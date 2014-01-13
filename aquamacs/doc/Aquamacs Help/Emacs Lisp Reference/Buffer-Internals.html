@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Buffer Internals - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Window-Internals.html#Window-Internals" title="Window Internals">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -42,14 +39,14 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Object-Internals.html#Object-Internals"
 <hr>
 </div>
 
-<h4 class="appendixsubsec">E.6.1 Buffer Internals</h4>
+<h4 class="subsection">E.6.1 Buffer Internals</h4>
 
-<p><a name="index-internals_002c-of-buffer-3993"></a><a name="index-buffer-internals-3994"></a>
-  Two structures are used to represent buffers in C.  The
-<code>buffer_text</code> structure contains fields describing the text of a
-buffer; the <code>buffer</code> structure holds other fields.  In the case
-of indirect buffers, two or more <code>buffer</code> structures reference
-the same <code>buffer_text</code> structure.
+<p><a name="index-internals_002c-of-buffer-4362"></a><a name="index-buffer-internals-4363"></a>
+  Two structures (see <samp><span class="file">buffer.h</span></samp>) are used to represent buffers
+in C.  The <code>buffer_text</code> structure contains fields describing the
+text of a buffer; the <code>buffer</code> structure holds other fields.  In
+the case of indirect buffers, two or more <code>buffer</code> structures
+reference the same <code>buffer_text</code> structure.
 
    <p>Here are some of the fields in <code>struct buffer_text</code>:
 
@@ -75,7 +72,7 @@ to the overlays.
 known to be unchanged since the last complete redisplay.
 
      <br><dt><code>unchanged_modified</code><dt><code>overlay_unchanged_modified</code><dd>The values of <code>modiff</code> and <code>overlay_modiff</code>, respectively,
-after the last compelete redisplay.  If their current values match
+after the last complete redisplay.  If their current values match
 <code>modiff</code> or <code>overlay_modiff</code>, that means
 <code>beg_unchanged</code> and <code>end_unchanged</code> contain no useful
 information.
@@ -90,11 +87,8 @@ markers referring to this buffer text.
    <p>Some of the fields of <code>struct buffer</code> are:
 
      <dl>
-<dt><code>next</code><dd>Points to the next buffer, in the chain of all buffers (including
-killed buffers).  This chain is used only for garbage collection, in
-order to collect killed buffers properly.  Note that vectors, and most
-kinds of objects allocated as vectors, are all on one chain, but
-buffers are on a separate chain of their own.
+<dt><code>header</code><dd>A header of type <code>struct vectorlike_header</code> is common to all
+vectorlike objects.
 
      <br><dt><code>own_text</code><dd>A <code>struct buffer_text</code> structure that ordinarily holds the buffer
 contents.  In indirect buffers, this field is not used.
@@ -102,6 +96,10 @@ contents.  In indirect buffers, this field is not used.
      <br><dt><code>text</code><dd>A pointer to the <code>buffer_text</code> structure for this buffer.  In an
 ordinary buffer, this is the <code>own_text</code> field above.  In an
 indirect buffer, this is the <code>own_text</code> field of the base buffer.
+
+     <br><dt><code>next</code><dd>A pointer to the next buffer, in the chain of all buffers, including
+killed buffers.  This chain is used only for allocation and garbage
+collection, in order to collect killed buffers properly.
 
      <br><dt><code>pt</code><dt><code>pt_byte</code><dd>The character and byte positions of point in a buffer.
 
@@ -145,6 +143,7 @@ after the current overlay center.  See <a href="Managing-Overlays.html#Managing-
 and <code>overlays_after</code> is sorted in order of increasing beginning
 position.
 
+     <!-- FIXME? the following are now all Lisp_Object BUFFER_INTERNAL_FIELD (foo). -->
      <br><dt><code>name</code><dd>A Lisp string that names the buffer.  It is guaranteed to be unique. 
 See <a href="Buffer-Names.html#Buffer-Names">Buffer Names</a>.
 
@@ -160,11 +159,11 @@ the buffer-local variable <code>default-directory</code> (see <a href="File-Name
 the value of the buffer-local variable <code>buffer-file-name</code>
 (see <a href="Buffer-File-Name.html#Buffer-File-Name">Buffer File Name</a>).
 
-     <br><dt><code>undo_list</code><dt><code>backed_up</code><dt><code>auto_save_file_name</code><dt><code>read_only</code><dt><code>file_format</code><dt><code>file_truename</code><dt><code>invisibility_spec</code><dt><code>display_count</code><dt><code>display_time</code><dd>These fields store the values of Lisp variables that are automatically
+     <br><dt><code>undo_list</code><dt><code>backed_up</code><dt><code>auto_save_file_name</code><dt><code>auto_save_file_format</code><dt><code>read_only</code><dt><code>file_format</code><dt><code>file_truename</code><dt><code>invisibility_spec</code><dt><code>display_count</code><dt><code>display_time</code><dd>These fields store the values of Lisp variables that are automatically
 buffer-local (see <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables">Buffer-Local Variables</a>), whose corresponding
 variable names have the additional prefix <code>buffer-</code> and have
 underscores replaced with dashes.  For instance, <code>undo_list</code>
-stores the value of <code>buffer-undo-list</code>.  See <a href="Standard-Buffer_002dLocal-Variables.html#Standard-Buffer_002dLocal-Variables">Standard Buffer-Local Variables</a>.
+stores the value of <code>buffer-undo-list</code>.
 
      <br><dt><code>mark</code><dd>The mark for the buffer.  The mark is a marker, hence it is also
 included on the list <code>markers</code>.  See <a href="The-Mark.html#The-Mark">The Mark</a>.
@@ -193,11 +192,10 @@ is the base of an indirect buffer.  Each holds a marker that records
 <code>pt</code>, <code>begv</code>, and <code>zv</code> respectively, for this buffer
 when the buffer is not current.
 
-     <br><dt><code>mode_line_format</code><dt><code>header_line_format</code><dt><code>case_fold_search</code><dt><code>tab_width</code><dt><code>fill_column</code><dt><code>left_margin</code><dt><code>auto_fill_function</code><dt><code>truncate_lines</code><dt><code>word_wrap</code><dt><code>ctl_arrow</code><dt><code>selective_display</code><dt><code>selective_display_ellipses</code><dt><code>overwrite_mode</code><dt><code>abbrev_mode</code><dt><code>display_table</code><dt><code>mark_active</code><dt><code>enable_multibyte_characters</code><dt><code>buffer_file_coding_system</code><dt><code>auto_save_file_format</code><dt><code>cache_long_line_scans</code><dt><code>point_before_scroll</code><dt><code>left_fringe_width</code><dt><code>right_fringe_width</code><dt><code>fringes_outside_margins</code><dt><code>scroll_bar_width</code><dt><code>indicate_empty_lines</code><dt><code>indicate_buffer_boundaries</code><dt><code>fringe_indicator_alist</code><dt><code>fringe_cursor_alist</code><dt><code>scroll_up_aggressively</code><dt><code>scroll_down_aggressively</code><dt><code>cursor_type</code><dt><code>cursor_in_non_selected_windows</code><dd>These fields store the values of Lisp variables that are automatically
+     <br><dt><code>mode_line_format</code><dt><code>header_line_format</code><dt><code>case_fold_search</code><dt><code>tab_width</code><dt><code>fill_column</code><dt><code>left_margin</code><dt><code>auto_fill_function</code><dt><code>truncate_lines</code><dt><code>word_wrap</code><dt><code>ctl_arrow</code><dt><code>bidi_display_reordering</code><dt><code>bidi_paragraph_direction</code><dt><code>selective_display</code><dt><code>selective_display_ellipses</code><dt><code>overwrite_mode</code><dt><code>abbrev_mode</code><dt><code>mark_active</code><dt><code>enable_multibyte_characters</code><dt><code>buffer_file_coding_system</code><dt><code>cache_long_line_scans</code><dt><code>point_before_scroll</code><dt><code>left_fringe_width</code><dt><code>right_fringe_width</code><dt><code>fringes_outside_margins</code><dt><code>scroll_bar_width</code><dt><code>indicate_empty_lines</code><dt><code>indicate_buffer_boundaries</code><dt><code>fringe_indicator_alist</code><dt><code>fringe_cursor_alist</code><dt><code>scroll_up_aggressively</code><dt><code>scroll_down_aggressively</code><dt><code>cursor_type</code><dt><code>cursor_in_non_selected_windows</code><dd>These fields store the values of Lisp variables that are automatically
 buffer-local (see <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables">Buffer-Local Variables</a>), whose corresponding
 variable names have underscores replaced with dashes.  For instance,
-<code>mode_line_format</code> stores the value of <code>mode-line-format</code>. 
-See <a href="Standard-Buffer_002dLocal-Variables.html#Standard-Buffer_002dLocal-Variables">Standard Buffer-Local Variables</a>.
+<code>mode_line_format</code> stores the value of <code>mode-line-format</code>.
 
      <br><dt><code>last_selected_window</code><dd>This is the last window that was selected with this buffer in it, or <code>nil</code>
 if that window no longer displays this buffer. 

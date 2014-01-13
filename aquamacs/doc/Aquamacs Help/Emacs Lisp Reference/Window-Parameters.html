@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Window Parameters - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Window-Hooks.html#Window-Hooks" title="Window Hooks">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,41 +41,137 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
 <hr>
 </div>
 
-<h3 class="section">28.20 Window Parameters</h3>
+<h3 class="section">28.25 Window Parameters</h3>
 
-<p><a name="index-window-parameters-2218"></a>
-This sections describes how window parameters can be used to associate
+<p><a name="index-window-parameters-2466"></a>
+This section describes how window parameters can be used to associate
 additional information with windows.
 
 <div class="defun">
-&mdash; Function: <b>window-parameter</b><var> window parameter<a name="index-window_002dparameter-2219"></a></var><br>
+&mdash; Function: <b>window-parameter</b><var> window parameter<a name="index-window_002dparameter-2467"></a></var><br>
 <blockquote><p>This function returns <var>window</var>'s value for <var>parameter</var>.  The
-default for <var>window</var> is the selected window.  If <var>window</var>
-has no setting for <var>parameter</var>, this function returns <code>nil</code>. 
+default for <var>window</var> is the selected window.  If <var>window</var> has no
+setting for <var>parameter</var>, this function returns <code>nil</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>window-parameters</b><var> &amp;optional window<a name="index-window_002dparameters-2220"></a></var><br>
+&mdash; Function: <b>window-parameters</b><var> &amp;optional window<a name="index-window_002dparameters-2468"></a></var><br>
 <blockquote><p>This function returns all parameters of <var>window</var> and their values. 
 The default for <var>window</var> is the selected window.  The return value
-is an association list of elements of the form <code>(</code><var>parameter</var><code>
-. </code><var>value</var><code>)</code>. 
+is either <code>nil</code>, or an association list whose elements have the form
+<code>(</code><var>parameter</var><code> . </code><var>value</var><code>)</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-window-parameter</b><var> window parameter value<a name="index-set_002dwindow_002dparameter-2221"></a></var><br>
+&mdash; Function: <b>set-window-parameter</b><var> window parameter value<a name="index-set_002dwindow_002dparameter-2469"></a></var><br>
 <blockquote><p>This function sets <var>window</var>'s value of <var>parameter</var> to
 <var>value</var> and returns <var>value</var>.  The default for <var>window</var>
 is the selected window. 
 </p></blockquote></div>
 
-   <p>Currently, window parameters are not saved in window configurations and
-consequently not restored by <code>set-window-configuration</code>.  Hence,
-any change of a parameter introduced via <code>set-window-parameter</code> can
-be undone only by invoking <code>set-window-parameter</code> for the same
-parameter again.  Since <code>save-window-excursion</code> relies on window
-configurations (see <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a>), window parameters are
-not saved and restored by that special form, either.
+   <p>By default, the functions that save and restore window configurations or the
+states of windows (see <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a>) do not care about
+window parameters.  This means that when you change the value of a
+parameter within the body of a <code>save-window-excursion</code>, the
+previous value is not restored when that macro exits.  It also means
+that when you restore via <code>window-state-put</code> a window state saved
+earlier by <code>window-state-get</code>, all cloned windows have their
+parameters reset to <code>nil</code>.  The following variable allows you to
+override the standard behavior:
+
+<div class="defun">
+&mdash; Variable: <b>window-persistent-parameters</b><var><a name="index-window_002dpersistent_002dparameters-2470"></a></var><br>
+<blockquote><p>This variable is an alist specifying which parameters get saved by
+<code>current-window-configuration</code> and <code>window-state-get</code>, and
+subsequently restored by <code>set-window-configuration</code> and
+<code>window-state-put</code>.  See <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a>.
+
+        <p>The <span class="sc">car</span> of each entry of this alist is a symbol specifying the
+parameter.  The <span class="sc">cdr</span> should be one of the following:
+
+          <dl>
+<dt><code>nil</code><dd>This value means the parameter is saved neither by
+<code>window-state-get</code> nor by <code>current-window-configuration</code>.
+
+          <br><dt><code>t</code><dd>This value specifies that the parameter is saved by
+<code>current-window-configuration</code> and (provided its <var>writable</var>
+argument is <code>nil</code>) by <code>window-state-get</code>.
+
+          <br><dt><code>writable</code><dd>This means that the parameter is saved unconditionally by both
+<code>current-window-configuration</code> and <code>window-state-get</code>.  This
+value should not be used for parameters whose values do not have a read
+syntax.  Otherwise, invoking <code>window-state-put</code> in another session
+may fail with an <code>invalid-read-syntax</code> error. 
+</dl>
+        </p></blockquote></div>
+
+   <p>Some functions (notably <code>delete-window</code>,
+<code>delete-other-windows</code> and <code>split-window</code>), may behave specially
+when their <var>window</var> argument has a parameter set.  You can override
+such special behavior by binding the following variable to a
+non-<code>nil</code> value:
+
+<div class="defun">
+&mdash; Variable: <b>ignore-window-parameters</b><var><a name="index-ignore_002dwindow_002dparameters-2471"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code>, some standard functions do not
+process window parameters.  The functions currently affected by this are
+<code>split-window</code>, <code>delete-window</code>, <code>delete-other-windows</code>,
+and <code>other-window</code>.
+
+        <p>An application can bind this variable to a non-<code>nil</code> value around
+calls to these functions.  If it does so, the application is fully
+responsible for correctly assigning the parameters of all involved
+windows when exiting that function. 
+</p></blockquote></div>
+
+   <p>The following parameters are currently used by the window management
+code:
+
+     <dl>
+<dt><code>delete-window</code><dd>This parameter affects the execution of <code>delete-window</code>
+(see <a href="Deleting-Windows.html#Deleting-Windows">Deleting Windows</a>).
+
+     <br><dt><code>delete-other-windows</code><dd>This parameter affects the execution of <code>delete-other-windows</code>
+(see <a href="Deleting-Windows.html#Deleting-Windows">Deleting Windows</a>).
+
+     <br><dt><code>split-window</code><dd>This parameter affects the execution of <code>split-window</code>
+(see <a href="Splitting-Windows.html#Splitting-Windows">Splitting Windows</a>).
+
+     <br><dt><code>other-window</code><dd>This parameter affects the execution of <code>other-window</code>
+(see <a href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic Window Ordering</a>).
+
+     <br><dt><code>no-other-window</code><dd>This parameter marks the window as not selectable by <code>other-window</code>
+(see <a href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic Window Ordering</a>).
+
+     <br><dt><code>clone-of</code><dd>This parameter specifies the window that this one has been cloned
+from.  It is installed by <code>window-state-get</code> (see <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a>).
+
+     <br><dt><code>quit-restore</code><dd>This parameter is installed by the buffer display functions
+(see <a href="Choosing-Window.html#Choosing-Window">Choosing Window</a>) and consulted by <code>quit-restore-window</code>
+(see <a href="Quitting-Windows.html#Quitting-Windows">Quitting Windows</a>).  It contains four elements:
+
+     <p>The first element is one of the symbols <code>window</code>, meaning that the
+window has been specially created by <code>display-buffer</code>; <code>frame</code>,
+a separate frame has been created; <code>same</code>, the window has
+displayed the same buffer before; or <code>other</code>, the window showed
+another buffer before.
+
+     <p>The second element is either one of the symbols <code>window</code> or
+<code>frame</code>, or a list whose elements are the buffer shown in the
+window before, that buffer's window start and window point positions,
+and the window's height at that time.
+
+     <p>The third element is the window selected at the time the parameter was
+created.  The function <code>quit-restore-window</code> tries to reselect that
+window when it deletes the window passed to it as argument.
+
+     <p>The fourth element is the buffer whose display caused the creation of
+this parameter.  <code>quit-restore-window</code> deletes the specified window
+only if it still shows that buffer. 
+</dl>
+
+   <p>There are additional parameters <code>window-atom</code> and <code>window-side</code>;
+these are reserved and should not be used by applications.
 
    </body></html>
 

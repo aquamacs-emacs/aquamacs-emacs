@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Excursions - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Narrowing.html#Narrowing" title="Narrowing">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,63 +43,62 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Positions.html#Positions">Positions</a>
 
 <h3 class="section">30.3 Excursions</h3>
 
-<p><a name="index-excursion-2518"></a>
+<p><a name="index-excursion-2778"></a>
   It is often useful to move point &ldquo;temporarily&rdquo; within a localized
-portion of the program, or to switch buffers temporarily.  This is
-called an <dfn>excursion</dfn>, and it is done with the <code>save-excursion</code>
-special form.  This construct initially remembers the identity of the
-current buffer, and its values of point and the mark, and restores them
-after the completion of the excursion.
+portion of the program.  This is called an <dfn>excursion</dfn>, and it is
+done with the <code>save-excursion</code> special form.  This construct
+remembers the initial identity of the current buffer, and its values
+of point and the mark, and restores them after the excursion
+completes.  It is the standard way to move point within one part of a
+program and avoid affecting the rest of the program, and is used
+thousands of times in the Lisp sources of Emacs.
 
-   <p>The forms for saving and restoring the configuration of windows are
-described elsewhere (see <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a>, and see <a href="Frame-Configurations.html#Frame-Configurations">Frame Configurations</a>).  When only the identity of the current buffer needs
-to be saved and restored, it is preferable to use
-<code>save-current-buffer</code> instead.
+   <p>If you only need to save and restore the identity of the current
+buffer, use <code>save-current-buffer</code> or <code>with-current-buffer</code>
+instead (see <a href="Current-Buffer.html#Current-Buffer">Current Buffer</a>).  If you need to save or restore
+window configurations, see the forms described in <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a> and in <a href="Frame-Configurations.html#Frame-Configurations">Frame Configurations</a>. <!-- frameset? -->
 
 <div class="defun">
-&mdash; Special Form: <b>save-excursion</b><var> body<small class="dots">...</small><a name="index-save_002dexcursion-2519"></a></var><br>
-<blockquote><p><a name="index-mark-excursion-2520"></a><a name="index-point-excursion-2521"></a>The <code>save-excursion</code> special form saves the identity of the current
-buffer and the values of point and the mark in it, evaluates
-<var>body</var>, and finally restores the buffer and its saved values of
-point and the mark.  All three saved values are restored even in case of
-an abnormal exit via <code>throw</code> or error (see <a href="Nonlocal-Exits.html#Nonlocal-Exits">Nonlocal Exits</a>).
-
-        <p>The <code>save-excursion</code> special form is the standard way to move
-point within one part of a program and avoid affecting the rest of the
-program.  It is used more than 4000 times in the Lisp sources
-of Emacs.
-
-        <p><code>save-excursion</code> does not save the values of point and the mark for
-other buffers, so changes in other buffers remain in effect after
-<code>save-excursion</code> exits.
-
-        <p><a name="index-window-excursions-2522"></a>Likewise, <code>save-excursion</code> does not restore window-buffer
-correspondences altered by functions such as <code>switch-to-buffer</code>. 
-One way to restore these correspondences, and the selected window, is to
-use <code>save-window-excursion</code> inside <code>save-excursion</code>
-(see <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a>).
+&mdash; Special Form: <b>save-excursion</b><var> body<small class="dots">...</small><a name="index-save_002dexcursion-2779"></a></var><br>
+<blockquote><p><a name="index-mark-excursion-2780"></a><a name="index-point-excursion-2781"></a>This special form saves the identity of the current buffer and the
+values of point and the mark in it, evaluates <var>body</var>, and finally
+restores the buffer and its saved values of point and the mark.  All
+three saved values are restored even in case of an abnormal exit via
+<code>throw</code> or error (see <a href="Nonlocal-Exits.html#Nonlocal-Exits">Nonlocal Exits</a>).
 
         <p>The value returned by <code>save-excursion</code> is the result of the last
-form in <var>body</var>, or <code>nil</code> if no body forms were given.
+form in <var>body</var>, or <code>nil</code> if no body forms were given. 
+</p></blockquote></div>
 
-     <pre class="example">          (save-excursion <var>forms</var>)
-          ==
-          (let ((old-buf (current-buffer))
-                (old-pnt (point-marker))
-                (old-mark (copy-marker (mark-marker))))
-            (unwind-protect
-                (progn <var>forms</var>)
-              (set-buffer old-buf)
-              (goto-char old-pnt)
-              (set-marker (mark-marker) old-mark)))
+   <p>Because <code>save-excursion</code> only saves point and mark for the
+buffer that was current at the start of the excursion, any changes
+made to point and/or mark in other buffers, during the excursion, will
+remain in effect afterward.  This frequently leads to unintended
+consequences, so the byte compiler warns if you call <code>set-buffer</code>
+during an excursion:
+
+<pre class="example">     Warning: Use `with-current-buffer' rather than
+              save-excursion+set-buffer
 </pre>
-        </blockquote></div>
+   <p class="noindent">To avoid such problems, you should call <code>save-excursion</code> only
+after setting the desired current buffer, as in the following example:
+
+<pre class="example">     (defun append-string-to-buffer (string buffer)
+       "Append STRING to the end of BUFFER."
+       (with-current-buffer buffer
+         (save-excursion
+           (goto-char (point-max))
+           (insert string))))
+</pre>
+   <p><a name="index-window-excursions-2782"></a>  Likewise, <code>save-excursion</code> does not restore window-buffer
+correspondences altered by functions such as <code>switch-to-buffer</code>.
 
    <p><strong>Warning:</strong> Ordinary insertion of text adjacent to the saved
-point value relocates the saved value, just as it relocates all markers. 
-More precisely, the saved value is a marker with insertion type
-<code>nil</code>.  See <a href="Marker-Insertion-Types.html#Marker-Insertion-Types">Marker Insertion Types</a>.  Therefore, when the saved
-point value is restored, it normally comes before the inserted text.
+point value relocates the saved value, just as it relocates all
+markers.  More precisely, the saved value is a marker with insertion
+type <code>nil</code>.  See <a href="Marker-Insertion-Types.html#Marker-Insertion-Types">Marker Insertion Types</a>.  Therefore, when the
+saved point value is restored, it normally comes before the inserted
+text.
 
    <p>Although <code>save-excursion</code> saves the location of the mark, it does
 not prevent functions which modify the buffer from setting

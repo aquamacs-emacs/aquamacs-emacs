@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Definitions - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Creating-Symbols.html#Creating-Symbols" title="Creating Symbols">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,27 +43,32 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Symbols.html#Symbols">Symbols</a>
 
 <h3 class="section">8.2 Defining Symbols</h3>
 
-<p><a name="index-definitions-of-symbols-454"></a>
-  A <dfn>definition</dfn> in Lisp is a special form that announces your
-intention to use a certain symbol in a particular way.  In Emacs Lisp,
-you can define a symbol as a variable, or define it as a function (or
-macro), or both independently.
-
-   <p>A definition construct typically specifies a value or meaning for the
-symbol for one kind of use, plus documentation for its meaning when used
-in this way.  Thus, when you define a symbol as a variable, you can
-supply an initial value for the variable, plus documentation for the
-variable.
+<p><a name="index-definitions-of-symbols-476"></a>
+  A <dfn>definition</dfn> is a special kind of Lisp expression that
+announces your intention to use a symbol in a particular way.  It
+typically specifies a value or meaning for the symbol for one kind of
+use, plus documentation for its meaning when used in this way.  Thus,
+when you define a symbol as a variable, you can supply an initial
+value for the variable, plus documentation for the variable.
 
    <p><code>defvar</code> and <code>defconst</code> are special forms that define a
-symbol as a global variable.  They are documented in detail in
-<a href="Defining-Variables.html#Defining-Variables">Defining Variables</a>.  For defining user option variables that can
-be customized, use <code>defcustom</code> (see <a href="Customization.html#Customization">Customization</a>).
+symbol as a <dfn>global variable</dfn>&mdash;a variable that can be accessed at
+any point in a Lisp program.  See <a href="Variables.html#Variables">Variables</a>, for details about
+variables.  To define a customizable variable, use the
+<code>defcustom</code> macro, which also calls <code>defvar</code> as a subroutine
+(see <a href="Customization.html#Customization">Customization</a>).
+
+   <p>In principle, you can assign a variable value to any symbol with
+<code>setq</code>, whether not it has first been defined as a variable. 
+However, you ought to write a variable definition for each global
+variable that you want to use; otherwise, your Lisp program may not
+act correctly if it is evaluated with lexical scoping enabled
+(see <a href="Variable-Scoping.html#Variable-Scoping">Variable Scoping</a>).
 
    <p><code>defun</code> defines a symbol as a function, creating a lambda
 expression and storing it in the function cell of the symbol.  This
 lambda expression thus becomes the function definition of the symbol. 
-(The term &ldquo;function definition,&rdquo; meaning the contents of the function
+(The term &ldquo;function definition&rdquo;, meaning the contents of the function
 cell, is derived from the idea that <code>defun</code> gives the symbol its
 definition as a function.)  <code>defsubst</code> and <code>defalias</code> are two
 other ways of defining a function.  See <a href="Functions.html#Functions">Functions</a>.
@@ -78,15 +80,14 @@ both macro and function definitions are kept in the function cell, and
 that cell can hold only one Lisp object at any given time. 
 See <a href="Macros.html#Macros">Macros</a>.
 
-   <p>In Emacs Lisp, a definition is not required in order to use a symbol
-as a variable or function.  Thus, you can make a symbol a global
-variable with <code>setq</code>, whether you define it first or not.  The real
-purpose of definitions is to guide programmers and programming tools. 
-They inform programmers who read the code that certain symbols are
-<em>intended</em> to be used as variables, or as functions.  In addition,
-utilities such as <samp><span class="file">etags</span></samp> and <samp><span class="file">make-docfile</span></samp> recognize
-definitions, and add appropriate information to tag tables and the
-<samp><span class="file">DOC-</span><var>version</var></samp> file.  See <a href="Accessing-Documentation.html#Accessing-Documentation">Accessing Documentation</a>.
+   <p>As previously noted, Emacs Lisp allows the same symbol to be defined
+both as a variable (e.g., with <code>defvar</code>) and as a function or
+macro (e.g., with <code>defun</code>).  Such definitions do not conflict.
+
+   <p>These definition also act as guides for programming tools.  For
+example, the <kbd>C-h f</kbd> and <kbd>C-h v</kbd> commands create help buffers
+containing links to the relevant variable, function, or macro
+definitions.  See <a href="../emacs/Name-Help.html#Name-Help">Name Help</a>.
 
    </body></html>
 

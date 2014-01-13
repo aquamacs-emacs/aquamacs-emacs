@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Integer Type - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Floating-Point-Type.html#Floating-Point-Type" title="Floating Point Type">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -48,11 +45,10 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Programming-Types.html#Programming-Type
 536870911 (30 bits; i.e.,
 -2**29
 to
-2**29 - 1)
-on most machines.  (Some machines may provide a wider range.)  It is
-important to note that the Emacs Lisp arithmetic functions do not check
-for overflow.  Thus <code>(1+ 536870911)</code> is &minus;536870912 on most
-machines.
+2**29 &minus; 1)
+on typical 32-bit machines.  (Some machines provide a wider range.) 
+Emacs Lisp arithmetic functions do not check for overflow.  Thus
+<code>(1+ 536870911)</code> is &minus;536870912 if Emacs integers are 30 bits.
 
    <p>The read syntax for integers is a sequence of (base ten) digits with an
 optional sign at the beginning and an optional period at the end.  The
@@ -63,13 +59,12 @@ leading &lsquo;<samp><span class="samp">+</span></samp>&rsquo; or a final &lsquo
      1                ; <span class="roman">The integer 1.</span>
      1.               ; <span class="roman">Also the integer 1.</span>
      +1               ; <span class="roman">Also the integer 1.</span>
-     1073741825       ; <span class="roman">Also the integer 1 on a 30-bit implementation.</span>
 </pre>
    <p class="noindent">As a special exception, if a sequence of digits specifies an integer
 too large or too small to be a valid integer object, the Lisp reader
 reads it as a floating-point number (see <a href="Floating-Point-Type.html#Floating-Point-Type">Floating Point Type</a>). 
-For instance, on most machines <code>536870912</code> is read as the
-floating-point number <code>536870912.0</code>.
+For instance, if Emacs integers are 30 bits, <code>536870912</code> is read
+as the floating-point number <code>536870912.0</code>.
 
    <p>See <a href="Numbers.html#Numbers">Numbers</a>, for more information.
 

@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Completion Example - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Completion-Commands.html#Completion-Commands" title="Completion Commands">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -43,26 +40,36 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Completion.html#Completion">Completion<
 <hr>
 </div>
 
-<h4 class="subsection">8.3.1 Completion Example</h4>
+<h4 class="subsection">8.4.1 Completion Example</h4>
 
-<p><a name="index-TAB-_0040r_007b_0028completion_0029_007d-167"></a>  A concrete example may help here.  If you type <kbd>M-x a u
-&lt;TAB&gt;</kbd>, the &lt;TAB&gt; looks for alternatives (in this case,
-command names) that start with &lsquo;<samp><span class="samp">au</span></samp>&rsquo;.  There are several,
-including <code>auto-fill-mode</code> and <code>autoconf-mode</code>, but they all
-begin with <code>auto</code>, so the &lsquo;<samp><span class="samp">au</span></samp>&rsquo; in the minibuffer completes
-to &lsquo;<samp><span class="samp">auto</span></samp>&rsquo;.
+<p><a name="index-TAB-_0040r_007b_0028completion_0029_007d-196"></a>  A simple example may help here.  <kbd>M-x</kbd> uses the minibuffer to
+read the name of a command, so completion works by matching the
+minibuffer text against the names of existing Emacs commands.  Suppose
+you wish to run the command <code>auto-fill-mode</code>.  You can do that by
+typing <kbd>M-x auto-fill-mode &lt;RET&gt;</kbd>, but it is easier to use
+completion.
+
+   <p>If you type <kbd>M-x a u &lt;TAB&gt;</kbd>, the &lt;TAB&gt; looks for
+completion alternatives (in this case, command names) that start with
+&lsquo;<samp><span class="samp">au</span></samp>&rsquo;.  There are several, including <code>auto-fill-mode</code> and
+<code>autoconf-mode</code>, but they all begin with <code>auto</code>, so the
+&lsquo;<samp><span class="samp">au</span></samp>&rsquo; in the minibuffer completes to &lsquo;<samp><span class="samp">auto</span></samp>&rsquo;.  (More commands
+may be defined in your Emacs session.  For example, if a command
+called <code>authorize-me</code> was defined, Emacs could only complete
+as far as &lsquo;<samp><span class="samp">aut</span></samp>&rsquo;.)
 
    <p>If you type &lt;TAB&gt; again immediately, it cannot determine the
 next character; it could be &lsquo;<samp><span class="samp">-</span></samp>&rsquo;, &lsquo;<samp><span class="samp">a</span></samp>&rsquo;, or &lsquo;<samp><span class="samp">c</span></samp>&rsquo;.  So it
 does not add any characters; instead, &lt;TAB&gt; displays a list of all
 possible completions in another window.
 
-   <p>Next, type <kbd>- f</kbd>.  The minibuffer now contains &lsquo;<samp><span class="samp">auto-f</span></samp>&rsquo;,
-and the only command name that starts with this is
-<code>auto-fill-mode</code>.  If you now type &lt;TAB&gt;, completion fills in
-the rest of the argument &lsquo;<samp><span class="samp">auto-fill-mode</span></samp>&rsquo; into the minibuffer. 
-You have been able to enter &lsquo;<samp><span class="samp">auto-fill-mode</span></samp>&rsquo; by typing just
-<kbd>a u &lt;TAB&gt; - f &lt;TAB&gt;</kbd>.
+   <p>Next, type <kbd>-f</kbd>.  The minibuffer now contains &lsquo;<samp><span class="samp">auto-f</span></samp>&rsquo;, and
+the only command name that starts with this is <code>auto-fill-mode</code>. 
+If you now type &lt;TAB&gt;, completion fills in the rest of the
+argument &lsquo;<samp><span class="samp">auto-fill-mode</span></samp>&rsquo; into the minibuffer.
+
+   <p>Hence, typing just <kbd>a u &lt;TAB&gt; - f &lt;TAB&gt;</kbd> allows you to
+enter &lsquo;<samp><span class="samp">auto-fill-mode</span></samp>&rsquo;.
 
    </body></html>
 

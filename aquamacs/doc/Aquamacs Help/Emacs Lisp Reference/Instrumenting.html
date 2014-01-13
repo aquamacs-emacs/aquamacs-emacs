@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Instrumenting - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Edebug-Execution-Modes.html#Edebug-Execution-Modes" title="Edebug Execution Modes">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,11 +43,12 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Edebug.html#Edebug">Edebug</a>
 
 <h4 class="subsection">18.2.2 Instrumenting for Edebug</h4>
 
-<p>In order to use Edebug to debug Lisp code, you must first
+<p><a name="index-instrumenting-for-Edebug-1017"></a>
+  In order to use Edebug to debug Lisp code, you must first
 <dfn>instrument</dfn> the code.  Instrumenting code inserts additional code
 into it, to invoke Edebug at the proper places.
 
-   <p><a name="index-C_002dM_002dx-957"></a><a name="index-eval_002ddefun-_0028Edebug_0029-958"></a>  When you invoke command <kbd>C-M-x</kbd> (<code>eval-defun</code>) with a
+   <p><a name="index-C_002dM_002dx-1018"></a><a name="index-eval_002ddefun-_0028Edebug_0029-1019"></a>  When you invoke command <kbd>C-M-x</kbd> (<code>eval-defun</code>) with a
 prefix argument on a function definition, it instruments the
 definition before evaluating it.  (This does not modify the source
 code itself.)  If the variable <code>edebug-all-defs</code> is
@@ -60,7 +58,7 @@ a prefix argument.  The default value of <code>edebug-all-defs</code> is
 <code>nil</code>.  The command <kbd>M-x edebug-all-defs</kbd> toggles the value
 of the variable <code>edebug-all-defs</code>.
 
-   <p><a name="index-eval_002dregion-_0040r_007b_0028Edebug_0029_007d-959"></a><a name="index-eval_002dbuffer-_0040r_007b_0028Edebug_0029_007d-960"></a><a name="index-eval_002dcurrent_002dbuffer-_0040r_007b_0028Edebug_0029_007d-961"></a>  If <code>edebug-all-defs</code> is non-<code>nil</code>, then the commands
+   <p><a name="index-eval_002dregion-_0040r_007b_0028Edebug_0029_007d-1020"></a><a name="index-eval_002dbuffer-_0040r_007b_0028Edebug_0029_007d-1021"></a><a name="index-eval_002dcurrent_002dbuffer-_0040r_007b_0028Edebug_0029_007d-1022"></a>  If <code>edebug-all-defs</code> is non-<code>nil</code>, then the commands
 <code>eval-region</code>, <code>eval-current-buffer</code>, and <code>eval-buffer</code>
 also instrument any definitions they evaluate.  Similarly,
 <code>edebug-all-forms</code> controls whether <code>eval-region</code> should
@@ -68,9 +66,10 @@ instrument <em>any</em> form, even non-defining forms.  This doesn't apply
 to loading or evaluations in the minibuffer.  The command <kbd>M-x
 edebug-all-forms</kbd> toggles this option.
 
-   <p><a name="index-edebug_002deval_002dtop_002dlevel_002dform-962"></a>  Another command, <kbd>M-x edebug-eval-top-level-form</kbd>, is available to
+   <p><a name="index-edebug_002deval_002dtop_002dlevel_002dform-1023"></a><a name="index-edebug_002ddefun-1024"></a>  Another command, <kbd>M-x edebug-eval-top-level-form</kbd>, is available to
 instrument any top-level form regardless of the values of
-<code>edebug-all-defs</code> and <code>edebug-all-forms</code>.
+<code>edebug-all-defs</code> and <code>edebug-all-forms</code>. 
+<code>edebug-defun</code> is an alias for <code>edebug-eval-top-level-form</code>.
 
    <p>While Edebug is active, the command <kbd>I</kbd>
 (<code>edebug-instrument-callee</code>) instruments the definition of the
@@ -94,14 +93,15 @@ session, it runs the hook <code>edebug-setup-hook</code>, then sets it to
 <code>nil</code>.  You can use this to load Edebug specifications
 associated with a package you are using, but only when you use Edebug.
 
-   <p><a name="index-eval_002dexpression-_0040r_007b_0028Edebug_0029_007d-963"></a>  To remove instrumentation from a definition, simply re-evaluate its
+   <p><a name="index-eval_002dexpression-_0040r_007b_0028Edebug_0029_007d-1025"></a>  To remove instrumentation from a definition, simply re-evaluate its
 definition in a way that does not instrument.  There are two ways of
 evaluating forms that never instrument them: from a file with
 <code>load</code>, and from the minibuffer with <code>eval-expression</code>
 (<kbd>M-:</kbd>).
 
    <p>If Edebug detects a syntax error while instrumenting, it leaves point
-at the erroneous code and signals an <code>invalid-read-syntax</code> error.
+at the erroneous code and signals an <code>invalid-read-syntax</code> error. 
+<!-- FIXME?  I can't see that it "leaves point at the erroneous code". -->
 
    <p>See <a href="Edebug-Eval.html#Edebug-Eval">Edebug Eval</a>, for other evaluation functions available
 inside of Edebug.

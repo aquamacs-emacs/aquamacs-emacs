@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>User Identification - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Time-of-Day.html#Time-of-Day" title="Time of Day">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,10 +43,10 @@ Up:&nbsp;<a rel="up" accesskey="u" href="System-Interface.html#System-Interface"
 
 <h3 class="section">39.4 User Identification</h3>
 
-<p><a name="index-user-identification-3838"></a>
+<p><a name="index-user-identification-4180"></a>
 
 <div class="defun">
-&mdash; Variable: <b>init-file-user</b><var><a name="index-init_002dfile_002duser-3839"></a></var><br>
+&mdash; Variable: <b>init-file-user</b><var><a name="index-init_002dfile_002duser-4181"></a></var><br>
 <blockquote><p>This variable says which user's init files should be used by
 Emacs&mdash;or <code>nil</code> if none.  <code>""</code> stands for the user who
 originally logged in.  The value reflects command-line options such as
@@ -64,7 +61,7 @@ files or user profile.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>user-mail-address</b><var><a name="index-user_002dmail_002daddress-3840"></a></var><br>
+&mdash; User Option: <b>user-mail-address</b><var><a name="index-user_002dmail_002daddress-4182"></a></var><br>
 <blockquote><p>This holds the nominal email address of the user who is using Emacs. 
 Emacs normally sets this variable to a default value after reading your
 init files, but not if you have already set it.  So you can set the
@@ -73,40 +70,30 @@ want to use the default value.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>user-login-name</b><var> &amp;optional uid<a name="index-user_002dlogin_002dname-3841"></a></var><br>
-<blockquote><p>If you don't specify <var>uid</var>, this function returns the name under
-which the user is logged in.  If the environment variable <code>LOGNAME</code>
-is set, that value is used.  Otherwise, if the environment variable
-<code>USER</code> is set, that value is used.  Otherwise, the value is based
-on the effective <acronym>UID</acronym>, not the real <acronym>UID</acronym>.
+&mdash; Function: <b>user-login-name</b><var> &amp;optional uid<a name="index-user_002dlogin_002dname-4183"></a></var><br>
+<blockquote><p>This function returns the name under which the user is logged in. 
+It uses the environment variables <samp><span class="env">LOGNAME</span></samp> or <samp><span class="env">USER</span></samp> if
+either is set.  Otherwise, the value is based on the effective
+<acronym>UID</acronym>, not the real <acronym>UID</acronym>.
 
-        <p>If you specify <var>uid</var>, the value is the user name that corresponds
-to <var>uid</var> (which should be an integer), or <code>nil</code> if there is
-no such user.
-
-     <pre class="example">          (user-login-name)
-               &rArr; "lewis"
-</pre>
-        </blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>user-real-login-name</b><var><a name="index-user_002dreal_002dlogin_002dname-3842"></a></var><br>
-<blockquote><p>This function returns the user name corresponding to Emacs's real
-<acronym>UID</acronym>.  This ignores the effective <acronym>UID</acronym> and ignores the
-environment variables <code>LOGNAME</code> and <code>USER</code>. 
+        <p>If you specify <var>uid</var> (a number), the result is the user name that
+corresponds to <var>uid</var>, or <code>nil</code> if there is no such user. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>user-full-name</b><var> &amp;optional uid<a name="index-user_002dfull_002dname-3843"></a></var><br>
-<blockquote><p>This function returns the full name of the logged-in user&mdash;or the value
-of the environment variable <code>NAME</code>, if that is set.
+&mdash; Function: <b>user-real-login-name</b><var><a name="index-user_002dreal_002dlogin_002dname-4184"></a></var><br>
+<blockquote><p>This function returns the user name corresponding to Emacs's real
+<acronym>UID</acronym>.  This ignores the effective <acronym>UID</acronym>, and the
+environment variables <samp><span class="env">LOGNAME</span></samp> and <samp><span class="env">USER</span></samp>. 
+</p></blockquote></div>
 
-     <!-- "Bil" is the correct spelling. -->
-     <pre class="example">          (user-full-name)
-               &rArr; "Bil Lewis"
-</pre>
-        <p>If the Emacs job's user-id does not correspond to any known user (and
-provided <code>NAME</code> is not set), the value is <code>"unknown"</code>.
+<div class="defun">
+&mdash; Function: <b>user-full-name</b><var> &amp;optional uid<a name="index-user_002dfull_002dname-4185"></a></var><br>
+<blockquote><p>This function returns the full name of the logged-in user&mdash;or the value
+of the environment variable <samp><span class="env">NAME</span></samp>, if that is set.
+
+        <p>If the Emacs process's user-id does not correspond to any known user (and
+provided <code>NAME</code> is not set), the result is <code>"unknown"</code>.
 
         <p>If <var>uid</var> is non-<code>nil</code>, then it should be a number (a user-id)
 or a string (a login name).  Then <code>user-full-name</code> returns the full
@@ -114,26 +101,51 @@ name corresponding to that user-id or login name.  If you specify a
 user-id or login name that isn't defined, it returns <code>nil</code>. 
 </p></blockquote></div>
 
-   <p><a name="index-user_002dfull_002dname-3844"></a><a name="index-user_002dreal_002dlogin_002dname-3845"></a><a name="index-user_002dlogin_002dname-3846"></a>  The symbols <code>user-login-name</code>, <code>user-real-login-name</code> and
+   <p><a name="index-user_002dfull_002dname-4186"></a><a name="index-user_002dreal_002dlogin_002dname-4187"></a><a name="index-user_002dlogin_002dname-4188"></a>  The symbols <code>user-login-name</code>, <code>user-real-login-name</code> and
 <code>user-full-name</code> are variables as well as functions.  The functions
 return the same values that the variables hold.  These variables allow
 you to &ldquo;fake out&rdquo; Emacs by telling the functions what to return.  The
 variables are also useful for constructing frame titles (see <a href="Frame-Titles.html#Frame-Titles">Frame Titles</a>).
 
 <div class="defun">
-&mdash; Function: <b>user-real-uid</b><var><a name="index-user_002dreal_002duid-3847"></a></var><br>
+&mdash; Function: <b>user-real-uid</b><var><a name="index-user_002dreal_002duid-4189"></a></var><br>
 <blockquote><p>This function returns the real <acronym>UID</acronym> of the user. 
-The value may be a floating point number.
-
-     <pre class="example">          (user-real-uid)
-               &rArr; 19
-</pre>
-        </blockquote></div>
+The value may be a floating point number, in the (unlikely) event that
+the UID is too large to fit in a Lisp integer. 
+</p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>user-uid</b><var><a name="index-user_002duid-3848"></a></var><br>
+&mdash; Function: <b>user-uid</b><var><a name="index-user_002duid-4190"></a></var><br>
 <blockquote><p>This function returns the effective <acronym>UID</acronym> of the user. 
 The value may be a floating point number. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>group-gid</b><var><a name="index-group_002dgid-4191"></a></var><br>
+<blockquote><p>This function returns the effective <acronym>GID</acronym> of the Emacs process. 
+The value may be a floating point number. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>group-real-gid</b><var><a name="index-group_002dreal_002dgid-4192"></a></var><br>
+<blockquote><p>This function returns the real <acronym>GID</acronym> of the Emacs process. 
+The value may be a floating point number. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>system-users</b><var><a name="index-system_002dusers-4193"></a></var><br>
+<blockquote><p>This function returns a list of strings, listing the user names on the
+system.  If Emacs cannot retrieve this information, the return value
+is a list containing just the value of <code>user-real-login-name</code>. 
+</p></blockquote></div>
+
+   <p><a name="index-user-groups-4194"></a>
+
+<div class="defun">
+&mdash; Function: <b>system-groups</b><var><a name="index-system_002dgroups-4195"></a></var><br>
+<blockquote><p>This function returns a list of strings, listing the names of user
+groups on the system.  If Emacs cannot retrieve this information, the
+return value is <code>nil</code>. 
 </p></blockquote></div>
 
    </body></html>

@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Expressions - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Moving-by-Parens.html#Moving-by-Parens" title="Moving by Parens">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -43,10 +40,14 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Parentheses.html#Parentheses">Parenthes
 <hr>
 </div>
 
-<h4 class="subsection">30.4.1 Expressions with Balanced Parentheses</h4>
+<h4 class="subsection">26.4.1 Expressions with Balanced Parentheses</h4>
 
-<p><a name="index-sexp-2031"></a><a name="index-expression-2032"></a><a name="index-balanced-expression-2033"></a>  These commands deal with balanced expressions, also called
-<dfn>sexps</dfn><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.
+<p><a name="index-sexp-2295"></a><a name="index-expression-2296"></a><a name="index-balanced-expression-2297"></a>  Each programming language mode has its own definition of a
+<dfn>balanced expression</dfn>.  Balanced expressions typically include
+individual symbols, numbers, and string constants, as well as pieces
+of code enclosed in a matching pair of delimiters.  The following
+commands deal with balanced expressions (in Emacs, such expressions
+are referred to internally as <dfn>sexps</dfn><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>).
 
      <dl>
 <dt><kbd>C-M-f</kbd><dd>Move forward over a balanced expression (<code>forward-sexp</code>). 
@@ -56,78 +57,63 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Parentheses.html#Parentheses">Parenthes
 <br><dt><kbd>C-M-@</kbd><dt><kbd>C-M-&lt;SPC&gt;</kbd><dd>Put mark after following expression (<code>mark-sexp</code>). 
 </dl>
 
-   <p>Each programming language major mode customizes the definition of
-balanced expressions to suit that language.  Balanced expressions
-typically include symbols, numbers, and string constants, as well as
-any pair of matching delimiters and their contents.  Some languages
-have obscure forms of expression syntax that nobody has bothered to
-implement in Emacs.
-
-   <p><a name="index-Control_002dMeta-2034"></a>  By convention, the keys for these commands are all Control-Meta
-characters.  They usually act on expressions just as the corresponding
-Meta characters act on words.  For instance, the command <kbd>C-M-b</kbd>
-moves backward over a balanced expression, just as <kbd>M-b</kbd> moves
-back over a word.
-
-   <p><a name="index-C_002dM_002df-2035"></a><a name="index-C_002dM_002db-2036"></a><a name="index-forward_002dsexp-2037"></a><a name="index-backward_002dsexp-2038"></a>  To move forward over a balanced expression, use <kbd>C-M-f</kbd>
+   <p><a name="index-C_002dM_002df-2298"></a><a name="index-C_002dM_002db-2299"></a><a name="index-forward_002dsexp-2300"></a><a name="index-backward_002dsexp-2301"></a>  To move forward over a balanced expression, use <kbd>C-M-f</kbd>
 (<code>forward-sexp</code>).  If the first significant character after point
-is an opening delimiter (&lsquo;<samp><span class="samp">(</span></samp>&rsquo; in Lisp; &lsquo;<samp><span class="samp">(</span></samp>&rsquo;, &lsquo;<samp><span class="samp">[</span></samp>&rsquo; or
-&lsquo;<samp><span class="samp">{</span></samp>&rsquo; in C), <kbd>C-M-f</kbd> moves past the matching closing
-delimiter.  If the character begins a symbol, string, or number,
-<kbd>C-M-f</kbd> moves over that.
+is an opening delimiter (e.g., &lsquo;<samp><span class="samp">(</span></samp>&rsquo;, &lsquo;<samp><span class="samp">[</span></samp>&rsquo; or &lsquo;<samp><span class="samp">{</span></samp>&rsquo; in C),
+this command moves past the matching closing delimiter.  If the
+character begins a symbol, string, or number, the command moves over
+that.
 
    <p>The command <kbd>C-M-b</kbd> (<code>backward-sexp</code>) moves backward over a
-balanced expression.  The detailed rules are like those above for
-<kbd>C-M-f</kbd>, but with directions reversed.  If there are prefix
-characters (single-quote, backquote and comma, in Lisp) preceding the
-expression, <kbd>C-M-b</kbd> moves back over them as well.  The balanced
-expression commands move across comments as if they were whitespace,
-in most modes.
+balanced expression&mdash;like <kbd>C-M-f</kbd>, but in the reverse direction. 
+If the expression is preceded by any prefix characters (single-quote,
+backquote and comma, in Lisp), the command moves back over them as
+well.
 
-   <p><kbd>C-M-f</kbd> or <kbd>C-M-b</kbd> with an argument repeats that operation the
-specified number of times; with a negative argument, it moves in the
-opposite direction.
+   <p><kbd>C-M-f</kbd> or <kbd>C-M-b</kbd> with an argument repeats that operation
+the specified number of times; with a negative argument means to move
+in the opposite direction.  In most modes, these two commands move
+across comments as if they were whitespace.  Note that their keys,
+<kbd>C-M-f</kbd> and <kbd>C-M-b</kbd>, are analogous to <kbd>C-f</kbd> and <kbd>C-b</kbd>,
+which move by characters (see <a href="Moving-Point.html#Moving-Point">Moving Point</a>), and <kbd>M-f</kbd> and
+<kbd>M-b</kbd>, which move by words (see <a href="Words.html#Words">Words</a>).
 
-   <p><a name="index-killing-expressions-2039"></a><a name="index-C_002dM_002dk-2040"></a><a name="index-kill_002dsexp-2041"></a>  Killing a whole balanced expression can be done with <kbd>C-M-k</kbd>
-(<code>kill-sexp</code>).  <kbd>C-M-k</kbd> kills the characters that <kbd>C-M-f</kbd>
-would move over.
+   <p><a name="index-killing-expressions-2302"></a><a name="index-C_002dM_002dk-2303"></a><a name="index-kill_002dsexp-2304"></a>  To kill a whole balanced expression, type <kbd>C-M-k</kbd>
+(<code>kill-sexp</code>).  This kills the text that <kbd>C-M-f</kbd> would move
+over.
 
-   <p><a name="index-transposition-of-expressions-2042"></a><a name="index-C_002dM_002dt-2043"></a><a name="index-transpose_002dsexps-2044"></a>  A somewhat random-sounding command which is nevertheless handy is
-<kbd>C-M-t</kbd> (<code>transpose-sexps</code>), which drags the previous
-balanced expression across the next one.  An argument serves as a
-repeat count, moving the previous expression over that many following
-ones.  A negative argument drags the previous balanced expression
-backwards across those before it (thus canceling out the effect of
-<kbd>C-M-t</kbd> with a positive argument).  An argument of zero, rather
-than doing nothing, transposes the balanced expressions ending at or
-after point and the mark.
+   <p><a name="index-transposition-of-expressions-2305"></a><a name="index-C_002dM_002dt-2306"></a><a name="index-transpose_002dsexps-2307"></a>  <kbd>C-M-t</kbd> (<code>transpose-sexps</code>) switches the positions of the
+previous balanced expression and the next one.  It is analogous to the
+<kbd>C-t</kbd> command, which transposes characters (see <a href="Transpose.html#Transpose">Transpose</a>). 
+An argument to <kbd>C-M-t</kbd> serves as a repeat count, moving the
+previous expression over that many following ones.  A negative
+argument moves the previous balanced expression backwards across those
+before it.  An argument of zero, rather than doing nothing, transposes
+the balanced expressions ending at or after point and the mark.
 
-   <p><a name="index-C_002dM_002d_0040_0040-2045"></a><a name="index-C_002dM_002d_0040key_007bSPC_007d-2046"></a><a name="index-mark_002dsexp-2047"></a>  To set the region around the next balanced expression in the buffer,
-use <kbd>C-M-&lt;SPC&gt;</kbd> (<code>mark-sexp</code>), which sets mark at the
-same place that <kbd>C-M-f</kbd> would move to.  <kbd>C-M-&lt;SPC&gt;</kbd> treats
-numeric arguments in the same way as <kbd>C-M-f</kbd>; in particular, a
-negative argument puts the mark at the beginning of the previous
-balanced expression.  The alias <kbd>C-M-@</kbd> is equivalent to
-<kbd>C-M-&lt;SPC&gt;</kbd>.  While the mark is active, each successive use of
-<kbd>C-M-&lt;SPC&gt;</kbd> extends the region by shifting the mark by one
-sexp.
+   <p><a name="index-C_002dM_002d_0040_0040-2308"></a><a name="index-C_002dM_002d_0040key_007bSPC_007d-2309"></a><a name="index-mark_002dsexp-2310"></a>  To operate on balanced expressions with a command which acts on the
+region, type <kbd>C-M-&lt;SPC&gt;</kbd> (<code>mark-sexp</code>).  This sets the
+mark where <kbd>C-M-f</kbd> would move to.  While the mark is active, each
+successive call to this command extends the region by shifting the
+mark by one expression.  Positive or negative numeric arguments move
+the mark forward or backward by the specified number of expressions. 
+The alias <kbd>C-M-@</kbd> is equivalent to <kbd>C-M-&lt;SPC&gt;</kbd>. 
+See <a href="Marking-Objects.html#Marking-Objects">Marking Objects</a>, for more information about this and related
+commands.
 
    <p>In languages that use infix operators, such as C, it is not possible
-to recognize all balanced expressions as such because there can be
-multiple possibilities at a given position.  For example, C mode does
-not treat &lsquo;<samp><span class="samp">foo + bar</span></samp>&rsquo; as a single expression, even though it
-<em>is</em> one C expression; instead, it recognizes &lsquo;<samp><span class="samp">foo</span></samp>&rsquo; as one
-expression and &lsquo;<samp><span class="samp">bar</span></samp>&rsquo; as another, with the &lsquo;<samp><span class="samp">+</span></samp>&rsquo; as punctuation
-between them.  Both &lsquo;<samp><span class="samp">foo + bar</span></samp>&rsquo; and &lsquo;<samp><span class="samp">foo</span></samp>&rsquo; are legitimate
-choices for &ldquo;the expression following point&rdquo; when point is at the
-&lsquo;<samp><span class="samp">f</span></samp>&rsquo;, so the expression commands must perforce choose one or the
-other to operate on.  Note that &lsquo;<samp><span class="samp">(foo + bar)</span></samp>&rsquo; is recognized as a
-single expression in C mode, because of the parentheses.
+to recognize all balanced expressions because there can be multiple
+possibilities at a given position.  For example, C mode does not treat
+&lsquo;<samp><span class="samp">foo + bar</span></samp>&rsquo; as a single expression, even though it <em>is</em> one
+C expression; instead, it recognizes &lsquo;<samp><span class="samp">foo</span></samp>&rsquo; as one expression and
+&lsquo;<samp><span class="samp">bar</span></samp>&rsquo; as another, with the &lsquo;<samp><span class="samp">+</span></samp>&rsquo; as punctuation between them. 
+However, C mode recognizes &lsquo;<samp><span class="samp">(foo + bar)</span></samp>&rsquo; as a single expression,
+because of the parentheses.
 
    <div class="footnote">
 <hr>
-<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> The word &ldquo;sexp&rdquo; is used to refer to an
-expression in Lisp.</p>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> The word &ldquo;sexp&rdquo;
+is used to refer to an expression in Lisp.</p>
 
    <hr></div>
 

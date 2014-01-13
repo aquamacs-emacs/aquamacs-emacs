@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Read Only Buffers - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="The-Buffer-List.html#The-Buffer-List" title="The Buffer List">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,7 +43,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Buffers.html#Buffers">Buffers</a>
 
 <h3 class="section">27.7 Read-Only Buffers</h3>
 
-<p><a name="index-read_002donly-buffer-2022"></a><a name="index-buffer_002c-read_002donly-2023"></a>
+<p><a name="index-read_002donly-buffer-2175"></a><a name="index-buffer_002c-read_002donly-2176"></a>
   If a buffer is <dfn>read-only</dfn>, then you cannot change its contents,
 although you may change your view of the contents by scrolling and
 narrowing.
@@ -70,20 +67,17 @@ contents with the usual editing commands would probably be a mistake.
 </ul>
 
 <div class="defun">
-&mdash; Variable: <b>buffer-read-only</b><var><a name="index-buffer_002dread_002donly-2024"></a></var><br>
+&mdash; Variable: <b>buffer-read-only</b><var><a name="index-buffer_002dread_002donly-2177"></a></var><br>
 <blockquote><p>This buffer-local variable specifies whether the buffer is read-only. 
 The buffer is read-only if this variable is non-<code>nil</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>inhibit-read-only</b><var><a name="index-inhibit_002dread_002donly-2025"></a></var><br>
+&mdash; Variable: <b>inhibit-read-only</b><var><a name="index-inhibit_002dread_002donly-2178"></a></var><br>
 <blockquote><p>If this variable is non-<code>nil</code>, then read-only buffers and,
 depending on the actual value, some or all read-only characters may be
-modified.  Read-only characters in a buffer are those that have
-non-<code>nil</code> <code>read-only</code> properties (either text properties or
-overlay properties).  See <a href="Special-Properties.html#Special-Properties">Special Properties</a>, for more information
-about text properties.  See <a href="Overlays.html#Overlays">Overlays</a>, for more information about
-overlays and their properties.
+modified.  Read-only characters in a buffer are those that have a
+non-<code>nil</code> <code>read-only</code> text property.  See <a href="Special-Properties.html#Special-Properties">Special Properties</a>, for more information about text properties.
 
         <p>If <code>inhibit-read-only</code> is <code>t</code>, all <code>read-only</code> character
 properties have no effect.  If <code>inhibit-read-only</code> is a list, then
@@ -92,21 +86,28 @@ of the list (comparison is done with <code>eq</code>).
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>toggle-read-only</b><var> &amp;optional arg<a name="index-toggle_002dread_002donly-2026"></a></var><br>
-<blockquote><p>This command toggles whether the current buffer is read-only.  It is
-intended for interactive use; do not use it in programs.  At any given
-point in a program, you should know whether you want the read-only flag
-on or off; so you can set <code>buffer-read-only</code> explicitly to the
-proper value, <code>t</code> or <code>nil</code>.
+&mdash; Command: <b>read-only-mode</b><var> &amp;optional arg<a name="index-read_002donly_002dmode-2179"></a></var><br>
+<blockquote><p>This is the mode command for Read Only minor mode, a buffer-local
+minor mode.  When the mode is enabled, <code>buffer-read-only</code> is
+non-<code>nil</code> in the buffer; when disabled, <code>buffer-read-only</code>
+is <code>nil</code> in the buffer.  The calling convention is the same as
+for other minor mode commands (see <a href="Minor-Mode-Conventions.html#Minor-Mode-Conventions">Minor Mode Conventions</a>).
 
-        <p>If <var>arg</var> is non-<code>nil</code>, it should be a raw prefix argument. 
-<code>toggle-read-only</code> sets <code>buffer-read-only</code> to <code>t</code> if
-the numeric value of that prefix argument is positive and to
-<code>nil</code> otherwise.  See <a href="Prefix-Command-Arguments.html#Prefix-Command-Arguments">Prefix Command Arguments</a>. 
+        <p>This minor mode mainly serves as a wrapper for
+<code>buffer-read-only</code>; unlike most minor modes, there is no separate
+<code>read-only-mode</code> variable.  Even when Read Only mode is disabled,
+characters with non-<code>nil</code> <code>read-only</code> text properties remain
+read-only.  To temporarily ignore all read-only states, bind
+<code>inhibit-read-only</code>, as described above.
+
+        <p>When enabling Read Only mode, this mode command also enables View mode
+if the option <code>view-read-only</code> is non-<code>nil</code>.  See <a href="../emacs/Misc-Buffer.html#Misc-Buffer">Miscellaneous Buffer Operations</a>. 
+When disabling Read Only mode, it disables View mode if View mode was
+enabled. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>barf-if-buffer-read-only</b><var><a name="index-barf_002dif_002dbuffer_002dread_002donly-2027"></a></var><br>
+&mdash; Function: <b>barf-if-buffer-read-only</b><var><a name="index-barf_002dif_002dbuffer_002dread_002donly-2180"></a></var><br>
 <blockquote><p>This function signals a <code>buffer-read-only</code> error if the current
 buffer is read-only.  See <a href="Using-Interactive.html#Using-Interactive">Using Interactive</a>, for another way to
 signal an error if the current buffer is read-only. 

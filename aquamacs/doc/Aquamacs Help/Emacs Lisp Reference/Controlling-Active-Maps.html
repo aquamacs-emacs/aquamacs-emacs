@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Controlling Active Maps - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Key-Lookup.html#Key-Lookup" title="Key Lookup">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,7 +44,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Keymaps.html#Keymaps">Keymaps</a>
 <h3 class="section">22.9 Controlling the Active Keymaps</h3>
 
 <div class="defun">
-&mdash; Variable: <b>global-map</b><var><a name="index-global_002dmap-1491"></a></var><br>
+&mdash; Variable: <b>global-map</b><var><a name="index-global_002dmap-1582"></a></var><br>
 <blockquote><p>This variable contains the default global keymap that maps Emacs
 keyboard input to commands.  The global keymap is normally this
 keymap.  The default global keymap is a full keymap that binds
@@ -59,7 +56,7 @@ out with.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>current-global-map</b><var><a name="index-current_002dglobal_002dmap-1492"></a></var><br>
+&mdash; Function: <b>current-global-map</b><var><a name="index-current_002dglobal_002dmap-1583"></a></var><br>
 <blockquote><p>This function returns the current global keymap.  This is the same as
 the value of <code>global-map</code> unless you change one or the other. 
 The return value is a reference, not a copy; if you use
@@ -73,10 +70,10 @@ bindings.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>current-local-map</b><var><a name="index-current_002dlocal_002dmap-1493"></a></var><br>
+&mdash; Function: <b>current-local-map</b><var><a name="index-current_002dlocal_002dmap-1584"></a></var><br>
 <blockquote><p>This function returns the current buffer's local keymap, or <code>nil</code>
 if it has none.  In the following example, the keymap for the
-&lsquo;<samp><span class="samp">*scratch*</span></samp>&rsquo; buffer (using Lisp Interaction mode) is a sparse keymap
+<samp><span class="file">*scratch*</span></samp> buffer (using Lisp Interaction mode) is a sparse keymap
 in which the entry for &lt;ESC&gt;, <acronym>ASCII</acronym> code 27, is another sparse
 keymap.
 
@@ -96,12 +93,12 @@ a copy of it; if you use <code>define-key</code> or other functions on it
 you will alter local bindings.
 
 <div class="defun">
-&mdash; Function: <b>current-minor-mode-maps</b><var><a name="index-current_002dminor_002dmode_002dmaps-1494"></a></var><br>
+&mdash; Function: <b>current-minor-mode-maps</b><var><a name="index-current_002dminor_002dmode_002dmaps-1585"></a></var><br>
 <blockquote><p>This function returns a list of the keymaps of currently enabled minor modes. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>use-global-map</b><var> keymap<a name="index-use_002dglobal_002dmap-1495"></a></var><br>
+&mdash; Function: <b>use-global-map</b><var> keymap<a name="index-use_002dglobal_002dmap-1586"></a></var><br>
 <blockquote><p>This function makes <var>keymap</var> the new current global keymap.  It
 returns <code>nil</code>.
 
@@ -109,7 +106,7 @@ returns <code>nil</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>use-local-map</b><var> keymap<a name="index-use_002dlocal_002dmap-1496"></a></var><br>
+&mdash; Function: <b>use-local-map</b><var> keymap<a name="index-use_002dlocal_002dmap-1587"></a></var><br>
 <blockquote><p>This function makes <var>keymap</var> the new local keymap of the current
 buffer.  If <var>keymap</var> is <code>nil</code>, then the buffer has no local
 keymap.  <code>use-local-map</code> returns <code>nil</code>.  Most major mode
@@ -118,7 +115,7 @@ commands use this function.
 
 <!-- Emacs 19 feature -->
 <div class="defun">
-&mdash; Variable: <b>minor-mode-map-alist</b><var><a name="index-minor_002dmode_002dmap_002dalist-1497"></a></var><br>
+&mdash; Variable: <b>minor-mode-map-alist</b><var><a name="index-minor_002dmode_002dmap_002dalist-1588"></a></var><br>
 <blockquote><p><a name="Definition-of-minor_002dmode_002dmap_002dalist"></a>This variable is an alist describing keymaps that may or may not be
 active according to the values of certain variables.  Its elements look
 like this:
@@ -145,7 +142,7 @@ modes.  See also <code>minor-mode-key-binding</code> (see <a href="Functions-for
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>minor-mode-overriding-map-alist</b><var><a name="index-minor_002dmode_002doverriding_002dmap_002dalist-1498"></a></var><br>
+&mdash; Variable: <b>minor-mode-overriding-map-alist</b><var><a name="index-minor_002dmode_002doverriding_002dmap_002dalist-1589"></a></var><br>
 <blockquote><p>This variable allows major modes to override the key bindings for
 particular minor modes.  The elements of this alist look like the
 elements of <code>minor-mode-map-alist</code>: <code>(</code><var>variable</var><code>
@@ -161,7 +158,7 @@ all buffers.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>overriding-local-map</b><var><a name="index-overriding_002dlocal_002dmap-1499"></a></var><br>
+&mdash; Variable: <b>overriding-local-map</b><var><a name="index-overriding_002dlocal_002dmap-1590"></a></var><br>
 <blockquote><p>If non-<code>nil</code>, this variable holds a keymap to use instead of the
 buffer's local keymap, any text property or overlay keymaps, and any
 minor mode keymaps.  This keymap, if specified, overrides all other
@@ -169,7 +166,7 @@ maps that would have been active, except for the current global map.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>overriding-terminal-local-map</b><var><a name="index-overriding_002dterminal_002dlocal_002dmap-1500"></a></var><br>
+&mdash; Variable: <b>overriding-terminal-local-map</b><var><a name="index-overriding_002dterminal_002dlocal_002dmap-1591"></a></var><br>
 <blockquote><p>If non-<code>nil</code>, this variable holds a keymap to use instead of
 <code>overriding-local-map</code>, the buffer's local keymap, text property
 or overlay keymaps, and all the minor mode keymaps.
@@ -180,7 +177,7 @@ incremental search mode.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>overriding-local-map-menu-flag</b><var><a name="index-overriding_002dlocal_002dmap_002dmenu_002dflag-1501"></a></var><br>
+&mdash; Variable: <b>overriding-local-map-menu-flag</b><var><a name="index-overriding_002dlocal_002dmap_002dmenu_002dflag-1592"></a></var><br>
 <blockquote><p>If this variable is non-<code>nil</code>, the value of
 <code>overriding-local-map</code> or <code>overriding-terminal-local-map</code> can
 affect the display of the menu bar.  The default value is <code>nil</code>, so
@@ -196,14 +193,14 @@ exiting.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>special-event-map</b><var><a name="index-special_002devent_002dmap-1502"></a></var><br>
+&mdash; Variable: <b>special-event-map</b><var><a name="index-special_002devent_002dmap-1593"></a></var><br>
 <blockquote><p>This variable holds a keymap for special events.  If an event type has a
 binding in this keymap, then it is special, and the binding for the
 event is run directly by <code>read-event</code>.  See <a href="Special-Events.html#Special-Events">Special Events</a>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>emulation-mode-map-alists</b><var><a name="index-emulation_002dmode_002dmap_002dalists-1503"></a></var><br>
+&mdash; Variable: <b>emulation-mode-map-alists</b><var><a name="index-emulation_002dmode_002dmap_002dalists-1594"></a></var><br>
 <blockquote><p>This variable holds a list of keymap alists to use for emulations
 modes.  It is intended for modes or packages using multiple minor-mode
 keymaps.  Each element is a keymap alist which has the same format and
@@ -211,6 +208,22 @@ meaning as <code>minor-mode-map-alist</code>, or a symbol with a variable
 binding which is such an alist.  The &ldquo;active&rdquo; keymaps in each alist
 are used before <code>minor-mode-map-alist</code> and
 <code>minor-mode-overriding-map-alist</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-temporary-overlay-map</b><var> keymap &amp;optional keep<a name="index-set_002dtemporary_002doverlay_002dmap-1595"></a></var><br>
+<blockquote><p>This function adds <var>keymap</var> as a temporary keymap that takes
+precedence over most other keymaps.  It does not take precedence over
+the &ldquo;overriding&rdquo; maps (see above); and unlike them, if no match for
+a key is found in <var>keymap</var>, the search continues.
+
+        <p>Normally, <var>keymap</var> is used only once.  If the optional argument
+<var>pred</var> is <code>t</code>, the map stays active if a key from <var>keymap</var>
+is used.  <var>pred</var> can also be a function of no arguments: if it returns
+non-<code>nil</code> then <var>keymap</var> stays active.
+
+        <p>For a pseudo-Lisp description of exactly how and when this keymap applies,
+see <a href="Searching-Keymaps.html#Searching-Keymaps">Searching Keymaps</a>. 
 </p></blockquote></div>
 
    </body></html>

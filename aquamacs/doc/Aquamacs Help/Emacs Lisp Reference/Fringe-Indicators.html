@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Fringe Indicators - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Fringe-Cursors.html#Fringe-Cursors" title="Fringe Cursors">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,21 +43,21 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Fringes.html#Fringes">Fringes</a>
 
 <h4 class="subsection">38.13.2 Fringe Indicators</h4>
 
-<p><a name="index-fringe-indicators-3584"></a><a name="index-indicators_002c-fringe-3585"></a>
-  The <dfn>fringe indicators</dfn> are tiny icons Emacs displays in the
-window fringe (on a graphic display) to indicate truncated or
-continued lines, buffer boundaries, overlay arrow, etc.
+<p><a name="index-fringe-indicators-3886"></a><a name="index-indicators_002c-fringe-3887"></a>
+  <dfn>Fringe indicators</dfn> are tiny icons displayed in the window
+fringe to indicate truncated or continued lines, buffer boundaries,
+etc.
 
 <div class="defun">
-&mdash; User Option: <b>indicate-empty-lines</b><var><a name="index-indicate_002dempty_002dlines-3586"></a></var><br>
-<blockquote><p><a name="index-fringes_002c-and-empty-line-indication-3587"></a>When this is non-<code>nil</code>, Emacs displays a special glyph in the
+&mdash; User Option: <b>indicate-empty-lines</b><var><a name="index-indicate_002dempty_002dlines-3888"></a></var><br>
+<blockquote><p><a name="index-fringes_002c-and-empty-line-indication-3889"></a>When this is non-<code>nil</code>, Emacs displays a special glyph in the
 fringe of each empty line at the end of the buffer, on graphical
 displays.  See <a href="Fringes.html#Fringes">Fringes</a>.  This variable is automatically
 buffer-local in every buffer. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>indicate-buffer-boundaries</b><var><a name="index-indicate_002dbuffer_002dboundaries-3588"></a></var><br>
+&mdash; User Option: <b>indicate-buffer-boundaries</b><var><a name="index-indicate_002dbuffer_002dboundaries-3890"></a></var><br>
 <blockquote><p>This buffer-local variable controls how the buffer boundaries and
 window scrolling are indicated in the window fringes.
 
@@ -95,61 +92,52 @@ fringe, and no arrow bitmaps, use <code>((top .  left) (bottom . left))</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>fringe-indicator-alist</b><var><a name="index-fringe_002dindicator_002dalist-3589"></a></var><br>
+&mdash; Variable: <b>fringe-indicator-alist</b><var><a name="index-fringe_002dindicator_002dalist-3891"></a></var><br>
 <blockquote><p>This buffer-local variable specifies the mapping from logical fringe
-indicators to the actual bitmaps displayed in the window fringes.
+indicators to the actual bitmaps displayed in the window fringes.  The
+value is an alist of elements <code>(</code><var>indicator</var><code>
+. </code><var>bitmaps</var><code>)</code>, where <var>indicator</var> specifies a logical indicator
+type and <var>bitmaps</var> specifies the fringe bitmaps to use for that
+indicator.
 
-        <p>These symbols identify the logical fringe indicators:
+        <p>Each <var>indicator</var> should be one of the following symbols:
 
           <dl>
-<dt>Truncation and continuation line indicators:<dd><code>truncation</code>, <code>continuation</code>.
+<dt><code>truncation</code>, <code>continuation</code>.<dd>Used for truncation and continuation lines.
 
-          <br><dt>Buffer position indicators:<dd><code>up</code>, <code>down</code>,
-<code>top</code>, <code>bottom</code>,
-<code>top-bottom</code>.
+          <br><dt><code>up</code>, <code>down</code>, <code>top</code>, <code>bottom</code>, <code>top-bottom</code><dd>Used when <code>indicate-buffer-boundaries</code> is non-<code>nil</code>:
+<code>up</code> and <code>down</code> indicate a buffer boundary lying above or
+below the window edge; <code>top</code> and <code>bottom</code> indicate the
+topmost and bottommost buffer text line; and <code>top-bottom</code>
+indicates where there is just one line of text in the buffer.
 
-          <br><dt>Empty line indicator:<dd><code>empty-line</code>.
+          <br><dt><code>empty-line</code><dd>Used to indicate empty lines when <code>indicate-empty-lines</code> is
+non-<code>nil</code>.
 
-          <br><dt>Overlay arrow indicator:<dd><code>overlay-arrow</code>.
-
-          <br><dt>Unknown bitmap indicator:<dd><code>unknown</code>. 
+          <br><dt><code>overlay-arrow</code><dd>Used for overlay arrows (see <a href="Overlay-Arrow.html#Overlay-Arrow">Overlay Arrow</a>). 
+<!-- Is this used anywhere? -->
+<!-- @item Unknown bitmap indicator: -->
+<!-- @code{unknown}. -->
 </dl>
 
-        <p>The value is an alist where each element <code>(</code><var>indicator</var><code> . </code><var>bitmaps</var><code>)</code>
-specifies the fringe bitmaps used to display a specific logical
-fringe indicator.
+        <p>Each <var>bitmaps</var> value may be a list of symbols <code>(</code><var>left</var>
+<var>right</var><code> [</code><var>left1</var> <var>right1</var><code>])</code>.  The <var>left</var> and
+<var>right</var> symbols specify the bitmaps shown in the left and/or right
+fringe, for the specific indicator.  <var>left1</var> and <var>right1</var> are
+specific to the <code>bottom</code> and <code>top-bottom</code> indicators, and
+are used to indicate that the last text line has no final newline. 
+Alternatively, <var>bitmaps</var> may be a single symbol which is used in
+both left and right fringes.
 
-        <p>Here, <var>indicator</var> specifies the logical indicator type, and
-<var>bitmaps</var> is list of symbols <code>(</code><var>left</var> <var>right</var><code>
-[</code><var>left1</var> <var>right1</var><code>])</code> which specifies the actual bitmap shown
-in the left or right fringe for the logical indicator.
+        <p>See <a href="Fringe-Bitmaps.html#Fringe-Bitmaps">Fringe Bitmaps</a>, for a list of standard bitmap symbols and how
+to define your own.  In addition, <code>nil</code> represents the empty
+bitmap (i.e., an indicator that is not shown).
 
-        <p>The <var>left</var> and <var>right</var> symbols specify the bitmaps shown in
-the left and/or right fringe for the specific indicator.  The
-<var>left1</var> or <var>right1</var> bitmaps are used only for the `bottom' and
-`top-bottom indicators when the last (only) line in has no final
-newline.  Alternatively, <var>bitmaps</var> may be a single symbol which is
-used in both left and right fringes.
-
-        <p>When <code>fringe-indicator-alist</code> has a buffer-local value, and there
-is no bitmap defined for a logical indicator, or the bitmap is
+        <p>When <code>fringe-indicator-alist</code> has a buffer-local value, and
+there is no bitmap defined for a logical indicator, or the bitmap is
 <code>t</code>, the corresponding value from the default value of
-<code>fringe-indicator-alist</code> is used.
-
-        <p>To completely hide a specific indicator, set the bitmap to <code>nil</code>. 
+<code>fringe-indicator-alist</code> is used. 
 </p></blockquote></div>
 
-   <p>Standard fringe bitmaps for indicators:
-<pre class="example">     left-arrow right-arrow up-arrow down-arrow
-     left-curly-arrow right-curly-arrow
-     left-triangle right-triangle
-     top-left-angle top-right-angle
-     bottom-left-angle bottom-right-angle
-     left-bracket right-bracket
-     filled-rectangle hollow-rectangle
-     filled-square hollow-square
-     vertical-bar horizontal-bar
-     empty-line question-mark
-</pre>
    </body></html>
 

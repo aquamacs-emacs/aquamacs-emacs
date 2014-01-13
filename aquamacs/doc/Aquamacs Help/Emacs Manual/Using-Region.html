@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Using Region - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Mark-Ring.html#Mark-Ring" title="Mark Ring">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,7 +44,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Mark.html#Mark">Mark</a>
 
 <h3 class="section">11.3 Operating on the Region</h3>
 
-<p><a name="index-operations-on-a-marked-region-314"></a>  Once you have a region, here are some of the ways you can operate on
+<p><a name="index-operations-on-a-marked-region-377"></a>  Once you have a region, here are some of the ways you can operate on
 it:
 
      <ul>
@@ -58,31 +55,48 @@ it:
 <li>Replace text within it using <kbd>M-%</kbd> (see <a href="Query-Replace.html#Query-Replace">Query Replace</a>). 
 <li>Indent it with <kbd>C-x &lt;TAB&gt;</kbd> or <kbd>C-M-\</kbd> (see <a href="Indentation.html#Indentation">Indentation</a>). 
 <li>Fill it as text with <kbd>M-x fill-region</kbd> (see <a href="Filling.html#Filling">Filling</a>). 
-<li>Print hardcopy with <kbd>M-x print-region</kbd> (see <a href="Printing.html#Printing">Printing</a>). 
+<li>Check the spelling of words within it with <kbd>M-$</kbd> (see <a href="Spelling.html#Spelling">Spelling</a>). 
 <li>Evaluate it as Lisp code with <kbd>M-x eval-region</kbd> (see <a href="Lisp-Eval.html#Lisp-Eval">Lisp Eval</a>). 
 <li>Save it in a register with <kbd>C-x r s</kbd> (see <a href="Registers.html#Registers">Registers</a>). 
 <li>Save it in a buffer or a file (see <a href="Accumulating-Text.html#Accumulating-Text">Accumulating Text</a>). 
 </ul>
 
-   <p>Most commands that operate on the text in the region have the word
-<code>region</code> in their names.
-
    <p>Some commands have a default behavior when the mark is inactive, but
-operate on the text in the region if the mark is active.  For example,
-<kbd>M-$</kbd> (<code>ispell-word</code>) normally checks the spelling of the
-word at point, but it checks the text in the region if the region is
-active (see <a href="Spelling.html#Spelling">Spelling</a>).  Normally, such commands use their default
+operate on the region if the mark is active.  For example, <kbd>M-$</kbd>
+(<code>ispell-word</code>) normally checks the spelling of the word at
+point, but it checks the text in the region if the mark is active
+(see <a href="Spelling.html#Spelling">Spelling</a>).  Normally, such commands use their default
 behavior if the region is empty (i.e., if mark and point are at the
 same position).  If you want them to operate on the empty region,
 change the variable <code>use-empty-active-region</code> to <code>t</code>.
 
-   <p><a name="index-Delete-Selection-mode-315"></a><a name="index-mode_002c-Delete-Selection-316"></a><a name="index-delete_002dselection_002dmode-317"></a>  If you enable Delete Selection mode, a minor mode, then inserting
-text while the mark is active causes the selected text to be deleted
-first.  This also deactivates the mark.  Many graphical applications
-follow this convention, but Emacs does not.  To toggle Delete
-Selection mode on or off, type <kbd>M-x delete-selection-mode</kbd>. 
-Another effect of this mode is that some keys, such as &lt;DEL&gt; and
-<kbd>C-d</kbd>, always kill the region if one exists.
+   <p><a name="index-delete_002dactive_002dregion-378"></a>  As described in <a href="Erasing.html#Erasing">Erasing</a>, the &lt;DEL&gt;
+(<code>backward-delete-char</code>) and &lt;delete&gt;
+(<code>delete-forward-char</code>) commands also act this way.  If the mark
+is active, they delete the text in the region.  (As an exception, if
+you supply a numeric argument <var>n</var>, where <var>n</var> is not one, these
+commands delete <var>n</var> characters regardless of whether the mark is
+active).  If you change the variable <code>delete-active-region</code> to
+<code>nil</code>, then these commands don't act differently when the mark is
+active.  If you change the value to <code>kill</code>, these commands
+<dfn>kill</dfn> the region instead of deleting it (see <a href="Killing.html#Killing">Killing</a>).
+
+   <p><a name="index-mark_002deven_002dif_002dinactive-379"></a>  Other commands always operate on the region, and have no default
+behavior.  Such commands usually have the word <code>region</code> in their
+names, like <kbd>C-w</kbd> (<code>kill-region</code>) and <code>C-x C-u</code>
+(<code>upcase-region</code>).  If the mark is inactive, they operate on the
+&ldquo;inactive region&rdquo;&mdash;that is, on the text between point and the
+position at which the mark was last set (see <a href="Mark-Ring.html#Mark-Ring">Mark Ring</a>).  To
+disable this behavior, change the variable
+<code>mark-even-if-inactive</code> to <code>nil</code>.  Then these commands will
+instead signal an error if the mark is inactive.
+
+   <p><a name="index-Delete-Selection-mode-380"></a><a name="index-mode_002c-Delete-Selection-381"></a><a name="index-delete_002dselection_002dmode-382"></a>  By default, text insertion occurs normally even if the mark is
+active&mdash;for example, typing <kbd>a</kbd> inserts the character &lsquo;<samp><span class="samp">a</span></samp>&rsquo;,
+then deactivates the mark.  If you enable Delete Selection mode, a
+minor mode, then inserting text while the mark is active causes the
+text in the region to be deleted first.  To toggle Delete Selection
+mode on or off, type <kbd>M-x delete-selection-mode</kbd>.
 
    </body></html>
 

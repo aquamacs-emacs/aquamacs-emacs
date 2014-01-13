@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Windows HOME - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Windows-Keyboard.html#Windows-Keyboard" title="Windows Keyboard">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,49 +44,57 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Microsoft-Windows.html#Microsoft-Window
 
 <h3 class="section">G.5 HOME and Startup Directories on MS-Windows</h3>
 
-<p><a name="index-g_t_0040code_007bHOME_007d-directory-on-MS_002dWindows-4405"></a>
-  The Windows equivalent of the <code>HOME</code> directory is the
-<dfn>user-specific application data directory</dfn>.  The actual location
-depends on your Windows version and system configuration; typical values
-are <samp><span class="file">C:\Documents and Settings\</span><var>username</var><span class="file">\Application Data</span></samp> on
-Windows 2K/XP and later, and either <samp><span class="file">C:\WINDOWS\Application Data</span></samp>
-or <samp><span class="file">C:\WINDOWS\Profiles\</span><var>username</var><span class="file">\Application Data</span></samp> on the
-older Windows 9X/ME systems.
+<p><a name="index-g_t_0040code_007bHOME_007d-directory-on-MS_002dWindows-4741"></a>
+  The Windows equivalent of <code>HOME</code> is the <dfn>user-specific
+application data directory</dfn>.  The actual location depends on the
+Windows version; typical values are <samp><span class="file">C:\Documents and
+Settings\</span><var>username</var><span class="file">\Application Data</span></samp> on Windows 2000/XP/2K3,
+<samp><span class="file">C:\Users\</span><var>username</var><span class="file">\AppData\Roaming</span></samp> on Windows
+Vista/7/2008, and either <samp><span class="file">C:\WINDOWS\Application Data</span></samp> or
+<samp><span class="file">C:\WINDOWS\Profiles\</span><var>username</var><span class="file">\Application Data</span></samp> on Windows
+9X/ME.  If this directory does not exist or cannot be accessed, Emacs
+falls back to <samp><span class="file">C:\</span></samp> as the default value of <code>HOME</code>.
 
-   <p><code>HOME</code> can also be set in the system registry, for details see
-<a href="MS_002dWindows-Registry.html#MS_002dWindows-Registry">MS-Windows Registry</a>.
+   <p>You can override this default value of <code>HOME</code> by explicitly
+setting the environment variable <samp><span class="env">HOME</span></samp> to point to any directory
+on your system.  <samp><span class="env">HOME</span></samp> can be set either from the command shell
+prompt or from &lsquo;<samp><span class="samp">Properties</span></samp>&rsquo; dialog of &lsquo;<samp><span class="samp">My Computer</span></samp>&rsquo;. 
+<code>HOME</code> can also be set in the system registry,
+see <a href="MS_002dWindows-Registry.html#MS_002dWindows-Registry">MS-Windows Registry</a>.
 
-   <p><a name="index-init-file-_0040file_007b_002eemacs_007d-on-MS_002dWindows-4406"></a>  The home directory is where your init file <samp><span class="file">.emacs</span></samp> is stored. 
-When Emacs starts, it first checks whether the environment variable
-<samp><span class="env">HOME</span></samp> is set.  If it is, it looks for the init file in the
-directory pointed by <samp><span class="env">HOME</span></samp>.  If <samp><span class="env">HOME</span></samp> is not defined, Emacs
-checks for an existing <samp><span class="file">.emacs</span></samp> file in <samp><span class="file">C:\</span></samp>, the root
-directory of drive <samp><span class="file">C:</span></samp><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  If there's no such file in <samp><span class="file">C:\</span></samp>, Emacs next uses the Windows
-system calls to find out the exact location of your application data
-directory.  If that system call fails, Emacs falls back to <samp><span class="file">C:\</span></samp>.
+   <p>For compatibility with older versions of Emacs<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>, if there is a file named <samp><span class="file">.emacs</span></samp> in <samp><span class="file">C:\</span></samp>, the root
+directory of drive <samp><span class="file">C:</span></samp>, and <samp><span class="env">HOME</span></samp> is set neither in the
+environment nor in the Registry, Emacs will treat <samp><span class="file">C:\</span></samp> as the
+default <code>HOME</code> location, and will not look in the application
+data directory, even if it exists.  Note that only <samp><span class="file">.emacs</span></samp> is
+looked for in <samp><span class="file">C:\</span></samp>; the older name <samp><span class="file">_emacs</span></samp> (see below) is
+not.  This use of <samp><span class="file">C:\.emacs</span></samp> to define <code>HOME</code> is
+deprecated.
 
-   <p>Whatever the final place is, Emacs sets the value of the <samp><span class="env">HOME</span></samp>
-environment variable to point to it, and it will use that location for
-other files and directories it normally creates in the user's home
-directory.
+   <p>Whatever the final place is, Emacs sets the internal value of the
+<samp><span class="env">HOME</span></samp> environment variable to point to it, and it will use that
+location for other files and directories it normally looks for or
+creates in your home directory.
 
-   <p>You can always find out where Emacs thinks is your home directory's
+   <p>You can always find out what Emacs thinks is your home directory's
 location by typing <kbd>C-x d ~/ &lt;RET&gt;</kbd>.  This should present the
 list of files in the home directory, and show its full name on the
 first line.  Likewise, to visit your init file, type <kbd>C-x C-f
-~/.emacs &lt;RET&gt;</kbd>.
+~/.emacs &lt;RET&gt;</kbd> (assuming the file's name is <samp><span class="file">.emacs</span></samp>).
 
-   <p><a name="index-g_t_0040file_007b_005femacs_007d-init-file_002c-MS_002dWindows-4407"></a>  Because MS-DOS does not allow file names with leading dots, and
-because older Windows systems made it hard to create files with such
-names, the Windows port of Emacs supports an alternative name
-<samp><span class="file">_emacs</span></samp> as a fallback, if such a file exists in the home
-directory, whereas <samp><span class="file">.emacs</span></samp> does not.
+   <p><a name="index-init-file-_0040file_007b_002eemacs_007d-on-MS_002dWindows-4742"></a>  The home directory is where your init file is stored.  It can have
+any name mentioned in <a href="Init-File.html#Init-File">Init File</a>.
+
+   <p><a name="index-g_t_0040file_007b_005femacs_007d-init-file_002c-MS_002dWindows-4743"></a>  Because MS-DOS does not allow file names with leading dots, and
+older Windows systems made it hard to create files with such names,
+the Windows port of Emacs supports an init file name <samp><span class="file">_emacs</span></samp>, if
+such a file exists in the home directory and <samp><span class="file">.emacs</span></samp> does not. 
+This name is considered obsolete.
 
    <div class="footnote">
 <hr>
 <h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> 
-The check in <samp><span class="file">C:\</span></samp> is for compatibility with older versions of Emacs,
-which didn't check the application data directory. 
+Older versions of Emacs didn't check the application data directory. 
 </p>
 
    <hr></div>

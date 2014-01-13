@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Apropos - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Help-Mode.html#Help-Mode" title="Help Mode">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,44 +44,48 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Help.html#Help">Help</a>
 
 <h3 class="section">10.4 Apropos</h3>
 
-<p>The <dfn>apropos</dfn> commands answer questions like, &ldquo;What are the
+<p><a name="index-apropos-279"></a>
+  The <dfn>apropos</dfn> commands answer questions like, &ldquo;What are the
 commands for working with files?&rdquo;  More precisely, you specify an
 <dfn>apropos pattern</dfn>, which means either a word, a list of words, or
-a regular expression.  Each apropos command displays a list of items
-that match the pattern, in a separate buffer.
+a regular expression.
+
+   <p>Each of the following apropos commands reads an apropos pattern in
+the minibuffer, searches for items that match the pattern, and
+displays the results in a different window.
 
      <dl>
-<dt><kbd>C-h a </kbd><var>pattern</var><kbd> &lt;RET&gt;</kbd><dd>Search for commands whose names match <var>pattern</var>.
+<dt><kbd>C-h a</kbd><dd><a name="index-C_002dh-a-280"></a><a name="index-apropos_002dcommand-281"></a>Search for commands (<code>apropos-command</code>).  With a prefix argument,
+search for noninteractive functions too.
 
-     <br><dt><kbd>M-x apropos &lt;RET&gt; </kbd><var>pattern</var><kbd> &lt;RET&gt;</kbd><dd>Search for functions and variables whose names match <var>pattern</var>. 
-Both interactive functions (commands) and noninteractive functions can
-be found by this command.
+     <br><dt><kbd>M-x apropos</kbd><dd><a name="index-apropos-282"></a>Search for functions and variables.  Both interactive functions
+(commands) and noninteractive functions can be found by this.
 
-     <br><dt><kbd>M-x apropos-variable &lt;RET&gt; </kbd><var>pattern</var><kbd> &lt;RET&gt;</kbd><dd>Search for user-option variables whose names match <var>pattern</var>.
+     <br><dt><kbd>M-x apropos-user-option</kbd><dd><a name="index-apropos_002duser_002doption-283"></a>Search for user-customizable variables.  With a prefix argument,
+search for non-customizable variables too.
 
-     <br><dt><kbd>M-x apropos-value &lt;RET&gt; </kbd><var>pattern</var><kbd> &lt;RET&gt;</kbd><dd>Search for functions whose definitions match <var>pattern</var>, and
-variables whose values match <var>pattern</var>.
+     <br><dt><kbd>M-x apropos-variable</kbd><dd><a name="index-apropos_002dvariable-284"></a>Search for variables.  With a prefix argument, search for
+customizable variables only.
 
-     <br><dt><kbd>C-h d </kbd><var>pattern</var><kbd> &lt;RET&gt;</kbd><dd>Search for functions and variables whose <strong>documentation
-strings</strong> match <var>pattern</var>. 
+     <br><dt><kbd>M-x apropos-value</kbd><dd><a name="index-apropos_002dvalue-285"></a>Search for variables whose values match the specified pattern.  With a
+prefix argument, search also for functions with definitions matching
+the pattern, and Lisp symbols with properties matching the pattern.
+
+     <br><dt><kbd>C-h d</kbd><dd><a name="index-C_002dh-d-286"></a><a name="index-apropos_002ddocumentation-287"></a>Search for functions and variables whose documentation strings match
+the specified pattern (<code>apropos-documentation</code>). 
 </dl>
 
-   <p><a name="index-C_002dh-a-233"></a><a name="index-apropos_002dcommand-234"></a><a name="index-apropos-235"></a>  The simplest kind of apropos pattern is one word.  Anything which
-contains that word matches the pattern.  Thus, to find the commands
-that work on files, type <kbd>C-h a file &lt;RET&gt;</kbd>.  This displays a
-list of all command names that contain &lsquo;<samp><span class="samp">file</span></samp>&rsquo;, including
+   <p>The simplest kind of apropos pattern is one word.  Anything
+containing that word matches the pattern.  Thus, to find commands that
+work on files, type <kbd>C-h a file &lt;RET&gt;</kbd>.  This displays a list
+of all command names that contain &lsquo;<samp><span class="samp">file</span></samp>&rsquo;, including
 <code>copy-file</code>, <code>find-file</code>, and so on.  Each command name
 comes with a brief description and a list of keys you can currently
 invoke it with.  In our example, it would say that you can invoke
 <code>find-file</code> by typing <kbd>C-x C-f</kbd>.
 
-   <p>The <kbd>a</kbd> in <kbd>C-h a</kbd> stands for &ldquo;Apropos&rdquo;; <kbd>C-h a</kbd>
-runs the command <code>apropos-command</code>.  This command normally checks
-only commands (interactive functions); if you specify a prefix
-argument, it checks noninteractive functions as well.
-
    <p>For more information about a function definition, variable or symbol
-property listed in the apropos buffer, you can click on it with
+property listed in an apropos buffer, you can click on it with
 <kbd>Mouse-1</kbd> or <kbd>Mouse-2</kbd>, or move there and type &lt;RET&gt;.
 
    <p>When you specify more than one word in the apropos pattern, a name
@@ -112,36 +113,17 @@ mark, insert, yank, fill, indent, case, change, set, what, list, find,
 view, describe, default. 
 </blockquote>
 
-   <p><a name="index-apropos-236"></a>  Use <kbd>M-x apropos</kbd> instead of <kbd>C-h a</kbd> to list all the Lisp
-symbols that match an apropos pattern, not just the symbols that are
-commands.  This command does not list key bindings by default; specify
-a numeric argument if you want it to list them.
-
-   <p><a name="index-apropos_002dvariable-237"></a>  Use <kbd>M-x apropos-variable</kbd> to list user-customizable variables
-that match an apropos pattern.  If you specify a prefix argument, it
-lists all matching variables.
-
-   <p><a name="index-C_002dh-d-238"></a><a name="index-apropos_002ddocumentation-239"></a>  The <code>apropos-documentation</code> command is like <code>apropos</code>
-except that it searches documentation strings instead of symbol names
-for matches.
-
-   <p><a name="index-apropos_002dvalue-240"></a>  The <code>apropos-value</code> command is like <code>apropos</code> except that
-it searches variables' values for matches for the apropos pattern. 
-With a prefix argument, it also checks symbols' function definitions
-and property lists.
-
-   <p><a name="index-apropos_002ddo_002dall-241"></a>  If the variable <code>apropos-do-all</code> is non-<code>nil</code>, the apropos
+   <p><a name="index-apropos_002ddo_002dall-288"></a>  If the variable <code>apropos-do-all</code> is non-<code>nil</code>, the apropos
 commands always behave as if they had been given a prefix argument.
 
-   <p><a name="index-apropos_002dsort_002dby_002dscores-242"></a><a name="index-apropos-search-results_002c-order-by-score-243"></a>  By default, apropos lists the search results in alphabetical order. 
-If the variable <code>apropos-sort-by-scores</code> is non-<code>nil</code>, the
-apropos commands try to guess the relevance of each result, and
-display the most relevant ones first.
-
-   <p><a name="index-apropos_002ddocumentation_002dsort_002dby_002dscores-244"></a>  By default, apropos lists the search results for
-<code>apropos-documentation</code> in order of relevance of the match.  If
-the variable <code>apropos-documentation-sort-by-scores</code> is
-<code>nil</code>, apropos lists the symbols found in alphabetical order.
+   <p><a name="index-apropos_002dsort_002dby_002dscores-289"></a><a name="index-apropos-search-results_002c-order-by-score-290"></a><a name="index-apropos_002ddocumentation_002dsort_002dby_002dscores-291"></a>  By default, all apropos commands except <code>apropos-documentation</code>
+list their results in alphabetical order.  If the variable
+<code>apropos-sort-by-scores</code> is non-<code>nil</code>, these commands
+instead try to guess the relevance of each result, and display the
+most relevant ones first.  The <code>apropos-documentation</code> command
+lists its results in order of relevance by default; to list them in
+alphabetical order, change the variable
+<code>apropos-documentation-sort-by-scores</code> to <code>nil</code>.
 
    </body></html>
 

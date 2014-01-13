@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Documentation Basics - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Accessing-Documentation.html#Accessing-Documentation" title="Accessing Documentation">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -42,10 +39,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Documentation.html#Documentation">Docum
 <hr>
 </div>
 
-<!-- node-name,  next,  previous,  up -->
 <h3 class="section">24.1 Documentation Basics</h3>
 
-<p><a name="index-documentation-conventions-1722"></a><a name="index-writing-a-documentation-string-1723"></a><a name="index-string_002c-writing-a-doc-string-1724"></a>
+<p><a name="index-documentation-conventions-1842"></a><a name="index-writing-a-documentation-string-1843"></a><a name="index-string_002c-writing-a-doc-string-1844"></a>
   A documentation string is written using the Lisp syntax for strings,
 with double-quote characters surrounding the text of the string.  This
 is because it really is a Lisp string object.  The string serves as
@@ -55,52 +51,60 @@ string follows the argument list.  In a variable definition, the
 documentation string follows the initial value of the variable.
 
    <p>When you write a documentation string, make the first line a
-complete sentence (or two complete sentences) since some commands,
-such as <code>apropos</code>, show only the first line of a multi-line
-documentation string.  Also, you should not indent the second line of
-a documentation string, if it has one, because that looks odd when you
+complete sentence (or two complete sentences) that briefly describes
+what the function or variable does.  Some commands, such as
+<code>apropos</code>, show only the first line of a multi-line documentation
+string.  Also, you should not indent the second line of a
+documentation string, if it has one, because that looks odd when you
 use <kbd>C-h f</kbd> (<code>describe-function</code>) or <kbd>C-h v</kbd>
 (<code>describe-variable</code>) to view the documentation string.  There
-are many other conventions for doc strings; see <a href="Documentation-Tips.html#Documentation-Tips">Documentation Tips</a>.
+are many other conventions for documentation strings; see
+<a href="Documentation-Tips.html#Documentation-Tips">Documentation Tips</a>.
 
-   <p>Documentation strings can contain several special substrings, which
-stand for key bindings to be looked up in the current keymaps when the
-documentation is displayed.  This allows documentation strings to refer
-to the keys for related commands and be accurate even when a user
-rearranges the key bindings.  (See <a href="Keys-in-Documentation.html#Keys-in-Documentation">Keys in Documentation</a>.)
+   <p>Documentation strings can contain several special text sequences,
+referring to key bindings which are looked up in the current keymaps
+when the user views the documentation.  This allows the help commands
+to display the correct keys even if a user rearranges the default key
+bindings.  See <a href="Keys-in-Documentation.html#Keys-in-Documentation">Keys in Documentation</a>.
 
-   <p><a name="index-emacs_002dlisp_002ddocstring_002dfill_002dcolumn-1725"></a>  Emacs Lisp mode fills documentation strings to the width
+   <p>In the documentation string of an autoloaded command
+(see <a href="Autoload.html#Autoload">Autoload</a>), these special text sequences have an additional
+special effect: they cause <kbd>C-h f</kbd> (<code>describe-function</code>) on
+the command to trigger autoloading.  (This is needed for correctly
+setting up the hyperlinks in the <samp><span class="file">*Help*</span></samp> buffer).
+
+   <p><a name="index-emacs_002dlisp_002ddocstring_002dfill_002dcolumn-1845"></a>  Emacs Lisp mode fills documentation strings to the width
 specified by <code>emacs-lisp-docstring-fill-column</code>.
 
-   <p>In Emacs Lisp, a documentation string is accessible through the
-function or variable that it describes:
+   <p>Exactly where a documentation string is stored depends on how its
+function or variable was defined or loaded into memory:
 
      <ul>
-<li><a name="index-function_002ddocumentation-1726"></a>The documentation for a function is usually stored in the function
-definition itself (see <a href="Lambda-Expressions.html#Lambda-Expressions">Lambda Expressions</a>).  The function
-<code>documentation</code> knows how to extract it.  You can also put
-function documentation in the <code>function-documentation</code> property
-of the function name.  That is useful with definitions such as
-keyboard macros that can't hold a documentation string.
+<li><a name="index-function_002ddocumentation-1846"></a>When you define a function (see <a href="Lambda-Expressions.html#Lambda-Expressions">Lambda Expressions</a>, and
+see <a href="Function-Documentation.html#Function-Documentation">Function Documentation</a>), the documentation string is stored in
+the function definition itself.  You can also put function
+documentation in the <code>function-documentation</code> property of a
+function name.  That is useful for function definitions which can't
+hold a documentation string, such as keyboard macros.
 
-     <li><a name="index-variable_002ddocumentation-1727"></a>The documentation for a variable is stored in the variable's property
-list under the property name <code>variable-documentation</code>.  The
-function <code>documentation-property</code> knows how to retrieve it. 
+     <li><a name="index-variable_002ddocumentation-1847"></a>When you define a variable with a <code>defvar</code> or related form
+(see <a href="Defining-Variables.html#Defining-Variables">Defining Variables</a>), the documentation is stored in the
+variable's <code>variable-documentation</code> property.
+
+     <p><a name="index-g_t_0040file_007bDOC_007d-_0028documentation_0029-file-1848"></a><li>To save memory, the documentation for preloaded functions and
+variables (including primitive functions and autoloaded functions) is
+not kept in memory, but in the file
+<samp><span class="file">emacs/etc/DOC</span></samp>).
+
+     <li>When a function or variable is loaded from a byte-compiled file during
+the Emacs session, its documentation string is not loaded into memory. 
+Instead, Emacs looks it up in the byte-compiled file as needed. 
+See <a href="Docs-and-Compilation.html#Docs-and-Compilation">Docs and Compilation</a>. 
 </ul>
 
-   <p><a name="index-g_t_0040file_007bDOC_002d_0040var_007bversion_007d_007d-_0028documentation_0029-file-1728"></a>To save space, the documentation for preloaded functions and variables
-(including primitive functions and autoloaded functions) is stored in
-the file <samp><span class="file">emacs/etc/DOC-</span><var>version</var></samp>&mdash;not inside Emacs.  The
-documentation strings for functions and variables loaded during the
-Emacs session from byte-compiled files are stored in those files
-(see <a href="Docs-and-Compilation.html#Docs-and-Compilation">Docs and Compilation</a>).
-
-   <p>The data structure inside Emacs has an integer offset into the file, or
-a list containing a file name and an integer, in place of the
-documentation string.  The functions <code>documentation</code> and
-<code>documentation-property</code> use that information to fetch the
-documentation string from the appropriate file; this is transparent to
-the user.
+<p class="noindent">Regardless of where the documentation string is stored, you can
+retrieve it using the <code>documentation</code> or
+<code>documentation-property</code> function, described in the next section.
 
    </body></html>
 

@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Syntax Properties - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Motion-and-Syntax.html#Motion-and-Syntax" title="Motion and Syntax">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,32 +43,64 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Syntax-Tables.html#Syntax-Tables">Synta
 
 <h3 class="section">35.4 Syntax Properties</h3>
 
-<p><a name="index-syntax_002dtable-_0040r_007b_0028text-property_0029_007d-3162"></a>
+<p><a name="index-syntax_002dtable-_0040r_007b_0028text-property_0029_007d-3435"></a>
 When the syntax table is not flexible enough to specify the syntax of
-a language, you can use <code>syntax-table</code> text properties to
-override the syntax table for specific character occurrences in the
-buffer.  See <a href="Text-Properties.html#Text-Properties">Text Properties</a>.  You can use Font Lock mode to set
-<code>syntax-table</code> text properties.  See <a href="Setting-Syntax-Properties.html#Setting-Syntax-Properties">Setting Syntax Properties</a>.
+a language, you can override the syntax table for specific character
+occurrences in the buffer, by applying a <code>syntax-table</code> text
+property.  See <a href="Text-Properties.html#Text-Properties">Text Properties</a>, for how to apply text properties.
 
    <p>The valid values of <code>syntax-table</code> text property are:
 
      <dl>
 <dt><var>syntax-table</var><dd>If the property value is a syntax table, that table is used instead of
-the current buffer's syntax table to determine the syntax for this
-occurrence of the character.
+the current buffer's syntax table to determine the syntax for the
+underlying text character.
 
-     <br><dt><code>(</code><var>syntax-code</var><code> . </code><var>matching-char</var><code>)</code><dd>A cons cell of this format specifies the syntax for this
-occurrence of the character.  (see <a href="Syntax-Table-Internals.html#Syntax-Table-Internals">Syntax Table Internals</a>)
+     <br><dt><code>(</code><var>syntax-code</var><code> . </code><var>matching-char</var><code>)</code><dd>A cons cell of this format is a raw syntax descriptor (see <a href="Syntax-Table-Internals.html#Syntax-Table-Internals">Syntax Table Internals</a>), which directly specifies a syntax class for the
+underlying text character.
 
      <br><dt><code>nil</code><dd>If the property is <code>nil</code>, the character's syntax is determined from
 the current syntax table in the usual way. 
 </dl>
 
 <div class="defun">
-&mdash; Variable: <b>parse-sexp-lookup-properties</b><var><a name="index-parse_002dsexp_002dlookup_002dproperties-3163"></a></var><br>
-<blockquote><p>If this is non-<code>nil</code>, the syntax scanning functions pay attention
-to syntax text properties.  Otherwise they use only the current syntax
-table. 
+&mdash; Variable: <b>parse-sexp-lookup-properties</b><var><a name="index-parse_002dsexp_002dlookup_002dproperties-3436"></a></var><br>
+<blockquote><p>If this is non-<code>nil</code>, the syntax scanning functions, like
+<code>forward-sexp</code>, pay attention to syntax text properties. 
+Otherwise they use only the current syntax table. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>syntax-propertize-function</b><var><a name="index-syntax_002dpropertize_002dfunction-3437"></a></var><br>
+<blockquote><p>This variable, if non-<code>nil</code>, should store a function for applying
+<code>syntax-table</code> properties to a specified stretch of text.  It is
+intended to be used by major modes to install a function which applies
+<code>syntax-table</code> properties in some mode-appropriate way.
+
+        <p>The function is called by <code>syntax-ppss</code> (see <a href="Position-Parse.html#Position-Parse">Position Parse</a>),
+and by Font Lock mode during syntactic fontification (see <a href="Syntactic-Font-Lock.html#Syntactic-Font-Lock">Syntactic Font Lock</a>).  It is called with two arguments, <var>start</var> and
+<var>end</var>, which are the starting and ending positions of the text on
+which it should act.  It is allowed to call <code>syntax-ppss</code> on any
+position before <var>end</var>.  However, it should not call
+<code>syntax-ppss-flush-cache</code>; so, it is not allowed to call
+<code>syntax-ppss</code> on some position and later modify the buffer at an
+earlier position. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>syntax-propertize-extend-region-functions</b><var><a name="index-syntax_002dpropertize_002dextend_002dregion_002dfunctions-3438"></a></var><br>
+<blockquote><p>This abnormal hook is run by the syntax parsing code prior to calling
+<code>syntax-propertize-function</code>.  Its role is to help locate safe
+starting and ending buffer positions for passing to
+<code>syntax-propertize-function</code>.  For example, a major mode can add
+a function to this hook to identify multi-line syntactic constructs,
+and ensure that the boundaries do not fall in the middle of one.
+
+        <p>Each function in this hook should accept two arguments, <var>start</var>
+and <var>end</var>.  It should return either a cons cell of two adjusted
+buffer positions, <code>(</code><var>new-start</var><code> . </code><var>new-end</var><code>)</code>, or
+<code>nil</code> if no adjustment is necessary.  The hook functions are run
+in turn, repeatedly, until they all return <code>nil</code>. 
 </p></blockquote></div>
 
    </body></html>

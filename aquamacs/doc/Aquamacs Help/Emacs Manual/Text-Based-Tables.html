@@ -1,21 +1,19 @@
 <html lang="en">
 <head>
 <title>Text Based Tables - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Text.html#Text" title="Text">
-<link rel="prev" href="Formatted-Text.html#Formatted-Text" title="Formatted Text">
+<link rel="prev" href="Enriched-Text.html#Enriched-Text" title="Enriched Text">
+<link rel="next" href="Two_002dColumn.html#Two_002dColumn" title="Two-Column">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -38,16 +36,17 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <div class="node">
 <a name="Text-Based-Tables"></a>
 <p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Formatted-Text.html#Formatted-Text">Formatted Text</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Two_002dColumn.html#Two_002dColumn">Two-Column</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Enriched-Text.html#Enriched-Text">Enriched Text</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
 <hr>
 </div>
 
-<h3 class="section">29.13 Editing Text-based Tables</h3>
+<h3 class="section">25.14 Editing Text-based Tables</h3>
 
-<p><a name="index-table-mode-1891"></a><a name="index-text_002dbased-tables-1892"></a>
-  Table mode provides an easy and intuitive way to create and edit WYSIWYG
-text-based tables.  Here is an example of such a table:
+<p><a name="index-table-mode-2140"></a><a name="index-text_002dbased-tables-2141"></a>
+  The <code>table</code> package provides commands to easily edit text-based
+tables.  Here is an example of what such a table looks like:
 
 <pre class="smallexample">     +-----------------+--------------------------------+-----------------+
      |     Command     |          Description           |   Key Binding   |
@@ -55,25 +54,20 @@ text-based tables.  Here is an example of such a table:
      |  forward-char   |Move point right N characters   |       C-f       |
      |                 |(left if N is negative).        |                 |
      |                 |                                |                 |
-     |                 |On reaching end of buffer, stop |                 |
-     |                 |and signal error.               |                 |
      +-----------------+--------------------------------+-----------------+
      |  backward-char  |Move point left N characters    |       C-b       |
      |                 |(right if N is negative).       |                 |
      |                 |                                |                 |
-     |                 |On attempt to pass beginning or |                 |
-     |                 |end of buffer, stop and signal  |                 |
-     |                 |error.                          |                 |
      +-----------------+--------------------------------+-----------------+
 </pre>
-   <p>Table mode allows the contents of the table such as this one to be
-easily manipulated by inserting or deleting characters inside a cell. 
-A cell is effectively a localized rectangular edit region and edits to
-a cell do not affect the contents of the surrounding cells.  If the
-contents do not fit into a cell, then the cell is automatically
-expanded in the vertical and/or horizontal directions and the rest of
-the table is restructured and reformatted in accordance with the
-growth of the cell.
+   <p>When Emacs recognizes such a stretch of text as a table
+(see <a href="Table-Recognition.html#Table-Recognition">Table Recognition</a>), editing the contents of each table cell
+will automatically resize the table, whenever the contents become too
+large to fit in the cell.  You can use the commands defined in the
+following sections for navigating and editing the table layout.
+
+   <p><a name="index-table_002dfixed_002dwidth_002dmode-2142"></a>  Type <kbd>M-x table-fixed-width-mode</kbd> to toggle the automatic table
+resizing feature.
 
 <ul class="menu">
 <li><a accesskey="1" href="Table-Definition.html#Table-Definition">Table Definition</a>:           What is a text based table. 
@@ -81,12 +75,9 @@ growth of the cell.
 <li><a accesskey="3" href="Table-Recognition.html#Table-Recognition">Table Recognition</a>:          How to activate and deactivate tables. 
 <li><a accesskey="4" href="Cell-Commands.html#Cell-Commands">Cell Commands</a>:              Cell-oriented commands in a table. 
 <li><a accesskey="5" href="Cell-Justification.html#Cell-Justification">Cell Justification</a>:         Justifying cell contents. 
-<li><a accesskey="6" href="Row-Commands.html#Row-Commands">Row Commands</a>:               Manipulating rows of table cell. 
-<li><a accesskey="7" href="Column-Commands.html#Column-Commands">Column Commands</a>:            Manipulating columns of table cell. 
-<li><a accesskey="8" href="Fixed-Width-Mode.html#Fixed-Width-Mode">Fixed Width Mode</a>:           Fixing cell width. 
-<li><a accesskey="9" href="Table-Conversion.html#Table-Conversion">Table Conversion</a>:           Converting between plain text and tables. 
-<li><a href="Measuring-Tables.html#Measuring-Tables">Measuring Tables</a>:           Analyzing table dimension. 
-<li><a href="Table-Misc.html#Table-Misc">Table Misc</a>:                 Table miscellany. 
+<li><a accesskey="6" href="Table-Rows-and-Columns.html#Table-Rows-and-Columns">Table Rows and Columns</a>:     Inserting and deleting rows and columns. 
+<li><a accesskey="7" href="Table-Conversion.html#Table-Conversion">Table Conversion</a>:           Converting between plain text and tables. 
+<li><a accesskey="8" href="Table-Misc.html#Table-Misc">Table Misc</a>:                 Table miscellany. 
 </ul>
 
    </body></html>

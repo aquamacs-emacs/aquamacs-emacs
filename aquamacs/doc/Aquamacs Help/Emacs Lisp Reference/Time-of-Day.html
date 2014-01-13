@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Time of Day - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Time-Conversion.html#Time-Conversion" title="Time Conversion">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,25 +43,49 @@ Up:&nbsp;<a rel="up" accesskey="u" href="System-Interface.html#System-Interface"
 
 <h3 class="section">39.5 Time of Day</h3>
 
-<p>This section explains how to determine the current time and the time
+<p>This section explains how to determine the current time and time
 zone.
 
+   <p><a name="index-epoch-4196"></a>  Most of these functions represent time as a list of either four
+integers, <code>(</code><var>sec-high</var> <var>sec-low</var> <var>microsec</var>
+<var>picosec</var><code>)</code>, or of three
+integers, <code>(</code><var>sec-high</var> <var>sec-low</var> <var>microsec</var><code>)</code>, or of
+two integers, <code>(</code><var>sec-high</var> <var>sec-low</var><code>)</code>.  The integers
+<var>sec-high</var> and <var>sec-low</var> give the high and low bits of an
+integer number of seconds.  This integer number,
+<var>high</var> * 2**16 + <var>low</var>,
+is the number of seconds from the <dfn>epoch</dfn> (0:00 January 1, 1970
+UTC) to the specified time.  The third list element <var>microsec</var>, if
+present, gives the number of microseconds from the start of that
+second to the specified time. 
+Similarly, the fourth list element <var>picosec</var>, if present, gives
+the number of picoseconds from the start of that microsecond to the
+specified time.
+
+   <p>The return value of <code>current-time</code> represents time using four
+integers, as do the timestamps in the return value of
+<code>file-attributes</code> (see <a href="Definition-of-file_002dattributes.html#Definition-of-file_002dattributes">Definition of file-attributes</a>).  In function arguments, e.g., the <var>time-value</var>
+argument to <code>current-time-string</code>, two-, three-, and four-integer
+lists are accepted.  You can convert times from the list
+representation into standard human-readable strings using
+<code>current-time</code>, or to other forms using the <code>decode-time</code>
+and <code>format-time-string</code> functions documented in the following
+sections.
+
 <div class="defun">
-&mdash; Function: <b>current-time-string</b><var> &amp;optional time-value<a name="index-current_002dtime_002dstring-3849"></a></var><br>
+&mdash; Function: <b>current-time-string</b><var> &amp;optional time-value<a name="index-current_002dtime_002dstring-4197"></a></var><br>
 <blockquote><p>This function returns the current time and date as a human-readable
-string.  The format of the string is unvarying; the number of characters
-used for each part is always the same, so you can reliably use
-<code>substring</code> to extract pieces of it.  It is wise to count the
-characters from the beginning of the string rather than from the end, as
-additional information may some day be added at the end.
+string.  The format does not vary for the initial part of the string,
+which contains the day of week, month, day of month, and time of day
+in that order: the number of characters used for these fields is
+always the same, so you can reliably
+use <code>substring</code> to extract them.  You should count
+characters from the beginning of the string rather than from the end,
+as the year might not have exactly four digits, and additional
+information may some day be added at the end.
 
         <p>The argument <var>time-value</var>, if given, specifies a time to format
-instead of the current time.  This argument should have the same form
-as the times obtained from <code>current-time</code> (see below) and from
-<code>file-attributes</code> (see <a href="Definition-of-file_002dattributes.html#Definition-of-file_002dattributes">Definition of file-attributes</a>).  It
-should be a list whose first two elements are integers; a third
-(microsecond) element, if present, is ignored.  <var>time-value</var> can
-also be a cons of two integers, but this usage is obsolete.
+(represented as a list of integers), instead of the current time.
 
      <pre class="example">          (current-time-string)
                &rArr; "Wed Oct 14 22:21:05 1987"
@@ -72,24 +93,28 @@ also be a cons of two integers, but this usage is obsolete.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>current-time</b><var><a name="index-current_002dtime-3850"></a></var><br>
-<blockquote><p>This function returns the system's time value as a list of three
-integers: <code>(</code><var>high</var> <var>low</var> <var>microsec</var><code>)</code>.  The integers
-<var>high</var> and <var>low</var> combine to give the number of seconds since
-0:00 January 1, 1970 UTC (Coordinated Universal Time), which is
-<var>high</var> * 2**16 + <var>low</var>.
-
-        <p>The third element, <var>microsec</var>, gives the microseconds since the
-start of the current second (or 0 for systems that return time with
-the resolution of only one second).
-
-        <p>The first two elements can be compared with file time values such as you
-get with the function <code>file-attributes</code>. 
-See <a href="Definition-of-file_002dattributes.html#Definition-of-file_002dattributes">Definition of file-attributes</a>. 
+&mdash; Function: <b>current-time</b><var><a name="index-current_002dtime-4198"></a></var><br>
+<blockquote><p>This function returns the current time, represented as a list of four
+integers <code>(</code><var>sec-high</var> <var>sec-low</var> <var>microsec</var> <var>picosec</var><code>)</code>. 
+These integers have trailing zeros on systems that return time with
+lower resolutions.  On all current machines <var>picosec</var> is a
+multiple of 1000, but this may change as higher-resolution clocks
+become available. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>current-time-zone</b><var> &amp;optional time-value<a name="index-current_002dtime_002dzone-3851"></a></var><br>
+&mdash; Function: <b>float-time</b><var> &amp;optional time-value<a name="index-float_002dtime-4199"></a></var><br>
+<blockquote><p>This function returns the current time as a floating-point number of
+seconds since the epoch.  The optional argument <var>time-value</var>, if
+given, specifies a time (represented as a list of integers) to convert
+instead of the current time.
+
+        <p><em>Warning</em>: Since the result is floating point, it may not be
+exact.  Do not use this function if precise time stamps are required. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>current-time-zone</b><var> &amp;optional time-value<a name="index-current_002dtime_002dzone-4200"></a></var><br>
 <blockquote><p>This function returns a list describing the time zone that the user is
 in.
 
@@ -104,34 +129,15 @@ adjustment, then the value is constant through time.
         <p>If the operating system doesn't supply all the information necessary to
 compute the value, the unknown elements of the list are <code>nil</code>.
 
-        <p>The argument <var>time-value</var>, if given, specifies a time to analyze
-instead of the current time.  The argument should have the same form
-as for <code>current-time-string</code> (see above).  Thus, you can use
-times obtained from <code>current-time</code> (see above) and from
-<code>file-attributes</code>.  See <a href="Definition-of-file_002dattributes.html#Definition-of-file_002dattributes">Definition of file-attributes</a>. 
+        <p>The argument <var>time-value</var>, if given, specifies a time (represented
+as a list of integers) to analyze instead of the current time. 
 </p></blockquote></div>
 
-<div class="defun">
-&mdash; Function: <b>set-time-zone-rule</b><var> tz<a name="index-set_002dtime_002dzone_002drule-3852"></a></var><br>
-<blockquote><p>This function specifies the local time zone according to <var>tz</var>.  If
-<var>tz</var> is <code>nil</code>, that means to use an implementation-defined
-default time zone.  If <var>tz</var> is <code>t</code>, that means to use
-Universal Time.  Otherwise, <var>tz</var> should be a string specifying a
-time zone rule. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>float-time</b><var> &amp;optional time-value<a name="index-float_002dtime-3853"></a></var><br>
-<blockquote><p>This function returns the current time as a floating-point number of
-seconds since the epoch.  The argument <var>time-value</var>, if given,
-specifies a time to convert instead of the current time.  The argument
-should have the same form as for <code>current-time-string</code> (see
-above).  Thus, it accepts the output of <code>current-time</code> and
-<code>file-attributes</code> (see <a href="Definition-of-file_002dattributes.html#Definition-of-file_002dattributes">Definition of file-attributes</a>).
-
-        <p><em>Warning</em>: Since the result is floating point, it may not be
-exact.  Do not use this function if precise time stamps are required. 
-</p></blockquote></div>
+   <p>The current time zone is determined by the <samp><span class="env">TZ</span></samp> environment
+variable.  See <a href="System-Environment.html#System-Environment">System Environment</a>.  For example, you can tell Emacs
+to use universal time with <code>(setenv "TZ" "UTC0")</code>.  If <samp><span class="env">TZ</span></samp>
+is not in the environment, Emacs uses a platform-dependent default
+time zone.
 
    </body></html>
 

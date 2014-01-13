@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Pop-Up Menus - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Dialog-Boxes.html#Dialog-Boxes" title="Dialog Boxes">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,13 +42,15 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
 <hr>
 </div>
 
-<h3 class="section">29.16 Pop-Up Menus</h3>
+<h3 class="section">29.15 Pop-Up Menus</h3>
 
-<p>When using a window system, a Lisp program can pop up a menu so that
-the user can choose an alternative with the mouse.
+<p>A Lisp program can pop up a menu so that the user can choose an
+alternative with the mouse.  On a text terminal, if the mouse is not
+available, the user can choose an alternative using the keyboard
+motion keys&mdash;<kbd>C-n</kbd>, <kbd>C-p</kbd>, or up- and down-arrow keys.
 
 <div class="defun">
-&mdash; Function: <b>x-popup-menu</b><var> position menu<a name="index-x_002dpopup_002dmenu-2400"></a></var><br>
+&mdash; Function: <b>x-popup-menu</b><var> position menu<a name="index-x_002dpopup_002dmenu-2653"></a></var><br>
 <blockquote><p>This function displays a pop-up menu and returns an indication of
 what selection the user makes.
 
@@ -67,16 +66,22 @@ pixels, counting from the top left corner of <var>window</var>.  <var>window</va
 may be a window or a frame.
 
         <p>If <var>position</var> is <code>t</code>, it means to use the current mouse
-position.  If <var>position</var> is <code>nil</code>, it means to precompute the
-key binding equivalents for the keymaps specified in <var>menu</var>,
-without actually displaying or popping up the menu.
+position (or the top-left corner of the frame if the mouse is not
+available on a text terminal).  If <var>position</var> is <code>nil</code>, it
+means to precompute the key binding equivalents for the keymaps
+specified in <var>menu</var>, without actually displaying or popping up the
+menu.
 
         <p>The argument <var>menu</var> says what to display in the menu.  It can be a
 keymap or a list of keymaps (see <a href="Menu-Keymaps.html#Menu-Keymaps">Menu Keymaps</a>).  In this case, the
 return value is the list of events corresponding to the user's choice. 
-(This list has more than one element if the choice occurred in a
-submenu.)  Note that <code>x-popup-menu</code> does not actually execute the
-command bound to that sequence of events.
+This list has more than one element if the choice occurred in a
+submenu.  (Note that <code>x-popup-menu</code> does not actually execute the
+command bound to that sequence of events.)  On text terminals and
+toolkits that support menu titles, the title is taken from the prompt
+string of <var>menu</var> if <var>menu</var> is a keymap, or from the prompt
+string of the first keymap in <var>menu</var> if it is a list of keymaps
+(see <a href="Defining-Menus.html#Defining-Menus">Defining Menus</a>).
 
         <p>Alternatively, <var>menu</var> can have the following form:
 
@@ -86,14 +91,16 @@ command bound to that sequence of events.
 
      <pre class="example">          (<var>title</var> <var>item1</var> <var>item2</var>...)
 </pre>
-        <p>Each item should normally be a cons cell <code>(</code><var>line</var><code> . </code><var>value</var><code>)</code>,
-where <var>line</var> is a string, and <var>value</var> is the value to return if
-that <var>line</var> is chosen.  An item can also be a string; this makes a
-non-selectable line in the menu.
+        <p>Each <var>item</var> should be a cons cell, <code>(</code><var>line</var><code> . </code><var>value</var><code>)</code>,
+where <var>line</var> is a string and <var>value</var> is the value to return if
+that <var>line</var> is chosen.  Unlike in a menu keymap, a <code>nil</code>
+<var>value</var> does not make the menu item non-selectable. 
+Alternatively, each <var>item</var> can be a string rather than a cons
+cell; this makes a non-selectable menu item.
 
         <p>If the user gets rid of the menu without making a valid choice, for
 instance by clicking the mouse away from a valid choice or by typing
-keyboard input, then this normally results in a quit and
+<kbd>C-g</kbd>, then this normally results in a quit and
 <code>x-popup-menu</code> does not return.  But if <var>position</var> is a mouse
 button event (indicating that the user invoked the menu with the
 mouse) then no quit occurs and <code>x-popup-menu</code> returns <code>nil</code>. 

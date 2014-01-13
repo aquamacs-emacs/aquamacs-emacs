@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Kinds of Files - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Truenames.html#Truenames" title="Truenames">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,15 +41,14 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Information-about-Files.html#Informatio
 <hr>
 </div>
 
-<!-- node-name,  next,  previous,  up -->
 <h4 class="subsection">25.6.2 Distinguishing Kinds of Files</h4>
 
 <p>This section describes how to distinguish various kinds of files, such
 as directories, symbolic links, and ordinary files.
 
 <div class="defun">
-&mdash; Function: <b>file-symlink-p</b><var> filename<a name="index-file_002dsymlink_002dp-1815"></a></var><br>
-<blockquote><p><a name="index-file-symbolic-links-1816"></a>If the file <var>filename</var> is a symbolic link, the
+&mdash; Function: <b>file-symlink-p</b><var> filename<a name="index-file_002dsymlink_002dp-1941"></a></var><br>
+<blockquote><p><a name="index-file-symbolic-links-1942"></a>If the file <var>filename</var> is a symbolic link, the
 <code>file-symlink-p</code> function returns the (non-recursive) link target
 as a string.  (Determining the file name that the link points to from
 the target is nontrivial.)  First, this function recursively follows
@@ -77,7 +73,7 @@ symbolic links at all levels of parent directories.
 all levels for <var>filename</var>.
 
 <div class="defun">
-&mdash; Function: <b>file-directory-p</b><var> filename<a name="index-file_002ddirectory_002dp-1817"></a></var><br>
+&mdash; Function: <b>file-directory-p</b><var> filename<a name="index-file_002ddirectory_002dp-1943"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if <var>filename</var> is the name of an
 existing directory, <code>nil</code> otherwise.
 
@@ -96,10 +92,27 @@ existing directory, <code>nil</code> otherwise.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>file-regular-p</b><var> filename<a name="index-file_002dregular_002dp-1818"></a></var><br>
+&mdash; Function: <b>file-regular-p</b><var> filename<a name="index-file_002dregular_002dp-1944"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if the file <var>filename</var> exists and is
 a regular file (not a directory, named pipe, terminal, or
 other I/O device). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>file-equal-p</b><var> file1 file2<a name="index-file_002dequal_002dp-1945"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if the files <var>file1</var> and
+<var>file2</var> name the same file.  If <var>file1</var> or <var>file2</var> does
+not exist, the return value is unspecified. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>file-in-directory-p</b><var> file dir<a name="index-file_002din_002ddirectory_002dp-1946"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if <var>file</var> is a file in directory
+<var>dir</var>, or in a subdirectory of <var>dir</var>.  It also returns
+<code>t</code> if <var>file</var> and <var>dir</var> are the same directory.  It
+compares the <code>file-truename</code> values of the two directories
+(see <a href="Truenames.html#Truenames">Truenames</a>).  If <var>dir</var> does not name an existing
+directory, the return value is <code>nil</code>. 
 </p></blockquote></div>
 
    </body></html>

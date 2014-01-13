@@ -1,0 +1,174 @@
+<html lang="en">
+<head>
+<title>Tabulated List Mode - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Major-Modes.html#Major-Modes" title="Major Modes">
+<link rel="prev" href="Mode-Hooks.html#Mode-Hooks" title="Mode Hooks">
+<link rel="next" href="Generic-Modes.html#Generic-Modes" title="Generic Modes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
+
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Tabulated-List-Mode"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Generic-Modes.html#Generic-Modes">Generic Modes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mode-Hooks.html#Mode-Hooks">Mode Hooks</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Major-Modes.html#Major-Modes">Major Modes</a>
+<hr>
+</div>
+
+<h4 class="subsection">23.2.7 Tabulated List mode</h4>
+
+<p><a name="index-Tabulated-List-mode-1727"></a>
+  Tabulated List mode is a major mode for displaying tabulated data,
+i.e., data consisting of <dfn>entries</dfn>, each entry occupying one row of
+text with its contents divided into columns.  Tabulated List mode
+provides facilities for pretty-printing rows and columns, and sorting
+the rows according to the values in each column.  It is derived from
+Special mode (see <a href="Basic-Major-Modes.html#Basic-Major-Modes">Basic Major Modes</a>).
+
+   <p>Tabulated List mode is intended to be used as a parent mode by a more
+specialized major mode.  Examples include Process Menu mode
+(see <a href="Process-Information.html#Process-Information">Process Information</a>) and Package Menu mode (see <a href="../emacs/Package-Menu.html#Package-Menu">Package Menu</a>).
+
+   <p><a name="index-tabulated_002dlist_002dmode-1728"></a>  Such a derived mode should use <code>define-derived-mode</code> in the usual
+way, specifying <code>tabulated-list-mode</code> as the second argument
+(see <a href="Derived-Modes.html#Derived-Modes">Derived Modes</a>).  The body of the <code>define-derived-mode</code>
+form should specify the format of the tabulated data, by assigning
+values to the variables documented below; then, it should call the
+function <code>tabulated-list-init-header</code> to initialize the header
+line.
+
+   <p>The derived mode should also define a <dfn>listing command</dfn>.  This,
+not the mode command, is what the user calls (e.g., <kbd>M-x
+list-processes</kbd>).  The listing command should create or switch to a
+buffer, turn on the derived mode, specify the tabulated data, and
+finally call <code>tabulated-list-print</code> to populate the buffer.
+
+<div class="defun">
+&mdash; Variable: <b>tabulated-list-format</b><var><a name="index-tabulated_002dlist_002dformat-1729"></a></var><br>
+<blockquote><p>This buffer-local variable specifies the format of the Tabulated List
+data.  Its value should be a vector.  Each element of the vector
+represents a data column, and should be a list <code>(</code><var>name</var>
+<var>width</var> <var>sort</var><code>)</code>, where
+
+          <ul>
+<li><var>name</var> is the column's name (a string).
+
+          <li><var>width</var> is the width to reserve for the column (an integer).  This
+is meaningless for the last column, which runs to the end of each line.
+
+          <li><var>sort</var> specifies how to sort entries by the column.  If <code>nil</code>,
+the column cannot be used for sorting.  If <code>t</code>, the column is
+sorted by comparing string values.  Otherwise, this should be a
+predicate function for <code>sort</code> (see <a href="Rearrangement.html#Rearrangement">Rearrangement</a>), which
+accepts two arguments with the same form as the elements of
+<code>tabulated-list-entries</code> (see below). 
+</ul>
+        </p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>tabulated-list-entries</b><var><a name="index-tabulated_002dlist_002dentries-1730"></a></var><br>
+<blockquote><p>This buffer-local variable specifies the entries displayed in the
+Tabulated List buffer.  Its value should be either a list, or a
+function.
+
+        <p>If the value is a list, each list element corresponds to one entry, and
+should have the form <code>(</code><var>id</var><code>&nbsp;</code><var>contents</var><code>)</code><!-- /@w -->, where
+
+          <ul>
+<li><var>id</var> is either <code>nil</code>, or a Lisp object that identifies the
+entry.  If the latter, the cursor stays on the &ldquo;same&rdquo; entry when
+re-sorting entries.  Comparison is done with <code>equal</code>.
+
+          <li><var>contents</var> is a vector with the same number of elements as
+<code>tabulated-list-format</code>.  Each vector element is either a string,
+which is inserted into the buffer as-is, or a list <code>(</code><var>label</var><code>
+. </code><var>properties</var><code>)</code>, which means to insert a text button by calling
+<code>insert-text-button</code> with <var>label</var> and <var>properties</var> as
+arguments (see <a href="Making-Buttons.html#Making-Buttons">Making Buttons</a>).
+
+          <p>There should be no newlines in any of these strings. 
+</ul>
+
+        <p>Otherwise, the value should be a function which returns a list of the
+above form when called with no arguments. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>tabulated-list-revert-hook</b><var><a name="index-tabulated_002dlist_002drevert_002dhook-1731"></a></var><br>
+<blockquote><p>This normal hook is run prior to reverting a Tabulated List buffer.  A
+derived mode can add a function to this hook to recompute
+<code>tabulated-list-entries</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>tabulated-list-printer</b><var><a name="index-tabulated_002dlist_002dprinter-1732"></a></var><br>
+<blockquote><p>The value of this variable is the function called to insert an entry at
+point, including its terminating newline.  The function should accept
+two arguments, <var>id</var> and <var>contents</var>, having the same meanings as
+in <code>tabulated-list-entries</code>.  The default value is a function which
+inserts an entry in a straightforward way; a mode which uses Tabulated
+List mode in a more complex way can specify another function. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>tabulated-list-sort-key</b><var><a name="index-tabulated_002dlist_002dsort_002dkey-1733"></a></var><br>
+<blockquote><p>The value of this variable specifies the current sort key for the
+Tabulated List buffer.  If it is <code>nil</code>, no sorting is done. 
+Otherwise, it should have the form <code>(</code><var>name</var><code> . </code><var>flip</var><code>)</code>,
+where <var>name</var> is a string matching one of the column names in
+<code>tabulated-list-format</code>, and <var>flip</var>, if non-<code>nil</code>, means
+to invert the sort order. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>tabulated-list-init-header</b><var><a name="index-tabulated_002dlist_002dinit_002dheader-1734"></a></var><br>
+<blockquote><p>This function computes and sets <code>header-line-format</code> for the
+Tabulated List buffer (see <a href="Header-Lines.html#Header-Lines">Header Lines</a>), and assigns a keymap to
+the header line to allow sort entries by clicking on column headers.
+
+        <p>Modes derived from Tabulated List mode should call this after setting
+the above variables (in particular, only after setting
+<code>tabulated-list-format</code>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>tabulated-list-print</b><var> &amp;optional remember-pos<a name="index-tabulated_002dlist_002dprint-1735"></a></var><br>
+<blockquote><p>This function populates the current buffer with entries.  It should be
+called by the listing command.  It erases the buffer, sorts the entries
+specified by <code>tabulated-list-entries</code> according to
+<code>tabulated-list-sort-key</code>, then calls the function specified by
+<code>tabulated-list-printer</code> to insert each entry.
+
+        <p>If the optional argument <var>remember-pos</var> is non-<code>nil</code>, this
+function looks for the <var>id</var> element on the current line, if any, and
+tries to move to that entry after all the entries are (re)inserted. 
+</p></blockquote></div>
+
+   </body></html>
+

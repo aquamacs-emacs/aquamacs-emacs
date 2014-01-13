@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Hard and Soft Newlines - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Formatted-Text.html#Formatted-Text" title="Formatted Text">
-<link rel="prev" href="Requesting-Formatted-Text.html#Requesting-Formatted-Text" title="Requesting Formatted Text">
+<link rel="up" href="Enriched-Text.html#Enriched-Text" title="Enriched Text">
+<link rel="prev" href="Enriched-Mode.html#Enriched-Mode" title="Enriched Mode">
 <link rel="next" href="Editing-Format-Info.html#Editing-Format-Info" title="Editing Format Info">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -40,39 +37,34 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <a name="Hard-and-Soft-Newlines"></a>
 <p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Editing-Format-Info.html#Editing-Format-Info">Editing Format Info</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Requesting-Formatted-Text.html#Requesting-Formatted-Text">Requesting Formatted Text</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Formatted-Text.html#Formatted-Text">Formatted Text</a>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Enriched-Mode.html#Enriched-Mode">Enriched Mode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Enriched-Text.html#Enriched-Text">Enriched Text</a>
 <hr>
 </div>
 
-<h4 class="subsection">29.12.2 Hard and Soft Newlines</h4>
+<h4 class="subsection">25.13.2 Hard and Soft Newlines</h4>
 
-<p><a name="index-hard-newline-1846"></a><a name="index-soft-newline-1847"></a><a name="index-newlines_002c-hard-and-soft-1848"></a>
-<a name="index-use_002dhard_002dnewlines-1849"></a>  In formatted text, Emacs distinguishes between two different kinds of
-newlines, <dfn>hard</dfn> newlines and <dfn>soft</dfn> newlines.  (You can enable
-or disable this feature separately in any  buffer with the command
-<code>use-hard-newlines</code>.)
+<p><a name="index-hard-newline-2095"></a><a name="index-soft-newline-2096"></a><a name="index-newlines_002c-hard-and-soft-2097"></a>
+<a name="index-use_002dhard_002dnewlines-2098"></a>  In Enriched mode, Emacs distinguishes between two different kinds of
+newlines, <dfn>hard</dfn> newlines and <dfn>soft</dfn> newlines.  You can also
+enable or disable this feature in other buffers, by typing <kbd>M-x
+use-hard-newlines</kbd>.
 
-   <p>Hard newlines are used to separate paragraphs, or items in a list, or
-anywhere that there should always be a line break regardless of the
-margins.  The &lt;RET&gt; command (<code>newline</code>) and <kbd>C-o</kbd>
-(<code>open-line</code>) insert hard newlines.
+   <p>Hard newlines are used to separate paragraphs, or anywhere there
+needs to be a line break regardless of how the text is filled; soft
+newlines are used for filling.  The &lt;RET&gt; (<code>newline</code>) and
+<kbd>C-o</kbd> (<code>open-line</code>) commands insert hard newlines.  The fill
+commands, including Auto Fill (see <a href="Auto-Fill.html#Auto-Fill">Auto Fill</a>), insert only soft
+newlines and delete only soft newlines, leaving hard newlines alone.
 
-   <p>Soft newlines are used to make text fit between the margins.  All the
-fill commands, including Auto Fill, insert soft newlines&mdash;and they
-delete only soft newlines.
-
-   <p>Although hard and soft newlines look the same, it is important to bear
-the difference in mind.  Do not use &lt;RET&gt; to break lines in the
-middle of filled paragraphs, or else you will get hard newlines that are
-barriers to further filling.  Instead, let Auto Fill mode break lines,
-so that if the text or the margins change, Emacs can refill the lines
-properly.  See <a href="Auto-Fill.html#Auto-Fill">Auto Fill</a>.
-
-   <p>On the other hand, in tables and lists, where the lines should always
-remain as you type them, you can use &lt;RET&gt; to end lines.  For these
-lines, you may also want to set the justification style to
-<code>unfilled</code>.  See <a href="Format-Justification.html#Format-Justification">Format Justification</a>.
+<!-- FIXME: I don't see ‘unfilled’ in that node.  -xfq -->
+   <p>Thus, when editing with Enriched mode, you should not use &lt;RET&gt;
+or <kbd>C-o</kbd> to break lines in the middle of filled paragraphs.  Use
+Auto Fill mode or explicit fill commands (see <a href="Fill-Commands.html#Fill-Commands">Fill Commands</a>)
+instead.  Use &lt;RET&gt; or <kbd>C-o</kbd> where line breaks should always
+remain, such as in tables and lists.  For such lines, you may also
+want to set the justification style to <code>unfilled</code>
+(see <a href="Enriched-Justification.html#Enriched-Justification">Enriched Justification</a>).
 
    </body></html>
 

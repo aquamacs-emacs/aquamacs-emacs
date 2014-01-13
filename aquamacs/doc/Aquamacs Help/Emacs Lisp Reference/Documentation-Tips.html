@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Documentation Tips - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Comment-Tips.html#Comment-Tips" title="Comment Tips">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,8 +43,8 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Tips.html#Tips">Tips</a>
 
 <h3 class="section">D.6 Tips for Documentation Strings</h3>
 
-<p><a name="index-documentation-strings_002c-conventions-and-tips-3935"></a>
-<a name="index-checkdoc_002dminor_002dmode-3936"></a>  Here are some tips and conventions for the writing of documentation
+<p><a name="index-documentation-strings_002c-conventions-and-tips-4299"></a>
+<a name="index-checkdoc_002dminor_002dmode-4300"></a>  Here are some tips and conventions for the writing of documentation
 strings.  You can check many of these conventions by running the command
 <kbd>M-x checkdoc-minor-mode</kbd>.
 
@@ -55,11 +52,9 @@ strings.  You can check many of these conventions by running the command
 <li>Every command, function, or variable intended for users to know about
 should have a documentation string.
 
-     <li>An internal variable or subroutine of a Lisp program might as well have
-a documentation string.  In earlier Emacs versions, you could save space
-by using a comment instead of a documentation string, but that is no
-longer the case&mdash;documentation strings now take up very little space in
-a running Emacs.
+     <li>An internal variable or subroutine of a Lisp program might as well
+have a documentation string.  Documentation strings take up very
+little space in a running Emacs.
 
      <li>Format the documentation string so that it fits in an Emacs window on an
 80-column screen.  It is a good idea for most lines to be no wider than
@@ -69,13 +64,13 @@ or it will look bad in the output of <code>apropos</code>.
      <p>You can fill the text if that looks good.  However, rather than blindly
 filling the entire documentation string, you can often make it much more
 readable by choosing certain line breaks with care.  Use blank lines
-between topics if the documentation string is long.
+between sections if the documentation string is long.
 
      <li>The first line of the documentation string should consist of one or two
 complete sentences that stand on their own as a summary.  <kbd>M-x
 apropos</kbd> displays just the first line, and if that line's contents don't
 stand on their own, the result looks bad.  In particular, start the
-first line with a capital letter and end with a period.
+first line with a capital letter and end it with a period.
 
      <p>For a function, the first line should briefly answer the question,
 &ldquo;What does this function do?&rdquo;  For a variable, the first line should
@@ -100,7 +95,7 @@ important arguments.
      <li>When a function's documentation string mentions the value of an argument
 of the function, use the argument name in capital letters as if it were
 a name for that value.  Thus, the documentation string of the function
-<code>eval</code> refers to its second argument as &lsquo;<samp><span class="samp">FORM</span></samp>&rsquo;, because the
+<code>eval</code> refers to its first argument as &lsquo;<samp><span class="samp">FORM</span></samp>&rsquo;, because the
 actual argument name is <code>form</code>:
 
      <pre class="example">          Evaluate FORM and return its value.
@@ -114,12 +109,12 @@ illustrate this practice:
           have the form (KEY . VALUE).  Here, KEY is ...
 </pre>
      <li>Never change the case of a Lisp symbol when you mention it in a doc
-string.  If the symbol's name is <code>foo</code>, write &ldquo;foo,&rdquo; not
+string.  If the symbol's name is <code>foo</code>, write &ldquo;foo&rdquo;, not
 &ldquo;Foo&rdquo; (which is a different symbol).
 
      <p>This might appear to contradict the policy of writing function
 argument values, but there is no real contradiction; the argument
-<em>value</em> is not the same thing as the <em>symbol</em> which the
+<em>value</em> is not the same thing as the <em>symbol</em> that the
 function uses to hold the value.
 
      <p>If this puts a lower-case letter at the beginning of a sentence
@@ -140,7 +135,7 @@ around it.  For example: &lsquo;<samp><span class="samp">lambda</span></samp>&rs
 t and nil without single-quotes.  (In this manual, we use a different
 convention, with single-quotes for all symbols.)
 
-     <p><a name="index-hyperlinks-in-documentation-strings-3937"></a>Help mode automatically creates a hyperlink when a documentation string
+     <p><a name="index-hyperlinks-in-documentation-strings-4301"></a>Help mode automatically creates a hyperlink when a documentation string
 uses a symbol name inside single quotes, if the symbol has either a
 function or a variable definition.  You do not need to do anything
 special to make use of this feature.  However, when a symbol has both a
@@ -219,9 +214,9 @@ paragraph.  Subsequent paragraphs usually look better if each sentence
 is indicative and has a proper subject.
 
      <li>The documentation string for a function that is a yes-or-no predicate
-should start with words such as &ldquo;Return t if,&rdquo; to indicate
-explicitly what constitutes &ldquo;truth.&rdquo;  The word &ldquo;return&rdquo; avoids
-starting the sentence with lower-case &ldquo;t,&rdquo; which could be somewhat
+should start with words such as &ldquo;Return t if&rdquo;, to indicate
+explicitly what constitutes &ldquo;truth&rdquo;.  The word &ldquo;return&rdquo; avoids
+starting the sentence with lower-case &ldquo;t&rdquo;, which could be somewhat
 distracting.
 
      <li>If a line in a documentation string begins with an open-parenthesis,
@@ -239,8 +234,8 @@ containing A and B.&rdquo; instead of &ldquo;A list containing A and B will be
 returned.&rdquo;
 
      <li>Avoid using the word &ldquo;cause&rdquo; (or its equivalents) unnecessarily. 
-Instead of, &ldquo;Cause Emacs to display text in boldface,&rdquo; write just
-&ldquo;Display text in boldface.&rdquo;
+Instead of, &ldquo;Cause Emacs to display text in boldface&rdquo;, write just
+&ldquo;Display text in boldface&rdquo;.
 
      <li>Avoid using &ldquo;iff&rdquo; (a mathematics term meaning &ldquo;if and only if&rdquo;),
 since many people are unfamiliar with it and mistake it for a typo.  In
@@ -253,13 +248,11 @@ the documentation of <code>dired-find-file</code> is:
 
      <pre class="example">          In Dired, visit the file or directory named on this line.
 </pre>
-     <li>When you define a variable that users ought to set interactively, you
-normally should use <code>defcustom</code>.  However, if for some reason you
-use <code>defvar</code> instead, start the doc string with a &lsquo;<samp><span class="samp">*</span></samp>&rsquo;. 
-See <a href="Defining-Variables.html#Defining-Variables">Defining Variables</a>.
+     <li>When you define a variable that represents an option users might want
+to set, use <code>defcustom</code>.  See <a href="Defining-Variables.html#Defining-Variables">Defining Variables</a>.
 
      <li>The documentation string for a variable that is a yes-or-no flag should
-start with words such as &ldquo;Non-nil means,&rdquo; to make it clear that
+start with words such as &ldquo;Non-nil means&rdquo;, to make it clear that
 all non-<code>nil</code> values are equivalent and indicate explicitly what
 <code>nil</code> and non-<code>nil</code> mean. 
 </ul>

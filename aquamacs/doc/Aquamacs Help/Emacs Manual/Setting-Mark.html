@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Setting Mark - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Marking-Objects.html#Marking-Objects" title="Marking Objects">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -50,56 +47,76 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Mark.html#Mark">Mark</a>
      <dl>
 <dt><kbd>C-&lt;SPC&gt;</kbd><dd>Set the mark at point, and activate it (<code>set-mark-command</code>). 
 <br><dt><kbd>C-@</kbd><dd>The same. 
-<br><dt><kbd>C-x C-x</kbd><dd>Set the mark at point, and move point where the mark was
-(<code>exchange-point-and-mark</code>). 
+<br><dt><kbd>C-x C-x</kbd><dd>Set the mark at point, and activate it; then move point where the mark
+used to be (<code>exchange-point-and-mark</code>). 
 <br><dt><kbd>Drag-Mouse-1</kbd><dd>Set point and the mark around the text you drag across. 
 <br><dt><kbd>Mouse-3</kbd><dd>Set the mark at point, then move point to where you click
 (<code>mouse-save-then-kill</code>). 
-<br><dt><kbd>&lsquo;</kbd><samp><span class="samp">Shifted motion keys</span></samp><kbd>&rsquo;</kbd><dd>Set the mark at point if the mark is inactive, then move point. 
+<br><dt><kbd>&lsquo;</kbd><samp><span class="samp">Shifted cursor motion keys</span></samp><kbd>&rsquo;</kbd><dd>Set the mark at point if the mark is inactive, then move point. 
+See <a href="Shift-Selection.html#Shift-Selection">Shift Selection</a>. 
 </dl>
 
-   <p><a name="index-C_002dSPC-303"></a><a name="index-C_002d_0040_0040-304"></a><a name="index-set_002dmark_002dcommand-305"></a>  The most common way to set the mark is with <kbd>C-&lt;SPC&gt;</kbd>
+   <p><a name="index-C_002dSPC-362"></a><a name="index-C_002d_0040_0040-363"></a><a name="index-set_002dmark_002dcommand-364"></a>  The most common way to set the mark is with <kbd>C-&lt;SPC&gt;</kbd>
 (<code>set-mark-command</code>)<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  This sets the mark where point is,
 and activates it.  You can then move point away, leaving the mark
 behind.
 
    <p>For example, suppose you wish to convert part of the buffer to upper
-case.  To accomplish this, go to the beginning of the desired text,
-type <kbd>C-&lt;SPC&gt;</kbd>, and move point until the desired portion of
-text is highlighted.  Now type <kbd>C-x C-u</kbd> (<code>upcase-region</code>). 
-This converts the text in the region to upper case, and then
-deactivates the mark.
+case.  To accomplish this, go to one end of the desired text, type
+<kbd>C-&lt;SPC&gt;</kbd>, and move point until the desired portion of text is
+highlighted.  Now type <kbd>C-x C-u</kbd> (<code>upcase-region</code>).  This
+converts the text in the region to upper case, and then deactivates
+the mark.
 
-   <p><a name="index-C_002dx-C_002dx-306"></a><a name="index-exchange_002dpoint_002dand_002dmark-307"></a>  The command <kbd>C-x C-x</kbd> (<code>exchange-point-and-mark</code>) exchanges
-the positions of point and the mark, keeping the region unchanged.  If
-the mark is inactive, Emacs first reactivates the mark wherever it was
-last set.  <kbd>C-x C-x</kbd> is useful when you are satisfied with the
-position of point but want to move the other end of the region (where
-the mark is).  Using <kbd>C-x C-x</kbd> a second time, if necessary, puts
-the mark at the new position with point back at its original position.
+   <p>Whenever the mark is active, you can deactivate it by typing
+<kbd>C-g</kbd> (see <a href="Quitting.html#Quitting">Quitting</a>).  Most commands that operate on the
+region also automatically deactivate the mark, like <kbd>C-x C-u</kbd> in
+the above example.
+
+   <p>Instead of setting the mark in order to operate on a region, you can
+also use it to &ldquo;remember&rdquo; a position in the buffer (by typing
+<kbd>C-&lt;SPC&gt; C-&lt;SPC&gt;</kbd>), and later jump back there (by typing
+<kbd>C-u C-&lt;SPC&gt;</kbd>).  See <a href="Mark-Ring.html#Mark-Ring">Mark Ring</a>, for details.
+
+   <p><a name="index-C_002dx-C_002dx-365"></a><a name="index-exchange_002dpoint_002dand_002dmark-366"></a>  The command <kbd>C-x C-x</kbd> (<code>exchange-point-and-mark</code>) exchanges
+the positions of point and the mark.  <kbd>C-x C-x</kbd> is useful when you
+are satisfied with the position of point but want to move the other
+end of the region (where the mark is).  Using <kbd>C-x C-x</kbd> a second
+time, if necessary, puts the mark at the new position with point back
+at its original position.  Normally, if the mark is inactive, this
+command first reactivates the mark wherever it was last set, to ensure
+that the region is left highlighted.  However, if you call it with a
+prefix argument, it leaves the mark inactive and the region
+unhighlighted; you can use this to jump to the mark in a manner
+similar to <kbd>C-u C-&lt;SPC&gt;</kbd>.
 
    <p>You can also set the mark with the mouse.  If you press the left
 mouse button (<kbd>down-mouse-1</kbd>) and drag the mouse across a range of
-text while holding down this button, this sets the mark where you
-first pressed the mouse button and puts point where you release it. 
-Alternatively, clicking the right mouse button (<kbd>mouse-3</kbd>) sets
-the mark at point and then moves point to where you clicked.  Using
-the mouse to mark a region also copies the region into the kill ring
-(see <a href="Kill-Ring.html#Kill-Ring">Kill Ring</a>).  See <a href="Mouse-Commands.html#Mouse-Commands">Mouse Commands</a>, for a more detailed
-description of these mouse commands.
+text, this sets the mark where you first pressed the mouse button and
+puts point where you release it.  Alternatively, clicking the right
+mouse button (<kbd>mouse-3</kbd>) sets the mark at point and then moves
+point to where you clicked.  See <a href="Mouse-Commands.html#Mouse-Commands">Mouse Commands</a>, for a more
+detailed description of these mouse commands.
 
-   <p><a name="index-shift_002dselection-308"></a>  Finally, you can set the mark by holding down the shift key while
+   <p><a name="index-shift_002dselection-367"></a>  Finally, you can set the mark by holding down the shift key while
 typing certain cursor motion commands (such as <kbd>S-&lt;right&gt;</kbd>,
-<kbd>S-C-f</kbd>, <kbd>S-C-n</kbd>, etc.)  This is referred to as
-<dfn>shift-selection</dfn>.  This sets the mark at point before moving
-point, but only if there is no active mark set via shift-selection. 
-The mark set by mouse commands and by shift-selection behaves slightly
-differently from the usual mark: any subsequent unshifted cursor
-motion command deactivates it automatically.  For details, See <a href="Shift-Selection.html#Shift-Selection">Shift Selection</a>.
+<kbd>S-C-f</kbd>, <kbd>S-C-n</kbd>, etc.).  This is called <dfn>shift-selection</dfn>. 
+It sets the mark at point before moving point, but only if there is no
+active mark set via shift-selection.  The mark set by mouse commands
+and by shift-selection behaves slightly differently from the usual
+mark: any subsequent unshifted cursor motion command deactivates it
+automatically.  For details, See <a href="Shift-Selection.html#Shift-Selection">Shift Selection</a>.
 
-   <p>Whenever the mark is active, you can deactivate it by typing
-<kbd>C-g</kbd> (see <a href="Quitting.html#Quitting">Quitting</a>).  The mark is also automatically
-deactivated after certain non-motion commands.
+   <p>Many commands that insert text, such as <kbd>C-y</kbd> (<code>yank</code>), set
+the mark at the other end of the inserted text, without activating it. 
+This lets you easily return to that position (see <a href="Mark-Ring.html#Mark-Ring">Mark Ring</a>).  You
+can tell that a command does this when it shows &lsquo;<samp><span class="samp">Mark set</span></samp>&rsquo; in the
+echo area.
+
+   <p><a name="index-primary-selection-368"></a>  Under X, every time the active region changes, Emacs saves the text
+in the region to the <dfn>primary selection</dfn>.  This lets you insert
+that text into other X applications with <kbd>mouse-2</kbd> clicks. 
+See <a href="Primary-Selection.html#Primary-Selection">Primary Selection</a>.
 
    <div class="footnote">
 <hr>

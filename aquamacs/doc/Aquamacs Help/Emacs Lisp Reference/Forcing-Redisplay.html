@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Forcing Redisplay - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Truncation.html#Truncation" title="Truncation">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,72 +43,67 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
 
 <h3 class="section">38.2 Forcing Redisplay</h3>
 
-<p><a name="index-forcing-redisplay-3401"></a>
+<p><a name="index-forcing-redisplay-3678"></a>
   Emacs normally tries to redisplay the screen whenever it waits for
 input.  With the following function, you can request an immediate
 attempt to redisplay, in the middle of Lisp code, without actually
 waiting for input.
 
 <div class="defun">
-&mdash; Function: <b>redisplay</b><var> &amp;optional force<a name="index-redisplay-3402"></a></var><br>
-<blockquote><p>This function tries immediately to redisplay, provided there are no
-pending input events.
-
-        <p>If the optional argument <var>force</var> is non-<code>nil</code>, it does all
-pending redisplay work even if input is available, with no
-pre-emption.
+&mdash; Function: <b>redisplay</b><var> &amp;optional force<a name="index-redisplay-3679"></a></var><br>
+<blockquote><p>This function tries immediately to redisplay.  The optional argument
+<var>force</var>, if non-<code>nil</code>, forces the redisplay to be performed,
+instead of being preempted, even if input is pending and the variable
+<code>redisplay-dont-pause</code> is <code>nil</code> (see below).  If
+<code>redisplay-dont-pause</code> is non-<code>nil</code> (the default), this
+function redisplays in any case, i.e., <var>force</var> does nothing.
 
         <p>The function returns <code>t</code> if it actually tried to redisplay, and
 <code>nil</code> otherwise.  A value of <code>t</code> does not mean that
-redisplay proceeded to completion; it could have been pre-empted by
-newly arriving terminal input. 
-</p></blockquote></div>
-
-   <p><code>redisplay</code> with no argument tries immediately to redisplay,
-but has no effect on the usual rules for what parts of the screen to
-redisplay.  By contrast, the following function adds certain windows
-to the pending redisplay work (as if their contents had completely
-changed), but doesn't immediately try to do any redisplay work.
-
-<div class="defun">
-&mdash; Function: <b>force-window-update</b><var> &amp;optional object<a name="index-force_002dwindow_002dupdate-3403"></a></var><br>
-<blockquote><p>This function forces some or all windows to be updated on next
-redisplay.  If <var>object</var> is a window, it requires eventual
-redisplay of that window.  If <var>object</var> is a buffer or buffer name,
-it requires eventual redisplay of all windows displaying that buffer. 
-If <var>object</var> is <code>nil</code> (or omitted), it requires eventual
-redisplay of all windows. 
-</p></blockquote></div>
-
-   <p><code>force-window-update</code> does not do a redisplay immediately. 
-(Emacs will do that when it waits for input.)  Rather, its effect is
-to put more work on the queue to be done by redisplay whenever there
-is a chance.
-
-   <p>Emacs redisplay normally stops if input arrives, and does not happen
-at all if input is available before it starts.  Most of the time, this
-is exactly what you want.  However, you can prevent preemption by
-binding <code>redisplay-dont-pause</code> to a non-<code>nil</code> value.
-
-<div class="defun">
-&mdash; Variable: <b>redisplay-dont-pause</b><var><a name="index-redisplay_002ddont_002dpause-3404"></a></var><br>
-<blockquote><p>If this variable is non-<code>nil</code>, pending input does not
-prevent or halt redisplay; redisplay occurs, and finishes,
-regardless of whether input is available. 
+redisplay proceeded to completion; it could have been preempted by
+newly arriving input. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>redisplay-preemption-period</b><var><a name="index-redisplay_002dpreemption_002dperiod-3405"></a></var><br>
-<blockquote><p>This variable specifies how many seconds Emacs waits between checks
-for new input during redisplay.  (The default is 0.1 seconds.)  If
-input has arrived when Emacs checks, it pre-empts redisplay and
-processes the available input before trying again to redisplay.
+&mdash; Variable: <b>redisplay-dont-pause</b><var><a name="index-redisplay_002ddont_002dpause-3680"></a></var><br>
+<blockquote><p>If this variable is <code>nil</code>, arriving input events preempt
+redisplay; Emacs avoids starting a redisplay, and stops any redisplay
+that is in progress, until the input has been processed.  In
+particular, <code>(redisplay)</code> returns <code>nil</code> without actually
+redisplaying, if there is pending input.
 
-        <p>If this variable is <code>nil</code>, Emacs does not check for input during
-redisplay, and redisplay cannot be preempted by input.
+        <p>The default value is <code>t</code>, which means that pending input does not
+preempt redisplay. 
+</p></blockquote></div>
 
-        <p>This variable is only obeyed on graphical terminals.  For
-text terminals, see <a href="Terminal-Output.html#Terminal-Output">Terminal Output</a>. 
+<div class="defun">
+&mdash; Variable: <b>redisplay-preemption-period</b><var><a name="index-redisplay_002dpreemption_002dperiod-3681"></a></var><br>
+<blockquote><p>If <code>redisplay-dont-pause</code> is <code>nil</code>, this variable specifies
+how many seconds Emacs waits between checks for new input during
+redisplay; if input arrives during this interval, redisplay stops and
+the input is processed.  The default value is 0.1; if the value is
+<code>nil</code>, Emacs does not check for input during redisplay.
+
+        <p>This variable has no effect when <code>redisplay-dont-pause</code> is
+non-<code>nil</code> (the default). 
+</p></blockquote></div>
+
+   <p>Although <code>redisplay</code> tries immediately to redisplay, it does
+not change how Emacs decides which parts of its frame(s) to redisplay. 
+By contrast, the following function adds certain windows to the
+pending redisplay work (as if their contents had completely changed),
+but does not immediately try to perform redisplay.
+
+<div class="defun">
+&mdash; Function: <b>force-window-update</b><var> &amp;optional object<a name="index-force_002dwindow_002dupdate-3682"></a></var><br>
+<blockquote><p>This function forces some or all windows to be updated the next time
+Emacs does a redisplay.  If <var>object</var> is a window, that window is
+to be updated.  If <var>object</var> is a buffer or buffer name, all
+windows displaying that buffer are to be updated.  If <var>object</var> is
+<code>nil</code> (or omitted), all windows are to be updated.
+
+        <p>This function does not do a redisplay immediately; Emacs does that as
+it waits for input, or when the function <code>redisplay</code> is called. 
 </p></blockquote></div>
 
    </body></html>

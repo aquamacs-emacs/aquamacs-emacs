@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Display Custom - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="prev" href="Visual-Line-Mode.html#Visual-Line-Mode" title="Visual Line Mode">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -43,49 +40,35 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
 <hr>
 </div>
 
-<h3 class="section">18.19 Customization of Display</h3>
+<h3 class="section">14.23 Customization of Display</h3>
 
-<p>This section describes variables (see <a href="Variables.html#Variables">Variables</a>) that you can
-change to customize how Emacs displays.  Beginning users can skip
-it. 
-<!-- the reason for that pxref is because an xref early in the -->
-<!-- ``echo area'' section leads here. -->
+<p>This section describes variables that control miscellaneous aspects
+of the appearance of the Emacs screen.  Beginning users can skip it.
 
-   <p><a name="index-visible_002dbell-634"></a>  If the variable <code>visible-bell</code> is non-<code>nil</code>, Emacs attempts
+   <p><a name="index-visible_002dbell-798"></a>  If the variable <code>visible-bell</code> is non-<code>nil</code>, Emacs attempts
 to make the whole screen blink when it would normally make an audible bell
 sound.  This variable has no effect if your terminal does not have a way
 to make the screen blink.
 
-   <p><a name="index-echo_002dkeystrokes-635"></a>  The variable <code>echo-keystrokes</code> controls the echoing of multi-character
+   <p><a name="index-echo_002dkeystrokes-799"></a>  The variable <code>echo-keystrokes</code> controls the echoing of multi-character
 keys; its value is the number of seconds of pause required to cause echoing
 to start, or zero, meaning don't echo at all.  The value takes effect when
-there is someting to echo.  See <a href="Echo-Area.html#Echo-Area">Echo Area</a>.
+there is something to echo.  See <a href="Echo-Area.html#Echo-Area">Echo Area</a>.
 
-   <p><a name="index-baud_002drate-636"></a>  The variable <a name="baud_002drate"></a><code>baud-rate</code> holds the output
-speed of the terminal.  Setting this variable does not change the
-speed of actual data transmission, but the value is used for
-calculations.  On text-only terminals, it affects padding, and
-decisions about whether to scroll part of the screen or redraw it
-instead.  It also affects the behavior of incremental search.  On
-graphical displays, <code>baud-rate</code> is only used to determine how
-frequently to look for pending input during display updating.  A
-higher value of <code>baud-rate</code> means that check for pending input
-will be done less frequently.
-
-   <p><a name="index-mouse-pointer-637"></a><a name="index-hourglass-pointer-display-638"></a><a name="index-display_002dhourglass-639"></a><a name="index-hourglass_002ddelay-640"></a>  On graphical displays, Emacs displays the mouse pointer as an
+   <p><a name="index-mouse-pointer-800"></a><a name="index-hourglass-pointer-display-801"></a><a name="index-display_002dhourglass-802"></a><a name="index-hourglass_002ddelay-803"></a>  On graphical displays, Emacs displays the mouse pointer as an
 hourglass if Emacs is busy.  To disable this feature, set the variable
 <code>display-hourglass</code> to <code>nil</code>.  The variable
 <code>hourglass-delay</code> determines the number of seconds of &ldquo;busy
 time&rdquo; before the hourglass is shown; the default is 1.
 
-   <p><a name="index-make_002dpointer_002dinvisible-641"></a>  If the mouse pointer lies inside an Emacs frame, Emacs makes it
+   <p><a name="index-make_002dpointer_002dinvisible-804"></a>  If the mouse pointer lies inside an Emacs frame, Emacs makes it
 invisible each time you type a character to insert text, to prevent it
 from obscuring the text.  (To be precise, the hiding occurs when you
 type a &ldquo;self-inserting&rdquo; character.  See <a href="Inserting-Text.html#Inserting-Text">Inserting Text</a>.)  Moving
 the mouse pointer makes it visible again.  To disable this feature,
 set the variable <code>make-pointer-invisible</code> to <code>nil</code>.
 
-   <p><a name="index-underline_002dminimum_002doffset-642"></a><a name="index-x_002dunderline_002dat_002ddescent_002dline-643"></a>  On graphical displays, the variable <code>underline-minimum-offset</code>
+   <p><a name="index-underline_002dminimum_002doffset-805"></a><a name="index-x_002dunderline_002dat_002ddescent_002dline-806"></a>  On graphical displays, the variable <code>underline-minimum-offset</code>
 determines the minimum distance between the baseline and underline, in
 pixels, for underlined text.  By default, the value is 1; increasing
 it may improve the legibility of underlined text for certain fonts. 
@@ -96,30 +79,18 @@ draw it at the baseline level of the font; if you change it to
 <code>nil</code>, Emacs draws the underline at the same height as the font's
 descent line.
 
-   <p><a name="index-overline_002dmargin-644"></a>  The variable <code>overline-margin</code> specifies the vertical position
+   <p><a name="index-overline_002dmargin-807"></a>  The variable <code>overline-margin</code> specifies the vertical position
 of an overline above the text, including the height of the overline
 itself, in pixels; the default is 2.
 
-   <p><a name="index-tty_002dsuppress_002dbold_002dinverse_002ddefault_002dcolors-645"></a>  On some text-only terminals, bold face and inverse video together
-result in text that is hard to read.  Call the function
+   <p><a name="index-tty_002dsuppress_002dbold_002dinverse_002ddefault_002dcolors-808"></a>  On some text terminals, bold face and inverse video together result
+in text that is hard to read.  Call the function
 <code>tty-suppress-bold-inverse-default-colors</code> with a non-<code>nil</code>
 argument to suppress the effect of bold-face in this case.
 
-   <p><a name="index-no_002dredraw_002don_002dreenter-646"></a>  On a text-only terminal, when you reenter Emacs after suspending, Emacs
-normally clears the screen and redraws the entire display.  On some
-terminals with more than one page of memory, it is possible to arrange
-the termcap entry so that the &lsquo;<samp><span class="samp">ti</span></samp>&rsquo; and &lsquo;<samp><span class="samp">te</span></samp>&rsquo; strings (output
-to the terminal when Emacs is entered and exited, respectively) switch
-between pages of memory so as to use one page for Emacs and another
-page for other output.  On such terminals, you might want to set the variable
-<code>no-redraw-on-reenter</code> non-<code>nil</code>; this tells Emacs to
-assume, when resumed, that the screen page it is using still contains
-what Emacs last wrote there.
-
 <!-- This is part of the Emacs manual. -->
-<!-- Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1997, 2000, 2001, 2002, -->
-<!-- 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 -->
-<!-- Free Software Foundation, Inc. -->
+<!-- Copyright (C) 1985-1987, 1993-1995, 1997, 2000-2013 Free Software -->
+<!-- Foundation, Inc. -->
 <!-- See file emacs.texi for copying conditions. -->
    </body></html>
 

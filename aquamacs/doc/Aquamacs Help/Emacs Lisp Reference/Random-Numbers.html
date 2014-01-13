@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Random Numbers - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="prev" href="Math-Functions.html#Math-Functions" title="Math Functions">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,49 +41,51 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Numbers.html#Numbers">Numbers</a>
 
 <h3 class="section">3.10 Random Numbers</h3>
 
-<p><a name="index-random-numbers-216"></a>
-A deterministic computer program cannot generate true random numbers. 
-For most purposes, <dfn>pseudo-random numbers</dfn> suffice.  A series of
-pseudo-random numbers is generated in a deterministic fashion.  The
-numbers are not truly random, but they have certain properties that
-mimic a random series.  For example, all possible values occur equally
-often in a pseudo-random series.
+<p><a name="index-random-numbers-227"></a>
+  A deterministic computer program cannot generate true random
+numbers.  For most purposes, <dfn>pseudo-random numbers</dfn> suffice.  A
+series of pseudo-random numbers is generated in a deterministic
+fashion.  The numbers are not truly random, but they have certain
+properties that mimic a random series.  For example, all possible
+values occur equally often in a pseudo-random series.
 
-   <p>In Emacs, pseudo-random numbers are generated from a &ldquo;seed&rdquo; number. 
-Starting from any given seed, the <code>random</code> function always
-generates the same sequence of numbers.  Emacs always starts with the
-same seed value, so the sequence of values of <code>random</code> is actually
-the same in each Emacs run!  For example, in one operating system, the
-first call to <code>(random)</code> after you start Emacs always returns
-&minus;1457731, and the second one always returns &minus;7692030.  This
-repeatability is helpful for debugging.
+   <p>Pseudo-random numbers are generated from a &ldquo;seed&rdquo;.  Starting from
+any given seed, the <code>random</code> function always generates the same
+sequence of numbers.  By default, Emacs initializes the random seed at
+startup, in such a way that the sequence of values of <code>random</code>
+(with overwhelming likelihood) differs in each Emacs run.
 
-   <p>If you want random numbers that don't always come out the same, execute
-<code>(random t)</code>.  This chooses a new seed based on the current time of
-day and on Emacs's process <acronym>ID</acronym> number.
+   <p>Sometimes you want the random number sequence to be repeatable.  For
+example, when debugging a program whose behavior depends on the random
+number sequence, it is helpful to get the same behavior in each
+program run.  To make the sequence repeat, execute <code>(random "")</code>. 
+This sets the seed to a constant value for your particular Emacs
+executable (though it may differ for other Emacs builds).  You can use
+other strings to choose various seed values.
 
 <div class="defun">
-&mdash; Function: <b>random</b><var> &amp;optional limit<a name="index-random-217"></a></var><br>
+&mdash; Function: <b>random</b><var> &amp;optional limit<a name="index-random-228"></a></var><br>
 <blockquote><p>This function returns a pseudo-random integer.  Repeated calls return a
 series of pseudo-random integers.
 
         <p>If <var>limit</var> is a positive integer, the value is chosen to be
-nonnegative and less than <var>limit</var>.
+nonnegative and less than <var>limit</var>.  Otherwise, the value might be
+any integer representable in Lisp, i.e., an integer between
+<code>most-negative-fixnum</code> and <code>most-positive-fixnum</code>
+(see <a href="Integer-Basics.html#Integer-Basics">Integer Basics</a>).
 
         <p>If <var>limit</var> is <code>t</code>, it means to choose a new seed based on the
-current time of day and on Emacs's process <acronym>ID</acronym> number. 
-<!-- "Emacs'" is incorrect usage! -->
+current time of day and on Emacs's process <acronym>ID</acronym> number.
 
-        <p>On some machines, any integer representable in Lisp may be the result
-of <code>random</code>.  On other machines, the result can never be larger
-than a certain maximum or less than a certain (negative) minimum. 
-</p></blockquote></div>
+        <p>If <var>limit</var> is a string, it means to choose a new seed based on the
+string's contents.
 
-<!-- *-texinfo-*- -->
+        </blockquote></div>
+   <!-- *-texinfo-*- -->
 <!-- This is part of the GNU Emacs Lisp Reference Manual. -->
-<!-- Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1998, 1999, 2001, -->
-<!-- 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 -->
-<!-- Free Software Foundation, Inc. -->
+<!-- Copyright (C) 1990-1995, 1998-1999, 2001-2013 Free Software -->
+<!-- Foundation, Inc. -->
 <!-- See the file elisp.texi for copying conditions. -->
+
    </body></html>
 

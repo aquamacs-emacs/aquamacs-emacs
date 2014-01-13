@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Syntax Table Internals - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Syntax-Tables.html#Syntax-Tables" title="Syntax Tables">
-<link rel="prev" href="Standard-Syntax-Tables.html#Standard-Syntax-Tables" title="Standard Syntax Tables">
+<link rel="prev" href="Parsing-Expressions.html#Parsing-Expressions" title="Parsing Expressions">
 <link rel="next" href="Categories.html#Categories" title="Categories">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -39,126 +36,86 @@ Foundation, Inc.
 <a name="Syntax-Table-Internals"></a>
 <p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Categories.html#Categories">Categories</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Standard-Syntax-Tables.html#Standard-Syntax-Tables">Standard Syntax Tables</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Parsing-Expressions.html#Parsing-Expressions">Parsing Expressions</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>
 <hr>
 </div>
 
-<h3 class="section">35.8 Syntax Table Internals</h3>
+<h3 class="section">35.7 Syntax Table Internals</h3>
 
-<p><a name="index-syntax-table-internals-3190"></a>
-  Lisp programs don't usually work with the elements directly; the
-Lisp-level syntax table functions usually work with syntax descriptors
-(see <a href="Syntax-Descriptors.html#Syntax-Descriptors">Syntax Descriptors</a>).  Nonetheless, here we document the
-internal format.  This format is used mostly when manipulating
-syntax properties.
+<p><a name="index-syntax-table-internals-3461"></a>
+  Syntax tables are implemented as char-tables (see <a href="Char_002dTables.html#Char_002dTables">Char-Tables</a>),
+but most Lisp programs don't work directly with their elements. 
+Syntax tables do not store syntax data as syntax descriptors
+(see <a href="Syntax-Descriptors.html#Syntax-Descriptors">Syntax Descriptors</a>); they use an internal format, which is
+documented in this section.  This internal format can also be assigned
+as syntax properties (see <a href="Syntax-Properties.html#Syntax-Properties">Syntax Properties</a>).
 
-   <p>Each element of a syntax table is a cons cell of the form
-<code>(</code><var>syntax-code</var><code> . </code><var>matching-char</var><code>)</code>.  The <span class="sc">car</span>,
-<var>syntax-code</var>, is an integer that encodes the syntax class, and any
-flags.  The <span class="sc">cdr</span>, <var>matching-char</var>, is non-<code>nil</code> if
-a character to match was specified.
+   <p><a name="index-syntax-code-3462"></a><a name="index-raw-syntax-descriptor-3463"></a>  Each entry in a syntax table is a <dfn>raw syntax descriptor</dfn>: a
+cons cell of the form <code>(</code><var>syntax-code</var><code>
+. </code><var>matching-char</var><code>)</code>.  <var>syntax-code</var> is an integer which
+encodes the syntax class and syntax flags, according to the table
+below.  <var>matching-char</var>, if non-<code>nil</code>, specifies a matching
+character (similar to the second character in a syntax descriptor).
 
-   <p>This table gives the value of <var>syntax-code</var> which corresponds
-to each syntactic type.
+   <p>Here are the syntax codes corresponding to the various syntax
+classes:
 
-   <p><table summary=""><tr align="left"><td valign="top" width="5%"></td><td valign="top" width="30%">
-<i>Integer</i> <i>Class</i>
-</td><td valign="top" width="30%">
-<i>Integer</i> <i>Class</i>
-</td><td valign="top" width="31%">
-<i>Integer</i> <i>Class</i>
-<br></td></tr><tr align="left"><td valign="top" width="5%"></td><td valign="top" width="30%">
-0    whitespace
-</td><td valign="top" width="30%">
-5    close parenthesis
-</td><td valign="top" width="31%">
-10    character quote
-<br></td></tr><tr align="left"><td valign="top" width="5%"></td><td valign="top" width="30%">
-1    punctuation
-</td><td valign="top" width="30%">
-6    expression prefix
-</td><td valign="top" width="31%">
-11    comment-start
-<br></td></tr><tr align="left"><td valign="top" width="5%"></td><td valign="top" width="30%">
-2    word
-</td><td valign="top" width="30%">
-7    string quote
-</td><td valign="top" width="31%">
-12    comment-end
-<br></td></tr><tr align="left"><td valign="top" width="5%"></td><td valign="top" width="30%">
-3    symbol
-</td><td valign="top" width="30%">
-8    paired delimiter
-</td><td valign="top" width="31%">
-13    inherit
-<br></td></tr><tr align="left"><td valign="top" width="5%"></td><td valign="top" width="30%">
-4    open parenthesis
-</td><td valign="top" width="30%">
-9    escape
-</td><td valign="top" width="31%">
-14    generic comment
-<br></td></tr><tr align="left"><td valign="top" width="5%"></td><td valign="top" width="30%">
-15   generic string
+   <p><table summary=""><tr align="left"><td valign="top" width="20%"><i>Code</i> </td><td valign="top" width="30%"><i>Class</i> </td><td valign="top" width="20%"><i>Code</i> </td><td valign="top" width="30%"><i>Class</i>
+<br></td></tr><tr align="left"><td valign="top" width="20%">0 </td><td valign="top" width="30%">whitespace </td><td valign="top" width="20%">8 </td><td valign="top" width="30%">paired delimiter
+<br></td></tr><tr align="left"><td valign="top" width="20%">1 </td><td valign="top" width="30%">punctuation </td><td valign="top" width="20%">9 </td><td valign="top" width="30%">escape
+<br></td></tr><tr align="left"><td valign="top" width="20%">2 </td><td valign="top" width="30%">word </td><td valign="top" width="20%">10 </td><td valign="top" width="30%">character quote
+<br></td></tr><tr align="left"><td valign="top" width="20%">3 </td><td valign="top" width="30%">symbol </td><td valign="top" width="20%">11 </td><td valign="top" width="30%">comment-start
+<br></td></tr><tr align="left"><td valign="top" width="20%">4 </td><td valign="top" width="30%">open parenthesis </td><td valign="top" width="20%">12 </td><td valign="top" width="30%">comment-end
+<br></td></tr><tr align="left"><td valign="top" width="20%">5 </td><td valign="top" width="30%">close parenthesis </td><td valign="top" width="20%">13 </td><td valign="top" width="30%">inherit
+<br></td></tr><tr align="left"><td valign="top" width="20%">6 </td><td valign="top" width="30%">expression prefix </td><td valign="top" width="20%">14 </td><td valign="top" width="30%">generic comment
+<br></td></tr><tr align="left"><td valign="top" width="20%">7 </td><td valign="top" width="30%">string quote </td><td valign="top" width="20%">15 </td><td valign="top" width="30%">generic string
    <br></td></tr></table>
 
-   <p>For example, the usual syntax value for &lsquo;<samp><span class="samp">(</span></samp>&rsquo; is <code>(4 . 41)</code>. 
-(41 is the character code for &lsquo;<samp><span class="samp">)</span></samp>&rsquo;.)
+<p class="noindent">For example, in the standard syntax table, the entry for &lsquo;<samp><span class="samp">(</span></samp>&rsquo; is
+<code>(4 . 41)</code>.  41 is the character code for &lsquo;<samp><span class="samp">)</span></samp>&rsquo;.
 
-   <p>The flags are encoded in higher order bits, starting 16 bits from the
-least significant bit.  This table gives the power of two which
+   <p>Syntax flags are encoded in higher order bits, starting 16 bits from
+the least significant bit.  This table gives the power of two which
 corresponds to each syntax flag.
 
-   <p><table summary=""><tr align="left"><td valign="top" width="5%"></td><td valign="top" width="30%">
-<i>Prefix</i> <i>Flag</i>
-</td><td valign="top" width="30%">
-<i>Prefix</i> <i>Flag</i>
-</td><td valign="top" width="30%">
-<i>Prefix</i> <i>Flag</i>
-<br></td></tr><tr align="left"><td valign="top" width="5%"></td><td valign="top" width="30%">
-&lsquo;<samp><span class="samp">1</span></samp>&rsquo;    <code>(lsh 1 16)</code>
-</td><td valign="top" width="30%">
-&lsquo;<samp><span class="samp">4</span></samp>&rsquo;    <code>(lsh 1 19)</code>
-</td><td valign="top" width="30%">
-&lsquo;<samp><span class="samp">b</span></samp>&rsquo;    <code>(lsh 1 21)</code>
-<br></td></tr><tr align="left"><td valign="top" width="5%"></td><td valign="top" width="30%">
-&lsquo;<samp><span class="samp">2</span></samp>&rsquo;    <code>(lsh 1 17)</code>
-</td><td valign="top" width="30%">
-&lsquo;<samp><span class="samp">p</span></samp>&rsquo;    <code>(lsh 1 20)</code>
-</td><td valign="top" width="30%">
-&lsquo;<samp><span class="samp">n</span></samp>&rsquo;    <code>(lsh 1 22)</code>
-<br></td></tr><tr align="left"><td valign="top" width="5%"></td><td valign="top" width="30%">
-&lsquo;<samp><span class="samp">3</span></samp>&rsquo;    <code>(lsh 1 18)</code>
+   <p><table summary=""><tr align="left"><td valign="top" width="15%"><i>Prefix</i> </td><td valign="top" width="30%"><i>Flag</i> </td><td valign="top" width="15%"><i>Prefix</i> </td><td valign="top" width="30%"><i>Flag</i>
+<br></td></tr><tr align="left"><td valign="top" width="15%">&lsquo;<samp><span class="samp">1</span></samp>&rsquo; </td><td valign="top" width="30%"><code>(lsh 1 16)</code> </td><td valign="top" width="15%">&lsquo;<samp><span class="samp">p</span></samp>&rsquo; </td><td valign="top" width="30%"><code>(lsh 1 20)</code>
+<br></td></tr><tr align="left"><td valign="top" width="15%">&lsquo;<samp><span class="samp">2</span></samp>&rsquo; </td><td valign="top" width="30%"><code>(lsh 1 17)</code> </td><td valign="top" width="15%">&lsquo;<samp><span class="samp">b</span></samp>&rsquo; </td><td valign="top" width="30%"><code>(lsh 1 21)</code>
+<br></td></tr><tr align="left"><td valign="top" width="15%">&lsquo;<samp><span class="samp">3</span></samp>&rsquo; </td><td valign="top" width="30%"><code>(lsh 1 18)</code> </td><td valign="top" width="15%">&lsquo;<samp><span class="samp">n</span></samp>&rsquo; </td><td valign="top" width="30%"><code>(lsh 1 22)</code>
+<br></td></tr><tr align="left"><td valign="top" width="15%">&lsquo;<samp><span class="samp">4</span></samp>&rsquo; </td><td valign="top" width="30%"><code>(lsh 1 19)</code>
    <br></td></tr></table>
 
 <div class="defun">
-&mdash; Function: <b>string-to-syntax</b><var> desc<a name="index-string_002dto_002dsyntax-3191"></a></var><br>
-<blockquote><p>This function returns the internal form corresponding to the syntax
-descriptor <var>desc</var>, a cons cell <code>(</code><var>syntax-code</var><code>
-. </code><var>matching-char</var><code>)</code>. 
+&mdash; Function: <b>string-to-syntax</b><var> desc<a name="index-string_002dto_002dsyntax-3464"></a></var><br>
+<blockquote><p>Given a syntax descriptor <var>desc</var> (a string), this function returns
+the corresponding raw syntax descriptor. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>syntax-after</b><var> pos<a name="index-syntax_002dafter-3192"></a></var><br>
-<blockquote><p>This function returns the syntax code of the character in the buffer
-after position <var>pos</var>, taking account of syntax properties as well
-as the syntax table.  If <var>pos</var> is outside the buffer's accessible
-portion (see <a href="Narrowing.html#Narrowing">accessible portion</a>), this function returns
-<code>nil</code>. 
+&mdash; Function: <b>syntax-after</b><var> pos<a name="index-syntax_002dafter-3465"></a></var><br>
+<blockquote><p>This function returns the raw syntax descriptor for the character in
+the buffer after position <var>pos</var>, taking account of syntax
+properties as well as the syntax table.  If <var>pos</var> is outside the
+buffer's accessible portion (see <a href="Narrowing.html#Narrowing">accessible portion</a>),
+the return value is <code>nil</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>syntax-class</b><var> syntax<a name="index-syntax_002dclass-3193"></a></var><br>
-<blockquote><p>This function returns the syntax class of the syntax code
-<var>syntax</var>.  (It masks off the high 16 bits that hold the flags
-encoded in the syntax descriptor.)  If <var>syntax</var> is <code>nil</code>, it
-returns <code>nil</code>; this is so evaluating the expression
+&mdash; Function: <b>syntax-class</b><var> syntax<a name="index-syntax_002dclass-3466"></a></var><br>
+<blockquote><p>This function returns the syntax code for the raw syntax descriptor
+<var>syntax</var>.  More precisely, it takes the raw syntax descriptor's
+<var>syntax-code</var> component, masks off the high 16 bits which record
+the syntax flags, and returns the resulting integer.
+
+        <p>If <var>syntax</var> is <code>nil</code>, the return value is returns <code>nil</code>. 
+This is so that the expression
 
      <pre class="example">          (syntax-class (syntax-after pos))
 </pre>
-        <p class="noindent">where <code>pos</code> is outside the buffer's accessible portion, will
-yield <code>nil</code> without throwing errors or producing wrong syntax
-class codes. 
+        <p class="noindent">evaluates to <code>nil</code> if <code>pos</code> is outside the buffer's
+accessible portion, without throwing errors or returning an incorrect
+code. 
 </p></blockquote></div>
 
    </body></html>

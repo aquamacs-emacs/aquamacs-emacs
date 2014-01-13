@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Showing Images - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Images.html#Images" title="Images">
 <link rel="prev" href="Defining-Images.html#Defining-Images" title="Defining Images">
-<link rel="next" href="Image-Cache.html#Image-Cache" title="Image Cache">
+<link rel="next" href="Multi_002dFrame-Images.html#Multi_002dFrame-Images" title="Multi-Frame Images">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -38,20 +35,20 @@ Foundation, Inc.
 <div class="node">
 <a name="Showing-Images"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Image-Cache.html#Image-Cache">Image Cache</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Multi_002dFrame-Images.html#Multi_002dFrame-Images">Multi-Frame Images</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Defining-Images.html#Defining-Images">Defining Images</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Images.html#Images">Images</a>
 <hr>
 </div>
 
-<h4 class="subsection">38.16.11 Showing Images</h4>
+<h4 class="subsection">38.16.9 Showing Images</h4>
 
 <p>You can use an image descriptor by setting up the <code>display</code>
 property yourself, but it is easier to use the functions in this
 section.
 
 <div class="defun">
-&mdash; Function: <b>insert-image</b><var> image &amp;optional string area slice<a name="index-insert_002dimage-3645"></a></var><br>
+&mdash; Function: <b>insert-image</b><var> image &amp;optional string area slice<a name="index-insert_002dimage-3945"></a></var><br>
 <blockquote><p>This function inserts <var>image</var> in the current buffer at point.  The
 value <var>image</var> should be an image descriptor; it could be a value
 returned by <code>create-image</code>, or the value of a symbol defined with
@@ -78,15 +75,22 @@ image.
 it a <code>display</code> property which specifies <var>image</var>.  See <a href="Display-Property.html#Display-Property">Display Property</a>. 
 </p></blockquote></div>
 
+   <p><a name="index-slice_002c-image-3946"></a><a name="index-image-slice-3947"></a>
+
 <div class="defun">
-&mdash; Function: <b>insert-sliced-image</b><var> image &amp;optional string area rows cols<a name="index-insert_002dsliced_002dimage-3646"></a></var><br>
+&mdash; Function: <b>insert-sliced-image</b><var> image &amp;optional string area rows cols<a name="index-insert_002dsliced_002dimage-3948"></a></var><br>
 <blockquote><p>This function inserts <var>image</var> in the current buffer at point, like
 <code>insert-image</code>, but splits the image into <var>rows</var>x<var>cols</var>
-equally sized slices. 
+equally sized slices.
+
+        <p>If an image is inserted &ldquo;sliced&rdquo;, Emacs displays each slice as a
+separate image, and allow more intuitive scrolling up/down, instead of
+jumping up/down the entire image when paging through a buffer that
+displays (large) images. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>put-image</b><var> image pos &amp;optional string area<a name="index-put_002dimage-3647"></a></var><br>
+&mdash; Function: <b>put-image</b><var> image pos &amp;optional string area<a name="index-put_002dimage-3949"></a></var><br>
 <blockquote><p>This function puts image <var>image</var> in front of <var>pos</var> in the
 current buffer.  The argument <var>pos</var> should be an integer or a
 marker.  It specifies the buffer position where the image should appear. 
@@ -108,7 +112,7 @@ property whose value is the image.  (Whew!)
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>remove-images</b><var> start end &amp;optional buffer<a name="index-remove_002dimages-3648"></a></var><br>
+&mdash; Function: <b>remove-images</b><var> start end &amp;optional buffer<a name="index-remove_002dimages-3950"></a></var><br>
 <blockquote><p>This function removes images in <var>buffer</var> between positions
 <var>start</var> and <var>end</var>.  If <var>buffer</var> is omitted or <code>nil</code>,
 images are removed from the current buffer.
@@ -119,7 +123,7 @@ images are removed from the current buffer.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>image-size</b><var> spec &amp;optional pixels frame<a name="index-image_002dsize-3649"></a></var><br>
+&mdash; Function: <b>image-size</b><var> spec &amp;optional pixels frame<a name="index-image_002dsize-3951"></a></var><br>
 <blockquote><p>This function returns the size of an image as a pair
 <code>(</code><var>width</var><code>&nbsp;.&nbsp;</code><var>height</var><code>)</code><!-- /@w -->.  <var>spec</var> is an image
 specification.  <var>pixels</var> non-<code>nil</code> means return sizes
@@ -130,7 +134,7 @@ font).  <var>frame</var> is the frame on which the image will be displayed.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>max-image-size</b><var><a name="index-max_002dimage_002dsize-3650"></a></var><br>
+&mdash; Variable: <b>max-image-size</b><var><a name="index-max_002dimage_002dsize-3952"></a></var><br>
 <blockquote><p>This variable is used to define the maximum size of image that Emacs
 will load.  Emacs will refuse to load (and display) any image that is
 larger than this limit.

@@ -1,0 +1,96 @@
+<html lang="en">
+<head>
+<title>Applying Customizations - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customization.html#Customization" title="Customization">
+<link rel="prev" href="Customization-Types.html#Customization-Types" title="Customization Types">
+<link rel="next" href="Custom-Themes.html#Custom-Themes" title="Custom Themes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
+
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Applying-Customizations"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Custom-Themes.html#Custom-Themes">Custom Themes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Customization-Types.html#Customization-Types">Customization Types</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Customization</a>
+<hr>
+</div>
+
+<h3 class="section">14.5 Applying Customizations</h3>
+
+<p>The following functions are responsible for installing the user's
+customization settings for variables and faces, respectively.  When
+the user invokes &lsquo;<samp><span class="samp">Save for future sessions</span></samp>&rsquo; in the Customize
+interface, that takes effect by writing a <code>custom-set-variables</code>
+and/or a <code>custom-set-faces</code> form into the custom file, to be
+evaluated the next time Emacs starts.
+
+<div class="defun">
+&mdash; Function: <b>custom-set-variables</b><var> &amp;rest args<a name="index-custom_002dset_002dvariables-834"></a></var><br>
+<blockquote><p>This function installs the variable customizations specified by
+<var>args</var>.  Each argument in <var>args</var> should have the form
+
+     <pre class="example">          (<var>var</var> <var>expression</var> [<var>now</var> [<var>request</var> [<var>comment</var>]]])
+</pre>
+        <p class="noindent"><var>var</var> is a variable name (a symbol), and <var>expression</var> is an
+expression which evaluates to the desired customized value.
+
+        <p>If the <code>defcustom</code> form for <var>var</var> has been evaluated prior to
+this <code>custom-set-variables</code> call, <var>expression</var> is immediately
+evaluated, and the variable's value is set to the result.  Otherwise,
+<var>expression</var> is stored into the variable's <code>saved-value</code>
+property, to be evaluated when the relevant <code>defcustom</code> is called
+(usually when the library defining that variable is loaded into
+Emacs).
+
+        <p>The <var>now</var>, <var>request</var>, and <var>comment</var> entries are for
+internal use only, and may be omitted.  <var>now</var>, if non-<code>nil</code>,
+means to set the variable's value now, even if the variable's
+<code>defcustom</code> form has not been evaluated.  <var>request</var> is a list
+of features to be loaded immediately (see <a href="Named-Features.html#Named-Features">Named Features</a>). 
+<var>comment</var> is a string describing the customization. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>custom-set-faces</b><var> &amp;rest args<a name="index-custom_002dset_002dfaces-835"></a></var><br>
+<blockquote><p>This function installs the face customizations specified by
+<var>args</var>.  Each argument in <var>args</var> should have the form
+
+     <pre class="example">          (<var>face</var> <var>spec</var> [<var>now</var> [<var>comment</var>]])
+</pre>
+        <p class="noindent"><var>face</var> is a face name (a symbol), and <var>spec</var> is the customized
+face specification for that face (see <a href="Defining-Faces.html#Defining-Faces">Defining Faces</a>).
+
+        <p>The <var>now</var> and <var>comment</var> entries are for internal use only, and
+may be omitted.  <var>now</var>, if non-<code>nil</code>, means to install the
+face specification now, even if the <code>defface</code> form has not been
+evaluated.  <var>comment</var> is a string describing the customization. 
+</p></blockquote></div>
+
+   </body></html>
+

@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Customization Groups - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Browsing-Custom.html#Browsing-Custom" title="Browsing Custom">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -43,57 +40,60 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Easy-Customization.html#Easy-Customizat
 <hr>
 </div>
 
-<h4 class="subsection">57.2.1 Customization Groups</h4>
+<h4 class="subsection">48.1.1 Customization Groups</h4>
 
-<p><a name="index-customization-groups-3990"></a>
-  For customization purposes, settings are organized into <dfn>groups</dfn>
-to help you find them.  Groups are collected into bigger groups, all
-the way up to a master group called <code>Emacs</code>.
+<p><a name="index-customization-groups-4310"></a>
+  Customization settings are organized into <dfn>customization
+groups</dfn>.  These groups are collected into bigger groups, all the way
+up to a master group called <code>Emacs</code>.
 
    <p><kbd>M-x customize</kbd> creates a customization buffer that shows the
-top-level <code>Emacs</code> group and the second-level groups immediately
-under it.  It looks like this, in part:
+top-level <code>Emacs</code> group.  It looks like this, in part:
 
 <!-- we want the buffer example to all be on one page, but unfortunately -->
 <!-- that's quite a bit of text, so force all space to the bottom. -->
-<pre class="smallexample">     /- Emacs group: Customization of the One True Editor. -------------\
-           [State]: visible group members are all at standard values.
+<!-- @page -->
+<pre class="smallexample">     To apply changes, use the Save or Set buttons.
+     For details, see [Saving Customizations] in the [Emacs manual].
      
-        See also [Manual].
+     ________________________________________ [ Search ]
+     
+      Operate on all settings in this buffer:
+      [ Set for current session ] [ Save for future sessions ]
+      [ Undo edits ] [ Reset to saved ] [ Erase customizations ] [ Exit ]
+     
+     
+     Emacs group: Customization of the One True Editor.
+           [State]: visible group members are all at standard values.
+           See also [Manual].
      
      [Editing] : Basic text editing facilities.
      
-     [External] : Interfacing to external utilities.
+     [Convenience] : Convenience features for faster editing.
      
      <var>more second-level groups</var>
-     
-     \- Emacs group end ------------------------------------------------/
 </pre>
-   <p class="noindent">This says that the buffer displays the contents of the <code>Emacs</code>
-group.  The other groups are listed because they are its contents.  But
-they are listed differently, without indentation and dashes, because
-<em>their</em> contents are not included.  Each group has a single-line
-documentation string; the <code>Emacs</code> group also has a &lsquo;<samp><span class="samp">[State]</span></samp>&rsquo;
-line.
+   <p class="noindent">The main part of this buffer shows the &lsquo;<samp><span class="samp">Emacs</span></samp>&rsquo; customization
+group, which contains several other groups (&lsquo;<samp><span class="samp">Editing</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">Convenience</span></samp>&rsquo;, etc.).  The contents of those groups are not
+listed here, only one line of documentation each.
 
-   <p><a name="index-editable-fields-_0028customization-buffer_0029-3991"></a><a name="index-buttons-_0028customization-buffer_0029-3992"></a><a name="index-links-_0028customization-buffer_0029-3993"></a>  Most of the text in the customization buffer is read-only, but it
-typically includes some <dfn>editable fields</dfn> that you can edit. 
-There are also <dfn>buttons</dfn> and <dfn>links</dfn>, which do something when
-you <dfn>invoke</dfn> them.  To invoke a button or a link, either click on
-it with <kbd>Mouse-1</kbd>, or move point to it and type &lt;RET&gt;.
+   <p>The <dfn>state</dfn> of the group indicates whether setting in that group
+has been edited, set or saved.  See <a href="Changing-a-Variable.html#Changing-a-Variable">Changing a Variable</a>.
 
-   <p>For example, the phrase &lsquo;<samp><span class="samp">[State]</span></samp>&rsquo; that appears in a
-second-level group is a button.  It operates on the same customization
-buffer.  Each group name, such as &lsquo;<samp><span class="samp">[Editing]</span></samp>&rsquo;, is a hypertext
-link to that group; invoking it creates a new customization buffer,
-showing the group and its contents.
+   <p><a name="index-editable-fields-_0028customization-buffer_0029-4311"></a><a name="index-buttons-_0028customization-buffer_0029-4312"></a><a name="index-links-_0028customization-buffer_0029-4313"></a>  Most of the customization buffer is read-only, but it includes some
+<dfn>editable fields</dfn> that you can edit.  For example, at the top of
+the customization buffer is an editable field for searching for
+settings (see <a href="Browsing-Custom.html#Browsing-Custom">Browsing Custom</a>).  There are also <dfn>buttons</dfn> and
+<dfn>links</dfn>, which you can activate by either clicking with the mouse,
+or moving point there and typing &lt;RET&gt;.  For example, the group
+names like &lsquo;<samp><span class="samp">[Editing]</span></samp>&rsquo; are links; activating one of these links
+brings up the customization buffer for that group.
 
-   <p>The <code>Emacs</code> group only contains other groups.  These groups, in
-turn, can contain settings or still more groups.  By browsing the
-hierarchy of groups, you will eventually find the feature you are
-interested in customizing.  Then you can use the customization buffer
-to set that feature's settings.  You can also go straight to a
-particular group by name, using the command <kbd>M-x customize-group</kbd>.
+   <p><a name="index-TAB-_0040r_007b_0028customization-buffer_0029_007d-4314"></a><a name="index-S_002dTAB-_0040r_007b_0028customization-buffer_0029_007d-4315"></a><a name="index-widget_002dforward-4316"></a><a name="index-widget_002dbackward-4317"></a>  In the customizable buffer, you can type &lt;TAB&gt;
+(<code>widget-forward</code>) to move forward to the next button or editable
+field.  <kbd>S-&lt;TAB&gt;</kbd> (<code>widget-backward</code>) moves back to the
+previous button or editable field.
 
    </body></html>
 

@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Processor Run Time - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Time-Calculations.html#Time-Calculations" title="Time Calculations">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,12 +43,12 @@ Up:&nbsp;<a rel="up" accesskey="u" href="System-Interface.html#System-Interface"
 
 <h3 class="section">39.8 Processor Run time</h3>
 
-<p><a name="index-processor-run-time-3860"></a><a name="index-Emacs-process-run-time-3861"></a>
+<p><a name="index-processor-run-time-4207"></a><a name="index-Emacs-process-run-time-4208"></a>
   Emacs provides several functions and primitives that return time,
 both elapsed and processor time, used by the Emacs process.
 
 <div class="defun">
-&mdash; Command: <b>emacs-uptime</b><var> &amp;optional format<a name="index-emacs_002duptime-3862"></a></var><br>
+&mdash; Command: <b>emacs-uptime</b><var> &amp;optional format<a name="index-emacs_002duptime-4209"></a></var><br>
 <blockquote><p>This function returns a string representing the Emacs
 <dfn>uptime</dfn>&mdash;the elapsed wall-clock time this instance of Emacs is
 running.  The string is formatted by <code>format-seconds</code> according
@@ -64,15 +61,11 @@ is <code>nil</code> or omitted, it defaults to <code>"%Y, %D, %H, %M,
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>get-internal-run-time</b><var><a name="index-get_002dinternal_002drun_002dtime-3863"></a></var><br>
+&mdash; Function: <b>get-internal-run-time</b><var><a name="index-get_002dinternal_002drun_002dtime-4210"></a></var><br>
 <blockquote><p>This function returns the processor run time used by Emacs as a list
-of three integers: <code>(</code><var>high</var> <var>low</var> <var>microsec</var><code>)</code>.  The
-integers <var>high</var> and <var>low</var> combine to give the number of
-seconds, which is
-<var>high</var> * 2**16 + <var>low</var>.
-
-        <p>The third element, <var>microsec</var>, gives the microseconds (or 0 for
-systems that return time with the resolution of only one second).
+of four integers: <code>(</code><var>high</var> <var>low</var> <var>microsec</var>
+<var>picosec</var><code>)</code>, using the same format as <code>current-time</code>
+(see <a href="Time-of-Day.html#Time-of-Day">Time of Day</a>).
 
         <p>Note that the time returned by this function excludes the time Emacs
 was not using the processor, and if the Emacs process has several
@@ -85,7 +78,7 @@ time, <code>get-internal-run-time</code> returns the same time as
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>emacs-init-time</b><var><a name="index-emacs_002dinit_002dtime-3864"></a></var><br>
+&mdash; Command: <b>emacs-init-time</b><var><a name="index-emacs_002dinit_002dtime-4211"></a></var><br>
 <blockquote><p>This function returns the duration of the Emacs initialization
 (see <a href="Startup-Summary.html#Startup-Summary">Startup Summary</a>) in seconds, as a string.  When called
 interactively, it prints the duration in the echo area. 

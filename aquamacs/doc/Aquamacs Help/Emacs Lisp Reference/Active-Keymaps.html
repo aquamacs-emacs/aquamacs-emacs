@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Active Keymaps - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Searching-Keymaps.html#Searching-Keymaps" title="Searching Keymaps">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,7 +43,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Keymaps.html#Keymaps">Keymaps</a>
 
 <h3 class="section">22.7 Active Keymaps</h3>
 
-<p><a name="index-active-keymap-1484"></a><a name="index-global-keymap-1485"></a><a name="index-local-keymap-1486"></a>
+<p><a name="index-active-keymap-1575"></a><a name="index-global-keymap-1576"></a><a name="index-local-keymap-1577"></a>
   Emacs normally contains many keymaps; at any given time, just a few
 of them are <dfn>active</dfn>, meaning that they participate in the
 interpretation of user input.  All the active keymaps are used
@@ -58,8 +55,8 @@ keymap, and the global keymap, in that order.  Emacs searches for each
 input key sequence in all these keymaps.  See <a href="Searching-Keymaps.html#Searching-Keymaps">Searching Keymaps</a>,
 for more details of this procedure.
 
-   <p>When the key sequence starts with a mouse event (optionally preceded
-by a symbolic prefix), the active keymaps are determined based on the
+   <p>When the key sequence starts with a mouse event,
+the active keymaps are determined based on the
 position in that event.  If the event happened on a string embedded
 with a <code>display</code>, <code>before-string</code>, or <code>after-string</code>
 property (see <a href="Special-Properties.html#Special-Properties">Special Properties</a>), the non-<code>nil</code> map
@@ -90,12 +87,13 @@ keymap to be processed, in normal circumstances.
    <p>However, there are also special ways for programs to substitute
 other keymaps for some of those.  The variable
 <code>overriding-local-map</code>, if non-<code>nil</code>, specifies a keymap
-that replaces all the usual active keymaps except the global keymap. 
-Another way to do this is with <code>overriding-terminal-local-map</code>;
-it operates on a per-terminal basis.  These variables are documented
-below.
+that replaces all the usual active keymaps except the global keymap.
 
-   <p><a name="index-major-mode-keymap-1487"></a>  Since every buffer that uses the same major mode normally uses the
+   <p>The very highest precedence keymap comes from
+<code>overriding-terminal-local-map</code>; it operates on a per-terminal basis and
+is normally used for modal/transient keybindings.
+
+   <p><a name="index-major-mode-keymap-1578"></a>  Since every buffer that uses the same major mode normally uses the
 same local keymap, you can think of the keymap as local to the mode.  A
 change to the local keymap of a buffer (using <code>local-set-key</code>, for
 example) is seen also in the other buffers that share that keymap.
@@ -112,10 +110,10 @@ and exit commands.  See <a href="Intro-to-Minibuffers.html#Intro-to-Minibuffers"
    <p>Emacs has other keymaps that are used in a different way&mdash;translating
 events within <code>read-key-sequence</code>.  See <a href="Translation-Keymaps.html#Translation-Keymaps">Translation Keymaps</a>.
 
-   <p>See <a href="Standard-Keymaps.html#Standard-Keymaps">Standard Keymaps</a>, for a list of standard keymaps.
+   <p>See <a href="Standard-Keymaps.html#Standard-Keymaps">Standard Keymaps</a>, for a list of some standard keymaps.
 
 <div class="defun">
-&mdash; Function: <b>current-active-maps</b><var> &amp;optional olp position<a name="index-current_002dactive_002dmaps-1488"></a></var><br>
+&mdash; Function: <b>current-active-maps</b><var> &amp;optional olp position<a name="index-current_002dactive_002dmaps-1579"></a></var><br>
 <blockquote><p>This returns the list of active keymaps that would be used by the
 command loop in the current circumstances to look up a key sequence. 
 Normally it ignores <code>overriding-local-map</code> and
@@ -127,7 +125,7 @@ position, and may change the keymaps as described for
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>key-binding</b><var> key &amp;optional accept-defaults no-remap position<a name="index-key_002dbinding-1489"></a></var><br>
+&mdash; Function: <b>key-binding</b><var> key &amp;optional accept-defaults no-remap position<a name="index-key_002dbinding-1580"></a></var><br>
 <blockquote><p>This function returns the binding for <var>key</var> according to the
 current active keymaps.  The result is <code>nil</code> if <var>key</var> is
 undefined in the keymaps.
@@ -137,7 +135,7 @@ bindings, as in <code>lookup-key</code> (see <a href="Functions-for-Key-Lookup.h
 
         <p>When commands are remapped (see <a href="Remapping-Commands.html#Remapping-Commands">Remapping Commands</a>),
 <code>key-binding</code> normally processes command remappings so as to
-returns the remapped command that will actually be executed.  However,
+return the remapped command that will actually be executed.  However,
 if <var>no-remap</var> is non-<code>nil</code>, <code>key-binding</code> ignores
 remappings and returns the binding directly specified for <var>key</var>.
 

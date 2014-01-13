@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Coding Conventions - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Key-Binding-Conventions.html#Key-Binding-Conventions" title="Key Binding Conventions">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,7 +41,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Tips.html#Tips">Tips</a>
 
 <h3 class="section">D.1 Emacs Lisp Coding Conventions</h3>
 
-<p><a name="index-coding-conventions-in-Emacs-Lisp-3919"></a>  Here are conventions that you should follow when writing Emacs Lisp
+<p><a name="index-coding-conventions-in-Emacs-Lisp-4288"></a>  Here are conventions that you should follow when writing Emacs Lisp
 code intended for widespread use:
 
      <ul>
@@ -58,12 +55,13 @@ an incompatible change, go ahead and make the incompatible change;
 don't postpone it.
 
      <li>You should choose a short word to distinguish your program from other
-Lisp programs.  The names of all global variables, constants, and
-functions in your program should begin with that chosen prefix. 
-Separate the prefix from the rest of the name with a hyphen, &lsquo;<samp><span class="samp">-</span></samp>&rsquo;. 
-This practice helps avoid name conflicts, since all global variables
-in Emacs Lisp share the same name space, and all functions share
-another name space<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>
+Lisp programs.  The names of all global symbols in your program, that
+is the names of variables, constants, and functions, should begin with
+that chosen prefix.  Separate the prefix from the rest of the name
+with a hyphen, &lsquo;<samp><span class="samp">-</span></samp>&rsquo;.  This practice helps avoid name conflicts,
+since all global variables in Emacs Lisp share the same name space,
+and all functions share another name space<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  Use two hyphens to separate prefix and name if the symbol is
+not meant to be used by other packages.
 
      <p>Occasionally, for a command name intended for users to use, it is more
 convenient if some words come before the package's name prefix.  And
@@ -107,15 +105,28 @@ compilation.  Using <code>eval-when-compile</code> avoids loading <var>bar</var>
 when the compiled version of <var>foo</var> is <em>used</em>.  It should be
 called before the first use of the macro in the file.  See <a href="Compiling-Macros.html#Compiling-Macros">Compiling Macros</a>.
 
-     <li>Please don't require the <code>cl</code> package of Common Lisp extensions at
-run time.  Use of this package is optional, and it is not part of the
-standard Emacs namespace.  If your package loads <code>cl</code> at run time,
-that could cause name clashes for users who don't use that package.
+     <li>Avoid loading additional libraries at run time unless they are really
+needed.  If your file simply cannot work without some other library,
+then just <code>require</code> that library at the top-level and be done
+with it.  But if your file contains several independent features, and
+only one or two require the extra library, then consider putting
+<code>require</code> statements inside the relevant functions rather than at
+the top-level.  Or use <code>autoload</code> statements to load the extra
+library when needed.  This way people who don't use those aspects of
+your file do not need to load the extra library.
 
-     <p>However, there is no problem with using the <code>cl</code> package at
-compile time, with <code>(eval-when-compile (require 'cl))</code>.  That's
+     <li>If you need Common Lisp extensions, use the <code>cl-lib</code> library
+rather than the old <code>cl</code> library.  The latter does not
+use a clean namespace (i.e., its definitions do not
+start with a &lsquo;<samp><span class="samp">cl-</span></samp>&rsquo; prefix).  If your package loads <code>cl</code> at
+run time, that could cause name clashes for users who don't use that
+package.
+
+     <p>There is no problem with using the <code>cl</code> package at <em>compile</em>
+time, with <code>(eval-when-compile (require 'cl))</code>.  That's
 sufficient for using the macros in the <code>cl</code> package, because the
-compiler expands them before generating the byte-code.
+compiler expands them before generating the byte-code.  It is still
+better to use the more modern <code>cl-lib</code> in this case, though.
 
      <li>When defining a major mode, please follow the major mode
 conventions.  See <a href="Major-Mode-Conventions.html#Major-Mode-Conventions">Major Mode Conventions</a>.
@@ -134,7 +145,7 @@ name that ends in &lsquo;<samp><span class="samp">-function</span></samp>&rsquo;
 to store a list of functions (i.e., the variable is a hook), please
 follow the naming conventions for hooks.  See <a href="Hooks.html#Hooks">Hooks</a>.
 
-     <li><a name="index-unloading-packages_002c-preparing-for-3920"></a>If loading the file adds functions to hooks, define a function
+     <li><a name="index-unloading-packages_002c-preparing-for-4289"></a>If loading the file adds functions to hooks, define a function
 <var>feature</var><code>-unload-hook</code>, where <var>feature</var> is the name of
 the feature the package provides, and make it undo any such changes. 
 Using <code>unload-feature</code> to unload the file will run this function. 
@@ -176,66 +187,41 @@ should say which functions are replaced, and how the behavior of the
 replacements differs from that of the originals.
 
      <li>Constructs that define a function or variable should be macros,
-not functions, and their names should start with &lsquo;<samp><span class="samp">def</span></samp>&rsquo;.
-
-     <li>A macro that defines a function or variable should have a name that
-starts with &lsquo;<samp><span class="samp">define-</span></samp>&rsquo;.  The macro should receive the name to be
+not functions, and their names should start with &lsquo;<samp><span class="samp">define-</span></samp>&rsquo;. 
+The macro should receive the name to be
 defined as the first argument.  That will help various tools find the
 definition automatically.  Avoid constructing the names in the macro
 itself, since that would confuse these tools.
 
-     <li>Please keep the names of your Emacs Lisp source files to 13 characters
-or less.  This way, if the files are compiled, the compiled files' names
-will be 14 characters or less, which is short enough to fit on all kinds
-of Unix systems.
-
      <li>In some other systems there is a convention of choosing variable names
 that begin and end with &lsquo;<samp><span class="samp">*</span></samp>&rsquo;.  We don't use that convention in Emacs
 Lisp, so please don't use it in your programs.  (Emacs uses such names
-only for special-purpose buffers.)  The users will find Emacs more
+only for special-purpose buffers.)  People will find Emacs more
 coherent if all libraries use the same conventions.
 
      <li>If your program contains non-ASCII characters in string or character
 constants, you should make sure Emacs always decodes these characters
 the same way, regardless of the user's settings.  The easiest way to
 do this is to use the coding system <code>utf-8-emacs</code> (see <a href="Coding-System-Basics.html#Coding-System-Basics">Coding System Basics</a>), and specify that coding in the &lsquo;<samp><span class="samp">-*-</span></samp>&rsquo; line or the
-local variables list.  See <a href="../emacs/File-variables.html#File-variables">Local Variables in Files</a>.
+local variables list.  See <a href="../emacs/File-Variables.html#File-Variables">Local Variables in Files</a>.
 
      <pre class="example">          ;; XXX.el  -*- coding: utf-8-emacs; -*-
 </pre>
-     <li>Indent each function with <kbd>C-M-q</kbd> (<code>indent-sexp</code>) using the
-default indentation parameters.
+     <li>Indent the file using the default indentation parameters.
 
      <li>Don't make a habit of putting close-parentheses on lines by
 themselves; Lisp programmers find this disconcerting.
 
      <li>Please put a copyright notice and copying permission notice on the
-file if you distribute copies.  Use a notice like this one:
+file if you distribute copies.  See <a href="Library-Headers.html#Library-Headers">Library Headers</a>.
 
-     <pre class="smallexample">          ;; Copyright (C) <var>year</var> <var>name</var>
-          
-          ;; This program is free software: you can redistribute it and/or
-          ;; modify it under the terms of the GNU General Public License as
-          ;; published by the Free Software Foundation, either version 3 of
-          ;; the License, or (at your option) any later version.
-          
-          ;; This program is distributed in the hope that it will be useful,
-          ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-          ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-          ;; GNU General Public License for more details.
-          
-          ;; You should have received a copy of the GNU General Public License
-          ;; along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
-</pre>
-     <p>If you have signed papers to assign the copyright to the Foundation,
-then use &lsquo;<samp><span class="samp">Free Software Foundation, Inc.</span></samp>&rsquo; as <var>name</var>. 
-Otherwise, use your name.  See <a href="Library-Headers.html#Library-Headers">Library Headers</a>. 
-</ul>
+   </ul>
 
    <div class="footnote">
 <hr>
-<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> The benefits of a Common Lisp-style
-package system are considered not to outweigh the costs.</p>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> The benefits of a
+Common Lisp-style package system are considered not to outweigh the
+costs.</p>
 
    <hr></div>
 

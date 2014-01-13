@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Holiday Customizing - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Advanced-Calendar_002fDiary-Usage.html#Advanced-Calendar_002fDiary-Usage" title="Advanced Calendar/Diary Usage">
 <link rel="prev" href="Calendar-Customizing.html#Calendar-Customizing" title="Calendar Customizing">
-<link rel="next" href="Date-Display-Format.html#Date-Display-Format" title="Date Display Format">
+<link rel="next" href="Mayan-Calendar.html#Mayan-Calendar" title="Mayan Calendar">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -39,36 +36,34 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <div class="node">
 <a name="Holiday-Customizing"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Date-Display-Format.html#Date-Display-Format">Date Display Format</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Mayan-Calendar.html#Mayan-Calendar">Mayan Calendar</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Calendar-Customizing.html#Calendar-Customizing">Calendar Customizing</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Advanced-Calendar_002fDiary-Usage.html#Advanced-Calendar_002fDiary-Usage">Advanced Calendar/Diary Usage</a>
 <hr>
 </div>
 
-<h4 class="subsection">38.15.2 Customizing the Holidays</h4>
+<h4 class="subsection">31.15.2 Customizing the Holidays</h4>
 
-<p><a name="index-calendar_002dholidays-3470"></a><a name="index-holiday_002doriental_002dholidays-3471"></a><a name="index-holiday_002dsolar_002dholidays-3472"></a>  Emacs knows about holidays defined by entries on one of several lists. 
-The lists of holidays that Emacs uses are for
-general holidays (<code>holiday-general-holidays</code>),
-local holidays (<code>holiday-local-holidays</code>),
-sun- and moon-related holidays (<code>holiday-solar-holidays</code>),
-Baha'i holidays (<code>holiday-bahai-holidays</code>),
-Christian holidays (<code>holiday-christian-holidays</code>),
-Hebrew (Jewish) holidays (<code>holiday-hebrew-holidays</code>),
-Islamic (Muslim) holidays (<code>holiday-islamic-holidays</code>),
-Oriental holidays (<code>holiday-oriental-holidays</code>),
-and other holidays (<code>holiday-other-holidays</code>).
+<p><a name="index-calendar_002dholidays-3464"></a><a name="index-holiday_002doriental_002dholidays-3465"></a><a name="index-holiday_002dsolar_002dholidays-3466"></a>  There are several variables listing the default holidays that Emacs
+knows about.  These are: <code>holiday-general-holidays</code>,
+<code>holiday-local-holidays</code>, <code>holiday-solar-holidays</code>,
+<code>holiday-bahai-holidays</code>, <code>holiday-christian-holidays</code>,
+<code>holiday-hebrew-holidays</code>, <code>holiday-islamic-holidays</code>,
+<code>holiday-oriental-holidays</code>, and <code>holiday-other-holidays</code>. 
+The names should be self-explanatory; e.g., <code>holiday-solar-holidays</code>
+lists sun- and moon-related holidays.
 
    <p>You can customize these lists of holidays to your own needs, deleting or
 adding holidays as described below.  Set any of them to <code>nil</code> to
-eliminate the associated holidays.
+not show the associated holidays.
 
-   <p><a name="index-holiday_002dgeneral_002dholidays-3473"></a>  The general holidays are, by default, holidays common throughout the
-United States.
+   <p><a name="index-holiday_002dgeneral_002dholidays-3467"></a><a name="index-holiday_002dlocal_002dholidays-3468"></a><a name="index-holiday_002dother_002dholidays-3469"></a>  The general holidays are, by default, holidays common throughout the
+United States.  In contrast, <code>holiday-local-holidays</code> and
+<code>holiday-other-holidays</code> are both empty by default.  These are
+intended for system-wide settings and your individual use,
+respectively.
 
-   <p><a name="index-holiday_002dlocal_002dholidays-3474"></a>  There are no default local holidays, but your site may supply some.
-
-   <p><a name="index-holiday_002dbahai_002dholidays-3475"></a><a name="index-holiday_002dchristian_002dholidays-3476"></a><a name="index-holiday_002dhebrew_002dholidays-3477"></a><a name="index-holiday_002dislamic_002dholidays-3478"></a><a name="index-calendar_002dbahai_002dall_002dholidays_002dflag-3479"></a><a name="index-calendar_002dchristian_002dall_002dholidays_002dflag-3480"></a><a name="index-calendar_002dhebrew_002dall_002dholidays_002dflag-3481"></a><a name="index-calendar_002dislamic_002dall_002dholidays_002dflag-3482"></a>  By default, Emacs does not include all the holidays of the religions
+   <p><a name="index-holiday_002dbahai_002dholidays-3470"></a><a name="index-holiday_002dchristian_002dholidays-3471"></a><a name="index-holiday_002dhebrew_002dholidays-3472"></a><a name="index-holiday_002dislamic_002dholidays-3473"></a><a name="index-calendar_002dbahai_002dall_002dholidays_002dflag-3474"></a><a name="index-calendar_002dchristian_002dall_002dholidays_002dflag-3475"></a><a name="index-calendar_002dhebrew_002dall_002dholidays_002dflag-3476"></a><a name="index-calendar_002dislamic_002dall_002dholidays_002dflag-3477"></a>  By default, Emacs does not include all the holidays of the religions
 that it knows, only those commonly found in secular calendars.  For a
 more extensive collection of religious holidays, you can set any (or
 all) of the variables <code>calendar-bahai-all-holidays-flag</code>,
@@ -76,16 +71,12 @@ all) of the variables <code>calendar-bahai-all-holidays-flag</code>,
 <code>calendar-hebrew-all-holidays-flag</code>, or
 <code>calendar-islamic-all-holidays-flag</code> to <code>t</code>.
 
-   <p><a name="index-holiday_002dother_002dholidays-3483"></a>  You can set the variable <code>holiday-other-holidays</code> to any list of
-holidays.  This list, normally empty, is intended for individual use.
-
-   <p><a name="index-holiday-forms-3484"></a>  Each of the holiday variables is a list of <dfn>holiday forms</dfn>, each
-form describing a holiday (or sometimes a list of holidays).
-
-   <p>Here is a table of the possible kinds of holiday form.  Day numbers
-and month numbers count starting from 1, but &ldquo;dayname&rdquo; numbers
-count Sunday as 0.  The element <var>string</var> is always the
-description of the holiday, as a string.
+   <p><a name="index-holiday-forms-3478"></a>  Each of the holiday variables is a list of <dfn>holiday forms</dfn>, each
+form describing a holiday (or sometimes a list of holidays).  Here is
+a table of the possible kinds of holiday form.  Day numbers and month
+numbers count starting from 1, but &ldquo;dayname&rdquo; numbers count Sunday as
+0.  The argument <var>string</var> is always the description of the
+holiday, as a string.
 
      <dl>
 <dt><code>(holiday-fixed </code><var>month</var> <var>day</var> <var>string</var><code>)</code><dd>A fixed date on the Gregorian calendar.
@@ -133,7 +124,7 @@ the month (1 specifies the first occurrence, 2 the second occurrence,
 &minus;1 the last occurrence, &minus;2 the second-to-last occurrence, and
 so on).
 
-   <p>You can specify holidays that occur on fixed days of the Baha'i,
+   <p>You can specify holidays that occur on fixed days of the Bahá'í,
 Chinese, Hebrew, Islamic, and Julian calendars too.  For example,
 
 <pre class="smallexample">     (setq holiday-other-holidays
@@ -178,7 +169,7 @@ and write an Emacs Lisp function <code>eclipses</code> that returns a
 (possibly empty) list of the relevant Gregorian dates among the range
 visible in the calendar window, with descriptive strings, like this:
 
-<pre class="smallexample">     (((6 27 1991) "Lunar Eclipse") ((7 11 1991) "Solar Eclipse") ... )
+<pre class="smallexample">     (((6 4 2012) "Lunar Eclipse") ((11 13 2012) "Solar Eclipse") ... )
 </pre>
    </body></html>
 

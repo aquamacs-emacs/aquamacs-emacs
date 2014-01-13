@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Inserting Text - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Moving-Point.html#Moving-Point" title="Moving Point">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,28 +42,28 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Basic.html#Basic">Basic</a>
 
 <h3 class="section">7.1 Inserting Text</h3>
 
-<p><a name="index-insertion-63"></a><a name="index-graphic-characters-64"></a>  You can insert an ordinary <dfn>graphic character</dfn> (e.g., &lsquo;<samp><span class="samp">a</span></samp>&rsquo;,
+<p><a name="index-insertion-64"></a><a name="index-graphic-characters-65"></a>  You can insert an ordinary <dfn>graphic character</dfn> (e.g., &lsquo;<samp><span class="samp">a</span></samp>&rsquo;,
 &lsquo;<samp><span class="samp">B</span></samp>&rsquo;, &lsquo;<samp><span class="samp">3</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">=</span></samp>&rsquo;) by typing the associated key.  This
 adds the character to the buffer at point.  Insertion moves point
 forward, so that point remains just after the inserted text. 
 See <a href="Point.html#Point">Point</a>.
 
-   <p><a name="index-RET-65"></a><a name="index-newline-66"></a>  To end a line and start a new one, type &lt;RET&gt;.  This key may be
-labeled &lt;Return&gt; or &lt;Enter&gt; on your keyboard, but we refer to
-it as &lt;RET&gt; in this manual.  Pressing it inserts a newline
-character in the buffer.  If point is at the end of the line, this
-creates a new blank line after it; if point is in the middle of a
-line, the line is split at that position.
+   <p><a name="index-RET-66"></a><a name="index-newline-67"></a>  To end a line and start a new one, type &lt;RET&gt; (<code>newline</code>). 
+(The &lt;RET&gt; key may be labeled &lt;Return&gt; or &lt;Enter&gt; on your
+keyboard, but we refer to it as &lt;RET&gt; in this manual.)  This
+command inserts a newline character into the buffer.  If point is at
+the end of the line, the effect is to create a new blank line after
+it; if point is in the middle of a line, the line is split at that
+position.
 
    <p>As we explain later in this manual, you can change the way Emacs
 handles text insertion by turning on <dfn>minor modes</dfn>.  For instance,
-if you turn on a minor mode called <dfn>Auto Fill</dfn> mode, Emacs can
-split lines automatically when they become too long (see <a href="Filling.html#Filling">Filling</a>). 
-If you turn on a minor mode called <dfn>Overwrite</dfn> mode, inserted
-characters replace (overwrite) existing text, instead of shoving it to
-the right.  See <a href="Minor-Modes.html#Minor-Modes">Minor Modes</a>.
+the minor mode called Auto Fill mode splits lines automatically when
+they get too long (see <a href="Filling.html#Filling">Filling</a>).  The minor mode called Overwrite
+mode causes inserted characters to replace (overwrite) existing text,
+instead of shoving it to the right.  See <a href="Minor-Modes.html#Minor-Modes">Minor Modes</a>.
 
-   <p><a name="index-quoting-67"></a><a name="index-C_002dq-68"></a><a name="index-quoted_002dinsert-69"></a>  Only graphic characters can be inserted by typing the associated
+   <p><a name="index-quoting-68"></a><a name="index-C_002dq-69"></a><a name="index-quoted_002dinsert-70"></a>  Only graphic characters can be inserted by typing the associated
 key; other keys act as editing commands and do not insert themselves. 
 For instance, <kbd>DEL</kbd> runs the command <code>delete-backward-char</code>
 by default (some modes bind it to a different command); it does not
@@ -85,30 +82,36 @@ literal &lsquo;<samp><span class="samp">DEL</span></samp>&rsquo; character.
      <li><kbd>C-q</kbd> followed by a sequence of octal digits inserts the character
 with the specified octal character code.  You can use any number of
 octal digits; any non-digit terminates the sequence.  If the
-terminating character is &lt;RET&gt;, it serves only to terminate the
-sequence.  Any other non-digit terminates the sequence and then acts
-as normal input&mdash;thus, <kbd>C-q 1 0 1 B</kbd> inserts &lsquo;<samp><span class="samp">AB</span></samp>&rsquo;.
+terminating character is &lt;RET&gt;, that &lt;RET&gt; serves only to
+terminate the sequence.  Any other non-digit terminates the sequence
+and then acts as normal input&mdash;thus, <kbd>C-q 1 0 1 B</kbd> inserts
+&lsquo;<samp><span class="samp">AB</span></samp>&rsquo;.
 
      <p>The use of octal sequences is disabled in ordinary non-binary
 Overwrite mode, to give you a convenient way to insert a digit instead
 of overwriting with it. 
 </ul>
 
-   <p><a name="index-read_002dquoted_002dchar_002dradix-70"></a>To use decimal or hexadecimal instead of octal, set the variable
+   <p><a name="index-read_002dquoted_002dchar_002dradix-71"></a>To use decimal or hexadecimal instead of octal, set the variable
 <code>read-quoted-char-radix</code> to 10 or 16.  If the radix is 16,
 the letters <kbd>a</kbd> to <kbd>f</kbd> serve as part of a character code,
 just like digits.  Case is ignored.
 
-   <p>A numeric argument tells <kbd>C-q</kbd> how many copies of the quoted
-character to insert (see <a href="Arguments.html#Arguments">Arguments</a>).
+   <p><a name="index-insert_002dchar-72"></a><a name="index-C_002dx-8-RET-73"></a><a name="index-Unicode-characters_002c-inserting-74"></a><a name="index-insert-Unicode-character-75"></a><a name="index-characters_002c-inserting-by-name-or-code_002dpoint-76"></a>  Alternatively, you can use the command <kbd>C-x 8 &lt;RET&gt;</kbd>
+(<code>insert-char</code>).  This prompts for the Unicode name or code-point
+of a character, using the minibuffer.  If you enter a name, the
+command provides completion (see <a href="Completion.html#Completion">Completion</a>).  If you enter a
+code-point, it should be as a hexadecimal number (the convention for
+Unicode), or a number with a specified radix, e.g., <code>#o23072</code>
+(octal); See <a href="../elisp/Integer-Basics.html#Integer-Basics">Integer Basics</a>.  The command then inserts the corresponding character into
+the buffer.  For example, both of the following insert the infinity
+sign (Unicode code-point <code>U+221E</code>):
 
-   <p><a name="index-ucs_002dinsert-71"></a><a name="index-C_002dx-8-RET-72"></a><a name="index-Unicode-73"></a>  Instead of <kbd>C-q</kbd>, you can use <kbd>C-x 8 &lt;RET&gt;</kbd>
-(<code>ucs-insert</code>) to insert a character based on its Unicode name or
-code-point.  This command prompts for a character to insert, using
-the minibuffer; you can specify the character using either (i) the
-character's name in the Unicode standard, or (ii) the character's
-code-point in the Unicode standard.  If you specify the character's
-name, the command provides completion.
+<pre class="example">     <kbd>C-x 8 &lt;RET&gt; infinity &lt;RET&gt;</kbd>
+     <kbd>C-x 8 &lt;RET&gt; 221e &lt;RET&gt;</kbd>
+</pre>
+   <p>A numeric argument to <kbd>C-q</kbd> or <kbd>C-x 8 &lt;RET&gt;</kbd> specifies
+how many copies of the character to insert (see <a href="Arguments.html#Arguments">Arguments</a>).
 
    </body></html>
 

@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Marking Objects - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Using-Region.html#Using-Region" title="Using Region">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,7 +44,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Mark.html#Mark">Mark</a>
 
 <h3 class="section">11.2 Commands to Mark Textual Objects</h3>
 
-<p><a name="index-marking-sections-of-text-309"></a>  Here are the commands for placing point and the mark around a textual
+<p><a name="index-marking-sections-of-text-369"></a>  Here are commands for placing point and the mark around a textual
 object such as a word, list, paragraph or page:
 
      <dl>
@@ -65,37 +62,34 @@ end (<code>mark-page</code>).
 (<code>mark-whole-buffer</code>). 
 </dl>
 
-   <p><a name="index-mark_002dword-310"></a><a name="index-mark_002dsexp-311"></a><kbd>M-@</kbd> (<code>mark-word</code>) puts the mark at the end of the next
-word, while <kbd>C-M-@</kbd> (<code>mark-sexp</code>) puts it at the end of the
-next balanced expression (see <a href="Expressions.html#Expressions">Expressions</a>).  These commands handle
-arguments just like <kbd>M-f</kbd> and <kbd>C-M-f</kbd>.
+   <p><a name="index-M_002d_0040_0040-370"></a><a name="index-mark_002dword-371"></a>  <kbd>M-@</kbd> (<code>mark-word</code>) sets the mark at the end of the next
+word (see <a href="Words.html#Words">Words</a>, for information about words).  Repeated
+invocations of this command extend the region by advancing the mark
+one word at a time.  As an exception, if the mark is active and
+located before point, <kbd>M-@</kbd> moves the mark backwards from its
+current position one word at a time.
 
-   <p><a name="index-C_002dx-h-312"></a><a name="index-mark_002dwhole_002dbuffer-313"></a>   The other commands in the above list set both point and mark, so as
+   <p>This command also accepts a numeric argument <var>n</var>, which tells it
+to advance the mark by <var>n</var> words.  A negative argument moves the
+mark back by <var>n</var> words.
+
+   <p><a name="index-C_002dM_002d_0040_0040-372"></a><a name="index-mark_002dsexp-373"></a>  Similarly, <kbd>C-M-@</kbd> (<code>mark-sexp</code>) puts the mark at the end
+of the next balanced expression (see <a href="Expressions.html#Expressions">Expressions</a>).  Repeated
+invocations extend the region to subsequent expressions, while
+positive or negative numeric arguments move the mark forward or
+backward by the specified number of expressions.
+
+   <p>The other commands in the above list set both point and mark, so as
 to delimit an object in the buffer.  <kbd>M-h</kbd> (<code>mark-paragraph</code>)
-moves point to the beginning of the paragraph that surrounds or
-follows point, and sets the mark at the end of that paragraph
-(see <a href="Paragraphs.html#Paragraphs">Paragraphs</a>).  As a special exception, repeated invocations of
-<kbd>M-h</kbd> extend the region to subsequent paragraphs.  This is
-convenient for indenting, case-converting, or killing entire
-paragraphs.
+marks paragraphs (see <a href="Paragraphs.html#Paragraphs">Paragraphs</a>), <kbd>C-M-h</kbd> (<code>mark-defun</code>)
+marks top-level definitions (see <a href="Moving-by-Defuns.html#Moving-by-Defuns">Moving by Defuns</a>), and <kbd>C-x
+C-p</kbd> (<code>mark-page</code>) marks pages (see <a href="Pages.html#Pages">Pages</a>).  Repeated
+invocations again play the same role, extending the region to
+consecutive objects; similarly, numeric arguments specify how many
+objects to move the mark by.
 
-   <p>The <kbd>M-h</kbd> command accepts prefix arguments.  If the argument's
-value is positive, <kbd>M-h</kbd> marks that many paragraphs starting with
-the one surrounding point; therefore, <kbd>C-u M-h</kbd> is equivalent to
-<kbd>M-h M-h M-h M-h</kbd>.  If the prefix argument is &minus;<var>n</var>,
-<kbd>M-h</kbd> marks <var>n</var> paragraphs running back from the one
-surrounding point; in this case, point moves forward to the end of
-that paragraph, and the mark goes at the start of the region.
-
-   <p>Similarly, <kbd>C-M-h</kbd> (<code>mark-defun</code>) sets mark and point
-around major top-level definitions (see <a href="Moving-by-Defuns.html#Moving-by-Defuns">Moving by Defuns</a>), and
-<kbd>C-x C-p</kbd> (<code>mark-page</code>) does the same for pages
-(see <a href="Pages.html#Pages">Pages</a>).  These treat repeated invocations and prefix
-arguments similarly to <code>mark-paragraph</code>.
-
-   <p>Finally, <kbd>C-x h</kbd> (<code>mark-whole-buffer</code>) sets up the entire
-buffer as the region, by putting point at the beginning and the mark
-at the end.  (In some programs this is called &ldquo;select all.&rdquo;)
+   <p><a name="index-C_002dx-h-374"></a><a name="index-mark_002dwhole_002dbuffer-375"></a><a name="index-select-all-376"></a>  <kbd>C-x h</kbd> (<code>mark-whole-buffer</code>) sets up the entire buffer as
+the region, by putting point at the beginning and the mark at the end.
 
    </body></html>
 

@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Comment Tips - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Library-Headers.html#Library-Headers" title="Library Headers">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,24 +43,19 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Tips.html#Tips">Tips</a>
 
 <h3 class="section">D.7 Tips on Writing Comments</h3>
 
-<p><a name="index-comments_002c-Lisp-convention-for-3938"></a>
-  We recommend these conventions for where to put comments and how to
-indent them:
+<p><a name="index-comments_002c-Lisp-convention-for-4302"></a>
+  We recommend these conventions for comments:
 
      <dl>
 <dt>&lsquo;<samp><span class="samp">;</span></samp>&rsquo;<dd>Comments that start with a single semicolon, &lsquo;<samp><span class="samp">;</span></samp>&rsquo;, should all be
 aligned to the same column on the right of the source code.  Such
-comments usually explain how the code on the same line does its job.  In
-Lisp mode and related modes, the <kbd>M-;</kbd> (<code>indent-for-comment</code>)
-command automatically inserts such a &lsquo;<samp><span class="samp">;</span></samp>&rsquo; in the right place, or
-aligns such a comment if it is already present.
+comments usually explain how the code on that line does its job. 
+For example:
 
-     <p>This and following examples are taken from the Emacs sources.
-
-     <pre class="smallexample">          (setq base-version-list                 ; there was a base
+     <pre class="smallexample">          (setq base-version-list                 ; There was a base
                 (assoc (substring fn 0 start-vn)  ; version to which
                        file-version-assoc-list))  ; this looks like
-                                                  ; a subversion
+                                                  ; a subversion.
 </pre>
      <br><dt>&lsquo;<samp><span class="samp">;;</span></samp>&rsquo;<dd>Comments that start with two semicolons, &lsquo;<samp><span class="samp">;;</span></samp>&rsquo;, should be aligned to
 the same level of indentation as the code.  Such comments usually
@@ -73,45 +65,31 @@ at that point.  For example:
      <pre class="smallexample">          (prog1 (setq auto-fill-function
                        ...
                        ...
-            ;; update mode line
+            ;; Update mode line.
             (force-mode-line-update)))
 </pre>
      <p>We also normally use two semicolons for comments outside functions.
 
-     <pre class="smallexample">          ;; This Lisp code is run in Emacs
-          ;; when it is to operate as a server
-          ;; for other processes.
+     <pre class="smallexample">          ;; This Lisp code is run in Emacs when it is to operate as
+          ;; a server for other processes.
 </pre>
-     <p>Every function that has no documentation string (presumably one that is
-used only internally within the package it belongs to), should instead
-have a two-semicolon comment right before the function, explaining what
-the function does and how to call it properly.  Explain precisely what
-each argument means and how the function interprets its possible values.
+     <p>If a function has no documentation string, it should instead have a
+two-semicolon comment right before the function, explaining what the
+function does and how to call it properly.  Explain precisely what
+each argument means and how the function interprets its possible
+values.  It is much better to convert such comments to documentation
+strings, though.
 
      <br><dt>&lsquo;<samp><span class="samp">;;;</span></samp>&rsquo;<dd>Comments that start with three semicolons, &lsquo;<samp><span class="samp">;;;</span></samp>&rsquo;, should start at
-the left margin.  These are used, occasionally, for comments within
-functions that should start at the margin.  We also use them sometimes
-for comments that are between functions&mdash;whether to use two or three
-semicolons depends on whether the comment should be considered a
+the left margin.  We use them
+for comments which should be considered a
 &ldquo;heading&rdquo; by Outline minor mode.  By default, comments starting with
 at least three semicolons (followed by a single space and a
 non-whitespace character) are considered headings, comments starting
-with two or less are not.
+with two or fewer are not.  Historically, triple-semicolon comments have
+also been used for commenting out lines within a function, but this use
+is discouraged.
 
-     <p>Another use for triple-semicolon comments is for commenting out lines
-within a function.  We use three semicolons for this precisely so that
-they remain at the left margin.  By default, Outline minor mode does
-not consider a comment to be a heading (even if it starts with at
-least three semicolons) if the semicolons are followed by at least two
-spaces.  Thus, if you add an introductory comment to the commented out
-code, make sure to indent it by at least two spaces after the three
-semicolons.
-
-     <pre class="smallexample">          (defun foo (a)
-          ;;;  This is no longer necessary.
-          ;;;  (force-mode-line-update)
-            (message "Finished with %s" a))
-</pre>
      <p>When commenting out entire functions, use two semicolons.
 
      <br><dt>&lsquo;<samp><span class="samp">;;;;</span></samp>&rsquo;<dd>Comments that start with four semicolons, &lsquo;<samp><span class="samp">;;;;</span></samp>&rsquo;, should be aligned
@@ -122,10 +100,11 @@ program.  For example:
 </pre>
      </dl>
 
-<p class="noindent">The indentation commands of the Lisp modes in Emacs, such as <kbd>M-;</kbd>
-(<code>indent-for-comment</code>) and &lt;TAB&gt; (<code>lisp-indent-line</code>),
-automatically indent comments according to these conventions,
-depending on the number of semicolons.  See <a href="../emacs/Comments.html#Comments">Manipulating Comments</a>.
+<p class="noindent">Generally speaking, the <kbd>M-;</kbd> (<code>comment-dwim</code>) command
+automatically starts a comment of the appropriate type; or indents an
+existing comment to the right place, depending on the number of
+semicolons. 
+See <a href="../emacs/Comments.html#Comments">Manipulating Comments</a>.
 
    </body></html>
 

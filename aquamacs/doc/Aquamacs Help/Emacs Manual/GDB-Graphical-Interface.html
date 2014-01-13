@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>GDB Graphical Interface - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="prev" href="GUD-Customization.html#GUD-Customization" title="GUD Customization">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -43,22 +40,22 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Debuggers.html#Debuggers">Debuggers</a>
 <hr>
 </div>
 
-<h4 class="subsection">31.6.5 GDB Graphical Interface</h4>
+<h4 class="subsection">27.6.5 GDB Graphical Interface</h4>
 
-<p>The command <code>gdb</code> starts GDB in a graphical interface, using
-Emacs windows for display program state information.  With it, you do
-not need to use textual GDB commands; you can control the debugging
-session with the mouse.  For example, you can click in the fringe of a
-source buffer to set a breakpoint there, or on a stack frame in the
-stack buffer to select that frame.
+<p>The command <kbd>M-x gdb</kbd> starts GDB in an IDE-like interface, with
+specialized buffers for controlling breakpoints, stack frames, and
+other aspects of the debugger state.  It also provides additional ways
+to control the debugging session with the mouse, such as clicking in
+the fringe of a source buffer to set a breakpoint there.
 
-   <p>This mode requires telling GDB that its &ldquo;screen size&rdquo; is
-unlimited, so it sets the height and width accordingly.  For correct
-operation you must not change these values during the GDB session.
+   <p><a name="index-gud_002dgdb_002dcommand_002dname-2644"></a>  To run GDB using just the GUD interaction buffer interface, without
+these additional features, use <kbd>M-x gud-gdb</kbd> (see <a href="Starting-GUD.html#Starting-GUD">Starting GUD</a>).  You must use this if you want to debug multiple programs
+within one Emacs session, as that is currently unsupported by <kbd>M-x
+gdb</kbd>.
 
-   <p><a name="index-gud_002dgdb_002dcommand_002dname-2370"></a>  To run GDB in text command mode, like the other debuggers in Emacs,
-use <kbd>M-x gud-gdb</kbd>.  You need to use text command mode to debug
-multiple programs within one Emacs session.
+   <p>Internally, <kbd>M-x gdb</kbd> informs GDB that its &ldquo;screen size&rdquo; is
+unlimited; for correct operation, you must not change GDB's screen
+height and width values during the debugging session.
 
 <ul class="menu">
 <li><a accesskey="1" href="GDB-User-Interface-Layout.html#GDB-User-Interface-Layout">GDB User Interface Layout</a>:    Control the number of displayed buffers. 
@@ -67,8 +64,7 @@ multiple programs within one Emacs session.
 <li><a accesskey="3" href="Breakpoints-Buffer.html#Breakpoints-Buffer">Breakpoints Buffer</a>:           A breakpoint control panel. 
 <li><a accesskey="4" href="Threads-Buffer.html#Threads-Buffer">Threads Buffer</a>:               Displays your threads. 
 <li><a accesskey="5" href="Stack-Buffer.html#Stack-Buffer">Stack Buffer</a>:                 Select a frame from the call stack. 
-<li><a accesskey="6" href="Other-GDB-Buffers.html#Other-GDB-Buffers">Other GDB Buffers</a>:            Input/output, locals, registers,
-                                assembler, threads and memory buffers. 
+<li><a accesskey="6" href="Other-GDB-Buffers.html#Other-GDB-Buffers">Other GDB Buffers</a>:            Other buffers for controlling the GDB state. 
 <li><a accesskey="7" href="Watch-Expressions.html#Watch-Expressions">Watch Expressions</a>:            Monitor variable values in the speedbar. 
 <li><a accesskey="8" href="Multithreaded-Debugging.html#Multithreaded-Debugging">Multithreaded Debugging</a>:      Debugging programs with several threads. 
 </ul>

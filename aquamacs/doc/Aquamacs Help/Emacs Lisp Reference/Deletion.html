@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Deletion - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="User_002dLevel-Deletion.html#User_002dLevel-Deletion" title="User-Level Deletion">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,8 +43,8 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
 
 <h3 class="section">32.6 Deleting Text</h3>
 
-<p><a name="index-text-deletion-2609"></a>
-<a name="index-deleting-text-vs-killing-2610"></a>  Deletion means removing part of the text in a buffer, without saving
+<p><a name="index-text-deletion-2873"></a>
+<a name="index-deleting-text-vs-killing-2874"></a>  Deletion means removing part of the text in a buffer, without saving
 it in the kill ring (see <a href="The-Kill-Ring.html#The-Kill-Ring">The Kill Ring</a>).  Deleted text can't be
 yanked, but can be reinserted using the undo mechanism (see <a href="Undo.html#Undo">Undo</a>). 
 Some deletion functions do save text in the kill ring in some special
@@ -56,7 +53,7 @@ cases.
    <p>All of the deletion functions operate on the current buffer.
 
 <div class="defun">
-&mdash; Command: <b>erase-buffer</b><var><a name="index-erase_002dbuffer-2611"></a></var><br>
+&mdash; Command: <b>erase-buffer</b><var><a name="index-erase_002dbuffer-2875"></a></var><br>
 <blockquote><p>This function deletes the entire text of the current buffer
 (<em>not</em> just the accessible portion), leaving it
 empty.  If the buffer is read-only, it signals a <code>buffer-read-only</code>
@@ -65,14 +62,14 @@ error; if some of the text in it is read-only, it signals a
 asking for any confirmation.  It returns <code>nil</code>.
 
         <p>Normally, deleting a large amount of text from a buffer inhibits further
-auto-saving of that buffer &ldquo;because it has shrunk.&rdquo;  However,
+auto-saving of that buffer &ldquo;because it has shrunk&rdquo;.  However,
 <code>erase-buffer</code> does not do this, the idea being that the future
 text is not really related to the former text, and its size should not
 be compared with that of the former text. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>delete-region</b><var> start end<a name="index-delete_002dregion-2612"></a></var><br>
+&mdash; Command: <b>delete-region</b><var> start end<a name="index-delete_002dregion-2876"></a></var><br>
 <blockquote><p>This command deletes the text between positions <var>start</var> and
 <var>end</var> in the current buffer, and returns <code>nil</code>.  If point was
 inside the deleted region, its value afterward is <var>start</var>. 
@@ -80,7 +77,7 @@ Otherwise, point relocates with the surrounding text, as markers do.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>delete-and-extract-region</b><var> start end<a name="index-delete_002dand_002dextract_002dregion-2613"></a></var><br>
+&mdash; Function: <b>delete-and-extract-region</b><var> start end<a name="index-delete_002dand_002dextract_002dregion-2877"></a></var><br>
 <blockquote><p>This function deletes the text between positions <var>start</var> and
 <var>end</var> in the current buffer, and returns a string containing the
 text just deleted.
@@ -91,7 +88,7 @@ markers do.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>delete-char</b><var> count &amp;optional killp<a name="index-delete_002dchar-2614"></a></var><br>
+&mdash; Command: <b>delete-char</b><var> count &amp;optional killp<a name="index-delete_002dchar-2878"></a></var><br>
 <blockquote><p>This command deletes <var>count</var> characters directly after point, or
 before point if <var>count</var> is negative.  If <var>killp</var> is
 non-<code>nil</code>, then it saves the deleted characters in the kill ring.
@@ -106,8 +103,8 @@ the kill ring.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>delete-backward-char</b><var> count &amp;optional killp<a name="index-delete_002dbackward_002dchar-2615"></a></var><br>
-<blockquote><p><a name="index-deleting-previous-char-2616"></a>This command deletes <var>count</var> characters directly before point, or
+&mdash; Command: <b>delete-backward-char</b><var> count &amp;optional killp<a name="index-delete_002dbackward_002dchar-2879"></a></var><br>
+<blockquote><p><a name="index-deleting-previous-char-2880"></a>This command deletes <var>count</var> characters directly before point, or
 after point if <var>count</var> is negative.  If <var>killp</var> is
 non-<code>nil</code>, then it saves the deleted characters in the kill ring.
 
@@ -121,8 +118,8 @@ the kill ring.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>backward-delete-char-untabify</b><var> count &amp;optional killp<a name="index-backward_002ddelete_002dchar_002duntabify-2617"></a></var><br>
-<blockquote><p><a name="index-tab-deletion-2618"></a>This command deletes <var>count</var> characters backward, changing tabs
+&mdash; Command: <b>backward-delete-char-untabify</b><var> count &amp;optional killp<a name="index-backward_002ddelete_002dchar_002duntabify-2881"></a></var><br>
+<blockquote><p><a name="index-tab-deletion-2882"></a>This command deletes <var>count</var> characters backward, changing tabs
 into spaces.  When the next character to be deleted is a tab, it is
 first replaced with the proper number of spaces to preserve alignment
 and then one of those spaces is deleted instead of the tab.  If
@@ -143,7 +140,7 @@ the kill ring.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>backward-delete-char-untabify-method</b><var><a name="index-backward_002ddelete_002dchar_002duntabify_002dmethod-2619"></a></var><br>
+&mdash; User Option: <b>backward-delete-char-untabify-method</b><var><a name="index-backward_002ddelete_002dchar_002duntabify_002dmethod-2883"></a></var><br>
 <blockquote><p>This option specifies how <code>backward-delete-char-untabify</code> should
 deal with whitespace.  Possible values include <code>untabify</code>, the
 default, meaning convert a tab to many spaces and delete one;

@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Defining Functions - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Calling-Functions.html#Calling-Functions" title="Calling Functions">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,42 +43,35 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Functions.html#Functions">Functions</a>
 
 <h3 class="section">12.4 Defining Functions</h3>
 
-<p><a name="index-defining-a-function-692"></a>
+<p><a name="index-defining-a-function-735"></a>
   We usually give a name to a function when it is first created.  This
 is called <dfn>defining a function</dfn>, and it is done with the
-<code>defun</code> special form.
+<code>defun</code> macro.
 
 <div class="defun">
-&mdash; Special Form: <b>defun</b><var> name argument-list body-forms<a name="index-defun-693"></a></var><br>
+&mdash; Macro: <b>defun</b><var> name args </var>[<var>doc</var>] [<var>declare</var>] [<var>interactive</var>]<var> body<small class="dots">...</small><a name="index-defun-736"></a></var><br>
 <blockquote><p><code>defun</code> is the usual way to define new Lisp functions.  It
-defines the symbol <var>name</var> as a function that looks like this:
+defines the symbol <var>name</var> as a function with argument list
+<var>args</var> and body forms given by <var>body</var>.  Neither <var>name</var> nor
+<var>args</var> should be quoted.
 
-     <pre class="example">          (lambda <var>argument-list</var> . <var>body-forms</var>)
-</pre>
-        <p><code>defun</code> stores this lambda expression in the function cell of
-<var>name</var>.  It returns the value <var>name</var>, but usually we ignore this
-value.
+        <p><var>doc</var>, if present, should be a string specifying the function's
+documentation string (see <a href="Function-Documentation.html#Function-Documentation">Function Documentation</a>).  <var>declare</var>,
+if present, should be a <code>declare</code> form specifying function
+metadata (see <a href="Declare-Form.html#Declare-Form">Declare Form</a>).  <var>interactive</var>, if present,
+should be an <code>interactive</code> form specifying how the function is to
+be called interactively (see <a href="Interactive-Call.html#Interactive-Call">Interactive Call</a>).
 
-        <p>As described previously, <var>argument-list</var> is a list of argument
-names and may include the keywords <code>&amp;optional</code> and <code>&amp;rest</code>
-(see <a href="Lambda-Expressions.html#Lambda-Expressions">Lambda Expressions</a>).  Also, the first two of the
-<var>body-forms</var> may be a documentation string and an interactive
-declaration.
-
-        <p>There is no conflict if the same symbol <var>name</var> is also used as a
-variable, since the symbol's value cell is independent of the function
-cell.  See <a href="Symbol-Components.html#Symbol-Components">Symbol Components</a>.
+        <p>The return value of <code>defun</code> is undefined.
 
         <p>Here are some examples:
 
      <pre class="example">          (defun foo () 5)
-               &rArr; foo
           (foo)
                &rArr; 5
           
           (defun bar (a &amp;optional b &amp;rest c)
               (list a b c))
-               &rArr; bar
           (bar 1 2 3 4 5)
                &rArr; (1 2 (3 4 5))
           (bar 1)
@@ -90,31 +80,31 @@ cell.  See <a href="Symbol-Components.html#Symbol-Components">Symbol Components<
           error--&gt; Wrong number of arguments.
           
           (defun capitalize-backwards ()
-            "Upcase the last letter of a word."
+            "Upcase the last letter of the word at point."
             (interactive)
             (backward-word 1)
             (forward-word 1)
             (backward-char 1)
             (capitalize-word 1))
-               &rArr; capitalize-backwards
 </pre>
         <p>Be careful not to redefine existing functions unintentionally. 
 <code>defun</code> redefines even primitive functions such as <code>car</code>
-without any hesitation or notification.  Redefining a function already
-defined is often done deliberately, and there is no way to distinguish
-deliberate redefinition from unintentional redefinition. 
+without any hesitation or notification.  Emacs does not prevent you
+from doing this, because redefining a function is sometimes done
+deliberately, and there is no way to distinguish deliberate
+redefinition from unintentional redefinition. 
 </p></blockquote></div>
 
-   <p><a name="index-function-aliases-694"></a>
+   <p><a name="index-function-aliases-737"></a><a name="index-alias_002c-for-functions-738"></a>
 
 <div class="defun">
-&mdash; Function: <b>defalias</b><var> name definition &amp;optional docstring<a name="index-defalias-695"></a></var><br>
-<blockquote><p><a name="Definition-of-defalias"></a>This special form defines the symbol <var>name</var> as a function, with
+&mdash; Function: <b>defalias</b><var> name definition &amp;optional doc<a name="index-defalias-739"></a></var><br>
+<blockquote><p><a name="Definition-of-defalias"></a>This function defines the symbol <var>name</var> as a function, with
 definition <var>definition</var> (which can be any valid Lisp function). 
-It returns <var>definition</var>.
+Its return value is <em>undefined</em>.
 
-        <p>If <var>docstring</var> is non-<code>nil</code>, it becomes the function
-documentation of <var>name</var>.  Otherwise, any documentation provided by
+        <p>If <var>doc</var> is non-<code>nil</code>, it becomes the function documentation
+of <var>name</var>.  Otherwise, any documentation provided by
 <var>definition</var> is used.
 
         <p>The proper place to use <code>defalias</code> is where a specific function
@@ -140,7 +130,8 @@ call the primitive's C definition directly, so changing the symbol's
 definition will have no effect on them.
 
    <p>See also <code>defsubst</code>, which defines a function like <code>defun</code>
-and tells the Lisp compiler to open-code it.  See <a href="Inline-Functions.html#Inline-Functions">Inline Functions</a>.
+and tells the Lisp compiler to perform inline expansion on it. 
+See <a href="Inline-Functions.html#Inline-Functions">Inline Functions</a>.
 
    </body></html>
 

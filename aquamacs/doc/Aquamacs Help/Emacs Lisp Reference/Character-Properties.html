@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Character Properties - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Character-Sets.html#Character-Sets" title="Character Sets">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,13 +41,15 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Non_002dASCII-Characters.html#Non_002dA
 <hr>
 </div>
 
-<h3 class="section">33.5 Character Properties</h3>
+<h3 class="section">33.6 Character Properties</h3>
 
-<p><a name="index-character-properties-2879"></a>A <dfn>character property</dfn> is a named attribute of a character that
+<p><a name="index-character-properties-3160"></a>A <dfn>character property</dfn> is a named attribute of a character that
 specifies how the character behaves and how it should be handled
 during text processing and display.  Thus, character properties are an
 important part of specifying the character's semantics.
 
+<!-- FIXME: Use the latest URI of this chapter? -->
+<!-- http://www.unicode.org/versions/latest/ch04.pdf -->
    <p>On the whole, Emacs follows the Unicode Standard in its implementation
 of character properties.  In particular, Emacs supports the
 <a href="http://www.unicode.org/reports/tr23/">Unicode Character Property Model</a>, and the Emacs character property database is derived from the
@@ -71,40 +70,56 @@ replacing each &lsquo;<samp><span class="samp">_</span></samp>&rsquo; character 
 <code>canonical-combining-class</code>.  However, sometimes we shorten the
 names to make their use easier.
 
+   <p><a name="index-unassigned-character-codepoints-3161"></a>  Some codepoints are left <dfn>unassigned</dfn> by the
+<acronym>UCD</acronym>&mdash;they don't correspond to any character.  The Unicode
+Standard defines default values of properties for such codepoints;
+they are mentioned below for each property.
+
    <p>Here is the full list of value types for all the character
 properties that Emacs knows about:
 
      <dl>
-<dt><code>name</code><dd>This property corresponds to the Unicode <code>Name</code> property.  The
-value is a string consisting of upper-case Latin letters A to Z,
-digits, spaces, and hyphen &lsquo;<samp><span class="samp">-</span></samp>&rsquo; characters.
+<dt><code>name</code><dd>Corresponds to the <code>Name</code> Unicode property.  The value is a
+string consisting of upper-case Latin letters A to Z, digits, spaces,
+and hyphen &lsquo;<samp><span class="samp">-</span></samp>&rsquo; characters.  For unassigned codepoints, the value
+is an empty string.
 
-     <p><a name="index-unicode-general-category-2880"></a><br><dt><code>general-category</code><dd>This property corresponds to the Unicode <code>General_Category</code>
-property.  The value is a symbol whose name is a 2-letter abbreviation
-of the character's classification.
+     <p><a name="index-unicode-general-category-3162"></a><br><dt><code>general-category</code><dd>Corresponds to the <code>General_Category</code> Unicode property.  The
+value is a symbol whose name is a 2-letter abbreviation of the
+character's classification.  For unassigned codepoints, the value
+is <code>Cn</code>.
 
-     <br><dt><code>canonical-combining-class</code><dd>Corresponds to the Unicode <code>Canonical_Combining_Class</code> property. 
-The value is an integer number.
+     <br><dt><code>canonical-combining-class</code><dd>Corresponds to the <code>Canonical_Combining_Class</code> Unicode property. 
+The value is an integer number.  For unassigned codepoints, the value
+is zero.
 
-     <br><dt><code>bidi-class</code><dd>Corresponds to the Unicode <code>Bidi_Class</code> property.  The value is a
+     <p><a name="index-bidirectional-class-of-characters-3163"></a><br><dt><code>bidi-class</code><dd>Corresponds to the Unicode <code>Bidi_Class</code> property.  The value is a
 symbol whose name is the Unicode <dfn>directional type</dfn> of the
-character.
+character.  Emacs uses this property when it reorders bidirectional
+text for display (see <a href="Bidirectional-Display.html#Bidirectional-Display">Bidirectional Display</a>).  For unassigned
+codepoints, the value depends on the code blocks to which the
+codepoint belongs: most unassigned codepoints get the value of
+<code>L</code> (strong L), but some get values of <code>AL</code> (Arabic letter)
+or <code>R</code> (strong R).
 
-     <br><dt><code>decomposition</code><dd>Corresponds to the Unicode <code>Decomposition_Type</code> and
-<code>Decomposition_Value</code> properties.  The value is a list, whose
-first element may be a symbol representing a compatibility formatting
-tag, such as <code>small</code><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>; the other elements are characters that give the compatibility
-decomposition sequence of this character.
+     <br><dt><code>decomposition</code><dd>Corresponds to the Unicode properties <code>Decomposition_Type</code> and
+<code>Decomposition_Value</code>.  The value is a list, whose first element
+may be a symbol representing a compatibility formatting tag, such as
+<code>small</code><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>; the other elements are characters that give the
+compatibility decomposition sequence of this character.  For
+unassigned codepoints, the value is the character itself.
 
      <br><dt><code>decimal-digit-value</code><dd>Corresponds to the Unicode <code>Numeric_Value</code> property for
-characters whose <code>Numeric_Type</code> is &lsquo;<samp><span class="samp">Digit</span></samp>&rsquo;.  The value is an
-integer number.
-
-     <br><dt><code>digit</code><dd>Corresponds to the Unicode <code>Numeric_Value</code> property for
 characters whose <code>Numeric_Type</code> is &lsquo;<samp><span class="samp">Decimal</span></samp>&rsquo;.  The value is
-an integer number.  Examples of such characters include compatibility
+an integer number.  For unassigned codepoints, the value is
+<code>nil</code>, which means <acronym>NaN</acronym>, or &ldquo;not-a-number&rdquo;.
+
+     <br><dt><code>digit-value</code><dd>Corresponds to the Unicode <code>Numeric_Value</code> property for
+characters whose <code>Numeric_Type</code> is &lsquo;<samp><span class="samp">Digit</span></samp>&rsquo;.  The value is an
+integer number.  Examples of such characters include compatibility
 subscript and superscript digits, for which the value is the
-corresponding number.
+corresponding number.  For unassigned codepoints, the value is
+<code>nil</code>, which means <acronym>NaN</acronym>.
 
      <br><dt><code>numeric-value</code><dd>Corresponds to the Unicode <code>Numeric_Value</code> property for
 characters whose <code>Numeric_Type</code> is &lsquo;<samp><span class="samp">Numeric</span></samp>&rsquo;.  The value of
@@ -112,48 +127,71 @@ this property is an integer or a floating-point number.  Examples of
 characters that have this property include fractions, subscripts,
 superscripts, Roman numerals, currency numerators, and encircled
 numbers.  For example, the value of this property for the character
-<code>U+2155</code> (<span class="sc">vulgar fraction one fifth</span>) is <code>0.2</code>.
+<code>U+2155</code> (<span class="sc">vulgar fraction one fifth</span>) is <code>0.2</code>.  For
+unassigned codepoints, the value is <code>nil</code>, which means
+<acronym>NaN</acronym>.
 
-     <br><dt><code>mirrored</code><dd>Corresponds to the Unicode <code>Bidi_Mirrored</code> property.  The value
-of this property is a symbol, either <code>Y</code> or <code>N</code>.
+     <p><a name="index-mirroring-of-characters-3164"></a><br><dt><code>mirrored</code><dd>Corresponds to the Unicode <code>Bidi_Mirrored</code> property.  The value
+of this property is a symbol, either <code>Y</code> or <code>N</code>.  For
+unassigned codepoints, the value is <code>N</code>.
+
+     <br><dt><code>mirroring</code><dd>Corresponds to the Unicode <code>Bidi_Mirroring_Glyph</code> property.  The
+value of this property is a character whose glyph represents the
+mirror image of the character's glyph, or <code>nil</code> if there's no
+defined mirroring glyph.  All the characters whose <code>mirrored</code>
+property is <code>N</code> have <code>nil</code> as their <code>mirroring</code>
+property; however, some characters whose <code>mirrored</code> property is
+<code>Y</code> also have <code>nil</code> for <code>mirroring</code>, because no
+appropriate characters exist with mirrored glyphs.  Emacs uses this
+property to display mirror images of characters when appropriate
+(see <a href="Bidirectional-Display.html#Bidirectional-Display">Bidirectional Display</a>).  For unassigned codepoints, the value
+is <code>nil</code>.
 
      <br><dt><code>old-name</code><dd>Corresponds to the Unicode <code>Unicode_1_Name</code> property.  The value
-is a string.
+is a string.  For unassigned codepoints, the value is an empty string.
 
      <br><dt><code>iso-10646-comment</code><dd>Corresponds to the Unicode <code>ISO_Comment</code> property.  The value is
-a string.
+a string.  For unassigned codepoints, the value is an empty string.
 
      <br><dt><code>uppercase</code><dd>Corresponds to the Unicode <code>Simple_Uppercase_Mapping</code> property. 
-The value of this property is a single character.
+The value of this property is a single character.  For unassigned
+codepoints, the value is <code>nil</code>, which means the character itself.
 
      <br><dt><code>lowercase</code><dd>Corresponds to the Unicode <code>Simple_Lowercase_Mapping</code> property. 
-The value of this property is a single character.
+The value of this property is a single character.  For unassigned
+codepoints, the value is <code>nil</code>, which means the character itself.
 
      <br><dt><code>titlecase</code><dd>Corresponds to the Unicode <code>Simple_Titlecase_Mapping</code> property. 
 <dfn>Title case</dfn> is a special form of a character used when the first
 character of a word needs to be capitalized.  The value of this
-property is a single character. 
+property is a single character.  For unassigned codepoints, the value
+is <code>nil</code>, which means the character itself. 
 </dl>
 
 <div class="defun">
-&mdash; Function: <b>get-char-code-property</b><var> char propname<a name="index-get_002dchar_002dcode_002dproperty-2881"></a></var><br>
+&mdash; Function: <b>get-char-code-property</b><var> char propname<a name="index-get_002dchar_002dcode_002dproperty-3165"></a></var><br>
 <blockquote><p>This function returns the value of <var>char</var>'s <var>propname</var> property.
 
+     <!-- FIXME: Use ‘?\s’ instead of ‘? ’ for the space character in the -->
+     <!-- first example?  -xfq -->
      <pre class="example">          (get-char-code-property ?  'general-category)
                &rArr; Zs
           (get-char-code-property ?1  'general-category)
                &rArr; Nd
-          (get-char-code-property ?\u2084 'digit-value) ; subscript 4
+          ;; subscript 4
+          (get-char-code-property ?\u2084 'digit-value)
                &rArr; 4
-          (get-char-code-property ?\u2155 'numeric-value) ; one fifth
-               &rArr; 1/5
-          (get-char-code-property ?\u2163 'numeric-value) ; Roman IV
-               &rArr; \4
+          ;; one fifth
+          (get-char-code-property ?\u2155 'numeric-value)
+               &rArr; 0.2
+          ;; Roman IV
+          (get-char-code-property ?\u2163 'numeric-value)
+               &rArr; 4
 </pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>char-code-property-description</b><var> prop value<a name="index-char_002dcode_002dproperty_002ddescription-2882"></a></var><br>
+&mdash; Function: <b>char-code-property-description</b><var> prop value<a name="index-char_002dcode_002dproperty_002ddescription-3166"></a></var><br>
 <blockquote><p>This function returns the description string of property <var>prop</var>'s
 <var>value</var>, or <code>nil</code> if <var>value</var> has no description.
 
@@ -167,20 +205,20 @@ property is a single character.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>put-char-code-property</b><var> char propname value<a name="index-put_002dchar_002dcode_002dproperty-2883"></a></var><br>
+&mdash; Function: <b>put-char-code-property</b><var> char propname value<a name="index-put_002dchar_002dcode_002dproperty-3167"></a></var><br>
 <blockquote><p>This function stores <var>value</var> as the value of the property
 <var>propname</var> for the character <var>char</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>unicode-category-table</b><var><a name="index-unicode_002dcategory_002dtable-2884"></a></var><br>
+&mdash; Variable: <b>unicode-category-table</b><var><a name="index-unicode_002dcategory_002dtable-3168"></a></var><br>
 <blockquote><p>The value of this variable is a char-table (see <a href="Char_002dTables.html#Char_002dTables">Char-Tables</a>) that
 specifies, for each character, its Unicode <code>General_Category</code>
 property as a symbol. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>char-script-table</b><var><a name="index-char_002dscript_002dtable-2885"></a></var><br>
+&mdash; Variable: <b>char-script-table</b><var><a name="index-char_002dscript_002dtable-3169"></a></var><br>
 <blockquote><p>The value of this variable is a char-table that specifies, for each
 character, a symbol whose name is the script to which the character
 belongs, according to the Unicode Standard classification of the
@@ -189,13 +227,13 @@ single extra slot whose value is the list of all script symbols.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>char-width-table</b><var><a name="index-char_002dwidth_002dtable-2886"></a></var><br>
+&mdash; Variable: <b>char-width-table</b><var><a name="index-char_002dwidth_002dtable-3170"></a></var><br>
 <blockquote><p>The value of this variable is a char-table that specifies the width of
 each character in columns that it will occupy on the screen. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>printable-chars</b><var><a name="index-printable_002dchars-2887"></a></var><br>
+&mdash; Variable: <b>printable-chars</b><var><a name="index-printable_002dchars-3171"></a></var><br>
 <blockquote><p>The value of this variable is a char-table that specifies, for each
 character, whether it is printable or not.  That is, if evaluating
 <code>(aref printable-chars char)</code> results in <code>t</code>, the character
@@ -204,12 +242,10 @@ is printable, and if it results in <code>nil</code>, it is not.
 
    <div class="footnote">
 <hr>
-<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> 
-Note that the Unicode spec writes these tag names inside
-&lsquo;<samp><span class="samp">&lt;..&gt;</span></samp>&rsquo; brackets.  The tag names in Emacs do not include the
-brackets; e.g., Unicode specifies &lsquo;<samp><span class="samp">&lt;small&gt;</span></samp>&rsquo; where Emacs uses
-&lsquo;<samp><span class="samp">small</span></samp>&rsquo;. 
-</p>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> The Unicode specification writes these tag names
+inside &lsquo;<samp><span class="samp">&lt;..&gt;</span></samp>&rsquo; brackets, but the tag names in Emacs do not include
+the brackets; e.g., Unicode specifies &lsquo;<samp><span class="samp">&lt;small&gt;</span></samp>&rsquo; where Emacs uses
+&lsquo;<samp><span class="samp">small</span></samp>&rsquo;. </p>
 
    <hr></div>
 

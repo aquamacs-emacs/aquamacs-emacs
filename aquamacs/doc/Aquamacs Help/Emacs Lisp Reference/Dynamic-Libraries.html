@@ -1,21 +1,18 @@
 <html lang="en">
 <head>
 <title>Dynamic Libraries - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="System-Interface.html#System-Interface" title="System Interface">
-<link rel="prev" href="Session-Management.html#Session-Management" title="Session Management">
+<link rel="prev" href="File-Notifications.html#File-Notifications" title="File Notifications">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -37,20 +34,20 @@ Foundation, Inc.
 <div class="node">
 <a name="Dynamic-Libraries"></a>
 <p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Session-Management.html#Session-Management">Session Management</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="File-Notifications.html#File-Notifications">File Notifications</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="System-Interface.html#System-Interface">System Interface</a>
 <hr>
 </div>
 
-<h3 class="section">39.18 Dynamically Loaded Libraries</h3>
+<h3 class="section">39.20 Dynamically Loaded Libraries</h3>
 
-<p><a name="index-dynamic-libraries-3908"></a>
+<p><a name="index-dynamic-libraries-4263"></a>
   A <dfn>dynamically loaded library</dfn> is a library that is loaded on
 demand, when its facilities are first needed.  Emacs supports such
 on-demand loading of support libraries for some of its features.
 
 <div class="defun">
-&mdash; Variable: <b>dynamic-library-alist</b><var><a name="index-dynamic_002dlibrary_002dalist-3909"></a></var><br>
+&mdash; Variable: <b>dynamic-library-alist</b><var><a name="index-dynamic_002dlibrary_002dalist-4264"></a></var><br>
 <blockquote><p>This is an alist of dynamic libraries and external library files
 implementing them.
 
@@ -60,18 +57,19 @@ a symbol representing a supported external library, and the rest are
 strings giving alternate filenames for that library.
 
         <p>Emacs tries to load the library from the files in the order they
-appear in the list; if none is found, the running session of Emacs
-won't have access to that library, and the features that depend on the
-library will be unavailable.
+appear in the list; if none is found, the Emacs session won't have
+access to that library, and the features it provides will be
+unavailable.
 
         <p>Image support on some platforms uses this facility.  Here's an example
 of setting this variable for supporting images on MS-Windows:
 
-     <pre class="lisp">          (setq dynamic-library-alist
+     <pre class="example">          (setq dynamic-library-alist
                 '((xpm "libxpm.dll" "xpm4.dll" "libXpm-nox4.dll")
                   (png "libpng12d.dll" "libpng12.dll" "libpng.dll"
-          	 "libpng13d.dll" "libpng13.dll")
-                  (jpeg "jpeg62.dll" "libjpeg.dll" "jpeg-62.dll" "jpeg.dll")
+                       "libpng13d.dll" "libpng13.dll")
+                  (jpeg "jpeg62.dll" "libjpeg.dll" "jpeg-62.dll"
+                        "jpeg.dll")
                   (tiff "libtiff3.dll" "libtiff.dll")
                   (gif "giflib4.dll" "libungif4.dll" "libungif.dll")
                   (svg "librsvg-2-2.dll")
@@ -93,8 +91,7 @@ linked into Emacs.
 
 <!-- *-texinfo-*- -->
 <!-- This is part of the GNU Emacs Lisp Reference Manual. -->
-<!-- Copyright (C) 2010 -->
-<!-- Free Software Foundation, Inc. -->
+<!-- Copyright (C) 2010-2013 Free Software Foundation, Inc. -->
 <!-- See the file elisp.texi for copying conditions. -->
    </body></html>
 

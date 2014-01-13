@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Standard File Names - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="prev" href="File-Name-Completion.html#File-Name-Completion" title="File Name Completion">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,48 +41,61 @@ Up:&nbsp;<a rel="up" accesskey="u" href="File-Names.html#File-Names">File Names<
 
 <h4 class="subsection">25.8.7 Standard File Names</h4>
 
-<p>Most of the file names used in Lisp programs are entered by the user. 
-But occasionally a Lisp program needs to specify a standard file name
-for a particular use&mdash;typically, to hold customization information
-about each user.  For example, abbrev definitions are stored (by
-default) in the file <samp><span class="file">~/.abbrev_defs</span></samp>; the <code>completion</code>
-package stores completions in the file <samp><span class="file">~/.completions</span></samp>.  These are
-two of the many standard file names used by parts of Emacs for certain
-purposes.
-
-   <p>Various operating systems have their own conventions for valid file
-names and for which file names to use for user profile data.  A Lisp
-program which reads a file using a standard file name ought to use, on
-each type of system, a file name suitable for that system.  The function
-<code>convert-standard-filename</code> makes this easy to do.
+<p>Sometimes, an Emacs Lisp program needs to specify a standard file
+name for a particular use&mdash;typically, to hold configuration data
+specified by the current user.  Usually, such files should be located
+in the directory specified by <code>user-emacs-directory</code>, which is
+<samp><span class="file">~/.emacs.d</span></samp> by default (see <a href="Init-File.html#Init-File">Init File</a>).  For example, abbrev
+definitions are stored by default in <samp><span class="file">~/.emacs.d/abbrev_defs</span></samp>. 
+The easiest way to specify such a file name is to use the function
+<code>locate-user-emacs-file</code>.
 
 <div class="defun">
-&mdash; Function: <b>convert-standard-filename</b><var> filename<a name="index-convert_002dstandard_002dfilename-1891"></a></var><br>
-<blockquote><p>This function alters the file name <var>filename</var> to fit the conventions
-of the operating system in use, and returns the result as a new string. 
-</p></blockquote></div>
+&mdash; Function: <b>locate-user-emacs-file</b><var> base-name &amp;optional old-name<a name="index-locate_002duser_002demacs_002dfile-2038"></a></var><br>
+<blockquote><p>This function returns an absolute file name for an Emacs-specific
+configuration or data file.  The argument <samp><span class="file">base-name</span></samp> should be a
+relative file name.  The return value is the absolute name of a file
+in the directory specified by <code>user-emacs-directory</code>; if that
+directory does not exist, this function creates it.
 
-   <p>The recommended way to specify a standard file name in a Lisp program
-is to choose a name which fits the conventions of GNU and Unix systems,
-usually with a nondirectory part that starts with a period, and pass it
-to <code>convert-standard-filename</code> instead of using it directly.  Here
-is an example from the <code>completion</code> package:
+        <p>If the optional argument <var>old-name</var> is non-<code>nil</code>, it
+specifies a file in the user's home directory,
+<samp><span class="file">~/</span><var>old-name</var></samp>.  If such a file exists, the return value is
+the absolute name of that file, instead of the file specified by
+<var>base-name</var>.  This argument is intended to be used by Emacs
+packages to provide backward compatibility.  For instance, prior to
+the introduction of <code>user-emacs-directory</code>, the abbrev file was
+located in <samp><span class="file">~/.abbrev_defs</span></samp>.  Here is the definition of
+<code>abbrev-file-name</code>:
 
-<pre class="example">     (defvar save-completions-file-name
-             (convert-standard-filename "~/.completions")
-       "*The file name to save completions to.")
+     <pre class="example">          (defcustom abbrev-file-name
+            (locate-user-emacs-file "abbrev_defs" ".abbrev_defs")
+            "Default name of file from which to read abbrevs."
+            ...
+            :type 'file)
 </pre>
-   <p>On GNU and Unix systems, and on some other systems as well,
-<code>convert-standard-filename</code> returns its argument unchanged.  On
-some other systems, it alters the name to fit the system's conventions.
+        </blockquote></div>
 
-   <p>For example, on MS-DOS the alterations made by this function include
-converting a leading &lsquo;<samp><span class="samp">.</span></samp>&rsquo;  to &lsquo;<samp><span class="samp">_</span></samp>&rsquo;, converting a &lsquo;<samp><span class="samp">_</span></samp>&rsquo; in the
-middle of the name to &lsquo;<samp><span class="samp">.</span></samp>&rsquo; if there is no other &lsquo;<samp><span class="samp">.</span></samp>&rsquo;, inserting
-a &lsquo;<samp><span class="samp">.</span></samp>&rsquo; after eight characters if there is none, and truncating to
-three characters after the &lsquo;<samp><span class="samp">.</span></samp>&rsquo;.  (It makes other changes as well.) 
-Thus, <samp><span class="file">.abbrev_defs</span></samp> becomes <samp><span class="file">_abbrev.def</span></samp>, and
-<samp><span class="file">.completions</span></samp> becomes <samp><span class="file">_complet.ion</span></samp>.
+   <p>A lower-level function for standardizing file names, which
+<code>locate-user-emacs-file</code> uses as a subroutine, is
+<code>convert-standard-filename</code>.
+
+<div class="defun">
+&mdash; Function: <b>convert-standard-filename</b><var> filename<a name="index-convert_002dstandard_002dfilename-2039"></a></var><br>
+<blockquote><p>This function returns a file name based on <var>filename</var>, which fits
+the conventions of the current operating system.
+
+        <p>On GNU and Unix systems, this simply returns <var>filename</var>.  On other
+operating systems, it may enforce system-specific file name
+conventions; for example, on MS-DOS this function performs a variety
+of changes to enforce MS-DOS file name limitations, including
+converting any leading &lsquo;<samp><span class="samp">.</span></samp>&rsquo; to &lsquo;<samp><span class="samp">_</span></samp>&rsquo; and truncating to three
+characters after the &lsquo;<samp><span class="samp">.</span></samp>&rsquo;.
+
+        <p>The recommended way to use this function is to specify a name which
+fits the conventions of GNU and Unix systems, and pass it to
+<code>convert-standard-filename</code>. 
+</p></blockquote></div>
 
    </body></html>
 

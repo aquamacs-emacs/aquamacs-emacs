@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Variable Aliases - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Variables.html#Variables" title="Variables">
-<link rel="prev" href="Frame_002dLocal-Variables.html#Frame_002dLocal-Variables" title="Frame-Local Variables">
+<link rel="prev" href="Directory-Local-Variables.html#Directory-Local-Variables" title="Directory Local Variables">
 <link rel="next" href="Variables-with-Restricted-Values.html#Variables-with-Restricted-Values" title="Variables with Restricted Values">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -39,14 +36,14 @@ Foundation, Inc.
 <a name="Variable-Aliases"></a>
 <p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Variables-with-Restricted-Values.html#Variables-with-Restricted-Values">Variables with Restricted Values</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Frame_002dLocal-Variables.html#Frame_002dLocal-Variables">Frame-Local Variables</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Directory-Local-Variables.html#Directory-Local-Variables">Directory Local Variables</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
 <hr>
 </div>
 
-<h3 class="section">11.14 Variable Aliases</h3>
+<h3 class="section">11.13 Variable Aliases</h3>
 
-<p><a name="index-variable-aliases-659"></a>
+<p><a name="index-variable-aliases-693"></a><a name="index-alias_002c-for-variables-694"></a>
   It is sometimes useful to make two variables synonyms, so that both
 variables always have the same value, and changing either one also
 changes the other.  Whenever you change the name of a
@@ -56,7 +53,7 @@ to keep the old name as an <em>alias</em> of the new one for
 compatibility.  You can do this with <code>defvaralias</code>.
 
 <div class="defun">
-&mdash; Function: <b>defvaralias</b><var> new-alias base-variable &amp;optional docstring<a name="index-defvaralias-660"></a></var><br>
+&mdash; Function: <b>defvaralias</b><var> new-alias base-variable &amp;optional docstring<a name="index-defvaralias-695"></a></var><br>
 <blockquote><p>This function defines the symbol <var>new-alias</var> as a variable alias
 for symbol <var>base-variable</var>. This means that retrieving the value
 of <var>new-alias</var> returns the value of <var>base-variable</var>, and
@@ -79,23 +76,26 @@ the old name is obsolete and therefore that it may be removed at some
 stage in the future.
 
 <div class="defun">
-&mdash; Function: <b>make-obsolete-variable</b><var> obsolete-name current-name &amp;optional when<a name="index-make_002dobsolete_002dvariable-661"></a></var><br>
+&mdash; Function: <b>make-obsolete-variable</b><var> obsolete-name current-name when &amp;optional access-type<a name="index-make_002dobsolete_002dvariable-696"></a></var><br>
 <blockquote><p>This function makes the byte compiler warn that the variable
-<var>obsolete-name</var> is obsolete.  If <var>current-name</var> is a symbol, it is
-the variable's new name; then the warning message says to use
-<var>current-name</var> instead of <var>obsolete-name</var>.  If <var>current-name</var>
-is a string, this is the message and there is no replacement variable.
+<var>obsolete-name</var> is obsolete.  If <var>current-name</var> is a symbol,
+it is the variable's new name; then the warning message says to use
+<var>current-name</var> instead of <var>obsolete-name</var>.  If
+<var>current-name</var> is a string, this is the message and there is no
+replacement variable.  <var>when</var> should be a string indicating when
+the variable was first made obsolete (usually a version number
+string).
 
-        <p>If provided, <var>when</var> should be a string indicating when the
-variable was first made obsolete&mdash;for example, a date or a release
-number. 
+        <p>The optional argument <var>access-type</var>, if non-<code>nil</code>, should
+should specify the kind of access that will trigger obsolescence
+warnings; it can be either <code>get</code> or <code>set</code>. 
 </p></blockquote></div>
 
    <p>You can make two variables synonyms and declare one obsolete at the
 same time using the macro <code>define-obsolete-variable-alias</code>.
 
 <div class="defun">
-&mdash; Macro: <b>define-obsolete-variable-alias</b><var> obsolete-name current-name &amp;optional when docstring<a name="index-define_002dobsolete_002dvariable_002dalias-662"></a></var><br>
+&mdash; Macro: <b>define-obsolete-variable-alias</b><var> obsolete-name current-name &amp;optional when docstring<a name="index-define_002dobsolete_002dvariable_002dalias-697"></a></var><br>
 <blockquote><p>This macro marks the variable <var>obsolete-name</var> as obsolete and also
 makes it an alias for the variable <var>current-name</var>.  It is
 equivalent to the following:
@@ -106,7 +106,7 @@ equivalent to the following:
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>indirect-variable</b><var> variable<a name="index-indirect_002dvariable-663"></a></var><br>
+&mdash; Function: <b>indirect-variable</b><var> variable<a name="index-indirect_002dvariable-698"></a></var><br>
 <blockquote><p>This function returns the variable at the end of the chain of aliases
 of <var>variable</var>.  If <var>variable</var> is not a symbol, or if <var>variable</var> is
 not defined as an alias, the function returns <var>variable</var>.

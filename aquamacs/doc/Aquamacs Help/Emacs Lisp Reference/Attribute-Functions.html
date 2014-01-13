@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Attribute Functions - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Faces.html#Faces" title="Faces">
-<link rel="prev" href="Face-Attributes.html#Face-Attributes" title="Face Attributes">
+<link rel="prev" href="Defining-Faces.html#Defining-Faces" title="Defining Faces">
 <link rel="next" href="Displaying-Faces.html#Displaying-Faces" title="Displaying Faces">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -39,53 +36,26 @@ Foundation, Inc.
 <a name="Attribute-Functions"></a>
 <p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Displaying-Faces.html#Displaying-Faces">Displaying Faces</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Face-Attributes.html#Face-Attributes">Face Attributes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Defining-Faces.html#Defining-Faces">Defining Faces</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Faces.html#Faces">Faces</a>
 <hr>
 </div>
 
 <h4 class="subsection">38.12.3 Face Attribute Functions</h4>
 
-<p>This section describes the functions for accessing and modifying the
-attributes of an existing face.
+<p>This section describes functions for directly accessing and
+modifying the attributes of a named face.
 
 <div class="defun">
-&mdash; Function: <b>set-face-attribute</b><var> face frame &amp;rest arguments<a name="index-set_002dface_002dattribute-3519"></a></var><br>
-<blockquote><p>This function sets one or more attributes of <var>face</var> for
-<var>frame</var>.  The attributes you specify this way override whatever
-the <code>defface</code> says.
+&mdash; Function: <b>face-attribute</b><var> face attribute &amp;optional frame inherit<a name="index-face_002dattribute-3817"></a></var><br>
+<blockquote><p>This function returns the value of the <var>attribute</var> attribute for
+<var>face</var> on <var>frame</var>.
 
-        <p>The extra arguments <var>arguments</var> specify the attributes to set, and
-the values for them.  They should consist of alternating attribute names
-(such as <code>:family</code> or <code>:underline</code>) and corresponding values. 
-Thus,
-
-     <pre class="example">          (set-face-attribute 'foo nil
-                              :width 'extended
-                              :weight 'bold
-                              :underline "red")
-</pre>
-        <p class="noindent">sets the attributes <code>:width</code>, <code>:weight</code> and <code>:underline</code>
-to the corresponding values.
-
-        <p>If <var>frame</var> is <code>t</code>, this function sets the default attributes
-for new frames.  Default attribute values specified this way override
-the <code>defface</code> for newly created frames.
-
-        <p>If <var>frame</var> is <code>nil</code>, this function sets the attributes for
-all existing frames, and the default for new frames. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>face-attribute</b><var> face attribute &amp;optional frame inherit<a name="index-face_002dattribute-3520"></a></var><br>
-<blockquote><p>This returns the value of the <var>attribute</var> attribute of <var>face</var>
-on <var>frame</var>.  If <var>frame</var> is <code>nil</code>, that means the selected
-frame (see <a href="Input-Focus.html#Input-Focus">Input Focus</a>).
-
-        <p>If <var>frame</var> is <code>t</code>, this returns whatever new-frames default
-value you previously specified with <code>set-face-attribute</code> for the
-<var>attribute</var> attribute of <var>face</var>.  If you have not specified
-one, it returns <code>nil</code>.
+        <p>If <var>frame</var> is <code>nil</code>, that means the selected frame
+(see <a href="Input-Focus.html#Input-Focus">Input Focus</a>).  If <var>frame</var> is <code>t</code>, this function
+returns the value of the specified attribute for newly-created frames
+(this is normally <code>unspecified</code>, unless you have specified some
+value using <code>set-face-attribute</code>; see below).
 
         <p>If <var>inherit</var> is <code>nil</code>, only attributes directly defined by
 <var>face</var> are considered, so the return value may be
@@ -109,8 +79,9 @@ unspecified or relative values by merging with the <code>default</code> face
 </pre>
         </blockquote></div>
 
+<!-- FIXME: Add an index for "relative face attribute", maybe here?  -xfq -->
 <div class="defun">
-&mdash; Function: <b>face-attribute-relative-p</b><var> attribute value<a name="index-face_002dattribute_002drelative_002dp-3521"></a></var><br>
+&mdash; Function: <b>face-attribute-relative-p</b><var> attribute value<a name="index-face_002dattribute_002drelative_002dp-3818"></a></var><br>
 <blockquote><p>This function returns non-<code>nil</code> if <var>value</var>, when used as the
 value of the face attribute <var>attribute</var>, is relative.  This means
 it would modify, rather than completely override, any value that comes
@@ -128,7 +99,7 @@ another face.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>face-all-attributes</b><var> face &amp;optional frame<a name="index-face_002dall_002dattributes-3522"></a></var><br>
+&mdash; Function: <b>face-all-attributes</b><var> face &amp;optional frame<a name="index-face_002dall_002dattributes-3819"></a></var><br>
 <blockquote><p>This function returns an alist of attributes of <var>face</var>.  The
 elements of the result are name-value pairs of the form
 <code>(</code><var>attr-name</var><code>&nbsp;.&nbsp;</code><var>attr-value</var><code>)</code><!-- /@w -->.  Optional argument
@@ -138,111 +109,127 @@ default attributes of <var>face</var> for newly created frames.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>merge-face-attribute</b><var> attribute value1 value2<a name="index-merge_002dface_002dattribute-3523"></a></var><br>
+&mdash; Function: <b>merge-face-attribute</b><var> attribute value1 value2<a name="index-merge_002dface_002dattribute-3820"></a></var><br>
 <blockquote><p>If <var>value1</var> is a relative value for the face attribute
 <var>attribute</var>, returns it merged with the underlying value
 <var>value2</var>; otherwise, if <var>value1</var> is an absolute value for the
 face attribute <var>attribute</var>, returns <var>value1</var> unchanged. 
 </p></blockquote></div>
 
-   <p>The following functions provide compatibility with Emacs 20 and
-below.  They work by calling <code>set-face-attribute</code>.  Values of
-<code>t</code> and <code>nil</code> for their <var>frame</var> argument are handled
-just like <code>set-face-attribute</code> and <code>face-attribute</code>.
+   <p>Normally, Emacs uses the face specs of each face to automatically
+calculate its attributes on each frame (see <a href="Defining-Faces.html#Defining-Faces">Defining Faces</a>).  The
+function <code>set-face-attribute</code> can override this calculation by
+directly assigning attributes to a face, either on a specific frame or
+for all frames.  This function is mostly intended for internal usage.
 
 <div class="defun">
-&mdash; Function: <b>set-face-foreground</b><var> face color &amp;optional frame<a name="index-set_002dface_002dforeground-3524"></a></var><br>
-&mdash; Function: <b>set-face-background</b><var> face color &amp;optional frame<a name="index-set_002dface_002dbackground-3525"></a></var><br>
-<blockquote><p>These functions set the <code>:foreground</code> attribute (or
-<code>:background</code> attribute, respectively) of <var>face</var> to
-<var>color</var>. 
+&mdash; Function: <b>set-face-attribute</b><var> face frame &amp;rest arguments<a name="index-set_002dface_002dattribute-3821"></a></var><br>
+<blockquote><p>This function sets one or more attributes of <var>face</var> for
+<var>frame</var>.  The attributes specifies in this way override the face
+spec(s) belonging to <var>face</var>.
+
+        <p>The extra arguments <var>arguments</var> specify the attributes to set, and
+the values for them.  They should consist of alternating attribute
+names (such as <code>:family</code> or <code>:underline</code>) and values.  Thus,
+
+     <pre class="example">          (set-face-attribute 'foo nil :weight 'bold :slant 'italic)
+</pre>
+        <p class="noindent">sets the attribute <code>:weight</code> to <code>bold</code> and the attribute
+<code>:slant</code> to <code>italic</code>.
+
+        <p>If <var>frame</var> is <code>t</code>, this function sets the default attributes
+for newly created frames.  If <var>frame</var> is <code>nil</code>, this function
+sets the attributes for all existing frames, as well as for newly
+created frames. 
+</p></blockquote></div>
+
+   <p>The following commands and functions mostly provide compatibility
+with old versions of Emacs.  They work by calling
+<code>set-face-attribute</code>.  Values of <code>t</code> and <code>nil</code> for
+their <var>frame</var> argument are handled just like
+<code>set-face-attribute</code> and <code>face-attribute</code>.  The commands
+read their arguments using the minibuffer, if called interactively.
+
+<div class="defun">
+&mdash; Command: <b>set-face-foreground</b><var> face color &amp;optional frame<a name="index-set_002dface_002dforeground-3822"></a></var><br>
+&mdash; Command: <b>set-face-background</b><var> face color &amp;optional frame<a name="index-set_002dface_002dbackground-3823"></a></var><br>
+<blockquote><p>These set the <code>:foreground</code> attribute (or <code>:background</code>
+attribute, respectively) of <var>face</var> to <var>color</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-face-stipple</b><var> face pattern &amp;optional frame<a name="index-set_002dface_002dstipple-3526"></a></var><br>
-<blockquote><p>This function sets the <code>:stipple</code> attribute of <var>face</var> to
+&mdash; Command: <b>set-face-stipple</b><var> face pattern &amp;optional frame<a name="index-set_002dface_002dstipple-3824"></a></var><br>
+<blockquote><p>This sets the <code>:stipple</code> attribute of <var>face</var> to
 <var>pattern</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-face-font</b><var> face font &amp;optional frame<a name="index-set_002dface_002dfont-3527"></a></var><br>
-<blockquote><p>This function sets the <code>:font</code> attribute of <var>face</var> to
-<var>font</var>. 
+&mdash; Command: <b>set-face-font</b><var> face font &amp;optional frame<a name="index-set_002dface_002dfont-3825"></a></var><br>
+<blockquote><p>This sets the <code>:font</code> attribute of <var>face</var> to <var>font</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-face-bold-p</b><var> face bold-p &amp;optional frame<a name="index-set_002dface_002dbold_002dp-3528"></a></var><br>
-<blockquote><p>This function sets the <code>:weight</code> attribute of <var>face</var> to
-<var>normal</var> if <var>bold-p</var> is <code>nil</code>, and to <var>bold</var>
-otherwise. 
+&mdash; Function: <b>set-face-bold</b><var> face bold-p &amp;optional frame<a name="index-set_002dface_002dbold-3826"></a></var><br>
+<blockquote><p>This sets the <code>:weight</code> attribute of <var>face</var> to <var>normal</var>
+if <var>bold-p</var> is <code>nil</code>, and to <var>bold</var> otherwise. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-face-italic-p</b><var> face italic-p &amp;optional frame<a name="index-set_002dface_002ditalic_002dp-3529"></a></var><br>
-<blockquote><p>This function sets the <code>:slant</code> attribute of <var>face</var> to
-<var>normal</var> if <var>italic-p</var> is <code>nil</code>, and to <var>italic</var>
-otherwise. 
+&mdash; Function: <b>set-face-italic</b><var> face italic-p &amp;optional frame<a name="index-set_002dface_002ditalic-3827"></a></var><br>
+<blockquote><p>This sets the <code>:slant</code> attribute of <var>face</var> to <var>normal</var> if
+<var>italic-p</var> is <code>nil</code>, and to <var>italic</var> otherwise. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-face-underline-p</b><var> face underline &amp;optional frame<a name="index-set_002dface_002dunderline_002dp-3530"></a></var><br>
-<blockquote><p>This function sets the <code>:underline</code> attribute of <var>face</var> to
+&mdash; Function: <b>set-face-underline</b><var> face underline &amp;optional frame<a name="index-set_002dface_002dunderline-3828"></a></var><br>
+<blockquote><p>This sets the <code>:underline</code> attribute of <var>face</var> to
 <var>underline</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-face-inverse-video-p</b><var> face inverse-video-p &amp;optional frame<a name="index-set_002dface_002dinverse_002dvideo_002dp-3531"></a></var><br>
-<blockquote><p>This function sets the <code>:inverse-video</code> attribute of <var>face</var>
-to <var>inverse-video-p</var>. 
+&mdash; Function: <b>set-face-inverse-video</b><var> face inverse-video-p &amp;optional frame<a name="index-set_002dface_002dinverse_002dvideo-3829"></a></var><br>
+<blockquote><p>This sets the <code>:inverse-video</code> attribute of <var>face</var> to
+<var>inverse-video-p</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>invert-face</b><var> face &amp;optional frame<a name="index-invert_002dface-3532"></a></var><br>
-<blockquote><p>This function swaps the foreground and background colors of face
-<var>face</var>. 
+&mdash; Command: <b>invert-face</b><var> face &amp;optional frame<a name="index-invert_002dface-3830"></a></var><br>
+<blockquote><p>This swaps the foreground and background colors of face <var>face</var>. 
 </p></blockquote></div>
 
-   <p>The following functions examine the attributes of a face.  If you
-don't specify <var>frame</var>, they refer to the selected frame; <code>t</code>
-refers to the default data for new frames.  They return the symbol
-<code>unspecified</code> if the face doesn't define any value for that
-attribute.
-
-<div class="defun">
-&mdash; Function: <b>face-foreground</b><var> face &amp;optional frame inherit<a name="index-face_002dforeground-3533"></a></var><br>
-&mdash; Function: <b>face-background</b><var> face &amp;optional frame inherit<a name="index-face_002dbackground-3534"></a></var><br>
-<blockquote><p>These functions return the foreground color (or background color,
-respectively) of face <var>face</var>, as a string.
-
-        <p>If <var>inherit</var> is <code>nil</code>, only a color directly defined by the face is
-returned.  If <var>inherit</var> is non-<code>nil</code>, any faces specified by its
-<code>:inherit</code> attribute are considered as well, and if <var>inherit</var>
-is a face or a list of faces, then they are also considered, until a
-specified color is found.  To ensure that the return value is always
-specified, use a value of <code>default</code> for <var>inherit</var>. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>face-stipple</b><var> face &amp;optional frame inherit<a name="index-face_002dstipple-3535"></a></var><br>
-<blockquote><p>This function returns the name of the background stipple pattern of face
-<var>face</var>, or <code>nil</code> if it doesn't have one.
-
-        <p>If <var>inherit</var> is <code>nil</code>, only a stipple directly defined by the
+   <p>The following functions examine the attributes of a face.  They
+mostly provide compatibility with old versions of Emacs.  If you don't
+specify <var>frame</var>, they refer to the selected frame; <code>t</code> refers
+to the default data for new frames.  They return <code>unspecified</code> if
+the face doesn't define any value for that attribute.  If
+<var>inherit</var> is <code>nil</code>, only an attribute directly defined by the
 face is returned.  If <var>inherit</var> is non-<code>nil</code>, any faces
 specified by its <code>:inherit</code> attribute are considered as well, and
 if <var>inherit</var> is a face or a list of faces, then they are also
-considered, until a specified stipple is found.  To ensure that the
+considered, until a specified attribute is found.  To ensure that the
 return value is always specified, use a value of <code>default</code> for
-<var>inherit</var>. 
-</p></blockquote></div>
+<var>inherit</var>.
 
 <div class="defun">
-&mdash; Function: <b>face-font</b><var> face &amp;optional frame<a name="index-face_002dfont-3536"></a></var><br>
+&mdash; Function: <b>face-font</b><var> face &amp;optional frame<a name="index-face_002dfont-3831"></a></var><br>
 <blockquote><p>This function returns the name of the font of face <var>face</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>face-bold-p</b><var> face &amp;optional frame<a name="index-face_002dbold_002dp-3537"></a></var><br>
+&mdash; Function: <b>face-foreground</b><var> face &amp;optional frame inherit<a name="index-face_002dforeground-3832"></a></var><br>
+&mdash; Function: <b>face-background</b><var> face &amp;optional frame inherit<a name="index-face_002dbackground-3833"></a></var><br>
+<blockquote><p>These functions return the foreground color (or background color,
+respectively) of face <var>face</var>, as a string. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>face-stipple</b><var> face &amp;optional frame inherit<a name="index-face_002dstipple-3834"></a></var><br>
+<blockquote><p>This function returns the name of the background stipple pattern of face
+<var>face</var>, or <code>nil</code> if it doesn't have one. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>face-bold-p</b><var> face &amp;optional frame inherit<a name="index-face_002dbold_002dp-3835"></a></var><br>
 <blockquote><p>This function returns a non-<code>nil</code> value if the <code>:weight</code>
 attribute of <var>face</var> is bolder than normal (i.e., one of
 <code>semi-bold</code>, <code>bold</code>, <code>extra-bold</code>, or
@@ -250,20 +237,22 @@ attribute of <var>face</var> is bolder than normal (i.e., one of
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>face-italic-p</b><var> face &amp;optional frame<a name="index-face_002ditalic_002dp-3538"></a></var><br>
+&mdash; Function: <b>face-italic-p</b><var> face &amp;optional frame inherit<a name="index-face_002ditalic_002dp-3836"></a></var><br>
 <blockquote><p>This function returns a non-<code>nil</code> value if the <code>:slant</code>
 attribute of <var>face</var> is <code>italic</code> or <code>oblique</code>, and
 <code>nil</code> otherwise. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>face-underline-p</b><var> face &amp;optional frame<a name="index-face_002dunderline_002dp-3539"></a></var><br>
-<blockquote><p>This function returns the <code>:underline</code> attribute of face <var>face</var>. 
+&mdash; Function: <b>face-underline-p</b><var> face &amp;optional frame inherit<a name="index-face_002dunderline_002dp-3837"></a></var><br>
+<blockquote><p>This function returns non-<code>nil</code> if face <var>face</var> specifies
+a non-<code>nil</code> <code>:underline</code> attribute. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>face-inverse-video-p</b><var> face &amp;optional frame<a name="index-face_002dinverse_002dvideo_002dp-3540"></a></var><br>
-<blockquote><p>This function returns the <code>:inverse-video</code> attribute of face <var>face</var>. 
+&mdash; Function: <b>face-inverse-video-p</b><var> face &amp;optional frame inherit<a name="index-face_002dinverse_002dvideo_002dp-3838"></a></var><br>
+<blockquote><p>This function returns non-<code>nil</code> if face <var>face</var> specifies
+a non-<code>nil</code> <code>:inverse-video</code> attribute. 
 </p></blockquote></div>
 
    </body></html>

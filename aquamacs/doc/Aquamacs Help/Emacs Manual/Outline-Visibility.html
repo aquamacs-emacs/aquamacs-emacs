@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Outline Visibility - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Outline-Views.html#Outline-Views" title="Outline Views">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,13 +42,12 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Outline-Mode.html#Outline-Mode">Outline
 <hr>
 </div>
 
-<h4 class="subsection">29.8.3 Outline Visibility Commands</h4>
+<h4 class="subsection">25.8.3 Outline Visibility Commands</h4>
 
-<p>The other special commands of outline mode are used to make lines visible
-or invisible.  Their names all start with <code>hide</code> or <code>show</code>. 
-Most of them fall into pairs of opposites.  They are not undoable; instead,
-you can undo right past them.  Making lines visible or invisible is simply
-not recorded by the undo mechanism.
+<p>Outline mode provides several commands for temporarily hiding or
+revealing parts of the buffer, based on the outline structure.  These
+commands are not undoable; their effects are simply not recorded by
+the undo mechanism, so you can undo right past them (see <a href="Undo.html#Undo">Undo</a>).
 
    <p>Many of these commands act on the &ldquo;current&rdquo; heading line.  If
 point is on a heading line, that is the current heading line; if point
@@ -80,52 +76,44 @@ the headings leading up from there to the top level of the outline
 (<code>hide-other</code>). 
 </dl>
 
-   <p><a name="index-hide_002dentry-1685"></a><a name="index-show_002dentry-1686"></a><a name="index-C_002dc-C_002dc-_0040r_007b_0028Outline-mode_0029_007d-1687"></a><a name="index-C_002dc-C_002de-_0040r_007b_0028Outline-mode_0029_007d-1688"></a>  Two commands that are exact opposites are <kbd>C-c C-c</kbd>
-(<code>hide-entry</code>) and <kbd>C-c C-e</kbd> (<code>show-entry</code>).  They apply
-to the body lines directly following the current heading line. 
-Subheadings and their bodies are not affected.
+   <p><a name="index-hide_002dentry-1905"></a><a name="index-show_002dentry-1906"></a><a name="index-C_002dc-C_002dc-_0040r_007b_0028Outline-mode_0029_007d-1907"></a><a name="index-C_002dc-C_002de-_0040r_007b_0028Outline-mode_0029_007d-1908"></a>  The simplest of these commands are <kbd>C-c C-c</kbd>
+(<code>hide-entry</code>), which hides the body lines directly following the
+current heading line, and <kbd>C-c C-e</kbd> (<code>show-entry</code>), which
+reveals them.  Subheadings and their bodies are not affected.
 
-   <p><a name="index-hide_002dsubtree-1689"></a><a name="index-show_002dsubtree-1690"></a><a name="index-C_002dc-C_002ds-_0040r_007b_0028Outline-mode_0029_007d-1691"></a><a name="index-C_002dc-C_002dd-_0040r_007b_0028Outline-mode_0029_007d-1692"></a><a name="index-subtree-_0028Outline-mode_0029-1693"></a>  Two more powerful opposites are <kbd>C-c C-d</kbd> (<code>hide-subtree</code>)
-and <kbd>C-c C-s</kbd> (<code>show-subtree</code>).  Both apply to the current
-heading line's <dfn>subtree</dfn>: its body, all its subheadings, both
-direct and indirect, and all of their bodies.  In other words, the
-subtree contains everything following the current heading line, up to
-and not including the next heading of the same or higher rank.
+   <p><a name="index-hide_002dsubtree-1909"></a><a name="index-show_002dsubtree-1910"></a><a name="index-C_002dc-C_002ds-_0040r_007b_0028Outline-mode_0029_007d-1911"></a><a name="index-C_002dc-C_002dd-_0040r_007b_0028Outline-mode_0029_007d-1912"></a><a name="index-subtree-_0028Outline-mode_0029-1913"></a>  The commands <kbd>C-c C-d</kbd> (<code>hide-subtree</code>) and <kbd>C-c C-s</kbd>
+(<code>show-subtree</code>) are more powerful.  They apply to the current
+heading line's <dfn>subtree</dfn>: its body, all of its subheadings, both
+direct and indirect, and all of their bodies.
 
-   <p><a name="index-hide_002dleaves-1694"></a><a name="index-show_002dbranches-1695"></a><a name="index-C_002dc-C_002dl-_0040r_007b_0028Outline-mode_0029_007d-1696"></a><a name="index-C_002dc-C_002dk-_0040r_007b_0028Outline-mode_0029_007d-1697"></a>  Intermediate between a visible subtree and an invisible one is having
-all the subheadings visible but none of the body.  There are two
-commands for doing this, depending on whether you want to hide the
-bodies or make the subheadings visible.  They are <kbd>C-c C-l</kbd>
-(<code>hide-leaves</code>) and <kbd>C-c C-k</kbd> (<code>show-branches</code>).
+   <p><a name="index-hide_002dleaves-1914"></a><a name="index-show_002dbranches-1915"></a><a name="index-show_002dchildren-1916"></a><a name="index-C_002dc-C_002dl-_0040r_007b_0028Outline-mode_0029_007d-1917"></a><a name="index-C_002dc-C_002dk-_0040r_007b_0028Outline-mode_0029_007d-1918"></a><a name="index-C_002dc-C_002di-_0040r_007b_0028Outline-mode_0029_007d-1919"></a>  The command <kbd>C-c C-l</kbd> (<code>hide-leaves</code>) hides the body of the
+current heading line as well as all the bodies in its subtree; the
+subheadings themselves are left visible.  The command <kbd>C-c C-k</kbd>
+(<code>show-branches</code>) reveals the subheadings, if they had previously
+been hidden (e.g., by <kbd>C-c C-d</kbd>).  The command <kbd>C-c C-i</kbd>
+(<code>show-children</code>) is a weaker version of this; it reveals just
+the direct subheadings, i.e., those one level down.
 
-   <p><a name="index-C_002dc-C_002di-_0040r_007b_0028Outline-mode_0029_007d-1698"></a><a name="index-show_002dchildren-1699"></a>  A little weaker than <code>show-branches</code> is <kbd>C-c C-i</kbd>
-(<code>show-children</code>).  It makes just the direct subheadings
-visible&mdash;those one level down.  Deeper subheadings remain invisible, if
-they were invisible.
-
-   <p><a name="index-hide_002dbody-1700"></a><a name="index-show_002dall-1701"></a><a name="index-C_002dc-C_002dt-_0040r_007b_0028Outline-mode_0029_007d-1702"></a><a name="index-C_002dc-C_002da-_0040r_007b_0028Outline-mode_0029_007d-1703"></a>  Two commands have a blanket effect on the whole file.  <kbd>C-c C-t</kbd>
-(<code>hide-body</code>) makes all body lines invisible, so that you see just
-the outline structure (as a special exception, it will not hide lines
-at the top of the file, preceding the first header line, even though
-these are technically body lines).  <kbd>C-c C-a</kbd> (<code>show-all</code>)
-makes all lines visible.  These commands can be thought of as a pair
-of opposites even though <kbd>C-c C-a</kbd> applies to more than just body
-lines.
-
-   <p><a name="index-hide_002dsublevels-1704"></a><a name="index-C_002dc-C_002dq-_0040r_007b_0028Outline-mode_0029_007d-1705"></a>  The command <kbd>C-c C-q</kbd> (<code>hide-sublevels</code>) hides all but the
-top level headings.  With a numeric argument <var>n</var>, it hides everything
-except the top <var>n</var> levels of heading lines.
-
-   <p><a name="index-hide_002dother-1706"></a><a name="index-C_002dc-C_002do-_0040r_007b_0028Outline-mode_0029_007d-1707"></a>  The command <kbd>C-c C-o</kbd> (<code>hide-other</code>) hides everything except
-the heading and body text that point is in, plus its parents (the headers
+   <p><a name="index-hide_002dother-1920"></a><a name="index-C_002dc-C_002do-_0040r_007b_0028Outline-mode_0029_007d-1921"></a>  The command <kbd>C-c C-o</kbd> (<code>hide-other</code>) hides everything
+except the entry that point is in, plus its parents (the headers
 leading up from there to top level in the outline) and the top level
 headings.
 
-   <p><a name="index-reveal_002dmode-1708"></a>  When incremental search finds text that is hidden by Outline mode,
-it makes that part of the buffer visible.  If you exit the search
-at that position, the text remains visible.  You can also
-automatically make text visible as you navigate in it by using
-<kbd>M-x reveal-mode</kbd>.
+   <p><a name="index-hide_002dbody-1922"></a><a name="index-show_002dall-1923"></a><a name="index-C_002dc-C_002dt-_0040r_007b_0028Outline-mode_0029_007d-1924"></a><a name="index-C_002dc-C_002da-_0040r_007b_0028Outline-mode_0029_007d-1925"></a><a name="index-hide_002dsublevels-1926"></a><a name="index-C_002dc-C_002dq-_0040r_007b_0028Outline-mode_0029_007d-1927"></a>  The remaining commands affect the whole buffer.  <kbd>C-c C-t</kbd>
+(<code>hide-body</code>) makes all body lines invisible, so that you see
+just the outline structure (as a special exception, it will not hide
+lines at the top of the file, preceding the first header line, even
+though these are technically body lines).  <kbd>C-c C-a</kbd>
+(<code>show-all</code>) makes all lines visible.  <kbd>C-c C-q</kbd>
+(<code>hide-sublevels</code>) hides all but the top level headings; with a
+numeric argument <var>n</var>, it hides everything except the top <var>n</var>
+levels of heading lines.
+
+   <p><a name="index-reveal_002dmode-1928"></a>  When incremental search finds text that is hidden by Outline mode,
+it makes that part of the buffer visible.  If you exit the search at
+that position, the text remains visible.  You can also automatically
+make text visible as you navigate in it by using Reveal mode (<kbd>M-x
+reveal-mode</kbd>), a buffer-local minor mode.
 
    </body></html>
 

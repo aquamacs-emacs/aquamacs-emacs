@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Mouse Menus - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Keyboard-Menus.html#Keyboard-Menus" title="Keyboard Menus">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -60,24 +57,25 @@ multiple levels or comes from the menu bar.)
    <p>It's often best to use a button-down event to trigger the menu.  Then
 the user can select a menu item by releasing the button.
 
-   <p>A single keymap can appear as multiple menu panes, if you explicitly
-arrange for this.  The way to do this is to make a keymap for each pane,
-then create a binding for each of those maps in the main keymap of the
-menu.  Give each of these bindings an item string that starts with
-&lsquo;<samp><span class="samp">@</span></samp>&rsquo;.  The rest of the item string becomes the name of the pane. 
-See the file <samp><span class="file">lisp/mouse.el</span></samp> for an example of this.  Any ordinary
-bindings with &lsquo;<samp><span class="samp">@</span></samp>&rsquo;-less item strings are grouped into one pane,
-which appears along with the other panes explicitly created for the
-submaps.
+   <p><a name="index-submenu-1653"></a>  If the menu keymap contains a binding to a nested keymap, the nested
+keymap specifies a <dfn>submenu</dfn>.  There will be a menu item, labeled
+by the nested keymap's item string, and clicking on this item
+automatically pops up the specified submenu.  As a special exception,
+if the menu keymap contains a single nested keymap and no other menu
+items, the menu shows the contents of the nested keymap directly, not
+as a submenu.
 
-   <p>X toolkit menus don't have panes; instead, they can have submenus. 
-Every nested keymap becomes a submenu, whether the item string starts
-with &lsquo;<samp><span class="samp">@</span></samp>&rsquo; or not.  In a toolkit version of Emacs, the only thing
-special about &lsquo;<samp><span class="samp">@</span></samp>&rsquo; at the beginning of an item string is that the
-&lsquo;<samp><span class="samp">@</span></samp>&rsquo; doesn't appear in the menu item.
-
-   <p>Multiple keymaps that define the same menu prefix key produce
-separate panes or separate submenus.
+   <p>However, if Emacs is compiled without X toolkit support, or on text
+terminals, submenus are not supported.  Each nested keymap is shown as
+a menu item, but clicking on it does not automatically pop up the
+submenu.  If you wish to imitate the effect of submenus, you can do
+that by giving a nested keymap an item string which starts with
+&lsquo;<samp><span class="samp">@</span></samp>&rsquo;.  This causes Emacs to display the nested keymap using a
+separate <dfn>menu pane</dfn>; the rest of the item string after the
+&lsquo;<samp><span class="samp">@</span></samp>&rsquo; is the pane label.  If Emacs is compiled without X toolkit
+support, or if a menu is displayed on a text terminal, menu panes are
+not used; in that case, a &lsquo;<samp><span class="samp">@</span></samp>&rsquo; at the beginning of an item string
+is omitted when the menu label is displayed, and has no other effect.
 
    </body></html>
 

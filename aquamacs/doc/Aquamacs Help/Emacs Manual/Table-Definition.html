@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Table Definition - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Table-Creation.html#Table-Creation" title="Table Creation">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -43,59 +40,44 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Text-Based-Tables.html#Text-Based-Table
 <hr>
 </div>
 
-<h4 class="subsection">29.13.1 What is a Text-based Table?</h4>
+<h4 class="subsection">25.14.1 What is a Text-based Table?</h4>
 
-<p>Keep the following examples of valid tables in mind as a reference
-while you read this section:
+<p><a name="index-cells_002c-for-text_002dbased-tables-2143"></a>
+  A <dfn>table</dfn> consists of a rectangular text area which is divided
+into <dfn>cells</dfn>.  Each cell must be at least one character wide and
+one character high, not counting its border lines.  A cell can be
+subdivided into more cells, but they cannot overlap.
 
-<pre class="example">                   +--+----+---+     +-+     +--+-----+
-                   |  |    |   |     | |     |  |     |
-                   +--+----+---+     +-+     |  +--+--+
-                   |  |    |   |             |  |  |  |
-                   +--+----+---+             +--+--+  |
-                                             |     |  |
-                                             +-----+--+
-</pre>
-   <p>A table consists of a rectangular frame whose inside is divided into
-cells.  Each cell must be at least one character wide and one
-character high, not counting its border lines.  A cell can be
-subdivided into multiple rectangular cells, but cells cannot overlap.
-
-   <p>The table frame and cell border lines are made of three special
-characters.  These variables specify those characters:
+   <p>Cell border lines are drawn with three special characters, specified
+by the following variables:
 
      
-<a name="index-table_002dcell_002dvertical_002dchar-1893"></a>
-<dl><dt><code>table-cell-vertical-char</code><dd>Holds the character used for vertical lines.  The default value is
-&lsquo;<samp><span class="samp">|</span></samp>&rsquo;.
+<a name="index-table_002dcell_002dvertical_002dchar-2144"></a>
+<dl><dt><code>table-cell-vertical-char</code><dd>The character used for vertical lines.  The default is &lsquo;<samp><span class="samp">|</span></samp>&rsquo;.
 
-     <p><a name="index-table_002dcell_002dhorizontal_002dchars-1894"></a><br><dt><code>table-cell-horizontal-chars</code><dd>Holds the characters used for horizontal lines.  The default value is
-&lsquo;<samp><span class="samp">"-="</span></samp>&rsquo;.
+     <p><a name="index-table_002dcell_002dhorizontal_002dchars-2145"></a><br><dt><code>table-cell-horizontal-chars</code><dd>The characters used for horizontal lines.  The default is &lsquo;<samp><span class="samp">"-="</span></samp>&rsquo;.
 
-     <p><a name="index-table_002dcell_002dintersection_002dchar-1895"></a><br><dt><code>table-cell-intersection-char</code><dd>Holds the character used at where horizontal line and vertical line
-meet.  The default value is &lsquo;<samp><span class="samp">+</span></samp>&rsquo;. 
+     <p><a name="index-table_002dcell_002dintersection_002dchar-2146"></a><br><dt><code>table-cell-intersection-char</code><dd>The character used for the intersection of horizontal and vertical
+lines.  The default is &lsquo;<samp><span class="samp">+</span></samp>&rsquo;. 
 </dl>
 
-<p class="noindent">Based on this definition, the following five tables are examples of invalid
-tables:
+<p class="noindent">The following are examples of <em>invalid</em> tables:
 
-<pre class="example">        +-----+    +-----+       +--+    +-++--+    ++
-        |     |    |     |       |  |    | ||  |    ++
-        | +-+ |    |     |       |  |    | ||  |
-        | | | |    +--+  |    +--+--+    +-++--+
-        | +-+ |    |  |  |    |  |  |    +-++--+
-        |     |    |  |  |    |  |  |    | ||  |
-        +-----+    +--+--+    +--+--+    +-++--+
-          a           b          c          d        e
+<pre class="example">        +-----+       +--+    +-++--+
+        |     |       |  |    | ||  |
+        |     |       |  |    | ||  |
+        +--+  |    +--+--+    +-++--+
+        |  |  |    |  |  |    +-++--+
+        |  |  |    |  |  |    | ||  |
+        +--+--+    +--+--+    +-++--+
+           a          b          c
 </pre>
-   <p>From left to right:
+   <p class="noindent">From left to right:
 
      <ol type=a start=1>
 <li>Overlapped cells or non-rectangular cells are not allowed. 
-<li>Same as a. 
 <li>The border must be rectangular. 
-<li>Cells must have a minimum width/height of one character. 
-<li>Same as d.
+<li>Cells must have a minimum width/height of one character.
         </ol>
 
    </body></html>

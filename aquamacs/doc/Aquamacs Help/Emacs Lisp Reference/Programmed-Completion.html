@@ -1,21 +1,19 @@
 <html lang="en">
 <head>
 <title>Programmed Completion - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Completion.html#Completion" title="Completion">
-<link rel="prev" href="Completion-Styles.html#Completion-Styles" title="Completion Styles">
+<link rel="prev" href="Completion-Variables.html#Completion-Variables" title="Completion Variables">
+<link rel="next" href="Completion-in-Buffers.html#Completion-in-Buffers" title="Completion in Buffers">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -37,19 +35,21 @@ Foundation, Inc.
 <div class="node">
 <a name="Programmed-Completion"></a>
 <p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Completion-Styles.html#Completion-Styles">Completion Styles</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Completion-in-Buffers.html#Completion-in-Buffers">Completion in Buffers</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Completion-Variables.html#Completion-Variables">Completion Variables</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Completion.html#Completion">Completion</a>
 <hr>
 </div>
 
 <h4 class="subsection">20.6.7 Programmed Completion</h4>
 
-<p><a name="index-programmed-completion-1161"></a>
-  Sometimes it is not possible to create an alist or an obarray
-containing all the intended possible completions.  In such a case, you
-can supply your own function to compute the completion of a given
-string.  This is called <dfn>programmed completion</dfn>.  Emacs uses
-programmed completion when completing file names (see <a href="File-Name-Completion.html#File-Name-Completion">File Name Completion</a>), among many other cases.
+<p><a name="index-programmed-completion-1242"></a>
+  Sometimes it is not possible or convenient to create an alist or
+an obarray containing all the intended possible completions ahead
+of time.  In such a case, you can supply your own function to compute
+the completion of a given string.  This is called <dfn>programmed
+completion</dfn>.  Emacs uses programmed completion when completing file
+names (see <a href="File-Name-Completion.html#File-Name-Completion">File Name Completion</a>), among many other cases.
 
    <p>To use this feature, pass a function as the <var>collection</var>
 argument to <code>completing-read</code>.  The function
@@ -63,74 +63,80 @@ the work.
      <ul>
 <li>The string to be completed.
 
-     <li>The predicate function to filter possible matches, or <code>nil</code> if
-none.  Your function should call the predicate for each possible match,
-and ignore the possible match if the predicate returns <code>nil</code>.
+     <li>A predicate function with which to filter possible matches, or
+<code>nil</code> if none.  The function should call the predicate for each
+possible match, and ignore the match if the predicate returns
+<code>nil</code>.
 
-     <li>A flag specifying the type of operation.  The best way to think about
-it is that the function stands for an object (in the
-&ldquo;object-oriented&rdquo; sense of the word), and this third argument
-specifies which method to run. 
-</ul>
+     <li>A flag specifying the type of completion operation to perform.  This
+is one of the following four values:
 
-   <p>There are currently four methods, i.e. four flag values, one for
-  each of the four different basic operations:
+          <dl>
+<dt><code>nil</code><dd>This specifies a <code>try-completion</code> operation.  The function should
+return <code>t</code> if the specified string is a unique and exact match;
+if there is more than one match, it should return the common substring
+of all matches (if the string is an exact match for one completion
+alternative but also matches other longer alternatives, the return
+value is the string); if there are no matches, it should return
+<code>nil</code>.
 
-     <ul>
-<li><code>nil</code> specifies <code>try-completion</code>.  The completion function
-should return the completion of the specified string, or <code>t</code> if the
-string is a unique and exact match already, or <code>nil</code> if the string
-matches no possibility.
-
-     <p>If the string is an exact match for one possibility, but also matches
-other longer possibilities, the function should return the string, not
-<code>t</code>.
-
-     <li><code>t</code> specifies <code>all-completions</code>.  The completion function
+          <br><dt><code>t</code><dd>This specifies an <code>all-completions</code> operation.  The function
 should return a list of all possible completions of the specified
 string.
 
-     <li><code>lambda</code> specifies <code>test-completion</code>.  The completion
-function should return <code>t</code> if the specified string is an exact
-match for some possibility; <code>nil</code> otherwise.
+          <br><dt><code>lambda</code><dd>This specifies a <code>test-completion</code> operation.  The function
+should return <code>t</code> if the specified string is an exact match for
+some completion alternative; <code>nil</code> otherwise.
 
-     <li><code>(boundaries . SUFFIX)</code> specifies <code>completion-boundaries</code>. 
-The function should return a value of the form <code>(boundaries
-START . END)</code> where START is the position of the beginning boundary in
-in the string to complete, and END is the position of the end boundary
-in SUFFIX. 
+          <br><dt><code>(boundaries . </code><var>suffix</var><code>)</code><dd>This specifies a <code>completion-boundaries</code> operation.  The function
+should return <code>(boundaries </code><var>start</var><code> . </code><var>end</var><code>)</code>, where
+<var>start</var> is the position of the beginning boundary in the specified
+string, and <var>end</var> is the position of the end boundary in
+<var>suffix</var>.
+
+          <br><dt><code>metadata</code><dd>This specifies a request for information about the state of the
+current completion.  The return value should have the form
+<code>(metadata . </code><var>alist</var><code>)</code>, where <var>alist</var> is an alist whose
+elements are described below. 
+</dl>
+
+     <p class="noindent">If the flag has any other value, the completion function should return
+<code>nil</code>. 
 </ul>
 
-   <p>It would be consistent and clean for completion functions to allow
-lambda expressions (lists that are functions) as well as function
-symbols as <var>collection</var>, but this is impossible.  Lists as
-completion tables already have other meanings, and it would be
-unreliable to treat one differently just because it is also a possible
-function.  So you must arrange for any function you wish to use for
-completion to be encapsulated in a symbol.
+   <p>The following is a list of metadata entries that a completion function
+may return in response to a <code>metadata</code> flag argument:
+
+     <dl>
+<dt><code>category</code><dd>The value should be a symbol describing what kind of text the
+completion function is trying to complete.  If the symbol matches one
+of the keys in <code>completion-category-overrides</code>, the usual
+completion behavior is overridden.  See <a href="Completion-Variables.html#Completion-Variables">Completion Variables</a>.
+
+     <br><dt><code>annotation-function</code><dd>The value should be a function for <dfn>annotating</dfn> completions.  The
+function should take one argument, <var>string</var>, which is a possible
+completion.  It should return a string, which is displayed after the
+completion <var>string</var> in the <samp><span class="file">*Completions*</span></samp> buffer.
+
+     <br><dt><code>display-sort-function</code><dd>The value should be a function for sorting completions.  The function
+should take one argument, a list of completion strings, and return a
+sorted list of completion strings.  It is allowed to alter the input
+list destructively.
+
+     <br><dt><code>cycle-sort-function</code><dd>The value should be a function for sorting completions, when
+<code>completion-cycle-threshold</code> is non-<code>nil</code> and the user is
+cycling through completion alternatives.  See <a href="../emacs/Completion-Options.html#Completion-Options">Completion Options</a>.  Its argument list and return value are
+the same as for <code>display-sort-function</code>. 
+</dl>
 
 <div class="defun">
-&mdash; Function: <b>completion-table-dynamic</b><var> function<a name="index-completion_002dtable_002ddynamic-1162"></a></var><br>
+&mdash; Function: <b>completion-table-dynamic</b><var> function<a name="index-completion_002dtable_002ddynamic-1243"></a></var><br>
 <blockquote><p>This function is a convenient way to write a function that can act as
-programmed completion function.  The argument <var>function</var> should be
+a programmed completion function.  The argument <var>function</var> should be
 a function that takes one argument, a string, and returns an alist of
 possible completions of it.  You can think of
 <code>completion-table-dynamic</code> as a transducer between that interface
 and the interface for programmed completion functions. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Variable: <b>completion-annotate-function</b><var><a name="index-completion_002dannotate_002dfunction-1163"></a></var><br>
-<blockquote><p>The value of this variable, if non-<code>nil</code>, should be a function
-for &ldquo;annotating&rdquo; the entries in the &lsquo;<samp><span class="samp">*Completions*</span></samp>&rsquo; buffer. 
-The function should accept a single argument, the completion string
-for an entry.  It should return an additional string to display next
-to that entry in the &lsquo;<samp><span class="samp">*Completions*</span></samp>&rsquo; buffer, or <code>nil</code> if no
-additional string is to be displayed.
-
-        <p>The function can determine the collection used for the current
-completion via the variable <code>minibuffer-completion-table</code>
-(see <a href="Completion-Commands.html#Completion-Commands">Completion Commands</a>). 
 </p></blockquote></div>
 
    </body></html>

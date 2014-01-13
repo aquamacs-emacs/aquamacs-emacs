@@ -1,21 +1,19 @@
 <html lang="en">
 <head>
-<title>GTK widget names - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<title>GTK Widget Names - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="GTK-resources.html#GTK-resources" title="GTK resources">
+<link rel="prev" href="GTK-Resource-Basics.html#GTK-Resource-Basics" title="GTK Resource Basics">
 <link rel="next" href="GTK-Names-in-Emacs.html#GTK-Names-in-Emacs" title="GTK Names in Emacs">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -36,21 +34,22 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
 <body>
 <div class="node">
-<a name="GTK-widget-names"></a>
+<a name="GTK-Widget-Names"></a>
 <p>
 Next:&nbsp;<a rel="next" accesskey="n" href="GTK-Names-in-Emacs.html#GTK-Names-in-Emacs">GTK Names in Emacs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="GTK-Resource-Basics.html#GTK-Resource-Basics">GTK Resource Basics</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="GTK-resources.html#GTK-resources">GTK resources</a>
 <hr>
 </div>
 
-<h4 class="appendixsubsec">D.6.1 GTK widget names</h4>
+<h4 class="appendixsubsec">D.5.2 GTK widget names</h4>
 
-<p><a name="index-GTK-widget-names-4363"></a>
-  A GTK widget is specified by its <dfn>widget class</dfn> and
-<dfn>widget name</dfn>.  The widget class is the type of the widget: for
-example, <code>GtkMenuBar</code>.  The widget name is the name given to a
-specific widget.  A widget always has a class, but need not have a
-name.
+<p><a name="index-GTK-widget-names-4699"></a>
+  A GTK+ widget is specified by a <dfn>widget name</dfn> and a <dfn>widget
+class</dfn>.  The widget name refers to a specific widget
+(e.g., &lsquo;<samp><span class="samp">emacs-menuitem</span></samp>&rsquo;), while the widget class refers to a
+collection of similar widgets (e.g., &lsquo;<samp><span class="samp">GtkMenuItem</span></samp>&rsquo;).  A widget
+always has a class, but need not have a name.
 
    <p><dfn>Absolute names</dfn> are sequences of widget names or widget
 classes, corresponding to hierarchies of widgets embedded within
@@ -60,47 +59,27 @@ a <code>GtkMenuBar</code> called <code>menubar</code>, the absolute class name
 of the menu-bar widget is <code>GtkWindow.GtkVBox.GtkMenuBar</code>, and
 its absolute widget name is <code>top.box.menubar</code>.
 
-   <p>When assigning a style to a widget, you can use the absolute class
-name or the absolute widget name.
-
-   <p>There are two commands to specify changes for widgets:
+   <p>GTK+ resource files can contain two types of commands for specifying
+widget appearances:
 
      <dl>
-<dt><code>widget_class</code><dd>specifies a style for widgets based on the absolute class name.
+<dt><code>widget</code><dd>specifies a style for widgets based on the class name, or just the
+class.
 
-     <br><dt><code>widget</code><dd>specifies a style for widgets based on the absolute class name,
-or just the class. 
+     <br><dt><code>widget_class</code><dd>specifies a style for widgets based on the class name. 
 </dl>
 
-<p class="noindent">You must specify the class and the style in double-quotes, and put
-these commands at the top level in the GTK customization file, like
-this:
+<p class="noindent">See the previous subsection for examples of using the <code>widget</code>
+command; the <code>widget_class</code> command is used similarly.  Note that
+the widget name/class and the style must be enclosed in double-quotes,
+and these commands must be at the top level in the GTK+ resource file.
 
-<pre class="smallexample">     style "menufont"
-     {
-       font_name = "helvetica bold 14"
-     }
-     
-     widget "top.box.menubar" style "menufont"
-     widget_class "GtkWindow.GtkVBox.GtkMenuBar" style "menufont"
-</pre>
-   <p>Matching of absolute names uses shell wildcard syntax: &lsquo;<samp><span class="samp">*</span></samp>&rsquo;
-matches zero or more characters and &lsquo;<samp><span class="samp">?</span></samp>&rsquo; matches one character. 
-This example assigns <code>base_style</code> to all widgets:
+   <p>As previously noted, you may specify a widget name or class with
+shell wildcard syntax: &lsquo;<samp><span class="samp">*</span></samp>&rsquo; matches zero or more characters and
+&lsquo;<samp><span class="samp">?</span></samp>&rsquo; matches one character.  This example assigns a style to all
+widgets:
 
-<pre class="smallexample">     widget "*" style "base_style"
-</pre>
-   <p>Given the absolute class name <code>GtkWindow.GtkVBox.GtkMenuBar</code>
-and the corresponding absolute widget name <code>top.box.menubar</code>, all
-these examples specify <code>my_style</code> for the menu bar:
-
-<pre class="smallexample">     widget_class "GtkWindow.GtkVBox.GtkMenuBar" style "my_style"
-     widget_class "GtkWindow.*.GtkMenuBar" style "my_style"
-     widget_class "*GtkMenuBar" style "my_style"
-     widget "top.box.menubar" style "my_style"
-     widget "*box*menubar" style "my_style"
-     widget "*menubar" style "my_style"
-     widget "*menu*" style "my_style"
+<pre class="smallexample">     widget "*" style "my_style"
 </pre>
    </body></html>
 

@@ -1,0 +1,91 @@
+<html lang="en">
+<head>
+<title>GTK Resource Basics - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="GTK-resources.html#GTK-resources" title="GTK resources">
+<link rel="next" href="GTK-Widget-Names.html#GTK-Widget-Names" title="GTK Widget Names">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
+
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="GTK-Resource-Basics"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="GTK-Widget-Names.html#GTK-Widget-Names">GTK Widget Names</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="GTK-resources.html#GTK-resources">GTK resources</a>
+<hr>
+</div>
+
+<h4 class="appendixsubsec">D.5.1 GTK Resource Basics</h4>
+
+<p>In a GTK+ 2 resource file (usually <samp><span class="file">~/.emacs.d/gtkrc</span></samp>), the
+simplest kinds of resource settings simply assign a value to a
+variable.  For example, putting the following line in the resource
+file changes the font on all GTK+ widgets to &lsquo;<samp><span class="samp">courier-12</span></samp>&rsquo;:
+
+<pre class="smallexample">     gtk-font-name = "courier 12"
+</pre>
+   <p class="noindent">Note that in this case the font name must be supplied as a GTK font
+pattern (also called a <dfn>Pango font name</dfn>), not as a
+Fontconfig-style font name or XLFD.  See <a href="Fonts.html#Fonts">Fonts</a>.
+
+   <p>To customize widgets you first define a <dfn>style</dfn>, and then apply
+the style to the widgets.  Here is an example that sets the font for
+menus (&lsquo;<samp><span class="samp">#</span></samp>&rsquo; characters indicate comments):
+
+<pre class="smallexample">     # <span class="roman">Define the style &lsquo;</span><samp><span class="samp">my_style</span></samp><span class="roman">&rsquo;.</span>
+     style "my_style"
+     {
+       font_name = "helvetica bold 14"
+     }
+     
+     # <span class="roman">Specify that widget type &lsquo;</span><samp><span class="samp">*emacs-menuitem*</span></samp><span class="roman">&rsquo; uses &lsquo;</span><samp><span class="samp">my_style</span></samp><span class="roman">&rsquo;.</span>
+     widget "*emacs-menuitem*" style "my_style"
+</pre>
+   <p class="noindent">The widget name in this example contains wildcards, so the style is
+applied to all widgets matching &lsquo;<samp><span class="samp">*emacs-menuitem*</span></samp>&rsquo;.  The widgets
+are named by the way they are contained, from the outer widget to the
+inner widget.  Here is another example that applies &lsquo;<samp><span class="samp">my_style</span></samp>&rsquo;
+specifically to the Emacs menu bar:
+
+<pre class="smallexample">     widget "Emacs.pane.menubar.*" style "my_style"
+</pre>
+   <p>Here is a more elaborate example, showing how to change the parts of
+the scroll bar:
+
+<pre class="smallexample">     style "scroll"
+     {
+       fg[NORMAL] = "red"     # <span class="roman">Arrow color.</span>
+       bg[NORMAL] = "yellow"  # <span class="roman">Thumb and background around arrow.</span>
+       bg[ACTIVE] = "blue"    # <span class="roman">Trough color.</span>
+       bg[PRELIGHT] = "white" # <span class="roman">Thumb color when the mouse is over it.</span>
+     }
+     
+     widget "*verticalScrollBar*" style "scroll"
+</pre>
+   </body></html>
+

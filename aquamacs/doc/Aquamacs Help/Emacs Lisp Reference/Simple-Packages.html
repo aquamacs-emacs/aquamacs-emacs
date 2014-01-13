@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Simple Packages - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Multi_002dfile-Packages.html#Multi_002dfile-Packages" title="Multi-file Packages">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,40 +43,59 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Packaging.html#Packaging">Packaging</a>
 
 <h3 class="section">40.2 Simple Packages</h3>
 
-<p><a name="index-single-file-packages-3913"></a>
-  The simplest package consists of a single Emacs Lisp source file. 
-In this case, all the attributes of the package (see <a href="Packaging-Basics.html#Packaging-Basics">Packaging Basics</a>) are taken from this file.
+<p><a name="index-single-file-package-4275"></a><a name="index-simple-package-4276"></a>
+  A simple package consists of a single Emacs Lisp source file.  The
+file must conform to the Emacs Lisp library header conventions
+(see <a href="Library-Headers.html#Library-Headers">Library Headers</a>).  The package's attributes are taken from
+the various headers, as illustrated by the following example:
 
-   <p>The package system expects this <samp><span class="file">.el</span></samp> file to conform to the
-Emacs Lisp library header conventions.  See <a href="Library-Headers.html#Library-Headers">Library Headers</a>.
-
-   <p>The name of the package is the same as the base name of the
-<samp><span class="file">.el</span></samp> file, as written in the first comment line.  For example,
-given the header line:
-
-<pre class="smallexample">     ;;; superfrobnicator.el --- frobnicate and bifurcate flanges
+<pre class="example">     ;;; superfrobnicator.el --- Frobnicate and bifurcate flanges
+     
+     ;; Copyright (C) 2011 Free Software Foundation, Inc.
+     
+     ;; Author: J. R. Hacker &lt;jrh@example.com&gt;
+     ;; Version: 1.3
+     ;; Package-Requires: ((flange "1.0"))
+     ;; Keywords: frobnicate
+     
+     ...
+     
+     ;;; Commentary:
+     
+     ;; This package provides a minor mode to frobnicate and/or
+     ;; bifurcate any flanges you desire.  To activate it, just type
+     ...
+     
+     ;;;###autoload
+     (define-minor-mode superfrobnicator-mode
+     ...
 </pre>
-   <p>the package name will be &lsquo;<samp><span class="samp">superfrobnicator</span></samp>&rsquo;.
+   <p>The name of the package is the same as the base name of the file, as
+written on the first line.  Here, it is &lsquo;<samp><span class="samp">superfrobnicator</span></samp>&rsquo;.
 
-   <p>The short description of the package is also taken from the first
-line of the file.
+   <p>The brief description is also taken from the first line.  Here, it
+is &lsquo;<samp><span class="samp">Frobnicate and bifurcate flanges</span></samp>&rsquo;.
 
-   <p>If the file has a &ldquo;Commentary&rdquo; header, then it is used as the long
-description.
+   <p>The version number comes from the &lsquo;<samp><span class="samp">Package-Version</span></samp>&rsquo; header, if
+it exists, or from the &lsquo;<samp><span class="samp">Version</span></samp>&rsquo; header otherwise.  One or the
+other <em>must</em> be present.  Here, the version number is 1.3.
 
-   <p>The version of the package comes either from the &ldquo;Package-Version&rdquo;
-header, if it exists, or from the &ldquo;Version&rdquo; header.  A package is
-required to have a version number.  Each release of a package must be
-accompanied by an increase in the version number.
+   <p>If the file has a &lsquo;<samp><span class="samp">;;; Commentary:</span></samp>&rsquo; section, this section is
+used as the long description.  (When displaying the description, Emacs
+omits the &lsquo;<samp><span class="samp">;;; Commentary:</span></samp>&rsquo; line, as well as the leading comment
+characters in the commentary itself.)
 
-   <p>If the file has a &ldquo;Package-Requires&rdquo; header, then that is used as
-the package dependencies.  Otherwise, the package is assumed not to
-have any dependencies.
+   <p>If the file has a &lsquo;<samp><span class="samp">Package-Requires</span></samp>&rsquo; header, that is used as
+the package dependencies.  In the above example, the package depends
+on the &lsquo;<samp><span class="samp">flange</span></samp>&rsquo; package, version 1.0 or higher.  See <a href="Library-Headers.html#Library-Headers">Library Headers</a>, for a description of the &lsquo;<samp><span class="samp">Package-Requires</span></samp>&rsquo; header.  If
+the header is omitted, the package has no dependencies.
 
-   <p>A single-file package cannot have an Info manual.
+   <p>The file ought to also contain one or more autoload magic comments,
+as explained in <a href="Packaging-Basics.html#Packaging-Basics">Packaging Basics</a>.  In the above example, a magic
+comment autoloads <code>superfrobnicator-mode</code>.
 
-   <p>The file will be scanned for autoload cookies at install time. 
-See <a href="Autoload.html#Autoload">Autoload</a>.
+   <p>See <a href="Package-Archives.html#Package-Archives">Package Archives</a>, for a explanation of how to add a
+single-file package to a package archive.
 
    </body></html>
 

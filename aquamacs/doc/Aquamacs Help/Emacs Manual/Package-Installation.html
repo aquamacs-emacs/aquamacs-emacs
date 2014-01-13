@@ -1,0 +1,121 @@
+<html lang="en">
+<head>
+<title>Package Installation - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Packages.html#Packages" title="Packages">
+<link rel="prev" href="Package-Menu.html#Package-Menu" title="Package Menu">
+<link rel="next" href="Package-Files.html#Package-Files" title="Package Files">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
+
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Package-Installation"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Package-Files.html#Package-Files">Package Files</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Package-Menu.html#Package-Menu">Package Menu</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Packages.html#Packages">Packages</a>
+<hr>
+</div>
+
+<h3 class="section">47.2 Package Installation</h3>
+
+<p><a name="index-package_002dinstall-4292"></a>  Packages are most conveniently installed using the package menu
+(see <a href="Package-Menu.html#Package-Menu">Package Menu</a>), but you can also use the command <kbd>M-x
+package-install</kbd>.  This prompts for the name of a package with the
+&lsquo;<samp><span class="samp">available</span></samp>&rsquo; status, then downloads and installs it.
+
+   <p><a name="index-package-requirements-4293"></a>  A package may <dfn>require</dfn> certain other packages to be installed,
+because it relies on functionality provided by them.  When Emacs
+installs such a package, it also automatically downloads and installs
+any required package that is not already installed.  (If a required
+package is somehow unavailable, Emacs signals an error and stops
+installation.)  A package's requirements list is shown in its help
+buffer.
+
+   <p><a name="index-package_002darchives-4294"></a>  By default, packages are downloaded from a single package archive
+maintained by the Emacs developers.  This is controlled by the
+variable <code>package-archives</code>, whose value is a list of package
+archives known to Emacs.  Each list element must have the form
+<code>(</code><var>id</var><code> . </code><var>location</var><code>)</code>, where <var>id</var> is the name of a
+package archive and <var>location</var> is the <acronym>HTTP</acronym> address or
+directory name of the package archive.  You can alter this list if you
+wish to use third party package archives&mdash;but do so at your own risk,
+and use only third parties that you think you can trust!
+
+   <p>Once a package is downloaded and installed, it is <dfn>loaded</dfn> into
+the current Emacs session.  Loading a package is not quite the same as
+loading a Lisp library (see <a href="Lisp-Libraries.html#Lisp-Libraries">Lisp Libraries</a>); its effect varies
+from package to package.  Most packages just make some new commands
+available, while others have more wide-ranging effects on the Emacs
+session.  For such information, consult the package's help buffer.
+
+   <p>By default, Emacs also automatically loads all installed packages in
+subsequent Emacs sessions.  This happens at startup, after processing
+the init file (see <a href="Init-File.html#Init-File">Init File</a>).  As an exception, Emacs does not
+load packages at startup if invoked with the &lsquo;<samp><span class="samp">-q</span></samp>&rsquo; or
+&lsquo;<samp><span class="samp">--no-init-file</span></samp>&rsquo; options (see <a href="Initial-Options.html#Initial-Options">Initial Options</a>).
+
+   <p><a name="index-package_002denable_002dat_002dstartup-4295"></a>  To disable automatic package loading, change the variable
+<code>package-enable-at-startup</code> to <code>nil</code>.
+
+   <p><a name="index-package_002dinitialize-4296"></a>  The reason automatic package loading occurs after loading the init
+file is that user options only receive their customized values after
+loading the init file, including user options which affect the
+packaging system.  In some circumstances, you may want to load
+packages explicitly in your init file (usually because some other code
+in your init file depends on a package).  In that case, your init file
+should call the function <code>package-initialize</code>.  It is up to you
+to ensure that relevant user options, such as <code>package-load-list</code>
+(see below), are set up prior to the <code>package-initialize</code> call. 
+You should also set <code>package-enable-at-startup</code> to <code>nil</code>, to
+avoid loading the packages again after processing the init file. 
+Alternatively, you may choose to completely inhibit package loading at
+startup, and invoke the command <kbd>M-x package-initialize</kbd> to load
+your packages manually.
+
+   <p><a name="index-package_002dload_002dlist-4297"></a>  For finer control over package loading, you can use the variable
+<code>package-load-list</code>.  Its value should be a list.  A list element
+of the form <code>(</code><var>name</var> <var>version</var><code>)</code> tells Emacs to load
+version <var>version</var> of the package named <var>name</var>.  Here,
+<var>version</var> should be a version string (corresponding to a specific
+version of the package), or <code>t</code> (which means to load any
+installed version), or <code>nil</code> (which means no version; this
+&ldquo;disables&rdquo; the package, preventing it from being loaded).  A list
+element can also be the symbol <code>all</code>, which means to load the
+latest installed version of any package not named by the other list
+elements.  The default value is just <code>'(all)</code>.
+
+   <p>For example, if you set <code>package-load-list</code> to <code>'((muse
+"3.20") all)</code>, then Emacs only loads version 3.20 of the &lsquo;<samp><span class="samp">muse</span></samp>&rsquo;
+package, plus any installed version of packages other than
+&lsquo;<samp><span class="samp">muse</span></samp>&rsquo;.  Any other version of &lsquo;<samp><span class="samp">muse</span></samp>&rsquo; that happens to be
+installed will be ignored.  The &lsquo;<samp><span class="samp">muse</span></samp>&rsquo; package will be listed in
+the package menu with the &lsquo;<samp><span class="samp">held</span></samp>&rsquo; status.
+
+   </body></html>
+

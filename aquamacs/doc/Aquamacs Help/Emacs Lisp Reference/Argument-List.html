@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Argument List - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Function-Documentation.html#Function-Documentation" title="Function Documentation">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,7 +43,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Lambda-Expressions.html#Lambda-Expressi
 
 <h4 class="subsection">12.2.3 Other Features of Argument Lists</h4>
 
-<p><a name="index-wrong_002dnumber_002dof_002darguments-679"></a><a name="index-argument-binding-680"></a><a name="index-binding-arguments-681"></a><a name="index-argument-lists_002c-features-682"></a>
+<p><a name="index-wrong_002dnumber_002dof_002darguments-722"></a><a name="index-argument-binding-723"></a><a name="index-binding-arguments-724"></a><a name="index-argument-lists_002c-features-725"></a>
   Our simple sample function, <code>(lambda (a b c) (+ a b c))</code>,
 specifies three argument variables, so it must be called with three
 arguments: if you try to call it with only two arguments or four
@@ -60,7 +57,7 @@ string if you omit it.  It is also convenient for certain functions to
 accept an indefinite number of arguments, as the functions <code>list</code>
 and <code>+</code> do.
 
-   <p><a name="index-optional-arguments-683"></a><a name="index-rest-arguments-684"></a><a name="index-g_t_0026optional-685"></a><a name="index-g_t_0026rest-686"></a>  To specify optional arguments that may be omitted when a function
+   <p><a name="index-optional-arguments-726"></a><a name="index-rest-arguments-727"></a><a name="index-g_t_0026optional-728"></a><a name="index-g_t_0026rest-729"></a>  To specify optional arguments that may be omitted when a function
 is called, simply include the keyword <code>&amp;optional</code> before the optional
 arguments.  To specify a list of zero or more extra arguments, include the
 keyword <code>&amp;rest</code> before one final argument.
@@ -88,7 +85,7 @@ consider <code>nil</code> an abbreviation for some other meaningful value.
 This is what <code>substring</code> does; <code>nil</code> as the third argument to
 <code>substring</code> means to use the length of the string supplied.
 
-   <p><a name="index-CL-note_002d_002d_002ddefault-optional-arg-687"></a><blockquote>
+   <p><a name="index-CL-note_002d_002d_002ddefault-optional-arg-730"></a><blockquote>
 <b>Common Lisp note:</b> Common Lisp allows the function to specify what
 default value to use when an optional argument is omitted; Emacs Lisp
 always uses <code>nil</code>.  Emacs Lisp does not support &ldquo;supplied-p&rdquo;
@@ -118,16 +115,16 @@ after a <code>&amp;rest</code> argument.
 
    <p>Here are some examples of argument lists and proper calls:
 
-<pre class="smallexample">     ((lambda (n) (1+ n))                ; <span class="roman">One required:</span>
-      1)                                 ; <span class="roman">requires exactly one argument.</span>
+<pre class="example">     (funcall (lambda (n) (1+ n))        ; <span class="roman">One required:</span>
+              1)                         ; <span class="roman">requires exactly one argument.</span>
           &rArr; 2
-     ((lambda (n &amp;optional n1)           ; <span class="roman">One required and one optional:</span>
-              (if n1 (+ n n1) (1+ n)))   ; <span class="roman">1 or 2 arguments.</span>
-      1 2)
+     (funcall (lambda (n &amp;optional n1)   ; <span class="roman">One required and one optional:</span>
+                (if n1 (+ n n1) (1+ n))) ; <span class="roman">1 or 2 arguments.</span>
+              1 2)
           &rArr; 3
-     ((lambda (n &amp;rest ns)               ; <span class="roman">One required and one rest:</span>
-              (+ n (apply '+ ns)))       ; <span class="roman">1 or more arguments.</span>
-      1 2 3 4 5)
+     (funcall (lambda (n &amp;rest ns)       ; <span class="roman">One required and one rest:</span>
+                (+ n (apply '+ ns)))     ; <span class="roman">1 or more arguments.</span>
+              1 2 3 4 5)
           &rArr; 15
 </pre>
    </body></html>

@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Dedicated Windows - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Windows.html#Windows" title="Windows">
-<link rel="prev" href="Choosing-Window.html#Choosing-Window" title="Choosing Window">
-<link rel="next" href="Window-Point.html#Window-Point" title="Window Point">
+<link rel="prev" href="Window-History.html#Window-History" title="Window History">
+<link rel="next" href="Quitting-Windows.html#Quitting-Windows" title="Quitting Windows">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -38,55 +35,58 @@ Foundation, Inc.
 <div class="node">
 <a name="Dedicated-Windows"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Window-Point.html#Window-Point">Window Point</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Choosing-Window.html#Choosing-Window">Choosing Window</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Quitting-Windows.html#Quitting-Windows">Quitting Windows</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Window-History.html#Window-History">Window History</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
 <hr>
 </div>
 
-<h3 class="section">28.9 Dedicated Windows</h3>
+<h3 class="section">28.16 Dedicated Windows</h3>
 
-<p><a name="index-dedicated-window-2131"></a>
+<p><a name="index-dedicated-window-2387"></a>
 Functions for displaying a buffer can be told to not use specific
 windows by marking these windows as <dfn>dedicated</dfn> to their buffers. 
 <code>display-buffer</code> (see <a href="Choosing-Window.html#Choosing-Window">Choosing Window</a>) never uses a dedicated
 window for displaying another buffer in it.  <code>get-lru-window</code> and
-<code>get-largest-window</code> (see <a href="Selecting-Windows.html#Selecting-Windows">Selecting Windows</a>) do not consider
-dedicated windows as candidates when their <var>dedicated</var> argument is
-non-<code>nil</code>.  The behavior of <code>set-window-buffer</code>
+<code>get-largest-window</code> (see <a href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic Window Ordering</a>) do not
+consider dedicated windows as candidates when their <var>dedicated</var>
+argument is non-<code>nil</code>.  The behavior of <code>set-window-buffer</code>
 (see <a href="Buffers-and-Windows.html#Buffers-and-Windows">Buffers and Windows</a>) with respect to dedicated windows is
 slightly different, see below.
 
-   <p>When <code>delete-windows-on</code> (see <a href="Deleting-Windows.html#Deleting-Windows">Deleting Windows</a>) wants to delete
-a dedicated window and that window is the only window on its frame, it
-deletes the window's frame too, provided there are other frames left. 
-<code>replace-buffer-in-windows</code> (see <a href="Displaying-Buffers.html#Displaying-Buffers">Displaying Buffers</a>) tries to
-delete all dedicated windows showing its buffer argument.  When such a
-window is the only window on its frame, that frame is deleted, provided
-there are other frames left.  If there are no more frames left, some
-other buffer is displayed in the window, and the window is marked as
-non-dedicated.
+   <p>Functions supposed to remove a buffer from a window or a window from
+a frame can behave specially when a window they operate on is dedicated. 
+We will distinguish three basic cases, namely where (1) the window is
+not the only window on its frame, (2) the window is the only window on
+its frame but there are other frames on the same terminal left, and (3)
+the window is the only window on the only frame on the same terminal.
 
-   <p>When you kill a buffer (see <a href="Killing-Buffers.html#Killing-Buffers">Killing Buffers</a>) displayed in a
-dedicated window, any such window usually gets deleted too, since
-<code>kill-buffer</code> calls <code>replace-buffer-in-windows</code> for cleaning
-up windows.  Burying a buffer (see <a href="The-Buffer-List.html#The-Buffer-List">The Buffer List</a>) deletes the
-selected window if it is dedicated to that buffer.  If, however, that
-window is the only window on its frame, <code>bury-buffer</code> displays
-another buffer in it and iconifies the frame.
+   <p>In particular, <code>delete-windows-on</code> (see <a href="Deleting-Windows.html#Deleting-Windows">Deleting Windows</a>)
+handles case (2) by deleting the associated frame and case (3) by
+showing another buffer in that frame's only window.  The function
+<code>replace-buffer-in-windows</code> (see <a href="Buffers-and-Windows.html#Buffers-and-Windows">Buffers and Windows</a>) which is
+called when a buffer gets killed, deletes the window in case (1) and
+behaves like <code>delete-windows-on</code> otherwise. 
+<!-- FIXME: Does replace-buffer-in-windows _delete_ a window in case (1)? -->
+
+   <p>When <code>bury-buffer</code> (see <a href="The-Buffer-List.html#The-Buffer-List">The Buffer List</a>) operates on the
+selected window (which shows the buffer that shall be buried), it
+handles case (2) by calling <code>frame-auto-hide-function</code>
+(see <a href="Quitting-Windows.html#Quitting-Windows">Quitting Windows</a>) to deal with the selected frame.  The other
+two cases are handled as with <code>replace-buffer-in-windows</code>.
 
 <div class="defun">
-&mdash; Function: <b>window-dedicated-p</b><var> &amp;optional window<a name="index-window_002ddedicated_002dp-2132"></a></var><br>
+&mdash; Function: <b>window-dedicated-p</b><var> &amp;optional window<a name="index-window_002ddedicated_002dp-2388"></a></var><br>
 <blockquote><p>This function returns non-<code>nil</code> if <var>window</var> is dedicated to its
 buffer and <code>nil</code> otherwise.  More precisely, the return value is
 the value assigned by the last call of <code>set-window-dedicated-p</code> for
-<var>window</var> or <code>nil</code> if that function was never called with
+<var>window</var>, or <code>nil</code> if that function was never called with
 <var>window</var> as its argument.  The default for <var>window</var> is the
 selected window. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-window-dedicated-p</b><var> window flag<a name="index-set_002dwindow_002ddedicated_002dp-2133"></a></var><br>
+&mdash; Function: <b>set-window-dedicated-p</b><var> window flag<a name="index-set_002dwindow_002ddedicated_002dp-2389"></a></var><br>
 <blockquote><p>This function marks <var>window</var> as dedicated to its buffer if
 <var>flag</var> is non-<code>nil</code>, and non-dedicated otherwise.
 

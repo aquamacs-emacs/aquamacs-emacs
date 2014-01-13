@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Making Buttons - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Manipulating-Buttons.html#Manipulating-Buttons" title="Manipulating Buttons">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,7 +43,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Buttons.html#Buttons">Buttons</a>
 
 <h4 class="subsection">38.17.3 Making Buttons</h4>
 
-<p><a name="index-making-buttons-3669"></a>
+<p><a name="index-making-buttons-3979"></a>
   Buttons are associated with a region of text, using an overlay or
 text properties to hold button-specific information, all of which are
 initialized from the button's type (which defaults to the built-in
@@ -72,33 +69,33 @@ defines such a property).
 (see <a href="Overlays.html#Overlays">Overlays</a>) to hold the button properties:
 
 <div class="defun">
-&mdash; Function: <b>make-button</b><var> beg end &amp;rest properties<a name="index-make_002dbutton-3670"></a></var><br>
+&mdash; Function: <b>make-button</b><var> beg end &amp;rest properties<a name="index-make_002dbutton-3980"></a></var><br>
 <blockquote><p>This makes a button from <var>beg</var> to <var>end</var> in the
 current buffer, and returns it. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>insert-button</b><var> label &amp;rest properties<a name="index-insert_002dbutton-3671"></a></var><br>
+&mdash; Function: <b>insert-button</b><var> label &amp;rest properties<a name="index-insert_002dbutton-3981"></a></var><br>
 <blockquote><p>This insert a button with the label <var>label</var> at point,
 and returns it. 
 </p></blockquote></div>
 
-   <p>The following functions are similar, but use Emacs text properties
-(see <a href="Text-Properties.html#Text-Properties">Text Properties</a>) to hold the button properties, making the
-button actually part of the text instead of being a property of the
-buffer.  Buttons using text properties do not create markers into the
-buffer, which is important for speed when you use extremely large
-numbers of buttons.  Both functions return the position of the start
-of the new button:
+   <p>The following functions are similar, but using text properties
+(see <a href="Text-Properties.html#Text-Properties">Text Properties</a>) to hold the button properties.  Such buttons
+do not add markers to the buffer, so editing in the buffer does not
+slow down if there is an extremely large numbers of buttons.  However,
+if there is an existing face text property on the text (e.g., a face
+assigned by Font Lock mode), the button face may not be visible.  Both
+of these functions return the starting position of the new button.
 
 <div class="defun">
-&mdash; Function: <b>make-text-button</b><var> beg end &amp;rest properties<a name="index-make_002dtext_002dbutton-3672"></a></var><br>
-<blockquote><p>This makes a button from <var>beg</var> to <var>end</var> in the current buffer, using
-text properties. 
+&mdash; Function: <b>make-text-button</b><var> beg end &amp;rest properties<a name="index-make_002dtext_002dbutton-3982"></a></var><br>
+<blockquote><p>This makes a button from <var>beg</var> to <var>end</var> in the current buffer,
+using text properties. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>insert-text-button</b><var> label &amp;rest properties<a name="index-insert_002dtext_002dbutton-3673"></a></var><br>
+&mdash; Function: <b>insert-text-button</b><var> label &amp;rest properties<a name="index-insert_002dtext_002dbutton-3983"></a></var><br>
 <blockquote><p>This inserts a button with the label <var>label</var> at point, using text
 properties. 
 </p></blockquote></div>

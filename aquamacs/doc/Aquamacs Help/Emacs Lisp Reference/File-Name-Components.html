@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>File Name Components - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Relative-File-Names.html#Relative-File-Names" title="Relative File Names">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,7 +41,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="File-Names.html#File-Names">File Names<
 
 <h4 class="subsection">25.8.1 File Name Components</h4>
 
-<p><a name="index-directory-part-_0028of-file-name_0029-1856"></a><a name="index-nondirectory-part-_0028of-file-name_0029-1857"></a><a name="index-version-number-_0028in-file-name_0029-1858"></a>
+<p><a name="index-directory-part-_0028of-file-name_0029-2002"></a><a name="index-nondirectory-part-_0028of-file-name_0029-2003"></a><a name="index-version-number-_0028in-file-name_0029-2004"></a>
   The operating system groups files into directories.  To specify a
 file, you must specify the directory and the file's name within that
 directory.  Therefore, Emacs considers a file name as having two main
@@ -61,7 +58,7 @@ the name proper and the <dfn>version number</dfn>.  On most systems, only
 backup files have version numbers in their names.
 
 <div class="defun">
-&mdash; Function: <b>file-name-directory</b><var> filename<a name="index-file_002dname_002ddirectory-1859"></a></var><br>
+&mdash; Function: <b>file-name-directory</b><var> filename<a name="index-file_002dname_002ddirectory-2005"></a></var><br>
 <blockquote><p>This function returns the directory part of <var>filename</var>, as a
 directory name (see <a href="Directory-Names.html#Directory-Names">Directory Names</a>), or <code>nil</code> if
 <var>filename</var> does not include a directory part.
@@ -77,7 +74,7 @@ ends in a slash.  On MS-DOS it can also end in a colon.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>file-name-nondirectory</b><var> filename<a name="index-file_002dname_002dnondirectory-1860"></a></var><br>
+&mdash; Function: <b>file-name-nondirectory</b><var> filename<a name="index-file_002dname_002dnondirectory-2006"></a></var><br>
 <blockquote><p>This function returns the nondirectory part of <var>filename</var>.
 
      <pre class="example">          (file-name-nondirectory "lewis/foo")
@@ -90,7 +87,7 @@ ends in a slash.  On MS-DOS it can also end in a colon.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>file-name-sans-versions</b><var> filename &amp;optional keep-backup-version<a name="index-file_002dname_002dsans_002dversions-1861"></a></var><br>
+&mdash; Function: <b>file-name-sans-versions</b><var> filename &amp;optional keep-backup-version<a name="index-file_002dname_002dsans_002dversions-2007"></a></var><br>
 <blockquote><p>This function returns <var>filename</var> with any file version numbers,
 backup version numbers, or trailing tildes discarded.
 
@@ -108,8 +105,8 @@ return value, but backup version numbers are kept.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>file-name-extension</b><var> filename &amp;optional period<a name="index-file_002dname_002dextension-1862"></a></var><br>
-<blockquote><p>This function returns <var>filename</var>'s final &ldquo;extension,&rdquo; if any,
+&mdash; Function: <b>file-name-extension</b><var> filename &amp;optional period<a name="index-file_002dname_002dextension-2008"></a></var><br>
+<blockquote><p>This function returns <var>filename</var>'s final &ldquo;extension&rdquo;, if any,
 after applying <code>file-name-sans-versions</code> to remove any
 version/backup part.  The extension, in a file name, is the part that
 follows the last &lsquo;<samp><span class="samp">.</span></samp>&rsquo; in the last name component (minus any
@@ -128,7 +125,7 @@ extension, the value is <code>""</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>file-name-sans-extension</b><var> filename<a name="index-file_002dname_002dsans_002dextension-1863"></a></var><br>
+&mdash; Function: <b>file-name-sans-extension</b><var> filename<a name="index-file_002dname_002dsans_002dextension-2009"></a></var><br>
 <blockquote><p>This function returns <var>filename</var> minus its extension, if any.  The
 version/backup part, if present, is only removed if the file has an
 extension.  For example,
@@ -148,6 +145,17 @@ extension.  For example,
 </pre>
         <p>Note that the &lsquo;<samp><span class="samp">.~3~</span></samp>&rsquo; in the two last examples is the backup part,
 not an extension. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>file-name-base</b><var> &amp;optional filename<a name="index-file_002dname_002dbase-2010"></a></var><br>
+<blockquote><p>This function is the composition of <code>file-name-sans-extension</code>
+and <code>file-name-nondirectory</code>.  For example,
+
+     <pre class="example">          (file-name-base "/my/home/foo.c")
+              &rArr; "foo"
+</pre>
+        <p>The <var>filename</var> argument defaults to <code>buffer-file-name</code>. 
 </p></blockquote></div>
 
    </body></html>

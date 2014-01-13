@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>VC With A Merging VCS - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="VC-With-A-Locking-VCS.html#VC-With-A-Locking-VCS" title="VC With A Locking VCS">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -43,43 +40,40 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Basic-VC-Editing.html#Basic-VC-Editing"
 <hr>
 </div>
 
-<h5 class="subsubsection">32.1.3.1 Basic Version Control with Merging</h5>
+<h5 class="subsubsection">28.1.3.1 Basic Version Control with Merging</h5>
 
-<p>When your version control system is merging-based (the default for
-CVS and all newer version control systems), work files are always
-writable; you need not do anything special to begin editing a file. 
-The status indicator on the mode line is &lsquo;<samp><span class="samp">-</span></samp>&rsquo; if the file is
-unmodified; it flips to &lsquo;<samp><span class="samp">:</span></samp>&rsquo; as soon as you save any changes
-(see <a href="VC-Mode-Line.html#VC-Mode-Line">VC Mode Line</a>).
-
-   <p>Here is what <kbd>C-x v v</kbd> does when using a merging-based system:
+<p>On a merging-based version control system (i.e., most modern ones;
+see <a href="VCS-Merging.html#VCS-Merging">VCS Merging</a>), <kbd>C-x v v</kbd> does the following:
 
      <ul>
-<li>If the work file is in a directory that is not controlled by any
-version control system, prompt for a repository type.  Then, create a
-version control repository of that type and register the file with it.
+<li>If there is more than one file in the VC fileset and the files have
+inconsistent version control statuses, signal an error.  (Note,
+however, that a fileset is allowed to include both &ldquo;newly-added&rdquo;
+files and &ldquo;modified&rdquo; files; see <a href="Registering.html#Registering">Registering</a>.)
 
-     <li>If the work file is in a directory that is controlled by a version
-control system but not registered with it, register the file.
+     <li>If none of the files in the VC fileset are registered with a version
+control system, register the VC fileset, i.e., place it under version
+control.  See <a href="Registering.html#Registering">Registering</a>.  If Emacs cannot find a system to
+register under, it prompts for a repository type, creates a new
+repository, and registers the VC fileset with it.
 
-     <li>If the work file is the same as in the repository, do nothing.
+     <li>If every work file in the VC fileset is unchanged, do nothing.
 
-     <li>If you have not changed the work file, but some other user has checked
-in changes to the repository, merge those changes into the work file.
+     <li>If every work file in the VC fileset has been modified, commit the
+changes.  To do this, Emacs pops up a <samp><span class="file">*vc-log*</span></samp> buffer; type the
+desired log entry for the new revision, followed by <kbd>C-c C-c</kbd> to
+commit.  See <a href="Log-Buffer.html#Log-Buffer">Log Buffer</a>.
 
-     <li>If you have made modifications to the work file, attempt to commit
-the changes.  To do this, Emacs first reads the log entry for the new
-revision (see <a href="Log-Buffer.html#Log-Buffer">Log Buffer</a>).  If some other user has committed
-changes to the repository since you last checked it out, the checkin
-fails.  In that case, type <kbd>C-x v v</kbd> again to merge those changes
-into your own work file; this puts the work file into a &ldquo;conflicted&rdquo;
-state.  Type <kbd>C-x v v</kbd> to clear the &ldquo;conflicted&rdquo; state; VC then
-regards the file as up-to-date and modified, and you can try to check
-it in again.
+     <p>If committing to a shared repository, the commit may fail if the
+repository that has been changed since your last update.  In that
+case, you must perform an update before trying again.  On a
+decentralized version control system, use <kbd>C-x v +</kbd> (see <a href="VC-Pull.html#VC-Pull">VC Pull</a>) or <kbd>C-x v m</kbd> (see <a href="Merging.html#Merging">Merging</a>).  On a centralized version
+control system, type <kbd>C-x v v</kbd> again to merge in the repository
+changes.
 
-     <p>To pick up any recent changes from the repository <em>without</em>
-trying to commit your own changes, type <kbd>C-x v m &lt;RET&gt;</kbd>. 
-See <a href="Merging.html#Merging">Merging</a>. 
+     <li>Finally, if you are using a centralized version control system, check
+if each work file in the VC fileset is up-to-date.  If any file has
+been changed in the repository, offer to update it. 
 </ul>
 
    <p>These rules also apply when you use RCS in its &ldquo;non-locking&rdquo; mode,
@@ -88,7 +82,7 @@ Nothing informs you if another user has committed changes in the same
 file since you began editing it; when you commit your revision, his
 changes are removed (however, they remain in the repository and are
 thus not irrevocably lost).  Therefore, you must verify that the
-current revision is unchanged before checking in your changes.  In
+current revision is unchanged before committing your changes.  In
 addition, locking is possible with RCS even in this mode: <kbd>C-x v
 v</kbd> with an unmodified file locks the file, just as it does with RCS in
 its normal locking mode (see <a href="VC-With-A-Locking-VCS.html#VC-With-A-Locking-VCS">VC With A Locking VCS</a>).

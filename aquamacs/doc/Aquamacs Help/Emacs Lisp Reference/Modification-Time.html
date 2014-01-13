@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Modification Time - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Read-Only-Buffers.html#Read-Only-Buffers" title="Read Only Buffers">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,10 +41,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Buffers.html#Buffers">Buffers</a>
 <hr>
 </div>
 
-<!-- node-name,  next,  previous,  up -->
 <h3 class="section">27.6 Buffer Modification Time</h3>
 
-<p><a name="index-comparing-file-modification-time-2014"></a><a name="index-modification-time-of-buffer-2015"></a>
+<p><a name="index-comparing-file-modification-time-2167"></a><a name="index-modification-time-of-buffer-2168"></a>
   Suppose that you visit a file and make changes in its buffer, and
 meanwhile the file itself is changed on disk.  At this point, saving the
 buffer would overwrite the changes in the file.  Occasionally this may
@@ -57,7 +53,7 @@ described below before saving the file.  (See <a href="File-Attributes.html#File
 for how to examine a file's modification time.)
 
 <div class="defun">
-&mdash; Function: <b>verify-visited-file-modtime</b><var> &amp;optional buffer<a name="index-verify_002dvisited_002dfile_002dmodtime-2016"></a></var><br>
+&mdash; Function: <b>verify-visited-file-modtime</b><var> &amp;optional buffer<a name="index-verify_002dvisited_002dfile_002dmodtime-2169"></a></var><br>
 <blockquote><p>This function compares what <var>buffer</var> (by default, the
 current-buffer) has recorded for the modification time of its visited
 file against the actual modification time of the file as recorded by the
@@ -79,7 +75,7 @@ been deleted.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>clear-visited-file-modtime</b><var><a name="index-clear_002dvisited_002dfile_002dmodtime-2017"></a></var><br>
+&mdash; Function: <b>clear-visited-file-modtime</b><var><a name="index-clear_002dvisited_002dfile_002dmodtime-2170"></a></var><br>
 <blockquote><p>This function clears out the record of the last modification time of
 the file being visited by the current buffer.  As a result, the next
 attempt to save this buffer will not complain of a discrepancy in
@@ -92,9 +88,10 @@ file should not be done.
 
 <!-- Emacs 19 feature -->
 <div class="defun">
-&mdash; Function: <b>visited-file-modtime</b><var><a name="index-visited_002dfile_002dmodtime-2018"></a></var><br>
+&mdash; Function: <b>visited-file-modtime</b><var><a name="index-visited_002dfile_002dmodtime-2171"></a></var><br>
 <blockquote><p>This function returns the current buffer's recorded last file
-modification time, as a list of the form <code>(</code><var>high</var> <var>low</var><code>)</code>. 
+modification time, as a list of the form <code>(</code><var>high</var> <var>low</var>
+<var>microsec</var> <var>picosec</var><code>)</code>. 
 (This is the same format that <code>file-attributes</code> uses to return
 time values; see <a href="File-Attributes.html#File-Attributes">File Attributes</a>.)
 
@@ -108,21 +105,20 @@ the last modification time of that directory, as recorded by Dired.
 
         <p>For a new buffer visiting a not yet existing file, <var>high</var> is
 &minus;1 and <var>low</var> is 65535, that is,
-2**16&nbsp;-&nbsp;1.<!-- /@w -->
+2**16&nbsp;&minus;&nbsp;1.<!-- /@w -->
 </p></blockquote></div>
 
 <!-- Emacs 19 feature -->
 <div class="defun">
-&mdash; Function: <b>set-visited-file-modtime</b><var> &amp;optional time<a name="index-set_002dvisited_002dfile_002dmodtime-2019"></a></var><br>
+&mdash; Function: <b>set-visited-file-modtime</b><var> &amp;optional time<a name="index-set_002dvisited_002dfile_002dmodtime-2172"></a></var><br>
 <blockquote><p>This function updates the buffer's record of the last modification time
 of the visited file, to the value specified by <var>time</var> if <var>time</var>
 is not <code>nil</code>, and otherwise to the last modification time of the
 visited file.
 
         <p>If <var>time</var> is neither <code>nil</code> nor zero, it should have the form
-<code>(</code><var>high</var><code> . </code><var>low</var><code>)</code> or <code>(</code><var>high</var> <var>low</var><code>)</code>, in
-either case containing two integers, each of which holds 16 bits of the
-time.
+<code>(</code><var>high</var> <var>low</var> <var>microsec</var> <var>picosec</var><code>)</code>,
+the format used by <code>current-time</code> (see <a href="Time-of-Day.html#Time-of-Day">Time of Day</a>).
 
         <p>This function is useful if the buffer was not read from the file
 normally, or if the file itself has been changed for some known benign
@@ -130,14 +126,14 @@ reason.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>ask-user-about-supersession-threat</b><var> filename<a name="index-ask_002duser_002dabout_002dsupersession_002dthreat-2020"></a></var><br>
+&mdash; Function: <b>ask-user-about-supersession-threat</b><var> filename<a name="index-ask_002duser_002dabout_002dsupersession_002dthreat-2173"></a></var><br>
 <blockquote><p>This function is used to ask a user how to proceed after an attempt to
 modify an buffer visiting file <var>filename</var> when the file is newer
 than the buffer text.  Emacs detects this because the modification
 time of the file on disk is newer than the last save-time of the
 buffer.  This means some other program has probably altered the file.
 
-        <p><a name="index-file_002dsupersession-2021"></a>Depending on the user's answer, the function may return normally, in
+        <p><a name="index-file_002dsupersession-2174"></a>Depending on the user's answer, the function may return normally, in
 which case the modification of the buffer proceeds, or it may signal a
 <code>file-supersession</code> error with data <code>(</code><var>filename</var><code>)</code>, in which
 case the proposed buffer modification is not allowed.

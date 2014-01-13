@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Inheritance and Keymaps - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Prefix-Keys.html#Prefix-Keys" title="Prefix Keys">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,7 +43,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Keymaps.html#Keymaps">Keymaps</a>
 
 <h3 class="section">22.5 Inheritance and Keymaps</h3>
 
-<p><a name="index-keymap-inheritance-1453"></a><a name="index-inheriting-a-keymap_0027s-bindings-1454"></a>
+<p><a name="index-keymap-inheritance-1542"></a><a name="index-inheritance_002c-keymap-1543"></a>
   A keymap can inherit the bindings of another keymap, which we call the
 <dfn>parent keymap</dfn>.  Such a keymap looks like this:
 
@@ -70,13 +67,13 @@ keymap with a parent, please convert the program to use
 <code>set-keymap-parent</code> instead.
 
 <div class="defun">
-&mdash; Function: <b>keymap-parent</b><var> keymap<a name="index-keymap_002dparent-1455"></a></var><br>
+&mdash; Function: <b>keymap-parent</b><var> keymap<a name="index-keymap_002dparent-1544"></a></var><br>
 <blockquote><p>This returns the parent keymap of <var>keymap</var>.  If <var>keymap</var>
 has no parent, <code>keymap-parent</code> returns <code>nil</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-keymap-parent</b><var> keymap parent<a name="index-set_002dkeymap_002dparent-1456"></a></var><br>
+&mdash; Function: <b>set-keymap-parent</b><var> keymap parent<a name="index-set_002dkeymap_002dparent-1545"></a></var><br>
 <blockquote><p>This sets the parent keymap of <var>keymap</var> to <var>parent</var>, and returns
 <var>parent</var>.  If <var>parent</var> is <code>nil</code>, this function gives
 <var>keymap</var> no parent at all.
@@ -99,5 +96,30 @@ for every numeric character code without modifier bits, even if it is
 <code>nil</code>, so these character's bindings are never inherited from
 the parent keymap.
 
+   <p><a name="index-keymap-inheritance-from-multiple-maps-1546"></a>  Sometimes you want to make a keymap that inherits from more than one
+map.  You can use the function <code>make-composed-keymap</code> for this.
+
+<div class="defun">
+&mdash; Function: <b>make-composed-keymap</b><var> maps &amp;optional parent<a name="index-make_002dcomposed_002dkeymap-1547"></a></var><br>
+<blockquote><p>This function returns a new keymap composed of the existing keymap(s)
+<var>maps</var>, and optionally inheriting from a parent keymap
+<var>parent</var>.  <var>maps</var> can be a single keymap or a list of more
+than one.  When looking up a key in the resulting new map, Emacs
+searches in each of the <var>maps</var> in turn, and then in <var>parent</var>,
+stopping at the first match.  A <code>nil</code> binding in any one of
+<var>maps</var> overrides any binding in <var>parent</var>, but it does not
+override any non-<code>nil</code> binding in any other of the <var>maps</var>. 
+</p></blockquote></div>
+
+<p class="noindent">For example, here is how Emacs sets the parent of
+<code>help-mode-map</code>, such that it inherits from both
+<code>button-buffer-map</code> and <code>special-mode-map</code>:
+
+<pre class="example">     (defvar help-mode-map
+       (let ((map (make-sparse-keymap)))
+         (set-keymap-parent map
+           (make-composed-keymap button-buffer-map special-mode-map))
+         ... map) ... )
+</pre>
    </body></html>
 

@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Frame Parameters - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Frames.html#Frames" title="Frames">
-<link rel="prev" href="Special-Buffer-Frames.html#Special-Buffer-Frames" title="Special Buffer Frames">
+<link rel="prev" href="Multiple-Displays.html#Multiple-Displays" title="Multiple Displays">
 <link rel="next" href="Scroll-Bars.html#Scroll-Bars" title="Scroll Bars">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -40,48 +37,39 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <a name="Frame-Parameters"></a>
 <p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Scroll-Bars.html#Scroll-Bars">Scroll Bars</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Special-Buffer-Frames.html#Special-Buffer-Frames">Special Buffer Frames</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Multiple-Displays.html#Multiple-Displays">Multiple Displays</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
 <hr>
 </div>
 
-<h3 class="section">25.11 Setting Frame Parameters</h3>
+<h3 class="section">21.11 Frame Parameters</h3>
 
-<p><a name="index-Auto_002dRaise-mode-1271"></a><a name="index-Auto_002dLower-mode-1272"></a>
-  These commands are available for controlling the window management
-behavior of the selected frame:
+<p><a name="index-default_002dframe_002dalist-1500"></a>
+  You can control the default appearance and behavior of all frames by
+specifying a default list of <dfn>frame parameters</dfn> in the variable
+<code>default-frame-alist</code>.  Its value should be a list of entries,
+each specifying a parameter name and a value for that parameter. 
+These entries take effect whenever Emacs creates a new frame,
+including the initial frame.
 
-     
-<a name="index-auto_002draise_002dmode-1273"></a>
-<dl><dt><kbd>M-x auto-raise-mode</kbd><dd>Toggle whether or not the selected frame should auto-raise.  Auto-raise
-means that every time you move the mouse onto the frame, it raises the
-frame.
+   <p><a name="index-frame-size_002c-specifying-default-1501"></a>  For example, you can add the following lines to your init file
+(see <a href="Init-File.html#Init-File">Init File</a>) to set the default frame width to 90 character
+columns, the default frame height to 40 character rows, and the
+default font to &lsquo;<samp><span class="samp">Monospace-10</span></samp>&rsquo;:
 
-     <p>Some window managers also implement auto-raise.  If you enable
-auto-raise for Emacs frames in your window manager, it will work, but
-it is beyond Emacs' control, so <code>auto-raise-mode</code> has no effect
-on it.
+<pre class="example">     (add-to-list 'default-frame-alist '(width  . 90))
+     (add-to-list 'default-frame-alist '(height . 40))
+     (add-to-list 'default-frame-alist '(font . "Monospace-10"))
+</pre>
+   <p>For a list of frame parameters and their effects, see <a href="../elisp/Frame-Parameters.html#Frame-Parameters">Frame Parameters</a>.
 
-     <p><a name="index-auto_002dlower_002dmode-1274"></a><br><dt><kbd>M-x auto-lower-mode</kbd><dd>Toggle whether or not the selected frame should auto-lower. 
-Auto-lower means that every time you move the mouse off the frame,
-the frame moves to the bottom of the stack on the screen.
+   <p><a name="index-initial_002dframe_002dalist-1502"></a>  You can also specify a list of frame parameters which apply to just
+the initial frame, by customizing the variable
+<code>initial-frame-alist</code>.
 
-     <p>The command <code>auto-lower-mode</code> has no effect on auto-lower
-implemented by the window manager.  To control that, you must use the
-appropriate window manager features. 
-</dl>
-
-   <p>In Emacs versions that use an X toolkit, the color-setting and
-font-setting functions don't affect menus and the menu bar, since they
-are displayed by their own widget classes.  To change the appearance of
-the menus and menu bar, you must use X resources (see <a href="Resources.html#Resources">Resources</a>). 
-See <a href="Colors.html#Colors">Colors</a>, regarding colors.  See <a href="Font-X.html#Font-X">Font X</a>, regarding choice of
-font.
-
-   <p>Colors, fonts, and other attributes of the frame's display can also
-be customized by setting frame parameters in the variable
-<code>default-frame-alist</code> (see <a href="Creating-Frames.html#Creating-Frames">Creating Frames</a>).  For a detailed
-description of frame parameters and customization, see <a href="../elisp/Frame-Parameters.html#Frame-Parameters">Frame Parameters</a>.
+   <p>If Emacs is compiled to use an X toolkit, frame parameters that
+specify colors and fonts don't affect menus and the menu bar, since
+those are drawn by the toolkit and not directly by Emacs.
 
    </body></html>
 

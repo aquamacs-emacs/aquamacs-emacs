@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Syntax Descriptors - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Syntax-Table-Functions.html#Syntax-Table-Functions" title="Syntax Table Functions">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,37 +43,48 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Syntax-Tables.html#Syntax-Tables">Synta
 
 <h3 class="section">35.2 Syntax Descriptors</h3>
 
-<p><a name="index-syntax-class-3134"></a>
-  This section describes the syntax classes and flags that denote the
-syntax of a character, and how they are represented as a <dfn>syntax
-descriptor</dfn>, which is a Lisp string that you pass to
-<code>modify-syntax-entry</code> to specify the syntax you want.
-
-   <p>The syntax table specifies a syntax class for each character.  There
+<p><a name="index-syntax-class-3420"></a>
+  The <dfn>syntax class</dfn> of a character describes its syntactic role. 
+Each syntax table specifies the syntax class of each character.  There
 is no necessary relationship between the class of a character in one
 syntax table and its class in any other table.
 
-   <p>Each class is designated by a mnemonic character, which serves as the
-name of the class when you need to specify a class.  Usually the
-designator character is one that is often assigned that class; however,
-its meaning as a designator is unvarying and independent of what syntax
-that character currently has.  Thus, &lsquo;<samp><span class="samp">\</span></samp>&rsquo; as a designator character
-always gives &ldquo;escape character&rdquo; syntax, regardless of what syntax
-&lsquo;<samp><span class="samp">\</span></samp>&rsquo; currently has.
+   <p>Each syntax class is designated by a mnemonic character, which
+serves as the name of the class when you need to specify a class. 
+Usually, this designator character is one that is often assigned that
+class; however, its meaning as a designator is unvarying and
+independent of what syntax that character currently has.  Thus,
+&lsquo;<samp><span class="samp">\</span></samp>&rsquo; as a designator character always means &ldquo;escape character&rdquo;
+syntax, regardless of whether the &lsquo;<samp><span class="samp">\</span></samp>&rsquo; character actually has that
+syntax in the current syntax table. 
+See <a href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class Table</a>, for a list of syntax classes and their
+designator characters.
 
-   <p><a name="index-syntax-descriptor-3135"></a>  A syntax descriptor is a Lisp string that specifies a syntax class, a
-matching character (used only for the parenthesis classes) and flags. 
-The first character is the designator for a syntax class.  The second
-character is the character to match; if it is unused, put a space there. 
-Then come the characters for any desired flags.  If no matching
-character or flags are needed, one character is sufficient.
+   <p><a name="index-syntax-descriptor-3421"></a>  A <dfn>syntax descriptor</dfn> is a Lisp string that describes the syntax
+class and other syntactic properties of a character.  When you want to
+modify the syntax of a character, that is done by calling the function
+<code>modify-syntax-entry</code> and passing a syntax descriptor as one of
+its arguments (see <a href="Syntax-Table-Functions.html#Syntax-Table-Functions">Syntax Table Functions</a>).
+
+   <p>The first character in a syntax descriptor must be a syntax class
+designator character.  The second character, if present, specifies a
+matching character (e.g., in Lisp, the matching character for
+&lsquo;<samp><span class="samp">(</span></samp>&rsquo; is &lsquo;<samp><span class="samp">)</span></samp>&rsquo;); a space specifies that there is no matching
+character.  Then come characters specifying additional syntax
+properties (see <a href="Syntax-Flags.html#Syntax-Flags">Syntax Flags</a>).
+
+   <p>If no matching character or flags are needed, only one character
+(specifying the syntax class) is sufficient.
 
    <p>For example, the syntax descriptor for the character &lsquo;<samp><span class="samp">*</span></samp>&rsquo; in C
-mode is &lsquo;<samp><span class="samp">.&nbsp;23<!-- /@w --></span></samp>&rsquo; (i.e., punctuation, matching character slot
+mode is <code>". 23"</code> (i.e., punctuation, matching character slot
 unused, second character of a comment-starter, first character of a
 comment-ender), and the entry for &lsquo;<samp><span class="samp">/</span></samp>&rsquo; is &lsquo;<samp><span class="samp">.&nbsp;14<!-- /@w --></span></samp>&rsquo; (i.e.,
 punctuation, matching character slot unused, first character of a
 comment-starter, second character of a comment-ender).
+
+   <p>Emacs also defines <dfn>raw syntax descriptors</dfn>, which are used to
+describe syntax classes at a lower level.  See <a href="Syntax-Table-Internals.html#Syntax-Table-Internals">Syntax Table Internals</a>.
 
 <ul class="menu">
 <li><a accesskey="1" href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class Table</a>:       Table of syntax classes. 

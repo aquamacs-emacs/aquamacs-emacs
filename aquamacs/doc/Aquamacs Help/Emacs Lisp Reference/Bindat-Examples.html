@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Bindat Examples - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="prev" href="Bindat-Functions.html#Bindat-Functions" title="Bindat Functions">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,9 +41,15 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Byte-Packing.html#Byte-Packing">Byte Pa
 
 <h4 class="subsection">37.20.3 Examples of Byte Unpacking and Packing</h4>
 
+<!-- FIXME?  This seems a very long example for something that is not used -->
+<!-- very often.  As of 24.1, gdb-mi.el is the only user of bindat.el in Emacs. -->
+<!-- Maybe one or both of these examples should just be moved to the -->
+<!-- commentary of bindat.el. -->
 <p>Here is a complete example of byte unpacking and packing:
 
-<pre class="lisp">     (defvar fcookie-index-spec
+<pre class="lisp">     (require 'bindat)
+     
+     (defvar fcookie-index-spec
        '((:version  u32)
          (:count    u32)
          (:longest  u32)
@@ -54,16 +57,14 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Byte-Packing.html#Byte-Packing">Byte Pa
          (:flags    u32)
          (:delim    u8)
          (:ignored  fill 3)
-         (:offset   repeat (:count)
-                    (:foo u32)))
+         (:offset   repeat (:count) (:foo u32)))
        "Description of a fortune cookie index file's contents.")
      
      (defun fcookie (cookies &amp;optional index)
        "Display a random fortune cookie from file COOKIES.
      Optional second arg INDEX specifies the associated index
-     filename, which is by default constructed by appending
-     \".dat\" to COOKIES.  Display cookie text in possibly
-     new buffer \"*Fortune Cookie: BASENAME*\" where BASENAME
+     filename, by default \"COOKIES.dat\".  Display cookie text
+     in buffer \"*Fortune Cookie: BASENAME*\", where BASENAME
      is COOKIES without the directory part."
        (interactive "fCookies file: ")
        (let* ((info (with-temp-buffer
@@ -86,10 +87,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Byte-Packing.html#Byte-Packing">Byte Pa
      
      (defun fcookie-create-index (cookies &amp;optional index delim)
        "Scan file COOKIES, and write out its index file.
-     Optional second arg INDEX specifies the index filename,
-     which is by default constructed by appending \".dat\" to
-     COOKIES.  Optional third arg DELIM specifies the unibyte
-     character which, when found on a line of its own in
+     Optional arg INDEX specifies the index filename, which by
+     default is \"COOKIES.dat\".  Optional arg DELIM specifies the
+     unibyte character that, when found on a line of its own in
      COOKIES, indicates the border between entries."
        (interactive "fCookies file: ")
        (setq delim (or delim ?%))
@@ -125,8 +125,8 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Byte-Packing.html#Byte-Packing">Byte Pa
            (let ((coding-system-for-write 'raw-text-unix))
              (write-file (or index (concat cookies ".dat")))))))
 </pre>
-   <p>Following is an example of defining and unpacking a complex structure. 
-Consider the following C structures:
+   <p>The following is an example of defining and unpacking a complex
+structure.  Consider the following C structures:
 
 <pre class="example">     struct header {
          unsigned long    dest_ip;
@@ -138,21 +138,21 @@ Consider the following C structures:
      struct data {
          unsigned char    type;
          unsigned char    opcode;
-         unsigned short   length;  /* In network byte order */
+         unsigned short   length;  /* in network byte order  */
          unsigned char    id[8];   /* null-terminated string  */
          unsigned char    data[/* (length + 3) &amp; ~3 */];
      };
      
      struct packet {
          struct header    header;
-         unsigned long    counters[2];  /* In little endian order */
+         unsigned long    counters[2];  /* in little endian order  */
          unsigned char    items;
          unsigned char    filler[3];
          struct data      item[/* items */];
      
      };
 </pre>
-   <p>The corresponding data layout specification:
+   <p>The corresponding data layout specification is:
 
 <pre class="lisp">     (setq header-spec
            '((dest-ip   ip)
@@ -163,20 +163,20 @@ Consider the following C structures:
      (setq data-spec
            '((type      u8)
              (opcode    u8)
-             (length    u16)  ;; network byte order
+             (length    u16)  ; network byte order
              (id        strz 8)
              (data      vec (length))
              (align     4)))
      
      (setq packet-spec
            '((header    struct header-spec)
-             (counters  vec 2 u32r)   ;; little endian order
+             (counters  vec 2 u32r)   ; little endian order
              (items     u8)
              (fill      3)
              (item      repeat (items)
                         (struct data-spec))))
 </pre>
-   <p>A binary data representation:
+   <p>A binary data representation is:
 
 <pre class="lisp">     (setq binary-data
            [ 192 168 1 100 192 168 1 101 01 28 21 32
@@ -184,7 +184,7 @@ Consider the following C structures:
              2 3 0 5 ?A ?B ?C ?D ?E ?F 0 0 1 2 3 4 5 0 0 0
              1 4 0 7 ?B ?C ?D ?E ?F ?G 0 0 6 7 8 9 10 11 12 0 ])
 </pre>
-   <p>The corresponding decoded structure:
+   <p>The corresponding decoded structure is:
 
 <pre class="lisp">     (setq decoded (bindat-unpack packet-spec binary-data))
           &rArr;
@@ -206,16 +206,14 @@ Consider the following C structures:
              (opcode . 4)
              (type . 1))))
 </pre>
-   <p>Fetching data from this structure:
+   <p>An example of fetching data from this structure:
 
 <pre class="lisp">     (bindat-get-field decoded 'item 1 'id)
           &rArr; "BCDEFG"
 </pre>
    <!-- *-texinfo-*- -->
 <!-- This is part of the GNU Emacs Lisp Reference Manual. -->
-<!-- Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1998, 1999, 2000, 2001, -->
-<!-- 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 -->
-<!-- Free Software Foundation, Inc. -->
+<!-- Copyright (C) 1990-1995, 1998-2013 Free Software Foundation, Inc. -->
 <!-- See the file elisp.texi for copying conditions. -->
    </body></html>
 

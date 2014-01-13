@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Cell Justification - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Text-Based-Tables.html#Text-Based-Tables" title="Text Based Tables">
 <link rel="prev" href="Cell-Commands.html#Cell-Commands" title="Cell Commands">
-<link rel="next" href="Row-Commands.html#Row-Commands" title="Row Commands">
+<link rel="next" href="Table-Rows-and-Columns.html#Table-Rows-and-Columns" title="Table Rows and Columns">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -39,47 +36,41 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <div class="node">
 <a name="Cell-Justification"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Row-Commands.html#Row-Commands">Row Commands</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Table-Rows-and-Columns.html#Table-Rows-and-Columns">Table Rows and Columns</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Cell-Commands.html#Cell-Commands">Cell Commands</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Text-Based-Tables.html#Text-Based-Tables">Text Based Tables</a>
 <hr>
 </div>
 
-<h4 class="subsection">29.13.5 Cell Justification</h4>
+<h4 class="subsection">25.14.5 Cell Justification</h4>
 
-<p><a name="index-cell-text-justification-1922"></a>
-  You can specify text justification for each cell.  The justification
-is remembered independently for each cell and the subsequent editing
-of cell contents is subject to the specified justification.
+<p><a name="index-justification-in-text_002dbased-tables-2171"></a>
+  The command <kbd>M-x table-justify</kbd> imposes <dfn>justification</dfn> on
+one or more cells in a text-based table.  Justification determines how
+the text in the cell is aligned, relative to the edges of the cell. 
+Each cell in a table can be separately justified.
 
-   <p><a name="index-table_002djustify-1923"></a>  The command <code>table-justify</code> ask you to specify what to justify:
-a cell, a column, or a row.  If you select cell justification, this
-command sets the justification only for the current cell.  Selecting
-column or row justification sets the justification for all the cells
-within a column or row respectively.  The command then ask you which
-kind of justification to apply: <code>left</code>, <code>center</code>,
-<code>right</code>, <code>top</code>, <code>middle</code>, <code>bottom</code>, or
-<code>none</code>.  Horizontal justification and vertical justification are
-specified independently.  The options <code>left</code>, <code>center</code>, and
-<code>right</code> specify horizontal justification while the options
-<code>top</code>, <code>middle</code>, <code>bottom</code>, and <code>none</code> specify
-vertical justification.  The vertical justification <code>none</code>
-effectively removes vertical justification.  Horizontal justification
-must be one of <code>left</code>, <code>center</code>, or <code>right</code>.
+   <p><a name="index-table_002djustify-2172"></a>  <kbd>M-x table-justify</kbd> first prompts for what to justify; the
+options are &lsquo;<samp><span class="samp">cell</span></samp>&rsquo; (just the current cell), &lsquo;<samp><span class="samp">column</span></samp>&rsquo; (all
+cells in the current table column) and &lsquo;<samp><span class="samp">row</span></samp>&rsquo; (all cells in the
+current table row).  The command then prompts for the justification
+style; the options are <code>left</code>, <code>center</code>, <code>right</code>,
+<code>top</code>, <code>middle</code>, <code>bottom</code>, or <code>none</code> (meaning no
+vertical justification).
 
-   <p><a name="index-table_002ddetect_002dcell_002dalignment-1924"></a>  Justification information is stored in the buffer as a part of text
-property.  Therefore, this information is ephemeral and does not
-survive through the loss of the buffer (closing the buffer and
-revisiting the buffer erase any previous text properties).  To
-countermand for this, the command <code>table-recognize</code> and other
-recognition commands (see <a href="Table-Recognition.html#Table-Recognition">Table Recognition</a>) are equipped with a
-convenience feature (turned on by default).  During table recognition,
-the contents of a cell are examined to determine which justification
-was originally applied to the cell and then applies this justification
-to the cell.  This is a speculative algorithm and is therefore not
-perfect, however, the justification is deduced correctly most of the
-time.  To disable this feature, customize the variable
-<code>table-detect-cell-alignment</code> and set it to <code>nil</code>.
+   <p>Horizontal and vertical justification styles are specified
+independently, and both types can be in effect simultaneously; for
+instance, you can call <kbd>M-x table-justify</kbd> twice, once to specify
+<code>right</code> justification and once to specify <code>bottom</code>
+justification, to align the contents of a cell to the bottom right.
+
+   <p><a name="index-table_002ddetect_002dcell_002dalignment-2173"></a>  The justification style is stored in the buffer as a text property,
+and is lost when you kill the buffer or exit Emacs.  However, the
+table recognition commands, such as <kbd>M-x table-recognize</kbd>
+(see <a href="Table-Recognition.html#Table-Recognition">Table Recognition</a>), attempt to determine and re-apply each
+cell's justification style, by examining its contents.  To disable
+this feature, change the variable <code>table-detect-cell-alignment</code>
+to <code>nil</code>.
 
    </body></html>
 

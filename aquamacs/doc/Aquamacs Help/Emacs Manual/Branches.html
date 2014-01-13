@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Branches - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Version-Control.html#Version-Control" title="Version Control">
 <link rel="prev" href="VC-Directory-Mode.html#VC-Directory-Mode" title="VC Directory Mode">
-<link rel="next" href="Remote-Repositories.html#Remote-Repositories" title="Remote Repositories">
+<link rel="next" href="Miscellaneous-VC.html#Miscellaneous-VC" title="Miscellaneous VC">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -39,54 +36,34 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <div class="node">
 <a name="Branches"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Remote-Repositories.html#Remote-Repositories">Remote Repositories</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Miscellaneous-VC.html#Miscellaneous-VC">Miscellaneous VC</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="VC-Directory-Mode.html#VC-Directory-Mode">VC Directory Mode</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Version-Control.html#Version-Control">Version Control</a>
 <hr>
 </div>
 
-<h4 class="subsection">32.1.8 Multiple Branches of a File</h4>
+<h4 class="subsection">28.1.11 Version Control Branches</h4>
 
-<p><a name="index-branch-_0028version-control_0029-2525"></a><a name="index-trunk-_0028version-control_0029-2526"></a>
-  One use of version control is to maintain multiple &ldquo;current&rdquo;
-revisions of a file.  For example, you might have different revisions of a
-program in which you are gradually adding various unfinished new
-features.  Each such independent line of development is called a
-<dfn>branch</dfn>.  VC allows you to create branches, switch between
-different branches, and merge changes from one branch to another. 
-Please note, however, that branches are not supported for SCCS.
+<p><a name="index-branch-_0028version-control_0029-2827"></a>
+  One use of version control is to support multiple independent lines
+of development, which are called <dfn>branches</dfn>.  Amongst other
+things, branches can be used for maintaining separate &ldquo;stable&rdquo; and
+&ldquo;development&rdquo; versions of a program, and for developing unrelated
+features in isolation from one another.
 
-   <p>A file's main line of development is usually called the <dfn>trunk</dfn>. 
-You can create multiple branches from the trunk.  How the difference
-between trunk and branch is made visible is dependent on whether the
-VCS uses dot-pair or monotonic version IDs.
-
-   <p>In VCSes with dot-pair revision IDs, the revisions on the trunk are
-normally IDed 1.1, 1.2, 1.3, etc.  At any such revision, you can
-start an independent branch.  A branch starting at revision 1.2 would
-have revision ID 1.2.1.1, and consecutive revisions on this branch
-would have IDs 1.2.1.2, 1.2.1.3, 1.2.1.4, and so on.  If there is
-a second branch also starting at revision 1.2, it would consist of
-revisions 1.2.2.1, 1.2.2.2, 1.2.2.3, etc.
-
-   <p>In VCSes with monotonic revision IDs, trunk revisions are IDed as
-1, 2, 3, etc.  A branch from (say) revision 2 might start with 2.1 and
-continue through 2.2, 2.3, etc.  But naming conventions for branches
-and subbranches vary widely on these systems, and some (like
-Mercurial) never depart from the monotonic integer sequence at all. 
-Consult the documentation of the VCS you are using.
-
-   <p><a name="index-head-revision-2527"></a>  If you omit the final component of a dot-pair revision ID, that is called a
-<dfn>branch ID</dfn>.  It refers to the highest existing revision on that
-branch&mdash;the <dfn>head revision</dfn> of that branch.  The branches in the
-dot-pair example above have branch IDs 1.2.1 and 1.2.2.
+   <p>VC's support for branch operations is currently fairly limited.  For
+decentralized version control systems, it provides commands for
+<dfn>updating</dfn> one branch with the contents of another, and for
+<dfn>merging</dfn> the changes made to two different branches
+(see <a href="Merging.html#Merging">Merging</a>).  For centralized version control systems, it
+supports checking out different branches and committing into new or
+different branches.
 
 <ul class="menu">
 <li><a accesskey="1" href="Switching-Branches.html#Switching-Branches">Switching Branches</a>:     How to get to another existing branch. 
-<li><a accesskey="2" href="Creating-Branches.html#Creating-Branches">Creating Branches</a>:      How to start a new branch. 
+<li><a accesskey="2" href="VC-Pull.html#VC-Pull">VC Pull</a>:                Updating the contents of a branch. 
 <li><a accesskey="3" href="Merging.html#Merging">Merging</a>:                Transferring changes between branches. 
-<li><a accesskey="4" href="Multi_002dUser-Branching.html#Multi_002dUser-Branching">Multi-User Branching</a>:   Multiple users working at multiple branches
-                            in parallel. 
+<li><a accesskey="4" href="Creating-Branches.html#Creating-Branches">Creating Branches</a>:      How to start a new branch. 
 </ul>
 
    </body></html>

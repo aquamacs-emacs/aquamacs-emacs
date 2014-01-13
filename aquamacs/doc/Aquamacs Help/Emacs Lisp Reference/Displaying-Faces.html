@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Displaying Faces - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Face-Remapping.html#Face-Remapping" title="Face Remapping">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,8 +43,12 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Faces.html#Faces">Faces</a>
 
 <h4 class="subsection">38.12.4 Displaying Faces</h4>
 
-<p>Here is how Emacs determines the face to use for displaying any
-given piece of text:
+<p>When Emacs displays a given piece of text, the visual appearance of
+the text may be determined by faces drawn from different sources.  If
+these various sources together specify more than one face for a
+particular character, Emacs merges the attributes of the various
+faces.  Here is the order in which Emacs merges the faces, from
+highest to lowest priority:
 
      <ul>
 <li>If the text consists of a special glyph, the glyph can specify a
@@ -57,11 +58,10 @@ particular face.  See <a href="Glyphs.html#Glyphs">Glyphs</a>.
 the <code>region</code> face.  See <a href="../emacs/Standard-Faces.html#Standard-Faces">Standard Faces</a>.
 
      <li>If the text lies within an overlay with a non-<code>nil</code> <code>face</code>
-property, Emacs applies the face or face attributes specified by that
-property.  If the overlay has a <code>mouse-face</code> property and the
-mouse is &ldquo;near enough&rdquo; to the overlay, Emacs applies the face or
-face attributes specified by the <code>mouse-face</code> property instead. 
-See <a href="Overlay-Properties.html#Overlay-Properties">Overlay Properties</a>.
+property, Emacs applies the face(s) specified by that property.  If
+the overlay has a <code>mouse-face</code> property and the mouse is &ldquo;near
+enough&rdquo; to the overlay, Emacs applies the face or face attributes
+specified by the <code>mouse-face</code> property instead.  See <a href="Overlay-Properties.html#Overlay-Properties">Overlay Properties</a>.
 
      <p>When multiple overlays cover one character, an overlay with higher
 priority overrides those with lower priority.  See <a href="Overlays.html#Overlays">Overlays</a>.
@@ -79,14 +79,11 @@ For a header line, Emacs applies the <code>header-line</code> face.
 steps, Emacs applies the attribute of the <code>default</code> face. 
 </ul>
 
-   <p>If these various sources together specify more than one face for a
-particular character, Emacs merges the attributes of the various faces
-specified.  For each attribute, Emacs tries using the above order
-(i.e., first the face of any special glyph; then the face for region
-highlighting, if appropriate; then faces specified by overlays, then
-faces specified by text properties, then the <code>mode-line</code> or
-<code>mode-line-inactive</code> or <code>header-line</code> face, if appropriate,
-and finally the <code>default</code> face).
+   <p>At each stage, if a face has a valid <code>:inherit</code> attribute,
+Emacs treats any attribute with an <code>unspecified</code> value as having
+the corresponding value drawn from the parent face(s).  see <a href="Face-Attributes.html#Face-Attributes">Face Attributes</a>.  Note that the parent face(s) may also leave the
+attribute unspecified; in that case, the attribute remains unspecified
+at the next level of face merging.
 
    </body></html>
 

@@ -1,21 +1,19 @@
 <html lang="en">
 <head>
 <title>Minor Modes - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Customization.html#Customization" title="Customization">
-<link rel="next" href="Easy-Customization.html#Easy-Customization" title="Easy Customization">
+<link rel="up" href="Modes.html#Modes" title="Modes">
+<link rel="prev" href="Major-Modes.html#Major-Modes" title="Major Modes">
+<link rel="next" href="Choosing-Modes.html#Choosing-Modes" title="Choosing Modes">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -38,46 +36,61 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <div class="node">
 <a name="Minor-Modes"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Easy-Customization.html#Easy-Customization">Easy Customization</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Customization</a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Choosing-Modes.html#Choosing-Modes">Choosing Modes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Major-Modes.html#Major-Modes">Major Modes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Modes.html#Modes">Modes</a>
 <hr>
 </div>
 
-<h3 class="section">57.1 Minor Modes</h3>
+<h3 class="section">23.2 Minor Modes</h3>
 
-<p><a name="index-minor-modes-3978"></a><a name="index-mode_002c-minor-3979"></a>
-  Minor modes are optional features which you can turn on or off.  For
-example, Auto Fill mode is a minor mode in which &lt;SPC&gt; breaks
-lines between words as you type.  Minor modes are independent of one
-another and of the selected major mode.  Most minor modes say in the
-mode line when they are enabled; for example, &lsquo;<samp><span class="samp">Fill</span></samp>&rsquo; in the mode
-line means that Auto Fill mode is enabled.
+<p><a name="index-minor-modes-1724"></a><a name="index-mode_002c-minor-1725"></a>
+  A minor mode is an optional editing mode that alters the behavior of
+Emacs in some well-defined way.  Unlike major modes, any number of
+minor modes can be in effect at any time.  Some minor modes are
+<dfn>buffer-local</dfn>, and can be turned on (enabled) in certain buffers
+and off (disabled) in others.  Other minor modes are <dfn>global</dfn>:
+while enabled, they affect everything you do in the Emacs session, in
+all buffers.  Most minor modes are disabled by default, but a few are
+enabled by default.
 
-   <p>Each minor mode is associated with a command, called the <dfn>mode
-command</dfn>, which turns it on or off.  The name of this command consists
-of the name of the minor mode, followed by &lsquo;<samp><span class="samp">-mode</span></samp>&rsquo;; for instance,
-the mode command for Auto Fill mode is <code>auto-fill-mode</code>.  Calling
-the minor mode command with no prefix argument <dfn>toggles</dfn> the mode,
-turning it on if it was off, and off if it was on.  A positive
-argument always turns the mode on, and a zero or negative argument
-always turns it off.  Mode commands are usually invoked with
-<kbd>M-x</kbd>, but you can bind keys to them if you wish (see <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a>).
+   <p>Most buffer-local minor modes say in the mode line when they are
+enabled, just after the major mode indicator.  For example,
+&lsquo;<samp><span class="samp">Fill</span></samp>&rsquo; in the mode line means that Auto Fill mode is enabled. 
+See <a href="Mode-Line.html#Mode-Line">Mode Line</a>.
+
+   <p><a name="index-mode-commands-for-minor-modes-1726"></a>  Like major modes, each minor mode is associated with a <dfn>mode
+command</dfn>, whose name consists of the mode name followed by
+&lsquo;<samp><span class="samp">-mode</span></samp>&rsquo;.  For instance, the mode command for Auto Fill mode is
+<code>auto-fill-mode</code>.  But unlike a major mode command, which simply
+enables the mode, the mode command for a minor mode can either enable
+or disable it:
+
+     <ul>
+<li>If you invoke the mode command directly with no prefix argument
+(either via <kbd>M-x</kbd>, or by binding it to a key and typing that key;
+see <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a>), that <dfn>toggles</dfn> the minor mode.  The minor
+mode is turned on if it was off, and turned off if it was on.
+
+     <li>If you invoke the mode command with a prefix argument, the minor mode
+is unconditionally turned off if that argument is zero or negative;
+otherwise, it is unconditionally turned on.
+
+     <li>If the mode command is called via Lisp, the minor mode is
+unconditionally turned on if the argument is omitted or <code>nil</code>. 
+This makes it easy to turn on a minor mode from a major mode's mode
+hook (see <a href="Major-Modes.html#Major-Modes">Major Modes</a>).  A non-<code>nil</code> argument is handled like
+an interactive prefix argument, as described above. 
+</ul>
 
    <p>Most minor modes also have a <dfn>mode variable</dfn>, with the same name
 as the mode command.  Its value is non-<code>nil</code> if the mode is
-enabled, and <code>nil</code> if it is disabled.  In some minor modes&mdash;but
-not all&mdash;the value of the variable alone determines whether the mode
-is active: the mode command works simply by setting the variable, and
-changing the value of the variable has the same effect as calling the
-mode command.  Because not all minor modes work this way, we recommend
-that you avoid changing the mode variables directly; use the mode
-commands instead.
-
-   <p>Some minor modes are <dfn>buffer-local</dfn>: they apply only to the
-current buffer, so you can enable the mode in certain buffers and not
-others.  Other minor modes are <dfn>global</dfn>: while enabled, they
-affect everything you do in the Emacs session, in all buffers.  Some
-global minor modes are enabled by default.
+enabled, and <code>nil</code> if it is disabled.  In general, you should not
+try to enable or disable the mode by changing the value of the mode
+variable directly in Lisp; you should run the mode command instead. 
+However, setting the mode variable through the Customize interface
+(see <a href="Easy-Customization.html#Easy-Customization">Easy Customization</a>) will always properly enable or disable
+the mode, since Customize automatically runs the mode command for you.
 
    <p>The following is a list of some buffer-local minor modes:
 
@@ -92,7 +105,7 @@ becoming too long.  See <a href="Filling.html#Filling">Filling</a>.
 amount of work you can lose in case of a crash.  See <a href="Auto-Save.html#Auto-Save">Auto Save</a>.
 
      <li>Enriched mode enables editing and saving of formatted text. 
-See <a href="Formatted-Text.html#Formatted-Text">Formatted Text</a>.
+See <a href="Enriched-Text.html#Enriched-Text">Enriched Text</a>.
 
      <li>Flyspell mode automatically highlights misspelled words. 
 See <a href="Spelling.html#Spelling">Spelling</a>.
@@ -101,13 +114,12 @@ See <a href="Spelling.html#Spelling">Spelling</a>.
 programs.  It is enabled globally by default, but you can disable it
 in individual buffers.  See <a href="Faces.html#Faces">Faces</a>.
 
-     <p><a name="index-linum_002dmode-3980"></a><a name="index-Linum-mode-3981"></a><li>Linum mode displays each line's line number in the window's left
-margin.  Its mode command is <code>linum-mode</code>.
+     <p><a name="index-linum_002dmode-1727"></a><a name="index-Linum-mode-1728"></a><li>Linum mode displays each line's line number in the window's left margin.
 
      <li>Outline minor mode provides similar facilities to the major mode
 called Outline mode.  See <a href="Outline-Mode.html#Outline-Mode">Outline Mode</a>.
 
-     <p><a name="index-Overwrite-mode-3982"></a><a name="index-mode_002c-Overwrite-3983"></a><a name="index-overwrite_002dmode-3984"></a><a name="index-INSERT-3985"></a><li>Overwrite mode causes ordinary printing characters to replace existing
+     <p><a name="index-Overwrite-mode-1729"></a><a name="index-mode_002c-Overwrite-1730"></a><a name="index-overwrite_002dmode-1731"></a><a name="index-INSERT-1732"></a><li>Overwrite mode causes ordinary printing characters to replace existing
 text instead of shoving it to the right.  For example, if point is in
 front of the &lsquo;<samp><span class="samp">B</span></samp>&rsquo; in &lsquo;<samp><span class="samp">FOOBAR</span></samp>&rsquo;, then in Overwrite mode typing
 a <kbd>G</kbd> changes it to &lsquo;<samp><span class="samp">FOOGAR</span></samp>&rsquo;, instead of producing
@@ -117,7 +129,7 @@ digit&mdash;this gives you a way to insert a character instead of
 replacing an existing character.  The mode command,
 <code>overwrite-mode</code>, is bound to the &lt;Insert&gt; key.
 
-     <p><a name="index-binary_002doverwrite_002dmode-3986"></a><li>Binary Overwrite mode is a variant of Overwrite mode for editing
+     <p><a name="index-binary_002doverwrite_002dmode-1733"></a><li>Binary Overwrite mode is a variant of Overwrite mode for editing
 binary files; it treats newlines and tabs like other characters, so
 that they overwrite other characters and can be overwritten by them. 
 In Binary Overwrite mode, digits after <kbd>C-q</kbd> specify an octal
@@ -127,11 +139,7 @@ character code, as usual.
 wrapped at word boundaries.  See <a href="Visual-Line-Mode.html#Visual-Line-Mode">Visual Line Mode</a>. 
 </ul>
 
-   <p>Here are some useful global minor modes.  Since Line Number mode and
-Transient Mark mode can be enabled or disabled just by setting the
-value of the minor mode variable, you <em>can</em> set them differently
-for particular buffers, by explicitly making the corresponding
-variable local in those buffers.  See <a href="Locals.html#Locals">Locals</a>.
+<p class="noindent">And here are some useful global minor modes:
 
      <ul>
 <li>Column Number mode enables display of the current column number in the

@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Search-based Fontification - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Customizing-Keywords.html#Customizing-Keywords" title="Customizing Keywords">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,16 +44,18 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Font-Lock-Mode.html#Font-Lock-Mode">Fon
 
 <h4 class="subsection">23.6.2 Search-based Fontification</h4>
 
-<p>The most important variable for customizing Font Lock mode is
-<code>font-lock-keywords</code>.  It specifies the search criteria for
-search-based fontification.  You should specify the value of this
-variable with <var>keywords</var> in <code>font-lock-defaults</code>.
+<p>The variable which directly controls search-based fontification is
+<code>font-lock-keywords</code>, which is typically specified via the
+<var>keywords</var> element in <code>font-lock-defaults</code>.
 
 <div class="defun">
-&mdash; Variable: <b>font-lock-keywords</b><var><a name="index-font_002dlock_002dkeywords-1667"></a></var><br>
-<blockquote><p>This variable's value is a list of the keywords to highlight.  Be
-careful when composing regular expressions for this list; a poorly
-written pattern can dramatically slow things down! 
+&mdash; Variable: <b>font-lock-keywords</b><var><a name="index-font_002dlock_002dkeywords-1782"></a></var><br>
+<blockquote><p>The value of this variable is a list of the keywords to highlight.  Lisp
+programs should not set this variable directly.  Normally, the value is
+automatically set by Font Lock mode, using the <var>keywords</var> element in
+<code>font-lock-defaults</code>.  The value can also be altered using the
+functions <code>font-lock-add-keywords</code> and
+<code>font-lock-remove-keywords</code> (see <a href="Customizing-Keywords.html#Customizing-Keywords">Customizing Keywords</a>). 
 </p></blockquote></div>
 
    <p>Each element of <code>font-lock-keywords</code> specifies how to find
@@ -78,9 +77,10 @@ forms:
           ;; <span class="roman">using </span><code>font-lock-keyword-face</code><span class="roman">.</span>
           "\\&lt;foo\\&gt;"
 </pre>
-     <p>The function <code>regexp-opt</code> (see <a href="Regexp-Functions.html#Regexp-Functions">Regexp Functions</a>) is useful
-for calculating optimal regular expressions to match a number of
-different keywords.
+     <p>Be careful when composing these regular expressions; a poorly written
+pattern can dramatically slow things down!  The function
+<code>regexp-opt</code> (see <a href="Regexp-Functions.html#Regexp-Functions">Regexp Functions</a>) is useful for calculating
+optimal regular expressions to match several keywords.
 
      <br><dt><var>function</var><dd>Find text by calling <var>function</var>, and highlight the matches
 it finds using <code>font-lock-keyword-face</code>.
@@ -242,7 +242,7 @@ the value of <code>font-lock-keywords-case-fold-search</code> which says
 whether search-based fontification should be case-insensitive.
 
 <div class="defun">
-&mdash; Variable: <b>font-lock-keywords-case-fold-search</b><var><a name="index-font_002dlock_002dkeywords_002dcase_002dfold_002dsearch-1668"></a></var><br>
+&mdash; Variable: <b>font-lock-keywords-case-fold-search</b><var><a name="index-font_002dlock_002dkeywords_002dcase_002dfold_002dsearch-1783"></a></var><br>
 <blockquote><p>Non-<code>nil</code> means that regular expression matching for the sake of
 <code>font-lock-keywords</code> should be case-insensitive. 
 </p></blockquote></div>

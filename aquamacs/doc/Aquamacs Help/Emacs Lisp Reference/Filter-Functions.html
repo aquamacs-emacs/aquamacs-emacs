@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Filter Functions - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Decoding-Output.html#Decoding-Output" title="Decoding Output">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,7 +43,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Output-from-Processes.html#Output-from-
 
 <h4 class="subsection">37.9.2 Process Filter Functions</h4>
 
-<p><a name="index-filter-function-3334"></a><a name="index-process-filter-3335"></a>
+<p><a name="index-filter-function-3608"></a><a name="index-process-filter-3609"></a>
   A process <dfn>filter function</dfn> is a function that receives the
 standard output from the associated process.  If a process has a filter,
 then <em>all</em> output from that process is passed to the filter.  The
@@ -55,14 +52,16 @@ there is no filter.
 
    <p>The filter function can only be called when Emacs is waiting for
 something, because process output arrives only at such times.  Emacs
-waits when reading terminal input, in <code>sit-for</code> and
-<code>sleep-for</code> (see <a href="Waiting.html#Waiting">Waiting</a>), and in <code>accept-process-output</code>
-(see <a href="Accepting-Output.html#Accepting-Output">Accepting Output</a>).
+waits when reading terminal input (see the function
+<code>waiting-for-user-input-p</code>), in <code>sit-for</code> and
+<code>sleep-for</code> (see <a href="Waiting.html#Waiting">Waiting</a>), and in
+<code>accept-process-output</code> (see <a href="Accepting-Output.html#Accepting-Output">Accepting Output</a>).
 
    <p>A filter function must accept two arguments: the associated process
 and a string, which is output just received from it.  The function is
 then free to do whatever it chooses with the output.
 
+<!-- Note this text is duplicated in the sentinels section. -->
    <p>Quitting is normally inhibited within a filter function&mdash;otherwise,
 the effect of typing <kbd>C-g</kbd> at command level or to quit a user
 command would be unpredictable.  If you want to permit quitting inside
@@ -73,37 +72,33 @@ cases, the right way to do this is with the macro
    <p>If an error happens during execution of a filter function, it is
 caught automatically, so that it doesn't stop the execution of whatever
 program was running when the filter function was started.  However, if
-<code>debug-on-error</code> is non-<code>nil</code>, the error-catching is turned
-off.  This makes it possible to use the Lisp debugger to debug the
+<code>debug-on-error</code> is non-<code>nil</code>, errors are not caught. 
+This makes it possible to use the Lisp debugger to debug the
 filter function.  See <a href="Debugger.html#Debugger">Debugger</a>.
 
-   <p>Many filter functions sometimes or always insert the text in the
+   <p>Many filter functions sometimes (or always) insert the output in the
 process's buffer, mimicking the actions of Emacs when there is no
-filter.  Such filter functions need to use <code>set-buffer</code> in order to
-be sure to insert in that buffer.  To avoid setting the current buffer
-semipermanently, these filter functions must save and restore the
-current buffer.  They should also check whether the buffer is still
-alive, update the process marker, and in some cases update the value
-of point.  Here is how to do these things:
+filter.  Such filter functions need to make sure that they save the
+current buffer, select the correct buffer (if different) before
+inserting output, and then restore the original buffer. 
+They should also check whether the buffer is still alive, update the
+process marker, and in some cases update the value of point.  Here is
+how to do these things:
 
+   <p><a name="Process-Filter-Example"></a>
 <pre class="smallexample">     (defun ordinary-insertion-filter (proc string)
        (when (buffer-live-p (process-buffer proc))
          (with-current-buffer (process-buffer proc)
            (let ((moving (= (point) (process-mark proc))))
              (save-excursion
-               ;;  <span class="roman">Insert the text, advancing the process marker.</span>
+               ;; <span class="roman">Insert the text, advancing the process marker.</span>
                (goto-char (process-mark proc))
                (insert string)
                (set-marker (process-mark proc) (point)))
              (if moving (goto-char (process-mark proc)))))))
 </pre>
-   <p class="noindent">The reason to use <code>with-current-buffer</code>, rather than using
-<code>save-excursion</code> to save and restore the current buffer, is so as
-to preserve the change in point made by the second call to
-<code>goto-char</code>.
-
    <p>To make the filter force the process buffer to be visible whenever new
-text arrives, insert the following line just before the
+text arrives, you could insert a line like the following just before the
 <code>with-current-buffer</code> construct:
 
 <pre class="smallexample">     (display-buffer (process-buffer proc))
@@ -112,12 +107,10 @@ text arrives, insert the following line just before the
 previously, eliminate the variable <code>moving</code> and call
 <code>goto-char</code> unconditionally.
 
-   <p>In earlier Emacs versions, every filter function that did regular
-expression searching or matching had to explicitly save and restore the
-match data.  Now Emacs does this automatically for filter functions;
-they never need to do it explicitly.  See <a href="Match-Data.html#Match-Data">Match Data</a>.
+   <p>Note that Emacs automatically saves and restores the match data
+while executing filter functions.  See <a href="Match-Data.html#Match-Data">Match Data</a>.
 
-   <p>The output to the function may come in chunks of any size.  A program
+   <p>The output to the filter may come in chunks of any size.  A program
 that produces the same output twice in a row may send it as one batch of
 200 characters one time, and five batches of 40 characters the next.  If
 the filter looks for certain text strings in the subprocess output, make
@@ -126,18 +119,18 @@ or more batches of output; one way to do this is to insert the
 received text into a temporary buffer, which can then be searched.
 
 <div class="defun">
-&mdash; Function: <b>set-process-filter</b><var> process filter<a name="index-set_002dprocess_002dfilter-3336"></a></var><br>
+&mdash; Function: <b>set-process-filter</b><var> process filter<a name="index-set_002dprocess_002dfilter-3610"></a></var><br>
 <blockquote><p>This function gives <var>process</var> the filter function <var>filter</var>.  If
 <var>filter</var> is <code>nil</code>, it gives the process no filter. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>process-filter</b><var> process<a name="index-process_002dfilter-3337"></a></var><br>
+&mdash; Function: <b>process-filter</b><var> process<a name="index-process_002dfilter-3611"></a></var><br>
 <blockquote><p>This function returns the filter function of <var>process</var>, or <code>nil</code>
 if it has none. 
 </p></blockquote></div>
 
-   <p>Here is an example of use of a filter function:
+   <p>Here is an example of the use of a filter function:
 
 <pre class="smallexample">     (defun keep-output (process output)
         (setq kept (cons output kept)))
@@ -149,7 +142,7 @@ if it has none.
      (process-send-string "shell" "ls ~/other\n")
           &rArr; nil
      kept
-          &rArr; ("lewis@slug[8] % "
+          &rArr; ("lewis@slug:$ "
      "FINAL-W87-SHORT.MSS    backup.otl              kolstad.mss~
      address.txt             backup.psf              kolstad.psf
      backup.bib~             david.mss               resume-Dec-86.mss~

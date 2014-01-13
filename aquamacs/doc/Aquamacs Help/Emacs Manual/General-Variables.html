@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>General Variables - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Misc-Variables.html#Misc-Variables" title="Misc Variables">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -43,7 +40,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Environment.html#Environment">Environme
 <hr>
 </div>
 
-<h4 class="appendixsubsec">C.5.1 General Variables</h4>
+<h4 class="appendixsubsec">C.4.1 General Variables</h4>
 
 <p>Here is an alphabetical list of environment variables that have
 special meanings in Emacs.  Most of these variables are also used by
@@ -53,19 +50,25 @@ variables to be set, but it uses their values if they are set.
      <dl>
 <dt><samp><span class="env">CDPATH</span></samp><dd>Used by the <code>cd</code> command to search for the directory you specify,
 when you specify a relative directory name. 
+<br><dt><samp><span class="env">DBUS_SESSION_BUS_ADDRESS</span></samp><dd>Used by D-Bus when Emacs is compiled with it.  Usually, there is no
+need to change it.  Setting it to a dummy address, like
+&lsquo;<samp><span class="samp">unix:path=/dev/null</span></samp>&rsquo;, suppresses connections to the D-Bus session
+bus as well as autolaunching the D-Bus session bus if not running yet. 
 <br><dt><samp><span class="env">EMACSDATA</span></samp><dd>Directory for the architecture-independent files that come with Emacs. 
-This is used to initialize the Lisp variable <code>data-directory</code>. 
-<br><dt><samp><span class="env">EMACSDOC</span></samp><dd>Directory for the documentation string file,
-<samp><span class="file">DOC-</span><var>emacsversion</var></samp>.  This is used to initialize the Lisp
-variable <code>doc-directory</code>. 
-<br><dt><samp><span class="env">EMACSLOADPATH</span></samp><dd>A colon-separated list of directories<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>
-to search for Emacs Lisp files&mdash;used to initialize <code>load-path</code>. 
-<br><dt><samp><span class="env">EMACSPATH</span></samp><dd>A colon-separated list of directories to search for executable
-files&mdash;used to initialize <code>exec-path</code>. 
-<br><dt><samp><span class="env">EMAIL</span></samp><dd><a name="index-user_002dmail_002daddress_0040r_007b_002c-initialization_007d-4250"></a>Your email address; used to initialize the Lisp variable
-<code>user-mail-address</code>, which the Emacs mail interface puts into
-the &lsquo;<samp><span class="samp">From</span></samp>&rsquo; header of outgoing messages (see <a href="Mail-Headers.html#Mail-Headers">Mail Headers</a>). 
-<br><dt><samp><span class="env">ESHELL</span></samp><dd>Used for shell-mode to override the <samp><span class="env">SHELL</span></samp> environment variable. 
+This is used to initialize the variable <code>data-directory</code>. 
+<br><dt><samp><span class="env">EMACSDOC</span></samp><dd>Directory for the documentation string file, which is used to
+initialize the Lisp variable <code>doc-directory</code>. 
+<br><dt><samp><span class="env">EMACSLOADPATH</span></samp><dd>A colon-separated list of directories<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>  to search for
+Emacs Lisp files.  If set, it overrides the usual initial value of the
+<code>load-path</code> variable (see <a href="Lisp-Libraries.html#Lisp-Libraries">Lisp Libraries</a>). 
+<br><dt><samp><span class="env">EMACSPATH</span></samp><dd>A colon-separated list of directories to search for executable files. 
+If set, Emacs uses this in addition to <samp><span class="env">PATH</span></samp> (see below) when
+initializing the variable <code>exec-path</code> (see <a href="Shell.html#Shell">Shell</a>). 
+<br><dt><samp><span class="env">EMAIL</span></samp><dd><a name="index-user_002dmail_002daddress_0040r_007b_002c-initialization_007d-4589"></a>Your email address; used to initialize the Lisp variable
+<code>user-mail-address</code>, which the Emacs mail interface puts into the
+&lsquo;<samp><span class="samp">From</span></samp>&rsquo; header of outgoing messages (see <a href="Mail-Headers.html#Mail-Headers">Mail Headers</a>). 
+<br><dt><samp><span class="env">ESHELL</span></samp><dd>Used for shell-mode to override the <samp><span class="env">SHELL</span></samp> environment variable
+(see <a href="Interactive-Shell.html#Interactive-Shell">Interactive Shell</a>). 
 <br><dt><samp><span class="env">HISTFILE</span></samp><dd>The name of the file that shell commands are saved in between logins. 
 This variable defaults to <samp><span class="file">~/.bash_history</span></samp> if you use Bash, to
 <samp><span class="file">~/.sh_history</span></samp> if you use ksh, and to <samp><span class="file">~/.history</span></samp>
@@ -106,34 +109,39 @@ matched against entries in <code>locale-language-names</code>,
 environment and coding system.  See <a href="Language-Environments.html#Language-Environments">Language Environments</a>. 
 <br><dt><samp><span class="env">LOGNAME</span></samp><dd>The user's login name.  See also <samp><span class="env">USER</span></samp>. 
 <br><dt><samp><span class="env">MAIL</span></samp><dd>The name of your system mail inbox. 
-<br><dt><samp><span class="env">MH</span></samp><dd>Name of setup file for the mh system.  (The default is <samp><span class="file">~/.mh_profile</span></samp>.) 
-<br><dt><samp><span class="env">NAME</span></samp><dd>Your real-world name. 
+<br><dt><samp><span class="env">MH</span></samp><dd>Name of setup file for the mh system.  See <a href="../mh-e/index.html#Top">MH-E</a>. 
+<br><dt><samp><span class="env">NAME</span></samp><dd>Your real-world name.  This is used to initialize the variable
+<code>user-full-name</code> (see <a href="Mail-Headers.html#Mail-Headers">Mail Headers</a>). 
 <br><dt><samp><span class="env">NNTPSERVER</span></samp><dd>The name of the news server.  Used by the mh and Gnus packages. 
 <br><dt><samp><span class="env">ORGANIZATION</span></samp><dd>The name of the organization to which you belong.  Used for setting the
 `Organization:' header in your posts from the Gnus package. 
-<br><dt><samp><span class="env">PATH</span></samp><dd>A colon-separated list of directories in which executables reside.  This
-is used to initialize the Emacs Lisp variable <code>exec-path</code>. 
+<br><dt><samp><span class="env">PATH</span></samp><dd>A colon-separated list of directories containing executable files. 
+This is used to initialize the variable <code>exec-path</code>
+(see <a href="Shell.html#Shell">Shell</a>). 
 <br><dt><samp><span class="env">PWD</span></samp><dd>If set, this should be the default directory when Emacs was started. 
 <br><dt><samp><span class="env">REPLYTO</span></samp><dd>If set, this specifies an initial value for the variable
-<code>mail-default-reply-to</code>.  See <a href="Mail-Headers.html#Mail-Headers">Mail Headers</a>. 
+<code>mail-default-reply-to</code> (see <a href="Mail-Headers.html#Mail-Headers">Mail Headers</a>). 
 <br><dt><samp><span class="env">SAVEDIR</span></samp><dd>The name of a directory in which news articles are saved by default. 
 Used by the Gnus package. 
 <br><dt><samp><span class="env">SHELL</span></samp><dd>The name of an interpreter used to parse and execute programs run from
 inside Emacs. 
-<br><dt><samp><span class="env">SMTPSERVER</span></samp><dd>The name of the outgoing mail server.  Used by the SMTP library
-(see <a href="../smtpmail/index.html#Top">Top</a>). 
-<a name="index-background-mode_002c-on-_0040command_007bxterm_007d-4251"></a><br><dt><samp><span class="env">TERM</span></samp><dd>The type of the terminal that Emacs is using.  This variable must be
+<br><dt><samp><span class="env">SMTPSERVER</span></samp><dd>The name of the outgoing mail server.  This is used to initialize the
+variable <code>smtpmail-smtp-server</code> (see <a href="Mail-Sending.html#Mail-Sending">Mail Sending</a>). 
+<a name="index-background-mode_002c-on-_0040command_007bxterm_007d-4590"></a><br><dt><samp><span class="env">TERM</span></samp><dd>The type of the terminal that Emacs is using.  This variable must be
 set unless Emacs is run in batch mode.  On MS-DOS, it defaults to
 &lsquo;<samp><span class="samp">internal</span></samp>&rsquo;, which specifies a built-in terminal emulation that
-handles the machine's own display.  If the value of <samp><span class="env">TERM</span></samp> indicates
-that Emacs runs in non-windowed mode from <samp><span class="command">xterm</span></samp> or a similar
-terminal emulator, the background mode defaults to &lsquo;<samp><span class="samp">light</span></samp>&rsquo;, and
-Emacs will choose colors that are appropriate for a light background. 
+handles the machine's own display. 
 <br><dt><samp><span class="env">TERMCAP</span></samp><dd>The name of the termcap library file describing how to program the
-terminal specified by the <samp><span class="env">TERM</span></samp> variable.  This defaults to
+terminal specified by <samp><span class="env">TERM</span></samp>.  This defaults to
 <samp><span class="file">/etc/termcap</span></samp>. 
-<br><dt><samp><span class="env">TMPDIR</span></samp><dd>Used by the Emerge package as a prefix for temporary files. 
-<br><dt><samp><span class="env">TZ</span></samp><dd>This specifies the current time zone and possibly also daylight
+<br><dt><samp><span class="env">TMPDIR</span></samp><dt><samp><span class="env">TMP</span></samp><dt><samp><span class="env">TEMP</span></samp><dd>These environment variables are used to initialize the variable
+<code>temporary-file-directory</code>, which specifies a directory in which
+to put temporary files (see <a href="Backup.html#Backup">Backup</a>).  Emacs tries to use
+<samp><span class="env">TMPDIR</span></samp> first.  If that is unset, Emacs normally falls back on
+<samp><span class="file">/tmp</span></samp>, but on MS-Windows and MS-DOS it instead falls back on
+<samp><span class="env">TMP</span></samp>, then <samp><span class="env">TEMP</span></samp>, and finally <samp><span class="file">c:/temp</span></samp>.
+
+     <br><dt><samp><span class="env">TZ</span></samp><dd>This specifies the current time zone and possibly also daylight
 saving time information.  On MS-DOS, if <samp><span class="env">TZ</span></samp> is not set in the
 environment when Emacs starts, Emacs defines a default value as
 appropriate for the country code returned by DOS.  On MS-Windows, Emacs
@@ -145,10 +153,10 @@ defaults to &lsquo;<samp><span class="samp">root</span></samp>&rsquo;.
 
    <div class="footnote">
 <hr>
-<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> 
-Here and below, whenever we say &ldquo;colon-separated list of directories,&rdquo;
-it pertains to Unix and GNU/Linux systems.  On MS-DOS and MS-Windows,
-the directories are separated by semi-colons instead, since DOS/Windows
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small>  Here and below,
+whenever we say &ldquo;colon-separated list of directories&rdquo;, it pertains
+to Unix and GNU/Linux systems.  On MS-DOS and MS-Windows, the
+directories are separated by semi-colons instead, since DOS/Windows
 file names might include a colon after a drive letter.</p>
 
    <hr></div>

@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Special Events - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Waiting.html#Waiting" title="Waiting">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,28 +43,29 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Command-Loop.html#Command-Loop">Command
 
 <h3 class="section">21.9 Special Events</h3>
 
-<p><a name="index-special-events-1378"></a>Special events are handled at a very low level&mdash;as soon as they are
-read.  The <code>read-event</code> function processes these events itself, and
-never returns them.  Instead, it keeps waiting for the first event
-that is not special and returns that one.
+<p><a name="index-special-events-1467"></a>Certain <dfn>special events</dfn> are handled at a very low level&mdash;as soon
+as they are read.  The <code>read-event</code> function processes these
+events itself, and never returns them.  Instead, it keeps waiting for
+the first event that is not special and returns that one.
 
-   <p>Events that are handled in this way do not echo, they are never grouped
-into key sequences, and they never appear in the value of
+   <p>Special events do not echo, they are never grouped into key
+sequences, and they never appear in the value of
 <code>last-command-event</code> or <code>(this-command-keys)</code>.  They do not
 discard a numeric argument, they cannot be unread with
 <code>unread-command-events</code>, they may not appear in a keyboard macro,
 and they are not recorded in a keyboard macro while you are defining
 one.
 
-   <p>These events do, however, appear in <code>last-input-event</code> immediately
-after they are read, and this is the way for the event's definition to
-find the actual event.
+   <p>Special events do, however, appear in <code>last-input-event</code>
+immediately after they are read, and this is the way for the event's
+definition to find the actual event.
 
    <p>The events types <code>iconify-frame</code>, <code>make-frame-visible</code>,
-<code>delete-frame</code>, <code>drag-n-drop</code>, and user signals like
-<code>sigusr1</code> are normally handled in this way.  The keymap which
-defines how to handle special events&mdash;and which events are special&mdash;is
-in the variable <code>special-event-map</code> (see <a href="Active-Keymaps.html#Active-Keymaps">Active Keymaps</a>).
+<code>delete-frame</code>, <code>drag-n-drop</code>, <code>language-change</code>, and
+user signals like <code>sigusr1</code> are normally handled in this way. 
+The keymap which defines how to handle special events&mdash;and which
+events are special&mdash;is in the variable <code>special-event-map</code>
+(see <a href="Active-Keymaps.html#Active-Keymaps">Active Keymaps</a>).
 
    </body></html>
 

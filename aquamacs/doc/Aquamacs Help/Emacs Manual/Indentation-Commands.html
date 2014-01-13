@@ -1,22 +1,18 @@
 <html lang="en">
 <head>
 <title>Indentation Commands - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Indentation.html#Indentation" title="Indentation">
-<link rel="prev" href="Indentation.html#Indentation" title="Indentation">
 <link rel="next" href="Tab-Stops.html#Tab-Stops" title="Tab Stops">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -40,73 +36,65 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <a name="Indentation-Commands"></a>
 <p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Tab-Stops.html#Tab-Stops">Tab Stops</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Indentation.html#Indentation">Indentation</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Indentation.html#Indentation">Indentation</a>
 <hr>
 </div>
 
-<h3 class="section">28.1 Indentation Commands and Techniques</h3>
+<h3 class="section">24.1 Indentation Commands</h3>
 
-<p><a name="index-M_002dm-1520"></a><a name="index-back_002dto_002dindentation-1521"></a>  To move over the indentation on a line, do <kbd>M-m</kbd>
-(<code>back-to-indentation</code>).  This command, given anywhere on a line,
-positions point at the first nonblank character on the line, if any,
-or else at the end of the line.
+<p>Apart from the &lt;TAB&gt; (<code>indent-for-tab-command</code>) command,
+Emacs provides a variety of commands to perform indentation in other
+ways.
 
-   <p>To insert an indented line before the current line, do <kbd>C-a C-o
-&lt;TAB&gt;</kbd>.  To make an indented line after the current line, use
-<kbd>C-e C-j</kbd>.
+     <dl>
+<dt><kbd>C-j</kbd><dd><a name="index-C_002dj-1749"></a><a name="index-newline_002dand_002dindent-1750"></a>Perform &lt;RET&gt; followed by &lt;TAB&gt; (<code>newline-and-indent</code>).
 
-   <p>If you just want to insert a tab character in the buffer, type
-<kbd>C-q &lt;TAB&gt;</kbd>.
+     <br><dt><kbd>C-M-o</kbd><dd><a name="index-C_002dM_002do-1751"></a><a name="index-split_002dline-1752"></a>Split the current line at point (<code>split-line</code>).  The text on the
+line after point becomes a new line, indented to the same column where
+point is located.  This command first moves point forward over any
+spaces and tabs.  Afterward, point is positioned before the inserted
+newline.
 
-   <p><a name="index-C_002dM_002do-1522"></a><a name="index-split_002dline-1523"></a>  <kbd>C-M-o</kbd> (<code>split-line</code>) moves the text from point to the end of
-the line vertically down, so that the current line becomes two lines. 
-<kbd>C-M-o</kbd> first moves point forward over any spaces and tabs.  Then it
-inserts after point a newline and enough indentation to reach the same
-column point is on.  Point remains before the inserted newline; in this
-regard, <kbd>C-M-o</kbd> resembles <kbd>C-o</kbd>.
+     <p><a name="index-M_002dm-1753"></a><a name="index-back_002dto_002dindentation-1754"></a><br><dt><kbd>M-m</kbd><dd>Move (forward or back) to the first non-whitespace character on the
+current line (<code>back-to-indentation</code>).  If there are no
+non-whitespace characters on the line, move to the end of the line.
 
-   <p><a name="index-M_002d_005e-1524"></a><a name="index-delete_002dindentation-1525"></a>  To join two lines cleanly, use the <kbd>M-^</kbd>
-(<code>delete-indentation</code>) command.  It deletes the indentation at
-the front of the current line, and the line boundary as well,
-replacing them with a single space.  As a special case (useful for
-Lisp code) the single space is omitted if the characters to be joined
-are consecutive open parentheses or closing parentheses, or if the
-junction follows another newline.  To delete just the indentation of a
-line, go to the beginning of the line and use <kbd>M-\</kbd>
-(<code>delete-horizontal-space</code>), which deletes all spaces and tabs
-around the cursor.
+     <br><dt><kbd>M-i</kbd><dd><a name="index-M_002di-1755"></a><a name="index-tab_002dto_002dtab_002dstop-1756"></a>Indent whitespace at point, up to the next tab stop
+(<code>tab-to-tab-stop</code>).  See <a href="Tab-Stops.html#Tab-Stops">Tab Stops</a>.
 
-   <p>If you have a fill prefix, <kbd>M-^</kbd> deletes the fill prefix if it
+     <p><a name="index-indent_002drelative-1757"></a><br><dt><kbd>M-x indent-relative</kbd><dd>Insert whitespace at point, until point is aligned with the first
+non-whitespace character on the previous line (actually, the last
+non-blank line).  If point is already farther right than that, run
+<code>tab-to-tab-stop</code> instead&mdash;unless called with a numeric
+argument, in which case do nothing.
+
+     <br><dt><kbd>M-^</kbd><dd><a name="index-M_002d_005e-1758"></a><a name="index-delete_002dindentation-1759"></a>Merge the previous and the current line (<code>delete-indentation</code>). 
+This &ldquo;joins&rdquo; the two lines cleanly, by replacing any indentation at
+the front of the current line, together with the line boundary, with a
+single space.
+
+     <p>As a special case (useful for Lisp code), the single space is omitted
+if the characters to be joined are consecutive opening and closing
+parentheses, or if the junction follows another newline.
+
+     <p>If there is a fill prefix, <kbd>M-^</kbd> deletes the fill prefix if it
 appears after the newline that is deleted.  See <a href="Fill-Prefix.html#Fill-Prefix">Fill Prefix</a>.
 
-   <p><a name="index-C_002dM_002d_005c-1526"></a><a name="index-C_002dx-TAB-1527"></a><a name="index-indent_002dregion-1528"></a><a name="index-indent_002drigidly-1529"></a>  There are also commands for changing the indentation of several lines
-at once.  They apply to all the lines that begin in the region. 
-<kbd>C-M-\</kbd> (<code>indent-region</code>) indents each line in the &ldquo;usual&rdquo;
-way, as if you had typed &lt;TAB&gt; at the beginning of the line.  A
-numeric argument specifies the column to indent to, and each line is
-shifted left or right so that its first nonblank character appears in
-that column.  <kbd>C-x &lt;TAB&gt;</kbd> (<code>indent-rigidly</code>) moves all of
-the lines in the region right by its argument (left, for negative
-arguments).  The whole group of lines moves rigidly sideways, which is
-how the command gets its name.
+     <br><dt><kbd>C-M-\</kbd><dd><a name="index-C_002dM_002d_005c-1760"></a><a name="index-indent_002dregion-1761"></a>Indent all the lines in the region, as though you had typed &lt;TAB&gt;
+at the beginning of each line (<code>indent-region</code>).
 
-   <p><a name="index-remove-indentation-1530"></a>  To remove all indentation from all of the lines in the region,
-invoke <kbd>C-x &lt;TAB&gt;</kbd> with a large negative argument, such as
--1000.
+     <p>If a numeric argument is supplied, indent every line in the region to
+that column number.
 
-   <p><a name="index-indent_002drelative-1531"></a>  <kbd>M-x indent-relative</kbd> indents at point based on the previous line
-(actually, the last nonempty line).  It inserts whitespace at point, moving
-point, until it is underneath the next indentation point in the previous line. 
-An indentation point is the end of a sequence of whitespace or the end of
-the line.  If point is farther right than any indentation point in the
-previous line, <code>indent-relative</code> runs <code>tab-to-tab-stop</code>
-(see <a href="Tab-Stops.html#Tab-Stops">Tab Stops</a>),
-unless it is called with a numeric argument, in which case it does
-nothing.
+     <br><dt><kbd>C-x &lt;TAB&gt;</kbd><dd><a name="index-C_002dx-TAB-1762"></a><a name="index-indent_002drigidly-1763"></a><a name="index-remove-indentation-1764"></a>Shift each line in the region by a fixed distance, to the right or
+left (<code>indent-rigidly</code>).  The distance to move is determined by
+the numeric argument (positive to move rightward, negative to move
+leftward).
 
-   <p>See <a href="Format-Indentation.html#Format-Indentation">Format Indentation</a>, for another way of specifying the
-indentation for part of your text.
+     <p>This command can be used to remove all indentation from the lines in
+the region, by invoking it with a large negative argument,
+e.g., <kbd>C-u -1000 C-x &lt;TAB&gt;</kbd>. 
+</dl>
 
    </body></html>
 

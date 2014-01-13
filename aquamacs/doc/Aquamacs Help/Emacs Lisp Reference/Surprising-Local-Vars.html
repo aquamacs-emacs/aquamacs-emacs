@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Surprising Local Vars - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Eval-During-Expansion.html#Eval-During-Expansion" title="Eval During Expansion">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,13 +41,13 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Problems-with-Macros.html#Problems-with
 <hr>
 </div>
 
-<h4 class="subsection">13.6.3 Local Variables in Macro Expansions</h4>
+<h4 class="subsection">13.5.3 Local Variables in Macro Expansions</h4>
 
 <p>In the previous section, the definition of <code>for</code> was fixed as
 follows to make the expansion evaluate the macro arguments the proper
 number of times:
 
-<pre class="smallexample">     (defmacro for (var from init to final do &amp;rest body)
+<pre class="example">     (defmacro for (var from init to final do &amp;rest body)
        "Execute a simple for loop: (for i from 1 to 10 do (print i))."
        `(let ((,var ,init)
               (max ,final))
@@ -62,7 +59,7 @@ number of times:
 local variable named <code>max</code> which the user does not expect.  This
 causes trouble in examples such as the following:
 
-<pre class="smallexample">     (let ((max 0))
+<pre class="example">     (let ((max 0))
        (for x from 0 to 10 do
          (let ((this (frob x)))
            (if (&lt; max this)
@@ -81,7 +78,7 @@ put it into the program later.  It will never appear anywhere except
 where put by <code>for</code>.  Here is a definition of <code>for</code> that works
 this way:
 
-<pre class="smallexample">     (defmacro for (var from init to final do &amp;rest body)
+<pre class="example">     (defmacro for (var from init to final do &amp;rest body)
        "Execute a simple for loop: (for i from 1 to 10 do (print i))."
        (let ((tempvar (make-symbol "max")))
          `(let ((,var ,init)

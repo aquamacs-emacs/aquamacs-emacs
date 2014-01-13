@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Hideshow - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Symbol-Completion.html#Symbol-Completion" title="Symbol Completion">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,49 +42,47 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Programs.html#Programs">Programs</a>
 <hr>
 </div>
 
-<h3 class="section">30.7 Hideshow minor mode</h3>
+<h3 class="section">26.7 Hideshow minor mode</h3>
 
-<p><a name="index-hs_002dminor_002dmode-2104"></a>  Hideshow minor mode provides selective display of portions of a
-program, known as <dfn>blocks</dfn>.  You can use <kbd>M-x hs-minor-mode</kbd>
-to enable or disable this mode, or add <code>hs-minor-mode</code> to the
-mode hook for certain major modes in order to enable it automatically
-for those modes.
+<p><a name="index-Hideshow-mode-2371"></a><a name="index-mode_002c-Hideshow-2372"></a>
+<a name="index-hs_002dminor_002dmode-2373"></a>  Hideshow mode is a buffer-local minor mode that allows you to
+selectively display portions of a program, which are referred to as
+<dfn>blocks</dfn>.  Type <kbd>M-x hs-minor-mode</kbd> to toggle this minor mode
+(see <a href="Minor-Modes.html#Minor-Modes">Minor Modes</a>).
 
-   <p>Just what constitutes a block depends on the major mode.  In C mode
-or C++ mode, they are delimited by braces, while in Lisp mode and
-similar modes they are delimited by parentheses.  Multi-line comments
-also count as blocks.
+   <p>When you use Hideshow mode to hide a block, the block disappears
+from the screen, to be replaced by an ellipsis (three periods in a
+row).  Just what constitutes a block depends on the major mode.  In C
+mode and related modes, blocks are delimited by braces, while in Lisp
+mode they are delimited by parentheses.  Multi-line comments also
+count as blocks.
 
-   <p><a name="index-hs_002dhide_002dall-2105"></a><a name="index-hs_002dhide_002dblock-2106"></a><a name="index-hs_002dshow_002dall-2107"></a><a name="index-hs_002dshow_002dblock-2108"></a><a name="index-hs_002dshow_002dregion-2109"></a><a name="index-hs_002dhide_002dlevel-2110"></a><a name="index-hs_002dminor_002dmode-2111"></a><a name="index-C_002dc-_0040_0040-C_002dh-2112"></a><a name="index-C_002dc-_0040_0040-C_002ds-2113"></a><a name="index-C_002dc-_0040_0040-C_002dM_002dh-2114"></a><a name="index-C_002dc-_0040_0040-C_002dM_002ds-2115"></a><a name="index-C_002dc-_0040_0040-C_002dr-2116"></a><a name="index-C_002dc-_0040_0040-C_002dl-2117"></a><a name="index-S_002dMouse_002d2-2118"></a>
+   <p>Hideshow mode provides the following commands:
+
+   <p><a name="index-hs_002dhide_002dall-2374"></a><a name="index-hs_002dhide_002dblock-2375"></a><a name="index-hs_002dshow_002dall-2376"></a><a name="index-hs_002dshow_002dblock-2377"></a><a name="index-hs_002dshow_002dregion-2378"></a><a name="index-hs_002dhide_002dlevel-2379"></a><a name="index-hs_002dminor_002dmode-2380"></a><a name="index-C_002dc-_0040_0040-C_002dh-2381"></a><a name="index-C_002dc-_0040_0040-C_002ds-2382"></a><a name="index-C_002dc-_0040_0040-C_002dM_002dh-2383"></a><a name="index-C_002dc-_0040_0040-C_002dM_002ds-2384"></a><a name="index-C_002dc-_0040_0040-C_002dr-2385"></a><a name="index-C_002dc-_0040_0040-C_002dl-2386"></a><a name="index-S_002dMouse_002d2-2387"></a>
      <dl>
 <dt><kbd>C-c @ C-h</kbd><dd>Hide the current block (<code>hs-hide-block</code>). 
 <br><dt><kbd>C-c @ C-s</kbd><dd>Show the current block (<code>hs-show-block</code>). 
 <br><dt><kbd>C-c @ C-c</kbd><dd>Either hide or show the current block (<code>hs-toggle-hiding</code>). 
-<br><dt><kbd>S-Mouse-2</kbd><dd>Either hide or show the block you click on (<code>hs-mouse-toggle-hiding</code>). 
+<br><dt><kbd>S-Mouse-2</kbd><dd>Toggle hiding for the block you click on (<code>hs-mouse-toggle-hiding</code>). 
 <br><dt><kbd>C-c @ C-M-h</kbd><dd>Hide all top-level blocks (<code>hs-hide-all</code>). 
-<br><dt><kbd>C-c @ C-M-s</kbd><dd>Show everything in the buffer (<code>hs-show-all</code>). 
+<br><dt><kbd>C-c @ C-M-s</kbd><dd>Show all blocks in the buffer (<code>hs-show-all</code>). 
 <br><dt><kbd>C-c @ C-l</kbd><dd>Hide all blocks <var>n</var> levels below this block
 (<code>hs-hide-level</code>). 
 </dl>
 
-   <p><a name="index-hs_002dhide_002dcomments_002dwhen_002dhiding_002dall-2119"></a><a name="index-hs_002disearch_002dopen-2120"></a><a name="index-hs_002dspecial_002dmodes_002dalist-2121"></a>  These variables exist for customizing Hideshow mode.
+   <p><a name="index-hs_002dhide_002dcomments_002dwhen_002dhiding_002dall-2388"></a><a name="index-hs_002disearch_002dopen-2389"></a><a name="index-hs_002dspecial_002dmodes_002dalist-2390"></a>  These variables can be used to customize Hideshow mode:
 
      <dl>
-<dt><code>hs-hide-comments-when-hiding-all</code><dd>Non-<code>nil</code> says that <kbd>hs-hide-all</kbd> should hide comments too.
+<dt><code>hs-hide-comments-when-hiding-all</code><dd>If non-<code>nil</code>, <kbd>C-c @ C-M-h</kbd> (<code>hs-hide-all</code>) hides
+comments too.
 
-     <br><dt><code>hs-isearch-open</code><dd>Specifies what kind of hidden blocks incremental search should make
-visible.  The value should be one of these four symbols:
-
-          <dl>
-<dt><code>code</code><dd>Open only code blocks. 
-<br><dt><code>comment</code><dd>Open only comments. 
-<br><dt><code>t</code><dd>Open both code blocks and comments. 
-<br><dt><code>nil</code><dd>Open neither code blocks nor comments. 
-</dl>
-
-     <br><dt><code>hs-special-modes-alist</code><dd>A list of elements, each specifying how to initialize Hideshow
-variables for one major mode.  See the variable's documentation string
-for more information. 
+     <br><dt><code>hs-isearch-open</code><dd>This variable specifies the conditions under which incremental search
+should unhide a hidden block when matching text occurs within the
+block.  Its value should be either <code>code</code> (unhide only code
+blocks), <code>comment</code> (unhide only comments), <code>t</code> (unhide both
+code blocks and comments), or <code>nil</code> (unhide neither code blocks
+nor comments).  The default value is <code>code</code>. 
 </dl>
 
    </body></html>

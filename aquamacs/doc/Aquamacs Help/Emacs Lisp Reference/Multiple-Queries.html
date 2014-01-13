@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Multiple Queries - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Reading-a-Password.html#Reading-a-Password" title="Reading a Password">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -54,14 +51,14 @@ convenient facilities such as the ability to answer the whole series at
 once.
 
 <div class="defun">
-&mdash; Function: <b>map-y-or-n-p</b><var> prompter actor list &amp;optional help action-alist no-cursor-in-echo-area<a name="index-map_002dy_002dor_002dn_002dp-1170"></a></var><br>
+&mdash; Function: <b>map-y-or-n-p</b><var> prompter actor list &amp;optional help action-alist no-cursor-in-echo-area<a name="index-map_002dy_002dor_002dn_002dp-1254"></a></var><br>
 <blockquote><p>This function asks the user a series of questions, reading a
 single-character answer in the echo area for each one.
 
         <p>The value of <var>list</var> specifies the objects to ask questions about. 
 It should be either a list of objects or a generator function.  If it is
 a function, it should expect no arguments, and should return either the
-next object to ask about, or <code>nil</code> meaning stop asking questions.
+next object to ask about, or <code>nil</code>, meaning to stop asking questions.
 
         <p>The argument <var>prompter</var> specifies how to ask each question.  If
 <var>prompter</var> is a string, the question text is computed like this:
@@ -74,8 +71,8 @@ next object to ask about, or <code>nil</code> meaning stop asking questions.
         <p>If not a string, <var>prompter</var> should be a function of one argument
 (the next object to ask about) and should return the question text.  If
 the value is a string, that is the question to ask the user.  The
-function can also return <code>t</code> meaning do act on this object (and
-don't ask the user), or <code>nil</code> meaning ignore this object (and don't
+function can also return <code>t</code>, meaning do act on this object (and
+don't ask the user), or <code>nil</code>, meaning ignore this object (and don't
 ask the user).
 
         <p>The argument <var>actor</var> says how to act on the answers that the user
@@ -113,7 +110,7 @@ answer); <var>function</var> is a function of one argument (an object from
 
         <p>When the user responds with <var>char</var>, <code>map-y-or-n-p</code> calls
 <var>function</var>.  If it returns non-<code>nil</code>, the object is considered
-&ldquo;acted upon,&rdquo; and <code>map-y-or-n-p</code> advances to the next object in
+&ldquo;acted upon&rdquo;, and <code>map-y-or-n-p</code> advances to the next object in
 <var>list</var>.  If it returns <code>nil</code>, the prompt is repeated for the
 same object.
 
@@ -124,12 +121,14 @@ does not do that.
         <p>If <code>map-y-or-n-p</code> is called in a command that was invoked using the
 mouse&mdash;more precisely, if <code>last-nonmenu-event</code> (see <a href="Command-Loop-Info.html#Command-Loop-Info">Command Loop Info</a>) is either <code>nil</code> or a list&mdash;then it uses a dialog box
 or pop-up menu to ask the question.  In this case, it does not use
-keyboard input or the echo area.  You can force use of the mouse or use
+keyboard input or the echo area.  You can force use either of the mouse or
 of keyboard input by binding <code>last-nonmenu-event</code> to a suitable
 value around the call.
 
         <p>The return value of <code>map-y-or-n-p</code> is the number of objects acted on. 
 </p></blockquote></div>
+   <!-- FIXME  An example of this would be more useful than all the -->
+<!-- preceding examples of simple things. -->
 
    </body></html>
 

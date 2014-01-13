@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>The Region - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="prev" href="The-Mark.html#The-Mark" title="The Mark">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,7 +41,12 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Markers.html#Markers">Markers</a>
 
 <h3 class="section">31.8 The Region</h3>
 
-<p><a name="index-region-_0028between-point-and-mark_0029-2569"></a>
+<!-- The index entry must be just ``region'' to make it the first hit -->
+<!-- when the user types ``i region RET'', because otherwise the Info -->
+<!-- reader will present substring matches in alphabetical order, -->
+<!-- putting this one near the end, with something utterly unrelated as -->
+<!-- the first hit. -->
+<p><a name="index-region-2829"></a>
   The text between point and the mark is known as <dfn>the region</dfn>. 
 Various functions operate on text delimited by point and the mark, but
 only those functions specifically related to the region itself are
@@ -56,38 +58,44 @@ anywhere.  If Transient Mark mode is enabled and
 if the mark is inactive.
 
 <div class="defun">
-&mdash; Function: <b>region-beginning</b><var><a name="index-region_002dbeginning-2570"></a></var><br>
+&mdash; Function: <b>region-beginning</b><var><a name="index-region_002dbeginning-2830"></a></var><br>
 <blockquote><p>This function returns the position of the beginning of the region (as
 an integer).  This is the position of either point or the mark,
 whichever is smaller. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>region-end</b><var><a name="index-region_002dend-2571"></a></var><br>
+&mdash; Function: <b>region-end</b><var><a name="index-region_002dend-2831"></a></var><br>
 <blockquote><p>This function returns the position of the end of the region (as an
 integer).  This is the position of either point or the mark, whichever is
 larger. 
 </p></blockquote></div>
 
-   <p>Few programs need to use the <code>region-beginning</code> and
-<code>region-end</code> functions.  A command designed to operate on a region
-should normally use <code>interactive</code> with the &lsquo;<samp><span class="samp">r</span></samp>&rsquo; specification
-to find the beginning and end of the region.  This lets other Lisp
-programs specify the bounds explicitly as arguments.  (See <a href="Interactive-Codes.html#Interactive-Codes">Interactive Codes</a>.)
+<!-- FIXME: Mention it in tips.texi? -->
+   <p>Instead of using <code>region-beginning</code> and <code>region-end</code>, a
+command designed to operate on a region should normally use
+<code>interactive</code> with the &lsquo;<samp><span class="samp">r</span></samp>&rsquo; specification to find the
+beginning and end of the region.  This lets other Lisp programs
+specify the bounds explicitly as arguments.  See <a href="Interactive-Codes.html#Interactive-Codes">Interactive Codes</a>.
 
 <div class="defun">
-&mdash; Function: <b>use-region-p</b><var><a name="index-use_002dregion_002dp-2572"></a></var><br>
+&mdash; Function: <b>use-region-p</b><var><a name="index-use_002dregion_002dp-2832"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if Transient Mark mode is enabled, the
-mark is active, and there's a valid region in the buffer.  Commands
-that operate on the region (instead of on text near point) when
-there's an active mark should use this to test whether to do that. 
+mark is active, and there is a valid region in the buffer.  This
+function is intended to be used by commands that operate on the
+region, instead of on text near point, when the mark is active.
+
+        <p><a name="index-empty-region-2833"></a><a name="index-use_002dempty_002dactive_002dregion-2834"></a>A region is valid if it has a non-zero size, or if the user option
+<code>use-empty-active-region</code> is non-<code>nil</code> (by default, it is
+<code>nil</code>).  The function <code>region-active-p</code> is similar to
+<code>use-region-p</code>, but considers all regions as valid.  In most
+cases, you should not use <code>region-active-p</code>, since if the region
+is empty it is often more appropriate to operate on point. 
 </p></blockquote></div>
 
 <!-- *-texinfo-*- -->
 <!-- This is part of the GNU Emacs Lisp Reference Manual. -->
-<!-- Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1998, 1999, 2000, 2001, -->
-<!-- 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 -->
-<!-- Free Software Foundation, Inc. -->
+<!-- Copyright (C) 1990-1995, 1998-2013 Free Software Foundation, Inc. -->
 <!-- See the file elisp.texi for copying conditions. -->
    </body></html>
 

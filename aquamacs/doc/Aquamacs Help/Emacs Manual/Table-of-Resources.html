@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Table of Resources - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="X-Resources.html#X-Resources" title="X Resources">
 <link rel="prev" href="Resources.html#Resources" title="Resources">
-<link rel="next" href="Face-Resources.html#Face-Resources" title="Face Resources">
+<link rel="next" href="Lucid-Resources.html#Lucid-Resources" title="Lucid Resources">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -39,7 +36,7 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <div class="node">
 <a name="Table-of-Resources"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Face-Resources.html#Face-Resources">Face Resources</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Lucid-Resources.html#Lucid-Resources">Lucid Resources</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Resources.html#Resources">Resources</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="X-Resources.html#X-Resources">X Resources</a>
 <hr>
@@ -47,70 +44,74 @@ Up:&nbsp;<a rel="up" accesskey="u" href="X-Resources.html#X-Resources">X Resourc
 
 <h3 class="appendixsec">D.2 Table of X Resources for Emacs</h3>
 
-<p>This table lists the resource names that designate options for
-Emacs, not counting those for the appearance of the menu bar, each
-with the class that it belongs to:
+<p>This table lists the X resource names that Emacs recognizes,
+excluding those that control the appearance of graphical widgets like
+the menu bar:
 
      <dl>
-<dt><code>background</code> (class <code>Background</code>)<dd>Background color name.
+<dt><code>background</code> (class <code>Background</code>)<dd>Background color (see <a href="Colors.html#Colors">Colors</a>).
 
-     <br><dt><code>bitmapIcon</code> (class <code>BitmapIcon</code>)<dd>Use a bitmap icon (a picture of a gnu) if &lsquo;<samp><span class="samp">on</span></samp>&rsquo;, let the window
-manager choose an icon if &lsquo;<samp><span class="samp">off</span></samp>&rsquo;.
+     <br><dt><code>bitmapIcon</code> (class <code>BitmapIcon</code>)<dd>Tell the window manager to display the Emacs icon if &lsquo;<samp><span class="samp">on</span></samp>&rsquo;; don't
+do so if &lsquo;<samp><span class="samp">off</span></samp>&rsquo;.  See <a href="Icons-X.html#Icons-X">Icons X</a>, for a description of the icon.
 
-     <br><dt><code>borderColor</code> (class <code>BorderColor</code>)<dd>Color name for the external border.
+     <br><dt><code>borderColor</code> (class <code>BorderColor</code>)<dd>Color of the frame's external border.  This has no effect if Emacs is
+compiled with GTK+ support.
 
-     <br><dt><code>borderWidth</code> (class <code>BorderWidth</code>)<dd>Width in pixels of the external border.
+     <br><dt><code>borderWidth</code> (class <code>BorderWidth</code>)<dd>Width of the frame's external border, in pixels.  This has no effect
+if Emacs is compiled with GTK+ support.
 
-     <br><dt><code>cursorColor</code> (class <code>Foreground</code>)<dd>Color name for text cursor (point).
+     <br><dt><code>cursorColor</code> (class <code>Foreground</code>)<dd>Text cursor color.  If this resource is specified when Emacs starts
+up, Emacs sets its value as the background color of the <code>cursor</code>
+face (see <a href="Faces.html#Faces">Faces</a>).
 
-     <br><dt><code>cursorBlink</code> (class <code>CursorBlink</code>)<dd>Specifies whether to make the cursor blink. The default is &lsquo;<samp><span class="samp">on</span></samp>&rsquo;.  Use
-&lsquo;<samp><span class="samp">off</span></samp>&rsquo; or &lsquo;<samp><span class="samp">false</span></samp>&rsquo; to turn cursor blinking off.
+     <br><dt><code>cursorBlink</code> (class <code>CursorBlink</code>)<dd>If the value of this resource is &lsquo;<samp><span class="samp">off</span></samp>&rsquo; or &lsquo;<samp><span class="samp">false</span></samp>&rsquo; or
+&lsquo;<samp><span class="samp">0</span></samp>&rsquo; at startup, Emacs disables Blink Cursor mode (see <a href="Cursor-Display.html#Cursor-Display">Cursor Display</a>).
 
-     <br><dt><code>font</code> (class <code>Font</code>)<dd>Font name for the <code>default</code> font.  See <a href="Fonts.html#Fonts">Fonts</a>.  You can also
+     <br><dt><code>font</code> (class <code>Font</code>)<dd>Font name for the <code>default</code> face (see <a href="Fonts.html#Fonts">Fonts</a>).  You can also
 specify a fontset name (see <a href="Fontsets.html#Fontsets">Fontsets</a>).
 
-     <br><dt><code>fontBackend</code> (class <code>FontBackend</code>)<dd>The backend(s) to use for drawing fonts; if multiple backends are
-specified, they must be comma-delimited and given in order of
-precedence.  On X, for instance, the value &lsquo;<samp><span class="samp">x,xft</span></samp>&rsquo; tells Emacs to
+     <br><dt><code>fontBackend</code> (class <code>FontBackend</code>)<dd>Comma-delimited list of backend(s) to use for drawing fonts, in order
+of precedence.  For instance, the value &lsquo;<samp><span class="samp">x,xft</span></samp>&rsquo; tells Emacs to
 draw fonts using the X core font driver, falling back on the Xft font
-driver if that fails.  Normally, you can leave this resource unset, in
-which case Emacs tries using all font backends available on your
-graphical device.
+driver if that fails.  Normally, you should leave this resource unset,
+in which case Emacs tries using all available font backends.
 
-     <br><dt><code>foreground</code> (class <code>Foreground</code>)<dd>Color name for text.
+     <br><dt><code>foreground</code> (class <code>Foreground</code>)<dd>Default foreground color for text.
 
-     <br><dt><code>geometry</code> (class <code>Geometry</code>)<dd>Window size and position.  Be careful not to specify this resource as
-&lsquo;<samp><span class="samp">emacs*geometry</span></samp>&rsquo;, because that may affect individual menus as well
-as the Emacs frame itself.
+     <br><dt><code>geometry</code> (class <code>Geometry</code>)<dd>Window size and position.  The value should be a size and position
+specification, of the same form as in the &lsquo;<samp><span class="samp">-g</span></samp>&rsquo; or
+&lsquo;<samp><span class="samp">--geometry</span></samp>&rsquo; command-line option (see <a href="Window-Size-X.html#Window-Size-X">Window Size X</a>).
 
-     <p>If this resource specifies a position, that position applies only to the
-initial Emacs frame (or, in the case of a resource for a specific frame
-name, only that frame).  However, the size, if specified here, applies to
-all frames.
+     <p>The size applies to all frames in the Emacs session, but the position
+applies only to the initial Emacs frame (or, in the case of a resource
+for a specific frame name, only that frame).
+
+     <p>Be careful not to specify this resource as &lsquo;<samp><span class="samp">emacs*geometry</span></samp>&rsquo;, as
+that may affect individual menus as well as the main Emacs frame.
 
      <br><dt><code>fullscreen</code> (class <code>Fullscreen</code>)<dd>The desired fullscreen size.  The value can be one of <code>fullboth</code>,
-<code>maximized</code>, <code>fullwidth</code> or <code>fullheight</code>, which correspond to
-the command-line options &lsquo;<samp><span class="samp">-fs</span></samp>&rsquo;, &lsquo;<samp><span class="samp">-mm</span></samp>&rsquo;, &lsquo;<samp><span class="samp">-fw</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">-fh</span></samp>&rsquo;
-(see <a href="Window-Size-X.html#Window-Size-X">Window Size X</a>).
-
-     <p>Note that this applies to the initial frame only.
+<code>maximized</code>, <code>fullwidth</code> or <code>fullheight</code>, which
+correspond to the command-line options &lsquo;<samp><span class="samp">-fs</span></samp>&rsquo;, &lsquo;<samp><span class="samp">-mm</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">-fw</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">-fh</span></samp>&rsquo; (see <a href="Window-Size-X.html#Window-Size-X">Window Size X</a>).  Note that this
+applies to the initial frame only.
 
      <br><dt><code>iconName</code> (class <code>Title</code>)<dd>Name to display in the icon.
 
-     <br><dt><code>internalBorder</code> (class <code>BorderWidth</code>)<dd>Width in pixels of the internal border.
+     <br><dt><code>internalBorder</code> (class <code>BorderWidth</code>)<dd>Width of the internal frame border, in pixels.
 
-     <br><dt><code>lineSpacing</code> (class <code>LineSpacing</code>)<dd><a name="index-line-spacing-4342"></a><a name="index-leading-4343"></a>Additional space (<dfn>leading</dfn>) between lines, in pixels.
+     <br><dt><code>lineSpacing</code> (class <code>LineSpacing</code>)<dd><a name="index-line-spacing-4679"></a>Additional space between lines, in pixels.
 
-     <br><dt><code>menuBar</code> (class <code>MenuBar</code>)<dd><a name="index-menu-bar-4344"></a>Give frames menu bars if &lsquo;<samp><span class="samp">on</span></samp>&rsquo;; don't have menu bars if &lsquo;<samp><span class="samp">off</span></samp>&rsquo;. 
-See <a href="Lucid-Resources.html#Lucid-Resources">Lucid Resources</a>, and <a href="LessTif-Resources.html#LessTif-Resources">LessTif Resources</a>,
-for how to control the appearance of the menu bar if you have one.
+     <br><dt><code>menuBar</code> (class <code>MenuBar</code>)<dd><a name="index-menu-bar-4680"></a>If the value of this resource is &lsquo;<samp><span class="samp">off</span></samp>&rsquo; or &lsquo;<samp><span class="samp">false</span></samp>&rsquo; or
+&lsquo;<samp><span class="samp">0</span></samp>&rsquo;, Emacs disables Menu Bar mode at startup (see <a href="Menu-Bars.html#Menu-Bars">Menu Bars</a>).
 
-     <br><dt><code>minibuffer</code> (class <code>Minibuffer</code>)<dd>If &lsquo;<samp><span class="samp">none</span></samp>&rsquo;, don't make a minibuffer in this frame. 
-It will use a separate minibuffer frame instead.
+     <br><dt><code>minibuffer</code> (class <code>Minibuffer</code>)<dd>If &lsquo;<samp><span class="samp">none</span></samp>&rsquo;, Emacs will not make a minibuffer in this frame; it
+will use a separate minibuffer frame instead.
 
-     <br><dt><code>paneFont</code> (class <code>Font</code>)<dd><a name="index-font-for-menus-4345"></a>Font name for menu pane titles, in non-toolkit versions of Emacs.
+     <br><dt><code>paneFont</code> (class <code>Font</code>)<dd><a name="index-font-for-menus-4681"></a>Font name for menu pane titles, in non-toolkit versions of Emacs.
 
-     <br><dt><code>pointerColor</code> (class <code>Foreground</code>)<dd>Color of the mouse cursor.
+     <br><dt><code>pointerColor</code> (class <code>Foreground</code>)<dd>Color of the mouse cursor.  This has no effect in many graphical
+desktop environments, as they do not let Emacs change the mouse cursor
+this way.
 
      <br><dt><code>privateColormap</code> (class <code>PrivateColormap</code>)<dd>If &lsquo;<samp><span class="samp">on</span></samp>&rsquo;, use a private color map, in the case where the &ldquo;default
 visual&rdquo; of class PseudoColor and Emacs is using it.
@@ -118,52 +119,48 @@ visual&rdquo; of class PseudoColor and Emacs is using it.
      <br><dt><code>reverseVideo</code> (class <code>ReverseVideo</code>)<dd>Switch foreground and background default colors if &lsquo;<samp><span class="samp">on</span></samp>&rsquo;, use colors as
 specified if &lsquo;<samp><span class="samp">off</span></samp>&rsquo;.
 
-     <br><dt><code>screenGamma</code> (class <code>ScreenGamma</code>)<dd><a name="index-gamma-correction-4346"></a>Gamma correction for colors, equivalent to the frame parameter
+     <br><dt><code>screenGamma</code> (class <code>ScreenGamma</code>)<dd><a name="index-gamma-correction-4682"></a>Gamma correction for colors, equivalent to the frame parameter
 <code>screen-gamma</code>.
 
-     <br><dt><code>scrollBarWidth</code> (class <code>ScrollBarWidth</code>)<dd><a name="index-scrollbar-width-4347"></a>The scroll bar width in pixels, equivalent to the frame parameter
-<code>scroll-bar-width</code>.
+     <br><dt><code>scrollBarWidth</code> (class <code>ScrollBarWidth</code>)<dd><a name="index-scrollbar-width-4683"></a>The scroll bar width in pixels, equivalent to the frame parameter
+<code>scroll-bar-width</code>.  Do not set this resource if Emacs is
+compiled with GTK+ support.
 
      <br><dt><code>selectionFont</code> (class <code>SelectionFont</code>)<dd>Font name for pop-up menu items, in non-toolkit versions of Emacs.  (For
-toolkit versions, see <a href="Lucid-Resources.html#Lucid-Resources">Lucid Resources</a>, also see <a href="LessTif-Resources.html#LessTif-Resources">LessTif Resources</a>.)
+toolkit versions, see <a href="Lucid-Resources.html#Lucid-Resources">Lucid Resources</a>, also see <a href="Motif-Resources.html#Motif-Resources">Motif Resources</a>.)
 
      <br><dt><code>selectionTimeout</code> (class <code>SelectionTimeout</code>)<dd>Number of milliseconds to wait for a selection reply. 
 If the selection owner doesn't reply in this time, we give up. 
 A value of 0 means wait as long as necessary.
 
-     <br><dt><code>synchronous</code> (class <code>Synchronous</code>)<dd><a name="index-debugging-X-problems-4348"></a><a name="index-synchronous-X-mode-4349"></a>Run Emacs in synchronous mode if &lsquo;<samp><span class="samp">on</span></samp>&rsquo;.  Synchronous mode is
+     <br><dt><code>synchronous</code> (class <code>Synchronous</code>)<dd><a name="index-debugging-X-problems-4684"></a><a name="index-synchronous-X-mode-4685"></a>Run Emacs in synchronous mode if &lsquo;<samp><span class="samp">on</span></samp>&rsquo;.  Synchronous mode is
 useful for debugging X problems.
 
      <br><dt><code>title</code> (class <code>Title</code>)<dd>Name to display in the title bar of the initial Emacs frame.
 
-     <br><dt><code>toolBar</code> (class <code>ToolBar</code>)<dd><a name="index-tool-bar-4350"></a>Number of lines to reserve for the tool bar.  A zero value suppresses
-the tool bar.  For the Emacs tool bar (i.e. not Gtk+), if the value is
-non-zero and <code>auto-resize-tool-bars</code> is non-<code>nil</code>, the tool bar's
-size will be changed automatically so that all tool bar items are visible. 
-  If the value of <code>auto-resize-tool-bars</code> is <code>grow-only</code>,
-the tool bar expands automatically, but does not contract automatically. 
-To contract the tool bar, you must redraw the frame by entering <kbd>C-l</kbd>. 
-For the Gtk+ tool bar, any non-zero value means on and
-<code>auto-resize-tool-bars</code> has no effect.
+     <br><dt><code>toolBar</code> (class <code>ToolBar</code>)<dd><a name="index-tool-bar-4686"></a>If the value of this resource is &lsquo;<samp><span class="samp">off</span></samp>&rsquo; or &lsquo;<samp><span class="samp">false</span></samp>&rsquo; or
+&lsquo;<samp><span class="samp">0</span></samp>&rsquo;, Emacs disables Tool Bar mode at startup (see <a href="Tool-Bars.html#Tool-Bars">Tool Bars</a>).
 
-     <br><dt><code>useXIM</code> (class <code>UseXIM</code>)<dd><a name="index-XIM-4351"></a><a name="index-X-input-methods-4352"></a><a name="index-input-methods_002c-X-4353"></a>Turn off use of X input methods (XIM) if &lsquo;<samp><span class="samp">false</span></samp>&rsquo; or &lsquo;<samp><span class="samp">off</span></samp>&rsquo;. 
-This is only relevant if your Emacs is actually built with XIM
-support.  It is potentially useful to turn off XIM for efficiency,
-especially slow X client/server links.
+     <br><dt><code>useXIM</code> (class <code>UseXIM</code>)<dd><a name="index-XIM-4687"></a><a name="index-X-input-methods-4688"></a><a name="index-input-methods_002c-X-4689"></a>Disable use of X input methods (XIM) if &lsquo;<samp><span class="samp">false</span></samp>&rsquo; or &lsquo;<samp><span class="samp">off</span></samp>&rsquo;. 
+This is only relevant if your Emacs is built with XIM support.  It
+might be useful to turn off XIM on slow X client/server links.
 
      <br><dt><code>verticalScrollBars</code> (class <code>ScrollBars</code>)<dd>Give frames scroll bars if &lsquo;<samp><span class="samp">on</span></samp>&rsquo;; don't have scroll bars if
 &lsquo;<samp><span class="samp">off</span></samp>&rsquo;.
 
-     <br><dt><code>visualClass</code> (class <code>VisualClass</code>)<dd>Specify the &ldquo;visual&rdquo; that X should use.  This tells X how to handle
-colors.
-
-     <p>The value should start with one of &lsquo;<samp><span class="samp">TrueColor</span></samp>&rsquo;,
-&lsquo;<samp><span class="samp">PseudoColor</span></samp>&rsquo;, &lsquo;<samp><span class="samp">DirectColor</span></samp>&rsquo;, &lsquo;<samp><span class="samp">StaticColor</span></samp>&rsquo;,
-&lsquo;<samp><span class="samp">GrayScale</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">StaticGray</span></samp>&rsquo;, followed by
-&lsquo;<samp><span class="samp">-</span><var>depth</var></samp>&rsquo;, where <var>depth</var> is the number of color planes. 
-Most terminals only allow a few &ldquo;visuals,&rdquo; and the &lsquo;<samp><span class="samp">dpyinfo</span></samp>&rsquo;
-program outputs information saying which ones. 
+     <br><dt><code>visualClass</code> (class <code>VisualClass</code>)<dd>The <dfn>visual class</dfn> for X color display.  If specified, the value
+should start with one of &lsquo;<samp><span class="samp">TrueColor</span></samp>&rsquo;, &lsquo;<samp><span class="samp">PseudoColor</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">DirectColor</span></samp>&rsquo;, &lsquo;<samp><span class="samp">StaticColor</span></samp>&rsquo;, &lsquo;<samp><span class="samp">GrayScale</span></samp>&rsquo;, and
+&lsquo;<samp><span class="samp">StaticGray</span></samp>&rsquo;, followed by &lsquo;<samp><span class="samp">-</span><var>depth</var></samp>&rsquo;, where <var>depth</var>
+is the number of color planes. 
 </dl>
+
+   <p>You can also use X resources to customize individual Emacs faces
+(see <a href="Faces.html#Faces">Faces</a>).  For example, setting the resource
+&lsquo;<samp><var>face</var><span class="samp">.attributeForeground</span></samp>&rsquo; is equivalent to customizing the
+&lsquo;<samp><span class="samp">foreground</span></samp>&rsquo; attribute of the face <var>face</var>.  However, we
+recommend customizing faces from within Emacs, instead of using X
+resources.  See <a href="Face-Customization.html#Face-Customization">Face Customization</a>.
 
    </body></html>
 

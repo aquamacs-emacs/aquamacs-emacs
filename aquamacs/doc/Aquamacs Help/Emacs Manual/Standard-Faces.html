@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Standard Faces - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Display.html#Display" title="Display">
-<link rel="prev" href="Faces.html#Faces" title="Faces">
-<link rel="next" href="Temporary-Face-Changes.html#Temporary-Face-Changes" title="Temporary Face Changes">
+<link rel="prev" href="Colors.html#Colors" title="Colors">
+<link rel="next" href="Text-Scale.html#Text-Scale" title="Text Scale">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -39,26 +36,20 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <div class="node">
 <a name="Standard-Faces"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Temporary-Face-Changes.html#Temporary-Face-Changes">Temporary Face Changes</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Faces.html#Faces">Faces</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Text-Scale.html#Text-Scale">Text Scale</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Colors.html#Colors">Colors</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
 <hr>
 </div>
 
-<h3 class="section">18.6 Standard Faces</h3>
+<h3 class="section">14.10 Standard Faces</h3>
 
-<p><a name="index-list_002dfaces_002ddisplay-489"></a>  To see what faces are currently defined, and what they look like,
-type <kbd>M-x list-faces-display</kbd>.  It's possible for a given face to
-look different in different frames; this command shows the appearance
-in the frame in which you type it.  With a prefix argument, this
-prompts for a regular expression, and displays only faces with names
-matching that regular expression.
-
-   <p>Here are the standard faces for specifying text appearance.  You can
+<p>Here are the standard faces for specifying text appearance.  You can
 apply them to specific text when you want the effects they produce.
 
      <dl>
 <dt><code>default</code><dd>This face is used for ordinary text that doesn't specify any face. 
+Its background color is used as the frame's background color. 
 <br><dt><code>bold</code><dd>This face uses a bold variant of the default font. 
 <br><dt><code>italic</code><dd>This face uses an italic variant of the default font. 
 <br><dt><code>bold-italic</code><dd>This face uses a bold italic variant of the default font. 
@@ -77,28 +68,27 @@ text temporarily for specific purposes.  (Many other modes define
 their own faces for this purpose.)
 
      <dl>
-<dt><code>highlight</code><dd>This face is used for highlighting portions of text, in various modes. 
-For example, mouse-sensitive text is highlighted using this face. 
-<br><dt><code>isearch</code><dd>This face is used for highlighting the current Isearch match
+<dt><code>highlight</code><dd>This face is used for text highlighting in various contexts, such as
+when the mouse cursor is moved over a hyperlink. 
+<br><dt><code>isearch</code><dd>This face is used to highlight the current Isearch match
 (see <a href="Incremental-Search.html#Incremental-Search">Incremental Search</a>). 
-<br><dt><code>query-replace</code><dd>This face is used for highlighting the current Query Replace match
+<br><dt><code>query-replace</code><dd>This face is used to highlight the current Query Replace match
 (see <a href="Replace.html#Replace">Replace</a>). 
-<br><dt><code>lazy-highlight</code><dd>This face is used for lazy highlighting of Isearch and Query Replace
-matches other than the current one. 
-<br><dt><code>region</code><dd>This face is used for displaying a selected region (see <a href="Mark.html#Mark">Mark</a>). 
+<br><dt><code>lazy-highlight</code><dd>This face is used to highlight &ldquo;lazy matches&rdquo; for Isearch and Query
+Replace (matches other than the current one). 
+<br><dt><code>region</code><dd>This face is used for displaying an active region (see <a href="Mark.html#Mark">Mark</a>). 
+When Emacs is built with GTK support, its colors are taken from the
+current GTK theme. 
 <br><dt><code>secondary-selection</code><dd>This face is used for displaying a secondary X selection (see <a href="Secondary-Selection.html#Secondary-Selection">Secondary Selection</a>). 
 <br><dt><code>trailing-whitespace</code><dd>The face for highlighting excess spaces and tabs at the end of a line
-when <code>show-trailing-whitespace</code> is non-<code>nil</code>; see
-<a href="Useless-Whitespace.html#Useless-Whitespace">Useless Whitespace</a>. 
-<br><dt><code>nobreak-space</code><dd>The face for displaying the character &ldquo;nobreak space.&rdquo;
-<br><dt><code>escape-glyph</code><dd>The face for highlighting the &lsquo;<samp><span class="samp">\</span></samp>&rsquo; or &lsquo;<samp><span class="samp">^</span></samp>&rsquo; that indicates
-a control character.  It's also used when &lsquo;<samp><span class="samp">\</span></samp>&rsquo; indicates a
-nobreak space or nobreak (soft) hyphen. 
+when <code>show-trailing-whitespace</code> is non-<code>nil</code> (see <a href="Useless-Whitespace.html#Useless-Whitespace">Useless Whitespace</a>). 
+<br><dt><code>escape-glyph</code><dd>The face for displaying control characters and escape sequences
+(see <a href="Text-Display.html#Text-Display">Text Display</a>). 
+<br><dt><code>nobreak-space</code><dd>The face for displaying &ldquo;no-break&rdquo; space characters (see <a href="Text-Display.html#Text-Display">Text Display</a>). 
 </dl>
 
-   <p>These faces control the appearance of parts of the Emacs frame. 
-They exist as faces to provide a consistent way to customize the
-appearance of these parts of the frame.
+   <p>The following faces control the appearance of parts of the Emacs
+frame:
 
      <dl>
 <dt><code>mode-line</code><dd>This face is used for the mode line of the currently selected window,
@@ -115,32 +105,41 @@ in that face affect mode lines in all windows.
 at the top of a window just as the mode line appears at the bottom. 
 Most windows do not have a header line&mdash;only some special modes, such
 Info mode, create one. 
-<br><dt><code>vertical-border</code><dd>This face is used for the vertical divider between windows. 
-By default this face inherits from the <code>mode-line-inactive</code> face
-on character terminals.  On graphical displays the foreground color of
-this face is used for the vertical line between windows without
-scrollbars. 
-<br><dt><code>minibuffer-prompt</code><dd><a name="index-g_t_0040code_007bminibuffer_002dprompt_007d-face-490"></a><a name="index-minibuffer_002dprompt_002dproperties-491"></a>This face is used for the prompt strings displayed in the minibuffer. 
+<br><dt><code>vertical-border</code><dd>This face is used for the vertical divider between windows on text
+terminals. 
+<br><dt><code>minibuffer-prompt</code><dd><a name="index-g_t_0040code_007bminibuffer_002dprompt_007d-face-629"></a><a name="index-minibuffer_002dprompt_002dproperties-630"></a>This face is used for the prompt strings displayed in the minibuffer. 
 By default, Emacs automatically adds this face to the value of
 <code>minibuffer-prompt-properties</code>, which is a list of text
 properties used to display the prompt text.  (This variable takes
 effect when you enter the minibuffer.) 
-<br><dt><code>fringe</code><dd><a name="index-g_t_0040code_007bfringe_007d-face-492"></a>The face for the fringes to the left and right of windows on graphic
+<br><dt><code>fringe</code><dd><a name="index-g_t_0040code_007bfringe_007d-face-631"></a>The face for the fringes to the left and right of windows on graphic
 displays.  (The fringes are the narrow portions of the Emacs frame
 between the text area and the window's right and left borders.) 
 See <a href="Fringes.html#Fringes">Fringes</a>. 
-<br><dt><code>scroll-bar</code><dd>This face determines the visual appearance of the scroll bar. 
-See <a href="Scroll-Bars.html#Scroll-Bars">Scroll Bars</a>. 
-<br><dt><code>border</code><dd>This face determines the color of the frame border. 
-<br><dt><code>cursor</code><dd>This face determines the color of the cursor. 
+<br><dt><code>cursor</code><dd>The <code>:background</code> attribute of this face specifies the color of
+the text cursor.  See <a href="Cursor-Display.html#Cursor-Display">Cursor Display</a>. 
+<br><dt><code>tooltip</code><dd>This face is used for tooltip text.  By default, if Emacs is built
+with GTK support, tooltips are drawn via GTK and this face has no
+effect.  See <a href="Tooltips.html#Tooltips">Tooltips</a>. 
 <br><dt><code>mouse</code><dd>This face determines the color of the mouse pointer. 
+</dl>
+
+   <p>The following faces likewise control the appearance of parts of the
+Emacs frame, but only on text terminals, or when Emacs is built on X
+with no toolkit support.  (For all other cases, the appearance of the
+respective frame elements is determined by system-wide settings.)
+
+     <dl>
+<dt><code>scroll-bar</code><dd>This face determines the visual appearance of the scroll bar. 
+See <a href="Scroll-Bars.html#Scroll-Bars">Scroll Bars</a>. 
 <br><dt><code>tool-bar</code><dd>This face determines the color of tool bar icons.  See <a href="Tool-Bars.html#Tool-Bars">Tool Bars</a>. 
-<br><dt><code>tooltip</code><dd>This face is used for tooltips.  See <a href="Tooltips.html#Tooltips">Tooltips</a>. 
-<br><dt><code>menu</code><dd><a name="index-menu-bar-appearance-493"></a><a name="index-g_t_0040code_007bmenu_007d-face_002c-no-effect-if-customized-494"></a><a name="index-customization-of-_0040code_007bmenu_007d-face-495"></a>This face determines the colors and font of Emacs's menus.  See <a href="Menu-Bars.html#Menu-Bars">Menu Bars</a>.  This has no effect in Emacs built with GTK and in the
-MS-Windows/Mac ports; you need to use system-wide styles and options
-to change the appearance of GTK, Windows, or Mac menus.  Setting the
-font of LessTif/Motif menus is currently not supported; attempts to
-set the font are ignored in this case. 
+<br><dt><code>menu</code><dd><a name="index-menu-bar-appearance-632"></a><a name="index-g_t_0040code_007bmenu_007d-face_002c-no-effect-if-customized-633"></a><a name="index-customization-of-_0040code_007bmenu_007d-face-634"></a>This face determines the colors and font of Emacs's menus.  See <a href="Menu-Bars.html#Menu-Bars">Menu Bars</a>. 
+<br><dt><code>tty-menu-enabled-face</code><dd><a name="index-faces-for-text_002dmode-menus-635"></a><a name="index-TTY-menu-faces-636"></a>This face is used to display enabled menu items on text-mode
+terminals. 
+<br><dt><code>tty-menu-disabled-face</code><dd>This face is used to display disabled menu items on text-mode
+terminals. 
+<br><dt><code>tty-menu-selected-face</code><dd>This face is used to display on text-mode terminals the menu item that
+would be selected if you click a mouse or press &lt;RET&gt;. 
 </dl>
 
    </body></html>

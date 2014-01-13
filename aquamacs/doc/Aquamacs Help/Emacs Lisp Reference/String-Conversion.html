@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>String Conversion - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Formatting-Strings.html#Formatting-Strings" title="Formatting Strings">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,16 +41,15 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Strings-and-Characters.html#Strings-and
 <hr>
 </div>
 
-<!-- node-name,  next,  previous,  up -->
 <h3 class="section">4.6 Conversion of Characters and Strings</h3>
 
-<p><a name="index-conversion-of-strings-245"></a>
+<p><a name="index-conversion-of-strings-257"></a>
   This section describes functions for converting between characters,
 strings and integers.  <code>format</code> (see <a href="Formatting-Strings.html#Formatting-Strings">Formatting Strings</a>) and
 <code>prin1-to-string</code> (see <a href="Output-Functions.html#Output-Functions">Output Functions</a>) can also convert
 Lisp objects into strings.  <code>read-from-string</code> (see <a href="Input-Functions.html#Input-Functions">Input Functions</a>) can &ldquo;convert&rdquo; a string representation of a Lisp object
-into an object.  The functions <code>string-make-multibyte</code> and
-<code>string-make-unibyte</code> convert the text representation of a string
+into an object.  The functions <code>string-to-multibyte</code> and
+<code>string-to-unibyte</code> convert the text representation of a string
 (see <a href="Converting-Representations.html#Converting-Representations">Converting Representations</a>).
 
    <p>See <a href="Documentation.html#Documentation">Documentation</a>, for functions that produce textual descriptions
@@ -62,8 +58,8 @@ of text characters and general input events
 are used primarily for making help messages.
 
 <div class="defun">
-&mdash; Function: <b>number-to-string</b><var> number<a name="index-number_002dto_002dstring-246"></a></var><br>
-<blockquote><p><a name="index-integer-to-string-247"></a><a name="index-integer-to-decimal-248"></a>This function returns a string consisting of the printed base-ten
+&mdash; Function: <b>number-to-string</b><var> number<a name="index-number_002dto_002dstring-258"></a></var><br>
+<blockquote><p><a name="index-integer-to-string-259"></a><a name="index-integer-to-decimal-260"></a>This function returns a string consisting of the printed base-ten
 representation of <var>number</var>, which may be an integer or a floating
 point number.  The returned value starts with a minus sign if the argument is
 negative.
@@ -75,14 +71,14 @@ negative.
           (number-to-string -23.5)
                &rArr; "-23.5"
 </pre>
-        <p><a name="index-int_002dto_002dstring-249"></a><code>int-to-string</code> is a semi-obsolete alias for this function.
+        <p><a name="index-int_002dto_002dstring-261"></a><code>int-to-string</code> is a semi-obsolete alias for this function.
 
         <p>See also the function <code>format</code> in <a href="Formatting-Strings.html#Formatting-Strings">Formatting Strings</a>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>string-to-number</b><var> string &amp;optional base<a name="index-string_002dto_002dnumber-250"></a></var><br>
-<blockquote><p><a name="index-string-to-number-251"></a>This function returns the numeric value of the characters in
+&mdash; Function: <b>string-to-number</b><var> string &amp;optional base<a name="index-string_002dto_002dnumber-262"></a></var><br>
+<blockquote><p><a name="index-string-to-number-263"></a>This function returns the numeric value of the characters in
 <var>string</var>.  If <var>base</var> is non-<code>nil</code>, it must be an integer
 between 2 and 16 (inclusive), and integers are converted in that base. 
 If <var>base</var> is <code>nil</code>, then base ten is used.  Floating point
@@ -111,18 +107,18 @@ this function returns 0.
           (string-to-number "1e5")
                &rArr; 100000.0
 </pre>
-        <p><a name="index-string_002dto_002dint-252"></a><code>string-to-int</code> is an obsolete alias for this function. 
+        <p><a name="index-string_002dto_002dint-264"></a><code>string-to-int</code> is an obsolete alias for this function. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>char-to-string</b><var> character<a name="index-char_002dto_002dstring-253"></a></var><br>
-<blockquote><p><a name="index-character-to-string-254"></a>This function returns a new string containing one character,
+&mdash; Function: <b>char-to-string</b><var> character<a name="index-char_002dto_002dstring-265"></a></var><br>
+<blockquote><p><a name="index-character-to-string-266"></a>This function returns a new string containing one character,
 <var>character</var>.  This function is semi-obsolete because the function
 <code>string</code> is more general.  See <a href="Creating-Strings.html#Creating-Strings">Creating Strings</a>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>string-to-char</b><var> string<a name="index-string_002dto_002dchar-255"></a></var><br>
+&mdash; Function: <b>string-to-char</b><var> string<a name="index-string_002dto_002dchar-267"></a></var><br>
 <blockquote><p>  This function returns the first character in <var>string</var>.  This
 mostly identical to <code>(aref string 0)</code>, except that it returns 0
 if the string is empty.  (The value is also 0 when the first character

@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Window Internals - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Process-Internals.html#Process-Internals" title="Process Internals">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,10 +41,11 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Object-Internals.html#Object-Internals"
 <hr>
 </div>
 
-<h4 class="appendixsubsec">E.6.2 Window Internals</h4>
+<h4 class="subsection">E.6.2 Window Internals</h4>
 
-<p><a name="index-internals_002c-of-window-3995"></a><a name="index-window-internals-3996"></a>
-  Windows have the following accessible fields:
+<p><a name="index-internals_002c-of-window-4364"></a><a name="index-window-internals-4365"></a>
+  The fields of a window (for a complete list, see the definition of
+<code>struct window</code> in <samp><span class="file">window.h</span></samp>) include:
 
      <dl>
 <dt><code>frame</code><dd>The frame that this window is on.
@@ -66,11 +64,12 @@ leaves of the tree, which actually display buffers.
      <br><dt><code>hchild</code><dt><code>vchild</code><dd>These fields contain the window's leftmost child and its topmost child
 respectively.  <code>hchild</code> is used if the window is subdivided
 horizontally by child windows, and <code>vchild</code> if it is subdivided
-vertically.
+vertically.  In a live window, only one of <code>hchild</code>, <code>vchild</code>,
+and <code>buffer</code> (q.v.) is non-<code>nil</code>.
 
      <br><dt><code>next</code><dt><code>prev</code><dd>The next sibling and previous sibling of this window.  <code>next</code> is
-<code>nil</code> if the window is the rightmost or bottommost in its group;
-<code>prev</code> is <code>nil</code> if it is the leftmost or topmost in its
+<code>nil</code> if the window is the right-most or bottom-most in its group;
+<code>prev</code> is <code>nil</code> if it is the left-most or top-most in its
 group.
 
      <br><dt><code>left_col</code><dd>The left-hand edge of the window, measured in columns, relative to the
@@ -88,7 +87,7 @@ the separator line on the right of the window (if any).
      <br><dt><code>start</code><dd>A marker pointing to the position in the buffer that is the first
 character displayed in the window.
 
-     <br><dt><code>pointm</code><dd><a name="index-window-point-internals-3997"></a>This is the value of point in the current buffer when this window is
+     <br><dt><code>pointm</code><dd><a name="index-window-point-internals-4366"></a>This is the value of point in the current buffer when this window is
 selected; when it is not selected, it retains its previous value.
 
      <br><dt><code>force_start</code><dd>If this flag is non-<code>nil</code>, it says that the window has been
@@ -123,9 +122,14 @@ window was last updated.
 
      <br><dt><code>vertical_scroll_bar</code><dd>This window's vertical scroll bar.
 
-     <br><dt><code>left_margin_width</code><dt><code>right_margin_width</code><dd>The widths of the left and right margins in this window.  A value of
-<code>nil</code> means to use the buffer's value of <code>left-margin-width</code>
-or <code>right-margin-width</code>.
+     <br><dt><code>left_margin_cols</code><dt><code>right_margin_cols</code><dd>The widths of the left and right margins in this window.  A value of
+<code>nil</code> means no margin.
+
+     <br><dt><code>left_fringe_width</code><dt><code>right_fringe_width</code><dd>The widths of the left and right fringes in this window.  A value of
+<code>nil</code> or <code>t</code> means use the values of the frame.
+
+     <br><dt><code>fringes_outside_margins</code><dd>A non-<code>nil</code> value means the fringes outside the display margins;
+othersize they are between the margin and the text.
 
      <br><dt><code>window_end_pos</code><dd>This is computed as <code>z</code> minus the buffer position of the last glyph
 in the current matrix of the window.  The value is only valid if
@@ -137,7 +141,7 @@ in the current matrix of the window.  The value is only valid if
 <code>window_end_pos</code>.
 
      <br><dt><code>window_end_valid</code><dd>This field is set to a non-<code>nil</code> value if <code>window_end_pos</code> is truly
-valid.  This is <code>nil</code> if nontrivial redisplay is preempted since in that
+valid.  This is <code>nil</code> if nontrivial redisplay is pre-empted, since in that
 case the display that <code>window_end_pos</code> was computed for did not get
 onto the screen.
 
@@ -147,11 +151,15 @@ onto the screen.
 
      <br><dt><code>phys_cursor</code><dd>A structure describing where the cursor of this window physically is.
 
-     <br><dt><code>phys_cursor_type</code><dd>The type of cursor that was last displayed on this window.
+     <br><dt><code>phys_cursor_type</code><dd><!-- FIXME What is this? -->
+<!-- itemx phys_cursor_ascent -->
+<dt><code>phys_cursor_height</code><dt><code>phys_cursor_width</code><dd>The type, height, and width of the cursor that was last displayed on
+this window.
 
      <br><dt><code>phys_cursor_on_p</code><dd>This field is non-zero if the cursor is physically on.
 
-     <br><dt><code>cursor_off_p</code><dd>Non-zero means the cursor in this window is logically on.
+     <br><dt><code>cursor_off_p</code><dd>Non-zero means the cursor in this window is logically off.  This is
+used for blinking the cursor.
 
      <br><dt><code>last_cursor_off_p</code><dd>This field contains the value of <code>cursor_off_p</code> as of the time of
 the last redisplay.
@@ -173,7 +181,8 @@ horizontally to the left.  Normally, this is 0.
 This is used for displaying the line number of point in the mode line.
 
      <br><dt><code>base_line_pos</code><dd>The position in the buffer for which the line number is known, or
-<code>nil</code> meaning none is known.
+<code>nil</code> meaning none is known.  If it is a buffer, don't display
+the line number as long as the window shows that buffer.
 
      <br><dt><code>region_showing</code><dd>If the region (or part of it) is highlighted in this window, this field
 holds the mark position that made one end of that region.  Otherwise,
@@ -182,9 +191,7 @@ this field is <code>nil</code>.
      <br><dt><code>column_number_displayed</code><dd>The column number currently displayed in this window's mode line, or <code>nil</code>
 if column numbers are not being displayed.
 
-     <br><dt><code>current_matrix</code><dd>A glyph matrix describing the current display of this window.
-
-     <br><dt><code>desired_matrix</code><dd>A glyph matrix describing the desired display of this window. 
+     <br><dt><code>current_matrix</code><dt><code>desired_matrix</code><dd>Glyph matrices describing the current and desired display of this window. 
 </dl>
 
    </body></html>

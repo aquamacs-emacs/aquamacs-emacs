@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Numeric Conversions - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Arithmetic-Operations.html#Arithmetic-Operations" title="Arithmetic Operations">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,28 +43,29 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Numbers.html#Numbers">Numbers</a>
 
 <h3 class="section">3.5 Numeric Conversions</h3>
 
-<p><a name="index-rounding-in-conversions-167"></a><a name="index-number-conversions-168"></a><a name="index-converting-numbers-169"></a>
+<p><a name="index-rounding-in-conversions-177"></a><a name="index-number-conversions-178"></a><a name="index-converting-numbers-179"></a>
 To convert an integer to floating point, use the function <code>float</code>.
 
 <div class="defun">
-&mdash; Function: <b>float</b><var> number<a name="index-float-170"></a></var><br>
+&mdash; Function: <b>float</b><var> number<a name="index-float-180"></a></var><br>
 <blockquote><p>This returns <var>number</var> converted to floating point. 
 If <var>number</var> is already a floating point number, <code>float</code> returns
 it unchanged. 
 </p></blockquote></div>
 
-   <p>There are four functions to convert floating point numbers to integers;
-they differ in how they round.  All accept an argument <var>number</var>
-and an optional argument <var>divisor</var>.  Both arguments may be
-integers or floating point numbers.  <var>divisor</var> may also be
+   <p>There are four functions to convert floating point numbers to
+integers; they differ in how they round.  All accept an argument
+<var>number</var> and an optional argument <var>divisor</var>.  Both arguments
+may be integers or floating point numbers.  <var>divisor</var> may also be
 <code>nil</code>.  If <var>divisor</var> is <code>nil</code> or omitted, these
 functions convert <var>number</var> to an integer, or return it unchanged
 if it already is an integer.  If <var>divisor</var> is non-<code>nil</code>, they
 divide <var>number</var> by <var>divisor</var> and convert the result to an
-integer.  An <code>arith-error</code> results if <var>divisor</var> is 0.
+integer.  integer.  If <var>divisor</var> is zero (whether integer or
+floating-point), Emacs signals an <code>arith-error</code> error.
 
 <div class="defun">
-&mdash; Function: <b>truncate</b><var> number &amp;optional divisor<a name="index-truncate-171"></a></var><br>
+&mdash; Function: <b>truncate</b><var> number &amp;optional divisor<a name="index-truncate-181"></a></var><br>
 <blockquote><p>This returns <var>number</var>, converted to an integer by rounding towards
 zero.
 
@@ -83,7 +81,7 @@ zero.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>floor</b><var> number &amp;optional divisor<a name="index-floor-172"></a></var><br>
+&mdash; Function: <b>floor</b><var> number &amp;optional divisor<a name="index-floor-182"></a></var><br>
 <blockquote><p>This returns <var>number</var>, converted to an integer by rounding downward
 (towards negative infinity).
 
@@ -104,7 +102,7 @@ operation that corresponds to <code>mod</code>, rounding downward.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>ceiling</b><var> number &amp;optional divisor<a name="index-ceiling-173"></a></var><br>
+&mdash; Function: <b>ceiling</b><var> number &amp;optional divisor<a name="index-ceiling-183"></a></var><br>
 <blockquote><p>This returns <var>number</var>, converted to an integer by rounding upward
 (towards positive infinity).
 
@@ -120,7 +118,7 @@ operation that corresponds to <code>mod</code>, rounding downward.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>round</b><var> number &amp;optional divisor<a name="index-round-174"></a></var><br>
+&mdash; Function: <b>round</b><var> number &amp;optional divisor<a name="index-round-184"></a></var><br>
 <blockquote><p>This returns <var>number</var>, converted to an integer by rounding towards the
 nearest integer.  Rounding a value equidistant between two integers
 may choose the integer closer to zero, or it may prefer an even integer,

@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>emacsclient Options - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="prev" href="Invoking-emacsclient.html#Invoking-emacsclient" title="Invoking emacsclient">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -43,9 +40,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Emacs-Server.html#Emacs-Server">Emacs S
 <hr>
 </div>
 
-<h3 class="section">42.2 <code>emacsclient</code> Options</h3>
+<h3 class="section">37.2 <code>emacsclient</code> Options</h3>
 
-<p><a name="index-g_t_0040code_007bemacsclient_007d-options-3760"></a>
+<p><a name="index-g_t_0040code_007bemacsclient_007d-options-4057"></a>
   You can pass some optional arguments to the <samp><span class="command">emacsclient</span></samp>
 program, such as:
 
@@ -61,28 +58,36 @@ listed below:
 
      <dl>
 <dt>&lsquo;<samp><span class="samp">-a </span><var>command</var></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">--alternate-editor=</span><var>command</var></samp>&rsquo;<dd>Specify a command to run if <code>emacsclient</code> fails to contact Emacs. 
-This is useful when running <code>emacsclient</code> in a script.  For
-example, the following setting for the <samp><span class="env">EDITOR</span></samp> environment
-variable will always give you an editor, even if no Emacs server is
-running:
+This is useful when running <code>emacsclient</code> in a script.
 
-     <pre class="example">          EDITOR="emacsclient --alternate-editor emacs +%d %s"
-</pre>
-     <p class="noindent">As a special exception, if <var>command</var> is the empty string, then
-<code>emacsclient</code> starts Emacs in daemon mode and then tries
-connecting again.
+     <p>As a special exception, if <var>command</var> is the empty string, then
+<code>emacsclient</code> starts Emacs in daemon mode (as <samp><span class="command">emacs
+--daemon</span></samp>) and then tries connecting again.
 
-     <p><a name="index-g_t_0040env_007bALTERNATE_005fEDITOR_007d-environment-variable-3761"></a>The environment variable <samp><span class="env">ALTERNATE_EDITOR</span></samp> has the same effect as
+     <p><a name="index-g_t_0040env_007bALTERNATE_005fEDITOR_007d-environment-variable-4058"></a>The environment variable <samp><span class="env">ALTERNATE_EDITOR</span></samp> has the same effect as
 the &lsquo;<samp><span class="samp">-a</span></samp>&rsquo; option.  If both are present, the latter takes
 precedence.
 
-     <br><dt>&lsquo;<samp><span class="samp">-c</span></samp>&rsquo;<dd>Create a new graphical frame, instead of using an existing Emacs
-frame.  Emacs 23 can create a graphical frame even if it was started
-in a text-only terminal, provided it is able to connect to a graphical
-display.  If no graphical display is available, Emacs creates a new
-text-only terminal frame (see <a href="Frames.html#Frames">Frames</a>).  If you omit a filename
-argument while supplying the &lsquo;<samp><span class="samp">-c</span></samp>&rsquo; option, the new frame displays
-the &lsquo;<samp><span class="samp">*scratch*</span></samp>&rsquo; buffer (see <a href="Buffers.html#Buffers">Buffers</a>).
+     <p><a name="index-client-frame-4059"></a><br><dt>&lsquo;<samp><span class="samp">-c</span></samp>&rsquo;<dd>Create a new graphical <dfn>client frame</dfn>, instead of using an
+existing Emacs frame.  See below for the special behavior of <kbd>C-x
+C-c</kbd> in a client frame.  If Emacs cannot create a new graphical frame
+(e.g., if it cannot connect to the X server), it tries to create a
+text terminal client frame, as though you had supplied the &lsquo;<samp><span class="samp">-t</span></samp>&rsquo;
+option instead.
+
+     <p>On MS-Windows, a single Emacs session cannot display frames on both
+graphical and text terminals, nor on multiple text terminals.  Thus,
+if the Emacs server is running on a text terminal, the &lsquo;<samp><span class="samp">-c</span></samp>&rsquo;
+option, like the &lsquo;<samp><span class="samp">-t</span></samp>&rsquo; option, creates a new frame in the server's
+current text terminal.  See <a href="Windows-Startup.html#Windows-Startup">Windows Startup</a>.
+
+     <p>If you omit a filename argument while supplying the &lsquo;<samp><span class="samp">-c</span></samp>&rsquo; option,
+the new frame displays the <samp><span class="file">*scratch*</span></samp> buffer by default.  If
+<code>initial-buffer-choice</code> is a string (see <a href="Entering-Emacs.html#Entering-Emacs">Entering Emacs</a>), the
+new frame displays that file or directory instead.
+
+     <br><dt>&lsquo;<samp><span class="samp">-F </span><var>alist</var></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">--frame-parameters=</span><var>alist</var></samp>&rsquo;<dd>Set the parameters for a newly-created graphical frame
+(see <a href="Frame-Parameters.html#Frame-Parameters">Frame Parameters</a>).
 
      <br><dt>&lsquo;<samp><span class="samp">-d </span><var>display</var></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">--display=</span><var>display</var></samp>&rsquo;<dd>Tell Emacs to open the given files on the X display <var>display</var>
 (assuming there is more than one X display available).
@@ -92,60 +97,74 @@ files.  When this option is given, the arguments to
 <samp><span class="command">emacsclient</span></samp> are interpreted as a list of expressions to
 evaluate, <em>not</em> as a list of files to visit.
 
-     <br><dt>&lsquo;<samp><span class="samp">-f </span><var>server-file</var></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">--server-file=</span><var>server-file</var></samp>&rsquo;<dd><a name="index-g_t_0040env_007bEMACS_005fSERVER_005fFILE_007d-environment-variable-3762"></a><a name="index-server-file-3763"></a><a name="index-server_002duse_002dtcp-3764"></a><a name="index-server_002dhost-3765"></a>Specify a <dfn>server file</dfn> for connecting to an Emacs server via TCP.
+     <br><dt>&lsquo;<samp><span class="samp">-f </span><var>server-file</var></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">--server-file=</span><var>server-file</var></samp>&rsquo;<dd><a name="index-g_t_0040env_007bEMACS_005fSERVER_005fFILE_007d-environment-variable-4060"></a>Specify a <dfn>server file</dfn> for connecting to an Emacs server via TCP.
 
      <p>An Emacs server usually uses an operating system feature called a
 &ldquo;local socket&rdquo; to listen for connections.  Some operating systems,
 such as Microsoft Windows, do not support local sockets; in that case,
-Emacs uses TCP instead.  When you start the Emacs server, Emacs
-creates a server file containing some TCP information that
-<samp><span class="command">emacsclient</span></samp> needs for making the connection.  By default,
-the server file is in <samp><span class="file">~/.emacs.d/server/</span></samp>.  On Microsoft
-Windows, if <samp><span class="command">emacsclient</span></samp> does not find the server file there,
-it looks in the <samp><span class="file">.emacs.d/server/</span></samp> subdirectory of the directory
-pointed to by the <samp><span class="env">APPDATA</span></samp> environment variable.  You can tell
-<samp><span class="command">emacsclient</span></samp> to use a specific server file with the &lsquo;<samp><span class="samp">-f</span></samp>&rsquo;
-or &lsquo;<samp><span class="samp">--server-file</span></samp>&rsquo; option, or by setting the
-<samp><span class="env">EMACS_SERVER_FILE</span></samp> environment variable.
+the server communicates with <samp><span class="command">emacsclient</span></samp> via TCP.
 
-     <p>Even if local sockets are available, you can tell Emacs to use TCP by
-setting the variable <code>server-use-tcp</code> to <code>t</code>.  One advantage
-of TCP is that the server can accept connections from remote machines. 
-For this to work, you must (i) set the variable <code>server-host</code> to
-the hostname or IP address of the machine on which the Emacs server
-runs, and (ii) provide <samp><span class="command">emacsclient</span></samp> with the server file. 
-(One convenient way to do the latter is to put the server file on a
-networked file system such as NFS.)
+     <p><a name="index-server_002dauth_002ddir-4061"></a><a name="index-server-file-4062"></a><a name="index-server_002dport-4063"></a>When you start a TCP Emacs server, Emacs creates a <dfn>server file</dfn>
+containing the TCP information to be used by <samp><span class="command">emacsclient</span></samp> to
+connect to the server.  The variable <code>server-auth-dir</code> specifies
+the directory containing the server file; by default, this is
+<samp><span class="file">~/.emacs.d/server/</span></samp>.  To tell <samp><span class="command">emacsclient</span></samp> to connect
+to the server over TCP with a specific server file, use the &lsquo;<samp><span class="samp">-f</span></samp>&rsquo;
+or &lsquo;<samp><span class="samp">--server-file</span></samp>&rsquo; option, or set the <samp><span class="env">EMACS_SERVER_FILE</span></samp>
+environment variable.
 
      <br><dt>&lsquo;<samp><span class="samp">-n</span></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">--no-wait</span></samp>&rsquo;<dd>Let <samp><span class="command">emacsclient</span></samp> exit immediately, instead of waiting until
 all server buffers are finished.  You can take as long as you like to
 edit the server buffers within Emacs, and they are <em>not</em> killed
 when you type <kbd>C-x #</kbd> in them.
 
+     <br><dt>&lsquo;<samp><span class="samp">--parent-id </span><var>ID</var></samp>&rsquo;<dd>Open an <samp><span class="command">emacsclient</span></samp> frame as a client frame in the parent X
+window with id <var>ID</var>, via the XEmbed protocol.  Currently, this
+option is mainly useful for developers.
+
+     <br><dt>&lsquo;<samp><span class="samp">-q</span></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">--quiet</span></samp>&rsquo;<dd>Do not let <samp><span class="command">emacsclient</span></samp> display messages about waiting for
+Emacs or connecting to remote server sockets.
+
      <br><dt>&lsquo;<samp><span class="samp">-s </span><var>server-name</var></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">--socket-name=</span><var>server-name</var></samp>&rsquo;<dd>Connect to the Emacs server named <var>server-name</var>.  The server name
 is given by the variable <code>server-name</code> on the Emacs server.  If
 this option is omitted, <samp><span class="command">emacsclient</span></samp> connects to the first
 server it finds.  (This option is not supported on MS-Windows.)
 
-     <br><dt>&lsquo;<samp><span class="samp">-t</span></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">--tty</span></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">-nw</span></samp>&rsquo;<dd>Create a new Emacs frame on the current text-only terminal, instead of
-using an existing Emacs frame.  Emacs 23 can open a text-only terminal
-even if it was started in another text-only terminal, or on a
-graphical display.  If you omit a filename argument while supplying
-this option, the new frame displays the &lsquo;<samp><span class="samp">*scratch*</span></samp>&rsquo; buffer. 
-See <a href="Buffers.html#Buffers">Buffers</a>. 
+     <br><dt>&lsquo;<samp><span class="samp">-t</span></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">--tty</span></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">-nw</span></samp>&rsquo;<dd>Create a new client frame on the current text terminal, instead of
+using an existing Emacs frame.  This behaves just like the &lsquo;<samp><span class="samp">-c</span></samp>&rsquo;
+option, described above, except that it creates a text terminal frame
+(see <a href="Non_002dWindow-Terminals.html#Non_002dWindow-Terminals">Non-Window Terminals</a>).
+
+     <p>On MS-Windows, &lsquo;<samp><span class="samp">-t</span></samp>&rsquo; behaves just like &lsquo;<samp><span class="samp">-c</span></samp>&rsquo; if the Emacs
+server is using the graphical display, but if the Emacs server is
+running on a text terminal, it creates a new frame in the current text
+terminal. 
 </dl>
 
-   <p>If you type <kbd>C-x C-c</kbd> (<code>save-buffers-kill-terminal</code>) in an
-Emacs frame created with <samp><span class="command">emacsclient</span></samp>, via the &lsquo;<samp><span class="samp">-c</span></samp>&rsquo; or
-&lsquo;<samp><span class="samp">-t</span></samp>&rsquo; options, Emacs deletes the frame instead of killing the
-Emacs process itself.  On a text-only terminal frame created with the
-&lsquo;<samp><span class="samp">-t</span></samp>&rsquo; option, this returns control to the terminal.  Emacs also
-marks all the server buffers for the client as finished, as though you
-had typed <kbd>C-x #</kbd> in all of them.
+   <p>The new graphical or text terminal frames created by the &lsquo;<samp><span class="samp">-c</span></samp>&rsquo;
+or &lsquo;<samp><span class="samp">-t</span></samp>&rsquo; options are considered <dfn>client frames</dfn>.  Any new
+frame that you create from a client frame is also considered a client
+frame.  If you type <kbd>C-x C-c</kbd> (<code>save-buffers-kill-terminal</code>)
+in a client frame, that command does not kill the Emacs session as it
+normally does (see <a href="Exiting.html#Exiting">Exiting</a>).  Instead, Emacs deletes the client
+frame; furthermore, if the client frame has an <samp><span class="command">emacsclient</span></samp>
+waiting to regain control (i.e., if you did not supply the &lsquo;<samp><span class="samp">-n</span></samp>&rsquo;
+option), Emacs deletes all other frames of the same client, and marks
+the client's server buffers as finished, as though you had typed
+<kbd>C-x #</kbd> in all of them.  If it so happens that there are no
+remaining frames after the client frame(s) are deleted, the Emacs
+session exits.
 
-   <p>When Emacs is started as a daemon, all frames are considered client
-frames, so <kbd>C-x C-c</kbd> will never kill Emacs.  To kill the Emacs
-process, type <kbd>M-x kill-emacs</kbd>.
+   <p>As an exception, when Emacs is started as a daemon, all frames are
+considered client frames, and <kbd>C-x C-c</kbd> never kills Emacs.  To
+kill a daemon session, type <kbd>M-x kill-emacs</kbd>.
+
+   <p>Note that the &lsquo;<samp><span class="samp">-t</span></samp>&rsquo; and &lsquo;<samp><span class="samp">-n</span></samp>&rsquo; options are contradictory:
+&lsquo;<samp><span class="samp">-t</span></samp>&rsquo; says to take control of the current text terminal to create
+a new client frame, while &lsquo;<samp><span class="samp">-n</span></samp>&rsquo; says not to take control of the
+text terminal.  If you supply both options, Emacs visits the specified
+files(s) in an existing frame rather than a new client frame, negating
+the effect of &lsquo;<samp><span class="samp">-t</span></samp>&rsquo;.
 
    </body></html>
 

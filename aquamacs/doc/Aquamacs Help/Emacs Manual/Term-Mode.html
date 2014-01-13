@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Term Mode - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Shell.html#Shell" title="Shell">
 <link rel="prev" href="Terminal-emulator.html#Terminal-emulator" title="Terminal emulator">
-<link rel="next" href="Paging-in-Term.html#Paging-in-Term" title="Paging in Term">
+<link rel="next" href="Remote-Host.html#Remote-Host" title="Remote Host">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -39,28 +36,30 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <div class="node">
 <a name="Term-Mode"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Paging-in-Term.html#Paging-in-Term">Paging in Term</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Remote-Host.html#Remote-Host">Remote Host</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Terminal-emulator.html#Terminal-emulator">Terminal emulator</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Shell.html#Shell">Shell</a>
 <hr>
 </div>
 
-<h3 class="section">41.9 Term Mode</h3>
+<h3 class="section">36.9 Term Mode</h3>
 
-<p><a name="index-Term-mode-3731"></a><a name="index-mode_002c-Term-3732"></a>
+<p><a name="index-Term-mode-4027"></a><a name="index-mode_002c-Term-4028"></a>
   The terminal emulator uses Term mode, which has two input modes.  In
-line mode, Term basically acts like Shell mode; see <a href="Shell-Mode.html#Shell-Mode">Shell Mode</a>. 
-In char mode, each character is sent directly to the inferior
-subshell, except for the Term escape character, normally <kbd>C-c</kbd>.
+line mode, Term basically acts like Shell mode (see <a href="Shell-Mode.html#Shell-Mode">Shell Mode</a>). 
+In char mode, each character is sent directly to the subshell, except
+for the Term escape character, normally <kbd>C-c</kbd>.
 
    <p>To switch between line and char mode, use these commands:
 
      
-<a name="index-C_002dc-C_002dj-_0040r_007b_0028Term-mode_0029_007d-3733"></a>
-<a name="index-term_002dchar_002dmode-3734"></a>
-<dl><dt><kbd>C-c C-j</kbd><dd>Switch to line mode.  Do nothing if already in line mode.
+<a name="index-C_002dc-C_002dj-_0040r_007b_0028Term-mode_0029_007d-4029"></a>
+<a name="index-term_002dline_002dmode-4030"></a>
+<dl><dt><kbd>C-c C-j</kbd><dd>Switch to line mode (<code>term-line-mode</code>).  Do nothing if already in
+line mode.
 
-     <p><a name="index-C_002dc-C_002dk-_0040r_007b_0028Term-mode_0029_007d-3735"></a><a name="index-term_002dline_002dmode-3736"></a><br><dt><kbd>C-c C-k</kbd><dd>Switch to char mode.  Do nothing if already in char mode. 
+     <p><a name="index-C_002dc-C_002dk-_0040r_007b_0028Term-mode_0029_007d-4031"></a><a name="index-term_002dchar_002dmode-4032"></a><br><dt><kbd>C-c C-k</kbd><dd>Switch to char mode (<code>term-char-mode</code>).  Do nothing if already in
+char mode. 
 </dl>
 
    <p>The following commands are only available in char mode:
@@ -71,6 +70,21 @@ subshell, except for the Term escape character, normally <kbd>C-c</kbd>.
      <br><dt><kbd>C-c </kbd><var>char</var><dd>This is equivalent to <kbd>C-x </kbd><var>char</var> in normal Emacs.  For
 example, <kbd>C-c o</kbd> invokes the global binding of <kbd>C-x o</kbd>, which
 is normally &lsquo;<samp><span class="samp">other-window</span></samp>&rsquo;. 
+</dl>
+
+   <p><a name="index-paging-in-Term-mode-4033"></a>  Term mode has a page-at-a-time feature.  When enabled, it makes
+output pause at the end of each screenful:
+
+     
+<a name="index-C_002dc-C_002dq-_0040r_007b_0028Term-mode_0029_007d-4034"></a>
+<a name="index-term_002dpager_002dtoggle-4035"></a>
+<dl><dt><kbd>C-c C-q</kbd><dd>Toggle the page-at-a-time feature.  This command works in both line
+and char modes.  When the feature is enabled, the mode-line displays
+the word &lsquo;<samp><span class="samp">page</span></samp>&rsquo;, and each time Term receives more than a
+screenful of output, it pauses and displays &lsquo;<samp><span class="samp">**MORE**</span></samp>&rsquo; in the
+mode-line.  Type &lt;SPC&gt; to display the next screenful of output, or
+<kbd>?</kbd> to see your other options.  The interface is similar to the
+<code>more</code> program. 
 </dl>
 
    </body></html>

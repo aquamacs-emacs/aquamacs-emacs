@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Init File - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Terminal_002dSpecific.html#Terminal_002dSpecific" title="Terminal-Specific">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,48 +41,48 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Starting-Up.html#Starting-Up">Starting 
 <hr>
 </div>
 
-<h4 class="subsection">39.1.2 The Init File, <samp><span class="file">.emacs</span></samp></h4>
+<h4 class="subsection">39.1.2 The Init File</h4>
 
-<p><a name="index-init-file-3777"></a><a name="index-g_t_0040file_007b_002eemacs_007d-3778"></a>
+<p><a name="index-init-file-4113"></a><a name="index-g_t_0040file_007b_002eemacs_007d-4114"></a><a name="index-g_t_0040file_007binit_002eel_007d-4115"></a>
   When you start Emacs, it normally attempts to load your <dfn>init
 file</dfn>.  This is either a file named <samp><span class="file">.emacs</span></samp> or <samp><span class="file">.emacs.el</span></samp>
 in your home directory, or a file named <samp><span class="file">init.el</span></samp> in a
-subdirectory named <samp><span class="file">.emacs.d</span></samp> in your home directory.  Whichever
-place you use, you can also compile the file (see <a href="Byte-Compilation.html#Byte-Compilation">Byte Compilation</a>); then the actual file loaded will be <samp><span class="file">.emacs.elc</span></samp>
-or <samp><span class="file">init.elc</span></samp>.
+subdirectory named <samp><span class="file">.emacs.d</span></samp> in your home directory.
 
    <p>The command-line switches &lsquo;<samp><span class="samp">-q</span></samp>&rsquo;, &lsquo;<samp><span class="samp">-Q</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">-u</span></samp>&rsquo;
 control whether and where to find the init file; &lsquo;<samp><span class="samp">-q</span></samp>&rsquo; (and the
 stronger &lsquo;<samp><span class="samp">-Q</span></samp>&rsquo;) says not to load an init file, while &lsquo;<samp><span class="samp">-u
 </span><var>user</var></samp>&rsquo; says to load <var>user</var>'s init file instead of yours. 
 See <a href="../emacs/Entering-Emacs.html#Entering-Emacs">Entering Emacs</a>.  If neither
-option is specified, Emacs uses the <code>LOGNAME</code> environment
-variable, or the <code>USER</code> (most systems) or <code>USERNAME</code> (MS
+option is specified, Emacs uses the <samp><span class="env">LOGNAME</span></samp> environment
+variable, or the <samp><span class="env">USER</span></samp> (most systems) or <samp><span class="env">USERNAME</span></samp> (MS
 systems) variable, to find your home directory and thus your init
 file; this way, even if you have su'd, Emacs still loads your own init
 file.  If those environment variables are absent, though, Emacs uses
 your user-id to find your home directory.
 
-   <p><a name="index-default-init-file-3779"></a>  A site may have a <dfn>default init file</dfn>, which is the library
-named <samp><span class="file">default.el</span></samp>.  Emacs finds the <samp><span class="file">default.el</span></samp> file
-through the standard search path for libraries (see <a href="How-Programs-Do-Loading.html#How-Programs-Do-Loading">How Programs Do Loading</a>).  The Emacs distribution does not come with this file; sites
-may provide one for local customizations.  If the default init file
-exists, it is loaded whenever you start Emacs, except in batch mode or
-if &lsquo;<samp><span class="samp">-q</span></samp>&rsquo; (or &lsquo;<samp><span class="samp">-Q</span></samp>&rsquo;) is specified.  But your own personal init
+   <p><a name="index-default-init-file-4116"></a>  An Emacs installation may have a <dfn>default init file</dfn>, which is a
+Lisp library named <samp><span class="file">default.el</span></samp>.  Emacs finds this file through
+the standard search path for libraries (see <a href="How-Programs-Do-Loading.html#How-Programs-Do-Loading">How Programs Do Loading</a>).  The Emacs distribution does not come with this file; it is
+intended for local customizations.  If the default init file exists,
+it is loaded whenever you start Emacs.  But your own personal init
 file, if any, is loaded first; if it sets <code>inhibit-default-init</code>
 to a non-<code>nil</code> value, then Emacs does not subsequently load the
-<samp><span class="file">default.el</span></samp> file.
+<samp><span class="file">default.el</span></samp> file.  In batch mode, or if you specify &lsquo;<samp><span class="samp">-q</span></samp>&rsquo;
+(or &lsquo;<samp><span class="samp">-Q</span></samp>&rsquo;), Emacs loads neither your personal init file nor
+the default init file.
 
    <p>Another file for site-customization is <samp><span class="file">site-start.el</span></samp>.  Emacs
 loads this <em>before</em> the user's init file.  You can inhibit the
 loading of this file with the option &lsquo;<samp><span class="samp">--no-site-file</span></samp>&rsquo;.
 
 <div class="defun">
-&mdash; User Option: <b>site-run-file</b><var><a name="index-site_002drun_002dfile-3780"></a></var><br>
+&mdash; User Option: <b>site-run-file</b><var><a name="index-site_002drun_002dfile-4117"></a></var><br>
 <blockquote><p>This variable specifies the site-customization file to load before the
 user's init file.  Its normal value is <code>"site-start"</code>.  The only
 way you can change it with real effect is to do so before dumping
 Emacs. 
+<!-- So why even mention it here.  I imagine it is almost never changed. -->
 </p></blockquote></div>
 
    <p>See <a href="../emacs/Init-Examples.html#Init-Examples">Init File Examples</a>, for
@@ -93,45 +90,44 @@ examples of how to make various commonly desired customizations in your
 <samp><span class="file">.emacs</span></samp> file.
 
 <div class="defun">
-&mdash; User Option: <b>inhibit-default-init</b><var><a name="index-inhibit_002ddefault_002dinit-3781"></a></var><br>
-<blockquote><p>This variable prevents Emacs from loading the default initialization
-library file for your session of Emacs.  If its value is non-<code>nil</code>,
-then the default library is not loaded.  The default value is
-<code>nil</code>. 
+&mdash; User Option: <b>inhibit-default-init</b><var><a name="index-inhibit_002ddefault_002dinit-4118"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code>, it prevents Emacs from loading the
+default initialization library file.  The default value is <code>nil</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>before-init-hook</b><var><a name="index-before_002dinit_002dhook-3782"></a></var><br>
+&mdash; Variable: <b>before-init-hook</b><var><a name="index-before_002dinit_002dhook-4119"></a></var><br>
 <blockquote><p>This normal hook is run, once, just before loading all the init files
-(the user's init file, <samp><span class="file">default.el</span></samp>, and/or <samp><span class="file">site-start.el</span></samp>). 
+(<samp><span class="file">site-start.el</span></samp>, your init file, and <samp><span class="file">default.el</span></samp>). 
 (The only way to change it with real effect is before dumping Emacs.) 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>after-init-hook</b><var><a name="index-after_002dinit_002dhook-3783"></a></var><br>
+&mdash; Variable: <b>after-init-hook</b><var><a name="index-after_002dinit_002dhook-4120"></a></var><br>
 <blockquote><p>This normal hook is run, once, just after loading all the init files
-(the user's init file, <samp><span class="file">default.el</span></samp>, and/or <samp><span class="file">site-start.el</span></samp>),
-before loading the terminal-specific library and processing the
-command-line action arguments. 
+(<samp><span class="file">site-start.el</span></samp>, your init file, and <samp><span class="file">default.el</span></samp>),
+before loading the terminal-specific library (if started on a text
+terminal) and processing the command-line action arguments. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>emacs-startup-hook</b><var><a name="index-emacs_002dstartup_002dhook-3784"></a></var><br>
+&mdash; Variable: <b>emacs-startup-hook</b><var><a name="index-emacs_002dstartup_002dhook-4121"></a></var><br>
 <blockquote><p>This normal hook is run, once, just after handling the command line
-arguments, just before <code>term-setup-hook</code>. 
+arguments, just before <code>term-setup-hook</code>.  In batch mode, Emacs
+does not run either of these hooks. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>user-init-file</b><var><a name="index-user_002dinit_002dfile-3785"></a></var><br>
+&mdash; Variable: <b>user-init-file</b><var><a name="index-user_002dinit_002dfile-4122"></a></var><br>
 <blockquote><p>This variable holds the absolute file name of the user's init file.  If the
 actual init file loaded is a compiled file, such as <samp><span class="file">.emacs.elc</span></samp>,
 the value refers to the corresponding source file. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>user-emacs-directory</b><var><a name="index-user_002demacs_002ddirectory-3786"></a></var><br>
+&mdash; Variable: <b>user-emacs-directory</b><var><a name="index-user_002demacs_002ddirectory-4123"></a></var><br>
 <blockquote><p>This variable holds the name of the <samp><span class="file">.emacs.d</span></samp> directory.  It is
-ordinarily <samp><span class="file">~/.emacs.d</span></samp>, but differs on some platforms. 
+<samp><span class="file">~/.emacs.d</span></samp> on all platforms but MS-DOS. 
 </p></blockquote></div>
 
    </body></html>

@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Directory Names - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="File-Name-Expansion.html#File-Name-Expansion" title="File Name Expansion">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,10 +41,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="File-Names.html#File-Names">File Names<
 <hr>
 </div>
 
-<!-- node-name,  next,  previous,  up -->
 <h4 class="subsection">25.8.3 Directory Names</h4>
 
-<p><a name="index-directory-name-1868"></a><a name="index-file-name-of-directory-1869"></a>
+<p><a name="index-directory-name-2015"></a><a name="index-file-name-of-directory-2016"></a>
   A <dfn>directory name</dfn> is the name of a directory.  A directory is
 actually a kind of file, so it has a file name, which is related to
 the directory name but not identical to it.  (This is not quite the
@@ -68,7 +64,7 @@ names.  They do nothing special with environment variable substitutions
 such as &lsquo;<samp><span class="samp">$HOME</span></samp>&rsquo;, and the constructs &lsquo;<samp><span class="samp">~</span></samp>&rsquo;, &lsquo;<samp><span class="samp">.</span></samp>&rsquo; and &lsquo;<samp><span class="samp">..</span></samp>&rsquo;.
 
 <div class="defun">
-&mdash; Function: <b>file-name-as-directory</b><var> filename<a name="index-file_002dname_002das_002ddirectory-1870"></a></var><br>
+&mdash; Function: <b>file-name-as-directory</b><var> filename<a name="index-file_002dname_002das_002ddirectory-2017"></a></var><br>
 <blockquote><p>This function returns a string representing <var>filename</var> in a form
 that the operating system will interpret as the name of a directory.  On
 most systems, this means appending a slash to the string (if it does not
@@ -80,7 +76,7 @@ already end in one).
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>directory-file-name</b><var> dirname<a name="index-directory_002dfile_002dname-1871"></a></var><br>
+&mdash; Function: <b>directory-file-name</b><var> dirname<a name="index-directory_002dfile_002dname-2018"></a></var><br>
 <blockquote><p>This function returns a string representing <var>dirname</var> in a form that
 the operating system will interpret as the name of a file.  On most
 systems, this means removing the final slash (or backslash) from the
@@ -114,50 +110,24 @@ combination, you must first convert it to a directory name using
    <p class="noindent">because this is not portable.  Always use
 <code>file-name-as-directory</code>.
 
-   <p><a name="index-directory-name-abbreviation-1872"></a>  Directory name abbreviations are useful for directories that are
-normally accessed through symbolic links.  Sometimes the users recognize
-primarily the link's name as &ldquo;the name&rdquo; of the directory, and find it
-annoying to see the directory's &ldquo;real&rdquo; name.  If you define the link
-name as an abbreviation for the &ldquo;real&rdquo; name, Emacs shows users the
-abbreviation instead.
-
-<div class="defun">
-&mdash; User Option: <b>directory-abbrev-alist</b><var><a name="index-directory_002dabbrev_002dalist-1873"></a></var><br>
-<blockquote><p>The variable <code>directory-abbrev-alist</code> contains an alist of
-abbreviations to use for file directories.  Each element has the form
-<code>(</code><var>from</var><code> . </code><var>to</var><code>)</code>, and says to replace <var>from</var> with
-<var>to</var> when it appears in a directory name.  The <var>from</var> string is
-actually a regular expression; it should always start with &lsquo;<samp><span class="samp">\`</span></samp>&rsquo;. 
-The <var>to</var> string should be an ordinary absolute directory name.  Do
-not use &lsquo;<samp><span class="samp">~</span></samp>&rsquo; to stand for a home directory in that string.  The
-function <code>abbreviate-file-name</code> performs these substitutions.
-
-        <p>You can set this variable in <samp><span class="file">site-init.el</span></samp> to describe the
-abbreviations appropriate for your site.
-
-        <p>Here's an example, from a system on which file system <samp><span class="file">/home/fsf</span></samp>
-and so on are normally accessed through symbolic links named <samp><span class="file">/fsf</span></samp>
-and so on.
-
-     <pre class="example">          (("\\`/home/fsf" . "/fsf")
-           ("\\`/home/gp" . "/gp")
-           ("\\`/home/gd" . "/gd"))
-</pre>
-        </blockquote></div>
-
    <p>To convert a directory name to its abbreviation, use this
 function:
 
+   <p><a name="index-file-name-abbreviations-2019"></a><a name="index-abbreviated-file-names-2020"></a>
+
 <div class="defun">
-&mdash; Function: <b>abbreviate-file-name</b><var> filename<a name="index-abbreviate_002dfile_002dname-1874"></a></var><br>
-<blockquote><p><a name="Definition-of-abbreviate_002dfile_002dname"></a>This function applies abbreviations from <code>directory-abbrev-alist</code>
-to its argument, and also substitutes &lsquo;<samp><span class="samp">~</span></samp>&rsquo; for the user's home
-directory if the argument names a file in the home directory or one of
-its subdirectories.  (If the home directory is a root directory, it is
-not replaced with &lsquo;<samp><span class="samp">~</span></samp>&rsquo;, because this does not make the result
-shorter on many systems.)  You can use it for directory names and for
-file names, because it recognizes abbreviations even as part of the
-name. 
+&mdash; Function: <b>abbreviate-file-name</b><var> filename<a name="index-abbreviate_002dfile_002dname-2021"></a></var><br>
+<blockquote><p><a name="abbreviate_002dfile_002dname"></a>This function returns an abbreviated form of <var>filename</var>.  It
+applies the abbreviations specified in <code>directory-abbrev-alist</code>
+(see <a href="../emacs/File-Aliases.html#File-Aliases">File Aliases</a>),
+then substitutes &lsquo;<samp><span class="samp">~</span></samp>&rsquo; for the user's home directory if the
+argument names a file in the home directory or one of its
+subdirectories.  If the home directory is a root directory, it is not
+replaced with &lsquo;<samp><span class="samp">~</span></samp>&rsquo;, because this does not make the result shorter
+on many systems.
+
+        <p>You can use this function for directory names and for file names,
+because it recognizes abbreviations even as part of the name. 
 </p></blockquote></div>
 
    </body></html>

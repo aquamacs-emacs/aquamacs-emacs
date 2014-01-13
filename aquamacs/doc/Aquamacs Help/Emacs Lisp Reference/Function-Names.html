@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Function Names - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Defining-Functions.html#Defining-Functions" title="Defining Functions">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,56 +43,43 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Functions.html#Functions">Functions</a>
 
 <h3 class="section">12.3 Naming a Function</h3>
 
-<p><a name="index-function-definition-689"></a><a name="index-named-function-690"></a><a name="index-function-name-691"></a>
-  In most computer languages, every function has a name; the idea of a
-function without a name is nonsensical.  In Lisp, a function in the
-strictest sense has no name.  It is simply a list whose first element is
-<code>lambda</code>, a byte-code function object, or a primitive subr-object.
+<p><a name="index-function-definition-732"></a><a name="index-named-function-733"></a><a name="index-function-name-734"></a>
+  A symbol can serve as the name of a function.  This happens when the
+symbol's <dfn>function cell</dfn> (see <a href="Symbol-Components.html#Symbol-Components">Symbol Components</a>) contains a
+function object (e.g., a lambda expression).  Then the symbol itself
+becomes a valid, callable function, equivalent to the function object
+in its function cell.
 
-   <p>However, a symbol can serve as the name of a function.  This happens
-when you put the function in the symbol's <dfn>function cell</dfn>
-(see <a href="Symbol-Components.html#Symbol-Components">Symbol Components</a>).  Then the symbol itself becomes a valid,
-callable function, equivalent to the list or subr-object that its
-function cell refers to.  The contents of the function cell are also
-called the symbol's <dfn>function definition</dfn>.  The procedure of using a
-symbol's function definition in place of the symbol is called
-<dfn>symbol function indirection</dfn>; see <a href="Function-Indirection.html#Function-Indirection">Function Indirection</a>.
+   <p>The contents of the function cell are also called the symbol's
+<dfn>function definition</dfn>.  The procedure of using a symbol's function
+definition in place of the symbol is called <dfn>symbol function
+indirection</dfn>; see <a href="Function-Indirection.html#Function-Indirection">Function Indirection</a>.  If you have not given a
+symbol a function definition, its function cell is said to be
+<dfn>void</dfn>, and it cannot be used as a function.
 
-   <p>In practice, nearly all functions are given names in this way and
-referred to through their names.  For example, the symbol <code>car</code> works
-as a function and does what it does because the primitive subr-object
-<code>#&lt;subr car&gt;</code> is stored in its function cell.
+   <p>In practice, nearly all functions have names, and are referred to by
+their names.  You can create a named Lisp function by defining a
+lambda expression and putting it in a function cell (see <a href="Function-Cells.html#Function-Cells">Function Cells</a>).  However, it is more common to use the <code>defun</code> special
+form, described in the next section. 
+See <a href="Defining-Functions.html#Defining-Functions">Defining Functions</a>.
 
    <p>We give functions names because it is convenient to refer to them by
-their names in Lisp expressions.  For primitive subr-objects such as
-<code>#&lt;subr car&gt;</code>, names are the only way you can refer to them: there
-is no read syntax for such objects.  For functions written in Lisp, the
-name is more convenient to use in a call than an explicit lambda
-expression.  Also, a function with a name can refer to itself&mdash;it can
-be recursive.  Writing the function's name in its own definition is much
-more convenient than making the function definition point to itself
-(something that is not impossible but that has various disadvantages in
-practice).
+their names in Lisp expressions.  Also, a named Lisp function can
+easily refer to itself&mdash;it can be recursive.  Furthermore, primitives
+can only be referred to textually by their names, since primitive
+function objects (see <a href="Primitive-Function-Type.html#Primitive-Function-Type">Primitive Function Type</a>) have no read
+syntax.
 
-   <p>We often identify functions with the symbols used to name them.  For
-example, we often speak of &ldquo;the function <code>car</code>,&rdquo; not
-distinguishing between the symbol <code>car</code> and the primitive
-subr-object that is its function definition.  For most purposes, the
-distinction is not important.
+   <p>A function need not have a unique name.  A given function object
+<em>usually</em> appears in the function cell of only one symbol, but
+this is just a convention.  It is easy to store it in several symbols
+using <code>fset</code>; then each of the symbols is a valid name for the
+same function.
 
-   <p>Even so, keep in mind that a function need not have a unique name.  While
-a given function object <em>usually</em> appears in the function cell of only
-one symbol, this is just a matter of convenience.  It is easy to store
-it in several symbols using <code>fset</code>; then each of the symbols is
-equally well a name for the same function.
-
-   <p>A symbol used as a function name may also be used as a variable; these
-two uses of a symbol are independent and do not conflict.  (Some Lisp
-dialects, such as Scheme, do not distinguish between a symbol's value
-and its function definition; a symbol's value as a variable is also its
-function definition.)  If you have not given a symbol a function
-definition, you cannot use it as a function; whether the symbol has a
-value as a variable makes no difference to this.
+   <p>Note that a symbol used as a function name may also be used as a
+variable; these two uses of a symbol are independent and do not
+conflict.  (This is not the case in some dialects of Lisp, like
+Scheme.)
 
    </body></html>
 

@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Custom C Indent - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="prev" href="C-Indent.html#C-Indent" title="C Indent">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -43,9 +40,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Program-Indent.html#Program-Indent">Pro
 <hr>
 </div>
 
-<h4 class="subsection">30.3.5 Customizing C Indentation</h4>
+<h4 class="subsection">26.3.5 Customizing C Indentation</h4>
 
-<p><a name="index-style-_0028for-indentation_0029-2025"></a>
+<p><a name="index-style-_0028for-indentation_0029-2287"></a>
   C mode and related modes use a flexible mechanism for customizing
 indentation.  C mode indents a source line in two steps: first it
 classifies the line syntactically according to its contents and
@@ -67,20 +64,22 @@ used with any of the languages supported by these modes.  To find out
 what a style looks like, select it and reindent some code, e.g., by
 typing &lt;C-M-q&gt; at the start of a function definition.
 
-   <p><a name="index-C_002dc-_002e-_0040r_007b_0028C-mode_0029_007d-2026"></a><a name="index-c_002dset_002dstyle-2027"></a>  To choose a style for the current buffer, use the command <kbd>C-c&nbsp;.</kbd><!-- /@w -->.  Specify a style name as an argument (case is not significant). 
+   <p><a name="index-C_002dc-_002e-_0040r_007b_0028C-mode_0029_007d-2288"></a><a name="index-c_002dset_002dstyle-2289"></a>  To choose a style for the current buffer, use the command <kbd>C-c&nbsp;.</kbd><!-- /@w -->.  Specify a style name as an argument (case is not significant). 
 This command affects the current buffer only, and it affects only
 future invocations of the indentation commands; it does not reindent
 the code already in the buffer.  To reindent the whole buffer in the
 new style, you can type <kbd>C-x h C-M-\</kbd>.
 
-   <p><a name="index-c_002ddefault_002dstyle-2028"></a>  You can also set the variable <code>c-default-style</code> to specify the
+   <p><a name="index-c_002ddefault_002dstyle-2290"></a>  You can also set the variable <code>c-default-style</code> to specify the
 default style for various major modes.  Its value should be either the
 style's name (a string) or an alist, in which each element specifies
 one major mode and which indentation style to use for it.  For
 example,
 
 <pre class="example">     (setq c-default-style
-           '((java-mode . "java") (awk-mode . "awk") (other . "gnu")))
+           '((java-mode . "java")
+             (awk-mode . "awk")
+             (other . "gnu")))
 </pre>
    <p class="noindent">specifies explicit choices for Java and AWK modes, and the default
 &lsquo;<samp><span class="samp">gnu</span></samp>&rsquo; style for the other C-like modes.  (These settings are
@@ -98,6 +97,11 @@ recommended style.
 information on customizing indentation for C and related modes,
 including how to override parts of an existing style and how to define
 your own styles.
+
+   <p><a name="index-c_002dguess-2291"></a><a name="index-c_002dguess_002dinstall-2292"></a>  As an alternative to specifying a style, you can tell Emacs to guess
+a style by typing <kbd>M-x c-guess</kbd> in a sample code buffer.  You can
+then apply the guessed style to other buffers with <kbd>M-x
+c-guess-install</kbd>.  See <a href="../ccmode/Guessing-the-Style.html#Guessing-the-Style">Guessing the Style</a>, for details.
 
    </body></html>
 

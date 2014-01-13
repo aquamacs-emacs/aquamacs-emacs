@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Major Modes - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Minor-Modes.html#Minor-Modes" title="Minor Modes">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,26 +43,62 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Modes.html#Modes">Modes</a>
 
 <h3 class="section">23.2 Major Modes</h3>
 
-<p><a name="index-major-mode-1585"></a>
-  Major modes specialize Emacs for editing particular kinds of text. 
-Each buffer has only one major mode at a time.  For each major mode
-there is a function to switch to that mode in the current buffer; its
-name should end in &lsquo;<samp><span class="samp">-mode</span></samp>&rsquo;.  These functions work by setting
-buffer-local variable bindings and other data associated with the
-buffer, such as a local keymap.  The effect lasts until you switch
-to another major mode in the same buffer.
+<p><a name="index-major-mode-1683"></a>
+<a name="index-major-mode-command-1684"></a>  Major modes specialize Emacs for editing particular kinds of text. 
+Each buffer has one major mode at a time.  Every major mode is
+associated with a <dfn>major mode command</dfn>, whose name should end in
+&lsquo;<samp><span class="samp">-mode</span></samp>&rsquo;.  This command takes care of switching to that mode in the
+current buffer, by setting various buffer-local variables such as a
+local keymap.  See <a href="Major-Mode-Conventions.html#Major-Mode-Conventions">Major Mode Conventions</a>.
+
+   <p>The least specialized major mode is called <dfn>Fundamental mode</dfn>,
+which has no mode-specific definitions or variable settings.
+
+<div class="defun">
+&mdash; Command: <b>fundamental-mode</b><var><a name="index-fundamental_002dmode-1685"></a></var><br>
+<blockquote><p>This is the major mode command for Fundamental mode.  Unlike other mode
+commands, it does <em>not</em> run any mode hooks (see <a href="Major-Mode-Conventions.html#Major-Mode-Conventions">Major Mode Conventions</a>), since you are not supposed to customize this mode. 
+</p></blockquote></div>
+
+   <p>The easiest way to write a major mode is to use the macro
+<code>define-derived-mode</code>, which sets up the new mode as a variant of
+an existing major mode.  See <a href="Derived-Modes.html#Derived-Modes">Derived Modes</a>.  We recommend using
+<code>define-derived-mode</code> even if the new mode is not an obvious
+derivative of another mode, as it automatically enforces many coding
+conventions for you.  See <a href="Basic-Major-Modes.html#Basic-Major-Modes">Basic Major Modes</a>, for common modes to
+derive from.
+
+   <p>The standard GNU Emacs Lisp directory tree contains the code for
+several major modes, in files such as <samp><span class="file">text-mode.el</span></samp>,
+<samp><span class="file">texinfo.el</span></samp>, <samp><span class="file">lisp-mode.el</span></samp>, and <samp><span class="file">rmail.el</span></samp>.  You can
+study these libraries to see how modes are written.
+
+<div class="defun">
+&mdash; User Option: <b>major-mode</b><var><a name="index-major_002dmode-1686"></a></var><br>
+<blockquote><p>The buffer-local value of this variable holds the symbol for the current
+major mode.  Its default value holds the default major mode for new
+buffers.  The standard default value is <code>fundamental-mode</code>.
+
+        <p>If the default value is <code>nil</code>, then whenever Emacs creates a new
+buffer via a command such as <kbd>C-x b</kbd> (<code>switch-to-buffer</code>), the
+new buffer is put in the major mode of the previously current buffer. 
+As an exception, if the major mode of the previous buffer has a
+<code>mode-class</code> symbol property with value <code>special</code>, the new
+buffer is put in Fundamental mode (see <a href="Major-Mode-Conventions.html#Major-Mode-Conventions">Major Mode Conventions</a>). 
+</p></blockquote></div>
 
 <ul class="menu">
-<li><a accesskey="1" href="Major-Mode-Basics.html#Major-Mode-Basics">Major Mode Basics</a>
-<li><a accesskey="2" href="Major-Mode-Conventions.html#Major-Mode-Conventions">Major Mode Conventions</a>:       Coding conventions for keymaps, etc. 
-<li><a accesskey="3" href="Auto-Major-Mode.html#Auto-Major-Mode">Auto Major Mode</a>:              How Emacs chooses the major mode automatically. 
-<li><a accesskey="4" href="Mode-Help.html#Mode-Help">Mode Help</a>:                    Finding out how to use a mode. 
-<li><a accesskey="5" href="Derived-Modes.html#Derived-Modes">Derived Modes</a>:                Defining a new major mode based on another major
+<li><a accesskey="1" href="Major-Mode-Conventions.html#Major-Mode-Conventions">Major Mode Conventions</a>:   Coding conventions for keymaps, etc. 
+<li><a accesskey="2" href="Auto-Major-Mode.html#Auto-Major-Mode">Auto Major Mode</a>:          How Emacs chooses the major mode automatically. 
+<li><a accesskey="3" href="Mode-Help.html#Mode-Help">Mode Help</a>:                Finding out how to use a mode. 
+<li><a accesskey="4" href="Derived-Modes.html#Derived-Modes">Derived Modes</a>:            Defining a new major mode based on another major
                               mode. 
-<li><a accesskey="6" href="Generic-Modes.html#Generic-Modes">Generic Modes</a>:                Defining a simple major mode that supports
+<li><a accesskey="5" href="Basic-Major-Modes.html#Basic-Major-Modes">Basic Major Modes</a>:        Modes that other modes are often derived from. 
+<li><a accesskey="6" href="Mode-Hooks.html#Mode-Hooks">Mode Hooks</a>:               Hooks run at the end of major mode functions. 
+<li><a accesskey="7" href="Tabulated-List-Mode.html#Tabulated-List-Mode">Tabulated List Mode</a>:      Parent mode for buffers containing tabulated data. 
+<li><a accesskey="8" href="Generic-Modes.html#Generic-Modes">Generic Modes</a>:            Defining a simple major mode that supports
                               comment syntax and Font Lock mode. 
-<li><a accesskey="7" href="Mode-Hooks.html#Mode-Hooks">Mode Hooks</a>:                   Hooks run at the end of major mode functions. 
-<li><a accesskey="8" href="Example-Major-Modes.html#Example-Major-Modes">Example Major Modes</a>:          Text mode and Lisp modes. 
+<li><a accesskey="9" href="Example-Major-Modes.html#Example-Major-Modes">Example Major Modes</a>:      Text mode and Lisp modes. 
 </ul>
 
    </body></html>

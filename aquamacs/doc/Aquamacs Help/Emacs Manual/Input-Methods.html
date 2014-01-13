@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Input Methods - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Select-Input-Method.html#Select-Input-Method" title="Select Input Method">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,11 +42,11 @@ Up:&nbsp;<a rel="up" accesskey="u" href="International.html#International">Inter
 <hr>
 </div>
 
-<h3 class="section">26.4 Input Methods</h3>
+<h3 class="section">22.3 Input Methods</h3>
 
-<p><a name="index-input-methods-1394"></a>  An <dfn>input method</dfn> is a kind of character conversion designed
+<p><a name="index-input-methods-1605"></a>  An <dfn>input method</dfn> is a kind of character conversion designed
 specifically for interactive input.  In Emacs, typically each language
-has its own input method; sometimes several languages which use the same
+has its own input method; sometimes several languages that use the same
 characters can share one input method.  A few languages support several
 input methods.
 
@@ -62,14 +59,14 @@ work this way.
 characters into one letter.  Many European input methods use composition
 to produce a single non-<acronym>ASCII</acronym> letter from a sequence that consists of a
 letter followed by accent characters (or vice versa).  For example, some
-methods convert the sequence <kbd>a'</kbd> into a single accented letter. 
+methods convert the sequence <kbd>o ^</kbd> into a single accented letter. 
 These input methods have no special commands of their own; all they do
 is compose sequences of printing characters.
 
    <p>The input methods for syllabic scripts typically use mapping followed
 by composition.  The input methods for Thai and Korean work this way. 
 First, letters are mapped into symbols for particular sounds or tone
-marks; then, sequences of these which make up a whole syllable are
+marks; then, sequences of these that make up a whole syllable are
 mapped into one syllable sign.
 
    <p>Chinese and Japanese require more complex methods.  In Chinese input
@@ -79,7 +76,8 @@ portions of the character (input methods <code>chinese-4corner</code> and
 <code>chinese-sw</code>, and others).  One input sequence typically
 corresponds to many possible Chinese characters.  You select the one
 you mean using keys such as <kbd>C-f</kbd>, <kbd>C-b</kbd>, <kbd>C-n</kbd>,
-<kbd>C-p</kbd>, and digits, which have special meanings in this situation.
+<kbd>C-p</kbd> (or the arrow keys), and digits, which have special meanings
+in this situation.
 
    <p>The possible characters are conceptually arranged in several rows,
 with each row holding up to 10 alternatives.  Normally, Emacs displays
@@ -93,8 +91,8 @@ the alternatives in the current row.  As you do this, Emacs highlights
 the current alternative with a special color; type <code>C-&lt;SPC&gt;</code>
 to select the current alternative and use it as input.  The
 alternatives in the row are also numbered; the number appears before
-the alternative.  Typing a digit <var>n</var> selects the <var>n</var>th
-alternative of the current row and uses it as input.
+the alternative.  Typing a number selects the associated alternative
+of the current row and uses it as input.
 
    <p>&lt;TAB&gt; in these Chinese input methods displays a buffer showing
 all the possible characters at once; then clicking <kbd>Mouse-2</kbd> on
@@ -113,29 +111,29 @@ the alternatives.
    <p>Sometimes it is useful to cut off input method processing so that the
 characters you have just entered will not combine with subsequent
 characters.  For example, in input method <code>latin-1-postfix</code>, the
-sequence <kbd>e '</kbd> combines to form an &lsquo;<samp><span class="samp">e</span></samp>&rsquo; with an accent.  What if
+sequence <kbd>o ^</kbd> combines to form an &lsquo;<samp><span class="samp">o</span></samp>&rsquo; with an accent.  What if
 you want to enter them as separate characters?
 
    <p>One way is to type the accent twice; this is a special feature for
-entering the separate letter and accent.  For example, <kbd>e ' '</kbd> gives
-you the two characters &lsquo;<samp><span class="samp">e'</span></samp>&rsquo;.  Another way is to type another letter
-after the <kbd>e</kbd>&mdash;something that won't combine with that&mdash;and
-immediately delete it.  For example, you could type <kbd>e e &lt;DEL&gt;
-'</kbd> to get separate &lsquo;<samp><span class="samp">e</span></samp>&rsquo; and &lsquo;<samp><span class="samp">'</span></samp>&rsquo;.
+entering the separate letter and accent.  For example, <kbd>o ^ ^</kbd> gives
+you the two characters &lsquo;<samp><span class="samp">o^</span></samp>&rsquo;.  Another way is to type another letter
+after the <kbd>o</kbd>&mdash;something that won't combine with that&mdash;and
+immediately delete it.  For example, you could type <kbd>o o &lt;DEL&gt;
+^</kbd> to get separate &lsquo;<samp><span class="samp">o</span></samp>&rsquo; and &lsquo;<samp><span class="samp">^</span></samp>&rsquo;.
 
    <p>Another method, more general but not quite as easy to type, is to use
 <kbd>C-\ C-\</kbd> between two characters to stop them from combining.  This
 is the command <kbd>C-\</kbd> (<code>toggle-input-method</code>) used twice. 
 See <a href="Select-Input-Method.html#Select-Input-Method">Select Input Method</a>.
 
-   <p><a name="index-incremental-search_002c-input-method-interference-1395"></a>  <kbd>C-\ C-\</kbd> is especially useful inside an incremental search,
+   <p><a name="index-incremental-search_002c-input-method-interference-1606"></a>  <kbd>C-\ C-\</kbd> is especially useful inside an incremental search,
 because it stops waiting for more characters to combine, and starts
 searching for what you have already entered.
 
    <p>To find out how to input the character after point using the current
 input method, type <kbd>C-u C-x =</kbd>.  See <a href="Position-Info.html#Position-Info">Position Info</a>.
 
-   <p><a name="index-input_002dmethod_002dverbose_002dflag-1396"></a><a name="index-input_002dmethod_002dhighlight_002dflag-1397"></a>  The variables <code>input-method-highlight-flag</code> and
+   <p><a name="index-input_002dmethod_002dverbose_002dflag-1607"></a><a name="index-input_002dmethod_002dhighlight_002dflag-1608"></a>  The variables <code>input-method-highlight-flag</code> and
 <code>input-method-verbose-flag</code> control how input methods explain
 what is happening.  If <code>input-method-highlight-flag</code> is
 non-<code>nil</code>, the partial sequence is highlighted in the buffer (for
@@ -145,7 +143,7 @@ possible characters to type next is displayed in the echo area (but
 not when you are in the minibuffer).
 
    <p>Another facility for typing characters not on your keyboard is by
-using the <kbd>C-x 8 &lt;RET&gt;</kbd> (<code>ucs-insert</code>) to insert a single
+using <kbd>C-x 8 &lt;RET&gt;</kbd> (<code>insert-char</code>) to insert a single
 character based on its Unicode name or code-point; see <a href="Inserting-Text.html#Inserting-Text">Inserting Text</a>.
 
    </body></html>

@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Directory Tracking - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Shell-Options.html#Shell-Options" title="Shell Options">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,34 +42,39 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Shell.html#Shell">Shell</a>
 <hr>
 </div>
 
-<h3 class="section">41.6 Directory Tracking</h3>
+<h3 class="section">36.6 Directory Tracking</h3>
 
-<p><a name="index-directory-tracking-3712"></a>
-<a name="index-shell_002dpushd_002dregexp-3713"></a><a name="index-shell_002dpopd_002dregexp-3714"></a><a name="index-shell_002dcd_002dregexp-3715"></a>  Shell mode keeps track of &lsquo;<samp><span class="samp">cd</span></samp>&rsquo;, &lsquo;<samp><span class="samp">pushd</span></samp>&rsquo; and &lsquo;<samp><span class="samp">popd</span></samp>&rsquo;
-commands given to the inferior shell, so it can keep the
-&lsquo;<samp><span class="samp">*shell*</span></samp>&rsquo; buffer's default directory the same as the shell's
-working directory.  It recognizes these commands syntactically, by
-examining lines of input that are sent.
+<p><a name="index-directory-tracking-4003"></a>
+<a name="index-shell_002dpushd_002dregexp-4004"></a><a name="index-shell_002dpopd_002dregexp-4005"></a><a name="index-shell_002dcd_002dregexp-4006"></a>  Shell mode keeps track of &lsquo;<samp><span class="samp">cd</span></samp>&rsquo;, &lsquo;<samp><span class="samp">pushd</span></samp>&rsquo; and &lsquo;<samp><span class="samp">popd</span></samp>&rsquo;
+commands given to the subshell, in order to keep the Shell buffer's
+default directory (see <a href="File-Names.html#File-Names">File Names</a>) the same as the shell's working
+directory.  It recognizes these commands by examining lines of input
+that you send.
 
    <p>If you use aliases for these commands, you can tell Emacs to
-recognize them also.  For example, if the value of the variable
-<code>shell-pushd-regexp</code> matches the beginning of a shell command
-line, that line is regarded as a <code>pushd</code> command.  Change this
-variable when you add aliases for &lsquo;<samp><span class="samp">pushd</span></samp>&rsquo;.  Likewise,
-<code>shell-popd-regexp</code> and <code>shell-cd-regexp</code> are used to
-recognize commands with the meaning of &lsquo;<samp><span class="samp">popd</span></samp>&rsquo; and &lsquo;<samp><span class="samp">cd</span></samp>&rsquo;. 
-These commands are recognized only at the beginning of a shell command
-line.
+recognize them also, by setting the variables
+<code>shell-pushd-regexp</code>, <code>shell-popd-regexp</code>, and
+<code>shell-cd-regexp</code> to the appropriate regular expressions
+(see <a href="Regexps.html#Regexps">Regexps</a>).  For example, if <code>shell-pushd-regexp</code> matches
+the beginning of a shell command line, that line is regarded as a
+<code>pushd</code> command.  These commands are recognized only at the
+beginning of a shell command line.
 
-   <p><a name="index-dirs-3716"></a>  If Emacs gets confused about changes in the current directory of the
-subshell, use the command <kbd>M-x dirs</kbd> to ask the shell what its
-current directory is.  This command works for shells that support the
-most common command syntax; it may not work for unusual shells.
+   <p><a name="index-dirs-4007"></a>  If Emacs gets confused about changes in the working directory of the
+subshell, type <kbd>M-x dirs</kbd>.  This command asks the shell for its
+working directory and updates the default directory accordingly.  It
+works for shells that support the most common command syntax, but may
+not work for unusual shells.
 
-   <p><a name="index-dirtrack_002dmode-3717"></a>  You can also use <kbd>M-x dirtrack-mode</kbd> to enable (or disable) an
-alternative method of tracking changes in the current directory.  This
-method relies on your shell prompt containing the full current working
-directory at all times.
+   <p><a name="index-dirtrack_002dmode-4008"></a><a name="index-Dirtrack-mode-4009"></a><a name="index-mode_002c-Dirtrack-4010"></a><a name="index-dirtrack_002dlist-4011"></a>  You can also use Dirtrack mode, a buffer-local minor mode that
+implements an alternative method of tracking the shell's working
+directory.  To use this method, your shell prompt must contain the
+working directory at all times, and you must supply a regular
+expression for recognizing which part of the prompt contains the
+working directory; see the documentation of the variable
+<code>dirtrack-list</code> for details.  To use Dirtrack mode, type <kbd>M-x
+dirtrack-mode</kbd> in the Shell buffer, or add <code>dirtrack-mode</code> to
+<code>shell-mode-hook</code> (see <a href="Hooks.html#Hooks">Hooks</a>).
 
    </body></html>
 

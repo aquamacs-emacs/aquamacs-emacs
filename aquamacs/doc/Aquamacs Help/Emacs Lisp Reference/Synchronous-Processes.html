@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Synchronous Processes - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Asynchronous-Processes.html#Asynchronous-Processes" title="Asynchronous Processes">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,7 +43,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Processes.html#Processes">Processes</a>
 
 <h3 class="section">37.3 Creating a Synchronous Process</h3>
 
-<p><a name="index-synchronous-subprocess-3275"></a>
+<p><a name="index-synchronous-subprocess-3548"></a>
   After a <dfn>synchronous process</dfn> is created, Emacs waits for the
 process to terminate before continuing.  Starting Dired on GNU or
 Unix<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> is an example of this: it
@@ -71,11 +68,13 @@ subprocess by <code>call-process-region</code> is encoded using a coding
 system, much like text written into a file.  See <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>.
 
 <div class="defun">
-&mdash; Function: <b>call-process</b><var> program &amp;optional infile destination display &amp;rest args<a name="index-call_002dprocess-3276"></a></var><br>
-<blockquote><p>This function calls <var>program</var> in a separate process and waits for
-it to finish.
+&mdash; Function: <b>call-process</b><var> program &amp;optional infile destination display &amp;rest args<a name="index-call_002dprocess-3549"></a></var><br>
+<blockquote><p>This function calls <var>program</var> and waits for it to finish.
 
-        <p>The standard input for the process comes from file <var>infile</var> if
+        <p>The current working directory of the subprocess is
+<code>default-directory</code>.
+
+        <p>The standard input for the new process comes from file <var>infile</var> if
 <var>infile</var> is not <code>nil</code>, and from the null device otherwise. 
 The argument <var>destination</var> says where to put the process output. 
 Here are the possibilities:
@@ -100,6 +99,9 @@ function returns.
 
           <p>MS-DOS doesn't support asynchronous subprocesses, so this option doesn't
 work there.
+
+          <br><dt><code>(:file </code><var>file-name</var><code>)</code><dd>Send the output to the file name specified, overwriting it if it
+already exists.
 
           <br><dt><code>(</code><var>real-destination</var> <var>error-destination</var><code>)</code><dd>Keep the standard output stream separate from the standard error stream;
 deal with the ordinary output as specified by <var>real-destination</var>,
@@ -140,21 +142,21 @@ means failure.  If the process terminated with a signal,
                &rArr; 0
           
           ---------- Buffer: foo ----------
-          /usr/user/lewis/manual
+          /home/lewis/manual
           ---------- Buffer: foo ----------
           
           (call-process "grep" nil "bar" nil "lewis" "/etc/passwd")
                &rArr; 0
           
           ---------- Buffer: bar ----------
-          lewis:5LTsHm66CSWKg:398:21:Bil Lewis:/user/lewis:/bin/csh
+          lewis:x:1001:1001:Bil Lewis,,,,:/home/lewis:/bin/bash
           
           ---------- Buffer: bar ----------
 </pre>
-        <p>Here is a good example of the use of <code>call-process</code>, which used to
-be found in the definition of <code>insert-directory</code>:
+        <p>Here is an example of the use of <code>call-process</code>, as used to
+be found in the definition of the <code>insert-directory</code> function:
 
-     <pre class="smallexample">          (call-process insert-directory-program nil t nil <var>switches</var>
+     <pre class="smallexample">          (call-process insert-directory-program nil t nil switches
                         (if full-directory-p
                             (concat (file-name-as-directory file) ".")
                           file))
@@ -162,11 +164,11 @@ be found in the definition of <code>insert-directory</code>:
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>process-file</b><var> program &amp;optional infile buffer display &amp;rest args<a name="index-process_002dfile-3277"></a></var><br>
+&mdash; Function: <b>process-file</b><var> program &amp;optional infile buffer display &amp;rest args<a name="index-process_002dfile-3550"></a></var><br>
 <blockquote><p>This function processes files synchronously in a separate process.  It
-is similar to <code>call-process</code> but may invoke a file handler based
-on the value of the variable <code>default-directory</code>.  The current
-working directory of the subprocess is <code>default-directory</code>.
+is similar to <code>call-process</code>, but may invoke a file handler based
+on the value of the variable <code>default-directory</code>, which specifies
+the current working directory of the subprocess.
 
         <p>The arguments are handled in almost the same way as for
 <code>call-process</code>, with the following differences:
@@ -179,15 +181,15 @@ file handlers might not support separating standard output and error
 output by way of the <var>buffer</var> argument.
 
         <p>If a file handler is invoked, it determines the program to run based
-on the first argument <var>program</var>.  For instance, consider that a
+on the first argument <var>program</var>.  For instance, suppose that a
 handler for remote files is invoked.  Then the path that is used for
-searching the program might be different than <code>exec-path</code>.
+searching for the program might be different from <code>exec-path</code>.
 
         <p>The second argument <var>infile</var> may invoke a file handler.  The file
 handler could be different from the handler chosen for the
 <code>process-file</code> function itself.  (For example,
-<code>default-directory</code> could be on a remote host, whereas
-<var>infile</var> is on another remote host.  Or <code>default-directory</code>
+<code>default-directory</code> could be on one remote host, and
+<var>infile</var> on a different remote host.  Or <code>default-directory</code>
 could be non-special, whereas <var>infile</var> is on a remote host.)
 
         <p>If <var>buffer</var> is a list of the form <code>(</code><var>real-destination</var>
@@ -204,21 +206,21 @@ file names.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>process-file-side-effects</b><var><a name="index-process_002dfile_002dside_002deffects-3278"></a></var><br>
-<blockquote><p>This variable indicates, whether a call of <code>process-file</code> changes
+&mdash; Variable: <b>process-file-side-effects</b><var><a name="index-process_002dfile_002dside_002deffects-3551"></a></var><br>
+<blockquote><p>This variable indicates whether a call of <code>process-file</code> changes
 remote files.
 
-        <p>Per default, this variable is always set to <code>t</code>, meaning that a
+        <p>By default, this variable is always set to <code>t</code>, meaning that a
 call of <code>process-file</code> could potentially change any file on a
 remote host.  When set to <code>nil</code>, a file handler could optimize
-its behaviour with respect to remote file attributes caching.
+its behavior with respect to remote file attribute caching.
 
-        <p>This variable should never be changed by <code>setq</code>.  Instead of, it
-shall be set only by let-binding. 
+        <p>You should only ever change this variable with a let-binding; never
+with <code>setq</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>call-process-region</b><var> start end program &amp;optional delete destination display &amp;rest args<a name="index-call_002dprocess_002dregion-3279"></a></var><br>
+&mdash; Function: <b>call-process-region</b><var> start end program &amp;optional delete destination display &amp;rest args<a name="index-call_002dprocess_002dregion-3552"></a></var><br>
 <blockquote><p>This function sends the text from <var>start</var> to <var>end</var> as
 standard input to a process running <var>program</var>.  It deletes the text
 sent if <var>delete</var> is non-<code>nil</code>; this is useful when
@@ -231,7 +233,7 @@ as it comes in.  For details, see the description of
 <code>call-process</code>, above.  If <var>destination</var> is the integer 0,
 <code>call-process-region</code> discards the output and returns <code>nil</code>
 immediately, without waiting for the subprocess to finish (this only
-works if asynchronous subprocesses are supported).
+works if asynchronous subprocesses are supported; i.e., not on MS-DOS).
 
         <p>The remaining arguments, <var>args</var>, are strings that specify command
 line arguments for the program.
@@ -259,48 +261,51 @@ buffer.
           inputinput-!-
           ---------- Buffer: foo ----------
 </pre>
-        <p>The <code>shell-command-on-region</code> command uses
-<code>call-process-region</code> like this:
+        <p>For example, the <code>shell-command-on-region</code> command uses
+<code>call-process-region</code> in a manner similar to this:
 
      <pre class="smallexample">          (call-process-region
            start end
-           shell-file-name      ; <span class="roman">Name of program.</span>
-           nil                  ; <span class="roman">Do not delete region.</span>
-           buffer               ; <span class="roman">Send output to </span><code>buffer</code><span class="roman">.</span>
-           nil                  ; <span class="roman">No redisplay during output.</span>
-           "-c" command)        ; <span class="roman">Arguments for the shell.</span>
+           shell-file-name      ; <span class="roman">name of program</span>
+           nil                  ; <span class="roman">do not delete region</span>
+           buffer               ; <span class="roman">send output to </span><code>buffer</code>
+           nil                  ; <span class="roman">no redisplay during output</span>
+           "-c" command)        ; <span class="roman">arguments for the shell</span>
 </pre>
+        <!-- It actually uses shell-command-switch, but no need to mention that here. -->
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>call-process-shell-command</b><var> command &amp;optional infile destination display &amp;rest args<a name="index-call_002dprocess_002dshell_002dcommand-3280"></a></var><br>
-<blockquote><p>This function executes the shell command <var>command</var> synchronously
-in a separate process.  The final arguments <var>args</var> are additional
-arguments to add at the end of <var>command</var>.  The other arguments
-are handled as in <code>call-process</code>. 
+&mdash; Function: <b>call-process-shell-command</b><var> command &amp;optional infile destination display &amp;rest args<a name="index-call_002dprocess_002dshell_002dcommand-3553"></a></var><br>
+<blockquote><p>This function executes the shell command <var>command</var> synchronously. 
+The final arguments <var>args</var> are additional arguments to add at the
+end of <var>command</var>.  The other arguments are handled as in
+<code>call-process</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>process-file-shell-command</b><var> command &amp;optional infile destination display &amp;rest args<a name="index-process_002dfile_002dshell_002dcommand-3281"></a></var><br>
+&mdash; Function: <b>process-file-shell-command</b><var> command &amp;optional infile destination display &amp;rest args<a name="index-process_002dfile_002dshell_002dcommand-3554"></a></var><br>
 <blockquote><p>This function is like <code>call-process-shell-command</code>, but uses
 <code>process-file</code> internally.  Depending on <code>default-directory</code>,
 <var>command</var> can be executed also on remote hosts. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>shell-command-to-string</b><var> command<a name="index-shell_002dcommand_002dto_002dstring-3282"></a></var><br>
+&mdash; Function: <b>shell-command-to-string</b><var> command<a name="index-shell_002dcommand_002dto_002dstring-3555"></a></var><br>
 <blockquote><p>This function executes <var>command</var> (a string) as a shell command,
 then returns the command's output as a string. 
 </p></blockquote></div>
 
+<!-- There is also shell-command-on-region, but that is more of a user -->
+<!-- command, not something to use in programs. -->
 <div class="defun">
-&mdash; Function: <b>process-lines</b><var> program &amp;rest args<a name="index-process_002dlines-3283"></a></var><br>
-<blockquote><p>This function runs <var>program</var> in a separate process, waits for it
-to finish, and returns its output as a list of strings.  Each string
-in the list holds a single line of text output by the program; the
-end-of-line characters are stripped from each line.  The arguments
-beyond <var>program</var>, <var>args</var>, are strings that specify
-command-line arguments with which to run the program.
+&mdash; Function: <b>process-lines</b><var> program &amp;rest args<a name="index-process_002dlines-3556"></a></var><br>
+<blockquote><p>This function runs <var>program</var>, waits for it to finish, and returns
+its output as a list of strings.  Each string in the list holds a
+single line of text output by the program; the end-of-line characters
+are stripped from each line.  The arguments beyond <var>program</var>,
+<var>args</var>, are strings that specify command-line arguments with which
+to run the program.
 
         <p>If <var>program</var> exits with a non-zero exit status, this function
 signals an error.

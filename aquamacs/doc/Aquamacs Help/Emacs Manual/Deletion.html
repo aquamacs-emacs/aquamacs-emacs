@@ -1,21 +1,18 @@
 <html lang="en">
 <head>
 <title>Deletion - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Killing.html#Killing" title="Killing">
+<link rel="up" href="Deletion-and-Killing.html#Deletion-and-Killing" title="Deletion and Killing">
 <link rel="next" href="Killing-by-Lines.html#Killing-by-Lines" title="Killing by Lines">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -39,21 +36,27 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <a name="Deletion"></a>
 <p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Killing-by-Lines.html#Killing-by-Lines">Killing by Lines</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Killing.html#Killing">Killing</a>
+Up:&nbsp;<a rel="up" accesskey="u" href="Deletion-and-Killing.html#Deletion-and-Killing">Deletion and Killing</a>
 <hr>
 </div>
 
-<h3 class="section">12.1 Deletion</h3>
+<h4 class="subsection">12.1.1 Deletion</h4>
 
-<p><a name="index-delete_002dbackward_002dchar-339"></a><a name="index-delete_002dchar-340"></a>
+<p><a name="index-delete_002dbackward_002dchar-404"></a><a name="index-delete_002dchar-405"></a>
   Deletion means erasing text and not saving it in the kill ring.  For
 the most part, the Emacs commands that delete text are those that
 erase just one character or only whitespace.
 
      <dl>
-<dt><kbd>C-d</kbd><dt><kbd>&lt;Delete&gt;</kbd><dd>Delete next character (<code>delete-char</code>). 
-<br><dt><kbd>&lt;DEL&gt;</kbd><dt><kbd>&lt;Backspace&gt;</kbd><dd>Delete previous character (<code>delete-backward-char</code>). 
-<br><dt><kbd>M-\</kbd><dd>Delete spaces and tabs around point (<code>delete-horizontal-space</code>). 
+<dt><kbd>&lt;DEL&gt;</kbd><dt><kbd>&lt;Backspace&gt;</kbd><dd>Delete the previous character, or the text in the region if it is
+active (<code>delete-backward-char</code>).
+
+     <br><dt><kbd>&lt;Delete&gt;</kbd><dd>Delete the next character, or the text in the region if it is active
+(<code>delete-forward-char</code>).
+
+     <br><dt><kbd>C-d</kbd><dd>Delete the next character (<code>delete-char</code>).
+
+     <br><dt><kbd>M-\</kbd><dd>Delete spaces and tabs around point (<code>delete-horizontal-space</code>). 
 <br><dt><kbd>M-&lt;SPC&gt;</kbd><dd>Delete spaces and tabs around point, leaving one space
 (<code>just-one-space</code>). 
 <br><dt><kbd>C-x C-o</kbd><dd>Delete blank lines around the current line (<code>delete-blank-lines</code>). 
@@ -61,19 +64,26 @@ erase just one character or only whitespace.
 indentation following it (<code>delete-indentation</code>). 
 </dl>
 
-   <p>We have already described the basic deletion commands <kbd>C-d</kbd>
-(<code>delete-char</code>) and &lt;DEL&gt; (<code>delete-backward-char</code>). 
-See <a href="Erasing.html#Erasing">Erasing</a>.
+   <p>We have already described the basic deletion commands &lt;DEL&gt;
+(<code>delete-backward-char</code>), &lt;delete&gt;
+(<code>delete-forward-char</code>), and <kbd>C-d</kbd> (<code>delete-char</code>). 
+See <a href="Erasing.html#Erasing">Erasing</a>.  With a numeric argument, they delete the specified
+number of characters.  If the numeric argument is omitted or one, they
+delete all the text in the region if it is active (see <a href="Using-Region.html#Using-Region">Using Region</a>).
 
-   <p><a name="index-M_002d_005c-341"></a><a name="index-delete_002dhorizontal_002dspace-342"></a><a name="index-M_002dSPC-343"></a><a name="index-just_002done_002dspace-344"></a>  The other delete commands are those that delete only whitespace
+<!-- FIXME: `cycle-spacing' should be documented, too.  (Maybe not in -->
+<!-- this node, tho.)  -xfq -->
+   <p><a name="index-M_002d_005c-406"></a><a name="index-delete_002dhorizontal_002dspace-407"></a><a name="index-M_002dSPC-408"></a><a name="index-just_002done_002dspace-409"></a>  The other delete commands are those that delete only whitespace
 characters: spaces, tabs and newlines.  <kbd>M-\</kbd>
 (<code>delete-horizontal-space</code>) deletes all the spaces and tab
 characters before and after point.  With a prefix argument, this only
 deletes spaces and tab characters before point.  <kbd>M-&lt;SPC&gt;</kbd>
-(<code>just-one-space</code>) does likewise but leaves a single space after
+(<code>just-one-space</code>) does likewise but leaves a single space before
 point, regardless of the number of spaces that existed previously
 (even if there were none before).  With a numeric argument <var>n</var>, it
-leaves <var>n</var> spaces after point.
+leaves <var>n</var> spaces before point if <var>n</var> is positive; if <var>n</var>
+is negative, it deletes newlines in addition to spaces and tabs,
+leaving <var>-n</var> spaces before point.
 
    <p><kbd>C-x C-o</kbd> (<code>delete-blank-lines</code>) deletes all blank lines
 after the current line.  If the current line is blank, it deletes all

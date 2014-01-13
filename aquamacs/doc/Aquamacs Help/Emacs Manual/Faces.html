@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Faces - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Display.html#Display" title="Display">
 <link rel="prev" href="Follow-Mode.html#Follow-Mode" title="Follow Mode">
-<link rel="next" href="Standard-Faces.html#Standard-Faces" title="Standard Faces">
+<link rel="next" href="Colors.html#Colors" title="Colors">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -39,63 +36,65 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <div class="node">
 <a name="Faces"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Standard-Faces.html#Standard-Faces">Standard Faces</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Colors.html#Colors">Colors</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Follow-Mode.html#Follow-Mode">Follow Mode</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
 <hr>
 </div>
 
-<h3 class="section">18.5 Faces: Controlling Text Display Style</h3>
+<h3 class="section">14.8 Text Faces</h3>
 
-<p><a name="index-faces-485"></a>
-  Emacs can display text in several different styles, which are called
+<p><a name="index-faces-616"></a>
+  Emacs can display text in several different styles, called
 <dfn>faces</dfn>.  Each face can specify various <dfn>face attributes</dfn>,
-such as the font, height, weight and slant, the foreground and
-background color, and underlining or overlining.  A face does not have
-to specify all of these attributes; often it inherits most of them
-from another face.
+such as the font, height, weight, slant, foreground and background
+color, and underlining or overlining.  Most major modes assign faces
+to the text automatically, via Font Lock mode.  See <a href="Font-Lock.html#Font-Lock">Font Lock</a>, for
+more information about how these faces are assigned.
 
-   <p>On a text-only terminal, not all face attributes are meaningful. 
-Some text-only terminals support inverse video, bold, and underline
-attributes; some support colors.  Text-only terminals generally do not
-support changing the height, width or font.
+   <p><a name="index-list_002dfaces_002ddisplay-617"></a>  To see what faces are currently defined, and what they look like,
+type <kbd>M-x list-faces-display</kbd>.  With a prefix argument, this
+prompts for a regular expression, and displays only faces with names
+matching that regular expression (see <a href="Regexps.html#Regexps">Regexps</a>).
 
-   <p>Most major modes assign faces to the text automatically through the
-work of Font Lock mode.  See <a href="Font-Lock.html#Font-Lock">Font Lock</a>, for more information about
-Font Lock mode and syntactic highlighting.  You can print the current
-buffer with the highlighting that appears on your screen using the
-command <code>ps-print-buffer-with-faces</code>.  See <a href="PostScript.html#PostScript">PostScript</a>.
+   <p><a name="index-frame_002dbackground_002dmode-618"></a>  It's possible for a given face to look different in different
+frames.  For instance, some text terminals do not support all face
+attributes, particularly font, height, and width, and some support a
+limited range of colors.  In addition, most Emacs faces are defined so
+that their attributes are different on light and dark frame
+backgrounds, for reasons of legibility.  By default, Emacs
+automatically chooses which set of face attributes to display on each
+frame, based on the frame's current background color.  However, you
+can override this by giving the variable <code>frame-background-mode</code>
+a non-<code>nil</code> value.  A value of <code>dark</code> makes Emacs treat all
+frames as if they have a dark background, whereas a value of
+<code>light</code> makes it treat all frames as if they have a light
+background.
 
-   <p>Enriched mode, the mode for editing formatted text, provides
-commands and menus for specifying faces for text in the buffer. 
-See <a href="Format-Faces.html#Format-Faces">Format Faces</a>.
+   <p><a name="index-background-color-619"></a><a name="index-default-face-620"></a>  You can customize a face to alter its attributes, and save those
+customizations for future Emacs sessions.  See <a href="Face-Customization.html#Face-Customization">Face Customization</a>,
+for details.
 
-   <p><a name="index-face-colors_002c-setting-486"></a>  To alter the appearance of a face, use the customization buffer. 
-See <a href="Face-Customization.html#Face-Customization">Face Customization</a>.  You can also use X resources to specify
-attributes of any particular face (see <a href="Resources.html#Resources">Resources</a>).  When
-displaying a character, any attribute that isn't specified by its face
-is taken from the <code>default</code> face, whose attributes reflect the
-default settings of the frame itself.
+   <p>The <code>default</code> face is the default for displaying text, and all
+of its attributes are specified.  Its background color is also used as
+the frame's background color.  See <a href="Colors.html#Colors">Colors</a>.
 
-   <p><a name="index-set_002dface_002dforeground-487"></a><a name="index-set_002dface_002dbackground-488"></a>  You can also change the foreground and background colors of a
-specific face with <kbd>M-x set-face-foreground</kbd> and <kbd>M-x
-set-face-background</kbd>.  These commands prompt in the minibuffer for a
-face name and a color name, with completion, and then set that face to
-use the specified color.  See <a href="Face-Customization.html#Face-Customization">Face Customization</a>, for information
-about color names.  These commands affect the face colors on all
-frames, both existing and those to be created in the future.  These
-changes do not, however, persist for future Emacs sessions; to make
-lasting changes, use the customization buffer (see <a href="Face-Customization.html#Face-Customization">Face Customization</a>).
+   <p><a name="index-cursor-face-621"></a>  Another special face is the <code>cursor</code> face.  On graphical
+displays, the background color of this face is used to draw the text
+cursor.  None of the other attributes of this face have any effect;
+the foreground color for text under the cursor is taken from the
+background color of the underlying text.  On text terminals, the
+appearance of the text cursor is determined by the terminal, not by
+the <code>cursor</code> face.
 
-   <p>You can also set foreground and background colors for the current
-frame only; see <a href="Frame-Parameters.html#Frame-Parameters">Frame Parameters</a>.
+   <p>You can also use X resources to specify attributes of any particular
+face.  See <a href="Resources.html#Resources">Resources</a>.
 
-   <p>Emacs can display variable-width fonts, but some of the Emacs
-commands that calculate width and indentation do not know how to
-calculate variable widths.  This can sometimes lead to incorrect
-results when you use variable-width fonts.  In particular, indentation
-commands can give inconsistent results, so we recommend you avoid
-variable-width fonts, especially for editing program source code.
+   <p>Emacs can display variable-width fonts, but some Emacs commands,
+particularly indentation commands, do not account for variable
+character display widths.  Therefore, we recommend not using
+variable-width fonts for most faces, particularly those assigned by
+Font Lock mode.
 
    </body></html>
 

@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Raising and Lowering - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Frame-Configurations.html#Frame-Configurations" title="Frame Configurations">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,46 +41,47 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
 <hr>
 </div>
 
-<h3 class="section">29.12 Raising and Lowering Frames</h3>
+<h3 class="section">29.11 Raising and Lowering Frames</h3>
 
-<p>Most window systems use a desktop metaphor.  Part of this metaphor is
-the idea that windows are stacked in a notional third dimension
-perpendicular to the screen surface, and thus ordered from &ldquo;highest&rdquo;
-to &ldquo;lowest.&rdquo;  Where two windows overlap, the one higher up covers
-the one underneath.  Even a window at the bottom of the stack can be
-seen if no other window overlaps it.
-
-<!-- @cindex raising a frame  redundant with raise-frame -->
-   <p><a name="index-lowering-a-frame-2383"></a>  A window's place in this ordering is not fixed; in fact, users tend
-to change the order frequently.  <dfn>Raising</dfn> a window means moving
-it &ldquo;up,&rdquo; to the top of the stack.  <dfn>Lowering</dfn> a window means
-moving it to the bottom of the stack.  This motion is in the notional
-third dimension only, and does not change the position of the window
-on the screen.
-
-   <p>With Emacs, frames constitute the windows in the metaphor sketched
-above. You can raise and lower frames using these functions:
+<p><a name="index-raising-a-frame-2633"></a><a name="index-lowering-a-frame-2634"></a>  Most window systems use a desktop metaphor.  Part of this metaphor
+is the idea that system-level windows (e.g., Emacs frames) are
+stacked in a notional third dimension perpendicular to the screen
+surface.  Where two overlap, the one higher up covers the one
+underneath.  You can <dfn>raise</dfn> or <dfn>lower</dfn> a frame using the
+functions <code>raise-frame</code> and <code>lower-frame</code>.
 
 <div class="defun">
-&mdash; Command: <b>raise-frame</b><var> &amp;optional frame<a name="index-raise_002dframe-2384"></a></var><br>
+&mdash; Command: <b>raise-frame</b><var> &amp;optional frame<a name="index-raise_002dframe-2635"></a></var><br>
 <blockquote><p>This function raises frame <var>frame</var> (default, the selected frame). 
 If <var>frame</var> is invisible or iconified, this makes it visible. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>lower-frame</b><var> &amp;optional frame<a name="index-lower_002dframe-2385"></a></var><br>
+&mdash; Command: <b>lower-frame</b><var> &amp;optional frame<a name="index-lower_002dframe-2636"></a></var><br>
 <blockquote><p>This function lowers frame <var>frame</var> (default, the selected frame). 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>minibuffer-auto-raise</b><var><a name="index-minibuffer_002dauto_002draise-2386"></a></var><br>
+&mdash; User Option: <b>minibuffer-auto-raise</b><var><a name="index-minibuffer_002dauto_002draise-2637"></a></var><br>
 <blockquote><p>If this is non-<code>nil</code>, activation of the minibuffer raises the frame
 that the minibuffer window is in. 
 </p></blockquote></div>
 
-   <p>You can also enable auto-raise (raising automatically when a frame is
-selected) or auto-lower (lowering automatically when it is deselected)
-for any frame using frame parameters.  See <a href="Management-Parameters.html#Management-Parameters">Management Parameters</a>.
+   <p>On window systems, you can also enable auto-raising (on frame
+selection) or auto-lowering (on frame deselection) using frame
+parameters.  See <a href="Management-Parameters.html#Management-Parameters">Management Parameters</a>.
+
+   <p><a name="index-top-frame-2638"></a>  The concept of raising and lowering frames also applies to text
+terminal frames.  On each text terminal, only the top frame is
+displayed at any one time.
+
+<div class="defun">
+&mdash; Function: <b>tty-top-frame</b><var> terminal<a name="index-tty_002dtop_002dframe-2639"></a></var><br>
+<blockquote><p>This function returns the top frame on <var>terminal</var>.  <var>terminal</var>
+should be a terminal object, a frame (meaning that frame's terminal),
+or <code>nil</code> (meaning the selected frame's terminal).  If it does not
+refer to a text terminal, the return value is <code>nil</code>. 
+</p></blockquote></div>
 
    </body></html>
 

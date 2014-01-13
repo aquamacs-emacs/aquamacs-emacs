@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Backup Copying - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="prev" href="Backup-Deletion.html#Backup-Deletion" title="Backup Deletion">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -43,7 +40,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Backup.html#Backup">Backup</a>
 <hr>
 </div>
 
-<h5 class="subsubsection">22.3.2.3 Copying vs. Renaming</h5>
+<h5 class="subsubsection">18.3.2.3 Copying vs. Renaming</h5>
 
 <p>Backup files can be made by copying the old file or by renaming it. 
 This makes a difference when the old file has multiple names (hard
@@ -58,28 +55,28 @@ and group.  If copying is used, these do not change.  If renaming is used,
 you become the file's owner, and the file's group becomes the default
 (different operating systems have different defaults for the group).
 
-   <p>Having the owner change is usually a good idea, because then the owner
-always shows who last edited the file.  Also, the owners of the backups
-show who produced those versions.  Occasionally there is a file whose
-owner should not change; it is a good idea for such files to contain
-local variable lists to set <code>backup-by-copying-when-mismatch</code>
-locally (see <a href="File-Variables.html#File-Variables">File Variables</a>).
+   <p><a name="index-backup_002dby_002dcopying-1063"></a><a name="index-backup_002dby_002dcopying_002dwhen_002dlinked-1064"></a><a name="index-backup_002dby_002dcopying_002dwhen_002dmismatch-1065"></a><a name="index-backup_002dby_002dcopying_002dwhen_002dprivileged_002dmismatch-1066"></a><a name="index-file-ownership_002c-and-backup-1067"></a><a name="index-backup_002c-and-user_002did-1068"></a>  The choice of renaming or copying is made as follows:
 
-   <p><a name="index-backup_002dby_002dcopying-872"></a><a name="index-backup_002dby_002dcopying_002dwhen_002dlinked-873"></a><a name="index-backup_002dby_002dcopying_002dwhen_002dmismatch-874"></a><a name="index-backup_002dby_002dcopying_002dwhen_002dprivileged_002dmismatch-875"></a><a name="index-file-ownership_002c-and-backup-876"></a><a name="index-backup_002c-and-user_002did-877"></a>  The choice of renaming or copying is controlled by four variables. 
-Renaming is the default choice.  If the variable
-<code>backup-by-copying</code> is non-<code>nil</code>, copying is used.  Otherwise,
-if the variable <code>backup-by-copying-when-linked</code> is non-<code>nil</code>,
-then copying is used for files that have multiple names, but renaming
-may still be used when the file being edited has only one name.  If the
-variable <code>backup-by-copying-when-mismatch</code> is non-<code>nil</code>, then
-copying is used if renaming would cause the file's owner or group to
-change.  <code>backup-by-copying-when-mismatch</code> is <code>t</code> by default
-if you start Emacs as the superuser.  The fourth variable,
-<code>backup-by-copying-when-privileged-mismatch</code>, gives the highest
-numeric user-id for which <code>backup-by-copying-when-mismatch</code> will be
-forced on.  This is useful when low-numbered user-ids are assigned to
-special system users, such as <code>root</code>, <code>bin</code>, <code>daemon</code>,
-etc., which must maintain ownership of files.
+     <ul>
+<li>If the variable <code>backup-by-copying</code> is non-<code>nil</code> (the
+default is <code>nil</code>), use copying.
+
+     <li>Otherwise, if the variable <code>backup-by-copying-when-linked</code> is
+non-<code>nil</code> (the default is <code>nil</code>), and the file has multiple
+names, use copying.
+
+     <li>Otherwise, if the variable <code>backup-by-copying-when-mismatch</code> is
+non-<code>nil</code> (the default is <code>t</code>), and renaming would change
+the file's owner or group, use copying.
+
+     <p>If you change <code>backup-by-copying-when-mismatch</code> to <code>nil</code>,
+Emacs checks the numeric user-id of the file's owner.  If this is
+higher than <code>backup-by-copying-when-privileged-mismatch</code>, then it
+behaves as though <code>backup-by-copying-when-mismatch</code> is
+non-<code>nil</code> anyway.
+
+     <li>Otherwise, renaming is the default choice. 
+</ul>
 
    <p>When a file is managed with a version control system (see <a href="Version-Control.html#Version-Control">Version Control</a>), Emacs does not normally make backups in the usual way for
 that file.  But check-in and check-out are similar in some ways to

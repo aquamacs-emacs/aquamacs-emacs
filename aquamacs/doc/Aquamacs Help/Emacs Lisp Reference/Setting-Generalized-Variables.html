@@ -1,0 +1,126 @@
+<html lang="en">
+<head>
+<title>Setting Generalized Variables - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Generalized-Variables.html#Generalized-Variables" title="Generalized Variables">
+<link rel="next" href="Adding-Generalized-Variables.html#Adding-Generalized-Variables" title="Adding Generalized Variables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
+
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Setting-Generalized-Variables"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Adding-Generalized-Variables.html#Adding-Generalized-Variables">Adding Generalized Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Generalized-Variables.html#Generalized-Variables">Generalized Variables</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.15.1 The <code>setf</code> Macro</h4>
+
+<p>The <code>setf</code> macro is the most basic way to operate on generalized
+variables.  The <code>setf</code> form is like <code>setq</code>, except that it
+accepts arbitrary place forms on the left side rather than just
+symbols.  For example, <code>(setf (car a) b)</code> sets the car of
+<code>a</code> to <code>b</code>, doing the same operation as <code>(setcar a b)</code>,
+but without having to remember two separate functions for setting and
+accessing every type of place.
+
+<div class="defun">
+&mdash; Macro: <b>setf</b> [<var>place form</var>]<var><small class="dots">...</small><a name="index-setf-700"></a></var><br>
+<blockquote><p>This macro evaluates <var>form</var> and stores it in <var>place</var>, which
+must be a valid generalized variable form.  If there are several
+<var>place</var> and <var>form</var> pairs, the assignments are done sequentially
+just as with <code>setq</code>.  <code>setf</code> returns the value of the last
+<var>form</var>. 
+</p></blockquote></div>
+
+   <p>The following Lisp forms will work as generalized variables, and
+so may appear in the <var>place</var> argument of <code>setf</code>:
+
+     <ul>
+<li>A symbol naming a variable.  In other words, <code>(setf x y)</code> is
+exactly equivalent to <code>(setq x y)</code>, and <code>setq</code> itself is
+strictly speaking redundant given that <code>setf</code> exists.  Many
+programmers continue to prefer <code>setq</code> for setting simple
+variables, though, purely for stylistic or historical reasons. 
+The macro <code>(setf x y)</code> actually expands to <code>(setq x y)</code>,
+so there is no performance penalty for using it in compiled code.
+
+     <li>A call to any of the following standard Lisp functions:
+
+     <pre class="smallexample">          aref      cddr      symbol-function
+          car       elt       symbol-plist
+          caar      get       symbol-value
+          cadr      gethash
+          cdr       nth
+          cdar      nthcdr
+</pre>
+     <li>A call to any of the following Emacs-specific functions:
+
+     <pre class="smallexample">          default-value                 process-get
+          frame-parameter               process-sentinel
+          terminal-parameter            window-buffer
+          keymap-parent                 window-display-table
+          match-data                    window-dedicated-p
+          overlay-get                   window-hscroll
+          overlay-start                 window-parameter
+          overlay-end                   window-point
+          process-buffer                window-start
+          process-filter
+</pre>
+     </ul>
+
+<p class="noindent"><code>setf</code> signals an error if you pass a <var>place</var> form that it
+does not know how to handle.
+
+<!-- And for cl-lib's cl-getf. -->
+   <p>Note that for <code>nthcdr</code>, the list argument of the function must
+itself be a valid <var>place</var> form.  For example, <code>(setf (nthcdr
+0 foo) 7)</code> will set <code>foo</code> itself to 7. 
+<!-- The use of @code{nthcdr} as a @var{place} form is an extension -->
+<!-- to standard Common Lisp. -->
+
+<!-- FIXME I don't think is a particularly good way to do it, -->
+<!-- but these macros are introduced before generalized variables are. -->
+   <p>The macros <code>push</code> (see <a href="List-Variables.html#List-Variables">List Variables</a>) and <code>pop</code>
+(see <a href="List-Elements.html#List-Elements">List Elements</a>) can manipulate generalized variables,
+not just lists.  <code>(pop </code><var>place</var><code>)</code> removes and returns the first
+element of the list stored in <var>place</var>.  It is analogous to
+<code>(prog1 (car </code><var>place</var><code>) (setf </code><var>place</var><code> (cdr </code><var>place</var><code>)))</code>,
+except that it takes care to evaluate all subforms only once. 
+<code>(push </code><var>x</var> <var>place</var><code>)</code> inserts <var>x</var> at the front of
+the list stored in <var>place</var>.  It is analogous to <code>(setf
+</code><var>place</var><code> (cons </code><var>x</var> <var>place</var><code>))</code>, except for evaluation of the
+subforms.  Note that <code>push</code> and <code>pop</code> on an <code>nthcdr</code>
+place can be used to insert or delete at any position in a list.
+
+   <p>The <samp><span class="file">cl-lib</span></samp> library defines various extensions for generalized
+variables, including additional <code>setf</code> places. 
+See <a href="../cl/Generalized-Variables.html#Generalized-Variables">Generalized Variables</a>.
+
+   </body></html>
+

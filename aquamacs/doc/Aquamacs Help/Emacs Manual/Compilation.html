@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Compilation - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Compilation-Mode.html#Compilation-Mode" title="Compilation Mode">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -43,106 +40,86 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Building.html#Building">Building</a>
 <hr>
 </div>
 
-<h3 class="section">31.1 Running Compilations under Emacs</h3>
+<h3 class="section">27.1 Running Compilations under Emacs</h3>
 
-<p><a name="index-inferior-process-2272"></a><a name="index-make-2273"></a><a name="index-compilation-errors-2274"></a><a name="index-error-log-2275"></a>
-  Emacs can run compilers for noninteractive languages such as C and
-Fortran as inferior processes, feeding the error log into an Emacs buffer. 
-It can also parse the error messages and show you the source lines where
-compilation errors occurred.
+<p><a name="index-inferior-process-2542"></a><a name="index-make-2543"></a><a name="index-compilation-errors-2544"></a><a name="index-error-log-2545"></a>
+  Emacs can run compilers for languages such as C and Fortran, feeding
+the compilation log into an Emacs buffer.  It can also parse the error
+messages and show you where the errors occurred.
 
      <dl>
 <dt><kbd>M-x compile</kbd><dd>Run a compiler asynchronously under Emacs, with error messages going to
-the &lsquo;<samp><span class="samp">*compilation*</span></samp>&rsquo; buffer. 
+the <samp><span class="file">*compilation*</span></samp> buffer. 
 <br><dt><kbd>M-x recompile</kbd><dd>Invoke a compiler with the same command as in the last invocation of
 <kbd>M-x compile</kbd>. 
 <br><dt><kbd>M-x kill-compilation</kbd><dd>Kill the running compilation subprocess. 
 </dl>
 
-   <p><a name="index-compile-2276"></a>  To run <code>make</code> or another compilation command, do <kbd>M-x
-compile</kbd>.  This command reads a shell command line using the minibuffer,
-and then executes the command in an inferior shell, putting output in
-the buffer named &lsquo;<samp><span class="samp">*compilation*</span></samp>&rsquo;.  The current buffer's default
-directory is used as the working directory for the execution of the
-command; normally, therefore, the compilation happens in this
-directory.
+   <p><a name="index-compile-2546"></a>  To run <code>make</code> or another compilation command, type <kbd>M-x
+compile</kbd>.  This reads a shell command line using the minibuffer, and
+then executes the command by running a shell as a subprocess (or
+<dfn>inferior process</dfn>) of Emacs.  The output is inserted in a buffer
+named <samp><span class="file">*compilation*</span></samp>.  The current buffer's default directory is
+used as the working directory for the execution of the command;
+normally, therefore, compilation takes place in this directory.
 
-   <p><a name="index-compile_002dcommand-2277"></a>  The default for the compilation command is normally &lsquo;<samp><span class="samp">make -k</span></samp>&rsquo;,
-which is correct most of the time for nontrivial programs. 
-See <a href="../make/index.html#Top">Make</a>.  If you have done <kbd>M-x
-compile</kbd> before, the default each time is the command you used the
-previous time.  <code>compile</code> stores this command in the variable
-<code>compile-command</code>, so setting that variable specifies the default
-for the next use of <kbd>M-x compile</kbd>.  If a file specifies a file
-local value for <code>compile-command</code>, that provides the default when
-you type <kbd>M-x compile</kbd> in that file's buffer.  See <a href="File-Variables.html#File-Variables">File Variables</a>.
+   <p><a name="index-compile_002dcommand-2547"></a>  The default compilation command is &lsquo;<samp><span class="samp">make -k</span></samp>&rsquo;, which is usually
+correct for programs compiled using the <samp><span class="command">make</span></samp> utility (the
+&lsquo;<samp><span class="samp">-k</span></samp>&rsquo; flag tells <samp><span class="command">make</span></samp> to continue compiling as much as
+possible after an error).  See <a href="../make/index.html#Top">Make</a>. 
+If you have done <kbd>M-x compile</kbd> before, the command that you
+specified is automatically stored in the variable
+<code>compile-command</code>; this is used as the default the next time you
+type <kbd>M-x compile</kbd>.  A file can also specify a file-local value
+for <code>compile-command</code> (see <a href="File-Variables.html#File-Variables">File Variables</a>).
 
-   <p>Starting a compilation displays the buffer &lsquo;<samp><span class="samp">*compilation*</span></samp>&rsquo; in
-another window but does not select it.  The buffer's mode line tells
-you whether compilation is finished, with the word &lsquo;<samp><span class="samp">run</span></samp>&rsquo;,
-&lsquo;<samp><span class="samp">signal</span></samp>&rsquo; or &lsquo;<samp><span class="samp">exit</span></samp>&rsquo; inside the parentheses.  You do not have
-to keep this buffer visible; compilation continues in any case.  While
-a compilation is going on, the string &lsquo;<samp><span class="samp">Compiling</span></samp>&rsquo; appears in the
-mode lines of all windows.  When this string disappears, the
-compilation is finished.
+   <p>Starting a compilation displays the <samp><span class="file">*compilation*</span></samp> buffer in
+another window but does not select it.  While the compilation is
+running, the word &lsquo;<samp><span class="samp">run</span></samp>&rsquo; is shown in the major mode indicator for
+the <samp><span class="file">*compilation*</span></samp> buffer, and the word &lsquo;<samp><span class="samp">Compiling</span></samp>&rsquo; appears
+in all mode lines.  You do not have to keep the <samp><span class="file">*compilation*</span></samp>
+buffer visible while compilation is running; it continues in any case. 
+When the compilation ends, for whatever reason, the mode line of the
+<samp><span class="file">*compilation*</span></samp> buffer changes to say &lsquo;<samp><span class="samp">exit</span></samp>&rsquo; (followed by
+the exit code: &lsquo;<samp><span class="samp">[0]</span></samp>&rsquo; for a normal exit), or &lsquo;<samp><span class="samp">signal</span></samp>&rsquo; (if a
+signal terminated the process).
 
-   <p>If you want to watch the compilation transcript as it appears, switch
-to the &lsquo;<samp><span class="samp">*compilation*</span></samp>&rsquo; buffer and move point to the end of the
-buffer.  When point is at the end, new compilation output is inserted
-above point, which remains at the end.  If point is not at the end of
-the buffer, it remains fixed while more compilation output is added at
-the end of the buffer.
+   <p>If you want to watch the compilation transcript as it appears,
+switch to the <samp><span class="file">*compilation*</span></samp> buffer and move point to the end of
+the buffer.  When point is at the end, new compilation output is
+inserted above point, which remains at the end.  Otherwise, point
+remains fixed while compilation output is added at the end of the
+buffer.
 
-   <p><a name="index-compilation-buffer_002c-keeping-point-at-end-2278"></a><a name="index-compilation_002dscroll_002doutput-2279"></a>  If you change the variable <code>compilation-scroll-output</code> to a
-non-<code>nil</code> value, the compilation buffer will scroll automatically
-to follow the output as it comes in.  If the value is
-<code>first-error</code>, the scrolling stops at the first error that
-appears, leaving point at that error.  For any other non-<code>nil</code>
-value, the buffer continues scrolling until there is no more output.
+   <p><a name="index-compilation-buffer_002c-keeping-point-at-end-2548"></a><a name="index-compilation_002dscroll_002doutput-2549"></a>  If you change the variable <code>compilation-scroll-output</code> to a
+non-<code>nil</code> value, the <samp><span class="file">*compilation*</span></samp> buffer scrolls
+automatically to follow the output.  If the value is
+<code>first-error</code>, scrolling stops when the first error appears,
+leaving point at that error.  For any other non-<code>nil</code> value,
+scrolling continues until there is no more output.
 
-   <p><a name="index-recompile-2280"></a>  To rerun the last compilation with the same command, type <kbd>M-x
-recompile</kbd>.  This automatically reuses the compilation command from
-the last invocation of <kbd>M-x compile</kbd>.  It also reuses the
-&lsquo;<samp><span class="samp">*compilation*</span></samp>&rsquo; buffer and starts the compilation in its default
+   <p><a name="index-recompile-2550"></a>  To rerun the last compilation with the same command, type <kbd>M-x
+recompile</kbd>.  This reuses the compilation command from the last
+invocation of <kbd>M-x compile</kbd>.  It also reuses the
+<samp><span class="file">*compilation*</span></samp> buffer and starts the compilation in its default
 directory, which is the directory in which the previous compilation
 was started.
 
-   <p>When the compiler process terminates, for whatever reason, the mode
-line of the &lsquo;<samp><span class="samp">*compilation*</span></samp>&rsquo; buffer changes to say &lsquo;<samp><span class="samp">exit</span></samp>&rsquo;
-(followed by the exit code, &lsquo;<samp><span class="samp">[0]</span></samp>&rsquo; for a normal exit), or
-&lsquo;<samp><span class="samp">signal</span></samp>&rsquo; (if a signal terminated the process), instead of
-&lsquo;<samp><span class="samp">run</span></samp>&rsquo;.
-
-   <p><a name="index-kill_002dcompilation-2281"></a>  Starting a new compilation also kills any compilation already
-running in &lsquo;<samp><span class="samp">*compilation*</span></samp>&rsquo;, as the buffer can only handle one
+   <p><a name="index-kill_002dcompilation-2551"></a><a name="index-compilation_002dalways_002dkill-2552"></a>  Starting a new compilation also kills any compilation already
+running in <samp><span class="file">*compilation*</span></samp>, as the buffer can only handle one
 compilation at any time.  However, <kbd>M-x compile</kbd> asks for
-confirmation before actually killing a compilation that is running. 
-You can also kill the compilation process with <kbd>M-x
+confirmation before actually killing a compilation that is running; to
+always automatically kill the compilation without asking, change the
+variable <code>compilation-always-kill</code> to <code>t</code>.  You can also
+kill a compilation process with the command <kbd>M-x
 kill-compilation</kbd>.
 
-   <p>If you want to run two compilations at once, you should start the
-first one, then rename the &lsquo;<samp><span class="samp">*compilation*</span></samp>&rsquo; buffer (perhaps using
-<code>rename-uniquely</code>; see <a href="Misc-Buffer.html#Misc-Buffer">Misc Buffer</a>), and start the other
-compilation.  That will create a new &lsquo;<samp><span class="samp">*compilation*</span></samp>&rsquo; buffer.
+   <p>To run two compilations at once, start the first one, then rename
+the <samp><span class="file">*compilation*</span></samp> buffer (perhaps using <code>rename-uniquely</code>;
+see <a href="Misc-Buffer.html#Misc-Buffer">Misc Buffer</a>), then switch buffers and start the other
+compilation.  This will create a new <samp><span class="file">*compilation*</span></samp> buffer.
 
-   <p>Emacs does not expect a compiler process to launch asynchronous
-subprocesses; if it does, and they keep running after the main
-compiler process has terminated, Emacs may kill them or their output
-may not arrive in Emacs.  To avoid this problem, make the main process
-wait for its subprocesses to finish.  In a shell script, you can do this
-using &lsquo;<samp><span class="samp">$!</span></samp>&rsquo; and &lsquo;<samp><span class="samp">wait</span></samp>&rsquo;, like this:
-
-<pre class="example">     (sleep 10; echo 2nd)&amp; pid=$!  # <span class="roman">Record pid of subprocess</span>
-     echo first message
-     wait $pid                     # <span class="roman">Wait for subprocess</span>
-</pre>
-   <p>If the background process does not output to the compilation buffer,
-so you only need to prevent it from being killed when the main
-compilation process terminates, this is sufficient:
-
-<pre class="example">     nohup <var>command</var>; sleep 1
-</pre>
-   <p><a name="index-compilation_002denvironment-2282"></a>  You can control the environment passed to the compilation command
+   <p><a name="index-compilation_002denvironment-2553"></a>  You can control the environment passed to the compilation command
 with the variable <code>compilation-environment</code>.  Its value is a list
 of environment variable settings; each element should be a string of
 the form <code>"</code><var>envvarname</var><code>=</code><var>value</var><code>"</code>.  These environment

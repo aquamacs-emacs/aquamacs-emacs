@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Log Buffer - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Version-Control.html#Version-Control" title="Version Control">
 <link rel="prev" href="Basic-VC-Editing.html#Basic-VC-Editing" title="Basic VC Editing">
-<link rel="next" href="Old-Revisions.html#Old-Revisions" title="Old Revisions">
+<link rel="next" href="Registering.html#Registering" title="Registering">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -39,27 +36,33 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <div class="node">
 <a name="Log-Buffer"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Old-Revisions.html#Old-Revisions">Old Revisions</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Registering.html#Registering">Registering</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Basic-VC-Editing.html#Basic-VC-Editing">Basic VC Editing</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Version-Control.html#Version-Control">Version Control</a>
 <hr>
 </div>
 
-<h4 class="subsection">32.1.4 Features of the Log Entry Buffer</h4>
+<h4 class="subsection">28.1.4 Features of the Log Entry Buffer</h4>
 
-<p>When you tell VC to commit a change, it pops up a buffer called
-&lsquo;<samp><span class="samp">*VC-Log*</span></samp>&rsquo;.  In this buffer, you should write a <dfn>log entry</dfn>
+<p><a name="index-C_002dc-C_002dc-_0040r_007b_0028Log-Edit-mode_0029_007d-2776"></a><a name="index-log_002dedit_002ddone-2777"></a>  When you tell VC to commit a change, it pops up a buffer named
+<samp><span class="file">*vc-log*</span></samp>.  In this buffer, you should write a <dfn>log entry</dfn>
 describing the changes you have made (see <a href="Why-Version-Control_003f.html#Why-Version-Control_003f">Why Version Control?</a>). 
-After you are done, type <kbd>C-c C-c</kbd>; this exits the buffer and
-commits the change, together with your log entry.
+After you are done, type <kbd>C-c C-c</kbd> (<code>log-edit-done</code>) to exit
+the buffer and commit the change, together with your log entry.
 
-   <p>While in the &lsquo;<samp><span class="samp">*VC-Log*</span></samp>&rsquo; buffer, you can write one or more
-<dfn>header lines</dfn>, specifying additional information to be supplied
-to the version control system.  Each header line must occupy a single
-line at the top of the buffer; the first line that is not a header
-line is treated as the start of the log entry.  For example, the
-following header line states that the present change was not written
-by you, but by another developer:
+   <p><a name="index-Log-Edit-mode-2778"></a><a name="index-mode_002c-Log-Edit-2779"></a><a name="index-vc_002dlog_002dmode_002dhook-2780"></a><!-- FIXME: Mention log-edit-mode-hook here?  -xfq -->
+  The major mode for the <samp><span class="file">*vc-log*</span></samp> buffer is Log Edit mode, a
+variant of Text mode (see <a href="Text-Mode.html#Text-Mode">Text Mode</a>).  On entering Log Edit mode,
+Emacs runs the hooks <code>text-mode-hook</code> and <code>vc-log-mode-hook</code>
+(see <a href="Hooks.html#Hooks">Hooks</a>).
+
+   <p>In the <samp><span class="file">*vc-log*</span></samp> buffer, you can write one or more <dfn>header
+lines</dfn>, specifying additional information to be supplied to the
+version control system.  Each header line must occupy a single line at
+the top of the buffer; the first line that is not a header line is
+treated as the start of the log entry.  For example, the following
+header line states that the present change was not written by you, but
+by another developer:
 
 <pre class="smallexample">     Author: J. R. Hacker &lt;jrh@example.com&gt;
 </pre>
@@ -67,56 +70,41 @@ by you, but by another developer:
 &lsquo;<samp><span class="samp">Date</span></samp>&rsquo; (a manually-specified commit time) and &lsquo;<samp><span class="samp">Fixes</span></samp>&rsquo; (a
 reference to a bug fixed by the change).  Not all version control
 systems recognize all headers: Bazaar recognizes all three headers,
-while git, Mercurial, and Monotone recognizes only &lsquo;<samp><span class="samp">Author</span></samp>&rsquo; and
-&lsquo;<samp><span class="samp">Summary</span></samp>&rsquo;.  If you specify a header for a version control that
-does not support it, the header is treated as part of the log entry.
+while Git, Mercurial, and Monotone recognize only &lsquo;<samp><span class="samp">Author</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">Date</span></samp>&rsquo;.  If you specify a header for a system that does not
+support it, the header is treated as part of the log entry.
 
-   <p><a name="index-log_002dedit_002dshow_002dfiles-2488"></a><a name="index-log_002dedit_002dshow_002ddiff-2489"></a>  Type <kbd>C-c C-f</kbd> (<code>log-edit-show-files</code>) to display a list of
-files in the current VC fileset.  If you called <kbd>C-x v v</kbd> directly
-from a work file, the fileset consists of that single file; if you
-called <kbd>C-x v v</kbd> from a VC directory buffer (see <a href="VC-Directory-Mode.html#VC-Directory-Mode">VC Directory Mode</a>), the fileset may consist of multiple files.
+   <p><a name="index-C_002dc-C_002df-_0040r_007b_0028Log-Edit-mode_0029_007d-2781"></a><a name="index-log_002dedit_002dshow_002dfiles-2782"></a><a name="index-C_002dc-C_002dd-_0040r_007b_0028Log-Edit-mode_0029_007d-2783"></a><a name="index-log_002dedit_002dshow_002ddiff-2784"></a>  While in the <samp><span class="file">*vc-log*</span></samp> buffer, the &ldquo;current VC fileset&rdquo; is
+considered to be the fileset that will be committed if you type
+<kbd>C-c&nbsp;C-c</kbd><!-- /@w -->.  To view a list of the files in the VC fileset,
+type <kbd>C-c&nbsp;C-f</kbd><!-- /@w --> (<code>log-edit-show-files</code>).  To view a diff
+of changes between the VC fileset and the version from which you
+started editing (see <a href="Old-Revisions.html#Old-Revisions">Old Revisions</a>), type <kbd>C-c C-d</kbd>
+(<code>log-edit-show-diff</code>).
 
-   <p><a name="index-log_002dedit_002dinsert_002dchangelog-2490"></a>  Type <kbd>C-c C-d</kbd> (<code>log-edit-show-diff</code>) to show a <dfn>diff</dfn>
-of the changes you have made (i.e., the differences between the work
-file and the repository revision from which you started editing). 
-See <a href="Old-Revisions.html#Old-Revisions">Old Revisions</a>.
-
-   <p>If the current VC fileset includes one or more <samp><span class="file">ChangeLog</span></samp>
-files (see <a href="Change-Log.html#Change-Log">Change Log</a>), type <kbd>C-c C-a</kbd>
+   <p><a name="index-C_002dc-C_002da-_0040r_007b_0028Log-Edit-mode_0029_007d-2785"></a><a name="index-log_002dedit_002dinsert_002dchangelog-2786"></a>  If the VC fileset includes one or more <samp><span class="file">ChangeLog</span></samp> files
+(see <a href="Change-Log.html#Change-Log">Change Log</a>), type <kbd>C-c C-a</kbd>
 (<code>log-edit-insert-changelog</code>) to pull the relevant entries into
-the &lsquo;<samp><span class="samp">*VC-Log*</span></samp>&rsquo; buffer.  If the topmost item in each
+the <samp><span class="file">*vc-log*</span></samp> buffer.  If the topmost item in each
 <samp><span class="file">ChangeLog</span></samp> was made under your user name on the current date,
-this command searches that item for entries that match the file(s) to
-be committed; if found, these entries are inserted. 
-See <a href="Change-Logs-and-VC.html#Change-Logs-and-VC">Change Logs and VC</a>,
-for the opposite way of working&mdash;generating ChangeLog entries from
-the revision control log.
+this command searches that item for entries matching the file(s) to be
+committed, and inserts them. 
+If you are using CVS or RCS, see <a href="Change-Logs-and-VC.html#Change-Logs-and-VC">Change Logs and VC</a>, for the
+opposite way of working&mdash;generating ChangeLog entries from the Log
+Edit buffer.
 
-   <p>To abort a check-in, just <strong>don't</strong> type <kbd>C-c C-c</kbd> in that
+   <p>To abort a commit, just <em>don't</em> type <kbd>C-c C-c</kbd> in that
 buffer.  You can switch buffers and do other editing.  As long as you
-don't try to commit another file, the entry you were editing remains
-in the &lsquo;<samp><span class="samp">*VC-Log*</span></samp>&rsquo; buffer, and you can go back to that buffer at
-any time to complete the check-in.
+don't try to make another commit, the entry you were editing remains
+in the <samp><span class="file">*vc-log*</span></samp> buffer, and you can go back to that buffer at
+any time to complete the commit.
 
-   <p>If you change several source files for the same reason, it is often
-convenient to specify the same log entry for many of the files.  (This
-is the normal way to do things on a changeset-oriented system, where
-comments are attached to changesets rather than the history of
-individual files.)  The most convenient way to do this is to mark all
-the files in VC Directory Mode and commit from there; the log buffer
-will carry the fileset information with it and do a group commit when
-you type <kbd>C-c C-c</kbd>.
-
-   <p>You can also browse the history of previous log entries to duplicate
-a checkin comment. This can be useful when you want several files to
-have checkin comments that vary only slightly from each other. The
-commands <kbd>M-n</kbd>, <kbd>M-p</kbd>, <kbd>M-s</kbd> and <kbd>M-r</kbd> for doing this
-work just like the minibuffer history commands (except that these
-versions are used outside the minibuffer).
-
-   <p><a name="index-vc_002dlog_002dmode_002dhook-2491"></a>  Each time you commit a change, the log entry buffer is put into VC
-Log Edit mode, which involves running two hooks: <code>text-mode-hook</code>
-and <code>vc-log-mode-hook</code>.  See <a href="Hooks.html#Hooks">Hooks</a>.
+   <p><a name="index-M_002dn-_0040r_007b_0028Log-Edit-mode_0029_007d-2787"></a><a name="index-M_002dp-_0040r_007b_0028Log-Edit-mode_0029_007d-2788"></a><a name="index-M_002ds-_0040r_007b_0028Log-Edit-mode_0029_007d-2789"></a><a name="index-M_002dr-_0040r_007b_0028Log-Edit-mode_0029_007d-2790"></a>  You can also browse the history of previous log entries to duplicate
+a commit comment.  This can be useful when you want to make several
+commits with similar comments.  The commands <kbd>M-n</kbd>, <kbd>M-p</kbd>,
+<kbd>M-s</kbd> and <kbd>M-r</kbd> for doing this work just like the minibuffer
+history commands (see <a href="Minibuffer-History.html#Minibuffer-History">Minibuffer History</a>), except that they are
+used outside the minibuffer.
 
    </body></html>
 

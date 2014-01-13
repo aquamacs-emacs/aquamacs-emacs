@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>General VC Options - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="RCS-and-SCCS.html#RCS-and-SCCS" title="RCS and SCCS">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -43,49 +40,30 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Customizing-VC.html#Customizing-VC">Cus
 <hr>
 </div>
 
-<h5 class="subsubsection">32.1.12.1 General Options</h5>
+<h5 class="subsubsection">28.1.13.1 General Options</h5>
 
-<p><a name="index-vc_002dmake_002dbackup_002dfiles-2556"></a>  Emacs normally does not save backup files for source files that are
+<p><a name="index-vc_002dmake_002dbackup_002dfiles-2850"></a>  Emacs normally does not save backup files for source files that are
 maintained with version control.  If you want to make backup files even
 for files that use version control, set the variable
 <code>vc-make-backup-files</code> to a non-<code>nil</code> value.
 
-   <p><a name="index-vc_002dkeep_002dworkfiles-2557"></a>  Normally the work file exists all the time, whether it is locked or
-not.  If you set <code>vc-keep-workfiles</code> to <code>nil</code>, then checking
-in a new version with <kbd>C-x v v</kbd> deletes the work file; but any
-attempt to visit the file with Emacs creates it again.  (With CVS, work
-files are always kept.)
+   <p><a name="index-vc_002dfollow_002dsymlinks-2851"></a><a name="index-symbolic-links-_0028and-version-control_0029-2852"></a>  Editing a version-controlled file through a symbolic link may cause
+unexpected results, if you are unaware that the underlying file is
+version-controlled.  The variable <code>vc-follow-symlinks</code> controls
+what Emacs does if you try to visit a symbolic link pointing to a
+version-controlled file.  If the value is <code>ask</code> (the default),
+Emacs asks for confirmation.  If it is <code>nil</code>, Emacs just displays
+a warning message.  If it is <code>t</code>, Emacs automatically follows the
+link and visits the real file instead.
 
-   <p><a name="index-vc_002dfollow_002dsymlinks-2558"></a>  Editing a version-controlled file through a symbolic link can be
-dangerous.  It bypasses the version control system&mdash;you can edit the
-file without locking it, and fail to check your changes in.  Also,
-your changes might overwrite those of another user.  To protect against
-this, VC checks each symbolic link that you visit, to see if it points
-to a file under version control.
-
-   <p>The variable <code>vc-follow-symlinks</code> controls what to do when a
-symbolic link points to a version-controlled file.  If it is <code>nil</code>,
-VC only displays a warning message.  If it is <code>t</code>, VC automatically
-follows the link, and visits the real file instead, telling you about
-this in the echo area.  If the value is <code>ask</code> (the default), VC
-asks you each time whether to follow the link.
-
-   <p><a name="index-vc_002dsuppress_002dconfirm-2559"></a>  If <code>vc-suppress-confirm</code> is non-<code>nil</code>, then <kbd>C-x v v</kbd>
+   <p><a name="index-vc_002dsuppress_002dconfirm-2853"></a>  If <code>vc-suppress-confirm</code> is non-<code>nil</code>, then <kbd>C-x v v</kbd>
 and <kbd>C-x v i</kbd> can save the current buffer without asking, and
-<kbd>C-x v u</kbd> also operates without asking for confirmation.  (This
-variable does not affect <kbd>C-x v c</kbd>; that operation is so drastic
-that it should always ask for confirmation.)
+<kbd>C-x v u</kbd> also operates without asking for confirmation.
 
-   <p><a name="index-vc_002dcommand_002dmessages-2560"></a>  VC mode does much of its work by running the shell commands for the
-appropriate backend.  If <code>vc-command-messages</code> is non-<code>nil</code>, VC
-displays messages to indicate which shell commands it runs, and
-additional messages when the commands finish.
-
-   <p><a name="index-vc_002dpath-2561"></a>  You can specify additional directories to search for version control
-programs by setting the variable <code>vc-path</code>.  These directories
-are searched before the usual search path.  It is rarely necessary to
-set this variable, because VC normally finds the proper files
-automatically.
+   <p><a name="index-vc_002dcommand_002dmessages-2854"></a>  VC mode does much of its work by running the shell commands for the
+appropriate version control system.  If <code>vc-command-messages</code> is
+non-<code>nil</code>, VC displays messages to indicate which shell commands
+it runs, and additional messages when the commands finish.
 
    </body></html>
 

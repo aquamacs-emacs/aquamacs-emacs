@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Advising Functions - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Debugging.html#Debugging" title="Debugging">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,36 +42,41 @@ Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
 
 <h2 class="chapter">17 Advising Emacs Lisp Functions</h2>
 
-<p><a name="index-advising-functions-875"></a>
+<p><a name="index-advising-functions-933"></a>
   The <dfn>advice</dfn> feature lets you add to the existing definition of
 a function, by <dfn>advising the function</dfn>.  This is a cleaner method
 for a library to customize functions defined within Emacs&mdash;cleaner
 than redefining the whole function.
 
-   <p><a name="index-piece-of-advice-876"></a>  Each function can have multiple <dfn>pieces of advice</dfn>, separately
-defined.  Each defined piece of advice can be <dfn>enabled</dfn> or
-<dfn>disabled</dfn> explicitly.  All the enabled pieces of advice for any given
-function actually take effect when you <dfn>activate</dfn> advice for that
+   <p><a name="index-piece-of-advice-934"></a>  Each function can have multiple <dfn>pieces of advice</dfn>, each of
+which can be separately defined and then <dfn>enabled</dfn> or
+<dfn>disabled</dfn>.  All the enabled pieces of advice for any given
+function actually take effect when you <dfn>activate advice</dfn> for that
 function, or when you define or redefine the function.  Note that
-enabling a piece of advice and activating advice for a function
-are not the same thing.
+enabling a piece of advice and activating advice for a function are
+not the same thing.
 
-   <p><strong>Usage Note:</strong> Advice is useful for altering the behavior of
-existing calls to an existing function.  If you want the new behavior
-for new calls, or for key bindings, you should define a new function
-(or a new command) which uses the existing function.
+   <p>Advice is useful for altering the behavior of existing calls to an
+existing function.  If you want the new behavior for new function
+calls or new key bindings, you should define a new function or
+command, and have it use the existing function as a subroutine.
 
-   <p><strong>Usage note:</strong> Advising a function can cause confusion in
-debugging, since people who debug calls to the original function may
-not notice that it has been modified with advice.  Therefore, if you
-have the possibility to change the code of that function (or ask
-someone to do so) to run a hook, please solve the problem that way. 
-Advice should be reserved for the cases where you cannot get the
-function changed.
+   <p>Advising a function can cause confusion in debugging, since people
+who debug calls to the original function may not notice that it has
+been modified with advice.  Therefore, if you have the possibility to
+change the code of that function to run a hook, please solve the
+problem that way.  Advice should be reserved for the cases where you
+cannot get the function changed.  In particular, Emacs's own source
+files should not put advice on functions in Emacs.  There are
+currently a few exceptions to this convention, but we aim to correct
+them.
 
-   <p>In particular, this means that a file in Emacs should not put advice
-on a function in Emacs.  There are currently a few exceptions to this
-convention, but we aim to correct them.
+   <p>Unless you know what you are doing, do <em>not</em> advise a primitive
+(see <a href="What-Is-a-Function.html#What-Is-a-Function">What Is a Function</a>).  Some primitives are used by the advice
+mechanism; advising them could cause an infinite recursion.  Also,
+many primitives are called directly from C code.  Calls to the
+primitive from Lisp code will take note of the advice, but calls from
+C code will ignore the advice.
 
 <ul class="menu">
 <li><a accesskey="1" href="Simple-Advice.html#Simple-Advice">Simple Advice</a>:            A simple example to explain the basics of advice. 
@@ -86,8 +88,7 @@ convention, but we aim to correct them.
 <li><a accesskey="7" href="Preactivation.html#Preactivation">Preactivation</a>:            Preactivation is a way of speeding up the
                               loading of compiled advice. 
 <li><a accesskey="8" href="Argument-Access-in-Advice.html#Argument-Access-in-Advice">Argument Access in Advice</a>:  How advice can access the function's arguments. 
-<li><a accesskey="9" href="Advising-Primitives.html#Advising-Primitives">Advising Primitives</a>:      Accessing arguments when advising a primitive. 
-<li><a href="Combined-Definition.html#Combined-Definition">Combined Definition</a>:      How advice is implemented. 
+<li><a accesskey="9" href="Combined-Definition.html#Combined-Definition">Combined Definition</a>:      How advice is implemented. 
 </ul>
 
    </body></html>

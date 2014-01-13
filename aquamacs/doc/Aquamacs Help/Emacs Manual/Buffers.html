@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Buffers - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Windows.html#Windows" title="Windows">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,14 +41,14 @@ Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
 <hr>
 </div>
 
-<h2 class="chapter">23 Using Multiple Buffers</h2>
+<h2 class="chapter">19 Using Multiple Buffers</h2>
 
-<p><a name="index-buffers-1059"></a>  The text you are editing in Emacs resides in an object called a
-<dfn>buffer</dfn>.  Each time you visit a file, a buffer is created to hold the
-file's text.  Each time you invoke Dired, a buffer is created to hold the
-directory listing.  If you send a message with <kbd>C-x m</kbd>, a buffer named
-&lsquo;<samp><span class="samp">*mail*</span></samp>&rsquo; is used to hold the text of the message.  When you ask for a
-command's documentation, that appears in a buffer called &lsquo;<samp><span class="samp">*Help*</span></samp>&rsquo;.
+<p><a name="index-buffers-1263"></a>  The text you are editing in Emacs resides in an object called a
+<dfn>buffer</dfn>.  Each time you visit a file, a buffer is used to hold
+the file's text.  Each time you invoke Dired, a buffer is used to hold
+the directory listing.  If you send a message with <kbd>C-x m</kbd>, a
+buffer is used to hold the text of the message.  When you ask for a
+command's documentation, that appears in a buffer named <samp><span class="file">*Help*</span></samp>.
 
    <p>Each buffer has a unique name, which can be of any length.  When a
 buffer is displayed in a window, its name is shown in the mode line
@@ -59,29 +56,31 @@ buffer is displayed in a window, its name is shown in the mode line
 matters in buffer names.  Most buffers are made by visiting files, and
 their names are derived from the files' names; however, you can also
 create an empty buffer with any name you want.  A newly started Emacs
-has a buffer named &lsquo;<samp><span class="samp">*scratch*</span></samp>&rsquo;, which is not associated with any
-file and can be used for evaluating Lisp expressions in Emacs
-(see <a href="Lisp-Interaction.html#Lisp-Interaction">Lisp Interaction</a>).
+has several buffers, including one named <samp><span class="file">*scratch*</span></samp>, which can
+be used for evaluating Lisp expressions and is not associated with any
+file (see <a href="Lisp-Interaction.html#Lisp-Interaction">Lisp Interaction</a>).
 
-   <p><a name="index-selected-buffer-1060"></a><a name="index-current-buffer-1061"></a>  At any time, one and only one buffer is <dfn>current</dfn>.  This is also
-called the <dfn>selected buffer</dfn>.  We often say that a command
-operates on &ldquo;the buffer&rdquo;; this really means that the command
-operates on the current buffer (most commands do).  When there is only
-one Emacs window, the buffer displayed in that window is current. 
-When there are multiple windows present, the buffer displayed in the
-<dfn>selected window</dfn> is current.  See <a href="Windows.html#Windows">Windows</a>.
+   <p><a name="index-selected-buffer-1264"></a><a name="index-current-buffer-1265"></a>  At any time, one and only one buffer is <dfn>selected</dfn>; we call it
+the <dfn>current buffer</dfn>.  We sometimes say that a command operates on
+&ldquo;the buffer&rdquo;; this really means that it operates on the current
+buffer.  When there is only one Emacs window, the buffer displayed in
+that window is current.  When there are multiple windows, the buffer
+displayed in the <dfn>selected window</dfn> is current.  See <a href="Windows.html#Windows">Windows</a>.
 
-   <p>Each buffer records individually what file it is visiting (if any),
-whether it is modified, and what major mode and minor modes are in
-effect (see <a href="Major-Modes.html#Major-Modes">Major Modes</a>).  Any Emacs variable can be made
-<dfn>local to</dfn> a particular buffer, meaning its value in that buffer
-can be different from the value in other buffers.  See <a href="Locals.html#Locals">Locals</a>.
+   <p>Aside from its textual contents, each buffer records several pieces
+of information, such as what file it is visiting (if any), whether it
+is modified, and what major mode and minor modes are in effect
+(see <a href="Modes.html#Modes">Modes</a>).  These are stored in <dfn>buffer-local
+variables</dfn>&mdash;variables that can have a different value in each buffer. 
+See <a href="Locals.html#Locals">Locals</a>.
 
-   <p><a name="index-buffer-size_002c-maximum-1062"></a>  A buffer's size cannot be larger than some maximum, which is defined
-by the largest buffer position representable by the <dfn>Emacs
-integer</dfn> data type.  This is because Emacs tracks buffer positions
-using that data type.  For 32-bit machines, the largest buffer size is
-512 megabytes.
+   <p><a name="index-buffer-size_002c-maximum-1266"></a>  A buffer's size cannot be larger than some maximum, which is defined
+by the largest buffer position representable by <dfn>Emacs integers</dfn>. 
+This is because Emacs tracks buffer positions using that data type. 
+For typical 64-bit machines, this maximum buffer size is 2^61 -
+2 bytes, or about 2 EiB.  For typical 32-bit machines, the maximum is
+usually 2^29 - 2 bytes, or about 512 MiB.  Buffer sizes are
+also limited by the amount of memory in the system.
 
 <ul class="menu">
 <li><a accesskey="1" href="Select-Buffer.html#Select-Buffer">Select Buffer</a>:        Creating a new buffer or reselecting an old one. 

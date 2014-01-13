@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Symbol Completion - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Glasses.html#Glasses" title="Glasses">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,45 +42,32 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Programs.html#Programs">Programs</a>
 <hr>
 </div>
 
-<h3 class="section">30.8 Completion for Symbol Names</h3>
+<h3 class="section">26.8 Completion for Symbol Names</h3>
 
-<p><a name="index-completion-_0028symbol-names_0029-2122"></a>
-  In Emacs, completion is something you normally do in the minibuffer
-(see <a href="Completion.html#Completion">Completion</a>).  But one kind of completion is available in all
-buffers: completion for symbol names.
+<p><a name="index-completion-_0028symbol-names_0029-2391"></a>
+  Completion is normally done in the minibuffer (see <a href="Completion.html#Completion">Completion</a>),
+but you can also complete symbol names in ordinary Emacs buffers.
 
-   <p><a name="index-M_002dTAB-2123"></a>  The character <kbd>M-&lt;TAB&gt;</kbd> runs a command to complete the
-partial symbol before point against the set of meaningful symbol
-names.  This command inserts at point any additional characters that
-it can determine from the partial name.
+   <p><a name="index-M_002dTAB-2392"></a><a name="index-C_002dM_002di-2393"></a>  In programming language modes, type <kbd>C-M-i</kbd> or <kbd>M-&lt;TAB&gt;</kbd>
+to complete the partial symbol before point.  On graphical displays,
+the <kbd>M-&lt;TAB&gt;</kbd> key is usually reserved by the window manager
+for switching graphical windows, so you should type <kbd>C-M-i</kbd> or
+<kbd>&lt;ESC&gt; &lt;TAB&gt;</kbd> instead.
 
-   <p>If your window manager defines <kbd>M-&lt;TAB&gt;</kbd> to switch windows,
-you can type <kbd>&lt;ESC&gt; &lt;TAB&gt;</kbd> or <kbd>C-M-i</kbd> instead. 
-However, most window managers let you customize these shortcuts, so
-you can change any that interfere with the way you use Emacs.
+   <p><a name="index-tags_002dbased-completion-2394"></a><a name="index-completion_002dat_002dpoint-2395"></a><a name="index-Lisp-symbol-completion-2396"></a><a name="index-completion-_0028Lisp-symbols_0029-2397"></a>  In most programming language modes, <kbd>C-M-i</kbd> (or
+<kbd>M-&lt;TAB&gt;</kbd>) invokes the command <code>completion-at-point</code>,
+which generates its completion list in a flexible way.  If Semantic
+mode is enabled, it tries to use the Semantic parser data for
+completion (see <a href="Semantic.html#Semantic">Semantic</a>).  If Semantic mode is not enabled or
+fails at performing completion, it tries to complete using the
+selected tags table (see <a href="Tags.html#Tags">Tags</a>).  If in Emacs Lisp mode, it
+performs completion using the function, variable, or property names
+defined in the current Emacs session.
 
-   <p>If the partial name in the buffer has multiple possible completions
-that differ in the very next character, so that it is impossible to
-complete even one more character, <kbd>M-&lt;TAB&gt;</kbd> displays a list of
-all possible completions in another window.
-
-   <p><a name="index-tags_002dbased-completion-2124"></a><a name="index-Info-index-completion-2125"></a><a name="index-complete_002dsymbol-2126"></a>  In most programming language major modes, <kbd>M-&lt;TAB&gt;</kbd> runs the
-command <code>complete-symbol</code>, which provides two kinds of completion. 
-Normally it does completion based on a tags table (see <a href="Tags.html#Tags">Tags</a>); with a
-numeric argument (regardless of the value), it does completion based on
-the names listed in the Info file indexes for your language.  Thus, to
-complete the name of a symbol defined in your own program, use
-<kbd>M-&lt;TAB&gt;</kbd> with no argument; to complete the name of a standard
-library function, use <kbd>C-u M-&lt;TAB&gt;</kbd>.  Of course, Info-based
-completion works only if there is an Info file for the standard library
-functions of your language, and only if it is installed at your site.
-
-   <p><a name="index-Lisp-symbol-completion-2127"></a><a name="index-completion-_0028Lisp-symbols_0029-2128"></a><a name="index-lisp_002dcomplete_002dsymbol-2129"></a>  In Emacs-Lisp mode, the name space for completion normally consists of
-nontrivial symbols present in Emacs&mdash;those that have function
-definitions, values or properties.  However, if there is an
-open-parenthesis immediately before the beginning of the partial symbol,
-only symbols with function definitions are considered as completions. 
-The command which implements this is <code>lisp-complete-symbol</code>.
+   <p>In all other respects, in-buffer symbol completion behaves like
+minibuffer completion.  For instance, if Emacs cannot complete to a
+unique symbol, it displays a list of completion alternatives in
+another window.  See <a href="Completion.html#Completion">Completion</a>.
 
    <p>In Text mode and related modes, <kbd>M-&lt;TAB&gt;</kbd> completes words
 based on the spell-checker's dictionary.  See <a href="Spelling.html#Spelling">Spelling</a>.

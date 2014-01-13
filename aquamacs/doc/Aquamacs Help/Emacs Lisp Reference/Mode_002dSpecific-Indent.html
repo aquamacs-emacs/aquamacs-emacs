@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Mode-Specific Indent - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Region-Indent.html#Region-Indent" title="Region Indent">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -53,58 +50,80 @@ describes the mechanism of the &lt;TAB&gt; key and how to control it.
 The functions in this section return unpredictable values.
 
 <div class="defun">
-&mdash; Variable: <b>indent-line-function</b><var><a name="index-indent_002dline_002dfunction-2712"></a></var><br>
-<blockquote><p>This variable's value is the function to be used by &lt;TAB&gt; (and
-various commands) to indent the current line.  The command
-<code>indent-according-to-mode</code> does little more than call this function.
+&mdash; Command: <b>indent-for-tab-command</b><var> &amp;optional rigid<a name="index-indent_002dfor_002dtab_002dcommand-2980"></a></var><br>
+<blockquote><p>This is the command bound to &lt;TAB&gt; in most editing modes.  Its
+usual action is to indent the current line, but it can alternatively
+insert a tab character or indent a region.
 
-        <p>In Lisp mode, the value is the symbol <code>lisp-indent-line</code>; in C
-mode, <code>c-indent-line</code>; in Fortran mode, <code>fortran-indent-line</code>. 
-The default value is <code>indent-relative</code>.  See <a href="Auto_002dIndentation.html#Auto_002dIndentation">Auto-Indentation</a>. 
+        <p>Here is what it does:
+
+          <ul>
+<li>First, it checks whether Transient Mark mode is enabled and the region
+is active.  If so, it called <code>indent-region</code> to indent all the
+text in the region (see <a href="Region-Indent.html#Region-Indent">Region Indent</a>).
+
+          <li>Otherwise, if the indentation function in <code>indent-line-function</code>
+is <code>indent-to-left-margin</code> (a trivial command that inserts a tab
+character), or if the variable <code>tab-always-indent</code> specifies that
+a tab character ought to be inserted (see below), then it inserts a
+tab character.
+
+          <li>Otherwise, it indents the current line; this is done by calling the
+function in <code>indent-line-function</code>.  If the line is already
+indented, and the value of <code>tab-always-indent</code> is <code>complete</code>
+(see below), it tries completing the text at point. 
+</ul>
+
+        <p>If <var>rigid</var> is non-<code>nil</code> (interactively, with a prefix
+argument), then after this command indents a line or inserts a tab, it
+also rigidly indents the entire balanced expression which starts at
+the beginning of the current line, in order to reflect the new
+indentation.  This argument is ignored if the command indents the
+region. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>indent-according-to-mode</b><var><a name="index-indent_002daccording_002dto_002dmode-2713"></a></var><br>
+&mdash; Variable: <b>indent-line-function</b><var><a name="index-indent_002dline_002dfunction-2981"></a></var><br>
+<blockquote><p>This variable's value is the function to be used by
+<code>indent-for-tab-command</code>, and various other indentation commands,
+to indent the current line.  It is usually assigned by the major mode;
+for instance, Lisp mode sets it to <code>lisp-indent-line</code>, C mode
+sets it to <code>c-indent-line</code>, and so on.  The default value is
+<code>indent-relative</code>.  See <a href="Auto_002dIndentation.html#Auto_002dIndentation">Auto-Indentation</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>indent-according-to-mode</b><var><a name="index-indent_002daccording_002dto_002dmode-2982"></a></var><br>
 <blockquote><p>This command calls the function in <code>indent-line-function</code> to
 indent the current line in a way appropriate for the current major mode. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>indent-for-tab-command</b><var> &amp;optional rigid<a name="index-indent_002dfor_002dtab_002dcommand-2714"></a></var><br>
-<blockquote><p>This command calls the function in <code>indent-line-function</code> to
-indent the current line; however, if that function is
-<code>indent-to-left-margin</code>, <code>insert-tab</code> is called instead. 
-(That is a trivial command that inserts a tab character.)  If
-<var>rigid</var> is non-<code>nil</code>, this function also rigidly indents the
-entire balanced expression that starts at the beginning of the current
-line, to reflect change in indentation of the current line. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Command: <b>newline-and-indent</b><var><a name="index-newline_002dand_002dindent-2715"></a></var><br>
+&mdash; Command: <b>newline-and-indent</b><var><a name="index-newline_002dand_002dindent-2983"></a></var><br>
 <blockquote><p>This function inserts a newline, then indents the new line (the one
-following the newline just inserted) according to the major mode.
-
-        <p>It does indentation by calling the current <code>indent-line-function</code>. 
-In programming language modes, this is the same thing &lt;TAB&gt; does,
-but in some text modes, where &lt;TAB&gt; inserts a tab,
-<code>newline-and-indent</code> indents to the column specified by
-<code>left-margin</code>. 
+following the newline just inserted) according to the major mode.  It
+does indentation by calling <code>indent-according-to-mode</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>reindent-then-newline-and-indent</b><var><a name="index-reindent_002dthen_002dnewline_002dand_002dindent-2716"></a></var><br>
-<blockquote><!-- !!SourceFile simple.el -->
-        <p>This command reindents the current line, inserts a newline at point,
+&mdash; Command: <b>reindent-then-newline-and-indent</b><var><a name="index-reindent_002dthen_002dnewline_002dand_002dindent-2984"></a></var><br>
+<blockquote><p>This command reindents the current line, inserts a newline at point,
 and then indents the new line (the one following the newline just
-inserted).
+inserted).  It does indentation on both lines by calling
+<code>indent-according-to-mode</code>. 
+</p></blockquote></div>
 
-        <p>This command does indentation on both lines according to the current
-major mode, by calling the current value of <code>indent-line-function</code>. 
-In programming language modes, this is the same thing &lt;TAB&gt; does,
-but in some text modes, where &lt;TAB&gt; inserts a tab,
-<code>reindent-then-newline-and-indent</code> indents to the column specified
-by <code>left-margin</code>. 
+<div class="defun">
+&mdash; User Option: <b>tab-always-indent</b><var><a name="index-tab_002dalways_002dindent-2985"></a></var><br>
+<blockquote><p>This variable can be used to customize the behavior of the &lt;TAB&gt;
+(<code>indent-for-tab-command</code>) command.  If the value is <code>t</code>
+(the default), the command normally just indents the current line.  If
+the value is <code>nil</code>, the command indents the current line only if
+point is at the left margin or in the line's indentation; otherwise,
+it inserts a tab character.  If the value is <code>complete</code>, the
+command first tries to indent the current line, and if the line was
+already indented, it calls <code>completion-at-point</code> to complete the
+text at point (see <a href="Completion-in-Buffers.html#Completion-in-Buffers">Completion in Buffers</a>). 
 </p></blockquote></div>
 
    </body></html>

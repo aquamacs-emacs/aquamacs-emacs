@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Alias Menu Items - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="prev" href="Menu-Separators.html#Menu-Separators" title="Menu Separators">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -49,11 +46,11 @@ command but with different enable conditions.  The best way to do this
 in Emacs now is with extended menu items; before that feature existed,
 it could be done by defining alias commands and using them in menu
 items.  Here's an example that makes two aliases for
-<code>toggle-read-only</code> and gives them different enable conditions:
+<code>read-only-mode</code> and gives them different enable conditions:
 
-<pre class="example">     (defalias 'make-read-only 'toggle-read-only)
+<pre class="example">     (defalias 'make-read-only 'read-only-mode)
      (put 'make-read-only 'menu-enable '(not buffer-read-only))
-     (defalias 'make-writable 'toggle-read-only)
+     (defalias 'make-writable 'read-only-mode)
      (put 'make-writable 'menu-enable 'buffer-read-only)
 </pre>
    <p>When using aliases in menus, often it is useful to display the
@@ -66,7 +63,7 @@ itself).  To request this, give the alias symbol a non-<code>nil</code>
      (put 'make-writable 'menu-alias t)
 </pre>
    <p class="noindent">causes menu items for <code>make-read-only</code> and <code>make-writable</code> to
-show the keyboard bindings for <code>toggle-read-only</code>.
+show the keyboard bindings for <code>read-only-mode</code>.
 
    </body></html>
 

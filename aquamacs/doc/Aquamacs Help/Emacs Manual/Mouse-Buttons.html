@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Mouse Buttons - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Disabling.html#Disabling" title="Disabling">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,9 +42,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Key-Bindings.html#Key-Bindings">Key Bin
 <hr>
 </div>
 
-<h4 class="subsection">57.4.10 Rebinding Mouse Buttons</h4>
+<h4 class="subsection">48.3.10 Rebinding Mouse Buttons</h4>
 
-<p><a name="index-mouse-button-events-4100"></a><a name="index-rebinding-mouse-buttons-4101"></a><a name="index-click-events-4102"></a><a name="index-drag-events-4103"></a><a name="index-down-events-4104"></a><a name="index-button-down-events-4105"></a>
+<p><a name="index-mouse-button-events-4433"></a><a name="index-rebinding-mouse-buttons-4434"></a><a name="index-click-events-4435"></a><a name="index-drag-events-4436"></a><a name="index-down-events-4437"></a><a name="index-button-down-events-4438"></a>
   Emacs uses Lisp symbols to designate mouse buttons, too.  The ordinary
 mouse events in Emacs are <dfn>click</dfn> events; these happen when you
 press a button and release it without moving the mouse.  You can also
@@ -58,7 +55,7 @@ down.  Drag events happen when you finally let go of the button.
 button, <code>mouse-2</code> for the next, and so on.  Here is how you can
 redefine the second mouse button to split the current window:
 
-<pre class="example">     (global-set-key [mouse-2] 'split-window-vertically)
+<pre class="example">     (global-set-key [mouse-2] 'split-window-below)
 </pre>
    <p>The symbols for drag events are similar, but have the prefix
 &lsquo;<samp><span class="samp">drag-</span></samp>&rsquo; before the word &lsquo;<samp><span class="samp">mouse</span></samp>&rsquo;.  For example, dragging the
@@ -70,7 +67,7 @@ is pressed down.  These events start with &lsquo;<samp><span class="samp">down-<
 When you get a button-down event, a corresponding click or drag event
 will always follow.
 
-   <p><a name="index-double-clicks-4106"></a><a name="index-triple-clicks-4107"></a>  If you wish, you can distinguish single, double, and triple clicks.  A
+   <p><a name="index-double-clicks-4439"></a><a name="index-triple-clicks-4440"></a>  If you wish, you can distinguish single, double, and triple clicks.  A
 double click means clicking a mouse button twice in approximately the
 same place.  The first click generates an ordinary click event.  The
 second click, if it comes soon enough, generates a double-click event
@@ -84,7 +81,7 @@ single click definition has run when the first click was received.
    <p>This constrains what you can do with double clicks, but user interface
 designers say that this constraint ought to be followed in any case.  A
 double click should do something similar to the single click, only
-&ldquo;more so.&rdquo;  The command for the double-click event should perform the
+&ldquo;more so&rdquo;.  The command for the double-click event should perform the
 extra work for the double click.
 
    <p>If a double-click event has no binding, it changes to the
@@ -110,13 +107,13 @@ moment when you press it down for the second time, Emacs gets a
 &lsquo;<samp><span class="samp">double-down-</span></samp>&rsquo; event (which is ignored, like all button-down
 events, if it has no binding).
 
-   <p><a name="index-double_002dclick_002dtime-4108"></a>  The variable <code>double-click-time</code> specifies how much time can
+   <p><a name="index-double_002dclick_002dtime-4441"></a>  The variable <code>double-click-time</code> specifies how much time can
 elapse between clicks and still allow them to be grouped as a multiple
 click.  Its value is in units of milliseconds.  If the value is
 <code>nil</code>, double clicks are not detected at all.  If the value is
 <code>t</code>, then there is no time limit.  The default is 500.
 
-   <p><a name="index-double_002dclick_002dfuzz-4109"></a>  The variable <code>double-click-fuzz</code> specifies how much the mouse
+   <p><a name="index-double_002dclick_002dfuzz-4442"></a>  The variable <code>double-click-fuzz</code> specifies how much the mouse
 can move between clicks and still allow them to be grouped as a multiple
 click.  Its value is in units of pixels on windowed displays and in
 units of 1/8 of a character cell on text-mode terminals; the default is
@@ -130,12 +127,12 @@ or &lsquo;<samp><span class="samp">triple-</span></samp>&rsquo;, which always pr
    <p>A frame includes areas that don't show text from the buffer, such as
 the mode line and the scroll bar.  You can tell whether a mouse button
 comes from a special area of the screen by means of dummy &ldquo;prefix
-keys.&rdquo;  For example, if you click the mouse in the mode line, you get
+keys&rdquo;.  For example, if you click the mouse in the mode line, you get
 the prefix key <code>mode-line</code> before the ordinary mouse-button symbol. 
 Thus, here is how to define the command for clicking the first button in
-a mode line to run <code>scroll-up</code>:
+a mode line to run <code>scroll-up-command</code>:
 
-<pre class="example">     (global-set-key [mode-line mouse-1] 'scroll-up)
+<pre class="example">     (global-set-key [mode-line mouse-1] 'scroll-up-command)
 </pre>
    <p>Here is the complete list of these dummy prefix keys and their
 meanings:

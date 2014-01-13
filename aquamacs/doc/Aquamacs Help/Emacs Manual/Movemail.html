@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Movemail - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Remote-Mailboxes.html#Remote-Mailboxes" title="Remote Mailboxes">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,30 +42,32 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Rmail.html#Rmail">Rmail</a>
 <hr>
 </div>
 
-<h3 class="section">36.18 <code>movemail</code> program</h3>
+<h3 class="section">33.18 <code>movemail</code> program</h3>
 
-<p><a name="index-g_t_0040code_007bmovemail_007d-program-2966"></a>
+<p><a name="index-g_t_0040code_007bmovemail_007d-program-3809"></a>
   Rmail uses the <code>movemail</code> program to move mail from your inbox to
 your Rmail file (see <a href="Rmail-Inbox.html#Rmail-Inbox">Rmail Inbox</a>).  When loaded for the first time,
 Rmail attempts to locate the <code>movemail</code> program and determine its
 version.  There are two versions of the <code>movemail</code> program: the
 native one, shipped with GNU Emacs (the &ldquo;emacs version&rdquo;) and the one
-included in GNU mailutils (the &ldquo;mailutils version,&rdquo;
+included in GNU mailutils (the &ldquo;mailutils version&rdquo;,
 see <a href="../mailutils/movemail.html#movemail">movemail</a>).  They support the same
 command line syntax and the same basic subset of options.  However, the
 Mailutils version offers additional features.
 
-   <p>The Emacs version of <code>movemail</code> is able to retrieve mail from the
-usual UNIX mailbox formats and from remote mailboxes using the POP3
-protocol.
+   <p>The Emacs version of <code>movemail</code> is able to retrieve mail from
+the usual Unix mailbox formats and from remote mailboxes using the
+POP3 protocol.
 
    <p>The Mailutils version is able to handle a wide set of mailbox
-formats, such as plain UNIX mailboxes, <code>maildir</code> and <code>MH</code>
-mailboxes, etc.  It is able to access remote mailboxes using the POP3 or
-IMAP4 protocol, and can retrieve mail from them using a TLS encrypted
-channel.  It also accepts mailbox arguments in <acronym>URL</acronym> form. 
-The detailed description of mailbox <acronym>URL</acronym>s can be found in
-<a href="../mailutils/URL.html#URL">URL</a>.  In short, a <acronym>URL</acronym> is:
+formats, such as plain Unix mailboxes, <code>maildir</code> and <code>MH</code>
+mailboxes, etc.  It is able to access remote mailboxes using the POP3
+or IMAP4 protocol, and can retrieve mail from them using a TLS
+encrypted channel.  It also accepts mailbox arguments in <acronym>URL</acronym>
+form.  The detailed description of mailbox <acronym>URL</acronym>s can be found
+<!-- Note this node seems to be missing in some versions of mailutils.info? -->
+in <a href="../mailutils/URL.html#URL">URL</a>.  In short, a
+<acronym>URL</acronym> is:
 
 <pre class="smallexample">     <var>proto</var>://[<var>user</var>[:<var>password</var>]@]<var>host-or-file-name</var>
 </pre>
@@ -90,9 +89,9 @@ local mailbox.
 <p class="noindent"><var>Proto</var> can be one of:
 
      <dl>
-<dt><code>mbox</code><dd>Usual UNIX mailbox format.  In this case, neither <var>user</var> nor
-<var>pass</var> are used, and <var>host-or-file-name</var> denotes the file name of
-the mailbox file, e.g., <code>mbox://var/spool/mail/smith</code>.
+<dt><code>mbox</code><dd>Usual Unix mailbox format.  In this case, neither <var>user</var> nor
+<var>pass</var> are used, and <var>host-or-file-name</var> denotes the file name
+of the mailbox file, e.g., <code>mbox://var/spool/mail/smith</code>.
 
      <br><dt><code>mh</code><dd>A local mailbox in the <acronym>MH</acronym> format.  <var>User</var> and
 <var>pass</var> are not used.  <var>Host-or-file-name</var> denotes the name of
@@ -123,12 +122,12 @@ This is equivalent to specifying the &lsquo;<samp><span class="samp">file</span>
 
 <pre class="smallexample">     /var/spool/mail/<var>user</var> == file://var/spool/mail/<var>user</var>
 </pre>
-   <p><a name="index-rmail_002dmovemail_002dprogram-2967"></a><a name="index-rmail_002dmovemail_002dsearch_002dpath-2968"></a>  The variable <code>rmail-movemail-program</code> controls which version of
+   <p><a name="index-rmail_002dmovemail_002dprogram-3810"></a><a name="index-rmail_002dmovemail_002dsearch_002dpath-3811"></a>  The variable <code>rmail-movemail-program</code> controls which version of
 <code>movemail</code> to use.  If that is a string, it specifies the
 absolute file name of the <code>movemail</code> executable.  If it is
 <code>nil</code>, Rmail searches for <code>movemail</code> in the directories
-listed in <code>rmail-movemail-search-path</code> and <code>exec-path</code>, then
-in <code>exec-directory</code>.
+listed in <code>rmail-movemail-search-path</code>, then in <code>exec-path</code>
+(see <a href="Shell.html#Shell">Shell</a>), then in <code>exec-directory</code>.
 
    </body></html>
 

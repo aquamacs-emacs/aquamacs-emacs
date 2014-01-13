@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Antinews - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Mac-OS-_002f-GNUstep.html#Mac-OS-_002f-GNUstep" title="Mac OS / GNUstep">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,122 +41,104 @@ Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
 <hr>
 </div>
 
-<h2 class="appendix">Appendix E Emacs 22 Antinews</h2>
+<h2 class="appendix">Appendix E Emacs 23 Antinews</h2>
 
 <!-- Update the emacs.texi Antinews menu entry with the above version number. -->
 <p>For those users who live backwards in time, here is information
-about downgrading to Emacs version 22.3.  We hope you will enjoy the
+about downgrading to Emacs version 23.4.  We hope you will enjoy the
 greater simplicity that results from the absence of many Emacs
-24.0.50 features.
+24.3.50 features.
 
      <ul>
-<li>We have switched to a character representation specially designed for
-Emacs.  Rather than forcing all the widely used scripts into artificial
-alignment, as Unicode does, Emacs treats them all equally, giving
-each one a place in the space of character codes.  We have eliminated
-the confusing practice, in Emacs 23, whereby one character can belong
-to multiple character sets.  Now each script has its own variant, and
-they all are different as far as Emacs is concerned.  For example,
-there's a Latin-1 c-cedilla character, and there's a Latin-2
-c-cedilla; searching a buffer for the Latin-1 variant only finds that
-variant, but not the others.
+<li>Support for displaying and editing &ldquo;bidirectional&rdquo; text has been
+removed.  Text is now always displayed on the screen in a single
+consistent direction&mdash;left to right&mdash;regardless of the underlying
+script.  Similarly, <kbd>C-f</kbd> and <kbd>C-b</kbd> always move the text
+cursor to the right and left respectively.  Also, &lt;right&gt; and
+&lt;left&gt; are now equivalent to <kbd>C-f</kbd> and <kbd>C-b</kbd>, as you might
+expect, rather than moving forward or backward based on the underlying
+&ldquo;paragraph direction&rdquo;.
 
-     <li>Emacs now uses its own special internal encoding for non-<acronym>ASCII</acronym>
-characters, known as &lsquo;<samp><span class="samp">emacs-mule</span></samp>&rsquo;.  This was imperative to
-support several different variants of the same character, each one
-belonging to its own script: &lsquo;<samp><span class="samp">emacs-mule</span></samp>&rsquo; marks each character
-with its script, to better discern them from one another.
+     <p>Users of &ldquo;right-to-left&rdquo; languages, like Arabic and Hebrew, may
+adapt by reading and/or editing text in left-to-right order.
 
-     <li>For simplicity, the functions <code>encode-coding-region</code> and
-<code>decode-coding-region</code> no longer accept an argument saying where
-to store the result of their conversions.  The result always replaces
-the original, so there's no need to look for it elsewhere.
+     <li>The Emacs Lisp package manager has been removed.  Instead of using a
+&ldquo;user interface&rdquo; (<kbd>M-x list-packages</kbd>), additional Lisp packages
+must now be installed by hand, which is the most flexible and
+&ldquo;Lispy&rdquo; method anyway.  Typically, this just involves editing your
+init file to add the package installation directory to the load path
+and defining some autoloads; see each package's commentary section
+and/or README file for details.
 
-     <li>Emacs no longer performs font anti-aliasing.  If your fonts look ugly,
-try choosing a larger font and increasing the screen resolution. 
-Admittedly, this becomes difficult as you go further back in time,
-since available screen resolutions will decrease.
+     <li>The option <code>delete-active-region</code> has been deleted.  When the
+region is active, typing &lt;DEL&gt; or &lt;delete&gt; no longer deletes
+the text in the region; it deletes a single character instead.
 
-     <li>The Fontconfig font library is no longer supported.  To specify a
-font, you must use an XLFD (X Logical Font Descriptor).  The other
-ways of specifying fonts&mdash;so-called &ldquo;Fontconfig&rdquo; and &ldquo;GTK&rdquo; font
-names&mdash;are redundant, so they have been removed.
+     <li>We have reworked how Emacs handles the clipboard and the X primary
+selection.  Commands for killing and yanking, like <kbd>C-w</kbd> and
+<kbd>C-y</kbd>, use the primary selection and not the clipboard, so you can
+use these commands without interfering with &ldquo;cutting&rdquo; or &ldquo;pasting&rdquo;
+in other programs.  The &lsquo;<samp><span class="samp">Cut</span></samp>&rsquo;/&lsquo;<samp><span class="samp">Copy</span></samp>&rsquo;/&lsquo;<samp><span class="samp">Paste</span></samp>&rsquo; menu items
+are bound to separate clipboard commands, not to the same commands as
+<kbd>C-w</kbd>/<kbd>M-w</kbd>/<kbd>C-y</kbd>.
 
-     <li>Transient Mark mode is now disabled by default.  Furthermore, some
-commands that operate specifically on the region when it is active and
-Transient Mark mode is enabled (such as <code>fill-paragraph</code>
-<code>ispell-word</code>, and <code>indent-for-tab-command</code>), no longer do
-so.
+     <p>Selecting text by dragging with the mouse now puts the text in the
+kill ring, in addition to the primary selection.  But note that
+selecting an active region with <kbd>C-&lt;SPC&gt;</kbd> does <em>not</em>
+alter the kill ring nor the primary selection, even though the text
+highlighting is visually identical.
 
-     <li>Holding &lt;shift&gt; while typing a motion command no longer creates a
-temporarily active region, since that's inconsistent with how Emacs
-normally handles keybindings.  The variable <code>shift-select-mode</code>
-has been deleted.  You can, however, still create temporarily active
-regions by dragging the mouse.
+     <li>In Isearch, <kbd>C-y</kbd> and <kbd>M-y</kbd> are no longer bound to
+<code>isearch-yank-kill</code> and <code>isearch-yank-pop</code> respectively. 
+Instead, <kbd>C-y</kbd> yanks the rest of the current line into the search
+string (<code>isearch-yank-line</code>), whereas <kbd>M-y</kbd> does
+<code>isearch-yank-kill</code>.  The mismatch with the usual meanings of
+<kbd>C-y</kbd> and <kbd>M-y</kbd> is unintended.
 
-     <li>The line motion commands, <kbd>C-n</kbd> and <kbd>C-p</kbd>, now move by logical
-text lines, not screen lines.  Even if a long text line is continued
-over multiple screen lines, <kbd>C-n</kbd> and <kbd>C-p</kbd> treat it as a
-single line, because that's ultimately what it is.
+     <li>Various completion features have been simplified.  The option
+<code>completion-category-overrides</code> has been removed, so Emacs uses a
+single consistent scheme to generate completions, instead of using a
+separate scheme for (say) buffer name completion.  Several major
+modes, such as Shell mode, now implement their own inline completion
+commands instead of using <code>completion-at-point</code>.
 
-     <li>Visual Line mode, which provides &ldquo;word wrap&rdquo; functionality, has been
-removed.  You can still use Long Lines mode to gain an approximation
-of word wrapping, though this has some drawbacks&mdash;for instance,
-syntax highlighting often doesn't work well on wrapped lines.
+     <li>We have removed several options for controlling how windows are used,
+such as <code>display-buffer-base-action</code>,
+<code>display-buffer-alist</code>, <code>window-combination-limit</code>, and
+<code>window-combination-resize</code>.
 
-     <li><kbd>C-l</kbd> now runs <code>recenter</code> instead of
-<code>recenter-top-bottom</code>.  This always sets the current line at the
-center of the window, instead of cycling through the center, top, and
-bottom of the window on successive invocations.  This lets you type
-<kbd>C-l C-l C-l C-l</kbd> to be <em>absolutely sure</em> that you have
-recentered the line.
+     <li>The command <kbd>M-x customize-themes</kbd> has been removed.  Emacs no
+longer comes with pre-defined themes (you can write your own).
 
-     <li>The way Emacs generates possible minibuffer completions is now much
-simpler to understand.  It matches alternatives to the text before
-point, ignoring the text after point; it also does not attempt to
-perform partial completion if the first completion attempt fails.
+     <li>Emacs no longer adapts various aspects of its display to GTK+
+settings, opting instead for a uniform toolkit-independent look.  GTK+
+scroll bars are placed on the left, the same position as non-GTK+ X
+scroll bars.  Emacs no longer refers to GTK+ to set the default
+<code>region</code> face, nor for drawing tooltips.
 
-     <li>Typing <kbd>M-n</kbd> at the start of the minibuffer history list no longer
-attempts to generate guesses of possible minibuffer input.  It instead
-does the straightforward thing, by issuing the message &lsquo;<samp><span class="samp">End of
-history; no default available</span></samp>&rsquo;.
+     <li>Setting the option <code>delete-by-moving-to-trash</code> to a
+non-<code>nil</code> now causes all file deletions to use the system trash,
+even temporary files created by Lisp programs; furthermore, the
+<kbd>M-x delete-file</kbd> and <kbd>M-x delete-directory</kbd> commands no
+longer accept prefix arguments to force true deletion.
 
-     <li>Individual buffers can no longer display faces specially.  The text
-scaling commands <kbd>C-x C-+</kbd>, <kbd>C-x C--</kbd>, and <kbd>C-x C-0</kbd> have
-been removed, and so has the buffer face menu bound to
-<kbd>S-down-mouse-1</kbd>.
+     <li>On GNU/Linux and Unix, the default method for sending mail (as
+specified by <code>send-mail-function</code>) is to use the
+<samp><span class="command">sendmail</span></samp> program.  Emacs no longer asks for a delivery
+method the first time you try to send mail, trusting instead that the
+system is configured for mail delivery, as it ought to be.
 
-     <li>VC no longer supports fileset-based operations on distributed version
-control systems (DVCSs) such as Arch, Bazaar, Subversion, Mercurial,
-and Git.  For instance, multi-file commits will be performed by
-committing one file at a time.  As you go further back in time, we
-will remove DVCS support entirely, so you should migrate your projects
-to CVS.
-
-     <li>Rmail now uses a special file format, Babyl format, specifically designed
-for storing and editing mail.  When you visit a file in Rmail, or get new
-mail, Rmail converts it automatically to Babyl format.
-
-     <li>Emacs can no longer display frames on X windows and text terminals
-(ttys) simultaneously.  If you start Emacs as an X application, it
-can only create X frames; if you start Emacs on a tty, it can only use
-that tty.  No more confusion about which type of frame
-<samp><span class="command">emacsclient</span></samp> will use in any given Emacs session!
-
-     <li>Emacs can no longer be started as a daemon.  You can be sure that if
-you don't see Emacs, then it's not running.
-
-     <li>Emacs has added support for many soon-to-be-non-obsolete platforms,
-including VMS, DECstation, SCO Unix, and systems lacking alloca. 
-Support for Sun windows has been added.
+     <li>Several VC features have been removed, including the <kbd>C-x v +</kbd> and
+<kbd>C-x v m</kbd> commands for pulling and merging on distributed version
+control systems, and the ability to view inline log entries in the log
+buffers made by <kbd>C-x v L</kbd>.
 
      <li>To keep up with decreasing computer memory capacity and disk space, many
-other functions and files have been eliminated in Emacs 22.3. 
+other functions and files have been eliminated in Emacs 23.4. 
 </ul>
 
 <!-- This is part of the Emacs manual. -->
-<!-- Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, -->
-<!-- 2009, 2010  Free Software Foundation, Inc. -->
+<!-- Copyright (C) 2000-2013 Free Software Foundation, Inc. -->
 <!-- See file emacs.texi for copying conditions. -->
    </body></html>
 

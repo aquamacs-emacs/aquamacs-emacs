@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Dired Deletion - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Flagging-Many-Files.html#Flagging-Many-Files" title="Flagging Many Files">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,39 +42,47 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Dired.html#Dired">Dired</a>
 <hr>
 </div>
 
-<h3 class="section">37.3 Deleting Files with Dired</h3>
+<h3 class="section">30.3 Deleting Files with Dired</h3>
 
-<p><a name="index-flagging-files-_0028in-Dired_0029-2995"></a><a name="index-deleting-files-_0028in-Dired_0029-2996"></a>
+<p><a name="index-flagging-files-_0028in-Dired_0029-2996"></a><a name="index-deleting-files-_0028in-Dired_0029-2997"></a>
   One of the most frequent uses of Dired is to first <dfn>flag</dfn> files for
 deletion, then delete the files that were flagged.
 
      <dl>
-<dt><kbd>d</kbd><dd>Flag this file for deletion. 
-<br><dt><kbd>u</kbd><dd>Remove deletion flag on this line. 
-<br><dt><kbd>&lt;DEL&gt;</kbd><dd>Move point to previous line and remove the deletion flag on that line. 
-<br><dt><kbd>x</kbd><dd>Delete the files that are flagged for deletion. 
+<dt><kbd>d</kbd><dd>Flag this file for deletion (<code>dired-flag-file-deletion</code>). 
+<br><dt><kbd>u</kbd><dd>Remove the deletion flag (<code>dired-unmark</code>). 
+<br><dt><kbd>&lt;DEL&gt;</kbd><dd>Move point to previous line and remove the deletion flag on that line
+(<code>dired-unmark-backward</code>). 
+<br><dt><kbd>x</kbd><dd>Delete files flagged for deletion (<code>dired-do-flagged-delete</code>). 
 </dl>
 
-   <p><a name="index-d-_0040r_007b_0028Dired_0029_007d-2997"></a><a name="index-dired_002dflag_002dfile_002ddeletion-2998"></a>  You can flag a file for deletion by moving to the line describing
+   <p><a name="index-d-_0040r_007b_0028Dired_0029_007d-2998"></a><a name="index-dired_002dflag_002dfile_002ddeletion-2999"></a>  You can flag a file for deletion by moving to the line describing
 the file and typing <kbd>d</kbd> (<code>dired-flag-file-deletion</code>).  The
 deletion flag is visible as a &lsquo;<samp><span class="samp">D</span></samp>&rsquo; at the beginning of the line. 
 This command moves point to the next line, so that repeated <kbd>d</kbd>
-commands flag successive files.  A numeric argument serves as a repeat
-count.
+commands flag successive files.  A numeric prefix argument serves as a
+repeat count; a negative count means to flag preceding files.
 
-   <p><a name="index-u-_0040r_007b_0028Dired-deletion_0029_007d-2999"></a><a name="index-DEL-_0040r_007b_0028Dired_0029_007d-3000"></a>  The reason for flagging files for deletion, rather than deleting
+   <p>If the region is active, the <kbd>d</kbd> command flags all files in the
+region for deletion; in this case, the command does not move point,
+and ignores any prefix argument.
+
+   <p><a name="index-u-_0040r_007b_0028Dired-deletion_0029_007d-3000"></a><a name="index-DEL-_0040r_007b_0028Dired_0029_007d-3001"></a>  The reason for flagging files for deletion, rather than deleting
 files immediately, is to reduce the danger of deleting a file
 accidentally.  Until you direct Dired to delete the flagged files, you
 can remove deletion flags using the commands <kbd>u</kbd> and &lt;DEL&gt;. 
 <kbd>u</kbd> (<code>dired-unmark</code>) works just like <kbd>d</kbd>, but removes
 flags rather than making flags.  &lt;DEL&gt;
 (<code>dired-unmark-backward</code>) moves upward, removing flags; it is
-like <kbd>u</kbd> with argument &minus;1.
+like <kbd>u</kbd> with argument &minus;1.  A numeric prefix argument to
+either command serves as a repeat count, with a negative count meaning
+to unflag in the opposite direction.  If the region is active, these
+commands instead unflag all files in the region, without moving point.
 
-   <p><a name="index-x-_0040r_007b_0028Dired_0029_007d-3001"></a><a name="index-dired_002ddo_002dflagged_002ddelete-3002"></a>  To delete the flagged files, type <kbd>x</kbd>
-(<code>dired-do-flagged-delete</code>).  This command first displays a list
-of all the file names flagged for deletion, and requests confirmation
-with <kbd>yes</kbd>.  If you confirm, Dired deletes the flagged files, then
+   <p><a name="index-x-_0040r_007b_0028Dired_0029_007d-3002"></a><a name="index-dired_002ddo_002dflagged_002ddelete-3003"></a>  To delete flagged files, type <kbd>x</kbd>
+(<code>dired-do-flagged-delete</code>).  This command displays a list of all
+the file names flagged for deletion, and requests confirmation with
+<kbd>yes</kbd>.  If you confirm, Dired deletes the flagged files, then
 deletes their lines from the text of the Dired buffer.  The Dired
 buffer, with somewhat fewer lines, remains selected.
 
@@ -85,17 +90,16 @@ buffer, with somewhat fewer lines, remains selected.
 return immediately to Dired, with the deletion flags still present in
 the buffer, and no files actually deleted.
 
-   <p><a name="index-recursive-deletion-3003"></a><a name="index-dired_002drecursive_002ddeletes-3004"></a>  You can delete empty directories just like other files, but normally
+   <p><a name="index-recursive-deletion-3004"></a><a name="index-dired_002drecursive_002ddeletes-3005"></a>  You can delete empty directories just like other files, but normally
 Dired cannot delete directories that are nonempty.  If the variable
 <code>dired-recursive-deletes</code> is non-<code>nil</code>, then Dired can
 delete nonempty directories including all their contents.  That can
 be somewhat risky.
 
-   <p><a name="index-delete_002dby_002dmoving_002dto_002dtrash-3005"></a>  On some systems, there is a facility called the &ldquo;Trash&rdquo; or
-&ldquo;Recycle Bin&rdquo;, but Emacs does <em>not</em> use it by default.  Thus,
-when you delete a file in Dired, it is gone forever.  However, you can
-tell Emacs to use the Trash for file deletion, by changing the
-variable <code>delete-by-moving-to-trash</code> to <code>t</code>.  See <a href="Misc-File-Ops.html#Misc-File-Ops">Misc File Ops</a>, for more information about the Trash.
+   <p><a name="index-delete_002dby_002dmoving_002dto_002dtrash-3006"></a>  If you change the variable <code>delete-by-moving-to-trash</code> to
+<code>t</code>, the above deletion commands will move the affected files or
+directories into the operating system's Trash, instead of deleting
+them outright.  See <a href="Misc-File-Ops.html#Misc-File-Ops">Misc File Ops</a>.
 
    </body></html>
 

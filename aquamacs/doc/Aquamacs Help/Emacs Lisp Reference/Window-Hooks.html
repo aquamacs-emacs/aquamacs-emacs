@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Window Hooks - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="prev" href="Window-Parameters.html#Window-Parameters" title="Window Parameters">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -42,9 +39,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
 <hr>
 </div>
 
-<h3 class="section">28.21 Hooks for Window Scrolling and Changes</h3>
+<h3 class="section">28.26 Hooks for Window Scrolling and Changes</h3>
 
-<p><a name="index-hooks-for-window-operations-2222"></a>
+<p><a name="index-hooks-for-window-operations-2472"></a>
 This section describes how a Lisp program can take action whenever a
 window displays a different part of its buffer or a different buffer. 
 There are three actions that can change this: scrolling the window,
@@ -53,7 +50,7 @@ The first two actions run <code>window-scroll-functions</code>; the last runs
 <code>window-size-change-functions</code>.
 
 <div class="defun">
-&mdash; Variable: <b>window-scroll-functions</b><var><a name="index-window_002dscroll_002dfunctions-2223"></a></var><br>
+&mdash; Variable: <b>window-scroll-functions</b><var><a name="index-window_002dscroll_002dfunctions-2473"></a></var><br>
 <blockquote><p>This variable holds a list of functions that Emacs should call before
 redisplaying a window with scrolling.  Displaying a different buffer in
 the window also runs these functions.
@@ -61,7 +58,7 @@ the window also runs these functions.
         <p>This variable is not a normal hook, because each function is called with
 two arguments: the window, and its new display-start position.
 
-        <p>These functions must be careful in using <code>window-end</code>
+        <p>These functions must take care when using <code>window-end</code>
 (see <a href="Window-Start-and-End.html#Window-Start-and-End">Window Start and End</a>); if you need an up-to-date value, you
 must use the <var>update</var> argument to ensure you get it.
 
@@ -71,7 +68,7 @@ work.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>window-size-change-functions</b><var><a name="index-window_002dsize_002dchange_002dfunctions-2224"></a></var><br>
+&mdash; Variable: <b>window-size-change-functions</b><var><a name="index-window_002dsize_002dchange_002dfunctions-2474"></a></var><br>
 <blockquote><p>This variable holds a list of functions to be called if the size of any
 window changes for any reason.  The functions are called just once per
 redisplay, and just once for each frame on which size changes have
@@ -87,19 +84,21 @@ present sizes and the previous sizes.
 causes these functions to be called.  Changing the frame size also
 counts, because it changes the sizes of the existing windows.
 
-        <p>It is not a good idea to use <code>save-window-excursion</code> (see <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a>) in these functions, because that always counts as a
-size change, and it would cause these functions to be called over and
-over.  In most cases, <code>save-selected-window</code> (see <a href="Selecting-Windows.html#Selecting-Windows">Selecting Windows</a>) is what you need here. 
+        <p>You may use <code>save-selected-window</code> in these functions
+(see <a href="Selecting-Windows.html#Selecting-Windows">Selecting Windows</a>).  However, do not use
+<code>save-window-excursion</code> (see <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a>); exiting
+that macro counts as a size change, which would cause these functions
+to be called over and over. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>window-configuration-change-hook</b><var><a name="index-window_002dconfiguration_002dchange_002dhook-2225"></a></var><br>
+&mdash; Variable: <b>window-configuration-change-hook</b><var><a name="index-window_002dconfiguration_002dchange_002dhook-2475"></a></var><br>
 <blockquote><p>A normal hook that is run every time you change the window configuration
 of an existing frame.  This includes splitting or deleting windows,
 changing the sizes of windows, or displaying a different buffer in a
 window.
 
-        <p>The buffer-local part of this hook is run once per each window on the
+        <p>The buffer-local part of this hook is run once for each window on the
 affected frame, with the relevant window selected and its buffer
 current.  The global part is run once for the modified frame, with that
 frame selected. 
@@ -108,13 +107,12 @@ frame selected.
    <p>In addition, you can use <code>jit-lock-register</code> to register a Font
 Lock fontification function, which will be called whenever parts of a
 buffer are (re)fontified because a window was scrolled or its size
-changed.  See <a href="Other-Font-Lock-Variables.html#Other-Font-Lock-Variables">Other Font Lock Variables</a>.
-
+changed.  See <a href="Other-Font-Lock-Variables.html#Other-Font-Lock-Variables">Other Font Lock Variables</a>. 
 <!-- *-texinfo-*- -->
 <!-- This is part of the GNU Emacs Lisp Reference Manual. -->
-<!-- Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1998, 1999, 2001, -->
-<!-- 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 -->
-<!-- Free Software Foundation, Inc. -->
+<!-- Copyright (C) 1990-1995, 1998-1999, 2001-2013 Free Software -->
+<!-- Foundation, Inc. -->
 <!-- See the file elisp.texi for copying conditions. -->
+
    </body></html>
 

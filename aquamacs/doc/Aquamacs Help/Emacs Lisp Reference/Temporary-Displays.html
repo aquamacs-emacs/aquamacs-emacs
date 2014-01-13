@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Temporary Displays - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Overlays.html#Overlays" title="Overlays">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -51,11 +48,12 @@ buffer and then present it to the user for perusal rather than for
 editing.  Many help commands use this feature.
 
 <div class="defun">
-&mdash; Special Form: <b>with-output-to-temp-buffer</b><var> buffer-name forms<small class="dots">...</small><a name="index-with_002doutput_002dto_002dtemp_002dbuffer-3460"></a></var><br>
+&mdash; Macro: <b>with-output-to-temp-buffer</b><var> buffer-name forms<small class="dots">...</small><a name="index-with_002doutput_002dto_002dtemp_002dbuffer-3743"></a></var><br>
 <blockquote><p>This function executes <var>forms</var> while arranging to insert any output
 they print into the buffer named <var>buffer-name</var>, which is first
 created if necessary, and put into Help mode.  Finally, the buffer is
-displayed in some window, but not selected.
+displayed in some window, but not selected.  (See the similar
+form <code>with-temp-buffer-window</code> below.)
 
         <p>If the <var>forms</var> do not change the major mode in the output buffer,
 so that it is still Help mode at the end of their execution, then
@@ -91,6 +89,7 @@ of this construct; they are listed below.
           &rArr; #&lt;buffer foo&gt;
           
           ---------- Buffer: foo ----------
+          
           20
           
           #&lt;buffer foo&gt;
@@ -100,7 +99,7 @@ of this construct; they are listed below.
         </blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>temp-buffer-show-function</b><var><a name="index-temp_002dbuffer_002dshow_002dfunction-3461"></a></var><br>
+&mdash; User Option: <b>temp-buffer-show-function</b><var><a name="index-temp_002dbuffer_002dshow_002dfunction-3744"></a></var><br>
 <blockquote><p>If this variable is non-<code>nil</code>, <code>with-output-to-temp-buffer</code>
 calls it as a function to do the job of displaying a help buffer.  The
 function gets one argument, which is the buffer it should display.
@@ -112,7 +111,7 @@ selected.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>temp-buffer-setup-hook</b><var><a name="index-temp_002dbuffer_002dsetup_002dhook-3462"></a></var><br>
+&mdash; Variable: <b>temp-buffer-setup-hook</b><var><a name="index-temp_002dbuffer_002dsetup_002dhook-3745"></a></var><br>
 <blockquote><p>This normal hook is run by <code>with-output-to-temp-buffer</code> before
 evaluating <var>body</var>.  When the hook runs, the temporary buffer is
 current.  This hook is normally set up with a function to put the
@@ -120,14 +119,44 @@ buffer in Help mode.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>temp-buffer-show-hook</b><var><a name="index-temp_002dbuffer_002dshow_002dhook-3463"></a></var><br>
+&mdash; Variable: <b>temp-buffer-show-hook</b><var><a name="index-temp_002dbuffer_002dshow_002dhook-3746"></a></var><br>
 <blockquote><p>This normal hook is run by <code>with-output-to-temp-buffer</code> after
 displaying the temporary buffer.  When the hook runs, the temporary buffer
 is current, and the window it was displayed in is selected. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>momentary-string-display</b><var> string position &amp;optional char message<a name="index-momentary_002dstring_002ddisplay-3464"></a></var><br>
+&mdash; Macro: <b>with-temp-buffer-window</b><var> buffer-or-name action quit-function forms<small class="dots">...</small><a name="index-with_002dtemp_002dbuffer_002dwindow-3747"></a></var><br>
+<blockquote><p>This macro is similar to <code>with-output-to-temp-buffer</code>. 
+Like that construct, it executes <var>forms</var> while arranging to insert
+any output they print into the buffer named <var>buffer-or-name</var>. 
+Finally, the buffer is displayed in some window, but not selected. 
+Unlike <code>with-output-to-temp-buffer</code>, this does not switch to Help
+mode.
+
+        <p>The argument <var>buffer-or-name</var> specifies the temporary buffer. 
+It can be either a buffer, which must already exist, or a string,
+in which case a buffer of that name is created if necessary. 
+The buffer is marked as unmodified and read-only when
+<code>with-temp-buffer-window</code> exits.
+
+        <p>This macro does not call <code>temp-buffer-show-function</code>.  Rather, it
+passes the <var>action</var> argument to <code>display-buffer</code> in order to
+display the buffer.
+
+        <p>The value of the last form in <var>forms</var> is returned, unless the
+argument <var>quit-function</var> is specified.  In that case,
+it is called with two arguments: the window showing the buffer
+and the result of <var>forms</var>.  The final return value is then
+whatever <var>quit-function</var> returns.
+
+        <p><a name="index-temp_002dbuffer_002dwindow_002dsetup_002dhook-3748"></a><a name="index-temp_002dbuffer_002dwindow_002dshow_002dhook-3749"></a>This macro uses the normal hooks <code>temp-buffer-window-setup-hook</code>
+and <code>temp-buffer-window-show-hook</code> in place of the analogous hooks
+run by <code>with-output-to-temp-buffer</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>momentary-string-display</b><var> string position &amp;optional char message<a name="index-momentary_002dstring_002ddisplay-3750"></a></var><br>
 <blockquote><p>This function momentarily displays <var>string</var> in the current buffer at
 <var>position</var>.  It has no effect on the undo list or on the buffer's
 modification status.

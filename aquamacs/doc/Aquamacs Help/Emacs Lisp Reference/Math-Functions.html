@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Math Functions - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Random-Numbers.html#Random-Numbers" title="Random Numbers">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,38 +43,38 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Numbers.html#Numbers">Numbers</a>
 
 <h3 class="section">3.9 Standard Mathematical Functions</h3>
 
-<p><a name="index-transcendental-functions-202"></a><a name="index-mathematical-functions-203"></a><a name="index-floating_002dpoint-functions-204"></a>
+<p><a name="index-transcendental-functions-212"></a><a name="index-mathematical-functions-213"></a><a name="index-floating_002dpoint-functions-214"></a>
   These mathematical functions allow integers as well as floating point
 numbers as arguments.
 
 <div class="defun">
-&mdash; Function: <b>sin</b><var> arg<a name="index-sin-205"></a></var><br>
-&mdash; Function: <b>cos</b><var> arg<a name="index-cos-206"></a></var><br>
-&mdash; Function: <b>tan</b><var> arg<a name="index-tan-207"></a></var><br>
-<blockquote><p>These are the ordinary trigonometric functions, with argument measured
-in radians. 
+&mdash; Function: <b>sin</b><var> arg<a name="index-sin-215"></a></var><br>
+&mdash; Function: <b>cos</b><var> arg<a name="index-cos-216"></a></var><br>
+&mdash; Function: <b>tan</b><var> arg<a name="index-tan-217"></a></var><br>
+<blockquote><p>These are the basic trigonometric functions, with argument <var>arg</var>
+measured in radians. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>asin</b><var> arg<a name="index-asin-208"></a></var><br>
+&mdash; Function: <b>asin</b><var> arg<a name="index-asin-218"></a></var><br>
 <blockquote><p>The value of <code>(asin </code><var>arg</var><code>)</code> is a number between
 &minus;pi/2
 and
 pi/2
-(inclusive) whose sine is <var>arg</var>; if, however, <var>arg</var> is out of
-range (outside [&minus;1, 1]), it signals a <code>domain-error</code> error. 
+(inclusive) whose sine is <var>arg</var>.  If <var>arg</var> is out of range
+(outside [&minus;1, 1]), <code>asin</code> returns a NaN. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>acos</b><var> arg<a name="index-acos-209"></a></var><br>
+&mdash; Function: <b>acos</b><var> arg<a name="index-acos-219"></a></var><br>
 <blockquote><p>The value of <code>(acos </code><var>arg</var><code>)</code> is a number between 0 and
 pi
-(inclusive) whose cosine is <var>arg</var>; if, however, <var>arg</var> is out
-of range (outside [&minus;1, 1]), it signals a <code>domain-error</code> error. 
+(inclusive) whose cosine is <var>arg</var>.  If <var>arg</var> is out of range
+(outside [&minus;1, 1]), <code>acos</code> returns a NaN. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>atan</b><var> y &amp;optional x<a name="index-atan-210"></a></var><br>
+&mdash; Function: <b>atan</b><var> y &amp;optional x<a name="index-atan-220"></a></var><br>
 <blockquote><p>The value of <code>(atan </code><var>y</var><code>)</code> is a number between
 &minus;pi/2
 and
@@ -89,43 +86,45 @@ angle in radians between the vector <code>[</code><var>x</var><code>, </code><va
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>exp</b><var> arg<a name="index-exp-211"></a></var><br>
-<blockquote><p>This is the exponential function; it returns
-<i>e</i>
-to the power <var>arg</var>. 
-<i>e</i>
-is a fundamental mathematical constant also called the base of natural
-logarithms. 
+&mdash; Function: <b>exp</b><var> arg<a name="index-exp-221"></a></var><br>
+<blockquote><p>This is the exponential function; it returns e to the power
+<var>arg</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>log</b><var> arg &amp;optional base<a name="index-log-212"></a></var><br>
-<blockquote><p>This function returns the logarithm of <var>arg</var>, with base <var>base</var>. 
-If you don't specify <var>base</var>, the base
-<i>e</i>
-is used.  If <var>arg</var> is negative, it signals a <code>domain-error</code>
-error. 
+&mdash; Function: <b>log</b><var> arg &amp;optional base<a name="index-log-222"></a></var><br>
+<blockquote><p>This function returns the logarithm of <var>arg</var>, with base
+<var>base</var>.  If you don't specify <var>base</var>, the natural base
+e is used.  If <var>arg</var> or <var>base</var> is negative, <code>log</code>
+returns a NaN. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>log10</b><var> arg<a name="index-log10-213"></a></var><br>
-<blockquote><p>This function returns the logarithm of <var>arg</var>, with base 10.  If
-<var>arg</var> is negative, it signals a <code>domain-error</code> error. 
-<code>(log10 </code><var>x</var><code>)</code> == <code>(log </code><var>x</var><code> 10)</code>, at least
-approximately. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>expt</b><var> x y<a name="index-expt-214"></a></var><br>
+&mdash; Function: <b>expt</b><var> x y<a name="index-expt-223"></a></var><br>
 <blockquote><p>This function returns <var>x</var> raised to power <var>y</var>.  If both
 arguments are integers and <var>y</var> is positive, the result is an
 integer; in this case, overflow causes truncation, so watch out. 
+If <var>x</var> is a finite negative number and <var>y</var> is a finite
+non-integer, <code>expt</code> returns a NaN. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>sqrt</b><var> arg<a name="index-sqrt-215"></a></var><br>
+&mdash; Function: <b>sqrt</b><var> arg<a name="index-sqrt-224"></a></var><br>
 <blockquote><p>This returns the square root of <var>arg</var>.  If <var>arg</var> is negative,
-it signals a <code>domain-error</code> error. 
+<code>sqrt</code> returns a NaN. 
+</p></blockquote></div>
+
+   <p>In addition, Emacs defines the following common mathematical
+constants:
+
+<div class="defun">
+&mdash; Variable: <b>float-e</b><var><a name="index-float_002de-225"></a></var><br>
+<blockquote><p>The mathematical constant e (2.71828<small class="dots">...</small>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>float-pi</b><var><a name="index-float_002dpi-226"></a></var><br>
+<blockquote><p>The mathematical constant pi (3.14159<small class="dots">...</small>). 
 </p></blockquote></div>
 
    </body></html>

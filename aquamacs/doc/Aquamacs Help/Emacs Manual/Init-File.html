@@ -1,21 +1,18 @@
 <html lang="en">
 <head>
 <title>Init File - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Customization.html#Customization" title="Customization">
-<link rel="prev" href="Syntax.html#Syntax" title="Syntax">
+<link rel="prev" href="Key-Bindings.html#Key-Bindings" title="Key Bindings">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -38,14 +35,14 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <div class="node">
 <a name="Init-File"></a>
 <p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Syntax.html#Syntax">Syntax</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Key-Bindings.html#Key-Bindings">Key Bindings</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Customization</a>
 <hr>
 </div>
 
-<h3 class="section">57.6 The Init File, <samp><span class="file">~/.emacs</span></samp></h3>
+<h3 class="section">48.4 The Emacs Initialization File</h3>
 
-<p><a name="index-init-file-4116"></a><a name="index-Emacs-initialization-file-4117"></a><a name="index-key-rebinding_002c-permanent-4118"></a><a name="index-rebinding-keys_002c-permanently-4119"></a><a name="index-startup-_0028init-file_0029-4120"></a>
+<p><a name="index-init-file-4446"></a><a name="index-g_t_002eemacs-file-4447"></a><a name="index-g_t_007e_002f_002eemacs-file-4448"></a><a name="index-Emacs-initialization-file-4449"></a><a name="index-key-rebinding_002c-permanent-4450"></a><a name="index-rebinding-keys_002c-permanently-4451"></a><a name="index-startup-_0028init-file_0029-4452"></a>
   When Emacs is started, it normally tries to load a Lisp program from
 an <dfn>initialization file</dfn>, or <dfn>init file</dfn> for short.  This
 file, if it exists, specifies how to initialize Emacs for you.  Emacs
@@ -58,7 +55,7 @@ stands for your home directory.
 your init file, and &lsquo;<samp><span class="samp">-u</span></samp>&rsquo; (or &lsquo;<samp><span class="samp">--user</span></samp>&rsquo;) to specify a
 different user's init file (see <a href="Initial-Options.html#Initial-Options">Initial Options</a>).
 
-   <p><a name="index-g_t_0040file_007bdefault_002eel_007d_002c-the-default-init-file-4121"></a>  There can also be a <dfn>default init file</dfn>, which is the library
+   <p><a name="index-g_t_0040file_007bdefault_002eel_007d_002c-the-default-init-file-4453"></a>  There can also be a <dfn>default init file</dfn>, which is the library
 named <samp><span class="file">default.el</span></samp>, found via the standard search path for
 libraries.  The Emacs distribution contains no such library; your site
 may create one for local customizations.  If this library exists, it is
@@ -67,7 +64,7 @@ But your init file, if any, is loaded first; if it sets
 <code>inhibit-default-init</code> non-<code>nil</code>, then <samp><span class="file">default</span></samp> is not
 loaded.
 
-   <p><a name="index-site-init-file-4122"></a><a name="index-g_t_0040file_007bsite_002dstart_002eel_007d_002c-the-site-startup-file-4123"></a>  Your site may also have a <dfn>site startup file</dfn>; this is named
+   <p><a name="index-site-init-file-4454"></a><a name="index-g_t_0040file_007bsite_002dstart_002eel_007d_002c-the-site-startup-file-4455"></a>  Your site may also have a <dfn>site startup file</dfn>; this is named
 <samp><span class="file">site-start.el</span></samp>, if it exists.  Like <samp><span class="file">default.el</span></samp>, Emacs
 finds this file via the standard search path for Lisp libraries. 
 Emacs loads this library before it loads your init file.  To inhibit
@@ -77,11 +74,11 @@ See <a href="Initial-Options.html#Initial-Options">Initial Options</a>.  We reco
 better to put them in <samp><span class="file">default.el</span></samp>, so that users can more easily
 override them.
 
-   <p>You can place <samp><span class="file">default.el</span></samp> and <samp><span class="file">site-start.el</span></samp> in any of
+   <p><a name="index-site_002dlisp-directories-4456"></a>  You can place <samp><span class="file">default.el</span></samp> and <samp><span class="file">site-start.el</span></samp> in any of
 the directories which Emacs searches for Lisp libraries.  The variable
 <code>load-path</code> (see <a href="Lisp-Libraries.html#Lisp-Libraries">Lisp Libraries</a>) specifies these directories. 
-Many sites put these files in the <samp><span class="file">site-lisp</span></samp> subdirectory of the
-Emacs installation directory, typically
+Many sites put these files in a subdirectory named <samp><span class="file">site-lisp</span></samp> in
+the Emacs installation directory, such as
 <samp><span class="file">/usr/local/share/emacs/site-lisp</span></samp>.
 
    <p>Byte-compiling your init file is not recommended (see <a href="../elisp/Byte-Compilation.html#Byte-Compilation">Byte Compilation</a>).  It generally does not speed up startup very much, and often

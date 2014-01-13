@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Hooks for Loading - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="prev" href="Unloading.html#Unloading" title="Unloading">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,31 +41,30 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Loading.html#Loading">Loading</a>
 
 <h3 class="section">15.10 Hooks for Loading</h3>
 
-<p><a name="index-loading-hooks-837"></a><a name="index-hooks-for-loading-838"></a>
+<p><a name="index-loading-hooks-897"></a><a name="index-hooks-for-loading-898"></a>
 You can ask for code to be executed each time Emacs loads a library,
 by using the variable <code>after-load-functions</code>:
 
 <div class="defun">
-&mdash; Variable: <b>after-load-functions</b><var><a name="index-after_002dload_002dfunctions-839"></a></var><br>
+&mdash; Variable: <b>after-load-functions</b><var><a name="index-after_002dload_002dfunctions-899"></a></var><br>
 <blockquote><p>This abnormal hook is run after loading a file.  Each function in the
 hook is called with a single argument, the absolute filename of the
 file that was just loaded. 
 </p></blockquote></div>
 
    <p>If you want code to be executed when a <em>particular</em> library is
-loaded, use the function <code>eval-after-load</code>:
+loaded, use the macro <code>with-eval-after-load</code>:
 
 <div class="defun">
-&mdash; Function: <b>eval-after-load</b><var> library form<a name="index-eval_002dafter_002dload-840"></a></var><br>
-<blockquote><p>This function arranges to evaluate <var>form</var> at the end of loading
+&mdash; Macro: <b>with-eval-after-load</b><var> library body<small class="dots">...</small><a name="index-with_002deval_002dafter_002dload-900"></a></var><br>
+<blockquote><p>This macro arranges to evaluate <var>body</var> at the end of loading
 the file <var>library</var>, each time <var>library</var> is loaded.  If
-<var>library</var> is already loaded, it evaluates <var>form</var> right away. 
-Don't forget to quote <var>form</var>!
+<var>library</var> is already loaded, it evaluates <var>body</var> right away.
 
         <p>You don't need to give a directory or extension in the file name
 <var>library</var>.  Normally, you just give a bare file name, like this:
 
-     <pre class="example">          (eval-after-load "edebug" '(def-edebug-spec c-point t))
+     <pre class="example">          (with-eval-after-load "edebug" (def-edebug-spec c-point t))
 </pre>
         <p>To restrict which files can trigger the evaluation, include a
 directory or an extension or both in <var>library</var>.  Only a file whose
@@ -78,13 +74,14 @@ example, <samp><span class="file">my_inst.elc</span></samp> or <samp><span class
 <code>..../foo/bar</code> will trigger the evaluation, but not
 <samp><span class="file">my_inst.el</span></samp>:
 
-     <pre class="example">          (eval-after-load "foo/bar/my_inst.elc" ...)
+     <pre class="example">          (with-eval-after-load "foo/bar/my_inst.elc" ...)
 </pre>
-        <p><var>library</var> can also be a feature (i.e. a symbol), in which case
-<var>form</var> is evaluated when <code>(provide </code><var>library</var><code>)</code> is called.
+        <p><var>library</var> can also be a feature (i.e., a symbol), in which case
+<var>body</var> is evaluated at the end of any file where
+<code>(provide </code><var>library</var><code>)</code> is called.
 
-        <p>An error in <var>form</var> does not undo the load, but does prevent
-execution of the rest of <var>form</var>. 
+        <p>An error in <var>body</var> does not undo the load, but does prevent
+execution of the rest of <var>body</var>. 
 </p></blockquote></div>
 
    <p>Normally, well-designed Lisp programs should not use
@@ -92,30 +89,11 @@ execution of the rest of <var>form</var>.
 defined in another library (those meant for outside use), you can do
 it immediately&mdash;there is no need to wait until the library is loaded. 
 If you need to call functions defined by that library, you should load
-the library, preferably with <code>require</code> (see <a href="Named-Features.html#Named-Features">Named Features</a>).
-
-   <p>But it is OK to use <code>eval-after-load</code> in your personal
-customizations if you don't feel that they must meet the design
-standards for programs meant for wider use.
-
-<div class="defun">
-&mdash; Variable: <b>after-load-alist</b><var><a name="index-after_002dload_002dalist-841"></a></var><br>
-<blockquote><p>This variable stores an alist built by <code>eval-after-load</code>,
-containing the expressions to evaluate when certain libraries are
-loaded.  Each element looks like this:
-
-     <pre class="example">          (<var>regexp-or-feature</var> <var>forms</var>...)
-</pre>
-        <p>The key <var>regexp-or-feature</var> is either a regular expression or a
-symbol, and the value is a list of forms.  The forms are evaluated
-when the key matches the absolute true name or feature name of the
-library being loaded. 
-</p></blockquote></div>
-
+the library, preferably with <code>require</code> (see <a href="Named-Features.html#Named-Features">Named Features</a>). 
 <!-- *-texinfo-*- -->
 <!-- This is part of the GNU Emacs Lisp Reference Manual. -->
-<!-- Copyright (C) 1990, 1991, 1992, 1993, 1994, 2001, 2002, 2003, 2004, -->
-<!-- 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc. -->
+<!-- Copyright (C) 1990-1994, 2001-2013 Free Software Foundation, Inc. -->
 <!-- See the file elisp.texi for copying conditions. -->
+
    </body></html>
 

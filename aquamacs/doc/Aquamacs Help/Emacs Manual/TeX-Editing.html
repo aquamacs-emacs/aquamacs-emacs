@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>TeX Editing - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="LaTeX-Editing.html#LaTeX-Editing" title="LaTeX Editing">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -43,7 +40,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="TeX-Mode.html#TeX-Mode">TeX Mode</a>
 <hr>
 </div>
 
-<h4 class="subsection">29.9.1 TeX Editing Commands</h4>
+<h4 class="subsection">25.10.1 TeX Editing Commands</h4>
 
      <dl>
 <dt><kbd>"</kbd><dd>Insert, according to context, either &lsquo;<samp><span class="samp">``</span></samp>&rsquo; or &lsquo;<samp><span class="samp">"</span></samp>&rsquo; or
@@ -56,22 +53,17 @@ paragraph for unbalanced braces or dollar signs
 <br><dt><kbd>C-c }</kbd><dd>Move forward past the next unmatched close brace (<code>up-list</code>). 
 </dl>
 
-   <p><a name="index-tex_002dinsert_002dquote-1734"></a><a name="index-g_t_0022-_0040r_007b_0028_0040TeX_007b_007d-mode_0029_007d-1735"></a>  In TeX, the character &lsquo;<samp><span class="samp">"</span></samp>&rsquo; is not normally used; instead,
-quotations begin with &lsquo;<samp><span class="samp">``</span></samp>&rsquo; and end with &lsquo;<samp><span class="samp">''</span></samp>&rsquo;.  For
-convenience, TeX mode overrides the normal meaning of the key
-<kbd>"</kbd> with a command that inserts a pair of single-quotes or
-backquotes (<code>tex-insert-quote</code>).  To be precise, it inserts
-&lsquo;<samp><span class="samp">``</span></samp>&rsquo; after whitespace or an open brace, &lsquo;<samp><span class="samp">"</span></samp>&rsquo; after a
-backslash, and &lsquo;<samp><span class="samp">''</span></samp>&rsquo; after any other character.
+   <p><a name="index-tex_002dinsert_002dquote-1988"></a><a name="index-g_t_0022-_0040r_007b_0028_0040TeX_007b_007d-mode_0029_007d-1989"></a>  In TeX, the character &lsquo;<samp><span class="samp">"</span></samp>&rsquo; is not normally used; instead,
+quotations begin with &lsquo;<samp><span class="samp">``</span></samp>&rsquo; and end with &lsquo;<samp><span class="samp">''</span></samp>&rsquo;.  TeX mode
+therefore binds the <kbd>"</kbd> key to the <code>tex-insert-quote</code>
+command.  This inserts &lsquo;<samp><span class="samp">``</span></samp>&rsquo; after whitespace or an open brace,
+&lsquo;<samp><span class="samp">"</span></samp>&rsquo; after a backslash, and &lsquo;<samp><span class="samp">''</span></samp>&rsquo; after any other character.
 
    <p>As a special exception, if you type <kbd>"</kbd> when the text before
 point is either &lsquo;<samp><span class="samp">``</span></samp>&rsquo; or &lsquo;<samp><span class="samp">''</span></samp>&rsquo;, Emacs replaces that preceding
 text with a single &lsquo;<samp><span class="samp">"</span></samp>&rsquo; character.  You can therefore type
 <kbd>""</kbd> to insert &lsquo;<samp><span class="samp">"</span></samp>&rsquo;, should you ever need to do so.  (You can
 also use <kbd>C-q "</kbd> to insert this character.)
-
-   <p>To disable the <kbd>"</kbd> expansion feature, eliminate that binding in
-the local map (see <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a>).
 
    <p>In TeX mode, &lsquo;<samp><span class="samp">$</span></samp>&rsquo; has a special syntax code which attempts to
 understand the way TeX math mode delimiters match.  When you insert a
@@ -83,20 +75,21 @@ math mode or leaves it; so when you insert a &lsquo;<samp><span class="samp">$</
 mode, the previous &lsquo;<samp><span class="samp">$</span></samp>&rsquo; position is shown as if it were a match, even
 though they are actually unrelated.
 
-   <p><a name="index-tex_002dinsert_002dbraces-1736"></a><a name="index-C_002dc-_0040_007b-_0040r_007b_0028_0040TeX_007b_007d-mode_0029_007d-1737"></a><a name="index-up_002dlist-1738"></a><a name="index-C_002dc-_0040_007d-_0040r_007b_0028_0040TeX_007b_007d-mode_0029_007d-1739"></a>  TeX uses braces as delimiters that must match.  Some users prefer
+   <p><a name="index-tex_002dinsert_002dbraces-1990"></a><a name="index-C_002dc-_0040_007b-_0040r_007b_0028_0040TeX_007b_007d-mode_0029_007d-1991"></a><a name="index-up_002dlist-1992"></a><a name="index-C_002dc-_0040_007d-_0040r_007b_0028_0040TeX_007b_007d-mode_0029_007d-1993"></a>  TeX uses braces as delimiters that must match.  Some users prefer
 to keep braces balanced at all times, rather than inserting them
 singly.  Use <kbd>C-c {</kbd> (<code>tex-insert-braces</code>) to insert a pair of
 braces.  It leaves point between the two braces so you can insert the
 text that belongs inside.  Afterward, use the command <kbd>C-c }</kbd>
 (<code>up-list</code>) to move forward past the close brace.
 
-   <p><a name="index-tex_002dvalidate_002dregion-1740"></a><a name="index-tex_002dterminate_002dparagraph-1741"></a><a name="index-C_002dj-_0040r_007b_0028_0040TeX_007b_007d-mode_0029_007d-1742"></a>  There are two commands for checking the matching of braces.  <kbd>C-j</kbd>
-(<code>tex-terminate-paragraph</code>) checks the paragraph before point, and
-inserts two newlines to start a new paragraph.  It outputs a message in
-the echo area if any mismatch is found.  <kbd>M-x tex-validate-region</kbd>
-checks a region, paragraph by paragraph.  The errors are listed in the
-&lsquo;<samp><span class="samp">*Occur*</span></samp>&rsquo; buffer, and you can use <kbd>C-c C-c</kbd> or <kbd>Mouse-2</kbd> in
-that buffer to go to a particular mismatch.
+   <p><a name="index-tex_002dvalidate_002dregion-1994"></a><a name="index-tex_002dterminate_002dparagraph-1995"></a><a name="index-C_002dj-_0040r_007b_0028_0040TeX_007b_007d-mode_0029_007d-1996"></a>  There are two commands for checking the matching of braces. 
+<kbd>C-j</kbd> (<code>tex-terminate-paragraph</code>) checks the paragraph before
+point, and inserts two newlines to start a new paragraph.  It outputs
+a message in the echo area if any mismatch is found.  <kbd>M-x
+tex-validate-region</kbd> checks a region, paragraph by paragraph.  The
+errors are listed in an <samp><span class="file">*Occur*</span></samp> buffer; you can use the usual
+Occur mode commands in that buffer, such as <kbd>C-c C-c</kbd>, to visit a
+particular mismatch (see <a href="Other-Repeating-Search.html#Other-Repeating-Search">Other Repeating Search</a>).
 
    <p>Note that Emacs commands count square brackets and parentheses in
 TeX mode, not just braces.  This is not strictly correct for the

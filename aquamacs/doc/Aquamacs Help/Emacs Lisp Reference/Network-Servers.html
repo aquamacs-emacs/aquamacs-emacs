@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Network Servers - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Datagrams.html#Datagrams" title="Datagrams">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,18 +43,20 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Processes.html#Processes">Processes</a>
 
 <h3 class="section">37.15 Network Servers</h3>
 
-<p><a name="index-network-servers-3362"></a>
-  You create a server by calling <code>make-network-process</code> with
-<code>:server t</code>.  The server will listen for connection requests from
-clients.  When it accepts a client connection request, that creates a
-new network connection, itself a process object, with the following
-parameters:
+<p><a name="index-network-servers-3639"></a>
+  You create a server by calling <code>make-network-process</code>
+(see <a href="Network-Processes.html#Network-Processes">Network Processes</a>) with <code>:server t</code>.  The server will
+listen for connection requests from clients.  When it accepts a client
+connection request, that creates a new network connection, itself a
+process object, with the following parameters:
 
      <ul>
 <li>The connection's process name is constructed by concatenating the
-server process' <var>name</var> with a client identification string.  The
+server process's <var>name</var> with a client identification string.  The
+<!-- FIXME?  What about IPv6?  Say briefly what the difference is? -->
 client identification string for an IPv4 connection looks like
-&lsquo;<samp><span class="samp">&lt;</span><var>a</var><span class="samp">.</span><var>b</var><span class="samp">.</span><var>c</var><span class="samp">.</span><var>d</var><span class="samp">:</span><var>p</var><span class="samp">&gt;</span></samp>&rsquo;.  Otherwise, it is a
+&lsquo;<samp><span class="samp">&lt;</span><var>a</var><span class="samp">.</span><var>b</var><span class="samp">.</span><var>c</var><span class="samp">.</span><var>d</var><span class="samp">:</span><var>p</var><span class="samp">&gt;</span></samp>&rsquo;, which represents an
+address and port number.  Otherwise, it is a
 unique number in brackets, as in &lsquo;<samp><span class="samp">&lt;</span><var>nnn</var><span class="samp">&gt;</span></samp>&rsquo;.  The number
 is unique for each connection in the Emacs session.
 
@@ -66,16 +65,16 @@ not get a separate process buffer; otherwise, Emacs creates a new
 buffer for the purpose.  The buffer name is the server's buffer name
 or process name, concatenated with the client identification string.
 
-     <p>The server's process buffer value is never used directly by Emacs, but
-it is passed to the log function, which can log connections by
-inserting text there.
+     <p>The server's process buffer value is never used directly, but the log
+function can retrieve it and use it to log connections by inserting
+text there.
 
      <li>The communication type and the process filter and sentinel are
 inherited from those of the server.  The server never directly
 uses its filter and sentinel; their sole purpose is to initialize
 connections made to the server.
 
-     <li>The connection's process contact info is set according to the client's
+     <li>The connection's process contact information is set according to the client's
 addressing information (typically an IP address and a port number). 
 This information is associated with the <code>process-contact</code>
 keywords <code>:host</code>, <code>:service</code>, <code>:remote</code>.
@@ -83,7 +82,7 @@ keywords <code>:host</code>, <code>:service</code>, <code>:remote</code>.
      <li>The connection's local address is set up according to the port
 number used for the connection.
 
-     <li>The client process' plist is initialized from the server's plist. 
+     <li>The client process's plist is initialized from the server's plist. 
 </ul>
 
    </body></html>

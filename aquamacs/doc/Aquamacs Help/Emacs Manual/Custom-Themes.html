@@ -1,21 +1,19 @@
 <html lang="en">
 <head>
 <title>Custom Themes - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Easy-Customization.html#Easy-Customization" title="Easy Customization">
 <link rel="prev" href="Specific-Customization.html#Specific-Customization" title="Specific Customization">
+<link rel="next" href="Creating-Custom-Themes.html#Creating-Custom-Themes" title="Creating Custom Themes">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -38,65 +36,94 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <div class="node">
 <a name="Custom-Themes"></a>
 <p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Creating-Custom-Themes.html#Creating-Custom-Themes">Creating Custom Themes</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Specific-Customization.html#Specific-Customization">Specific Customization</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Easy-Customization.html#Easy-Customization">Easy Customization</a>
 <hr>
 </div>
 
-<h4 class="subsection">57.2.7 Customization Themes</h4>
+<h4 class="subsection">48.1.7 Custom Themes</h4>
 
-<p><a name="index-custom-themes-4021"></a>
+<p><a name="index-custom-themes-4345"></a>
   <dfn>Custom themes</dfn> are collections of settings that can be enabled
-or disabled as a unit.  You can use Custom themes to switch quickly
-and easily between various collections of settings, and to transfer
-such collections from one computer to another.
+or disabled as a unit.  You can use Custom themes to switch easily
+between various collections of settings, and to transfer such
+collections from one computer to another.
 
-   <p><a name="index-customize_002dcreate_002dtheme-4022"></a>  To define a Custom theme, use <kbd>M-x customize-create-theme</kbd>,
-which brings up a buffer named &lsquo;<samp><span class="samp">*New Custom Theme*</span></samp>&rsquo;.  At the top
-of the buffer is an editable field where you can specify the name of
-the theme.  Click on the button labelled &lsquo;<samp><span class="samp">Insert Variable</span></samp>&rsquo; to add
-a variable to the theme, and click on &lsquo;<samp><span class="samp">Insert Face</span></samp>&rsquo; to add a
-face.  You can edit these values in the &lsquo;<samp><span class="samp">*New Custom Theme*</span></samp>&rsquo;
-buffer like in an ordinary Customize buffer.  To remove an option from
-the theme, click on its &lsquo;<samp><span class="samp">State</span></samp>&rsquo; button and select &lsquo;<samp><span class="samp">Delete</span></samp>&rsquo;.
+   <p>A Custom theme is stored as an Emacs Lisp source file.  If the name of
+the Custom theme is <var>name</var>, the theme file is named
+<samp><var>name</var><span class="file">-theme.el</span></samp>.  See <a href="Creating-Custom-Themes.html#Creating-Custom-Themes">Creating Custom Themes</a>, for the
+format of a theme file and how to make one.
 
-   <p><a name="index-custom_002dtheme_002ddirectory-4023"></a>  After adding the desired options, click on &lsquo;<samp><span class="samp">Save Theme</span></samp>&rsquo; to save
-the Custom theme.  This writes the theme definition to a file
-<samp><var>foo</var><span class="file">-theme.el</span></samp> (where <var>foo</var> is the theme name you
-supplied), in the directory <samp><span class="file">~/.emacs.d/</span></samp>.  You can specify the
-directory by setting <code>custom-theme-directory</code>.
+   <p><a name="index-customize_002dthemes-4346"></a><a name="index-custom_002dtheme_002ddirectory-4347"></a><a name="index-color-scheme-4348"></a>  Type <kbd>M-x customize-themes</kbd> to switch to a buffer named
+<samp><span class="file">*Custom Themes*</span></samp>, which lists the Custom themes that Emacs knows
+about.  By default, Emacs looks for theme files in two locations: the
+directory specified by the variable <code>custom-theme-directory</code>
+(which defaults to <samp><span class="file">~/.emacs.d/</span></samp>), and a directory named
+<samp><span class="file">etc/themes</span></samp> in your Emacs installation (see the variable
+<code>data-directory</code>).  The latter contains several Custom themes
+which are distributed with Emacs, which customize Emacs's faces to fit
+various color schemes.  (Note, however, that Custom themes need not be
+restricted to this purpose; they can be used to customize variables
+too).
 
-   <p>You can view and edit the settings of a previously-defined theme by
-clicking on &lsquo;<samp><span class="samp">Visit Theme</span></samp>&rsquo; and specifying the theme name.  You can
-also import the variables and faces that you have set using Customize
-by visiting the &ldquo;special&rdquo; theme named &lsquo;<samp><span class="samp">user</span></samp>&rsquo;.  This theme, which
-records all the options that you set in the ordinary customization
-buffer, is always enabled, and always takes precedence over all other
-enabled Custom themes.  Additionally, the &lsquo;<samp><span class="samp">user</span></samp>&rsquo; theme is
-recorded with code in your <samp><span class="file">.emacs</span></samp> file, rather than a
-<samp><span class="file">user-theme.el</span></samp> file.
+   <p><a name="index-custom_002dtheme_002dload_002dpath-4349"></a>  If you want Emacs to look for Custom themes in some other directory,
+add the directory name to the list variable
+<code>custom-theme-load-path</code>.  Its default value is
+<code>(custom-theme-directory t)</code>; here, the symbol
+<code>custom-theme-directory</code> has the special meaning of the value of
+the variable <code>custom-theme-directory</code>, while <code>t</code> stands for
+the built-in theme directory <samp><span class="file">etc/themes</span></samp>.  The themes listed in
+the <samp><span class="file">*Custom Themes*</span></samp> buffer are those found in the directories
+specified by <code>custom-theme-load-path</code>.
 
-   <p><a name="index-custom_002denabled_002dthemes-4024"></a>  Once you have defined a Custom theme, you can use it by customizing
-the variable <code>custom-enabled-themes</code>.  This is a list of Custom
-themes that are <dfn>enabled</dfn>, or put into effect.  If you set
-<code>custom-enabled-themes</code> using the Customize interface, the theme
-definitions are automatically loaded from the theme files, if they
-aren't already.  If you save the value of <code>custom-enabled-themes</code>
-for future Emacs sessions, those Custom themes will be enabled
-whenever Emacs is started up.
+   <p><a name="index-C_002dx-C_002ds-_0040r_007b_0028Custom-Themes-buffer_0029_007d-4350"></a>  In the <samp><span class="file">*Custom Themes*</span></samp> buffer, you can activate the checkbox
+next to a Custom theme to enable or disable the theme for the current
+Emacs session.  When a Custom theme is enabled, all of its settings
+(variables and faces) take effect in the Emacs session.  To apply the
+choice of theme(s) to future Emacs sessions, type <kbd>C-x C-s</kbd>
+(<code>custom-theme-save</code>) or use the &lsquo;<samp><span class="samp">[Save Theme Settings]</span></samp>&rsquo;
+button.
 
-   <p>If two enabled themes specify different values for an option, the
-theme occurring earlier in <code>custom-enabled-themes</code> takes effect.
+   <p><a name="index-custom_002dsafe_002dthemes-4351"></a>  When you first enable a Custom theme, Emacs displays the contents of
+the theme file and asks if you really want to load it.  Because
+loading a Custom theme can execute arbitrary Lisp code, you should
+only say yes if you know that the theme is safe; in that case, Emacs
+offers to remember in the future that the theme is safe (this is done
+by saving the theme file's SHA-256 hash to the variable
+<code>custom-safe-themes</code>; if you want to treat all themes as safe,
+change its value to <code>t</code>).  Themes that come with Emacs (in the
+<samp><span class="file">etc/themes</span></samp> directory) are exempt from this check, and are
+always considered safe.
 
-   <p><a name="index-load_002dtheme-4025"></a><a name="index-enable_002dtheme-4026"></a><a name="index-disable_002dtheme-4027"></a>  You can temporarily enable a Custom theme with <kbd>M-x
-enable-theme</kbd>.  This prompts for a theme name in the minibuffer, loads
-the theme from the theme file if necessary, and enables the theme. 
-You can <dfn>disable</dfn> any enabled theme with the command <kbd>M-x
-disable-theme</kbd>; this returns the options specified in the theme to
-their original values.  To re-enable the theme, type <kbd>M-x
-enable-theme</kbd> again.  If a theme file is changed during your Emacs
-session, you can reload it by typing <kbd>M-x load-theme</kbd>.  (This also
-enables the theme.)
+   <p><a name="index-custom_002denabled_002dthemes-4352"></a>  Setting or saving Custom themes actually works by customizing the
+variable <code>custom-enabled-themes</code>.  The value of this variable is
+a list of Custom theme names (as Lisp symbols, e.g., <code>tango</code>). 
+Instead of using the <samp><span class="file">*Custom Themes*</span></samp> buffer to set
+<code>custom-enabled-themes</code>, you can customize the variable using the
+usual customization interface, e.g., with <kbd>M-x customize-option</kbd>. 
+Note that Custom themes are not allowed to set
+<code>custom-enabled-themes</code> themselves.
+
+   <p>Any customizations that you make through the customization buffer
+take precedence over theme settings.  This lets you easily override
+individual theme settings that you disagree with.  If settings from
+two different themes overlap, the theme occurring earlier in
+<code>custom-enabled-themes</code> takes precedence.  In the customization
+buffer, if a setting has been changed from its default by a Custom
+theme, its &lsquo;<samp><span class="samp">State</span></samp>&rsquo; display shows &lsquo;<samp><span class="samp">THEMED</span></samp>&rsquo; instead of
+&lsquo;<samp><span class="samp">STANDARD</span></samp>&rsquo;.
+
+   <p><a name="index-load_002dtheme-4353"></a><a name="index-enable_002dtheme-4354"></a><a name="index-disable_002dtheme-4355"></a>  You can enable a specific Custom theme in the current Emacs session
+by typing <kbd>M-x load-theme</kbd>.  This prompts for a theme name, loads
+the theme from the theme file, and enables it.  If a theme file
+has been loaded before, you can enable the theme without loading its
+file by typing <kbd>M-x enable-theme</kbd>.  To disable a Custom theme,
+type <kbd>M-x disable-theme</kbd>.
+
+   <p><a name="index-describe_002dtheme-4356"></a>  To see a description of a Custom theme, type <kbd>?</kbd> on its line in
+the <samp><span class="file">*Custom Themes*</span></samp> buffer; or type <kbd>M-x describe-theme</kbd>
+anywhere in Emacs and enter the theme name.
 
    </body></html>
 

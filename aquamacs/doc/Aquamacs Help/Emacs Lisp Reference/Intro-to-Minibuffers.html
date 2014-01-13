@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Intro to Minibuffers - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Text-from-Minibuffer.html#Text-from-Minibuffer" title="Text from Minibuffer">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -62,14 +59,17 @@ including <code>beginning-of-line</code>, <code>forward-word</code>,
 <code>forward-sentence</code>, and <code>forward-paragraph</code>, stop at the
 boundary between the prompt and the actual text.
 
+<!-- See http://debbugs.gnu.org/11276 -->
    <p>The minibuffer's window is normally a single line; it grows
-automatically if the contents require more space.  You can explicitly
-resize it temporarily with the window sizing commands; it reverts to
-its normal size when the minibuffer is exited.  You can resize it
+automatically if the contents require more space.  Whilst it is
+active, you can explicitly resize it temporarily with the window
+sizing commands; it reverts to its normal size when the minibuffer is
+exited.  When the minibuffer is not active, you can resize it
 permanently by using the window sizing commands in the frame's other
-window, when the minibuffer is not active.  If the frame contains just
-a minibuffer, you can change the minibuffer's size by changing the
-frame's size.
+window, or dragging the mode line with the mouse.  (Due to details of
+the current implementation, for this to work <code>resize-mini-windows</code>
+must be <code>nil</code>.)  If the frame contains just a minibuffer, you can
+change the minibuffer's size by changing the frame's size.
 
    <p>Use of the minibuffer reads input events, and that alters the values
 of variables such as <code>this-command</code> and <code>last-command</code>
@@ -77,9 +77,9 @@ of variables such as <code>this-command</code> and <code>last-command</code>
 code that uses the minibuffer, if you do not want that to change them.
 
    <p>Under some circumstances, a command can use a minibuffer even if
-there is an active minibuffer; such minibuffers are called a
+there is an active minibuffer; such a minibuffer is called a
 <dfn>recursive minibuffer</dfn>.  The first minibuffer is named
-&lsquo;<samp><span class="samp">&nbsp;*Minibuf-0*</span></samp>&rsquo;<!-- /@w -->.  Recursive minibuffers are named by
+&lsquo;<samp><span class="samp">&nbsp;*Minibuf-1*</span></samp>&rsquo;<!-- /@w -->.  Recursive minibuffers are named by
 incrementing the number at the end of the name.  (The names begin with
 a space so that they won't show up in normal buffer lists.)  Of
 several recursive minibuffers, the innermost (or most recently
@@ -94,6 +94,11 @@ invokes the minibuffer also sets up its local map according to the job
 to be done.  See <a href="Text-from-Minibuffer.html#Text-from-Minibuffer">Text from Minibuffer</a>, for the non-completion
 minibuffer local maps.  See <a href="Completion-Commands.html#Completion-Commands">Completion Commands</a>, for the minibuffer
 local maps for completion.
+
+   <p><a name="index-inactive-minibuffer-1157"></a>  When a minibuffer is inactive, its major mode is
+<code>minibuffer-inactive-mode</code>, with keymap
+<code>minibuffer-inactive-mode-map</code>.  This is only really useful if
+the minibuffer is in a separate frame.  See <a href="Minibuffers-and-Frames.html#Minibuffers-and-Frames">Minibuffers and Frames</a>.
 
    <p>When Emacs is running in batch mode, any request to read from the
 minibuffer actually reads a line from the standard input descriptor that

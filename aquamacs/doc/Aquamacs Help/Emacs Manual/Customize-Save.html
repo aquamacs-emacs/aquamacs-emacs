@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Customize Save - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Interlocking.html#Interlocking" title="Interlocking">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,33 +42,47 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Saving.html#Saving">Saving</a>
 <hr>
 </div>
 
-<h4 class="subsection">22.3.3 Customizing Saving of Files</h4>
+<h4 class="subsection">18.3.3 Customizing Saving of Files</h4>
 
-<p><a name="index-require_002dfinal_002dnewline-878"></a>  If the value of the variable <code>require-final-newline</code> is
+<p><a name="index-require_002dfinal_002dnewline-1069"></a>  If the value of the variable <code>require-final-newline</code> is
 <code>t</code>, saving or writing a file silently puts a newline at the end
 if there isn't already one there.  If the value is <code>visit</code>, Emacs
 adds a newline at the end of any file that doesn't have one, just
 after it visits the file.  (This marks the buffer as modified, and you
-can undo it.)  If the value is <code>visit-save</code>, that means to add
+can undo it.)  If the value is <code>visit-save</code>, Emacs adds such
 newlines both on visiting and on saving.  If the value is <code>nil</code>,
-Emacs leaves the end of the file unchanged; if it's neither <code>nil</code>
-nor <code>t</code>, Emacs asks you whether to add a newline.  The default is
+Emacs leaves the end of the file unchanged; any other non-<code>nil</code>
+value means to asks you whether to add a newline.  The default is
 <code>nil</code>.
 
-   <p><a name="index-mode_002drequire_002dfinal_002dnewline-879"></a>  Many major modes are designed for specific kinds of files that are
-always supposed to end in newlines.  These major modes set the
-variable <code>require-final-newline</code> according to
-<code>mode-require-final-newline</code>.  By setting the latter variable,
-you can control how these modes handle final newlines.
+   <p><a name="index-mode_002drequire_002dfinal_002dnewline-1070"></a>  Some major modes are designed for specific kinds of files that are
+always supposed to end in newlines.  Such major modes set the variable
+<code>require-final-newline</code> to the value of
+<code>mode-require-final-newline</code>, which defaults to <code>t</code>.  By
+setting the latter variable, you can control how these modes handle
+final newlines.
 
-   <p><a name="index-write_002dregion_002dinhibit_002dfsync-880"></a>  When Emacs saves a file, it invokes the <code>fsync</code> system call to
-force the data immediately out to disk.  This is important for safety
-if the system crashes or in case of power outage.  However, it can be
-disruptive on laptops using power saving, because it requires the disk
-to spin up each time you save a file.  Setting
-<code>write-region-inhibit-fsync</code> to a non-<code>nil</code> value disables
-this synchronization.  Be careful&mdash;this means increased risk of data
-loss.
+   <p><a name="index-write_002dregion_002dinhibit_002dfsync-1071"></a>  Normally, when a program writes a file, the operating system briefly
+caches the file's data in main memory before committing the data to
+disk.  This can greatly improve performance; for example, when running
+on laptops, it can avoid a disk spin-up each time a file is written. 
+However, it risks data loss if the operating system crashes before
+committing the cache to disk.
+
+   <p>To lessen this risk, Emacs can invoke the <code>fsync</code> system call
+after saving a file.  Using <code>fsync</code> does not eliminate the risk
+of data loss, partly because many systems do not implement
+<code>fsync</code> properly, and partly because Emacs's file-saving
+procedure typically relies also on directory updates that might not
+survive a crash even if <code>fsync</code> works properly.
+
+   <p>The <code>write-region-inhibit-fsync</code> variable controls whether
+Emacs invokes <code>fsync</code> after saving a file.  The variable's
+default value is <code>nil</code> when Emacs is interactive, and <code>t</code>
+when Emacs runs in batch mode.
+
+   <p>Emacs never uses <code>fsync</code> when writing auto-save files, as these
+files might lose data anyway.
 
    </body></html>
 

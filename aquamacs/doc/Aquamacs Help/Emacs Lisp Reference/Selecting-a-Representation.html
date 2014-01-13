@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Selecting a Representation - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Character-Codes.html#Character-Codes" title="Character Codes">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,13 +41,13 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Non_002dASCII-Characters.html#Non_002dA
 <hr>
 </div>
 
-<h3 class="section">33.3 Selecting a Representation</h3>
+<h3 class="section">33.4 Selecting a Representation</h3>
 
 <p>Sometimes it is useful to examine an existing buffer or string as
 multibyte when it was unibyte, or vice versa.
 
 <div class="defun">
-&mdash; Function: <b>set-buffer-multibyte</b><var> multibyte<a name="index-set_002dbuffer_002dmultibyte-2870"></a></var><br>
+&mdash; Function: <b>set-buffer-multibyte</b><var> multibyte<a name="index-set_002dbuffer_002dmultibyte-3151"></a></var><br>
 <blockquote><p>Set the representation type of the current buffer.  If <var>multibyte</var>
 is non-<code>nil</code>, the buffer becomes multibyte.  If <var>multibyte</var>
 is <code>nil</code>, the buffer becomes unibyte.
@@ -69,13 +66,17 @@ representation is in use.  It also adjusts various data in the buffer
 (including overlays, text properties and markers) so that they cover the
 same text as they did before.
 
-        <p>You cannot use <code>set-buffer-multibyte</code> on an indirect buffer,
-because indirect buffers always inherit the representation of the
+        <p>This function signals an error if the buffer is narrowed, since the
+narrowing might have occurred in the middle of multibyte character
+sequences.
+
+        <p>This function also signals an error if the buffer is an indirect
+buffer.  An indirect buffer always inherits the representation of its
 base buffer. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>string-as-unibyte</b><var> string<a name="index-string_002das_002dunibyte-2871"></a></var><br>
+&mdash; Function: <b>string-as-unibyte</b><var> string<a name="index-string_002das_002dunibyte-3152"></a></var><br>
 <blockquote><p>If <var>string</var> is already a unibyte string, this function returns
 <var>string</var> itself.  Otherwise, it returns a new string with the same
 bytes as <var>string</var>, but treating each byte as a separate character
@@ -86,7 +87,7 @@ text properties.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>string-as-multibyte</b><var> string<a name="index-string_002das_002dmultibyte-2872"></a></var><br>
+&mdash; Function: <b>string-as-multibyte</b><var> string<a name="index-string_002das_002dmultibyte-3153"></a></var><br>
 <blockquote><p>If <var>string</var> is a multibyte string, this function returns
 <var>string</var> itself.  Otherwise, it returns a new string with the same
 bytes as <var>string</var>, but treating each multibyte sequence as one

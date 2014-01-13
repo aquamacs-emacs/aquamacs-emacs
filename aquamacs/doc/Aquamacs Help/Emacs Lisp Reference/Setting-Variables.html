@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Setting Variables - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Variable-Scoping.html#Variable-Scoping" title="Variable Scoping">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,22 +41,22 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
 <hr>
 </div>
 
-<h3 class="section">11.8 How to Alter a Variable Value</h3>
+<h3 class="section">11.8 Setting Variable Values</h3>
 
 <p>The usual way to change the value of a variable is with the special
 form <code>setq</code>.  When you need to compute the choice of variable at
 run time, use the function <code>set</code>.
 
 <div class="defun">
-&mdash; Special Form: <b>setq</b> [<var>symbol form</var>]<var><small class="dots">...</small><a name="index-setq-609"></a></var><br>
+&mdash; Special Form: <b>setq</b> [<var>symbol form</var>]<var><small class="dots">...</small><a name="index-setq-636"></a></var><br>
 <blockquote><p>This special form is the most common method of changing a variable's
 value.  Each <var>symbol</var> is given a new value, which is the result of
-evaluating the corresponding <var>form</var>.  The most-local existing
-binding of the symbol is changed.
+evaluating the corresponding <var>form</var>.  The current binding of the
+symbol is changed.
 
         <p><code>setq</code> does not evaluate <var>symbol</var>; it sets the symbol that you
 write.  We say that this argument is <dfn>automatically quoted</dfn>.  The
-&lsquo;<samp><span class="samp">q</span></samp>&rsquo; in <code>setq</code> stands for &ldquo;quoted.&rdquo;
+&lsquo;<samp><span class="samp">q</span></samp>&rsquo; in <code>setq</code> stands for &ldquo;quoted&rdquo;.
 
         <p>The value of the <code>setq</code> form is the value of the last <var>form</var>.
 
@@ -85,13 +82,18 @@ second <var>symbol</var> is set, and so on:
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set</b><var> symbol value<a name="index-set-610"></a></var><br>
-<blockquote><p>This function sets <var>symbol</var>'s value to <var>value</var>, then returns
-<var>value</var>.  Since <code>set</code> is a function, the expression written for
-<var>symbol</var> is evaluated to obtain the symbol to set.
+&mdash; Function: <b>set</b><var> symbol value<a name="index-set-637"></a></var><br>
+<blockquote><p>This function puts <var>value</var> in the value cell of <var>symbol</var>. 
+Since it is a function rather than a special form, the expression
+written for <var>symbol</var> is evaluated to obtain the symbol to set. 
+The return value is <var>value</var>.
 
-        <p>The most-local existing binding of the variable is the binding that is
-set; shadowed bindings are not affected.
+        <p>When dynamic variable binding is in effect (the default), <code>set</code>
+has the same effect as <code>setq</code>, apart from the fact that
+<code>set</code> evaluates its <var>symbol</var> argument whereas <code>setq</code>
+does not.  But when a variable is lexically bound, <code>set</code> affects
+its <em>dynamic</em> value, whereas <code>setq</code> affects its current
+(lexical) value.  See <a href="Variable-Scoping.html#Variable-Scoping">Variable Scoping</a>.
 
      <pre class="example">          (set one 1)
           error--&gt; Symbol's value as variable is void: one
@@ -116,22 +118,7 @@ error is signaled.
      <pre class="example">          (set '(x y) 'z)
           error--&gt; Wrong type argument: symbolp, (x y)
 </pre>
-        <p>Logically speaking, <code>set</code> is a more fundamental primitive than
-<code>setq</code>.  Any use of <code>setq</code> can be trivially rewritten to use
-<code>set</code>; <code>setq</code> could even be defined as a macro, given the
-availability of <code>set</code>.  However, <code>set</code> itself is rarely used;
-beginners hardly need to know about it.  It is useful only for choosing
-at run time which variable to set.  For example, the command
-<code>set-variable</code>, which reads a variable name from the user and then
-sets the variable, needs to use <code>set</code>.
-
-        <p><a name="index-CL-note_002d_002d_002d_0040code_007bset_007d-local-611"></a><blockquote>
-<b>Common Lisp note:</b> In Common Lisp, <code>set</code> always changes the
-symbol's &ldquo;special&rdquo; or dynamic value, ignoring any lexical bindings. 
-In Emacs Lisp, all variables and all bindings are dynamic, so <code>set</code>
-always affects the most local existing binding. 
-</blockquote>
-        </p></blockquote></div>
+        </blockquote></div>
 
    </body></html>
 

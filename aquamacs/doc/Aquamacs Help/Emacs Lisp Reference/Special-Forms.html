@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Special Forms - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Autoloading.html#Autoloading" title="Autoloading">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,7 +43,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Forms.html#Forms">Forms</a>
 
 <h4 class="subsection">9.2.7 Special Forms</h4>
 
-<p><a name="index-special-forms-508"></a><a name="index-evaluation-of-special-forms-509"></a>
+<p><a name="index-special-forms-524"></a><a name="index-evaluation-of-special-forms-525"></a>
   A <dfn>special form</dfn> is a primitive function specially marked so that
 its arguments are not all evaluated.  Most special forms define control
 structures or perform variable bindings&mdash;things which functions cannot
@@ -55,6 +52,14 @@ do.
    <p>Each special form has its own rules for which arguments are evaluated
 and which are used without evaluation.  Whether a particular argument is
 evaluated may depend on the results of evaluating other arguments.
+
+   <p>If an expression's first symbol is that of a special form, the
+expression should follow the rules of that special form; otherwise,
+Emacs's behavior is not well-defined (though it will not crash).  For
+example, <code>((lambda (x) x . 3) 4)</code> contains a subexpression that
+begins with <code>lambda</code> but is not a well-formed <code>lambda</code>
+expression, so Emacs may signal an error, or may return 3 or 4 or
+<code>nil</code>, or may behave in other ways.
 
    <p>Here is a list, in alphabetical order, of all of the special forms in
 Emacs Lisp with a reference to where each is described.
@@ -70,10 +75,6 @@ Emacs Lisp with a reference to where each is described.
 
      <br><dt><code>defconst</code><dd>see <a href="Defining-Variables.html#Defining-Variables">Defining Variables</a>
 
-     <br><dt><code>defmacro</code><dd>see <a href="Defining-Macros.html#Defining-Macros">Defining Macros</a>
-
-     <br><dt><code>defun</code><dd>see <a href="Defining-Functions.html#Defining-Functions">Defining Functions</a>
-
      <br><dt><code>defvar</code><dd>see <a href="Defining-Variables.html#Defining-Variables">Defining Variables</a>
 
      <br><dt><code>function</code><dd>see <a href="Anonymous-Functions.html#Anonymous-Functions">Anonymous Functions</a>
@@ -81,6 +82,8 @@ Emacs Lisp with a reference to where each is described.
      <br><dt><code>if</code><dd>see <a href="Conditionals.html#Conditionals">Conditionals</a>
 
      <br><dt><code>interactive</code><dd>see <a href="Interactive-Call.html#Interactive-Call">Interactive Call</a>
+
+     <br><dt><code>lambda</code><dd>see <a href="Lambda-Expressions.html#Lambda-Expressions">Lambda Expressions</a>
 
      <br><dt><code>let</code><dt><code>let*</code><dd>see <a href="Local-Variables.html#Local-Variables">Local Variables</a>
 
@@ -96,8 +99,6 @@ Emacs Lisp with a reference to where each is described.
 
      <br><dt><code>save-restriction</code><dd>see <a href="Narrowing.html#Narrowing">Narrowing</a>
 
-     <br><dt><code>save-window-excursion</code><dd>see <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a>
-
      <br><dt><code>setq</code><dd>see <a href="Setting-Variables.html#Setting-Variables">Setting Variables</a>
 
      <br><dt><code>setq-default</code><dd>see <a href="Creating-Buffer_002dLocal.html#Creating-Buffer_002dLocal">Creating Buffer-Local</a>
@@ -107,16 +108,13 @@ Emacs Lisp with a reference to where each is described.
      <br><dt><code>unwind-protect</code><dd>see <a href="Nonlocal-Exits.html#Nonlocal-Exits">Nonlocal Exits</a>
 
      <br><dt><code>while</code><dd>see <a href="Iteration.html#Iteration">Iteration</a>
-
-     <br><dt><code>with-output-to-temp-buffer</code><dd>see <a href="Temporary-Displays.html#Temporary-Displays">Temporary Displays</a>
 </dl>
 
-   <p><a name="index-CL-note_002d_002d_002dspecial-forms-compared-510"></a><blockquote>
+   <p><a name="index-CL-note_002d_002d_002dspecial-forms-compared-526"></a><blockquote>
 <b>Common Lisp note:</b> Here are some comparisons of special forms in
 GNU Emacs Lisp and Common Lisp.  <code>setq</code>, <code>if</code>, and
 <code>catch</code> are special forms in both Emacs Lisp and Common Lisp. 
-<code>defun</code> is a special form in Emacs Lisp, but a macro in Common
-Lisp.  <code>save-excursion</code> is a special form in Emacs Lisp, but
+<code>save-excursion</code> is a special form in Emacs Lisp, but
 doesn't exist in Common Lisp.  <code>throw</code> is a special form in
 Common Lisp (because it must be able to throw multiple values), but it
 is a function in Emacs Lisp (which doesn't have multiple

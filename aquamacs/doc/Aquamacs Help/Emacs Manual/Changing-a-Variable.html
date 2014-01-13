@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Changing a Variable - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Saving-Customizations.html#Saving-Customizations" title="Saving Customizations">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,141 +42,117 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Easy-Customization.html#Easy-Customizat
 <hr>
 </div>
 
-<h4 class="subsection">57.2.3 Changing a Variable</h4>
+<h4 class="subsection">48.1.3 Changing a Variable</h4>
 
-<p>Here is an example of what a variable (a user option) looks like in
+<p>Here is an example of what a variable, or user option, looks like in
 the customization buffer:
 
-<pre class="smallexample">     Kill Ring Max: [Hide Value] 60
+<pre class="smallexample">     [Hide] Kill Ring Max: 60
         [State]: STANDARD.
-     Maximum length of kill ring before oldest elements are thrown away.
+        Maximum length of kill ring before oldest elements are thrown away.
 </pre>
-   <p>The text following &lsquo;<samp><span class="samp">[Hide Value]</span></samp>&rsquo;, &lsquo;<samp><span class="samp">60</span></samp>&rsquo; in this case, indicates
-the current value of the variable.  If you see &lsquo;<samp><span class="samp">[Show Value]</span></samp>&rsquo; instead of
-&lsquo;<samp><span class="samp">[Hide Value]</span></samp>&rsquo;, it means that the value is hidden; the customization
-buffer initially hides values that take up several lines.  Invoke
-&lsquo;<samp><span class="samp">[Show Value]</span></samp>&rsquo; to show the value.
+   <p>The first line shows that the variable is named
+<code>kill-ring-max</code>, formatted as &lsquo;<samp><span class="samp">Kill Ring Max</span></samp>&rsquo; for easier
+viewing.  Its value is &lsquo;<samp><span class="samp">60</span></samp>&rsquo;.  The button labeled &lsquo;<samp><span class="samp">[Hide]</span></samp>&rsquo;,
+if activated, hides the variable's value and state; this is useful to
+avoid cluttering up the customization buffer with very long values
+(for this reason, variables that have very long values may start out
+hidden).  If you use the &lsquo;<samp><span class="samp">[Hide]</span></samp>&rsquo; button, it changes to
+&lsquo;<samp><span class="samp">[Show Value]</span></samp>&rsquo;, which you can activate to reveal the value and
+state.  On a graphical display, the &lsquo;<samp><span class="samp">[Hide]</span></samp>&rsquo; and &lsquo;<samp><span class="samp">[Show
+Value]</span></samp>&rsquo; buttons are replaced with graphical triangles pointing
+downwards and rightwards respectively.
 
    <p>The line after the variable name indicates the <dfn>customization
-state</dfn> of the variable: in the example above, it says you have not
-changed the option yet.  The &lsquo;<samp><span class="samp">[State]</span></samp>&rsquo; button at the beginning of
-this line gives you a menu of various operations for customizing the
+state</dfn> of the variable: in this example, &lsquo;<samp><span class="samp">STANDARD</span></samp>&rsquo; means you
+have not changed the variable, so its value is the default one.  The
+&lsquo;<samp><span class="samp">[State]</span></samp>&rsquo; button gives a menu of operations for customizing the
 variable.
 
-   <p>The line after the &lsquo;<samp><span class="samp">[State]</span></samp>&rsquo; line displays the beginning of the
-variable's documentation string.  If there are more lines of
-documentation, this line ends with a &lsquo;<samp><span class="samp">[More]</span></samp>&rsquo; button; invoke that
-to show the full documentation string.
+   <p>Below the customization state is the documentation for the variable. 
+This is the same documentation that would be shown by the <kbd>C-h v</kbd>
+command (see <a href="Examining.html#Examining">Examining</a>).  If the documentation is more than one
+line long, only one line may be shown.  If so, that line ends with a
+&lsquo;<samp><span class="samp">[More]</span></samp>&rsquo; button; activate this to see the full documentation.
 
-   <p>To enter a new value for &lsquo;<samp><span class="samp">Kill Ring Max</span></samp>&rsquo;, move point to the
-value and edit it textually.  For example, you can type <kbd>M-d</kbd>,
-then insert another number.  As you begin to alter the text, you will
-see the &lsquo;<samp><span class="samp">[State]</span></samp>&rsquo; line change to say that you have edited the
-value:
+   <p><a name="index-user-options_002c-changing-4320"></a><a name="index-customizing-variables-4321"></a><a name="index-variables_002c-changing-4322"></a>  To enter a new value for &lsquo;<samp><span class="samp">Kill Ring Max</span></samp>&rsquo;, just move point to
+the value and edit it.  For example, type <kbd>M-d</kbd> to delete the
+&lsquo;<samp><span class="samp">60</span></samp>&rsquo; and type in another number.  As you begin to alter the text,
+the &lsquo;<samp><span class="samp">[State]</span></samp>&rsquo; line will change:
 
-<pre class="smallexample">     [State]: EDITED, shown value does not take effect until you set or <span class="roman">...</span>
-                                                                save it.
+<pre class="smallexample">     [State]: EDITED, shown value does not take effect until you
+              set or save it.
 </pre>
-   <p><a name="index-user-options_002c-how-to-set-3995"></a><a name="index-variables_002c-how-to-set-3996"></a><a name="index-settings_002c-how-to-set-3997"></a>  Editing the value does not actually set the variable.  To do that,
-you must <dfn>set</dfn> the variable.  To do this, invoke the
-&lsquo;<samp><span class="samp">[State]</span></samp>&rsquo; button and choose &lsquo;<samp><span class="samp">Set for Current Session</span></samp>&rsquo;.
-
-   <p>The state of the variable changes visibly when you set it:
+   <p class="noindent">Editing the value does not make it take effect right away.  To do
+that, you must <dfn>set</dfn> the variable by activating the &lsquo;<samp><span class="samp">[State]</span></samp>&rsquo;
+button and choosing &lsquo;<samp><span class="samp">Set for Current Session</span></samp>&rsquo;.  Then the
+variable's state becomes:
 
 <pre class="smallexample">     [State]: SET for current session only.
 </pre>
-   <p>You don't have to worry about specifying a value that is not valid;
+   <p class="noindent">You don't have to worry about specifying a value that is not valid;
 the &lsquo;<samp><span class="samp">Set for Current Session</span></samp>&rsquo; operation checks for validity and
 will not install an unacceptable value.
 
-   <p><a name="index-M_002dTAB-_0040r_007b_0028customization-buffer_0029_007d-3998"></a><a name="index-widget_002dcomplete-3999"></a>  While editing a field that is a file name, directory name,
-command name, or anything else for which completion is defined, you
-can type <kbd>M-&lt;TAB&gt;</kbd> (<code>widget-complete</code>) to do completion. 
-(<kbd>&lt;ESC&gt; &lt;TAB&gt;</kbd> and <kbd>C-M-i</kbd> do the same thing.)
+   <p><a name="index-M_002dTAB-_0040r_007b_0028customization-buffer_0029_007d-4323"></a><a name="index-C_002dM_002di-_0040r_007b_0028customization-buffer_0029_007d-4324"></a><a name="index-widget_002dcomplete-4325"></a>  While editing certain kinds of values, such as file names, directory
+names, and Emacs command names, you can perform completion with
+<kbd>C-M-i</kbd> (<code>widget-complete</code>), or the equivalent keys
+<kbd>M-&lt;TAB&gt;</kbd> or <kbd>&lt;ESC&gt; &lt;TAB&gt;</kbd>.  This behaves much
+like minibuffer completion (see <a href="Completion.html#Completion">Completion</a>).
 
-   <p>Some variables have a small fixed set of possible legitimate values. 
-These variables don't let you edit the value textually.  Instead, a
-&lsquo;<samp><span class="samp">[Value Menu]</span></samp>&rsquo; button appears before the value; invoke this
-button to change the value.  For a boolean &ldquo;on or off&rdquo; value, the
-button says &lsquo;<samp><span class="samp">[Toggle]</span></samp>&rsquo;, and it changes to the other value. 
-&lsquo;<samp><span class="samp">[Value Menu]</span></samp>&rsquo; and &lsquo;<samp><span class="samp">[Toggle]</span></samp>&rsquo; simply edit the buffer; the
-changes take real effect when you use the &lsquo;<samp><span class="samp">Set for Current
-Session</span></samp>&rsquo; operation.
+   <p>Typing &lt;RET&gt; on an editable value field moves point forward to
+the next field or button, like &lt;TAB&gt;.  You can thus type &lt;RET&gt;
+when you are finished editing a field, to move on to the next button
+or field.  To insert a newline within an editable field, use <kbd>C-o</kbd>
+or <kbd>C-q C-j</kbd>.
+
+   <p>For some variables, there is only a fixed set of legitimate values,
+and you are not allowed to edit the value directly.  Instead, a
+&lsquo;<samp><span class="samp">[Value Menu]</span></samp>&rsquo; button appears before the value; activating this
+button presents a choice of values.  For a boolean &ldquo;on or off&rdquo;
+value, the button says &lsquo;<samp><span class="samp">[Toggle]</span></samp>&rsquo;, and flips the value.  After
+using the &lsquo;<samp><span class="samp">[Value Menu]</span></samp>&rsquo; or &lsquo;<samp><span class="samp">[Toggle]</span></samp>&rsquo; button, you must
+again set the variable to make the chosen value take effect.
 
    <p>Some variables have values with complex structure.  For example, the
-value of <code>file-coding-system-alist</code> is an association list.  Here
+value of <code>minibuffer-frame-alist</code> is an association list.  Here
 is how it appears in the customization buffer:
 
-<pre class="smallexample">     File Coding System Alist: [Hide Value]
-     [INS] [DEL] File regexp: \.elc\'
-                 Choice: [Value Menu] Encoding/decoding pair:
-                 Decoding: emacs-mule
-                 Encoding: emacs-mule
-     [INS] [DEL] File regexp: \(\`\|/\)loaddefs.el\'
-                 Choice: [Value Menu] Encoding/decoding pair:
-                 Decoding: raw-text
-                 Encoding: raw-text-unix
-     [INS] [DEL] File regexp: \.tar\'
-                 Choice: [Value Menu] Encoding/decoding pair:
-                 Decoding: no-conversion
-                 Encoding: no-conversion
-     [INS] [DEL] File regexp:
-                 Choice: [Value Menu] Encoding/decoding pair:
-                 Decoding: undecided
-                 Encoding: nil
+<pre class="smallexample">     [Hide] Minibuffer Frame Alist:
+     [INS] [DEL] Parameter: width
+                 Value: 80
+     [INS] [DEL] Parameter: height
+                 Value: 2
      [INS]
-        [State]: STANDARD.
-     Alist to decide a coding system to use for a file I/O <span class="roman">...</span>
-                                     operation. [Hide Rest]
-     The format is ((PATTERN . VAL) ...),
-     where PATTERN is a regular expression matching a file name,
-     <span class="roman">[...more lines of documentation...]</span>
+        [ State ]: STANDARD.
+        Alist of parameters for the initial minibuffer frame. [Hide]
+        <span class="roman">[...more lines of documentation...]</span>
 </pre>
-   <p class="noindent">Each association in the list appears on four lines, with several
-editable fields and/or buttons.  You can edit the regexps and coding
-systems using ordinary editing commands.  You can also invoke
-&lsquo;<samp><span class="samp">[Value Menu]</span></samp>&rsquo; to switch to a different kind of value&mdash;for
-instance, to specify a function instead of a pair of coding systems.
+   <p class="noindent">In this case, each association in the list consists of two items, one
+labeled &lsquo;<samp><span class="samp">Parameter</span></samp>&rsquo; and one labeled &lsquo;<samp><span class="samp">Value</span></samp>&rsquo;; both are
+editable fields.  You can delete an association from the list with the
+&lsquo;<samp><span class="samp">[DEL]</span></samp>&rsquo; button next to it.  To add an association, use the
+&lsquo;<samp><span class="samp">[INS]</span></samp>&rsquo; button at the position where you want to insert it; the
+very last &lsquo;<samp><span class="samp">[INS]</span></samp>&rsquo; button inserts at the end of the list.
 
-   <p>To delete an association from the list, invoke the &lsquo;<samp><span class="samp">[DEL]</span></samp>&rsquo; button
-for that item.  To add an association, invoke &lsquo;<samp><span class="samp">[INS]</span></samp>&rsquo; at the
-position where you want to add it.  There is an &lsquo;<samp><span class="samp">[INS]</span></samp>&rsquo; button
-between each pair of associations, another at the beginning and another
-at the end, so you can add a new association at any position in the
-list.
+   <p><a name="index-saving-a-setting-4326"></a><a name="index-settings_002c-how-to-save-4327"></a>  When you set a variable, the new value takes effect only in the
+current Emacs session.  To <dfn>save</dfn> the value for future sessions,
+use the &lsquo;<samp><span class="samp">[State]</span></samp>&rsquo; button and select the &lsquo;<samp><span class="samp">Save for Future
+Sessions</span></samp>&rsquo; operation.  See <a href="Saving-Customizations.html#Saving-Customizations">Saving Customizations</a>.
 
-   <p><a name="index-TAB-_0040r_007b_0028customization-buffer_0029_007d-4000"></a><a name="index-S_002dTAB-_0040r_007b_0028customization-buffer_0029_007d-4001"></a><a name="index-widget_002dforward-4002"></a><a name="index-widget_002dbackward-4003"></a>  Two special commands, &lt;TAB&gt; and <kbd>S-&lt;TAB&gt;</kbd>, are useful
-for moving through the customization buffer.  &lt;TAB&gt;
-(<code>widget-forward</code>) moves forward to the next button or editable
-field; <kbd>S-&lt;TAB&gt;</kbd> (<code>widget-backward</code>) moves backward to
-the previous button or editable field.
-
-   <p>Typing &lt;RET&gt; on an editable field also moves forward, just like
-&lt;TAB&gt;.  You can thus type &lt;RET&gt; when you are finished editing
-a field, to move on to the next button or field.  To insert a newline
-within an editable field, use <kbd>C-o</kbd> or <kbd>C-q C-j</kbd>.
-
-   <p><a name="index-saving-a-setting-4004"></a><a name="index-settings_002c-how-to-save-4005"></a>  Setting the variable changes its value in the current Emacs session;
-<dfn>saving</dfn> the value changes it for future sessions as well.  To
-save the variable, invoke &lsquo;<samp><span class="samp">[State]</span></samp>&rsquo; and select the &lsquo;<samp><span class="samp">Save for
-Future Sessions</span></samp>&rsquo; operation.  This works by writing code so as to set
-the variable again, each time you start Emacs (see <a href="Saving-Customizations.html#Saving-Customizations">Saving Customizations</a>).
-
-   <p>You can also restore the variable to its standard value by invoking
-&lsquo;<samp><span class="samp">[State]</span></samp>&rsquo; and selecting the &lsquo;<samp><span class="samp">Erase Customization</span></samp>&rsquo; operation. 
-There are actually four reset operations:
+   <p>You can also restore the variable to its standard value by using the
+&lsquo;<samp><span class="samp">[State]</span></samp>&rsquo; button and selecting the &lsquo;<samp><span class="samp">Erase Customization</span></samp>&rsquo;
+operation.  There are actually four reset operations:
 
      <dl>
-<dt>&lsquo;<samp><span class="samp">Undo Edits</span></samp>&rsquo;<dd>If you have made some modifications and not yet set the variable,
-this restores the text in the customization buffer to match
-the actual value.
+<dt>&lsquo;<samp><span class="samp">Undo Edits</span></samp>&rsquo;<dd>If you have modified but not yet set the variable, this restores the
+text in the customization buffer to match the actual value.
 
      <br><dt>&lsquo;<samp><span class="samp">Reset to Saved</span></samp>&rsquo;<dd>This restores the value of the variable to the last saved value,
 and updates the text accordingly.
 
-     <br><dt>&lsquo;<samp><span class="samp">Erase Customization</span></samp>&rsquo;<dd>This sets the variable to its standard value, and updates the text
-accordingly.  This also eliminates any saved value for the variable,
-so that you will get the standard value in future Emacs sessions.
+     <br><dt>&lsquo;<samp><span class="samp">Erase Customization</span></samp>&rsquo;<dd>This sets the variable to its standard value.  Any saved value that
+you have is also eliminated.
 
      <br><dt>&lsquo;<samp><span class="samp">Set to Backup Value</span></samp>&rsquo;<dd>This sets the variable to a previous value that was set in the
 customization buffer in this session.  If you customize a variable
@@ -187,27 +160,29 @@ and then reset it, which discards the customized value,
 you can get the discarded value back again with this operation. 
 </dl>
 
-   <p><a name="index-comments-on-customized-settings-4006"></a>  Sometimes it is useful to record a comment about a specific
+   <p><a name="index-comments-on-customized-settings-4328"></a>  Sometimes it is useful to record a comment about a specific
 customization.  Use the &lsquo;<samp><span class="samp">Add Comment</span></samp>&rsquo; item from the
-&lsquo;<samp><span class="samp">[State]</span></samp>&rsquo; menu to create a field for entering the comment.  The
-comment you enter will be saved, and displayed again if you again view
-the same variable in a customization buffer, even in another session.
+&lsquo;<samp><span class="samp">[State]</span></samp>&rsquo; menu to create a field for entering the comment.
 
-   <p>The state of a group indicates whether anything in that group has been
-edited, set or saved.
-
-   <p>Near the top of the customization buffer there are two lines of buttons:
+   <p>Near the top of the customization buffer are two lines of buttons:
 
 <pre class="smallexample">      [Set for Current Session] [Save for Future Sessions]
-      [Undo Edits] [Reset to Saved] [Erase Customization]   [Finish]
+      [Undo Edits] [Reset to Saved] [Erase Customization]   [Exit]
 </pre>
-   <p><a name="index-custom_002dbuffer_002ddone_002dfunction-4007"></a>Invoking &lsquo;<samp><span class="samp">[Finish]</span></samp>&rsquo; either buries or kills this customization
-buffer according to the setting of the option
-<code>custom-buffer-done-kill</code>; the default is to bury the buffer. 
-Each of the other buttons performs an operation&mdash;set, save or
-reset&mdash;on each of the settings in the buffer that could meaningfully
-be set, saved or reset.  They do not operate on settings whose values
-are hidden, nor on subgroups which are hidden or not visible in the buffer.
+   <p class="noindent">Each of the first five buttons performs the stated operation&mdash;set,
+save, reset, etc.&mdash;on all the settings in the buffer that could
+meaningfully be affected.  They do not operate on settings that are
+hidden, nor on subgroups that are hidden or not visible in the buffer.
+
+   <p><a name="index-C_002dc-C_002dc-_0040r_007b_0028customization-buffer_0029_007d-4329"></a><a name="index-C_002dx-C_002dc-_0040r_007b_0028customization-buffer_0029_007d-4330"></a><a name="index-Custom_002dset-4331"></a><a name="index-Custom_002dsave-4332"></a>  The command <kbd>C-c C-c</kbd> (<code>Custom-set</code>) is equivalent to using
+the &lsquo;<samp><span class="samp">[Set for Current Session]</span></samp>&rsquo; button.  The command <kbd>C-x
+C-s</kbd> (<code>Custom-save</code>) is like using the &lsquo;<samp><span class="samp">[Save for Future
+Sessions]</span></samp>&rsquo; button.
+
+   <p><a name="index-custom_002dbuffer_002ddone_002dkill-4333"></a>  The &lsquo;<samp><span class="samp">[Exit]</span></samp>&rsquo; button switches out of the customization buffer,
+and buries the buffer at the bottom of the buffer list.  To make it
+kill the customization buffer instead, change the variable
+<code>custom-buffer-done-kill</code> to <code>t</code>.
 
    </body></html>
 

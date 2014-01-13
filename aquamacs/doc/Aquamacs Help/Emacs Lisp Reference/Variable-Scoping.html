@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Variable Scoping - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables" title="Buffer-Local Variables">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,35 +43,38 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
 
 <h3 class="section">11.9 Scoping Rules for Variable Bindings</h3>
 
-<p>A given symbol <code>foo</code> can have several local variable bindings,
-established at different places in the Lisp program, as well as a global
-binding.  The most recently established binding takes precedence over
-the others.
+<p>When you create a local binding for a variable, that binding takes
+effect only within a limited portion of the program (see <a href="Local-Variables.html#Local-Variables">Local Variables</a>).  This section describes exactly what this means.
 
-   <p><a name="index-scope-612"></a><a name="index-extent-613"></a><a name="index-dynamic-scoping-614"></a><a name="index-lexical-scoping-615"></a>  Local bindings in Emacs Lisp have <dfn>indefinite scope</dfn> and
-<dfn>dynamic extent</dfn>.  <dfn>Scope</dfn> refers to <em>where</em> textually in
-the source code the binding can be accessed.  &ldquo;Indefinite scope&rdquo; means
-that any part of the program can potentially access the variable
-binding.  <dfn>Extent</dfn> refers to <em>when</em>, as the program is
-executing, the binding exists.  &ldquo;Dynamic extent&rdquo; means that the binding
-lasts as long as the activation of the construct that established it.
+   <p><a name="index-scope-638"></a><a name="index-extent-639"></a>  Each local binding has a certain <dfn>scope</dfn> and <dfn>extent</dfn>. 
+<dfn>Scope</dfn> refers to <em>where</em> in the textual source code the
+binding can be accessed.  <dfn>Extent</dfn> refers to <em>when</em>, as the
+program is executing, the binding exists.
 
-   <p>The combination of dynamic extent and indefinite scope is called
-<dfn>dynamic scoping</dfn>.  By contrast, most programming languages use
-<dfn>lexical scoping</dfn>, in which references to a local variable must be
-located textually within the function or block that binds the variable.
+   <p><a name="index-dynamic-binding-640"></a><a name="index-indefinite-scope-641"></a><a name="index-dynamic-extent-642"></a>  By default, the local bindings that Emacs creates are <dfn>dynamic
+bindings</dfn>.  Such a binding has <dfn>indefinite scope</dfn>, meaning that
+any part of the program can potentially access the variable binding. 
+It also has <dfn>dynamic extent</dfn>, meaning that the binding lasts only
+while the binding construct (such as the body of a <code>let</code> form) is
+being executed.
 
-   <p><a name="index-CL-note_002d_002d_002dspecial-variables-616"></a><blockquote>
-<b>Common Lisp note:</b> Variables declared &ldquo;special&rdquo; in Common Lisp are
-dynamically scoped, like all variables in Emacs Lisp. 
-</blockquote>
+   <p><a name="index-lexical-binding-643"></a><a name="index-lexical-scope-644"></a><a name="index-indefinite-extent-645"></a>  Emacs can optionally create <dfn>lexical bindings</dfn>.  A lexical
+binding has <dfn>lexical scope</dfn>, meaning that any reference to the
+variable must be located textually within the binding construct.  It
+also has <dfn>indefinite extent</dfn>, meaning that under some
+circumstances the binding can live on even after the binding construct
+has finished executing, by means of special objects called
+<dfn>closures</dfn>.
+
+   <p>The following subsections describe dynamic binding and lexical
+binding in greater detail, and how to enable lexical binding in Emacs
+Lisp programs.
 
 <ul class="menu">
-<li><a accesskey="1" href="Scope.html#Scope">Scope</a>:           Scope means where in the program a value is visible. 
-                     Comparison with other languages. 
-<li><a accesskey="2" href="Extent.html#Extent">Extent</a>:          Extent means how long in time a value exists. 
-<li><a accesskey="3" href="Impl-of-Scope.html#Impl-of-Scope">Impl of Scope</a>:   Two ways to implement dynamic scoping. 
-<li><a accesskey="4" href="Using-Scoping.html#Using-Scoping">Using Scoping</a>:   How to use dynamic scoping carefully and avoid problems. 
+<li><a accesskey="1" href="Dynamic-Binding.html#Dynamic-Binding">Dynamic Binding</a>:          The default for binding local variables in Emacs. 
+<li><a accesskey="2" href="Dynamic-Binding-Tips.html#Dynamic-Binding-Tips">Dynamic Binding Tips</a>:     Avoiding problems with dynamic binding. 
+<li><a accesskey="3" href="Lexical-Binding.html#Lexical-Binding">Lexical Binding</a>:          A different type of local variable binding. 
+<li><a accesskey="4" href="Using-Lexical-Binding.html#Using-Lexical-Binding">Using Lexical Binding</a>:    How to enable lexical binding. 
 </ul>
 
    </body></html>

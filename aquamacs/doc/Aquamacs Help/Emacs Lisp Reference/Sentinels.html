@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Sentinels - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Query-Before-Exit.html#Query-Before-Exit" title="Query Before Exit">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,7 +43,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Processes.html#Processes">Processes</a>
 
 <h3 class="section">37.10 Sentinels: Detecting Process Status Changes</h3>
 
-<p><a name="index-process-sentinel-3343"></a><a name="index-sentinel-_0028of-process_0029-3344"></a>
+<p><a name="index-process-sentinel-3617"></a><a name="index-sentinel-_0028of-process_0029-3618"></a>
   A <dfn>process sentinel</dfn> is a function that is called whenever the
 associated process changes status for any reason, including signals
 (whether sent by Emacs or caused by the process's own actions) that
@@ -57,6 +54,7 @@ describing the type of event.
 
    <p>The string describing the event looks like one of the following:
 
+<!-- FIXME?  Also "killed\n" - see example below? -->
      <ul>
 <li><code>"finished\n"</code>.
 
@@ -69,7 +67,7 @@ describing the type of event.
 
    <p>A sentinel runs only while Emacs is waiting (e.g., for terminal
 input, or for time to elapse, or for process output).  This avoids the
-timing errors that could result from running them at random places in
+timing errors that could result from running sentinels at random places in
 the middle of other Lisp programs.  A program can wait, so that
 sentinels will run, by calling <code>sit-for</code> or <code>sleep-for</code>
 (see <a href="Waiting.html#Waiting">Waiting</a>), or <code>accept-process-output</code> (see <a href="Accepting-Output.html#Accepting-Output">Accepting Output</a>).  Emacs also allows sentinels to run when the command loop is
@@ -92,6 +90,7 @@ should check whether the buffer is still alive.  If it tries to insert
 into a dead buffer, it will get an error.  If the buffer is dead,
 <code>(buffer-name (process-buffer </code><var>process</var><code>))</code> returns <code>nil</code>.
 
+<!-- Note this text is duplicated in the filter functions section. -->
    <p>Quitting is normally inhibited within a sentinel&mdash;otherwise, the
 effect of typing <kbd>C-g</kbd> at command level or to quit a user command
 would be unpredictable.  If you want to permit quitting inside a
@@ -102,8 +101,8 @@ See <a href="Quitting.html#Quitting">Quitting</a>.
    <p>If an error happens during execution of a sentinel, it is caught
 automatically, so that it doesn't stop the execution of whatever
 programs was running when the sentinel was started.  However, if
-<code>debug-on-error</code> is non-<code>nil</code>, the error-catching is turned
-off.  This makes it possible to use the Lisp debugger to debug the
+<code>debug-on-error</code> is non-<code>nil</code>,  errors are not caught. 
+This makes it possible to use the Lisp debugger to debug the
 sentinel.  See <a href="Debugger.html#Debugger">Debugger</a>.
 
    <p>While a sentinel is running, the process sentinel is temporarily
@@ -111,19 +110,17 @@ set to <code>nil</code> so that the sentinel won't run recursively.
 For this reason it is not possible for a sentinel to specify
 a new sentinel.
 
-   <p>In earlier Emacs versions, every sentinel that did regular expression
-searching or matching had to explicitly save and restore the match data. 
-Now Emacs does this automatically for sentinels; they never need to do
-it explicitly.  See <a href="Match-Data.html#Match-Data">Match Data</a>.
+   <p>Note that Emacs automatically saves and restores the match data
+while executing sentinels.  See <a href="Match-Data.html#Match-Data">Match Data</a>.
 
 <div class="defun">
-&mdash; Function: <b>set-process-sentinel</b><var> process sentinel<a name="index-set_002dprocess_002dsentinel-3345"></a></var><br>
+&mdash; Function: <b>set-process-sentinel</b><var> process sentinel<a name="index-set_002dprocess_002dsentinel-3619"></a></var><br>
 <blockquote><p>This function associates <var>sentinel</var> with <var>process</var>.  If
 <var>sentinel</var> is <code>nil</code>, then the process will have no sentinel. 
 The default behavior when there is no sentinel is to insert a message in
 the process's buffer when the process status changes.
 
-        <p>Changes in process sentinel take effect immediately&mdash;if the sentinel
+        <p>Changes in process sentinels take effect immediately&mdash;if the sentinel
 is slated to be run but has not been called yet, and you specify a new
 sentinel, the eventual call to the sentinel will use the new one.
 
@@ -139,16 +136,16 @@ sentinel, the eventual call to the sentinel will use the new one.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>process-sentinel</b><var> process<a name="index-process_002dsentinel-3346"></a></var><br>
+&mdash; Function: <b>process-sentinel</b><var> process<a name="index-process_002dsentinel-3620"></a></var><br>
 <blockquote><p>This function returns the sentinel of <var>process</var>, or <code>nil</code> if it
 has none. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>waiting-for-user-input-p</b><var><a name="index-waiting_002dfor_002duser_002dinput_002dp-3347"></a></var><br>
+&mdash; Function: <b>waiting-for-user-input-p</b><var><a name="index-waiting_002dfor_002duser_002dinput_002dp-3621"></a></var><br>
 <blockquote><p>While a sentinel or filter function is running, this function returns
 non-<code>nil</code> if Emacs was waiting for keyboard input from the user at
-the time the sentinel or filter function was called, <code>nil</code> if it
+the time the sentinel or filter function was called, or <code>nil</code> if it
 was not. 
 </p></blockquote></div>
 

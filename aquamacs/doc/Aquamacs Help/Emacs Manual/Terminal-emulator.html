@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Terminal emulator - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Term-Mode.html#Term-Mode" title="Term Mode">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,40 +42,46 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Shell.html#Shell">Shell</a>
 <hr>
 </div>
 
-<h3 class="section">41.8 Emacs Terminal Emulator</h3>
+<h3 class="section">36.8 Emacs Terminal Emulator</h3>
 
-<p><a name="index-term-3730"></a>
-  To run a subshell in a terminal emulator, use <kbd>M-x term</kbd>.  This
-creates (or reuses) a buffer named &lsquo;<samp><span class="samp">*terminal*</span></samp>&rsquo;, and runs a
+<p><a name="index-term-4024"></a>
+  To run a subshell in a text terminal emulator, use <kbd>M-x term</kbd>. 
+This creates (or reuses) a buffer named <samp><span class="file">*terminal*</span></samp>, and runs a
 subshell with input coming from your keyboard, and output going to
 that buffer.
 
-   <p>The terminal emulator uses Term mode, which has two input modes.  In
-line mode, Term basically acts like Shell mode; see <a href="Shell-Mode.html#Shell-Mode">Shell Mode</a>.
-
-   <p>In char mode, each character is sent directly to the inferior
-subshell, as &ldquo;terminal input.&rdquo;  Any &ldquo;echoing&rdquo; of your input is the
-responsibility of the subshell.  The sole exception is the terminal
-escape character, which by default is <kbd>C-c</kbd> (see <a href="Term-Mode.html#Term-Mode">Term Mode</a>). 
-Any &ldquo;terminal output&rdquo; from the subshell goes into the buffer,
-advancing point.
+   <p><a name="index-line-mode-_0040r_007b_0028terminal-emulator_0029_007d-4025"></a><a name="index-char-mode-_0040r_007b_0028terminal-emulator_0029_007d-4026"></a>  The terminal emulator uses Term mode, which has two input modes.  In
+<dfn>line mode</dfn>, Term basically acts like Shell mode (see <a href="Shell-Mode.html#Shell-Mode">Shell Mode</a>).  In <dfn>char mode</dfn>, each character is sent directly to the
+subshell, as terminal input; the sole exception is the terminal escape
+character, which by default is <kbd>C-c</kbd> (see <a href="Term-Mode.html#Term-Mode">Term Mode</a>).  Any
+echoing of your input is the responsibility of the subshell; any
+terminal output from the subshell goes into the buffer, advancing
+point.
 
    <p>Some programs (such as Emacs itself) need to control the appearance
-on the terminal screen in detail.  They do this by sending special
-control codes.  The exact control codes needed vary from terminal to
-terminal, but nowadays most terminals and terminal emulators
-(including <code>xterm</code>) understand the ANSI-standard (VT100-style)
-escape sequences.  Term mode recognizes these escape sequences, and
-handles each one appropriately, changing the buffer so that the
-appearance of the window matches what it would be on a real terminal. 
-You can actually run Emacs inside an Emacs Term window.
+of the terminal screen in detail.  They do this by emitting special
+control codes.  Term mode recognizes and handles ANSI-standard
+VT100-style escape sequences, which are accepted by most modern
+terminals, including <samp><span class="command">xterm</span></samp>.  (Hence, you can actually run
+Emacs inside an Emacs Term window.)
 
-   <p>You can use Term mode to communicate with a device connected to a
-serial port of your computer.  See <a href="Serial-Terminal.html#Serial-Terminal">Serial Terminal</a>.
+   <p>The <code>term</code> face specifies the default appearance of text
+in the terminal emulator (the default is the same appearance as the
+<code>default</code> face).  When terminal control codes are used to change
+the appearance of text, these are represented in the terminal emulator
+by the faces <code>term-color-black</code>, <code>term-color-red</code>,
+<code>term-color-green</code>, <code>term-color-yellow</code>
+<code>term-color-blue</code>, <code>term-color-magenta</code>,
+<code>term-color-cyan</code>, <code>term-color-white</code>,
+<code>term-color-underline</code>, and <code>term-color-bold</code>. 
+See <a href="Faces.html#Faces">Faces</a>.
+
+   <p>You can also Term mode to communicate with a device connected to a
+serial port.  See <a href="Serial-Terminal.html#Serial-Terminal">Serial Terminal</a>.
 
    <p>The file name used to load the subshell is determined the same way
 as for Shell mode.  To make multiple terminal emulators, rename the
-buffer &lsquo;<samp><span class="samp">*terminal*</span></samp>&rsquo; to something different using <kbd>M-x
+buffer <samp><span class="file">*terminal*</span></samp> to something different using <kbd>M-x
 rename-uniquely</kbd>, just as with Shell mode.
 
    <p>Unlike Shell mode, Term mode does not track the current directory by

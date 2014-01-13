@@ -1,21 +1,19 @@
 <html lang="en">
 <head>
 <title>Minibuffer File - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Minibuffer.html#Minibuffer" title="Minibuffer">
+<link rel="prev" href="Basic-Minibuffer.html#Basic-Minibuffer" title="Basic Minibuffer">
 <link rel="next" href="Minibuffer-Edit.html#Minibuffer-Edit" title="Minibuffer Edit">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -39,29 +37,30 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <a name="Minibuffer-File"></a>
 <p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Minibuffer-Edit.html#Minibuffer-Edit">Minibuffer Edit</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Basic-Minibuffer.html#Basic-Minibuffer">Basic Minibuffer</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Minibuffer.html#Minibuffer">Minibuffer</a>
 <hr>
 </div>
 
-<h3 class="section">8.1 Minibuffers for File Names</h3>
+<h3 class="section">8.2 Minibuffers for File Names</h3>
 
-<p>Commands such as <kbd>C-x C-f</kbd> (<code>find-file</code>) use the minibuffer
+<p><a name="index-default-directory-179"></a>  Commands such as <kbd>C-x C-f</kbd> (<code>find-file</code>) use the minibuffer
 to read a file name argument (see <a href="Basic-Files.html#Basic-Files">Basic Files</a>).  When the
 minibuffer is used to read a file name, it typically starts out with
 some initial text ending in a slash.  This is the <dfn>default
 directory</dfn>.  For example, it may start out like this:
 
-<pre class="example">     Find File: /u2/emacs/src/
+<pre class="example">     Find file: /u2/emacs/src/
 </pre>
-   <p class="noindent">Here, &lsquo;<samp><span class="samp">Find File: </span></samp>&rsquo; is the prompt and &lsquo;<samp><span class="samp">/u2/emacs/src/</span></samp>&rsquo; is
+   <p class="noindent">Here, &lsquo;<samp><span class="samp">Find file: </span></samp>&rsquo; is the prompt and &lsquo;<samp><span class="samp">/u2/emacs/src/</span></samp>&rsquo; is
 the default directory.  If you now type <kbd>buffer.c</kbd> as input, that
 specifies the file <samp><span class="file">/u2/emacs/src/buffer.c</span></samp>.  See <a href="File-Names.html#File-Names">File Names</a>,
 for information about the default directory.
 
-   <p>You can specify the parent directory by adding <samp><span class="file">..</span></samp>: for
-example, <samp><span class="file">/u2/emacs/src/../lisp/simple.el</span></samp> is equivalent to
-<samp><span class="file">/u2/emacs/lisp/simple.el</span></samp>.  Alternatively, you can use
-<kbd>M-&lt;DEL&gt;</kbd> to kill directory names backwards (see <a href="Words.html#Words">Words</a>).
+   <p>You can specify the parent directory with <samp><span class="file">..</span></samp>:
+<samp><span class="file">/a/b/../foo.el</span></samp> is equivalent to <samp><span class="file">/a/foo.el</span></samp>. 
+Alternatively, you can use <kbd>M-&lt;DEL&gt;</kbd> to kill directory names
+backwards (see <a href="Words.html#Words">Words</a>).
 
    <p>To specify a file in a completely different directory, you can kill
 the entire default with <kbd>C-a C-k</kbd> (see <a href="Minibuffer-Edit.html#Minibuffer-Edit">Minibuffer Edit</a>). 
@@ -69,16 +68,16 @@ Alternatively, you can ignore the default, and enter an absolute file
 name starting with a slash or a tilde after the default directory. 
 For example, you can specify <samp><span class="file">/etc/termcap</span></samp> as follows:
 
-<pre class="example">     Find File: /u2/emacs/src//etc/termcap
+<pre class="example">     Find file: /u2/emacs/src//etc/termcap
 </pre>
-   <p class="noindent"><a name="index-g_t_002f_002f-in-file-name-153"></a><a name="index-double-slash-in-file-name-154"></a><a name="index-slashes-repeated-in-file-name-155"></a><a name="index-file_002dname_002dshadow_002dmode-156"></a>Emacs interprets a double slash as &ldquo;ignore everything before the
-second slash in the pair.&rdquo;  In the example above,
+   <p class="noindent"><a name="index-g_t_002f_002f-in-file-name-180"></a><a name="index-double-slash-in-file-name-181"></a><a name="index-slashes-repeated-in-file-name-182"></a><a name="index-file_002dname_002dshadow_002dmode-183"></a>Emacs interprets a double slash as &ldquo;ignore everything before the
+second slash in the pair&rdquo;.  In the example above,
 <samp><span class="file">/u2/emacs/src/</span></samp> is ignored, so the argument you supplied is
 <samp><span class="file">/etc/termcap</span></samp>.  The ignored part of the file name is dimmed if
-the terminal allows it (to disable this dimming, turn off File Name
+the terminal allows it.  (To disable this dimming, turn off File Name
 Shadow mode with the command <kbd>M-x file-name-shadow-mode</kbd>.)
 
-   <p><a name="index-home-directory-shorthand-157"></a>  Emacs interprets <samp><span class="file">~/</span></samp> as your home directory.  Thus,
+   <p><a name="index-home-directory-shorthand-184"></a>  Emacs interprets <samp><span class="file">~/</span></samp> as your home directory.  Thus,
 <samp><span class="file">~/foo/bar.txt</span></samp> specifies a file named <samp><span class="file">bar.txt</span></samp>, inside a
 directory named <samp><span class="file">foo</span></samp>, which is in turn located in your home
 directory.  In addition, <samp><span class="file">~</span><var>user-id</var><span class="file">/</span></samp> means the home
@@ -89,16 +88,19 @@ directory name in front of the <samp><span class="file">~</span></samp> is ignor
    <p>On MS-Windows and MS-DOS systems, where a user doesn't always have a
 home directory, Emacs uses several alternatives.  For MS-Windows, see
 <a href="Windows-HOME.html#Windows-HOME">Windows HOME</a>; for MS-DOS, see
-<a href="MS_002dDOS-File-Names.html#MS_002dDOS-File-Names">HOME on MS-DOS</a>. 
+<a href="MS_002dDOS-File-Names.html#MS_002dDOS-File-Names">MS-DOS File Names</a>. 
 On these systems, the <samp><span class="file">~</span><var>user-id</var><span class="file">/</span></samp> construct is supported
 only for the current user, i.e., only if <var>user-id</var> is the current
 user's login name.
 
-   <p><a name="index-insert_002ddefault_002ddirectory-158"></a>  To prevent Emacs from inserting the default directory when reading
+   <p><a name="index-insert_002ddefault_002ddirectory-185"></a>  To prevent Emacs from inserting the default directory when reading
 file names, change the variable <code>insert-default-directory</code> to
 <code>nil</code>.  In that case, the minibuffer starts out empty. 
 Nonetheless, relative file name arguments are still interpreted based
 on the same default directory.
+
+   <p>You can also enter remote file names in the minibuffer. 
+See <a href="Remote-Files.html#Remote-Files">Remote Files</a>.
 
    </body></html>
 

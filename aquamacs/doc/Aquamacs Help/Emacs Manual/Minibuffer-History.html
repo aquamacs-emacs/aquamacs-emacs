@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Minibuffer History - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Repetition.html#Repetition" title="Repetition">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,9 +42,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Minibuffer.html#Minibuffer">Minibuffer<
 <hr>
 </div>
 
-<h3 class="section">8.4 Minibuffer History</h3>
+<h3 class="section">8.5 Minibuffer History</h3>
 
-<p><a name="index-minibuffer-history-187"></a><a name="index-history-of-minibuffer-input-188"></a>
+<p><a name="index-minibuffer-history-228"></a><a name="index-history-of-minibuffer-input-229"></a>
   Every argument that you enter with the minibuffer is saved in a
 <dfn>minibuffer history list</dfn> so you can easily use it again later. 
 You can use the following arguments to quickly fetch an earlier
@@ -64,58 +61,52 @@ matches <var>regexp</var> (<code>previous-matching-history-element</code>).
 <var>regexp</var> (<code>next-matching-history-element</code>). 
 </dl>
 
-   <p><a name="index-M_002dp-_0040r_007b_0028minibuffer-history_0029_007d-189"></a><a name="index-M_002dn-_0040r_007b_0028minibuffer-history_0029_007d-190"></a><a name="index-next_002dhistory_002delement-191"></a><a name="index-previous_002dhistory_002delement-192"></a>  While in the minibuffer, typing <kbd>M-p</kbd> or &lt;Up&gt;
-(<code>previous-history-element</code>) moves up through the minibuffer
-history list, one item at a time.  Each <kbd>M-p</kbd> fetches an earlier
-item from the history list into the minibuffer, replacing its existing
-contents.  Similarly, typing <kbd>M-n</kbd> or &lt;Down&gt;
-(<code>next-history-element</code>) moves back down the history list,
-fetching later entries into the minibuffer.  You can think of these
-commands as &ldquo;backwards&rdquo; and &ldquo;forwards&rdquo; through the history list.
+   <p><a name="index-M_002dp-_0040r_007b_0028minibuffer-history_0029_007d-230"></a><a name="index-M_002dn-_0040r_007b_0028minibuffer-history_0029_007d-231"></a><a name="index-UP-_0040r_007b_0028minibuffer-history_0029_007d-232"></a><a name="index-DOWN-_0040r_007b_0028minibuffer-history_0029_007d-233"></a><a name="index-next_002dhistory_002delement-234"></a><a name="index-previous_002dhistory_002delement-235"></a>  While in the minibuffer, <kbd>M-p</kbd> or &lt;Up&gt;
+(<code>previous-history-element</code>) moves through the minibuffer history
+list, one item at a time.  Each <kbd>M-p</kbd> fetches an earlier item from
+the history list into the minibuffer, replacing its existing contents. 
+Typing <kbd>M-n</kbd> or &lt;Down&gt; (<code>next-history-element</code>) moves
+through the minibuffer history list in the opposite direction,
+fetching later entries into the minibuffer.
 
    <p>If you type <kbd>M-n</kbd> in the minibuffer when there are no later
 entries in the minibuffer history (e.g., if you haven't previously
 typed <kbd>M-p</kbd>), Emacs tries fetching from a list of default
-argument: values that you are likely to enter.  You can think of this
-as moving through the &ldquo;future list&rdquo; instead of the &ldquo;history list&rdquo;.
+arguments: values that you are likely to enter.  You can think of this
+as moving through the &ldquo;future history&rdquo; list.
 
-   <p>The input that <kbd>M-p</kbd> or <kbd>M-n</kbd> fetches into the minibuffer
-entirely replaces the existing contents of the minibuffer, so you can
-simply type &lt;RET&gt; to use it as an argument.  You can also edit the
-text before you reuse it; this does not change the history element
-that you &ldquo;moved&rdquo; to, but your new argument does go at the end of the
-history list in its own right.
+   <p>If you edit the text inserted by the <kbd>M-p</kbd> or &lt;M-n&gt;
+minibuffer history commands, this does not change its entry in the
+history list.  However, the edited argument does go at the end of the
+history list when you submit it.
 
-   <p><a name="index-previous_002dmatching_002dhistory_002delement-193"></a><a name="index-next_002dmatching_002dhistory_002delement-194"></a><a name="index-M_002dr-_0040r_007b_0028minibuffer-history_0029_007d-195"></a><a name="index-M_002ds-_0040r_007b_0028minibuffer-history_0029_007d-196"></a>  There are also commands to search forward or backward through the
-history; they search for history elements that match a regular
-expression.  <kbd>M-r</kbd> (<code>previous-matching-history-element</code>)
-searches older elements in the history, while <kbd>M-s</kbd>
-(<code>next-matching-history-element</code>) searches newer elements.  These
-commands are unusual: they use the minibuffer to read the regular
-expression even though they are invoked from the minibuffer.  As with
-incremental searching, an upper-case letter in the regular expression
-makes the search case-sensitive (see <a href="Search-Case.html#Search-Case">Search Case</a>).  You can also
-search through the history using an incremental search (see <a href="Isearch-Minibuffer.html#Isearch-Minibuffer">Isearch Minibuffer</a>).
+   <p><a name="index-previous_002dmatching_002dhistory_002delement-236"></a><a name="index-next_002dmatching_002dhistory_002delement-237"></a><a name="index-M_002dr-_0040r_007b_0028minibuffer-history_0029_007d-238"></a><a name="index-M_002ds-_0040r_007b_0028minibuffer-history_0029_007d-239"></a>  You can use <kbd>M-r</kbd> (<code>previous-matching-history-element</code>) to
+search through older elements in the history list, and <kbd>M-s</kbd>
+(<code>next-matching-history-element</code>) to search through newer
+entries.  Each of these commands asks for a <dfn>regular expression</dfn>
+as an argument, and fetches the first matching entry into the
+minibuffer.  See <a href="Regexps.html#Regexps">Regexps</a>, for an explanation of regular
+expressions.  A numeric prefix argument <var>n</var> means to fetch the
+<var>n</var>th matching entry.  These commands are unusual, in that they
+use the minibuffer to read the regular expression argument, even
+though they are invoked from the minibuffer.  An upper-case letter in
+the regular expression makes the search case-sensitive (see <a href="Search-Case.html#Search-Case">Search Case</a>).
 
-   <p>All uses of the minibuffer record your input on a history list, but
-there are separate history lists for different kinds of arguments. 
-For example, there is a list for file names, used by all the commands
-that read file names.  (As a special feature, this history list
-records the absolute file name, even if the name you entered was not
-absolute.)
+   <p>You can also search through the history using an incremental search. 
+See <a href="Isearch-Minibuffer.html#Isearch-Minibuffer">Isearch Minibuffer</a>.
 
-   <p>There are several other specific history lists, including one for
-buffer names, one for arguments of commands like <code>query-replace</code>,
-one used by <kbd>M-x</kbd> for command names, and one used by
-<code>compile</code> for compilation commands.  Finally, there is one
-&ldquo;miscellaneous&rdquo; history list that most minibuffer arguments use.
+   <p>Emacs keeps separate history lists for several different kinds of
+arguments.  For example, there is a list for file names, used by all
+the commands that read file names.  Other history lists include buffer
+names, command names (used by <kbd>M-x</kbd>), and command arguments (used
+by commands like <code>query-replace</code>).
 
-   <p><a name="index-history_002dlength-197"></a>  The variable <code>history-length</code> specifies the maximum length of a
+   <p><a name="index-history_002dlength-240"></a>  The variable <code>history-length</code> specifies the maximum length of a
 minibuffer history list; adding a new element deletes the oldest
-element if the list gets too long.  If the value of
-<code>history-length</code> is <code>t</code>, there is no maximum length.
+element if the list gets too long.  If the value is <code>t</code>, there is
+no maximum length.
 
-   <p><a name="index-history_002ddelete_002dduplicates-198"></a>  The variable <code>history-delete-duplicates</code> specifies whether to
+   <p><a name="index-history_002ddelete_002dduplicates-241"></a>  The variable <code>history-delete-duplicates</code> specifies whether to
 delete duplicates in history.  If it is non-<code>nil</code>, adding a new
 element deletes from the list all other elements that are equal to it. 
 The default is <code>nil</code>.

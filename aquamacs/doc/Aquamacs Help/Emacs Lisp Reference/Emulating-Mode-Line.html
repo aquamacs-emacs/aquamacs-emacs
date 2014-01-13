@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Emulating Mode Line - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="prev" href="Header-Lines.html#Header-Lines" title="Header Lines">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -42,37 +39,46 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Mode-Line-Format.html#Mode-Line-Format"
 <hr>
 </div>
 
-<h4 class="subsection">23.4.8 Emulating Mode-Line Formatting</h4>
+<h4 class="subsection">23.4.8 Emulating Mode Line Formatting</h4>
 
-<p>You can use the function <code>format-mode-line</code> to compute
-the text that would appear in a mode line or header line
-based on a certain mode-line specification.
+<p>You can use the function <code>format-mode-line</code> to compute the text
+that would appear in a mode line or header line based on a certain
+mode line construct.
 
 <div class="defun">
-&mdash; Function: <b>format-mode-line</b><var> format &amp;optional face window buffer<a name="index-format_002dmode_002dline-1656"></a></var><br>
-<blockquote><p>This function formats a line of text according to <var>format</var> as if
-it were generating the mode line for <var>window</var>, but instead of
-displaying the text in the mode line or the header line, it returns
-the text as a string.  The argument <var>window</var> defaults to the
-selected window.  If <var>buffer</var> is non-<code>nil</code>, all the
-information used is taken from <var>buffer</var>; by default, it comes from
-<var>window</var>'s buffer.
+&mdash; Function: <b>format-mode-line</b><var> format &amp;optional face window buffer<a name="index-format_002dmode_002dline-1771"></a></var><br>
+<blockquote><p>This function formats a line of text according to <var>format</var> as if it
+were generating the mode line for <var>window</var>, but it also returns the
+text as a string.  The argument <var>window</var> defaults to the selected
+window.  If <var>buffer</var> is non-<code>nil</code>, all the information used is
+taken from <var>buffer</var>; by default, it comes from <var>window</var>'s
+buffer.
 
         <p>The value string normally has text properties that correspond to the
-faces, keymaps, etc., that the mode line would have.  And any character
-for which no <code>face</code> property is specified gets a default
-value which is usually <var>face</var>.  (If <var>face</var> is <code>t</code>,
-that stands for either <code>mode-line</code> if <var>window</var> is selected,
+faces, keymaps, etc., that the mode line would have.  Any character for
+which no <code>face</code> property is specified by <var>format</var> gets a
+default value determined by <var>face</var>.  If <var>face</var> is <code>t</code>, that
+stands for either <code>mode-line</code> if <var>window</var> is selected,
 otherwise <code>mode-line-inactive</code>.  If <var>face</var> is <code>nil</code> or
-omitted, that stands for no face property.)
+omitted, that stands for the default face.  If <var>face</var> is an integer,
+the value returned by this function will have no text properties.
 
-        <p>However, if <var>face</var> is an integer, the value has no text properties.
+        <p>You can also specify other valid faces as the value of <var>face</var>. 
+If specified, that face provides the <code>face</code> property for characters
+whose face is not specified by <var>format</var>.
+
+        <p>Note that using <code>mode-line</code>, <code>mode-line-inactive</code>, or
+<code>header-line</code> as <var>face</var> will actually redisplay the mode line
+or the header line, respectively, using the current definitions of the
+corresponding face, in addition to returning the formatted string. 
+(Other faces do not cause redisplay.)
 
         <p>For example, <code>(format-mode-line header-line-format)</code> returns the
 text that would appear in the selected window's header line (<code>""</code>
 if it has no header line).  <code>(format-mode-line header-line-format
 'header-line)</code> returns the same text, with each character
-carrying the face that it will have in the header line itself. 
+carrying the face that it will have in the header line itself, and also
+redraws the header line. 
 </p></blockquote></div>
 
    </body></html>

@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Select Buffer - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="List-Buffers.html#List-Buffers" title="List Buffers">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -43,87 +40,70 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Buffers.html#Buffers">Buffers</a>
 <hr>
 </div>
 
-<h3 class="section">23.1 Creating and Selecting Buffers</h3>
+<h3 class="section">19.1 Creating and Selecting Buffers</h3>
 
-<p><a name="index-change-buffers-1063"></a><a name="index-switch-buffers-1064"></a>
+<p><a name="index-change-buffers-1267"></a><a name="index-switch-buffers-1268"></a>
      <dl>
 <dt><kbd>C-x b </kbd><var>buffer</var><kbd> &lt;RET&gt;</kbd><dd>Select or create a buffer named <var>buffer</var> (<code>switch-to-buffer</code>). 
 <br><dt><kbd>C-x 4 b </kbd><var>buffer</var><kbd> &lt;RET&gt;</kbd><dd>Similar, but select <var>buffer</var> in another window
 (<code>switch-to-buffer-other-window</code>). 
 <br><dt><kbd>C-x 5 b </kbd><var>buffer</var><kbd> &lt;RET&gt;</kbd><dd>Similar, but select <var>buffer</var> in a separate frame
 (<code>switch-to-buffer-other-frame</code>). 
-<br><dt><kbd>C-x &lt;LEFT&gt;</kbd><dd>Select the previous buffer in the list of existing buffers. 
-<br><dt><kbd>C-x &lt;RIGHT&gt;</kbd><dd>Select the next buffer in the list of existing buffers. 
+<br><dt><kbd>C-x &lt;LEFT&gt;</kbd><dd>Select the previous buffer in the buffer list (<code>previous-buffer</code>). 
+<br><dt><kbd>C-x &lt;RIGHT&gt;</kbd><dd>Select the next buffer in the buffer list (<code>next-buffer</code>). 
 <br><dt><kbd>C-u M-g M-g</kbd><dt><kbd>C-u M-g g</kbd><dd>Read a number <var>n</var> and move to line <var>n</var> in the most recently
 selected buffer other than the current buffer. 
 </dl>
 
-   <p><a name="index-C_002dx-b-1065"></a><a name="index-switch_002dto_002dbuffer-1066"></a>  To select the buffer named <var>bufname</var>, type <kbd>C-x b
-</kbd><var>bufname</var><kbd> &lt;RET&gt;</kbd>.  This runs the command
-<code>switch-to-buffer</code> with argument <var>bufname</var>.  While entering
-the buffer name, you can use the usual minibuffer completion and
-history commands (see <a href="Minibuffer.html#Minibuffer">Minibuffer</a>).  An empty argument to <kbd>C-x
-b</kbd> specifies the buffer that was current most recently among those not
+   <p><a name="index-C_002dx-b-1269"></a><a name="index-switch_002dto_002dbuffer-1270"></a>  The <kbd>C-x b</kbd> (<code>switch-to-buffer</code>) command reads a buffer
+name using the minibuffer.  Then it makes that buffer current, and
+displays it in the currently-selected window.  An empty input
+specifies the buffer that was current most recently among those not
 now displayed in any window.
 
-   <p><a name="index-minibuffer-confirmation-1067"></a><a name="index-confirming-in-the-minibuffer-1068"></a>  If you specify a buffer that does not exist, <kbd>C-x b</kbd> creates a
+   <p>While entering the buffer name, you can use the usual completion and
+history commands (see <a href="Minibuffer.html#Minibuffer">Minibuffer</a>).  Note that <kbd>C-x b</kbd>, and
+related commands, use &ldquo;permissive completion with confirmation&rdquo; for
+minibuffer completion: if you type &lt;RET&gt; immediately after
+completing up to a nonexistent buffer name, Emacs prints
+&lsquo;<samp><span class="samp">[Confirm]</span></samp>&rsquo; and you must type a second &lt;RET&gt; to submit that
+buffer name.  See <a href="Completion-Exit.html#Completion-Exit">Completion Exit</a>, for details.
+
+   <p>If you specify a buffer that does not exist, <kbd>C-x b</kbd> creates a
 new, empty buffer that is not visiting any file, and selects it for
-editing.  First, however, Emacs might prompt you for confirmation, in
-case you entered the wrong buffer name.  Emacs asks for confirmation
-only if the last key you typed, before submitting the minibuffer input
-with &lt;RET&gt;, was &lt;TAB&gt; (<code>minibuffer-complete</code>).  This
-catches a common mistake, in which one types &lt;RET&gt; before
-realizing that &lt;TAB&gt; did not complete far enough to yield the
-desired buffer name (see <a href="Completion.html#Completion">Completion</a>).  Emacs asks for confirmation
-by putting the message &lsquo;<samp><span class="samp">[Confirm]</span></samp>&rsquo; in the minibuffer; type
-&lt;RET&gt; again to confirm and visit the buffer.
+editing.  The default value of the variable <code>major-mode</code>
+determines the new buffer's major mode; the default value is
+Fundamental mode.  See <a href="Major-Modes.html#Major-Modes">Major Modes</a>.  One reason to create a new
+buffer is to use it for making temporary notes.  If you try to save
+it, Emacs asks for the file name to use, and the buffer's major mode
+is re-established taking that file name into account (see <a href="Choosing-Modes.html#Choosing-Modes">Choosing Modes</a>).
 
-   <p><a name="index-confirm_002dnonexistent_002dfile_002dor_002dbuffer-1069"></a>  The variable <code>confirm-nonexistent-file-or-buffer</code> controls
-whether Emacs asks for confirmation before visiting a buffer that did
-not previously exist.  The default value, <code>after-completion</code>,
-gives the behavior we have just described.  If the value is
-<code>nil</code>, Emacs never asks for confirmation; for any other
-non-<code>nil</code> value, Emacs always asks for confirmation.  This
-variable also affects the <code>find-file</code> command (see <a href="Visiting.html#Visiting">Visiting</a>).
+   <p><a name="index-C_002dx-_0040key_007bLEFT_007d-1271"></a><a name="index-C_002dx-_0040key_007bRIGHT_007d-1272"></a><a name="index-next_002dbuffer-1273"></a><a name="index-previous_002dbuffer-1274"></a>  For conveniently switching between a few buffers, use the commands
+<kbd>C-x &lt;LEFT&gt;</kbd> and <kbd>C-x &lt;RIGHT&gt;</kbd>.  <kbd>C-x &lt;LEFT&gt;</kbd>
+(<code>previous-buffer</code>) selects the previous buffer (following the
+order of most recent selection in the current frame), while <kbd>C-x
+&lt;RIGHT&gt;</kbd> (<code>next-buffer</code>) moves through buffers in the reverse
+direction.
 
-   <p>One reason to create a new buffer is to use it for making temporary
-notes.  If you try to save it, Emacs asks for the file name to use. 
-The default value of the variable <code>major-mode</code> determines the new
-buffer's major mode; the default value is Fundamental mode.  See <a href="Major-Modes.html#Major-Modes">Major Modes</a>.
-
-   <p><a name="index-C_002dx-_0040key_007bLEFT_007d-1070"></a><a name="index-C_002dx-_0040key_007bRIGHT_007d-1071"></a><a name="index-next_002dbuffer-1072"></a><a name="index-previous_002dbuffer-1073"></a>  For conveniently switching between a few buffers, use the commands
-<kbd>C-x &lt;LEFT&gt;</kbd> and <kbd>C-x &lt;RIGHT&gt;</kbd>.  <kbd>C-x &lt;RIGHT&gt;</kbd>
-(<code>previous-buffer</code>) selects the previous buffer (following the order
-of most recent selection in the current frame), while <kbd>C-x &lt;LEFT&gt;</kbd>
-(<code>next-buffer</code>) moves through buffers in the reverse direction.
-
-   <p><a name="index-C_002dx-4-b-1074"></a><a name="index-switch_002dto_002dbuffer_002dother_002dwindow-1075"></a><a name="index-even_002dwindow_002dheights-1076"></a>  To select a buffer in a window other than the current one, type
+   <p><a name="index-C_002dx-4-b-1275"></a><a name="index-switch_002dto_002dbuffer_002dother_002dwindow-1276"></a>  To select a buffer in a window other than the current one, type
 <kbd>C-x 4 b</kbd> (<code>switch-to-buffer-other-window</code>).  This prompts
 for a buffer name using the minibuffer, displays that buffer in
-another window, and selects that window.  By default, if displaying
-the buffer causes two vertically adjacent windows to be displayed, the
-heights of those windows are evened out; to countermand that and
-preserve the window configuration, set the variable
-<code>even-window-heights</code> to <code>nil</code>.
+another window, and selects that window.
 
-   <p><a name="index-C_002dx-5-b-1077"></a><a name="index-switch_002dto_002dbuffer_002dother_002dframe-1078"></a>  Similarly, <kbd>C-x 5 b</kbd> (<code>switch-to-buffer-other-frame</code>)
+   <p><a name="index-C_002dx-5-b-1277"></a><a name="index-switch_002dto_002dbuffer_002dother_002dframe-1278"></a>  Similarly, <kbd>C-x 5 b</kbd> (<code>switch-to-buffer-other-frame</code>)
 prompts for a buffer name, displays that buffer in another frame, and
-selects that frame.
+selects that frame.  If the buffer is already being shown in a window
+on another frame, Emacs selects that window and frame instead of
+creating a new frame.
+
+   <p>See <a href="Displaying-Buffers.html#Displaying-Buffers">Displaying Buffers</a>, for how the <kbd>C-x 4 b</kbd> and <kbd>C-x 5
+b</kbd> commands get the window and/or frame to display in.
 
    <p>In addition, <kbd>C-x C-f</kbd>, and any other command for visiting a
 file, can also be used to switch to an existing file-visiting buffer. 
 See <a href="Visiting.html#Visiting">Visiting</a>.
 
-   <p><a name="index-display_002dbuffer_002dreuse_002dframes-1079"></a>  You can control how certain buffers are handled by these commands by
-customizing the variables <code>special-display-buffer-names</code>,
-<code>special-display-regexps</code>, <code>same-window-buffer-names</code>, and
-<code>same-window-regexps</code>.  See <a href="Force-Same-Window.html#Force-Same-Window">Force Same Window</a>, and
-<a href="Special-Buffer-Frames.html#Special-Buffer-Frames">Special Buffer Frames</a>, for more about these variables.  In
-addition, if the value of <code>display-buffer-reuse-frames</code> is
-non-<code>nil</code>, and the buffer you want to switch to is already
-displayed in some frame, Emacs will just raise that frame.
-
-   <p><a name="index-goto_002dline-1080"></a>  <kbd>C-u M-g M-g</kbd>, that is <code>goto-line</code> with a plain prefix
+   <p><a name="index-goto_002dline-1279"></a>  <kbd>C-u M-g M-g</kbd>, that is <code>goto-line</code> with a plain prefix
 argument, reads a number <var>n</var> using the minibuffer, selects the
 most recently selected buffer other than the current buffer in another
 window, and then moves point to the beginning of line number <var>n</var>

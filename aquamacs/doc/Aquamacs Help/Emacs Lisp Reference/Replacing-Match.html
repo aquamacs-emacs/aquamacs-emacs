@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Replacing Match - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Simple-Match-Data.html#Simple-Match-Data" title="Simple Match Data">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,28 +41,26 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Match-Data.html#Match-Data">Match Data<
 
 <h4 class="subsection">34.6.1 Replacing the Text that Matched</h4>
 
-<p><a name="index-replace-matched-text-3100"></a>
+<p><a name="index-replace-matched-text-3383"></a>
   This function replaces all or part of the text matched by the last
 search.  It works by means of the match data.
 
-   <p><a name="index-case-in-replacements-3101"></a>
+   <p><a name="index-case-in-replacements-3384"></a>
 
 <div class="defun">
-&mdash; Function: <b>replace-match</b><var> replacement &amp;optional fixedcase literal string subexp<a name="index-replace_002dmatch-3102"></a></var><br>
-<blockquote><p>This function replaces the text in the buffer (or in <var>string</var>) that
-was matched by the last search.  It replaces that text with
-<var>replacement</var>.
+&mdash; Function: <b>replace-match</b><var> replacement &amp;optional fixedcase literal string subexp<a name="index-replace_002dmatch-3385"></a></var><br>
+<blockquote><p>This function performs a replacement operation on a buffer or string.
 
-        <p>If you did the last search in a buffer, you should specify <code>nil</code>
-for <var>string</var> and make sure that the current buffer when you call
-<code>replace-match</code> is the one in which you did the searching or
-matching.  Then <code>replace-match</code> does the replacement by editing
-the buffer; it leaves point at the end of the replacement text, and
-returns <code>t</code>.
+        <p>If you did the last search in a buffer, you should omit the
+<var>string</var> argument or specify <code>nil</code> for it, and make sure that
+the current buffer is the one in which you performed the last search. 
+Then this function edits the buffer, replacing the matched text with
+<var>replacement</var>.  It leaves point at the end of the replacement
+text, and returns <code>t</code>.
 
-        <p>If you did the search in a string, pass the same string as <var>string</var>. 
-Then <code>replace-match</code> does the replacement by constructing and
-returning a new string.
+        <p>If you performed the last search on a string, pass the same string as
+<var>string</var>.  Then this function returns a new string, in which the
+matched text is replaced by <var>replacement</var>.
 
         <p>If <var>fixedcase</var> is non-<code>nil</code>, then <code>replace-match</code> uses
 the replacement text without case conversion; otherwise, it converts
@@ -84,18 +79,24 @@ specially.  If a &lsquo;<samp><span class="samp">\</span></samp>&rsquo; appears 
 part of one of the following sequences:
 
           <dl>
-<dt>&lsquo;<samp><span class="samp">\&amp;</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_0026_007d-in-replacement-3103"></a>&lsquo;<samp><span class="samp">\&amp;</span></samp>&rsquo; stands for the entire text being replaced.
+<dt>&lsquo;<samp><span class="samp">\&amp;</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_0026_007d-in-replacement-3386"></a>This stands for the entire text being replaced.
 
-          <br><dt>&lsquo;<samp><span class="samp">\</span><var>n</var></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_005c_0040var_007bn_007d_007d-in-replacement-3104"></a>&lsquo;<samp><span class="samp">\</span><var>n</var></samp>&rsquo;, where <var>n</var> is a digit, stands for the text that
-matched the <var>n</var>th subexpression in the original regexp. 
-Subexpressions are those expressions grouped inside &lsquo;<samp><span class="samp">\(...\)</span></samp>&rsquo;. 
-If the <var>n</var>th subexpression never matched, an empty string is substituted.
+          <br><dt>&lsquo;<samp><span class="samp">\</span><var>n</var></samp>&rsquo;, where <var>n</var> is a digit<dd><a name="index-g_t_0040samp_007b_005c_0040var_007bn_007d_007d-in-replacement-3387"></a>This stands for the text that matched the <var>n</var>th subexpression in
+the original regexp.  Subexpressions are those expressions grouped
+inside &lsquo;<samp><span class="samp">\(...\)</span></samp>&rsquo;.  If the <var>n</var>th subexpression never
+matched, an empty string is substituted.
 
-          <br><dt>&lsquo;<samp><span class="samp">\\</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_005c_007d-in-replacement-3105"></a>&lsquo;<samp><span class="samp">\\</span></samp>&rsquo; stands for a single &lsquo;<samp><span class="samp">\</span></samp>&rsquo; in the replacement text. 
+          <br><dt>&lsquo;<samp><span class="samp">\\</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_005c_007d-in-replacement-3388"></a>This stands for a single &lsquo;<samp><span class="samp">\</span></samp>&rsquo; in the replacement text.
+
+          <br><dt>&lsquo;<samp><span class="samp">\?</span></samp>&rsquo;<dd>This stands for itself (for compatibility with <code>replace-regexp</code>
+and related commands; see <a href="../emacs/Regexp-Replace.html#Regexp-Replace">Regexp Replace</a>). 
 </dl>
 
-        <p>These substitutions occur after case conversion, if any,
-so the strings they substitute are never case-converted.
+     <p class="noindent">Any other character following &lsquo;<samp><span class="samp">\</span></samp>&rsquo; signals an error.
+
+        <p>The substitutions performed by &lsquo;<samp><span class="samp">\&amp;</span></samp>&rsquo; and &lsquo;<samp><span class="samp">\</span><var>n</var></samp>&rsquo; occur
+after case conversion, if any.  Therefore, the strings they substitute
+are never case-converted.
 
         <p>If <var>subexp</var> is non-<code>nil</code>, that says to replace just
 subexpression number <var>subexp</var> of the regexp that was matched, not
@@ -105,7 +106,7 @@ just the text that matched &lsquo;<samp><span class="samp">\(ba*r\)</span></samp
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>match-substitute-replacement</b><var> replacement &amp;optional fixedcase literal string subexp<a name="index-match_002dsubstitute_002dreplacement-3106"></a></var><br>
+&mdash; Function: <b>match-substitute-replacement</b><var> replacement &amp;optional fixedcase literal string subexp<a name="index-match_002dsubstitute_002dreplacement-3389"></a></var><br>
 <blockquote><p>This function returns the text that would be inserted into the buffer
 by <code>replace-match</code>, but without modifying the buffer.  It is
 useful if you want to present the user with actual replacement result,

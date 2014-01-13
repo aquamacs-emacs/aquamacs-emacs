@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Truenames - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="File-Attributes.html#File-Attributes" title="File Attributes">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,8 +43,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Information-about-Files.html#Informatio
 
 <h4 class="subsection">25.6.3 Truenames</h4>
 
-<p><a name="index-truename-_0028of-file_0029-1819"></a>
-<!-- Emacs 19 features -->
+<p><a name="index-truename-_0028of-file_0029-1947"></a>
   The <dfn>truename</dfn> of a file is the name that you get by following
 symbolic links at all levels until none remain, then simplifying away
 &lsquo;<samp><span class="samp">.</span></samp>&rsquo; and &lsquo;<samp><span class="samp">..</span></samp>&rsquo; appearing as name components.  This results
@@ -57,9 +53,10 @@ the number of hard links to the file.  However, truenames are useful
 because they eliminate symbolic links as a cause of name variation.
 
 <div class="defun">
-&mdash; Function: <b>file-truename</b><var> filename<a name="index-file_002dtruename-1820"></a></var><br>
-<blockquote><p>The function <code>file-truename</code> returns the truename of the file
-<var>filename</var>.  The argument must be an absolute file name.
+&mdash; Function: <b>file-truename</b><var> filename<a name="index-file_002dtruename-1948"></a></var><br>
+<blockquote><p>This function returns the truename of the file <var>filename</var>.  If the
+argument is not an absolute file name, this function first expands it
+against <code>default-directory</code>.
 
         <p>This function does not expand environment variables.  Only
 <code>substitute-in-file-name</code> does that.  See <a href="Definition-of-substitute_002din_002dfile_002dname.html#Definition-of-substitute_002din_002dfile_002dname">Definition of substitute-in-file-name</a>.
@@ -75,7 +72,7 @@ same way that <code>expand-file-name</code> does.  See <a href="File-Name-Expans
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>file-chase-links</b><var> filename &amp;optional limit<a name="index-file_002dchase_002dlinks-1821"></a></var><br>
+&mdash; Function: <b>file-chase-links</b><var> filename &amp;optional limit<a name="index-file_002dchase_002dlinks-1949"></a></var><br>
 <blockquote><p>This function follows symbolic links, starting with <var>filename</var>,
 until it finds a file name which is not the name of a symbolic link. 
 Then it returns that file name.  This function does <em>not</em> follow

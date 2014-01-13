@@ -1,21 +1,19 @@
 <html lang="en">
 <head>
 <title>VC Undo - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Secondary-VC-Commands.html#Secondary-VC-Commands" title="Secondary VC Commands">
+<link rel="up" href="Version-Control.html#Version-Control" title="Version Control">
 <link rel="prev" href="VC-Change-Log.html#VC-Change-Log" title="VC Change Log">
+<link rel="next" href="VC-Ignore.html#VC-Ignore" title="VC Ignore">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -38,39 +36,34 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <div class="node">
 <a name="VC-Undo"></a>
 <p>
+Next:&nbsp;<a rel="next" accesskey="n" href="VC-Ignore.html#VC-Ignore">VC Ignore</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="VC-Change-Log.html#VC-Change-Log">VC Change Log</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Secondary-VC-Commands.html#Secondary-VC-Commands">Secondary VC Commands</a>
+Up:&nbsp;<a rel="up" accesskey="u" href="Version-Control.html#Version-Control">Version Control</a>
 <hr>
 </div>
 
-<h5 class="subsubsection">32.1.6.3 Undoing Version Control Actions</h5>
+<h4 class="subsection">28.1.8 Undoing Version Control Actions</h4>
 
      <dl>
-<dt><kbd>C-x v u</kbd><dd>Revert the buffer and the file to the working revision from which you started
-editing the file.
-
-     <br><dt><kbd>C-x v c</kbd><dd>Remove the last-entered change from the master for the visited file. 
-This undoes your last check-in. 
+<dt><kbd>C-x v u</kbd><dd>Revert the work file(s) in the current VC fileset to the last revision
+(<code>vc-revert</code>). 
 </dl>
 
-   <p><a name="index-C_002dx-v-u-2511"></a><a name="index-vc_002drevert_002dbuffer-2512"></a>  If you want to discard your current set of changes and revert to the
-working revision from which you started editing the file, use <kbd>C-x
-v u</kbd> (<code>vc-revert-buffer</code>).  If the version control system is
-locking-based, this leaves the file unlocked, and you must lock it
-again before making new changes.  <kbd>C-x v u</kbd> requires confirmation,
-unless it sees that you haven't made any changes with respect to the
-master copy of the working revision.
+<!-- `C-x v c' (vc-rollback) was removed, since it's RCS/SCCS specific. -->
+   <p><a name="index-C_002dx-v-u-2809"></a><a name="index-vc_002drevert-2810"></a><a name="index-vc_002drevert_002dshow_002ddiff-2811"></a>  If you want to discard all the changes you have made to the current
+VC fileset, type <kbd>C-x v u</kbd> (<code>vc-revert-buffer</code>).  This shows
+you a diff between the work file(s) and the revision from which you
+started editing, and asks for confirmation for discarding the changes. 
+If you agree, the fileset is reverted.  If you don't want <kbd>C-x v
+u</kbd> to show a diff, set the variable <code>vc-revert-show-diff</code> to
+<code>nil</code> (you can still view the diff directly with <kbd>C-x v =</kbd>;
+see <a href="Old-Revisions.html#Old-Revisions">Old Revisions</a>).  Note that <kbd>C-x v u</kbd> cannot be reversed
+with the usual undo commands (see <a href="Undo.html#Undo">Undo</a>), so use it with care.
 
-   <p><kbd>C-x v u</kbd> is also the command to unlock a file if you lock it and
-then decide not to change it.
-
-   <p><a name="index-C_002dx-v-c-2513"></a><a name="index-vc_002drollback-2514"></a>  To cancel a change that you already committed, use <kbd>C-x v c</kbd>
-(<code>vc-rollback</code>).  This command discards all record of the most
-recent checked-in revision, but only if your work file corresponds to
-that revision&mdash;you cannot use <kbd>C-x v c</kbd> to cancel a revision that
-is not the latest on its branch.  Note that many version control
-systems do not support rollback at all; this command is something of a
-historical relic.
+   <p>On locking-based version control systems, <kbd>C-x v u</kbd> leaves files
+unlocked; you must lock again to resume editing.  You can also use
+<kbd>C-x v u</kbd> to unlock a file if you lock it and then decide not to
+change it.
 
    </body></html>
 

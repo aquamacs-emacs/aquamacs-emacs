@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Coding Systems - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Recognize-Coding.html#Recognize-Coding" title="Recognize Coding">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,9 +42,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="International.html#International">Inter
 <hr>
 </div>
 
-<h3 class="section">26.6 Coding Systems</h3>
+<h3 class="section">22.5 Coding Systems</h3>
 
-<p><a name="index-coding-systems-1410"></a>
+<p><a name="index-coding-systems-1621"></a>
   Users of various languages have established many more-or-less standard
 coding systems for representing them.  Emacs does not use these coding
 systems internally; instead, it converts from various coding systems to
@@ -63,7 +60,7 @@ languages; their names usually start with &lsquo;<samp><span class="samp">iso</s
 special coding systems, such as <code>no-conversion</code>, <code>raw-text</code>,
 and <code>emacs-internal</code>.
 
-   <p><a name="index-international-files-from-DOS_002fWindows-systems-1411"></a>  A special class of coding systems, collectively known as
+   <p><a name="index-international-files-from-DOS_002fWindows-systems-1622"></a>  A special class of coding systems, collectively known as
 <dfn>codepages</dfn>, is designed to support text encoded by MS-Windows and
 MS-DOS software.  The names of these coding systems are
 <code>cp</code><var>nnnn</var>, where <var>nnnn</var> is a 3- or 4-digit number of the
@@ -75,17 +72,18 @@ system; for example, to visit a file encoded in codepage 850, type
    <p>In addition to converting various representations of non-<acronym>ASCII</acronym>
 characters, a coding system can perform end-of-line conversion.  Emacs
 handles three different conventions for how to separate lines in a file:
-newline, carriage-return linefeed, and just carriage-return.
+newline (&ldquo;unix&rdquo;), carriage-return linefeed (&ldquo;dos&rdquo;), and just
+carriage-return (&ldquo;mac&rdquo;).
 
      <dl>
-<dt><kbd>C-h C </kbd><var>coding</var><kbd> &lt;RET&gt;</kbd><dd>Describe coding system <var>coding</var>.
+<dt><kbd>C-h C </kbd><var>coding</var><kbd> &lt;RET&gt;</kbd><dd>Describe coding system <var>coding</var> (<code>describe-coding-system</code>).
 
      <br><dt><kbd>C-h C &lt;RET&gt;</kbd><dd>Describe the coding systems currently in use.
 
      <br><dt><kbd>M-x list-coding-systems</kbd><dd>Display a list of all the supported coding systems. 
 </dl>
 
-   <p><a name="index-C_002dh-C-1412"></a><a name="index-describe_002dcoding_002dsystem-1413"></a>  The command <kbd>C-h C</kbd> (<code>describe-coding-system</code>) displays
+   <p><a name="index-C_002dh-C-1623"></a><a name="index-describe_002dcoding_002dsystem-1624"></a>  The command <kbd>C-h C</kbd> (<code>describe-coding-system</code>) displays
 information about particular coding systems, including the end-of-line
 conversion specified by those coding systems.  You can specify a coding
 system name as the argument; alternatively, with an empty argument, it
@@ -93,33 +91,33 @@ describes the coding systems currently selected for various purposes,
 both in the current buffer and as the defaults, and the priority list
 for recognizing coding systems (see <a href="Recognize-Coding.html#Recognize-Coding">Recognize Coding</a>).
 
-   <p><a name="index-list_002dcoding_002dsystems-1414"></a>  To display a list of all the supported coding systems, type <kbd>M-x
+   <p><a name="index-list_002dcoding_002dsystems-1625"></a>  To display a list of all the supported coding systems, type <kbd>M-x
 list-coding-systems</kbd>.  The list gives information about each coding
 system, including the letter that stands for it in the mode line
 (see <a href="Mode-Line.html#Mode-Line">Mode Line</a>).
 
-   <p><a name="index-end_002dof_002dline-conversion-1415"></a><a name="index-line-endings-1416"></a><a name="index-MS_002dDOS-end_002dof_002dline-conversion-1417"></a><a name="index-Macintosh-end_002dof_002dline-conversion-1418"></a>  Each of the coding systems that appear in this list&mdash;except for
+   <p><a name="index-end_002dof_002dline-conversion-1626"></a><a name="index-line-endings-1627"></a><a name="index-MS_002dDOS-end_002dof_002dline-conversion-1628"></a><a name="index-Macintosh-end_002dof_002dline-conversion-1629"></a>  Each of the coding systems that appear in this list&mdash;except for
 <code>no-conversion</code>, which means no conversion of any kind&mdash;specifies
 how and whether to convert printing characters, but leaves the choice of
 end-of-line conversion to be decided based on the contents of each file. 
 For example, if the file appears to use the sequence carriage-return
 linefeed to separate lines, DOS end-of-line conversion will be used.
 
-   <p>Each of the listed coding systems has three variants which specify
+   <p>Each of the listed coding systems has three variants, which specify
 exactly what to do for end-of-line conversion:
 
      <dl>
 <dt><code>...-unix</code><dd>Don't do any end-of-line conversion; assume the file uses
 newline to separate lines.  (This is the convention normally used
-on Unix and GNU systems.)
+on Unix and GNU systems, and Mac OS X.)
 
      <br><dt><code>...-dos</code><dd>Assume the file uses carriage-return linefeed to separate lines, and do
 the appropriate conversion.  (This is the convention normally used on
 Microsoft systems.<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>)
 
      <br><dt><code>...-mac</code><dd>Assume the file uses carriage-return to separate lines, and do the
-appropriate conversion.  (This is the convention normally used on the
-Macintosh system.) 
+appropriate conversion.  (This was the convention used on the
+Macintosh system prior to OS X.) 
 </dl>
 
    <p>These variant coding systems are omitted from the
@@ -128,14 +126,14 @@ predictable.  For example, the coding system <code>iso-latin-1</code> has
 variants <code>iso-latin-1-unix</code>, <code>iso-latin-1-dos</code> and
 <code>iso-latin-1-mac</code>.
 
-   <p><a name="index-g_t_0040code_007bundecided_007d_002c-coding-system-1419"></a>  The coding systems <code>unix</code>, <code>dos</code>, and <code>mac</code> are
+   <p><a name="index-g_t_0040code_007bundecided_007d_002c-coding-system-1630"></a>  The coding systems <code>unix</code>, <code>dos</code>, and <code>mac</code> are
 aliases for <code>undecided-unix</code>, <code>undecided-dos</code>, and
 <code>undecided-mac</code>, respectively.  These coding systems specify only
 the end-of-line conversion, and leave the character code conversion to
 be deduced from the text itself.
 
-   <p>The coding system <code>raw-text</code> is good for a file which is mainly
-<acronym>ASCII</acronym> text, but may contain byte values above 127 which are
+   <p><a name="index-g_t_0040code_007braw_002dtext_007d_002c-coding-system-1631"></a>  The coding system <code>raw-text</code> is good for a file which is mainly
+<acronym>ASCII</acronym> text, but may contain byte values above 127 that are
 not meant to encode non-<acronym>ASCII</acronym> characters.  With
 <code>raw-text</code>, Emacs copies those byte values unchanged, and sets
 <code>enable-multibyte-characters</code> to <code>nil</code> in the current buffer
@@ -144,7 +142,7 @@ end-of-line conversion in the usual way, based on the data
 encountered, and has the usual three variants to specify the kind of
 end-of-line conversion to use.
 
-   <p>In contrast, the coding system <code>no-conversion</code> specifies no
+   <p><a name="index-g_t_0040code_007bno_002dconversion_007d_002c-coding-system-1632"></a>  In contrast, the coding system <code>no-conversion</code> specifies no
 character code conversion at all&mdash;none for non-<acronym>ASCII</acronym> byte values and
 none for end of line.  This is useful for reading or writing binary
 files, tar files, and other files that must be examined verbatim.  It,
@@ -155,7 +153,7 @@ the <kbd>M-x find-file-literally</kbd> command.  This uses
 <code>no-conversion</code>, and also suppresses other Emacs features that
 might convert the file contents before you see them.  See <a href="Visiting.html#Visiting">Visiting</a>.
 
-   <p>The coding system <code>emacs-internal</code> (or <code>utf-8-emacs</code>,
+   <p><a name="index-g_t_0040code_007bemacs_002dinternal_007d_002c-coding-system-1633"></a>  The coding system <code>emacs-internal</code> (or <code>utf-8-emacs</code>,
 which is equivalent) means that the file contains non-<acronym>ASCII</acronym>
 characters stored with the internal Emacs encoding.  This coding
 system handles end-of-line conversion based on the data encountered,
@@ -166,7 +164,7 @@ conversion.
 <hr>
 <h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> It is also specified for MIME &lsquo;<samp><span class="samp">text/*</span></samp>&rsquo;
 bodies and in other network transport contexts.  It is different
-from the SGML reference syntax record-start/record-end format which
+from the SGML reference syntax record-start/record-end format, which
 Emacs doesn't support directly.</p>
 
    <hr></div>

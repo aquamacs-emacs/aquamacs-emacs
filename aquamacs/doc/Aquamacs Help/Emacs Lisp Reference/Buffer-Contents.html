@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Buffer Contents - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Comparing-Text.html#Comparing-Text" title="Comparing Text">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -50,16 +47,12 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
 convert any portion of the text in the buffer into a string.
 
 <div class="defun">
-&mdash; Function: <b>buffer-substring</b><var> start end<a name="index-buffer_002dsubstring-2584"></a></var><br>
+&mdash; Function: <b>buffer-substring</b><var> start end<a name="index-buffer_002dsubstring-2846"></a></var><br>
 <blockquote><p>This function returns a string containing a copy of the text of the
 region defined by positions <var>start</var> and <var>end</var> in the current
-buffer.  If the arguments are not positions in the accessible portion of
-the buffer, <code>buffer-substring</code> signals an <code>args-out-of-range</code>
-error.
-
-        <p>It is not necessary for <var>start</var> to be less than <var>end</var>; the
-arguments can be given in either order.  But most often the smaller
-argument is written first.
+buffer.  If the arguments are not positions in the accessible portion
+of the buffer, <code>buffer-substring</code> signals an
+<code>args-out-of-range</code> error.
 
         <p>Here's an example which assumes Font-Lock mode is not enabled:
 
@@ -86,74 +79,78 @@ these:
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>buffer-substring-no-properties</b><var> start end<a name="index-buffer_002dsubstring_002dno_002dproperties-2585"></a></var><br>
+&mdash; Function: <b>buffer-substring-no-properties</b><var> start end<a name="index-buffer_002dsubstring_002dno_002dproperties-2847"></a></var><br>
 <blockquote><p>This is like <code>buffer-substring</code>, except that it does not copy text
 properties, just the characters themselves.  See <a href="Text-Properties.html#Text-Properties">Text Properties</a>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>filter-buffer-substring</b><var> start end &amp;optional delete noprops<a name="index-filter_002dbuffer_002dsubstring-2586"></a></var><br>
+&mdash; Function: <b>buffer-string</b><var><a name="index-buffer_002dstring-2848"></a></var><br>
+<blockquote><p>This function returns the contents of the entire accessible portion of
+the current buffer, as a string. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>filter-buffer-substring</b><var> start end &amp;optional delete<a name="index-filter_002dbuffer_002dsubstring-2849"></a></var><br>
 <blockquote><p>This function passes the buffer text between <var>start</var> and <var>end</var>
-through the filter functions specified by the variable
-<code>buffer-substring-filters</code>, and returns the value from the last
-filter function.  If <code>buffer-substring-filters</code> is <code>nil</code>,
-the value is the unaltered text from the buffer, what
-<code>buffer-substring</code> would return.
+through the filter functions specified by the wrapper hook
+<code>filter-buffer-substring-functions</code>, and returns the result.  The
+obsolete variable <code>buffer-substring-filters</code> is also consulted. 
+If both of these variables are <code>nil</code>, the value is the unaltered
+text from the buffer, i.e., what <code>buffer-substring</code> would
+return.
 
         <p>If <var>delete</var> is non-<code>nil</code>, this function deletes the text
 between <var>start</var> and <var>end</var> after copying it, like
 <code>delete-and-extract-region</code>.
-
-        <p>If <var>noprops</var> is non-<code>nil</code>, the final string returned does not
-include text properties, while the string passed through the filters
-still includes text properties from the buffer text.
 
         <p>Lisp code should use this function instead of <code>buffer-substring</code>,
 <code>buffer-substring-no-properties</code>,
 or <code>delete-and-extract-region</code> when copying into user-accessible
 data structures such as the kill-ring, X clipboard, and registers. 
 Major and minor modes can add functions to
-<code>buffer-substring-filters</code> to alter such text as it is copied out
-of the buffer. 
+<code>filter-buffer-substring-functions</code> to alter such text as it is
+copied out of the buffer. 
+</p></blockquote></div>
+
+<!-- FIXME: `filter-buffer-substring-function' should be documented. -->
+<div class="defun">
+&mdash; Variable: <b>filter-buffer-substring-functions</b><var><a name="index-filter_002dbuffer_002dsubstring_002dfunctions-2850"></a></var><br>
+<blockquote><p>This variable is a wrapper hook (see <a href="Running-Hooks.html#Running-Hooks">Running Hooks</a>), whose members
+should be functions that accept four arguments: <var>fun</var>,
+<var>start</var>, <var>end</var>, and <var>delete</var>.  <var>fun</var> is a function
+that takes three arguments (<var>start</var>, <var>end</var>, and <var>delete</var>),
+and returns a string.  In both cases, the <var>start</var>, <var>end</var>, and
+<var>delete</var> arguments are the same as those of
+<code>filter-buffer-substring</code>.
+
+        <p>The first hook function is passed a <var>fun</var> that is equivalent to
+the default operation of <code>filter-buffer-substring</code>, i.e., it
+returns the buffer-substring between <var>start</var> and <var>end</var>
+(processed by any <code>buffer-substring-filters</code>) and optionally
+deletes the original text from the buffer.  In most cases, the hook
+function will call <var>fun</var> once, and then do its own processing of
+the result.  The next hook function receives a <var>fun</var> equivalent to
+this, and so on.  The actual return value is the result of all the
+hook functions acting in sequence. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>buffer-substring-filters</b><var><a name="index-buffer_002dsubstring_002dfilters-2587"></a></var><br>
-<blockquote><p>This variable should be a list of functions that accept a single
-argument, a string, and return a string. 
-<code>filter-buffer-substring</code> passes the buffer substring to the
-first function in this list, and the return value of each function is
-passed to the next function.  The return value of the last function is
-used as the return value of <code>filter-buffer-substring</code>.
-
-        <p>As a special convention, point is set to the start of the buffer text
-being operated on (i.e., the <var>start</var> argument for
-<code>filter-buffer-substring</code>) before these functions are called.
-
-        <p>If this variable is <code>nil</code>, no filtering is performed. 
+&mdash; Variable: <b>buffer-substring-filters</b><var><a name="index-buffer_002dsubstring_002dfilters-2851"></a></var><br>
+<blockquote><p>This variable is obsoleted by
+<code>filter-buffer-substring-functions</code>, but is still supported for
+backward compatibility.  Its value should should be a list of
+functions which accept a single string argument and return another
+string.  <code>filter-buffer-substring</code> passes the buffer substring to
+the first function in this list, and the return value of each function
+is passed to the next function.  The return value of the last function
+is passed to <code>filter-buffer-substring-functions</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>buffer-string</b><var><a name="index-buffer_002dstring-2588"></a></var><br>
-<blockquote><p>This function returns the contents of the entire accessible portion of
-the current buffer as a string.  It is equivalent to
-
-     <pre class="example">          (buffer-substring (point-min) (point-max))
-</pre>
-        <pre class="example">          ---------- Buffer: foo ----------
-          This is the contents of buffer foo
-          
-          ---------- Buffer: foo ----------
-          
-          (buffer-string)
-               &rArr; "This is the contents of buffer foo\n"
-</pre>
-        </blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>current-word</b><var> &amp;optional strict really-word<a name="index-current_002dword-2589"></a></var><br>
-<blockquote><p>This function returns the symbol (or word) at or near point, as a string. 
-The return value includes no text properties.
+&mdash; Function: <b>current-word</b><var> &amp;optional strict really-word<a name="index-current_002dword-2852"></a></var><br>
+<blockquote><p>This function returns the symbol (or word) at or near point, as a
+string.  The return value includes no text properties.
 
         <p>If the optional argument <var>really-word</var> is non-<code>nil</code>, it finds a
 word; otherwise, it finds a symbol (which includes both word
@@ -166,7 +163,7 @@ word on the same line is acceptable.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>thing-at-point</b><var> thing<a name="index-thing_002dat_002dpoint-2590"></a></var><br>
+&mdash; Function: <b>thing-at-point</b><var> thing<a name="index-thing_002dat_002dpoint-2853"></a></var><br>
 <blockquote><p>Return the <var>thing</var> around or next to point, as a string.
 
         <p>The argument <var>thing</var> is a symbol which specifies a kind of syntactic

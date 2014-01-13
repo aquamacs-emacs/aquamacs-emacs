@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Operator Precedence Grammars - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="SMIE-Grammar.html#SMIE-Grammar" title="SMIE Grammar">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -60,27 +57,27 @@ Such pairs of precedences are sufficient to express left-associativity
 or right-associativity of infix operators, nesting of tokens like
 parentheses and many other cases.
 
-<!-- ¡Let's leave this undocumented to leave it more open for change! -->
+<!-- Let's leave this undocumented to leave it more open for change! -->
 <!-- @defvar smie-grammar -->
 <!-- The value of this variable is an alist specifying the left and right -->
 <!-- precedence of each token.  It is meant to be initialized by using one of -->
 <!-- the functions below. -->
 <!-- @end defvar -->
 <div class="defun">
-&mdash; Function: <b>smie-prec2-&gt;grammar</b><var> table<a name="index-smie_002dprec2_002d_003egrammar-1706"></a></var><br>
+&mdash; Function: <b>smie-prec2-&gt;grammar</b><var> table<a name="index-smie_002dprec2_002d_003egrammar-1821"></a></var><br>
 <blockquote><p>This function takes a <em>prec2</em> grammar <var>table</var> and returns an
 alist suitable for use in <code>smie-setup</code>.  The <em>prec2</em>
 <var>table</var> is itself meant to be built by one of the functions below. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>smie-merge-prec2s</b><var> &amp;rest tables<a name="index-smie_002dmerge_002dprec2s-1707"></a></var><br>
+&mdash; Function: <b>smie-merge-prec2s</b><var> &amp;rest tables<a name="index-smie_002dmerge_002dprec2s-1822"></a></var><br>
 <blockquote><p>This function takes several <em>prec2</em> <var>tables</var> and merges them
 into a new <em>prec2</em> table. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>smie-precs-&gt;prec2</b><var> precs<a name="index-smie_002dprecs_002d_003eprec2-1708"></a></var><br>
+&mdash; Function: <b>smie-precs-&gt;prec2</b><var> precs<a name="index-smie_002dprecs_002d_003eprec2-1823"></a></var><br>
 <blockquote><p>This function builds a <em>prec2</em> table from a table of precedences
 <var>precs</var>.  <var>precs</var> should be a list, sorted by precedence (for
 example <code>"+"</code> will come before <code>"*"</code>), of elements of the form
@@ -92,7 +89,7 @@ and associativity.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>smie-bnf-&gt;prec2</b><var> bnf &amp;rest resolvers<a name="index-smie_002dbnf_002d_003eprec2-1709"></a></var><br>
+&mdash; Function: <b>smie-bnf-&gt;prec2</b><var> bnf &amp;rest resolvers<a name="index-smie_002dbnf_002d_003eprec2-1824"></a></var><br>
 <blockquote><p>This function lets you specify the grammar using a BNF notation. 
 It accepts a <var>bnf</var> description of the grammar along with a set of
 conflict resolution rules <var>resolvers</var>, and
@@ -118,7 +115,7 @@ for any given pair only one constraint can be present: T1 &lt; T2,
 T1 = T2, or T1 &gt; T2. 
 <li>A token can be an <code>opener</code> (something similar to an open-paren),
 a <code>closer</code> (like a close-paren), or <code>neither</code> of the two
-(e.g. an infix operator, or an inner token like <code>"else"</code>). 
+(e.g., an infix operator, or an inner token like <code>"else"</code>). 
 </ul>
 
         <p>Precedence conflicts can be resolved via <var>resolvers</var>, which

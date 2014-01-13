@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Syntax Class Table - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Syntax-Flags.html#Syntax-Flags" title="Syntax Flags">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,181 +41,126 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Syntax-Descriptors.html#Syntax-Descript
 
 <h4 class="subsection">35.2.1 Table of Syntax Classes</h4>
 
-<p>Here is a table of syntax classes, the characters that stand for them,
-their meanings, and examples of their use.
+<p><a name="index-syntax-class-table-3422"></a>
+  Here is a table of syntax classes, the characters that designate
+them, their meanings, and examples of their use.
 
-<div class="defun">
-&mdash; Syntax class: <b>whitespace&nbsp;character<!-- /@w --></b><var><a name="index-g_t_0040w_007bwhitespace-character_007d-3136"></a></var><br>
-<blockquote><p><dfn>Whitespace characters</dfn> (designated by &lsquo;<samp><span class="samp">&nbsp;</span></samp>&rsquo;<!-- /@w --> or &lsquo;<samp><span class="samp">-</span></samp>&rsquo;)
-separate symbols and words from each other.  Typically, whitespace
-characters have no other syntactic significance, and multiple whitespace
-characters are syntactically equivalent to a single one.  Space, tab,
-newline and formfeed are classified as whitespace in almost all major
-modes. 
-</p></blockquote></div>
+     <dl>
+<dt>Whitespace characters: &lsquo;<samp> </samp>&rsquo; or &lsquo;<samp><span class="samp">-</span></samp>&rsquo;<dd>Characters that separate symbols and words from each other. 
+Typically, whitespace characters have no other syntactic significance,
+and multiple whitespace characters are syntactically equivalent to a
+single one.  Space, tab, and formfeed are classified as whitespace in
+almost all major modes.
 
-<div class="defun">
-&mdash; Syntax class: <b>word&nbsp;constituent<!-- /@w --></b><var><a name="index-g_t_0040w_007bword-constituent_007d-3137"></a></var><br>
-<blockquote><p><dfn>Word constituents</dfn> (designated by &lsquo;<samp><span class="samp">w</span></samp>&rsquo;) are parts of words in
-human languages, and are typically used in variable and command names
-in programs.  All upper- and lower-case letters, and the digits, are
-typically word constituents. 
-</p></blockquote></div>
+     <p>This syntax class can be designated by either &lsquo;<samp><span class="samp">&nbsp;</span></samp>&rsquo;<!-- /@w --> or
+&lsquo;<samp><span class="samp">-</span></samp>&rsquo;.  Both designators are equivalent.
 
-<div class="defun">
-&mdash; Syntax class: <b>symbol&nbsp;constituent<!-- /@w --></b><var><a name="index-g_t_0040w_007bsymbol-constituent_007d-3138"></a></var><br>
-<blockquote><p><dfn>Symbol constituents</dfn> (designated by &lsquo;<samp><span class="samp">_</span></samp>&rsquo;) are the extra
-characters that are used in variable and command names along with word
-constituents.  For example, the symbol constituents class is used in
-Lisp mode to indicate that certain characters may be part of symbol
-names even though they are not part of English words.  These characters
-are &lsquo;<samp><span class="samp">$&amp;*+-_&lt;&gt;</span></samp>&rsquo;.  In standard C, the only non-word-constituent
-character that is valid in symbols is underscore (&lsquo;<samp><span class="samp">_</span></samp>&rsquo;). 
-</p></blockquote></div>
+     <br><dt>Word constituents: &lsquo;<samp><span class="samp">w</span></samp>&rsquo;<dd>Parts of words in human languages.  These are typically used in
+variable and command names in programs.  All upper- and lower-case
+letters, and the digits, are typically word constituents.
 
-<div class="defun">
-&mdash; Syntax class: <b>punctuation&nbsp;character<!-- /@w --></b><var><a name="index-g_t_0040w_007bpunctuation-character_007d-3139"></a></var><br>
-<blockquote><p><dfn>Punctuation characters</dfn> (designated by &lsquo;<samp><span class="samp">.</span></samp>&rsquo;) are those
-characters that are used as punctuation in English, or are used in some
-way in a programming language to separate symbols from one another. 
-Some programming language modes, such as Emacs Lisp mode, have no
-characters in this class since the few characters that are not symbol or
-word constituents all have other uses.  Other programming language modes,
-such as C mode, use punctuation syntax for operators. 
-</p></blockquote></div>
+     <br><dt>Symbol constituents: &lsquo;<samp><span class="samp">_</span></samp>&rsquo;<dd>Extra characters used in variable and command names along with word
+constituents.  Examples include the characters &lsquo;<samp><span class="samp">$&amp;*+-_&lt;&gt;</span></samp>&rsquo; in Lisp
+mode, which may be part of a symbol name even though they are not part
+of English words.  In standard C, the only non-word-constituent
+character that is valid in symbols is underscore (&lsquo;<samp><span class="samp">_</span></samp>&rsquo;).
 
-<div class="defun">
-&mdash; Syntax class: <b>open&nbsp;parenthesis&nbsp;character<!-- /@w --></b><var><a name="index-g_t_0040w_007bopen-parenthesis-character_007d-3140"></a></var><br>
-&mdash; Syntax class: <b>close&nbsp;parenthesis&nbsp;character<!-- /@w --></b><var><a name="index-g_t_0040w_007bclose-parenthesis-character_007d-3141"></a></var><br>
-<blockquote><p><a name="index-parenthesis-syntax-3142"></a>Open and close <dfn>parenthesis characters</dfn> are characters used in
-dissimilar pairs to surround sentences or expressions.  Such a grouping
-is begun with an open parenthesis character and terminated with a close. 
-Each open parenthesis character matches a particular close parenthesis
-character, and vice versa.  Normally, Emacs indicates momentarily the
-matching open parenthesis when you insert a close parenthesis. 
-See <a href="Blinking.html#Blinking">Blinking</a>.
+     <br><dt>Punctuation characters: &lsquo;<samp><span class="samp">.</span></samp>&rsquo;<dd>Characters used as punctuation in a human language, or used in a
+programming language to separate symbols from one another.  Some
+programming language modes, such as Emacs Lisp mode, have no
+characters in this class since the few characters that are not symbol
+or word constituents all have other uses.  Other programming language
+modes, such as C mode, use punctuation syntax for operators.
 
-        <p>The class of open parentheses is designated by &lsquo;<samp><span class="samp">(</span></samp>&rsquo;, and that of
-close parentheses by &lsquo;<samp><span class="samp">)</span></samp>&rsquo;.
+     <br><dt>Open parenthesis characters: &lsquo;<samp><span class="samp">(</span></samp>&rsquo;<dt>Close parenthesis characters: &lsquo;<samp><span class="samp">)</span></samp>&rsquo;<dd>Characters used in dissimilar pairs to surround sentences or
+expressions.  Such a grouping is begun with an open parenthesis
+character and terminated with a close.  Each open parenthesis
+character matches a particular close parenthesis character, and vice
+versa.  Normally, Emacs indicates momentarily the matching open
+parenthesis when you insert a close parenthesis.  See <a href="Blinking.html#Blinking">Blinking</a>.
 
-        <p>In English text, and in C code, the parenthesis pairs are &lsquo;<samp><span class="samp">()</span></samp>&rsquo;,
-&lsquo;<samp><span class="samp">[]</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">{}</span></samp>&rsquo;.  In Emacs Lisp, the delimiters for lists and
-vectors (&lsquo;<samp><span class="samp">()</span></samp>&rsquo; and &lsquo;<samp><span class="samp">[]</span></samp>&rsquo;) are classified as parenthesis
-characters. 
-</p></blockquote></div>
+     <p>In human languages, and in C code, the parenthesis pairs are
+&lsquo;<samp><span class="samp">()</span></samp>&rsquo;, &lsquo;<samp><span class="samp">[]</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">{}</span></samp>&rsquo;.  In Emacs Lisp, the delimiters
+for lists and vectors (&lsquo;<samp><span class="samp">()</span></samp>&rsquo; and &lsquo;<samp><span class="samp">[]</span></samp>&rsquo;) are classified as
+parenthesis characters.
 
-<div class="defun">
-&mdash; Syntax class: <b>string&nbsp;quote<!-- /@w --></b><var><a name="index-g_t_0040w_007bstring-quote_007d-3143"></a></var><br>
-<blockquote><p><dfn>String quote characters</dfn> (designated by &lsquo;<samp><span class="samp">"</span></samp>&rsquo;) are used in
-many languages, including Lisp and C, to delimit string constants.  The
-same string quote character appears at the beginning and the end of a
-string.  Such quoted strings do not nest.
+     <br><dt>String quotes: &lsquo;<samp><span class="samp">"</span></samp>&rsquo;<dd>Characters used to delimit string constants.  The same string quote
+character appears at the beginning and the end of a string.  Such
+quoted strings do not nest.
 
-        <p>The parsing facilities of Emacs consider a string as a single token. 
+     <p>The parsing facilities of Emacs consider a string as a single token. 
 The usual syntactic meanings of the characters in the string are
 suppressed.
 
-        <p>The Lisp modes have two string quote characters: double-quote (&lsquo;<samp><span class="samp">"</span></samp>&rsquo;)
+     <p>The Lisp modes have two string quote characters: double-quote (&lsquo;<samp><span class="samp">"</span></samp>&rsquo;)
 and vertical bar (&lsquo;<samp><span class="samp">|</span></samp>&rsquo;).  &lsquo;<samp><span class="samp">|</span></samp>&rsquo; is not used in Emacs Lisp, but it
 is used in Common Lisp.  C also has two string quote characters:
 double-quote for strings, and single-quote (&lsquo;<samp><span class="samp">'</span></samp>&rsquo;) for character
 constants.
 
-        <p>English text has no string quote characters because English is not a
-programming language.  Although quotation marks are used in English,
-we do not want them to turn off the usual syntactic properties of
-other characters in the quotation. 
-</p></blockquote></div>
+     <p>Human text has no string quote characters.  We do not want quotation
+marks to turn off the usual syntactic properties of other characters
+in the quotation.
 
-<div class="defun">
-&mdash; Syntax class: <b>escape-syntax&nbsp;character<!-- /@w --></b><var><a name="index-g_t_0040w_007bescape_002dsyntax-character_007d-3144"></a></var><br>
-<blockquote><p>An <dfn>escape character</dfn> (designated by &lsquo;<samp><span class="samp">\</span></samp>&rsquo;) starts an escape
-sequence such as is used in C string and character constants.  The
-character &lsquo;<samp><span class="samp">\</span></samp>&rsquo; belongs to this class in both C and Lisp.  (In C, it
-is used thus only inside strings, but it turns out to cause no trouble
-to treat it this way throughout C code.)
+     <br><dt>Escape-syntax characters: &lsquo;<samp><span class="samp">\</span></samp>&rsquo;<dd>Characters that start an escape sequence, such as is used in string
+and character constants.  The character &lsquo;<samp><span class="samp">\</span></samp>&rsquo; belongs to this class
+in both C and Lisp.  (In C, it is used thus only inside strings, but
+it turns out to cause no trouble to treat it this way throughout C
+code.)
 
-        <p>Characters in this class count as part of words if
-<code>words-include-escapes</code> is non-<code>nil</code>.  See <a href="Word-Motion.html#Word-Motion">Word Motion</a>. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Syntax class: <b>character&nbsp;quote<!-- /@w --></b><var><a name="index-g_t_0040w_007bcharacter-quote_007d-3145"></a></var><br>
-<blockquote><p>A <dfn>character quote character</dfn> (designated by &lsquo;<samp><span class="samp">/</span></samp>&rsquo;) quotes the
-following character so that it loses its normal syntactic meaning.  This
-differs from an escape character in that only the character immediately
-following is ever affected.
-
-        <p>Characters in this class count as part of words if
+     <p>Characters in this class count as part of words if
 <code>words-include-escapes</code> is non-<code>nil</code>.  See <a href="Word-Motion.html#Word-Motion">Word Motion</a>.
 
-        <p>This class is used for backslash in TeX mode. 
-</p></blockquote></div>
+     <br><dt>Character quotes: &lsquo;<samp><span class="samp">/</span></samp>&rsquo;<dd>Characters used to quote the following character so that it loses its
+normal syntactic meaning.  This differs from an escape character in
+that only the character immediately following is ever affected.
 
-<div class="defun">
-&mdash; Syntax class: <b>paired&nbsp;delimiter<!-- /@w --></b><var><a name="index-g_t_0040w_007bpaired-delimiter_007d-3146"></a></var><br>
-<blockquote><p><dfn>Paired delimiter characters</dfn> (designated by &lsquo;<samp><span class="samp">$</span></samp>&rsquo;) are like
-string quote characters except that the syntactic properties of the
-characters between the delimiters are not suppressed.  Only TeX mode
-uses a paired delimiter presently&mdash;the &lsquo;<samp><span class="samp">$</span></samp>&rsquo; that both enters and
-leaves math mode. 
-</p></blockquote></div>
+     <p>Characters in this class count as part of words if
+<code>words-include-escapes</code> is non-<code>nil</code>.  See <a href="Word-Motion.html#Word-Motion">Word Motion</a>.
 
-<div class="defun">
-&mdash; Syntax class: <b>expression&nbsp;prefix<!-- /@w --></b><var><a name="index-g_t_0040w_007bexpression-prefix_007d-3147"></a></var><br>
-<blockquote><p>An <dfn>expression prefix operator</dfn> (designated by &lsquo;<samp><span class="samp">'</span></samp>&rsquo;) is used for
-syntactic operators that are considered as part of an expression if they
-appear next to one.  In Lisp modes, these characters include the
-apostrophe, &lsquo;<samp><span class="samp">'</span></samp>&rsquo; (used for quoting), the comma, &lsquo;<samp><span class="samp">,</span></samp>&rsquo; (used in
-macros), and &lsquo;<samp><span class="samp">#</span></samp>&rsquo; (used in the read syntax for certain data types). 
-</p></blockquote></div>
+     <p>This class is used for backslash in TeX mode.
 
-<div class="defun">
-&mdash; Syntax class: <b>comment&nbsp;starter<!-- /@w --></b><var><a name="index-g_t_0040w_007bcomment-starter_007d-3148"></a></var><br>
-&mdash; Syntax class: <b>comment&nbsp;ender<!-- /@w --></b><var><a name="index-g_t_0040w_007bcomment-ender_007d-3149"></a></var><br>
-<blockquote><p><a name="index-comment-syntax-3150"></a>The <dfn>comment starter</dfn> and <dfn>comment ender</dfn> characters are used in
-various languages to delimit comments.  These classes are designated
-by &lsquo;<samp><span class="samp">&lt;</span></samp>&rsquo; and &lsquo;<samp><span class="samp">&gt;</span></samp>&rsquo;, respectively.
+     <br><dt>Paired delimiters: &lsquo;<samp><span class="samp">$</span></samp>&rsquo;<dd>Similar to string quote characters, except that the syntactic
+properties of the characters between the delimiters are not
+suppressed.  Only TeX mode uses a paired delimiter presently&mdash;the
+&lsquo;<samp><span class="samp">$</span></samp>&rsquo; that both enters and leaves math mode.
 
-        <p>English text has no comment characters.  In Lisp, the semicolon
-(&lsquo;<samp><span class="samp">;</span></samp>&rsquo;) starts a comment and a newline or formfeed ends one. 
-</p></blockquote></div>
+     <br><dt>Expression prefixes: &lsquo;<samp><span class="samp">'</span></samp>&rsquo;<dd>Characters used for syntactic operators that are considered as part of
+an expression if they appear next to one.  In Lisp modes, these
+characters include the apostrophe, &lsquo;<samp><span class="samp">'</span></samp>&rsquo; (used for quoting), the
+comma, &lsquo;<samp><span class="samp">,</span></samp>&rsquo; (used in macros), and &lsquo;<samp><span class="samp">#</span></samp>&rsquo; (used in the read
+syntax for certain data types).
 
-<div class="defun">
-&mdash; Syntax class: <b>inherit&nbsp;standard&nbsp;syntax<!-- /@w --></b><var><a name="index-g_t_0040w_007binherit-standard-syntax_007d-3151"></a></var><br>
-<blockquote><p>This syntax class does not specify a particular syntax.  It says to look
-in the standard syntax table to find the syntax of this character.  The
-designator for this syntax class is &lsquo;<samp><span class="samp">@</span></samp>&rsquo;. 
-</p></blockquote></div>
+     <br><dt>Comment starters: &lsquo;<samp><span class="samp">&lt;</span></samp>&rsquo;<dt>Comment enders: &lsquo;<samp><span class="samp">&gt;</span></samp>&rsquo;<dd><a name="index-comment-syntax-3423"></a>Characters used in various languages to delimit comments.  Human text
+has no comment characters.  In Lisp, the semicolon (&lsquo;<samp><span class="samp">;</span></samp>&rsquo;) starts a
+comment and a newline or formfeed ends one.
 
-<div class="defun">
-&mdash; Syntax class: <b>generic&nbsp;comment&nbsp;delimiter<!-- /@w --></b><var><a name="index-g_t_0040w_007bgeneric-comment-delimiter_007d-3152"></a></var><br>
-<blockquote><p>A <dfn>generic comment delimiter</dfn> (designated by &lsquo;<samp><span class="samp">!</span></samp>&rsquo;) starts
-or ends a special kind of comment.  <em>Any</em> generic comment delimiter
-matches <em>any</em> generic comment delimiter, but they cannot match
-a comment starter or comment ender; generic comment delimiters can only
-match each other.
+     <br><dt>Inherit standard syntax: &lsquo;<samp><span class="samp">@</span></samp>&rsquo;<dd>This syntax class does not specify a particular syntax.  It says to
+look in the standard syntax table to find the syntax of this
+character.
 
-        <p>This syntax class is primarily meant for use with the
-<code>syntax-table</code> text property (see <a href="Syntax-Properties.html#Syntax-Properties">Syntax Properties</a>).  You can
-mark any range of characters as forming a comment, by giving the first
-and last characters of the range <code>syntax-table</code> properties
-identifying them as generic comment delimiters. 
-</p></blockquote></div>
+     <br><dt>Generic comment delimiters: &lsquo;<samp><span class="samp">!</span></samp>&rsquo;<dd>Characters that start or end a special kind of comment.  <em>Any</em>
+generic comment delimiter matches <em>any</em> generic comment
+delimiter, but they cannot match a comment starter or comment ender;
+generic comment delimiters can only match each other.
 
-<div class="defun">
-&mdash; Syntax class: <b>generic&nbsp;string&nbsp;delimiter<!-- /@w --></b><var><a name="index-g_t_0040w_007bgeneric-string-delimiter_007d-3153"></a></var><br>
-<blockquote><p>A <dfn>generic string delimiter</dfn> (designated by &lsquo;<samp><span class="samp">|</span></samp>&rsquo;) starts or ends
-a string.  This class differs from the string quote class in that <em>any</em>
-generic string delimiter can match any other generic string delimiter; but
-they do not match ordinary string quote characters.
-
-        <p>This syntax class is primarily meant for use with the
-<code>syntax-table</code> text property (see <a href="Syntax-Properties.html#Syntax-Properties">Syntax Properties</a>).  You can
-mark any range of characters as forming a string constant, by giving the
+     <p>This syntax class is primarily meant for use with the
+<code>syntax-table</code> text property (see <a href="Syntax-Properties.html#Syntax-Properties">Syntax Properties</a>).  You
+can mark any range of characters as forming a comment, by giving the
 first and last characters of the range <code>syntax-table</code> properties
-identifying them as generic string delimiters. 
-</p></blockquote></div>
+identifying them as generic comment delimiters.
+
+     <br><dt>Generic string delimiters: &lsquo;<samp><span class="samp">|</span></samp>&rsquo;<dd>Characters that start or end a string.  This class differs from the
+string quote class in that <em>any</em> generic string delimiter can
+match any other generic string delimiter; but they do not match
+ordinary string quote characters.
+
+     <p>This syntax class is primarily meant for use with the
+<code>syntax-table</code> text property (see <a href="Syntax-Properties.html#Syntax-Properties">Syntax Properties</a>).  You
+can mark any range of characters as forming a string constant, by
+giving the first and last characters of the range <code>syntax-table</code>
+properties identifying them as generic string delimiters. 
+</dl>
 
    </body></html>
 

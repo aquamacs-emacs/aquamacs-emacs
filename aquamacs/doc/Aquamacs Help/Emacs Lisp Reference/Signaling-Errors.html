@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Signaling Errors - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Processing-of-Errors.html#Processing-of-Errors" title="Processing of Errors">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,7 +41,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Errors.html#Errors">Errors</a>
 
 <h5 class="subsubsection">10.5.3.1 How to Signal an Error</h5>
 
-<p><a name="index-signaling-errors-550"></a>
+<p><a name="index-signaling-errors-574"></a>
    <dfn>Signaling</dfn> an error means beginning error processing.  Error
 processing normally aborts all or part of the running program and
 returns to a point that is set up to handle the error
@@ -68,7 +65,7 @@ Lisp is that error messages should start with a capital letter, but
 should not end with any sort of punctuation.
 
 <div class="defun">
-&mdash; Function: <b>error</b><var> format-string &amp;rest args<a name="index-error-551"></a></var><br>
+&mdash; Function: <b>error</b><var> format-string &amp;rest args<a name="index-error-575"></a></var><br>
 <blockquote><p>This function signals an error with an error message constructed by
 applying <code>format</code> (see <a href="Formatting-Strings.html#Formatting-Strings">Formatting Strings</a>) to
 <var>format-string</var> and <var>args</var>.
@@ -92,15 +89,14 @@ undesirable results.  Instead, use <code>(error "%s" </code><var>string</var><co
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>signal</b><var> error-symbol data<a name="index-signal-552"></a></var><br>
+&mdash; Function: <b>signal</b><var> error-symbol data<a name="index-signal-576"></a></var><br>
 <blockquote><p><a name="Definition-of-signal"></a>This function signals an error named by <var>error-symbol</var>.  The
 argument <var>data</var> is a list of additional Lisp objects relevant to
 the circumstances of the error.
 
         <p>The argument <var>error-symbol</var> must be an <dfn>error symbol</dfn>&mdash;a symbol
-bearing a property <code>error-conditions</code> whose value is a list of
-condition names.  This is how Emacs Lisp classifies different sorts of
-errors. See <a href="Error-Symbols.html#Error-Symbols">Error Symbols</a>, for a description of error symbols,
+defined with <code>define-error</code>.  This is how Emacs Lisp classifies different
+sorts of errors. See <a href="Error-Symbols.html#Error-Symbols">Error Symbols</a>, for a description of error symbols,
 error conditions and condition names.
 
         <p>If the error is not handled, the two arguments are used in printing
@@ -121,10 +117,10 @@ handlers that handle the error: <code>condition-case</code> binds a local
 variable to a list of the form <code>(</code><var>error-symbol</var><code> . 
 </code><var>data</var><code>)</code> (see <a href="Handling-Errors.html#Handling-Errors">Handling Errors</a>).
 
-        <p>The function <code>signal</code> never returns (though in older Emacs versions
-it could sometimes return).
+        <p>The function <code>signal</code> never returns. 
+<!-- (though in older Emacs versions it sometimes could). -->
 
-     <pre class="smallexample">          (signal 'wrong-number-of-arguments '(x y))
+     <pre class="example">          (signal 'wrong-number-of-arguments '(x y))
                error--&gt; Wrong number of arguments: x, y
           
           (signal 'no-such-error '("My unknown error condition"))
@@ -132,7 +128,22 @@ it could sometimes return).
 </pre>
         </blockquote></div>
 
-   <p><a name="index-CL-note_002d_002d_002dno-continuable-errors-553"></a><blockquote>
+   <p><a name="index-user-errors_002c-signaling-577"></a>
+
+<div class="defun">
+&mdash; Function: <b>user-error</b><var> format-string &amp;rest args<a name="index-user_002derror-578"></a></var><br>
+<blockquote><p>This function behaves exactly like <code>error</code>, except that it uses
+the error symbol <code>user-error</code> rather than <code>error</code>.  As the
+name suggests, this is intended to report errors on the part of the
+user, rather than errors in the code itself.  For example,
+if you try to use the command <code>Info-history-back</code> (<kbd>l</kbd>) to
+move back beyond the start of your Info browsing history, Emacs
+signals a <code>user-error</code>.  Such errors do not cause entry to the
+debugger, even when <code>debug-on-error</code> is non-<code>nil</code>. 
+See <a href="Error-Debugging.html#Error-Debugging">Error Debugging</a>. 
+</p></blockquote></div>
+
+   <p><a name="index-CL-note_002d_002d_002dno-continuable-errors-579"></a><blockquote>
 <b>Common Lisp note:</b> Emacs Lisp has nothing like the Common Lisp
 concept of continuable errors. 
 </blockquote>

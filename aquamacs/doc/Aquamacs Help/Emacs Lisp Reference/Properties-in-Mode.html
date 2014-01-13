@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Properties in Mode - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Header-Lines.html#Header-Lines" title="Header Lines">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,31 +43,31 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Mode-Line-Format.html#Mode-Line-Format"
 
 <h4 class="subsection">23.4.6 Properties in the Mode Line</h4>
 
-<p><a name="index-text-properties-in-the-mode-line-1652"></a>
+<p><a name="index-text-properties-in-the-mode-line-1767"></a>
   Certain text properties are meaningful in the
 mode line.  The <code>face</code> property affects the appearance of text; the
 <code>help-echo</code> property associates help strings with the text, and
-<code>local-map</code> can make the text mouse-sensitive.
+<code>keymap</code> can make the text mouse-sensitive.
 
    <p>There are four ways to specify text properties for text in the mode
 line:
 
      <ol type=1 start=1>
-<li>Put a string with a text property directly into the mode-line data
+<li>Put a string with a text property directly into the mode line data
 structure.
 
-     <li>Put a text property on a mode-line %-construct such as &lsquo;<samp><span class="samp">%12b</span></samp>&rsquo;; then
+     <li>Put a text property on a mode line %-construct such as &lsquo;<samp><span class="samp">%12b</span></samp>&rsquo;; then
 the expansion of the %-construct will have that same text property.
 
      <li>Use a <code>(:propertize </code><var>elt</var> <var>props</var><code>...)</code> construct to
 give <var>elt</var> a text property specified by <var>props</var>.
 
-     <li>Use a list containing <code>:eval </code><var>form</var> in the mode-line data
+     <li>Use a list containing <code>:eval </code><var>form</var> in the mode line data
 structure, and make <var>form</var> evaluate to a string that has a text
 property.
         </ol>
 
-   <p>You can use the <code>local-map</code> property to specify a keymap.  This
+   <p>You can use the <code>keymap</code> property to specify a keymap.  This
 keymap only takes real effect for mouse clicks; binding character keys
 and function keys to it has no effect, since it is impossible to move
 point into the mode line.

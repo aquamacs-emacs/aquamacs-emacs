@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Fringe Bitmaps - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Customizing-Bitmaps.html#Customizing-Bitmaps" title="Customizing Bitmaps">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,27 +43,52 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Fringes.html#Fringes">Fringes</a>
 
 <h4 class="subsection">38.13.4 Fringe Bitmaps</h4>
 
-<p><a name="index-fringe-bitmaps-3594"></a><a name="index-bitmaps_002c-fringe-3595"></a>
+<p><a name="index-fringe-bitmaps-3896"></a><a name="index-bitmaps_002c-fringe-3897"></a>
   The <dfn>fringe bitmaps</dfn> are the actual bitmaps which represent the
 logical fringe indicators for truncated or continued lines, buffer
-boundaries, overlay arrow, etc.  Fringe bitmap symbols have their own
-name space.  The fringe bitmaps are shared by all frames and windows. 
-You can redefine the built-in fringe bitmaps, and you can define new
-fringe bitmaps.
+boundaries, overlay arrows, etc.  Each bitmap is represented by a
+symbol. 
+These symbols are referred to by the variable
+<code>fringe-indicator-alist</code>, which maps fringe indicators to bitmaps
+(see <a href="Fringe-Indicators.html#Fringe-Indicators">Fringe Indicators</a>), and the variable
+<code>fringe-cursor-alist</code>, which maps fringe cursors to bitmaps
+(see <a href="Fringe-Cursors.html#Fringe-Cursors">Fringe Cursors</a>).
 
-   <p>The way to display a bitmap in the left or right fringes for a given
-line in a window is by specifying the <code>display</code> property for one
-of the characters that appears in it.  Use a display specification of
-the form <code>(left-fringe </code><var>bitmap</var><code> [</code><var>face</var><code>])</code> or
-<code>(right-fringe </code><var>bitmap</var><code> [</code><var>face</var><code>])</code> (see <a href="Display-Property.html#Display-Property">Display Property</a>).  Here, <var>bitmap</var> is a symbol identifying the bitmap you
-want, and <var>face</var> (which is optional) is the name of the face whose
-colors should be used for displaying the bitmap, instead of the
-default <code>fringe</code> face.  <var>face</var> is automatically merged with
-the <code>fringe</code> face, so normally <var>face</var> need only specify the
-foreground color for the bitmap.
+   <p>Lisp programs can also directly display a bitmap in the left or
+right fringe, by using a <code>display</code> property for one of the
+characters appearing in the line (see <a href="Other-Display-Specs.html#Other-Display-Specs">Other Display Specs</a>).  Such
+a display specification has the form
+
+<pre class="example">     (<var>fringe</var> <var>bitmap</var> [<var>face</var>])
+</pre>
+   <p class="noindent"><var>fringe</var> is either the symbol <code>left-fringe</code> or
+<code>right-fringe</code>.  <var>bitmap</var> is a symbol identifying the bitmap
+to display.  The optional <var>face</var> names a face whose foreground
+color is used to display the bitmap; this face is automatically merged
+with the <code>fringe</code> face.
+
+   <p>Here is a list of the standard fringe bitmaps defined in Emacs, and
+how they are currently used in Emacs (via
+<code>fringe-indicator-alist</code> and <code>fringe-cursor-alist</code>):
+
+     <dl>
+<dt><code>left-arrow</code>, <code>right-arrow</code><dd>Used to indicate truncated lines.
+
+     <br><dt><code>left-curly-arrow</code>, <code>right-curly-arrow</code><dd>Used to indicate continued lines.
+
+     <br><dt><code>right-triangle</code>, <code>left-triangle</code><dd>The former is used by overlay arrows.  The latter is unused.
+
+     <br><dt><code>up-arrow</code>, <code>down-arrow</code>, <code>top-left-angle</code> <code>top-right-angle</code><dt><code>bottom-left-angle</code>, <code>bottom-right-angle</code><dt><code>top-right-angle</code>, <code>top-left-angle</code><dt><code>left-bracket</code>, <code>right-bracket</code>, <code>top-right-angle</code>, <code>top-left-angle</code><dd>Used to indicate buffer boundaries.
+
+     <br><dt><code>filled-rectangle</code>, <code>hollow-rectangle</code><dt><code>filled-square</code>, <code>hollow-square</code><dt><code>vertical-bar</code>, <code>horizontal-bar</code><dd>Used for different types of fringe cursors.
+
+     <br><dt><code>empty-line</code>, <code>exclamation-mark</code>, <code>question-mark</code>, <code>exclamation-mark</code><dd>Not used by core Emacs features. 
+</dl>
+
+<p class="noindent">The next subsection describes how to define your own fringe bitmaps.
 
 <div class="defun">
-&mdash; Function: <b>fringe-bitmaps-at-pos</b><var> &amp;optional pos window<a name="index-fringe_002dbitmaps_002dat_002dpos-3596"></a></var><br>
+&mdash; Function: <b>fringe-bitmaps-at-pos</b><var> &amp;optional pos window<a name="index-fringe_002dbitmaps_002dat_002dpos-3898"></a></var><br>
 <blockquote><p>This function returns the fringe bitmaps of the display line
 containing position <var>pos</var> in window <var>window</var>.  The return
 value has the form <code>(</code><var>left</var> <var>right</var> <var>ov</var><code>)</code>, where <var>left</var>

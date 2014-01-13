@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Fontsets - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Defining-Fontsets.html#Defining-Fontsets" title="Defining Fontsets">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,34 +42,44 @@ Up:&nbsp;<a rel="up" accesskey="u" href="International.html#International">Inter
 <hr>
 </div>
 
-<h3 class="section">26.14 Fontsets</h3>
+<h3 class="section">22.13 Fontsets</h3>
 
-<p><a name="index-fontsets-1462"></a>
+<p><a name="index-fontsets-1673"></a>
   A font typically defines shapes for a single alphabet or script. 
 Therefore, displaying the entire range of scripts that Emacs supports
 requires a collection of many fonts.  In Emacs, such a collection is
-called a <dfn>fontset</dfn>.  A fontset is defined by a list of font specs,
+called a <dfn>fontset</dfn>.  A fontset is defined by a list of font specifications,
 each assigned to handle a range of character codes, and may fall back
-on another fontset for characters which are not covered by the fonts
+on another fontset for characters that are not covered by the fonts
 it specifies.
 
-   <p>Each fontset has a name, like a font.  However, while fonts are
+   <p><a name="index-fonts-for-various-scripts-1674"></a><a name="index-Intlfonts-package_002c-installation-1675"></a>  Each fontset has a name, like a font.  However, while fonts are
 stored in the system and the available font names are defined by the
 system, fontsets are defined within Emacs itself.  Once you have
 defined a fontset, you can use it within Emacs by specifying its name,
 anywhere that you could use a single font.  Of course, Emacs fontsets
-can use only the fonts that the system supports; if certain characters
-appear on the screen as hollow boxes, this means that the fontset in
-use for them has no font for those characters.<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>
+can use only the fonts that the system supports.  If some characters
+appear on the screen as empty boxes or hex codes, this means that the
+fontset in use for them has no font for those characters.  In this
+case, or if the characters are shown, but not as well as you would
+like, you may need to install extra fonts.  Your operating system may
+have optional fonts that you can install; or you can install the GNU
+Intlfonts package, which includes fonts for most supported
+scripts.<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>
 
    <p>Emacs creates three fontsets automatically: the <dfn>standard
 fontset</dfn>, the <dfn>startup fontset</dfn> and the <dfn>default fontset</dfn>. 
+<!-- FIXME?  The doc of *standard*-fontset-spec says: -->
+<!-- "You have the biggest chance to display international characters -->
+<!-- with correct glyphs by using the *standard* fontset." (my emphasis) -->
+<!-- See http://lists.gnu.org/archive/html/emacs-devel/2012-04/msg00430.html -->
 The default fontset is most likely to have fonts for a wide variety of
-non-<acronym>ASCII</acronym> characters and is the default fallback for the
+non-<acronym>ASCII</acronym> characters, and is the default fallback for the
 other two fontsets, and if you set a default font rather than fontset. 
-However it does not specify font family names, so results can be
+However, it does not specify font family names, so results can be
 somewhat random if you use it directly.  You can specify use of a
-specific fontset with the &lsquo;<samp><span class="samp">-fn</span></samp>&rsquo; option.  For example,
+particular fontset by starting Emacs with the &lsquo;<samp><span class="samp">-fn</span></samp>&rsquo; option. 
+For example,
 
 <pre class="example">     emacs -fn fontset-standard
 </pre>
@@ -91,9 +98,16 @@ hex code or thin space or an empty box instead.  (See <a href="Text-Display.html
 
    <div class="footnote">
 <hr>
-<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> The Emacs
-installation instructions have information on additional font
-support.</p>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> If you run Emacs on X, you may need to inform the X
+server about the location of the newly installed fonts with commands
+such as:
+<!-- FIXME?  I feel like this may be out of date. -->
+<!-- E.g., the intlfonts tarfile is ~ 10 years old. -->
+
+<pre class="example">      xset fp+ /usr/local/share/emacs/fonts
+      xset fp rehash
+</pre>
+   <p></p>
 
    <hr></div>
 

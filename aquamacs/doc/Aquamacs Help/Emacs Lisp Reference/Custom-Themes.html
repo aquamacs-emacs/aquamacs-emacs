@@ -1,0 +1,151 @@
+<html lang="en">
+<head>
+<title>Custom Themes - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customization.html#Customization" title="Customization">
+<link rel="prev" href="Applying-Customizations.html#Applying-Customizations" title="Applying Customizations">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
+
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Custom-Themes"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Applying-Customizations.html#Applying-Customizations">Applying Customizations</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Customization</a>
+<hr>
+</div>
+
+<h3 class="section">14.6 Custom Themes</h3>
+
+<p><dfn>Custom themes</dfn> are collections of settings that can be enabled
+or disabled as a unit.  See <a href="../emacs/Custom-Themes.html#Custom-Themes">Custom Themes</a>.  Each Custom theme is defined by an Emacs Lisp source file,
+which should follow the conventions described in this section. 
+(Instead of writing a Custom theme by hand, you can also create one
+using a Customize-like interface; see <a href="../emacs/Creating-Custom-Themes.html#Creating-Custom-Themes">Creating Custom Themes</a>.)
+
+   <p>A Custom theme file should be named <samp><var>foo</var><span class="file">-theme.el</span></samp>, where
+<var>foo</var> is the theme name.  The first Lisp form in the file should
+be a call to <code>deftheme</code>, and the last form should be a call to
+<code>provide-theme</code>.
+
+<div class="defun">
+&mdash; Macro: <b>deftheme</b><var> theme &amp;optional doc<a name="index-deftheme-836"></a></var><br>
+<blockquote><p>This macro declares <var>theme</var> (a symbol) as the name of a Custom
+theme.  The optional argument <var>doc</var> should be a string describing
+the theme; this is the description shown when the user invokes the
+<code>describe-theme</code> command or types <kbd>?</kbd> in the &lsquo;<samp><span class="samp">*Custom
+Themes*</span></samp>&rsquo; buffer.
+
+        <p>Two special theme names are disallowed (using them causes an error):
+<code>user</code> is a &ldquo;dummy&rdquo; theme that stores the user's direct
+customization settings, and <code>changed</code> is a &ldquo;dummy&rdquo; theme that
+stores changes made outside of the Customize system. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>provide-theme</b><var> theme<a name="index-provide_002dtheme-837"></a></var><br>
+<blockquote><p>This macro declares that the theme named <var>theme</var> has been fully
+specified. 
+</p></blockquote></div>
+
+   <p>In between <code>deftheme</code> and <code>provide-theme</code> are Lisp forms
+specifying the theme settings: usually a call to
+<code>custom-theme-set-variables</code> and/or a call to
+<code>custom-theme-set-faces</code>.
+
+<div class="defun">
+&mdash; Function: <b>custom-theme-set-variables</b><var> theme &amp;rest args<a name="index-custom_002dtheme_002dset_002dvariables-838"></a></var><br>
+<blockquote><p>This function specifies the Custom theme <var>theme</var>'s variable
+settings.  <var>theme</var> should be a symbol.  Each argument in
+<var>args</var> should be a list of the form
+
+     <pre class="example">          (<var>var</var> <var>expression</var> [<var>now</var> [<var>request</var> [<var>comment</var>]]])
+</pre>
+        <p class="noindent">where the list entries have the same meanings as in
+<code>custom-set-variables</code>.  See <a href="Applying-Customizations.html#Applying-Customizations">Applying Customizations</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>custom-theme-set-faces</b><var> theme &amp;rest args<a name="index-custom_002dtheme_002dset_002dfaces-839"></a></var><br>
+<blockquote><p>This function specifies the Custom theme <var>theme</var>'s face settings. 
+<var>theme</var> should be a symbol.  Each argument in <var>args</var> should be
+a list of the form
+
+     <pre class="example">          (<var>face</var> <var>spec</var> [<var>now</var> [<var>comment</var>]])
+</pre>
+        <p class="noindent">where the list entries have the same meanings as in
+<code>custom-set-faces</code>.  See <a href="Applying-Customizations.html#Applying-Customizations">Applying Customizations</a>. 
+</p></blockquote></div>
+
+   <p>In theory, a theme file can also contain other Lisp forms, which
+would be evaluated when loading the theme, but that is &ldquo;bad form&rdquo;. 
+To protect against loading themes containing malicious code, Emacs
+displays the source file and asks for confirmation from the user
+before loading any non-built-in theme for the first time.
+
+   <p>The following functions are useful for programmatically enabling and
+disabling themes:
+
+<div class="defun">
+&mdash; Function: <b>custom-theme-p</b><var> theme<a name="index-custom_002dtheme_002dp-840"></a></var><br>
+<blockquote><p>This function return a non-<code>nil</code> value if <var>theme</var> (a symbol)
+is the name of a Custom theme (i.e., a Custom theme which has been
+loaded into Emacs, whether or not the theme is enabled).  Otherwise,
+it returns <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>load-theme</b><var> theme &amp;optional no-confirm no-enable<a name="index-load_002dtheme-841"></a></var><br>
+<blockquote><p>This function loads the Custom theme named <var>theme</var> from its source
+file, looking for the source file in the directories specified by the
+variable <code>custom-theme-load-path</code>.  See <a href="../emacs/Custom-Themes.html#Custom-Themes">Custom Themes</a>.  It also <dfn>enables</dfn> the theme (unless the
+optional argument <var>no-enable</var> is non-<code>nil</code>), causing its
+variable and face settings to take effect.  It prompts the user for
+confirmation before loading the theme, unless the optional argument
+<var>no-confirm</var> is non-<code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>enable-theme</b><var> theme<a name="index-enable_002dtheme-842"></a></var><br>
+<blockquote><p>This function enables the Custom theme named <var>theme</var>.  It signals
+an error if no such theme has been loaded. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>disable-theme</b><var> theme<a name="index-disable_002dtheme-843"></a></var><br>
+<blockquote><p>This function disables the Custom theme named <var>theme</var>.  The theme
+remains loaded, so that a subsequent call to <code>enable-theme</code> will
+re-enable it. 
+</p></blockquote></div>
+   <!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 1990-1995, 1998-1999, 2001-2013 Free Software -->
+<!-- Foundation, Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+
+   </body></html>
+

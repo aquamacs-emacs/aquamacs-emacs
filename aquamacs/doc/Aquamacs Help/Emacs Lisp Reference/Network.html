@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Network - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Network-Servers.html#Network-Servers" title="Network Servers">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,12 +43,13 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Processes.html#Processes">Processes</a>
 
 <h3 class="section">37.14 Network Connections</h3>
 
-<p><a name="index-network-connection-3358"></a><a name="index-TCP-3359"></a><a name="index-UDP-3360"></a>
+<p><a name="index-network-connection-3631"></a><a name="index-TCP-3632"></a><a name="index-UDP-3633"></a>
   Emacs Lisp programs can open stream (TCP) and datagram (UDP) network
-connections to other processes on the same machine or other machines. 
+connections (see <a href="Datagrams.html#Datagrams">Datagrams</a>) to other processes on the same machine
+or other machines. 
 A network connection is handled by Lisp much like a subprocess, and is
 represented by a process object.  However, the process you are
-communicating with is not a child of the Emacs process, so it has no
+communicating with is not a child of the Emacs process, has no
 process <acronym>ID</acronym>, and you can't kill it or send it signals.  All you
 can do is send and receive data.  <code>delete-process</code> closes the
 connection, but does not kill the program at the other end; that
@@ -79,7 +77,7 @@ network connection or server, <code>serial</code> for a serial port
 connection, or <code>real</code> for a real subprocess.
 
    <p>The <code>process-status</code> function returns <code>open</code>,
-<code>closed</code>, <code>connect</code>, and <code>failed</code> for network
+<code>closed</code>, <code>connect</code>, or <code>failed</code> for network
 connections.  For a network server, the status is always
 <code>listen</code>.  None of those values is possible for a real
 subprocess.  See <a href="Process-Information.html#Process-Information">Process Information</a>.
@@ -89,31 +87,100 @@ subprocess.  See <a href="Process-Information.html#Process-Information">Process 
 process, being stopped means not accepting new connections.  (Up to 5
 connection requests will be queued for when you resume the server; you
 can increase this limit, unless it is imposed by the operating
-system.)  For a network stream connection, being stopped means not
-processing input (any arriving input waits until you resume the
-connection).  For a datagram connection, some number of packets may be
-queued but input may be lost.  You can use the function
+system&mdash;see the <code>:server</code> keyword of <code>make-network-process</code>,
+<a href="Network-Processes.html#Network-Processes">Network Processes</a>.)  For a network stream connection, being
+stopped means not processing input (any arriving input waits until you
+resume the connection).  For a datagram connection, some number of
+packets may be queued but input may be lost.  You can use the function
 <code>process-command</code> to determine whether a network connection or
 server is stopped; a non-<code>nil</code> value means yes.
 
+   <p><a name="index-network-connection_002c-encrypted-3634"></a><a name="index-encrypted-network-connections-3635"></a><a name="index-g_t_0040acronym_007bTLS_007d-network-connections-3636"></a><a name="index-g_t_0040acronym_007bSTARTTLS_007d-network-connections-3637"></a>Emacs can create encrypted network connections, using either built-in
+or external support.  The built-in support uses the GnuTLS
+(&ldquo;Transport Layer Security&rdquo;) library; see
+<a href="http://www.gnu.org/software/gnutls/">the GnuTLS project page</a>. 
+If your Emacs was compiled with GnuTLS support, the function
+<code>gnutls-available-p</code> is defined and returns non-<code>nil</code>.  For
+more details, see <a href="../emacs-gnutls/index.html#Top">Overview</a>. 
+The external support uses the <samp><span class="file">starttls.el</span></samp> library, which
+requires a helper utility such as <samp><span class="command">gnutls-cli</span></samp> to be installed
+on the system.  The <code>open-network-stream</code> function can
+transparently handle the details of creating encrypted connections for
+you, using whatever support is available.
+
 <div class="defun">
-&mdash; Function: <b>open-network-stream</b><var> name buffer-or-name host service<a name="index-open_002dnetwork_002dstream-3361"></a></var><br>
-<blockquote><p>This function opens a TCP connection, and returns a process object
-that represents the connection.
+&mdash; Function: <b>open-network-stream</b><var> name buffer host service &amp;rest parameters<a name="index-open_002dnetwork_002dstream-3638"></a></var><br>
+<blockquote><p>This function opens a TCP connection, with optional encryption, and
+returns a process object that represents the connection.
 
         <p>The <var>name</var> argument specifies the name for the process object.  It
 is modified as necessary to make it unique.
 
-        <p>The <var>buffer-or-name</var> argument is the buffer to associate with the
+        <p>The <var>buffer</var> argument is the buffer to associate with the
 connection.  Output from the connection is inserted in the buffer,
 unless you specify a filter function to handle the output.  If
-<var>buffer-or-name</var> is <code>nil</code>, it means that the connection is not
+<var>buffer</var> is <code>nil</code>, it means that the connection is not
 associated with any buffer.
 
         <p>The arguments <var>host</var> and <var>service</var> specify where to connect to;
 <var>host</var> is the host name (a string), and <var>service</var> is the name of
-a defined network service (a string) or a port number (an integer). 
-</p></blockquote></div>
+a defined network service (a string) or a port number (an integer).
+
+        <p>The remaining arguments <var>parameters</var> are keyword/argument pairs
+that are mainly relevant to encrypted connections:
+
+          <dl>
+<dt><code>:nowait </code><var>boolean</var><dd>If non-<code>nil</code>, try to make an asynchronous connection.
+
+          <br><dt><code>:type </code><var>type</var><dd>The type of connection.  Options are:
+
+               <dl>
+<dt><code>plain</code><dd>An ordinary, unencrypted connection. 
+<br><dt><code>tls</code><dt><code>ssl</code><dd>A <acronym>TLS</acronym> (&ldquo;Transport Layer Security&rdquo;) connection. 
+<br><dt><code>nil</code><dt><code>network</code><dd>Start with a plain connection, and if parameters &lsquo;<samp><span class="samp">:success</span></samp>&rsquo;
+and &lsquo;<samp><span class="samp">:capability-command</span></samp>&rsquo; are supplied, try to upgrade to an encrypted
+connection via <acronym>STARTTLS</acronym>.  If that fails, retain the
+unencrypted connection. 
+<br><dt><code>starttls</code><dd>As for <code>nil</code>, but if <acronym>STARTTLS</acronym> fails drop the connection. 
+<br><dt><code>shell</code><dd>A shell connection. 
+</dl>
+
+          <br><dt><code>:always-query-capabilities </code><var>boolean</var><dd>If non-<code>nil</code>, always ask for the server's capabilities, even when
+doing a &lsquo;<samp><span class="samp">plain</span></samp>&rsquo; connection.
+
+          <br><dt><code>:capability-command </code><var>capability-command</var><dd>Command string to query the host capabilities.
+
+          <br><dt><code>:end-of-command </code><var>regexp</var><dt><code>:end-of-capability </code><var>regexp</var><dd>Regular expression matching the end of a command, or the end of the
+command <var>capability-command</var>.  The latter defaults to the former.
+
+          <br><dt><code>:starttls-function </code><var>function</var><dd>Function of one argument (the response to <var>capability-command</var>),
+which returns either <code>nil</code>, or the command to activate <acronym>STARTTLS</acronym>
+if supported.
+
+          <br><dt><code>:success </code><var>regexp</var><dd>Regular expression matching a successful <acronym>STARTTLS</acronym> negotiation.
+
+          <br><dt><code>:use-starttls-if-possible </code><var>boolean</var><dd>If non-<code>nil</code>, do opportunistic <acronym>STARTTLS</acronym> upgrades even if Emacs
+doesn't have built-in <acronym>TLS</acronym> support.
+
+          <br><dt><code>:client-certificate </code><var>list-or-t</var><dd>Either a list of the form <code>(</code><var>key-file</var> <var>cert-file</var><code>)</code>,
+naming the certificate key file and certificate file itself, or
+<code>t</code>, meaning to query <code>auth-source</code> for this information
+(see <a href="../auth/index.html#Top">Overview</a>). 
+Only used for <acronym>TLS</acronym> or <acronym>STARTTLS</acronym>.
+
+          <br><dt><code>:return-list </code><var>cons-or-nil</var><dd>The return value of this function.  If omitted or <code>nil</code>, return a
+process object.  Otherwise, a cons of the form <code>(</code><var>process-object</var><code>
+. </code><var>plist</var><code>)</code>, where <var>plist</var> has keywords:
+
+               <dl>
+<dt><code>:greeting </code><var>string-or-nil</var><dd>If non-<code>nil</code>, the greeting string returned by the host. 
+<br><dt><code>:capabilities </code><var>string-or-nil</var><dd>If non-<code>nil</code>, the host's capability string. 
+<br><dt><code>:type </code><var>symbol</var><dd>The connection type: &lsquo;<samp><span class="samp">plain</span></samp>&rsquo; or &lsquo;<samp><span class="samp">tls</span></samp>&rsquo;. 
+</dl>
+
+        </dl>
+
+        </blockquote></div>
 
    </body></html>
 

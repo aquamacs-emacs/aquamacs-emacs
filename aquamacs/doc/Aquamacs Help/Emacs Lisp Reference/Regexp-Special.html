@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Regexp Special - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Char-Classes.html#Char-Classes" title="Char Classes">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -48,12 +45,12 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Syntax-of-Regexps.html#Syntax-of-Regexp
 expression.
 
      <dl>
-<dt>&lsquo;<samp><span class="samp">.</span></samp>&rsquo; <span class="roman">(Period)</span><dd><a name="index-g_t_0040samp_007b_002e_007d-in-regexp-3044"></a>is a special character that matches any single character except a newline. 
+<dt>&lsquo;<samp><span class="samp">.</span></samp>&rsquo; <span class="roman">(Period)</span><dd><a name="index-g_t_0040samp_007b_002e_007d-in-regexp-3322"></a>is a special character that matches any single character except a newline. 
 Using concatenation, we can make regular expressions like &lsquo;<samp><span class="samp">a.b</span></samp>&rsquo;, which
 matches any three-character string that begins with &lsquo;<samp><span class="samp">a</span></samp>&rsquo; and ends with
 &lsquo;<samp><span class="samp">b</span></samp>&rsquo;.
 
-     <br><dt>&lsquo;<samp><span class="samp">*</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_002a_007d-in-regexp-3045"></a>is not a construct by itself; it is a postfix operator that means to
+     <br><dt>&lsquo;<samp><span class="samp">*</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_002a_007d-in-regexp-3323"></a>is not a construct by itself; it is a postfix operator that means to
 match the preceding regular expression repetitively as many times as
 possible.  Thus, &lsquo;<samp><span class="samp">o*</span></samp>&rsquo; matches any number of &lsquo;<samp><span class="samp">o</span></samp>&rsquo;s (including no
 &lsquo;<samp><span class="samp">o</span></samp>&rsquo;s).
@@ -62,7 +59,7 @@ possible.  Thus, &lsquo;<samp><span class="samp">o*</span></samp>&rsquo; matches
 expression.  Thus, &lsquo;<samp><span class="samp">fo*</span></samp>&rsquo; has a repeating &lsquo;<samp><span class="samp">o</span></samp>&rsquo;, not a repeating
 &lsquo;<samp><span class="samp">fo</span></samp>&rsquo;.  It matches &lsquo;<samp><span class="samp">f</span></samp>&rsquo;, &lsquo;<samp><span class="samp">fo</span></samp>&rsquo;, &lsquo;<samp><span class="samp">foo</span></samp>&rsquo;, and so on.
 
-     <p>The matcher processes a &lsquo;<samp><span class="samp">*</span></samp>&rsquo; construct by matching, immediately, as
+     <p><a name="index-backtracking-and-regular-expressions-3324"></a>The matcher processes a &lsquo;<samp><span class="samp">*</span></samp>&rsquo; construct by matching, immediately, as
 many repetitions as can be found.  Then it continues with the rest of
 the pattern.  If that fails, backtracking occurs, discarding some of the
 matches of the &lsquo;<samp><span class="samp">*</span></samp>&rsquo;-modified construct in the hope that that will
@@ -84,16 +81,16 @@ many ways, so it causes an infinite loop.  To avoid these problems,
 check nested repetitions carefully, to make sure that they do not
 cause combinatorial explosions in backtracking.
 
-     <br><dt>&lsquo;<samp><span class="samp">+</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_002b_007d-in-regexp-3046"></a>is a postfix operator, similar to &lsquo;<samp><span class="samp">*</span></samp>&rsquo; except that it must match
+     <br><dt>&lsquo;<samp><span class="samp">+</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_002b_007d-in-regexp-3325"></a>is a postfix operator, similar to &lsquo;<samp><span class="samp">*</span></samp>&rsquo; except that it must match
 the preceding expression at least once.  So, for example, &lsquo;<samp><span class="samp">ca+r</span></samp>&rsquo;
 matches the strings &lsquo;<samp><span class="samp">car</span></samp>&rsquo; and &lsquo;<samp><span class="samp">caaaar</span></samp>&rsquo; but not the string
 &lsquo;<samp><span class="samp">cr</span></samp>&rsquo;, whereas &lsquo;<samp><span class="samp">ca*r</span></samp>&rsquo; matches all three strings.
 
-     <br><dt>&lsquo;<samp><span class="samp">?</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_003f_007d-in-regexp-3047"></a>is a postfix operator, similar to &lsquo;<samp><span class="samp">*</span></samp>&rsquo; except that it must match the
+     <br><dt>&lsquo;<samp><span class="samp">?</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_003f_007d-in-regexp-3326"></a>is a postfix operator, similar to &lsquo;<samp><span class="samp">*</span></samp>&rsquo; except that it must match the
 preceding expression either once or not at all.  For example,
 &lsquo;<samp><span class="samp">ca?r</span></samp>&rsquo; matches &lsquo;<samp><span class="samp">car</span></samp>&rsquo; or &lsquo;<samp><span class="samp">cr</span></samp>&rsquo;; nothing else.
 
-     <br><dt>&lsquo;<samp><span class="samp">*?</span></samp>&rsquo;, &lsquo;<samp><span class="samp">+?</span></samp>&rsquo;, &lsquo;<samp><span class="samp">??</span></samp>&rsquo;<dd><a name="index-non_002dgreedy-repetition-characters-in-regexp-3048"></a>These are &ldquo;non-greedy&rdquo; variants of the operators &lsquo;<samp><span class="samp">*</span></samp>&rsquo;, &lsquo;<samp><span class="samp">+</span></samp>&rsquo;
+     <br><dt>&lsquo;<samp><span class="samp">*?</span></samp>&rsquo;, &lsquo;<samp><span class="samp">+?</span></samp>&rsquo;, &lsquo;<samp><span class="samp">??</span></samp>&rsquo;<dd><a name="index-non_002dgreedy-repetition-characters-in-regexp-3327"></a>These are &ldquo;non-greedy&rdquo; variants of the operators &lsquo;<samp><span class="samp">*</span></samp>&rsquo;, &lsquo;<samp><span class="samp">+</span></samp>&rsquo;
 and &lsquo;<samp><span class="samp">?</span></samp>&rsquo;.  Where those operators match the largest possible
 substring (consistent with matching the entire containing expression),
 the non-greedy variants match the smallest possible substring
@@ -105,7 +102,7 @@ expression &lsquo;<samp><span class="samp">c[ad]*?a</span></samp>&rsquo;, applie
 &lsquo;<samp><span class="samp">cda</span></samp>&rsquo;.  (The smallest possible match here for &lsquo;<samp><span class="samp">[ad]*?</span></samp>&rsquo; that
 permits the whole expression to match is &lsquo;<samp><span class="samp">d</span></samp>&rsquo;.)
 
-     <br><dt>&lsquo;<samp><span class="samp">[ ... ]</span></samp>&rsquo;<dd><a name="index-character-alternative-_0028in-regexp_0029-3049"></a><a name="index-g_t_0040samp_007b_005b_007d-in-regexp-3050"></a><a name="index-g_t_0040samp_007b_005d_007d-in-regexp-3051"></a>is a <dfn>character alternative</dfn>, which begins with &lsquo;<samp><span class="samp">[</span></samp>&rsquo; and is
+     <br><dt>&lsquo;<samp><span class="samp">[ ... ]</span></samp>&rsquo;<dd><a name="index-character-alternative-_0028in-regexp_0029-3328"></a><a name="index-g_t_0040samp_007b_005b_007d-in-regexp-3329"></a><a name="index-g_t_0040samp_007b_005d_007d-in-regexp-3330"></a>is a <dfn>character alternative</dfn>, which begins with &lsquo;<samp><span class="samp">[</span></samp>&rsquo; and is
 terminated by &lsquo;<samp><span class="samp">]</span></samp>&rsquo;.  In the simplest case, the characters between
 the two brackets are what this character alternative can match.
 
@@ -121,7 +118,16 @@ Ranges may be intermixed freely with individual characters, as in
 &lsquo;<samp><span class="samp">[a-z$%.]</span></samp>&rsquo;, which matches any lower case <acronym>ASCII</acronym> letter
 or &lsquo;<samp><span class="samp">$</span></samp>&rsquo;, &lsquo;<samp><span class="samp">%</span></samp>&rsquo; or period.
 
-     <p>Note that the usual regexp special characters are not special inside a
+     <p>If <code>case-fold-search</code> is non-<code>nil</code>, &lsquo;<samp><span class="samp">[a-z]</span></samp>&rsquo; also
+matches upper-case letters.  Note that a range like &lsquo;<samp><span class="samp">[a-z]</span></samp>&rsquo; is
+not affected by the locale's collation sequence, it always represents
+a sequence in <acronym>ASCII</acronym> order. 
+<!-- This wasn't obvious to me, since, e.g., the grep manual "Character -->
+<!-- Classes and Bracket Expressions" specifically notes the opposite -->
+<!-- behavior.  But by experiment Emacs seems unaffected by LC_COLLATE -->
+<!-- in this regard. -->
+
+     <p>Note also that the usual regexp special characters are not special inside a
 character alternative.  A completely different set of characters is
 special inside character alternatives: &lsquo;<samp><span class="samp">]</span></samp>&rsquo;, &lsquo;<samp><span class="samp">-</span></samp>&rsquo; and &lsquo;<samp><span class="samp">^</span></samp>&rsquo;.
 
@@ -129,34 +135,29 @@ special inside character alternatives: &lsquo;<samp><span class="samp">]</span><
 first character.  For example, &lsquo;<samp><span class="samp">[]a]</span></samp>&rsquo; matches &lsquo;<samp><span class="samp">]</span></samp>&rsquo; or &lsquo;<samp><span class="samp">a</span></samp>&rsquo;. 
 To include a &lsquo;<samp><span class="samp">-</span></samp>&rsquo;, write &lsquo;<samp><span class="samp">-</span></samp>&rsquo; as the first or last character of
 the character alternative, or put it after a range.  Thus, &lsquo;<samp><span class="samp">[]-]</span></samp>&rsquo;
-matches both &lsquo;<samp><span class="samp">]</span></samp>&rsquo; and &lsquo;<samp><span class="samp">-</span></samp>&rsquo;.
+matches both &lsquo;<samp><span class="samp">]</span></samp>&rsquo; and &lsquo;<samp><span class="samp">-</span></samp>&rsquo;.  (As explained below, you cannot
+use &lsquo;<samp><span class="samp">\]</span></samp>&rsquo; to include a &lsquo;<samp><span class="samp">]</span></samp>&rsquo; inside a character alternative,
+since &lsquo;<samp><span class="samp">\</span></samp>&rsquo; is not special there.)
 
      <p>To include &lsquo;<samp><span class="samp">^</span></samp>&rsquo; in a character alternative, put it anywhere but at
 the beginning.
 
-     <p>The beginning and end of a range of multibyte characters must be in
-the same character set (see <a href="Character-Sets.html#Character-Sets">Character Sets</a>).  Thus,
-<code>"[\x8e0-\x97c]"</code> is invalid because character 0x8e0 (&lsquo;<samp><span class="samp">a</span></samp>&rsquo;
-with grave accent) is in the Emacs character set for Latin-1 but the
-character 0x97c (&lsquo;<samp><span class="samp">u</span></samp>&rsquo; with diaeresis) is in the Emacs character
-set for Latin-2.  (We use Lisp string syntax to write that example,
-and a few others in the next few paragraphs, in order to include hex
-escape sequences in them.)
-
+     <!-- What if it starts with a multibyte and ends with a unibyte? -->
+     <!-- That doesn't seem to match anything...? -->
      <p>If a range starts with a unibyte character <var>c</var> and ends with a
 multibyte character <var>c2</var>, the range is divided into two parts: one
-is &lsquo;<samp><var>c</var><span class="samp">..?\377</span></samp>&rsquo;, the other is &lsquo;<samp><var>c1</var><span class="samp">..</span><var>c2</var></samp>&rsquo;, where
-<var>c1</var> is the first character of the charset to which <var>c2</var>
-belongs.
+spans the unibyte characters &lsquo;<samp><var>c</var><span class="samp">..?\377</span></samp>&rsquo;, the other the
+multibyte characters &lsquo;<samp><var>c1</var><span class="samp">..</span><var>c2</var></samp>&rsquo;, where <var>c1</var> is the
+first character of the charset to which <var>c2</var> belongs.
 
      <p>A character alternative can also specify named character classes
-(see <a href="Char-Classes.html#Char-Classes">Char Classes</a>).  This is a POSIX feature whose syntax is
-&lsquo;<samp><span class="samp">[:</span><var>class</var><span class="samp">:]</span></samp>&rsquo;.  Using a character class is equivalent to
-mentioning each of the characters in that class; but the latter is not
-feasible in practice, since some classes include thousands of
-different characters.
+(see <a href="Char-Classes.html#Char-Classes">Char Classes</a>).  This is a POSIX feature.  For example,
+&lsquo;<samp><span class="samp">[[:ascii:]]</span></samp>&rsquo; matches any <acronym>ASCII</acronym> character. 
+Using a character class is equivalent to mentioning each of the
+characters in that class; but the latter is not feasible in practice,
+since some classes include thousands of different characters.
 
-     <br><dt>&lsquo;<samp><span class="samp">[^ ... ]</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_005e_007d-in-regexp-3052"></a>&lsquo;<samp><span class="samp">[^</span></samp>&rsquo; begins a <dfn>complemented character alternative</dfn>.  This
+     <br><dt>&lsquo;<samp><span class="samp">[^ ... ]</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_005e_007d-in-regexp-3331"></a>&lsquo;<samp><span class="samp">[^</span></samp>&rsquo; begins a <dfn>complemented character alternative</dfn>.  This
 matches any character except the ones specified.  Thus,
 &lsquo;<samp><span class="samp">[^a-z0-9A-Z]</span></samp>&rsquo; matches all characters <em>except</em> letters and
 digits.
@@ -173,7 +174,7 @@ the handling of regexps in programs such as <code>grep</code>.
 alternatives.  For instance, &lsquo;<samp><span class="samp">[^[:ascii:]]</span></samp>&rsquo; matches any
 non-<acronym>ASCII</acronym> character.  See <a href="Char-Classes.html#Char-Classes">Char Classes</a>.
 
-     <br><dt>&lsquo;<samp><span class="samp">^</span></samp>&rsquo;<dd><a name="index-beginning-of-line-in-regexp-3053"></a>When matching a buffer, &lsquo;<samp><span class="samp">^</span></samp>&rsquo; matches the empty string, but only at the
+     <br><dt>&lsquo;<samp><span class="samp">^</span></samp>&rsquo;<dd><a name="index-beginning-of-line-in-regexp-3332"></a>When matching a buffer, &lsquo;<samp><span class="samp">^</span></samp>&rsquo; matches the empty string, but only at the
 beginning of a line in the text being matched (or the beginning of the
 accessible portion of the buffer).  Otherwise it fails to match
 anything.  Thus, &lsquo;<samp><span class="samp">^foo</span></samp>&rsquo; matches a &lsquo;<samp><span class="samp">foo</span></samp>&rsquo; that occurs at the
@@ -186,7 +187,7 @@ beginning of the string or after a newline character.
 beginning of the regular expression, or after &lsquo;<samp><span class="samp">\(</span></samp>&rsquo;, &lsquo;<samp><span class="samp">\(?:</span></samp>&rsquo;
 or &lsquo;<samp><span class="samp">\|</span></samp>&rsquo;.
 
-     <br><dt>&lsquo;<samp><span class="samp">$</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_0024_007d-in-regexp-3054"></a><a name="index-end-of-line-in-regexp-3055"></a>is similar to &lsquo;<samp><span class="samp">^</span></samp>&rsquo; but matches only at the end of a line (or the
+     <br><dt>&lsquo;<samp><span class="samp">$</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_0024_007d-in-regexp-3333"></a><a name="index-end-of-line-in-regexp-3334"></a>is similar to &lsquo;<samp><span class="samp">^</span></samp>&rsquo; but matches only at the end of a line (or the
 end of the accessible portion of the buffer).  Thus, &lsquo;<samp><span class="samp">x+$</span></samp>&rsquo;
 matches a string of one &lsquo;<samp><span class="samp">x</span></samp>&rsquo; or more at the end of a line.
 
@@ -196,7 +197,7 @@ of the string or before a newline character.
      <p>For historical compatibility reasons, &lsquo;<samp><span class="samp">$</span></samp>&rsquo; can be used only at the
 end of the regular expression, or before &lsquo;<samp><span class="samp">\)</span></samp>&rsquo; or &lsquo;<samp><span class="samp">\|</span></samp>&rsquo;.
 
-     <br><dt>&lsquo;<samp><span class="samp">\</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_005c_007d-in-regexp-3056"></a>has two functions: it quotes the special characters (including
+     <br><dt>&lsquo;<samp><span class="samp">\</span></samp>&rsquo;<dd><a name="index-g_t_0040samp_007b_005c_007d-in-regexp-3335"></a>has two functions: it quotes the special characters (including
 &lsquo;<samp><span class="samp">\</span></samp>&rsquo;), and it introduces additional special constructs.
 
      <p>Because &lsquo;<samp><span class="samp">\</span></samp>&rsquo; quotes special characters, &lsquo;<samp><span class="samp">\$</span></samp>&rsquo; is a regular

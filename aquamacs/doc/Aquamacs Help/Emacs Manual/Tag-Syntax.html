@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Tag Syntax - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Create-Tags-Table.html#Create-Tags-Table" title="Create Tags Table">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -43,7 +40,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Tags.html#Tags">Tags</a>
 <hr>
 </div>
 
-<h4 class="subsection">32.3.1 Source File Tag Syntax</h4>
+<h4 class="subsection">28.3.1 Source File Tag Syntax</h4>
 
 <p>Here is how tag syntax is defined for the most popular languages:
 
@@ -60,7 +57,7 @@ and &lsquo;<samp><span class="samp">--no-members</span></samp>&rsquo; can make t
 
      <p>You can tag function declarations and external variables in addition
 to function definitions by giving the &lsquo;<samp><span class="samp">--declarations</span></samp>&rsquo; option to
-<code>etags</code>.
+<samp><span class="command">etags</span></samp>.
 
      <li>In C++ code, in addition to all the tag constructs of C code, member
 functions are also recognized; member variables are also recognized,
@@ -74,15 +71,15 @@ the <code>interface</code>, <code>extends</code> and <code>implements</code> con
 Tags for variables and functions in classes are named
 &lsquo;<samp><var>class</var><span class="samp">.</span><var>variable</var></samp>&rsquo; and &lsquo;<samp><var>class</var><span class="samp">.</span><var>function</var></samp>&rsquo;.
 
-     <li>In LaTeX text, the argument of any of the commands <code>\chapter</code>,
+     <li>In LaTeX documents, the arguments for <code>\chapter</code>,
 <code>\section</code>, <code>\subsection</code>, <code>\subsubsection</code>,
 <code>\eqno</code>, <code>\label</code>, <code>\ref</code>, <code>\cite</code>,
 <code>\bibitem</code>, <code>\part</code>, <code>\appendix</code>, <code>\entry</code>,
 <code>\index</code>, <code>\def</code>, <code>\newcommand</code>, <code>\renewcommand</code>,
-<code>\newenvironment</code> or <code>\renewenvironment</code> is a tag.
+<code>\newenvironment</code> and <code>\renewenvironment</code> are tags.
 
      <p>Other commands can make tags as well, if you specify them in the
-environment variable <samp><span class="env">TEXTAGS</span></samp> before invoking <code>etags</code>.  The
+environment variable <samp><span class="env">TEXTAGS</span></samp> before invoking <samp><span class="command">etags</span></samp>.  The
 value of this environment variable should be a colon-separated list of
 command names.  For example,
 
@@ -93,9 +90,11 @@ command names.  For example,
 &lsquo;<samp><span class="samp">\mycommand</span></samp>&rsquo; and &lsquo;<samp><span class="samp">\myothercommand</span></samp>&rsquo; also define tags.
 
      <li>In Lisp code, any function defined with <code>defun</code>, any variable
-defined with <code>defvar</code> or <code>defconst</code>, and in general the first
-argument of any expression that starts with &lsquo;<samp><span class="samp">(def</span></samp>&rsquo; in column zero is
-a tag.
+defined with <code>defvar</code> or <code>defconst</code>, and in general the
+first argument of any expression that starts with &lsquo;<samp><span class="samp">(def</span></samp>&rsquo; in
+column zero is a tag.  As an exception, expressions of the form
+<code>(defvar </code><var>foo</var><code>)</code> are treated as declarations, and are only
+tagged if the &lsquo;<samp><span class="samp">--declarations</span></samp>&rsquo; option is given.
 
      <li>In Scheme code, tags include anything defined with <code>def</code> or with a
 construct whose name starts with &lsquo;<samp><span class="samp">def</span></samp>&rsquo;.  They also include variables
@@ -111,8 +110,8 @@ packages only.
 
      <p>In Ada, the same name can be used for different kinds of entity
 (e.g., for a procedure and for a function).  Also, for things like
-packages, procedures and functions, there is the spec (i.e. the
-interface) and the body (i.e. the implementation).  To make it
+packages, procedures and functions, there is the spec (i.e., the
+interface) and the body (i.e., the implementation).  To make it
 easier to pick the definition you want, Ada tag name have suffixes
 indicating the type of entity:
 
@@ -130,7 +129,7 @@ directly to the body of the package <code>bidule</code>, while <kbd>M-x
 find-tag &lt;RET&gt; bidule &lt;RET&gt;</kbd> will just search for any tag
 <code>bidule</code>.
 
-     <li>In assembler code, labels appearing at the beginning of a line,
+     <li>In assembler code, labels appearing at the start of a line,
 followed by a colon, are tags.
 
      <li>In Bison or Yacc input files, each rule defines as a tag the nonterminal
@@ -163,11 +162,11 @@ functions in classes are named &lsquo;<samp><var>class</var><span class="samp">:
 the file.
 
      <li>In Perl code, the tags are the packages, subroutines and variables
-defined by the <code>package</code>, <code>sub</code>, <code>my</code> and <code>local</code>
-keywords.  Use &lsquo;<samp><span class="samp">--globals</span></samp>&rsquo; if you want to tag global variables. 
-Tags for subroutines are named &lsquo;<samp><var>package</var><span class="samp">::</span><var>sub</var></samp>&rsquo;.  The
-name for subroutines defined in the default package is
-&lsquo;<samp><span class="samp">main::</span><var>sub</var></samp>&rsquo;.
+defined by the <code>package</code>, <code>sub</code>, <code>use constant</code>,
+<code>my</code>, and <code>local</code> keywords.  Use &lsquo;<samp><span class="samp">--globals</span></samp>&rsquo; if you
+want to tag global variables.  Tags for subroutines are named
+&lsquo;<samp><var>package</var><span class="samp">::</span><var>sub</var></samp>&rsquo;.  The name for subroutines defined in
+the default package is &lsquo;<samp><span class="samp">main::</span><var>sub</var></samp>&rsquo;.
 
      <li>In PHP code, tags are functions, classes and defines.  Vars are tags
 too, unless you use the &lsquo;<samp><span class="samp">--no-members</span></samp>&rsquo; option.

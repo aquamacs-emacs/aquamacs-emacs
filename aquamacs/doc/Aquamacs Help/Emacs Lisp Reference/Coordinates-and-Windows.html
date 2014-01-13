@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Coordinates and Windows - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Windows.html#Windows" title="Windows">
-<link rel="prev" href="Resizing-Windows.html#Resizing-Windows" title="Resizing Windows">
-<link rel="next" href="Window-Tree.html#Window-Tree" title="Window Tree">
+<link rel="prev" href="Horizontal-Scrolling.html#Horizontal-Scrolling" title="Horizontal Scrolling">
+<link rel="next" href="Window-Configurations.html#Window-Configurations" title="Window Configurations">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -38,38 +35,99 @@ Foundation, Inc.
 <div class="node">
 <a name="Coordinates-and-Windows"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Window-Tree.html#Window-Tree">Window Tree</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Resizing-Windows.html#Resizing-Windows">Resizing Windows</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Window-Configurations.html#Window-Configurations">Window Configurations</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Horizontal-Scrolling.html#Horizontal-Scrolling">Horizontal Scrolling</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
 <hr>
 </div>
 
-<h3 class="section">28.17 Coordinates and Windows</h3>
+<h3 class="section">28.23 Coordinates and Windows</h3>
 
-<p>This section describes how to relate screen coordinates to windows.
+<p><a name="index-frame_002drelative-coordinate-2443"></a><a name="index-coordinate_002c-relative-to-frame-2444"></a><a name="index-window-position-2445"></a>
+  This section describes functions that report the position of a
+window.  Most of these functions report positions relative to the
+window's frame.  In this case, the coordinate origin &lsquo;<samp><span class="samp">(0,0)</span></samp>&rsquo; lies
+near the upper left corner of the frame.  For technical reasons, on
+graphical displays the origin is not located at the exact corner of
+the graphical window as it appears on the screen.  If Emacs is built
+with the GTK+ toolkit, the origin is at the upper left corner of the
+frame area used for displaying Emacs windows, below the title-bar,
+GTK+ menu bar, and tool bar (since these are drawn by the window
+manager and/or GTK+, not by Emacs).  But if Emacs is not built with
+GTK+, the origin is at the upper left corner of the tool bar (since in
+this case Emacs itself draws the tool bar).  In both cases, the X and
+Y coordinates increase rightward and downward respectively.
+
+   <p>Except where noted, X and Y coordinates are reported in integer
+character units, i.e., numbers of lines and columns respectively.  On a
+graphical display, each &ldquo;line&rdquo; and &ldquo;column&rdquo; corresponds to the
+height and width of a default character specified by the frame's
+default font.
 
 <div class="defun">
-&mdash; Function: <b>window-at</b><var> x y &amp;optional frame<a name="index-window_002dat-2206"></a></var><br>
-<blockquote><p>This function returns the window containing the specified cursor
-position in the frame <var>frame</var>.  The coordinates <var>x</var> and <var>y</var>
-are measured in characters and count from the top left corner of the
-frame.  If they are out of range, <code>window-at</code> returns <code>nil</code>.
+&mdash; Function: <b>window-edges</b><var> &amp;optional window<a name="index-window_002dedges-2446"></a></var><br>
+<blockquote><p>This function returns a list of the edge coordinates of <var>window</var>. 
+If <var>window</var> is omitted or <code>nil</code>, it defaults to the selected
+window.
 
-        <p>If you omit <var>frame</var>, the selected frame is used. 
+        <p>The return value has the form <code>(</code><var>left</var> <var>top</var> <var>right</var>
+<var>bottom</var><code>)</code>.  These list elements are, respectively, the X
+coordinate of the leftmost column occupied by the window, the Y
+coordinate of the topmost row, the X coordinate one column to the
+right of the rightmost column, and the Y coordinate one row down from
+the bottommost row.
+
+        <p>Note that these are the actual outer edges of the window, including
+any header line, mode line, scroll bar, fringes, and display margins. 
+On a text terminal, if the window has a neighbor on its right, its
+right edge includes the separator line between the window and its
+neighbor. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>coordinates-in-window-p</b><var> coordinates window<a name="index-coordinates_002din_002dwindow_002dp-2207"></a></var><br>
-<blockquote><p>This function checks whether a particular frame position falls within
-the window <var>window</var>.
+&mdash; Function: <b>window-inside-edges</b><var> &amp;optional window<a name="index-window_002dinside_002dedges-2447"></a></var><br>
+<blockquote><p>This function is similar to <code>window-edges</code>, but the returned edge
+values are for the text area of the window.  They exclude any header
+line, mode line, scroll bar, fringes, display margins, and vertical
+separator. 
+</p></blockquote></div>
 
-        <p>The argument <var>coordinates</var> is a cons cell of the form <code>(</code><var>x</var><code>
-. </code><var>y</var><code>)</code>.  The coordinates <var>x</var> and <var>y</var> are measured in
-characters, and count from the top left corner of the screen or frame.
+<div class="defun">
+&mdash; Function: <b>window-top-line</b><var> &amp;optional window<a name="index-window_002dtop_002dline-2448"></a></var><br>
+<blockquote><p>This function returns the Y coordinate of the topmost row of
+<var>window</var>, equivalent to the <var>top</var> entry in the list returned
+by <code>window-edges</code>. 
+</p></blockquote></div>
 
-        <p>The value returned by <code>coordinates-in-window-p</code> is non-<code>nil</code>
-if the coordinates are inside <var>window</var>.  The value also indicates
-what part of the window the position is in, as follows:
+<div class="defun">
+&mdash; Function: <b>window-left-column</b><var> &amp;optional window<a name="index-window_002dleft_002dcolumn-2449"></a></var><br>
+<blockquote><p>This function returns the X coordinate of the leftmost column of
+<var>window</var>, equivalent to the <var>left</var> entry in the list returned
+by <code>window-edges</code>. 
+</p></blockquote></div>
+
+   <p>The following functions can be used to relate a set of
+frame-relative coordinates to a window:
+
+<div class="defun">
+&mdash; Function: <b>window-at</b><var> x y &amp;optional frame<a name="index-window_002dat-2450"></a></var><br>
+<blockquote><p>This function returns the live window at the frame-relative
+coordinates <var>x</var> and <var>y</var>, on frame <var>frame</var>.  If there is no
+window at that position, the return value is <code>nil</code>.  If
+<var>frame</var> is omitted or <code>nil</code>, it defaults to the selected
+frame. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>coordinates-in-window-p</b><var> coordinates window<a name="index-coordinates_002din_002dwindow_002dp-2451"></a></var><br>
+<blockquote><p>This function checks whether a window <var>window</var> occupies the
+frame-relative coordinates <var>coordinates</var>, and if so, which part of
+the window that is.  <var>window</var> should be a live window. 
+<var>coordinates</var> should be a cons cell of the form <code>(</code><var>x</var><code>
+. </code><var>y</var><code>)</code>, where <var>x</var> and <var>y</var> are frame-relative coordinates.
+
+        <p>If there is no window at the specified position, the return value is
+<code>nil</code> .  Otherwise, the return value is one of the following:
 
           <dl>
 <dt><code>(</code><var>relx</var><code> . </code><var>rely</var><code>)</code><dd>The coordinates are inside <var>window</var>.  The numbers <var>relx</var> and
@@ -95,6 +153,49 @@ window for these purposes.
 
         <p>The function <code>coordinates-in-window-p</code> does not require a frame as
 argument because it always uses the frame that <var>window</var> is on. 
+</p></blockquote></div>
+
+   <p>The following functions return window positions in pixels, rather
+than character units.  Though mostly useful on graphical displays,
+they can also be called on text terminals, where the screen area of
+each text character is taken to be &ldquo;one pixel&rdquo;.
+
+<div class="defun">
+&mdash; Function: <b>window-pixel-edges</b><var> &amp;optional window<a name="index-window_002dpixel_002dedges-2452"></a></var><br>
+<blockquote><p>This function returns a list of pixel coordinates for the edges of
+<var>window</var>.  If <var>window</var> is omitted or <code>nil</code>, it defaults
+to the selected window.
+
+        <p>The return value has the form <code>(</code><var>left</var> <var>top</var> <var>right</var>
+<var>bottom</var><code>)</code>.  The list elements are, respectively, the X pixel
+coordinate of the left window edge, the Y pixel coordinate of the top
+edge, one more than the X pixel coordinate of the right edge, and one
+more than the Y pixel coordinate of the bottom edge. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>window-inside-pixel-edges</b><var> &amp;optional window<a name="index-window_002dinside_002dpixel_002dedges-2453"></a></var><br>
+<blockquote><p>This function is like <code>window-pixel-edges</code>, except that it
+returns the pixel coordinates for the edges of the window's text area,
+rather than the pixel coordinates for the edges of the window itself. 
+<var>window</var> must specify a live window. 
+</p></blockquote></div>
+
+   <p>The following functions return window positions in pixels, relative
+to the display screen rather than the frame:
+
+<div class="defun">
+&mdash; Function: <b>window-absolute-pixel-edges</b><var> &amp;optional window<a name="index-window_002dabsolute_002dpixel_002dedges-2454"></a></var><br>
+<blockquote><p>This function is like <code>window-pixel-edges</code>, except that it
+returns the edge pixel coordinates relative to the top left corner of
+the display screen. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>window-inside-absolute-pixel-edges</b><var> &amp;optional window<a name="index-window_002dinside_002dabsolute_002dpixel_002dedges-2455"></a></var><br>
+<blockquote><p>This function is like <code>window-inside-pixel-edges</code>, except that it
+returns the edge pixel coordinates relative to the top left corner of
+the display screen.  <var>window</var> must specify a live window. 
 </p></blockquote></div>
 
    </body></html>

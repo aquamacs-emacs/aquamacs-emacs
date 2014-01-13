@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Object from Minibuffer - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Minibuffer-History.html#Minibuffer-History" title="Minibuffer History">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -50,7 +47,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Minibuffers.html#Minibuffers">Minibuffe
 minibuffer.
 
 <div class="defun">
-&mdash; Function: <b>read-minibuffer</b><var> prompt &amp;optional initial<a name="index-read_002dminibuffer-1097"></a></var><br>
+&mdash; Function: <b>read-minibuffer</b><var> prompt &amp;optional initial<a name="index-read_002dminibuffer-1168"></a></var><br>
 <blockquote><p>This function reads a Lisp object using the minibuffer, and returns it
 without evaluating it.  The arguments <var>prompt</var> and <var>initial</var> are
 used as in <code>read-from-minibuffer</code>.
@@ -80,7 +77,7 @@ default, or can edit the input.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>eval-minibuffer</b><var> prompt &amp;optional initial<a name="index-eval_002dminibuffer-1098"></a></var><br>
+&mdash; Function: <b>eval-minibuffer</b><var> prompt &amp;optional initial<a name="index-eval_002dminibuffer-1169"></a></var><br>
 <blockquote><p>This function reads a Lisp expression using the minibuffer, evaluates
 it, then returns the result.  The arguments <var>prompt</var> and
 <var>initial</var> are used as in <code>read-from-minibuffer</code>.
@@ -95,24 +92,17 @@ it, then returns the result.  The arguments <var>prompt</var> and
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>edit-and-eval-command</b><var> prompt form<a name="index-edit_002dand_002deval_002dcommand-1099"></a></var><br>
-<blockquote><p>This function reads a Lisp expression in the minibuffer, and then
-evaluates it.  The difference between this command and
+&mdash; Function: <b>edit-and-eval-command</b><var> prompt form<a name="index-edit_002dand_002deval_002dcommand-1170"></a></var><br>
+<blockquote><p>This function reads a Lisp expression in the minibuffer, evaluates it,
+then returns the result.  The difference between this command and
 <code>eval-minibuffer</code> is that here the initial <var>form</var> is not
 optional and it is treated as a Lisp object to be converted to printed
 representation rather than as a string of text.  It is printed with
 <code>prin1</code>, so if it is a string, double-quote characters (&lsquo;<samp><span class="samp">"</span></samp>&rsquo;)
 appear in the initial text.  See <a href="Output-Functions.html#Output-Functions">Output Functions</a>.
 
-        <p>The first thing <code>edit-and-eval-command</code> does is to activate the
-minibuffer with <var>prompt</var> as the prompt.  Then it inserts the printed
-representation of <var>form</var> in the minibuffer, and lets the user edit it. 
-When the user exits the minibuffer, the edited text is read with
-<code>read</code> and then evaluated.  The resulting value becomes the value
-of <code>edit-and-eval-command</code>.
-
         <p>In the following example, we offer the user an expression with initial
-text which is a valid form already:
+text that is already a valid form:
 
      <pre class="smallexample">          (edit-and-eval-command "Please edit: " '(forward-word 1))
           
@@ -125,7 +115,6 @@ text which is a valid form already:
 </pre>
         <p class="noindent">Typing &lt;RET&gt; right away would exit the minibuffer and evaluate the
 expression, thus moving point forward one word. 
-<code>edit-and-eval-command</code> returns <code>nil</code> in this example. 
 </p></blockquote></div>
 
    </body></html>

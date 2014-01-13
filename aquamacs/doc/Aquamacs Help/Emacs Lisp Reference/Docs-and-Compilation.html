@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Docs and Compilation - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Dynamic-Loading.html#Dynamic-Loading" title="Dynamic Loading">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,7 +43,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Byte-Compilation.html#Byte-Compilation"
 
 <h3 class="section">16.3 Documentation Strings and Compilation</h3>
 
-<p><a name="index-dynamic-loading-of-documentation-856"></a>
+<p><a name="index-dynamic-loading-of-documentation-913"></a>
   Functions and variables loaded from a byte-compiled file access their
 documentation strings dynamically from the file whenever needed.  This
 saves space within Emacs, and makes loading faster because the
@@ -66,40 +63,34 @@ then further access to documentation strings in this file will
 probably give nonsense results. 
 </ul>
 
-   <p>If your site installs Emacs following the usual procedures, these
-problems will never normally occur.  Installing a new version uses a new
-directory with a different name; as long as the old version remains
-installed, its files will remain unmodified in the places where they are
-expected to be.
+<p class="noindent">These problems normally occur only if you build Emacs yourself and use
+it from the directory where you built it, and you happen to edit
+and/or recompile the Lisp source files.  They can be easily cured by
+reloading each file after recompiling it.
 
-   <p>However, if you have built Emacs yourself and use it from the
-directory where you built it, you will experience this problem
-occasionally if you edit and recompile Lisp files.  When it happens, you
-can cure the problem by reloading the file after recompiling it.
+   <p><a name="index-g_t_0040samp_007b_0023_0040_0040_0040var_007bcount_007d_007d-914"></a><a name="index-g_t_0040samp_007b_0023_0024_007d-915"></a>  The dynamic documentation string feature writes compiled files that
+use a special Lisp reader construct, &lsquo;<samp><span class="samp">#@</span><var>count</var></samp>&rsquo;.  This
+construct skips the next <var>count</var> characters.  It also uses the
+&lsquo;<samp><span class="samp">#$</span></samp>&rsquo; construct, which stands for &ldquo;the name of this file, as a
+string&rdquo;.  It is usually best not to use these constructs in Lisp source
+files, since they are not designed to be clear to humans reading the
+file.
 
-   <p>You can turn off this feature at compile time by setting
-<code>byte-compile-dynamic-docstrings</code> to <code>nil</code>; this is useful
-mainly if you expect to change the file, and you want Emacs processes
-that have already loaded it to keep working when the file changes. 
-You can do this globally, or for one source file by specifying a
-file-local binding for the variable.  One way to do that is by adding
-this string to the file's first line:
+   <p>You can disable the dynamic documentation string feature at compile
+time by setting <code>byte-compile-dynamic-docstrings</code> to <code>nil</code>;
+this is useful mainly if you expect to change the file, and you want
+Emacs processes that have already loaded it to keep working when the
+file changes.  You can do this globally, or for one source file by
+specifying a file-local binding for the variable.  One way to do that
+is by adding this string to the file's first line:
 
 <pre class="example">     -*-byte-compile-dynamic-docstrings: nil;-*-
 </pre>
    <div class="defun">
-&mdash; Variable: <b>byte-compile-dynamic-docstrings</b><var><a name="index-byte_002dcompile_002ddynamic_002ddocstrings-857"></a></var><br>
+&mdash; User Option: <b>byte-compile-dynamic-docstrings</b><var><a name="index-byte_002dcompile_002ddynamic_002ddocstrings-916"></a></var><br>
 <blockquote><p>If this is non-<code>nil</code>, the byte compiler generates compiled files
 that are set up for dynamic loading of documentation strings. 
 </p></blockquote></div>
-
-   <p><a name="index-g_t_0040samp_007b_0023_0040_0040_0040var_007bcount_007d_007d-858"></a><a name="index-g_t_0040samp_007b_0023_0024_007d-859"></a>  The dynamic documentation string feature writes compiled files that
-use a special Lisp reader construct, &lsquo;<samp><span class="samp">#@</span><var>count</var></samp>&rsquo;.  This
-construct skips the next <var>count</var> characters.  It also uses the
-&lsquo;<samp><span class="samp">#$</span></samp>&rsquo; construct, which stands for &ldquo;the name of this file, as a
-string.&rdquo;  It is usually best not to use these constructs in Lisp source
-files, since they are not designed to be clear to humans reading the
-file.
 
    </body></html>
 

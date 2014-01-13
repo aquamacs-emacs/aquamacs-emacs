@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Shell Prompts - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Shell-History.html#Shell-History" title="Shell History">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,39 +42,36 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Shell.html#Shell">Shell</a>
 <hr>
 </div>
 
-<h3 class="section">41.4 Shell Prompts</h3>
+<h3 class="section">36.4 Shell Prompts</h3>
 
-<p><a name="index-shell_002dprompt_002dpattern-3686"></a><a name="index-comint_002dprompt_002dregexp-3687"></a><a name="index-comint_002duse_002dprompt_002dregexp-3688"></a><a name="index-prompt_002c-shell-3689"></a>  A prompt is text output by a program to show that it is ready to
+<p><a name="index-prompt_002c-shell-3978"></a>  A prompt is text output by a program to show that it is ready to
 accept new user input.  Normally, Comint mode (and thus Shell mode)
-considers the prompt to be any text output by a program at the
-beginning of an input line.  However, if the variable
-<code>comint-use-prompt-regexp</code> is non-<code>nil</code>, then Comint mode
-uses a regular expression to recognize prompts.  In Shell mode,
-<code>shell-prompt-pattern</code> specifies the regular expression.
+automatically figures out part of the buffer is a prompt, based on the
+output of the subprocess.  (Specifically, it assumes that any received
+output line which doesn't end with a newline is a prompt.)
 
-   <p>The value of <code>comint-use-prompt-regexp</code> also affects many
-motion and paragraph commands.  If the value is non-<code>nil</code>, the
-general Emacs motion commands behave as they normally do in buffers
-without special text properties.  However, if the value is <code>nil</code>,
-the default, then Comint mode divides the buffer into two types of
-&ldquo;fields&rdquo; (ranges of consecutive characters having the same
-<code>field</code> text property): input and output.  Prompts are part of
-the output.  Most Emacs motion commands do not cross field boundaries,
-unless they move over multiple lines.  For instance, when point is in
-input on the same line as a prompt, <kbd>C-a</kbd> puts point at the
-beginning of the input if <code>comint-use-prompt-regexp</code> is
-<code>nil</code> and at the beginning of the line otherwise.
+   <p>Comint mode divides the buffer into two types of <dfn>fields</dfn>: input
+fields (where user input is typed) and output fields (everywhere
+else).  Prompts are part of the output fields.  Most Emacs motion
+commands do not cross field boundaries, unless they move over multiple
+lines.  For instance, when point is in the input field on a shell
+command line, <kbd>C-a</kbd> puts point at the beginning of the input
+field, after the prompt.  Internally, the fields are implemented using
+the <code>field</code> text property (see <a href="../elisp/Text-Properties.html#Text-Properties">Text Properties</a>).
 
-   <p>In Shell mode, only shell prompts start new paragraphs.  Thus, a
-paragraph consists of a prompt and the input and output that follow
-it.  However, if <code>comint-use-prompt-regexp</code> is <code>nil</code>, the
-default, most paragraph commands do not cross field boundaries.  This
-means that prompts, ranges of input, and ranges of non-prompt output
-behave mostly like separate paragraphs; with this setting, numeric
-arguments to most paragraph commands yield essentially undefined
-behavior.  For the purpose of finding paragraph boundaries, Shell mode
-uses <code>shell-prompt-pattern</code>, regardless of
-<code>comint-use-prompt-regexp</code>.
+   <p><a name="index-comint_002duse_002dprompt_002dregexp-3979"></a><a name="index-shell_002dprompt_002dpattern-3980"></a>  If you change the variable <code>comint-use-prompt-regexp</code> to a
+non-<code>nil</code> value, then Comint mode recognize prompts using a
+regular expression (see <a href="Regexps.html#Regexps">Regexps</a>).  In Shell mode, the regular
+expression is specified by the variable <code>shell-prompt-pattern</code>. 
+The default value of <code>comint-use-prompt-regexp</code> is <code>nil</code>,
+because this method for recognizing prompts is unreliable, but you may
+want to set it to a non-<code>nil</code> value in unusual circumstances.  In
+that case, Emacs does not divide the Comint buffer into fields, so the
+general motion commands behave as they normally do in buffers without
+special text properties.  However, you can use the paragraph motion
+commands to conveniently navigate the buffer (see <a href="Paragraphs.html#Paragraphs">Paragraphs</a>); in
+Shell mode, Emacs uses <code>shell-prompt-pattern</code> as paragraph
+boundaries.
 
    </body></html>
 

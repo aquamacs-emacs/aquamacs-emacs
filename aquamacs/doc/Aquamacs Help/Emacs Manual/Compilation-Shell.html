@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Compilation Shell - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Grep-Searching.html#Grep-Searching" title="Grep Searching">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,16 +42,16 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Building.html#Building">Building</a>
 <hr>
 </div>
 
-<h3 class="section">31.3 Subshells for Compilation</h3>
+<h3 class="section">27.3 Subshells for Compilation</h3>
 
-<p>Emacs uses a shell to run the compilation command, but specifies the
-option for a noninteractive shell.  This means, in particular, that
-the shell should start with no prompt.  If you find your usual shell
-prompt making an unsightly appearance in the &lsquo;<samp><span class="samp">*compilation*</span></samp>&rsquo;
-buffer, it means you have made a mistake in your shell's init file by
-setting the prompt unconditionally.  (This init file's name may be
-<samp><span class="file">.bashrc</span></samp>, <samp><span class="file">.profile</span></samp>, <samp><span class="file">.cshrc</span></samp>, <samp><span class="file">.shrc</span></samp>, or
-various other things, depending on the shell you use.)  The shell init
+<p>The <kbd>M-x compile</kbd> command uses a shell to run the compilation
+command, but specifies the option for a noninteractive shell.  This
+means, in particular, that the shell should start with no prompt.  If
+you find your usual shell prompt making an unsightly appearance in the
+<samp><span class="file">*compilation*</span></samp> buffer, it means you have made a mistake in your
+shell's init file by setting the prompt unconditionally.  (This init
+file may be named <samp><span class="file">.bashrc</span></samp>, <samp><span class="file">.profile</span></samp>, <samp><span class="file">.cshrc</span></samp>,
+<samp><span class="file">.shrc</span></samp>, etc., depending on what shell you use.)  The shell init
 file should set the prompt only if there already is a prompt.  Here's
 how to do it in bash:
 
@@ -66,16 +63,27 @@ how to do it in bash:
 
 <pre class="example">     if ($?prompt) set prompt = ...
 </pre>
-   <p>There may well be other things that your shell's init file
-ought to do only for an interactive shell.  You can use the same
-method to conditionalize them.
+   <p>Emacs does not expect a compiler process to launch asynchronous
+subprocesses; if it does, and they keep running after the main
+compiler process has terminated, Emacs may kill them or their output
+may not arrive in Emacs.  To avoid this problem, make the main
+compilation process wait for its subprocesses to finish.  In a shell
+script, you can do this using &lsquo;<samp><span class="samp">$!</span></samp>&rsquo; and &lsquo;<samp><span class="samp">wait</span></samp>&rsquo;, like this:
 
-   <p>The MS-DOS &ldquo;operating system&rdquo; does not support asynchronous
-subprocesses; to work around this lack, <kbd>M-x compile</kbd> runs the
-compilation command synchronously on MS-DOS.  As a consequence, you must
-wait until the command finishes before you can do anything else in
-Emacs. 
-See <a href="MS_002dDOS.html#MS_002dDOS">MS-DOS</a>.
+<pre class="example">     (sleep 10; echo 2nd)&amp; pid=$!  # <span class="roman">Record pid of subprocess</span>
+     echo first message
+     wait $pid                     # <span class="roman">Wait for subprocess</span>
+</pre>
+   <p class="noindent">If the background process does not output to the compilation buffer,
+so you only need to prevent it from being killed when the main
+compilation process terminates, this is sufficient:
+
+<pre class="example">     nohup <var>command</var>; sleep 1
+</pre>
+   <p>On the MS-DOS &ldquo;operating system&rdquo;, asynchronous subprocesses are
+not supported, so <kbd>M-x compile</kbd> runs the compilation command
+synchronously (i.e., you must wait until the command finishes before
+you can do anything else in Emacs).  See <a href="MS_002dDOS.html#MS_002dDOS">MS-DOS</a>.
 
    </body></html>
 

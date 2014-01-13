@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Comments - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Documentation.html#Documentation" title="Documentation">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,15 +42,30 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Programs.html#Programs">Programs</a>
 <hr>
 </div>
 
-<h3 class="section">30.5 Manipulating Comments</h3>
+<h3 class="section">26.5 Manipulating Comments</h3>
 
-<p><a name="index-comments-2069"></a>
+<p><a name="index-comments-2335"></a>
   Because comments are such an important part of programming, Emacs
 provides special commands for editing and inserting comments.  It can
 also do spell checking on comments with Flyspell Prog mode
 (see <a href="Spelling.html#Spelling">Spelling</a>).
 
-<ul class="menu">
+   <p>Some major modes have special rules for indenting different kinds of
+comments.  For example, in Lisp code, comments starting with two
+semicolons are indented as if they were lines of code, while those
+starting with three semicolons are supposed to be aligned to the left
+margin and are often used for sectioning purposes.  Emacs understand
+these conventions; for instance, typing &lt;TAB&gt; on a comment line
+will indent the comment to the appropriate position.
+
+<pre class="example">     ;; This function is just an example.
+     ;;; Here either two or three semicolons are appropriate.
+     (defun foo (x)
+     ;;;  And now, the first part of the function:
+       ;; The following line adds one.
+       (1+ x))           ; This line adds one.
+</pre>
+   <ul class="menu">
 <li><a accesskey="1" href="Comment-Commands.html#Comment-Commands">Comment Commands</a>:     Inserting, killing, and aligning comments. 
 <li><a accesskey="2" href="Multi_002dLine-Comments.html#Multi_002dLine-Comments">Multi-Line Comments</a>:  Commands for adding and editing multi-line comments. 
 <li><a accesskey="3" href="Options-for-Comments.html#Options-for-Comments">Options for Comments</a>: Customizing the comment features. 

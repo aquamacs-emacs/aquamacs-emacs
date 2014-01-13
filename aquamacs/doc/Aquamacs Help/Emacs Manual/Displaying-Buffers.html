@@ -1,0 +1,86 @@
+<html lang="en">
+<head>
+<title>Displaying Buffers - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Windows.html#Windows" title="Windows">
+<link rel="prev" href="Change-Window.html#Change-Window" title="Change Window">
+<link rel="next" href="Window-Convenience.html#Window-Convenience" title="Window Convenience">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
+
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Displaying-Buffers"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Window-Convenience.html#Window-Convenience">Window Convenience</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Change-Window.html#Change-Window">Change Window</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
+<hr>
+</div>
+
+<h3 class="section">20.6 Displaying a Buffer in a Window</h3>
+
+<p>It is a common Emacs operation to display or &ldquo;pop up&rdquo; some buffer
+in response to a user command.  There are several different ways in
+which commands do this.
+
+   <p>Many commands, like <kbd>C-x C-f</kbd> (<code>find-file</code>), display the
+buffer by &ldquo;taking over&rdquo; the selected window, expecting that the
+user's attention will be diverted to that buffer.  These commands
+usually work by calling <code>switch-to-buffer</code> internally
+(see <a href="Select-Buffer.html#Select-Buffer">Select Buffer</a>).
+
+   <p><a name="index-display_002dbuffer-1410"></a>  Some commands try to display &ldquo;intelligently&rdquo;, trying not to take
+over the selected window, e.g., by splitting off a new window and
+displaying the desired buffer there.  Such commands, which include the
+various help commands (see <a href="Help.html#Help">Help</a>), work by calling
+<code>display-buffer</code> internally.  See <a href="Window-Choice.html#Window-Choice">Window Choice</a>, for details.
+
+   <p>Other commands do the same as <code>display-buffer</code>, and
+additionally select the displaying window so that you can begin
+editing its buffer.  The command <kbd>C-x `</kbd> (<code>next-error</code>) is
+one example (see <a href="Compilation-Mode.html#Compilation-Mode">Compilation Mode</a>).  Such commands work by calling
+the function <code>pop-to-buffer</code> internally.  See <a href="../elisp/Switching-Buffers.html#Switching-Buffers">Switching to a Buffer in a Window</a>.
+
+   <p>Commands with names ending in <code>-other-window</code> behave like
+<code>display-buffer</code>, except that they never display in the selected
+window.  Several of these commands are bound in the <kbd>C-x 4</kbd> prefix
+key (see <a href="Pop-Up-Window.html#Pop-Up-Window">Pop Up Window</a>).
+
+   <p>Commands with names ending in <code>-other-frame</code> behave like
+<code>display-buffer</code>, except that they (i) never display in the
+selected window and (ii) prefer to create a new frame to display the
+desired buffer instead of splitting a window&mdash;as though the variable
+<code>pop-up-frames</code> is set to <code>t</code> (see <a href="Window-Choice.html#Window-Choice">Window Choice</a>). 
+Several of these commands are bound in the <kbd>C-x 5</kbd> prefix key.
+
+<ul class="menu">
+<li><a accesskey="1" href="Window-Choice.html#Window-Choice">Window Choice</a>:    How <code>display-buffer</code> works. 
+</ul>
+
+   </body></html>
+

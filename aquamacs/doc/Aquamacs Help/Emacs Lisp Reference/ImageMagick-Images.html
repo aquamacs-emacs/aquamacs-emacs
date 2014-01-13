@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>ImageMagick Images - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Other-Image-Types.html#Other-Image-Types" title="Other Image Types">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,49 +41,74 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Images.html#Images">Images</a>
 <hr>
 </div>
 
-<h4 class="subsection">38.16.8 ImageMagick Images</h4>
+<h4 class="subsection">38.16.6 ImageMagick Images</h4>
 
-<p><a name="index-ImageMagick-images-3634"></a><a name="index-images_002c-support-for-more-formats-3635"></a>
-  If you build Emacs with ImageMagick (<a href="http://www.imagemagick.org">http://www.imagemagick.org</a>)
-support, you can use the ImageMagick library to load many image formats.
+<p><a name="index-ImageMagick-images-3934"></a><a name="index-images_002c-support-for-more-formats-3935"></a>
+  If you build Emacs with ImageMagick support, you can use the
+ImageMagick library to load many image formats (see <a href="../emacs/File-Conveniences.html#File-Conveniences">File Conveniences</a>).  The image type symbol
+for images loaded via ImageMagick is <code>imagemagick</code>, regardless of
+the actual underlying image format.
 
-   <p><a name="index-imagemagick_002dtypes-3636"></a>The function <code>imagemagick-types</code> returns a list of image file
-extensions that your installation of ImageMagick supports.  To enable
-support, you must call the function <code>imagemagick-register-types</code>.
+<div class="defun">
+&mdash; Function: <b>imagemagick-types</b><var><a name="index-imagemagick_002dtypes-3936"></a></var><br>
+<blockquote><p>This function returns a list of image file extensions supported by the
+current ImageMagick installation.  Each list element is a symbol
+representing an internal ImageMagick name for an image type, such as
+<code>BMP</code> for <samp><span class="file">.bmp</span></samp> images. 
+</p></blockquote></div>
 
-   <p><a name="index-imagemagick_002dtypes_002dinhibit-3637"></a>The variable <code>imagemagick-types-inhibit</code> specifies a list of
-image types that you do <em>not</em> want ImageMagick to handle.  There
-may be overlap between image loaders in your Emacs installation, and
-you may prefer to use a different one for a given image type (which
-<!-- FIXME how is this priority determined? -->
-loader will be used in practice depends on the priority of the loaders). 
-<!-- FIXME why are these uppercase when image-types is lower-case? -->
-<!-- FIXME what are the possibe options?  Are these actually file extensions? -->
-For example, if you never want to use the ImageMagick loader to use
-JPEG files, add <code>JPG</code> to this list.
+<div class="defun">
+&mdash; User Option: <b>imagemagick-enabled-types</b><var><a name="index-imagemagick_002denabled_002dtypes-3937"></a></var><br>
+<blockquote><p>The value of this variable is a list of ImageMagick image types which
+Emacs may attempt to render using ImageMagick.  Each list element
+should be one of the symbols in the list returned by
+<code>imagemagick-types</code>, or an equivalent string.  Alternatively, a
+value of <code>t</code> enables ImageMagick for all possible image types. 
+Regardless of the value of this variable,
+<code>imagemagick-types-inhibit</code> (see below) takes precedence. 
+</p></blockquote></div>
 
-   <p><a name="index-imagemagick_002drender_002dtype-3638"></a>You can set the variable <code>imagemagick-render-type</code> to choose
-between screen render methods for the ImageMagick loader.  The options
-are: <code>0</code>, a conservative method which works with older
-<!-- FIXME details of this "newer method"? -->
-<!-- Presumably it is faster but may be less "robust"? -->
-ImageMagick versions (it is a bit slow, but robust); and <code>1</code>,
-a newer ImageMagick method.
+<div class="defun">
+&mdash; User Option: <b>imagemagick-types-inhibit</b><var><a name="index-imagemagick_002dtypes_002dinhibit-3938"></a></var><br>
+<blockquote><p>The value of this variable lists the ImageMagick image types which
+should never be rendered using ImageMagick, regardless of the value of
+<code>imagemagick-enabled-types</code>.  A value of <code>t</code> disables
+ImageMagick entirely. 
+</p></blockquote></div>
 
-   <p>Images loaded with ImageMagick support a few new display specifications:
+   <p>Images loaded with ImageMagick support the following additional
+image descriptor properties:
 
      <dl>
-<dt><code>:width, :height</code><dd>The <code>:width</code> and <code>:height</code> keywords are used for scaling the
+<dt><code>:background </code><var>background</var><dd><var>background</var>, if non-<code>nil</code>, should be a string specifying a
+color, which is used as the image's background color if the image
+supports transparency.  If the value is <code>nil</code>, it defaults to the
+frame's background color.
+
+     <br><dt><code>:width, :height</code><dd>The <code>:width</code> and <code>:height</code> keywords are used for scaling the
 image.  If only one of them is specified, the other one will be
 calculated so as to preserve the aspect ratio.  If both are specified,
 aspect ratio may not be preserved.
 
+     <br><dt><code>:max-width, :max-height</code><dd>The <code>:max-width</code> and <code>:max-height</code> keywords are used for
+scaling if the size of the image of the image exceeds these values. 
+If <code>:width</code> is set it will have precedence over <code>max-width</code>,
+and if <code>:height</code> is set it will have precedence over
+<code>max-height</code>, but you can otherwise mix these keywords as you
+wish.  <code>:max-width</code> and <code>:max-height</code> will always preserve
+the aspect ratio.
+
+     <br><dt><code>:format</code><dd>ImageMagick tries to auto-detect the image type, but it isn't always
+able to.  By using <code>:format-type</code>, we can give ImageMagick a hint
+to try to help it.  It's used in conjunction with the
+<code>image-format-suffixes</code> variable, which provides a mapping from
+content types to file name suffixes.  This is then given to
+ImageMagick as a file name hint.
+
      <br><dt><code>:rotation</code><dd>Specifies a rotation angle in degrees.
 
-     <br><dt><code>:index</code><dd>Specifies which image to view inside an image bundle file format, such
-as TIFF or DJVM.  You can use the <code>image-metadata</code> function to
-retrieve the total number of images in an image bundle (this is
-similar to how GIF files work). 
+     <br><dt><code>:index</code><dd><!-- Doesn't work: http://debbugs.gnu.org/7978 -->
+See <a href="Multi_002dFrame-Images.html#Multi_002dFrame-Images">Multi-Frame Images</a>. 
 </dl>
 
    </body></html>

@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Words - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Sentences.html#Sentences" title="Sentences">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -43,11 +40,11 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
 <hr>
 </div>
 
-<h3 class="section">29.1 Words</h3>
+<h3 class="section">25.1 Words</h3>
 
-<p><a name="index-words-1555"></a><a name="index-Meta-commands-and-words-1556"></a>
-  Emacs has commands for moving over or operating on words.  By convention,
-the keys for them are all Meta characters.
+<p><a name="index-words-1784"></a><a name="index-Meta-commands-and-words-1785"></a>
+  Emacs defines several commands for moving over or operating on
+words:
 
      <dl>
 <dt><kbd>M-f</kbd><dd>Move forward over a word (<code>forward-word</code>). 
@@ -63,7 +60,7 @@ the keys for them are all Meta characters.
 <kbd>C-f</kbd>, <kbd>C-b</kbd>, <kbd>C-d</kbd>, &lt;DEL&gt; and <kbd>C-t</kbd>.  <kbd>M-@</kbd> is
 cognate to <kbd>C-@</kbd>, which is an alias for <kbd>C-&lt;SPC&gt;</kbd>.
 
-   <p><a name="index-M_002df-1557"></a><a name="index-M_002db-1558"></a><a name="index-forward_002dword-1559"></a><a name="index-backward_002dword-1560"></a>  The commands <kbd>M-f</kbd> (<code>forward-word</code>) and <kbd>M-b</kbd>
+   <p><a name="index-M_002df-1786"></a><a name="index-M_002db-1787"></a><a name="index-forward_002dword-1788"></a><a name="index-backward_002dword-1789"></a>  The commands <kbd>M-f</kbd> (<code>forward-word</code>) and <kbd>M-b</kbd>
 (<code>backward-word</code>) move forward and backward over words.  These
 &lt;Meta&gt;-based key sequences are analogous to the key sequences
 <kbd>C-f</kbd> and <kbd>C-b</kbd>, which move over single characters.  The
@@ -73,7 +70,7 @@ a negative argument moves forward.  Forward motion stops right after
 the last letter of the word, while backward motion stops right before
 the first letter.
 
-   <p><a name="index-M_002dd-1561"></a><a name="index-kill_002dword-1562"></a>  <kbd>M-d</kbd> (<code>kill-word</code>) kills the word after point.  To be
+   <p><a name="index-M_002dd-1790"></a><a name="index-kill_002dword-1791"></a>  <kbd>M-d</kbd> (<code>kill-word</code>) kills the word after point.  To be
 precise, it kills everything from point to the place <kbd>M-f</kbd> would
 move to.  Thus, if point is in the middle of a word, <kbd>M-d</kbd> kills
 just the part after point.  If some punctuation comes between point
@@ -82,7 +79,7 @@ kill only the next word but not the punctuation before it, simply do
 <kbd>M-f</kbd> to get the end, and kill the word backwards with
 <kbd>M-&lt;DEL&gt;</kbd>.)  <kbd>M-d</kbd> takes arguments just like <kbd>M-f</kbd>.
 
-   <p><a name="index-backward_002dkill_002dword-1563"></a><a name="index-M_002dDEL-1564"></a>  <kbd>M-&lt;DEL&gt;</kbd> (<code>backward-kill-word</code>) kills the word before
+   <p><a name="index-backward_002dkill_002dword-1792"></a><a name="index-M_002dDEL-1793"></a>  <kbd>M-&lt;DEL&gt;</kbd> (<code>backward-kill-word</code>) kills the word before
 point.  It kills everything from point back to where <kbd>M-b</kbd> would
 move to.  For instance, if point is after the space in &lsquo;<samp><span class="samp">FOO,&nbsp;BAR</span></samp>&rsquo;<!-- /@w -->, it kills &lsquo;<samp><span class="samp">FOO,&nbsp;</span></samp>&rsquo;<!-- /@w -->.  If you wish to kill just
 &lsquo;<samp><span class="samp">FOO</span></samp>&rsquo;, and not the comma and the space, use <kbd>M-b M-d</kbd> instead
@@ -98,17 +95,18 @@ the words do not move.  For example, &lsquo;<samp><span class="samp">FOO,&nbsp;B
 &lsquo;<samp><span class="samp">BAR,&nbsp;FOO</span></samp>&rsquo;<!-- /@w --> rather than &lsquo;<samp><span class="samp">BAR&nbsp;FOO,<!-- /@w --></span></samp>&rsquo;.  See <a href="Transpose.html#Transpose">Transpose</a>, for
 more on transposition.
 
-   <p><a name="index-M_002d_0040_0040-1565"></a><a name="index-mark_002dword-1566"></a>  To operate on the next <var>n</var> words with an operation which acts on
-the region, use the command <kbd>M-@</kbd> (<code>mark-word</code>).  This
-command does not move point, but sets the mark where <kbd>M-f</kbd> would
-move to.  Once the mark is active, each additional <kbd>M-@</kbd> advances
-the mark by one additional word.  <kbd>M-@</kbd> also accepts a numeric
-argument that says how many words to scan for the place to put the
-mark.
+   <p><a name="index-M_002d_0040_0040-1794"></a><a name="index-mark_002dword-1795"></a>  To operate on words with an operation which acts on the region, use
+the command <kbd>M-@</kbd> (<code>mark-word</code>).  This command sets the mark
+where <kbd>M-f</kbd> would move to.  See <a href="Marking-Objects.html#Marking-Objects">Marking Objects</a>, for more
+information about this command.
 
-   <p>The word commands' understanding of word boundaries is controlled
-by the syntax table.  Any character can, for example, be declared to
-be a word delimiter.  See <a href="Syntax.html#Syntax">Syntax</a>.
+   <p>The word commands' understanding of word boundaries is controlled by
+the syntax table.  Any character can, for example, be declared to be a
+word delimiter.  See <a href="../elisp/Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>.
+
+   <p>In addition, see <a href="Position-Info.html#Position-Info">Position Info</a> for the <kbd>M-=</kbd>
+(<code>count-words-region</code>) and <kbd>M-x count-words</kbd> commands, which
+count and report the number of words in the region or buffer.
 
    </body></html>
 

@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Window Configurations - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Windows.html#Windows" title="Windows">
-<link rel="prev" href="Window-Tree.html#Window-Tree" title="Window Tree">
+<link rel="prev" href="Coordinates-and-Windows.html#Coordinates-and-Windows" title="Coordinates and Windows">
 <link rel="next" href="Window-Parameters.html#Window-Parameters" title="Window Parameters">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -39,37 +36,38 @@ Foundation, Inc.
 <a name="Window-Configurations"></a>
 <p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Window-Parameters.html#Window-Parameters">Window Parameters</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Window-Tree.html#Window-Tree">Window Tree</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Coordinates-and-Windows.html#Coordinates-and-Windows">Coordinates and Windows</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
 <hr>
 </div>
 
-<h3 class="section">28.19 Window Configurations</h3>
+<h3 class="section">28.24 Window Configurations</h3>
 
-<p><a name="index-window-configurations-2210"></a><a name="index-saving-window-information-2211"></a>
-  A <dfn>window configuration</dfn> records the entire layout of one
+<p><a name="index-window-configurations-2456"></a><a name="index-saving-window-information-2457"></a>
+A <dfn>window configuration</dfn> records the entire layout of one
 frame&mdash;all windows, their sizes, which buffers they contain, how those
 buffers are scrolled, and their values of point and the mark; also their
 fringes, margins, and scroll bar settings.  It also includes the value
 of <code>minibuffer-scroll-window</code>.  As a special exception, the window
 configuration does not record the value of point in the selected window
-for the current buffer.  Also, the window configuration does not record
-the values of window parameters; see <a href="Window-Parameters.html#Window-Parameters">Window Parameters</a>.
+for the current buffer.
 
    <p>You can bring back an entire frame layout by restoring a previously
 saved window configuration.  If you want to record the layout of all
 frames instead of just one, use a frame configuration instead of a
-window configuration; see <a href="Frame-Configurations.html#Frame-Configurations">Frame Configurations</a>.
+window configuration.  See <a href="Frame-Configurations.html#Frame-Configurations">Frame Configurations</a>.
 
 <div class="defun">
-&mdash; Function: <b>current-window-configuration</b><var> &amp;optional frame<a name="index-current_002dwindow_002dconfiguration-2212"></a></var><br>
+&mdash; Function: <b>current-window-configuration</b><var> &amp;optional frame<a name="index-current_002dwindow_002dconfiguration-2458"></a></var><br>
 <blockquote><p>This function returns a new object representing <var>frame</var>'s current
 window configuration.  The default for <var>frame</var> is the selected
-frame. 
+frame.  The variable <code>window-persistent-parameters</code> specifies
+which window parameters (if any) are saved by this function. 
+See <a href="Window-Parameters.html#Window-Parameters">Window Parameters</a>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-window-configuration</b><var> configuration<a name="index-set_002dwindow_002dconfiguration-2213"></a></var><br>
+&mdash; Function: <b>set-window-configuration</b><var> configuration<a name="index-set_002dwindow_002dconfiguration-2459"></a></var><br>
 <blockquote><p>This function restores the configuration of windows and buffers as
 specified by <var>configuration</var>, for the frame that <var>configuration</var>
 was created for.
@@ -83,9 +81,9 @@ change and triggers execution of the <code>window-size-change-functions</code>
 know how to tell whether the new configuration actually differs from the
 old one.
 
-        <p>If the frame which <var>configuration</var> was saved from is dead, all this
+        <p>If the frame from which <var>configuration</var> was saved is dead, all this
 function does is restore the three variables <code>window-min-height</code>,
-<code>window-min-width</code> and <code>minibuffer-scroll-window</code>. In this
+<code>window-min-width</code> and <code>minibuffer-scroll-window</code>.  In this
 case, the function returns <code>nil</code>.  Otherwise, it returns <code>t</code>.
 
         <p>Here is a way of using this function to get the same effect
@@ -93,52 +91,38 @@ as <code>save-window-excursion</code>:
 
      <pre class="example">          (let ((config (current-window-configuration)))
             (unwind-protect
-                (progn (split-window-vertically nil)
+                (progn (split-window-below nil)
                        ...)
               (set-window-configuration config)))
 </pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Special Form: <b>save-window-excursion</b><var> forms<small class="dots">...</small><a name="index-save_002dwindow_002dexcursion-2214"></a></var><br>
-<blockquote><p>This special form records the window configuration, executes <var>forms</var>
-in sequence, then restores the earlier window configuration.  The window
-configuration includes, for each window, the value of point and the
-portion of the buffer that is visible.  It also includes the choice of
-selected window.  However, it does not include the value of point in
-the current buffer; use <code>save-excursion</code> also, if you wish to
-preserve that.
+&mdash; Macro: <b>save-window-excursion</b><var> forms<small class="dots">...</small><a name="index-save_002dwindow_002dexcursion-2460"></a></var><br>
+<blockquote><p>This macro records the window configuration of the selected frame,
+executes <var>forms</var> in sequence, then restores the earlier window
+configuration.  The return value is the value of the final form in
+<var>forms</var>.
 
-        <p>Don't use this construct when <code>save-selected-window</code> is sufficient.
+        <p>Most Lisp code should not use this macro; <code>save-selected-window</code>
+is typically sufficient.  In particular, this macro cannot reliably
+prevent the code in <var>forms</var> from opening new windows, because new
+windows might be opened in other frames (see <a href="Choosing-Window.html#Choosing-Window">Choosing Window</a>), and
+<code>save-window-excursion</code> only saves and restores the window
+configuration on the current frame.
 
-        <p>Exit from <code>save-window-excursion</code> always triggers execution of
-<code>window-size-change-functions</code>.  (It doesn't know how to tell
-whether the restored configuration actually differs from the one in
-effect at the end of the <var>forms</var>.)
-
-        <p>The return value is the value of the final form in <var>forms</var>. 
-For example:
-
-     <pre class="example">          (split-window)
-               &rArr; #&lt;window 25 on control.texi&gt;
-          (setq w (selected-window))
-               &rArr; #&lt;window 19 on control.texi&gt;
-          (save-window-excursion
-            (delete-other-windows w)
-            (switch-to-buffer "foo")
-            'do-something)
-               &rArr; do-something
-               ;; <span class="roman">The screen is now split again.</span>
-</pre>
-        </blockquote></div>
+        <p>Do not use this macro in <code>window-size-change-functions</code>; exiting
+the macro triggers execution of <code>window-size-change-functions</code>,
+leading to an endless loop. 
+</p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>window-configuration-p</b><var> object<a name="index-window_002dconfiguration_002dp-2215"></a></var><br>
+&mdash; Function: <b>window-configuration-p</b><var> object<a name="index-window_002dconfiguration_002dp-2461"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if <var>object</var> is a window configuration. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>compare-window-configurations</b><var> config1 config2<a name="index-compare_002dwindow_002dconfigurations-2216"></a></var><br>
+&mdash; Function: <b>compare-window-configurations</b><var> config1 config2<a name="index-compare_002dwindow_002dconfigurations-2462"></a></var><br>
 <blockquote><p>This function compares two window configurations as regards the
 structure of windows, but ignores the values of point and mark and the
 saved scrolling positions&mdash;it can return <code>t</code> even if those
@@ -150,7 +134,7 @@ saved point or mark.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>window-configuration-frame</b><var> config<a name="index-window_002dconfiguration_002dframe-2217"></a></var><br>
+&mdash; Function: <b>window-configuration-frame</b><var> config<a name="index-window_002dconfiguration_002dframe-2463"></a></var><br>
 <blockquote><p>This function returns the frame for which the window configuration
 <var>config</var> was made. 
 </p></blockquote></div>
@@ -159,6 +143,49 @@ saved point or mark.
 sense, but are not implemented because we did not need them.  See the
 file <samp><span class="file">winner.el</span></samp> for some more operations on windows
 configurations.
+
+   <p>The objects returned by <code>current-window-configuration</code> die
+together with the Emacs process.  In order to store a window
+configuration on disk and read it back in another Emacs session, you
+can use the functions described next.  These functions are also useful
+to clone the state of a frame into an arbitrary live window
+(<code>set-window-configuration</code> effectively clones the windows of a
+frame into the root window of that very frame only).
+
+<div class="defun">
+&mdash; Function: <b>window-state-get</b><var> &amp;optional window writable<a name="index-window_002dstate_002dget-2464"></a></var><br>
+<blockquote><p>This function returns the state of <var>window</var> as a Lisp object.  The
+argument <var>window</var> must be a valid window and defaults to the root
+window of the selected frame.
+
+        <p>If the optional argument <var>writable</var> is non-<code>nil</code>, this means to
+not use markers for sampling positions like <code>window-point</code> or
+<code>window-start</code>.  This argument should be non-<code>nil</code> when the
+state will be written to disk and read back in another session.
+
+        <p>Together, the argument <var>writable</var> and the variable
+<code>window-persistent-parameters</code> specify which window parameters are
+saved by this function.  See <a href="Window-Parameters.html#Window-Parameters">Window Parameters</a>. 
+</p></blockquote></div>
+
+   <p>The value returned by <code>window-state-get</code> can be used in the same
+session to make a clone of a window in another window.  It can be also
+written to disk and read back in another session.  In either case, use
+the following function to restore the state of the window.
+
+<div class="defun">
+&mdash; Function: <b>window-state-put</b><var> state &amp;optional window ignore<a name="index-window_002dstate_002dput-2465"></a></var><br>
+<blockquote><p>This function puts the window state <var>state</var> into <var>window</var>.  The
+argument <var>state</var> should be the state of a window returned by an
+earlier invocation of <code>window-state-get</code>, see above.  The optional
+argument <var>window</var> must specify a live window and defaults to the
+selected one.
+
+        <p>If the optional argument <var>ignore</var> is non-<code>nil</code>, it means to ignore
+minimum window sizes and fixed-size restrictions.  If <var>ignore</var>
+is <code>safe</code>, this means windows can get as small as one line
+and/or two columns. 
+</p></blockquote></div>
 
    </body></html>
 

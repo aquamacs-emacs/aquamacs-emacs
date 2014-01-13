@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Mail Format - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Mail-Headers.html#Mail-Headers" title="Mail Headers">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -43,41 +40,36 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Sending-Mail.html#Sending-Mail">Sending
 <hr>
 </div>
 
-<h3 class="section">35.1 The Format of the Mail Buffer</h3>
+<h3 class="section">32.1 The Format of the Mail Buffer</h3>
 
-<p>An email message must contain certain pieces of information, called
-<dfn>headers</dfn>, which specify the message's sender, recipient(s), and
-so on.
+<p>Here is an example of the contents of a mail buffer:
 
-   <p>At the top of the mail buffer is a set of <dfn>header fields</dfn>, where
-you can enter this information.  You can insert and edit header fields
-using ordinary editing commands.  See <a href="Header-Editing.html#Header-Editing">Header Editing</a>, for commands
-specific to editing header fields.
+<pre class="example">     To: subotai@example.org
+     CC: mongol.soldier@example.net, rms@gnu.org
+     Subject: Re: What is best in life?
+     From: conan@example.org
+     --text follows this line--
+     To crush your enemies, see them driven before you, and to
+     hear the lamentation of their women.
+</pre>
+   <p class="noindent">At the top of the mail buffer is a set of <dfn>header fields</dfn>, which
+are used for specifying information about the email's recipient(s),
+subject, and so on.  The above buffer contains header fields for
+&lsquo;<samp><span class="samp">To</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Cc</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Subject</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">From</span></samp>&rsquo;.  Some header
+fields are automatically pre-initialized in the mail buffer, when
+appropriate.
 
-   <p>Some header fields are automatically pre-initialized in the buffer,
-when appropriate; other headers, such as &lsquo;<samp><span class="samp">Date</span></samp>&rsquo; and
-&lsquo;<samp><span class="samp">Message-Id</span></samp>&rsquo;, are normally omitted from the mail buffer and
+   <p>The line that says &lsquo;<samp><span class="samp">--text follows this line--</span></samp>&rsquo; separates the
+header fields from the <dfn>body</dfn> (or <dfn>text</dfn>) of the message. 
+Everything above that line is treated as part of the headers;
+everything below it is treated as the body.  The delimiter line itself
+does not appear in the message actually sent.
+
+   <p>You can insert and edit header fields using ordinary editing
+commands.  See <a href="Header-Editing.html#Header-Editing">Header Editing</a>, for commands specific to editing
+header fields.  Certain headers, such as &lsquo;<samp><span class="samp">Date</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">Message-Id</span></samp>&rsquo;, are normally omitted from the mail buffer and are
 created automatically when the message is sent.
 
-   <p><a name="index-mail_002dheader_002dseparator-2740"></a>  The line in the buffer that says
-
-<pre class="smallexample">     --text follows this line--
-</pre>
-   <p class="noindent">separates the header fields from the <dfn>body</dfn> (or <dfn>text</dfn>) of the
-message.  Everything above this line is treated as part of the
-headers; everything below it is treated as the body.  The delimiter
-line itself does not appear in the message actually sent.  The text
-used for the delimiter line is controlled by the variable
-<code>mail-header-separator</code>.
-
-   <p>Here is an example of what the headers and text in the mail buffer
-might look like.
-
-<pre class="example">     To: gnu@example.org
-     CC: lungfish@example.com, byob@example.net
-     Subject: The Emacs Manual
-     --text follows this line--
-     Please ignore this message.
-</pre>
    </body></html>
 

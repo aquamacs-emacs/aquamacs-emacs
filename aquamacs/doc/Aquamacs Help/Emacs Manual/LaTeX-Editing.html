@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>LaTeX Editing - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="TeX-Print.html#TeX-Print" title="TeX Print">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,10 +42,10 @@ Up:&nbsp;<a rel="up" accesskey="u" href="TeX-Mode.html#TeX-Mode">TeX Mode</a>
 <hr>
 </div>
 
-<h4 class="subsection">29.9.2 LaTeX Editing Commands</h4>
+<h4 class="subsection">25.10.2 LaTeX Editing Commands</h4>
 
-<p>LaTeX mode (and its obsolete variant, SliTeX mode) provide a
-few extra features not applicable to plain TeX:
+<p>LaTeX mode provides a few extra features not applicable to plain
+TeX:
 
      <dl>
 <dt><kbd>C-c C-o</kbd><dd>Insert &lsquo;<samp><span class="samp">\begin</span></samp>&rsquo; and &lsquo;<samp><span class="samp">\end</span></samp>&rsquo; for LaTeX block and position
@@ -57,23 +54,26 @@ point on a line between them (<code>tex-latex-block</code>).
 (<code>tex-close-latex-block</code>). 
 </dl>
 
-   <p><a name="index-tex_002dlatex_002dblock-1743"></a><a name="index-C_002dc-C_002do-_0040r_007b_0028La_0040TeX_007b_007d-mode_0029_007d-1744"></a><a name="index-latex_002dblock_002dnames-1745"></a>  In LaTeX input, &lsquo;<samp><span class="samp">\begin</span></samp>&rsquo; and &lsquo;<samp><span class="samp">\end</span></samp>&rsquo; commands are used to
-group blocks of text.  To insert a &lsquo;<samp><span class="samp">\begin</span></samp>&rsquo; and a matching
-&lsquo;<samp><span class="samp">\end</span></samp>&rsquo; (on a new line following the &lsquo;<samp><span class="samp">\begin</span></samp>&rsquo;), use <kbd>C-c
-C-o</kbd> (<code>tex-latex-block</code>).  A blank line is inserted between the
-two, and point is left there.  You can use completion when you enter the
-block type; to specify additional block type names beyond the standard
-list, set the variable <code>latex-block-names</code>.  For example, here's
-how to add &lsquo;<samp><span class="samp">theorem</span></samp>&rsquo;, &lsquo;<samp><span class="samp">corollary</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">proof</span></samp>&rsquo;:
+   <p><a name="index-tex_002dlatex_002dblock-1997"></a><a name="index-C_002dc-C_002do-_0040r_007b_0028_0040LaTeX_007b_007d-mode_0029_007d-1998"></a>  In LaTeX input, &lsquo;<samp><span class="samp">\begin</span></samp>&rsquo; and &lsquo;<samp><span class="samp">\end</span></samp>&rsquo; tags are used to
+group blocks of text.  To insert a block, type <kbd>C-c C-o</kbd>
+(<code>tex-latex-block</code>).  This prompts for a block type, and inserts
+the appropriate matching &lsquo;<samp><span class="samp">\begin</span></samp>&rsquo; and &lsquo;<samp><span class="samp">\end</span></samp>&rsquo; tags, leaving a
+blank line between the two and moving point there.
 
-<pre class="example">     (setq latex-block-names '("theorem" "corollary" "proof"))
-</pre>
-   <p><a name="index-tex_002dclose_002dlatex_002dblock-1746"></a><a name="index-C_002dc-C_002de-_0040r_007b_0028La_0040TeX_007b_007d-mode_0029_007d-1747"></a>  In LaTeX input, &lsquo;<samp><span class="samp">\begin</span></samp>&rsquo; and &lsquo;<samp><span class="samp">\end</span></samp>&rsquo; commands must
-balance.  You can use <kbd>C-c C-e</kbd> (<code>tex-close-latex-block</code>) to
-insert automatically a matching &lsquo;<samp><span class="samp">\end</span></samp>&rsquo; to match the last unmatched
-&lsquo;<samp><span class="samp">\begin</span></samp>&rsquo;.  It indents the &lsquo;<samp><span class="samp">\end</span></samp>&rsquo; to match the corresponding
-&lsquo;<samp><span class="samp">\begin</span></samp>&rsquo;.  It inserts a newline after &lsquo;<samp><span class="samp">\end</span></samp>&rsquo; if point is at
-the beginning of a line.
+   <p><a name="index-latex_002dblock_002dnames-1999"></a>  When entering the block type argument to <kbd>C-c C-o</kbd>, you can use
+the usual completion commands (see <a href="Completion.html#Completion">Completion</a>).  The default
+completion list contains the standard LaTeX block types.  If you
+want additional block types for completion, customize the list
+variable <code>latex-block-names</code>.
+
+   <p><a name="index-tex_002dclose_002dlatex_002dblock-2000"></a><a name="index-C_002dc-C_002de-_0040r_007b_0028_0040LaTeX_007b_007d-mode_0029_007d-2001"></a><a name="index-latex_002delectric_002denv_002dpair_002dmode-2002"></a>  In LaTeX input, &lsquo;<samp><span class="samp">\begin</span></samp>&rsquo; and &lsquo;<samp><span class="samp">\end</span></samp>&rsquo; tags must balance. 
+You can use <kbd>C-c C-e</kbd> (<code>tex-close-latex-block</code>) to insert an
+&lsquo;<samp><span class="samp">\end</span></samp>&rsquo; tag which matches the last unmatched &lsquo;<samp><span class="samp">\begin</span></samp>&rsquo;.  It
+also indents the &lsquo;<samp><span class="samp">\end</span></samp>&rsquo; to match the corresponding &lsquo;<samp><span class="samp">\begin</span></samp>&rsquo;,
+and inserts a newline after the &lsquo;<samp><span class="samp">\end</span></samp>&rsquo; tag if point is at the
+beginning of a line.  The minor mode <code>latex-electric-env-pair-mode</code>
+automatically inserts an &lsquo;<samp><span class="samp">\end</span></samp>&rsquo; or &lsquo;<samp><span class="samp">\begin</span></samp>&rsquo; tag for you
+when you type the corresponding one.
 
    </body></html>
 

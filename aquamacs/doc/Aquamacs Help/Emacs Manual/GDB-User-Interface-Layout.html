@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>GDB User Interface Layout - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Source-Buffers.html#Source-Buffers" title="Source Buffers">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -43,58 +40,49 @@ Up:&nbsp;<a rel="up" accesskey="u" href="GDB-Graphical-Interface.html#GDB-Graphi
 <hr>
 </div>
 
-<h5 class="subsubsection">31.6.5.1 GDB User Interface Layout</h5>
+<h5 class="subsubsection">27.6.5.1 GDB User Interface Layout</h5>
 
-<p><a name="index-GDB-User-Interface-layout-2371"></a>
-<a name="index-gdb_002dmany_002dwindows-2372"></a>  If the variable <code>gdb-many-windows</code> is <code>nil</code> (the default
-value) then <kbd>M-x gdb</kbd> normally displays only the GUD buffer. 
+<p><a name="index-GDB-User-Interface-layout-2645"></a>
+<a name="index-gdb_002dmany_002dwindows-2646"></a>  If the variable <code>gdb-many-windows</code> is <code>nil</code> (the default),
+<kbd>M-x gdb</kbd> normally displays only the GUD interaction buffer. 
 However, if the variable <code>gdb-show-main</code> is also non-<code>nil</code>,
-it starts with two windows: one displaying the GUD buffer, and the
-other showing the source for the <code>main</code> function of the program
-you are debugging.
+it starts with two windows: one displaying the GUD interaction buffer,
+and the other showing the source for the <code>main</code> function of the
+program you are debugging.
 
    <p>If <code>gdb-many-windows</code> is non-<code>nil</code>, then <kbd>M-x gdb</kbd>
 displays the following frame layout:
 
 <pre class="smallexample">     +--------------------------------+--------------------------------+
-     |   GUD buffer (I/O of GDB)      |   Locals/Registers buffer      |
+     |   GUD interaction buffer       |   Locals/Registers buffer      |
      |--------------------------------+--------------------------------+
      |   Primary Source buffer        |   I/O buffer for debugged pgm  |
      |--------------------------------+--------------------------------+
      |   Stack buffer                 |   Breakpoints/Threads buffer   |
      +--------------------------------+--------------------------------+
 </pre>
-   <p>However, if <code>gdb-use-separate-io-buffer</code> is <code>nil</code>, the I/O
-buffer does not appear and the primary source buffer occupies the full
-width of the frame.
-
-   <p><a name="index-gdb_002drestore_002dwindows-2373"></a>  If you change the window layout, for example, while editing and
-re-compiling your program, then you can restore this standard window
-layout with the command <code>gdb-restore-windows</code>.
-
-   <p><a name="index-gdb_002dmany_002dwindows-2374"></a>  To switch between this standard layout and a simple layout
-containing just the GUD buffer and a source file, type <kbd>M-x
-gdb-many-windows</kbd>.
+   <p><a name="index-gdb_002drestore_002dwindows-2647"></a><a name="index-gdb_002dmany_002dwindows-2648"></a>  If you ever change the window layout, you can restore the &ldquo;many
+windows&rdquo; layout by typing <kbd>M-x gdb-restore-windows</kbd>.  To toggle
+between the many windows layout and a simple layout with just the GUD
+interaction buffer and a source file, type <kbd>M-x gdb-many-windows</kbd>.
 
    <p>You may also specify additional GDB-related buffers to display,
 either in the same frame or a different one.  Select the buffers you
-want with the &lsquo;<samp><span class="samp">GUD-&gt;GDB-Windows</span></samp>&rsquo; and &lsquo;<samp><span class="samp">GUD-&gt;GDB-Frames</span></samp>&rsquo;
-sub-menus.  If the menu-bar is unavailable, type <code>M-x
-gdb-display-</code><var>buffertype</var><code>-buffer</code> or <code>M-x
-gdb-frame-</code><var>buffertype</var><code>-buffer</code> respectively, where
-<var>buffertype</var> is the relevant buffer type, such as
-&lsquo;<samp><span class="samp">breakpoints</span></samp>&rsquo;.  Most of these buffers are read-only, and typing
-<kbd>q</kbd> in them kills them.
+want by typing <code>M-x gdb-display-</code><var>buffertype</var><code>-buffer</code> or
+<code>M-x gdb-frame-</code><var>buffertype</var><code>-buffer</code>, where <var>buffertype</var>
+is the relevant buffer type, such as &lsquo;<samp><span class="samp">breakpoints</span></samp>&rsquo;.  You can do
+the same with the menu bar, with the &lsquo;<samp><span class="samp">GDB-Windows</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">GDB-Frames</span></samp>&rsquo; sub-menus of the &lsquo;<samp><span class="samp">GUD</span></samp>&rsquo; menu.
 
-   <p>When you finish debugging, kill the GUD buffer with <kbd>C-x k</kbd>,
-which will also kill all the buffers associated with the session. 
-However you need not do this if, after editing and re-compiling your
-source code within Emacs, you wish continue debugging.  When you
-restart execution, GDB will automatically find your new executable. 
-Keeping the GUD buffer has the advantage of keeping the shell history
-as well as GDB's breakpoints.  You do need to check that the
-breakpoints in recently edited source files are still in the right
-places.
+   <p>When you finish debugging, kill the GUD interaction buffer with
+<kbd>C-x k</kbd>, which will also kill all the buffers associated with the
+session.  However you need not do this if, after editing and
+re-compiling your source code within Emacs, you wish to continue
+debugging.  When you restart execution, GDB automatically finds the
+new executable.  Keeping the GUD interaction buffer has the advantage
+of keeping the shell history as well as GDB's breakpoints.  You do
+need to check that the breakpoints in recently edited source files are
+still in the right places.
 
    </body></html>
 

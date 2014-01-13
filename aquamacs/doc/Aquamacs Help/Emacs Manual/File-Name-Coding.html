@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>File Name Coding - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Terminal-Coding.html#Terminal-Coding" title="Terminal Coding">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,27 +42,29 @@ Up:&nbsp;<a rel="up" accesskey="u" href="International.html#International">Inter
 <hr>
 </div>
 
-<h3 class="section">26.12 Coding Systems for File Names</h3>
+<h3 class="section">22.11 Coding Systems for File Names</h3>
 
      <dl>
 <dt><kbd>C-x &lt;RET&gt; F </kbd><var>coding</var><kbd> &lt;RET&gt;</kbd><dd>Use coding system <var>coding</var> for encoding and decoding file
-<em>names</em>. 
+names (<code>set-file-name-coding-system</code>). 
 </dl>
 
-   <p><a name="index-file_002dname_002dcoding_002dsystem-1452"></a><a name="index-file-names-with-non_002d_0040acronym_007bASCII_007d-characters-1453"></a>  The variable <code>file-name-coding-system</code> specifies a coding
-system to use for encoding file names.  It has no effect on reading
-and writing the <em>contents</em> of files.
+   <p><a name="index-set_002dfile_002dname_002dcoding_002dsystem-1663"></a><a name="index-C_002dx-_0040key_007bRET_007d-F-1664"></a><a name="index-file-names-with-non_002d_0040acronym_007bASCII_007d-characters-1665"></a>  The command <kbd>C-x &lt;RET&gt; F</kbd> (<code>set-file-name-coding-system</code>)
+specifies a coding system to use for encoding file <em>names</em>.  It
+has no effect on reading and writing the <em>contents</em> of files.
 
-   <p><a name="index-set_002dfile_002dname_002dcoding_002dsystem-1454"></a><a name="index-C_002dx-_0040key_007bRET_007d-F-1455"></a>  If you set the variable to a coding system name (as a Lisp symbol or
-a string), Emacs encodes file names using that coding system for all
-file operations.  This makes it possible to use non-<acronym>ASCII</acronym>
-characters in file names&mdash;or, at least, those non-<acronym>ASCII</acronym>
-characters which the specified coding system can encode.  Use <kbd>C-x
-&lt;RET&gt; F</kbd> (<code>set-file-name-coding-system</code>) to specify this
-interactively.
+   <p><a name="index-file_002dname_002dcoding_002dsystem-1666"></a>  In fact, all this command does is set the value of the variable
+<code>file-name-coding-system</code>.  If you set the variable to a coding
+system name (as a Lisp symbol or a string), Emacs encodes file names
+using that coding system for all file operations.  This makes it
+possible to use non-<acronym>ASCII</acronym> characters in file names&mdash;or, at
+least, those non-<acronym>ASCII</acronym> characters that the specified coding
+system can encode.
 
    <p>If <code>file-name-coding-system</code> is <code>nil</code>, Emacs uses a
-default coding system determined by the selected language environment. 
+default coding system determined by the selected language environment,
+and stored in the <code>default-file-name-coding-system</code> variable. 
+<!-- FIXME?  Is this correct?  What is the "default language environment"? -->
 In the default language environment, non-<acronym>ASCII</acronym> characters in
 file names are not encoded specially; they appear in the file system
 using the internal Emacs representation.
@@ -76,10 +75,10 @@ result if you have already visited files whose names were encoded using
 the earlier coding system and cannot be encoded (or are encoded
 differently) under the new coding system.  If you try to save one of
 these buffers under the visited file name, saving may use the wrong file
-name, or it may get an error.  If such a problem happens, use <kbd>C-x
+name, or it may encounter an error.  If such a problem happens, use <kbd>C-x
 C-w</kbd> to specify a new file name for that buffer.
 
-   <p><a name="index-recode_002dfile_002dname-1456"></a>  If a mistake occurs when encoding a file name, use the command
+   <p><a name="index-recode_002dfile_002dname-1667"></a>  If a mistake occurs when encoding a file name, use the command
 <kbd>M-x recode-file-name</kbd> to change the file name's coding
 system.  This prompts for an existing file name, its old coding
 system, and the coding system to which you wish to convert.

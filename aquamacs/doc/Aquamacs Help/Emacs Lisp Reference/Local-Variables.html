@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Local Variables - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Void-Variables.html#Void-Variables" title="Void Variables">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,64 +43,63 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
 
 <h3 class="section">11.3 Local Variables</h3>
 
-<p><a name="index-binding-local-variables-585"></a><a name="index-local-variables-586"></a><a name="index-local-binding-587"></a><a name="index-global-binding-588"></a>
+<p><a name="index-binding-local-variables-615"></a><a name="index-local-variables-616"></a><a name="index-local-binding-617"></a><a name="index-global-binding-618"></a>
   Global variables have values that last until explicitly superseded
-with new values.  Sometimes it is useful to create variable values that
-exist temporarily&mdash;only until a certain part of the program finishes. 
-These values are called <dfn>local</dfn>, and the variables so used are
-called <dfn>local variables</dfn>.
+with new values.  Sometimes it is useful to give a variable a
+<dfn>local value</dfn>&mdash;a value that takes effect only within a certain
+part of a Lisp program.  When a variable has a local value, we say
+that it is <dfn>locally bound</dfn> to that value, and that it is a
+<dfn>local variable</dfn>.
 
-   <p>For example, when a function is called, its argument variables receive
-new local values that last until the function exits.  The <code>let</code>
-special form explicitly establishes new local values for specified
-variables; these last until exit from the <code>let</code> form.
-
-   <p><a name="index-shadowing-of-variables-589"></a>  Establishing a local value saves away the variable's previous value
-(or lack of one).  We say that the previous value is <dfn>shadowed</dfn>
-and <dfn>not visible</dfn>.  Both global and local values may be shadowed
-(see <a href="Scope.html#Scope">Scope</a>).  After the life span of the local value is over, the
-previous value (or lack of one) is restored.
-
-   <p>If you set a variable (such as with <code>setq</code>) while it is local,
-this replaces the local value; it does not alter the global value, or
-previous local values, that are shadowed.  To model this behavior, we
-speak of a <dfn>local binding</dfn> of the variable as well as a local value.
-
-   <p>The local binding is a conceptual place that holds a local value. 
-Entering a function, or a special form such as <code>let</code>, creates the
-local binding; exiting the function or the <code>let</code> removes the
-local binding.  While the local binding lasts, the variable's value is
-stored within it.  Using <code>setq</code> or <code>set</code> while there is a
-local binding stores a different value into the local binding; it does
-not create a new binding.
+   <p>For example, when a function is called, its argument variables
+receive local values, which are the actual arguments supplied to the
+function call; these local bindings take effect within the body of the
+function.  To take another example, the <code>let</code> special form
+explicitly establishes local bindings for specific variables, which
+take effect within the body of the <code>let</code> form.
 
    <p>We also speak of the <dfn>global binding</dfn>, which is where
 (conceptually) the global value is kept.
 
-   <p><a name="index-current-binding-590"></a>  A variable can have more than one local binding at a time (for
-example, if there are nested <code>let</code> forms that bind it).  In such a
-case, the most recently created local binding that still exists is the
-<dfn>current binding</dfn> of the variable.  (This rule is called
-<dfn>dynamic scoping</dfn>; see <a href="Variable-Scoping.html#Variable-Scoping">Variable Scoping</a>.)  If there are no
-local bindings, the variable's global binding is its current binding. 
-We sometimes call the current binding the <dfn>most-local existing
-binding</dfn>, for emphasis.  Ordinary evaluation of a symbol always returns
-the value of its current binding.
+   <p><a name="index-shadowing-of-variables-619"></a>  Establishing a local binding saves away the variable's previous
+value (or lack of one).  We say that the previous value is
+<dfn>shadowed</dfn>.  Both global and local values may be shadowed.  If a
+local binding is in effect, using <code>setq</code> on the local variable
+stores the specified value in the local binding.  When that local
+binding is no longer in effect, the previously shadowed value (or lack
+of one) comes back.
 
-   <p>The special forms <code>let</code> and <code>let*</code> exist to create
-local bindings.
+   <p><a name="index-current-binding-620"></a>  A variable can have more than one local binding at a time (e.g., if
+there are nested <code>let</code> forms that bind the variable).  The
+<dfn>current binding</dfn> is the local binding that is actually in effect. 
+It determines the value returned by evaluating the variable symbol,
+and it is the binding acted on by <code>setq</code>.
+
+   <p>For most purposes, you can think of the current binding as the
+&ldquo;innermost&rdquo; local binding, or the global binding if there is no
+local binding.  To be more precise, a rule called the <dfn>scoping
+rule</dfn> determines where in a program a local binding takes effect.  The
+default scoping rule in Emacs Lisp is called <dfn>dynamic scoping</dfn>,
+which simply states that the current binding at any given point in the
+execution of a program is the most recently-created binding for that
+variable that still exists.  For details about dynamic scoping, and an
+alternative scoping rule called <dfn>lexical scoping</dfn>, See <a href="Variable-Scoping.html#Variable-Scoping">Variable Scoping</a>.
+
+   <p>The special forms <code>let</code> and <code>let*</code> exist to create local
+bindings:
 
 <div class="defun">
-&mdash; Special Form: <b>let</b> (<var>bindings<small class="dots">...</small></var>)<var> forms<small class="dots">...</small><a name="index-let-591"></a></var><br>
-<blockquote><p>This special form binds variables according to <var>bindings</var> and then
-evaluates all of the <var>forms</var> in textual order.  The <code>let</code>-form
-returns the value of the last form in <var>forms</var>.
+&mdash; Special Form: <b>let</b> (<var>bindings<small class="dots">...</small></var>)<var> forms<small class="dots">...</small><a name="index-let-621"></a></var><br>
+<blockquote><p>This special form sets up local bindings for a certain set of
+variables, as specified by <var>bindings</var>, and then evaluates all of
+the <var>forms</var> in textual order.  Its return value is the value of
+the last form in <var>forms</var>.
 
         <p>Each of the <var>bindings</var> is either (i)&nbsp;a<!-- /@w --> symbol, in which case
-that symbol is bound to <code>nil</code>; or (ii)&nbsp;a<!-- /@w --> list of the form
-<code>(</code><var>symbol</var> <var>value-form</var><code>)</code>, in which case <var>symbol</var> is
-bound to the result of evaluating <var>value-form</var>.  If <var>value-form</var>
-is omitted, <code>nil</code> is used.
+that symbol is locally bound to <code>nil</code>; or (ii)&nbsp;a<!-- /@w --> list of the
+form <code>(</code><var>symbol</var> <var>value-form</var><code>)</code>, in which case
+<var>symbol</var> is locally bound to the result of evaluating
+<var>value-form</var>.  If <var>value-form</var> is omitted, <code>nil</code> is used.
 
         <p>All of the <var>value-form</var>s in <var>bindings</var> are evaluated in the
 order they appear and <em>before</em> binding any of the symbols to them. 
@@ -112,6 +108,7 @@ Here is an example of this: <code>z</code> is bound to the old value of
 
      <pre class="example">          (setq y 2)
                &rArr; 2
+          
           (let ((y 1)
                 (z y))
             (list y z))
@@ -120,16 +117,16 @@ Here is an example of this: <code>z</code> is bound to the old value of
         </blockquote></div>
 
 <div class="defun">
-&mdash; Special Form: <b>let*</b> (<var>bindings<small class="dots">...</small></var>)<var> forms<small class="dots">...</small><a name="index-let_002a-592"></a></var><br>
+&mdash; Special Form: <b>let*</b> (<var>bindings<small class="dots">...</small></var>)<var> forms<small class="dots">...</small><a name="index-let_002a-622"></a></var><br>
 <blockquote><p>This special form is like <code>let</code>, but it binds each variable right
 after computing its local value, before computing the local value for
 the next variable.  Therefore, an expression in <var>bindings</var> can
-reasonably refer to the preceding symbols bound in this <code>let*</code>
-form.  Compare the following example with the example above for
-<code>let</code>.
+refer to the preceding symbols bound in this <code>let*</code> form. 
+Compare the following example with the example above for <code>let</code>.
 
      <pre class="example">          (setq y 2)
                &rArr; 2
+          
           (let* ((y 1)
                  (z y))    ; <span class="roman">Use the just-established value of </span><code>y</code><span class="roman">.</span>
             (list y z))
@@ -151,11 +148,11 @@ bindings:
    <p>Variables can also have buffer-local bindings (see <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables">Buffer-Local Variables</a>); a few variables have terminal-local bindings
 (see <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>).  These kinds of bindings work somewhat
 like ordinary local bindings, but they are localized depending on
-&ldquo;where&rdquo; you are in Emacs, rather than localized in time.
+&ldquo;where&rdquo; you are in Emacs.
 
 <div class="defun">
-&mdash; User Option: <b>max-specpdl-size</b><var><a name="index-max_002dspecpdl_002dsize-593"></a></var><br>
-<blockquote><p><a name="Definition-of-max_002dspecpdl_002dsize"></a><a name="index-variable-limit-error-594"></a><a name="index-evaluation-error-595"></a><a name="index-infinite-recursion-596"></a>This variable defines the limit on the total number of local variable
+&mdash; User Option: <b>max-specpdl-size</b><var><a name="index-max_002dspecpdl_002dsize-623"></a></var><br>
+<blockquote><p><a name="Definition-of-max_002dspecpdl_002dsize"></a><a name="index-variable-limit-error-624"></a><a name="index-evaluation-error-625"></a><a name="index-infinite-recursion-626"></a>This variable defines the limit on the total number of local variable
 bindings and <code>unwind-protect</code> cleanups (see <a href="Cleanups.html#Cleanups">Cleaning Up from Nonlocal Exits</a>) that are allowed before Emacs
 signals an error (with data <code>"Variable binding depth exceeds
 max-specpdl-size"</code>).
@@ -165,7 +162,7 @@ that Lisp avoids infinite recursion on an ill-defined function.
 <code>max-lisp-eval-depth</code> provides another limit on depth of nesting. 
 See <a href="Definition-of-max_002dlisp_002deval_002ddepth.html#Definition-of-max_002dlisp_002deval_002ddepth">Eval</a>.
 
-        <p>The default value is 1000.  Entry to the Lisp debugger increases the
+        <p>The default value is 1300.  Entry to the Lisp debugger increases the
 value, if there is little room left, to make sure the debugger itself
 has room to execute. 
 </p></blockquote></div>

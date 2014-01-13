@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Backquote - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Macros.html#Macros" title="Macros">
-<link rel="prev" href="Defining-Macros.html#Defining-Macros" title="Defining Macros">
-<link rel="next" href="Problems-with-Macros.html#Problems-with-Macros" title="Problems with Macros">
+<link rel="up" href="Evaluation.html#Evaluation" title="Evaluation">
+<link rel="prev" href="Quoting.html#Quoting" title="Quoting">
+<link rel="next" href="Eval.html#Eval" title="Eval">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -38,49 +35,41 @@ Foundation, Inc.
 <div class="node">
 <a name="Backquote"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Problems-with-Macros.html#Problems-with-Macros">Problems with Macros</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Defining-Macros.html#Defining-Macros">Defining Macros</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Macros.html#Macros">Macros</a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Eval.html#Eval">Eval</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Quoting.html#Quoting">Quoting</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Evaluation.html#Evaluation">Evaluation</a>
 <hr>
 </div>
 
-<h3 class="section">13.5 Backquote</h3>
+<h3 class="section">9.4 Backquote</h3>
 
-<p><a name="index-backquote-_0028list-substitution_0029-743"></a><a name="index-g_t_0060-_0028list-substitution_0029-744"></a><a name="index-g_t_0060-745"></a>
-  Macros often need to construct large list structures from a mixture of
-constants and nonconstant parts.  To make this easier, use the &lsquo;<samp><span class="samp">`</span></samp>&rsquo;
-syntax (usually called <dfn>backquote</dfn>).
-
-   <p>Backquote allows you to quote a list, but selectively evaluate
-elements of that list.  In the simplest case, it is identical to the
-special form <code>quote</code> (see <a href="Quoting.html#Quoting">Quoting</a>).  For example, these
-two forms yield identical results:
+<p><a name="index-backquote-_0028list-substitution_0029-531"></a><a name="index-g_t_0060-_0028list-substitution_0029-532"></a><a name="index-g_t_0060-533"></a>
+  <dfn>Backquote constructs</dfn> allow you to quote a list, but
+selectively evaluate elements of that list.  In the simplest case, it
+is identical to the special form <code>quote</code>
+(described in the previous section; see <a href="Quoting.html#Quoting">Quoting</a>). 
+For example, these two forms yield identical results:
 
 <pre class="example">     `(a list of (+ 2 3) elements)
           &rArr; (a list of (+ 2 3) elements)
      '(a list of (+ 2 3) elements)
           &rArr; (a list of (+ 2 3) elements)
 </pre>
-   <p><a name="index-g_t_002c-_0040r_007b_0028with-backquote_0029_007d-746"></a>The special marker &lsquo;<samp><span class="samp">,</span></samp>&rsquo; inside of the argument to backquote
-indicates a value that isn't constant.  Backquote evaluates the
-argument of &lsquo;<samp><span class="samp">,</span></samp>&rsquo; and puts the value in the list structure:
+   <p><a name="index-g_t_002c-_0040r_007b_0028with-backquote_0029_007d-534"></a>  The special marker &lsquo;<samp><span class="samp">,</span></samp>&rsquo; inside of the argument to backquote
+indicates a value that isn't constant.  The Emacs Lisp evaluator
+evaluates the argument of &lsquo;<samp><span class="samp">,</span></samp>&rsquo;, and puts the value in the list
+structure:
 
-<pre class="example">     (list 'a 'list 'of (+ 2 3) 'elements)
-          &rArr; (a list of 5 elements)
-     `(a list of ,(+ 2 3) elements)
+<pre class="example">     `(a list of ,(+ 2 3) elements)
           &rArr; (a list of 5 elements)
 </pre>
-   <p>Substitution with &lsquo;<samp><span class="samp">,</span></samp>&rsquo; is allowed at deeper levels of the list
+   <p class="noindent">Substitution with &lsquo;<samp><span class="samp">,</span></samp>&rsquo; is allowed at deeper levels of the list
 structure also.  For example:
 
-<pre class="example">     (defmacro t-becomes-nil (variable)
-       `(if (eq ,variable t)
-            (setq ,variable nil)))
-     
-     (t-becomes-nil foo)
-          == (if (eq foo t) (setq foo nil))
+<pre class="example">     `(1 2 (3 ,(+ 4 5)))
+          &rArr; (1 2 (3 9))
 </pre>
-   <p><a name="index-g_t_002c_0040_0040-_0040r_007b_0028with-backquote_0029_007d-747"></a><a name="index-splicing-_0028with-backquote_0029-748"></a>  You can also <dfn>splice</dfn> an evaluated value into the resulting list,
+   <p><a name="index-g_t_002c_0040_0040-_0040r_007b_0028with-backquote_0029_007d-535"></a><a name="index-splicing-_0028with-backquote_0029-536"></a>  You can also <dfn>splice</dfn> an evaluated value into the resulting list,
 using the special marker &lsquo;<samp><span class="samp">,@</span></samp>&rsquo;.  The elements of the spliced list
 become elements at the same level as the other elements of the resulting
 list.  The equivalent code without using &lsquo;<samp><span class="samp">`</span></samp>&rsquo; is often unreadable. 

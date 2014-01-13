@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Revision Tags - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Version-Control.html#Version-Control" title="Version Control">
-<link rel="prev" href="Remote-Repositories.html#Remote-Repositories" title="Remote Repositories">
-<link rel="next" href="Miscellaneous-VC.html#Miscellaneous-VC" title="Miscellaneous VC">
+<link rel="up" href="Miscellaneous-VC.html#Miscellaneous-VC" title="Miscellaneous VC">
+<link rel="prev" href="VC-Delete_002fRename.html#VC-Delete_002fRename" title="VC Delete/Rename">
+<link rel="next" href="Version-Headers.html#Version-Headers" title="Version Headers">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -39,28 +36,71 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <div class="node">
 <a name="Revision-Tags"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Miscellaneous-VC.html#Miscellaneous-VC">Miscellaneous VC</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Remote-Repositories.html#Remote-Repositories">Remote Repositories</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Version-Control.html#Version-Control">Version Control</a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Version-Headers.html#Version-Headers">Version Headers</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="VC-Delete_002fRename.html#VC-Delete_002fRename">VC Delete/Rename</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Miscellaneous-VC.html#Miscellaneous-VC">Miscellaneous VC</a>
 <hr>
 </div>
 
-<h4 class="subsection">32.1.10 Revision Tags</h4>
+<h5 class="subsubsection">28.1.12.3 Revision Tags</h5>
 
-<p><a name="index-tags-and-version-control-2542"></a>
-  In a VCS with per-file revision numbers (such as SCCS, RCS, or CVS)
-<dfn>tag</dfn> is a named set of file versions (one for each registered
-file) that you can treat as a unit.  In a VCS with per-repository
-version numbers (Subversion and most later ones) a tag is simply
-a symbolic name for a revision.
+<p><a name="index-revision-tag-2838"></a><a name="index-tags-for-version-control-2839"></a>
+  Most version control systems allow you to apply a <dfn>revision tag</dfn>
+to a specific version of a version-controlled tree.  On modern
+changeset-based version control systems, a revision tag is simply a
+symbolic name for a particular revision.  On older file-based systems
+like CVS, each tag is added to the entire set of version-controlled
+files, allowing them to be handled as a unit.  Revision tags are
+commonly used to identify releases that are distributed to users.
 
-   <p>One important kind of tag is a <dfn>release</dfn>, a (theoretically)
-stable version of the system that is ready for distribution to users.
+   <p>There are two basic commands for tags; one makes a tag with a given
+name, the other retrieves a named tag.
 
-<ul class="menu">
-<li><a accesskey="1" href="Making-Revision-Tags.html#Making-Revision-Tags">Making Revision Tags</a>:   The tag facilities. 
-<li><a accesskey="2" href="Revision-Tag-Caveats.html#Revision-Tag-Caveats">Revision Tag Caveats</a>:   Things to be careful of when using tags. 
-</ul>
+     
+<a name="index-C_002dx-v-s-2840"></a>
+<a name="index-vc_002dcreate_002dtag-2841"></a>
+<dl><dt><code>C-x v s </code><var>name</var><code> &lt;RET&gt;</code><dd>Define the working revision of every registered file in or under the
+current directory as a tag named <var>name</var>
+(<code>vc-create-tag</code>).
+
+     <p><a name="index-C_002dx-v-r-2842"></a><a name="index-vc_002dretrieve_002dtag-2843"></a><br><dt><code>C-x v r </code><var>name</var><code> &lt;RET&gt;</code><dd>For all registered files at or below the current directory level,
+retrieve the tagged revision <var>name</var>. This command will switch to a
+branch if <var>name</var> is a branch name and your VCS distinguishes
+branches from tags.  (<code>vc-retrieve-tag</code>).
+
+     <p>This command reports an error if any files are locked at or below the
+current directory, without changing anything; this is to avoid
+overwriting work in progress. 
+</dl>
+
+   <p>You can give a tag or branch name as an argument to <kbd>C-x v =</kbd> or
+<kbd>C-x v ~</kbd>
+(see <a href="Old-Revisions.html#Old-Revisions">Old Revisions</a>). 
+Thus, you can use it to compare a tagged version against the current files,
+or two tagged versions against each other.
+
+   <p>On SCCS, VC implements tags itself; these tags are visible only
+through VC.  Most later systems (including CVS, Subversion, bzr, git,
+and hg) have a native tag facility, and VC uses it where available;
+those tags will be visible even when you bypass VC.
+
+   <p>In file-based version control systems, when you rename a registered
+file you need to rename its master along with it; the command
+<code>vc-rename-file</code> will do this automatically
+(see <a href="VC-Delete_002fRename.html#VC-Delete_002fRename">VC Delete/Rename</a>). 
+If you are using SCCS, you must also update the records of the tag, to
+mention the file by its new name (<code>vc-rename-file</code> does this,
+too).  An old tag that refers to a master file that no longer exists
+under the recorded name is invalid; VC can no longer retrieve it.  It
+would be beyond the scope of this manual to explain enough about RCS
+and SCCS to explain how to update the tags by hand.  Using
+<code>vc-rename-file</code> makes the tag remain valid for retrieval, but it
+does not solve all problems.  For example, some of the files in your
+program probably refer to others by name.  At the very least, the
+makefile probably mentions the file that you renamed.  If you retrieve
+an old tag, the renamed file is retrieved under its new name, which is
+not the name that the makefile expects.  So the program won't really
+work as retrieved.
 
    </body></html>
 

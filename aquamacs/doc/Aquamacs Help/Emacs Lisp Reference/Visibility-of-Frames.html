@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Visibility of Frames - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Raising-and-Lowering.html#Raising-and-Lowering" title="Raising and Lowering">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,23 +41,39 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
 <hr>
 </div>
 
-<h3 class="section">29.11 Visibility of Frames</h3>
+<h3 class="section">29.10 Visibility of Frames</h3>
 
-<p><a name="index-visible-frame-2375"></a><a name="index-invisible-frame-2376"></a><a name="index-iconified-frame-2377"></a><a name="index-frame-visibility-2378"></a>
-A window frame may be <dfn>visible</dfn>, <dfn>invisible</dfn>, or
-<dfn>iconified</dfn>.  If it is visible, you can see its contents, unless
-other windows cover it.  If it is iconified, the frame's contents do
-not appear on the screen, but an icon does.  (Note: because of the
-way in which some window managers implement the concept of multiple
-workspaces, or desktops, all frames on other workspaces may appear to
-Emacs to be iconified.)  If the frame is invisible, it doesn't show on
-the screen, not even as an icon.
+<p><a name="index-visible-frame-2624"></a><a name="index-invisible-frame-2625"></a><a name="index-iconified-frame-2626"></a><a name="index-minimized-frame-2627"></a><a name="index-frame-visibility-2628"></a>
+A frame on a graphical display may be <dfn>visible</dfn>, <dfn>invisible</dfn>,
+or <dfn>iconified</dfn>.  If it is visible, its contents are displayed in
+the usual manner.  If it is iconified, its contents are not displayed,
+but there is a little icon somewhere to bring the frame back into view
+(some window managers refer to this state as <dfn>minimized</dfn> rather
+than <dfn>iconified</dfn>, but from Emacs' point of view they are the same
+thing).  If a frame is invisible, it is not displayed at all.
 
-   <p>Visibility is meaningless for terminal frames, since only the selected
+   <p>Visibility is meaningless on text terminals, since only the selected
 one is actually displayed in any case.
 
 <div class="defun">
-&mdash; Command: <b>make-frame-visible</b><var> &amp;optional frame<a name="index-make_002dframe_002dvisible-2379"></a></var><br>
+&mdash; Function: <b>frame-visible-p</b><var> frame<a name="index-frame_002dvisible_002dp-2629"></a></var><br>
+<blockquote><p>This function returns the visibility status of frame <var>frame</var>.  The
+value is <code>t</code> if <var>frame</var> is visible, <code>nil</code> if it is
+invisible, and <code>icon</code> if it is iconified.
+
+        <p>On a text terminal, all frames are considered &ldquo;visible&rdquo; for the
+purposes of this function, even though only one frame is displayed. 
+See <a href="Raising-and-Lowering.html#Raising-and-Lowering">Raising and Lowering</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>iconify-frame</b><var> &amp;optional frame<a name="index-iconify_002dframe-2630"></a></var><br>
+<blockquote><p>This function iconifies frame <var>frame</var>.  If you omit <var>frame</var>, it
+iconifies the selected frame. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>make-frame-visible</b><var> &amp;optional frame<a name="index-make_002dframe_002dvisible-2631"></a></var><br>
 <blockquote><p>This function makes frame <var>frame</var> visible.  If you omit
 <var>frame</var>, it makes the selected frame visible.  This does not raise
 the frame, but you can do that with <code>raise-frame</code> if you wish
@@ -68,7 +81,7 @@ the frame, but you can do that with <code>raise-frame</code> if you wish
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>make-frame-invisible</b><var> &amp;optional frame force<a name="index-make_002dframe_002dinvisible-2380"></a></var><br>
+&mdash; Command: <b>make-frame-invisible</b><var> &amp;optional frame force<a name="index-make_002dframe_002dinvisible-2632"></a></var><br>
 <blockquote><p>This function makes frame <var>frame</var> invisible.  If you omit
 <var>frame</var>, it makes the selected frame invisible.
 
@@ -76,30 +89,11 @@ the frame, but you can do that with <code>raise-frame</code> if you wish
 <var>frame</var> invisible if all other frames are invisible.. 
 </p></blockquote></div>
 
-<div class="defun">
-&mdash; Command: <b>iconify-frame</b><var> &amp;optional frame<a name="index-iconify_002dframe-2381"></a></var><br>
-<blockquote><p>This function iconifies frame <var>frame</var>.  If you omit <var>frame</var>, it
-iconifies the selected frame. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>frame-visible-p</b><var> frame<a name="index-frame_002dvisible_002dp-2382"></a></var><br>
-<blockquote><p>This returns the visibility status of frame <var>frame</var>.  The value is
-<code>t</code> if <var>frame</var> is visible, <code>nil</code> if it is invisible, and
-<code>icon</code> if it is iconified.
-
-        <p>On a text-only terminal, all frames are considered visible, whether
-they are currently being displayed or not, and this function returns
-<code>t</code> for all frames. 
-</p></blockquote></div>
-
    <p>The visibility status of a frame is also available as a frame
-parameter.  You can read or change it as such.  See <a href="Management-Parameters.html#Management-Parameters">Management Parameters</a>.
-
-   <p>The user can iconify and deiconify frames with the window manager. 
-This happens below the level at which Emacs can exert any control, but
-Emacs does provide events that you can use to keep track of such
-changes.  See <a href="Misc-Events.html#Misc-Events">Misc Events</a>.
+parameter.  You can read or change it as such.  See <a href="Management-Parameters.html#Management-Parameters">Management Parameters</a>.  The user can also iconify and deiconify frames with the
+window manager.  This happens below the level at which Emacs can exert
+any control, but Emacs does provide events that you can use to keep
+track of such changes.  See <a href="Misc-Events.html#Misc-Events">Misc Events</a>.
 
    </body></html>
 

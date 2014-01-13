@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Specific Customization - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Custom-Themes.html#Custom-Themes" title="Custom Themes">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,18 +42,13 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Easy-Customization.html#Easy-Customizat
 <hr>
 </div>
 
-<h4 class="subsection">57.2.6 Customizing Specific Items</h4>
-
-<p>Instead of finding the setting you want to change by navigating the
-structure of groups, here are other ways to specify the settings that
-you want to customize.
+<h4 class="subsection">48.1.6 Customizing Specific Items</h4>
 
      <dl>
-<dt><kbd>M-x customize-option &lt;RET&gt; </kbd><var>option</var><kbd> &lt;RET&gt;</kbd><dd>Set up a customization buffer with just one user option variable,
-<var>option</var>. 
-<br><dt><kbd>M-x customize-face &lt;RET&gt; </kbd><var>face</var><kbd> &lt;RET&gt;</kbd><dd>Set up a customization buffer with just one face, <var>face</var>. 
-<br><dt><kbd>M-x customize-group &lt;RET&gt; </kbd><var>group</var><kbd> &lt;RET&gt;</kbd><dd>Set up a customization buffer with just one group, <var>group</var>. 
-<br><dt><kbd>M-x customize-apropos &lt;RET&gt; </kbd><var>regexp</var><kbd> &lt;RET&gt;</kbd><dd>Set up a customization buffer with all the settings and groups that
+<dt><kbd>M-x customize-option &lt;RET&gt; </kbd><var>option</var><kbd> &lt;RET&gt;</kbd><dt><kbd>M-x customize-variable &lt;RET&gt; </kbd><var>option</var><kbd> &lt;RET&gt;</kbd><dd>Set up a customization buffer for just one user option, <var>option</var>. 
+<br><dt><kbd>M-x customize-face &lt;RET&gt; </kbd><var>face</var><kbd> &lt;RET&gt;</kbd><dd>Set up a customization buffer for just one face, <var>face</var>. 
+<br><dt><kbd>M-x customize-group &lt;RET&gt; </kbd><var>group</var><kbd> &lt;RET&gt;</kbd><dd>Set up a customization buffer for just one group, <var>group</var>. 
+<br><dt><kbd>M-x customize-apropos &lt;RET&gt; </kbd><var>regexp</var><kbd> &lt;RET&gt;</kbd><dd>Set up a customization buffer for all the settings and groups that
 match <var>regexp</var>. 
 <br><dt><kbd>M-x customize-changed &lt;RET&gt; </kbd><var>version</var><kbd> &lt;RET&gt;</kbd><dd>Set up a customization buffer with all the settings and groups
 whose meaning has changed since Emacs version <var>version</var>. 
@@ -66,34 +58,23 @@ have saved with customization buffers.
 set but not saved. 
 </dl>
 
-   <p><a name="index-customize_002doption-4014"></a>  If you want to alter a particular user option with the customization
-buffer, and you know its name, you can use the command <kbd>M-x
-customize-option</kbd> and specify the user option (variable) name.  This
-sets up the customization buffer with just one user option&mdash;the one
-that you asked for.  Editing, setting and saving the value work as
-described above, but only for the specified user option.  Minibuffer
-completion is handy if you only know part of the name.  However, this
-command can only see options that have been loaded in the current
-Emacs session.
+   <p><a name="index-customize_002doption-4338"></a>  If you want to customize a particular user option, type <kbd>M-x
+customize-option</kbd>.  This reads the variable name, and sets up the
+customization buffer with just that one user option.  When entering
+the variable name into the minibuffer, completion is available, but
+only for the names of variables that have been loaded into Emacs.
 
-   <p><a name="index-customize_002dface-4015"></a>  Likewise, you can modify a specific face, chosen by name, using
-<kbd>M-x customize-face</kbd>.  By default it operates on the face used
-on the character after point.
+   <p><a name="index-customize_002dface-4339"></a><a name="index-customize_002dgroup-4340"></a>  Likewise, you can customize a specific face using <kbd>M-x
+customize-face</kbd>.  You can set up a customization buffer for a specific
+customization group using <kbd>M-x customize-group</kbd>.
 
-   <p><a name="index-customize_002dgroup-4016"></a>  You can also set up the customization buffer with a specific group,
-using <kbd>M-x customize-group</kbd>.  The immediate contents of the chosen
-group, including settings (user options and faces), and other groups,
-all appear as well (even if not already loaded).  However, the
-subgroups' own contents are not included.
+   <p><a name="index-customize_002dapropos-4341"></a>  <kbd>M-x customize-apropos</kbd> prompts for a search term&mdash;either one
+or more words separated by spaces, or a regular expression&mdash;and sets
+up a customization buffer for all <em>loaded</em> settings and groups
+with matching names.  This is like using the search field at the top
+of the customization buffer (see <a href="Customization-Groups.html#Customization-Groups">Customization Groups</a>).
 
-   <p><a name="index-customize_002dapropos-4017"></a>  For a more general way of controlling what to customize, you can use
-<kbd>M-x customize-apropos</kbd>.  You specify a regular expression as
-argument; then all <em>loaded</em> settings and groups whose names match
-this regular expression are set up in the customization buffer.  If
-you specify an empty regular expression, this includes <em>all</em>
-loaded groups and settings&mdash;which takes a long time to set up.
-
-   <p><a name="index-customize_002dchanged-4018"></a>  When you upgrade to a new Emacs version, you might want to consider
+   <p><a name="index-customize_002dchanged-4342"></a>  When you upgrade to a new Emacs version, you might want to consider
 customizing new settings, and settings whose meanings or default
 values have changed.  To do this, use <kbd>M-x customize-changed</kbd> and
 specify a previous Emacs version number using the minibuffer.  It
@@ -101,11 +82,11 @@ creates a customization buffer which shows all the settings and groups
 whose definitions have been changed since the specified version,
 loading them if necessary.
 
-   <p><a name="index-customize_002dsaved-4019"></a><a name="index-customize_002dunsaved-4020"></a>  If you change settings and then decide the change was a mistake, you
-can use two special commands to revisit your previous changes.  Use
-<kbd>M-x customize-saved</kbd> to look at the settings that you have saved. 
-Use <kbd>M-x customize-unsaved</kbd> to look at the settings that you
-have set but not saved.
+   <p><a name="index-customize_002dsaved-4343"></a><a name="index-customize_002dunsaved-4344"></a>  If you change settings and then decide the change was a mistake, you
+can use two commands to revisit your changes.  Use <kbd>M-x
+customize-saved</kbd> to customize settings that you have saved.  Use
+<kbd>M-x customize-unsaved</kbd> to customize settings that you have set
+but not saved.
 
    </body></html>
 

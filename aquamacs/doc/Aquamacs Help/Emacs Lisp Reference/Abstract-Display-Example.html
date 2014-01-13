@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Abstract Display Example - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="prev" href="Abstract-Display-Functions.html#Abstract-Display-Functions" title="Abstract Display Functions">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,7 +42,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Abstract-Display.html#Abstract-Display"
 <h4 class="subsection">38.18.2 Abstract Display Example</h4>
 
 <p>Here is a simple example using functions of the ewoc package to
-implement a &ldquo;color components display,&rdquo; an area in a buffer that
+implement a &ldquo;color components display&rdquo;, an area in a buffer that
 represents a vector of three integers (itself representing a 24-bit RGB
 value) in various ways.
 
@@ -66,8 +63,10 @@ value) in various ways.
                              (aref colorcomp-data 2)))
                (samp " (sample text) "))
            (insert "Color\t: "
-                   (propertize samp 'face `(foreground-color . ,cstr))
-                   (propertize samp 'face `(background-color . ,cstr))
+                   (propertize samp 'face
+                               `(foreground-color . ,cstr))
+                   (propertize samp 'face
+                               `(background-color . ,cstr))
                    "\n"))))
      
      (defun colorcomp (color)
@@ -99,7 +98,7 @@ value) in various ways.
          (ewoc-enter-last ewoc 2)
          (ewoc-enter-last ewoc nil)))
 </pre>
-   <p><a name="index-controller-part_002c-model_002fview_002fcontroller-3722"></a>  This example can be extended to be a &ldquo;color selection widget&rdquo; (in
+   <p><a name="index-controller-part_002c-model_002fview_002fcontroller-4032"></a>  This example can be extended to be a &ldquo;color selection widget&rdquo; (in
 other words, the controller part of the &ldquo;model/view/controller&rdquo;
 design paradigm) by defining commands to modify <code>colorcomp-data</code>
 and to &ldquo;finish&rdquo; the selection process, and a keymap to tie it all

@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Yanking - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Yank-Commands.html#Yank-Commands" title="Yank Commands">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,52 +43,56 @@ Up:&nbsp;<a rel="up" accesskey="u" href="The-Kill-Ring.html#The-Kill-Ring">The K
 
 <h4 class="subsection">32.8.3 Yanking</h4>
 
-<p>Yanking means inserting text from the kill ring, but it does
-not insert the text blindly.  Yank commands and some other commands
-use <code>insert-for-yank</code> to perform special processing on the
-text that they copy into the buffer.
+<p>Yanking means inserting text from the kill ring, but it does not
+insert the text blindly.  The <code>yank</code> command, and related
+commands, use <code>insert-for-yank</code> to perform special processing on
+the text before it is inserted.
 
 <div class="defun">
-&mdash; Function: <b>insert-for-yank</b><var> string<a name="index-insert_002dfor_002dyank-2630"></a></var><br>
-<blockquote><p>This function normally works like <code>insert</code> except that it doesn't
-insert the text properties in the <code>yank-excluded-properties</code>
-list.  However, if any part of <var>string</var> has a non-<code>nil</code>
-<code>yank-handler</code> text property, that property can do various
-special processing on that part of the text being inserted. 
+&mdash; Function: <b>insert-for-yank</b><var> string<a name="index-insert_002dfor_002dyank-2894"></a></var><br>
+<blockquote><p>This function works like <code>insert</code>, except that it processes the
+text in <var>string</var> according to the <code>yank-handler</code> text
+property, as well as the variables <code>yank-handled-properties</code> and
+<code>yank-excluded-properties</code> (see below), before inserting the
+result into the current buffer. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>insert-buffer-substring-as-yank</b><var> buf &amp;optional start end<a name="index-insert_002dbuffer_002dsubstring_002das_002dyank-2631"></a></var><br>
-<blockquote><p>This function resembles <code>insert-buffer-substring</code> except that it
-doesn't insert the text properties in the
-<code>yank-excluded-properties</code> list. 
+&mdash; Function: <b>insert-buffer-substring-as-yank</b><var> buf &amp;optional start end<a name="index-insert_002dbuffer_002dsubstring_002das_002dyank-2895"></a></var><br>
+<blockquote><p>This function resembles <code>insert-buffer-substring</code>, except that it
+processes the text according to <code>yank-handled-properties</code> and
+<code>yank-excluded-properties</code>.  (It does not handle the
+<code>yank-handler</code> property, which does not normally occur in buffer
+text anyway.) 
 </p></blockquote></div>
 
-   <p>You can put a <code>yank-handler</code> text property on all or part of
-the text to control how it will be inserted if it is yanked.  The
-<code>insert-for-yank</code> function looks for that property.  The property
-value must be a list of one to four elements, with the following
-format (where elements after the first may be omitted):
+<!-- FIXME: Add an index for yank-handler. -->
+   <p>If you put a <code>yank-handler</code> text property on all or part of a
+string, that alters how <code>insert-for-yank</code> inserts the string.  If
+different parts of the string have different <code>yank-handler</code>
+values (comparison being done with <code>eq</code>), each substring is
+handled separately.  The property value must be a list of one to four
+elements, with the following format (where elements after the first
+may be omitted):
 
 <pre class="example">     (<var>function</var> <var>param</var> <var>noexclude</var> <var>undo</var>)
 </pre>
    <p>Here is what the elements do:
 
      <dl>
-<dt><var>function</var><dd>When <var>function</var> is present and non-<code>nil</code>, it is called instead of
-<code>insert</code> to insert the string.  <var>function</var> takes one
-argument&mdash;the string to insert.
+<dt><var>function</var><dd>When <var>function</var> is non-<code>nil</code>, it is called instead of
+<code>insert</code> to insert the string, with one argument&mdash;the string to
+insert.
 
      <br><dt><var>param</var><dd>If <var>param</var> is present and non-<code>nil</code>, it replaces <var>string</var>
-(or the part of <var>string</var> being processed) as the object passed to
-<var>function</var> (or <code>insert</code>); for example, if <var>function</var> is
-<code>yank-rectangle</code>, <var>param</var> should be a list of strings to
-insert as a rectangle.
+(or the substring of <var>string</var> being processed) as the object
+passed to <var>function</var> (or <code>insert</code>).  For example, if
+<var>function</var> is <code>yank-rectangle</code>, <var>param</var> should be a list
+of strings to insert as a rectangle.
 
-     <br><dt><var>noexclude</var><dd>If <var>noexclude</var> is present and non-<code>nil</code>, the normal removal of the
-yank-excluded-properties is not performed; instead <var>function</var> is
-responsible for removing those properties.  This may be necessary
-if <var>function</var> adjusts point before or after inserting the object.
+     <br><dt><var>noexclude</var><dd>If <var>noexclude</var> is present and non-<code>nil</code>, that disables the
+normal action of <code>yank-handled-properties</code> and
+<code>yank-excluded-properties</code> on the inserted string.
 
      <br><dt><var>undo</var><dd>If <var>undo</var> is present and non-<code>nil</code>, it is a function that will be
 called by <code>yank-pop</code> to undo the insertion of the current object. 
@@ -99,6 +100,32 @@ It is called with two arguments, the start and end of the current
 region.  <var>function</var> can set <code>yank-undo-function</code> to override
 the <var>undo</var> value. 
 </dl>
+
+   <p><a name="index-yanking-and-text-properties-2896"></a>
+
+<div class="defun">
+&mdash; User Option: <b>yank-handled-properties</b><var><a name="index-yank_002dhandled_002dproperties-2897"></a></var><br>
+<blockquote><p>This variable specifies special text property handling conditions for
+yanked text.  It takes effect after the text has been inserted (either
+normally, or via the <code>yank-handler</code> property), and prior to
+<code>yank-excluded-properties</code> taking effect.
+
+        <p>The value should be an alist of elements <code>(</code><var>prop</var><code>
+. </code><var>fun</var><code>)</code>.  Each alist element is handled in order.  The inserted
+text is scanned for stretches of text having text properties <code>eq</code>
+to <var>prop</var>; for each such stretch, <var>fun</var> is called with three
+arguments: the value of the property, and the start and end positions
+of the text. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>yank-excluded-properties</b><var><a name="index-yank_002dexcluded_002dproperties-2898"></a></var><br>
+<blockquote><p>The value of this variable is the list of properties to remove from
+inserted text.  Its default value contains properties that might lead
+to annoying results, such as causing the text to respond to the mouse
+or specifying key bindings.  It takes effect after
+<code>yank-handled-properties</code>. 
+</p></blockquote></div>
 
    </body></html>
 

@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Init Rebinding - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Modifier-Keys.html#Modifier-Keys" title="Modifier Keys">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,17 +42,17 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Key-Bindings.html#Key-Bindings">Key Bin
 <hr>
 </div>
 
-<h4 class="subsection">57.4.6 Rebinding Keys in Your Init File</h4>
+<h4 class="subsection">48.3.6 Rebinding Keys in Your Init File</h4>
 
-<p><a name="index-rebinding-major-mode-keys-4095"></a><!-- This node is referenced in the tutorial.  When renaming or deleting -->
+<p><a name="index-rebinding-major-mode-keys-4428"></a><!-- This node is referenced in the tutorial.  When renaming or deleting -->
 <!-- it, the tutorial needs to be adjusted.  (TUTORIAL.de) -->
 
    <p>If you have a set of key bindings that you like to use all the time,
 you can specify them in your initialization file by writing Lisp code. 
 See <a href="Init-File.html#Init-File">Init File</a>, for a description of the initialization file.
 
-   <p><a name="index-kbd-4096"></a>  There are several ways to write a key binding using Lisp.  The
-simplest is to use the <code>kbd</code> macro, which converts a textual
+   <p><a name="index-kbd-4429"></a>  There are several ways to write a key binding using Lisp.  The
+simplest is to use the <code>kbd</code> function, which converts a textual
 representation of a key sequence&mdash;similar to how we have written key
 sequences in this manual&mdash;into a form that can be passed as an
 argument to <code>global-set-key</code>.  For example, here's how to bind
@@ -77,13 +74,12 @@ and mouse events:
      (global-set-key (kbd "C-&lt;f5&gt;") 'linum-mode)
      (global-set-key (kbd "C-&lt;right&gt;") 'forward-sentence)
      (global-set-key (kbd "&lt;mouse-2&gt;") 'mouse-save-then-kill)
-     (global-set-key (kbd "C-&lt;down-mouse-3&gt;") 'mouse-yank-at-click)
 </pre>
-   <p>Instead of using the <code>kbd</code> macro, you can use a Lisp string or
-vector to specify the key sequence.  Using a string is simpler, but
-only works for <acronym>ASCII</acronym> characters and Meta-modified
-<acronym>ASCII</acronym> characters.  For example, here's how to bind <kbd>C-x
-M-l</kbd> to <code>make-symbolic-link</code> (see <a href="Misc-File-Ops.html#Misc-File-Ops">Misc File Ops</a>):
+   <p>Instead of using <code>kbd</code>, you can use a Lisp string or vector to
+specify the key sequence.  Using a string is simpler, but only works
+for <acronym>ASCII</acronym> characters and Meta-modified <acronym>ASCII</acronym>
+characters.  For example, here's how to bind <kbd>C-x M-l</kbd> to
+<code>make-symbolic-link</code> (see <a href="Misc-File-Ops.html#Misc-File-Ops">Misc File Ops</a>):
 
 <pre class="example">     (global-set-key "\C-x\M-l" 'make-symbolic-link)
 </pre>
@@ -123,14 +119,16 @@ define local keymaps.  These keymaps are constructed when the mode is
 used for the first time in a session.  If you wish to change one of
 these keymaps, you must use the <dfn>mode hook</dfn> (see <a href="Hooks.html#Hooks">Hooks</a>).
 
-   <p><a name="index-define_002dkey-4097"></a>  For example, Texinfo mode runs the hook <code>texinfo-mode-hook</code>. 
+   <p><a name="index-define_002dkey-4430"></a>  For example, Texinfo mode runs the hook <code>texinfo-mode-hook</code>. 
 Here's how you can use the hook to add local bindings for <kbd>C-c n</kbd>
 and <kbd>C-c p</kbd> in Texinfo mode:
 
 <pre class="example">     (add-hook 'texinfo-mode-hook
-               '(lambda ()
-                  (define-key texinfo-mode-map "\C-cp" 'backward-paragraph)
-                  (define-key texinfo-mode-map "\C-cn" 'forward-paragraph)))
+               (lambda ()
+                 (define-key texinfo-mode-map "\C-cp"
+                             'backward-paragraph)
+                 (define-key texinfo-mode-map "\C-cn"
+                             'forward-paragraph)))
 </pre>
    </body></html>
 

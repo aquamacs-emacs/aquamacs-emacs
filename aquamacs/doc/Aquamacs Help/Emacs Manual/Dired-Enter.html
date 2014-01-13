@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Dired Enter - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Dired-Navigation.html#Dired-Navigation" title="Dired Navigation">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -43,9 +40,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Dired.html#Dired">Dired</a>
 <hr>
 </div>
 
-<h3 class="section">37.1 Entering Dired</h3>
+<h3 class="section">30.1 Entering Dired</h3>
 
-<p><a name="index-dired-2981"></a><a name="index-C_002dx-d-2982"></a><a name="index-dired_002dlisting_002dswitches-2983"></a>  To invoke Dired, type <kbd>C-x d</kbd> (<code>dired</code>).  This reads a
+<p><a name="index-dired-2975"></a><a name="index-C_002dx-d-2976"></a><a name="index-dired_002dlisting_002dswitches-2977"></a>  To invoke Dired, type <kbd>C-x d</kbd> (<code>dired</code>).  This reads a
 directory name using the minibuffer, and opens a <dfn>Dired buffer</dfn>
 listing the files in that directory.  You can also supply a wildcard
 file name pattern as the minibuffer argument, in which case the Dired
@@ -58,21 +55,38 @@ completion commands can be used in the minibuffer; in particular,
 a directory name.
 
    <p>The variable <code>dired-listing-switches</code> specifies the options to
-give to <code>ls</code> for listing the directory; this string <em>must</em>
-contain &lsquo;<samp><span class="samp">-l</span></samp>&rsquo;.  If you use a prefix argument with the <code>dired</code>
-command, you can specify the <code>ls</code> switches with the minibuffer
-before you enter the directory specification.  No matter how they are
-specified, the <code>ls</code> switches can include short options (that is,
-single characters) requiring no arguments, and long options (starting
-with &lsquo;<samp><span class="samp">--</span></samp>&rsquo;) whose arguments are specified with &lsquo;<samp><span class="samp">=</span></samp>&rsquo;.
+give to <samp><span class="command">ls</span></samp> for listing the directory; this string
+<em>must</em> contain &lsquo;<samp><span class="samp">-l</span></samp>&rsquo;.  If you use a prefix argument with the
+<code>dired</code> command, you can specify the <samp><span class="command">ls</span></samp> switches with the
+minibuffer before you enter the directory specification.  No matter
+how they are specified, the <samp><span class="command">ls</span></samp> switches can include short
+options (that is, single characters) requiring no arguments, and long
+options (starting with &lsquo;<samp><span class="samp">--</span></samp>&rsquo;) whose arguments are specified with
+&lsquo;<samp><span class="samp">=</span></samp>&rsquo;.
 
-   <p>On MS-Windows and MS-DOS systems, Emacs <em>emulates</em> <code>ls</code>;
-see <a href="ls-in-Lisp.html#ls-in-Lisp">ls in Lisp</a>, for options and peculiarities of that emulation.
+   <p><a name="index-dired_002duse_002dls_002ddired-2978"></a>  If your <samp><span class="command">ls</span></samp> program supports the &lsquo;<samp><span class="samp">--dired</span></samp>&rsquo; option,
+Dired automatically passes it that option; this causes <samp><span class="command">ls</span></samp> to
+emit special escape sequences for certain unusual file names, without
+which Dired will not be able to parse those names.  The first time you
+run Dired in an Emacs session, it checks whether <samp><span class="command">ls</span></samp> supports
+the &lsquo;<samp><span class="samp">--dired</span></samp>&rsquo; option by calling it once with that option.  If the
+exit code is 0, Dired will subsequently use the &lsquo;<samp><span class="samp">--dired</span></samp>&rsquo; option;
+otherwise it will not.  You can inhibit this check by customizing the
+variable <code>dired-use-ls-dired</code>.  The value <code>unspecified</code> (the
+default) means to perform the check; any other non-<code>nil</code> value
+means to use the &lsquo;<samp><span class="samp">--dired</span></samp>&rsquo; option; and <code>nil</code> means not to
+use the &lsquo;<samp><span class="samp">--dired</span></samp>&rsquo; option.
 
-   <p><a name="index-dired_002dother_002dwindow-2984"></a><a name="index-C_002dx-4-d-2985"></a><a name="index-dired_002dother_002dframe-2986"></a><a name="index-C_002dx-5-d-2987"></a>  To display the Dired buffer in another window rather than in the
-selected window, use <kbd>C-x 4 d</kbd> (<code>dired-other-window</code>) instead
-of <kbd>C-x d</kbd>.  <kbd>C-x 5 d</kbd> (<code>dired-other-frame</code>) uses a
-separate frame to display the Dired buffer.
+   <p>On MS-Windows and MS-DOS systems, Emacs emulates <samp><span class="command">ls</span></samp>. 
+See <a href="ls-in-Lisp.html#ls-in-Lisp">ls in Lisp</a>, for options and peculiarities of this emulation.
+
+   <p><a name="index-dired_002dother_002dwindow-2979"></a><a name="index-C_002dx-4-d-2980"></a><a name="index-dired_002dother_002dframe-2981"></a><a name="index-C_002dx-5-d-2982"></a>  To display the Dired buffer in another window, use <kbd>C-x 4 d</kbd>
+(<code>dired-other-window</code>).  <kbd>C-x 5 d</kbd>
+(<code>dired-other-frame</code>) displays the Dired buffer in a separate
+frame.
+
+   <p><a name="index-q-_0040r_007b_0028Dired_0029_007d-2983"></a><a name="index-quit_002dwindow-2984"></a>  Typing <kbd>q</kbd> (<code>quit-window</code>) buries the Dired buffer, and
+deletes its window if the window was created just for that buffer.
 
    </body></html>
 

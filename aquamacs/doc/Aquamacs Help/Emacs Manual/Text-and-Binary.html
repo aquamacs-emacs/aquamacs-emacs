@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Text and Binary - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Windows-Files.html#Windows-Files" title="Windows Files">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,11 +44,11 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Microsoft-Windows.html#Microsoft-Window
 
 <h3 class="section">G.2 Text Files and Binary Files</h3>
 
-<p><a name="index-text-and-binary-files-on-MS_002dDOS_002fMS_002dWindows-4382"></a>
+<p><a name="index-text-and-binary-files-on-MS_002dDOS_002fMS_002dWindows-4720"></a>
   GNU Emacs uses newline characters to separate text lines.  This is the
 convention used on GNU, Unix, and other Posix-compliant systems.
 
-   <p><a name="index-end_002dof_002dline-conversion-on-MS_002dDOS_002fMS_002dWindows-4383"></a>  By contrast, MS-DOS and MS-Windows normally use carriage-return linefeed,
+   <p><a name="index-end_002dof_002dline-conversion-on-MS_002dDOS_002fMS_002dWindows-4721"></a>  By contrast, MS-DOS and MS-Windows normally use carriage-return linefeed,
 a two-character sequence, to separate text lines.  (Linefeed is the same
 character as newline.)  Therefore, convenient editing of typical files
 with Emacs requires conversion of these end-of-line (EOL) sequences. 
@@ -61,7 +58,7 @@ carriage-return linefeed when writing files.  The same mechanism that
 handles conversion of international character codes does this conversion
 also (see <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>).
 
-   <p><a name="index-cursor-location_002c-on-MS_002dDOS-4384"></a><a name="index-point-location_002c-on-MS_002dDOS-4385"></a>  One consequence of this special format-conversion of most files is
+   <p><a name="index-cursor-location_002c-on-MS_002dDOS-4722"></a><a name="index-point-location_002c-on-MS_002dDOS-4723"></a>  One consequence of this special format-conversion of most files is
 that character positions as reported by Emacs (see <a href="Position-Info.html#Position-Info">Position Info</a>) do
 not agree with the file size information known to the operating system.
 
@@ -80,7 +77,7 @@ the coding system mnemonic near the beginning of the mode line
 &lsquo;<samp><span class="samp">(Unix)</span></samp>&rsquo; is displayed instead of the backslash, to alert you that the
 file's EOL format is not the usual carriage-return linefeed.
 
-   <p><a name="index-DOS_002dto_002dUnix-conversion-of-files-4386"></a>  To visit a file and specify whether it uses DOS-style or Unix-style
+   <p><a name="index-DOS_002dto_002dUnix-conversion-of-files-4724"></a>  To visit a file and specify whether it uses DOS-style or Unix-style
 end-of-line, specify a coding system (see <a href="Text-Coding.html#Text-Coding">Text Coding</a>).  For
 example, <kbd>C-x &lt;RET&gt; c unix &lt;RET&gt; C-x C-f foobar.txt</kbd>
 visits the file <samp><span class="file">foobar.txt</span></samp> without converting the EOLs; if some
@@ -90,9 +87,10 @@ save a buffer in a specified EOL format with the <kbd>C-x &lt;RET&gt; f</kbd>
 command.  For example, to save a buffer with Unix EOL format, type
 <kbd>C-x &lt;RET&gt; f unix &lt;RET&gt; C-x C-s</kbd>.  If you visit a file
 with DOS EOL conversion, then save it with Unix EOL format, that
-effectively converts the file to Unix EOL style, like <code>dos2unix</code>.
+effectively converts the file to Unix EOL style, like the
+<code>dos2unix</code> program.
 
-   <p><a name="index-untranslated-file-system-4387"></a><a name="index-add_002duntranslated_002dfilesystem-4388"></a>  When you use NFS, Samba, or some other similar method to access file
+   <p><a name="index-untranslated-file-system-4725"></a><a name="index-add_002duntranslated_002dfilesystem-4726"></a>  When you use NFS, Samba, or some other similar method to access file
 systems that reside on computers using GNU or Unix systems, Emacs
 should not perform end-of-line translation on any files in these file
 systems&mdash;not even when you create a new file.  To request this,
@@ -114,7 +112,7 @@ system.
 <samp><span class="file">.emacs</span></samp> file, or in <samp><span class="file">site-start.el</span></samp> so that all the users at
 your site get the benefit of it.
 
-   <p><a name="index-remove_002duntranslated_002dfilesystem-4389"></a>  To countermand the effect of <code>add-untranslated-filesystem</code>, use
+   <p><a name="index-remove_002duntranslated_002dfilesystem-4727"></a>  To countermand the effect of <code>add-untranslated-filesystem</code>, use
 the function <code>remove-untranslated-filesystem</code>.  This function takes
 one argument, which should be a string just like the one that was used
 previously with <code>add-untranslated-filesystem</code>.
@@ -123,27 +121,6 @@ previously with <code>add-untranslated-filesystem</code>.
 set conversion, only end-of-line conversion.  Essentially, it directs
 Emacs to create new files with the Unix-style convention of using
 newline at the end of a line.  See <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>.
-
-   <p><a name="index-file_002dname_002dbuffer_002dfile_002dtype_002dalist-4390"></a><a name="index-binary-files_002c-on-MS_002dDOS_002fMS_002dWindows-4391"></a>  Some kinds of files should not be converted at all, because their
-contents are not really text.  Therefore, Emacs on MS-Windows distinguishes
-certain files as <dfn>binary files</dfn>.  (This distinction is not part of
-MS-Windows; it is made by Emacs only.)  Binary files include executable
-programs, compressed archives, etc.  Emacs uses the file name to decide
-whether to treat a file as binary: the variable
-<code>file-name-buffer-file-type-alist</code> defines the file-name patterns
-that indicate binary files.  If a file name matches one of the patterns
-for binary files (those whose associations are of the type
-<code>(</code><var>pattern</var><code> . t)</code>, Emacs reads and writes that file using the
-<code>no-conversion</code> coding system (see <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>) which turns
-off <em>all</em> coding-system conversions, not only the EOL conversion. 
-<code>file-name-buffer-file-type-alist</code> also includes file-name patterns
-for files which are known to be Windows-style text files with
-carriage-return linefeed EOL format, such as <samp><span class="file">CONFIG.SYS</span></samp>; Emacs
-always writes those files with Windows-style EOLs.
-
-   <p>If a file which belongs to an untranslated file system matches one of
-the file-name patterns in <code>file-name-buffer-file-type-alist</code>, the
-EOL conversion is determined by <code>file-name-buffer-file-type-alist</code>.
 
    </body></html>
 

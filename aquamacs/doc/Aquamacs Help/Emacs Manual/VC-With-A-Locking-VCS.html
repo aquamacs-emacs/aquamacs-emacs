@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>VC With A Locking VCS - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Advanced-C_002dx-v-v.html#Advanced-C_002dx-v-v" title="Advanced C-x v v">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,30 +42,40 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Basic-VC-Editing.html#Basic-VC-Editing"
 <hr>
 </div>
 
-<h5 class="subsubsection">32.1.3.2 Basic Version Control with Locking</h5>
+<h5 class="subsubsection">28.1.3.2 Basic Version Control with Locking</h5>
 
-<p>Under a locking-based version control system (such as SCCS, and RCS
-in its default mode), <kbd>C-x v v</kbd> does the following:
+<p>On a locking-based version control system (such as SCCS, and RCS in
+its default mode), <kbd>C-x v v</kbd> does the following:
 
      <ul>
-<li>If the file is not locked, lock it and make it writable, so that you
-can change it.
+<li>If there is more than one file in the VC fileset and the files have
+inconsistent version control statuses, signal an error.
 
-     <li>If the file is locked by you, and contains changes, commit the
-changes.  In order to do this, Emacs first reads the log entry for the
-new revision.  See <a href="Log-Buffer.html#Log-Buffer">Log Buffer</a>.
+     <li>If each file in the VC fileset is not registered with a version
+control system, register the VC fileset.  See <a href="Registering.html#Registering">Registering</a>.  If
+Emacs cannot find a system to register under, it prompts for a
+repository type, creates a new repository, and registers the VC
+fileset with it.
 
-     <li>If the file is locked by you, but you have not changed it since you
-locked it, release the lock and makes the file read-only again.
+     <li>If each file is registered and unlocked, lock it and make it writable,
+so that you can begin to edit it.
 
-     <li>If the file is locked by some other user, ask whether you want to
-&ldquo;steal the lock&rdquo; from that user.  If you say yes, the file becomes
-locked by you, but a message is sent to the person who had formerly
-locked the file, to inform him of what has happened. 
+     <li>If each file is locked by you and contains changes, commit the
+changes.  To do this, Emacs pops up a <samp><span class="file">*vc-log*</span></samp> buffer; type the
+desired log entry for the new revision, followed by <kbd>C-c C-c</kbd> to
+commit (see <a href="Log-Buffer.html#Log-Buffer">Log Buffer</a>).
+
+     <li>If each file is locked by you, but you have not changed it, release
+the lock and make the file read-only again.
+
+     <li>If each file is locked by another user, ask whether you want to
+&ldquo;steal the lock&rdquo;.  If you say yes, the file becomes locked by you,
+and a warning message is sent to the user who had formerly locked the
+file. 
 </ul>
 
    <p>These rules also apply when you use CVS in locking mode, except
-that CVS does not support stealing a lock.
+that CVS does not support stealing locks.
 
    </body></html>
 

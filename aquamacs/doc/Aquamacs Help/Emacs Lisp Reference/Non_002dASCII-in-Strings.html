@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Non-ASCII in Strings - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Nonprinting-Characters.html#Nonprinting-Characters" title="Nonprinting Characters">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,40 +44,52 @@ Up:&nbsp;<a rel="up" accesskey="u" href="String-Type.html#String-Type">String Ty
 
 <h5 class="subsubsection">2.3.8.2 Non-<acronym>ASCII</acronym> Characters in Strings</h5>
 
-<p>You can include a non-<acronym>ASCII</acronym> international character in a string
-constant by writing it literally.  There are two text representations
-for non-<acronym>ASCII</acronym> characters in Emacs strings (and in buffers): unibyte
-and multibyte.  If the string constant is read from a multibyte source,
-such as a multibyte buffer or string, or a file that would be visited as
-multibyte, then the character is read as a multibyte character, and that
-makes the string multibyte.  If the string constant is read from a
-unibyte source, then the character is read as unibyte and that makes the
-string unibyte.
+<p>There are two text representations for non-<acronym>ASCII</acronym>
+characters in Emacs strings: multibyte and unibyte (see <a href="Text-Representations.html#Text-Representations">Text Representations</a>).  Roughly speaking, unibyte strings store raw bytes,
+while multibyte strings store human-readable text.  Each character in
+a unibyte string is a byte, i.e., its value is between 0 and 255.  By
+contrast, each character in a multibyte string may have a value
+between 0 to 4194303 (see <a href="Character-Type.html#Character-Type">Character Type</a>).  In both cases,
+characters above 127 are non-<acronym>ASCII</acronym>.
 
-   <p>You can also represent a multibyte non-<acronym>ASCII</acronym> character with its
-character code: use a hex escape, &lsquo;<samp><span class="samp">\x</span><var>nnnnnnn</var></samp>&rsquo;, with as many
-digits as necessary.  (Multibyte non-<acronym>ASCII</acronym> character codes are all
-greater than 256.)  Any character which is not a valid hex digit
-terminates this construct.  If the next character in the string could be
-interpreted as a hex digit, write &lsquo;<samp><span class="samp">\&nbsp;</span></samp>&rsquo;<!-- /@w --> (backslash and space) to
-terminate the hex escape&mdash;for example, &lsquo;<samp><span class="samp">\x8e0\&nbsp;</span></samp>&rsquo;<!-- /@w --> represents
-one character, &lsquo;<samp><span class="samp">a</span></samp>&rsquo; with grave accent.  &lsquo;<samp><span class="samp">\&nbsp;</span></samp>&rsquo;<!-- /@w --> in a string
-constant is just like backslash-newline; it does not contribute any
-character to the string, but it does terminate the preceding hex escape.
+   <p>You can include a non-<acronym>ASCII</acronym> character in a string constant
+by writing it literally.  If the string constant is read from a
+multibyte source, such as a multibyte buffer or string, or a file that
+would be visited as multibyte, then Emacs reads each
+non-<acronym>ASCII</acronym> character as a multibyte character and
+automatically makes the string a multibyte string.  If the string
+constant is read from a unibyte source, then Emacs reads the
+non-<acronym>ASCII</acronym> character as unibyte, and makes the string
+unibyte.
 
-   <p>You can represent a unibyte non-<acronym>ASCII</acronym> character with its
-character code, which must be in the range from 128 (0200 octal) to
-255 (0377 octal).  If you write all such character codes in octal and
-the string contains no other characters forcing it to be multibyte,
-this produces a unibyte string.  However, using any hex escape in a
-string (even for an <acronym>ASCII</acronym> character) forces the string to be
-multibyte.
+   <p>Instead of writing a character literally into a multibyte string,
+you can write it as its character code using an escape sequence. 
+See <a href="General-Escape-Syntax.html#General-Escape-Syntax">General Escape Syntax</a>, for details about escape sequences.
 
-   <p>You can also specify characters in a string by their numeric values
-in Unicode, using &lsquo;<samp><span class="samp">\u</span></samp>&rsquo; and &lsquo;<samp><span class="samp">\U</span></samp>&rsquo; (see <a href="Character-Type.html#Character-Type">Character Type</a>).
+   <p>If you use any Unicode-style escape sequence &lsquo;<samp><span class="samp">\uNNNN</span></samp>&rsquo; or
+&lsquo;<samp><span class="samp">\U00NNNNNN</span></samp>&rsquo; in a string constant (even for an <acronym>ASCII</acronym>
+character), Emacs automatically assumes that it is multibyte.
 
-   <p>See <a href="Text-Representations.html#Text-Representations">Text Representations</a>, for more information about the two
-text representations.
+   <p>You can also use hexadecimal escape sequences (&lsquo;<samp><span class="samp">\x</span><var>n</var></samp>&rsquo;) and
+octal escape sequences (&lsquo;<samp><span class="samp">\</span><var>n</var></samp>&rsquo;) in string constants. 
+<strong>But beware:</strong> If a string constant contains hexadecimal or
+octal escape sequences, and these escape sequences all specify unibyte
+characters (i.e., less than 256), and there are no other literal
+non-<acronym>ASCII</acronym> characters or Unicode-style escape sequences in
+the string, then Emacs automatically assumes that it is a unibyte
+string.  That is to say, it assumes that all non-<acronym>ASCII</acronym>
+characters occurring in the string are 8-bit raw bytes.
+
+   <p>In hexadecimal and octal escape sequences, the escaped character
+code may contain a variable number of digits, so the first subsequent
+character which is not a valid hexadecimal or octal digit terminates
+the escape sequence.  If the next character in a string could be
+interpreted as a hexadecimal or octal digit, write &lsquo;<samp><span class="samp">\&nbsp;</span></samp>&rsquo;<!-- /@w -->
+(backslash and space) to terminate the escape sequence.  For example,
+&lsquo;<samp><span class="samp">\xe0\&nbsp;</span></samp>&rsquo;<!-- /@w --> represents one character, &lsquo;<samp><span class="samp">a</span></samp>&rsquo; with grave
+accent.  &lsquo;<samp><span class="samp">\&nbsp;</span></samp>&rsquo;<!-- /@w --> in a string constant is just like
+backslash-newline; it does not contribute any character to the string,
+but it does terminate any preceding hex escape.
 
    </body></html>
 

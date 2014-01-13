@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Arithmetic Operations - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Rounding-Operations.html#Rounding-Operations" title="Rounding Operations">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,22 +43,20 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Numbers.html#Numbers">Numbers</a>
 
 <h3 class="section">3.6 Arithmetic Operations</h3>
 
-<p><a name="index-arithmetic-operations-175"></a>
-  Emacs Lisp provides the traditional four arithmetic operations:
-addition, subtraction, multiplication, and division.  Remainder and modulus
-functions supplement the division functions.  The functions to
-add or subtract 1 are provided because they are traditional in Lisp and
-commonly used.
-
-   <p>All of these functions except <code>%</code> return a floating point value
-if any argument is floating.
+<p><a name="index-arithmetic-operations-185"></a>
+  Emacs Lisp provides the traditional four arithmetic operations
+(addition, subtraction, multiplication, and division), as well as
+remainder and modulus functions, and functions to add or subtract 1. 
+Except for <code>%</code>, each of these functions accepts both integer and
+floating point arguments, and returns a floating point number if any
+argument is a floating point number.
 
    <p>It is important to note that in Emacs Lisp, arithmetic functions
-do not check for overflow.  Thus <code>(1+ 268435455)</code> may evaluate to
-&minus;268435456, depending on your hardware.
+do not check for overflow.  Thus <code>(1+ 536870911)</code> may evaluate to
+&minus;536870912, depending on your hardware.
 
 <div class="defun">
-&mdash; Function: <b>1+</b><var> number-or-marker<a name="index-g_t1_002b-176"></a></var><br>
+&mdash; Function: <b>1+</b><var> number-or-marker<a name="index-g_t1_002b-186"></a></var><br>
 <blockquote><p>This function returns <var>number-or-marker</var> plus 1. 
 For example,
 
@@ -85,12 +80,12 @@ like this:
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>1-</b><var> number-or-marker<a name="index-g_t1_002d-177"></a></var><br>
+&mdash; Function: <b>1-</b><var> number-or-marker<a name="index-g_t1_002d-187"></a></var><br>
 <blockquote><p>This function returns <var>number-or-marker</var> minus 1. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>+</b><var> &amp;rest numbers-or-markers<a name="index-g_t_002b-178"></a></var><br>
+&mdash; Function: <b>+</b><var> &amp;rest numbers-or-markers<a name="index-g_t_002b-188"></a></var><br>
 <blockquote><p>This function adds its arguments together.  When given no arguments,
 <code>+</code> returns 0.
 
@@ -104,7 +99,7 @@ like this:
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>-</b><var> &amp;optional number-or-marker &amp;rest more-numbers-or-markers<a name="index-g_t_002d-179"></a></var><br>
+&mdash; Function: <b>-</b><var> &amp;optional number-or-marker &amp;rest more-numbers-or-markers<a name="index-g_t_002d-189"></a></var><br>
 <blockquote><p>The <code>-</code> function serves two purposes: negation and subtraction. 
 When <code>-</code> has a single argument, the value is the negative of the
 argument.  When there are multiple arguments, <code>-</code> subtracts each of
@@ -121,7 +116,7 @@ cumulatively.  If there are no arguments, the result is 0.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>*</b><var> &amp;rest numbers-or-markers<a name="index-g_t_002a-180"></a></var><br>
+&mdash; Function: <b>*</b><var> &amp;rest numbers-or-markers<a name="index-g_t_002a-190"></a></var><br>
 <blockquote><p>This function multiplies its arguments together, and returns the
 product.  When given no arguments, <code>*</code> returns 1.
 
@@ -135,24 +130,18 @@ product.  When given no arguments, <code>*</code> returns 1.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>/</b><var> dividend divisor &amp;rest divisors<a name="index-g_t_002f-181"></a></var><br>
+&mdash; Function: <b>/</b><var> dividend divisor &amp;rest divisors<a name="index-g_t_002f-191"></a></var><br>
 <blockquote><p>This function divides <var>dividend</var> by <var>divisor</var> and returns the
 quotient.  If there are additional arguments <var>divisors</var>, then it
 divides <var>dividend</var> by each divisor in turn.  Each argument may be a
 number or a marker.
 
-        <p>If all the arguments are integers, then the result is an integer too. 
-This means the result has to be rounded.  On most machines, the result
-is rounded towards zero after each division, but some machines may round
-differently with negative arguments.  This is because the Lisp function
-<code>/</code> is implemented using the C division operator, which also
-permits machine-dependent rounding.  As a practical matter, all known
-machines round in the standard fashion.
-
-        <p><a name="index-g_t_0040code_007barith_002derror_007d-in-division-182"></a>If you divide an integer by 0, an <code>arith-error</code> error is signaled. 
-(See <a href="Errors.html#Errors">Errors</a>.)  Floating point division by zero returns either
-infinity or a NaN if your machine supports <acronym>IEEE</acronym> floating point;
-otherwise, it signals an <code>arith-error</code> error.
+        <p>If all the arguments are integers, the result is an integer, obtained
+by rounding the quotient towards zero after each division. 
+(Hypothetically, some machines may have different rounding behavior
+for negative arguments, because <code>/</code> is implemented using the C
+division operator, which permits machine-dependent rounding; but this
+does not happen in practice.)
 
      <pre class="example">          (/ 6 2)
                &rArr; 3
@@ -167,19 +156,26 @@ otherwise, it signals an <code>arith-error</code> error.
           (/ 25 3 2)
                &rArr; 4
           (/ -17 6)
-               &rArr; -2   <span class="roman">(could in theory be &minus;3 on some machines)</span>
+               &rArr; -2
 </pre>
-        </blockquote></div>
+        <p><a name="index-g_t_0040code_007barith_002derror_007d-in-division-192"></a>If you divide an integer by the integer 0, Emacs signals an
+<code>arith-error</code> error (see <a href="Errors.html#Errors">Errors</a>).  If you divide a floating
+point number by 0, or divide by the floating point number 0.0, the
+result is either positive or negative infinity (see <a href="Float-Basics.html#Float-Basics">Float Basics</a>). 
+</p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>%</b><var> dividend divisor<a name="index-g_t_0025-183"></a></var><br>
-<blockquote><p><a name="index-remainder-184"></a>This function returns the integer remainder after division of <var>dividend</var>
+&mdash; Function: <b>%</b><var> dividend divisor<a name="index-g_t_0025-193"></a></var><br>
+<blockquote><p><a name="index-remainder-194"></a>This function returns the integer remainder after division of <var>dividend</var>
 by <var>divisor</var>.  The arguments must be integers or markers.
 
-        <p>For negative arguments, the remainder is in principle machine-dependent
-since the quotient is; but in practice, all known machines behave alike.
+        <p>For any two integers <var>dividend</var> and <var>divisor</var>,
 
-        <p>An <code>arith-error</code> results if <var>divisor</var> is 0.
+     <pre class="example">          (+ (% <var>dividend</var> <var>divisor</var>)
+             (* (/ <var>dividend</var> <var>divisor</var>) <var>divisor</var>))
+</pre>
+        <p class="noindent">always equals <var>dividend</var>.  If <var>divisor</var> is zero, Emacs signals
+an <code>arith-error</code> error.
 
      <pre class="example">          (% 9 4)
                &rArr; 1
@@ -190,27 +186,21 @@ since the quotient is; but in practice, all known machines behave alike.
           (% -9 -4)
                &rArr; -1
 </pre>
-        <p>For any two integers <var>dividend</var> and <var>divisor</var>,
-
-     <pre class="example">          (+ (% <var>dividend</var> <var>divisor</var>)
-             (* (/ <var>dividend</var> <var>divisor</var>) <var>divisor</var>))
-</pre>
-        <p class="noindent">always equals <var>dividend</var>. 
-</p></blockquote></div>
+        </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>mod</b><var> dividend divisor<a name="index-mod-185"></a></var><br>
-<blockquote><p><a name="index-modulus-186"></a>This function returns the value of <var>dividend</var> modulo <var>divisor</var>;
+&mdash; Function: <b>mod</b><var> dividend divisor<a name="index-mod-195"></a></var><br>
+<blockquote><p><a name="index-modulus-196"></a>This function returns the value of <var>dividend</var> modulo <var>divisor</var>;
 in other words, the remainder after division of <var>dividend</var>
 by <var>divisor</var>, but with the same sign as <var>divisor</var>. 
 The arguments must be numbers or markers.
 
-        <p>Unlike <code>%</code>, <code>mod</code> returns a well-defined result for negative
-arguments.  It also permits floating point arguments; it rounds the
-quotient downward (towards minus infinity) to an integer, and uses that
-quotient to compute the remainder.
+        <p>Unlike <code>%</code>, <code>mod</code> permits floating point arguments; it
+rounds the quotient downward (towards minus infinity) to an integer,
+and uses that quotient to compute the remainder.
 
-        <p>An <code>arith-error</code> results if <var>divisor</var> is 0.
+        <p>If <var>divisor</var> is zero, <code>mod</code> signals an <code>arith-error</code>
+error if both arguments are integers, and returns a NaN otherwise.
 
      <pre class="example">          (mod 9 4)
                &rArr; 1

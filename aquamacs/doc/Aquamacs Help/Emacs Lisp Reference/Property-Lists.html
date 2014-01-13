@@ -1,21 +1,18 @@
 <html lang="en">
 <head>
 <title>Property Lists - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Symbols.html#Symbols" title="Symbols">
-<link rel="prev" href="Creating-Symbols.html#Creating-Symbols" title="Creating Symbols">
+<link rel="up" href="Lists.html#Lists" title="Lists">
+<link rel="prev" href="Association-Lists.html#Association-Lists" title="Association Lists">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -37,42 +34,40 @@ Foundation, Inc.
 <div class="node">
 <a name="Property-Lists"></a>
 <p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Creating-Symbols.html#Creating-Symbols">Creating Symbols</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Symbols.html#Symbols">Symbols</a>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Association-Lists.html#Association-Lists">Association Lists</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Lists.html#Lists">Lists</a>
 <hr>
 </div>
 
-<h3 class="section">8.4 Property Lists</h3>
+<h3 class="section">5.9 Property Lists</h3>
 
-<p><a name="index-property-list-472"></a><a name="index-plist-473"></a>
+<p><a name="index-property-list-382"></a><a name="index-plist-383"></a>
   A <dfn>property list</dfn> (<dfn>plist</dfn> for short) is a list of paired
 elements.  Each of the pairs associates a property name (usually a
-symbol) with a property or value.
+symbol) with a property or value.  Here is an example of a property
+list:
 
-   <p>Every symbol has a cell that stores a property list (see <a href="Symbol-Components.html#Symbol-Components">Symbol Components</a>).  This property list is used to record information about
-the symbol, such as its variable documentation and the name of the
-file where it was defined.
-
-   <p>Property lists can also be used in other contexts.  For instance,
-you can assign property lists to character positions in a string or
-buffer.  See <a href="Text-Properties.html#Text-Properties">Text Properties</a>.
-
-   <p>The property names and values in a property list can be any Lisp
-objects, but the names are usually symbols.  Property list functions
-compare the property names using <code>eq</code>.  Here is an example of a
-property list, found on the symbol <code>progn</code> when the compiler is
-loaded:
-
-<pre class="example">     (lisp-indent-function 0 byte-compile byte-compile-progn)
+<pre class="example">     (pine cones numbers (1 2 3) color "blue")
 </pre>
-   <p class="noindent">Here <code>lisp-indent-function</code> and <code>byte-compile</code> are property
-names, and the other two elements are the corresponding values.
+   <p class="noindent">This property list associates <code>pine</code> with <code>cones</code>,
+<code>numbers</code> with <code>(1 2 3)</code>, and <code>color</code> with
+<code>"blue"</code>.  The property names and values can be any Lisp objects,
+but the names are usually symbols (as they are in this example).
+
+   <p>Property lists are used in several contexts.  For instance, the
+function <code>put-text-property</code> takes an argument which is a
+property list, specifying text properties and associated values which
+are to be applied to text in a string or buffer.  See <a href="Text-Properties.html#Text-Properties">Text Properties</a>.
+
+   <p>Another prominent use of property lists is for storing symbol
+properties.  Every symbol possesses a list of properties, used to
+record miscellaneous information about the symbol; these properties
+are stored in the form of a property list.  See <a href="Symbol-Properties.html#Symbol-Properties">Symbol Properties</a>.
 
 <ul class="menu">
 <li><a accesskey="1" href="Plists-and-Alists.html#Plists-and-Alists">Plists and Alists</a>:            Comparison of the advantages of property
                                   lists and association lists. 
-<li><a accesskey="2" href="Symbol-Plists.html#Symbol-Plists">Symbol Plists</a>:                Functions to access symbols' property lists. 
-<li><a accesskey="3" href="Other-Plists.html#Other-Plists">Other Plists</a>:                 Accessing property lists stored elsewhere. 
+<li><a accesskey="2" href="Plist-Access.html#Plist-Access">Plist Access</a>:                 Accessing property lists stored elsewhere. 
 </ul>
 
    </body></html>

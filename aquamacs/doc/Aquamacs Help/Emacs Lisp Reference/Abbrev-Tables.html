@@ -1,22 +1,18 @@
 <html lang="en">
 <head>
 <title>Abbrev Tables - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Abbrevs.html#Abbrevs" title="Abbrevs">
-<link rel="prev" href="Abbrev-Mode.html#Abbrev-Mode" title="Abbrev Mode">
 <link rel="next" href="Defining-Abbrevs.html#Defining-Abbrevs" title="Defining Abbrevs">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -39,17 +35,16 @@ Foundation, Inc.
 <a name="Abbrev-Tables"></a>
 <p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Defining-Abbrevs.html#Defining-Abbrevs">Defining Abbrevs</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Abbrev-Mode.html#Abbrev-Mode">Abbrev Mode</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Abbrevs.html#Abbrevs">Abbrevs</a>
 <hr>
 </div>
 
-<h3 class="section">36.2 Abbrev Tables</h3>
+<h3 class="section">36.1 Abbrev Tables</h3>
 
 <p>This section describes how to create and manipulate abbrev tables.
 
 <div class="defun">
-&mdash; Function: <b>make-abbrev-table</b><var> &amp;optional props<a name="index-make_002dabbrev_002dtable-3214"></a></var><br>
+&mdash; Function: <b>make-abbrev-table</b><var> &amp;optional props<a name="index-make_002dabbrev_002dtable-3487"></a></var><br>
 <blockquote><p>This function creates and returns a new, empty abbrev table&mdash;an
 obarray containing no symbols.  It is a vector filled with zeros. 
 <var>props</var> is a property list that is applied to the new table
@@ -57,34 +52,34 @@ obarray containing no symbols.  It is a vector filled with zeros.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>abbrev-table-p</b><var> object<a name="index-abbrev_002dtable_002dp-3215"></a></var><br>
+&mdash; Function: <b>abbrev-table-p</b><var> object<a name="index-abbrev_002dtable_002dp-3488"></a></var><br>
 <blockquote><p>This function returns a non-<code>nil</code> value if <var>object</var> is an
 abbrev table. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>clear-abbrev-table</b><var> abbrev-table<a name="index-clear_002dabbrev_002dtable-3216"></a></var><br>
+&mdash; Function: <b>clear-abbrev-table</b><var> abbrev-table<a name="index-clear_002dabbrev_002dtable-3489"></a></var><br>
 <blockquote><p>This function undefines all the abbrevs in <var>abbrev-table</var>, leaving
-it empty.  It always returns <code>nil</code>. 
+it empty. 
+<!-- Don't see why this needs saying. -->
+<!-- It always returns @code{nil}. -->
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>copy-abbrev-table</b><var> abbrev-table<a name="index-copy_002dabbrev_002dtable-3217"></a></var><br>
+&mdash; Function: <b>copy-abbrev-table</b><var> abbrev-table<a name="index-copy_002dabbrev_002dtable-3490"></a></var><br>
 <blockquote><p>This function returns a copy of <var>abbrev-table</var>&mdash;a new abbrev
-table containing the same abbrev definitions.  There is one difference
-between the contents of <var>abbrev-table</var> and the returned copy: all
-abbrevs in the latter have their property lists set to <code>nil</code>. 
+table containing the same abbrev definitions.  It does <em>not</em> copy
+any property lists; only the names, values, and functions. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>define-abbrev-table</b><var> tabname definitions &amp;optional docstring &amp;rest props<a name="index-define_002dabbrev_002dtable-3218"></a></var><br>
+&mdash; Function: <b>define-abbrev-table</b><var> tabname definitions &amp;optional docstring &amp;rest props<a name="index-define_002dabbrev_002dtable-3491"></a></var><br>
 <blockquote><p>This function defines <var>tabname</var> (a symbol) as an abbrev table
 name, i.e., as a variable whose value is an abbrev table.  It defines
 abbrevs in the table according to <var>definitions</var>, a list of
 elements of the form <code>(</code><var>abbrevname</var> <var>expansion</var><code>
 [</code><var>hook</var><code>] [</code><var>props</var><code>...])</code>.  These elements are passed as
-arguments to <code>define-abbrev</code>.  The return value is always
-<code>nil</code>.
+arguments to <code>define-abbrev</code>.  <!-- The return value is always @code{nil}. -->
 
         <p>The optional string <var>docstring</var> is the documentation string of the
 variable <var>tabname</var>.  The property list <var>props</var> is applied to
@@ -92,22 +87,22 @@ the abbrev table (see <a href="Abbrev-Table-Properties.html#Abbrev-Table-Propert
 
         <p>If this function is called more than once for the same <var>tabname</var>,
 subsequent calls add the definitions in <var>definitions</var> to
-<var>tabname</var>, rather than overriding the entire original contents. 
+<var>tabname</var>, rather than overwriting the entire original contents. 
 (A subsequent call only overrides abbrevs explicitly redefined or
 undefined in <var>definitions</var>.) 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>abbrev-table-name-list</b><var><a name="index-abbrev_002dtable_002dname_002dlist-3219"></a></var><br>
+&mdash; Variable: <b>abbrev-table-name-list</b><var><a name="index-abbrev_002dtable_002dname_002dlist-3492"></a></var><br>
 <blockquote><p>This is a list of symbols whose values are abbrev tables. 
 <code>define-abbrev-table</code> adds the new abbrev table name to this list. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>insert-abbrev-table-description</b><var> name &amp;optional human<a name="index-insert_002dabbrev_002dtable_002ddescription-3220"></a></var><br>
+&mdash; Function: <b>insert-abbrev-table-description</b><var> name &amp;optional human<a name="index-insert_002dabbrev_002dtable_002ddescription-3493"></a></var><br>
 <blockquote><p>This function inserts before point a description of the abbrev table
 named <var>name</var>.  The argument <var>name</var> is a symbol whose value is an
-abbrev table.  The return value is always <code>nil</code>.
+abbrev table.  <!-- The return value is always @code{nil}. -->
 
         <p>If <var>human</var> is non-<code>nil</code>, the description is human-oriented. 
 System abbrevs are listed and identified as such.  Otherwise the

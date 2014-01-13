@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Buttons - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Abstract-Display.html#Abstract-Display" title="Abstract Display">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,29 +43,24 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
 
 <h3 class="section">38.17 Buttons</h3>
 
-<p><a name="index-buttons-in-buffers-3655"></a><a name="index-clickable-buttons-in-buffers-3656"></a>
-  The <em>button</em> package defines functions for inserting and
-manipulating clickable (with the mouse, or via keyboard commands)
-buttons in Emacs buffers, such as might be used for help hyper-links,
-etc.  Emacs uses buttons for the hyper-links in help text and the like.
+<p><a name="index-buttons-in-buffers-3965"></a><a name="index-clickable-buttons-in-buffers-3966"></a>
+  The Button package defines functions for inserting and manipulating
+<dfn>buttons</dfn> that can be activated with the mouse or via keyboard
+commands.  These buttons are typically used for various kinds of
+hyperlinks.
 
-   <p>A button is essentially a set of properties attached (via text
-properties or overlays) to a region of text in an Emacs buffer.  These
-properties are called <dfn>button properties</dfn>.
+   <p>A button is essentially a set of text or overlay properties,
+attached to a stretch of text in a buffer.  These properties are
+called <dfn>button properties</dfn>.  One of these properties, the
+<dfn>action property</dfn>, specifies a function which is called when the
+user invokes the button using the keyboard or the mouse.  The action
+function may examine the button and use its other properties as
+desired.
 
-   <p>One of these properties (<code>action</code>) is a function, which will
-be called when the user invokes it using the keyboard or the mouse. 
-The invoked function may then examine the button and use its other
-properties as desired.
-
-   <p>In some ways the Emacs button package duplicates functionality offered
-by the widget package (see <a href="../widget/index.html#Top">Introduction</a>), but the button package has the advantage that it is
-much faster, much smaller, and much simpler to use (for elisp
-programmers&mdash;for users, the result is about the same).  The extra
-speed and space savings are useful mainly if you need to create many
-buttons in a buffer (for instance an <code>*Apropos*</code> buffer uses
-buttons to make entries clickable, and may contain many thousands of
-entries).
+   <p>In some ways, the Button package duplicates the functionality in the
+Widget package.  See <a href="../widget/index.html#Top">Introduction</a>.  The advantage of the Button package is that it is faster,
+smaller, and simpler to program.  From the point of view of the user,
+the interfaces produced by the two packages are very similar.
 
 <ul class="menu">
 <li><a accesskey="1" href="Button-Properties.html#Button-Properties">Button Properties</a>:       Button properties with special meanings. 

@@ -1,21 +1,18 @@
 <html lang="en">
 <head>
 <title>Document View - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Calendar_002fDiary.html#Calendar_002fDiary" title="Calendar/Diary">
-<link rel="next" href="Gnus.html#Gnus" title="Gnus">
+<link rel="prev" href="Gnus.html#Gnus" title="Gnus">
+<link rel="next" href="Shell.html#Shell" title="Shell">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -38,53 +35,63 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <div class="node">
 <a name="Document-View"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Gnus.html#Gnus">Gnus</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Calendar_002fDiary.html#Calendar_002fDiary">Calendar/Diary</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Shell.html#Shell">Shell</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Gnus.html#Gnus">Gnus</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
 <hr>
 </div>
 
-<h2 class="chapter">39 Document Viewing</h2>
+<h2 class="chapter">35 Document Viewing</h2>
 
-<p><a name="index-DVI-file-3556"></a><a name="index-PDF-file-3557"></a><a name="index-PS-file-3558"></a><a name="index-Postscript-file-3559"></a><a name="index-DocView-mode-3560"></a><a name="index-mode_002c-DocView-3561"></a><a name="index-document-viewer-_0028DocView_0029-3562"></a><a name="index-doc_002dview_002dmode-3563"></a>
-DocView mode (<code>doc-view-mode</code>) is a viewer for DVI, Postscript
-(PS), and PDF documents.  It provides features such as slicing,
-zooming, and searching inside documents.  It works by converting the
-document to a set of images using the <samp><span class="command">gs</span></samp> (GhostScript)
-command, and displaying those images.
+<p><a name="index-DVI-file-3869"></a><a name="index-PDF-file-3870"></a><a name="index-PS-file-3871"></a><a name="index-PostScript-file-3872"></a><a name="index-OpenDocument-file-3873"></a><a name="index-Microsoft-Office-file-3874"></a><a name="index-DocView-mode-3875"></a><a name="index-mode_002c-DocView-3876"></a><a name="index-document-viewer-_0028DocView_0029-3877"></a><a name="index-doc_002dview_002dmode-3878"></a>
+  DocView mode is a major mode for viewing DVI, PostScript (PS), PDF,
+OpenDocument, and Microsoft Office documents.  It provides features
+such as slicing, zooming, and searching inside documents.  It works by
+converting the document to a set of images using the <samp><span class="command">gs</span></samp>
+(GhostScript) command and other external tools <a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>, and displaying those images.
 
-   <p><a name="index-doc_002dview_002dtoggle_002ddisplay-3564"></a><a name="index-doc_002dview_002dtoggle_002ddisplay-3565"></a><a name="index-doc_002dview_002dminor_002dmode-3566"></a>  When you visit a PDF or DVI file, Emacs automatically switches to
-DocView mode.  When you visit a Postscript file, Emacs switches to PS
-mode, a major mode for editing Postscript files as text; however, it
-also enables DocView minor mode, so you can type <kbd>C-c C-c</kbd> to view
-the document with DocView.  (PDF and DVI files, unlike Postscript
-files, are not usually human-editable.)  In either case, repeating
-<kbd>C-c C-c</kbd> (<code>doc-view-toggle-display</code>) toggles between DocView
-and the file text.
+   <p><a name="index-doc_002dview_002dtoggle_002ddisplay-3879"></a><a name="index-doc_002dview_002dtoggle_002ddisplay-3880"></a><a name="index-doc_002dview_002dminor_002dmode-3881"></a>  When you visit a document file that can be displayed with DocView
+mode, Emacs automatically uses DocView mode <a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>.  As an exception, when you visit a PostScript file, Emacs
+switches to PS mode, a major mode for editing PostScript files as
+text; however, it also enables DocView minor mode, so you can type
+<kbd>C-c C-c</kbd> to view the document with DocView.  In either DocView
+mode or DocView minor mode, repeating <kbd>C-c C-c</kbd>
+(<code>doc-view-toggle-display</code>) toggles between DocView and the
+underlying file contents.
 
-   <p>You can explicitly toggle DocView mode with the command <code>M-x
-doc-view-mode</code>, and DocView minor mode with the command <code>M-x
+   <p>You can explicitly enable DocView mode with the command <code>M-x
+doc-view-mode</code>.  You can toggle DocView minor mode with <code>M-x
 doc-view-minor-mode</code>.
 
    <p>When DocView mode starts, it displays a welcome screen and begins
 formatting the file, page by page.  It displays the first page once
 that has been formatted.
 
-   <p><a name="index-doc_002dview_002denlarge-3567"></a><a name="index-doc_002dview_002dshrink-3568"></a><a name="index-doc_002dview_002dresolution-3569"></a>  When in DocView mode, you can enlarge or shrink the document with
-<kbd>+</kbd> (<code>doc-view-enlarge</code>) and <kbd>-</kbd>
-(<code>doc-view-shrink</code>).  To specify the default size for DocView,
-set or customize the variable <code>doc-view-resolution</code>.
-
    <p>To kill the DocView buffer, type <kbd>k</kbd>
 (<code>doc-view-kill-proc-and-buffer</code>).  To bury it, type <kbd>q</kbd>
 (<code>quit-window</code>).
 
 <ul class="menu">
-<li><a accesskey="1" href="Navigation.html#Navigation">Navigation</a>:   Navigation inside DocView buffers. 
-<li><a accesskey="2" href="Searching.html#Searching">Searching</a>:    Searching inside documents. 
-<li><a accesskey="3" href="Slicing.html#Slicing">Slicing</a>:      Specifying which part of pages should be displayed. 
-<li><a accesskey="4" href="Conversion.html#Conversion">Conversion</a>:   Influencing and triggering conversion. 
+<li><a accesskey="1" href="DocView-Navigation.html#DocView-Navigation">Navigation</a>:   Navigating DocView buffers. 
+<li><a accesskey="2" href="DocView-Searching.html#DocView-Searching">Searching</a>:     Searching inside documents. 
+<li><a accesskey="3" href="DocView-Slicing.html#DocView-Slicing">Slicing</a>:         Specifying which part of a page is displayed. 
+<li><a accesskey="4" href="DocView-Conversion.html#DocView-Conversion">Conversion</a>:   Influencing and triggering conversion. 
 </ul>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> <code>gs</code> is
+a hard requirement.  For DVI files, <code>dvipdf</code> or <code>dvipdfm</code> is
+needed.  For OpenDocument and Microsoft Office documents, the
+<code>unoconv</code> tool is needed.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> The needed
+external tools for the document type must be available, and Emacs must
+be running in a graphical frame and have PNG image support.  If any of
+these requirements is not fulfilled, Emacs falls back to another major
+mode.</p>
+
+   <hr></div>
 
    </body></html>
 

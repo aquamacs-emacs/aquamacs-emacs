@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Translation of Characters - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Coding-Systems.html#Coding-Systems" title="Coding Systems">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,9 +41,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Non_002dASCII-Characters.html#Non_002dA
 <hr>
 </div>
 
-<h3 class="section">33.8 Translation of Characters</h3>
+<h3 class="section">33.9 Translation of Characters</h3>
 
-<p><a name="index-character-translation-tables-2909"></a><a name="index-translation-tables-2910"></a>
+<p><a name="index-character-translation-tables-3193"></a><a name="index-translation-tables-3194"></a>
   A <dfn>translation table</dfn> is a char-table (see <a href="Char_002dTables.html#Char_002dTables">Char-Tables</a>) that
 specifies a mapping of characters into characters.  These tables are
 used in encoding and decoding, and for other purposes.  Some coding
@@ -61,7 +58,7 @@ for translating sequences of characters (see the description of
 <code>make-translation-table-from-alist</code> below).
 
 <div class="defun">
-&mdash; Function: <b>make-translation-table</b><var> &amp;rest translations<a name="index-make_002dtranslation_002dtable-2911"></a></var><br>
+&mdash; Function: <b>make-translation-table</b><var> &amp;rest translations<a name="index-make_002dtranslation_002dtable-3195"></a></var><br>
 <blockquote><p>This function returns a translation table based on the argument
 <var>translations</var>.  Each element of <var>translations</var> should be a
 list of elements of the form <code>(</code><var>from</var><code> . </code><var>to</var><code>)</code>; this says
@@ -93,21 +90,23 @@ is non-<code>nil</code>, it specifies the translation table to use for
 translating the result.
 
 <div class="defun">
-&mdash; Variable: <b>standard-translation-table-for-decode</b><var><a name="index-standard_002dtranslation_002dtable_002dfor_002ddecode-2912"></a></var><br>
+&mdash; Variable: <b>standard-translation-table-for-decode</b><var><a name="index-standard_002dtranslation_002dtable_002dfor_002ddecode-3196"></a></var><br>
 <blockquote><p>This is the default translation table for decoding.  If a coding
 systems specifies its own translation tables, the table that is the
 value of this variable, if non-<code>nil</code>, is applied after them. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>standard-translation-table-for-encode</b><var><a name="index-standard_002dtranslation_002dtable_002dfor_002dencode-2913"></a></var><br>
+&mdash; Variable: <b>standard-translation-table-for-encode</b><var><a name="index-standard_002dtranslation_002dtable_002dfor_002dencode-3197"></a></var><br>
 <blockquote><p>This is the default translation table for encoding.  If a coding
 systems specifies its own translation tables, the table that is the
 value of this variable, if non-<code>nil</code>, is applied after them. 
 </p></blockquote></div>
 
+<!-- FIXME: This variable is obsolete since 23.1.  We should mention -->
+<!-- that here or simply remove this defvar.  -xfq -->
 <div class="defun">
-&mdash; Variable: <b>translation-table-for-input</b><var><a name="index-translation_002dtable_002dfor_002dinput-2914"></a></var><br>
+&mdash; Variable: <b>translation-table-for-input</b><var><a name="index-translation_002dtable_002dfor_002dinput-3198"></a></var><br>
 <blockquote><p>Self-inserting characters are translated through this translation
 table before they are inserted.  Search commands also translate their
 input through this table, so they can compare more reliably with
@@ -117,7 +116,7 @@ what's in the buffer.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>make-translation-table-from-vector</b><var> vec<a name="index-make_002dtranslation_002dtable_002dfrom_002dvector-2915"></a></var><br>
+&mdash; Function: <b>make-translation-table-from-vector</b><var> vec<a name="index-make_002dtranslation_002dtable_002dfrom_002dvector-3199"></a></var><br>
 <blockquote><p>This function returns a translation table made from <var>vec</var> that is
 an array of 256 elements to map bytes (values 0 through #xFF) to
 characters.  Elements may be <code>nil</code> for untranslated bytes.  The
@@ -133,13 +132,13 @@ respectively in the <var>props</var> argument to
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>make-translation-table-from-alist</b><var> alist<a name="index-make_002dtranslation_002dtable_002dfrom_002dalist-2916"></a></var><br>
+&mdash; Function: <b>make-translation-table-from-alist</b><var> alist<a name="index-make_002dtranslation_002dtable_002dfrom_002dalist-3200"></a></var><br>
 <blockquote><p>This function is similar to <code>make-translation-table</code> but returns
 a complex translation table rather than a simple one-to-one mapping. 
 Each element of <var>alist</var> is of the form <code>(</code><var>from</var><code>
 . </code><var>to</var><code>)</code>, where <var>from</var> and <var>to</var> are either characters or
 vectors specifying a sequence of characters.  If <var>from</var> is a
-character, that character is translated to <var>to</var> (i.e. to a
+character, that character is translated to <var>to</var> (i.e., to a
 character or a character sequence).  If <var>from</var> is a vector of
 characters, that sequence is translated to <var>to</var>.  The returned
 table has a translation table for reverse mapping in the first extra

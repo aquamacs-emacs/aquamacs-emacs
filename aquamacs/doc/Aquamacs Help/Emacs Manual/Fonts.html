@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Fonts - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Speedbar.html#Speedbar" title="Speedbar">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,50 +42,55 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
 <hr>
 </div>
 
-<h3 class="section">25.7 Fonts</h3>
+<h3 class="section">21.8 Fonts</h3>
 
-<p><a name="index-fonts-1255"></a>
-  By default, Emacs displays text in X using a 12-point monospace
-font.  There are several different ways to specify a different font:
+<p><a name="index-fonts-1486"></a>
+  By default, Emacs displays text on graphical displays using a
+12-point monospace font.  There are several different ways to specify
+a different font:
 
      <ul>
 <li>Click on &lsquo;<samp><span class="samp">Set Default Font</span></samp>&rsquo; in the &lsquo;<samp><span class="samp">Options</span></samp>&rsquo; menu.  To save
 this for future sessions, click on &lsquo;<samp><span class="samp">Save Options</span></samp>&rsquo; in the
 &lsquo;<samp><span class="samp">Options</span></samp>&rsquo; menu.
 
-     <li>Add a line to your init file (see <a href="Init-File.html#Init-File">Init File</a>), modifying the
-variable <code>default-frame-alist</code> to specify the <code>font</code>
-parameter (see <a href="Creating-Frames.html#Creating-Frames">Creating Frames</a>), like this:
+     <li>Add a line to your init file, modifying the variable
+<code>default-frame-alist</code> to specify the <code>font</code> parameter
+(see <a href="Frame-Parameters.html#Frame-Parameters">Frame Parameters</a>), like this:
 
-     <pre class="smallexample">          (add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-12"))
+     <pre class="example">          (add-to-list 'default-frame-alist
+                       '(font . "DejaVu Sans Mono-10"))
 </pre>
-     <p><a name="index-X-defaults-file-1256"></a><a name="index-X-resources-file-1257"></a><li>Add an &lsquo;<samp><span class="samp">emacs.font</span></samp>&rsquo; X resource setting to your X resource file,
+     <p><a name="index-X-defaults-file-1487"></a><a name="index-X-resources-file-1488"></a><li>Add an &lsquo;<samp><span class="samp">emacs.font</span></samp>&rsquo; X resource setting to your X resource file,
 like this:
 
-     <pre class="smallexample">          emacs.font: DejaVu Sans Mono-12
+     <pre class="example">          emacs.font: DejaVu Sans Mono-12
 </pre>
      <p class="noindent">You must restart X, or use the <samp><span class="command">xrdb</span></samp> command, for the X
-resources file to take effect.  See <a href="Resources.html#Resources">Resources</a>.  When specifying a
-font in your X resources file, you should not quote it.
+resources file to take effect.  See <a href="Resources.html#Resources">Resources</a>.  Do not quote
+font names in X resource files.
 
      <li>If you are running Emacs on the GNOME desktop, you can tell Emacs to
 use the default system font by setting the variable
 <code>font-use-system-font</code> to <code>t</code> (the default is <code>nil</code>). 
-For this to work, Emacs must be compiled with Gconf support; this is
-done automatically if the libraries are present at compile time.
+For this to work, Emacs must have been compiled with Gconf support.
 
      <li>Use the command line option &lsquo;<samp><span class="samp">-fn</span></samp>&rsquo; (or &lsquo;<samp><span class="samp">--font</span></samp>&rsquo;).  See <a href="Font-X.html#Font-X">Font X</a>. 
 </ul>
 
-   <p><a name="index-fontconfig-1258"></a>  On X, there are four different ways to express a &ldquo;font name&rdquo;.  The
+   <p>To check what font you're currently using, the <kbd>C-u C-x =</kbd>
+command can be helpful.  It describes the character at point, and
+names the font that it's rendered in.
+
+   <p><a name="index-fontconfig-1489"></a>  On X, there are four different ways to express a &ldquo;font name&rdquo;.  The
 first is to use a <dfn>Fontconfig pattern</dfn>.  Fontconfig patterns have
 the following form:
 
-<pre class="smallexample">     <var>fontname</var>[-<var>fontsize</var>][:<var>name1</var>=<var>values1</var>][:<var>name2</var>=<var>values2</var>]...
+<pre class="example">     <var>fontname</var>[-<var>fontsize</var>][:<var>name1</var>=<var>values1</var>][:<var>name2</var>=<var>values2</var>]...
 </pre>
    <p class="noindent">Within this format, any of the elements in braces may be omitted. 
 Here, <var>fontname</var> is the <dfn>family name</dfn> of the font, such as
-&lsquo;<samp><span class="samp">Monospace</span></samp>&rsquo; or &lsquo;<samp><span class="samp">DejaVu Serif</span></samp>&rsquo;; <var>fontsize</var> is the
+&lsquo;<samp><span class="samp">Monospace</span></samp>&rsquo; or &lsquo;<samp><span class="samp">DejaVu Sans Mono</span></samp>&rsquo;; <var>fontsize</var> is the
 <dfn>point size</dfn> of the font (one <dfn>printer's point</dfn> is about 1/72
 of an inch); and the &lsquo;<samp><var>name</var><span class="samp">=</span><var>values</var></samp>&rsquo; entries specify
 settings such as the slant and weight of the font.  Each <var>values</var>
@@ -100,7 +102,7 @@ omitted.
    <p>Here is a list of common font properties:
 
      <dl>
-<dt>&lsquo;<samp><span class="samp">slant</span></samp>&rsquo;<dd>One of &lsquo;<samp><span class="samp">italic</span></samp>&rsquo;, &lsquo;<samp><span class="samp">oblique</span></samp>&rsquo; or &lsquo;<samp><span class="samp">roman</span></samp>&rsquo;.
+<dt>&lsquo;<samp><span class="samp">slant</span></samp>&rsquo;<dd>One of &lsquo;<samp><span class="samp">italic</span></samp>&rsquo;, &lsquo;<samp><span class="samp">oblique</span></samp>&rsquo;, or &lsquo;<samp><span class="samp">roman</span></samp>&rsquo;.
 
      <br><dt>&lsquo;<samp><span class="samp">weight</span></samp>&rsquo;<dd>One of &lsquo;<samp><span class="samp">light</span></samp>&rsquo;, &lsquo;<samp><span class="samp">medium</span></samp>&rsquo;, &lsquo;<samp><span class="samp">demibold</span></samp>&rsquo;, &lsquo;<samp><span class="samp">bold</span></samp>&rsquo; or
 &lsquo;<samp><span class="samp">black</span></samp>&rsquo;.
@@ -117,47 +119,47 @@ style, which overrides the slant and weight properties.
 
 <p class="noindent">Here are some examples of Fontconfig patterns:
 
-<pre class="smallexample">     Monospace
+<pre class="example">     Monospace
      Monospace-12
      Monospace-12:bold
      DejaVu Sans Mono:bold:italic
      Monospace-12:weight=bold:slant=italic
 </pre>
-   <p>See the Fontconfig manual for a more detailed description of
-Fontconfig patterns.  This manual is located in the file
-<samp><span class="file">fontconfig-user.html</span></samp>, distributed with Fontconfig.  It is also
-available online at <a href="http://fontconfig.org/fontconfig-user.html">http://fontconfig.org/fontconfig-user.html</a>. 
-In particular, that manual describes additional font properties that
-influence how the font is hinted, antialiased, or scaled.
+   <p>For a more detailed description of Fontconfig patterns, see the
+Fontconfig manual, which is distributed with Fontconfig and available
+online at <a href="http://fontconfig.org/fontconfig-user.html">http://fontconfig.org/fontconfig-user.html</a>.
 
-   <p>The second way to specify a font is to use a <dfn>GTK font
-description</dfn>.  These have the syntax
+   <p><a name="index-GTK-font-pattern-1490"></a>  The second way to specify a font is to use a <dfn>GTK font pattern</dfn>. 
+These have the syntax
 
-<pre class="smallexample">     <var>fontname</var> [<var>properties</var>] [<var>fontsize</var>]
+<pre class="example">     <var>fontname</var> [<var>properties</var>] [<var>fontsize</var>]
 </pre>
    <p class="noindent">where <var>fontname</var> is the family name, <var>properties</var> is a list of
 property values separated by spaces, and <var>fontsize</var> is the point
-size.  The properties that you may specify are as follows:
+size.  The properties that you may specify for GTK font patterns are
+as follows:
 
-     <dl>
-<dt>&lsquo;<samp><span class="samp">style</span></samp>&rsquo;<dd>One of &lsquo;<samp><span class="samp">roman</span></samp>&rsquo;, &lsquo;<samp><span class="samp">italic</span></samp>&rsquo; or &lsquo;<samp><span class="samp">oblique</span></samp>&rsquo;.  If omitted, the
-&lsquo;<samp><span class="samp">roman</span></samp>&rsquo; style is used. 
-<br><dt>&lsquo;<samp><span class="samp">weight</span></samp>&rsquo;<dd>One of &lsquo;<samp><span class="samp">medium</span></samp>&rsquo;, &lsquo;<samp><span class="samp">ultra-light</span></samp>&rsquo;, &lsquo;<samp><span class="samp">light</span></samp>&rsquo;,
-&lsquo;<samp><span class="samp">semi-bold</span></samp>&rsquo;, or &lsquo;<samp><span class="samp">bold</span></samp>&rsquo;.  If omitted, &lsquo;<samp><span class="samp">medium</span></samp>&rsquo; weight is
-used. 
-</dl>
+     <ul>
+<li>Slant properties: &lsquo;<samp><span class="samp">Italic</span></samp>&rsquo; or &lsquo;<samp><span class="samp">Oblique</span></samp>&rsquo;.  If omitted, the
+default (roman) slant is implied. 
+<li>Weight properties: &lsquo;<samp><span class="samp">Bold</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Book</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Light</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">Medium</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Semi-bold</span></samp>&rsquo;, or &lsquo;<samp><span class="samp">Ultra-light</span></samp>&rsquo;.  If omitted,
+&lsquo;<samp><span class="samp">Medium</span></samp>&rsquo; weight is implied. 
+<li>Width properties: &lsquo;<samp><span class="samp">Semi-Condensed</span></samp>&rsquo; or &lsquo;<samp><span class="samp">Condensed</span></samp>&rsquo;.  If
+omitted, a default width is used. 
+</ul>
 
-<p class="noindent">Here are some examples of GTK font descriptions:
+<p class="noindent">Here are some examples of GTK font patterns:
 
-<pre class="smallexample">     Monospace 12
+<pre class="example">     Monospace 12
      Monospace Bold Italic 12
 </pre>
-   <p><a name="index-XLFD-1259"></a><a name="index-X-Logical-Font-Description-1260"></a>  The third way to specify a font is to use an <dfn>XLFD</dfn> (<dfn>X
+   <p><a name="index-XLFD-1491"></a><a name="index-X-Logical-Font-Description-1492"></a>  The third way to specify a font is to use an <dfn>XLFD</dfn> (<dfn>X
 Logical Font Description</dfn>).  This is the traditional method for
 specifying fonts under X.  Each XLFD consists of fourteen words or
 numbers, separated by dashes, like this:
 
-<pre class="smallexample">     -misc-fixed-medium-r-semicondensed--13-*-*-*-c-60-iso8859-1
+<pre class="example">     -misc-fixed-medium-r-semicondensed--13-*-*-*-c-60-iso8859-1
 </pre>
    <p class="noindent">A wildcard character (&lsquo;<samp><span class="samp">*</span></samp>&rsquo;) in an XLFD matches any sequence of
 characters (including none), and &lsquo;<samp><span class="samp">?</span></samp>&rsquo; matches any single
@@ -167,24 +169,24 @@ results, supply all 14 dashes and use wildcards only within a field.
 Case is insignificant in an XLFD.  The syntax for an XLFD is as
 follows:
 
-<pre class="smallexample">     -<var>maker</var>-<var>family</var>-<var>weight</var>-<var>slant</var>-<var>widthtype</var>-<var>style</var>...
+<pre class="example">     -<var>maker</var>-<var>family</var>-<var>weight</var>-<var>slant</var>-<var>widthtype</var>-<var>style</var>...
      ...-<var>pixels</var>-<var>height</var>-<var>horiz</var>-<var>vert</var>-<var>spacing</var>-<var>width</var>-<var>registry</var>-<var>encoding</var>
 </pre>
    <p class="noindent">The entries have the following meanings:
 
      <dl>
 <dt><var>maker</var><dd>The name of the font manufacturer. 
-<br><dt><var>family</var><dd>The name of the font family (e.g. &lsquo;<samp><span class="samp">courier</span></samp>&rsquo;). 
+<br><dt><var>family</var><dd>The name of the font family (e.g., &lsquo;<samp><span class="samp">courier</span></samp>&rsquo;). 
 <br><dt><var>weight</var><dd>The font weight&mdash;normally either &lsquo;<samp><span class="samp">bold</span></samp>&rsquo;, &lsquo;<samp><span class="samp">medium</span></samp>&rsquo; or
 &lsquo;<samp><span class="samp">light</span></samp>&rsquo;.  Some font names support other values. 
 <br><dt><var>slant</var><dd>The font slant&mdash;normally &lsquo;<samp><span class="samp">r</span></samp>&rsquo; (roman), &lsquo;<samp><span class="samp">i</span></samp>&rsquo; (italic),
 &lsquo;<samp><span class="samp">o</span></samp>&rsquo; (oblique), &lsquo;<samp><span class="samp">ri</span></samp>&rsquo; (reverse italic), or &lsquo;<samp><span class="samp">ot</span></samp>&rsquo; (other). 
 Some font names support other values. 
-<br><dt><var>widthtype</var><dd>The font width&mdash;normally &lsquo;<samp><span class="samp">condensed</span></samp>&rsquo;, &lsquo;<samp><span class="samp">extended</span></samp>&rsquo;,
-&lsquo;<samp><span class="samp">semicondensed</span></samp>&rsquo; or &lsquo;<samp><span class="samp">normal</span></samp>&rsquo; (some font names support other
-values). 
-<br><dt><var>style</var><dd>An optional additional style name.  Usually it is empty&mdash;most long
-font names have two hyphens in a row at this point. 
+<br><dt><var>widthtype</var><dd>The font width&mdash;normally &lsquo;<samp><span class="samp">normal</span></samp>&rsquo;, &lsquo;<samp><span class="samp">condensed</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">semicondensed</span></samp>&rsquo;, or &lsquo;<samp><span class="samp">extended</span></samp>&rsquo;.  Some font names support
+other values. 
+<br><dt><var>style</var><dd>An optional additional style name.  Usually it is empty&mdash;most XLFDs
+have two hyphens in a row at this point. 
 <br><dt><var>pixels</var><dd>The font height, in pixels. 
 <br><dt><var>height</var><dd>The font height on the screen, measured in tenths of a printer's
 point.  This is the point size of the font, times ten.  For a given
@@ -212,16 +214,16 @@ nickname&rdquo;.  Certain fonts have shorter nicknames, which you can use
 instead of a normal font specification.  For instance, &lsquo;<samp><span class="samp">6x13</span></samp>&rsquo; is
 equivalent to
 
-<pre class="smallexample">     -misc-fixed-medium-r-semicondensed--13-*-*-*-c-60-iso8859-1
+<pre class="example">     -misc-fixed-medium-r-semicondensed--13-*-*-*-c-60-iso8859-1
 </pre>
-   <p><a name="index-client_002dside-fonts-1261"></a><a name="index-server_002dside-fonts-1262"></a>  On X, Emacs recognizes two types of fonts: <dfn>client-side</dfn> fonts,
+   <p><a name="index-client_002dside-fonts-1493"></a><a name="index-server_002dside-fonts-1494"></a>  On X, Emacs recognizes two types of fonts: <dfn>client-side</dfn> fonts,
 which are provided by the Xft and Fontconfig libraries, and
 <dfn>server-side</dfn> fonts, which are provided by the X server itself. 
 Most client-side fonts support advanced font features such as
 antialiasing and subpixel hinting, while server-side fonts do not. 
 Fontconfig and GTK patterns match only client-side fonts.
 
-   <p><a name="index-listing-system-fonts-1263"></a>  You will probably want to use a fixed-width default font&mdash;that is,
+   <p><a name="index-listing-system-fonts-1495"></a>  You will probably want to use a fixed-width default font&mdash;that is,
 a font in which all characters have the same width.  For Xft and
 Fontconfig fonts, you can use the <samp><span class="command">fc-list</span></samp> command to list
 the available fixed-width fonts, like this:

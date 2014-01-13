@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Text Comparison - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="String-Conversion.html#String-Conversion" title="String Conversion">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,10 +43,10 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Strings-and-Characters.html#Strings-and
 
 <h3 class="section">4.5 Comparison of Characters and Strings</h3>
 
-<p><a name="index-string-equality-236"></a>
+<p><a name="index-string-equality-247"></a>
 
 <div class="defun">
-&mdash; Function: <b>char-equal</b><var> character1 character2<a name="index-char_002dequal-237"></a></var><br>
+&mdash; Function: <b>char-equal</b><var> character1 character2<a name="index-char_002dequal-248"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if the arguments represent the same
 character, <code>nil</code> otherwise.  This function ignores differences
 in case if <code>case-fold-search</code> is non-<code>nil</code>.
@@ -63,11 +60,16 @@ in case if <code>case-fold-search</code> is non-<code>nil</code>.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>string=</b><var> string1 string2<a name="index-string_003d-238"></a></var><br>
+&mdash; Function: <b>string=</b><var> string1 string2<a name="index-string_003d-249"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if the characters of the two strings
 match exactly.  Symbols are also allowed as arguments, in which case
-their print names are used. 
-Case is always significant, regardless of <code>case-fold-search</code>.
+the symbol names are used.  Case is always significant, regardless of
+<code>case-fold-search</code>.
+
+        <p>This function is equivalent to <code>equal</code> for comparing two strings
+(see <a href="Equality-Predicates.html#Equality-Predicates">Equality Predicates</a>).  In particular, the text properties of
+the two strings are ignored.  But if either argument is not a string
+or symbol, an error is signaled.
 
      <pre class="example">          (string= "abc" "abc")
                &rArr; t
@@ -76,10 +78,6 @@ Case is always significant, regardless of <code>case-fold-search</code>.
           (string= "ab" "ABC")
                &rArr; nil
 </pre>
-        <p>The function <code>string=</code> ignores the text properties of the two
-strings.  When <code>equal</code> (see <a href="Equality-Predicates.html#Equality-Predicates">Equality Predicates</a>) compares two
-strings, it uses <code>string=</code>.
-
         <p>For technical reasons, a unibyte and a multibyte string are
 <code>equal</code> if and only if they contain the same sequence of
 character codes and all these codes are either in the range 0 through
@@ -97,14 +95,14 @@ Lisp programmers ever get confronted with.  See <a href="Text-Representations.ht
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>string-equal</b><var> string1 string2<a name="index-string_002dequal-239"></a></var><br>
+&mdash; Function: <b>string-equal</b><var> string1 string2<a name="index-string_002dequal-250"></a></var><br>
 <blockquote><p><code>string-equal</code> is another name for <code>string=</code>. 
 </p></blockquote></div>
 
-   <p><a name="index-lexical-comparison-240"></a>
+   <p><a name="index-lexical-comparison-251"></a>
 
 <div class="defun">
-&mdash; Function: <b>string&lt;</b><var> string1 string2<a name="index-string_003c-241"></a></var><br>
+&mdash; Function: <b>string&lt;</b><var> string1 string2<a name="index-string_003c-252"></a></var><br>
 <blockquote><!-- (findex string< causes problems for permuted index!!) -->
         <p>This function compares two strings a character at a time.  It
 scans both the strings at the same time to find the first pair of corresponding
@@ -150,35 +148,47 @@ are used.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>string-lessp</b><var> string1 string2<a name="index-string_002dlessp-242"></a></var><br>
+&mdash; Function: <b>string-lessp</b><var> string1 string2<a name="index-string_002dlessp-253"></a></var><br>
 <blockquote><p><code>string-lessp</code> is another name for <code>string&lt;</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>compare-strings</b><var> string1 start1 end1 string2 start2 end2 &amp;optional ignore-case<a name="index-compare_002dstrings-243"></a></var><br>
-<blockquote><p>This function compares the specified part of <var>string1</var> with the
-specified part of <var>string2</var>.  The specified part of <var>string1</var>
-runs from index <var>start1</var> up to index <var>end1</var> (<code>nil</code> means
-the end of the string).  The specified part of <var>string2</var> runs from
-index <var>start2</var> up to index <var>end2</var> (<code>nil</code> means the end of
-the string).
-
-        <p>The strings are both converted to multibyte for the comparison
-(see <a href="Text-Representations.html#Text-Representations">Text Representations</a>) so that a unibyte string and its
-conversion to multibyte are always regarded as equal.  If
-<var>ignore-case</var> is non-<code>nil</code>, then case is ignored, so that
-upper case letters can be equal to lower case letters.
-
-        <p>If the specified portions of the two strings match, the value is
-<code>t</code>.  Otherwise, the value is an integer which indicates how many
-leading characters agree, and which string is less.  Its absolute value
-is one plus the number of characters that agree at the beginning of the
-two strings.  The sign is negative if <var>string1</var> (or its specified
-portion) is less. 
+&mdash; Function: <b>string-prefix-p</b><var> string1 string2 &amp;optional ignore-case<a name="index-string_002dprefix_002dp-254"></a></var><br>
+<blockquote><p>This function returns non-<code>nil</code> if <var>string1</var> is a prefix of
+<var>string2</var>; i.e., if <var>string2</var> starts with <var>string1</var>.  If
+the optional argument <var>ignore-case</var> is non-<code>nil</code>, the
+comparison ignores case differences. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>assoc-string</b><var> key alist &amp;optional case-fold<a name="index-assoc_002dstring-244"></a></var><br>
+&mdash; Function: <b>compare-strings</b><var> string1 start1 end1 string2 start2 end2 &amp;optional ignore-case<a name="index-compare_002dstrings-255"></a></var><br>
+<blockquote><p>This function compares a specified part of <var>string1</var> with a
+specified part of <var>string2</var>.  The specified part of <var>string1</var>
+runs from index <var>start1</var> (inclusive) up to index <var>end1</var>
+(exclusive); <code>nil</code> for <var>start1</var> means the start of the
+string, while <code>nil</code> for <var>end1</var> means the length of the
+string.  Likewise, the specified part of <var>string2</var> runs from index
+<var>start2</var> up to index <var>end2</var>.
+
+        <p>The strings are compared by the numeric values of their characters. 
+For instance, <var>str1</var> is considered &ldquo;smaller than&rdquo; <var>str2</var> if
+its first differing character has a smaller numeric value.  If
+<var>ignore-case</var> is non-<code>nil</code>, characters are converted to
+lower-case before comparing them.  Unibyte strings are converted to
+multibyte for comparison (see <a href="Text-Representations.html#Text-Representations">Text Representations</a>), so that a
+unibyte string and its conversion to multibyte are always regarded as
+equal.
+
+        <p>If the specified portions of the two strings match, the value is
+<code>t</code>.  Otherwise, the value is an integer which indicates how many
+leading characters agree, and which string is less.  Its absolute
+value is one plus the number of characters that agree at the beginning
+of the two strings.  The sign is negative if <var>string1</var> (or its
+specified portion) is less. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>assoc-string</b><var> key alist &amp;optional case-fold<a name="index-assoc_002dstring-256"></a></var><br>
 <blockquote><p>This function works like <code>assoc</code>, except that <var>key</var> must be a
 string or symbol, and comparison is done using <code>compare-strings</code>. 
 Symbols are converted to strings before testing. 

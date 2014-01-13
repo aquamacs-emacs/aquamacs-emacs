@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Input Modes - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Recording-Input.html#Recording-Input" title="Recording Input">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,10 +41,10 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Terminal-Input.html#Terminal-Input">Ter
 
 <h4 class="subsection">39.12.1 Input Modes</h4>
 
-<p><a name="index-input-modes-3880"></a><a name="index-terminal-input-modes-3881"></a>
+<p><a name="index-input-modes-4227"></a><a name="index-terminal-input-modes-4228"></a>
 
 <div class="defun">
-&mdash; Function: <b>set-input-mode</b><var> interrupt flow meta &amp;optional quit-char<a name="index-set_002dinput_002dmode-3882"></a></var><br>
+&mdash; Function: <b>set-input-mode</b><var> interrupt flow meta &amp;optional quit-char<a name="index-set_002dinput_002dmode-4229"></a></var><br>
 <blockquote><p>This function sets the mode for reading keyboard input.  If
 <var>interrupt</var> is non-null, then Emacs uses input interrupts.  If it is
 <code>nil</code>, then it uses <span class="sc">cbreak</span> mode.  The default setting is
@@ -61,7 +58,6 @@ uses interrupts if that is the way it knows how to communicate.
 (<kbd>C-q</kbd>, <kbd>C-s</kbd>) flow control for output to the terminal.  This
 has no effect except in <span class="sc">cbreak</span> mode.
 
-     <!-- Emacs 19 feature -->
         <p>The argument <var>meta</var> controls support for input character codes
 above 127.  If <var>meta</var> is <code>t</code>, Emacs converts characters with
 the 8th bit set into Meta characters.  If <var>meta</var> is <code>nil</code>,
@@ -70,7 +66,6 @@ it as a parity bit.  If <var>meta</var> is neither <code>t</code> nor <code>nil<
 Emacs uses all 8 bits of input unchanged.  This is good for terminals
 that use 8-bit character sets.
 
-     <!-- Emacs 19 feature -->
         <p>If <var>quit-char</var> is non-<code>nil</code>, it specifies the character to
 use for quitting.  Normally this character is <kbd>C-g</kbd>. 
 See <a href="Quitting.html#Quitting">Quitting</a>. 
@@ -79,9 +74,8 @@ See <a href="Quitting.html#Quitting">Quitting</a>.
    <p>The <code>current-input-mode</code> function returns the input mode settings
 Emacs is currently using.
 
-<!-- Emacs 19 feature -->
 <div class="defun">
-&mdash; Function: <b>current-input-mode</b><var><a name="index-current_002dinput_002dmode-3883"></a></var><br>
+&mdash; Function: <b>current-input-mode</b><var><a name="index-current_002dinput_002dmode-4230"></a></var><br>
 <blockquote><p>This function returns the current mode for reading keyboard input.  It
 returns a list, corresponding to the arguments of <code>set-input-mode</code>,
 of the form <code>(</code><var>interrupt</var> <var>flow</var> <var>meta</var> <var>quit</var><code>)</code> in

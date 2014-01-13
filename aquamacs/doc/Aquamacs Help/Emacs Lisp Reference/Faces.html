@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Faces - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Fringes.html#Fringes" title="Fringes">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,43 +43,61 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
 
 <h3 class="section">38.12 Faces</h3>
 
-<p><a name="index-faces-3509"></a>
+<p><a name="index-faces-3798"></a>
   A <dfn>face</dfn> is a collection of graphical attributes for displaying
-text: font family, foreground color, background color, optional
-underlining, and so on.  Faces control how buffer text is displayed,
-and how some parts of the frame, such as the mode-line, are displayed. 
-See <a href="../emacs/Standard-Faces.html#Standard-Faces">Standard Faces</a>, for the list of
-faces Emacs normally comes with.
+text: font, foreground color, background color, optional underlining,
+etc.  Faces control how Emacs displays text in buffers, as well as
+other parts of the frame such as the mode line.
 
-   <p><a name="index-face-id-3510"></a>  For most purposes, you refer to a face in Lisp programs using its
-<dfn>face name</dfn>.  This is either a string or (equivalently) a Lisp
-symbol whose name is equal to that string.
+   <p><a name="index-anonymous-face-3799"></a>  One way to represent a face is as a property list of attributes,
+like <code>(:foreground "red" :weight bold)</code>.  Such a list is called
+an <dfn>anonymous face</dfn>.  For example, you can assign an anonymous
+face as the value of the <code>face</code> text property, and Emacs will
+display the underlying text with the specified attributes. 
+See <a href="Special-Properties.html#Special-Properties">Special Properties</a>.
+
+   <p><a name="index-face-name-3800"></a>  More commonly, a face is referred to via a <dfn>face name</dfn>: a Lisp
+symbol associated with a set of face attributes<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  Named faces are
+defined using the <code>defface</code> macro (see <a href="Defining-Faces.html#Defining-Faces">Defining Faces</a>). 
+Emacs comes with several standard named faces (see <a href="Basic-Faces.html#Basic-Faces">Basic Faces</a>).
+
+   <p>Many parts of Emacs required named faces, and do not accept
+anonymous faces.  These include the functions documented in
+<a href="Attribute-Functions.html#Attribute-Functions">Attribute Functions</a>, and the variable <code>font-lock-keywords</code>
+(see <a href="Search_002dbased-Fontification.html#Search_002dbased-Fontification">Search-based Fontification</a>).  Unless otherwise stated, we
+will use the term <dfn>face</dfn> to refer only to named faces.
 
 <div class="defun">
-&mdash; Function: <b>facep</b><var> object<a name="index-facep-3511"></a></var><br>
-<blockquote><p>This function returns a non-<code>nil</code> value if <var>object</var> is a Lisp
-symbol or string that names a face.  Otherwise, it returns <code>nil</code>. 
+&mdash; Function: <b>facep</b><var> object<a name="index-facep-3801"></a></var><br>
+<blockquote><p>This function returns a non-<code>nil</code> value if <var>object</var> is a
+named face: a Lisp symbol or string which serves as a face name. 
+Otherwise, it returns <code>nil</code>. 
 </p></blockquote></div>
 
-   <p>Each face name is meaningful for all frames, and by default it has
-the same meaning in all frames.  But you can arrange to give a
-particular face name a special meaning in one frame if you wish.
-
 <ul class="menu">
-<li><a accesskey="1" href="Defining-Faces.html#Defining-Faces">Defining Faces</a>:       How to define a face with <code>defface</code>. 
-<li><a accesskey="2" href="Face-Attributes.html#Face-Attributes">Face Attributes</a>:      What is in a face? 
+<li><a accesskey="1" href="Face-Attributes.html#Face-Attributes">Face Attributes</a>:      What is in a face? 
+<li><a accesskey="2" href="Defining-Faces.html#Defining-Faces">Defining Faces</a>:       How to define a face. 
 <li><a accesskey="3" href="Attribute-Functions.html#Attribute-Functions">Attribute Functions</a>:   Functions to examine and set face attributes. 
 <li><a accesskey="4" href="Displaying-Faces.html#Displaying-Faces">Displaying Faces</a>:      How Emacs combines the faces specified for a character. 
-<li><a accesskey="5" href="Face-Remapping.html#Face-Remapping">Face Remapping</a>:      Remapping faces to alternative definitions. 
+<li><a accesskey="5" href="Face-Remapping.html#Face-Remapping">Face Remapping</a>:       Remapping faces to alternative definitions. 
 <li><a accesskey="6" href="Face-Functions.html#Face-Functions">Face Functions</a>:       How to define and examine faces. 
 <li><a accesskey="7" href="Auto-Faces.html#Auto-Faces">Auto Faces</a>:           Hook for automatic face assignment. 
-<li><a accesskey="8" href="Font-Selection.html#Font-Selection">Font Selection</a>:       Finding the best available font for a face. 
-<li><a accesskey="9" href="Font-Lookup.html#Font-Lookup">Font Lookup</a>:          Looking up the names of available fonts
+<li><a accesskey="8" href="Basic-Faces.html#Basic-Faces">Basic Faces</a>:          Faces that are defined by default. 
+<li><a accesskey="9" href="Font-Selection.html#Font-Selection">Font Selection</a>:       Finding the best available font for a face. 
+<li><a href="Font-Lookup.html#Font-Lookup">Font Lookup</a>:          Looking up the names of available fonts
                           and information about them. 
 <li><a href="Fontsets.html#Fontsets">Fontsets</a>:             A fontset is a collection of fonts
                           that handle a range of character sets. 
 <li><a href="Low_002dLevel-Font.html#Low_002dLevel-Font">Low-Level Font</a>:       Lisp representation for character display fonts. 
 </ul>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> For backward
+compatibility, you can also use a string to specify a face name; that
+is equivalent to a Lisp symbol with the same name.</p>
+
+   <hr></div>
 
    </body></html>
 

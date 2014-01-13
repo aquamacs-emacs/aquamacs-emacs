@@ -1,0 +1,100 @@
+<html lang="en">
+<head>
+<title>Basic Major Modes - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Major-Modes.html#Major-Modes" title="Major Modes">
+<link rel="prev" href="Derived-Modes.html#Derived-Modes" title="Derived Modes">
+<link rel="next" href="Mode-Hooks.html#Mode-Hooks" title="Mode Hooks">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
+
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Basic-Major-Modes"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Mode-Hooks.html#Mode-Hooks">Mode Hooks</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Derived-Modes.html#Derived-Modes">Derived Modes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Major-Modes.html#Major-Modes">Major Modes</a>
+<hr>
+</div>
+
+<h4 class="subsection">23.2.5 Basic Major Modes</h4>
+
+<p>Apart from Fundamental mode, there are three major modes that other
+major modes commonly derive from: Text mode, Prog mode, and Special
+mode.  While Text mode is useful in its own right (e.g., for editing
+files ending in <samp><span class="file">.txt</span></samp>), Prog mode and Special mode exist mainly to
+let other modes derive from them.
+
+   <p><a name="index-prog_002dmode_002dhook-1719"></a>  As far as possible, new major modes should be derived, either directly
+or indirectly, from one of these three modes.  One reason is that this
+allows users to customize a single mode hook
+(e.g., <code>prog-mode-hook</code>) for an entire family of relevant modes
+(e.g., all programming language modes).
+
+<div class="defun">
+&mdash; Command: <b>text-mode</b><var><a name="index-text_002dmode-1720"></a></var><br>
+<blockquote><p>Text mode is a major mode for editing human languages.  It defines the
+&lsquo;<samp><span class="samp">"</span></samp>&rsquo; and &lsquo;<samp><span class="samp">\</span></samp>&rsquo; characters as having punctuation syntax
+(see <a href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class Table</a>), and binds <kbd>M-&lt;TAB&gt;</kbd> to
+<code>ispell-complete-word</code> (see <a href="../emacs/Spelling.html#Spelling">Spelling</a>).
+
+        <p>An example of a major mode derived from Text mode is HTML mode. 
+See <a href="../emacs/HTML-Mode.html#HTML-Mode">SGML and HTML Modes</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>prog-mode</b><var><a name="index-prog_002dmode-1721"></a></var><br>
+<blockquote><p>Prog mode is a basic major mode for buffers containing programming
+language source code.  Most of the programming language major modes
+built into Emacs are derived from it.
+
+        <p>Prog mode binds <code>parse-sexp-ignore-comments</code> to <code>t</code>
+(see <a href="Motion-via-Parsing.html#Motion-via-Parsing">Motion via Parsing</a>) and <code>bidi-paragraph-direction</code> to
+<code>left-to-right</code> (see <a href="Bidirectional-Display.html#Bidirectional-Display">Bidirectional Display</a>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>special-mode</b><var><a name="index-special_002dmode-1722"></a></var><br>
+<blockquote><p>Special mode is a basic major mode for buffers containing text that is
+produced specially by Emacs, rather than directly from a file.  Major
+modes derived from Special mode are given a <code>mode-class</code> property
+of <code>special</code> (see <a href="Major-Mode-Conventions.html#Major-Mode-Conventions">Major Mode Conventions</a>).
+
+        <p>Special mode sets the buffer to read-only.  Its keymap defines several
+common bindings, including <kbd>q</kbd> for <code>quit-window</code> and <kbd>g</kbd>
+for <code>revert-buffer</code> (see <a href="Reverting.html#Reverting">Reverting</a>).
+
+        <p>An example of a major mode derived from Special mode is Buffer Menu
+mode, which is used by the <samp><span class="file">*Buffer List*</span></samp> buffer.  See <a href="../emacs/List-Buffers.html#List-Buffers">Listing Existing Buffers</a>. 
+</p></blockquote></div>
+
+   <p>In addition, modes for buffers of tabulated data can inherit from
+Tabulated List mode, which is in turn derived from Special mode. 
+See <a href="Tabulated-List-Mode.html#Tabulated-List-Mode">Tabulated List Mode</a>.
+
+   </body></html>
+

@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Auto Scrolling - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Display.html#Display" title="Display">
-<link rel="prev" href="Scrolling.html#Scrolling" title="Scrolling">
+<link rel="prev" href="Recentering.html#Recentering" title="Recentering">
 <link rel="next" href="Horizontal-Scrolling.html#Horizontal-Scrolling" title="Horizontal Scrolling">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -40,40 +37,68 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <a name="Auto-Scrolling"></a>
 <p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Horizontal-Scrolling.html#Horizontal-Scrolling">Horizontal Scrolling</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Scrolling.html#Scrolling">Scrolling</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Recentering.html#Recentering">Recentering</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
 <hr>
 </div>
 
-<h3 class="section">18.2 Automatic Scrolling</h3>
+<h3 class="section">14.3 Automatic Scrolling</h3>
 
-<p>Emacs performs <dfn>automatic scrolling</dfn> when point moves out of the
-visible portion of the text.
+<p><a name="index-automatic-scrolling-573"></a>  Emacs performs <dfn>automatic scrolling</dfn> when point moves out of the
+visible portion of the text.  Normally, automatic scrolling centers
+point vertically in the window, but there are several ways to alter
+this behavior.
 
-   <p><a name="index-scroll_002dconservatively-467"></a>  Normally, this centers point vertically within the window.  However,
-if you set <code>scroll-conservatively</code> to a small number <var>n</var>,
-then if you move point just a little off the screen (less than <var>n</var>
-lines), Emacs scrolls the text just far enough to bring point back on
-screen.  By default, <code>scroll-conservatively</code> is&nbsp;0.
+   <p><a name="index-scroll_002dconservatively-574"></a>  If you set <code>scroll-conservatively</code> to a small number <var>n</var>,
+then moving point just a little off the screen (no more than <var>n</var>
+lines) causes Emacs to scroll just enough to bring point back on
+screen; if doing so fails to make point visible, Emacs scrolls just
+far enough to center point in the window.  If you set
+<code>scroll-conservatively</code> to a large number (larger than 100),
+automatic scrolling never centers point, no matter how far point
+moves; Emacs always scrolls text just enough to bring point into view,
+either at the top or bottom of the window depending on the scroll
+direction.  By default, <code>scroll-conservatively</code> is&nbsp;0, which
+means to always center point in the window.
 
-   <p><a name="index-aggressive-scrolling-468"></a><a name="index-scroll_002dup_002daggressively-469"></a><a name="index-scroll_002ddown_002daggressively-470"></a>  When the window does scroll by a longer distance, you can control
-how aggressively it scrolls by setting the variables
-<code>scroll-up-aggressively</code> and <code>scroll-down-aggressively</code>. 
-The value of <code>scroll-up-aggressively</code> should be either
-<code>nil</code>, or a fraction <var>f</var> between 0 and 1.  A fraction
-specifies where on the screen to put point when scrolling upward: when
-a window scrolls up because point is above the window start, the new
-start position is chosen to put point <var>f</var> parts of the window
-height from the top.  Thus, larger <var>f</var> means more aggressive
-scrolling.  The default value, <code>nil</code>, is equivalent to 0.5.
+   <p><a name="index-scroll_002dstep-575"></a>  Another way to control automatic scrolling is to customize the
+variable <code>scroll-step</code>.  Its value determines the number of lines
+by which to automatically scroll, when point moves off the screen.  If
+scrolling by that number of lines fails to bring point back into view,
+point is centered instead.  The default value is zero, which (by
+default) causes point to always be centered after scrolling.
 
-   <p>Likewise, <code>scroll-down-aggressively</code> is used for scrolling
-down.  The value specifies how far point should be placed from the
-bottom of the window; thus, as with <code>scroll-up-aggressively</code>, a
+   <p><a name="index-aggressive-scrolling-576"></a><a name="index-scroll_002dup_002daggressively-577"></a><a name="index-scroll_002ddown_002daggressively-578"></a>  A third way to control automatic scrolling is to customize the
+variables <code>scroll-up-aggressively</code> and
+<code>scroll-down-aggressively</code>, which directly specify the vertical
+position of point after scrolling.  The value of
+<code>scroll-up-aggressively</code> should be either <code>nil</code> (the
+default), or a floating point number <var>f</var> between 0 and 1.  The
+latter means that when point goes below the bottom window edge (i.e.,
+scrolling forward), Emacs scrolls the window so that point is <var>f</var>
+parts of the window height from the bottom window edge.  Thus, larger
+<var>f</var> means more aggressive scrolling: more new text is brought into
+view.  The default value, <code>nil</code>, is equivalent to 0.5.
+
+   <p>Likewise, <code>scroll-down-aggressively</code> is used when point goes
+above the bottom window edge (i.e., scrolling backward).  The value
+specifies how far point should be from the top margin of the window
+after scrolling.  Thus, as with <code>scroll-up-aggressively</code>, a
 larger value is more aggressive.
 
-   <p><a name="index-scroll_002dmargin-471"></a>  The variable <code>scroll-margin</code> restricts how close point can come
-to the top or bottom of a window.  Its value is a number of screen
+   <p>Note that the variables <code>scroll-conservatively</code>,
+<code>scroll-step</code>, and <code>scroll-up-aggressively</code> /
+<code>scroll-down-aggressively</code> control automatic scrolling in
+contradictory ways.  Therefore, you should pick no more than one of
+these methods to customize automatic scrolling.  In case you customize
+multiple variables, the order of priority is:
+<code>scroll-conservatively</code>, then <code>scroll-step</code>, and finally
+<code>scroll-up-aggressively</code> / <code>scroll-down-aggressively</code>.
+
+   <p><a name="index-scroll_002dmargin-579"></a>  The variable <code>scroll-margin</code> restricts how close point can come
+to the top or bottom of a window (even if aggressive scrolling
+specifies a fraction <var>f</var> that is larger than the window portion
+between the top and the bottom margins).  Its value is a number of screen
 lines; if point comes within that many lines of the top or bottom of
 the window, Emacs performs automatic scrolling.  By default,
 <code>scroll-margin</code> is 0.

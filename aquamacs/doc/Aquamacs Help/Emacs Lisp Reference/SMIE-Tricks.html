@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>SMIE Tricks - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="SMIE-Indentation.html#SMIE-Indentation" title="SMIE Indentation">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -59,7 +56,9 @@ natural to have a BNF grammar that looks like this:
        (inst ("IF" exp "THEN" insts "ELSE" insts "END")
              ("CASE" exp "OF" cases "END")
              ...)
-       (cases (cases "|" cases) (caselabel ":" insts) ("ELSE" insts))
+       (cases (cases "|" cases)
+              (caselabel ":" insts)
+              ("ELSE" insts))
        ...
 </pre>
    <p>But this will create conflicts for <code>"ELSE"</code>: on the one hand, the
@@ -106,7 +105,7 @@ in practice.
 restructure the grammar.  Do not despair: while the parser cannot be
 made more clever, you can make the lexer as smart as you want.  So, the
 solution is then to look at the tokens involved in the conflict and to
-split one of those tokens into 2 (or more) different tokens.  E.g. if
+split one of those tokens into 2 (or more) different tokens.  E.g., if
 the grammar needs to distinguish between two incompatible uses of the
 token <code>"begin"</code>, make the lexer return different tokens (say
 <code>"begin-fun"</code> and <code>"begin-plain"</code>) depending on which kind of

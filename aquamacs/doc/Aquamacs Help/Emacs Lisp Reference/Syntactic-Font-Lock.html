@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Syntactic Font Lock - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Font-Lock-Mode.html#Font-Lock-Mode" title="Font Lock Mode">
 <link rel="prev" href="Faces-for-Font-Lock.html#Faces-for-Font-Lock" title="Faces for Font Lock">
-<link rel="next" href="Setting-Syntax-Properties.html#Setting-Syntax-Properties" title="Setting Syntax Properties">
+<link rel="next" href="Multiline-Font-Lock.html#Multiline-Font-Lock" title="Multiline Font Lock">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -38,7 +35,7 @@ Foundation, Inc.
 <div class="node">
 <a name="Syntactic-Font-Lock"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Setting-Syntax-Properties.html#Setting-Syntax-Properties">Setting Syntax Properties</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Multiline-Font-Lock.html#Multiline-Font-Lock">Multiline Font Lock</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Faces-for-Font-Lock.html#Faces-for-Font-Lock">Faces for Font Lock</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Font-Lock-Mode.html#Font-Lock-Mode">Font Lock Mode</a>
 <hr>
@@ -46,69 +43,70 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Font-Lock-Mode.html#Font-Lock-Mode">Fon
 
 <h4 class="subsection">23.6.8 Syntactic Font Lock</h4>
 
-<p><a name="index-syntactic-font-lock-1694"></a>
-Syntactic fontification uses the syntax table to find comments and
-string constants (see <a href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>).  It highlights them using
-<code>font-lock-comment-face</code> and <code>font-lock-string-face</code>
-(see <a href="Faces-for-Font-Lock.html#Faces-for-Font-Lock">Faces for Font Lock</a>), or whatever
-<code>font-lock-syntactic-face-function</code> chooses.  There are several
-variables that affect syntactic fontification; you should set them by
-means of <code>font-lock-defaults</code> (see <a href="Font-Lock-Basics.html#Font-Lock-Basics">Font Lock Basics</a>).
+<p><a name="index-syntactic-font-lock-1809"></a>
+Syntactic fontification uses a syntax table (see <a href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>) to
+find and highlight syntactically relevant text.  If enabled, it runs
+prior to search-based fontification.  The variable
+<code>font-lock-syntactic-face-function</code>, documented below, determines
+which syntactic constructs to highlight.  There are several variables
+that affect syntactic fontification; you should set them by means of
+<code>font-lock-defaults</code> (see <a href="Font-Lock-Basics.html#Font-Lock-Basics">Font Lock Basics</a>).
+
+   <p>Whenever Font Lock mode performs syntactic fontification on a stretch
+of text, it first calls the function specified by
+<code>syntax-propertize-function</code>.  Major modes can use this to apply
+<code>syntax-table</code> text properties to override the buffer's syntax
+table in special cases.  See <a href="Syntax-Properties.html#Syntax-Properties">Syntax Properties</a>.
 
 <div class="defun">
-&mdash; Variable: <b>font-lock-keywords-only</b><var><a name="index-font_002dlock_002dkeywords_002donly-1695"></a></var><br>
-<blockquote><p>Non-<code>nil</code> means Font Lock should not do syntactic fontification;
-it should only fontify based on <code>font-lock-keywords</code>.  The normal
-way for a mode to set this variable to <code>t</code> is with
-<var>keywords-only</var> in <code>font-lock-defaults</code>. 
+&mdash; Variable: <b>font-lock-keywords-only</b><var><a name="index-font_002dlock_002dkeywords_002donly-1810"></a></var><br>
+<blockquote><p>If the value of this variable is non-<code>nil</code>, Font Lock does not do
+syntactic fontification, only search-based fontification based on
+<code>font-lock-keywords</code>.  It is normally set by Font Lock mode based
+on the <var>keywords-only</var> element in <code>font-lock-defaults</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>font-lock-syntax-table</b><var><a name="index-font_002dlock_002dsyntax_002dtable-1696"></a></var><br>
+&mdash; Variable: <b>font-lock-syntax-table</b><var><a name="index-font_002dlock_002dsyntax_002dtable-1811"></a></var><br>
 <blockquote><p>This variable holds the syntax table to use for fontification of
-comments and strings.  Specify it using <var>syntax-alist</var> in
-<code>font-lock-defaults</code>.  If this is <code>nil</code>, fontification uses
-the buffer's syntax table. 
+comments and strings.  It is normally set by Font Lock mode based on the
+<var>syntax-alist</var> element in <code>font-lock-defaults</code>.  If this value
+is <code>nil</code>, syntactic fontification uses the buffer's syntax table
+(the value returned by the function <code>syntax-table</code>; see <a href="Syntax-Table-Functions.html#Syntax-Table-Functions">Syntax Table Functions</a>). 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>font-lock-beginning-of-syntax-function</b><var><a name="index-font_002dlock_002dbeginning_002dof_002dsyntax_002dfunction-1697"></a></var><br>
+&mdash; Variable: <b>font-lock-beginning-of-syntax-function</b><var><a name="index-font_002dlock_002dbeginning_002dof_002dsyntax_002dfunction-1812"></a></var><br>
 <blockquote><p>If this variable is non-<code>nil</code>, it should be a function to move
 point back to a position that is syntactically at &ldquo;top level&rdquo; and
-outside of strings or comments.  Font Lock uses this when necessary
-to get the right results for syntactic fontification.
+outside of strings or comments.  The value is normally set through an
+<var>other-vars</var> element in <code>font-lock-defaults</code>.  If it is
+<code>nil</code>, Font Lock uses <code>syntax-begin-function</code> to move back
+outside of any comment, string, or sexp (see <a href="Position-Parse.html#Position-Parse">Position Parse</a>).
 
-        <p>This function is called with no arguments.  It should leave point at
-the beginning of any enclosing syntactic block.  Typical values are
-<code>beginning-of-line</code> (used when the start of the line is known to
-be outside a syntactic block), or <code>beginning-of-defun</code> for
-programming modes, or <code>backward-paragraph</code> for textual modes.
+        <p>This variable is semi-obsolete; we usually recommend setting
+<code>syntax-begin-function</code> instead.  One of its uses is to tune the
+behavior of syntactic fontification, e.g., to ensure that different
+kinds of strings or comments are highlighted differently.
 
-        <p>If the value is <code>nil</code>, Font Lock uses
-<code>syntax-begin-function</code> to move back outside of any comment,
-string, or sexp.  This variable is semi-obsolete; we recommend setting
-<code>syntax-begin-function</code> instead.
-
-        <p>Specify this variable using <var>syntax-begin</var> in
-<code>font-lock-defaults</code>. 
+        <p>The specified function is called with no arguments.  It should leave
+point at the beginning of any enclosing syntactic block.  Typical values
+are <code>beginning-of-line</code> (used when the start of the line is known
+to be outside a syntactic block), or <code>beginning-of-defun</code> for
+programming modes, or <code>backward-paragraph</code> for textual modes. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>font-lock-syntactic-face-function</b><var><a name="index-font_002dlock_002dsyntactic_002dface_002dfunction-1698"></a></var><br>
-<blockquote><p>A function to determine which face to use for a given syntactic
-element (a string or a comment).  The function is called with one
-argument, the parse state at point returned by
-<code>parse-partial-sexp</code>, and should return a face.  The default
-value returns <code>font-lock-comment-face</code> for comments and
-<code>font-lock-string-face</code> for strings.
+&mdash; Variable: <b>font-lock-syntactic-face-function</b><var><a name="index-font_002dlock_002dsyntactic_002dface_002dfunction-1813"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code>, it should be a function to determine
+which face to use for a given syntactic element (a string or a comment). 
+The value is normally set through an <var>other-vars</var> element in
+<code>font-lock-defaults</code>.
 
-        <p>This can be used to highlighting different kinds of strings or
-comments differently.  It is also sometimes abused together with
-<code>font-lock-syntactic-keywords</code> to highlight constructs that span
-multiple lines, but this is too esoteric to document here.
-
-        <p>Specify this variable using <var>other-vars</var> in
-<code>font-lock-defaults</code>. 
+        <p>The function is called with one argument, the parse state at point
+returned by <code>parse-partial-sexp</code>, and should return a face.  The
+default value returns <code>font-lock-comment-face</code> for comments and
+<code>font-lock-string-face</code> for strings (see <a href="Faces-for-Font-Lock.html#Faces-for-Font-Lock">Faces for Font Lock</a>). 
 </p></blockquote></div>
 
    </body></html>

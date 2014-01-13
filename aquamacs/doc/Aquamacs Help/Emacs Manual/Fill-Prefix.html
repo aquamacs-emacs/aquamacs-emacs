@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Fill Prefix - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Adaptive-Fill.html#Adaptive-Fill" title="Adaptive Fill">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,14 +42,13 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Filling.html#Filling">Filling</a>
 <hr>
 </div>
 
-<h4 class="subsection">29.5.3 The Fill Prefix</h4>
+<h4 class="subsection">25.5.3 The Fill Prefix</h4>
 
-<p><a name="index-fill-prefix-1618"></a>  To fill a paragraph in which each line starts with a special marker
-(which might be a few spaces, giving an indented paragraph), you can use
-the <dfn>fill prefix</dfn> feature.  The fill prefix is a string that Emacs
-expects every line to start with, and which is not included in filling. 
-You can specify a fill prefix explicitly; Emacs can also deduce the
-fill prefix automatically (see <a href="Adaptive-Fill.html#Adaptive-Fill">Adaptive Fill</a>).
+<p><a name="index-fill-prefix-1848"></a>  The <dfn>fill prefix</dfn> feature allows paragraphs to be filled so that
+each line starts with a special string of characters (such as a
+sequence of spaces, giving an indented paragraph).  You can specify a
+fill prefix explicitly; otherwise, Emacs tries to deduce one
+automatically (see <a href="Adaptive-Fill.html#Adaptive-Fill">Adaptive Fill</a>).
 
      <dl>
 <dt><kbd>C-x .</kbd><dd>Set the fill prefix (<code>set-fill-prefix</code>). 
@@ -63,22 +59,22 @@ new paragraph.
 a new paragraph. 
 </dl>
 
-   <p><a name="index-C_002dx-_002e-1619"></a><a name="index-set_002dfill_002dprefix-1620"></a>  To specify a fill prefix for the current buffer, move to a line that
+   <p><a name="index-C_002dx-_002e-1849"></a><a name="index-set_002dfill_002dprefix-1850"></a>  To specify a fill prefix for the current buffer, move to a line that
 starts with the desired prefix, put point at the end of the prefix,
 and type <kbd>C-x&nbsp;.</kbd><!-- /@w --> (<code>set-fill-prefix</code>).  (That's a period
 after the <kbd>C-x</kbd>.)  To turn off the fill prefix, specify an empty
 prefix: type <kbd>C-x&nbsp;.</kbd><!-- /@w --> with point at the beginning of a line.
 
    <p>When a fill prefix is in effect, the fill commands remove the fill
-prefix from each line of the paragraph before filling and insert it on
-each line after filling.  (The beginning of the first line of the
+prefix from each line of the paragraph before filling, and insert it
+on each line after filling.  (The beginning of the first line of the
 paragraph is left unchanged, since often that is intentionally
 different.)  Auto Fill mode also inserts the fill prefix automatically
-when it makes a new line.  The <kbd>C-o</kbd> command inserts the fill
-prefix on new lines it creates, when you use it at the beginning of a
-line (see <a href="Blank-Lines.html#Blank-Lines">Blank Lines</a>).  Conversely, the command <kbd>M-^</kbd> deletes
-the prefix (if it occurs) after the newline that it deletes
-(see <a href="Indentation.html#Indentation">Indentation</a>).
+when it makes a new line (see <a href="Auto-Fill.html#Auto-Fill">Auto Fill</a>).  The <kbd>C-o</kbd> command
+inserts the fill prefix on new lines it creates, when you use it at
+the beginning of a line (see <a href="Blank-Lines.html#Blank-Lines">Blank Lines</a>).  Conversely, the
+command <kbd>M-^</kbd> deletes the prefix (if it occurs) after the newline
+that it deletes (see <a href="Indentation.html#Indentation">Indentation</a>).
 
    <p>For example, if <code>fill-column</code> is 40 and you set the fill prefix
 to &lsquo;<samp><span class="samp">;; </span></samp>&rsquo;, then <kbd>M-q</kbd> in the following text
@@ -100,7 +96,7 @@ the prefix is removed also separate or start paragraphs; this is what
 you want if you are writing multi-paragraph comments with a comment
 delimiter on each line.
 
-   <p><a name="index-fill_002dindividual_002dparagraphs-1621"></a>  You can use <kbd>M-x fill-individual-paragraphs</kbd> to set the fill
+   <p><a name="index-fill_002dindividual_002dparagraphs-1851"></a>  You can use <kbd>M-x fill-individual-paragraphs</kbd> to set the fill
 prefix for each paragraph automatically.  This command divides the
 region into paragraphs, treating every change in the amount of
 indentation as the start of a new paragraph, and fills each of these
@@ -108,7 +104,7 @@ paragraphs.  Thus, all the lines in one &ldquo;paragraph&rdquo; have the same
 amount of indentation.  That indentation serves as the fill prefix for
 that paragraph.
 
-   <p><a name="index-fill_002dnonuniform_002dparagraphs-1622"></a>  <kbd>M-x fill-nonuniform-paragraphs</kbd> is a similar command that divides
+   <p><a name="index-fill_002dnonuniform_002dparagraphs-1852"></a>  <kbd>M-x fill-nonuniform-paragraphs</kbd> is a similar command that divides
 the region into paragraphs in a different way.  It considers only
 paragraph-separating lines (as defined by <code>paragraph-separate</code>) as
 starting a new paragraph.  Since this means that the lines of one
@@ -117,13 +113,13 @@ used is the smallest amount of indentation of any of the lines of the
 paragraph.  This gives good results with styles that indent a paragraph's
 first line more or less that the rest of the paragraph.
 
-   <p><a name="index-fill_002dprefix-1623"></a>  The fill prefix is stored in the variable <code>fill-prefix</code>.  Its value
+   <p><a name="index-fill_002dprefix-1853"></a>  The fill prefix is stored in the variable <code>fill-prefix</code>.  Its value
 is a string, or <code>nil</code> when there is no fill prefix.  This is a
 per-buffer variable; altering the variable affects only the current buffer,
 but there is a default value which you can change as well.  See <a href="Locals.html#Locals">Locals</a>.
 
    <p>The <code>indentation</code> text property provides another way to control
-the amount of indentation paragraphs receive.  See <a href="Format-Indentation.html#Format-Indentation">Format Indentation</a>.
+the amount of indentation paragraphs receive.  See <a href="Enriched-Indentation.html#Enriched-Indentation">Enriched Indentation</a>.
 
    </body></html>
 

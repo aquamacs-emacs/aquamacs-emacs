@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Position Parse - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Parser-State.html#Parser-State" title="Parser State">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -51,26 +48,33 @@ thing is to compute the syntactic state corresponding to a given buffer
 position.  This function does that conveniently.
 
 <div class="defun">
-&mdash; Function: <b>syntax-ppss</b><var> &amp;optional pos<a name="index-syntax_002dppss-3170"></a></var><br>
-<blockquote><p>This function returns the parser state (see next section) that the
-parser would reach at position <var>pos</var> starting from the beginning
-of the buffer.  This is equivalent to <code>(parse-partial-sexp
-(point-min) </code><var>pos</var><code>)</code>, except that <code>syntax-ppss</code> uses a cache
-to speed up the computation.  Due to this optimization, the 2nd value
-(previous complete subexpression) and 6th value (minimum parenthesis
-depth) of the returned parser state are not meaningful. 
+&mdash; Function: <b>syntax-ppss</b><var> &amp;optional pos<a name="index-syntax_002dppss-3445"></a></var><br>
+<blockquote><p>This function returns the parser state that the parser would reach at
+position <var>pos</var> starting from the beginning of the buffer. 
+See <a href="Parser-State.html#Parser-State">Parser State</a>,
+for a description of the parser state.
+
+        <p>The return value is the same as if you call the low-level parsing
+function <code>parse-partial-sexp</code> to parse from the beginning of the
+buffer to <var>pos</var> (see <a href="Low_002dLevel-Parsing.html#Low_002dLevel-Parsing">Low-Level Parsing</a>).  However,
+<code>syntax-ppss</code> uses a cache to speed up the computation.  Due to
+this optimization, the second value (previous complete subexpression)
+and sixth value (minimum parenthesis depth) in the returned parser
+state are not meaningful.
+
+        <p>This function has a side effect: it adds a buffer-local entry to
+<code>before-change-functions</code> (see <a href="Change-Hooks.html#Change-Hooks">Change Hooks</a>) for
+<code>syntax-ppss-flush-cache</code> (see below).  This entry keeps the
+cache consistent as the buffer is modified.  However, the cache might
+not be updated if <code>syntax-ppss</code> is called while
+<code>before-change-functions</code> is temporarily let-bound, or if the
+buffer is modified without running the hook, such as when using
+<code>inhibit-modification-hooks</code>.  In those cases, it is necessary to
+call <code>syntax-ppss-flush-cache</code> explicitly. 
 </p></blockquote></div>
 
-   <p><code>syntax-ppss</code> automatically hooks itself to
-<code>before-change-functions</code> to keep its cache consistent.  But
-updating can fail if <code>syntax-ppss</code> is called while
-<code>before-change-functions</code> is temporarily let-bound, or if the
-buffer is modified without obeying the hook, such as when using
-<code>inhibit-modification-hooks</code>.  For this reason, it is sometimes
-necessary to flush the cache manually.
-
 <div class="defun">
-&mdash; Function: <b>syntax-ppss-flush-cache</b><var> beg &amp;rest ignored-args<a name="index-syntax_002dppss_002dflush_002dcache-3171"></a></var><br>
+&mdash; Function: <b>syntax-ppss-flush-cache</b><var> beg &amp;rest ignored-args<a name="index-syntax_002dppss_002dflush_002dcache-3446"></a></var><br>
 <blockquote><p>This function flushes the cache used by <code>syntax-ppss</code>, starting
 at position <var>beg</var>.  The remaining arguments, <var>ignored-args</var>,
 are ignored; this function accepts them so that it can be directly
@@ -81,7 +85,7 @@ used on hooks such as <code>before-change-functions</code> (see <a href="Change-
 where it needs to start parsing.
 
 <div class="defun">
-&mdash; Variable: <b>syntax-begin-function</b><var><a name="index-syntax_002dbegin_002dfunction-3172"></a></var><br>
+&mdash; Variable: <b>syntax-begin-function</b><var><a name="index-syntax_002dbegin_002dfunction-3447"></a></var><br>
 <blockquote><p>If this is non-<code>nil</code>, it should be a function that moves to an
 earlier buffer position where the parser state is equivalent to
 <code>nil</code>&mdash;in other words, a position outside of any comment,

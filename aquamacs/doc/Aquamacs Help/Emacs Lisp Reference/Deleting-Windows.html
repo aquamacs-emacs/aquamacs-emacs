@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Deleting Windows - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Windows.html#Windows" title="Windows">
 <link rel="prev" href="Splitting-Windows.html#Splitting-Windows" title="Splitting Windows">
-<link rel="next" href="Selecting-Windows.html#Selecting-Windows" title="Selecting Windows">
+<link rel="next" href="Recombining-Windows.html#Recombining-Windows" title="Recombining Windows">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -38,83 +35,99 @@ Foundation, Inc.
 <div class="node">
 <a name="Deleting-Windows"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Selecting-Windows.html#Selecting-Windows">Selecting Windows</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Recombining-Windows.html#Recombining-Windows">Recombining Windows</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Splitting-Windows.html#Splitting-Windows">Splitting Windows</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
 <hr>
 </div>
 
-<h3 class="section">28.3 Deleting Windows</h3>
+<h3 class="section">28.6 Deleting Windows</h3>
 
-<p><a name="index-deleting-windows-2070"></a>
-A window remains visible on its frame unless you <dfn>delete</dfn> it by
-calling certain functions that delete windows.  A deleted window cannot
-appear on the screen, but continues to exist as a Lisp object until
-there are no references to it.  There is no way to cancel the deletion
-of a window aside from restoring a saved window configuration
-(see <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a>).  Restoring a window configuration also
-deletes any windows that aren't part of that configuration.
+<p><a name="index-deleting-windows-2303"></a>
+  <dfn>Deleting</dfn> a window removes it from the frame's window tree.  If
+the window is a live window, it disappears from the screen.  If the
+window is an internal window, its child windows are deleted too.
 
-   <p>When you delete a window, the space it took up is given to one of
-its sibling windows adjacent to it.
+   <p>Even after a window is deleted, it continues to exist as a Lisp
+object, until there are no more references to it.  Window deletion can
+be reversed, by restoring a saved window configuration (see <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a>).
 
-<!-- Emacs 19 feature -->
 <div class="defun">
-&mdash; Function: <b>window-live-p</b><var> window<a name="index-window_002dlive_002dp-2071"></a></var><br>
-<blockquote><p>This function returns <code>nil</code> if <var>window</var> is deleted, and
-<code>t</code> otherwise.
+&mdash; Command: <b>delete-window</b><var> &amp;optional window<a name="index-delete_002dwindow-2304"></a></var><br>
+<blockquote><p>This function removes <var>window</var> from display and returns
+<code>nil</code>.  If <var>window</var> is omitted or <code>nil</code>, it defaults to
+the selected window.  If deleting the window would leave no more
+windows in the window tree (e.g., if it is the only live window in the
+frame), an error is signaled.
 
-        <p><strong>Warning:</strong> Erroneous information or fatal errors may result from
-using a deleted window as if it were live. 
+        <p>By default, the space taken up by <var>window</var> is given to one of its
+adjacent sibling windows, if any.  However, if the variable
+<code>window-combination-resize</code> is non-<code>nil</code>, the space is
+proportionally distributed among any remaining windows in the window
+combination.  See <a href="Recombining-Windows.html#Recombining-Windows">Recombining Windows</a>.
+
+        <p>The behavior of this function may be altered by the window parameters
+of <var>window</var>, so long as the variable
+<code>ignore-window-parameters</code> is <code>nil</code>.  If the value of
+the <code>delete-window</code> window parameter is <code>t</code>, this function
+ignores all other window parameters.  Otherwise, if the value of the
+<code>delete-window</code> window parameter is a function, that function is
+called with the argument <var>window</var>, in lieu of the usual action of
+<code>delete-window</code>.  Otherwise, this function obeys the
+<code>window-atom</code> or <code>window-side</code> window parameter, if any. 
+See <a href="Window-Parameters.html#Window-Parameters">Window Parameters</a>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>delete-window</b><var> &amp;optional window<a name="index-delete_002dwindow-2072"></a></var><br>
-<blockquote><p>This function removes <var>window</var> from display and returns <code>nil</code>. 
-The default for <var>window</var> is the selected window.  An error is
-signaled if <var>window</var> is the only window on its frame. 
+&mdash; Command: <b>delete-other-windows</b><var> &amp;optional window<a name="index-delete_002dother_002dwindows-2305"></a></var><br>
+<blockquote><p>This function makes <var>window</var> fill its frame, by deleting other
+windows as necessary.  If <var>window</var> is omitted or <code>nil</code>, it
+defaults to the selected window.  The return value is <code>nil</code>.
+
+        <p>The behavior of this function may be altered by the window parameters
+of <var>window</var>, so long as the variable
+<code>ignore-window-parameters</code> is <code>nil</code>.  If the value of
+the <code>delete-other-windows</code> window parameter is <code>t</code>, this
+function ignores all other window parameters.  Otherwise, if the value
+of the <code>delete-other-windows</code> window parameter is a function,
+that function is called with the argument <var>window</var>, in lieu of the
+usual action of <code>delete-other-windows</code>.  Otherwise, this function
+obeys the <code>window-atom</code> or <code>window-side</code> window parameter,
+if any.  See <a href="Window-Parameters.html#Window-Parameters">Window Parameters</a>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>delete-other-windows</b><var> &amp;optional window<a name="index-delete_002dother_002dwindows-2073"></a></var><br>
-<blockquote><p>This function makes <var>window</var> the only window on its frame, by
-deleting the other windows in that frame.  The default for <var>window</var>
-is the selected window.  The return value is <code>nil</code>. 
-</p></blockquote></div>
+&mdash; Command: <b>delete-windows-on</b><var> &amp;optional buffer-or-name frame<a name="index-delete_002dwindows_002don-2306"></a></var><br>
+<blockquote><p>This function deletes all windows showing <var>buffer-or-name</var>, by
+calling <code>delete-window</code> on those windows.  <var>buffer-or-name</var>
+should be a buffer, or the name of a buffer; if omitted or <code>nil</code>,
+it defaults to the current buffer.  If there are no windows showing
+the specified buffer, this function does nothing.  If the specified
+buffer is a minibuffer, an error is signaled.
 
-<div class="defun">
-&mdash; Command: <b>delete-windows-on</b><var> &amp;optional buffer-or-name frame<a name="index-delete_002dwindows_002don-2074"></a></var><br>
-<blockquote><p>This function deletes all windows showing <var>buffer-or-name</var>.  If
-there are no windows showing <var>buffer-or-name</var>, it does nothing.  The
-optional argument <var>buffer-or-name</var> may be a buffer or the name of an
-existing buffer and defaults to the current buffer.
+        <p>If there is a dedicated window showing the buffer, and that window is
+the only one on its frame, this function also deletes that frame if it
+is not the only frame on the terminal.
 
-        <p><code>delete-windows-on</code> operates frame by frame.  If a frame has
-several windows showing different buffers, then those showing
-<var>buffer-or-name</var> are removed, and the others expand to fill the
-space.  If all windows in some frame are showing <var>buffer-or-name</var>
-(including the case where there is only one window), then the frame
-winds up with a single window showing another buffer chosen with
-<code>other-buffer</code> (see <a href="The-Buffer-List.html#The-Buffer-List">The Buffer List</a>).  If, however, the window
-showing <var>buffer-or-name</var> is dedicated to its buffer
-(see <a href="Dedicated-Windows.html#Dedicated-Windows">Dedicated Windows</a>), and there are other frames left, that
-window's frame is deleted.
-
-        <p>The optional argument <var>frame</var> specifies which frames to operate on. 
-This function does not use it in quite the same way as the other
-functions which scan all windows; specifically, the values <code>t</code> and
-<code>nil</code> have the opposite of their meanings in other functions.  Here
-are the full details:
+        <p>The optional argument <var>frame</var> specifies which frames to operate
+on:
 
           <ul>
-<li>If it is <code>nil</code>, operate on all frames. 
-<li>If it is <code>t</code>, operate on the selected frame. 
-<li>If it is <code>visible</code>, operate on all visible frames. 
-<li>If it is 0, operate on all visible or iconified frames. 
-<li>If it is a frame, operate on that frame. 
+<li><code>nil</code>
+means operate on all frames. 
+<li><code>t</code>
+means operate on the selected frame. 
+<li><code>visible</code>
+means operate on all visible frames. 
+<li><code>0</code>
+means operate on all visible or iconified frames. 
+<li>A frame
+means operate on that frame. 
 </ul>
 
-        <p>This function always returns <code>nil</code>. 
+        <p>Note that this argument does not have the same meaning as in other
+functions which scan all live windows (see <a href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic Window Ordering</a>).  Specifically, the meanings of <code>t</code> and <code>nil</code> here
+are the opposite of what they are in those other functions. 
 </p></blockquote></div>
 
    </body></html>

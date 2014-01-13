@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Blinking - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Display.html#Display" title="Display">
 <link rel="prev" href="Abstract-Display.html#Abstract-Display" title="Abstract Display">
-<link rel="next" href="Usual-Display.html#Usual-Display" title="Usual Display">
+<link rel="next" href="Character-Display.html#Character-Display" title="Character Display">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -38,7 +35,7 @@ Foundation, Inc.
 <div class="node">
 <a name="Blinking"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Usual-Display.html#Usual-Display">Usual Display</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Character-Display.html#Character-Display">Character Display</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Abstract-Display.html#Abstract-Display">Abstract Display</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
 <hr>
@@ -46,12 +43,12 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
 
 <h3 class="section">38.19 Blinking Parentheses</h3>
 
-<p><a name="index-parenthesis-matching-3723"></a><a name="index-blinking-parentheses-3724"></a><a name="index-balancing-parentheses-3725"></a>
+<p><a name="index-parenthesis-matching-4033"></a><a name="index-blinking-parentheses-4034"></a><a name="index-balancing-parentheses-4035"></a>
   This section describes the mechanism by which Emacs shows a matching
 open parenthesis when the user inserts a close parenthesis.
 
 <div class="defun">
-&mdash; Variable: <b>blink-paren-function</b><var><a name="index-blink_002dparen_002dfunction-3726"></a></var><br>
+&mdash; Variable: <b>blink-paren-function</b><var><a name="index-blink_002dparen_002dfunction-4036"></a></var><br>
 <blockquote><p>The value of this variable should be a function (of no arguments) to
 be called whenever a character with close parenthesis syntax is inserted. 
 The value of <code>blink-paren-function</code> may be <code>nil</code>, in which
@@ -59,26 +56,26 @@ case nothing is done.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>blink-matching-paren</b><var><a name="index-blink_002dmatching_002dparen-3727"></a></var><br>
+&mdash; User Option: <b>blink-matching-paren</b><var><a name="index-blink_002dmatching_002dparen-4037"></a></var><br>
 <blockquote><p>If this variable is <code>nil</code>, then <code>blink-matching-open</code> does
 nothing. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>blink-matching-paren-distance</b><var><a name="index-blink_002dmatching_002dparen_002ddistance-3728"></a></var><br>
+&mdash; User Option: <b>blink-matching-paren-distance</b><var><a name="index-blink_002dmatching_002dparen_002ddistance-4038"></a></var><br>
 <blockquote><p>This variable specifies the maximum distance to scan for a matching
 parenthesis before giving up. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>blink-matching-delay</b><var><a name="index-blink_002dmatching_002ddelay-3729"></a></var><br>
+&mdash; User Option: <b>blink-matching-delay</b><var><a name="index-blink_002dmatching_002ddelay-4039"></a></var><br>
 <blockquote><p>This variable specifies the number of seconds for the cursor to remain
 at the matching parenthesis.  A fraction of a second often gives
 good results, but the default is 1, which works on all systems. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>blink-matching-open</b><var><a name="index-blink_002dmatching_002dopen-3730"></a></var><br>
+&mdash; Command: <b>blink-matching-open</b><var><a name="index-blink_002dmatching_002dopen-4040"></a></var><br>
 <blockquote><p>This function is the default value of <code>blink-paren-function</code>.  It
 assumes that point follows a character with close parenthesis syntax and
 moves the cursor momentarily to the matching opening character.  If that
@@ -89,9 +86,6 @@ search farther than <code>blink-matching-paren-distance</code> characters.
         <p>Here is an example of calling this function explicitly.
 
      <pre class="smallexample">          (defun interactive-blink-matching-open ()
-          <!-- Do not break this line! - rms. -->
-          <!-- The first line of a doc string -->
-          <!-- must stand alone. -->
             "Indicate momentarily the start of sexp before point."
             (interactive)
             (let ((blink-matching-paren-distance

@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>%-Constructs - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Properties-in-Mode.html#Properties-in-Mode" title="Properties in Mode">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,12 +44,17 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Mode-Line-Format.html#Mode-Line-Format"
 
 <h4 class="subsection">23.4.5 <code>%</code>-Constructs in the Mode Line</h4>
 
-<p>Strings used as mode-line constructs can use certain
-<code>%</code>-constructs to substitute various kinds of data.  Here is a
-list of the defined <code>%</code>-constructs, and what they mean.  In any
-construct except &lsquo;<samp><span class="samp">%%</span></samp>&rsquo;, you can add a decimal integer after the
-&lsquo;<samp><span class="samp">%</span></samp>&rsquo; to specify a minimum field width.  If the width is less, the
-field is padded with spaces to the right.
+<p>Strings used as mode line constructs can use certain
+<code>%</code>-constructs to substitute various kinds of data.  The
+following is a list of the defined <code>%</code>-constructs, and what they
+mean.
+
+   <p>In any construct except &lsquo;<samp><span class="samp">%%</span></samp>&rsquo;, you can add a decimal integer
+after the &lsquo;<samp><span class="samp">%</span></samp>&rsquo; to specify a minimum field width.  If the width is
+less, the field is padded to that width.  Purely numeric constructs
+(&lsquo;<samp><span class="samp">c</span></samp>&rsquo;, &lsquo;<samp><span class="samp">i</span></samp>&rsquo;, &lsquo;<samp><span class="samp">I</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">l</span></samp>&rsquo;) are padded by inserting
+spaces to the left, and others are padded by inserting spaces to the
+right.
 
      <dl>
 <dt><code>%b</code><dd>The current buffer name, obtained with the <code>buffer-name</code> function. 
@@ -83,8 +85,8 @@ of the buffer.
 <code>narrow-to-region</code> in <a href="Narrowing.html#Narrowing">Narrowing</a>).
 
      <br><dt><code>%p</code><dd>The percentage of the buffer text above the <strong>top</strong> of window, or
-&lsquo;<samp><span class="samp">Top</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Bottom</span></samp>&rsquo; or &lsquo;<samp><span class="samp">All</span></samp>&rsquo;.  Note that the default
-mode-line specification truncates this to three characters.
+&lsquo;<samp><span class="samp">Top</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Bottom</span></samp>&rsquo; or &lsquo;<samp><span class="samp">All</span></samp>&rsquo;.  Note that the default mode
+line construct truncates this to three characters.
 
      <br><dt><code>%P</code><dd>The percentage of the buffer text that is above the <strong>bottom</strong> of
 the window (which includes the text visible in the window, as well as
@@ -93,9 +95,6 @@ visible on screen; or &lsquo;<samp><span class="samp">Bottom</span></samp>&rsquo
 
      <br><dt><code>%s</code><dd>The status of the subprocess belonging to the current buffer, obtained with
 <code>process-status</code>.  See <a href="Process-Information.html#Process-Information">Process Information</a>.
-
-     <br><dt><code>%t</code><dd>Whether the visited file is a text file or a binary file.  This is a
-meaningful distinction only on certain operating systems (see <a href="MS_002dDOS-File-Types.html#MS_002dDOS-File-Types">MS-DOS File Types</a>).
 
      <br><dt><code>%z</code><dd>The mnemonics of keyboard, terminal, and buffer coding systems.
 

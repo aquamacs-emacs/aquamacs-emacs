@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Speed of Byte-Code - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Compilation-Functions.html#Compilation-Functions" title="Compilation Functions">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -50,27 +47,24 @@ written in C, but runs much faster than the version written in Lisp.
 Here is an example:
 
 <pre class="example">     (defun silly-loop (n)
-       "Return time before and after N iterations of a loop."
-       (let ((t1 (current-time-string)))
-         (while (&gt; (setq n (1- n))
-                   0))
-         (list t1 (current-time-string))))
+       "Return the time, in seconds, to run N iterations of a loop."
+       (let ((t1 (float-time)))
+         (while (&gt; (setq n (1- n)) 0))
+         (- (float-time) t1)))
      &rArr; silly-loop
      
      (silly-loop 50000000)
-     &rArr; ("Wed Mar 11 21:10:19 2009"
-         "Wed Mar 11 21:10:41 2009")  ; <span class="roman">22 seconds</span>
+     &rArr; 10.235304117202759
      
      (byte-compile 'silly-loop)
      &rArr; <span class="roman">[Compiled code not shown]</span>
      
      (silly-loop 50000000)
-     &rArr; ("Wed Mar 11 21:12:26 2009"
-         "Wed Mar 11 21:12:32 2009")  ; <span class="roman">6 seconds</span>
+     &rArr; 3.705854892730713
 </pre>
-   <p>In this example, the interpreted code required 22 seconds to run,
-whereas the byte-compiled code required 6 seconds.  These results are
-representative, but actual results will vary greatly.
+   <p>In this example, the interpreted code required 10 seconds to run,
+whereas the byte-compiled code required less than 4 seconds.  These
+results are representative, but actual results may vary.
 
    </body></html>
 

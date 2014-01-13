@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Mouse References - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Frames.html#Frames" title="Frames">
-<link rel="prev" href="Cut-and-Paste.html#Cut-and-Paste" title="Cut and Paste">
+<link rel="prev" href="Word-and-Line-Mouse.html#Word-and-Line-Mouse" title="Word and Line Mouse">
 <link rel="next" href="Menu-Mouse-Clicks.html#Menu-Mouse-Clicks" title="Menu Mouse Clicks">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -40,53 +37,54 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <a name="Mouse-References"></a>
 <p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Menu-Mouse-Clicks.html#Menu-Mouse-Clicks">Menu Mouse Clicks</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Cut-and-Paste.html#Cut-and-Paste">Cut and Paste</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Word-and-Line-Mouse.html#Word-and-Line-Mouse">Word and Line Mouse</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
 <hr>
 </div>
 
-<h3 class="section">25.2 Following References with the Mouse</h3>
+<h3 class="section">21.3 Following References with the Mouse</h3>
 
-<p><a name="index-Mouse_002d1-_0040r_007b_0028selection_0029_007d-1219"></a><a name="index-Mouse_002d2-_0040r_007b_0028selection_0029_007d-1220"></a>
-<a name="index-mouse_002dhighlight-1221"></a>  Some Emacs buffers include <dfn>buttons</dfn>.  A button is a piece of
-text that performs some action when you activate it, such as following
-a reference.  Usually, a button's text is visually highlighted: it is
-underlined, or a box is drawn around it.  If you move the mouse over a
-button, the shape of the mouse cursor changes and the button lights up
-(if you change the variable <code>mouse-highlight</code> to <code>nil</code>,
-Emacs disables this highlighting).
+<p><a name="index-Mouse_002d1-_0040r_007b_0028on-buttons_0029_007d-1453"></a><a name="index-Mouse_002d2-_0040r_007b_0028on-buttons_0029_007d-1454"></a><a name="index-hyperlinks-1455"></a><a name="index-links-1456"></a><a name="index-text-buttons-1457"></a><a name="index-buttons-1458"></a>
+<a name="index-mouse_002dhighlight-1459"></a>  Some Emacs buffers include <dfn>buttons</dfn>, or <dfn>hyperlinks</dfn>:
+pieces of text that perform some action (e.g., following a reference)
+when activated (e.g., by clicking on them).  Usually, a button's text
+is visually highlighted: it is underlined, or a box is drawn around
+it.  If you move the mouse over a button, the shape of the mouse
+cursor changes and the button lights up.  If you change the variable
+<code>mouse-highlight</code> to <code>nil</code>, Emacs disables this
+highlighting.
 
    <p>You can activate a button by moving point to it and typing
 &lt;RET&gt;, or by clicking either <kbd>Mouse-1</kbd> or <kbd>Mouse-2</kbd> on the
-button.  For example, typing &lt;RET&gt; or clicking on a file name in a
-Dired buffer visits that file (see <a href="Dired.html#Dired">Dired</a>).  Doing it on an error
-message in the &lsquo;<samp><span class="samp">*Compilation*</span></samp>&rsquo; buffer goes to the source code for
-that error message (see <a href="Compilation.html#Compilation">Compilation</a>).  Doing it on a completion in
-the &lsquo;<samp><span class="samp">*Completions*</span></samp>&rsquo; buffer chooses that completion
-(see <a href="Completion.html#Completion">Completion</a>).
+button.  For example, in a Dired buffer, each file name is a button;
+activating it causes Emacs to visit that file (see <a href="Dired.html#Dired">Dired</a>).  In a
+<samp><span class="file">*Compilation*</span></samp> buffer, each error message is a button, and
+activating it visits the source code for that error
+(see <a href="Compilation.html#Compilation">Compilation</a>).
 
-   <p>Although clicking <kbd>Mouse-1</kbd> on a button usually activates that
-button, if you hold the mouse button down for a short period of time
-before releasing it (specifically, for more than 450 milliseconds),
-then Emacs moves point where you clicked instead.  This behavior
-allows you to use the mouse to move point over a button without
-following it.  Dragging&mdash;moving the mouse while it is held down&mdash;has
-its usual behavior of setting the region, even if you drag from or
-onto a button.
+   <p>Although clicking <kbd>Mouse-1</kbd> on a button usually activates the
+button, if you hold the mouse button down for a period of time before
+releasing it (specifically, for more than 450 milliseconds), then
+Emacs moves point where you clicked, without activating the button. 
+In this way, you can use the mouse to move point over a button without
+activating it.  Dragging the mouse over or onto a button has its usual
+behavior of setting the region, and does not activate the button.
 
-   <p><a name="index-mouse_002d1_002dclick_002din_002dnon_002dselected_002dwindows-1222"></a>  Normally, clicking <kbd>Mouse-1</kbd> on a button activates the button
-even if it is in a nonselected window.  If you change the variable
-<code>mouse-1-click-in-non-selected-windows</code> to <code>nil</code>, clicking
-<kbd>Mouse-1</kbd> on a button in an un-selected window moves point to the
+   <p>You can change how <kbd>Mouse-1</kbd> applies to buttons by customizing
+the variable <code>mouse-1-click-follows-link</code>.  If the value is a
+positive integer, that determines how long you need to hold the mouse
+button down for, in milliseconds, to cancel button activation; the
+default is 450, as described in the previous paragraph.  If the value
+is <code>nil</code>, <kbd>Mouse-1</kbd> just sets point where you clicked, and
+does not activate buttons.  If the value is <code>double</code>, double
+clicks activate buttons but single clicks just set point.
+
+   <p><a name="index-mouse_002d1_002dclick_002din_002dnon_002dselected_002dwindows-1460"></a>  Normally, <kbd>Mouse-1</kbd> on a button activates the button even if it
+is in a non-selected window.  If you change the variable
+<code>mouse-1-click-in-non-selected-windows</code> to <code>nil</code>,
+<kbd>Mouse-1</kbd> on a button in an unselected window moves point to the
 clicked position and selects that window, without activating the
 button.
-
-   <p><a name="index-mouse_002d1_002dclick_002dfollows_002dlink-1223"></a>  In Emacs versions before 22, only <kbd>Mouse-2</kbd> activates buttons
-and <kbd>Mouse-1</kbd> always sets point.  If you prefer this older
-behavior, set the variable <code>mouse-1-click-follows-link</code> to
-<code>nil</code>.  This variable also lets you choose various other
-alternatives for following links with the mouse.  Type <kbd>C-h v
-mouse-1-click-follows-link &lt;RET&gt;</kbd> for more details.
 
    </body></html>
 

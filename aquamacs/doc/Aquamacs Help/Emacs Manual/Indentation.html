@@ -1,21 +1,18 @@
 <html lang="en">
 <head>
 <title>Indentation - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Major-Modes.html#Major-Modes" title="Major Modes">
+<link rel="prev" href="Modes.html#Modes" title="Modes">
 <link rel="next" href="Text.html#Text" title="Text">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -39,89 +36,56 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <a name="Indentation"></a>
 <p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Text.html#Text">Text</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Major-Modes.html#Major-Modes">Major Modes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Modes.html#Modes">Modes</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
 <hr>
 </div>
 
-<h2 class="chapter">28 Indentation</h2>
+<h2 class="chapter">24 Indentation</h2>
 
-<p><a name="index-indentation-1512"></a><a name="index-tabs-1513"></a><a name="index-columns-_0028indentation_0029-1514"></a>
-  This chapter describes the Emacs commands that add, remove, or
-adjust indentation.
+<p><a name="index-indentation-1743"></a><a name="index-tabs-1744"></a><a name="index-columns-_0028indentation_0029-1745"></a>
+<a name="index-whitespace-character-1746"></a>  <dfn>Indentation</dfn> refers to inserting or adjusting <dfn>whitespace
+characters</dfn> (space and/or tab characters) at the beginning of a line
+of text.  This chapter documents indentation commands and options
+which are common to Text mode and related modes, as well as
+programming language modes.  See <a href="Program-Indent.html#Program-Indent">Program Indent</a>, for additional
+documentation about indenting in programming modes.
+
+   <p><a name="index-indent_002dfor_002dtab_002dcommand-1747"></a><a name="index-TAB-_0040r_007b_0028indentation_0029_007d-1748"></a>  The simplest way to perform indentation is the &lt;TAB&gt; key.  In
+most major modes, this runs the command <code>indent-for-tab-command</code>. 
+(In C and related modes, &lt;TAB&gt; runs the command
+<code>c-indent-line-or-region</code>, which behaves similarly).
 
      <dl>
-<dt><kbd>&lt;TAB&gt;</kbd><dd>Indent the current line appropriately, in a mode-dependent fashion. 
-<br><dt><kbd>C-j</kbd><dd>Perform &lt;RET&gt; followed by &lt;TAB&gt; (<code>newline-and-indent</code>). 
-<br><dt><kbd>M-^</kbd><dd>Merge the previous and the current line (<code>delete-indentation</code>). 
-This would cancel the effect of a preceding <kbd>C-j</kbd>. 
-<br><dt><kbd>C-M-o</kbd><dd>Split the current line at point; text on the line after point becomes a
-new line indented to the same column where point is located
-(<code>split-line</code>). 
-<br><dt><kbd>M-m</kbd><dd>Move (forward or back) to the first nonblank character on the current
-line (<code>back-to-indentation</code>). 
-<br><dt><kbd>C-M-\</kbd><dd>Indent lines in the region to the same column (<code>indent-region</code>). 
-<br><dt><kbd>C-x &lt;TAB&gt;</kbd><dd>Shift lines in the region rigidly right or left (<code>indent-rigidly</code>). 
-<br><dt><kbd>M-i</kbd><dd>Indent from point to the next prespecified tab stop column
-(<code>tab-to-tab-stop</code>). 
-<br><dt><kbd>M-x indent-relative</kbd><dd>Indent from point to under an indentation point in the previous line. 
+<dt>&lt;TAB&gt;<dd>Insert whitespace, or indent the current line, in a mode-appropriate
+way (<code>indent-for-tab-command</code>).  If the region is active, indent
+all the lines within it. 
 </dl>
 
-<p class="noindent">The &lt;TAB&gt; key runs <code>indent-for-tab-command</code> in most major
-modes (in C and related modes, &lt;TAB&gt; runs a separate command,
-<code>c-indent-line-or-region</code>, which behaves similarly).  The major
-mode determines just what this entails.
+   <p>The exact behavior of &lt;TAB&gt; depends on the major mode.  In Text
+mode and related major modes, &lt;TAB&gt; normally inserts some
+combination of space and tab characters to advance point to the next
+tab stop (see <a href="Tab-Stops.html#Tab-Stops">Tab Stops</a>).  For this purpose, the position of the
+first non-whitespace character on the preceding line is treated as an
+additional tab stop, so you can use &lt;TAB&gt; to &ldquo;align&rdquo; point with
+the preceding line.  If the region is active (see <a href="Using-Region.html#Using-Region">Using Region</a>),
+&lt;TAB&gt; acts specially: it indents each line in the region so that
+its first non-whitespace character is aligned with the preceding line.
 
-   <p>In text modes, &lt;TAB&gt; inserts some combination of space and tab
-characters to advance point to the next tab stop (see <a href="Tab-Stops.html#Tab-Stops">Tab Stops</a>). 
-If the region is active and spans multiple lines, it advances the
-first character of each of those lines to the next tab stop
-(see <a href="Using-Region.html#Using-Region">Using Region</a>).  For the purposes of this command, the
-position of the first non-whitespace character on the preceding line
-is treated as an additional tab stop.  Thus, you can use &lt;TAB&gt; to
-&ldquo;align&rdquo; point with the preceding line.
+   <p>In programming modes, &lt;TAB&gt; indents the current line of code in
+a way that makes sense given the code in the preceding lines.  If the
+region is active, all the lines in the region are indented this way. 
+If point was initially within the current line's indentation, it is
+repositioned to the first non-whitespace character on the line.
 
-   <p>In programming modes, &lt;TAB&gt; adds or removes some combination of
-space and tab characters at the start of the line, in a way that makes
-sense given the text in the preceding lines.  If the region is active
-and spans multiple lines, all those lines are indented this way.  If
-point was initially within the current line's indentation, it is
-positioned after that indentation; otherwise, it remains at same point
-in the newly-indented text.  See <a href="Program-Indent.html#Program-Indent">Program Indent</a>.
-
-   <p><a name="index-tab_002dwidth-1515"></a>  Normally, indentation commands insert (or remove) an optimal mix of
-<dfn>tab characters</dfn> and spaces to align to the desired column.  Tab
-characters (<acronym>ASCII</acronym> code 9) are displayed as a stretch of
-empty space extending to the next <dfn>display tab stop</dfn>.  By default,
-there is one display tab stop every eight columns; the number of
-columns is determined by the variable <code>tab-width</code>.  You can
-insert a single tab character by typing <kbd>C-q &lt;TAB&gt;</kbd>. 
-See <a href="Text-Display.html#Text-Display">Text Display</a>.
-
-   <p><a name="index-edit_002dtab_002dstops-1516"></a><a name="index-tab_002dto_002dtab_002dstop-1517"></a><a name="index-M_002di-1518"></a>  The command <kbd>M-i</kbd> (<code>tab-to-tab-stop</code>) adjusts the
-whitespace characters around point, inserting just enough whitespace
-to advance point up to the next tab stop.  By default, this involves
-deleting the existing whitespace and inserting a single tab character.
-
-   <p>See <a href="Just-Spaces.html#Just-Spaces">Just Spaces</a>, for how to disable use of tabs.  However,
-<kbd>C-q &lt;TAB&gt;</kbd> always inserts a tab, even when tabs are disabled
-for the indentation commands.
-
-   <p><a name="index-tab_002dalways_002dindent-1519"></a>  The variable <code>tab-always-indent</code> tweaks the behavior of the
-&lt;TAB&gt; (<code>indent-for-tab-command</code>) command.  The default value,
-<code>t</code>, gives the behavior described above.  If you change the value
-to the symbol <code>complete</code>, then &lt;TAB&gt; first tries to indent
-the current line, and if the line was already indented, it tries to
-complete the text at point (see <a href="Symbol-Completion.html#Symbol-Completion">Symbol Completion</a>).  If the value
-is <code>nil</code>, then &lt;TAB&gt; indents the current line only if point
-is at the left margin or in the line's indentation; otherwise, it
-inserts a real tab character.
+   <p>If you just want to insert a tab character in the buffer, type
+<kbd>C-q &lt;TAB&gt;</kbd> (see <a href="Inserting-Text.html#Inserting-Text">Inserting Text</a>).
 
 <ul class="menu">
-<li><a accesskey="1" href="Indentation-Commands.html#Indentation-Commands">Indentation Commands</a>:   Various commands and techniques for indentation. 
-<li><a accesskey="2" href="Tab-Stops.html#Tab-Stops">Tab Stops</a>:              You can set arbitrary "tab stops" and then
-                            indent to the next tab stop when you want to. 
-<li><a accesskey="3" href="Just-Spaces.html#Just-Spaces">Just Spaces</a>:            You can request indentation using just spaces. 
+<li><a accesskey="1" href="Indentation-Commands.html#Indentation-Commands">Indentation Commands</a>:   More commands for performing indentation. 
+<li><a accesskey="2" href="Tab-Stops.html#Tab-Stops">Tab Stops</a>:              Stop points for indentation in Text modes. 
+<li><a accesskey="3" href="Just-Spaces.html#Just-Spaces">Just Spaces</a>:            Using only space characters for indentation. 
+<li><a accesskey="4" href="Indent-Convenience.html#Indent-Convenience">Indent Convenience</a>:     Optional indentation features. 
 </ul>
 
    </body></html>

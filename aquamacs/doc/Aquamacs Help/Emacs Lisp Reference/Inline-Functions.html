@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Inline Functions - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Functions.html#Functions" title="Functions">
 <link rel="prev" href="Obsolete-Functions.html#Obsolete-Functions" title="Obsolete Functions">
-<link rel="next" href="Declaring-Functions.html#Declaring-Functions" title="Declaring Functions">
+<link rel="next" href="Declare-Form.html#Declare-Form" title="Declare Form">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -38,29 +35,36 @@ Foundation, Inc.
 <div class="node">
 <a name="Inline-Functions"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Declaring-Functions.html#Declaring-Functions">Declaring Functions</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Declare-Form.html#Declare-Form">Declare Form</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Obsolete-Functions.html#Obsolete-Functions">Obsolete Functions</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Functions.html#Functions">Functions</a>
 <hr>
 </div>
 
-<h3 class="section">12.10 Inline Functions</h3>
+<h3 class="section">12.11 Inline Functions</h3>
 
-<p><a name="index-inline-functions-724"></a>
-<a name="index-defsubst-725"></a>You can define an <dfn>inline function</dfn> by using <code>defsubst</code> instead
-of <code>defun</code>.  An inline function works just like an ordinary
-function except for one thing: when you compile a call to the function,
-the function's definition is open-coded into the caller.
+<p><a name="index-inline-functions-770"></a>
+  An <dfn>inline function</dfn> is a function that works just like an
+ordinary function, except for one thing: when you byte-compile a call
+to the function (see <a href="Byte-Compilation.html#Byte-Compilation">Byte Compilation</a>), the function's definition
+is expanded into the caller.  To define an inline function, use
+<code>defsubst</code> instead of <code>defun</code>.
 
-   <p>Making a function inline makes explicit calls run faster.  But it also
-has disadvantages.  For one thing, it reduces flexibility; if you
-change the definition of the function, calls already inlined still use
-the old definition until you recompile them.
+<div class="defun">
+&mdash; Macro: <b>defsubst</b><var> name args </var>[<var>doc</var>] [<var>declare</var>] [<var>interactive</var>]<var> body<small class="dots">...</small><a name="index-defsubst-771"></a></var><br>
+<blockquote><p>This macro defines an inline function.  Its syntax is exactly the same
+as <code>defun</code> (see <a href="Defining-Functions.html#Defining-Functions">Defining Functions</a>). 
+</p></blockquote></div>
 
-   <p>Another disadvantage is that making a large function inline can increase
-the size of compiled code both in files and in memory.  Since the speed
-advantage of inline functions is greatest for small functions, you
-generally should not make large functions inline.
+   <p>Making a function inline often makes its function calls run faster. 
+But it also has disadvantages.  For one thing, it reduces flexibility;
+if you change the definition of the function, calls already inlined
+still use the old definition until you recompile them.
+
+   <p>Another disadvantage is that making a large function inline can
+increase the size of compiled code both in files and in memory.  Since
+the speed advantage of inline functions is greatest for small
+functions, you generally should not make large functions inline.
 
    <p>Also, inline functions do not behave well with respect to debugging,
 tracing, and advising (see <a href="Advising-Functions.html#Advising-Functions">Advising Functions</a>).  Since ease of
@@ -70,17 +74,17 @@ small, unless its speed is really crucial, and you've timed the code
 to verify that using <code>defun</code> actually has performance problems.
 
    <p>It's possible to define a macro to expand into the same code that an
-inline function would execute.  (See <a href="Macros.html#Macros">Macros</a>.)  But the macro would be
-limited to direct use in expressions&mdash;a macro cannot be called with
-<code>apply</code>, <code>mapcar</code> and so on.  Also, it takes some work to
-convert an ordinary function into a macro.  To convert it into an inline
-function is very easy; simply replace <code>defun</code> with <code>defsubst</code>. 
-Since each argument of an inline function is evaluated exactly once, you
-needn't worry about how many times the body uses the arguments, as you
-do for macros.  (See <a href="Argument-Evaluation.html#Argument-Evaluation">Argument Evaluation</a>.)
+inline function would execute (see <a href="Macros.html#Macros">Macros</a>).  But the macro would
+be limited to direct use in expressions&mdash;a macro cannot be called
+with <code>apply</code>, <code>mapcar</code> and so on.  Also, it takes some work
+to convert an ordinary function into a macro.  To convert it into an
+inline function is easy; just replace <code>defun</code> with
+<code>defsubst</code>.  Since each argument of an inline function is
+evaluated exactly once, you needn't worry about how many times the
+body uses the arguments, as you do for macros.
 
-   <p>Inline functions can be used and open-coded later on in the same file,
-following the definition, just like macros.
+   <p>After an inline function is defined, its inline expansion can be
+performed later on in the same file, just like macros.
 
    </body></html>
 

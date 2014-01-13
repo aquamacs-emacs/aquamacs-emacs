@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Equality Predicates - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="prev" href="Type-Predicates.html#Type-Predicates" title="Type Predicates">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,25 +41,25 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Lisp-Data-Types.html#Lisp-Data-Types">L
 
 <h3 class="section">2.7 Equality Predicates</h3>
 
-<p><a name="index-equality-122"></a>
-  Here we describe functions that test for equality between any two
-objects.  Other functions test equality of contents between objects of specific
-types, e.g., strings.  For these predicates, see the appropriate chapter
-describing the data type.
+<p><a name="index-equality-126"></a>
+  Here we describe functions that test for equality between two
+objects.  Other functions test equality of contents between objects of
+specific types, e.g., strings.  For these predicates, see the
+appropriate chapter describing the data type.
 
 <div class="defun">
-&mdash; Function: <b>eq</b><var> object1 object2<a name="index-eq-123"></a></var><br>
+&mdash; Function: <b>eq</b><var> object1 object2<a name="index-eq-127"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if <var>object1</var> and <var>object2</var> are
-the same object, <code>nil</code> otherwise.
+the same object, and <code>nil</code> otherwise.
 
-        <p><code>eq</code> returns <code>t</code> if <var>object1</var> and <var>object2</var> are
-integers with the same value.  Also, since symbol names are normally
-unique, if the arguments are symbols with the same name, they are
-<code>eq</code>.  For other types (e.g., lists, vectors, strings), two
-arguments with the same contents or elements are not necessarily
-<code>eq</code> to each other: they are <code>eq</code> only if they are the same
-object, meaning that a change in the contents of one will be reflected
-by the same change in the contents of the other.
+        <p>If <var>object1</var> and <var>object2</var> are integers with the same value,
+they are considered to be the same object (i.e., <code>eq</code> returns
+<code>t</code>).  If <var>object1</var> and <var>object2</var> are symbols with the
+same name, they are normally the same object&mdash;but see <a href="Creating-Symbols.html#Creating-Symbols">Creating Symbols</a> for exceptions.  For other types (e.g., lists, vectors,
+strings), two arguments with the same contents or elements are not
+necessarily <code>eq</code> to each other: they are <code>eq</code> only if they
+are the same object, meaning that a change in the contents of one will
+be reflected by the same change in the contents of the other.
 
      <pre class="example">          (eq 'foo 'foo)
                &rArr; t
@@ -94,7 +91,7 @@ by the same change in the contents of the other.
           (eq (point-marker) (point-marker))
                &rArr; nil
 </pre>
-        <p>The <code>make-symbol</code> function returns an uninterned symbol, distinct
+        <p class="noindent">The <code>make-symbol</code> function returns an uninterned symbol, distinct
 from the symbol that is used if you write the name in a Lisp expression. 
 Distinct symbols with the same name are not <code>eq</code>.  See <a href="Creating-Symbols.html#Creating-Symbols">Creating Symbols</a>.
 
@@ -104,13 +101,13 @@ Distinct symbols with the same name are not <code>eq</code>.  See <a href="Creat
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>equal</b><var> object1 object2<a name="index-equal-124"></a></var><br>
+&mdash; Function: <b>equal</b><var> object1 object2<a name="index-equal-128"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if <var>object1</var> and <var>object2</var> have
-equal components, <code>nil</code> otherwise.  Whereas <code>eq</code> tests if its
-arguments are the same object, <code>equal</code> looks inside nonidentical
-arguments to see if their elements or contents are the same.  So, if two
-objects are <code>eq</code>, they are <code>equal</code>, but the converse is not
-always true.
+equal components, and <code>nil</code> otherwise.  Whereas <code>eq</code> tests
+if its arguments are the same object, <code>equal</code> looks inside
+nonidentical arguments to see if their elements or contents are the
+same.  So, if two objects are <code>eq</code>, they are <code>equal</code>, but
+the converse is not always true.
 
      <pre class="example">          (equal 'foo 'foo)
                &rArr; t
@@ -140,13 +137,13 @@ always true.
                &rArr; nil
 </pre>
         <p>Comparison of strings is case-sensitive, but does not take account of
-text properties&mdash;it compares only the characters in the strings.  Use
-<code>equal-including-properties</code> to also compare text properties.  For
-technical reasons, a unibyte string and a multibyte string are
-<code>equal</code> if and only if they contain the same sequence of
-character codes and all these codes are either in the range 0 through
-127 (<acronym>ASCII</acronym>) or 160 through 255 (<code>eight-bit-graphic</code>). 
-(see <a href="Text-Representations.html#Text-Representations">Text Representations</a>).
+text properties&mdash;it compares only the characters in the strings. 
+See <a href="Text-Properties.html#Text-Properties">Text Properties</a>.  Use <code>equal-including-properties</code> to also
+compare text properties.  For technical reasons, a unibyte string and
+a multibyte string are <code>equal</code> if and only if they contain the
+same sequence of character codes and all these codes are either in the
+range 0 through 127 (<acronym>ASCII</acronym>) or 160 through 255
+(<code>eight-bit-graphic</code>).  (see <a href="Text-Representations.html#Text-Representations">Text Representations</a>).
 
      <pre class="example">          (equal "asdf" "ASDF")
                &rArr; nil
@@ -167,7 +164,7 @@ returns <code>t</code> if and only if both the expressions below return
 infinite recursion (leading to an error).
 
 <div class="defun">
-&mdash; Function: <b>equal-including-properties</b><var> object1 object2<a name="index-equal_002dincluding_002dproperties-125"></a></var><br>
+&mdash; Function: <b>equal-including-properties</b><var> object1 object2<a name="index-equal_002dincluding_002dproperties-129"></a></var><br>
 <blockquote><p>This function behaves like <code>equal</code> in all cases but also requires
 that for two strings to be equal, they have the same text properties.
 
@@ -178,12 +175,11 @@ that for two strings to be equal, they have the same text properties.
                &rArr; nil
 </pre>
         </blockquote></div>
-
-<!-- *-texinfo-*- -->
+   <!-- *-texinfo-*- -->
 <!-- This is part of the GNU Emacs Lisp Reference Manual. -->
-<!-- Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1998, 1999, 2001, -->
-<!-- 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 -->
-<!-- Free Software Foundation, Inc. -->
+<!-- Copyright (C) 1990-1995, 1998-1999, 2001-2013 Free Software -->
+<!-- Foundation, Inc. -->
 <!-- See the file elisp.texi for copying conditions. -->
+
    </body></html>
 

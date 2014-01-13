@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>What Is a Function - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Lambda-Expressions.html#Lambda-Expressions" title="Lambda Expressions">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,82 +41,100 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Functions.html#Functions">Functions</a>
 
 <h3 class="section">12.1 What Is a Function?</h3>
 
-<p>In a general sense, a function is a rule for carrying on a computation
-given several values called <dfn>arguments</dfn>.  The result of the
-computation is called the value of the function.  The computation can
-also have side effects: lasting changes in the values of variables or
-the contents of data structures.
+<p><a name="index-return-value-706"></a><a name="index-value-of-function-707"></a><a name="index-argument-708"></a>  In a general sense, a function is a rule for carrying out a
+computation given input values called <dfn>arguments</dfn>.  The result of
+the computation is called the <dfn>value</dfn> or <dfn>return value</dfn> of the
+function.  The computation can also have side effects, such as lasting
+changes in the values of variables or the contents of data structures.
 
-   <p>Here are important terms for functions in Emacs Lisp and for other
-function-like objects.
+   <p>In most computer languages, every function has a name.  But in Lisp,
+a function in the strictest sense has no name: it is an object which
+can <em>optionally</em> be associated with a symbol (e.g., <code>car</code>)
+that serves as the function name.  See <a href="Function-Names.html#Function-Names">Function Names</a>.  When a
+function has been given a name, we usually also refer to that symbol
+as a &ldquo;function&rdquo; (e.g., we refer to &ldquo;the function <code>car</code>&rdquo;). 
+In this manual, the distinction between a function name and the
+function object itself is usually unimportant, but we will take note
+wherever it is relevant.
+
+   <p>Certain function-like objects, called <dfn>special forms</dfn> and
+<dfn>macros</dfn>, also accept arguments to carry out computations. 
+However, as explained below, these are not considered functions in
+Emacs Lisp.
+
+   <p>Here are important terms for functions and function-like objects:
 
      <dl>
-<dt><dfn>function</dfn><dd><a name="index-function-665"></a>In Emacs Lisp, a <dfn>function</dfn> is anything that can be applied to
-arguments in a Lisp program.  In some cases, we use it more
-specifically to mean a function written in Lisp.  Special forms and
-macros are not functions.
-
-     <br><dt><dfn>primitive</dfn><dd><a name="index-primitive-666"></a><a name="index-subr-667"></a><a name="index-built_002din-function-668"></a>A <dfn>primitive</dfn> is a function callable from Lisp that is written in C,
-such as <code>car</code> or <code>append</code>.  These functions are also called
-<dfn>built-in functions</dfn>, or <dfn>subrs</dfn>.  (Special forms are also
-considered primitives.)
-
-     <p>Usually the reason we implement a function as a primitive is either
-because it is fundamental, because it provides a low-level interface
-to operating system services, or because it needs to run fast. 
-Primitives can be modified or added only by changing the C sources and
-recompiling the editor.  See <a href="Writing-Emacs-Primitives.html#Writing-Emacs-Primitives">Writing Emacs Primitives</a>.
-
-     <br><dt><dfn>lambda expression</dfn><dd>A <dfn>lambda expression</dfn> is a function written in Lisp. 
-These are described in the following section. 
+<dt><dfn>lambda expression</dfn><dd>A function (in the strict sense, i.e., a function object) which is
+written in Lisp.  These are described in the following section. 
 See <a href="Lambda-Expressions.html#Lambda-Expressions">Lambda Expressions</a>.
 
-     <br><dt><dfn>special form</dfn><dd>A <dfn>special form</dfn> is a primitive that is like a function but does not
-evaluate all of its arguments in the usual way.  It may evaluate only
-some of the arguments, or may evaluate them in an unusual order, or
-several times.  Many special forms are described in <a href="Control-Structures.html#Control-Structures">Control Structures</a>.
+     <br><dt><dfn>primitive</dfn><dd><a name="index-primitive-709"></a><a name="index-subr-710"></a><a name="index-built_002din-function-711"></a>A function which is callable from Lisp but is actually written in C. 
+Primitives are also called <dfn>built-in functions</dfn>, or <dfn>subrs</dfn>. 
+Examples include functions like <code>car</code> and <code>append</code>.  In
+addition, all special forms (see below) are also considered
+primitives.
 
-     <br><dt><dfn>macro</dfn><dd><a name="index-macro-669"></a>A <dfn>macro</dfn> is a construct defined in Lisp by the programmer.  It
-differs from a function in that it translates a Lisp expression that you
-write into an equivalent expression to be evaluated instead of the
-original expression.  Macros enable Lisp programmers to do the sorts of
-things that special forms can do.  See <a href="Macros.html#Macros">Macros</a>, for how to define and
-use macros.
+     <p>Usually, a function is implemented as a primitive because it is a
+fundamental part of Lisp (e.g., <code>car</code>), or because it provides a
+low-level interface to operating system services, or because it needs
+to run fast.  Unlike functions defined in Lisp, primitives can be
+modified or added only by changing the C sources and recompiling
+Emacs.  See <a href="Writing-Emacs-Primitives.html#Writing-Emacs-Primitives">Writing Emacs Primitives</a>.
 
-     <br><dt><dfn>command</dfn><dd><a name="index-command-670"></a>A <dfn>command</dfn> is an object that <code>command-execute</code> can invoke; it
-is a possible definition for a key sequence.  Some functions are
-commands; a function written in Lisp is a command if it contains an
-interactive declaration (see <a href="Defining-Commands.html#Defining-Commands">Defining Commands</a>).  Such a function
-can be called from Lisp expressions like other functions; in this case,
-the fact that the function is a command makes no difference.
+     <br><dt><dfn>special form</dfn><dd>A primitive that is like a function but does not evaluate all of its
+arguments in the usual way.  It may evaluate only some of the
+arguments, or may evaluate them in an unusual order, or several times. 
+Examples include <code>if</code>, <code>and</code>, and <code>while</code>. 
+See <a href="Special-Forms.html#Special-Forms">Special Forms</a>.
+
+     <br><dt><dfn>macro</dfn><dd><a name="index-macro-712"></a>A construct defined in Lisp, which differs from a function in that it
+translates a Lisp expression into another expression which is to be
+evaluated instead of the original expression.  Macros enable Lisp
+programmers to do the sorts of things that special forms can do. 
+See <a href="Macros.html#Macros">Macros</a>.
+
+     <br><dt><dfn>command</dfn><dd><a name="index-command-713"></a>An object which can be invoked via the <code>command-execute</code>
+primitive, usually due to the user typing in a key sequence
+<dfn>bound</dfn> to that command.  See <a href="Interactive-Call.html#Interactive-Call">Interactive Call</a>.  A command is
+usually a function; if the function is written in Lisp, it is made
+into a command by an <code>interactive</code> form in the function
+definition (see <a href="Defining-Commands.html#Defining-Commands">Defining Commands</a>).  Commands that are functions
+can also be called from Lisp expressions, just like other functions.
 
      <p>Keyboard macros (strings and vectors) are commands also, even though
-they are not functions.  A symbol is a command if its function
-definition is a command; such symbols can be invoked with <kbd>M-x</kbd>. 
-The symbol is a function as well if the definition is a function. 
-See <a href="Interactive-Call.html#Interactive-Call">Interactive Call</a>.
+they are not functions.  See <a href="Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a>.  We say that a symbol
+is a command if its function cell contains a command (see <a href="Symbol-Components.html#Symbol-Components">Symbol Components</a>); such a <dfn>named command</dfn> can be invoked with
+<kbd>M-x</kbd>.
 
-     <br><dt><dfn>keystroke command</dfn><dd><a name="index-keystroke-command-671"></a>A <dfn>keystroke command</dfn> is a command that is bound to a key sequence
-(typically one to three keystrokes).  The distinction is made here
-merely to avoid confusion with the meaning of &ldquo;command&rdquo; in non-Emacs
-editors; for Lisp programs, the distinction is normally unimportant.
+     <br><dt><dfn>closure</dfn><dd>A function object that is much like a lambda expression, except that
+it also encloses an &ldquo;environment&rdquo; of lexical variable bindings. 
+See <a href="Closures.html#Closures">Closures</a>.
 
-     <br><dt><dfn>byte-code function</dfn><dd>A <dfn>byte-code function</dfn> is a function that has been compiled by the
-byte compiler.  See <a href="Byte_002dCode-Type.html#Byte_002dCode-Type">Byte-Code Type</a>. 
+     <br><dt><dfn>byte-code function</dfn><dd>A function that has been compiled by the byte compiler. 
+See <a href="Byte_002dCode-Type.html#Byte_002dCode-Type">Byte-Code Type</a>.
+
+     <br><dt><dfn>autoload object</dfn><dd><a name="index-autoload-object-714"></a>A place-holder for a real function.  If the autoload object is called,
+Emacs loads the file containing the definition of the real function,
+and then calls the real function.  See <a href="Autoload.html#Autoload">Autoload</a>. 
 </dl>
 
+   <p>You can use the function <code>functionp</code> to test if an object is a
+function:
+
 <div class="defun">
-&mdash; Function: <b>functionp</b><var> object<a name="index-functionp-672"></a></var><br>
+&mdash; Function: <b>functionp</b><var> object<a name="index-functionp-715"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if <var>object</var> is any kind of
-function, i.e. can be passed to <code>funcall</code>.  Note that
-<code>functionp</code> returns <code>nil</code> for special forms (see <a href="Special-Forms.html#Special-Forms">Special Forms</a>). 
+function, i.e., can be passed to <code>funcall</code>.  Note that
+<code>functionp</code> returns <code>t</code> for symbols that are function names,
+and returns <code>nil</code> for special forms. 
 </p></blockquote></div>
 
-   <p>Unlike <code>functionp</code>, the next three functions do <em>not</em>
-treat a symbol as its function definition.
+<p class="noindent">Unlike <code>functionp</code>, the next three functions do <em>not</em> treat
+a symbol as its function definition.
 
 <div class="defun">
-&mdash; Function: <b>subrp</b><var> object<a name="index-subrp-673"></a></var><br>
+&mdash; Function: <b>subrp</b><var> object<a name="index-subrp-716"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if <var>object</var> is a built-in function
 (i.e., a Lisp primitive).
 
@@ -131,7 +146,7 @@ treat a symbol as its function definition.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>byte-code-function-p</b><var> object<a name="index-byte_002dcode_002dfunction_002dp-674"></a></var><br>
+&mdash; Function: <b>byte-code-function-p</b><var> object<a name="index-byte_002dcode_002dfunction_002dp-717"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if <var>object</var> is a byte-code
 function.  For example:
 
@@ -141,7 +156,7 @@ function.  For example:
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>subr-arity</b><var> subr<a name="index-subr_002darity-675"></a></var><br>
+&mdash; Function: <b>subr-arity</b><var> subr<a name="index-subr_002darity-718"></a></var><br>
 <blockquote><p>This function provides information about the argument list of a
 primitive, <var>subr</var>.  The returned value is a pair
 <code>(</code><var>min</var><code> . </code><var>max</var><code>)</code>.  <var>min</var> is the minimum number of

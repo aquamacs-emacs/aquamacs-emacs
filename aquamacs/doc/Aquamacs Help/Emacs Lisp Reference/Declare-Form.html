@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+<title>Declare Form - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Functions.html#Functions" title="Functions">
+<link rel="prev" href="Inline-Functions.html#Inline-Functions" title="Inline Functions">
+<link rel="next" href="Declaring-Functions.html#Declaring-Functions" title="Declaring Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
+
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Declare-Form"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Declaring-Functions.html#Declaring-Functions">Declaring Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Inline-Functions.html#Inline-Functions">Inline Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Functions.html#Functions">Functions</a>
+<hr>
+</div>
+
+<h3 class="section">12.12 The <code>declare</code> Form</h3>
+
+<p><a name="index-declare-772"></a>
+  <code>declare</code> is a special macro which can be used to add &ldquo;meta&rdquo;
+properties to a function or macro: for example, marking it as
+obsolete, or giving its forms a special &lt;TAB&gt; indentation
+convention in Emacs Lisp mode.
+
+   <p><a name="Definition-of-declare"></a>
+
+<div class="defun">
+&mdash; Macro: <b>declare</b><var> specs<small class="dots">...</small><a name="index-declare-773"></a></var><br>
+<blockquote><p>This macro ignores its arguments and evaluates to <code>nil</code>; it has
+no run-time effect.  However, when a <code>declare</code> form occurs in the
+<var>declare</var> argument of a <code>defun</code> or <code>defsubst</code> function
+definition (see <a href="Defining-Functions.html#Defining-Functions">Defining Functions</a>) or a <code>defmacro</code> macro
+definition (see <a href="Defining-Macros.html#Defining-Macros">Defining Macros</a>), it appends the properties
+specified by <var>specs</var> to the function or macro.  This work is
+specially performed by <code>defun</code>, <code>defsubst</code>, and
+<code>defmacro</code>.
+
+        <p>Each element in <var>specs</var> should have the form <code>(</code><var>property</var>
+<var>args</var><code>...)</code>, which should not be quoted.  These have the
+following effects:
+
+          <dl>
+<dt><code>(advertised-calling-convention </code><var>signature</var> <var>when</var><code>)</code><dd>This acts like a call to <code>set-advertised-calling-convention</code>
+(see <a href="Obsolete-Functions.html#Obsolete-Functions">Obsolete Functions</a>); <var>signature</var> specifies the correct
+argument list for calling the function or macro, and <var>when</var> should
+be a string indicating when the variable was first made obsolete.
+
+          <br><dt><code>(debug </code><var>edebug-form-spec</var><code>)</code><dd>This is valid for macros only.  When stepping through the macro with
+Edebug, use <var>edebug-form-spec</var>.  See <a href="Instrumenting-Macro-Calls.html#Instrumenting-Macro-Calls">Instrumenting Macro Calls</a>.
+
+          <br><dt><code>(doc-string </code><var>n</var><code>)</code><dd>Use element number <var>n</var>, if any, as the documentation string.
+
+          <br><dt><code>(indent </code><var>indent-spec</var><code>)</code><dd>Indent calls to this function or macro according to <var>indent-spec</var>. 
+This is typically used for macros, though it works for functions too. 
+See <a href="Indenting-Macros.html#Indenting-Macros">Indenting Macros</a>.
+
+          <br><dt><code>(obsolete </code><var>current-name</var> <var>when</var><code>)</code><dd>Mark the function or macro as obsolete, similar to a call to
+<code>make-obsolete</code> (see <a href="Obsolete-Functions.html#Obsolete-Functions">Obsolete Functions</a>).  <var>current-name</var>
+should be a symbol (in which case the warning message says to use that
+instead), a string (specifying the warning message), or <code>nil</code> (in
+which case the warning message gives no extra details).  <var>when</var>
+should be a string indicating when the function or macro was first
+made obsolete. 
+</dl>
+        </p></blockquote></div>
+
+   </body></html>
+

@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>File Attributes - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Locating-Files.html#Locating-Files" title="Locating Files">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,63 +41,69 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Information-about-Files.html#Informatio
 <hr>
 </div>
 
-<!-- node-name,  next,  previous,  up -->
 <h4 class="subsection">25.6.4 Other Information about Files</h4>
 
-<p>This section describes the functions for getting detailed information
-about a file, other than its contents.  This information includes the
-mode bits that control access permission, the owner and group numbers,
-the number of names, the inode number, the size, and the times of access
-and modification.
+<p>This section describes the functions for getting detailed
+information about a file, other than its contents.  This information
+includes the mode bits that control access permissions, the owner and
+group numbers, the number of names, the inode number, the size, and
+the times of access and modification.
 
 <div class="defun">
-&mdash; Function: <b>file-modes</b><var> filename<a name="index-file_002dmodes-1822"></a></var><br>
-<blockquote><p><a name="index-permission-1823"></a><a name="index-file-attributes-1824"></a>This function returns the mode bits of <var>filename</var>, as an integer. 
-The mode bits are also called the file permissions, and they specify
-access control in the usual Unix fashion.  If the low-order bit is 1,
-then the file is executable by all users, if the second-lowest-order bit
-is 1, then the file is writable by all users, etc.
+&mdash; Function: <b>file-modes</b><var> filename<a name="index-file_002dmodes-1950"></a></var><br>
+<blockquote><p><a name="index-file-permissions-1951"></a><a name="index-permissions_002c-file-1952"></a><a name="index-file-attributes-1953"></a><a name="index-file-modes-1954"></a>This function returns the <dfn>mode bits</dfn> describing the <dfn>file
+permissions</dfn> of <var>filename</var>, as an integer.  It recursively follows
+symbolic links in <var>filename</var> at all levels.  If <var>filename</var>
+does not exist, the return value is <code>nil</code>.
 
-        <p>The highest value returnable is 4095 (7777 octal), meaning that
-everyone has read, write, and execute permission, that the <acronym>SUID</acronym> bit
-is set for both others and group, and that the sticky bit is set.
-
-        <p>If <var>filename</var> does not exist, <code>file-modes</code> returns <code>nil</code>.
-
-        <p>This function recursively follows symbolic links at all levels.
+        <p>See <a href="../coreutils/File-permissions.html#File-permissions">File permissions</a>, for a description of mode bits.  If the low-order bit is 1,
+then the file is executable by all users, if the second-lowest-order
+bit is 1, then the file is writable by all users, etc.  The highest
+value returnable is 4095 (7777 octal), meaning that everyone has read,
+write, and execute permission, that the <acronym>SUID</acronym> bit is set for
+both others and group, and that the sticky bit is set.
 
      <pre class="example">          (file-modes "~/junk/diffs")
                &rArr; 492               ; <span class="roman">Decimal integer.</span>
           (format "%o" 492)
                &rArr; "754"             ; <span class="roman">Convert to octal.</span>
           
-          (set-file-modes "~/junk/diffs" 438)
+          (set-file-modes "~/junk/diffs" #o666)
                &rArr; nil
           
-          (format "%o" 438)
-               &rArr; "666"             ; <span class="roman">Convert to octal.</span>
-          
-          % ls -l diffs
-            -rw-rw-rw-  1 lewis 0 3063 Oct 30 16:00 diffs
+          $ ls -l diffs
+          -rw-rw-rw- 1 lewis lewis 3063 Oct 30 16:00 diffs
 </pre>
-        </blockquote></div>
+        <p>See <a href="Changing-Files.html#Changing-Files">Changing Files</a>, for functions that change file permissions,
+such as <code>set-file-modes</code>.
 
-   <p>If the <var>filename</var> argument to the next two functions is a symbolic
-link, then these function do <em>not</em> replace it with its target. 
-However, they both recursively follow symbolic links at all levels of
-parent directories.
+        <p><a name="index-MS_002dDOS-and-file-modes-1955"></a><a name="index-file-modes-and-MS_002dDOS-1956"></a><strong>MS-DOS note:</strong> On MS-DOS, there is no such thing as an
+&ldquo;executable&rdquo; file mode bit.  So <code>file-modes</code> considers a file
+executable if its name ends in one of the standard executable
+extensions, such as <samp><span class="file">.com</span></samp>, <samp><span class="file">.bat</span></samp>, <samp><span class="file">.exe</span></samp>, and some
+others.  Files that begin with the Unix-standard &lsquo;<samp><span class="samp">#!</span></samp>&rsquo; signature,
+such as shell and Perl scripts, are also considered executable. 
+Directories are also reported as executable, for compatibility with
+Unix.  These conventions are also followed by <code>file-attributes</code>,
+below. 
+</p></blockquote></div>
+
+   <p>If the <var>filename</var> argument to the next two functions is a
+symbolic link, then these function do <em>not</em> replace it with its
+target.  However, they both recursively follow symbolic links at all
+levels of parent directories.
 
 <div class="defun">
-&mdash; Function: <b>file-nlinks</b><var> filename<a name="index-file_002dnlinks-1825"></a></var><br>
-<blockquote><p>This functions returns the number of names (i.e., hard links) that
-file <var>filename</var> has.  If the file does not exist, then this function
+&mdash; Function: <b>file-nlinks</b><var> filename<a name="index-file_002dnlinks-1957"></a></var><br>
+<blockquote><p>This function returns the number of names (i.e., hard links) that
+file <var>filename</var> has.  If the file does not exist, this function
 returns <code>nil</code>.  Note that symbolic links have no effect on this
-function, because they are not considered to be names of the files they
-link to.
+function, because they are not considered to be names of the files
+they link to.
 
-     <pre class="example">          % ls -l foo*
-          -rw-rw-rw-  2 rms       4 Aug 19 01:27 foo
-          -rw-rw-rw-  2 rms       4 Aug 19 01:27 foo1
+     <pre class="example">          $ ls -l foo*
+          -rw-rw-rw- 2 rms rms 4 Aug 19 01:27 foo
+          -rw-rw-rw- 2 rms rms 4 Aug 19 01:27 foo1
           
           (file-nlinks "foo")
                &rArr; 2
@@ -110,7 +113,7 @@ link to.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>file-attributes</b><var> filename &amp;optional id-format<a name="index-file_002dattributes-1826"></a></var><br>
+&mdash; Function: <b>file-attributes</b><var> filename &amp;optional id-format<a name="index-file_002dattributes-1958"></a></var><br>
 <blockquote><p><a name="Definition-of-file_002dattributes"></a>This function returns a list of attributes of file <var>filename</var>.  If
 the specified file cannot be opened, it returns <code>nil</code>. 
 The optional parameter <var>id-format</var> specifies the preferred format
@@ -137,17 +140,16 @@ point number.
 
           <li>The file's <acronym>GID</acronym>, likewise.
 
-          <li>The time of last access, as a list of two integers. 
-The first integer has the high-order 16 bits of time,
-the second has the low 16 bits.  (This is similar to the
+          <li>The time of last access, as a list of four integers <code>(</code><var>sec-high</var>
+<var>sec-low</var> <var>microsec</var> <var>picosec</var><code>)</code>.  (This is similar to the
 value of <code>current-time</code>; see <a href="Time-of-Day.html#Time-of-Day">Time of Day</a>.)  Note that on
 some FAT-based filesystems, only the date of last access is recorded,
 so this time will always hold the midnight of the day of last access.
 
-          <p><a name="index-modification-time-of-file-1827"></a><li>The time of last modification as a list of two integers (as above). 
+          <p><a name="index-modification-time-of-file-1959"></a><li>The time of last modification as a list of four integers (as above). 
 This is the last time when the file's contents were modified.
 
-          <li>The time of last status change as a list of two integers (as above). 
+          <li>The time of last status change as a list of four integers (as above). 
 This is the time of the last change to the file's access mode bits,
 its owner and group, and other information recorded in the filesystem
 for the file, beyond the file's contents.
@@ -158,16 +160,16 @@ Lisp integer, this is a floating point number.
           <li>The file's modes, as a string of ten letters or dashes,
 as in &lsquo;<samp><span class="samp">ls -l</span></samp>&rsquo;.
 
-          <li><code>t</code> if the file's <acronym>GID</acronym> would change if file were
-deleted and recreated; <code>nil</code> otherwise.
+          <li>An unspecified value, present for backward compatibility.
 
           <li>The file's inode number.  If possible, this is an integer.  If the
 inode number is too large to be represented as an integer in Emacs
-Lisp, but still fits into a 32-bit integer, then the value has the
+Lisp but dividing it by 2^16 yields a representable integer,
+then the value has the
 form <code>(</code><var>high</var><code> . </code><var>low</var><code>)</code>, where <var>low</var> holds the low 16
-bits.  If the inode is wider than 32 bits, the value is of the form
+bits.  If the inode number is too wide for even that, the value is of the form
 <code>(</code><var>high</var> <var>middle</var><code> . </code><var>low</var><code>)</code>, where <code>high</code> holds
-the high 24 bits, <var>middle</var> the next 24 bits, and <var>low</var> the low
+the high bits, <var>middle</var> the middle 24 bits, and <var>low</var> the low
 16 bits.
 
           <li>The filesystem number of the device that the file is on.  Depending on
@@ -182,11 +184,11 @@ for both of these numbers.
 
      <pre class="example">          (file-attributes "files.texi" 'string)
                &rArr;  (nil 1 "lh" "users"
-                    (19145 42977)
-                    (19141 59576)
-                    (18340 17300)
+                    (20614 64019 50040 152000)
+                    (20000 23 0 0)
+                    (20614 64555 902289 872000)
                     122295 "-rw-rw-rw-"
-                    nil  (5888 2 . 43978)
+                    t (5888 2 . 43978)
                     (15479 . 46724))
 </pre>
         <p class="noindent">and here is how the result is interpreted:
@@ -201,11 +203,11 @@ directory).
 
           <br><dt><code>"users"</code><dd>is in the group with name "users".
 
-          <br><dt><code>(19145 42977)</code><dd>was last accessed on Oct 5 2009, at 10:01:37.
+          <br><dt><code>(20614 64019 50040 152000)</code><dd>was last accessed on October 23, 2012, at 20:12:03.050040152 UTC.
 
-          <br><dt><code>(19141 59576)</code><dd>last had its contents modified on Oct 2 2009, at 13:49:12.
+          <br><dt><code>(20000 23 0 0)</code><dd>was last modified on July 15, 2001, at 08:53:43 UTC.
 
-          <br><dt><code>(18340 17300)</code><dd>last had its status changed on Feb 2 2008, at 12:19:00.
+          <br><dt><code>(20614 64555 902289 872000)</code><dd>last had its status changed on October 23, 2012, at 20:20:59.902289872 UTC.
 
           <br><dt><code>122295</code><dd>is 122295 bytes long.  (It may not contain 122295 characters, though,
 if some of the bytes belong to multibyte sequences, and also if the
@@ -213,7 +215,7 @@ end-of-line format is CR-LF.)
 
           <br><dt><code>"-rw-rw-rw-"</code><dd>has a mode of read and write access for the owner, group, and world.
 
-          <br><dt><code>nil</code><dd>would retain the same <acronym>GID</acronym> if it were recreated.
+          <br><dt><code>t</code><dd>is merely a placeholder; it carries no information.
 
           <br><dt><code>(5888 2 . 43978)</code><dd>has an inode number of 6473924464520138.
 
@@ -221,14 +223,47 @@ end-of-line format is CR-LF.)
 </dl>
         </p></blockquote></div>
 
-   <p><a name="index-MS_002dDOS-and-file-modes-1828"></a><a name="index-file-modes-and-MS_002dDOS-1829"></a>  On MS-DOS, there is no such thing as an &ldquo;executable&rdquo; file mode bit. 
-So Emacs considers a file executable if its name ends in one of the
-standard executable extensions, such as <samp><span class="file">.com</span></samp>, <samp><span class="file">.bat</span></samp>,
-<samp><span class="file">.exe</span></samp>, and some others.  Files that begin with the Unix-standard
-&lsquo;<samp><span class="samp">#!</span></samp>&rsquo; signature, such as shell and Perl scripts, are also considered
-as executable files.  This is reflected in the values returned by
-<code>file-modes</code> and <code>file-attributes</code>.  Directories are also
-reported with executable bit set, for compatibility with Unix.
+   <p><a name="index-SELinux-context-1960"></a>  SELinux is a Linux kernel feature which provides more sophisticated
+file access controls than ordinary &ldquo;Unix-style&rdquo; file permissions. 
+If Emacs has been compiled with SELinux support on a system with
+SELinux enabled, you can use the function <code>file-selinux-context</code>
+to retrieve a file's SELinux security context.  For the function
+<code>set-file-selinux-context</code>, see <a href="Changing-Files.html#Changing-Files">Changing Files</a>.
+
+<div class="defun">
+&mdash; Function: <b>file-selinux-context</b><var> filename<a name="index-file_002dselinux_002dcontext-1961"></a></var><br>
+<blockquote><p>This function returns the SELinux security context of the file
+<var>filename</var>.  This return value is a list of the form
+<code>(</code><var>user</var> <var>role</var> <var>type</var> <var>range</var><code>)</code>, whose elements
+are the context's user, role, type, and range respectively, as Lisp
+strings.  See the SELinux documentation for details about what these
+actually mean.
+
+        <p>If the file does not exist or is inaccessible, or if the system does
+not support SELinux, or if Emacs was not compiled with SELinux
+support, then the return value is <code>(nil nil nil nil)</code>. 
+</p></blockquote></div>
+
+   <p><a name="index-access-control-list-1962"></a><a name="index-ACL-entries-1963"></a>  If Emacs has been compiled with <dfn>ACL</dfn> (access control list)
+support, you can use the function <code>file-acl</code> to retrieve a file's
+ACL entries.  The interface implementation is platform-specific; on
+GNU/Linux and BSD, Emacs uses the POSIX ACL interface, while on
+MS-Windows Emacs emulates the POSIX ACL interface with native file
+security APIs.
+
+<div class="defun">
+&mdash; Function: <b>file-acl</b><var> filename<a name="index-file_002dacl-1964"></a></var><br>
+<blockquote><p>This function returns the ACL entries of the file <var>filename</var>.  The
+return value is a platform-dependent object containing some
+representation of the ACL entries.  Don't use it for anything except
+passing it to the <code>set-file-acl</code> function (see <a href="Changing-Files.html#Changing-Files">set-file-acl</a>).
+
+        <p>If the file does not exist or is inaccessible, or if Emacs was unable to
+determine the ACL entries, then the return value is <code>nil</code>.  The
+latter can happen for local files if Emacs was not compiled with ACL
+support, or for remote files if the file handler returns nil for the
+file's ACL entries. 
+</p></blockquote></div>
 
    </body></html>
 

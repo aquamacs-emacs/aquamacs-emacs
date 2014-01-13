@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Antinews - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License" title="GNU Free Documentation License">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -43,131 +40,118 @@ Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
 <hr>
 </div>
 
-<h2 class="appendix">Appendix A Emacs 22 Antinews</h2>
+<h2 class="appendix">Appendix A Emacs 23 Antinews</h2>
 
-<!-- Update the elisp.texi, vol1.texi, vol2.texi Antinews menu entries -->
-<!-- with the above version number. -->
+<!-- Update the elisp.texi Antinews menu entry with the above version number. -->
 <p>For those users who live backwards in time, here is information about
-downgrading to Emacs version 22.3.  We hope you will enjoy the greater
-simplicity that results from the absence of many Emacs 24.0.50
+downgrading to Emacs version 23.4.  We hope you will enjoy the greater
+simplicity that results from the absence of many Emacs 24.3.50
 features.
 
-<h3 class="section">A.1 Old Lisp Features in Emacs 22</h3>
+<h3 class="section">A.1 Old Lisp Features in Emacs 23</h3>
 
      <ul>
-<li>The internal character representation used by Emacs is not longer
-based on Unicode.  In this representation, called <code>emacs-mule</code>,
-each character belongs to one and only one script.  Emacs makes no
-attempt to distinguish between &ldquo;similar&rdquo; characters occurring in
-different scripts.
+<li>Support for lexical scoping has been removed; all variables are
+dynamically scoped.  The <code>lexical-binding</code> variable has been
+removed, and so has the <var>lexical</var> argument to <code>eval</code>.  The
+<code>defvar</code> and <code>defconst</code> forms no longer mark variables as
+dynamic, since all variables are dynamic.
 
-     <li>The <code>^</code> interactive spec code, the function
-<code>handle-shift-selection</code>, and the variable
-<code>this-command-keys-shift-translated</code> have all been removed. 
-Shift-translated keys are no longer treated specially, making Emacs'
-handling of keybindings much more consistent.
+     <p>Having only dynamic binding follows the spirit of Emacs extensibility,
+for it allows any Emacs code to access any defined variable with a
+minimum of fuss.  But See <a href="Dynamic-Binding-Tips.html#Dynamic-Binding-Tips">Dynamic Binding Tips</a>, for tips to avoid
+making your programs hard to understand.
 
-     <li>Temporarily-active regions are not created by giving the variable
-<code>transient-mark-mode</code> values of the form <code>(only
-. </code><var>oldvar</var><code>)</code>.  We instead use a more complicated scheme:
-setting <code>transient-mark-mode</code> to <code>only</code> enables Transient
-Mark mode for the following command only, during which the value of
-<code>transient-mark-mode</code> is set to <code>identity</code>; if it is still
-<code>identity</code> at the end of the command, Transient Mark mode is
-disabled.
+     <li>Calling a minor mode function from Lisp with a nil or omitted argument
+does not enable the minor mode unconditionally; instead, it toggles
+the minor mode&mdash;which is the straightforward thing to do, since that
+is the behavior when invoked interactively.  One downside is that it
+is more troublesome to enable minor modes from hooks; you have to do
+something like
 
-     <li>Many minibuffer functions, such as <code>read-file-name</code> and
-<code>minibuffer-complete</code>, have been rewritten in C for greater
-speed.  The completion code has been considerably simplified; the
-completion style can no longer be changed via
-<code>completion-styles-alist</code>, and <code>completing-read</code> no longer
-recognizes the special values <code>confirm-only</code> and
-<code>confirm-after-completion</code> for its <var>require-match</var> argument.
+     <pre class="example">          (add-hook 'foo-hook (lambda () (bar-mode 1)))
+</pre>
+     <p class="noindent">or define <code>turn-on-bar-mode</code> and call that from the hook.
 
-     <li>Emacs no longer supports explicitly-numbered groups in regular
-expressions.
+     <li>The <code>prog-mode</code> dummy major mode has been removed.  Instead of
+using it as a crutch to meet programming mode conventions, you should
+explicitly ensure that your mode follows those conventions. 
+See <a href="Major-Mode-Conventions.html#Major-Mode-Conventions">Major Mode Conventions</a>.
 
-     <li>The <code>permanent-local-hook</code> function property has no special
-meaning.
+     <li>Emacs no longer supports bidirectional display and editing.  Since
+there is no need to worry about the insertion of right-to-left text
+messing up how lines and paragraphs are displayed, the function
+<code>bidi-string-mark-left-to-right</code> has been removed; so have many
+other functions and variables related to bidirectional display. 
+Unicode directionality characters like <code>U+200E</code> ("left-to-right
+mark") have no special effect on display.
 
-     <li>The <code>functionp</code> function now returns <code>t</code> for special forms.
+     <li>Emacs windows now have most of their internal state hidden from Lisp. 
+Internal windows are no longer visible to Lisp; functions such as
+<code>window-parent</code>, window parameters related to window arrangement,
+and window-local buffer lists have all been removed.  Functions for
+resizing windows can delete windows if they become too small.
 
-     <li>The <code>interactive-form</code> symbol property has no special meaning. 
-Once you supply a function with an interactive form, the only way to
-change it is to redefine the function.
+     <p>The &ldquo;action function&rdquo; feature for controlling buffer display has
+been removed, including <code>display-buffer-overriding-action</code> and
+related variables, as well as the <var>action</var> argument to
+<code>display-buffer</code> and other functions.  The way to
+programmatically control how Emacs chooses a window to display a
+buffer is to bind the right combination of <code>pop-up-frames</code> and
+other variables.
 
-     <li>The <code>ignore-errors</code> macro has been moved into the <code>cl</code>
-package.
+     <li>The standard completion interface has been simplified, eliminating the
+<code>completion-extra-properties</code> variable, the <code>metadata</code>
+action flag for completion functions, and the concept of
+&ldquo;completion categories&rdquo;.  Lisp programmers may now find the choice
+of methods for tuning completion less bewildering, but if a package
+finds the streamlined interface insufficient for its needs, it must
+implement its own specialized completion feature.
 
-     <li>Variables can now be both buffer-local and frame-local; buffer-local
-bindings take precedence over frame-local bindings.
+     <li><code>copy-directory</code> now behaves the same whether or not the
+destination is an existing directory: if the destination exists, the
+<em>contents</em> of the first directory are copied into it (with
+subdirectories handled recursively), rather than copying the first
+directory into a subdirectory.
 
-     <li>Faces can no longer be remapped.
+     <li>The <var>trash</var> arguments for <code>delete-file</code> and
+<code>delete-directory</code> have been removed.  The variable
+<code>delete-by-moving-to-trash</code> must now be used with care; whenever
+it is non-<code>nil</code>, all calls to <code>delete-file</code> or
+<code>delete-directory</code> use the trash.
 
-     <li>Lisp programs now specify fonts by their names, which are strings
-following the XLFD (X logical font descriptor) format.  Fonts are no
-longer represented using a special set of &ldquo;font&rdquo; data types.  The
-various functions that act on these data types, such as <code>fontp</code>,
-<code>font-spec</code>, and <code>list-fonts</code>, have all been deleted.
+     <li>Because Emacs no longer supports SELinux file contexts, the
+<var>preserve-selinux-context</var> argument to <code>copy-file</code> has been
+removed.  The return value of <code>backup-buffer</code> no longer has an
+entry for the SELinux file context.
 
-     <li>Emacs does not recognize the <code>FontBackend</code> X resource and the
-<code>font-backend</code> frame parameter.  On the X Window System, fonts
-are always drawn using the X core font driver.
+     <li>For mouse click input events in the text area, the Y pixel coordinate
+in the <var>position</var> list (see <a href="Click-Events.html#Click-Events">Click Events</a>) now counts from the
+top of the header line, if there is one, rather than the top of the
+text area.
 
-     <li>Display terminals are no longer represented using a &ldquo;terminal&rdquo; data
-type; this is not necessary, because we have removed the ability to
-display on graphical and text-only terminals simultaneously.  For the
-same reason, the <code>window-system</code> variable is no longer
-frame-local, and the <code>window-system</code> function has been removed.
+     <li>Bindings in menu keymaps (see <a href="Format-of-Keymaps.html#Format-of-Keymaps">Format of Keymaps</a>) now sometimes get
+an additional <var>cache</var> entry in their definitions, like this:
 
-     <li>The functions <code>list-system-processes</code> and
-<code>process-attributes</code> have been removed.  To get information about
-system processes, call an external program, such as <samp><span class="command">ps</span></samp>.
+     <pre class="example">          (<var>type</var> <var>item-name</var> <var>cache</var> . <var>binding</var>)
+</pre>
+     <p class="noindent">The <var>cache</var> entry is used internally by Emacs to record equivalent
+keyboard key sequences for invoking the same command; Lisp programs
+should never use it. 
+<!-- Not really NEWS-worthy then... -->
 
-     <li>The function <code>locate-user-emacs-file</code> and the variable
-<code>user-emacs-directory</code> have been removed.  Instead, use
-hard-coded values pointing to <samp><span class="file">~/.emacs.d</span></samp>.
+     <li>The <code>gnutls</code> library has been removed, and the function
+<code>open-network-stream</code> correspondingly simplified. 
+Lisp programs that want an encrypted network connection must now call
+external utilities such as <samp><span class="command">starttls</span></samp> or <samp><span class="command">gnutls-cli</span></samp>.
 
-     <li><code>vertical-motion</code> can no longer be told to move to a specific
-column; it always puts point on the first column of a line.
+     <li>Tool bars can no longer display separators, which frees up several
+pixels of space on each graphical frame.
 
-     <li>Windows no longer have parameters.
-
-     <li>The <code>display-buffer</code> function has been rewritten in C.  Its
-window-splitting heuristics are a little less sophisticated, and a
-little less documented.  Window-splitting is handled internally,
-instead of using <code>split-window-preferred-function</code> (which has
-been removed).  Windows are never split horizontally; the variable
-<code>split-width-threshold</code> has been removed.
-
-     <li>The <code>mode-name</code> variable now accepts only string values, and
-cannot take the form of a mode-line construct.
-
-     <li>The behavior of <code>map-char-table</code> has changed.  It calls the
-mapping function for every single character in the table, instead of
-using cons cells to represent contiguous character code ranges.
-
-     <li>Several keymaps have been eliminated: <code>input-decode-map</code>,
-<code>local-function-key-map</code>, <code>search-map</code>,
-<code>multi-query-replace-map</code>, and
-<code>minibuffer-local-shell-command-map</code>.
-
-     <li>Many functions have been removed, including: <code>buffer-swap-text</code>,
-<code>emacs-init-time</code>, <code>emacs-uptime</code>, <code>use-region-p</code>,
-<code>region-active-p</code>, <code>start-file-process</code>,
-<code>process-lines</code>, <code>image-refresh</code>,
-<code>match-substitute-replacement</code>, <code>word-search-forward-lax</code>,
-and <code>word-search-backward-lax</code>.
-
-     <li>Many variables have been removed, including <code>read-circle</code>,
-<code>after-init-time</code> and <code>before-init-time</code>,
-<code>generate-autoload-cookie</code>, <code>file-local-variables-alist</code>,
-<code>replace-search-function</code> and <code>replace-re-search-function</code>,
-<code>inhibit-changing-match-data</code>, <code>wrap-prefix</code>, and
-<code>line-prefix</code>,
+     <li>As part of the ongoing quest for simplicity, many other functions and
+variables have been eliminated. 
 </ul>
 
-<!-- *-texinfo-*- -->
-<!-- The GNU Free Documentation License. -->
+
    </body></html>
 

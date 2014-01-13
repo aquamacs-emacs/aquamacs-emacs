@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Function Indirection - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Function-Forms.html#Function-Forms" title="Function Forms">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,7 +43,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Forms.html#Forms">Forms</a>
 
 <h4 class="subsection">9.2.4 Symbol Function Indirection</h4>
 
-<p><a name="index-symbol-function-indirection-500"></a><a name="index-indirection-for-functions-501"></a><a name="index-void-function-502"></a>
+<p><a name="index-symbol-function-indirection-516"></a><a name="index-indirection-for-functions-517"></a><a name="index-void-function-518"></a>
   If the first element of the list is a symbol then evaluation
 examines the symbol's function cell, and uses its contents instead of
 the original symbol.  If the contents are another symbol, this
@@ -61,7 +58,7 @@ symbol may have a void function cell, in which case the subroutine
 neither of these things happens, we eventually obtain a non-symbol,
 which ought to be a function or other suitable object.
 
-   <p><a name="index-invalid_002dfunction-503"></a>  More precisely, we should now have a Lisp function (a lambda
+   <p><a name="index-invalid_002dfunction-519"></a>  More precisely, we should now have a Lisp function (a lambda
 expression), a byte-code function, a primitive function, a Lisp macro,
 a special form, or an autoload object.  Each of these types is a case
 described in one of the following sections.  If the object is not one
@@ -74,12 +71,11 @@ use <code>fset</code> to set the function cell of a symbol and
 into the function cell of <code>first</code>, and the symbol <code>first</code> into
 the function cell of <code>erste</code>.
 
-<pre class="smallexample">     ;; <span class="roman">Build this function cell linkage:</span>
+<pre class="example">     ;; <span class="roman">Build this function cell linkage:</span>
      ;;   -------------       -----        -------        -------
      ;;  | #&lt;subr car&gt; | &lt;-- | car |  &lt;-- | first |  &lt;-- | erste |
      ;;   -------------       -----        -------        -------
-</pre>
-   <pre class="smallexample">     (symbol-function 'car)
+     (symbol-function 'car)
           &rArr; #&lt;subr car&gt;
      (fset 'first 'car)
           &rArr; car
@@ -92,19 +88,28 @@ the function cell of <code>erste</code>.
 function indirection, because the first element is an anonymous Lisp
 function, not a symbol.
 
-<pre class="smallexample">     ((lambda (arg) (erste arg))
+<pre class="example">     ((lambda (arg) (erste arg))
       '(1 2 3))
           &rArr; 1
 </pre>
    <p class="noindent">Executing the function itself evaluates its body; this does involve
 symbol function indirection when calling <code>erste</code>.
 
+   <p>This form is rarely used and is now deprecated.  Instead, you should write it
+as:
+
+<pre class="example">     (funcall (lambda (arg) (erste arg))
+              '(1 2 3))
+</pre>
+   <p>or just
+<pre class="example">     (let ((arg '(1 2 3))) (erste arg))
+</pre>
    <p>The built-in function <code>indirect-function</code> provides an easy way to
 perform symbol function indirection explicitly.
 
 <!-- Emacs 19 feature -->
 <div class="defun">
-&mdash; Function: <b>indirect-function</b><var> function &amp;optional noerror<a name="index-indirect_002dfunction-504"></a></var><br>
+&mdash; Function: <b>indirect-function</b><var> function &amp;optional noerror<a name="index-indirect_002dfunction-520"></a></var><br>
 <blockquote><p><a name="Definition-of-indirect_002dfunction"></a>This function returns the meaning of <var>function</var> as a function.  If
 <var>function</var> is a symbol, then it finds <var>function</var>'s function
 definition and starts over with that value.  If <var>function</var> is not a
@@ -120,7 +125,7 @@ loop in the chain of symbols.
 
         <p>Here is how you could define <code>indirect-function</code> in Lisp:
 
-     <pre class="smallexample">          (defun indirect-function (function)
+     <pre class="example">          (defun indirect-function (function)
             (if (symbolp function)
                 (indirect-function (symbol-function function))
               function))

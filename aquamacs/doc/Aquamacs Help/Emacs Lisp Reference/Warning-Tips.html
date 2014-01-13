@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Warning Tips - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Documentation-Tips.html#Documentation-Tips" title="Documentation Tips">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,7 +43,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Tips.html#Tips">Tips</a>
 
 <h3 class="section">D.5 Tips for Avoiding Compiler Warnings</h3>
 
-<p><a name="index-byte-compiler-warnings_002c-how-to-avoid-3934"></a>
+<p><a name="index-byte-compiler-warnings_002c-how-to-avoid-4298"></a>
      <ul>
 <li>Try to avoid compiler warnings about undefined free variables, by adding
 dummy <code>defvar</code> definitions for these variables, like this:
@@ -55,6 +52,10 @@ dummy <code>defvar</code> definitions for these variables, like this:
 </pre>
      <p>Such a definition has no effect except to tell the compiler
 not to warn about uses of the variable <code>foo</code> in this file.
+
+     <li>Similarly, to avoid a compiler warning about an undefined function
+that you know <em>will</em> be defined, use a <code>declare-function</code>
+statement (see <a href="Declaring-Functions.html#Declaring-Functions">Declaring Functions</a>).
 
      <li>If you use many functions and variables from a certain file, you can
 add a <code>require</code> for that package to avoid compilation warnings
@@ -72,8 +73,8 @@ this variable to start with the name prefix used for the other
 functions and variables in your package.
 
      <li>The last resort for avoiding a warning, when you want to do something
-that usually is a mistake but it's not a mistake in this one case,
-is to put a call to <code>with-no-warnings</code> around it. 
+that is usually a mistake but you know is not a mistake in your usage,
+is to put it inside <code>with-no-warnings</code>.  See <a href="Compiler-Errors.html#Compiler-Errors">Compiler Errors</a>. 
 </ul>
 
    </body></html>

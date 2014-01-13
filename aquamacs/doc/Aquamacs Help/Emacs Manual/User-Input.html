@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>User Input - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Keys.html#Keys" title="Keys">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,64 +43,55 @@ Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
 
 <h2 class="chapter">2 Kinds of User Input</h2>
 
-<p><a name="index-input-with-the-keyboard-20"></a><a name="index-keyboard-input-21"></a><a name="index-character-set-_0028keyboard_0029-22"></a><a name="index-g_t_0040acronym_007bASCII_007d-23"></a><a name="index-C_002d-24"></a><a name="index-Control-25"></a><a name="index-control-characters-26"></a>
+<p><a name="index-input-with-the-keyboard-23"></a><a name="index-keyboard-input-24"></a><a name="index-character-set-_0028keyboard_0029-25"></a><a name="index-g_t_0040acronym_007bASCII_007d-26"></a><a name="index-C_002d-27"></a><a name="index-Control-28"></a>
   GNU Emacs is primarily designed for use with the keyboard.  While it
 is possible to use the mouse to issue editing commands through the
 menu bar and tool bar, that is not as efficient as using the keyboard. 
 Therefore, this manual mainly documents how to edit with the keyboard.
 
-   <p>Keyboard input into Emacs is based on a heavily-extended version of
-<acronym>ASCII</acronym>.  The simplest characters that you can input into
-Emacs correspond to graphic symbols such as &lsquo;<samp><span class="samp">a</span></samp>&rsquo;, &lsquo;<samp><span class="samp">B</span></samp>&rsquo;,
-&lsquo;<samp><span class="samp">3</span></samp>&rsquo;, &lsquo;<samp><span class="samp">=</span></samp>&rsquo;, the space character (conventionally denoted as
-&lt;SPC&gt;), and so on.  Entering these using the keyboard is
-straightforward.  Certain characters found on non-English keyboards
-also fall into this category (see <a href="International.html#International">International</a>).
+   <p><a name="index-control-character-29"></a>  Keyboard input into Emacs is based on a heavily-extended version of
+<acronym>ASCII</acronym>.  Simple characters, like &lsquo;<samp><span class="samp">a</span></samp>&rsquo;, &lsquo;<samp><span class="samp">B</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">3</span></samp>&rsquo;, &lsquo;<samp><span class="samp">=</span></samp>&rsquo;, and the space character (denoted as &lt;SPC&gt;),
+are entered by typing the corresponding key.  <dfn>Control
+characters</dfn>, such as &lt;RET&gt;, &lt;TAB&gt;, &lt;DEL&gt;, &lt;ESC&gt;,
+&lt;F1&gt;, &lt;Home&gt;, and &lt;left&gt;, are also entered this way, as
+are certain characters found on non-English keyboards
+(see <a href="International.html#International">International</a>).
 
-   <p>In addition to these simple characters, Emacs recognizes
-<dfn>control characters</dfn> such as &lt;RET&gt;, &lt;TAB&gt;, &lt;DEL&gt;,
-&lt;ESC&gt;, &lt;F1&gt;, &lt;Home&gt;, &lt;left&gt;, etc.  Most keyboards have
-special keys for entering these.
-
-   <p><a name="index-modifier-keys-27"></a><a name="index-Control-28"></a><a name="index-C_002d-29"></a><a name="index-Meta-30"></a><a name="index-M_002d-31"></a>  Emacs also recognizes control characters that are entered using
+   <p><a name="index-modifier-keys-30"></a><a name="index-Control-31"></a><a name="index-C_002d-32"></a><a name="index-Meta-33"></a><a name="index-M_002d-34"></a>  Emacs also recognizes control characters that are entered using
 <dfn>modifier keys</dfn>.  Two commonly-used modifier keys are
-&lt;Control&gt; (which is usually labelled as &lt;Ctrl&gt;), and
-&lt;Meta&gt; (which is usually labeled as &lt;Alt&gt;)<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  For example,
-<kbd>Control-a</kbd> is entered by holding down the &lt;Ctrl&gt; key while
-pressing <kbd>a</kbd>; we will refer to this as <kbd>C-a</kbd> for short. 
-Similarly <kbd>Meta-a</kbd>, or <kbd>M-a</kbd> for short, is entered by holding
-down the &lt;Alt&gt; key and pressing <kbd>a</kbd>.
+&lt;Control&gt; (usually labeled &lt;Ctrl&gt;), and &lt;Meta&gt; (usually
+labeled &lt;Alt&gt;)<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  For example, <kbd>Control-a</kbd> is entered by
+holding down the &lt;Ctrl&gt; key while pressing <kbd>a</kbd>; we will refer
+to this as <kbd>C-a</kbd> for short.  Similarly <kbd>Meta-a</kbd>, or <kbd>M-a</kbd>
+for short, is entered by holding down the &lt;Alt&gt; key and pressing
+<kbd>a</kbd>.  Modifier keys can also be applied to non-alphanumerical
+characters, e.g., <kbd>C-&lt;F1&gt;</kbd> or <kbd>M-&lt;left&gt;</kbd>.
 
-   <p><a name="index-g_t_0040key_007bESC_007d-replacing-_0040key_007bMeta_007d-key-32"></a>  You can also type Meta characters using two-character sequences
+   <p><a name="index-g_t_0040key_007bESC_007d-replacing-_0040key_007bMeta_007d-key-35"></a>  You can also type Meta characters using two-character sequences
 starting with &lt;ESC&gt;.  Thus, you can enter <kbd>M-a</kbd> by typing
 <kbd>&lt;ESC&gt; a</kbd>.  You can enter <kbd>C-M-a</kbd> by typing <kbd>&lt;ESC&gt;
 C-a</kbd>.  Unlike &lt;Meta&gt;, &lt;ESC&gt; is entered as a separate
 character.  You don't hold down &lt;ESC&gt; while typing the next
 character; instead, press &lt;ESC&gt; and release it, then enter the
-next character.  This feature is useful on certain text-only terminals
+next character.  This feature is useful on certain text terminals
 where the &lt;Meta&gt; key does not function reliably.
 
-   <p>Modifier keys can apply not only to alphanumerical characters, but
-also to special input characters, such as the arrow keys and mouse
-buttons.
+   <p><a name="index-keys-stolen-by-window-manager-36"></a><a name="index-window-manager_002c-keys-stolen-by-37"></a>  On graphical displays, the window manager might block some keyboard
+inputs, including <kbd>M-&lt;TAB&gt;</kbd>, <kbd>M-&lt;SPC&gt;</kbd>, <kbd>C-M-d</kbd>
+and <kbd>C-M-l</kbd>.  If you have this problem, you can either customize
+your window manager to not block those keys, or &ldquo;rebind&rdquo; the
+affected Emacs commands (see <a href="Customization.html#Customization">Customization</a>).
 
-   <p><a name="index-input-event-33"></a>  See <a href="../elisp/Input-Events.html#Input-Events">Input Events</a>, for
-the full Lisp-level details about keyboard and mouse input, which are
-collectively referred to as <dfn>input events</dfn>.  If you are not doing
-Lisp programming, but simply want to redefine the meaning of some
-characters or non-character events, see <a href="Customization.html#Customization">Customization</a>.
-
-   <p><a name="index-keys-stolen-by-window-manager-34"></a><a name="index-window-manager_002c-keys-stolen-by-35"></a>  On graphical displays, the window manager is likely to block the
-character <kbd>M-&lt;TAB&gt;</kbd> before Emacs can see it.  It may also
-block <kbd>M-&lt;SPC&gt;</kbd>, <kbd>C-M-d</kbd> and <kbd>C-M-l</kbd>.  If you have
-these problems, we recommend that you customize your window manager to
-turn off those commands, or put them on key combinations that Emacs
-does not use.
+   <p><a name="index-input-event-38"></a>  Simple characters and control characters, as well as certain
+non-keyboard inputs such as mouse clicks, are collectively referred to
+as <dfn>input events</dfn>.  For details about how Emacs internally handles
+input events, see <a href="../elisp/Input-Events.html#Input-Events">Input Events</a>.
 
    <div class="footnote">
 <hr>
-<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> We refer
-to &lt;Alt&gt; as &lt;Meta&gt; for historical reasons.</p>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> We refer to &lt;Alt&gt; as &lt;Meta&gt; for
+historical reasons.</p>
 
    <hr></div>
 

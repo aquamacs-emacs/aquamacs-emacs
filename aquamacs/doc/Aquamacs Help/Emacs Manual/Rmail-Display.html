@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Rmail Display - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Rmail-Coding.html#Rmail-Coding" title="Rmail Coding">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,63 +42,96 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Rmail.html#Rmail">Rmail</a>
 <hr>
 </div>
 
-<h3 class="section">36.13 Display of Messages</h3>
+<h3 class="section">33.13 Display of Messages</h3>
 
-<p>Rmail reformats the header of each message before displaying it for
-the first time.  Reformatting hides uninteresting header fields to
-reduce clutter.  You can use the <kbd>t</kbd> command to show the entire
-header or to repeat the header reformatting operation.
+<p>This section describes how Rmail displays mail headers,
+<acronym>MIME</acronym> sections and attachments, URLs, and encrypted messages.
 
      <dl>
 <dt><kbd>t</kbd><dd>Toggle display of complete header (<code>rmail-toggle-header</code>). 
 </dl>
 
-   <p><a name="index-rmail_002dignored_002dheaders-2946"></a><a name="index-rmail_002dnonignored_002dheaders-2947"></a>  Reformatting the header involves deleting most header fields, on the
-grounds that they are not interesting.  The variable
-<code>rmail-ignored-headers</code> holds a regular expression that specifies
-which header fields to hide in this way&mdash;if it matches the beginning
-of a header field, that whole field is hidden.  However, the variable
-<code>rmail-nonignored-headers</code> provides a further override: a header
-matching that regular expression is shown even if it matches
-<code>rmail-ignored-headers</code> too.
+   <p><a name="index-t-_0040r_007b_0028Rmail_0029_007d-3782"></a><a name="index-rmail_002dtoggle_002dheader-3783"></a>  Before displaying each message for the first time, Rmail reformats
+its header, hiding uninteresting header fields to reduce clutter.  The
+<kbd>t</kbd> (<code>rmail-toggle-header</code>) command toggles this, switching
+between showing the reformatted header fields and showing the
+complete, original header.  With a positive prefix argument, the
+command shows the reformatted header; with a zero or negative prefix
+argument, it shows the full header.  Selecting the message again also
+reformats it if necessary.
 
-   <p><a name="index-rmail_002ddisplayed_002dheaders-2948"></a>  As an alternative to the previous two variables, you can set
-<code>rmail-displayed-headers</code> instead.  If non-<code>nil</code>, this should
-be a regular expression specifying which headers to display.
+   <p><a name="index-rmail_002dignored_002dheaders-3784"></a><a name="index-rmail_002ddisplayed_002dheaders-3785"></a><a name="index-rmail_002dnonignored_002dheaders-3786"></a>  The variable <code>rmail-ignored-headers</code> holds a regular expression
+specifying the header fields to hide; any matching header line will be
+hidden.  The variable <code>rmail-nonignored-headers</code> overrides this:
+any header field matching that regular expression is shown even if it
+matches <code>rmail-ignored-headers</code> too.  The variable
+<code>rmail-displayed-headers</code> is an alternative to these two
+variables; if non-<code>nil</code>, this should be a regular expression
+specifying which headers to display (the default is <code>nil</code>).
 
-   <p><a name="index-t-_0040r_007b_0028Rmail_0029_007d-2949"></a><a name="index-rmail_002dtoggle_002dheader-2950"></a>  To see the complete, original header, use the <kbd>t</kbd> command
-(<code>rmail-toggle-header</code>).  This discards the reformatted headers of
-the current message and displays it with the original header.  Repeating
-<kbd>t</kbd> reformats the message again, which shows only the interesting
-headers according to the current values of the above variables. 
-Selecting the message again also reformats it if necessary.
-
-   <p>When the <kbd>t</kbd> command has a prefix argument, a positive argument
-means to show the reformatted header, and a zero or negative argument
-means to show the full header.
-
-   <p><a name="index-rmail_002dhighlighted_002dheaders-2951"></a>  Rmail highlights certain header fields that are especially
+   <p><a name="index-rmail_002dhighlighted_002dheaders-3787"></a>  Rmail highlights certain header fields that are especially
 interesting&mdash;by default, the &lsquo;<samp><span class="samp">From</span></samp>&rsquo; and &lsquo;<samp><span class="samp">Subject</span></samp>&rsquo; fields. 
-The variable <code>rmail-highlighted-headers</code> holds a regular expression
-that specifies the header fields to highlight; if it matches the
-beginning of a header field, that whole field is highlighted.  To turn
-off this feature, set <code>rmail-highlighted-headers</code> to <code>nil</code>. 
-Customize the face <code>rmail-highlight</code> to adjust the style of the
-highlighting.
+This highlighting uses the <code>rmail-highlight</code> face.  The variable
+<code>rmail-highlighted-headers</code> holds a regular expression specifying
+the header fields to highlight; if it matches the beginning of a
+header field, that whole field is highlighted.  To disable this
+feature, set <code>rmail-highlighted-headers</code> to <code>nil</code>.
 
-   <p>You can highlight and activate URLs in incoming messages using
-Goto Address mode:
+   <p><a name="index-MIME-messages-_0028Rmail_0029-3788"></a><a name="index-rmail_002denable_002dmime-3789"></a>  If a message is in <acronym>MIME</acronym> (Multipurpose Internet Mail
+Extensions) format and contains multiple parts (<acronym>MIME</acronym>
+entities), Rmail displays each part with a <dfn>tagline</dfn>.  The tagline
+summarizes the part's index, size, and content type.  Depending on the
+content type, it may also contain one or more buttons; these perform
+actions such as saving the part into a file.
+
+     
+<a name="index-rmail_002dmime_002dtoggle_002dhidden-3790"></a>
+<dl><dt><kbd>&lt;RET&gt;</kbd><dd>Hide or show the <acronym>MIME</acronym> part at point
+(<code>rmail-mime-toggle-hidden</code>).
+
+     <p><a name="index-rmail_002dmime_002dnext_002ditem-3791"></a><br><dt><kbd>&lt;TAB&gt;</kbd><dd>Move point to the next <acronym>MIME</acronym> tagline button. 
+(<code>rmail-mime-next-item</code>).
+
+     <p><a name="index-rmail_002dmime_002dprevious_002ditem-3792"></a><br><dt><kbd>S-&lt;TAB&gt;</kbd><dd>Move point to the previous <acronym>MIME</acronym> part
+(<code>rmail-mime-previous-item</code>).
+
+     <p><a name="index-rmail_002dmime-3793"></a><br><dt><kbd>v</kbd><dd><a name="index-v-_0040r_007b_0028Rmail_0029_007d-3794"></a>Toggle between <acronym>MIME</acronym> display and raw message
+(<code>rmail-mime</code>). 
+</dl>
+
+   <p>Each plain-text <acronym>MIME</acronym> part is initially displayed
+immediately after its tagline, as part of the Rmail buffer, while
+<acronym>MIME</acronym> parts of other types are represented only by their
+taglines, with their actual contents hidden.  In either case, you can
+toggle a <acronym>MIME</acronym> part between its &ldquo;displayed&rdquo; and &ldquo;hidden&rdquo;
+states by typing &lt;RET&gt; anywhere in the part&mdash;or anywhere in its
+tagline (except for buttons for other actions, if there are any).  Type
+&lt;RET&gt; (or click with the mouse) to activate a tagline button, and
+&lt;TAB&gt; to cycle point between tagline buttons.
+
+   <p>The <kbd>v</kbd> (<code>rmail-mime</code>) command toggles between the default
+<acronym>MIME</acronym> display described above, and a &ldquo;raw&rdquo; display showing
+the undecoded <acronym>MIME</acronym> data.  With a prefix argument, this
+command toggles the display of only an entity at point.
+
+   <p>To prevent Rmail from handling MIME decoded messages, change the
+variable <code>rmail-enable-mime</code> to <code>nil</code>.  When this is the
+case, the <kbd>v</kbd> (<code>rmail-mime</code>) command instead creates a
+temporary buffer to display the current <acronym>MIME</acronym> message.
+
+   <p><a name="index-rmail_002depa_002ddecrypt-3795"></a><a name="index-encrypted-mails-_0028reading-in-Rmail_0029-3796"></a>  If the current message is an encrypted one, use the command <kbd>M-x
+rmail-epa-decrypt</kbd> to decrypt it, using the EasyPG library
+(see <a href="../epa/index.html#Top">EasyPG</a>).
+
+   <p>You can highlight and activate URLs in the Rmail buffer using Goto
+Address mode:
 
 <!-- FIXME goto-addr.el commentary says to use goto-address instead. -->
-<pre class="smallexample">     (add-hook 'rmail-show-message-hook (lambda () (goto-address-mode 1)))
+<pre class="example">     (add-hook 'rmail-show-message-hook 'goto-address-mode)
 </pre>
    <p class="noindent">Then you can browse these URLs by clicking on them with <kbd>Mouse-2</kbd>
 (or <kbd>Mouse-1</kbd> quickly) or by moving to one and typing <kbd>C-c
 &lt;RET&gt;</kbd>.  See <a href="Goto-Address-mode.html#Goto-Address-mode">Activating URLs</a>.
-
-   <p><a name="index-MIME-messages-_0028Rmail_0029-2952"></a><a name="index-rmail_002dmime-2953"></a><a name="index-v-_0040r_007b_0028Rmail_0029_007d-2954"></a>  The <kbd>v</kbd> (<code>rmail-mime</code>) command creates a temporary buffer
-displaying the current MIME message.  By default, it displays plain text
-and multipart messages, and offers buttons to save attachments.
 
    </body></html>
 

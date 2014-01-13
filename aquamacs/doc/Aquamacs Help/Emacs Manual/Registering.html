@@ -1,21 +1,19 @@
 <html lang="en">
 <head>
 <title>Registering - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Secondary-VC-Commands.html#Secondary-VC-Commands" title="Secondary VC Commands">
-<link rel="next" href="VC-Change-Log.html#VC-Change-Log" title="VC Change Log">
+<link rel="up" href="Version-Control.html#Version-Control" title="Version Control">
+<link rel="prev" href="Log-Buffer.html#Log-Buffer" title="Log Buffer">
+<link rel="next" href="Old-Revisions.html#Old-Revisions" title="Old Revisions">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -38,50 +36,49 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <div class="node">
 <a name="Registering"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="VC-Change-Log.html#VC-Change-Log">VC Change Log</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Secondary-VC-Commands.html#Secondary-VC-Commands">Secondary VC Commands</a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Old-Revisions.html#Old-Revisions">Old Revisions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Log-Buffer.html#Log-Buffer">Log Buffer</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Version-Control.html#Version-Control">Version Control</a>
 <hr>
 </div>
 
-<h5 class="subsubsection">32.1.6.1 Registering a File for Version Control</h5>
-
-<p><a name="index-C_002dx-v-i-2502"></a><a name="index-vc_002dregister-2503"></a>  You can put any file under version control by simply visiting it, and
-then typing <kbd>C-x&nbsp;v&nbsp;i</kbd><!-- /@w --> (<code>vc-register</code>).
+<h4 class="subsection">28.1.5 Registering a File for Version Control</h4>
 
      <dl>
 <dt><kbd>C-x v i</kbd><dd>Register the visited file for version control. 
 </dl>
 
-   <p>To register the file, Emacs must choose which version control system
-to use for it.  If the file's directory already contains files
-registered in a version control system, Emacs uses that system.  If
-there is more than one system in use for a directory, Emacs uses the
-one that appears first in <code>vc-handled-backends</code>
-(see <a href="Customizing-VC.html#Customizing-VC">Customizing VC</a>). 
-On the other hand, if there are no files already registered, Emacs uses
-the first system from <code>vc-handled-backends</code> that could register
-the file (for example, you cannot register a file under CVS if its
-directory is not already part of a CVS tree); with the default value
-of <code>vc-handled-backends</code>, this means that Emacs uses RCS in this
-situation.
+   <p><a name="index-C_002dx-v-i-2791"></a><a name="index-vc_002dregister-2792"></a>  The command <kbd>C-x v i</kbd> (<code>vc-register</code>) <dfn>registers</dfn> each
+file in the current VC fileset, placing it under version control. 
+This is essentially equivalent to the action of <kbd>C-x v v</kbd> on an
+unregistered VC fileset (see <a href="Basic-VC-Editing.html#Basic-VC-Editing">Basic VC Editing</a>), except that if the
+VC fileset is already registered, <kbd>C-x v i</kbd> signals an error
+whereas <kbd>C-x v v</kbd> performs some other action.
 
-   <p>If locking is in use, <kbd>C-x v i</kbd> leaves the file unlocked and
-read-only.  Type <kbd>C-x v v</kbd> if you wish to start editing it.  After
-registering a file with CVS, you must subsequently commit the initial
-revision by typing <kbd>C-x v v</kbd>.  Until you do that, the revision ID
-appears as &lsquo;<samp><span class="samp">@@</span></samp>&rsquo; in the mode line.
+   <p>To register a file, Emacs must choose a version control system.  For
+a multi-file VC fileset, the VC Directory buffer specifies the system
+to use (see <a href="VC-Directory-Mode.html#VC-Directory-Mode">VC Directory Mode</a>).  For a single-file VC fileset, if
+the file's directory already contains files registered in a version
+control system, or if the directory is part of a directory tree
+controlled by a version control system, Emacs chooses that system.  In
+the event that more than one version control system is applicable,
+Emacs uses the one that appears first in the variable
+<code>vc-handled-backends</code> (see <a href="Customizing-VC.html#Customizing-VC">Customizing VC</a>). 
+If Emacs cannot find a version control system to register the file
+under, it prompts for a repository type, creates a new repository, and
+registers the file into that repository.
 
-   <p><a name="index-vc_002ddefault_002dinit_002drevision-2504"></a><a name="index-initial-revision-ID-to-register-2505"></a>  The default initial revision ID for a newly registered file
-varies by what VCS you are using; normally it will be 1.1 on VCSes
-that use dot-pair revision IDs and 1 on VCSes that use monotonic IDs. 
-You can specify a different default by setting the variable
-<code>vc-default-init-revision</code>, or you can give <kbd>C-x v i</kbd> a
-numeric argument; then it reads the initial revision ID for this
-particular file using the minibuffer.
+   <p>On most version control systems, registering a file with <kbd>C-x v
+i</kbd> or <kbd>C-x v v</kbd> adds it to the &ldquo;working tree&rdquo; but not to the
+repository.  Such files are labeled as &lsquo;<samp><span class="samp">added</span></samp>&rsquo; in the VC
+Directory buffer, and show a revision ID of &lsquo;<samp><span class="samp">@@</span></samp>&rsquo; in the mode
+line.  To make the registration take effect in the repository, you
+must perform a commit (see <a href="Basic-VC-Editing.html#Basic-VC-Editing">Basic VC Editing</a>).  Note that a single
+commit can include both file additions and edits to existing files.
 
-   <p><a name="index-vc_002dinitial_002dcomment-2506"></a>  If <code>vc-initial-comment</code> is non-<code>nil</code>, <kbd>C-x v i</kbd> reads an
-initial comment to describe the purpose of this source file.  Reading
-the initial comment works like reading a log entry (see <a href="Log-Buffer.html#Log-Buffer">Log Buffer</a>).
+   <p>On a locking-based version control system (see <a href="VCS-Merging.html#VCS-Merging">VCS Merging</a>),
+registering a file leaves it unlocked and read-only.  Type <kbd>C-x v
+v</kbd> to start editing it.
 
    </body></html>
 

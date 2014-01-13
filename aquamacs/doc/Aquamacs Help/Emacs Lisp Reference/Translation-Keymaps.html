@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Translation Keymaps - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Key-Binding-Commands.html#Key-Binding-Commands" title="Key Binding Commands">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,35 +43,36 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Keymaps.html#Keymaps">Keymaps</a>
 
 <h3 class="section">22.14 Keymaps for Translating Sequences of Events</h3>
 
-<p><a name="index-keymaps-for-translating-events-1537"></a>
+<p><a name="index-keymaps-for-translating-events-1629"></a>
   This section describes keymaps that are used during reading a key
 sequence, to translate certain event sequences into others. 
 <code>read-key-sequence</code> checks every subsequence of the key sequence
 being read, as it is read, against <code>input-decode-map</code>, then
 <code>local-function-key-map</code>, and then against <code>key-translation-map</code>.
 
-<div class="defun">
-&mdash; Variable: <b>input-decode-map</b><var><a name="index-input_002ddecode_002dmap-1538"></a></var><br>
-<blockquote><p>This variable holds a keymap that describes the character sequences sent
-by function keys on an ordinary character terminal.  This keymap has the
-same structure as other keymaps, but is used differently: it specifies
-translations to make while reading key sequences, rather than bindings
-for key sequences.
+   <p>These keymaps have the same structure as other keymaps, but they are used
+differently: they specify translations to make while reading key sequences,
+rather than bindings for key sequences.
 
-        <p>If <code>input-decode-map</code> &ldquo;binds&rdquo; a key sequence <var>k</var> to a vector
+   <p>If one of these keymaps &ldquo;binds&rdquo; a key sequence <var>k</var> to a vector
 <var>v</var>, then when <var>k</var> appears as a subsequence <em>anywhere</em> in a
 key sequence, it is replaced with the events in <var>v</var>.
 
-        <p>For example, VT100 terminals send <kbd>&lt;ESC&gt; O P</kbd> when the
+   <p>For example, VT100 terminals send <kbd>&lt;ESC&gt; O P</kbd> when the
 keypad &lt;PF1&gt; key is pressed.  Therefore, we want Emacs to translate
 that sequence of events into the single event <code>pf1</code>.  We accomplish
 this by &ldquo;binding&rdquo; <kbd>&lt;ESC&gt; O P</kbd> to <code>[pf1]</code> in
 <code>input-decode-map</code>, when using a VT100.
 
-        <p>Thus, typing <kbd>C-c &lt;PF1&gt;</kbd> sends the character sequence <kbd>C-c
+   <p>Thus, typing <kbd>C-c &lt;PF1&gt;</kbd> sends the character sequence <kbd>C-c
 &lt;ESC&gt; O P</kbd>; later the function <code>read-key-sequence</code> translates
 this back into <kbd>C-c &lt;PF1&gt;</kbd>, which it returns as the vector
 <code>[?\C-c pf1]</code>.
+
+<div class="defun">
+&mdash; Variable: <b>input-decode-map</b><var><a name="index-input_002ddecode_002dmap-1630"></a></var><br>
+<blockquote><p>This variable holds a keymap that describes the character sequences sent
+by function keys on an ordinary character terminal.
 
         <p>The value of <code>input-decode-map</code> is usually set up automatically
 according to the terminal's Terminfo or Termcap entry, but sometimes
@@ -85,14 +83,14 @@ deduced from Termcap and Terminfo.  See <a href="Terminal_002dSpecific.html#Term
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>local-function-key-map</b><var><a name="index-local_002dfunction_002dkey_002dmap-1539"></a></var><br>
+&mdash; Variable: <b>local-function-key-map</b><var><a name="index-local_002dfunction_002dkey_002dmap-1631"></a></var><br>
 <blockquote><p>This variable holds a keymap similar to <code>input-decode-map</code> except
 that it describes key sequences which should be translated to
 alternative interpretations that are usually preferred.  It applies
 after <code>input-decode-map</code> and before <code>key-translation-map</code>.
 
         <p>Entries in <code>local-function-key-map</code> are ignored if they conflict
-with bindings made in the minor mode, local, or global keymaps.  I.e. 
+with bindings made in the minor mode, local, or global keymaps.  I.e.,
 the remapping only applies if the original key sequence would
 otherwise not have any binding.
 
@@ -101,7 +99,7 @@ but the latter should not be used directly.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>key-translation-map</b><var><a name="index-key_002dtranslation_002dmap-1540"></a></var><br>
+&mdash; Variable: <b>key-translation-map</b><var><a name="index-key_002dtranslation_002dmap-1632"></a></var><br>
 <blockquote><p>This variable is another keymap used just like <code>input-decode-map</code>
 to translate input events into other events.  It differs from
 <code>input-decode-map</code> in that it goes to work after
@@ -122,10 +120,11 @@ character set to another, including ordinary characters normally bound
 to <code>self-insert-command</code>. 
 </p></blockquote></div>
 
-   <p><a name="index-key-translation-function-1541"></a>You can use <code>input-decode-map</code>, <code>local-function-key-map</code>, or
-<code>key-translation-map</code> for more than simple aliases, by using a
-function, instead of a key sequence, as the &ldquo;translation&rdquo; of a key. 
-Then this function is called to compute the translation of that key.
+   <p><a name="index-key-translation-function-1633"></a>You can use <code>input-decode-map</code>, <code>local-function-key-map</code>,
+and <code>key-translation-map</code> for more than simple aliases, by using
+a function, instead of a key sequence, as the &ldquo;translation&rdquo; of a
+key.  Then this function is called to compute the translation of that
+key.
 
    <p>The key translation function receives one argument, which is the prompt
 that was specified in <code>read-key-sequence</code>&mdash;or <code>nil</code> if the
@@ -155,10 +154,30 @@ to turn the character that follows into a Hyper character:
      (define-key local-function-key-map "\C-ch" 'hyperify)
 </pre>
    <p>If you have enabled keyboard character set decoding using
-<code>set-keyboard-coding-system</code>, decoding is done after the
-translations listed above.  See <a href="Terminal-I_002fO-Encoding.html#Terminal-I_002fO-Encoding">Terminal I/O Encoding</a>.  However, in
-future Emacs versions, character set decoding may be done at an
-earlier stage.
+<code>set-keyboard-coding-system</code>, decoding is done before the
+translations listed above.  See <a href="Terminal-I_002fO-Encoding.html#Terminal-I_002fO-Encoding">Terminal I/O Encoding</a>.
+
+<h4 class="subsection">22.14.1 Interaction with normal keymaps</h4>
+
+<p>The end of a key sequence is detected when that key sequence either is bound
+to a command, or when Emacs determines that no additional event can lead
+to a sequence that is bound to a command.
+
+   <p>This means that, while <code>input-decode-map</code> and <code>key-translation-map</code>
+apply regardless of whether the original key sequence would have a binding, the
+presence of such a binding can still prevent translation from taking place. 
+For example, let us return to our VT100 example above and add a binding for
+<kbd>C-c &lt;ESC&gt;</kbd> to the global map; now when the user hits <kbd>C-c
+&lt;PF1&gt;</kbd> Emacs will fail to decode <kbd>C-c &lt;ESC&gt; O P</kbd> into <kbd>C-c
+&lt;PF1&gt;</kbd> because it will stop reading keys right after <kbd>C-x &lt;ESC&gt;</kbd>,
+leaving <kbd>O P</kbd> for later.  This is in case the user really hit <kbd>C-c
+&lt;ESC&gt;</kbd>, in which case Emacs should not sit there waiting for the next key
+to decide whether the user really pressed <kbd>&lt;ESC&gt;</kbd> or <kbd>&lt;PF1&gt;</kbd>.
+
+   <p>For that reason, it is better to avoid binding commands to key sequences where
+the end of the key sequence is a prefix of a key translation.  The main such
+problematic suffixes/prefixes are <kbd>&lt;ESC&gt;</kbd>, <kbd>M-O</kbd> (which is really
+<kbd>&lt;ESC&gt; O</kbd>) and <kbd>M-[</kbd> (which is really <kbd>&lt;ESC&gt; [</kbd>).
 
    </body></html>
 

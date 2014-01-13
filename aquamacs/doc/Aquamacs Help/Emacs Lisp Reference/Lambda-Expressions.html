@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Lambda Expressions - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Function-Names.html#Function-Names" title="Function Names">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,19 +43,23 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Functions.html#Functions">Functions</a>
 
 <h3 class="section">12.2 Lambda Expressions</h3>
 
-<p><a name="index-lambda-expression-676"></a>
-  A function written in Lisp is a list that looks like this:
+<p><a name="index-lambda-expression-719"></a>
+  A lambda expression is a function object written in Lisp.  Here is
+an example:
 
-<pre class="example">     (lambda (<var>arg-variables</var>...)
-       <span class="roman">[</span><var>documentation-string</var><span class="roman">]</span>
-       <span class="roman">[</span><var>interactive-declaration</var><span class="roman">]</span>
-       <var>body-forms</var>...)
+<pre class="example">     (lambda (x)
+       "Return the hyperbolic cosine of X."
+       (* 0.5 (+ (exp x) (exp (- x)))))
 </pre>
-   <p class="noindent">Such a list is called a <dfn>lambda expression</dfn>.  In Emacs Lisp, it
-actually is valid as an expression&mdash;it evaluates to itself.  In some
-other Lisp dialects, a lambda expression is not a valid expression at
-all.  In either case, its main use is not to be evaluated as an
-expression, but to be called as a function.
+   <p class="noindent">In Emacs Lisp, such a list is a valid expression which evaluates to
+a function object.
+
+   <p>A lambda expression, by itself, has no name; it is an <dfn>anonymous
+function</dfn>.  Although lambda expressions can be used this way
+(see <a href="Anonymous-Functions.html#Anonymous-Functions">Anonymous Functions</a>), they are more commonly associated with
+symbols to make <dfn>named functions</dfn> (see <a href="Function-Names.html#Function-Names">Function Names</a>). 
+Before going into these details, the following subsections describe
+the components of a lambda expression and what they do.
 
 <ul class="menu">
 <li><a accesskey="1" href="Lambda-Components.html#Lambda-Components">Lambda Components</a>:        The parts of a lambda expression. 

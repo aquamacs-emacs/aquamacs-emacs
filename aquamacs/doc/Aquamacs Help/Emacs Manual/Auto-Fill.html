@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Auto Fill - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Fill-Commands.html#Fill-Commands" title="Fill Commands">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -43,54 +40,48 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Filling.html#Filling">Filling</a>
 <hr>
 </div>
 
-<h4 class="subsection">29.5.1 Auto Fill Mode</h4>
+<h4 class="subsection">25.5.1 Auto Fill Mode</h4>
 
-<p><a name="index-Auto-Fill-mode-1602"></a><a name="index-mode_002c-Auto-Fill-1603"></a>
-  <dfn>Auto Fill</dfn> mode is a minor mode in which lines are broken
-automatically when they become too wide.  Breaking happens only when
-you type a &lt;SPC&gt; or &lt;RET&gt;.
+<p><a name="index-Auto-Fill-mode-1832"></a><a name="index-mode_002c-Auto-Fill-1833"></a>
+  <dfn>Auto Fill</dfn> mode is a buffer-local minor mode (see <a href="Minor-Modes.html#Minor-Modes">Minor Modes</a>) in which lines are broken automatically when they become too
+wide.  Breaking happens only when you type a &lt;SPC&gt; or &lt;RET&gt;.
 
      <dl>
 <dt><kbd>M-x auto-fill-mode</kbd><dd>Enable or disable Auto Fill mode. 
 <br><dt><kbd>&lt;SPC&gt;</kbd><dt><kbd>&lt;RET&gt;</kbd><dd>In Auto Fill mode, break lines when appropriate. 
 </dl>
 
-   <p><a name="index-auto_002dfill_002dmode-1604"></a>  <kbd>M-x auto-fill-mode</kbd> turns Auto Fill mode on if it was off, or off
-if it was on.  With a positive numeric argument it always turns Auto
-Fill mode on, and with a negative argument always turns it off.  You can
-see when Auto Fill mode is in effect by the presence of the word
-&lsquo;<samp><span class="samp">Fill</span></samp>&rsquo; in the mode line, inside the parentheses.  Auto Fill mode is
-a minor mode which is enabled or disabled for each buffer individually. 
-See <a href="Minor-Modes.html#Minor-Modes">Minor Modes</a>.
+   <p><a name="index-auto_002dfill_002dmode-1834"></a>  The mode command <kbd>M-x auto-fill-mode</kbd> toggles Auto Fill mode in
+the current buffer.  With a positive numeric argument, it enables Auto
+Fill mode, and with a negative argument it disables it.  If
+<code>auto-fill-mode</code> is called from Lisp with an omitted or
+<code>nil</code> argument, it enables Auto Fill mode.  To enable Auto Fill
+mode automatically in certain major modes, add <code>auto-fill-mode</code>
+to the mode hooks (see <a href="Major-Modes.html#Major-Modes">Major Modes</a>).  When Auto Fill mode is
+enabled, the mode indicator &lsquo;<samp><span class="samp">Fill</span></samp>&rsquo; appears in the mode line
+(see <a href="Mode-Line.html#Mode-Line">Mode Line</a>).
 
-   <p>In Auto Fill mode, lines are broken automatically at spaces when they
-get longer than the desired width.  Line breaking and rearrangement
-takes place only when you type &lt;SPC&gt; or &lt;RET&gt;.  If you wish to
-insert a space or newline without permitting line-breaking, type
-<kbd>C-q &lt;SPC&gt;</kbd> or <kbd>C-q C-j</kbd> (recall that a newline is really a
-control-J).  Also, <kbd>C-o</kbd> inserts a newline without line breaking.
+   <p>Auto Fill mode breaks lines automatically at spaces whenever they
+get longer than the desired width.  This line breaking occurs only
+when you type &lt;SPC&gt; or &lt;RET&gt;.  If you wish to insert a space
+or newline without permitting line-breaking, type <kbd>C-q &lt;SPC&gt;</kbd>
+or <kbd>C-q C-j</kbd> respectively.  Also, <kbd>C-o</kbd> inserts a newline
+without line breaking.
 
-   <p>Auto Fill mode works well with programming-language modes, because it
-indents new lines with &lt;TAB&gt;.  If a line ending in a comment gets
-too long, the text of the comment is split into two comment lines. 
-Optionally, new comment delimiters are inserted at the end of the first
-line and the beginning of the second so that each line is a separate
-comment; the variable <code>comment-multi-line</code> controls the choice
-(see <a href="Comments.html#Comments">Comments</a>).
+   <p>When Auto Fill mode breaks a line, it tries to obey the
+<dfn>adaptive fill prefix</dfn>: if a fill prefix can be deduced from the
+first and/or second line of the current paragraph, it is inserted into
+the new line (see <a href="Adaptive-Fill.html#Adaptive-Fill">Adaptive Fill</a>).  Otherwise the new line is
+indented, as though you had typed &lt;TAB&gt; on it
+(see <a href="Indentation.html#Indentation">Indentation</a>).  In a programming language mode, if a line is
+broken in the middle of a comment, the comment is split by inserting
+new comment delimiters as appropriate.
 
-   <p>Adaptive filling (see <a href="Adaptive-Fill.html#Adaptive-Fill">Adaptive Fill</a>) works for Auto Filling as
-well as for explicit fill commands.  It takes a fill prefix
-automatically from the second or first line of a paragraph.
-
-   <p>Auto Fill mode does not refill entire paragraphs; it can break lines but
-cannot merge lines.  So editing in the middle of a paragraph can result in
-a paragraph that is not correctly filled.  The easiest way to make the
-paragraph properly filled again is usually with the explicit fill commands. 
-See <a href="Fill-Commands.html#Fill-Commands">Fill Commands</a>.
-
-   <p>Many users like Auto Fill mode and want to use it in all text files. 
-The section on init files says how to arrange this permanently for yourself. 
-See <a href="Init-File.html#Init-File">Init File</a>.
+   <p>Auto Fill mode does not refill entire paragraphs; it breaks lines
+but does not merge lines.  Therefore, editing in the middle of a
+paragraph can result in a paragraph that is not correctly filled.  To
+fill it, call the explicit fill commands
+(see <a href="Fill-Commands.html#Fill-Commands">Fill Commands</a>).
 
    </body></html>
 

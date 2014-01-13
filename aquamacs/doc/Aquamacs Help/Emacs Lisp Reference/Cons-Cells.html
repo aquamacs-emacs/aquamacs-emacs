@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Cons Cells - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="List_002drelated-Predicates.html#List_002drelated-Predicates" title="List-related Predicates">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,59 +41,53 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Lists.html#Lists">Lists</a>
 
 <h3 class="section">5.1 Lists and Cons Cells</h3>
 
-<p><a name="index-lists-and-cons-cells-289"></a>
+<p><a name="index-lists-and-cons-cells-301"></a>
   Lists in Lisp are not a primitive data type; they are built up from
-<dfn>cons cells</dfn>.  A cons cell is a data object that represents an
-ordered pair.  That is, it has two slots, and each slot <dfn>holds</dfn>, or
-<dfn>refers to</dfn>, some Lisp object.  One slot is known as the <span class="sc">car</span>,
-and the other is known as the <span class="sc">cdr</span>.  (These names are traditional;
-see <a href="Cons-Cell-Type.html#Cons-Cell-Type">Cons Cell Type</a>.)  <span class="sc">cdr</span> is pronounced &ldquo;could-er.&rdquo;
+<dfn>cons cells</dfn> (see <a href="Cons-Cell-Type.html#Cons-Cell-Type">Cons Cell Type</a>).  A cons cell is a data
+object that represents an ordered pair.  That is, it has two slots,
+and each slot <dfn>holds</dfn>, or <dfn>refers to</dfn>, some Lisp object.  One
+slot is known as the <span class="sc">car</span>, and the other is known as the <span class="sc">cdr</span>. 
+(These names are traditional; see <a href="Cons-Cell-Type.html#Cons-Cell-Type">Cons Cell Type</a>.)  <span class="sc">cdr</span> is
+pronounced &ldquo;could-er&rdquo;.
 
    <p>We say that &ldquo;the <span class="sc">car</span> of this cons cell is&rdquo; whatever object
 its <span class="sc">car</span> slot currently holds, and likewise for the <span class="sc">cdr</span>.
 
-   <p>A list is a series of cons cells &ldquo;chained together,&rdquo; so that each
-cell refers to the next one.  There is one cons cell for each element of
-the list.  By convention, the <span class="sc">car</span>s of the cons cells hold the
-elements of the list, and the <span class="sc">cdr</span>s are used to chain the list: the
-<span class="sc">cdr</span> slot of each cons cell refers to the following cons cell.  The
-<span class="sc">cdr</span> of the last cons cell is <code>nil</code>.  This asymmetry between
-the <span class="sc">car</span> and the <span class="sc">cdr</span> is entirely a matter of convention; at the
-level of cons cells, the <span class="sc">car</span> and <span class="sc">cdr</span> slots have the same
-characteristics.
+   <p>A list is a series of cons cells &ldquo;chained together&rdquo;, so that each
+cell refers to the next one.  There is one cons cell for each element
+of the list.  By convention, the <span class="sc">car</span>s of the cons cells hold the
+elements of the list, and the <span class="sc">cdr</span>s are used to chain the list
+(this asymmetry between <span class="sc">car</span> and <span class="sc">cdr</span> is entirely a matter of
+convention; at the level of cons cells, the <span class="sc">car</span> and <span class="sc">cdr</span>
+slots have similar properties).  Hence, the <span class="sc">cdr</span> slot of each cons
+cell in a list refers to the following cons cell.
 
-   <p><a name="index-true-list-290"></a>  Since <code>nil</code> is the conventional value to put in the <span class="sc">cdr</span> of
-the last cons cell in the list, we call that case a <dfn>true list</dfn>.
-
-   <p>In Lisp, we consider the symbol <code>nil</code> a list as well as a
-symbol; it is the list with no elements.  For convenience, the symbol
+   <p><a name="index-true-list-302"></a>  Also by convention, the <span class="sc">cdr</span> of the last cons cell in a list is
+<code>nil</code>.  We call such a <code>nil</code>-terminated structure a
+<dfn>true list</dfn>.  In Emacs Lisp, the symbol <code>nil</code> is both a
+symbol and a list with no elements.  For convenience, the symbol
 <code>nil</code> is considered to have <code>nil</code> as its <span class="sc">cdr</span> (and also
-as its <span class="sc">car</span>).  Therefore, the <span class="sc">cdr</span> of a true list is always a
-true list.
+as its <span class="sc">car</span>).
 
-   <p><a name="index-dotted-list-291"></a><a name="index-circular-list-292"></a>  If the <span class="sc">cdr</span> of a list's last cons cell is some other value,
-neither <code>nil</code> nor another cons cell, we call the structure a
-<dfn>dotted list</dfn>, since its printed representation would use
-&lsquo;<samp><span class="samp">.</span></samp>&rsquo;.  There is one other possibility: some cons cell's <span class="sc">cdr</span>
-could point to one of the previous cons cells in the list.  We call
-that structure a <dfn>circular list</dfn>.
+   <p>Hence, the <span class="sc">cdr</span> of a true list is always a true list.  The
+<span class="sc">cdr</span> of a nonempty true list is a true list containing all the
+elements except the first.
+
+   <p><a name="index-dotted-list-303"></a><a name="index-circular-list-304"></a>  If the <span class="sc">cdr</span> of a list's last cons cell is some value other than
+<code>nil</code>, we call the structure a <dfn>dotted list</dfn>, since its
+printed representation would use dotted pair notation (see <a href="Dotted-Pair-Notation.html#Dotted-Pair-Notation">Dotted Pair Notation</a>).  There is one other possibility: some cons cell's
+<span class="sc">cdr</span> could point to one of the previous cons cells in the list. 
+We call that structure a <dfn>circular list</dfn>.
 
    <p>For some purposes, it does not matter whether a list is true,
-circular or dotted.  If the program doesn't look far enough down the
+circular or dotted.  If a program doesn't look far enough down the
 list to see the <span class="sc">cdr</span> of the final cons cell, it won't care. 
 However, some functions that operate on lists demand true lists and
 signal errors if given a dotted list.  Most functions that try to find
 the end of a list enter infinite loops if given a circular list.
 
-   <p><a name="index-list-structure-293"></a>  Because most cons cells are used as part of lists, the phrase
-<dfn>list structure</dfn> has come to mean any structure made out of cons
-cells.
-
-   <p>The <span class="sc">cdr</span> of any nonempty true list <var>l</var> is a list containing all the
-elements of <var>l</var> except the first.
-
-   <p>See <a href="Cons-Cell-Type.html#Cons-Cell-Type">Cons Cell Type</a>, for the read and print syntax of cons cells and
-lists, and for &ldquo;box and arrow&rdquo; illustrations of lists.
+   <p><a name="index-list-structure-305"></a>  Because most cons cells are used as part of lists, we refer to any
+structure made out of cons cells as a <dfn>list structure</dfn>.
 
    </body></html>
 

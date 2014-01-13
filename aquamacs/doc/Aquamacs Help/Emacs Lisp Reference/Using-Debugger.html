@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Using Debugger - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Debugger-Commands.html#Debugger-Commands" title="Debugger Commands">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,14 +44,14 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Debugger.html#Debugger">Debugger</a>
 <h4 class="subsection">18.1.5 Using the Debugger</h4>
 
 <p>When the debugger is entered, it displays the previously selected
-buffer in one window and a buffer named &lsquo;<samp><span class="samp">*Backtrace*</span></samp>&rsquo; in another
+buffer in one window and a buffer named <samp><span class="file">*Backtrace*</span></samp> in another
 window.  The backtrace buffer contains one line for each level of Lisp
 function execution currently going on.  At the beginning of this buffer
 is a message describing the reason that the debugger was invoked (such
 as the error message and associated data, if it was invoked due to an
 error).
 
-   <p>The backtrace buffer is read-only and uses a special major mode,
+   <p><a name="index-debugger_002dbury_002dor_002dkill-998"></a>  The backtrace buffer is read-only and uses a special major mode,
 Debugger mode, in which letters are defined as debugger commands.  The
 usual Emacs editing commands are available; thus, you can switch windows
 to examine the buffer that was being edited at the time of the error,
@@ -62,10 +59,24 @@ switch buffers, visit files, or do any other sort of editing.  However,
 the debugger is a recursive editing level (see <a href="Recursive-Editing.html#Recursive-Editing">Recursive Editing</a>)
 and it is wise to go back to the backtrace buffer and exit the debugger
 (with the <kbd>q</kbd> command) when you are finished with it.  Exiting
-the debugger gets out of the recursive edit and kills the backtrace
-buffer.
+the debugger gets out of the recursive edit and buries the backtrace
+buffer.  (You can customize what the <kbd>q</kbd> command does with the
+backtrace buffer by setting the variable <code>debugger-bury-or-kill</code>. 
+For example, set it to <code>kill</code> if you prefer to kill the buffer
+rather than bury it.  Consult the variable's documentation for more
+possibilities.)
 
-   <p><a name="index-current-stack-frame-939"></a>  The backtrace buffer shows you the functions that are executing and
+   <p>When the debugger has been entered, the <code>debug-on-error</code>
+variable is temporarily set according to
+<code>eval-expression-debug-on-error</code>.  If the latter variable is
+non-<code>nil</code>, <code>debug-on-error</code> will temporarily be set to
+<code>t</code>.  This means that any further errors that occur while doing a
+debugging session will (by default) trigger another backtrace.  If
+this is not what you want, you can either set
+<code>eval-expression-debug-on-error</code> to <code>nil</code>, or set
+<code>debug-on-error</code> to <code>nil</code> in <code>debugger-mode-hook</code>.
+
+   <p><a name="index-current-stack-frame-999"></a>  The backtrace buffer shows you the functions that are executing and
 their argument values.  It also allows you to specify a stack frame by
 moving point to the line describing that frame.  (A stack frame is the
 place where the Lisp interpreter records information about a particular
@@ -76,8 +87,8 @@ that exiting that frame will call the debugger again.  This is useful
 for examining the return value of a function.
 
    <p>If a function name is underlined, that means the debugger knows
-where its source code is located.  You can click <kbd>Mouse-2</kbd> on that
-name, or move to it and type &lt;RET&gt;, to visit the source code.
+where its source code is located.  You can click with the mouse on
+that name, or move to it and type &lt;RET&gt;, to visit the source code.
 
    <p>The debugger itself must be run byte-compiled, since it makes
 assumptions about how many stack frames are used for the debugger

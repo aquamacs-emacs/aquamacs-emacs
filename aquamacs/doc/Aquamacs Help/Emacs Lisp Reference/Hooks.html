@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Hooks - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Major-Modes.html#Major-Modes" title="Major Modes">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,35 +41,34 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Modes.html#Modes">Modes</a>
 
 <h3 class="section">23.1 Hooks</h3>
 
-<p><a name="index-hooks-1576"></a>
+<p><a name="index-hooks-1672"></a>
   A <dfn>hook</dfn> is a variable where you can store a function or functions
 to be called on a particular occasion by an existing program.  Emacs
 provides hooks for the sake of customization.  Most often, hooks are set
 up in the init file (see <a href="Init-File.html#Init-File">Init File</a>), but Lisp programs can set them also. 
-See <a href="Standard-Hooks.html#Standard-Hooks">Standard Hooks</a>, for a list of standard hook variables.
+See <a href="Standard-Hooks.html#Standard-Hooks">Standard Hooks</a>, for a list of some standard hook variables.
 
-   <p><a name="index-normal-hook-1577"></a>  Most of the hooks in Emacs are <dfn>normal hooks</dfn>.  These variables
+   <p><a name="index-normal-hook-1673"></a>  Most of the hooks in Emacs are <dfn>normal hooks</dfn>.  These variables
 contain lists of functions to be called with no arguments.  By
 convention, whenever the hook name ends in &lsquo;<samp><span class="samp">-hook</span></samp>&rsquo;, that tells
 you it is normal.  We try to make all hooks normal, as much as
 possible, so that you can use them in a uniform way.
 
-   <p>Every major mode function is supposed to run a normal hook called
-the <dfn>mode hook</dfn> as the one of the last steps of initialization. 
-This makes it easy for a user to customize the behavior of the mode,
-by overriding the buffer-local variable assignments already made by
-the mode.  Most minor mode functions also run a mode hook at the end. 
-But hooks are used in other contexts too.  For example, the hook
-<code>suspend-hook</code> runs just before Emacs suspends itself
-(see <a href="Suspending-Emacs.html#Suspending-Emacs">Suspending Emacs</a>).
+   <p>Every major mode command is supposed to run a normal hook called the
+<dfn>mode hook</dfn> as one of the last steps of initialization.  This makes
+it easy for a user to customize the behavior of the mode, by overriding
+the buffer-local variable assignments already made by the mode.  Most
+minor mode functions also run a mode hook at the end.  But hooks are
+used in other contexts too.  For example, the hook <code>suspend-hook</code>
+runs just before Emacs suspends itself (see <a href="Suspending-Emacs.html#Suspending-Emacs">Suspending Emacs</a>).
 
-   <p>The recommended way to add a hook function to a normal hook is by
-calling <code>add-hook</code> (see below).  The hook functions may be any of
-the valid kinds of functions that <code>funcall</code> accepts (see <a href="What-Is-a-Function.html#What-Is-a-Function">What Is a Function</a>).  Most normal hook variables are initially void;
+   <p>The recommended way to add a hook function to a hook is by calling
+<code>add-hook</code> (see <a href="Setting-Hooks.html#Setting-Hooks">Setting Hooks</a>).  The hook functions may be any
+of the valid kinds of functions that <code>funcall</code> accepts (see <a href="What-Is-a-Function.html#What-Is-a-Function">What Is a Function</a>).  Most normal hook variables are initially void;
 <code>add-hook</code> knows how to deal with this.  You can add hooks either
 globally or buffer-locally with <code>add-hook</code>.
 
-   <p><a name="index-abnormal-hook-1578"></a>  If the hook variable's name does not end with &lsquo;<samp><span class="samp">-hook</span></samp>&rsquo;, that
+   <p><a name="index-abnormal-hook-1674"></a>  If the hook variable's name does not end with &lsquo;<samp><span class="samp">-hook</span></samp>&rsquo;, that
 indicates it is probably an <dfn>abnormal hook</dfn>.  That means the hook
 functions are called with arguments, or their return values are used
 in some way.  The hook's documentation says how the functions are
@@ -80,13 +76,13 @@ called.  You can use <code>add-hook</code> to add a function to an abnormal
 hook, but you must write the function to follow the hook's calling
 convention.
 
-   <p>By convention, abnormal hook names end in &lsquo;<samp><span class="samp">-functions</span></samp>&rsquo; or
-&lsquo;<samp><span class="samp">-hooks</span></samp>&rsquo;.  If the variable's name ends in &lsquo;<samp><span class="samp">-function</span></samp>&rsquo;, then
-its value is just a single function, not a list of functions.
+   <p>By convention, abnormal hook names end in &lsquo;<samp><span class="samp">-functions</span></samp>&rsquo;.  If the
+variable's name ends in &lsquo;<samp><span class="samp">-function</span></samp>&rsquo;, then its value is just a single
+function, not a list of functions.
 
 <ul class="menu">
-<li><a accesskey="1" href="Running-Hooks.html#Running-Hooks">Running Hooks</a>:                How to run a hook. 
-<li><a accesskey="2" href="Setting-Hooks.html#Setting-Hooks">Setting Hooks</a>:                How to put functions on a hook, or remove them. 
+<li><a accesskey="1" href="Running-Hooks.html#Running-Hooks">Running Hooks</a>:     How to run a hook. 
+<li><a accesskey="2" href="Setting-Hooks.html#Setting-Hooks">Setting Hooks</a>:     How to put functions on a hook, or remove them. 
 </ul>
 
    </body></html>

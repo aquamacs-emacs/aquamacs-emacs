@@ -1,21 +1,19 @@
 <html lang="en">
 <head>
 <title>Glyphs - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Display-Tables.html#Display-Tables" title="Display Tables">
+<link rel="up" href="Character-Display.html#Character-Display" title="Character Display">
 <link rel="prev" href="Active-Display-Table.html#Active-Display-Table" title="Active Display Table">
+<link rel="next" href="Glyphless-Chars.html#Glyphless-Chars" title="Glyphless Chars">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -37,76 +35,65 @@ Foundation, Inc.
 <div class="node">
 <a name="Glyphs"></a>
 <p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Glyphless-Chars.html#Glyphless-Chars">Glyphless Chars</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Active-Display-Table.html#Active-Display-Table">Active Display Table</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Display-Tables.html#Display-Tables">Display Tables</a>
+Up:&nbsp;<a rel="up" accesskey="u" href="Character-Display.html#Character-Display">Character Display</a>
 <hr>
 </div>
 
-<h4 class="subsection">38.21.3 Glyphs</h4>
+<h4 class="subsection">38.20.4 Glyphs</h4>
 
-<p><a name="index-glyph-3745"></a>  A <dfn>glyph</dfn> is a generalization of a character; it stands for an
-image that takes up a single character position on the screen.  Normally
-glyphs come from vectors in the display table (see <a href="Display-Tables.html#Display-Tables">Display Tables</a>).
-
-   <p>A glyph is represented in Lisp as a <dfn>glyph code</dfn>.  A glyph code
-can be <dfn>simple</dfn> or it can be defined by the <dfn>glyph table</dfn>.  A
-simple glyph code is just a way of specifying a character and a face
-to output it in.  See <a href="Faces.html#Faces">Faces</a>.
-
-   <p>The following functions are used to manipulate simple glyph codes:
+<p><a name="index-glyph-4058"></a>
+  A <dfn>glyph</dfn> is a graphical symbol which occupies a single
+character position on the screen.  Each glyph is represented in Lisp
+as a <dfn>glyph code</dfn>, which specifies a character and optionally a
+face to display it in (see <a href="Faces.html#Faces">Faces</a>).  The main use of glyph codes is
+as the entries of display tables (see <a href="Display-Tables.html#Display-Tables">Display Tables</a>).  The
+following functions are used to manipulate glyph codes:
 
 <div class="defun">
-&mdash; Function: <b>make-glyph-code</b><var> char &amp;optional face<a name="index-make_002dglyph_002dcode-3746"></a></var><br>
-<blockquote><p>This function returns a simple glyph code representing char <var>char</var>
-with face <var>face</var>. 
+&mdash; Function: <b>make-glyph-code</b><var> char &amp;optional face<a name="index-make_002dglyph_002dcode-4059"></a></var><br>
+<blockquote><p>This function returns a glyph code representing char <var>char</var> with
+face <var>face</var>.  If <var>face</var> is omitted or <code>nil</code>, the glyph
+uses the default face; in that case, the glyph code is an integer.  If
+<var>face</var> is non-<code>nil</code>, the glyph code is not necessarily an
+integer object. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>glyph-char</b><var> glyph<a name="index-glyph_002dchar-3747"></a></var><br>
-<blockquote><p>This function returns the character of simple glyph code <var>glyph</var>. 
+&mdash; Function: <b>glyph-char</b><var> glyph<a name="index-glyph_002dchar-4060"></a></var><br>
+<blockquote><p>This function returns the character of glyph code <var>glyph</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>glyph-face</b><var> glyph<a name="index-glyph_002dface-3748"></a></var><br>
-<blockquote><p>This function returns face of simple glyph code <var>glyph</var>, or
-<code>nil</code> if <var>glyph</var> has the default face (face-id 0). 
-See <a href="Face-Functions.html#Face-Functions">Face Functions</a>. 
+&mdash; Function: <b>glyph-face</b><var> glyph<a name="index-glyph_002dface-4061"></a></var><br>
+<blockquote><p>This function returns face of glyph code <var>glyph</var>, or <code>nil</code> if
+<var>glyph</var> uses the default face. 
 </p></blockquote></div>
 
-   <p>On character terminals, you can set up a <dfn>glyph table</dfn> to define
-the meaning of glyph codes (represented as small integers).
+   <p>You can set up a <dfn>glyph table</dfn> to change how glyph codes are
+actually displayed on text terminals.  This feature is semi-obsolete;
+use <code>glyphless-char-display</code> instead (see <a href="Glyphless-Chars.html#Glyphless-Chars">Glyphless Chars</a>).
 
 <div class="defun">
-&mdash; Variable: <b>glyph-table</b><var><a name="index-glyph_002dtable-3749"></a></var><br>
-<blockquote><p>The value of this variable is the current glyph table.  It should be
-<code>nil</code> or a vector whose <var>g</var>th element defines glyph code
-<var>g</var>.
+&mdash; Variable: <b>glyph-table</b><var><a name="index-glyph_002dtable-4062"></a></var><br>
+<blockquote><p>The value of this variable, if non-<code>nil</code>, is the current glyph
+table.  It takes effect only on character terminals; on graphical
+displays, all glyphs are displayed literally.  The glyph table should
+be a vector whose <var>g</var>th element specifies how to display glyph
+code <var>g</var>, where <var>g</var> is the glyph code for a glyph whose face
+is unspecified.  Each element should be one of the following:
 
-        <p>If a glyph code is greater than or equal to the length of the glyph
-table, that code is automatically simple.  If <code>glyph-table</code> is
-<code>nil</code> then all glyph codes are simple.
+          <dl>
+<dt><code>nil</code><dd>Display this glyph literally.
 
-        <p>The glyph table is used only on character terminals.  On graphical
-displays, all glyph codes are simple. 
-</p></blockquote></div>
+          <br><dt>a string<dd>Display this glyph by sending the specified string to the terminal.
 
-   <p>Here are the meaningful types of elements in the glyph table:
-
-     <dl>
-<dt><var>string</var><dd>Send the characters in <var>string</var> to the terminal to output
-this glyph code.
-
-     <br><dt><var>code</var><dd>Define this glyph code as an alias for glyph code <var>code</var> created
-by <code>make-glyph-code</code>.  You can use such an alias to define a
-small-numbered glyph code which specifies a character with a face.
-
-     <br><dt><code>nil</code><dd>This glyph code is simple. 
+          <br><dt>a glyph code<dd>Display the specified glyph code instead. 
 </dl>
 
-<div class="defun">
-&mdash; Function: <b>create-glyph</b><var> string<a name="index-create_002dglyph-3750"></a></var><br>
-<blockquote><p>This function returns a newly-allocated glyph code which is set up to
-display by sending <var>string</var> to the terminal. 
+        <p>Any integer glyph code greater than or equal to the length of the
+glyph table is displayed literally. 
 </p></blockquote></div>
 
    </body></html>

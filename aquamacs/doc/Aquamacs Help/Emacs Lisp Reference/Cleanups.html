@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Cleanups - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="prev" href="Errors.html#Errors" title="Errors">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -51,8 +48,8 @@ throw.  (Another more specific cleanup construct that is used only for
 changes in buffer contents is the atomic change group; <a href="Atomic-Changes.html#Atomic-Changes">Atomic Changes</a>.)
 
 <div class="defun">
-&mdash; Special Form: <b>unwind-protect</b><var> body-form cleanup-forms<small class="dots">...</small><a name="index-unwind_002dprotect-570"></a></var><br>
-<blockquote><p><a name="index-cleanup-forms-571"></a><a name="index-protected-forms-572"></a><a name="index-error-cleanup-573"></a><a name="index-unwinding-574"></a><code>unwind-protect</code> executes <var>body-form</var> with a guarantee that
+&mdash; Special Form: <b>unwind-protect</b><var> body-form cleanup-forms<small class="dots">...</small><a name="index-unwind_002dprotect-600"></a></var><br>
+<blockquote><p><a name="index-cleanup-forms-601"></a><a name="index-protected-forms-602"></a><a name="index-error-cleanup-603"></a><a name="index-unwinding-604"></a><code>unwind-protect</code> executes <var>body-form</var> with a guarantee that
 the <var>cleanup-forms</var> will be evaluated if control leaves
 <var>body-form</var>, no matter how that happens.  <var>body-form</var> may
 complete normally, or execute a <code>throw</code> out of the
@@ -79,7 +76,7 @@ together with the number of local variable bindings, against the limit
    <p>For example, here we make an invisible buffer for temporary use, and
 make sure to kill it before finishing:
 
-<pre class="smallexample">     (let ((buffer (get-buffer-create " *temp*")))
+<pre class="example">     (let ((buffer (get-buffer-create " *temp*")))
        (with-current-buffer buffer
          (unwind-protect
              <var>body-form</var>
@@ -97,7 +94,7 @@ kill it.)
 expands into more or less the code shown above (see <a href="Definition-of-with_002dtemp_002dbuffer.html#Definition-of-with_002dtemp_002dbuffer">Current Buffer</a>).  Several of the macros defined in
 this manual use <code>unwind-protect</code> in this way.
 
-   <p><a name="index-ftp_002dlogin-575"></a>  Here is an actual example derived from an FTP package.  It creates a
+   <p><a name="index-ftp_002dlogin-605"></a>  Here is an actual example derived from an FTP package.  It creates a
 process (see <a href="Processes.html#Processes">Processes</a>) to try to establish a connection to a remote
 machine.  As the function <code>ftp-login</code> is highly susceptible to
 numerous problems that the writer of the function cannot anticipate, it
@@ -105,7 +102,7 @@ is protected with a form that guarantees deletion of the process in the
 event of failure.  Otherwise, Emacs might fill up with useless
 subprocesses.
 
-<pre class="smallexample">     (let ((win nil))
+<pre class="example">     (let ((win nil))
        (unwind-protect
            (progn
              (setq process (ftp-setup-buffer host file))
@@ -118,13 +115,11 @@ subprocesses.
 quit, and the quit happens immediately after the function
 <code>ftp-setup-buffer</code> returns but before the variable <code>process</code> is
 set, the process will not be killed.  There is no easy way to fix this bug,
-but at least it is very unlikely.
-
+but at least it is very unlikely. 
 <!-- *-texinfo-*- -->
 <!-- This is part of the GNU Emacs Lisp Reference Manual. -->
-<!-- Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1998, 1999, 2000, -->
-<!-- 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 -->
-<!-- Free Software Foundation, Inc. -->
+<!-- Copyright (C) 1990-1995, 1998-2013 Free Software Foundation, Inc. -->
 <!-- See the file elisp.texi for copying conditions. -->
+
    </body></html>
 

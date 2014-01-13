@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Key Sequences - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Keymap-Basics.html#Keymap-Basics" title="Keymap Basics">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,10 +41,11 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Keymaps.html#Keymaps">Keymaps</a>
 
 <h3 class="section">22.1 Key Sequences</h3>
 
-<p><a name="index-key-1431"></a><a name="index-keystroke-1432"></a><a name="index-key-sequence-1433"></a>
+<p><a name="index-key-1520"></a><a name="index-keystroke-1521"></a><a name="index-key-sequence-1522"></a>
   A <dfn>key sequence</dfn>, or <dfn>key</dfn> for short, is a sequence of one
 or more input events that form a unit.  Input events include
-characters, function keys, and mouse actions (see <a href="Input-Events.html#Input-Events">Input Events</a>). 
+characters, function keys, mouse actions, or system events external to
+Emacs, such as <code>iconify-frame</code> (see <a href="Input-Events.html#Input-Events">Input Events</a>). 
 The Emacs Lisp representation for a key sequence is a string or
 vector.  Unless otherwise stated, any Emacs Lisp function that accepts
 a key sequence as an argument can handle both representations.
@@ -64,9 +62,10 @@ sequence is the concatenation of the string representations of the
 constituent events; thus, <code>"\C-xl"</code> represents the key sequence
 <kbd>C-x l</kbd>.
 
-   <p>Key sequences containing function keys, mouse button events, or
-non-ASCII characters such as <kbd>C-=</kbd> or <kbd>H-a</kbd> cannot be
-represented as strings; they have to be represented as vectors.
+   <p>Key sequences containing function keys, mouse button events, system
+events, or non-<acronym>ASCII</acronym> characters such as <kbd>C-=</kbd> or
+<kbd>H-a</kbd> cannot be represented as strings; they have to be
+represented as vectors.
 
    <p>In the vector representation, each element of the vector represents
 an input event, in its Lisp form.  See <a href="Input-Events.html#Input-Events">Input Events</a>.  For example,
@@ -76,13 +75,13 @@ the vector <code>[?\C-x ?l]</code> represents the key sequence <kbd>C-x l</kbd>.
 representations, <a href="../emacs/Init-Rebinding.html#Init-Rebinding">Init Rebinding</a>.
 
 <div class="defun">
-&mdash; Macro: <b>kbd</b><var> keyseq-text<a name="index-kbd-1434"></a></var><br>
-<blockquote><p>This macro converts the text <var>keyseq-text</var> (a string constant)
+&mdash; Function: <b>kbd</b><var> keyseq-text<a name="index-kbd-1523"></a></var><br>
+<blockquote><p>This function converts the text <var>keyseq-text</var> (a string constant)
 into a key sequence (a string or vector constant).  The contents of
-<var>keyseq-text</var> should describe the key sequence using almost the same
-syntax used in this manual.  More precisely, it uses the same syntax
-that Edit Macro mode uses for editing keyboard macros (see <a href="../emacs/Edit-Keyboard-Macro.html#Edit-Keyboard-Macro">Edit Keyboard Macro</a>); you must surround
-function key names with &lsquo;<samp><span class="samp">&lt;...&gt;</span></samp>&rsquo;.
+<var>keyseq-text</var> should use the same syntax as in the buffer invoked
+by the <kbd>C-x C-k &lt;RET&gt;</kbd> (<code>kmacro-edit-macro</code>) command; in
+particular, you must surround function key names with
+&lsquo;<samp><span class="samp">&lt;...&gt;</span></samp>&rsquo;.  See <a href="../emacs/Edit-Keyboard-Macro.html#Edit-Keyboard-Macro">Edit Keyboard Macro</a>.
 
      <pre class="example">          (kbd "C-x") &rArr; "\C-x"
           (kbd "C-x C-f") &rArr; "\C-x\C-f"
@@ -93,9 +92,7 @@ function key names with &lsquo;<samp><span class="samp">&lt;...&gt;</span></samp
           (kbd "&lt;f1&gt; SPC") &rArr; [f1 32]
           (kbd "C-M-&lt;down&gt;") &rArr; [C-M-down]
 </pre>
-        <p>This macro is not meant for use with arguments that vary&mdash;only
-with string constants. 
-</p></blockquote></div>
+        </blockquote></div>
 
    </body></html>
 

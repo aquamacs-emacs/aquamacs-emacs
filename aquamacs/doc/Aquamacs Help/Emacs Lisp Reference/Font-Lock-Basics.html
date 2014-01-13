@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Font Lock Basics - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Search_002dbased-Fontification.html#Search_002dbased-Fontification" title="Search-based Fontification">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -51,13 +48,13 @@ variable.  The value assigned to this variable is used, if and when Font
 Lock mode is enabled, to set all the other variables.
 
 <div class="defun">
-&mdash; Variable: <b>font-lock-defaults</b><var><a name="index-font_002dlock_002ddefaults-1666"></a></var><br>
-<blockquote><p>This variable is set by major modes, as a buffer-local variable, to
-specify how to fontify text in that mode.  It automatically becomes
-buffer-local when you set it.  If its value is <code>nil</code>, Font-Lock
-mode does no highlighting, and you can use the &lsquo;<samp><span class="samp">Faces</span></samp>&rsquo; menu
-(under &lsquo;<samp><span class="samp">Edit</span></samp>&rsquo; and then &lsquo;<samp><span class="samp">Text Properties</span></samp>&rsquo; in the menu bar) to
-assign faces explicitly to text in the buffer.
+&mdash; Variable: <b>font-lock-defaults</b><var><a name="index-font_002dlock_002ddefaults-1781"></a></var><br>
+<blockquote><p>This variable is set by major modes to specify how to fontify text in
+that mode.  It automatically becomes buffer-local when set.  If its
+value is <code>nil</code>, Font Lock mode does no highlighting, and you can
+use the &lsquo;<samp><span class="samp">Faces</span></samp>&rsquo; menu (under &lsquo;<samp><span class="samp">Edit</span></samp>&rsquo; and then &lsquo;<samp><span class="samp">Text
+Properties</span></samp>&rsquo; in the menu bar) to assign faces explicitly to text in the
+buffer.
 
         <p>If non-<code>nil</code>, the value should look like this:
 
@@ -78,19 +75,20 @@ value.  See <a href="Levels-of-Font-Lock.html#Levels-of-Font-Lock">Levels of Fon
         <p>The second element, <var>keywords-only</var>, specifies the value of the
 variable <code>font-lock-keywords-only</code>.  If this is omitted or
 <code>nil</code>, syntactic fontification (of strings and comments) is also
-performed.  If this is non-<code>nil</code>, such fontification is not
+performed.  If this is non-<code>nil</code>, syntactic fontification is not
 performed.  See <a href="Syntactic-Font-Lock.html#Syntactic-Font-Lock">Syntactic Font Lock</a>.
 
         <p>The third element, <var>case-fold</var>, specifies the value of
 <code>font-lock-keywords-case-fold-search</code>.  If it is non-<code>nil</code>,
-Font Lock mode ignores case when searching as directed by
-<code>font-lock-keywords</code>.
+Font Lock mode ignores case during search-based fontification.
 
-        <p>If the fourth element, <var>syntax-alist</var>, is non-<code>nil</code>, it
-should be a list of cons cells of the form <code>(</code><var>char-or-string</var><code>
-. </code><var>string</var><code>)</code>.  These are used to set up a syntax table for
-syntactic fontification (see <a href="Syntax-Table-Functions.html#Syntax-Table-Functions">Syntax Table Functions</a>).  The
-resulting syntax table is stored in <code>font-lock-syntax-table</code>.
+        <p>If the fourth element, <var>syntax-alist</var>, is non-<code>nil</code>, it should
+be a list of cons cells of the form <code>(</code><var>char-or-string</var><code>
+. </code><var>string</var><code>)</code>.  These are used to set up a syntax table for syntactic
+fontification; the resulting syntax table is stored in
+<code>font-lock-syntax-table</code>.  If <var>syntax-alist</var> is omitted or
+<code>nil</code>, syntactic fontification uses the syntax table returned by
+the <code>syntax-table</code> function.  See <a href="Syntax-Table-Functions.html#Syntax-Table-Functions">Syntax Table Functions</a>.
 
         <p>The fifth element, <var>syntax-begin</var>, specifies the value of
 <code>font-lock-beginning-of-syntax-function</code>.  We recommend setting

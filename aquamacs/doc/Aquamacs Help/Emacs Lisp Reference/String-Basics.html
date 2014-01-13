@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>String Basics - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Predicates-for-Strings.html#Predicates-for-Strings" title="Predicates for Strings">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,25 +41,30 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Strings-and-Characters.html#Strings-and
 
 <h3 class="section">4.1 String and Character Basics</h3>
 
-<p>Characters are represented in Emacs Lisp as integers;
-whether an integer is a character or not is determined only by how it is
-used.  Thus, strings really contain integers.  See <a href="Character-Codes.html#Character-Codes">Character Codes</a>,
-for details about character representation in Emacs.
+<p>A character is a Lisp object which represents a single character of
+text.  In Emacs Lisp, characters are simply integers; whether an
+integer is a character or not is determined only by how it is used. 
+See <a href="Character-Codes.html#Character-Codes">Character Codes</a>, for details about character representation in
+Emacs.
 
-   <p>The length of a string (like any array) is fixed, and cannot be
-altered once the string exists.  Strings in Lisp are <em>not</em>
-terminated by a distinguished character code.  (By contrast, strings in
-C are terminated by a character with <acronym>ASCII</acronym> code 0.)
+   <p>A string is a fixed sequence of characters.  It is a type of
+sequence called a <dfn>array</dfn>, meaning that its length is fixed and
+cannot be altered once it is created (see <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences Arrays Vectors</a>).  Unlike in C, Emacs Lisp strings are <em>not</em> terminated
+by a distinguished character code.
 
    <p>Since strings are arrays, and therefore sequences as well, you can
-operate on them with the general array and sequence functions. 
-(See <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences Arrays Vectors</a>.)  For example, you can access or
-change individual characters in a string using the functions <code>aref</code>
-and <code>aset</code> (see <a href="Array-Functions.html#Array-Functions">Array Functions</a>).
+operate on them with the general array and sequence functions
+documented in <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences Arrays Vectors</a>.  For example, you can
+access or change individual characters in a string using the functions
+<code>aref</code> and <code>aset</code> (see <a href="Array-Functions.html#Array-Functions">Array Functions</a>).  However, note
+that <code>length</code> should <em>not</em> be used for computing the width
+of a string on display; use <code>string-width</code> (see <a href="Width.html#Width">Width</a>)
+instead.
 
-   <p>There are two text representations for non-<acronym>ASCII</acronym> characters in
-Emacs strings (and in buffers): unibyte and multibyte (see <a href="Text-Representations.html#Text-Representations">Text Representations</a>).  For most Lisp programming, you don't need to be
-concerned with these two representations.
+   <p>There are two text representations for non-<acronym>ASCII</acronym>
+characters in Emacs strings (and in buffers): unibyte and multibyte. 
+For most Lisp programming, you don't need to be concerned with these
+two representations.  See <a href="Text-Representations.html#Text-Representations">Text Representations</a>, for details.
 
    <p>Sometimes key sequences are represented as unibyte strings.  When a
 unibyte string is a key sequence, string elements in the range 128 to

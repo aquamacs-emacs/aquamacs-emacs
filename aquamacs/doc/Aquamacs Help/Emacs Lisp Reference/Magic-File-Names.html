@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Magic File Names - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Format-Conversion.html#Format-Conversion" title="Format Conversion">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,18 +43,17 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
 
 <h3 class="section">25.11 Making Certain File Names &ldquo;Magic&rdquo;</h3>
 
-<p><a name="index-magic-file-names-1904"></a>
-<!-- Emacs 19 feature -->
+<p><a name="index-magic-file-names-2054"></a>
   You can implement special handling for certain file names.  This is
 called making those names <dfn>magic</dfn>.  The principal use for this
-feature is in implementing remote file names (see <a href="../emacs/Remote-Files.html#Remote-Files">Remote Files</a>).
+feature is in implementing access to remote files (see <a href="../emacs/Remote-Files.html#Remote-Files">Remote Files</a>).
 
    <p>To define a kind of magic file name, you must supply a regular
 expression to define the class of names (all those that match the
 regular expression), plus a handler that implements all the primitive
-Emacs file operations for file names that do match.
+Emacs file operations for file names that match.
 
-   <p><a name="index-file_002dname_002dhandler_002dalist-1905"></a>  The variable <code>file-name-handler-alist</code> holds a list of handlers,
+   <p><a name="index-file-handler-2055"></a><a name="index-file_002dname_002dhandler_002dalist-2056"></a>  The variable <code>file-name-handler-alist</code> holds a list of handlers,
 together with regular expressions that determine when to apply each
 handler.  Each element has this form:
 
@@ -113,19 +109,24 @@ first, before handlers for jobs such as remote file access.
 <code>dired-compress-file</code>, <code>dired-uncache</code>,<br>
 <code>expand-file-name</code>,
 <code>file-accessible-directory-p</code>,
+<code>file-acl</code>,
 <code>file-attributes</code>,
 <code>file-directory-p</code>,
+<code>file-equal-p</code>,
 <code>file-executable-p</code>, <code>file-exists-p</code>,
-<code>file-local-copy</code>, <code>file-remote-p</code>,
+<code>file-in-directory-p</code>,
+<code>file-local-copy</code>,
 <code>file-modes</code>, <code>file-name-all-completions</code>,
 <code>file-name-as-directory</code>,
 <code>file-name-completion</code>,
 <code>file-name-directory</code>,
 <code>file-name-nondirectory</code>,
 <code>file-name-sans-versions</code>, <code>file-newer-than-file-p</code>,
+<code>file-notify-add-watch</code>, <code>file-notify-rm-watch</code>,
 <code>file-ownership-preserved-p</code>,
-<code>file-readable-p</code>, <code>file-regular-p</code>, <code>file-symlink-p</code>,
-<code>file-truename</code>, <code>file-writable-p</code>,
+<code>file-readable-p</code>, <code>file-regular-p</code>,
+<code>file-remote-p</code>, <code>file-selinux-context</code>,
+<code>file-symlink-p</code>, <code>file-truename</code>, <code>file-writable-p</code>,
 <code>find-backup-file-name</code>,
 <!-- Not sure why it was here:   @code{find-file-noselect},@* -->
 <code>get-file-buffer</code>,
@@ -137,7 +138,8 @@ first, before handlers for jobs such as remote file access.
 <code>make-directory-internal</code>,
 <code>make-symbolic-link</code>,<br>
 <code>process-file</code>,
-<code>rename-file</code>, <code>set-file-modes</code>, <code>set-file-times</code>,
+<code>rename-file</code>, <code>set-file-acl</code>, <code>set-file-modes</code>,
+<code>set-file-selinux-context</code>, <code>set-file-times</code>,
 <code>set-visited-file-modtime</code>, <code>shell-command</code>,
 <code>start-file-process</code>,
 <code>substitute-in-file-name</code>,<br>
@@ -155,7 +157,7 @@ unlocking the buffer if it is locked.
 possibly others to be added in the future.  It need not implement all
 these operations itself&mdash;when it has nothing special to do for a
 certain operation, it can reinvoke the primitive, to handle the
-operation &ldquo;in the usual way.&rdquo;  It should always reinvoke the primitive
+operation &ldquo;in the usual way&rdquo;.  It should always reinvoke the primitive
 for an operation it does not recognize.  Here's one way to do this:
 
 <pre class="smallexample">     (defun my-file-handler (operation &amp;rest args)
@@ -182,7 +184,7 @@ shown above; the details are crucial for proper behavior in the case of
 multiple handlers, and for operations that have two file names that may
 each have handlers.
 
-   <p><a name="index-safe_002dmagic-_0028_0040r_007bproperty_007d_0029-1906"></a>  Handlers that don't really do anything special for actual access to the
+   <p><a name="index-safe_002dmagic-_0028_0040r_007bproperty_007d_0029-2057"></a>  Handlers that don't really do anything special for actual access to the
 file&mdash;such as the ones that implement completion of host names for
 remote file names&mdash;should have a non-<code>nil</code> <code>safe-magic</code>
 property.  For instance, Emacs normally &ldquo;protects&rdquo; directory names
@@ -191,7 +193,7 @@ file names, by prefixing them with &lsquo;<samp><span class="samp">/:</span></sa
 would be used for them has a non-<code>nil</code> <code>safe-magic</code>
 property, the &lsquo;<samp><span class="samp">/:</span></samp>&rsquo; is not added.
 
-   <p><a name="index-operations-_0028_0040r_007bproperty_007d_0029-1907"></a>  A file name handler can have an <code>operations</code> property to
+   <p><a name="index-operations-_0028_0040r_007bproperty_007d_0029-2058"></a>  A file name handler can have an <code>operations</code> property to
 declare which operations it handles in a nontrivial way.  If this
 property has a non-<code>nil</code> value, it should be a list of
 operations; then only those operations will call the handler.  This
@@ -208,18 +210,18 @@ handle <code>file-exists-p</code>, then it need not handle <code>load</code>
 nontrivially.
 
 <div class="defun">
-&mdash; Variable: <b>inhibit-file-name-handlers</b><var><a name="index-inhibit_002dfile_002dname_002dhandlers-1908"></a></var><br>
+&mdash; Variable: <b>inhibit-file-name-handlers</b><var><a name="index-inhibit_002dfile_002dname_002dhandlers-2059"></a></var><br>
 <blockquote><p>This variable holds a list of handlers whose use is presently inhibited
 for a certain operation. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>inhibit-file-name-operation</b><var><a name="index-inhibit_002dfile_002dname_002doperation-1909"></a></var><br>
+&mdash; Variable: <b>inhibit-file-name-operation</b><var><a name="index-inhibit_002dfile_002dname_002doperation-2060"></a></var><br>
 <blockquote><p>The operation for which certain handlers are presently inhibited. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>find-file-name-handler</b><var> file operation<a name="index-find_002dfile_002dname_002dhandler-1910"></a></var><br>
+&mdash; Function: <b>find-file-name-handler</b><var> file operation<a name="index-find_002dfile_002dname_002dhandler-2061"></a></var><br>
 <blockquote><p>This function returns the handler function for file name <var>file</var>,
 or <code>nil</code> if there is none.  The argument <var>operation</var> should
 be the operation to be performed on the file&mdash;the value you will pass
@@ -230,7 +232,7 @@ function returns <code>nil</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>file-local-copy</b><var> filename<a name="index-file_002dlocal_002dcopy-1911"></a></var><br>
+&mdash; Function: <b>file-local-copy</b><var> filename<a name="index-file_002dlocal_002dcopy-2062"></a></var><br>
 <blockquote><p>This function copies file <var>filename</var> to an ordinary non-magic file
 on the local machine, if it isn't on the local machine already.  Magic
 file names should handle the <code>file-local-copy</code> operation if they
@@ -245,7 +247,7 @@ of the local copy file.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>file-remote-p</b><var> filename &amp;optional identification connected<a name="index-file_002dremote_002dp-1912"></a></var><br>
+&mdash; Function: <b>file-remote-p</b><var> filename &amp;optional identification connected<a name="index-file_002dremote_002dp-2063"></a></var><br>
 <blockquote><p>This function tests whether <var>filename</var> is a remote file.  If
 <var>filename</var> is local (not remote), the return value is <code>nil</code>. 
 If <var>filename</var> is indeed remote, the return value is a string that
@@ -260,7 +262,7 @@ system.  For example, the remote identifier string for the filename
 filenames, that means they are stored on the same file system and can
 be accessed locally with respect to each other.  This means, for
 example, that it is possible to start a remote process accessing both
-files at the same time.  Implementors of file handlers need to ensure
+files at the same time.  Implementers of file handlers need to ensure
 this principle is valid.
 
         <p><var>identification</var> specifies which part of the identifier shall be
@@ -277,7 +279,7 @@ making connections when they don't exist.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>unhandled-file-name-directory</b><var> filename<a name="index-unhandled_002dfile_002dname_002ddirectory-1913"></a></var><br>
+&mdash; Function: <b>unhandled-file-name-directory</b><var> filename<a name="index-unhandled_002dfile_002dname_002ddirectory-2064"></a></var><br>
 <blockquote><p>This function returns the name of a directory that is not magic.  It
 uses the directory part of <var>filename</var> if that is not magic.  For a
 magic file name, it invokes the file name handler, which therefore
@@ -291,30 +293,29 @@ is a good way to come up with one.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>remote-file-name-inhibit-cache</b><var><a name="index-remote_002dfile_002dname_002dinhibit_002dcache-1914"></a></var><br>
-<blockquote><p>Whether to use the remote file-name cache for read access.
-
-        <p>File attributes of remote files are cached for better performance.  If
-they are changed out of Emacs' control, the cached values become
+&mdash; User Option: <b>remote-file-name-inhibit-cache</b><var><a name="index-remote_002dfile_002dname_002dinhibit_002dcache-2065"></a></var><br>
+<blockquote><p>The attributes of remote files can be cached for better performance.  If
+they are changed outside of Emacs's control, the cached values become
 invalid, and must be reread.
 
-        <p>When set to <code>nil</code>, cached values are always used.  This shall be
-set with care.  When set to <code>t</code>, cached values are never used. 
-ALthough this is the safest value, it could result in performance
-degradation.
+        <p>When this variable is set to <code>nil</code>, cached values are never
+expired.  Use this setting with caution, only if you are sure nothing
+other than Emacs ever changes the remote files.  If it is set to
+<code>t</code>, cached values are never used.  This is the safest value, but
+could result in performance degradation.
 
         <p>A compromise is to set it to a positive number.  This means that
 cached values are used for that amount of seconds since they were
-cached.
-
-        <p>In case a remote file is checked regularly, it might be reasonable to
-let-bind this variable to a value less then the time period between
-two checks.  Example:
+cached.  If a remote file is checked regularly, it might be a good
+idea to let-bind this variable to a value less than the time period
+between consecutive checks.  For example:
 
      <pre class="example">          (defun display-time-file-nonempty-p (file)
-            (let ((remote-file-name-inhibit-cache (- display-time-interval 5)))
+            (let ((remote-file-name-inhibit-cache
+                   (- display-time-interval 5)))
               (and (file-exists-p file)
-                   (&lt; 0 (nth 7 (file-attributes (file-chase-links file)))))))
+                   (&lt; 0 (nth 7 (file-attributes
+                                 (file-chase-links file)))))))
 </pre>
         </blockquote></div>
 

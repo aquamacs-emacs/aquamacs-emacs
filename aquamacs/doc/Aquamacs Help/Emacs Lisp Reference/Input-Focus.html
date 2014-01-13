@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Input Focus - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Visibility-of-Frames.html#Visibility-of-Frames" title="Visibility of Frames">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,9 +41,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
 <hr>
 </div>
 
-<h3 class="section">29.10 Input Focus</h3>
+<h3 class="section">29.9 Input Focus</h3>
 
-<p><a name="index-input-focus-2368"></a><!-- @cindex selected frame    Duplicates selected-frame -->
+<p><a name="index-input-focus-2617"></a><!-- @cindex selected frame    Duplicates selected-frame, same for selected-window. -->
 
    <p>At any time, one frame in Emacs is the <dfn>selected frame</dfn>.  The selected
 window always resides on the selected frame.
@@ -62,7 +59,7 @@ in this manual.  The display on which the selected frame is shown is
 the <dfn>selected frame's display</dfn>.
 
 <div class="defun">
-&mdash; Function: <b>selected-frame</b><var><a name="index-selected_002dframe-2369"></a></var><br>
+&mdash; Function: <b>selected-frame</b><var><a name="index-selected_002dframe-2618"></a></var><br>
 <blockquote><p>This function returns the selected frame. 
 </p></blockquote></div>
 
@@ -78,25 +75,25 @@ function <code>select-frame</code>.  This does not alter the window system's
 concept of focus; rather, it escapes from the window manager's control
 until that control is somehow reasserted.
 
-   <p>When using a text-only terminal, only one frame can be displayed at a
-time on the terminal, so after a call to <code>select-frame</code>, the next
+   <p>When using a text terminal, only one frame can be displayed at a time
+on the terminal, so after a call to <code>select-frame</code>, the next
 redisplay actually displays the newly selected frame.  This frame
 remains selected until a subsequent call to <code>select-frame</code>.  Each
-terminal frame has a number which appears in the mode line before the
-buffer name (see <a href="Mode-Line-Variables.html#Mode-Line-Variables">Mode Line Variables</a>).
+frame on a text terminal has a number which appears in the mode line
+before the buffer name (see <a href="Mode-Line-Variables.html#Mode-Line-Variables">Mode Line Variables</a>).
 
 <div class="defun">
-&mdash; Function: <b>select-frame-set-input-focus</b><var> frame<a name="index-select_002dframe_002dset_002dinput_002dfocus-2370"></a></var><br>
+&mdash; Function: <b>select-frame-set-input-focus</b><var> frame &amp;optional norecord<a name="index-select_002dframe_002dset_002dinput_002dfocus-2619"></a></var><br>
 <blockquote><p>This function selects <var>frame</var>, raises it (should it happen to be
-obscured by other frames) and tries to give it the X server's focus.  On
-a text-only terminal, the next redisplay displays the new frame on the
-entire terminal screen.  The return value of this function is not
-significant. 
+obscured by other frames) and tries to give it the X server's focus. 
+On a text terminal, the next redisplay displays the new frame on the
+entire terminal screen.  The optional argument <var>norecord</var> has the
+same meaning as for <code>select-frame</code> (see below).  The return value
+of this function is not significant. 
 </p></blockquote></div>
 
-<!-- ??? This is not yet implemented properly. -->
 <div class="defun">
-&mdash; Function: <b>select-frame</b><var> frame &amp;optional norecord<a name="index-select_002dframe-2371"></a></var><br>
+&mdash; Command: <b>select-frame</b><var> frame &amp;optional norecord<a name="index-select_002dframe-2620"></a></var><br>
 <blockquote><p>This function selects frame <var>frame</var>, temporarily disregarding the
 focus of the X server if any.  The selection of <var>frame</var> lasts until
 the next time the user does something to select a different frame, or
@@ -105,17 +102,20 @@ window system, the previously selected frame may be restored as the
 selected frame after return to the command loop, because it still may
 have the window system's input focus.)
 
-        <p>The specified <var>frame</var> becomes the selected frame, as explained
-above, and the terminal that <var>frame</var> is on becomes the selected
-terminal.  The window selected within <var>frame</var> becomes the selected
-window.  This function returns <var>frame</var>, or <code>nil</code> if <var>frame</var>
-has been deleted.
+        <p>The specified <var>frame</var> becomes the selected frame, and its terminal
+becomes the selected terminal.  This function then calls
+<code>select-window</code> as a subroutine, passing the window selected
+within <var>frame</var> as its first argument and <var>norecord</var> as its
+second argument (hence, if <var>norecord</var> is non-<code>nil</code>, this
+avoids changing the order of recently selected windows nor the buffer
+list).  See <a href="Selecting-Windows.html#Selecting-Windows">Selecting Windows</a>.
 
-        <p>Optional argument <var>norecord</var> non-<code>nil</code> means to neither change
-the order of recently selected windows nor the buffer list.  See <a href="The-Buffer-List.html#The-Buffer-List">The Buffer List</a>.
+        <p>This function returns <var>frame</var>, or <code>nil</code> if <var>frame</var> has
+been deleted.
 
-        <p>In general, you should never use <code>select-frame</code> in a way that could
-switch to a different terminal without switching back when you're done. 
+        <p>In general, you should never use <code>select-frame</code> in a way that
+could switch to a different terminal without switching back when
+you're done. 
 </p></blockquote></div>
 
    <p>Emacs cooperates with the window system by arranging to select frames as
@@ -125,7 +125,7 @@ appropriate.  The command loop handles a focus event by calling
 <code>handle-switch-frame</code>.  See <a href="Focus-Events.html#Focus-Events">Focus Events</a>.
 
 <div class="defun">
-&mdash; Command: <b>handle-switch-frame</b><var> frame<a name="index-handle_002dswitch_002dframe-2372"></a></var><br>
+&mdash; Command: <b>handle-switch-frame</b><var> frame<a name="index-handle_002dswitch_002dframe-2621"></a></var><br>
 <blockquote><p>This function handles a focus event by selecting frame <var>frame</var>.
 
         <p>Focus events normally do their job by invoking this command. 
@@ -133,7 +133,7 @@ Don't call it for any other reason.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>redirect-frame-focus</b><var> frame &amp;optional focus-frame<a name="index-redirect_002dframe_002dfocus-2373"></a></var><br>
+&mdash; Function: <b>redirect-frame-focus</b><var> frame &amp;optional focus-frame<a name="index-redirect_002dframe_002dfocus-2622"></a></var><br>
 <blockquote><p>This function redirects focus from <var>frame</var> to <var>focus-frame</var>. 
 This means that <var>focus-frame</var> will receive subsequent keystrokes and
 events intended for <var>frame</var>.  After such an event, the value of
@@ -165,7 +165,7 @@ change it.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>focus-follows-mouse</b><var><a name="index-focus_002dfollows_002dmouse-2374"></a></var><br>
+&mdash; User Option: <b>focus-follows-mouse</b><var><a name="index-focus_002dfollows_002dmouse-2623"></a></var><br>
 <blockquote><p>This option is how you inform Emacs whether the window manager transfers
 focus when the user moves the mouse.  Non-<code>nil</code> says that it does. 
 When this is so, the command <code>other-frame</code> moves the mouse to a

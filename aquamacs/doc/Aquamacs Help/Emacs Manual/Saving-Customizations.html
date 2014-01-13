@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Saving Customizations - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Face-Customization.html#Face-Customization" title="Face Customization">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,14 +42,19 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Easy-Customization.html#Easy-Customizat
 <hr>
 </div>
 
-<h4 class="subsection">57.2.4 Saving Customizations</h4>
+<h4 class="subsection">48.1.4 Saving Customizations</h4>
 
-<p><a name="index-custom_002dfile-4008"></a>  Saving customizations from the customization buffer works by writing
-code to a file.  By reading this code, future sessions can set up the
-customizations again.  Normally, the code is saved in your
-initialization file (see <a href="Init-File.html#Init-File">Init File</a>).
+<p>In the customization buffer, you can <dfn>save</dfn> a customization
+setting by choosing the &lsquo;<samp><span class="samp">Save for Future Sessions</span></samp>&rsquo; choice from
+its &lsquo;<samp><span class="samp">[State]</span></samp>&rsquo; button.  The <kbd>C-x C-s</kbd> (<code>Custom-save</code>)
+command, or the &lsquo;<samp><span class="samp">[Save for Future Sessions]</span></samp>&rsquo; button at the top of
+the customization buffer, saves all applicable settings in the buffer.
 
-   <p>You can choose to save your customizations in a file other than your
+   <p>Saving works by writing code to a file, usually your initialization
+file (see <a href="Init-File.html#Init-File">Init File</a>).  Future Emacs sessions automatically read
+this file at startup, which sets up the customizations again.
+
+   <p><a name="index-custom_002dfile-4334"></a>  You can choose to save customizations somewhere other than your
 initialization file.  To make this work, you must add a couple of
 lines of code to your initialization file, to set the variable
 <code>custom-file</code> to the name of the desired file, and to load that
@@ -61,13 +63,14 @@ file.  For example:
 <pre class="example">     (setq custom-file "~/.emacs-custom.el")
      (load custom-file)
 </pre>
-   <p>You can use <code>custom-file</code> to specify different customization
-files for different Emacs versions, like this:
+   <p>You can even specify different customization files for different
+Emacs versions, like this:
 
 <pre class="example">     (cond ((&lt; emacs-major-version 22)
             ;; <span class="roman">Emacs 21 customization.</span>
             (setq custom-file "~/.custom-21.el"))
-           ((and (= emacs-major-version 22) (&lt; emacs-minor-version 3))
+           ((and (= emacs-major-version 22)
+                 (&lt; emacs-minor-version 3))
             ;; <span class="roman">Emacs 22 customization, before version 22.3.</span>
             (setq custom-file "~/.custom-22.el"))
            (t

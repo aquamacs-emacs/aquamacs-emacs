@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Useless Whitespace - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Selective-Display.html#Selective-Display" title="Selective Display">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,12 +42,12 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
 <hr>
 </div>
 
-<h3 class="section">18.12 Useless Whitespace</h3>
+<h3 class="section">14.16 Useless Whitespace</h3>
 
-<p><a name="index-trailing-whitespace-553"></a><a name="index-whitespace_002c-trailing-554"></a><a name="index-show_002dtrailing_002dwhitespace-555"></a>  It is easy to leave unnecessary spaces at the end of a line, or
-empty lines at the end of a file, without realizing it.  In most
-cases, this <dfn>trailing whitespace</dfn> has no effect, but there are
-special circumstances where it matters, and it can be a nuisance.
+<p><a name="index-trailing-whitespace-707"></a><a name="index-whitespace_002c-trailing-708"></a><a name="index-show_002dtrailing_002dwhitespace-709"></a>  It is easy to leave unnecessary spaces at the end of a line, or
+empty lines at the end of a buffer, without realizing it.  In most
+cases, this <dfn>trailing whitespace</dfn> has no effect, but sometimes it
+can be a nuisance.
 
    <p>You can make trailing whitespace at the end of a line visible by
 setting the buffer-local variable <code>show-trailing-whitespace</code> to
@@ -64,22 +61,57 @@ looks ugly while you are typing in new text.  In this special case,
 the location of point is enough to show you that the spaces are
 present.
 
-   <p><a name="index-delete_002dtrailing_002dwhitespace-556"></a>  To delete all trailing whitespace within the buffer's accessible
-portion (see <a href="Narrowing.html#Narrowing">Narrowing</a>), type <kbd>M-x delete-trailing-whitespace
-&lt;RET&gt;</kbd>.  This command does not remove newline characters.
+   <p><a name="index-delete_002dtrailing_002dwhitespace-710"></a><a name="index-delete_002dtrailing_002dlines-711"></a>  Type <kbd>M-x delete-trailing-whitespace</kbd> to delete all trailing
+whitespace.  This command deletes all extra spaces at the end of each
+line in the buffer, and all empty lines at the end of the buffer; to
+ignore the latter, change the variable <code>delete-trailing-lines</code> to
+<code>nil</code>.  If the region is active, the command instead deletes
+extra spaces at the end of each line in the region.
 
-   <p><a name="index-indicate_002dempty_002dlines-557"></a><a name="index-unused-lines-558"></a><a name="index-fringes_002c-and-unused-line-indication-559"></a>  Emacs can indicate unused lines at the end of the window with a
-small image in the left fringe (see <a href="Fringes.html#Fringes">Fringes</a>).  The image appears
-for window lines that do not correspond to any buffer text.  Blank
-lines at the end of the buffer then stand out because they do not have
-this image in the fringe.
+   <p><a name="index-indicate_002dempty_002dlines-712"></a><a name="index-unused-lines-713"></a><a name="index-fringes_002c-and-unused-line-indication-714"></a>  On graphical displays, Emacs can indicate unused lines at the end of
+the window with a small image in the left fringe (see <a href="Fringes.html#Fringes">Fringes</a>). 
+The image appears for screen lines that do not correspond to any
+buffer text, so blank lines at the end of the buffer stand out because
+they lack this image.  To enable this feature, set the buffer-local
+variable <code>indicate-empty-lines</code> to a non-<code>nil</code> value.  You
+can enable or disable this feature for all new buffers by setting the
+default value of this variable, e.g., <code>(setq-default
+indicate-empty-lines t)</code>.
 
-   <p>To enable this feature, set the buffer-local variable
-<code>indicate-empty-lines</code> to a non-<code>nil</code> value.  You can enable
-or disable this feature for all new buffers by setting the default
-value of this variable, e.g. <code>(setq-default
-indicate-empty-lines t)</code>;.  (This feature currently doesn't work on
-text-only terminals.)
+   <p><a name="index-Whitespace-mode-715"></a><a name="index-mode_002c-Whitespace-716"></a><a name="index-whitespace_002dmode-717"></a><a name="index-whitespace_002dstyle-718"></a>  Whitespace mode is a buffer-local minor mode that lets you
+&ldquo;visualize&rdquo; many kinds of whitespace in the buffer, by either
+drawing the whitespace characters with a special face or displaying
+them as special glyphs.  To toggle this mode, type <kbd>M-x
+whitespace-mode</kbd>.  The kinds of whitespace visualized are determined
+by the list variable <code>whitespace-style</code>.  Here is a partial list
+of possible elements (see the variable's documentation for the full
+list):
+
+     <dl>
+<dt><code>face</code><dd>Enable all visualizations which use special faces.  This element has a
+special meaning: if it is absent from the list, none of the other
+visualizations take effect except <code>space-mark</code>, <code>tab-mark</code>,
+and <code>newline-mark</code>.
+
+     <br><dt><code>trailing</code><dd>Highlight trailing whitespace.
+
+     <br><dt><code>tabs</code><dd>Highlight tab characters.
+
+     <br><dt><code>spaces</code><dd>Highlight space and non-breaking space characters.
+
+     <br><dt><code>lines</code><dd><a name="index-whitespace_002dline_002dcolumn-719"></a>Highlight lines longer than 80 lines.  To change the column limit,
+customize the variable <code>whitespace-line-column</code>.
+
+     <br><dt><code>newline</code><dd>Highlight newlines.
+
+     <br><dt><code>empty</code><dd>Highlight empty lines.
+
+     <br><dt><code>space-mark</code><dd>Draw space and non-breaking characters with a special glyph.
+
+     <br><dt><code>tab-mark</code><dd>Draw tab characters with a special glyph.
+
+     <br><dt><code>newline-mark</code><dd>Draw newline characters with a special glyph. 
+</dl>
 
    </body></html>
 

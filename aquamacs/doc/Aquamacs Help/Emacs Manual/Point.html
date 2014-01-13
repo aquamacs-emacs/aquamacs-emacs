@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Point - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Echo-Area.html#Echo-Area" title="Echo Area">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,44 +43,37 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Screen.html#Screen">Screen</a>
 <h3 class="section">1.1 Point</h3>
 
 <p><a name="index-point-3"></a><a name="index-cursor-4"></a>
-  The active cursor shows the location at which editing commands will
-take effect, which is called <dfn>point</dfn><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  Many Emacs commands move point to
-different places in the buffer; for example, you can place point by
+  The cursor in the selected window shows the location where most
+editing commands take effect, which is called <dfn>point</dfn><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  Many Emacs commands move point
+to different places in the buffer; for example, you can place point by
 clicking mouse button 1 (normally the left button) at the desired
 location.
 
-   <p>While the cursor appears to be <em>on</em> a character, you should
-think of point as <em>between</em> two characters; it points <em>before</em>
-the character that appears under the cursor.  For example, if your text
-looks like &lsquo;<samp><span class="samp">frob</span></samp>&rsquo; with the cursor over the &lsquo;<samp><span class="samp">b</span></samp>&rsquo;, then point is
-between the &lsquo;<samp><span class="samp">o</span></samp>&rsquo; and the &lsquo;<samp><span class="samp">b</span></samp>&rsquo;.  If you insert the character
-&lsquo;<samp><span class="samp">!</span></samp>&rsquo; at that position, the result is &lsquo;<samp><span class="samp">fro!b</span></samp>&rsquo;, with point
-between the &lsquo;<samp><span class="samp">!</span></samp>&rsquo; and the &lsquo;<samp><span class="samp">b</span></samp>&rsquo;.  Thus, the cursor remains over
-the &lsquo;<samp><span class="samp">b</span></samp>&rsquo;, as before.
-
-   <p>Sometimes people speak of &ldquo;the cursor&rdquo; when they mean &ldquo;point,&rdquo; or
-speak of commands that move point as &ldquo;cursor motion&rdquo; commands.
+   <p>By default, the cursor in the selected window is drawn as a solid
+block and appears to be <em>on</em> a character, but you should think of
+point as <em>between</em> two characters; it is situated <em>before</em>
+the character under the cursor.  For example, if your text looks like
+&lsquo;<samp><span class="samp">frob</span></samp>&rsquo; with the cursor over the &lsquo;<samp><span class="samp">b</span></samp>&rsquo;, then point is between
+the &lsquo;<samp><span class="samp">o</span></samp>&rsquo; and the &lsquo;<samp><span class="samp">b</span></samp>&rsquo;.  If you insert the character &lsquo;<samp><span class="samp">!</span></samp>&rsquo;
+at that position, the result is &lsquo;<samp><span class="samp">fro!b</span></samp>&rsquo;, with point between the
+&lsquo;<samp><span class="samp">!</span></samp>&rsquo;  and the &lsquo;<samp><span class="samp">b</span></samp>&rsquo;.  Thus, the cursor remains over the
+&lsquo;<samp><span class="samp">b</span></samp>&rsquo;, as before.
 
    <p>If you are editing several files in Emacs, each in its own buffer,
-each buffer has its own point location.  A buffer that is not
-currently displayed remembers its point location in case you display
-it again later.  When Emacs displays multiple windows, each window has
-its own point location.  If the same buffer appears in more than one
-window, each window has its own point position in that buffer.
+each buffer has its own value of point.  A buffer that is not
+currently displayed remembers its value of point if you later display
+it again.  Furthermore, if a buffer is displayed in multiple windows,
+each of those windows has its own value of point.
 
-   <p>On a graphical display, Emacs shows a cursor in each window; the
-selected window's cursor is solid and blinking, and the other cursors
-are hollow.  On a text-only terminal, there is just one cursor, in the
-selected window; even though the unselected windows have their own
-point positions, they do not display a cursor.  See <a href="Cursor-Display.html#Cursor-Display">Cursor Display</a>,
-for customizable variables that control cursor display.
+   <p>See <a href="Cursor-Display.html#Cursor-Display">Cursor Display</a>, for options that control how Emacs displays
+the cursor.
 
    <div class="footnote">
 <hr>
-<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> The term &ldquo;point&rdquo;
-comes from the character &lsquo;<samp><span class="samp">.</span></samp>&rsquo;, which was the command in TECO (the
-language in which the original Emacs was written) for accessing the
-value now called &ldquo;point.&rdquo;</p>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> The
+term &ldquo;point&rdquo; comes from the character &lsquo;<samp><span class="samp">.</span></samp>&rsquo;, which was the
+command in TECO (the language in which the original Emacs was written)
+for accessing the editing position.</p>
 
    <hr></div>
 

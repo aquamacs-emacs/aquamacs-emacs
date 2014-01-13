@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Window System Selections - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Drag-and-Drop.html#Drag-and-Drop" title="Drag and Drop">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,39 +41,39 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
 <hr>
 </div>
 
-<h3 class="section">29.19 Window System Selections</h3>
+<h3 class="section">29.18 Window System Selections</h3>
 
-<p><a name="index-selection-_0028for-window-systems_0029-2408"></a>
-The X server records a set of <dfn>selections</dfn> which permit transfer of
-data between application programs.  The various selections are
-distinguished by <dfn>selection types</dfn>, represented in Emacs by
-symbols.  X clients including Emacs can read or set the selection for
-any given type.
+<p><a name="index-selection-_0028for-window-systems_0029-2661"></a><a name="index-clipboard-2662"></a><a name="index-primary-selection-2663"></a><a name="index-secondary-selection-2664"></a>
+  In the X window system, data can be transferred between different
+applications by means of <dfn>selections</dfn>.  X defines an arbitrary
+number of <dfn>selection types</dfn>, each of which can store its own data;
+however, only three are commonly used: the <dfn>clipboard</dfn>,
+<dfn>primary selection</dfn>, and <dfn>secondary selection</dfn>.  See <a href="../emacs/Cut-and-Paste.html#Cut-and-Paste">Cut and Paste</a>, for Emacs
+commands that make use of these selections.  This section documents
+the low-level functions for reading and setting X selections.
 
 <div class="defun">
-&mdash; Command: <b>x-set-selection</b><var> type data<a name="index-x_002dset_002dselection-2409"></a></var><br>
-<blockquote><p>This function sets a &ldquo;selection&rdquo; in the X server.  It takes two
-arguments: a selection type <var>type</var>, and the value to assign to it,
-<var>data</var>.  If <var>data</var> is <code>nil</code>, it means to clear out the
-selection.  Otherwise, <var>data</var> may be a string, a symbol, an integer
-(or a cons of two integers or list of two integers), an overlay, or a
-cons of two markers pointing to the same buffer.  An overlay or a pair
-of markers stands for text in the overlay or between the markers.
+&mdash; Command: <b>x-set-selection</b><var> type data<a name="index-x_002dset_002dselection-2665"></a></var><br>
+<blockquote><p>This function sets an X selection.  It takes two arguments: a
+selection type <var>type</var>, and the value to assign to it, <var>data</var>.
 
-        <p>The argument <var>data</var> may also be a vector of valid non-vector
-selection values.
+        <p><var>type</var> should be a symbol; it is usually one of <code>PRIMARY</code>,
+<code>SECONDARY</code> or <code>CLIPBOARD</code>.  These are symbols with
+upper-case names, in accord with X Window System conventions.  If
+<var>type</var> is <code>nil</code>, that stands for <code>PRIMARY</code>.
 
-        <p>Each possible <var>type</var> has its own selection value, which changes
-independently.  The usual values of <var>type</var> are <code>PRIMARY</code>,
-<code>SECONDARY</code> and <code>CLIPBOARD</code>; these are symbols with upper-case
-names, in accord with X Window System conventions.  If <var>type</var> is
-<code>nil</code>, that stands for <code>PRIMARY</code>.
+        <p>If <var>data</var> is <code>nil</code>, it means to clear out the selection. 
+Otherwise, <var>data</var> may be a string, a symbol, an integer (or a cons
+of two integers or list of two integers), an overlay, or a cons of two
+markers pointing to the same buffer.  An overlay or a pair of markers
+stands for text in the overlay or between the markers.  The argument
+<var>data</var> may also be a vector of valid non-vector selection values.
 
         <p>This function returns <var>data</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>x-get-selection</b><var> &amp;optional type data-type<a name="index-x_002dget_002dselection-2410"></a></var><br>
+&mdash; Function: <b>x-get-selection</b><var> &amp;optional type data-type<a name="index-x_002dget_002dselection-2666"></a></var><br>
 <blockquote><p>This function accesses selections set up by Emacs or by other X
 clients.  It takes two optional arguments, <var>type</var> and
 <var>data-type</var>.  The default for <var>type</var>, the selection type, is
@@ -95,26 +92,17 @@ with X conventions.)  The default for <var>data-type</var> is
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>selection-coding-system</b><var><a name="index-selection_002dcoding_002dsystem-2411"></a></var><br>
+&mdash; User Option: <b>selection-coding-system</b><var><a name="index-selection_002dcoding_002dsystem-2667"></a></var><br>
 <blockquote><p>This variable specifies the coding system to use when reading and
 writing selections or the clipboard.  See <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>.  The default is <code>compound-text-with-extensions</code>, which
 converts to the text representation that X11 normally uses. 
 </p></blockquote></div>
 
-   <p><a name="index-clipboard-support-_0028for-MS_002dWindows_0029-2412"></a>When Emacs runs on MS-Windows, it does not implement X selections in
+   <p><a name="index-clipboard-support-_0028for-MS_002dWindows_0029-2668"></a>When Emacs runs on MS-Windows, it does not implement X selections in
 general, but it does support the clipboard.  <code>x-get-selection</code>
 and <code>x-set-selection</code> on MS-Windows support the text data type
 only; if the clipboard holds other types of data, Emacs treats the
 clipboard as empty.
-
-<div class="defun">
-&mdash; User Option: <b>x-select-enable-clipboard</b><var><a name="index-x_002dselect_002denable_002dclipboard-2413"></a></var><br>
-<blockquote><p>If this is non-<code>nil</code>, the Emacs yank functions consult the
-clipboard before the primary selection, and the kill functions store in
-the clipboard as well as the primary selection.  Otherwise they do not
-access the clipboard at all.  The default is <code>nil</code> on most systems,
-but <code>t</code> on MS-Windows. 
-</p></blockquote></div>
 
    </body></html>
 

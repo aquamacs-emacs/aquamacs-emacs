@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>A Sample Function Description - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="A-Sample-Variable-Description.html#A-Sample-Variable-Description" title="A Sample Variable Description">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -57,7 +54,7 @@ you call the function.
 
    <p>The keyword <code>&amp;rest</code> (which must be followed by a single
 argument name) indicates that any number of arguments can follow.  The
-single argument name following <code>&amp;rest</code> will receive, as its
+single argument name following <code>&amp;rest</code> receives, as its
 value, a list of all the remaining arguments passed to the function. 
 Do not write <code>&amp;rest</code> when you call the function.
 
@@ -82,32 +79,33 @@ is not supplied, then the number 19 is used by default.
 </pre>
         </blockquote></div>
 
-   <p>Any argument whose name contains the name of a type (e.g.,
-<var>integer</var>, <var>integer1</var> or <var>buffer</var>) is expected to be of that
-type.  A plural of a type (such as <var>buffers</var>) often means a list of
-objects of that type.  Arguments named <var>object</var> may be of any type. 
-(See <a href="Lisp-Data-Types.html#Lisp-Data-Types">Lisp Data Types</a>, for a list of Emacs object types.)  Arguments
-with other sorts of names (e.g., <var>new-file</var>) are discussed
-specifically in the description of the function.  In some sections,
-features common to the arguments of several functions are described at
-the beginning.
+   <p>By convention, any argument whose name contains the name of a type
+(e.g., <var>integer</var>, <var>integer1</var> or <var>buffer</var>) is expected to
+be of that type.  A plural of a type (such as <var>buffers</var>) often
+means a list of objects of that type.  An argument named <var>object</var>
+may be of any type.  (For a list of Emacs object types, see <a href="Lisp-Data-Types.html#Lisp-Data-Types">Lisp Data Types</a>.)  An argument with any other sort of name
+(e.g., <var>new-file</var>) is specific to the function; if the function
+has a documentation string, the type of the argument should be
+described there (see <a href="Documentation.html#Documentation">Documentation</a>).
 
-   <p>See <a href="Lambda-Expressions.html#Lambda-Expressions">Lambda Expressions</a>, for a more complete description of optional
-and rest arguments.
+   <p>See <a href="Lambda-Expressions.html#Lambda-Expressions">Lambda Expressions</a>, for a more complete description of
+arguments modified by <code>&amp;optional</code> and <code>&amp;rest</code>.
 
    <p>Command, macro, and special form descriptions have the same format,
-but the word `Function' is replaced by `Command', `Macro', or `Special
-Form', respectively.  Commands are simply functions that may be called
-interactively; macros process their arguments differently from functions
-(the arguments are not evaluated), but are presented the same way.
+but the word &lsquo;<samp><span class="samp">Function</span></samp>&rsquo; is replaced by &lsquo;<samp><span class="samp">Command</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">Macro</span></samp>&rsquo;, or &lsquo;<samp><span class="samp">Special Form</span></samp>&rsquo;, respectively.  Commands are
+simply functions that may be called interactively; macros process
+their arguments differently from functions (the arguments are not
+evaluated), but are presented the same way.
 
-   <p>Special form descriptions use a more complex notation to specify
-optional and repeated arguments because they can break the argument
-list down into separate arguments in more complicated ways. 
-&lsquo;<samp><span class="samp">[</span><var>optional-arg</var><span class="samp">]</span></samp>&rsquo; means that <var>optional-arg</var> is
-optional and &lsquo;<samp><var>repeated-args</var><span class="samp">...</span></samp>&rsquo; stands for zero or more
-arguments.  Parentheses are used when several arguments are grouped into
-additional levels of list structure.  Here is an example:
+   <p>The descriptions of macros and special forms use a more complex
+notation to specify optional and repeated arguments, because they can
+break the argument list down into separate arguments in more
+complicated ways.  &lsquo;<samp><span class="samp">[</span><var>optional-arg</var><span class="samp">]</span></samp>&rsquo; means that
+<var>optional-arg</var> is optional and &lsquo;<samp><var>repeated-args</var><span class="samp">...</span></samp>&rsquo;
+stands for zero or more arguments.  Parentheses are used when several
+arguments are grouped into additional levels of list structure.  Here
+is an example:
 
 <div class="defun">
 &mdash; Special Form: <b>count-loop</b> (<var>var </var>[<var>from to </var>[<var>inc</var>]])<var> body<small class="dots">...</small><a name="index-count_002dloop-28"></a></var><br>

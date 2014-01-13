@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Time Parsing - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Processor-Run-Time.html#Processor-Run-Time" title="Processor Run Time">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,17 +43,17 @@ Up:&nbsp;<a rel="up" accesskey="u" href="System-Interface.html#System-Interface"
 
 <h3 class="section">39.7 Parsing and Formatting Times</h3>
 
-<p>These functions convert time values (lists of two or three integers)
-to text in a string, and vice versa.
+<p>These functions convert time values to text in a string, and vice versa. 
+Time values are lists of two to four integers (see <a href="Time-of-Day.html#Time-of-Day">Time of Day</a>).
 
 <div class="defun">
-&mdash; Function: <b>date-to-time</b><var> string<a name="index-date_002dto_002dtime-3856"></a></var><br>
+&mdash; Function: <b>date-to-time</b><var> string<a name="index-date_002dto_002dtime-4203"></a></var><br>
 <blockquote><p>This function parses the time-string <var>string</var> and returns the
 corresponding time value. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>format-time-string</b><var> format-string &amp;optional time universal<a name="index-format_002dtime_002dstring-3857"></a></var><br>
+&mdash; Function: <b>format-time-string</b><var> format-string &amp;optional time universal<a name="index-format_002dtime_002dstring-4204"></a></var><br>
 <blockquote><p>This function converts <var>time</var> (or the current time, if <var>time</var> is
 omitted) to a string according to <var>format-string</var>.  The argument
 <var>format-string</var> may contain &lsquo;<samp><span class="samp">%</span></samp>&rsquo;-sequences which say to
@@ -75,30 +72,33 @@ is equivalent to &lsquo;<samp><span class="samp">%A, %B %e, %Y</span></samp>&rsq
 <br><dt>&lsquo;<samp><span class="samp">%D</span></samp>&rsquo;<dd>This is a synonym for &lsquo;<samp><span class="samp">%m/%d/%y</span></samp>&rsquo;. 
 <br><dt>&lsquo;<samp><span class="samp">%e</span></samp>&rsquo;<dd>This stands for the day of month, blank-padded. 
 <br><dt>&lsquo;<samp><span class="samp">%h</span></samp>&rsquo;<dd>This is a synonym for &lsquo;<samp><span class="samp">%b</span></samp>&rsquo;. 
-<br><dt>&lsquo;<samp><span class="samp">%H</span></samp>&rsquo;<dd>This stands for the hour (00-23). 
-<br><dt>&lsquo;<samp><span class="samp">%I</span></samp>&rsquo;<dd>This stands for the hour (01-12). 
-<br><dt>&lsquo;<samp><span class="samp">%j</span></samp>&rsquo;<dd>This stands for the day of the year (001-366). 
-<br><dt>&lsquo;<samp><span class="samp">%k</span></samp>&rsquo;<dd>This stands for the hour (0-23), blank padded. 
-<br><dt>&lsquo;<samp><span class="samp">%l</span></samp>&rsquo;<dd>This stands for the hour (1-12), blank padded. 
-<br><dt>&lsquo;<samp><span class="samp">%m</span></samp>&rsquo;<dd>This stands for the month (01-12). 
-<br><dt>&lsquo;<samp><span class="samp">%M</span></samp>&rsquo;<dd>This stands for the minute (00-59). 
+<br><dt>&lsquo;<samp><span class="samp">%H</span></samp>&rsquo;<dd>This stands for the hour (00&ndash;23). 
+<br><dt>&lsquo;<samp><span class="samp">%I</span></samp>&rsquo;<dd>This stands for the hour (01&ndash;12). 
+<br><dt>&lsquo;<samp><span class="samp">%j</span></samp>&rsquo;<dd>This stands for the day of the year (001&ndash;366). 
+<br><dt>&lsquo;<samp><span class="samp">%k</span></samp>&rsquo;<dd>This stands for the hour (0&ndash;23), blank padded. 
+<br><dt>&lsquo;<samp><span class="samp">%l</span></samp>&rsquo;<dd>This stands for the hour (1&ndash;12), blank padded. 
+<br><dt>&lsquo;<samp><span class="samp">%m</span></samp>&rsquo;<dd>This stands for the month (01&ndash;12). 
+<br><dt>&lsquo;<samp><span class="samp">%M</span></samp>&rsquo;<dd>This stands for the minute (00&ndash;59). 
 <br><dt>&lsquo;<samp><span class="samp">%n</span></samp>&rsquo;<dd>This stands for a newline. 
+<br><dt>&lsquo;<samp><span class="samp">%N</span></samp>&rsquo;<dd>This stands for the nanoseconds (000000000&ndash;999999999).  To ask for
+fewer digits, use &lsquo;<samp><span class="samp">%3N</span></samp>&rsquo; for milliseconds, &lsquo;<samp><span class="samp">%6N</span></samp>&rsquo; for
+microseconds, etc.  Any excess digits are discarded, without rounding. 
 <br><dt>&lsquo;<samp><span class="samp">%p</span></samp>&rsquo;<dd>This stands for &lsquo;<samp><span class="samp">AM</span></samp>&rsquo; or &lsquo;<samp><span class="samp">PM</span></samp>&rsquo;, as appropriate. 
 <br><dt>&lsquo;<samp><span class="samp">%r</span></samp>&rsquo;<dd>This is a synonym for &lsquo;<samp><span class="samp">%I:%M:%S %p</span></samp>&rsquo;. 
 <br><dt>&lsquo;<samp><span class="samp">%R</span></samp>&rsquo;<dd>This is a synonym for &lsquo;<samp><span class="samp">%H:%M</span></samp>&rsquo;. 
-<br><dt>&lsquo;<samp><span class="samp">%S</span></samp>&rsquo;<dd>This stands for the seconds (00-59). 
+<br><dt>&lsquo;<samp><span class="samp">%S</span></samp>&rsquo;<dd>This stands for the seconds (00&ndash;59). 
 <br><dt>&lsquo;<samp><span class="samp">%t</span></samp>&rsquo;<dd>This stands for a tab character. 
 <br><dt>&lsquo;<samp><span class="samp">%T</span></samp>&rsquo;<dd>This is a synonym for &lsquo;<samp><span class="samp">%H:%M:%S</span></samp>&rsquo;. 
-<br><dt>&lsquo;<samp><span class="samp">%U</span></samp>&rsquo;<dd>This stands for the week of the year (01-52), assuming that weeks
+<br><dt>&lsquo;<samp><span class="samp">%U</span></samp>&rsquo;<dd>This stands for the week of the year (01&ndash;52), assuming that weeks
 start on Sunday. 
-<br><dt>&lsquo;<samp><span class="samp">%w</span></samp>&rsquo;<dd>This stands for the numeric day of week (0-6).  Sunday is day 0. 
-<br><dt>&lsquo;<samp><span class="samp">%W</span></samp>&rsquo;<dd>This stands for the week of the year (01-52), assuming that weeks
+<br><dt>&lsquo;<samp><span class="samp">%w</span></samp>&rsquo;<dd>This stands for the numeric day of week (0&ndash;6).  Sunday is day 0. 
+<br><dt>&lsquo;<samp><span class="samp">%W</span></samp>&rsquo;<dd>This stands for the week of the year (01&ndash;52), assuming that weeks
 start on Monday. 
 <br><dt>&lsquo;<samp><span class="samp">%x</span></samp>&rsquo;<dd>This has a locale-specific meaning.  In the default locale (named
 &lsquo;<samp><span class="samp">C</span></samp>&rsquo;), it is equivalent to &lsquo;<samp><span class="samp">%D</span></samp>&rsquo;. 
 <br><dt>&lsquo;<samp><span class="samp">%X</span></samp>&rsquo;<dd>This has a locale-specific meaning.  In the default locale (named
 &lsquo;<samp><span class="samp">C</span></samp>&rsquo;), it is equivalent to &lsquo;<samp><span class="samp">%T</span></samp>&rsquo;. 
-<br><dt>&lsquo;<samp><span class="samp">%y</span></samp>&rsquo;<dd>This stands for the year without century (00-99). 
+<br><dt>&lsquo;<samp><span class="samp">%y</span></samp>&rsquo;<dd>This stands for the year without century (00&ndash;99). 
 <br><dt>&lsquo;<samp><span class="samp">%Y</span></samp>&rsquo;<dd>This stands for the year with century. 
 <br><dt>&lsquo;<samp><span class="samp">%Z</span></samp>&rsquo;<dd>This stands for the time zone abbreviation (e.g., &lsquo;<samp><span class="samp">EST</span></samp>&rsquo;). 
 <br><dt>&lsquo;<samp><span class="samp">%z</span></samp>&rsquo;<dd>This stands for the time zone numerical offset (e.g., &lsquo;<samp><span class="samp">-0500</span></samp>&rsquo;). 
@@ -141,14 +141,14 @@ system.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>seconds-to-time</b><var> seconds<a name="index-seconds_002dto_002dtime-3858"></a></var><br>
+&mdash; Function: <b>seconds-to-time</b><var> seconds<a name="index-seconds_002dto_002dtime-4205"></a></var><br>
 <blockquote><p>This function converts <var>seconds</var>, a floating point number of
 seconds since the epoch, to a time value and returns that.  To perform
 the inverse conversion, use <code>float-time</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>format-seconds</b><var> format-string seconds<a name="index-format_002dseconds-3859"></a></var><br>
+&mdash; Function: <b>format-seconds</b><var> format-string seconds<a name="index-format_002dseconds-4206"></a></var><br>
 <blockquote><p>This function converts its argument <var>seconds</var> into a string of
 years, days, hours, etc., according to <var>format-string</var>.  The
 argument <var>format-string</var> may contain &lsquo;<samp><span class="samp">%</span></samp>&rsquo;-sequences which
@@ -162,7 +162,7 @@ control the conversion.  Here is a table of what the
 <br><dt>&lsquo;<samp><span class="samp">%m</span></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">%M</span></samp>&rsquo;<dd>The integer number of minutes. 
 <br><dt>&lsquo;<samp><span class="samp">%s</span></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">%S</span></samp>&rsquo;<dd>The integer number of seconds. 
 <br><dt>&lsquo;<samp><span class="samp">%z</span></samp>&rsquo;<dd>Non-printing control flag.  When it is used, other specifiers must be
-given in the order of decreasing size, i.e. years before days, hours
+given in the order of decreasing size, i.e., years before days, hours
 before minutes, etc.  Nothing will be produced in the result string to
 the left of &lsquo;<samp><span class="samp">%z</span></samp>&rsquo; until the first non-zero conversion is
 encountered.  For example, the default format used by

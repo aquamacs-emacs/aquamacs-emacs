@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Specifying File Variables - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Safe-File-Variables.html#Safe-File-Variables" title="Safe File Variables">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -43,7 +40,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="File-Variables.html#File-Variables">Fil
 <hr>
 </div>
 
-<h5 class="subsubsection">57.3.4.1 Specifying File Variables</h5>
+<h5 class="subsubsection">48.2.4.1 Specifying File Variables</h5>
 
 <p>There are two ways to specify file local variable values: in the first
 line, or with a local variables list.  Here's how to specify them in the
@@ -52,19 +49,17 @@ first line:
 <pre class="example">     -*- mode: <var>modename</var>; <var>var</var>: <var>value</var>; ... -*-
 </pre>
    <p class="noindent">You can specify any number of variable/value pairs in this way, each
-pair with a colon and semicolon as shown above.  The special
-variable/value pair <code>mode: </code><var>modename</var><code>;</code>, if present,
-specifies a major or minor mode; if you use this to specify a major
-mode, it should come first in the line.  The <var>value</var>s are used
-literally, and not evaluated.
+pair with a colon and semicolon.  The special variable/value pair
+<code>mode: </code><var>modename</var><code>;</code>, if present, specifies a major mode.  The
+<var>value</var>s are used literally, and not evaluated.
 
-   <p><a name="index-add_002dfile_002dlocal_002dvariable_002dprop_002dline-4048"></a><a name="index-delete_002dfile_002dlocal_002dvariable_002dprop_002dline-4049"></a><a name="index-copy_002ddir_002dlocals_002dto_002dfile_002dlocals_002dprop_002dline-4050"></a>  You can use the command <code>add-file-local-variable-prop-line</code>
-instead of adding entries by hand.  It prompts for a variable
-and value, and adds them to the first line in the appropriate way. 
-The command <code>delete-file-local-variable-prop-line</code> deletes a
-variable from the line.  The command
-<code>copy-dir-locals-to-file-locals-prop-line</code> copies directory-local
-variables (see <a href="Directory-Variables.html#Directory-Variables">Directory Variables</a>) to the first line.
+   <p><a name="index-add_002dfile_002dlocal_002dvariable_002dprop_002dline-4381"></a><a name="index-delete_002dfile_002dlocal_002dvariable_002dprop_002dline-4382"></a><a name="index-copy_002ddir_002dlocals_002dto_002dfile_002dlocals_002dprop_002dline-4383"></a>  You can use <kbd>M-x add-file-local-variable-prop-line</kbd> instead of
+adding entries by hand.  This command prompts for a variable and
+value, and adds them to the first line in the appropriate way. 
+<kbd>M-x delete-file-local-variable-prop-line</kbd> prompts for a variable,
+and deletes its entry from the line.  The command <kbd>M-x
+copy-dir-locals-to-file-locals-prop-line</kbd> copies the current
+directory-local variables to the first line (see <a href="Directory-Variables.html#Directory-Variables">Directory Variables</a>).
 
    <p>Here is an example first line that specifies Lisp mode and sets two
 variables with numeric values:
@@ -75,7 +70,7 @@ variables with numeric values:
 file variables are <code>coding</code>, <code>unibyte</code>, and <code>eval</code>. 
 These are described below.
 
-   <p><a name="index-shell-scripts_002c-and-local-file-variables-4051"></a><a name="index-man-pages_002c-and-local-file-variables-4052"></a>  In shell scripts, the first line is used to identify the script
+   <p><a name="index-shell-scripts_002c-and-local-file-variables-4384"></a><a name="index-man-pages_002c-and-local-file-variables-4385"></a>  In shell scripts, the first line is used to identify the script
 interpreter, so you cannot put any local variables there.  To
 accommodate this, Emacs looks for local variable specifications in the
 <em>second</em> line if the first line specifies an interpreter.  The
@@ -83,7 +78,7 @@ same is true for man pages which start with the magic string
 &lsquo;<samp><span class="samp">'\"</span></samp>&rsquo; to specify a list of troff preprocessors (not all do,
 however).
 
-   <p>Instead of using a &lsquo;<samp><span class="samp">-*-</span></samp>&rsquo; line, you can define file local
+   <p>Apart from using a &lsquo;<samp><span class="samp">-*-</span></samp>&rsquo; line, you can define file local
 variables using a <dfn>local variables list</dfn> near the end of the file. 
 The start of the local variables list should be no more than 3000
 characters from the end of the file, and must be on the last page if
@@ -91,17 +86,20 @@ the file is divided into pages.
 
    <p>If a file has both a local variables list and a &lsquo;<samp><span class="samp">-*-</span></samp>&rsquo; line,
 Emacs processes <em>everything</em> in the &lsquo;<samp><span class="samp">-*-</span></samp>&rsquo; line first, and
-<em>everything</em> in the local variables list afterward.
+<em>everything</em> in the local variables list afterward.  The exception
+to this is a major mode specification.  Emacs applies this first,
+wherever it appears, since most major modes kill all local variables as
+part of their initialization.
 
    <p>A local variables list starts with a line containing the string
 &lsquo;<samp><span class="samp">Local Variables:</span></samp>&rsquo;, and ends with a line containing the string
 &lsquo;<samp><span class="samp">End:</span></samp>&rsquo;.  In between come the variable names and values, one set
 per line, like this:
 
-<pre class="example">     /* Local Variables: */
-     /* mode:c           */
-     /* comment-column:0 */
-     /* End:             */
+<pre class="example">     /* Local Variables:  */
+     /* mode: c           */
+     /* comment-column: 0 */
+     /* End:              */
 </pre>
    <p class="noindent">In this example, each line starts with the prefix &lsquo;<samp><span class="samp">/*</span></samp>&rsquo; and ends
 with the suffix &lsquo;<samp><span class="samp">*/</span></samp>&rsquo;.  Emacs recognizes the prefix and suffix by
@@ -110,20 +108,20 @@ the first line of the list; it then automatically discards them from
 the other lines of the list.  The usual reason for using a prefix
 and/or suffix is to embed the local variables list in a comment, so it
 won't confuse other programs that the file is intended for.  The
-example above is for the C programming language, where comment lines
-start with &lsquo;<samp><span class="samp">/*</span></samp>&rsquo; and end with &lsquo;<samp><span class="samp">*/</span></samp>&rsquo;.
+example above is for the C programming language, where comments start
+with &lsquo;<samp><span class="samp">/*</span></samp>&rsquo; and end with &lsquo;<samp><span class="samp">*/</span></samp>&rsquo;.
 
-   <p><a name="index-add_002dfile_002dlocal_002dvariable-4053"></a><a name="index-delete_002dfile_002dlocal_002dvariable-4054"></a><a name="index-copy_002ddir_002dlocals_002dto_002dfile_002dlocals-4055"></a>  You can construct the local variables list yourself, or use the
-command <code>add-file-local-variable</code>.  This prompts for a variable
-and value, and adds them to the list.  If necessary, it also adds the
-start and end markers.  The command <code>delete-file-local-variable</code>
-deletes a variable from the list.  The command
-<code>copy-dir-locals-to-file-locals</code> copies directory-local variables
-(see <a href="Directory-Variables.html#Directory-Variables">Directory Variables</a>) to the list.
+   <p><a name="index-add_002dfile_002dlocal_002dvariable-4386"></a><a name="index-delete_002dfile_002dlocal_002dvariable-4387"></a><a name="index-copy_002ddir_002dlocals_002dto_002dfile_002dlocals-4388"></a>  Instead of typing in the local variables list directly, you can use
+the command <kbd>M-x add-file-local-variable</kbd>.  This prompts for a
+variable and value, and adds them to the list, adding the &lsquo;<samp><span class="samp">Local
+Variables:</span></samp>&rsquo; string and start and end markers as necessary.  The
+command <kbd>M-x delete-file-local-variable</kbd> deletes a variable from
+the list.  <kbd>M-x copy-dir-locals-to-file-locals</kbd> copies
+directory-local variables to the list (see <a href="Directory-Variables.html#Directory-Variables">Directory Variables</a>).
 
    <p>As with the &lsquo;<samp><span class="samp">-*-</span></samp>&rsquo; line, the variables in a local variables list
 are used literally, and are not evaluated first.  If you want to split
-a long string across multiple lines of the file, you can use
+a long string value across multiple lines of the file, you can use
 backslash-newline, which is ignored in Lisp string constants; you
 should put the prefix and suffix on each line, even lines that start
 or end within the string, as they will be stripped off when processing
@@ -138,7 +136,7 @@ the list.  Here is an example:
 list:
 
      <ul>
-<li><code>mode</code> enables the specified major or minor mode.
+<li><code>mode</code> enables the specified major mode.
 
      <li><code>eval</code> evaluates the specified Lisp expression (the value
 returned by that expression is ignored).
@@ -146,32 +144,37 @@ returned by that expression is ignored).
      <li><code>coding</code> specifies the coding system for character code
 conversion of this file.  See <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>.
 
-     <li><code>unibyte</code> says to visit the file in a unibyte buffer, if the
-value is <code>t</code>.  See <a href="Enabling-Multibyte.html#Enabling-Multibyte">Enabling Multibyte</a>. 
-</ul>
+     <li><code>unibyte</code> says to load or compile a file of Emacs Lisp in unibyte
+mode, if the value is <code>t</code>.  See <a href="../elisp/Disabling-Multibyte.html#Disabling-Multibyte">Disabling Multibyte Characters</a>.
 
-<p class="noindent">These four &ldquo;variables&rdquo; are not really variables; setting them in any
+   </ul>
+
+<p class="noindent">These four keywords are not really variables; setting them in any
 other context has no special meaning.
 
-   <p><em>If </em><code>mode</code><em> is used to set a major mode, it should be the
-first &ldquo;variable&rdquo; in the list.</em>  Otherwise, the entries that precede
-it will usually have no effect, since most major modes kill all local
-variables as part of their initialization.
+   <p>Do not use the <code>mode</code> keyword for minor modes.  To enable or
+disable a minor mode in a local variables list, use the <code>eval</code>
+keyword with a Lisp expression that runs the mode command
+(see <a href="Minor-Modes.html#Minor-Modes">Minor Modes</a>).  For example, the following local variables
+list enables Eldoc mode (see <a href="Lisp-Doc.html#Lisp-Doc">Lisp Doc</a>) by calling
+<code>eldoc-mode</code> with no argument (calling it with an argument of 1
+would do the same), and disables Font Lock mode (see <a href="Font-Lock.html#Font-Lock">Font Lock</a>) by
+calling <code>font-lock-mode</code> with an argument of -1.
 
-   <p>You can use the <code>mode</code> &ldquo;variable&rdquo; to enable minor modes as
-well as the major modes; in fact, you can use it more than once, first
-to set the major mode and then to enable minor modes which are
-specific to particular buffers.
+<pre class="example">     ;; Local Variables:
+     ;; eval: (eldoc-mode)
+     ;; eval: (font-lock-mode -1)
+     ;; End:
+</pre>
+   <p class="noindent">Note, however, that it is often a mistake to specify minor modes this
+way.  Minor modes represent individual user preferences, and it may be
+inappropriate to impose your preferences on another user who might
+edit the file.  If you wish to automatically enable or disable a minor
+mode in a situation-dependent way, it is often better to do it in a
+major mode hook (see <a href="Hooks.html#Hooks">Hooks</a>).
 
-   <p>Often, however, it is a mistake to enable minor modes this way. 
-Most minor modes, like Auto Fill mode, represent individual user
-preferences.  If you want to use a minor mode, it is better to set up
-major mode hooks with your init file to turn that minor mode on for
-yourself alone (see <a href="Init-File.html#Init-File">Init File</a>), instead of using a local variable
-list to impose your taste on everyone.
-
-   <p>Use the command <code>normal-mode</code> to reset the local variables and
-major mode of a buffer according to the file name and contents,
+   <p>Use the command <kbd>M-x normal-mode</kbd> to reset the local variables
+and major mode of a buffer according to the file name and contents,
 including the local variables list if any.  See <a href="Choosing-Modes.html#Choosing-Modes">Choosing Modes</a>.
 
    </body></html>

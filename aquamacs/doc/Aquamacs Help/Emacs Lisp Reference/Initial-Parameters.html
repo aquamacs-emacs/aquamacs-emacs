@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Initial Parameters - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Window-Frame-Parameters.html#Window-Frame-Parameters" title="Window Frame Parameters">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,13 +43,13 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Frame-Parameters.html#Frame-Parameters"
 
 <h4 class="subsection">29.3.2 Initial Frame Parameters</h4>
 
-<p>You can specify the parameters for the initial startup frame
-by setting <code>initial-frame-alist</code> in your init file (see <a href="Init-File.html#Init-File">Init File</a>).
+<p>You can specify the parameters for the initial startup frame by
+setting <code>initial-frame-alist</code> in your init file (see <a href="Init-File.html#Init-File">Init File</a>).
 
 <div class="defun">
-&mdash; User Option: <b>initial-frame-alist</b><var><a name="index-initial_002dframe_002dalist-2257"></a></var><br>
-<blockquote><p>This variable's value is an alist of parameter values used when creating
-the initial window frame.  You can set this variable to specify the
+&mdash; User Option: <b>initial-frame-alist</b><var><a name="index-initial_002dframe_002dalist-2508"></a></var><br>
+<blockquote><p>This variable's value is an alist of parameter values used when
+creating the initial frame.  You can set this variable to specify the
 appearance of the initial frame without altering subsequent frames. 
 Each element has the form:
 
@@ -78,35 +75,36 @@ the initial frame, specify the same parameters in
 <code>initial-frame-alist</code> with values that match the X resources. 
 </p></blockquote></div>
 
-   <p>If these parameters specify a separate minibuffer-only frame with
-<code>(minibuffer . nil)</code>, and you have not created one, Emacs creates
-one for you.
+   <p><a name="index-minibuffer_002donly-frame-2509"></a>If these parameters include <code>(minibuffer . nil)</code>, that indicates
+that the initial frame should have no minibuffer.  In this case, Emacs
+creates a separate <dfn>minibuffer-only frame</dfn> as well.
 
 <div class="defun">
-&mdash; User Option: <b>minibuffer-frame-alist</b><var><a name="index-minibuffer_002dframe_002dalist-2258"></a></var><br>
+&mdash; User Option: <b>minibuffer-frame-alist</b><var><a name="index-minibuffer_002dframe_002dalist-2510"></a></var><br>
 <blockquote><p>This variable's value is an alist of parameter values used when
-creating an initial minibuffer-only frame.  This is the
-minibuffer-only frame that Emacs creates if <code>initial-frame-alist</code>
-specifies a frame with no minibuffer. 
+creating an initial minibuffer-only frame (i.e., the minibuffer-only
+frame that Emacs creates if <code>initial-frame-alist</code> specifies a
+frame with no minibuffer). 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>default-frame-alist</b><var><a name="index-default_002dframe_002dalist-2259"></a></var><br>
+&mdash; User Option: <b>default-frame-alist</b><var><a name="index-default_002dframe_002dalist-2511"></a></var><br>
 <blockquote><p>This is an alist specifying default values of frame parameters for all
 Emacs frames&mdash;the first frame, and subsequent frames.  When using the X
 Window System, you can get the same results by means of X resources
 in many cases.
 
-        <p>Setting this variable does not affect existing frames. 
+        <p>Setting this variable does not affect existing frames.  Furthermore,
+functions that display a buffer in a separate frame may override the
+default parameters by supplying their own parameters. 
 </p></blockquote></div>
 
-   <p>Functions that display a buffer in a separate frame can override the
-default parameters by supplying their own parameters.  See <a href="Definition-of-special_002ddisplay_002dframe_002dalist.html#Definition-of-special_002ddisplay_002dframe_002dalist">Definition of special-display-frame-alist</a>.
-
-   <p>If you use options that specify window appearance when you invoke Emacs,
-they take effect by adding elements to <code>default-frame-alist</code>.  One
-exception is &lsquo;<samp><span class="samp">-geometry</span></samp>&rsquo;, which adds the specified position to
-<code>initial-frame-alist</code> instead.  See <a href="../emacs/Emacs-Invocation.html#Emacs-Invocation">Command Line Arguments for Emacs Invocation</a>.
+   <p>If you invoke Emacs with command-line options that specify frame
+appearance, those options take effect by adding elements to either
+<code>initial-frame-alist</code> or <code>default-frame-alist</code>.  Options
+which affect just the initial frame, such as &lsquo;<samp><span class="samp">--geometry</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">--maximized</span></samp>&rsquo;, add to <code>initial-frame-alist</code>; the others add
+to <code>default-frame-alist</code>.  see <a href="../emacs/Emacs-Invocation.html#Emacs-Invocation">Command Line Arguments for Emacs Invocation</a>.
 
    </body></html>
 

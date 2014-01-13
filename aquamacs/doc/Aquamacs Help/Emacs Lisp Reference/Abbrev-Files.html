@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Abbrev Files - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Abbrev-Expansion.html#Abbrev-Expansion" title="Abbrev Expansion">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,52 +41,54 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Abbrevs.html#Abbrevs">Abbrevs</a>
 <hr>
 </div>
 
-<h3 class="section">36.4 Saving Abbrevs in Files</h3>
+<h3 class="section">36.3 Saving Abbrevs in Files</h3>
 
 <p>A file of saved abbrev definitions is actually a file of Lisp code. 
 The abbrevs are saved in the form of a Lisp program to define the same
 abbrev tables with the same contents.  Therefore, you can load the file
 with <code>load</code> (see <a href="How-Programs-Do-Loading.html#How-Programs-Do-Loading">How Programs Do Loading</a>).  However, the
 function <code>quietly-read-abbrev-file</code> is provided as a more
-convenient interface.
+convenient interface.  Emacs automatically calls this function at
+startup.
 
    <p>User-level facilities such as <code>save-some-buffers</code> can save
 abbrevs in a file automatically, under the control of variables
 described here.
 
 <div class="defun">
-&mdash; User Option: <b>abbrev-file-name</b><var><a name="index-abbrev_002dfile_002dname-3224"></a></var><br>
+&mdash; User Option: <b>abbrev-file-name</b><var><a name="index-abbrev_002dfile_002dname-3497"></a></var><br>
 <blockquote><p>This is the default file name for reading and saving abbrevs. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>quietly-read-abbrev-file</b><var> &amp;optional filename<a name="index-quietly_002dread_002dabbrev_002dfile-3225"></a></var><br>
+&mdash; Function: <b>quietly-read-abbrev-file</b><var> &amp;optional filename<a name="index-quietly_002dread_002dabbrev_002dfile-3498"></a></var><br>
 <blockquote><p>This function reads abbrev definitions from a file named <var>filename</var>,
 previously written with <code>write-abbrev-file</code>.  If <var>filename</var> is
 omitted or <code>nil</code>, the file specified in <code>abbrev-file-name</code> is
-used.  <code>save-abbrevs</code> is set to <code>t</code> so that changes will be
-saved.
+used.
 
-        <p>This function does not display any messages.  It returns <code>nil</code>. 
+        <p>As the name implies, this function does not display any messages. 
+<!-- It returns @code{nil}. -->
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>save-abbrevs</b><var><a name="index-save_002dabbrevs-3226"></a></var><br>
+&mdash; User Option: <b>save-abbrevs</b><var><a name="index-save_002dabbrevs-3499"></a></var><br>
 <blockquote><p>A non-<code>nil</code> value for <code>save-abbrevs</code> means that Emacs should
-offer the user to save abbrevs when files are saved.  If the value is
-<code>silently</code>, Emacs saves the abbrevs without asking the user. 
-<code>abbrev-file-name</code> specifies the file to save the abbrevs in. 
+offer to save abbrevs (if any have changed) when files are saved.  If
+the value is <code>silently</code>, Emacs saves the abbrevs without asking
+the user.  <code>abbrev-file-name</code> specifies the file to save the
+abbrevs in. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>abbrevs-changed</b><var><a name="index-abbrevs_002dchanged-3227"></a></var><br>
+&mdash; Variable: <b>abbrevs-changed</b><var><a name="index-abbrevs_002dchanged-3500"></a></var><br>
 <blockquote><p>This variable is set non-<code>nil</code> by defining or altering any
 abbrevs (except system abbrevs).  This serves as a flag for various
 Emacs commands to offer to save your abbrevs. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>write-abbrev-file</b><var> &amp;optional filename<a name="index-write_002dabbrev_002dfile-3228"></a></var><br>
+&mdash; Command: <b>write-abbrev-file</b><var> &amp;optional filename<a name="index-write_002dabbrev_002dfile-3501"></a></var><br>
 <blockquote><p>Save all abbrev definitions (except system abbrevs), for all abbrev
 tables listed in <code>abbrev-table-name-list</code>, in the file
 <var>filename</var>, in the form of a Lisp program that when loaded will

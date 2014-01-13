@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Image Descriptors - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="XBM-Images.html#XBM-Images" title="XBM Images">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,48 +43,49 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Images.html#Images">Images</a>
 
 <h4 class="subsection">38.16.2 Image Descriptors</h4>
 
-<p><a name="index-image-descriptor-3627"></a>
-  An image description is a list of the form <code>(image . </code><var>props</var><code>)</code>,
-where <var>props</var> is a property list containing alternating keyword
-symbols (symbols whose names start with a colon) and their values. 
-You can use any Lisp object as a property, but the only properties
-that have any special meaning are certain symbols, all of them keywords.
+<p><a name="index-image-descriptor-3929"></a>
+  An <dfn>image descriptor</dfn> is a list which specifies the underlying
+data for an image, and how to display it.  It is typically used as the
+value of a <code>display</code> overlay or text property (see <a href="Other-Display-Specs.html#Other-Display-Specs">Other Display Specs</a>); but See <a href="Showing-Images.html#Showing-Images">Showing Images</a>, for convenient helper
+functions to insert images into buffers.
 
-   <p>Every image descriptor must contain the property <code>:type
-</code><var>type</var> to specify the format of the image.  The value of <var>type</var>
-should be an image type symbol; for example, <code>xpm</code> for an image in
-XPM format.
+   <p>Each image descriptor has the form <code>(image . </code><var>props</var><code>)</code>,
+where <var>props</var> is a property list of alternating keyword symbols
+and values, including at least the pair <code>:type </code><var>TYPE</var> which
+specifies the image type.
 
-   <p>Here is a list of other properties that are meaningful for all image
-types:
+   <p>The following is a list of properties that are meaningful for all
+image types (there are also properties which are meaningful only for
+certain image types, as documented in the following subsections):
 
      <dl>
-<dt><code>:file </code><var>file</var><dd>The <code>:file</code> property says to load the image from file
-<var>file</var>.  If <var>file</var> is not an absolute file name, it is expanded
-in <code>data-directory</code>.
+<dt><code>:type </code><var>type</var><dd>The image type. 
+See <a href="Image-Formats.html#Image-Formats">Image Formats</a>. 
+Every image descriptor must include this property.
 
-     <br><dt><code>:data </code><var>data</var><dd>The <code>:data</code> property says the actual contents of the image. 
-Each image must use either <code>:data</code> or <code>:file</code>, but not both. 
-For most image types, the value of the <code>:data</code> property should be a
-string containing the image data; we recommend using a unibyte string.
+     <br><dt><code>:file </code><var>file</var><dd>This says to load the image from file <var>file</var>.  If <var>file</var> is
+not an absolute file name, it is expanded in <code>data-directory</code>.
 
-     <p>Before using <code>:data</code>, look for further information in the section
-below describing the specific image format.  For some image types,
-<code>:data</code> may not be supported; for some, it allows other data types;
-for some, <code>:data</code> alone is not enough, so you need to use other
-image properties along with <code>:data</code>.
+     <br><dt><code>:data </code><var>data</var><dd>This specifies the raw image data.  Each image descriptor must have
+either <code>:data</code> or <code>:file</code>, but not both.
 
-     <br><dt><code>:margin </code><var>margin</var><dd>The <code>:margin</code> property specifies how many pixels to add as an
-extra margin around the image.  The value, <var>margin</var>, must be a
-non-negative number, or a pair <code>(</code><var>x</var><code> . </code><var>y</var><code>)</code> of such
-numbers.  If it is a pair, <var>x</var> specifies how many pixels to add
-horizontally, and <var>y</var> specifies how many pixels to add vertically. 
-If <code>:margin</code> is not specified, the default is zero.
+     <p>For most image types, the value of a <code>:data</code> property should be a
+string containing the image data.  Some image types do not support
+<code>:data</code>; for some others, <code>:data</code> alone is not enough, so
+you need to use other image properties along with <code>:data</code>.  See
+the following subsections for details.
 
-     <br><dt><code>:ascent </code><var>ascent</var><dd>The <code>:ascent</code> property specifies the amount of the image's
-height to use for its ascent&mdash;that is, the part above the baseline. 
-The value, <var>ascent</var>, must be a number in the range 0 to 100, or
-the symbol <code>center</code>.
+     <br><dt><code>:margin </code><var>margin</var><dd>This specifies how many pixels to add as an extra margin around the
+image.  The value, <var>margin</var>, must be a non-negative number, or a
+pair <code>(</code><var>x</var><code> . </code><var>y</var><code>)</code> of such numbers.  If it is a pair,
+<var>x</var> specifies how many pixels to add horizontally, and <var>y</var>
+specifies how many pixels to add vertically.  If <code>:margin</code> is not
+specified, the default is zero.
+
+     <br><dt><code>:ascent </code><var>ascent</var><dd>This specifies the amount of the image's height to use for its
+ascent&mdash;that is, the part above the baseline.  The value,
+<var>ascent</var>, must be a number in the range 0 to 100, or the symbol
+<code>center</code>.
 
      <p>If <var>ascent</var> is a number, that percentage of the image's height is
 used for its ascent.
@@ -99,15 +97,14 @@ properties and overlays that apply to the image.
 
      <p>If this property is omitted, it defaults to 50.
 
-     <br><dt><code>:relief </code><var>relief</var><dd>The <code>:relief</code> property, if non-<code>nil</code>, adds a shadow rectangle
-around the image.  The value, <var>relief</var>, specifies the width of the
-shadow lines, in pixels.  If <var>relief</var> is negative, shadows are drawn
-so that the image appears as a pressed button; otherwise, it appears as
-an unpressed button.
+     <br><dt><code>:relief </code><var>relief</var><dd>This adds a shadow rectangle around the image.  The value,
+<var>relief</var>, specifies the width of the shadow lines, in pixels.  If
+<var>relief</var> is negative, shadows are drawn so that the image appears
+as a pressed button; otherwise, it appears as an unpressed button.
 
-     <br><dt><code>:conversion </code><var>algorithm</var><dd>The <code>:conversion</code> property, if non-<code>nil</code>, specifies a
-conversion algorithm that should be applied to the image before it is
-displayed; the value, <var>algorithm</var>, specifies which algorithm.
+     <br><dt><code>:conversion </code><var>algorithm</var><dd>This specifies a conversion algorithm that should be applied to the
+image before it is displayed; the value, <var>algorithm</var>, specifies
+which algorithm.
 
           <dl>
 <dt><code>laplace</code><dt><code>emboss</code><dd>Specifies the Laplace edge detection algorithm, which blurs out small
@@ -135,14 +132,14 @@ of the factors' absolute values.
           <p>Laplace edge-detection currently uses a matrix of
           <pre class="display">                 (1  0  0
                   0  0  0
-                  9  9 -1)
+                  0  0 -1)
 </pre>
           <p>Emboss edge-detection uses a matrix of
           <pre class="display">                 ( 2 -1  0
                   -1  0  1
                    0  1 -2)
 </pre>
-          <br><dt><code>disabled</code><dd>Specifies transforming the image so that it looks &ldquo;disabled.&rdquo;
+          <br><dt><code>disabled</code><dd>Specifies transforming the image so that it looks &ldquo;disabled&rdquo;. 
 </dl>
 
      <br><dt><code>:mask </code><var>mask</var><dd>If <var>mask</var> is <code>heuristic</code> or <code>(heuristic </code><var>bg</var><code>)</code>, build
@@ -195,7 +192,7 @@ mouse event; for instance, <code>[area4 mouse-1]</code> if the hot-spot's
 </dl>
 
 <div class="defun">
-&mdash; Function: <b>image-mask-p</b><var> spec &amp;optional frame<a name="index-image_002dmask_002dp-3628"></a></var><br>
+&mdash; Function: <b>image-mask-p</b><var> spec &amp;optional frame<a name="index-image_002dmask_002dp-3930"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if image <var>spec</var> has a mask bitmap. 
 <var>frame</var> is the frame on which the image will be displayed. 
 <var>frame</var> <code>nil</code> or omitted means to use the selected frame

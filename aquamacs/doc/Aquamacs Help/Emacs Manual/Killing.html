@@ -1,21 +1,18 @@
 <html lang="en">
 <head>
 <title>Killing - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="prev" href="Mark.html#Mark" title="Mark">
-<link rel="next" href="Yanking.html#Yanking" title="Yanking">
+<link rel="next" href="Registers.html#Registers" title="Registers">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -38,7 +35,7 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <div class="node">
 <a name="Killing"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Yanking.html#Yanking">Yanking</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Registers.html#Registers">Registers</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Mark.html#Mark">Mark</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
 <hr>
@@ -46,44 +43,24 @@ Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
 
 <h2 class="chapter">12 Killing and Moving Text</h2>
 
-<p><dfn>Killing</dfn> means erasing text and copying it into the <dfn>kill
-ring</dfn>, from which you can bring it back into the buffer by
-<dfn>yanking</dfn> it.  (Some applications use the terms &ldquo;cutting&rdquo; and
-&ldquo;pasting&rdquo; for similar operations.)  This is the most common way of
-moving or copying text within Emacs.  It is very versatile, because
-there are commands for killing many different types of syntactic
-units.
+<p>In Emacs, <dfn>killing</dfn> means erasing text and copying it into the
+<dfn>kill ring</dfn>.  <dfn>Yanking</dfn> means bringing text from the kill ring
+back into the buffer.  (Some applications use the terms &ldquo;cutting&rdquo;
+and &ldquo;pasting&rdquo; for similar operations.)  The kill ring is so-named
+because it can be visualized as a set of blocks of text arranged in a
+ring, which you can access in cyclic order.  See <a href="Kill-Ring.html#Kill-Ring">Kill Ring</a>.
 
-   <p><a name="index-killing-text-336"></a><a name="index-cutting-text-337"></a><a name="index-deletion-338"></a>  Most commands which erase text from the buffer save it in the kill
-ring.  These are known as <dfn>kill</dfn> commands.  The kill ring stores
-several recent kills, not just the last one, so killing is a very safe
-operation: when you make a new kill, you don't have to worry much
-about losing text that you previously killed.
-
-   <p>You can yank text from the kill ring into any position in a buffer,
-including a position in a different buffer; the kill ring is shared by
-all buffers.  The <kbd>C-/</kbd> (<code>undo</code>) command can undo both kill
-and delete commands (see <a href="Undo.html#Undo">Undo</a>); the importance of the kill ring is
-that you can yank the text in a different place.
-
-   <p>Commands that erase text but do not save it in the kill ring are
-known as <dfn>delete</dfn> commands.  These include <kbd>C-d</kbd>
-(<code>delete-char</code>) and &lt;DEL&gt; (<code>delete-backward-char</code>),
-which delete only one character at a time, and those commands that
-delete only spaces or newlines.  Commands that can erase significant
-amounts of nontrivial data generally do a kill operation instead.  The
-commands' names and individual descriptions use the words &lsquo;<samp><span class="samp">kill</span></samp>&rsquo;
-and &lsquo;<samp><span class="samp">delete</span></samp>&rsquo; to say which kind of operation they perform.
-
-   <p>You can also use the mouse to kill and yank.  See <a href="Cut-and-Paste.html#Cut-and-Paste">Cut and Paste</a>.
+   <p>Killing and yanking are the most common way to move or copy text
+within Emacs.  It is very versatile, because there are commands for
+killing many different types of syntactic units.
 
 <ul class="menu">
-<li><a accesskey="1" href="Deletion.html#Deletion">Deletion</a>:             Commands for deleting small amounts of text and
-                          blank areas. 
-<li><a accesskey="2" href="Killing-by-Lines.html#Killing-by-Lines">Killing by Lines</a>:     How to kill entire lines of text at one time. 
-<li><a accesskey="3" href="Other-Kill-Commands.html#Other-Kill-Commands">Other Kill Commands</a>:  Commands to kill large regions of text and
-                          syntactic units such as words and sentences. 
-<li><a accesskey="4" href="Kill-Options.html#Kill-Options">Kill Options</a>:         Options that affect killing. 
+<li><a accesskey="1" href="Deletion-and-Killing.html#Deletion-and-Killing">Deletion and Killing</a>:  Commands that remove text. 
+<li><a accesskey="2" href="Yanking.html#Yanking">Yanking</a>:               Commands that insert text. 
+<li><a accesskey="3" href="Cut-and-Paste.html#Cut-and-Paste">Cut and Paste</a>:         Clipboard and selections on graphical displays. 
+<li><a accesskey="4" href="Accumulating-Text.html#Accumulating-Text">Accumulating Text</a>:     Other methods to add text to the buffer. 
+<li><a accesskey="5" href="Rectangles.html#Rectangles">Rectangles</a>:            Operating on text in rectangular areas. 
+<li><a accesskey="6" href="CUA-Bindings.html#CUA-Bindings">CUA Bindings</a>:          Using <kbd>C-x</kbd>/<kbd>C-c</kbd>/<kbd>C-v</kbd> to kill and yank. 
 </ul>
 
    </body></html>

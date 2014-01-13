@@ -1,0 +1,121 @@
+<html lang="en">
+<head>
+<title>Motif Resources - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="X-Resources.html#X-Resources" title="X Resources">
+<link rel="prev" href="Lucid-Resources.html#Lucid-Resources" title="Lucid Resources">
+<link rel="next" href="GTK-resources.html#GTK-resources" title="GTK resources">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
+
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Motif-Resources"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="GTK-resources.html#GTK-resources">GTK resources</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Lucid-Resources.html#Lucid-Resources">Lucid Resources</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="X-Resources.html#X-Resources">X Resources</a>
+<hr>
+</div>
+
+<h3 class="appendixsec">D.4 Motif Menu X Resources</h3>
+
+<p><a name="index-Menu-X-Resources-_0028Motif-widgets_0029-4693"></a><a name="index-Motif-Widget-X-Resources-4694"></a>
+  If Emacs is compiled with the X toolkit support using Motif or
+LessTif widgets, you can use X resources to customize the appearance
+of the menu bar, pop-up menus, and dialog boxes.  However, the
+resources are organized differently from Lucid widgets.
+
+   <p>The resource names for the menu bar are in the &lsquo;<samp><span class="samp">pane.menubar</span></samp>&rsquo;
+class, and they must be specified in this form:
+
+<pre class="smallexample">     Emacs.pane.menubar.<var>subwidget</var>.<var>resource</var>:  <var>value</var>
+</pre>
+   <p class="noindent">For pop-up menus, the resources are in the &lsquo;<samp><span class="samp">menu*</span></samp>&rsquo; class, instead
+of &lsquo;<samp><span class="samp">pane.menubar</span></samp>&rsquo;.  For dialog boxes, they are in &lsquo;<samp><span class="samp">dialog</span></samp>&rsquo;. 
+In each case, each individual menu string is a subwidget; the
+subwidget's name is the same as the menu item string.  For example,
+the &lsquo;<samp><span class="samp">File</span></samp>&rsquo; menu in the menu bar is a subwidget named
+&lsquo;<samp><span class="samp">emacs.pane.menubar.File</span></samp>&rsquo;.
+
+   <p>Typically, you want to specify the same resources for the whole menu
+bar.  To do this, use &lsquo;<samp><span class="samp">*</span></samp>&rsquo; instead of a specific subwidget name. 
+For example, to specify the font &lsquo;<samp><span class="samp">8x16</span></samp>&rsquo; for all menu bar items,
+including submenus, write this:
+
+<pre class="smallexample">     Emacs.pane.menubar.*.fontList:  8x16
+</pre>
+   <p>Each item in a submenu also has its own name for X resources; for
+example, the &lsquo;<samp><span class="samp">File</span></samp>&rsquo; submenu has an item named &lsquo;<samp><span class="samp">Save (current
+buffer)</span></samp>&rsquo;.  A resource specification for a submenu item looks like
+this:
+
+<pre class="smallexample">     Emacs.pane.menubar.popup_*.<var>menu</var>.<var>item</var>.<var>resource</var>: <var>value</var>
+</pre>
+   <p class="noindent">For example, here's how to specify the font for the &lsquo;<samp><span class="samp">Save (current
+buffer)</span></samp>&rsquo; item:
+
+<pre class="smallexample">     Emacs.pane.menubar.popup_*.File.Save (current buffer).fontList: 8x16
+</pre>
+   <p class="noindent">For an item in a second-level submenu, such as &lsquo;<samp><span class="samp">Complete Word</span></samp>&rsquo;
+under &lsquo;<samp><span class="samp">Spell Checking</span></samp>&rsquo; under &lsquo;<samp><span class="samp">Tools</span></samp>&rsquo;, the resource fits this
+template:
+
+<pre class="smallexample">     Emacs.pane.menubar.popup_*.popup_*.<var>menu</var>.<var>resource</var>: <var>value</var>
+</pre>
+   <p class="noindent">For example,
+
+<pre class="smallexample">     Emacs.pane.menubar.popup_*.popup_*.Spell Checking.Complete Word: <var>value</var>
+</pre>
+   <p class="noindent">(This should be one long line.)
+
+   <p>If you want the submenu items to look different from the menu bar
+itself, you must first specify the resource for all of them, then
+override the value for submenus alone.  Here is an example:
+
+<pre class="smallexample">     Emacs.pane.menubar.*.fontList:  8x16
+     Emacs.pane.menubar.popup_*.fontList: 8x16
+</pre>
+   <p>To specify resources for the LessTif file-selection box, use
+&lsquo;<samp><span class="samp">fsb*</span></samp>&rsquo;, like this:
+
+<pre class="example">     Emacs.fsb*.fontList: 8x16
+</pre>
+   <p>Here is a list of resources for LessTif menu bars and pop-up menus:
+
+     <dl>
+<dt><code>armColor</code><dd>The color to show in an armed button. 
+<br><dt><code>fontList</code><dd>The font to use. 
+<br><dt><code>marginBottom</code><dt><code>marginHeight</code><dt><code>marginLeft</code><dt><code>marginRight</code><dt><code>marginTop</code><dt><code>marginWidth</code><dd>Amount of space to leave around the item, within the border. 
+<br><dt><code>borderWidth</code><dd>The width of the border around the menu item, on all sides. 
+<br><dt><code>shadowThickness</code><dd>The width of the border shadow. 
+<br><dt><code>bottomShadowColor</code><dd>The color for the border shadow, on the bottom and the right. 
+<br><dt><code>topShadowColor</code><dd>The color for the border shadow, on the top and the left. 
+</dl>
+
+   </body></html>
+

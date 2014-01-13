@@ -1,0 +1,123 @@
+<html lang="en">
+<head>
+<title>C Integer Types - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" title="GNU Emacs Internals">
+<link rel="prev" href="Object-Internals.html#Object-Internals" title="Object Internals">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
+
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="C-Integer-Types"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Object-Internals.html#Object-Internals">Object Internals</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="GNU-Emacs-Internals.html#GNU-Emacs-Internals">GNU Emacs Internals</a>
+<hr>
+</div>
+
+<h3 class="section">E.7 C Integer Types</h3>
+
+<p><a name="index-integer-types-_0028C-programming-language_0029-4369"></a>
+Here are some guidelines for use of integer types in the Emacs C
+source code.  These guidelines sometimes give competing advice; common
+sense is advised.
+
+     <ul>
+<li>Avoid arbitrary limits.  For example, avoid <code>int len = strlen
+(s);</code> unless the length of <code>s</code> is required for other reasons to
+fit in <code>int</code> range.
+
+     <li>Do not assume that signed integer arithmetic wraps around on overflow. 
+This is no longer true of Emacs porting targets: signed integer
+overflow has undefined behavior in practice, and can dump core or
+even cause earlier or later code to behave &ldquo;illogically&rdquo;.  Unsigned
+overflow does wrap around reliably, modulo a power of two.
+
+     <li>Prefer signed types to unsigned, as code gets confusing when signed
+and unsigned types are combined.  Many other guidelines assume that
+types are signed; in the rarer cases where unsigned types are needed,
+similar advice may apply to the unsigned counterparts (e.g.,
+<code>size_t</code> instead of <code>ptrdiff_t</code>, or <code>uintptr_t</code> instead
+of <code>intptr_t</code>).
+
+     <li>Prefer <code>int</code> for Emacs character codes, in the range 0 .. 0x3FFFFF.
+
+     <li>Prefer <code>ptrdiff_t</code> for sizes, i.e., for integers bounded by the
+maximum size of any individual C object or by the maximum number of
+elements in any C array.  This is part of Emacs's general preference
+for signed types.  Using <code>ptrdiff_t</code> limits objects to
+<code>PTRDIFF_MAX</code> bytes, but larger objects would cause trouble
+anyway since they would break pointer subtraction, so this does not
+impose an arbitrary limit.
+
+     <li>Prefer <code>intptr_t</code> for internal representations of pointers, or
+for integers bounded only by the number of objects that can exist at
+any given time or by the total number of bytes that can be allocated. 
+Currently Emacs sometimes uses other types when <code>intptr_t</code> would
+be better; fixing this is lower priority, as the code works as-is on
+Emacs's current porting targets.
+
+     <li>Prefer the Emacs-defined type <code>EMACS_INT</code> for representing values
+converted to or from Emacs Lisp fixnums, as fixnum arithmetic is based
+on <code>EMACS_INT</code>.
+
+     <li>When representing a system value (such as a file size or a count of
+seconds since the Epoch), prefer the corresponding system type (e.g.,
+<code>off_t</code>, <code>time_t</code>).  Do not assume that a system type is
+signed, unless this assumption is known to be safe.  For example,
+although <code>off_t</code> is always signed, <code>time_t</code> need not be.
+
+     <li>Prefer the Emacs-defined type <code>printmax_t</code> for representing
+values that might be any signed integer value that can be printed,
+using a <code>printf</code>-family function.
+
+     <li>Prefer <code>intmax_t</code> for representing values that might be any
+signed integer value.
+
+     <li>In bitfields, prefer <code>unsigned int</code> or <code>signed int</code> to
+<code>int</code>, as <code>int</code> is less portable: it might be signed, and
+might not be.  Single-bit bit fields are invariably <code>unsigned
+int</code> so that their values are 0 and 1.
+
+     <li>In C, Emacs commonly uses <code>bool</code>, 1, and 0 for boolean values. 
+Using <code>bool</code> for booleans can make programs easier to read and a
+bit faster than using <code>int</code>.  Although it is also OK to use
+<code>int</code>, this older style is gradually being phased out.  When
+using <code>bool</code>, respect the limitations of the replacement
+implementation of <code>bool</code>, as documented in the source file
+<samp><span class="file">lib/stdbool.in.h</span></samp>, so that Emacs remains portable to pre-C99
+platforms. 
+</ul>
+
+<!-- FIXME Mention src/globals.h somewhere in this file? -->
+<!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 1990-1993, 1999, 2001-2013 Free Software Foundation, -->
+<!-- Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+   </body></html>
+

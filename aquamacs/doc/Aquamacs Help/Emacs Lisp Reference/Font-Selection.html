@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Font Selection - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Faces.html#Faces" title="Faces">
-<link rel="prev" href="Auto-Faces.html#Auto-Faces" title="Auto Faces">
+<link rel="prev" href="Basic-Faces.html#Basic-Faces" title="Basic Faces">
 <link rel="next" href="Font-Lookup.html#Font-Lookup" title="Font Lookup">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -39,25 +36,26 @@ Foundation, Inc.
 <a name="Font-Selection"></a>
 <p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Font-Lookup.html#Font-Lookup">Font Lookup</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Auto-Faces.html#Auto-Faces">Auto Faces</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Basic-Faces.html#Basic-Faces">Basic Faces</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Faces.html#Faces">Faces</a>
 <hr>
 </div>
 
-<h4 class="subsection">38.12.8 Font Selection</h4>
+<h4 class="subsection">38.12.9 Font Selection</h4>
 
-<p>Before Emacs can draw a character on a particular display, it must
-select a <dfn>font</dfn> for that character<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  Normally, Emacs automatically chooses a font based on the
-faces assigned to that character&mdash;specifically, the face attributes
-<code>:family</code>, <code>:weight</code>, <code>:slant</code>, and <code>:width</code>
-(see <a href="Face-Attributes.html#Face-Attributes">Face Attributes</a>).  The choice of font also depends on the
-character to be displayed; some fonts can only display a limited set
-of characters.  If no available font exactly fits the requirements,
-Emacs looks for the <dfn>closest matching font</dfn>.  The variables in
-this section control how Emacs makes this selection.
+<p><a name="index-font-selection-3857"></a><a name="index-selecting-a-font-3858"></a>
+  Before Emacs can draw a character on a graphical display, it must
+select a <dfn>font</dfn> for that character<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  See <a href="../emacs/Fonts.html#Fonts">Fonts</a>.  Normally,
+Emacs automatically chooses a font based on the faces assigned to that
+character&mdash;specifically, the face attributes <code>:family</code>,
+<code>:weight</code>, <code>:slant</code>, and <code>:width</code> (see <a href="Face-Attributes.html#Face-Attributes">Face Attributes</a>).  The choice of font also depends on the character to be
+displayed; some fonts can only display a limited set of characters. 
+If no available font exactly fits the requirements, Emacs looks for
+the <dfn>closest matching font</dfn>.  The variables in this section
+control how Emacs makes this selection.
 
 <div class="defun">
-&mdash; User Option: <b>face-font-family-alternatives</b><var><a name="index-face_002dfont_002dfamily_002dalternatives-3558"></a></var><br>
+&mdash; User Option: <b>face-font-family-alternatives</b><var><a name="index-face_002dfont_002dfamily_002dalternatives-3859"></a></var><br>
 <blockquote><p>If a given family is specified but does not exist, this variable
 specifies alternative font families to try.  Each element should have
 this form:
@@ -70,7 +68,7 @@ family that does exist.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>face-font-selection-order</b><var><a name="index-face_002dfont_002dselection_002dorder-3559"></a></var><br>
+&mdash; User Option: <b>face-font-selection-order</b><var><a name="index-face_002dfont_002dselection_002dorder-3860"></a></var><br>
 <blockquote><p>If there is no font that exactly matches all desired face attributes
 (<code>:width</code>, <code>:height</code>, <code>:weight</code>, and <code>:slant</code>),
 this variable specifies the order in which these attributes should be
@@ -99,7 +97,7 @@ quite right.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>face-font-registry-alternatives</b><var><a name="index-face_002dfont_002dregistry_002dalternatives-3560"></a></var><br>
+&mdash; User Option: <b>face-font-registry-alternatives</b><var><a name="index-face_002dfont_002dregistry_002dalternatives-3861"></a></var><br>
 <blockquote><p>This variable lets you specify alternative font registries to try, if a
 given registry is specified and doesn't exist.  Each element should have
 this form:
@@ -111,11 +109,11 @@ other registries given in <var>alternate-registries</var>, one by one,
 until it finds a registry that does exist. 
 </p></blockquote></div>
 
-   <p>Emacs can make use of scalable fonts, but by default it does not use
+   <p><a name="index-scalable-fonts-3862"></a>  Emacs can make use of scalable fonts, but by default it does not use
 them.
 
 <div class="defun">
-&mdash; User Option: <b>scalable-fonts-allowed</b><var><a name="index-scalable_002dfonts_002dallowed-3561"></a></var><br>
+&mdash; User Option: <b>scalable-fonts-allowed</b><var><a name="index-scalable_002dfonts_002dallowed-3863"></a></var><br>
 <blockquote><p>This variable controls which scalable fonts to use.  A value of
 <code>nil</code>, the default, means do not use scalable fonts.  <code>t</code>
 means to use any scalable font that seems appropriate for the text.
@@ -130,7 +128,7 @@ expression in the list.  For example,
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>face-font-rescale-alist</b><var><a name="index-face_002dfont_002drescale_002dalist-3562"></a></var><br>
+&mdash; Variable: <b>face-font-rescale-alist</b><var><a name="index-face_002dfont_002drescale_002dalist-3864"></a></var><br>
 <blockquote><p>This variable specifies scaling for certain faces.  Its value should
 be a list of elements of the form
 

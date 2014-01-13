@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Low-Level Kill Ring - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Internals-of-Kill-Ring.html#Internals-of-Kill-Ring" title="Internals of Kill Ring">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -53,7 +50,7 @@ because they take care of interaction with window system selections
 (see <a href="Window-System-Selections.html#Window-System-Selections">Window System Selections</a>).
 
 <div class="defun">
-&mdash; Function: <b>current-kill</b><var> n &amp;optional do-not-move<a name="index-current_002dkill-2636"></a></var><br>
+&mdash; Function: <b>current-kill</b><var> n &amp;optional do-not-move<a name="index-current_002dkill-2903"></a></var><br>
 <blockquote><p>The function <code>current-kill</code> rotates the yanking pointer, which
 designates the &ldquo;front&rdquo; of the kill ring, by <var>n</var> places (from newer
 kills to older ones), and returns the text at that place in the ring.
@@ -77,7 +74,7 @@ move the yanking pointer.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>kill-new</b><var> string &amp;optional replace<a name="index-kill_002dnew-2637"></a></var><br>
+&mdash; Function: <b>kill-new</b><var> string &amp;optional replace<a name="index-kill_002dnew-2904"></a></var><br>
 <blockquote><p>This function pushes the text <var>string</var> onto the kill ring and
 makes the yanking pointer point to it.  It discards the oldest entry
 if appropriate.  It also invokes the value of
@@ -89,7 +86,7 @@ first element of the kill ring with <var>string</var>, rather than pushing
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>kill-append</b><var> string before-p<a name="index-kill_002dappend-2638"></a></var><br>
+&mdash; Function: <b>kill-append</b><var> string before-p<a name="index-kill_002dappend-2905"></a></var><br>
 <blockquote><p>This function appends the text <var>string</var> to the first entry in the
 kill ring and makes the yanking pointer point to the combined entry. 
 Normally <var>string</var> goes at the end of the entry, but if
@@ -99,14 +96,14 @@ function also invokes the value of <code>interprogram-cut-function</code>
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>interprogram-paste-function</b><var><a name="index-interprogram_002dpaste_002dfunction-2639"></a></var><br>
+&mdash; Variable: <b>interprogram-paste-function</b><var><a name="index-interprogram_002dpaste_002dfunction-2906"></a></var><br>
 <blockquote><p>This variable provides a way of transferring killed text from other
 programs, when you are using a window system.  Its value should be
 <code>nil</code> or a function of no arguments.
 
         <p>If the value is a function, <code>current-kill</code> calls it to get the
-&ldquo;most recent kill.&rdquo;  If the function returns a non-<code>nil</code> value,
-then that value is used as the &ldquo;most recent kill.&rdquo;  If it returns
+&ldquo;most recent kill&rdquo;.  If the function returns a non-<code>nil</code> value,
+then that value is used as the &ldquo;most recent kill&rdquo;.  If it returns
 <code>nil</code>, then the front of the kill ring is used.
 
         <p>To facilitate support for window systems that support multiple
@@ -115,17 +112,15 @@ case, the first string is used as the &ldquo;most recent kill&rdquo;, and all
 the other strings are pushed onto the kill ring, for easy access by
 <code>yank-pop</code>.
 
-        <p>The normal use of this function is to get the window system's primary
-selection as the most recent kill, even if the selection belongs to
+        <p>The normal use of this function is to get the window system's
+clipboard as the most recent kill, even if the selection belongs to
 another application.  See <a href="Window-System-Selections.html#Window-System-Selections">Window System Selections</a>.  However, if
-the selection was provided by the current Emacs session, this function
-should return <code>nil</code>.  (If it is hard to tell whether Emacs or
-some other program provided the selection, it should be good enough to
-use <code>string=</code> to compare it with the last text Emacs provided.) 
+the clipboard contents come from the current Emacs session, this
+function should return <code>nil</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>interprogram-cut-function</b><var><a name="index-interprogram_002dcut_002dfunction-2640"></a></var><br>
+&mdash; Variable: <b>interprogram-cut-function</b><var><a name="index-interprogram_002dcut_002dfunction-2907"></a></var><br>
 <blockquote><p>This variable provides a way of communicating killed text to other
 programs, when you are using a window system.  Its value should be
 <code>nil</code> or a function of one required argument.
@@ -133,9 +128,8 @@ programs, when you are using a window system.  Its value should be
         <p>If the value is a function, <code>kill-new</code> and <code>kill-append</code> call
 it with the new first element of the kill ring as the argument.
 
-        <p>The normal use of this function is to set the window system's primary
-selection from the newly killed text. 
-See <a href="Window-System-Selections.html#Window-System-Selections">Window System Selections</a>. 
+        <p>The normal use of this function is to put newly killed text in the
+window system's clipboard.  See <a href="Window-System-Selections.html#Window-System-Selections">Window System Selections</a>. 
 </p></blockquote></div>
 
    </body></html>

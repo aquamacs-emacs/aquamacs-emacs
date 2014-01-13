@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Beeping - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Display.html#Display" title="Display">
-<link rel="prev" href="Display-Tables.html#Display-Tables" title="Display Tables">
+<link rel="prev" href="Character-Display.html#Character-Display" title="Character Display">
 <link rel="next" href="Window-Systems.html#Window-Systems" title="Window Systems">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -39,46 +36,45 @@ Foundation, Inc.
 <a name="Beeping"></a>
 <p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Window-Systems.html#Window-Systems">Window Systems</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Display-Tables.html#Display-Tables">Display Tables</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Character-Display.html#Character-Display">Character Display</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
 <hr>
 </div>
 
-<h3 class="section">38.22 Beeping</h3>
+<h3 class="section">38.21 Beeping</h3>
 
-<!-- @cindex beeping   "beep" is adjacent -->
-<p><a name="index-bell-3751"></a>
+<p><a name="index-bell-4066"></a>
   This section describes how to make Emacs ring the bell (or blink the
 screen) to attract the user's attention.  Be conservative about how
 often you do this; frequent bells can become irritating.  Also be
 careful not to use just beeping when signaling an error is more
-appropriate.  (See <a href="Errors.html#Errors">Errors</a>.)
+appropriate (see <a href="Errors.html#Errors">Errors</a>).
 
 <div class="defun">
-&mdash; Function: <b>ding</b><var> &amp;optional do-not-terminate<a name="index-ding-3752"></a></var><br>
-<blockquote><p><a name="index-keyboard-macro-termination-3753"></a>This function beeps, or flashes the screen (see <code>visible-bell</code> below). 
+&mdash; Function: <b>ding</b><var> &amp;optional do-not-terminate<a name="index-ding-4067"></a></var><br>
+<blockquote><p><a name="index-keyboard-macro-termination-4068"></a>This function beeps, or flashes the screen (see <code>visible-bell</code> below). 
 It also terminates any keyboard macro currently executing unless
 <var>do-not-terminate</var> is non-<code>nil</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>beep</b><var> &amp;optional do-not-terminate<a name="index-beep-3754"></a></var><br>
+&mdash; Function: <b>beep</b><var> &amp;optional do-not-terminate<a name="index-beep-4069"></a></var><br>
 <blockquote><p>This is a synonym for <code>ding</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>visible-bell</b><var><a name="index-visible_002dbell-3755"></a></var><br>
+&mdash; User Option: <b>visible-bell</b><var><a name="index-visible_002dbell-4070"></a></var><br>
 <blockquote><p>This variable determines whether Emacs should flash the screen to
-represent a bell.  Non-<code>nil</code> means yes, <code>nil</code> means no.  This
-is effective on graphical displays, and on text-only terminals
+represent a bell.  Non-<code>nil</code> means yes, <code>nil</code> means no. 
+This is effective on graphical displays, and on text terminals
 provided the terminal's Termcap entry defines the visible bell
 capability (&lsquo;<samp><span class="samp">vb</span></samp>&rsquo;). 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>ring-bell-function</b><var><a name="index-ring_002dbell_002dfunction-3756"></a></var><br>
+&mdash; Variable: <b>ring-bell-function</b><var><a name="index-ring_002dbell_002dfunction-4071"></a></var><br>
 <blockquote><p>If this is non-<code>nil</code>, it specifies how Emacs should &ldquo;ring the
-bell.&rdquo;  Its value should be a function of no arguments.  If this is
+bell&rdquo;.  Its value should be a function of no arguments.  If this is
 non-<code>nil</code>, it takes precedence over the <code>visible-bell</code>
 variable. 
 </p></blockquote></div>

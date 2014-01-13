@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Completion Commands - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Completion.html#Completion" title="Completion">
 <link rel="prev" href="Completion-Example.html#Completion-Example" title="Completion Example">
-<link rel="next" href="Strict-Completion.html#Strict-Completion" title="Strict Completion">
+<link rel="next" href="Completion-Exit.html#Completion-Exit" title="Completion Exit">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -39,95 +36,67 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <div class="node">
 <a name="Completion-Commands"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Strict-Completion.html#Strict-Completion">Strict Completion</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Completion-Exit.html#Completion-Exit">Completion Exit</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Completion-Example.html#Completion-Example">Completion Example</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Completion.html#Completion">Completion</a>
 <hr>
 </div>
 
-<h4 class="subsection">8.3.2 Completion Commands</h4>
+<h4 class="subsection">8.4.2 Completion Commands</h4>
 
 <p>Here is a list of the completion commands defined in the minibuffer
 when completion is allowed.
 
      <dl>
-<dt><kbd>&lt;TAB&gt;</kbd><dd><a name="index-minibuffer_002dcomplete-168"></a>Complete the text in the minibuffer as much as possible; if unable to
+<dt><kbd>&lt;TAB&gt;</kbd><dd><a name="index-minibuffer_002dcomplete-197"></a>Complete the text in the minibuffer as much as possible; if unable to
 complete, display a list of possible completions
 (<code>minibuffer-complete</code>). 
 <br><dt><kbd>&lt;SPC&gt;</kbd><dd>Complete up to one word from the minibuffer text before point
-(<code>minibuffer-complete-word</code>).  &lt;SPC&gt; for completion is not
-available when entering a file name, since file names often include
-spaces. 
+(<code>minibuffer-complete-word</code>).  This command is not available for
+arguments that often include spaces, such as file names. 
 <br><dt><kbd>&lt;RET&gt;</kbd><dd>Submit the text in the minibuffer as the argument, possibly completing
-first as described in the next
-node (<code>minibuffer-complete-and-exit</code>).  See <a href="Strict-Completion.html#Strict-Completion">Strict Completion</a>. 
-<br><dt><kbd>?</kbd><dd>Display a list of possible completions of the text before point
-(<code>minibuffer-completion-help</code>). 
+first (<code>minibuffer-complete-and-exit</code>).  See <a href="Completion-Exit.html#Completion-Exit">Completion Exit</a>. 
+<br><dt><kbd>?</kbd><dd>Display a list of completions (<code>minibuffer-completion-help</code>). 
 </dl>
 
-   <p><a name="index-TAB-169"></a><a name="index-minibuffer_002dcomplete-170"></a>  &lt;TAB&gt; (<code>minibuffer-complete</code>) is the most fundamental
-completion command.  It searches for all possible completion
-alternatives that match the existing minibuffer text, and attempts to
-complete as much as it can.  The matching of completion alternatives
-to the minibuffer text is performed according to somewhat intricate
-rules, which are designed so that plausible completions are offered
-under most circumstances.  A valid completion alternative must satisfy
-the following criteria:
+   <p><a name="index-TAB-_0040r_007b_0028completion_0029_007d-198"></a><a name="index-minibuffer_002dcomplete-199"></a>  &lt;TAB&gt; (<code>minibuffer-complete</code>) is the most fundamental
+completion command.  It searches for all possible completions that
+match the existing minibuffer text, and attempts to complete as much
+as it can.  See <a href="Completion-Styles.html#Completion-Styles">Completion Styles</a>, for how completion alternatives
+are chosen.
 
-     <ul>
-<li>The minibuffer text before point must be the same as the beginning of
-the completion alternative.  If there is any minibuffer text after
-point, it must be a substring of the remainder of the completion
-alternative.
-
-     <li>If no completion alternative satisfies the above rules, try using
-<dfn>partial completion</dfn> rules: divide the minibuffer text into words
-separated by hyphens or spaces, and complete each word separately. 
-Thus, when completing command names, &lsquo;<samp><span class="samp">em-l-m</span></samp>&rsquo; completes to
-&lsquo;<samp><span class="samp">emacs-lisp-mode</span></samp>&rsquo;.
-
-     <li>If there is still no completion alternative, try the first rule again,
-but ignore the minibuffer text after point (i.e., don't try matching
-it). 
-</ul>
-
-<p class="noindent">When performing these comparisons, a &lsquo;<samp><span class="samp">*</span></samp>&rsquo; in the minibuffer text
-acts as a <dfn>wildcard</dfn>&mdash;it matches any character at the
-corresponding position in the completion alternative.
-
-   <p><a name="index-SPC-171"></a><a name="index-minibuffer_002dcomplete_002dword-172"></a>  &lt;SPC&gt; (<code>minibuffer-complete-word</code>) completes like
+   <p><a name="index-SPC-_0040r_007b_0028completion_0029_007d-200"></a><a name="index-minibuffer_002dcomplete_002dword-201"></a>  &lt;SPC&gt; (<code>minibuffer-complete-word</code>) completes like
 &lt;TAB&gt;, but only up to the next hyphen or space.  If you have
 &lsquo;<samp><span class="samp">auto-f</span></samp>&rsquo; in the minibuffer and type &lt;SPC&gt;, it finds that the
 completion is &lsquo;<samp><span class="samp">auto-fill-mode</span></samp>&rsquo;, but it only inserts &lsquo;<samp><span class="samp">ill-</span></samp>&rsquo;,
 giving &lsquo;<samp><span class="samp">auto-fill-</span></samp>&rsquo;.  Another &lt;SPC&gt; at this point completes
 all the way to &lsquo;<samp><span class="samp">auto-fill-mode</span></samp>&rsquo;.
 
-   <p>If &lt;TAB&gt; or &lt;SPC&gt; is unable to complete, it displays a list
-of possible completions (if there are any) in a separate window.  You
-can choose a completion from this list using the following commands:
+   <p><a name="index-g_t_003f-_0040r_007b_0028completion_0029_007d-202"></a><a name="index-completion-list-203"></a>  If &lt;TAB&gt; or &lt;SPC&gt; is unable to complete, it displays a list
+of matching completion alternatives (if there are any) in another
+window.  You can display the same list with <kbd>?</kbd>
+(<code>minibuffer-completion-help</code>).  The following commands can be
+used with the completion list:
 
      
-<a name="index-mouse_002dchoose_002dcompletion-173"></a>
-<dl><dt><kbd>Mouse-1</kbd><dt><kbd>Mouse-2</kbd><dd>Clicking mouse button 1 or 2 on a completion possibility chooses that
-completion (<code>mouse-choose-completion</code>).
+<a name="index-mouse_002dchoose_002dcompletion-204"></a>
+<dl><dt><kbd>Mouse-1</kbd><dt><kbd>Mouse-2</kbd><dd>Clicking mouse button 1 or 2 on a completion alternative chooses it
+(<code>mouse-choose-completion</code>).
 
-     <p><a name="index-switch_002dto_002dcompletions-174"></a><br><dt><kbd>M-v</kbd><dt><kbd>&lt;PageUp&gt;</kbd><dt><kbd>&lt;prior&gt;</kbd><dd>Typing <kbd>M-v</kbd>, while in the minibuffer, selects the window showing
-the completion list buffer (<code>switch-to-completions</code>).  This paves
-the way for using the commands below.  Typing &lt;PageUp&gt; or
-&lt;prior&gt; does the same, as does selecting that window in other
-ways.
+     <p><a name="index-switch_002dto_002dcompletions-205"></a><br><dt><kbd>M-v</kbd><dt><kbd>&lt;PageUp&gt;</kbd><dt><kbd>&lt;prior&gt;</kbd><dd>Typing <kbd>M-v</kbd>, while in the minibuffer, selects the window showing
+the completion list (<code>switch-to-completions</code>).  This paves the
+way for using the commands below.  &lt;PageUp&gt; or &lt;prior&gt; does
+the same.  You can also select the window in other ways
+(see <a href="Windows.html#Windows">Windows</a>).
 
-     <p><a name="index-choose_002dcompletion-175"></a><br><dt><kbd>&lt;RET&gt;</kbd><dd>Typing &lt;RET&gt;, while in the completion list buffer, chooses the
-completion that point is in or next to (<code>choose-completion</code>).  To
-use this command, you must first switch to the completion list window.
+     <p><a name="index-choose_002dcompletion-206"></a><br><dt><kbd>&lt;RET&gt;</kbd><dd>While in the completion list buffer, this chooses the completion at
+point (<code>choose-completion</code>).
 
-     <p><a name="index-next_002dcompletion-176"></a><br><dt><kbd>&lt;Right&gt;</kbd><dd>Typing the right-arrow key &lt;Right&gt;, while in the completion list
-buffer, moves point to the following completion possibility
-(<code>next-completion</code>).
+     <p><a name="index-next_002dcompletion-207"></a><br><dt><kbd>&lt;Right&gt;</kbd><dd>While in the completion list buffer, this moves point to the following
+completion alternative (<code>next-completion</code>).
 
-     <p><a name="index-previous_002dcompletion-177"></a><br><dt><kbd>&lt;Left&gt;</kbd><dd>Typing the left-arrow key &lt;Left&gt;, while in the completion list
-buffer, moves point to the previous completion possibility
-(<code>previous-completion</code>). 
+     <p><a name="index-previous_002dcompletion-208"></a><br><dt><kbd>&lt;Left&gt;</kbd><dd>While in the completion list buffer, this moves point to the previous
+completion alternative (<code>previous-completion</code>). 
 </dl>
 
    </body></html>

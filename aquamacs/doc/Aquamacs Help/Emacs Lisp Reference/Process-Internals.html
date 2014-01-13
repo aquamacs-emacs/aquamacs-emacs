@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Process Internals - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="prev" href="Window-Internals.html#Window-Internals" title="Window Internals">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -42,10 +39,11 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Object-Internals.html#Object-Internals"
 <hr>
 </div>
 
-<h4 class="appendixsubsec">E.6.3 Process Internals</h4>
+<h4 class="subsection">E.6.3 Process Internals</h4>
 
-<p><a name="index-internals_002c-of-process-3998"></a><a name="index-process-internals-3999"></a>
-  The fields of a process are:
+<p><a name="index-internals_002c-of-process-4367"></a><a name="index-process-internals-4368"></a>
+  The fields of a process (for a complete list, see the definition of
+<code>struct Lisp_Process</code> in <samp><span class="file">process.h</span></samp>) include:
 
      <dl>
 <dt><code>name</code><dd>A string, the name of the process.
@@ -54,17 +52,20 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Object-Internals.html#Object-Internals"
 process.  For a network or serial process, it is <code>nil</code> if the
 process is running or <code>t</code> if the process is stopped.
 
-     <br><dt><code>filter</code><dd>A function used to accept output from the process instead of a buffer,
-or <code>nil</code>.
+     <br><dt><code>filter</code><dd>If non-<code>nil</code>, a function used to accept output from the process
+instead of a buffer.
 
-     <br><dt><code>sentinel</code><dd>A function called whenever the process receives a signal, or <code>nil</code>.
+     <br><dt><code>sentinel</code><dd>If non-<code>nil</code>, a function called whenever the state of the process
+changes.
 
      <br><dt><code>buffer</code><dd>The associated buffer of the process.
 
-     <br><dt><code>pid</code><dd>An integer, the operating system's process <acronym>ID</acronym>.
+     <br><dt><code>pid</code><dd>An integer, the operating system's process <acronym>ID</acronym>. 
+Pseudo-processes such as network or serial connections use a value of 0.
 
-     <br><dt><code>childp</code><dd>A flag, non-<code>nil</code> if this is really a child process. 
-It is <code>nil</code> for a network or serial connection.
+     <br><dt><code>childp</code><dd>A flag, <code>t</code> if this is really a child process.  For a network or
+serial connection, it is a plist based on the arguments to
+<code>make-network-process</code> or <code>make-serial-process</code>.
 
      <br><dt><code>mark</code><dd>A marker indicating the position of the end of the last output from this
 process inserted into the buffer.  This is often but not always the end
@@ -73,8 +74,7 @@ of the buffer.
      <br><dt><code>kill_without_query</code><dd>If this is non-zero, killing Emacs while this process is still running
 does not ask for confirmation about killing the process.
 
-     <br><dt><code>raw_status_low</code><dt><code>raw_status_high</code><dd>These two fields record 16 bits each of the process status returned by
-the <code>wait</code> system call.
+     <br><dt><code>raw_status</code><dd>The raw process status, as returned by the <code>wait</code> system call.
 
      <br><dt><code>status</code><dd>The process status, as <code>process-status</code> should return it.
 
@@ -82,16 +82,12 @@ the <code>wait</code> system call.
 needs to be reported, either by running the sentinel or by inserting a
 message in the process buffer.
 
-     <br><dt><code>pty_flag</code><dd>Non-<code>nil</code> if communication with the subprocess uses a <acronym>PTY</acronym>;
+     <br><dt><code>pty_flag</code><dd>Non-<code>nil</code> if communication with the subprocess uses a pty;
 <code>nil</code> if it uses a pipe.
 
      <br><dt><code>infd</code><dd>The file descriptor for input from the process.
 
      <br><dt><code>outfd</code><dd>The file descriptor for output to the process.
-
-     <br><dt><code>subtty</code><dd>The file descriptor for the terminal that the subprocess is using.  (On
-some systems, there is no need to record this, so the value is
-<code>nil</code>.)
 
      <br><dt><code>tty_name</code><dd>The name of the terminal that the subprocess is using,
 or <code>nil</code> if it is using pipes.
@@ -106,20 +102,13 @@ or <code>nil</code> if it is using pipes.
 
      <br><dt><code>encoding_buf</code><dd>A working buffer for encoding.
 
-     <br><dt><code>encoding_carryover</code><dd>Size of carryover in encoding.
-
      <br><dt><code>inherit_coding_system_flag</code><dd>Flag to set <code>coding-system</code> of the process buffer from the
 coding system used to decode process output.
 
      <br><dt><code>type</code><dd>Symbol indicating the type of process: <code>real</code>, <code>network</code>,
-<code>serial</code>
+<code>serial</code>.
 
    </dl>
 
-<!-- *-texinfo-*- -->
-<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
-<!-- Copyright (C) 1990, 1991, 1992, 1993, 1999, 2001, 2002, 2003, 2004, -->
-<!-- 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc. -->
-<!-- See the file elisp.texi for copying conditions. -->
    </body></html>
 

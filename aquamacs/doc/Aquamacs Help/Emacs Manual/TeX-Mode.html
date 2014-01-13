@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>TeX Mode - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Text.html#Text" title="Text">
-<link rel="prev" href="Outline-Mode.html#Outline-Mode" title="Outline Mode">
+<link rel="prev" href="Org-Mode.html#Org-Mode" title="Org Mode">
 <link rel="next" href="HTML-Mode.html#HTML-Mode" title="HTML Mode">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -40,14 +37,14 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <a name="TeX-Mode"></a>
 <p>
 Next:&nbsp;<a rel="next" accesskey="n" href="HTML-Mode.html#HTML-Mode">HTML Mode</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Outline-Mode.html#Outline-Mode">Outline Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Org-Mode.html#Org-Mode">Org Mode</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
 <hr>
 </div>
 
-<h3 class="section">29.9 TeX Mode</h3>
+<h3 class="section">25.10 TeX Mode</h3>
 
-<p><a name="index-g_t_0040TeX_007b_007d-mode-1719"></a><a name="index-La_0040TeX_007b_007d-mode-1720"></a><a name="index-Sli_0040TeX_007b_007d-mode-1721"></a><a name="index-Doc_0040TeX_007b_007d-mode-1722"></a><a name="index-mode_002c-_0040TeX_007b_007d-1723"></a><a name="index-mode_002c-La_0040TeX_007b_007d-1724"></a><a name="index-mode_002c-Sli_0040TeX_007b_007d-1725"></a><a name="index-mode_002c-Doc_0040TeX_007b_007d-1726"></a><a name="index-tex_002dmode-1727"></a><a name="index-plain_002dtex_002dmode-1728"></a><a name="index-latex_002dmode-1729"></a><a name="index-slitex_002dmode-1730"></a><a name="index-doctex_002dmode-1731"></a><a name="index-bibtex_002dmode-1732"></a>
+<p><a name="index-g_t_0040TeX_007b_007d-mode-1973"></a><a name="index-g_t_0040LaTeX_007b_007d-mode-1974"></a><a name="index-Sli_0040TeX_007b_007d-mode-1975"></a><a name="index-Doc_0040TeX_007b_007d-mode-1976"></a><a name="index-mode_002c-_0040TeX_007b_007d-1977"></a><a name="index-mode_002c-_0040LaTeX_007b_007d-1978"></a><a name="index-mode_002c-Sli_0040TeX_007b_007d-1979"></a><a name="index-mode_002c-Doc_0040TeX_007b_007d-1980"></a><a name="index-tex_002dmode-1981"></a><a name="index-plain_002dtex_002dmode-1982"></a><a name="index-latex_002dmode-1983"></a><a name="index-slitex_002dmode-1984"></a><a name="index-doctex_002dmode-1985"></a><a name="index-bibtex_002dmode-1986"></a>
   Emacs provides special major modes for editing files written in
 TeX and its related formats.  TeX is a powerful text formatter
 written by Donald Knuth; like GNU Emacs, it is free software. 
@@ -56,7 +53,7 @@ TeX macros.  DocTeX is a special file format in which the
 LaTeX sources are written, combining sources with documentation. 
 SliTeX is an obsolete special form of LaTeX.<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>
 
-   <p><a name="index-tex_002ddefault_002dmode-1733"></a>  TeX mode has four variants: Plain TeX mode, LaTeX mode,
+   <p><a name="index-tex_002ddefault_002dmode-1987"></a>  TeX mode has four variants: Plain TeX mode, LaTeX mode,
 DocTeX mode, and SliTeX mode.  These distinct major modes differ
 only slightly, and are designed for editing the four different
 formats.  Emacs selects the appropriate mode by looking at the
@@ -69,18 +66,35 @@ Emacs does not guess right, you can select the correct variant of
 TeX mode using the command <kbd>M-x plain-tex-mode</kbd>, <kbd>M-x
 latex-mode</kbd>, <kbd>M-x slitex-mode</kbd>, or <kbd>doctex-mode</kbd>.
 
-   <p>Emacs also provides BibTeX mode, a major mode for editing
-BibTeX files.  BibTeX is a tool for storing and formatting
-bibliographic references, which is commonly used together with
-LaTeX.  In addition, the RefTeX package provides a minor mode
-which can be used in conjunction with LaTeX mode to manage
-bibliographic references.  see <a href="../reftex/index.html#Top">Top</a>.
+   <p>The following sections document the features of TeX mode and its
+variants.  There are several other TeX-related Emacs packages,
+which are not documented in this manual:
+
+     <ul>
+<li>BibTeX mode is a major mode for BibTeX files, which are commonly
+used for keeping bibliographic references for LaTeX documents.  For
+more information, see the documentation string for the command
+<code>bibtex-mode</code>.
+
+     <li>The RefTeX package provides a minor mode which can be used with
+LaTeX mode to manage bibliographic references. 
+For more information, see the RefTeX Info manual, which is
+distributed with Emacs.
+
+     <li>The AUCTeX package provides more advanced features for editing
+TeX and its related formats, including the ability to preview
+TeX equations within Emacs buffers.  Unlike BibTeX mode and the
+RefTeX package, AUCTeX is not distributed with Emacs by default. 
+It can be downloaded via the Package Menu (see <a href="Packages.html#Packages">Packages</a>); once
+installed, see
+the AUCTeX manual, which is included with the package. 
+</ul>
 
 <ul class="menu">
-<li><a accesskey="1" href="TeX-Editing.html#TeX-Editing">Editing</a>:    Special commands for editing in TeX mode. 
-<li><a accesskey="2" href="LaTeX-Editing.html#LaTeX-Editing">LaTeX</a>:    Additional commands for LaTeX input files. 
-<li><a accesskey="3" href="TeX-Print.html#TeX-Print">Printing</a>:     Commands for printing part of a file with TeX. 
-<li><a accesskey="4" href="TeX-Misc.html#TeX-Misc">Misc</a>:          Customization of TeX mode, and related features. 
+<li><a accesskey="1" href="TeX-Editing.html#TeX-Editing">TeX Editing</a>:    Special commands for editing in TeX mode. 
+<li><a accesskey="2" href="LaTeX-Editing.html#LaTeX-Editing">LaTeX Editing</a>:  Additional commands for LaTeX input files. 
+<li><a accesskey="3" href="TeX-Print.html#TeX-Print">TeX Print</a>:      Commands for printing part of a file with TeX. 
+<li><a accesskey="4" href="TeX-Misc.html#TeX-Misc">TeX Misc</a>:       Customization of TeX mode, and related features. 
 </ul>
 
    <div class="footnote">

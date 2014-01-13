@@ -1,21 +1,19 @@
 <html lang="en">
 <head>
 <title>Rectangles - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Killing.html#Killing" title="Killing">
 <link rel="prev" href="Accumulating-Text.html#Accumulating-Text" title="Accumulating Text">
 <link rel="next" href="CUA-Bindings.html#CUA-Bindings" title="CUA Bindings">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -40,13 +38,13 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <p>
 Next:&nbsp;<a rel="next" accesskey="n" href="CUA-Bindings.html#CUA-Bindings">CUA Bindings</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Accumulating-Text.html#Accumulating-Text">Accumulating Text</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+Up:&nbsp;<a rel="up" accesskey="u" href="Killing.html#Killing">Killing</a>
 <hr>
 </div>
 
-<h2 class="chapter">15 Rectangles</h2>
+<h3 class="section">12.5 Rectangles</h3>
 
-<p><a name="index-rectangle-381"></a><a name="index-columns-_0028and-rectangles_0029-382"></a><a name="index-killing-rectangular-areas-of-text-383"></a>
+<p><a name="index-rectangle-474"></a><a name="index-columns-_0028and-rectangles_0029-475"></a><a name="index-killing-rectangular-areas-of-text-476"></a>
   <dfn>Rectangle</dfn> commands operate on rectangular areas of the text:
 all the characters between a certain pair of columns, in a certain
 range of lines.  Emacs has commands to kill rectangles, yank killed
@@ -54,29 +52,31 @@ rectangles, clear them out, fill them with blanks or text, or delete
 them.  Rectangle commands are useful with text in multicolumn formats,
 and for changing text into or out of such formats.
 
-   <p><a name="index-mark-rectangle-384"></a>  When you must specify a rectangle for a command to work on, you do it
-by putting the mark at one corner and point at the opposite corner.  The
-rectangle thus specified is called the <dfn>region-rectangle</dfn> because
-you control it in much the same way as the region is controlled.  But
-remember that a given combination of point and mark values can be
-interpreted either as a region or as a rectangle, depending on the
-command that uses them.
+   <p><a name="index-mark-rectangle-477"></a>  To specify a rectangle for a command to work on, set the mark at one
+corner and point at the opposite corner.  The rectangle thus specified
+is called the <dfn>region-rectangle</dfn>.  If point and the mark are in
+the same column, the region-rectangle is empty.  If they are in the
+same line, the region-rectangle is one line high.
 
-   <p>If point and the mark are in the same column, the rectangle they
-delimit is empty.  If they are in the same line, the rectangle is one
-line high.  This asymmetry between lines and columns comes about
-because point (and likewise the mark) is between two columns, but within
-a line.
+   <p>The region-rectangle is controlled in much the same way as the
+region is controlled.  But remember that a given combination of point
+and mark values can be interpreted either as a region or as a
+rectangle, depending on the command that uses them.
 
      <dl>
 <dt><kbd>C-x r k</kbd><dd>Kill the text of the region-rectangle, saving its contents as the
 &ldquo;last killed rectangle&rdquo; (<code>kill-rectangle</code>). 
+<br><dt><kbd>C-x r M-w</kbd><dd>Save the text of the region-rectangle as the &ldquo;last killed rectangle&rdquo;
+(<code>copy-rectangle-as-kill</code>). 
 <br><dt><kbd>C-x r d</kbd><dd>Delete the text of the region-rectangle (<code>delete-rectangle</code>). 
 <br><dt><kbd>C-x r y</kbd><dd>Yank the last killed rectangle with its upper left corner at point
 (<code>yank-rectangle</code>). 
 <br><dt><kbd>C-x r o</kbd><dd>Insert blank space to fill the space of the region-rectangle
 (<code>open-rectangle</code>).  This pushes the previous contents of the
-region-rectangle rightward. 
+region-rectangle to the right. 
+<br><dt><kbd>C-x r N</kbd><dd>Insert line numbers along the left edge of the region-rectangle
+(<code>rectangle-number-lines</code>).  This pushes the previous contents of
+the region-rectangle to the right. 
 <br><dt><kbd>C-x r c</kbd><dd>Clear the region-rectangle by replacing all of its contents with spaces
 (<code>clear-rectangle</code>). 
 <br><dt><kbd>M-x delete-whitespace-rectangle</kbd><dd>Delete whitespace in each of the lines on the specified rectangle,
@@ -86,60 +86,67 @@ starting from the left edge column of the rectangle.
 <br><dt><kbd>M-x string-insert-rectangle &lt;RET&gt; </kbd><var>string</var><kbd> &lt;RET&gt;</kbd><dd>Insert <var>string</var> on each line of the rectangle. 
 </dl>
 
-   <p>The rectangle operations fall into two classes: commands for
-deleting and inserting rectangles, and commands for blank rectangles.
+   <p>The rectangle operations fall into two classes: commands to erase or
+insert rectangles, and commands to make blank rectangles.
 
-   <p><a name="index-C_002dx-r-k-385"></a><a name="index-C_002dx-r-d-386"></a><a name="index-kill_002drectangle-387"></a><a name="index-delete_002drectangle-388"></a>  There are two ways to get rid of the text in a rectangle: you can
-discard the text (delete it) or save it as the &ldquo;last killed&rdquo;
-rectangle.  The commands for these two ways are <kbd>C-x r d</kbd>
-(<code>delete-rectangle</code>) and <kbd>C-x r k</kbd> (<code>kill-rectangle</code>).  In
-either case, the portion of each line that falls inside the rectangle's
-boundaries is deleted, causing any following text on the line to
-move left into the gap.
+   <p><a name="index-C_002dx-r-k-478"></a><a name="index-C_002dx-r-d-479"></a><a name="index-kill_002drectangle-480"></a><a name="index-delete_002drectangle-481"></a>  There are two ways to erase the text in a rectangle: <kbd>C-x r d</kbd>
+(<code>delete-rectangle</code>) to delete the text outright, or <kbd>C-x r
+k</kbd> (<code>kill-rectangle</code>) to remove the text and save it as the
+<dfn>last killed rectangle</dfn>.  In both cases, erasing the
+region-rectangle is like erasing the specified text on each line of
+the rectangle; if there is any following text on the line, it moves
+backwards to fill the gap.
 
-   <p>Note that &ldquo;killing&rdquo; a rectangle is not killing in the usual sense; the
+   <p>&ldquo;Killing&rdquo; a rectangle is not killing in the usual sense; the
 rectangle is not stored in the kill ring, but in a special place that
-can only record the most recent rectangle killed.  This is because yanking
-a rectangle is so different from yanking linear text that different yank
-commands have to be used.  It is hard to define yank-popping for rectangles,
-so we do not try.
+only records the most recent rectangle killed.  This is because
+yanking a rectangle is so different from yanking linear text that
+different yank commands have to be used.  Yank-popping is not defined
+for rectangles.
 
-   <p><a name="index-C_002dx-r-y-389"></a><a name="index-yank_002drectangle-390"></a>  To yank the last killed rectangle, type <kbd>C-x r y</kbd>
-(<code>yank-rectangle</code>).  Yanking a rectangle is the opposite of killing
-one.  Point specifies where to put the rectangle's upper left corner. 
-The rectangle's first line is inserted there, the rectangle's second
-line is inserted at the same horizontal position, but one line
-vertically down, and so on.  The number of lines affected is determined
-by the height of the saved rectangle.
+   <p><a name="index-C_002dx-r-M_002dw-482"></a><a name="index-copy_002drectangle_002das_002dkill-483"></a>  <kbd>C-x r M-w</kbd> (<code>copy-rectangle-as-kill</code>) is the equivalent of
+<kbd>M-w</kbd> for rectangles: it records the rectangle as the &ldquo;last
+killed rectangle&rdquo;, without deleting the text from the buffer.
 
-   <p>You can convert single-column lists into double-column lists using
-rectangle killing and yanking; kill the second half of the list as a
-rectangle and then yank it beside the first line of the list. 
-See <a href="Two_002dColumn.html#Two_002dColumn">Two-Column</a>, for another way to edit multi-column text.
+   <p><a name="index-C_002dx-r-y-484"></a><a name="index-yank_002drectangle-485"></a>  To yank the last killed rectangle, type <kbd>C-x r y</kbd>
+(<code>yank-rectangle</code>).  The rectangle's first line is inserted at
+point, the rectangle's second line is inserted at the same horizontal
+position one line vertically below, and so on.  The number of lines
+affected is determined by the height of the saved rectangle.
+
+   <p>For example, you can convert two single-column lists into a
+double-column list by killing one of the single-column lists as a
+rectangle, and then yanking it beside the other list.
 
    <p>You can also copy rectangles into and out of registers with <kbd>C-x r
-r </kbd><var>r</var> and <kbd>C-x r i </kbd><var>r</var>.  See <a href="RegRect.html#RegRect">Rectangle Registers</a>.
+r </kbd><var>r</var> and <kbd>C-x r i </kbd><var>r</var>.  See <a href="Rectangle-Registers.html#Rectangle-Registers">Rectangle Registers</a>.
 
-   <p><a name="index-C_002dx-r-o-391"></a><a name="index-open_002drectangle-392"></a><a name="index-C_002dx-r-c-393"></a><a name="index-clear_002drectangle-394"></a>  There are two commands you can use for making blank rectangles:
-<kbd>C-x r c</kbd> (<code>clear-rectangle</code>) which blanks out existing text,
-and <kbd>C-x r o</kbd> (<code>open-rectangle</code>) which inserts a blank
-rectangle.  Clearing a rectangle is equivalent to deleting it and then
-inserting a blank rectangle of the same size.
+   <p><a name="index-C_002dx-r-o-486"></a><a name="index-open_002drectangle-487"></a><a name="index-C_002dx-r-c-488"></a><a name="index-clear_002drectangle-489"></a>  There are two commands you can use for making blank rectangles:
+<kbd>C-x r c</kbd> (<code>clear-rectangle</code>) blanks out existing text in the
+region-rectangle, and <kbd>C-x r o</kbd> (<code>open-rectangle</code>) inserts a
+blank rectangle.
 
-   <p><a name="index-delete_002dwhitespace_002drectangle-395"></a>  The command <kbd>M-x delete-whitespace-rectangle</kbd> deletes horizontal
-whitespace starting from a particular column.  This applies to each of
-the lines in the rectangle, and the column is specified by the left
-edge of the rectangle.  The right edge of the rectangle does not make
-any difference to this command.
+   <p><a name="index-delete_002dwhitespace_002drectangle-490"></a>  <kbd>M-x delete-whitespace-rectangle</kbd> deletes horizontal whitespace
+starting from a particular column.  This applies to each of the lines
+in the rectangle, and the column is specified by the left edge of the
+rectangle.  The right edge of the rectangle does not make any
+difference to this command.
 
-   <p><a name="index-C_002dx-r-t-396"></a><a name="index-string_002drectangle-397"></a>  The command <kbd>C-x r t</kbd> (<code>string-rectangle</code>) replaces the
+   <p><a name="index-C_002dx-r-N-491"></a><a name="index-rectangle-492"></a>  The command <kbd>C-x r N</kbd> (<code>rectangle-number-lines</code>) inserts
+line numbers along the left edge of the region-rectangle.  Normally,
+the numbering begins from 1 (for the first line of the rectangle). 
+With a prefix argument, the command prompts for a number to begin
+from, and for a format string with which to print the numbers
+(see <a href="../elisp/Formatting-Strings.html#Formatting-Strings">Formatting Strings</a>).
+
+   <p><a name="index-C_002dx-r-t-493"></a><a name="index-string_002drectangle-494"></a>  The command <kbd>C-x r t</kbd> (<code>string-rectangle</code>) replaces the
 contents of a region-rectangle with a string on each line.  The
 string's width need not be the same as the width of the rectangle.  If
 the string's width is less, the text after the rectangle shifts left;
 if the string is wider than the rectangle, the text after the
 rectangle shifts right.
 
-   <p><a name="index-string_002dinsert_002drectangle-398"></a>  The command <kbd>M-x string-insert-rectangle</kbd> is similar to
+   <p><a name="index-string_002dinsert_002drectangle-495"></a>  The command <kbd>M-x string-insert-rectangle</kbd> is similar to
 <code>string-rectangle</code>, but inserts the string on each line,
 shifting the original text to the right.
 

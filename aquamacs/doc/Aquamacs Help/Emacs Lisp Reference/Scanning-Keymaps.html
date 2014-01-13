@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Scanning Keymaps - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Menu-Keymaps.html#Menu-Keymaps" title="Menu Keymaps">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -50,7 +47,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Keymaps.html#Keymaps">Keymaps</a>
 for the sake of printing help information.
 
 <div class="defun">
-&mdash; Function: <b>accessible-keymaps</b><var> keymap &amp;optional prefix<a name="index-accessible_002dkeymaps-1548"></a></var><br>
+&mdash; Function: <b>accessible-keymaps</b><var> keymap &amp;optional prefix<a name="index-accessible_002dkeymaps-1640"></a></var><br>
 <blockquote><p>This function returns a list of all the keymaps that can be reached (via
 zero or more prefix keys) from <var>keymap</var>.  The value is an
 association list with elements of the form <code>(</code><var>key</var><code> . 
@@ -108,7 +105,7 @@ of a window.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>map-keymap</b><var> function keymap<a name="index-map_002dkeymap-1549"></a></var><br>
+&mdash; Function: <b>map-keymap</b><var> function keymap<a name="index-map_002dkeymap-1641"></a></var><br>
 <blockquote><p>The function <code>map-keymap</code> calls <var>function</var> once
 for each binding in <var>keymap</var>.  It passes two arguments,
 the event type and the value of the binding.  If <var>keymap</var>
@@ -121,7 +118,7 @@ in a keymap.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>where-is-internal</b><var> command &amp;optional keymap firstonly noindirect no-remap<a name="index-where_002dis_002dinternal-1550"></a></var><br>
+&mdash; Function: <b>where-is-internal</b><var> command &amp;optional keymap firstonly noindirect no-remap<a name="index-where_002dis_002dinternal-1642"></a></var><br>
 <blockquote><p>This function is a subroutine used by the <code>where-is</code> command
 (see <a href="../emacs/Help.html#Help">Help</a>).  It returns a list
 of all key sequences (of any length) that are bound to <var>command</var> in a
@@ -137,9 +134,9 @@ maps searched are <var>keymap</var> and the global keymap.  If <var>keymap</var>
 is a list of keymaps, only those keymaps are searched.
 
         <p>Usually it's best to use <code>overriding-local-map</code> as the expression
-for <var>keymap</var>.  Then <code>where-is-internal</code> searches precisely the
-keymaps that are active.  To search only the global map, pass
-<code>(keymap)</code> (an empty keymap) as <var>keymap</var>.
+for <var>keymap</var>.  Then <code>where-is-internal</code> searches precisely
+the keymaps that are active.  To search only the global map, pass the
+value <code>(keymap)</code> (an empty keymap) as <var>keymap</var>.
 
         <p>If <var>firstonly</var> is <code>non-ascii</code>, then the value is a single
 vector representing the first key sequence found, rather than a list of
@@ -153,30 +150,32 @@ return value can never be a menu binding.
 follow indirect keymap bindings.  This makes it possible to search for
 an indirect definition itself.
 
-        <p>When command remapping is in effect (see <a href="Remapping-Commands.html#Remapping-Commands">Remapping Commands</a>),
-<code>where-is-internal</code> figures out when a command will be run due to
-remapping and reports keys accordingly.  It also returns <code>nil</code> if
-<var>command</var> won't really be run because it has been remapped to some
-other command.  However, if <var>no-remap</var> is non-<code>nil</code>. 
-<code>where-is-internal</code> ignores remappings.
+        <p>The fifth argument, <var>no-remap</var>, determines how this function
+treats command remappings (see <a href="Remapping-Commands.html#Remapping-Commands">Remapping Commands</a>).  There are two
+cases of interest:
 
-     <pre class="smallexample">          (where-is-internal 'describe-function)
-              &rArr; ([8 102] [f1 102] [help 102]
-                   [menu-bar help-menu describe describe-function])
-</pre>
-        </blockquote></div>
+          <dl>
+<dt>If a command <var>other-command</var> is remapped to <var>command</var>:<dd>If <var>no-remap</var> is <code>nil</code>, find the bindings for
+<var>other-command</var> and treat them as though they are also bindings
+for <var>command</var>.  If <var>no-remap</var> is non-<code>nil</code>, include the
+vector <code>[remap </code><var>other-command</var><code>]</code> in the list of possible key
+sequences, instead of finding those bindings.
+
+          <br><dt>If <var>command</var> is remapped to <var>other-command</var>:<dd>If <var>no-remap</var> is <code>nil</code>, return the bindings for
+<var>other-command</var> rather than <var>command</var>.  If <var>no-remap</var> is
+non-<code>nil</code>, return the bindings for <var>command</var>, ignoring the
+fact that it is remapped. 
+</dl>
+        </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>describe-bindings</b><var> &amp;optional prefix buffer-or-name<a name="index-describe_002dbindings-1551"></a></var><br>
+&mdash; Command: <b>describe-bindings</b><var> &amp;optional prefix buffer-or-name<a name="index-describe_002dbindings-1643"></a></var><br>
 <blockquote><p>This function creates a listing of all current key bindings, and
-displays it in a buffer named &lsquo;<samp><span class="samp">*Help*</span></samp>&rsquo;.  The text is grouped by
+displays it in a buffer named <samp><span class="file">*Help*</span></samp>.  The text is grouped by
 modes&mdash;minor modes first, then the major mode, then global bindings.
 
         <p>If <var>prefix</var> is non-<code>nil</code>, it should be a prefix key; then the
 listing includes only keys that start with <var>prefix</var>.
-
-        <p>The listing describes meta characters as &lt;ESC&gt; followed by the
-corresponding non-meta character.
 
         <p>When several characters with consecutive <acronym>ASCII</acronym> codes have the
 same definition, they are shown together, as

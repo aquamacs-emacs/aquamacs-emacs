@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Changing Key Bindings - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Remapping-Commands.html#Remapping-Commands" title="Remapping Commands">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,7 +43,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Keymaps.html#Keymaps">Keymaps</a>
 
 <h3 class="section">22.12 Changing Key Bindings</h3>
 
-<p><a name="index-changing-key-bindings-1522"></a><a name="index-rebinding-1523"></a>
+<p><a name="index-changing-key-bindings-1614"></a><a name="index-rebinding-1615"></a>
   The way to rebind a key is to change its entry in a keymap.  If you
 change a binding in the global keymap, the change is effective in all
 buffers (though it has no direct effect in buffers that shadow the
@@ -54,12 +51,12 @@ global binding with a local one).  If you change the current buffer's
 local map, that usually affects all buffers using the same major mode. 
 The <code>global-set-key</code> and <code>local-set-key</code> functions are
 convenient interfaces for these operations (see <a href="Key-Binding-Commands.html#Key-Binding-Commands">Key Binding Commands</a>).  You can also use <code>define-key</code>, a more general
-function; then you must specify explicitly the map to change.
+function; then you must explicitly specify the map to change.
 
    <p>When choosing the key sequences for Lisp programs to rebind, please
 follow the Emacs conventions for use of various keys (see <a href="Key-Binding-Conventions.html#Key-Binding-Conventions">Key Binding Conventions</a>).
 
-   <p><a name="index-meta-character-key-constants-1524"></a><a name="index-control-character-key-constants-1525"></a>  In writing the key sequence to rebind, it is good to use the special
+   <p><a name="index-meta-character-key-constants-1616"></a><a name="index-control-character-key-constants-1617"></a>  In writing the key sequence to rebind, it is good to use the special
 escape sequences for control and meta characters (see <a href="String-Type.html#String-Type">String Type</a>). 
 The syntax &lsquo;<samp><span class="samp">\C-</span></samp>&rsquo; means that the following character is a control
 character and &lsquo;<samp><span class="samp">\M-</span></samp>&rsquo; means that the following character is a meta
@@ -81,11 +78,11 @@ numeric codes for the modifier bits don't appear in compiled files.
    <p>The functions below signal an error if <var>keymap</var> is not a keymap,
 or if <var>key</var> is not a string or vector representing a key sequence. 
 You can use event types (symbols) as shorthand for events that are
-lists.  The <code>kbd</code> macro (see <a href="Key-Sequences.html#Key-Sequences">Key Sequences</a>) is a convenient
-way to specify the key sequence.
+lists.  The <code>kbd</code> function (see <a href="Key-Sequences.html#Key-Sequences">Key Sequences</a>) is a
+convenient way to specify the key sequence.
 
 <div class="defun">
-&mdash; Function: <b>define-key</b><var> keymap key binding<a name="index-define_002dkey-1526"></a></var><br>
+&mdash; Function: <b>define-key</b><var> keymap key binding<a name="index-define_002dkey-1618"></a></var><br>
 <blockquote><p>This function sets the binding for <var>key</var> in <var>keymap</var>.  (If
 <var>key</var> is more than one event long, the change is actually made
 in another keymap reached from <var>keymap</var>.)  The argument
@@ -97,7 +94,7 @@ The value returned by <code>define-key</code> is <var>binding</var>.
 <var>keymap</var>.  When an event has no binding of its own, the Emacs
 command loop uses the keymap's default binding, if there is one.
 
-        <p><a name="index-invalid-prefix-key-error-1527"></a><a name="index-key-sequence-error-1528"></a>Every prefix of <var>key</var> must be a prefix key (i.e., bound to a keymap)
+        <p><a name="index-invalid-prefix-key-error-1619"></a><a name="index-key-sequence-error-1620"></a>Every prefix of <var>key</var> must be a prefix key (i.e., bound to a keymap)
 or undefined; otherwise an error is signaled.  If some prefix of
 <var>key</var> is undefined, then <code>define-key</code> defines it as a prefix
 key so that the rest of <var>key</var> can be defined as specified.
@@ -153,8 +150,8 @@ binding.  Another feature which is cleaner and can often produce the
 same results to remap one command into another (see <a href="Remapping-Commands.html#Remapping-Commands">Remapping Commands</a>).
 
 <div class="defun">
-&mdash; Function: <b>substitute-key-definition</b><var> olddef newdef keymap &amp;optional oldmap<a name="index-substitute_002dkey_002ddefinition-1529"></a></var><br>
-<blockquote><p><a name="index-replace-bindings-1530"></a>This function replaces <var>olddef</var> with <var>newdef</var> for any keys in
+&mdash; Function: <b>substitute-key-definition</b><var> olddef newdef keymap &amp;optional oldmap<a name="index-substitute_002dkey_002ddefinition-1621"></a></var><br>
+<blockquote><p><a name="index-replace-bindings-1622"></a>This function replaces <var>olddef</var> with <var>newdef</var> for any keys in
 <var>keymap</var> that were bound to <var>olddef</var>.  In other words,
 <var>olddef</var> is replaced with <var>newdef</var> wherever it appears.  The
 function returns <code>nil</code>.
@@ -195,8 +192,8 @@ are globally bound to the standard deletion command.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>suppress-keymap</b><var> keymap &amp;optional nodigits<a name="index-suppress_002dkeymap-1531"></a></var><br>
-<blockquote><p><a name="index-g_t_0040code_007bself_002dinsert_002dcommand_007d-override-1532"></a>This function changes the contents of the full keymap <var>keymap</var> by
+&mdash; Function: <b>suppress-keymap</b><var> keymap &amp;optional nodigits<a name="index-suppress_002dkeymap-1623"></a></var><br>
+<blockquote><p><a name="index-g_t_0040code_007bself_002dinsert_002dcommand_007d-override-1624"></a>This function changes the contents of the full keymap <var>keymap</var> by
 remapping <code>self-insert-command</code> to the command <code>undefined</code>
 (see <a href="Remapping-Commands.html#Remapping-Commands">Remapping Commands</a>).  This has the effect of undefining all
 printing characters, thus making ordinary insertion of text impossible. 
@@ -207,7 +204,7 @@ digits to run <code>digit-argument</code>, and <kbd>-</kbd> to run
 <code>negative-argument</code>.  Otherwise it makes them undefined like the
 rest of the printing characters.
 
-        <p><a name="index-yank-suppression-1533"></a><a name="index-g_t_0040code_007bquoted_002dinsert_007d-suppression-1534"></a>The <code>suppress-keymap</code> function does not make it impossible to
+        <p><a name="index-yank-suppression-1625"></a><a name="index-g_t_0040code_007bquoted_002dinsert_007d-suppression-1626"></a>The <code>suppress-keymap</code> function does not make it impossible to
 modify a buffer, as it does not suppress commands such as <code>yank</code>
 and <code>quoted-insert</code>.  To prevent any modification of a buffer, make
 it read-only (see <a href="Read-Only-Buffers.html#Read-Only-Buffers">Read Only Buffers</a>).
@@ -218,21 +215,18 @@ that is used for some other purpose is likely to cause trouble; for
 example, suppressing <code>global-map</code> would make it impossible to use
 most of Emacs.
 
-        <p>Most often, <code>suppress-keymap</code> is used to initialize local
-keymaps of modes such as Rmail and Dired where insertion of text is not
-desirable and the buffer is read-only.  Here is an example taken from
-the file <samp><span class="file">emacs/lisp/dired.el</span></samp>, showing how the local keymap for
-Dired mode is set up:
+        <p>This function can be used to initialize the local keymap of a major
+mode for which insertion of text is not desirable.  But usually such a
+mode should be derived from <code>special-mode</code> (see <a href="Basic-Major-Modes.html#Basic-Major-Modes">Basic Major Modes</a>); then its keymap will automatically inherit from
+<code>special-mode-map</code>, which is already suppressed.  Here is how
+<code>special-mode-map</code> is defined:
 
-     <pre class="smallexample">          (setq dired-mode-map (make-keymap))
-          (suppress-keymap dired-mode-map)
-          (define-key dired-mode-map "r" 'dired-rename-file)
-          (define-key dired-mode-map "\C-d" 'dired-flag-file-deleted)
-          (define-key dired-mode-map "d" 'dired-flag-file-deleted)
-          (define-key dired-mode-map "v" 'dired-view-file)
-          (define-key dired-mode-map "e" 'dired-find-file)
-          (define-key dired-mode-map "f" 'dired-find-file)
-          ...
+     <pre class="smallexample">          (defvar special-mode-map
+            (let ((map (make-sparse-keymap)))
+              (suppress-keymap map)
+              (define-key map "q" 'quit-window)
+              ...
+              map))
 </pre>
         </blockquote></div>
 

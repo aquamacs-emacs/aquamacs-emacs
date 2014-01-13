@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Misc Dired Features - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="prev" href="Image_002dDired.html#Image_002dDired" title="Image-Dired">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -43,13 +40,13 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Dired.html#Dired">Dired</a>
 <hr>
 </div>
 
-<h3 class="section">37.19 Other Dired Features</h3>
+<h3 class="section">30.19 Other Dired Features</h3>
 
-<p><a name="index-g_t_002b-_0040r_007b_0028Dired_0029_007d-3225"></a><a name="index-dired_002dcreate_002ddirectory-3226"></a>  The command <kbd>+</kbd> (<code>dired-create-directory</code>) reads a
-directory name, and creates the directory if it does not already
-exist.
+<p><a name="index-g_t_002b-_0040r_007b_0028Dired_0029_007d-3224"></a><a name="index-dired_002dcreate_002ddirectory-3225"></a>  The command <kbd>+</kbd> (<code>dired-create-directory</code>) reads a
+directory name, and creates that directory.  It signals an error if
+the directory already exists.
 
-   <p><a name="index-searching-multiple-files-via-Dired-3227"></a>  The command <kbd>M-s a C-s</kbd> (<code>dired-do-isearch</code>) begins a
+   <p><a name="index-searching-multiple-files-via-Dired-3226"></a><a name="index-M_002ds-a-C_002ds-_0040r_007b_0028Dired_0029_007d-3227"></a><a name="index-M_002ds-a-M_002dC_002ds-_0040r_007b_0028Dired_0029_007d-3228"></a><a name="index-dired_002ddo_002disearch-3229"></a><a name="index-dired_002ddo_002disearch_002dregexp-3230"></a>  The command <kbd>M-s a C-s</kbd> (<code>dired-do-isearch</code>) begins a
 &ldquo;multi-file&rdquo; incremental search on the marked files.  If a search
 fails at the end of a file, typing <kbd>C-s</kbd> advances to the next
 marked file and repeats the search; at the end of the last marked
@@ -58,7 +55,7 @@ file, the search wraps around to the first marked file.  The command
 a regular expression search.  See <a href="Repeat-Isearch.html#Repeat-Isearch">Repeat Isearch</a>, for information
 about search repetition.
 
-   <p><a name="index-Adding-to-the-kill-ring-in-Dired_002e-3228"></a><a name="index-w-_0040r_007b_0028Dired_0029_007d-3229"></a><a name="index-dired_002dcopy_002dfilename_002das_002dkill-3230"></a>  The command <kbd>w</kbd> (<code>dired-copy-filename-as-kill</code>) puts the
+   <p><a name="index-Adding-to-the-kill-ring-in-Dired_002e-3231"></a><a name="index-w-_0040r_007b_0028Dired_0029_007d-3232"></a><a name="index-dired_002dcopy_002dfilename_002das_002dkill-3233"></a>  The command <kbd>w</kbd> (<code>dired-copy-filename-as-kill</code>) puts the
 names of the marked (or next <var>n</var>) files into the kill ring, as if
 you had killed them with <kbd>C-w</kbd>.  The names are separated by a
 space.
@@ -76,11 +73,11 @@ names into arguments for other Emacs commands.  It also displays what
 it added to the kill ring, so you can use it to display the list of
 currently marked files in the echo area.
 
-   <p><a name="index-Dired-and-version-control-3231"></a>  If the directory you are visiting is under version control
+   <p><a name="index-Dired-and-version-control-3234"></a>  If the directory you are visiting is under version control
 (see <a href="Version-Control.html#Version-Control">Version Control</a>), then the normal VC diff and log commands
 will operate on the selected files.
 
-   <p><a name="index-dired_002dcompare_002ddirectories-3232"></a>  The command <kbd>M-x dired-compare-directories</kbd> is used to compare
+   <p><a name="index-dired_002dcompare_002ddirectories-3235"></a>  The command <kbd>M-x dired-compare-directories</kbd> is used to compare
 the current Dired buffer with another directory.  It marks all the files
 that are &ldquo;different&rdquo; between the two directories.  It puts these marks
 in all Dired buffers where these files are listed, which of course includes
@@ -88,7 +85,7 @@ the current buffer.
 
    <p>The default comparison method (used if you type &lt;RET&gt; at the
 prompt) is to compare just the file names&mdash;each file name that does
-not appear in the other directory is &ldquo;different.&rdquo;  You can specify
+not appear in the other directory is &ldquo;different&rdquo;.  You can specify
 more stringent comparisons by entering a Lisp expression, which can
 refer to the variables <code>size1</code> and <code>size2</code>, the respective
 file sizes; <code>mtime1</code> and <code>mtime2</code>, the last modification
@@ -96,7 +93,7 @@ times in seconds, as floating point numbers; and <code>fa1</code> and
 <code>fa2</code>, the respective file attribute lists (as returned by the
 function <code>file-attributes</code>).  This expression is evaluated for
 each pair of like-named files, and if the expression's value is
-non-<code>nil</code>, those files are considered &ldquo;different.&rdquo;
+non-<code>nil</code>, those files are considered &ldquo;different&rdquo;.
 
    <p>For instance, the sequence <code>M-x dired-compare-directories
 &lt;RET&gt; (&gt; mtime1 mtime2) &lt;RET&gt;</code> marks files newer in this
@@ -104,18 +101,17 @@ directory than in the other, and marks files older in the other
 directory than in this one.  It also marks files with no counterpart,
 in both directories, as always.
 
-   <p><a name="index-drag-and-drop_002c-Dired-3233"></a>  On the X window system, Emacs supports the &ldquo;drag and drop&rdquo;
+   <p><a name="index-drag-and-drop_002c-Dired-3236"></a>  On the X Window System, Emacs supports the &ldquo;drag and drop&rdquo;
 protocol.  You can drag a file object from another program, and drop
 it onto a Dired buffer; this either moves, copies, or creates a link
 to the file in that directory.  Precisely which action is taken is
 determined by the originating program.  Dragging files out of a Dired
-buffer is currently not supported.
-
+buffer is currently not supported. 
 <!-- Includes cal-xtra. -->
-<!-- This is part of the Emacs manual. -->
-<!-- Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1997, 2000, 2001, -->
-<!-- 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 -->
-<!-- Free Software Foundation, Inc. -->
+
+<!-- This is part of the Emacs manual.  -*- coding: utf-8 -*- -->
+<!-- Copyright (C) 1985-1987, 1993-1995, 1997, 2000-2013 Free Software -->
+<!-- Foundation, Inc. -->
 <!-- See file emacs.texi for copying conditions. -->
    </body></html>
 

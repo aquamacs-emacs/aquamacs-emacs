@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Autoload - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Repeated-Loading.html#Repeated-Loading" title="Repeated Loading">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,12 +43,14 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Loading.html#Loading">Loading</a>
 
 <h3 class="section">15.5 Autoload</h3>
 
-<p><a name="index-autoload-810"></a>
-  The <dfn>autoload</dfn> facility allows you to make a function or macro
-known in Lisp, but put off loading the file that defines it.  The first
-call to the function automatically reads the proper file to install the
-real definition and other associated code, then runs the real definition
-as if it had been loaded all along.
+<p><a name="index-autoload-868"></a>
+  The <dfn>autoload</dfn> facility lets you register the existence of a
+function or macro, but put off loading the file that defines it.  The
+first call to the function automatically loads the proper library, in
+order to install the real definition and other associated code, then
+runs the real definition as if it had been loaded all along. 
+Autoloading can also be triggered by looking up the documentation of
+the function or macro (see <a href="Documentation-Basics.html#Documentation-Basics">Documentation Basics</a>).
 
    <p>There are two ways to set up an autoloaded function: by calling
 <code>autoload</code>, and by writing a special &ldquo;magic&rdquo; comment in the
@@ -64,15 +63,15 @@ nothing on their own, but they serve as a guide for the command
 and arranges to execute them when Emacs is built.
 
 <div class="defun">
-&mdash; Function: <b>autoload</b><var> function filename &amp;optional docstring interactive type<a name="index-autoload-811"></a></var><br>
+&mdash; Function: <b>autoload</b><var> function filename &amp;optional docstring interactive type<a name="index-autoload-869"></a></var><br>
 <blockquote><p>This function defines the function (or macro) named <var>function</var> so as
 to load automatically from <var>filename</var>.  The string <var>filename</var>
 specifies the file to load to get the real definition of <var>function</var>.
 
         <p>If <var>filename</var> does not contain either a directory name, or the
-suffix <code>.el</code> or <code>.elc</code>, then <code>autoload</code> insists on adding
-one of these suffixes, and it will not load from a file whose name is
-just <var>filename</var> with no added suffix.  (The variable
+suffix <code>.el</code> or <code>.elc</code>, this function insists on adding one
+of these suffixes, and it will not load from a file whose name is just
+<var>filename</var> with no added suffix.  (The variable
 <code>load-suffixes</code> specifies the exact required suffixes.)
 
         <p>The argument <var>docstring</var> is the documentation string for the
@@ -103,10 +102,11 @@ happen when a Lisp program gets the keymap from the value of a variable
 and calls <code>define-key</code>; not even if the variable name is the same
 symbol <var>function</var>.
 
-        <p><a name="index-function-cell-in-autoload-812"></a>If <var>function</var> already has a non-void function definition that is not
-an autoload object, <code>autoload</code> does nothing and returns <code>nil</code>. 
-If the function cell of <var>function</var> is void, or is already an autoload
-object, then it is defined as an autoload object like this:
+        <p><a name="index-function-cell-in-autoload-870"></a>If <var>function</var> already has a non-void function definition that is not
+an autoload object, this function does nothing and returns <code>nil</code>. 
+Otherwise, it constructs an autoload object (see <a href="Autoload-Type.html#Autoload-Type">Autoload Type</a>),
+and stores it as the function definition for <var>function</var>.  The
+autoload object has this form:
 
      <pre class="example">          (autoload <var>filename</var> <var>docstring</var> <var>interactive</var> <var>type</var>)
 </pre>
@@ -117,12 +117,22 @@ object, then it is defined as an autoload object like this:
 </pre>
         <p class="noindent">In this case, <code>"prolog"</code> is the name of the file to load, 169681
 refers to the documentation string in the
-<samp><span class="file">emacs/etc/DOC-</span><var>version</var></samp> file (see <a href="Documentation-Basics.html#Documentation-Basics">Documentation Basics</a>),
+<samp><span class="file">emacs/etc/DOC</span></samp> file (see <a href="Documentation-Basics.html#Documentation-Basics">Documentation Basics</a>),
 <code>t</code> means the function is interactive, and <code>nil</code> that it is
 not a macro or a keymap. 
 </p></blockquote></div>
 
-   <p><a name="index-autoload-errors-813"></a>  The autoloaded file usually contains other definitions and may require
+<div class="defun">
+&mdash; Function: <b>autoloadp</b><var> object<a name="index-autoloadp-871"></a></var><br>
+<blockquote><p>This function returns non-<code>nil</code> if <var>object</var> is an autoload
+object.  For example, to check if <code>run-prolog</code> is defined as an
+autoloaded function, evaluate
+
+     <pre class="smallexample">          (autoloadp (symbol-function 'run-prolog))
+</pre>
+        </blockquote></div>
+
+   <p><a name="index-autoload-errors-872"></a>  The autoloaded file usually contains other definitions and may require
 or provide one or more features.  If the file is not completely loaded
 (due to an error in the evaluation of its contents), any function
 definitions or <code>provide</code> calls that occurred during the load are
@@ -136,7 +146,7 @@ subroutines not loaded successfully because they come later in the file.
 macro, then an error is signaled with data <code>"Autoloading failed to
 define function </code><var>function-name</var><code>"</code>.
 
-   <p><a name="index-update_002dfile_002dautoloads-814"></a><a name="index-update_002ddirectory_002dautoloads-815"></a><a name="index-magic-autoload-comment-816"></a><a name="index-autoload-cookie-817"></a><a name="autoload-cookie"></a>A magic autoload comment (often called an <dfn>autoload cookie</dfn>)
+   <p><a name="index-update_002dfile_002dautoloads-873"></a><a name="index-update_002ddirectory_002dautoloads-874"></a><a name="index-magic-autoload-comment-875"></a><a name="index-autoload-cookie-876"></a><a name="autoload-cookie"></a>A magic autoload comment (often called an <dfn>autoload cookie</dfn>)
 consists of &lsquo;<samp><span class="samp">;;;###autoload</span></samp>&rsquo;, on a line by itself,
 just before the real definition of the function in its
 autoloadable source file.  The command <kbd>M-x update-file-autoloads</kbd>
@@ -149,14 +159,28 @@ Building Emacs loads <samp><span class="file">loaddefs.el</span></samp> and thus
 autoloads for all files in the current directory.
 
    <p>The same magic comment can copy any kind of form into
-<samp><span class="file">loaddefs.el</span></samp>.  If the form following the magic comment is not a
-function-defining form or a <code>defcustom</code> form, it is copied
-verbatim.  &ldquo;Function-defining forms&rdquo; include <code>define-skeleton</code>,
-<code>define-derived-mode</code>, <code>define-generic-mode</code> and
-<code>define-minor-mode</code> as well as <code>defun</code> and
-<code>defmacro</code>.  To save space, a <code>defcustom</code> form is converted to
-a <code>defvar</code> in <samp><span class="file">loaddefs.el</span></samp>, with some additional information
-if it uses <code>:require</code>.
+<samp><span class="file">loaddefs.el</span></samp>.  The form following the magic comment is copied
+verbatim, <em>except</em> if it is one of the forms which the autoload
+facility handles specially (e.g., by conversion into an
+<code>autoload</code> call).  The forms which are not copied verbatim are
+the following:
+
+     <dl>
+<dt>Definitions for function or function-like objects:<dd><code>defun</code> and <code>defmacro</code>; also <code>cl-defun</code> and
+<code>cl-defmacro</code> (see <a href="../cl/Argument-Lists.html#Argument-Lists">Argument Lists</a>),
+and <code>define-overloadable-function</code> (see the commentary in
+<samp><span class="file">mode-local.el</span></samp>).
+
+     <br><dt>Definitions for major or minor modes:<dd><code>define-minor-mode</code>, <code>define-globalized-minor-mode</code>,
+<code>define-generic-mode</code>, <code>define-derived-mode</code>,
+<code>easy-mmode-define-minor-mode</code>,
+<code>easy-mmode-define-global-mode</code>, <code>define-compilation-mode</code>,
+and <code>define-global-minor-mode</code>.
+
+     <br><dt>Other definition types:<dd><code>defcustom</code>, <code>defgroup</code>, <code>defclass</code>
+(see <a href="../eieio/index.html#Top">EIEIO</a>), and <code>define-skeleton</code> (see the
+commentary in <samp><span class="file">skeleton.el</span></samp>). 
+</dl>
 
    <p>You can also use a magic comment to execute a form at build time
 <em>without</em> executing it when the file itself is loaded.  To do this,
@@ -168,7 +192,7 @@ it is executed while building Emacs.
    <p>The following example shows how <code>doctor</code> is prepared for
 autoloading with a magic comment:
 
-<pre class="smallexample">     ;;;###autoload
+<pre class="example">     ;;;###autoload
      (defun doctor ()
        "Switch to *doctor* buffer and start giving psychotherapy."
        (interactive)
@@ -177,12 +201,12 @@ autoloading with a magic comment:
 </pre>
    <p class="noindent">Here's what that produces in <samp><span class="file">loaddefs.el</span></samp>:
 
-<pre class="smallexample">     (autoload (quote doctor) "doctor" "\
+<pre class="example">     (autoload (quote doctor) "doctor" "\
      Switch to *doctor* buffer and start giving psychotherapy.
      
      \(fn)" t nil)
 </pre>
-   <p class="noindent"><a name="index-g_t_0040code_007bfn_007d-in-function_0027s-documentation-string-818"></a>The backslash and newline immediately following the double-quote are a
+   <p class="noindent"><a name="index-g_t_0040code_007bfn_007d-in-function_0027s-documentation-string-877"></a>The backslash and newline immediately following the double-quote are a
 convention used only in the preloaded uncompiled Lisp files such as
 <samp><span class="file">loaddefs.el</span></samp>; they tell <code>make-docfile</code> to put the
 documentation string in the <samp><span class="file">etc/DOC</span></samp> file.  See <a href="Building-Emacs.html#Building-Emacs">Building Emacs</a>. 
@@ -196,7 +220,7 @@ ordinary magic autoload comment would copy the whole definition into
 <code>loaddefs.el</code>.  That is not desirable.  You can put the desired
 <code>autoload</code> call into <code>loaddefs.el</code> instead by writing this:
 
-<pre class="smallexample">     ;;;###autoload (autoload 'foo "myfile")
+<pre class="example">     ;;;###autoload (autoload 'foo "myfile")
      (mydefunmacro foo
        ...)
 </pre>
@@ -206,7 +230,7 @@ different from the default <samp><span class="file">loaddefs.el</span></samp>.  
 variables to control this:
 
 <div class="defun">
-&mdash; Variable: <b>generate-autoload-cookie</b><var><a name="index-generate_002dautoload_002dcookie-819"></a></var><br>
+&mdash; Variable: <b>generate-autoload-cookie</b><var><a name="index-generate_002dautoload_002dcookie-878"></a></var><br>
 <blockquote><p>The value of this variable should be a string whose syntax is a Lisp
 comment.  <kbd>M-x update-file-autoloads</kbd> copies the Lisp form that
 follows the cookie into the autoload file it generates.  The default
@@ -214,12 +238,26 @@ value of this variable is <code>";;;###autoload"</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>generated-autoload-file</b><var><a name="index-generated_002dautoload_002dfile-820"></a></var><br>
+&mdash; Variable: <b>generated-autoload-file</b><var><a name="index-generated_002dautoload_002dfile-879"></a></var><br>
 <blockquote><p>The value of this variable names an Emacs Lisp file where the autoload
 calls should go.  The default value is <samp><span class="file">loaddefs.el</span></samp>, but you can
 override that, e.g., in the &ldquo;Local Variables&rdquo; section of a
 <samp><span class="file">.el</span></samp> file (see <a href="File-Local-Variables.html#File-Local-Variables">File Local Variables</a>).  The autoload file is
 assumed to contain a trailer starting with a formfeed character. 
+</p></blockquote></div>
+
+   <p>The following function may be used to explicitly load the library
+specified by an autoload object:
+
+<div class="defun">
+&mdash; Function: <b>autoload-do-load</b><var> autoload &amp;optional name macro-only<a name="index-autoload_002ddo_002dload-880"></a></var><br>
+<blockquote><p>This function performs the loading specified by <var>autoload</var>, which
+should be an autoload object.  The optional argument <var>name</var>, if
+non-<code>nil</code>, should be a symbol whose function value is
+<var>autoload</var>; in that case, the return value of this function is the
+symbol's new function value.  If the value of the optional argument
+<var>macro-only</var> is <code>macro</code>, this function avoids loading a
+function, only a macro. 
 </p></blockquote></div>
 
    </body></html>

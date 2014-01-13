@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Type Keywords - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Defining-New-Types.html#Defining-New-Types" title="Defining New Types">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -51,7 +48,12 @@ type name symbol.  Here are the keywords you can use, and their
 meanings:
 
      <dl>
-<dt><code>:value </code><var>default</var><dd>This is used for a type that appears as an alternative inside of
+<dt><code>:value </code><var>default</var><dd>Provide a default value.
+
+     <p>If <code>nil</code> is not a valid value for the alternative, then it is
+essential to specify a valid default with <code>:value</code>.
+
+     <p>If you use this for a type that appears as an alternative inside of
 <code>choice</code>; it specifies the default value to use, at first, if and
 when the user selects this alternative with the menu in the
 customization buffer.
@@ -59,10 +61,7 @@ customization buffer.
      <p>Of course, if the actual value of the option fits this alternative, it
 will appear showing the actual value, not <var>default</var>.
 
-     <p>If <code>nil</code> is not a valid value for the alternative, then it is
-essential to specify a valid default with <code>:value</code>.
-
-     <br><dt><code>:format </code><var>format-string</var><dd><a name="index-format_0040r_007b_002c-customization-keyword_007d-782"></a>This string will be inserted in the buffer to represent the value
+     <br><dt><code>:format </code><var>format-string</var><dd><a name="index-format_0040r_007b_002c-customization-keyword_007d-826"></a>This string will be inserted in the buffer to represent the value
 corresponding to the type.  The following &lsquo;<samp><span class="samp">%</span></samp>&rsquo; escapes are available
 for use in <var>format-string</var>:
 
@@ -83,8 +82,7 @@ the kind of item, and (for variables) on the customization type.
           <br><dt>&lsquo;<samp><span class="samp">%d</span></samp>&rsquo;<dd>Substitute the item's documentation string.
 
           <br><dt>&lsquo;<samp><span class="samp">%h</span></samp>&rsquo;<dd>Like &lsquo;<samp><span class="samp">%d</span></samp>&rsquo;, but if the documentation string is more than one line,
-add an active field to control whether to show all of it or just the
-first line.
+add a button to control whether to show all of it or just the first line.
 
           <br><dt>&lsquo;<samp><span class="samp">%t</span></samp>&rsquo;<dd>Substitute the tag here.  You specify the tag with the <code>:tag</code>
 keyword.
@@ -92,12 +90,12 @@ keyword.
           <br><dt>&lsquo;<samp><span class="samp">%%</span></samp>&rsquo;<dd>Display a literal &lsquo;<samp><span class="samp">%</span></samp>&rsquo;. 
 </dl>
 
-     <br><dt><code>:action </code><var>action</var><dd><a name="index-action_0040r_007b_002c-customization-keyword_007d-783"></a>Perform <var>action</var> if the user clicks on a button.
+     <br><dt><code>:action </code><var>action</var><dd><a name="index-action_0040r_007b_002c-customization-keyword_007d-827"></a>Perform <var>action</var> if the user clicks on a button.
 
-     <br><dt><code>:button-face </code><var>face</var><dd><a name="index-button_002dface_0040r_007b_002c-customization-keyword_007d-784"></a>Use the face <var>face</var> (a face name or a list of face names) for button
+     <br><dt><code>:button-face </code><var>face</var><dd><a name="index-button_002dface_0040r_007b_002c-customization-keyword_007d-828"></a>Use the face <var>face</var> (a face name or a list of face names) for button
 text displayed with &lsquo;<samp><span class="samp">%[...%]</span></samp>&rsquo;.
 
-     <br><dt><code>:button-prefix </code><var>prefix</var><dt><code>:button-suffix </code><var>suffix</var><dd><a name="index-button_002dprefix_0040r_007b_002c-customization-keyword_007d-785"></a><a name="index-button_002dsuffix_0040r_007b_002c-customization-keyword_007d-786"></a>These specify the text to display before and after a button. 
+     <br><dt><code>:button-prefix </code><var>prefix</var><dt><code>:button-suffix </code><var>suffix</var><dd><a name="index-button_002dprefix_0040r_007b_002c-customization-keyword_007d-829"></a><a name="index-button_002dsuffix_0040r_007b_002c-customization-keyword_007d-830"></a>These specify the text to display before and after a button. 
 Each can be:
 
           <dl>
@@ -111,7 +109,7 @@ Each can be:
      <br><dt><code>:tag </code><var>tag</var><dd>Use <var>tag</var> (a string) as the tag for the value (or part of the value)
 that corresponds to this type.
 
-     <br><dt><code>:doc </code><var>doc</var><dd><a name="index-doc_0040r_007b_002c-customization-keyword_007d-787"></a>Use <var>doc</var> as the documentation string for this value (or part of the
+     <br><dt><code>:doc </code><var>doc</var><dd><a name="index-doc_0040r_007b_002c-customization-keyword_007d-831"></a>Use <var>doc</var> as the documentation string for this value (or part of the
 value) that corresponds to this type.  In order for this to work, you
 must specify a value for <code>:format</code>, and use &lsquo;<samp><span class="samp">%d</span></samp>&rsquo; or &lsquo;<samp><span class="samp">%h</span></samp>&rsquo;
 in that value.
@@ -120,14 +118,14 @@ in that value.
 provide more information about the meanings of alternatives inside a
 <code>:choice</code> type or the parts of some other composite type.
 
-     <br><dt><code>:help-echo </code><var>motion-doc</var><dd><a name="index-help_002decho_0040r_007b_002c-customization-keyword_007d-788"></a>When you move to this item with <code>widget-forward</code> or
+     <br><dt><code>:help-echo </code><var>motion-doc</var><dd><a name="index-help_002decho_0040r_007b_002c-customization-keyword_007d-832"></a>When you move to this item with <code>widget-forward</code> or
 <code>widget-backward</code>, it will display the string <var>motion-doc</var> in
 the echo area.  In addition, <var>motion-doc</var> is used as the mouse
 <code>help-echo</code> string and may actually be a function or form evaluated
 to yield a help string.  If it is a function, it is called with one
 argument, the widget.
 
-     <br><dt><code>:match </code><var>function</var><dd><a name="index-match_0040r_007b_002c-customization-keyword_007d-789"></a>Specify how to decide whether a value matches the type.  The
+     <br><dt><code>:match </code><var>function</var><dd><a name="index-match_0040r_007b_002c-customization-keyword_007d-833"></a>Specify how to decide whether a value matches the type.  The
 corresponding value, <var>function</var>, should be a function that accepts
 two arguments, a widget and a value; it should return non-<code>nil</code> if
 the value is acceptable.

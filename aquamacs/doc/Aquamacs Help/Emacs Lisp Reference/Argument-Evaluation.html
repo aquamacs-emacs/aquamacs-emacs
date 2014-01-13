@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Argument Evaluation - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Surprising-Local-Vars.html#Surprising-Local-Vars" title="Surprising Local Vars">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,22 +41,21 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Problems-with-Macros.html#Problems-with
 <hr>
 </div>
 
-<h4 class="subsection">13.6.2 Evaluating Macro Arguments Repeatedly</h4>
+<h4 class="subsection">13.5.2 Evaluating Macro Arguments Repeatedly</h4>
 
 <p>When defining a macro you must pay attention to the number of times
 the arguments will be evaluated when the expansion is executed.  The
-following macro (used to facilitate iteration) illustrates the problem. 
-This macro allows us to write a simple &ldquo;for&rdquo; loop such as one might
-find in Pascal.
+following macro (used to facilitate iteration) illustrates the
+problem.  This macro allows us to write a &ldquo;for&rdquo; loop construct.
 
-   <p><a name="index-for-749"></a>
-<pre class="smallexample">     (defmacro for (var from init to final do &amp;rest body)
+   <p><a name="index-for-790"></a>
+<pre class="example">     (defmacro for (var from init to final do &amp;rest body)
        "Execute a simple \"for\" loop.
      For example, (for i from 1 to 10 do (print i))."
        (list 'let (list (list var init))
-             (cons 'while (cons (list '&lt;= var final)
-                                (append body (list (list 'inc var)))))))
-     &rArr; for
+             (cons 'while
+                   (cons (list '&lt;= var final)
+                         (append body (list (list 'inc var)))))))
      
      (for i from 1 to 3 do
         (setq square (* i i))
@@ -83,7 +79,7 @@ in those positions in the macro call.
 
    <p>Here's an equivalent definition simplified through use of backquote:
 
-<pre class="smallexample">     (defmacro for (var from init to final do &amp;rest body)
+<pre class="example">     (defmacro for (var from init to final do &amp;rest body)
        "Execute a simple \"for\" loop.
      For example, (for i from 1 to 10 do (print i))."
        `(let ((,var ,init))
@@ -98,12 +94,12 @@ complex form, say <code>(long-complex-calculation x)</code>, this can slow
 down the execution significantly.  If <var>final</var> has side effects,
 executing it more than once is probably incorrect.
 
-   <p><a name="index-macro-argument-evaluation-750"></a>A well-designed macro definition takes steps to avoid this problem by
+   <p><a name="index-macro-argument-evaluation-791"></a>A well-designed macro definition takes steps to avoid this problem by
 producing an expansion that evaluates the argument expressions exactly
 once unless repeated evaluation is part of the intended purpose of the
 macro.  Here is a correct expansion for the <code>for</code> macro:
 
-<pre class="smallexample">     (let ((i 1)
+<pre class="example">     (let ((i 1)
            (max 3))
        (while (&lt;= i max)
          (setq square (* i i))
@@ -112,7 +108,7 @@ macro.  Here is a correct expansion for the <code>for</code> macro:
 </pre>
    <p>Here is a macro definition that creates this expansion:
 
-<pre class="smallexample">     (defmacro for (var from init to final do &amp;rest body)
+<pre class="example">     (defmacro for (var from init to final do &amp;rest body)
        "Execute a simple for loop: (for i from 1 to 10 do (print i))."
        `(let ((,var ,init)
               (max ,final))

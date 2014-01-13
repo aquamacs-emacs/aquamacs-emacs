@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Cursor Parameters - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Font-and-Color-Parameters.html#Font-and-Color-Parameters" title="Font and Color Parameters">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,11 +43,11 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Window-Frame-Parameters.html#Window-Fra
 
 <h5 class="subsubsection">29.3.3.7 Cursor Parameters</h5>
 
-<p><a name="index-cursor_002c-and-frame-parameters-2304"></a>
+<p><a name="index-cursor_002c-and-frame-parameters-2556"></a>
   This frame parameter controls the way the cursor looks.
 
      
-<a name="index-cursor_002dtype_002c-a-frame-parameter-2305"></a>
+<a name="index-cursor_002dtype_002c-a-frame-parameter-2557"></a>
 <dl><dt><code>cursor-type</code><dd>How to display the cursor.  Legitimate values are:
 
           <dl>
@@ -64,33 +61,42 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Window-Frame-Parameters.html#Window-Fra
 </dl>
      </dl>
 
-   <p><a name="index-cursor_002dtype-2306"></a>The buffer-local variable <code>cursor-type</code> overrides the value of
-the <code>cursor-type</code> frame parameter, but if it is <code>t</code>, that
-means to use the cursor specified for the frame.
+   <p><a name="index-cursor_002dtype-2558"></a>The <code>cursor-type</code> frame parameter may be overridden by the
+variables <code>cursor-type</code> and
+<code>cursor-in-non-selected-windows</code>:
 
 <div class="defun">
-&mdash; User Option: <b>blink-cursor-alist</b><var><a name="index-blink_002dcursor_002dalist-2307"></a></var><br>
+&mdash; Variable: <b>cursor-type</b><var><a name="index-cursor_002dtype-2559"></a></var><br>
+<blockquote><p>This buffer-local variable controls how the cursor looks in a selected
+window showing the buffer.  If its value is <code>t</code>, that means to
+use the cursor specified by the <code>cursor-type</code> frame parameter. 
+Otherwise, the value should be one of the cursor types listed above,
+and it overrides the <code>cursor-type</code> frame parameter. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>cursor-in-non-selected-windows</b><var><a name="index-cursor_002din_002dnon_002dselected_002dwindows-2560"></a></var><br>
+<blockquote><p>This buffer-local variable controls how the cursor looks in a window
+that is not selected.  It supports the same values as the
+<code>cursor-type</code> frame parameter; also, <code>nil</code> means don't
+display a cursor in nonselected windows, and <code>t</code> (the default)
+means use a standard modification of the usual cursor type (solid box
+becomes hollow box, and bar becomes a narrower bar). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>blink-cursor-alist</b><var><a name="index-blink_002dcursor_002dalist-2561"></a></var><br>
 <blockquote><p>This variable specifies how to blink the cursor.  Each element has the
 form <code>(</code><var>on-state</var><code> . </code><var>off-state</var><code>)</code>.  Whenever the cursor
 type equals <var>on-state</var> (comparing using <code>equal</code>), the
 corresponding <var>off-state</var> specifies what the cursor looks like
-when it blinks &ldquo;off.&rdquo;  Both <var>on-state</var> and <var>off-state</var>
+when it blinks &ldquo;off&rdquo;.  Both <var>on-state</var> and <var>off-state</var>
 should be suitable values for the <code>cursor-type</code> frame parameter.
 
         <p>There are various defaults for how to blink each type of cursor, if
 the type is not mentioned as an <var>on-state</var> here.  Changes in this
 variable do not take effect immediately, only when you specify the
 <code>cursor-type</code> frame parameter. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; User Option: <b>cursor-in-non-selected-windows</b><var><a name="index-cursor_002din_002dnon_002dselected_002dwindows-2308"></a></var><br>
-<blockquote><p>This variable controls how the cursor looks in a window that is not
-selected.  It supports the same values as the <code>cursor-type</code> frame
-parameter; also, <code>nil</code> means don't display a cursor in
-nonselected windows, and <code>t</code> (the default) means use a standard
-modification of the usual cursor type (solid box becomes hollow box,
-and bar becomes a narrower bar). 
 </p></blockquote></div>
 
    </body></html>

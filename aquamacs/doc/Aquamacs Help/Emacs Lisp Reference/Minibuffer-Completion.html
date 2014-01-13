@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Minibuffer Completion - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Completion-Commands.html#Completion-Commands" title="Completion Commands">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,22 +43,24 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Completion.html#Completion">Completion<
 
 <h4 class="subsection">20.6.2 Completion and the Minibuffer</h4>
 
-<p><a name="index-minibuffer-completion-1124"></a><a name="index-reading-from-minibuffer-with-completion-1125"></a>
+<p><a name="index-minibuffer-completion-1204"></a><a name="index-reading-from-minibuffer-with-completion-1205"></a>
   This section describes the basic interface for reading from the
 minibuffer with completion.
 
 <div class="defun">
-&mdash; Function: <b>completing-read</b><var> prompt collection &amp;optional predicate require-match initial hist default inherit-input-method<a name="index-completing_002dread-1126"></a></var><br>
+&mdash; Function: <b>completing-read</b><var> prompt collection &amp;optional predicate require-match initial history default inherit-input-method<a name="index-completing_002dread-1206"></a></var><br>
 <blockquote><p>This function reads a string in the minibuffer, assisting the user by
 providing completion.  It activates the minibuffer with prompt
 <var>prompt</var>, which must be a string.
 
-        <p>The actual completion is done by passing <var>collection</var> and
-<var>predicate</var> to the function <code>try-completion</code> (see <a href="Basic-Completion.html#Basic-Completion">Basic Completion</a>).  This happens in certain commands bound in the local
-keymaps used for completion.  Some of these commands also call
-<code>test-completion</code>.  Thus, if <var>predicate</var> is non-<code>nil</code>,
-it should be compatible with <var>collection</var> and
-<code>completion-ignore-case</code>.  See <a href="Definition-of-test_002dcompletion.html#Definition-of-test_002dcompletion">Definition of test-completion</a>.
+        <p>The actual completion is done by passing the completion table
+<var>collection</var> and the completion predicate <var>predicate</var> to the
+function <code>try-completion</code> (see <a href="Basic-Completion.html#Basic-Completion">Basic Completion</a>).  This
+happens in certain commands bound in the local keymaps used for
+completion.  Some of these commands also call <code>test-completion</code>. 
+Thus, if <var>predicate</var> is non-<code>nil</code>, it should be compatible
+with <var>collection</var> and <code>completion-ignore-case</code>. 
+See <a href="Definition-of-test_002dcompletion.html#Definition-of-test_002dcompletion">Definition of test-completion</a>.
 
         <p>The value of the optional argument <var>require-match</var> determines how
 the user may exit the minibuffer:
@@ -99,13 +98,13 @@ commands.
 <code>minibuffer-local-must-match-map</code> if <var>require-match</var> is
 non-<code>nil</code>.  See <a href="Completion-Commands.html#Completion-Commands">Completion Commands</a>.
 
-        <p>The argument <var>hist</var> specifies which history list variable to use for
+        <p>The argument <var>history</var> specifies which history list variable to use for
 saving the input and for minibuffer history commands.  It defaults to
 <code>minibuffer-history</code>.  See <a href="Minibuffer-History.html#Minibuffer-History">Minibuffer History</a>.
 
         <p>The argument <var>initial</var> is mostly deprecated; we recommend using a
 non-<code>nil</code> value only in conjunction with specifying a cons cell
-for <var>hist</var>.  See <a href="Initial-Input.html#Initial-Input">Initial Input</a>.  For default input, use
+for <var>history</var>.  See <a href="Initial-Input.html#Initial-Input">Initial Input</a>.  For default input, use
 <var>default</var> instead.
 
         <p>If the argument <var>inherit-input-method</var> is non-<code>nil</code>, then the
@@ -113,7 +112,7 @@ minibuffer inherits the current input method (see <a href="Input-Methods.html#In
 (see <a href="Text-Representations.html#Text-Representations">Text Representations</a>) from whichever buffer was current before
 entering the minibuffer.
 
-        <p>If the built-in variable <code>completion-ignore-case</code> is
+        <p>If the variable <code>completion-ignore-case</code> is
 non-<code>nil</code>, completion ignores case when comparing the input
 against the possible matches.  See <a href="Basic-Completion.html#Basic-Completion">Basic Completion</a>.  In this mode
 of operation, <var>predicate</var> must also ignore case, or you will get
@@ -139,6 +138,15 @@ surprising results.
         <p>The <code>completing-read</code> function binds variables to pass
 information to the commands that actually do completion. 
 They are described in the following section. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>completing-read-function</b><var><a name="index-completing_002dread_002dfunction-1207"></a></var><br>
+<blockquote><p>The value of this variable must be a function, which is called by
+<code>completing-read</code> to actually do its work.  It should accept the
+same arguments as <code>completing-read</code>.  This can be bound to a
+different function to completely override the normal behavior of
+<code>completing-read</code>. 
 </p></blockquote></div>
 
    </body></html>

@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Mode Hooks - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Major-Modes.html#Major-Modes" title="Major Modes">
-<link rel="prev" href="Generic-Modes.html#Generic-Modes" title="Generic Modes">
-<link rel="next" href="Example-Major-Modes.html#Example-Major-Modes" title="Example Major Modes">
+<link rel="prev" href="Basic-Major-Modes.html#Basic-Major-Modes" title="Basic Major Modes">
+<link rel="next" href="Tabulated-List-Mode.html#Tabulated-List-Mode" title="Tabulated List Mode">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -38,16 +35,17 @@ Foundation, Inc.
 <div class="node">
 <a name="Mode-Hooks"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Example-Major-Modes.html#Example-Major-Modes">Example Major Modes</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Generic-Modes.html#Generic-Modes">Generic Modes</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Tabulated-List-Mode.html#Tabulated-List-Mode">Tabulated List Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Basic-Major-Modes.html#Basic-Major-Modes">Basic Major Modes</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Major-Modes.html#Major-Modes">Major Modes</a>
 <hr>
 </div>
 
-<h4 class="subsection">23.2.7 Mode Hooks</h4>
+<h4 class="subsection">23.2.6 Mode Hooks</h4>
 
-<p>Every major mode function should finish by running its mode hook and
-the mode-independent normal hook <code>after-change-major-mode-hook</code>. 
+<p>Every major mode command should finish by running the mode-independent
+normal hook <code>change-major-mode-after-body-hook</code>, its mode hook,
+and the normal hook <code>after-change-major-mode-hook</code>. 
 It does this by calling <code>run-mode-hooks</code>.  If the major mode is a
 derived mode, that is if it calls another major mode (the parent mode)
 in its body, it should do this inside <code>delay-mode-hooks</code> so that
@@ -56,21 +54,23 @@ call to <code>run-mode-hooks</code> runs the parent's mode hook too.
 See <a href="Major-Mode-Conventions.html#Major-Mode-Conventions">Major Mode Conventions</a>.
 
    <p>Emacs versions before Emacs 22 did not have <code>delay-mode-hooks</code>. 
-When user-implemented major modes have not been updated to use it,
-they won't entirely follow these conventions: they may run the
-parent's mode hook too early, or fail to run
-<code>after-change-major-mode-hook</code>.  If you encounter such a major
-mode, please correct it to follow these conventions.
+Versions before 24 did not have <code>change-major-mode-after-body-hook</code>. 
+When user-implemented major modes do not use <code>run-mode-hooks</code> and
+have not been updated to use these newer features, they won't entirely
+follow these conventions: they may run the parent's mode hook too early,
+or fail to run <code>after-change-major-mode-hook</code>.  If you encounter
+such a major mode, please correct it to follow these conventions.
 
    <p>When you defined a major mode using <code>define-derived-mode</code>, it
 automatically makes sure these conventions are followed.  If you
-define a major mode &ldquo;by hand,&rdquo; not using <code>define-derived-mode</code>,
+define a major mode &ldquo;by hand&rdquo;, not using <code>define-derived-mode</code>,
 use the following functions to handle these conventions automatically.
 
 <div class="defun">
-&mdash; Function: <b>run-mode-hooks</b><var> &amp;rest hookvars<a name="index-run_002dmode_002dhooks-1622"></a></var><br>
+&mdash; Function: <b>run-mode-hooks</b><var> &amp;rest hookvars<a name="index-run_002dmode_002dhooks-1723"></a></var><br>
 <blockquote><p>Major modes should run their mode hook using this function.  It is
 similar to <code>run-hooks</code> (see <a href="Hooks.html#Hooks">Hooks</a>), but it also runs
+<code>change-major-mode-after-body-hook</code> and
 <code>after-change-major-mode-hook</code>.
 
         <p>When this function is called during the execution of a
@@ -80,7 +80,7 @@ them.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Macro: <b>delay-mode-hooks</b><var> body<small class="dots">...</small><a name="index-delay_002dmode_002dhooks-1623"></a></var><br>
+&mdash; Macro: <b>delay-mode-hooks</b><var> body<small class="dots">...</small><a name="index-delay_002dmode_002dhooks-1724"></a></var><br>
 <blockquote><p>When one major mode command calls another, it should do so inside of
 <code>delay-mode-hooks</code>.
 
@@ -92,9 +92,15 @@ construct.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>after-change-major-mode-hook</b><var><a name="index-after_002dchange_002dmajor_002dmode_002dhook-1624"></a></var><br>
+&mdash; Variable: <b>change-major-mode-after-body-hook</b><var><a name="index-change_002dmajor_002dmode_002dafter_002dbody_002dhook-1725"></a></var><br>
+<blockquote><p>This is a normal hook run by <code>run-mode-hooks</code>.  It is run before
+the mode hooks. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>after-change-major-mode-hook</b><var><a name="index-after_002dchange_002dmajor_002dmode_002dhook-1726"></a></var><br>
 <blockquote><p>This is a normal hook run by <code>run-mode-hooks</code>.  It is run at the
-very end of every properly-written major mode function. 
+very end of every properly-written major mode command. 
 </p></blockquote></div>
 
    </body></html>

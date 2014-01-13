@@ -1,21 +1,18 @@
 <html lang="en">
 <head>
 <title>Image Cache - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Images.html#Images" title="Images">
-<link rel="prev" href="Showing-Images.html#Showing-Images" title="Showing Images">
+<link rel="prev" href="Multi_002dFrame-Images.html#Multi_002dFrame-Images" title="Multi-Frame Images">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -37,14 +34,14 @@ Foundation, Inc.
 <div class="node">
 <a name="Image-Cache"></a>
 <p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Showing-Images.html#Showing-Images">Showing Images</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Multi_002dFrame-Images.html#Multi_002dFrame-Images">Multi-Frame Images</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Images.html#Images">Images</a>
 <hr>
 </div>
 
-<h4 class="subsection">38.16.12 Image Cache</h4>
+<h4 class="subsection">38.16.11 Image Cache</h4>
 
-<p><a name="index-image-cache-3651"></a>
+<p><a name="index-image-cache-3961"></a>
   Emacs caches images so that it can display them again more
 efficiently.  When Emacs displays an image, it searches the image
 cache for an existing image specification <code>equal</code> to the desired
@@ -52,14 +49,14 @@ specification.  If a match is found, the image is displayed from the
 cache.  Otherwise, Emacs loads the image normally.
 
 <div class="defun">
-&mdash; Function: <b>image-flush</b><var> spec &amp;optional frame<a name="index-image_002dflush-3652"></a></var><br>
+&mdash; Function: <b>image-flush</b><var> spec &amp;optional frame<a name="index-image_002dflush-3962"></a></var><br>
 <blockquote><p>This function removes the image with specification <var>spec</var> from the
 image cache of frame <var>frame</var>.  Image specifications are compared
 using <code>equal</code>.  If <var>frame</var> is <code>nil</code>, it defaults to the
 selected frame.  If <var>frame</var> is <code>t</code>, the image is flushed on
 all existing frames.
 
-        <p>In Emacs' current implementation, each graphical terminal possesses an
+        <p>In Emacs's current implementation, each graphical terminal possesses an
 image cache, which is shared by all the frames on that terminal
 (see <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>).  Thus, refreshing an image in one frame
 also refreshes it in all other frames on the same terminal. 
@@ -80,7 +77,7 @@ below), you can opt to flush unused images yourself, instead of
 waiting for Emacs to do it automatically.
 
 <div class="defun">
-&mdash; Function: <b>clear-image-cache</b><var> &amp;optional filter<a name="index-clear_002dimage_002dcache-3653"></a></var><br>
+&mdash; Function: <b>clear-image-cache</b><var> &amp;optional filter<a name="index-clear_002dimage_002dcache-3963"></a></var><br>
 <blockquote><p>This function clears an image cache, removing all the images stored in
 it.  If <var>filter</var> is omitted or <code>nil</code>, it clears the cache for
 the selected frame.  If <var>filter</var> is a frame, it clears the cache
@@ -95,7 +92,7 @@ period of time, Emacs removes it from the cache and frees the
 associated memory.
 
 <div class="defun">
-&mdash; Variable: <b>image-cache-eviction-delay</b><var><a name="index-image_002dcache_002deviction_002ddelay-3654"></a></var><br>
+&mdash; Variable: <b>image-cache-eviction-delay</b><var><a name="index-image_002dcache_002deviction_002ddelay-3964"></a></var><br>
 <blockquote><p>This variable specifies the number of seconds an image can remain in
 the cache without being displayed.  When an image is not displayed for
 this length of time, Emacs removes it from the image cache.

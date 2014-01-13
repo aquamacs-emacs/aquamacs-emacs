@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Accessing Variables - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Setting-Variables.html#Setting-Variables" title="Setting Variables">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,16 +44,24 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
 <h3 class="section">11.7 Accessing Variable Values</h3>
 
 <p>The usual way to reference a variable is to write the symbol which
-names it (see <a href="Symbol-Forms.html#Symbol-Forms">Symbol Forms</a>).  This requires you to specify the
-variable name when you write the program.  Usually that is exactly what
-you want to do.  Occasionally you need to choose at run time which
-variable to reference; then you can use <code>symbol-value</code>.
+names it.  See <a href="Symbol-Forms.html#Symbol-Forms">Symbol Forms</a>.
+
+   <p>Occasionally, you may want to reference a variable which is only
+determined at run time.  In that case, you cannot specify the variable
+name in the text of the program.  You can use the <code>symbol-value</code>
+function to extract the value.
 
 <div class="defun">
-&mdash; Function: <b>symbol-value</b><var> symbol<a name="index-symbol_002dvalue-608"></a></var><br>
-<blockquote><p>This function returns the value of <var>symbol</var>.  This is the value in
-the innermost local binding of the symbol, or its global value if it
-has no local bindings.
+&mdash; Function: <b>symbol-value</b><var> symbol<a name="index-symbol_002dvalue-635"></a></var><br>
+<blockquote><p>This function returns the value stored in <var>symbol</var>'s value cell. 
+This is where the variable's current (dynamic) value is stored.  If
+the variable has no local binding, this is simply its global value. 
+If the variable is void, a <code>void-variable</code> error is signaled.
+
+        <p>If the variable is lexically bound, the value reported by
+<code>symbol-value</code> is not necessarily the same as the variable's
+lexical value, which is determined by the lexical environment rather
+than the symbol's value cell.  See <a href="Variable-Scoping.html#Variable-Scoping">Variable Scoping</a>.
 
      <pre class="example">          (setq abracadabra 5)
                &rArr; 5
@@ -79,9 +84,7 @@ has no local bindings.
           (symbol-value 'abracadabra)
                &rArr; 5
 </pre>
-        <p>A <code>void-variable</code> error is signaled if the current binding of
-<var>symbol</var> is void. 
-</p></blockquote></div>
+        </blockquote></div>
 
    </body></html>
 

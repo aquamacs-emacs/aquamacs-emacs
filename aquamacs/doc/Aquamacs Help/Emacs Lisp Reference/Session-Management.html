@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Session Management - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="System-Interface.html#System-Interface" title="System Interface">
 <link rel="prev" href="Batch-Mode.html#Batch-Mode" title="Batch Mode">
-<link rel="next" href="Dynamic-Libraries.html#Dynamic-Libraries" title="Dynamic Libraries">
+<link rel="next" href="Desktop-Notifications.html#Desktop-Notifications" title="Desktop Notifications">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -38,7 +35,7 @@ Foundation, Inc.
 <div class="node">
 <a name="Session-Management"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Dynamic-Libraries.html#Dynamic-Libraries">Dynamic Libraries</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Desktop-Notifications.html#Desktop-Notifications">Desktop Notifications</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Batch-Mode.html#Batch-Mode">Batch Mode</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="System-Interface.html#System-Interface">System Interface</a>
 <hr>
@@ -46,7 +43,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="System-Interface.html#System-Interface"
 
 <h3 class="section">39.17 Session Management</h3>
 
-<p><a name="index-session-manager-3905"></a>
+<p><a name="index-session-manager-4252"></a>
 Emacs supports the X Session Management Protocol, which is used to
 suspend and restart applications.  In the X Window System, a program
 called the <dfn>session manager</dfn> is responsible for keeping track of
@@ -62,7 +59,7 @@ saved session to restore.  For Emacs, this argument is &lsquo;<samp><span class=
 </span><var>session</var></samp>&rsquo;.
 
 <div class="defun">
-&mdash; Variable: <b>emacs-save-session-functions</b><var><a name="index-emacs_002dsave_002dsession_002dfunctions-3906"></a></var><br>
+&mdash; Variable: <b>emacs-save-session-functions</b><var><a name="index-emacs_002dsave_002dsession_002dfunctions-4253"></a></var><br>
 <blockquote><p>Emacs supports saving state via a hook called
 <code>emacs-save-session-functions</code>.  Emacs runs this hook when the
 session manager tells it that the window system is shutting down.  The
@@ -71,7 +68,7 @@ set to a temporary buffer.  Each function can use <code>insert</code> to add
 Lisp code to this buffer.  At the end, Emacs saves the buffer in a
 file, called the <dfn>session file</dfn>.
 
-        <p><a name="index-emacs_002dsession_002drestore-3907"></a>Subsequently, when the session manager restarts Emacs, it loads the
+        <p><a name="index-emacs_002dsession_002drestore-4254"></a>Subsequently, when the session manager restarts Emacs, it loads the
 session file automatically (see <a href="Loading.html#Loading">Loading</a>).  This is performed by a
 function named <code>emacs-session-restore</code>, which is called during
 startup.  See <a href="Startup-Summary.html#Startup-Summary">Startup Summary</a>.
@@ -81,7 +78,7 @@ non-<code>nil</code>, Emacs tells the session manager to cancel the
 shutdown. 
 </p></blockquote></div>
 
-   <p>Here is an example that just inserts some text into &lsquo;<samp><span class="samp">*scratch*</span></samp>&rsquo; when
+   <p>Here is an example that just inserts some text into <samp><span class="file">*scratch*</span></samp> when
 Emacs is restarted by the session manager.
 
 <pre class="example">     (add-hook 'emacs-save-session-functions 'save-yourself-test)

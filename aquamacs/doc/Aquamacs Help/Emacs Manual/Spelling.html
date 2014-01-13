@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Spelling - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="prev" href="Fixing-Case.html#Fixing-Case" title="Fixing Case">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -43,20 +40,21 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Fixit.html#Fixit">Fixit</a>
 <hr>
 </div>
 
-<h3 class="section">20.4 Checking and Correcting Spelling</h3>
+<h3 class="section">16.4 Checking and Correcting Spelling</h3>
 
-<p><a name="index-spelling_002c-checking-and-correcting-744"></a><a name="index-checking-spelling-745"></a><a name="index-correcting-spelling-746"></a>
+<p><a name="index-spelling_002c-checking-and-correcting-935"></a><a name="index-checking-spelling-936"></a><a name="index-correcting-spelling-937"></a>
   This section describes the commands to check the spelling of a
 single word or of a portion of a buffer.  These commands only work if
 the spelling checker program Aspell, Ispell or Hunspell is installed. 
-Aspell, Ispell or Hunspell are not part of Emacs, but one or the other
-is usually installed in GNU/Linux and other free operating systems. 
+These programs are not part of Emacs, but one of them is usually
+installed in GNU/Linux and other free operating systems. 
 See <a href="../aspell/index.html#Top">Aspell</a>.
 
      <dl>
-<dt><kbd>M-$</kbd><dd>Check and correct spelling of the active region or the word at point
-(<code>ispell-word</code>). 
-<br><dt><kbd>M-x ispell</kbd><dd>Check and correct spelling in the active region or the entire buffer. 
+<dt><kbd>M-$</kbd><dd>Check and correct spelling of the word at point (<code>ispell-word</code>). 
+If the region is active, do it for all words in the region instead. 
+<br><dt><kbd>M-x ispell</kbd><dd>Check and correct spelling of all words in the buffer.  If the region
+is active, do it for all words in the region instead. 
 <br><dt><kbd>M-x ispell-buffer</kbd><dd>Check and correct spelling in the buffer. 
 <br><dt><kbd>M-x ispell-region</kbd><dd>Check and correct spelling in the region. 
 <br><dt><kbd>M-x ispell-message</kbd><dd>Check and correct spelling in a draft mail message, excluding cited
@@ -69,14 +67,14 @@ material.
 <br><dt><kbd>M-x flyspell-prog-mode</kbd><dd>Enable Flyspell mode for comments and strings only. 
 </dl>
 
-   <p><a name="index-M_002d_0024-747"></a><a name="index-ispell_002dword-748"></a>  To check the spelling of the word around or before point, and
+   <p><a name="index-M_002d_0024-938"></a><a name="index-ispell_002dword-939"></a>  To check the spelling of the word around or before point, and
 optionally correct it as well, type <kbd>M-$</kbd> (<code>ispell-word</code>). 
 If a region is active, <kbd>M-$</kbd> checks the spelling of all words
 within the region.  See <a href="Mark.html#Mark">Mark</a>.  (When Transient Mark mode is off,
 <kbd>M-$</kbd> always acts on the word around or before point, ignoring the
-region.  See <a href="Persistent-Mark.html#Persistent-Mark">Persistent Mark</a>.)
+region; see <a href="Disabled-Transient-Mark.html#Disabled-Transient-Mark">Disabled Transient Mark</a>.)
 
-   <p><a name="index-ispell-749"></a><a name="index-ispell_002dbuffer-750"></a><a name="index-ispell_002dregion-751"></a><a name="index-spell_002dchecking-the-active-region-752"></a>  Similarly, the command <kbd>M-x ispell</kbd> performs spell-checking in
+   <p><a name="index-ispell-940"></a><a name="index-ispell_002dbuffer-941"></a><a name="index-ispell_002dregion-942"></a><a name="index-spell_002dchecking-the-active-region-943"></a>  Similarly, the command <kbd>M-x ispell</kbd> performs spell-checking in
 the region if one is active, or in the entire buffer otherwise.  The
 commands <kbd>M-x ispell-buffer</kbd> and <kbd>M-x ispell-region</kbd>
 explicitly perform spell-checking on the entire buffer or the region
@@ -133,73 +131,67 @@ M-$</kbd>.
      <br><dt><kbd>x</kbd><dd>Quit interactive spell checking and move point back to where it was
 when you started spell checking.
 
-     <br><dt><kbd>q</kbd><dd>Quit interactive spell checking and kill the Aspell/Ispell/Hunspell
-subprocess.
+     <br><dt><kbd>q</kbd><dd>Quit interactive spell checking and kill the spell-checker subprocess.
 
      <br><dt><kbd>?</kbd><dd>Show the list of options. 
 </dl>
 
-   <p><a name="index-ispell_002dcomplete_002dword-753"></a>  In Text mode and related modes, the command <kbd>M-&lt;TAB&gt;</kbd>
-(<code>ispell-complete-word</code>) shows a list of completions based on
+   <p><a name="index-ispell_002dcomplete_002dword-944"></a>  In Text mode and related modes, <kbd>M-&lt;TAB&gt;</kbd>
+(<code>ispell-complete-word</code>) performs in-buffer completion based on
 spelling correction.  Insert the beginning of a word, and then type
-<kbd>M-&lt;TAB&gt;</kbd>; the command displays a completion list window.  (If
-your window manager intercepts <kbd>M-&lt;TAB&gt;</kbd>, type <kbd>&lt;ESC&gt;
-&lt;TAB&gt;</kbd> or <kbd>C-M-i</kbd>.)  To choose one of the completions listed,
-click <kbd>Mouse-2</kbd> or <kbd>Mouse-1</kbd> fast on it, or move the cursor
-there in the completions window and type &lt;RET&gt;.  See <a href="Text-Mode.html#Text-Mode">Text Mode</a>.
+<kbd>M-&lt;TAB&gt;</kbd>; this shows a list of completions.  (If your
+window manager intercepts <kbd>M-&lt;TAB&gt;</kbd>, type <kbd>&lt;ESC&gt;
+&lt;TAB&gt;</kbd> or <kbd>C-M-i</kbd>.)  Each completion is listed with a digit or
+character; type that digit or character to choose it.
 
-   <p><a name="index-g_t_0040code_007bispell_007d-program-754"></a><a name="index-ispell_002dkill_002dispell-755"></a>  Once started, the Aspell or Ispell or Hunspell subprocess continues
+   <p><a name="index-g_t_0040code_007bispell_007d-program-945"></a><a name="index-ispell_002dkill_002dispell-946"></a>  Once started, the Aspell or Ispell or Hunspell subprocess continues
 to run, waiting for something to do, so that subsequent spell checking
 commands complete more quickly.  If you want to get rid of the
 process, use <kbd>M-x ispell-kill-ispell</kbd>.  This is not usually
-necessary, since the process uses no time except when you do spelling
-correction.
+necessary, since the process uses no processor time except when you do
+spelling correction.
 
-   <p><a name="index-ispell_002ddictionary-756"></a><a name="index-ispell_002dlocal_002ddictionary-757"></a><a name="index-ispell_002dpersonal_002ddictionary-758"></a><a name="index-ispell_002dcomplete_002dword_002ddict-759"></a>  Ispell, Aspell and Hunspell use two dictionaries together for spell checking:
-the standard dictionary and your private dictionary.  The standard
-dictionary is specified by <code>ispell-local-dictionary</code> or,
-if <code>nil</code>, by <code>ispell-dictionary</code>.  If both are <code>nil</code>
-the default dictionary is selected.  The command
-<kbd>M-x ispell-change-dictionary</kbd> sets the standard dictionary for
-the buffer and then restarts the subprocess, so that it will use a
-different standard dictionary.  Personal dictionary is specified by
-<code>ispell-personal-dictionary</code>.  If <code>nil</code>, default value is
-used.
+   <p><a name="index-ispell_002ddictionary-947"></a><a name="index-ispell_002dlocal_002ddictionary-948"></a><a name="index-ispell_002dpersonal_002ddictionary-949"></a><a name="index-ispell_002dchange_002ddictionary-950"></a>  Ispell, Aspell and Hunspell look up spelling in two dictionaries:
+the standard dictionary and your personal dictionary.  The standard
+dictionary is specified by the variable <code>ispell-local-dictionary</code>
+or, if that is <code>nil</code>, by the variable <code>ispell-dictionary</code>. 
+If both are <code>nil</code>, the spelling program's default dictionary is
+used.  The command <kbd>M-x ispell-change-dictionary</kbd> sets the
+standard dictionary for the buffer and then restarts the subprocess,
+so that it will use a different standard dictionary.  Your personal
+dictionary is specified by the variable
+<code>ispell-personal-dictionary</code>.  If that is <code>nil</code>, the
+spelling program looks for a personal dictionary in a default
+location.
 
-   <p>Set variable <code>ispell-dictionary</code> to select a specific default
-dictionary for all your documents. Set variable
-<code>ispell-local-dictionary</code> in the local variables section to
-select a specific dictionary for a given document.
-
-   <p>A separate dictionary is used for word completion.  The variable
+   <p><a name="index-ispell_002dcomplete_002dword_002ddict-951"></a>  A separate dictionary is used for word completion.  The variable
 <code>ispell-complete-word-dict</code> specifies the file name of this
 dictionary.  The completion dictionary must be different because it
 cannot use root and affix information.  For some languages, there
 is a spell checking dictionary but no word completion dictionary.
 
-   <p><a name="index-Flyspell-mode-760"></a><a name="index-flyspell_002dmode-761"></a>  Flyspell mode is a fully-automatic way to check spelling as you edit
-in Emacs.  It operates by checking words as you change or insert them. 
-When it finds a word that it does not recognize, it highlights that
-word.  This does not interfere with your editing, but when you see the
-highlighted word, you can move to it and fix it.  Type <kbd>M-x
-flyspell-mode</kbd> to enable or disable this mode in the current buffer. 
-<a name="index-turn_002don_002dflyspell-762"></a>To enable <code>flyspell-mode</code> in all text mode buffers, add
-<code>turn-on-flyspell</code> to <code>text-mode-hook</code>.
+   <p><a name="index-Flyspell-mode-952"></a><a name="index-mode_002c-Flyspell-953"></a><a name="index-flyspell_002dmode-954"></a>  Flyspell mode is a minor mode that performs automatic spell checking
+as you type.  When it finds a word that it does not recognize, it
+highlights that word.  Type <kbd>M-x flyspell-mode</kbd> to toggle Flyspell
+mode in the current buffer.  To enable Flyspell mode in all text mode
+buffers, add <code>flyspell-mode</code> to <code>text-mode-hook</code>. 
+See <a href="Hooks.html#Hooks">Hooks</a>.
 
    <p>When Flyspell mode highlights a word as misspelled, you can click on
 it with <kbd>Mouse-2</kbd> to display a menu of possible corrections and
 actions.  You can also correct the word by editing it manually in any
 way you like.
 
-   <p><a name="index-flyspell_002dprog_002dmode-763"></a>  Flyspell Prog mode works just like ordinary Flyspell mode, except
+   <p><a name="index-flyspell_002dprog_002dmode-955"></a>  Flyspell Prog mode works just like ordinary Flyspell mode, except
 that it only checks words in comments and string constants.  This
 feature is useful for editing programs.  Type <kbd>M-x
 flyspell-prog-mode</kbd> to enable or disable this mode in the current
-buffer.
+buffer.  To enable this mode in all programming mode buffers, add
+<code>flyspell-prog-mode</code> to <code>prog-mode-hook</code> (see <a href="Hooks.html#Hooks">Hooks</a>).
 
 <!-- This is part of the Emacs manual. -->
-<!-- Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1997, 2000, 2001, -->
-<!-- 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc. -->
+<!-- Copyright (C) 1985-1987, 1993-1995, 1997, 2000-2013 Free Software -->
+<!-- Foundation, Inc. -->
 <!-- See file emacs.texi for copying conditions. -->
    </body></html>
 

@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Building Emacs - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Pure-Storage.html#Pure-Storage" title="Pure Storage">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -42,54 +39,50 @@ Up:&nbsp;<a rel="up" accesskey="u" href="GNU-Emacs-Internals.html#GNU-Emacs-Inte
 <hr>
 </div>
 
-<h3 class="appendixsec">E.1 Building Emacs</h3>
+<h3 class="section">E.1 Building Emacs</h3>
 
-<p><a name="index-building-Emacs-3941"></a><a name="index-temacs-3942"></a>
+<p><a name="index-building-Emacs-4306"></a><a name="index-temacs-4307"></a>
   This section explains the steps involved in building the Emacs
 executable.  You don't have to know this material to build and install
 Emacs, since the makefiles do all these things automatically.  This
-information is pertinent to Emacs maintenance.
+information is pertinent to Emacs developers.
 
    <p>Compilation of the C source files in the <samp><span class="file">src</span></samp> directory
 produces an executable file called <samp><span class="file">temacs</span></samp>, also called a
-<dfn>bare impure Emacs</dfn>.  It contains the Emacs Lisp interpreter and I/O
-routines, but not the editing commands.
+<dfn>bare impure Emacs</dfn>.  It contains the Emacs Lisp interpreter and
+I/O routines, but not the editing commands.
 
-   <p><a name="index-g_t_0040file_007bloadup_002eel_007d-3943"></a>  The command &lsquo;<samp><span class="samp">temacs&nbsp;-l&nbsp;loadup</span></samp>&rsquo;<!-- /@w --> uses <samp><span class="file">temacs</span></samp> to create
-the real runnable Emacs executable.  These arguments direct
-<samp><span class="file">temacs</span></samp> to evaluate the Lisp files specified in the file
-<samp><span class="file">loadup.el</span></samp>.  These files set up the normal Emacs editing
-environment, resulting in an Emacs that is still impure but no longer
-bare.
+   <p><a name="index-g_t_0040file_007bloadup_002eel_007d-4308"></a>  The command <samp><span class="command">temacs&nbsp;-l&nbsp;loadup</span></samp><!-- /@w --> would run <samp><span class="file">temacs</span></samp>
+and direct it to load <samp><span class="file">loadup.el</span></samp>.  The <code>loadup</code> library
+loads additional Lisp libraries, which set up the normal Emacs editing
+environment.  After this step, the Emacs executable is no longer
+<dfn>bare</dfn>.
 
-   <p><a name="index-dumping-Emacs-3944"></a>  It takes a substantial time to load the standard Lisp files.  Luckily,
-you don't have to do this each time you run Emacs; <samp><span class="file">temacs</span></samp> can
-dump out an executable program called <samp><span class="file">emacs</span></samp> that has these files
-preloaded.  <samp><span class="file">emacs</span></samp> starts more quickly because it does not need to
-load the files.  This is the Emacs executable that is normally
-installed.
+   <p><a name="index-dumping-Emacs-4309"></a>  Because it takes some time to load the standard Lisp files, the
+<samp><span class="file">temacs</span></samp> executable usually isn't run directly by users. 
+Instead, as one of the last steps of building Emacs, the command
+&lsquo;<samp><span class="samp">temacs -batch -l loadup dump</span></samp>&rsquo; is run.  The special &lsquo;<samp><span class="samp">dump</span></samp>&rsquo;
+argument causes <samp><span class="command">temacs</span></samp> to dump out an executable program,
+called <samp><span class="file">emacs</span></samp>, which has all the standard Lisp files preloaded. 
+(The &lsquo;<samp><span class="samp">-batch</span></samp>&rsquo; argument prevents <samp><span class="file">temacs</span></samp> from trying to
+initialize any of its data on the terminal, so that the tables of
+terminal information are empty in the dumped Emacs.)
 
-   <p><a name="index-preloaded_002dfile_002dlist-3945"></a><a name="index-dumped-Lisp-files-3946"></a>  To create <samp><span class="file">emacs</span></samp>, use the command &lsquo;<samp><span class="samp">temacs -batch -l loadup
-dump</span></samp>&rsquo;.  The purpose of &lsquo;<samp><span class="samp">-batch</span></samp>&rsquo; here is to prevent <samp><span class="file">temacs</span></samp>
-from trying to initialize any of its data on the terminal; this ensures
-that the tables of terminal information are empty in the dumped Emacs. 
-The argument &lsquo;<samp><span class="samp">dump</span></samp>&rsquo; tells <samp><span class="file">loadup.el</span></samp> to dump a new executable
-named <samp><span class="file">emacs</span></samp>.  The variable <code>preloaded-file-list</code> stores a
-list of the Lisp files that were dumped with the <samp><span class="file">emacs</span></samp> executable.
+   <p><a name="index-preloaded-Lisp-files-4310"></a><a name="index-preloaded_002dfile_002dlist-4311"></a>  The dumped <samp><span class="file">emacs</span></samp> executable (also called a <dfn>pure</dfn> Emacs)
+is the one which is installed.  The variable
+<code>preloaded-file-list</code> stores a list of the Lisp files preloaded
+into the dumped Emacs.  If you port Emacs to a new operating system,
+and are not able to implement dumping, then Emacs must load
+<samp><span class="file">loadup.el</span></samp> each time it starts.
 
-   <p>Some operating systems don't support dumping.  On those systems, you
-must start Emacs with the &lsquo;<samp><span class="samp">temacs -l loadup</span></samp>&rsquo; command each time you
-use it.  This takes a substantial time, but since you need to start
-Emacs once a day at most&mdash;or once a week if you never log out&mdash;the
-extra time is not too severe a problem.
-
-   <p><a name="index-g_t_0040file_007bsite_002dload_002eel_007d-3947"></a>
-  You can specify additional files to preload by writing a library named
-<samp><span class="file">site-load.el</span></samp> that loads them.  You may need to add a definition
+   <p><a name="index-g_t_0040file_007bsite_002dload_002eel_007d-4312"></a>  You can specify additional files to preload by writing a library named
+<samp><span class="file">site-load.el</span></samp> that loads them.  You may need to rebuild Emacs
+with an added definition
 
 <pre class="example">     #define SITELOAD_PURESIZE_EXTRA <var>n</var>
 </pre>
-   <p class="noindent">to make <var>n</var> added bytes of pure space to hold the additional files. 
+   <p class="noindent">to make <var>n</var> added bytes of pure space to hold the additional files;
+see <samp><span class="file">src/puresize.h</span></samp>. 
 (Try adding increments of 20000 until it is big enough.)  However, the
 advantage of preloading additional files decreases as machines get
 faster.  On modern machines, it is usually not advisable.
@@ -99,7 +92,7 @@ documentation strings for primitive and preloaded functions (and
 variables) in the file <samp><span class="file">etc/DOC</span></samp> where they are stored, by
 calling <code>Snarf-documentation</code> (see <a href="Definition-of-Snarf_002ddocumentation.html#Definition-of-Snarf_002ddocumentation">Accessing Documentation</a>).
 
-   <p><a name="index-g_t_0040file_007bsite_002dinit_002eel_007d-3948"></a><a name="index-preloading-additional-functions-and-variables-3949"></a>  You can specify other Lisp expressions to execute just before dumping
+   <p><a name="index-g_t_0040file_007bsite_002dinit_002eel_007d-4313"></a><a name="index-preloading-additional-functions-and-variables-4314"></a>  You can specify other Lisp expressions to execute just before dumping
 by putting them in a library named <samp><span class="file">site-init.el</span></samp>.  This file is
 executed after the documentation strings are found.
 
@@ -114,11 +107,11 @@ and load them with <samp><span class="file">site-load.el</span></samp>.
      <li>Load the files with <samp><span class="file">site-init.el</span></samp>, then copy the files into the
 installation directory for Lisp files when you install Emacs.
 
-     <li>Specify a non-<code>nil</code> value for
-<code>byte-compile-dynamic-docstrings</code> as a local variable in each of these
-files, and load them with either <samp><span class="file">site-load.el</span></samp> or
-<samp><span class="file">site-init.el</span></samp>.  (This method has the drawback that the
-documentation strings take up space in Emacs all the time.) 
+     <li>Specify a <code>nil</code> value for <code>byte-compile-dynamic-docstrings</code>
+as a local variable in each of these files, and load them with either
+<samp><span class="file">site-load.el</span></samp> or <samp><span class="file">site-init.el</span></samp>.  (This method has the
+drawback that the documentation strings take up space in Emacs all the
+time.) 
 </ul>
 
    <p>It is not advisable to put anything in <samp><span class="file">site-load.el</span></samp> or
@@ -127,22 +120,32 @@ expect in an ordinary unmodified Emacs.  If you feel you must override
 normal features for your site, do it with <samp><span class="file">default.el</span></samp>, so that
 users can override your changes if they wish.  See <a href="Startup-Summary.html#Startup-Summary">Startup Summary</a>.
 
-   <p>In a package that can be preloaded, it is sometimes useful to
-specify a computation to be done when Emacs subsequently starts up. 
-For this, use <code>eval-at-startup</code>:
+   <p>In a package that can be preloaded, it is sometimes necessary (or
+useful) to delay certain evaluations until Emacs subsequently starts
+up.  The vast majority of such cases relate to the values of
+customizable variables.  For example, <code>tutorial-directory</code> is a
+variable defined in <samp><span class="file">startup.el</span></samp>, which is preloaded.  The default
+value is set based on <code>data-directory</code>.  The variable needs to
+access the value of <code>data-directory</code> when Emacs starts, not when
+it is dumped, because the Emacs executable has probably been installed
+in a different location since it was dumped.
 
 <div class="defun">
-&mdash; Macro: <b>eval-at-startup</b><var> body<small class="dots">...</small><a name="index-eval_002dat_002dstartup-3950"></a></var><br>
-<blockquote><p>This evaluates the <var>body</var> forms, either immediately if running in
-an Emacs that has already started up, or later when Emacs does start
-up.  Since the value of the <var>body</var> forms is not necessarily
-available when the <code>eval-at-startup</code> form is run, that form
-always returns <code>nil</code>. 
+&mdash; Function: <b>custom-initialize-delay</b><var> symbol value<a name="index-custom_002dinitialize_002ddelay-4315"></a></var><br>
+<blockquote><p>This function delays the initialization of <var>symbol</var> to the next
+Emacs start.  You normally use this function by specifying it as the
+<code>:initialize</code> property of a customizable variable.  (The argument
+<var>value</var> is unused, and is provided only for compatibility with the
+form Custom expects.) 
 </p></blockquote></div>
 
+   <p>In the unlikely event that you need a more general functionality than
+<code>custom-initialize-delay</code> provides, you can use
+<code>before-init-hook</code> (see <a href="Startup-Summary.html#Startup-Summary">Startup Summary</a>).
+
 <div class="defun">
-&mdash; Function: <b>dump-emacs</b><var> to-file from-file<a name="index-dump_002demacs-3951"></a></var><br>
-<blockquote><p><a name="index-unexec-3952"></a>This function dumps the current state of Emacs into an executable file
+&mdash; Function: <b>dump-emacs</b><var> to-file from-file<a name="index-dump_002demacs-4316"></a></var><br>
+<blockquote><p><a name="index-unexec-4317"></a>This function dumps the current state of Emacs into an executable file
 <var>to-file</var>.  It takes symbols from <var>from-file</var> (this is normally
 the executable file <samp><span class="file">temacs</span></samp>).
 

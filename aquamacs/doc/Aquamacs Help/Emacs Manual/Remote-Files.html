@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Remote Files - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Quoted-File-Names.html#Quoted-File-Names" title="Quoted File Names">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,9 +42,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
 <hr>
 </div>
 
-<h3 class="section">22.14 Remote Files</h3>
+<h3 class="section">18.14 Remote Files</h3>
 
-<p><a name="index-Tramp-1023"></a><a name="index-FTP-1024"></a><a name="index-remote-file-access-1025"></a>  You can refer to files on other machines using a special file name
+<p><a name="index-Tramp-1220"></a><a name="index-FTP-1221"></a><a name="index-remote-file-access-1222"></a>  You can refer to files on other machines using a special file name
 syntax:
 
 <pre class="example">     /<var>host</var>:<var>filename</var>
@@ -65,44 +62,40 @@ whereas <samp><span class="file">/ssh:</span><var>user</var><span class="file">@
 Emacs chooses the method as follows:
 
      <ol type=1 start=1>
-<li>If the host name starts with &lsquo;<samp><span class="samp">ftp.</span></samp>&rsquo; (with dot), then Emacs uses
-FTP. 
-<li>If the user name is &lsquo;<samp><span class="samp">ftp</span></samp>&rsquo; or &lsquo;<samp><span class="samp">anonymous</span></samp>&rsquo;, then Emacs uses
-FTP. 
+<li>If the host name starts with &lsquo;<samp><span class="samp">ftp.</span></samp>&rsquo; (with dot), Emacs uses FTP. 
+<li>If the user name is &lsquo;<samp><span class="samp">ftp</span></samp>&rsquo; or &lsquo;<samp><span class="samp">anonymous</span></samp>&rsquo;, Emacs uses FTP. 
 <li>If the variable <code>tramp-default-method</code> is set to &lsquo;<samp><span class="samp">ftp</span></samp>&rsquo;,
-then Emacs uses FTP. 
-<li>If <samp><span class="command">ssh-agent</span></samp> is running, then Emacs uses <samp><span class="command">scp</span></samp>. 
+Emacs uses FTP. 
+<li>If <samp><span class="command">ssh-agent</span></samp> is running, Emacs uses <samp><span class="command">scp</span></samp>. 
 <li>Otherwise, Emacs uses <samp><span class="command">ssh</span></samp>.
         </ol>
 
-   <p><a name="index-disabling-remote-files-1026"></a>You can entirely turn off the remote file name feature by setting the
+   <p><a name="index-disabling-remote-files-1223"></a>You can entirely turn off the remote file name feature by setting the
 variable <code>tramp-mode</code> to <code>nil</code>.  You can turn off the
 feature in individual cases by quoting the file name with &lsquo;<samp><span class="samp">/:</span></samp>&rsquo;
 (see <a href="Quoted-File-Names.html#Quoted-File-Names">Quoted File Names</a>).
 
-   <p>Remote file access through FTP is handled by the Ange-FTP package, which
+   <p><a name="index-ange_002dftp-1224"></a>  Remote file access through FTP is handled by the Ange-FTP package, which
 is documented in the following.  Remote file access through the other
 methods is handled by the Tramp package, which has its own manual. 
 See <a href="../tramp/index.html#Top">The Tramp Manual</a>.
 
-   <p>When the Ange-FTP package is used, Emacs logs in through FTP using
-your user name or the name <var>user</var>.  It may ask you for a password
-from time to time (see <a href="Passwords.html#Passwords">Passwords</a>); this is used for logging in on
-<var>host</var>.  The form using <var>port</var> allows you to access servers
-running on a non-default TCP port.
+   <p><a name="index-ange_002dftp_002ddefault_002duser-1225"></a><a name="index-user-name-for-remote-file-access-1226"></a>  When the Ange-FTP package is used, Emacs logs in through FTP using
+the name <var>user</var>, if that is specified in the remote file name.  If
+<var>user</var> is unspecified, Emacs logs in using your user name on the
+local system; but if you set the variable <code>ange-ftp-default-user</code>
+to a string, that string is used instead.  When logging in, Emacs may
+also ask for a password.
 
-   <p><a name="index-backups-for-remote-files-1027"></a><a name="index-ange_002dftp_002dmake_002dbackup_002dfiles-1028"></a>  If you want to disable backups for remote files, set the variable
-<code>ange-ftp-make-backup-files</code> to <code>nil</code>.
+   <p><a name="index-backups-for-remote-files-1227"></a><a name="index-ange_002dftp_002dmake_002dbackup_002dfiles-1228"></a>  For performance reasons, Emacs does not make backup files for files
+accessed via FTP by default.  To make it do so, change the variable
+<code>ange-ftp-make-backup-files</code> to a non-<code>nil</code> value.
 
-   <p>By default, the auto-save files (see <a href="Auto-Save-Files.html#Auto-Save-Files">Auto Save Files</a>) for remote
-files are made in the temporary file directory on the local machine. 
-This is achieved using the variable <code>auto-save-file-name-transforms</code>.
+   <p>By default, auto-save files for remote files are made in the
+temporary file directory on the local machine, as specified by the
+variable <code>auto-save-file-name-transforms</code>.  See <a href="Auto-Save-Files.html#Auto-Save-Files">Auto Save Files</a>.
 
-   <p><a name="index-ange_002dftp-1029"></a><a name="index-ange_002dftp_002ddefault_002duser-1030"></a><a name="index-user-name-for-remote-file-access-1031"></a>  Normally, if you do not specify a user name in a remote file name,
-that means to use your own user name.  But if you set the variable
-<code>ange-ftp-default-user</code> to a string, that string is used instead.
-
-   <p><a name="index-anonymous-FTP-1032"></a><a name="index-ange_002dftp_002dgenerate_002danonymous_002dpassword-1033"></a>  To visit files accessible by anonymous FTP, you use special user
+   <p><a name="index-anonymous-FTP-1229"></a><a name="index-ange_002dftp_002dgenerate_002danonymous_002dpassword-1230"></a>  To visit files accessible by anonymous FTP, you use special user
 names &lsquo;<samp><span class="samp">anonymous</span></samp>&rsquo; or &lsquo;<samp><span class="samp">ftp</span></samp>&rsquo;.  Passwords for these user names
 are handled specially.  The variable
 <code>ange-ftp-generate-anonymous-password</code> controls what happens: if
@@ -111,7 +104,7 @@ the password; if non-<code>nil</code> (the default), then the value of
 <code>user-mail-address</code> is used; if <code>nil</code>, then Emacs prompts
 you for a password as usual (see <a href="Passwords.html#Passwords">Passwords</a>).
 
-   <p><a name="index-firewall_002c-and-accessing-remote-files-1034"></a><a name="index-gateway_002c-and-remote-file-access-with-_0040code_007bange_002dftp_007d-1035"></a><a name="index-ange_002dftp_002dsmart_002dgateway-1036"></a><a name="index-ange_002dftp_002dgateway_002dhost-1037"></a>  Sometimes you may be unable to access files on a remote machine
+   <p><a name="index-firewall_002c-and-accessing-remote-files-1231"></a><a name="index-gateway_002c-and-remote-file-access-with-_0040code_007bange_002dftp_007d-1232"></a><a name="index-ange_002dftp_002dsmart_002dgateway-1233"></a><a name="index-ange_002dftp_002dgateway_002dhost-1234"></a>  Sometimes you may be unable to access files on a remote machine
 because a <dfn>firewall</dfn> in between blocks the connection for security
 reasons.  If you can log in on a <dfn>gateway</dfn> machine from which the
 target files <em>are</em> accessible, and whose FTP server supports

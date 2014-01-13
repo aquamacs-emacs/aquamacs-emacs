@@ -1,21 +1,18 @@
 <html lang="en">
 <head>
 <title>Basic Windows - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Windows.html#Windows" title="Windows">
-<link rel="next" href="Splitting-Windows.html#Splitting-Windows" title="Splitting Windows">
+<link rel="next" href="Windows-and-Frames.html#Windows-and-Frames" title="Windows and Frames">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -37,64 +34,88 @@ Foundation, Inc.
 <div class="node">
 <a name="Basic-Windows"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Splitting-Windows.html#Splitting-Windows">Splitting Windows</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Windows-and-Frames.html#Windows-and-Frames">Windows and Frames</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
 <hr>
 </div>
 
 <h3 class="section">28.1 Basic Concepts of Emacs Windows</h3>
 
-<p><a name="index-window-2056"></a><a name="index-selected-window-2057"></a>
-  A <dfn>window</dfn> in Emacs is the physical area of the screen in which a
-buffer is displayed.  The term is also used to refer to a Lisp object that
-represents that screen area in Emacs Lisp.  It should be
-clear from the context which is meant.
+<p><a name="index-window-2210"></a>
+A <dfn>window</dfn> is an area of the screen that is used to display a buffer
+(see <a href="Buffers.html#Buffers">Buffers</a>).  In Emacs Lisp, windows are represented by a special
+Lisp object type.
 
-   <p>Emacs groups windows into frames; see <a href="Frames.html#Frames">Frames</a>.  A frame
-represents an area of screen available for Emacs to use.  Each frame
-always contains at least one window, but you can subdivide it
-vertically or horizontally into multiple, nonoverlapping Emacs
-windows.
+   <p><a name="index-multiple-windows-2211"></a>  Windows are grouped into frames (see <a href="Frames.html#Frames">Frames</a>).  Each frame
+contains at least one window; the user can subdivide it into multiple,
+non-overlapping windows to view several buffers at once.  Lisp
+programs can use multiple windows for a variety of purposes.  In
+Rmail, for example, you can view a summary of message titles in one
+window, and the contents of the selected message in another window.
 
-   <p>In each frame, at any time, one and only one window is designated as
-<dfn>selected within the frame</dfn>.  The frame's cursor appears in that
-window, but the other windows have &ldquo;non-selected&rdquo; cursors, normally
-less visible.  (See <a href="Cursor-Parameters.html#Cursor-Parameters">Cursor Parameters</a>, for customizing this.)  At
-any time, one frame is the selected frame; and the window selected
-within that frame is <dfn>the selected window</dfn>.  The selected window's
-buffer is usually the current buffer (except when <code>set-buffer</code> has
-been used); see <a href="Current-Buffer.html#Current-Buffer">Current Buffer</a>.
+   <p><a name="index-terminal-screen-2212"></a><a name="index-screen-of-terminal-2213"></a>  Emacs uses the word &ldquo;window&rdquo; with a different meaning than in
+graphical desktop environments and window systems, such as the X
+Window System.  When Emacs is run on X, each of its graphical X
+windows is an Emacs frame (containing one or more Emacs windows). 
+When Emacs is run on a text terminal, the frame fills the entire
+terminal screen.
 
-   <p>For practical purposes, a window exists only while it is displayed in
-a frame.  Once removed from the frame, the window is effectively deleted
-and should not be used, <em>even though there may still be references
-to it</em> from other Lisp objects; see <a href="Deleting-Windows.html#Deleting-Windows">Deleting Windows</a>.  Restoring a
-saved window configuration is the only way for a window no longer on the
-screen to come back to life; see <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a>.
-
-   <p><a name="index-multiple-windows-2058"></a>  Users create multiple windows so they can look at several buffers at
-once.  Lisp libraries use multiple windows for a variety of reasons, but
-most often to display related information.  In Rmail, for example, you
-can move through a summary buffer in one window while the other window
-shows messages one at a time as they are reached.
-
-   <p>The meaning of &ldquo;window&rdquo; in Emacs is similar to what it means in the
-context of general-purpose window systems such as X, but not identical. 
-The X Window System places X windows on the screen; Emacs uses one or
-more X windows as frames, and subdivides them into
-Emacs windows.  When you use Emacs on a character-only terminal, Emacs
-treats the whole terminal screen as one frame.
-
-   <p><a name="index-terminal-screen-2059"></a><a name="index-screen-of-terminal-2060"></a><a name="index-tiled-windows-2061"></a>  Most window systems support arbitrarily located overlapping windows. 
-In contrast, Emacs windows are <dfn>tiled</dfn>; they never overlap, and
-together they fill the whole screen or frame.  Because of the way in
-which Emacs creates new windows (see <a href="Splitting-Windows.html#Splitting-Windows">Splitting Windows</a>) and resizes
-them (see <a href="Resizing-Windows.html#Resizing-Windows">Resizing Windows</a>), not all conceivable tilings of windows
-on an Emacs frame are actually possible.
+   <p><a name="index-tiled-windows-2214"></a>  Unlike X windows, Emacs windows are <dfn>tiled</dfn>; they never overlap
+within the area of the frame.  When a window is created, resized, or
+deleted, the change in window space is taken from or given to the
+adjacent windows, so that the total area of the frame is unchanged.
 
 <div class="defun">
-&mdash; Function: <b>windowp</b><var> object<a name="index-windowp-2062"></a></var><br>
-<blockquote><p>This function returns <code>t</code> if <var>object</var> is a window. 
+&mdash; Function: <b>windowp</b><var> object<a name="index-windowp-2215"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if <var>object</var> is a window (whether or
+not it displays a buffer).  Otherwise, it returns <code>nil</code>. 
+</p></blockquote></div>
+
+   <p><a name="index-live-windows-2216"></a>A <dfn>live window</dfn> is one that is actually displaying a buffer in a
+frame.
+
+<div class="defun">
+&mdash; Function: <b>window-live-p</b><var> object<a name="index-window_002dlive_002dp-2217"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if <var>object</var> is a live window and
+<code>nil</code> otherwise.  A live window is one that displays a buffer. 
+</p></blockquote></div>
+
+   <p><a name="index-internal-windows-2218"></a>The windows in each frame are organized into a <dfn>window tree</dfn>. 
+See <a href="Windows-and-Frames.html#Windows-and-Frames">Windows and Frames</a>.  The leaf nodes of each window tree are live
+windows&mdash;the ones actually displaying buffers.  The internal nodes of
+the window tree are <dfn>internal windows</dfn>, which are not live.
+
+   <p><a name="index-valid-windows-2219"></a>   A <dfn>valid window</dfn> is one that is either live or internal.  A valid
+window can be <dfn>deleted</dfn>, i.e., removed from its frame
+(see <a href="Deleting-Windows.html#Deleting-Windows">Deleting Windows</a>); then it is no longer valid, but the Lisp
+object representing it might be still referenced from other Lisp
+objects.  A deleted window may be made valid again by restoring a saved
+window configuration (see <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a>).
+
+   <p>You can distinguish valid windows from deleted windows with
+<code>window-valid-p</code>.
+
+<div class="defun">
+&mdash; Function: <b>window-valid-p</b><var> object<a name="index-window_002dvalid_002dp-2220"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if <var>object</var> is a live window, or an
+internal window in a window tree.  Otherwise, it returns <code>nil</code>,
+including for the case where <var>object</var> is a deleted window. 
+</p></blockquote></div>
+
+   <p><a name="index-selected-window-2221"></a><a name="index-window-selected-within-a-frame-2222"></a>  In each frame, at any time, exactly one Emacs window is designated
+as <dfn>selected within the frame</dfn>.  For the selected frame, that
+window is called the <dfn>selected window</dfn>&mdash;the one in which most
+editing takes place, and in which the cursor for selected windows
+appears (see <a href="Cursor-Parameters.html#Cursor-Parameters">Cursor Parameters</a>).  The selected window's buffer is
+usually also the current buffer, except when <code>set-buffer</code> has
+been used (see <a href="Current-Buffer.html#Current-Buffer">Current Buffer</a>).  As for non-selected frames, the
+window selected within the frame becomes the selected window if the
+frame is ever selected.  See <a href="Selecting-Windows.html#Selecting-Windows">Selecting Windows</a>.
+
+<div class="defun">
+&mdash; Function: <b>selected-window</b><var><a name="index-selected_002dwindow-2223"></a></var><br>
+<blockquote><p>This function returns the selected window (which is always a live
+window). 
 </p></blockquote></div>
 
    </body></html>

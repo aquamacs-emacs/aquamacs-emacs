@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>File Name Expansion - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Unique-File-Names.html#Unique-File-Names" title="Unique File Names">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,15 +43,17 @@ Up:&nbsp;<a rel="up" accesskey="u" href="File-Names.html#File-Names">File Names<
 
 <h4 class="subsection">25.8.4 Functions that Expand Filenames</h4>
 
-<p><a name="index-expansion-of-file-names-1875"></a>
-  <dfn>Expansion</dfn> of a file name means converting a relative file name
-to an absolute one.  Since this is done relative to a default directory,
-you must specify the default directory name as well as the file name to
-be expanded.  Expansion also simplifies file names by eliminating
-redundancies such as <samp><span class="file">./</span></samp> and <samp><var>name</var><span class="file">/../</span></samp>.
+<p><a name="index-expansion-of-file-names-2022"></a>
+  <dfn>Expanding</dfn> a file name means converting a relative file name to
+an absolute one.  Since this is done relative to a default directory,
+you must specify the default directory name as well as the file name
+to be expanded.  It also involves expanding abbreviations like
+<samp><span class="file">~/</span></samp>
+(see <a href="abbreviate_002dfile_002dname.html#abbreviate_002dfile_002dname">abbreviate-file-name</a>),
+and eliminating redundancies like <samp><span class="file">./</span></samp> and <samp><var>name</var><span class="file">/../</span></samp>.
 
 <div class="defun">
-&mdash; Function: <b>expand-file-name</b><var> filename &amp;optional directory<a name="index-expand_002dfile_002dname-1876"></a></var><br>
+&mdash; Function: <b>expand-file-name</b><var> filename &amp;optional directory<a name="index-expand_002dfile_002dname-2023"></a></var><br>
 <blockquote><p>This function converts <var>filename</var> to an absolute file name.  If
 <var>directory</var> is supplied, it is the default directory to start with
 if <var>filename</var> is relative.  (The value of <var>directory</var> should
@@ -68,8 +67,6 @@ start with &lsquo;<samp><span class="samp">~</span></samp>&rsquo;.)  Otherwise, 
                &rArr; "/xcssun/users/rms/foo"
           (expand-file-name "foo" "/usr/spool/")
                &rArr; "/usr/spool/foo"
-          (expand-file-name "$HOME/foo")
-               &rArr; "/xcssun/users/rms/lewis/$HOME/foo"
 </pre>
         <p>If the part of the combined file name before the first slash is
 &lsquo;<samp><span class="samp">~</span></samp>&rsquo;, it expands to the value of the <samp><span class="env">HOME</span></samp> environment
@@ -93,8 +90,11 @@ canonical form:
 <samp><span class="file">/../</span></samp> is interpreted exactly the same as <samp><span class="file">/</span></samp>.
 
         <p>Note that <code>expand-file-name</code> does <em>not</em> expand environment
-variables; only <code>substitute-in-file-name</code> does that.
+variables; only <code>substitute-in-file-name</code> does that:
 
+     <pre class="example">          (expand-file-name "$HOME/foo")
+               &rArr; "/xcssun/users/rms/lewis/$HOME/foo"
+</pre>
         <p>Note also that <code>expand-file-name</code> does not follow symbolic links
 at any level.  This results in a difference between the way
 <code>file-truename</code> and <code>expand-file-name</code> treat &lsquo;<samp><span class="samp">..</span></samp>&rsquo;. 
@@ -112,7 +112,7 @@ indirect calls to <code>expand-file-name</code>.  See <a href="Truenames.html#Tr
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>default-directory</b><var><a name="index-default_002ddirectory-1877"></a></var><br>
+&mdash; Variable: <b>default-directory</b><var><a name="index-default_002ddirectory-2024"></a></var><br>
 <blockquote><p>The value of this buffer-local variable is the default directory for the
 current buffer.  It should be an absolute directory name; it may start
 with &lsquo;<samp><span class="samp">~</span></samp>&rsquo;.  This variable is buffer-local in every buffer.
@@ -128,7 +128,7 @@ argument is <code>nil</code>.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>substitute-in-file-name</b><var> filename<a name="index-substitute_002din_002dfile_002dname-1878"></a></var><br>
+&mdash; Function: <b>substitute-in-file-name</b><var> filename<a name="index-substitute_002din_002dfile_002dname-2025"></a></var><br>
 <blockquote><p><a name="Definition-of-substitute_002din_002dfile_002dname"></a>This function replaces environment variable references in
 <var>filename</var> with the environment variable values.  Following
 standard Unix shell syntax, &lsquo;<samp><span class="samp">$</span></samp>&rsquo; is the prefix to substitute an
@@ -151,7 +151,7 @@ double all &lsquo;<samp><span class="samp">$</span></samp>&rsquo; characters to 
 results.
 
      <!-- Wordy to avoid overfull hbox.  -rjc 15mar92 -->
-        <p>Here we assume that the environment variable <code>HOME</code>, which holds
+        <p>Here we assume that the environment variable <samp><span class="env">HOME</span></samp>, which holds
 the user's home directory name, has value &lsquo;<samp><span class="samp">/xcssun/users/rms</span></samp>&rsquo;.
 
      <pre class="example">          (substitute-in-file-name "$HOME/foo")

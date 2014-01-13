@@ -1,0 +1,93 @@
+<html lang="en">
+<head>
+<title>Parsing HTML/XML - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Text.html#Text" title="Text">
+<link rel="prev" href="Checksum_002fHash.html#Checksum_002fHash" title="Checksum/Hash">
+<link rel="next" href="Atomic-Changes.html#Atomic-Changes" title="Atomic Changes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
+
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Parsing-HTML%2fXML"></a>
+<a name="Parsing-HTML_002fXML"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Atomic-Changes.html#Atomic-Changes">Atomic Changes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Checksum_002fHash.html#Checksum_002fHash">Checksum/Hash</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
+<hr>
+</div>
+
+<h3 class="section">32.25 Parsing HTML and XML</h3>
+
+<p><a name="index-parsing-html-3107"></a>
+When Emacs is compiled with libxml2 support, the following functions
+are available to parse HTML or XML text into Lisp object trees.
+
+<div class="defun">
+&mdash; Function: <b>libxml-parse-html-region</b><var> start end &amp;optional base-url<a name="index-libxml_002dparse_002dhtml_002dregion-3108"></a></var><br>
+<blockquote><p>This function parses the text between <var>start</var> and <var>end</var> as
+HTML, and returns a list representing the HTML <dfn>parse tree</dfn>.  It
+attempts to handle &ldquo;real world&rdquo; HTML by robustly coping with syntax
+mistakes.
+
+        <p>The optional argument <var>base-url</var>, if non-<code>nil</code>, should be a
+string specifying the base URL for relative URLs occurring in links.
+
+        <p>In the parse tree, each HTML node is represented by a list in which
+the first element is a symbol representing the node name, the second
+element is an alist of node attributes, and the remaining elements are
+the subnodes.
+
+        <p>The following example demonstrates this.  Given this (malformed) HTML
+document:
+
+     <pre class="example">          &lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body width=101&gt;&lt;div class=thing&gt;Foo&lt;div&gt;Yes
+</pre>
+        <p class="noindent">A call to <code>libxml-parse-html-region</code> returns this:
+
+     <pre class="example">          (html ()
+            (head ())
+            (body ((width . "101"))
+             (div ((class . "thing"))
+              "Foo"
+              (div ()
+                "Yes"))))
+</pre>
+        </blockquote></div>
+
+   <p><a name="index-parsing-xml-3109"></a>
+
+<div class="defun">
+&mdash; Function: <b>libxml-parse-xml-region</b><var> start end &amp;optional base-url<a name="index-libxml_002dparse_002dxml_002dregion-3110"></a></var><br>
+<blockquote><p>This function is the same as <code>libxml-parse-html-region</code>, except
+that it parses the text as XML rather than HTML (so it is stricter
+about syntax). 
+</p></blockquote></div>
+
+   </body></html>
+

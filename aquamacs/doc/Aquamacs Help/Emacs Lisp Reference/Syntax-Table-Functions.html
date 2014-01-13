@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Syntax Table Functions - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Syntax-Properties.html#Syntax-Properties" title="Syntax Properties">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -50,45 +47,43 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Syntax-Tables.html#Syntax-Tables">Synta
 altering syntax tables.
 
 <div class="defun">
-&mdash; Function: <b>make-syntax-table</b><var> &amp;optional table<a name="index-make_002dsyntax_002dtable-3155"></a></var><br>
-<blockquote><p>This function creates a new syntax table, with all values initialized
-to <code>nil</code>.  If <var>table</var> is non-<code>nil</code>, it becomes the
-parent of the new syntax table, otherwise the standard syntax table is
-the parent.  Like all char-tables, a syntax table inherits from its
-parent.  Thus the original syntax of all characters in the returned
-syntax table is determined by the parent.  See <a href="Char_002dTables.html#Char_002dTables">Char-Tables</a>.
+&mdash; Function: <b>make-syntax-table</b><var> &amp;optional table<a name="index-make_002dsyntax_002dtable-3426"></a></var><br>
+<blockquote><p>This function creates a new syntax table.  If <var>table</var> is
+non-<code>nil</code>, the parent of the new syntax table is <var>table</var>;
+otherwise, the parent is the standard syntax table.
 
-        <p>Most major mode syntax tables are created in this way. 
+        <p>In the new syntax table, all characters are initially given the
+&ldquo;inherit&rdquo; (&lsquo;<samp><span class="samp">@</span></samp>&rsquo;) syntax class, i.e., their syntax is inherited
+from the parent table (see <a href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class Table</a>). 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>copy-syntax-table</b><var> &amp;optional table<a name="index-copy_002dsyntax_002dtable-3156"></a></var><br>
+&mdash; Function: <b>copy-syntax-table</b><var> &amp;optional table<a name="index-copy_002dsyntax_002dtable-3427"></a></var><br>
 <blockquote><p>This function constructs a copy of <var>table</var> and returns it.  If
-<var>table</var> is not supplied (or is <code>nil</code>), it returns a copy of the
-standard syntax table.  Otherwise, an error is signaled if <var>table</var> is
-not a syntax table. 
+<var>table</var> is omitted or <code>nil</code>, it returns a copy of the
+standard syntax table.  Otherwise, an error is signaled if <var>table</var>
+is not a syntax table. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>modify-syntax-entry</b><var> char syntax-descriptor &amp;optional table<a name="index-modify_002dsyntax_002dentry-3157"></a></var><br>
-<blockquote><p>This function sets the syntax entry for <var>char</var> according to
-<var>syntax-descriptor</var>.  <var>char</var> can be a character, or a cons
+&mdash; Command: <b>modify-syntax-entry</b><var> char syntax-descriptor &amp;optional table<a name="index-modify_002dsyntax_002dentry-3428"></a></var><br>
+<blockquote><p><a name="index-syntax-entry_002c-setting-3429"></a>This function sets the syntax entry for <var>char</var> according to
+<var>syntax-descriptor</var>.  <var>char</var> must be a character, or a cons
 cell of the form <code>(</code><var>min</var><code> . </code><var>max</var><code>)</code>; in the latter case,
 the function sets the syntax entries for all characters in the range
 between <var>min</var> and <var>max</var>, inclusive.
 
         <p>The syntax is changed only for <var>table</var>, which defaults to the
-current buffer's syntax table, and not in any other syntax table.  The
-argument <var>syntax-descriptor</var> specifies the desired syntax; this is
-a string beginning with a class designator character, and optionally
-containing a matching character and flags as well.  See <a href="Syntax-Descriptors.html#Syntax-Descriptors">Syntax Descriptors</a>.
+current buffer's syntax table, and not in any other syntax table.
+
+        <p>The argument <var>syntax-descriptor</var> is a syntax descriptor, i.e., a
+string whose first character is a syntax class designator and whose
+second and subsequent characters optionally specify a matching
+character and syntax flags.  See <a href="Syntax-Descriptors.html#Syntax-Descriptors">Syntax Descriptors</a>.  An error is
+signaled if <var>syntax-descriptor</var> is not a valid syntax descriptor.
 
         <p>This function always returns <code>nil</code>.  The old syntax information in
 the table for this character is discarded.
-
-        <p>An error is signaled if the first character of the syntax descriptor is not
-one of the seventeen syntax class designator characters.  An error is also
-signaled if <var>char</var> is not a character.
 
      <pre class="example">     <br><span class="roman">Examples:</span><br>
           
@@ -116,48 +111,53 @@ signaled if <var>char</var> is not a character.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>char-syntax</b><var> character<a name="index-char_002dsyntax-3158"></a></var><br>
+&mdash; Function: <b>char-syntax</b><var> character<a name="index-char_002dsyntax-3430"></a></var><br>
 <blockquote><p>This function returns the syntax class of <var>character</var>, represented
-by its mnemonic designator character.  This returns <em>only</em> the
-class, not any matching parenthesis or flags.
+by its designator character (see <a href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class Table</a>).  This
+returns <em>only</em> the class, not its matching character or syntax
+flags.
 
-        <p>An error is signaled if <var>char</var> is not a character.
+        <p>The following examples apply to C mode.  (We use <code>string</code> to make
+it easier to see the character returned by <code>char-syntax</code>.)
 
-        <p>The following examples apply to C mode.  The first example shows that
-the syntax class of space is whitespace (represented by a space).  The
-second example shows that the syntax of &lsquo;<samp><span class="samp">/</span></samp>&rsquo; is punctuation.  This
-does not show the fact that it is also part of comment-start and -end
-sequences.  The third example shows that open parenthesis is in the class
-of open parentheses.  This does not show the fact that it has a matching
-character, &lsquo;<samp><span class="samp">)</span></samp>&rsquo;.
-
-     <pre class="example">          (string (char-syntax ?\s))
+     <pre class="example">          ;; Space characters have whitespace syntax class.
+          (string (char-syntax ?\s))
                &rArr; " "
           
+          ;; Forward slash characters have punctuation syntax.
+          ;; Note that this <code>char-syntax</code> call does not reveal
+          ;; that it is also part of comment-start and -end sequences.
           (string (char-syntax ?/))
                &rArr; "."
           
+          ;; Open parenthesis characters have open parenthesis syntax.
+          ;; Note that this <code>char-syntax</code> call does not reveal that
+          ;; it has a matching character, &lsquo;<samp><span class="samp">)</span></samp>&rsquo;.
           (string (char-syntax ?\())
                &rArr; "("
 </pre>
-        <p>We use <code>string</code> to make it easier to see the character returned by
-<code>char-syntax</code>. 
-</p></blockquote></div>
+        </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-syntax-table</b><var> table<a name="index-set_002dsyntax_002dtable-3159"></a></var><br>
+&mdash; Function: <b>set-syntax-table</b><var> table<a name="index-set_002dsyntax_002dtable-3431"></a></var><br>
 <blockquote><p>This function makes <var>table</var> the syntax table for the current buffer. 
 It returns <var>table</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>syntax-table</b><var><a name="index-syntax_002dtable-3160"></a></var><br>
+&mdash; Function: <b>syntax-table</b><var><a name="index-syntax_002dtable-3432"></a></var><br>
 <blockquote><p>This function returns the current syntax table, which is the table for
 the current buffer. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Macro: <b>with-syntax-table</b><var> table body<small class="dots">...</small><a name="index-with_002dsyntax_002dtable-3161"></a></var><br>
+&mdash; Command: <b>describe-syntax</b><var> &amp;optional buffer<a name="index-describe_002dsyntax-3433"></a></var><br>
+<blockquote><p>This command displays the contents of the syntax table of
+<var>buffer</var> (by default, the current buffer) in a help buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>with-syntax-table</b><var> table body<small class="dots">...</small><a name="index-with_002dsyntax_002dtable-3434"></a></var><br>
 <blockquote><p>This macro executes <var>body</var> using <var>table</var> as the current syntax
 table.  It returns the value of the last form in <var>body</var>, after
 restoring the old current syntax table.

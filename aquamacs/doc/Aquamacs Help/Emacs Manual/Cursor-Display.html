@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Cursor Display - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Line-Truncation.html#Line-Truncation" title="Line Truncation">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,37 +42,51 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
 <hr>
 </div>
 
-<h3 class="section">18.16 Displaying the Cursor</h3>
+<h3 class="section">14.20 Displaying the Cursor</h3>
 
-<p><a name="index-blink_002dcursor_002dmode-609"></a><a name="index-blink_002dcursor_002dalist-610"></a><a name="index-cursor_002c-locating-visually-611"></a><a name="index-cursor_002c-blinking-612"></a>  You can customize the cursor's color, and whether it blinks, using
-the <code>cursor</code> Custom group (see <a href="Easy-Customization.html#Easy-Customization">Easy Customization</a>).  On
-a graphical display, the command <kbd>M-x blink-cursor-mode</kbd> enables
-or disables the blinking of the cursor.  (On text terminals, the
-terminal itself blinks the cursor, and Emacs has no control over it.) 
-You can control how the cursor appears when it blinks off by setting
-the variable <code>blink-cursor-alist</code>.
+<p><a name="index-text-cursor-769"></a>
+<a name="index-visible_002dcursor-770"></a>  On a text terminal, the cursor's appearance is controlled by the
+terminal, largely out of the control of Emacs.  Some terminals offer
+two different cursors: a &ldquo;visible&rdquo; static cursor, and a &ldquo;very
+visible&rdquo; blinking cursor.  By default, Emacs uses the very visible
+cursor, and switches to it when you start or resume Emacs.  If the
+variable <code>visible-cursor</code> is <code>nil</code> when Emacs starts or
+resumes, it uses the normal cursor.
 
-   <p><a name="index-visible_002dcursor-613"></a>  Some text terminals offer two different cursors: the normal cursor
-and the very visible cursor, where the latter may be e.g. bigger or
-blinking.  By default Emacs uses the very visible cursor, and switches
-to it when you start or resume Emacs.  If the variable
-<code>visible-cursor</code> is <code>nil</code> when Emacs starts or resumes, it
-doesn't switch, so it uses the normal cursor.
+   <p><a name="index-cursor-face-771"></a><a name="index-cursor_002dtype-772"></a>  On a graphical display, many more properties of the text cursor can
+be altered.  To customize its color, change the <code>:background</code>
+attribute of the face named <code>cursor</code> (see <a href="Face-Customization.html#Face-Customization">Face Customization</a>).  (The other attributes of this face have no effect;
+the text shown under the cursor is drawn using the frame's background
+color.)  To change its shape, customize the buffer-local variable
+<code>cursor-type</code>; possible values are <code>box</code> (the default),
+<code>hollow</code> (a hollow box), <code>bar</code> (a vertical bar), <code>(bar
+. </code><var>n</var><code>)</code> (a vertical bar <var>n</var> pixels wide), <code>hbar</code> (a
+horizontal bar), <code>(hbar . </code><var>n</var><code>)</code> (a horizontal bar <var>n</var>
+pixels tall), or <code>nil</code> (no cursor at all).
 
-   <p><a name="index-cursor-in-non_002dselected-windows-614"></a><a name="index-cursor_002din_002dnon_002dselected_002dwindows-615"></a>  Normally, the cursor appears in non-selected windows without
-blinking, with the same appearance as when the blinking cursor blinks
-&ldquo;off.&rdquo;  For a box cursor, this is a hollow box; for a bar cursor,
-this is a thinner bar.  To turn off cursors in non-selected windows,
-customize the variable <code>cursor-in-non-selected-windows</code> and
-assign it a <code>nil</code> value.
+   <p><a name="index-blink_002dcursor_002dmode-773"></a><a name="index-cursor_002c-blinking-774"></a><a name="index-blinking-cursor-775"></a><a name="index-blink_002dcursor_002dalist-776"></a>  To disable cursor blinking, change the variable
+<code>blink-cursor-mode</code> to <code>nil</code> (see <a href="Easy-Customization.html#Easy-Customization">Easy Customization</a>),
+or add the line <code>(blink-cursor-mode 0)</code> to your init file. 
+Alternatively, you can change how the cursor looks when it &ldquo;blinks
+off&rdquo; by customizing the list variable <code>blink-cursor-alist</code>. 
+Each element in the list should have the form <code>(</code><var>on-type</var><code>
+. </code><var>off-type</var><code>)</code>; this means that if the cursor is displayed as
+<var>on-type</var> when it blinks on (where <var>on-type</var> is one of the
+cursor types described above), then it is displayed as <var>off-type</var>
+when it blinks off.
 
-   <p><a name="index-x_002dstretch_002dcursor-616"></a><a name="index-wide-block-cursor-617"></a>  On graphical displays, Emacs can optionally draw the block cursor
-as wide as the character under the cursor&mdash;for example, if the cursor
-is on a tab character, it would cover the full width occupied by that
-tab character.  To enable this feature, set the variable
+   <p><a name="index-x_002dstretch_002dcursor-777"></a><a name="index-wide-block-cursor-778"></a>  Some characters, such as tab characters, are &ldquo;extra wide&rdquo;.  When
+the cursor is positioned over such a character, it is normally drawn
+with the default character width.  You can make the cursor stretch to
+cover wide characters, by changing the variable
 <code>x-stretch-cursor</code> to a non-<code>nil</code> value.
 
-   <p><a name="index-hl_002dline_002dmode-618"></a><a name="index-global_002dhl_002dline_002dmode-619"></a><a name="index-highlight-current-line-620"></a>  To make the cursor even more visible, you can use HL Line mode, a
+   <p><a name="index-cursor-in-non_002dselected-windows-779"></a><a name="index-cursor_002din_002dnon_002dselected_002dwindows-780"></a>  The cursor normally appears in non-selected windows as a
+non-blinking hollow box.  (For a bar cursor, it instead appears as a
+thinner bar.)  To turn off cursors in non-selected windows, change the
+variable <code>cursor-in-non-selected-windows</code> to <code>nil</code>.
+
+   <p><a name="index-hl_002dline_002dmode-781"></a><a name="index-global_002dhl_002dline_002dmode-782"></a><a name="index-highlight-current-line-783"></a>  To make the cursor even more visible, you can use HL Line mode, a
 minor mode that highlights the line containing point.  Use <kbd>M-x
 hl-line-mode</kbd> to enable or disable it in the current buffer.  <kbd>M-x
 global-hl-line-mode</kbd> enables or disables the same mode globally.

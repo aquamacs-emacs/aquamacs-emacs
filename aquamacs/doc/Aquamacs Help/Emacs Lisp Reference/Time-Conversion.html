@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Time Conversion - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Time-Parsing.html#Time-Parsing" title="Time Parsing">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,16 +43,15 @@ Up:&nbsp;<a rel="up" accesskey="u" href="System-Interface.html#System-Interface"
 
 <h3 class="section">39.6 Time Conversion</h3>
 
-<p>These functions convert time values (lists of two or three integers)
-to calendrical information and vice versa.  You can get time values
-from the functions <code>current-time</code> (see <a href="Time-of-Day.html#Time-of-Day">Time of Day</a>) and
-<code>file-attributes</code> (see <a href="Definition-of-file_002dattributes.html#Definition-of-file_002dattributes">Definition of file-attributes</a>).
+<p>These functions convert time values (lists of two to four integers,
+as explained in the previous section) into calendrical information and
+vice versa.
 
-   <p>Many operating systems are limited to time values that contain 32 bits
-of information; these systems typically handle only the times from
-1901-12-13 20:45:52 UTC through 2038-01-19 03:14:07 UTC.  However, some
-operating systems have larger time values, and can represent times far
-in the past or future.
+   <p>Many 32-bit operating systems are limited to time values containing
+32 bits of information; these systems typically handle only the times
+from 1901-12-13 20:45:52 UTC through 2038-01-19 03:14:07 UTC. 
+However, 64-bit and some 32-bit operating systems have larger time
+values, and can represent times far in the past or future.
 
    <p>Time conversion functions always use the Gregorian calendar, even
 for dates before the Gregorian calendar was introduced.  Year numbers
@@ -64,7 +60,7 @@ as traditional Gregorian years do; for example, the year number
 &minus;37 represents the Gregorian year 38 B.C.
 
 <div class="defun">
-&mdash; Function: <b>decode-time</b><var> &amp;optional time<a name="index-decode_002dtime-3854"></a></var><br>
+&mdash; Function: <b>decode-time</b><var> &amp;optional time<a name="index-decode_002dtime-4201"></a></var><br>
 <blockquote><p>This function converts a time value into calendrical information.  If
 you don't specify <var>time</var>, it decodes the current time.  The return
 value is a list of nine elements, as follows:
@@ -93,7 +89,7 @@ Greenwich.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>encode-time</b><var> seconds minutes hour day month year &amp;optional zone<a name="index-encode_002dtime-3855"></a></var><br>
+&mdash; Function: <b>encode-time</b><var> seconds minutes hour day month year &amp;optional zone<a name="index-encode_002dtime-4202"></a></var><br>
 <blockquote><p>This function is the inverse of <code>decode-time</code>.  It converts seven
 items of calendrical data into a time value.  For the meanings of the
 arguments, see the table above under <code>decode-time</code>.
@@ -105,7 +101,7 @@ yourself before you call <code>encode-time</code>.
         <p>The optional argument <var>zone</var> defaults to the current time zone and
 its daylight saving time rules.  If specified, it can be either a list
 (as you would get from <code>current-time-zone</code>), a string as in the
-<code>TZ</code> environment variable, <code>t</code> for Universal Time, or an
+<samp><span class="env">TZ</span></samp> environment variable, <code>t</code> for Universal Time, or an
 integer (as you would get from <code>decode-time</code>).  The specified
 zone is used without any further alteration for daylight saving time.
 

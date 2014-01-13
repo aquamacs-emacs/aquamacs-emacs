@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Minibuffer Commands - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Minibuffers.html#Minibuffers" title="Minibuffers">
 <link rel="prev" href="Reading-a-Password.html#Reading-a-Password" title="Reading a Password">
-<link rel="next" href="Minibuffer-Contents.html#Minibuffer-Contents" title="Minibuffer Contents">
+<link rel="next" href="Minibuffer-Windows.html#Minibuffer-Windows" title="Minibuffer Windows">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -38,7 +35,7 @@ Foundation, Inc.
 <div class="node">
 <a name="Minibuffer-Commands"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Minibuffer-Contents.html#Minibuffer-Contents">Minibuffer Contents</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Minibuffer-Windows.html#Minibuffer-Windows">Minibuffer Windows</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Reading-a-Password.html#Reading-a-Password">Reading a Password</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Minibuffers.html#Minibuffers">Minibuffers</a>
 <hr>
@@ -50,42 +47,56 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Minibuffers.html#Minibuffers">Minibuffe
 minibuffer.
 
 <div class="defun">
-&mdash; Command: <b>exit-minibuffer</b><var><a name="index-exit_002dminibuffer-1173"></a></var><br>
+&mdash; Command: <b>exit-minibuffer</b><var><a name="index-exit_002dminibuffer-1257"></a></var><br>
 <blockquote><p>This command exits the active minibuffer.  It is normally bound to
 keys in minibuffer local keymaps. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>self-insert-and-exit</b><var><a name="index-self_002dinsert_002dand_002dexit-1174"></a></var><br>
+&mdash; Command: <b>self-insert-and-exit</b><var><a name="index-self_002dinsert_002dand_002dexit-1258"></a></var><br>
 <blockquote><p>This command exits the active minibuffer after inserting the last
 character typed on the keyboard (found in <code>last-command-event</code>;
 see <a href="Command-Loop-Info.html#Command-Loop-Info">Command Loop Info</a>). 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>previous-history-element</b><var> n<a name="index-previous_002dhistory_002delement-1175"></a></var><br>
+&mdash; Command: <b>previous-history-element</b><var> n<a name="index-previous_002dhistory_002delement-1259"></a></var><br>
 <blockquote><p>This command replaces the minibuffer contents with the value of the
 <var>n</var>th previous (older) history element. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>next-history-element</b><var> n<a name="index-next_002dhistory_002delement-1176"></a></var><br>
+&mdash; Command: <b>next-history-element</b><var> n<a name="index-next_002dhistory_002delement-1260"></a></var><br>
 <blockquote><p>This command replaces the minibuffer contents with the value of the
 <var>n</var>th more recent history element. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>previous-matching-history-element</b><var> pattern n<a name="index-previous_002dmatching_002dhistory_002delement-1177"></a></var><br>
+&mdash; Command: <b>previous-matching-history-element</b><var> pattern n<a name="index-previous_002dmatching_002dhistory_002delement-1261"></a></var><br>
 <blockquote><p>This command replaces the minibuffer contents with the value of the
 <var>n</var>th previous (older) history element that matches <var>pattern</var> (a
 regular expression). 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>next-matching-history-element</b><var> pattern n<a name="index-next_002dmatching_002dhistory_002delement-1178"></a></var><br>
+&mdash; Command: <b>next-matching-history-element</b><var> pattern n<a name="index-next_002dmatching_002dhistory_002delement-1262"></a></var><br>
 <blockquote><p>This command replaces the minibuffer contents with the value of the
 <var>n</var>th next (newer) history element that matches <var>pattern</var> (a
 regular expression). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>previous-complete-history-element</b><var> n<a name="index-previous_002dcomplete_002dhistory_002delement-1263"></a></var><br>
+<blockquote><p>This command replaces the minibuffer contents with the value of the
+<var>n</var>th previous (older) history element that completes the current
+contents of the minibuffer before the point. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>next-complete-history-element</b><var> n<a name="index-next_002dcomplete_002dhistory_002delement-1264"></a></var><br>
+<blockquote><p>This command replaces the minibuffer contents with the value of the
+<var>n</var>th next (newer) history element that completes the current
+contents of the minibuffer before the point. 
 </p></blockquote></div>
 
    </body></html>

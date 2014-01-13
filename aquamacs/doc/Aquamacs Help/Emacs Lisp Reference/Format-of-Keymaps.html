@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Format of Keymaps - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Creating-Keymaps.html#Creating-Keymaps" title="Creating Keymaps">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,7 +43,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Keymaps.html#Keymaps">Keymaps</a>
 
 <h3 class="section">22.3 Format of Keymaps</h3>
 
-<p><a name="index-format-of-keymaps-1439"></a><a name="index-keymap-format-1440"></a><a name="index-full-keymap-1441"></a><a name="index-sparse-keymap-1442"></a>
+<p><a name="index-format-of-keymaps-1528"></a><a name="index-keymap-format-1529"></a><a name="index-full-keymap-1530"></a><a name="index-sparse-keymap-1531"></a>
   Each keymap is a list whose <span class="sc">car</span> is the symbol <code>keymap</code>.  The
 remaining elements of the list define the key bindings of the keymap. 
 A symbol whose function definition is a keymap is also a keymap.  Use
@@ -62,16 +59,15 @@ ordinary binding applies to events of a particular <dfn>event type</dfn>,
 which is always a character or a symbol.  See <a href="Classifying-Events.html#Classifying-Events">Classifying Events</a>. 
 In this kind of binding, <var>binding</var> is a command.
 
-     <br><dt><code>(</code><var>type</var> <var>item-name</var> <span class="roman">[</span><var>cache</var><span class="roman">]</span><code> . </code><var>binding</var><code>)</code><dd>This specifies a binding which is also a simple menu item that
-displays as <var>item-name</var> in the menu.  <var>cache</var>, if present,
-caches certain information for display in the menu.  See <a href="Simple-Menu-Items.html#Simple-Menu-Items">Simple Menu Items</a>.
+     <br><dt><code>(</code><var>type</var> <var>item-name</var><code> . </code><var>binding</var><code>)</code><dd>This specifies a binding which is also a simple menu item that
+displays as <var>item-name</var> in the menu.  See <a href="Simple-Menu-Items.html#Simple-Menu-Items">Simple Menu Items</a>.
 
-     <br><dt><code>(</code><var>type</var> <var>item-name</var> <var>help-string</var> <span class="roman">[</span><var>cache</var><span class="roman">]</span><code> . </code><var>binding</var><code>)</code><dd>This is a simple menu item with help string <var>help-string</var>.
+     <br><dt><code>(</code><var>type</var> <var>item-name</var> <var>help-string</var><code> . </code><var>binding</var><code>)</code><dd>This is a simple menu item with help string <var>help-string</var>.
 
      <br><dt><code>(</code><var>type</var><code> menu-item . </code><var>details</var><code>)</code><dd>This specifies a binding which is also an extended menu item.  This
 allows use of other features.  See <a href="Extended-Menu-Items.html#Extended-Menu-Items">Extended Menu Items</a>.
 
-     <br><dt><code>(t . </code><var>binding</var><code>)</code><dd><a name="index-default-key-binding-1443"></a>This specifies a <dfn>default key binding</dfn>; any event not bound by other
+     <br><dt><code>(t . </code><var>binding</var><code>)</code><dd><a name="index-default-key-binding-1532"></a>This specifies a <dfn>default key binding</dfn>; any event not bound by other
 elements of the keymap is given <var>binding</var> as its binding.  Default
 bindings allow a keymap to bind all possible event types without having
 to enumerate all of them.  A keymap that has a default binding
@@ -85,10 +81,14 @@ character with code <var>n</var>.  This is a compact way to record lots of
 bindings.  A keymap with such a char-table is called a <dfn>full
 keymap</dfn>.  Other keymaps are called <dfn>sparse keymaps</dfn>.
 
-     <br><dt><var>string</var><dd><a name="index-keymap-prompt-string-1444"></a><a name="index-overall-prompt-string-1445"></a><a name="index-prompt-string-of-keymap-1446"></a>Aside from elements that specify bindings for keys, a keymap can also
+     <br><dt><var>string</var><dd><a name="index-keymap-prompt-string-1533"></a><a name="index-overall-prompt-string-1534"></a><a name="index-prompt-string-of-keymap-1535"></a>Aside from elements that specify bindings for keys, a keymap can also
 have a string as an element.  This is called the <dfn>overall prompt
 string</dfn> and makes it possible to use the keymap as a menu. 
-See <a href="Defining-Menus.html#Defining-Menus">Defining Menus</a>. 
+See <a href="Defining-Menus.html#Defining-Menus">Defining Menus</a>.
+
+     <br><dt><code>(keymap ...)</code><dd>If an element of a keymap is itself a keymap, it counts as if this inner keymap
+were inlined in the outer keymap.  This is used for multiple-inheritance, such
+as in <code>make-composed-keymap</code>. 
 </dl>
 
    <p>When the binding is <code>nil</code>, it doesn't constitute a definition
@@ -98,7 +98,7 @@ parent keymap.  On the other hand, a binding of <code>nil</code> does
 gives a binding of <code>nil</code>, Emacs uses the binding from the
 global map.
 
-   <p><a name="index-meta-characters-lookup-1447"></a>  Keymaps do not directly record bindings for the meta characters. 
+   <p><a name="index-meta-characters-lookup-1536"></a>  Keymaps do not directly record bindings for the meta characters. 
 Instead, meta characters are regarded for purposes of key lookup as
 sequences of two characters, the first of which is &lt;ESC&gt; (or
 whatever is currently the value of <code>meta-prefix-char</code>).  Thus, the
@@ -111,8 +111,9 @@ other input events; thus, <kbd>M-&lt;end&gt;</kbd> has nothing to do with
 <kbd>&lt;ESC&gt; &lt;end&gt;</kbd>.
 
    <p>Here as an example is the local keymap for Lisp mode, a sparse
-keymap.  It defines bindings for &lt;DEL&gt; and &lt;TAB&gt;, plus <kbd>C-c
-C-l</kbd>, <kbd>M-C-q</kbd>, and <kbd>M-C-x</kbd>.
+keymap.  It defines bindings for &lt;DEL&gt;, <kbd>C-c C-z</kbd>,
+<kbd>C-M-q</kbd>, and <kbd>C-M-x</kbd> (the actual value also contains a menu
+binding, which is omitted here for the sake of brevity).
 
 <pre class="example">     lisp-mode-map
      &rArr;
@@ -121,22 +122,18 @@ C-l</kbd>, <kbd>M-C-q</kbd>, and <kbd>M-C-x</kbd>.
          ;; <kbd>C-c C-z</kbd>
          (26 . run-lisp))
       (27 keymap
-          ;; <kbd>M-C-x</kbd><span class="roman">, treated as </span><kbd>&lt;ESC&gt; C-x</kbd>
-          (24 . lisp-send-defun)
-          keymap
-          ;; <kbd>M-C-q</kbd><span class="roman">, treated as </span><kbd>&lt;ESC&gt; C-q</kbd>
-          (17 . indent-sexp))
+          ;; <kbd>C-M-x</kbd><span class="roman">, treated as </span><kbd>&lt;ESC&gt; C-x</kbd>
+          (24 . lisp-send-defun))
       ;; <span class="roman">This part is inherited from </span><code>lisp-mode-shared-map</code><span class="roman">.</span>
       keymap
       ;; &lt;DEL&gt;
       (127 . backward-delete-char-untabify)
       (27 keymap
-          ;; <kbd>M-C-q</kbd><span class="roman">, treated as </span><kbd>&lt;ESC&gt; C-q</kbd>
-          (17 . indent-sexp))
-      (9 . lisp-indent-line))
+          ;; <kbd>C-M-q</kbd><span class="roman">, treated as </span><kbd>&lt;ESC&gt; C-q</kbd>
+          (17 . indent-sexp)))
 </pre>
    <div class="defun">
-&mdash; Function: <b>keymapp</b><var> object<a name="index-keymapp-1448"></a></var><br>
+&mdash; Function: <b>keymapp</b><var> object<a name="index-keymapp-1537"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if <var>object</var> is a keymap, <code>nil</code>
 otherwise.  More precisely, this function tests for a list whose
 <span class="sc">car</span> is <code>keymap</code>, or for a symbol whose function definition

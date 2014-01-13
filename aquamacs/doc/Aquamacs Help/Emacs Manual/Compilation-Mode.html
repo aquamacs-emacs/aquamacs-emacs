@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Compilation Mode - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Compilation-Shell.html#Compilation-Shell" title="Compilation Shell">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,114 +42,114 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Building.html#Building">Building</a>
 <hr>
 </div>
 
-<h3 class="section">31.2 Compilation Mode</h3>
+<h3 class="section">27.2 Compilation Mode</h3>
 
-<p><a name="index-Compilation-mode-2283"></a><a name="index-mode_002c-Compilation-2284"></a>  The &lsquo;<samp><span class="samp">*compilation*</span></samp>&rsquo; buffer uses a special major mode,
-Compilation mode, whose main feature is to provide a convenient way to
-visit the source line corresponding to an error message.  These
-commands are also available in other special buffers that list
-locations in files, including those made by <kbd>M-x grep</kbd> and
-<kbd>M-x occur</kbd>.
+<p><a name="index-Compilation-mode-2554"></a><a name="index-mode_002c-Compilation-2555"></a><a name="index-locus-2556"></a>  The <samp><span class="file">*compilation*</span></samp> buffer uses a major mode called Compilation
+mode.  Compilation mode turns each error message in the buffer into a
+hyperlink; you can move point to it and type &lt;RET&gt;, or click on it
+with the mouse (see <a href="Mouse-References.html#Mouse-References">Mouse References</a>), to visit the <dfn>locus</dfn> of
+the error message in a separate window.  The locus is the specific
+position in a file where that error occurred.
+
+   <p><a name="index-compile_002dgoto_002derror-2557"></a><a name="index-compilation_002dauto_002djump_002dto_002dfirst_002derror-2558"></a>  If you change the variable
+<code>compilation-auto-jump-to-first-error</code> to a non-<code>nil</code> value,
+Emacs automatically visits the locus of the first error message that
+appears in the <samp><span class="file">*compilation*</span></samp> buffer.
+
+   <p>Compilation mode provides the following additional commands.  These
+commands can also be used in <samp><span class="file">*grep*</span></samp> buffers, where the
+hyperlinks are search matches rather than error messages (see <a href="Grep-Searching.html#Grep-Searching">Grep Searching</a>).
 
      <dl>
-<dt><kbd>M-g M-n</kbd><dt><kbd>M-g n</kbd><dt><kbd>C-x `</kbd><dd>Visit the locus of the next error message or match. 
-<br><dt><kbd>M-g M-p</kbd><dt><kbd>M-g p</kbd><dd>Visit the locus of the previous error message or match. 
-<br><dt><kbd>&lt;RET&gt;</kbd><dd>Visit the locus of the error message that point is on. 
-This command is used in the compilation buffer. 
-<br><dt><kbd>Mouse-2</kbd><dd>Visit the locus of the error message that you click on. 
-<br><dt><kbd>M-n</kbd><dd>Find and highlight the locus of the next error message, without
-selecting the source buffer. 
-<br><dt><kbd>M-p</kbd><dd>Find and highlight the locus of the previous error message, without
-selecting the source buffer. 
-<br><dt><kbd>M-}</kbd><dd>Move point to the next error for a different file than the current
-one. 
-<br><dt><kbd>M-{</kbd><dd>Move point to the previous error for a different file than the current
-one. 
+<dt><kbd>M-g M-n</kbd><dt><kbd>M-g n</kbd><dt><kbd>C-x `</kbd><dd>Visit the locus of the next error message or match (<code>next-error</code>). 
+<br><dt><kbd>M-g M-p</kbd><dt><kbd>M-g p</kbd><dd>Visit the locus of the previous error message or match
+(<code>previous-error</code>). 
+<br><dt><kbd>M-n</kbd><dd>Move point to the next error message or match, without visiting its
+locus (<code>compilation-next-error</code>). 
+<br><dt><kbd>M-p</kbd><dd>Move point to the previous error message or match, without visiting
+its locus (<code>compilation-previous-error</code>). 
+<br><dt><kbd>M-}</kbd><dd>Move point to the next error message or match occurring in a different
+file (<code>compilation-next-file</code>). 
+<br><dt><kbd>M-{</kbd><dd>Move point to the previous error message or match occurring in a
+different file (<code>compilation-previous-file</code>). 
 <br><dt><kbd>C-c C-f</kbd><dd>Toggle Next Error Follow minor mode, which makes cursor motion in the
 compilation buffer produce automatic source display. 
 </dl>
 
-   <p><a name="index-compile_002dgoto_002derror-2285"></a><a name="index-compilation_002dauto_002djump_002dto_002dfirst_002derror-2286"></a>  You can visit the source for any particular error message by moving
-point in the &lsquo;<samp><span class="samp">*compilation*</span></samp>&rsquo; buffer to that error message and
-typing &lt;RET&gt; (<code>compile-goto-error</code>).  Alternatively, you can
-click <kbd>Mouse-2</kbd> on the error message; you need not switch to the
-&lsquo;<samp><span class="samp">*compilation*</span></samp>&rsquo; buffer first.  If you set the variable
-<code>compilation-auto-jump-to-first-error</code> to a non-<code>nil</code> value,
-Emacs automatically jumps to the first error, if any, as soon as it
-appears in the &lsquo;<samp><span class="samp">*compilation*</span></samp>&rsquo; buffer.
+   <p><a name="index-M_002dg-M_002dn-2559"></a><a name="index-M_002dg-n-2560"></a><a name="index-C_002dx-_0060-2561"></a><a name="index-next_002derror-2562"></a><a name="index-next_002derror_002dhighlight-2563"></a>  To visit errors sequentially, type <kbd>C-x&nbsp;`</kbd><!-- /@w -->
+(<code>next-error</code>), or equivalently <kbd>M-g M-n</kbd> or <kbd>M-g n</kbd>. 
+This command can be invoked from any buffer, not just a Compilation
+mode buffer.  The first time you invoke it after a compilation, it
+visits the locus of the first error message.  Each subsequent
+<kbd>C-x&nbsp;`</kbd><!-- /@w --> visits the next error, in a similar fashion.  If you
+visit a specific error with &lt;RET&gt; or a mouse click in the
+<samp><span class="file">*compilation*</span></samp> buffer, subsequent <kbd>C-x&nbsp;`</kbd><!-- /@w --> commands
+advance from there.  When <kbd>C-x&nbsp;`</kbd><!-- /@w --> finds no more error messages
+to visit, it signals an error.  <kbd>C-u&nbsp;C-x&nbsp;`</kbd><!-- /@w --> starts again from
+the beginning of the compilation buffer, and visits the first locus.
 
-   <p><a name="index-M_002dg-M_002dn-2287"></a><a name="index-M_002dg-n-2288"></a><a name="index-C_002dx-_0060-2289"></a><a name="index-next_002derror-2290"></a><a name="index-next_002derror_002dhighlight-2291"></a>  To parse the compiler error messages sequentially, type <kbd>C-x `</kbd>
-(<code>next-error</code>).  The character following the <kbd>C-x</kbd> is the
-backquote or &ldquo;grave accent,&rdquo; not the single-quote.  This command is
-available in all buffers, not just in &lsquo;<samp><span class="samp">*compilation*</span></samp>&rsquo;; it
-displays the next error message at the top of one window and source
-location of the error in another window.  It also temporarily
-highlights the relevant source line, for a period controlled by the
-variable <code>next-error-highlight</code>.
+   <p><kbd>M-g M-p</kbd> or <kbd>M-g p</kbd> (<code>previous-error</code>) iterates
+through errors in the opposite direction.
 
-   <p>The first time <kbd>C-x&nbsp;`</kbd><!-- /@w --> is used after the start of a compilation,
-it moves to the first error's location.  Subsequent uses of <kbd>C-x
-`</kbd> advance down to subsequent errors.  If you visit a specific error
-message with &lt;RET&gt; or <kbd>Mouse-2</kbd>, subsequent <kbd>C-x&nbsp;`</kbd><!-- /@w -->
-commands advance from there.  When <kbd>C-x&nbsp;`</kbd><!-- /@w --> gets to the end of the
-buffer and finds no more error messages to visit, it fails and signals
-an Emacs error.  <kbd>C-u&nbsp;C-x&nbsp;`</kbd><!-- /@w --> starts scanning from the beginning of
-the compilation buffer, and goes to the first error's location.
+   <p>The <code>next-error</code> and <code>previous-error</code> commands don't just
+act on the errors or matches listed in <samp><span class="file">*compilation*</span></samp> and
+<samp><span class="file">*grep*</span></samp> buffers; they also know how to iterate through error or
+match lists produced by other commands, such as <kbd>M-x occur</kbd>
+(see <a href="Other-Repeating-Search.html#Other-Repeating-Search">Other Repeating Search</a>).  If you are already in a buffer
+containing error messages or matches, those are the ones that are
+iterated through; otherwise, Emacs looks for a buffer containing error
+messages or matches amongst the windows of the selected frame, then
+for one that <code>next-error</code> or <code>previous-error</code> previously
+iterated through, and finally amongst all other buffers.  If the
+buffer chosen for iterating through is not currently displayed in a
+window, it will be displayed.
 
-   <p><a name="index-compilation_002dskip_002dthreshold-2292"></a>  By default, <kbd>C-x&nbsp;`</kbd><!-- /@w --> skips less important messages.  The variable
-<code>compilation-skip-threshold</code> controls this.  If its value is 2,
-<kbd>C-x&nbsp;`</kbd><!-- /@w --> skips anything less than error, 1 skips anything less
-than warning, and 0 doesn't skip any messages.  The default is 1.
+   <p><a name="index-compilation_002dskip_002dthreshold-2564"></a>  By default, the <code>next-error</code> and <code>previous-error</code> commands
+skip less important messages.  The variable
+<code>compilation-skip-threshold</code> controls this.  The default value,
+1, means to skip anything less important than a warning.  A value of 2
+means to skip anything less important than an error, while 0 means not
+to skip any messages.
 
-   <p>When the window has a left fringe, an arrow in the fringe points to
-the current message in the compilation buffer. The variable
-<code>compilation-context-lines</code> controls the number of lines of
-leading context to display before the current message.  Going to an
-error message location scrolls the &lsquo;<samp><span class="samp">*compilation*</span></samp>&rsquo; buffer to put
-the message that far down from the top.  The value <code>nil</code> is
-special: if there's a left fringe, the window doesn't scroll at all
-if the message is already visible.  If there is no left fringe,
-<code>nil</code> means display the message at the top of the window.
+   <p>When Emacs visits the locus of an error message, it momentarily
+highlights the relevant source line.  The duration of this highlight
+is determined by the variable <code>next-error-highlight</code>.
 
-   <p>If you're not in the compilation buffer when you run
-<code>next-error</code>, Emacs will look for a buffer that contains error
-messages.  First, it looks for one displayed in the selected frame,
-then for one that previously had <code>next-error</code> called on it, and
-then at the current buffer.  Finally, Emacs looks at all the remaining
-buffers.  <code>next-error</code> signals an error if it can't find any such
-buffer.
+   <p><a name="index-compilation_002dcontext_002dlines-2565"></a>  If the <samp><span class="file">*compilation*</span></samp> buffer is shown in a window with a left
+fringe (see <a href="Fringes.html#Fringes">Fringes</a>), the locus-visiting commands put an arrow in
+the fringe, pointing to the current error message.  If the window has
+no left fringe, such as on a text terminal, these commands scroll the
+window so that the current message is at the top of the window.  If
+you change the variable <code>compilation-context-lines</code> to an integer
+value <var>n</var>, these commands scroll the window so that the current
+error message is <var>n</var> lines from the top, whether or not there is a
+fringe; the default value, <code>nil</code>, gives the behavior described
+above.
 
-   <p><a name="index-compilation_002derror_002dregexp_002dalist-2293"></a><a name="index-grep_002dregexp_002dalist-2294"></a>  To parse messages from the compiler, Compilation mode uses the
+   <p><a name="index-compilation_002derror_002dregexp_002dalist-2566"></a><a name="index-grep_002dregexp_002dalist-2567"></a>  To parse messages from the compiler, Compilation mode uses the
 variable <code>compilation-error-regexp-alist</code> which lists various
-formats of error messages and tells Emacs how to extract the source file
-and the line number from the text of a message.  If your compiler isn't
-supported, you can tailor Compilation mode to it by adding elements to
-that list.  A similar variable <code>grep-regexp-alist</code> tells Emacs how
-to parse output of a <code>grep</code> command.
+error message formats and tells Emacs how to extract the locus from
+each.  A similar variable, <code>grep-regexp-alist</code>, tells Emacs how
+to parse output from a <code>grep</code> command (see <a href="Grep-Searching.html#Grep-Searching">Grep Searching</a>).
 
-   <p><a name="index-compilation_002dnext_002derror-2295"></a><a name="index-compilation_002dprevious_002derror-2296"></a><a name="index-compilation_002dnext_002dfile-2297"></a><a name="index-compilation_002dprevious_002dfile-2298"></a>  Compilation mode also redefines the keys &lt;SPC&gt; and &lt;DEL&gt; to
-scroll by screenfuls, and <kbd>M-n</kbd> (<code>compilation-next-error</code>)
-and <kbd>M-p</kbd> (<code>compilation-previous-error</code>) to move to the next
-or previous error message.  You can also use <kbd>M-{</kbd>
-(<code>compilation-next-file</code> and <kbd>M-}</kbd>
-(<code>compilation-previous-file</code>) to move up or down to an error
-message for a different source file.
+   <p><a name="index-compilation_002dnext_002derror-2568"></a><a name="index-compilation_002dprevious_002derror-2569"></a><a name="index-compilation_002dnext_002dfile-2570"></a><a name="index-compilation_002dprevious_002dfile-2571"></a>  Compilation mode also defines the keys &lt;SPC&gt; and &lt;DEL&gt; to
+scroll by screenfuls; <kbd>M-n</kbd> (<code>compilation-next-error</code>) and
+<kbd>M-p</kbd> (<code>compilation-previous-error</code>) to move to the next or
+previous error message; and <kbd>M-{</kbd> (<code>compilation-next-file</code>)
+and <kbd>M-}</kbd> (<code>compilation-previous-file</code>) to move to the next
+or previous error message for a different source file.
 
-   <p><a name="index-Next-Error-Follow-mode-2299"></a><a name="index-next_002derror_002dfollow_002dminor_002dmode-2300"></a>  You can type <kbd>C-c C-f</kbd> to toggle Next Error Follow mode.  In
+   <p><a name="index-Next-Error-Follow-mode-2572"></a><a name="index-next_002derror_002dfollow_002dminor_002dmode-2573"></a>  You can type <kbd>C-c C-f</kbd> to toggle Next Error Follow mode.  In
 this minor mode, ordinary cursor motion in the compilation buffer
-automatically updates the source buffer.  For instance, moving the
-cursor to the next error message causes the location of that error to
-be displayed immediately.
+automatically updates the source buffer, i.e., moving the cursor over
+an error message causes the locus of that error to be displayed.
 
    <p>The features of Compilation mode are also available in a minor mode
 called Compilation Minor mode.  This lets you parse error messages in
-any buffer, not just a normal compilation output buffer.  Type <kbd>M-x
-compilation-minor-mode</kbd> to enable the minor mode.  This defines the keys
-&lt;RET&gt; and <kbd>Mouse-2</kbd>, as in the Compilation major mode.
-
-   <p>Compilation minor mode works in any buffer, as long as the contents
-are in a format that it understands.  In an Rlogin buffer (see <a href="Remote-Host.html#Remote-Host">Remote Host</a>), Compilation minor mode automatically accesses remote source
-files by FTP (see <a href="File-Names.html#File-Names">File Names</a>).
+any buffer, not just a normal compilation output buffer.  Type
+<kbd>M-x compilation-minor-mode</kbd> to enable the minor mode.  For
+instance, in an Rlogin buffer (see <a href="Remote-Host.html#Remote-Host">Remote Host</a>), Compilation minor
+mode automatically accesses remote source files by FTP (see <a href="File-Names.html#File-Names">File Names</a>).
 
    </body></html>
 

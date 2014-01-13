@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Visiting Functions - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Subroutines-of-Visiting.html#Subroutines-of-Visiting" title="Subroutines of Visiting">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -56,7 +53,7 @@ temporary buffer.  Visiting the file is not necessary and takes longer.
 See <a href="Reading-from-Files.html#Reading-from-Files">Reading from Files</a>.
 
 <div class="defun">
-&mdash; Command: <b>find-file</b><var> filename &amp;optional wildcards<a name="index-find_002dfile-1766"></a></var><br>
+&mdash; Command: <b>find-file</b><var> filename &amp;optional wildcards<a name="index-find_002dfile-1888"></a></var><br>
 <blockquote><p>This command selects a buffer visiting the file <var>filename</var>,
 using an existing buffer if there is one, and otherwise creating a
 new buffer and reading the file into it.  It also returns that buffer.
@@ -66,7 +63,7 @@ function is basically equivalent to:
 
      <pre class="smallexample">          (switch-to-buffer (find-file-noselect filename nil nil wildcards))
 </pre>
-        <p class="noindent">(See <code>switch-to-buffer</code> in <a href="Displaying-Buffers.html#Displaying-Buffers">Displaying Buffers</a>.)
+        <p class="noindent">(See <code>switch-to-buffer</code> in <a href="Switching-Buffers.html#Switching-Buffers">Switching Buffers</a>.)
 
         <p>If <var>wildcards</var> is non-<code>nil</code>, which is always true in an
 interactive call, then <code>find-file</code> expands wildcard characters in
@@ -77,7 +74,27 @@ interactive call, then <code>find-file</code> expands wildcard characters in
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>find-file-noselect</b><var> filename &amp;optional nowarn rawfile wildcards<a name="index-find_002dfile_002dnoselect-1767"></a></var><br>
+&mdash; Command: <b>find-file-literally</b><var> filename<a name="index-find_002dfile_002dliterally-1889"></a></var><br>
+<blockquote><p>This command visits <var>filename</var>, like <code>find-file</code> does, but it
+does not perform any format conversions (see <a href="Format-Conversion.html#Format-Conversion">Format Conversion</a>),
+character code conversions (see <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>), or end-of-line
+conversions (see <a href="Coding-System-Basics.html#Coding-System-Basics">End of line conversion</a>). 
+The buffer visiting the file is made unibyte, and its major mode is
+Fundamental mode, regardless of the file name.  File local variable
+specifications  in the file (see <a href="File-Local-Variables.html#File-Local-Variables">File Local Variables</a>) are
+ignored, and automatic decompression and adding a newline at the end
+of the file due to <code>require-final-newline</code> (see <a href="Saving-Buffers.html#Saving-Buffers">require-final-newline</a>) are also disabled.
+
+        <p>Note that if Emacs already has a buffer visiting the same file
+non-literally, it will not visit the same file literally, but instead
+just switch to the existing buffer.  If you want to be sure of
+accessing a file's contents literally, you should create a temporary
+buffer and then read the file contents into it using
+<code>insert-file-contents-literally</code> (see <a href="Reading-from-Files.html#Reading-from-Files">Reading from Files</a>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>find-file-noselect</b><var> filename &amp;optional nowarn rawfile wildcards<a name="index-find_002dfile_002dnoselect-1890"></a></var><br>
 <blockquote><p>This function is the guts of all the file-visiting functions.  It
 returns a buffer visiting the file <var>filename</var>.  You may make the
 buffer current or display it in a window if you wish, but this
@@ -125,17 +142,17 @@ various files.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>find-file-other-window</b><var> filename &amp;optional wildcards<a name="index-find_002dfile_002dother_002dwindow-1768"></a></var><br>
+&mdash; Command: <b>find-file-other-window</b><var> filename &amp;optional wildcards<a name="index-find_002dfile_002dother_002dwindow-1891"></a></var><br>
 <blockquote><p>This command selects a buffer visiting the file <var>filename</var>, but
-does so in a window other than the selected window.  It may use another
-existing window or split a window; see <a href="Displaying-Buffers.html#Displaying-Buffers">Displaying Buffers</a>.
+does so in a window other than the selected window.  It may use
+another existing window or split a window; see <a href="Switching-Buffers.html#Switching-Buffers">Switching Buffers</a>.
 
         <p>When this command is called interactively, it prompts for
 <var>filename</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>find-file-read-only</b><var> filename &amp;optional wildcards<a name="index-find_002dfile_002dread_002donly-1769"></a></var><br>
+&mdash; Command: <b>find-file-read-only</b><var> filename &amp;optional wildcards<a name="index-find_002dfile_002dread_002donly-1892"></a></var><br>
 <blockquote><p>This command selects a buffer visiting the file <var>filename</var>, like
 <code>find-file</code>, but it marks the buffer as read-only.  See <a href="Read-Only-Buffers.html#Read-Only-Buffers">Read Only Buffers</a>, for related functions and variables.
 
@@ -144,19 +161,7 @@ existing window or split a window; see <a href="Displaying-Buffers.html#Displayi
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>view-file</b><var> filename<a name="index-view_002dfile-1770"></a></var><br>
-<blockquote><p>This command visits <var>filename</var> using View mode, returning to the
-previous buffer when you exit View mode.  View mode is a minor mode that
-provides commands to skim rapidly through the file, but does not let you
-modify the text.  Entering View mode runs the normal hook
-<code>view-mode-hook</code>.  See <a href="Hooks.html#Hooks">Hooks</a>.
-
-        <p>When <code>view-file</code> is called interactively, it prompts for
-<var>filename</var>. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; User Option: <b>find-file-wildcards</b><var><a name="index-find_002dfile_002dwildcards-1771"></a></var><br>
+&mdash; User Option: <b>find-file-wildcards</b><var><a name="index-find_002dfile_002dwildcards-1893"></a></var><br>
 <blockquote><p>If this variable is non-<code>nil</code>, then the various <code>find-file</code>
 commands check for wildcard characters and visit all the files that
 match them (when invoked interactively or when their <var>wildcards</var>
@@ -166,7 +171,7 @@ and never treat wildcard characters specially.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>find-file-hook</b><var><a name="index-find_002dfile_002dhook-1772"></a></var><br>
+&mdash; User Option: <b>find-file-hook</b><var><a name="index-find_002dfile_002dhook-1894"></a></var><br>
 <blockquote><p>The value of this variable is a list of functions to be called after a
 file is visited.  The file's local-variables specification (if any) will
 have been processed before the hooks are run.  The buffer visiting the
@@ -176,7 +181,7 @@ file is current when the hook functions are run.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>find-file-not-found-functions</b><var><a name="index-find_002dfile_002dnot_002dfound_002dfunctions-1773"></a></var><br>
+&mdash; Variable: <b>find-file-not-found-functions</b><var><a name="index-find_002dfile_002dnot_002dfound_002dfunctions-1895"></a></var><br>
 <blockquote><p>The value of this variable is a list of functions to be called when
 <code>find-file</code> or <code>find-file-noselect</code> is passed a nonexistent
 file name.  <code>find-file-noselect</code> calls these functions as soon as
@@ -186,6 +191,17 @@ already set up.
 
         <p>This is not a normal hook because the values of the functions are
 used, and in many cases only some of the functions are called. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>find-file-literally</b><var><a name="index-find_002dfile_002dliterally-1896"></a></var><br>
+<blockquote><p>This buffer-local variable, if set to a non-<code>nil</code> value, makes
+<code>save-buffer</code> behave as if the buffer were visiting its file
+literally, i.e., without conversions of any kind.  The command
+<code>find-file-literally</code> sets this variable's local value, but other
+equivalent functions and commands can do that as well, e.g., to avoid
+automatic addition of a newline at the end of the file.  This variable
+is permanent local, so it is unaffected by changes of major modes. 
 </p></blockquote></div>
 
    </body></html>

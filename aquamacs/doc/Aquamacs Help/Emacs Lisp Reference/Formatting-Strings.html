@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Formatting Strings - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Case-Conversion.html#Case-Conversion" title="Case Conversion">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,10 +41,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Strings-and-Characters.html#Strings-and
 <hr>
 </div>
 
-<!-- node-name,  next,  previous,  up -->
 <h3 class="section">4.7 Formatting Strings</h3>
 
-<p><a name="index-formatting-strings-256"></a><a name="index-strings_002c-formatting-them-257"></a>
+<p><a name="index-formatting-strings-268"></a><a name="index-strings_002c-formatting-them-269"></a>
   <dfn>Formatting</dfn> means constructing a string by substituting
 computed values at various places in a constant string.  This constant
 string controls how the other values are printed, as well as where
@@ -59,7 +55,7 @@ formatting feature described here; they differ from <code>format</code> only
 in how they use the result of formatting.
 
 <div class="defun">
-&mdash; Function: <b>format</b><var> string &amp;rest objects<a name="index-format-258"></a></var><br>
+&mdash; Function: <b>format</b><var> string &amp;rest objects<a name="index-format-270"></a></var><br>
 <blockquote><p>This function returns a new string that is made by copying
 <var>string</var> and then replacing any format specification
 in the copy with encodings of the corresponding <var>objects</var>.  The
@@ -70,7 +66,7 @@ are copied directly into the output, including their text properties,
 if any. 
 </p></blockquote></div>
 
-   <p><a name="index-g_t_0040samp_007b_0025_007d-in-format-259"></a><a name="index-format-specification-260"></a>  A format specification is a sequence of characters beginning with a
+   <p><a name="index-g_t_0040samp_007b_0025_007d-in-format-271"></a><a name="index-format-specification-272"></a>  A format specification is a sequence of characters beginning with a
 &lsquo;<samp><span class="samp">%</span></samp>&rsquo;.  Thus, if there is a &lsquo;<samp><span class="samp">%d</span></samp>&rsquo; in <var>string</var>, the
 <code>format</code> function replaces it with the printed representation of
 one of the values to be formatted (one of the arguments <var>objects</var>). 
@@ -117,13 +113,13 @@ are also copied, but those of the object take priority.
 made with quoting (that is, using <code>prin1</code>&mdash;see <a href="Output-Functions.html#Output-Functions">Output Functions</a>).  Thus, strings are enclosed in &lsquo;<samp><span class="samp">"</span></samp>&rsquo; characters, and
 &lsquo;<samp><span class="samp">\</span></samp>&rsquo; characters appear where necessary before special characters.
 
-     <br><dt>&lsquo;<samp><span class="samp">%o</span></samp>&rsquo;<dd><a name="index-integer-to-octal-261"></a>Replace the specification with the base-eight representation of an
+     <br><dt>&lsquo;<samp><span class="samp">%o</span></samp>&rsquo;<dd><a name="index-integer-to-octal-273"></a>Replace the specification with the base-eight representation of an
 integer.
 
      <br><dt>&lsquo;<samp><span class="samp">%d</span></samp>&rsquo;<dd>Replace the specification with the base-ten representation of an
 integer.
 
-     <br><dt>&lsquo;<samp><span class="samp">%x</span></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">%X</span></samp>&rsquo;<dd><a name="index-integer-to-hexadecimal-262"></a>Replace the specification with the base-sixteen representation of an
+     <br><dt>&lsquo;<samp><span class="samp">%x</span></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">%X</span></samp>&rsquo;<dd><a name="index-integer-to-hexadecimal-274"></a>Replace the specification with the base-sixteen representation of an
 integer.  &lsquo;<samp><span class="samp">%x</span></samp>&rsquo; uses lower case and &lsquo;<samp><span class="samp">%X</span></samp>&rsquo; uses upper case.
 
      <br><dt>&lsquo;<samp><span class="samp">%c</span></samp>&rsquo;<dd>Replace the specification with the character which is the value given.
@@ -159,7 +155,7 @@ operation</span></samp>&rsquo; error.
           &rArr; "The octal value of 18 is 22,
               and the hex value is 12."
 </pre>
-   <p><a name="index-field-width-263"></a><a name="index-padding-264"></a>  A specification can have a <dfn>width</dfn>, which is a decimal number
+   <p><a name="index-field-width-275"></a><a name="index-padding-276"></a>  A specification can have a <dfn>width</dfn>, which is a decimal number
 between the &lsquo;<samp><span class="samp">%</span></samp>&rsquo; and the specification character.  If the printed
 representation of the object contains fewer characters than this
 width, <code>format</code> extends it with padding.  The width specifier is
@@ -178,14 +174,14 @@ has only 3 letters, and needs 4 blank spaces as padding.  In the
 second case, the string <code>"specification"</code> is 13 letters wide but
 is not truncated.
 
-<pre class="example">     (format "The word `%7s' actually has %d letters in it."
+<pre class="example">     (format "The word `%7s' has %d letters in it."
              "foo" (length "foo"))
-          &rArr; "The word `    foo' actually has 3 letters in it."
-     (format "The word `%7s' actually has %d letters in it."
+          &rArr; "The word `    foo' has 3 letters in it."
+     (format "The word `%7s' has %d letters in it."
              "specification" (length "specification"))
-          &rArr; "The word `specification' actually has 13 letters in it."
+          &rArr; "The word `specification' has 13 letters in it."
 </pre>
-   <p><a name="index-flags-in-format-specifications-265"></a>  Immediately after the &lsquo;<samp><span class="samp">%</span></samp>&rsquo; and before the optional width
+   <p><a name="index-flags-in-format-specifications-277"></a>  Immediately after the &lsquo;<samp><span class="samp">%</span></samp>&rsquo; and before the optional width
 specifier, you can also put certain <dfn>flag characters</dfn>.
 
    <p>The flag &lsquo;<samp><span class="samp">+</span></samp>&rsquo; inserts a plus sign before a positive number, so
@@ -203,14 +199,16 @@ with &lsquo;<samp><span class="samp">0x</span></samp>&rsquo; or &lsquo;<samp><sp
 the &lsquo;<samp><span class="samp">#</span></samp>&rsquo; flag means include a decimal point even if the precision
 is zero.
 
+   <p>The flag &lsquo;<samp><span class="samp">0</span></samp>&rsquo; ensures that the padding consists of &lsquo;<samp><span class="samp">0</span></samp>&rsquo;
+characters instead of spaces.  This flag is ignored for non-numerical
+specification characters like &lsquo;<samp><span class="samp">%s</span></samp>&rsquo;, &lsquo;<samp><span class="samp">%S</span></samp>&rsquo; and &lsquo;<samp><span class="samp">%c</span></samp>&rsquo;. 
+These specification characters accept the &lsquo;<samp><span class="samp">0</span></samp>&rsquo; flag, but still pad
+with <em>spaces</em>.
+
    <p>The flag &lsquo;<samp><span class="samp">-</span></samp>&rsquo; causes the padding inserted by the width
 specifier, if any, to be inserted on the right rather than the left. 
-The flag &lsquo;<samp><span class="samp">0</span></samp>&rsquo; ensures that the padding consists of &lsquo;<samp><span class="samp">0</span></samp>&rsquo;
-characters instead of spaces, inserted on the left.  These flags are
-ignored for specification characters for which they do not make sense:
-&lsquo;<samp><span class="samp">%s</span></samp>&rsquo;, &lsquo;<samp><span class="samp">%S</span></samp>&rsquo; and &lsquo;<samp><span class="samp">%c</span></samp>&rsquo; accept the &lsquo;<samp><span class="samp">0</span></samp>&rsquo; flag, but still
-pad with <em>spaces</em> on the left.  If both &lsquo;<samp><span class="samp">-</span></samp>&rsquo; and &lsquo;<samp><span class="samp">0</span></samp>&rsquo; are
-present and valid, &lsquo;<samp><span class="samp">-</span></samp>&rsquo; takes precedence.
+If both &lsquo;<samp><span class="samp">-</span></samp>&rsquo; and &lsquo;<samp><span class="samp">0</span></samp>&rsquo; are present, the &lsquo;<samp><span class="samp">0</span></samp>&rsquo; flag is
+ignored.
 
 <pre class="example">     (format "%06d is padded on the left with zeros" 123)
           &rArr; "000123 is padded on the left with zeros"
@@ -222,7 +220,7 @@ present and valid, &lsquo;<samp><span class="samp">-</span></samp>&rsquo; takes 
              "foo" (length "foo"))
           &rArr; "The word `foo    ' actually has 3 letters in it."
 </pre>
-   <p><a name="index-precision-in-format-specifications-266"></a>  All the specification characters allow an optional <dfn>precision</dfn>
+   <p><a name="index-precision-in-format-specifications-278"></a>  All the specification characters allow an optional <dfn>precision</dfn>
 before the character (after the width, if present).  The precision is
 a decimal-point &lsquo;<samp><span class="samp">.</span></samp>&rsquo; followed by a digit-string.  For the
 floating-point specifications (&lsquo;<samp><span class="samp">%e</span></samp>&rsquo;, &lsquo;<samp><span class="samp">%f</span></samp>&rsquo;, &lsquo;<samp><span class="samp">%g</span></samp>&rsquo;), the

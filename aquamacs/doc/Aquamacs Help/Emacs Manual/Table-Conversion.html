@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Table Conversion - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Text-Based-Tables.html#Text-Based-Tables" title="Text Based Tables">
-<link rel="prev" href="Fixed-Width-Mode.html#Fixed-Width-Mode" title="Fixed Width Mode">
-<link rel="next" href="Measuring-Tables.html#Measuring-Tables" title="Measuring Tables">
+<link rel="prev" href="Table-Rows-and-Columns.html#Table-Rows-and-Columns" title="Table Rows and Columns">
+<link rel="next" href="Table-Misc.html#Table-Misc" title="Table Misc">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -39,24 +36,23 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <div class="node">
 <a name="Table-Conversion"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Measuring-Tables.html#Measuring-Tables">Measuring Tables</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Fixed-Width-Mode.html#Fixed-Width-Mode">Fixed Width Mode</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Table-Misc.html#Table-Misc">Table Misc</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Table-Rows-and-Columns.html#Table-Rows-and-Columns">Table Rows and Columns</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Text-Based-Tables.html#Text-Based-Tables">Text Based Tables</a>
 <hr>
 </div>
 
-<h4 class="subsection">29.13.9 Conversion Between Plain Text and Tables</h4>
+<h4 class="subsection">25.14.7 Converting Between Plain Text and Tables</h4>
 
-<p><a name="index-text-to-table-1936"></a><a name="index-table-to-text-1937"></a>
-<a name="index-table_002dcapture-1938"></a>  The command <code>table-capture</code> captures plain text in a region and
-turns it into a table.  Unlike <code>table-recognize</code> (see <a href="Table-Recognition.html#Table-Recognition">Table Recognition</a>), the original text does not have a table appearance but
-may hold a logical table structure.  For example, some elements
-separated by known patterns form a two dimensional structure which can
-be turned into a table.
+<p><a name="index-text-to-table-2178"></a><a name="index-table-to-text-2179"></a>
+<a name="index-table_002dcapture-2180"></a>  The command <kbd>M-x table-capture</kbd> captures plain text in a region
+and turns it into a table.  Unlike <kbd>M-x table-recognize</kbd>
+(see <a href="Table-Recognition.html#Table-Recognition">Table Recognition</a>), the original text does not need to have a
+table appearance; it only needs to have a logical table-like
+structure.
 
-   <p>Here's an example of data that <code>table-capture</code> can operate on. 
-The numbers are horizontally separated by a comma and vertically
-separated by a newline character.
+   <p>For example, suppose we have the following numbers, which are
+divided into three lines and separated horizontally by commas:
 
 <pre class="example">     1, 2, 3, 4
      5, 6, 7, 8
@@ -72,82 +68,48 @@ separated by a newline character.
      |     |9    |10   |     |
      +-----+-----+-----+-----+
 </pre>
-   <p class="noindent">The conversion uses &lsquo;<samp><span class="samp">,</span></samp>&rsquo; for the column delimiter and newline for
-a row delimiter, cells are left justified, and minimum cell width is
-5.
+   <p><a name="index-table_002drelease-2181"></a>  <kbd>M-x table-release</kbd> does the opposite: it converts a table back
+to plain text, removing its cell borders.
 
-   <p><a name="index-table_002drelease-1939"></a>  The command <code>table-release</code> does the opposite of
-<code>table-capture</code>.  It releases a table by removing the table frame
-and cell borders.  This leaves the table contents as plain text.  One
-of the useful applications of <code>table-capture</code> and
-<code>table-release</code> is to edit a text in layout.  Look at the
-following three paragraphs (the latter two are indented with header
-lines):
+   <p>One application of this pair of commands is to edit a text in
+layout.  Look at the following three paragraphs (the latter two are
+indented with header lines):
 
-<pre class="example">     &lsquo;<samp><span class="samp">table-capture</span></samp>&rsquo; is a powerful command, but mastering its
-     power requires some practice.  Here are some things it can do:
+<pre class="example">     table-capture is a powerful command.
+     Here are some things it can do:
      
-     Parse Cell Items      By using column delimiter regular
-                           expression and raw delimiter regular
-                           expression, it parses the specified text
-                           area and extracts cell items from
-                           non-table text and then forms a table out
-                           of them.
-     
-     Capture Text Area     When no delimiters are specified it
-                           creates a single cell table.  The text in
-                           the specified region is placed in that
-                           cell.
+     Parse Cell Items   Using row and column delimiter regexps,
+                        it parses the specified text area and
+                        extracts cell items into a table.
 </pre>
-   <p class="noindent">Applying <code>table-capture</code> to a region containing the above three
-paragraphs, with empty strings for column delimiter regexp and row
-delimiter regexp, creates a table with a single cell like the
-following one.
+   <p class="noindent">Applying <code>table-capture</code> to a region containing the above text,
+with empty strings for the column and row delimiter regexps, creates a
+table with a single cell like the following one.
 
-<!-- The first line's right-hand frame in the following two examples -->
-<!-- sticks out to accommodate for the removal of @samp in the -->
-<!-- produced output!! -->
-<pre class="smallexample">     +-----------------------------------------------------------------+
-     |&lsquo;<samp><span class="samp">table-capture</span></samp>&rsquo; is a powerful command, but mastering its         |
-     |power requires some practice.  Here are some things it can do:   |
-     |                                                                 |
-     |Parse Cell Items      By using column delimiter regular          |
-     |                      expression and raw delimiter regular       |
-     |                      expression, it parses the specified text   |
-     |                      area and extracts cell items from          |
-     |                      non-table text and then forms a table out  |
-     |                      of them.                                   |
-     |                                                                 |
-     |Capture Text Area     When no delimiters are specified it        |
-     |                      creates a single cell table.  The text in  |
-     |                      the specified region is placed in that     |
-     |                      cell.                                      |
-     +-----------------------------------------------------------------+
+<pre class="smallexample">     +----------------------------------------------------------+
+     |table-capture is a powerful command.                      |
+     |Here are some things it can do:                           |
+     |                                                          |
+     |Parse Cell Items   Using row and column delimiter regexps,|
+     |                   it parses the specified text area and  |
+     |                   extracts cell items into a table.      |
+     +----------------------------------------------------------+
 </pre>
-   <p class="noindent">By splitting the cell appropriately we now have a table consisting of
-paragraphs occupying its own cell.  Each cell can now be edited
-independently without affecting the layout of other cells.
+   <p class="noindent">We can then use the cell splitting commands (see <a href="Cell-Commands.html#Cell-Commands">Cell Commands</a>) to
+subdivide the table so that each paragraph occupies a cell:
 
-<pre class="smallexample">     +-----------------------------------------------------------------+
-     |&lsquo;<samp><span class="samp">table-capture</span></samp>&rsquo; is a powerful command, but mastering its         |
-     |power requires some practice.  Here are some things it can do:   |
-     +---------------------+-------------------------------------------+
-     |Parse Cell Items     |By using column delimiter regular          |
-     |                     |expression and raw delimiter regular       |
-     |                     |expression, it parses the specified text   |
-     |                     |area and extracts cell items from          |
-     |                     |non-table text and then forms a table out  |
-     |                     |of them.                                   |
-     +---------------------+-------------------------------------------+
-     |Capture Text Area    |When no delimiters are specified it        |
-     |                     |creates a single cell table.  The text in  |
-     |                     |the specified region is placed in that     |
-     |                     |cell.                                      |
-     +---------------------+-------------------------------------------+
+<pre class="smallexample">     +----------------------------------------------------------+
+     |table-capture is a powerful command.                      |
+     |Here are some things it can do:                           |
+     +-----------------+----------------------------------------+
+     |Parse Cell Items | Using row and column delimiter regexps,|
+     |                 | it parses the specified text area and  |
+     |                 | extracts cell items into a table.      |
+     +-----------------+----------------------------------------+
 </pre>
-   <p class="noindent">By applying <code>table-release</code>, which does the opposite process, the
-contents become once again plain text.  <code>table-release</code> works as
-a companion command to <code>table-capture</code>.
+   <p class="noindent">Each cell can now be edited independently without affecting the layout
+of other cells.  When finished, we can invoke <kbd>M-x table-release</kbd>
+to convert the table back to plain text.
 
    </body></html>
 

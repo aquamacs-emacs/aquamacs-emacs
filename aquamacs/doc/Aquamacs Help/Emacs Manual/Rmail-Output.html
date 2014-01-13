@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Rmail Output - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Rmail-Labels.html#Rmail-Labels" title="Rmail Labels">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,7 +42,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Rmail.html#Rmail">Rmail</a>
 <hr>
 </div>
 
-<h3 class="section">36.7 Copying Messages Out to Files</h3>
+<h3 class="section">33.7 Copying Messages Out to Files</h3>
 
 <p>These commands copy messages from an Rmail file into another file.
 
@@ -60,20 +57,21 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Rmail.html#Rmail">Rmail</a>
 file name from the message &lsquo;<samp><span class="samp">Subject</span></samp>&rsquo; header. 
 </dl>
 
-   <p><a name="index-o-_0040r_007b_0028Rmail_0029_007d-2877"></a><a name="index-rmail_002doutput_002das_002dseen-2878"></a><a name="index-C_002do-_0040r_007b_0028Rmail_0029_007d-2879"></a><a name="index-rmail_002doutput-2880"></a>  The commands <kbd>o</kbd> and <kbd>C-o</kbd> copy the current message into a
+   <p><a name="index-o-_0040r_007b_0028Rmail_0029_007d-3711"></a><a name="index-rmail_002doutput_002das_002dseen-3712"></a><a name="index-C_002do-_0040r_007b_0028Rmail_0029_007d-3713"></a><a name="index-rmail_002doutput-3714"></a>  The commands <kbd>o</kbd> and <kbd>C-o</kbd> copy the current message into a
 specified file, adding it at the end.  The two commands differ mainly
 in how much to copy: <kbd>o</kbd> copies the full message headers, even if
 they are not all visible, while <kbd>C-o</kbd> copies exactly the headers
 currently displayed and no more.  See <a href="Rmail-Display.html#Rmail-Display">Rmail Display</a>.  In addition,
 <kbd>o</kbd> converts the message to Babyl format (used by Rmail in Emacs
 version 22 and before) if the file is in Babyl format; <kbd>C-o</kbd>
-cannot output to Babyl files at all.
+cannot output to Babyl files at all. 
+<!-- FIXME remove BABYL mention in Emacs 25? -->
 
    <p>If the output file is currently visited in an Emacs buffer, the
 output commands append the message to that buffer.  It is up to you to
 save the buffer eventually in its file.
 
-   <p><a name="index-w-_0040r_007b_0028Rmail_0029_007d-2881"></a><a name="index-rmail_002doutput_002dbody_002dto_002dfile-2882"></a>  Sometimes you may receive a message whose body holds the contents of a
+   <p><a name="index-w-_0040r_007b_0028Rmail_0029_007d-3715"></a><a name="index-rmail_002doutput_002dbody_002dto_002dfile-3716"></a>  Sometimes you may receive a message whose body holds the contents of a
 file.  You can save the body to a file (excluding the message header)
 with the <kbd>w</kbd> command (<code>rmail-output-body-to-file</code>).  Often
 these messages contain the intended file name in the &lsquo;<samp><span class="samp">Subject</span></samp>&rsquo;
@@ -92,7 +90,7 @@ second says which files in that directory to offer (all those that
 match the regular expression).  If no files match, you cannot select
 this menu item.
 
-   <p><a name="index-rmail_002ddelete_002dafter_002doutput-2883"></a>  Copying a message with <kbd>o</kbd> or <kbd>C-o</kbd> gives the original copy
+   <p><a name="index-rmail_002ddelete_002dafter_002doutput-3717"></a>  Copying a message with <kbd>o</kbd> or <kbd>C-o</kbd> gives the original copy
 of the message the &lsquo;<samp><span class="samp">filed</span></samp>&rsquo; attribute, so that &lsquo;<samp><span class="samp">filed</span></samp>&rsquo;
 appears in the mode line when such a message is current.
 
@@ -101,7 +99,7 @@ the variable <code>rmail-delete-after-output</code> to <code>t</code>; then the
 <kbd>o</kbd>, <kbd>C-o</kbd> and <kbd>w</kbd> commands delete the original message
 after copying it.  (You can undelete it afterward if you wish.)
 
-   <p><a name="index-rmail_002doutput_002dfile_002dalist-2884"></a>  The variable <code>rmail-output-file-alist</code> lets you specify
+   <p><a name="index-rmail_002doutput_002dfile_002dalist-3718"></a>  The variable <code>rmail-output-file-alist</code> lets you specify
 intelligent defaults for the output file, based on the contents of the
 current message.  The value should be a list whose elements have this
 form:
@@ -115,6 +113,21 @@ name.  The subexpression <var>name-exp</var> may be a string constant giving
 the file name to use, or more generally it may be any Lisp expression
 that returns a file name as a string.  <code>rmail-output-file-alist</code>
 applies to both <kbd>o</kbd> and <kbd>C-o</kbd>.
+
+   <p><a name="index-rmail_002dautomatic_002dfolder_002ddirectives-3719"></a>Rmail can automatically save messages from your primary Rmail file
+(the one that <code>rmail-file-name</code> specifies) to other files, based
+on the value of the variable <code>rmail-automatic-folder-directives</code>. 
+This variable is a list of elements (&lsquo;<samp><span class="samp">directives</span></samp>&rsquo;) that say which
+messages to save where.  Each directive is a list consisting of an
+output file, followed by one or more pairs of a header name and a regular
+expression.  If a message has a header matching the specified regular
+expression, that message is saved to the given file.  If the directive
+has more than one header entry, all must match.  Rmail checks directives
+when it shows a message from the file <code>rmail-file-name</code>, and
+applies the first that matches (if any).  If the output file is
+<code>nil</code>, the message is deleted, not saved.  For example, you can use
+this feature to save messages from a particular address, or with a
+particular subject, to a dedicated file.
 
    </body></html>
 

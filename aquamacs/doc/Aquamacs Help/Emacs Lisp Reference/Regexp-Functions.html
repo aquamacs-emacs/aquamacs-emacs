@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Regexp Functions - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="prev" href="Regexp-Example.html#Regexp-Example" title="Regexp Example">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,12 +44,12 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Regular-Expressions.html#Regular-Expres
 <p>These functions operate on regular expressions.
 
 <div class="defun">
-&mdash; Function: <b>regexp-quote</b><var> string<a name="index-regexp_002dquote-3081"></a></var><br>
+&mdash; Function: <b>regexp-quote</b><var> string<a name="index-regexp_002dquote-3362"></a></var><br>
 <blockquote><p>This function returns a regular expression whose only exact match is
 <var>string</var>.  Using this regular expression in <code>looking-at</code> will
 succeed only if the next characters in the buffer are <var>string</var>;
 using it in a search function will succeed if the text being searched
-contains <var>string</var>.
+contains <var>string</var>.  See <a href="Regexp-Search.html#Regexp-Search">Regexp Search</a>.
 
         <p>This allows you to request an exact string match or search when calling
 a function that wants a regular expression.
@@ -71,11 +68,12 @@ whitespace:
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>regexp-opt</b><var> strings &amp;optional paren<a name="index-regexp_002dopt-3082"></a></var><br>
+&mdash; Function: <b>regexp-opt</b><var> strings &amp;optional paren<a name="index-regexp_002dopt-3363"></a></var><br>
 <blockquote><p>This function returns an efficient regular expression that will match
 any of the strings in the list <var>strings</var>.  This is useful when you
 need to make matching or searching as fast as possible&mdash;for example,
-for Font Lock mode.
+for Font Lock mode<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>. 
+<!-- E.g., see http://debbugs.gnu.org/2816 -->
 
         <p>If the optional argument <var>paren</var> is non-<code>nil</code>, then the
 returned regular expression is always enclosed by at least one
@@ -90,7 +88,7 @@ programming-language keywords and the like).
 regular expression which is equivalent to the actual value
 (but not as efficient):
 
-     <pre class="example">          (defun regexp-opt (strings paren)
+     <pre class="example">          (defun regexp-opt (strings &amp;optional paren)
             (let ((open-paren (if paren "\\(" ""))
                   (close-paren (if paren "\\)" "")))
               (concat open-paren
@@ -100,11 +98,32 @@ regular expression which is equivalent to the actual value
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>regexp-opt-depth</b><var> regexp<a name="index-regexp_002dopt_002ddepth-3083"></a></var><br>
+&mdash; Function: <b>regexp-opt-depth</b><var> regexp<a name="index-regexp_002dopt_002ddepth-3364"></a></var><br>
 <blockquote><p>This function returns the total number of grouping constructs
 (parenthesized expressions) in <var>regexp</var>.  This does not include
 shy groups (see <a href="Regexp-Backslash.html#Regexp-Backslash">Regexp Backslash</a>). 
 </p></blockquote></div>
+
+<!-- Supposedly an internal regexp-opt function, but table.el uses it at least. -->
+<div class="defun">
+&mdash; Function: <b>regexp-opt-charset</b><var> chars<a name="index-regexp_002dopt_002dcharset-3365"></a></var><br>
+<blockquote><p>This function returns a regular expression matching a character in the
+list of characters <var>chars</var>.
+
+     <pre class="example">          (regexp-opt-charset '(?a ?b ?c ?d ?e))
+               &rArr; "[a-e]"
+</pre>
+        </blockquote></div>
+
+<!-- Internal functions: regexp-opt-group -->
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Note that <code>regexp-opt</code> does not
+guarantee that its result is absolutely the most efficient form
+possible.  A hand-tuned regular expression can sometimes be slightly
+more efficient, but is almost never worth the effort.</p>
+
+   <hr></div>
 
    </body></html>
 

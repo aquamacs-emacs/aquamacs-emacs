@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Gnus Startup - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Gnus.html#Gnus" title="Gnus">
 <link rel="prev" href="Buffers-of-Gnus.html#Buffers-of-Gnus" title="Buffers of Gnus">
-<link rel="next" href="Summary-of-Gnus.html#Summary-of-Gnus" title="Summary of Gnus">
+<link rel="next" href="Gnus-Group-Buffer.html#Gnus-Group-Buffer" title="Gnus Group Buffer">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -39,35 +36,47 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <div class="node">
 <a name="Gnus-Startup"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Summary-of-Gnus.html#Summary-of-Gnus">Summary of Gnus</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Gnus-Group-Buffer.html#Gnus-Group-Buffer">Gnus Group Buffer</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Buffers-of-Gnus.html#Buffers-of-Gnus">Buffers of Gnus</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Gnus.html#Gnus">Gnus</a>
 <hr>
 </div>
 
-<h3 class="section">40.2 When Gnus Starts Up</h3>
+<h3 class="section">34.2 When Gnus Starts Up</h3>
 
-<p>At startup, Gnus reads your <samp><span class="file">.newsrc</span></samp> news initialization file
-and attempts to communicate with the local news server, which is a
-repository of news articles.  The news server need not be the same
-computer you are logged in on.
+<p><a name="index-gnus-3825"></a><a name="index-g_t_0040file_007b_002enewsrc_007d-file-3826"></a>  If your system has been set up for reading Usenet news, getting
+started with Gnus is easy&mdash;just type <kbd>M-x gnus</kbd>.
 
-   <p>If you start Gnus and connect to the server, but do not see any
-newsgroups listed in the group buffer, type <kbd>L</kbd> or <kbd>A k</kbd> to get
-a listing of all the groups.  Then type <kbd>u</kbd> to toggle
-subscription to groups.
+   <p>On starting up, Gnus reads your <dfn>news initialization file</dfn>: a
+file named <samp><span class="file">.newsrc</span></samp> in your home directory which lists your
+Usenet newsgroups and subscriptions (this file is not unique to Gnus;
+it is used by many other newsreader programs).  It then tries to
+contact the system's default news server, which is typically specified
+by the <samp><span class="env">NNTPSERVER</span></samp> environment variable.
 
-   <p>The first time you start Gnus, Gnus subscribes you to a few selected
-groups.  All other groups start out as <dfn>killed groups</dfn> for you; you
-can list them with <kbd>A k</kbd>.  All new groups that subsequently come to
-exist at the news server become <dfn>zombie groups</dfn> for you; type <kbd>A
-z</kbd> to list them.  You can subscribe to a group shown in these lists
-using the <kbd>u</kbd> command.
+   <p>If your system does not have a default news server, or if you wish
+to use Gnus for reading email, then before invoking <kbd>M-x gnus</kbd> you
+need to tell Gnus where to get news and/or mail.  To do this,
+customize the variables <code>gnus-select-method</code> and/or
+<code>gnus-secondary-select-methods</code>. 
+See <a href="../gnus/Finding-the-News.html#Finding-the-News">Finding the News</a>.
 
-   <p>When you quit Gnus with <kbd>q</kbd>, it automatically records in your
-<samp><span class="file">.newsrc</span></samp> and <samp><span class="file">.newsrc.eld</span></samp> initialization files the
-subscribed or unsubscribed status of all groups.  You should normally
-not edit these files manually, but you may if you know how.
+   <p>Once Gnus has started up, it displays the group buffer.  By default,
+the group buffer shows only a small number of <dfn>subscribed groups</dfn>. 
+Groups with other statuses&mdash;<dfn>unsubscribed</dfn>, <dfn>killed</dfn>, or
+<dfn>zombie</dfn>&mdash;are hidden.  The first time you start Gnus, any group
+to which you are not subscribed is made into a killed group; any group
+that subsequently appears on the news server becomes a zombie group.
+
+   <p>To proceed, you must select a group in the group buffer to open the
+summary buffer for that group; then, select an article in the summary
+buffer to view its article buffer in a separate window.  The following
+sections explain how to use the group and summary buffers to do this.
+
+   <p>To quit Gnus, type <kbd>q</kbd> in the group buffer.  This automatically
+records your group statuses in the files <samp><span class="file">.newsrc</span></samp> and
+<samp><span class="file">.newsrc.eld</span></samp>, so that they take effect in subsequent Gnus
+sessions.
 
    </body></html>
 

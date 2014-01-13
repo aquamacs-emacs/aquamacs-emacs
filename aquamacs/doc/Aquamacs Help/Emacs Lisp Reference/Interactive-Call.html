@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Interactive Call - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Distinguish-Interactive.html#Distinguish-Interactive" title="Distinguish Interactive">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,29 +43,32 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Command-Loop.html#Command-Loop">Command
 
 <h3 class="section">21.3 Interactive Call</h3>
 
-<p><a name="index-interactive-call-1236"></a>
+<p><a name="index-interactive-call-1324"></a>
   After the command loop has translated a key sequence into a command,
 it invokes that command using the function <code>command-execute</code>.  If
 the command is a function, <code>command-execute</code> calls
 <code>call-interactively</code>, which reads the arguments and calls the
 command.  You can also call these functions yourself.
 
+   <p>Note that the term &ldquo;command&rdquo;, in this context, refers to an
+interactively callable function (or function-like object), or a
+keyboard macro.  It does not refer to the key sequence used to invoke
+a command (see <a href="Keymaps.html#Keymaps">Keymaps</a>).
+
 <div class="defun">
-&mdash; Function: <b>commandp</b><var> object &amp;optional for-call-interactively<a name="index-commandp-1237"></a></var><br>
-<blockquote><p>Returns <code>t</code> if <var>object</var> is suitable for calling interactively;
-that is, if <var>object</var> is a command.  Otherwise, returns <code>nil</code>.
+&mdash; Function: <b>commandp</b><var> object &amp;optional for-call-interactively<a name="index-commandp-1325"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if <var>object</var> is a command. 
+Otherwise, it returns <code>nil</code>.
 
-        <p>Interactively-callable objects include strings and vectors (which are
-treated as keyboard macros), lambda expressions that contain a
-top-level <code>interactive</code> form (see <a href="Using-Interactive.html#Using-Interactive">Using Interactive</a>),
-byte-code function objects made from such lambda expressions, autoload
-objects that are declared as interactive (non-<code>nil</code> fourth
-argument to <code>autoload</code>), and some primitive functions.
-
-        <p>A symbol satisfies <code>commandp</code> if it has a non-<code>nil</code>
+        <p>Commands include strings and vectors (which are treated as keyboard
+macros), lambda expressions that contain a top-level
+<code>interactive</code> form (see <a href="Using-Interactive.html#Using-Interactive">Using Interactive</a>), byte-code
+function objects made from such lambda expressions, autoload objects
+that are declared as interactive (non-<code>nil</code> fourth argument to
+<code>autoload</code>), and some primitive functions.  Also, a symbol is
+considered a command if it has a non-<code>nil</code>
 <code>interactive-form</code> property, or if its function definition
-satisfies <code>commandp</code>.  Keys and keymaps are not commands. 
-Rather, they are used to look up commands (see <a href="Keymaps.html#Keymaps">Keymaps</a>).
+satisfies <code>commandp</code>.
 
         <p>If <var>for-call-interactively</var> is non-<code>nil</code>, then
 <code>commandp</code> returns <code>t</code> only for objects that
@@ -79,17 +79,32 @@ realistic example of using <code>commandp</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>call-interactively</b><var> command &amp;optional record-flag keys<a name="index-call_002dinteractively-1238"></a></var><br>
+&mdash; Function: <b>call-interactively</b><var> command &amp;optional record-flag keys<a name="index-call_002dinteractively-1326"></a></var><br>
 <blockquote><p>This function calls the interactively callable function <var>command</var>,
-reading arguments according to its interactive calling specifications. 
-It returns whatever <var>command</var> returns.  An error is signaled if
-<var>command</var> is not a function or if it cannot be called
-interactively (i.e., is not a command).  Note that keyboard macros
-(strings and vectors) are not accepted, even though they are
-considered commands, because they are not functions.  If <var>command</var>
-is a symbol, then <code>call-interactively</code> uses its function definition.
+providing arguments according to its interactive calling specifications. 
+It returns whatever <var>command</var> returns.
 
-        <p><a name="index-record-command-history-1239"></a>If <var>record-flag</var> is non-<code>nil</code>, then this command and its
+        <p>If, for instance, you have a function with the following signature:
+
+     <pre class="example">          (defun foo (begin end)
+            (interactive "r")
+            ...)
+</pre>
+        <p>then saying
+
+     <pre class="example">          (call-interactively 'foo)
+</pre>
+        <p>will call <code>foo</code> with the region (<code>point</code> and <code>mark</code>) as
+the arguments.
+
+        <p>An error is signaled if <var>command</var> is not a function or if it
+cannot be called interactively (i.e., is not a command).  Note that
+keyboard macros (strings and vectors) are not accepted, even though
+they are considered commands, because they are not functions.  If
+<var>command</var> is a symbol, then <code>call-interactively</code> uses its
+function definition.
+
+        <p><a name="index-record-command-history-1327"></a>If <var>record-flag</var> is non-<code>nil</code>, then this command and its
 arguments are unconditionally added to the list <code>command-history</code>. 
 Otherwise, the command is added only if it uses the minibuffer to read
 an argument.  See <a href="Command-History.html#Command-History">Command History</a>.
@@ -102,21 +117,21 @@ See <a href="Definition-of-this_002dcommand_002dkeys_002dvector.html#Definition-
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>command-execute</b><var> command &amp;optional record-flag keys special<a name="index-command_002dexecute-1240"></a></var><br>
-<blockquote><p><a name="index-keyboard-macro-execution-1241"></a>This function executes <var>command</var>.  The argument <var>command</var> must
+&mdash; Function: <b>command-execute</b><var> command &amp;optional record-flag keys special<a name="index-command_002dexecute-1328"></a></var><br>
+<blockquote><p><a name="index-keyboard-macro-execution-1329"></a>This function executes <var>command</var>.  The argument <var>command</var> must
 satisfy the <code>commandp</code> predicate; i.e., it must be an interactively
 callable function or a keyboard macro.
 
         <p>A string or vector as <var>command</var> is executed with
 <code>execute-kbd-macro</code>.  A function is passed to
-<code>call-interactively</code>, along with the optional <var>record-flag</var>
-and <var>keys</var>.
+<code>call-interactively</code> (see above), along with the
+<var>record-flag</var> and <var>keys</var> arguments.
 
-        <p>A symbol is handled by using its function definition in its place.  A
-symbol with an <code>autoload</code> definition counts as a command if it was
-declared to stand for an interactively callable function.  Such a
-definition is handled by loading the specified library and then
-rechecking the definition of the symbol.
+        <p>If <var>command</var> is a symbol, its function definition is used in its
+place.  A symbol with an <code>autoload</code> definition counts as a
+command if it was declared to stand for an interactively callable
+function.  Such a definition is handled by loading the specified
+library and then rechecking the definition of the symbol.
 
         <p>The argument <var>special</var>, if given, means to ignore the prefix
 argument and not clear it.  This is used for executing special events
@@ -124,19 +139,19 @@ argument and not clear it.  This is used for executing special events
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>execute-extended-command</b><var> prefix-argument<a name="index-execute_002dextended_002dcommand-1242"></a></var><br>
-<blockquote><p><a name="index-read-command-name-1243"></a>This function reads a command name from the minibuffer using
+&mdash; Command: <b>execute-extended-command</b><var> prefix-argument<a name="index-execute_002dextended_002dcommand-1330"></a></var><br>
+<blockquote><p><a name="index-read-command-name-1331"></a>This function reads a command name from the minibuffer using
 <code>completing-read</code> (see <a href="Completion.html#Completion">Completion</a>).  Then it uses
 <code>command-execute</code> to call the specified command.  Whatever that
 command returns becomes the value of <code>execute-extended-command</code>.
 
-        <p><a name="index-execute-with-prefix-argument-1244"></a>If the command asks for a prefix argument, it receives the value
+        <p><a name="index-execute-with-prefix-argument-1332"></a>If the command asks for a prefix argument, it receives the value
 <var>prefix-argument</var>.  If <code>execute-extended-command</code> is called
 interactively, the current raw prefix argument is used for
 <var>prefix-argument</var>, and thus passed on to whatever command is run.
 
      <!-- !!! Should this be @kindex? -->
-        <p><a name="index-g_t_0040kbd_007bM_002dx_007d-1245"></a><code>execute-extended-command</code> is the normal definition of <kbd>M-x</kbd>,
+        <p><a name="index-g_t_0040kbd_007bM_002dx_007d-1333"></a><code>execute-extended-command</code> is the normal definition of <kbd>M-x</kbd>,
 so it uses the string &lsquo;<samp><span class="samp">M-x&nbsp;</span></samp>&rsquo;<!-- /@w --> as a prompt.  (It would be better
 to take the prompt from the events used to invoke
 <code>execute-extended-command</code>, but that is painful to implement.)  A

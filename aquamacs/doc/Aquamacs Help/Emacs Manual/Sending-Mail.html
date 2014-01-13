@@ -1,21 +1,18 @@
 <html lang="en">
 <head>
 <title>Sending Mail - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Picture-Mode.html#Picture-Mode" title="Picture Mode">
+<link rel="prev" href="Calendar_002fDiary.html#Calendar_002fDiary" title="Calendar/Diary">
 <link rel="next" href="Rmail.html#Rmail" title="Rmail">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -39,18 +36,18 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <a name="Sending-Mail"></a>
 <p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Rmail.html#Rmail">Rmail</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Picture-Mode.html#Picture-Mode">Picture Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Calendar_002fDiary.html#Calendar_002fDiary">Calendar/Diary</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
 <hr>
 </div>
 
-<h2 class="chapter">35 Sending Mail</h2>
+<h2 class="chapter">32 Sending Mail</h2>
 
-<p><a name="index-sending-mail-2730"></a><a name="index-mail-2731"></a><a name="index-email-2732"></a><a name="index-message-2733"></a>
-<a name="index-C_002dx-m-2734"></a><a name="index-compose_002dmail-2735"></a>  To send an <dfn>e-mail</dfn> message in Emacs, type <kbd>C-x m</kbd>.  This
-selects and initializes a buffer named &lsquo;<samp><span class="samp">*mail*</span></samp>&rsquo;, where you can
-edit the text and headers of the message.  Finally, type <kbd>C-c C-s</kbd>
-or <kbd>C-c C-c</kbd> to send the message.
+<p><a name="index-sending-mail-3564"></a><a name="index-mail-3565"></a><a name="index-email-3566"></a><a name="index-message-3567"></a>
+<a name="index-C_002dx-m-3568"></a><a name="index-compose_002dmail-3569"></a>  To send an email message from Emacs, type <kbd>C-x m</kbd>.  This
+switches to a buffer named <samp><span class="file">*unsent mail*</span></samp>, where you can edit
+the text and headers of the message.  When done, type <kbd>C-c C-s</kbd> or
+<kbd>C-c C-c</kbd> to send it.
 
      <dl>
 <dt><kbd>C-x m</kbd><dd>Begin composing mail (<code>compose-mail</code>). 
@@ -61,32 +58,24 @@ or <kbd>C-c C-c</kbd> to send the message.
 (<code>message-send-and-exit</code>). 
 </dl>
 
-   <p><a name="index-C_002dx-4-m-2736"></a><a name="index-compose_002dmail_002dother_002dwindow-2737"></a><a name="index-C_002dx-5-m-2738"></a><a name="index-compose_002dmail_002dother_002dframe-2739"></a>The command <kbd>C-x 4 m</kbd> (<code>compose-mail-other-window</code>) does the
-same as <kbd>C-x m</kbd>, except it displays the mail buffer in a different
-window.  The command <kbd>C-x 5 m</kbd> (<code>compose-mail-other-frame</code>)
-creates a new frame for the mail buffer.
+   <p>The mail buffer is an ordinary Emacs buffer, so you can switch to
+other buffers while composing the mail.  If you want to send another
+mail before finishing the current one, type <kbd>C-x m</kbd> again to open
+a new mail buffer whose name has a different numeric suffix
+(see <a href="Misc-Buffer.html#Misc-Buffer">Misc Buffer</a>).  If you invoke the command with a prefix
+argument, <kbd>C-u&nbsp;C-x&nbsp;m</kbd><!-- /@w -->, Emacs switches back to the last mail
+buffer, and asks if you want to erase the message in that buffer; if
+you answer no, this lets you pick up editing the message where you
+left off.
 
-   <p>Because the mail buffer is an ordinary Emacs buffer, you can switch
-to other buffers while in the middle of composing mail, and switch
-back later (or never).  If you type <kbd>C-x m</kbd> again when you have
-been composing another message but have not sent it, Emacs asks for
-confirmation before erasing the old message.  If you answer <kbd>n</kbd>,
-Emacs selects the mail buffer with its old contents, so you can finish
-the old message and send it.  <kbd>C-u C-x m</kbd> is another way to do
-this.  Sending the message marks the mail buffer &ldquo;unmodified,&rdquo; which
-avoids the need for confirmation when <kbd>C-x m</kbd> is next used.
+   <p><a name="index-C_002dx-4-m-3570"></a><a name="index-compose_002dmail_002dother_002dwindow-3571"></a><a name="index-C_002dx-5-m-3572"></a><a name="index-compose_002dmail_002dother_002dframe-3573"></a>  The command <kbd>C-x 4 m</kbd> (<code>compose-mail-other-window</code>) does
+the same as <kbd>C-x m</kbd>, except it displays the mail buffer in a
+different window.  The command <kbd>C-x 5 m</kbd>
+(<code>compose-mail-other-frame</code>) does it in a new frame.
 
-   <p>If you want to send another message before finishing the current
-message, use the command <kbd>M-x rename-uniquely</kbd> to rename the
-current mail buffer (see <a href="Misc-Buffer.html#Misc-Buffer">Misc Buffer</a>).  Then you can use <kbd>C-x
-m</kbd> to make a new mail buffer, and work with each mail buffer
-independently.
-
-   <p>Before using Emacs to send mail, you may need to customize the
-variable <code>send-mail-function</code> if your system is not set up to
-deliver mail directly via SMTP (see <a href="Mail-Sending.html#Mail-Sending">Mail Sending</a>).  In addition,
-you may need to customize <code>user-mail-address</code> if the system
-cannot receive mail via SMTP (see <a href="Mail-Headers.html#Mail-Headers">Mail Headers</a>).
+   <p>When you type <kbd>C-c C-c</kbd> or <kbd>C-c C-s</kbd> to send the mail, Emacs
+may ask you how it should deliver the mail&mdash;either directly via SMTP,
+or using some other method.  See <a href="Mail-Sending.html#Mail-Sending">Mail Sending</a>, for details.
 
 <ul class="menu">
 <li><a accesskey="1" href="Mail-Format.html#Mail-Format">Format</a>:         Format of a mail message. 

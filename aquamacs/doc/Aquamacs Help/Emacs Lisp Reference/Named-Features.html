@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Named Features - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Where-Defined.html#Where-Defined" title="Where Defined">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,7 +43,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Loading.html#Loading">Loading</a>
 
 <h3 class="section">15.7 Features</h3>
 
-<p><a name="index-features-822"></a><a name="index-requiring-features-823"></a><a name="index-providing-features-824"></a>
+<p><a name="index-features-882"></a><a name="index-requiring-features-883"></a><a name="index-providing-features-884"></a>
   <code>provide</code> and <code>require</code> are an alternative to
 <code>autoload</code> for loading files automatically.  They work in terms of
 named <dfn>features</dfn>.  Autoloading is triggered by calling a specific
@@ -59,37 +56,43 @@ feature.  Another program that uses them may ensure they are defined by
 <dfn>requiring</dfn> the feature.  This loads the file of definitions if it
 hasn't been loaded already.
 
-   <p><a name="index-load-error-with-require-825"></a>  To require the presence of a feature, call <code>require</code> with the
+   <p><a name="index-load-error-with-require-885"></a>  To require the presence of a feature, call <code>require</code> with the
 feature name as argument.  <code>require</code> looks in the global variable
 <code>features</code> to see whether the desired feature has been provided
 already.  If not, it loads the feature from the appropriate file.  This
 file should call <code>provide</code> at the top level to add the feature to
 <code>features</code>; if it fails to do so, <code>require</code> signals an error.
 
-   <p>For example, in <samp><span class="file">emacs/lisp/prolog.el</span></samp>,
-the definition for <code>run-prolog</code> includes the following code:
+   <p>For example, in <samp><span class="file">idlwave.el</span></samp>, the definition for
+<code>idlwave-complete-filename</code> includes the following code:
 
-<pre class="smallexample">     (defun run-prolog ()
-       "Run an inferior Prolog process, with I/O via buffer *prolog*."
-       (interactive)
-       (require 'comint)
-       (switch-to-buffer (make-comint "prolog" prolog-program-name))
-       (inferior-prolog-mode))
+<pre class="example">     (defun idlwave-complete-filename ()
+       "Use the comint stuff to complete a file name."
+        (require 'comint)
+        (let* ((comint-file-name-chars "~/A-Za-z0-9+@:_.$#%={}\\-")
+               (comint-completion-addsuffix nil)
+               ...)
+            (comint-dynamic-complete-filename)))
 </pre>
    <p class="noindent">The expression <code>(require 'comint)</code> loads the file <samp><span class="file">comint.el</span></samp>
-if it has not yet been loaded.  This ensures that <code>make-comint</code> is
-defined.  Features are normally named after the files that provide them,
-so that <code>require</code> need not be given the file name.
+if it has not yet been loaded, ensuring that
+<code>comint-dynamic-complete-filename</code> is defined.  Features are
+normally named after the files that provide them, so that
+<code>require</code> need not be given the file name.  (Note that it is
+important that the <code>require</code> statement be outside the body of the
+<code>let</code>.  Loading a library while its variables are let-bound can
+have unintended consequences, namely the variables becoming unbound
+after the let exits.)
 
    <p>The <samp><span class="file">comint.el</span></samp> file contains the following top-level expression:
 
-<pre class="smallexample">     (provide 'comint)
+<pre class="example">     (provide 'comint)
 </pre>
    <p class="noindent">This adds <code>comint</code> to the global <code>features</code> list, so that
 <code>(require 'comint)</code> will henceforth know that nothing needs to be
 done.
 
-   <p><a name="index-byte_002dcompiling-_0040code_007brequire_007d-826"></a>  When <code>require</code> is used at top level in a file, it takes effect
+   <p><a name="index-byte_002dcompiling-_0040code_007brequire_007d-886"></a>  When <code>require</code> is used at top level in a file, it takes effect
 when you byte-compile that file (see <a href="Byte-Compilation.html#Byte-Compilation">Byte Compilation</a>) as well as
 when you load it.  This is in case the required package contains macros
 that the byte compiler must know about.  It also avoids byte compiler
@@ -102,7 +105,7 @@ ensure that a file of definitions is loaded before it is byte-compiled
 by including a <code>provide</code> followed by a <code>require</code> for the same
 feature, as in the following example.
 
-<pre class="smallexample">     (provide 'my-feature)  ; <span class="roman">Ignored by byte compiler,</span>
+<pre class="example">     (provide 'my-feature)  ; <span class="roman">Ignored by byte compiler,</span>
                             ;   <span class="roman">evaluated by </span><code>load</code><span class="roman">.</span>
      (require 'my-feature)  ; <span class="roman">Evaluated by byte compiler.</span>
 </pre>
@@ -112,7 +115,7 @@ execute the <code>provide</code> call, so the subsequent <code>require</code> ca
 does nothing when the file is loaded.
 
 <div class="defun">
-&mdash; Function: <b>provide</b><var> feature &amp;optional subfeatures<a name="index-provide-827"></a></var><br>
+&mdash; Function: <b>provide</b><var> feature &amp;optional subfeatures<a name="index-provide-887"></a></var><br>
 <blockquote><p>This function announces that <var>feature</var> is now loaded, or being
 loaded, into the current Emacs session.  This means that the facilities
 associated with <var>feature</var> are or will be available for other Lisp
@@ -133,7 +136,7 @@ package, which might or might not be loaded, or might or might not be
 present in a given version.  See <a href="Network-Feature-Testing.html#Network-Feature-Testing">Network Feature Testing</a>, for
 an example.
 
-     <pre class="smallexample">          features
+     <pre class="example">          features
                &rArr; (bar bish)
           
           (provide 'foo)
@@ -148,7 +151,7 @@ See <a href="Autoload.html#Autoload">Autoload</a>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>require</b><var> feature &amp;optional filename noerror<a name="index-require-828"></a></var><br>
+&mdash; Function: <b>require</b><var> feature &amp;optional filename noerror<a name="index-require-888"></a></var><br>
 <blockquote><p>This function checks whether <var>feature</var> is present in the current
 Emacs session (using <code>(featurep </code><var>feature</var><code>)</code>; see below).  The
 argument <var>feature</var> must be a symbol.
@@ -173,17 +176,17 @@ was not provided</span></samp>&rsquo;.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>featurep</b><var> feature &amp;optional subfeature<a name="index-featurep-829"></a></var><br>
+&mdash; Function: <b>featurep</b><var> feature &amp;optional subfeature<a name="index-featurep-889"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if <var>feature</var> has been provided in
 the current Emacs session (i.e., if <var>feature</var> is a member of
 <code>features</code>.)  If <var>subfeature</var> is non-<code>nil</code>, then the
 function returns <code>t</code> only if that subfeature is provided as well
-(i.e. if <var>subfeature</var> is a member of the <code>subfeature</code>
+(i.e., if <var>subfeature</var> is a member of the <code>subfeature</code>
 property of the <var>feature</var> symbol.) 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>features</b><var><a name="index-features-830"></a></var><br>
+&mdash; Variable: <b>features</b><var><a name="index-features-890"></a></var><br>
 <blockquote><p>The value of this variable is a list of symbols that are the features
 loaded in the current Emacs session.  Each symbol was put in this list
 with a call to <code>provide</code>.  The order of the elements in the

@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Reverting - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Autorevert.html#Autorevert" title="Autorevert">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,21 +42,24 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
 <hr>
 </div>
 
-<h3 class="section">22.4 Reverting a Buffer</h3>
+<h3 class="section">18.4 Reverting a Buffer</h3>
 
-<p><a name="index-revert_002dbuffer-893"></a><a name="index-drastic-changes-894"></a><a name="index-reread-a-file-895"></a>
-  If you have made extensive changes to a file and then change your mind
-about them, you can get rid of them by reading in the previous version
-of the file.  To do this, use <kbd>M-x revert-buffer</kbd>, which operates on
-the current buffer.  Since reverting a buffer unintentionally could lose
-a lot of work, you must confirm this command with <kbd>yes</kbd>.
+<p><a name="index-revert_002dbuffer-1085"></a><a name="index-drastic-changes-1086"></a><a name="index-reread-a-file-1087"></a>
+  If you have made extensive changes to a file-visiting buffer and
+then change your mind, you can <dfn>revert</dfn> the changes and go back to
+the saved version of the file.  To do this, type <kbd>M-x
+revert-buffer</kbd>.  Since reverting unintentionally could lose a lot of
+work, Emacs asks for confirmation first.
 
-   <p><code>revert-buffer</code> tries to position point in such a way that, if
-the file was edited only slightly, you will be at approximately the
-same piece of text after reverting as before.  However, if you have made
-drastic changes, point may wind up in a totally different piece of text.
+   <p>The <code>revert-buffer</code> command tries to position point in such a
+way that, if the file was edited only slightly, you will be at
+approximately the same part of the text as before.  But if you have
+made major changes, point may end up in a totally different location.
 
-   <p>Reverting marks the buffer as &ldquo;not modified&rdquo;.
+   <p>Reverting marks the buffer as &ldquo;not modified&rdquo;.  It also clears the
+buffer's undo history (see <a href="Undo.html#Undo">Undo</a>).  Thus, the reversion cannot be
+undone&mdash;if you change your mind yet again, you can't use the undo
+commands to bring the reverted changes back.
 
    <p>Some kinds of buffers that are not associated with files, such as
 Dired buffers, can also be reverted.  For them, reverting means
@@ -67,7 +67,7 @@ recalculating their contents.  Buffers created explicitly with
 <kbd>C-x b</kbd> cannot be reverted; <code>revert-buffer</code> reports an error
 if you try.
 
-   <p><a name="index-revert_002dwithout_002dquery-896"></a>  When you edit a file that changes automatically and frequently&mdash;for
+   <p><a name="index-revert_002dwithout_002dquery-1088"></a>  When you edit a file that changes automatically and frequently&mdash;for
 example, a log of output from a process that continues to run&mdash;it may
 be useful for Emacs to revert the file without querying you.  To
 request this behavior, set the variable <code>revert-without-query</code> to
@@ -77,15 +77,14 @@ revert it automatically if it has changed&mdash;provided the buffer itself
 is not modified.  (If you have edited the text, it would be wrong to
 discard your changes.)
 
-   <p><a name="index-Global-Auto_002dRevert-mode-897"></a><a name="index-mode_002c-Global-Auto_002dRevert-898"></a><a name="index-Auto_002dRevert-mode-899"></a><a name="index-mode_002c-Auto_002dRevert-900"></a><a name="index-global_002dauto_002drevert_002dmode-901"></a><a name="index-auto_002drevert_002dmode-902"></a><a name="index-auto_002drevert_002dtail_002dmode-903"></a><a name="index-auto_002drevert_002dinterval-904"></a>
-  In addition, you can tell Emacs to periodically revert a buffer by
-typing <kbd>M-x auto-revert-mode</kbd>.  This turns on Auto-Revert mode, a
-minor mode that makes Emacs automatically revert the current buffer
-every five seconds.  You can change this interval through the variable
-<code>auto-revert-interval</code>.  Typing <kbd>M-x global-auto-revert-mode</kbd>
-enables Global Auto-Revert mode, which does the same for all file
-buffers.  Auto-Revert mode and Global Auto-Revert modes do not check
-or revert remote files, because that is usually too slow.
+   <p><a name="index-Global-Auto_002dRevert-mode-1089"></a><a name="index-mode_002c-Global-Auto_002dRevert-1090"></a><a name="index-Auto_002dRevert-mode-1091"></a><a name="index-mode_002c-Auto_002dRevert-1092"></a><a name="index-global_002dauto_002drevert_002dmode-1093"></a><a name="index-auto_002drevert_002dmode-1094"></a><a name="index-auto_002drevert_002dtail_002dmode-1095"></a><a name="index-auto_002drevert_002dinterval-1096"></a>  You can also tell Emacs to revert buffers periodically.  To do this
+for a specific buffer, enable the minor mode Auto-Revert mode by
+typing <kbd>M-x auto-revert-mode</kbd>.  This automatically reverts the
+current buffer every five seconds; you can change the interval through
+the variable <code>auto-revert-interval</code>.  To do the same for all file
+buffers, type <kbd>M-x global-auto-revert-mode</kbd> to enable Global
+Auto-Revert mode.  These minor modes do not check or revert remote
+files, because that is usually too slow.
 
    <p>One use of Auto-Revert mode is to &ldquo;tail&rdquo; a file such as a system
 log, so that changes made to that file by other programs are
@@ -96,12 +95,12 @@ the end, use Auto-Revert Tail mode instead
 (<code>auto-revert-tail-mode</code>).  It is more efficient for this. 
 Auto-Revert Tail mode works also for remote files.
 
-   <p>See <a href="VC-Mode-Line.html#VC-Mode-Line">VC Mode Line</a>, for Auto Revert peculiarities in buffers that
-visit files under version control.
+   <p>See <a href="VC-Undo.html#VC-Undo">VC Undo</a>, for commands to revert to earlier versions of files
+under version control.  See <a href="VC-Mode-Line.html#VC-Mode-Line">VC Mode Line</a>, for Auto Revert
+peculiarities when visiting files under version control.
 
 <!-- This is part of the Emacs manual. -->
-<!-- Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 -->
-<!-- Free Software Foundation, Inc. -->
+<!-- Copyright (C) 2004-2013 Free Software Foundation, Inc. -->
 <!-- See file emacs.texi for copying conditions. -->
 <!-- This file is included either in emacs-xtra.texi (when producing the -->
 <!-- printed version) or in the main Emacs manual (for the on-line version). -->

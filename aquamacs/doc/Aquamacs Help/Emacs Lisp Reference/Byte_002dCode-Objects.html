@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Byte-Code Objects - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Disassembly.html#Disassembly" title="Disassembly">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,19 +44,18 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Byte-Compilation.html#Byte-Compilation"
 
 <h3 class="section">16.7 Byte-Code Function Objects</h3>
 
-<p><a name="index-compiled-function-870"></a><a name="index-byte_002dcode-function-871"></a>
+<p><a name="index-compiled-function-927"></a><a name="index-byte_002dcode-function-928"></a><a name="index-byte_002dcode-object-929"></a>
   Byte-compiled functions have a special data type: they are
-<dfn>byte-code function objects</dfn>.
+<dfn>byte-code function objects</dfn>.  Whenever such an object appears as
+a function to be called, Emacs uses the byte-code interpreter to
+execute the byte-code.
 
-   <p>Internally, a byte-code function object is much like a vector;
-however, the evaluator handles this data type specially when it appears
-as a function to be called.  The printed representation for a byte-code
-function object is like that for a vector, with an additional &lsquo;<samp><span class="samp">#</span></samp>&rsquo;
-before the opening &lsquo;<samp><span class="samp">[</span></samp>&rsquo;.
-
-   <p>A byte-code function object must have at least four elements; there is
-no maximum number, but only the first six elements have any normal use. 
-They are:
+   <p>Internally, a byte-code function object is much like a vector; its
+elements can be accessed using <code>aref</code>.  Its printed
+representation is like that for a vector, with an additional &lsquo;<samp><span class="samp">#</span></samp>&rsquo;
+before the opening &lsquo;<samp><span class="samp">[</span></samp>&rsquo;.  It must have at least four elements;
+there is no maximum number, but only the first six elements have any
+normal use.  They are:
 
      <dl>
 <dt><var>arglist</var><dd>The list of argument symbols.
@@ -89,13 +85,13 @@ representation.  It is the definition of the command
        [arg 1 forward-sexp]
        2
        254435
-       "p"]
+       "^p"]
 </pre>
    <p>The primitive way to create a byte-code object is with
 <code>make-byte-code</code>:
 
 <div class="defun">
-&mdash; Function: <b>make-byte-code</b><var> &amp;rest elements<a name="index-make_002dbyte_002dcode-872"></a></var><br>
+&mdash; Function: <b>make-byte-code</b><var> &amp;rest elements<a name="index-make_002dbyte_002dcode-930"></a></var><br>
 <blockquote><p>This function constructs and returns a byte-code function object
 with <var>elements</var> as its elements. 
 </p></blockquote></div>
@@ -104,10 +100,6 @@ with <var>elements</var> as its elements.
 function yourself, because if they are inconsistent, Emacs may crash
 when you call the function.  Always leave it to the byte compiler to
 create these objects; it makes the elements consistent (we hope).
-
-   <p>You can access the elements of a byte-code object using <code>aref</code>;
-you can also use <code>vconcat</code> to create a vector with the same
-elements.
 
    </body></html>
 

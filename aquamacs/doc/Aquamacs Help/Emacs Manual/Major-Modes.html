@@ -1,21 +1,18 @@
 <html lang="en">
 <head>
 <title>Major Modes - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="International.html#International" title="International">
-<link rel="next" href="Indentation.html#Indentation" title="Indentation">
+<link rel="up" href="Modes.html#Modes" title="Modes">
+<link rel="next" href="Minor-Modes.html#Minor-Modes" title="Minor Modes">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -38,60 +35,92 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <div class="node">
 <a name="Major-Modes"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Indentation.html#Indentation">Indentation</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="International.html#International">International</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Minor-Modes.html#Minor-Modes">Minor Modes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Modes.html#Modes">Modes</a>
 <hr>
 </div>
 
-<h2 class="chapter">27 Major Modes</h2>
+<h3 class="section">23.1 Major Modes</h3>
 
-<p><a name="index-major-modes-1498"></a><a name="index-mode_002c-major-1499"></a><a name="index-TAB-_0040r_007b_0028and-major-modes_0029_007d-1500"></a><a name="index-DEL-_0040r_007b_0028and-major-modes_0029_007d-1501"></a><a name="index-C_002dj-_0040r_007b_0028and-major-modes_0029_007d-1502"></a>
-  Emacs provides many alternative <dfn>major modes</dfn>, each of which
-customizes Emacs for editing text of a particular sort.  The major modes
-are mutually exclusive, and each buffer has one major mode at any time. 
-The mode line normally shows the name of the current major mode, in
-parentheses (see <a href="Mode-Line.html#Mode-Line">Mode Line</a>).
+<p><a name="index-major-modes-1713"></a><a name="index-mode_002c-major-1714"></a><a name="index-TAB-_0040r_007b_0028and-major-modes_0029_007d-1715"></a><a name="index-DEL-_0040r_007b_0028and-major-modes_0029_007d-1716"></a><a name="index-C_002dj-_0040r_007b_0028and-major-modes_0029_007d-1717"></a>
+  Every buffer possesses a major mode, which determines the editing
+behavior of Emacs while that buffer is current.  The mode line
+normally shows the name of the current major mode, in parentheses
+(see <a href="Mode-Line.html#Mode-Line">Mode Line</a>).
 
    <p>The least specialized major mode is called <dfn>Fundamental mode</dfn>. 
 This mode has no mode-specific redefinitions or variable settings, so
 that each Emacs command behaves in its most general manner, and each
-user option variable is in its default state.  For editing text of a
-specific type that Emacs knows about, such as Lisp code or English
-text, you should switch to the appropriate major mode, such as Lisp
-mode or Text mode.
+user option variable is in its default state.
 
-   <p>Selecting a major mode changes the meanings of a few keys to become
-more specifically adapted to the language being edited.  The ones that
-are changed frequently are &lt;TAB&gt;, &lt;DEL&gt;, and <kbd>C-j</kbd>.  The
-prefix key <kbd>C-c</kbd> normally contains mode-specific commands.  In
-addition, the commands which handle comments use the mode to determine
-how comments are to be delimited.  Many major modes redefine the
-syntactical properties of characters appearing in the buffer. 
-See <a href="Syntax.html#Syntax">Syntax</a>.
+   <p>For editing text of a specific type that Emacs knows about, such as
+Lisp code or English text, you typically use a more specialized major
+mode, such as Lisp mode or Text mode.  Most major modes fall into
+three major groups.  The first group contains modes for normal text,
+either plain or with mark-up.  It includes Text mode, HTML mode, SGML
+mode, TeX mode and Outline mode.  The second group contains modes
+for specific programming languages.  These include Lisp mode (which
+has several variants), C mode, Fortran mode, and others.  The third
+group consists of major modes that are not associated directly with
+files; they are used in buffers created for specific purposes by
+Emacs, such as Dired mode for buffers made by Dired (see <a href="Dired.html#Dired">Dired</a>),
+Message mode for buffers made by <kbd>C-x m</kbd> (see <a href="Sending-Mail.html#Sending-Mail">Sending Mail</a>),
+and Shell mode for buffers used to communicate with an inferior shell
+process (see <a href="Interactive-Shell.html#Interactive-Shell">Interactive Shell</a>).
 
-   <p>The major modes fall into three major groups.  The first group
-contains modes for normal text, either plain or with mark-up.  It
-includes Text mode, HTML mode, SGML mode, TeX mode and Outline
-mode.  The second group contains modes for specific programming
-languages.  These include Lisp mode (which has several variants), C
-mode, Fortran mode, and others.  The remaining major modes are not
-intended for use on users' files; they are used in buffers created for
-specific purposes by Emacs, such as Dired mode for buffers made by
-Dired (see <a href="Dired.html#Dired">Dired</a>), Message mode for buffers made by <kbd>C-x m</kbd>
-(see <a href="Sending-Mail.html#Sending-Mail">Sending Mail</a>), and Shell mode for buffers used for
-communicating with an inferior shell process (see <a href="Interactive-Shell.html#Interactive-Shell">Interactive Shell</a>).
+   <p>Usually, the major mode is automatically set by Emacs, when you
+first visit a file or create a buffer (see <a href="Choosing-Modes.html#Choosing-Modes">Choosing Modes</a>).  You
+can explicitly select a new major mode by using an <kbd>M-x</kbd> command. 
+Take the name of the mode and add <code>-mode</code> to get the name of the
+command to select that mode (e.g., <kbd>M-x lisp-mode</kbd> enters Lisp mode).
 
-   <p>Most programming-language major modes specify that only blank lines
-separate paragraphs.  This is to make the paragraph commands useful. 
-(See <a href="Paragraphs.html#Paragraphs">Paragraphs</a>.)  They also cause Auto Fill mode to use the
-definition of &lt;TAB&gt; to indent the new lines it creates.  This is
-because most lines in a program are usually indented
-(see <a href="Indentation.html#Indentation">Indentation</a>).
+   <p><a name="index-major_002dmode-1718"></a>  The value of the buffer-local variable <code>major-mode</code> is a symbol
+with the same name as the major mode command (e.g., <code>lisp-mode</code>). 
+This variable is set automatically; you should not change it yourself.
 
-<ul class="menu">
-<li><a accesskey="1" href="Choosing-Modes.html#Choosing-Modes">Choosing Modes</a>:      How major modes are specified or chosen. 
-</ul>
+   <p>The default value of <code>major-mode</code> determines the major mode to
+use for files that do not specify a major mode, and for new buffers
+created with <kbd>C-x b</kbd>.  Normally, this default value is the symbol
+<code>fundamental-mode</code>, which specifies Fundamental mode.  You can
+change this default value via the Customization interface (see <a href="Easy-Customization.html#Easy-Customization">Easy Customization</a>), or by adding a line like this to your init file
+(see <a href="Init-File.html#Init-File">Init File</a>):
 
+<pre class="example">     (setq-default major-mode 'text-mode)
+</pre>
+   <p class="noindent">If the default value of <code>major-mode</code> is <code>nil</code>, the major
+mode is taken from the previously current buffer.
+
+   <p>Specialized major modes often change the meanings of certain keys to
+do something more suitable for the mode.  For instance, programming
+language modes bind &lt;TAB&gt; to indent the current line according to
+the rules of the language (see <a href="Indentation.html#Indentation">Indentation</a>).  The keys that are
+commonly changed are &lt;TAB&gt;, &lt;DEL&gt;, and <kbd>C-j</kbd>.  Many modes
+also define special commands of their own, usually bound in the prefix
+key <kbd>C-c</kbd>.  Major modes can also alter user options and variables;
+for instance, programming language modes typically set a buffer-local
+value for the variable <code>comment-start</code>, which determines how
+source code comments are delimited (see <a href="Comments.html#Comments">Comments</a>).
+
+   <p><a name="index-describe_002dmode-1719"></a><a name="index-C_002dh-m-1720"></a>  To view the documentation for the current major mode, including a
+list of its key bindings, type <code>C-h m</code> (<code>describe-mode</code>).
+
+   <p><a name="index-mode-hook-1721"></a><a name="index-text_002dmode_002dhook-1722"></a><a name="index-prog_002dmode_002dhook-1723"></a>  Every major mode, apart from Fundamental mode, defines a <dfn>mode
+hook</dfn>, a customizable list of Lisp functions to run each time the mode
+is enabled in a buffer.  See <a href="Hooks.html#Hooks">Hooks</a>, for more information about
+hooks.  Each mode hook is named after its major mode, e.g., Fortran
+mode has <code>fortran-mode-hook</code>.  Furthermore, all text-based major
+modes run <code>text-mode-hook</code>, and all programming language modes
+run <code>prog-mode-hook</code>, prior to running their own mode hooks. 
+Hook functions can look at the value of the variable <code>major-mode</code>
+to see which mode is actually being entered.
+
+   <p>Mode hooks are commonly used to enable minor modes (see <a href="Minor-Modes.html#Minor-Modes">Minor Modes</a>).  For example, you can put the following lines in your init
+file to enable Flyspell minor mode in all text-based major modes
+(see <a href="Spelling.html#Spelling">Spelling</a>), and Eldoc minor mode in Emacs Lisp mode
+(see <a href="Lisp-Doc.html#Lisp-Doc">Lisp Doc</a>):
+
+<pre class="example">     (add-hook 'text-mode-hook 'flyspell-mode)
+     (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+</pre>
    </body></html>
 

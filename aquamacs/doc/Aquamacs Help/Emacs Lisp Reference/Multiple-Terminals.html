@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Multiple Terminals - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Frame-Parameters.html#Frame-Parameters" title="Frame Parameters">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,12 +43,12 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
 
 <h3 class="section">29.2 Multiple Terminals</h3>
 
-<p><a name="index-multiple-terminals-2237"></a><a name="index-multi_002dtty-2238"></a><a name="index-multiple-X-displays-2239"></a><a name="index-displays_002c-multiple-2240"></a>
-  Emacs represents each terminal, whether graphical or text-only, as a
-<dfn>terminal object</dfn> data type (see <a href="Terminal-Type.html#Terminal-Type">Terminal Type</a>).  On GNU and
-Unix systems, Emacs can use multiple terminals simultaneously in each
-session.  On other systems, it can only use a single terminal.  Each
-terminal object has the following attributes:
+<p><a name="index-multiple-terminals-2488"></a><a name="index-multi_002dtty-2489"></a><a name="index-multiple-X-displays-2490"></a><a name="index-displays_002c-multiple-2491"></a>
+  Emacs represents each terminal as a <dfn>terminal object</dfn> data type
+(see <a href="Terminal-Type.html#Terminal-Type">Terminal Type</a>).  On GNU and Unix systems, Emacs can use
+multiple terminals simultaneously in each session.  On other systems,
+it can only use a single terminal.  Each terminal object has the
+following attributes:
 
      <ul>
 <li>The name of the device used by the terminal (e.g., &lsquo;<samp><span class="samp">:0.0</span></samp>&rsquo; or
@@ -69,10 +66,10 @@ returned by the function <code>terminal-live-p</code> (i.e., <code>x</code>,
 
    <p>There is no primitive for creating terminal objects.  Emacs creates
 them as needed, such as when you call <code>make-frame-on-display</code>
-(which is described below).
+(described below).
 
 <div class="defun">
-&mdash; Function: <b>terminal-name</b><var> &amp;optional terminal<a name="index-terminal_002dname-2241"></a></var><br>
+&mdash; Function: <b>terminal-name</b><var> &amp;optional terminal<a name="index-terminal_002dname-2492"></a></var><br>
 <blockquote><p>This function returns the file name of the device used by
 <var>terminal</var>.  If <var>terminal</var> is omitted or <code>nil</code>, it
 defaults to the selected frame's terminal.  <var>terminal</var> can also be
@@ -80,12 +77,12 @@ a frame, meaning that frame's terminal.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>terminal-list</b><var><a name="index-terminal_002dlist-2242"></a></var><br>
-<blockquote><p>This function returns a list of all terminal objects currently in use. 
+&mdash; Function: <b>terminal-list</b><var><a name="index-terminal_002dlist-2493"></a></var><br>
+<blockquote><p>This function returns a list of all live terminal objects. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>get-device-terminal</b><var> device<a name="index-get_002ddevice_002dterminal-2243"></a></var><br>
+&mdash; Function: <b>get-device-terminal</b><var> device<a name="index-get_002ddevice_002dterminal-2494"></a></var><br>
 <blockquote><p>This function returns a terminal whose device name is given by
 <var>device</var>.  If <var>device</var> is a string, it can be either the file
 name of a terminal device, or the name of an X display of the form
@@ -97,7 +94,7 @@ function signals an error if its argument is none of the above.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>delete-terminal</b><var> &amp;optional terminal force<a name="index-delete_002dterminal-2244"></a></var><br>
+&mdash; Function: <b>delete-terminal</b><var> &amp;optional terminal force<a name="index-delete_002dterminal-2495"></a></var><br>
 <blockquote><p>This function deletes all frames on <var>terminal</var> and frees the
 resources used by it.  It runs the abnormal hook
 <code>delete-terminal-functions</code>, passing <var>terminal</var> as the
@@ -114,7 +111,7 @@ last frame on a terminal is deleted (see <a href="Deleting-Frames.html#Deleting-
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>delete-terminal-functions</b><var><a name="index-delete_002dterminal_002dfunctions-2245"></a></var><br>
+&mdash; Variable: <b>delete-terminal-functions</b><var><a name="index-delete_002dterminal_002dfunctions-2496"></a></var><br>
 <blockquote><p>An abnormal hook run by <code>delete-terminal</code>.  Each function
 receives one argument, the <var>terminal</var> argument passed to
 <code>delete-terminal</code>.  Due to technical details, the functions may
@@ -122,7 +119,7 @@ be called either just before the terminal is deleted, or just
 afterwards. 
 </p></blockquote></div>
 
-   <p><a name="index-terminal_002dlocal-variables-2246"></a>  A few Lisp variables are <dfn>terminal-local</dfn>; that is, they have a
+   <p><a name="index-terminal_002dlocal-variables-2497"></a>  A few Lisp variables are <dfn>terminal-local</dfn>; that is, they have a
 separate binding for each terminal.  The binding in effect at any time
 is the one for the terminal that the currently selected frame belongs
 to.  These variables include <code>default-minibuffer-frame</code>,
@@ -132,14 +129,14 @@ never be buffer-local (see <a href="Buffer_002dLocal-Variables.html#Buffer_002dL
 
    <p>On GNU and Unix systems, each X display is a separate graphical
 terminal.  When Emacs is started from within the X window system, it
-uses the X display chosen with the <code>DISPLAY</code> environment
-variable, or with the &lsquo;<samp><span class="samp">--display</span></samp>&rsquo; option.  See <a href="../emacs/Initial-Options.html#Initial-Options">Initial Options</a>.  Emacs can connect to other X
-displays via the command <code>make-frame-on-display</code>.  Each X display
-has its own selected frame and its own minibuffer windows; however,
-only one of those frames is &ldquo;<em>the</em> selected frame&rdquo; at any given
-moment (see <a href="Input-Focus.html#Input-Focus">Input Focus</a>).  Emacs can even connect to other
-text-only terminals, by interacting with the <samp><span class="command">emacsclient</span></samp>
-program.  See <a href="../emacs/Emacs-Server.html#Emacs-Server">Emacs Server</a>.
+uses the X display specified by the <samp><span class="env">DISPLAY</span></samp> environment
+variable, or by the &lsquo;<samp><span class="samp">--display</span></samp>&rsquo; option (see <a href="../emacs/Initial-Options.html#Initial-Options">Initial Options</a>).  Emacs can connect to other X displays
+via the command <code>make-frame-on-display</code>.  Each X display has its
+own selected frame and its own minibuffer windows; however, only one
+of those frames is &ldquo;<em>the</em> selected frame&rdquo; at any given moment
+(see <a href="Input-Focus.html#Input-Focus">Input Focus</a>).  Emacs can even connect to other text
+terminals, by interacting with the <samp><span class="command">emacsclient</span></samp> program. 
+See <a href="../emacs/Emacs-Server.html#Emacs-Server">Emacs Server</a>.
 
    <p>A single X server can handle more than one display.  Each X display
 has a three-part name, &lsquo;<samp><var>host</var><span class="samp">:</span><var>server</var><span class="samp">.</span><var>screen</var></samp>&rsquo;. 
@@ -150,31 +147,31 @@ server, Emacs knows by the similarity in their names that they share a
 single keyboard.
 
    <p>On some &ldquo;multi-monitor&rdquo; setups, a single X display outputs to more
-than one monitor.  Currently, there is no way for Emacs to distinguish
-between the different physical monitors.
+than one physical monitor.  Currently, there is no way for Emacs to
+distinguish between the different physical monitors.
 
 <div class="defun">
-&mdash; Command: <b>make-frame-on-display</b><var> display &amp;optional parameters<a name="index-make_002dframe_002don_002ddisplay-2247"></a></var><br>
+&mdash; Command: <b>make-frame-on-display</b><var> display &amp;optional parameters<a name="index-make_002dframe_002don_002ddisplay-2498"></a></var><br>
 <blockquote><p>This function creates and returns a new frame on <var>display</var>, taking
 the other frame parameters from the alist <var>parameters</var>. 
 <var>display</var> should be the name of an X display (a string).
 
         <p>Before creating the frame, this function ensures that Emacs is &ldquo;set
 up&rdquo; to display graphics.  For instance, if Emacs has not processed X
-resources (e.g., if it was started on a text-only terminal), it does
-so at this time.  In all other respects, this function behaves like
+resources (e.g., if it was started on a text terminal), it does so at
+this time.  In all other respects, this function behaves like
 <code>make-frame</code> (see <a href="Creating-Frames.html#Creating-Frames">Creating Frames</a>). 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>x-display-list</b><var><a name="index-x_002ddisplay_002dlist-2248"></a></var><br>
+&mdash; Function: <b>x-display-list</b><var><a name="index-x_002ddisplay_002dlist-2499"></a></var><br>
 <blockquote><p>This function returns a list that indicates which X displays Emacs has
 a connection to.  The elements of the list are strings, and each one
 is a display name. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>x-open-connection</b><var> display &amp;optional xrm-string must-succeed<a name="index-x_002dopen_002dconnection-2249"></a></var><br>
+&mdash; Function: <b>x-open-connection</b><var> display &amp;optional xrm-string must-succeed<a name="index-x_002dopen_002dconnection-2500"></a></var><br>
 <blockquote><p>This function opens a connection to the X display <var>display</var>,
 without creating a frame on that display.  Normally, Emacs Lisp
 programs need not call this function, as <code>make-frame-on-display</code>
@@ -194,7 +191,7 @@ terminates Emacs.  Otherwise, it is an ordinary Lisp error.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>x-close-connection</b><var> display<a name="index-x_002dclose_002dconnection-2250"></a></var><br>
+&mdash; Function: <b>x-close-connection</b><var> display<a name="index-x_002dclose_002dconnection-2501"></a></var><br>
 <blockquote><p>This function closes the connection to display <var>display</var>.  Before
 you can do this, you must first delete all the frames that were open
 on that display (see <a href="Deleting-Frames.html#Deleting-Frames">Deleting Frames</a>). 

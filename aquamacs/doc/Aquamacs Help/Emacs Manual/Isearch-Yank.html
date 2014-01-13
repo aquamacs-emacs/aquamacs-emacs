@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Isearch Yank - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Incremental-Search.html#Incremental-Search" title="Incremental Search">
 <link rel="prev" href="Special-Isearch.html#Special-Isearch" title="Special Isearch">
-<link rel="next" href="Isearch-Scroll.html#Isearch-Scroll" title="Isearch Scroll">
+<link rel="next" href="Not-Exiting-Isearch.html#Not-Exiting-Isearch" title="Not Exiting Isearch">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -39,39 +36,40 @@ Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
 <div class="node">
 <a name="Isearch-Yank"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Isearch-Scroll.html#Isearch-Scroll">Isearch Scroll</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Not-Exiting-Isearch.html#Not-Exiting-Isearch">Not Exiting Isearch</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Special-Isearch.html#Special-Isearch">Special Isearch</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Incremental-Search.html#Incremental-Search">Incremental Search</a>
 <hr>
 </div>
 
-<h4 class="subsection">19.1.5 Isearch Yanking</h4>
+<h4 class="subsection">15.1.5 Isearch Yanking</h4>
 
-<p>Within incremental search, you can use <kbd>C-w</kbd> and <kbd>C-y</kbd> to grab
-text from the buffer into the search string.  This makes it convenient
-to search for another occurrence of text at point.
+<p><a name="index-C_002dy-_0040r_007b_0028Incremental-search_0029_007d-836"></a><a name="index-M_002dy-_0040r_007b_0028Incremental-search_0029_007d-837"></a><a name="index-isearch_002dyank_002dkill-838"></a><a name="index-isearch_002dyank_002dpop-839"></a>  Within incremental search, <kbd>C-y</kbd> (<code>isearch-yank-kill</code>)
+appends the current kill to the search string.  <kbd>M-y</kbd>
+(<code>isearch-yank-pop</code>), if called after <kbd>C-y</kbd>, replaces that
+appended text with an earlier kill, similar to the usual <kbd>M-y</kbd>
+(<code>yank-pop</code>) command (see <a href="Yanking.html#Yanking">Yanking</a>).  <kbd>Mouse-2</kbd> appends
+the current X selection (see <a href="Primary-Selection.html#Primary-Selection">Primary Selection</a>).
 
-   <p><kbd>C-w</kbd> copies the character or word after point and adds it to
-the search string, advancing point over it.  (The decision, whether to
-copy a character or a word, is heuristic.)
+   <p><a name="index-C_002dw-_0040r_007b_0028Incremental-search_0029_007d-840"></a><a name="index-isearch_002dyank_002dword_002dor_002dchar-841"></a>  <kbd>C-w</kbd> (<code>isearch-yank-word-or-char</code>) appends the next
+character or word at point to the search string.  This is an easy way
+to search for another occurrence of the text at point.  (The decision
+of whether to copy a character or a word is heuristic.)
 
-   <p><kbd>C-y</kbd> is similar to <kbd>C-w</kbd> but copies all the rest of the
-current line into the search string.  If point is already at the end
-of a line, it grabs the entire next line.  If the search is currently
-case-insensitive, both <kbd>C-y</kbd> and <kbd>C-w</kbd> convert the text they
-copy to lower case, so that the search remains case-insensitive.
+   <p><a name="index-M_002ds-C_002de-_0040r_007b_0028Incremental-search_0029_007d-842"></a><a name="index-isearch_002dyank_002dline-843"></a>  Similarly, <kbd>M-s C-e</kbd> (<code>isearch-yank-line</code>) appends the rest
+of the current line to the search string.  If point is already at the
+end of a line, it appends the next line.
 
-   <p><kbd>C-M-w</kbd> and <kbd>C-M-y</kbd> modify the search string by only one
-character at a time: <kbd>C-M-w</kbd> deletes the last character from the
-search string and <kbd>C-M-y</kbd> copies the character after point to the
-end of the search string.  An alternative method to add the character
-after point into the search string is to enter the minibuffer by
-<kbd>M-e</kbd> and to type <kbd>C-f</kbd> at the end of the search string in the
-minibuffer.
+   <p>If the search is currently case-insensitive, both <kbd>C-w</kbd> and
+<kbd>M-s C-e</kbd> convert the text they copy to lower case, so that the
+search remains case-insensitive.
 
-   <p>The character <kbd>M-y</kbd> copies text from the kill ring into the
-search string.  It uses the same text that <kbd>C-y</kbd> would yank. 
-<kbd>Mouse-2</kbd> in the echo area does the same.  See <a href="Yanking.html#Yanking">Yanking</a>.
+   <p><a name="index-C_002dM_002dw-_0040r_007b_0028Incremental-search_0029_007d-844"></a><a name="index-C_002dM_002dy-_0040r_007b_0028Incremental-search_0029_007d-845"></a><a name="index-isearch_002ddel_002dchar-846"></a><a name="index-isearch_002dyank_002dchar-847"></a>  <kbd>C-M-w</kbd> (<code>isearch-del-char</code>) deletes the last character
+from the search string, and <kbd>C-M-y</kbd> (<code>isearch-yank-char</code>)
+appends the character after point to the search string.  An
+alternative method to add the character after point is to enter the
+minibuffer with <kbd>M-e</kbd> (see <a href="Repeat-Isearch.html#Repeat-Isearch">Repeat Isearch</a>) and type <kbd>C-f</kbd>
+at the end of the search string in the minibuffer.
 
    </body></html>
 

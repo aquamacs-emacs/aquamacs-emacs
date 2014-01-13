@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Split Window - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Other-Window.html#Other-Window" title="Other Window">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,65 +42,66 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
 <hr>
 </div>
 
-<h3 class="section">24.2 Splitting Windows</h3>
+<h3 class="section">20.2 Splitting Windows</h3>
 
      <dl>
 <dt><kbd>C-x 2</kbd><dd>Split the selected window into two windows, one above the other
-(<code>split-window-vertically</code>). 
-<br><dt><kbd>C-x 3</kbd><dd>Split the selected window into two windows positioned side by side
-(<code>split-window-horizontally</code>). 
-<br><dt><kbd>C-Mouse-2</kbd><dd>In the mode line or scroll bar of a window, split that window. 
+(<code>split-window-below</code>). 
+<br><dt><kbd>C-x 3</kbd><dd>Split the selected window into two windows, positioned side by side
+(<code>split-window-right</code>). 
+<br><dt><kbd>C-Mouse-2</kbd><dd>In the mode line of a window, split that window. 
 </dl>
 
-   <p><a name="index-C_002dx-2-1132"></a><a name="index-split_002dwindow_002dvertically-1133"></a>  The command <kbd>C-x 2</kbd> (<code>split-window-vertically</code>) breaks the
-selected window into two windows, one above the other.  Both windows start
-out displaying the same buffer, with the same value of point.  By default
-the two windows each get half the height of the window that was split; a
-numeric argument specifies how many lines to give to the top window.
+   <p><a name="index-C_002dx-2-1371"></a><a name="index-split_002dwindow_002dbelow-1372"></a>  <kbd>C-x 2</kbd> (<code>split-window-below</code>) splits the selected window
+into two windows, one above the other.  After splitting, the selected
+window is the upper one, and the newly split-off window is below. 
+Both windows have the same value of point as before, and display the
+same portion of the buffer (or as close to it as possible).  If
+necessary, the windows are scrolled to keep point on-screen.  By
+default, the two windows each get half the height of the original
+window.  A positive numeric argument specifies how many lines to give
+to the top window; a negative numeric argument specifies how many
+lines to give to the bottom window.
 
-   <p><a name="index-C_002dx-3-1134"></a><a name="index-split_002dwindow_002dhorizontally-1135"></a>  <kbd>C-x 3</kbd> (<code>split-window-horizontally</code>) breaks the selected
-window into two side-by-side windows.  A numeric argument specifies how
-many columns to give the one on the left.  If you are not using
-scrollbars, a vertical line separates the two windows. 
-You can customize its color with the face <code>vertical-border</code>. 
-Windows that are not the full width of the screen have mode lines, but
-they are truncated.  On terminals where Emacs does not support
-highlighting, truncated mode lines sometimes do not appear in inverse
-video.
+   <p><a name="index-split_002dwindow_002dkeep_002dpoint-1373"></a>  If you change the variable <code>split-window-keep-point</code> to
+<code>nil</code>, <kbd>C-x 2</kbd> instead adjusts the portion of the buffer
+displayed by the two windows, as well as the value of point in each
+window, in order to keep the text on the screen as close as possible
+to what it was before; furthermore, if point was in the lower half of
+the original window, the bottom window is selected instead of the
+upper one.
 
-   <p><a name="index-C_002dMouse_002d2-_0040r_007b_0028scroll-bar_0029_007d-1136"></a>  You can split a window horizontally or vertically by clicking
-<kbd>C-Mouse-2</kbd> in the mode line or the scroll bar.  The line of
-splitting goes through the place where you click: if you click on the
-mode line, the new scroll bar goes above the spot; if you click in the
-scroll bar, the mode line of the split window is side by side with
-your click.
+   <p><a name="index-C_002dx-3-1374"></a><a name="index-split_002dwindow_002dright-1375"></a>  <kbd>C-x 3</kbd> (<code>split-window-right</code>) splits the selected window
+into two side-by-side windows.  The left window is the selected one;
+the right window displays the same portion of the same buffer, and has
+the same value of point.  A positive numeric argument specifies how
+many columns to give the left window; a negative numeric argument
+specifies how many columns to give the right window.
 
-   <p><a name="index-truncate_002dpartial_002dwidth_002dwindows-1137"></a>  When a window occupies less than the full width of the frame, it may
-become too narrow for most of the text lines in its buffer.  If most of
-its lines are continued (see <a href="Continuation-Lines.html#Continuation-Lines">Continuation Lines</a>), the buffer may
-become difficult to read.  Therefore, Emacs automatically truncates
-lines if the window width becomes narrower than 50 columns.  This
-truncation occurs regardless of the value of the variable
-<code>truncate-lines</code> (see <a href="Line-Truncation.html#Line-Truncation">Line Truncation</a>); it is instead
-controlled by the variable <code>truncate-partial-width-windows</code>.  If
-the value of <code>truncate-partial-width-windows</code> is a positive integer
-(the default is 50), that specifies the minimum width for a
-partial-width window before automatic line truncation occurs; if the
-value is <code>nil</code>, automatic line truncation is disabled; and for any
-other non-<code>nil</code> value, Emacs truncates lines in every partial-width
-window regardless of its width.
+   <p><a name="index-truncate_002dpartial_002dwidth_002dwindows-1376"></a>  When you split a window with <kbd>C-x 3</kbd>, each resulting window
+occupies less than the full width of the frame.  If it becomes too
+narrow, the buffer may be difficult to read if continuation lines are
+in use (see <a href="Continuation-Lines.html#Continuation-Lines">Continuation Lines</a>).  Therefore, Emacs automatically
+switches to line truncation if the window width becomes narrower than
+50 columns.  This truncation occurs regardless of the value of the
+variable <code>truncate-lines</code> (see <a href="Line-Truncation.html#Line-Truncation">Line Truncation</a>); it is
+instead controlled by the variable
+<code>truncate-partial-width-windows</code>.  If the value of this variable
+is a positive integer (the default is 50), that specifies the minimum
+width for a partial-width window before automatic line truncation
+occurs; if the value is <code>nil</code>, automatic line truncation is
+disabled; and for any other non-<code>nil</code> value, Emacs truncates
+lines in every partial-width window regardless of its width.
 
-   <p>Horizontal scrolling is often used in side-by-side windows. 
-See <a href="Horizontal-Scrolling.html#Horizontal-Scrolling">Horizontal Scrolling</a>.
+   <p>On text terminals, side-by-side windows are separated by a vertical
+divider which is drawn using the <code>vertical-border</code> face.
 
-   <p><a name="index-split_002dwindow_002dkeep_002dpoint-1138"></a>  If <code>split-window-keep-point</code> is non-<code>nil</code>, the default,
-both of the windows resulting from <kbd>C-x 2</kbd> inherit the value of
-point from the window that was split.  This means that scrolling is
-inevitable.  If this variable is <code>nil</code>, then <kbd>C-x 2</kbd> tries to
-avoid scrolling the text currently visible on the screen, by putting
-point in each window at a position already visible in the window.  It
-also selects whichever window contains the screen line that the cursor
-was previously on.  Some users prefer that mode on slow terminals.
+   <p><a name="index-C_002dMouse_002d2-_0040r_007b_0028mode-line_0029_007d-1377"></a><a name="index-C_002dMouse_002d2-_0040r_007b_0028scroll-bar_0029_007d-1378"></a>  If you click <kbd>C-Mouse-2</kbd> in the mode line of a window, that
+splits the window, putting a vertical divider where you click. 
+Depending on how Emacs is compiled, you can also split a window by
+clicking <kbd>C-Mouse-2</kbd> in the scroll bar, which puts a horizontal
+divider where you click (this feature does not work when Emacs uses
+GTK+ scroll bars).
 
    </body></html>
 

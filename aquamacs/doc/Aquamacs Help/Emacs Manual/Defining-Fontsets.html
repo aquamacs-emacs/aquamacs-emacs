@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Defining Fontsets - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Modifying-Fontsets.html#Modifying-Fontsets" title="Modifying Fontsets">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,24 +42,26 @@ Up:&nbsp;<a rel="up" accesskey="u" href="International.html#International">Inter
 <hr>
 </div>
 
-<h3 class="section">26.15 Defining fontsets</h3>
+<h3 class="section">22.14 Defining fontsets</h3>
 
-<p><a name="index-standard_002dfontset_002dspec-1463"></a><a name="index-w32_002dstandard_002dfontset_002dspec-1464"></a><a name="index-ns_002dstandard_002dfontset_002dspec-1465"></a><a name="index-standard-fontset-1466"></a>  When running on X, Emacs creates a standard fontset automatically according to the value
+<p><a name="index-standard_002dfontset_002dspec-1676"></a><a name="index-w32_002dstandard_002dfontset_002dspec-1677"></a><a name="index-ns_002dstandard_002dfontset_002dspec-1678"></a><a name="index-standard-fontset-1679"></a>  When running on X, Emacs creates a standard fontset automatically according to the value
 of <code>standard-fontset-spec</code>.  This fontset's name is
 
 <pre class="example">     -*-fixed-medium-r-normal-*-16-*-*-*-*-*-fontset-standard
 </pre>
    <p class="noindent">or just &lsquo;<samp><span class="samp">fontset-standard</span></samp>&rsquo; for short.
 
-   <p>On GNUstep and Mac, fontset-standard is created using the value of
-<code>ns-standard-fontset-spec</code>, and on Windows it is
+   <p>On GNUstep and Mac OS X, the standard fontset is created using the value of
+<code>ns-standard-fontset-spec</code>, and on MS Windows it is
 created using the value of <code>w32-standard-fontset-spec</code>.
 
+<!-- FIXME?  How does one access these, or do anything with them? -->
+<!-- Does it matter? -->
    <p>Bold, italic, and bold-italic variants of the standard fontset are
 created automatically.  Their names have &lsquo;<samp><span class="samp">bold</span></samp>&rsquo; instead of
 &lsquo;<samp><span class="samp">medium</span></samp>&rsquo;, or &lsquo;<samp><span class="samp">i</span></samp>&rsquo; instead of &lsquo;<samp><span class="samp">r</span></samp>&rsquo;, or both.
 
-   <p><a name="index-startup-fontset-1467"></a>  Emacs generates a fontset automatically, based on any default
+   <p><a name="index-startup-fontset-1680"></a>  Emacs generates a fontset automatically, based on any default
 <acronym>ASCII</acronym> font that you specify with the &lsquo;<samp><span class="samp">Font</span></samp>&rsquo; resource or
 the &lsquo;<samp><span class="samp">-fn</span></samp>&rsquo; argument, or the default font that Emacs found when it
 started.  This is the <dfn>startup fontset</dfn> and its name is
@@ -71,8 +70,15 @@ started.  This is the <dfn>startup fontset</dfn> and its name is
 <var>charset_encoding</var> field with &lsquo;<samp><span class="samp">startup</span></samp>&rsquo;, then using the
 resulting string to specify a fontset.
 
-   <p>For instance, if you start Emacs this way,
+   <p>For instance, if you start Emacs with a font of this form,
 
+<!-- FIXME?  I think this is a little misleading, because you cannot (?) -->
+<!-- actually specify a font with wildcards, it has to be a complete spec. -->
+<!-- Also, an X font specification of this form hasn't (?) been -->
+<!-- mentioned before now, and is somewhat obsolete these days. -->
+<!-- People are more likely to use a form like -->
+<!-- emacs -fn "DejaVu Sans Mono-12" -->
+<!-- How does any of this apply in that case? -->
 <pre class="example">     emacs -fn "*courier-medium-r-normal--14-140-*-iso8859-1"
 </pre>
    <p class="noindent">Emacs generates the following fontset and uses it for the initial X
@@ -80,8 +86,8 @@ window frame:
 
 <pre class="example">     -*-courier-medium-r-normal-*-14-140-*-*-*-*-fontset-startup
 </pre>
-   <p>The startup fontset will use the font that you specify or a variant
-with a different registry and encoding for all the characters which
+   <p>The startup fontset will use the font that you specify, or a variant
+with a different registry and encoding, for all the characters that
 are supported by that font, and fallback on &lsquo;<samp><span class="samp">fontset-default</span></samp>&rsquo; for
 other characters.
 
@@ -89,7 +95,8 @@ other characters.
 just like an actual font name.  But be careful not to specify a fontset
 name in a wildcard resource like &lsquo;<samp><span class="samp">Emacs*Font</span></samp>&rsquo;&mdash;that wildcard
 specification matches various other resources, such as for menus, and
-menus cannot handle fontsets.
+<!-- FIXME is this still true? -->
+menus cannot handle fontsets.  See <a href="X-Resources.html#X-Resources">X Resources</a>.
 
    <p>You can specify additional fontsets using X resources named
 &lsquo;<samp><span class="samp">Fontset-</span><var>n</var></samp>&rsquo;, where <var>n</var> is an integer starting from 0. 
@@ -97,7 +104,8 @@ The resource value should have this form:
 
 <pre class="smallexample">     <var>fontpattern</var>, <span class="roman">[</span><var>charset</var>:<var>font</var><span class="roman">]...</span>
 </pre>
-   <p class="noindent"><var>fontpattern</var> should have the form of a standard X font name, except
+   <p class="noindent"><var>fontpattern</var> should have the form of a standard X font name (see
+the previous fontset-startup example), except
 for the last two fields.  They should have the form
 &lsquo;<samp><span class="samp">fontset-</span><var>alias</var></samp>&rsquo;.
 
@@ -119,7 +127,7 @@ that describe the character set.  For the <acronym>ASCII</acronym> character fon
    <p>In addition, when several consecutive fields are wildcards, Emacs
 collapses them into a single wildcard.  This is to prevent use of
 auto-scaled fonts.  Fonts made by scaling larger fonts are not usable
-for editing, and scaling a smaller font is not useful because it is
+for editing, and scaling a smaller font is not also useful, because it is
 better to use the smaller font in its own size, which is what Emacs
 does.
 
@@ -137,8 +145,8 @@ does.
 </pre>
    <p>You may not have any Chinese font matching the above font
 specification.  Most X distributions include only Chinese fonts that
-have &lsquo;<samp><span class="samp">song ti</span></samp>&rsquo; or &lsquo;<samp><span class="samp">fangsong ti</span></samp>&rsquo; in <var>family</var> field.  In
-such a case, &lsquo;<samp><span class="samp">Fontset-</span><var>n</var></samp>&rsquo; can be specified as below:
+have &lsquo;<samp><span class="samp">song ti</span></samp>&rsquo; or &lsquo;<samp><span class="samp">fangsong ti</span></samp>&rsquo; in the <var>family</var> field.  In
+such a case, &lsquo;<samp><span class="samp">Fontset-</span><var>n</var></samp>&rsquo; can be specified as:
 
 <pre class="smallexample">     Emacs.Fontset-0: -*-fixed-medium-r-normal-*-24-*-*-*-*-*-fontset-24,\
              chinese-gb2312:-*-*-medium-r-normal-*-24-*-gb2312*-*
@@ -148,7 +156,7 @@ such a case, &lsquo;<samp><span class="samp">Fontset-</span><var>n</var></samp>&
 Chinese GB2312 characters has a wild card &lsquo;<samp><span class="samp">*</span></samp>&rsquo; in the <var>family</var>
 field.
 
-   <p><a name="index-create_002dfontset_002dfrom_002dfontset_002dspec-1468"></a>  The function that processes the fontset resource value to create the
+   <p><a name="index-create_002dfontset_002dfrom_002dfontset_002dspec-1681"></a>  The function that processes the fontset resource value to create the
 fontset is called <code>create-fontset-from-fontset-spec</code>.  You can also
 call this function explicitly to create a fontset.
 

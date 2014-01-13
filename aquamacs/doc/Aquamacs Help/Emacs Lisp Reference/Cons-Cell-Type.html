@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Cons Cell Type - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Array-Type.html#Array-Type" title="Array Type">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -46,31 +43,32 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Programming-Types.html#Programming-Type
 
 <h4 class="subsection">2.3.6 Cons Cell and List Types</h4>
 
-<p><a name="index-address-field-of-register-88"></a><a name="index-decrement-field-of-register-89"></a><a name="index-pointers-90"></a>
-  A <dfn>cons cell</dfn> is an object that consists of two slots, called the
-<span class="sc">car</span> slot and the <span class="sc">cdr</span> slot.  Each slot can <dfn>hold</dfn> or
-<dfn>refer to</dfn> any Lisp object.  We also say that &ldquo;the <span class="sc">car</span> of
-this cons cell is&rdquo; whatever object its <span class="sc">car</span> slot currently holds,
-and likewise for the <span class="sc">cdr</span>.
+<p><a name="index-address-field-of-register-89"></a><a name="index-decrement-field-of-register-90"></a><a name="index-pointers-91"></a>
+  A <dfn>cons cell</dfn> is an object that consists of two slots, called
+the <span class="sc">car</span> slot and the <span class="sc">cdr</span> slot.  Each slot can <dfn>hold</dfn> any
+Lisp object.  We also say that &ldquo;the <span class="sc">car</span> of this cons cell is&rdquo;
+whatever object its <span class="sc">car</span> slot currently holds, and likewise for
+the <span class="sc">cdr</span>.
 
-   <blockquote>
-A note to C programmers: in Lisp, we do not distinguish between
-&ldquo;holding&rdquo; a value and &ldquo;pointing to&rdquo; the value, because pointers in
-Lisp are implicit. 
-</blockquote>
-
-   <p>A <dfn>list</dfn> is a series of cons cells, linked together so that the
+   <p><a name="index-list-structure-92"></a>  A <dfn>list</dfn> is a series of cons cells, linked together so that the
 <span class="sc">cdr</span> slot of each cons cell holds either the next cons cell or the
 empty list.  The empty list is actually the symbol <code>nil</code>. 
-See <a href="Lists.html#Lists">Lists</a>, for functions that work on lists.  Because most cons
-cells are used as part of lists, the phrase <dfn>list structure</dfn> has
-come to refer to any structure made out of cons cells.
+See <a href="Lists.html#Lists">Lists</a>, for details.  Because most cons cells are used as part
+of lists, we refer to any structure made out of cons cells as a
+<dfn>list structure</dfn>.
 
-   <p><a name="index-atoms-91"></a>  Because cons cells are so central to Lisp, we also have a word for
-&ldquo;an object which is not a cons cell.&rdquo;  These objects are called
+   <p><a name="index-linked-list-93"></a><blockquote>
+A note to C programmers: a Lisp list thus works as a <dfn>linked list</dfn>
+built up of cons cells.  Because pointers in Lisp are implicit, we do
+not distinguish between a cons cell slot &ldquo;holding&rdquo; a value versus
+&ldquo;pointing to&rdquo; the value. 
+</blockquote>
+
+   <p><a name="index-atoms-94"></a>  Because cons cells are so central to Lisp, we also have a word for
+&ldquo;an object which is not a cons cell&rdquo;.  These objects are called
 <dfn>atoms</dfn>.
 
-   <p><a name="index-parenthesis-92"></a><a name="index-g_t_0040samp_007b_0028_0040dots_007b_007d_0029_007d-in-lists-93"></a>  The read syntax and printed representation for lists are identical, and
+   <p><a name="index-parenthesis-95"></a><a name="index-g_t_0040samp_007b_0028_0040dots_007b_007d_0029_007d-in-lists-96"></a>  The read syntax and printed representation for lists are identical, and
 consist of a left parenthesis, an arbitrary number of elements, and a
 right parenthesis.  Here are examples of lists:
 

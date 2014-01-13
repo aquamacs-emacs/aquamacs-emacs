@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Frames - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="International.html#International" title="International">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -44,44 +41,52 @@ Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
 <hr>
 </div>
 
-<h2 class="chapter">25 Frames and Graphical Displays</h2>
+<h2 class="chapter">21 Frames and Graphical Displays</h2>
 
-<p><a name="index-frames-1179"></a>
-  When using a graphical display, you can create multiple system-level
-&ldquo;windows&rdquo; in a single Emacs session.  We refer to these system-level
-windows as <dfn>frames</dfn>.  A frame initially contains a single Emacs
-window; however, you can subdivide this Emacs window into smaller
-windows, all fitting into the same frame.  Each frame normally
-contains its own echo area and minibuffer.
+<p><a name="index-frames-1430"></a>
+  When Emacs is started on a graphical display, e.g., on the X Window
+System, it occupies a graphical system-level &ldquo;window&rdquo;.  In this
+manual, we call this a <dfn>frame</dfn>, reserving the word &ldquo;window&rdquo; for
+the part of the frame used for displaying a buffer.  A frame initially
+contains one window, but it can be subdivided into multiple windows
+(see <a href="Windows.html#Windows">Windows</a>).  A frame normally also contains a menu bar, tool
+bar, and echo area.
 
-   <p>To avoid confusion, we reserve the word &ldquo;window&rdquo; for the
-subdivisions that Emacs implements, and never use it to refer to a
-frame.
+   <p>You can also create additional frames (see <a href="Creating-Frames.html#Creating-Frames">Creating Frames</a>). 
+All frames created in the same Emacs session have access to the same
+underlying buffers and other data.  For instance, if a buffer is being
+shown in more than one frame, any changes made to it in one frame show
+up immediately in the other frames too.
 
-   <p>Any editing you do in one frame affects the other frames.  For
-instance, if you put text in the kill ring in one frame, you can yank
-it in another frame.  If you exit Emacs through <kbd>C-x C-c</kbd> in one
-frame, it terminates all the frames.  To delete just one frame, use
+   <p>Typing <kbd>C-x C-c</kbd> closes all the frames on the current display,
+and ends the Emacs session if it has no frames open on any other
+displays (see <a href="Exiting.html#Exiting">Exiting</a>).  To close just the selected frame, type
 <kbd>C-x 5 0</kbd> (that is zero, not <kbd>o</kbd>).
 
-   <p>Emacs compiled for MS-DOS emulates some windowing functionality,
-so that you can use many of the features described in this chapter. 
-See <a href="MS_002dDOS-Mouse.html#MS_002dDOS-Mouse">MS-DOS Mouse</a>.
+   <p>This chapter describes Emacs features specific to graphical displays
+(particularly mouse commands), and features for managing multiple
+frames.  On text terminals, many of these features are unavailable. 
+However, it is still possible to create multiple &ldquo;frames&rdquo; on text
+terminals; such frames are displayed one at a time, filling the entire
+terminal screen (see <a href="Non_002dWindow-Terminals.html#Non_002dWindow-Terminals">Non-Window Terminals</a>).  It is also possible
+to use the mouse on some text terminals (see <a href="Text_002dOnly-Mouse.html#Text_002dOnly-Mouse">Text-Only Mouse</a>, for
+doing so on GNU and Unix systems; and
+see <a href="MS_002dDOS-Mouse.html#MS_002dDOS-Mouse">MS-DOS Mouse</a>,
+for doing so on MS-DOS).  Menus are supported on all text terminals.
 
 <ul class="menu">
-<li><a accesskey="1" href="Cut-and-Paste.html#Cut-and-Paste">Cut and Paste</a>:        Mouse commands for cut and paste. 
-<li><a accesskey="2" href="Mouse-References.html#Mouse-References">Mouse References</a>:     Using the mouse to select an item from a list. 
-<li><a accesskey="3" href="Menu-Mouse-Clicks.html#Menu-Mouse-Clicks">Menu Mouse Clicks</a>:    Mouse clicks that bring up menus. 
-<li><a accesskey="4" href="Mode-Line-Mouse.html#Mode-Line-Mouse">Mode Line Mouse</a>:      Mouse clicks on the mode line. 
-<li><a accesskey="5" href="Creating-Frames.html#Creating-Frames">Creating Frames</a>:      Creating additional Emacs frames with various contents. 
-<li><a accesskey="6" href="Frame-Commands.html#Frame-Commands">Frame Commands</a>:       Iconifying, deleting, and switching frames. 
-<li><a accesskey="7" href="Fonts.html#Fonts">Fonts</a>:                Changing the frame font. 
-<li><a accesskey="8" href="Speedbar.html#Speedbar">Speedbar</a>:             How to make and use a speedbar frame. 
-<li><a accesskey="9" href="Multiple-Displays.html#Multiple-Displays">Multiple Displays</a>:    How one Emacs job can talk to several displays. 
-<li><a href="Special-Buffer-Frames.html#Special-Buffer-Frames">Special Buffer Frames</a>:   You can make certain buffers have their own frames. 
+<li><a accesskey="1" href="Mouse-Commands.html#Mouse-Commands">Mouse Commands</a>:       Moving, cutting, and pasting, with the mouse. 
+<li><a accesskey="2" href="Word-and-Line-Mouse.html#Word-and-Line-Mouse">Word and Line Mouse</a>:  Mouse commands for selecting whole words or lines. 
+<li><a accesskey="3" href="Mouse-References.html#Mouse-References">Mouse References</a>:     Using the mouse to select an item from a list. 
+<li><a accesskey="4" href="Menu-Mouse-Clicks.html#Menu-Mouse-Clicks">Menu Mouse Clicks</a>:    Mouse clicks that bring up menus. 
+<li><a accesskey="5" href="Mode-Line-Mouse.html#Mode-Line-Mouse">Mode Line Mouse</a>:      Mouse clicks on the mode line. 
+<li><a accesskey="6" href="Creating-Frames.html#Creating-Frames">Creating Frames</a>:      Creating additional Emacs frames with various contents. 
+<li><a accesskey="7" href="Frame-Commands.html#Frame-Commands">Frame Commands</a>:       Iconifying, deleting, and switching frames. 
+<li><a accesskey="8" href="Fonts.html#Fonts">Fonts</a>:                Changing the frame font. 
+<li><a accesskey="9" href="Speedbar.html#Speedbar">Speedbar</a>:             How to make and use a speedbar frame. 
+<li><a href="Multiple-Displays.html#Multiple-Displays">Multiple Displays</a>:    How one Emacs instance can talk to several displays. 
 <li><a href="Frame-Parameters.html#Frame-Parameters">Frame Parameters</a>:     Changing the colors and other modes of frames. 
 <li><a href="Scroll-Bars.html#Scroll-Bars">Scroll Bars</a>:          How to enable and disable scroll bars; how to use them. 
-<li><a href="Wheeled-Mice.html#Wheeled-Mice">Wheeled Mice</a>:         Using mouse wheels for scrolling. 
 <li><a href="Drag-and-Drop.html#Drag-and-Drop">Drag and Drop</a>:        Using drag and drop to open files and insert text. 
 <li><a href="Menu-Bars.html#Menu-Bars">Menu Bars</a>:            Enabling and disabling the menu bar. 
 <li><a href="Tool-Bars.html#Tool-Bars">Tool Bars</a>:            Enabling and disabling the tool bar. 
@@ -89,7 +94,7 @@ See <a href="MS_002dDOS-Mouse.html#MS_002dDOS-Mouse">MS-DOS Mouse</a>.
 <li><a href="Tooltips.html#Tooltips">Tooltips</a>:             Displaying information at the current mouse position. 
 <li><a href="Mouse-Avoidance.html#Mouse-Avoidance">Mouse Avoidance</a>:      Preventing the mouse pointer from obscuring text. 
 <li><a href="Non_002dWindow-Terminals.html#Non_002dWindow-Terminals">Non-Window Terminals</a>:   Multiple frames on terminals that show only one. 
-<li><a href="Text_002dOnly-Mouse.html#Text_002dOnly-Mouse">Text-Only Mouse</a>:      Using the mouse in text-only terminals. 
+<li><a href="Text_002dOnly-Mouse.html#Text_002dOnly-Mouse">Text-Only Mouse</a>:      Using the mouse in text terminals. 
 </ul>
 
    </body></html>

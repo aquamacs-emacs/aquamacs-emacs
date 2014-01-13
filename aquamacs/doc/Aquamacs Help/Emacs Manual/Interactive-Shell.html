@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Interactive Shell - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Shell-Mode.html#Shell-Mode" title="Shell Mode">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,65 +42,62 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Shell.html#Shell">Shell</a>
 <hr>
 </div>
 
-<h3 class="section">41.2 Interactive Inferior Shell</h3>
+<h3 class="section">36.2 Interactive Subshell</h3>
 
-<p><a name="index-shell-3633"></a>  To run a subshell interactively, use <kbd>M-x shell</kbd>.  This creates
-(or reuses) a buffer named &lsquo;<samp><span class="samp">*shell*</span></samp>&rsquo; and runs a subshell with
-input coming from and output going to that buffer.  That is to say,
-any &ldquo;terminal output&rdquo; from the subshell goes into the buffer,
-advancing point, and any &ldquo;terminal input&rdquo; for the subshell comes
-from text in the buffer.  To give input to the subshell, go to the end
-of the buffer and type the input, terminated by &lt;RET&gt;.
+<p><a name="index-shell-3925"></a>  To run a subshell interactively, type <kbd>M-x shell</kbd>.  This creates
+(or reuses) a buffer named <samp><span class="file">*shell*</span></samp>, and runs a shell subprocess
+with input coming from and output going to that buffer.  That is to
+say, any terminal output from the subshell goes into the buffer,
+advancing point, and any terminal input for the subshell comes from
+text in the buffer.  To give input to the subshell, go to the end of
+the buffer and type the input, terminated by &lt;RET&gt;.
 
-   <p>Emacs does not wait for the subshell to do anything.  You can switch
-windows or buffers and edit them while the shell is waiting, or while it is
-running a command.  Output from the subshell waits until Emacs has time to
-process it; this happens whenever Emacs is waiting for keyboard input or
-for time to elapse.
+   <p>While the subshell is waiting or running a command, you can switch
+windows or buffers and perform other editing in Emacs.  Emacs inserts
+the output from the subshell into the Shell buffer whenever it has
+time to process it (e.g., while waiting for keyboard input).
 
-   <p><a name="index-g_t_0040code_007bcomint_002dhighlight_002dinput_007d-face-3634"></a><a name="index-g_t_0040code_007bcomint_002dhighlight_002dprompt_007d-face-3635"></a>  Input lines, once you submit them, are displayed using the face
-<code>comint-highlight-input</code>, and prompts are displayed using the
-face <code>comint-highlight-prompt</code>.  This makes it easier to see
-previous input lines in the buffer.  See <a href="Faces.html#Faces">Faces</a>.
+   <p><a name="index-g_t_0040code_007bcomint_002dhighlight_002dinput_007d-face-3926"></a><a name="index-g_t_0040code_007bcomint_002dhighlight_002dprompt_007d-face-3927"></a>  In the Shell buffer, prompts are displayed with the face
+<code>comint-highlight-prompt</code>, and submitted input lines are
+displayed with the face <code>comint-highlight-input</code>.  This makes it
+easier to distinguish input lines from the shell output. 
+See <a href="Faces.html#Faces">Faces</a>.
 
-   <p>To make multiple subshells, you can invoke <kbd>M-x shell</kbd> with a
-prefix argument (e.g. <kbd>C-u M-x shell</kbd>), which will read a buffer
-name and create (or reuse) a subshell in that buffer.  You can also
-rename the &lsquo;<samp><span class="samp">*shell*</span></samp>&rsquo; buffer using <kbd>M-x rename-uniquely</kbd>, then
-create a new &lsquo;<samp><span class="samp">*shell*</span></samp>&rsquo; buffer using plain <kbd>M-x shell</kbd>. 
+   <p>To make multiple subshells, invoke <kbd>M-x shell</kbd> with a prefix
+argument (e.g., <kbd>C-u M-x shell</kbd>).  Then the command will read a
+buffer name, and create (or reuse) a subshell in that buffer.  You can
+also rename the <samp><span class="file">*shell*</span></samp> buffer using <kbd>M-x rename-uniquely</kbd>,
+then create a new <samp><span class="file">*shell*</span></samp> buffer using plain <kbd>M-x shell</kbd>. 
 Subshells in different buffers run independently and in parallel.
 
-   <p><a name="index-explicit_002dshell_002dfile_002dname-3636"></a><a name="index-environment-variables-for-subshells-3637"></a><a name="index-g_t_0040env_007bESHELL_007d-environment-variable-3638"></a><a name="index-g_t_0040env_007bSHELL_007d-environment-variable-3639"></a>  The file name used to load the subshell is the value of the variable
-<code>explicit-shell-file-name</code>, if that is non-<code>nil</code>. 
-Otherwise, the environment variable <samp><span class="env">ESHELL</span></samp> is used, or the
-environment variable <samp><span class="env">SHELL</span></samp> if there is no <samp><span class="env">ESHELL</span></samp>.  If the
-file name specified is relative, the directories in the list
-<code>exec-path</code> are searched; this list is initialized based on the
-environment variable <samp><span class="env">PATH</span></samp> when Emacs is started.  Your init file
-can override either or both of these default initializations. 
-(see <a href="Init-File.html#Init-File">Init File</a>).
+   <p><a name="index-explicit_002dshell_002dfile_002dname-3928"></a><a name="index-environment-variables-for-subshells-3929"></a><a name="index-g_t_0040env_007bESHELL_007d-environment-variable-3930"></a><a name="index-g_t_0040env_007bSHELL_007d-environment-variable-3931"></a>  To specify the shell file name used by <kbd>M-x shell</kbd>, customize
+the variable <code>explicit-shell-file-name</code>.  If this is <code>nil</code>
+(the default), Emacs uses the environment variable <samp><span class="env">ESHELL</span></samp> if it
+exists.  Otherwise, it usually uses the variable
+<code>shell-file-name</code> (see <a href="Single-Shell.html#Single-Shell">Single Shell</a>); but if the default
+directory is remote (see <a href="Remote-Files.html#Remote-Files">Remote Files</a>), it prompts you for the
+shell file name.
 
    <p>Emacs sends the new shell the contents of the file
 <samp><span class="file">~/.emacs_</span><var>shellname</var></samp> as input, if it exists, where
 <var>shellname</var> is the name of the file that the shell was loaded
 from.  For example, if you use bash, the file sent to it is
-<samp><span class="file">~/.emacs_bash</span></samp>.  If this file is not found, Emacs tries to fallback
-on <samp><span class="file">~/.emacs.d/init_</span><var>shellname</var><span class="file">.sh</span></samp>.
+<samp><span class="file">~/.emacs_bash</span></samp>.  If this file is not found, Emacs tries with
+<samp><span class="file">~/.emacs.d/init_</span><var>shellname</var><span class="file">.sh</span></samp>.
 
    <p>To specify a coding system for the shell, you can use the command
 <kbd>C-x &lt;RET&gt; c</kbd> immediately before <kbd>M-x shell</kbd>.  You can
 also change the coding system for a running subshell by typing
 <kbd>C-x &lt;RET&gt; p</kbd> in the shell buffer.  See <a href="Communication-Coding.html#Communication-Coding">Communication Coding</a>.
 
-   <p><a name="index-g_t_0040env_007bINSIDE_005fEMACS_007d-environment-variable-3640"></a>  Emacs sets the environment variable <samp><span class="env">INSIDE_EMACS</span></samp> in the
-subshell to a comma-separated list including the Emacs version. 
-Programs can check this variable to determine whether they are running
-inside an Emacs subshell.
-
-   <p><a name="index-g_t_0040env_007bEMACS_007d-environment-variable-3641"></a>  Emacs also sets the <samp><span class="env">EMACS</span></samp> environment variable (to <code>t</code>) if
-it is not already defined.  <strong>Warning:</strong> This environment
-variable is deprecated.  Programs that check this variable should be
-changed to check <samp><span class="env">INSIDE_EMACS</span></samp> instead.
+   <p><a name="index-g_t_0040env_007bINSIDE_005fEMACS_007d-environment-variable-3932"></a><a name="index-g_t_0040env_007bEMACS_007d-environment-variable-3933"></a>  Emacs sets the environment variable <samp><span class="env">INSIDE_EMACS</span></samp> in the
+subshell to &lsquo;<samp><var>version</var><span class="samp">,comint</span></samp>&rsquo;, where <var>version</var> is the
+Emacs version (e.g., &lsquo;<samp><span class="samp">24.1</span></samp>&rsquo;).  Programs can check this variable
+to determine whether they are running inside an Emacs subshell.  (It
+also sets the <samp><span class="env">EMACS</span></samp> environment variable to <code>t</code>, if that
+environment variable is not already defined.  However, this
+environment variable is deprecated; programs that use it should switch
+to using <samp><span class="env">INSIDE_EMACS</span></samp> instead.)
 
    </body></html>
 

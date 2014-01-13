@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Accessing Documentation - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Keys-in-Documentation.html#Keys-in-Documentation" title="Keys in Documentation">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -47,16 +44,25 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Documentation.html#Documentation">Docum
 <h3 class="section">24.2 Access to Documentation Strings</h3>
 
 <div class="defun">
-&mdash; Function: <b>documentation-property</b><var> symbol property &amp;optional verbatim<a name="index-documentation_002dproperty-1729"></a></var><br>
-<blockquote><p>This function returns the documentation string that is recorded in
-<var>symbol</var>'s property list under property <var>property</var>.  It
-retrieves the text from a file if the value calls for that.  If the
-property value isn't <code>nil</code>, isn't a string, and doesn't refer to
-text in a file, then it is evaluated to obtain a string.
+&mdash; Function: <b>documentation-property</b><var> symbol property &amp;optional verbatim<a name="index-documentation_002dproperty-1849"></a></var><br>
+<blockquote><p>This function returns the documentation string recorded in
+<var>symbol</var>'s property list under property <var>property</var>.  It is
+most often used to look up the documentation strings of variables, for
+which <var>property</var> is <code>variable-documentation</code>.  However, it
+can also be used to look up other kinds of documentation, such as for
+customization groups (but for function documentation, use the
+<code>documentation</code> command, below).
+
+        <p>If the value recorded in the property list refers to a documentation
+string stored in a <samp><span class="file">DOC</span></samp> file or a byte-compiled
+file, it looks up that string and returns it.  If the property value
+isn't <code>nil</code>, isn't a string, and doesn't refer to text in a file,
+then it is evaluated as a Lisp expression to obtain a string.
 
         <p>The last thing this function does is pass the string through
-<code>substitute-command-keys</code> to substitute actual key bindings,
-unless <var>verbatim</var> is non-<code>nil</code>.
+<code>substitute-command-keys</code> to substitute actual key bindings
+(see <a href="Keys-in-Documentation.html#Keys-in-Documentation">Keys in Documentation</a>).  However, it skips this step if
+<var>verbatim</var> is non-<code>nil</code>.
 
      <pre class="smallexample">          (documentation-property 'command-line-processed
              'variable-documentation)
@@ -69,10 +75,10 @@ unless <var>verbatim</var> is non-<code>nil</code>.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>documentation</b><var> function &amp;optional verbatim<a name="index-documentation-1730"></a></var><br>
-<blockquote><p>This function returns the documentation string of <var>function</var>. 
-<code>documentation</code> handles macros, named keyboard macros, and
-special forms, as well as ordinary functions.
+&mdash; Function: <b>documentation</b><var> function &amp;optional verbatim<a name="index-documentation-1850"></a></var><br>
+<blockquote><p>This function returns the documentation string of <var>function</var>.  It
+handles macros, named keyboard macros, and special forms, as well as
+ordinary functions.
 
         <p>If <var>function</var> is a symbol, this function first looks for the
 <code>function-documentation</code> property of that symbol; if that has a
@@ -93,7 +99,7 @@ the function definition has no documentation string.  In that case,
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>face-documentation</b><var> face<a name="index-face_002ddocumentation-1731"></a></var><br>
+&mdash; Function: <b>face-documentation</b><var> face<a name="index-face_002ddocumentation-1851"></a></var><br>
 <blockquote><p>This function returns the documentation string of <var>face</var> as a
 face. 
 </p></blockquote></div>
@@ -101,7 +107,7 @@ face.
 <!-- Wordy to prevent overfull hboxes.  -rjc 15mar92 -->
    <p>Here is an example of using the two functions, <code>documentation</code> and
 <code>documentation-property</code>, to display the documentation strings for
-several symbols in a &lsquo;<samp><span class="samp">*Help*</span></samp>&rsquo; buffer.
+several symbols in a <samp><span class="file">*Help*</span></samp> buffer.
 
    <p><a name="describe_002dsymbols-example"></a>
 <pre class="smallexample">     (defun describe-symbols (pattern)
@@ -131,7 +137,7 @@ several symbols in a &lsquo;<samp><span class="samp">*Help*</span></samp>&rsquo;
                  (if (boundp s)              ; <span class="roman">It is a variable.</span>
                      (princ
                       (format "%s\t%s\n%s\n\n" s
-                        (if (user-variable-p s)
+                        (if (custom-variable-p s)
                             "Option " "Variable")
                         (or (documentation-property
                               s 'variable-documentation)
@@ -176,24 +182,26 @@ but provides more information.
      When the `track-eol' feature is doing its job, the value is 9999.
      ---------- Buffer: *Help* ----------
 </pre>
-   <div class="defun">
-&mdash; Function: <b>Snarf-documentation</b><var> filename<a name="index-Snarf_002ddocumentation-1732"></a></var><br>
-<blockquote><p><a name="Definition-of-Snarf_002ddocumentation"></a>This function is used only during Emacs initialization, just before
-the runnable Emacs is dumped.  It finds the file offsets of the
-documentation strings stored in the file <var>filename</var>, and records
-them in the in-core function definitions and variable property lists in
-place of the actual strings.  See <a href="Building-Emacs.html#Building-Emacs">Building Emacs</a>.
+   <p><a name="Definition-of-Snarf_002ddocumentation"></a>
+
+<div class="defun">
+&mdash; Function: <b>Snarf-documentation</b><var> filename<a name="index-Snarf_002ddocumentation-1852"></a></var><br>
+<blockquote><p>This function is used when building Emacs, just before the runnable
+Emacs is dumped.  It finds the positions of the documentation strings
+stored in the file <var>filename</var>, and records those positions into
+memory in the function definitions and variable property lists. 
+See <a href="Building-Emacs.html#Building-Emacs">Building Emacs</a>.
 
         <p>Emacs reads the file <var>filename</var> from the <samp><span class="file">emacs/etc</span></samp> directory. 
 When the dumped Emacs is later executed, the same file will be looked
 for in the directory <code>doc-directory</code>.  Usually <var>filename</var> is
-<code>"DOC-</code><var>version</var><code>"</code>. 
+<code>"DOC"</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>doc-directory</b><var><a name="index-doc_002ddirectory-1733"></a></var><br>
+&mdash; Variable: <b>doc-directory</b><var><a name="index-doc_002ddirectory-1853"></a></var><br>
 <blockquote><p>This variable holds the name of the directory which should contain the
-file <code>"DOC-</code><var>version</var><code>"</code> that contains documentation strings for
+file <code>"DOC"</code> that contains documentation strings for
 built-in and preloaded functions and variables.
 
         <p>In most cases, this is the same as <code>data-directory</code>.  They may be

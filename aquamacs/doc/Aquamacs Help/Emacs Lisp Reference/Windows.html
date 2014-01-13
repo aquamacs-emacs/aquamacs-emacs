@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Windows - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="next" href="Frames.html#Frames" title="Frames">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,33 +42,39 @@ Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
 
 <h2 class="chapter">28 Windows</h2>
 
-<p>This chapter describes most of the functions and variables related to
-Emacs windows.  See <a href="Frames-and-Windows.html#Frames-and-Windows">Frames and Windows</a>, for how windows relate to
-frames.  See <a href="Display.html#Display">Display</a>, for information on how text is displayed in
-windows.
+<p>This chapter describes the functions and variables related to Emacs
+windows.  See <a href="Frames.html#Frames">Frames</a>, for how windows are assigned an area of screen
+available for Emacs to use.  See <a href="Display.html#Display">Display</a>, for information on how text
+is displayed in windows.
 
 <ul class="menu">
 <li><a accesskey="1" href="Basic-Windows.html#Basic-Windows">Basic Windows</a>:            Basic information on using windows. 
-<li><a accesskey="2" href="Splitting-Windows.html#Splitting-Windows">Splitting Windows</a>:        Splitting one window into two windows. 
-<li><a accesskey="3" href="Deleting-Windows.html#Deleting-Windows">Deleting Windows</a>:         Deleting a window gives its space to other windows. 
-<li><a accesskey="4" href="Selecting-Windows.html#Selecting-Windows">Selecting Windows</a>:        The selected window is the one that you edit in. 
-<li><a accesskey="5" href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic Window Ordering</a>:   Moving around the existing windows. 
-<li><a accesskey="6" href="Buffers-and-Windows.html#Buffers-and-Windows">Buffers and Windows</a>:      Each window displays the contents of a buffer. 
-<li><a accesskey="7" href="Displaying-Buffers.html#Displaying-Buffers">Displaying Buffers</a>:       Higher-level functions for displaying a buffer
-                              and choosing a window for it. 
-<li><a accesskey="8" href="Choosing-Window.html#Choosing-Window">Choosing Window</a>:          How to choose a window for displaying a buffer. 
-<li><a accesskey="9" href="Dedicated-Windows.html#Dedicated-Windows">Dedicated Windows</a>:        How to avoid displaying another buffer in
+<li><a accesskey="2" href="Windows-and-Frames.html#Windows-and-Frames">Windows and Frames</a>:       Relating windows to the frame they appear on. 
+<li><a accesskey="3" href="Window-Sizes.html#Window-Sizes">Window Sizes</a>:             Accessing a window's size. 
+<li><a accesskey="4" href="Resizing-Windows.html#Resizing-Windows">Resizing Windows</a>:         Changing the sizes of windows. 
+<li><a accesskey="5" href="Splitting-Windows.html#Splitting-Windows">Splitting Windows</a>:        Creating a new window. 
+<li><a accesskey="6" href="Deleting-Windows.html#Deleting-Windows">Deleting Windows</a>:         Removing a window from its frame. 
+<li><a accesskey="7" href="Recombining-Windows.html#Recombining-Windows">Recombining Windows</a>:      Preserving the frame layout when splitting and
+                              deleting windows. 
+<li><a accesskey="8" href="Selecting-Windows.html#Selecting-Windows">Selecting Windows</a>:        The selected window is the one that you edit in. 
+<li><a accesskey="9" href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic Window Ordering</a>:   Moving around the existing windows. 
+<li><a href="Buffers-and-Windows.html#Buffers-and-Windows">Buffers and Windows</a>:      Each window displays the contents of a buffer. 
+<li><a href="Switching-Buffers.html#Switching-Buffers">Switching Buffers</a>:        Higher-level functions for switching to a buffer. 
+<li><a href="Choosing-Window.html#Choosing-Window">Choosing Window</a>:          How to choose a window for displaying a buffer. 
+<li><a href="Display-Action-Functions.html#Display-Action-Functions">Display Action Functions</a>:  Subroutines for <code>display-buffer</code>. 
+<li><a href="Choosing-Window-Options.html#Choosing-Window-Options">Choosing Window Options</a>:  Extra options affecting how buffers are displayed. 
+<li><a href="Window-History.html#Window-History">Window History</a>:           Each window remembers the buffers displayed in it. 
+<li><a href="Dedicated-Windows.html#Dedicated-Windows">Dedicated Windows</a>:        How to avoid displaying another buffer in
                               a specific window. 
+<li><a href="Quitting-Windows.html#Quitting-Windows">Quitting Windows</a>:         How to restore the state prior to displaying a
+                              buffer. 
 <li><a href="Window-Point.html#Window-Point">Window Point</a>:             Each window has its own location of point. 
 <li><a href="Window-Start-and-End.html#Window-Start-and-End">Window Start and End</a>:     Buffer positions indicating which text is
                               on-screen in a window. 
 <li><a href="Textual-Scrolling.html#Textual-Scrolling">Textual Scrolling</a>:        Moving text up and down through the window. 
 <li><a href="Vertical-Scrolling.html#Vertical-Scrolling">Vertical Scrolling</a>:       Moving the contents up and down on the window. 
 <li><a href="Horizontal-Scrolling.html#Horizontal-Scrolling">Horizontal Scrolling</a>:     Moving the contents sideways on the window. 
-<li><a href="Size-of-Window.html#Size-of-Window">Size of Window</a>:           Accessing the size of a window. 
-<li><a href="Resizing-Windows.html#Resizing-Windows">Resizing Windows</a>:         Changing the size of a window. 
 <li><a href="Coordinates-and-Windows.html#Coordinates-and-Windows">Coordinates and Windows</a>:  Converting coordinates to windows. 
-<li><a href="Window-Tree.html#Window-Tree">Window Tree</a>:              The layout and sizes of all windows in a frame. 
 <li><a href="Window-Configurations.html#Window-Configurations">Window Configurations</a>:    Saving and restoring the state of the screen. 
 <li><a href="Window-Parameters.html#Window-Parameters">Window Parameters</a>:        Associating additional information with windows. 
 <li><a href="Window-Hooks.html#Window-Hooks">Window Hooks</a>:             Hooks for scrolling, window size changes,

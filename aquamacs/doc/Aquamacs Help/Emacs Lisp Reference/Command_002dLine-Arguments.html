@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Command-Line Arguments - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="prev" href="Terminal_002dSpecific.html#Terminal_002dSpecific" title="Terminal-Specific">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,29 +42,25 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Starting-Up.html#Starting-Up">Starting 
 
 <h4 class="subsection">39.1.4 Command-Line Arguments</h4>
 
-<p><a name="index-command_002dline-arguments-3792"></a>
-  You can use command-line arguments to request various actions when you
-start Emacs.  Since you do not need to start Emacs more than once per
-day, and will often leave your Emacs session running longer than that,
-command-line arguments are hardly ever used.  As a practical matter, it
-is best to avoid making the habit of using them, since this habit would
-encourage you to kill and restart Emacs unnecessarily often.  These
-options exist for two reasons: to be compatible with other editors (for
-invocation by other programs) and to enable shell scripts to run
-specific Lisp programs.
-
-   <p>This section describes how Emacs processes command-line arguments,
-and how you can customize them.
+<p><a name="index-command_002dline-arguments-4129"></a>
+  You can use command-line arguments to request various actions when
+you start Emacs.  Note that the recommended way of using Emacs is to
+start it just once, after logging in, and then do all editing in the same
+Emacs session (see <a href="../emacs/Entering-Emacs.html#Entering-Emacs">Entering Emacs</a>). 
+For this reason, you might not use command-line arguments very often;
+nonetheless, they can be useful when invoking Emacs from session
+scripts or debugging Emacs.  This section describes how Emacs
+processes command-line arguments.
 
 <div class="defun">
-&mdash; Function: <b>command-line</b><var><a name="index-command_002dline-3793"></a></var><br>
+&mdash; Function: <b>command-line</b><var><a name="index-command_002dline-4130"></a></var><br>
 <blockquote><p>This function parses the command line that Emacs was called with,
-processes it, loads the user's init file and displays the
-startup messages. 
+processes it, and (amongst other things) loads the user's init file and
+displays the startup messages. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>command-line-processed</b><var><a name="index-command_002dline_002dprocessed-3794"></a></var><br>
+&mdash; Variable: <b>command-line-processed</b><var><a name="index-command_002dline_002dprocessed-4131"></a></var><br>
 <blockquote><p>The value of this variable is <code>t</code> once the command line has been
 processed.
 
@@ -77,10 +70,10 @@ to process its new command-line arguments.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>command-switch-alist</b><var><a name="index-command_002dswitch_002dalist-3795"></a></var><br>
-<blockquote><p><a name="index-switches-on-command-line-3796"></a><a name="index-options-on-command-line-3797"></a><a name="index-command_002dline-options-3798"></a>The value of this variable is an alist of user-defined command-line
-options and associated handler functions.  This variable exists so you
-can add elements to it.
+&mdash; Variable: <b>command-switch-alist</b><var><a name="index-command_002dswitch_002dalist-4132"></a></var><br>
+<blockquote><p><a name="index-switches-on-command-line-4133"></a><a name="index-options-on-command-line-4134"></a><a name="index-command_002dline-options-4135"></a>This variable is an alist of user-defined command-line options and
+associated handler functions.  By default it is empty, but you can
+add elements if you wish.
 
         <p>A <dfn>command-line option</dfn> is an argument on the command line, which
 has the form:
@@ -107,19 +100,21 @@ function in the <samp><span class="file">startup.el</span></samp> file.  See als
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>command-line-args</b><var><a name="index-command_002dline_002dargs-3799"></a></var><br>
+&mdash; Variable: <b>command-line-args</b><var><a name="index-command_002dline_002dargs-4136"></a></var><br>
 <blockquote><p>The value of this variable is the list of command-line arguments passed
 to Emacs. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>command-line-args-left</b><var><a name="index-command_002dline_002dargs_002dleft-3800"></a></var><br>
-<blockquote><p><a name="index-argv-3801"></a>The value of this variable is the list of command-line arguments that
-have not yet been processed.  <code>argv</code> is an alias for this. 
+&mdash; Variable: <b>command-line-args-left</b><var><a name="index-command_002dline_002dargs_002dleft-4137"></a></var><br>
+<blockquote><p><a name="index-argv-4138"></a>The value of this variable is the list of command-line arguments that
+have not yet been processed. 
+<!-- Don't mention this, since it is a "bad name for a dynamically bound variable" -->
+<!-- @code{argv} is an alias for this. -->
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>command-line-functions</b><var><a name="index-command_002dline_002dfunctions-3802"></a></var><br>
+&mdash; Variable: <b>command-line-functions</b><var><a name="index-command_002dline_002dfunctions-4139"></a></var><br>
 <blockquote><p>This variable's value is a list of functions for handling an
 unrecognized command-line argument.  Each time the next argument to be
 processed has no special meaning, the functions in this list are called,
@@ -137,7 +132,7 @@ should return a non-<code>nil</code> value to say it has dealt with that
 argument.  If it has also dealt with some of the following arguments, it
 can indicate that by deleting them from <code>command-line-args-left</code>.
 
-        <p>If all of these functions return <code>nil</code>, then the argument is used
+        <p>If all of these functions return <code>nil</code>, then the argument is treated
 as a file name to visit. 
 </p></blockquote></div>
 

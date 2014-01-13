@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Debugger Operation - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Commands-of-GUD.html#Commands-of-GUD" title="Commands of GUD">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -45,52 +42,58 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Debuggers.html#Debuggers">Debuggers</a>
 <hr>
 </div>
 
-<h4 class="subsection">31.6.2 Debugger Operation</h4>
+<h4 class="subsection">27.6.2 Debugger Operation</h4>
 
-<p><a name="index-fringes_002c-and-current-execution-line-in-GUD-2327"></a>  Generally when you run a debugger with GUD, the debugger uses an Emacs
-buffer for its ordinary input and output.  This is called the GUD
-buffer.  Input and output from the program you are debugging also use
-this buffer.  We call this <dfn>text command mode</dfn>.  The GDB Graphical
-Interface can use further buffers (see <a href="GDB-Graphical-Interface.html#GDB-Graphical-Interface">GDB Graphical Interface</a>).
+<p><a name="index-GUD-interaction-buffer-2601"></a>
+  The <dfn>GUD interaction buffer</dfn> is an Emacs buffer which is used to
+send text commands to a debugger subprocess, and record its output. 
+This is the basic interface for interacting with a debugger, used by
+<kbd>M-x gud-gdb</kbd> and other commands listed in
+<a href="Starting-GUD.html#Starting-GUD">Starting GUD</a>. 
+The <kbd>M-x gdb</kbd> command extends this interface with additional
+specialized buffers for controlling breakpoints, stack frames, and
+other aspects of the debugger state (see <a href="GDB-Graphical-Interface.html#GDB-Graphical-Interface">GDB Graphical Interface</a>).
 
-   <p>The debugger displays the source files of the program by visiting
-them in Emacs buffers.  An arrow in the left fringe indicates the
-current execution line.<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>  Moving
-point in this buffer does not move the arrow.  The arrow is not part
-of the file's text; it appears only on the screen.
+   <p>The GUD interaction buffer uses a variant of Shell mode, so the
+Emacs commands defined by Shell mode are available (see <a href="Shell-Mode.html#Shell-Mode">Shell Mode</a>).  Completion is available for most debugger commands
+(see <a href="Completion.html#Completion">Completion</a>), and you can use the usual Shell mode history
+commands to repeat them. 
+See <a href="Commands-of-GUD.html#Commands-of-GUD">Commands of GUD</a>,
+for special commands that can be used in the GUD interaction buffer.
 
-   <p>You can start editing these source files at any time in the buffers
-that display them.  If you do modify a source file, keep in mind that
-inserting or deleting lines will throw off the arrow's positioning;
-GUD has no way of figuring out which line corresponded before your
-changes to the line number in a debugger message.  Also, you'll
-typically have to recompile and restart the program for your changes
-to be reflected in the debugger's tables.
+   <p>As you debug a program, Emacs displays the relevant source files by
+visiting them in Emacs buffers, with an arrow in the left fringe
+indicating the current execution line.  (On a text terminal, the arrow
+appears as &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo;, overlaid on the first two text columns.)  Moving
+point in such a buffer does not move the arrow.  You are free to edit
+these source files, but note that inserting or deleting lines will
+throw off the arrow's positioning, as Emacs has no way to figure out
+which edited source line corresponds to the line reported by the
+debugger subprocess.  To update this information, you typically have
+to recompile and restart the program.
 
-   <p><a name="index-tooltips-with-GUD-2328"></a><a name="index-tooltip_002dgud_002dmodes-2329"></a><a name="index-gud_002dtooltip_002dmode-2330"></a><a name="index-gud_002dtooltip_002decho_002darea-2331"></a>  The Tooltip facility (see <a href="Tooltips.html#Tooltips">Tooltips</a>) provides support for GUD. 
-You activate this feature by turning on the minor mode
-<code>gud-tooltip-mode</code>.  Then you can display a variable's value in a
-tooltip simply by pointing at it with the mouse.  This operates in the
-GUD buffer and in source buffers with major modes in the list
-<code>gud-tooltip-modes</code>.  If the variable <code>gud-tooltip-echo-area</code>
-is non-<code>nil</code> then the variable's value is displayed in the echo
-area.  When debugging a C program using the GDB Graphical Interface, you
-can also display macro definitions associated with an identifier when
-the program is not executing.
+   <p><a name="index-GUD-Tooltip-mode-2602"></a><a name="index-mode_002c-GUD-Tooltip-2603"></a><a name="index-gud_002dtooltip_002dmode-2604"></a><a name="index-gud_002dtooltip_002decho_002darea-2605"></a>  GUD Tooltip mode is a global minor mode that adds tooltip support to
+GUD.  To toggle this mode, type <kbd>M-x gud-tooltip-mode</kbd>.  It is
+disabled by default.  If enabled, you can move the mouse cursor over a
+variable, a function, or a macro (collectively called
+<dfn>identifiers</dfn>) to show their values in tooltips
+(see <a href="Tooltips.html#Tooltips">Tooltips</a>).  Alternatively, mark an identifier or an
+expression by dragging the mouse over it, then leave the mouse in the
+marked area to have the value of the expression displayed in a
+tooltip.  The GUD Tooltip mode takes effect in the GUD interaction
+buffer, and in all source buffers with major modes listed in the
+variable <code>gud-tooltip-modes</code>.  If the variable
+<code>gud-tooltip-echo-area</code> is non-<code>nil</code>, or if you turned off
+the tooltip mode, values are shown in the echo area instead of a
+tooltip.
 
-   <p>GUD tooltips are disabled when you use GDB in text command mode
-(see <a href="GDB-Graphical-Interface.html#GDB-Graphical-Interface">GDB Graphical Interface</a>), because displaying an expression's
-value in GDB can sometimes expand a macro and result in a side effect
-that interferes with the program's operation.  The GDB graphical
-interface supports GUD tooltips and assures they will not cause side
-effects.
-
-   <div class="footnote">
-<hr>
-<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> On a text-only terminal, the arrow
-appears as &lsquo;<samp><span class="samp">=&gt;</span></samp>&rsquo; and overlays the first two text columns.</p>
-
-   <hr></div>
+   <p>When using GUD Tooltip mode with <kbd>M-x gud-gdb</kbd>, displaying an
+expression's value in GDB can sometimes expand a macro, potentially
+causing side effects in the debugged program.  For that reason, using
+tooltips in <code>gud-gdb</code> is disabled.  If you use the <kbd>M-x gdb</kbd>
+interface, this problem does not occur, as there is special code to
+avoid side-effects; furthermore, you can display macro definitions
+associated with an identifier when the program is not executing.
 
    </body></html>
 

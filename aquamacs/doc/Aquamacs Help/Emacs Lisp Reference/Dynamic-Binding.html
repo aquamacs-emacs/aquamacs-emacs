@@ -1,0 +1,104 @@
+<html lang="en">
+<head>
+<title>Dynamic Binding - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Variable-Scoping.html#Variable-Scoping" title="Variable Scoping">
+<link rel="next" href="Dynamic-Binding-Tips.html#Dynamic-Binding-Tips" title="Dynamic Binding Tips">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
+
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Dynamic-Binding"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Dynamic-Binding-Tips.html#Dynamic-Binding-Tips">Dynamic Binding Tips</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Variable-Scoping.html#Variable-Scoping">Variable Scoping</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.9.1 Dynamic Binding</h4>
+
+<p>By default, the local variable bindings made by Emacs are dynamic
+bindings.  When a variable is dynamically bound, its current binding
+at any point in the execution of the Lisp program is simply the most
+recently-created dynamic local binding for that symbol, or the global
+binding if there is no such local binding.
+
+   <p>Dynamic bindings have indefinite scope and dynamic extent, as shown
+by the following example:
+
+<pre class="example">     (defvar x -99)  ; <code>x</code><span class="roman"> receives an initial value of -99.</span>
+     
+     (defun getx ()
+       x)            ; <code>x</code><span class="roman"> is used ``free'' in this function.</span>
+     
+     (let ((x 1))    ; <code>x</code><span class="roman"> is dynamically bound.</span>
+       (getx))
+          &rArr; 1
+     
+     ;; <span class="roman">After the </span><code>let</code><span class="roman"> form finishes, </span><code>x</code><span class="roman"> reverts to its</span>
+     ;; <span class="roman">previous value, which is -99.</span>
+     
+     (getx)
+          &rArr; -99
+</pre>
+   <p class="noindent">The function <code>getx</code> refers to <code>x</code>.  This is a &ldquo;free&rdquo;
+reference, in the sense that there is no binding for <code>x</code> within
+that <code>defun</code> construct itself.  When we call <code>getx</code> from
+within a <code>let</code> form in which <code>x</code> is (dynamically) bound, it
+retrieves the local value of <code>x</code> (i.e., 1).  But when we call
+<code>getx</code> outside the <code>let</code> form, it retrieves the global value
+of <code>x</code> (i.e., -99).
+
+   <p>Here is another example, which illustrates setting a dynamically
+bound variable using <code>setq</code>:
+
+<pre class="example">     (defvar x -99)      ; <code>x</code><span class="roman"> receives an initial value of -99.</span>
+     
+     (defun addx ()
+       (setq x (1+ x)))  ; <span class="roman">Add 1 to </span><code>x</code><span class="roman"> and return its new value.</span>
+     
+     (let ((x 1))
+       (addx)
+       (addx))
+          &rArr; 3           ; <span class="roman">The two </span><code>addx</code><span class="roman"> calls add to </span><code>x</code><span class="roman"> twice.</span>
+     
+     ;; <span class="roman">After the </span><code>let</code><span class="roman"> form finishes, </span><code>x</code><span class="roman"> reverts to its</span>
+     ;; <span class="roman">previous value, which is -99.</span>
+     
+     (addx)
+          &rArr; -98
+</pre>
+   <p>Dynamic binding is implemented in Emacs Lisp in a simple way.  Each
+symbol has a value cell, which specifies its current dynamic value (or
+absence of value).  See <a href="Symbol-Components.html#Symbol-Components">Symbol Components</a>.  When a symbol is given
+a dynamic local binding, Emacs records the contents of the value cell
+(or absence thereof) in a stack, and stores the new local value in the
+value cell.  When the binding construct finishes executing, Emacs pops
+the old value off the stack, and puts it in the value cell.
+
+   </body></html>
+

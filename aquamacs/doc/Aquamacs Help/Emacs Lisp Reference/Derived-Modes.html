@@ -1,22 +1,19 @@
 <html lang="en">
 <head>
 <title>Derived Modes - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Major-Modes.html#Major-Modes" title="Major Modes">
 <link rel="prev" href="Mode-Help.html#Mode-Help" title="Mode Help">
-<link rel="next" href="Generic-Modes.html#Generic-Modes" title="Generic Modes">
+<link rel="next" href="Basic-Major-Modes.html#Basic-Major-Modes" title="Basic Major Modes">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -38,23 +35,24 @@ Foundation, Inc.
 <div class="node">
 <a name="Derived-Modes"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Generic-Modes.html#Generic-Modes">Generic Modes</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Basic-Major-Modes.html#Basic-Major-Modes">Basic Major Modes</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Mode-Help.html#Mode-Help">Mode Help</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Major-Modes.html#Major-Modes">Major Modes</a>
 <hr>
 </div>
 
-<h4 class="subsection">23.2.5 Defining Derived Modes</h4>
+<h4 class="subsection">23.2.4 Defining Derived Modes</h4>
 
-<p><a name="index-derived-mode-1618"></a>
-  The recommended way to define a new major mode is to derive it
-from an existing one using <code>define-derived-mode</code>.  If there is no
-closely related mode, you can inherit from <code>text-mode</code>,
-<code>special-mode</code>, <code>prog-mode</code>, or in the worst case
-<code>fundamental-mode</code>.
+<p><a name="index-derived-mode-1716"></a>
+  The recommended way to define a new major mode is to derive it from an
+existing one using <code>define-derived-mode</code>.  If there is no closely
+related mode, you should inherit from either <code>text-mode</code>,
+<code>special-mode</code>, or <code>prog-mode</code>.  See <a href="Basic-Major-Modes.html#Basic-Major-Modes">Basic Major Modes</a>.  If
+none of these are suitable, you can inherit from <code>fundamental-mode</code>
+(see <a href="Major-Modes.html#Major-Modes">Major Modes</a>).
 
 <div class="defun">
-&mdash; Macro: <b>define-derived-mode</b><var> variant parent name docstring keyword-args<small class="dots">...</small> body<small class="dots">...</small><a name="index-define_002dderived_002dmode-1619"></a></var><br>
+&mdash; Macro: <b>define-derived-mode</b><var> variant parent name docstring keyword-args<small class="dots">...</small> body<small class="dots">...</small><a name="index-define_002dderived_002dmode-1717"></a></var><br>
 <blockquote><p>This macro defines <var>variant</var> as a major mode command, using
 <var>name</var> as the string form of the mode name.  <var>variant</var> and
 <var>parent</var> should be unquoted symbols.
@@ -99,10 +97,10 @@ also a special mode (see <a href="Major-Mode-Conventions.html#Major-Mode-Convent
 mode no parent.  Then <code>define-derived-mode</code> behaves as described
 above, but, of course, omits all actions connected with <var>parent</var>.
 
-        <p>The argument <var>docstring</var> specifies the documentation string for
-the new mode.  <code>define-derived-mode</code> adds some general
-information about the mode's hook, followed by the mode's keymap, at
-the end of this docstring.  If you omit <var>docstring</var>,
+        <p>The argument <var>docstring</var> specifies the documentation string for the
+new mode.  <code>define-derived-mode</code> adds some general information
+about the mode's hook, followed by the mode's keymap, at the end of this
+documentation string.  If you omit <var>docstring</var>,
 <code>define-derived-mode</code> generates a documentation string.
 
         <p>The <var>keyword-args</var> are pairs of keywords and values.  The values
@@ -142,6 +140,12 @@ define the specified customization group.
 </pre>
         <p>Do not write an <code>interactive</code> spec in the definition;
 <code>define-derived-mode</code> does that automatically. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>derived-mode-p</b><var> &amp;rest modes<a name="index-derived_002dmode_002dp-1718"></a></var><br>
+<blockquote><p>This function returns non-<code>nil</code> if the current major mode is
+derived from any of the major modes given by the symbols <var>modes</var>. 
 </p></blockquote></div>
 
    </body></html>

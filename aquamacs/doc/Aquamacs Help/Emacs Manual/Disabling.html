@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Disabling - GNU Emacs Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -9,13 +9,10 @@
 <link rel="prev" href="Mouse-Buttons.html#Mouse-Buttons" title="Mouse Buttons">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is the Sixteenth edition of the `GNU Emacs Manual',
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
 
-updated for Emacs version 24.0.50.
-
-Copyright (C) 1985, 1986, 1987, 1993, 1994, 1995, 1996, 1997,
-1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010  Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -43,9 +40,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Key-Bindings.html#Key-Bindings">Key Bin
 <hr>
 </div>
 
-<h4 class="subsection">57.4.11 Disabling Commands</h4>
+<h4 class="subsection">48.3.11 Disabling Commands</h4>
 
-<p><a name="index-disabled-command-4110"></a>
+<p><a name="index-disabled-command-4443"></a>
   Disabling a command means that invoking it interactively asks for
 confirmation from the user.  The purpose of disabling a command is to
 prevent users from executing it by accident; we do this for commands
@@ -58,7 +55,7 @@ input saying whether to execute the command as requested, enable it
 and execute it, or cancel.  If you decide to enable the command, you
 must then answer another question&mdash;whether to do this permanently, or
 just for the current session.  (Enabling permanently works by
-automatically editing your <samp><span class="file">.emacs</span></samp> file.)  You can also type
+automatically editing your initialization file.)  You can also type
 <kbd>!</kbd> to enable <em>all</em> commands, for the current session only.
 
    <p>The direct mechanism for disabling a command is to put a
@@ -73,15 +70,16 @@ is included in the message displayed when the command is used:
 <pre class="example">     (put 'delete-region 'disabled
           "It's better to use `kill-region' instead.\n")
 </pre>
-   <p><a name="index-disable_002dcommand-4111"></a><a name="index-enable_002dcommand-4112"></a>  You can make a command disabled either by editing the <samp><span class="file">.emacs</span></samp>
-file directly, or with the command <kbd>M-x disable-command</kbd>, which edits
-the <samp><span class="file">.emacs</span></samp> file for you.  Likewise, <kbd>M-x enable-command</kbd>
-edits <samp><span class="file">.emacs</span></samp> to enable a command permanently.  See <a href="Init-File.html#Init-File">Init File</a>.
+   <p><a name="index-disable_002dcommand-4444"></a><a name="index-enable_002dcommand-4445"></a>  You can make a command disabled either by editing the initialization
+file directly, or with the command <kbd>M-x disable-command</kbd>, which
+edits the initialization file for you.  Likewise, <kbd>M-x
+enable-command</kbd> edits the initialization file to enable a command
+permanently.  See <a href="Init-File.html#Init-File">Init File</a>.
 
    <p>If Emacs was invoked with the <samp><span class="option">-q</span></samp> or <samp><span class="option">--no-init-file</span></samp>
 options (see <a href="Initial-Options.html#Initial-Options">Initial Options</a>), it will not edit your
-<samp><span class="file">~/.emacs</span></samp> init file.  Doing so could lose information
-because Emacs has not read your init file.
+initialization file.  Doing so could lose information because Emacs
+has not read your initialization file.
 
    <p>Whether a command is disabled is independent of what key is used to
 invoke it; disabling also applies if the command is invoked using

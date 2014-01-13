@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <title>Commands for Insertion - GNU Emacs Lisp Reference Manual</title>
-<meta http-equiv="Content-Type" content="text/html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
@@ -10,13 +10,10 @@
 <link rel="next" href="Deletion.html#Deletion" title="Deletion">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
-This is edition 3.0 of the GNU Emacs Lisp Reference Manual,
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
 
-corresponding to Emacs version 24.0.50.
-
-Copyright (C) 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software
-Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -51,7 +48,7 @@ commands intended primarily for the user but useful also in Lisp
 programs.
 
 <div class="defun">
-&mdash; Command: <b>insert-buffer</b><var> from-buffer-or-name<a name="index-insert_002dbuffer-2602"></a></var><br>
+&mdash; Command: <b>insert-buffer</b><var> from-buffer-or-name<a name="index-insert_002dbuffer-2865"></a></var><br>
 <blockquote><p>This command inserts the entire accessible contents of
 <var>from-buffer-or-name</var> (which must exist) into the current buffer
 after point.  It leaves the mark after the inserted text.  The value
@@ -59,8 +56,8 @@ is <code>nil</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>self-insert-command</b><var> count<a name="index-self_002dinsert_002dcommand-2603"></a></var><br>
-<blockquote><p><a name="index-character-insertion-2604"></a><a name="index-self_002dinsertion-2605"></a>This command inserts the last character typed; it does so <var>count</var>
+&mdash; Command: <b>self-insert-command</b><var> count<a name="index-self_002dinsert_002dcommand-2866"></a></var><br>
+<blockquote><p><a name="index-character-insertion-2867"></a><a name="index-self_002dinsertion-2868"></a>This command inserts the last character typed; it does so <var>count</var>
 times, before point, and returns <code>nil</code>.  Most printing characters
 are bound to this command.  In routine use, <code>self-insert-command</code>
 is the most frequently called function in Emacs, but programs rarely use
@@ -68,6 +65,7 @@ it except to install it on a keymap.
 
         <p>In an interactive call, <var>count</var> is the numeric prefix argument.
 
+     <!-- FIXME: This variable is obsolete since 23.1. -->
         <p>Self-insertion translates the input character through
 <code>translation-table-for-input</code>.  See <a href="Translation-of-Characters.html#Translation-of-Characters">Translation of Characters</a>.
 
@@ -82,18 +80,22 @@ syntax. (See <a href="Abbrevs.html#Abbrevs">Abbrevs</a>, and <a href="Syntax-Cla
 responsible for calling <code>blink-paren-function</code> when the inserted
 character has close parenthesis syntax (see <a href="Blinking.html#Blinking">Blinking</a>).
 
+        <p><a name="index-post_002dself_002dinsert_002dhook-2869"></a>The final thing this command does is to run the hook
+<code>post-self-insert-hook</code>.  You could use this to automatically
+reindent text as it is typed, for example.
+
         <p>Do not try substituting your own definition of
 <code>self-insert-command</code> for the standard one.  The editor command
 loop handles this function specially. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>newline</b><var> &amp;optional number-of-newlines<a name="index-newline-2606"></a></var><br>
+&mdash; Command: <b>newline</b><var> &amp;optional number-of-newlines<a name="index-newline-2870"></a></var><br>
 <blockquote><p>This command inserts newlines into the current buffer before point. 
 If <var>number-of-newlines</var> is supplied, that many newline characters
 are inserted.
 
-        <p><a name="index-newline-and-Auto-Fill-mode-2607"></a>This function calls <code>auto-fill-function</code> if the current column
+        <p><a name="index-newline-and-Auto-Fill-mode-2871"></a>This function calls <code>auto-fill-function</code> if the current column
 number is greater than the value of <code>fill-column</code> and
 <var>number-of-newlines</var> is <code>nil</code>.  Typically what
 <code>auto-fill-function</code> does is insert a newline; thus, the overall
@@ -109,7 +111,7 @@ is the numeric prefix argument.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>overwrite-mode</b><var><a name="index-overwrite_002dmode-2608"></a></var><br>
+&mdash; Variable: <b>overwrite-mode</b><var><a name="index-overwrite_002dmode-2872"></a></var><br>
 <blockquote><p>This variable controls whether overwrite mode is in effect.  The value
 should be <code>overwrite-mode-textual</code>, <code>overwrite-mode-binary</code>,
 or <code>nil</code>.  <code>overwrite-mode-textual</code> specifies textual
