@@ -30,6 +30,7 @@ Original author: YAMAMOTO Mitsuharu
 #include "composite.h"
 #include "fontset.h"
 #include "font.h"
+#include "termchar.h"
 #include "nsgui.h"
 #include "nsterm.h"
 #include "macfont.h"
@@ -623,24 +624,21 @@ get_cgcolor(unsigned long idx, struct frame *f)
   return cgColor;
 }
 
-#define CG_SET_FILL_COLOR_WITH_GC_FOREGROUND(context, s)                \
+#define CG_SET_FILL_COLOR_WITH_FACE_FOREGROUND(context, face, f)        \
   do {                                                                  \
-    CGColorRef refcol_ = get_cgcolor (NS_FACE_FOREGROUND (s->face),     \
-                                      s->f);                            \
+    CGColorRef refcol_ = get_cgcolor (NS_FACE_FOREGROUND (face), f);    \
     CGContextSetFillColorWithColor (context, refcol_) ;                 \
     CGColorRelease (refcol_);                                           \
   } while (0)
-#define CG_SET_FILL_COLOR_WITH_GC_BACKGROUND(context, s)                \
+#define CG_SET_FILL_COLOR_WITH_FACE_BACKGROUND(context, face, f)        \
   do {                                                                  \
-    CGColorRef refcol_ = get_cgcolor (NS_FACE_BACKGROUND (s->face),\
-                                      s->f);                            \
+    CGColorRef refcol_ = get_cgcolor (NS_FACE_BACKGROUND (face), f);    \
     CGContextSetFillColorWithColor (context, refcol_);                  \
     CGColorRelease (refcol_);                                           \
   } while (0)
-#define CG_SET_STROKE_COLOR_WITH_GC_FOREGROUND(context, s)              \
+#define CG_SET_STROKE_COLOR_WITH_FACE_FOREGROUND(context, face, f)      \
   do {                                                                  \
-    CGColorRef refcol_ = get_cgcolor (NS_FACE_FOREGROUND (s->face),\
-                                      s->f);                            \
+    CGColorRef refcol_ = get_cgcolor (NS_FACE_FOREGROUND (face), f);    \
     CGContextSetStrokeColorWithColor (context, refcol_);                \
     CGColorRelease (refcol_);                                           \
   } while (0)
@@ -2691,6 +2689,7 @@ macfont_draw (struct glyph_string *s, int from, int to, int x, int y,
   BOOL isComposite = s->first_glyph->type == COMPOSITE_GLYPH;
   int end = isComposite ? s->cmp_to : s->nchars;
   int len = end - s->cmp_from;
+  struct face *face = s->face;
   int i;
 
   block_input ();
@@ -2713,7 +2712,14 @@ macfont_draw (struct glyph_string *s, int from, int to, int x, int y,
 
   if (with_background)
     {
-      CG_SET_FILL_COLOR_WITH_GC_BACKGROUND (context, s);
+      if (s->hl == DRAW_MOUSE_FACE) 
+        {
+          face = FACE_FROM_ID (s->f, MOUSE_HL_INFO (s->f)->mouse_face_face_id);
+          if (!face)
+            face = FACE_FROM_ID (s->f, MOUSE_FACE_ID);
+        }
+
+      CG_SET_FILL_COLOR_WITH_FACE_BACKGROUND (context, face, f);
       CGContextFillRect (context,
 			 CGRectMake (x, y,
                                      s->width, FONT_HEIGHT (s->font)));
@@ -2748,7 +2754,7 @@ macfont_draw (struct glyph_string *s, int from, int to, int x, int y,
 	}
 
       CGContextScaleCTM (context, 1, -1);
-      CG_SET_FILL_COLOR_WITH_GC_FOREGROUND (context, s);
+      CG_SET_FILL_COLOR_WITH_FACE_FOREGROUND (context, face, s->f);
       if (macfont_info->synthetic_italic_p)
 	atfm = synthetic_italic_atfm;
       else
@@ -2757,7 +2763,7 @@ macfont_draw (struct glyph_string *s, int from, int to, int x, int y,
 	{
 	  CGContextSetTextDrawingMode (context, kCGTextFillStroke);
 	  CGContextSetLineWidth (context, synthetic_bold_factor * font_size);
-	  CG_SET_STROKE_COLOR_WITH_GC_FOREGROUND (context, s);
+	  CG_SET_STROKE_COLOR_WITH_FACE_FOREGROUND (context, face, f);
 	}
       if (no_antialias_p)
 	CGContextSetShouldAntialias (context, false);
