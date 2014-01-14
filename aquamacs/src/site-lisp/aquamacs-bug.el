@@ -101,10 +101,10 @@ Prompts for bug subject.  Leaves you in a mail buffer."
 	    ))))))
 
 
-(defun check-for-aquamacs-crashes ()
+(defun check-for-aquamacs-crashes (&optional old-ones)
   "Check for crashes of Aquamacs since last start.
 Offer to send a bug report."
-  (interactive)
+  (interactive "P")
   (protect
    (let* ((logfiles (append
 		    (directory-files "~/Library/Logs/CrashReporter" t "^Aquamacs.*")
@@ -115,7 +115,7 @@ Offer to send a bug report."
 	  (shell-file-name "/bin/bash"))
      (mapc
       (lambda (file)
-	(when (file-newer-than-file-p file aquamacs-id-file)
+	(when (or old-ones (file-newer-than-file-p file aquamacs-id-file))
 	  (push file reportable-crashes)))
       (if (> ln 4)
 	  (nthcdr (- (length logfiles) 3) logfiles)
@@ -125,15 +125,64 @@ Offer to send a bug report."
 Please send a simple bug report by e-mailing the automatically generated crash report to the Aquamacs developers. If possible, please describe briefly what you were doing when it happened." 
 						 (if (cdr reportable-crashes) "s" "")) nil nil nil nil t)
 	   (mapc (lambda (file)
-     (let ((location (aq-chomp
-			   (shell-command-to-string
-			    (format "grep org.gnu.Aquamacs \"%s\" | grep -v -e 'Identifier' -e 'fatal' -e 'ns_term_shutdown' -e 'shut_down_emacs' -e 'signal' -e 'emacs_abort' | head -n1 | grep -o -e '0x.*' | grep -o -e ' .*'" file))))
-		(last-lisp-location (aq-chomp
-			   (shell-command-to-string
-			    (format "grep org.gnu.Aquamacs \"%s\" | grep -v -e 'Identifier' -e 'fatal' -e 'ns_term_shutdown' -e 'shut_down_emacs' -e 'signal' -e 'emacs_abort'  | grep '[0-9a-f][0-9a-f][0-9a-f][0-9a-f]\sF[a-z]' | head -n1 | grep -o -e '0x.*' | grep -o -e ' .*'" file)))))
-	   
-	      (report-aquamacs-bug (concat "Crash in " location (if last-lisp-location (concat " / " last-lisp-location) "")) nil file))) reportable-crashes))
+     (let* ((locations (aquamacs-get-crash-location file))
+	    (location (car locations))
+	    (last-lisp-location (cdr locations)))
+       (report-aquamacs-bug (concat "Crash in " location 
+				    (if last-lisp-location (concat " / " last-lisp-location) ""))
+			    nil file))) reportable-crashes))
      nil)))
+
+(defun aquamacs-get-crash-location (file)
+  (protect
+   (with-temp-buffer
+     (insert-file-contents file)
+     (aquamacs-get-crash-location-in-buffer))))
+
+(defun aquamacs-get-crash-location-in-buffer (&optional lineinfo)
+  (let ((cpos nil) (fpos nil))
+    (goto-char (point-min))
+    (protect
+     (when
+	 ;; we're assuming it is thread 0.
+	 ;; others might crash, but this is where Aquamacs is at
+	 (or (search-forward "Thread 0 Crashed:" nil t)
+	     (search-forward "Thread 0:" nil t))
+       (set-mark (point))
+       (or (search-forward "Thread 1:" nil t)
+	   (goto-char (point-max)))
+       (narrow-to-region (mark) (point))
+       ;; find last occ of signal
+       
+       (when
+	   (and (or (search-backward "_signal " nil t)
+		    (goto-char (point-min)))
+		(or (search-forward "emacs_abort " nil t) t)
+		(or (search-forward "syms_of_" nil t) t)
+		(or (search-forward "org.gnu.Aquamacs" nil t) (search-forward "Aquamacs" nil t))
+		(search-forward-regexp "[\s\t _]+[0-9a-fxA-FX]*[\s\t _]*" nil t))
+	 (set-mark (point))
+	 (if lineinfo
+	     (end-of-line)
+	   (progn (search-forward " " nil t) (backward-char)))
+	 (setq cpos (buffer-substring-no-properties (mark) (point)))
+	 (when
+	     (search-forward-regexp "org.gnu.Aquamacs .* F" nil t)
+	   (backward-char)   
+	   (set-mark (point))
+	   (if lineinfo
+	       (end-of-line)
+	     (progn (search-forward " " nil t) (backward-char)))
+	   (setq fpos (buffer-substring-no-properties (mark) (point)))))
+       (widen))
+     (cons cpos fpos))))
+
+
+;; (aq-chomp (shell-command-to-string
+;; 			    (format "grep org.gnu.Aquamacs \"%s\" | grep -v -e 'Identifier' -e 'fatal' -e 'ns_term_shutdown' -e 'shut_down_emacs' -e 'signal' -e 'emacs_abort' | head -n1 | grep -o -e '0x.*' | grep -o -e ' .*'" file)))
+;; (aq-chomp
+;; (shell-command-to-string
+;; 	(format "grep org.gnu.Aquamacs \"%s\" | grep -v -e 'Identifier' -e 'fatal' -e 'ns_term_shutdown' -e 'shut_down_emacs' -e 'signal' -e 'emacs_abort'  | grep '[0-9a-f][0-9a-f][0-9a-f][0-9a-f]\sF[a-z]' | head -n1 | grep -o -e '0x.*' | grep -o -e ' .*'" file))
 
 
 (defun start-aquamacs-with-args (kill-session &rest args)
