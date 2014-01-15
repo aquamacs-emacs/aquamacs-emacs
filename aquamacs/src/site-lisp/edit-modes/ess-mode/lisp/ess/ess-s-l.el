@@ -67,9 +67,7 @@
   "Syntax table for S code."
   )
 
-
-;; what is R doing here?
-(defvar R-editing-alist
+(defvar S-editing-alist
   '((paragraph-start              . (concat "\\s-*$\\|" page-delimiter))
     (paragraph-separate           . (concat "\\s-*$\\|" page-delimiter))
     (paragraph-ignore-fill-prefix . t)
@@ -85,23 +83,12 @@
     (ess-mode-syntax-table        . S-syntax-table)
     ;; For Changelog add, require ' ' before <- : "attr<-" is a function name :
     (add-log-current-defun-header-regexp . "^\\(.+\\)\\s-+<-[ \t\n]*function")
-    (ess-font-lock-keywords       . 'ess-R-font-lock-keywords)
-    (ess-font-lock-defaults       . (ess--extract-default-fl-keywords ess-R-font-lock-keywords))
+    (ess-font-lock-keywords       . 'ess-S-font-lock-keywords)
+    (ess-font-lock-defaults       . (ess--extract-default-fl-keywords ess-S-font-lock-keywords))
     (font-lock-defaults           . '(ess-font-lock-defaults
                                       nil nil ((?\. . "w") (?\_ . "w"))))
     )
-  "General options for R source files.")
-
-
-(defvar S-editing-alist
-  ;; copy the R-list and modify :
-  (let ((S-alist (copy-alist R-editing-alist)))
-    (setcdr (assoc 'ess-font-lock-defaults S-alist)
-            '(ess--extract-default-fl-keywords ess-S-font-lock-keywords))
-    (setcdr (assoc 'ess-font-lock-keywords S-alist)
-            (quote 'ess-S-font-lock-keywords))
-    S-alist)
-  "General options for editing S and S+ source files.")
+  "General options for S and S+ source files.")
 
 (defvar inferior-S-language-start
   '(concat "options("
@@ -128,7 +115,7 @@
     (ess-imenu-generic-expression  . ess-imenu-S-generic-expression)
     (comment-add                  . 1)
     (comment-start-skip           . "#+ *")
-    (comment-use-syntax           . nil) ;; regexp based, probably faster than syntax based
+    (comment-use-syntax           . t)  ; see log for bug report 2013-06-07
     (comment-column               . 40)
     (ess-no-skip-regexp           . (concat "^ *@\\|" (default-value 'ess-no-skip-regexp)))
     ;; inferior-ess-prompt is used by comint for navigation, only if
@@ -138,6 +125,9 @@
     (ess-getwd-command          . "getwd()\n")
     (ess-setwd-command          . "setwd('%s')\n")
     (ess-funargs-command        . ".ess_funargs(\"%s\")\n")
+    
+    (fill-nobreak-predicate     . 'ess-inside-string-p)
+    (normal-auto-fill-function  . 'ess-do-auto-fill)
     )
   "S-language common settings for all <dialect>-customize-alist s")
 
@@ -232,6 +222,7 @@
   '((?a . "\\s *Arguments:")
     (?d . "\\s *Description:")
     (?D . "\\s *Details:")
+    (?t . "\\s *Details:")
     (?e . "\\s *Examples:")
     (?n . "\\s *Note:")
     (?r . "\\s *References:")
@@ -245,7 +236,7 @@
 (defconst ess-help-S+-sec-regex "^[A-Z. ---]+:$"
   "Reg(ular) Ex(pression) of section headers in help file.")
 
-(defconst ess-help-R-sec-regex "^[A-Z][a-z].+:$"
+(defconst ess-help-R-sec-regex "^[A-Z][A-Za-z].+:$"
   "Reg(ular) Ex(pression) of section headers in help file.")
 
 ;;; S-mode extras of Martin Maechler, Statistik, ETH Zurich.
@@ -600,6 +591,9 @@ and one that is well formatted in emacs ess-mode."
   "Fix Miscellaneous S/R `ill-formation's from current \\[point].
  Particularly use \"<-\"and put spaces around operators."
   (interactive "d\nP"); Defaults: point and prefix (C-u)
+  ;; activate by (setq ess-verbose t)
+  (ess-if-verbose-write
+   (format "ess-fix-misc begin (from = %s, verbose = %s)\n" from verbose))
   (save-excursion
 
     (if (string= ess-dialect "R")
@@ -607,14 +601,20 @@ and one that is well formatted in emacs ess-mode."
           (require 'ess-r-d)
           (R-fix-T-F from (not verbose))))
 
+    ;; activate by (setq ess-verbose t)
+    (ess-if-verbose-write "ess-fix-misc: after fix-T-F\n");___D___
+
     ;; former C and matlab programmers leave trailing  ";" :
-    (goto-char from) (ess-rep-regexp "; *$" "" nil 'literal verbose)
+    ;; (goto-char from) (ess-rep-regexp "; *$" "" nil 'literal verbose)
+    ;; (ess-if-verbose-write "ess-fix-misc: after trailing ';'\n");___D___
     (goto-char from) (ess-rep-regexp ";\\( *\\)#" "\\1#" nil nil verbose)
+    (ess-if-verbose-write "ess-fix-misc: after ';' before #\n");___D___
 
     ;;from R 1.9.x "_" is valid in names; here assume no initial / trailing '_'
     (goto-char from) (ess-rep-regexp " +_ *" " <- " nil 'literal verbose)
     (goto-char from) (ess-rep-regexp   "_ +" " <- " nil 'literal verbose)
 
+    (ess-if-verbose-write "ess-fix-misc: before 'around \"<-\"' :\n");___D___
     ;; ensure space around  "<-"  ---- but only replace if necessary:
     (goto-char from)
     (ess-rep-regexp "\\([^< \t\n]\\)\\(<<?-\\)" "\\1 \\2" nil nil verbose)
@@ -628,6 +628,7 @@ and one that is well formatted in emacs ess-mode."
     (goto-char from)
     (ess-rep-regexp "\\(<=?\\)\\([^-<= \t\n]\\)" "\\1 \\2" nil nil t)
 
+    (ess-if-verbose-write "ess-fix-misc: before \"=\" \"==\" .. :\n");___D___
     ;; -- ensure space around "=", "==", "!=" :
     (goto-char from) ;; --> " ="
     (ess-rep-regexp "\\([^=!<> ]\\)\\([=!]?\\)=" "\\1 \\2=" nil nil verbose)
@@ -640,6 +641,7 @@ and one that is well formatted in emacs ess-mode."
     (ess-rep-regexp "\\([A-Za-z0-9()]\\)}" "\\1 }" 'fix nil verbose)
     (ess-space-around "else" from verbose)
 
+    (ess-if-verbose-write "ess-fix-misc: after \"{ ... }\" :\n");___D___
     (goto-char from) ;; add a space inside "){"
     (ess-rep-regexp "){" ") {" 'fix nil verbose)
 
@@ -649,6 +651,7 @@ and one that is well formatted in emacs ess-mode."
     (goto-char from)
     (ess-rep-regexp "^\\([^#{\n]*[^#{ \t\n]+[ \t]*\\)}[ \t]*$"
                     "\\1\n}" 'fix nil verbose)
+    (ess-if-verbose-write "ess-fix-misc __end__\n");___D___
     ))
 
 ;; This is by Seth Falcon, modeled after ess-toggle-underscore (see below).
@@ -694,7 +697,7 @@ the  underscore is always inserted. "
     (ignore-errors
       (when (and (eq major-mode 'inferior-ess-mode)
                  (> (point) (process-mark (get-buffer-process (current-buffer)))))
-        (narrow-to-region (process-mark (get-ess-process)) (point-max)))
+        (narrow-to-region (process-mark (ess-get-process)) (point-max)))
       (and ess-noweb-mode
            (ess-noweb-in-code-chunk)
            (ess-noweb-narrow-to-chunk))
@@ -802,16 +805,6 @@ and I need to relearn emacs lisp (but I had to, anyway."
     (use-local-map ess-mode-map)
     (set-syntax-table ess-mode-syntax-table)
     ))
-
-(add-hook 'ess-mode-hook
-          (lambda ()
-            (set (make-local-variable 'fill-nobreak-predicate)
-                 'ess-inside-string-p)
-            (set (make-local-variable 'normal-auto-fill-function)
-                 'ess-do-auto-fill)
-            (when (string= ess-language "S");; <- is this needed at all here?
-              (local-set-key "\M-\r" 'ess-use-this-dir))
-            ))
 
 
 

@@ -187,7 +187,8 @@ Better logic needed!  (see 2 uses, in this file).")
     (inferior-ess-start-args       . inferior-SAS-args-temp)
     (inferior-ess-font-lock-defaults . SAS-mode-font-lock-defaults)
     ;; (ess-pre-run-hook              . 'ess-SAS-pre-run-hook)
-    (ess-local-process-name        . nil))
+    ;; (ess-local-process-name        . nil)
+    )
   "Variables to customize for SAS")
 
 ;;; The functions of interest (mode, inferior mode)
@@ -212,22 +213,22 @@ Better logic needed!  (see 2 uses, in this file).")
   (define-key sas-mode-local-map "\C-ci" 'ess-eval-line-and-step-invisibly)
   (define-key sas-mode-local-map ";" 'ess-electric-run-semicolon)
 
-                                        ; this is a mess
-                                        ; interactive and batch commands share sas-mode-local-map,
-                                        ; but the associated commands are very different
-                                        ; what would be better is two maps like
-                                        ; sas-batch-mode-local-map and sas-interactive-mode-local-map
-                                        ; or smart function definitions that would do the appropriate
-                                        ; thing for either batch or interactive sessions
-                                        ; however, neither of these solutions are planned
-                                        ; therefore, no key definitions can be shared between
-                                        ; batch and interactive at this time, hence the lines that
-                                        ; are commented below:  uncomment at your own risk
-                                        ;  (define-key sas-mode-local-map "\C-c\C-p" 'ess-sas-file-path)
-                                        ;  (define-key sas-mode-local-map "\C-c\C-b" 'ess-sas-submit)
-                                        ;  (define-key sas-mode-local-map "\C-c\C-r" 'ess-sas-submit-region)
-                                        ;  (define-key sas-mode-local-map "\C-c\C-x" 'ess-sas-goto-log)
-                                        ;  (define-key sas-mode-local-map "\C-c\C-y" 'ess-sas-goto-lst)
+  ;; this is a mess
+  ;; interactive and batch commands share sas-mode-local-map,
+  ;; but the associated commands are very different
+  ;; what would be better is two maps like
+  ;; sas-batch-mode-local-map and sas-interactive-mode-local-map
+  ;; or smart function definitions that would do the appropriate
+  ;; thing for either batch or interactive sessions
+  ;; however, neither of these solutions are planned
+  ;; therefore, no key definitions can be shared between
+  ;; batch and interactive at this time, hence the lines that
+  ;; are commented below:  uncomment at your own risk
+  ;;  (define-key sas-mode-local-map "\C-c\C-p" 'ess-sas-file-path)
+  ;;  (define-key sas-mode-local-map "\C-c\C-b" 'ess-sas-submit)
+  ;;  (define-key sas-mode-local-map "\C-c\C-r" 'ess-sas-submit-region)
+  ;;  (define-key sas-mode-local-map "\C-c\C-x" 'ess-sas-goto-log)
+  ;;  (define-key sas-mode-local-map "\C-c\C-y" 'ess-sas-goto-lst)
 
   (use-local-map sas-mode-local-map)
 
@@ -244,7 +245,7 @@ Better logic needed!  (see 2 uses, in this file).")
 
 ;; rmh Jul 10 2003
 (defun ess-electric-run-semicolon (arg)
-  "Insert character.  If the line contains \"run;\" and nothing else then indent line."
+  "Insert character.  If the line contains \"run;\" or \"quit;\" and nothing else then indent line."
   (interactive "P")
   (if ess-sas-edit-keys-toggle (insert ";") (let (insertpos)
                                               (if (and (not arg)
@@ -252,7 +253,7 @@ Better logic needed!  (see 2 uses, in this file).")
                                                        (save-excursion
                                                          (skip-chars-backward " \t")
                                                          (backward-word 1)
-                                                         (and (looking-at "run")
+                                                         (and (looking-at "run\\|quit")
                                                               (progn
                                                                 (skip-chars-backward " \t")
                                                                 (bolp)))))

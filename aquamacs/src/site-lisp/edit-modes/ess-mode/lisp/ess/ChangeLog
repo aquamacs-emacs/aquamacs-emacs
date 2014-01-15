@@ -1,3 +1,84 @@
+2013-12-05  Rodney Sparapani  <rsparapa@mcw.edu>
+
+	* ess-sas-a.el (ess-sas-edit-keys-toggle): the default returns
+	to nil; indentation has improved somewhat and will probably
+	improve a bit more in the near future
+
+2013-10-19  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* ess-trns.el (ess-transcript-clean-region): use t and nil, not 1
+	and 0 for boolean  'buffer-read-only
+
+2013-10-19  Rodney Sparapani  <rsparapa@mcw.edu>
+
+	* ess-r-d.el (ess--R-load-ESSR): install.packages need
+	type='source' on Mac OS X and Windows
+
+2013-10-13  Henning Redestig  <henning@hemulen>
+
+	* ess-roxy.el (ess-roxy-mode-map): better key-mappings and
+	behavior of html preview as agreed on ess-help
+
+2013-08-30  Rodney Sparapani  <rsparapa@mcw.edu>
+
+	* ess-sas-l.el (SAS-mode-font-lock-defaults): added PROCs
+	sgdesign and sgrender
+
+2013-08-23  Rodney Sparapani  <rsparapa@mcw.edu>
+
+	* ess-sas-a.el (ess-sas-interactive): remove '< /dev/tty'
+
+2013-07-27  Henning Redestig  <henning.red@gmail.com>
+
+	* ess-roxy.el (ess-roxy-mode): add interoperability with
+	auto-fill-mode
+
+2013-07-15  Rodney Sparapani  <rsparapa@mcw.edu>
+
+	* ess-site.el: Here is a workaround for an Emacs bug related to indirect
+	buffers and spurious lockfiles that rears its ugly head with .Rd files
+http://lists.gnu.org/archive/html/bug-gnu-emacs/2013-02/msg01368.html
+http://debbugs.gnu.org/cgi/bugreport.cgi?bug=14328
+
+2013-07-11  Rodney Sparapani  <rsparapa@mcw.edu>
+
+	* ess-sas-l.el (SAS-mode-font-lock-defaults):  remove annoying 9.3
+	note/news from the comment category; it's not a one-time 9.3 specific
+	message; it is also in 12.1 and presumably it is now eternally
+	annoying; but we can't font-lock it since it changes with every
+	new SAS release and it is not worth the maintenance/vigilance
+
+2013-06-12  Rodney Sparapani  <rsparapa@mcw.edu>
+
+	* ess-sas-d.el: see discussion in the thread:
+	"patch: identing quit statement like run statement in ess-sas" at
+	http://article.gmane.org/gmane.emacs.ess.general/7340
+
+2013-06-09  Stephen Eglen  <stephen@gnu.org>
+
+	* ess-julia.el: Checkdoc modifications, and other whitespace
+	cleanup.  Many docstrings were missing, so I've made initial
+	guesses at what they should be.
+
+	* ess-site.el (ess-etc-directory): Remove * from docstring.
+	Fix most points noted by checkdoc.
+
+2013-06-07  Stephen Eglen  <stephen@gnu.org>
+
+	* ess-s-l.el (S-common-cust-alist): Change default for
+	comment-use-syntax to t.  Dirk Eddelbuettel reported the follownig
+	bug:
+
+	With a line like the following in an R buffer, when M-TAB is hit
+	on the line to add a comment, the hash within the string is
+	interpeted as an existing comment, causing the string to be
+	disrupted.
+
+	rug( foo,  col="#00000030")
+
+	This is now fixed such that M-TAB would add a hash at
+	the end of the line, allowing for a comment.
+
 2013-04-11  Rodney Sparapani  <rsparapa@mcw.edu>
 
 	* ess-sas-a.el (ess-sas-edit-keys-toggle): `sas-indent-line' still
@@ -386,7 +467,7 @@
 	* ess-help.el (ess-skip-to-help-section): this issue is documented in 2 places
 http://www.xemacs.org/About/XEmacsVsGNUemacs.html
 http://www.xemacs.org/Documentation/21.5/html/cl_4.html
-So, the schism goes back many years: circa 1997-1998.  However, the fix is not
+So, the schism goes back many years: circa 1997-1998.  The fix is simple.
 If the keypress is meant to be a character, then
 you wrap last-command-event as follows...
 

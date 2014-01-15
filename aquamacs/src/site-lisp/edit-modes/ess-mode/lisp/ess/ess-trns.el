@@ -52,7 +52,7 @@
 
 (autoload 'ess-load-file                "ess-inf" "[autoload]" t)
 (autoload 'ess-request-a-process        "ess-inf" "(autoload)" nil)
-(autoload 'get-ess-buffer               "ess-inf" "(autoload)" nil)
+(autoload 'ess-get-process-buffer               "ess-inf" "(autoload)" nil)
 (autoload 'ess-switch-to-ESS            "ess-inf" "(autoload)" nil)
 (autoload 'ess-switch-to-end-of-ESS     "ess-inf" "(autoload)" nil)
 (autoload 'ess-eval-linewise            "ess-inf" "(autoload)" nil)
@@ -91,7 +91,7 @@
   (define-key ess-transcript-mode-map "\C-c\C-v" 'ess-display-help-on-object)
   (define-key ess-transcript-mode-map "\C-c\C-d" 'ess-dump-object-into-edit-buffer)
   (define-key ess-transcript-mode-map "\C-c\C-t" 'ess-execute-in-tb)
-  (define-key ess-transcript-mode-map "\C-c\t"   'ess-complete-object-name)
+  (define-key ess-transcript-mode-map "\C-c\t"   'ess-complete-object-name-deprecated)
   (define-key ess-transcript-mode-map "\C-a"     'comint-bol)
   (define-key ess-transcript-mode-map "\M-\t"    'comint-replace-by-expanded-filename)
   (define-key ess-transcript-mode-map "\M-?"     'comint-dynamic-list-completions)
@@ -110,7 +110,9 @@
   (define-key ess-transcript-mode-map "\r"       'ess-transcript-send-command-and-move)
   (define-key ess-transcript-mode-map "\M-\r"    'ess-transcript-send-command)
   (define-key ess-transcript-mode-map "\C-c\r"   'ess-transcript-copy-command)
-  (define-key ess-transcript-mode-map "\C-c\C-w" 'ess-transcript-clean-region))
+  (define-key ess-transcript-mode-map "\C-c\C-w" 'ess-transcript-DO-clean-region)
+  (define-key ess-transcript-mode-map "\C-c\M-c" 'ess-transcript-clean-buffer)
+  )
 
 (easy-menu-define
   ess-transcript-mode-menu ess-transcript-mode-map
@@ -126,10 +128,11 @@
     ["Next prompt"      comint-next-prompt      t]
     "------"
     ["Send and move" ess-transcript-send-command-and-move t]
-    ["Copy command"  ess-transcript-copy-command                t]
-    ["Send command"  ess-transcript-send-command                t]
-    ["Clean Region"  ess-transcript-DO-clean-region     t]
-    ["Switch S process" ess-switch-process              t]
+    ["Copy command"  ess-transcript-copy-command	t]
+    ["Send command"  ess-transcript-send-command	t]
+    ["Clean Region"  ess-transcript-DO-clean-region	t]
+    ["Clean Whole Buffer" ess-transcript-clean-buffer	t]
+    ["Switch S process" ess-switch-process		t]
     ))
 
 (unless (featurep 'xemacs)
@@ -199,7 +202,7 @@ in the region, leaving only the S commands.  Other keybindings are:
   (when inferior-ess-font-lock-keywords ;; new system
     (setq inferior-ess-font-lock-defaults
           (ess--extract-default-fl-keywords inferior-ess-font-lock-keywords)))
-  
+
   (set (make-local-variable 'font-lock-defaults)
        '(inferior-ess-font-lock-defaults nil nil ((?\. . "w") (?\_ . "w") (?' . "."))))
 
@@ -218,7 +221,7 @@ is not already."
   (interactive)
   (let* ((proc (or ess-local-process-name
                    (ess-request-a-process "Evaluate into which process? " t)))
-         (ess-buf (get-ess-buffer proc)))
+         (ess-buf (ess-get-process-buffer proc)))
     (setq ess-local-process-name proc)
     (if (get-buffer-window ess-buf) nil
       (display-buffer ess-buf t))
@@ -234,7 +237,7 @@ is not already."
   ;; replacement code begins
   (let* ((proc (or ess-local-process-name
                    (ess-request-a-process "Evaluate into which process? " t)))
-         (ess-buf (get-ess-buffer proc)))
+         (ess-buf (ess-get-process-buffer proc)))
     (setq ess-local-process-name proc)
     (if (get-buffer-window ess-buf) nil
       (display-buffer ess-buf t))
@@ -264,7 +267,7 @@ is not already."
 (defun ess-transcript-clean-region (beg end even-if-read-only)
   "Strip the transcript in the region, leaving only (R/S/Lsp/..) commands.
 Deletes any lines not beginning with a prompt, and then removes the
-prompt from those lines that remain.  Prefix argument means to 
+prompt from those lines that remain.  Prefix argument means to
 clean even if the buffer is \\[read-only]."
   (interactive "r\nP")
   (unless inferior-ess-prompt
@@ -273,9 +276,15 @@ clean even if the buffer is \\[read-only]."
            ;; Maybe call ess-clean-region-in-new-transcript ?"))
            ))
   (let ((do-toggle (and buffer-read-only even-if-read-only))
-        (ess-prompt-rx (concat "^" inferior-ess-prompt)))
+        (ess-prompt-rx (if inferior-ess-secondary-prompt
+                           (concat "^\\("
+                                   inferior-ess-prompt
+                                   "\\)\\|\\("
+                                   inferior-ess-secondary-prompt
+                                   "\\)")
+                         (concat "^" inferior-ess-prompt))))
     (save-excursion
-      (if do-toggle (setq buffer-read-only 0))
+      (if do-toggle (setq buffer-read-only nil))
       (save-restriction
         (unless (featurep 'xemacs) ;; does not exist in xemacs:
           (deactivate-mark))
@@ -287,7 +296,7 @@ clean even if the buffer is \\[read-only]."
         (while (re-search-forward ess-prompt-rx nil t)
           (replace-match "" nil nil)))
 
-      (if do-toggle (setq buffer-read-only 1)))))
+      (if do-toggle (setq buffer-read-only t)))))
 
 
 ;; unfinished idea :-----------------------

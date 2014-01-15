@@ -1,28 +1,23 @@
-.ess_evalq({
+## COMMENT ON S3 METHODS: It is not feasible and, quite frankly, a bad practice
+## to check all the assigned function names for "." separator. Thus, S3 methods
+## are not automatically registered. You can register them manually after you
+## have inserted method_name.my_class into your package environment using
+## ess-developer, like follows:
+##
+##    registerS3method("method_name", "my_class", my_package:::method_name.my_class)
+##
+## Otherwise R will call the registered (i.e. cached) S3 method instead of the
+## new method that ess-developer inserted in the package environment.
 
-    ## COMMENT ON S3 METHODS: It is not feasible and, quite frankly, a bad practice
-    ## to check all the assigned function names for "." separator. Thus, S3 methods
-    ## are not automatically registered. You can register them manually after you
-    ## have inserted method_name.my_class into your package environment using
-    ## ess-developer, like follows:
-    ##
-    ##    registerS3method("method_name", "my_class", my_package:::method_name.my_class)
-    ##
-    ## Otherwise R will call the registered (i.e. cached) S3 method instead of the
-    ## new method that ess-developer inserted in the package environment.
+.essDev.eval <- function(string, package, file = tempfile("ESSDev")){
+    cat(string, file = file)
+    on.exit(file.remove(file))
+    .essDev_source(file,, package = package)
+}
 
-
-    .essDev_differs <- function(f1, f2)
+.essDev_source <- function(source, expr, package = "")
     {
-        if (is.function(f1) && is.function(f2)){
-            !(identical(body(f1), body(f2)) && identical(args(f1), args(f2)))
-        }else
-            !identical(f1, f2)
-    }
-
-    .essDev_source <- function (source, expr, package = "")
-    {
-        require('methods')
+        ## require('methods')
         oldopts <- options(warn = 1)
         on.exit(options(oldopts))
         MPattern <- methods:::.TableMetaPattern()
@@ -198,7 +193,7 @@
                     newMethods <- c(newMethods,  gettextf("%s{%s}", methods[[i]], paste(inserted, collapse = ", ")))
             }else{
                 .essDev_assign(table, tableEnv, envir = .GlobalEnv)
-                newMethods <- c(newMethods,  gettextf("%s{%s}", methods[[i]], paste(objects(envir = tableEnv, all = T), collapse = ", ")))
+                newMethods <- c(newMethods,  gettextf("%s{%s}", methods[[i]], paste(objects(envir = tableEnv, all.names = T), collapse = ", ")))
             }
         }
         if(length(methodsNs))
@@ -207,20 +202,20 @@
             newObjects <- c(newObjects, gettextf("METH[%s]", paste(newMethods, collapse = ", ")))
 
         if(length(objectsPkg))
-            cat(sprintf("%s@PKG:\t%s\n", package, paste(objectsPkg, collapse = ", ")))
+            cat(sprintf("%s  PKG: %s   ", package, paste(objectsPkg, collapse = ", ")))
         if(length(objectsNs))
-            cat(sprintf("%s@NS:\t%s\n", package, paste(objectsNs, collapse = ", ")))
+            cat(sprintf("NS: %s   ", paste(objectsNs, collapse = ", ")))
         if(length(newObjects))
-            cat(sprintf("*GlobalEnv*:\t%s\n", paste(newObjects, collapse = ", ")))
-        if(length(c(objectsNs, objectsPkg, newObjects)) == 0L)
+            cat(sprintf("GE: %s\n", paste(newObjects, collapse = ", ")))
+        if(length(c(objectsNs, objectsPkg, newObjects)) == 0)
             cat(sprintf("*** Nothing explicitly assigned ***\n"))
         invisible(env)
     }
 
-    .essDev_insertMethods <- function(tableEnv,  tablePkg, envns)
+.essDev_insertMethods <- function(tableEnv,  tablePkg, envns)
     {
         inserted <- character()
-        for(m in ls(envir = tableEnv, all = T)){
+        for(m in ls(envir = tableEnv, all.names = T)){
             if(exists(m, envir = tablePkg, inherits = FALSE)){
                 thisEnv <- get(m, envir = tableEnv)
                 thisPkg <- get(m, envir = tablePkg)
@@ -236,7 +231,7 @@
     }
 
 
-    .essDev_evalSource <- function (source, expr, package = "")
+.essDev_evalSource <- function (source, expr, package = "")
     {
         envns <- tryCatch(asNamespace(package), error = function(cond) NULL)
         if(is.null(envns))
@@ -255,7 +250,7 @@
     }
 
 
-    .essDev_assign <- function (x, value, envir)
+.essDev_assign <- function (x, value, envir)
     {
         if (exists(x, envir = envir, inherits = FALSE) && bindingIsLocked(x, envir)) {
             unlockBinding(x, envir)
@@ -270,16 +265,23 @@
         invisible(NULL)
     }
 
-    .essDev_identicalClass <- function(cls1, cls2, printInfo = FALSE){
-        slots1 <- slotNames(class(cls1))
-        slots2 <- slotNames(class(cls2))
-        if(identical(slots1, slots2)){
-            vK <- grep("versionKey", slots1)
-            if(length(vK))
-                slots1 <- slots2 <- slots1[-vK]
-            out <- sapply(slots1, function(nm) identical(slot(cls1, nm), slot(cls2, nm)))
-            if(printInfo) print(out)
-            all(out)
-        }
+.essDev_identicalClass <- function(cls1, cls2, printInfo = FALSE){
+    slots1 <- slotNames(class(cls1))
+    slots2 <- slotNames(class(cls2))
+    if(identical(slots1, slots2)){
+        vK <- grep("versionKey", slots1)
+        if(length(vK))
+            slots1 <- slots2 <- slots1[-vK]
+        out <- sapply(slots1, function(nm) identical(slot(cls1, nm), slot(cls2, nm)))
+        if(printInfo) print(out)
+        all(out)
     }
-})
+}
+
+
+.essDev_differs <- function(f1, f2) {
+    if (is.function(f1) && is.function(f2)){
+        !(identical(body(f1), body(f2)) && identical(args(f1), args(f2)))
+    }else
+        !identical(f1, f2)
+}

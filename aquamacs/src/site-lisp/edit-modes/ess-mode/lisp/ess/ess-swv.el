@@ -110,7 +110,7 @@
     (save-excursion
       ;; (ess-execute (format "require(tools)")) ;; Make sure tools is loaded.
       (basic-save-buffer); do not Sweave/Stangle old version of file !
-      (let* ((sprocess (get-ess-process ess-current-process-name))
+      (let* ((sprocess (ess-get-process ess-current-process-name))
              (sbuffer (process-buffer sprocess))
              (rnw-file (buffer-file-name))
              (Rnw-dir (file-name-directory rnw-file))
@@ -376,6 +376,8 @@ file and latex the result."
     ["LaTeX"  ess-swv-latex   t]
     ["PDF(LaTeX)" ess-swv-PDF t]
     ["PS (dvips)" ess-swv-PS  t]
+    ["Knit" ess-swv-knit   t]
+    ["Purl" ess-swv-purl   t]
     ["Insert Sexpr" ess-insert-Sexpr t]
     ["AUCTeX Interface" ess-swv-toggle-plug-into-AUCTeX
      :style toggle :selected ess-swv-plug-into-AUCTeX-p]

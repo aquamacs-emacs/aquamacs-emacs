@@ -96,6 +96,50 @@ the mode line."
   (force-mode-line-update)
   (setq mode-line-process
         '(" [" ess-local-process-name "]")))
+        
+(defcustom ess-automatic-sas-log-or-lst-mode t
+  "Automatically turn on `SAS-log-mode' and `SAS-listing-mode' when enabled."
+  :type 'boolean
+  :group 'ess-sas)
+
+(defun ess-SAS-log-mode-p ()
+  "Return t when when a SAS log file is detected.
+A SAS log is defined as having:
+
+1. The first line matches \"^1[ \t]*The SAS System\"
+2. The file name ends in .log.
+"
+  (and ess-automatic-sas-log-or-lst-mode
+       (save-excursion
+         (goto-char (point-min))
+         (looking-at "1[ \t]*The SAS System"))
+       (if (buffer-file-name)
+           (string-match ".log$" (buffer-file-name))
+         t)))
+
+(defun ess-SAS-listing-mode-p ()
+  "Return t when SAS listing file is detected.
+A .lst file is a SAS listing file when:
+
+1. The file name ends in .lst
+2. The corresponding log file exists and is a SAS log file.
+"
+  (when ess-automatic-sas-log-or-lst-mode
+    (let* ((bfn (buffer-file-name))
+           (log (and bfn
+                     (string-match-p "\\.lst$" bfn)
+                     (replace-regexp-in-string "\\.lst$" ".log" bfn))))
+      (and log
+           (file-exists-p log)
+           (with-temp-buffer
+             (insert-file-contents log nil 0 200)
+             (goto-char (point-min))
+             (looking-at "1[ \t]*The SAS System"))))))
+
+(add-to-list 'magic-mode-alist
+             '(ess-SAS-log-mode-p . SAS-log-mode))
+(add-to-list 'magic-mode-alist
+             '(ess-SAS-listing-mode-p . SAS-listing-mode))
 
 (defun SAS-log-mode ()
   "`ess-transcript-mode' for SAS."
@@ -296,8 +340,8 @@ number."
              font-lock-comment-face)
        (cons "For further information on ANNOTATE macros, enter,"
              font-lock-comment-face)
-       (cons "^SAS/STAT 9.3_M1, SAS/ETS 9.3_M1, SAS/OR 9.3_M1"
-             font-lock-comment-face)
+       ;; (cons "^SAS/STAT 9.3_M1, SAS/ETS 9.3_M1, SAS/OR 9.3_M1"
+       ;;       font-lock-comment-face)
        (cons "\\(or \\)?%HELPANO.*$"
              font-lock-comment-face)
        (cons "^Local Variables:$"                  font-lock-comment-face)
@@ -415,7 +459,7 @@ number."
                                    "options"
                                    "plot" "pmenu" "print" "printto"
                                    "rank" "registry" "report"
-                                   "setinit" "sgpanel" "sgplot" "sgscatter" "sort" "sql" "standard" "summary"
+                                   "setinit" "sgdesign" "sgpanel" "sgplot" "sgrender" "sgscatter" "sort" "sql" "standard" "summary"
                                    "tabulate" "template" "timeplot" "transpose" "trantab"
                                    "univariate"
 
@@ -811,7 +855,7 @@ number."
                (back-to-indentation)
                (or (bobp)
                    (looking-at
-                    "data[ ;]\\|proc[ ;]\\|run[ ;]\\|endsas[ ;]\\|g?options[ ;]\\|%macro[ ;]\\|%mend[ ;]")))
+                    "data[ ;]\\|proc[ ;]\\|run[ ;]\\|quit[ ;]\\|endsas[ ;]\\|g?options[ ;]\\|%macro[ ;]\\|%mend[ ;]")))
              ;;  Case where current statement is DATA, PROC, etc...
              (setq prev-end (point))
              (goto-char (point-min))
@@ -840,7 +884,7 @@ number."
                 ((save-excursion;; added 4/28/94 to properly check
                    (if (bobp) () (backward-char 1));; for end of comment
                    (setq prev-end (point))
-                   (looking-at "*/"));;  improved 1/31/95
+                   (looking-at "\\*/"));;  improved 1/31/95
                  (save-excursion
                    (search-backward "*/"
                                     (point-min) 1 1); comment start is first /*
@@ -852,7 +896,8 @@ number."
                          (if (bobp) 0
                            (if (looking-at ";")
                                (sas-next-statement-indentation)
-                             (+ (current-indentation) sas-indent-width))))))
+                             ;;(+ (current-indentation) sas-indent-width)
+                             (current-indentation))))))
 
                 ;; added 6/27/94 to leave "* ;" comments alone
                 ((save-excursion
@@ -865,6 +910,10 @@ number."
                    (beginning-of-sas-statement 1)
                    (bobp));; added 4/13/94
                  (setq indent sas-indent-width));; so the first line works
+                ((save-excursion
+                   (beginning-of-sas-statement 2)
+                   (looking-at "cards4?;\\|datalines4?;\\|lines4?;"))
+                 (setq indent (current-indentation))) ; So cards keep indentation.
                 (t
                  (if (progn
                        (save-excursion
@@ -936,7 +985,9 @@ This will (hopefully) be fixed in later versions."
           (beginning-of-sas-statement 1 t))
         (if (or
              (looking-at
-              "data[ \n\t;]\\|proc[ \n\t]\\|%?do[ \n\t;]\\|%macro[ \n\t]\\|/\\*")
+              (concat "data[ \n\t;]\\|"
+                      (regexp-opt '("cards;" "cards4;" "datalines;" "datalines4;" "lines;" "lines4;"))
+                      "\\|proc[ \n\t]\\|%?do[ \n\t;]\\|%macro[ \n\t]\\|/\\*"))
              (save-excursion
                (re-search-forward
                 "\\b%?then\\>[ \n\t]*\\b%?do\\>\\|\\b%?else\\>[ \n\t]*\\b%?do\\>"

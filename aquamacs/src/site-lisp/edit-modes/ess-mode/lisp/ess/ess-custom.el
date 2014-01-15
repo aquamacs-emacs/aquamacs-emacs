@@ -133,7 +133,7 @@
   :prefix "ess-")
 ;; Variables (not user-changeable)
 
-(defvar ess-version "13.05" ;; updated by 'make'
+(defvar ess-version "13.09-1" ;; updated by 'make'
   "Version of ESS currently loaded.")
 
 (defvar ess-revision nil ;; set
@@ -226,12 +226,13 @@ See also `tooltip-hide-delay' and `tooltip-delay'.
 
 (defcustom ess-R-describe-object-at-point-commands
   '(("str(%s)")
-    ("head(%s, n = 40)")
-    ("tail(%s, n = 40)")
-    ("summary(%s)"))
+    ("htsummary(%s, hlength = 20, tlength = 20)")
+    ("summary(%s, maxsum = 20)"))
   "A list of commands cycled by `ess-describe-object-at-point'.
-%s is substituted with the name at point. The value of the
- aliment is not used as yet and has no effect."
+%s is substituted with the name at point.
+
+The value of each element is nil and is not used in current
+implementation."
   :group 'R
   :type 'alist)
 
@@ -356,7 +357,6 @@ for all projects."
   :type '(choice (const :tag "Off" nil)
                  (const :tag "On" t)
                  file))
-(make-variable-buffer-local 'ess-history-file)
 
 (defcustom ess-plain-first-buffername t
   "No fancy process buffname for the first process of each type (novice mode)."
@@ -387,6 +387,7 @@ Some useful keys for IDO completion:
 "
   :group 'ess
   :type 'boolean)
+
 
 (defcustom ess-tab-complete-in-script nil
   "If non-nil, TAB in script buffers tries to complete if there is nothing to indent.
@@ -470,7 +471,6 @@ to install your custom sources.
   :group 'ess-extras
   :type '(choice (const t) (const script-only) (const nil)))
 
-
 (defcustom ess-ac-R-argument-suffix " = "
   "Suffix appended by `ac-source-R' and `ac-source-R-args' to candidates."
   :group 'R
@@ -489,6 +489,10 @@ might want to set this to nil.
 "
   :group 'ess
   :type 'boolean)
+
+
+(defvar ess-ac-sources nil
+  "Dialect specific, ESS specific list of ac-sources")
 
 (defvar ess--completing-hist nil
   "Variable to store completion history.
@@ -836,7 +840,7 @@ Since ESS 13.05, the default is  RRR  rather than DEFAULT."
 
 ;; the real setting of this happens via <foo>-editing-alist:
 (defvar ess-style ess-default-style
-  "*The buffer specific ESS indentation style.")
+  "*The buffer specific ESS indentation style, see `ess-style-alist' for more.")
 
 ;;*;; Variables controlling behaviour of dump files
 
@@ -961,13 +965,13 @@ If nil, ESS will try finding one from a list."
   :group 'ess-roxy
   :type 'string)
 
-(defcustom ess-roxy-tags-noparam '("export" "nord")
+(defcustom ess-roxy-tags-noparam '("export" "noRd")
   "The tags used in roxygen fields that can be used alone.  Used
 to decide highlighting and tag completion."
   :group 'ess-roxy
   :type '(repeat string))
 
-(defcustom ess-roxy-tags-param '("author" "aliases" "concept"
+(defcustom ess-roxy-tags-param '("author" "aliases" "concept" "details"
                                  "examples" "format" "keywords"
                                  "method" "exportMethod"
                                  "name" "note" "param"
@@ -975,9 +979,10 @@ to decide highlighting and tag completion."
                                  "seealso" "source" "docType"
                                  "title" "TODO" "usage" "import"
                                  "exportClass" "exportPattern" "S3method"
+                                 "inheritParams"
                                  "importFrom" "importClassesFrom"
                                  "importMethodsFrom" "useDynLib"
-                                 "rdname" "slot")
+                                 "rdname" "section" "slot")
   "The tags used in roxygen fields that require a parameter.
 Used to decide highlighting and tag completion."
   :group 'ess-roxy
@@ -1219,7 +1224,11 @@ directory in which \"R/\" is located.  For example, setting
 `ess-directory-containing-R' to \"c:\" will tell ESS to search
 for R versions with pathnames of the form \"c:/R/R-x.y.z\".
 
-Currently only used when `ess-microsoft-p'."
+Currently only used when `ess-microsoft-p'.  If you change the
+value of this variable, you need to restart Emacs for it to take
+effect.  It also needs to be set before you load ess-site as its
+value is used once only when ESS is loaded."
+
   :group 'ess
   :type 'directory)
 
@@ -1673,7 +1682,7 @@ If you wish to pass arguments to a process, see e.g. `inferior-R-args'.")
 
 (defvar inferior-ess-secondary-prompt nil
   "Regular expression used by ess-mode to detect the secondary prompt.
-(This is issued by S to continue an incomplete expression).
+This is issued by S to continue an incomplete expression.
 Set to nil if language doesn't support secondary prompt.")
 ;; :group 'ess-proc
 ;; :type 'string)
@@ -1782,7 +1791,7 @@ of Emacs until the code has been successfully evaluated."
 ;; go away, (once we are sure this doesn't break anything)
 (defvaralias 'ess-current-process-name 'ess-local-process-name)
 
-(defvar ess-mode-line-indicator '("" ess-local-process-name)
+(defvar ess--mode-line-process-indicator '("" ess-local-process-name)
   "List of ESS mode-line indicators.
 Local in process buffers and must start with a string. Changes of
 this variable are automatically reflected in mode-lines of the
@@ -1799,22 +1808,58 @@ External utilities such as `ess-tracebug' and `ess-developer'
 customize this variable to indicate changes in the process
 status.
 ")
-(put 'ess-mode-line-indicator 'risky-local-variable t)
-(make-variable-buffer-local 'ess-mode-line-indicator)
+(put 'ess--mode-line-process-indicator 'risky-local-variable t)
+(make-variable-buffer-local 'ess--mode-line-process-indicator)
+
+(defvar ess--local-mode-line-process-indicator '("")
+  "List of local process indicators.
+See `ess--mode-line-process-indicator' for how to set it.
+
+This is an internal varialbe used by tools like `ess-developer'
+and `ess-tracebug'.")
+(put 'ess--local-mode-line-process-indicator 'risky-local-variable t)
+(make-variable-buffer-local 'ess--local-mode-line-process-indicator)
 
 (defvar ess-process-name-list nil
   "Alist of active ESS processes.")
 
 ;;*;; Inferior ESS commands
 
-(defcustom inferior-ess-load-command "source(\"%s\")\n"
-  "Format-string for building the ess command to load a file.
+(defvar ess-load-command "source(\"%s\")\n"
+  "Dialect specific format-string for building the ess command to load a file.
 
 This format string should use %s to substitute a file name and should
 result in an ESS expression that will command the inferior ESS to load
-that file."
-  :group 'ess-command
-  :type 'string)
+that file.")
+(define-obsolete-variable-alias 'inferior-ess-load-command 'ess-load-command "ESS v13.09")
+
+(defvar ess-load-visibly-command nil
+  "Dialect specific format-string for building the ess command to
+  load a file with echo.")
+
+(defvar ess-load-visibly-noecho-command nil
+  "Dialect specific format-string for building the ess command to
+load a file with visible output but no echo.")
+
+(defvar ess-eval-command nil
+  "Dialect specific format-string for building the command to evaluate a string.
+
+This format string should use %s as a placeholder for the string
+to be evaluated and, optionally, %f for the file name to be
+reported in the error references.
+
+The resulting command should not echo code or print any
+transitory output. See also `ess-eval-visibly-command' and
+`ess-eval-visibly-noecho-command'.")
+
+(defvar ess-eval-visibly-command nil
+  "Dialect specific format-string for building the command to
+  evaluate a string with visible output and code echo.
+See ")
+
+(defvar ess-eval-visibly-noecho-command nil
+  "Dialect specific format-string for building the command to
+  evaluate a string with visible output but no echo.")
 
 (defcustom inferior-ess-dump-command "dump(\"%s\",file=\"%s\")\n"
   "Format-string for building the ess command to dump an object into a file.
@@ -1833,7 +1878,7 @@ This format string should use %s to substitute an object name.")
 (setq-default inferior-ess-help-command "help(\"%s\")\n")
 
 
-(defcustom inferior-ess-r-help-command ".ess_help(\"%s\", help_type=\"text\")\n"
+(defcustom inferior-ess-r-help-command ".ess.help(\"%s\", help.type=\"text\")\n"
   "Format-string for building the R command to ask for help on an object.
 
 This format string should use %s to substitute an object name.
@@ -1916,8 +1961,7 @@ It is always used in transcript mode.  In inferior ess mode it is
 used only if `comint-use-prompt-regexp' is t.
 
 If not set in language's customise-alist it is constructed at run time
-from `inferior-ess-primary-prompt' and
-`inferior-ess-secondary-prompt' within `ess-multi'.")
+from `inferior-ess-primary-prompt' and `inferior-ess-secondary-prompt'.")
 
 (make-variable-buffer-local 'inferior-ess-prompt)
 
@@ -1951,7 +1995,7 @@ session.")
 
 (defvar ess-sp-change nil
   "Variable not used. Use (ess-process-get 'sp-for-help-changed?) instead.")
-(make-obsolete-variable 'ess-sp-change nil "ESS 12.09")
+(make-obsolete-variable 'ess-sp-change nil "ESS[12.09]")
 ;; (make-variable-buffer-local 'ess-sp-change)
 
 (defvar ess-prev-load-dir/file nil
@@ -2257,13 +2301,12 @@ current buffer. Old system. From ESS[12.09] switched to new
 system described in `inferior-ess-font-lock-keywords'.")
 (make-variable-buffer-local 'inferior-ess-font-lock-defaults)
 
-
 (defvar comint-highlight-prompt 'comint-highlight-prompt)
 ;; needed for proper font-lock
 
 (defvar ess-S-fl-keyword:prompt
   (cons (concat "^" inferior-S-prompt) 'comint-highlight-prompt)
-  "Highlith prompts missed by comint.")
+  "Highlight prompts missed by comint.")
 
 ;; (defvar ess-S-fl-keyword:input-line
 ;;   (cons "^[a-zA-Z0-9 ]*[>+]\\(.*$\\)" '(1 font-lock-variable-name-face keep t)))
@@ -2274,20 +2317,20 @@ system described in `inferior-ess-font-lock-keywords'.")
 ") ;; also matches subsetting
 
 (defvar ess-R-fl-keyword:messages
-  (cons (concat "^" (regexp-opt ess-R-message-prefixes 'enc-paren))
-        'font-lock-constant-face)
+  (cons (regexp-opt ess-R-message-prefixes 'enc-paren)
+        'font-lock-warning-face)
   "Inferior-ess problems or errors.")
 
 (defcustom inferior-R-font-lock-keywords
   '((ess-S-fl-keyword:prompt   . t) ;; comint does that, but misses some prompts
     ;; (ess-S-fl-keyword:input-line) ;; comint boguously highlights input with text props, no use for this
+    (ess-R-fl-keyword:messages  . t)
     (ess-R-fl-keyword:modifiers . t)
     (ess-R-fl-keyword:fun-defs  . t)
     (ess-R-fl-keyword:keywords  . t)
-    (ess-R-fl-keyword:assign-ops        . t)
+    (ess-R-fl-keyword:assign-ops	. t)
     (ess-R-fl-keyword:constants . t)
-    (ess-R-fl-keyword:messages  . t)
-    (ess-fl-keyword:matrix-labels        . t)
+    (ess-fl-keyword:matrix-labels	. t)
     (ess-fl-keyword:fun-calls)
     (ess-fl-keyword:numbers)
     (ess-fl-keyword:operators)
@@ -2313,20 +2356,19 @@ should be t or nil to indicate if the keyword is active or not."
 NOT used. See `inferior-S-font-lock-keywords'")
 (make-obsolete-variable 'ess-S-common-font-lock-keywords nil "ESS[12.09]")
 
-
 (defvar ess-S-fl-keyword:messages
-  (cons (concat "^" (regexp-opt ess-S-message-prefixes 'enc-paren))
-        'font-lock-constant-face)
+  (cons (regexp-opt ess-S-message-prefixes 'enc-paren)
+        'font-lock-warning-face)
   "Inferior-ess problems or errors.")
 
 (defcustom inferior-S-font-lock-keywords
   '((ess-S-fl-keyword:prompt    . t)
+    (ess-S-fl-keyword:messages  . t)
     (ess-S-fl-keyword:modifiers . t)
     (ess-S-fl-keyword:fun-defs  . t)
     (ess-S-fl-keyword:keywords  . t)
     (ess-S-fl-keyword:assign-ops        . t)
     (ess-S-fl-keyword:constants . t)
-    (ess-S-fl-keyword:messages  . t)
     (ess-fl-keyword:fun-calls)
     (ess-fl-keyword:numbers)
     (ess-fl-keyword:operators)
@@ -2356,8 +2398,8 @@ default."
 
 (defcustom ess-help-pop-to-buffer t
   "If non-nil ess-help buffers are given focus during the display.
-The default is t.
-"
+The default is t (except when `focus-follows-mouse' and
+`mouse-autoselect-window' are both t)."
   :group 'ess-help
   :type 'boolean)
 
@@ -2373,6 +2415,11 @@ The parameters of this frame are stored in `ess-help-frame-alist'.
 See also `inferior-ess-own-frame'."
   :group 'ess-help
   :type '(choice (const nil) (const one) (const t)))
+
+(defcustom ess-help-reuse-window t
+  "If t, ESS tries to display new help buffers in the existing help window"
+  :type 'boolean
+  :group 'ess-help)
 
 (defcustom ess-help-frame-alist special-display-frame-alist
   "Alist of frame parameters used to create help frames.
@@ -2391,9 +2438,6 @@ the variable `ess-help-own-frame' is non-nil."
 (defvar ess-function-call-face 'ess-function-call-face
   "Face name to use for highlighting function calls.")
 
-(defvar ess-function-call-face 'ess-function-call-face
-  "Face name to use for highlighting function calls.")
-
 (defvar ess-numbers-face 'ess-numbers-face
   "Face name to use for highlighting numbers.")
 
@@ -2403,7 +2447,7 @@ the variable `ess-help-own-frame' is non-nil."
           ess-numbers-face font-lock-type-face)
 
   (defface ess-function-call-face
-    '((default (:slant normal :inherit font-lock-builtin-face)))
+    '((default (:slant normal :inherit font-lock-function-name-face)))
     "Font Lock face used to highlight function calls in ess buffers."
     :group 'ess)
 
@@ -2428,6 +2472,16 @@ Choices are `separate-buffer', `s-process', `www'.  The latter uses
   "Dialect specific command web help search.
 Passed to `ess-execute-dialect-specific' which see. ")
 (make-variable-buffer-local 'ess-help-web-search-command)
+
+(defvar ess-manual-lookup-command nil
+  "Dialect specific command manual lookup.
+Passed to `ess-execute-dialect-specific' which see. ")
+(make-variable-buffer-local 'ess-manual-lookup-command)
+
+(defvar ess-reference-lookup-command nil
+  "Dialect specific command for reference lookup..
+Passed to `ess-execute-dialect-specific' which see. ")
+(make-variable-buffer-local 'ess-reference-lookup-command)
 
 (defvar ess-funargs-command  nil
   "Dialect specific command to return a list of function arguments.
@@ -2489,10 +2543,10 @@ Defaults to `ess-S-non-functions'."
 
 
  ; julia-mode
-(defcustom inferior-julia-program-name "julia-release-basic"
+(defcustom inferior-julia-program-name "julia-basic"
   ;; the default assumes it is on the PATH ... which is typically the case after
   ;; a "typical unix-alike installation"
-  "Path to julia-release-basic executable"
+  "Path to julia-basic executable"
   :group 'ess-Julia)
 
 (defvar julia-basic-offset 4
@@ -2534,11 +2588,10 @@ Created for each process."
   "Buffer for temporary use for setting default variable values.
 Used for recording status of the program, mainly for debugging.")
 
-;; VS[31-08-2012]: No global exchange please. This var should be local. If you
-;; need it in a new buffer, import it from the parent buffer.
 (defvar ess-customize-alist nil
   "Variable settings to use for proper behavior.
 Not buffer local!")
+;; TODO: fixme We cannot make it local as yet, Not list is set on inferior startup.
 ;; (make-variable-buffer-local 'ess-customize-alist)
 ;; (defvaralias 'ess-local-customize-alist 'ess-customize-alist)
 

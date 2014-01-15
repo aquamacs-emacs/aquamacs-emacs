@@ -36,10 +36,9 @@
   ;;FIXME (defun ess-calculate-indent ..)  can do that ...
   (interactive)
   (setq pos (or pos (point)))
-  (let ((pps (parse-partial-sexp (point-min) pos)))
-         ;; (if (featurep 'xemacs)
-                 ;;   (parse-partial-sexp (point-min) pos)
-                 ;; (syntax-ppss pos))))
+  (let ((pps
+         ;; (parse-partial-sexp (point-min) pos)
+         (syntax-ppss pos)))
     ;; 3: string,  4: comment
     (or (nth 3 pps) (nth 4 pps))))
 
@@ -47,14 +46,11 @@
 (defun ess-inside-string-p (&optional pos)
   "Return non-nil if point is inside string (according to syntax)."
   (interactive)
-  (setq pos (or pos (point)))
-  ;; next doesn't work reliably, when narrowing the buffer in iESS the ppss
-  ;; cahce is screwd :(
-  ;; (let ((pps (if (featurep 'xemacs)
-  ;;                (parse-partial-sexp (point-min) pos)
-  ;;              (syntax-ppss pos))))
-  ;;   (nth 3 pps))
-  (nth 3 (parse-partial-sexp (point-min) pos))
+  ;; when narrowing the buffer in iESS the ppss cahce is screwed:( But it is
+  ;; very fast, so don't bother for now.
+  (let ((pps (syntax-ppss pos)))
+    (nth 3 pps))
+  ;; (nth 3 (parse-partial-sexp (point-min) pos))
   )
 
 (defun ess-inside-comment-p (&optional pos)
@@ -67,6 +63,14 @@
 	    (eq 'font-lock-comment-face face)))
 	(nth 4 (parse-partial-sexp (progn (goto-char pos) (point-at-bol)) pos)))))
 
+(defun ess-inside-brackets-p (&optional pos)
+  "Return t if position POS is inside brackets.
+POS defaults to point if no value is given."
+  (save-excursion
+    (let* ((pos (or pos (point)))
+	   (beg (re-search-backward "\\[" (max (point-min) (- pos 1000)) t))
+	   (end (re-search-forward "\\]" (min (point-max) (+ pos 1000)) t)))
+      (and beg end (> pos beg) (> end pos)))))
 
 (defun ess--extract-default-fl-keywords (keywords)
   "Extract the t-keywords from `ess-font-lock-keywords'."
@@ -104,7 +108,7 @@
             (buffer-list)))))
 
 
-(defun ess-generate-font-lock-submenu (menu)
+(defun ess--generate-font-lock-submenu (menu)
   "Internal, used to generate ESS font-lock submenu"
   (append (mapcar (lambda (el)
                     `[,(symbol-name (car el))
@@ -157,13 +161,16 @@ for a better but slower version."
  If VERBOSE   is non-nil, (message ..) about replacements."
   (let ((case-fold-search (and case-fold-search
                                (not fixedcase))); t  <==> ignore case in search
-        (pl) (p))
-    (while (setq p (re-search-forward regexp nil t))
+        (ppt (point)); previous point
+        (p))
+    (while (and (setq p (re-search-forward regexp nil t))
+                (< ppt p))
+      (setq ppt p)
       (cond ((not (ess-inside-string-or-comment-p (1- p)))
              (if verbose
                  (let ((beg (match-beginning 0)))
-                   (message "(beg,p)= (%d,%d) = %s"
-                            beg p (buffer-substring beg p) )))
+                   (message "buffer in (match-beg.,p)=(%d,%d) is '%s'"
+                            beg p (buffer-substring beg p))))
              (replace-match to-string fixedcase literal)
              ;;or (if verbose (setq pl (append pl (list p))))
              )))
@@ -783,19 +790,17 @@ etc.
   ;; (while-no-input
   (run-hooks 'ess-idle-timer-functions))
 
-
 (require 'timer)
 (defvar ess--idle-timer
   (run-with-idle-timer ess-idle-timer-interval 'repeat 'ess--idle-timer-function)
   "Timer used to run `ess-idle-timer-functions'.")
 
-
 (defmacro ess-when-new-input (time-var &rest body)
-  "BODY is evaluate only if the value of TIME-VAR is bigger than
-the time of the last user input (stored in 'last-eval' process
-variable). TIME-VAR is the name of the process variable which
-holds the access time. See the code for `ess-synchronize-dirs'
-and `ess-cache-search-list'.
+  "BODY is evaluate only if the value of procss variable TIME-VAR
+is bigger than the time of the last user input (stored in
+'last-eval' process variable). TIME-VAR is the name of the
+process variable which holds the access time. See the code for
+`ess-synchronize-dirs' and `ess-cache-search-list'.
 
 Returns nil when no current process, or process is busy, or
 time-var > last-eval. Otherwise, execute BODY and return the last
@@ -820,14 +825,6 @@ process to avoid excessive requests.
            (process-put *proc* ',time-var (current-time))
            out)))))
 
-;; debug util:
-(defmacro dbg (&rest args)
-  `(progn
-     ,@(mapcar (lambda (el)
-		 `(princ (format "%s:%s\n" ',el ,el)))
-	       args)))
-
-
 
 (defmacro ess--execute-electric-command (map &optional prompt wait exit-form &rest args)
   "Execute single-key comands defined in MAP till a key is pressed which is not part of map.
@@ -850,7 +847,8 @@ EXIT-FORM should be supplied for a more refined control of the
 read-even loop. The loop is exited when EXIT-FORM evaluates to
 t. See examples in the tracebug code.
 "
-  
+  ;;VS[09-06-2013]: check: it seems that set-temporary-overlay-map is designed
+  ;;for this type of things; see also repeat.el package.
   `(let* ((ev last-command-event)
           (command (lookup-key ,map (vector ev)))
           out exit )
@@ -874,10 +872,11 @@ t. See examples in the tracebug code.
 
 -- If command is not defined issue warning 'Not availabe for dialect X'
 -- if a function, execute it with ARGS
--- If a string strarting with 'http' or 'www' browse with `browse-url',
+-- If a string starting with 'http' or 'www', browse with `browse-url',
    otherwise execute the command in inferior process.
 
-When command is a string ARGS are substituted by (format ,command ,@args).
+-- If a string, interpret as a command to subprocess, and
+   substitute ARGS with `(format ,command ,@args).
 
 When PROMPT is non-nil ask the user for a string value and
 prepend the response to ARGS.
@@ -909,8 +908,7 @@ to `ess-completing-read'.
               (setq com (apply 'format com args))
               (ess-eval-linewise com))
              (t
-              (error "Argument COMMAND must be either a function or a string")))))
-  )
+              (error "Argument COMMAND must be either a function or a string"))))))
 
 
 
@@ -972,15 +970,12 @@ and y-offsets for the toolbar from point."
 ;; (defun ess-tooltip-show-at-point (text xo yo)
 ;;   (with-no-warnings
 ;;     (pos-tip-show text
-;;                   'popup-tip-face 
+;;                   'popup-tip-face
 ;;                   (point)
 ;;                   nil tooltip-hide-delay
 ;;                   popup-tip-max-width
 ;;                   nil xo yo)))
 
-
-
-      
 
 (defvar ess-build-tags-command nil
   "Command passed to generate tags.
@@ -989,7 +984,7 @@ If nil, `ess-build-tags-for-directory' uses the mode's imenu
 regexpresion. Othersiwe, it should be a string with two %s
 formats: one for directory and another for the output file.")
 
-  
+
 (defun ess-build-tags-for-directory (dir tagfile)
   "Ask for directory and tag file and build tags for current dialect.
 
@@ -1002,13 +997,18 @@ Use M-. to navigate to a tag. M-x `visit-tags-table' to
 append/replace the currently used tag table.
 
 If prefix is given, force tag generation based on imenu. Might be
-useful when different languages are also present in the
-directory (.cpp, .c etc).
-"
-  (interactive "DDirectory to tag: 
+useful when different language files are also present in the
+directory (.cpp, .c etc)."
+  (interactive "DDirectory to tag:
 FTags file (default TAGS): ")
   (when (eq (length (file-name-nondirectory tagfile)) 0)
     (setq tagfile (concat tagfile "TAGS")))
+  ;; emacs find-tags doesn't play well with remote TAG files :(
+  (when (file-remote-p tagfile)
+    (require 'tramp)
+    (setq tagfile (with-parsed-tramp-file-name tagfile foo foo-localname)))
+  (when (file-remote-p dir)
+    (setq dir (with-parsed-tramp-file-name dir foo foo-localname)))
   (if (and ess-build-tags-command (null current-prefix-arg))
       (ess-eval-linewise (format ess-build-tags-command dir tagfile))
     ;; else generate from imenu
@@ -1029,42 +1029,45 @@ FTags file (default TAGS): ")
       ;; (dbg (format "%s | %s" find-cmd tags-cmd))
       (when (= 0 (shell-command (format "%s | %s" find-cmd tags-cmd)))
         (message "Building tags .. ok!")))))
-      
 
 
-(defun ess-function-arguments (funname)
+(defun ess-function-arguments (funname &optional proc)
   "Get FUNARGS from cache or ask the process for it.
 
 Return FUNARGS - a list with the first element being a
 cons (package_name . time_stamp_of_request), second element is a
 string giving arguments of the function as they appear in
-documentation, third element is a list of arguments of all S3
-methods as returned by utils:::functionArgs utility.
+documentation, third element is a list of arguments of all
+methods.
 
-If package_name is R_GlobalEnv or \"\", and time_stamp is less
-recent than the time of the last user interaction to the process,
-then update the entry.
+If package_name is nil, and time_stamp is less recent than the
+time of the last user interaction to the process, then update the
+entry.
 
-Package_name is \"\" if funname was not found or is a special
-name i.e. contains :,$ or @.
+Package_name is also nil when funname was not found, or funname
+is a special name that contains :,$ or @.
+
+If PROC is given, it should be an ESS process which should be
+queried for arguments.
 "
+
   (when (and funname ;; usually returned by ess--funname.start (might be nil)
-             (ess-process-live-p))
-    (let* ((proc (get-process ess-local-process-name))
+             (or proc (ess-process-live-p)))
+    (let* ((proc (or proc (get-process ess-local-process-name)))
            (args (gethash funname (process-get proc 'funargs-cache)))
            (pack (caar args))
            (ts   (cdar args)))
       (when (and args
                  (and (time-less-p ts (process-get proc 'last-eval))
                       (or (null pack)
-                          (equal pack "")
-                          (equal pack "R_GlobalEnv"))))
+                          (equal pack ""))))
         ;; reset cache
         (setq args nil))
       (or args
           (cadr (assoc funname (process-get proc 'funargs-pre-cache)))
           (with-current-buffer (ess-command (format ess-funargs-command
-                                                    (ess-quote-special-chars funname)))
+                                                    (ess-quote-special-chars funname))
+                                            nil nil nil nil proc)
             (goto-char (point-min))
             (when (re-search-forward "(list" nil t)
               (goto-char (match-beginning 0))
@@ -1075,6 +1078,12 @@ name i.e. contains :,$ or @.
             (puthash (substring-no-properties funname) args (process-get proc 'funargs-cache))
             )))))
 
+(defun ess-symbol-start ()
+  "Get initial position for objects completion."
+  (let ((beg (car (bounds-of-thing-at-point 'symbol))))
+    (when (and beg (not (save-excursion (goto-char beg)
+                                        (looking-at "/\\|.[0-9]"))))
+      beg)))
 
 (defvar ess--funname.start nil)
 
@@ -1089,36 +1098,43 @@ of lines.
 
 Also store the cons in 'ess--funname.start for potential use
 later."
-  (save-restriction
-    (let* ((proc (get-buffer-process (current-buffer)))
-           (mark (and proc (process-mark proc))))
+  (save-excursion
+    (save-restriction
+     (let* ((proc (get-buffer-process (current-buffer)))
+            (mark (and proc (process-mark proc))))
 
-      (if (and mark (>= (point) mark))
-          (narrow-to-region mark (point)))
+       (if (and mark (>= (point) mark))
+           (narrow-to-region mark (point)))
 
-      (and ess-noweb-mode
-           (ess-noweb-narrow-to-chunk))
+       (and ess-noweb-mode
+            (ess-noweb-narrow-to-chunk))
 
-      (when (not (ess-inside-string-p))
-        (setq ess--funname.start
-              (condition-case nil ;; check if it is inside a functon call
-                  (save-excursion
-                    (up-list -1)
-                    (while (not (looking-at "("))
-                      (up-list -1))
-                    ;; (skip-chars-backward " \t") ;; bad R style, so not providding help
-                    (let ((funname (symbol-name (symbol-at-point))))
-                      (when (and funname
-                                 (not (member funname ess-S-non-functions)))
-                        (cons funname (- (point) (length funname))))
-                      ))
-                (error nil)))))))
+       (unless (ess-inside-string-p)
+         (setq ess--funname.start
+               (condition-case nil ;; check if it is inside a functon 
+                   (progn
+                     ;; for the sake of big buffers, look only 1000 chars back
+                     (narrow-to-region (max (point-min) (- (point) 1000)) (point))
+                     (up-list -1)
+                     (while (not (looking-at "("))
+                       (up-list -1))
+                     (let ((funname (symbol-name (symbol-at-point))))
+                       (when (and funname
+                                  (not (member funname ess-S-non-functions)))
+                         (cons funname (- (point) (length funname))))
+                       ))
+                 (error nil))
+               ))))))
 
 (defun ess--inject-code-from-file (file)
   ;; this is different from ess-load-file
-  (ess-command (with-temp-buffer
-                 (insert-file-contents file)
-                 (buffer-string))))
+  (let ((content (with-temp-buffer
+                   (insert-file-contents file)
+                   (buffer-string))))
+    (when (string= ess-dialect "R")
+      ;; don't detect intermediate prompts
+      (setq content (concat "{" content "}\n")))
+    (ess-command content)))
 
 (provide 'ess-utils)
 

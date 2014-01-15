@@ -72,7 +72,7 @@
 ;; (autoload 'ess-switch-process           "ess-inf" "" nil)
 ;; (autoload 'ess-switch-to-ESS            "ess-inf" "" nil)
 ;; (autoload 'ess-request-a-process        "ess-inf" "" nil)
-;; (autoload 'get-ess-process              "ess-inf" "" nil)
+;; (autoload 'ess-get-process              "ess-inf" "" nil)
 ;; (autoload 'ess-command                  "ess-inf" "" nil)
 ;; (autoload 'ess-create-temp-buffer       "ess-inf" "" nil)
 ;; (autoload 'ess-display-temp-buffer      "ess-inf" "" nil)
@@ -154,7 +154,7 @@
     (define-key map "\C-c\C-k"   'ess-force-buffer-current)
     (define-key map "\C-c`"      'ess-show-traceback)
     (define-key map [(control ?c) ?~] 'ess-show-call-stack)
-    (define-key map "\C-c."      'ess-set-style); analogous to binding in C-mode
+    (define-key map "\C-c."      (lambda () (interactive) (message "ess-set-style moved to C-c C-e C-s. Sorry for the inconvenience")))
     (define-key map "{"          'ess-electric-brace)
     (define-key map "}"          'ess-electric-brace)
     (define-key map "\C-\M-q"    'ess-indent-exp)
@@ -164,6 +164,8 @@
     ;;(define-key map [delete]   'backward-delete-char-untabify)
     (define-key map "\t"         'ess-indent-or-complete)
     (define-key map "\C-c\C-q"   'ess-quit)
+    (define-key map "\M-\r"      'ess-use-this-dir)
+
     ;; smart operators; most likely will go in the future into a separate local map
     (define-key map ","          'ess-smart-comma)
 
@@ -188,23 +190,28 @@
     ;; (define-key map "\M-j"    'ess-eval-line-and-go)
     map)
   "Keymap for ess-eval functions.")
-(make-obsolete-variable 'ess-eval-map nil "ESS12.09.1")
+(make-obsolete-variable 'ess-eval-map nil "ESS[12.09.1]")
 
 (defvar ess-extra-map
   (let (ess-extra-map)
     (define-prefix-command 'ess-extra-map)
     (define-key ess-extra-map "\C-d" 'ess-dump-object-into-edit-buffer)
     (define-key ess-extra-map "d" 'ess-dump-object-into-edit-buffer)
-    (define-key ess-extra-map "\C-t" 'ess-build-tags-for-directory)
-    (define-key ess-extra-map "t" 'ess-build-tags-for-directory)
-    (define-key ess-extra-map "\C-l" 'ess-load-library)
-    (define-key ess-extra-map "l" 'ess-load-library)
+    (define-key ess-extra-map "\C-e" 'ess-execute)
+    (define-key ess-extra-map "e" 'ess-execute)
     (define-key ess-extra-map "\C-i" 'ess-install-library)
     (define-key ess-extra-map "i" 'ess-install-library)
-    ;; (define-key map "C-t" 
+    (define-key ess-extra-map "\C-l" 'ess-load-library)
+    (define-key ess-extra-map "l" 'ess-load-library)
+    (define-key ess-extra-map "\C-s" 'ess-set-style)
+    (define-key ess-extra-map "s" 'ess-set-style)
+    (define-key ess-extra-map "\C-t" 'ess-build-tags-for-directory)
+    (define-key ess-extra-map "t" 'ess-build-tags-for-directory)
+    (define-key ess-extra-map "\C-w" 'ess-execute-screen-options)
+    (define-key ess-extra-map "w" 'ess-execute-screen-options)
+    (define-key ess-extra-map "/" 'ess-set-working-directory)
     ess-extra-map)
-  "ESS extra map"
-  )
+  "ESS extra map")
 
 
 (require 'ess-noweb-mode)
@@ -218,7 +225,7 @@
     ["Eval region | func | para" ess-eval-region-or-function-or-paragraph t]
     ["Eval region | func | para & step" ess-eval-region-or-function-or-paragraph-and-step t]
     ["Eval region | line" ess-eval-region-or-line-and-step t]
-    ["Enter expression" ess-execute-in-tb                 t]
+    ["Enter expression" ess-execute                 t]
     ;; sub menus
     "------"
     ("Process"
@@ -303,7 +310,7 @@
     "------"
     ("Font Lock"
      :active ess-font-lock-keywords
-     :filter ess-generate-font-lock-submenu)
+     :filter ess--generate-font-lock-submenu)
     "------"
     ["Describe"         describe-mode                   t]
     ["About editing" (ess-goto-info "Editing")  t]
@@ -454,36 +461,12 @@ indentation style. At present, predefined style are `BSD', `GNU', `K&R', `C++',
   (make-local-variable 'indent-tabs-mode)
   (setq indent-tabs-mode nil)
 
-  ;;  (make-local-variable 'paragraph-start)
-  ;;  (setq paragraph-start (concat "^$\\|" page-delimiter))
-  ;;  (make-local-variable 'paragraph-separate)
-  ;;  (setq paragraph-separate paragraph-start)
-  ;;  (make-local-variable 'paragraph-ignore-fill-prefix)
-  ;;  (setq paragraph-ignore-fill-prefix t)
-  ;;  (make-local-variable 'indent-line-function)
-  ;;  (setq indent-line-function 'ess-indent-line)
-  ;;  (make-local-variable 'require-final-newline)
-  ;;  (setq require-final-newline t)
-  ;;  (make-local-variable 'comment-start)
-  ;;  (setq comment-start "#")
-  ;;  (make-local-variable 'comment-start-skip)
-  ;;  (setq comment-start-skip "#+ *")
-  ;;  (make-local-variable 'comment-column)
-  ;;  (setq comment-column 40)
-  ;;  (make-local-variable 'comment-indent-function)
-  ;;  (setq comment-indent-function 'ess-comment-indent)
-  ;;  (make-local-variable 'parse-sexp-ignore-comments)
-  ;;  (setq parse-sexp-ignore-comments t)
-  ;;  (ess-set-style ess-default-style)
-  ;;  (make-local-variable 'ess-local-process-name)
-  ;;  (make-local-variable 'ess-keep-dump-files)
-
   (put 'ess-local-process-name 'permanent-local t) ; protect from RCS
-  (if (featurep 'xemacs)
-      (setq mode-line-process ;; AJR: in future, XEmacs will use modeline-process.
-            '(" [" ess-local-process-name  "]")) ;; xemacs does not support :eval
-    (setq mode-line-process
-          '(" [" (:eval (ess--get-mode-line-indicator))  "]")))
+  (setq mode-line-process
+        '(" ["
+          (:eval (ess--get-mode-line-indicator))
+          ess--local-mode-line-process-indicator
+          "]"))
   ;; completion
   (if (and (featurep 'emacs)
            (>= emacs-major-version 24))
@@ -507,14 +490,14 @@ indentation style. At present, predefined style are `BSD', `GNU', `K&R', `C++',
 
 
 (defun ess--get-mode-line-indicator ()
-  "Get `ess-mode-line-indicator' from process buffer.
+  "Get `ess--mode-line-process-indicator' from process buffer.
 Internal function to be used for dynamic mode-line dysplay in
 ess-mode."
   (if ess-local-process-name
       (let* ((proc (get-process ess-local-process-name))
-             (buff (if proc (process-buffer proc))))
+             (buff (when proc (process-buffer proc))))
         (if (and proc (buffer-live-p buff))
-            (with-current-buffer buff (mapcar 'eval ess-mode-line-indicator))
+            (with-current-buffer buff (mapcar 'eval ess--mode-line-process-indicator))
           "none"))
     "none"))
 
@@ -546,7 +529,7 @@ ess-mode."
      (repl "\\(<-\\)?")                 ; replacement (function)
      (Sym-0 "\\(\\sw\\|\\s_\\)")        ; symbol
      (Symb  (concat Sym-0 "+"))
-     (xSymb (concat "\\[?\\[?" Sym-0 "*")); symbol / [ / [[ / [symbol / [[symbol
+     (xSymb "[^ \t\n\"']+") ;; (concat "\\[?\\[?" Sym-0 "*")); symbol / [ / [[ / [symbol / [[symbol
      ;; FIXME: allow '%foo%' but only when quoted; don't allow [_0-9] at beg.
      (_or_  "\\)\\|\\(")                ; OR
      (space "\\(\\s-\\|\n\\)*")         ; white space
@@ -554,8 +537,7 @@ ess-mode."
      (part-1 (concat
               "\\(" ;;--------outer Either-------
               "\\(\\("          ; EITHER
-              ;; Q xSymb repl Sym-0 "*" Q  ; quote ([) (replacement) symbol quote
-              Q "[^ \t\n\"']+" Q ;; any function name between quotes
+              Q xSymb Q         ; any function name between quotes
               _or_
               "\\(^\\|[ ]\\)" Symb      ; (beginning of name) + Symb
               "\\)\\)"))        ; END EITHER OR
@@ -578,6 +560,7 @@ ess-mode."
               space "function\\s-*(" ; whitespace, function keyword, parenthesis
               ))
      )
+
   (defvar ess-R-function-pattern
     (concat part-1
             "\\s-*\\(<-\\|=\\)" ; whitespace, assign
@@ -613,6 +596,11 @@ it cannot find a function beginning."
     (if (search-forward "("
                         (ess-line-end-position 2) t); at most end of next line
         (forward-char 1))
+    ;; TODO: replace the above by hopefully more sucessful logic:
+    ;; 1. If we have 'function *(' in the same line, move to end of that line
+    ;; 2. if *not*, skip all comment lines (concat space comment-char .* "\n")
+    ;;    and only* then do something like the
+    ;;    (search-forward '(' .. (..line-end.. 2) )  above
 
     (setq end (point)); = init-point when nothing found
 
@@ -927,31 +915,34 @@ of the expression are preserved."
 
 
 (defun ess-indent-or-complete ()
-  "Try to indent first, if code is already properly indented, complete instead.
-It calls `comint-dynamic-complete' for emacs < 24 and `completion-at-point' otherwise.
+  "When region is selected indent the region, otherwise, if
+`ess-tab-complete-in-script' is non-nil, try to indent, if code
+is already indented, complete instead.
 
-In ess-mode, only tries completion if `ess-tab-complete-in-script' is non-nil.
-See also `ess-first-tab-never-complete'."
+The default of `ess-tab-complete-in-script' is nil.  Also see
+`ess-first-tab-never-complete'."
   (interactive)
-  (let ((shift (ess-indent-command)))
-    (when (and ess-tab-complete-in-script
-               (numberp shift) ;; can be nil if ess-tab-always-indent is nil
-               (equal shift 0)
-               (or (eq last-command 'ess-indent-or-complete)
-                   (null ess-first-tab-never-complete)
-                   (and (eq ess-first-tab-never-complete 'unless-eol)
-                        (looking-at "\\s-*$"))
-                   (and (eq ess-first-tab-never-complete 'symbol)
-                        (not (looking-at "\\w\\|\\s_")))
-                   (and (eq ess-first-tab-never-complete 'symbol-or-paren)
-                        (not (looking-at "\\w\\|\\s_\\|\\s)")))
-                   (and (eq ess-first-tab-never-complete 'symbol-or-paren-or-punct)
-                        (not (looking-at "\\w\\|\\s_\\|\\s)\\|\\s.")))
-                   ))
-      (if (and (featurep 'emacs) (>= emacs-major-version 24))
-          (completion-at-point)
-        (comint-dynamic-complete)
-        ))))
+  (if (use-region-p)
+      (indent-region (region-beginning) (region-end))
+    (let ((shift (ess-indent-command)))
+      (when (and ess-tab-complete-in-script
+                 (numberp shift) ;; can be nil if ess-tab-always-indent is nil
+                 (equal shift 0)
+                 (or (eq last-command 'ess-indent-or-complete)
+                     (null ess-first-tab-never-complete)
+                     (and (eq ess-first-tab-never-complete 'unless-eol)
+                          (looking-at "\\s-*$"))
+                     (and (eq ess-first-tab-never-complete 'symbol)
+                          (not (looking-at "\\w\\|\\s_")))
+                     (and (eq ess-first-tab-never-complete 'symbol-or-paren)
+                          (not (looking-at "\\w\\|\\s_\\|\\s)")))
+                     (and (eq ess-first-tab-never-complete 'symbol-or-paren-or-punct)
+                          (not (looking-at "\\w\\|\\s_\\|\\s)\\|\\s.")))
+                     ))
+        (if (and (featurep 'emacs) (>= emacs-major-version 24))
+            (completion-at-point)
+          (comint-dynamic-complete)
+          )))))
 
 (defun ess-indent-exp ()
   "Indent each line of the ESS grouping following point."
@@ -1412,7 +1403,7 @@ generate the source buffer."
   (let* ((dirname (file-name-as-directory
                    (if (stringp ess-source-directory)
                        ess-source-directory
-                     (with-current-buffer (process-buffer (get-ess-process
+                     (with-current-buffer (process-buffer (ess-get-process
                                                            ess-local-process-name))
                        (ess-setq-vars-local ess-customize-alist)
                        (apply ess-source-directory nil)))))
