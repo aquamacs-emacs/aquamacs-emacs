@@ -1,3 +1,18 @@
+Put the following into your initialization file:
+
+  (setq py-install-directory "PATH/TO/PYTHON-MODE/")
+  (add-to-list 'load-path py-install-directory)
+  (require 'python-mode)
+
+
+Unless other libraries depend on python.el, unloading 'python is recommended, as it seems to destroy python-mode user defined abbreviations:
+
+  (when (featurep 'python) (unload-feature 'python t))
+
+
+
+;;;;;;;;;
+
 Customize default Python shell as `py-shell-name'
 
 `py-shell-name' might be an installed executable as
@@ -9,15 +24,15 @@ To change the Python default shell see also INSTALL
 Most python-mode.el commands start with prefix `py-'
 
 `M-x py- TAB'
-displays a list of them in completion-buffer. 
+displays a list of them in completion-buffer.
 See also commands list delivered in directory doc.
 
 List virtualenv related `M-x virtualenv- TAB'
-resp. Pymacs commands `M-x pymacs-'  
+resp. Pymacs commands `M-x pymacs-'
 
 Commands related to a specific shell start with
 it's name as `ipython-complete'.
-Open an installed shell by 
+Open an installed shell by
 
 M-x SHELL
 
@@ -34,4 +49,121 @@ Install a local shell by evaluating
   (interactive)
   (py-shell nil DEDICATED PATH-TO-LOCAL-SHELL))
 
-If `py-complete-function' is set, it takes precedence 
+;;;;;;;;;
+
+When code is executed from current buffer, either
+
+- python-mode-v5-behavior, a quite simple and effective way.
+  Setting `python-mode-v5-behavior-p' to `t' makes it the default.
+
+- if a buffer-file exists and buffer is unchanged, it's file is executed as is.
+
+- in all other cases a temporary file is created.
+  Setback: in case of error, returned error code points
+  here, i.e. indicated error-line-numbers are not that of
+  orginal buffer.
+
+;;;;;;;;;
+To enable code auto-completion:
+
+  (setq py-load-pymacs-p t)
+
+To use auto-complete, just prepend the following lines:
+
+  (require 'auto-complete-config)
+  (ac-config-default)
+
+or for company:
+
+  (autoload 'company-mode "company" nil t)
+
+If you do not use one of those visual completion interfaces, key bindings exist:
+  - C-tab complete symbol
+  - f1    show help
+  - S-f1  show signature
+  - f2    go to
+
+If `py-complete-function' is set, it takes precedence
+
+;;;;;;;;;
+
+smart-operator minor mode
+
+for example with key "+"
+inserts " + "
+
+smart-operator extended by augmented-assigments
+C-u +
+inserts " += "
+
+customizable boolean `py-smart-operator-mode-p'
+
+;;;;;;;;;
+
+Beside common moves like `defun', `statement' specific Python-mode edits are delivered:
+
+`py-expression' and `py-partial-expression'. 
+
+Statement below is considered composed of two `py-expression' 
+
+a = ['spam', 'eggs', 100, 1234]
+|_| |_________________________|
+
+Assigment operator and all inside comments is ignored.
+
+`py-partial-expression' would match six sections
+
+ a = ['spam', 'eggs', 100, 1234]
+|_|   |_____|  |____| |__| |__|
+     |_________________________|
+
+When traversing code, `py-partial-expression' climbs down and up
+all levels encountered, i.e. at opening `[' `py-expression' would return ['spam', 'eggs', 100, 1234], while one char behind at `''
+it yields `'spam','
+
+- py-sexp-function, 
+  When set, it's value is called instead of `forward-sexp', `backward-sexp
+  Choices are py-partial-expression, py-expression, default nil
+
+;;;;;;;;;
+
+Moving, copying, deleting
+
+When moving over or mark code, commands with suffix
+"-bol" take the correspond beginning of line as start
+resp. end. Commands without that suffix take the
+indentation at the beginning resp. the last printable
+character the end - see in menu PyEdit whats implemented.
+
+While commands "py-beginning..." resp. "py-end..." compute the context, 
+selecting the corresponding beginning or end
+new "py-up...", "py-down..." jump regexp-based to the 
+next element in buffer.
+Listed in PyMenu. 
+
+;;;;;;;;;
+
+Customize boolean `py-set-fill-column-p'
+
+If `t', enables use Python specific `fill-column' according to
+
+`py-docstring-fill-column', default is 72
+
+and `py-comment-fill-column, default is 79
+
+Comment- and docstring settings might be disabled by
+any non-integer value, which means: do not use a
+different value of `fill-column' than emacs-wide
+
+;;;;;;;;;
+
+- customizable `py-output-buffer'.
+
+  `py-execute-...'-commands arrive in buffer created by
+  `py-shell'. It's name is composed WRT to Python
+  version used, it's path etc. If boolean
+  `py-enforce-output-buffer-p' is non-nil, value of
+  `py-output-buffer' is taken instead.
+  
+
+
