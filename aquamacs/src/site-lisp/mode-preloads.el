@@ -176,7 +176,7 @@ or `CVS', and any subdirectory that contains a file named `.nosearch'."
 
 
 
-(defvar ess-etc-directory (concat  (mac-resources-path)
+(setq ess-etc-directory (concat  (mac-resources-path)
 				  "lisp/aquamacs/edit-modes/ess-mode/etc"
 				  ))
 
