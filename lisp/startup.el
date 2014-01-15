@@ -1752,6 +1752,7 @@ splash screen in another window."
 	    (concat "----"
 		    (propertize "%b" 'face 'mode-line-buffer-id)
 		    "%-"))
+      (setq word-wrap t)
       (let ((inhibit-read-only t))
 	(erase-buffer)
 	(if pure-space-overflow
