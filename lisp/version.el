@@ -103,8 +103,7 @@ not determine the revision.")
     (if dir (cd dir))
     (when (zerop
 	   (call-process "git" nil '(t nil) nil "describe"
-			 "--always"
-			 "--dirty"))
+			 "--always"))
       (replace-regexp-in-string "\n" "" (buffer-string)))))
 
 (defun emacs-git-get-version (&optional dir _external)
