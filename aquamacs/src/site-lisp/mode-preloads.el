@@ -290,6 +290,10 @@ or `CVS', and any subdirectory that contains a file named `.nosearch'."
 
 (autoload 'markdown-mode "markdown"
   "Major mode for editing Markdown files.")
-(assq-set-equal "\\.\\(md\\)$" 
+(assq-set-equal "\\.\\(md\\)$"
 		'markdown-mode 'auto-mode-alist)
 
+(autoload 'dart-mode "dart-mode"
+  "Major mode for editing Dart files.")
+(assq-set-equal "\\.dart$"
+		'dart-mode 'auto-mode-alist)
