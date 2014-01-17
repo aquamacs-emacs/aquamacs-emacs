@@ -93,8 +93,11 @@ Prompts for bug subject.  Leaves you in a mail buffer."
 	      (insert "\n\n")
 	      (insert-file-contents insert-file))
 	    (set-buffer-modified-p t)
-	    (mail-send)
-	    (if (buffer-live-p "*mail*") (kill-buffer "*mail*"))
+	    (let ((buf (current-buffer))
+		  (kill-buffer-query-functions nil))
+	      (mail-send)
+	      (set-buffer-modified-p nil)
+	      (if (buffer-live-p buf) (kill-buffer buf)))
 	    (if backup-buffer
 		(with-current-buffer backup-buffer
 		  (rename-buffer "*mail*" t)))
