@@ -7121,7 +7121,7 @@ if (cols > 0 && rows > 0)
   NSRect r, wr;
   NSColor *col;
 
-  if (fs_is_native)
+  if (fs_is_native && [[self window] respondsToSelector:@selector(toggleFullScreen:)])
     {
 #ifdef HAVE_NATIVE_FS
       [[self window] toggleFullScreen:sender];
