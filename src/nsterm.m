@@ -6741,9 +6741,9 @@ if (cols > 0 && rows > 0)
   win = [[EmacsWindow alloc]
             initWithContentRect: r
                       styleMask: (NSResizableWindowMask |
-				  //#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
+				  #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
                                   NSTitledWindowMask |
-				  //#endif
+				  #endif
                                   NSMiniaturizableWindowMask |
                                   NSClosableWindowMask)
                         backing: NSBackingStoreBuffered
@@ -7402,42 +7402,6 @@ if (cols > 0 && rows > 0)
   emacs_event->code = KEY_NS_TOGGLE_FULLSCREEN;
   EV_TRAILER ((id)nil);
   return self;
-}
-
-- (NSSize)window:(NSWindow *)window willUseFullScreenContentSize:(NSSize)proposedSize {
-
- 
-    NSRect r = NSMakeRect(0.f, 0.f, proposedSize.width, proposedSize.height);
-    int newcols = FRAME_PIXEL_WIDTH_TO_TEXT_COLS(emacsframe, r.size.width);
-    int newrows = FRAME_PIXEL_HEIGHT_TO_TEXT_LINES(emacsframe, r.size.height);
-
-    change_frame_size (emacsframe, newrows, newcols, 0, 1, 0); /* pretend, delay, safe */
-    FRAME_PIXEL_WIDTH (emacsframe) = (int)r.size.width;
-    FRAME_PIXEL_HEIGHT (emacsframe) = (int)r.size.height;
-
-    emacsframe->border_width = [window frame].size.width - r.size.width;
-    FRAME_NS_TITLEBAR_HEIGHT (emacsframe) = 0;
-
-    return proposedSize;
-}
-
-- (void)windowDidExitFullScreen_orig_Aquamacs:(NSNotification *)notification {
- 
-   NSWindow* window = [notification object];
-
-    NSRect r = [window contentRectForFrameRect:[window frame]];
-    int newcols = FRAME_PIXEL_WIDTH_TO_TEXT_COLS(emacsframe, r.size.width);
-    int newrows = FRAME_PIXEL_HEIGHT_TO_TEXT_LINES(emacsframe, r.size.height);
-
-    change_frame_size (emacsframe, newrows, newcols, 0, 1, 0); /* pretend, delay, safe */
-    FRAME_PIXEL_WIDTH (emacsframe) = (int)r.size.width;
-    FRAME_PIXEL_HEIGHT (emacsframe) = (int)r.size.height;
-
-    emacsframe->border_width = [window frame].size.width - r.size.width;
-    FRAME_NS_TITLEBAR_HEIGHT (emacsframe) =
-        [window frame].size.height - r.size.height;
-
-    [[window delegate] windowDidMove:nil];
 }
 
 - (void)drawRect: (NSRect)rect
