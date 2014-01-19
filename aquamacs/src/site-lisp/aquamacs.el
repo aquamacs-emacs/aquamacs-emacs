@@ -954,6 +954,10 @@ yes-or-no prompts - y or n will do."
 					; Display the column number of the point in the mode line
      (column-number-mode t)
 
+;; Do not ask to save abbrevs table - just do it
+
+     (save-abbrevs silently)
+
 ;;; Do not automatically add newlines on (page) down
      (next-line-add-newlines nil)
 
