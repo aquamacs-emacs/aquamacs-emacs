@@ -274,10 +274,10 @@ or `CVS', and any subdirectory that contains a file named `.nosearch'."
 ; what about run-python - we'll leave it for now
 
 (autoload (quote python-mode) "python-mode" 
-  "Major mode for editing Python files." t nil)
+  "Major mode for editing Python files." t)
 
 (autoload (quote jython-mode) "python-mode" 
-  "Major mode for editing Jython/Jython files." t nil)
+  "Major mode for editing Jython/Jython files." t)
 
 (autoload 'visual-basic-mode "visual-basic-mode" "Visual Basic mode." t)
 (assq-set-equal "\\.\\(frm\\|bas\\|cls\\)$" 
@@ -288,12 +288,12 @@ or `CVS', and any subdirectory that contains a file named `.nosearch'."
 (autoload 'paredit-mode "paredit"
   "Minor mode for pseudo-structurally editing Lisp code.")
 
-(autoload 'markdown-mode "markdown"
-  "Major mode for editing Markdown files.")
+(autoload 'markdown-mode "markdown-mode"
+  "Major mode for editing Markdown files." t)
 (assq-set-equal "\\.\\(md\\)$"
 		'markdown-mode 'auto-mode-alist)
 
 (autoload 'dart-mode "dart-mode"
-  "Major mode for editing Dart files.")
+  "Major mode for editing Dart files." t)
 (assq-set-equal "\\.dart$"
 		'dart-mode 'auto-mode-alist)
