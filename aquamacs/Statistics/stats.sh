@@ -1,43 +1,53 @@
 #!/bin/sh
 #
-# You need to be an Aquamacs developer at sourceforge in order to
-# run this script. 
+# use fetch-log manually, which adds to logs/
+# supply any argument to avoid re-parsing log files.
 
-SOURCEFORGEUSERNAME=davidswelt
-
-#ssh ${SOURCEFORGEUSERNAME}@aquamacs.sourceforge.net '/home/groups/a/aq/aquamacs/fetch-log.sh'
-
-#scp -C ${SOURCEFORGEUSERNAME}@aquamacs.sourceforge.net:/home/groups/a/aq/aquamacs/logs/version-queries.log .
-scp -C davidswelt_aquamacs@ssh.phx.nearlyfreespeech.net:/home/protected/version-queries.log .
 
 shopt -s xpg_echo
 
+
+if [ $# -eq 0 ]
+  then
 echo "user\tcalls\tvers\ttime\n" >stats.txt
 
 #perl -ne 'use Time::ParseDate; /^(.*)\t.*sess=(\-?[0-9]*)\&.*seq=([0-9]*)\&.*ver=([^\&\n]*)/ig; $ep = parsedate($1); print "$2\t$3\t$4\t$ep\n";' <version-queries.log >>stats.txt
- 
-cat version-queries.a.log version-queries.log | ./calc-stats.perl
 
-# stats can now be processed with R 
+cat `ls -rt logs/*` | ./calc-stats.perl
+
+fi
+
+# stats can now be processed with R
 
 R --no-restore --no-save < stats.R
 
 
 # generate a nice html file
 
-echo >index.html
-echo  " 
+OUT=stats/index.html; export OUT
+
+echo >$OUT
+echo  "
 <html>
 <head></head>
-<body><h1>Aquamacs User Statistics</h1><p><a href=\"http://aquamacs.org\">Aquamacs Website</a><br></br>" >>index.html
+<body><h1>Aquamacs User Statistics</h1><p>Note:  data for a few years are missing.  <p><a href=\"http://aquamacs.org\">Aquamacs Website</a><br></br>" >>$OUT
 
-for i in *.pdf
+# for i in *.pdf
+# do
+#  nn=`basename "$i" .pdf`.gif
+#  convert $i $nn
+#  echo "<img src=\""$nn"\" />  <br>" >>index.html
+# done
+for i in *.svg
 do
- nn=`basename "$i" .pdf`.gif
- convert $i $nn
- echo "<img src=\""$nn"\" />  <br>" >>index.html
+ cp $i stats/
+ echo "<img width=650 src=\""$i"\" />  <br>" >>$OUT
 done
 
-date >>index.html
-echo "<a href=\"http://www.david-reitter.com/\">David Reitter</a></p></body></html>" >>index.html
+date >>$OUT
+echo "<a href=\"http://www.david-reitter.com/\">David Reitter</a></p></body></html>" >>$OUT
 
+
+# upload straight to Braeburn
+
+rsync -r stats dreitter@cc.ist.psu.edu:Sites/Aquamacs/
