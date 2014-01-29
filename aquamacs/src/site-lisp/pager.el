@@ -107,7 +107,7 @@ keep the `pager-temporary-goal-column'")
   (interactive)
   (unless (or keep-mark
 	      (and cua-mode ;; this means transient-mark-mode, too
-	       cua--explicit-region-start))
+		   (region-active-p)))
     (deactivate-mark)) ; why doesn't this happen automatically in cua-mode?
 					; there is probable a more
 					; elegant solution to this
@@ -127,7 +127,7 @@ keep the `pager-temporary-goal-column'")
   (interactive)
   (unless (or keep-mark
 	      (and cua-mode ;; this means transient-mark-mode, too
-	       cua--explicit-region-start))
+		   (region-active-p)))
     (deactivate-mark))
   (if (not (pos-visible-in-window-p (point-min)))
       (pager-scroll-screen (- next-screen-context-lines 

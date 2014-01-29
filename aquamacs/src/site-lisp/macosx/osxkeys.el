@@ -102,8 +102,6 @@ after updating this variable.")
 ;; to prevent isearch from interpreting this event (and aborting)
 (define-key special-event-map [ns-application-store-state] 'ignore)
 
-(defvar cua--explicit-region-start) ;; in case CUA isn't loaded
-
 (aquamacs-set-defaults '((x-select-enable-clipboard t)))
 
 ;; support copy&paste at the right level
@@ -144,7 +142,7 @@ provided `cua-mode' and the mark are active."
 
     (if (and cua-mode transient-mark-mode 
 	     mark-active
-	     (not cua--explicit-region-start)
+	     (not (region-active-p))
 	     (not this-command-keys-shift-translated))
 	(goto-char left)
       (let ((this-command 'left-char)) ;; maintain compatibility
@@ -159,7 +157,7 @@ provided `cua-mode' and the mark are active."
   (let ((right (max (point) (or (mark t) 0))))
     (if (and cua-mode transient-mark-mode 
 	     mark-active
-	     (not cua--explicit-region-start)
+	     (not (region-active-p))
 	     (not this-command-keys-shift-translated))
 	(goto-char right)
        (let ((this-command 'right-char)) ;; maintain compatibility

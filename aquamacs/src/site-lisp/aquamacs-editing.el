@@ -167,7 +167,7 @@ default in case there is not enough text."
   (interactive)
   (unless (or keep-mark
 	      (and cua-mode ;; this means transient-mark-mode, too
-		   cua--explicit-region-start))
+		   (region-active-p)))
     (deactivate-mark))
   (let ((scroll-preserve-screen-position t))
     (setq page-scrolling-points (cons (cons (point-marker) (window-start)) page-scrolling-points))
