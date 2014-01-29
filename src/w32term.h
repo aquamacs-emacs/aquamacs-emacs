@@ -1,5 +1,5 @@
 /* Definitions and headers for communication on the Microsoft Windows API.
-   Copyright (C) 1995, 2001-2013 Free Software Foundation, Inc.
+   Copyright (C) 1995, 2001-2014 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -26,22 +26,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #define BLACK_PIX_DEFAULT(f) PALETTERGB(0,0,0)
 #define WHITE_PIX_DEFAULT(f) PALETTERGB(255,255,255)
 
-#define FONT_WIDTH(f)     ((f)->max_width)
-#define FONT_HEIGHT(f)    ((f)->height)
-#define FONT_BASE(f)      ((f)->ascent)
-#define FONT_DESCENT(f)   ((f)->descent)
-
 #define CP_DEFAULT 1004
-
-#define CHECK_W32_FRAME(f, frame)		\
-  if (NILP (frame))				\
-    f = SELECTED_FRAME ();			\
-  else						\
-    {						\
-      CHECK_LIVE_FRAME (frame, 0);		\
-      f = XFRAME (frame);			\
-    }						\
-  if (! FRAME_W32_P (f))
 
 /* Indicates whether we are in the readsocket call and the message we
    are processing in the current loop */
@@ -230,7 +215,7 @@ extern struct w32_display_info *w32_term_init (Lisp_Object,
 extern int w32_defined_color (struct frame *f, const char *color,
                               XColor *color_def, int alloc);
 extern void x_set_window_size (struct frame *f, int change_grav,
-                              int cols, int rows);
+			       int width, int height, bool pixelwise);
 extern int x_display_pixel_height (struct w32_display_info *);
 extern int x_display_pixel_width (struct w32_display_info *);
 extern Lisp_Object x_get_focus_frame (struct frame *);
@@ -349,6 +334,7 @@ struct w32_output
   Cursor hand_cursor;
   Cursor hourglass_cursor;
   Cursor horizontal_drag_cursor;
+  Cursor vertical_drag_cursor;
 
   /* Non-zero means hourglass cursor is currently displayed.  */
   unsigned hourglass_p : 1;
@@ -376,7 +362,6 @@ struct w32_output
   {
     XGCValues *gc;
     unsigned long pixel;
-    int allocated_p;
   }
   black_relief, white_relief;
 
@@ -444,7 +429,7 @@ struct scroll_bar {
 
   /* The position and size of the scroll bar in pixels, relative to the
      frame.  */
-  Lisp_Object top, left, width, height;
+  int top, left, width, height;
 
   /* The starting and ending positions of the handle, relative to the
      handle area (i.e. zero is the top position, not
@@ -457,19 +442,13 @@ struct scroll_bar {
      drawing handle bottoms VERTICAL_SCROLL_BAR_MIN_HANDLE pixels below
      where they would be normally; the bottom and top are in a
      different co-ordinate system.  */
-  Lisp_Object start, end;
+  int start, end;
 
   /* If the scroll bar handle is currently being dragged by the user,
      this is the number of pixels from the top of the handle to the
      place where the user grabbed it.  If the handle isn't currently
      being dragged, this is Qnil.  */
-  Lisp_Object dragging;
-
-  /* 1 if the background of the fringe that is adjacent to a scroll
-     bar is extended to the gap between the fringe and the bar.  */
-  /* Note: this could be a bit field, but we need to take its address
-     in ALLOCATE_PSEUDOVECTOR (see x_scroll_bar_create).  */
-  bool fringe_extended_p;
+  int dragging;
 };
 
 /* Turning a lisp vector value into a pointer to a struct scroll_bar.  */
@@ -681,6 +660,7 @@ extern DWORD notifications_size;
 extern void *notifications_desc;
 extern Lisp_Object w32_get_watch_object (void *);
 extern Lisp_Object lispy_file_action (DWORD);
+extern int handle_file_notifications (struct input_event *);
 
 extern void w32_initialize_display_info (Lisp_Object);
 extern void initialize_w32_display (struct terminal *, int *, int *);

@@ -1,7 +1,7 @@
 ### @configure_input@
 
-# Copyright (C) 1985, 1987-1988, 1993-1994, 2001-2013
-#   Free Software Foundation, Inc.
+# Copyright (C) 1985, 1987-1988, 1993-1994, 2001-2014 Free Software
+# Foundation, Inc.
 
 # This file is part of GNU Emacs.
 
@@ -234,7 +234,8 @@ $(DESTDIR)${archlibdir}: all
 	@echo
 	@echo "Installing utilities run internally by Emacs."
 	umask 022; ${MKDIR_P} "$(DESTDIR)${archlibdir}"
-	if [ "`cd \"$(DESTDIR)${archlibdir}\" && /bin/pwd`" != "`/bin/pwd`" ]; then \
+	exp_archlibdir=`cd "$(DESTDIR)${archlibdir}" && /bin/pwd`; \
+	if [ "$$exp_archlibdir" != "`/bin/pwd`" ]; then \
 	  for file in ${UTILITIES}; do \
 	    $(INSTALL_PROGRAM) $(INSTALL_STRIP) $$file "$(DESTDIR)${archlibdir}/$$file" ; \
 	  done ; \
@@ -314,8 +315,7 @@ test-distrib${EXEEXT}: ${srcdir}/test-distrib.c
 	cd ../lib && $(MAKE) libgnu.a
 
 regex.o: $(srcdir)/../src/regex.c $(srcdir)/../src/regex.h $(config_h)
-	${CC} -c ${CPP_CFLAGS} -DCONFIG_BROKETS -DINHIBIT_STRING_HEADER \
-	  ${srcdir}/../src/regex.c
+	${CC} -c ${CPP_CFLAGS} ${srcdir}/../src/regex.c
 
 etags${EXEEXT}: ${srcdir}/etags.c regex.o $(NTLIB) $(config_h)
 	$(CC) ${ALL_CFLAGS} -DEMACS_NAME="\"GNU Emacs\"" \

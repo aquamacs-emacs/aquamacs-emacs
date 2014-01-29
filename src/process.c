@@ -1,6 +1,6 @@
 /* Asynchronous subprocess control for GNU Emacs.
 
-Copyright (C) 1985-1988, 1993-1996, 1998-1999, 2001-2013 Free Software
+Copyright (C) 1985-1988, 1993-1996, 1998-1999, 2001-2014 Free Software
 Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -812,13 +812,14 @@ get_process (register Lisp_Object name)
   else
     obj = name;
 
-  /* Now obj should be either a buffer object or a process object.
-   */
+  /* Now obj should be either a buffer object or a process object.  */
   if (BUFFERP (obj))
     {
+      if (NILP (BVAR (XBUFFER (obj), name)))
+        error ("Attempt to get process for a dead buffer");
       proc = Fget_buffer_process (obj);
       if (NILP (proc))
-	error ("Buffer %s has no process", SDATA (BVAR (XBUFFER (obj), name)));
+        error ("Buffer %s has no process", SDATA (BVAR (XBUFFER (obj), name)));
     }
   else
     {
@@ -1333,15 +1334,15 @@ Returns nil if format of ADDRESS is invalid.  */)
 
       for (i = 0; i < nargs; i++)
 	{
-	  if (! RANGED_INTEGERP (0, p->u.contents[i], 65535))
+	  if (! RANGED_INTEGERP (0, p->contents[i], 65535))
 	    return Qnil;
 
 	  if (nargs <= 5         /* IPv4 */
 	      && i < 4           /* host, not port */
-	      && XINT (p->u.contents[i]) > 255)
+	      && XINT (p->contents[i]) > 255)
 	    return Qnil;
 
-	  args[i+1] = p->u.contents[i];
+	  args[i+1] = p->contents[i];
 	}
 
       return Fformat (nargs+1, args);
@@ -1529,7 +1530,8 @@ usage: (start-process NAME BUFFER PROGRAM &rest PROGRAM-ARGS)  */)
 
 	  tem = Qnil;
 	  GCPRO4 (name, program, buffer, current_dir);
-	  openp (Vexec_path, program, Vexec_suffixes, &tem, make_number (X_OK));
+	  openp (Vexec_path, program, Vexec_suffixes, &tem,
+		 make_number (X_OK), false);
 	  UNGCPRO;
 	  if (NILP (tem))
 	    report_file_error ("Searching for program", program);
@@ -1983,7 +1985,7 @@ conv_sockaddr_to_lisp (struct sockaddr *sa, int len)
 	len = sizeof (sin->sin_addr) + 1;
 	address = Fmake_vector (make_number (len), Qnil);
 	p = XVECTOR (address);
-	p->u.contents[--len] = make_number (ntohs (sin->sin_port));
+	p->contents[--len] = make_number (ntohs (sin->sin_port));
 	cp = (unsigned char *) &sin->sin_addr;
 	break;
       }
@@ -1995,9 +1997,9 @@ conv_sockaddr_to_lisp (struct sockaddr *sa, int len)
 	len = sizeof (sin6->sin6_addr)/2 + 1;
 	address = Fmake_vector (make_number (len), Qnil);
 	p = XVECTOR (address);
-	p->u.contents[--len] = make_number (ntohs (sin6->sin6_port));
+	p->contents[--len] = make_number (ntohs (sin6->sin6_port));
 	for (i = 0; i < len; i++)
-	  p->u.contents[i] = make_number (ntohs (ip6[i]));
+	  p->contents[i] = make_number (ntohs (ip6[i]));
 	return address;
       }
 #endif
@@ -2022,7 +2024,7 @@ conv_sockaddr_to_lisp (struct sockaddr *sa, int len)
 
   i = 0;
   while (i < len)
-    p->u.contents[i++] = make_number (*cp++);
+    p->contents[i++] = make_number (*cp++);
 
   return address;
 }
@@ -2093,7 +2095,7 @@ conv_lisp_to_sockaddr (int family, Lisp_Object address, struct sockaddr *sa, int
 	{
 	  struct sockaddr_in *sin = (struct sockaddr_in *) sa;
 	  len = sizeof (sin->sin_addr) + 1;
-	  hostport = XINT (p->u.contents[--len]);
+	  hostport = XINT (p->contents[--len]);
 	  sin->sin_port = htons (hostport);
 	  cp = (unsigned char *)&sin->sin_addr;
 	  sa->sa_family = family;
@@ -2104,12 +2106,12 @@ conv_lisp_to_sockaddr (int family, Lisp_Object address, struct sockaddr *sa, int
 	  struct sockaddr_in6 *sin6 = (struct sockaddr_in6 *) sa;
 	  uint16_t *ip6 = (uint16_t *)&sin6->sin6_addr;
 	  len = sizeof (sin6->sin6_addr) + 1;
-	  hostport = XINT (p->u.contents[--len]);
+	  hostport = XINT (p->contents[--len]);
 	  sin6->sin6_port = htons (hostport);
 	  for (i = 0; i < len; i++)
-	    if (INTEGERP (p->u.contents[i]))
+	    if (INTEGERP (p->contents[i]))
 	      {
-		int j = XFASTINT (p->u.contents[i]) & 0xffff;
+		int j = XFASTINT (p->contents[i]) & 0xffff;
 		ip6[i] = ntohs (j);
 	      }
 	  sa->sa_family = family;
@@ -2140,8 +2142,8 @@ conv_lisp_to_sockaddr (int family, Lisp_Object address, struct sockaddr *sa, int
     }
 
   for (i = 0; i < len; i++)
-    if (INTEGERP (p->u.contents[i]))
-      *cp++ = XFASTINT (p->u.contents[i]) & 0xff;
+    if (INTEGERP (p->contents[i]))
+      *cp++ = XFASTINT (p->contents[i]) & 0xff;
 }
 
 #ifdef DATAGRAM_SOCKETS
@@ -3723,7 +3725,9 @@ network_interface_info (Lisp_Object ifname)
 
       any = 1;
       for (n = 0; n < 6; n++)
-	p->u.contents[n] = make_number (((unsigned char *)&rq.ifr_hwaddr.sa_data[0])[n]);
+	p->contents[n] = make_number (((unsigned char *)
+				       &rq.ifr_hwaddr.sa_data[0])
+				      [n]);
       elt = Fcons (make_number (rq.ifr_hwaddr.sa_family), hwaddr);
     }
 #elif defined (HAVE_GETIFADDRS) && defined (LLADDR)
@@ -3746,7 +3750,7 @@ network_interface_info (Lisp_Object ifname)
 
           memcpy (linkaddr, LLADDR (sdl), sdl->sdl_alen);
           for (n = 0; n < 6; n++)
-            p->u.contents[n] = make_number (linkaddr[n]);
+            p->contents[n] = make_number (linkaddr[n]);
 
           elt = Fcons (make_number (it->ifa_addr->sa_family), hwaddr);
           break;
@@ -4607,7 +4611,7 @@ wait_reading_process_output (intmax_t time_limit, int nsecs, int read_kbd,
 		      {
 			struct Lisp_Process *p =
 			  XPROCESS (chan_process[channel]);
-			if (p && p->gnutls_p && p->infd
+			if (p && p->gnutls_p && p->gnutls_state && p->infd
 			    && ((emacs_gnutls_record_check_pending
 				 (p->gnutls_state))
 				> 0))
@@ -4621,6 +4625,7 @@ wait_reading_process_output (intmax_t time_limit, int nsecs, int read_kbd,
 		{
 		  /* Check this specific channel. */
 		  if (wait_proc->gnutls_p /* Check for valid process.  */
+		      && wait_proc->gnutls_state
 		      /* Do we have pending data?  */
 		      && ((emacs_gnutls_record_check_pending
 			   (wait_proc->gnutls_state))
@@ -5002,7 +5007,7 @@ read_process_output (Lisp_Object proc, register int channel)
 	  proc_buffered_char[channel] = -1;
 	}
 #ifdef HAVE_GNUTLS
-      if (p->gnutls_p)
+      if (p->gnutls_p && p->gnutls_state)
 	nbytes = emacs_gnutls_read (p, chars + carryover + buffered,
 				    readmax - buffered);
       else
@@ -5243,7 +5248,7 @@ DEFUN ("internal-default-process-filter", Finternal_default_process_filter,
       else
 	set_marker_both (p->mark, p->buffer, PT, PT_BYTE);
 
-      update_mode_lines++;
+      update_mode_lines = 23;
 
       /* Make sure opoint and the old restrictions
 	 float ahead of any new text just as point would.  */
@@ -5496,7 +5501,7 @@ send_process (Lisp_Object proc, const char *buf, ptrdiff_t len,
 #endif
 	    {
 #ifdef HAVE_GNUTLS
-	      if (p->gnutls_p)
+	      if (p->gnutls_p && p->gnutls_state)
 		written = emacs_gnutls_write (p, cur_buf, cur_len);
 	      else
 #endif
@@ -6028,13 +6033,16 @@ process has been transmitted to the serial port.  */)
   (Lisp_Object process)
 {
   Lisp_Object proc;
-  struct coding_system *coding;
+  struct coding_system *coding = NULL;
+  int outfd;
 
   if (DATAGRAM_CONN_P (process))
     return process;
 
   proc = get_process (process);
-  coding = proc_encode_coding_system[XPROCESS (proc)->outfd];
+  outfd = XPROCESS (proc)->outfd;
+  if (outfd >= 0)
+    coding = proc_encode_coding_system[outfd];
 
   /* Make sure the process is really alive.  */
   if (XPROCESS (proc)->raw_status_new)
@@ -6042,7 +6050,7 @@ process has been transmitted to the serial port.  */)
   if (! EQ (XPROCESS (proc)->status, Qrun))
     error ("Process %s not running", SDATA (XPROCESS (proc)->name));
 
-  if (CODING_REQUIRE_FLUSHING (coding))
+  if (coding && CODING_REQUIRE_FLUSHING (coding))
     {
       coding->mode |= CODING_MODE_LAST_BLOCK;
       send_process (proc, "", 0, Qnil);
@@ -6060,7 +6068,8 @@ process has been transmitted to the serial port.  */)
     }
   else
     {
-      int old_outfd = XPROCESS (proc)->outfd;
+      struct Lisp_Process *p = XPROCESS (proc);
+      int old_outfd = p->outfd;
       int new_outfd;
 
 #ifdef HAVE_SHUTDOWN
@@ -6068,24 +6077,30 @@ process has been transmitted to the serial port.  */)
 	 for communication with the subprocess, call shutdown to cause EOF.
 	 (In some old system, shutdown to socketpair doesn't work.
 	 Then we just can't win.)  */
-      if (EQ (XPROCESS (proc)->type, Qnetwork)
-	  || XPROCESS (proc)->infd == old_outfd)
+      if (EQ (p->type, Qnetwork)
+	  || p->infd == old_outfd)
 	shutdown (old_outfd, 1);
 #endif
-      close_process_fd (&XPROCESS (proc)->open_fd[WRITE_TO_SUBPROCESS]);
+      close_process_fd (&p->open_fd[WRITE_TO_SUBPROCESS]);
       new_outfd = emacs_open (NULL_DEVICE, O_WRONLY, 0);
       if (new_outfd < 0)
 	report_file_error ("Opening null device", Qnil);
-      XPROCESS (proc)->open_fd[WRITE_TO_SUBPROCESS] = new_outfd;
-      XPROCESS (proc)->outfd = new_outfd;
+      p->open_fd[WRITE_TO_SUBPROCESS] = new_outfd;
+      p->outfd = new_outfd;
 
       if (!proc_encode_coding_system[new_outfd])
 	proc_encode_coding_system[new_outfd]
 	  = xmalloc (sizeof (struct coding_system));
-      *proc_encode_coding_system[new_outfd]
-	= *proc_encode_coding_system[old_outfd];
-      memset (proc_encode_coding_system[old_outfd], 0,
-	      sizeof (struct coding_system));
+      if (old_outfd >= 0)
+	{
+	  *proc_encode_coding_system[new_outfd]
+	    = *proc_encode_coding_system[old_outfd];
+	  memset (proc_encode_coding_system[old_outfd], 0,
+		  sizeof (struct coding_system));
+	}
+      else
+	setup_coding_system (p->encode_coding_system,
+			     proc_encode_coding_system[new_outfd]);
     }
   return process;
 }
@@ -6217,7 +6232,7 @@ handle_child_signal (int sig)
 
   lib_child_handler (sig);
 #ifdef NS_IMPL_GNUSTEP
-  /* NSTask in GNUStep sets its child handler each time it is called.
+  /* NSTask in GNUstep sets its child handler each time it is called.
      So we must re-set ours.  */
   catch_child_signal();
 #endif
@@ -6387,7 +6402,7 @@ status_notify (struct Lisp_Process *deleting_process)
 	}
     } /* end for */
 
-  update_mode_lines++;  /* In case buffers use %s in mode-line-format.  */
+  update_mode_lines = 24;  /* In case buffers use %s in mode-line-format.  */
   UNGCPRO;
 }
 

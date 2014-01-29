@@ -1,6 +1,6 @@
 /* String search routines for GNU Emacs.
 
-Copyright (C) 1985-1987, 1993-1994, 1997-1999, 2001-2013 Free Software
+Copyright (C) 1985-1987, 1993-1994, 1997-1999, 2001-2014 Free Software
 Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -602,23 +602,47 @@ fast_looking_at (Lisp_Object regexp, ptrdiff_t pos, ptrdiff_t pos_byte,
    Otherwise, make sure it's off.
    This is our cheezy way of associating an action with the change of
    state of a buffer-local variable.  */
-static void
+static struct region_cache *
 newline_cache_on_off (struct buffer *buf)
 {
+  struct buffer *base_buf = buf;
+  bool indirect_p = false;
+
+  if (buf->base_buffer)
+    {
+      base_buf = buf->base_buffer;
+      indirect_p = true;
+    }
+
+  /* Don't turn on or off the cache in the base buffer, if the value
+     of cache-long-scans of the base buffer is inconsistent with that.
+     This is because doing so will just make the cache pure overhead,
+     since if we turn it on via indirect buffer, it will be
+     immediately turned off by its base buffer.  */
   if (NILP (BVAR (buf, cache_long_scans)))
     {
-      /* It should be off.  */
-      if (buf->newline_cache)
-        {
-          free_region_cache (buf->newline_cache);
-          buf->newline_cache = 0;
-        }
+      if (!indirect_p
+	  || NILP (BVAR (base_buf, cache_long_scans)))
+	{
+	  /* It should be off.  */
+	  if (base_buf->newline_cache)
+	    {
+	      free_region_cache (base_buf->newline_cache);
+	      base_buf->newline_cache = 0;
+	    }
+	}
+      return NULL;
     }
   else
     {
-      /* It should be on.  */
-      if (buf->newline_cache == 0)
-        buf->newline_cache = new_region_cache ();
+      if (!indirect_p
+	  || !NILP (BVAR (base_buf, cache_long_scans)))
+	{
+	  /* It should be on.  */
+	  if (base_buf->newline_cache == 0)
+	    base_buf->newline_cache = new_region_cache ();
+	}
+      return base_buf->newline_cache;
     }
 }
 
@@ -653,6 +677,7 @@ find_newline (ptrdiff_t start, ptrdiff_t start_byte, ptrdiff_t end,
 {
   struct region_cache *newline_cache;
   int direction;
+  struct buffer *cache_buffer;
 
   if (count > 0)
     {
@@ -669,8 +694,11 @@ find_newline (ptrdiff_t start, ptrdiff_t start_byte, ptrdiff_t end,
   if (end_byte == -1)
     end_byte = CHAR_TO_BYTE (end);
 
-  newline_cache_on_off (current_buffer);
-  newline_cache = current_buffer->newline_cache;
+  newline_cache = newline_cache_on_off (current_buffer);
+  if (current_buffer->base_buffer)
+    cache_buffer = current_buffer->base_buffer;
+  else
+    cache_buffer = current_buffer;
 
   if (shortage != 0)
     *shortage = 0;
@@ -694,7 +722,7 @@ find_newline (ptrdiff_t start, ptrdiff_t start_byte, ptrdiff_t end,
             ptrdiff_t next_change;
             immediate_quit = 0;
             while (region_cache_forward
-                   (current_buffer, newline_cache, start, &next_change))
+                   (cache_buffer, newline_cache, start, &next_change))
               start = next_change;
             immediate_quit = allow_quit;
 
@@ -720,42 +748,45 @@ find_newline (ptrdiff_t start, ptrdiff_t start_byte, ptrdiff_t end,
 
         {
           /* The termination address of the dumb loop.  */
-          register unsigned char *ceiling_addr
-	    = BYTE_POS_ADDR (ceiling_byte) + 1;
-          register unsigned char *cursor
-	    = BYTE_POS_ADDR (start_byte);
-          unsigned char *base = cursor;
+	  unsigned char *lim_addr = BYTE_POS_ADDR (ceiling_byte) + 1;
+	  ptrdiff_t lim_byte = ceiling_byte + 1;
 
-          while (cursor < ceiling_addr)
-            {
+	  /* Nonpositive offsets (relative to LIM_ADDR and LIM_BYTE)
+	     of the base, the cursor, and the next line.  */
+	  ptrdiff_t base = start_byte - lim_byte;
+	  ptrdiff_t cursor, next;
+
+	  for (cursor = base; cursor < 0; cursor = next)
+	    {
               /* The dumb loop.  */
-	      unsigned char *nl = memchr (cursor, '\n', ceiling_addr - cursor);
+	      unsigned char *nl = memchr (lim_addr + cursor, '\n', - cursor);
+	      next = nl ? nl - lim_addr : 0;
 
               /* If we're looking for newlines, cache the fact that
-                 the region from start to cursor is free of them. */
+                 this line's region is free of them. */
               if (newline_cache)
 		{
-		  unsigned char *low = cursor;
-		  unsigned char *lim = nl ? nl : ceiling_addr;
-		  know_region_cache (current_buffer, newline_cache,
-				     BYTE_TO_CHAR (low - base + start_byte),
-				     BYTE_TO_CHAR (lim - base + start_byte));
+		  know_region_cache (cache_buffer, newline_cache,
+				     BYTE_TO_CHAR (lim_byte + cursor),
+				     BYTE_TO_CHAR (lim_byte + next));
+		  /* know_region_cache can relocate buffer text.  */
+		  lim_addr = BYTE_POS_ADDR (ceiling_byte) + 1;
 		}
 
               if (! nl)
 		break;
+	      next++;
 
 	      if (--count == 0)
 		{
 		  immediate_quit = 0;
 		  if (bytepos)
-		    *bytepos = nl + 1 - base + start_byte;
-		  return BYTE_TO_CHAR (nl + 1 - base + start_byte);
+		    *bytepos = lim_byte + next;
+		  return BYTE_TO_CHAR (lim_byte + next);
 		}
-	      cursor = nl + 1;
             }
 
-	  start_byte += ceiling_addr - base;
+	  start_byte = lim_byte;
 	  start = BYTE_TO_CHAR (start_byte);
         }
       }
@@ -771,7 +802,7 @@ find_newline (ptrdiff_t start, ptrdiff_t start_byte, ptrdiff_t end,
             ptrdiff_t next_change;
             immediate_quit = 0;
             while (region_cache_backward
-                   (current_buffer, newline_cache, start, &next_change))
+                   (cache_buffer, newline_cache, start, &next_change))
               start = next_change;
             immediate_quit = allow_quit;
 
@@ -794,24 +825,28 @@ find_newline (ptrdiff_t start, ptrdiff_t start_byte, ptrdiff_t end,
 
         {
           /* The termination address of the dumb loop.  */
-          register unsigned char *ceiling_addr = BYTE_POS_ADDR (ceiling_byte);
-          register unsigned char *cursor = BYTE_POS_ADDR (start_byte - 1);
-          unsigned char *base = cursor;
+	  unsigned char *ceiling_addr = BYTE_POS_ADDR (ceiling_byte);
 
-          while (cursor >= ceiling_addr)
+	  /* Offsets (relative to CEILING_ADDR and CEILING_BYTE) of
+	     the base, the cursor, and the previous line.  These
+	     offsets are at least -1.  */
+	  ptrdiff_t base = start_byte - ceiling_byte;
+	  ptrdiff_t cursor, prev;
+
+	  for (cursor = base; 0 < cursor; cursor = prev)
             {
-	      unsigned char *nl = memrchr (ceiling_addr, '\n',
-					   cursor + 1 - ceiling_addr);
+	      unsigned char *nl = memrchr (ceiling_addr, '\n', cursor);
+	      prev = nl ? nl - ceiling_addr : -1;
 
               /* If we're looking for newlines, cache the fact that
-                 the region from after the cursor to start is free of them.  */
+                 this line's region is free of them. */
               if (newline_cache)
 		{
-		  unsigned char *low = nl ? nl : ceiling_addr - 1;
-		  unsigned char *lim = cursor;
-		  know_region_cache (current_buffer, newline_cache,
-				     BYTE_TO_CHAR (low - base + start_byte),
-				     BYTE_TO_CHAR (lim - base + start_byte));
+		  know_region_cache (cache_buffer, newline_cache,
+				     BYTE_TO_CHAR (ceiling_byte + prev + 1),
+				     BYTE_TO_CHAR (ceiling_byte + cursor));
+		  /* know_region_cache can relocate buffer text.  */
+		  ceiling_addr = BYTE_POS_ADDR (ceiling_byte);
 		}
 
               if (! nl)
@@ -821,13 +856,12 @@ find_newline (ptrdiff_t start, ptrdiff_t start_byte, ptrdiff_t end,
 		{
 		  immediate_quit = 0;
 		  if (bytepos)
-		    *bytepos = nl - base + start_byte;
-		  return BYTE_TO_CHAR (nl - base + start_byte);
+		    *bytepos = ceiling_byte + prev + 1;
+		  return BYTE_TO_CHAR (ceiling_byte + prev + 1);
 		}
-	      cursor = nl - 1;
             }
 
-	  start_byte += ceiling_addr - 1 - base;
+	  start_byte = ceiling_byte;
 	  start = BYTE_TO_CHAR (start_byte);
         }
       }

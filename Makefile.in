@@ -1,6 +1,6 @@
 ### @configure_input@
 
-# Copyright (C) 1992-2013 Free Software Foundation, Inc.
+# Copyright (C) 1992-2014 Free Software Foundation, Inc.
 
 # This file is part of GNU Emacs.
 
@@ -48,6 +48,8 @@
 #
 # make extraclean
 #      Still more severe - delete backup and autosave files, too.
+#      Also generated files that do not normally change and can be slow
+#      to rebuild (eg leim/ja-dic).
 #
 # make bootstrap
 #      Removes all the compiled files to force a new bootstrap from a
@@ -190,15 +192,13 @@ iconsrcdir=$(srcdir)/etc/images/icons
 # These variables hold the values Emacs will actually use.  They are
 # based on the values of the standard Make variables above.
 
-# Where to install the lisp, leim files distributed with
-# Emacs.  This includes the Emacs version, so that the
-# lisp files for different versions of Emacs will install
-# themselves in separate directories.
+# Where to install the lisp files distributed with Emacs.
+# This includes the Emacs version, so that the lisp files for different
+# versions of Emacs will install themselves in separate directories.
 lispdir=@lispdir@
-leimdir=@leimdir@
 
 # Directories Emacs should search for standard lisp files.
-# The default is ${lispdir}:${leimdir}.
+# The default is ${lispdir}.
 standardlisppath=@standardlisppath@
 
 # Directories Emacs should search for lisp files specific to this
@@ -213,12 +213,13 @@ locallisppath=@locallisppath@
 # The default is ${locallisppath}:${standardlisppath}.
 lisppath=@lisppath@
 
-# Where Emacs will search for its lisp files while
-# building.  This is only used during the process of
-# compiling Emacs, to help Emacs find its lisp files
-# before they've been installed in their final location.
+# Where Emacs will search for its lisp files while building.
+# This is only used during the process of compiling Emacs,
+# to help Emacs find its lisp files before they've been installed
+# in their final location.
 # This should be a colon-separated list of directories.
 # Normally it points to the lisp/ directory in the sources.
+# NB lread.c relies on lisp/ being first here.
 buildlisppath=${abs_srcdir}/lisp
 
 # Where to install the other architecture-independent
@@ -274,7 +275,7 @@ EMACS = ${EMACS_NAME}${EXEEXT}
 EMACSFULL = `echo emacs-${version} | sed '$(TRANSFORM)'`${EXEEXT}
 
 # Subdirectories to make recursively.
-SUBDIR = $(NTDIR) lib lib-src src lisp leim
+SUBDIR = $(NTDIR) lib lib-src src lisp
 
 # The subdir makefiles created by config.status.
 SUBDIR_MAKEFILES_IN = @SUBDIR_MAKEFILES_IN@
@@ -283,10 +284,9 @@ SUBDIR_MAKEFILES = `echo $(SUBDIR_MAKEFILES_IN:.in=) | sed 's|$(srcdir)/||g'`
 # Subdirectories to install, and where they'll go.  lib-src's and nt's
 # makefiles know how to install them, so we don't do that here.
 # Directories that cannot simply be copied, eg info, are treated
-# separately.  quail appears twice because in out-of-tree builds, it
-# exists twice.
-COPYDIR = ${srcdir}/etc ${srcdir}/lisp ${srcdir}/leim/ja-dic ${srcdir}/leim/quail leim/quail
-COPYDESTS = "$(DESTDIR)${etcdir}" "$(DESTDIR)${lispdir}" "$(DESTDIR)${leimdir}/ja-dic" "$(DESTDIR)${leimdir}/quail" "$(DESTDIR)${leimdir}/quail"
+# separately.
+COPYDIR = ${srcdir}/etc ${srcdir}/lisp
+COPYDESTS = "$(DESTDIR)${etcdir}" "$(DESTDIR)${lispdir}"
 
 all: ${SUBDIR}
 
@@ -317,22 +317,9 @@ epaths-force: FRC
 	  -e 's;\(#.*PATH_DOC\).*$$;\1 "${etcdocdir}";') &&		\
 	${srcdir}/build-aux/move-if-change epaths.h.$$$$ src/epaths.h
 
-# Convert MSYS-style /x/foo or Windows-style x:\foo file names
-# into x:/foo that Windows can grok.
-msys_to_w32=sed -e 's,\\\\,/,g' -e 's,^/\([A-Za-z]\)/,\1:/,'
-
-# Transform directory search path and its components.  Original can
-# be MSYS or Windows style.  Set path separator to ";", directory
-# separator to "/" and transform MSYS-style "/c/" to "c:/".
-# Remove empty path components and escape semicolons.
-msys_lisppath_to_w32=sed -e 's,\\\\,/,g' 			\
-	-e 's,\(^\|[:;]\)\([A-Za-z]\):/,\1/\2/,g'		\
-	-e 's/:/;/g' -e 's,\(^\|;\)/\([A-Za-z]\)/,\1\2:/,g'	\
-	-e 's/;\+/;/g' -e 's/^;//' -e 's/;$$//' -e 's/;/\\\\;/g'
-
-# Replace "${prefix}" with '%emacs_dir%' (which expands to install
+# Replace "${w32prefix}" with '%emacs_dir%' (which expands to install
 # directory at runtime).
-msys_prefix_subst=sed -e 's!\(^\|;\)'"$${prefixpattern}"'\([;/]\|$$\)!\1%emacs_dir%\2!g'
+msys_w32prefix_subst=sed -e 's!\(^\|;\)'"$${w32prefixpattern}"'\([;/]\|$$\)!\1%emacs_dir%\2!g'
 
 # Quote Sed special characters (except backslash and newline) with
 # a double backslash.
@@ -340,14 +327,21 @@ msys_sed_sh_escape=sed -e 's/[];$$*.^[]/\\\\&/g'
 
 # The w32 build needs a slightly different editing, and it uses
 # nt/epaths.nt as the template.
+#
 # Use the value of ${locallisppath} supplied by `configure',
 # to support the --enable-locallisppath argument.
+#
+# In this case, the paths written to 'src/epaths.h' must be in native
+# MS-Windows format (e.g. 'c:/foo/bar'), because temacs is a MinGW
+# program that doesn't support MSYS-style paths (e.g. '/c/foo/bar' or
+# '/foo/bar').
 epaths-force-w32: FRC
-	@(w32srcdir=`echo "${abs_srcdir}" | ${msys_to_w32}` ; 	\
-	  prefixpattern=`echo '${prefix}' | ${msys_to_w32} | ${msys_sed_sh_escape}` ; \
-	  locallisppath=`echo '${locallisppath}' | ${msys_lisppath_to_w32} | ${msys_prefix_subst}` ; \
+	@(w32srcdir=`${srcdir}/build-aux/msys-to-w32 "${srcdir}"`; \
+	  w32prefix=`${srcdir}/build-aux/msys-to-w32 "${prefix}" N`; \
+	  w32prefixpattern=`echo "$${w32prefix}" | ${msys_sed_sh_escape}` ; \
+	  w32locallisppath=`${srcdir}/build-aux/msys-to-w32 "${locallisppath}" N ":" "\\;" | ${msys_w32prefix_subst}` ; \
 	  sed < ${srcdir}/nt/epaths.nt > epaths.h.$$$$		\
-	  -e 's;\(#.*PATH_SITELOADSEARCH\).*$$;\1 "'"$${locallisppath}"'";' \
+	  -e 's;\(#.*PATH_SITELOADSEARCH\).*$$;\1 "'"$${w32locallisppath}"'";' \
 	  -e '/^.*#/s/@VER@/${version}/g' 			\
 	  -e '/^.*#/s/@CFG@/${configuration}/g' 		\
 	  -e "/^.*#/s|@SRC@|$${w32srcdir}|g") &&		\
@@ -361,12 +355,11 @@ lib-src src: $(NTDIR) lib
 
 src: lib-src
 
-# We need to build `emacs' in `src' to compile the *.elc files in `lisp'
-# and `leim'.
-lisp leim: src
+# We need to build `emacs' in `src' to compile the *.elc files in `lisp'.
+lisp: src
 
 # These targets should be "${SUBDIR} without `src'".
-lib lib-src lisp leim nt: Makefile FRC
+lib lib-src lisp nt: Makefile FRC
 	cd $@ && $(MAKE) all $(MFLAGS)                         \
 	  CC='${CC}' CFLAGS='${CFLAGS}' CPPFLAGS='${CPPFLAGS}' \
 	  LDFLAGS='${LDFLAGS}' MAKE='${MAKE}'
@@ -380,6 +373,11 @@ lib lib-src lisp leim nt: Makefile FRC
 # file src/foo.c forces dumping a new bootstrap-emacs, then re-byte-compiling
 # all preloaded elisp files, and only then dump the actual src/emacs, which
 # is not wrong, but is overkill in 99.99% of the cases.
+#
+# Note the use of single quotes in the value of vcswitness.
+# This passes an unexpanded $srcdir to src's Makefile, which then
+# expands it using its own value of srcdir (which points to the
+# source directory of src/).
 src: Makefile FRC
 	dirstate='.bzr/checkout/dirstate';				\
 	vcswitness='$$(srcdir)/../'$$dirstate;				\
@@ -427,7 +425,7 @@ AUTOCONF_INPUTS = $(srcdir)/configure.ac $(srcdir)/aclocal.m4
 $(srcdir)/configure: $(AUTOCONF_INPUTS)
 	cd ${srcdir} && autoconf
 
-ACLOCAL_INPUTS = $(srcdir)/m4/gnulib-comp.m4
+ACLOCAL_INPUTS = $(srcdir)/configure.ac $(srcdir)/m4/gnulib-comp.m4
 $(srcdir)/aclocal.m4: $(ACLOCAL_INPUTS)
 	cd $(srcdir) && aclocal -I m4
 
@@ -588,9 +586,12 @@ set_installuser=for installuser in $${LOGNAME} $${USERNAME} $${USER} \
 ## Note that the Makefiles in the etc directory are potentially useful
 ## in an installed Emacs, so should not be excluded.
 
-## We used to create locallisppath, but if it points to non-standard
-## locations, is not really Emacs's job to create these directories,
-## so it is no longer done.
+## We always create the _default_ locallisppath directories, and
+## ensure that they contain a subdirs.el file (via write_subdir).
+## This is true even if locallisppath has a non-default value.
+## In case of non-default value, we used to create the specified directories,
+## but not add subdirs.el to them.  This was a strange halfway house.
+## Nowadays we do not create non-default directories.
 
 ## Note that we use tar instead of plain old cp -R/-r because the latter
 ## is apparently not portable (even in 2012!).
@@ -599,23 +600,20 @@ set_installuser=for installuser in $${LOGNAME} $${USERNAME} $${USER} \
 ## work correctly, and therefore no idea when tar can be replaced.
 ## See also these comments from 2004 about cp -r working fine:
 ## http://lists.gnu.org/archive/html/autoconf-patches/2004-11/msg00005.html
-install-arch-indep: lisp leim install-info install-man ${INSTALL_ARCH_INDEP_EXTRA}
+install-arch-indep: lisp install-info install-man ${INSTALL_ARCH_INDEP_EXTRA}
 	-set ${COPYDESTS} ; \
 	unset CDPATH; \
 	$(set_installuser); \
 	for dir in ${COPYDIR} ; do \
 	  [ -d $${dir} ] || exit 1 ; \
 	  dest="$$1" ; shift ; \
-	  [ -d "$${dest}" ] && \
-	    [ "`cd \"$${dest}\" && /bin/pwd`" = "`cd $${dir} && /bin/pwd`" ] && \
-	    continue ; \
-	  if [ "$${dir}" = "leim/quail" ]; then \
-	    [ "`cd $${dir} && /bin/pwd`" = "`cd ${srcdir}/leim/quail && /bin/pwd`" ] && \
-	      continue ; \
-	  else \
-	    rm -rf "$${dest}" ; \
-	    umask 022; ${MKDIR_P} "$${dest}" ; \
-	  fi ; \
+	  if [ -d "$${dest}" ]; then \
+	    exp_dest=`cd "$${dest}" && /bin/pwd`; \
+	    [ "$$exp_dest" = "`cd $${dir} && /bin/pwd`" ] && continue ; \
+	  else true; \
+	  fi; \
+	  rm -rf "$${dest}" ; \
+	  umask 022; ${MKDIR_P} "$${dest}" ; \
 	  echo "Copying $${dir} to $${dest}..." ; \
 	  (cd $${dir}; tar -chf - . ) \
 	    | (cd "$${dest}"; umask 022; \
@@ -642,8 +640,6 @@ install-arch-indep: lisp leim install-info install-man ${INSTALL_ARCH_INDEP_EXTR
 	    done ); \
 	  find "$${dest}" -exec chown $${installuser} {} ';' ;\
 	done
-	-rm -f "$(DESTDIR)${leimdir}/leim-list.el"
-	${INSTALL_DATA} leim/leim-list.el "$(DESTDIR)${leimdir}/leim-list.el"
 	-rm -f "$(DESTDIR)${lispdir}/subdirs.el"
 	umask 022; $(srcdir)/build-aux/update-subdirs "$(DESTDIR)${lispdir}"
 	subdir="$(DESTDIR)${datadir}/emacs/${version}/site-lisp" ; \
@@ -654,11 +650,12 @@ install-arch-indep: lisp leim install-info install-man ${INSTALL_ARCH_INDEP_EXTR
 	  ( echo "Compressing *.el ..." ; \
 	    unset CDPATH; \
 	    thisdir=`/bin/pwd`; \
-	    for dir in "$(DESTDIR)${lispdir}" "$(DESTDIR)${leimdir}"; do \
+	    for dir in "$(DESTDIR)${lispdir}"; do \
 	      cd "$${thisdir}" ; \
 	      cd "$${dir}" || exit 1 ; \
 	      for f in `find . -name "*.elc" -print`; do \
-	        ${GZIP_PROG} -9n "`echo \"$$f\" | sed 's/.elc$$/.el/'`" ; \
+	        f_el=`echo "$$f" | sed 's/.elc$$/.el/'`; \
+	        ${GZIP_PROG} -9n "$$f_el" ; \
 	      done ; \
 	    done )
 	-chmod -R a+r "$(DESTDIR)${datadir}/emacs/${version}" ${COPYDESTS}
@@ -672,7 +669,8 @@ install-arch-indep: lisp leim install-info install-man ${INSTALL_ARCH_INDEP_EXTR
 install-etcdoc: src install-arch-indep
 	-unset CDPATH; \
 	umask 022; ${MKDIR_P} "$(DESTDIR)${etcdocdir}" ; \
-	if [ "`cd ./etc; /bin/pwd`" != "`cd \"$(DESTDIR)${etcdocdir}\"; /bin/pwd`" ]; \
+	exp_etcdocdir=`cd "$(DESTDIR)${etcdocdir}"; /bin/pwd`; \
+	if [ "`cd ./etc; /bin/pwd`" != "$$exp_etcdocdir" ]; \
 	then \
 	   docfile="DOC"; \
 	   echo "Copying etc/$${docfile} to $(DESTDIR)${etcdocdir} ..." ; \
@@ -681,17 +679,24 @@ install-etcdoc: src install-arch-indep
 	     chown $${installuser} "$(DESTDIR)${etcdocdir}/$${docfile}" || true ; \
 	else true; fi
 
+## FIXME:
+## If info/dir is missing, but we have install-info, we should let
+## that handle it.  If info/dir is present and we do not have install-info,
+## we should check for missing entries and add them by hand.
+##
+## FIXME:
+## If HAVE_MAKEINFO = no and there are no info files, do not install info/dir.
 install-info: info
 	umask 022; ${MKDIR_P} "$(DESTDIR)${infodir}"
 	-unset CDPATH; \
 	thisdir=`/bin/pwd`; \
-	if [ "`cd ${srcdir}/info && /bin/pwd`" = "`cd \"$(DESTDIR)${infodir}\" && /bin/pwd`" ]; then \
+	exp_infodir=`cd "$(DESTDIR)${infodir}" && /bin/pwd`; \
+	if [ "`cd ${srcdir}/info && /bin/pwd`" = "$$exp_infodir" ]; then \
 	  true; \
 	else \
-	  (cd "$(DESTDIR)${infodir}"; \
-	   [ -f dir ] || \
-	     (cd "$${thisdir}"; \
-	      ${INSTALL_DATA} ${srcdir}/info/dir "$(DESTDIR)${infodir}/dir") ); \
+	   [ -f "$(DESTDIR)${infodir}/dir" ] || \
+	      [ ! -f ${srcdir}/info/dir ] || \
+	      ${INSTALL_DATA} ${srcdir}/info/dir "$(DESTDIR)${infodir}/dir"; \
 	   info_misc=`cd doc/misc && $(QUIET_SUBMAKE) $(MAKE) -s echo-info`; \
 	   cd ${srcdir}/info ; \
 	   for elt in ${INFO_NONMISC} $${info_misc}; do \
@@ -848,7 +853,6 @@ mostlyclean: FRC
 	-cd doc/misc      && $(MAKE) $(MFLAGS) mostlyclean
 	-cd doc/lispref   && $(MAKE) $(MFLAGS) mostlyclean
 	-cd doc/lispintro && $(MAKE) $(MFLAGS) mostlyclean
-	cd leim     && $(MAKE) $(MFLAGS) mostlyclean
 
 ### `clean'
 ###      Delete all files from the current directory that are normally
@@ -870,7 +874,6 @@ clean: FRC
 	-cd doc/misc      && $(MAKE) $(MFLAGS) clean
 	-cd doc/lispref   && $(MAKE) $(MFLAGS) clean
 	-cd doc/lispintro && $(MAKE) $(MFLAGS) clean
-	cd leim     && $(MAKE) $(MFLAGS) clean
 	cd nextstep && $(MAKE) $(MFLAGS) clean
 
 ### `bootclean'
@@ -900,9 +903,9 @@ distclean: FRC
 	cd leim     && $(MAKE) $(MFLAGS) distclean
 	cd lisp     && $(MAKE) $(MFLAGS) distclean
 	cd nextstep && $(MAKE) $(MFLAGS) distclean
-	[ ! -d test/automated ] || { \
-	  cd test/automated && $(MAKE) $(MFLAGS) distclean; \
-	}
+	for dir in test/automated admin/grammars admin/unidata; do \
+	  [ ! -d $$dir ] || (cd $$dir && $(MAKE) $(MFLAGS) distclean); \
+	done
 	${top_distclean}
 
 ### `bootstrap-clean'
@@ -919,13 +922,14 @@ bootstrap-clean: FRC
 	-cd doc/misc      && $(MAKE) $(MFLAGS) maintainer-clean
 	-cd doc/lispref   && $(MAKE) $(MFLAGS) maintainer-clean
 	-cd doc/lispintro && $(MAKE) $(MFLAGS) maintainer-clean
-	cd leim     && $(MAKE) $(MFLAGS) maintainer-clean
+	cd leim     && $(MAKE) $(MFLAGS) bootstrap-clean
 	cd lisp     && $(MAKE) $(MFLAGS) bootstrap-clean
 	cd nextstep && $(MAKE) $(MFLAGS) maintainer-clean
-	[ ! -d test/automated ] || { \
-	  cd test/automated && $(MAKE) $(MFLAGS) bootstrap-clean; \
-	}
+	for dir in test/automated admin/grammars admin/unidata; do \
+	  [ ! -d $$dir ] || (cd $$dir && $(MAKE) $(MFLAGS) bootstrap-clean); \
+	done
 	[ ! -f config.log ] || mv -f config.log config.log~
+	rm -rf ${srcdir}/info
 	${top_bootclean}
 
 ### `maintainer-clean'
@@ -944,10 +948,11 @@ top_maintainer_clean=\
 	rm -fr autom4te.cache
 maintainer-clean: bootstrap-clean FRC
 	cd src  && $(MAKE) $(MFLAGS) maintainer-clean
+	cd leim && $(MAKE) $(MFLAGS) maintainer-clean
 	cd lisp && $(MAKE) $(MFLAGS) maintainer-clean
-	[ ! -d test/automated ] || { \
-	  cd test/automated && $(MAKE) $(MFLAGS) maintainer-clean; \
-	}
+	for dir in test/automated admin/grammars admin/unidata; do \
+	  [ ! -d $$dir ] || (cd $$dir && $(MAKE) $(MFLAGS) maintainer-clean); \
+	done
 	${top_maintainer_clean}
 
 ### This doesn't actually appear in the coding standards, but Karl
@@ -966,7 +971,7 @@ extraclean:
 TAGS tags: lib lib-src src
 	cd src; $(MAKE) $(MFLAGS) tags
 
-check:
+check: all
 	@if test ! -d test/automated; then \
 	  echo "You do not seem to have the test/ directory."; \
 	  echo "Maybe you are using a release tarfile, rather than a repository checkout."; \
@@ -988,7 +993,7 @@ $(DOCS):
 	t=$@; IFS=-; set $$t; IFS=; cd doc/$$1 && $(MAKE) $(MFLAGS) $$2
 
 .PHONY: $(DOCS) docs pdf ps
-.PHONY: info dvi dist check html info-real force-info check-info-dir
+.PHONY: info dvi dist check html info-real info-dir force-info check-info
 
 ## TODO add etc/refcards.
 docs: $(DOCS)
@@ -998,6 +1003,28 @@ info-real: $(INFOS)
 pdf: $(PDFS)
 ps: $(PSS)
 
+info-dir: ${srcdir}/info/dir
+
+## Not strictly necessary, but speeds things up a bit by stopping
+## the info-dir rule from running when not needed.
+## Hopefully doc/misc/*.texi is not too long for some systems?
+info_dir_deps = ${srcdir}/build-aux/dir_top \
+	${srcdir}/doc/emacs/emacs.texi \
+	${srcdir}/doc/lispintro/emacs-lisp-intro.texi \
+	${srcdir}/doc/lispref/elisp.texi ${srcdir}/doc/misc/*.texi
+
+## It would be much simpler if info/dir was only created in the
+## installation location by the install-info rule, but we also
+## need one in the source directory for people running uninstalled.
+## FIXME it would be faster to use the install-info program if we have it,
+## but then we would need to depend on info-real, which would
+## slow down parallelization.
+${srcdir}/info/dir: ${info_dir_deps}
+	tempfile=info-dir.$$$$; \
+	rm -f $${tempfile}; \
+	thisdir=`pwd`; \
+	(cd ${srcdir} && ./build-aux/make-info-dir $${thisdir}/$${tempfile}); \
+	${srcdir}/build-aux/move-if-change $${tempfile} ${srcdir}/info/dir
 
 INSTALL_DVI = install-emacs-dvi install-lispref-dvi \
 	install-lispintro-dvi install-misc-dvi
@@ -1063,28 +1090,31 @@ info: force-info
 	@if test "$(HAVE_MAKEINFO)" = "no"; then \
 	  echo "Configured --without-makeinfo, not building manuals" ; \
 	else \
-	  $(MAKE) $(MFLAGS) info-real ; \
+	  $(MAKE) $(MFLAGS) info-real info-dir; \
 	fi
 
-# The info/dir file must be updated by hand when new manuals are added.
-# Cannot add an info/dir entry for efaq-w32 since it is not installed
-# on all platforms.
-check-info-dir: info
+## build-aux/make-info-dir expects only certain dircategories.
+check-info: info
 	cd info ; \
-	missing= ; \
+	bad= ; \
 	for file in *; do \
 	  test -f "$${file}" || continue ; \
 	  case $${file} in \
-	    *-[0-9]*|COPYING|dir|efaq-w32*) continue ;; \
+	    *-[0-9]*|COPYING|dir) continue ;; \
 	  esac ; \
-	  file=`echo $${file} | sed 's/\.info//'` ; \
-	  grep -q -F ": ($${file})." dir || missing="$${missing} $${file}" ; \
+	  cat=`sed -n 's/^INFO-DIR-SECTION //p' $${file}`; \
+	  case $${cat} in \
+	   "Texinfo documentation system" | "Emacs"| "Emacs lisp" | \
+           "Emacs editing modes" | "Emacs network features" | \
+	   "Emacs misc features" | "Emacs lisp libraries" ) : ;; \
+	   *)  bad="$${bad} $${file}" ;; \
+	  esac; \
 	done ; \
-	if test -n "$${missing}"; then \
-	  echo "Missing info/dir entries: $${missing}" ; \
+	if test -n "$${bad}"; then \
+	  echo "Unexpected dircategory in: $${bad}" ; \
 	  exit 1 ; \
 	fi ; \
-	echo "info/dir is OK"
+	echo "info files are OK"
 
 #### Bootstrapping.
 
@@ -1095,11 +1125,11 @@ check-info-dir: info
 
 # Bootstrapping does the following:
 #  * Remove files to start from a bootstrap-clean slate.
-#  * Run autogen.sh, falling back on copy_autogen if autogen.sh fails.
+#  * Run autogen.sh.
 #  * Rebuild Makefile, to update the build procedure itself.
 #  * Do the actual build.
 bootstrap: bootstrap-clean FRC
-	cd $(srcdir) && { ./autogen.sh || autogen/copy_autogen; }
+	cd $(srcdir) && ./autogen.sh
 	$(MAKE) $(MFLAGS) MAKEFILE_NAME=force-Makefile force-Makefile
 	$(MAKE) $(MFLAGS) info all
 
@@ -1110,5 +1140,4 @@ check-declare:
 	  echo "You must build Emacs to use this command"; \
 	  exit 1; \
 	fi
-	cd leim && $(MAKE) $(MFLAGS) $@
 	cd lisp && $(MAKE) $(MFLAGS) $@

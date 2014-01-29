@@ -1,6 +1,6 @@
 ;;; lisp-mnt.el --- utility functions for Emacs Lisp maintainers
 
-;; Copyright (C) 1992, 1994, 1997, 2000-2013 Free Software Foundation,
+;; Copyright (C) 1992, 1994, 1997, 2000-2014 Free Software Foundation,
 ;; Inc.
 
 ;; Author: Eric S. Raymond <esr@snark.thyrsus.com>
@@ -461,8 +461,8 @@ each line."
   (let ((keywords (lm-keywords file)))
     (if keywords
 	(if (string-match-p "," keywords)
-	    (split-string keywords ",[ \t\n]*" t)
-	  (split-string keywords "[ \t\n]+" t)))))
+	    (split-string keywords ",[ \t\n]*" t "[ ]+")
+	  (split-string keywords "[ \t\n]+" t "[ ]+")))))
 
 (defvar finder-known-keywords)
 (defun lm-keywords-finder-p (&optional file)

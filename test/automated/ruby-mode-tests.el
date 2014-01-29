@@ -1,6 +1,6 @@
 ;;; ruby-mode-tests.el --- Test suite for ruby-mode
 
-;; Copyright (C) 2012-2013 Free Software Foundation, Inc.
+;; Copyright (C) 2012-2014 Free Software Foundation, Inc.
 
 ;; This file is part of GNU Emacs.
 
@@ -90,6 +90,9 @@ VALUES-PLIST is a list with alternating index and value elements."
 
 (ert-deftest ruby-no-heredoc-inside-quotes ()
   (ruby-assert-state "\"<<\", \"\",\nfoo" 3 nil))
+
+(ert-deftest ruby-exit!-font-lock ()
+  (ruby-assert-face "exit!" 5 font-lock-builtin-face))
 
 (ert-deftest ruby-deep-indent ()
   (let ((ruby-deep-arglist nil)
@@ -279,6 +282,57 @@ VALUES-PLIST is a list with alternating index and value elements."
      |  3)
      |")))
 
+(ert-deftest ruby-align-to-stmt-keywords-t ()
+  (let ((ruby-align-to-stmt-keywords t))
+    (ruby-should-indent-buffer
+     "foo = if bar?
+     |  1
+     |else
+     |  2
+     |end
+     |
+     |foo || begin
+     |  bar
+     |end
+     |
+     |foo ||
+     |  begin
+     |    bar
+     |  end
+     |"
+     "foo = if bar?
+     |       1
+     |else
+     |  2
+     | end
+     |
+     | foo || begin
+     |    bar
+     |end
+     |
+     |  foo ||
+     | begin
+     |bar
+     |  end
+     |")
+    ))
+
+(ert-deftest ruby-align-to-stmt-keywords-case ()
+  (let ((ruby-align-to-stmt-keywords '(case)))
+    (ruby-should-indent-buffer
+     "b = case a
+     |when 13
+     |  6
+     |else
+     |  42
+     |end"
+     "b = case a
+     |    when 13
+     |  6
+     |    else
+     |      42
+     |    end")))
+
 (ert-deftest ruby-move-to-block-stops-at-indentation ()
   (ruby-with-temp-buffer "def f\nend"
     (beginning-of-line)
@@ -292,8 +346,8 @@ VALUES-PLIST is a list with alternating index and value elements."
     (should (string= "foo do |b|\nend" (buffer-string)))))
 
 (ert-deftest ruby-toggle-block-to-brace ()
-  (let ((pairs '((16 . "foo {|b| b + 2 }")
-                 (15 . "foo {|b|\n  b + 2\n}"))))
+  (let ((pairs '((17 . "foo { |b| b + 2 }")
+                 (16 . "foo { |b|\n  b + 2\n}"))))
     (dolist (pair pairs)
       (with-temp-buffer
         (let ((fill-column (car pair)))
@@ -308,6 +362,12 @@ VALUES-PLIST is a list with alternating index and value elements."
     (beginning-of-line)
     (ruby-toggle-block)
     (should (string= "foo do |b|\n  b + 1\nend" (buffer-string)))))
+
+(ert-deftest ruby-toggle-block-with-interpolation ()
+  (ruby-with-temp-buffer "foo do\n  \"#{bar}\"\nend"
+    (beginning-of-line)
+    (ruby-toggle-block)
+    (should (string= "foo { \"#{bar}\" }" (buffer-string)))))
 
 (ert-deftest ruby-recognize-symbols-starting-with-at-character ()
   (ruby-assert-face ":@abc" 3 font-lock-constant-face))
@@ -585,8 +645,6 @@ VALUES-PLIST is a list with alternating index and value elements."
     (end-of-defun)
     (should (= 5 (line-number-at-pos)))))
 
-;; Tests below fail when using SMIE.
-
 (defvar ruby-sexp-test-example
   (ruby-test-string
    "class C
@@ -611,6 +669,26 @@ VALUES-PLIST is a list with alternating index and value elements."
     (end-of-line)
     (ruby-backward-sexp)
     (should (= 2 (line-number-at-pos)))))
+
+(ert-deftest ruby--insert-coding-comment-ruby-style ()
+  (with-temp-buffer
+    (let ((ruby-encoding-magic-comment-style 'ruby))
+      (ruby--insert-coding-comment "utf-8")
+      (should (string= "# coding: utf-8\n" (buffer-string))))))
+
+(ert-deftest ruby--insert-coding-comment-emacs-style ()
+  (with-temp-buffer
+    (let ((ruby-encoding-magic-comment-style 'emacs))
+      (ruby--insert-coding-comment "utf-8")
+      (should (string= "# -*- coding: utf-8 -*-\n" (buffer-string))))))
+
+(ert-deftest ruby--insert-coding-comment-custom-style ()
+  (with-temp-buffer
+    (let ((ruby-encoding-magic-comment-style 'custom)
+          (ruby-custom-encoding-magic-comment-template "# encoding: %s\n"))
+      (ruby--insert-coding-comment "utf-8")
+      (should (string= "# encoding: utf-8\n\n" (buffer-string))))))
+
 
 (provide 'ruby-mode-tests)
 

@@ -1,6 +1,6 @@
 ;;; nnimap.el --- IMAP interface for Gnus
 
-;; Copyright (C) 2010-2013 Free Software Foundation, Inc.
+;; Copyright (C) 2010-2014 Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;;         Simon Josefsson <simon@josefsson.org>
@@ -456,8 +456,8 @@ textual parts.")
                                (nnimap-credentials
 				(gnus-delete-duplicates
 				 (list
-				  nnimap-address
-				  (nnoo-current-server 'nnimap)))
+                                  (nnoo-current-server 'nnimap)
+				  nnimap-address))
                                 ports
                                 nnimap-user))))
 		  (setq nnimap-object nil)

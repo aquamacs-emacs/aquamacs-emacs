@@ -1,6 +1,6 @@
 ;;; grep.el --- run `grep' and display the results
 
-;; Copyright (C) 1985-1987, 1993-1999, 2001-2013 Free Software
+;; Copyright (C) 1985-1987, 1993-1999, 2001-2014 Free Software
 ;; Foundation, Inc.
 
 ;; Author: Roland McGrath <roland@gnu.org>
@@ -819,12 +819,7 @@ substitution string.  Note dynamic scoping of variables.")
 
 (defun grep-read-regexp ()
   "Read regexp arg for interactive grep."
-  (let ((default (grep-tag-default)))
-    (read-regexp
-     (concat "Search for"
-	     (if (and default (> (length default) 0))
-		 (format " (default \"%s\"): " default) ": "))
-     default 'grep-regexp-history)))
+  (read-regexp "Search for" 'grep-tag-default 'grep-regexp-history))
 
 (defun grep-read-files (regexp)
   "Read files arg for interactive grep."
@@ -995,8 +990,6 @@ to specify a command to run."
 	    (compilation-start regexp 'grep-mode))
       (setq dir (file-name-as-directory (expand-file-name dir)))
       (require 'find-dired)		; for `find-name-arg'
-      ;; In Tramp, there could be problems if the command line is too
-      ;; long.  We escape it, therefore.
       (let ((command (grep-expand-template
 		      grep-find-template
 		      regexp
@@ -1005,7 +998,7 @@ to specify a command to run."
 			      (mapconcat
 			       #'shell-quote-argument
 			       (split-string files)
-			       (concat "\\\n" " -o " find-name-arg " "))
+			       (concat " -o " find-name-arg " "))
 			      " "
 			      (shell-quote-argument ")"))
 		      dir
@@ -1026,7 +1019,7 @@ to specify a command to run."
 						      (concat "*/"
 							      (cdr ignore)))))))
 				     grep-find-ignored-directories
-				     "\\\n -o -path ")
+				     " -o -path ")
 				    " "
 				    (shell-quote-argument ")")
 				    " -prune -o "))
@@ -1044,7 +1037,7 @@ to specify a command to run."
 						     (shell-quote-argument
 						      (cdr ignore))))))
 				     grep-find-ignored-files
-				     "\\\n -o -name ")
+				     " -o -name ")
 				    " "
 				    (shell-quote-argument ")")
 				    " -prune -o "))))))

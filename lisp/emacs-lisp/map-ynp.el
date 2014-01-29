@@ -1,6 +1,6 @@
 ;;; map-ynp.el --- general-purpose boolean question-asker  -*- lexical-binding:t -*-
 
-;; Copyright (C) 1991-1995, 2000-2013 Free Software Foundation, Inc.
+;; Copyright (C) 1991-1995, 2000-2014 Free Software Foundation, Inc.
 
 ;; Author: Roland McGrath <roland@gnu.org>
 ;; Maintainer: FSF
@@ -34,20 +34,7 @@
 
 ;;; Code:
 
-;; unit test
-
-;; (defun map-test ()
-;; (interactive)
-;; (map-y-or-n-p (lambda (x) (format "Do it with %s?" x))
-;; 	     'ignore
-;; 	      '("one" "two" "three")
-;; 	      nil
-;; 	      '(((h) message "messge") )
-;; 	       )
-;; )
-;; (define-key menu-bar-file-menu [qweqwe] '(menu-item "map-test" map-test)) 
-
-(declare-function x-popup-dialog "xmenu.c" (position contents &optional header))
+(declare-function x-popup-dialog "menu.c" (position contents &optional header))
 
 (defun map-y-or-n-p (prompter actor list &optional help action-alist
 			      no-cursor-in-echo-area)
@@ -245,7 +232,7 @@ the current %s and exit."
 			 ((and (symbolp def) (commandp def))
 			  (call-interactively def)
 			  ;; Regurgitated; try again.
-                          (funcall try-again))
+			  (funcall try-again))
 			 ((and (consp def) (eq (cdr def) 'suppress) (symbolp (car def)) (commandp (car def)))
 			  (call-interactively (car def))
 			  (setq actions (1+ actions))

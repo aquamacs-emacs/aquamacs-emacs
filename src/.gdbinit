@@ -1,4 +1,4 @@
-# Copyright (C) 1992-1998, 2000-2013 Free Software Foundation, Inc.
+# Copyright (C) 1992-1998, 2000-2014 Free Software Foundation, Inc.
 #
 # This file is part of GNU Emacs.
 #
@@ -67,7 +67,7 @@ define xgettype
   else
     set $bugfix = $arg0
   end
-  set $type = (enum Lisp_Type) (USE_LSB_TAG ? $bugfix & (1 << GCTYPEBITS) - 1 : $bugfix >> VALBITS)
+  set $type = (enum Lisp_Type) (USE_LSB_TAG ? $bugfix & (1 << GCTYPEBITS) - 1 : (EMACS_UINT) $bugfix >> VALBITS)
 end
 
 # Set up something to print out s-expressions.

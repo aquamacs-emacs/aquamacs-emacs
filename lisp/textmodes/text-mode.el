@@ -1,6 +1,7 @@
 ;;; text-mode.el --- text mode, and its idiosyncratic commands
 
-;; Copyright (C) 1985, 1992, 1994, 2001-2013 Free Software Foundation, Inc.
+;; Copyright (C) 1985, 1992, 1994, 2001-2014 Free Software Foundation,
+;; Inc.
 
 ;; Maintainer: FSF
 ;; Keywords: wp
@@ -121,9 +122,10 @@ Turning on Paragraph-Indent minor mode runs the normal hook
                (concat ps-re paragraph-start)))))
   ;; Change the indentation function.
   (if paragraph-indent-minor-mode
-      (set (make-local-variable 'indent-line-function) 'indent-to-left-margin)
-    (if (eq indent-line-function 'indent-to-left-margin)
-        (set (make-local-variable 'indent-line-function) 'indent-region))))
+      (add-function :override (local 'indent-line-function)
+                    #'indent-to-left-margin)
+    (remove-function (local 'indent-line-function)
+                     #'indent-to-left-margin)))
 
 (defalias 'indented-text-mode 'text-mode)
 

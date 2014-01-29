@@ -1,6 +1,6 @@
 ;;; gnus-int.el --- backend interface functions for Gnus
 
-;; Copyright (C) 1996-2013 Free Software Foundation, Inc.
+;; Copyright (C) 1996-2014 Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;; Keywords: news
@@ -113,7 +113,8 @@ If CONFIRM is non-nil, the user will be asked for an NNTP server."
 	(setq gnus-nntp-server
 	      (gnus-completing-read "NNTP server"
                                     (cons gnus-nntp-server
-                                          gnus-secondary-servers)
+					  (if (boundp 'gnus-secondary-servers)
+					      gnus-secondary-servers))
                                     nil gnus-nntp-server)))
 
       (when (and gnus-nntp-server

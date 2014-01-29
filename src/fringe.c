@@ -1,5 +1,5 @@
 /* Fringe handling (split from xdisp.c).
-   Copyright (C) 1985-1988, 1993-1995, 1997-2013 Free Software
+   Copyright (C) 1985-1988, 1993-1995, 1997-2014 Free Software
    Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -83,7 +83,7 @@ struct fringe_bitmap
   unsigned width : 8;
   unsigned period : 8;
   unsigned align : 2;
-  unsigned dynamic : 1;
+  bool_bf dynamic : 1;
 };
 
 
@@ -664,6 +664,10 @@ draw_fringe_bitmap_1 (struct window *w, struct glyph_row *row, int left_p, int o
 	{
 	  /* If W has a vertical border to its left, don't draw over it.  */
 	  wd -= ((!WINDOW_LEFTMOST_P (w)
+		  /* This could be wrong when we allow window local
+		     right dividers - but the window on the left is hard
+		     to get.  */
+		  && !FRAME_RIGHT_DIVIDER_WIDTH (f)
 		  && !WINDOW_HAS_VERTICAL_SCROLL_BAR (w)
 		  /* But don't reduce the fringe width if the window
 		     has a left margin, because that means we are not
@@ -1677,7 +1681,7 @@ If BITMAP already exists, the existing definition is replaced.  */)
       Fput (bitmap, Qfringe, make_number (n));
     }
 
-  fb.dynamic = 1;
+  fb.dynamic = true;
 
   xfb = xmalloc (sizeof fb + fb.height * BYTES_PER_BITMAP_ROW);
   fb.bits = b = (unsigned short *) (xfb + 1);
@@ -1707,6 +1711,8 @@ If BITMAP already exists, the existing definition is replaced.  */)
 DEFUN ("set-fringe-bitmap-face", Fset_fringe_bitmap_face, Sset_fringe_bitmap_face,
        1, 2, 0,
        doc: /* Set face for fringe bitmap BITMAP to FACE.
+FACE is merged with the `fringe' face, so normally FACE should specify
+only the foreground color.
 If FACE is nil, reset face to default fringe face.  */)
   (Lisp_Object bitmap, Lisp_Object face)
 {

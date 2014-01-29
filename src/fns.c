@@ -1,6 +1,7 @@
 /* Random utility Lisp functions.
 
-Copyright (C) 1985-1987, 1993-1995, 1997-2013 Free Software Foundation, Inc.
+Copyright (C) 1985-1987, 1993-1995, 1997-2014 Free Software Foundation,
+Inc.
 
 This file is part of GNU Emacs.
 
@@ -35,11 +36,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "frame.h"
 #include "window.h"
 #include "blockinput.h"
-#ifdef HAVE_MENUS
 #if defined (HAVE_X_WINDOWS)
 #include "xterm.h"
 #endif
-#endif /* HAVE_MENUS */
 
 Lisp_Object Qstring_lessp;
 static Lisp_Object Qprovide, Qrequire;
@@ -50,7 +49,7 @@ static Lisp_Object Qcodeset, Qdays, Qmonths, Qpaper;
 
 static Lisp_Object Qmd5, Qsha1, Qsha224, Qsha256, Qsha384, Qsha512;
 
-static bool internal_equal (Lisp_Object, Lisp_Object, int, bool);
+static bool internal_equal (Lisp_Object, Lisp_Object, int, bool, Lisp_Object);
 
 DEFUN ("identity", Fidentity, Sidentity, 1, 1, 0,
        doc: /* Return the argument unchanged.  */)
@@ -435,14 +434,10 @@ with the original.  */)
 
   if (BOOL_VECTOR_P (arg))
     {
-      Lisp_Object val;
-      ptrdiff_t size_in_chars
-	= ((bool_vector_size (arg) + BOOL_VECTOR_BITS_PER_CHAR - 1)
-	   / BOOL_VECTOR_BITS_PER_CHAR);
-
-      val = Fmake_bool_vector (Flength (arg), Qnil);
-      memcpy (XBOOL_VECTOR (val)->data, XBOOL_VECTOR (arg)->data,
-	      size_in_chars);
+      EMACS_INT nbits = bool_vector_size (arg);
+      ptrdiff_t nbytes = bool_vector_bytes (nbits);
+      Lisp_Object val = make_uninit_bool_vector (nbits);
+      memcpy (bool_vector_data (val), bool_vector_data (arg), nbytes);
       return val;
     }
 
@@ -674,12 +669,7 @@ concat (ptrdiff_t nargs, Lisp_Object *args,
 	      }
 	    else if (BOOL_VECTOR_P (this))
 	      {
-		int byte;
-		byte = XBOOL_VECTOR (this)->data[thisindex / BOOL_VECTOR_BITS_PER_CHAR];
-		if (byte & (1 << (thisindex % BOOL_VECTOR_BITS_PER_CHAR)))
-		  elt = Qt;
-		else
-		  elt = Qnil;
+		elt = bool_vector_ref (this, thisindex);
 		thisindex++;
 	      }
 	    else
@@ -1366,7 +1356,7 @@ The value is actually the tail of LIST whose car is ELT.  */)
       register Lisp_Object tem;
       CHECK_LIST_CONS (tail, list);
       tem = XCAR (tail);
-      if (FLOATP (tem) && internal_equal (elt, tem, 0, 0))
+      if (FLOATP (tem) && internal_equal (elt, tem, 0, 0, Qnil))
 	return tail;
       QUIT;
     }
@@ -1548,15 +1538,12 @@ Write `(setq foo (delq element foo))' to be sure of correctly changing
 the value of a list `foo'.  */)
   (register Lisp_Object elt, Lisp_Object list)
 {
-  register Lisp_Object tail, prev;
-  register Lisp_Object tem;
+  Lisp_Object tail, tortoise, prev = Qnil;
+  bool skip;
 
-  tail = list;
-  prev = Qnil;
-  while (CONSP (tail))
+  FOR_EACH_TAIL (tail, list, tortoise, skip)
     {
-      CHECK_LIST_CONS (tail, list);
-      tem = XCAR (tail);
+      Lisp_Object tem = XCAR (tail);
       if (EQ (elt, tem))
 	{
 	  if (NILP (prev))
@@ -1566,8 +1553,6 @@ the value of a list `foo'.  */)
 	}
       else
 	prev = tail;
-      tail = XCDR (tail);
-      QUIT;
     }
   return list;
 }
@@ -1602,7 +1587,7 @@ changing the value of a sequence `foo'.  */)
 
 	  for (i = n = 0; i < ASIZE (seq); ++i)
 	    if (NILP (Fequal (AREF (seq, i), elt)))
-	      p->u.contents[n++] = AREF (seq, i);
+	      p->contents[n++] = AREF (seq, i);
 
 	  XSETVECTOR (seq, p);
 	}
@@ -1970,7 +1955,7 @@ Floating-point numbers of equal value are `eql', but they may not be `eq'.  */)
   (Lisp_Object obj1, Lisp_Object obj2)
 {
   if (FLOATP (obj1))
-    return internal_equal (obj1, obj2, 0, 0) ? Qt : Qnil;
+    return internal_equal (obj1, obj2, 0, 0, Qnil) ? Qt : Qnil;
   else
     return EQ (obj1, obj2) ? Qt : Qnil;
 }
@@ -1985,7 +1970,7 @@ Numbers are compared by value, but integers cannot equal floats.
 Symbols must match exactly.  */)
   (register Lisp_Object o1, Lisp_Object o2)
 {
-  return internal_equal (o1, o2, 0, 0) ? Qt : Qnil;
+  return internal_equal (o1, o2, 0, 0, Qnil) ? Qt : Qnil;
 }
 
 DEFUN ("equal-including-properties", Fequal_including_properties, Sequal_including_properties, 2, 2, 0,
@@ -1994,7 +1979,7 @@ This is like `equal' except that it compares the text properties
 of strings.  (`equal' ignores text properties.)  */)
   (register Lisp_Object o1, Lisp_Object o2)
 {
-  return internal_equal (o1, o2, 0, 1) ? Qt : Qnil;
+  return internal_equal (o1, o2, 0, 1, Qnil) ? Qt : Qnil;
 }
 
 /* DEPTH is current depth of recursion.  Signal an error if it
@@ -2002,10 +1987,41 @@ of strings.  (`equal' ignores text properties.)  */)
    PROPS means compare string text properties too.  */
 
 static bool
-internal_equal (Lisp_Object o1, Lisp_Object o2, int depth, bool props)
+internal_equal (Lisp_Object o1, Lisp_Object o2, int depth, bool props,
+		Lisp_Object ht)
 {
-  if (depth > 200)
-    error ("Stack overflow in equal");
+  if (depth > 10)
+    {
+      if (depth > 200)
+	error ("Stack overflow in equal");
+      if (NILP (ht))
+	{
+	  Lisp_Object args[2];
+	  args[0] = QCtest;
+	  args[1] = Qeq;
+	  ht = Fmake_hash_table (2, args);
+	}
+      switch (XTYPE (o1))
+	{
+	case Lisp_Cons: case Lisp_Misc: case Lisp_Vectorlike:
+	  {
+	    struct Lisp_Hash_Table *h = XHASH_TABLE (ht);
+	    EMACS_UINT hash;
+	    ptrdiff_t i = hash_lookup (h, o1, &hash);
+	    if (i >= 0)
+	      { /* `o1' was seen already.  */
+		Lisp_Object o2s = HASH_VALUE (h, i);
+		if (!NILP (Fmemq (o2, o2s)))
+		  return 1;
+		else
+		  set_hash_value_slot (h, i, Fcons (o2, o2s));
+	      }
+	    else
+	      hash_put (h, o1, Fcons (o2, Qnil), hash);
+	  }
+	default: ;
+	}
+    }
 
  tail_recurse:
   QUIT;
@@ -2028,10 +2044,11 @@ internal_equal (Lisp_Object o1, Lisp_Object o2, int depth, bool props)
       }
 
     case Lisp_Cons:
-      if (!internal_equal (XCAR (o1), XCAR (o2), depth + 1, props))
+      if (!internal_equal (XCAR (o1), XCAR (o2), depth + 1, props, ht))
 	return 0;
       o1 = XCDR (o1);
       o2 = XCDR (o2);
+      /* FIXME: This inf-loops in a circular list!  */
       goto tail_recurse;
 
     case Lisp_Misc:
@@ -2040,9 +2057,9 @@ internal_equal (Lisp_Object o1, Lisp_Object o2, int depth, bool props)
       if (OVERLAYP (o1))
 	{
 	  if (!internal_equal (OVERLAY_START (o1), OVERLAY_START (o2),
-			       depth + 1, props)
+			       depth + 1, props, ht)
 	      || !internal_equal (OVERLAY_END (o1), OVERLAY_END (o2),
-				  depth + 1, props))
+				  depth + 1, props, ht))
 	    return 0;
 	  o1 = XOVERLAY (o1)->plist;
 	  o2 = XOVERLAY (o2)->plist;
@@ -2071,9 +2088,8 @@ internal_equal (Lisp_Object o1, Lisp_Object o2, int depth, bool props)
 	    EMACS_INT size = bool_vector_size (o1);
 	    if (size != bool_vector_size (o2))
 	      return 0;
-	    if (memcmp (XBOOL_VECTOR (o1)->data, XBOOL_VECTOR (o2)->data,
-			((size + BOOL_VECTOR_BITS_PER_CHAR - 1)
-			 / BOOL_VECTOR_BITS_PER_CHAR)))
+	    if (memcmp (bool_vector_data (o1), bool_vector_data (o2),
+			bool_vector_bytes (size)))
 	      return 0;
 	    return 1;
 	  }
@@ -2095,7 +2111,7 @@ internal_equal (Lisp_Object o1, Lisp_Object o2, int depth, bool props)
 	    Lisp_Object v1, v2;
 	    v1 = AREF (o1, i);
 	    v2 = AREF (o2, i);
-	    if (!internal_equal (v1, v2, depth + 1, props))
+	    if (!internal_equal (v1, v2, depth + 1, props, ht))
 	      return 0;
 	  }
 	return 1;
@@ -2163,19 +2179,7 @@ ARRAY is a vector, string, char-table, or bool-vector.  */)
 	  p[idx] = charval;
     }
   else if (BOOL_VECTOR_P (array))
-    {
-      unsigned char *p = XBOOL_VECTOR (array)->data;
-      size = ((bool_vector_size (array) + BOOL_VECTOR_BITS_PER_CHAR - 1)
-	      / BOOL_VECTOR_BITS_PER_CHAR);
-
-      if (size)
-	{
-	  memset (p, ! NILP (item) ? -1 : 0, size);
-
-	  /* Clear any extraneous bits in the last byte.  */
-	  p[size - 1] &= (1 << (size % BOOL_VECTOR_BITS_PER_CHAR)) - 1;
-	}
-    }
+    return bool_vector_fill (array, item);
   else
     wrong_type_argument (Qarrayp, array);
   return array;
@@ -2287,10 +2291,7 @@ mapcar1 (EMACS_INT leni, Lisp_Object *vals, Lisp_Object fn, Lisp_Object seq)
     {
       for (i = 0; i < leni; i++)
 	{
-	  unsigned char byte;
-	  byte = XBOOL_VECTOR (seq)->data[i / BOOL_VECTOR_BITS_PER_CHAR];
-	  dummy = (byte & (1 << (i % BOOL_VECTOR_BITS_PER_CHAR))) ? Qt : Qnil;
-	  dummy = call1 (fn, dummy);
+	  dummy = call1 (fn, bool_vector_ref (seq, i));
 	  if (vals)
 	    vals[i] = dummy;
 	}
@@ -2441,7 +2442,6 @@ if `last-nonmenu-event' is nil, and `use-dialog-box' is non-nil.  */)
 
   CHECK_STRING (prompt);
 
-#ifdef HAVE_MENUS
   if ((NILP (last_nonmenu_event) || CONSP (last_nonmenu_event))
       && use_dialog_box)
     {
@@ -2455,7 +2455,6 @@ if `last-nonmenu-event' is nil, and `use-dialog-box' is non-nil.  */)
       UNGCPRO;
       return obj;
     }
-#endif /* HAVE_MENUS */
 
   args[0] = prompt;
   args[1] = build_string ("(yes or no) ");
@@ -3446,7 +3445,7 @@ larger_vector (Lisp_Object vec, ptrdiff_t incr_min, ptrdiff_t nitems_max)
 {
   struct Lisp_Vector *v;
   ptrdiff_t i, incr, incr_max, old_size, new_size;
-  ptrdiff_t C_language_max = min (PTRDIFF_MAX, SIZE_MAX) / sizeof *v->u.contents;
+  ptrdiff_t C_language_max = min (PTRDIFF_MAX, SIZE_MAX) / sizeof *v->contents;
   ptrdiff_t n_max = (0 <= nitems_max && nitems_max < C_language_max
 		     ? nitems_max : C_language_max);
   eassert (VECTORP (vec));
@@ -3458,9 +3457,9 @@ larger_vector (Lisp_Object vec, ptrdiff_t incr_min, ptrdiff_t nitems_max)
     memory_full (SIZE_MAX);
   new_size = old_size + incr;
   v = allocate_vector (new_size);
-  memcpy (v->u.contents, XVECTOR (vec)->u.contents, old_size * sizeof *v->u.contents);
+  memcpy (v->contents, XVECTOR (vec)->contents, old_size * sizeof *v->contents);
   for (i = old_size; i < new_size; ++i)
-    v->u.contents[i] = Qnil;
+    v->contents[i] = Qnil;
   XSETVECTOR (vec, v);
   return vec;
 }
@@ -4189,11 +4188,9 @@ sxhash_bool_vector (Lisp_Object vec)
   EMACS_UINT hash = size;
   int i, n;
 
-  n = min (SXHASH_MAX_LEN,
-	   ((size + BOOL_VECTOR_BITS_PER_CHAR - 1)
-	    / BOOL_VECTOR_BITS_PER_CHAR));
+  n = min (SXHASH_MAX_LEN, bool_vector_words (size));
   for (i = 0; i < n; ++i)
-    hash = sxhash_combine (hash, XBOOL_VECTOR (vec)->data[i]);
+    hash = sxhash_combine (hash, bool_vector_data (vec)[i]);
 
   return SXHASH_REDUCE (hash);
 }

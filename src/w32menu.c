@@ -1,5 +1,5 @@
 /* Menu support for GNU Emacs on the Microsoft Windows API.
-   Copyright (C) 1986, 1988, 1993-1994, 1996, 1998-1999, 2001-2013 Free
+   Copyright (C) 1986, 1988, 1993-1994, 1996, 1998-1999, 2001-2014 Free
    Software Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -82,8 +82,8 @@ typedef BOOL (WINAPI * SetMenuItemInfoA_Proc) (
     IN LPCMENUITEMINFOA);
 typedef int (WINAPI * MessageBoxW_Proc) (
     IN HWND window,
-    IN WCHAR *text,
-    IN WCHAR *caption,
+    IN const WCHAR *text,
+    IN const WCHAR *caption,
     IN UINT type);
 
 #ifdef NTGUI_UNICODE
@@ -114,7 +114,6 @@ static int fill_in_menu (HMENU, widget_value *);
 
 void w32_free_menu_strings (HWND);
 
-#ifdef HAVE_MENUS
 #ifdef HAVE_DIALOGS
 Lisp_Object
 w32_popup_dialog (struct frame *f, Lisp_Object header, Lisp_Object contents)
@@ -326,7 +325,7 @@ set_frame_menubar (struct frame *f, bool first_time, bool deep_p)
 
       /* Save the frame's previous menu bar contents data.  */
       if (previous_menu_items_used)
-	memcpy (previous_items, XVECTOR (f->menu_bar_vector)->u.contents,
+	memcpy (previous_items, XVECTOR (f->menu_bar_vector)->contents,
 		previous_menu_items_used * word_size);
 
       /* Fill in menu_items with the current menu bar contents.
@@ -506,7 +505,7 @@ set_frame_menubar (struct frame *f, bool first_time, bool deep_p)
     /* Force the window size to be recomputed so that the frame's text
        area remains the same, if menubar has just been created.  */
     if (old_widget == NULL)
-      x_set_window_size (f, 0, FRAME_COLS (f), FRAME_LINES (f));
+      x_set_window_size (f, 0, FRAME_TEXT_WIDTH (f), FRAME_TEXT_HEIGHT (f), 1);
   }
 
   unblock_input ();
@@ -630,7 +629,7 @@ w32_menu_show (struct frame *f, int x, int y, int for_click, int keymaps,
 	{
 	  /* Create a new pane.  */
 	  Lisp_Object pane_name, prefix;
-	  char *pane_string;
+	  const char *pane_string;
 	  pane_name = AREF (menu_items, i + MENU_ITEMS_PANE_NAME);
 	  prefix = AREF (menu_items, i + MENU_ITEMS_PANE_PREFIX);
 
@@ -1146,7 +1145,8 @@ simple_dialog_show (struct frame *f, Lisp_Object contents, Lisp_Object header)
   /* Use Unicode if possible, so any language can be displayed.  */
   if (unicode_message_box)
     {
-      WCHAR *text, *title;
+      WCHAR *text;
+      const WCHAR *title;
       USE_SAFE_ALLOCA;
 
       if (STRINGP (temp))
@@ -1181,7 +1181,7 @@ simple_dialog_show (struct frame *f, Lisp_Object contents, Lisp_Object header)
     }
   else
     {
-      char *text, *title;
+      const char *text, *title;
 
       /* Fall back on ANSI message box, but at least use system
 	 encoding so questions representable by the system codepage
@@ -1602,21 +1602,15 @@ w32_free_menu_strings (HWND hwnd)
   current_popup_menu = NULL;
 }
 
-#endif /* HAVE_MENUS */
-
 /* The following is used by delayed window autoselection.  */
 
 DEFUN ("menu-or-popup-active-p", Fmenu_or_popup_active_p, Smenu_or_popup_active_p, 0, 0, 0,
        doc: /* Return t if a menu or popup dialog is active on selected frame.  */)
   (void)
 {
-#ifdef HAVE_MENUS
   struct frame *f;
   f = SELECTED_FRAME ();
   return (f->output_data.w32->menubar_active > 0) ? Qt : Qnil;
-#else
-  return Qnil;
-#endif /* HAVE_MENUS */
 }
 
 void

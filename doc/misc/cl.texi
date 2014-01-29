@@ -1,12 +1,13 @@
 \input texinfo    @c -*-texinfo-*-
 @setfilename ../../info/cl
 @settitle Common Lisp Extensions
+@documentencoding UTF-8
 @include emacsver.texi
 
 @copying
 This file documents the GNU Emacs Common Lisp emulation package.
 
-Copyright @copyright{} 1993, 2001--2013 Free Software Foundation, Inc.
+Copyright @copyright{} 1993, 2001--2014 Free Software Foundation, Inc.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -1281,13 +1282,8 @@ cells of symbols rather than on the value cells.  Each @var{binding}
 must be a list of the form @samp{(@var{name} @var{arglist}
 @var{forms}@dots{})}, which defines a function exactly as if
 it were a @code{cl-defun} form.  The function @var{name} is defined
-accordingly for the duration of the body of the @code{cl-flet}; then
-the old function definition, or lack thereof, is restored.
-
-You can use @code{cl-flet} to disable or modify the behavior of
-functions (including Emacs primitives) in a temporary, localized fashion.
-(Compare this with the idea of advising functions.
-@xref{Advising Functions,,,elisp,GNU Emacs Lisp Reference Manual}.)
+accordingly but only within the body of the @code{cl-flet}, hiding any external
+definition if applicable.
 
 The bindings are lexical in scope.  This means that all references to
 the named functions must appear physically within the body of the
@@ -1495,7 +1491,7 @@ simply returning @code{nil}.
 
 @node Blocks and Exits
 @section Blocks and Exits
-@cindex block 
+@cindex block
 
 @noindent
 Common Lisp @dfn{blocks} provide a non-local exit mechanism very

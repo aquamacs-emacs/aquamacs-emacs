@@ -1,6 +1,6 @@
 /* Platform-independent code for terminal communications.
 
-Copyright (C) 1986, 1988, 1993-1994, 1996, 1999-2013 Free Software
+Copyright (C) 1986, 1988, 1993-1994, 1996, 1999-2014 Free Software
 Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -1178,7 +1178,6 @@ no quit occurs and `x-popup-menu' returns nil.  */)
        keybinding equivalents, but we don't do that any more anyway.  */
     return Qnil;
 
-#ifdef HAVE_MENUS
   {
     bool get_current_pos_p = 0;
 
@@ -1315,7 +1314,6 @@ no quit occurs and `x-popup-menu' returns nil.  */)
 
     XSETFRAME (Vmenu_updating_frame, f);
   }
-#endif /* HAVE_MENUS */
 
   /* Now parse the lisp menus.  */
   record_unwind_protect_void (unuse_menu_items);
@@ -1398,7 +1396,6 @@ no quit occurs and `x-popup-menu' returns nil.  */)
 
   unbind_to (specpdl_count, Qnil);
 
-#ifdef HAVE_MENUS
 #ifdef HAVE_WINDOW_SYSTEM
   /* Hide a previous tip, if any.  */
   if (!FRAME_TERMCAP_P (f))
@@ -1446,8 +1443,16 @@ no quit occurs and `x-popup-menu' returns nil.  */)
   else
 #endif
   if (FRAME_TERMCAP_P (f))
-    selection = tty_menu_show (f, xpos, ypos, for_click, keymaps, title,
-			       kbd_menu_navigation, &error_name);
+    {
+      ptrdiff_t count1 = SPECPDL_INDEX ();
+
+      /* Avoid crashes if, e.g., another client will connect while we
+	 are in a menu.  */
+      temporarily_switch_to_single_kboard (f);
+      selection = tty_menu_show (f, xpos, ypos, for_click, keymaps, title,
+				 kbd_menu_navigation, &error_name);
+      unbind_to (count1, Qnil);
+    }
 
 #ifdef HAVE_NS
   unbind_to (specpdl_count, Qnil);
@@ -1460,15 +1465,11 @@ no quit occurs and `x-popup-menu' returns nil.  */)
     FRAME_DISPLAY_INFO (f)->grabbed = 0;
 #endif
 
-#endif /* HAVE_MENUS */
-
   UNGCPRO;
 
   if (error_name) error ("%s", error_name);
   return selection;
 }
-
-#ifdef HAVE_MENUS
 
 DEFUN ("x-popup-dialog", Fx_popup_dialog, Sx_popup_dialog, 2, 3, 0,
        doc: /* Pop up a dialog box and return user's selection.
@@ -1608,8 +1609,6 @@ for instance using the window manager, then this produces a quit and
   }
 }
 
-#endif	/* HAVE_MENUS */
-
 void
 syms_of_menu (void)
 {
@@ -1618,9 +1617,6 @@ syms_of_menu (void)
   menu_items_inuse = Qnil;
 
   defsubr (&Sx_popup_menu);
-
-#ifdef HAVE_MENUS
   defsubr (&Sx_popup_dialog);
-#endif
   defsubr (&Smenu_bar_menu_at_x_y);
 }

@@ -1,6 +1,6 @@
 ;;; ispell.el --- interface to International Ispell Versions 3.1 and 3.2
 
-;; Copyright (C) 1994-1995, 1997-2013 Free Software Foundation, Inc.
+;; Copyright (C) 1994-1995, 1997-2014 Free Software Foundation, Inc.
 
 ;; Author:           Ken Stevens <k.stevens@ieee.org>
 ;; Maintainer:       Ken Stevens <k.stevens@ieee.org>
@@ -3311,8 +3311,12 @@ if defined."
       (message "Starting \"%s\" process..." (file-name-nondirectory prog))
       (if look-p
           nil
+        (insert "^" word)
+        ;; When there are no wildcards, append one, for consistency
+        ;; with `look' behavior.
+        (unless wild-p (insert "*"))
+        (insert "$")
         ;; Convert * to .*
-        (insert "^" word "$")
         (while (search-backward "*" nil t) (insert "."))
         (setq word (buffer-string))
         (erase-buffer))
@@ -3974,7 +3978,8 @@ ispell-region: Search for first region to skip after (ispell-begin-skip-region-r
                    ispell-start ispell-end (point-at-eol) in-comment add-comment string)
 		  (if add-comment		; account for comment chars added
 		      (setq ispell-start (- ispell-start (length add-comment))
-			    add-comment nil))
+			    ;; Reset `in-comment' (and indirectly `add-comment') for new line
+			    in-comment nil))
 		  (setq ispell-end (point)) ; "end" tracks region retrieved.
 		  (if string		; there is something to spell check!
 		      ;; (special start end)
@@ -4466,8 +4471,7 @@ Standard ispell choices are then available."
 	  (or (string= word "")		; Will give you every word
 	      (ispell-lookup-words
 	       (concat (and interior-frag "*") word
-		       (if (or interior-frag (null ispell-look-p))
-			   "*"))
+		       (and interior-frag "*"))
 	       (or ispell-complete-word-dict
 		   ispell-alternate-dictionary))))
     (cond ((eq possibilities t)

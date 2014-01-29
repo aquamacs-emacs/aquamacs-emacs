@@ -1,6 +1,6 @@
 ;;; subr.el --- basic lisp subroutines for Emacs  -*- coding: utf-8; lexical-binding:t -*-
 
-;; Copyright (C) 1985-1986, 1992, 1994-1995, 1999-2013 Free Software
+;; Copyright (C) 1985-1986, 1992, 1994-1995, 1999-2014 Free Software
 ;; Foundation, Inc.
 
 ;; Maintainer: FSF
@@ -28,16 +28,6 @@
 
 ;; Beware: while this file has tag `utf-8', before it's compiled, it gets
 ;; loaded as "raw-text", so non-ASCII chars won't work right during bootstrap.
-
-(defvar custom-declare-variable-list nil
-  "Record `defcustom' calls made before `custom.el' is loaded to handle them.
-Each element of this list holds the arguments to one call to `defcustom'.")
-
-;; Use this, rather than defcustom, in subr.el and other files loaded
-;; before custom.el.
-(defun custom-declare-variable-early (&rest arguments)
-  (setq custom-declare-variable-list
-	(cons arguments custom-declare-variable-list)))
 
 (defmacro declare-function (_fn _file &optional _arglist _fileonly)
   "Tell the byte-compiler that function FN is defined, in FILE.
@@ -302,8 +292,7 @@ In Emacs, the convention is that error messages start with a capital
 letter but *do not* end with a period.  Please follow this convention
 for the sake of consistency."
   (declare (advertised-calling-convention (string &rest args) "23.1"))
-  (while t
-    (signal 'error (list (apply 'format args)))))
+  (signal 'error (list (apply 'format args))))
 
 (defun user-error (format &rest args)
   "Signal a pilot error, making error message by passing all args to `format'.
@@ -313,8 +302,7 @@ for the sake of consistency.
 This is just like `error' except that `user-error's are expected to be the
 result of an incorrect manipulation on the part of the user, rather than the
 result of an actual problem."
-  (while t
-    (signal 'user-error (list (apply #'format format args)))))
+  (signal 'user-error (list (apply #'format format args))))
 
 (defun define-error (name message &optional parent)
   "Define NAME as a new error signal.
@@ -586,7 +574,15 @@ saving keyboard macros (see `edmacro-mode')."
 (defun undefined ()
   "Beep to tell the user this binding is undefined."
   (interactive)
-  (ding))
+  (ding)
+  (message "%s is undefined" (key-description (this-single-command-keys)))
+  (setq defining-kbd-macro nil)
+  (force-mode-line-update)
+  ;; If this is a down-mouse event, don't reset prefix-arg;
+  ;; pass it to the command run by the up event.
+  (setq prefix-arg
+        (when (memq 'down (event-modifiers last-command-event))
+          current-prefix-arg)))
 
 ;; Prevent the \{...} documentation construct
 ;; from mentioning keys that run this command.
@@ -1563,13 +1559,14 @@ other hooks, such as major mode hooks, can do the job."
                             (byte-compile-log-warning msg t :error))))
                (code
                 (macroexp-let2 macroexp-copyable-p x element
-                  `(unless ,(if compare-fn
-                                (progn
-                                  (require 'cl-lib)
-                                  `(cl-member ,x ,sym :test ,compare-fn))
-                              ;; For bootstrapping reasons, don't rely on
-                              ;; cl--compiler-macro-member for the base case.
-                              `(member ,x ,sym))
+                  `(if ,(if compare-fn
+                            (progn
+                              (require 'cl-lib)
+                              `(cl-member ,x ,sym :test ,compare-fn))
+                          ;; For bootstrapping reasons, don't rely on
+                          ;; cl--compiler-macro-member for the base case.
+                          `(member ,x ,sym))
+                       ,sym
                      ,(if append
                           `(setq ,sym (append ,sym (list ,x)))
                         `(push ,x ,sym))))))
@@ -1835,7 +1832,7 @@ If TYPE is nil, then any kind of definition is acceptable.  If
 TYPE is `defun', `defvar', or `defface', that specifies function
 definition, variable definition, or face definition only."
   (if (and (or (null type) (eq type 'defun))
-	   (symbolp symbol) (fboundp symbol)
+	   (symbolp symbol)
 	   (autoloadp (symbol-function symbol)))
       (nth 1 (symbol-function symbol))
     (let ((files load-history)
@@ -1910,9 +1907,11 @@ Signal an error if the program returns with a non-zero exit status."
 (defun process-live-p (process)
   "Returns non-nil if PROCESS is alive.
 A process is considered alive if its status is `run', `open',
-`listen', `connect' or `stop'."
-  (memq (process-status process)
-        '(run open listen connect stop)))
+`listen', `connect' or `stop'.  Value is nil if PROCESS is not a
+process."
+  (and (processp process)
+       (memq (process-status process)
+	     '(run open listen connect stop))))
 
 ;; compatibility
 
@@ -1956,17 +1955,6 @@ It can be retrieved with `(process-get PROCESS PROPNAME)'."
 
 
 ;;;; Input and display facilities.
-
-(defvar read-quoted-char-radix 8
-  "Radix for \\[quoted-insert] and other uses of `read-quoted-char'.
-Legitimate radix values are 8, 10 and 16.")
-
-(custom-declare-variable-early
- 'read-quoted-char-radix 8
- "*Radix for \\[quoted-insert] and other uses of `read-quoted-char'.
-Legitimate radix values are 8, 10 and 16."
- :type '(choice (const 8) (const 10) (const 16))
- :group 'editing-basics)
 
 (defconst read-key-empty-map (make-sparse-keymap))
 
@@ -2023,61 +2011,6 @@ some sort of escape sequence, the ambiguity is resolved via `read-key-delay'."
       (cancel-timer timer)
       (use-global-map old-global-map))))
 
-(defun read-quoted-char (&optional prompt)
-  "Like `read-char', but do not allow quitting.
-Also, if the first character read is an octal digit,
-we read any number of octal digits and return the
-specified character code.  Any nondigit terminates the sequence.
-If the terminator is RET, it is discarded;
-any other terminator is used itself as input.
-
-The optional argument PROMPT specifies a string to use to prompt the user.
-The variable `read-quoted-char-radix' controls which radix to use
-for numeric input."
-  (let ((message-log-max nil) done (first t) (code 0) translated)
-    (while (not done)
-      (let ((inhibit-quit first)
-	    ;; Don't let C-h get the help message--only help function keys.
-	    (help-char nil)
-	    (help-form
-	     "Type the special character you want to use,
-or the octal character code.
-RET terminates the character code and is discarded;
-any other non-digit terminates the character code and is then used as input."))
-	(setq translated (read-key (and prompt (format "%s-" prompt))))
-	(if inhibit-quit (setq quit-flag nil)))
-      (if (integerp translated)
-	  (setq translated (char-resolve-modifiers translated)))
-      (cond ((null translated))
-	    ((not (integerp translated))
-	     (setq unread-command-events
-                   (listify-key-sequence (this-single-command-raw-keys))
-		   done t))
-	    ((/= (logand translated ?\M-\^@) 0)
-	     ;; Turn a meta-character into a character with the 0200 bit set.
-	     (setq code (logior (logand translated (lognot ?\M-\^@)) 128)
-		   done t))
-	    ((and (<= ?0 translated)
-                  (< translated (+ ?0 (min 10 read-quoted-char-radix))))
-	     (setq code (+ (* code read-quoted-char-radix) (- translated ?0)))
-	     (and prompt (setq prompt (message "%s %c" prompt translated))))
-	    ((and (<= ?a (downcase translated))
-		  (< (downcase translated)
-                     (+ ?a -10 (min 36 read-quoted-char-radix))))
-	     (setq code (+ (* code read-quoted-char-radix)
-			   (+ 10 (- (downcase translated) ?a))))
-	     (and prompt (setq prompt (message "%s %c" prompt translated))))
-	    ((and (not first) (eq translated ?\C-m))
-	     (setq done t))
-	    ((not first)
-	     (setq unread-command-events
-                   (listify-key-sequence (this-single-command-raw-keys))
-		   done t))
-	    (t (setq code translated
-		     done t)))
-      (setq first nil))
-    code))
-
 (defvar read-passwd-map
   ;; BEWARE: `defconst' would purecopy it, breaking the sharing with
   ;; minibuffer-local-map along the way!
@@ -2128,6 +2061,7 @@ by doing (clear-string STRING)."
             (setq-local select-active-regions nil)
             (use-local-map read-passwd-map)
             (setq-local inhibit-modification-hooks nil) ;bug#15501.
+	    (setq-local show-paren-mode nil)		;bug#16091.
             (add-hook 'after-change-functions hide-chars-fun nil 'local))
         (unwind-protect
             (let ((enable-recursive-minibuffers t))
@@ -2266,7 +2200,7 @@ floating point support."
 	    nil))))))
 
 ;; Behind display-popup-menus-p test.
-(declare-function x-popup-dialog "xmenu.c" (position contents &optional header))
+(declare-function x-popup-dialog "menu.c" (position contents &optional header))
 
 (defun y-or-n-p (prompt)
   "Ask user a \"y or n\" question.  Return t if answer is \"y\".
@@ -2474,14 +2408,6 @@ This finishes the change group by reverting all of its changes."
 (define-obsolete-function-alias 'redraw-modeline
   'force-mode-line-update "24.3")
 
-(defun force-mode-line-update (&optional all)
-  "Force redisplay of the current buffer's mode line and header line.
-With optional non-nil ALL, force redisplay of all mode lines and
-header lines.  This function also forces recomputation of the
-menu bar menus and the frame title."
-  (if all (with-current-buffer (other-buffer)))
-  (set-buffer-modified-p (buffer-modified-p)))
-
 (defun momentary-string-display (string pos &optional exit-char message)
   "Momentarily display STRING in the buffer at POS.
 Display remains until next event is input.
@@ -2588,57 +2514,6 @@ mode.")
 Various programs in Emacs store information in this directory.
 Note that this should end with a directory separator.
 See also `locate-user-emacs-file'.")
-
-(custom-declare-variable-early 'user-emacs-directory-warning t
-  "Non-nil means warn if cannot access `user-emacs-directory'.
-Set this to nil at your own risk..."
-  :type 'boolean
-  :group 'initialization
-  :version "24.4")
-
-(defun locate-user-emacs-file (new-name &optional old-name)
-  "Return an absolute per-user Emacs-specific file name.
-If NEW-NAME exists in `user-emacs-directory', return it.
-Else if OLD-NAME is non-nil and ~/OLD-NAME exists, return ~/OLD-NAME.
-Else return NEW-NAME in `user-emacs-directory', creating the
-directory if it does not exist."
-  (convert-standard-filename
-   (let* ((home (concat "~" (or init-file-user "")))
-	  (at-home (and old-name (expand-file-name old-name home)))
-          (bestname (abbreviate-file-name
-                     (expand-file-name new-name user-emacs-directory))))
-     (if (and at-home (not (file-readable-p bestname))
-              (file-readable-p at-home))
-	 at-home
-       ;; Make sure `user-emacs-directory' exists,
-       ;; unless we're in batch mode or dumping Emacs.
-       (or noninteractive
-	   purify-flag
-	   (let (errtype)
-	     (if (file-directory-p user-emacs-directory)
-		 (or (file-accessible-directory-p user-emacs-directory)
-		     (setq errtype "access"))
-	       (let ((umask (default-file-modes)))
-		 (unwind-protect
-		     (progn
-		       (set-default-file-modes ?\700)
-		       (condition-case nil
-			   (make-directory user-emacs-directory)
-			 (error (setq errtype "create"))))
-		   (set-default-file-modes umask))))
-	     (when (and errtype
-			user-emacs-directory-warning
-			(not (get 'user-emacs-directory-warning 'this-session)))
-	       ;; Only warn once per Emacs session.
-	       (put 'user-emacs-directory-warning 'this-session t)
-	       (display-warning 'initialization
-				(format "\
-Unable to %s `user-emacs-directory' (%s).
-Any data that would normally be written there may be lost!
-If you never want to see this message again,
-customize the variable `user-emacs-directory-warning'."
-					errtype user-emacs-directory)))))
-       bestname))))
 
 ;;;; Misc. useful functions.
 
@@ -2688,14 +2563,26 @@ If there is no tag at point, return nil.
 When in a major mode that does not provide its own
 `find-tag-default-function', return a regexp that matches the
 symbol at point exactly."
-  (let* ((tagf (or find-tag-default-function
-		   (get major-mode 'find-tag-default-function)
-		   'find-tag-default))
-	 (tag (funcall tagf)))
-    (cond ((null tag) nil)
-	  ((eq tagf 'find-tag-default)
-	   (format "\\_<%s\\_>" (regexp-quote tag)))
-	  (t (regexp-quote tag)))))
+  (let ((tag (funcall (or find-tag-default-function
+			  (get major-mode 'find-tag-default-function)
+			  'find-tag-default))))
+    (if tag (regexp-quote tag))))
+
+(defun find-tag-default-as-symbol-regexp ()
+  "Return regexp that matches the default tag at point as symbol.
+If there is no tag at point, return nil.
+
+When in a major mode that does not provide its own
+`find-tag-default-function', return a regexp that matches the
+symbol at point exactly."
+  (let ((tag-regexp (find-tag-default-as-regexp)))
+    (if (and tag-regexp
+	     (eq (or find-tag-default-function
+		     (get major-mode 'find-tag-default-function)
+		     'find-tag-default)
+		 'find-tag-default))
+	(format "\\_<%s\\_>" tag-regexp)
+      tag-regexp)))
 
 (defun play-sound (sound)
   "SOUND is a list of the form `(sound KEYWORD VALUE...)'.
@@ -2840,6 +2727,7 @@ if it's an autoloaded macro."
     val))
 
 ;;;; Support for yanking and text properties.
+;; Why here in subr.el rather than in simple.el?  --Stef
 
 (defvar yank-handled-properties)
 (defvar yank-excluded-properties)
@@ -3381,9 +3269,13 @@ even if this catches the signal."
 
 (defmacro with-demoted-errors (format &rest body)
   "Run BODY and demote any errors to simple messages.
+FORMAT is a string passed to `message' to format any error message.
+It should contain a single %-sequence; e.g., \"Error: %S\".
+
 If `debug-on-error' is non-nil, run BODY without catching its errors.
 This is to be used around code which is not expected to signal an error
 but which should be robust in the unexpected case that an error is signaled.
+
 For backward compatibility, if FORMAT is not a constant string, it
 is assumed to be part of BODY, in which case the message format
 used is \"Error: %S\"."
@@ -3784,6 +3676,15 @@ If IGNORE-CASE is non-nil, the comparison is done without paying attention
 to case differences."
   (eq t (compare-strings str1 nil nil
                          str2 0 (length str1) ignore-case)))
+
+(defun string-suffix-p (suffix string  &optional ignore-case)
+  "Return non-nil if SUFFIX is a suffix of STRING.
+If IGNORE-CASE is non-nil, the comparison is done without paying
+attention to case differences."
+  (let ((start-pos (- (length string) (length suffix))))
+    (and (>= start-pos 0)
+         (eq t (compare-strings suffix nil nil
+                                string start-pos nil ignore-case)))))
 
 (defun bidi-string-mark-left-to-right (str)
   "Return a string that can be safely inserted in left-to-right text.
@@ -4392,38 +4293,47 @@ use `called-interactively-p'."
            (eq 'add-keymap-witness (nth 1 map))
            (set symbol tail)))))
 
-(defun set-temporary-overlay-map (map &optional keep-pred on-exit)
-  "Set MAP as a temporary keymap taking precedence over most other keymaps.
-Note that this does NOT take precedence over the \"overriding\" maps
-`overriding-terminal-local-map' and `overriding-local-map' (or the
-`keymap' text property).  Unlike those maps, if no match for a key is
-found in MAP, the normal key lookup sequence then continues.
+(define-obsolete-function-alias
+  'set-temporary-overlay-map 'set-transient-map "24.4")
 
-Normally, MAP is used only once.  If the optional argument
-KEEP-PRED is t, MAP stays active if a key from MAP is used.
-KEEP-PRED can also be a function of no arguments: if it returns
-non-nil then MAP stays active.
+(defun set-transient-map (map &optional keep-pred on-exit)
+  "Set MAP as a temporary keymap taking precedence over other keymaps.
+Normally, MAP is used only once, to look up the very next key.
+However, if the optional argument KEEP-PRED is t, MAP stays
+active if a key from MAP is used.  KEEP-PRED can also be a
+function of no arguments: if it returns non-nil, then MAP stays
+active.
 
-Optional ON-EXIT argument is a function that is called after the
-deactivation of MAP."
-  (let ((clearfun (make-symbol "clear-temporary-overlay-map")))
+Optional arg ON-EXIT, if non-nil, specifies a function that is
+called, with no arguments, after MAP is deactivated.
+
+This uses `overriding-terminal-local-map' which takes precedence over all other
+keymaps.  As usual, if no match for a key is found in MAP, the normal key
+lookup sequence then continues."
+  (let ((clearfun (make-symbol "clear-transient-map")))
     ;; Don't use letrec, because equal (in add/remove-hook) would get trapped
     ;; in a cycle.
     (fset clearfun
           (lambda ()
-            ;; FIXME: Handle the case of multiple temporary-overlay-maps
-            ;; E.g. if isearch and C-u both use temporary-overlay-maps, Then
-            ;; the lifetime of the C-u should be nested within the isearch
-            ;; overlay, so the pre-command-hook of isearch should be
-            ;; suspended during the C-u one so we don't exit isearch just
-            ;; because we hit 1 after C-u and that 1 exits isearch whereas it
-            ;; doesn't exit C-u.
-            (with-demoted-errors "set-temporary-overlay-map PCH: %S"
-              (unless (cond ((null keep-pred) nil)
-                            ((eq t keep-pred)
-                             (eq this-command
-                                 (lookup-key map (this-command-keys-vector))))
-                            (t (funcall keep-pred)))
+            (with-demoted-errors "set-transient-map PCH: %S"
+              (unless (cond
+                       ((not (eq map (cadr overriding-terminal-local-map)))
+                        ;; There's presumably some other transient-map in
+                        ;; effect.  Wait for that one to terminate before we
+                        ;; remove ourselves.
+                        ;; For example, if isearch and C-u both use transient
+                        ;; maps, then the lifetime of the C-u should be nested
+                        ;; within isearch's, so the pre-command-hook of
+                        ;; isearch should be suspended during the C-u one so
+                        ;; we don't exit isearch just because we hit 1 after
+                        ;; C-u and that 1 exits isearch whereas it doesn't
+                        ;; exit C-u.
+                        t)
+                       ((null keep-pred) nil)
+                       ((eq t keep-pred)
+                        (eq this-command
+                            (lookup-key map (this-command-keys-vector))))
+                       (t (funcall keep-pred)))
                 (internal-pop-keymap map 'overriding-terminal-local-map)
                 (remove-hook 'pre-command-hook clearfun)
                 (when on-exit (funcall on-exit))))))
@@ -4620,11 +4530,14 @@ Usually the separator is \".\", but it can be any other string.")
 
 
 (defconst version-regexp-alist
-  '(("^[-_+ ]?alpha$"           . -3)
-    ("^[-_+]$"                  . -3) ; treat "1.2.3-20050920" and "1.2-3" as alpha releases
-    ("^[-_+ ]cvs$"              . -3) ; treat "1.2.3-CVS" as alpha release
-    ("^[-_+ ]?beta$"            . -2)
-    ("^[-_+ ]?\\(pre\\|rcc\\)$" . -1))
+  '(("^[-_+ ]?snapshot$"                                 . -4)
+    ;; treat "1.2.3-20050920" and "1.2-3" as snapshot releases
+    ("^[-_+]$"                                           . -4)
+    ;; treat "1.2.3-CVS" as snapshot release
+    ("^[-_+ ]?\\(cvs\\|git\\|bzr\\|svn\\|hg\\|darcs\\)$" . -4)
+    ("^[-_+ ]?alpha$"                                    . -3)
+    ("^[-_+ ]?beta$"                                     . -2)
+    ("^[-_+ ]?\\(pre\\|rc\\)$"                           . -1))
   "Specify association between non-numeric version and its priority.
 
 This association is used to handle version string like \"1.0pre2\",
@@ -4632,6 +4545,8 @@ This association is used to handle version string like \"1.0pre2\",
 non-numeric part of a version string to an integer.  For example:
 
    String Version    Integer List Version
+   \"0.9snapshot\"     (0  9 -4)
+   \"1.0-git\"         (1  0 -4)
    \"1.0pre2\"         (1  0 -1 2)
    \"1.0PRE2\"         (1  0 -1 2)
    \"22.8beta3\"       (22 8 -2 3)
@@ -4688,6 +4603,8 @@ Examples of version conversion:
    \"0.9alpha1\"       (0  9 -3 1)
    \"0.9AlphA1\"       (0  9 -3 1)
    \"0.9alpha\"        (0  9 -3)
+   \"0.9snapshot\"     (0  9 -4)
+   \"1.0-git\"         (1  0 -4)
 
 See documentation for `version-separator' and `version-regexp-alist'."
   (or (and (stringp ver) (> (length ver) 0))
@@ -4809,10 +4726,9 @@ If all LST elements are zeros or LST is nil, return zero."
 Note that version string \"1\" is equal to \"1.0\", \"1.0.0\", \"1.0.0.0\",
 etc.  That is, the trailing \".0\"s are insignificant.  Also, version
 string \"1\" is higher (newer) than \"1pre\", which is higher than \"1beta\",
-which is higher than \"1alpha\".  Also, \"-CVS\" and \"-NNN\" are treated
-as alpha versions."
+which is higher than \"1alpha\", which is higher than \"1snapshot\".
+Also, \"-GIT\", \"-CVS\" and \"-NNN\" are treated as snapshot versions."
   (version-list-< (version-to-list v1) (version-to-list v2)))
-
 
 (defun version<= (v1 v2)
   "Return t if version V1 is lower (older) than or equal to V2.
@@ -4820,8 +4736,8 @@ as alpha versions."
 Note that version string \"1\" is equal to \"1.0\", \"1.0.0\", \"1.0.0.0\",
 etc.  That is, the trailing \".0\"s are insignificant.  Also, version
 string \"1\" is higher (newer) than \"1pre\", which is higher than \"1beta\",
-which is higher than \"1alpha\".  Also, \"-CVS\" and \"-NNN\" are treated
-as alpha versions."
+which is higher than \"1alpha\", which is higher than \"1snapshot\".
+Also, \"-GIT\", \"-CVS\" and \"-NNN\" are treated as snapshot versions."
   (version-list-<= (version-to-list v1) (version-to-list v2)))
 
 (defun version= (v1 v2)
@@ -4830,8 +4746,8 @@ as alpha versions."
 Note that version string \"1\" is equal to \"1.0\", \"1.0.0\", \"1.0.0.0\",
 etc.  That is, the trailing \".0\"s are insignificant.  Also, version
 string \"1\" is higher (newer) than \"1pre\", which is higher than \"1beta\",
-which is higher than \"1alpha\".  Also, \"-CVS\" and \"-NNN\" are treated
-as alpha versions."
+which is higher than \"1alpha\", which is higher than \"1snapshot\".
+Also, \"-GIT\", \"-CVS\" and \"-NNN\" are treated as snapshot versions."
   (version-list-= (version-to-list v1) (version-to-list v2)))
 
 

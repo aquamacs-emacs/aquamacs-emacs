@@ -1,8 +1,8 @@
 ;;; menu-bar.el --- define a default menu bar
 
-;; Copyright (C) 1993-1995, 2000-2013 Free Software Foundation, Inc.
+;; Copyright (C) 1993-1995, 2000-2014 Free Software Foundation, Inc.
 
-;; Author: RMS
+;; Author: Richard M. Stallman
 ;; Maintainer: FSF
 ;; Keywords: internal, mouse
 ;; Package: emacs
@@ -523,25 +523,17 @@
   (let ((x-select-enable-clipboard t))
     (yank)))
 
-(defun clipboard-kill-ring-save (beg end)
+(defun clipboard-kill-ring-save (beg end &optional region)
   "Copy region to kill ring, and save in the X clipboard."
-  (interactive "r")
-  ;; when called with arguments, always execute
-  (if (or (not (eq this-original-command 'clipboard-kill-ring-save))
-	  mark-active (not transient-mark-mode))
+  (interactive "r\np")
   (let ((x-select-enable-clipboard t))
-	(kill-ring-save beg end))
-    (error "Region is not active.")))
+    (kill-ring-save beg end region)))
 
-(defun clipboard-kill-region (beg end)
+(defun clipboard-kill-region (beg end &optional region)
   "Kill the region, and save it in the X clipboard."
-  (interactive "r")
-  ;; when called with arguments, always execute
-  (if (or (not (eq this-original-command 'clipboard-kill-region))
-	  mark-active (not transient-mark-mode))
+  (interactive "r\np")
   (let ((x-select-enable-clipboard t))
-	(kill-region beg end))
-    (error "Region is not active.")))
+    (kill-region beg end region)))
 
 (defun menu-bar-enable-clipboard ()
   "Make CUT, PASTE and COPY (keys and menu bar items) use the clipboard.
@@ -743,46 +735,46 @@ Only available in Aquamacs."
 
     (bindings--define-key menu [customize]
       '(menu-item "Other (Customize)"
-		  menu-bar-showhide-fringe-ind-customize
-		  :help "Additional choices available through Custom buffer"
-		  :visible (display-graphic-p)
-		  :button (:radio . (not (member indicate-buffer-boundaries
-						 '(nil left right
-						   ((top . left) (bottom . right))
-						   ((t . right) (top . left))))))))
+                  menu-bar-showhide-fringe-ind-customize
+                  :help "Additional choices available through Custom buffer"
+                  :visible (display-graphic-p)
+                  :button (:radio . (not (member indicate-buffer-boundaries
+                                                 '(nil left right
+                                                   ((top . left) (bottom . right))
+                                                   ((t . right) (top . left))))))))
 
     (bindings--define-key menu [mixed]
       '(menu-item "Opposite, Arrows Right" menu-bar-showhide-fringe-ind-mixed
-		  :help
-		  "Show top/bottom indicators in opposite fringes, arrows in right"
-		  :visible (display-graphic-p)
-		  :button (:radio . (equal indicate-buffer-boundaries
-					   '((t . right) (top . left))))))
+                  :help
+                  "Show top/bottom indicators in opposite fringes, arrows in right"
+                  :visible (display-graphic-p)
+                  :button (:radio . (equal indicate-buffer-boundaries
+                                           '((t . right) (top . left))))))
 
     (bindings--define-key menu [box]
       '(menu-item "Opposite, No Arrows" menu-bar-showhide-fringe-ind-box
-		  :help "Show top/bottom indicators in opposite fringes, no arrows"
-		  :visible (display-graphic-p)
-		  :button (:radio . (equal indicate-buffer-boundaries
-					   '((top . left) (bottom . right))))))
+                  :help "Show top/bottom indicators in opposite fringes, no arrows"
+                  :visible (display-graphic-p)
+                  :button (:radio . (equal indicate-buffer-boundaries
+                                           '((top . left) (bottom . right))))))
 
     (bindings--define-key menu [right]
       '(menu-item "In Right Fringe" menu-bar-showhide-fringe-ind-right
-		  :help "Show buffer boundaries and arrows in right fringe"
-		  :visible (display-graphic-p)
-		  :button (:radio . (eq indicate-buffer-boundaries 'right))))
+                  :help "Show buffer boundaries and arrows in right fringe"
+                  :visible (display-graphic-p)
+                  :button (:radio . (eq indicate-buffer-boundaries 'right))))
 
     (bindings--define-key menu [left]
       '(menu-item "In Left Fringe" menu-bar-showhide-fringe-ind-left
-		  :help "Show buffer boundaries and arrows in left fringe"
-		  :visible (display-graphic-p)
-		  :button (:radio . (eq indicate-buffer-boundaries 'left))))
+                  :help "Show buffer boundaries and arrows in left fringe"
+                  :visible (display-graphic-p)
+                  :button (:radio . (eq indicate-buffer-boundaries 'left))))
 
     (bindings--define-key menu [none]
       '(menu-item "No Indicators" menu-bar-showhide-fringe-ind-none
-		  :help "Hide all buffer boundary indicators and arrows"
-		  :visible (display-graphic-p)
-		  :button (:radio . (eq indicate-buffer-boundaries nil))))
+                  :help "Hide all buffer boundary indicators and arrows"
+                  :visible (display-graphic-p)
+                  :button (:radio . (eq indicate-buffer-boundaries nil))))
     menu))
 
 (defun menu-bar-showhide-fringe-menu-customize ()
@@ -1017,18 +1009,18 @@ mail status in mode line"
 
     (bindings--define-key menu [column-number-mode]
       (menu-bar-make-mm-toggle column-number-mode
-			       "Column Numbers"
-			       "Show the current column number in the mode line"))
+                               "Column Numbers"
+                               "Show the current column number in the mode line"))
 
     (bindings--define-key menu [line-number-mode]
       (menu-bar-make-mm-toggle line-number-mode
                                "Line Numbers"
-			       "Show the current line number in the mode line"))
+                               "Show the current line number in the mode line"))
 
     (bindings--define-key menu [size-indication-mode]
       (menu-bar-make-mm-toggle size-indication-mode
-			       "Size Indication"
-			       "Show the size of the buffer in the mode line"))
+                               "Size Indication"
+                               "Show the size of the buffer in the mode line"))
 
     (bindings--define-key menu [size-separator] menu-bar-separator)
 
@@ -1044,17 +1036,17 @@ mail status in mode line"
     ;; (bindings--define-key menu [tooltip-separator] menu-bar-separator)
     (bindings--define-key menu [showhide-speedbar]
       '(menu-item "Speedbar" speedbar-frame-mode
-		  :help "Display a Speedbar quick-navigation frame"
-		  :button (:toggle
-			   . (and (boundp 'speedbar-frame)
-				  (frame-live-p (symbol-value 'speedbar-frame))
-				  (frame-visible-p
-				   (symbol-value 'speedbar-frame))))))
+                  :help "Display a Speedbar quick-navigation frame"
+                  :button (:toggle
+                           . (and (boundp 'speedbar-frame)
+                                  (frame-live-p (symbol-value 'speedbar-frame))
+                                  (frame-visible-p
+                                   (symbol-value 'speedbar-frame))))))
     (bindings--define-key menu [speedbar-separator] menu-bar-separator)
     (bindings--define-key menu [showhide-fringe]
       `(menu-item "Fringe" ,menu-bar-showhide-fringe-menu
     	    :help "Settings for Fringe display in the margins of windows."
-    	    :visible (display-graphic-p)))
+                  :visible (display-graphic-p)))
 
     ;; No scroll bar options shown in Aquamacs
     ;; (bindings--define-key menu [showhide-scroll-bar]
@@ -1255,7 +1247,7 @@ for future buffers."
 
     (let ((vlf (member (cons 'continuation visual-line-fringe-indicators)
 		       fringe-indicator-alist)))
-
+
       (unless (eq (if vlf t nil)
 		  (if (member (cons 'continuation visual-line-fringe-indicators)
 			      (default-value 'fringe-indicator-alist)) t nil))
@@ -1503,6 +1495,8 @@ for future buffers."
     (bindings--define-key menu [separator-net]
       menu-bar-separator)
 
+    (bindings--define-key menu [browse-web]
+      '(menu-item "Browse the Web..." browse-web))
     (bindings--define-key menu [directory-search]
       '(menu-item "Directory Search" eudc-tools-menu))
     (bindings--define-key menu [compose-mail]
@@ -1722,14 +1716,6 @@ key, a click, or a menu-item"))
 		  :help ,(purecopy "Our doctor will help you feel better")))
     menu))
 
-(defun menu-bar-help-extra-packages ()
-  "Display help about some additional packages available for Emacs."
-  (interactive)
-  (let (enable-local-variables)
-    (view-file (expand-file-name "MORE.STUFF"
-				 data-directory))
-    (goto-address-mode 1)))
-
 (defun help-with-tutorial-spec-language ()
   "Use the Emacs tutorial, specifying which language you want."
   (interactive)
@@ -1757,8 +1743,8 @@ key, a click, or a menu-item"))
     (bindings--define-key menu [sep2]
       menu-bar-separator)
     (bindings--define-key menu [external-packages]
-      `(menu-item ,(purecopy "Finding Extra Packages") menu-bar-help-extra-packages
-                  :help ,(purecopy "Lisp packages distributed separately for use in Emacs")))
+      '(menu-item "Finding Extra Packages" view-external-packages
+                  :help "How to get more Lisp packages for use in Emacs"))
     (bindings--define-key menu [find-emacs-packages]
       `(menu-item ,(purecopy "Search Built-in Packages") finder-by-keyword
                   :help ,(purecopy "Find built-in packages and features by keyword")))
@@ -2282,10 +2268,7 @@ FROM-MENU-BAR, if non-nil, means we are dropping one of menu-bar's menus."
 		(setq position (list menu-symbol (list frame '(menu-bar)
 						 event 0)))
 		(setq map
-		      (or
-		       (lookup-key global-map (vector 'menu-bar menu-symbol))
-		       (lookup-key (current-local-map) (vector 'menu-bar
-							       menu-symbol))))))
+		      (key-binding (vector 'menu-bar menu-symbol)))))
 	     ((and (not (keymapp map)) (listp map))
 	      ;; We were given a list of keymaps.  Search them all
 	      ;; in sequence until a first binding is found.
@@ -2371,7 +2354,8 @@ If FRAME is nil or not given, use the selected frame."
 	     (menu (menu-bar-menu-at-x-y x 0 frame)))
 	(popup-menu (or
 		     (lookup-key global-map (vector 'menu-bar menu))
-		     (lookup-key (current-local-map) (vector 'menu-bar menu)))
+		     (lookup-key (current-local-map) (vector 'menu-bar menu))
+		     (cdar (minor-mode-key-binding (vector 'menu-bar menu))))
 		    (posn-at-x-y x 0 nil t) nil t)))
      (t (with-selected-frame (or frame (selected-frame))
           (tmm-menubar))))))

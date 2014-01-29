@@ -1,6 +1,6 @@
 /* Functions for image support on window system.
 
-Copyright (C) 1989, 1992-2013 Free Software Foundation, Inc.
+Copyright (C) 1989, 1992-2014 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -87,11 +87,12 @@ typedef struct w32_bitmap_record Bitmap_Record;
 #define x_defined_color w32_defined_color
 #define DefaultDepthOfScreen(screen) (one_w32_display_info.n_cbits)
 
-/* Versions of libpng and libgif that we were compiled with, or -1 if
-   no PNG/GIF support was compiled in.  This is tested by w32-win.el
-   to correctly set up the alist used to search for the respective
-   image libraries.  */
-Lisp_Object Qlibpng_version, Qlibgif_version;
+/* Versions of libpng, libgif, and libjpeg that we were compiled with,
+   or -1 if no PNG/GIF support was compiled in.  This is tested by
+   w32-win.el to correctly set up the alist used to search for the
+   respective image libraries.  */
+Lisp_Object Qlibpng_version, Qlibgif_version, Qlibjpeg_version;
+
 #endif /* HAVE_NTGUI */
 
 #ifdef HAVE_NS
@@ -159,13 +160,13 @@ XPutPixel (XImagePtr ximage, int x, int y, unsigned long pixel)
 
 /* Functions to access the contents of a bitmap, given an id.  */
 
-int
+static int
 x_bitmap_height (struct frame *f, ptrdiff_t id)
 {
   return FRAME_DISPLAY_INFO (f)->bitmaps[id - 1].height;
 }
 
-int
+static int
 x_bitmap_width (struct frame *f, ptrdiff_t id)
 {
   return FRAME_DISPLAY_INFO (f)->bitmaps[id - 1].width;
@@ -263,7 +264,7 @@ x_create_bitmap_from_data (struct frame *f, char *bits, unsigned int width, unsi
 
 #ifdef HAVE_X_WINDOWS
   dpyinfo->bitmaps[id - 1].pixmap = bitmap;
-  dpyinfo->bitmaps[id - 1].have_mask = 0;
+  dpyinfo->bitmaps[id - 1].have_mask = false;
   dpyinfo->bitmaps[id - 1].depth = 1;
 #endif /* HAVE_X_WINDOWS */
 
@@ -326,7 +327,9 @@ x_create_bitmap_from_file (struct frame *f, Lisp_Object file)
     }
 
   /* Search bitmap-file-path for the file, if appropriate.  */
-  if (openp (Vx_bitmap_file_path, file, Qnil, &found, make_number (R_OK)) < 0)
+  if (openp (Vx_bitmap_file_path, file, Qnil, &found,
+	     make_number (R_OK), false)
+      < 0)
     return -1;
 
   filename = SSDATA (found);
@@ -338,7 +341,7 @@ x_create_bitmap_from_file (struct frame *f, Lisp_Object file)
 
   id = x_allocate_bitmap_record (f);
   dpyinfo->bitmaps[id - 1].pixmap = bitmap;
-  dpyinfo->bitmaps[id - 1].have_mask = 0;
+  dpyinfo->bitmaps[id - 1].have_mask = false;
   dpyinfo->bitmaps[id - 1].refcount = 1;
   dpyinfo->bitmaps[id - 1].file = xlispstrdup (file);
   dpyinfo->bitmaps[id - 1].depth = 1;
@@ -514,7 +517,7 @@ x_create_bitmap_mask (struct frame *f, ptrdiff_t id)
 	     width, height);
   XFreeGC (FRAME_X_DISPLAY (f), gc);
 
-  dpyinfo->bitmaps[id - 1].have_mask = 1;
+  dpyinfo->bitmaps[id - 1].have_mask = true;
   dpyinfo->bitmaps[id - 1].mask = mask;
 
   XDestroyImage (ximg);
@@ -1520,7 +1523,7 @@ clear_image_cache (struct frame *f, Lisp_Object filter)
 		clear_current_matrices (fr);
 	    }
 
-	  ++windows_or_buffers_changed;
+	  windows_or_buffers_changed = 19;
 	}
 
       unblock_input ();
@@ -2241,7 +2244,7 @@ x_find_image_file (Lisp_Object file)
 		       Vx_bitmap_file_path);
 
   /* Try to find FILE in data-directory/images, then x-bitmap-file-path.  */
-  fd = openp (search_path, file, Qnil, &file_found, Qnil);
+  fd = openp (search_path, file, Qnil, &file_found, Qnil, false);
 
   if (fd == -1)
     file_found = Qnil;
@@ -3025,13 +3028,13 @@ xbm_load (struct frame *f, struct image *img)
 		  if (STRINGP (line))
 		    memcpy (p, SDATA (line), nbytes);
 		  else
-		    memcpy (p, XBOOL_VECTOR (line)->data, nbytes);
+		    memcpy (p, bool_vector_data (line), nbytes);
 		}
 	    }
 	  else if (STRINGP (data))
 	    bits = SSDATA (data);
 	  else
-	    bits = (char *) XBOOL_VECTOR (data)->data;
+	    bits = (char *) bool_vector_data (data);
 
 #ifdef HAVE_NTGUI
           {
@@ -3445,7 +3448,7 @@ x_create_bitmap_from_xpm_data (struct frame *f, const char **bits)
 
   id = x_allocate_bitmap_record (f);
   dpyinfo->bitmaps[id - 1].pixmap = bitmap;
-  dpyinfo->bitmaps[id - 1].have_mask = 1;
+  dpyinfo->bitmaps[id - 1].have_mask = true;
   dpyinfo->bitmaps[id - 1].mask = mask;
   dpyinfo->bitmaps[id - 1].file = NULL;
   dpyinfo->bitmaps[id - 1].height = attrs.height;
@@ -3589,6 +3592,12 @@ xpm_load (struct frame *f, struct image *img)
 	}
 
 #ifdef HAVE_NTGUI
+#ifdef WINDOWSNT
+      /* FILE is encoded in UTF-8, but image libraries on Windows
+	 support neither UTF-8 nor UTF-16 encoded file names.  So we
+	 need to re-encode it in ANSI.  */
+      file = ansi_encode_filename (file);
+#endif
       /* XpmReadFileToPixmap is not available in the Windows port of
 	 libxpm.  But XpmReadFileToImage almost does what we want.  */
       rc = fn_XpmReadFileToImage (&hdc, SDATA (file),
@@ -3967,7 +3976,7 @@ xpm_load_image (struct frame *f,
   Lisp_Object (*get_color_table) (Lisp_Object, const unsigned char *, int);
   Lisp_Object frame, color_symbols, color_table;
   int best_key;
-  bool have_mask = 0;
+  bool have_mask = false;
   XImagePtr ximg = NULL, mask_img = NULL;
 
 #define match() \
@@ -4139,7 +4148,7 @@ xpm_load_image (struct frame *f,
 #ifndef HAVE_NS
 	  XPutPixel (mask_img, x, y,
 		     (!EQ (color_val, Qt) ? PIX_MASK_DRAW
-		      : (have_mask = 1, PIX_MASK_RETAIN)));
+		      : (have_mask = true, PIX_MASK_RETAIN)));
 #else
           if (EQ (color_val, Qt))
             ns_set_alpha (ximg, x, y, 0);
@@ -5105,6 +5114,27 @@ pbm_image_p (Lisp_Object object)
 }
 
 
+/* Get next char skipping comments in Netpbm header.  Returns -1 at
+   end of input.  */
+
+static int
+pbm_next_char (unsigned char **s, unsigned char *end)
+{
+  int c = -1;
+
+  while (*s < end && (c = *(*s)++, c == '#'))
+    {
+      /* Skip to the next line break.  */
+      while (*s < end && (c = *(*s)++, c != '\n' && c != '\r'))
+        ;
+
+      c = -1;
+    }
+
+  return c;
+}
+
+
 /* Scan a decimal number from *S and return it.  Advance *S while
    reading the number.  END is the end of the string.  Value is -1 at
    end of input.  */
@@ -5114,28 +5144,16 @@ pbm_scan_number (unsigned char **s, unsigned char *end)
 {
   int c = 0, val = -1;
 
-  while (*s < end)
-    {
-      /* Skip white-space.  */
-      while (*s < end && (c = *(*s)++, c_isspace (c)))
-	;
+  /* Skip white-space.  */
+  while ((c = pbm_next_char (s, end)) != -1 && c_isspace (c))
+    ;
 
-      if (c == '#')
-	{
-	  /* Skip comment to end of line.  */
-	  while (*s < end && (c = *(*s)++, c != '\n'))
-	    ;
-	}
-      else if (c_isdigit (c))
-	{
-	  /* Read decimal number.  */
-	  val = c - '0';
-	  while (*s < end && (c = *(*s)++, c_isdigit (c)))
-	    val = 10 * val + c - '0';
-	  break;
-	}
-      else
-	break;
+  if (c_isdigit (c))
+    {
+      /* Read decimal number.  */
+      val = c - '0';
+      while ((c = pbm_next_char (s, end)) != -1 && c_isdigit (c))
+        val = 10 * val + c - '0';
     }
 
   return val;
@@ -5518,7 +5536,7 @@ DEF_IMGLIB_FN (void, png_read_end, (png_structp, png_infop));
 DEF_IMGLIB_FN (void, png_error, (png_structp, png_const_charp));
 
 #if (PNG_LIBPNG_VER >= 10500)
-DEF_IMGLIB_FN (void, png_longjmp, (png_structp, int));
+DEF_IMGLIB_FN (void, png_longjmp, (png_structp, int)) PNG_NORETURN;
 DEF_IMGLIB_FN (jmp_buf *, png_set_longjmp_fn, (png_structp, png_longjmp_ptr, size_t));
 #endif /* libpng version >= 1.5 */
 
@@ -5590,24 +5608,26 @@ init_png_functions (void)
 
 #endif /* WINDOWSNT */
 
-/* Possibly inefficient/inexact substitutes for _setjmp and _longjmp.
-   Do not use sys_setjmp, as PNG supports only jmp_buf.  The _longjmp
-   substitute may munge the signal mask, but that should be OK here.
-   MinGW (MS-Windows) uses _setjmp and defines setjmp to _setjmp in
-   the system header setjmp.h; don't mess up that.  */
-#ifndef HAVE__SETJMP
-# define _setjmp(j) setjmp (j)
-# define _longjmp longjmp
+/* Fast implementations of setjmp and longjmp.  Although setjmp and longjmp
+   will do, POSIX _setjmp and _longjmp (if available) are often faster.
+   Do not use sys_setjmp, as PNG supports only jmp_buf.
+   It's OK if the longjmp substitute restores the signal mask.  */
+#ifdef HAVE__SETJMP
+# define FAST_SETJMP(j) _setjmp (j)
+# define FAST_LONGJMP _longjmp
+#else
+# define FAST_SETJMP(j) setjmp (j)
+# define FAST_LONGJMP longjmp
 #endif
 
-#if (PNG_LIBPNG_VER < 10500)
-#define PNG_LONGJMP(ptr) (_longjmp ((ptr)->jmpbuf, 1))
+#if PNG_LIBPNG_VER < 10500
+#define PNG_LONGJMP(ptr) FAST_LONGJMP ((ptr)->jmpbuf, 1)
 #define PNG_JMPBUF(ptr) ((ptr)->jmpbuf)
 #else
 /* In libpng version 1.5, the jmpbuf member is hidden. (Bug#7908)  */
-#define PNG_LONGJMP(ptr) (fn_png_longjmp ((ptr), 1))
+#define PNG_LONGJMP(ptr) fn_png_longjmp (ptr, 1)
 #define PNG_JMPBUF(ptr) \
-  (*fn_png_set_longjmp_fn ((ptr), _longjmp, sizeof (jmp_buf)))
+  (*fn_png_set_longjmp_fn (ptr, FAST_LONGJMP, sizeof (jmp_buf)))
 #endif
 
 /* Error and warning handlers installed when the PNG library
@@ -5792,7 +5812,7 @@ png_load_body (struct frame *f, struct image *img, struct png_load_context *c)
 
   /* Set error jump-back.  We come back here when the PNG library
      detects an error.  */
-  if (_setjmp (PNG_JMPBUF (png_ptr)))
+  if (FAST_SETJMP (PNG_JMPBUF (png_ptr)))
     {
     error:
       if (c->png_ptr)
@@ -6958,6 +6978,9 @@ tiff_load (struct frame *f, struct image *img)
 	  image_error ("Cannot find image file `%s'", specified_file, Qnil);
 	  return 0;
 	}
+#ifdef WINDOWSNT
+      file = ansi_encode_filename (file);
+#endif
 
       /* Try to open the image file.  */
       tiff = fn_TIFFOpen (SSDATA (file), "r");
@@ -7343,6 +7366,9 @@ gif_load (struct frame *f, struct image *img)
 	  image_error ("Cannot find image file `%s'", specified_file, Qnil);
 	  return 0;
 	}
+#ifdef WINDOWSNT
+      file = ansi_encode_filename (file);
+#endif
 
       /* Open the GIF file.  */
 #if GIFLIB_MAJOR < 5
@@ -7562,7 +7588,7 @@ gif_load (struct frame *f, struct image *img)
 	  }
 
       /* Apply the pixel values.  */
-      if (gif->SavedImages[j].ImageDesc.Interlace)
+      if (GIFLIB_MAJOR < 5 && gif->SavedImages[j].ImageDesc.Interlace)
 	{
 	  int row, pass;
 
@@ -7882,7 +7908,7 @@ imagemagick_error (MagickWand *wand)
   image_error ("ImageMagick error: %s",
 	       build_string (description),
 	       Qnil);
-  description = (char *) MagickRelinquishMemory (description);
+  MagickRelinquishMemory (description);
 }
 
 /* Possibly give ImageMagick some extra help to determine the image
@@ -8083,7 +8109,7 @@ imagemagick_compute_animated_image (MagickWand *super_wand, int ino)
 	    {
 	      /* Sanity check.  This shouldn't happen, but apparently
 		 also does in some pictures.  */
-	      if (x + source_left > dest_width)
+	      if (x + source_left > dest_width - 1)
 		break;
 	      /* Normally we only copy over non-transparent pixels,
 		 but if the disposal method is "Background", then we
@@ -8469,6 +8495,9 @@ imagemagick_load (struct frame *f, struct image *img)
 	  image_error ("Cannot find image file `%s'", file_name, Qnil);
 	  return 0;
 	}
+#ifdef WINDOWSNT
+      file = ansi_encode_filename (file);
+#endif
       success_p = imagemagick_load_image (f, img, 0, 0, SSDATA (file));
     }
   /* Else its not a file, its a lisp object.  Load the image from a
@@ -8517,7 +8546,10 @@ and `imagemagick-types-inhibit'.  */)
     {
       Qimagemagicktype = intern (imtypes[i]);
       typelist = Fcons (Qimagemagicktype, typelist);
+      imtypes[i] = MagickRelinquishMemory (imtypes[i]);
     }
+
+  MagickRelinquishMemory (imtypes);
   return Fnreverse (typelist);
 }
 
@@ -9411,6 +9443,14 @@ non-numeric, there is no explicit limit on the size of images.  */);
 #else
 	make_number (-1)
 #endif
+        );
+  DEFSYM (Qlibjpeg_version, "libjpeg-version");
+  Fset (Qlibjpeg_version,
+#if HAVE_JPEG
+	make_number (JPEG_LIB_VERSION)
+#else
+	make_number (-1)
+#endif
 	);
 #endif
 
@@ -9484,7 +9524,7 @@ A cross is always drawn on black & white displays.  */);
 
   DEFVAR_LISP ("x-bitmap-file-path", Vx_bitmap_file_path,
     doc: /* List of directories to search for window system bitmap files.  */);
-  Vx_bitmap_file_path = decode_env_path (0, PATH_BITMAPS);
+  Vx_bitmap_file_path = decode_env_path (0, PATH_BITMAPS, 0);
 
   DEFVAR_LISP ("image-cache-eviction-delay", Vimage_cache_eviction_delay,
     doc: /* Maximum time after which images are removed from the cache.

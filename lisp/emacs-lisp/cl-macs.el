@@ -1,6 +1,6 @@
 ;;; cl-macs.el --- Common Lisp macros  -*- lexical-binding: t; coding: utf-8 -*-
 
-;; Copyright (C) 1993, 2001-2013 Free Software Foundation, Inc.
+;; Copyright (C) 1993, 2001-2014 Free Software Foundation, Inc.
 
 ;; Author: Dave Gillespie <daveg@synaptics.com>
 ;; Old-Version: 2.02
@@ -1992,11 +1992,18 @@ by EXPANSION, and (setq NAME ...) will act like (setf EXPANSION ...).
       (unwind-protect
           (progn
             (fset 'macroexpand #'cl--sm-macroexpand)
-            ;; FIXME: For N bindings, this will traverse `body' N times!
-            (macroexpand-all (cons 'progn body)
-                             (cons (list (symbol-name (caar bindings))
-                                         (cl-cadar bindings))
-                                   macroexpand-all-environment)))
+            (let ((expansion
+                   ;; FIXME: For N bindings, this will traverse `body' N times!
+                   (macroexpand-all (macroexp-progn body)
+                                    (cons (list (symbol-name (caar bindings))
+                                                (cl-cadar bindings))
+                                          macroexpand-all-environment))))
+              (if (or (null (cdar bindings)) (cl-cddar bindings))
+                  (macroexp--warn-and-return
+                   (format "Malformed `cl-symbol-macrolet' binding: %S"
+                           (car bindings))
+                   expansion)
+                expansion)))
         (fset 'macroexpand previous-macroexpand))))))
 
 ;;; Multiple values.
@@ -2581,6 +2588,17 @@ The type name can then be used in `cl-typecase', `cl-check-type', etc."
      (put ',name 'cl-deftype-handler
           (cl-function (lambda (&cl-defs '('*) ,@arglist) ,@body)))))
 
+(defvar byte-compile-function-environment)
+(defvar byte-compile-macro-environment)
+
+(defun cl--macroexp-fboundp (sym)
+  "Return non-nil if SYM will be bound when we run the code.
+Of course, we really can't know that for sure, so it's just a heuristic."
+  (or (fboundp sym)
+      (and (cl--compiling-file)
+           (or (cdr (assq sym byte-compile-function-environment))
+               (cdr (assq sym byte-compile-macro-environment))))))
+
 (defun cl--make-type-test (val type)
   (if (symbolp type)
       (cond ((get type 'cl-deftype-handler)
@@ -2596,8 +2614,12 @@ The type name can then be used in `cl-typecase', `cl-check-type', etc."
 	    (t
 	     (let* ((name (symbol-name type))
 		    (namep (intern (concat name "p"))))
-	       (if (fboundp namep) (list namep val)
-		 (list (intern (concat name "-p")) val)))))
+	       (cond
+                ((cl--macroexp-fboundp namep) (list namep val))
+                ((cl--macroexp-fboundp
+                  (setq namep (intern (concat name "-p"))))
+                 (list namep val))
+                (t (list type val))))))
     (cond ((get (car type) 'cl-deftype-handler)
 	   (cl--make-type-test val (apply (get (car type) 'cl-deftype-handler)
 					 (cdr type))))
@@ -2726,12 +2748,12 @@ macro that returns its `&whole' argument."
   (let* ((cl-entry (cons (nth 1 (nth 1 cl-form)) nil))
          (cl--active-block-names (cons cl-entry cl--active-block-names))
          (cl-body (macroexpand-all      ;Performs compiler-macro expansions.
-                   (cons 'progn (cddr cl-form))
+                   (macroexp-progn (cddr cl-form))
                    macroexpand-all-environment)))
     ;; FIXME: To avoid re-applying macroexpand-all, we'd like to be able
     ;; to indicate that this return value is already fully expanded.
     (if (cdr cl-entry)
-        `(catch ,(nth 1 cl-form) ,@(cdr cl-body))
+        `(catch ,(nth 1 cl-form) ,@(macroexp-unprogn cl-body))
       cl-body)))
 
 (cl-define-compiler-macro cl--block-throw (cl-tag cl-value)

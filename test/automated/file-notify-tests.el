@@ -1,6 +1,6 @@
 ;;; file-notify-tests.el --- Tests of file notifications
 
-;; Copyright (C) 2013 Free Software Foundation, Inc.
+;; Copyright (C) 2013-2014 Free Software Foundation, Inc.
 
 ;; Author: Michael Albinus <michael.albinus@gmx.de>
 
@@ -19,13 +19,17 @@
 
 ;;; Commentary:
 
-;; Some of the tests are intended to run over remote files.  Set
-;; `file-notify-test-remote-temporary-file-directory' to a suitable
-;; value.  It must NOT require an interactive password prompt, when
-;; running the tests in batch mode.
+;; Some of the tests require access to a remote host files.  Set
+;; $REMOTE_TEMPORARY_FILE_DIRECTORY to a suitable value in order
+;; to overwrite the default value.  If you want to skip tests
+;; accessing a remote host, set this environment variable to
+;; "/dev/null" or whatever is appropriate on your system.
 
-;; If you want to skip tests for remote files, set this variable to
-;; `null-device'.
+;; When running the tests in batch mode, it must NOT require an
+;; interactive password prompt unless the environment variable
+;; $REMOTE_ALLOW_PASSWORD is set.
+
+;; A whole test run can be performed calling the command `file-notify-test-all'.
 
 ;;; Code:
 
@@ -34,7 +38,10 @@
 
 ;; There is no default value on w32 systems, which could work out of the box.
 (defconst file-notify-test-remote-temporary-file-directory
-  (if (eq system-type 'windows-nt) null-device "/ssh::/tmp")
+  (cond
+   ((getenv "REMOTE_TEMPORARY_FILE_DIRECTORY"))
+   ((eq system-type 'windows-nt) null-device)
+   (t (format "/ssh::%s" temporary-file-directory)))
   "Temporary directory for Tramp tests.")
 
 (defvar file-notify--test-tmpfile nil)
@@ -45,7 +52,14 @@
 (require 'tramp)
 (setq tramp-verbose 0
       tramp-message-show-message nil)
-(when noninteractive (defalias 'tramp-read-passwd 'ignore))
+
+;; Disable interactive passwords in batch mode.
+(when (and noninteractive (not (getenv "REMOTE_ALLOW_PASSWORD")))
+  (defalias 'tramp-read-passwd 'ignore))
+
+;; This shall happen on hydra only.
+(when (getenv "NIX_STORE")
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
 
 ;; We do not want to try and fail `file-notify-add-watch'.
 (defun file-notify--test-local-enabled ()
@@ -53,7 +67,7 @@
 This is needed for local `temporary-file-directory' only, in the
 remote case we return always `t'."
   (or file-notify--library
-      (not (file-remote-p temporary-file-directory))))
+      (file-remote-p temporary-file-directory)))
 
 (defvar file-notify--test-remote-enabled-checked nil
   "Cached result of `file-notify--test-remote-enabled'.
@@ -88,11 +102,8 @@ being the result.")
 	     file-notify-test-remote-temporary-file-directory)
 	    (ert-test (ert-get-test ',test)))
        (skip-unless (file-notify--test-remote-enabled))
-       ;; The local test could have passed, skipped, or quit.  All of
-       ;; these results should not prevent us to run the remote test.
-       ;; That's why we skip only for failed local tests.
-       (skip-unless
-	(not (ert-test-failed-p (ert-test-most-recent-result ert-test))))
+       (tramp-cleanup-connection
+	(tramp-dissect-file-name temporary-file-directory) nil 'keep-password)
        (funcall (ert-test-body ert-test)))))
 
 (ert-deftest file-notify-test00-availability ()
@@ -171,8 +182,22 @@ Save the result in `file-notify--test-results', for later analysis."
   (expand-file-name
    (make-temp-name "file-notify-test") temporary-file-directory))
 
+(defmacro file-notify--wait-for-events (timeout until)
+  "Wait for file notification events until form UNTIL is true.
+TIMEOUT is the maximum time to wait for, in seconds."
+  `(with-timeout (,timeout (ignore))
+     (while (null ,until)
+       (let (noninteractive)
+	 (sit-for 0.1 'nodisplay)))))
+
 (ert-deftest file-notify-test02-events ()
   "Check file creation/removal notifications."
+  ;; Bug#16519.
+  :expected-result
+  (if (and noninteractive
+	   (not (file-remote-p temporary-file-directory))
+	   (memq file-notify--library '(gfilenotify w32notify)))
+      :failed :passed)
   (skip-unless (file-notify--test-local-enabled))
   (let (desc)
     (unwind-protect
@@ -186,25 +211,32 @@ Save the result in `file-notify--test-results', for later analysis."
 		 '(change) 'file-notify--test-event-handler))
 
 	  ;; Check creation and removal.
-	  (write-region "any text" nil file-notify--test-tmpfile)
+	  (write-region
+	   "any text" nil file-notify--test-tmpfile nil 'no-message)
 	  (delete-file file-notify--test-tmpfile)
+	  (sit-for 0.1 'nodisplay)
 
 	  ;; Check copy and rename.
-	  (write-region "any text" nil file-notify--test-tmpfile)
+	  (write-region
+	   "any text" nil file-notify--test-tmpfile nil 'no-message)
 	  (copy-file file-notify--test-tmpfile file-notify--test-tmpfile1)
 	  (delete-file file-notify--test-tmpfile)
 	  (delete-file file-notify--test-tmpfile1)
+	  (sit-for 0.1 'nodisplay)
 
-	  (write-region "any text" nil file-notify--test-tmpfile)
+	  (write-region
+	   "any text" nil file-notify--test-tmpfile nil 'no-message)
 	  (rename-file file-notify--test-tmpfile file-notify--test-tmpfile1)
-	  (delete-file file-notify--test-tmpfile1))
+	  (delete-file file-notify--test-tmpfile1)
+	  (sit-for 0.1 'nodisplay))
 
       ;; Wait for events, and exit.
-      (sit-for 5 'nodisplay)
+      (file-notify--wait-for-events 5 file-notify--test-results)
       (file-notify-rm-watch desc)
       (ignore-errors (delete-file file-notify--test-tmpfile))
       (ignore-errors (delete-file file-notify--test-tmpfile1))))
 
+  (should file-notify--test-results)
   (dolist (result file-notify--test-results)
     ;(message "%s" (ert-test-result-messages result))
     (when (ert-test-failed-p result)
@@ -213,25 +245,27 @@ Save the result in `file-notify--test-results', for later analysis."
 (file-notify--deftest-remote file-notify-test02-events
   "Check file creation/removal notifications for remote files.")
 
-;; autorevert runs only in interactive mode.
 (defvar auto-revert-remote-files)
-(setq auto-revert-remote-files t)
+(defvar auto-revert-stop-on-user-input)
+(setq auto-revert-remote-files t
+      auto-revert-stop-on-user-input nil)
 (require 'autorevert)
 
 (ert-deftest file-notify-test03-autorevert ()
   "Check autorevert via file notification.
 This test is skipped in batch mode."
   (skip-unless (file-notify--test-local-enabled))
-  (skip-unless (not noninteractive))
   ;; `auto-revert-buffers' runs every 5".  And we must wait, until the
   ;; file has been reverted.
-  (let ((timeout 10)
-	buf)
+  (let* ((remote (file-remote-p temporary-file-directory))
+	 (timeout (if remote 60 10))
+	 buf)
     (unwind-protect
 	(progn
 	  (setq file-notify--test-tmpfile (file-notify--test-make-temp-name))
 
-	  (write-region "any text" nil file-notify--test-tmpfile)
+	  (write-region
+	   "any text" nil file-notify--test-tmpfile nil 'no-message)
 	  (setq buf (find-file-noselect file-notify--test-tmpfile))
 	  (with-current-buffer buf
 	    (should (string-equal (buffer-string) "any text"))
@@ -240,7 +274,7 @@ This test is skipped in batch mode."
 	    ;; `auto-revert-buffers' runs every 5".
 	    (with-timeout (timeout (ignore))
 	      (while (null auto-revert-notify-watch-descriptor)
-		(sit-for 0.1 'nodisplay)))
+		(sit-for 1 'nodisplay)))
 
 	    ;; Check, that file notification has been used.
 	    (should auto-revert-mode)
@@ -257,13 +291,11 @@ This test is skipped in batch mode."
 
 	    ;; Check, that the buffer has been reverted.
 	    (with-current-buffer (get-buffer-create "*Messages*")
-	      (with-timeout (timeout (ignore))
-		(while
-		    (null (string-match
-			   (format "Reverting buffer `%s'." (buffer-name buf))
-			   (buffer-string)))
-		  (sit-for 0.1 'nodisplay))))
-	    (should (string-equal (buffer-string) "another text"))))
+	      (file-notify--wait-for-events
+	       timeout
+	       (string-match (format "Reverting buffer `%s'." (buffer-name buf))
+			     (buffer-string))))
+	    (should (string-match "another text" (buffer-string)))))
 
       ;; Exit.
       (ignore-errors (kill-buffer buf))

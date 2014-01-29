@@ -1,6 +1,6 @@
 ;; info.el --- info package for Emacs
 
-;; Copyright (C) 1985-1986, 1992-2013 Free Software Foundation, Inc.
+;; Copyright (C) 1985-1986, 1992-2014 Free Software Foundation, Inc.
 
 ;; Maintainer: FSF
 ;; Keywords: help
@@ -732,6 +732,14 @@ in `Info-file-supports-index-cookies-list'."
 			     (Info-default-dirs))
 		   (split-string path sep))
 	       (Info-default-dirs))))
+      ;; If we are running uninstalled, our own Info files should
+      ;; always come first.  If INFOPATH was set, they might not.
+      (and path
+	   installation-directory
+	   (let ((dir (expand-file-name "info/" installation-directory)))
+	     (when (file-directory-p dir)
+	       (setq Info-directory-list (delete dir Info-directory-list))
+	       (push dir Info-directory-list))))
       ;; For a self-contained (ie relocatable) NS build, AFAICS we
       ;; always want the included info directory to be at the head of
       ;; the search path, unless it's already in INFOPATH somewhere.
@@ -917,7 +925,10 @@ just return nil (no error)."
 	  (setq filename found)
 	(if noerror
 	    (setq filename nil)
-	  (error "Info file %s does not exist" filename)))
+	  ;; If there is no previous Info file, go to the directory.
+	  (unless Info-current-file
+	    (Info-directory))
+	  (user-error "Info file %s does not exist" filename)))
       filename))))
 
 (defun Info-find-node (filename nodename &optional no-going-back strict-case)
@@ -1237,12 +1248,14 @@ is non-nil)."
 		   (Info-find-index-name Info-point-loc)
 		   (setq Info-point-loc nil))))))
     ;; If we did not finish finding the specified node,
-    ;; go back to the previous one.
-    (or Info-current-node no-going-back (null Info-history)
-        (let ((hist (car Info-history)))
-          (setq Info-history (cdr Info-history))
-          (Info-find-node (nth 0 hist) (nth 1 hist) t)
-          (goto-char (nth 2 hist))))))
+    ;; go back to the previous one or to the Top node.
+    (unless (or Info-current-node no-going-back)
+      (if Info-history
+	  (let ((hist (car Info-history)))
+	    (setq Info-history (cdr Info-history))
+	    (Info-find-node (nth 0 hist) (nth 1 hist) t)
+	    (goto-char (nth 2 hist)))
+	(Info-find-node Info-current-file "Top" t)))))
 
 ;; Cache the contents of the (virtual) dir file, once we have merged
 ;; it for the first time, so we can save time subsequently.

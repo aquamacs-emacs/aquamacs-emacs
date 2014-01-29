@@ -1,6 +1,6 @@
 /* Font back-end driver for the NeXT/Open/GNUstep and MacOSX window system.
    See font.h
-   Copyright (C) 2006-2013 Free Software Foundation, Inc.
+   Copyright (C) 2006-2014 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -624,7 +624,7 @@ static Lisp_Object nsfont_match (struct frame *, Lisp_Object);
 static Lisp_Object nsfont_list_family (struct frame *);
 static Lisp_Object nsfont_open (struct frame *f, Lisp_Object font_entity,
                                  int pixel_size);
-static void nsfont_close (struct frame *f, struct font *font);
+static void nsfont_close (struct font *font);
 static int nsfont_has_char (Lisp_Object entity, int c);
 static unsigned int nsfont_encode_char (struct font *font, int c);
 static int nsfont_text_extents (struct font *font, unsigned int *code,
@@ -829,7 +829,6 @@ nsfont_open (struct frame *f, Lisp_Object font_entity, int pixel_size)
   font->vertical_centering = 0;
   font->baseline_offset = 0;
   font->relative_compose = 0;
-  font->font_encoder = NULL;
 
   font->props[FONT_FORMAT_INDEX] = Qns;
   font->props[FONT_FILE_INDEX] = Qnil;
@@ -954,29 +953,30 @@ nsfont_open (struct frame *f, Lisp_Object font_entity, int pixel_size)
 }
 
 
-/* Close FONT on frame F. */
+/* Close FONT. */
 static void
-nsfont_close (struct frame *f, struct font *font)
+nsfont_close (struct font *font)
 {
-  struct nsfont_info *font_info = (struct nsfont_info *)font;
-  int i;
+  struct nsfont_info *font_info = (struct nsfont_info *) font;
 
-  /* FIXME: this occurs apparently due to same failure to detect same font
-            that causes need for cache in nsfont_open () */
-  if (!font_info)
-      return;
-
-  for (i =0; i<0x100; i++)
+  /* FIXME: font_info may be NULL due to same failure to detect
+     same font that causes need for cache in nsfont_open.  */
+  if (font_info && font_info->name)
     {
-      xfree (font_info->glyphs[i]);
-      xfree (font_info->metrics[i]);
-    }
-  [font_info->nsfont release];
+      int i;
+
+      for (i = 0; i < 0x100; i++)
+	{
+	  xfree (font_info->glyphs[i]);
+	  xfree (font_info->metrics[i]);
+	}
+      [font_info->nsfont release];
 #ifdef NS_IMPL_COCOA
-  CGFontRelease (font_info->cgfont);
+      CGFontRelease (font_info->cgfont);
 #endif
-  xfree (font_info->name);
-  xfree (font_info);
+      xfree (font_info->name);
+      font_info->name = NULL;
+    }
 }
 
 

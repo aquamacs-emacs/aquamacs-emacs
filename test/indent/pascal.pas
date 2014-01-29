@@ -1,6 +1,6 @@
 { GPC demo program for the CRT unit.
 
-Copyright (C) 1999-2006, 2013 Free Software Foundation, Inc.
+Copyright (C) 1999-2006, 2013-2014 Free Software Foundation, Inc.
 
 Author: Frank Heckenbach <frank@pascal.gnu.de>
 
@@ -688,7 +688,7 @@ var
       NoSound;
       RestoreTerminalClearCRT;
       WriteLn (StdErr, 'You''re trying to kill me. Since I have break checking turned off,');
-      WriteLn (StdErr, 'I''m not dying, but I''ll do you a favour and terminate now.');
+      WriteLn (StdErr, 'I''m not dying, but I''ll do you a favor and terminate now.');
       Halt (3)
    end;
 

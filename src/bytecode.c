@@ -1,5 +1,5 @@
 /* Execution of byte code produced by bytecomp.el.
-   Copyright (C) 1985-1988, 1993, 2000-2013 Free Software Foundation,
+   Copyright (C) 1985-1988, 1993, 2000-2014 Free Software Foundation,
    Inc.
 
 This file is part of GNU Emacs.
@@ -550,7 +550,7 @@ exec_byte_code (Lisp_Object bytestr, Lisp_Object vector, Lisp_Object maxdepth,
 #ifdef BYTE_CODE_SAFE
   bytestr_length = SBYTES (bytestr);
 #endif
-  vectorp = XVECTOR (vector)->u.contents;
+  vectorp = XVECTOR (vector)->contents;
 
   stack.byte_string = bytestr;
   stack.pc = stack.byte_string_start = SDATA (bytestr);

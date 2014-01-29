@@ -1,6 +1,6 @@
 ;;; uce.el --- facilitate reply to unsolicited commercial email
 
-;; Copyright (C) 1996, 1998, 2000-2013 Free Software Foundation, Inc.
+;; Copyright (C) 1996, 1998, 2000-2014 Free Software Foundation, Inc.
 
 ;; Author: stanislav shalunov <shalunov@mccme.ru>
 ;; Created: 10 Dec 1996
@@ -279,7 +279,7 @@ You might need to set `uce-mail-reader' before using this."
 	(goto-char (point-min)))
       ;; Now find the mail hub that first accepted this message.
       ;; This should try to find the last Received: header.
-      ;; Sometimes there may be other headers inbetween Received: headers.
+      ;; Sometimes there may be other headers in between Received: headers.
       (cond ((eq uce-mail-reader 'gnus)
 	     ;; Does Gnus always have Lines: in the end?
 	     (re-search-forward "^Lines:")

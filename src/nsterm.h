@@ -1,5 +1,5 @@
 /* Definitions and headers for communication with NeXT/Open/GNUstep API.
-   Copyright (C) 1989, 1993, 2005, 2008-2013 Free Software Foundation,
+   Copyright (C) 1989, 1993, 2005, 2008-2014 Free Software Foundation,
    Inc.
 
 This file is part of GNU Emacs.
@@ -51,7 +51,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #ifdef __OBJC__
 
-/* CGFloat on GNUStep may be 4 or 8 byte, but functions expect float* for some
+/* CGFloat on GNUstep may be 4 or 8 byte, but functions expect float* for some
    versions.
    On Cocoa >= 10.5, functions expect CGFloat*. Make compatible type.  */
 #ifdef NS_IMPL_COCOA
@@ -78,6 +78,18 @@ typedef float EmacsCGFloat;
 
 /* ==========================================================================
 
+   NSColor, EmacsColor category.
+
+   ========================================================================== */
+@interface NSColor (EmacsColor)
++ (NSColor *)colorForEmacsRed:(CGFloat)red green:(CGFloat)green
+                         blue:(CGFloat)blue alpha:(CGFloat)alpha;
+- (NSColor *)colorUsingDefaultColorSpace;
+
+@end
+
+/* ==========================================================================
+
    The Emacs application
 
    ========================================================================== */
@@ -91,6 +103,7 @@ typedef float EmacsCGFloat;
   BOOL isFirst;
 #endif
 #ifdef NS_IMPL_GNUSTEP
+  BOOL applicationDidFinishLaunchingCalled;
 @public
   int nextappdefined;
 #endif
@@ -173,7 +186,7 @@ typedef float EmacsCGFloat;
 - (BOOL) fsIsNative;
 - (BOOL) isFullscreen;
 #ifdef HAVE_NATIVE_FS
-- (void) updateCollectionBehaviour;
+- (void) updateCollectionBehavior;
 #endif
 
 #ifdef NS_IMPL_GNUSTEP
@@ -496,11 +509,11 @@ extern NSMenu *panelMenu;
 
 /* Special keycodes that we pass down the event chain */
 #define KEY_NS_POWER_OFF               ((1<<28)|(0<<16)|1)
-#define KEY_NS_OPEN_FILE               ((1<<28)|(0<<16)|2)
-#define KEY_NS_OPEN_TEMP_FILE          ((1<<28)|(0<<16)|3)
 #define KEY_NS_DRAG_FILE               ((1<<28)|(0<<16)|4)
 #define KEY_NS_DRAG_COLOR              ((1<<28)|(0<<16)|5)
 #define KEY_NS_DRAG_TEXT               ((1<<28)|(0<<16)|6)
+#define KEY_NS_OPEN_FILE               ((1<<28)|(0<<16)|2)
+#define KEY_NS_OPEN_TEMP_FILE          ((1<<28)|(0<<16)|3)
 #define KEY_NS_CHANGE_FONT             ((1<<28)|(0<<16)|7)
 #define KEY_NS_OPEN_FILE_LINE          ((1<<28)|(0<<16)|8)
 #define KEY_NS_PUT_WORKING_TEXT        ((1<<28)|(0<<16)|9)
@@ -707,6 +720,7 @@ struct ns_output
   Cursor hand_cursor;
   Cursor hourglass_cursor;
   Cursor horizontal_drag_cursor;
+  Cursor vertical_drag_cursor;
 
   /* NS-specific */
   Cursor current_pointer;
@@ -738,9 +752,6 @@ struct ns_output
   /* This is the Emacs structure for the NS display this frame is on.  */
   struct ns_display_info *display_info;
 
-  /* Non-zero if we want to constrain the frame to the screen.  */
-  int dont_constrain;
-
   /* Non-zero if we are zooming (maximizing) the frame.  */
   int zooming;
 };
@@ -771,11 +782,6 @@ struct x_output
 #define NS_FACE_BACKGROUND(f) ((f)->background)
 #define FRAME_NS_TITLEBAR_HEIGHT(f) ((f)->output_data.ns->titlebar_height)
 #define FRAME_TOOLBAR_HEIGHT(f) ((f)->output_data.ns->toolbar_height)
-
-#define FONT_WIDTH(f)	((f)->max_width)
-#define FONT_HEIGHT(f)	((f)->height)
-#define FONT_BASE(f)    ((f)->ascent)
-#define FONT_DESCENT(f) ((f)->descent)
 
 #define FRAME_DEFAULT_FACE(f) FACE_FROM_ID (f, DEFAULT_FACE_ID)
 

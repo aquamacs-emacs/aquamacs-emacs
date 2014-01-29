@@ -1,6 +1,6 @@
 ;;; image.el --- image API
 
-;; Copyright (C) 1998-2013 Free Software Foundation, Inc.
+;; Copyright (C) 1998-2014 Free Software Foundation, Inc.
 
 ;; Maintainer: FSF
 ;; Keywords: multimedia
@@ -34,7 +34,10 @@
 
 (defconst image-type-header-regexps
   `(("\\`/[\t\n\r ]*\\*.*XPM.\\*/" . xpm)
-    ("\\`P[1-6][[:space:]]+\\(?:#.*[[:space:]]+\\)*[0-9]+[[:space:]]+[0-9]+" . pbm)
+    ("\\`P[1-6]\\\(?:\
+\\(?:\\(?:#[^\r\n]*[\r\n]\\)?[[:space:]]\\)+\
+\\(?:\\(?:#[^\r\n]*[\r\n]\\)?[0-9]\\)+\
+\\)\\{2\\}" . pbm)
     ("\\`GIF8[79]a" . gif)
     ("\\`\x89PNG\r\n\x1a\n" . png)
     ("\\`[\t\n\r ]*#define \\([a-z0-9_]+\\)_width [0-9]+\n\
@@ -101,11 +104,13 @@ AUTODETECT can be
 
 (defvar image-format-suffixes
   '((image/x-icon "ico"))
-  "Alist of MIME Content-Type headers to file name suffixes.
+  "An alist associating image types with file name suffixes.
 This is used as a hint by the ImageMagick library when detecting
-image types.  If `create-image' is called with a :format
-matching found in this alist, the ImageMagick library will be
-told that the data would have this suffix if saved to a file.")
+the type of image data (that does not have an associated file name).
+Each element has the form (MIME-CONTENT-TYPE EXTENSION).
+If `create-image' is called with a :format attribute whose value
+equals a content-type found in this list, the ImageMagick library is
+told that the data would have the associated suffix if saved to a file.")
 
 (defcustom image-load-path
   (list (file-name-as-directory (expand-file-name "images" data-directory))
@@ -115,7 +120,9 @@ If an element is a string, it defines a directory to search.
 If an element is a variable symbol whose value is a string, that
 value defines a directory to search.
 If an element is a variable symbol whose value is a list, the
-value is used as a list of directories to search."
+value is used as a list of directories to search.
+
+Subdirectories are not automatically included in the search."
   :type '(repeat (choice directory variable))
   :initialize 'custom-initialize-delay)
 
@@ -591,7 +598,7 @@ Image files should not be larger than specified by `max-image-size'."
 
 ;;;###autoload
 (defmacro defimage (symbol specs &optional doc)
-  "Define SYMBOL as an image.
+  "Define SYMBOL as an image, and return SYMBOL.
 
 SPECS is a list of image specifications.  DOC is an optional
 documentation string.

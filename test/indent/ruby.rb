@@ -3,6 +3,7 @@ if something_wrong?             # ruby-move-to-block-skips-heredoc
   boo hoo
   end
   eowarn
+  foo
 end
 
 # Percent literals.
@@ -44,10 +45,38 @@ foo = { a: b,
         a1: b1
       }
 
-foo({
-     a: b,
-     c: d
-   })
+foo({                           # bug#16118
+      a: b,
+      c: d
+    })
+
+bar = foo(
+  a, [
+    1,
+  ],
+  :qux => [
+    3
+  ])
+
+foo(
+  [
+    {
+      a: b
+    },
+  ],
+  {
+    c: d
+  }
+)
+
+foo([{
+       a: 2
+     },
+     {
+       b: 3
+     },
+     4
+    ])
 
 foo = [                         # ruby-deep-indent-disabled
   1
@@ -85,17 +114,17 @@ def test2 (arg)
     puts "there"
   end
 
-  case a
-  when "a"
-    6
-  # Support for this syntax was removed in Ruby 1.9, so we
-  # probably don't need to handle it either.
-  # when "b" :
-  #   7
-  # when "c" : 2
-  when "d"  then 4
-  else 5
-  end
+  b = case a
+      when "a"
+        6
+      # Support for this syntax was removed in Ruby 1.9, so we
+      # probably don't need to handle it either.
+      # when "b" :
+      #   7
+      # when "c" : 2
+      when "d"  then 4
+      else 5
+      end
 end
 
 # Some Cucumber code:
@@ -115,6 +144,9 @@ d = 4 + 5 +      # no '\' needed
 # Example from http://www.ruby-doc.org/docs/ProgrammingRuby/html/language.html
 e = 8 + 9   \
     + 10         # '\' needed
+
+foo = obj.bar { |m| tee(m) } +
+      obj.qux { |m| hum(m) }
 
 begin
   foo
@@ -174,12 +206,29 @@ method? arg1,
 method! arg1,
         arg2
 
+method !arg1,
+       arg2
+
+method [],
+       arg2
+
+method :foo,
+       :bar
+
+method (a + b),
+       c, :d => :e,
+       f: g
+
+desc "abc",
+     defg
+
 it "is a method call with block" do |asd|
   foo
 end
 
 it("is too!") {
   bar
+    .qux
 }
 
 and_this_one(has) { |block, parameters|
@@ -191,6 +240,20 @@ if foo &&
 end
 
 foo +
+  bar
+
+foo and
+  bar
+
+foo > bar &&
+  tee < qux
+
+zux do
+  foo == bar and
+    tee == qux
+end
+
+foo ^
   bar
 
 foo_bar_tee(1, 2, 3)
@@ -207,24 +270,88 @@ def bar
     .baz
 end
 
-# Examples below still fail with `ruby-use-smie' on:
+# http://stackoverflow.com/questions/17786563/emacs-ruby-mode-if-expressions-indentation
+tee = if foo
+        bar
+      else
+        tee
+      end
+
+a = b {
+  c
+}
+
+aa = bb do
+  cc
+end
+
+foo :bar do
+  qux
+end
+
+foo do |*args|
+  tee
+end
+
+bar do |&block|
+  tee
+end
 
 foo = [1, 2, 3].map do |i|
   i + 1
 end
 
-method !arg1,
-       arg2
-
-method [],
-       arg2
-
-method :foo,
-       :bar
-
-method (a + b),
-       c
-
-bar.foo do # "." is parent to "do"; it shouldn't be.
+bar.foo do
   bar
 end
+
+bar.foo(tee) do
+  bar
+end
+
+bar.foo(tee) {
+  bar
+}
+
+bar 1 do
+  foo 2 do
+    tee
+  end
+end
+
+foo |
+  bar
+
+def qux
+  foo ||= begin
+            bar
+            tee
+          rescue
+            oomph
+          end
+end
+
+private def foo
+  bar
+end
+
+%^abc^
+ddd
+
+qux = foo ?
+        bar :
+        tee
+
+zoo.keep.bar!(
+  {x: y,
+   z: t})
+
+zoo
+  .lose(
+  q, p)
+
+foo(bar:
+      tee)
+
+foo(:bar =>
+      tee)

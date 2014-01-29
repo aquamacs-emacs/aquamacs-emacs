@@ -1,6 +1,6 @@
 ;;; cconv.el --- Closure conversion for statically scoped Emacs lisp. -*- lexical-binding: t; coding: utf-8 -*-
 
-;; Copyright (C) 2011-2013 Free Software Foundation, Inc.
+;; Copyright (C) 2011-2014 Free Software Foundation, Inc.
 
 ;; Author: Igor Kuzmin <kzuminig@iro.umontreal.ca>
 ;; Maintainer: FSF
@@ -289,12 +289,15 @@ places where they originally did not directly appear."
 
        (dolist (binder binders)
          (let* ((value nil)
-                (var (if (not (consp binder))
-                         (prog1 binder (setq binder (list binder)))
-                       (setq value (cadr binder))
-                       (car binder)))
-                (new-val
-                 (cond
+		(var (if (not (consp binder))
+			 (prog1 binder (setq binder (list binder)))
+                       (when (cddr binder)
+                         (byte-compile-log-warning
+                          (format "Malformed `%S' binding: %S" letsym binder)))
+		       (setq value (cadr binder))
+		       (car binder)))
+		(new-val
+		 (cond
                   ;; Check if var is a candidate for lambda lifting.
                   ((and (member (cons binder form) cconv-lambda-candidates)
                         (progn

@@ -1,6 +1,6 @@
 ;;; ert-tests.el --- ERT's self-tests  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2007-2008, 2010-2013 Free Software Foundation, Inc.
+;; Copyright (C) 2007-2008, 2010-2014 Free Software Foundation, Inc.
 
 ;; Author: Christian Ohler <ohler@gnu.org>
 
@@ -375,18 +375,16 @@ This macro is used to test if macroexpansion in `should' works."
   (should-error (macroexpand '(ert-deftest ghi ()
                                 :documentation "foo"))))
 
-;; FIXME Test disabled due to persistent failure owing to lexical binding.
-;; http://debbugs.gnu.org/13064
-;;; (ert-deftest ert-test-record-backtrace ()
-;;;   (let ((test (make-ert-test :body (lambda () (ert-fail "foo")))))
-;;;     (let ((result (ert-run-test test)))
-;;;       (should (ert-test-failed-p result))
-;;;       (with-temp-buffer
-;;;         (ert--print-backtrace (ert-test-failed-backtrace result))
-;;;         (goto-char (point-min))
-;;;         (end-of-line)
-;;;         (let ((first-line (buffer-substring-no-properties (point-min) (point))))
-;;;           (should (equal first-line "  signal(ert-test-failed (\"foo\"))")))))))
+(ert-deftest ert-test-record-backtrace ()
+  (let ((test (make-ert-test :body (lambda () (ert-fail "foo")))))
+    (let ((result (ert-run-test test)))
+      (should (ert-test-failed-p result))
+      (with-temp-buffer
+        (ert--print-backtrace (ert-test-failed-backtrace result))
+        (goto-char (point-min))
+	(end-of-line)
+	(let ((first-line (buffer-substring-no-properties (point-min) (point))))
+	  (should (equal first-line "  (closure (ert--test-body-was-run t) nil (ert-fail \"foo\"))()")))))))
 
 (ert-deftest ert-test-messages ()
   :tags '(:causes-redisplay)
@@ -777,41 +775,57 @@ This macro is used to test if macroexpansion in `should' works."
          (stats (ert--make-stats (list test-1 test-2) 't))
          (failed (make-ert-test-failed :condition nil
                                        :backtrace nil
-                                       :infos nil)))
+                                       :infos nil))
+         (skipped (make-ert-test-skipped :condition nil
+					 :backtrace nil
+					 :infos nil)))
     (should (eql 2 (ert-stats-total stats)))
     (should (eql 0 (ert-stats-completed stats)))
     (should (eql 0 (ert-stats-completed-expected stats)))
     (should (eql 0 (ert-stats-completed-unexpected stats)))
+    (should (eql 0 (ert-stats-skipped stats)))
     (ert--stats-set-test-and-result stats 0 test-1 (make-ert-test-passed))
     (should (eql 2 (ert-stats-total stats)))
     (should (eql 1 (ert-stats-completed stats)))
     (should (eql 1 (ert-stats-completed-expected stats)))
     (should (eql 0 (ert-stats-completed-unexpected stats)))
+    (should (eql 0 (ert-stats-skipped stats)))
     (ert--stats-set-test-and-result stats 0 test-1 failed)
     (should (eql 2 (ert-stats-total stats)))
     (should (eql 1 (ert-stats-completed stats)))
     (should (eql 0 (ert-stats-completed-expected stats)))
     (should (eql 1 (ert-stats-completed-unexpected stats)))
+    (should (eql 0 (ert-stats-skipped stats)))
     (ert--stats-set-test-and-result stats 0 test-1 nil)
     (should (eql 2 (ert-stats-total stats)))
     (should (eql 0 (ert-stats-completed stats)))
     (should (eql 0 (ert-stats-completed-expected stats)))
     (should (eql 0 (ert-stats-completed-unexpected stats)))
+    (should (eql 0 (ert-stats-skipped stats)))
     (ert--stats-set-test-and-result stats 0 test-3 failed)
     (should (eql 2 (ert-stats-total stats)))
     (should (eql 1 (ert-stats-completed stats)))
     (should (eql 0 (ert-stats-completed-expected stats)))
     (should (eql 1 (ert-stats-completed-unexpected stats)))
+    (should (eql 0 (ert-stats-skipped stats)))
     (ert--stats-set-test-and-result stats 1 test-2 (make-ert-test-passed))
     (should (eql 2 (ert-stats-total stats)))
     (should (eql 2 (ert-stats-completed stats)))
     (should (eql 1 (ert-stats-completed-expected stats)))
     (should (eql 1 (ert-stats-completed-unexpected stats)))
+    (should (eql 0 (ert-stats-skipped stats)))
     (ert--stats-set-test-and-result stats 0 test-1 (make-ert-test-passed))
     (should (eql 2 (ert-stats-total stats)))
     (should (eql 2 (ert-stats-completed stats)))
     (should (eql 2 (ert-stats-completed-expected stats)))
-    (should (eql 0 (ert-stats-completed-unexpected stats)))))
+    (should (eql 0 (ert-stats-completed-unexpected stats)))
+    (should (eql 0 (ert-stats-skipped stats)))
+    (ert--stats-set-test-and-result stats 0 test-1 skipped)
+    (should (eql 2 (ert-stats-total stats)))
+    (should (eql 2 (ert-stats-completed stats)))
+    (should (eql 1 (ert-stats-completed-expected stats)))
+    (should (eql 0 (ert-stats-completed-unexpected stats)))
+    (should (eql 1 (ert-stats-skipped stats)))))
 
 
 (provide 'ert-tests)

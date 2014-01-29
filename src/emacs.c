@@ -1,7 +1,7 @@
 /* Fully extensible Emacs, running on Unix, intended for GNU.
 
-Copyright (C) 1985-1987, 1993-1995, 1997-1999, 2001-2013
-  Free Software Foundation, Inc.
+Copyright (C) 1985-1987, 1993-1995, 1997-1999, 2001-2014 Free Software
+Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -36,6 +36,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #ifdef WINDOWSNT
 #include <fcntl.h>
 #include <sys/socket.h>
+#include <mbstring.h>
 #include "w32.h"
 #include "w32heap.h"
 #endif
@@ -254,7 +255,7 @@ Action options:\n\
 FILE                    visit FILE using find-file\n\
 +LINE                   go to line LINE in next FILE\n\
 +LINE:COLUMN            go to line LINE, column COLUMN, in next FILE\n\
---directory, -L DIR     add DIR to variable load-path\n\
+--directory, -L DIR     prepend DIR to load-path (with :DIR, append DIR)\n\
 --eval EXPR             evaluate Emacs Lisp expression EXPR\n\
 --execute EXPR          evaluate Emacs Lisp expression EXPR\n\
 ",
@@ -383,7 +384,7 @@ terminate_due_to_signal (int sig, int backtrace_limit)
 /* Code for dealing with Lisp access to the Unix command line.  */
 
 static void
-init_cmdargs (int argc, char **argv, int skip_args)
+init_cmdargs (int argc, char **argv, int skip_args, char *original_pwd)
 {
   register int i;
   Lisp_Object name, dir, handler;
@@ -393,7 +394,20 @@ init_cmdargs (int argc, char **argv, int skip_args)
   initial_argv = argv;
   initial_argc = argc;
 
-  raw_name = build_string (argv[0]);
+#ifdef WINDOWSNT
+  /* Must use argv[0] converted to UTF-8, as it begets many standard
+     file and directory names.  */
+  {
+    char argv0[MAX_UTF8_PATH];
+
+    if (filename_from_ansi (argv[0], argv0) == 0)
+      raw_name = build_unibyte_string (argv0);
+    else
+      raw_name = build_unibyte_string (argv[0]);
+  }
+#else
+  raw_name = build_unibyte_string (argv[0]);
+#endif
 
   /* Add /: to the front of the name
      if it would otherwise be treated as magic.  */
@@ -410,7 +424,7 @@ init_cmdargs (int argc, char **argv, int skip_args)
     {
       Lisp_Object found;
       int yes = openp (Vexec_path, Vinvocation_name,
-		       Vexec_suffixes, &found, make_number (X_OK));
+		       Vexec_suffixes, &found, make_number (X_OK), false);
       if (yes == 1)
 	{
 	  /* Add /: to the front of the name
@@ -426,7 +440,12 @@ init_cmdargs (int argc, char **argv, int skip_args)
       && NILP (Ffile_name_absolute_p (Vinvocation_directory)))
     /* Emacs was started with relative path, like ./emacs.
        Make it absolute.  */
-    Vinvocation_directory = Fexpand_file_name (Vinvocation_directory, Qnil);
+    {
+      Lisp_Object odir =
+	original_pwd ? build_unibyte_string (original_pwd) : Qnil;
+
+      Vinvocation_directory = Fexpand_file_name (Vinvocation_directory, odir);
+    }
 
   Vinstallation_directory = Qnil;
 
@@ -699,6 +718,9 @@ main (int argc, char **argv)
 #endif
   char *ch_to_dir;
 
+  /* If we use --chdir, this records the original directory.  */
+  char *original_pwd = 0;
+
 #if GC_MARK_STACK
   stack_base = &dummy;
 #endif
@@ -727,6 +749,12 @@ main (int argc, char **argv)
      early as possible.  (unexw32.c calls this function as well, but
      the additional call here is harmless.) */
   cache_system_info ();
+#ifdef WINDOWSNT
+  /* On Windows 9X, we have to load UNICOWS.DLL as early as possible,
+     to have non-stub implementations of APIs we need to convert file
+     names between UTF-8 and the system's ANSI codepage.  */
+  maybe_load_unicows_dll ();
+#endif
 #endif
 
 #ifdef RUN_TIME_REMAP
@@ -786,12 +814,23 @@ main (int argc, char **argv)
     }
 
   if (argmatch (argv, argc, "-chdir", "--chdir", 4, &ch_to_dir, &skip_args))
-    if (chdir (ch_to_dir) == -1)
-      {
-	fprintf (stderr, "%s: Can't chdir to %s: %s\n",
-		 argv[0], ch_to_dir, strerror (errno));
-	exit (1);
-      }
+    {
+#ifdef WINDOWSNT
+      /* argv[] array is kept in its original ANSI codepage encoding,
+	 we need to convert to UTF-8, for chdir to work.  */
+      char newdir[MAX_UTF8_PATH];
+
+      filename_from_ansi (ch_to_dir, newdir);
+      ch_to_dir = newdir;
+#endif
+      original_pwd = get_current_dir_name ();
+      if (chdir (ch_to_dir) != 0)
+        {
+          fprintf (stderr, "%s: Can't chdir to %s: %s\n",
+                   argv[0], ch_to_dir, strerror (errno));
+          exit (1);
+        }
+    }
 
   dumping = !initialized && (strcmp (argv[argc - 1], "dump") == 0
 			     || strcmp (argv[argc - 1], "bootstrap") == 0);
@@ -1066,6 +1105,8 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
 
             argv[skip_args] = fdStr;
 
+	    fcntl (daemon_pipe[0], F_SETFD, 0);
+	    fcntl (daemon_pipe[1], F_SETFD, 0);
             execvp (argv[0], argv);
 	    emacs_perror (argv[0]);
 	    exit (errno == ENOENT ? EXIT_ENOENT : EXIT_CANNOT_INVOKE);
@@ -1082,6 +1123,7 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
         sscanf (dname_arg, "\n%d,%d\n%s", &(daemon_pipe[0]), &(daemon_pipe[1]),
                 dname_arg2);
         dname_arg = *dname_arg2 ? dname_arg2 : NULL;
+	fcntl (daemon_pipe[1], F_SETFD, FD_CLOEXEC);
       }
 #endif /* DAEMON_MUST_EXEC */
 
@@ -1184,6 +1226,11 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
 
 #ifdef HAVE_NS
   ns_pool = ns_alloc_autorelease_pool ();
+#ifdef NS_IMPL_GNUSTEP
+  /* GNUstep stupidly resets our locale settings after we made them.  */
+  fixup_locale ();
+#endif
+
   if (!noninteractive)
     {
 #ifdef NS_IMPL_COCOA
@@ -1192,7 +1239,7 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
          chdir fails.  */
       if (! inhibit_window_system && ! isatty (0))
         chdir (getenv ("HOME"));
-      else if (skip_args < argc)
+      if (skip_args < argc)
         {
           if (!strncmp (argv[skip_args], "-psn", 4))
             {
@@ -1321,7 +1368,9 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
   init_buffer ();	/* Init default directory of main buffer.  */
 
   init_callproc_1 ();	/* Must precede init_cmdargs and init_sys_modes.  */
-  init_cmdargs (argc, argv, skip_args);	/* Must precede init_lread.  */
+
+  /* Must precede init_lread.  */
+  init_cmdargs (argc, argv, skip_args, original_pwd);
 
   if (initialized)
     {
@@ -1504,6 +1553,10 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
   init_keyboard ();	/* This too must precede init_sys_modes.  */
   if (!noninteractive)
     init_display ();	/* Determine terminal type.  Calls init_sys_modes.  */
+#if HAVE_W32NOTIFY
+  else
+    init_crit ();	/* w32notify.c needs this in batch mode.  */
+#endif	/* HAVE_W32NOTIFY */
   init_xdisp ();
 #ifdef HAVE_WINDOW_SYSTEM
   init_fringe ();
@@ -1517,7 +1570,16 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
       char *file;
       /* Handle -l loadup, args passed by Makefile.  */
       if (argmatch (argv, argc, "-l", "--load", 3, &file, &skip_args))
-	Vtop_level = list2 (intern_c_string ("load"), build_string (file));
+	{
+#ifdef WINDOWSNT
+	  char file_utf8[MAX_UTF8_PATH];
+
+	  if (filename_from_ansi (file, file_utf8) == 0)
+	    file = file_utf8;
+#endif
+	  Vtop_level = list2 (intern_c_string ("load"),
+			      build_unibyte_string (file));
+	}
       /* Unless next switch is -nl, load "loadup.el" first thing.  */
       if (! no_loadup)
 	Vtop_level = list2 (intern_c_string ("load"),
@@ -1661,7 +1723,6 @@ static const struct standard_args standard_args[] =
 #ifdef HAVE_NS
   { "-NSAutoLaunch", 0, 5, 1 },
   { "-NXAutoLaunch", 0, 5, 1 },
-  { "-disable-font-backend", "--disable-font-backend", 65, 0 },
   { "-_NSMachLaunch", 0, 85, 1 },
   { "-MachLaunch", 0, 85, 1 },
   { "-macosx", 0, 85, 0 },
@@ -2044,11 +2105,15 @@ You must run Emacs in batch mode in order to dump it.  */)
 
   CHECK_STRING (filename);
   filename = Fexpand_file_name (filename, Qnil);
+  filename = ENCODE_FILE (filename);
   if (!NILP (symfile))
     {
       CHECK_STRING (symfile);
       if (SCHARS (symfile))
-	symfile = Fexpand_file_name (symfile, Qnil);
+	{
+	  symfile = Fexpand_file_name (symfile, Qnil);
+	  symfile = ENCODE_FILE (symfile);
+	}
     }
 
   tem = Vpurify_flag;
@@ -2150,15 +2215,25 @@ synchronize_system_messages_locale (void)
 
 
 Lisp_Object
-decode_env_path (const char *evarname, const char *defalt)
+decode_env_path (const char *evarname, const char *defalt, bool empty)
 {
   const char *path, *p;
   Lisp_Object lpath, element, tem;
+  /* Default is to use "." for empty path elements.
+     But if argument EMPTY is true, use nil instead.  */
+  Lisp_Object empty_element = empty ? Qnil : build_string (".");
 #ifdef WINDOWSNT
   bool defaulted = 0;
-  const char *emacs_dir = egetenv ("emacs_dir");
   static const char *emacs_dir_env = "%emacs_dir%/";
   const size_t emacs_dir_len = strlen (emacs_dir_env);
+  const char *edir = egetenv ("emacs_dir");
+  char emacs_dir[MAX_UTF8_PATH];
+
+  /* egetenv looks in process-environment, which holds the variables
+     in their original system-locale encoding.  We need emacs_dir to
+     be in UTF-8.  */
+  if (edir)
+    filename_from_ansi (edir, emacs_dir);
 #endif
 
   /* It's okay to use getenv here, because this function is only used
@@ -2179,9 +2254,44 @@ decode_env_path (const char *evarname, const char *defalt)
   /* Ensure values from the environment use the proper directory separator.  */
   if (path)
     {
-      char *path_copy = alloca (strlen (path) + 1);
+      char *path_copy;
+
+#ifdef WINDOWSNT
+      char *path_utf8, *q, *d;
+      int cnv_result;
+
+      /* Convert each element of PATH to UTF-8.  */
+      p = path_copy = alloca (strlen (path) + 1);
       strcpy (path_copy, path);
-      dostounix_filename (path_copy, 0);
+      d = path_utf8 = alloca (4 * strlen (path) + 1);
+      *d = '\0';
+      do {
+	q = _mbschr (p, SEPCHAR);
+	if (q)
+	  *q = '\0';
+	cnv_result = filename_from_ansi (p, d);
+	if (q)
+	  {
+	    *q++ = SEPCHAR;
+	    p = q;
+	    /* If conversion of this PATH elements fails, make sure
+	       destination pointer will stay put, thus effectively
+	       ignoring the offending element.  */
+	    if (cnv_result == 0)
+	      {
+		d += strlen (d);
+		*d++ = SEPCHAR;
+	      }
+	  }
+	else if (cnv_result != 0 && d > path_utf8)
+	  d[-1] = '\0';	/* remove last semi-colon and null-terminate PATH */
+      } while (q);
+      path_copy = path_utf8;
+#else  /* MSDOS */
+      path_copy = alloca (strlen (path) + 1);
+      strcpy (path_copy, path);
+#endif
+      dostounix_filename (path_copy);
       path = path_copy;
     }
 #endif
@@ -2191,35 +2301,39 @@ decode_env_path (const char *evarname, const char *defalt)
       p = strchr (path, SEPCHAR);
       if (!p)
 	p = path + strlen (path);
-      element = (p - path ? make_string (path, p - path)
-		 : build_string ("."));
+      element = (p - path ? make_unibyte_string (path, p - path)
+		 : empty_element);
+      if (! NILP (element))
+        {
 #ifdef WINDOWSNT
-      /* Relative file names in the default path are interpreted as
-	 being relative to $emacs_dir.  */
-      if (emacs_dir && defaulted
-	  && strncmp (path, emacs_dir_env, emacs_dir_len) == 0)
-	element = Fexpand_file_name (Fsubstring (element,
-						 make_number (emacs_dir_len),
-						 Qnil),
-				     build_string (emacs_dir));
+          /* Relative file names in the default path are interpreted as
+             being relative to $emacs_dir.  */
+          if (edir && defaulted
+              && strncmp (path, emacs_dir_env, emacs_dir_len) == 0)
+            element = Fexpand_file_name (Fsubstring
+                                         (element,
+                                          make_number (emacs_dir_len),
+                                          Qnil),
+                                         build_unibyte_string (emacs_dir));
 #endif
 
-      /* Add /: to the front of the name
-	 if it would otherwise be treated as magic.  */
-      tem = Ffind_file_name_handler (element, Qt);
+          /* Add /: to the front of the name
+             if it would otherwise be treated as magic.  */
+          tem = Ffind_file_name_handler (element, Qt);
 
-      /* However, if the handler says "I'm safe",
-	 don't bother adding /:.  */
-      if (SYMBOLP (tem))
-	{
-	  Lisp_Object prop;
-	  prop = Fget (tem, intern ("safe-magic"));
-	  if (! NILP (prop))
-	    tem = Qnil;
-	}
+          /* However, if the handler says "I'm safe",
+             don't bother adding /:.  */
+          if (SYMBOLP (tem))
+            {
+              Lisp_Object prop;
+              prop = Fget (tem, intern ("safe-magic"));
+              if (! NILP (prop))
+                tem = Qnil;
+            }
 
-      if (! NILP (tem))
-	element = concat2 (build_string ("/:"), element);
+          if (! NILP (tem))
+            element = concat2 (build_string ("/:"), element);
+        } /* !NILP (element) */
 
       lpath = Fcons (element, lpath);
       if (*p)

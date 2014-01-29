@@ -1,6 +1,6 @@
 ;;; loadup.el --- load up standardly loaded Lisp files for Emacs
 
-;; Copyright (C) 1985-1986, 1992, 1994, 2001-2013 Free Software
+;; Copyright (C) 1985-1986, 1992, 1994, 2001-2014 Free Software
 ;; Foundation, Inc.
 
 ;; Maintainer: FSF
@@ -46,23 +46,23 @@
 ;; Add subdirectories to the load-path for files that might get
 ;; autoloaded when bootstrapping.
 ;; This is because PATH_DUMPLOADSEARCH is just "../lisp".
-;; Note that we reset load-path below just before dumping,
-;; since lread.c:init_lread checks for changes to load-path
-;; in deciding whether to modify it.
 (if (or (equal (nth 3 command-line-args) "bootstrap")
 	(equal (nth 4 command-line-args) "bootstrap")
-	(equal (nth 3 command-line-args) "unidata-gen.el")
-	(equal (nth 4 command-line-args) "unidata-gen-files")
-	;; In case CANNOT_DUMP.
-	(string-match "src/bootstrap-emacs" (nth 0 command-line-args)))
+	;; FIXME this is irritatingly fragile.
+	(equal (nth 4 command-line-args) "unidata-gen.el")
+	(equal (nth 7 command-line-args) "unidata-gen-files")
+	(if (fboundp 'dump-emacs)
+	    (string-match "src/bootstrap-emacs" (nth 0 command-line-args))
+	  t))
     (let ((dir (car load-path)))
       ;; We'll probably overflow the pure space.
       (setq purify-flag nil)
-      (setq load-path (list dir
+      (setq load-path (list (expand-file-name "." dir)
 			    (expand-file-name "emacs-lisp" dir)
 			    (expand-file-name "language" dir)
 			    (expand-file-name "international" dir)
-			    (expand-file-name "textmodes" dir)))))
+			    (expand-file-name "textmodes" dir)
+			    (expand-file-name "vc" dir)))))
 
 (if (eq t purify-flag)
     ;; Hash consing saved around 11% of pure space in my tests.
@@ -98,6 +98,8 @@
 (load "env")
 (load "format")
 (load "bindings")
+;; This sets temporary-file-directory, used by eg
+;; auto-save-file-name-transforms in files.el.
 (load "cus-start")
 (load "window")  ; Needed here for `replace-buffer-in-windows'.
 (setq load-source-file-function 'load-with-code-conversion)
@@ -277,15 +279,42 @@
 
 (load "vc/vc-hooks")
 (load "vc/ediff-hook")
+(load "uniquify")
+(load "electric")
 (if (not (eq system-type 'ms-dos)) (load "tooltip"))
 
-;If you want additional libraries to be preloaded and their
-;doc strings kept in the DOC file rather than in core,
-;you may load them with a "site-load.el" file.
-;But you must also cause them to be scanned when the DOC file
-;is generated.
-;For other systems, you must edit ../src/Makefile.in.
-(load "site-load" t)
+;; This file doesn't exist when building a development version of Emacs
+;; from the repository.  It is generated just after temacs is built.
+(load "leim/leim-list.el" t)
+
+;; If you want additional libraries to be preloaded and their
+;; doc strings kept in the DOC file rather than in core,
+;; you may load them with a "site-load.el" file.
+;; But you must also cause them to be scanned when the DOC file
+;; is generated.
+(let ((lp load-path))
+  (load "site-load" t)
+  ;; We reset load-path after dumping.
+  ;; For a permanent change in load-path, use configure's
+  ;; --enable-locallisppath option.
+  ;; See http://debbugs.gnu.org/16107 for more details.
+  (or (equal lp load-path)
+      (message "Warning: Change in load-path due to site-load will be \
+lost after dumping")))
+
+;; Make sure default-directory is unibyte when dumping.  This is
+;; because we cannot decode and encode it correctly (since the locale
+;; environment is not, and should not be, set up).  default-directory
+;; is used every time we call expand-file-name, which we do in every
+;; file primitive.  So the only workable solution to support building
+;; in non-ASCII directories is to manipulate unibyte strings in the
+;; current locale's encoding.
+(if (and (or (equal (nth 3 command-line-args) "dump")
+	     (equal (nth 4 command-line-args) "dump")
+	     (equal (nth 3 command-line-args) "bootstrap")
+	     (equal (nth 4 command-line-args) "bootstrap"))
+	 (multibyte-string-p default-directory))
+    (error "default-directory must be unibyte when dumping Emacs!"))
 
 ;; Determine which last version number to use
 ;; based on the executables that now exist.
@@ -300,7 +329,7 @@
 				(string-to-number
 				 (substring name (length base) exelen))))
 			     files)))
-      (setq emacs-bzr-version (condition-case nil (emacs-bzr-get-version)
+      (setq emacs-repository-version (condition-case nil (emacs-repository-get-version)
                               (error nil)))
       (setq emacs-git-version (condition-case nil (emacs-git-get-version)
                               (error nil)))
@@ -321,8 +350,13 @@
 
 ;; Note: You can cause additional libraries to be preloaded
 ;; by writing a site-init.el that loads them.
-;; See also "site-load" above.
-(load "site-init" t)
+;; See also "site-load" above
+(let ((lp load-path))
+  (load "site-init" t)
+  (or (equal lp load-path)
+      (message "Warning: Change in load-path due to site-init will be \
+lost after dumping")))
+
 (setq current-load-list nil)
 
 ;; We keep the load-history data in PURE space.
@@ -331,11 +365,6 @@
 (setq load-history (mapcar 'purecopy load-history))
 
 (set-buffer-modified-p nil)
-
-;; reset the load-path.  See lread.c:init_lread why.
-(if (or (equal (nth 3 command-line-args) "bootstrap")
-	(equal (nth 4 command-line-args) "bootstrap"))
-    (setcdr load-path nil))
 
 (remove-hook 'after-load-functions (lambda (f) (garbage-collect)))
 

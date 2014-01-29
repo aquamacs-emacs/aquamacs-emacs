@@ -1,5 +1,5 @@
 /* Functions to manipulate menus.
-   Copyright (C) 2008-2013 Free Software Foundation, Inc.
+   Copyright (C) 2008-2014 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -51,7 +51,7 @@ extern Lisp_Object ns_menu_show (struct frame *, int, int, bool, bool,
 				 Lisp_Object, const char **);
 extern Lisp_Object xmenu_show (struct frame *, int, int, bool, bool,
 			       Lisp_Object, const char **);
-extern Lisp_Object tty_menu_show (struct frame *, int, int, int, int,
-				  Lisp_Object, int, const char **);
+extern Lisp_Object tty_menu_show (struct frame *, int, int, bool, bool,
+				  Lisp_Object, bool, const char **);
 extern ptrdiff_t menu_item_width (const unsigned char *);
 #endif /* MENU_H */

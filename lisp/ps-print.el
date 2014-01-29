@@ -1,6 +1,6 @@
 ;;; ps-print.el --- print text from the buffer as PostScript
 
-;; Copyright (C) 1993-2013 Free Software Foundation, Inc.
+;; Copyright (C) 1993-2014 Free Software Foundation, Inc.
 
 ;; Author: Jim Thompson (was <thompson@wg2.waii.com>)
 ;;	Jacques Duthen (was <duthen@cegelec-red.fr>)
@@ -1771,7 +1771,7 @@ See `ps-lpr-command'."
 
 (defcustom ps-print-region-function
   (if (memq system-type '(ms-dos windows-nt))
-      #'direct-ps-print-region-function
+      #'w32-direct-ps-print-region-function
     #'call-process-region)
   "Specify a function to print the region on a PostScript printer.
 See definition of `call-process-region' for calling conventions.  The fourth
@@ -6121,7 +6121,7 @@ to the equivalent Latin-1 characters.")
     (goto-char from)
 
     ;; ...break the region up into chunks separated by tabs, linefeeds,
-    ;; pagefeeds, control characters, and plot each chunk.
+    ;; formfeeds, control characters, and plot each chunk.
     (while (< from to)
       ;; skip lines between cut markers
       (and ps-begin-cut-regexp ps-end-cut-regexp
@@ -6293,6 +6293,10 @@ If FACE is not a valid face name, use default face."
    ;; only background color, not a `real' face
    ((ps-face-background-color-p (car face-or-list))
     (vector 0 nil (ps-face-extract-color face-or-list)))
+   ;; Anonymous face.
+   ((keywordp (car face-or-list))
+    (vector 0 (plist-get face-or-list :foreground)
+	    (plist-get face-or-list :background)))
    ;; list of faces
    (t
     (let ((effects 0)
@@ -6584,7 +6588,7 @@ If FACE is not a valid face name, use default face."
 ;; To make this file smaller, some commands go in a separate file.
 ;; But autoload them here to make the separation invisible.
 
-;;;### (autoloads nil "ps-mule" "ps-mule.el" "a90e8414a27ac8fdf093251ac648d761")
+;;;### (autoloads nil "ps-mule" "ps-mule.el" "173235d6520575a877c25be437fb9e5f")
 ;;; Generated autoloads from ps-mule.el
 
 (defvar ps-multibyte-buffer nil "\

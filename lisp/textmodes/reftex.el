@@ -1,5 +1,5 @@
 ;;; reftex.el --- minor mode for doing \label, \ref, \cite, \index in LaTeX
-;; Copyright (C) 1997-2000, 2003-2013 Free Software Foundation, Inc.
+;; Copyright (C) 1997-2000, 2003-2014 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <dominik@science.uva.nl>
 ;; Maintainer: auctex-devel@gnu.org
@@ -135,7 +135,9 @@
  "Make a citation using BibTeX database files." t)
 (autoload 'reftex-default-bibliography "reftex-cite")
 (autoload 'reftex-bib-or-thebib "reftex-cite")
-(autoload 'reftex-create-bibtex-file "reftex-cite")
+(autoload 'reftex-create-bibtex-file "reftex-cite"
+  "Create a new BibTeX database BIBFILE with all entries referenced in document."
+  t)
 
 ;; Selection
 (autoload 'reftex-select-label-mode "reftex-sel")

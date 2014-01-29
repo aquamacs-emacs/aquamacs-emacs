@@ -1,5 +1,5 @@
 /* GnuTLS glue for GNU Emacs.
-   Copyright (C) 2010-2013 Free Software Foundation, Inc.
+   Copyright (C) 2010-2014 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -21,6 +21,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include "lisp.h"
 #include "process.h"
+#include "coding.h"
 
 #ifdef HAVE_GNUTLS
 #include <gnutls/gnutls.h>
@@ -49,14 +50,16 @@ static Lisp_Object QCgnutls_bootprop_loglevel;
 static Lisp_Object QCgnutls_bootprop_hostname;
 static Lisp_Object QCgnutls_bootprop_min_prime_bits;
 static Lisp_Object QCgnutls_bootprop_verify_flags;
-static Lisp_Object QCgnutls_bootprop_verify_hostname_error;
+static Lisp_Object QCgnutls_bootprop_verify_error;
 
 /* Callback keys for `gnutls-boot'.  Unused currently.  */
 static Lisp_Object QCgnutls_bootprop_callbacks_verify;
 
 static void gnutls_log_function (int, const char *);
-static void gnutls_audit_log_function (gnutls_session_t, const char *);
 static void gnutls_log_function2 (int, const char*, const char*);
+#ifdef HAVE_GNUTLS3
+static void gnutls_audit_log_function (gnutls_session_t, const char *);
+#endif
 
 
 #ifdef WINDOWSNT
@@ -261,6 +264,7 @@ init_gnutls_functions (void)
 #endif /* !WINDOWSNT */
 
 
+#ifdef HAVE_GNUTLS3
 /* Function to log a simple audit message.  */
 static void
 gnutls_audit_log_function (gnutls_session_t session, const char* string)
@@ -270,6 +274,7 @@ gnutls_audit_log_function (gnutls_session_t session, const char* string)
       message ("gnutls.c: [audit] %s", string);
     }
 }
+#endif
 
 /* Function to log a simple message.  */
 static void
@@ -360,7 +365,7 @@ emacs_gnutls_handshake (struct Lisp_Process *proc)
   return ret;
 }
 
-int
+ptrdiff_t
 emacs_gnutls_record_check_pending (gnutls_session_t state)
 {
   return fn_gnutls_record_check_pending (state);
@@ -488,8 +493,20 @@ emacs_gnutls_handle_error (gnutls_session_t session, int err)
   else
     {
       ret = 1;
-      GNUTLS_LOG2 (1, max_log_level, "non-fatal error:", str);
-      /* TODO: EAGAIN AKA Qgnutls_e_again should be level 2.  */
+
+      switch (err)
+        {
+        case GNUTLS_E_AGAIN:
+          GNUTLS_LOG2 (3,
+                       max_log_level,
+                       "retry:",
+                       str);
+        default:
+          GNUTLS_LOG2 (1,
+                       max_log_level,
+                       "non-fatal error:",
+                       str);
+        }
     }
 
   if (err == GNUTLS_E_WARNING_ALERT_RECEIVED
@@ -737,8 +754,12 @@ certificates for `gnutls-x509pki'.
 :verify-flags is a bitset as per GnuTLS'
 gnutls_certificate_set_verify_flags.
 
-:verify-hostname-error, if non-nil, makes a hostname mismatch an
-error.  Otherwise it will be just a warning.
+:verify-hostname-error is ignored.  Pass :hostname in :verify-error
+instead.
+
+:verify-error is a list of symbols to express verification checks or
+`t' to do all checks.  Currently it can contain `:trustfiles' and
+`:hostname' to verify the certificate or the hostname respectively.
 
 :min-prime-bits is the minimum accepted number of bits the client will
 accept in Diffie-Hellman key exchange.
@@ -782,8 +803,7 @@ one trustfile (usually a CA bundle).  */)
   /* Lisp_Object callbacks; */
   Lisp_Object loglevel;
   Lisp_Object hostname;
-  /* Lisp_Object verify_error; */
-  Lisp_Object verify_hostname_error;
+  Lisp_Object verify_error;
   Lisp_Object prime_bits;
 
   CHECK_PROCESS (proc);
@@ -791,16 +811,10 @@ one trustfile (usually a CA bundle).  */)
   CHECK_LIST (proplist);
 
   if (NILP (Fgnutls_available_p ()))
-    {
-      error ("GnuTLS not available");
-      return gnutls_make_error (GNUTLS_EMACS_ERROR_NOT_LOADED);
-    }
+    error ("GnuTLS not available");
 
   if (!EQ (type, Qgnutls_x509pki) && !EQ (type, Qgnutls_anon))
-    {
-      error ("Invalid GnuTLS credential type");
-      return gnutls_make_error (GNUTLS_EMACS_ERROR_INVALID_TYPE);
-    }
+    error ("Invalid GnuTLS credential type");
 
   hostname              = Fplist_get (proplist, QCgnutls_bootprop_hostname);
   priority_string       = Fplist_get (proplist, QCgnutls_bootprop_priority);
@@ -808,15 +822,17 @@ one trustfile (usually a CA bundle).  */)
   keylist               = Fplist_get (proplist, QCgnutls_bootprop_keylist);
   crlfiles              = Fplist_get (proplist, QCgnutls_bootprop_crlfiles);
   loglevel              = Fplist_get (proplist, QCgnutls_bootprop_loglevel);
-  verify_hostname_error = Fplist_get (proplist, QCgnutls_bootprop_verify_hostname_error);
+  verify_error          = Fplist_get (proplist, QCgnutls_bootprop_verify_error);
   prime_bits            = Fplist_get (proplist, QCgnutls_bootprop_min_prime_bits);
 
+  if (NILP (Flistp (verify_error)))
+    error ("gnutls-boot: invalid :verify_error parameter (not a list)");
+
   if (!STRINGP (hostname))
-    error ("gnutls-boot: invalid :hostname parameter");
+    error ("gnutls-boot: invalid :hostname parameter (not a string)");
   c_hostname = SSDATA (hostname);
 
   state = XPROCESS (proc)->gnutls_state;
-  XPROCESS (proc)->gnutls_p = 1;
 
   if (TYPE_RANGED_INTEGERP (int, loglevel))
     {
@@ -839,7 +855,6 @@ one trustfile (usually a CA bundle).  */)
   emacs_gnutls_deinit (proc);
 
   /* Mark PROC as a GnuTLS process.  */
-  XPROCESS (proc)->gnutls_p = 1;
   XPROCESS (proc)->gnutls_state = NULL;
   XPROCESS (proc)->gnutls_x509_cred = NULL;
   XPROCESS (proc)->gnutls_anon_cred = NULL;
@@ -891,6 +906,13 @@ one trustfile (usually a CA bundle).  */)
 	    {
 	      GNUTLS_LOG2 (1, max_log_level, "setting the trustfile: ",
 			   SSDATA (trustfile));
+	      trustfile = ENCODE_FILE (trustfile);
+#ifdef WINDOWSNT
+	      /* Since GnuTLS doesn't support UTF-8 or UTF-16 encoded
+		 file names on Windows, we need to re-encode the file
+		 name using the current ANSI codepage.  */
+	      trustfile = ansi_encode_filename (trustfile);
+#endif
 	      ret = fn_gnutls_certificate_set_x509_trust_file
 		(x509_cred,
 		 SSDATA (trustfile),
@@ -913,6 +935,10 @@ one trustfile (usually a CA bundle).  */)
 	    {
 	      GNUTLS_LOG2 (1, max_log_level, "setting the CRL file: ",
 			   SSDATA (crlfile));
+	      crlfile = ENCODE_FILE (crlfile);
+#ifdef WINDOWSNT
+	      crlfile = ansi_encode_filename (crlfile);
+#endif
 	      ret = fn_gnutls_certificate_set_x509_crl_file
 		(x509_cred, SSDATA (crlfile), file_format);
 
@@ -936,6 +962,12 @@ one trustfile (usually a CA bundle).  */)
 			   SSDATA (keyfile));
 	      GNUTLS_LOG2 (1, max_log_level, "setting the client cert file: ",
 			   SSDATA (certfile));
+	      keyfile = ENCODE_FILE (keyfile);
+	      certfile = ENCODE_FILE (certfile);
+#ifdef WINDOWSNT
+	      keyfile = ansi_encode_filename (keyfile);
+	      certfile = ansi_encode_filename (certfile);
+#endif
 	      ret = fn_gnutls_certificate_set_x509_key_file
 		(x509_cred, SSDATA (certfile), SSDATA (keyfile), file_format);
 
@@ -1039,14 +1071,16 @@ one trustfile (usually a CA bundle).  */)
 
   if (peer_verification != 0)
     {
-      if (NILP (verify_hostname_error))
-	GNUTLS_LOG2 (1, max_log_level, "certificate validation failed:",
-		     c_hostname);
-      else
-	{
+      if (!NILP (Fmember (QCgnutls_bootprop_trustfiles, verify_error)))
+        {
 	  emacs_gnutls_deinit (proc);
 	  error ("Certificate validation failed %s, verification code %d",
 		 c_hostname, peer_verification);
+        }
+      else
+	{
+          GNUTLS_LOG2 (1, max_log_level, "certificate validation failed:",
+                       c_hostname);
 	}
     }
 
@@ -1086,18 +1120,23 @@ one trustfile (usually a CA bundle).  */)
 
       if (!fn_gnutls_x509_crt_check_hostname (gnutls_verify_cert, c_hostname))
 	{
-	  if (NILP (verify_hostname_error))
-	    GNUTLS_LOG2 (1, max_log_level, "x509 certificate does not match:",
-			 c_hostname);
-	  else
-	    {
+          if (!NILP (Fmember (QCgnutls_bootprop_hostname, verify_error)))
+            {
 	      fn_gnutls_x509_crt_deinit (gnutls_verify_cert);
 	      emacs_gnutls_deinit (proc);
 	      error ("The x509 certificate does not match \"%s\"", c_hostname);
+            }
+	  else
+	    {
+              GNUTLS_LOG2 (1, max_log_level, "x509 certificate does not match:",
+                           c_hostname);
 	    }
 	}
       fn_gnutls_x509_crt_deinit (gnutls_verify_cert);
     }
+
+  /* Set this flag only if the whole initialization succeeded.  */
+  XPROCESS (proc)->gnutls_p = 1;
 
   return gnutls_make_error (ret);
 }
@@ -1150,7 +1189,7 @@ syms_of_gnutls (void)
   DEFSYM (QCgnutls_bootprop_min_prime_bits, ":min-prime-bits");
   DEFSYM (QCgnutls_bootprop_loglevel, ":loglevel");
   DEFSYM (QCgnutls_bootprop_verify_flags, ":verify-flags");
-  DEFSYM (QCgnutls_bootprop_verify_hostname_error, ":verify-hostname-error");
+  DEFSYM (QCgnutls_bootprop_verify_error, ":verify-error");
 
   DEFSYM (Qgnutls_e_interrupted, "gnutls-e-interrupted");
   Fput (Qgnutls_e_interrupted, Qgnutls_code,

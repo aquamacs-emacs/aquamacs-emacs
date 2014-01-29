@@ -1,5 +1,5 @@
 /* Indentation functions.
-   Copyright (C) 1985-1988, 1993-1995, 1998, 2000-2013 Free Software
+   Copyright (C) 1985-1988, 1993-1995, 1998, 2000-2014 Free Software
    Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -118,7 +118,7 @@ disptab_matches_widthtab (struct Lisp_Char_Table *disptab, struct Lisp_Vector *w
 
   for (i = 0; i < 256; i++)
     if (character_width (i, disptab)
-        != XFASTINT (widthtab->u.contents[i]))
+        != XFASTINT (widthtab->contents[i]))
       return 0;
 
   return 1;
@@ -138,36 +138,57 @@ recompute_width_table (struct buffer *buf, struct Lisp_Char_Table *disptab)
   eassert (widthtab->header.size == 256);
 
   for (i = 0; i < 256; i++)
-    XSETFASTINT (widthtab->u.contents[i], character_width (i, disptab));
+    XSETFASTINT (widthtab->contents[i], character_width (i, disptab));
 }
 
 /* Allocate or free the width run cache, as requested by the
    current state of current_buffer's cache_long_scans variable.  */
 
-static void
+static struct region_cache *
 width_run_cache_on_off (void)
 {
+  struct buffer *cache_buffer = current_buffer;
+  bool indirect_p = false;
+
+  if (cache_buffer->base_buffer)
+    {
+      cache_buffer = cache_buffer->base_buffer;
+      indirect_p = true;
+    }
+
   if (NILP (BVAR (current_buffer, cache_long_scans))
       /* And, for the moment, this feature doesn't work on multibyte
          characters.  */
       || !NILP (BVAR (current_buffer, enable_multibyte_characters)))
     {
-      /* It should be off.  */
-      if (current_buffer->width_run_cache)
-        {
-          free_region_cache (current_buffer->width_run_cache);
-          current_buffer->width_run_cache = 0;
-          bset_width_table (current_buffer, Qnil);
+      if (!indirect_p
+	  || NILP (BVAR (cache_buffer, cache_long_scans))
+	  || !NILP (BVAR (cache_buffer, enable_multibyte_characters)))
+	{
+	  /* It should be off.  */
+	  if (cache_buffer->width_run_cache)
+	    {
+	      free_region_cache (cache_buffer->width_run_cache);
+	      cache_buffer->width_run_cache = 0;
+	      bset_width_table (current_buffer, Qnil);
+	    }
         }
+      return NULL;
     }
   else
     {
-      /* It should be on.  */
-      if (current_buffer->width_run_cache == 0)
-        {
-          current_buffer->width_run_cache = new_region_cache ();
-          recompute_width_table (current_buffer, buffer_display_table ());
-        }
+      if (!indirect_p
+	  || (!NILP (BVAR (cache_buffer, cache_long_scans))
+	      && NILP (BVAR (cache_buffer, enable_multibyte_characters))))
+	{
+	  /* It should be on.  */
+	  if (cache_buffer->width_run_cache == 0)
+	    {
+	      cache_buffer->width_run_cache = new_region_cache ();
+	      recompute_width_table (current_buffer, buffer_display_table ());
+	    }
+	}
+      return cache_buffer->width_run_cache;
     }
 }
 
@@ -1128,15 +1149,19 @@ compute_motion (ptrdiff_t from, ptrdiff_t frombyte, EMACS_INT fromvpos,
   EMACS_INT contin_hpos;	/* HPOS of last column of continued line.  */
   int prev_tab_offset;		/* Previous tab offset.  */
   int continuation_glyph_width;
+  struct buffer *cache_buffer = current_buffer;
+  struct region_cache *width_cache;
 
   struct composition_it cmp_it;
 
   XSETWINDOW (window, win);
 
-  width_run_cache_on_off ();
+  if (cache_buffer->base_buffer)
+    cache_buffer = cache_buffer->base_buffer;
+  width_cache = width_run_cache_on_off ();
   if (dp == buffer_display_table ())
     width_table = (VECTORP (BVAR (current_buffer, width_table))
-                   ? XVECTOR (BVAR (current_buffer, width_table))->u.contents
+                   ? XVECTOR (BVAR (current_buffer, width_table))->contents
                    : 0);
   else
     /* If the window has its own display table, we can't use the width
@@ -1146,7 +1171,7 @@ compute_motion (ptrdiff_t from, ptrdiff_t frombyte, EMACS_INT fromvpos,
   /* Negative width means use all available text columns.  */
   if (width < 0)
     {
-      width = window_body_cols (win);
+      width = window_body_width (win, 0);
       /* We must make room for continuation marks if we don't have fringes.  */
 #ifdef HAVE_WINDOW_SYSTEM
       if (!FRAME_WINDOW_P (XFRAME (win->frame)))
@@ -1404,13 +1429,11 @@ compute_motion (ptrdiff_t from, ptrdiff_t frombyte, EMACS_INT fromvpos,
 
       /* Consult the width run cache to see if we can avoid inspecting
          the text character-by-character.  */
-      if (current_buffer->width_run_cache && pos >= next_width_run)
+      if (width_cache && pos >= next_width_run)
         {
           ptrdiff_t run_end;
           int common_width
-            = region_cache_forward (current_buffer,
-                                    current_buffer->width_run_cache,
-                                    pos, &run_end);
+            = region_cache_forward (cache_buffer, width_cache, pos, &run_end);
 
           /* A width of zero means the character's width varies (like
              a tab), is meaningless (like a newline), or we just don't
@@ -1486,7 +1509,7 @@ compute_motion (ptrdiff_t from, ptrdiff_t frombyte, EMACS_INT fromvpos,
 	  pos++, pos_byte++;
 
 	  /* Perhaps add some info to the width_run_cache.  */
-	  if (current_buffer->width_run_cache)
+	  if (width_cache)
 	    {
 	      /* Is this character part of the current run?  If so, extend
 		 the run.  */
@@ -1502,8 +1525,7 @@ compute_motion (ptrdiff_t from, ptrdiff_t frombyte, EMACS_INT fromvpos,
 		     (Currently, we only cache runs of width == 1).  */
 		  if (width_run_start < width_run_end
 		      && width_run_width == 1)
-		    know_region_cache (current_buffer,
-				       current_buffer->width_run_cache,
+		    know_region_cache (cache_buffer, width_cache,
 				       width_run_start, width_run_end);
 
 		  /* Start recording a new width run.  */
@@ -1639,10 +1661,10 @@ compute_motion (ptrdiff_t from, ptrdiff_t frombyte, EMACS_INT fromvpos,
  after_loop:
 
   /* Remember any final width run in the cache.  */
-  if (current_buffer->width_run_cache
+  if (width_cache
       && width_run_width == 1
       && width_run_start < width_run_end)
-    know_region_cache (current_buffer, current_buffer->width_run_cache,
+    know_region_cache (cache_buffer, width_cache,
                        width_run_start, width_run_end);
 
   val_compute_motion.bufpos = pos;
@@ -1756,7 +1778,7 @@ visible section of the buffer, and pass LINE and COL as TOPOS.  */)
 			 ? window_internal_height (w)
 			 : XINT (XCDR (topos))),
 			(NILP (topos)
-			 ? (window_body_cols (w)
+			 ? (window_body_width (w, 0)
 			    - (
 #ifdef HAVE_WINDOW_SYSTEM
 			       FRAME_WINDOW_P (XFRAME (w->frame)) ? 0 :

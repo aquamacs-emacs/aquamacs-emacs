@@ -1,6 +1,6 @@
 /* Definitions and headers for GTK widgets.
 
-Copyright (C) 2003-2013 Free Software Foundation, Inc.
+Copyright (C) 2003-2014 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -107,7 +107,7 @@ extern void xg_update_frame_menubar (struct frame *f);
 
 extern bool xg_event_is_for_menubar (struct frame *, const XEvent *);
 
-extern bool xg_have_tear_offs (void);
+extern bool xg_have_tear_offs (struct frame *f);
 
 extern ptrdiff_t xg_get_scroll_id_for_window (Display *dpy, Window wid);
 
@@ -139,7 +139,7 @@ extern void xg_change_toolbar_position (struct frame *f, Lisp_Object pos);
 extern void xg_frame_resized (struct frame *f,
                               int pixelwidth,
                               int pixelheight);
-extern void xg_frame_set_char_size (struct frame *f, int cols, int rows);
+extern void xg_frame_set_char_size (struct frame *f, int width, int height);
 extern GtkWidget * xg_win_to_widget (Display *dpy, Window wdesc);
 
 extern void xg_display_open (char *display_name, Display **dpy);

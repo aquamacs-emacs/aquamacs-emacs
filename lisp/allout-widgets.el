@@ -1,6 +1,6 @@
 ;; allout-widgets.el --- Visually highlight allout outline structure.
 
-;; Copyright (C) 2005-2013 Free Software Foundation, Inc.
+;; Copyright (C) 2005-2014 Free Software Foundation, Inc.
 
 ;; Author: Ken Manheimer <ken dot manheimer at gmail...>
 ;; Maintainer: Ken Manheimer <ken dot manheimer at gmail...>
@@ -90,7 +90,6 @@
 
 ;;;_ : USER CUSTOMIZATION VARIABLES and incidental functions:
 ;;;_  > defgroup allout-widgets
-;;;###autoload
 (defgroup allout-widgets nil
   "Allout extension that highlights outline structure graphically.
 

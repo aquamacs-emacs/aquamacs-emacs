@@ -1,3 +1,186 @@
+2014-01-18  Steinar Bang  <sb@dod.no>
+
+	* gnus-setup.el (gnus-use-sendmail): We never use sendmail for mail
+	reading.
+
+2014-01-09  Ken Olum  <kdo@cosmos.phy.tufts.edu>  (tiny change)
+
+	* message.el (message-bury): Call bury-buffer with no argument
+	in the message-return-action case too.
+
+2014-01-05  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* gnus-sum.el (gnus-article-stop-animations): Declare it before using.
+	(nnimap-split-fancy, nnimap-split-methods): Declare.
+
+	* mm-util.el (help-function-arglist): Declare.
+
+2013-12-28  Glenn Morris  <rgm@gnu.org>
+
+	* gnus-sieve.el (gnus-sieve-select-method):
+	* gravatar.el (gravatar-automatic-caching, gravatar-cache-ttl)
+	(gravatar-rating, gravatar-size):
+	* message.el (message-minibuffer-local-map):
+	* sieve-manage.el (sieve-manage-authenticators)
+	(sieve-manage-authenticator-alist): Specify custom types.
+
+	* gnus-icalendar.el (gnus-icalendar-org, gnus-icalendar):
+	* gnus-sum.el (gnus-subthread-sort-functions): Add version.
+	* gnus-sync.el (gnus-sync-file-encrypt-to): Add type and version.
+
+	* auth-source.el (auth-sources):
+	* nnmairix.el (nnmairix-propagate-marks-upon-close):
+	Fix custom types.
+
+2013-12-26  Lars Ingebrigtsen  <larsi@gnus.org>
+
+	* gnus-sum.el (gnus-summary-respool-query): Special-case nnimap so that
+	we get proper traces there, too.
+
+2013-12-26  Sean Connor  <sconnor005@allyinics.org>  (tiny change)
+
+	* gnus-sum.el (gnus-summary-enter-digest-group): Don't discard previous
+	value of the parameters if the current article has a Reply-To or From
+	field.
+
+2013-12-26  Lars Ingebrigtsen  <larsi@gnus.org>
+
+	* gnus.el (gnus-group-buffer): Remove duplicate definition.
+
+2013-12-25  Lars Ingebrigtsen  <larsi@gnus.org>
+
+	* gnus-sum.el (gnus-summary-exit): Stop animations.
+
+2013-12-19  Juri Linkov  <juri@jurta.org>
+
+	* gnus.el (gnus-suppress-keymap):
+	* gnus-art.el (gnus-article-mode-map):
+	* gnus-group.el (gnus-group-mode-map):
+	* gnus-sum.el (gnus-summary-mode-map, gnus-summary-backend-map):
+	Remove [backspace] key binding because it shadows DEL (bug#16035).
+
+	* mm-decode.el (mm-viewer-completion-map): Remove duplicate definition.
+
+2013-12-19  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* gnus-uu.el (gnus-uu-decode-binhex, gnus-uu-decode-binhex-view):
+	Make sure work directory exists.
+	(gnus-uu-digest-mail-forward): Store temporary files in work directory
+	rather than tmp directory.
+	(gnus-summary-prepare-exit-hook): Replace gnus-exit-group-hook, that is
+	not necessarily always run, with it.
+
+2013-12-18  Jan Tatarik  <jan.tatarik@gmail.com>
+
+	* gnus-icalendar.el (gnus-icalendar-identities): Make changing the
+	value of gnus-icalendar-additional-identities work without restart.
+
+2013-12-17  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* mm-util.el (mm-make-temp-file):
+	Alias to make-temp-file for modern Emacsen.
+
+2013-12-08  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* gnus-msg.el (gnus-setup-message): Fix the type of argument passed to
+	nnir-article-number and nnir-article-group.
+
+2013-12-03  Vitalie Spinu  <spinuvit@gmail.com>
+
+	* message.el (message-send-mail-with-sendmail):
+	Don't kill error buffer if sending fails.
+
+2013-11-28  Jan Tatarik  <jan.tatarik@gmail.com>
+
+	* gnus-icalendar.el (gnus-icalendar-event-from-ical)
+	(gnus-icalendar-event->org-entry)
+	(gnus-icalendar--update-org-event)
+	(gnus-icalendar-event->gnus-calendar): Distinguish between
+	required/optional/non-participant attendee status. Fix bug causing
+	the first required event participant to be omitted.
+
+2013-11-27  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* gnus-art.el (article-de-quoted-unreadable)
+	(article-de-base64-unreadable, gnus-mime-copy-part)
+	* gnus-html.el (gnus-article-html)
+	* mm-view.el (mm-inline-text-html-render-with-w3)
+	(mm-inline-text-html-render-with-w3m-standalone)
+	* rfc2231.el (rfc2231-decode-encoded-string):
+	Allow overriding charset by mm-charset-override-alist.
+
+	* gnus-art.el (gnus-article-browse-html-parts):
+	Replace LWSPs with `&nbsp;'s in header.
+
+	Work for broken Chinese articles.
+
+	* gnus-art.el (gnus-article-browse-html-save-cid-content):
+	Exclude broken handles that gnus-summary-enter-digest-group may create.
+	(gnus-article-browse-html-parts):
+	Allow overriding charset by mm-charset-override-alist.
+
+2013-11-21  Jan Tatarik  <jan.tatarik@gmail.com>
+
+	* gnus-icalendar.el (gnus-icalendar-additional-identities): New.
+	(gnus-icalendar-identities): Support additional-identities.
+
+	* gnus-icalendar.el (gnus-icalendar-event:org-timestamp):
+	Fix org-timestamp for events ending at midnight.
+
+2013-11-21  Ivan Shmakov  <ivan@siamics.net>  (tiny change)
+
+	* nndoc.el (nndoc-type-alist, nndoc-debbugs-db-type-p):
+	Support debbugs .log files.
+
+2013-11-20  Dave Goldberg  <david.goldberg6@verizon.net>
+
+	* message.el (message-beginning-of-line):
+	Use beginning-of-visual-line when visual-line-mode is turned on.
+
+2013-11-15  Jan Tatarik  <jan.tatarik@gmail.com>
+
+	* gnus-icalendar.el (gnus-icalendar-event->gnus-calendar)
+	(gnus-icalendar-event-from-ical)
+	(gnus-icalendar-event->org-entry)
+	(gnus-icalendar--update-org-event): Required/optional participation,
+	list of attendees synced to org.
+
+2013-11-13  Jan Tatarik  <jan.tatarik@gmail.com>
+
+	* gnus-icalendar.el (gnus-icalendar-event:sync-to-org)
+	(gnus-icalendar-event:inline-org-buttons): Allow for appointment
+	cancellations to be synced to org if the original appt has an org
+	outline.
+
+2013-11-13  Jan Tatarik  <jan.tatarik@gmail.com>
+
+	* gnus-icalendar.el (gnus-icalendar--format-summary-line)
+	(gnus-icalendar-event->org-entry)
+	(gnus-icalendar--update-org-event)
+	(gnus-icalendar-event->gnus-calendar): Fix empty location handling.
+
+2013-11-12  Jan Tatarik  <jan.tatarik@gmail.com>
+
+	* gnus-icalendar.el (gnus-icalendar-event-from-ical):
+	Fix timezone handling in gnus-icalendar export to org.
+
+2013-11-05  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* gnus-cite.el (gnus-cite-add-face): Make non-sticky overlays.
+
+2013-10-30  Glenn Morris  <rgm@gnu.org>
+
+	* gnus-group.el (gnus-group-browse-foreign-server):
+	* gnus-int.el (gnus-start-news-server):
+	Silence compiler obsolescence warning.
+
+2013-10-29  Teodor Zlatanov  <tzz@lifelogs.com>
+
+	* nnimap.el (nnimap-open-connection-1): `auth-source-search' for the
+	`nnoo-current-server' first, then for the actual `nnimap-address' to
+	allow netrc entries for the nnoo server to coexist with netrc entries
+	for the `nnimap-address'.
+
 2013-10-23  Katsumi Yamaoka  <yamaoka@jpl.org>
 
 	* mm-decode.el (mm-dissect-buffer): Revert last change.
@@ -25182,7 +25365,7 @@
 
 See ChangeLog.2 for earlier changes.
 
-  Copyright (C) 2004-2013 Free Software Foundation, Inc.
+  Copyright (C) 2004-2014 Free Software Foundation, Inc.
 
   This file is part of GNU Emacs.
 

@@ -1,6 +1,6 @@
 ;;; speedbar --- quick access to files and tags in a frame
 
-;; Copyright (C) 1996-2013 Free Software Foundation, Inc.
+;; Copyright (C) 1996-2014 Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: file, tags, tools
@@ -135,17 +135,21 @@ this version is not backward compatible to 0.14 or earlier.")
   :group 'etags
   :group 'tools
   :group 'convenience
+  :link '(custom-manual "(speedbar) Top")
+  :link '(info-link "(speedbar) Customizing")
 ;  :version "20.3"
   )
 
 (defgroup speedbar-faces nil
   "Faces used in speedbar."
   :prefix "speedbar-"
+  :link '(info-link "(speedbar) Frames and Faces")
   :group 'speedbar
   :group 'faces)
 
 (defgroup speedbar-vc nil
   "Version control display in speedbar."
+  :link '(info-link "(speedbar) Version Control")
   :prefix "speedbar-"
   :group 'speedbar)
 
@@ -2969,7 +2973,7 @@ that will occur on your system."
    (run-hook-with-args 'speedbar-vc-in-control-hook directory name)
    ))
 
-;; Objet File scanning
+;; Object File scanning
 (defun speedbar-check-objects ()
   "Scan all files in a directory, and for each see if there is an object.
 See `speedbar-check-obj-this-line' and `speedbar-obj-alist' for how

@@ -1,6 +1,6 @@
 ;;; epa.el --- the EasyPG Assistant -*- lexical-binding: t -*-
 
-;; Copyright (C) 2006-2013 Free Software Foundation, Inc.
+;; Copyright (C) 2006-2014 Free Software Foundation, Inc.
 
 ;; Author: Daiki Ueno <ueno@unixuser.org>
 ;; Keywords: PGP, GnuPG
@@ -31,6 +31,7 @@
 (defgroup epa nil
   "The EasyPG Assistant"
   :version "23.1"
+  :link '(custom-manual "(epa) Top")
   :group 'epg)
 
 (defcustom epa-popup-info-window t

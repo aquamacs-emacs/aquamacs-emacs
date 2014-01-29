@@ -1,6 +1,6 @@
 ;;; ido.el --- interactively do things with buffers and files
 
-;; Copyright (C) 1996-2013 Free Software Foundation, Inc.
+;; Copyright (C) 1996-2014 Free Software Foundation, Inc.
 
 ;; Author: Kim F. Storm <storm@cua.dk>
 ;; Based on: iswitchb by Stephen Eglen <stephen@cns.ed.ac.uk>
@@ -337,7 +337,9 @@
   :group 'convenience
   :version "22.1"
   :link '(emacs-commentary-link :tag "Commentary" "ido.el")
-  :link '(emacs-library-link :tag "Lisp File" "ido.el"))
+  :link '(emacs-library-link :tag "Lisp File" "ido.el")
+  :link '(custom-manual "(ido) Top")
+  :link '(info-link "(ido) Customization"))
 
 ;;;###autoload
 (defcustom ido-mode nil
@@ -797,7 +799,7 @@ remaining completion.  If absent, elements 5 and 6 are used instead."
 The value can be one of the following:
 
   nil:  No virtual buffers are used.
-  auto: Use virtual bufferw when the current input matches no
+  auto: Use virtual buffers when the current input matches no
         existing buffers.
   t:    Always use virtual buffers.
 
@@ -954,6 +956,7 @@ ido is running.  Copied from `icomplete-minibuffer-setup-hook'."
 Variables stored are: `ido-last-directory-list', `ido-work-directory-list',
 `ido-work-file-list', and `ido-dir-file-cache'.
 Must be set before enabling ido mode."
+  :version "24.4"                       ; added locate-user-emacs-file
   :type 'string
   :group 'ido)
 

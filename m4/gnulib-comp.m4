@@ -1,5 +1,5 @@
 # DO NOT EDIT! GENERATED AUTOMATICALLY!
-# Copyright (C) 2002-2013 Free Software Foundation, Inc.
+# Copyright (C) 2002-2014 Free Software Foundation, Inc.
 #
 # This file is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -38,6 +38,7 @@ AC_DEFUN([gl_EARLY],
   m4_pattern_allow([^gl_LIBOBJS$])dnl a variable
   m4_pattern_allow([^gl_LTLIBOBJS$])dnl a variable
   AC_REQUIRE([gl_PROG_AR_RANLIB])
+  # Code from module absolute-header:
   # Code from module alloca-opt:
   # Code from module allocator:
   # Code from module at-internal:
@@ -149,6 +150,7 @@ AC_DEFUN([gl_EARLY],
   # Code from module u64:
   # Code from module unistd:
   # Code from module unsetenv:
+  # Code from module update-copyright:
   # Code from module utimens:
   # Code from module verify:
   # Code from module warnings:
@@ -790,6 +792,7 @@ AC_DEFUN([gl_FILE_LIST], [
   build-aux/snippet/arg-nonnull.h
   build-aux/snippet/c++defs.h
   build-aux/snippet/warn-on-use.h
+  build-aux/update-copyright
   lib/acl-errno-valid.c
   lib/acl-internal.h
   lib/acl.h
@@ -847,6 +850,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/gettext.h
   lib/gettime.c
   lib/gettimeofday.c
+  lib/gl_openssl.h
   lib/group-member.c
   lib/intprops.h
   lib/inttypes.in.h
@@ -921,6 +925,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/verify.h
   lib/xalloc-oversized.h
   m4/00gnulib.m4
+  m4/absolute-header.m4
   m4/acl.m4
   m4/alloca.m4
   m4/byteswap.m4
@@ -953,6 +958,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/getopt.m4
   m4/gettime.m4
   m4/gettimeofday.m4
+  m4/gl-openssl.m4
   m4/gnulib-common.m4
   m4/group-member.m4
   m4/include_next.m4

@@ -1,6 +1,6 @@
 ;;; ert.el --- Emacs Lisp Regression Testing  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2007-2008, 2010-2013 Free Software Foundation, Inc.
+;; Copyright (C) 2007-2008, 2010-2014 Free Software Foundation, Inc.
 
 ;; Author: Christian Ohler <ohler@gnu.org>
 ;; Keywords: lisp, tools
@@ -436,7 +436,7 @@ failed."
 
 (cl-defmacro ert--skip-unless (form)
   "Evaluate FORM.  If it returns nil, skip the current test.
-Errors during evaluation are catched and handled like nil."
+Errors during evaluation are caught and handled like nil."
   (declare (debug t))
   (ert--expand-should `(skip-unless ,form) form
                       (lambda (inner-form form-description-form _value-var)
@@ -999,7 +999,8 @@ contained in UNIVERSE."
        (list (cl-remove-if-not (lambda (test)
                                    (and (ert-test-name test)
                                         (string-match selector
-                                                      (ert-test-name test))))
+                                                      (symbol-name
+                                                       (ert-test-name test)))))
                                  universe))))
     (ert-test (list selector))
     (symbol
@@ -1881,11 +1882,11 @@ and how to display message."
                             ;; defined without cl.
                             (car ert--selector-history)
                           "t")))
-           (read-from-minibuffer (if (null default)
-                                     "Run tests: "
-                                   (format "Run tests (default %s): " default))
-                                 nil nil t 'ert--selector-history
-                                 default nil))
+           (completing-read (if (null default)
+				"Run tests: "
+			      (format "Run tests (default %s): " default))
+			    obarray #'ert-test-boundp nil nil
+			    'ert--selector-history default nil))
          nil))
   (unless message-fn (setq message-fn 'message))
   (let ((output-buffer-name output-buffer-name)

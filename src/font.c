@@ -1,6 +1,6 @@
 /* font.c -- "Font" primitives.
 
-Copyright (C) 2006-2013 Free Software Foundation, Inc.
+Copyright (C) 2006-2014 Free Software Foundation, Inc.
 Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011
   National Institute of Advanced Industrial Science and Technology (AIST)
   Registration Number H13PRO009
@@ -148,7 +148,27 @@ static Lisp_Object font_charset_alist;
    here.  */
 static struct font_driver_list *font_driver_list;
 
-
+#ifdef ENABLE_CHECKING
+
+/* Used to catch bogus pointers in font objects.  */
+
+bool
+valid_font_driver (struct font_driver *drv)
+{
+  Lisp_Object tail, frame;
+  struct font_driver_list *fdl;
+
+  for (fdl = font_driver_list; fdl; fdl = fdl->next)
+    if (fdl->driver == drv)
+      return true;
+  FOR_EACH_FRAME (tail, frame)
+    for (fdl = XFRAME (frame)->font_driver_list; fdl; fdl = fdl->next)
+      if (fdl->driver == drv)
+	return true;
+  return false;
+}
+
+#endif /* ENABLE_CHECKING */
 
 /* Creators of font-related Lisp object.  */
 
@@ -2591,7 +2611,7 @@ font_clear_cache (struct frame *f, Lisp_Object cache, struct font_driver *driver
 		      if (! NILP (AREF (val, FONT_TYPE_INDEX)))
 			{
 			  eassert (font && driver == font->driver);
-			  driver->close (f, font);
+			  driver->close (font);
 			}
 		    }
 		  if (driver->free_entity)
@@ -2718,7 +2738,7 @@ font_list_entities (struct frame *f, Lisp_Object spec)
   ASET (scratch_font_spec, FONT_SPACING_INDEX, AREF (spec, FONT_SPACING_INDEX));
   ASET (scratch_font_spec, FONT_EXTRA_INDEX, AREF (spec, FONT_EXTRA_INDEX));
 
-  for (i = 0; driver_list; driver_list = driver_list->next)
+  for (; driver_list; driver_list = driver_list->next)
     if (driver_list->on
 	&& (NILP (ftype) || EQ (driver_list->driver->type, ftype)))
       {
@@ -2892,7 +2912,7 @@ font_close_object (struct frame *f, Lisp_Object font_object)
     /* Already closed.  */
     return;
   FONT_ADD_LOG ("close", font_object, Qnil);
-  font->driver->close (f, font);
+  font->driver->close (font);
 #ifdef HAVE_WINDOW_SYSTEM
   eassert (FRAME_DISPLAY_INFO (f)->n_fonts);
   FRAME_DISPLAY_INFO (f)->n_fonts--;
@@ -3209,7 +3229,10 @@ font_find_for_lface (struct frame *f, Lisp_Object *attrs, Lisp_Object spec, int 
 		      val = font_select_entity (f, entities,
 						attrs, pixel_size, c);
 		      if (! NILP (val))
-                        return val;
+			{
+			  SAFE_FREE ();
+			  return val;
+			}
 		    }
 		}
 	    }
@@ -3669,10 +3692,10 @@ font_at (int c, ptrdiff_t pos, struct face *face, struct window *w,
       ptrdiff_t endptr;
 
       if (STRINGP (string))
-	face_id = face_at_string_position (w, string, pos, 0, -1, -1, &endptr,
+	face_id = face_at_string_position (w, string, pos, 0, &endptr,
 					   DEFAULT_FACE_ID, 0);
       else
-	face_id = face_at_buffer_position (w, pos, -1, -1, &endptr,
+	face_id = face_at_buffer_position (w, pos, &endptr,
 					   pos + 100, 0, -1);
       face = FACE_FROM_ID (f, face_id);
     }
@@ -3716,7 +3739,7 @@ font_range (ptrdiff_t pos, ptrdiff_t pos_byte, ptrdiff_t *limit,
 	{
 	  int face_id;
 
-	  face_id = face_at_buffer_position (w, pos, 0, 0, &ignore,
+	  face_id = face_at_buffer_position (w, pos, &ignore,
 					     *limit, 0, -1);
 	  face = FACE_FROM_ID (XFRAME (w->frame), face_id);
 	}
@@ -4406,7 +4429,7 @@ where
   LANGSYS is a symbol specifying a langsys tag of OpenType,
   GSUB and GPOS, if non-nil, are lists of symbols specifying feature tags.
 
-If LANGYS is nil, the default langsys is selected.
+If LANGSYS is nil, the default langsys is selected.
 
 The features are applied in the order they appear in the list.  The
 symbol `*' means to apply all available features not present in this

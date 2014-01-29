@@ -1,6 +1,6 @@
 ;;; tramp-compat.el --- Tramp compatibility functions
 
-;; Copyright (C) 2007-2013 Free Software Foundation, Inc.
+;; Copyright (C) 2007-2014 Free Software Foundation, Inc.
 
 ;; Author: Michael Albinus <michael.albinus@gmx.de>
 ;; Keywords: comm, processes
@@ -415,6 +415,13 @@ Not actually used.  Use `(format \"%o\" i)' instead?"
 	       (directory-files
 		directory 'full "^\\([^.]\\|\\.\\([^.]\\|\\..\\)\\).*")))
      (delete-directory directory))))
+
+;; MUST-SUFFIX doesn't exist on XEmacs.
+(defun tramp-compat-load (file &optional noerror nomessage nosuffix must-suffix)
+  "Like `load' for Tramp files (compat function)."
+  (if must-suffix
+      (tramp-compat-funcall 'load file noerror nomessage nosuffix must-suffix)
+    (load file noerror nomessage nosuffix)))
 
 ;; `number-sequence' does not exist in XEmacs.  Implementation is
 ;; taken from Emacs 23.

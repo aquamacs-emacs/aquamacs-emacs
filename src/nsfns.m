@@ -1,6 +1,6 @@
 /* Functions for the NeXT/Open/GNUstep and MacOSX window system.
 
-Copyright (C) 1989, 1992-1994, 2005-2006, 2008-2013 Free Software
+Copyright (C) 1989, 1992-1994, 2005-2006, 2008-2014 Free Software
 Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -432,23 +432,23 @@ x_set_icon_name (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
       if (!NILP (f->title))
         arg = f->title;
       else
-        /* explicit name and no icon-name -> explicit_name */
+        /* Explicit name and no icon-name -> explicit_name.  */
         if (f->explicit_name)
           arg = f->name;
         else
           {
-            /* no explicit name and no icon-name ->
-               name has to be rebuild from icon_title_format */
-            windows_or_buffers_changed++;
+            /* No explicit name and no icon-name ->
+               name has to be rebuild from icon_title_format.  */
+            windows_or_buffers_changed = 62;
             return;
           }
     }
 
   /* Don't change the name if it's already NAME.  */
-  if ([[view window] miniwindowTitle] &&
-      ([[[view window] miniwindowTitle]
+  if ([[view window] miniwindowTitle]
+      && ([[[view window] miniwindowTitle]
              isEqualToString: [NSString stringWithUTF8String:
-                                           SSDATA (arg)]]))
+					  SSDATA (arg)]]))
     return;
 
   [[view window] setMiniwindowTitle:
@@ -480,8 +480,8 @@ ns_set_name_internal (struct frame *f, Lisp_Object name)
 
   str = [NSString stringWithUTF8String: SSDATA (encoded_icon_name)];
 
-  if ([[view window] miniwindowTitle] &&
-      ! [[[view window] miniwindowTitle] isEqualToString: str])
+  if ([[view window] miniwindowTitle]
+      && ! [[[view window] miniwindowTitle] isEqualToString: str])
     [[view window] setMiniwindowTitle: str];
 
 }
@@ -498,7 +498,7 @@ ns_set_name (struct frame *f, Lisp_Object name, int explicit)
       /* If we're switching from explicit to implicit, we had better
          update the mode lines and thereby update the title.  */
       if (f->explicit_name && NILP (name))
-        update_mode_lines = 1;
+        update_mode_lines = 21;
 
       f->explicit_name = ! NILP (name);
     }
@@ -506,7 +506,7 @@ ns_set_name (struct frame *f, Lisp_Object name, int explicit)
     return;
 
   if (NILP (name))
-    name = build_string([ns_app_name UTF8String]);
+    name = build_string ([ns_app_name UTF8String]);
   else
     CHECK_STRING (name);
 
@@ -516,7 +516,7 @@ ns_set_name (struct frame *f, Lisp_Object name, int explicit)
 
   fset_name (f, name);
 
-  /* title overrides explicit name */
+  /* Title overrides explicit name.  */
   if (! NILP (f->title))
     name = f->title;
 
@@ -563,7 +563,7 @@ x_set_title (struct frame *f, Lisp_Object name, Lisp_Object old_name)
   if (EQ (name, f->title))
     return;
 
-  update_mode_lines = 1;
+  update_mode_lines = 22;
 
   fset_title (f, name);
 
@@ -732,7 +732,7 @@ x_set_tool_bar_lines (struct frame *f, Lisp_Object value, Lisp_Object oldval)
         }
     }
 
-  x_set_window_size (f, 0, f->text_cols, f->text_lines);
+  x_set_window_size (f, 0, f->text_cols, f->text_lines, 0);
 }
 
 
@@ -975,6 +975,8 @@ frame_parm_handler ns_frame_parm_handlers[] =
   x_set_icon_name,
   x_set_icon_type,
   x_set_internal_border_width, /* generic OK */
+  0, /* x_set_right_divider_width */
+  0, /* x_set_bottom_divider_width */
   x_set_menu_bar_lines,
   x_set_mouse_color,
   x_explicitly_set_name,
@@ -1264,6 +1266,13 @@ This function is an internal primitive--use `make-frame' instead.  */)
 
   init_frame_faces (f);
 
+  /* Read comment about this code in corresponding place in xfns.c.  */
+  width = FRAME_TEXT_WIDTH (f);
+  height = FRAME_TEXT_HEIGHT (f);
+  FRAME_TEXT_HEIGHT (f) = 0;
+  SET_FRAME_WIDTH (f, 0);
+  change_frame_size (f, width, height, 1, 0, 0, 1);
+
   /* The resources controlling the menu-bar and tool-bar are
      processed specially at startup, and reflected in the mode
      variables; ignore them here.  */
@@ -1295,6 +1304,7 @@ This function is an internal primitive--use `make-frame' instead.  */)
   f->output_data.ns->hand_cursor = [NSCursor pointingHandCursor];
   f->output_data.ns->hourglass_cursor = [NSCursor disappearingItemCursor];
   f->output_data.ns->horizontal_drag_cursor = [NSCursor resizeLeftRightCursor];
+  f->output_data.ns->vertical_drag_cursor = [NSCursor resizeUpDownCursor];
   FRAME_DISPLAY_INFO (f)->vertical_scroll_bar_cursor
      = [NSCursor arrowCursor];
   f->output_data.ns->current_pointer = f->output_data.ns->text_cursor;
@@ -1327,12 +1337,11 @@ This function is an internal primitive--use `make-frame' instead.  */)
   x_default_parameter (f, parms, Qfullscreen, Qnil,
                        "fullscreen", "Fullscreen", RES_TYPE_SYMBOL);
 
-  width = FRAME_COLS (f);
-  height = FRAME_LINES (f);
-
-  SET_FRAME_COLS (f, 0);
-  FRAME_LINES (f) = 0;
-  change_frame_size (f, height, width, 1, 0, 0);
+  width = FRAME_TEXT_WIDTH (f);
+  height = FRAME_TEXT_HEIGHT (f);
+  FRAME_TEXT_HEIGHT (f) = 0;
+  SET_FRAME_WIDTH (f, 0);
+  change_frame_size (f, width, height, 1, 0, 0, 1);
 
   if (! f->output_data.ns->explicit_parent)
     {
@@ -3232,7 +3241,7 @@ DEFUN ("xw-color-values", Fxw_color_values, Sxw_color_values, 1, 2, 0,
   if (ns_lisp_to_color (color, &col))
     return Qnil;
 
-  [[col colorUsingColorSpaceName: NSCalibratedRGBColorSpace]
+  [[col colorUsingDefaultColorSpace]
         getRed: &red green: &green blue: &blue alpha: &alpha];
   return list3i (lrint (red * 65280), lrint (green * 65280),
 		 lrint (blue * 65280));
@@ -3310,7 +3319,35 @@ each physical monitor, use `display-monitor-attributes-list'.  */)
 }
 
 #ifdef NS_IMPL_COCOA
-/* Returns the name for the screen that DICT came from, or NULL.
+
+/* Returns the name for the screen that OBJ represents, or NULL.
+   Caller must free return value.
+*/
+
+static char *
+ns_get_name_from_ioreg (io_object_t obj)
+{
+  char *name = NULL;
+
+  NSDictionary *info = (NSDictionary *)
+    IODisplayCreateInfoDictionary (obj, kIODisplayOnlyPreferredName);
+  NSDictionary *names = [info objectForKey:
+                                [NSString stringWithUTF8String:
+                                            kDisplayProductName]];
+
+  if ([names count] > 0)
+    {
+      NSString *n = [names objectForKey: [[names allKeys]
+                                                 objectAtIndex:0]];
+      if (n != nil) name = xstrdup ([n UTF8String]);
+    }
+
+  [info release];
+
+  return name;
+}
+
+/* Returns the name for the screen that DID came from, or NULL.
    Caller must free return value.
 */
 
@@ -3318,20 +3355,50 @@ static char *
 ns_screen_name (CGDirectDisplayID did)
 {
   char *name = NULL;
-  NSDictionary *info = (NSDictionary *)
-    IODisplayCreateInfoDictionary (CGDisplayIOServicePort (did),
-                                   kIODisplayOnlyPreferredName);
-  NSDictionary *names
-    = [info objectForKey:
-              [NSString stringWithUTF8String:kDisplayProductName]];
 
-  if ([names count] > 0) {
-    NSString *n = [names objectForKey: [[names allKeys] objectAtIndex:0]];
-    if (n != nil)
-      name = xstrdup ([n UTF8String]);
-  }
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
+  mach_port_t masterPort;
+  io_iterator_t it;
+  io_object_t obj;
 
-  [info release];
+  // CGDisplayIOServicePort is deprecated.  Do it another (harder) way.
+
+  if (IOMasterPort (MACH_PORT_NULL, &masterPort) != kIOReturnSuccess
+      || IOServiceGetMatchingServices (masterPort,
+                                       IOServiceMatching ("IONDRVDevice"),
+                                       &it) != kIOReturnSuccess)
+    return name;
+
+  /* Must loop until we find a name.  Many devices can have the same unit
+     number (represents different GPU parts), but only one has a name.  */
+  while (! name && (obj = IOIteratorNext (it)))
+    {
+      CFMutableDictionaryRef props;
+      const void *val;
+
+      if (IORegistryEntryCreateCFProperties (obj,
+                                             &props,
+                                             kCFAllocatorDefault,
+                                             kNilOptions) == kIOReturnSuccess
+          && props != nil
+          && (val = CFDictionaryGetValue(props, @"IOFBDependentIndex")))
+        {
+          unsigned nr = [(NSNumber *)val unsignedIntegerValue];
+          if (nr == CGDisplayUnitNumber (did))
+            name = ns_get_name_from_ioreg (obj);
+        }
+
+      CFRelease (props);
+      IOObjectRelease (obj);
+    }
+
+  IOObjectRelease (it);
+
+#else
+
+  name = ns_get_name_from_ioreg (CGDisplayIOServicePort (did));
+
+#endif
   return name;
 }
 #endif

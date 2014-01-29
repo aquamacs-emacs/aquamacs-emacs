@@ -1,6 +1,6 @@
 ;;; pcvs.el --- a front-end to CVS  -*- lexical-binding:t -*-
 
-;; Copyright (C) 1991-2013 Free Software Foundation, Inc.
+;; Copyright (C) 1991-2014 Free Software Foundation, Inc.
 
 ;; Author: (The PCL-CVS Trust) pcl-cvs@cyclic.com
 ;;	(Per Cederqvist) ceder@lysator.liu.se
@@ -1924,6 +1924,8 @@ With prefix argument, prompt for cvs flags."
                              (lambda () (with-current-buffer buf
                                      (cvs-mode-remove-handled)))))))
 
+(autoload 'cvs-status-cvstrees "cvs-status")
+
 (defun-cvs-mode (cvs-mode-tree . SIMPLE) (flags)
   "Call cvstree using the file under the point as a keyfile."
   (interactive (list (cvs-flags-query 'cvs-status-flags "cvs status flags")))
@@ -1974,8 +1976,9 @@ This command ignores files that are not flagged as `Unknown'."
     (setf (cvs-fileinfo->type fi) 'DEAD))
   (cvs-cleanup-collection cvs-cookies nil nil nil))
 
-(declare-function vc-editable-p "vc" (file))
-(declare-function vc-checkout "vc" (file &optional writable rev))
+(define-obsolete-function-alias 'cvs-append-to-ignore 'vc-cvs-append-to-ignore
+  "24.4")
+
 
 (defun cvs-mode-find-file-other-window (e)
   "Select a buffer containing the file in another window."

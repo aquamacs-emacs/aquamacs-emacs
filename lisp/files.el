@@ -1,6 +1,6 @@
 ;;; files.el --- file input and output commands for Emacs  -*- lexical-binding:t -*-
 
-;; Copyright (C) 1985-1987, 1992-2013 Free Software Foundation, Inc.
+;; Copyright (C) 1985-1987, 1992-2014 Free Software Foundation, Inc.
 
 ;; Maintainer: FSF
 ;; Package: emacs
@@ -248,10 +248,12 @@ See also: `break-hardlink-on-save'."
   :group 'backup)
 
 (defcustom break-hardlink-on-save nil
-  "Non-nil means when saving a file that exists under several names
-\(i.e., has multiple hardlinks), break the hardlink associated with
-`buffer-file-name' and write to a new file, so that the other
-instances of the file are not affected by the save.
+  "Whether to allow breaking hardlinks when saving files.
+If non-nil, then when saving a file that exists under several
+names \(i.e., has multiple hardlinks), break the hardlink
+associated with `buffer-file-name' and write to a new file, so
+that the other instances of the file are not affected by the
+save.
 
 If `buffer-file-name' refers to a symlink, do not break the symlink.
 
@@ -915,6 +917,57 @@ which we're looking."
                                      (directory-file-name file))))
              (setq file nil))))
     (if root (file-name-as-directory root))))
+
+(defcustom user-emacs-directory-warning t
+  "Non-nil means warn if cannot access `user-emacs-directory'.
+Set this to nil at your own risk..."
+  :type 'boolean
+  :group 'initialization
+  :version "24.4")
+
+(defun locate-user-emacs-file (new-name &optional old-name)
+  "Return an absolute per-user Emacs-specific file name.
+If NEW-NAME exists in `user-emacs-directory', return it.
+Else if OLD-NAME is non-nil and ~/OLD-NAME exists, return ~/OLD-NAME.
+Else return NEW-NAME in `user-emacs-directory', creating the
+directory if it does not exist."
+  (convert-standard-filename
+   (let* ((home (concat "~" (or init-file-user "")))
+	  (at-home (and old-name (expand-file-name old-name home)))
+          (bestname (abbreviate-file-name
+                     (expand-file-name new-name user-emacs-directory))))
+     (if (and at-home (not (file-readable-p bestname))
+              (file-readable-p at-home))
+	 at-home
+       ;; Make sure `user-emacs-directory' exists,
+       ;; unless we're in batch mode or dumping Emacs.
+       (or noninteractive
+	   purify-flag
+	   (let (errtype)
+	     (if (file-directory-p user-emacs-directory)
+		 (or (file-accessible-directory-p user-emacs-directory)
+		     (setq errtype "access"))
+	       (let ((umask (default-file-modes)))
+		 (unwind-protect
+		     (progn
+		       (set-default-file-modes ?\700)
+		       (condition-case nil
+			   (make-directory user-emacs-directory)
+			 (error (setq errtype "create"))))
+		   (set-default-file-modes umask))))
+	     (when (and errtype
+			user-emacs-directory-warning
+			(not (get 'user-emacs-directory-warning 'this-session)))
+	       ;; Only warn once per Emacs session.
+	       (put 'user-emacs-directory-warning 'this-session t)
+	       (display-warning 'initialization
+				(format "\
+Unable to %s `user-emacs-directory' (%s).
+Any data that would normally be written there may be lost!
+If you never want to see this message again,
+customize the variable `user-emacs-directory-warning'."
+					errtype user-emacs-directory)))))
+       bestname))))
 
 
 (defun executable-find (command)
@@ -2063,6 +2116,7 @@ Don't call it from programs!  Use `insert-file-contents-literally' instead.
 \(Its calling sequence is different; see its documentation)."
   (interactive "*fInsert file literally: ")
   (insert-file-1 filename #'insert-file-contents-literally))
+(put 'insert-file-literally 'interactive-only 'insert-file-contents-literally)
 
 (defvar find-file-literally nil
   "Non-nil if this buffer was made by `find-file-literally' or equivalent.
@@ -4996,6 +5050,7 @@ Don't call it from programs!  Use `insert-file-contents' instead.
 \(Its calling sequence is different; see its documentation)."
   (interactive "*fInsert file: ")
   (insert-file-1 filename #'insert-file-contents))
+(put 'insert-file 'interactive-only 'insert-file-contents)
 
 (defun append-to-file (start end filename)
   "Append the contents of the region to the end of file FILENAME.
@@ -5555,7 +5610,7 @@ non-nil, it is called instead of rereading visited file contents."
 	     (insert-file-contents file-name nil)
 	     (set-buffer-file-coding-system coding-system))
 	   (after-find-file nil nil t))
-	  (t (user-error "Recover-file cancelled")))))
+	  (t (user-error "Recover-file canceled")))))
 
 (defun recover-session ()
   "Recover auto save files from a previous Emacs session.

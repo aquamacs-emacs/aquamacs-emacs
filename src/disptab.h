@@ -1,5 +1,5 @@
 /* Things for GLYPHS and glyph tables.
-   Copyright (C) 1993, 2001-2013 Free Software Foundation, Inc.
+   Copyright (C) 1993, 2001-2014 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -59,7 +59,7 @@ extern Lisp_Object Qdisplay_table;
 /* Return the current base (for indexing) of the GLYPH table,
    or 0 if the table isn't currently valid.  */
 #define GLYPH_TABLE_BASE  \
-  ((VECTORP (Vglyph_table)) ? XVECTOR (Vglyph_table)->u.contents : 0)
+  ((VECTORP (Vglyph_table)) ? XVECTOR (Vglyph_table)->contents : 0)
 
 /* Given BASE and LEN returned by the two previous macros,
    return nonzero if the GLYPH code G should be output as a single
@@ -80,7 +80,7 @@ extern Lisp_Object Qdisplay_table;
       SET_GLYPH_CHAR ((g), XINT ((base)[GLYPH_CHAR (g)]));	\
     if (!GLYPH_CHAR_VALID_P (g))				\
       SET_GLYPH_CHAR (g, ' ');					\
-  } while (0)
+  } while (false)
 
 /* Assuming that GLYPH_SIMPLE_P (BASE, LEN, G) is 0,
    return the length and the address of the character-sequence

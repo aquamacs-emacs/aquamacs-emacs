@@ -1,6 +1,6 @@
 /* Lisp object printing and output streams.
 
-Copyright (C) 1985-1986, 1988, 1993-1995, 1997-2013 Free Software
+Copyright (C) 1985-1986, 1988, 1993-1995, 1997-2014 Free Software
 Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -1119,7 +1119,7 @@ print (Lisp_Object obj, Lisp_Object printcharfun, bool escapeflag)
    string (its text properties will be traced), or a symbol that has
    no obarray (this is for the print-gensym feature).
    The status fields of Vprint_number_table mean whether each object appears
-   more than once in OBJ: Qnil at the first time, and Qt after that .  */
+   more than once in OBJ: Qnil at the first time, and Qt after that.  */
 static void
 print_preprocess (Lisp_Object obj)
 {
@@ -1705,8 +1705,7 @@ print_object (Lisp_Object obj, Lisp_Object printcharfun, bool escapeflag)
 	  unsigned char c;
 	  struct gcpro gcpro1;
 	  EMACS_INT size = bool_vector_size (obj);
-	  ptrdiff_t size_in_chars = ((size + BOOL_VECTOR_BITS_PER_CHAR - 1)
-				     / BOOL_VECTOR_BITS_PER_CHAR);
+	  ptrdiff_t size_in_chars = bool_vector_bytes (size);
 	  ptrdiff_t real_size_in_chars = size_in_chars;
 	  GCPRO1 (obj);
 
@@ -1726,7 +1725,7 @@ print_object (Lisp_Object obj, Lisp_Object printcharfun, bool escapeflag)
 	  for (i = 0; i < size_in_chars; i++)
 	    {
 	      QUIT;
-	      c = XBOOL_VECTOR (obj)->data[i];
+	      c = bool_vector_uchar_data (obj)[i];
 	      if (c == '\n' && print_escape_newlines)
 		{
 		  PRINTCHAR ('\\');
@@ -1767,8 +1766,9 @@ print_object (Lisp_Object obj, Lisp_Object printcharfun, bool escapeflag)
 	}
       else if (WINDOWP (obj))
 	{
-	  void *ptr = XWINDOW (obj);
-	  int len = sprintf (buf, "#<window %p", ptr);
+	  int len;
+	  strout ("#<window ", -1, -1, printcharfun);
+	  len = sprintf (buf, "%d", XWINDOW (obj)->sequence_number);
 	  strout (buf, len, len, printcharfun);
 	  if (BUFFERP (XWINDOW (obj)->contents))
 	    {

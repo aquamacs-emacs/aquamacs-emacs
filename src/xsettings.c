@@ -1,6 +1,6 @@
 /* Functions for handling font and other changes dynamically.
 
-Copyright (C) 2009-2013 Free Software Foundation, Inc.
+Copyright (C) 2009-2014 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -393,7 +393,7 @@ get_prop_window (struct x_display_info *dpyinfo)
 
 static int
 parse_settings (unsigned char *prop,
-                long unsigned int bytes,
+                unsigned long bytes,
                 struct xsettings *settings)
 {
   Lisp_Object byteorder = Fbyteorder ();

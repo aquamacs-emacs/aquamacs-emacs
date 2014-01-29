@@ -1,7 +1,7 @@
 ;;; emacsbug.el --- command to report Emacs bugs to appropriate mailing list
 
-;; Copyright (C) 1985, 1994, 1997-1998, 2000-2013
-;;   Free Software Foundation, Inc.
+;; Copyright (C) 1985, 1994, 1997-1998, 2000-2014 Free Software
+;; Foundation, Inc.
 
 ;; Author: K. Shane Hartman
 ;; Maintainer: FSF
@@ -214,19 +214,17 @@ and may appear in other public locations.\n\n"
       (insert (propertize "\n" 'display txt)))
 
     (insert "\n\nIn " (emacs-version) "\n")
-    (if (stringp emacs-bzr-version)
-	(insert "Bzr revision: " emacs-bzr-version "\n"))
-    (if (stringp emacs-git-version)
-	(insert "Git revision: " emacs-git-version "\n"))
+    (if (stringp emacs-repository-version)
+	(insert "Repository revision: " emacs-repository-version "\n"))
     (if (fboundp 'ns-os-version)
 	(insert (format "Operating System: OS X %s\n"
 			(ns-os-version)))
-      (if (fboundp 'x-server-vendor)
-	  (condition-case nil
-		;; This is used not only for X11 but also W32 and others.
-		(insert "Windowing system distributor `" (x-server-vendor)
-			"', version "
-			(mapconcat 'number-to-string (x-server-version) ".") "\n")
+    (if (fboundp 'x-server-vendor)
+	(condition-case nil
+            ;; This is used not only for X11 but also W32 and others.
+	    (insert "Windowing system distributor `" (x-server-vendor)
+                    "', version "
+		    (mapconcat 'number-to-string (x-server-version) ".") "\n")
 	    (error t))))
     (let ((lsb (with-temp-buffer
 		 (if (eq 0 (ignore-errors
@@ -249,8 +247,11 @@ and may appear in other public locations.\n\n"
        "LC_ALL" "LC_COLLATE" "LC_CTYPE" "LC_MESSAGES"
        "LC_MONETARY" "LC_NUMERIC" "LC_TIME" "LANG" "XMODIFIERS"))
     (insert (format "  locale-coding-system: %s\n" locale-coding-system))
-    (insert (format "  default enable-multibyte-characters: %s\n"
-		    (default-value 'enable-multibyte-characters)))
+    ;; Only ~ 0.2% of people from a sample of 3200 changed this from
+    ;; the default, t.
+    (or (default-value 'enable-multibyte-characters)
+	(insert (format "  default enable-multibyte-characters: %s\n"
+			(default-value 'enable-multibyte-characters))))
     (insert "\n")
     (insert (format "Major mode: %s\n"
 		    (format-mode-line
@@ -385,7 +386,7 @@ and send the mail again%s."
                             (format " using \\[%s]"
                                     report-emacs-bug-send-command)
                           "")))))
-      (error "M-x report-emacs-bug was cancelled, please read *Bug Help* buffer"))
+      (error "M-x report-emacs-bug was canceled, please read *Bug Help* buffer"))
     ;; Query the user for the SMTP method, so that we can skip
     ;; questions about From header validity if the user is going to
     ;; use mailclient, anyway.

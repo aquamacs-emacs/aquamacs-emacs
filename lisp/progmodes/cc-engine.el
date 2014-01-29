@@ -1,6 +1,6 @@
 ;;; cc-engine.el --- core syntax guessing engine for CC mode -*- coding: utf-8 -*-
 
-;; Copyright (C) 1985, 1987, 1992-2013 Free Software Foundation, Inc.
+;; Copyright (C) 1985, 1987, 1992-2014 Free Software Foundation, Inc.
 
 ;; Authors:    2001- Alan Mackenzie
 ;;             1998- Martin Stjernholm
@@ -1261,12 +1261,15 @@ comment at the start of cc-engine.el for more info."
 	      ;; looking for more : and ?.
 	      (setq c-maybe-labelp nil
 		    skip-chars (substring c-stmt-delim-chars 0 -2)))
-	     ;; At a CPP construct?
-	     ((and c-opt-cpp-symbol (looking-at c-opt-cpp-symbol)
-		   (save-excursion
-		     (forward-line 0)
-		     (looking-at c-opt-cpp-prefix)))
-	      (c-end-of-macro))
+	     ;; At a CPP construct or a "#" or "##" operator?
+	     ((and c-opt-cpp-symbol (looking-at c-opt-cpp-symbol))
+	      (if (save-excursion
+		    (skip-chars-backward " \t")
+		    (and (bolp)
+			 (or (bobp)
+			     (not (eq (char-before (1- (point))) ?\\)))))
+		  (c-end-of-macro)
+		(skip-chars-forward c-opt-cpp-symbol)))
 	     ((memq (char-after) non-skip-list)
 	      (throw 'done (point)))))
 	  ;; In trailing space after an as yet undetected virtual semicolon?
@@ -3180,7 +3183,8 @@ comment at the start of cc-engine.el for more info."
     ;; Truncate `c-state-cache' and set `c-state-cache-good-pos' to a value
     ;; below `here'.  To maintain its consistency, we may need to insert a new
     ;; brace pair.
-    (let ((here-bol (c-point 'bol here))
+    (let (open-paren-in-column-0-is-defun-start
+	  (here-bol (c-point 'bol here))
 	  too-high-pa		  ; recorded {/(/[ next above here, or nil.
 	  dropped-cons		  ; was the last removed element a brace pair?
 	  pa)
@@ -3251,6 +3255,7 @@ comment at the start of cc-engine.el for more info."
   ;; This function might do hidden buffer changes.
   (let* ((here (point))
 	 (here-bopl (c-point 'bopl))
+	 open-paren-in-column-0-is-defun-start
 	 strategy	     ; 'forward, 'backward etc..
 	 ;; Candidate positions to start scanning from:
 	 cache-pos	     ; highest position below HERE already existing in
@@ -3694,7 +3699,7 @@ comment at the start of cc-engine.el for more info."
 	  (while (let ((pos (or (and (looking-at c-nonsymbol-token-regexp)
 				     (match-end 0))
 				;; `c-nonsymbol-token-regexp' should always match
-				;; since we've skipped backward over punctuator
+				;; since we've skipped backward over punctuation
 				;; or paren syntax, but consume one char in case
 				;; it doesn't so that we don't leave point before
 				;; some earlier incorrect token.
@@ -3718,7 +3723,7 @@ comment at the start of cc-engine.el for more info."
 		    (if (looking-at c-nonsymbol-token-regexp)
 			(goto-char (match-end 0))
 		      ;; `c-nonsymbol-token-regexp' should always match since
-		      ;; we've skipped backward over punctuator or paren
+		      ;; we've skipped backward over punctuation or paren
 		      ;; syntax, but move forward in case it doesn't so that
 		      ;; we don't leave point earlier than we started with.
 		      (forward-char))
@@ -9367,7 +9372,8 @@ comment at the start of cc-engine.el for more info."
     (c-save-buffer-state
 	((indent-point (point))
 	 (case-fold-search nil)
-	 ;; A whole ugly bunch of various temporary variables.  Have
+	 open-paren-in-column-0-is-defun-start
+	 ;; A whole ugly bunch of various temporary variables.	Have
 	 ;; to declare them here since it's not possible to declare
 	 ;; a variable with only the scope of a cond test and the
 	 ;; following result clauses, and most of this function is a

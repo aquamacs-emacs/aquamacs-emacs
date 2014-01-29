@@ -1,6 +1,6 @@
 ;;; register.el --- register commands for Emacs      -*- lexical-binding: t; -*-
 
-;; Copyright (C) 1985, 1993-1994, 2001-2013 Free Software Foundation,
+;; Copyright (C) 1985, 1993-1994, 2001-2014 Free Software Foundation,
 ;; Inc.
 
 ;; Maintainer: FSF
@@ -91,6 +91,7 @@ text."
 
 (defcustom register-preview-delay 1
   "If non-nil delay in seconds to pop up the preview window."
+  :version "24.4"
   :type '(choice number (const :tag "Indefinitely" nil))
   :group 'register)
 
@@ -122,22 +123,21 @@ See the documentation of the variable `register-alist' for possible VALUEs."
   "Pop up a window to show register preview in BUFFER.
 If SHOW-EMPTY is non-nil show the window even if no registers."
   (when (or show-empty (consp register-alist))
-    (let ((split-height-threshold 0))
-      (with-temp-buffer-window
-       buffer
-       (cons 'display-buffer-below-selected
-	     '((window-height . fit-window-to-buffer)))
-       nil
-       (with-current-buffer standard-output
-	 (setq cursor-in-non-selected-windows nil)
-	 (mapc
-	  (lambda (r)
-	    (insert (or (run-hook-with-args-until-success
-			 'register-preview-functions r)
-			(format "%s %s\n"
-				(concat (single-key-description (car r)) ":")
-				(register-describe-oneline (car r))))))
-	  register-alist))))))
+    (with-temp-buffer-window
+     buffer
+     (cons 'display-buffer-below-selected
+	   '((window-height . fit-window-to-buffer)))
+     nil
+     (with-current-buffer standard-output
+       (setq cursor-in-non-selected-windows nil)
+       (mapc
+	(lambda (r)
+	  (insert (or (run-hook-with-args-until-success
+		       'register-preview-functions r)
+		      (format "%s %s\n"
+			      (concat (single-key-description (car r)) ":")
+			      (register-describe-oneline (car r))))))
+	register-alist)))))
 
 (defun register-read-with-preview (prompt)
   "Read an event with register preview using PROMPT.
@@ -364,6 +364,7 @@ The Lisp value REGISTER is a character."
 	(princ (car val))))
 
      ((stringp val)
+      (setq val (copy-sequence val))
       (if (eq yank-excluded-properties t)
 	  (set-text-properties 0 (length val) nil val)
 	(remove-list-of-text-properties 0 (length val)
@@ -417,19 +418,24 @@ Interactively, second arg is non-nil if prefix arg is supplied."
       (error "Register does not contain text"))))
   (if (not arg) (exchange-point-and-mark)))
 
-(defun copy-to-register (register start end &optional delete-flag)
+(defun copy-to-register (register start end &optional delete-flag region)
   "Copy region into register REGISTER.
 With prefix arg, delete as well.
 Called from program, takes four args: REGISTER, START, END and DELETE-FLAG.
-START and END are buffer positions indicating what to copy."
+START and END are buffer positions indicating what to copy.
+The optional argument REGION if non-nil, indicates that we're not just copying
+some text between START and END, but we're copying the region."
   (interactive (list (register-read-with-preview "Copy to register: ")
 		     (region-beginning)
 		     (region-end)
-		     current-prefix-arg))
-  (set-register register (filter-buffer-substring start end))
+		     current-prefix-arg
+		     t))
+  (set-register register (if region
+			     (funcall region-extract-function delete-flag)
+			   (prog1 (filter-buffer-substring start end)
+			     (if delete-flag (delete-region start end)))))
   (setq deactivate-mark t)
-  (cond (delete-flag
-	 (delete-region start end))
+  (cond (delete-flag)
 	((called-interactively-p 'interactive)
 	 (indicate-copied-region))))
 

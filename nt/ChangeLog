@@ -1,4 +1,73 @@
+2014-01-18  Eli Zaretskii  <eliz@gnu.org>
+
+	* runemacs.c (ensure_unicows_dll): Don't tell in the message box
+	that "emacs -nw" can do without UNICOWS.DLL on Windows 9X.  See
+	w32.c:maybe_load_unicows_dll and its callers for the reason.
+
+2014-01-11  Claudio Bley  <claudio.bley@googlemail.com>
+
+	* inc/sys/stat.h (_WSTAT_DEFINED): Define, to avoid compilation
+	failures when wchar.h is included.
+
+2014-01-11  Fabrice Popineau  <fabrice.popineau@supelec.fr>
+
+	* inc/ms-w32.h (pthread_sigmask): Undefine if defined, for MinGW64.
+
+2013-12-31  Fabrice Popineau  <fabrice.popineau@supelec.fr>
+
+	* inc/ms-w32.h (sys_kill): Fix prototype.
+
+2013-12-30  Eli Zaretskii  <eliz@gnu.org>
+
+	* inc/ms-w32.h (umask) [emacs]: Redirect to sys_umask.  (Bug#16299)
+
+2013-12-23  Eli Zaretskii  <eliz@gnu.org>
+
+	* README.W32:
+	* INSTALL: Update instructions for downloading and using image
+	libraries in general, and librsvg in particular.
+
+2013-12-16  Eli Zaretskii  <eliz@gnu.org>
+
+	* emacs-x64.manifest:
+	* emacs-x86.manifest: Declare that we target Windows 8.1 as well
+	as earlier versions.  This is so GetVersion and GetVersionEx APIs
+	used for bug reporting and other purposes return accurate version
+	number on Windows 8.1.  See the discussion on MSDN
+	http://msdn.microsoft.com/en-us/library/windows/desktop/dn302074.aspx
+	for more details.
+
+2013-12-12  Eli Zaretskii  <eliz@gnu.org>
+
+	* inc/ms-w32.h (MAX_UTF8_PATH): New macro.
+	(opendir, closedir, readdir, seekdir): Redirect to replacement
+	functions.
+	* inc/dirent.h: Make d_name[] be MAXNAMELEN*4 characters long.
+
+2013-11-27  Glenn Morris  <rgm@gnu.org>
+
+	* README.W32:
+	* addpm.c (env_vars):
+	* epaths.nt (PATH_LOADSEARCH, PATH_DUMPLOADSEARCH):
+	* paths.h (PATH_LOADSEARCH): No more leim directory.
+
+2013-11-26  Glenn Morris  <rgm@gnu.org>
+
+	* epaths.nt (PATH_DUMPLOADSEARCH): Add leim/.
+
+2013-11-12  Dani Moncayo  <dmoncayo@gmail.com>
+
+	* msysconfig.sh: Remove.
+	* INSTALL: Update for this.
+
+2013-11-09  Glenn Morris  <rgm@gnu.org>
+
+	* mingw-cfg.site: No need for this to be executable.
+
 2013-10-24  Glenn Morris  <rgm@gnu.org>
+
+	* Makefile.in ($(DESTDIR)${archlibdir}):
+	Avoid non-portable "`\" nesting.
 
 	* Makefile.in (abs_top_srcdir): New, set by configure.
 
@@ -3040,7 +3109,7 @@
 
 1997-06-19  Geoff Voelker  <voelker@cs.washington.edu>
 
-	* makefile.def, emacs.bat: Use windows95 and windowsnt instead
+	* makefile.def, emacs.bat.in: Use windows95 and windowsnt instead
 	of win95 and winnt, respectively.
 
 1997-01-04  Geoff Voelker  <voelker@cs.washington.edu>
@@ -3222,10 +3291,10 @@
 
 1995-05-09  Geoff Voelker  <voelker@cs.washington.edu>
 
-	* _emacs, config.h, ebuild.bat, emacs.bat, emacs.rc,
-	fast-install.bat, install.bat, makefile.def, makefile.nt, paths.h,
-	inc/pwd.h, inc/sys/dir.h, inc/sys/file.h, inc/sys/ioctl.h,
-	inc/sys/param.h: Removed carriage-returns.
+	* _emacs, config.h, ebuild.bat, emacs.bat, emacs.rc:
+	* fast-install.bat, install.bat, makefile.def, makefile.nt, paths.h:
+	* inc/pwd.h, inc/sys/dir.h, inc/sys/file.h, inc/sys/ioctl.h:
+	* inc/sys/param.h: Removed carriage-returns.
 
 1995-05-06  Geoff Voelker  <voelker@cs.washington.edu>
 
@@ -3235,9 +3304,7 @@
 
 1995-04-10  Geoff Voelker  <voelker@cs.washington.edu>
 
-	* src: Remove directory.
-
-	* src\config.h, src\paths.h: Moved to parent dir, src removed.
+	* src/config.h, src/paths.h: Moved to parent dir, src/ removed.
 
 1995-04-09  Geoff Voelker  <voelker@cs.washington.edu>
 
@@ -3293,7 +3360,7 @@
 ;; add-log-time-zone-rule: t
 ;; End:
 
-  Copyright (C) 1995-1999, 2001-2013 Free Software Foundation, Inc.
+  Copyright (C) 1995-1999, 2001-2014 Free Software Foundation, Inc.
 
   This file is part of GNU Emacs.
 

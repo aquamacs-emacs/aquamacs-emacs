@@ -1,5 +1,5 @@
 /* Code for doing intervals.
-   Copyright (C) 1993-1995, 1997-1998, 2001-2013 Free Software
+   Copyright (C) 1993-1995, 1997-1998, 2001-2014 Free Software
    Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -60,16 +60,7 @@ static INTERVAL reproduce_tree (INTERVAL, INTERVAL);
 
 /* Utility functions for intervals.  */
 
-/* Use these functions to set Lisp_Object
-   or pointer slots of struct interval.  */
-
-static void
-set_interval_object (INTERVAL i, Lisp_Object obj)
-{
-  eassert (BUFFERP (obj) || STRINGP (obj));
-  i->up_obj = 1;
-  i->up.obj = obj;
-}
+/* Use these functions to set pointer slots of struct interval.  */
 
 static void
 set_interval_left (INTERVAL i, INTERVAL left)
@@ -676,6 +667,7 @@ find_interval (register INTERVAL tree, register ptrdiff_t position)
 
   while (1)
     {
+      eassert (tree);
       if (relative_position < LEFT_TOTAL_LENGTH (tree))
 	{
 	  tree = tree->left;
@@ -2232,7 +2224,7 @@ get_local_map (ptrdiff_t position, struct buffer *buffer, Lisp_Object type)
      editing a field with a `local-map' property, we want insertion at the end
      to obey the `local-map' property.  */
   if (NILP (prop))
-    prop = get_pos_property (lispy_position, type, lispy_buffer);
+    prop = Fget_pos_property (lispy_position, type, lispy_buffer);
 
   SET_BUF_BEGV_BOTH (buffer, old_begv, old_begv_byte);
   SET_BUF_ZV_BOTH (buffer, old_zv, old_zv_byte);

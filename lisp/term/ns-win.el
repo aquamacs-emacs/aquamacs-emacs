@@ -1,6 +1,6 @@
 ;;; ns-win.el --- lisp side of interface with NeXT/Open/GNUstep/MacOS X window system  -*- lexical-binding: t -*-
 
-;; Copyright (C) 1993-1994, 2005-2013 Free Software Foundation, Inc.
+;; Copyright (C) 1993-1994, 2005-2014 Free Software Foundation, Inc.
 
 ;; Authors: Carl Edman
 ;;	Christian Limpach
@@ -51,6 +51,7 @@
 (require 'faces)
 (require 'menu-bar)
 (require 'fontset)
+(require 'dnd)
 
 (defgroup ns nil
   "GNUstep/Mac OS X specific features."
@@ -626,6 +627,50 @@ unless the current buffer is a scratch buffer."
       (ns-hide-emacs 'activate)
       (find-file f)))))
 
+
+(defun ns-drag-n-drop (event &optional new-frame force-text)
+  "Edit the files listed in the drag-n-drop EVENT.
+Switch to a buffer editing the last file dropped."
+  (interactive "e")
+  (let* ((window (posn-window (event-start event)))
+         (arg (car (cdr (cdr event))))
+         (type (car arg))
+         (data (car (cdr arg)))
+         (url-or-string (cond ((eq type 'file)
+                               (concat "file:" data))
+                              (t data))))
+    (set-frame-selected-window nil window)
+    (when new-frame
+      (select-frame (make-frame)))
+    (raise-frame)
+    (setq window (selected-window))
+    (if force-text
+        (dnd-insert-text window 'private data)
+      (dnd-handle-one-url window 'private url-or-string))))
+
+
+(defun ns-drag-n-drop-other-frame (event)
+  "Edit the files listed in the drag-n-drop EVENT, in other frames.
+May create new frames, or reuse existing ones.  The frame editing
+the last file dropped is selected."
+  (interactive "e")
+  (ns-drag-n-drop event t))
+
+(defun ns-drag-n-drop-as-text (event)
+  "Drop the data in EVENT as text."
+  (interactive "e")
+  (ns-drag-n-drop event nil t))
+
+(defun ns-drag-n-drop-as-text-other-frame (event)
+  "Drop the data in EVENT as text in a new frame."
+  (interactive "e")
+  (ns-drag-n-drop event t t))
+
+(global-set-key [drag-n-drop] 'ns-drag-n-drop)
+(global-set-key [C-drag-n-drop] 'ns-drag-n-drop-other-frame)
+(global-set-key [M-drag-n-drop] 'ns-drag-n-drop-as-text)
+(global-set-key [C-M-drag-n-drop] 'ns-drag-n-drop-as-text-other-frame)
+
 ;;;; Frame-related functions.
 
 ;; nsterm.m
@@ -712,7 +757,7 @@ unless the current buffer is a scratch buffer."
                                   `(mouse-1 POSITION 1))))
         (if (y-or-n-p (format "Print buffer %s? " (buffer-name)))
             (print-buffer)
-	  (error "Cancelled")))
+	  (error "Canceled")))
     (print-buffer)))
 
 ;;;; Font support.
@@ -1037,7 +1082,7 @@ EVENT is a mouse event, and ATTRIBUTE is either
 
   (x-open-connection (system-name) nil t)
 
-  ;; Add GNUStep menu items Services, Hide and Quit.  Rename Help to Info
+  ;; Add GNUstep menu items Services, Hide and Quit.  Rename Help to Info
   ;; and put it first (i.e. omit from menu-bar-final-items.
   (if (featurep 'gnustep)
       (progn

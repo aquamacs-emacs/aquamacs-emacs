@@ -1,6 +1,7 @@
 /* Evaluator for GNU Emacs Lisp interpreter.
 
-Copyright (C) 1985-1987, 1993-1995, 1999-2013 Free Software Foundation, Inc.
+Copyright (C) 1985-1987, 1993-1995, 1999-2014 Free Software Foundation,
+Inc.
 
 This file is part of GNU Emacs.
 
@@ -237,11 +238,22 @@ init_eval_once (void)
   Vrun_hooks = Qnil;
 }
 
+static struct handler handlerlist_sentinel;
+
 void
 init_eval (void)
 {
   specpdl_ptr = specpdl;
-  handlerlist = NULL;
+  { /* Put a dummy catcher at top-level so that handlerlist is never NULL.
+       This is important since handlerlist->nextfree holds the freelist
+       which would otherwise leak every time we unwind back to top-level.   */
+    struct handler *c;
+    handlerlist = handlerlist_sentinel.nextfree = &handlerlist_sentinel;
+    PUSH_HANDLER (c, Qunbound, CATCHER);
+    eassert (c == &handlerlist_sentinel);
+    handlerlist_sentinel.nextfree = NULL;
+    handlerlist_sentinel.next = NULL;
+  }
   Vquit_flag = Qnil;
   debug_on_next_call = 0;
   lisp_eval_depth = 0;
@@ -1129,6 +1141,8 @@ unwind_to_catch (struct handler *catch, Lisp_Object value)
 {
   bool last_time;
 
+  eassert (catch->next);
+
   /* Save the value in the tag.  */
   catch->val = value;
 
@@ -1519,8 +1533,8 @@ See also the function `condition-case'.  */)
 	  || NILP (clause)
 	  /* A `debug' symbol in the handler list disables the normal
 	     suppression of the debugger.  */
-	  || (CONSP (clause) && CONSP (XCAR (clause))
-	      && !NILP (Fmemq (Qdebug, XCAR (clause))))
+	  || (CONSP (clause) && CONSP (clause)
+	      && !NILP (Fmemq (Qdebug, clause)))
 	  /* Special handler that means "print a message and run debugger
 	     if requested".  */
 	  || EQ (h->tag_or_ch, Qerror)))
@@ -1542,7 +1556,10 @@ See also the function `condition-case'.  */)
     }
   else
     {
-      if (handlerlist != 0)
+      if (handlerlist != &handlerlist_sentinel)
+	/* FIXME: This will come right back here if there's no `top-level'
+	   catcher.  A better solution would be to abort here, and instead
+	   add a catch-all condition handler so we never come here.  */
 	Fthrow (Qtop_level, Qt);
     }
 
@@ -2479,7 +2496,7 @@ run_hook_with_args (ptrdiff_t nargs, Lisp_Object *args,
 
   if (EQ (val, Qunbound) || NILP (val))
     return ret;
-  else if (!CONSP (val) || EQ (XCAR (val), Qlambda))
+  else if (!CONSP (val) || FUNCTIONP (val))
     {
       args[0] = val;
       return funcall (nargs, args);
@@ -3560,6 +3577,73 @@ NFRAMES and BASE specify the activation frame to use, as in `backtrace-frame'.  
      from the debugger.  */
   return unbind_to (count, eval_sub (exp));
 }
+
+DEFUN ("backtrace--locals", Fbacktrace__locals, Sbacktrace__locals, 1, 2, NULL,
+       doc: /* Return names and values of local variables of a stack frame.
+NFRAMES and BASE specify the activation frame to use, as in `backtrace-frame'.  */)
+  (Lisp_Object nframes, Lisp_Object base)
+{
+  union specbinding *frame = get_backtrace_frame (nframes, base);
+  union specbinding *prevframe
+    = get_backtrace_frame (make_number (XFASTINT (nframes) - 1), base);
+  ptrdiff_t distance = specpdl_ptr - frame;
+  Lisp_Object result = Qnil;
+  eassert (distance >= 0);
+
+  if (!backtrace_p (prevframe))
+    error ("Activation frame not found!");
+  if (!backtrace_p (frame))
+    error ("Activation frame not found!");
+
+  /* The specpdl entries normally contain the symbol being bound along with its
+     `old_value', so it can be restored.  The new value to which it is bound is
+     available in one of two places: either in the current value of the
+     variable (if it hasn't been rebound yet) or in the `old_value' slot of the
+     next specpdl entry for it.
+     `backtrace_eval_unrewind' happens to swap the role of `old_value'
+     and "new value", so we abuse it here, to fetch the new value.
+     It's ugly (we'd rather not modify global data) and a bit inefficient,
+     but it does the job for now.  */
+  backtrace_eval_unrewind (distance);
+
+  /* Grab values.  */
+  {
+    union specbinding *tmp = prevframe;
+    for (; tmp > frame; tmp--)
+      {
+	switch (tmp->kind)
+	  {
+	  case SPECPDL_LET:
+	  case SPECPDL_LET_DEFAULT:
+	  case SPECPDL_LET_LOCAL:
+	    {
+	      Lisp_Object sym = specpdl_symbol (tmp);
+	      Lisp_Object val = specpdl_old_value (tmp);
+	      if (EQ (sym, Qinternal_interpreter_environment))
+		{
+		  Lisp_Object env = val;
+		  for (; CONSP (env); env = XCDR (env))
+		    {
+		      Lisp_Object binding = XCAR (env);
+		      if (CONSP (binding))
+			result = Fcons (Fcons (XCAR (binding),
+					       XCDR (binding)),
+					result);
+		    }
+		}
+	      else
+		result = Fcons (Fcons (sym, val), result);
+	    }
+	  }
+      }
+  }
+
+  /* Restore values from specpdl to original place.  */
+  backtrace_eval_unrewind (-distance);
+
+  return result;
+}
+
 
 void
 mark_specpdl (void)
@@ -3808,6 +3892,7 @@ alist of active lexical bindings.  */);
   defsubr (&Sbacktrace);
   defsubr (&Sbacktrace_frame);
   defsubr (&Sbacktrace_eval);
+  defsubr (&Sbacktrace__locals);
   defsubr (&Sspecial_variable_p);
   defsubr (&Sfunctionp);
 }

@@ -1,5 +1,5 @@
 /* Composite sequence support.
-   Copyright (C) 2001-2013 Free Software Foundation, Inc.
+   Copyright (C) 2001-2014 Free Software Foundation, Inc.
    Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011
      National Institute of Advanced Industrial Science and Technology (AIST)
      Registration Number H14PRO021
@@ -266,7 +266,7 @@ get_composition_id (ptrdiff_t charpos, ptrdiff_t bytepos, ptrdiff_t nchars,
     composition_table = xpalloc (composition_table, &composition_table_size,
 				 1, -1, sizeof *composition_table);
 
-  key_contents = XVECTOR (key)->u.contents;
+  key_contents = XVECTOR (key)->contents;
 
   /* Check if the contents of COMPONENTS are valid if COMPONENTS is a
      vector or a list.  It should be a sequence of:
@@ -1191,7 +1191,7 @@ composition_compute_stop_pos (struct composition_it *cmp_it, ptrdiff_t charpos, 
 
 /* Check if the character at CHARPOS (and BYTEPOS) is composed
    (possibly with the following characters) on window W.  ENDPOS limits
-   characters to be composed.  FACE, in non-NULL, is a base face of
+   characters to be composed.  FACE, if non-NULL, is a base face of
    the character.  If STRING is not nil, it is a string containing the
    character to check, and CHARPOS and BYTEPOS are indices in the
    string.  In that case, FACE must not be NULL.
@@ -1412,7 +1412,7 @@ composition_update_it (struct composition_it *cmp_it, ptrdiff_t charpos, ptrdiff
       cmp_it->width = 0;
       for (i = cmp_it->nchars - 1; i >= 0; i--)
 	{
-	  c = XINT (LGSTRING_CHAR (gstring, cmp_it->from + i));
+	  c = XINT (LGSTRING_CHAR (gstring, from + i));
 	  cmp_it->nbytes += CHAR_BYTES (c);
 	  cmp_it->width += CHAR_WIDTH (c);
 	}

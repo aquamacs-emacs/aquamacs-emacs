@@ -1,6 +1,6 @@
 ;;; tramp.el --- Transparent Remote Access, Multiple Protocol
 
-;; Copyright (C) 1998-2013 Free Software Foundation, Inc.
+;; Copyright (C) 1998-2014 Free Software Foundation, Inc.
 
 ;; Author: Kai Großjohann <kai.grossjohann@gmx.net>
 ;;         Michael Albinus <michael.albinus@gmx.de>
@@ -566,11 +566,15 @@ This regexp must match both `tramp-initial-end-of-output' and
   :type 'regexp)
 
 (defcustom tramp-password-prompt-regexp
-  "^.*\\([pP]assword\\|[pP]assphrase\\).*:\^@? *"
+  (format "^.*\\(%s\\).*:\^@? *"
+	  (if (boundp 'password-word-equivalents)
+	      (regexp-opt (symbol-value 'password-word-equivalents))
+	    "password\\|passphrase"))
   "Regexp matching password-like prompts.
 The regexp should match at end of buffer.
 
 The `sudo' program appears to insert a `^@' character into the prompt."
+  :version "24.4"
   :group 'tramp
   :type 'regexp)
 
@@ -848,7 +852,7 @@ Derived from `tramp-postfix-host-format'.")
    "\\(?:" "\\("   tramp-method-regexp "\\)" tramp-postfix-method-regexp "\\)?"
    "\\(?:" "\\("   tramp-user-regexp   "\\)" tramp-postfix-user-regexp   "\\)?"
    "\\("   "\\(?:" tramp-host-regexp   "\\|"
-	           tramp-prefix-ipv6-regexp  tramp-ipv6-regexp
+	           tramp-prefix-ipv6-regexp  "\\(?:" tramp-ipv6-regexp "\\)?"
 		 			     tramp-postfix-ipv6-regexp "\\)"
 	   "\\(?:" tramp-prefix-port-regexp  tramp-port-regexp "\\)?" "\\)?")
 "Regular expression matching a Tramp file name between prefix and postfix.")
@@ -884,8 +888,8 @@ See also `tramp-file-name-regexp'.")
 ;;;###autoload
 (defconst tramp-file-name-regexp-unified
   (if (memq system-type '(cygwin windows-nt))
-      "\\`/\\([^[/|:]\\{2,\\}\\|[^/|]\\{2,\\}]\\):"
-    "\\`/\\([^[/|:]+\\|[^/|]+]\\):")
+      "\\`/\\(\\[.*\\]\\|[^/|:]\\{2,\\}[^/|]*\\):"
+    "\\`/[^/|:][^/|]*:")
   "Value for `tramp-file-name-regexp' for unified remoting.
 Emacs (not XEmacs) uses a unified filename syntax for Ange-FTP and
 Tramp.  See `tramp-file-name-structure' for more explanations.
@@ -2020,8 +2024,8 @@ ARGS are the arguments OPERATION has been called with."
 		  'vm-imap-move-mail 'vm-pop-move-mail 'vm-spool-move-mail))
     (save-match-data
       (cond
-       ((string-match tramp-file-name-regexp (nth 0 args)) (nth 0 args))
-       ((string-match tramp-file-name-regexp (nth 1 args)) (nth 1 args))
+       ((tramp-tramp-file-p (nth 0 args)) (nth 0 args))
+       ((tramp-tramp-file-p (nth 1 args)) (nth 1 args))
        (t (buffer-file-name (current-buffer))))))
    ;; START END FILE.
    ((eq operation 'write-region)
@@ -3141,9 +3145,8 @@ User is always nil."
       (let ((tramp-message-show-message (not nomessage)))
 	(with-tramp-progress-reporter v 0 (format "Loading %s" file)
 	  (let ((local-copy (file-local-copy file)))
-	    ;; MUST-SUFFIX doesn't exist on XEmacs, so let it default to nil.
 	    (unwind-protect
-		(load local-copy noerror t t)
+		(tramp-compat-load local-copy noerror t nosuffix must-suffix)
 	      (delete-file local-copy)))))
       t)))
 
@@ -3249,7 +3252,9 @@ User is always nil."
       ;; "/m:h:~" does not work for completion.  We use "/m:h:~/".
       (when (string-match "~$" filename)
 	(setq filename (concat filename "/"))))
-    (tramp-run-real-handler 'substitute-in-file-name (list filename))))
+    ;; We do not want to replace environment variables, again.
+    (let (process-environment)
+      (tramp-run-real-handler 'substitute-in-file-name (list filename)))))
 
 (defun tramp-handle-unhandled-file-name-directory (_filename)
   "Like `unhandled-file-name-directory' for Tramp files."
@@ -3351,7 +3356,8 @@ of."
 (defun tramp-action-password (proc vec)
   "Query the user for a password."
   (with-current-buffer (process-buffer proc)
-    (let ((enable-recursive-minibuffers t))
+    (let ((enable-recursive-minibuffers t)
+	  (case-fold-search t))
       (tramp-check-for-regexp proc tramp-password-prompt-regexp)
       (tramp-message vec 3 "Sending %s" (match-string 1))
       ;; We don't call `tramp-send-string' in order to hide the
@@ -3437,7 +3443,8 @@ The terminal type can be configured with `tramp-terminal-type'."
 
 (defun tramp-process-one-action (proc vec actions)
   "Wait for output from the shell and perform one action."
-  (let (found todo item pattern action)
+  (let ((case-fold-search t)
+	found todo item pattern action)
     (while (not found)
       ;; Reread output once all actions have been performed.
       ;; Obviously, the output was not complete.
@@ -4038,7 +4045,8 @@ Furthermore, traces are written with verbosity of 6."
   "Read a password from user (compat function).
 Consults the auth-source package.
 Invokes `password-read' if available, `read-passwd' else."
-  (let* ((key (tramp-make-tramp-file-name
+  (let* ((case-fold-search t)
+	 (key (tramp-make-tramp-file-name
 	       tramp-current-method tramp-current-user
 	       tramp-current-host ""))
 	 (pw-prompt
@@ -4258,11 +4266,6 @@ Only works for Bourne-like shells."
 ;;   tramp-server-local-variable-alist) to define any such variables
 ;;   that they need to, which would then be let bound as appropriate
 ;;   in tramp functions.  (Jason Rumney)
-;; * IMHO, it's a drawback that currently Tramp doesn't support
-;;   Unicode in Dired file names by default.  Is it possible to
-;;   improve Tramp to set LC_ALL to "C" only for commands where Tramp
-;;   expects English?  Or just to set LC_MESSAGES to "C" if Tramp
-;;   expects only English messages?  (Juri Linkov)
 ;; * Make shadowfile.el grok Tramp filenames.  (Bug#4526, Bug#4846)
 ;; * I was wondering if it would be possible to use tramp even if I'm
 ;;   actually using sshfs.  But when I launch a command I would like

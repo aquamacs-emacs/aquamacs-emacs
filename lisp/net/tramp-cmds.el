@@ -1,6 +1,6 @@
 ;;; tramp-cmds.el --- Interactive commands for Tramp
 
-;; Copyright (C) 2007-2013 Free Software Foundation, Inc.
+;; Copyright (C) 2007-2014 Free Software Foundation, Inc.
 
 ;; Author: Michael Albinus <michael.albinus@gmx.de>
 ;; Keywords: comm, processes
@@ -87,6 +87,11 @@ When called interactively, a Tramp connection has to be selected."
 
     ;; Flush password cache.
     (unless keep-password (tramp-clear-passwd vec))
+
+    ;; Cleanup `tramp-current-connection'.  Otherwise, we would be
+    ;; suppressed in the test suite.  We use `keep-password' as
+    ;; indicator; it is not worth to add a new argument.
+    (when keep-password (setq tramp-current-connection nil))
 
     ;; Flush file cache.
     (tramp-flush-directory-property vec "")

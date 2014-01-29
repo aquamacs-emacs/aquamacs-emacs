@@ -1,5 +1,5 @@
 /* Terminal control module for terminals described by TERMCAP
-   Copyright (C) 1985-1987, 1993-1995, 1998, 2000-2013 Free Software
+   Copyright (C) 1985-1987, 1993-1995, 1998, 2000-2014 Free Software
    Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -1422,18 +1422,6 @@ term_get_fkeys_1 (void)
       CONDITIONAL_REASSIGN ("kD", "kI", "insert");
       /* if there's no key_end keycap, map key_ll to 'end' keysym */
       CONDITIONAL_REASSIGN ("@7", "kH", "end");
-
-      /* IBM has their own non-standard dialect of terminfo.
-	 If the standard name isn't found, try the IBM name.  */
-      CONDITIONAL_REASSIGN ("kB", "KO", "backtab");
-      CONDITIONAL_REASSIGN ("@4", "kJ", "execute"); /* actually "action" */
-      CONDITIONAL_REASSIGN ("@4", "kc", "execute"); /* actually "command" */
-      CONDITIONAL_REASSIGN ("%7", "ki", "menu");
-      CONDITIONAL_REASSIGN ("@7", "kw", "end");
-      CONDITIONAL_REASSIGN ("F1", "k<", "f11");
-      CONDITIONAL_REASSIGN ("F2", "k>", "f12");
-      CONDITIONAL_REASSIGN ("%1", "kq", "help");
-      CONDITIONAL_REASSIGN ("*6", "kU", "select");
 #undef CONDITIONAL_REASSIGN
   }
 
@@ -1892,55 +1880,18 @@ static void
 turn_on_face (struct frame *f, int face_id)
 {
   struct face *face = FACE_FROM_ID (f, face_id);
-  long fg = face->foreground;
-  long bg = face->background;
+  unsigned long fg = face->foreground;
+  unsigned long bg = face->background;
   struct tty_display_info *tty = FRAME_TTY (f);
 
-  /* Do this first because TS_end_standout_mode may be the same
+  /* Use reverse video if the face specifies that.
+     Do this first because TS_end_standout_mode may be the same
      as TS_exit_attribute_mode, which turns all appearances off. */
-  if (MAY_USE_WITH_COLORS_P (tty, NC_REVERSE))
-    {
-      if (tty->TN_max_colors > 0)
-	{
-	  if (fg >= 0 && bg >= 0)
-	    {
-	      /* If the terminal supports colors, we can set them
-		 below without using reverse video.  The face's fg
-		 and bg colors are set as they should appear on
-		 the screen, i.e. they take the inverse-video'ness
-		 of the face already into account.  */
-	    }
-	  else if (inverse_video)
-	    {
-	      if (fg == FACE_TTY_DEFAULT_FG_COLOR
-		  || bg == FACE_TTY_DEFAULT_BG_COLOR)
-		tty_toggle_highlight (tty);
-	    }
-	  else
-	    {
-	      if (fg == FACE_TTY_DEFAULT_BG_COLOR
-		  || bg == FACE_TTY_DEFAULT_FG_COLOR)
-		tty_toggle_highlight (tty);
-	    }
-	}
-      else
-	{
-	  /* If we can't display colors, use reverse video
-	     if the face specifies that.  */
-	  if (inverse_video)
-	    {
-	      if (fg == FACE_TTY_DEFAULT_FG_COLOR
-		  || bg == FACE_TTY_DEFAULT_BG_COLOR)
-		tty_toggle_highlight (tty);
-	    }
-	  else
-	    {
-	      if (fg == FACE_TTY_DEFAULT_BG_COLOR
-		  || bg == FACE_TTY_DEFAULT_FG_COLOR)
-		tty_toggle_highlight (tty);
-	    }
-	}
-    }
+  if (MAY_USE_WITH_COLORS_P (tty, NC_REVERSE)
+      && (inverse_video
+	  ? fg == FACE_TTY_DEFAULT_FG_COLOR || bg == FACE_TTY_DEFAULT_BG_COLOR
+	  : fg == FACE_TTY_DEFAULT_BG_COLOR || bg == FACE_TTY_DEFAULT_FG_COLOR))
+    tty_toggle_highlight (tty);
 
   if (face->tty_bold_p && MAY_USE_WITH_COLORS_P (tty, NC_BOLD))
     OUTPUT1_IF (tty, tty->TS_enter_bold_mode);
@@ -1965,7 +1916,7 @@ turn_on_face (struct frame *f, int face_id)
       char *p;
 
       ts = tty->standout_mode ? tty->TS_set_background : tty->TS_set_foreground;
-      if (fg >= 0 && ts)
+      if (face_tty_specified_color (fg) && ts)
 	{
           p = tparam (ts, NULL, 0, fg, 0, 0, 0);
 	  OUTPUT (tty, p);
@@ -1973,7 +1924,7 @@ turn_on_face (struct frame *f, int face_id)
 	}
 
       ts = tty->standout_mode ? tty->TS_set_foreground : tty->TS_set_background;
-      if (bg >= 0 && ts)
+      if (face_tty_specified_color (bg) && ts)
 	{
           p = tparam (ts, NULL, 0, bg, 0, 0, 0);
 	  OUTPUT (tty, p);
@@ -2027,12 +1978,10 @@ turn_off_face (struct frame *f, int face_id)
 
 
 /* Return true if the terminal on frame F supports all of the
-   capabilities in CAPS simultaneously, with foreground and background
-   colors FG and BG.  */
+   capabilities in CAPS simultaneously.  */
 
 bool
-tty_capable_p (struct tty_display_info *tty, unsigned int caps,
-	       unsigned long fg, unsigned long bg)
+tty_capable_p (struct tty_display_info *tty, unsigned int caps)
 {
 #define TTY_CAPABLE_P_TRY(tty, cap, TS, NC_bit)				\
   if ((caps & (cap)) && (!(TS) || !MAY_USE_WITH_COLORS_P(tty, NC_bit)))	\
@@ -2446,7 +2395,7 @@ frame's terminal). */)
 	     was suspended.  */
 	  get_tty_size (fileno (t->display_info.tty->input), &width, &height);
 	  if (width != old_width || height != old_height)
-	    change_frame_size (f, height, width, 0, 0, 0);
+	    change_frame_size (f, width, height, 0, 0, 0, 0);
 	  SET_FRAME_VISIBLE (XFRAME (t->display_info.tty->top_frame), 1);
 	}
 
@@ -2778,7 +2727,7 @@ DEFUN ("gpm-mouse-stop", Fgpm_mouse_stop, Sgpm_mouse_stop,
 			       Menus
  ***********************************************************************/
 
-#if defined (HAVE_MENUS) && !defined (MSDOS)
+#if !defined (MSDOS)
 
 /* TTY menu implementation and main ideas are borrowed from msdos.c.
 
@@ -2867,7 +2816,8 @@ tty_menu_search_pane (tty_menu *menu, int pane)
       {
 	if (pane == menu->panenumber[i])
 	  return menu->submenu[i];
-	if ((try = tty_menu_search_pane (menu->submenu[i], pane)))
+	try = tty_menu_search_pane (menu->submenu[i], pane);
+	if (try)
 	  return try;
       }
   return (tty_menu *) 0;
@@ -2920,7 +2870,7 @@ mouse_get_xy (int *x, int *y)
 
 static void
 tty_menu_display (tty_menu *menu, int x, int y, int pn, int *faces,
-		  int mx, int my, int first_item, int disp_help)
+		  int mx, int my, int first_item, bool disp_help)
 {
   int i, face, width, enabled, mousehere, row, col;
   struct frame *sf = SELECTED_FRAME ();
@@ -2997,16 +2947,19 @@ tty_menu_add_pane (tty_menu *menu, const char *txt)
 
 /* Create a new item in a menu pane.  */
 
-static int
+static bool
 tty_menu_add_selection (tty_menu *menu, int pane,
-			char *txt, int enable, char const *help_text)
+			char *txt, bool enable, char const *help_text)
 {
   int len;
   unsigned char *p;
 
   if (pane)
-    if (!(menu = tty_menu_search_pane (menu, pane)))
-      return TTYM_FAILURE;
+    {
+      menu = tty_menu_search_pane (menu, pane);
+      if (! menu)
+	return 0;
+    }
   tty_menu_make_room (menu);
   menu->submenu[menu->count] = (tty_menu *) 0;
   menu->text[menu->count] = txt;
@@ -3027,7 +2980,7 @@ tty_menu_add_selection (tty_menu *menu, int pane,
   if (len > menu->width)
     menu->width = len;
 
-  return TTYM_SUCCESS;
+  return 1;
 }
 
 /* Decide where the menu would be placed if requested at (X,Y).  */
@@ -3074,7 +3027,7 @@ save_and_enable_current_matrix (struct frame *f)
       /* Make sure every row is enabled, or else update_frame will not
 	 redraw them.  (Rows that are identical to what is already on
 	 screen will not be redrawn anyway.)  */
-      to->enabled_p = 1;
+      to->enabled_p = true;
       to->hash = from->hash;
     }
 
@@ -3155,7 +3108,7 @@ read_menu_input (struct frame *sf, int *x, int *y, int min_y, int max_y,
   else
     {
       Lisp_Object cmd;
-      int usable_input = 1;
+      bool usable_input = 1;
       mi_result st = MI_CONTINUE;
       struct tty_display_info *tty = FRAME_TTY (sf);
       Lisp_Object saved_mouse_tracking = do_mouse_tracking;
@@ -3171,7 +3124,11 @@ read_menu_input (struct frame *sf, int *x, int *y, int min_y, int max_y,
       tty->showing_menu = 0;
       do_mouse_tracking = saved_mouse_tracking;
 
-      if (EQ (cmd, Qt) || EQ (cmd, Qtty_menu_exit))
+      if (EQ (cmd, Qt) || EQ (cmd, Qtty_menu_exit)
+	  /* If some input switched frames under our feet, exit the
+	     menu, since the menu faces are no longer valid, and the
+	     menu is no longer relevant anyway.  */
+	  || sf != SELECTED_FRAME ())
 	return MI_QUIT_MENU;
       if (EQ (cmd, Qtty_menu_mouse_movement))
 	mouse_get_xy (x, y);
@@ -3215,10 +3172,11 @@ static int
 tty_menu_activate (tty_menu *menu, int *pane, int *selidx,
 		   int x0, int y0, char **txt,
 		   void (*help_callback)(char const *, int, int),
-		   int kbd_navigation)
+		   bool kbd_navigation)
 {
   struct tty_menu_state *state;
-  int statecount, x, y, i, leave, onepane;
+  int statecount, x, y, i;
+  bool leave, onepane;
   int result IF_LINT (= 0);
   int title_faces[4];		/* face to display the menu title */
   int faces[4], buffers_num_deleted = 0;
@@ -3285,7 +3243,8 @@ tty_menu_activate (tty_menu *menu, int *pane, int *selidx,
   tty_hide_cursor (tty);
   if (buffers_num_deleted)
     menu->text[0][7] = ' ';
-  if ((onepane = menu->count == 1 && menu->submenu[0]))
+  onepane = menu->count == 1 && menu->submenu[0];
+  if (onepane)
     {
       menu->width = menu->submenu[0]->width;
       state[0].menu = menu->submenu[0];
@@ -3478,7 +3437,7 @@ tty_menu_help_callback (char const *help_string, int pane, int item)
   Lisp_Object pane_name;
   Lisp_Object menu_object;
 
-  first_item = XVECTOR (menu_items)->u.contents;
+  first_item = XVECTOR (menu_items)->contents;
   if (EQ (first_item[0], Qt))
     pane_name = first_item[MENU_ITEMS_PANE_NAME];
   else if (EQ (first_item[0], Qquote))
@@ -3585,8 +3544,8 @@ tty_menu_new_item_coords (struct frame *f, int which, int *x, int *y)
 }
 
 Lisp_Object
-tty_menu_show (struct frame *f, int x, int y, int for_click, int keymaps,
-	       Lisp_Object title, int kbd_navigation, const char **error_name)
+tty_menu_show (struct frame *f, int x, int y, bool for_click, bool keymaps,
+	       Lisp_Object title, bool kbd_navigation, const char **error_name)
 {
   tty_menu *menu;
   int pane, selidx, lpane, status;
@@ -3709,9 +3668,8 @@ tty_menu_show (struct frame *f, int x, int y, int for_click, int keymaps,
 	    item_data = SSDATA (item_name);
 
 	  if (lpane == TTYM_FAILURE
-	      || (tty_menu_add_selection (menu, lpane, item_data,
-					  !NILP (enable), help_string)
-		  == TTYM_FAILURE))
+	      || (! tty_menu_add_selection (menu, lpane, item_data,
+					    !NILP (enable), help_string)))
 	    {
 	      tty_menu_destroy (menu);
 	      *error_name = "Can't add selection to menu";
@@ -3837,6 +3795,11 @@ tty_menu_show (struct frame *f, int x, int y, int for_click, int keymaps,
     case TTYM_IA_SELECT:
       break;
     case TTYM_NO_SELECT:
+      /* If the selected frame was changed while we displayed a menu,
+	 throw to top level in order to undo any temporary settings
+	 made by TTY menu code.  */
+      if (f != SELECTED_FRAME ())
+	Ftop_level ();
       /* Make "Cancel" equivalent to C-g unless FOR_CLICK (which means
 	 the menu was invoked with a mouse event as POSITION).  */
       if (! for_click)
@@ -3850,7 +3813,7 @@ tty_menu_show (struct frame *f, int x, int y, int for_click, int keymaps,
   return entry;
 }
 
-#endif	/* HAVE_MENUS && !MSDOS */
+#endif	/* !MSDOS */
 
 
 #ifndef MSDOS
@@ -3859,7 +3822,7 @@ tty_menu_show (struct frame *f, int x, int y, int for_click, int keymaps,
  ***********************************************************************/
 
 /* Initialize the tty-dependent part of frame F.  The frame must
-   already have its device initialized. */
+   already have its device initialized.  */
 
 void
 create_tty_output (struct frame *f)
@@ -3873,30 +3836,25 @@ create_tty_output (struct frame *f)
   f->output_data.tty = t;
 }
 
-/* Delete frame F's face cache, and its tty-dependent part. */
+/* Delete frame F's face cache, and its tty-dependent part.  */
 
 static void
 tty_free_frame_resources (struct frame *f)
 {
   eassert (FRAME_TERMCAP_P (f));
-
-  if (FRAME_FACE_CACHE (f))
-    free_frame_faces (f);
-
+  free_frame_faces (f);
   xfree (f->output_data.tty);
 }
 
 #else  /* MSDOS */
 
-/* Delete frame F's face cache. */
+/* Delete frame F's face cache.  */
 
 static void
 tty_free_frame_resources (struct frame *f)
 {
   eassert (FRAME_TERMCAP_P (f) || FRAME_MSDOS_P (f));
-
-  if (FRAME_FACE_CACHE (f))
-    free_frame_faces (f);
+  free_frame_faces (f);
 }
 #endif	/* MSDOS */
 

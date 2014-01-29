@@ -1,6 +1,6 @@
 ;;; nxml-mode.el --- a new XML mode  -*- lexical-binding:t -*-
 
-;; Copyright (C) 2003-2004, 2007-2013 Free Software Foundation, Inc.
+;; Copyright (C) 2003-2004, 2007-2014 Free Software Foundation, Inc.
 
 ;; Author: James Clark
 ;; Keywords: XML
@@ -46,6 +46,7 @@
 
 (defgroup nxml nil
   "New XML editing mode."
+  :link '(custom-manual "(nxml-mode) Top")
   :group 'languages)
 
 (defgroup nxml-faces nil

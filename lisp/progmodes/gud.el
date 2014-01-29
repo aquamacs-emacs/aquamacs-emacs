@@ -1,6 +1,7 @@
 ;;; gud.el --- Grand Unified Debugger mode for running GDB and other debuggers
 
-;; Copyright (C) 1992-1996, 1998, 2000-2013 Free Software Foundation, Inc.
+;; Copyright (C) 1992-1996, 1998, 2000-2014 Free Software Foundation,
+;; Inc.
 
 ;; Author: Eric S. Raymond <esr@snark.thyrsus.com>
 ;; Maintainer: FSF
@@ -66,7 +67,7 @@ pdb (Python), and jdb."
   :group 'gud)
 
 (global-set-key (vconcat gud-key-prefix "\C-l") 'gud-refresh)
-(define-key ctl-x-map " " 'gud-break)	;; backward compatibility hack
+;; (define-key ctl-x-map " " 'gud-break); backward compatibility hack
 
 (defvar gud-marker-filter nil)
 (put 'gud-marker-filter 'permanent-local t)
@@ -1367,7 +1368,7 @@ and source-file directory for your debugger."
   )
 
 ;; ======================================================================
-;; xdb (HP PARISC debugger) functions
+;; xdb (HP PA-RISC debugger) functions
 
 ;; History of argument lists passed to xdb.
 (defvar gud-xdb-history nil)
@@ -2159,10 +2160,8 @@ relative to a classpath directory."
 		    (split-string
 		     ;; Eliminate any subclass references in the class
 		     ;; name string. These start with a "$"
-		     ((lambda (x)
-			(if (string-match "$.*" x)
-			    (replace-match "" t t x) p))
-		      p)
+                     (if (string-match "$.*" p)
+                         (replace-match "" t t p) p)
 		     "\\.") "/")
 	 ".java"))
        (cplist (append gud-jdb-sourcepath gud-jdb-classpath))

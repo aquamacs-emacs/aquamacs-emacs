@@ -1,6 +1,6 @@
 ;;; tramp-sh.el --- Tramp access functions for (s)sh-like connections
 
-;; Copyright (C) 1998-2013 Free Software Foundation, Inc.
+;; Copyright (C) 1998-2014 Free Software Foundation, Inc.
 
 ;; (copyright statements below in code to be updated with the above notice)
 
@@ -419,7 +419,7 @@ as given in your `~/.profile'."
 
 ;;;###tramp-autoload
 (defcustom tramp-remote-process-environment
-  `("HISTFILE=$HOME/.tramp_history" "HISTSIZE=1" "TMOUT=0" "LC_ALL=C"
+  `("HISTFILE=$HOME/.tramp_history" "HISTSIZE=1" "TMOUT=0" "LC_CTYPE=''"
     ,(format "TERM=%s" tramp-terminal-type)
     "EMACS=t" ;; Deprecated.
     ,(format "INSIDE_EMACS='%s,tramp:%s'" emacs-version tramp-version)
@@ -685,7 +685,7 @@ on the remote host.")
 (defconst tramp-perl-encode
   "%s -e '
 # This script contributed by Juanma Barranquero <lektu@terra.es>.
-# Copyright (C) 2002-2013 Free Software Foundation, Inc.
+# Copyright (C) 2002-2014 Free Software Foundation, Inc.
 use strict;
 
 my %%trans = do {
@@ -723,7 +723,7 @@ This string is passed to `format', so percent characters need to be doubled.")
 (defconst tramp-perl-decode
   "%s -e '
 # This script contributed by Juanma Barranquero <lektu@terra.es>.
-# Copyright (C) 2002-2013 Free Software Foundation, Inc.
+# Copyright (C) 2002-2014 Free Software Foundation, Inc.
 use strict;
 
 my %%trans = do {
@@ -1784,21 +1784,21 @@ tramp-sh-handle-file-name-all-completions: internal error accessing `%s': `%s'"
   (with-parsed-tramp-file-name filename v1
     (with-parsed-tramp-file-name newname v2
       (let ((ln (when v1 (tramp-get-remote-ln v1))))
-	(when (and (not ok-if-already-exists)
+	(when (and (numberp ok-if-already-exists)
 		   (file-exists-p newname)
-		   (not (numberp ok-if-already-exists))
-		   (y-or-n-p
+		   (yes-or-no-p
 		    (format
 		     "File %s already exists; make it a new name anyway? "
 		     newname)))
 	  (tramp-error
-	   v2 'file-error
-	   "add-name-to-file: file %s already exists" newname))
+	   v2 'file-error "add-name-to-file: file %s already exists" newname))
+	(when ok-if-already-exists (setq ln (concat ln " -f")))
 	(tramp-flush-file-property v2 (file-name-directory v2-localname))
 	(tramp-flush-file-property v2 v2-localname)
 	(tramp-barf-unless-okay
 	 v1
-	 (format "%s %s %s" ln (tramp-shell-quote-argument v1-localname)
+	 (format "%s %s %s" ln
+		 (tramp-shell-quote-argument v1-localname)
 		 (tramp-shell-quote-argument v2-localname))
 	 "error with add-name-to-file, see buffer `%s' for details"
 	 (buffer-name))))))
@@ -1831,18 +1831,20 @@ tramp-sh-handle-file-name-all-completions: internal error accessing `%s': `%s'"
      'copy-file (list filename newname ok-if-already-exists keep-date)))))
 
 (defun tramp-sh-handle-copy-directory
-  (dirname newname &optional keep-date parents _copy-contents)
+  (dirname newname &optional keep-date parents copy-contents)
   "Like `copy-directory' for Tramp files."
   (let ((t1 (tramp-tramp-file-p dirname))
 	(t2 (tramp-tramp-file-p newname)))
     (with-parsed-tramp-file-name (if t1 dirname newname) nil
-      (if (and (tramp-get-method-parameter method 'tramp-copy-recursive)
+      (if (and (not copy-contents)
+	       (tramp-get-method-parameter method 'tramp-copy-recursive)
 	       ;; When DIRNAME and NEWNAME are remote, they must have
 	       ;; the same method.
 	       (or (null t1) (null t2)
 		   (string-equal
 		    (tramp-file-name-method (tramp-dissect-file-name dirname))
-		    (tramp-file-name-method (tramp-dissect-file-name newname)))))
+		    (tramp-file-name-method
+		     (tramp-dissect-file-name newname)))))
 	  ;; scp or rsync DTRT.
 	  (progn
 	    (setq dirname (directory-file-name (expand-file-name dirname))
@@ -1859,7 +1861,10 @@ tramp-sh-handle-file-name-all-completions: internal error accessing `%s': `%s'"
 	     'copy dirname newname keep-date))
 	;; We must do it file-wise.
 	(tramp-run-real-handler
-	 'copy-directory (list dirname newname keep-date parents)))
+	 'copy-directory
+	 (if copy-contents
+	     (list dirname newname keep-date parents copy-contents)
+	   (list dirname newname keep-date parents))))
 
       ;; When newname did exist, we have wrong cached values.
       (when t2
@@ -1983,14 +1988,14 @@ file names."
 	;; In case of `rename', we must flush the cache of the source file.
 	(when (and t1 (eq op 'rename))
 	  (with-parsed-tramp-file-name filename v1
-	    (tramp-flush-file-property v1 (file-name-directory localname))
-	    (tramp-flush-file-property v1 localname)))
+	    (tramp-flush-file-property v1 (file-name-directory v1-localname))
+	    (tramp-flush-file-property v1 v1-localname)))
 
 	;; When newname did exist, we have wrong cached values.
 	(when t2
 	  (with-parsed-tramp-file-name newname v2
-	    (tramp-flush-file-property v2 (file-name-directory localname))
-	    (tramp-flush-file-property v2 localname)))))))
+	    (tramp-flush-file-property v2 (file-name-directory v2-localname))
+	    (tramp-flush-file-property v2 v2-localname)))))))
 
 (defun tramp-do-copy-or-rename-file-via-buffer (op filename newname keep-date)
   "Use an Emacs buffer to copy or rename a file.
@@ -2008,7 +2013,7 @@ KEEP-DATE is non-nil if NEWNAME should have the same timestamp as FILENAME."
     ;; `jka-compr-inhibit' to t.
     (let ((coding-system-for-write 'binary)
 	  (jka-compr-inhibit t))
-      (write-region (point-min) (point-max) newname)))
+      (write-region (point-min) (point-max) newname nil 'no-message)))
   ;; KEEP-DATE handling.
   (when keep-date (set-file-times newname (nth 5 (file-attributes filename))))
   ;; Set the mode.
@@ -2487,6 +2492,7 @@ This is like `dired-recursive-delete-directory' for Tramp files."
   (filename switches &optional wildcard full-directory-p)
   "Like `insert-directory' for Tramp files."
   (setq filename (expand-file-name filename))
+  (unless switches (setq switches ""))
   (with-parsed-tramp-file-name filename nil
     (if (and (featurep 'ls-lisp)
 	     (not (symbol-value 'ls-lisp-use-insert-directory-program)))
@@ -2513,13 +2519,10 @@ This is like `dired-recursive-delete-directory' for Tramp files."
        (if full-directory-p "yes" "no"))
       ;; If `full-directory-p', we just say `ls -l FILENAME'.
       ;; Else we chdir to the parent directory, then say `ls -ld BASENAME'.
-      ;; "--dired" returns byte positions.  Therefore, the file names
-      ;; must be encoded, which is guaranteed by "LC_ALL=en_US.utf8
-      ;; LC_CTYPE=''".
       (if full-directory-p
 	  (tramp-send-command
 	   v
-	   (format "env LC_ALL=en_US.utf8 LC_CTYPE='' %s %s %s 2>/dev/null"
+	   (format "%s %s %s 2>/dev/null"
 		   (tramp-get-ls-command v)
 		   switches
 		   (if wildcard
@@ -2535,7 +2538,7 @@ This is like `dired-recursive-delete-directory' for Tramp files."
 	  (tramp-run-real-handler 'file-name-directory (list localname))))
 	(tramp-send-command
 	 v
-	 (format "env LC_ALL=en_US.utf8 LC_CTYPE='' %s %s %s 2>/dev/null"
+	 (format "%s %s %s 2>/dev/null"
 		 (tramp-get-ls-command v)
 		 switches
 		 (if (or wildcard
@@ -2683,27 +2686,46 @@ the result will be a local, non-Tramp, filename."
 (defun tramp-sh-handle-start-file-process (name buffer program &rest args)
   "Like `start-file-process' for Tramp files."
   (with-parsed-tramp-file-name default-directory nil
-    ;; When PROGRAM is nil, we just provide a tty.
-    (let ((command
-	   (when (stringp program)
-	     (format "cd %s; exec env PS1=%s %s"
-		     (tramp-shell-quote-argument localname)
-		     ;; Use a human-friendly prompt, for example for `shell'.
-		     (tramp-shell-quote-argument
-		      (format "%s %s"
-			      (file-remote-p default-directory)
-			      tramp-initial-end-of-output))
-		     (mapconcat 'tramp-shell-quote-argument
-				(cons program args) " "))))
-	  (tramp-process-connection-type
-	   (or (null program) tramp-process-connection-type))
-	  (bmp (and (buffer-live-p buffer) (buffer-modified-p buffer)))
-	  (name1 name)
-	  (i 0)
-	  ;; We do not want to raise an error when
-	  ;; `start-file-process' has been started several time in
-	  ;; `eshell' and friends.
-	  (tramp-current-connection nil))
+    (let* (;; When PROGRAM matches "*sh", and the first arg is "-c",
+	   ;; it might be that the arguments exceed the command line
+	   ;; length.  Therefore, we modify the command.
+	   (heredoc (and (stringp program)
+			 (string-match "sh$" program)
+			 (string-equal "-c" (car args))
+			 (= (length args) 2)))
+	   ;; When PROGRAM is nil, we just provide a tty.
+	   (args (if (not heredoc) args
+		   (let ((i 250))
+		     (while (and (< i (length (cadr args)))
+				 (string-match " " (cadr args) i))
+		       (setcdr
+			args
+			(list (replace-match " \\\\\n" nil nil (cadr args))))
+		       (setq i (+ i 250))))
+		   (cdr args)))
+	   (command
+	    (when (stringp program)
+	      (format "cd %s; exec %s env PS1=%s %s"
+		      (tramp-shell-quote-argument localname)
+		      (if heredoc "<<EOF" "")
+		      ;; Use a human-friendly prompt, for example for `shell'.
+		      (tramp-shell-quote-argument
+		       (format "%s %s"
+			       (file-remote-p default-directory)
+			       tramp-initial-end-of-output))
+		      (if heredoc
+			  (format "%s\n%s\nEOF" program (car args))
+			(mapconcat 'tramp-shell-quote-argument
+				   (cons program args) " ")))))
+	   (tramp-process-connection-type
+	    (or (null program) tramp-process-connection-type))
+	   (bmp (and (buffer-live-p buffer) (buffer-modified-p buffer)))
+	   (name1 name)
+	   (i 0)
+	   ;; We do not want to raise an error when
+	   ;; `start-file-process' has been started several time in
+	   ;; `eshell' and friends.
+	   (tramp-current-connection nil))
 
       (unless buffer
 	;; BUFFER can be nil.  We use a temporary buffer.
@@ -2927,7 +2949,8 @@ the result will be a local, non-Tramp, filename."
 		      ;; epa-file gets confused.
 		      (let (file-name-handler-alist
 			    (coding-system-for-write 'binary))
-			(write-region (point-min) (point-max) tmpfile)))
+			(write-region
+			 (point-min) (point-max) tmpfile nil 'no-message)))
 
 		  ;; If tramp-decoding-function is not defined for this
 		  ;; method, we invoke tramp-decoding-command instead.
@@ -2937,7 +2960,8 @@ the result will be a local, non-Tramp, filename."
 		    (let (file-name-handler-alist
 			  (coding-system-for-write 'binary))
 		      (with-current-buffer (tramp-get-buffer v)
-			(write-region (point-min) (point-max) tmpfile2)))
+			(write-region
+			 (point-min) (point-max) tmpfile2 nil 'no-message)))
 		    (unwind-protect
 			(tramp-call-local-coding-command
 			 loc-dec tmpfile2 tmpfile)
@@ -3883,7 +3907,8 @@ process to set up.  VEC specifies the connection."
   ;; Set the environment.
   (tramp-message vec 5 "Setting default environment")
 
-  (let ((env (copy-sequence tramp-remote-process-environment))
+  (let ((env (append `(,(tramp-get-remote-locale vec))
+		     (copy-sequence tramp-remote-process-environment)))
 	unset item)
     (while env
       (setq item (tramp-compat-split-string (car env) "="))
@@ -4362,7 +4387,7 @@ connection if a previous connection has died for some reason."
 	      (when (and p (processp p))
 		(delete-process p))
 	      (setenv "TERM" tramp-terminal-type)
-	      (setenv "LC_ALL" "C")
+	      (setenv "LC_ALL" "en_US.utf8")
 	      (setenv "PROMPT_COMMAND")
 	      (setenv "PS1" tramp-initial-end-of-output)
 	      (let* ((target-alist (tramp-compute-multi-hops vec))
@@ -4472,7 +4497,7 @@ connection if a previous connection has died for some reason."
 			  tramp-current-user   (or g-user   l-user)
 			  tramp-current-host   (or g-host   l-host))
 
-		    ;; Replace login-args place holders.
+		    ;; Replace `login-args' place holders.
 		    (setq
 		     l-host (or l-host "")
 		     l-user (or l-user "")
@@ -4820,6 +4845,21 @@ Return ATTR."
 	     x))
 	   x))
 	remote-path)))))
+
+(defun tramp-get-remote-locale (vec)
+  (with-tramp-connection-property vec "locale"
+    (tramp-send-command vec "locale -a")
+    (let ((candidates '("en_US.utf8" "C.utf8" "C"))
+	  locale)
+      (with-current-buffer (tramp-get-connection-buffer vec)
+	(while candidates
+	  (goto-char (point-min))
+	  (if (string-match (concat "^" (car candidates) "$") (buffer-string))
+	      (setq locale (car candidates)
+		    candidates nil)
+	    (setq candidates (cdr candidates)))))
+      ;; Return value.
+      (when locale (format "LC_ALL=%s" locale)))))
 
 (defun tramp-get-ls-command (vec)
   (with-tramp-connection-property vec "ls"

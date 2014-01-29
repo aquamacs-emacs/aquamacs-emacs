@@ -1,5 +1,5 @@
 @c This is part of the Emacs manual.
-@c Copyright (C) 1985-1987, 1993-1995, 1997, 1999-2013 Free Software
+@c Copyright (C) 1985-1987, 1993-1995, 1997, 1999-2014 Free Software
 @c Foundation, Inc.
 @c See file emacs.texi for copying conditions.
 @node Files
@@ -752,9 +752,10 @@ file.
 @cindex locking files
   When you make the first modification in an Emacs buffer that is
 visiting a file, Emacs records that the file is @dfn{locked} by you.
-(It does this by creating a specially-named symbolic link or regular
-file with special contents in the same directory.)  Emacs removes the
-lock when you save the changes.  The idea is that the file is locked
+(It does this by creating a specially-named symbolic link@footnote{If
+your file system does not support symbolic links, a regular file is
+used.} with special contents in the same directory.)  Emacs removes the lock
+when you save the changes.  The idea is that the file is locked
 whenever an Emacs buffer visiting it has unsaved changes.
 
 @vindex create-lockfiles
@@ -1419,6 +1420,7 @@ In a multi-file patch, kill the current file part.
 
 @item C-c C-a
 @findex diff-apply-hunk
+@cindex patches, applying
 Apply this hunk to its target file (@code{diff-apply-hunk}).  With a
 prefix argument of @kbd{C-u}, revert this hunk.
 
@@ -1943,10 +1945,9 @@ point.  Partial Completion mode offers other features extending
 
 @findex image-mode
 @findex image-toggle-display
-@findex image-toggle-animation
+@findex image-next-file
+@findex image-previous-file
 @cindex images, viewing
-@cindex image animation
-@cindex animated images
   Visiting image files automatically selects Image mode.  In this
 major mode, you can type @kbd{C-c C-c} (@code{image-toggle-display})
 to toggle between displaying the file as an image in the Emacs buffer,
@@ -1955,10 +1956,33 @@ Displaying the file as an image works only if Emacs is compiled with
 support for displaying such images.  If the displayed image is wider
 or taller than the frame, the usual point motion keys (@kbd{C-f},
 @kbd{C-p}, and so forth) cause different parts of the image to be
-displayed.  If the image can be animated, the command @kbd{RET}
+displayed.  You can press @kbd{n} (@code{image-next-file}) and @kbd{p}
+(@code{image-previous-file}) to visit the next image file and the
+previous image file in the same directory, respectively.
+
+@findex image-toggle-animation
+@findex image-next-frame
+@findex image-previous-frame
+@findex image-goto-frame
+@findex image-increase-speed
+@findex image-decrease-speed
+@findex image-reset-speed
+@findex image-reverse-speed
+@vindex image-animate-loop
+@cindex image animation
+@cindex animated images
+  If the image can be animated, the command @kbd{RET}
 (@code{image-toggle-animation}) starts or stops the animation.
 Animation plays once, unless the option @code{image-animate-loop} is
-non-@code{nil}.
+non-@code{nil}.  With @kbd{f} (@code{image-next-frame}) and @kbd{b}
+(@code{image-previous-frame}) you can step through the individual
+frames.  Both commands accept a numeric prefix to step through several
+frames at once.  You can go to a specific frame with @kbd{F}
+(@code{image-goto-frame}).  Typing @kbd{a +}
+(@code{image-increase-speed}) increases the speed of the animation,
+@kbd{a -} (@code{image-decrease-speed}) decreases it, and @kbd{a r}
+(@code{image-reverse-speed}) reverses it.  The command @kbd{a 0}
+(@code{image-reset-speed}) resets the speed to the original value.
 
 @cindex ImageMagick support
 @vindex imagemagick-enabled-types

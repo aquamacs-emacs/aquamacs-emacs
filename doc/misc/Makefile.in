@@ -1,6 +1,6 @@
 ### @configure_input@
 
-# Copyright (C) 1994, 1996-2013 Free Software Foundation, Inc.
+# Copyright (C) 1994, 1996-2014 Free Software Foundation, Inc.
 
 # This file is part of GNU Emacs.
 
@@ -65,9 +65,9 @@ DOCMISC_W32 = @DOCMISC_W32@
 ## Info files to build and install on all platforms.
 INFO_COMMON = ada-mode auth autotype bovine calc ccmode cl \
 	dbus dired-x ebrowse ede ediff edt eieio \
-	emacs-mime epa erc ert eshell eudc efaq \
+	emacs-mime epa erc ert eshell eudc efaq eww \
 	flymake forms gnus emacs-gnutls htmlfontify idlwave ido info.info \
-	mairix-el message mh-e newsticker nxml-mode \
+	mairix-el message mh-e newsticker nxml-mode octave-mode \
 	org pcl-cvs pgg rcirc remember reftex sasl \
 	sc semantic ses sieve smtpmail speedbar srecode todo-mode tramp \
 	url vip viper widget wisent woman
@@ -193,7 +193,7 @@ calc.pdf: $(calc_deps)
 calc.html: $(calc_deps)
 	$(MAKEINFO) $(MAKEINFO_OPTS) $(HTML_OPTS) -o $@ ${srcdir}/calc.texi
 
-ccmode_deps = ${srcdir}/cc-mode.texi ${gfdl}
+cc_mode_deps = ${srcdir}/cc-mode.texi ${gfdl}
 ccmode : $(buildinfodir)/ccmode$(INFO_EXT)
 $(buildinfodir)/ccmode$(INFO_EXT): $(cc_mode_deps)
 	$(mkinfodir)
@@ -410,6 +410,18 @@ eudc.pdf: $(eudc_deps)
 eudc.html: $(eudc_deps)
 	$(MAKEINFO) $(MAKEINFO_OPTS) $(HTML_OPTS) -o $@ ${srcdir}/eudc.texi
 
+eww_deps = ${srcdir}/eww.texi ${gfdl}
+eww : $(buildinfodir)/eww$(INFO_EXT)
+$(buildinfodir)/eww$(INFO_EXT): $(eww_deps)
+	$(mkinfodir)
+	$(MAKEINFO) $(MAKEINFO_OPTS) $(INFO_OPTS) -o $@ ${srcdir}/eww.texi
+eww.dvi: $(eww_deps)
+	$(ENVADD) $(TEXI2DVI) ${srcdir}/eww.texi
+eww.pdf: $(eww_deps)
+	$(ENVADD) $(TEXI2PDF) ${srcdir}/eww.texi
+eww.html: $(eww_deps)
+	$(MAKEINFO) $(MAKEINFO_OPTS) $(HTML_OPTS) -o $@ ${srcdir}/eww.texi
+
 flymake_deps = ${srcdir}/flymake.texi ${gfdl}
 flymake : $(buildinfodir)/flymake$(INFO_EXT)
 $(buildinfodir)/flymake$(INFO_EXT): $(flymake_deps)
@@ -563,6 +575,18 @@ nxml-mode.pdf: $(nxml_mode_deps)
 	$(ENVADD) $(TEXI2PDF) ${srcdir}/nxml-mode.texi
 nxml-mode.html: $(nxml_mode_deps)
 	$(MAKEINFO) $(MAKEINFO_OPTS) $(HTML_OPTS) -o $@ ${srcdir}/nxml-mode.texi
+
+octave_mode_deps = ${srcdir}/octave-mode.texi ${gfdl}
+octave-mode : $(buildinfodir)/octave-mode$(INFO_EXT)
+$(buildinfodir)/octave-mode$(INFO_EXT): $(octave_mode_deps)
+	$(mkinfodir)
+	$(MAKEINFO) $(MAKEINFO_OPTS) $(INFO_OPTS) -o $@ ${srcdir}/octave-mode.texi
+octave-mode.dvi: $(octave_mode_deps)
+	$(ENVADD) $(TEXI2DVI) ${srcdir}/octave-mode.texi
+octave-mode.pdf: $(octave_mode_deps)
+	$(ENVADD) $(TEXI2PDF) ${srcdir}/octave-mode.texi
+octave-mode.html: $(octave_mode_deps)
+	$(MAKEINFO) $(MAKEINFO_OPTS) $(HTML_OPTS) -o $@ ${srcdir}/octave-mode.texi
 
 org_deps = ${srcdir}/org.texi ${gfdl}
 org : $(buildinfodir)/org$(INFO_EXT)
@@ -842,7 +866,7 @@ clean: mostlyclean
 	rm -f emacs-misc-${version}.tar*
 
 distclean: clean
-#	rm -f Makefile
+	rm -f Makefile
 
 ## buildinfodir is relative to srcdir.
 infoclean:

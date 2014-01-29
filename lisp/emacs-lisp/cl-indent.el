@@ -1,6 +1,6 @@
 ;;; cl-indent.el --- enhanced lisp-indent mode
 
-;; Copyright (C) 1987, 2000-2013 Free Software Foundation, Inc.
+;; Copyright (C) 1987, 2000-2014 Free Software Foundation, Inc.
 
 ;; Author: Richard Mlynarik <mly@eddie.mit.edu>
 ;; Created: July 1987
@@ -756,6 +756,7 @@ optional\\|rest\\|key\\|allow-other-keys\\|aux\\|whole\\|body\\|environment\
            (when 1)
            (with-accessors . multiple-value-bind)
            (with-condition-restarts . multiple-value-bind)
+	   (with-compilation-unit (&lambda &body))
            (with-output-to-string (4 2))
            (with-slots . multiple-value-bind)
            (with-standard-io-syntax (2)))))

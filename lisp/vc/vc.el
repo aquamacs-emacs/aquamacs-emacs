@@ -1,6 +1,6 @@
 ;;; vc.el --- drive a version-control system from within Emacs  -*- lexical-binding: t -*-
 
-;; Copyright (C) 1992-1998, 2000-2013 Free Software Foundation, Inc.
+;; Copyright (C) 1992-1998, 2000-2014 Free Software Foundation, Inc.
 
 ;; Author:     FSF (see below for full credits)
 ;; Maintainer: Andre Spiegel <spiegel@gnu.org>
@@ -755,13 +755,6 @@ not specific to any particular backend."
   :group 'vc
   :version "21.1")
 
-(defcustom vc-diff-knows-L nil
-  "Indicates whether diff understands the -L option.
-The value is either `yes', `no', or nil.  If it is nil, VC tries
-to use -L and sets this variable to remember whether it worked."
-  :type '(choice (const :tag "Work out" nil) (const yes) (const no))
-  :group 'vc)
-
 (defcustom vc-log-show-limit 2000
   "Limit the number of items shown by the VC log commands.
 Zero means unlimited.
@@ -1350,23 +1343,33 @@ first backend that could register the file is used."
   (let ((vc-handled-backends (list backend)))
     (call-interactively 'vc-register)))
 
-(defun vc-ignore (file &optional directory)
-  "Ignore FILE under the VCS of DIRECTORY (default is `default-directory').
-FILE is a file wildcard.
-When called interactively and with a prefix argument, remove FILE
-from ignored files.
-When called from Lisp code, if DIRECTORY is non-nil, the
-repository to use will be deduced by DIRECTORY."
+(defun vc-ignore (file &optional directory remove)
+  "Ignore FILE under the VCS of DIRECTORY.
+
+Normally, FILE is a wildcard specification that matches the files
+to be ignored.  When REMOVE is non-nil, remove FILE from the list
+of ignored files.
+
+DIRECTORY defaults to `default-directory' and is used to
+determine the responsible VC backend.
+
+When called interactively, prompt for a FILE to ignore, unless a
+prefix argument is given, in which case prompt for a file FILE to
+remove from the list of ignored files."
   (interactive
-   (list (read-file-name "The file to ignore: ")
-	 (completing-read
-	  "The file to remove: "
-	  (vc-call-backend
-	   (vc-backend default-directory)
-	   'ignore-completion-table default-directory))))
+   (list
+    (if (not current-prefix-arg)
+        (read-file-name "File to ignore: ")
+      (completing-read
+       "File to remove: "
+       (vc-call-backend
+        (or (vc-responsible-backend default-directory)
+            (error "Unknown backend"))
+        'ignore-completion-table default-directory)))
+    nil current-prefix-arg))
   (let* ((directory (or directory default-directory))
-	 (backend (vc-backend default-directory))
-	 (remove current-prefix-arg))
+	 (backend (or (vc-responsible-backend default-directory)
+                      (error "Unknown backend"))))
     (vc-call-backend backend 'ignore file directory remove)))
 
 (defun vc-default-ignore (backend file &optional directory remove)
@@ -1648,6 +1651,13 @@ Return t if the buffer had changes, nil otherwise."
 	 ;; be to call the back end separately for each file.
 	 (coding-system-for-read
 	  (if files (vc-coding-system-for-diff (car files)) 'undecided)))
+    ;; On MS-Windows and MS-DOS, Diff is likely to produce DOS-style
+    ;; EOLs, which will look ugly if (car files) happens to have Unix
+    ;; EOLs.
+    (if (memq system-type '(windows-nt ms-dos))
+	(setq coding-system-for-read
+	      (coding-system-change-eol-conversion coding-system-for-read
+						   'dos)))
     (vc-setup-buffer buffer)
     (message "%s" (car messages))
     ;; Many backends don't handle well the case of a file that has been
@@ -2302,7 +2312,8 @@ WORKING-REVISION and LIMIT."
   (let* ((vc-fileset (vc-deduce-fileset t)) ;FIXME: Why t? --Stef
 	 (backend (car vc-fileset))
 	 (files (cadr vc-fileset))
-	 (working-revision (or working-revision (vc-working-revision (car files)))))
+;;	 (working-revision (or working-revision (vc-working-revision (car files))))
+         )
     (vc-print-log-internal backend files working-revision nil limit)))
 
 ;;;###autoload

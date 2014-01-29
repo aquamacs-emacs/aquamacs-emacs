@@ -1,5 +1,5 @@
 /* NeXT/Open/GNUstep and MacOSX Cocoa menu and toolbar module.
-   Copyright (C) 2007-2012 Free Software Foundation, Inc.
+   Copyright (C) 2007-2014 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -1299,7 +1299,7 @@ update_frame_tool_bar (struct frame *f)
           NSLog (@"Could not prepare toolbar image for display.");
           continue;
         }
-      
+
       captionObj = TOOLPROP (TOOL_BAR_ITEM_LABEL);
       captionText = STRINGP (captionObj) ? SSDATA (captionObj) : "";
 
@@ -2541,7 +2541,7 @@ void
 syms_of_nsmenu (void)
 {
 #ifndef NS_IMPL_COCOA
-  /* Don't know how to keep track of this in Next/Open/Gnustep.  Always
+  /* Don't know how to keep track of this in Next/Open/GNUstep.  Always
      update menus there.  */
   trackingMenu = 1;
 #endif

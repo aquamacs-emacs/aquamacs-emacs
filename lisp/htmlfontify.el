@@ -1,6 +1,6 @@
 ;;; htmlfontify.el --- htmlize a buffer/source tree with optional hyperlinks
 
-;; Copyright (C) 2002-2003, 2009-2013 Free Software Foundation, Inc.
+;; Copyright (C) 2002-2003, 2009-2014 Free Software Foundation, Inc.
 
 ;; Emacs Lisp Archive Entry
 ;; Package: htmlfontify
@@ -15,7 +15,6 @@
 ;; Compatibility: Emacs23, Emacs22
 ;; Incompatibility: Emacs19, Emacs20, Emacs21
 ;; Last Updated: Thu 2009-11-19 01:31:21 +0000
-;; Version: 0.21
 
 ;; This file is part of GNU Emacs.
 
@@ -147,6 +146,8 @@ main-content <=MAIN_CONTENT;\\n\" rtfm-section file style rtfm-section file))
   "Convert buffers and files to HTML."
   :group  'applications
   :link '(variable-link htmlfontify-manual)
+  :link '(custom-manual "(htmlfontify) Top")
+  :link '(info-link "(htmlfontify) Customization")
   :prefix "hfy-")
 
 (defcustom hfy-page-header 'hfy-default-header
@@ -1620,7 +1621,7 @@ span also begins a invisible portion of text.
 
 An implementation can use TEXT-BLOCK, TEXT-ID,
 TEXT-BEGINS-BLOCK-P to implement fold/unfold-on-mouse-click like
-behaviour.
+behavior.
 
 The default handler is `hfy-begin-span'.")
 
@@ -2111,7 +2112,7 @@ FILE is the specific file we are rendering."
 ;; functionality easier to implement.
 ;; ( tar file functionality not merged here because it requires a
 ;;   hacked copy of etags capable of tagging stdin: if Francesco
-;;   Potorti accepts a patch, or otherwise implements stdin tagging,
+;;   Potortì accepts a patch, or otherwise implements stdin tagging,
 ;;   then I will provide a `htmlfontify-tar-file' defun )
 (defun hfy-parse-tags-buffer (srcdir buffer)
   "Parse a BUFFER containing etags formatted output, loading the
@@ -2411,8 +2412,7 @@ You may also want to set `hfy-page-header' and `hfy-page-footer'."
     (load file 'NOERROR nil nil) ))
 
 
-;;;### (autoloads (hfy-fallback-colour-values htmlfontify-load-rgb-file)
-;;;;;;  "hfy-cmap" "hfy-cmap.el" "3f97eeabe72027099da579f6ef9ae0bd")
+;;;### (autoloads nil "hfy-cmap" "hfy-cmap.el" "27dc80b0f7187aaf582805a8f887819a")
 ;;; Generated autoloads from hfy-cmap.el
 
 (autoload 'htmlfontify-load-rgb-file "hfy-cmap" "\

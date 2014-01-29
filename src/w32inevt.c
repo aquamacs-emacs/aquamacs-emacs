@@ -1,5 +1,5 @@
 /* Input event support for Emacs on the Microsoft Windows API.
-   Copyright (C) 1992-1993, 1995, 2001-2013 Free Software Foundation,
+   Copyright (C) 1992-1993, 1995, 2001-2014 Free Software Foundation,
    Inc.
 
 This file is part of GNU Emacs.
@@ -518,7 +518,7 @@ do_mouse_event (MOUSE_EVENT_RECORD *event,
 			      help_echo_window, help_echo_object,
 			      help_echo_pos);
 	  }
-	/* We alread called kbd_buffer_store_event, so indicate the
+	/* We already called kbd_buffer_store_event, so indicate the
 	   the caller it shouldn't.  */
 	return 0;
       }
@@ -587,7 +587,7 @@ resize_event (WINDOW_BUFFER_SIZE_RECORD *event)
 {
   struct frame *f = get_frame ();
 
-  change_frame_size (f, event->dwSize.Y, event->dwSize.X, 0, 1, 0);
+  change_frame_size (f, event->dwSize.X, event->dwSize.Y, 0, 1, 0, 0);
   SET_FRAME_GARBAGED (f);
 }
 
@@ -602,13 +602,13 @@ maybe_generate_resize_event (void)
   /* It is okay to call this unconditionally, since it will do nothing
      if the size hasn't actually changed.  */
   change_frame_size (f,
-		     1 + info.srWindow.Bottom - info.srWindow.Top,
 		     1 + info.srWindow.Right - info.srWindow.Left,
-		     0, 0, 0);
+		     1 + info.srWindow.Bottom - info.srWindow.Top,
+		     0, 0, 0, 0);
 }
 
 #if HAVE_W32NOTIFY
-static int
+int
 handle_file_notifications (struct input_event *hold_quit)
 {
   BYTE *p = file_notifications;
@@ -676,7 +676,7 @@ handle_file_notifications (struct input_event *hold_quit)
   return nevents;
 }
 #else  /* !HAVE_W32NOTIFY */
-static int
+int
 handle_file_notifications (struct input_event *hold_quit)
 {
   return 0;

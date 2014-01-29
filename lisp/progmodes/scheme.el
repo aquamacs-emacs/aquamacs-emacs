@@ -1,6 +1,6 @@
 ;;; scheme.el --- Scheme (and DSSSL) editing mode
 
-;; Copyright (C) 1986-1988, 1997-1998, 2001-2013 Free Software
+;; Copyright (C) 1986-1988, 1997-1998, 2001-2014 Free Software
 ;; Foundation, Inc.
 
 ;; Author: Bill Rozas <jinx@martigny.ai.mit.edu>
@@ -210,9 +210,7 @@ start an inferior Scheme using the more general `cmuscheme' package.
 Commands:
 Delete converts tabs to spaces as it moves back.
 Blank lines separate paragraphs.  Semicolons start comments.
-\\{scheme-mode-map}
-Entry to this mode calls the value of `scheme-mode-hook'
-if that value is non-nil."
+\\{scheme-mode-map}"
   (scheme-mode-variables))
 
 (defgroup scheme nil

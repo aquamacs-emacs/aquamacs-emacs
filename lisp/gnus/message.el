@@ -1,6 +1,6 @@
 ;;; message.el --- composing mail and news messages
 
-;; Copyright (C) 1996-2013 Free Software Foundation, Inc.
+;; Copyright (C) 1996-2014 Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;; Keywords: mail, news
@@ -944,6 +944,8 @@ the signature is inserted."
     (set-keymap-parent map minibuffer-local-map)
     map)
   "Keymap for `message-read-from-minibuffer'."
+  ;; FIXME improve type.
+  :type '(restricted-sexp :match-alternatives (symbolp keymapp))
   :version "22.1"
   :group 'message-various)
 
@@ -4097,11 +4099,12 @@ Instead, just auto-save the buffer and then bury it."
 
 (defun message-bury (buffer)
   "Bury this mail BUFFER."
+  ;; Note that this is not quite the same as (bury-buffer buffer),
+  ;; since bury-buffer does extra stuff with a nil argument.
+  ;; Eg http://lists.gnu.org/archive/html/emacs-devel/2014-01/msg00539.html
+  (with-current-buffer buffer (bury-buffer))
   (if message-return-action
-      (progn
-        (bury-buffer buffer)
-        (apply (car message-return-action) (cdr message-return-action)))
-    (with-current-buffer buffer (bury-buffer))))
+      (apply (car message-return-action) (cdr message-return-action))))
 
 (defun message-send (&optional arg)
   "Send the message in the current buffer.
@@ -4739,7 +4742,9 @@ that instead."
 			    (list resend-to-addresses)
 			  '("-t"))))))
 	    (unless (or (null cpr) (and (numberp cpr) (zerop cpr)))
-              (if errbuf (pop-to-buffer errbuf))
+	      (when errbuf
+		(pop-to-buffer errbuf)
+		(setq errbuf nil))
 	      (error "Sending...failed with exit value %d" cpr)))
 	  (when message-interactive
 	    (with-current-buffer errbuf
@@ -6271,6 +6276,9 @@ they are."
   :link '(custom-manual "(message)Movement")
   :type 'boolean)
 
+(defvar visual-line-mode)
+(declare-function beginning-of-visual-line "simple" (&optional n))
+
 (defun message-beginning-of-line (&optional n)
   "Move point to beginning of header value or to beginning of line.
 The prefix argument N is passed directly to `beginning-of-line'.
@@ -6297,7 +6305,9 @@ between beginning of field and beginning of line."
 	(goto-char
 	 (if (and eoh (or (< eoh here) (= bol here)))
 	     eoh bol)))
-    (beginning-of-line n)))
+    (if (and (boundp 'visual-line-mode) visual-line-mode)
+	(beginning-of-visual-line n)
+      (beginning-of-line n))))
 
 (defun message-buffer-name (type &optional to group)
   "Return a new (unique) buffer name based on TYPE and TO."
@@ -7205,7 +7215,7 @@ header line with the old Message-ID."
 	   (let ((buffer-read-only nil))
 	     (erase-buffer)
 	     (insert-file-contents file-name nil)))
-	  (t (error "message-recover cancelled")))))
+	  (t (error "message-recover canceled")))))
 
 ;;; Washing Subject:
 

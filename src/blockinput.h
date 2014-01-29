@@ -1,5 +1,5 @@
 /* blockinput.h - interface to blocking complicated interrupt-driven input.
-   Copyright (C) 1989, 1993, 2001-2013 Free Software Foundation, Inc.
+   Copyright (C) 1989, 1993, 2001-2014 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -59,7 +59,7 @@ extern void unblock_input (void);
 extern void totally_unblock_input (void);
 extern void unblock_input_to (int);
 
-/* In critical section ? */
+/* In critical section?  */
 
 INLINE bool
 input_blocked_p (void)

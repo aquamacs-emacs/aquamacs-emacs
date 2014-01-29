@@ -1,6 +1,6 @@
 /* X Communication module for terminals which understand the X protocol.
 
-Copyright (C) 1986, 1988, 1993-1994, 1996, 1999-2013 Free Software
+Copyright (C) 1986, 1988, 1993-1994, 1996, 1999-2014 Free Software
 Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -510,9 +510,7 @@ static void
 popup_activate_callback (Widget widget, LWLIB_ID id, XtPointer client_data)
 {
   popup_activated_flag = 1;
-#ifdef USE_X_TOOLKIT
   x_activate_timeout_atimer ();
-#endif
 }
 #endif
 
@@ -798,7 +796,7 @@ set_frame_menubar (struct frame *f, bool first_time, bool deep_p)
 #ifdef USE_GTK
   /* If we have detached menus, we must update deep so detached menus
      also gets updated.  */
-  deep_p = deep_p || xg_have_tear_offs ();
+  deep_p = deep_p || xg_have_tear_offs (f);
 #endif
 
   if (deep_p)
@@ -847,7 +845,7 @@ set_frame_menubar (struct frame *f, bool first_time, bool deep_p)
 
       /* Save the frame's previous menu bar contents data.  */
       if (previous_menu_items_used)
-	memcpy (previous_items, XVECTOR (f->menu_bar_vector)->u.contents,
+	memcpy (previous_items, XVECTOR (f->menu_bar_vector)->contents,
 		previous_menu_items_used * word_size);
 
       /* Fill in menu_items with the current menu bar contents.
@@ -1168,7 +1166,7 @@ free_frame_menubar (struct frame *f)
 	  if (x1 == 0 && y1 == 0)
 	    XtVaSetValues (f->output_data.x->widget, XtNx, x0, XtNy, y0, NULL);
 #endif
-          x_set_window_size (f, 0, FRAME_COLS (f), FRAME_LINES (f));
+	  x_set_window_size (f, 0, FRAME_TEXT_WIDTH (f), FRAME_TEXT_HEIGHT (f), 1);
 	}
       unblock_input ();
     }
@@ -1649,7 +1647,7 @@ xmenu_show (struct frame *f, int x, int y, bool for_click, bool keymaps,
 #endif
 
       wv_title->name = SSDATA (title);
-      wv_title->enabled = TRUE;
+      wv_title->enabled = true;
       wv_title->button_type = BUTTON_TYPE_NONE;
       wv_title->help = Qnil;
       wv_title->next = wv_sep1;
@@ -2086,7 +2084,7 @@ menu_help_callback (char const *help_string, int pane, int item)
   Lisp_Object pane_name;
   Lisp_Object menu_object;
 
-  first_item = XVECTOR (menu_items)->u.contents;
+  first_item = XVECTOR (menu_items)->contents;
   if (EQ (first_item[0], Qt))
     pane_name = first_item[MENU_ITEMS_PANE_NAME];
   else if (EQ (first_item[0], Qquote))
@@ -2440,11 +2438,7 @@ DEFUN ("menu-or-popup-active-p", Fmenu_or_popup_active_p, Smenu_or_popup_active_
        doc: /* Return t if a menu or popup dialog is active.  */)
   (void)
 {
-#ifdef HAVE_MENUS
   return (popup_activated ()) ? Qt : Qnil;
-#else
-  return Qnil;
-#endif /* HAVE_MENUS */
 }
 
 void

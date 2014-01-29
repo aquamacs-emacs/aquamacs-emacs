@@ -1,6 +1,6 @@
 ;;; minibuffer.el --- Minibuffer completion functions -*- lexical-binding: t -*-
 
-;; Copyright (C) 2008-2013 Free Software Foundation, Inc.
+;; Copyright (C) 2008-2014 Free Software Foundation, Inc.
 
 ;; Author: Stefan Monnier <monnier@iro.umontreal.ca>
 ;; Package: emacs
@@ -189,6 +189,24 @@ that can be used as the COLLECTION argument to `try-completion' and
                              (if (window-live-p win) (window-buffer win)
                                (current-buffer)))
         (complete-with-action action (funcall fun string) string pred)))))
+
+(defun completion-table-with-cache (fun &optional ignore-case)
+  "Create dynamic completion table from FUN, with cache.
+This wraps `completion-table-dynamic', but saves the last
+argument-result pair from FUN, so that several lookups with the
+same argument (or with an argument that starts with the first one)
+only need to call FUN once.  Most useful when FUN performs a relatively
+slow operation, such as calling an external process (see Bug#11906).
+When IGNORE-CASE is non-nil, FUN is expected to be case-insensitive."
+  (let* (last-arg last-result
+         (new-fun
+          (lambda (arg)
+            (if (and last-arg (string-prefix-p last-arg arg ignore-case))
+                last-result
+              (prog1
+                  (setq last-result (funcall fun arg))
+                (setq last-arg arg))))))
+    (completion-table-dynamic new-fun)))
 
 (defmacro lazy-completion-table (var fun)
   "Initialize variable VAR as a lazy completion table.
@@ -1067,7 +1085,8 @@ scroll the window of possible completions."
             ;; If end is in view, scroll up to the beginning.
             (set-window-start window (point-min) nil)
           ;; Else scroll down one screen.
-          (scroll-other-window))
+          (with-selected-window window
+	    (scroll-up)))
         nil)))
    ;; If we're cycling, keep on cycling.
    ((and completion-cycling completion-all-sorted-completions)
@@ -1203,7 +1222,7 @@ Repeated uses step through the possible completions."
                 (interactive)
                 (let ((completion-extra-properties extra-prop))
                   (completion-in-region start (point) table pred)))))
-        (set-temporary-overlay-map
+        (set-transient-map
          (let ((map (make-sparse-keymap)))
            (define-key map [remap completion-at-point] cmd)
            (define-key map (vector last-command-event) cmd)

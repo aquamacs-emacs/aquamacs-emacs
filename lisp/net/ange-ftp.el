@@ -1,6 +1,7 @@
 ;;; ange-ftp.el --- transparent FTP support for GNU Emacs
 
-;; Copyright (C) 1989-1996, 1998, 2000-2013 Free Software Foundation, Inc.
+;; Copyright (C) 1989-1996, 1998, 2000-2014 Free Software Foundation,
+;; Inc.
 
 ;; Author: Andy Norman (ange@hplb.hpl.hp.com)
 ;; Maintainer: FSF
@@ -363,7 +364,7 @@
 ;;
 ;; Filename syntax:
 ;;
-;; CMS filenames are entered in a UNIX-y way. In otherwords, minidisks are
+;; CMS filenames are entered in a UNIX-y way. In other words, minidisks are
 ;; treated as UNIX directories. For example to access the file READ.ME in
 ;; minidisk *.311 on cuvmb.cc.columbia.edu, you would enter
 ;;   /anonymous@cuvmb.cc.columbia.edu:/*.311/READ.ME

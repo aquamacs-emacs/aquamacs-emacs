@@ -1,6 +1,6 @@
 ;;; lisp-mode.el --- Lisp mode, and its idiosyncratic commands  -*- lexical-binding:t -*-
 
-;; Copyright (C) 1985-1986, 1999-2013 Free Software Foundation, Inc.
+;; Copyright (C) 1985-1986, 1999-2014 Free Software Foundation, Inc.
 
 ;; Maintainer: FSF
 ;; Keywords: lisp, languages
@@ -251,9 +251,7 @@ It has `lisp-mode-abbrev-table' as its parent."
                              (cons "go" (mapcar (lambda (s) (concat "cl-" s))
                                                 (remove "go" cl-lib-kw))))
                             t)
-                (regexp-opt (append lisp-kw el-kw eieio-kw
-                                    (cons "go" (mapcar (lambda (s) (concat "cl-" s))
-                                                       (remove "go" cl-kw))))
+                (regexp-opt (append lisp-kw cl-kw eieio-kw cl-lib-kw)
                             t)
 
                 ;; Elisp and Common Lisp "errors".
@@ -360,7 +358,7 @@ It has `lisp-mode-abbrev-table' as its parent."
        ;; Control structures.  Common Lisp forms.
        (,(concat "(" cl-kws-re "\\_>") . 1)
        ;; Exit/Feature symbols as constants.
-       (,(concat "(\\(catch\\|throw\\|featurep\\|provide\\|require\\)\\_>"
+       (,(concat "(\\(catch\\|throw\\|provide\\|require\\)\\_>"
                  "[ \t']*\\(\\(?:\\sw\\|\\s_\\)+\\)?")
         (1 font-lock-keyword-face)
         (2 font-lock-constant-face nil t))
@@ -462,7 +460,7 @@ font-lock keywords will not be case sensitive."
   (setq-local comment-use-global-state t)
   (setq-local imenu-generic-expression lisp-imenu-generic-expression)
   (setq-local multibyte-syntax-as-symbol t)
-  (setq-local syntax-begin-function 'beginning-of-defun)
+  ;; (setq-local syntax-begin-function 'beginning-of-defun)  ;;Bug#16247.
   (setq font-lock-defaults
 	`(,(if elisp '(lisp-el-font-lock-keywords
                        lisp-el-font-lock-keywords-1
@@ -474,7 +472,13 @@ font-lock keywords will not be case sensitive."
 	  (font-lock-mark-block-function . mark-defun)
 	  (font-lock-syntactic-face-function
 	   . lisp-font-lock-syntactic-face-function)))
-  (setq-local prettify-symbols-alist lisp--prettify-symbols-alist))
+  (setq-local prettify-symbols-alist lisp--prettify-symbols-alist)
+  ;; electric
+  (when elisp
+    (setq-local electric-pair-text-pairs
+                (cons '(?\` . ?\') electric-pair-text-pairs)))
+  (setq-local electric-pair-skip-whitespace 'chomp)
+  (setq-local electric-pair-open-newline-between-pairs nil))
 
 (defun lisp-outline-level ()
   "Lisp mode `outline-level' function."
@@ -702,9 +706,7 @@ Commands:
 Delete converts tabs to spaces as it moves back.
 Blank lines separate paragraphs.  Semicolons start comments.
 
-\\{emacs-lisp-mode-map}
-Entry to this mode calls the value of `emacs-lisp-mode-hook'
-if that value is non-nil."
+\\{emacs-lisp-mode-map}"
   :group 'lisp
   (lisp-mode-variables nil nil 'elisp)
   (setq imenu-case-fold-search nil)
@@ -794,10 +796,7 @@ Blank lines separate paragraphs.  Semicolons start comments.
 
 \\{lisp-mode-map}
 Note that `run-lisp' may be used either to start an inferior Lisp job
-or to switch back to an existing one.
-
-Entry to this mode calls the value of `lisp-mode-hook'
-if that value is non-nil."
+or to switch back to an existing one."
   (lisp-mode-variables nil t)
   (setq-local find-tag-default-function 'lisp-find-tag-default)
   (setq-local comment-start-skip
@@ -862,24 +861,25 @@ Delete converts tabs to spaces as it moves back.
 Paragraphs are separated only by blank lines.
 Semicolons start comments.
 
-\\{lisp-interaction-mode-map}
-Entry to this mode calls the value of `lisp-interaction-mode-hook'
-if that value is non-nil."
+\\{lisp-interaction-mode-map}"
   :abbrev-table nil)
 
-(defun eval-print-last-sexp ()
+(defun eval-print-last-sexp (&optional eval-last-sexp-arg-internal)
   "Evaluate sexp before point; print value into current buffer.
 
-If `eval-expression-debug-on-error' is non-nil, which is the default,
-this command arranges for all errors to enter the debugger.
+Normally, this function truncates long output according to the value
+of the variables `eval-expression-print-length' and
+`eval-expression-print-level'.  With a prefix argument of zero,
+however, there is no such truncation.  Such a prefix argument
+also causes integers to be printed in several additional formats
+\(octal, hexadecimal, and character).
 
-Note that printing the result is controlled by the variables
-`eval-expression-print-length' and `eval-expression-print-level',
-which see."
-  (interactive)
+If `eval-expression-debug-on-error' is non-nil, which is the default,
+this command arranges for all errors to enter the debugger."
+  (interactive "P")
   (let ((standard-output (current-buffer)))
     (terpri)
-    (eval-last-sexp t)
+    (eval-last-sexp (or eval-last-sexp-arg-internal t))
     (terpri)))
 
 
@@ -1022,18 +1022,26 @@ If CHAR is not a character, return nil."
 
 (defun eval-last-sexp-1 (eval-last-sexp-arg-internal)
   "Evaluate sexp before point; print value in the echo area.
-With argument, print output into current buffer."
+With argument, print output into current buffer.
+With a zero prefix arg, print output with no limit on the length
+and level of lists, and include additional formats for integers
+\(octal, hexadecimal, and character)."
   (let ((standard-output (if eval-last-sexp-arg-internal (current-buffer) t)))
     ;; Setup the lexical environment if lexical-binding is enabled.
     (eval-last-sexp-print-value
-     (eval (eval-sexp-add-defvars (preceding-sexp)) lexical-binding))))
+     (eval (eval-sexp-add-defvars (preceding-sexp)) lexical-binding)
+     eval-last-sexp-arg-internal)))
 
 
-(defun eval-last-sexp-print-value (value)
+(defun eval-last-sexp-print-value (value &optional eval-last-sexp-arg-internal)
   (let ((unabbreviated (let ((print-length nil) (print-level nil))
 			 (prin1-to-string value)))
-	(print-length eval-expression-print-length)
-	(print-level eval-expression-print-level)
+	(print-length (and (not (zerop (prefix-numeric-value
+					eval-last-sexp-arg-internal)))
+			   eval-expression-print-length))
+	(print-level (and (not (zerop (prefix-numeric-value
+				       eval-last-sexp-arg-internal)))
+			  eval-expression-print-level))
 	(beg (point))
 	end)
     (prog1
@@ -1077,8 +1085,13 @@ POS specifies the starting position where EXP was found and defaults to point."
 (defun eval-last-sexp (eval-last-sexp-arg-internal)
   "Evaluate sexp before point; print value in the echo area.
 Interactively, with prefix argument, print output into current buffer.
-Truncates long output according to the value of the variables
-`eval-expression-print-length' and `eval-expression-print-level'.
+
+Normally, this function truncates long output according to the value
+of the variables `eval-expression-print-length' and
+`eval-expression-print-level'.  With a prefix argument of zero,
+however, there is no such truncation.  Such a prefix argument
+also causes integers to be printed in several additional formats
+\(octal, hexadecimal, and character).
 
 If `eval-expression-debug-on-error' is non-nil, which is the default,
 this command arranges for all errors to enter the debugger."
@@ -1176,6 +1189,8 @@ Return the result of evaluation."
                          ;; will make eval-region return.
                          (goto-char end)
                          form))))))
+  (let ((str (eval-expression-print-format (car values))))
+    (if str (princ str)))
   ;; The result of evaluation has been put onto VALUES.  So return it.
   (car values))
 

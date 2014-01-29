@@ -1,6 +1,6 @@
 ;;; mm-view.el --- functions for viewing MIME objects
 
-;; Copyright (C) 1998-2013 Free Software Foundation, Inc.
+;; Copyright (C) 1998-2014 Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;; This file is part of GNU Emacs.
@@ -175,7 +175,7 @@
 				  (match-end 2))))
 		    (if (fboundp 'w3-coding-system-for-mime-charset)
 			(w3-coding-system-for-mime-charset bsubstr)
-		      (mm-charset-to-coding-system bsubstr))))
+		      (mm-charset-to-coding-system bsubstr nil t))))
 	    (delete-region (point-min) (point-max))
 	    (insert (mm-decode-string text charset))))
 	(save-window-excursion
@@ -343,9 +343,10 @@
 						'charset)
 			 (symbol-name mail-parse-charset)))
 	    cs)
-	(unless (and charset
-		     (setq cs (mm-charset-to-coding-system charset))
-		     (not (eq cs 'ascii)))
+	(if (and charset
+		 (setq cs (mm-charset-to-coding-system charset nil t))
+		 (not (eq cs 'ascii)))
+	    (setq charset (format "%s" (mm-coding-system-to-mime-charset cs)))
 	  ;; The default.
 	  (setq charset "iso-8859-1"
 		cs 'iso-8859-1))
