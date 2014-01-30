@@ -2006,8 +2006,7 @@ With argument, add COUNT copies of the character."
 	    ;; If the string was found but was completely invisible,
 	    ;; it might now be partly visible, so try again.
 	    (prog1 isearch-hidden (setq isearch-hidden nil)))
-    (if (and transient-mark-mode 
-	     (not (and cua-mode (region-active-p))))
+    (if (use-region-p)
 	(deactivate-mark))
     ;; In reverse search, adding stuff at
     ;; the end may cause zero or many more chars to be
