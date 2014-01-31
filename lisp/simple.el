@@ -7813,7 +7813,6 @@ warning using STRING as the message.")
     (with-eval-after-load pkg
       (bad-package-check pkg))))
 
-;; Smart spacing
 
 ;;; Generic dispatcher commands
 
@@ -7892,13 +7891,15 @@ contains the list of implementations currently supported for this command."
            (message ,(format "No implementation selected for command `%s'"
                              command-name)))))))
 
+;; Smart spacing
+
 ;; Author: David Reitter, david.reitter@gmail.com
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs
  
 ;; This code is part of Aquamacs Emacs
 ;; http://aquamacs.org/
-;; Copyright (C) 2009: David Reitter
+;; Copyright (C) 2009, 2014: David Reitter
 
 ;; (defcustom smart-spacing-when-killing-words nil
 ;;   "Delete extra spaces when killing words.
@@ -7907,6 +7908,7 @@ contains the list of implementations currently supported for this command."
 ;;   :group 'Aquamacs
 ;;   :type '(choice (const nil) (const t)))
 
+(defvar smart-spacing--prev-filter-buffer-substring-function nil)
 (define-minor-mode smart-spacing-mode
  "Smart spacing: word-wise kill&yank.
 When this mode is enabled, kill and yank operations support
@@ -7922,7 +7924,23 @@ will never delete more than one extra space at a time.
 
 This feature is part of Aquamacs."
  :group 'convenience
- :lighter " Spc")
+ :lighter " Spc"
+
+ (if smart-spacing-mode
+     ;; don't set it again (overwriting the original function)
+       (unless (eq filter-buffer-substring-function
+		   'smart-spacing-filter-buffer-substring)
+	 (setq smart-spacing--prev-filter-buffer-substring-function
+	       filter-buffer-substring-function)
+	 (setq filter-buffer-substring-function
+	       'smart-spacing-filter-buffer-substring))
+   (if (eq filter-buffer-substring-function
+	   'smart-spacing-filter-buffer-substring)
+       (setq filter-buffer-substring-function
+	     (or smart-spacing--prev-filter-buffer-substring-function
+		 ;; default:
+		 #'buffer-substring--filter)))
+   (setq smart-spacing--prev-filter-buffer-substring-function nil)))
 
 (defun turn-on-smart-spacing-mode ()
   (interactive)
@@ -7969,28 +7987,33 @@ the point is when the command is called.")
   (equal "\n" (buffer-substring-no-properties (max 1 (1- pos)) pos)))
 
 (defun smart-spacing-filter-buffer-substring (beg end &optional delete)
- "Like `filter-buffer-substring', but add spaces around content if region is a phrase."
- (let* ((from (min beg end)) (to (max beg end))
-	;; (move-point (memq (point) (list beg end))) 
-	(point-at-end (eq (point) end))
-	(end-of-line (smart-spacing-end-of-line to))
-	(use-smart-string 
-	 (and
-	  smart-spacing-mode
-	  (user-buffer-p (current-buffer))
-	  (smart-spacing-char-is-word-boundary (1- from) from)
-	  (smart-spacing-char-is-word-boundary to (1+ to))))
-	;; the following is destructive (side-effect).  
-	;; do after checking for word boundaries.
-	(string (filter-buffer-substring beg end delete)))
-   (when use-smart-string
-     (put-text-property 0 (length string)
-			'yank-handler 
-			'(smart-spacing-yank-handler nil nil nil) 
-			string)
-     (when (and (not end-of-line) delete) 
-       (smart-remove-remaining-spaces from point-at-end)))
-    string))
+  "Like `filter-buffer-substring', but add spaces around content if region is a phrase."
+  (if smart-spacing-mode
+      (let* ((from (min beg end)) (to (max beg end))
+	     (point-at-end (eq (point) end))
+	     (end-of-line (smart-spacing-end-of-line to))
+	     (use-smart-string
+	      (and
+	       (user-buffer-p (current-buffer))
+	       (smart-spacing-char-is-word-boundary (1- from) from)
+	       (smart-spacing-char-is-word-boundary to (1+ to))))
+	     ;; the following is destructive (side-effect).
+	     ;; do after checking for word boundaries.
+	     (filter-buffer-substring-function (or smart-spacing--prev-filter-buffer-substring-function
+						   #'buffer-substring--filter))
+	     (string (filter-buffer-substring beg end delete)))
+	(when use-smart-string
+	  (put-text-property 0 (length string)
+			     'yank-handler
+			     '(smart-spacing-yank-handler nil nil nil)
+			     string)
+	  (when (and (not end-of-line) delete)
+	    (smart-remove-remaining-spaces from point-at-end)))
+	string)
+    ;; smart-spacing is off, but this function is called anyway:
+    (let ((filter-buffer-substring-function (or smart-spacing--prev-filter-buffer-substring-function
+						#'buffer-substring--filter)))
+      (filter-buffer-substring beg end delete))))
 
 (defun smart-delete-region (from to)
   (if (and smart-spacing-mode
