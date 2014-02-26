@@ -56,17 +56,17 @@ Set to nil to turn off version check.")
 	versions of Aquamacs and OS X and the processor type that
 	you're using.  We also receive information about some
 	settings: currently, this is whether you've got
-	`one-buffer-one-frame-mode', `tabbar-mode', 
-        `global-smart-spacing-mode' and `smart-spacing-mode'
+	`one-buffer-one-frame-mode', `tabbar-mode',
+	`global-smart-spacing-mode' and `smart-spacing-mode'
 	turned on, and the major mode currently used.  Just as
-        during any access to an Internet
-	server, your IP address and the time of your inquiry is
-	be stored, too.  This information is used to produce
-	statistics; we will delete the original data after a
-	period of time. The statistics help us develop the
-	application further -- for example, we may decide to
+	during any access to an Internet server, connection
+	details (your IP address and the time of your inquiry)
+	are logged by the server.  This information is used to
+	produce statistics; we will delete the original data
+	after a period of time. The statistics help us develop
+	the application further -- for example, we may decide to
 	continue support for a particular old operating system
-	version.  
+	version.
 
 	If you like to turn this check off, add this to your file
 	~/Library/Preferences/Aquamacs Emacs/Preferences.el:
