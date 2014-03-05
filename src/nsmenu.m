@@ -563,6 +563,10 @@ name_is_separator (name)
   frame = 0;
   if ((self = [super initWithTitle: title]))
     [self setAutoenablesItems: NO];
+
+  if ( NILP (Vns_menu_display_services))
+    [self setAllowsContextMenuPlugIns: NO];
+  
   return self;
 }
 
@@ -2565,6 +2569,11 @@ assumed.  The default is nil.
 This variable only takes effect for newly created tool bars.*/);
 
   Vns_tool_bar_display_mode = Qnil;
+
+  DEFVAR_LISP ("ns-menu-display-services", Vns_menu_display_services,
+     doc: /* Service entries are displayed in popup menus if non-nil.*/);
+
+  Vns_menu_display_services = Qt;
 
   defsubr (&Sns_tool_bar_customize);
   defsubr (&Sns_tool_bar_configuration);
