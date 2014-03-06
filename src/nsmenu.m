@@ -2572,6 +2572,11 @@ This variable only takes effect for newly created tool bars.*/);
 
   Vns_tool_bar_display_mode = Qnil;
 
+  DEFVAR_LISP ("ns-menu-display-services", Vns_menu_display_services,
+     doc: /* Service entries are displayed in popup menus if non-nil.*/);
+
+  Vns_menu_display_services = Qt;
+
   defsubr (&Sns_tool_bar_customize);
   defsubr (&Sns_tool_bar_configuration);
   defsubr (&Sns_reset_menu);
