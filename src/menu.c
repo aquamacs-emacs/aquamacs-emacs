@@ -1337,10 +1337,6 @@ no quit occurs and `x-popup-menu' returns nil.  */)
       prompt = Fkeymap_prompt (keymap);
       if (!NILP (prompt))
 	title = prompt;
-#ifdef HAVE_NS		/* Is that needed and NS-specific?  --Stef  */
-      else
-	title = build_string ("Select");
-#endif
 
       /* Make that be the pane title of the first pane.  */
       if (!NILP (prompt) && menu_items_n_panes >= 0)

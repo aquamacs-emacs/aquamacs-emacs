@@ -563,10 +563,8 @@ name_is_separator (name)
   frame = 0;
   if ((self = [super initWithTitle: title]))
     [self setAutoenablesItems: NO];
-
-  if ( NILP (Vns_menu_display_services))
+  if (NILP (Vns_menu_display_services))
     [self setAllowsContextMenuPlugIns: NO];
-  
   return self;
 }
 
@@ -1125,10 +1123,14 @@ ns_menu_show (struct frame *f, int x, int y, bool for_click, bool keymaps,
       wv_title->help = Qnil;
       wv_title->next = wv_sep;
       first_wv->contents = wv_title;
-    }
 
-  pmenu = [[EmacsMenu alloc] initWithTitle:
-                               [NSString stringWithUTF8String: SSDATA (title)]];
+      pmenu = [[EmacsMenu alloc] initWithTitle:
+				   [NSString stringWithUTF8String: SSDATA (title)]];
+    }
+  else
+    {
+      pmenu = [[EmacsMenu alloc] initWithTitle: @"Menu"];
+    }
   [pmenu fillWithWidgetValue: first_wv->contents];
   free_menubar_widget_value_tree (first_wv);
   unbind_to (specpdl_count, Qnil);
@@ -2569,11 +2571,6 @@ assumed.  The default is nil.
 This variable only takes effect for newly created tool bars.*/);
 
   Vns_tool_bar_display_mode = Qnil;
-
-  DEFVAR_LISP ("ns-menu-display-services", Vns_menu_display_services,
-     doc: /* Service entries are displayed in popup menus if non-nil.*/);
-
-  Vns_menu_display_services = Qt;
 
   defsubr (&Sns_tool_bar_customize);
   defsubr (&Sns_tool_bar_configuration);
