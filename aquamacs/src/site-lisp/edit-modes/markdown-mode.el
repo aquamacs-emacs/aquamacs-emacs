@@ -1295,42 +1295,33 @@ on the value of `markdown-wiki-link-alias-first'.")
   "^\\(%\\)[ \t]*\\(.*\\)$"
   "Regular expression for matching Pandoc metadata.")
 
-(defvar markdown-hide-markup t)
-
-(defun markdown-make-face-spec (&optional face disptext)
-  (unless face (setq face 'markdown-header-delimiter-face))
-  (unless disptext (setq disptext "."))
-  `(quote (face ,face display ,disptext)))
-
-;; (markdown-make-face-spec)
-
 (defvar markdown-mode-font-lock-keywords-basic
   (list
    (cons 'markdown-match-pre-blocks '((0 markdown-pre-face)))
    (cons 'markdown-match-fenced-code-blocks '((0 markdown-pre-face)))
    (cons markdown-regex-blockquote 'markdown-blockquote-face)
-   (cons markdown-regex-header-1-setext `((1 markdown-header-face-1)
-                                          (2 ,(markdown-make-face-spec 'markdown-header-rule-face "-"))))
-   (cons markdown-regex-header-2-setext `((1 markdown-header-face-2)
-                                          (2 ,(markdown-make-face-spec 'markdown-header-rule-face "-"))))
-   (cons markdown-regex-header-6-atx `((1 ,(markdown-make-face-spec))
+   (cons markdown-regex-header-1-setext '((1 markdown-header-face-1)
+                                          (2 markdown-header-rule-face)))
+   (cons markdown-regex-header-2-setext '((1 markdown-header-face-2)
+                                          (2 markdown-header-rule-face)))
+   (cons markdown-regex-header-6-atx '((1 markdown-header-delimiter-face)
                                        (2 markdown-header-face-6)
-                                       (3 ,(markdown-make-face-spec))))
-   (cons markdown-regex-header-5-atx `((1 ,(markdown-make-face-spec))
+                                       (3 markdown-header-delimiter-face)))
+   (cons markdown-regex-header-5-atx '((1 markdown-header-delimiter-face)
                                        (2 markdown-header-face-5)
-                                       (3 ,(markdown-make-face-spec))))
-   (cons markdown-regex-header-4-atx `((1 ,(markdown-make-face-spec))
+                                       (3 markdown-header-delimiter-face)))
+   (cons markdown-regex-header-4-atx '((1 markdown-header-delimiter-face)
                                        (2 markdown-header-face-4)
-                                       (3 ,(markdown-make-face-spec))))
-   (cons markdown-regex-header-3-atx `((1 ,(markdown-make-face-spec))
+                                       (3 markdown-header-delimiter-face)))
+   (cons markdown-regex-header-3-atx '((1 markdown-header-delimiter-face)
                                        (2 markdown-header-face-3)
-                                       (3 ,(markdown-make-face-spec))))
-   (cons markdown-regex-header-2-atx `((1 ,(markdown-make-face-spec))
+                                       (3 markdown-header-delimiter-face)))
+   (cons markdown-regex-header-2-atx '((1 markdown-header-delimiter-face)
                                        (2 markdown-header-face-2)
-                                       (3 ,(markdown-make-face-spec))))
-   (cons markdown-regex-header-1-atx `((1 ,(markdown-make-face-spec))
-				       (2 markdown-header-face-1)
-				       (3 ,(markdown-make-face-spec))))
+                                       (3 markdown-header-delimiter-face)))
+   (cons markdown-regex-header-1-atx '((1 markdown-header-delimiter-face)
+                                       (2 markdown-header-face-1)
+                                       (3 markdown-header-delimiter-face)))
    (cons 'markdown-match-multimarkdown-metadata '((1 markdown-metadata-key-face)
                                                   (2 markdown-metadata-value-face)))
    (cons 'markdown-match-pandoc-metadata '((1 markdown-comment-face)
@@ -1357,19 +1348,6 @@ on the value of `markdown-wiki-link-alias-first'.")
    (cons markdown-regex-line-break '(1 markdown-line-break-face prepend))
    )
   "Syntax highlighting for Markdown files.")
-
-; (makunbound 'markdown-mode-font-lock-keywords-basic)
-; (setq font-lock-extra-managed-props '(invisible))
-; (markdown-reload-extensions)
-
-
-;; (font-lock-add-keywords
-;;              nil
-;;              `((,markdown-regex-header-2-atx
-;;                 (1 '(face nil invisible t))
-;;                 (2 'markdown-header-face-2)
-;;                 (3 '(face nil invisible t))
-;;                 )))
 
 (defvar markdown-mode-font-lock-keywords-core
   (list
