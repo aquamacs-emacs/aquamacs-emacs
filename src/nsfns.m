@@ -316,6 +316,14 @@ x_set_foreground_color (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
       error ("Unknown color");
     }
 
+  col = [col colorUsingColorSpace:[NSColorSpace sRGBColorSpace]];
+
+  if (col == nil)
+    {
+      // col = [NSColor blackColor];
+      error ("Unknown color (cannot convert to RGB)");
+    }
+
   [col retain];
   [f->output_data.ns->foreground_color release];
   f->output_data.ns->foreground_color = col;
