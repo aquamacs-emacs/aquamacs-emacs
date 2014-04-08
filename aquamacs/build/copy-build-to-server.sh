@@ -5,6 +5,8 @@
 
 # SSH authentication should be installed
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 GNUNAME=GNU-Emacs-$2.dmg.bz2
 NAME=Aquamacs-$1.tar.bz2
 COPYORLINK='ln -s'
@@ -59,6 +61,11 @@ echo "</BODY></HTML>" >>latest.html
 
 # sync and delete older files on server
 
-rsync --progress --bwlimit=1000 -l -r builds $DEST/ && \
-    rsync -l -r latest-logs latest.html changelog-nightly.html Aquamacs-nightly.tar.bz2 $DEST/ && \
+# rsync --progress --bwlimit=1000 -l -r builds $DEST/ && \
+#     rsync -l -r latest-logs latest.html changelog-nightly.html Aquamacs-nightly.tar.bz2 $DEST/ && \
+#     ssh $DESTSSH "find $DESTPATH/builds -mtime +2 -delete" && echo "All transfers successful."
+
+$DIR/retry.py -v -- rsync --partial --progress --rsh=ssh --timeout=5 -l -r builds $DEST/ &&\
+$DIR/retry.py -v -- rsync --partial --progress --rsh=ssh --timeout=5 -l -r latest-logs latest.html changelog-nightly.html Aquamacs-nightly.tar.bz2 $DEST/ && \
     ssh $DESTSSH "find $DESTPATH/builds -mtime +2 -delete" && echo "All transfers successful."
+
