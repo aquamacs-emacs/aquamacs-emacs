@@ -709,17 +709,36 @@ You can call print while debugging emacs, and pass it this function
 to make it write to the debugging output.  */)
   (Lisp_Object character)
 {
-  CHECK_NUMBER (character);
-  putc (XINT (character) & 0xFF, stderr);
+  unsigned int ch;
 
-#ifdef WINDOWSNT
-  /* Send the output to a debugger (nothing happens if there isn't one).  */
-  if (print_output_debug_flag)
+  CHECK_NUMBER (character);
+  ch = XINT (character);
+  if (ASCII_CHAR_P (ch))
     {
-      char buf[2] = {(char) XINT (character), '\0'};
-      OutputDebugString (buf);
-    }
+      putc (ch, stderr);
+#ifdef WINDOWSNT
+      /* Send the output to a debugger (nothing happens if there isn't
+	 one).  */
+      if (print_output_debug_flag)
+	{
+	  char buf[2] = {(char) XINT (character), '\0'};
+	  OutputDebugString (buf);
+	}
 #endif
+    }
+  else
+    {
+      unsigned char mbstr[MAX_MULTIBYTE_LENGTH];
+      ptrdiff_t len = CHAR_STRING (ch, mbstr);
+      Lisp_Object encoded_ch =
+	ENCODE_SYSTEM (make_multibyte_string ((char *) mbstr, 1, len));
+
+      fwrite (SSDATA (encoded_ch), SBYTES (encoded_ch), 1, stderr);
+#ifdef WINDOWSNT
+      if (print_output_debug_flag)
+	OutputDebugString (SSDATA (encoded_ch));
+#endif
+    }
 
   return character;
 }
@@ -1389,9 +1408,8 @@ print_object (Lisp_Object obj, Lisp_Object printcharfun, bool escapeflag)
 	print_string (obj, printcharfun);
       else
 	{
-	  register ptrdiff_t i_byte;
+	  register ptrdiff_t i, i_byte;
 	  struct gcpro gcpro1;
-	  unsigned char *str;
 	  ptrdiff_t size_byte;
 	  /* 1 means we must ensure that the next character we output
 	     cannot be taken as part of a hex character escape.  */
@@ -1410,23 +1428,15 @@ print_object (Lisp_Object obj, Lisp_Object printcharfun, bool escapeflag)
 	    }
 
 	  PRINTCHAR ('\"');
-	  str = SDATA (obj);
 	  size_byte = SBYTES (obj);
 
-	  for (i_byte = 0; i_byte < size_byte;)
+	  for (i = 0, i_byte = 0; i_byte < size_byte;)
 	    {
 	      /* Here, we must convert each multi-byte form to the
 		 corresponding character code before handing it to PRINTCHAR.  */
-	      int len;
 	      int c;
 
-	      if (multibyte)
-		{
-		  c = STRING_CHAR_AND_LENGTH (str + i_byte, len);
-		  i_byte += len;
-		}
-	      else
-		c = str[i_byte++];
+	      FETCH_STRING_CHAR_ADVANCE (c, obj, i, i_byte);
 
 	      QUIT;
 

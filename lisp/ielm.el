@@ -4,7 +4,7 @@
 ;; Copyright (C) 1994, 2001-2014 Free Software Foundation, Inc.
 
 ;; Author: David Smith <maa036@lancaster.ac.uk>
-;; Maintainer: FSF
+;; Maintainer: emacs-devel@gnu.org
 ;; Created: 25 Feb 1994
 ;; Keywords: lisp
 
@@ -118,7 +118,7 @@ such as `edebug-defun' to work with such inputs."
 
 (defcustom ielm-mode-hook nil
   "Hooks to be run when IELM (`inferior-emacs-lisp-mode') is started."
-  :options '(turn-on-eldoc-mode)
+  :options '(eldoc-mode)
   :type 'hook
   :group 'ielm)
 (defvaralias 'inferior-emacs-lisp-mode-hook 'ielm-mode-hook)
@@ -549,7 +549,7 @@ Customized bindings may be defined in `ielm-map', which currently contains:
   (setq mode-line-process '(":%s on " (:eval (buffer-name ielm-working-buffer))))
   ;; Useful for `hs-minor-mode'.
   (setq-local comment-start ";")
-  (setq-local comment-use-global-state t)
+  (setq-local comment-use-syntax t)
 
   (set (make-local-variable 'indent-line-function) 'ielm-indent-line)
   (set (make-local-variable 'ielm-working-buffer) (current-buffer))

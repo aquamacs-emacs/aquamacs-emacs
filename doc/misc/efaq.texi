@@ -1584,10 +1584,9 @@ According to the documentation string for @code{delete-selection-mode}
 delete-selection-mode @key{RET}}):
 
 @quotation
-When Delete Selection mode is enabled, Transient Mark mode is also
-enabled and typed text replaces the selection if the selection is
-active.  Otherwise, typed text is just inserted at point regardless of
-any selection.
+When Delete Selection mode is enabled, typed text replaces the selection
+if the selection is active.  Otherwise, typed text is just inserted at
+point regardless of any selection.
 @end quotation
 
 This mode also allows you to delete (not kill) the highlighted region by
@@ -2417,12 +2416,12 @@ printed an error message?  If so, compiling from within Emacs using the
 @kbd{M-x compile} and @kbd{M-x recompile} commands is a much more
 effective way of doing that.  Emacs automatically intercepts the compile
 error messages, inserts them into a special buffer called
-@code{*compilation*}, and lets you visit the locus of each message in
+@file{*compilation*}, and lets you visit the locus of each message in
 the source.  Type @kbd{C-x `} to step through the offending lines one by
 one (starting with Emacs 22, you can also use @kbd{M-g M-p} and
 @kbd{M-g M-n} to go to the previous and next matches directly).  Click
 @kbd{Mouse-2} or press @key{RET} on a message text in the
-@code{*compilation*} buffer to go to the line whose number is mentioned
+@file{*compilation*} buffer to go to the line whose number is mentioned
 in that message.
 
 But if you indeed need to go to a certain text line, type @kbd{M-g M-g}
@@ -2691,8 +2690,8 @@ Use the function @code{w32-send-sys-command}.  For example, you can
 put the following in your @file{.emacs} file:
 
 @lisp
-(add-hook 'term-setup-hook
-          #'(lambda () (w32-send-sys-command ?\xF030)))
+(add-hook 'emacs-startup-hook
+          (lambda () (w32-send-sys-command ?\xF030)))
 @end lisp
 
 To avoid the slightly distracting visual effect of Emacs starting with
@@ -3601,12 +3600,12 @@ been executed but is not, then you will experience this problem (this
 code/file execution order is not enforced after startup).
 
 To postpone the execution of Emacs Lisp code until after terminal or
-window-system setup, treat the code as a @dfn{lambda list} and set the
-value of either the @code{term-setup-hook} or @code{window-setup-hook}
-variable to this lambda function.  For example,
+window-system setup, treat the code as a @dfn{lambda list} and add it to
+@code{emacs-startup-hook} (or @code{tty-setup-hook} in Emacs 24.4 and
+newer).  For example,
 
 @lisp
-(add-hook 'term-setup-hook
+(add-hook 'emacs-startup-hook
           (lambda ()
            (when (string-match "\\`vt220" (or (getenv "TERM") ""))
              ;; Make vt220's "Do" key behave like M-x:

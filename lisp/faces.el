@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 1992-1996, 1998-2014 Free Software Foundation, Inc.
 
-;; Maintainer: FSF
+;; Maintainer: emacs-devel@gnu.org
 ;; Keywords: internal
 ;; Package: emacs
 
@@ -1260,7 +1260,7 @@ The sample text is a string that comes from the variable
 
 If REGEXP is non-nil, list only those faces with names matching
 this regular expression.  When called interactively with a prefix
-arg, prompt for a regular expression."
+argument, prompt for a regular expression using `read-regexp'."
   (interactive (list (and current-prefix-arg
                           (read-regexp "List faces matching regexp"))))
   (let ((all-faces (zerop (length regexp)))
@@ -2082,7 +2082,7 @@ If PARAMETERS contains a `reverse' parameter, handle that."
           (unless (terminal-parameter frame 'terminal-initted)
             (set-terminal-parameter frame 'terminal-initted t)
             (set-locale-environment nil frame)
-            (tty-run-terminal-initialization frame))
+            (tty-run-terminal-initialization frame nil t))
 	  (frame-set-background-mode frame t)
 	  (face-set-after-frame-default frame parameters)
 	  (setq success t))
@@ -2109,12 +2109,18 @@ the above example."
 
 (defvar tty-setup-hook nil
   "Hook run after running the initialization function of a new text terminal.
+Specifically, `tty-run-terminal-initialization' runs this.
 This can be used to fine tune the `input-decode-map', for example.")
 
-(defun tty-run-terminal-initialization (frame &optional type)
+(defun tty-run-terminal-initialization (frame &optional type run-hook)
   "Run the special initialization code for the terminal type of FRAME.
 The optional TYPE parameter may be used to override the autodetected
-terminal type to a different value."
+terminal type to a different value.
+
+If optional argument RUN-HOOK is non-nil, then as a final step,
+this runs the hook `tty-setup-hook'.
+
+If you set `term-file-prefix' to nil, this function does nothing."
   (setq type (or type (tty-type frame)))
   ;; Load library for our terminal type.
   ;; User init file can set term-file-prefix to nil to prevent this.
@@ -2137,7 +2143,7 @@ terminal type to a different value."
 	(when (fboundp term-init-func)
 	  (funcall term-init-func))
 	(set-terminal-parameter frame 'terminal-initted term-init-func)
-	(run-hooks 'tty-setup-hook)))))
+	(if run-hook (run-hooks 'tty-setup-hook))))))
 
 ;; Called from C function init_display to initialize faces of the
 ;; dumped terminal frame on startup.
@@ -2440,6 +2446,39 @@ Use the face `mode-line-highlight' for features that can be selected."
   '((((type tty)) :inherit mode-line-inactive))
   "Face used for vertical window dividers on ttys."
   :version "22.1"
+  :group 'basic-faces)
+
+(defface window-divider '((t :foreground "gray60"))
+  "Basic face for window dividers.
+When a divider is less than 3 pixels wide, it is drawn solidly
+with the foreground of this face.  For larger dividers this face
+is used for the inner part while the first pixel line/column is
+drawn with the `window-divider-first-pixel' face and the last
+pixel line/column with the `window-divider-last-pixel' face."
+  :version "24.4"
+  :group 'frames
+  :group 'basic-faces)
+
+(defface window-divider-first-pixel
+  '((t :foreground "gray80"))
+  "Basic face for first pixel line/column of window dividers.
+When a divider is at least 3 pixels wide, its first pixel
+line/column is drawn with the foreground of this face.  If you do
+not want to accentuate the first pixel line/column, set this to
+the same as `window-divider' face."
+  :version "24.4"
+  :group 'frames
+  :group 'basic-faces)
+
+(defface window-divider-last-pixel
+  '((t :foreground "gray40"))
+  "Basic face for last pixel line/column of window dividers.
+When a divider is at least 3 pixels wide, its last pixel
+line/column is drawn with the foreground of this face.  If you do
+not want to accentuate the last pixel line/column, set this to
+the same as `window-divider' face."
+  :version "24.4"
+  :group 'frames
   :group 'basic-faces)
 
 (defface minibuffer-prompt

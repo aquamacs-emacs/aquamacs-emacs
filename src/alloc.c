@@ -850,6 +850,20 @@ xlispstrdup (Lisp_Object string)
   return memcpy (xmalloc (size), SSDATA (string), size);
 }
 
+/* Assign to *PTR a copy of STRING, freeing any storage *PTR formerly
+   pointed to.  If STRING is null, assign it without copying anything.
+   Allocate before freeing, to avoid a dangling pointer if allocation
+   fails.  */
+
+void
+dupstring (char **ptr, char const *string)
+{
+  char *old = *ptr;
+  *ptr = string ? xstrdup (string) : 0;
+  xfree (old);
+}
+
+
 /* Like putenv, but (1) use the equivalent of xmalloc and (2) the
    argument is a const pointer.  */
 
@@ -1124,8 +1138,8 @@ lisp_align_malloc (size_t nbytes, enum mem_type type)
     }
 
   abase = ABLOCK_ABASE (free_ablock);
-  ABLOCKS_BUSY (abase) =
-    (struct ablocks *) (2 + (intptr_t) ABLOCKS_BUSY (abase));
+  ABLOCKS_BUSY (abase)
+    = (struct ablocks *) (2 + (intptr_t) ABLOCKS_BUSY (abase));
   val = free_ablock;
   free_ablock = free_ablock->x.next_free;
 

@@ -3,7 +3,7 @@
 ;; Copyright (C) 1985-1987, 1992, 1994, 1996-1997, 2000-2014 Free
 ;; Software Foundation, Inc.
 
-;; Maintainer: FSF
+;; Maintainer: emacs-devel@gnu.org
 ;; Package: emacs
 
 ;; This file is part of GNU Emacs.
@@ -450,6 +450,7 @@ of the region.  Otherwise, operate from point to the end of the buffer.
 
 Non-interactively, TO-STRINGS may be a list of replacement strings.
 
+Interactively, reads the regexp using `read-regexp'.
 Use \\<minibuffer-local-map>\\[next-history-element] \
 to pull the last incremental search regexp to the minibuffer
 that reads REGEXP.
@@ -627,17 +628,16 @@ of `history-length', which see.")
   "History of regexp for occur's collect operation")
 
 (defcustom read-regexp-defaults-function nil
-  "Function that provides default regexp(s) for regexp reading commands.
-This function should take no arguments and return one of nil, a
-regexp or a list of regexps.  The return value of this function is used
-as DEFAULTS param of `read-regexp'.  This function is called only during
-interactive use.
+  "Function that provides default regexp(s) for `read-regexp'.
+This function should take no arguments and return one of: nil, a
+regexp, or a list of regexps.  Interactively, `read-regexp' uses
+the return value of this function for its DEFAULT argument.
 
-If you need different defaults for different commands,
-use `this-command' to identify the command under execution.
+As an example, set this variable to `find-tag-default-as-regexp'
+to default to the symbol at point.
 
-You can customize `read-regexp-defaults-function' to the value
-`find-tag-default-as-regexp' to highlight a symbol at point."
+To provide different default regexps for different commands,
+the function that you set this to can check `this-command'."
   :type '(choice
 	  (const :tag "No default regexp reading function" nil)
 	  (const :tag "Latest regexp history" regexp-history-last)
@@ -647,7 +647,7 @@ You can customize `read-regexp-defaults-function' to the value
 			 find-tag-default-as-regexp)
 	  (function-item :tag "Tag at point as symbol regexp"
 			 find-tag-default-as-symbol-regexp)
-	  (function :tag "Function to provide default for read-regexp"))
+	  (function :tag "Your choice of function"))
   :group 'matching
   :version "24.4")
 
@@ -666,21 +666,35 @@ via \\<minibuffer-local-map>\\[next-history-element]."
 
 (defun read-regexp (prompt &optional defaults history)
   "Read and return a regular expression as a string.
-When PROMPT doesn't end with a colon and space, it adds a final \": \".
-If the first element of DEFAULTS is non-nil, it's added to the prompt.
+Prompt with the string PROMPT.  If PROMPT ends in \":\" (followed by
+optional whitespace), use it as-is.  Otherwise, add \": \" to the end,
+possibly preceded by the default result (see below).
 
-Optional arg DEFAULTS has the form (DEFAULT . SUGGESTIONS)
-or simply DEFAULT where DEFAULT, if non-nil, should be a string that
-is returned as the default value when the user enters empty input.
-SUGGESTIONS is a list of strings that can be inserted into
-the minibuffer using \\<minibuffer-local-map>\\[next-history-element].  \
-The values supplied in SUGGESTIONS
-are prepended to the list of standard suggestions returned by
-`read-regexp-suggestions'.  The default values can be customized
-by `read-regexp-defaults-function'.
+The optional argument DEFAULTS can be either: nil, a string, a list
+of strings, or a symbol.  We use DEFAULTS to construct the default
+return value in case of empty input.
 
-Optional arg HISTORY is a symbol to use for the history list.
-If HISTORY is nil, `regexp-history' is used."
+If DEFAULTS is a string, we use it as-is.
+
+If DEFAULTS is a list of strings, the first element is the
+default return value, but all the elements are accessible
+using the history command \\<minibuffer-local-map>\\[next-history-element].
+
+If DEFAULTS is a non-nil symbol, then if `read-regexp-defaults-function'
+is non-nil, we use that in place of DEFAULTS in the following:
+  If DEFAULTS is the symbol `regexp-history-last', we use the first
+  element of HISTORY (if specified) or `regexp-history'.
+  If DEFAULTS is a function, we call it with no arguments and use
+  what it returns, which should be either nil, a string, or a list of strings.
+
+We append the standard values from `read-regexp-suggestions' to DEFAULTS
+before using it.
+
+If the first element of DEFAULTS is non-nil (and if PROMPT does not end
+in \":\", followed by optional whitespace), we add it to the prompt.
+
+The optional argument HISTORY is a symbol to use for the history list.
+If nil, uses `regexp-history'."
   (let* ((defaults
 	   (if (and defaults (symbolp defaults))
 	       (cond
@@ -1891,9 +1905,11 @@ but coerced to the correct value of INTEGERS."
 
 (defun replace-match-maybe-edit (newtext fixedcase literal noedit match-data backward)
   "Make a replacement with `replace-match', editing `\\?'.
-NEWTEXT, FIXEDCASE, LITERAL are just passed on.  If NOEDIT is true, no
-check for `\\?' is made to save time.  MATCH-DATA is used for the
-replacement.  In case editing is done, it is changed to use markers.
+FIXEDCASE, LITERAL are passed to `replace-match' (which see).
+After possibly editing it (if `\\?' is present), NEWTEXT is also
+passed to `replace-match'.  If NOEDIT is true, no check for `\\?'
+is made (to save time).  MATCH-DATA is used for the replacement.
+In case editing is done, it is changed to use markers.
 
 The return value is non-nil if there has been no `\\?' or NOEDIT was
 passed in.  If LITERAL is set, no checking is done, anyway."

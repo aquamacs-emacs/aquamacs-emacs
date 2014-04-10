@@ -1469,7 +1469,7 @@ the tests)."
   "Activate font-lock keywords for some of ERT's symbols."
   (font-lock-add-keywords
    nil
-   '(("(\\(\\<ert-deftest\\)\\>\\s *\\(\\sw+\\)?"
+   '(("(\\(\\<ert-deftest\\)\\>\\s *\\(\\(?:\\sw\\|\\s_\\)+\\)?"
       (1 font-lock-keyword-face nil t)
       (2 font-lock-function-name-face nil t)))))
 
@@ -1882,11 +1882,12 @@ and how to display message."
                             ;; defined without cl.
                             (car ert--selector-history)
                           "t")))
-           (completing-read (if (null default)
-				"Run tests: "
-			      (format "Run tests (default %s): " default))
-			    obarray #'ert-test-boundp nil nil
-			    'ert--selector-history default nil))
+           (read
+            (completing-read (if (null default)
+                                 "Run tests: "
+                               (format "Run tests (default %s): " default))
+                             obarray #'ert-test-boundp nil nil
+                             'ert--selector-history default nil)))
          nil))
   (unless message-fn (setq message-fn 'message))
   (let ((output-buffer-name output-buffer-name)

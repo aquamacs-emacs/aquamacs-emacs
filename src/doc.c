@@ -1,7 +1,6 @@
 /* Record indices of function doc strings stored in a file.
 
-Copyright (C) 1985-1986, 1993-1995, 1997-2014 Free Software Foundation,
-Inc.
+Copyright (C) 1985-1986, 1993-1995, 1997-2014 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -536,6 +535,9 @@ store_function_docstring (Lisp_Object obj, ptrdiff_t offset)
 	 docstring, since we've found a docstring for it.  */
       if ((ASIZE (fun) & PSEUDOVECTOR_SIZE_MASK) > COMPILED_DOC_STRING)
 	ASET (fun, COMPILED_DOC_STRING, make_number (offset));
+      else
+	message ("No docstring slot for %s",
+		 SYMBOLP (obj) ? SSDATA (SYMBOL_NAME (obj)) : "<anonymous>");
     }
 }
 
@@ -559,6 +561,12 @@ the same file name is found in the `doc-directory'.  */)
   char *p, *name;
   bool skip_file = 0;
   ptrdiff_t count;
+  /* Preloaded defcustoms using custom-initialize-delay are added to
+     this list, but kept unbound.  See http://debbugs.gnu.org/11565  */
+  Lisp_Object delayed_init =
+    find_symbol_value (intern ("custom-delayed-init-variables"));
+
+  if (EQ (delayed_init, Qunbound)) delayed_init = Qnil;
 
   CHECK_STRING (filename);
 
@@ -656,7 +664,8 @@ the same file name is found in the `doc-directory'.  */)
 		  /* Install file-position as variable-documentation property
 		     and make it negative for a user-variable
 		     (doc starts with a `*').  */
-                  if (!NILP (Fboundp (sym)))
+                  if (!NILP (Fboundp (sym))
+                      || !NILP (Fmemq (sym, delayed_init)))
                     Fput (sym, Qvariable_documentation,
                           make_number ((pos + end + 1 - buf)
                                        * (end[1] == '*' ? -1 : 1)));
@@ -701,7 +710,7 @@ as the keymap for future \\=\\[COMMAND] substrings.
 thus, \\=\\=\\=\\= puts \\=\\= into the output, and \\=\\=\\=\\[ puts \\=\\[ into the output.
 
 Return the original STRING if no substitutions are made.
-Otherwise, return a new string, without any text properties.  */)
+Otherwise, return a new string.  */)
   (Lisp_Object string)
 {
   char *buf;

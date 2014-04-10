@@ -1,9 +1,8 @@
 ;;; startup.el --- process Emacs shell arguments  -*- lexical-binding: t -*-
 
-;; Copyright (C) 1985-1986, 1992, 1994-2014 Free Software Foundation,
-;; Inc.
+;; Copyright (C) 1985-1986, 1992, 1994-2014 Free Software Foundation, Inc.
 
-;; Maintainer: FSF
+;; Maintainer: emacs-devel@gnu.org
 ;; Keywords: internal
 ;; Package: emacs
 
@@ -288,10 +287,15 @@ these functions will invoke the debugger.")
   "Normal hook run after loading init files and handling the command line.")
 
 (defvar term-setup-hook nil
-  "Normal hook run after loading terminal-specific Lisp code.
-It also follows `emacs-startup-hook'.  This hook exists for users to set,
-so as to override the definitions made by the terminal-specific file.
-Emacs never sets this variable itself.")
+  "Normal hook run immediately after `emacs-startup-hook'.
+In new code, there is no reason to use this instead of `emacs-startup-hook'.
+If you want to execute terminal-specific Lisp code, for example
+to override the definitions made by the terminal-specific file,
+see `tty-setup-hook'.")
+
+(make-obsolete-variable 'term-setup-hook
+			"use either `emacs-startup-hook' or \
+`tty-setup-hook' instead." "24.4")
 
 (defvar inhibit-startup-hooks nil
   "Non-nil means don't run `term-setup-hook' and `emacs-startup-hook'.
@@ -745,7 +749,6 @@ opening the first frame (e.g. open a connection to an X server).")
 (defun tty-handle-args (args)
   "Handle the X-like command-line arguments \"-fg\", \"-bg\", \"-name\", etc."
   (let (rest)
-    (message "%S" args)
     (while (and args
 		(not (equal (car args) "--")))
       (let* ((argi (pop args))
@@ -1316,8 +1319,9 @@ the `--debug-init' option to view a complete error backtrace."
   ;; Load library for our terminal type.
   ;; User init file can set term-file-prefix to nil to prevent this.
   (unless (or noninteractive
-              initial-window-system)
-    (tty-run-terminal-initialization (selected-frame)))
+              initial-window-system
+              (daemonp))
+    (tty-run-terminal-initialization (selected-frame) nil t))
 
   ;; Update the out-of-memory error message based on user's key bindings
   ;; for save-some-buffers.
@@ -1635,28 +1639,26 @@ a face or button specification."
 
 (declare-function image-size "image.c" (spec &optional pixels frame))
 
+(defun fancy-splash-image-file ()
+  (cond ((stringp fancy-splash-image) fancy-splash-image)
+	((display-color-p)
+	 (cond ((<= (display-planes) 8)
+		(if (image-type-available-p 'xpm)
+		    "splash.xpm"
+		  "splash.pbm"))
+	       ((or (image-type-available-p 'svg)
+		    (image-type-available-p 'imagemagick))
+		"splash.svg")
+	       ((image-type-available-p 'png)
+		"splash.png")
+	       ((image-type-available-p 'xpm)
+		"splash.xpm")
+	       (t "splash.pbm")))
+	(t "splash.pbm")))
+
 (defun fancy-splash-head ()
-  "Insert the head part of the splash screen into the current buffer.
-This is modified in Aquamacs compared to GNU Emacs, because most
-information given would otherwise be irrelevant to Aquamacs users.
-"
-  (and (boundp 'longlines-mode) (longlines-mode -1))
-  (let* ((image-file (cond ((stringp fancy-splash-image)
-			    fancy-splash-image)
-			   ((display-color-p)
-			    (cond ((<= (display-planes) 8)
-				   (if (image-type-available-p 'xpm)
-				       "splash.xpm"
-				     "splash.pbm"))
-				  ((or (image-type-available-p 'svg)
-				       (image-type-available-p 'imagemagick))
-				   "splash.svg")
-				  ((image-type-available-p 'png)
-				   "splash.png")
-				  ((image-type-available-p 'xpm)
-				   "splash.xpm")
-				  (t "splash.pbm")))
-			   (t "splash.pbm")))
+  "Insert the head part of the splash screen into the current buffer."
+  (let* ((image-file (fancy-splash-image-file))
 	 (img (create-image image-file))
 	 (image-width (and img (car (image-size img))))
 	 (window-width (window-width)))
@@ -1867,10 +1869,7 @@ we put it on this frame."
                  (image-type-available-p 'pbm)))
     (let ((frame (fancy-splash-frame)))
       (when frame
-	(let* ((img (create-image (or fancy-splash-image
-				      (if (and (display-color-p)
-					       (image-type-available-p 'xpm))
-					  "splash.xpm" "splash.pbm"))))
+	(let* ((img (create-image (fancy-splash-image-file)))
 	       (image-height (and img (cdr (image-size img nil frame))))
 	       ;; We test frame-height so that, if the frame is split
 	       ;; by displaying a warning, that doesn't cause the normal

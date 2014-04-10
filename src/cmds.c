@@ -229,7 +229,8 @@ Optional second arg KILLFLAG non-nil means kill instead (save in kill ring).
 Interactively, N is the prefix arg, and KILLFLAG is set if
 N was explicitly specified.
 
-The command `delete-forward-char' is preferable for interactive use.  */)
+The command `delete-forward-char' is preferable for interactive use, e.g.
+because it respects values of `delete-active-region' and `overwrite-mode'.  */)
   (Lisp_Object n, Lisp_Object killflag)
 {
   EMACS_INT pos;
@@ -268,6 +269,7 @@ static int nonundocount;
 DEFUN ("self-insert-command", Fself_insert_command, Sself_insert_command, 1, 1, "p",
        doc: /* Insert the character you type.
 Whichever character you type to run this command is inserted.
+The numeric prefix argument N says how many times to repeat the insertion.
 Before insertion, `expand-abbrev' is executed if the inserted character does
 not have word syntax and the previous character in the buffer does.
 After insertion, the value of `auto-fill-function' is called if the
@@ -276,7 +278,10 @@ At the end, it runs `post-self-insert-hook'.  */)
   (Lisp_Object n)
 {
   bool remove_boundary = 1;
-  CHECK_NATNUM (n);
+  CHECK_NUMBER (n);
+
+  if (XFASTINT (n) < 1)
+    error ("Nonpositive repetition argument %"pI"d", XFASTINT (n));
 
   if (!EQ (Vthis_command, KVAR (current_kboard, Vlast_command)))
     nonundocount = 0;

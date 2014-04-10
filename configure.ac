@@ -468,14 +468,8 @@ dnl quotation begins
 
 ### If you add support for a new configuration, add code to this
 ### switch statement to recognize your configuration name and select
-### the appropriate operating system file.
+### the appropriate opsys.
 
-### You would hope that you could choose an s/*.h
-### file based on the operating system portion.  However, it turns out
-### that each s/*.h file is pretty manufacturer-specific.
-### So we basically have to have a special case for each
-### configuration name.
-###
 ### As far as handling version numbers on operating systems is
 ### concerned, make sure things will fail in a fixable way.  If
 ### /etc/MACHINES doesn't say anything about version numbers, be
@@ -581,16 +575,16 @@ case "${canonical}" in
       * )		unported=yes ;;
     esac
     case "${canonical}" in
+      *-sunos5.[1-9][0-9]* | *-solaris2.[1-9][0-9]* )
+		opsys=sol2-10
+		emacs_check_sunpro_c=yes
+		;;
       *-sunos5.6* | *-solaris2.6* )
 		opsys=sol2-6
 		RANLIB="ar -ts"
 		;;
       *-sunos5.[7-9]* | *-solaris2.[7-9]* )
 		opsys=sol2-6
-		emacs_check_sunpro_c=yes
-		;;
-      *-sunos5* | *-solaris* )
-		opsys=sol2-10
 		emacs_check_sunpro_c=yes
 		;;
     esac
@@ -659,7 +653,8 @@ fi
 dnl quotation ends
 
 if test $unported = yes; then
-  AC_MSG_ERROR([Emacs hasn't been ported to `${canonical}' systems.
+  AC_MSG_ERROR([Emacs does not support `${canonical}' systems.
+If you think it should, please send a report to bug-gnu-emacs@gnu.org.
 Check `etc/MACHINES' for recognized configuration names.])
 fi
 
@@ -2236,7 +2231,7 @@ if test "${HAVE_X11}" = "yes" || test "${HAVE_NS}" = "yes" || test "${opsys}" = 
 fi
 
 HAVE_IMAGEMAGICK=no
-if test "${HAVE_X11}" = "yes" || test "${HAVE_NS}" = "yes"; then
+if test "${HAVE_X11}" = "yes" || test "${HAVE_NS}" = "yes" || test "${HAVE_W32}" = "yes"; then
   if test "${with_imagemagick}" != "no"; then
     ## 6.2.8 is the earliest version known to work, but earlier versions
     ## might work - let us know if you find one.
@@ -2437,9 +2432,31 @@ HAVE_GSETTINGS=no
 if test "${HAVE_X11}" = "yes" && test "${with_gsettings}" = "yes"; then
    PKG_CHECK_MODULES(GSETTINGS, gio-2.0 >= 2.26, HAVE_GSETTINGS=yes, HAVE_GSETTINGS=no)
    if test "$HAVE_GSETTINGS" = "yes"; then
-      AC_DEFINE(HAVE_GSETTINGS, 1, [Define to 1 if using GSettings.])
-      SETTINGS_CFLAGS="$GSETTINGS_CFLAGS"
-      SETTINGS_LIBS="$GSETTINGS_LIBS"
+      old_CFLAGS=$CFLAGS
+      CFLAGS="$CFLAGS $GSETTINGS_CFLAGS"
+      old_LIBS=$LIBS
+      LIBS="$LIBS $GSETTINGS_LIBS"
+      AC_MSG_CHECKING([whether GSettings is in gio])
+      AC_LINK_IFELSE(
+         [AC_LANG_PROGRAM(
+ 	     [[/* Check that gsettings really is present.  */
+             #include <glib-object.h>
+	     #include <gio/gio.h>
+ 	     ]],
+ 	     [[
+	       GSettings *settings;
+	       GVariant *val = g_settings_get_value (settings, "");
+ 	     ]])],
+ 	 [], HAVE_GSETTINGS=no)
+      AC_MSG_RESULT([$HAVE_GSETTINGS])
+
+      if test "$HAVE_GSETTINGS" = "yes"; then
+        AC_DEFINE(HAVE_GSETTINGS, 1, [Define to 1 if using GSettings.])
+ 	SETTINGS_CFLAGS="$GSETTINGS_CFLAGS"
+ 	SETTINGS_LIBS="$GSETTINGS_LIBS"
+      fi
+      CFLAGS=$old_CFLAGS
+      LIBS=$old_LIBS
    fi
 fi
 
@@ -3839,6 +3856,10 @@ AC_CHECK_FUNCS(snprintf)
 dnl Check this late.  It depends on what other libraries (lrsvg, Gtk+ etc)
 dnl Emacs uses.
 XGSELOBJ=
+OLDCFLAGS="$CFLAGS"
+OLDLIBS="$LIBS"
+CFLAGS="$CFLAGS $GFILENOTIFY_CFLAGS"
+LIBS="$LIBS $GFILENOTIFY_LIBS"
 AC_MSG_CHECKING([whether GLib is linked in])
 AC_LINK_IFELSE([AC_LANG_PROGRAM(
 	[[#include <glib.h>
@@ -3853,6 +3874,8 @@ if test "${links_glib}" = "yes"; then
     XGSELOBJ=xgselect.o
   fi
 fi
+CFLAGS="$OLDCFLAGS"
+LIBS="$OLDLIBS"
 AC_SUBST(XGSELOBJ)
 
 dnl Adapted from Haible's version.

@@ -100,6 +100,12 @@ Alternative suggestions are:
   :group 'shr
   :type 'function)
 
+(defcustom shr-image-animate t
+  "Non nil means that images that can be animated will be."
+  :version "24.4"
+  :group 'shr
+  :type 'boolean)
+
 (defvar shr-content-function nil
   "If bound, this should be a function that will return the content.
 This is used for cid: URLs, and the function is called with the
@@ -141,8 +147,8 @@ cid: URL as the argument.")
     (define-key map "a" 'shr-show-alt-text)
     (define-key map "i" 'shr-browse-image)
     (define-key map "z" 'shr-zoom-image)
-    (define-key map [tab] 'shr-next-link)
-    (define-key map [backtab] 'shr-previous-link)
+    (define-key map [?\t] 'shr-next-link)
+    (define-key map [?\M-\t] 'shr-previous-link)
     (define-key map [follow-link] 'mouse-face)
     (define-key map [mouse-2] 'shr-browse-url)
     (define-key map "I" 'shr-insert-image)
@@ -359,6 +365,14 @@ size, and full-buffer size."
 	(push (shr-transform-dom sub) result)))
     (nreverse result)))
 
+(defsubst shr-generic (cont)
+  (dolist (sub cont)
+    (cond
+     ((eq (car sub) 'text)
+      (shr-insert (cdr sub)))
+     ((listp (cdr sub))
+      (shr-descend sub)))))
+
 (defun shr-descend (dom)
   (let ((function
 	 (or
@@ -391,14 +405,6 @@ size, and full-buffer size."
 	(shr-colorize-region start (point)
 			     (cdr (assq 'color shr-stylesheet))
 			     (cdr (assq 'background-color shr-stylesheet)))))))
-
-(defun shr-generic (cont)
-  (dolist (sub cont)
-    (cond
-     ((eq (car sub) 'text)
-      (shr-insert (cdr sub)))
-     ((listp (cdr sub))
-      (shr-descend sub)))))
 
 (defmacro shr-char-breakable-p (char)
   "Return non-nil if a line can be broken before and after CHAR."
@@ -765,14 +771,15 @@ element is the data blob and the second element is the content-type."
 	      (insert-sliced-image image (or alt "*") nil 20 1)
 	    (insert-image image (or alt "*")))
 	  (put-text-property start (point) 'image-size size)
-	  (when (cond ((fboundp 'image-multi-frame-p)
+	  (when (and shr-image-animate
+                     (cond ((fboundp 'image-multi-frame-p)
 		       ;; Only animate multi-frame things that specify a
 		       ;; delay; eg animated gifs as opposed to
 		       ;; multi-page tiffs.  FIXME?
-		       (cdr (image-multi-frame-p image)))
-		      ((fboundp 'image-animated-p)
-		       (image-animated-p image)))
-	    (image-animate image nil 60)))
+                            (cdr (image-multi-frame-p image)))
+                           ((fboundp 'image-animated-p)
+                            (image-animated-p image))))
+            (image-animate image nil 60)))
 	image)
     (insert alt)))
 
@@ -972,11 +979,18 @@ ones, in case fg and bg are nil."
 (defun shr-dom-to-xml (dom)
   "Convert DOM into a string containing the xml representation."
   (let ((arg " ")
-        (text ""))
+        (text "")
+	url)
     (dolist (sub (cdr dom))
       (cond
        ((listp (cdr sub))
-        (setq text (concat text (shr-dom-to-xml sub))))
+	;; Ignore external image definitions if required.
+	;; <image xlink:href="http://TRACKING_URL/"/>
+	(when (or (not (eq (car sub) 'image))
+		  (not (setq url (cdr (assq ':xlink:href (cdr sub)))))
+		  (not shr-blocked-images)
+		  (not (string-match shr-blocked-images url)))
+	  (setq text (concat text (shr-dom-to-xml sub)))))
        ((eq (car sub) 'text)
         (setq text (concat text (cdr sub))))
        (t
@@ -990,7 +1004,8 @@ ones, in case fg and bg are nil."
             (car dom))))
 
 (defun shr-tag-svg (cont)
-  (when (image-type-available-p 'svg)
+  (when (and (image-type-available-p 'svg)
+	     (not shr-inhibit-images))
     (funcall shr-put-image-function
              (shr-dom-to-xml (cons 'svg cont))
              "SVG Image")))

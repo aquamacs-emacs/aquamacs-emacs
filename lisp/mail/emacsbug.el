@@ -4,7 +4,7 @@
 ;; Foundation, Inc.
 
 ;; Author: K. Shane Hartman
-;; Maintainer: FSF
+;; Maintainer: emacs-devel@gnu.org
 ;; Keywords: maint mail
 ;; Package: emacs
 
@@ -309,6 +309,10 @@ and may appear in other public locations.\n\n"
                 shadows)))
     (insert (format "\nFeatures:\n%s\n" features))
     (fill-region (line-beginning-position 0) (point))
+
+    (insert (format "\nMemory information:\n"))
+    (pp (garbage-collect) (current-buffer))
+    
     ;; This is so the user has to type something in order to send easily.
     (use-local-map (nconc (make-sparse-keymap) (current-local-map)))
     (define-key (current-local-map) "\C-c\C-i" 'info-emacs-bug)

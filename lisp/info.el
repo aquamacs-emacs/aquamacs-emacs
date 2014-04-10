@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 1985-1986, 1992-2014 Free Software Foundation, Inc.
 
-;; Maintainer: FSF
+;; Maintainer: emacs-devel@gnu.org
 ;; Keywords: help
 
 ;; This file is part of GNU Emacs.
@@ -732,14 +732,6 @@ in `Info-file-supports-index-cookies-list'."
 			     (Info-default-dirs))
 		   (split-string path sep))
 	       (Info-default-dirs))))
-      ;; If we are running uninstalled, our own Info files should
-      ;; always come first.  If INFOPATH was set, they might not.
-      (and path
-	   installation-directory
-	   (let ((dir (expand-file-name "info/" installation-directory)))
-	     (when (file-directory-p dir)
-	       (setq Info-directory-list (delete dir Info-directory-list))
-	       (push dir Info-directory-list))))
       ;; For a self-contained (ie relocatable) NS build, AFAICS we
       ;; always want the included info directory to be at the head of
       ;; the search path, unless it's already in INFOPATH somewhere.
@@ -3706,7 +3698,9 @@ Build a menu of the possible matches."
 	  hits desc)
       (dolist (keyword keywords)
 	(push (copy-tree (gethash keyword finder-keywords-hash)) hits))
-      (setq hits (delete-dups (apply 'append hits)))
+      (setq hits (delete-dups (apply 'append hits))
+	    ;; Not a meaningful package.
+	    hits (delete 'emacs hits))
       (dolist (package hits)
 	(setq desc (cdr-safe (assq package package--builtins)))
 	(when (vectorp desc)
@@ -3721,6 +3715,9 @@ Build a menu of the possible matches."
     (insert "*****************\n\n")
     (insert
      "Commentary section of the package `" nodename "':\n\n")
+    ;; FIXME this assumes that a file named package.el exists,
+    ;; which is not always true.  E.g. for the nxml package,
+    ;; there is no "nxml.el" (it's nxml-mode.el).
     (let ((str (lm-commentary (find-library-name nodename))))
       (if (null str)
 	  (insert "Can't find any Commentary section\n\n")
@@ -3970,6 +3967,10 @@ If FORK is non-nil, it is passed to `Info-goto-node'."
     (define-key map "f" 'Info-follow-reference)
     (define-key map "g" 'Info-goto-node)
     (define-key map "h" 'Info-help)
+    ;; This is for compatibility with standalone info (>~ version 5.2).
+    ;; Though for some time, standalone info had H and h reversed.
+    ;; See <http://debbugs.gnu.org/16455>.
+    (define-key map "H" 'describe-mode)
     (define-key map "i" 'Info-index)
     (define-key map "I" 'Info-virtual-index)
     (define-key map "l" 'Info-history-back)

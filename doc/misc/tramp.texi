@@ -3053,13 +3053,26 @@ setting the cursor at the top of the buffer, and applying the expression
 If it fails, or the cursor is not moved at the end of the buffer, your
 prompt is not recognized correctly.
 
-A special problem is the zsh, which uses left-hand side and right-hand
-side prompts in parallel.  Therefore, it is necessary to disable the
-zsh line editor on the remote host.  You shall add to @file{~/.zshrc}
-the following command:
+A special problem is the zsh shell, which uses left-hand side and
+right-hand side prompts in parallel.  Therefore, it is necessary to
+disable the zsh line editor on the remote host.  You shall add to
+@file{~/.zshrc} the following command:
 
 @example
 [ $TERM = "dumb" ] && unsetopt zle && PS1='$ '
+@end example
+
+Similar fancy prompt settings are known from the fish shell.  Here you
+must add in @file{~/.config/fish/config.fish}:
+
+@example
+function fish_prompt
+  if test $TERM = "dumb"
+     echo "\$ "
+  else
+     @dots{}
+  end
+end
 @end example
 
 Furthermore it has been reported, that @value{tramp} (like sshfs,
@@ -3766,10 +3779,10 @@ its complete cache keeping attributes for all files of the remote host
 it has seen so far.
 
 This is a performance degradation, because the lost file attributes
-must be recomputed when needed again.  In cases the caller of
+must be recomputed when needed again.  In cases where the caller of
 @code{process-file} knows that there are no file attribute changes, it
-shall let-bind the variable @code{process-file-side-effects} to
-@code{nil}.  @value{tramp} wouldn't flush the file attributes cache then.
+should let-bind the variable @code{process-file-side-effects} to
+@code{nil}.  Then @value{tramp} won't flush the file attributes cache.
 
 @lisp
 (let (process-file-side-effects)
@@ -3779,8 +3792,8 @@ shall let-bind the variable @code{process-file-side-effects} to
 For asynchronous processes, @value{tramp} flushes the file attributes
 cache via a process sentinel.  If the caller of
 @code{start-file-process} knows that there are no file attribute
-changes, it shall set the process sentinel to @code{nil}.  In case the
-caller defines an own process sentinel, @value{tramp}'s process
+changes, it should set the process sentinel to the default.  In cases
+where the caller defines its own process sentinel, @value{tramp}'s process
 sentinel is overwritten.  The caller can still flush the file
 attributes cache in its process sentinel with this code:
 

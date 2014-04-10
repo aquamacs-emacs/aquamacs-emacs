@@ -3,7 +3,7 @@
 ;; Copyright (C) 1985-1987, 1992-1996, 1999-2014 Free Software
 ;; Foundation, Inc.
 
-;; Maintainer: FSF
+;; Maintainer: emacs-devel@gnu.org
 ;; Keywords: internal
 ;; Package: emacs
 
@@ -800,7 +800,6 @@ if `inhibit-field-text-motion' is non-nil."
 ;; suspend only the relevant terminal.
 (substitute-key-definition 'suspend-emacs 'suspend-frame global-map)
 
-(define-key global-map "\C-j" 'newline-and-indent)
 (define-key global-map "\C-m" 'newline)
 (define-key global-map "\C-o" 'open-line)
 (define-key esc-map "\C-o" 'split-line)
@@ -878,6 +877,11 @@ if `inhibit-field-text-motion' is non-nil."
 
 ;; Update tutorial--default-keys if you change these.
 (define-key global-map "\177" 'delete-backward-char)
+;; We explicitly want C-d to use `delete-char' instead of
+;; `delete-forward-char' so that it ignores `delete-active-region':
+;; Most C-d users are old-timers who don't expect
+;; `delete-active-region' here, while newer users who expect
+;; `delete-active-region' use C-d much less.
 (define-key global-map "\C-d" 'delete-char)
 
 (define-key global-map "\C-k" 'kill-line)

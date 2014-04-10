@@ -3,8 +3,8 @@
 ;; Copyright (C) 2008-2014 Free Software Foundation, Inc.
 
 ;; Author: Tom Tromey <tromey@redhat.com>
-;; Maintainer: FSF
-;; Version: 0.1
+;; Maintainer: emacs-devel@gnu.org
+;; Old-Version: 0.1
 ;; Keywords: comm
 
 ;; This file is part of GNU Emacs.

@@ -4,7 +4,7 @@
 ;; Inc.
 
 ;; Author: Matthieu Devin <devin@lucid.com>
-;; Maintainer: FSF
+;; Maintainer: emacs-devel@gnu.org
 ;; Created: 14 Jul 92
 ;; Keywords: convenience emulations
 
@@ -64,10 +64,9 @@ With a prefix argument ARG, enable Delete Selection mode if ARG
 is positive, and disable it otherwise.  If called from Lisp,
 enable the mode if ARG is omitted or nil.
 
-When Delete Selection mode is enabled, Transient Mark mode is also
-enabled and typed text replaces the selection if the selection is
-active.  Otherwise, typed text is just inserted at point regardless of
-any selection."
+When Delete Selection mode is enabled, typed text replaces the selection
+if the selection is active.  Otherwise, typed text is just inserted at
+point regardless of any selection."
   :global t :group 'editing-basics
   (if (not delete-selection-mode)
       (remove-hook 'pre-command-hook 'delete-selection-pre-hook)
@@ -182,6 +181,9 @@ See `delete-selection-helper'."
 (put 'yank 'delete-selection 'yank)
 (put 'clipboard-yank 'delete-selection 'yank)
 (put 'insert-register 'delete-selection t)
+;; delete-backward-char and delete-forward-char already delete the selection by
+;; default, but not delete-char.
+(put 'delete-char 'delete-selection 'supersede)
 
 (put 'reindent-then-newline-and-indent 'delete-selection t)
 (put 'newline-and-indent 'delete-selection t)

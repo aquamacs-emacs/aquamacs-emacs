@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 1985-1986, 1999-2014 Free Software Foundation, Inc.
 
-;; Maintainer: FSF
+;; Maintainer: emacs-devel@gnu.org
 ;; Keywords: lisp, languages
 ;; Package: emacs
 
@@ -449,15 +449,10 @@ font-lock keywords will not be case sensitive."
   (setq-local outline-level 'lisp-outline-level)
   (setq-local add-log-current-defun-function #'lisp-current-defun-name)
   (setq-local comment-start ";")
-  ;; Look within the line for a ; following an even number of backslashes
-  ;; after either a non-backslash or the line beginning.
-  (setq-local comment-start-skip "\\(\\(^\\|[^\\\\\n]\\)\\(\\\\\\\\\\)*\\);+ *")
-  ;; Font lock mode uses this only when it KNOWS a comment is starting.
-  (setq-local font-lock-comment-start-skip ";+ *")
+  (setq-local comment-start-skip ";+ *")
   (setq-local comment-add 1)		;default to `;;' in comment-region
   (setq-local comment-column 40)
-  ;; Don't get confused by `;' in doc strings when paragraph-filling.
-  (setq-local comment-use-global-state t)
+  (setq-local comment-use-syntax t)
   (setq-local imenu-generic-expression lisp-imenu-generic-expression)
   (setq-local multibyte-syntax-as-symbol t)
   ;; (setq-local syntax-begin-function 'beginning-of-defun)  ;;Bug#16247.
@@ -681,7 +676,7 @@ All commands in `lisp-mode-shared-map' are inherited by this map.")
 
 (defcustom emacs-lisp-mode-hook nil
   "Hook run when entering Emacs Lisp mode."
-  :options '(turn-on-eldoc-mode imenu-add-menubar-index checkdoc-minor-mode)
+  :options '(eldoc-mode imenu-add-menubar-index checkdoc-minor-mode)
   :type 'hook
   :group 'lisp)
 
@@ -693,7 +688,7 @@ All commands in `lisp-mode-shared-map' are inherited by this map.")
 
 (defcustom lisp-interaction-mode-hook nil
   "Hook run when entering Lisp Interaction mode."
-  :options '(turn-on-eldoc-mode)
+  :options '(eldoc-mode)
   :type 'hook
   :group 'lisp)
 

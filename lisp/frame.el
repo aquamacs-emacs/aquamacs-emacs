@@ -3,7 +3,7 @@
 ;; Copyright (C) 1993-1994, 1996-1997, 2000-2014 Free Software
 ;; Foundation, Inc.
 
-;; Maintainer: FSF
+;; Maintainer: emacs-devel@gnu.org
 ;; Keywords: internal
 ;; Package: emacs
 
@@ -610,7 +610,6 @@ The functions are run with one arg, the newly created frame.")
 (define-obsolete-function-alias 'new-frame 'make-frame "22.1")
 
 (defvar frame-inherited-parameters '()
-  ;; FIXME: Shouldn't we add `font' here as well?
   "Parameters `make-frame' copies from the `selected-frame' to the new frame.")
 
 (defvar x-display-name)
@@ -669,7 +668,7 @@ the new frame according to its own rules."
 	      (cdr (assq 'window-system parameters)))
              (display
               (or (window-system-for-display display)
-                  (error "Don't know how to interpret display \"%S\""
+                  (error "Don't know how to interpret display %S"
                          display)))
 	     (t window-system)))
 	 (frame-creation-function (cdr (assq w frame-creation-function-alist)))
@@ -1383,7 +1382,7 @@ frame's display)."
       (with-no-warnings
        (not (null dos-windows-version))))
      ((memq frame-type '(x w32 ns))
-      t)    ;; FIXME?
+      t)
      (t
       nil))))
 
@@ -1403,12 +1402,14 @@ If DISPLAY is omitted or nil, it defaults to the selected frame's display."
 
 (defun display-pixel-height (&optional display)
   "Return the height of DISPLAY's screen in pixels.
+If DISPLAY is omitted or nil, it defaults to the selected frame's display.
+
 For character terminals, each character counts as a single pixel.
+
 For graphical terminals, note that on \"multi-monitor\" setups this
 refers to the pixel height for all physical monitors associated
 with DISPLAY.  To get information for each physical monitor, use
-`display-monitor-attributes-list'.
-If DISPLAY is omitted or nil, it defaults to the selected frame's display."
+`display-monitor-attributes-list'."
   (let ((frame-type (framep-on-display display)))
     (cond
      ((memq frame-type '(x w32 ns))
@@ -1420,12 +1421,14 @@ If DISPLAY is omitted or nil, it defaults to the selected frame's display."
 
 (defun display-pixel-width (&optional display)
   "Return the width of DISPLAY's screen in pixels.
+If DISPLAY is omitted or nil, it defaults to the selected frame's display.
+
 For character terminals, each character counts as a single pixel.
+
 For graphical terminals, note that on \"multi-monitor\" setups this
 refers to the pixel width for all physical monitors associated
 with DISPLAY.  To get information for each physical monitor, use
-`display-monitor-attributes-list'.
-If DISPLAY is omitted or nil, it defaults to the selected frame's display."
+`display-monitor-attributes-list'."
   (let ((frame-type (framep-on-display display)))
     (cond
      ((memq frame-type '(x w32 ns))
@@ -1435,14 +1438,14 @@ If DISPLAY is omitted or nil, it defaults to the selected frame's display."
 
 (defcustom display-mm-dimensions-alist nil
   "Alist for specifying screen dimensions in millimeters.
-The dimensions will be used for `display-mm-height' and
-`display-mm-width' if defined for the respective display.
+The functions `display-mm-height' and `display-mm-width' consult
+this list before asking the system.
 
-Each element of the alist has the form (display . (width . height)),
-e.g. (\":0.0\" . (287 . 215)).
+Each element has the form (DISPLAY . (WIDTH . HEIGHT)), e.g.
+\(\":0.0\" . (287 . 215)).
 
-If `display' equals t, it specifies dimensions for all graphical
-displays not explicitly specified."
+If `display' is t, it specifies dimensions for all graphical displays
+not explicitly specified."
   :version "22.1"
   :type '(alist :key-type (choice (string :tag "Display name")
 				  (const :tag "Default" t))
@@ -1455,13 +1458,16 @@ displays not explicitly specified."
 
 (defun display-mm-height (&optional display)
   "Return the height of DISPLAY's screen in millimeters.
-System values can be overridden by `display-mm-dimensions-alist'.
-If the information is unavailable, value is nil.
+If the information is unavailable, this function returns nil.
+If DISPLAY is omitted or nil, it defaults to the selected frame's display.
+
+You can override what the system thinks the result should be by
+adding an entry to `display-mm-dimensions-alist'.
+
 For graphical terminals, note that on \"multi-monitor\" setups this
 refers to the height in millimeters for all physical monitors
 associated with DISPLAY.  To get information for each physical
-monitor, use `display-monitor-attributes-list'.
-If DISPLAY is omitted or nil, it defaults to the selected frame's display."
+monitor, use `display-monitor-attributes-list'."
   (and (memq (framep-on-display display) '(x w32 ns))
        (or (cddr (assoc (or display (frame-parameter nil 'display))
 			display-mm-dimensions-alist))
@@ -1472,13 +1478,16 @@ If DISPLAY is omitted or nil, it defaults to the selected frame's display."
 
 (defun display-mm-width (&optional display)
   "Return the width of DISPLAY's screen in millimeters.
-System values can be overridden by `display-mm-dimensions-alist'.
-If the information is unavailable, value is nil.
+If the information is unavailable, this function returns nil.
+If DISPLAY is omitted or nil, it defaults to the selected frame's display.
+
+You can override what the system thinks the result should be by
+adding an entry to `display-mm-dimensions-alist'.
+
 For graphical terminals, note that on \"multi-monitor\" setups this
 refers to the width in millimeters for all physical monitors
 associated with DISPLAY.  To get information for each physical
-monitor, use `display-monitor-attributes-list'.
-If DISPLAY is omitted or nil, it defaults to the selected frame's display."
+monitor, use `display-monitor-attributes-list'."
   (and (memq (framep-on-display display) '(x w32 ns))
        (or (cadr (assoc (or display (frame-parameter nil 'display))
 			display-mm-dimensions-alist))

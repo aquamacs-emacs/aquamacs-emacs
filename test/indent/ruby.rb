@@ -29,6 +29,10 @@ a = asub / aslb + bsub / bslb;
 # Highlight the regexp after "if".
 x = toto / foo if /do bar/ =~ "dobar"
 
+# Regexp options are highlighted.
+
+/foo/xi != %r{bar}mo.tee
+
 bar(class: XXX) do              # ruby-indent-keyword-label
   foo
 end
@@ -135,6 +139,18 @@ end
 # Bug#15208
 if something == :==
   do_something
+
+  return false unless method == :+
+  x = y + z # Bug#16609
+
+  a = 1 ? 2 :(
+    2 + 3
+  )
+end
+
+# Bug#17097
+if x == :!=
+  something
 end
 
 # Example from http://www.ruby-doc.org/docs/ProgrammingRuby/html/language.html
@@ -257,8 +273,8 @@ foo ^
   bar
 
 foo_bar_tee(1, 2, 3)
-  .qux
-  .bar
+  .qux.bar
+  .tee
 
 foo do
   bar
@@ -338,7 +354,7 @@ end
 %^abc^
 ddd
 
-qux = foo ?
+qux = foo.fee ?
         bar :
         tee
 
@@ -348,10 +364,40 @@ zoo.keep.bar!(
 
 zoo
   .lose(
-  q, p)
+    q, p)
 
+a.records().map(&:b).zip(
+  foo)
+
+# FIXME: This is not consistent with the example below it, but this
+# offset only happens if the colon is at eol, which wouldn't be often.
+# Tokenizing `bar:' as `:bar =>' would be better, but it's hard to
+# distinguish from a variable reference inside a ternary operator.
 foo(bar:
       tee)
 
 foo(:bar =>
-      tee)
+    tee)
+
+{'a' => {
+   'b' => 'c',
+   'd' => %w(e f)
+ }
+}
+
+# Bug#17050
+
+return render json: {
+                errors: { base: [message] },
+                copying: copying
+              },
+              status: 400
+
+top test(
+      some,
+      top,
+      test)
+
+foo bar, {
+      tee: qux
+    }

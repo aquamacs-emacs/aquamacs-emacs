@@ -226,6 +226,146 @@
             (should-not (buffer-modified-p))))
       (delete-file tempfile))))
 
+(ert-deftest undo-test-in-region-not-most-recent ()
+  "Test undo in region of an edit not the most recent."
+  (with-temp-buffer
+    (buffer-enable-undo)
+    (transient-mark-mode 1)
+    (insert "1111")
+    (undo-boundary)
+    (goto-char 2)
+    (insert "2")
+    (forward-char 2)
+    (undo-boundary)
+    (insert "3")
+    (undo-boundary)
+    ;; Highlight around "2", not "3"
+    (push-mark (+ 3 (point-min)) t t)
+    (setq mark-active t)
+    (goto-char (point-min))
+    (undo)
+    (should (string= (buffer-string)
+                     "11131"))))
+
+(ert-deftest undo-test-in-region-eob ()
+  "Test undo in region of a deletion at EOB, demonstrating bug 16411."
+  (with-temp-buffer
+    (buffer-enable-undo)
+    (transient-mark-mode 1)
+    (insert "This sentence corrupted?")
+    (undo-boundary)
+    ;; Same as recipe at
+    ;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=16411
+    (insert "aaa")
+    (undo-boundary)
+    (undo)
+    ;; Select entire buffer
+    (push-mark (point) t t)
+    (setq mark-active t)
+    (goto-char (point-min))
+    ;; Should undo the undo of "aaa", ie restore it.
+    (undo)
+    (should (string= (buffer-string)
+                     "This sentence corrupted?aaa"))))
+
+(ert-deftest undo-test-marker-adjustment-nominal ()
+  "Test nominal behavior of marker adjustments."
+  (with-temp-buffer
+    (buffer-enable-undo)
+    (insert "abcdefg")
+    (undo-boundary)
+    (let ((m (make-marker)))
+      (set-marker m 2 (current-buffer))
+      (goto-char (point-min))
+      (delete-forward-char 3)
+      (undo-boundary)
+      (should (= (point-min) (marker-position m)))
+      (undo)
+      (undo-boundary)
+      (should (= 2 (marker-position m))))))
+
+(ert-deftest undo-test-region-t-marker ()
+  "Test undo in region containing marker with t insertion-type."
+  (with-temp-buffer
+    (buffer-enable-undo)
+    (transient-mark-mode 1)
+    (insert "abcdefg")
+    (undo-boundary)
+    (let ((m (make-marker)))
+      (set-marker-insertion-type m t)
+      (set-marker m (point-min) (current-buffer)) ; m at a
+      (goto-char (+ 2 (point-min)))
+      (push-mark (point) t t)
+      (setq mark-active t)
+      (goto-char (point-min))
+      (delete-forward-char 1) ;; delete region covering "ab"
+      (undo-boundary)
+      (should (= (point-min) (marker-position m)))
+      ;; Resurrect "ab". m's insertion type means the reinsertion
+      ;; moves it forward 2, and then the marker adjustment returns it
+      ;; to its rightful place.
+      (undo)
+      (undo-boundary)
+      (should (= (point-min) (marker-position m))))))
+
+(ert-deftest undo-test-marker-adjustment-moved ()
+  "Test marker adjustment behavior when the marker moves.
+Demonstrates bug 16818."
+  (with-temp-buffer
+    (buffer-enable-undo)
+    (insert "abcdefghijk")
+    (undo-boundary)
+    (let ((m (make-marker)))
+      (set-marker m 2 (current-buffer)) ; m at b
+      (goto-char (point-min))
+      (delete-forward-char 3) ; m at d
+      (undo-boundary)
+      (set-marker m 4) ; m at g
+      (undo)
+      (undo-boundary)
+      ;; m still at g, but shifted 3 because deletion undone
+      (should (= 7 (marker-position m))))))
+
+(ert-deftest undo-test-region-mark-adjustment ()
+  "Test that the mark's marker adjustment in undo history doesn't
+obstruct undo in region from finding the correct change group.
+Demonstrates bug 16818."
+  (with-temp-buffer
+    (buffer-enable-undo)
+    (transient-mark-mode 1)
+    (insert "First line\n")
+    (insert "Second line\n")
+    (undo-boundary)
+
+    (goto-char (point-min))
+    (insert "aaa")
+    (undo-boundary)
+
+    (undo)
+    (undo-boundary)
+
+    (goto-char (point-max))
+    (insert "bbb")
+    (undo-boundary)
+
+    (push-mark (point) t t)
+    (setq mark-active t)
+    (goto-char (- (point) 3))
+    (delete-forward-char 1)
+    (undo-boundary)
+
+    (insert "bbb")
+    (undo-boundary)
+
+    (goto-char (point-min))
+    (push-mark (point) t t)
+    (setq mark-active t)
+    (goto-char (+ (point) 3))
+    (undo)
+    (undo-boundary)
+
+    (should (string= (buffer-string) "aaaFirst line\nSecond line\nbbb"))))
+
 (defun undo-test-all (&optional interactive)
   "Run all tests for \\[undo]."
   (interactive "p")

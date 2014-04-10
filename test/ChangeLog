@@ -1,3 +1,154 @@
+2014-03-24  Barry O'Reilly  <gundaetiapo@gmail.com>
+
+	* automated/undo-tests.el (undo-test-marker-adjustment-nominal):
+	(undo-test-region-t-marker): New tests of marker adjustments.
+	(undo-test-marker-adjustment-moved):
+	(undo-test-region-mark-adjustment): New tests to demonstrate
+	bug#16818, which fail without the fix.
+
+2014-03-23  Daniel Colascione  <dancol@dancol.org>
+
+	* automated/cl-lib.el (cl-lib-keyword-names-versus-values): New
+	test: correct parsing of keyword arguments.
+
+2014-03-23  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* automated/package-test.el (package-test-describe-package):
+	Fix test failure in non-graphical mode.
+
+2014-03-22  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* automated/package-test.el (package-test-describe-package):
+	Check for the "Keywords: " line.
+
+	* automated/data/package/archive-contents: Include the :keywords
+	field in `simple-single' data form.
+
+2014-03-21  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* automated/package-test.el
+	(package-test-install-two-dependencies): New test (bug#16826).
+
+	* automated/data/package/simple-two-depend-1.1.el: New file.
+
+	* automated/data/package/archive-contents:
+	Add info about the new package.
+
+2014-03-07  Michael Albinus  <michael.albinus@gmx.de>
+
+	* automated/tramp-tests.el (tramp-copy-size-limit): Declare.
+	(tramp-test10-write-region): Extend for out-of-band copy.
+	(tramp-test31-asynchronous-requests): New test.
+
+2014-03-02  Barry O'Reilly  <gundaetiapo@gmail.com>
+
+	* automated/undo-tests.el (undo-test-in-region-not-most-recent):
+	Add new test of undo in region.
+	(undo-test-in-region-eob): Add test case described at
+	http://debbugs.gnu.org/cgi/bugreport.cgi?bug=16411
+
+2014-02-28  Michael Albinus  <michael.albinus@gmx.de>
+
+	* automated/tramp-tests.el (tramp--test-enabled)
+	(tramp-test15-copy-directory): No special handling of tramp-adb.el
+	anymore.  It's fixed in that package.
+
+2014-02-27  Michael Albinus  <michael.albinus@gmx.de>
+
+	* automated/tramp-tests.el (tramp--test-enabled): Move connection
+	cleanup into this function.  Remove respective code from all test
+	cases.
+	(tramp--instrument-test-case): Declare `indent' and `debug'.
+	Handle other errors as well.
+	(tramp-test14-delete-directory): Check for `file-error' error.
+	(tramp-test15-copy-directory): Ignore return value of
+	`copy-directory'.  It's too much hassle to handle it for tramp-adb.el.
+	(tramp-test19-directory-files-and-attributes): Take care of
+	timestamp of "../".
+	(tramp-test20-file-modes, tramp-test27-start-file-process)
+	(tramp-test28-shell-command): Skip for tramp-adb.el.
+	(tramp-test21-file-links): `file-truename' shall preserve trailing
+	link of directories.
+	(tramp-test22-file-times): Skip if `set-file-times' returns nil.
+	(tramp-test26-process-file, tramp-test28-shell-command): Let-bind
+	`kill-buffer-query-functions' to nil.
+	(tramp-test28-shell-command): Run `async-shell-command' with timeouts.
+
+2014-02-21  Michael Albinus  <michael.albinus@gmx.de>
+
+	* automated/tramp-tests.el
+	(tramp-test19-directory-files-and-attributes): Do not include
+	directories in comparison; they might have changed their
+	timestamps already.
+
+2014-02-20  Michael Albinus  <michael.albinus@gmx.de>
+
+	* automated/tramp-tests.el (tramp--instrument-test-case): New macro.
+	(tramp-test17-insert-directory): First line could contain more
+	text, when produced by `ls-lisp'.
+	(tramp-test19-directory-files-and-attributes): Instrument failed
+	test case.
+
+2014-02-19  Michael Albinus  <michael.albinus@gmx.de>
+
+	* automated/tramp-tests.el (tramp-test17-insert-directory):
+	Make first line "total 123" optional.
+	(tramp-test20-file-modes, tramp-test22-file-times)
+	(tramp-test26-process-file, tramp-test27-start-file-process)
+	(tramp-test28-shell-command): Skip for tramp-gvfs.el and
+	tramp-smb.el.
+	(tramp-test20-file-modes): Check for "root" only when there is an
+	explicit user name.
+	(tramp-test21-file-links): Handle "... not supported" error.
+	(tramp-test22-file-times): Skip for "don't know" return values.
+	(tramp-test26-process-file, tramp-test28-shell-command):
+	Remove color escape sequences.
+	(tramp-test28-shell-command): Use `accept-process-output' rather
+	than `sit-for'.
+	(tramp-test30-utf8): Set coding system `utf-8'.
+
+2014-02-17  Michael Albinus  <michael.albinus@gmx.de>
+
+	* automated/tramp-tests.el (tramp-test28-shell-command): Perform
+	an initial `sit-for' prior the while loop.
+
+2014-02-16  Michael Albinus  <michael.albinus@gmx.de>
+
+	Sync with Tramp 2.2.9.
+
+	* automated/tramp-tests.el (password-cache-expiry): Set to nil.
+	(tramp-test28-shell-command): Make a while loop when waiting for
+	process exit.
+
+2014-02-11  Michael Albinus  <michael.albinus@gmx.de>
+
+	* automated/tramp-tests.el (top): Require `vc', `vc-bzr', `vc-git'
+	and `vc-hg'.  Declare `tramp-find-executable' and
+	`tramp-get-remote-path'.
+	(tramp-test29-vc-registered): New test.
+	(tramp-test30-utf8): Rename from `tramp-test29-utf8'.
+
+2014-02-07  Michael Albinus  <michael.albinus@gmx.de>
+
+	* automated/tramp-tests.el (tramp-test26-process-file): Improve test.
+	(tramp-test27-start-file-process): Use "_p" as argument of lambda.
+	(tramp-test28-shell-command): Improve `shell-command' test.  Add
+	`async-shell-command' tests.
+
+2014-02-04  Michael Albinus  <michael.albinus@gmx.de>
+
+	* automated/file-notify-tests.el (file-notify--wait-for-events):
+	Use `read-event' instead of `sit-for'.
+	(file-notify-test02-events): Remove expected result, the bug is
+	fixed meanwhile.
+	(file-notify-test02-events, file-notify-test03-autorevert):
+	Use `sleep-for' instead of `sit-for'.
+
+2014-01-31  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* automated/ruby-mode-tests.el (ruby-align-chained-calls):
+	New test.
+
 2014-01-27  Michael Albinus  <michael.albinus@gmx.de>
 
 	* automated/file-notify-tests.el (file-notify--deftest-remote):
@@ -172,7 +323,7 @@
 	* automated/Makefile.in (PATH_SEPARATOR): New, set by configure.
 	(EMACSOPT): Use PATH_SEPARATOR.
 
-2013-11-20  Bozhidar Batsov <bozhidar@batsov.com>
+2013-11-20  Bozhidar Batsov  <bozhidar@batsov.com>
 
 	* automated/ruby-mode-tests.el (ruby-exit!-font-lock):
 	Add a failing test for Bug#15874.
@@ -216,7 +367,7 @@
 	(tramp-test20-file-modes, tramp-test21-file-links)
 	(tramp-test22-file-times, tramp-test23-visited-file-modtime)
 	(tramp-test24-file-name-completion, tramp-test25-load)
-	(tramp-test26-process-file, tramp-test27-start-file-process):
+	(tramp-test26-process-file, tramp-test27-start-file-process)
 	(tramp-test28-shell-command): Protect unwindforms with `ignore-errors'.
 	(tramp-test29-utf8): New test.
 
@@ -235,7 +386,7 @@
 	* automated/tramp-tests.el (tramp-test-temporary-file-directory):
 	Check $TRAMP_TEST_TEMPORARY_FILE_DIRECTORY.
 	(tramp-read-passwd): Check $TRAMP_TEST_ALLOW_PASSWORD.
-	(tramp-test09-insert-file-contents, tramp-test10-write-region):
+	(tramp-test09-insert-file-contents, tramp-test10-write-region)
 	(tramp-test26-process-file): Add tests.
 	(tramp-test11-copy-file): Remove debug message.
 	(tramp-test20-file-modes): Special case, if user is "root".
@@ -866,7 +1017,7 @@
 
 2013-04-09  Masatake YAMATO  <yamato@redhat.com>
 
-	* automated/add-log-tests.el: New file. (Bug#14112)
+	* automated/add-log-tests.el: New file.  (Bug#14112)
 
 2013-03-30  Fabián Ezequiel Gallina  <fabian@anue.biz>
 
@@ -1205,7 +1356,7 @@
 
 	* automated/newsticker-tests.el
 	(newsticker--group-manage-orphan-feeds): Prevent updating
-	newsticker treeview. Fixed bug#9763.
+	newsticker treeview.  Fixed bug#9763.
 
 2011-10-20  Glenn Morris  <rgm@gnu.org>
 
@@ -1220,7 +1371,7 @@
 2011-09-27  Ulf Jasper  <ulf.jasper@web.de>
 
 	* automated/newsticker-tests.el: Move newsticker-testsuite.el
-	to automated/newsticker-tests.el. Convert to ERT.
+	to automated/newsticker-tests.el.  Convert to ERT.
 
 2011-07-26  Ulf Jasper  <ulf.jasper@web.de>
 
@@ -1509,22 +1660,22 @@
 	Add icalendar-testsuite--test-datestring-to-isodate,
 	icalendar-testsuite--test-datetime-to-diary-date, and
 	icalendar-testsuite--test-calendar-style.
-	(icalendar-testsuite--test-format-ical-event):
+	(icalendar-testsuite--test-format-ical-event)
 	(icalendar-testsuite--test-parse-summary-and-rest):
 	Doc fix.  Remove european-calendar-style.
 	(icalendar-testsuite--get-ical-event): Doc fix.
-	(icalendar-testsuite--test-first-weekday-of-year):
+	(icalendar-testsuite--test-first-weekday-of-year)
 	(icalendar-testsuite--run-cycle-tests): Add doc string.
-	(icalendar-testsuite--test-datestring-to-isodate):
-	(icalendar-testsuite--test-datetime-to-diary-date):
+	(icalendar-testsuite--test-datestring-to-isodate)
+	(icalendar-testsuite--test-datetime-to-diary-date)
 	(icalendar-testsuite--test-calendar-style): New functions.
 	(icalendar-testsuite--test-export): Handle iso date style.
 	New arg INPUT-ISO.  Use calendar-date-style.
 	(icalendar-testsuite--test-import): Handle iso date style.
 	New arg EXPECTED-ISO.  Use calendar-date-style.
 	(icalendar-testsuite--test-cycle): Handle iso date style.
-	(icalendar-testsuite--run-import-tests):
-	(icalendar-testsuite--run-export-tests):
+	(icalendar-testsuite--run-import-tests)
+	(icalendar-testsuite--run-export-tests)
 	(icalendar-testsuite--run-real-world-tests): Add iso style tests.
 
 2008-02-29  Glenn Morris  <rgm@gnu.org>

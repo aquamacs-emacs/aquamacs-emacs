@@ -95,7 +95,7 @@ Uses the same syntax as `nnmail-split-methods'.")
 (defvoo nnimap-unsplittable-articles '(%Deleted %Seen)
   "Articles with the flags in the list will not be considered when splitting.")
 
-(make-obsolete-variable 'nnimap-split-rule "see `nnimap-split-methods'"
+(make-obsolete-variable 'nnimap-split-rule "see `nnimap-split-methods'."
 			"Emacs 24.1")
 
 (defvoo nnimap-authenticator nil
@@ -255,7 +255,9 @@ textual parts.")
 	  (insert (format "Chars: %s\n" size)))
 	(when lines
 	  (insert (format "Lines: %s\n" lines)))
-	(unless (re-search-forward "^\r$" nil t)
+	;; Most servers have a blank line after the headers, but
+	;; Davmail doesn't.
+	(unless (re-search-forward "^\r$\\|^)\r?$" nil t)
 	  (goto-char (point-max)))
 	(delete-region (line-beginning-position) (line-end-position))
 	(insert ".")
@@ -1097,6 +1099,14 @@ If LIMIT, first try to limit the search to the N last articles."
 	  (nnimap-wait-for-response sequence))))))
 
 (deffoo nnimap-request-accept-article (group &optional server last)
+  (unless group
+    ;; We're respooling.  Find out where mail splitting would place
+    ;; this article.
+    (setq group
+	  (caar
+	   (nnmail-article-group
+	    `(lambda (group)
+	       (nnml-active-number group ,server))))))
   (setq group (nnimap-decode-gnus-group group))
   (when (nnimap-change-group nil server)
     (nnmail-check-syntax)

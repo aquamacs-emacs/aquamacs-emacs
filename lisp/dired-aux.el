@@ -4,7 +4,7 @@
 ;; Foundation, Inc.
 
 ;; Author: Sebastian Kremer <sk@thp.uni-koeln.de>.
-;; Maintainer: FSF
+;; Maintainer: emacs-devel@gnu.org
 ;; Keywords: files
 ;; Package: emacs
 
@@ -887,7 +887,7 @@ Otherwise, the rule is a compression rule, and compression is done with gzip.")
     ;; See if any suffix rule matches this file name.
     (while suffixes
       (let (case-fold-search)
-	(if (string-match-p (car (car suffixes)) file)
+	(if (string-match (car (car suffixes)) file)
 	    (setq suffix (car suffixes) suffixes nil))
 	(setq suffixes (cdr suffixes))))
     ;; If so, compute desired new name.
@@ -1343,9 +1343,7 @@ Special value `always' suppresses confirmation."
 	     (eq t (car attrs))
 	     (or (eq recursive 'always)
 		 (yes-or-no-p (format "Recursive copies of %s? " from))))
-	;; This is a directory.
 	(copy-directory from to preserve-time)
-      ;; Not a directory.
       (or top (dired-handle-overwrite to))
       (condition-case err
 	  (if (stringp (car attrs))

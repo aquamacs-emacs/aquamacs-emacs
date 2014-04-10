@@ -716,6 +716,7 @@ x_set_mouse_color (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
     XRecolorCursor (dpy, hand_cursor, &fore_color, &back_color);
     XRecolorCursor (dpy, hourglass_cursor, &fore_color, &back_color);
     XRecolorCursor (dpy, horizontal_drag_cursor, &fore_color, &back_color);
+    XRecolorCursor (dpy, vertical_drag_cursor, &fore_color, &back_color);
   }
 
   if (FRAME_X_WINDOW (f) != 0)
@@ -3033,6 +3034,10 @@ This function is an internal primitive--use `make-frame' instead.  */)
 #endif
 		       "internalBorderWidth", "internalBorderWidth",
 		       RES_TYPE_NUMBER);
+  x_default_parameter (f, parms, Qright_divider_width, make_number (0),
+		       NULL, NULL, RES_TYPE_NUMBER);
+  x_default_parameter (f, parms, Qbottom_divider_width, make_number (0),
+		       NULL, NULL, RES_TYPE_NUMBER);
   x_default_parameter (f, parms, Qvertical_scroll_bars,
 #if defined (USE_GTK) && defined (USE_TOOLKIT_SCROLL_BARS)
 		       Qright,

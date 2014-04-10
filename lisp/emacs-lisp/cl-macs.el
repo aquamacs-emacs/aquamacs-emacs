@@ -503,7 +503,7 @@ its argument list allows full Common Lisp conventions."
 		   (varg (if (consp (car arg)) (cl-cadar arg) (car arg)))
 		   (def (if (cdr arg) (cadr arg)
 			  (or (car cl--bind-defs) (cadr (assq varg cl--bind-defs)))))
-		   (look `(memq ',karg ,restarg)))
+                   (look `(plist-member ,restarg ',karg)))
 	      (and def cl--bind-enquote (setq def `',def))
 	      (if (cddr arg)
 		  (let* ((temp (or (nth 2 arg) (make-symbol "--cl-var--")))
@@ -2710,7 +2710,7 @@ compiler macros are expanded repeatedly until no further expansions are
 possible.  Unlike regular macros, BODY can decide to \"punt\" and leave the
 original function call alone by declaring an initial `&whole foo' parameter
 and then returning foo."
-  (declare (debug cl-defmacro))
+  (declare (debug cl-defmacro) (indent 2))
   (let ((p args) (res nil))
     (while (consp p) (push (pop p) res))
     (setq args (nconc (nreverse res) (and p (list '&rest p)))))

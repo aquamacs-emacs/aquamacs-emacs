@@ -4,7 +4,7 @@
 ;; Foundation, Inc.
 
 ;; Author: Roland McGrath <roland@gnu.org>
-;; Maintainer: FSF
+;; Maintainer: emacs-devel@gnu.org
 ;; Keywords: tools, processes
 
 ;; This file is part of GNU Emacs.
@@ -423,8 +423,9 @@ This variable's value takes effect when `grep-compute-defaults' is called.")
 
 ;;;###autoload
 (defvar find-program (purecopy "find")
-  "The default find program for `grep-find-command'.
-This variable's value takes effect when `grep-compute-defaults' is called.")
+  "The default find program.
+This is used by commands like `grep-find-command', `find-dired'
+and others.")
 
 ;;;###autoload
 (defvar xargs-program (purecopy "xargs")
@@ -818,7 +819,7 @@ substitution string.  Note dynamic scoping of variables.")
 		 t t command))))))
 
 (defun grep-read-regexp ()
-  "Read regexp arg for interactive grep."
+  "Read regexp arg for interactive grep using `read-regexp'."
   (read-regexp "Search for" 'grep-tag-default 'grep-regexp-history))
 
 (defun grep-read-files (regexp)

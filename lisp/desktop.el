@@ -1,7 +1,6 @@
 ;;; desktop.el --- save partial status of Emacs when killed -*- lexical-binding: t -*-
 
-;; Copyright (C) 1993-1995, 1997, 2000-2014 Free Software Foundation,
-;; Inc.
+;; Copyright (C) 1993-1995, 1997, 2000-2014 Free Software Foundation, Inc.
 
 ;; Author: Morten Welinder <terra@diku.dk>
 ;; Keywords: convenience
@@ -154,15 +153,29 @@ backward compatibility.")
 ;;;###autoload
 (define-minor-mode desktop-save-mode
   "Toggle desktop saving (Desktop Save mode).
-With a prefix argument ARG, enable Desktop Save mode if ARG is
-positive, and disable it otherwise.  If called from Lisp, enable
-the mode if ARG is omitted or nil.
+With a prefix argument ARG, enable Desktop Save mode if ARG is positive,
+and disable it otherwise.  If called from Lisp, enable the mode if ARG
+is omitted or nil.
 
-If Desktop Save mode is enabled, the state of Emacs is saved from
-one session to another.  See variable `desktop-save' and function
-`desktop-read' for details."
+When Desktop Save mode is enabled, the state of Emacs is saved from
+one session to another.  In particular, Emacs will save the desktop when
+it exits (this may prompt you; see the option `desktop-save').  The next
+time Emacs starts, if this mode is active it will restore the desktop.
+
+To manually save the desktop at any time, use the command `M-x desktop-save'.
+To load it, use `M-x desktop-read'.
+
+Once a desktop file exists, Emacs will auto-save it according to the
+option `desktop-auto-save-timeout'.
+
+To see all the options you can set, browse the `desktop' customization group.
+
+For further details, see info node `(emacs)Saving Emacs Sessions'."
   :global t
-  :group 'desktop)
+  :group 'desktop
+  (if desktop-save-mode
+      (desktop-auto-save-set-timer)
+    (desktop-auto-save-cancel-timer)))
 
 (defun desktop-save-mode-off ()
   "Disable `desktop-save-mode'.  Provided for use in hooks."
@@ -194,6 +207,7 @@ determine where the desktop is saved."
 
 (defcustom desktop-auto-save-timeout auto-save-timeout
   "Number of seconds idle time before auto-save of the desktop.
+This applies to an existing desktop file when `desktop-save-mode' is enabled.
 Zero or nil means disable auto-saving due to idleness."
   :type '(choice (const :tag "Off" nil)
                  (integer :tag "Seconds"))
@@ -350,11 +364,11 @@ modes are restored automatically; they should not be listed here."
   :type '(repeat symbol)
   :group 'desktop)
 
-(defcustom desktop-buffers-not-to-save nil
+(defcustom desktop-buffers-not-to-save "\\` "
   "Regexp identifying buffers that are to be excluded from saving."
   :type '(choice (const :tag "None" nil)
 		 regexp)
-  :version "23.2"                       ; set to nil
+  :version "24.4"		    ; skip invisible temporary buffers
   :group 'desktop)
 
 ;; Skip tramp and ange-ftp files
@@ -373,15 +387,18 @@ modes are restored automatically; they should not be listed here."
   :group 'desktop)
 
 (defcustom desktop-restore-frames t
-  "When non-nil, save frames to desktop file."
+  "When non-nil, save and restore the frame and window configuration.
+See related options `desktop-restore-reuses-frames',
+`desktop-restore-in-current-display', and `desktop-restore-forces-onscreen'."
   :type 'boolean
   :group 'desktop
   :version "24.4")
 
 (defcustom desktop-restore-in-current-display nil
-  "If t, frames are restored in the current display.
-If nil, frames are restored, if possible, in their original displays.
-If `delete', frames on other displays are deleted instead of restored."
+  "Controls how restoring of frames treats displays.
+If t, restores frames into the current display.
+If nil, restores frames into their original displays (if possible).
+If `delete', deletes frames on other displays instead of restoring them."
   :type '(choice (const :tag "Restore in current display" t)
 		 (const :tag "Restore in original display" nil)
 		 (const :tag "Delete frames in other displays" delete))
@@ -389,21 +406,23 @@ If `delete', frames on other displays are deleted instead of restored."
   :version "24.4")
 
 (defcustom desktop-restore-forces-onscreen t
-  "If t, offscreen frames are restored onscreen instead.
-If `:all', frames that are partially offscreen are also forced onscreen.
-NOTE: Checking of frame boundaries is only approximate and can fail
-to reliably detect frames whose onscreen/offscreen state depends on a
-few pixels, especially near the right / bottom borders of the screen."
+  "If t, restores frames that are fully offscreen onscreen instead.
+If `all', also restores frames that are partially offscreen onscreen.
+
+Note that checking of frame boundaries is only approximate.
+It can fail to reliably detect frames whose onscreen/offscreen state
+depends on a few pixels, especially near the right / bottom borders
+of the screen."
   :type '(choice (const :tag "Only fully offscreen frames" t)
-		 (const :tag "Also partially offscreen frames" :all)
+		 (const :tag "Also partially offscreen frames" all)
 		 (const :tag "Do not force frames onscreen" nil))
   :group 'desktop
   :version "24.4")
 
 (defcustom desktop-restore-reuses-frames t
   "If t, restoring frames reuses existing frames.
-If nil, existing frames are deleted.
-If `:keep', existing frames are kept and not reused."
+If nil, deletes existing frames.
+If `keep', keeps existing frames and does not reuse them."
   :type '(choice (const :tag "Reuse existing frames" t)
 		 (const :tag "Delete existing frames" nil)
 		 (const :tag "Keep existing frames" :keep))
@@ -477,13 +496,13 @@ Handlers are called with argument list
 
 Furthermore, they may use the following variables:
 
-   desktop-file-version
-   desktop-buffer-major-mode
-   desktop-buffer-minor-modes
-   desktop-buffer-point
-   desktop-buffer-mark
-   desktop-buffer-read-only
-   desktop-buffer-locals
+   `desktop-file-version'
+   `desktop-buffer-major-mode'
+   `desktop-buffer-minor-modes'
+   `desktop-buffer-point'
+   `desktop-buffer-mark'
+   `desktop-buffer-read-only'
+   `desktop-buffer-locals'
 
 If a handler returns a buffer, then the saved mode settings
 and variable values for that buffer are copied into it.
@@ -537,15 +556,15 @@ Handlers are called with argument list
 
 Furthermore, they may use the following variables:
 
-   desktop-file-version
-   desktop-buffer-file-name
-   desktop-buffer-name
-   desktop-buffer-major-mode
-   desktop-buffer-minor-modes
-   desktop-buffer-point
-   desktop-buffer-mark
-   desktop-buffer-read-only
-   desktop-buffer-misc
+   `desktop-file-version'
+   `desktop-buffer-file-name'
+   `desktop-buffer-name'
+   `desktop-buffer-major-mode'
+   `desktop-buffer-minor-modes'
+   `desktop-buffer-point'
+   `desktop-buffer-mark'
+   `desktop-buffer-read-only'
+   `desktop-buffer-misc'
 
 When a handler is called, the buffer has been created and the major mode has
 been set, but local variables listed in desktop-buffer-locals has not yet been
@@ -678,7 +697,7 @@ if different)."
 			(frame-parameter frame 'desktop-dont-clear))
 	      (delete-frame frame))
 	  (error
-	 (delay-warning 'desktop (error-message-string err))))))))
+	   (delay-warning 'desktop (error-message-string err))))))))
 
 ;; ----------------------------------------------------------------------------
 (unless noninteractive
@@ -864,23 +883,25 @@ FILENAME is the visited file name, BUFNAME is the buffer name, and
 MODE is the major mode.
 \n\(fn FILENAME BUFNAME MODE)"
   (let ((case-fold-search nil)
-        dired-skip)
-    (and (not (and (stringp desktop-buffers-not-to-save)
-		   (not filename)
-		   (string-match-p desktop-buffers-not-to-save bufname)))
-         (not (memq mode desktop-modes-not-to-save))
-         ;; FIXME this is broken if desktop-files-not-to-save is nil.
-         (or (and filename
-		  (stringp desktop-files-not-to-save)
-                  (not (string-match-p desktop-files-not-to-save filename)))
-             (and (memq mode '(dired-mode vc-dir-mode))
-                  (with-current-buffer bufname
-                    (not (setq dired-skip
-                               (string-match-p desktop-files-not-to-save
-                                               default-directory)))))
-             (and (null filename)
-                  (null dired-skip)     ; bug#5755
-		  (with-current-buffer bufname desktop-save-buffer))))))
+	(no-regexp-to-check (not (stringp desktop-files-not-to-save)))
+	dired-skip)
+    (and (or filename
+	     (not (stringp desktop-buffers-not-to-save))
+	     (not (string-match-p desktop-buffers-not-to-save bufname)))
+	 (not (memq mode desktop-modes-not-to-save))
+	 (or (and filename
+		  (or no-regexp-to-check
+		      (not (string-match-p desktop-files-not-to-save filename))))
+	     (and (memq mode '(dired-mode vc-dir-mode))
+		  (or no-regexp-to-check
+		      (not (setq dired-skip
+				 (with-current-buffer bufname
+				   (string-match-p desktop-files-not-to-save
+						   default-directory))))))
+	     (and (null filename)
+		  (null dired-skip)  ; bug#5755
+		  (with-current-buffer bufname desktop-save-buffer)))
+	 t)))
 
 ;; ----------------------------------------------------------------------------
 (defun desktop-file-name (filename dirname)
@@ -1042,7 +1063,8 @@ This function depends on the value of `desktop-saved-frameset'
 being set (usually, by reading it from the desktop)."
   (when (desktop-restoring-frameset-p)
     (frameset-restore desktop-saved-frameset
-		      :reuse-frames desktop-restore-reuses-frames
+		      :reuse-frames (eq desktop-restore-reuses-frames t)
+		      :cleanup-frames (not (eq desktop-restore-reuses-frames 'keep))
 		      :force-display desktop-restore-in-current-display
 		      :force-onscreen desktop-restore-forces-onscreen)))
 
@@ -1052,6 +1074,7 @@ being set (usually, by reading it from the desktop)."
 (defvar desktop-buffer-ok-count)
 (defvar desktop-buffer-fail-count)
 
+;; FIXME Interactively, this should have the option to prompt for dirname.
 ;;;###autoload
 (defun desktop-read (&optional dirname)
   "Read and process the desktop file in directory DIRNAME.
@@ -1105,7 +1128,7 @@ Using it may cause conflicts.  Use it anyway? " owner)))))
 	    (setq desktop-file-modtime (nth 5 (file-attributes (desktop-full-file-name))))
 	    ;; If it wasn't already, mark it as in-use, to bother other
 	    ;; desktop instances.
-	    (unless owner
+	    (unless (eq (emacs-pid) owner)
 	      (condition-case nil
 		  (desktop-claim-lock)
 		(file-error (message "Couldn't record use of desktop file")
@@ -1216,14 +1239,17 @@ Called by the timer created in `desktop-auto-save-set-timer'."
 Cancel any previous timer.  When `desktop-auto-save-timeout' is a positive
 integer, start a new idle timer to call `desktop-auto-save' repeatedly
 after that many seconds of idle time."
-  (when desktop-auto-save-timer
-    (cancel-timer desktop-auto-save-timer)
-    (setq desktop-auto-save-timer nil))
+  (desktop-auto-save-cancel-timer)
   (when (and (integerp desktop-auto-save-timeout)
 	     (> desktop-auto-save-timeout 0))
     (setq desktop-auto-save-timer
 	  (run-with-idle-timer desktop-auto-save-timeout t
 			       'desktop-auto-save))))
+
+(defun desktop-auto-save-cancel-timer ()
+  (when desktop-auto-save-timer
+    (cancel-timer desktop-auto-save-timer)
+    (setq desktop-auto-save-timer nil)))
 
 ;; ----------------------------------------------------------------------------
 ;;;###autoload
@@ -1360,20 +1386,21 @@ after that many seconds of idle time."
 		 (eval desktop-buffer-point)
 	       (error (message "%s" (error-message-string err)) 1))))
 	  (when desktop-buffer-mark
-	    (if (consp desktop-buffer-mark)
-		(progn
-		  (set-mark (car desktop-buffer-mark))
-		  (setq mark-active (car (cdr desktop-buffer-mark))))
-	      (set-mark desktop-buffer-mark)))
+            (if (consp desktop-buffer-mark)
+                (progn
+                  (move-marker (mark-marker) (car desktop-buffer-mark))
+                  ;; FIXME: Should we call (de)activate-mark instead?
+                  (setq mark-active (car (cdr desktop-buffer-mark))))
+              (move-marker (mark-marker) desktop-buffer-mark)))
 	  ;; Never override file system if the file really is read-only marked.
 	  (when desktop-buffer-read-only (setq buffer-read-only desktop-buffer-read-only))
 	  (dolist (this desktop-buffer-locals)
 	    (if (consp this)
-		;; an entry of this form `(symbol . value)'
+		;; An entry of this form `(symbol . value)'.
 		(progn
 		  (make-local-variable (car this))
 		  (set (car this) (cdr this)))
-	      ;; an entry of the form `symbol'
+	      ;; An entry of the form `symbol'.
 	      (make-local-variable this)
 	      (makunbound this))))))))
 
@@ -1465,11 +1492,11 @@ If there are no buffers left to create, kill the timer."
     (let ((key "--no-desktop"))
       (when (member key command-line-args)
         (setq command-line-args (delete key command-line-args))
-        (setq desktop-save-mode nil)))
+        (desktop-save-mode 0)))
     (when desktop-save-mode
       (desktop-read)
       (desktop-auto-save-set-timer)
-      (setq inhibit-startup-screen t))) t)
+      (setq inhibit-startup-screen t))))
 
 ;; So we can restore vc-dir buffers.
 (autoload 'vc-dir-mode "vc-dir" nil t)

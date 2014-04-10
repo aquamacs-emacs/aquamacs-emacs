@@ -4,7 +4,7 @@
 ;; Foundation, Inc.
 
 ;; Author: Sebastian Kremer <sk@thp.uni-koeln.de>
-;; Maintainer: FSF
+;; Maintainer: emacs-devel@gnu.org
 ;; Keywords: files
 ;; Package: emacs
 
@@ -634,7 +634,8 @@ Optional second argument ARG, if non-nil, specifies files near
  point instead of marked files.  It usually comes from the prefix
  argument.
   If ARG is an integer, use the next ARG files.
-  Any other non-nil value means to use the current file instead.
+  If ARG is any other non-nil value, return the current file name.
+  If no files are marked, and ARG is nil, also return the current file name.
 Optional third argument FILTER, if non-nil, is a function to select
   some of the files--those for which (funcall FILTER FILENAME) is non-nil.
 
@@ -1785,22 +1786,22 @@ Do so according to the former subdir alist OLD-SUBDIR-ALIST."
     (define-key map
       [menu-bar operate epa-dired-do-decrypt]
       '(menu-item "Decrypt..." epa-dired-do-decrypt
-		  :help "Decrypt file at cursor"))
+		  :help "Decrypt current or marked files"))
 
     (define-key map
       [menu-bar operate epa-dired-do-verify]
       '(menu-item "Verify" epa-dired-do-verify
-		  :help "Verify digital signature of file at cursor"))
+		  :help "Verify digital signature of current or marked files"))
 
     (define-key map
       [menu-bar operate epa-dired-do-sign]
       '(menu-item "Sign..." epa-dired-do-sign
-		  :help "Create digital signature of file at cursor"))
+		  :help "Create digital signature of current or marked files"))
 
     (define-key map
       [menu-bar operate epa-dired-do-encrypt]
       '(menu-item "Encrypt..." epa-dired-do-encrypt
-		  :help "Encrypt file at cursor"))
+		  :help "Encrypt current or marked files"))
 
     (define-key map [menu-bar operate dashes-3]
       '("--"))
@@ -2045,7 +2046,9 @@ Optional prefix ARG says how many lines to move; default is one line."
 (defun dired-up-directory (&optional other-window)
   "Run Dired on parent directory of current directory.
 Find the parent directory either in this buffer or another buffer.
-Creates a buffer if necessary."
+Creates a buffer if necessary.
+If OTHER-WINDOW (the optional prefix arg), display the parent
+directory in another window."
   (interactive "P")
   (let* ((dir (dired-current-directory))
 	 (up (file-name-directory (directory-file-name dir))))
@@ -2133,7 +2136,8 @@ Otherwise, display it in another buffer."
 (defun dired-display-file ()
   "In Dired, display this file or directory in another window."
   (interactive)
-  (display-buffer (find-file-noselect (dired-get-file-for-visit))))
+  (display-buffer (find-file-noselect (dired-get-file-for-visit))
+		  t))
 
 ;;; Functions for extracting and manipulating file names in Dired buffers.
 
@@ -2903,11 +2907,7 @@ non-empty directories is allowed."
   (let* ((files (mapcar (function car) l))
 	 (count (length l))
 	 (succ 0)
-	 (trashing (and trash delete-by-moving-to-trash))
-	 (progress-reporter
-	  (make-progress-reporter
-	   (if trashing "Trashing..." "Deleting...")
-	   succ count)))
+	 (trashing (and trash delete-by-moving-to-trash)))
     ;; canonicalize file list for pop up
     (setq files (nreverse (mapcar (function dired-make-relative) files)))
     (if (dired-mark-pop-up
@@ -2916,7 +2916,11 @@ non-empty directories is allowed."
 		 (if trashing "Trash" "Delete")
 		 (dired-mark-prompt arg files)))
 	(save-excursion
-	  (let (failures);; files better be in reverse order for this loop!
+	  (let ((progress-reporter
+		 (make-progress-reporter
+		  (if trashing "Trashing..." "Deleting...")
+		  succ count))
+		failures) ;; files better be in reverse order for this loop!
 	    (while l
 	      (goto-char (cdr (car l)))
 	      (let ((inhibit-read-only t))
@@ -2929,7 +2933,7 @@ non-empty directories is allowed."
 		      (dired-fun-in-all-buffers
 		       (file-name-directory fn) (file-name-nondirectory fn)
 		       (function dired-delete-entry) fn))
-		  (error;; catch errors from failed deletions
+		  (error ;; catch errors from failed deletions
 		   (dired-log "%s\n" err)
 		   (setq failures (cons (car (car l)) failures)))))
 	      (setq l (cdr l)))
@@ -3084,7 +3088,7 @@ argument or confirmation)."
       (apply function args)
     (let ((buffer (get-buffer-create (or buffer-or-name " *Marked Files*"))))
       (with-current-buffer buffer
-	(with-temp-buffer-window
+	(with-current-buffer-window
 	 buffer
 	 (cons 'display-buffer-below-selected
 	       '((window-height . fit-window-to-buffer)))
@@ -3140,7 +3144,9 @@ argument or confirmation)."
   (save-excursion (not (dired-move-to-filename))))
 
 (defun dired-next-marked-file (arg &optional wrap opoint)
-  "Move to the next marked file, wrapping around the end of the buffer."
+  "Move to the next marked file.
+If WRAP is non-nil, wrap around to the beginning of the buffer if
+we reach the end."
   (interactive "p\np")
   (or opoint (setq opoint (point)));; return to where interactively started
   (if (if (> arg 0)
@@ -3157,7 +3163,9 @@ argument or confirmation)."
       (dired-next-marked-file arg nil opoint))))
 
 (defun dired-prev-marked-file (arg &optional wrap)
-  "Move to the previous marked file, wrapping around the end of the buffer."
+  "Move to the previous marked file.
+If WRAP is non-nil, wrap around to the end of the buffer if we
+reach the beginning of the buffer."
   (interactive "p\np")
   (dired-next-marked-file (- arg) wrap))
 
@@ -3277,6 +3285,7 @@ As always, hidden subdirs are not affected."
   "History list of regular expressions used in Dired commands.")
 
 (defun dired-read-regexp (prompt &optional default history)
+  "Read a regexp using `read-regexp'."
   (read-regexp prompt default (or history 'dired-regexp-history)))
 
 (defun dired-mark-files-regexp (regexp &optional marker-char)
@@ -3631,6 +3640,7 @@ With a prefix argument, edit the current listing switches instead."
 	;; Remove a switch of the form -XtY for some X and Y.
 	(setq dired-actual-switches
 	      (replace-match "" t t dired-actual-switches 3))))
+
     ;; Now, if we weren't sorting by date before, add the -t switch.
     ;; Some simple-minded ls implementations (eg ftp servers) only
     ;; allow a single option string, so try not to add " -t" if possible.
@@ -3837,7 +3847,7 @@ Ask means pop up a menu for the user to select one of copy, move or link."
   (let* ((dired-dir (car misc-data))
          (dir (if (consp dired-dir) (car dired-dir) dired-dir)))
     (if (file-directory-p (file-name-directory dir))
-        (progn
+        (with-demoted-errors "Desktop: Problem restoring directory: %S"
           (dired dired-dir)
           ;; The following elements of `misc-data' are the keys
           ;; from `dired-subdir-alist'.
@@ -3853,7 +3863,7 @@ Ask means pop up a menu for the user to select one of copy, move or link."
 
 ;;; Start of automatically extracted autoloads.
 
-;;;### (autoloads nil "dired-aux" "dired-aux.el" "8861a67d8b72a1110007fba0be161c86")
+;;;### (autoloads nil "dired-aux" "dired-aux.el" "1a8e2a4a9117ab3a2586aa001358d3fb")
 ;;; Generated autoloads from dired-aux.el
 
 (autoload 'dired-diff "dired-aux" "\

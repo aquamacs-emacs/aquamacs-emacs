@@ -211,13 +211,13 @@ ns_display_info_for_name (Lisp_Object name)
     if (!NILP (Fstring_equal (XCAR (dpyinfo->name_list_element), name)))
       return dpyinfo;
 
-  error ("Emacs for OpenStep does not yet support multi-display.");
+  error ("Emacs for Nextstep does not yet support multi-display");
 
   Fx_open_connection (name, Qnil, Qnil);
   dpyinfo = x_display_list;
 
   if (dpyinfo == 0)
-    error ("OpenStep on %s not responding.\n", SDATA (name));
+    error ("Display on %s not responding.\n", SDATA (name));
 
   return dpyinfo;
 }
@@ -2521,10 +2521,10 @@ terminate Emacs if we can't open the connection.
   if (dpyinfo == 0)
     {
       if (!NILP (must_succeed))
-        fatal ("OpenStep on %s not responding.\n",
+        fatal ("Display on %s not responding.\n",
                SSDATA (display));
       else
-        error ("OpenStep on %s not responding.\n",
+        error ("Display on %s not responding.\n",
                SSDATA (display));
     }
 

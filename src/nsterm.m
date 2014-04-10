@@ -5914,9 +5914,17 @@ not_in_argv (NSString *arg)
       /* (Carbon way: [theEvent keyCode]) */
 
       /* is it a "function key"? */
-      fnKeysym = (code < 0x00ff && (flags&NSNumericPadKeyMask))
-	? ns_convert_key ([theEvent keyCode] | NSNumericPadKeyMask)
-	: ns_convert_key (code);
+      /* Note: Sometimes a plain key will have the NSNumericPadKeyMask
+         flag set (this is probably a bug in the OS).
+      */
+      if (code < 0x00ff && (flags&NSNumericPadKeyMask))
+        {
+          fnKeysym = ns_convert_key ([theEvent keyCode] | NSNumericPadKeyMask);
+        }
+      if (fnKeysym == 0)
+        {
+          fnKeysym = ns_convert_key (code);
+        }
 
       if (fnKeysym)
         {
@@ -7286,6 +7294,14 @@ if (cols > 0 && rows > 0)
 
   if (fs_state != FULLSCREEN_BOTH)
     {
+      NSScreen *screen = [w screen];
+
+#if defined (NS_IMPL_COCOA) && \
+  MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
+      /* Hide ghost menu bar on secondary monitor? */
+      if (! onFirstScreen)
+        onFirstScreen = [NSScreen screensHaveSeparateSpaces];
+#endif
       /* Hide dock and menubar if we are on the primary screen.  */
       if (onFirstScreen)
         {
@@ -7306,7 +7322,7 @@ if (cols > 0 && rows > 0)
                                  styleMask:NSBorderlessWindowMask
                                    backing:NSBackingStoreBuffered
                                      defer:YES
-                                    screen:[w screen]];
+                                    screen:screen];
 
       [fw setContentView:[w contentView]];
       [fw setTitle:[w title]];
@@ -7329,7 +7345,7 @@ if (cols > 0 && rows > 0)
       [fw makeKeyAndOrderFront:NSApp];
       [fw makeFirstResponder:self];
       [w orderOut:self];
-      r = [fw frameRectForContentRect:[[fw screen] frame]];
+      r = [fw frameRectForContentRect:[screen frame]];
       [fw setFrame: r display:YES animate:YES];
       [self windowDidEnterFullScreen:nil];
       [fw display];
@@ -7723,7 +7739,7 @@ if (cols > 0 && rows > 0)
     }
   else
     {
-      error ("Invalid data type in dragging pasteboard.");
+      error ("Invalid data type in dragging pasteboard");
       return NO;
     }
 }
@@ -7921,7 +7937,8 @@ if (cols > 0 && rows > 0)
 {
   /* When making the frame visible for the first time or if there is just
      one screen, we want to constrain.  Other times not.  */
-  NSUInteger nr_screens = [[NSScreen screens] count];
+  NSArray *screens = [NSScreen screens];
+  NSUInteger nr_screens = [screens count], nr_eff_screens = 0, i;
   struct frame *f = ((EmacsView *)[self delegate])->emacsframe;
   NSTRACE (constrainFrameRect);
   NSTRACE_RECT ("input", frameRect);
@@ -7929,6 +7946,31 @@ if (cols > 0 && rows > 0)
   if (ns_menu_bar_should_be_hidden ())
     return frameRect;
 
+  if (nr_screens == 1)
+    return [super constrainFrameRect:frameRect toScreen:screen];
+
+#ifdef NS_IMPL_COCOA
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
+  // If separate spaces is on, it is like each screen is independent.  There is
+  // no spanning of frames across screens.
+  if ([NSScreen screensHaveSeparateSpaces])
+    return [super constrainFrameRect:frameRect toScreen:screen];
+#endif
+#endif
+
+  for (i = 0; i < nr_screens; ++i) 
+    {
+      NSScreen *s = [screens objectAtIndex: i];
+      NSRect scrrect = [s frame];
+      NSRect intersect = NSIntersectionRect (frameRect, scrrect);
+
+      if (intersect.size.width > 0 || intersect.size.height > 0)
+        ++nr_eff_screens;
+    }
+
+  if (nr_eff_screens == 1)
+    return [super constrainFrameRect:frameRect toScreen:screen];
+  
   /* The default implementation does two things 1) ensure that the top
      of the rectangle is below the menu bar (or below the top of the
      screen) and 2) resizes windows larger than the screen. As we
@@ -8673,7 +8715,7 @@ Only works on OSX 10.6 or later.  */);
      doc: /*Non-nil means to use native fullscreen on OSX >= 10.7.
 Nil means use fullscreen the old (< 10.7) way.  The old way works better with
 multiple monitors, but lacks tool bar.  This variable is ignored on OSX < 10.7.
-Default is t for OSX >= 10.7, nil otherwise. */);
+Default is t for OSX >= 10.7, nil otherwise.  */);
 #ifdef HAVE_NATIVE_FS
   ns_use_native_fullscreen = YES;
 #else
@@ -8684,7 +8726,7 @@ Default is t for OSX >= 10.7, nil otherwise. */);
   DEFVAR_BOOL ("ns-use-srgb-colorspace", ns_use_srgb_colorspace,
      doc: /*Non-nil means to use sRGB colorspace on OSX >= 10.7.
 Note that this does not apply to images.
-This variable is ignored on OSX < 10.7 and GNUstep.  Default is t. */);
+This variable is ignored on OSX < 10.7 and GNUstep.  */);
   ns_use_srgb_colorspace = YES;
 
   /* TODO: move to common code */

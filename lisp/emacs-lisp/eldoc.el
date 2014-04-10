@@ -36,9 +36,10 @@
 ;; One useful way to enable this minor mode is to put the following in your
 ;; .emacs:
 ;;
-;;      (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
-;;      (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
-;;      (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
+;;      (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+;;      (add-hook 'lisp-interaction-mode-hook 'eldoc-mode)
+;;      (add-hook 'ielm-mode-hook 'eldoc-mode)
+;;      (add-hook 'eval-expression-minibuffer-setup-hook 'eldoc-mode)
 
 ;; Major modes for other languages may use ElDoc by defining an
 ;; appropriate function as the buffer-local value of
@@ -218,7 +219,9 @@ Otherwise work like `message'."
   (if (minibufferp)
       (progn
 	(add-hook 'minibuffer-exit-hook
-		  (lambda () (setq eldoc-mode-line-string nil))
+		  (lambda () (setq eldoc-mode-line-string nil
+			      ;; http://debbugs.gnu.org/16920
+			      eldoc-last-message nil))
 		  nil t)
 	(with-current-buffer
 	    (window-buffer

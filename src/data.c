@@ -738,6 +738,10 @@ Associates the function with the current load file, if any.
 The optional third argument DOCSTRING specifies the documentation string
 for SYMBOL; if it is omitted or nil, SYMBOL uses the documentation string
 determined by DEFINITION.
+
+Internally, this normally uses `fset', but if SYMBOL has a
+`defalias-fset-function' property, the associated value is used instead.
+
 The return value is undefined.  */)
   (register Lisp_Object symbol, Lisp_Object definition, Lisp_Object docstring)
 {
@@ -2365,7 +2369,7 @@ usage: (<= NUMBER-OR-MARKER &rest NUMBERS-OR-MARKERS)  */)
 DEFUN (">=", Fgeq, Sgeq, 1, MANY, 0,
        doc: /* Return t if each arg is greater than or equal to the next arg.
 All must be numbers or markers.
-usage: (= NUMBER-OR-MARKER &rest NUMBERS-OR-MARKERS)  */)
+usage: (>= NUMBER-OR-MARKER &rest NUMBERS-OR-MARKERS)  */)
   (ptrdiff_t nargs, Lisp_Object *args)
 {
   return arithcompare_driver (nargs, args, ARITH_GRTR_OR_EQUAL);

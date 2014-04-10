@@ -510,15 +510,51 @@ static void
 x_draw_window_divider (struct window *w, int x0, int x1, int y0, int y1)
 {
   struct frame *f = XFRAME (WINDOW_FRAME (w));
-  struct face *face;
+  struct face *face = FACE_FROM_ID (f, WINDOW_DIVIDER_FACE_ID);
+  struct face *face_first = FACE_FROM_ID (f, WINDOW_DIVIDER_FIRST_PIXEL_FACE_ID);
+  struct face *face_last = FACE_FROM_ID (f, WINDOW_DIVIDER_LAST_PIXEL_FACE_ID);
+  unsigned long color = face ? face->foreground : FRAME_FOREGROUND_PIXEL (f);
+  unsigned long color_first = (face_first
+			       ? face_first->foreground
+			       : FRAME_FOREGROUND_PIXEL (f));
+  unsigned long color_last = (face_last
+			      ? face_last->foreground
+			      : FRAME_FOREGROUND_PIXEL (f));
+  Display *display = FRAME_X_DISPLAY (f);
+  Window window = FRAME_X_WINDOW (f);
 
-  face = FACE_FROM_ID (f, WINDOW_DIVIDER_FACE_ID);
-  if (face)
-    XSetForeground (FRAME_X_DISPLAY (f), f->output_data.x->normal_gc,
-		    face->foreground);
-
-  XFillRectangle (FRAME_X_DISPLAY (f), FRAME_X_WINDOW (f),
-		  f->output_data.x->normal_gc, x0, y0, x1 - x0, y1 - y0);
+  if (y1 - y0 > x1 - x0 && x1 - x0 > 2)
+    /* Vertical.  */
+    {
+      XSetForeground (display, f->output_data.x->normal_gc, color_first);
+      XFillRectangle (display, window, f->output_data.x->normal_gc,
+		      x0, y0, 1, y1 - y0);
+      XSetForeground (display, f->output_data.x->normal_gc, color);
+      XFillRectangle (display, window, f->output_data.x->normal_gc,
+		      x0 + 1, y0, x1 - x0 - 2, y1 - y0);
+      XSetForeground (display, f->output_data.x->normal_gc, color_last);
+      XFillRectangle (display, window, f->output_data.x->normal_gc,
+		      x1 - 1, y0, 1, y1 - y0);
+    }
+  else if (x1 - x0 > y1 - y0 && y1 - y0 > 3)
+    /* Horizontal.  */
+    {
+      XSetForeground (display, f->output_data.x->normal_gc, color_first);
+      XFillRectangle (display, window, f->output_data.x->normal_gc,
+		      x0, y0, x1 - x0, 1);
+      XSetForeground (display, f->output_data.x->normal_gc, color);
+      XFillRectangle (display, window, f->output_data.x->normal_gc,
+		      x0, y0 + 1, x1 - x0, y1 - y0 - 2);
+      XSetForeground (display, f->output_data.x->normal_gc, color_last);
+      XFillRectangle (display, window, f->output_data.x->normal_gc,
+		      x0, y1 - 1, x1 - x0, 1);
+    }
+  else
+    {
+      XSetForeground (display, f->output_data.x->normal_gc, color);
+      XFillRectangle (display, window, f->output_data.x->normal_gc,
+		      x0, y0, x1 - x0, y1 - y0);
+    }
 }
 
 /* End update of window W.
@@ -2126,6 +2162,7 @@ static void
 x_draw_image_relief (struct glyph_string *s)
 {
   int x1, y1, thick, raised_p, top_p, bot_p, left_p, right_p;
+  int extra_x, extra_y;
   XRectangle r;
   int x = s->x;
   int y = s->ybase - image_ascent (s->img, s->face, &s->slice);
@@ -2158,16 +2195,31 @@ x_draw_image_relief (struct glyph_string *s)
 
   x1 = x + s->slice.width - 1;
   y1 = y + s->slice.height - 1;
+
+  extra_x = extra_y = 0;
+  if (s->face->id == TOOL_BAR_FACE_ID)
+    {
+      if (CONSP (Vtool_bar_button_margin)
+	  && INTEGERP (XCAR (Vtool_bar_button_margin))
+	  && INTEGERP (XCDR (Vtool_bar_button_margin)))
+	{
+	  extra_x = XINT (XCAR (Vtool_bar_button_margin));
+	  extra_y = XINT (XCDR (Vtool_bar_button_margin));
+	}
+      else if (INTEGERP (Vtool_bar_button_margin))
+	extra_x = extra_y = XINT (Vtool_bar_button_margin);
+    }
+
   top_p = bot_p = left_p = right_p = 0;
 
   if (s->slice.x == 0)
-    x -= thick, left_p = 1;
+    x -= thick + extra_x, left_p = 1;
   if (s->slice.y == 0)
-    y -= thick, top_p = 1;
+    y -= thick + extra_y, top_p = 1;
   if (s->slice.x + s->slice.width == s->img->width)
-    x1 += thick, right_p = 1;
+    x1 += thick + extra_x, right_p = 1;
   if (s->slice.y + s->slice.height == s->img->height)
-    y1 += thick, bot_p = 1;
+    y1 += thick + extra_y, bot_p = 1;
 
   x_setup_relief_colors (s);
   get_glyph_string_clip_rect (s, &r);
@@ -2350,15 +2402,19 @@ x_draw_image_glyph_string (struct glyph_string *s)
 	{
 	  int x = s->x;
 	  int y = s->y;
+	  int width = s->background_width;
 
 	  if (s->first_glyph->left_box_line_p
 	      && s->slice.x == 0)
-	    x += box_line_hwidth;
+	    {
+	      x += box_line_hwidth;
+	      width -= box_line_hwidth;
+	    }
 
 	  if (s->slice.y == 0)
 	    y += box_line_vwidth;
 
-	  x_draw_glyph_string_bg_rect (s, x, y, s->background_width, height);
+	  x_draw_glyph_string_bg_rect (s, x, y, width, height);
 	}
 
       s->background_filled_p = 1;
@@ -2465,6 +2521,8 @@ x_draw_stretch_glyph_string (struct glyph_string *s)
 	      XFillRectangle (s->display, s->window, gc, x, y, w, h);
 	      XSetForeground (s->display, gc, xgcv.foreground);
 	    }
+
+	  XSetClipMask (s->display, gc, None);
 	}
     }
   else if (!s->background_filled_p)
@@ -5629,7 +5687,7 @@ static struct input_event *current_hold_quit;
 
 /* This is the filter function invoked by the GTK event loop.
    It is invoked before the XEvent is translated to a GdkEvent,
-   so we have a chance to act on the event before GTK. */
+   so we have a chance to act on the event before GTK.  */
 static GdkFilterReturn
 event_handler_gdk (GdkXEvent *gxev, GdkEvent *ev, gpointer data)
 {
@@ -5658,9 +5716,9 @@ event_handler_gdk (GdkXEvent *gxev, GdkEvent *ev, gpointer data)
       if (! dpyinfo)
         current_finish = X_EVENT_NORMAL;
       else
-	current_count +=
-	  handle_one_xevent (dpyinfo, xev, &current_finish,
-			     current_hold_quit);
+	current_count
+	  += handle_one_xevent (dpyinfo, xev, &current_finish,
+				current_hold_quit);
     }
   else
     current_finish = x_dispatch_event (xev, xev->xany.display);
@@ -6104,14 +6162,6 @@ handle_one_xevent (struct x_display_info *dpyinfo,
       if (f)
         {
 	  bool iconified = FRAME_ICONIFIED_P (f);
-          /* wait_reading_process_output will notice this and update
-             the frame's display structures.
-             If we where iconified, we should not set garbaged,
-             because that stops redrawing on Expose events.  This looks
-             bad if we are called from a recursive event loop
-             (x_dispatch_event), for example when a dialog is up.  */
-          if (!iconified)
-            SET_FRAME_GARBAGED (f);
 
           /* Check if fullscreen was specified before we where mapped the
              first time, i.e. from the command line.  */
@@ -6662,7 +6712,7 @@ handle_one_xevent (struct x_display_info *dpyinfo,
 
 #ifdef USE_GTK
           /* GTK creates windows but doesn't map them.
-             Only get real positions when mapped. */
+             Only get real positions when mapped.  */
           if (FRAME_GTK_OUTER_WIDGET (f)
               && gtk_widget_get_mapped (FRAME_GTK_OUTER_WIDGET (f)))
 #endif
@@ -7917,17 +7967,18 @@ xim_initialize (struct x_display_info *dpyinfo, char *resource_name)
     {
 #ifdef HAVE_X11R6_XIM
       struct xim_inst_t *xim_inst = xmalloc (sizeof *xim_inst);
+      Bool ret;
 
       dpyinfo->xim_callback_data = xim_inst;
       xim_inst->dpyinfo = dpyinfo;
       xim_inst->resource_name = xstrdup (resource_name);
-      XRegisterIMInstantiateCallback (dpyinfo->display, dpyinfo->xrdb,
-				      resource_name, emacs_class,
-				      xim_instantiate_callback,
-				      /* This is XPointer in XFree86
-					 but (XPointer *) on Tru64, at
-					 least, hence the configure test.  */
-				      (XRegisterIMInstantiateCallback_arg6) xim_inst);
+      ret = XRegisterIMInstantiateCallback
+	(dpyinfo->display, dpyinfo->xrdb, xim_inst->resource_name,
+	 emacs_class, xim_instantiate_callback,
+	 /* This is XPointer in XFree86 but (XPointer *)
+	    on Tru64, at least, hence the configure test.  */
+	 (XRegisterIMInstantiateCallback_arg6) xim_inst);
+      eassert (ret == True);
 #else /* not HAVE_X11R6_XIM */
       xim_open_dpy (dpyinfo, resource_name);
 #endif /* not HAVE_X11R6_XIM */
@@ -7945,12 +7996,18 @@ xim_close_dpy (struct x_display_info *dpyinfo)
   if (use_xim)
     {
 #ifdef HAVE_X11R6_XIM
+      struct xim_inst_t *xim_inst = dpyinfo->xim_callback_data;
+      
       if (dpyinfo->display)
-	XUnregisterIMInstantiateCallback (dpyinfo->display, dpyinfo->xrdb,
-					  NULL, emacs_class,
-					  xim_instantiate_callback, NULL);
-      xfree (dpyinfo->xim_callback_data->resource_name);
-      xfree (dpyinfo->xim_callback_data);
+	{
+	  Bool ret = XUnregisterIMInstantiateCallback
+	    (dpyinfo->display, dpyinfo->xrdb, xim_inst->resource_name,
+	     emacs_class, xim_instantiate_callback,
+	     (XRegisterIMInstantiateCallback_arg6) xim_inst);
+	  eassert (ret == True);
+	}
+      xfree (xim_inst->resource_name);
+      xfree (xim_inst);
 #endif /* HAVE_X11R6_XIM */
       if (dpyinfo->display)
 	XCloseIM (dpyinfo->xim);
@@ -9260,6 +9317,22 @@ x_free_frame_resources (struct frame *f)
 	  f->output_data.x->black_relief.gc = 0;
 	}
 
+      /* Free cursors.  */
+      if (f->output_data.x->text_cursor != 0)
+	XFreeCursor (FRAME_X_DISPLAY (f), f->output_data.x->text_cursor);
+      if (f->output_data.x->nontext_cursor != 0)
+	XFreeCursor (FRAME_X_DISPLAY (f), f->output_data.x->nontext_cursor);
+      if (f->output_data.x->modeline_cursor != 0)
+	XFreeCursor (FRAME_X_DISPLAY (f), f->output_data.x->modeline_cursor);
+      if (f->output_data.x->hand_cursor != 0)
+	XFreeCursor (FRAME_X_DISPLAY (f), f->output_data.x->hand_cursor);
+      if (f->output_data.x->hourglass_cursor != 0)
+	XFreeCursor (FRAME_X_DISPLAY (f), f->output_data.x->hourglass_cursor);
+      if (f->output_data.x->horizontal_drag_cursor != 0)
+	XFreeCursor (FRAME_X_DISPLAY (f), f->output_data.x->horizontal_drag_cursor);
+      if (f->output_data.x->vertical_drag_cursor != 0)
+	XFreeCursor (FRAME_X_DISPLAY (f), f->output_data.x->vertical_drag_cursor);
+
       XFlush (FRAME_X_DISPLAY (f));
     }
 
@@ -9643,6 +9716,10 @@ my_log_handler (const gchar *log_domain, GLogLevelFlags log_level,
 }
 #endif
 
+/* Current X display connection identifier.  Incremented for each next
+   connection established.  */
+static unsigned x_display_id;
+
 /* Open a connection to X display DISPLAY_NAME, and return
    the structure that describes the open display.
    If we cannot contact the display, return null.  */
@@ -9860,6 +9937,7 @@ x_term_init (Lisp_Object display_name, char *xrm_option, char *resource_name)
   lim = min (PTRDIFF_MAX, SIZE_MAX) - sizeof "@";
   if (lim - SBYTES (Vinvocation_name) < SBYTES (Vsystem_name))
     memory_full (SIZE_MAX);
+  dpyinfo->x_id = ++x_display_id;
   dpyinfo->x_id_name = xmalloc (SBYTES (Vinvocation_name)
 				+ SBYTES (Vsystem_name) + 2);
   strcat (strcat (strcpy (dpyinfo->x_id_name, SSDATA (Vinvocation_name)), "@"),

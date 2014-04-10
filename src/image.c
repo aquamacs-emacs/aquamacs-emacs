@@ -2019,6 +2019,7 @@ x_create_x_image_and_pixmap (struct frame *f, int width, int height, int depth,
       XSETINT (errcode, err);
       image_error ("Unable to create bitmap, error code %d", errcode, Qnil);
       x_destroy_x_image (*ximg);
+      *ximg = NULL;
       return 0;
     }
 
@@ -5215,6 +5216,7 @@ pbm_load (struct frame *f, struct image *img)
       image_error ("Not a PBM image: `%s'", img->spec, Qnil);
     error:
       xfree (contents);
+      img->pixmap = NO_PIXMAP;
       return 0;
     }
 

@@ -834,7 +834,8 @@ skips all prompting."
 (deffoo nnir-request-update-mark (group article mark)
   (let ((artgroup (nnir-article-group article))
 	(artnumber (nnir-article-number article)))
-    (gnus-request-update-mark artgroup artnumber mark)))
+    (when (and artgroup artnumber)
+      (gnus-request-update-mark artgroup artnumber mark))))
 
 (deffoo nnir-request-set-mark (group actions &optional server)
   (nnir-possibly-change-group group server)
@@ -1486,7 +1487,7 @@ Tested with Namazu 2.0.6 on a GNU/Linux system."
 
       (goto-char (point-min))
       (while (re-search-forward
-              "^\\([0-9]+\\.\\).*\\((score: \\([0-9]+\\)\\))\n\\([^ ]+\\)"
+              "^\\([0-9,]+\\.\\).*\\((score: \\([0-9]+\\)\\))\n\\([^ ]+\\)"
               nil t)
         (setq score (match-string 3)
               group (file-name-directory (match-string 4))

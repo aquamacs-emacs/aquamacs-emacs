@@ -2187,11 +2187,12 @@ set_buffer_temp (struct buffer *b)
 
 DEFUN ("set-buffer", Fset_buffer, Sset_buffer, 1, 1, 0,
        doc: /* Make buffer BUFFER-OR-NAME current for editing operations.
-BUFFER-OR-NAME may be a buffer or the name of an existing buffer.  See
-also `with-current-buffer' when you want to make a buffer current
+BUFFER-OR-NAME may be a buffer or the name of an existing buffer.
+See also `with-current-buffer' when you want to make a buffer current
 temporarily.  This function does not display the buffer, so its effect
 ends when the current command terminates.  Use `switch-to-buffer' or
-`pop-to-buffer' to switch buffers permanently.  */)
+`pop-to-buffer' to switch buffers permanently.
+The return value is the buffer made current.  */)
   (register Lisp_Object buffer_or_name)
 {
   register Lisp_Object buffer;
@@ -2261,7 +2262,7 @@ validate_region (register Lisp_Object *b, register Lisp_Object *e)
     }
 
   if (! (BEGV <= XINT (*b) && XINT (*e) <= ZV))
-    args_out_of_range (*b, *e);
+    args_out_of_range_3 (Fcurrent_buffer (), *b, *e);
 }
 
 /* Advance BYTE_POS up to a character boundary
@@ -3146,6 +3147,7 @@ struct sortvec
   Lisp_Object overlay;
   ptrdiff_t beg, end;
   EMACS_INT priority;
+  EMACS_INT spriority;		/* Secondary priority.  */
 };
 
 static int
@@ -3153,19 +3155,28 @@ compare_overlays (const void *v1, const void *v2)
 {
   const struct sortvec *s1 = v1;
   const struct sortvec *s2 = v2;
+  /* Return 1 if s1 should take precedence, -1 if v2 should take precedence,
+     and 0 if they're equal.  */
   if (s1->priority != s2->priority)
     return s1->priority < s2->priority ? -1 : 1;
-  if (s1->beg != s2->beg)
-    return s1->beg < s2->beg ? -1 : 1;
-  if (s1->end != s2->end)
+  /* If the priority is equal, give precedence to the one not covered by the
+     other.  If neither covers the other, obey spriority.  */
+  else if (s1->beg < s2->beg)
+    return (s1->end < s2->end && s1->spriority > s2->spriority ? 1 : -1);
+  else if (s1->beg > s2->beg)
+    return (s1->end > s2->end && s1->spriority < s2->spriority ? -1 : 1);
+  else if (s1->end != s2->end)
     return s2->end < s1->end ? -1 : 1;
-  /* Avoid the non-determinism of qsort by choosing an arbitrary ordering
-     between "equal" overlays.  The result can still change between
-     invocations of Emacs, but it won't change in the middle of
-     `find_field' (bug#6830).  */
-  if (!EQ (s1->overlay, s2->overlay))
+  else if (s1->spriority != s2->spriority)
+    return (s1->spriority < s2->spriority ? -1 : 1);
+  else if (EQ (s1->overlay, s2->overlay))
+    return 0;
+  else
+    /* Avoid the non-determinism of qsort by choosing an arbitrary ordering
+       between "equal" overlays.  The result can still change between
+       invocations of Emacs, but it won't change in the middle of
+       `find_field' (bug#6830).  */
     return XLI (s1->overlay) < XLI (s2->overlay) ? -1 : 1;
-  return 0;
 }
 
 /* Sort an array of overlays by priority.  The array is modified in place.
@@ -3208,10 +3219,23 @@ sort_overlays (Lisp_Object *overlay_vec, ptrdiff_t noverlays, struct window *w)
 	  sortvec[j].beg = OVERLAY_POSITION (OVERLAY_START (overlay));
 	  sortvec[j].end = OVERLAY_POSITION (OVERLAY_END (overlay));
 	  tem = Foverlay_get (overlay, Qpriority);
-	  if (INTEGERP (tem))
-	    sortvec[j].priority = XINT (tem);
-	  else
-	    sortvec[j].priority = 0;
+	  if (NILP (tem))
+	    {
+	      sortvec[j].priority = 0;
+	      sortvec[j].spriority = 0;
+	    }
+	  else if (INTEGERP (tem))
+	    {
+	      sortvec[j].priority = XINT (tem);
+	      sortvec[j].spriority = 0;
+	    }
+	  else if (CONSP (tem))
+	    {
+	      Lisp_Object car = XCAR (tem);
+	      Lisp_Object cdr = XCDR (tem);
+	      sortvec[j].priority  = INTEGERP (car) ? XINT (car) : 0;
+	      sortvec[j].spriority = INTEGERP (cdr) ? XINT (cdr) : 0;
+	    }
 	  j++;
 	}
     }
@@ -3830,7 +3854,7 @@ DEFUN ("overlayp", Foverlayp, Soverlayp, 1, 1, 0,
 }
 
 DEFUN ("make-overlay", Fmake_overlay, Smake_overlay, 2, 5, 0,
-       doc: /* Create a new overlay with range BEG to END in BUFFER.
+       doc: /* Create a new overlay with range BEG to END in BUFFER and return it.
 If omitted, BUFFER defaults to the current buffer.
 BEG and END may be integers or markers.
 The fourth arg FRONT-ADVANCE, if non-nil, makes the marker
@@ -6133,6 +6157,8 @@ If the value of the variable is t, undo information is not recorded.  */);
   DEFVAR_PER_BUFFER ("cache-long-scans", &BVAR (current_buffer, cache_long_scans), Qnil,
 		     doc: /* Non-nil means that Emacs should use caches in attempt to speedup buffer scans.
 
+There is no reason to set this to nil except for debugging purposes.
+
 Normally, the line-motion functions work by scanning the buffer for
 newlines.  Columnar operations (like `move-to-column' and
 `compute-motion') also work by scanning the buffer, summing character
@@ -6182,15 +6208,16 @@ same format as a regular save would use.  */);
   DEFVAR_PER_BUFFER ("buffer-invisibility-spec",
 		     &BVAR (current_buffer, invisibility_spec), Qnil,
 		     doc: /* Invisibility spec of this buffer.
-The default is t, which means that text is invisible
-if it has a non-nil `invisible' property.
-If the value is a list, a text character is invisible if its `invisible'
-property is an element in that list (or is a list with members in common).
-If an element is a cons cell of the form (PROP . ELLIPSIS),
-then characters with property value PROP are invisible,
-and they have an ellipsis as well if ELLIPSIS is non-nil.
-Setting this variable is very fast, much faster than scanning all the
-text in the buffer looking for properties to change.  */);
+The default is t, which means that text is invisible if it has a non-nil
+`invisible' property.
+This variable can also be a list.  The list can have two kinds of elements:
+`ATOM' and `(ATOM . ELLIPSIS)'.  A text character is invisible if its
+`invisible' property is `ATOM', or has an `invisible' property that is a list
+that contains `ATOM'.
+If the `(ATOM . ELLIPSIS)' form is used, and `ELLIPSIS' is non-nil, an
+ellipsis will be displayed after the invisible characters.
+Setting this variable is very fast, much faster than scanning all the text in
+the buffer looking for properties to change.  */);
 
   DEFVAR_PER_BUFFER ("buffer-display-count",
 		     &BVAR (current_buffer, display_count), Qintegerp,
@@ -6284,9 +6311,9 @@ The function `kill-all-local-variables' runs this before doing anything else.  *
 
   DEFVAR_LISP ("buffer-list-update-hook", Vbuffer_list_update_hook,
 	       doc: /* Hook run when the buffer list changes.
-Functions running this hook are `get-buffer-create',
+Functions running this hook are, `get-buffer-create',
 `make-indirect-buffer', `rename-buffer', `kill-buffer',
-and `bury-buffer-internal'.  */);
+`bury-buffer-internal' and `select-window'.  */);
   Vbuffer_list_update_hook = Qnil;
   DEFSYM (Qbuffer_list_update_hook, "buffer-list-update-hook");
 

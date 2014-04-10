@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 1985-1987, 1993-2014 Free Software Foundation, Inc.
 
-;; Maintainer: FSF
+;; Maintainer: emacs-devel@gnu.org
 ;; Keywords: internal
 ;; Package: emacs
 
@@ -384,8 +384,9 @@ If option `use-hard-newlines' is non-nil, the newline is marked with the
 text-property `hard'.
 With ARG, insert that many newlines.
 
-To turn off indentation by this command, disable Electric Indent mode
-\(see \\[electric-indent-mode]).
+If `electric-indent-mode' is enabled, this indents the final new line
+that it adds, and reindents the preceding line.  To just insert
+a newline, use \\[electric-indent-just-newline].
 
 Calls `auto-fill-function' if the current column number is greater
 than the value of `fill-column' and ARG is nil.
@@ -611,7 +612,7 @@ In some text modes, where TAB inserts a tab, this command indents to the
 column specified by the function `current-left-margin'."
   (interactive "*")
   (delete-horizontal-space t)
-  (newline 1 t)
+  (newline nil t)
   (indent-according-to-mode))
 
 (defun reindent-then-newline-and-indent ()
@@ -642,7 +643,7 @@ column specified by the function `current-left-margin'."
     (indent-according-to-mode)))
 
 (defcustom read-quoted-char-radix 8
- "*Radix for \\[quoted-insert] and other uses of `read-quoted-char'.
+  "Radix for \\[quoted-insert] and other uses of `read-quoted-char'.
 Legitimate radix values are 8, 10 and 16."
  :type '(choice (const 8) (const 10) (const 16))
  :group 'editing-basics)
@@ -739,6 +740,9 @@ useful for editing binary files."
     ;;          (>= char ?\240)
     ;;          (<= char ?\377))
     ;;     (setq char (unibyte-char-to-multibyte char)))
+    (unless (characterp char)
+      (user-error "%s is not a valid character"
+		  (key-description (vector char))))
     (if (> arg 0)
 	(if (eq overwrite-mode 'overwrite-mode-binary)
 	    (delete-char arg)))
@@ -795,7 +799,8 @@ If BACKWARD-ONLY is non-nil, only delete them before point."
 
 (defun just-one-space (&optional n)
   "Delete all spaces and tabs around point, leaving one space (or N spaces).
-If N is negative, delete newlines as well, leaving -N spaces."
+If N is negative, delete newlines as well, leaving -N spaces.
+See also `cycle-spacing'."
   (interactive "*p")
   (cycle-spacing n nil t))
 
@@ -806,31 +811,22 @@ position and original spacing around the point in this
 variable.")
 
 (defun cycle-spacing (&optional n preserve-nl-back single-shot)
-  "Manipulate spaces around the point in a smart way.
+  "Manipulate whitespace around point in a smart way.
+In interactive use, this function behaves differently in successive
+consecutive calls.
 
-When run as an interactive command, the first time it's called
-in a sequence, deletes all spaces and tabs around point leaving
-one (or N spaces).  If this does not change content of the
-buffer, skips to the second step:
+The first call in a sequence acts like `just-one-space'.
+It deletes all spaces and tabs around point, leaving one space
+\(or N spaces).  N is the prefix argument.  If N is negative,
+it deletes newlines as well, leaving -N spaces.
+\(If PRESERVE-NL-BACK is non-nil, it does not delete newlines before point.)
 
-When run for the second time in a sequence, deletes all the
-spaces it has previously inserted.
+The second call in a sequence (or the first call if the above does
+not result in any changes) deletes all spaces.
 
-When run for the third time, returns the whitespace and point in
-a state encountered when it had been run for the first time.
+The third call in a sequence restores the original whitespace (and point).
 
-For example, if buffer contains \"foo ^ bar\" with \"^\" denoting the
-point, calling `cycle-spacing' command will replace two spaces with
-a single space, calling it again immediately after, will remove all
-spaces, and calling it for the third time will bring two spaces back
-together.
-
-If N is negative, delete newlines as well.  However, if
-PRESERVE-NL-BACK is t new line characters prior to the point
-won't be removed.
-
-If SINGLE-SHOT is non-nil, will only perform the first step.  In
-other words, it will work just like `just-one-space' command."
+If SINGLE-SHOT is non-nil, it only performs the first step in the sequence."
   (interactive "*p")
   (let ((orig-pos	 (point))
 	(skip-characters (if (and n (< n 0)) " \t\n\r" " \t"))
@@ -1014,6 +1010,7 @@ KILLFLAG is set if N was explicitly specified."
 
 	;; Otherwise, do simple deletion.
 	(t (delete-char n killflag))))
+(put 'delete-forward-char 'interactive-only 'delete-char)
 
 (defun mark-whole-buffer ()
   "Put point at beginning and mark at end of buffer.
@@ -1410,6 +1407,9 @@ however, there is no such truncation.  Such a prefix argument
 also causes integers to be printed in several additional formats
 \(octal, hexadecimal, and character).
 
+Runs the hook `eval-expression-minibuffer-setup-hook' on entering the
+minibuffer.
+
 If `eval-expression-debug-on-error' is non-nil, which is the default,
 this command arranges for all errors to enter the debugger."
   (interactive
@@ -1570,13 +1570,11 @@ If the value is non-nil and not a number, we wait 2 seconds."
 (defun execute-extended-command (prefixarg &optional command-name)
   ;; Based on Fexecute_extended_command in keyboard.c of Emacs.
   ;; Aaron S. Hawley <aaron.s.hawley(at)gmail.com> 2009-08-24
-  "Read function name, then read its arguments and call it.
-
-To pass a numeric argument to the command you are invoking, specify
-the numeric argument to this command.
-
+  "Read a command name, then read the arguments and call the command.
+Interactively, to pass a prefix argument to the command you are
+invoking, give a prefix argument to `execute-extended-command'.
 Noninteractively, the argument PREFIXARG is the prefix argument to
-give to the command you invoke, if it asks for an argument."
+give to the command you invoke."
   (interactive (list current-prefix-arg (read-extended-command)))
   ;; Emacs<24 calling-convention was with a single `prefixarg' argument.
   (if (null command-name)
@@ -2292,20 +2290,38 @@ Return what remains of the list."
            (when (let ((apos (abs pos)))
                    (or (< apos (point-min)) (> apos (point-max))))
              (error "Changes to be undone are outside visible portion of buffer"))
-           (if (< pos 0)
-               (progn
-                 (goto-char (- pos))
-                 (insert string))
-             (goto-char pos)
-             ;; Now that we record marker adjustments
-             ;; (caused by deletion) for undo,
-             ;; we should always insert after markers,
-             ;; so that undoing the marker adjustments
-             ;; put the markers back in the right place.
-             (insert string)
-             (goto-char pos)))
+           (let (valid-marker-adjustments)
+             ;; Check that marker adjustments which were recorded
+             ;; with the (STRING . POS) record are still valid, ie
+             ;; the markers haven't moved.  We check their validity
+             ;; before reinserting the string so as we don't need to
+             ;; mind marker insertion-type.
+             (while (and (markerp (car-safe (car list)))
+                         (integerp (cdr-safe (car list))))
+               (let* ((marker-adj (pop list))
+                      (m (car marker-adj)))
+                 (and (eq (marker-buffer m) (current-buffer))
+                      (= pos m)
+                      (push marker-adj valid-marker-adjustments))))
+             ;; Insert string and adjust point
+             (if (< pos 0)
+                 (progn
+                   (goto-char (- pos))
+                   (insert string))
+               (goto-char pos)
+               (insert string)
+               (goto-char pos))
+             ;; Adjust the valid marker adjustments
+             (dolist (adj valid-marker-adjustments)
+               (set-marker (car adj)
+                           (- (car adj) (cdr adj))))))
           ;; (MARKER . OFFSET) means a marker MARKER was adjusted by OFFSET.
           (`(,(and marker (pred markerp)) . ,(and offset (pred integerp)))
+           (warn "Encountered %S entry in undo list with no matching (TEXT . POS) entry"
+                 next)
+           ;; Even though these elements are not expected in the undo
+           ;; list, adjust them to be conservative for the 24.4
+           ;; release.  (Bug#16818)
            (when (marker-buffer marker)
              (set-marker marker
                          (- marker offset)
@@ -2344,8 +2360,6 @@ are ignored.  If BEG and END are nil, all undo elements are used."
 	    (undo-make-selective-list (min beg end) (max beg end))
 	  buffer-undo-list)))
 
-(defvar undo-adjusted-markers)
-
 (defun undo-make-selective-list (start end)
   "Return a list of undo elements for the region START to END.
 The elements come from `buffer-undo-list', but we keep only
@@ -2354,7 +2368,6 @@ If we find an element that crosses an edge of this region,
 we stop and ignore all further elements."
   (let ((undo-list-copy (undo-copy-list buffer-undo-list))
 	(undo-list (list nil))
-	undo-adjusted-markers
 	some-rejected
 	undo-elt temp-undo-list delta)
     (while undo-list-copy
@@ -2364,15 +2377,30 @@ we stop and ignore all further elements."
 		    ;; This is a "was unmodified" element.
 		    ;; Keep it if we have kept everything thus far.
 		    (not some-rejected))
+                   ;; Skip over marker adjustments, instead relying on
+                   ;; finding them after (TEXT . POS) elements
+                   ((markerp (car-safe undo-elt))
+                    nil)
 		   (t
 		    (undo-elt-in-region undo-elt start end)))))
 	(if keep-this
 	    (progn
 	      (setq end (+ end (cdr (undo-delta undo-elt))))
 	      ;; Don't put two nils together in the list
-	      (if (not (and (eq (car undo-list) nil)
-			    (eq undo-elt nil)))
-		  (setq undo-list (cons undo-elt undo-list))))
+	      (when (not (and (eq (car undo-list) nil)
+                              (eq undo-elt nil)))
+                (setq undo-list (cons undo-elt undo-list))
+                ;; If (TEXT . POS), "keep" its subsequent (MARKER
+                ;; . ADJUSTMENT) whose markers haven't moved.
+                (when (and (stringp (car-safe undo-elt))
+                           (integerp (cdr-safe undo-elt)))
+                  (let ((list-i (cdr undo-list-copy)))
+                    (while (markerp (car-safe (car list-i)))
+                      (let* ((adj-elt (pop list-i))
+                             (m (car adj-elt)))
+                        (and (eq (marker-buffer m) (current-buffer))
+                             (= (cdr undo-elt) m)
+                             (push adj-elt undo-list))))))))
 	  (if (undo-elt-crosses-region undo-elt start end)
 	      (setq undo-list-copy nil)
 	    (setq some-rejected t)
@@ -2420,7 +2448,12 @@ we stop and ignore all further elements."
 
 (defun undo-elt-in-region (undo-elt start end)
   "Determine whether UNDO-ELT falls inside the region START ... END.
-If it crosses the edge, we return nil."
+If it crosses the edge, we return nil.
+
+Generally this function is not useful for determining
+whether (MARKER . ADJUSTMENT) undo elements are in the region,
+because markers can be arbitrarily relocated.  Instead, pass the
+marker adjustment's corresponding (TEXT . POS) element."
   (cond ((integerp undo-elt)
 	 (and (>= undo-elt start)
 	      (<= undo-elt end)))
@@ -2431,19 +2464,10 @@ If it crosses the edge, we return nil."
 	((stringp (car undo-elt))
 	 ;; (TEXT . POSITION)
 	 (and (>= (abs (cdr undo-elt)) start)
-	      (< (abs (cdr undo-elt)) end)))
+	      (<= (abs (cdr undo-elt)) end)))
 	((and (consp undo-elt) (markerp (car undo-elt)))
-	 ;; This is a marker-adjustment element (MARKER . ADJUSTMENT).
-	 ;; See if MARKER is inside the region.
-	 (let ((alist-elt (assq (car undo-elt) undo-adjusted-markers)))
-	   (unless alist-elt
-	     (setq alist-elt (cons (car undo-elt)
-				   (marker-position (car undo-elt))))
-	     (setq undo-adjusted-markers
-		   (cons alist-elt undo-adjusted-markers)))
-	   (and (cdr alist-elt)
-		(>= (cdr alist-elt) start)
-		(<= (cdr alist-elt) end))))
+	 ;; (MARKER . ADJUSTMENT)
+         (<= start (car undo-elt) end))
 	((null (car undo-elt))
 	 ;; (nil PROPERTY VALUE BEG . END)
 	 (let ((tail (nthcdr 3 undo-elt)))
@@ -3189,9 +3213,9 @@ subprocess is `default-directory'.
 
 File names in INFILE and BUFFER are handled normally, but file
 names in ARGS should be relative to `default-directory', as they
-are passed to the process verbatim.  \(This is a difference to
+are passed to the process verbatim.  (This is a difference to
 `call-process' which does not support file handlers for INFILE
-and BUFFER.\)
+and BUFFER.)
 
 Some file handlers might not support all variants, for example
 they might behave as if DISPLAY was nil, regardless of the actual
@@ -3473,7 +3497,6 @@ extract characters that are special to a buffer, and should not
 be copied into other buffers."
   (funcall filter-buffer-substring-function beg end delete))
 
-;; FIXME: `with-wrapper-hook' is obsolete
 (defun buffer-substring--filter (beg end &optional delete)
   (with-wrapper-hook filter-buffer-substring-functions (beg end delete)
     (cond
@@ -4118,7 +4141,7 @@ even beep.)"
   "Kill current line.
 With prefix ARG, kill that many lines starting from the current line.
 If ARG is negative, kill backward.  Also kill the preceding newline.
-\(This is meant to make \\[repeat] work well with negative arguments.\)
+\(This is meant to make \\[repeat] work well with negative arguments.)
 If ARG is zero, kill current line but exclude the trailing newline."
   (interactive "p")
   (or arg (setq arg 1))
@@ -4396,18 +4419,19 @@ run `deactivate-mark-hook'."
       (if (eq (car-safe transient-mark-mode) 'only)
 	  (setq transient-mark-mode (cdr transient-mark-mode)))
       (setq mark-active nil)
-      (run-hooks 'deactivate-mark-hook))))
+      (run-hooks 'deactivate-mark-hook))
+    (redisplay--update-region-highlight (selected-window))))
 
 (defun activate-mark (&optional no-tmm)
   "Activate the mark.
 If NO-TMM is non-nil, leave `transient-mark-mode' alone."
   (when (mark t)
-    (unless (and mark-active transient-mark-mode)
-      (force-mode-line-update)) ;Refresh toolbar (bug#16382).
-    (setq mark-active t)
-    (unless (or transient-mark-mode no-tmm)
-      (setq transient-mark-mode 'lambda))
-    (run-hooks 'activate-mark-hook)))
+    (unless (region-active-p)
+      (force-mode-line-update) ;Refresh toolbar (bug#16382).
+      (setq mark-active t)
+      (unless (or transient-mark-mode no-tmm)
+        (setq transient-mark-mode 'lambda))
+      (run-hooks 'activate-mark-hook))))
 
 (defun set-mark (pos)
   "Set this buffer's mark to POS.  Don't use this function!
@@ -4425,14 +4449,18 @@ To remember a location for internal use in the Lisp program,
 store it in a Lisp variable.  Example:
 
    (let ((beg (point))) (forward-line 1) (delete-region beg (point)))."
-
-  (set-marker (mark-marker) pos (current-buffer))
   (if pos
-      (activate-mark 'no-tmm)
+      (progn
+        (set-marker (mark-marker) pos (current-buffer))
+        (activate-mark 'no-tmm))
     ;; Normally we never clear mark-active except in Transient Mark mode.
     ;; But when we actually clear out the mark value too, we must
     ;; clear mark-active in any mode.
-    (deactivate-mark t)))
+    (deactivate-mark t)
+    ;; `deactivate-mark' sometimes leaves mark-active non-nil, but
+    ;; it should never be nil if the mark is nil.
+    (setq mark-active nil)
+    (set-marker (mark-marker) nil)))
 
 (defcustom use-empty-active-region nil
   "Whether \"region-aware\" commands should act on empty regions.
@@ -4481,6 +4509,11 @@ also checks the value of `use-empty-active-region'."
           (funcall redisplay-unhighlight-region-function rol)
           (overlay-put nrol 'window window)
           (overlay-put nrol 'face 'region)
+          ;; Normal priority so that a large region doesn't hide all the
+          ;; overlays within it, but high secondary priority so that if it
+          ;; ends/starts in the middle of a small overlay, that small overlay
+          ;; won't hide the region's boundaries.
+          (overlay-put nrol 'priority '(nil . 100))
           nrol)
       (unless (and (eq (overlay-buffer rol) (current-buffer))
                    (eq (overlay-start rol) start)
@@ -4542,7 +4575,7 @@ Start discarding off end if gets this big."
 
 (defun pop-to-mark-command ()
   "Jump to mark, and pop a new position for mark off the ring.
-\(Does not affect global mark ring\)."
+\(Does not affect global mark ring)."
   (interactive)
   (if (null (mark t))
       (error "No mark set in this buffer")
@@ -4588,11 +4621,11 @@ global mark ring, if the previous mark was set in another buffer.
 When Transient Mark Mode is off, immediately repeating this
 command activates `transient-mark-mode' temporarily.
 
-With prefix argument \(e.g., \\[universal-argument] \\[set-mark-command]\), \
+With prefix argument (e.g., \\[universal-argument] \\[set-mark-command]), \
 jump to the mark, and set the mark from
-position popped off the local mark ring \(this does not affect the global
-mark ring\).  Use \\[pop-global-mark] to jump to a mark popped off the global
-mark ring \(see `pop-global-mark'\).
+position popped off the local mark ring (this does not affect the global
+mark ring).  Use \\[pop-global-mark] to jump to a mark popped off the global
+mark ring (see `pop-global-mark').
 
 If `set-mark-command-repeat-pop' is non-nil, repeating
 the \\[set-mark-command] command with no prefix argument pops the next position
@@ -5122,6 +5155,12 @@ The value is a floating-point number."
 ;; a cleaner solution to the problem of making C-n do something
 ;; useful given a tall image.
 (defun line-move (arg &optional noerror to-end try-vscroll)
+  "Move forward ARG lines.
+If NOERROR, don't signal an error if we can't move ARG lines.
+TO-END is unused.
+TRY-VSCROLL controls whether to vscroll tall lines: if either
+`auto-window-vscroll' or TRY-VSCROLL is nil, this function will
+not vscroll."
   (if noninteractive
       (forward-line arg)
     (unless (and auto-window-vscroll try-vscroll
@@ -5171,6 +5210,8 @@ The value is a floating-point number."
 ;; Arg says how many lines to move.  The value is t if we can move the
 ;; specified number of lines.
 (defun line-move-visual (arg &optional noerror)
+  "Move ARG lines forward.
+If NOERROR, don't signal an error if we can't move that many lines."
   (let ((opoint (point))
 	(hscroll (window-hscroll))
 	target-hscroll)
@@ -5383,7 +5424,7 @@ The value is a floating-point number."
 	;; the middle of a continued line.  When we get to
 	;; line-move-finish, point is at the start of a new *screen*
 	;; line but the same text line; then line-move-to-column would
-	;; move us backwards. Test using C-n with point on the "x" in
+	;; move us backwards.  Test using C-n with point on the "x" in
 	;;   (insert "a" (propertize "x" 'field t) (make-string 89 ?y))
 	(and forward
 	     (< (point) old)
@@ -6452,8 +6493,12 @@ If called from Lisp, enable the mode if ARG is omitted or nil."
   :group 'paren-matching)
 
 (defcustom blink-matching-paren t
-  "Non-nil means show matching open-paren when close-paren is inserted."
-  :type 'boolean
+  "Non-nil means show matching open-paren when close-paren is inserted.
+If t, highlight the paren.  If `jump', move cursor to its position."
+  :type '(choice
+          (const :tag "Disable" nil)
+          (const :tag "Highlight" t)
+          (const :tag "Move cursor" jump))
   :group 'paren-blinking)
 
 (defcustom blink-matching-paren-on-screen t
@@ -6563,17 +6608,21 @@ The function should return non-nil if the two tokens do not match.")
             (message "No matching parenthesis found"))))
        ((not blinkpos) nil)
        ((pos-visible-in-window-p blinkpos)
-        ;; Matching open within window, temporarily highlight char
-        ;; after blinkpos but only if `blink-matching-paren-on-screen'
+        ;; Matching open within window, temporarily move to or highlight
+        ;; char after blinkpos but only if `blink-matching-paren-on-screen'
         ;; is non-nil.
         (and blink-matching-paren-on-screen
              (not show-paren-mode)
-             (unwind-protect
-                 (progn
-                   (move-overlay blink-matching--overlay blinkpos (1+ blinkpos)
-                                 (current-buffer))
+             (if (eq blink-matching-paren 'jump)
+                 (save-excursion
+                   (goto-char blinkpos)
                    (sit-for blink-matching-delay))
-               (delete-overlay blink-matching--overlay))))
+               (unwind-protect
+                   (progn
+                     (move-overlay blink-matching--overlay blinkpos (1+ blinkpos)
+                                   (current-buffer))
+                     (sit-for blink-matching-delay))
+                 (delete-overlay blink-matching--overlay)))))
        (t
         (save-excursion
           (goto-char blinkpos)
@@ -7029,7 +7078,8 @@ With prefix argument N, move N items (negative N means move backward)."
 	(setq n (1+ n))))))
 
 (defun choose-completion (&optional event)
-  "Choose the completion at point."
+  "Choose the completion at point.
+If EVENT, use EVENT's position to determine the starting position."
   (interactive (list last-nonmenu-event))
   ;; In case this is run via the mouse, give temporary modes such as
   ;; isearch a chance to turn off.
@@ -7100,12 +7150,10 @@ With prefix argument N, move N items (negative N means move backward)."
 
 (defvar choose-completion-string-functions nil
   "Functions that may override the normal insertion of a completion choice.
-These functions are called in order with four arguments:
+These functions are called in order with three arguments:
 CHOICE - the string to insert in the buffer,
 BUFFER - the buffer in which the choice should be inserted,
-MINI-P - non-nil if BUFFER is a minibuffer, and
-BASE-SIZE - the number of characters in BUFFER before
-the string being completed.
+BASE-POSITION - where to insert the completion.
 
 If a function in the list returns non-nil, that function is supposed
 to have inserted the CHOICE in the BUFFER, and possibly exited
@@ -8079,6 +8127,33 @@ or a cons with a combination."
 ;; or delete-char
 
 
+
+
+;; This is here because files in obsolete/ are not scanned for autoloads.
+
+(defvar iswitchb-mode nil "\
+Non-nil if Iswitchb mode is enabled.
+See the command `iswitchb-mode' for a description of this minor mode.
+Setting this variable directly does not take effect;
+either customize it (see the info node `Easy Customization')
+or call the function `iswitchb-mode'.")
+
+(custom-autoload 'iswitchb-mode "iswitchb" nil)
+
+(autoload 'iswitchb-mode "iswitchb" "\
+Toggle Iswitchb mode.
+With a prefix argument ARG, enable Iswitchb mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+the mode if ARG is omitted or nil.
+
+Iswitchb mode is a global minor mode that enables switching
+between buffers using substrings.  See `iswitchb' for details.
+
+\(fn &optional ARG)" t nil)
+
+(make-obsolete 'iswitchb-mode
+               "use `icomplete-mode' or `ido-mode' instead." "24.4")
+
 
 (provide 'simple)
 

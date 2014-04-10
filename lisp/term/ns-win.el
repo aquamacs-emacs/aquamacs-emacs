@@ -67,7 +67,8 @@
 ;;;; Command line argument handling.
 
 (defvar x-invocation-args)
-(defvar ns-command-line-resources nil)  ; FIXME unused?
+;; Set in term/common-win.el; currently unused by Nextstep's x-open-connection.
+(defvar x-command-line-resources)
 
 ;; nsterm.m.
 (defvar ns-input-file)
@@ -1047,6 +1048,12 @@ EVENT is a mouse event, and ATTRIBUTE is either
    (ns-set-color-at-mouse event 'background-color))
 
 
+(defun ns-suspend-error ()
+  ;; Don't allow suspending if any of the frames are NS frames.
+  (if (memq 'ns (mapcar 'window-system (frame-list)))
+      (error "Cannot suspend Emacs while running under NS")))
+
+
 ;; Set some options to be as Nextstep-like as possible.
 (setq frame-title-format t
       icon-title-format t)
@@ -1080,7 +1087,7 @@ EVENT is a mouse event, and ATTRIBUTE is either
             (format "Creation of the standard fontset failed: %s" err)
             :error)))
 
-  (x-open-connection (system-name) nil t)
+  (x-open-connection (system-name) x-command-line-resources t)
 
   ;; Add GNUstep menu items Services, Hide and Quit.  Rename Help to Info
   ;; and put it first (i.e. omit from menu-bar-final-items.
@@ -1128,6 +1135,10 @@ EVENT is a mouse event, and ATTRIBUTE is either
   (ns-set-resource nil "ApplePressAndHoldEnabled" "NO")
 
   (x-apply-session-resources)
+
+  ;; Don't let Emacs suspend under NS.
+  (add-hook 'suspend-hook 'ns-suspend-error)
+
   (setq ns-initialized t))
 
 ;; Any display name is OK.

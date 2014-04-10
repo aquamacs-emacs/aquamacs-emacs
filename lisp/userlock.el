@@ -2,7 +2,9 @@
 
 ;; Copyright (C) 1985-1986, 2001-2014 Free Software Foundation, Inc.
 
-;; Maintainer: FSF
+;; Author: Richard King
+;; (according to authors.el)
+;; Maintainer: emacs-devel@gnu.org
 ;; Keywords: internal
 ;; Package: emacs
 
