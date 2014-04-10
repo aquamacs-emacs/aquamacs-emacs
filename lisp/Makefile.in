@@ -347,7 +347,8 @@ compile: $(LOADDEFS) autoloads compile-first
 # unconditionally.  Some files don't actually get compiled because they
 # set the local variable no-byte-compile.
 compile-always: doit
-	cd $(lisp) && rm -f *.elc */*.elc */*/*.elc */*/*/*.elc
+	cd $(lisp) && find . -name '*.elc' -delete
+# the following would, unlike setwins, follow symlinks: rm -f *.elc */*.elc */*/*.elc */*/*/*.elc
 	$(MAKE) $(MFLAGS) compile EMACS="$(EMACS)"
 
 .PHONY: backup-compiled-files compile-after-backup
