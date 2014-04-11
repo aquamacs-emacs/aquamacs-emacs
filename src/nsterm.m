@@ -4837,6 +4837,29 @@ ns_term_shutdown (int sig)
   [super sendEvent: theEvent];
 }
 
+/* Run an AppleScript in the main thread */
+
+- (NSAppleEventDescriptor*) executeApplescript: (NSString *) script
+{
+  appleScriptReturnValue = nil;
+  // must be performed on main thread.
+  [self performSelectorOnMainThread:@selector(doApplescriptInternal:) withObject:script waitUntilDone:YES];
+  return appleScriptReturnValue;
+}
+- (void) doApplescriptInternal: (NSString *) script
+{
+  NSDictionary* errorDict;
+
+  NSAppleScript* scriptObject =
+    [[NSAppleScript alloc] initWithSource:script];
+
+  appleScriptReturnValue = [scriptObject executeAndReturnError:&errorDict];
+
+  [scriptObject release];
+}
+
+/* SavePanel delegate functions */
+
 - (void)savePanelDidEnd2:(NSSavePanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
 {
   // struct frame *emacsframe = XFRAME (sheet);

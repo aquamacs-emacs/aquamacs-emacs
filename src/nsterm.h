@@ -101,6 +101,8 @@ typedef float EmacsCGFloat;
 /* We override sendEvent: as a means to stop/start the event loop */
 @interface EmacsApp : NSApplication
 {
+  NSAppleEventDescriptor* appleScriptReturnValue;
+
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
   BOOL shouldKeepRunning;
   BOOL isFirst;
@@ -111,6 +113,7 @@ typedef float EmacsCGFloat;
   int nextappdefined;
 #endif
 }
+
 - (void)logNotification: (NSNotification *)notification;
 - (void)sendEvent: (NSEvent *)theEvent;
 - (void)showPreferencesWindow: (id)sender;

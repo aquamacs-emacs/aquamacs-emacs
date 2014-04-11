@@ -2781,6 +2781,8 @@ DEFUN ("ns-convert-utf8-nfd-to-nfc", Fns_convert_utf8_nfd_to_nfc,
 
 #ifdef NS_IMPL_COCOA
 
+
+
 /* Compile and execute the AppleScript SCRIPT and return the error
    status as function value.  A zero is returned if compilation and
    execution is successful, in which case *RESULT is set to a Lisp
@@ -2789,19 +2791,15 @@ DEFUN ("ns-convert-utf8-nfd-to-nfc", Fns_convert_utf8_nfd_to_nfc,
 static int
 ns_do_applescript (Lisp_Object script, Lisp_Object *result)
 {
-  NSAppleEventDescriptor *desc;
-  NSDictionary* errorDict;
-  NSAppleEventDescriptor* returnDescriptor = NULL;
+  NSAppleEventDescriptor* desc;
+  NSAppleEventDescriptor* returnDescriptor;
 
-  NSAppleScript* scriptObject =
-    [[NSAppleScript alloc] initWithSource:
-			     [NSString stringWithUTF8String: SSDATA (script)]];
-
-  returnDescriptor = [scriptObject executeAndReturnError: &errorDict];
-  [scriptObject release];
+  // execute in main thread
+  returnDescriptor = [((EmacsApp*) NSApp) doApplescript: [NSString stringWithUTF8String: SSDATA (script)]];
 
   *result = Qnil;
 
+  // to do: maybe evaluate the message in errorDict instead, as per API documentation
   if (returnDescriptor != NULL)
     {
       // successful execution
