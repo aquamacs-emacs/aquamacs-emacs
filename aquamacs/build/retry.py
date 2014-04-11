@@ -38,11 +38,12 @@ parser.add_argument('command', nargs='*', help="The command to run. You can prec
 
 
 def become_tty_fg():
-    os.setpgrp()
-    hdlr = signal.signal(signal.SIGTTOU, signal.SIG_IGN)
-    tty = os.open('/dev/tty', os.O_RDWR)
-    os.tcsetpgrp(tty, os.getpgrp())
-    signal.signal(signal.SIGTTOU, hdlr)
+    pass
+    # os.setpgrp()
+    # hdlr = signal.signal(signal.SIGTTOU, signal.SIG_IGN)
+    # tty = os.open('/dev/tty', os.O_RDWR)
+    # os.tcsetpgrp(tty, os.getpgrp())
+    # signal.signal(signal.SIGTTOU, hdlr)
 
 
 def wait_some(seconds, verbose):
