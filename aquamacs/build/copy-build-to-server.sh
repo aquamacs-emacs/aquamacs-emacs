@@ -65,7 +65,7 @@ echo "</BODY></HTML>" >>latest.html
 #     rsync -l -r latest-logs latest.html changelog-nightly.html Aquamacs-nightly.tar.bz2 $DEST/ && \
 #     ssh $DESTSSH "find $DESTPATH/builds -mtime +2 -delete" && echo "All transfers successful."
 
-$DIR/retry.py -v -- rsync --partial --progress --rsh=ssh --timeout=5 -l -r builds $DEST/ &&\
-$DIR/retry.py -v -- rsync --partial --progress --rsh=ssh --timeout=5 -l -r latest-logs latest.html changelog-nightly.html Aquamacs-nightly.tar.bz2 $DEST/ && \
+$DIR/retry.py --limit 30 -- rsync --partial --rsh=ssh --timeout=15 -l -r builds $DEST/ &&\
+rsync -l -r latest-logs latest.html changelog-nightly.html Aquamacs-nightly.tar.bz2 $DEST/ && \
     ssh $DESTSSH "find $DESTPATH/builds -mtime +2 -delete" && echo "All transfers successful."
 
