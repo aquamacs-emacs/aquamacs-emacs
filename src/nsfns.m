@@ -2795,7 +2795,7 @@ ns_do_applescript (Lisp_Object script, Lisp_Object *result)
   NSAppleEventDescriptor* returnDescriptor;
 
   // execute in main thread
-  returnDescriptor = [((EmacsApp*) NSApp) doApplescript: [NSString stringWithUTF8String: SSDATA (script)]];
+  returnDescriptor = [((EmacsApp*) NSApp) executeApplescript: [NSString stringWithUTF8String: SSDATA (script)]];
 
   *result = Qnil;
 
