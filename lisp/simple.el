@@ -8032,7 +8032,7 @@ the point is when the command is called.")
   `(not (string= (substring (buffer-name ,buf) 0 1) " ")))
 
 (defsubst smart-spacing-end-of-line (pos)
-  (equal "\n" (buffer-substring-no-properties (max 1 (1- pos)) pos)))
+  (equal "\n" (buffer-substring-no-properties (max (point-min) (1- pos)) pos)))
 
 (defun smart-spacing-filter-buffer-substring (beg end &optional delete)
   "Like `filter-buffer-substring', but add spaces around content if region is a phrase."
