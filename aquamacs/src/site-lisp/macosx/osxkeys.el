@@ -194,14 +194,14 @@ if `visual-line-mode' is off and `line-move-visual' is set to `arrow-keys-only'.
 
 (defun left-of-visual-line (&optional n)
   "Move point to the left boundary of the current line."
-  (interactive)
+  (interactive "^")
   (if (eq (current-bidi-paragraph-direction) 'left-to-right)
 	(beginning-of-visual-line n)
       (end-of-visual-line n)))
 
 (defun right-of-visual-line (&optional n)
   "Move point to the right boundary of the current line."
-  (interactive)
+  (interactive "^")
   (if (eq (current-bidi-paragraph-direction) 'left-to-right)
 	(end-of-visual-line n)
       (beginning-of-visual-line n)))
