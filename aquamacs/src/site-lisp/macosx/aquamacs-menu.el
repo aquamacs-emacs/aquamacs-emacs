@@ -650,17 +650,6 @@ contains `turn-on-auto-fill', `turn-on-word-wrap' or `auto-detect-wrap'."
 
 (define-key menu-bar-options-menu [highlight-separator] nil)
 
-(define-key-after menu-bar-line-wrapping-menu [auto-wrap]
-  '(menu-item "Detect Line Wrap in Text Files"
-	      toggle-text-mode-auto-detect-wrap
-	      :help "Automatically use hard or soft word wrap (Auto Fill / Longlines) in text modes."
-	      :button (:toggle . (if (listp text-mode-hook)
-				     (or (member 'auto-detect-wrap text-mode-hook)
-					 (member 'auto-detect-longlines text-mode-hook))
-				   (or (eq 'auto-detect-wrap text-mode-hook)
-				       (eq 'auto-detect-longlines text-mode-hook)))))
-  'wrapping-set-default)
- 
 ;; giving these options would be too much configuration for most users
 ;; (define-key-after menu-bar-line-wrapping-menu [word-wrap-text-mode]
 ;;   `(menu-item ,(purecopy "Soft Word Wrap as Default in Text Modes")
