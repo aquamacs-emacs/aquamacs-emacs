@@ -1099,46 +1099,65 @@ mail status in mode line"
 (defvar menu-bar-line-wrapping-menu
   (let ((menu (make-sparse-keymap "Line Wrapping")))
 
-    (bindings--define-key menu [word-wrap]
-      `(menu-item "Word Wrap (Visual Line mode)"
-                  ,(lambda ()
-                     (interactive)
-                     (unless visual-line-mode
-                       (visual-line-mode 1))
-                     (message "Visual-Line mode enabled"))
-                  :help "Wrap long lines at word boundaries"
-                  :button (:radio
-                           . (and (null truncate-lines)
-                                  (not (truncated-partial-width-window-p))
-                                  word-wrap))
-                  :visible (menu-bar-menu-frame-live-and-visible-p)))
+    (bindings--define-key menu [auto-wrap]
+      '(menu-item "Auto-Detect Line Wrap in Text Files"
+		  toggle-text-mode-auto-detect-wrap
+		  :help "Automatically use hard or soft word wrap (Auto Fill / Longlines) in text modes."
+		  :button (:toggle . (if (listp text-mode-hook)
+					 (or (member 'auto-detect-wrap text-mode-hook)
+					     (member 'auto-detect-longlines text-mode-hook))
+				       (or (eq 'auto-detect-wrap text-mode-hook)
+					   (eq 'auto-detect-longlines text-mode-hook))))))
 
-    (bindings--define-key menu [truncate]
-      `(menu-item "Truncate Long Lines"
-                  ,(lambda ()
-                     (interactive)
-                     (if visual-line-mode (visual-line-mode 0))
-                     (setq word-wrap nil)
-                     (toggle-truncate-lines 1))
-                  :help "Truncate long lines at window edge"
-                  :button (:radio . (or truncate-lines
-                                        (truncated-partial-width-window-p)))
-                  :visible (menu-bar-menu-frame-live-and-visible-p)
-                  :enable (not (truncated-partial-width-window-p))))
+    (bindings--define-key menu [wrapping-set-default]
+      `(menu-item (if (menu-bar-local-wrapping-p)
+		      "Adopt as Default"
+		    "Adopted as Default")
+		  menu-bar-set-wrapping-default
+		  :help "Set current wrapping style as default for other buffers."
+		  :enable (and (menu-bar-menu-frame-live-and-visible-p)
+			       (menu-bar-local-wrapping-p))
+		  :button (:toggle . (not (menu-bar-local-wrapping-p)))))
+
+    (bindings--define-key menu [default-separator]
+      '("--"))
+
+    (bindings--define-key menu [auto-fill-mode]
+      `(menu-item (format "Break Lines (Auto Fill) at %s" fill-column)
+		  set-auto-fill
+		  :help "Automatically fill text between left and right margins (Auto Fill) in this buffer and in new buffers."
+		  :enable (menu-bar-menu-frame-live-and-visible-p)
+		  :button (:radio . auto-fill-function)))
+
+    (bindings--define-key menu [word-wrap]
+      `(menu-item "Word Wrap"
+		  set-word-wrap
+		  :help "Wrap long lines at word boundaries in this buffer and in new buffers."
+		  :button (:radio . (and (null truncate-lines)
+					 (not (truncated-partial-width-window-p))
+					 word-wrap))
+		  :enable (menu-bar-menu-frame-live-and-visible-p)))
+
 
     (bindings--define-key menu [window-wrap]
-      `(menu-item "Wrap at Window Edge"
-                  ,(lambda () (interactive)
-                     (if visual-line-mode (visual-line-mode 0))
-                     (setq word-wrap nil)
-                     (if truncate-lines (toggle-truncate-lines -1)))
-                  :help "Wrap long lines at window edge"
-                  :button (:radio
-                           . (and (null truncate-lines)
-                                  (not (truncated-partial-width-window-p))
-                                  (not word-wrap)))
-                  :visible (menu-bar-menu-frame-live-and-visible-p)
-                  :enable (not (truncated-partial-width-window-p))))
+      `(menu-item "Wrap"
+		  set-line-wrap
+		  :help "Wrap long lines at window edge in this buffer and in new buffers."
+		  :button (:radio . (and (null truncate-lines)
+					 (not (truncated-partial-width-window-p))
+					 (not word-wrap)
+					 (null auto-fill-function)))
+		  :visible (menu-bar-menu-frame-live-and-visible-p)
+		  :enable (not (truncated-partial-width-window-p))))
+
+    (bindings--define-key menu [truncate]
+      `(menu-item "Truncate"
+		  set-truncate-lines
+		  :help "Truncate long lines at window edge in this buffer and in new buffers."
+		  :button (:radio . (or (truncated-partial-width-window-p)
+					truncate-lines)) ; truncate takes precedence over word-wrap
+		  :visible (menu-bar-menu-frame-live-and-visible-p)
+		  :enable (not (truncated-partial-width-window-p))))
     menu))
 
 (defvar menu-bar-options-menu
@@ -1294,69 +1313,7 @@ for future buffers."
       (local-variable-p 'truncate-lines)
       (local-variable-p 'auto-fill-function)))
 
-(defvar menu-bar-line-wrapping-menu
-  (let ((menu (make-sparse-keymap "Line Wrapping")))
 
-    (bindings--define-key menu [auto-wrap]
-      '(menu-item "Auto-Detect Line Wrap in Text Files"
-		  toggle-text-mode-auto-detect-wrap
-		  :help "Automatically use hard or soft word wrap (Auto Fill / Longlines) in text modes."
-		  :button (:toggle . (if (listp text-mode-hook)
-					 (or (member 'auto-detect-wrap text-mode-hook)
-					     (member 'auto-detect-longlines text-mode-hook))
-				       (or (eq 'auto-detect-wrap text-mode-hook)
-					   (eq 'auto-detect-longlines text-mode-hook))))))
-
-    (bindings--define-key menu [wrapping-set-default]
-      `(menu-item (if (menu-bar-local-wrapping-p)
-		      "Adopt as Default"
-		    "Adopted as Default")
-		  menu-bar-set-wrapping-default
-		  :help "Set current wrapping style as default for other buffers."
-		  :enable (and (menu-bar-menu-frame-live-and-visible-p)
-			       (menu-bar-local-wrapping-p))
-		  :button (:toggle . (not (menu-bar-local-wrapping-p)))))
-
-    (bindings--define-key menu [default-separator]
-      '("--"))
-
-    (bindings--define-key menu [auto-fill-mode]
-      `(menu-item (format "Break Lines (Auto Fill) at %s" fill-column)
-		  set-auto-fill
-		  :help "Automatically fill text between left and right margins (Auto Fill) in this buffer and in new buffers."
-		  :enable (menu-bar-menu-frame-live-and-visible-p)
-		  :button (:radio . auto-fill-function)))
-
-    (bindings--define-key menu [word-wrap]
-      `(menu-item "Word Wrap"
-		  set-word-wrap
-		  :help "Wrap long lines at word boundaries in this buffer and in new buffers."
-		  :button (:radio . (and (null truncate-lines)
-					 (not (truncated-partial-width-window-p))
-					 word-wrap))
-		  :enable (menu-bar-menu-frame-live-and-visible-p)))
-
-
-    (bindings--define-key menu [window-wrap]
-      `(menu-item "Wrap"
-		  set-line-wrap
-		  :help "Wrap long lines at window edge in this buffer and in new buffers."
-		  :button (:radio . (and (null truncate-lines)
-					 (not (truncated-partial-width-window-p))
-					 (not word-wrap)
-					 (null auto-fill-function)))
-		  :visible (menu-bar-menu-frame-live-and-visible-p)
-		  :enable (not (truncated-partial-width-window-p))))
-
-    (bindings--define-key menu [truncate]
-      `(menu-item "Truncate"
-		  set-truncate-lines
-		  :help "Truncate long lines at window edge in this buffer and in new buffers."
-		  :button (:radio . (or (truncated-partial-width-window-p)
-					truncate-lines)) ; truncate takes precedence over word-wrap
-		  :visible (menu-bar-menu-frame-live-and-visible-p)
-		  :enable (not (truncated-partial-width-window-p))))
-    menu))
 
 (bindings--define-key menu-bar-options-menu [line-wrapping]
   `(menu-item "Line Wrapping" ,menu-bar-line-wrapping-menu))
