@@ -628,6 +628,25 @@ unless the current buffer is a scratch buffer."
       (ns-hide-emacs 'activate)
       (find-file f)))))
 
+(defun ns-find-file-in-current-space (filename)
+    "Visit file specified by FILENAME in a frame in the current
+space.  If an NS frame visible in the current space already has
+its selected window showing the buffer visiting FILENAME, raise
+that frame.  If not, pup up a new frame visiting FILENAME."
+    (let ((vis-frames (ns-visible-frame-list))
+	  (buffer (find-file-noselect filename))
+	  frame-to-use)
+      ;; try to find a frame displaying buffer visiting FILENAME
+      (dolist (frame vis-frames nil)
+	(when (eq (window-buffer (frame-selected-window frame)) buffer)
+	  (setq window-to-use window
+		frame-to-use frame)))
+      (if frame-to-use
+	  ;; use the frame already displaying buffer
+	  (raise-frame frame-to-use)
+	;; else create a new frame
+	(display-buffer-pop-up-frame buffer nil))))
+
 
 (defun ns-drag-n-drop (event &optional new-frame force-text)
   "Edit the files listed in the drag-n-drop EVENT.
