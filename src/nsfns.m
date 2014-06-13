@@ -316,11 +316,10 @@ x_set_foreground_color (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
       error ("Unknown color");
     }
 
-  col = [col colorUsingColorSpace:[NSColorSpace sRGBColorSpace]];
+  col = [col colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
 
   if (col == nil)
     {
-      // col = [NSColor blackColor];
       error ("Unknown color (cannot convert to RGB)");
     }
 
@@ -355,6 +354,12 @@ x_set_background_color (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
     {
       store_frame_param (f, Qbackground_color, oldval);
       error ("Unknown color");
+    }
+  col = [col colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+
+  if (col == nil)
+    {
+      error ("Unknown color (cannot convert to RGB)");
     }
   [col retain]; // retain before clearing frame!
 
