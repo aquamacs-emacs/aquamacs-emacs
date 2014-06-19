@@ -174,46 +174,32 @@ file://server-name/file-name will also be handled by this function.
 An alternative for systems that do not support unc file names is
 `dnd-open-remote-url'. ACTION is ignored."
 
-  (let* ((f (dnd-get-local-file-name uri nil)))
-    (if f
+  (let* ((f (dnd-get-local-file-name uri t)))
+    (if (and f (file-readable-p f))
 	(progn
-	  (if (fboundp 'aquamacs-find-file)
-	      (let ((one-buffer-one-frame-mode 
-		     (or one-buffer-one-frame-mode 
-			 dnd-open-file-other-window
-			 (and (boundp 'tabbar-mode)
-			      tabbar-mode       
-			      (fboundp 'ns-visible-frame-list)
-			      ;; ns-frame-is-on-active-space-p fails to do the right thing,
-			      ;; as the selected frame may be on another space.
-			      (if (not (ns-visible-frame-list))
-				  t ;; no frame visible on this space, open a new frame
-				;; frame visible on this space, we just need to make it selected
-				(select-frame-set-input-focus (car (ns-visible-frame-list)))
-				;; .. and proceed to use it
-				nil)
-			      ))))
-		(aquamacs-find-file f))
-	    (if dnd-open-file-other-window
-		(find-file-other-window f)
+	  (if dnd-open-file-other-window
+	      (find-file-other-window f)
+	    ;; when OBOF is on, open file in new frame unless already displayed in current space
+	    (let ((obof-force-current-space one-buffer-one-frame-mode))
 	      (find-file f)))
 	  'private)
-      (error "Cannot read %s" uri))))
+      (error "Can not read %s" uri))))
+
 
 (defun dnd-open-remote-url (uri _action)
   "Open a remote file with `find-file' and `url-handler-mode'.
 Turns `url-handler-mode' on if not on before.  The file is opened in the
 current window, or a new window if `dnd-open-file-other-window' is set.
 URI is the url for the file.  ACTION is ignored."
-  (require 'url-handlers)
-  (or url-handler-mode (url-handler-mode))
-  (if (fboundp 'aquamacs-find-file)
-      (let ((one-buffer-one-frame-mode (or one-buffer-one-frame-mode dnd-open-file-other-window)))
-	(aquamacs-find-file uri))
+  (progn
+    (require 'url-handlers)
+    (or url-handler-mode (url-handler-mode))
     (if dnd-open-file-other-window
 	(find-file-other-window uri)
-      (find-file uri)))
-  'private)
+      ;; when OBOF is on, open file in new frame unless already displayed in current space
+      (let ((obof-force-current-space one-buffer-one-frame-mode))
+	(find-file uri)))
+    'private))
 
 
 (defun dnd-open-file (uri action)

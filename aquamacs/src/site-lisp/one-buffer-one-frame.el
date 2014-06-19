@@ -392,23 +392,33 @@ the current window is switched to the new buffer."
   'previous-buffer-here)
 
 
+(defvar obof-force-current-space nil
+  "Instruct `switch-to-buffer' to only visit frames in the current space")
+
 (if (running-on-a-mac-p)
     (defadvice switch-to-buffer (around sw-force-other-frame (&rest args) 
 					activate compile)
       (if one-buffer-one-frame  
-	  ;; technically, code below should work even without this
-	  ;; "if", because it does mostly the same things as switch-to-buffer.
-	  ;; however, we want to be on the safe side, and also not
+	  ;; this does mostly the same things as switch-to-buffer.
+	  ;; However, we want to be sure not to
 	  ;; honor stuff like `obof-same-window-regexps' when obof is off.
 	  (let ((norecord (nth 1 args))
 		(switch t)
 		(window-to-select))
+	    ;; search for a window already displaying this buffer.
 	    (walk-windows
 	     (lambda (w)
-	       (when (equal (window-buffer w) (get-bufobj (car args)))
+	       (when (and
+		      ;; buffer is displayed in this window
+		      (equal (window-buffer w) (get-bufobj (car args)))
+		      ;; Either window's frame *need not be* in the current space,
+		      (or (not obof-force-current-space)
+			  ;; or it *is* in the current space
+			  (memq (window-frame w) (ns-visible-frame-list))))
 		 (setq switch nil)
 		 (setq window-to-select w))) t t) ;) ;; t = include-hidden-frame (must be t) 
 	    (if switch
+		;; Did *not* find a suitable window displaying the buffer.
 		(let ((same-window-regexps 
 		       (if (eq obof-same-window-regexps 'same-window-regexps)
 			   same-window-regexps
@@ -417,20 +427,22 @@ the current window is switched to the new buffer."
 		       (if (eq obof-same-window-buffer-names 'same-window-buffer-names)
 			   same-window-buffer-names
 			 obof-same-window-buffer-names)))
-		  (if (or (not (visible-frame-list))
-			  (not (frame-visible-p (selected-frame)))
-			  (open-in-other-frame-p (car args) t))
-		      (progn
+		  (if (or (not (visible-frame-list))  ;; no visible frames
+			  (not (frame-visible-p (selected-frame))) ;; selected frame is invisible
+			  (open-in-other-frame-p (car args) t))  ;; this buf should open other frame
+		      ;; Use a new frame
+		      (let ((display-buffer--other-frame-action
+			     '(display-buffer-pop-up-frame . nil)))
 			(setq ad-return-value (apply #'switch-to-buffer-other-frame args))
 			;; store the frame/buffer information
 			(add-to-list 'aquamacs-newly-opened-windows 
 				     (cons (selected-window) (buffer-name)))) 
-		    ;; else : show in same frame
+		    ;; else : if window is dedictated, use a different window
 		    (if (window-dedicated-p (selected-window))
 			(setq ad-return-value   (apply #'switch-to-buffer-other-window args))
-		      ;; else: show in same frame
+		      ;; else: show in current frame & window
 		      ad-do-it)))
-	      ;; else (don't switch, just activcate another frame)
+	      ;; else (don't switch, just activate another window)
 	      ;; we need to do it here, because raise-frame / select frame are
 	      ;; ineffective from within walk-windows
 	      (when window-to-select
@@ -443,9 +455,19 @@ the current window is switched to the new buffer."
 		;; we should do it manually.
 		(set-buffer (window-buffer window-to-select)))
 	      (unless ad-return-value (setq ad-return-value (current-buffer)))))
-	;; else: not one-buffer-one-frame   
-   	(setq ad-return-value 
-	      ad-do-it)
+	;; else: not one-buffer-one-frame
+	(if (or (ns-visible-frame-list)
+		(string= (substring (get-bufname (car args)) 0 1) " "))
+	    ;; If frames are visible in current space, or buffer (like *empty*)
+	    ;; should not be displayed, call vanilla switch-buffer
+	    (setq ad-return-value ad-do-it)
+	  ;; else pop up a new frame, and avoid switching to a different space
+	  (let ((display-buffer--other-frame-action
+		 '(display-buffer-pop-up-frame .nil)))
+	    (setq ad-return-value (apply #'switch-to-buffer-other-frame args))
+	    ;; store the frame/buffer information
+	    (add-to-list 'aquamacs-newly-opened-windows 
+			 (cons (selected-window) (buffer-name)))))
 	(unless (frame-visible-p (selected-frame))
 	  ;; make sure we don't make *empty* visible
 	  (if (not (string= (substring (get-bufname (car args)) 0 1) " "))
