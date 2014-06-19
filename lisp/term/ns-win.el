@@ -632,14 +632,15 @@ unless the current buffer is a scratch buffer."
     "Visit file specified by FILENAME in a frame in the current
 space.  If an NS frame visible in the current space already has
 its selected window showing the buffer visiting FILENAME, raise
-that frame.  If not, pop up a new frame visiting FILENAME."
-    (let ((vis-frames (ns-visible-frame-list)) ;; get list of frames in current space
+that frame.  If not, pup up a new frame visiting FILENAME."
+    (let ((vis-frames (ns-visible-frame-list))
 	  (buffer (find-file-noselect filename))
 	  frame-to-use)
-      ;; search through list for a frame displaying buffer visiting FILENAME
+      ;; try to find a frame displaying buffer visiting FILENAME
       (dolist (frame vis-frames nil)
 	(when (eq (window-buffer (frame-selected-window frame)) buffer)
-	  (setq frame-to-use frame)))
+	  (setq window-to-use window
+		frame-to-use frame)))
       (if frame-to-use
 	  ;; use the frame already displaying buffer
 	  (raise-frame frame-to-use)
