@@ -640,6 +640,47 @@ If an (emtpy) file named \emph{.nosearch} exists in a specific path, Aquamacs do
 {site-start} and \emph{site-prestart} source files in this or descending paths and does not add that or 
 subsequent paths to the load-path. 
 
+\subsection{Startup files}
+In short, most settings are stored in these files:
+
+\begin{itemize}
+\item  {\tt \~/.emacs}
+\item  {\tt \~/Library/Preferences/Aquamacs Emacs/Preferences.el}
+\item  {\tt \~/Library/Preferences/Aquamacs Emacs/customizations.el}
+
+  [Automatically written when you "Save Options"]
+\end{itemize}
+
+There are further source files that will be loaded.  So, the complete answer is as follows.
+
+At startup, Aquamacs will load this file:
+\begin{itemize}
+  \item {\tt \~/.emacs}
+\end{itemize}
+
+At startup, by default it will load the following files at startup:
+
+\begin{itemize}
+   \item {\tt \~/Library/Preferences/Aquamacs Emacs/customizations.el}
+   \item {\tt /Library/Application Support/Emacs/Preferences.el}  
+
+[deprecated: don't use!]
+   \item {\tt /Library/Application Support/Aquamacs Emacs/Preferences.el}
+   \item {\tt \~/Library/Application Support/Emacs/Preferences.el}  
+
+  [deprecated: don't use!]
+   \item {\tt \~/Library/Application Support/Aquamacs Emacs/Preferences.el}
+\end{itemize}
+
+The location of the first customizations file is given by the `custom-file' variable.
+
+Aquamacs will also automatically load all files names {\tt site-start.el} in the load path list, which includes the above paths.
+
+Note that Emacs (including Aquamacs) will preferentially load a {\tt foo.elc} file if present, in lieu of a {\tt foo.el} file, even if the {\tt .el} file is newer.
+
+To trouble-shoot your own customizations, first start Aquamacs "without customizations", which you can do via a function found
+in the menu "Help/Diagnose and Report Bug".
+
 
 \subsection{Changing Aquamacs source files}
 
