@@ -206,7 +206,8 @@ European languages which are distributed with Windows as
 See the documentation of `create-fontset-from-fontset-spec' for the format.")
 
 (defun x-win-suspend-error ()
-  "Report an error when a suspend is attempted."
+  "Report an error when a suspend is attempted.
+This returns an error if any Emacs frames are X frames, or always under W32."
   (error "Suspending an Emacs running under W32 makes no sense"))
 
 (defvar dynamic-library-alist)
@@ -250,13 +251,16 @@ See the documentation of `create-fontset-from-fontset-spec' for the format.")
        ;; libraries according to the version of giflib we were
        ;; compiled against.  (If we were compiled without GIF support,
        ;; libgif-version's value is -1.)
-       (if (>= libgif-version 50000)
-	   ;; Yes, giflib 5.x uses 6 as the major version of the API,
-	   ;; thus "libgif-6.dll" below (giflib 4.x used 5 as the
-	   ;; major API version).
-	   ;; giflib5.dll is from the lua-files project.
-	   '(gif "libgif-6.dll" "giflib5.dll")
-	 '(gif "libgif-5.dll" "giflib4.dll" "libungif4.dll" "libungif.dll"))
+       (if (>= libgif-version 50100)
+	   ;; Yes, giflib 5.0 uses 6 as the major version of the API,
+	   ;; and giflib 5.1 uses 7, thus "libgif-7.dll" and
+	   ;; "libgif-6.dll" below (giflib 4.x used 5 as the major API
+	   ;; version).  giflib5.dll is from the lua-files project,
+	   ;; and gif.dll is from luapower.
+	   '(gif "libgif-7.dll")
+	 (if (>= libgif-version 50000)
+	     '(gif "libgif-6.dll" "giflib5.dll" "gif.dll")
+	 '(gif "libgif-5.dll" "giflib4.dll" "libungif4.dll" "libungif.dll")))
        '(svg "librsvg-2-2.dll")
        '(gdk-pixbuf "libgdk_pixbuf-2.0-0.dll")
        '(glib "libglib-2.0-0.dll")

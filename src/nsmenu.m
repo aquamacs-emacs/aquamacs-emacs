@@ -1124,8 +1124,8 @@ ns_menu_show (struct frame *f, int x, int y, bool for_click, bool keymaps,
       wv_title->next = wv_sep;
       first_wv->contents = wv_title;
 
-      pmenu = [[EmacsMenu alloc] initWithTitle:
-				   [NSString stringWithUTF8String: SSDATA (title)]];
+  pmenu = [[EmacsMenu alloc] initWithTitle:
+                               [NSString stringWithUTF8String: SSDATA (title)]];
     }
   else
     {

@@ -2342,7 +2342,7 @@ usage: (= NUMBER-OR-MARKER &rest NUMBERS-OR-MARKERS)  */)
 }
 
 DEFUN ("<", Flss, Slss, 1, MANY, 0,
-       doc: /* Return t if each arg is less than the next arg.  All must be numbers or markers.
+       doc: /* Return t if each arg (a number or marker), is less than the next arg.
 usage: (< NUMBER-OR-MARKER &rest NUMBERS-OR-MARKERS)  */)
   (ptrdiff_t nargs, Lisp_Object *args)
 {
@@ -2350,7 +2350,7 @@ usage: (< NUMBER-OR-MARKER &rest NUMBERS-OR-MARKERS)  */)
 }
 
 DEFUN (">", Fgtr, Sgtr, 1, MANY, 0,
-       doc: /* Return t if each arg is greater than the next arg.  All must be numbers or markers.
+       doc: /* Return t if each arg (a number or marker) is greater than the next arg.
 usage: (> NUMBER-OR-MARKER &rest NUMBERS-OR-MARKERS)  */)
   (ptrdiff_t nargs, Lisp_Object *args)
 {
@@ -2358,8 +2358,7 @@ usage: (> NUMBER-OR-MARKER &rest NUMBERS-OR-MARKERS)  */)
 }
 
 DEFUN ("<=", Fleq, Sleq, 1, MANY, 0,
-       doc: /* Return t if each arg is less than or equal to the next arg.
-All must be numbers or markers.
+       doc: /* Return t if each arg (a number or marker) is less than or equal to the next.
 usage: (<= NUMBER-OR-MARKER &rest NUMBERS-OR-MARKERS)  */)
   (ptrdiff_t nargs, Lisp_Object *args)
 {
@@ -2367,8 +2366,7 @@ usage: (<= NUMBER-OR-MARKER &rest NUMBERS-OR-MARKERS)  */)
 }
 
 DEFUN (">=", Fgeq, Sgeq, 1, MANY, 0,
-       doc: /* Return t if each arg is greater than or equal to the next arg.
-All must be numbers or markers.
+       doc: /* Return t if each arg (a number or marker) is greater than or equal to the next.
 usage: (>= NUMBER-OR-MARKER &rest NUMBERS-OR-MARKERS)  */)
   (ptrdiff_t nargs, Lisp_Object *args)
 {
@@ -2982,7 +2980,7 @@ bool_vector_spare_mask (EMACS_INT nr_bits)
 /* Info about unsigned long long, falling back on unsigned long
    if unsigned long long is not available.  */
 
-#if HAVE_UNSIGNED_LONG_LONG_INT
+#if HAVE_UNSIGNED_LONG_LONG_INT && defined ULLONG_MAX
 enum { BITS_PER_ULL = CHAR_BIT * sizeof (unsigned long long) };
 # define ULL_MAX ULLONG_MAX
 #else

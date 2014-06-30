@@ -2647,18 +2647,24 @@ DEFUN ("make-list", Fmake_list, Smake_list, 2, 2, 0,
  ***********************************************************************/
 
 /* Sometimes a vector's contents are merely a pointer internally used
-   in vector allocation code.  Usually you don't want to touch this.  */
+   in vector allocation code.  On the rare platforms where a null
+   pointer cannot be tagged, represent it with a Lisp 0.
+   Usually you don't want to touch this.  */
+
+enum { TAGGABLE_NULL = (DATA_SEG_BITS & ~VALMASK) == 0 };
 
 static struct Lisp_Vector *
 next_vector (struct Lisp_Vector *v)
 {
+  if (! TAGGABLE_NULL && EQ (v->contents[0], make_number (0)))
+    return 0;
   return XUNTAG (v->contents[0], 0);
 }
 
 static void
 set_next_vector (struct Lisp_Vector *v, struct Lisp_Vector *p)
 {
-  v->contents[0] = make_lisp_ptr (p, 0);
+  v->contents[0] = TAGGABLE_NULL || p ? make_lisp_ptr (p, 0) : make_number (0);
 }
 
 /* This value is balanced well enough to avoid too much internal overhead
@@ -2918,9 +2924,16 @@ cleanup_vector (struct Lisp_Vector *vector)
       && ((vector->header.size & PSEUDOVECTOR_SIZE_MASK)
 	  == FONT_OBJECT_MAX))
     {
-      /* Attempt to catch subtle bugs like Bug#16140.  */
-      eassert (valid_font_driver (((struct font *) vector)->driver));
-      ((struct font *) vector)->driver->close ((struct font *) vector);
+      struct font_driver *drv = ((struct font *) vector)->driver;
+
+      /* The font driver might sometimes be NULL, e.g. if Emacs was
+	 interrupted before it had time to set it up.  */
+      if (drv)
+	{
+	  /* Attempt to catch subtle bugs like Bug#16140.  */
+	  eassert (valid_font_driver (drv));
+	  drv->close ((struct font *) vector);
+	}
     }
 }
 
@@ -3316,6 +3329,13 @@ struct symbol_block
 
 static struct symbol_block *symbol_block;
 static int symbol_block_index = SYMBOL_BLOCK_SIZE;
+/* Pointer to the first symbol_block that contains pinned symbols.
+   Tests for 24.4 showed that at dump-time, Emacs contains about 15K symbols,
+   10K of which are pinned (and all but 250 of them are interned in obarray),
+   whereas a "typical session" has in the order of 30K symbols.
+   `symbol_block_pinned' lets mark_pinned_symbols scan only 15K symbols rather
+   than 30K to find the 10K symbols we need to mark.  */
+static struct symbol_block *symbol_block_pinned;
 
 /* List of free symbols.  */
 
@@ -3368,10 +3388,11 @@ Its value is void, and its function definition and property list are nil.  */)
   SET_SYMBOL_VAL (p, Qunbound);
   set_symbol_function (val, Qnil);
   set_symbol_next (val, NULL);
-  p->gcmarkbit = 0;
+  p->gcmarkbit = false;
   p->interned = SYMBOL_UNINTERNED;
   p->constant = 0;
-  p->declared_special = 0;
+  p->declared_special = false;
+  p->pinned = false;
   consing_since_gc += sizeof (struct Lisp_Symbol);
   symbols_consed++;
   total_free_symbols--;
@@ -5173,6 +5194,8 @@ make_pure_c_string (const char *data, ptrdiff_t nchars)
   return string;
 }
 
+static Lisp_Object purecopy (Lisp_Object obj);
+
 /* Return a cons allocated from pure space.  Give it pure copies
    of CAR as car and CDR as cdr.  */
 
@@ -5182,8 +5205,8 @@ pure_cons (Lisp_Object car, Lisp_Object cdr)
   Lisp_Object new;
   struct Lisp_Cons *p = pure_alloc (sizeof *p, Lisp_Cons);
   XSETCONS (new, p);
-  XSETCAR (new, Fpurecopy (car));
-  XSETCDR (new, Fpurecopy (cdr));
+  XSETCAR (new, purecopy (car));
+  XSETCDR (new, purecopy (cdr));
   return new;
 }
 
@@ -5224,9 +5247,19 @@ Does not copy symbols.  Copies strings without text properties.  */)
 {
   if (NILP (Vpurify_flag))
     return obj;
-
-  if (PURE_POINTER_P (XPNTR (obj)))
+  else if (MARKERP (obj) || OVERLAYP (obj)
+	   || HASH_TABLE_P (obj) || SYMBOLP (obj))
+    /* Can't purify those.  */
     return obj;
+  else
+    return purecopy (obj);
+}
+
+static Lisp_Object
+purecopy (Lisp_Object obj)
+{
+  if (PURE_POINTER_P (XPNTR (obj)) || INTEGERP (obj) || SUBRP (obj))
+    return obj;    /* Already pure.  */
 
   if (HASH_TABLE_P (Vpurify_flag)) /* Hash consing.  */
     {
@@ -5254,7 +5287,7 @@ Does not copy symbols.  Copies strings without text properties.  */)
 	size &= PSEUDOVECTOR_SIZE_MASK;
       vec = XVECTOR (make_pure_vector (size));
       for (i = 0; i < size; i++)
-	vec->contents[i] = Fpurecopy (AREF (obj, i));
+	vec->contents[i] = purecopy (AREF (obj, i));
       if (COMPILEDP (obj))
 	{
 	  XSETPVECTYPE (vec, PVEC_COMPILED);
@@ -5263,11 +5296,23 @@ Does not copy symbols.  Copies strings without text properties.  */)
       else
 	XSETVECTOR (obj, vec);
     }
-  else if (MARKERP (obj))
-    error ("Attempt to copy a marker to pure storage");
+  else if (SYMBOLP (obj))
+    {
+      if (!XSYMBOL (obj)->pinned)
+	{ /* We can't purify them, but they appear in many pure objects.
+	     Mark them as `pinned' so we know to mark them at every GC cycle.  */
+	  XSYMBOL (obj)->pinned = true;
+	  symbol_block_pinned = symbol_block;
+	}
+      return obj;
+    }
   else
-    /* Not purified, don't hash-cons.  */
-    return obj;
+    {
+      Lisp_Object args[2];
+      args[0] = build_pure_c_string ("Don't know how to purify: %S");
+      args[1] = obj;
+      Fsignal (Qerror, (Fcons (Fformat (2, args), Qnil)));
+    }
 
   if (HASH_TABLE_P (Vpurify_flag)) /* Hash consing.  */
     Fputhash (obj, obj, Vpurify_flag);
@@ -5430,6 +5475,24 @@ compact_undo_list (Lisp_Object list)
   return list;
 }
 
+static void
+mark_pinned_symbols (void)
+{
+  struct symbol_block *sblk;
+  int lim = (symbol_block_pinned == symbol_block
+	     ? symbol_block_index : SYMBOL_BLOCK_SIZE);
+
+  for (sblk = symbol_block_pinned; sblk; sblk = sblk->next)
+    {
+      union aligned_Lisp_Symbol *sym = sblk->symbols, *end = sym + lim;
+      for (; sym < end; ++sym)
+	if (sym->s.pinned)
+	  mark_object (make_lisp_ptr (&sym->s, Lisp_Symbol));
+
+      lim = SYMBOL_BLOCK_SIZE;
+    }
+}
+
 DEFUN ("garbage-collect", Fgarbage_collect, Sgarbage_collect, 0, 0, "",
        doc: /* Reclaim storage for Lisp objects no longer needed.
 Garbage collection happens automatically if you cons more than
@@ -5532,6 +5595,7 @@ See Info node `(elisp)Garbage Collection'.  */)
   for (i = 0; i < staticidx; i++)
     mark_object (*staticvec[i]);
 
+  mark_pinned_symbols ();
   mark_specpdl ();
   mark_terminals ();
   mark_kboards ();
@@ -6536,12 +6600,7 @@ gc_sweep (void)
 
 	for (; sym < end; ++sym)
 	  {
-	    /* Check if the symbol was created during loadup.  In such a case
-	       it might be pointed to by pure bytecode which we don't trace,
-	       so we conservatively assume that it is live.  */
-	    bool pure_p = PURE_POINTER_P (XSTRING (sym->s.name));
-
-	    if (!sym->s.gcmarkbit && !pure_p)
+	    if (!sym->s.gcmarkbit)
 	      {
 		if (sym->s.redirect == SYMBOL_LOCALIZED)
 		  xfree (SYMBOL_BLV (&sym->s));
@@ -6555,8 +6614,7 @@ gc_sweep (void)
 	    else
 	      {
 		++num_used;
-		if (!pure_p)
-		  eassert (!STRING_MARKED_P (XSTRING (sym->s.name)));
+		eassert (!STRING_MARKED_P (XSTRING (sym->s.name)));
 		sym->s.gcmarkbit = 0;
 	      }
 	  }
@@ -6952,7 +7010,6 @@ union
   enum CHECK_LISP_OBJECT_TYPE CHECK_LISP_OBJECT_TYPE;
   enum DEFAULT_HASH_SIZE DEFAULT_HASH_SIZE;
   enum enum_USE_LSB_TAG enum_USE_LSB_TAG;
-  enum FLOAT_TO_STRING_BUFSIZE FLOAT_TO_STRING_BUFSIZE;
   enum Lisp_Bits Lisp_Bits;
   enum Lisp_Compiled Lisp_Compiled;
   enum maxargs maxargs;

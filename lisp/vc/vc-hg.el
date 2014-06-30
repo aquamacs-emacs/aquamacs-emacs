@@ -60,7 +60,7 @@
 ;; - responsible-p (file)                      OK
 ;; - could-register (file)                     OK
 ;; - receive-file (file rev)                   ?? PROBABLY NOT NEEDED
-;; - unregister (file)                         COMMENTED OUT, MAY BE INCORRECT
+;; - unregister (file)                         OK
 ;; * checkin (files rev comment)               OK
 ;; * find-revision (file rev buffer)           OK
 ;; * checkout (file &optional editable rev)    OK
@@ -227,14 +227,11 @@ highlighting the Log View buffer."
 
 (defun vc-hg-working-revision (file)
   "Hg-specific version of `vc-working-revision'."
-  (let ((default-directory (if (file-directory-p file)
-                               (file-name-as-directory file)
-                             (file-name-directory file))))
-    (ignore-errors
-      (with-output-to-string
-        (process-file vc-hg-program nil standard-output nil
-                      "log" "-l" "1" "--template" "{rev}"
-                      (file-relative-name file))))))
+  (or (ignore-errors
+        (with-output-to-string
+          (vc-hg-command standard-output 0 file
+                         "parent" "--template" "{rev}")))
+      "0"))
 
 ;;; History functions
 
@@ -436,10 +433,9 @@ COMMENT is ignored."
              ;; registered.
          (error))))
 
-;; FIXME: This would remove the file. Is that correct?
-;; (defun vc-hg-unregister (file)
-;;   "Unregister FILE from hg."
-;;   (vc-hg-command nil nil file "remove"))
+(defun vc-hg-unregister (file)
+  "Unregister FILE from hg."
+  (vc-hg-command nil 0 file "forget"))
 
 (declare-function log-edit-extract-headers "log-edit" (headers string))
 

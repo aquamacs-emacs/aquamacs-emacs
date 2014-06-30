@@ -277,6 +277,8 @@ object is returned instead of a list containing this single Lisp object.
 
   => \"i686\""
 
+  (or (featurep 'dbusbind)
+      (signal 'dbus-error (list "Emacs not compiled with dbus support")))
   (or (memq bus '(:system :session)) (stringp bus)
       (signal 'wrong-type-argument (list 'keywordp bus)))
   (or (stringp service)
@@ -316,10 +318,12 @@ object is returned instead of a list containing this single Lisp object.
              (while (eq (car result) :pending)
                (let ((event (let ((inhibit-redisplay t) unread-command-events)
                               (read-event nil nil check-interval))))
-                 (when event
-                   (setf unread-command-events
-                         (nconc unread-command-events
-                                (cons event nil))))
+		 (when event
+		   (if (ignore-errors (dbus-check-event event))
+		       (setf result (gethash key dbus-return-values-table))
+		     (setf unread-command-events
+			   (nconc unread-command-events
+				  (cons event nil)))))
                  (when (< check-interval 1)
                    (setf check-interval (* check-interval 1.05))))))
            (when (eq (car result) :error)
@@ -380,6 +384,8 @@ Example:
 
   -| i686"
 
+  (or (featurep 'dbusbind)
+      (signal 'dbus-error (list "Emacs not compiled with dbus support")))
   (or (memq bus '(:system :session)) (stringp bus)
       (signal 'wrong-type-argument (list 'keywordp bus)))
   (or (stringp service)
@@ -428,6 +434,8 @@ Example:
   :session nil \"/org/gnu/Emacs\" \"org.gnu.Emacs.FileManager\"
   \"FileModified\" \"/home/albinus/.emacs\")"
 
+  (or (featurep 'dbusbind)
+      (signal 'dbus-error (list "Emacs not compiled with dbus support")))
   (or (memq bus '(:system :session)) (stringp bus)
       (signal 'wrong-type-argument (list 'keywordp bus)))
   (or (null service) (stringp service)
@@ -446,6 +454,8 @@ Example:
   "Return for message SERIAL on the D-Bus BUS.
 This is an internal function, it shall not be used outside dbus.el."
 
+  (or (featurep 'dbusbind)
+      (signal 'dbus-error (list "Emacs not compiled with dbus support")))
   (or (memq bus '(:system :session)) (stringp bus)
       (signal 'wrong-type-argument (list 'keywordp bus)))
   (or (stringp service)
@@ -460,6 +470,8 @@ This is an internal function, it shall not be used outside dbus.el."
   "Return error message for message SERIAL on the D-Bus BUS.
 This is an internal function, it shall not be used outside dbus.el."
 
+  (or (featurep 'dbusbind)
+      (signal 'dbus-error (list "Emacs not compiled with dbus support")))
   (or (memq bus '(:system :session)) (stringp bus)
       (signal 'wrong-type-argument (list 'keywordp bus)))
   (or (stringp service)
@@ -1763,6 +1775,8 @@ connection used in the same Emacs process, like the one established by
 GTK+.  It should be used with care for at least the `:system' and
 `:session' buses, because other Emacs Lisp packages might already use
 this connection to those buses."
+  (or (featurep 'dbusbind)
+      (signal 'dbus-error (list "Emacs not compiled with dbus support")))
   (dbus--init-bus bus private)
   (dbus-register-signal
    bus nil dbus-path-local dbus-interface-local

@@ -597,7 +597,13 @@ x_update_window_end (struct window *w, bool cursor_on_p,
   /* If a row with mouse-face was overwritten, arrange for
      XTframe_up_to_date to redisplay the mouse highlight.  */
   if (mouse_face_overwritten_p)
-    reset_mouse_highlight (MOUSE_HL_INFO (XFRAME (w->frame)));
+    {
+      Mouse_HLInfo *hlinfo = MOUSE_HL_INFO (XFRAME (w->frame));
+
+      hlinfo->mouse_face_beg_row = hlinfo->mouse_face_beg_col = -1;
+      hlinfo->mouse_face_end_row = hlinfo->mouse_face_end_col = -1;
+      hlinfo->mouse_face_window = Qnil;
+    }
 }
 
 
@@ -4435,14 +4441,11 @@ xg_scroll_callback (GtkRange     *range,
                     gpointer      user_data)
 {
   struct scroll_bar *bar = user_data;
-  gdouble position;
   int part = -1, whole = 0, portion = 0;
   GtkAdjustment *adj = GTK_ADJUSTMENT (gtk_range_get_adjustment (range));
   struct frame *f = g_object_get_data (G_OBJECT (range), XG_FRAME_DATA);
 
   if (xg_ignore_gtk_scrollbar) return FALSE;
-  position = gtk_adjustment_get_value (adj);
-
 
   switch (scroll)
     {
@@ -4454,7 +4457,7 @@ xg_scroll_callback (GtkRange     *range,
           part = scroll_bar_handle;
           whole = gtk_adjustment_get_upper (adj) -
             gtk_adjustment_get_page_size (adj);
-          portion = min ((int)position, whole);
+          portion = min ((int)value, whole);
           bar->dragging = portion;
         }
       break;
@@ -7778,20 +7781,16 @@ x_new_font (struct frame *f, Lisp_Object font_object, int fontset)
 
   compute_fringe_widths (f, 1);
 
+  /* Compute character columns occupied by scrollbar.
+
+     Don't do things differently for non-toolkit scrollbars
+     (Bug#17163).  */
   unit = FRAME_COLUMN_WIDTH (f);
-#ifdef USE_TOOLKIT_SCROLL_BARS
-  /* The width of a toolkit scrollbar does not change with the new
-     font but we have to calculate the number of columns it occupies
-     anew.  */
-  FRAME_CONFIG_SCROLL_BAR_COLS (f)
-    = (FRAME_CONFIG_SCROLL_BAR_WIDTH (f) + unit - 1) / unit;
-#else
-  /* The width of a non-toolkit scrollbar is at least 14 pixels and a
-     multiple of the frame's character width.  */
-  FRAME_CONFIG_SCROLL_BAR_COLS (f) = (14 + unit - 1) / unit;
-  FRAME_CONFIG_SCROLL_BAR_WIDTH (f)
-    = FRAME_CONFIG_SCROLL_BAR_COLS (f) * unit;
-#endif  
+  if (FRAME_CONFIG_SCROLL_BAR_WIDTH (f) > 0)
+    FRAME_CONFIG_SCROLL_BAR_COLS (f)
+      = (FRAME_CONFIG_SCROLL_BAR_WIDTH (f) + unit - 1) / unit;
+  else
+    FRAME_CONFIG_SCROLL_BAR_COLS (f) = (14 + unit - 1) / unit;
 
   if (FRAME_X_WINDOW (f) != 0)
     {
@@ -7997,7 +7996,7 @@ xim_close_dpy (struct x_display_info *dpyinfo)
     {
 #ifdef HAVE_X11R6_XIM
       struct xim_inst_t *xim_inst = dpyinfo->xim_callback_data;
-      
+
       if (dpyinfo->display)
 	{
 	  Bool ret = XUnregisterIMInstantiateCallback
@@ -8903,6 +8902,7 @@ void
 x_make_frame_visible (struct frame *f)
 {
   int original_top, original_left;
+  int tries = 0;
 
   block_input ();
 
@@ -9010,7 +9010,13 @@ x_make_frame_visible (struct frame *f)
 	/* Force processing of queued events.  */
 	x_sync (f);
 
-	/* This hack is still in use at least for Cygwin.  See
+        /* If on another desktop, the deiconify/map may be ignored and the
+           frame never becomes visible.  XMonad does this.
+           Prevent an endless loop.  */
+        if (FRAME_ICONIFIED_P (f) &&  ++tries > 100)
+          break;
+
+       /* This hack is still in use at least for Cygwin.  See
 	   http://lists.gnu.org/archive/html/emacs-devel/2013-12/msg00351.html.
 
 	   Machines that do polling rather than SIGIO have been

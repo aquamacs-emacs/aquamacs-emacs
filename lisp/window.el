@@ -1079,7 +1079,6 @@ WINDOW-OR-FRAME can be a frame or a window and defaults to the
 selected frame.  When WINDOW-OR-FRAME is a window, dump that
 window's frame.  The buffer *window-frame-dump* is erased before
 dumping to it."
-  (interactive)
   (let* ((window
 	  (cond
 	   ((or (not window-or-frame)
@@ -1102,7 +1101,9 @@ dumping to it."
 	       (frame-text-width frame) (frame-text-height frame)
 	       (frame-text-cols frame) (frame-text-lines frame))
        (format "tool: %s  scroll: %s  fringe: %s  border: %s  right: %s  bottom: %s\n\n"
-	       (tool-bar-height frame t)
+	       (if (fboundp 'tool-bar-height)
+		   (tool-bar-height frame t)
+		 "0")
 	       (frame-scroll-bar-width frame)
 	       (frame-fringe-width frame)
 	       (frame-border-width frame)
@@ -5965,7 +5966,7 @@ live."
 ;; FIXME: By the way, there could be more levels of dedication:
 ;; - `barely' dedicated doesn't prevent reuse of the window, only records that
 ;;   the window hasn't been used for something else yet.
-;; - `softly' dedicated only allows reuse when asked explicitly.
+;; - `soft' (`softly') dedicated only allows reuse when asked explicitly.
 ;; - `strongly' never allows reuse.
 (defvar display-buffer-mark-dedicated nil
   "If non-nil, `display-buffer' marks the windows it creates as dedicated.
@@ -6496,7 +6497,7 @@ that frame."
       ;; resize it to its old height but don't signal an error.
       (when (and (listp quad)
 		 (integerp (nth 3 quad))
-		 (/= (nth 3 quad) (window-total-height window)))
+		 (> (nth 3 quad) (window-total-height window)))
 	(condition-case nil
 	    (window-resize window (- (nth 3 quad) (window-total-height window)))
 	  (error nil)))

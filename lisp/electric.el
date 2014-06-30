@@ -221,7 +221,8 @@ Python does not lend itself to fully automatic indentation.")
 (defvar electric-indent-functions-without-reindent
   '(indent-relative indent-to-left-margin indent-relative-maybe
     py-indent-line coffee-indent-line org-indent-line yaml-indent-line
-    haskell-indentation-indent-line haskell-indent-cycle haskell-simple-indent)
+    haskell-indentation-indent-line haskell-indent-cycle haskell-simple-indent
+    yaml-indent-line)
   "List of indent functions that can't reindent.
 If `line-indent-function' is one of those, then `electric-indent-mode' will
 not try to reindent lines.  It is normally better to make the major
@@ -258,29 +259,30 @@ or comment."
                     (unless (eq act 'do-indent) (nth 8 (syntax-ppss))))))))
       ;; For newline, we want to reindent both lines and basically behave like
       ;; reindent-then-newline-and-indent (whose code we hence copied).
-      (when (<= pos (line-beginning-position))
-        (let ((before (copy-marker (1- pos) t)))
-          (save-excursion
-            (unless (or (memq indent-line-function
-                              electric-indent-functions-without-reindent)
-                        electric-indent-inhibit)
-              ;; Don't reindent the previous line if the indentation function
-              ;; is not a real one.
+      (let ((at-newline (<= pos (line-beginning-position))))
+        (when at-newline
+          (let ((before (copy-marker (1- pos) t)))
+            (save-excursion
+              (unless (or (memq indent-line-function
+                                electric-indent-functions-without-reindent)
+                          electric-indent-inhibit)
+                ;; Don't reindent the previous line if the indentation function
+                ;; is not a real one.
+                (goto-char before)
+                (indent-according-to-mode))
+              ;; We are at EOL before the call to indent-according-to-mode, and
+              ;; after it we usually are as well, but not always.  We tried to
+              ;; address it with `save-excursion' but that uses a normal marker
+              ;; whereas we need `move after insertion', so we do the
+              ;; save/restore by hand.
               (goto-char before)
-              (indent-according-to-mode))
-            ;; We are at EOL before the call to indent-according-to-mode, and
-            ;; after it we usually are as well, but not always.  We tried to
-            ;; address it with `save-excursion' but that uses a normal marker
-            ;; whereas we need `move after insertion', so we do the
-            ;; save/restore by hand.
-            (goto-char before)
-	    (when (eolp)
-	      ;; Remove the trailing whitespace after indentation because
-	      ;; indentation may (re)introduce the whitespace.
-	      (delete-horizontal-space t)))))
-      (unless (and electric-indent-inhibit
-                   (> pos (line-beginning-position)))
-        (indent-according-to-mode)))))
+              (when (eolp)
+                ;; Remove the trailing whitespace after indentation because
+                ;; indentation may (re)introduce the whitespace.
+                (delete-horizontal-space t)))))
+        (unless (and electric-indent-inhibit
+                     (not at-newline))
+          (indent-according-to-mode))))))
 
 (put 'electric-indent-post-self-insert-function 'priority  60)
 

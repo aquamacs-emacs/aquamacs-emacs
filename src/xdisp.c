@@ -98,7 +98,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
       This function attempts to redisplay a window by reusing parts of
       its existing display.  It finds and reuses the part that was not
-      changed, and redraws the rest.
+      changed, and redraws the rest.  (The "id" part in the function's
+      name stands for "insert/delete", not for "identification" or
+      somesuch.)
 
     . try_window
 
@@ -112,6 +114,19 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
    it is known that they are not applicable).  If none of the
    optimizations were successful, redisplay calls redisplay_windows,
    which performs a full redisplay of all windows.
+
+   Note that there's one more important optimization up Emacs's
+   sleeve, but it is related to actually redrawing the potentially
+   changed portions of the window/frame, not to reproducing the
+   desired matrices of those potentially changed portions.  Namely,
+   the function update_frame and its subroutines, which you will find
+   in dispnew.c, compare the desired matrices with the current
+   matrices, and only redraw the portions that changed.  So it could
+   happen that the functions in this file for some reason decide that
+   the entire desired matrix needs to be regenerated from scratch, and
+   still only parts of the Emacs display, or even nothing at all, will
+   be actually delivered to the glass, because update_frame has found
+   that the new and the old screen contents are similar or identical.
 
    Desired matrices.
 
@@ -1262,12 +1277,23 @@ Value is the height in pixels of the line at point.  */)
   struct it it;
   struct text_pos pt;
   struct window *w = XWINDOW (selected_window);
+  struct buffer *old_buffer = NULL;
+  Lisp_Object result;
 
+  if (XBUFFER (w->contents) != current_buffer)
+    {
+      old_buffer = current_buffer;
+      set_buffer_internal_1 (XBUFFER (w->contents));
+    }
   SET_TEXT_POS (pt, PT, PT_BYTE);
   start_display (&it, w, pt);
   it.vpos = it.current_y = 0;
   last_height = 0;
-  return make_number (line_bottom_y (&it));
+  result = make_number (line_bottom_y (&it));
+  if (old_buffer)
+    set_buffer_internal_1 (old_buffer);
+
+  return result;
 }
 
 /* Return the default pixel height of text lines in window W.  The
@@ -2580,8 +2606,8 @@ safe_eval_handler (Lisp_Object arg, ptrdiff_t nargs, Lisp_Object *args)
    following.  Return the result, or nil if something went
    wrong.  Prevent redisplay during the evaluation.  */
 
-Lisp_Object
-safe_call (ptrdiff_t nargs, Lisp_Object func, ...)
+static Lisp_Object
+safe__call (bool inhibit_quit, ptrdiff_t nargs, Lisp_Object func, va_list ap)
 {
   Lisp_Object val;
 
@@ -2589,21 +2615,20 @@ safe_call (ptrdiff_t nargs, Lisp_Object func, ...)
     val = Qnil;
   else
     {
-      va_list ap;
       ptrdiff_t i;
       ptrdiff_t count = SPECPDL_INDEX ();
       struct gcpro gcpro1;
       Lisp_Object *args = alloca (nargs * word_size);
 
       args[0] = func;
-      va_start (ap, func);
       for (i = 1; i < nargs; i++)
 	args[i] = va_arg (ap, Lisp_Object);
-      va_end (ap);
 
       GCPRO1 (args[0]);
       gcpro1.nvars = nargs;
       specbind (Qinhibit_redisplay, Qt);
+      if (inhibit_quit)
+	specbind (Qinhibit_quit, Qt);
       /* Use Qt to ensure debugger does not run,
 	 so there is no possibility of wanting to redisplay.  */
       val = internal_condition_case_n (Ffuncall, nargs, args, Qt,
@@ -2615,6 +2640,17 @@ safe_call (ptrdiff_t nargs, Lisp_Object func, ...)
   return val;
 }
 
+Lisp_Object
+safe_call (ptrdiff_t nargs, Lisp_Object func, ...)
+{
+  Lisp_Object retval;
+  va_list ap;
+
+  va_start (ap, func);
+  retval = safe__call (false, nargs, func, ap);
+  va_end (ap);
+  return retval;
+}
 
 /* Call function FN with one argument ARG.
    Return the result, or nil if something went wrong.  */
@@ -2625,12 +2661,30 @@ safe_call1 (Lisp_Object fn, Lisp_Object arg)
   return safe_call (2, fn, arg);
 }
 
+static Lisp_Object
+safe__call1 (bool inhibit_quit, Lisp_Object fn, ...)
+{
+  Lisp_Object retval;
+  va_list ap;
+
+  va_start (ap, fn);
+  retval = safe__call (inhibit_quit, 2, fn, ap);
+  va_end (ap);
+  return retval;
+}
+
 static Lisp_Object Qeval;
 
 Lisp_Object
 safe_eval (Lisp_Object sexpr)
 {
-  return safe_call1 (Qeval, sexpr);
+  return safe__call1 (false, Qeval, sexpr);
+}
+
+static Lisp_Object
+safe__eval (bool inhibit_quit, Lisp_Object sexpr)
+{
+  return safe__call1 (inhibit_quit, Qeval, sexpr);
 }
 
 /* Call function FN with two arguments ARG1 and ARG2.
@@ -8520,7 +8574,7 @@ move_it_in_display_line_to (struct it *it,
 	}
       else
 	{
-	  if (it->line_wrap == WORD_WRAP)
+	  if (it->line_wrap == WORD_WRAP && it->area == TEXT_AREA)
 	    {
 	      if (IT_DISPLAYING_WHITESPACE (it))
 		may_wrap = 1;
@@ -8804,8 +8858,11 @@ move_it_in_display_line_to (struct it *it,
 		  if (closest_pos < ZV)
 		    {
 		      RESTORE_IT (it, &ppos_it, ppos_data);
-		      move_it_in_display_line_to (it, closest_pos, -1,
-						  MOVE_TO_POS);
+		      /* Don't recurse if closest_pos is equal to
+			 to_charpos, since we have just tried that.  */
+		      if (closest_pos != to_charpos)
+			move_it_in_display_line_to (it, closest_pos, -1,
+						    MOVE_TO_POS);
 		      result = MOVE_POS_MATCH_OR_ZV;
 		    }
 		  else
@@ -8866,8 +8923,9 @@ move_it_in_display_line_to (struct it *it,
 		      && !at_eob_p && closest_pos < ZV)
 		    {
 		      RESTORE_IT (it, &ppos_it, ppos_data);
-		      move_it_in_display_line_to (it, closest_pos, -1,
-						  MOVE_TO_POS);
+		      if (closest_pos != to_charpos)
+			move_it_in_display_line_to (it, closest_pos, -1,
+						    MOVE_TO_POS);
 		    }
 		  result = MOVE_POS_MATCH_OR_ZV;
 		  break;
@@ -8885,7 +8943,9 @@ move_it_in_display_line_to (struct it *it,
 	      if (closest_pos < ZV)
 		{
 		  RESTORE_IT (it, &ppos_it, ppos_data);
-		  move_it_in_display_line_to (it, closest_pos, -1, MOVE_TO_POS);
+		  if (closest_pos != to_charpos)
+		    move_it_in_display_line_to (it, closest_pos, -1,
+						MOVE_TO_POS);
 		}
 	      result = MOVE_POS_MATCH_OR_ZV;
 	      break;
@@ -9514,6 +9574,7 @@ move_it_by_lines (struct it *it, ptrdiff_t dvpos)
       ptrdiff_t start_charpos, i;
       int nchars_per_row
 	= (it->last_visible_x - it->first_visible_x) / FRAME_COLUMN_WIDTH (it->f);
+      bool hit_pos_limit = false;
       ptrdiff_t pos_limit;
 
       /* Start at the beginning of the screen line containing IT's
@@ -9530,8 +9591,11 @@ move_it_by_lines (struct it *it, ptrdiff_t dvpos)
 	pos_limit = BEGV;
       else
 	pos_limit = max (start_charpos + dvpos * nchars_per_row, BEGV);
+
       for (i = -dvpos; i > 0 && IT_CHARPOS (*it) > pos_limit; --i)
 	back_to_previous_visible_line_start (it);
+      if (i > 0 && IT_CHARPOS (*it) <= pos_limit)
+	hit_pos_limit = true;
       reseat (it, it->current.pos, 1);
 
       /* Move further back if we end up in a string or an image.  */
@@ -9574,6 +9638,25 @@ move_it_by_lines (struct it *it, ptrdiff_t dvpos)
 	    RESTORE_IT (it, &it2, it2data);
 	  else
 	    bidi_unshelve_cache (it2data, 1);
+	}
+      else if (hit_pos_limit && pos_limit > BEGV
+	       && dvpos < 0 && it2.vpos < -dvpos)
+	{
+	  /* If we hit the limit, but still didn't make it far enough
+	     back, that means there's a display string with a newline
+	     covering a large chunk of text, and that caused
+	     back_to_previous_visible_line_start try to go too far.
+	     Punish those who commit such atrocities by going back
+	     until we've reached DVPOS, after lifting the limit, which
+	     could make it slow for very long lines.  "If it hurts,
+	     don't do that!"  */
+	  dvpos += it2.vpos;
+	  RESTORE_IT (it, it, it2data);
+	  for (i = -dvpos; i > 0; --i)
+	    {
+	      back_to_previous_visible_line_start (it);
+	      it->vpos--;
+	    }
 	}
       else
 	RESTORE_IT (it, it, it2data);
@@ -11512,7 +11595,7 @@ prepare_menu_bars (void)
 		}
 	    }
 	}
-      safe_call1 (Vpre_redisplay_function, windows);
+      safe__call1 (true, Vpre_redisplay_function, windows);
     }
 
   /* Update all frame titles based on their buffer names, etc.  We do
@@ -14356,7 +14439,7 @@ set_cursor_from_row (struct window *w, struct glyph_row *row,
 					      pos_after, 0);
 
 		if (prop_pos >= pos_before)
-		  bpos_max = prop_pos - 1;
+		  bpos_max = prop_pos;
 	      }
 	    if (INTEGERP (chprop))
 	      {
@@ -14430,7 +14513,7 @@ set_cursor_from_row (struct window *w, struct glyph_row *row,
 					      pos_after, 0);
 
 		if (prop_pos >= pos_before)
-		  bpos_max = prop_pos - 1;
+		  bpos_max = prop_pos;
 	      }
 	    if (INTEGERP (chprop))
 	      {
@@ -14460,7 +14543,7 @@ set_cursor_from_row (struct window *w, struct glyph_row *row,
      GLYPH_BEFORE and GLYPH_AFTER.  */
   if (!((row->reversed_p ? glyph > glyphs_end : glyph < glyphs_end)
 	&& BUFFERP (glyph->object) && glyph->charpos == pt_old)
-      && !(bpos_max < pt_old && pt_old <= bpos_covered))
+      && !(bpos_max <= pt_old && pt_old <= bpos_covered))
     {
       /* An empty line has a single glyph whose OBJECT is zero and
 	 whose CHARPOS is the position of a newline on that line.
@@ -15693,7 +15776,51 @@ set_vertical_scroll_bar (struct window *w)
    selected_window is redisplayed.
 
    We can return without actually redisplaying the window if fonts has been
-   changed on window's frame.  In that case, redisplay_internal will retry.  */
+   changed on window's frame.  In that case, redisplay_internal will retry.
+
+   As one of the important parts of redisplaying a window, we need to
+   decide whether the previous window-start position (stored in the
+   window's w->start marker position) is still valid, and if it isn't,
+   recompute it.  Some details about that:
+
+    . The previous window-start could be in a continuation line, in
+      which case we need to recompute it when the window width
+      changes.  See compute_window_start_on_continuation_line and its
+      call below.
+
+    . The text that changed since last redisplay could include the
+      previous window-start position.  In that case, we try to salvage
+      what we can from the current glyph matrix by calling
+      try_scrolling, which see.
+
+    . Some Emacs command could force us to use a specific window-start
+      position by setting the window's force_start flag, or gently
+      propose doing that by setting the window's optional_new_start
+      flag.  In these cases, we try using the specified start point if
+      that succeeds (i.e. the window desired matrix is successfully
+      recomputed, and point location is within the window).  In case
+      of optional_new_start, we first check if the specified start
+      position is feasible, i.e. if it will allow point to be
+      displayed in the window.  If using the specified start point
+      fails, e.g., if new fonts are needed to be loaded, we abort the
+      redisplay cycle and leave it up to the next cycle to figure out
+      things.
+
+    . Note that the window's force_start flag is sometimes set by
+      redisplay itself, when it decides that the previous window start
+      point is fine and should be kept.  Search for "goto force_start"
+      below to see the details.  Like the values of window-start
+      specified outside of redisplay, these internally-deduced values
+      are tested for feasibility, and ignored if found to be
+      unfeasible.
+
+    . Note that the function try_window, used to completely redisplay
+      a window, accepts the window's start point as its argument.
+      This is used several times in the redisplay code to control
+      where the window start will be, according to user options such
+      as scroll-conservatively, and also to ensure the screen line
+      showing point will be fully (as opposed to partially) visible on
+      display.  */
 
 static void
 redisplay_window (Lisp_Object window, bool just_this_one_p)
@@ -15739,6 +15866,8 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
   eassert (XMARKER (w->start)->buffer == buffer);
   eassert (XMARKER (w->pointm)->buffer == buffer);
 
+  /* We come here again if we need to run window-text-change-functions
+     below.  */
  restart:
   reconsider_clip_changes (w);
   frame_line_height = default_line_pixel_height (w);
@@ -15803,7 +15932,7 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
        && !current_buffer->prevent_redisplay_optimizations_p
        && !window_outdated (w));
 
-  /* Run the window-bottom-change-functions
+  /* Run the window-text-change-functions
      if it is possible that the text on the screen has changed
      (either due to modification of the text, or any other reason).  */
   if (!current_matrix_up_to_date_p
@@ -18658,6 +18787,7 @@ insert_left_trunc_glyphs (struct it *it)
   truncate_it.current_x = 0;
   truncate_it.face_id = DEFAULT_FACE_ID;
   truncate_it.glyph_row = &scratch_glyph_row;
+  truncate_it.area = TEXT_AREA;
   truncate_it.glyph_row->used[TEXT_AREA] = 0;
   CHARPOS (truncate_it.position) = BYTEPOS (truncate_it.position) = -1;
   truncate_it.object = make_number (0);
@@ -20636,6 +20766,10 @@ Value is the new character position of point.  */)
       && !b->clip_changed
       && !b->prevent_redisplay_optimizations_p
       && !window_outdated (w)
+      /* We rely below on the cursor coordinates to be up to date, but
+	 we cannot trust them if some command moved point since the
+	 last complete redisplay.  */
+      && w->last_point == BUF_PT (b)
       && w->cursor.vpos >= 0
       && w->cursor.vpos < w->current_matrix->nrows
       && (row = MATRIX_ROW (w->current_matrix, w->cursor.vpos))->enabled_p)
@@ -21826,7 +21960,7 @@ display_mode_element (struct it *it, int depth, int field_width, int precision,
 	    if (CONSP (XCDR (elt)))
 	      {
 		Lisp_Object spec;
-		spec = safe_eval (XCAR (XCDR (elt)));
+		spec = safe__eval (true, XCAR (XCDR (elt)));
 		n += display_mode_element (it, depth, field_width - n,
 					   precision - n, spec, props,
 					   risky);

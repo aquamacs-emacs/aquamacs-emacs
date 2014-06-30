@@ -1857,6 +1857,38 @@ invalidate_buffer_caches (struct buffer *buf, ptrdiff_t start, ptrdiff_t end)
      need to consider the caches of their base buffer.  */
   if (buf->base_buffer)
     buf = buf->base_buffer;
+  /* The bidi_paragraph_cache must be invalidated first, because doing
+     so might need to use the newline_cache (via find_newline_no_quit,
+     see below).  */
+  if (buf->bidi_paragraph_cache)
+    {
+      if (start != end
+	  && start > BUF_BEG (buf))
+	{
+	  /* If we are deleting or replacing characters, we could
+	     create a paragraph start, because all of the characters
+	     from START to the beginning of START's line are
+	     whitespace.  Therefore, we must extend the region to be
+	     invalidated up to the newline before START.  */
+	  ptrdiff_t line_beg = start;
+	  ptrdiff_t start_byte = buf_charpos_to_bytepos (buf, start);
+
+	  if (BUF_FETCH_BYTE (buf, start_byte - 1) != '\n')
+	    {
+	      struct buffer *old = current_buffer;
+
+	      set_buffer_internal (buf);
+
+	      line_beg = find_newline_no_quit (start, start_byte, -1,
+					       &start_byte);
+	      set_buffer_internal (old);
+	    }
+	  start = line_beg - (line_beg > BUF_BEG (buf));
+	}
+      invalidate_region_cache (buf,
+			       buf->bidi_paragraph_cache,
+			       start - BUF_BEG (buf), BUF_Z (buf) - end);
+    }
   if (buf->newline_cache)
     invalidate_region_cache (buf,
                              buf->newline_cache,
@@ -1864,10 +1896,6 @@ invalidate_buffer_caches (struct buffer *buf, ptrdiff_t start, ptrdiff_t end)
   if (buf->width_run_cache)
     invalidate_region_cache (buf,
                              buf->width_run_cache,
-                             start - BUF_BEG (buf), BUF_Z (buf) - end);
-  if (buf->bidi_paragraph_cache)
-    invalidate_region_cache (buf,
-                             buf->bidi_paragraph_cache,
                              start - BUF_BEG (buf), BUF_Z (buf) - end);
 }
 

@@ -6262,9 +6262,6 @@ struct my_jpeg_error_mgr
       MY_JPEG_INVALID_IMAGE_SIZE,
       MY_JPEG_CANNOT_CREATE_X
     } failure_code;
-#ifdef lint
-  FILE *fp;
-#endif
 };
 
 
@@ -6479,7 +6476,8 @@ jpeg_load_body (struct frame *f, struct image *img,
 {
   Lisp_Object file, specified_file;
   Lisp_Object specified_data;
-  FILE *fp = NULL;
+  /* The 'volatile' silences a bogus diagnostic; see GCC bug 54561.  */
+  FILE * IF_LINT (volatile) fp = NULL;
   JSAMPARRAY buffer;
   int row_stride, x, y;
   XImagePtr ximg = NULL;
@@ -6511,8 +6509,6 @@ jpeg_load_body (struct frame *f, struct image *img,
       image_error ("Invalid image data `%s'", specified_data, Qnil);
       return 0;
     }
-
-  IF_LINT (mgr->fp = fp);
 
   /* Customize libjpeg's error handling to call my_error_exit when an
      error is detected.  This function will perform a longjmp.  */
@@ -6551,9 +6547,6 @@ jpeg_load_body (struct frame *f, struct image *img,
       x_clear_image (f, img);
       return 0;
     }
-
-  /* Silence a bogus diagnostic; see GCC bug 54561.  */
-  IF_LINT (fp = mgr->fp);
 
   /* Create the JPEG decompression object.  Let it read from fp.
 	 Read the JPEG image header.  */
@@ -7262,7 +7255,11 @@ gif_image_p (Lisp_Object object)
 #ifdef WINDOWSNT
 
 /* GIF library details.  */
+#if 5 < GIFLIB_MAJOR + (1 <= GIFLIB_MINOR)
+DEF_IMGLIB_FN (int, DGifCloseFile, (GifFileType *, int *));
+#else
 DEF_IMGLIB_FN (int, DGifCloseFile, (GifFileType *));
+#endif
 DEF_IMGLIB_FN (int, DGifSlurp, (GifFileType *));
 #if GIFLIB_MAJOR < 5
 DEF_IMGLIB_FN (GifFileType *, DGifOpen, (void *, InputFunc));
@@ -7332,6 +7329,22 @@ gif_read_from_memory (GifFileType *file, GifByteType *buf, int len)
   return len;
 }
 
+static int
+gif_close (GifFileType *gif, int *err)
+{
+  int retval;
+
+#if 5 < GIFLIB_MAJOR + (1 <= GIFLIB_MINOR)
+  retval = fn_DGifCloseFile (gif, err);
+#else
+  retval = fn_DGifCloseFile (gif);
+#if GIFLIB_MAJOR >= 5
+  if (err)
+    *err = gif->Error;
+#endif
+#endif
+  return retval;
+}
 
 /* Load GIF image IMG for use on frame F.  Value is true if
    successful.  */
@@ -7356,9 +7369,7 @@ gif_load (struct frame *f, struct image *img)
   Lisp_Object specified_data = image_spec_value (img->spec, QCdata, NULL);
   unsigned long bgcolor = 0;
   EMACS_INT idx;
-#if GIFLIB_MAJOR >= 5
   int gif_err;
-#endif
 
   if (NILP (specified_data))
     {
@@ -7426,7 +7437,7 @@ gif_load (struct frame *f, struct image *img)
   if (!check_image_size (f, gif->SWidth, gif->SHeight))
     {
       image_error ("Invalid image size (see `max-image-size')", Qnil, Qnil);
-      fn_DGifCloseFile (gif);
+      gif_close (gif, NULL);
       return 0;
     }
 
@@ -7435,7 +7446,7 @@ gif_load (struct frame *f, struct image *img)
   if (rc == GIF_ERROR || gif->ImageCount <= 0)
     {
       image_error ("Error reading `%s'", img->spec, Qnil);
-      fn_DGifCloseFile (gif);
+      gif_close (gif, NULL);
       return 0;
     }
 
@@ -7447,7 +7458,7 @@ gif_load (struct frame *f, struct image *img)
       {
 	image_error ("Invalid image number `%s' in image `%s'",
 		     image_number, img->spec);
-	fn_DGifCloseFile (gif);
+	gif_close (gif, NULL);
 	return 0;
       }
   }
@@ -7465,7 +7476,7 @@ gif_load (struct frame *f, struct image *img)
   if (!check_image_size (f, width, height))
     {
       image_error ("Invalid image size (see `max-image-size')", Qnil, Qnil);
-      fn_DGifCloseFile (gif);
+      gif_close (gif, NULL);
       return 0;
     }
 
@@ -7483,7 +7494,7 @@ gif_load (struct frame *f, struct image *img)
 	     && 0 <= subimg_left && subimg_left <= width - subimg_width))
 	{
 	  image_error ("Subimage does not fit in image", Qnil, Qnil);
-	  fn_DGifCloseFile (gif);
+	  gif_close (gif, NULL);
 	  return 0;
 	}
     }
@@ -7491,7 +7502,7 @@ gif_load (struct frame *f, struct image *img)
   /* Create the X image and pixmap.  */
   if (!image_create_x_image_and_pixmap (f, img, width, height, 0, &ximg, 0))
     {
-      fn_DGifCloseFile (gif);
+      gif_close (gif, NULL);
       return 0;
     }
 
@@ -7662,7 +7673,18 @@ gif_load (struct frame *f, struct image *img)
 			    Fcons (make_number (gif->ImageCount),
 				   img->lisp_data));
 
-  fn_DGifCloseFile (gif);
+  if (gif_close (gif, &gif_err) == GIF_ERROR)
+    {
+#if 5 <= GIFLIB_MAJOR
+      char *error_text = fn_GifErrorString (gif_err);
+
+      if (error_text)
+	image_error ("Error closing `%s': %s",
+		     img->spec, build_string (error_text));
+#else
+      image_error ("Error closing `%s'", img->spec, Qnil);
+#endif
+    }
 
   /* Maybe fill in the background field while we have ximg handy. */
   if (NILP (image_spec_value (img->spec, QCbackground, NULL)))

@@ -930,12 +930,14 @@ current value of @code{buffer-invisibility-spec}.
 
 @vindex line-move-ignore-invisible
   Ordinarily, functions that operate on text or move point do not care
-whether the text is invisible.  The user-level line motion commands
-ignore invisible newlines if @code{line-move-ignore-invisible} is
-non-@code{nil} (the default), but only because they are explicitly
-programmed to do so.
+whether the text is invisible, they process invisible characters and
+visible characters alike.  The user-level line motion commands,
+such as @code{next-line}, @code{previous-line}, ignore invisible
+newlines if @code{line-move-ignore-invisible} is non-@code{nil} (the
+default), i.e., behave like these invisible newlines didn't exist in
+the buffer, but only because they are explicitly programmed to do so.
 
-  However, if a command ends with point inside or at the boundary of
+  If a command ends with point inside or at the boundary of
 invisible text, the main editing loop relocates point to one of the
 two ends of the invisible text.  Emacs chooses the direction of
 relocation so that it is the same as the overall movement direction of
@@ -951,6 +953,10 @@ stickiness), Emacs moves point back to the beginning of that range.  If the
 command moved point forward into an invisible range, Emacs moves point forward
 to the first visible character that follows the invisible text and then forward
 one more character.
+
+  These @dfn{adjustments} of point that ended up in the middle of
+invisible text can be disabled by setting @code{disable-point-adjustment}
+to a non-@code{nil} value.  @xref{Adjusting Point}.
 
   Incremental search can make invisible overlays visible temporarily
 and/or permanently when a match includes invisible text.  To enable
@@ -1475,8 +1481,10 @@ the buffer's undo list.
 
   Since more than one overlay can specify a property value for the
 same character, Emacs lets you specify a priority value of each
-overlay.  You should not make assumptions about which overlay will
-prevail when there is a conflict and they have the same priority.
+overlay.  In case two overlays have the same priority value, and one
+is nested in the other, then the inner one will have priority over the
+outer one.  If neither is nested in the other then you should not make
+assumptions about which overlay will prevail.
 
   These functions read and set the properties of an overlay:
 
@@ -1507,9 +1515,9 @@ of them:
 @table @code
 @item priority
 @kindex priority @r{(overlay property)}
-This property's value (which should be a non-negative integer)
-determines the priority of the overlay.  No priority, or @code{nil},
-means zero.
+This property's value determines the priority of the overlay.
+If you want to specify a priority value, use either @code{nil}
+(or zero), or a positive integer.  Any other value has undefined behavior.
 
 The priority matters when two or more overlays cover the same
 character and both specify the same property; the one whose
@@ -1519,9 +1527,13 @@ completely override the other value; instead, its face attributes
 override the face attributes of the lower priority @code{face}
 property.
 
-Currently, all overlays take priority over text properties.  Please
-avoid using negative priority values, as we have not yet decided just
-what they should mean.
+Currently, all overlays take priority over text properties.
+
+Note that Emacs sometimes uses non-numeric priority values for some of
+its internal overlays, so do not try to do arithmetic on the
+priority of an overlay (unless it is one that you created).  If you
+need to put overlays in priority order, use the @var{sorted} argument
+of @code{overlays-at}.  @xref{Finding Overlays}.
 
 @item window
 @kindex window @r{(overlay property)}
@@ -1706,11 +1718,12 @@ Properties}.
 @node Finding Overlays
 @subsection Searching for Overlays
 
-@defun overlays-at pos
-This function returns a list of all the overlays that cover the
-character at position @var{pos} in the current buffer.  The list is in
-no particular order.  An overlay contains position @var{pos} if it
-begins at or before @var{pos}, and ends after @var{pos}.
+@defun overlays-at pos &optional sorted
+This function returns a list of all the overlays that cover the character at
+position @var{pos} in the current buffer.  If @var{sorted} is non-@code{nil},
+the list is in decreasing order of priority, otherwise it is in no particular
+order.  An overlay contains position @var{pos} if it begins at or before
+@var{pos}, and ends after @var{pos}.
 
 To illustrate usage, here is a Lisp function that returns a list of the
 overlays that specify property @var{prop} for the character at point:
@@ -6505,18 +6518,6 @@ graphic displays.  That is because @code{window-system} is not a good
 indicator of Emacs capabilities on a given display type.  Instead, use
 @code{display-graphic-p} or any of the other @code{display-*-p}
 predicates described in @ref{Display Feature Testing}.
-
-@defvar window-setup-hook
-This variable is a normal hook which Emacs runs after handling the
-initialization files.  Emacs runs this hook after it has completed
-loading your init file, the default initialization file (if
-any), and the terminal-specific Lisp code, and running the hook
-@code{emacs-startup-hook}.
-
-This hook is used for internal purposes: setting up communication with
-the window system, and creating the initial window.  Users should not
-interfere with it.
-@end defvar
 
 @node Bidirectional Display
 @section Bidirectional Display

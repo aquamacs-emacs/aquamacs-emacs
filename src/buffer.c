@@ -3333,17 +3333,18 @@ record_overlay_string (struct sortstrlist *ssl, Lisp_Object str,
     }
 }
 
-/* Return the concatenation of the strings associated with overlays that
-   begin or end at POS, ignoring overlays that are specific to a window
-   other than W.  The strings are concatenated in the appropriate order:
-   shorter overlays nest inside longer ones, and higher priority inside
-   lower.  Normally all of the after-strings come first, but zero-sized
-   overlays have their after-strings ride along with the before-strings
-   because it would look strange to print them inside-out.
+/* Concatenate the strings associated with overlays that begin or end
+   at POS, ignoring overlays that are specific to windows other than W.
+   The strings are concatenated in the appropriate order: shorter
+   overlays nest inside longer ones, and higher priority inside lower.
+   Normally all of the after-strings come first, but zero-sized
+   overlays have their after-strings ride along with the
+   before-strings because it would look strange to print them
+   inside-out.
 
-   Returns the string length, and stores the contents indirectly through
-   PSTR, if that variable is non-null.  The string may be overwritten by
-   subsequent calls.  */
+   Returns the concatenated string's length, and return the pointer to
+   that string via PSTR, if that variable is non-NULL.  The storage of
+   the concatenated strings may be overwritten by subsequent calls.  */
 
 ptrdiff_t
 overlay_strings (ptrdiff_t pos, struct window *w, unsigned char **pstr)
@@ -4168,9 +4169,10 @@ OVERLAY.  */)
 }
 
 
-DEFUN ("overlays-at", Foverlays_at, Soverlays_at, 1, 1, 0,
-       doc: /* Return a list of the overlays that contain the character at POS.  */)
-  (Lisp_Object pos)
+DEFUN ("overlays-at", Foverlays_at, Soverlays_at, 1, 2, 0,
+       doc: /* Return a list of the overlays that contain the character at POS.
+If SORTED is non-nil, then sort them by decreasing priority.  */)
+  (Lisp_Object pos, Lisp_Object sorted)
 {
   ptrdiff_t len, noverlays;
   Lisp_Object *overlay_vec;
@@ -4189,6 +4191,10 @@ DEFUN ("overlays-at", Foverlays_at, Soverlays_at, 1, 1, 0,
      Store the length in len.  */
   noverlays = overlays_at (XINT (pos), 1, &overlay_vec, &len,
 			   NULL, NULL, 0);
+
+  if (!NILP (sorted))
+    noverlays = sort_overlays (overlay_vec, noverlays,
+			       WINDOWP (sorted) ? XWINDOW (sorted) : NULL);
 
   /* Make a list of them all.  */
   result = Flist (noverlays, overlay_vec);

@@ -250,7 +250,11 @@
       ;; Catch ${ so that ${var} doesn't screw up indentation.
       ;; This also catches $' to handle 'foo$', although it should really
       ;; check that it occurs inside a '..' string.
-      ("\\(\\$\\)[{']" (1 ". p"))
+      ("\\(\\$\\)[{']" (1 (unless (and (eq ?\' (char-after (match-end 1)))
+                                       (save-excursion
+                                         (not (nth 3 (syntax-ppss
+                                                      (match-beginning 0))))))
+                            (string-to-syntax ". p"))))
       ;; Handle funny names like $DB'stop.
       ("\\$ ?{?^?[_[:alpha:]][_[:alnum:]]*\\('\\)[_[:alpha:]]" (1 "_"))
       ;; format statements
@@ -276,8 +280,8 @@
       ;; perl-font-lock-special-syntactic-constructs.
       ((concat "\\(?:\\(?:^\\|[^$@&%[:word:]]\\)"
                (regexp-opt '("split" "if" "unless" "until" "while" "split"
-                             "grep" "map" "not" "or" "and"))
-               "\\|[?:.,;=!~({[]\\|\\(^\\)\\)[ \t\n]*\\(/\\)")
+                             "grep" "map" "not" "or" "and" "for" "foreach"))
+               "\\|[-?:.,;|&+*=!~({[]\\|\\(^\\)\\)[ \t\n]*\\(/\\)")
        (2 (ignore
            (if (and (match-end 1)       ; / at BOL.
                     (save-excursion
@@ -854,11 +858,12 @@ changed by, or (parse-state) if line starts in a quoted string."
    (and (= (char-syntax (following-char)) ?\))
 	(save-excursion
 	  (forward-char 1)
-	  (forward-sexp -1)
-	  (perl-indent-new-calculate
-           ;; Recalculate the parsing-start, since we may have jumped
-           ;; dangerously close (typically in the case of nested functions).
-           'virtual nil (save-excursion (perl-beginning-of-function)))))
+          (when (condition-case nil (progn (forward-sexp -1) t)
+                  (scan-error nil))
+            (perl-indent-new-calculate
+             ;; Recalculate the parsing-start, since we may have jumped
+             ;; dangerously close (typically in the case of nested functions).
+             'virtual nil (save-excursion (perl-beginning-of-function))))))
    (and (and (= (following-char) ?{)
 	     (save-excursion (forward-char) (perl-hanging-paren-p)))
 	(+ (or default (perl-calculate-indent parse-start))
@@ -898,7 +903,9 @@ Optional argument PARSE-START should be the position of `beginning-of-defun'."
 	;;          following_quotep minimum_paren-depth_this_scan)
 	;; Parsing stops if depth in parentheses becomes equal to third arg.
 	(setq containing-sexp (nth 1 state)))
-      (cond ((nth 3 state) 'noindent)	; In a quoted string?
+      (cond
+       ;; Don't auto-indent in a quoted string or a here-document.
+       ((or (nth 3 state) (eq 2 (nth 7 state))) 'noindent)
 	    ((null containing-sexp)	; Line is at top level.
 	     (skip-chars-forward " \t\f")
 	     (if (memq (following-char)

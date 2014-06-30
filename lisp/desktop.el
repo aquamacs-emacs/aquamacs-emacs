@@ -174,8 +174,8 @@ For further details, see info node `(emacs)Saving Emacs Sessions'."
   :global t
   :group 'desktop
   (if desktop-save-mode
-      (desktop-auto-save-set-timer)
-    (desktop-auto-save-cancel-timer)))
+      (desktop-auto-save-enable)
+    (desktop-auto-save-disable)))
 
 (defun desktop-save-mode-off ()
   "Disable `desktop-save-mode'.  Provided for use in hooks."
@@ -207,13 +207,17 @@ determine where the desktop is saved."
 
 (defcustom desktop-auto-save-timeout auto-save-timeout
   "Number of seconds idle time before auto-save of the desktop.
+The idle timer activates auto-saving only when window configuration changes.
 This applies to an existing desktop file when `desktop-save-mode' is enabled.
 Zero or nil means disable auto-saving due to idleness."
   :type '(choice (const :tag "Off" nil)
                  (integer :tag "Seconds"))
   :set (lambda (symbol value)
          (set-default symbol value)
-         (ignore-errors (desktop-auto-save-set-timer)))
+         (ignore-errors
+	   (if (and (integerp value) (> value 0))
+	       (desktop-auto-save-enable value)
+	     (desktop-auto-save-disable))))
   :group 'desktop
   :version "24.4")
 
@@ -844,12 +848,13 @@ QUOTE may be `may' (value may be quoted),
   "Convert VALUE to a string that when read evaluates to the same value.
 Not all types of values are supported."
   (let* ((print-escape-newlines t)
+	 (print-length nil)
+	 (print-level nil)
 	 (float-output-format nil)
 	 (quote.sexp (desktop--v2s value))
 	 (quote (car quote.sexp))
-	 (txt
-          (let ((print-quoted t))
-            (prin1-to-string (cdr quote.sexp)))))
+	 (print-quoted t)
+	 (txt (prin1-to-string (cdr quote.sexp))))
     (if (eq quote 'must)
 	(concat "'" txt)
       txt)))
@@ -1123,6 +1128,10 @@ Using it may cause conflicts.  Use it anyway? " owner)))))
 		(unless desktop-dirname
 		  (message "Desktop file in use; not loaded.")))
 	    (desktop-lazy-abort)
+	    ;; Temporarily disable the autosave that will leave it
+	    ;; disabled when loading the desktop fails with errors,
+	    ;; thus not overwriting the desktop with broken contents.
+	    (desktop-auto-save-disable)
 	    ;; Evaluate desktop buffer and remember when it was modified.
 	    (load (desktop-full-file-name) t t t)
 	    (setq desktop-file-modtime (nth 5 (file-attributes (desktop-full-file-name))))
@@ -1175,6 +1184,7 @@ Using it may cause conflicts.  Use it anyway? " owner)))))
 				  (set-window-prev-buffers window nil)
 				  (set-window-next-buffers window nil))))
  	    (setq desktop-saved-frameset nil)
+	    (desktop-auto-save-enable)
 	    t))
       ;; No desktop file found.
       (desktop-clear)
@@ -1221,6 +1231,15 @@ directory DIRNAME."
 ;; Auto-Saving.
 (defvar desktop-auto-save-timer nil)
 
+(defun desktop-auto-save-enable (&optional timeout)
+  (when (and (integerp (or timeout desktop-auto-save-timeout))
+	     (> (or timeout desktop-auto-save-timeout) 0))
+    (add-hook 'window-configuration-change-hook 'desktop-auto-save-set-timer)))
+
+(defun desktop-auto-save-disable ()
+  (remove-hook 'window-configuration-change-hook 'desktop-auto-save-set-timer)
+  (desktop-auto-save-cancel-timer))
+
 (defun desktop-auto-save ()
   "Save the desktop periodically.
 Called by the timer created in `desktop-auto-save-set-timer'."
@@ -1243,7 +1262,7 @@ after that many seconds of idle time."
   (when (and (integerp desktop-auto-save-timeout)
 	     (> desktop-auto-save-timeout 0))
     (setq desktop-auto-save-timer
-	  (run-with-idle-timer desktop-auto-save-timeout t
+	  (run-with-idle-timer desktop-auto-save-timeout nil
 			       'desktop-auto-save))))
 
 (defun desktop-auto-save-cancel-timer ()

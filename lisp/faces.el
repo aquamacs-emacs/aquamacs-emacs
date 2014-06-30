@@ -133,9 +133,11 @@ REGISTRY, ALTERNATIVE1, ALTERNATIVE2, and etc."
   "Define a new face with name FACE, a symbol.
 Do not call this directly from Lisp code; use `defface' instead.
 
-If NO-INIT-FROM-RESOURCES is non-nil, don't initialize face
-attributes from X resources.  If FACE is already known as a face,
-leave it unmodified.  Return FACE."
+If FACE is already known as a face, leave it unmodified.  Return FACE.
+
+NO-INIT-FROM-RESOURCES has been deprecated and is no longer used
+and will go away.  Handling of conditional X resources application
+has been pushed down to make-x-resource-internal itself."
   (interactive (list (read-from-minibuffer
 		      "Make face: " nil nil t 'face-name-history)))
   (unless (facep face)
@@ -146,16 +148,20 @@ leave it unmodified.  Return FACE."
     (when (fboundp 'facemenu-add-new-face)
       (facemenu-add-new-face face))
     ;; Define frame-local faces for all frames from X resources.
-    (unless no-init-from-resources
-      (make-face-x-resource-internal face)))
+    (make-face-x-resource-internal face))
   face)
+
+;; Handling of whether to apply X resources or not, has been pushed down
+;; to make-face-x-resource-internal itself, thus the optional arg is no
+;; longer evaluated at all and going away.
+(set-advertised-calling-convention 'make-face '(face) "24.4")
 
 (defun make-empty-face (face)
   "Define a new, empty face with name FACE.
 Do not call this directly from Lisp code; use `defface' instead."
   (interactive (list (read-from-minibuffer
 		      "Make empty face: " nil nil t 'face-name-history)))
-  (make-face face 'no-init-from-resources))
+  (make-face face))
 
 (defun copy-face (old-face new-face &optional frame new-frame)
   "Define a face named NEW-FACE, which is a copy of OLD-FACE.
@@ -334,11 +340,16 @@ specifies an invalid attribute."
 
 (defun make-face-x-resource-internal (face &optional frame)
   "Fill frame-local FACE on FRAME from X resources.
-FRAME nil or not specified means do it for all frames."
-  (if (null frame)
-      (dolist (frame (frame-list))
-	(set-face-attributes-from-resources face frame))
-    (set-face-attributes-from-resources face frame)))
+FRAME nil or not specified means do it for all frames.
+
+If `inhibit-x-resources' is non-nil, this function does nothing."
+  (unless inhibit-x-resources
+    (dolist (frame (if (null frame) (frame-list) (list frame)))
+      ;; `x-create-frame' already took care of correctly handling
+      ;; the reverse video case-- do _not_ touch the default face
+      (unless (and (eq face 'default)
+		   (frame-parameter frame 'reverse))
+        (set-face-attributes-from-resources face frame)))))
 
 
 
@@ -1514,13 +1525,15 @@ If FRAME is nil, the current FRAME is used."
     match))
 
 
-(defun face-spec-choose (spec &optional frame)
-  "Choose the proper attributes for FRAME, out of SPEC.
-If SPEC is nil, return nil."
+(defun face-spec-choose (spec &optional frame no-match-retval)
+  "Return the proper attributes for FRAME, out of SPEC.
+
+If no match is found or SPEC is nil, return nil, unless NO-MATCH-RETVAL
+is given, in which case return its value instead."
   (unless frame
     (setq frame (selected-frame)))
   (let ((tail spec)
-	result defaults)
+	result defaults match-found)
     (while tail
       (let* ((entry (pop tail))
 	     (display (car entry))
@@ -1540,9 +1553,18 @@ If SPEC is nil, return nil."
 	    (setq defaults thisval)
 	  ;; Otherwise, if it matches, use it.
 	  (when (face-spec-set-match-display display frame)
-	    (setq result thisval)
-	    (setq tail nil)))))
-    (if defaults (append result defaults) result)))
+	    (setq result thisval
+	          tail nil
+		  match-found t)))))
+    ;; If defaults have been found, it's safe to just append those to the result
+    ;; list (which at this point will be either nil or contain actual specs) and
+    ;; return it to the caller. Since there will most definitely be something to
+    ;; return in this case, there's no need to know/check if a match was found.
+    (if defaults
+	(append result defaults)
+      (if match-found
+	  result
+	no-match-retval))))
 
 
 (defun face-spec-reset-face (face &optional frame)
@@ -1621,30 +1643,43 @@ function for its other effects."
 
 (defun face-spec-recalc (face frame)
   "Reset the face attributes of FACE on FRAME according to its specs.
-This applies the defface/custom spec first, then the custom theme specs,
-then the override spec."
+The following sources are applied in this order:
+
+  face reset to default values if it's the default face, otherwise set
+  to unspecified (through `face-spec-reset-face')
+   |
+  (theme and user customization)
+    or: if none of the above exist, and none match the current frame or
+        inherited from the defface spec instead of overwriting it
+        entirely, the following is applied instead:
+  (defface default spec)
+  (X resources (if applicable))
+   |
+  defface override spec"
   (while (get face 'face-alias)
     (setq face (get face 'face-alias)))
   (face-spec-reset-face face frame)
   ;; If FACE is customized or themed, set the custom spec from
   ;; `theme-face' records.
   (let ((theme-faces (get face 'theme-face))
+	(no-match-found 0)
 	spec theme-face-applied)
     (if theme-faces
 	(dolist (elt (reverse theme-faces))
-	  (setq spec (face-spec-choose (cadr elt) frame))
-	  (when spec
+	  (setq spec (face-spec-choose (cadr elt) frame no-match-found))
+	  (unless (eq spec no-match-found)
 	    (face-spec-set-2 face frame spec)
 	    (setq theme-face-applied t))))
     ;; If there was a spec applicable to FRAME, that overrides the
     ;; defface spec entirely (rather than inheriting from it).  If
-    ;; there was no spec applicable to FRAME, apply the defface spec.
+    ;; there was no spec applicable to FRAME, apply the defface spec
+    ;; as well as any applicable X resources.
     (unless theme-face-applied
       (setq spec (face-spec-choose (face-default-spec face) frame))
-      (face-spec-set-2 face frame spec))
+      (face-spec-set-2 face frame spec)
+      (make-face-x-resource-internal face frame))
     (setq spec (face-spec-choose (get face 'face-override-spec) frame))
-    (face-spec-set-2 face frame spec))
-  (make-face-x-resource-internal face frame))
+    (face-spec-set-2 face frame spec)))
 
 (defun face-spec-set-2 (face frame spec)
   "Set the face attributes of FACE on FRAME according to SPEC."
@@ -2028,10 +2063,6 @@ frame parameters in PARAMETERS."
 	  (progn
 	    ;; Initialize faces from face spec and custom theme.
 	    (face-spec-recalc face frame)
-	    ;; X resources for the default face are applied during
-	    ;; `x-create-frame'.
-	    (and (not (eq face 'default)) window-system-p
-		 (make-face-x-resource-internal face frame))
 	    ;; Apply attributes specified by face-new-frame-defaults
 	    (internal-merge-in-global-face face frame))
 	;; Don't let invalid specs prevent frame creation.

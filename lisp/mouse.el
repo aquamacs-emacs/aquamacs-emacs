@@ -26,8 +26,6 @@
 ;; This package provides various useful commands (including help
 ;; system access) through the mouse.  All this code assumes that mouse
 ;; interpretation has been abstracted into Emacs input events.
-;;
-;; The code is rather X-dependent.
 
 ;;; Code:
 
@@ -392,8 +390,6 @@ must be one of the symbols `header', `mode', or `vertical'."
 	 (window (posn-window start))
 	 (frame (window-frame window))
 	 (minibuffer-window (minibuffer-window frame))
-         (on-link (and mouse-1-click-follows-link
-		       (mouse-on-link-p start)))
 	 (side (and (eq line 'vertical)
 		    (or (cdr (assq 'vertical-scroll-bars
 				   (frame-parameters frame)))
@@ -489,15 +485,7 @@ must be one of the symbols `header', `mode', or `vertical'."
 	  (unless (zerop growth)
 	    (setq dragged t)
 	    (adjust-window-trailing-edge
-	     window (if (eq line 'mode) growth (- growth)) nil t))))))
-    ;; Process the terminating event.
-    (when (and (mouse-event-p event) on-link (not dragged)
-	       (mouse--remap-link-click-p start-event event))
-      ;; If mouse-2 has never been done by the user, it doesn't have
-      ;; the necessary property to be interpreted correctly.
-      (put 'mouse-2 'event-kind 'mouse-click)
-      (setcar event 'mouse-2)
-      (push event unread-command-events))))
+	     window (if (eq line 'mode) growth (- growth)) nil t))))))))
 
 (defun mouse-drag-mode-line (start-event)
   "Change the height of a window by dragging on the mode line."
@@ -676,7 +664,10 @@ its value is returned."
 	    (str (posn-string pos)))
 	(or (and str
 		 (get-text-property (cdr str) property (car str)))
-	    (and pt
+            ;; FIXME: mouse clicks on the mode-line come with a position in
+            ;; (nth 5).  Maybe we should change the C code instead so that
+            ;; mouse-clicks don't include a position there!
+	    (and pt (not (memq (posn-area pos) '(mode-line header-line)))
 		 (get-char-property pt property w))))
     (get-char-property pos property)))
 

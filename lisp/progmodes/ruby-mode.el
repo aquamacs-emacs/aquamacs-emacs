@@ -1804,9 +1804,10 @@ It will be properly highlighted even when the call omits parens.")
       ;; $' $" $` .... are variables.
       ;; ?' ?" ?` are character literals (one-char strings in 1.9+).
       ("\\([?$]\\)[#\"'`]"
-       (1 (unless (save-excursion
-                    ;; Not within a string.
-                    (nth 3 (syntax-ppss (match-beginning 0))))
+       (1 (if (save-excursion
+                (nth 3 (syntax-ppss (match-beginning 0))))
+              ;; Within a string, skip.
+              (goto-char (match-end 1))
             (string-to-syntax "\\"))))
       ;; Part of symbol when at the end of a method name.
       ("[!?]"
@@ -2065,6 +2066,10 @@ See `font-lock-syntax-table'.")
           "include"
           "module_function"
           "prepend"
+          "private_class_method"
+          "private_constant"
+          "public_class_method"
+          "public_constant"
           "refine"
           "using")
         'symbols))
@@ -2147,7 +2152,7 @@ See `font-lock-syntax-table'.")
     (ruby-match-expression-expansion
      2 font-lock-variable-name-face t)
     ;; Negation char.
-    ("\\(?:^\\|[^[:alnum:]_]\\)\\(!+\\)[^=]"
+    ("\\(?:^\\|[^[:alnum:]_]\\)\\(!+\\)[^=~]"
      1 font-lock-negation-char-face)
     ;; Character literals.
     ;; FIXME: Support longer escape sequences.

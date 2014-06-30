@@ -376,8 +376,6 @@ its argument list allows full Common Lisp conventions."
 	(if (car res) `(progn ,(car res) ,form) form))
     `(function ,func)))
 
-(declare-function help-add-fundoc-usage "help-fns" (docstring arglist))
-
 (defun cl--make-usage-var (x)
   "X can be a var or a (destructuring) lambda-list."
   (cond
@@ -1542,12 +1540,14 @@ If BODY is `setq', then use SPECS for assignments rather than for bindings."
               (if (and (cl--unused-var-p temp) (null expr))
                   nil ;; Don't bother declaring/setting `temp' since it won't
 		      ;; be used when `expr' is nil, anyway.
-                (when (and (eq body 'setq) (cl--unused-var-p temp))
+                (when (or (null temp)
+                          (and (eq body 'setq) (cl--unused-var-p temp)))
                   ;; Prefer a fresh uninterned symbol over "_to", to avoid
                   ;; warnings that we set an unused variable.
                   (setq temp (make-symbol "--cl-var--"))
                   ;; Make sure this temp variable is locally declared.
-                  (push (list (list temp)) cl--loop-bindings))
+                  (when (eq body 'setq)
+                    (push (list (list temp)) cl--loop-bindings)))
                 (push (list temp expr) new))
               (while (consp spec)
                 (push (list (pop spec)
@@ -2583,7 +2583,7 @@ non-nil value, that slot cannot be set via `setf'.
 (defmacro cl-deftype (name arglist &rest body)
   "Define NAME as a new data type.
 The type name can then be used in `cl-typecase', `cl-check-type', etc."
-  (declare (debug cl-defmacro) (doc-string 3))
+  (declare (debug cl-defmacro) (doc-string 3) (indent 2))
   `(cl-eval-when (compile load eval)
      (put ',name 'cl-deftype-handler
           (cl-function (lambda (&cl-defs '('*) ,@arglist) ,@body)))))

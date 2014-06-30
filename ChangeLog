@@ -1,3 +1,147 @@
+2014-06-20  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* configure.ac: Warn about --enable-link-time-optimization's issues
+	in --help message (Bug#17806).
+
+	Port to GCC 4.9.0 with link time optimization (Bug#17806).
+	* configure.ac (CFLAGS): With link time optimization,
+	use -ffat-lto-objects if supported; otherwise Emacs won't
+	build with GCC 4.9.0.
+
+2014-06-14  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Port part of the AIX fix to Solaris (Bug#17598).
+	* configure.ac (_REENTRANT): Define on Solaris if HAVE_PTHREAD.
+	This ports part of the recent AIX fixes to Solaris.  It is needed
+	for the same reason that _THREAD_SAFE is needed on AIX, e.g., to
+	make sure that each thread has its own 'errno'.
+
+2014-06-11  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Backport fcntl.h AIX fix from the trunk (Bug#17598).
+	This fixes a bug with the shell freezing.  See:
+	http://debbugs.gnu.org/cgi/bugreport.cgi?bug=17598#185
+	Merge from gnulib, incorporating:
+	2014-05-31 dup2, fcntl, fcntl-h: port to AIX 7.1
+	* lib/fcntl.in.h, m4/dup2.m4, m4/fcntl.m4:
+	Update from gnulib.
+
+2014-06-07  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Port better to AIX (Bug#17598).
+	* configure.ac (with_xpm_set): New shell var.
+	(_THREAD_SAFE): Define on AIX if HAVE_PTHREAD.
+	(with_xpm): Default to 'no' on AIX.
+	(LIBXPM): Append -lXpm if -lXaw is also used, as the latter
+	requires the former on AIX.
+
+2014-05-30  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Fix port to 32-bit AIX with xlc (Bug#17598).
+	This doesn't fix Bug#17598, but it does fix a regression since Emacs
+	built with xlc until recently, and perhaps it'll help us fix Bug#17598.
+	* configure.ac (GC_SETJMP_WORKS): Define for AIX, too.
+	Merge from gnulib, incorporating:
+	2014-05-30 ftoastr: work around compiler bug in IBM xlc 12.1
+	* lib/ftoastr.c: Update from gnulib.
+
+2014-05-22  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Fix port to 32-bit AIX (Bug#17540).
+	* configure.ac (opsys): On Power Architecture, treat release 7 of
+	AIX like releases 5 and 6.
+
+2014-05-18  Glenn Morris  <rgm@gnu.org>
+
+	* configure.ac (INSTALL_INFO):
+	Revert to just checking for "install-info".
+
+2014-05-17  Glenn Morris  <rgm@gnu.org>
+
+	* configure.ac (INSTALL_INFO): Try the identical-but-quieter-on-Debian
+	"ginstall-info" before "install-info".
+
+2014-05-04  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Revert recent libpng changes (Bug#17339).
+	They fix only bugs that aren't being reported, so it may be better
+	to do them on the trunk.
+	* configure.ac (PNG_CFLAGS): Remove.  All uses removed.
+	(LIBPNG): Don't be consistent about -lpng16 versus -lpng.
+	Ignore libpng-config's exit status.  Always append -lz -lm.
+
+	* configure.ac (LIBPNG): Add -lz -lm on platforms where they're needed
+	but libpng-config --libs omits them.  Problem reported by Glenn
+	Morris.
+
+2014-05-03  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Require ImageMagick >= 6.3.5, due to PixelSetMagickColor (Bug#17339).
+	* configure.ac (IMAGEMAGICK_MODULE): Bump prereq from 6.2.8 to 6.3.5.
+	A more-complicated fix would be to remove uses of PixelSetMagickColor,
+	introduced in ImageMagick 6.3.5 (Sept. 2007).
+
+2014-05-02  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Consult libpng-config more consistently (Bug#17339).
+	* configure.ac (edit_cflags): Move this up and to the top level,
+	so that PNG_CFLAGS can use it too.
+	(PNG_CFLAGS): New var.
+	(png_longjmp): Use PNG_CFLAGS when checking.
+	(LIBPNG): Be consistent about -lpng16 etc; e.g., don't use -lpng16
+	in some places and -lpng in others.  Test libpng-config's exit
+	status.  If it succeeds, use its output rather than appending -lz -lm.
+
+2014-05-01  Glenn Morris  <rgm@gnu.org>
+
+	* configure.ac (LIBPNG): Consult libpng-config for the precise
+	form of "-lpng" to use.  (Bug#17339)
+
+2014-04-29  Glenn Morris  <rgm@gnu.org>
+
+	* configure.ac: Treat MirBSD as OpenBSD.  (Bug#17339)
+
+2014-04-16  Eli Zaretskii  <eliz@gnu.org>
+
+	* config.bat: Update for Emacs 24.4.
+
+2014-04-13  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Port to IRIX 6.5 (Bug#9684).
+	This port requires IRIX cc, as I did not have time to get
+	undump working with the old GCC on the system I had access to,
+	but that's better than nothing.
+	* configure.ac (gl_GCC_VERSION_IFELSE): Remove unused macro
+	that wouldn't have worked anyway, with IRIX cc.
+	(emacs_cv_clang, emacs_cv_sanitize_address)
+	(ns_osx_have_104, ns_osx_have_105):
+	Don't assume '#error' makes the compiler fail,
+	as this doesn't work with IRIX cc.
+	(CFLAGS, LIBS): Don't let the GnuTLS results infect later 'configure'
+	checks.  This runs afoul of an IRIX configuration where GnuTLS is
+	in an optional library that also contains getdelim, and causes
+	a later 'configure' to incorrectly think getdelim is supported.
+
+2014-04-13  Eli Zaretskii  <eliz@gnu.org>
+
+	* configure.ac (LN_S_FILEONLY, LN_S): Use "/bin/ln" on MinGW, to
+	ensure the MSYS ln.exe is invoked.
+
+2014-04-11  Glenn Morris  <rgm@gnu.org>
+
+	* make-dist: Do not distribute generated admin/grammars/Makefile.
+	Do distribute lib-src/update-game-score.exe.manifest.
+
+2014-04-09  Ken Brown  <kbrown@cornell.edu>
+
+	* configure.ac (EMACS_MANIFEST): Revert last change (but leave
+	UPDATE_MANIFEST empty).
+
+2014-04-03  Ken Brown  <kbrown@cornell.edu>
+
+	* configure.ac (EMACS_MANIFEST, UPDATE_MANIFEST): Leave these
+	variables empty on Cygwin.  (Bug#17176)
+
 2014-03-31  Glenn Morris  <rgm@gnu.org>
 
 	* configure.ac: Make the final "Does Emacs use Gsettings" message

@@ -1,3 +1,1174 @@
+2014-06-27  Stephen Berman  <stephen.berman@gmx.net>
+
+	* calendar/todo-mode.el (todo-set-top-priorities): Fix logic to
+	account for file-wide setting of todo-top-priorities-overrides.
+	Make code a bit cleaner.
+
+2014-06-27  Leo Liu  <sdl.web@gmail.com>
+
+	* calc/calc.el (math-bignum): Handle most-negative-fixnum.  (Bug#17556)
+
+2014-06-27  Glenn Morris  <rgm@gnu.org>
+
+	* net/eww.el (eww-mode) <eww-current-title>: Make local.  (Bug#17860)
+
+2014-06-26  Stephen Berman  <stephen.berman@gmx.net>
+
+	* calendar/todo-mode.el (todo-prefix-overlays): If there is no
+	category-wide setting of todo-top-priorities-overrides, check for
+	a file-wide setting and fontify accordingly.
+
+2014-06-26  Glenn Morris  <rgm@gnu.org>
+
+	* subr.el (read-passwd): Warn about batch mode.  (Bug#17839)
+
+2014-06-26  Daiki Ueno  <ueno@gnu.org>
+
+	* emacs-lisp/package.el (package--check-signature):
+	If package-check-signature is allow-unsigned, don't signal error when
+	we can't verify signature because of missing public key
+	(backport for bug#17625).
+
+2014-06-26  Glenn Morris  <rgm@gnu.org>
+
+	* emacs-lisp/cl-macs.el (help-add-fundoc-usage):
+	Remove outdated declaration.
+
+	* emacs-lisp/authors.el (authors-valid-file-names)
+	(authors-renamed-files-alist): Additions.
+
+2014-06-25  Leo Liu  <sdl.web@gmail.com>
+
+	* textmodes/picture.el (picture-set-tab-stops):
+	* ruler-mode.el (ruler-mode-mouse-add-tab-stop)
+	(ruler-mode-ruler): Fix to work with nil tab-stop-list.
+
+	* progmodes/asm-mode.el (asm-calculate-indentation):
+	Use indent-next-tab-stop.
+
+	* indent.el (indent-accumulate-tab-stops): New function.
+
+2014-06-25  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/package.el (package-list-unsigned): New var (bug#17625).
+	(package-desc-status): Obey it.
+
+2014-06-25  Stephen Berman  <stephen.berman@gmx.net>
+
+	* calendar/todo-mode.el: Fix two bugs.
+	(todo-insert-item--basic): If user cancels item insertion to
+	another category before setting priority, show original category
+	whether it is in the same or a different file.
+	(todo-set-item-priority): After selecting category, instead of
+	moving point to top, which extends an active region, restore it.
+
+2014-06-25  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* help-fns.el (describe-function-1): Check file-name is a string before
+	calling help-fns--autoloaded-p (bug#17564).
+
+2014-06-24  Juri Linkov  <juri@jurta.org>
+
+	* desktop.el (desktop-auto-save-enable)
+	(desktop-auto-save-disable): New functions.
+	(desktop-save-mode, desktop-auto-save-timeout): Use them.
+	(desktop-read): Disable the autosave before loading the desktop,
+	and enable afterwards.  (Bug#17351)
+
+2014-06-24  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	Fix some indentation problem with \; and pipes (bug#17842).
+	* progmodes/sh-script.el (sh-mode-syntax-table): Set syntax of ;|&.
+	(sh-smie--default-forward-token, sh-smie--default-backward-token):
+	New functions.
+	(sh-smie-sh-forward-token, sh-smie-sh-backward-token)
+	(sh-smie-rc-forward-token, sh-smie-rc-backward-token): Use them.
+	(sh-smie-sh-rules): Fix indentation of a pipe at BOL.
+
+2014-06-24  Eli Zaretskii  <eliz@gnu.org>
+
+	* international/fontset.el (script-representative-chars):
+	Add representative characters for scripts added in Unicode 7.0.
+	(otf-script-alist): Synchronize with the latest registry of OTF
+	script tags.
+
+	* international/characters.el (char-script-table): Update for
+	scripts added and codepoint ranges changed in Unicode 7.0.
+
+2014-06-23  Leo Liu  <sdl.web@gmail.com>
+
+	* align.el (align-adjust-col-for-rule): Unbreak due to defaulting
+	tab-stop-list to nil.  (Bug#16381)
+
+	* indent.el (indent-next-tab-stop): Rename from indent--next-tab-stop.
+	(indent-rigidly-left-to-tab-stop)
+	(indent-rigidly-right-to-tab-stop, tab-to-tab-stop)
+	(move-to-tab-stop): Change callers.
+
+2014-06-22  Eli Zaretskii  <eliz@gnu.org>
+
+	* skeleton.el (skeleton-insert): Yet another fix of the doc string
+	wrt behavior of \n as the first/last element of a skeleton.
+
+2014-06-22  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp-adb.el (tramp-adb-handle-process-file):
+	* net/tramp-sh.el (tramp-sh-handle-process-file):
+	* net/tramp-smb.el (tramp-smb-handle-process-file): Do not raise
+	the output buffer when DISPLAY is non-nil.  (Bug#17815)
+
+2014-06-21  Glenn Morris  <rgm@gnu.org>
+
+	* play/landmark.el (landmark-move-down, landmark-move-up):
+	Fix 2007-10-20 change - preserve horizontal position.
+
+2014-06-21  Fabián Ezequiel Gallina  <fgallina@gnu.org>
+
+	Fix completion retrieval parsing (bug#17209).
+	* progmodes/python.el (python-mode):
+	(python-util-strip-string): New function.
+	(python-shell-completion-get-completions): Use it.
+
+2014-06-21  Eli Zaretskii  <eliz@gnu.org>
+
+	* skeleton.el (skeleton-insert): Fix last change.
+
+2014-06-21  Fabián Ezequiel Gallina  <fgallina@gnu.org>
+
+	Enhancements for outline integration (bug#17796).
+	* progmodes/python.el (python-mode): Properly set
+	outline-heading-end-regexp so that comments after colons for
+	defuns are supported.
+
+2014-06-21  Eli Zaretskii  <eliz@gnu.org>
+
+	* skeleton.el (skeleton-insert): Doc fix.
+
+2014-06-20  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/smie.el (smie-config--guess): Fix typo.
+	(smie-config-guess): Use smie-config-local so the rules are obeyed
+	(bug#17818).
+
+	* mouse.el (mouse-drag-line): Don't re-add to unread-comment-events,
+	since it's already done inside the loop	(bug#17819).
+
+2014-06-20  Martin Rudalics  <rudalics@gmx.at>
+
+	* mouse.el (mouse-drag-line): Re-remove code initially removed
+	on 2013-03-09 and inadvertently reintroduced on 2013-11-30
+	(Bug#17819).
+
+2014-06-20  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* progmodes/sh-script.el (sh-smie-sh-rules): For { after &&, don't
+	align with the surrounding parent (bug#17721).
+
+2014-06-20  Eli Zaretskii  <eliz@gnu.org>
+
+	* textmodes/texinfo.el (texinfo-mode): Set skeleton-end-newline
+	locally to nil.
+	(texinfo-insert-block, texinfo-insert-@end)
+	(texinfo-insert-@example, texinfo-insert-@quotation): Adjust to
+	local setting of skeleton-end-newline by adding an explicit \n to
+	the skeletons where appropriate.  (Bug#17801)
+
+2014-06-20  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/smie.el (smie--hanging-eolp-function): New var.
+	(smie-indent--hanging-p): Use it.
+	* progmodes/sh-script.el (sh-set-shell): Set it (bug#17621).
+
+2014-06-20  Leo Liu  <sdl.web@gmail.com>
+
+	* simple.el (read-quoted-char): Don't let help chars pop up help
+	buffer.  (Bug#16617)
+
+2014-06-19  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* progmodes/sh-script.el (sh-smie-sh-rules): Use same rule for && as
+	for | (bug#17621).
+
+2014-06-18  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* xt-mouse.el (xterm-mouse-translate-1): Fix last change (bug#17776).
+	(xterm-mouse--read-event-sequence-1000): Drop unknown events instead of
+	burping.
+
+2014-06-18  Eli Zaretskii  <eliz@gnu.org>
+
+	* term/w32-win.el (dynamic-library-alist): Support giflib 5.1.0
+	and later.  (Bug#17790)
+
+2014-06-18  Juri Linkov  <juri@jurta.org>
+
+	* dired.el (dired-mark-pop-up): Let-bind display-buffer-mark-dedicated
+	to `soft'.  (Bug#17554)
+
+2014-06-17  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* delsel.el (electric-newline-and-maybe-indent): Mark it as well
+	(bug#17737).
+
+2014-06-16  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* progmodes/ruby-mode.el (ruby-font-lock-keywords): Don't fontify
+	`!' in `!~' with `font-lock-negation-char-face'.  (Bug#17732)
+
+2014-06-15  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/dbus.el (dbus-call-method): Push only non D-Bus events into
+	`unread-command-events'.
+
+2014-06-14  Glenn Morris  <rgm@gnu.org>
+
+	* progmodes/cc-langs.el: Require cl-lib.  (Bug#17463)
+	Replace delete-duplicates and mapcan by cl- versions throughout.
+	And cl-macroexpand-all by macroexpand-all.
+	(delete-duplicates, mapcan, cl-macroexpand-all): No need to declare.
+
+2014-06-14  Eli Zaretskii  <eliz@gnu.org>
+
+	* subr.el (posn-col-row): Doc fix.  (Bug#17768)
+
+2014-06-14  Juri Linkov  <juri@jurta.org>
+
+	* bindings.el: Put `ascii-character' property on keypad keys
+	mapped to characters.  (Bug#17759)
+
+2014-06-13  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/smie.el (smie-next-sexp): Fix up "other-end" info when
+	bumping forward into a closing paren (bug#17761).
+
+	* term/xterm.el (xterm--version-handler): Work around for OSX
+	Terminal.app (bug#17607).
+
+2014-06-08  Glenn Morris  <rgm@gnu.org>
+
+	* startup.el (initial-buffer-choice): Doc fix.
+	Reset :version (adding an option does not merit a :version bump).
+
+	* bookmark.el (bookmark-load):
+	* uniquify.el (uniquify-buffer-name-style): Doc fixes.
+
+2014-06-06  Juri Linkov  <juri@jurta.org>
+
+	* desktop.el: Activate auto-saving on window configuration changes.
+	(desktop-save-mode, desktop-auto-save-timeout): Add/remove
+	`desktop-auto-save-set-timer' to/from `window-configuration-change-hook'.
+	(desktop-auto-save-set-timer): Change REPEAT arg of
+	`run-with-idle-timer' from t to nil.
+	http://lists.gnu.org/archive/html/emacs-devel/2014-06/msg00147.html
+
+2014-06-06  Santiago Payà i Miralta  <santiagopim@gmail.com>
+
+	* vc/vc-hg.el (vc-hg-working-revision): Use "hg parent" and
+	vc-hg-command (bug#17570).
+
+2014-06-06  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* international/mule-cmds.el (ucs-names): Add special entry for BEL
+	(bug#17702).
+
+2014-06-06  Glenn Morris  <rgm@gnu.org>
+
+	* startup.el (window-setup-hook): Doc fix.
+
+2014-06-05  Glenn Morris  <rgm@gnu.org>
+
+	* emacs-lisp/package.el (package-check-signature)
+	(package-unsigned-archives): Doc fixes.
+
+2014-06-03  Martin Rudalics  <rudalics@gmx.at>
+
+	* window.el (display-buffer-use-some-window): Don't make window
+	used smaller than it was before (Bug#17671).
+
+2014-06-03  Eli Zaretskii  <eliz@gnu.org>
+
+	* menu-bar.el (menu-bar-open): Fix last change: use the PC
+	'redisplay' instead of '(sit-for 0)'.
+
+2014-06-03  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp.el (tramp-ssh-controlmaster-options): Improve search
+	regexp.  (Bug#17653)
+
+2014-06-03  Glenn Morris  <rgm@gnu.org>
+
+	* emacs-lisp/package.el (package-pinned-packages): Doc fix.
+
+2014-06-02  Eli Zaretskii  <eliz@gnu.org>
+
+	* menu-bar.el (menu-bar-open): Fix invocation via M-x.
+
+2014-06-01  Eli Zaretskii  <eliz@gnu.org>
+
+	* simple.el (keyboard-quit): Force update of mode lines, to remove
+	the "Def" indicator, if we were defining a macro.  (Bug#17615)
+
+2014-06-01  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* minibuffer.el (minibuffer-force-complete-and-exit):
+	Obey minibuffer-default (bug#17545).
+
+	* progmodes/js.el (js-indent-line): Don't mix columns and chars
+	(bug#17619).
+
+2014-05-31  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* subr.el (set-transient-map): Don't wait for some "nested"
+	transient-map to finish if we're only supposed to be active for
+	the next command (bug#17642).
+
+2014-05-31  Leo Liu  <sdl.web@gmail.com>
+
+	* emacs-lisp/gv.el (window-buffer, window-display-table)
+	(window-dedicated-p, window-hscroll, window-point, window-start):
+	Fix gv-expander.  (Bug#17630)
+
+2014-05-31  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* mouse.el (mouse-posn-property): Ignore posn-point for mode-line
+	clicks (bug#17633).
+
+	* leim/quail/latin-pre.el ("latin-2-prefix"): Use ",," rather than ", "
+	for the single comma, since ", " is *very* common in normal French text
+	(bug#17643).
+
+2014-05-30  Glenn Morris  <rgm@gnu.org>
+
+	* emacs-lisp/package.el (package-check-signature)
+	(package-unsigned-archives): Fix :version.
+
+2014-05-29  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* subr.el (sit-for): Don't run input-methods (bug#15614).
+
+2014-05-28  Glenn Morris  <rgm@gnu.org>
+
+	* cus-start.el: Fix some :version numbers.
+
+2014-05-27  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* simple.el (deactivate-mark): Set mark-active to nil even if
+	deactivation is done via setting transient-mark-mode to nil,
+	since one is buffer-local and the other is global.
+
+	* emacs-lisp/byte-opt.el (byte-optimize-binary-predicate): Don't assume
+	there can't be more than 2 arguments (bug#17584).
+
+2014-05-27  Glenn Morris  <rgm@gnu.org>
+
+	* simple.el (filter-buffer-substring-functions)
+	(filter-buffer-substring-function, buffer-substring-filters)
+	(filter-buffer-substring, buffer-substring--filter): Doc fixes.
+
+	* minibuffer.el (completion-in-region-functions, completion-in-region)
+	(completion--in-region): Doc fixes.
+
+	* abbrev.el (abbrev-expand-functions, abbrev-expand-function)
+	(expand-abbrev, abbrev--default-expand): Doc fixes.
+
+2014-05-26  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Include sources used to create macuvs.h.
+	* international/README: Refer to the Unicode Terms of Use rather
+	than copying it bodily here, as that simplifies maintenance.
+
+2014-05-25  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* cus-face.el (custom-face-attributes): Add :distant-foreground.
+
+2014-05-25  Martin Rudalics  <rudalics@gmx.at>
+
+	* window.el (window--dump-frame): Remove interactive
+	specification.
+
+2014-05-23  Glenn Morris  <rgm@gnu.org>
+
+	* hippie-exp.el (he-line-search-regexp):
+	Handle comint-prompt-regexp containing subgroups.  (Bug#17529)
+
+2014-05-23  Stephen Berman  <stephen.berman@gmx.net>
+
+	* calendar/todo-mode.el: Remove dependence on auto-mode-alist,
+	to avoid errors when trying to create or visit a file foo.todo
+	located outside to todo-directory, and to allow having such files
+	without them being tied to Todo mode (bug#17482).
+	(todo-show, todo-move-category, todo-merge-category, todo-find-archive)
+	(todo-archive-done-item, todo-find-filtered-items-file)
+	(todo-filter-items, todo-find-item, todo-diary-goto-entry)
+	(todo-category-completions, todo-read-category): When visiting a
+	Todo file, make sure we're in the right mode and the buffer local
+	variables are set.
+	(todo-make-categories-list, todo-reset-nondiary-marker)
+	(todo-reset-done-string, todo-reset-comment-string):
+	After processing all Todo files, kill the buffers of those files that
+	weren't being visited before the processing.
+	(todo-display-as-todo-file, todo-add-to-buffer-list)
+	(todo-visit-files-commands): Comment out.
+	(todo-modes-set-3, todo-mode): Comment out additions to find-file-hook.
+	(auto-mode-alist): Remove add-to-list calls making Todo file
+	extensions unrestrictedly tied to Todo modes.
+
+2014-05-23  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/nadvice.el (advice--member-p): Change second arg.
+	(advice-function-member-p): Tell it to check both names and functions
+	(bug#17531).
+	(advice--add-function): Adjust call accordingly.
+
+2014-05-23  Stephen Berman  <stephen.berman@gmx.net>
+
+	* calendar/todo-mode.el: Miscellaneous bug fixes.
+	(todo-delete-file): When deleting an archive but not its todo
+	file, make sure to update the todo file's category sexp.
+	(todo-move-category): Keep the moved category's name unless the
+	file moved to already has a category with that name.  If the
+	numerically last category of the source file was moved, make the
+	first category current to avoid selecting a nonexisting category.
+	(todo-merge-category): Fix implementation to make merging to a
+	category in another file work as documented.  Eliminate now
+	insufficient and unnecessary renaming of archive category, correct
+	document string accordingly, and clarify it.  If the numerically
+	last category of the source file was merged, make the first
+	category current to avoid selecting a nonexisting category.
+	(todo-archive-done-item): When there are marked items and point
+	happens to be on an unmarked item, ignore the latter.  Don't leave
+	point below last item after archiving marked items.
+	(todo-unarchive-items): Fix logic to ensure unarchiving an item
+	from an archive with only one category deletes the archive only
+	when the category is empty after unarchiving.  Make sure the todo
+	file's category sexp is updated.
+	(todo-read-file-name): Allow an existing file name even when it is
+	not required (todo-move-category needs this to work as documented).
+	(todo-add-file): Call todo-validate-name to reject the name of an
+	existing todo file (needed due to fix in todo-read-file-name).
+	(todo-reset-nondiary-marker): Also reset in filtered items files.
+	(todo-reset-done-string, todo-reset-comment-string): Also reset in
+	regexp filtered items files.
+	(todo-reset-highlight-item): Also reset in filtered items files.
+	Fix incorrect variable reference in document string.
+
+2014-05-22  Glenn Morris  <rgm@gnu.org>
+
+	* window.el (window--dump-frame): Avoid error in --without-x builds.
+
+2014-05-21  Glenn Morris  <rgm@gnu.org>
+
+	* nxml/nxml-mode.el (xml-mode): Only define this alias once.
+
+2014-05-21  Eli Zaretskii  <eliz@gnu.org>
+
+	* frame.el (set-frame-font): Doc fix.
+
+	* menu-bar.el (menu-set-font): Doc fix.  (Bug#17532)
+
+2014-05-21  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* emacs-lisp/package.el (package--download-one-archive):
+	Use `write-region' instead of `save-buffer' to avoid running various
+	hooks.  (Bug#17155)
+	(describe-package-1): Same.  Insert newline at the end of the
+	buffer if appropriate.
+
+2014-05-20  Juri Linkov  <juri@jurta.org>
+
+	* avoid.el (mouse-avoidance-set-mouse-position): Don't raise frame.
+	(mouse-avoidance-ignore-p): Remove `switch-frame', add `focus-out'.
+	Add more modifiers: meta, control, shift, hyper, super, alt.
+	(Bug#17439)
+
+	* avoid.el (mouse-avoidance-banish-position): Fix defcustom :options
+	to allow changing its value with `set-variable'.
+
+2014-05-20  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* progmodes/scheme.el (scheme-mode-syntax-table): Remove hack for
+	#; comments.
+	(scheme-syntax-propertize, scheme-syntax-propertize-sexp-comment):
+	New functions.
+	(scheme-mode-variables): Set syntax-propertize-function instead of
+	font-lock-syntactic-face-function.
+	(scheme-font-lock-syntactic-face-function): Delete.
+
+	* emacs-lisp/lisp.el (end-of-defun): Ensure we move (bug#17274).
+
+2014-05-18  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/timer.el (timer-event-handler): Don't run if canceled
+	(bug#17392).
+
+2014-05-17  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp-sh.el (tramp-find-inline-encoding): Do not match "%%t"
+	for a temporary file name.
+
+2014-05-17  Eli Zaretskii  <eliz@gnu.org>
+
+	* simple.el (line-move-ignore-invisible): Doc fix.  (Bug#17511)
+
+2014-05-16  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/dbus.el (dbus-init-bus, dbus-call-method)
+	(dbus-call-method-asynchronously, dbus-send-signal)
+	(dbus-method-return-internal, dbus-method-error-internal):
+	Check, whether Emacs has been compiled with D-Bus support.  (Bug#17508)
+
+2014-05-14  Nicolas Richard  <theonewiththeevillook@yahoo.fr>
+
+	* emacs-lisp/eieio-opt.el (eieio-help-class): Correctly deal with
+	methods which do not have a doc string.  (Bug#17490)
+
+2014-05-14  Stephen Berman <stephen.berman@gmx.net>
+            Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* minibuffer.el (completion-pcm--merge-try): Merge trailing / with
+	suffix (bug#15419).
+
+2014-05-14  Glenn Morris  <rgm@gnu.org>
+
+	* vc/emerge.el (emerge-temp-file-prefix):
+	Make pointless option obsolete.
+	(emerge-temp-file-mode): Make non-functional option obsolete.
+
+2014-05-13  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/browse-url.el (browse-url):
+	Use `unhandled-file-name-directory' when setting `default-directory',
+	in order to circumvent stalled remote connections.  (Bug#17425)
+
+2014-05-12  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/nadvice.el (advice--interactive-form): Don't get fooled
+	into autoloading just because of a silly indirection.
+
+2014-05-11  Santiago Payà i Miralta  <santiagopim@gmail.com>  (tiny change)
+
+	* vc/vc-hg.el (vc-hg-unregister): New function.  (Bug#17454)
+
+2014-05-11  Glenn Morris  <rgm@gnu.org>
+
+	* emacs-lisp/find-gc.el: Move to ../admin.
+
+2014-05-10  Glenn Morris  <rgm@gnu.org>
+
+	* printing.el (pr-version):
+	* ps-print.el (ps-print-version): Also mention bug-gnu-emacs.
+
+	* net/browse-url.el (browse-url-mosaic):
+	Create /tmp/Mosaic.PID as a private file.
+
+2014-05-10  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/nadvice.el: Support adding a given function multiple times.
+	(advice--member-p): If name is given, only compare the name.
+	(advice--remove-function): Don't stop at the first match.
+	(advice--normalize-place): New function.
+	(add-function, remove-function): Use it.
+	(advice--add-function): Pass the name, if any, to
+	advice--remove-function.
+
+2014-05-09  Philipp Rumpf  <prumpf@gmail.com>  (tiny change)
+
+	* electric.el (electric-indent-post-self-insert-function): Don't use
+	`pos' after modifying the buffer (bug#17449).
+
+2014-05-09  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* subr.el (function-put): Add function.
+
+2014-05-09  Stephen Berman  <stephen.berman@gmx.net>
+
+	* calendar/todo-mode.el (todo-insert-item-from-calendar):
+	Correct argument list to conform to todo-insert-item--basic.
+
+2014-05-09  Glenn Morris  <rgm@gnu.org>
+
+	* files.el (cd-absolute): Test if directory is accessible
+	rather than executable.  (Bug#17330)
+
+	* progmodes/compile.el (recompile):
+	Handle C-u M-x recompile from a non-compilation buffer.  (Bug#17444)
+
+2014-05-08  Juri Linkov  <juri@jurta.org>
+
+	* dired.el (dired-check-switches, dired-switches-recursive-p):
+	New functions.  (Bug#17218)
+	(dired-switches-escape-p, dired-move-to-end-of-filename):
+	Use `dired-check-switches'.
+	(dired-insert-old-subdirs, dired-build-subdir-alist)
+	(dired-sort-R-check): Use `dired-switches-recursive-p'.
+
+2014-05-08  Glenn Morris  <rgm@gnu.org>
+
+	* net/browse-url.el (browse-url-mosaic):
+	Be careful when writing /tmp/Mosaic.PID.  (Bug#17428)
+	This is CVE-2014-3423.
+
+2014-05-08  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* xt-mouse.el: Drop spurious/oddly shaped events (bug#17378).
+	(xterm-mouse--read-event-sequence-1000): Return nil if something
+	looks fishy.
+	(xterm-mouse-event): Propagate it.
+	(xterm-mouse-translate-1): Handle it.
+
+2014-05-07  Stephen Berman  <stephen.berman@gmx.net>
+
+	* calendar/todo-mode.el (todo-insert-item--apply-args): When all
+	four slots of the parameter list are filled, make sure to pass it
+	to the argument list of todo-insert-item--basic.
+
+2014-05-06  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/package.el (package-compute-transaction): Topological sort.
+	Add optional `seen' argument to detect and break infinite loops.
+
+2014-05-06  Eli Zaretskii  <eliz@gnu.org>
+
+	* emacs-lisp/find-gc.el (find-gc-unsafe, find-unsafe-funcs)
+	(trace-unsafe, trace-use-tree): Make parentheses style be
+	according to Emacs style.
+
+2014-05-06  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp-sh.el (tramp-remote-process-environment):
+	Remove HISTFILE and HISTSIZE; it's too late to set them here.
+	Add :version entry.
+	(tramp-open-shell): Do not let-bind `tramp-end-of-output'.
+	Add "HISTFILE=/dev/null" to the shell's env arguments.  Do not send
+	extra "PSx=..." commands.
+	(tramp-maybe-open-connection): Setenv HISTFILE to /dev/null.
+	(Bug#17295)
+
+	(tramp-uudecode): Replace the hard-coded temporary file name by a
+	format specifier.
+	(tramp-remote-coding-commands): Enhance docstring.
+	(tramp-find-inline-encoding): Replace "%t" by a temporary file
+	name.  (Bug#17415)
+	This is CVE-2014-3424.
+
+2014-05-06  Glenn Morris  <rgm@gnu.org>
+
+	* emacs-lisp/find-gc.el (find-gc-source-directory): Give it a value.
+	(find-gc-source-files): Update some names.
+	(trace-call-tree): Simplify and update.
+	Avoid predictable temp-file names.  (http://bugs.debian.org/747100)
+	This is CVE-2014-3422.
+
+2014-05-05  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* minibuffer.el (completion--try-word-completion): Revert fix for
+	Bug#15980 (bug#17375).
+
+	* xt-mouse.el (xterm-mouse--read-event-sequence-1000): (bug#17378)
+	Always store button numbers in the same way in xterm-mouse-last;
+	Don't burp is xterm-mouse-last is not set as expected.
+	Never return negative indices.
+
+2014-05-05  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* progmodes/ruby-mode.el (ruby-syntax-propertize-function):
+	Backtrack one char if the global/char-literal var matcher hits
+	inside a string.  The next char could be the beginning of an
+	expression expansion.
+
+2014-05-05  Glenn Morris  <rgm@gnu.org>
+
+	* help-fns.el (describe-function-1): Test for an autoload before a
+	macro, since `macrop' works on autoloads.  (Bug#17410)
+
+2014-05-05  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* electric.el (electric-indent-functions-without-reindent): Add yaml.
+
+	* minibuffer.el (completion-table-with-quoting) <completion--unquote>:
+	Make sure the new point we return is within the new string (bug#17239).
+
+2014-05-03  Eli Zaretskii  <eliz@gnu.org>
+
+	* mail/rmailsum.el (rmail-new-summary-1): Fix a typo in a comment.
+
+2014-05-03  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* vc/ediff-diff.el (ediff-set-fine-diff-properties-in-one-buffer):
+	Use nil rather than `default' for the "default" appearance (bug#17388).
+	* vc/ediff-util.el (ediff-inferior-compare-regions)
+	(ediff-toggle-autorefine, ediff-unselect-difference): Don't use
+	a misleading `default' value when it's really a boolean.
+	* vc/ediff-init.el (ediff-set-overlay-face): Don't set help-echo if the
+	overlay is not visible.
+
+2014-05-02  Stephen Berman  <stephen.berman@gmx.net>
+
+	* calendar/todo-mode.el (todo-edit-file): Use display-warning.
+	(todo-menu): Uncomment and update.
+
+2014-05-02  Stephen Berman  <stephen.berman@gmx.net>
+
+	* calendar/todo-mode.el: Reimplement item editing to have the same
+	basic user interface as item insertion, and make small UI and
+	larger internal improvements to the latter.
+	(todo-insert-item): Add reference to the Todo mode user manual to
+	the documentation string.
+	(todo-insert-item--basic): Rename from todo-basic-insert-item and
+	adjust all callers.  Change signature to combine diary and
+	nonmarking arguments.  Incorporate functionality of deleted item
+	copying command and add error checking.  Remove detailed
+	descriptions of the arguments from the documentation string, since
+	this is treated in the Todo mode user manual.
+	(todo-copy-item, todo-edit-multiline-item)
+	(todo-edit-done-item-comment, todo-edit-item-header)
+	(todo-edit-item-time, todo-edit-item-date-from-calendar)
+	(todo-edit-item-date-to-today, todo-edit-item-date-day-name)
+	(todo-edit-item-date-year, todo-edit-item-date-month)
+	(todo-edit-item-date-day, todo-edit-item-diary-nonmarking):
+	Remove.
+	(todo-edit-item): Reimplement as wrapper command for
+	todo-edit-item--next-key and make it distinguish done and not done
+	todo items.
+	(todo-edit-item--text): New function, replacing old command
+	todo-edit-item and incorporating deleted commands
+	todo-edit-multiline-item and todo-edit-done-item-comment.
+	(todo-edit-item--header): Rename from todo-basic-edit-item-header.
+	Use only numeric value of prefix argument.  Remove detailed
+	descriptions of the arguments from the documentation string, since
+	this is treated in the Todo mode user manual.
+	(todo-edit-item--diary-inclusion): New function, replacing old
+	command todo-edit-item-diary-inclusion and incorporating and fixing
+	functionality of deleted command todo-edit-item-diary-nonmarking,
+	making sure to remove todo-nondiary-marker when adding
+	diary-nonmarking-symbol.
+	(todo-edit-category-diary-inclusion): Make sure to delete
+	diary-nonmarking-symbol when adding todo-nondiary-marker.
+	(todo-edit-category-diary-nonmarking): Fix indentation.
+	(todo-insert-item--parameters): Group diary and nonmarking
+	parameters together.
+	(todo-insert-item--apply-args): Adjust to signature of
+	todo-insert-item--basic and incorporate copy parameter.
+	Make small code improvements.
+	(todo-insert-item--next-param): Improve prompt and adjust it to
+	new parameter grouping.  Remove obsolete code.
+	(todo-edit-item--param-key-alist)
+	(todo-edit-item--date-param-key-alist)
+	(todo-edit-done-item--param-key-alist): New defconsts.
+	(todo-edit-item--prompt): New variable.
+	(todo-edit-item--next-key): New function.
+	(todo-key-bindings-t): Bind "e" to todo-edit-item.
+	Remove bindings of deleted commands.
+
+2014-05-02  Leo Liu  <sdl.web@gmail.com>
+
+	* emacs-lisp/cl-macs.el (cl-deftype): Fix indentation.
+
+2014-05-01  Glenn Morris  <rgm@gnu.org>
+
+	* allout-widgets.el (allout-widgets-tally)
+	(allout-decorate-item-guides):
+	* menu-bar.el (menu-bar-positive-p):
+	* minibuffer.el (completion-pcm-complete-word-inserts-delimiters):
+	* progmodes/gdb-mi.el (gdbmi-same-start, gdbmi-is-number):
+	* progmodes/js.el (js--inside-param-list-p)
+	(js--inside-dojo-class-list-p, js--forward-destructuring-spec):
+	* progmodes/prolog.el (region-exists-p):
+	* progmodes/verilog-mode.el (verilog-scan-cache-ok-p):
+	* textmodes/reftex-parse.el (reftex-using-biblatex-p):
+	Doc fixes (replace `iff').
+
+2014-05-01  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* mpc.el (mpc-volume-mouse-set): Don't burp at the boundaries.
+
+2014-04-30  Eli Zaretskii  <eliz@gnu.org>
+
+	* dired.el (dired-initial-position-hook, dired-initial-position):
+	Doc string fixes.
+
+2014-04-29  Glenn Morris  <rgm@gnu.org>
+
+	* mail/rmail.el (rmail-quit): Handle killed summaries.  (Bug#17283)
+
+2014-04-27  Matthias Dahl  <matthias.dahl@binary-island.eu>
+
+	* faces.el (face-spec-recalc): Apply X resources only after the
+	defface spec has been applied. Thus, X resources are no longer
+	overriden by the defface spec which also fixes issues on win32 where
+	the toolbar coloring was wrong because it is set through X resources
+	and was (wrongfully) overriden.  (Bug#16694)
+
+2014-04-28  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* textmodes/rst.el (electric-pair-pairs): Declare.
+	(rst-mode): Set it (bug#17131).
+
+2014-04-27  Juri Linkov  <juri@jurta.org>
+
+	* desktop.el (desktop-value-to-string): Let-bind `print-length'
+	and `print-level' to nil.  (Bug#17351)
+
+2014-04-25  Nicolas Richard  <theonewiththeevillook@yahoo.fr>
+
+	* battery.el (battery-update): Handle the case where battery
+	status is "N/A" (bug#17319).
+
+2014-04-24  Eli Zaretskii  <eliz@gnu.org>
+
+	* tooltip.el (tooltip-show-help-non-mode, tooltip-show-help):
+	Use equal-including-properties to compare help-echo strings (bug#17331).
+
+2014-04-24  Leo Liu  <sdl.web@gmail.com>
+
+	* emacs-lisp/lisp-mode.el (emacs-lisp-mode-syntax-table):
+	Fix syntax for @.  (Bug#17325)
+
+2014-04-24  Daniel Colascione  <dancol@dancol.org>
+
+	* emacs-lisp/cl.el (gv): Require gv early to break eager
+	macro-expansion cycles.
+
+2014-04-23  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* simple.el (region-active-p): Check there's a mark (bug#17324).
+
+	* simple.el (completion-list-mode-map): Use choose-completion for the
+	mouse binding as well (bug#17302).
+	(completion-list-mode, completion-setup-function): Adjust docstring and
+	echo area message accordingly.
+	* progmodes/idlwave.el (idlwave-choose-completion): Adjust to new
+	calling convention of choose-completion.
+	* comint.el (comint-dynamic-list-completions):
+	* term.el (term-dynamic-list-completions): Accept choose-completion.
+
+	* progmodes/perl-mode.el (perl-syntax-propertize-function): Slash after
+	&, |, +, - and * can't be a division (bug#17317).
+
+2014-04-22  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* term/xterm.el (xterm--version-handler): Don't use modern xterm
+	features on gnome-terminal (bug#16988).
+
+2014-04-22  Michael Heerdegen  <michael_heerdegen@web.de>
+
+	* dired.el (dired-insert-set-properties): Do not consider
+	subdirectory headings and empty lines to be information that
+	`dired-hide-details-mode' should hide.  (Bug#17228)
+
+2014-04-22  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp-sh.el (tramp-sh-handle-file-name-all-completions):
+	Remove test messages.
+	(tramp-do-copy-or-rename-file-out-of-band): Do not quote `source'
+	and `target' twice.
+
+2014-04-21  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* dframe.el (dframe-get-focus): Remove `hook' argument (bug#17311).
+	* speedbar.el (speedbar-get-focus): Run the "hook" afterwards instead.
+
+	* emacs-lisp/cl-macs.el (cl--loop-let): Avoid `nil' as var name.
+
+2014-04-21  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp-sh.el (tramp-sh-handle-file-name-all-completions):
+	Set "IFS=" when using read builtin, in order to preserve spaces in
+	the file name.  Add test messages for hunting a bug on hydra.
+	(tramp-get-ls-command): Undo using "-b" argument.  It doesn't help.
+
+2014-04-21  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* progmodes/prog-mode.el (prettify-symbols--compose-symbol):
+	Don't prettify a word within a symbol.
+
+2014-04-20  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp-sh.el (tramp-get-ls-command): Use "-b" argument if
+	possible.
+
+2014-04-19  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* progmodes/sh-script.el (sh-smie--sh-keyword-p): Handle variable
+	assignments such as "case=hello" (bug#17297).
+
+2014-04-18  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp.el (tramp-run-real-handler, tramp-file-name-handler):
+	Do not autoload.
+	(tramp-file-name-handler, tramp-completion-file-name-handler):
+	Revert patch from 2014-04-10, it isn't necessary anymore.
+	(tramp-autoload-file-name-handler)
+	(tramp-register-autoload-file-name-handlers): New defuns.
+	(top): Autoload call of `tramp-register-autoload-file-name-handlers'.
+	(tramp-register-file-name-handlers): Remove also
+	`tramp-autoload-file-name-handler' from `file-name-handler-list'.
+	Do not autoload its invocation, but eval it after loading of 'tramp.
+
+	* net/tramp-adb.el (tramp-unload-hook): Unload `tramp-adb'.
+
+	* net/tramp-compat.el (tramp-unload-hook): Unload `tramp-loaddefs'.
+
+2014-04-16  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* nxml/nxml-mode.el (nxml-fontify-matcher): Make sure propertization
+	was done (bug#17264).
+	* nxml/xmltok.el (xmltok-scan-after-comment-open): Extend unclosed
+	comment to EOB.
+
+	* progmodes/perl-mode.el (perl-calculate-indent): Don't auto-indent in
+	here-documents (bug#17262).
+
+2014-04-16  Eli Zaretskii  <eliz@gnu.org>
+
+	* term/pc-win.el (x-list-fonts, x-get-selection-value):
+	Provide doc strings, as required by snarf-documentation.
+
+2014-04-15  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* ps-def.el (ps-generate-postscript-with-faces1): Use the new `sorted'
+	arg of overlays-at.  Use `invisible-p'.
+
+	* obsolete/lucid.el (extent-at):
+	* htmlfontify.el (hfy-overlay-props-at): Use the new `sorted' arg of
+	overlays-at.
+	(hfy-fontify-buffer): Remove unused var `orig-ovls'.
+
+2014-04-14  João Távora  <joaotavora@gmail.com>
+
+	* net/shr.el (shr-expand-url): Use `expand-file-name' for relative
+	links.  (Bug#17217).
+
+2014-04-14  YAMAMOTO Mitsuharu  <mituharu@math.s.chiba-u.ac.jp>
+
+	* vc/ediff-diff.el (ediff-set-fine-diff-properties-in-one-buffer):
+	Use mapc to loop over a vector.  (Bug#17257).
+
+2014-04-13  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp-sh.el (tramp-sh-handle-file-truename): Revert previous
+	patch, there are new problems with file names containing spaces.
+	Get rid of backticks.  (Bug#17238)
+
+2014-04-13  João Távora  <joaotavora@gmail.com>
+
+	* elec-pair.el (electric-pair--syntax-ppss): Simplify and fix
+	possible bug.
+
+2014-04-13  Eli Zaretskii  <eliz@gnu.org>
+
+	* frame.el (blink-cursor-blinks, blink-cursor-blinks-done): Doc fixes.
+	(blink-cursor-mode): Mention customization variables and the
+	effect of 'blink-cursor-blinks'.
+
+2014-04-12  Barry O'Reilly  <gundaetiapo@gmail.com>
+
+	* simple.el (undo): Prevent insertion of identity mapping into
+	undo-equiv-table so as undo-only does not inf loop in the presence
+	of consecutive nils in undo list.
+
+2014-04-12  Matthias Dahl  <matthias.dahl@binary-island.eu>
+
+	* faces.el (make-face): Deprecate optional argument as it is no
+	longer needed/used since the conditional X resources handling
+	has been pushed down to make-face-x-resource-internal itself.
+	(make-empty-face): Don't pass optional argument to make-face.
+
+2014-04-12  Eli Zaretskii  <eliz@gnu.org>
+
+	* international/characters.el <standard-case-table>: Add entries
+	for letters from the Coptic block u+2C80-u+2CFF.  (Bug#17243)
+	Set category of Coptic characters be 'g' (Greek).
+
+2014-04-12  Leo Liu  <sdl.web@gmail.com>
+
+	* progmodes/octave.el (completion-table-with-cache): Define if not
+	available.
+	(octave-goto-function-definition)
+	(octave-sync-function-file-names)
+	(octave-find-definition-default-filename): Backquote upattern for
+	compatibility.
+
+2014-04-11  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp-sh.el (tramp-sh-handle-file-truename): Quote the file
+	name twice due to backticks.  (Bug#17238)
+
+2014-04-11  Glenn Morris  <rgm@gnu.org>
+
+	* term/w32-win.el (x-win-suspend-error):
+	* term/x-win.el (x-win-suspend-error): Sync docs.
+
+2014-04-10  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	Ediff's overlay priorities cause more trouble than they solve.
+	* vc/ediff-init.el (ediff-shadow-overlay-priority): Remove variable.
+	(ediff-highest-priority): Remove function (bug#17234).
+	* vc/ediff-util.el (ediff-highlight-diff-in-one-buffer):
+	* vc/ediff-diff.el (ediff-set-diff-overlays-in-one-buffer)
+	(ediff-set-fine-diff-properties-in-one-buffer): Don't mess with
+	overlay priorities.
+
+2014-04-10  Feng Li  <fengli@gmail.com>  (tiny change)
+
+	* progmodes/pascal.el (pascal-font-lock-keywords): Fix incorrect format
+	entry; use symbol boundaries to avoid mis-matches.
+
+2014-04-10  Michael Albinus  <michael.albinus@gmx.de>
+
+	* net/tramp.el (tramp-file-name-handler)
+	(tramp-completion-file-name-handler): Avoid recursive loading.
+
+	* net/tramp-sh.el (tramp-make-copy-program-file-name):
+	Quote result also locally.
+
+2014-04-09  Dmitry Gutov  <dgutov@yandex.ru>
+
+	* progmodes/ruby-mode.el (ruby-font-lock-keywords): Highlight more
+	Module methods.  (Bug#17216)
+
+2014-04-08  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* help.el (describe-bindings): Fix buffer handling (bug#17210).
+	(describe-bindings-internal): Mark obsolete.
+
+2014-04-07  João Távora  <joaotavora@gmail.com>
+
+	* elec-pair.el:
+	(electric-pair--syntax-ppss): When inside comments parse from
+	comment beginning.
+	(electric-pair--balance-info): Fix typo in comment.
+	(electric-pair--in-unterminated-string-p): Delete.
+	(electric-pair--unbalanced-strings-p): New function.
+	(electric-pair-string-bound-function): New var.
+	(electric-pair-inhibit-if-helps-balance): Decide quote pairing
+	according to `electric-pair--in-unterminated-string-p'
+
+2014-04-07  João Távora  <joaotavora@gmail.com>
+
+	* elec-pair.el (electric-pair-inhibit-if-helps-balance):
+	Inhibit quote pairing if point-max is inside an unterminated string.
+	(electric-pair--looking-at-unterminated-string-p): Delete.
+	(electric-pair--in-unterminated-string-p): New function.
+
+2014-04-07  Glenn Morris  <rgm@gnu.org>
+
+	* shell.el (shell-directory-tracker):
+	Go back to just ignoring failures.  (Bug#17159)
+
+2014-04-06  João Távora  <joaotavora@gmail.com>
+
+	Fix `electric-pair-delete-adjacent-pairs' in modes binding
+	backspace. (bug#16981)
+	* elec-pair.el (electric-pair-backward-delete-char): Delete.
+	(electric-pair-backward-delete-char-untabify): Delete.
+	(electric-pair-mode-map): Bind backspace to a menu item filtering
+	a new `electric-pair-delete-pair' command.
+	(electric-pair-delete-pair): New command.
+
+2014-04-06  João Távora  <joaotavora@gmail.com>
+
+	* progmodes/python.el (python-electric-pair-string-delimiter):
+	Fix triple-quoting electricity.  (Bug#17192)
+
+2014-04-06  João Távora  <joaotavora@gmail.com>
+
+	* elec-pair.el (electric-pair-post-self-insert-function):
+	Don't skip whitespace when `electric-pair-text-pairs' and
+	`electric-pair-pairs' were used. syntax to
+	electric-pair--skip-whitespace.  (Bug#17183)
+
+2014-04-06  Eli Zaretskii  <eliz@gnu.org>
+
+	* leim/quail/ipa.el (ipa-x-sampa): Fix the character produced for
+	"<F>".  (Bug#17199)
+
+2014-04-06  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* mpc.el (mpc--status-timer-run): Disable timer if not displayed.
+	(mpc--status-idle-timer-run): Use mpc--status-timer-run.
+
+2014-04-05  Glenn Morris  <rgm@gnu.org>
+
+	* help.el (view-lossage): Doc tweak.
+
+2014-04-05  Matthias Dahl  <matthias.dahl@binary-island.eu>
+
+	* faces.el (face-spec-recalc): Call make-face-x-resource-internal
+	only when inhibit-x-resources is nil, and do that earlier in the
+	function.  Doc fix.  (Bug#16694)
+	(face-spec-choose): Accept additional optional argument, whose
+	value is returned if no matching attributes are found.
+	(face-spec-recalc): Use the new optional argument when calling
+	face-spec-choose.  (Bug#16378)
+	(make-face-x-resource-internal): Do nothing when
+	inhibit-x-resources is non-nil.  Don't touch the default face if
+	reversed video is given--as was done in previous versions of Emacs.
+	(face-set-after-frame-default): Don't call
+	make-face-x-resource-internal here.  (Bug#16434)
+
+2014-04-04  Tassilo Horn  <tsdh@gnu.org>
+
+	* doc-view.el (doc-view-bookmark-jump):
+	Use `bookmark-after-jump-hook' to jump to the right page after the
+	buffer is shown in a window.  (bug#16090)
+
+2014-04-04  Eli Zaretskii  <eliz@gnu.org>
+
+	* international/characters.el (mirroring): Fix last change:
+	instead of loading uni-mirrored.el explicitly, do that implicitly
+	by creating the 'mirroring' uniprop table.  This avoids announcing
+	the loading of uni-mirrored.el.
+
+2014-04-04  Glenn Morris  <rgm@gnu.org>
+
+	* files.el (buffer-stale--default-function)
+	(buffer-stale-function, revert-buffer--default):
+	* autorevert.el (auto-revert-buffers): Doc tweaks.
+
+2014-04-03  Eli Zaretskii  <eliz@gnu.org>
+
+	* international/characters.el: Preload uni-mirrored.el.  (Bug#17169)
+
+2014-04-03  Glenn Morris  <rgm@gnu.org>
+
+	* files.el (make-backup-file-name-function)
+	(make-backup-file-name, make-backup-file-name--default-function)
+	(make-backup-file-name-1, find-backup-file-name)
+	(revert-buffer-function, revert-buffer-insert-file-contents-function)
+	(buffer-stale--default-function, buffer-stale-function)
+	(before-revert-hook, after-revert-hook, revert-buffer-in-progress-p)
+	(revert-buffer, revert-buffer--default)
+	(revert-buffer-insert-file-contents--default-function):
+	Doc fixes related to defaults no longer being nil.
+	(make-backup-file-name-function): Bump :version.
+	Restore nil as a valid but deprecated custom type.
+
+2014-04-03  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* progmodes/perl-mode.el (perl-syntax-propertize-function): Handle $'
+	used as a variable (bug#17174).
+
+2014-04-02  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* progmodes/perl-mode.el (perl-indent-new-calculate):
+	Handle forward-sexp failure (bug#16985).
+	(perl-syntax-propertize-function): Add "foreach" and "for" statement
+	modifiers introducing expressions (bug#17116).
+
+2014-04-02  Glenn Morris  <rgm@gnu.org>
+
+	* menu-bar.el (menu-bar-file-menu):
+	* vc/ediff.el (ediff-current-file):
+	Update for revert-buffer-function no longer being nil by default.
+
+	* simple.el (command-execute): Respect nil disabled-command-function.
+
+2014-04-01  Nicolas Richard  <theonewiththeevillook@yahoo.fr>
+
+	* simple.el (command-execute): Do not execute the command when it
+	is disabled; fixes thinko in 2013-02-20 conversion from C.  (Bug#17151)
+
 2014-03-29  Juri Linkov  <juri@jurta.org>
 
 	* dired-aux.el (dired-compress-file): Don't use string-match-p
@@ -197,6 +1368,7 @@
 	(electric-indent-mode): Don't mess with the global map any more.
 	Don't drop the post-self-insert-hook is some buffer is still using it
 	(bug#16770).
+
 	* bindings.el (global-map): Remove C-j binding.
 
 	* emacs-lisp/nadvice.el (advice--make-docstring): Try harder to find
@@ -668,7 +1840,7 @@
 
 2014-03-04  Michal Nazarewicz  <mina86@mina86.com>
 
-	* binding.el: Add comment describing why C-d binds to `delete-char'.
+	* bindings.el: Add comment describing why C-d binds to `delete-char'.
 	* simple.el (delete-forward-char): Mark as interactive-only.
 
 2014-03-03  Juanma Barranquero  <lekktu@gmail.com>
@@ -1725,7 +2897,7 @@
 	* ielm.el (ielm-mode-hook):
 	* emacs-lisp/lisp-mode.el (emacs-lisp-mode-hook)
 	(lisp-interaction-mode-hook):
-	* progmodes/cfengine.e (cfengine3-documentation-function):
+	* progmodes/cfengine.el (cfengine3-documentation-function):
 	Replace obsolete alias `turn-on-eldoc-mode' with `eldoc-mode'.
 
 2014-01-30  Stefan Monnier  <monnier@iro.umontreal.ca>
@@ -1828,7 +3000,6 @@
 	* net/shr.el (shr-tag-img): Prefer the title over the alt text
 	(bug#16537).
 
->>>>>>> MERGE-SOURCE
 2014-01-24  Juanma Barranquero  <lekktu@gmail.com>
 
 	* net/eww.el (eww-download-callback):
@@ -9554,7 +10725,7 @@
 
 2013-07-07  Michael Kifer  <kifer@cs.stonybrook.edu>
 
-	* ediff.el (ediff-version): Version update.
+	* vc/ediff.el (ediff-version): Version update.
 	(ediff-files-command, ediff3-files-command, ediff-merge-command)
 	(ediff-merge-with-ancestor-command, ediff-directories-command)
 	(ediff-directories3-command, ediff-merge-directories-command)
@@ -9562,19 +10733,21 @@
 	All are command-line interfaces to ediff: to facilitate calling
 	Emacs with the appropriate ediff functions invoked.
 
-	* viper-cmd.el (viper-del-forward-char-in-insert): New function.
+	* emulation/viper-cmd.el (viper-del-forward-char-in-insert):
+	New function.
 	(viper-save-kill-buffer): Check if buffer is modified.
 
-	* viper.el (viper-version): Version update.
+	* emulation/viper.el (viper-version): Version update.
 	(viper-emacs-state-mode-list): Add egg-status-buffer-mode.
 
 2013-07-07  Stefan Monnier  <monnier@iro.umontreal.ca>
 
 	* faces.el (tty-run-terminal-initialization): Run new tty-setup-hook.
-	* viper-cmd.el (viper-envelop-ESC-key): Remove function.
+	* emulation/viper-cmd.el (viper-envelop-ESC-key): Remove function.
 	(viper-intercept-ESC-key): Simplify.
-	* viper-keym.el (viper-ESC-key): Make it a constant, don't use kbd.
-	* viper.el (viper--tty-ESC-filter, viper--lookup-key)
+	* emulation/viper-keym.el (viper-ESC-key): Make it a constant,
+	don't use kbd.
+	* emulation/viper.el (viper--tty-ESC-filter, viper--lookup-key)
 	(viper-catch-tty-ESC, viper-uncatch-tty-ESC)
 	(viper-setup-ESC-to-escape): New functions.
 	(viper-go-away, viper-set-hooks): Call viper-setup-ESC-to-escape.

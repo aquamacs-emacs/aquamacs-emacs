@@ -22,7 +22,7 @@ dnl  You should have received a copy of the GNU General Public License
 dnl  along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
 
 AC_PREREQ(2.65)
-AC_INIT(emacs, 24.3.50)
+AC_INIT(emacs, 24.3.92)
 
 dnl We get MINGW64 with MSYS2
 if test "x$MSYSTEM" = "xMINGW32" -o "x$MSYSTEM" = "xMINGW64"
@@ -242,6 +242,7 @@ fi
 
 dnl _ON results in a '--without' option in the --help output, so
 dnl the help text should refer to "don't compile", etc.
+with_xpm_set=${with_xpm+set}
 OPTION_DEFAULT_ON([xpm],[don't compile with XPM image support])
 OPTION_DEFAULT_ON([jpeg],[don't compile with JPEG image support])
 OPTION_DEFAULT_ON([tiff],[don't compile with TIFF image support])
@@ -505,7 +506,7 @@ case "${canonical}" in
   ;;
 
   ## OpenBSD ports
-  *-*-openbsd* )
+  *-*-openbsd* | *-*-mirbsd* )
     opsys=openbsd
   ;;
 
@@ -550,7 +551,7 @@ case "${canonical}" in
   rs6000-ibm-aix[56]* )
     opsys=aix4-2
   ;;
-  powerpc-ibm-aix[56]*  )
+  powerpc-ibm-aix[5-9]* | powerpc-ibm-aix[1-9][0-9]* )
     opsys=aix4-2
   ;;
 
@@ -756,7 +757,10 @@ AC_ARG_ENABLE([gcc-warnings],
 AC_ARG_ENABLE(link-time-optimization,
 [AS_HELP_STRING([--enable-link-time-optimization],
                 [build emacs with link-time optimization.
-                 This is supported only for GCC since 4.5.0.])],
+		 This requires GCC 4.5.0 or later.
+		 It also makes Emacs harder to debug, and when we tried it
+		 with GCC 4.9.0 x86-64 it made Emacs slower, so it's not
+		 recommended for typical use.])],
 if test "${enableval}" != "no"; then
    AC_MSG_CHECKING([whether link-time optimization is supported])
    ac_lto_supported=no
@@ -776,33 +780,21 @@ if test "${enableval}" != "no"; then
    AC_MSG_RESULT([$ac_lto_supported])
    if test "$ac_lto_supported" = "yes"; then
       CFLAGS="$CFLAGS $LTO"
+      dnl The following is needed for GCC 4.9.0.  The GCC 4.9.0 release notes
+      dnl suggest that instead of -ffat-lto-objects we should use gcc-ar and
+      dnl gcc-ranlib in place of ar and ranlib, but gcc-ar makes /usr/bin/ar
+      dnl dump core on Fedora 20, so play it safe for now.
+      gl_COMPILER_OPTION_IF([-ffat-lto-objects],
+	[CFLAGS="$CFLAGS -ffat-lto-objects"])
    fi
 fi)
-
-# gl_GCC_VERSION_IFELSE([major], [minor], [run-if-found], [run-if-not-found])
-# ------------------------------------------------
-# If $CPP is gcc-MAJOR.MINOR or newer, then run RUN-IF-FOUND.
-# Otherwise, run RUN-IF-NOT-FOUND.
-AC_DEFUN([gl_GCC_VERSION_IFELSE],
-  [AC_PREPROC_IFELSE(
-    [AC_LANG_PROGRAM(
-      [[
-#if ($1) < __GNUC__ || (($1) == __GNUC__ && ($2) <= __GNUC_MINOR__)
-/* ok */
-#else
-# error "your version of gcc is older than $1.$2"
-#endif
-      ]]),
-    ], [$3], [$4])
-  ]
-)
 
 # clang is unduly picky about some things.
 AC_CACHE_CHECK([whether the compiler is clang], [emacs_cv_clang],
   [AC_COMPILE_IFELSE(
      [AC_LANG_PROGRAM([[
 	  #ifndef __clang__
-	    #error "not clang"
+	    error "not clang";
 	  #endif
         ]])],
      [emacs_cv_clang=yes],
@@ -915,6 +907,12 @@ else
   AC_SUBST([GNULIB_WARN_CFLAGS])
 fi
 
+edit_cflags="
+  s,///*,/,g
+  s/^/ /
+  s/ -I/ $isystem/g
+  s/^ //
+"
 
 
 dnl Some other nice autoconf tests.
@@ -938,11 +936,21 @@ rm -f conf$$ conf$$.file
 
 LN_S_FILEONLY='cp -p'
 
+dnl On MinGW, ensure we will call the MSYS /bin/ln.exe, not some
+dnl random program in the current directory.
 if (echo >conf$$.file) 2>/dev/null; then
   if ln -s conf$$.file conf$$ 2>/dev/null; then
-    LN_S_FILEONLY='ln -s'
+    if test "$opsys" = "mingw32"; then
+      LN_S_FILEONLY='/bin/ln -s'
+    else
+      LN_S_FILEONLY='ln -s'
+    fi
   elif ln conf$$.file conf$$ 2>/dev/null; then
-    LN_S_FILEONLY=ln
+    if test "$opsys" = "mingw32"; then
+      LN_S_FILEONLY=/bin/ln
+    else
+      LN_S_FILEONLY=ln
+    fi
   fi
 fi
 
@@ -964,8 +972,17 @@ dnl executables at "make install" time.
 dnl See http://lists.gnu.org/archive/html/emacs-devel/2013-04/msg00475.html
 dnl for more details.
 if test "$opsys" = "mingw32"; then
-  LN_S="ln"
+  LN_S="/bin/ln"
 fi
+
+dnl On some Debian versions, "install-info" prints irritating messages
+dnl "This is not dpkg install-info anymore, but GNU install-info"
+dnl if called via an absolute file name.
+dnl Use the entirely-identical-but-quieter ginstall-info instead if present.
+dnl Sadly some people may have an old ginstall-info installed on
+dnl non-Debian systems, so we can't use this.
+dnl AC_PATH_PROGS(INSTALL_INFO, [ginstall-info install-info], :,
+dnl   $PATH$PATH_SEPARATOR/usr/sbin$PATH_SEPARATOR/sbin)
 
 AC_PATH_PROG(INSTALL_INFO, install-info, :,
   $PATH$PATH_SEPARATOR/usr/sbin$PATH_SEPARATOR/sbin)
@@ -1104,7 +1121,7 @@ AC_CACHE_CHECK([whether addresses are sanitized],
 	  #endif
 	  #if defined __SANITIZE_ADDRESS__ || __has_feature (address_sanitizer)
 	  #else
-	   #error "Addresses are not sanitized."
+	   error "Addresses are not sanitized.";
 	  #endif
 	]])],
      [emacs_cv_sanitize_address=yes],
@@ -1348,12 +1365,6 @@ AC_DEFUN([PKG_CHECK_MODULES], [
         if "$PKG_CONFIG" --exists "$2" 2>&AS_MESSAGE_LOG_FD &&
 	   $1_CFLAGS=`"$PKG_CONFIG" --cflags "$2" 2>&AS_MESSAGE_LOG_FD` &&
 	   $1_LIBS=`"$PKG_CONFIG" --libs "$2" 2>&AS_MESSAGE_LOG_FD`; then
-	    edit_cflags="
-	      s,///*,/,g
-	      s/^/ /
-	      s/ -I/ $isystem/g
-	      s/^ //
-	    "
 	    $1_CFLAGS=`AS_ECHO(["$$1_CFLAGS"]) | sed -e "$edit_cflags"`
 	    $1_LIBS=`AS_ECHO(["$$1_LIBS"]) | sed -e 's,///*,/,g'`
             AC_MSG_RESULT([yes CFLAGS='$$1_CFLAGS' LIBS='$$1_LIBS'])
@@ -1702,7 +1713,7 @@ fail;
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= 1040
  ; /* OK */
 #else
-#error "OSX 10.4 or newer required"
+ error "OSX 10.4 or newer required";
 #endif
 #endif
 		    ])],
@@ -1720,7 +1731,7 @@ fail;
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= 1050
  ; /* OK */
 #else
-#error "OSX 10.5 not found"
+ error "OSX 10.5 not found";
 #endif
 #endif
 		    ])],
@@ -1838,7 +1849,6 @@ if test "${HAVE_W32}" = "yes"; then
     x86_64-*-*) EMACS_MANIFEST="emacs-x64.manifest" ;;
     *) EMACS_MANIFEST="emacs-x86.manifest" ;;
   esac
-  UPDATE_MANIFEST=update-game-score.exe.manifest
   if test "${opsys}" = "cygwin"; then
     W32_LIBS="$W32_LIBS -lkernel32 -luser32 -lgdi32 -lole32 -lcomdlg32"
     W32_LIBS="$W32_LIBS -lusp10 -lcomctl32 -lwinspool"
@@ -1846,6 +1856,7 @@ if test "${HAVE_W32}" = "yes"; then
     # the rc file), not a linker script.
     W32_RES_LINK="-Wl,emacs.res"
   else
+    UPDATE_MANIFEST=update-game-score.exe.manifest
     W32_OBJ="$W32_OBJ w32.o w32console.o w32heap.o w32inevt.o w32proc.o"
     W32_LIBS="$W32_LIBS -lwinmm -lgdi32 -lcomdlg32"
     W32_LIBS="$W32_LIBS -lmpr -lwinspool -lole32 -lcomctl32 -lusp10"
@@ -2073,6 +2084,18 @@ if test "$HAVE_PTHREAD" = yes; then
        LIBS="$LIB_PTHREAD $LIBS" ;;
   esac
   AC_DEFINE(HAVE_PTHREAD, 1, [Define to 1 if you have pthread (-lpthread).])
+
+  # Some systems optimize for single-threaded programs by default, and
+  # need special flags to disable these optimizations. For example, the
+  # definition of 'errno' in <errno.h>.
+  case $opsys in
+    sol*)
+      AC_DEFINE([_REENTRANT], 1,
+	[Define to 1 if your system requires this in multithreaded code.]);;
+    aix4-2)
+      AC_DEFINE([_THREAD_SAFE], 1,
+	[Define to 1 if your system requires this in multithreaded code.]);;
+  esac
 fi
 AC_SUBST([LIB_PTHREAD])
 
@@ -2233,11 +2256,9 @@ fi
 HAVE_IMAGEMAGICK=no
 if test "${HAVE_X11}" = "yes" || test "${HAVE_NS}" = "yes" || test "${HAVE_W32}" = "yes"; then
   if test "${with_imagemagick}" != "no"; then
-    ## 6.2.8 is the earliest version known to work, but earlier versions
-    ## might work - let us know if you find one.
-    ## 6.0.7 does not work.  See bug#7955.
+    ## 6.3.5 is the earliest version known to work; see Bug#17339.
     ## 6.8.2 makes Emacs crash; see Bug#13867.
-    IMAGEMAGICK_MODULE="Wand >= 6.2.8 Wand != 6.8.2"
+    IMAGEMAGICK_MODULE="Wand >= 6.3.5 Wand != 6.8.2"
     PKG_CHECK_MODULES(IMAGEMAGICK, $IMAGEMAGICK_MODULE, HAVE_IMAGEMAGICK=yes, :)
     AC_SUBST(IMAGEMAGICK_CFLAGS)
     AC_SUBST(IMAGEMAGICK_LIBS)
@@ -2519,9 +2540,6 @@ if test "${with_gnutls}" = "yes" ; then
   # Windows loads GnuTLS dynamically
   if test "${opsys}" = "mingw32"; then
     LIBGNUTLS_LIBS=
-  else
-    CFLAGS="$CFLAGS $LIBGNUTLS_CFLAGS"
-    LIBS="$LIBGNUTLS_LIBS $LIBS"
   fi
 fi
 
@@ -2988,6 +3006,9 @@ no_return_alloc_pixels
 fi
 
 if test "${HAVE_X11}" = "yes"; then
+  dnl Avoid Xpm on AIX unless requested, as it crashes; see Bug#17598.
+  test "$opsys$with_xpm_set" = aix4-2 && with_xpm=no
+
   if test "${with_xpm}" != "no"; then
     AC_CHECK_HEADER(X11/xpm.h,
       [AC_CHECK_LIB(Xpm, XpmReadFileToPixmap, HAVE_XPM=yes, , -lX11)])
@@ -3010,6 +3031,9 @@ no_return_alloc_pixels
 
   if test "${HAVE_XPM}" = "yes"; then
     AC_DEFINE(HAVE_XPM, 1, [Define to 1 if you have the Xpm library (-lXpm).])
+    LIBXPM=-lXpm
+  elif test "$opsys,$LUCID_LIBW" = aix4-2,-lXaw; then
+    dnl AIX -lXaw needs -lXpm linked too; see Bug#17598 Message#152.
     LIBXPM=-lXpm
   fi
 fi
@@ -3112,8 +3136,15 @@ elif test "${HAVE_X11}" = "yes" || test "${HAVE_W32}" = "yes"; then
   fi
 
   if test "${HAVE_PNG}" = "yes"; then
-    AC_DEFINE(HAVE_PNG, 1, [Define to 1 if you have the png library (-lpng).])
-    LIBPNG="-lpng -lz -lm"
+    AC_DEFINE(HAVE_PNG, 1, [Define to 1 if you have the png library.])
+
+    dnl Some systems, eg NetBSD 6, only provide eg "libpng16", not "libpng".
+    lpng=`libpng-config --libs 2> /dev/null`
+    case $lpng in
+      -l*) : ;;
+      *) lpng="-lpng" ;;
+    esac
+    LIBPNG="$lpng -lz -lm"
 
     AC_CHECK_DECL(png_longjmp,
       [],
@@ -4377,7 +4408,7 @@ if test x$GCC = xyes; then
 else
   case $opsys in
     dnl irix: Tested on Irix 6.5.  SCM worked on earlier versions.
-    dragonfly | freebsd | netbsd | openbsd | irix6-5 | sol2* )
+    aix* | dragonfly | freebsd | netbsd | openbsd | irix6-5 | sol2* )
       AC_DEFINE(GC_SETJMP_WORKS, 1)
       ;;
   esac
@@ -4988,7 +5019,7 @@ echo "  Does Emacs use -lXpm?                                   ${HAVE_XPM}"
 echo "  Does Emacs use -ljpeg?                                  ${HAVE_JPEG}"
 echo "  Does Emacs use -ltiff?                                  ${HAVE_TIFF}"
 echo "  Does Emacs use a gif library?                           ${HAVE_GIF} $LIBGIF"
-echo "  Does Emacs use -lpng?                                   ${HAVE_PNG}"
+echo "  Does Emacs use a png library?                           ${HAVE_PNG} $LIBPNG"
 echo "  Does Emacs use -lrsvg-2?                                ${HAVE_RSVG}"
 echo "  Does Emacs use imagemagick?                             ${HAVE_IMAGEMAGICK}"
 

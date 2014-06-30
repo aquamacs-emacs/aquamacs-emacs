@@ -1,7 +1,6 @@
 /* Keyboard and mouse input; editor command loop.
 
-Copyright (C) 1985-1989, 1993-1997, 1999-2014 Free Software Foundation,
-Inc.
+Copyright (C) 1985-1989, 1993-1997, 1999-2014 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -21,6 +20,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <config.h>
 
 #include "sysstdio.h"
+#include <sys/stat.h>
 
 #include "lisp.h"
 #include "termchar.h"
@@ -825,14 +825,18 @@ This function is called by the editor initialization to begin editing.  */)
   if (input_blocked_p ())
     return Qnil;
 
-  command_loop_level++;
-  update_mode_lines = 17;
-
-  if (command_loop_level
+  if (command_loop_level >= 0
       && current_buffer != XBUFFER (XWINDOW (selected_window)->contents))
     buffer = Fcurrent_buffer ();
   else
     buffer = Qnil;
+
+  /* Don't do anything interesting between the increment and the
+     record_unwind_protect!  Otherwise, we could get distracted and
+     never decrement the counter again.  */
+  command_loop_level++;
+  update_mode_lines = 17;
+  record_unwind_protect (recursive_edit_unwind, buffer);
 
   /* If we leave recursive_edit_1 below with a `throw' for instance,
      like it is done in the splash screen display, we have to
@@ -840,7 +844,6 @@ This function is called by the editor initialization to begin editing.  */)
      would have done if it were left normally.  */
   if (command_loop_level > 0)
     temporarily_switch_to_single_kboard (SELECTED_FRAME ());
-  record_unwind_protect (recursive_edit_unwind, buffer);
 
   recursive_edit_1 ();
   return unbind_to (count, Qnil);
@@ -2194,7 +2197,7 @@ show_help_echo (Lisp_Object help, Lisp_Object window, Lisp_Object object,
 
 
 
-/* Input of single characters from keyboard */
+/* Input of single characters from keyboard.  */
 
 static Lisp_Object kbd_buffer_get_event (KBOARD **kbp, bool *used_mouse_menu,
 					 struct timespec *end_time);
@@ -2377,7 +2380,7 @@ read_decoded_event_from_main_queue (struct timespec *end_time,
    -2 means do neither.
    1 means do both.  */
 
-/* The arguments MAP is for menu prompting.  MAP is a keymap.
+/* The argument MAP is a keymap for menu prompting.
 
    PREV_EVENT is the previous input event, or nil if we are reading
    the first event of a key sequence (or not reading a key sequence).
@@ -3653,7 +3656,8 @@ kbd_buffer_store_event_hold (register struct input_event *event,
       *kbd_store_ptr = *event;
       ++kbd_store_ptr;
 #ifdef subprocesses
-      if (kbd_buffer_nr_stored () > KBD_BUFFER_SIZE/2 && ! kbd_on_hold_p ())
+      if (kbd_buffer_nr_stored () > KBD_BUFFER_SIZE / 2
+	  && ! kbd_on_hold_p ())
         {
           /* Don't read keyboard input until we have processed kbd_buffer.
              This happens when pasting text longer than KBD_BUFFER_SIZE/2.  */
@@ -7145,7 +7149,12 @@ unblock_input_to (int level)
 /* End critical section.
 
    If doing signal-driven input, and a signal came in when input was
-   blocked, reinvoke the signal handler now to deal with it.  */
+   blocked, reinvoke the signal handler now to deal with it.
+
+   It will also process queued input, if it was not read before.
+   When a longer code sequence does not use block/unblock input
+   at all, the whole input gathered up to the next call to
+   unblock_input will be processed inside that call. */
 
 void
 unblock_input (void)
@@ -9408,16 +9417,6 @@ read_key_sequence (Lisp_Object *keybuf, int bufsize, Lisp_Object prompt,
 	  first_unbound = min (t, first_unbound);
 
 	  head = EVENT_HEAD (key);
-	  if (help_char_p (head) && t > 0)
-	    {
-	      read_key_sequence_cmd = Vprefix_help_command;
-	      keybuf[t++] = key;
-	      last_nonmenu_event = key;
-	      /* The Microsoft C compiler can't handle the goto that
-		 would go here.  */
-	      dummyflag = 1;
-	      break;
-	    }
 
 	  if (SYMBOLP (head))
 	    {
@@ -9675,6 +9674,17 @@ read_key_sequence (Lisp_Object *keybuf, int bufsize, Lisp_Object prompt,
 
 	  goto replay_sequence;
 	}
+
+      if (NILP (current_binding)
+	  && help_char_p (EVENT_HEAD (key)) && t > 1)
+	    {
+	      read_key_sequence_cmd = Vprefix_help_command;
+	      /* The Microsoft C compiler can't handle the goto that
+		 would go here.  */
+	      dummyflag = 1;
+	      break;
+	    }
+
       /* If KEY is not defined in any of the keymaps,
 	 and cannot be part of a function key or translation,
 	 and is a shifted function key,
@@ -10103,7 +10113,10 @@ DEFUN ("open-dribble-file", Fopen_dribble_file, Sopen_dribble_file, 1, 1,
        "FOpen dribble file: ",
        doc: /* Start writing all keyboard characters to a dribble file called FILE.
 If FILE is nil, close any open dribble file.
-The file will be closed when Emacs exits.  */)
+The file will be closed when Emacs exits.
+
+Be aware that this records ALL characters you type!
+This may include sensitive information such as passwords.  */)
   (Lisp_Object file)
 {
   if (dribble)
@@ -10115,8 +10128,15 @@ The file will be closed when Emacs exits.  */)
     }
   if (!NILP (file))
     {
+      int fd;
+      Lisp_Object encfile;
+
       file = Fexpand_file_name (file, Qnil);
-      dribble = emacs_fopen (SSDATA (file), "w");
+      encfile = ENCODE_FILE (file);
+      fd = emacs_open (SSDATA (encfile), O_WRONLY | O_CREAT | O_EXCL, 0600);
+      if (fd < 0 && errno == EEXIST && unlink (SSDATA (encfile)) == 0)
+	fd = emacs_open (SSDATA (encfile), O_WRONLY | O_CREAT | O_EXCL, 0600);
+      dribble = fd < 0 ? 0 : fdopen (fd, "w");
       if (dribble == 0)
 	report_file_error ("Opening dribble", file);
     }

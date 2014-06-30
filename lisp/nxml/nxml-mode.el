@@ -872,7 +872,7 @@ Called with `font-lock-beg' and `font-lock-end' dynamically bound."
 
 (defun nxml-fontify-matcher (bound)
   "Called as font-lock keyword matcher."
-
+  (syntax-propertize bound)
   (unless nxml-degraded
     (nxml-debug-change "nxml-fontify-matcher" (point) bound)
 
@@ -2630,8 +2630,9 @@ With a prefix argument, inserts the character directly."
 (put 'entity-ref 'nxml-friendly-name "entity reference")
 (put 'char-ref 'nxml-friendly-name "character reference")
 
-;;;###autoload
-(defalias 'xml-mode 'nxml-mode)
+;; Only do this in loaddefs, so that if someone defines a different
+;; alias in .emacs, loading this file afterwards does not clobber it.
+;;;###autoload(defalias 'xml-mode 'nxml-mode)
 
 (provide 'nxml-mode)
 

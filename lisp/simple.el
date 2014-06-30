@@ -659,11 +659,16 @@ any other terminator is used itself as input.
 The optional argument PROMPT specifies a string to use to prompt the user.
 The variable `read-quoted-char-radix' controls which radix to use
 for numeric input."
-  (let ((message-log-max nil) done (first t) (code 0) translated)
+  (let ((message-log-max nil)
+	(help-events (delq nil (mapcar (lambda (c) (unless (characterp c) c))
+				       help-event-list)))
+	done (first t) (code 0) translated)
     (while (not done)
       (let ((inhibit-quit first)
-	    ;; Don't let C-h get the help message--only help function keys.
+	    ;; Don't let C-h or other help chars get the help
+	    ;; message--only help function keys.  See bug#16617.
 	    (help-char nil)
+	    (help-event-list help-events)
 	    (help-form
 	     "Type the special character you want to use,
 or the octal character code.
@@ -1629,36 +1634,37 @@ a special event, so ignore the prefix argument and don't clear it."
                      (prog1 prefix-arg
                        (setq current-prefix-arg prefix-arg)
                        (setq prefix-arg nil)))))
-    (and (symbolp cmd)
-         (get cmd 'disabled)
-         ;; FIXME: Weird calling convention!
-         (run-hooks 'disabled-command-function))
-    (let ((final cmd))
-      (while
-          (progn
-            (setq final (indirect-function final))
-            (if (autoloadp final)
-                (setq final (autoload-do-load final cmd)))))
-      (cond
-       ((arrayp final)
-        ;; If requested, place the macro in the command history.  For
-        ;; other sorts of commands, call-interactively takes care of this.
-        (when record-flag
-          (push `(execute-kbd-macro ,final ,prefixarg) command-history)
-          ;; Don't keep command history around forever.
-          (when (and (numberp history-length) (> history-length 0))
-            (let ((cell (nthcdr history-length command-history)))
-              (if (consp cell) (setcdr cell nil)))))
-        (execute-kbd-macro final prefixarg))
-       (t
-        ;; Pass `cmd' rather than `final', for the backtrace's sake.
-        (prog1 (call-interactively cmd record-flag keys)
-          (when (and (symbolp cmd)
-                     (get cmd 'byte-obsolete-info)
-                     (not (get cmd 'command-execute-obsolete-warned)))
-            (put cmd 'command-execute-obsolete-warned t)
-            (message "%s" (macroexp--obsolete-warning
-                           cmd (get cmd 'byte-obsolete-info) "command")))))))))
+    (if (and (symbolp cmd)
+             (get cmd 'disabled)
+             disabled-command-function)
+        ;; FIXME: Weird calling convention!
+        (run-hooks 'disabled-command-function)
+      (let ((final cmd))
+        (while
+            (progn
+              (setq final (indirect-function final))
+              (if (autoloadp final)
+                  (setq final (autoload-do-load final cmd)))))
+        (cond
+         ((arrayp final)
+          ;; If requested, place the macro in the command history.  For
+          ;; other sorts of commands, call-interactively takes care of this.
+          (when record-flag
+            (push `(execute-kbd-macro ,final ,prefixarg) command-history)
+            ;; Don't keep command history around forever.
+            (when (and (numberp history-length) (> history-length 0))
+              (let ((cell (nthcdr history-length command-history)))
+                (if (consp cell) (setcdr cell nil)))))
+          (execute-kbd-macro final prefixarg))
+         (t
+          ;; Pass `cmd' rather than `final', for the backtrace's sake.
+          (prog1 (call-interactively cmd record-flag keys)
+            (when (and (symbolp cmd)
+                       (get cmd 'byte-obsolete-info)
+                       (not (get cmd 'command-execute-obsolete-warned)))
+              (put cmd 'command-execute-obsolete-warned t)
+              (message "%s" (macroexp--obsolete-warning
+                             cmd (get cmd 'byte-obsolete-info) "command"))))))))))
 
 (defvar minibuffer-history nil
   "Default minibuffer history list.
@@ -2143,7 +2149,12 @@ as an argument limits undo to changes within the current region."
       ;; above when checking.
       (while (eq (car list) nil)
 	(setq list (cdr list)))
-      (puthash list (if undo-in-region t pending-undo-list)
+      (puthash list
+               ;; Prevent identity mapping.  This can happen if
+               ;; consecutive nils are erroneously in undo list.
+               (if (or undo-in-region (eq list pending-undo-list))
+                   t
+                 pending-undo-list)
 	       undo-equiv-table))
     ;; Don't specify a position in the undo record for the undo command.
     ;; Instead, undoing this should move point to where the change is.
@@ -3458,46 +3469,50 @@ These commands include \\[set-mark-command] and \\[start-kbd-macro]."
 
 
 (defvar filter-buffer-substring-functions nil
-  "This variable is a wrapper hook around `filter-buffer-substring'.")
+  "This variable is a wrapper hook around `buffer-substring--filter'.")
 (make-obsolete-variable 'filter-buffer-substring-functions
                         'filter-buffer-substring-function "24.4")
 
 (defvar filter-buffer-substring-function #'buffer-substring--filter
   "Function to perform the filtering in `filter-buffer-substring'.
-The function is called with 3 arguments:
-\(BEG END DELETE).  The arguments BEG, END, and DELETE are the same
-as those of `filter-buffer-substring' in each case.
-It should return the buffer substring between BEG and END, after filtering.")
+The function is called with the same 3 arguments (BEG END DELETE)
+that `filter-buffer-substring' received.  It should return the
+buffer substring between BEG and END, after filtering.  If DELETE is
+non-nil, it should delete the text between BEG and END from the buffer.")
 
 (defvar buffer-substring-filters nil
-  "List of filter functions for `filter-buffer-substring'.
-Each function must accept a single argument, a string, and return
-a string.  The buffer substring is passed to the first function
-in the list, and the return value of each function is passed to
-the next.
+  "List of filter functions for `buffer-substring--filter'.
+Each function must accept a single argument, a string, and return a string.
+The buffer substring is passed to the first function in the list,
+and the return value of each function is passed to the next.
 As a special convention, point is set to the start of the buffer text
-being operated on (i.e., the first argument of `filter-buffer-substring')
+being operated on (i.e., the first argument of `buffer-substring--filter')
 before these functions are called.")
 (make-obsolete-variable 'buffer-substring-filters
                         'filter-buffer-substring-function "24.1")
 
 (defun filter-buffer-substring (beg end &optional delete)
   "Return the buffer substring between BEG and END, after filtering.
-The hook `filter-buffer-substring-function' performs the actual filtering.
-By default, no filtering is done.
+If DELETE is non-nil, delete the text between BEG and END from the buffer.
 
-If DELETE is non-nil, the text between BEG and END is deleted
-from the buffer.
+This calls the function that `filter-buffer-substring-function' specifies
+\(passing the same three arguments that it received) to do the work,
+and returns whatever it does.  The default function does no filtering,
+unless a hook has been set.
 
-This function should be used instead of `buffer-substring',
-`buffer-substring-no-properties', or `delete-and-extract-region'
-when you want to allow filtering to take place.  For example,
-major or minor modes can use `filter-buffer-substring-function' to
-extract characters that are special to a buffer, and should not
-be copied into other buffers."
+Use `filter-buffer-substring' instead of `buffer-substring',
+`buffer-substring-no-properties', or `delete-and-extract-region' when
+you want to allow filtering to take place.  For example, major or minor
+modes can use `filter-buffer-substring-function' to extract characters
+that are special to a buffer, and should not be copied into other buffers."
   (funcall filter-buffer-substring-function beg end delete))
 
 (defun buffer-substring--filter (beg end &optional delete)
+  "Default function to use for `filter-buffer-substring-function'.
+Its arguments and return value are as specified for `filter-buffer-substring'.
+This respects the wrapper hook `filter-buffer-substring-functions',
+and the abnormal hook `buffer-substring-filters'.
+No filtering is done unless a hook says to."
   (with-wrapper-hook filter-buffer-substring-functions (beg end delete)
     (cond
      ((or delete buffer-substring-filters)
@@ -4409,17 +4424,13 @@ run `deactivate-mark-hook'."
 	     (x-set-selection 'PRIMARY
                               (funcall region-extract-function nil)))))
     (when mark-active (force-mode-line-update)) ;Refresh toolbar (bug#16382).
-    (if (and (null force)
-	     (or (eq transient-mark-mode 'lambda)
-		 (and (eq (car-safe transient-mark-mode) 'only)
-		      (null (cdr transient-mark-mode)))))
-	;; When deactivating a temporary region, don't change
-	;; `mark-active' or run `deactivate-mark-hook'.
-	(setq transient-mark-mode nil)
-      (if (eq (car-safe transient-mark-mode) 'only)
-	  (setq transient-mark-mode (cdr transient-mark-mode)))
-      (setq mark-active nil)
-      (run-hooks 'deactivate-mark-hook))
+    (cond
+     ((eq (car-safe transient-mark-mode) 'only)
+      (setq transient-mark-mode (cdr transient-mark-mode)))
+     ((eq transient-mark-mode 'lambda)
+      (setq transient-mark-mode nil)))
+    (setq mark-active nil)
+    (run-hooks 'deactivate-mark-hook)
     (redisplay--update-region-highlight (selected-window))))
 
 (defun activate-mark (&optional no-tmm)
@@ -4496,7 +4507,12 @@ Some commands act specially on the region when Transient Mark
 mode is enabled.  Usually, such commands should use
 `use-region-p' instead of this function, because `use-region-p'
 also checks the value of `use-empty-active-region'."
-  (and transient-mark-mode mark-active))
+  (and transient-mark-mode mark-active
+       ;; FIXME: Somehow we sometimes end up with mark-active non-nil but
+       ;; without the mark being set (e.g. bug#17324).  We really should fix
+       ;; that problem, but in the mean time, let's make sure we don't say the
+       ;; region is active when there's no mark.
+       (mark)))
 
 
 (defvar redisplay-unhighlight-region-function
@@ -4974,7 +4990,15 @@ When the `track-eol' feature is doing its job, the value is
 `most-positive-fixnum'.")
 
 (defcustom line-move-ignore-invisible t
-  "Non-nil means \\[next-line] and \\[previous-line] ignore invisible lines.
+  "Non-nil means commands that move by lines ignore invisible newlines.
+When this option is non-nil, \\[next-line], \\[previous-line], \\[move-end-of-line], and \\[move-beginning-of-line] behave
+as if newlines that are invisible didn't exist, and count
+only visible newlines.  Thus, moving across across 2 newlines
+one of which is invisible will be counted as a one-line move.
+Also, a non-nil value causes invisible text to be ignored when
+counting columns for the purposes of keeping point in the same
+column by \\[next-line] and \\[previous-line].
+
 Outline mode sets this."
   :type 'boolean
   :group 'editing-basics)
@@ -6699,6 +6723,10 @@ At top-level, as an editor command, this simply beeps."
     (deactivate-mark))
   (if (fboundp 'kmacro-keyboard-quit)
       (kmacro-keyboard-quit))
+  ;; Force the next redisplay cycle to remove the "Def" indicator from
+  ;; all the mode lines.
+  (if defining-kbd-macro
+      (force-mode-line-update t))
   (setq defining-kbd-macro nil)
   (let ((debug-on-quit nil))
     (signal 'quit nil)))
@@ -6984,7 +7012,7 @@ With a prefix argument, set VARIABLE to VALUE buffer-locally."
 
 (defvar completion-list-mode-map
   (let ((map (make-sparse-keymap)))
-    (define-key map [mouse-2] 'mouse-choose-completion)
+    (define-key map [mouse-2] 'choose-completion)
     (define-key map [follow-link] 'mouse-face)
     (define-key map [down-mouse-2] nil)
     (define-key map "\C-m" 'choose-completion)
@@ -7233,8 +7261,7 @@ back on `completion-list-insert-choice-function' when nil."
   "Major mode for buffers showing lists of possible completions.
 Type \\<completion-list-mode-map>\\[choose-completion] in the completion list\
  to select the completion near point.
-Use \\<completion-list-mode-map>\\[mouse-choose-completion] to select one\
- with the mouse.
+Or click to select one with the mouse.
 
 \\{completion-list-mode-map}"
   (set (make-local-variable 'completion-base-size) nil))
@@ -7292,7 +7319,7 @@ Called from `temp-buffer-show-hook'."
 	(goto-char (point-min))
 	(if (display-mouse-p)
 	    (insert (substitute-command-keys
-		     "Click \\[mouse-choose-completion] on a completion to select it.\n")))
+		     "Click on a completion to select it.\n")))
 	(insert (substitute-command-keys
 		 "In this buffer, type \\[choose-completion] to \
 select the completion near point.\n\n"))))))
