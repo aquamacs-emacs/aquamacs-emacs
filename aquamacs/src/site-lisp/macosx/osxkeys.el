@@ -139,13 +139,13 @@ Ignored if text was selected by mouse. PUSH is ignored."
 provided `cua-mode' and the mark are active."
   (interactive)
   (let ((left (min (point) (or (mark t) 0))))
-    (if (and cua-mode transient-mark-mode 
+    (if (and cua-mode
+	     (consp transient-mark-mode) ;; used to be cua--explicit-region-start
 	     mark-active
-	     (not (region-active-p));(not cua--explicit-region-start)
 	     (not this-command-keys-shift-translated))
-	(goto-char left)
-      (let ((this-command 'left-char)) ;; maintain compatibility
-	(call-interactively 'left-char)))))
+	(goto-char left)))
+  (let ((this-command 'left-char)) ;; maintain compatibility
+      (call-interactively 'left-char)))
 
 
 (defun aquamacs-right-char (&rest args)
@@ -154,13 +154,13 @@ provided `cua-mode' and the mark are active."
 provided `cua-mode' and the mark are active."
   (interactive)
   (let ((right (max (point) (or (mark t) 0))))
-    (if (and cua-mode transient-mark-mode 
+    (if (and cua-mode
+	     (consp transient-mark-mode) ;; used to be cua--explicit-region-start
 	     mark-active
-	     (not (region-active-p));(not cua--explicit-region-start)
 	     (not this-command-keys-shift-translated))
-	(goto-char right)
-      (let ((this-command 'right-char)) ;; maintain compatibility
-	(call-interactively 'right-char)))))
+	(goto-char right)))
+  (let ((this-command 'right-char)) ;; maintain compatibility
+    (call-interactively 'right-char)))
 
 (dolist (cmd
 	 '(aquamacs-left-char 
@@ -319,11 +319,9 @@ With argument, do this that many times."
 	 (overlay-end mouse-secondary-overlay) )
 	(message "Secondary selection saved to clipboard and kill-ring.")
 	(setq mark-active mark-was-active
-	      deactivate-mark nil)
-	)
-					; else
-    (message "The secondary selection is not set.")
-    ))
+	      deactivate-mark nil))
+    ;; else
+    (message "The secondary selection is not set.")))
 
 (defun aquamacs-clipboard-kill-secondary ()
   "Kill the secondary selection, and save it in the X clipboard."
@@ -359,15 +357,21 @@ whenever isearch-mode is exited, even if it was invoked with
 	     (not isearch-mode-end-hook-quit)
 	     (or aquamacs-isearching
 		 (eq set-region-to-isearch-match 'always))
-	     transient-mark-mode (not mark-active))
-					; mark could have been set explicitly: don't change it
-    (push-mark isearch-other-end t t)
+	     transient-mark-mode
+	     isearch-other-end
+	     )
+    ;; mark could have been set explicitly: don't change it
     (goto-char (point))
+    (push-mark isearch-other-end t t)
     (setq transient-mark-mode
 	  (if (eq transient-mark-mode 'lambda)
 	      '(only)
-	    (cons 'only transient-mark-mode))))
-  (setq aquamacs-isearching))
+	    (if (consp transient-mark-mode)
+		transient-mark-mode
+	      (cons 'only transient-mark-mode)))))
+  (when isearch-mode-end-hook-quit
+    (deactivate-mark)
+    (setq aquamacs-isearching)))
 
 (defvar aquamacs-isearching nil)
 
@@ -385,7 +389,7 @@ whenever isearch-mode is exited, even if it was invoked with
   (setq aquamacs-isearching t)
   (call-interactively 'isearch-backward)) 
 
-(defun aquamacs-repeat-isearch ()
+(defun aquamacs-repeat-isearch (&optional dir)
   "Repeats the last string isearch.
 Set region to match if `set-region-to-isearch-match'.
 Wraps around after throwing and error once."
@@ -396,46 +400,28 @@ Wraps around after throwing and error once."
 	(deactivate-mark)
 	(if (not isearch-mode)
 	    (isearch-mode t isearch-regexp))
-	(isearch-repeat 'forward)
+	(isearch-repeat (or dir 'forward))
 	(aquamacs-set-region-to-search-match))
-    (isearch-repeat 'forward)))
+    (isearch-repeat (or dir 'forward))))
 
 (defun aquamacs-repeat-isearch-backward ()
   "Repeats the last string isearch backwards.
 Set region to match. 
 Wraps around after throwing and error once."
   (interactive)
-  (setq aquamacs-isearching t)
-  (if set-region-to-isearch-match
-      (progn
-	(if (and (eq last-command 'aquamacs-repeat-isearch-backward)
-		 (not mark-active)) ;; failed error has been shown once (and mark deactivated)
-	    (condition-case nil
-		(search-backward isearch-string)
-	      (error
-	       (let (new-point)
-		 (save-excursion
-		   (end-of-buffer)
-		   (condition-case x
-		       (progn (search-backward isearch-string)
-			      (setq new-point (point)))
-		     (error
-		      (signal (car x) (cdr x)))))
-		 (and new-point (goto-char new-point)))))
-	  (deactivate-mark)
-	  (if (and (mark) (< (mark) (point)))
-	      (goto-char (mark)))
-	  (search-backward isearch-string))
-	(set-mark (match-end 0)))
-    (isearch-repeat 'backward)))
+  (if (use-region-p)
+      (goto-char (region-beginning)))
+  (aquamacs-repeat-isearch 'backward))
 
 (defun aquamacs-isearch-yank-kill ()
   (interactive)			
-  (if (and isearch-string (> (length isearch-string) 0))
-      (call-interactively 'clipboard-yank)
+  (if (and isearch-mode isearch-string (> (length isearch-string) 0))
+     (call-interactively (if cua-mode 'cua-paste
+			     'clipboard-yank))
     (let ((x-select-enable-clipboard t))
       (call-interactively 'isearch-yank-kill))))
 
+(put 'aquamacs-isearch-yank-kill 'delete-selection 'yank)
 
 (defmacro allow-line-as-region-for-function (orig-function)
 `(defun ,(intern (concat (symbol-name orig-function) "-or-line")) 
@@ -1039,6 +1025,7 @@ keymaps used by this mode. They may be modified where necessary."
 	      (aquamacs-install-low-priority-global-key-map
 	       osx-key-low-priority-key-map))
 	(define-key isearch-mode-map `[(,osxkeys-command-key v)] 'aquamacs-isearch-yank-kill)
+	(add-hook 'isearch-update-post-hook 'aquamacs-set-region-to-search-match)
 	(add-hook 'isearch-mode-end-hook 'aquamacs-set-region-to-search-match))
     ;; restore old map
     (when osx-key--saved-low-priority-map
@@ -1046,6 +1033,7 @@ keymaps used by this mode. They may be modified where necessary."
        osx-key--saved-low-priority-map)
       (setq osx-key--saved-low-priority-map (make-sparse-keymap)))
     (define-key isearch-mode-map `[(,osxkeys-command-key v)] nil)
+    (remove-hook 'isearch-update-post-hook 'aquamacs-set-region-to-search-match)
     (remove-hook 'isearch-mode-end-hook 'aquamacs-set-region-to-search-match))
 
   (osx-key-mode-command-key-warning))
