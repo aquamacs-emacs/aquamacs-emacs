@@ -356,9 +356,11 @@ whenever isearch-mode is exited, even if it was invoked with
 (defun aquamacs-set-region-to-search-match ()
   ;; match beginning / end aren't guaranteed to be defined here (e.g., in flyspell-mode)
   (when (and set-region-to-isearch-match
+	     (not isearch-mode-end-hook-quit)
 	     (or aquamacs-isearching
 		 (eq set-region-to-isearch-match 'always))
-	     transient-mark-mode (not mark-active)) ; mark could have been set explicitly: don't change it
+	     transient-mark-mode (not mark-active))
+					; mark could have been set explicitly: don't change it
     (push-mark isearch-other-end t t)
     (goto-char (point))
     (setq transient-mark-mode
@@ -371,11 +373,15 @@ whenever isearch-mode is exited, even if it was invoked with
 
 (defun aquamacs-isearch-forward ()
   (interactive)
+  (if set-region-to-isearch-match
+      (deactivate-mark))
   (setq aquamacs-isearching t)
   (call-interactively 'isearch-forward))
 
 (defun aquamacs-isearch-backward ()
   (interactive)
+  (if set-region-to-isearch-match
+      (deactivate-mark))
   (setq aquamacs-isearching t)
   (call-interactively 'isearch-backward)) 
 
@@ -842,6 +848,9 @@ which key is mapped to command. The value of
     (define-key map `[(,osxkeys-command-key p)] 'aquamacs-print)
     (define-key map `[(,osxkeys-command-key l)] 'goto-line)
     (define-key map `[(,osxkeys-command-key f)] 'aquamacs-isearch-forward)
+    ;; this enables the user to jump into isearch (from outside of isearch-mode)
+    (define-key map `[(,osxkeys-command-key g)] 'aquamacs-repeat-isearch)
+    (define-key map `[(,osxkeys-command-key shift g)] 'aquamacs-repeat-isearch-backward)
     ;; the following should be defined in insearch-mode-map
     ;; because isearch terminates isearch-mode when non-isearch commands are entered
     (define-key isearch-mode-map `[(,osxkeys-command-key g)] 'aquamacs-repeat-isearch)
