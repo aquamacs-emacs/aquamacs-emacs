@@ -31,7 +31,7 @@
 ;; Boston, MA 02111-1307, USA.
 
  
-;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2012, 2013 David Reitter
+;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2012, 2013, 2014 David Reitter
 
 
 ;; Unit test  / check requirements
@@ -139,10 +139,9 @@ Ignored if text was selected by mouse. PUSH is ignored."
 provided `cua-mode' and the mark are active."
   (interactive)
   (let ((left (min (point) (or (mark t) 0))))
-
     (if (and cua-mode transient-mark-mode 
 	     mark-active
-	     (not (region-active-p))
+	     (not (region-active-p));(not cua--explicit-region-start)
 	     (not this-command-keys-shift-translated))
 	(goto-char left)
       (let ((this-command 'left-char)) ;; maintain compatibility
@@ -157,11 +156,11 @@ provided `cua-mode' and the mark are active."
   (let ((right (max (point) (or (mark t) 0))))
     (if (and cua-mode transient-mark-mode 
 	     mark-active
-	     (not (region-active-p))
+	     (not (region-active-p));(not cua--explicit-region-start)
 	     (not this-command-keys-shift-translated))
 	(goto-char right)
-       (let ((this-command 'right-char)) ;; maintain compatibility
-	 (call-interactively 'right-char)))))
+      (let ((this-command 'right-char)) ;; maintain compatibility
+	(call-interactively 'right-char)))))
 
 (dolist (cmd
 	 '(aquamacs-left-char 
@@ -360,7 +359,12 @@ whenever isearch-mode is exited, even if it was invoked with
 	     (or aquamacs-isearching
 		 (eq set-region-to-isearch-match 'always))
 	     transient-mark-mode (not mark-active)) ; mark could have been set explicitly: don't change it
-      (set-mark isearch-other-end))
+    (push-mark isearch-other-end t t)
+    (goto-char (point))
+    (setq transient-mark-mode
+	  (if (eq transient-mark-mode 'lambda)
+	      '(only)
+	    (cons 'only transient-mark-mode))))
   (setq aquamacs-isearching))
 
 (defvar aquamacs-isearching nil)
@@ -382,24 +386,12 @@ Wraps around after throwing and error once."
   (interactive)
   (setq aquamacs-isearching t)
   (if set-region-to-isearch-match
-    (progn
-      (if (or (and (eq last-command 'aquamacs-repeat-isearch)
-		   (not mark-active))) ;; failed error has been shown once (and mark deactivated)
-	  (condition-case nil
-	      (search-forward isearch-string)
-	    (error 
-	     (let (new-point)
-	       (save-excursion
-		 (beginning-of-buffer)
-		 (condition-case x
-		     (progn (search-forward isearch-string)
-			    (setq new-point (point)))
-		   (error
-		    (signal (car x) (cdr x)))))
-	       (and new-point (goto-char new-point)))))
-      (deactivate-mark)
-      (search-forward isearch-string))
-      (set-mark (match-beginning 0)))
+      (progn
+	(deactivate-mark)
+	(if (not isearch-mode)
+	    (isearch-mode t isearch-regexp))
+	(isearch-repeat 'forward)
+	(aquamacs-set-region-to-search-match))
     (isearch-repeat 'forward)))
 
 (defun aquamacs-repeat-isearch-backward ()
@@ -850,8 +842,10 @@ which key is mapped to command. The value of
     (define-key map `[(,osxkeys-command-key p)] 'aquamacs-print)
     (define-key map `[(,osxkeys-command-key l)] 'goto-line)
     (define-key map `[(,osxkeys-command-key f)] 'aquamacs-isearch-forward)
-    (define-key map `[(,osxkeys-command-key g)] 'aquamacs-repeat-isearch)  
-    (define-key map `[(,osxkeys-command-key shift g)] 'aquamacs-repeat-isearch-backward)
+    ;; the following should be defined in insearch-mode-map
+    ;; because isearch terminates isearch-mode when non-isearch commands are entered
+    (define-key isearch-mode-map `[(,osxkeys-command-key g)] 'aquamacs-repeat-isearch)
+    (define-key isearch-mode-map `[(,osxkeys-command-key shift g)] 'aquamacs-repeat-isearch-backward)
     (if (fboundp 'ns-do-hide-emacs)
 	(define-key map `[(,osxkeys-command-key h)] 'ns-do-hide-emacs))
     (define-key map `[(,osxkeys-command-key e)] 'aquamacs-use-selection-for-find)
