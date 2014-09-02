@@ -115,6 +115,7 @@ typedef float EmacsCGFloat;
 }
 
 - (void)logNotification: (NSNotification *)notification;
+- (void)antialiasThresholdDidChange:(NSNotification *)notification;
 - (void)sendEvent: (NSEvent *)theEvent;
 - (void)showPreferencesWindow: (id)sender;
 - (BOOL) openFile: (NSString *)fileName;

@@ -1,3 +1,245 @@
+2014-09-02  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* eval.c (internal_lisp_condition_case): Don't overrun the stack
+	when configured --with-wide-int on typical 32-bit platforms.
+
+2014-08-31  Eli Zaretskii  <eliz@gnu.org>
+
+	* xdisp.c (display_and_set_cursor): Call erase_phys_cursor also
+	when HPOS is negative, for the benefit of R2L glyph rows whose
+	newline overflows into the fringe.
+
+2014-08-30  Ken Brown  <kbrown@cornell.edu>
+
+	* conf_post.h (strnicmp) [CYGWIN && HAVE_NTGUI]: Define.
+	(Bug#18366)
+
+2014-08-28  Eli Zaretskii  <eliz@gnu.org>
+
+	* syntax.c (scan_lists): Don't examine positions before BEGV.
+	(Bug#18339)
+
+2014-08-25  Eli Zaretskii  <eliz@gnu.org>
+
+	* conf_post.h (_GL_EXECINFO_INLINE) [MSDOS]: Don't define.
+
+2014-08-18  Eli Zaretskii  <eliz@gnu.org>
+
+	* xdisp.c (handle_stop): Improve commentary.
+
+	* indent.c (Fvertical_motion): Fix vertical motion up through a
+	display property after a newline.  (Bug#18276)
+
+2014-08-17  Eli Zaretskii  <eliz@gnu.org>
+
+	* xdisp.c (display_line): Don't assume that the call to
+	reseat_at_next_visible_line_start ends up at a character
+	immediately following the newline on the previous line.  Avoids
+	setting the ends_at_zv_p flag on screen lines that are not at or
+	beyond ZV, which causes infloop in redisplay.  For the details, see
+	http://lists.gnu.org/archive/html/emacs-devel/2014-08/msg00368.html.
+
+	* dispnew.c (buffer_posn_from_coords): Fix mirroring of X
+	coordinate for hscrolled R2L screen lines.  (Bug#18277)
+
+2014-08-11  Ken Brown  <kbrown@cornell.edu>
+
+	* gmalloc.c (_malloc_mutex, _aligned_blocks_mutex) [CYGWIN]: Use
+	ERRORCHECK mutexes.  (Bug#18222)
+
+2014-08-11  Glenn Morris  <rgm@gnu.org>
+
+	* fileio.c: Revert 2013-01-31 change, which chose coding system for
+	writing before backing up, since it causes a more serious problem
+	than the one it solves.  (Closes Bug#18141, reopens Bug#13522.)
+	(choose_write_coding_system): No longer callable from Lisp.
+	Move last piece back here from Fwrite_region.
+	(Fwrite_region, syms_of_fileio): Update for above changes.
+
+2014-08-09  Martin Rudalics  <rudalics@gmx.at>
+
+	* window.c (Fwindow_new_total, Fwindow_new_normal)
+	(Fwindow_new_pixel, Fset_window_new_pixel)
+	(Fset_window_new_total, Fset_window_new_normal): Second attempt
+	to fix the doc-strings of these functions.  See:
+	http://lists.gnu.org/archive/html/bug-gnu-emacs/2014-08/msg00287.html
+
+2014-08-08  Martin Rudalics  <rudalics@gmx.at>
+
+	* window.c (Fwindow_valid_p): Fix doc-string (Bug#18194).
+	(Fwindow_new_total, Fwindow_normal_size, Fwindow_new_normal)
+	(Fwindow_new_pixel, Fset_window_new_pixel)
+	(Fset_window_new_total, Fset_window_new_normal)
+	(Fwindow_resize_apply): Fix doc-strings (see Bug#18112).
+
+2014-08-07  Eli Zaretskii  <eliz@gnu.org>
+
+	* fontset.c (Finternal_char_font): Recompute basic faces if the
+	frame's face cache was cleared.  (Bug#18162)
+
+2014-08-05  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	Fix bug with uninitialized undo list of an indirect buffer (Bug#18180).
+	* buffer.c (Fmake_indirect_buffer): Initialize undo list with the
+	base buffer's undo list.
+
+2014-08-03  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	Fix bug with an attempt to select uninitialized frame (Bug#18161).
+	* xfns.c (Fx_create_frame): Move call to change_frame_size to
+	a section where Lisp evaluation is disabled.  This way a pointer
+	to uninitialized frame is not accessible from Lisp, which becomes
+	critical if following call to x_figure_window_size throws an error.
+
+2014-08-02  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Fix bug with clang + directory_files_internal + GC (Bug#16986).
+	* dired.c (directory_files_internal): Use a volatile variable
+	to prevent the compiler from optimizing away all copies of a local.
+	I wonder how many other GC-related bugs like this lurk elsewhere?
+
+	Avoid 100% CPU utilization on ssh session exit (Bug#17691).
+	* xterm.h (struct x_display_info): New member 'connection'.
+	* xterm.c (x_term_init, x_delete_terminal): Set and use it,
+	so that x_delete_terminal has a file descriptor to pass to
+	delete_keyboard_wait_descriptor.
+
+2014-08-01  Eli Zaretskii  <eliz@gnu.org>
+
+	Fix display of R2L lines when the last character fits only partially.
+	See http://lists.gnu.org/archive/html/emacs-devel/2014-07/msg00476.html
+	for the details.
+	* xdisp.c (extend_face_to_end_of_line): If the last glyph of an
+	R2L row is visible only partially, give the row a negative x
+	offset.
+	(display_line): Fix the calculation of the glyph whose pixel width
+	is used to decide whether the last produced glyph fits on the
+	line.  When the last glyph fits only partially, give the row a
+	negative x offset.
+
+2014-07-29  Eli Zaretskii  <eliz@gnu.org>
+
+	Fix hscroll of R2L lines that begin with a TAB or another wide glyph.
+	* xdisp.c (append_stretch_glyph): In a R2L glyph row, decrease the
+	pixel width of the first glyph that is hscrolled from display.
+	(display_line): In R2L glyph rows, don't give a negative offset to
+	row->x when the first glyph begins before first_visible_x.
+
+2014-07-29  Andreas Schwab  <schwab@suse.de>
+
+	* macros.c (Fstart_kbd_macro): Initialize kbd_macro_ptr and
+	kbd_macro_end together with kbd_macro_buffer.  (Bug#18140)
+
+2014-07-28  Eli Zaretskii  <eliz@gnu.org>
+
+	* xdisp.c (display_line): If called with iterator set up to write
+	to a marginal area, delay the call to handle_line_prefix until we
+	switch back to the text area.  (Bug#18035)
+
+	* .gdbinit (xwindow): The members total_cols, total_lines,
+	left_col, and top_line are C integers (and has been so for the
+	last 1.5 years).
+
+2014-07-20  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* nsterm.m (applicationDidFinishLaunching:): Call
+	antialiasThresholdDidChange, register for antialias changes (Bug#17534).
+	(antialiasThresholdDidChange:): New method for EmacsApp.
+
+	* nsterm.h (EmacsApp): Add antialiasThresholdDidChange.
+
+	* macfont.m (macfont_update_antialias_threshold): Remove static.
+
+	* macfont.h (macfont_update_antialias_threshold): Declare.
+
+2014-07-17  Eli Zaretskii  <eliz@gnu.org>
+
+	* w32select.c (setup_windows_coding_system): Apply
+	CODING_ANNOTATION_MASK to the common_flags member of struct
+	coding_system.  Reported by martin rudalics <rudalics@gmx.at>.
+
+	* w16select.c (Fw16_get_clipboard_data): Apply
+	CODING_ANNOTATION_MASK to the common_flags member of struct
+	coding_system.
+
+	* xdisp.c (init_iterator): Initialize it->stop_charpos to the
+	buffer position where we are to start the iteration.
+	(handle_invisible_prop): Record in it->stop_charpos the position
+	where the invisible text ends.  (Bug#18035)
+	(hscroll_window_tree): Don't try hscrolling windows whose cursor
+	row has zero buffer position as their start position.  Reported by
+	martin rudalics <rudalics@gmx.at>.
+
+2014-07-16  Eli Zaretskii  <eliz@gnu.org>
+
+	* xdisp.c (move_it_vertically_backward, move_it_by_lines): Prevent
+	infinite looping in redisplay when display lines don't have enough
+	space to display even a single character.  (Bug#18036)
+
+2014-07-13  Eli Zaretskii  <eliz@gnu.org>
+
+	* xdisp.c (decode_mode_spec): Call file-remote-p on the current
+	buffer's default-directory only if it is a string.  (Bug#17986)
+
+2014-07-12  Eli Zaretskii  <eliz@gnu.org>
+
+	* xdisp.c (display_line): Don't call FETCH_BYTE with argument less
+	than 1.  (Bug#17962)
+
+	* w32fns.c (Fx_file_dialog): Mention in the doc string the
+	behavior on Windows 7 and later when the function is repeatedly
+	invoked with the same value of DIR.  (Bug#17950)
+
+	* xfns.c (Fx_file_dialog) [USE_MOTIF, USE_GTK]: Update the doc
+	string to match the one in w32fns.c.
+
+2014-07-08  Eli Zaretskii  <eliz@gnu.org>
+
+	* xdisp.c (move_it_to): Adjust calculation of line_start_x to what
+	x_produce_glyphs does when it generates a stretch glyph that
+	represents a TAB.  (Bug#17969)
+
+2014-07-05  Eli Zaretskii  <eliz@gnu.org>
+
+	* xdisp.c (pos_visible_p): If CHARPOS is at beginning of window,
+	and there is a display property at that position, don't call
+	move_it_to to move to a position before window start.  (Bug#17942)
+	Fix condition for finding CHARPOS by the first call to move_it_to.
+	(Bug#17944)
+
+2014-07-05  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* syntax.c (find_defun_start): Try the cache even
+	if !open_paren_in_column_0_is_defun_start.
+	(back_comment): If find_defun_start was pessimistic, use the
+	scan_sexps_forward result to improve the cache (bug#16526).
+
+2014-07-04  Daniel Colascione  <dancol@dancol.org>
+
+	Backport from trunk.
+	* xfns.c (create_frame_xic): Pass XNStatusAttributes to XCreateIC
+	only if xic_style calls for it.  This change allows Emacs to work
+	with ibus.  Also, don't leak resources if create_frame_xic fails,
+	and stop caching xic_style across different displays (Bug#17928).
+	(supported_xim_styles): Make const.
+	(best_xim_style): Remove first parameter: it's always just
+	supported_xim_styles.  Change to look at supported_xim_styles directly.
+
+2014-07-04  Eli Zaretskii  <eliz@gnu.org>
+
+	* xdisp.c (redisplay_window): If redisplay of a window ends up
+	with point in a partially visible line at end of the window, make
+	sure the amended position of point actually has smaller Y
+	coordinate; if not, give up and scroll the display.  (Bug#17905)
+
+	* window.c (window_scroll_pixel_based): When point ends up at the
+	last fully visible line, don't let move_it_to stop at the left
+	edge of the line and dupe us into thinking point is inside the
+	scroll margin.
+
+	* w32.c (network_interface_info): Make sure the argument is a
+	Lisp string.
+
 2014-07-01  Eli Zaretskii  <eliz@gnu.org>
 
 	* dispnew.c (prepare_desired_row): Accept 2 additional arguments:
@@ -2304,7 +2546,7 @@
 	Avoid undefined behavior with huge regexp interval counts.
 	* regex.c (GET_INTERVAL_COUNT): Rename from 'GET_UNSIGNED_NUMBER',
 	since it's now specialized to interval counts.  All uses changed.
-	Do not assume wrapraound on signed integer overflow.
+	Do not assume wraparound on signed integer overflow.
 	(regex_compile): Simplify based on the above changes.
 
 2013-12-12  Eli Zaretskii  <eliz@gnu.org>

@@ -1117,8 +1117,17 @@ dumping to it."
 WINDOW must be a valid window and defaults to the selected one.
 
 If HORIZONTAL is omitted or nil, return the total height of
-WINDOW, in lines, like `window-total-height'.  Otherwise return
-the total width, in columns, like `window-total-width'.
+WINDOW, in lines.  If WINDOW is live, its total height includes,
+in addition to the height of WINDOW's text, the heights of
+WINDOW's mode and header line and a bottom divider, if any.
+
+If HORIZONTAL is non-nil, return the total width of WINDOW, in
+columns.  If WINDOW is live, its total width includes, in
+addition to the width of WINDOW's text, the widths of WINDOW's
+fringes, margins, scroll bars and its right divider, if any.
+
+If WINDOW is internal, return the respective size of the screen
+areas spanned by its children.
 
 Optional argument ROUND is handled as for `window-total-height'
 and `window-total-width'."
@@ -2230,7 +2239,7 @@ Optional argument HORIZONTAL non-nil means assign new total
 window widths from pixel widths."
   (setq frame (window-normalize-frame frame))
   (let* ((char-size (frame-char-size frame horizontal))
-	 (root (frame-root-window))
+	 (root (frame-root-window frame))
 	 (root-size (window-size root horizontal t))
 	 ;; We have to care about the minibuffer window only if it
 	 ;; appears together with the root window on this frame.
@@ -6373,7 +6382,10 @@ again with `display-buffer-pop-up-window'."
 This either splits the selected window or reuses the window below
 the selected one."
   (let (window)
-    (or (and (not (frame-parameter nil 'unsplittable))
+    (or (and (setq window (window-in-direction 'below))
+	     (eq buffer (window-buffer window))
+	     (window--display-buffer buffer window 'reuse alist))
+	(and (not (frame-parameter nil 'unsplittable))
 	     (let ((split-height-threshold 0)
 		   split-width-threshold)
 	       (setq window (window--try-to-split-window (selected-window) alist)))

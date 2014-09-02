@@ -726,11 +726,11 @@ If command is repeated at same position, delete the rectangle."
   ;; Set cua--rectangle to indicate we're marking a rectangle.
   ;; Be careful if we are already marking a rectangle.
   (setq cua--rectangle
-        (if (and cua--last-rectangle
+        (or (and cua--last-rectangle
                  (eq (car cua--last-rectangle) (current-buffer))
-                 (eq (car (cdr cua--last-rectangle)) (point)))
-            (cdr (cdr cua--last-rectangle))
-          (cua--rectangle-get-corners))
+                 (eq (car (cdr cua--last-rectangle)) (point))
+                 (cdr (cdr cua--last-rectangle)))
+            (cua--rectangle-get-corners))
         cua--status-string (if (cua--rectangle-virtual-edges) " [R]" "")
         cua--last-rectangle nil)
   (activate-mark))
@@ -794,7 +794,7 @@ If command is repeated at same position, delete the rectangle."
 			       (make-string
 				(- l cl0 (if (and (= le pl) (/= le lb)) 1 0))
 				(if cua--virtual-edges-debug ?. ?\s))
-			       'face (or (get-text-property (1- s) 'face) 'default)))
+			       'face (or (get-text-property (max (1- s) (point-min)) 'face) 'default)))
 		     (if (/= pl le)
 			 (setq s (1- s))))
 		   (cond

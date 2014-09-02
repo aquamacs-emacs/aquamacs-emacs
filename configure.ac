@@ -22,7 +22,7 @@ dnl  You should have received a copy of the GNU General Public License
 dnl  along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
 
 AC_PREREQ(2.65)
-AC_INIT(emacs, 24.3.92)
+AC_INIT(emacs, 24.3.93)
 
 dnl We get MINGW64 with MSYS2
 if test "x$MSYSTEM" = "xMINGW32" -o "x$MSYSTEM" = "xMINGW64"
@@ -2969,6 +2969,9 @@ AC_SUBST(M17N_FLT_LIBS)
 
 ### Use -lXpm if available, unless `--with-xpm=no'.
 ### mingw32 doesn't use -lXpm, since it loads the library dynamically.
+### In the Cygwin-w32 build, we need to use /usr/include/noX/X11/xpm.h
+### rather than /usr/include/X11/xpm.h, so we set CPPFLAGS (and
+### LDFLAGS) accordingly.
 HAVE_XPM=no
 LIBXPM=
 if test "${HAVE_W32}" = "yes" && test "${opsys}" = "cygwin"; then
@@ -3508,7 +3511,7 @@ esac
 AC_SUBST(BLESSMAIL_TARGET)
 
 
-AC_CHECK_FUNCS(accept4 gethostname \
+AC_CHECK_FUNCS(accept4 fchdir gethostname \
 getrusage get_current_dir_name \
 lrand48 \
 select getpagesize setlocale \

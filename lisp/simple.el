@@ -375,6 +375,13 @@ Other major modes are defined by comparison with this one."
 
 ;; Making and deleting lines.
 
+(defvar self-insert-uses-region-functions nil
+  "Special hook to tell if `self-insert-command' will use the region.
+It must be called via `run-hook-with-args-until-success' with no arguments.
+Any `post-self-insert-command' which consumes the region should
+register a function on this hook so that things like `delete-selection-mode'
+can refrain from consuming the region.")
+
 (defvar hard-newline (propertize "\n" 'hard t 'rear-nonsticky '(hard))
   "Propertized string representing a hard newline character.")
 
@@ -5045,7 +5052,7 @@ or the frame."
 		     0)
 	       0)))
     (if (floatp lsp)
-	(setq lsp (* dfh lsp)))
+	(setq lsp (truncate (* (frame-char-height) lsp))))
     (+ dfh lsp)))
 
 (defun window-screen-lines ()
@@ -5057,10 +5064,9 @@ in the window, not in units of the frame's default font, and also accounts
 for `line-spacing', if any, defined for the window's buffer or frame.
 
 The value is a floating-point number."
-  (let ((canonical (window-text-height))
-	(fch (frame-char-height))
+  (let ((edges (window-inside-pixel-edges))
 	(dlh (default-line-height)))
-    (/ (* (float canonical) fch) dlh)))
+    (/ (float (- (nth 3 edges) (nth 1 edges))) dlh)))
 
 ;; Returns non-nil if partial move was done.
 (defun line-move-partial (arg noerror to-end)

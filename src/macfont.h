@@ -145,3 +145,4 @@ typedef const struct _EmacsScreenFont *ScreenFontRef; /* opaque */
 extern void mac_register_font_driver (struct frame *f);
 extern void *macfont_get_nsctfont (struct font *font);
 extern void macfont_update_antialias_threshold (void);
+

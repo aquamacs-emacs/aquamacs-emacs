@@ -1641,12 +1641,12 @@ hack_wm_protocols (struct frame *f, Widget widget)
 #ifdef HAVE_X_I18N
 
 static XFontSet xic_create_xfontset (struct frame *);
-static XIMStyle best_xim_style (XIMStyles *, XIMStyles *);
+static XIMStyle best_xim_style (XIMStyles *);
 
 
 /* Supported XIM styles, ordered by preference.  */
 
-static XIMStyle supported_xim_styles[] =
+static const XIMStyle supported_xim_styles[] =
 {
   XIMPreeditPosition | XIMStatusArea,
   XIMPreeditPosition | XIMStatusNothing,
@@ -1941,14 +1941,16 @@ xic_free_xfontset (struct frame *f)
    input method XIM.  */
 
 static XIMStyle
-best_xim_style (XIMStyles *user, XIMStyles *xim)
+best_xim_style (XIMStyles *xim)
 {
   int i, j;
+  int nr_supported =
+    sizeof (supported_xim_styles) / sizeof (supported_xim_styles[0]);
 
-  for (i = 0; i < user->count_styles; ++i)
+  for (i = 0; i < nr_supported; ++i)
     for (j = 0; j < xim->count_styles; ++j)
-      if (user->supported_styles[i] == xim->supported_styles[j])
-	return user->supported_styles[i];
+      if (supported_xim_styles[i] == xim->supported_styles[j])
+	return supported_xim_styles[i];
 
   /* Return the default style.  */
   return XIMPreeditNothing | XIMStatusNothing;
@@ -1956,42 +1958,41 @@ best_xim_style (XIMStyles *user, XIMStyles *xim)
 
 /* Create XIC for frame F. */
 
-static XIMStyle xic_style;
-
 void
 create_frame_xic (struct frame *f)
 {
   XIM xim;
   XIC xic = NULL;
   XFontSet xfs = NULL;
+  XVaNestedList status_attr = NULL;
+  XVaNestedList preedit_attr = NULL;
+  XRectangle s_area;
+  XPoint spot;
+  XIMStyle xic_style;
 
   if (FRAME_XIC (f))
-    return;
+    goto out;
+
+  xim = FRAME_X_XIM (f);
+  if (!xim)
+    goto out;
+
+  /* Determine XIC style.  */
+  xic_style = best_xim_style (FRAME_X_XIM_STYLES (f));
 
   /* Create X fontset. */
-  xfs = xic_create_xfontset (f);
-  xim = FRAME_X_XIM (f);
-  if (xim)
+  if (xic_style & (XIMPreeditPosition | XIMStatusArea))
     {
-      XRectangle s_area;
-      XPoint spot;
-      XVaNestedList preedit_attr;
-      XVaNestedList status_attr;
+      xfs = xic_create_xfontset (f);
+      if (!xfs)
+        goto out;
 
-      s_area.x = 0; s_area.y = 0; s_area.width = 1; s_area.height = 1;
+      FRAME_XIC_FONTSET (f) = xfs;
+    }
+
+  if (xic_style & XIMPreeditPosition)
+    {
       spot.x = 0; spot.y = 1;
-
-      /* Determine XIC style.  */
-      if (xic_style == 0)
-	{
-	  XIMStyles supported_list;
-	  supported_list.count_styles = (sizeof supported_xim_styles
-					 / sizeof supported_xim_styles[0]);
-	  supported_list.supported_styles = supported_xim_styles;
-	  xic_style = best_xim_style (&supported_list,
-				      FRAME_X_XIM_STYLES (f));
-	}
-
       preedit_attr = XVaCreateNestedList (0,
 					  XNFontSet, xfs,
 					  XNForeground,
@@ -2003,31 +2004,75 @@ create_frame_xic (struct frame *f)
 					   : NULL),
 					  &spot,
 					  NULL);
-      status_attr = XVaCreateNestedList (0,
-					 XNArea,
-					 &s_area,
-					 XNFontSet,
-					 xfs,
-					 XNForeground,
-					 FRAME_FOREGROUND_PIXEL (f),
-					 XNBackground,
-					 FRAME_BACKGROUND_PIXEL (f),
-					 NULL);
 
-      xic = XCreateIC (xim,
-		       XNInputStyle, xic_style,
-		       XNClientWindow, FRAME_X_WINDOW (f),
-		       XNFocusWindow, FRAME_X_WINDOW (f),
-		       XNStatusAttributes, status_attr,
-		       XNPreeditAttributes, preedit_attr,
-		       NULL);
-      XFree (preedit_attr);
-      XFree (status_attr);
+      if (!preedit_attr)
+        goto out;
     }
+
+  if (xic_style & XIMStatusArea)
+    {
+      s_area.x = 0; s_area.y = 0; s_area.width = 1; s_area.height = 1;
+      status_attr = XVaCreateNestedList (0,
+                                         XNArea,
+                                         &s_area,
+                                         XNFontSet,
+                                         xfs,
+                                         XNForeground,
+                                         FRAME_FOREGROUND_PIXEL (f),
+                                         XNBackground,
+                                         FRAME_BACKGROUND_PIXEL (f),
+                                         NULL);
+
+      if (!status_attr)
+        goto out;
+    }
+
+  if (preedit_attr && status_attr)
+    xic = XCreateIC (xim,
+                     XNInputStyle, xic_style,
+                     XNClientWindow, FRAME_X_WINDOW (f),
+                     XNFocusWindow, FRAME_X_WINDOW (f),
+                     XNStatusAttributes, status_attr,
+                     XNPreeditAttributes, preedit_attr,
+                     NULL);
+  else if (preedit_attr)
+    xic = XCreateIC (xim,
+                     XNInputStyle, xic_style,
+                     XNClientWindow, FRAME_X_WINDOW (f),
+                     XNFocusWindow, FRAME_X_WINDOW (f),
+                     XNPreeditAttributes, preedit_attr,
+                     NULL);
+  else if (status_attr)
+    xic = XCreateIC (xim,
+                     XNInputStyle, xic_style,
+                     XNClientWindow, FRAME_X_WINDOW (f),
+                     XNFocusWindow, FRAME_X_WINDOW (f),
+                     XNStatusAttributes, status_attr,
+                     NULL);
+  else
+    xic = XCreateIC (xim,
+                     XNInputStyle, xic_style,
+                     XNClientWindow, FRAME_X_WINDOW (f),
+                     XNFocusWindow, FRAME_X_WINDOW (f),
+                     NULL);
+
+  if (!xic)
+    goto out;
 
   FRAME_XIC (f) = xic;
   FRAME_XIC_STYLE (f) = xic_style;
-  FRAME_XIC_FONTSET (f) = xfs;
+  xfs = NULL; /* Don't free below.  */
+
+ out:
+
+  if (xfs)
+    free_frame_xic (f);
+
+  if (preedit_attr)
+    XFree (preedit_attr);
+
+  if (status_attr)
+    XFree (status_attr);
 }
 
 
@@ -2839,7 +2884,7 @@ This function is an internal primitive--use `make-frame' instead.  */)
   int minibuffer_only = 0;
   long window_prompting = 0;
   int width, height;
-  ptrdiff_t count = SPECPDL_INDEX ();
+  ptrdiff_t count = SPECPDL_INDEX (), count2;
   struct gcpro gcpro1, gcpro2, gcpro3, gcpro4;
   Lisp_Object display;
   struct x_display_info *dpyinfo = NULL;
@@ -3085,6 +3130,14 @@ This function is an internal primitive--use `make-frame' instead.  */)
      end up in init_iterator with a null face cache, which should not
      happen.  */
   init_frame_faces (f);
+  
+  /* Temporary disable window-configuration-change-hook to avoid
+     an infloop in next_frame and access to uninitialized frame
+     from Lisp code (Bug#18161).  */
+
+  count2 = SPECPDL_INDEX ();
+  record_unwind_protect (unwind_create_frame_1, inhibit_lisp_code);
+  inhibit_lisp_code = Qt;
 
   /* PXW: This is a duplicate from below.  We have to do it here since
      otherwise x_set_tool_bar_lines will work with the character sizes
@@ -3100,27 +3153,18 @@ This function is an internal primitive--use `make-frame' instead.  */)
   /* Set the menu-bar-lines and tool-bar-lines parameters.  We don't
      look up the X resources controlling the menu-bar and tool-bar
      here; they are processed specially at startup, and reflected in
-     the values of the mode variables.
+     the values of the mode variables.  */
 
-     Avoid calling window-configuration-change-hook; otherwise we
-     could get an infloop in next_frame since the frame is not yet in
-     Vframe_list.  */
-  {
-    ptrdiff_t count2 = SPECPDL_INDEX ();
-    record_unwind_protect (unwind_create_frame_1, inhibit_lisp_code);
-    inhibit_lisp_code = Qt;
+  x_default_parameter (f, parms, Qmenu_bar_lines,
+		       NILP (Vmenu_bar_mode)
+		       ? make_number (0) : make_number (1),
+		       NULL, NULL, RES_TYPE_NUMBER);
+  x_default_parameter (f, parms, Qtool_bar_lines,
+		       NILP (Vtool_bar_mode)
+		       ? make_number (0) : make_number (1),
+		       NULL, NULL, RES_TYPE_NUMBER);
 
-    x_default_parameter (f, parms, Qmenu_bar_lines,
-			 NILP (Vmenu_bar_mode)
-			 ? make_number (0) : make_number (1),
-			 NULL, NULL, RES_TYPE_NUMBER);
-    x_default_parameter (f, parms, Qtool_bar_lines,
-			 NILP (Vtool_bar_mode)
-			 ? make_number (0) : make_number (1),
-			 NULL, NULL, RES_TYPE_NUMBER);
-
-    unbind_to (count2, Qnil);
-  }
+  unbind_to (count2, Qnil);
 
   x_default_parameter (f, parms, Qbuffer_predicate, Qnil,
 		       "bufferPredicate", "BufferPredicate",
@@ -5613,7 +5657,11 @@ or directory must exist.
 
 This function is only defined on NS, MS Windows, and X Windows with the
 Motif or Gtk toolkits.  With the Motif toolkit, ONLY-DIR-P is ignored.
-Otherwise, if ONLY-DIR-P is non-nil, the user can only select directories.  */)
+Otherwise, if ONLY-DIR-P is non-nil, the user can only select directories.
+On Windows 7 and later, the file selection dialog "remembers" the last
+directory where the user selected a file, and will open that directory
+instead of DIR on subsequent invocations of this function with the same
+value of DIR as in previous invocations; this is standard Windows behavior.  */)
   (Lisp_Object prompt, Lisp_Object dir, Lisp_Object default_filename,
    Lisp_Object mustmatch, Lisp_Object only_dir_p)
 {
@@ -5785,7 +5833,11 @@ or directory must exist.
 
 This function is only defined on NS, MS Windows, and X Windows with the
 Motif or Gtk toolkits.  With the Motif toolkit, ONLY-DIR-P is ignored.
-Otherwise, if ONLY-DIR-P is non-nil, the user can only select directories.  */)
+Otherwise, if ONLY-DIR-P is non-nil, the user can only select directories.
+On Windows 7 and later, the file selection dialog "remembers" the last
+directory where the user selected a file, and will open that directory
+instead of DIR on subsequent invocations of this function with the same
+value of DIR as in previous invocations; this is standard Windows behavior.  */)
   (Lisp_Object prompt, Lisp_Object dir, Lisp_Object default_filename, Lisp_Object mustmatch, Lisp_Object only_dir_p)
 {
   struct frame *f = SELECTED_FRAME ();
