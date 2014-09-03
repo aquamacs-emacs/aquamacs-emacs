@@ -622,11 +622,7 @@ Defaults to nil if the major mode doesn't define a menu."
 	 ;; It is either nil or (SOME-SYMBOL).
 	 (mouse-major-mode-menu-prefix nil)
 	 ;; Keymap from which to inherit; may be null.
-	 (ancestor (if (> emacs-major-version 22)
-		       (mouse-menu-major-mode-map)
-		     (mouse-major-mode-menu-1
-		      (and (current-local-map)
-			   (local-key-binding [menu-bar])))))
+	 (ancestor (mouse-menu-major-mode-map))
 	 ;; Make a keymap in which our last command leads to a menu or
 	 ;; default to the edit menu.
 	 (newmap (if ancestor
@@ -693,11 +689,10 @@ Update unconditionally if optional argument FORCE is non-nil."
   (when (or force
 	    (frame-or-buffer-changed-p 'aquamacs-popup-context-menu-buffers-state))
     (let ((mode-menu (aquamacs-get-mouse-major-mode-menu)))
-      (if mode-menu
-	  ;; TO DO major mode might not work unless we switch buffer
-	  (define-key aquamacs-context-menu-map [mode-menu] 
-	    `(menu-item ,(aquamacs-pretty-mode-name major-mode) ,mode-menu :visible t))
-	(define-key aquamacs-context-menu-map [mode-menu] mouse-buffer-menu
+      (define-key aquamacs-context-menu-map [mode-menu] 
+	(if mode-menu
+	    ;; TO DO major mode might not work unless we switch buffer
+	    `(menu-item ,(aquamacs-pretty-mode-name major-mode) ,mode-menu :visible t)
 	  '(menu-item nil :visible nil))))
 
     (define-key aquamacs-context-menu-map [switch-buffer] 
@@ -980,8 +975,6 @@ ns-command-modifier osxkeys-command-key))))
 
 ;; ensure that we remap the right backward-kill-word 
 (define-key minibuffer-local-filename-completion-map 
-  [remap aquamacs-backward-kill-word] 'backward-kill-filename)
-(define-key minibuffer-local-filename-must-match-map 
   [remap aquamacs-backward-kill-word] 'backward-kill-filename)
  
 
