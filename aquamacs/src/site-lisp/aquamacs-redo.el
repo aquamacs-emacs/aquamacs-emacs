@@ -268,8 +268,17 @@ mark and point, and it will collaborate with `aquamacs-redo'."
 (defun aquamacs-undo--restore-mark-and-point (point mark)
   (when (eq this-command 'aquamacs-undo)
     (goto-char point)
-    (if mark (set-mark mark))
-    (setq deactivate-mark nil)))
+    (when mark
+      (set-mark mark)
+      (if transient-mark-mode
+	  ;; ensure that selection only exists temporarily
+	  (setq transient-mark-mode
+		(if (eq transient-mark-mode 'lambda)
+		    '(only)
+		  (if (consp transient-mark-mode)
+		      transient-mark-mode
+		    (cons 'only transient-mark-mode)))))
+    (setq deactivate-mark nil))))
 
 (defun aquamacs-undo--set-pre-command-hook ()
   "Make sure aquamacs-undo--rec-region is in pre-command hook
