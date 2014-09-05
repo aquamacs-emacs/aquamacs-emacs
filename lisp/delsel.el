@@ -80,6 +80,8 @@ If KILLP in not-nil, the active region is killed instead of deleted."
       (let (this-command)
 	(kill-region (point) (mark) t))
     (funcall region-extract-function 'delete-only))
+  ;; do not add undo-boundary in self-insert-command:
+  (setq last-command this-command)
   t)
 
 (defun delete-selection-helper (type)
