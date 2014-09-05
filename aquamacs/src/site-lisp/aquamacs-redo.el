@@ -3,7 +3,7 @@
 ;; Copyright (C) 1985, 1986, 1987, 1993-1995 Free Software Foundation, Inc.
 ;; Copyright (C) 1995 Tinker Systems and INS Engineering Corp.
 ;; Copyright (C) 1997 Kyle E. Jones
-;; Copyright (C) 2007 David Reitter
+;; Copyright (C) 2007,2014 David Reitter
 
 ;; Author: Kyle E. Jones, February 1997
 ;; Author/Maintainer: David Reitter, February 2007
@@ -251,6 +251,7 @@ mark and point, and it will collaborate with `aquamacs-redo'."
 
 ;; fore before-change
 (defun aquamacs-undo--rec-region-when-buffer-changes  (beg end &optional oldlen)
+  (aquamacs-undo--set-pre-command-hook) ;; ensure our hook is in the right place
   (or (eq this-command 'aquamacs-undo) 
       (eq this-command 'undo)
       (not aquamacs-undo--before-command-mark) 
@@ -270,11 +271,25 @@ mark and point, and it will collaborate with `aquamacs-redo'."
     (if mark (set-mark mark))
     (setq deactivate-mark nil)))
 
+(defun aquamacs-undo--set-pre-command-hook ()
+  "Make sure aquamacs-undo--rec-region is in pre-command hook
+Must be before delete-selection-pre-hook."
+  (let ((pch pre-command-hook))
+    (while pch
+      (if (eq 'aquamacs-undo--rec-region (car pch))
+	  (setq pch nil))
+      (when (eq 'delete-selection-pre-hook (car pch))
+	;; we find the DS hook before the URR hook
+	;; or the URR hook is not present.
+	;; So, make sure it's at the beginning
+	(remove-hook 'pre-command-hook 'aquamacs-undo--rec-region)
+	(add-hook 'pre-command-hook 'aquamacs-undo--rec-region)
+	(setq pch nil))
+      (setq pch (cdr-safe pch)))))
 
 ;; need to make sure this is before delete-selection-pre-hook
 
-(add-hook 'pre-command-hook 'aquamacs-undo--rec-region)
-
+(aquamacs-undo--set-pre-command-hook)
 (add-hook 'before-change-functions 
 	  'aquamacs-undo--rec-region-when-buffer-changes) 
 
