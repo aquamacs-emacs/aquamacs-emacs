@@ -120,7 +120,11 @@ extern NSString *NSMenuDidBeginTrackingNotification;
 {
 #ifdef NS_IMPL_COCOA
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
-  if (ns_use_srgb_colorspace)
+  if (ns_use_srgb_colorspace && [NSColorSpace respondsToSelector:@selector(sRGBColorSpace)]
+      // we need to avoid returing sRGB colors on 10.6, because
+      // getRed:green:blue:alpha apparently cannot handle sRGB colors
+      // there.
+      && [NSColor respondsToSelector:@selector(colorWithSRGBRed:green:blue:alpha:)])
       return [NSColor colorWithSRGBRed: red
                                  green: green
                                   blue: blue
@@ -137,7 +141,11 @@ extern NSString *NSMenuDidBeginTrackingNotification;
 {
 #ifdef NS_IMPL_COCOA
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
-  if (ns_use_srgb_colorspace)
+  if (ns_use_srgb_colorspace && [NSColorSpace respondsToSelector:@selector(sRGBColorSpace)]
+      // we need to avoid returing sRGB colors on 10.6, because
+      // getRed:green:blue:alpha apparently cannot handle sRGB colors
+      // there.
+      && [NSColor respondsToSelector:@selector(colorWithSRGBRed:green:blue:alpha:)])
     return [self colorUsingColorSpace: [NSColorSpace sRGBColorSpace]];
 #endif
 #endif
