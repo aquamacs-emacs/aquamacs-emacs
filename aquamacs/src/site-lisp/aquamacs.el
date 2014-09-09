@@ -935,7 +935,8 @@ yes-or-no prompts - y or n will do."
 					; turn on Auto Fill mode automatically in Text mode
      (initial-major-mode text-mode)
 
-
+     (frame-resize-pixelwise t)
+     (window-resize-pixelwise t)
 					; scroll just one line when hitting the bottom of the window
      (scroll-step 1)
      (scroll-conservatively 99)

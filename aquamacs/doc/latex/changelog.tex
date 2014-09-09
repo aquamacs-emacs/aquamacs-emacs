@@ -9,16 +9,38 @@
 \vskip2em
 
 \begin{itemize}
+\item Frames and windows now resize smoothly, pixel by pixel.
 \item Command-Shift-Left/Right now select the text from point to the left or right side of the line, as they did in Aquamacs 2. 
 Reported by Daniel Stegm\"{}uller.
 \item The order of menu items in the Options/Line Wrapping submenu has been restored.
 Reported by Gracjan Polak.
 \item Isearch using the Mac key bindings (A-f, A-g) has seen some improvements.  A-g will now highlight all other search results (just like regular isearch), and it will continue a regexp isearch (started with C-u A-f).  Because you remain in `isearch-mode' after a A-g, additional simple keys will just extend the search string.  (You may, as before, do other things like insert text clippings with A-v.)
+\item Cursor motion with arrow keys will follow the
+visual order of characters on the screen: <left> always moves to the
+left, <right> always moves to the right, disregarding the surrounding
+bidirectional context.  You may change this setting with the customization variable `visual-order-cursor-movement'.
+\begin{itemize}
+\item In keymaps where SPC scrolls forward, S-SPC now scrolls backward.
+This affects View mode, etc.
+\item The cursor stops blinking after 10 blinks (by default) on X and Nextstep.
+You can change the default by customizing `blink-cursor-blinks'.
+\item `electric-indent-mode' is now enabled by default.
+Typing RET reindents the current line and indents the new line.
+`C-j' inserts a newline but does not indent.  In some programming modes,
+additional characters are electric (eg `{').
+\item The behavior of `C-x TAB' (`indent-rigidly') has changed.
+When invoked without a prefix argument, it now activates a transient
+mode in which typing <left>, <right>, <S-left>, and <S-right> adjusts
+the text indentation in the region.  Typing any other key resumes
+normal editing behavior.
+\item New command `C-x SPC' (`rectangle-mark-mode') makes a rectangular region.
+Most commands are still unaware of it, but kill/yank do work on the rectangle.
+\end{itemize}
 \item `ams-tex-mode' is functional again.
 Reported by Albert Fisher. 
 \item Markdown-mode 2.0 is now provided with a default configuration of its faces, which no longer hides markup.
+\item Aquamacs is now based on Emacs 24.4.  Please see etc/NEWS for detailed information.  Some more important, user-visible changes are:
 \end{itemize}
-
 
 \subsection{Changes--- 3.0}
 
