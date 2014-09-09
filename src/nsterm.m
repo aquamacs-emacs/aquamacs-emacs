@@ -1826,9 +1826,9 @@ ns_query_color(void *col, XColor *color_def, int setPixel)
   else
     {
       [col2 getRed: &r green: &g blue: &b alpha: &a];
-      color_def->red   = r * 65535;
-      color_def->green = g * 65535;
-      color_def->blue  = b * 65535;
+  color_def->red   = r * 65535;
+  color_def->green = g * 65535;
+  color_def->blue  = b * 65535;
     }
 
   if (setPixel == YES)
@@ -6689,10 +6689,13 @@ not_in_argv (NSString *arg)
 
       // Did resize increments change because of a font change?
       if (sz.width != FRAME_COLUMN_WIDTH (emacsframe) ||
-          sz.height != FRAME_LINE_HEIGHT (emacsframe))
+          sz.height != FRAME_LINE_HEIGHT (emacsframe) ||
+          (frame_resize_pixelwise && sz.width != 1))
         {
-          sz.width = FRAME_COLUMN_WIDTH (emacsframe);
-          sz.height = FRAME_LINE_HEIGHT (emacsframe);
+          sz.width = frame_resize_pixelwise
+            ? 1 : FRAME_COLUMN_WIDTH (emacsframe);
+          sz.height = frame_resize_pixelwise
+            ? 1 : FRAME_LINE_HEIGHT (emacsframe);
           [win setResizeIncrements: sz];
 
           NSTRACE_SIZE ("New size", NSMakeSize (neww, newh));
@@ -6990,8 +6993,8 @@ if (cols > 0 && rows > 0)
 #endif
        ];
     }
-  sz.width = FRAME_COLUMN_WIDTH (f);
-  sz.height = FRAME_LINE_HEIGHT (f);
+  sz.width = frame_resize_pixelwise ? 1 : FRAME_COLUMN_WIDTH (f);
+  sz.height = frame_resize_pixelwise ? 1 : FRAME_LINE_HEIGHT (f);
   [win setResizeIncrements: sz];
 
   [[win contentView] addSubview: self];
@@ -7353,8 +7356,8 @@ if (cols > 0 && rows > 0)
                                  (FRAME_DEFAULT_FACE (f)),
                                  f);
 
-  sz.width = FRAME_COLUMN_WIDTH (f);
-  sz.height = FRAME_LINE_HEIGHT (f);
+  sz.width = frame_resize_pixelwise ? 1 : FRAME_COLUMN_WIDTH (f);
+  sz.height = frame_resize_pixelwise ? 1 : FRAME_LINE_HEIGHT (f);
 
   if (fs_state != FULLSCREEN_BOTH)
     {
