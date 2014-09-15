@@ -23,7 +23,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 David Reitter
+;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2012, 2013, 2014 David Reitter
  
 ;; DESCRIPTION:
 ;; 
@@ -433,13 +433,13 @@ the current window is switched to the new buffer."
 		      ;; Use a new frame
 		      (let ((display-buffer--other-frame-action
 			     '(display-buffer-pop-up-frame . nil)))
-			(setq ad-return-value (apply #'switch-to-buffer-other-frame args))
+			(setq ad-return-value (funcall #'switch-to-buffer-other-frame (car args) (cadr args)))
 			;; store the frame/buffer information
 			(add-to-list 'aquamacs-newly-opened-windows 
 				     (cons (selected-window) (buffer-name)))) 
 		    ;; else : if window is dedictated, use a different window
 		    (if (window-dedicated-p (selected-window))
-			(setq ad-return-value   (apply #'switch-to-buffer-other-window args))
+			(setq ad-return-value (funcall #'switch-to-buffer-other-window (car args) (cadr args)))
 		      ;; else: show in current frame & window
 		      ad-do-it)))
 	      ;; else (don't switch, just activate another window)
@@ -464,7 +464,7 @@ the current window is switched to the new buffer."
 	  ;; else pop up a new frame, and avoid switching to a different space
 	  (let ((display-buffer--other-frame-action
 		 '(display-buffer-pop-up-frame .nil)))
-	    (setq ad-return-value (apply #'switch-to-buffer-other-frame args))
+	    (setq ad-return-value (funcall #'switch-to-buffer-other-frame (car args) (cadr args)))
 	    ;; store the frame/buffer information
 	    (add-to-list 'aquamacs-newly-opened-windows 
 			 (cons (selected-window) (buffer-name)))))
