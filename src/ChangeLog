@@ -1,3 +1,61 @@
+2014-09-16  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	Always use matched specpdl entry to record call arguments (Bug#18473).
+	* lisp.h (record_in_backtrace): Adjust prototype.
+	* eval.c (record_in_backtrace): Return current specpdl level.
+	(set_backtrace_args, set_backtrace_nargs): Merge.  Adjust all users.
+	(eval_sub, Ffuncall): Record call arguments in matched specpdl
+	entry and use that entry in call to backtrace_debug_on_exit.
+	(apply_lambda): Likewise.  Get current specpdl level as 3rd arg.
+	(do_debug_on_call): Get current specpdl level as 2nd arg.
+
+	Prefer ptrdiff_t to int and avoid integer overflows.
+	* fileio.c (make_temp_name):
+	* font.c (font_parse_family_registry): Avoid integer
+	overflow on string size calculation.
+	* data.c (Faset): Likewise for byte index.
+
+2014-09-15  Eli Zaretskii  <eliz@gnu.org>
+
+	Fix display of R2L lines in partial-width windows.
+	* xdisp.c (init_iterator): Don't use it->bidi_p before it is
+	assigned the correct value.
+	(extend_face_to_end_of_line): Account for truncation and
+	continuation glyphs in R2L rows when one of the fringes is not
+	displayed.
+	(display_line): Don't assign negative X offset to a row if we are
+	going to produce a truncation glyph for it.  When handling
+	truncated R2L rows, consider the width of the left fringe instead
+	of the right one.
+	(produce_special_glyphs): Fix bogus assignments.
+
+2014-09-14  Eli Zaretskii  <eliz@gnu.org>
+
+	* w32.c (fcntl): Support O_NONBLOCK fcntl on the write side of
+	pipes.
+	(sys_write): When a write to a non-blocking pipe returns ENOSPC,
+	set errno to EAGAIN instead, to allow the caller to retry the
+	write after some waiting.  Fixes deadlocks when Emacs exchanges a
+	lot of data through the pipe.  (Bug#18420)
+
+2014-09-13  Eli Zaretskii  <eliz@gnu.org>
+
+	* sound.c (Fplay_sound_internal): Encode the sound file name in
+	the ANSI codepage.  Expand it against data-directory, as per docs,
+	not against the current directory.  No need to make a local copy
+	of the file name; pass the encoded file name directly to
+	do_play_sound.  (Bug#18463)
+
+	* w32.c (ansi_encode_filename): If w32_get_short_filename returns
+	NULL, and the file name is not encodable in ANSI codepage, return
+	the string with "?" replacement characters, which will fail the
+	caller.  This avoids returning a random value in that case.
+
+2014-09-11  Martin Rudalics  <rudalics@gmx.at>
+
+	* window.c (Fresize_mini_window_internal): Set w->total_lines
+	from w->pixel_height (Bug#18422).
+
 2014-09-09  Jan Djärv  <jan.h.d@swipnet.se>
 
 	* nsterm.m (updateFrameSize:, initFrameFromEmacs:)
