@@ -63,6 +63,14 @@ cd ${EMACS_ROOT} ; \
 echo "Copying build $DATE to server..." >>$LOG ; \
 aquamacs/build/copy-build-to-server.sh $DATE  >>$LOG 2>>$LOG
 echo "Done." >>$LOG ; \
+if [ -n "$AQ_DOWNLOAD_DESTINATION2" ]; then
+    export AQ_DOWNLOAD_DESTINATION=$AQ_DOWNLOAD_DESTINATION2
+    export AQ_DOWNLOAD_DESTSSH=$AQ_DOWNLOAD_DESTSSH2
+    echo "Copying build $DATE to second server..." >>$LOG ; \
+    aquamacs/build/copy-build-to-server.sh $DATE  >>$LOG 2>>$LOG
+    echo "Done." >>$LOG ; \
+fi  
+
 
 #echo "Archiving symbol table into ${BRANCH}-${DATE}"
 #mkdir ${DSYM_ROOT}/${BRANCH}-${DATE}
