@@ -4667,7 +4667,10 @@ ns_term_init (Lisp_Object display_name)
                             NSStringPboardType,
                             NSTabularTextPboardType,
                             NSFilenamesPboardType,
-                            NSURLPboardType, nil] retain];
+                            NSURLPboardType,
+			    NSColorPboardType,
+                            NSFontPboardType,
+			    nil] retain];
 
   /* If fullscreen is in init/default-frame-alist, focus isn't set
      right for fullscreen windows, so set this.  */
