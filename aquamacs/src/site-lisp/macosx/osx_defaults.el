@@ -29,7 +29,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2006,2007,2008,2010 David Reitter
+;; Copyright (C) 2005, 2006,2007,2008,2010,2014 David Reitter
 
  
 ; remaining issues
@@ -304,7 +304,7 @@ Set `auto-save-file-name-transforms' instead.")
 (aquamacs-set-defaults 
  `((mailclient-place-body-on-clipboard-flag ,(gmail-mailclient-p))
    (recentf-menu-action aquamacs-find-file-2)
-   (user-emacs-directory "~/Library/Application Support/Aquamacs Emacs/")
+   (user-emacs-directory "~/Library/Preferences/Aquamacs Emacs/Packages/")
    (ede-simple-save-directory "~/Library/Preferences/Aquamacs Emacs/EDE")
    (savehist-file "~/Library/Preferences/Aquamacs Emacs/minibuffer-history.el")
    (desktop-path ("~/Library/Preferences/Aquamacs Emacs" "." "~"))
@@ -314,6 +314,28 @@ Set `auto-save-file-name-transforms' instead.")
    (abbrev-file-name "~/Library/Preferences/Aquamacs Emacs/Abbreviations")
    (mail-default-directory 
     "~/Library/Application Support/Aquamacs Emacs/Temporary Files")))
+
+
+(defadvice locate-user-emacs-file  (after aquamacs-move-user-package-config (&rest args) activate)
+  "If file is present in the previous Aquamacs-specific location, move it."
+  (let ((orig (concat "~/Library/Application Support/Aquamacs Emacs/" (car args)))
+	(dest ad-return-value))
+  (and (file-exists-p orig)
+       (not (file-exists-p dest))
+       (condition-case nil
+	   (rename-file orig dest)
+	 (error (message "Cannot move %s to %s" orig dest))))))
+
+;; Before Aquamcas 3.1, user-emacs-directory was not in "Packages"
+;; It was moved to the new location in order to avoid having
+;; emacs-user-directory as part of load-path, which caused (load "tramp") to
+;; load the wrong file.  GNU Emacs bug #18512
+
+(locate-user-emacs-file "tramp")
+(locate-user-emacs-file "calc.el")
+(locate-user-emacs-file "maxima_history")
+(locate-user-emacs-file "SessionDesktop.el")
+
 
 (when (and (boundp 'mac-apple-event-map) mac-apple-event-map)
   (define-key mac-apple-event-map [core-event reopen-application]

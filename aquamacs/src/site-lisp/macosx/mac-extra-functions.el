@@ -225,11 +225,11 @@ end tell"
 		  )))
 	(setq aquamacs-mac-add-standard-directories-added-flag t)
 	(mapcar (lambda (dir)
-		  (let* ((xdir (directory-file-name (expand-file-name dir) ) )
-			 (default-directory xdir)) 
+		  (let* ((xdir (directory-file-name (expand-file-name dir)))
+			 (default-directory xdir))
 		    (and xdir
-			 (not (file-exists-p (concat xdir "/.nosearch")))
-			 (not (file-exists-p (concat xdir "/.ignore")))  ;; backwards compatiblity (Aq2.3 and lower)
+			 (not (file-exists-p ".nosearch"))
+			 (not (file-exists-p ".ignore"))  ;; backwards compatiblity (Aq2.3 and lower)
 			 (add-to-list 'load-path xdir) ;; add at beginning of list
 			 ;; Now add subdirectories.
 			 (condition-case nil

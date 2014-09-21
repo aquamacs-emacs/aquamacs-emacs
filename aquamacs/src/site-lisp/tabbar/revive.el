@@ -829,7 +829,7 @@ Configuration should be saved by save-current-configuration."
   (c-set-style (or (revive:prop-get-value x 'c-indentation-style) "gnu")))
 
 
-(defvar revive:app-restore-path "~/Library/Application Support/Aquamacs Emacs/")
+(defvar revive:app-restore-path user-emacs-directory)
 (defvar revive:desktop-base-file-name "SessionDesktop.el")
 (defvar revive:frame-configuration-to-restore nil "This variable is typically set by the desktop file.
 Its value is evaluated after loading the file in `revive:restore-application-state'.")
