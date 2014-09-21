@@ -276,6 +276,11 @@ Separate paths from file names with --."
 		    aquamacs-tool-bar-user-customization))
       (setcar (or (member 'turn-on-word-wrap text-mode-hook) (cons nil nil)) 'set-word-wrap)
       (setcar (or (member 'turn-on-auto-fill text-mode-hook) (cons nil nil)) 'set-auto-fill))
+    ;; (when (< aquamacs-customization-version-id 307)
+
+    ;;   (when global-linum-mode
+    ;; 	(global-linum-mode 0)
+    ;; 	(global-nlinum-mode 1)))
 
 ;; Emacs 23 transition
 
@@ -1346,6 +1351,7 @@ listed here."
   '(scroll-bar-mode
     debug-on-quit debug-on-error
     tooltip-mode
+    fringe-mode
     uniquify-buffer-name-style
     ;; fringe-mode and tool-bar-mode saved in default-frame-alist
     indicate-empty-lines indicate-buffer-boundaries
