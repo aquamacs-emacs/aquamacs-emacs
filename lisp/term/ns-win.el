@@ -735,7 +735,7 @@ the last file dropped is selected."
   (force-mode-line-update))
 
 
-(defun ns-toggle-fullscreen (&optional frame)
+(defun ns-toggle-fullscreen (&optional _frame)
   "Toggles Fullscreen on and off in frame FRAME.
  If FRAME is nil, the change applies to the selected frame."
   (interactive)
@@ -986,25 +986,47 @@ panel immediately after correcting a word in a buffer."
 
 ;;;; Color support.
 
+
+(defun ns-resolve-remapped-face-in-window (face win)
+  "Not in use.  Currently not fully functional.
+Get face that determines the foreground color."
+  (with-current-buffer (window-buffer win)
+    (let ((result nil)
+	  (fra face-remapping-alist))
+      (while fra
+	(let ((elt (car fra)))
+	  (if (and (eq face (car elt)))
+	      (if (not (face-attribute-relative-p
+			:foreground
+			(face-attribute (cdr elt)
+					:foreground (window-frame win) t)))
+		  (setq result (cdr elt)
+			fra nil))))
+	(setq fra (cdr fra)))
+      result)))
+
 ;; Functions for color panel + drag
 (defun ns-face-at-pos (pos)
-  (let ((p (nth 1 pos))) 
-    (cond
-     ((not p)
-      nil)
-     ((eq p 'mode-line)
-      'mode-line)
-     ((eq p 1)
-      'echo-area)
-     ((eq p 'vertical-line)
-      'default)
-           ((eq p (window-point (posn-window pos)))
-            'cursor)
-           ((and mark-active (< (region-beginning) p) (< p (region-end)))
-            'region)
-           (t
-	    (let ((faces (get-char-property p 'face (posn-window pos))))
-	      (if (consp faces) (car faces) faces))))))
+  (or
+    (let ((p (nth 1 pos)))
+      (cond
+       ((not p)
+	nil)
+       ((eq p 'mode-line)
+	'mode-line)
+       ((eq p 1)
+	'echo-area)
+       ((eq p 'vertical-line)
+	'default)
+       ((eq p (window-point (posn-window pos)))
+	'cursor)
+       ((and mark-active (< (region-beginning) p) (< p (region-end)))
+	'region)
+       (t
+	(let ((faces (get-char-property p 'face (posn-window pos))))
+	  (if (consp faces) (car faces) faces)))))
+    (if (boundp 'aquamacs-color-panel-target-face) aquamacs-color-panel-target-face)
+    'default))
 
 (defvar ns-input-color)			; nsterm.m
 
