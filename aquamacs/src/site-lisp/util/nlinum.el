@@ -75,7 +75,7 @@ Linum mode is a buffer-local minor mode."
   (let ((width (ceiling
                 ;; We'd really want to check the widths rather than the
                 ;; heights, but it's a start.
-                (/ (* nlinum--width 1.0
+                (/ (* nlinum--width 1.5
                       (nlinum--face-height 'linum))
                    (frame-char-height)))))
     (set-window-margins nil (if nlinum-mode width)
