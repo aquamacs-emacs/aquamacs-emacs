@@ -138,29 +138,31 @@ Ignored if text was selected by mouse. PUSH is ignored."
  Like `backward-char', but moves point to the beginning of the region
 provided `cua-mode' and the mark are active."
   (interactive)
-  (let ((left (min (point) (or (mark t) 0))))
-    (if (and cua-mode
-	     (consp transient-mark-mode) ;; used to be cua--explicit-region-start
-	     mark-active
-	     (not this-command-keys-shift-translated))
-	(goto-char left)))
   (let ((this-command 'left-char)) ;; maintain compatibility
-      (call-interactively 'left-char)))
+    (let ((left (min (point) (or (mark t) 0))))
+      (if (and cua-mode
+	       (consp transient-mark-mode) ;; used to be cua--explicit-region-start
+	       mark-active
+	       (not this-command-keys-shift-translated))
+	  (progn
+	    (goto-char left)
+	    (setq deactivate-mark t))
+	(call-interactively 'left-char)))))
 
-
-(defun aquamacs-right-char (&rest args)
+(defun aquamacs-right-char ()
   "Move point to the right or the end of the region.
  Like `right-char', but moves point to the end of the region
 provided `cua-mode' and the mark are active."
   (interactive)
-  (let ((right (max (point) (or (mark t) 0))))
-    (if (and cua-mode
-	     (consp transient-mark-mode) ;; used to be cua--explicit-region-start
-	     mark-active
-	     (not this-command-keys-shift-translated))
-	(goto-char right)))
   (let ((this-command 'right-char)) ;; maintain compatibility
-    (call-interactively 'right-char)))
+    (let ((right (max (point) (or (mark t) 0))))
+      (if (and cua-mode
+	       (consp transient-mark-mode) ;; used to be cua--explicit-region-start
+	       mark-active
+	       (not this-command-keys-shift-translated))
+	  (progn (goto-char right)
+		 (setq deactivate-mark t))
+	(call-interactively 'right-char)))))
 
 (dolist (cmd
 	 '(aquamacs-left-char 
