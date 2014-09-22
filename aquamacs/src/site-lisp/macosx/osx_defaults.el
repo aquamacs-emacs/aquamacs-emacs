@@ -159,6 +159,44 @@ from earlier versions of the distribution."
       (let ((one-buffer-one-frame-mode nil))
 	(switch-to-buffer "*scratch*")))))
 
+(defun aquamacs-set-file-location-defaults ()
+  (aquamacs-set-defaults 
+   `((mailclient-place-body-on-clipboard-flag ,(gmail-mailclient-p))
+     (recentf-menu-action aquamacs-find-file-2)
+     (user-emacs-directory "~/Library/Preferences/Aquamacs Emacs/Packages/")
+     (ede-simple-save-directory "~/Library/Preferences/Aquamacs Emacs/EDE")
+     (savehist-file "~/Library/Preferences/Aquamacs Emacs/minibuffer-history.el")
+     (desktop-path ("~/Library/Preferences/Aquamacs Emacs" "." "~"))
+     (trash-directory "~/.Trash")
+     (save-place-file "~/Library/Preferences/Aquamacs Emacs/places.el")
+     (recentf-save-file "~/Library/Preferences/Aquamacs Emacs/Recent Files.el")
+     (abbrev-file-name "~/Library/Preferences/Aquamacs Emacs/Abbreviations")
+     (mail-default-directory 
+      "~/Library/Application Support/Aquamacs Emacs/Temporary Files")))
+
+
+  (defadvice locate-user-emacs-file  (after aquamacs-move-user-package-config (&rest args) activate)
+    "If file is present in the previous Aquamacs-specific location, move it."
+    (let ((orig (concat "~/Library/Application Support/Aquamacs Emacs/" (car args)))
+	  (dest ad-return-value))
+      (and (file-exists-p orig)
+	   (not (file-exists-p dest))
+	   (condition-case nil
+	       (rename-file orig dest)
+	     (error (message "Cannot move %s to %s" orig dest))))))
+
+  ;; Before Aquamcas 3.1, user-emacs-directory was not in "Packages"
+  ;; It was moved to the new location in order to avoid having
+  ;; emacs-user-directory as part of load-path, which caused (load "tramp") to
+  ;; load the wrong file.  GNU Emacs bug #18512
+
+  (locate-user-emacs-file "tramp")
+  (locate-user-emacs-file "calc.el")
+  (locate-user-emacs-file "maxima_history")
+  (locate-user-emacs-file "SessionDesktop.el")
+  (write-region "" nil (concat user-emacs-directory ".nosearch"))
+  ) ;; aquamacs-file-location-defaults
+
 
 (defun aquamacs-osx-defaults-setup ()
 
@@ -166,6 +204,9 @@ from earlier versions of the distribution."
 
   (require 'aquamacs-tools)
 (ats "tools done")
+
+  (aquamacs-set-file-location-defaults)
+
 
   (require 'mac-extra-functions)
 (ats "mac-extra done")
@@ -300,41 +341,6 @@ Set `auto-save-file-name-transforms' instead.")
 
 ;; this is run at runtime - not during preloading
 (run-with-timer (* 60 60) (* 60 60 24 3) 'purge-session-and-auto-save-files)
-
-(aquamacs-set-defaults 
- `((mailclient-place-body-on-clipboard-flag ,(gmail-mailclient-p))
-   (recentf-menu-action aquamacs-find-file-2)
-   (user-emacs-directory "~/Library/Preferences/Aquamacs Emacs/Packages/")
-   (ede-simple-save-directory "~/Library/Preferences/Aquamacs Emacs/EDE")
-   (savehist-file "~/Library/Preferences/Aquamacs Emacs/minibuffer-history.el")
-   (desktop-path ("~/Library/Preferences/Aquamacs Emacs" "." "~"))
-   (trash-directory "~/.Trash")
-   (save-place-file "~/Library/Preferences/Aquamacs Emacs/places.el")
-   (recentf-save-file "~/Library/Preferences/Aquamacs Emacs/Recent Files.el")
-   (abbrev-file-name "~/Library/Preferences/Aquamacs Emacs/Abbreviations")
-   (mail-default-directory 
-    "~/Library/Application Support/Aquamacs Emacs/Temporary Files")))
-
-
-(defadvice locate-user-emacs-file  (after aquamacs-move-user-package-config (&rest args) activate)
-  "If file is present in the previous Aquamacs-specific location, move it."
-  (let ((orig (concat "~/Library/Application Support/Aquamacs Emacs/" (car args)))
-	(dest ad-return-value))
-  (and (file-exists-p orig)
-       (not (file-exists-p dest))
-       (condition-case nil
-	   (rename-file orig dest)
-	 (error (message "Cannot move %s to %s" orig dest))))))
-
-;; Before Aquamcas 3.1, user-emacs-directory was not in "Packages"
-;; It was moved to the new location in order to avoid having
-;; emacs-user-directory as part of load-path, which caused (load "tramp") to
-;; load the wrong file.  GNU Emacs bug #18512
-
-(locate-user-emacs-file "tramp")
-(locate-user-emacs-file "calc.el")
-(locate-user-emacs-file "maxima_history")
-(locate-user-emacs-file "SessionDesktop.el")
 
 
 (when (and (boundp 'mac-apple-event-map) mac-apple-event-map)
