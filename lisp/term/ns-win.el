@@ -1025,7 +1025,9 @@ Get face that determines the foreground color."
        (t
 	(let ((faces (get-char-property p 'face (posn-window pos))))
 	  (if (consp faces) (car faces) faces)))))
-    (if (boundp 'aquamacs-color-panel-target-face) aquamacs-color-panel-target-face)
+    (if (fboundp 'aquamacs-default-face-in-effect)
+	(with-current-buffer (window-buffer (posn-window pos))
+	  (aquamacs-default-face-in-effect)))
     'default))
 
 (defvar ns-input-color)			; nsterm.m
