@@ -834,10 +834,6 @@ which key is mapped to command. The value of
     ;; this enables the user to jump into isearch (from outside of isearch-mode)
     (define-key map `[(,osxkeys-command-key g)] 'aquamacs-repeat-isearch)
     (define-key map `[(,osxkeys-command-key shift g)] 'aquamacs-repeat-isearch-backward)
-    ;; the following should be defined in insearch-mode-map
-    ;; because isearch terminates isearch-mode when non-isearch commands are entered
-    (define-key isearch-mode-map `[(,osxkeys-command-key g)] 'aquamacs-repeat-isearch)
-    (define-key isearch-mode-map `[(,osxkeys-command-key shift g)] 'aquamacs-repeat-isearch-backward)
     (if (fboundp 'ns-do-hide-emacs)
 	(define-key map `[(,osxkeys-command-key h)] 'ns-do-hide-emacs))
     (define-key map `[(,osxkeys-command-key e)] 'aquamacs-use-selection-for-find)
@@ -939,6 +935,15 @@ which key is mapped to command. The value of
   "Keymap for `osx-key-mode'.")
 ;;  (setq  osx-key-mode-map (make-osx-key-mode-map))
 
+(defun aquamacs-modify-isearch-mode-map (mode)
+  (define-key isearch-mode-map `[(,osxkeys-command-key v)] (if mode 'aquamacs-isearch-yank-kill))
+  ;; the following should be defined in isearch-mode-map
+  ;; because isearch terminates isearch-mode when non-isearch commands are entered
+  (define-key isearch-mode-map `[(,osxkeys-command-key g)]  (if mode 'aquamacs-repeat-isearch))
+  (define-key isearch-mode-map `[(,osxkeys-command-key shift g)] (if mode 'aquamacs-repeat-isearch-backward))
+  (define-key isearch-mode-map `[(return)] (if mode 'aquamacs-repeat-isearch))
+  (define-key isearch-mode-map `[(shift return)] (if mode 'aquamacs-repeat-isearch-backward)))
+;; (aquamacs-modify-isearch-mode-map t)
 
 (defun osx-key-mode-command-key-warning ()
   (and osx-key-mode
@@ -1019,7 +1024,7 @@ keymaps used by this mode. They may be modified where necessary."
 	(setq osx-key--saved-low-priority-map 
 	      (aquamacs-install-low-priority-global-key-map
 	       osx-key-low-priority-key-map))
-	(define-key isearch-mode-map `[(,osxkeys-command-key v)] 'aquamacs-isearch-yank-kill)
+	(aquamacs-modify-isearch-mode-map t)
 	(add-hook 'isearch-update-post-hook 'aquamacs-set-region-to-search-match)
 	(add-hook 'isearch-mode-end-hook 'aquamacs-set-region-to-search-match))
     ;; restore old map
@@ -1027,7 +1032,7 @@ keymaps used by this mode. They may be modified where necessary."
       (aquamacs-install-low-priority-global-key-map
        osx-key--saved-low-priority-map)
       (setq osx-key--saved-low-priority-map (make-sparse-keymap)))
-    (define-key isearch-mode-map `[(,osxkeys-command-key v)] nil)
+    (aquamacs-modify-isearch-mode-map nil)
     (remove-hook 'isearch-update-post-hook 'aquamacs-set-region-to-search-match)
     (remove-hook 'isearch-mode-end-hook 'aquamacs-set-region-to-search-match))
 
