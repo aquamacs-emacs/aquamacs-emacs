@@ -5901,6 +5901,8 @@ and redisplay normally--don't erase and redraw the frame.  */)
   w->start_at_line_beg = (bytepos == BEGV_BYTE ||
 			  FETCH_BYTE (bytepos - 1) == '\n');
 
+  wset_redisplay (w);
+
   set_buffer_internal (obuf);
   return Qnil;
 }

@@ -1,3 +1,86 @@
+2014-10-01  Jan Djärv  <jan.h.d@swipnet.se>
+
+	* xfaces.c (Finternal_set_lisp_face_attribute): Don't try to
+	make a font_object from a tty frame (Bug#18573).
+	(Finternal_set_lisp_face_attribute): Added FIXME comment.
+
+2014-09-30  Eli Zaretskii  <eliz@gnu.org>
+
+	* w32fns.c (w32_createwindow): Accept an additional argument, an
+	array of 2 values specifying the coordinates of the frame's
+	top-left corner.  Use these values instead of calling x_get_arg,
+	which can cons Lisp objects, and therefore cannot be called except
+	from the main thread.  Remove redundant tests for the default
+	values.
+	(my_create_window): Move the calculation of the coordinates of the
+	frame's top-left edge here.  Pass them to the input thread via the
+	second parameter of the WM_EMACS_CREATEWINDOW message.  See
+	http://lists.gnu.org/archive/html/emacs-devel/2014-09/msg00892.html
+	for the details.
+
+2014-09-29  Eli Zaretskii  <eliz@gnu.org>
+
+	* xdisp.c (cursor_row_fully_visible_p): Update commentary.
+	(redisplay_window): Treat the frame's frozen_window_starts flag
+	the same way as the optional_new_start flag for the window: only
+	obey it if the glyph row showing point will be fully visible.
+	Likewise when the window start is in a continuation line.  If,
+	after trying everything under the 'force_start' label, point is
+	still not fully visible, give up and scroll the window.  Add
+	debugging traces.  (Bug#18545)
+
+	* window.c (Frecenter): Set the window's redisplay flag.
+
+2014-09-24  Eli Zaretskii  <eliz@gnu.org>
+
+	* w32term.c (w32_read_socket): Don't use frame dimensions for
+	resizing if GetClientRect returned an empty (0, 0, 0, 0)
+	rectangle.  Check the return value of GetClientRect, and don't use
+	the results if it didn't succeed.
+
+	* dispnew.c (change_frame_size_1): Recompute the frame dimensions
+	in columns and lines after correcting the pixel dimensions in
+	check_frame_size.
+	(adjust_decode_mode_spec_buffer): Add assertion to avoid passing
+	negative values to xrealloc.  (Bug#18528)
+
+2014-09-22  Dmitry Antipov  <dmantipov@yandex.ru>
+
+	On OSX, do not free font-specific data more than once (Bug#18501).
+	* macfont.m (macfont_close): Release and free font-specific data
+	only if it wasn't previously freed.
+
+2014-09-21  David Caldwell <david@porkrind.org> (tiny change)
+
+	* unexmacosx.c (dump_it): Improve error message.
+
+2014-09-18  Juri Linkov  <juri@jurta.org>
+
+	* image.c (imagemagick_load_image): Add delay to imagemagick metadata.
+	(Bug#10747, bug#18334)
+
+2014-09-18  Eli Zaretskii  <eliz@gnu.org>
+
+	* frame.c (Fmouse_position, Fset_mouse_position): Clarify the
+	units in which the position is measured.  (Bug#18493)
+
+	* xdisp.c (redisplay_internal): Force redisplay of all windows
+	that show a buffer whose narrowing has changed.  (Bug#18490)
+
+2014-09-16  Eli Zaretskii  <eliz@gnu.org>
+
+	* xterm.c (x_draw_hollow_cursor, x_draw_bar_cursor):
+	* w32term.c (x_draw_hollow_cursor, x_draw_bar_cursor): In R2L
+	lines, draw the hollow-box and hbar cursors on the right side of
+	cursor-glyph.  Thanks to martin rudalics <rudalics@gmx.at> for
+	testing on X.
+
+	* xterm.c (x_draw_stretch_glyph_string):
+	* w32term.c (x_draw_stretch_glyph_string): Fix a thinko that
+	caused the block cursor to disappear on a TAB in R2L lines in
+	every window except the leftmost one.  Reported by Martin Rudalics
+	<rudalics@gmx.at>.
+
 2014-09-16  Dmitry Antipov  <dmantipov@yandex.ru>
 
 	Always use matched specpdl entry to record call arguments (Bug#18473).
