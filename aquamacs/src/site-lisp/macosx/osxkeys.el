@@ -378,6 +378,14 @@ whenever isearch-mode is exited, even if it was invoked with
 (defvar aquamacs-isearching nil)
 
 (defun aquamacs-isearch-forward ()
+  "Search forward, similar to `isearch-forward'.
+Aquamacs' interactive search is different from regular `isearch' in some ways.
+After each search, the region will be set to the found string.
+After this command, the contents of the kill ring (pasteboard) can be 
+used as search string with \\[cua-paste].  Repeat searches are possible with
+\\[aquamacs-repeat-isearch], after which yanking (pasting) the kill ring
+(pasteboard) will replace the found string.
+The RET key (enter) will also repeat the search."
   (interactive)
   (if set-region-to-isearch-match
       (deactivate-mark))
@@ -385,6 +393,8 @@ whenever isearch-mode is exited, even if it was invoked with
   (call-interactively 'isearch-forward))
 
 (defun aquamacs-isearch-backward ()
+  "Search backward, similar to `isearch-backward'.
+See `aquamacs-isearch-forward'."
   (interactive)
   (if set-region-to-isearch-match
       (deactivate-mark))
@@ -939,10 +949,21 @@ which key is mapped to command. The value of
   (define-key isearch-mode-map `[(,osxkeys-command-key v)] (if mode 'aquamacs-isearch-yank-kill))
   ;; the following should be defined in isearch-mode-map
   ;; because isearch terminates isearch-mode when non-isearch commands are entered
+  ;; the RET binding is conditional on whether we've started isearch with A-f (as opposed to C-s)
+  (define-key isearch-mode-map `[(return)]
+    (if mode
+	`(menu-item "" aquamacs-repeat-isearch
+		    :filter ,(lambda (cmd)
+			       (if aquamacs-isearching 'aquamacs-repeat-isearch)))))
+  (define-key isearch-mode-map `[(shift return)]
+    (if mode
+	`(menu-item "" aquamacs-repeat-isearch-backward
+		    :filter ,(lambda (cmd)
+			       (if aquamacs-isearching 'aquamacs-repeat-isearch-backward)))))
+    
   (define-key isearch-mode-map `[(,osxkeys-command-key g)]  (if mode 'aquamacs-repeat-isearch))
   (define-key isearch-mode-map `[(,osxkeys-command-key shift g)] (if mode 'aquamacs-repeat-isearch-backward))
-  (define-key isearch-mode-map `[(return)] (if mode 'aquamacs-repeat-isearch))
-  (define-key isearch-mode-map `[(shift return)] (if mode 'aquamacs-repeat-isearch-backward)))
+;; (aquamacs-modify-isearch-mode-map nil)
 ;; (aquamacs-modify-isearch-mode-map t)
 
 (defun osx-key-mode-command-key-warning ()
