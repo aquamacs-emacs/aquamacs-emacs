@@ -336,8 +336,7 @@ With argument, do this that many times."
 	 (overlay-end mouse-secondary-overlay))
 	(message "Secondary selection saved to clipboard and kill-ring, then killed.")
 	(setq mark-active mark-was-active
-	      deactivate-mark nil)
-	)
+	      deactivate-mark nil))
     (message "The secondary selection is not set.")))
 
 
@@ -372,24 +371,23 @@ whenever isearch-mode is exited, even if it was invoked with
 		transient-mark-mode
 	      (cons 'only transient-mark-mode)))))
   (when isearch-mode-end-hook-quit
-    (deactivate-mark)
-    (setq aquamacs-isearching)))
+    (deactivate-mark)))
 
 (defvar aquamacs-isearching nil)
 
 (defun aquamacs-isearch-forward ()
   "Search forward, similar to `isearch-forward'.
-Aquamacs' interactive search is different from regular `isearch' in some ways.
-After each search, the region will be set to the found string.
-After this command, the contents of the kill ring (pasteboard) can be 
-used as search string with \\[cua-paste].  Repeat searches are possible with
-\\[aquamacs-repeat-isearch], after which yanking (pasting) the kill ring
-(pasteboard) will replace the found string.
+Aquamacs' interactive search is different from regular `isearch'
+in some ways.  After each search, the region will be set to the
+found string.  After this command, the contents of the kill
+ring (pasteboard) can be used as search string with
+\\[cua-paste].  Repeat searches are possible with
+\\[aquamacs-repeat-isearch], after which yanking (pasting) the
+kill ring (pasteboard) will replace the found string.
 The RET key (enter) will also repeat the search."
   (interactive)
   (if set-region-to-isearch-match
       (deactivate-mark))
-  (setq aquamacs-isearching t)
   (call-interactively 'isearch-forward))
 
 (defun aquamacs-isearch-backward ()
@@ -398,15 +396,31 @@ See `aquamacs-isearch-forward'."
   (interactive)
   (if set-region-to-isearch-match
       (deactivate-mark))
-  (setq aquamacs-isearching t)
-  (call-interactively 'isearch-backward)) 
+  (call-interactively 'isearch-backward))
+
+(put 'aquamacs-isearch-forward 'aquamacs t)
+(put 'aquamacs-isearch-backward 'aquamacs t)
+(put 'aquamacs-repeat-isearch 'aquamacs t)
+(put 'aquamacs-repeat-isearch-backward 'aquamacs t)
+
+(defun aquamacs-set-isearching-mode ()
+  (setq aquamacs-isearching (get this-original-command 'aquamacs)))
+
+(defadvice isearch-backward (before set-aquamacs-isearching activate)
+  "Isearch will behave differently if called via \\[aquamacs-isearch-backward]."
+  (aquamacs-set-isearching-mode))
+(defadvice isearch-forward (before set-aquamacs-isearching-forward activate)
+  "Isearch will behave differently if called via \\[aquamacs-isearch-forward]."
+  (aquamacs-set-isearching-mode))
+(defadvice isearch-repeat (before set-aquamacs-isearching-repeat activate)
+  "Isearch will behave differently if called via \\[aquamacs-repeat-isearch]."
+  (aquamacs-set-isearching-mode))
 
 (defun aquamacs-repeat-isearch (&optional dir)
   "Repeats the last string isearch.
 Set region to match if `set-region-to-isearch-match'.
 Wraps around after throwing and error once."
   (interactive)
-  (setq aquamacs-isearching t)
   (if set-region-to-isearch-match
       (progn
 	(deactivate-mark)
