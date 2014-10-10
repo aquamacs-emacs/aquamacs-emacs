@@ -960,7 +960,6 @@ which key is mapped to command. The value of
 ;;  (setq  osx-key-mode-map (make-osx-key-mode-map))
 
 (defun aquamacs-modify-isearch-mode-map (mode)
-  (define-key isearch-mode-map `[(,osxkeys-command-key v)] (if mode 'aquamacs-isearch-yank-kill))
   ;; the following should be defined in isearch-mode-map
   ;; because isearch terminates isearch-mode when non-isearch commands are entered
   ;; the RET binding is conditional on whether we've started isearch with A-f (as opposed to C-s)
@@ -975,8 +974,12 @@ which key is mapped to command. The value of
 		    :filter ,(lambda (cmd)
 			       (if aquamacs-isearching 'aquamacs-repeat-isearch-backward)))))
     
-  (define-key isearch-mode-map `[(,osxkeys-command-key g)]  (if mode 'aquamacs-repeat-isearch))
-  (define-key isearch-mode-map `[(,osxkeys-command-key shift g)] (if mode 'aquamacs-repeat-isearch-backward))
+  (define-key isearch-mode-map `[(,osxkeys-command-key v)]
+    (if mode 'aquamacs-isearch-yank-kill))
+  (define-key isearch-mode-map `[(,osxkeys-command-key g)]
+    (if mode 'aquamacs-repeat-isearch))
+  (define-key isearch-mode-map `[(,osxkeys-command-key shift g)]
+    (if mode 'aquamacs-repeat-isearch-backward)))
 ;; (aquamacs-modify-isearch-mode-map nil)
 ;; (aquamacs-modify-isearch-mode-map t)
 
