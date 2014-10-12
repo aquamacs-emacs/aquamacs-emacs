@@ -1298,7 +1298,7 @@ bars (top, bottom, or nil)."
 
 (defun frame-monitor-attributes (&optional frame)
   "Return the attributes of the physical monitor dominating FRAME.
-If FRAME is omitted, describe the currently selected frame.
+If FRAME is omitted or nil, describe the currently selected frame.
 
 A frame is dominated by a physical monitor when either the
 largest area of the frame resides in the monitor, or the monitor
@@ -1390,6 +1390,7 @@ frame's display)."
 
 (defun display-screens (&optional display)
   "Return the number of screens associated with DISPLAY.
+DISPLAY should be either a frame or a display name (a string).
 If DISPLAY is omitted or nil, it defaults to the selected frame's display."
   (let ((frame-type (framep-on-display display)))
     (cond
@@ -1402,6 +1403,7 @@ If DISPLAY is omitted or nil, it defaults to the selected frame's display."
 
 (defun display-pixel-height (&optional display)
   "Return the height of DISPLAY's screen in pixels.
+DISPLAY can be a display name or a frame.
 If DISPLAY is omitted or nil, it defaults to the selected frame's display.
 
 For character terminals, each character counts as a single pixel.
@@ -1421,6 +1423,7 @@ with DISPLAY.  To get information for each physical monitor, use
 
 (defun display-pixel-width (&optional display)
   "Return the width of DISPLAY's screen in pixels.
+DISPLAY can be a display name or a frame.
 If DISPLAY is omitted or nil, it defaults to the selected frame's display.
 
 For character terminals, each character counts as a single pixel.
@@ -1459,6 +1462,7 @@ not explicitly specified."
 (defun display-mm-height (&optional display)
   "Return the height of DISPLAY's screen in millimeters.
 If the information is unavailable, this function returns nil.
+DISPLAY can be a display name or a frame.
 If DISPLAY is omitted or nil, it defaults to the selected frame's display.
 
 You can override what the system thinks the result should be by
@@ -1479,6 +1483,7 @@ monitor, use `display-monitor-attributes-list'."
 (defun display-mm-width (&optional display)
   "Return the width of DISPLAY's screen in millimeters.
 If the information is unavailable, this function returns nil.
+DISPLAY can be a display name or a frame.
 If DISPLAY is omitted or nil, it defaults to the selected frame's display.
 
 You can override what the system thinks the result should be by
@@ -1502,6 +1507,7 @@ monitor, use `display-monitor-attributes-list'."
   "Return the backing store capability of DISPLAY's screen.
 The value may be `always', `when-mapped', `not-useful', or nil if
 the question is inapplicable to a certain kind of display.
+DISPLAY can be a display name or a frame.
 If DISPLAY is omitted or nil, it defaults to the selected frame's display."
   (let ((frame-type (framep-on-display display)))
     (cond
@@ -1514,6 +1520,7 @@ If DISPLAY is omitted or nil, it defaults to the selected frame's display."
 
 (defun display-save-under (&optional display)
   "Return non-nil if DISPLAY's screen supports the SaveUnder feature.
+DISPLAY can be a display name or a frame.
 If DISPLAY is omitted or nil, it defaults to the selected frame's display."
   (let ((frame-type (framep-on-display display)))
     (cond
@@ -1526,6 +1533,7 @@ If DISPLAY is omitted or nil, it defaults to the selected frame's display."
 
 (defun display-planes (&optional display)
   "Return the number of planes supported by DISPLAY.
+DISPLAY can be a display name or a frame.
 If DISPLAY is omitted or nil, it defaults to the selected frame's display."
   (let ((frame-type (framep-on-display display)))
     (cond
@@ -1540,6 +1548,7 @@ If DISPLAY is omitted or nil, it defaults to the selected frame's display."
 
 (defun display-color-cells (&optional display)
   "Return the number of color cells supported by DISPLAY.
+DISPLAY can be a display name or a frame.
 If DISPLAY is omitted or nil, it defaults to the selected frame's display."
   (let ((frame-type (framep-on-display display)))
     (cond
@@ -1556,6 +1565,7 @@ If DISPLAY is omitted or nil, it defaults to the selected frame's display."
   "Return the visual class of DISPLAY.
 The value is one of the symbols `static-gray', `gray-scale',
 `static-color', `pseudo-color', `true-color', or `direct-color'.
+DISPLAY can be a display name or a frame.
 If DISPLAY is omitted or nil, it defaults to the selected frame's display."
   (let ((frame-type (framep-on-display display)))
     (cond
@@ -1576,33 +1586,43 @@ If DISPLAY is omitted or nil, it defaults to the selected frame's display."
 
 (defun display-monitor-attributes-list (&optional display)
   "Return a list of physical monitor attributes on DISPLAY.
-Each element of the list represents the attributes of each
-physical monitor.  The first element corresponds to the primary
-monitor.
+DISPLAY can be a display name, a terminal name, or a frame.
+If DISPLAY is omitted or nil, it defaults to the selected frame's display.
+Each element of the list represents the attributes of a physical
+monitor.  The first element corresponds to the primary monitor.
 
-Attributes for a physical monitor is represented as an alist of
-attribute keys and values as follows:
+The attributes for a physical monitor are represented as an alist
+of attribute keys and values as follows:
 
- geometry -- Position and size in pixels in the form of
-	     (X Y WIDTH HEIGHT)
- workarea -- Position and size of the workarea in pixels in the
+ geometry -- Position and size in pixels in the form of (X Y WIDTH HEIGHT)
+ workarea -- Position and size of the work area in pixels in the
 	     form of (X Y WIDTH HEIGHT)
  mm-size  -- Width and height in millimeters in the form of
  	     (WIDTH HEIGHT)
  frames   -- List of frames dominated by the physical monitor
  name (*) -- Name of the physical monitor as a string
+ source (*) -- Source of multi-monitor information as a string
 
-where X, Y, WIDTH, and HEIGHT are integers.  Keys labeled
-with (*) are optional.
+where X, Y, WIDTH, and HEIGHT are integers.  X and Y are coordinates
+of the top-left corner, and might be negative for monitors other than
+the primary one.  Keys labeled with (*) are optional.
+
+The \"work area\" is a measure of the \"usable\" display space.
+It may be less than the total screen size, owing to space taken up
+by window manager features (docks, taskbars, etc.).  The precise
+details depend on the platform and environment.
+
+The `source' attribute describes the source from which the information
+was obtained.  On X, this may be one of: \"Gdk\", \"XRandr\", \"Xinerama\",
+or \"fallback\".
 
 A frame is dominated by a physical monitor when either the
 largest area of the frame resides in the monitor, or the monitor
 is the closest to the frame if the frame does not intersect any
-physical monitors.  Every non-tip frame (including invisible one)
+physical monitors.  Every (non-tooltip) frame (including invisible ones)
 in a graphical display is dominated by exactly one physical
 monitor at a time, though it can span multiple (or no) physical
-monitors.
-If DISPLAY is omitted or nil, it defaults to the selected frame's display."
+monitors."
   (let ((frame-type (framep-on-display display)))
     (cond
      ((eq frame-type 'x)
@@ -1853,6 +1873,11 @@ If the frame is in fullscreen mode, don't change its mode,
 just toggle the temporary frame parameter `maximized',
 so the frame will go to the right maximization state
 after disabling fullscreen mode.
+
+Note that with some window managers you may have to set
+`frame-resize-pixelwise' to non-nil in order to make a frame
+appear truly maximized.
+
 See also `toggle-frame-fullscreen'."
   (interactive)
   (if (memq (frame-parameter nil 'fullscreen) '(fullscreen fullboth))
@@ -1874,6 +1899,11 @@ already fullscreen.  Ignore window manager screen decorations.
 When turning on fullscreen mode, remember the previous value of the
 maximization state in the temporary frame parameter `maximized'.
 Restore the maximization state when turning off fullscreen mode.
+
+Note that with some window managers you may have to set
+`frame-resize-pixelwise' to non-nil in order to make a frame
+appear truly fullscreen.
+
 See also `toggle-frame-maximized'."
   (interactive)
   (modify-frame-parameters
