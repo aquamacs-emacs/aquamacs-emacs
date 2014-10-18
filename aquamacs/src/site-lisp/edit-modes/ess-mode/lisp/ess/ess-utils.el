@@ -21,9 +21,8 @@
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
 
-;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs; see the file COPYING.  If not, write to
-;; the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
+;; A copy of the GNU General Public License is available at
+;; http://www.r-project.org/Licenses/
 
 ;;; Code:
 
@@ -63,14 +62,22 @@
 	    (eq 'font-lock-comment-face face)))
 	(nth 4 (parse-partial-sexp (progn (goto-char pos) (point-at-bol)) pos)))))
 
-(defun ess-inside-brackets-p (&optional pos)
+(defun ess-inside-brackets-p (&optional pos curly?)
   "Return t if position POS is inside brackets.
-POS defaults to point if no value is given."
+POS defaults to point if no value is given. If curly? is non nil
+also return t if inside curly brackets."
   (save-excursion
-    (let* ((pos (or pos (point)))
-	   (beg (re-search-backward "\\[" (max (point-min) (- pos 1000)) t))
-	   (end (re-search-forward "\\]" (min (point-max) (+ pos 1000)) t)))
-      (and beg end (> pos beg) (> end pos)))))
+    (let ((ppss (syntax-ppss pos))
+          (r nil))
+      (while (and (> (nth 0 ppss) 0)
+                  (not r))
+        (goto-char (nth 1 ppss))
+        (when (or (char-equal ?\[ (char-after))
+                  (and curly?
+                       (char-equal ?\{ (char-after))))
+          (setq r t))
+        (setq ppss (syntax-ppss)))
+      r)))
 
 (defun ess--extract-default-fl-keywords (keywords)
   "Extract the t-keywords from `ess-font-lock-keywords'."
@@ -1000,9 +1007,10 @@ If prefix is given, force tag generation based on imenu. Might be
 useful when different language files are also present in the
 directory (.cpp, .c etc)."
   (interactive "DDirectory to tag:
-FTags file (default TAGS): ")
-  (when (eq (length (file-name-nondirectory tagfile)) 0)
-    (setq tagfile (concat tagfile "TAGS")))
+GTags file (default TAGS): ")
+  (when (or (eq (length (file-name-nondirectory tagfile)) 0)
+            (file-directory-p tagfile))
+    (setq tagfile (concat (file-name-as-directory tagfile) "TAGS")))
   ;; emacs find-tags doesn't play well with remote TAG files :(
   (when (file-remote-p tagfile)
     (require 'tramp)

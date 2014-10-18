@@ -21,10 +21,8 @@
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
 
-;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; A copy of the GNU General Public License is available at
+;; http://www.r-project.org/Licenses/
 
 ;; This provides a dired-like buffer for R objects.  Instead of
 ;; operating on files, we operate on R objects in the current
@@ -162,7 +160,11 @@ can then examine these objects, plot them, and so on.
   (setq revert-buffer-function 'ess-rdired-revert-buffer)
   (use-local-map ess-rdired-mode-map)
   (setq major-mode 'ess-rdired-mode)
-  (setq mode-name (concat "RDired " ess-local-process-name)))
+  (setq mode-name (concat "RDired " ess-local-process-name))
+  (run-mode-hooks 'ess-rdired-mode-hook))
+
+(defun ess-rdired-mode-hook  nil
+  "Run upon entering `ess-rdired-mode'.")
 
 (defvar ess-rdired-sort-num nil)        ;silence the compiler.
 ;; but see following defun -- maybe it should be buffer local.

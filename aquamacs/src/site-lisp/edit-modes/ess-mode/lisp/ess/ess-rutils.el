@@ -4,7 +4,7 @@
 ;; Created:      Thu Nov 10 02:20:36 2004 (UTC)
 ;; Last-Updated: 2013-09-22T16:08:47+0000
 ;;           By: Sebastian P. Luque
-;; Version: $Id: ess-rutils.el 5769 2013-09-22 16:13:07Z sluque $
+;; Version: $Id: ess-rutils.el 5939 2013-12-09 09:31:49Z maechler $
 ;; Compatibility: GNU Emacs >= 22.0.50.1
 
 ;; Copyright (c) 2005-2013 Sebastian P. Luque
@@ -17,10 +17,9 @@
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ;; GNU General Public License for more details.
-;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs; see the file COPYING. If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+
+;; A copy of the GNU General Public License is available at
+;; http://www.r-project.org/Licenses/
 
 ;;; Commentary:
 

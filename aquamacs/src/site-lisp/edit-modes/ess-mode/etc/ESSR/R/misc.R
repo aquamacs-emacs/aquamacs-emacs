@@ -11,6 +11,23 @@
         eval(bquote(.(cmd_symb)(.(file), encoding = .(encoding))), envir = frame)
 }
 
+.ess_knit <- function(file, output = NULL){
+    library(knitr)
+    frame <- parent.frame()
+    od <- getwd()
+    on.exit(setwd(od))
+    setwd(dirname(file))
+    ## this bquote is really needed for data.table := operator to work correctly
+    eval(bquote(knit(.(file), output = .(output))), envir = frame)
+}
+
+.ess_sweave <- function(file, output = NULL){
+    od <- getwd()
+    frame <- parent.frame()
+    on.exit(setwd(od))
+    setwd(dirname(file))
+    eval(bquote(Sweave(.(file), output = .(output))), envir = frame)
+}
 
 ## Users might find it useful. So don't prefix with .ess.
 htsummary <- function (x, hlength = 4, tlength = 4, digits = 3)
@@ -34,11 +51,12 @@ htsummary <- function (x, hlength = 4, tlength = 4, digits = 3)
         } else {
             if (is.matrix(x))
                 x <- data.frame(unclass(x))
-            h <- head(x, hlength)
-            t <- tail(x, tlength)
+            ## conversion needed, to avoid problems with derived classes suchs as data.table
+            h <- as.data.frame(head(x, hlength))
+            t <- as.data.frame(tail(x, tlength))
             for (i in 1:ncol(x)) {
                 h[[i]] <- f(h[[i]])
-                t[[i]] <- f(h[[i]])
+                t[[i]] <- f(t[[i]])
             }
             ## summaries
             sumr <- sapply(x, function(c){
@@ -75,4 +93,24 @@ htsummary <- function (x, hlength = 4, tlength = 4, digits = 3)
         }
     }
     invisible(NULL)
+}
+
+.ess_vignettes <- function(){
+    vs <- unclass(browseVignettes())
+    vs <- vs[sapply(vs, length) > 0]
+
+    mat2elist <- function(mat){
+        if(!is.null(dim(mat))){
+            apply(mat, 1, function(r)
+                  sprintf("(list \"%s\")",
+                          paste0(gsub("\"","\\\\\"",
+                                      as.vector(r[c("Title", "Dir", "PDF", "File", "R")])),
+                                 collapse = "\" \"")))
+        }
+    }
+    cat("(list \n",
+        paste0(mapply(function(el, name) sprintf("(list \"%s\"  %s)", 
+                                                 name,
+                                                 paste0(mat2elist(el), collapse = "\n")),
+                      vs, names(vs)), collapse = "\n"), ")\n")
 }

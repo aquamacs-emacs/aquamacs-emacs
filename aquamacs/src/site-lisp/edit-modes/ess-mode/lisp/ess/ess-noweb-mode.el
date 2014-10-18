@@ -23,10 +23,9 @@
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
 ;;
-;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, write to the Free Software
-;; Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-;;
+;; A copy of the GNU General Public License is available at
+;; http://www.r-project.org/Licenses/
+
 ;; See bottom of this file for information on language-dependent
 ;; highlighting, and recent changes.
 ;;
@@ -90,8 +89,8 @@
 
 ;; Want to use these now in order to cater for all obscure kinds of emacsen
 (eval-and-compile
-  (require 'ess-compat))
-
+  (require 'ess-compat)
+  (autoload 'ess-write-to-dribble-buffer "ess"))
 
 
 ;;; Variables
@@ -948,10 +947,17 @@ indent according to mode."
   (if auto-fill-function
       (setq auto-fill-function 'ess-noweb-auto-fill-doc-chunk)))
 
+(defun ess-noweb-auto-fill-code-chunk ()
+  "Replacement for do-auto-fill. Cancel filling in chunk headers"
+  (unless (save-excursion
+            (beginning-of-line)
+            (looking-at "<<"))
+    (do-auto-fill)))
+
 (defun ess-noweb-auto-fill-code-mode ()
   "Install the default auto fill function, iff necessary."
   (if auto-fill-function
-      (setq auto-fill-function 'do-auto-fill)))
+      (setq auto-fill-function 'ess-noweb-auto-fill-code-chunk)))
 
 ;;; Marking
 
@@ -1076,7 +1082,7 @@ switch narrowing on."
   "If in a documentation chunk, goto to the Nth documentation
 chunk from point, else goto to the Nth code chunk from point."
   (interactive "p")
-  (dbg (current-buffer))
+  ;; (dbg (current-buffer))
   (if (ess-noweb-in-code-chunk)
       (ess-noweb-next-code-chunk n)
     (ess-noweb-next-doc-chunk n)))

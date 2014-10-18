@@ -23,9 +23,8 @@
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
 
-;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs; see the file COPYING.  If not, write to
-;; the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
+;; A copy of the GNU General Public License is available at
+;; http://www.r-project.org/Licenses/
 
 ;;; Commentary:
 
@@ -270,7 +269,7 @@
 ;; precede R4 and allowes spaces in file path
 (add-to-list 'compilation-error-regexp-alist-alist
              ;; start with bol,: but don't start with digit
-             '(R3 "\\(?:^ +\\|: +\\)\\([^-+[:digit:]\n][^:\n]*\\):\\([0-9]+\\):\\([0-9]+\\):"  1 2 3 2 1))
+             '(R3 "\\(?:^ +\\|: +\\)\\([^-+[:digit:]\n]:?[^:\n]*\\):\\([0-9]+\\):\\([0-9]+\\):"  1 2 3 2 1))
 
 (add-to-list 'compilation-error-regexp-alist-alist
              ;; don't start with digit, don't contain spaces
@@ -278,6 +277,10 @@
 
 (add-to-list 'compilation-error-regexp-alist-alist
              '(R-recover " *[0-9]+: +\\([^:\n\t]+?\\)#\\([0-9]+:\\)"  1 2 nil 2 1))
+
+;; gnu C errors
+;; (add-to-list 'compilation-error-regexp-alist-alist
+;;              '(R_C "^\\([^-+ [:digit:]][^: \t\n]+\\):\\([0-9]+\\):\\([0-9]+\\):"  2 3 nil 2 1))
 
 (let ((r-ver '("R-1" "R-2" "R-3" "R-devel" "R-patched")))
   (defvar ess-r-versions
@@ -301,7 +304,7 @@ before ess-site is loaded) for it to take effect."))
   process.")
 
 (defun ess--R-load-ESSR ()
-  "Load/INSTALL/Update ESSR"
+  "Load/INSTALL/Update ESSR."
   (let* ((ESSR-directory (expand-file-name "ESSR" ess-etc-directory))
          (src-dir (expand-file-name "R" ESSR-directory)))
 
@@ -330,7 +333,7 @@ before ess-site is loaded) for it to take effect."))
                             (buffer-string))))
         (ess-write-to-dribble-buffer (format "version file: %s\nloadremote file: %s\n"
                                              verfile loadremote))
-        (unless (ess-boolean-command (format r-load-code version))
+        (unless (ess-boolean-command (format r-load-code version) nil 0.1)
           (let ((errmsg (with-current-buffer " *ess-command-output*" (buffer-string)))
                 (files (directory-files src-dir t "\\.R$")))
             (ess-write-to-dribble-buffer (format "error loading ESSR.rda: \n%s\n" errmsg))
@@ -348,8 +351,6 @@ Optional prefix (C-u) allows to set command line arguments, such as
 If you have certain command line arguments that should always be passed
 to R, put them in the variable `inferior-R-args'."
   (interactive "P")
-  ;; get settings, notably inferior-R-program-name :
-  (setq ess-customize-alist R-customize-alist)
   (ess-write-to-dribble-buffer   ;; for debugging only
    (format
     "\n(R): ess-dialect=%s, buf=%s, start-arg=%s\n current-prefix-arg=%s\n"
@@ -369,43 +370,57 @@ to R, put them in the variable `inferior-R-args'."
                                    (concat " [other than '" r-always-arg "']"))
                                " ? "))
                     nil)))
+         (cust-alist (copy-alist R-customize-alist))
+         (gdbp (string-match-p "gdb" r-start-args))
          use-dialog-box)
+
+    (when gdbp
+      (setcdr (assoc 'inferior-ess-secondary-prompt cust-alist)
+              (format "\\(%s\\)\\|\\((gdb) \\)"
+                      (cdr (assoc 'inferior-ess-secondary-prompt cust-alist)))))
 
     (when (or ess-microsoft-p
               (eq system-type 'cygwin))
       (setq use-dialog-box nil)
-      (if ess-microsoft-p ;; default-process-coding-system would break UTF locales on Unix
-          (setq default-process-coding-system '(undecided-dos . undecided-dos))))
+      (when ess-microsoft-p ;; default-process-coding-system would break UTF locales on Unix
+        (setq default-process-coding-system '(undecided-dos . undecided-dos))))
 
-    (inferior-ess r-start-args)
+    (inferior-ess r-start-args cust-alist gdbp)
 
     (ess-process-put 'funargs-pre-cache ess-R--funargs-pre-cache)
+    ;; We need to use callback, because R might start with a gdb process
+    (ess-process-put 'callbacks '(R-initialize-on-start))
+    ;; trigger the callback
+    (process-send-string (get-process ess-local-process-name) "\n")
 
     (remove-hook 'completion-at-point-functions 'ess-filename-completion 'local) ;; should be first
     (add-hook 'completion-at-point-functions 'ess-R-object-completion nil 'local)
     (add-hook 'completion-at-point-functions 'ess-filename-completion nil 'local)
-
-    ;;-------------------------
     (setq comint-input-sender 'inferior-R-input-sender)
+
     (ess-write-to-dribble-buffer
      (format "(R): inferior-ess-language-start=%s\n"
-             inferior-ess-language-start))
+             inferior-ess-language-start))))
 
-    (when ess-can-eval-in-background
-      (ess-async-command-delayed
-       "invisible(installed.packages())\n" nil (get-process ess-local-process-name)
-       ;; "invisible(Sys.sleep(10))\n" nil (get-process ess-local-process-name) ;; test only
-       (lambda (proc) (process-put proc 'packages-cached? t))))
+(defun R-initialize-on-start (&optional proc string)
+  "This function is run after the first R prompt.
+Executed in process buffer."
+  (interactive)
 
-    (ess--R-load-ESSR)
+  (when ess-can-eval-in-background
+    (ess-async-command-delayed
+     "invisible(installed.packages())\n" nil (get-process ess-local-process-name)
+     ;; "invisible(Sys.sleep(10))\n" nil (get-process ess-local-process-name) ;; test only
+     (lambda (proc) (process-put proc 'packages-cached? t))))
 
-    (if inferior-ess-language-start
-        (ess-eval-linewise inferior-ess-language-start
-                           nil nil nil 'wait-prompt))
+  (ess--R-load-ESSR)
 
-    (with-ess-process-buffer nil
-      (run-mode-hooks 'ess-R-post-run-hook))))
+  (when inferior-ess-language-start
+    (ess-eval-linewise inferior-ess-language-start
+                       nil nil nil 'wait-prompt))
 
+  (with-ess-process-buffer nil
+    (run-mode-hooks 'ess-R-post-run-hook)))
 
 
 ;; (defun ess--R-cache-installed-packages ()
@@ -451,6 +466,7 @@ to R, put them in the variable `inferior-R-args'."
   (ad-activate 'fill-paragraph)
   (ad-activate 'move-beginning-of-line)
   (ad-activate 'newline-and-indent)
+  (ad-activate 'ess-eval-line-and-step)
   (if ess-roxy-hide-show-p
     (ad-activate 'ess-indent-command))
 
@@ -907,7 +923,7 @@ or \\[ess-internal-complete-object-name] otherwise."
   (sit-for 2 t)
   )
 
-;; this one will be removed soon
+;; This one is needed for R <= 2.6.x -- hence *not* obsoleting it
 (defun ess-internal-complete-object-name ()
   "Perform completion on `ess-language' object preceding point.
 The object is compared against those objects known by
@@ -971,8 +987,8 @@ command may be necessary if you modify an attached dataframe."
         ;; always return a non-nil value to prevent history expansions
         (or (comint-dynamic-simple-complete  pattern components) 'none))))
 
-;; Hmm... shouldn't we keep and use this for R <= 2.6.x ???
-(make-obsolete 'ess-internal-complete-object-name nil "ESS 13.09")
+;; *NOT* doing this, as it is needed for R <= 2.6.x
+;;(make-obsolete 'ess-internal-complete-object-name nil "ESS 13.09")
 
 (defun ess-R-get-rcompletions (&optional start end)
   "Call R internal completion utilities (rcomp) for possible completions.
@@ -1076,7 +1092,7 @@ To be used instead of ESS' completion engine for R versions >= 2.7.0."
     (when (string-match ":+\\(.*\\)" sym)
       (setq sym (match-string 1 sym)))
     (ess-with-current-buffer buf
-      (ess--flush-help-into-current-buffer sym))
+      (ess--flush-help-into-current-buffer sym nil t))
     (with-current-buffer buf
       (ess-help-underline)
       (goto-char (point-min))

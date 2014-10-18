@@ -22,10 +22,9 @@
 ;; FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
 ;; details.
 ;;
-;; You should have received a copy of the GNU General Public License along with
-;; this program; see the file COPYING.  If not, write to the Free Software
-;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301,
-;; USA.
+;; A copy of the GNU General Public License is available at
+;; http://www.r-project.org/Licenses/
+
 ;;
 ;; Features that might be required by this library:
 ;;
@@ -189,7 +188,7 @@ Return new command, a string."
 
     ;; delete all old temp files
     (when (and (not (ess-process-get 'busy))
-               (< 1 (time-to-seconds
+               (< 1 (float-time
                      (time-subtract (current-time)
                                     (ess-process-get 'last-eval)))))
       (dolist (f (ess-process-get 'temp-source-files))
@@ -204,7 +203,7 @@ Return new command, a string."
      (let ((tmpfile
             (expand-file-name (make-temp-name
                                (concat (file-name-nondirectory
-                                        (or filename "unknown")) "@"))
+                                        (or filename "unknown")) "!"))
                               (if remote
                                   (tramp-get-remote-tmpdir remote)
                                 temporary-file-directory)))
@@ -1131,9 +1130,12 @@ Kill the *ess.dbg.[R_name]* buffer."
            (if (not (process-get pb 'busy)) ;; if ready
                (when (> ess--busy-count 0)
                  (setq ess--busy-count 0)
-                 (force-mode-line-update))
+                 (force-mode-line-update)
+                 (redisplay))
              (setq ess--busy-count (1+ (mod  ess--busy-count  (1- (length ess-busy-strings)))))
-             (force-mode-line-update)))))))
+             (force-mode-line-update)
+             ;; looks like redisplay is necessary for emacs > 24.4
+             (redisplay)))))))
 
 ;; (ess--make-busy-prompt-function (get-process "R"))
 
@@ -1204,7 +1206,7 @@ If in debugging state, mirrors the output into *ess.dbg* buffer."
          (flush-timer (process-get proc 'flush-timer)))
     ;; current-buffer is still the user's input buffer here
     (ess--if-verbose-write-process-state proc string)
-    (inferior-ess-run-callback proc) ;protected
+    (inferior-ess-run-callback proc string)
     (process-put proc 'is-recover match-selection)
 
     (if (or (process-get proc 'suppress-next-output?)
@@ -1397,7 +1399,8 @@ TB-INDEX is not found return nil.
   (if (stringp line) (setq line (string-to-number line)))
   (if (stringp col) (setq col (string-to-number col)))
   (let* ((srcref (gethash file ess--srcrefs))
-         (file (or (car srcref) file))
+         (file (replace-regexp-in-string "^\n" "" ;; hack for gnu regexp
+                                         (or (car srcref) file)))
          (tb-index (cadr srcref))
          (buffer (ess--dbg-find-buffer file))
          pos)
@@ -2404,7 +2407,7 @@ of steps decreases the height by the same amount)")
   (apply 'move-overlay ess-watch-current-block-overlay (ess-watch-block-limits-at-point)))
 
 
-(defun ess-watch-make-alist ()
+(defun ess-watch--make-alist ()
   "Create an association list of expression from current buffer (better be a watch buffer).
 Each element of assoc list is of the form (pos name expr) where
 pos is an unique integer identifying watch blocks by position,
@@ -2427,25 +2430,25 @@ string giving the actual R expression."
               (append wal (list (list pos name expr)))))
       wal)))
 
-(defun ess-watch-parse-assoc (al)
+(defun ess-watch--parse-assoc (al)
   "Return a string of the form 'assign(\".ess_watch_expressions\", list(a = parse(expr_a), b= parse(expr_b)), envir = .GlobalEnv)'
-ready to be send to R process. AL is an association list as return by `ess-watch-make-alist'"
-  (concat "assign(\".ess_watch_expressions\", list("
+ready to be send to R process. AL is an association list as return by `ess-watch--make-alist'"
+  (concat ".ess_watch_assign_expressions(list("
           (mapconcat (lambda (el)
                        (if (> (length  (cadr el) ) 0)
                            (concat "`" (cadr el) "` = parse(text = '" (caddr el) "')")
                          (concat "parse(text = '" (caddr el) "')")))
                      al ", ")
-          "), envir = .GlobalEnv)\n"))
+          "))\n"))
 
-(defun ess-watch-install-.ess_watch_expressions ()
+(defun ess-watch--install-.ess_watch_expressions ()
   ;; used whenever watches are added/deleted/modified from the watch
   ;; buffer. this is the only way  to insert expressions into
   ;; .ess_watch_expressions object in R. Assumes R watch being the current
   ;; buffer, otherwise will most likely install empty list.
   (interactive)
   (process-send-string (ess-get-process ess-current-process-name)
-                       (ess-watch-parse-assoc (ess-watch-make-alist)))
+                       (ess-watch--parse-assoc (ess-watch--make-alist)))
   ;;todo: delete the prompt at the end of proc buffer todo: defun ess-send-string!!
   (sleep-for 0.05)  ;; need here, if ess-command is used immediately after,  for some weird reason the process buffer will not be changed
   )
@@ -2508,7 +2511,7 @@ Optional N if supplied gives the number of backward steps."
     (delete-region start end)
     (insert name)
     (setq buffer-read-only t)
-    (ess-watch-install-.ess_watch_expressions)
+    (ess-watch--install-.ess_watch_expressions)
     (ess-watch-refresh-buffer-visibly (current-buffer))))
 
 (defun ess-watch-edit-expression ()
@@ -2531,7 +2534,7 @@ Optional N if supplied gives the number of backward steps."
     (delete-region start end)
     (insert expr)
     (setq buffer-read-only t)
-    (ess-watch-install-.ess_watch_expressions)
+    (ess-watch--install-.ess_watch_expressions)
     (ess-watch-refresh-buffer-visibly (current-buffer))))
 
 (defun ess-watch-add ()
@@ -2546,7 +2549,7 @@ Optional N if supplied gives the number of backward steps."
     (setq buffer-read-only nil)
     (insert (concat "\n" ess-watch-start-block " " name " -@\n" ess-watch-start-expression " " expr "\n"))
     (setq buffer-read-only t)
-    (ess-watch-install-.ess_watch_expressions)))
+    (ess-watch--install-.ess_watch_expressions)))
 
 (defun ess-watch-insert ()
   "Ask for new R expression and name and insert it in front of current watch block"
@@ -2560,7 +2563,7 @@ Optional N if supplied gives the number of backward steps."
     (setq buffer-read-only nil)
     (insert (concat "\n" ess-watch-start-block " " name " -@\n" ess-watch-start-expression " " expr "\n"))
     (setq buffer-read-only t)
-    (ess-watch-install-.ess_watch_expressions)))
+    (ess-watch--install-.ess_watch_expressions)))
 
 (defun ess-watch-move-up ()
   "Move the current block up."
@@ -2572,7 +2575,7 @@ Optional N if supplied gives the number of backward steps."
       (setq wbl (apply 'delete-and-extract-region  (ess-watch-block-limits-at-point)))
       (re-search-backward ess-watch-start-block nil t 1) ;; current block was deleted, point is at the end of previous block
       (insert wbl)
-      (ess-watch-install-.ess_watch_expressions)
+      (ess-watch--install-.ess_watch_expressions)
       (setq buffer-read-only t))))
 
 
@@ -2590,7 +2593,7 @@ Optional N if supplied gives the number of backward steps."
       (when (re-search-forward ess-watch-start-block nil 1 1) ;; current block was deleted, point is at the end of previous block or point-max
         (goto-char (match-beginning 0)))
       (insert wbl)
-      (ess-watch-install-.ess_watch_expressions)
+      (ess-watch--install-.ess_watch_expressions)
       (setq buffer-read-only t))))
 
 (defun ess-watch-kill ()
@@ -2598,7 +2601,7 @@ Optional N if supplied gives the number of backward steps."
   (interactive)
   (setq buffer-read-only nil)
   (apply 'delete-region (ess-watch-block-limits-at-point))
-  (ess-watch-install-.ess_watch_expressions))
+  (ess-watch--install-.ess_watch_expressions))
 
 ;;;_ + Debug/Undebug at point
 (defun ess--dbg-get-signatures (method)
@@ -2716,37 +2719,43 @@ for signature and trace it with browser tracer."
 
 ;;;_ * Kludges and Fixes
 ;;; delete-char and delete-backward-car do not delete whole intangible text
-(defadvice delete-char (around delete-backward-char-intangible activate)
+(defadvice delete-char (around ess-delete-backward-char-intangible activate)
   "When about to delete a char that's intangible, delete the whole intangible region
 Only do this when #chars is 1"
-  (if (and (= (ad-get-arg 0) 1)
+  (if (and (eq major-mode 'ess-mode)
+           (= (ad-get-arg 0) 1)
            (get-text-property (point) 'intangible))
       (progn
-        (kill-region (point) (next-single-property-change (point) 'intangible))
+        (kill-region (point) (or (next-single-property-change (point) 'intangible)
+                                 (point-max)))
         (indent-for-tab-command))
     ad-do-it))
 
-(defadvice delete-backward-char (around delete-backward-char-intangible activate)
+(defadvice delete-backward-char (around ess-delete-backward-char-intangible activate)
   "When about to delete a char that's intangible, delete the whole intangible region
 Only do this when called interactively and  #chars is 1"
-  (if (and (= (ad-get-arg 0) 1)
+  (if (and (eq major-mode 'ess-mode)
+           (= (ad-get-arg 0) 1)
            (> (point) (point-min))
            (get-text-property (1- (point)) 'intangible))
       (progn
-        (kill-region (previous-single-property-change (point) 'intangible) (point))
-        (indent-for-tab-command))
+        (let ((beg (or (previous-single-property-change (point) 'intangible)
+                       (point-min))))
+          (kill-region beg (point))))
     ad-do-it))
 
-;;; previous-line gets stuck if next char is intangible
-(defadvice previous-line (around solves-intangible-text-kludge activate)
+;; previous-line gets stuck if next char is intangible
+(defadvice previous-line (around ess-fix-cursor-stuck-at-intangible-text activate)
   "When about to move to previous line when next char is
 intanbible, step char backward first"
-  (if (and (or (null (ad-get-arg 0))
+  (if (and (eq major-mode 'ess-mode)
+           (or (null (ad-get-arg 0))
                (= (ad-get-arg 0) 1))
            (get-text-property (point) 'intangible))
       (backward-char 1))
   ad-do-it)
 
+;; (ad-remove-advice 'previous-line 'around 'delete-backward-char-intangible)
 
 (make-obsolete-variable 'ess-dbg-blink-ref-not-found-face  'ess-debug-blink-ref-not-found-face "ESS 13.05")
 (make-obsolete-variable 'ess-dbg-blink-same-ref-face  'ess-debug-blink-same-ref-face "ESS 13.05")

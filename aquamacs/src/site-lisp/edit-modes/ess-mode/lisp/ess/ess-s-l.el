@@ -21,9 +21,8 @@
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
 
-;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs; see the file COPYING.  If not, write to
-;; the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
+;; A copy of the GNU General Public License is available at
+;; http://www.r-project.org/Licenses/
 
 ;;; Commentary:
 
@@ -71,7 +70,7 @@
   '((paragraph-start              . (concat "\\s-*$\\|" page-delimiter))
     (paragraph-separate           . (concat "\\s-*$\\|" page-delimiter))
     (paragraph-ignore-fill-prefix . t)
-    (require-final-newline        . t)
+    (require-final-newline        . mode-require-final-newline)
     ;;(comment-indent-function  . 'S-comment-indent)
     ;;(ess-comment-indent           . 'S-comment-indent)
     ;;(ess-indent-line                      . 'S-indent-line)
@@ -611,8 +610,9 @@ and one that is well formatted in emacs ess-mode."
     (ess-if-verbose-write "ess-fix-misc: after ';' before #\n");___D___
 
     ;;from R 1.9.x "_" is valid in names; here assume no initial / trailing '_'
-    (goto-char from) (ess-rep-regexp " +_ *" " <- " nil 'literal verbose)
-    (goto-char from) (ess-rep-regexp   "_ +" " <- " nil 'literal verbose)
+    ;; BUG: The following changes "beta_ " or " _abc"
+    ;; (goto-char from) (ess-rep-regexp " +_ *" " <- " nil 'literal verbose)
+    ;; (goto-char from) (ess-rep-regexp   "_ +" " <- " nil 'literal verbose)
 
     (ess-if-verbose-write "ess-fix-misc: before 'around \"<-\"' :\n");___D___
     ;; ensure space around  "<-"  ---- but only replace if necessary:

@@ -23,9 +23,8 @@
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
 
-;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs; see the file COPYING.  If not, write to
-;; the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
+;; A copy of the GNU General Public License is available at
+;; http://www.r-project.org/Licenses/
 
 ;;; Commentary:
 
@@ -159,11 +158,11 @@ Depending on the `ess-swv-processor' used."
                            "purl")
                           (t (error "Not a valid processor %s" ess-swv-processor)))))
 
-(defun ess-swv-weave (choose)
+(defun ess-swv-weave (&optional choose)
   "Run Sweave/knit on the current .Rnw file.
 Depending on the `ess-swv-processor' used.
 
-If CHOOSE is non-nil, offer a menu of available weavers. 
+If CHOOSE is non-nil, offer a menu of available weavers.
 "
   (interactive "P")
   (let ((processor (if choose
@@ -246,7 +245,7 @@ default using the first entry of `ess-swv-pdflatex-commands' and display it."
          (cmd (if (stringp pdfviewer)
                   (list pdfviewer pdffile)
                 (append pdfviewer  (list pdffile)))))
-                           
+
     ;;(shell-command (concat "pdflatex " latex-filename))
     (message "Running '%s' on '%s' ..." pdflatex-cmd latex-filename)
     (with-current-buffer tex-buf (erase-buffer))

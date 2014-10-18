@@ -14,7 +14,7 @@ File: ess.info,  Node: Top,  Next: Introduction,  Up: (dir)
 ESS: Emacs Speaks Statistics
 ****************************
 
-ESS version 13.09-1
+ESS version 14.09
 
      by  A.J. Rossini,
          R.M. Heiberger,
@@ -170,7 +170,7 @@ File: ess.info,  Node: Current Features,  Up: Features
         * Recording and saving transcript files
         * Manipulating and editing saved transcripts
         * Re-evaluating commands from transcript files
-   * Interaction with Help Pages and other Documenation (R)
+   * Interaction with Help Pages and other Documentation (R)
         * Fast Navigation
         * Sending Examples to running ESS process.
         * Fast Transfer to Further Help Pages
@@ -245,7 +245,37 @@ File: ess.info,  Node: New features,  Next: Credits,  Prev: Features,  Up: Intro
 1.2 New features in ESS
 =======================
 
-Changes / Selected Bug Fixes in 13.09-1:
+Changes / Selected Bug Fixes in 14.09:
+   * ESS[Julia]: Executable is changed to 'julia'.
+   * ESS[Julia]: Completion and help system was adjusted to Julia
+     v.0.3.0.  Julia v.0.2.x is no more supported.
+   * ESS[R]: Running R with 'gdb' debugger now works as expected
+   * iESS: Inferior ESS buffers are now derived from 'comint-mode'
+   * ESS[R]: 'ess-execute-screen-options' uses correct screen width in
+     terminal sessions
+   * ESS: 'ess-build-tags-for-directory' works when no TAGS file name
+     was provided
+   * ESS: 'ess-continued-statement-offset' is now respected everywhere
+     except inside of the 'if' test condition.
+   * ESS: New variable 'ess-first-continued-statement-offset' for
+     indentation of the first line in multiline statements.
+   * ESSR: Starting ',' in multiline statements indentation is now
+     ignored to achieve a more pleasant alignment.
+   * ESSR: Improved behavior of 'RET' in roxygen blocks.
+   * ESS[R]: command cleaning with 'C-u C-u C-y' was broken with lines
+     containing " + "
+   * ESS[R]: fixed "empty watch window bug"
+   * ESS[R]: don't ask for help location on ac-quick-help (request of
+     github #81)
+   * ESS[R]: "importClassesFrom" and "importMethodsFrom" were added to
+     the list of two-parameter roxygen commands
+   * ESS[R]: fix vignetes display and hyperlinks (were broken in
+     13.09-1)
+   * ESS[Julia]: recognize function names ending with !
+   * ESS[Julia]: fix indentation of "for" comprehension syntax within
+     brackets.
+
+   Changes / Selected Bug Fixes in 13.09-1:
    * ess-remote and TRAMP: R support code is now downloaded in binary
      form instead of being injected from local machine.  The R code is
      stored in '~/.config/ESSR/' directory on the remote machine
@@ -1020,13 +1050,13 @@ can then use the development version by adding the following to .emacs:
 Subversion server of the R project is
 
      Certificate information:
-      - Hostname: svn.r-project.org
-      - Valid: from Jul 16 08:10:01 2004 GMT until Jul 14 08:10:01 2014 GMT
-      - Issuer: Department of Mathematics, ETH Zurich, Zurich, Switzerland, CH
-      - Fingerprint: c9:5d:eb:f9:f2:56:d1:04:ba:44:61:f8:64:6b:d9:33:3f:93:6e:ad
-
-(currently, there is no "trusted certificate").  You can accept this
-certificate permanently and will not be asked about it anymore.
+      - General name: r-project.org
+      - Serial number: 04:9D:4F:0D:53:03:DB
+      - Valid: from  03/10/2014  to  03/10/2016
+      - Issuer: Starfield Secure Certificate Authority - G2
+                http://certs.starfieldtech.com/repository/
+      - SHA1-Fingerprint: F5:15:96:DB:F1:2F:35:1B:96:06:C3:A4:2A:E2:80:78:76:4C:A4:30
+      - MD5-Fingerprint: D8:7D:4F:8F:ED:92:65:EE:EE:A5:73:2D:BB:F6:35:E6
 
 1.4.2 Git for development
 -------------------------
@@ -3019,8 +3049,8 @@ and off with 'M-x' 'ess-tracebug'.  To disable startup activation of
 
    Tracebug functionality can be found on 'ess-dev-map', bound to 'C-c
 C-t'.  Additionally, when subprocess is in a debugging state
-'ess-debug-minor-mode' is active and the following shortcuts are
-available:
+'ess-debug-minor-mode' is active and the following additional shortcuts
+are available:
 
 * Interactive Debugging (`ess-debug-minor-mode-map'):
 
@@ -3032,8 +3062,8 @@ available:
  M-Q   . Quit debugging            . `ess-debug-command-quit'
 
 
-   Here are all the tracebug commands defined in 'ess-dev-map' ('C-c C-t
-?' to show this table):
+   These are all the tracebug commands defined in 'ess-dev-map' ('C-c
+C-t ?' to show this table):
 
 
 * Breakpoints (`ess-dev-map'):
@@ -3068,6 +3098,9 @@ available:
 
 ?   . Show this help		. `ess-tracebug-show-help'
 
+
+   To configure how electric watch window splits the display see
+'ess-watch-width-threshold' and 'ess-watch-height-threshold' variables.
 
    A more detailed ess-tracebug documentation with screenshots is
 available at <http://code.google.com/p/ess-tracebug/>.
@@ -5467,115 +5500,115 @@ Concept Index
 
 Tag Table:
 Node: Top268
-Node: Introduction2285
-Node: Features5246
-Node: Current Features5879
-Node: New features10151
-Node: Credits42726
-Node: Latest version46245
-Node: Manual48282
-Node: Installation50827
-Node: Step by step instructions51157
-Node: License53357
-Node: Stability54020
-Node: Requirements54517
-Node: Interactive ESS55550
-Node: Starting up56404
-Node: Multiple ESS processes57187
-Node: ESS processes on Remote Computers58221
-Node: S+elsewhere and ESS-elsewhere62375
-Node: Customizing startup65150
-Node: Entering commands67830
-Node: Command-line editing68988
-Node: Transcript70225
-Node: Last command72002
-Node: Process buffer motion73436
-Node: Transcript resubmit74939
-Node: Saving transcripts76913
-Node: Command History78766
-Node: Saving History82216
-Node: History expansion83012
-Node: Hot keys86223
-Node: Statistical Process running in ESS?90298
-Node: Emacsclient91577
-Node: Other92384
-Node: Evaluating code93436
-Node: Transcript Mode96985
-Node: Resubmit98134
-Node: Clean99197
-Node: Editing objects100193
-Node: Edit buffer101311
-Node: Loading103360
-Node: Error Checking104387
-Node: Indenting105436
-Node: Styles108697
-Node: Other edit buffer commands110891
-Node: Source Files112547
-Node: Source Directories117157
-Node: Help120299
-Node: Completion124594
-Node: Object names124815
-Node: Function arguments127673
-Node: Minibuffer completion128212
-Node: Auto-complete128711
-Node: Icicles130258
-Node: Developing with ESS131624
-Node: ESS tracebug132062
-Node: Editing documentation135084
-Node: R documentation files135626
-Node: Roxygen139546
-Node: ESS developer143881
-Node: Extras150384
-Node: ESS ElDoc151367
-Node: Handy commands152890
-Node: Highlighting154085
-Node: Parens155414
-Node: Graphics155995
-Node: printer156504
-Node: X11157260
-Node: winjava157599
-Node: Imenu158011
-Node: Toolbar158852
-Node: TAGS159260
-Node: Rdired160612
-Node: Rutils161664
-Node: Org164040
-Node: Sweave and AUCTeX164982
-Node: ESS for S167106
-Node: ESS(S)--Editing files167541
-Node: iESS(S)--Inferior ESS processes168658
-Node: ESS-help--assistance with viewing help174325
-Node: Philosophies for using ESS(S)174645
-Node: Scenarios for use (possibilities--based on actual usage)175764
-Node: Customization Examples and Solutions to Problems180447
-Node: ESS for SAS182184
-Node: ESS(SAS)--Design philosophy182907
-Node: ESS(SAS)--Editing files183860
-Node: ESS(SAS)--TAB key185714
-Node: ESS(SAS)--Batch SAS processes187080
-Node: ESS(SAS)--Function keys for batch processing192109
-Node: iESS(SAS)--Interactive SAS processes201595
-Node: iESS(SAS)--Common problems205349
-Node: ESS(SAS)--Graphics206873
-Node: ESS(SAS)--Windows207656
-Node: ESS for BUGS208234
-Node: ESS(BUGS)--Model files209249
-Node: ESS(BUGS)--Command files210029
-Node: ESS(BUGS)--Log files210574
-Node: ESS for JAGS210911
-Node: ESS(JAGS)--Model files211899
-Node: ESS(JAGS)--Command files214333
-Node: ESS(JAGS)--Log files215108
-Node: Mailing lists/bug reports215404
-Node: Bugs215668
-Node: Reporting Bugs217293
-Node: Mailing Lists218106
-Node: Help with emacs218860
-Node: Customization219415
-Node: Indices220178
-Node: Key index220353
-Node: Function and program index225786
-Node: Variable index235362
-Node: Concept index238493
+Node: Introduction2283
+Node: Features5244
+Node: Current Features5877
+Node: New features10150
+Node: Credits44232
+Node: Latest version47751
+Node: Manual49788
+Node: Installation52333
+Node: Step by step instructions52663
+Node: License54863
+Node: Stability55526
+Node: Requirements56023
+Node: Interactive ESS57056
+Node: Starting up57910
+Node: Multiple ESS processes58693
+Node: ESS processes on Remote Computers59727
+Node: S+elsewhere and ESS-elsewhere63881
+Node: Customizing startup66656
+Node: Entering commands69336
+Node: Command-line editing70494
+Node: Transcript71731
+Node: Last command73508
+Node: Process buffer motion74942
+Node: Transcript resubmit76445
+Node: Saving transcripts78419
+Node: Command History80272
+Node: Saving History83722
+Node: History expansion84518
+Node: Hot keys87729
+Node: Statistical Process running in ESS?91804
+Node: Emacsclient93083
+Node: Other93890
+Node: Evaluating code94942
+Node: Transcript Mode98491
+Node: Resubmit99640
+Node: Clean100703
+Node: Editing objects101699
+Node: Edit buffer102817
+Node: Loading104866
+Node: Error Checking105893
+Node: Indenting106942
+Node: Styles110203
+Node: Other edit buffer commands112397
+Node: Source Files114053
+Node: Source Directories118663
+Node: Help121805
+Node: Completion126100
+Node: Object names126321
+Node: Function arguments129179
+Node: Minibuffer completion129718
+Node: Auto-complete130217
+Node: Icicles131764
+Node: Developing with ESS133130
+Node: ESS tracebug133568
+Node: Editing documentation136740
+Node: R documentation files137282
+Node: Roxygen141202
+Node: ESS developer145537
+Node: Extras152040
+Node: ESS ElDoc153023
+Node: Handy commands154546
+Node: Highlighting155741
+Node: Parens157070
+Node: Graphics157651
+Node: printer158160
+Node: X11158916
+Node: winjava159255
+Node: Imenu159667
+Node: Toolbar160508
+Node: TAGS160916
+Node: Rdired162268
+Node: Rutils163320
+Node: Org165696
+Node: Sweave and AUCTeX166638
+Node: ESS for S168762
+Node: ESS(S)--Editing files169197
+Node: iESS(S)--Inferior ESS processes170314
+Node: ESS-help--assistance with viewing help175981
+Node: Philosophies for using ESS(S)176301
+Node: Scenarios for use (possibilities--based on actual usage)177420
+Node: Customization Examples and Solutions to Problems182103
+Node: ESS for SAS183840
+Node: ESS(SAS)--Design philosophy184563
+Node: ESS(SAS)--Editing files185516
+Node: ESS(SAS)--TAB key187370
+Node: ESS(SAS)--Batch SAS processes188736
+Node: ESS(SAS)--Function keys for batch processing193765
+Node: iESS(SAS)--Interactive SAS processes203251
+Node: iESS(SAS)--Common problems207005
+Node: ESS(SAS)--Graphics208529
+Node: ESS(SAS)--Windows209312
+Node: ESS for BUGS209890
+Node: ESS(BUGS)--Model files210905
+Node: ESS(BUGS)--Command files211685
+Node: ESS(BUGS)--Log files212230
+Node: ESS for JAGS212567
+Node: ESS(JAGS)--Model files213555
+Node: ESS(JAGS)--Command files215989
+Node: ESS(JAGS)--Log files216764
+Node: Mailing lists/bug reports217060
+Node: Bugs217324
+Node: Reporting Bugs218949
+Node: Mailing Lists219762
+Node: Help with emacs220516
+Node: Customization221071
+Node: Indices221834
+Node: Key index222009
+Node: Function and program index227442
+Node: Variable index237018
+Node: Concept index240149
 
 End Tag Table
