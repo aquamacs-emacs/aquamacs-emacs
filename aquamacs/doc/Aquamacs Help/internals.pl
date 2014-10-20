@@ -35,7 +35,7 @@ $ref_files{$key} = "$dir".q|node17.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/standardpaths/;
-$ref_files{$key} = "$dir".q|node31.html|; 
+$ref_files{$key} = "$dir".q|node32.html|; 
 $noresave{$key} = "$nosave";
 
 1;

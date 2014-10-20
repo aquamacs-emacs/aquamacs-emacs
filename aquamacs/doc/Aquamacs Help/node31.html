@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>5.2 Load path</TITLE>
-<META NAME="description" CONTENT="5.2 Load path">
+<TITLE>6.1 Plug-in Interface</TITLE>
+<META NAME="description" CONTENT="6.1 Plug-in Interface">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,78 +21,66 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="node32.html">
 <LINK REL="previous" HREF="node30.html">
-<LINK REL="up" HREF="node29.html">
+<LINK REL="up" HREF="node30.html">
 <LINK REL="next" HREF="node32.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html586"
+<A NAME="tex2html594"
   HREF="node32.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html582"
-  HREF="node29.html">
+<A NAME="tex2html590"
+  HREF="node30.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html576"
+<A NAME="tex2html584"
   HREF="node30.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html584"
+<A NAME="tex2html592"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html587"
-  HREF="node32.html">5.3 Disabling a plug-in</A>
-<B> Up:</B> <A NAME="tex2html583"
-  HREF="node29.html">5 Extending Aquamacs</A>
-<B> Previous:</B> <A NAME="tex2html577"
-  HREF="node30.html">5.1 Plug-in Interface</A>
- &nbsp; <B>  <A NAME="tex2html585"
+<B> Next:</B> <A NAME="tex2html595"
+  HREF="node32.html">6.2 Load path</A>
+<B> Up:</B> <A NAME="tex2html591"
+  HREF="node30.html">6 Extending Aquamacs</A>
+<B> Previous:</B> <A NAME="tex2html585"
+  HREF="node30.html">6 Extending Aquamacs</A>
+ &nbsp; <B>  <A NAME="tex2html593"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION00062000000000000000">
-5.2 Load path</A>
+<H2><A NAME="SECTION00071000000000000000">
+6.1 Plug-in Interface</A>
 </H2>
 
 <P>
-Aquamacs is able to find configuration files and Emacs packages
-from any of the following standard locations (load-path) in Library folders.
-<A NAME="standardpaths"></A>
-<P>
-
-<UL>
-<LI><TT>/Library/Application&nbsp;Support/Aquamacs&nbsp;Emacs/</TT>
-</LI>
-<LI><TT>/Library/Preferences/Aquamacs&nbsp;Emacs/ </TT>
-</LI>
-</UL>
-The following paths are available in the load-path for individual preference settings. <I>They should 
-not be used if you distribute a point-and-click installer package.</I>
-
-<UL>
-<LI><TT>/Library/Application&nbsp;Support/Aquamacs&nbsp;Emacs/</TT>
-</LI>
-<LI><TT>/Library/Preferences/Aquamacs&nbsp;Emacs/ </TT>
-</LI>
-</UL>
+All files named <I>site-start.el</I> anywhere in the load-path are loaded at startup, before the user's init files are loaded. For example, such a file may be placed in the user's Library folder, that is in 
+<BR><TT>/Library/Application&nbsp;Support/Aquamacs&nbsp;Emacs/myPlugin</TT>. 
 
 <P>
-All subsequent directories are added recursively, so Aquamacs will
-find any path that starts below. Type <TT>C-h v load-path</TT> for more
-information.<A NAME="tex2html21"
-  HREF="footnode.html#foot252"><SUP>6</SUP></A>
-<BR>
+The load-path is automatically extended to cover all subdirectories in standard paths (see Section <A HREF="node32.html#standardpaths">6.2</A>).
+
+<P>
+If a plug-in needs to execute code earlier in the initialization phase, that is, before any Aquamacs- specific code is executed (but after Emacs initilization code has been executed), this code can be provided in a file <I>site-prestart.el</I> anywhere in the load-path.
+
+<P>
+Info files (M-x info) can be provided in a directory called <TT>info</TT> inside the plugin directory. Aquamacs will automatically add this path to `Info-default-directory-list'. Plugins should provide a <TT>dir</TT> file inside the <TT>info</TT> directory containing an overview (see the Emacs documentation for `info').
+
+<P>
+Note that plug-ins should not make any assumptions about whether a frame exists or is visible.
+
 <P>
 <BR><HR>
 <ADDRESS>
 <I>David Reitter</I>
-<BR><I>2014-01-19</I>
+<BR><I>2014-10-19</I>
 </ADDRESS>
 </BODY>
 </HTML>

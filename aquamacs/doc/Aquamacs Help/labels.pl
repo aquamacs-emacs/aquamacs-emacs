@@ -35,7 +35,7 @@ $external_labels{$key} = "$URL/" . q|node17.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/standardpaths/;
-$external_labels{$key} = "$URL/" . q|node31.html|; 
+$external_labels{$key} = "$URL/" . q|node32.html|; 
 $noresave{$key} = "$nosave";
 
 1;
@@ -78,7 +78,7 @@ $external_latex_labels{$key} = q|3.5.4|;
 $noresave{$key} = "$nosave";
 
 $key = q/standardpaths/;
-$external_latex_labels{$key} = q|5.2|; 
+$external_latex_labels{$key} = q|6.2|; 
 $noresave{$key} = "$nosave";
 
 1;
