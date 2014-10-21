@@ -7381,7 +7381,8 @@ if (cols > 0 && rows > 0)
   MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
       /* Hide ghost menu bar on secondary monitor? */
       if (! onFirstScreen)
-        onFirstScreen = [NSScreen screensHaveSeparateSpaces];
+	if ([NSScreen respondsToSelector:@selector(screensHaveSeparateSpaces)])
+	  onFirstScreen = [NSScreen screensHaveSeparateSpaces];
 #endif
       /* Hide dock and menubar if we are on the primary screen.  */
       if (onFirstScreen)
@@ -8034,7 +8035,7 @@ if (cols > 0 && rows > 0)
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
   // If separate spaces is on, it is like each screen is independent.  There is
   // no spanning of frames across screens.
-  if ([NSScreen screensHaveSeparateSpaces])
+  if ([NSScreen respondsToSelector:@selector(screensHaveSeparateSpaces)] && [NSScreen screensHaveSeparateSpaces])
     return [super constrainFrameRect:frameRect toScreen:screen];
 #endif
 #endif
