@@ -174,7 +174,12 @@ from earlier versions of the distribution."
      (mail-default-directory 
       "~/Library/Application Support/Aquamacs Emacs/Temporary Files")))
 
-
+  (condition-case nil
+      (progn
+	(make-directory user-emacs-directory t)
+	(make-directory mail-default-directory t))
+    (error nil))
+  
   (defadvice locate-user-emacs-file  (after aquamacs-move-user-package-config (&rest args) activate)
     "If file is present in the previous Aquamacs-specific location, move it."
     (let ((orig (concat "~/Library/Application Support/Aquamacs Emacs/" (car args)))
@@ -190,11 +195,14 @@ from earlier versions of the distribution."
   ;; emacs-user-directory as part of load-path, which caused (load "tramp") to
   ;; load the wrong file.  GNU Emacs bug #18512
 
-  (locate-user-emacs-file "tramp")
-  (locate-user-emacs-file "calc.el")
-  (locate-user-emacs-file "maxima_history")
-  (locate-user-emacs-file "SessionDesktop.el")
-  (write-region "" nil (concat user-emacs-directory ".nosearch"))
+  (condition-case
+      (progn
+	(locate-user-emacs-file "tramp")
+	(locate-user-emacs-file "calc.el")
+	(locate-user-emacs-file "maxima_history")
+	(locate-user-emacs-file "SessionDesktop.el")
+	(write-region "" nil (concat user-emacs-directory ".nosearch")))
+      (error nil))
   ) ;; aquamacs-file-location-defaults
 
 
