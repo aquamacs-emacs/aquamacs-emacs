@@ -195,7 +195,7 @@ from earlier versions of the distribution."
   ;; emacs-user-directory as part of load-path, which caused (load "tramp") to
   ;; load the wrong file.  GNU Emacs bug #18512
 
-  (condition-case
+  (condition-case nil
       (progn
 	(locate-user-emacs-file "tramp")
 	(locate-user-emacs-file "calc.el")
