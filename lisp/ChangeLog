@@ -1,3 +1,93 @@
+2014-10-23  Tassilo Horn  <tsdh@gnu.org>
+
+	* doc-view.el (doc-view-open-text): View the document's plain text
+	in the current buffer instead of a new one.
+	(doc-view-toggle-display): Handle the case where the current
+	buffer contains the plain text contents of the document.
+	(doc-view-initiate-display): Don't switch to fallback mode if the
+	user wants to view the doc's plain text.  [Backport]
+
+2014-10-23  Eli Zaretskii  <eliz@gnu.org>
+
+	* startup.el (fancy-about-text): Read the entire tutorial, not
+	just its first 256 bytes.  (Bug#18760)
+
+2014-10-23  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/bytecomp.el: Require cl-extra (bug#18804).
+	* emacs-lisp/cl-extra.el: Add missing provide.
+
+2014-10-22  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* emacs-lisp/bytecomp.el (byte-compile-and-folded): Optimize case where
+	all args are copyable (bug#18767).
+	(=, <, >, <=, >=): Re-enable the optimization.
+
+2014-10-20  Santiago Payà i Miralta  <santiagopim@gmail.com>
+
+	* vc/vc-hg.el (vc-hg-log-graph): New var.
+	(vc-hg-print-log): Use it.
+	(vc-hg-root-log-format): Include branch name and bookmarks; ignore
+	graph output (bug#17515).
+
+2014-10-20  Juri Linkov  <juri@jurta.org>
+
+	* vc/diff-mode.el (diff-refine-changed): Rename from
+	`diff-refine-change' for consistency with `diff-changed'.
+	(diff-refine-change): Add obsolete face alias.  (Bug#10181)
+
+	* vc/smerge-mode.el (smerge-refined-changed): Rename from
+	`smerge-refined-change'.
+	(smerge-refined-change): Add obsolete face alias.
+
+2014-09-05  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* subr.el (call-process-shell-command, process-file-shell-command):
+	Make the `args' obsolete (bug#18409).
+	(start-process-shell-command, start-file-process-shell-command):
+	Use `declare'.
+
+2014-10-20  Juanma Barranquero  <lekktu@gmail.com>
+
+	* skeleton.el (skeleton-autowrap): Mark as obsolete.  Doc fix.
+
+2014-10-20  Glenn Morris  <rgm@gnu.org>
+
+	* dired.el (dired-read-regexp): Make obsolete.
+	(dired-mark-files-regexp, dired-mark-files-containing-regexp)
+	(dired-flag-files-regexp):
+	* dired-aux.el (dired-mark-read-regexp):
+	* dired-x.el (dired-mark-unmarked-files): Use read-regexp directly.
+
+2014-10-20  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* progmodes/python.el (inferior-python-mode): Use add-hook.
+
+	* Makefile.in (AUTOGEN_VCS): Remove emulation/tpu-edt.el.
+
+2014-10-20  Glenn Morris  <rgm@gnu.org>
+
+	* emulation/crisp.el, emulation/tpu-edt.el, emulation/tpu-extras.el:
+	* emulation/tpu-mapper.el, emulation/vi.el, emulation/vip.el:
+	* emulation/ws-mode.el: Move to obsolete/.  [Backport]
+
+2014-10-20  Glenn Morris  <rgm@gnu.org>
+
+	* cus-start.el (history-length): Bump :version.  [Backport]
+
+2014-10-20  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* obsolete/cc-compat.el: Make obsolete (bug#18561).
+
+	* epg-config.el (epg-gpg-program): Don't use absolute names by default.
+
+	* emacs-lisp/bytecomp.el (=, <, >, <=, >=): Don't optimize multi-arg
+	case (bug#18767).
+
+2014-10-20  Glenn Morris  <rgm@gnu.org>
+
+	* Version 24.4 released.
+
 2014-10-15  Alan Mackenzie  <acm@muc.de>
 
 	* cus-edit.el (custom-command-apply): Specify the return value in
@@ -1131,7 +1221,7 @@
 	* emacs-lisp/nadvice.el (advice--interactive-form): Don't get fooled
 	into autoloading just because of a silly indirection.
 
-2014-05-11  Santiago Payà i Miralta  <santiagopim@gmail.com>  (tiny change)
+2014-05-12  Santiago Payà i Miralta  <santiagopim@gmail.com>
 
 	* vc/vc-hg.el (vc-hg-unregister): New function.  (Bug#17454)
 

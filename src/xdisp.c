@@ -16313,16 +16313,24 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
 
 	  set_cursor_from_row (w, row, w->desired_matrix, 0, 0, 0, 0);
 
-	  /* If we are highlighting the region, then we just changed
-	     the region, so redisplay to show it.  */
-	  /* FIXME: We need to (re)run pre-redisplay-function!  */
-	  /* if (markpos_of_region () >= 0)
+	  /* Re-run pre-redisplay-function so it can update the region
+	     according to the new position of point.  */
+	  /* Other than the cursor, w's redisplay is done so we can set its
+	     redisplay to false.  Also the buffer's redisplay can be set to
+	     false, since propagate_buffer_redisplay should have already
+	     propagated its info to `w' anyway.  */
+	  w->redisplay = false;
+	  XBUFFER (w->contents)->text->redisplay = false;
+	  safe__call1 (true, Vpre_redisplay_function, Fcons (window, Qnil));
+
+	  if (w->redisplay || XBUFFER (w->contents)->text->redisplay)
 	    {
+	      /* pre-redisplay-function made changes (e.g. move the region)
+		 that require another round of redisplay.  */
 	      clear_glyph_matrix (w->desired_matrix);
 	      if (!try_window (window, startp, 0))
 		goto need_larger_matrices;
 	    }
-	  */
 	}
       if (w->cursor.vpos < 0 || !cursor_row_fully_visible_p (w, 0, 0))
 	{
@@ -24930,13 +24938,16 @@ draw_glyphs (struct window *w, int x, struct glyph_row *row,
 	  else
 	    overlap_hl = DRAW_NORMAL_TEXT;
 
+	  if (hl != overlap_hl)
+	    clip_head = head;
 	  j = i;
 	  BUILD_GLYPH_STRINGS (j, start, h, t,
 			       overlap_hl, dummy_x, last_x);
 	  start = i;
 	  compute_overhangs_and_x (t, head->x, 1);
 	  prepend_glyph_string_lists (&head, &tail, h, t);
-	  clip_head = head;
+	  if (clip_head == NULL)
+	    clip_head = head;
 	}
 
       /* Prepend glyph strings for glyphs in front of the first glyph
@@ -24957,7 +24968,8 @@ draw_glyphs (struct window *w, int x, struct glyph_row *row,
 	  else
 	    overlap_hl = DRAW_NORMAL_TEXT;
 
-	  clip_head = head;
+	  if (hl == overlap_hl || clip_head == NULL)
+	    clip_head = head;
 	  BUILD_GLYPH_STRINGS (i, start, h, t,
 			       overlap_hl, dummy_x, last_x);
 	  for (s = h; s; s = s->next)
@@ -24981,13 +24993,16 @@ draw_glyphs (struct window *w, int x, struct glyph_row *row,
 	  else
 	    overlap_hl = DRAW_NORMAL_TEXT;
 
+	  if (hl != overlap_hl)
+	    clip_tail = tail;
 	  BUILD_GLYPH_STRINGS (end, i, h, t,
 			       overlap_hl, x, last_x);
 	  /* Because BUILD_GLYPH_STRINGS updates the first argument,
 	     we don't have `end = i;' here.  */
 	  compute_overhangs_and_x (h, tail->x + tail->width, 0);
 	  append_glyph_string_lists (&head, &tail, h, t);
-	  clip_tail = tail;
+	  if (clip_tail == NULL)
+	    clip_tail = tail;
 	}
 
       /* Append glyph strings for glyphs following the last glyph
@@ -25005,7 +25020,8 @@ draw_glyphs (struct window *w, int x, struct glyph_row *row,
 	  else
 	    overlap_hl = DRAW_NORMAL_TEXT;
 
-	  clip_tail = tail;
+	  if (hl == overlap_hl || clip_tail == NULL)
+	    clip_tail = tail;
 	  i++;			/* We must include the Ith glyph.  */
 	  BUILD_GLYPH_STRINGS (end, i, h, t,
 			       overlap_hl, x, last_x);
@@ -27455,7 +27471,7 @@ erase_phys_cursor (struct window *w)
   /* Maybe clear the display under the cursor.  */
   if (w->phys_cursor_type == HOLLOW_BOX_CURSOR)
     {
-      int x, y, left_x;
+      int x, y;
       int header_line_height = WINDOW_HEADER_LINE_HEIGHT (w);
       int width;
 
@@ -27464,13 +27480,15 @@ erase_phys_cursor (struct window *w)
 	goto mark_cursor_off;
 
       width = cursor_glyph->pixel_width;
-      left_x = window_box_left_offset (w, TEXT_AREA);
       x = w->phys_cursor.x;
-      if (x < left_x)
-	width -= left_x - x;
+      if (x < 0)
+	{
+	  width += x;
+	  x = 0;
+	}
       width = min (width, window_box_width (w, TEXT_AREA) - x);
       y = WINDOW_TO_FRAME_PIXEL_Y (w, max (header_line_height, cursor_row->y));
-      x = WINDOW_TEXT_TO_FRAME_PIXEL_X (w, max (x, left_x));
+      x = WINDOW_TEXT_TO_FRAME_PIXEL_X (w, x);
 
       if (width > 0)
 	FRAME_RIF (f)->clear_frame_area (f, x, y, width, cursor_row->visible_height);
