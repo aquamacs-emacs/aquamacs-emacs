@@ -5063,7 +5063,7 @@ echo
 if test "$HAVE_NS" = "yes"; then
    echo
    echo "You must run \"${MAKE-make} install\" in order to test the built application.
-The installed application will go to nextstep/Emacs.app and can be
+The installed application will go to nextstep/Aquamacs.app and can be
 run or moved from there."
    if test "$EN_NS_SELF_CONTAINED" = "yes"; then
       echo "The application will be fully self-contained."
