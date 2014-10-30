@@ -71,4 +71,5 @@ echo "Done." >>$LOG ; \
 
 # copy-build-to-server will be called by postprocessing script
 cd "$ORIGPATH"
-. ./post.sh  $BLD $DATE # do server-specific post-processing (webserver copy)
+echo "Postprocessing..." >>$LOG
+. ../post.sh  $BLD $DATE # do server-specific post-processing (webserver copy)
