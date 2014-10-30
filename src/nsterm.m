@@ -85,6 +85,8 @@ int term_trace_num = 0;
 #define NSTRACE(x)
 #endif
 
+//#define NS_UPDATE_TRACE
+
 /* Detailed tracing. "S" means "size" and "LL" stands for "lower left". */
 #if 0
 int term_trace_num = 0;
@@ -712,7 +714,7 @@ ns_update_auto_hide_menu_bar (void)
 {
 #ifdef NS_IMPL_COCOA
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
-  // block_input ();
+  block_input ();
 
   /*
     See bug #16355.
@@ -764,11 +766,15 @@ ns_update_auto_hide_menu_bar (void)
         }
     }
 
-  // unblock_input ();
+  unblock_input ();
 #endif
 #endif
 }
 
+
+#ifdef NS_UPDATE_TRACE
+static int ns_update_counter = 0;
+#endif
 
 static int
 ns_update_begin (struct frame *f)
@@ -780,6 +786,11 @@ ns_update_begin (struct frame *f)
   EmacsView *view = FRAME_NS_VIEW (f);
   NSTRACE (ns_update_begin);
 
+#ifdef NS_UPDATE_TRACE
+  ns_update_counter++;
+  fprintf (stderr, "NS_UPDATE beg: %d\n", ns_update_counter);
+#endif
+  
   ns_update_auto_hide_menu_bar ();
 
 #ifdef NS_IMPL_COCOA
@@ -873,11 +884,18 @@ ns_update_window_begin (struct window *w)
 static void
 ns_update_window_end (struct window *w, bool cursor_on_p,
                       bool mouse_face_overwritten_p)
+
 /* --------------------------------------------------------------------------
    Finished a grouped sequence of drawing calls
    external (RIF) call; for one window called before update_end
    -------------------------------------------------------------------------- */
 {
+  
+#ifdef NS_UPDATE_TRACE
+  ns_update_counter--;
+  fprintf (stderr, "NS_UPDATE end: %d\n", ns_update_counter);
+#endif
+  
   /* note: this fn is nearly identical in all terms */
   if (!w->pseudo_window_p)
     {
@@ -4748,11 +4766,18 @@ ns_term_shutdown (int sig)
         [pool release];
         pool = [[NSAutoreleasePool alloc] init];
 
+	/* OSX 10.10.1 seems to swalled AppDefined events when
+	   other events are put in the queue in rapid succession.
+	   To prevent Emacs becoming unresponsive, we need to
+	   set a reasonable timeout. */
         NSEvent *event =
           [self nextEventMatchingMask:NSAnyEventMask
-                            untilDate:[NSDate distantFuture]
+                            untilDate:[NSDate dateWithTimeIntervalSinceNow:0.5]
                                inMode:NSDefaultRunLoopMode
                               dequeue:YES];
+	if (event == nil) // timeout
+	  { shouldKeepRunning = NO;}
+	else
         [self sendEvent:event];
         [self updateWindows];
     } while (shouldKeepRunning);
