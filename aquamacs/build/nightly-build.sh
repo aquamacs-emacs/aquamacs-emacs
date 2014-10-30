@@ -61,8 +61,6 @@ mkdir builds 2>/dev/null ; \
 cd `dirname ${APP}` ; \
 tar cjf ${BLD} Aquamacs.app ; \
 cd ${EMACS_ROOT} ; \
-echo "Copying build $DATE to server..." >>$LOG ; \
-aquamacs/build/copy-build-to-server.sh $DATE  >>$LOG 2>>$LOG
 echo "Done." >>$LOG ; \
 
 
@@ -71,5 +69,6 @@ echo "Done." >>$LOG ; \
 #mv src/emacs.dSYM ${DSYM_ROOT}/${BRANCH}-${DATE}/
 #cp src/emacs ${DSYM_ROOT}/${BRANCH}-${DATE}/
 
+# copy-build-to-server will be called by postprocessing script
 cd "$ORIGPATH"
-. ./post.sh    # do server-specific post-processing (webserver copy)
+. ./post.sh  $BLD $DATE # do server-specific post-processing (webserver copy)
