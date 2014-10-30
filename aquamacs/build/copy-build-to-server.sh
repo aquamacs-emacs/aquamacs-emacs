@@ -1,9 +1,14 @@
 #!/bin/sh
 
+# Call:
+# aquamacs/build/copy-build-to-server.sh $DATE  >>$LOG 2>>$LOG
+
 # AQ_DOWNLOAD_DESTINATION = Sites/Aquamacs has to be set externally
 # AQ_DOWNLOAD_DESTSSH = username@ip
 
 # SSH authentication should be installed
+
+
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -22,6 +27,7 @@ DESTSSH=${AQ_DOWNLOAD_DESTSSH}
 TMP=/tmp/builds
 
 #cd $DEST
+echo "Copying build $DATE to server..." >>$LOG ; \
 
 
 scp $LOGPATH/cvs-update.log $DEST/ 2>/dev/null
@@ -65,7 +71,10 @@ echo "</BODY></HTML>" >>latest.html
 #     rsync -l -r latest-logs latest.html changelog-nightly.html Aquamacs-nightly.tar.bz2 $DEST/ && \
 #     ssh $DESTSSH "find $DESTPATH/builds -mtime +2 -delete" && echo "All transfers successful."
 
-$DIR/retry.py --limit 45 -- rsync --partial --rsh=ssh --timeout=15 -l -r builds $DEST/ &&\
-rsync -l -r latest-logs latest.html changelog-nightly.html Aquamacs-nightly.tar.bz2 $DEST/ && \
+#$DIR/retry.py --limit 45 --
+
+rsync --partial --rsh=ssh -l -r builds $DEST/ &&\
+rsync -l -r  Aquamacs-nightly.tar.bz2 $DEST/ && \
+rsync -l -r latest-logs latest.html changelog-nightly.html $DEST/ && \
     ssh $DESTSSH "find $DESTPATH/builds -mtime +2 -delete" && echo "All transfers successful."
 
