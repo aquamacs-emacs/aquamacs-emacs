@@ -12,6 +12,7 @@
    (when (fboundp 'font-latex-add-quotes)
      (font-latex-add-quotes '("\"`" "\"'"))
      (font-latex-add-quotes '("\">" "\"<" german)))
-   (run-hooks 'TeX-language-dk-hook)))
+   (run-hooks 'TeX-language-dk-hook))
+ LaTeX-dialect)
 
 ;;; danish.el ends here

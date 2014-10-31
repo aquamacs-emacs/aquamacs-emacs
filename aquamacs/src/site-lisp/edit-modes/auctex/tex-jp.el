@@ -1,7 +1,7 @@
-;;; tex-jp.el --- Support for Japanese TeX.
+;;; tex-jp.el --- Support for Japanese TeX.  -*- coding: iso-2022-jp-unix; -*-
 
+;; Copyright (C) 2002-2007, 2012  Free Software Foundation, Inc.
 ;; Copyright (C) 1999, 2001 Hidenobu Nabetani <nabe@debian.or.jp>
-;; Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007 Free Software Foundation
 
 ;; Author:     KOBAYASHI Shinji <koba@flab.fujitsu.co.jp>
 ;; Maintainer: Masayuki Ataka <masayuki.ataka@gmail.com>

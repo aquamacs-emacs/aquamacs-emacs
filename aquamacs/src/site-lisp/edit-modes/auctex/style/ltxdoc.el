@@ -33,7 +33,8 @@
  "ltxdoc"
  (lambda ()
    (TeX-run-style-hooks "doc")
-   (TeX-run-style-hooks "ltx-base")))
+   (TeX-run-style-hooks "ltx-base"))
+ LaTeX-dialect)
 
 ;; Local Variables:
 ;; coding: iso-8859-1

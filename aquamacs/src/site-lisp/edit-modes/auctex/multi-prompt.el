@@ -94,9 +94,9 @@ are the arguments to `completing-read'.  See that."
 				      initial nil)
 				(setq multi-prompt-found
 				      (cons extra multi-prompt-found)))))))))
-      (if answer 
-	  (nreverse (cons answer multi-prompt-found))
-	multi-prompt-found))))
+      (if (string= answer "")
+	  multi-prompt-found
+	(nreverse (cons answer multi-prompt-found))))))
 
 (defun multi-prompt-delete ()
   (interactive)
@@ -200,7 +200,6 @@ other arguments: PREDICATE, REQUIRE-MATCH, INITIAL-INPUT, HIST,
 DEF, and INHERIT-INPUT-METHOD.
 
 The return value is the string as entered in the minibuffer."
-  (require 'crm)
   (let* ((minibuffer-completion-table #'multi-prompt-key-value-collection-fn)
 	 (minibuffer-completion-predicate predicate)
 	 (minibuffer-completion-confirm

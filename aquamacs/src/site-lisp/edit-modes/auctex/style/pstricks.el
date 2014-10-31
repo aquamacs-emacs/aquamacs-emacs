@@ -1,6 +1,6 @@
 ;;; pstricks.el --- AUCTeX style for the `pstricks' package.
 
-;; Copyright (C) 2007, 2009 Free Software Foundation, Inc.
+;; Copyright (C) 2007, 2009, 2013 Free Software Foundation, Inc.
 
 ;; Author: Holger Sparr <holger.sparr@gmx.net>
 ;; Maintainer: auctex-devel@gnu.org
@@ -199,12 +199,12 @@ package PNAME"
       (setq preparam (funcall fask preparam)))
     ;;
     (setq param
-          (completing-read-multiple
+          (TeX-completing-read-multiple
            (concat
             "Params (use <Up,Down> for history or RET for choices): ")
            nlist nil nil nil hlist))
     ;;
-    (if (and  (string= "" (car param)) (= (length param) 1))
+    (if (not param)
         (setq param (funcall fask nil t))
       (setq param (car (symbol-value hlist))))
     (TeX-argument-insert
@@ -861,6 +861,11 @@ comma separated list. Point has to be within the sexp to modify."
       (TeX-arg-eval LaTeX-pst-angle) LaTeX-pst-point-in-parens t)
     '("uput" LaTeX-pst-macro-uput t)
     '("multirput" (LaTeX-pst-macro-multirputps t) t)
-    '("multips" (LaTeX-pst-macro-multirputps nil) t))))
+    '("multips" (LaTeX-pst-macro-multirputps nil) t)))
+ LaTeX-dialect)
+
+(defvar LaTeX-pstricks-package-options
+  '("97" "plain" "DIA" "vtex" "distiller" "noxcolor")
+  "Package options for pstricks.")
 
 ;;; pstricks.el ends here

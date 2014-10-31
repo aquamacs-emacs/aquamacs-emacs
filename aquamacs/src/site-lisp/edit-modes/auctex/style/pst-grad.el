@@ -60,6 +60,7 @@
     (make-local-variable 'LaTeX-pst-parameters-name-list)
     (setq LaTeX-pst-parameters-name-list
           (append LaTeX-pstgrad-parameters-name-list
-                  LaTeX-pst-parameters-name-list)))))
+                  LaTeX-pst-parameters-name-list))))
+ LaTeX-dialect)
 
 ;;; pst-grad.el ends here

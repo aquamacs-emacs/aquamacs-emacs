@@ -142,7 +142,7 @@ of plain-TeX-mode-hook."
   "Common initialization for plain TeX like modes."
   (VirTeX-common-initialization)
   (set-syntax-table TeX-mode-syntax-table)
-  (setq local-abbrev-table latex-mode-abbrev-table)
+  (setq local-abbrev-table plain-tex-mode-abbrev-table)
   (setq paragraph-start
 	(concat
 	 "\\(^[ \t]*$"

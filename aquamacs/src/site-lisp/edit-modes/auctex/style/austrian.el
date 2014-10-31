@@ -34,6 +34,7 @@
 (TeX-add-style-hook
  "austrian"
  (lambda ()
-   (TeX-run-style-hooks "german")))
+   (TeX-run-style-hooks "german"))
+ LaTeX-dialect)
 
 ;;; austrian.el ends here

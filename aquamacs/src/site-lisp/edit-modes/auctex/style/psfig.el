@@ -20,7 +20,8 @@
     (LaTeX-add-environments
      '("psfigure" LaTeX-env-psfigure)
      )
-    )))
+    ))
+ LaTeX-dialect)
 
 (defun TeX-arg-psfig (optional)
    "Ask for file, width and length. Insert psfig macro"

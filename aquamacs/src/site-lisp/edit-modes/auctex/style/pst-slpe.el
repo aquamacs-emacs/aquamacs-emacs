@@ -62,6 +62,7 @@
     (make-local-variable 'LaTeX-pst-parameters-name-list)
     (setq LaTeX-pst-parameters-name-list
           (append LaTeX-pstslpe-parameters-name-list
-                  LaTeX-pst-parameters-name-list)))))
+                  LaTeX-pst-parameters-name-list))))
+ LaTeX-dialect)
 
 ;;; pst-slpe.el ends here

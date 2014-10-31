@@ -73,6 +73,7 @@
 	       (concat "\\fg"
 		       (unless (member "xspace" TeX-active-styles) "{}")))
 	     ,TeX-quote-after-quote)))
-   (run-hooks 'TeX-language-fr-hook)))
+   (run-hooks 'TeX-language-fr-hook))
+ LaTeX-dialect)
 
 ;;; frenchb.el ends here

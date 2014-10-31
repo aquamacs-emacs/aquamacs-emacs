@@ -38,7 +38,8 @@
      '("empdef" LaTeX-env-emp-gen)
      '("empgraph" LaTeX-env-emp-gen)
      '("empcmds")
-     ))))
+     )))
+ LaTeX-dialect)
 
 (defun LaTeX-env-emp-gen (environment-name)
    "Ask for file, width and length. Insert environment-name environment

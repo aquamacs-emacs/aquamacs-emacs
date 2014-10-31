@@ -132,6 +132,7 @@
     (make-local-variable 'LaTeX-pst-parameters-name-list)
     (setq LaTeX-pst-parameters-name-list
           (append LaTeX-pstplot-parameters-name-list
-                  LaTeX-pst-parameters-name-list)))))
+                  LaTeX-pst-parameters-name-list))))
+ LaTeX-dialect)
 
 ;;; pst-plot.el ends here

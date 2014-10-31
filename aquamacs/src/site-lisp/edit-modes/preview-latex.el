@@ -3,8 +3,7 @@
 ;;; Code:
 
 
-;;;### (autoloads (preview-report-bug LaTeX-preview-setup preview-install-styles)
-;;;;;;  "preview" "preview.el" (19772 31043))
+;;;### (autoloads nil "preview" "preview.el" (21587 50212 0 0))
 ;;; Generated autoloads from preview.el
 
 (autoload 'preview-install-styles "preview" "\
@@ -44,6 +43,7 @@ Report a bug in the preview-latex package.
 ;; End:
 ;;; preview-latex.el ends here
 
-(add-to-list 'load-path (expand-file-name "auctex" (file-name-directory load-file-name)))
+(defvar preview-lispdir (expand-file-name "auctex" (file-name-directory load-file-name)))
+(add-to-list 'load-path preview-lispdir)
 (defvar preview-datadir (expand-file-name "auctex" (file-name-directory load-file-name)))
 (defvar preview-TeX-style-dir (expand-file-name "auctex/latex" (file-name-directory load-file-name)))

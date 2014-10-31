@@ -117,7 +117,7 @@
     ("\\vcenter"     arg-off)
 
     ;; Standard LaTeX
-    ("equation"      env-on)      ("equation*"     env-on)
+    ("equation"      env-on)
     ("eqnarray"      env-on)      ("eqnarray*"     env-on)
     ("math"          env-on)
     ("displaymath"   env-on)
@@ -132,6 +132,7 @@
     ("\\ensuremath"  arg-on)
 
     ;; AMS-LaTeX
+    ("equation*"     env-on)
     ("align"         env-on)      ("align*"        env-on)
     ("gather"        env-on)      ("gather*"       env-on)
     ("multline"      env-on)      ("multline*"     env-on)
@@ -139,7 +140,10 @@
     ("alignat"       env-on)      ("alignat*"      env-on)
     ("xalignat"      env-on)      ("xalignat*"     env-on)
     ("xxalignat"     env-on)      ("\\boxed"       arg-on)
-    ("\\text"        arg-off)     ("\\intertext"   arg-off))
+    ("\\text"        arg-off)     ("\\intertext"   arg-off)
+
+    ;; mathtools
+    ("\\shortintertext"   arg-off))
   "The default entries for `texmathp-tex-commands', which see.")
 
 (defun texmathp-compile ()
@@ -227,7 +231,7 @@ will be considered arguments of the macro independent of its definition."
   "After a call to `texmathp' this variable shows why math-mode is on or off.
 The value is a cons cell (MATCH . POSITION).
 MATCH is a string like a car of an entry in `texmathp-tex-commands', e.q.
-\"equation\" or \"\\ensuremath\" or \"\\[\" or \"$\".
+\"equation\" or \"\\ensuremath\" or \"\\=\\[\" or \"$\".
 POSITION is the buffer position of the match.  If there was no match,
 it points to the limit used for searches, usually two paragraphs up.")
 

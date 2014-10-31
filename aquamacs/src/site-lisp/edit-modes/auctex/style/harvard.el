@@ -104,7 +104,8 @@
 
     ;; Tell RefTeX
     (when (fboundp 'reftex-set-cite-format)
-      (reftex-set-cite-format 'harvard)))))
+      (reftex-set-cite-format 'harvard))))
+ LaTeX-dialect)
 
 (defun LaTeX-env-harvardbib (environment &optional ignore)
   "Insert ENVIRONMENT with label for harvarditem."

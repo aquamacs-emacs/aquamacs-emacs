@@ -92,7 +92,8 @@
    (if (fboundp 'reftex-add-section-levels)
        (reftex-add-section-levels
 	'(("toc" .  reftex-get-section-level-alphanum)
-	  ("sub" .  reftex-get-section-level-alphanum))))))
+	  ("sub" .  reftex-get-section-level-alphanum)))))
+ LaTeX-dialect)
 
 ;; Local Variables:
 ;; coding: iso-8859-1

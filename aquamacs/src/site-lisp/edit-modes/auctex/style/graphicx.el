@@ -50,7 +50,8 @@
 				("rotatebox" "[{{")
 				("scalebox" "{[{"))
 			      'textual)
-     (font-latex-add-keywords '(("includegraphics" "*[[{")) 'reference))))
+     (font-latex-add-keywords '(("includegraphics" "*[[{")) 'reference)))
+ LaTeX-dialect)
 
 (defun LaTeX-includegraphics-extensions (&optional list)
   "Return appropriate extensions for input files to \\includegraphics."

@@ -47,6 +47,7 @@
      "multidostop"
      "multidocount"
      '("fpAdd" "Summand 1" "Summand 2" "Register")
-     '("fpSub" "Minuend" "Subtrahend" "Register")))))
+     '("fpSub" "Minuend" "Subtrahend" "Register"))))
+ LaTeX-dialect)
 
 ;;; multido.el ends here

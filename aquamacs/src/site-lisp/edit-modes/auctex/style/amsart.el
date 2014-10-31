@@ -5,6 +5,7 @@
 (TeX-add-style-hook "amsart"
  (function
   (lambda ()
-    (TeX-run-style-hooks "amsmath" "amsthm"))))
+    (TeX-run-style-hooks "amsmath" "amsthm")))
+ LaTeX-dialect)
 
 ;;; amsart.el ends here.

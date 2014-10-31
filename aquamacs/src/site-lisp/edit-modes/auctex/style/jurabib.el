@@ -629,6 +629,7 @@
     "urldatecomment"
     "volname"
     "volumename"
-    "volumeofname")))
+    "volumeofname"))
+ LaTeX-dialect)
 
 ;;; jurabib.el ends here

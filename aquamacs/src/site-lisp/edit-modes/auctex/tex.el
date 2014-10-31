@@ -1,8 +1,6 @@
 ;;; tex.el --- Support for TeX documents.
 
-;; Copyright (C) 1985, 1986, 1987, 1991, 1993, 1994, 1996, 1997, 1999,
-;;   2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
-;;   2011 Free Software Foundation, Inc.
+;; Copyright (C) 1985-1987, 1991, 1993-2014 Free Software Foundation, Inc.
 
 ;; Maintainer: auctex-devel@gnu.org
 ;; Keywords: tex
@@ -95,7 +93,7 @@ If nil, none is specified."
   :type '(choice (const :tag "Unspecified" nil)
 		 string))
 ;; At least in TeXLive 2009 ConTeXt does not support an omega option anymore.
-(make-obsolete-variable 'ConTeXt-Omega-engine 'TeX-engine-alist)
+(make-obsolete-variable 'ConTeXt-Omega-engine 'TeX-engine-alist "11.86")
 
 (defcustom TeX-mode-hook nil
   "A hook run in TeX mode buffers."
@@ -114,30 +112,30 @@ If nil, none is specified."
 ;; TeX-expand-list for a description of the % escapes
 
 (defcustom TeX-command-list
-  `(("TeX" "%(PDF)%(tex) %`%S%(PDFout)%(mode)%' %t"
+  `(("TeX" "%(PDF)%(tex) %(extraopts) %`%S%(PDFout)%(mode)%' %t"
      TeX-run-TeX nil
      (plain-tex-mode ams-tex-mode texinfo-mode) :help "Run plain TeX")
     ("LaTeX" "%`%l%(mode)%' %t"
      TeX-run-TeX nil
      (latex-mode doctex-mode) :help "Run LaTeX")
 	;; Not part of standard TeX.
-    ("Makeinfo" "makeinfo %t" TeX-run-compile nil
+    ("Makeinfo" "makeinfo %(extraopts) %t" TeX-run-compile nil
      (texinfo-mode) :help "Run Makeinfo with Info output")
-    ("Makeinfo HTML" "makeinfo --html %t" TeX-run-compile nil
+    ("Makeinfo HTML" "makeinfo %(extraopts) --html %t" TeX-run-compile nil
      (texinfo-mode) :help "Run Makeinfo with HTML output")
-    ("AmSTeX" "%(PDF)amstex %`%S%(PDFout)%(mode)%' %t"
+    ("AmSTeX" "%(PDF)amstex %(extraopts) %`%S%(PDFout)%(mode)%' %t"
      TeX-run-TeX nil (ams-tex-mode) :help "Run AMSTeX")
     ;; support for ConTeXt  --pg
     ;; first version of ConTeXt to support nonstopmode: 2003.2.10
-    ("ConTeXt" "texexec --once --texutil %(execopts)%t"
+    ("ConTeXt" "texexec --once --texutil %(extraopts) %(execopts)%t"
      TeX-run-TeX nil (context-mode) :help "Run ConTeXt once")
-    ("ConTeXt Full" "texexec %(execopts)%t"
+    ("ConTeXt Full" "texexec %(extraopts) %(execopts)%t"
      TeX-run-TeX nil
      (context-mode) :help "Run ConTeXt until completion")
     ("BibTeX" "bibtex %s" TeX-run-BibTeX nil t :help "Run BibTeX")
     ("Biber" "biber %s" TeX-run-Biber nil t :help "Run Biber")
     ,(if (or window-system (getenv "DISPLAY"))
-	 '("View" "%V" TeX-run-discard-or-function nil t :help "Run Viewer")
+	'("View" "%V" TeX-run-discard-or-function t t :help "Run Viewer")
        '("View" "dvi2tty -q -w 132 %s" TeX-run-command t t
 	 :help "Run Text viewer"))
     ("Print" "%p" TeX-run-command t t :help "Print the file")
@@ -146,8 +144,12 @@ If nil, none is specified."
     ("File" "%(o?)dvips %d -o %f " TeX-run-command t t
      :help "Generate PostScript file")
     ("Index" "makeindex %s" TeX-run-command nil t :help "Create index file")
+    ("Xindy" "texindy %s" TeX-run-command nil t
+     :help "Run xindy to create index file")
     ("Check" "lacheck %s" TeX-run-compile nil (latex-mode)
      :help "Check LaTeX file for correctness")
+    ("ChkTeX" "chktex -v6 %s" TeX-run-compile nil (latex-mode)
+     :help "Check LaTeX file for common mistakes")
     ("Spell" "(TeX-ispell-document \"\")" TeX-run-function nil t
      :help "Spell-check the document")
     ("Clean" "TeX-clean" TeX-run-function nil t
@@ -299,7 +301,7 @@ The executable `latex' is LaTeX version 2e."
 
 (defcustom LaTeX-command-style
   ;; They have all been combined in LaTeX 2e.
-  '(("" "%(PDF)%(latex) %S%(PDFout)"))
+  '(("" "%(PDF)%(latex) %(extraopts) %S%(PDFout)"))
 "List of style options and LaTeX commands.
 
 If the first element (a regular expression) matches the name of one of
@@ -406,20 +408,25 @@ string."
   :group 'TeX-command
   :type '(repeat (group regexp (string :tag "Command"))))
 
+(defcustom TeX-command-extra-options ""
+  "String with the extra options to be given to the TeX processor."
+  :type 'string)
+(make-variable-buffer-local 'TeX-command-extra-options)
+
 ;; This is the list of expansion for the commands in
 ;; TeX-command-list.  Not likely to be changed, but you may e.g. want
 ;; to handle .ps files.
 
 (defcustom TeX-expand-list
-  '(("%p" TeX-printer-query)	;%p must be the first entry
+  '(("%p" TeX-printer-query)		;%p must be the first entry
     ("%q" (lambda ()
 	    (TeX-printer-query t)))
     ("%V" (lambda ()
 	    (TeX-source-correlate-start-server-maybe)
 	    (TeX-view-command-raw)))
     ("%vv" (lambda ()
-	    (TeX-source-correlate-start-server-maybe)
-	    (TeX-output-style-check TeX-output-view-style)))
+	     (TeX-source-correlate-start-server-maybe)
+	     (TeX-output-style-check TeX-output-view-style)))
     ("%v" (lambda ()
 	    (TeX-source-correlate-start-server-maybe)
 	    (TeX-style-check TeX-view-style)))
@@ -453,13 +460,21 @@ string."
     ("%(tex)" (lambda () (eval (nth 2 (assq TeX-engine (TeX-engine-alist))))))
     ("%(latex)" (lambda () (eval (nth 3 (assq TeX-engine (TeX-engine-alist))))))
     ("%(execopts)" ConTeXt-expand-options)
+    ("%(extraopts)" (lambda () TeX-command-extra-options))
     ("%S" TeX-source-correlate-expand-options)
     ("%dS" TeX-source-specials-view-expand-options)
-    ("%(Ad)" aquamacs-directory)
     ("%cS" TeX-source-specials-view-expand-client)
     ("%(outpage)" (lambda ()
-		    (or (when TeX-source-correlate-output-page-function
-			  (funcall TeX-source-correlate-output-page-function))
+		    ;; When `TeX-source-correlate-output-page-function' is nil
+		    ;; and we are using synctex, fallback on
+		    ;; `TeX-synctex-output-page'.
+		    (and TeX-source-correlate-mode
+			 (null TeX-source-correlate-output-page-function)
+			 (eq (TeX-source-correlate-method-active) 'synctex)
+			 (setq TeX-source-correlate-output-page-function
+			       'TeX-synctex-output-page))
+		    (or (if TeX-source-correlate-output-page-function
+			    (funcall TeX-source-correlate-output-page-function))
 			"1")))
     ;; `file' means to call `TeX-master-file' or `TeX-region-file'
     ("%s" file nil t)
@@ -492,10 +507,10 @@ string."
 	    (prog1
 		(if (stringp TeX-command-text)
 		    (progn
-		      (setq pos (+ (length TeX-command-text) 9)
+		      (setq pos (+ pos (length TeX-command-text) 9)
 			    TeX-command-pos
 			    (and (string-match " "
-					      (funcall file t t))
+					       (funcall file t t))
 				 "\""))
 		      (concat TeX-command-text " \"\\input\""))
 		  (setq TeX-command-pos nil)
@@ -509,6 +524,8 @@ string."
     ;; command needs to be relative to the master file, just in
     ;; case the file is in a different subdirectory
     ("%b" TeX-current-file-name-master-relative)
+    ;; Okular forward PDF search requires absolute path.
+    ("%a" (lambda nil (prin1-to-string (expand-file-name (buffer-file-name)))))
     ;; the following is for preview-latex.
     ("%m" preview-create-subdirectory))
   "List of expansion strings for TeX command names.
@@ -542,6 +559,7 @@ the name of the file being processed, with an optional extension."
 (autoload 'TeX-kill-job "tex-buf" nil t)
 (autoload 'TeX-recenter-output-buffer "tex-buf" nil t)
 (autoload 'TeX-next-error "tex-buf" nil t)
+(autoload 'TeX-error-overview "tex-buf" nil t)
 (autoload 'TeX-region-file "tex-buf" nil nil)
 (autoload 'TeX-current-offset "tex-buf" nil nil)
 (autoload 'TeX-process-set-variable "tex-buf" nil nil)
@@ -577,6 +595,9 @@ but does nothing in Emacs."
 Also does other stuff."
     (TeX-maybe-remove-help menu)))
 
+;;;###autoload
+(defalias 'TeX-assoc-string
+  (symbol-function  (if (featurep 'xemacs) 'assoc 'assoc-string)))
 
 ;;; Documentation for Info-goto-emacs-command-node and similar
 
@@ -669,16 +690,37 @@ overlays."
 	     (+ (/ (- outer-priority inner-priority) 2) inner-priority))
 	    (t TeX-overlay-priority-step)))) )
 
+;; require crm here, because we often do
+;;
+;; (let ((crm-separator ","))
+;;   (TeX-completing-read-multiple ...))
+;;
+;; which results in a void-variable error if crm hasn't been loaded before.
+;; XEmacs 21.4 `require' doesn't have the third NOERROR argument, thus we handle
+;; the file-error signal with a `condition-case' also in GNU Emacs.
+(condition-case nil
+    (require 'crm)
+  (file-error
+   (error "AUCTeX requires crm.el which is included in Emacs and
+edit-utils >= 2.32 for XEmacs.")))
 
 (if (fboundp 'completing-read-multiple)
-    (defalias 'TeX-completing-read-multiple 'completing-read-multiple)
+    (defun TeX-completing-read-multiple
+	(prompt table &optional predicate require-match initial-input
+		hist def inherit-input-method)
+      "Like `completing-read-multiple' which see.
+Ensures that empty input results in nil across different emacs versions."
+      (let ((result (completing-read-multiple prompt table predicate
+					      require-match initial-input
+					      hist def inherit-input-method)))
+	(if (equal result '("")) nil result)))
   (defun TeX-completing-read-multiple
     (prompt table &optional predicate require-match initial-input
 	    hist def inherit-input-method)
     "Poor mans implementation of Emacs' `completing-read-multiple' for XEmacs.
 The XEmacs package edit-utils-2.32 includes `crm.el'."
-    (multi-prompt "," nil prompt table predicate require-match initial-input
-		  hist)))
+    (multi-prompt (if (boundp 'crm-separator) crm-separator ",") nil prompt
+		  table predicate require-match initial-input hist)))
 
 (if (fboundp 'line-number-at-pos)
     (defalias 'TeX-line-number-at-pos 'line-number-at-pos)
@@ -700,7 +742,7 @@ If POS is nil, use current buffer location."
 
   (defun TeX-read-string (prompt &optional initial-input history default-value)
     (read-string prompt initial-input history default-value t))
-  
+
   (defun TeX-mark-active ()
     ;; In FSF 19 mark-active indicates if mark is active.
     mark-active)
@@ -709,7 +751,8 @@ If POS is nil, use current buffer location."
     (and transient-mark-mode mark-active))
 
   (defun TeX-activate-region ()
-    nil)
+    (setq deactivate-mark nil)
+    (activate-mark))
 
   (defun TeX-overlay-prioritize (start end)
     "Calculate a priority for an overlay extending from START to END.
@@ -1008,6 +1051,10 @@ The following built-in predicates are available:
   :group 'TeX-view
   :type '(alist :key-type symbol :value-type (group sexp)))
 
+;; Require dbus at compile time to prevent errors due to `dbus-ignore-errors'
+;; not being defined.
+(eval-when-compile (and (featurep 'dbusbind)
+			(require 'dbus nil :no-error)))
 (defun TeX-evince-dbus-p (&rest options)
   "Return non-nil, if evince is installed and accessible via DBUS.
 Additional OPTIONS may be given to extend the check.  If none are
@@ -1015,11 +1062,10 @@ given, only the minimal requirements needed by backward search
 are checked.  If OPTIONS include `:forward', which is currently
 the only option, then additional requirements needed by forward
 search are checked, too."
-  (and (not (featurep 'xemacs)) ; XEmacs 21.4 has no `require' with
-			        ; arity 3, and no dbus support anyway.
+  (and (featurep 'dbusbind)
        (require 'dbus nil :no-error)
-       (functionp 'dbus-register-signal)
-       (getenv "DBUS_SESSION_BUS_ADDRESS")
+       (dbus-ignore-errors (dbus-get-unique-name :session))
+       (dbus-ping :session "org.gnome.evince.Daemon")
        (executable-find "evince")
        (or (not (memq :forward options))
 	   (let ((spec (dbus-introspect-get-method
@@ -1044,8 +1090,11 @@ search are checked, too."
 of point in emacs by using Evince's DBUS API.  Used by default
 for the Evince viewer entry in `TeX-view-program-list-builtin' if
 the requirements are met."
-  (let* ((uri (concat "file://" (expand-file-name
-				 (concat file "." (TeX-output-extension)))))
+  (require 'url-util)
+  (let* ((uri (concat "file://" (let ((url-unreserved-chars (cons ?/ url-unreserved-chars)))
+				  (url-hexify-string
+				   (expand-file-name
+				    (concat file "." (TeX-output-extension)))))))
 	 (owner (dbus-call-method
 		 :session "org.gnome.evince.Daemon"
 		 "/org/gnome/evince/Daemon"
@@ -1061,17 +1110,7 @@ the requirements are met."
 	 "SyncView"
 	 (buffer-file-name)
 	 (list :struct :int32 (line-number-at-pos) :int32 (1+ (current-column)))
-	 :uint32 (let ((time (float-time)))
-		   ;; FIXME: Evince wants a timestamp as UInt32, but POSIX time
-		   ;; is too large for emacs integers on 32 bit systems.  Emacs
-		   ;; 24.2 will allow providing DBUS ints as floats, and this
-		   ;; dbus version will be identifiable by its new variables
-		   ;; `dbus-compiled-version' and `dbus-runtime-version'.  But
-		   ;; it seems providing just 1 as timestamp has no negative
-		   ;; consequences, anyway.
-		   (if (> most-positive-fixnum time)
-		       (round time)
-		     1)))
+	 :uint32 0)
       (error "Couldn't find the Evince instance for %s" uri))))
 
 (defvar TeX-view-program-list-builtin
@@ -1080,23 +1119,11 @@ the requirements are met."
     '(("Yap" ("yap -1" (mode-io-correlate " -s %n%b") " %o"))
       ("dvips and start" "dvips %d -o && start \"\" %f")
       ("start" "start \"\" %o")))
-;; XXX: We need the advice of a Mac OS X user to configure this
-;; correctly and test it.
-    ((eq system-type 'darwin)
-     '(("xdvi" ("%(o?)xdvi -editor \"%cS\" -sourceposition 0none"
-	       (mode-io-correlate " -sourceposition \"%n %b\"")
-	       ((paper-a4 paper-portrait) " -paper a4")
-	       ((paper-a4 paper-landscape) " -paper a4r")
-	       ((paper-a5 paper-portrait) " -paper a5")
-	       ((paper-a5 paper-landscape) " -paper a5r")
-	       (paper-b5 " -paper b5")
-	       (paper-letter " -paper us")
-	       (paper-legal " -paper legal")
-	       (paper-executive " -paper 7.25x10.5in")
-	       " %d"))
-       ("open" "open %o")
-       )
-      )
+   ((eq system-type 'darwin)
+    '(("Preview.app" "open -a Preview.app %o")
+      ("Skim" "open -a Skim.app %o")
+      ("displayline" "displayline %n %o %b")
+      ("open" "open %o")))
    (t
     `(("xdvi" ("%(o?)xdvi"
 	       (mode-io-correlate " -sourceposition \"%n %b\" -editor \"%cS\"")
@@ -1121,7 +1148,7 @@ the requirements are met."
 						  (shell-command-to-string "evince --help"))
 				    " -i %(outpage)"
 				  " -p %(outpage)")) " %o")))
-      ("Okular" ("okular --unique %o" (mode-io-correlate "#src:%n%b")))
+      ("Okular" ("okular --unique %o" (mode-io-correlate "#src:%n%a")))
       ("xdg-open" "xdg-open %o"))))
   "Alist of built-in viewer specifications.
 This variable should not be changed by the user who can use
@@ -1203,8 +1230,6 @@ restarting Emacs."
       (output-dvi "Yap")
       (output-pdf "start")
       (output-html "start")))
-;; XXX: We need the advice of a Mac OS X user to configure this
-;; correctly and test it.
    ((eq system-type 'darwin)
     '((output-dvi "open")
       (output-pdf "open")
@@ -1298,6 +1323,10 @@ predicates are true, nil otherwise."
 	   (prin1-to-string spec))
 	  ((stringp spec)
 	   spec)
+	  ((null spec)
+	   (error
+	    (format "Unknown %S viewer. \
+Check the `TeX-view-program-selection' variable." viewer)))
 	  (t
 	   ;; Build the unexpanded command line.  Pieces with predicates are
 	   ;; only added if the predicate is evaluated positively.
@@ -1384,25 +1413,43 @@ For available TYPEs, see variable `TeX-engine'."
   :group 'TeX-command
   (TeX-engine-set (if TeX-Omega-mode 'omega 'default)))
 (defalias 'tex-omega-mode 'TeX-Omega-mode)
-(make-obsolete 'TeX-Omega-mode 'TeX-engine-set)
-(make-obsolete-variable 'TeX-Omega-mode 'TeX-engine)
+(make-obsolete 'TeX-Omega-mode 'TeX-engine-set "11.86")
+(make-obsolete-variable 'TeX-Omega-mode 'TeX-engine "11.86")
 
 ;;; Forward and inverse search
 
-(defcustom TeX-source-correlate-method 'auto
+(defcustom TeX-source-correlate-method
+  '((dvi . source-specials) (pdf . synctex))
   "Method to use for enabling forward and inverse search.
 This can be `source-specials' if source specials should be used,
-`synctex' if SyncTeX should be used, or`auto' if AUCTeX should
+`synctex' if SyncTeX should be used, or `auto' if AUCTeX should
 decide.
 
-Setting this variable does not take effect if TeX Source
-Correlate mode has already been active.  Restart Emacs in this
-case."
-  :type '(choice (const auto) (const synctex) (const source-specials))
-  :group 'TeX-view)
+The previous values determine the variable for both DVI and PDF
+mode.  This variable can also be an alist of the kind
 
-(defvar TeX-source-correlate-method-active nil
-  "Method actually used for forward and inverse search.")
+  ((dvi . <source-specials or synctex>)
+   (pdf . <source-specials or synctex>))
+
+in which the CDR of each entry is a symbol specifying the method
+to be used in the corresponding mode.
+
+Programs should not use this variable directly but the function
+`TeX-source-correlate-method-active' which returns the method
+actually used for forward and inverse search."
+  :type '(choice (const auto)
+		 (const synctex)
+		 (const source-specials)
+		 (list :tag "Different method for DVI and PDF"
+		       (cons (const dvi)
+			     (choice :tag "Method for DVI mode"
+				     (const synctex)
+				     (const source-specials)))
+		       (cons (const pdf)
+			     (choice :tag "Method for PDF mode"
+				     (const synctex)
+				     (const source-specials)))))
+  :group 'TeX-view)
 
 (defvar TeX-source-correlate-output-page-function nil
   "Symbol of function returning an output page relating to buffer position.
@@ -1476,14 +1523,24 @@ This is the case if `TeX-source-correlate-start-server-flag' is non-nil."
 	'synctex
       'source-specials)))
 
+(defun TeX-source-correlate-method-active ()
+  "Return the method actually used for forward and inverse search."
+  (cond
+   ((eq TeX-source-correlate-method 'auto)
+    (TeX-source-correlate-determine-method))
+   ((listp TeX-source-correlate-method)
+    (if TeX-PDF-mode
+	(cdr (assoc 'pdf TeX-source-correlate-method))
+      (cdr (assoc 'dvi TeX-source-correlate-method))))
+   (t
+    TeX-source-correlate-method)))
+
 (defun TeX-source-correlate-expand-options ()
   "Return TeX engine command line option for forward search facilities.
 The return value depends on the value of `TeX-source-correlate-mode'.
 If this is nil, an empty string will be returned."
   (if TeX-source-correlate-mode
-      (if (not TeX-PDF-mode) 
-	  ;;   (eq TeX-source-correlate-method-active 'source-specials))
-	  ;;  on OSX, PDF mode must control this, due to unavailability of viewers.
+      (if (eq (TeX-source-correlate-method-active) 'source-specials)
 	  (concat TeX-source-specials-tex-flags
 		  (if TeX-source-specials-places
 		      ;; -src-specials=WHERE: insert source specials
@@ -1516,23 +1573,25 @@ or newer."
   (let ((buf (let ((f (condition-case nil
 			  (progn
 			    (require 'url-parse)
-			    (aref (url-generic-parse-url file) 6))
+			    (require 'url-util)
+			    (url-unhex-string (aref (url-generic-parse-url file) 6)))
 			;; For Emacs 21 compatibility, which doesn't have the
 			;; url package.
 			(file-error (replace-regexp-in-string "^file://" "" file)))))
 	       (if (file-name-absolute-p f)
 		   (find-file f)
 		 (get-buffer (file-name-nondirectory file)))))
-        (line (car linecol))
-        (col (cadr linecol)))
+	(line (car linecol))
+	(col (cadr linecol)))
     (if (null buf)
-        (message "No buffer for %s." file)
+	(message "No buffer for %s." file)
       (switch-to-buffer buf)
       (push-mark (point) 'nomsg)
       (goto-char (point-min))
       (forward-line (1- line))
       (unless (= col -1)
-        (move-to-column col)))))
+	(move-to-column col))
+      (raise-frame))))
 
 (define-minor-mode TeX-source-correlate-mode
   "Minor mode for forward and inverse search.
@@ -1560,18 +1619,10 @@ SyncTeX are recognized."
     (dbus-register-signal
      :session nil "/org/gnome/evince/Window/0"
      "org.gnome.evince.Window" "SyncSource"
-     'TeX-source-correlate-sync-source))
-  (unless TeX-source-correlate-method-active
-    (setq TeX-source-correlate-method-active
-	  (if (eq TeX-source-correlate-method 'auto)
-	      (TeX-source-correlate-determine-method)
-	    TeX-source-correlate-method)))
-  (when (eq TeX-source-correlate-method-active 'synctex)
-    (setq TeX-source-correlate-output-page-function
-	  (when TeX-source-correlate-mode
-	    'TeX-synctex-output-page))))
+     'TeX-source-correlate-sync-source)))
+
 (defalias 'TeX-source-specials-mode 'TeX-source-correlate-mode)
-(make-obsolete 'TeX-source-specials-mode 'TeX-source-correlate-mode)
+(make-obsolete 'TeX-source-specials-mode 'TeX-source-correlate-mode "11.86")
 (defalias 'tex-source-correlate-mode 'TeX-source-correlate-mode)
 (put 'TeX-source-correlate-mode 'safe-local-variable 'TeX-booleanp)
 ;; We do not want the custom variable to require tex.el.  This is only
@@ -1647,10 +1698,7 @@ Return the full path to the executable if possible."
 		    TeX-source-specials-view-emacsclient-flags)))
     (if (and client-full (file-executable-p client-full))
 	(concat client-full " " options)
-   (concat "\\\"" aquamacs-mac-application-bundle-directory "/Contents/MacOS/bin/" client-base "\\\" " options))))
-
-(defun aquamacs-directory ()
-  aquamacs-mac-application-bundle-directory)
+      (concat client-base " " options))))
 
 (defun TeX-source-specials-view-expand-options (&optional viewer)
   "Return source specials command line option for viewer command.
@@ -1660,7 +1708,7 @@ The return value depends on the values of
 `source-specials' respectively, an empty string will be
 returned."
   (if (and TeX-source-correlate-mode
-	   (eq TeX-source-correlate-method-active 'source-specials))
+	   (eq (TeX-source-correlate-method-active) 'source-specials))
       (concat TeX-source-specials-view-position-flags
 	      (when (TeX-source-correlate-server-enabled-p)
 		(concat " " TeX-source-specials-view-editor-flags)))
@@ -1714,7 +1762,7 @@ enabled and the `synctex' binary is available."
   (set-default var value)
   (TeX-set-mode-name var nil t))
 
-(defcustom TeX-PDF-mode nil nil
+(defcustom TeX-PDF-mode t nil
   :group 'TeX-command
   :set 'TeX-mode-set
   :type 'boolean)
@@ -1769,7 +1817,7 @@ already established, don't do anything."
     (unless (local-variable-p 'TeX-PDF-mode (current-buffer))
       (TeX-PDF-mode (if arg 1 0))
       (setq TeX-PDF-mode-parsed t))))
-  
+
 (defun TeX-PDF-mode-on ()
   "Use only from parsing routines."
   (TeX-PDF-mode-parsed t))
@@ -1848,7 +1896,7 @@ Must be the car of an entry in `TeX-command-list'."
     "\\.glo" "\\.gls" "\\.idx" "\\.ilg" "\\.ind"
     "\\.lof" "\\.log" "\\.lot" "\\.nav" "\\.out"
     "\\.snm" "\\.toc" "\\.url" "\\.synctex\\.gz"
-    "\\.bcf" "\\.run\\.xml")
+    "\\.bcf" "\\.run\\.xml" "\\.fls" "-blx\\.bib")
   "List of regexps matching suffixes of files to be cleaned.
 Used as a default in TeX, LaTeX and docTeX mode.")
 
@@ -1893,7 +1941,7 @@ output files."
 	(when (or (not TeX-clean-confirm)
 		  (condition-case nil
 		      (dired-mark-pop-up " *Deletions*" 'delete
-					 (if (> (length files) 1) 
+					 (if (> (length files) 1)
 					     files
 					   (cons t files))
 					 'y-or-n-p "Delete files? ")
@@ -2113,7 +2161,7 @@ the beginning of the file, but that feature will be phased out."
 			   (file-name-nondirectory (buffer-file-name)))
 	     (not buffer-read-only))
     (goto-char (point-max))
-    (if (re-search-backward (concat "^\\([^\n]+\\)Local " "Variables:")
+    (if (re-search-backward "^\\([^\n]+\\)Local Variables:"
 			    (- (point-max) 3000) t)
 	(let ((prefix (TeX-match-buffer 1)))
 	  (re-search-forward (regexp-quote (concat prefix
@@ -2130,10 +2178,10 @@ the beginning of the file, but that feature will be phased out."
 	(when (eq major-mode 'doctex-mode)
 	  (insert comment-prefix TeX-esc "endinput\n"))
 	(insert
-	 comment-prefix "Local " "Variables: \n"
+	 comment-prefix "Local Variables:\n"
 	 comment-prefix "mode: " mode "\n"
 	 comment-prefix "TeX-master: " (prin1-to-string TeX-master) "\n"
-	 comment-prefix "End: \n")))))
+	 comment-prefix "End:\n")))))
 
 (defun TeX-local-master-p ()
   "Return non-nil if there is a `TeX-master' entry in local variables spec.
@@ -2329,14 +2377,50 @@ Used when checking if any files have changed."
 (defvar TeX-style-hook-list nil
   "List of TeX style hooks currently loaded.
 
-Each entry is a list where the first element is the name of the style,
-and the remaining elements are hooks to be run when that style is
-active.")
+Each entry is a list:
+
+ (STYLE HOOK1 HOOK2 ...)
+
+where the first element STYLE is the name of the style, and the
+remaining elements HOOKN, if any, are hooks to be run when that
+style is active.
+
+A hook HOOKN may be a hook function HOOK-FUN to be run in
+all TeX dialects (LaTeX, Texinfo, etc.), or a vector like:
+
+     [TeX-style-hook HOOK-FUN DIALECT-SET]
+
+where HOOK-FUN is the hook function to be run, and DIALECT-SET is
+a non-empty set of dialects in which the hook function may be
+run.
+
+This set is instantiated by function `TeX-add-style-hook' through
+functions manipulating style hook dialect expression named with a
+`TeX-shdex-' prefix.
+
+For supported dialects, see variables `TeX-style-hook-dialect'.")
+
+(defvar TeX-style-hook-dialect :latex
+  "Dialect for running hooks locally to the considered file.
+Supported values are described below:
+
+* `:bibtex'  for files in BibTeX mode.
+* `:latex'   for files in LaTeX mode, or any mode derived
+	     thereof.
+* `:texinfo' for Texinfo files.
+
+Purpose is notably to prevent non-Texinfo hooks to be run in
+Texinfo files, due to ambiguous style name, as this may cause bad
+side effect e.g. on variable `TeX-font-list'.")
 
 (defcustom TeX-byte-compile nil
   "*Not nil means try to byte compile auto files before loading."
   :group 'TeX-parse
   :type 'boolean)
+
+(defun TeX-bibtex-set-BibTeX-dialect ()
+  "Set `TeX-style-hook-dialect' to `:bibtex' locally to BibTeX buffers."
+  (set (make-local-variable 'TeX-style-hook-dialect) :bibtex))
 
 (defun TeX-load-style (style)
   "Search for and load each definition for STYLE in `TeX-style-path'."
@@ -2384,9 +2468,79 @@ active.")
 	  ((file-readable-p el)
 	   (load-file el)))))
 
-(defun TeX-add-style-hook (style hook)
-  "Give STYLE yet another HOOK to run."
-  (let ((entry (assoc style TeX-style-hook-list)))
+(defconst TeX-style-hook-dialect-weight-alist
+  '((:latex . 1) (:texinfo . 2) (:bibtex . 4))
+  "Association list to map dialects to binary weight, in order to
+  implement dialect sets as bitmaps."  )
+
+(defun TeX-shdex-eval (dialect-expr)
+  "Evaluate a style hook dialect expression DIALECT-EXPR."
+  (cond
+   ((symbolp dialect-expr)
+    (let ((cell (assq dialect-expr TeX-style-hook-dialect-weight-alist)))
+      (if cell (cdr cell)
+	(error "Invalid dialect expression : %S." dialect-expr))))
+   ((and (consp dialect-expr)
+	 (memq (car dialect-expr) '(or not and nor)))
+    (apply (intern
+	    (concat "TeX-shdex-" (symbol-name  (car dialect-expr))))
+	   (cdr dialect-expr)))
+   (t
+    (error "Invalid dialect expression : %S." dialect-expr))))
+
+(defsubst TeX-shdex-or (&rest args)
+  "OR operator for style hook dialect expressions."
+  (apply 'logior (mapcar 'TeX-shdex-eval args)))
+
+(defsubst TeX-shdex-and (&rest args)
+  "AND operator for style hook dialect expressions."
+  (apply 'logand (mapcar 'TeX-shdex-eval args)))
+
+(defsubst TeX-shdex-nor (&rest args)
+  "NOR operator for style hook dialect expressions."
+  (lognot (apply 'TeX-shdex-or args)))
+
+(defsubst TeX-shdex-not (arg)
+  "NOT operator for style hook dialect expressions."
+   (lognot (TeX-shdex-eval arg)))
+
+(defsubst TeX-shdex-in-p (dialect dialect-set)
+  "Test whether dialect DIALECT is in dialect set DIALECT-SET."
+  (let ((cell (assq dialect TeX-style-hook-dialect-weight-alist)))
+    (if cell
+	(/= 0 (logand (cdr cell) dialect-set))
+      (error "Invalid dialect %S" dialect))))
+
+(defsubst TeX-shdex-listify (dialect-set)
+  "Converts a dialect set DIALECT-SET to a list of all dialect
+comprised in this set, where dialects are symbols"
+  (let (ret)
+    (dolist (c dialect-set)
+      (when (/= 0 (logand (cdr c) dialect-set))
+	(push (car c) ret)))
+    ret))
+
+(defun TeX-add-style-hook (style hook &optional dialect-expr)
+  "Give STYLE yet another HOOK to run.
+
+DIALECT-EXPR serves the purpose of marking the hook to be run only in
+that dicontext.
+
+DIALECT-EXPR may be a single symbol defining the dialect, see
+variable `TeX-style-hook-dialect' for supported dialects.
+
+DIALECT-EXPR can also be an expression like one of the following:
+
+* (or  DIALECT1 DIALECT2 ...)
+* (nor DIALECT1 DIALECT2 ...)
+* (and DIALECT1 DIALECT2 ...)
+* (not DIALECT )
+
+When omitted DIALECT-EXPR is equivalent to `(nor )', ie all
+dialected are allowed."
+  (let ((entry (TeX-assoc-string style TeX-style-hook-list)))
+    (and dialect-expr (setq hook (vector 'TeX-style-hook hook
+					 (TeX-shdex-eval dialect-expr))))
     (cond ((null entry)
 	   ;; New style, add entry.
 	   (setq TeX-style-hook-list (cons (list style hook)
@@ -2398,16 +2552,30 @@ active.")
 	   ;; Old style, new hook.
 	   (setcdr entry (cons hook (cdr entry)))))))
 
-(defun TeX-unload-style (style)
-  "Forget that we once loaded STYLE."
-  (cond ((null (assoc style TeX-style-hook-list)))
-	((equal (car (car TeX-style-hook-list)) style)
-	 (setq TeX-style-hook-list (cdr TeX-style-hook-list)))
-	(t
-	 (let ((entry TeX-style-hook-list))
-	   (while (not (equal (car (car (cdr entry))) style))
-	     (setq entry (cdr entry)))
-	   (setcdr entry (cdr (cdr entry)))))))
+(defun TeX-keep-hooks-in-dialect (hooks dialect-list)
+  "Scan HOOKS for all hooks the associated dialect of which is
+found in DIALECT-LIST and return the list thereof."
+  (let (ret dialect-list-1)
+    (dolist (hook hooks)
+      (setq dialect-list-1 (and (vectorp hook) (eq (aref hook 0) 'TeX-style-hook)
+				(TeX-shdex-listify (aref hook 2))))
+      (while dialect-list-1
+	(when (memq (pop dialect-list-1) dialect-list)
+	  (push hook ret)
+	  (setq dialect-list-1 nil)))
+    ret)))
+
+(defun TeX-unload-style (style &optional dialect-list)
+  "Forget that we once loaded STYLE. If DIALECT-LIST is provided
+the STYLE is only removed for those dialects in DIALECT-LIST.
+
+See variable `TeX-style-hook-dialect' for supported dialects."
+  (let ((style-data (TeX-assoc-string style TeX-style-hook-list)))
+    (if style-data
+	(let ((hooks (and dialect-list (TeX-keep-hooks-in-dialect (cdr style-data) dialect-list))))
+	  (if hooks
+	      (setcdr style-data hooks)
+	    (setq TeX-style-hook-list (delq style-data TeX-style-hook-list)))))))
 
 (defcustom TeX-virgin-style (if (and TeX-auto-global
 				     (file-directory-p TeX-auto-global))
@@ -2439,8 +2607,23 @@ active.")
 					    (TeX-master-directory))
 			style (substring style
 					 (match-beginning 2) (match-end 2))))
-		(mapcar 'funcall
-			(cdr-safe (assoc style TeX-style-hook-list))))))
+		(condition-case err
+		    (mapcar (lambda (hook)
+			      (cond
+			       ((functionp hook)
+				(funcall hook))
+			       ((and (vectorp hook)
+				     (eq (aref hook 0) 'TeX-style-hook))
+				(and (TeX-shdex-in-p TeX-style-hook-dialect (aref hook 2))
+				     (funcall (aref hook 1))))
+			       (t (error "Invalid style hook %S" hook))))
+			    (cdr-safe (TeX-assoc-string style TeX-style-hook-list)))
+		  ;; This happens in case some style added a new parser, and
+		  ;; now the style isn't used anymore (user deleted
+		  ;; \usepackage{style}).  Then we're left over with, e.g.,
+		  ;; (LaTeX-add-siunitx-units "\\parsec"), but the function is
+		  ;; defined in a style siunitx.el that's not loaded anymore.
+		  (void-function nil)))))
 	  styles))
 
 (defcustom TeX-parse-self nil
@@ -2519,6 +2702,59 @@ FORCE is not nil."
   "*Function to call for completing non-macros in `tex-mode'."
   :group 'TeX-macro)
 
+(defcustom TeX-complete-expert-commands nil
+  "Complete macros and environments marked as expert commands.
+
+Possible values are nil, t, or a list of style names.
+
+  - nil           Don't complete expert commands (default).
+  - t             Always complete expert commands.
+  - (STYLES ...)  Only complete expert commands of STYLES."
+  :group 'TeX-macro
+  :type '(choice (const  :tag "Don't complete expert commands" nil)
+		 (const  :tag "Always complete expert commands" t)
+		 (repeat :tag "Complete expert commands of certain styles" string)))
+
+(defmacro TeX-complete-make-expert-command-functions (thing list-var prefix)
+  (let* ((plural (concat thing "s"))
+	 (upcase (upcase thing))
+	 (upcase-plural (upcase plural)))
+    `(progn
+       (defvar ,(intern (format "%s-expert-%s-table" prefix thing))
+	 (make-hash-table :test 'equal)
+	 ,(format "A hash-table mapping %s names to the style name providing it.
+
+A %s occuring in this table is considered an expert %s and
+treated specially in the completion." thing thing thing))
+
+       (defun ,(intern (format "%s-declare-expert-%s" prefix plural)) (style &rest ,(intern plural))
+	 ,(format "Declare %s as expert %s of STYLE.
+
+Expert %s are completed depending on `TeX-complete-expert-commands'."
+		  upcase-plural plural plural)
+	 (dolist (x ,(intern plural))
+	   (if (null style)
+	       (remhash x TeX-expert-macro-table)
+	     (puthash x style TeX-expert-macro-table))))
+
+       (defun ,(intern (format "%s-filtered" list-var)) ()
+	 ,(format "Return (%s) filtered depending on `TeX-complete-expert-commands'."
+		  list-var)
+	 (delq nil
+	       (mapcar
+		(lambda (entry)
+		  (if (eq t TeX-complete-expert-commands)
+		      entry
+		    (let* ((cmd (car entry))
+			   (style (gethash cmd TeX-expert-macro-table)))
+		      (when (or (null style)
+				(member style TeX-complete-expert-commands))
+			entry))))
+		(,list-var)))))))
+
+(TeX-complete-make-expert-command-functions "macro" TeX-symbol-list "TeX")
+(TeX-complete-make-expert-command-functions "environment" LaTeX-environment-list "LaTeX")
+
 (defvar TeX-complete-list nil
   "List of ways to complete the preceding text.
 
@@ -2591,25 +2827,46 @@ Or alternatively:
 (make-variable-buffer-local 'TeX-default-macro)
 
 (defcustom TeX-insert-braces t
-  "*If non-nil, append a empty pair of braces after inserting a macro."
+  "*If non-nil, append a empty pair of braces after inserting a macro.
+
+See also `TeX-insert-braces-alist'."
   :group 'TeX-macro
   :type 'boolean)
+
+(defcustom TeX-insert-braces-alist nil
+  "Alist of macros to which braces should or should not be appended.
+
+Each element is a cons cell, whose CAR is the macro name, and the
+CDR is non-nil or nil, depending on whether a pair of braces
+should be, respectively, appended or not to the macro.
+
+If a macro has an element in this variable, `TeX-parse-macro'
+will use its value to decided what to do, whatever the value of
+the variable `TeX-insert-braces'."
+  :group 'TeX-macro
+  :type '(repeat (cons (string :tag "Macro name")
+		       (boolean :tag "Append braces?"))))
+(make-variable-buffer-local 'TeX-insert-braces-alist)
 
 (defcustom TeX-insert-macro-default-style 'show-optional-args
   "Specifies whether `TeX-insert-macro' will ask for all optional arguments.
 
-If set to the symbol `show-optional-args', `TeX-insert-macro' asks for
-optional arguments of TeX marcos.  If set to `mandatory-args-only',
+If set to the symbol `show-optional-args', `TeX-insert-macro'
+asks for optional arguments of TeX marcos, unless the previous
+optional argument has been rejected.  If set to
+`show-all-optional-args', `TeX-insert-macro' asks for all
+optional arguments.  If set to `mandatory-args-only',
 `TeX-insert-macro' asks only for mandatory argument.
 
 When `TeX-insert-macro' is called with \\[universal-argument], it's the other
 way round.
 
 Note that for some macros, there are special mechanisms, see e.g.
-`LaTeX-includegraphics-options-alist'."
+`LaTeX-includegraphics-options-alist' and `TeX-arg-cite-note-p'."
   :group 'TeX-macro
   :type '(choice (const mandatory-args-only)
-		 (const show-optional-args)))
+		 (const show-optional-args)
+		 (const show-all-optional-args)))
 
 (defvar TeX-arg-opening-brace nil
   "String used as an opening brace for argument insertion.
@@ -2639,12 +2896,10 @@ is called with \\[universal-argument]."
 					      TeX-default-macro
 					      "): "
 					      TeX-esc)
-				      (TeX-symbol-list) nil nil nil
-				      'TeX-macro-history)))
-  (cond ((string-equal symbol "")
-	 (setq symbol TeX-default-macro))
-	((interactive-p)
-	 (setq TeX-default-macro symbol)))
+				      (TeX-symbol-list-filtered) nil nil nil
+				      'TeX-macro-history TeX-default-macro)))
+  (when (interactive-p)
+    (setq TeX-default-macro symbol))
   (TeX-parse-macro symbol (cdr-safe (assoc symbol (TeX-symbol-list))))
   (run-hooks 'TeX-after-insert-macro-hook))
 
@@ -2717,21 +2972,31 @@ type of ARGS:
     (cond ((marker-position exit-mark)
 	   (goto-char (marker-position exit-mark))
 	   (set-marker exit-mark nil))
-	  ((and TeX-insert-braces
-		;; Do not add braces if the argument is 0 or -1.
-		(not (and (= (safe-length args) 1)
-			  (numberp (car args))
-			  (<= (car args) 0)))
-		(equal position (point))
-		(string-match "[a-zA-Z]+" symbol)
-		(not (texmathp)))
-	   (insert TeX-grop)
-	   (if (TeX-active-mark)
-	       (progn
+	  ((let ((element (assoc symbol TeX-insert-braces-alist)))
+	     ;; If in `TeX-insert-braces-alist' there is an element associated
+	     ;; to the current macro, use its value to decide whether inserting
+	     ;; a pair of braces, otherwise use the standard criterion.
+	     (if element
+		 (cdr element)
+	       (and TeX-insert-braces
+		    ;; Do not add braces if the argument is 0 or -1.
+		    (not (and (= (safe-length args) 1)
+			      (numberp (car args))
+			      (<= (car args) 0)))
+		    (equal position (point))
+		    (string-match "[a-zA-Z]+" symbol))))
+	   (if (texmathp)
+	       (when (TeX-active-mark)
+		 (insert TeX-grop)
 		 (exchange-point-and-mark)
 		 (insert TeX-grcl))
-	     (insert TeX-grcl)
-	     (backward-char))))))
+	     (insert TeX-grop)
+	     (if (TeX-active-mark)
+		 (progn
+		   (exchange-point-and-mark)
+		   (insert TeX-grcl))
+	       (insert TeX-grcl)
+	       (backward-char)))))))
 
 (defun TeX-arg-string (optional &optional prompt initial-input)
   "Prompt for a string.
@@ -2750,20 +3015,19 @@ INITIAL-INPUT is a string to insert before reading input."
   "Parse TeX macro arguments ARGS.
 
 See `TeX-parse-macro' for details."
-  (let ((last-optional-rejected nil)
-	skip-opt)
-    ;; Maybe get rid of all optional arguments.  See `TeX-insert-macro' for
-    ;; more comments.  See `TeX-insert-macro-default-style'.
-    (when (or (and (eq TeX-insert-macro-default-style 'show-optional-args)
-		   (equal current-prefix-arg '(4)))
-	      (and (eq TeX-insert-macro-default-style 'mandatory-args-only)
-		   (null (equal current-prefix-arg '(4)))))
-      (while (vectorp (car args))
-	(setq args (cdr args))))
-
+  (let ((last-optional-rejected nil))
     (while args
       (if (vectorp (car args))
-	  (unless last-optional-rejected
+	  ;; Maybe get rid of all optional arguments.  See `TeX-insert-macro'
+	  ;; for more comments.  See `TeX-insert-macro-default-style'.
+	  (unless (if (eq TeX-insert-macro-default-style 'show-all-optional-args)
+		      (equal current-prefix-arg '(4))
+		    (or
+		     (and (eq TeX-insert-macro-default-style 'show-optional-args)
+			  (equal current-prefix-arg '(4)))
+		     (and (eq TeX-insert-macro-default-style 'mandatory-args-only)
+			  (null (equal current-prefix-arg '(4))))
+		     last-optional-rejected))
 	    (let ((TeX-arg-opening-brace LaTeX-optop)
 		  (TeX-arg-closing-brace LaTeX-optcl))
 	      (TeX-parse-argument t (if (equal (length (car args)) 1)
@@ -2895,8 +3159,8 @@ Return the number as car and unit as cdr."
 
 (defun TeX-arg-literal (optional &rest args)
   "Insert its arguments ARGS into the buffer.
-Used for specifying extra syntax for a macro."
-  ;; FIXME: What is the purpose of OPTIONAL here?  -- rs
+Used for specifying extra syntax for a macro.  The compatibility
+argument OPTION is ignored."
   (apply 'insert args))
 
 
@@ -3001,18 +3265,14 @@ The algorithm is as follows:
   (setq indent-tabs-mode nil)
 
   ;; Ispell support
-  (make-local-variable 'ispell-parser)
-  (setq ispell-parser 'tex)
-  (make-local-variable 'ispell-tex-p)
-  (setq ispell-tex-p t)
-  
+  (set (make-local-variable 'ispell-parser) 'tex)
+  (set (make-local-variable 'ispell-tex-p) t)
+
   ;; Redefine some standard variables
   (make-local-variable 'paragraph-start)
   (make-local-variable 'paragraph-separate)
-  (make-local-variable 'comment-start)
-  (setq comment-start "%")
-  (make-local-variable 'comment-start-skip)
-  (setq comment-start-skip
+  (set (make-local-variable 'comment-start) "%")
+  (set (make-local-variable 'comment-start-skip)
 	(concat
 	 "\\(\\(^\\|[^\\\n]\\)\\("
 	 (regexp-quote TeX-esc)
@@ -3022,20 +3282,16 @@ The algorithm is as follows:
   (set (make-local-variable 'comment-use-syntax) t)
   ;; `comment-padding' is defined here as an integer for compatibility
   ;; reasons because older Emacsen could not cope with a string.
-  (make-local-variable 'comment-padding)
-  (setq comment-padding 1)
+  (set (make-local-variable 'comment-padding) 1)
   ;; Removed as commenting in (La)TeX is done with one `%' not two
   ;; (make-local-variable 'comment-add)
   ;; (setq comment-add 1) ;default to `%%' in comment-region
-  (make-local-variable 'comment-indent-function)
-  (setq comment-indent-function 'TeX-comment-indent)
-  (make-local-variable 'comment-multi-line)
-  (setq comment-multi-line nil)
+  (set (make-local-variable 'comment-indent-function) 'TeX-comment-indent)
+  (set (make-local-variable 'comment-multi-line) nil)
   (make-local-variable 'compile-command)
   (unless (boundp 'compile-command)
     (setq compile-command "make"))
-  (make-local-variable 'words-include-escapes)
-  (setq words-include-escapes nil)
+  (set (make-local-variable 'words-include-escapes) nil)
 
   ;; Make TAB stand out
   ;;  (make-local-variable 'buffer-display-table)
@@ -3045,10 +3301,10 @@ The algorithm is as follows:
   ;;  (aset buffer-display-table ?\t (apply 'vector (append "<TAB>" nil)))
 
   ;; Symbol completion.
-  (make-local-variable 'TeX-complete-list)
-  (setq TeX-complete-list
+  (set (make-local-variable 'TeX-complete-list)
 	(list (list "\\\\\\([a-zA-Z]*\\)"
-		    1 'TeX-symbol-list (if TeX-insert-braces "{}"))
+		    1 'TeX-symbol-list-filtered
+		    (if TeX-insert-braces "{}"))
 	      (list "" TeX-complete-word)))
 
   (funcall TeX-install-font-lock)
@@ -3058,8 +3314,9 @@ The algorithm is as follows:
   (if (boundp 'local-write-file-hooks)
       (add-hook 'local-write-file-hooks 'TeX-safe-auto-write)
     (add-hook 'write-file-hooks 'TeX-safe-auto-write))
-  (make-local-variable 'TeX-auto-update)
-  (setq TeX-auto-update t)
+  (set (make-local-variable 'TeX-auto-update) t)
+
+  (define-key TeX-mode-map "\C-xng" 'TeX-narrow-to-group)
 
   ;; Minor modes
   (when TeX-source-correlate-mode
@@ -3123,38 +3380,6 @@ The algorithm is as follows:
 (defconst TeX-auto-parser-local 3)
 (defconst TeX-auto-parser-change 4)
 
-(defun TeX-auto-add-type (name prefix &optional plural)
-  "Add information about NAME to the parser using PREFIX.
-
-Optional third argument PLURAL is the plural form of TYPE.
-By default just add an `s'.
-
-This function create a set of variables and functions to maintain a
-separate type of information in the parser."
-  (let* ((names (or plural (concat name "s")))
-	 (tmp (intern (concat prefix "-auto-" name)))
-	 (add (intern (concat prefix "-add-" names)))
-	 (local (intern (concat prefix "-" name "-list")))
-	 (change (intern (concat prefix "-" name "-changed"))))
-    (setq TeX-auto-parser
-	  (cons (list name tmp add local change) TeX-auto-parser))
-    (set local nil)
-    (make-variable-buffer-local local)
-    (set change nil)
-    (make-variable-buffer-local change)
-    (fset add `(lambda (&rest entries)
-		 ,(concat "Add information about " (upcase name)
-			  " to the current buffer.
-Generated by `TeX-auto-add-type'.")
-		 (TeX-auto-add-information ,name entries)))
-    (fset local `(lambda nil
-		   ,(concat "List of " names
-			    " active in the current buffer.
-Generated by `TeX-auto-add-type'.")
-		   (TeX-auto-list-information ,name)))
-    (add-hook 'TeX-remove-style-hook
-	      `(lambda nil (setq ,(symbol-name local) nil)))))
-
 (defun TeX-auto-add-information (name entries)
   "For NAME in `TeX-auto-parser' add ENTRIES."
   (let* ((entry (assoc name TeX-auto-parser))
@@ -3197,6 +3422,45 @@ Generated by `TeX-auto-add-type'.")
 	      (setcdr entry (cdr (cdr entry)))))))
       (message "Removing duplicates... done"))
     (symbol-value local)))
+
+(defmacro TeX-auto-add-type (name prefix &optional plural)
+  "Add information about NAME to the parser using PREFIX.
+
+Optional third argument PLURAL is the plural form of TYPE.
+By default just add an `s'.
+
+This function create a set of variables and functions to maintain a
+separate type of information in the parser."
+  (let* ((names (or plural (concat name "s")))
+	 (tmp (intern (concat prefix "-auto-" name)))
+	 (add (intern (concat prefix "-add-" names)))
+	 (local (intern (concat prefix "-" name "-list")))
+	 (change (intern (concat prefix "-" name "-changed")))
+	 (vardoc (concat "Information about " names
+			  " in the current buffer.
+Generated by `TeX-auto-add-type'.")))
+    `(progn
+       (defvar ,tmp nil ,vardoc)
+       (defvar ,local nil ,vardoc)
+       (make-variable-buffer-local ',local)
+       (defvar ,change nil ,vardoc)
+       (make-variable-buffer-local ',change)
+       (defun ,add (&rest ,(intern names))
+	 ,(concat "Add information about " (upcase names)
+		  " to the current buffer.
+Generated by `TeX-auto-add-type'.")
+	 (TeX-auto-add-information ,name ,(intern names)))
+       (defun ,local ()
+	 ,(concat "List of " names
+		  " active in the current buffer.
+Generated by `TeX-auto-add-type'.")
+	 (TeX-auto-list-information ,name))
+       ;; Append new type to `TeX-auto-parser' in order to make `style' type
+       ;; always the first.
+       (add-to-list 'TeX-auto-parser ',(list name tmp add local change) t)
+       (add-hook 'TeX-remove-style-hook
+		 (lambda ()
+		   (setq ,local nil))))))
 
 (TeX-auto-add-type "symbol" "TeX")
 
@@ -3325,9 +3589,8 @@ If TEX is a directory, generate style files for all files in the directory."
 				   (append TeX-file-extensions
 					   BibTeX-file-extensions
 					   TeX-Biber-file-extensions)))
-	 (save-excursion
-	   (set-buffer (let (enable-local-eval)
-			 (find-file-noselect tex)))
+	 (with-current-buffer (let (enable-local-eval)
+				(find-file-noselect tex))
 	   (message "Parsing %s..." tex)
 	   (TeX-auto-store (concat (file-name-as-directory auto)
 				   (TeX-strip-extension tex
@@ -3355,13 +3618,22 @@ If TEX is a directory, generate style files for all files in the directory."
   (TeX-auto-parse)
 
   (if (member nil (mapcar 'TeX-auto-entry-clear-p TeX-auto-parser))
-      (let ((style (TeX-strip-extension nil TeX-all-extensions t)))
+      (let ((style (TeX-strip-extension nil TeX-all-extensions t))
+	    (class-opts (if (boundp 'LaTeX-provided-class-options)
+			    LaTeX-provided-class-options))
+	    (pkg-opts (if (boundp 'LaTeX-provided-package-options)
+			  LaTeX-provided-package-options)))
 	(TeX-unload-style style)
-	(save-excursion
-	  (set-buffer (generate-new-buffer file))
+	(with-current-buffer (generate-new-buffer file)
 	  (erase-buffer)
-	  (insert "(TeX-add-style-hook \"" style "\"\n"
-		  " (lambda ()")
+	  (insert "(TeX-add-style-hook\n \""
+		  style "\"\n (lambda ()")
+	  (when class-opts
+	    (insert "\n   (TeX-add-to-alist 'LaTeX-provided-class-options\n"
+		    "                     '" (prin1-to-string class-opts) ")"))
+	  (when pkg-opts
+	    (insert "\n   (TeX-add-to-alist 'LaTeX-provided-package-options\n"
+		    "                     '" (prin1-to-string pkg-opts) ")"))
 	  (mapc (lambda (el) (TeX-auto-insert el style))
 		TeX-auto-parser)
 	  (insert "))\n\n")
@@ -3384,13 +3656,13 @@ If SKIP is not-nil, don't insert code for SKIP."
   (let ((name (symbol-name (nth TeX-auto-parser-add entry)))
 	(list (symbol-value (nth TeX-auto-parser-temporary entry))))
     (unless (null list)
-      (insert "\n    (" name)
+      (insert "\n   (" name)
       (dolist (el list)
 	(cond ((and (stringp el) (not (string= el skip)))
-	       (insert "\n     ")
+	       (insert "\n    ")
 	       (insert (prin1-to-string el)))
 	      ((not (stringp el))
-	       (insert "\n     ")
+	       (insert "\n    ")
 	       (insert "'" (prin1-to-string el)))))
       (insert ")"))))
 
@@ -3625,7 +3897,7 @@ Check for potential LaTeX environments."
   "File extensions recognized by AUCTeX."
   :group 'TeX-file)
 
-(defcustom TeX-file-extensions '("tex" "sty" "cls" "ltx" "texi" "texinfo" "dtx")
+(defcustom TeX-file-extensions '("tex" "sty" "cls" "ltx" "texi" "txi" "texinfo" "dtx")
   "*File extensions used by manually generated TeX files."
   :group 'TeX-file-extension
   :type '(repeat (string :format "%v")))
@@ -3667,6 +3939,11 @@ Access to the value should be through the function `TeX-output-extension'.")
 
 (defcustom BibTeX-file-extensions '("bib")
   "Valid file extensions for BibTeX files."
+  :group 'TeX-file-extension
+  :type '(repeat (string :format "%v")))
+
+(defcustom BibLaTeX-style-extensions '("bbx")
+  "Valid file extensions for BibLaTeX styles."
   :group 'TeX-file-extension
   :type '(repeat (string :format "%v")))
 
@@ -3861,7 +4138,7 @@ example.")
 (defun TeX-search-files-by-type (filetype &optional scope nodir strip)
   "Return a list of files in TeX's search path with type FILETYPE.
 FILETYPE is a symbol used to choose the search paths and
-extensions.  See `TeX-search-file-type-alist' for supported
+extensions.  See `TeX-search-files-type-alist' for supported
 symbols.
 
 The optional argument SCOPE sets the scope for the search.
@@ -3904,6 +4181,24 @@ If optional argument STRIP is non-nil, remove file extension."
 					       dir) t)))))
 	    (append local-files (TeX-search-files dirs exts nodir strip)))))))
 
+;;; Narrowing
+
+(defun TeX-narrow-to-group ()
+  "Make text outside current group invisible."
+  (interactive)
+  (save-excursion
+    (widen)
+    (let ((opoint (point))
+	  beg end)
+      (if (null (search-backward "{" nil t))
+	  (message "Nothing to be narrowed here.")
+	(setq beg (point))
+	(forward-sexp)
+	(setq end (point))
+	(if (< end opoint)
+	    (message "Nothing to be narrowed here.")
+	  (narrow-to-region beg end))))))
+(put 'TeX-narrow-to-group 'disabled t)
 
 ;;; Utilities
 ;;
@@ -4002,6 +4297,29 @@ mark which is sort of equivalent."
 (defalias 'TeX-run-mode-hooks
   (if (fboundp 'run-mode-hooks) 'run-mode-hooks 'run-hooks))
 
+(defun TeX-add-to-alist (alist-var new-alist)
+  "Add NEW-ALIST to the ALIST-VAR.
+If an element with the same key as the key of an element of
+NEW-ALIST is already present in ALIST-VAR, add the new values to
+it; if a matching element is not already present, append the new
+element to ALIST-VAR."
+  ;; Loop over all elements of NEW-ALIST.
+  (while new-alist
+    (let* ((new-element (car new-alist))
+	   ;; Get the element of ALIST-VAR with the same key of the current
+	   ;; element of NEW-ALIST, if any.
+	   (old-element (assoc (car new-element) (symbol-value alist-var))))
+      (if old-element
+	  (progn
+	    (set alist-var (delete old-element (symbol-value alist-var)))
+	    ;; Append to `old-element' the values of the current element of
+	    ;; NEW-ALIST.
+	    (mapc (lambda (elt) (add-to-list 'old-element elt t))
+		  (cdr new-element))
+	    (set alist-var (add-to-list alist-var old-element t)))
+	(add-to-list alist-var new-element t)))
+    ;; Next element of NEW-ALIST.
+    (setq new-alist (cdr new-alist))))
 
 ;;; Syntax Table
 
@@ -4157,7 +4475,7 @@ Brace insertion is only done if point is in a math construct and
     (define-key map "\C-c?"    'TeX-doc)
     (define-key map "\C-c\C-i" 'TeX-goto-info-page)
     (define-key map "\r"       'TeX-newline)
-    
+
     ;; From tex.el
     (define-key map "\""       'TeX-insert-quote)
     (define-key map "$"        'TeX-insert-dollar)
@@ -4171,14 +4489,14 @@ Brace insertion is only done if point is in a math construct and
     (define-key map "^"        'TeX-insert-sub-or-superscript)
     (define-key map "_"        'TeX-insert-sub-or-superscript)
     (define-key map "\e\t"     'TeX-complete-symbol) ;*** Emacs 19 way
-    
+
     (define-key map "\C-c'"    'TeX-comment-or-uncomment-paragraph) ;*** Old way
     (define-key map "\C-c:"    'TeX-comment-or-uncomment-region) ;*** Old way
     (define-key map "\C-c\""   'TeX-uncomment) ;*** Old way
-    
+
     (define-key map "\C-c;"    'TeX-comment-or-uncomment-region)
     (define-key map "\C-c%"    'TeX-comment-or-uncomment-paragraph)
-    
+
     (define-key map "\C-c\C-t\C-p"   'TeX-PDF-mode)
     (define-key map "\C-c\C-t\C-i"   'TeX-interactive-mode)
     (define-key map "\C-c\C-t\C-s"   'TeX-source-correlate-mode)
@@ -4260,6 +4578,12 @@ Brace insertion is only done if point is in a math construct and
        :help "Kill the current TeX process"]
       ["Next Error" TeX-next-error
        :help "Jump to the next error of the last TeX run"]
+      ["Previous Error" TeX-previous-error
+       :help "Jump to the previous error of the last TeX run"
+       :visible TeX-parse-all-errors]
+      ["Error Overview" TeX-error-overview
+       :help "Open an overview of errors occured in the last TeX run"
+       :visible (and TeX-parse-all-errors (fboundp 'tabulated-list-mode))]
       ["Quick View" TeX-view
        :help "Start a viewer without prompting"]
       "-"
@@ -4287,7 +4611,7 @@ Brace insertion is only done if point is in a math construct and
        ["Debug Warnings" TeX-toggle-debug-warnings
 	:style toggle :selected TeX-debug-warnings
 	:help "Make \"Next Error\" show warnings"])))
-   (let ((file 'TeX-command-on-current));; is this actually needed?
+   (let ((file 'TeX-command-on-current)) ;; is this actually needed?
      (TeX-maybe-remove-help
       (delq nil
 	    (mapcar 'TeX-command-menu-entry
@@ -5061,7 +5385,7 @@ See also `TeX-font-replace-macro' and `TeX-font-replace-function'."
 		(delete-char 3)
 		nil)
 	    t))
-	(delete-backward-char 1))
+	(delete-char -1))
     (insert end)))
 
 (defun TeX-font-replace-macro (start end)
@@ -5093,7 +5417,7 @@ See also `TeX-font-replace' and `TeX-font-replace-function'."
 	(forward-sexp 2))
       (save-excursion
 	(replace-match start t t))
-      (delete-backward-char 1)
+      (delete-char -1)
       (insert end))))
 
 ;;; Dollars
@@ -5119,19 +5443,42 @@ See also `TeX-font-replace' and `TeX-font-replace-function'."
   :group 'TeX-macro
   :type 'boolean)
 
-(defcustom TeX-math-close-double-dollar nil
-  "If non-nil close double dollar math by typing a single `$'."
+(defcustom TeX-electric-math nil
+  "If non-nil, when outside math mode `TeX-insert-dollar' will
+insert symbols for opening and closing inline equation and put
+the point between them.  If there is an active region,
+`TeX-insert-dollar' will put around it symbols for opening and
+closing inline equation and keep the region active, with point
+after closing symbol.  If you press `$' again, you can toggle
+between inline equation, display equation, and no equation.
+
+If non-nil and point is inside math mode right between a couple
+of single dollars, pressing `$' will insert another pair of
+dollar signs and leave the point between them.
+
+If nil, `TeX-insert-dollar' will simply insert \"$\" at point,
+this is the default.
+
+If non-nil, this variable is a cons cell whose CAR is the string
+to insert before point, the CDR is the string to insert after
+point.  You can choose between \"$...$\" and \"\\(...\\)\"."
   :group 'TeX-macro
-  :type 'boolean)
+  :type '(choice (const :tag "No electricity" nil)
+		 (const :tag "$...$" ("$" . "$"))
+		 (const :tag "\\(...\\)" ("\\(" . "\\)"))
+		 (cons :tag "Other"
+		       (string :tag "Insert before point")
+		       (string :tag "Insert after point"))))
 
 (defun TeX-insert-dollar (&optional arg)
   "Insert dollar sign.
 
 If current math mode was not entered with a dollar, refuse to
 insert one.  Show matching dollar sign if this dollar sign ends
-the TeX math mode and `blink-matching-paren' is non-nil.  Ensure
-double dollar signs match up correctly by inserting extra dollar
-signs when needed.
+the TeX math mode and `blink-matching-paren' is non-nil.
+
+When outside math mode, the behavior is controlled by the variable
+`TeX-electric-math'.
 
 With raw \\[universal-argument] prefix, insert exactly one dollar
 sign.  With optional ARG, insert that many dollar signs."
@@ -5143,40 +5490,91 @@ sign.  With optional ARG, insert that many dollar signs."
    (arg
     ;; Numerical arg inserts that many
     (insert (make-string (prefix-numeric-value arg) ?\$)))
-   ((TeX-escaped-p)
-    ;; This is escaped with `\', so just insert one.
+   ((or (TeX-escaped-p) (TeX-verbatim-p))
+    ;; Point is escaped with `\' or is in a verbatim-like construct, so just
+    ;; insert one $.
     (insert "$"))
    ((texmathp)
     ;; We are inside math mode
-    (if (and (stringp (car texmathp-why))
-	     (string-equal (substring (car texmathp-why) 0 1) "\$"))
-	;; Math mode was turned on with $ or $$ - so finish it accordingly.
-	(progn
-	  (if TeX-math-close-double-dollar
-	      (insert (car texmathp-why))
-	    (insert "$"))
-	  (when (and blink-matching-paren
-		     (or (string= (car texmathp-why) "$")
-			 (zerop (mod (save-excursion
-				       (skip-chars-backward "$")) 2))))
-	    (save-excursion
-	      (goto-char (cdr texmathp-why))
-	      (if (pos-visible-in-window-p)
-		  (sit-for 1)
-		(message "Matches %s"
-			 (buffer-substring
-			  (point) (progn (end-of-line) (point))))))))
+    (cond
+     ((and TeX-electric-math
+	   (eq (preceding-char) ?\$)
+	   (eq (following-char) ?\$))
+      ;; Point is between "$$" and `TeX-electric-math' is non-nil - insert
+      ;; another pair of dollar signs and leave point between them.
+      (insert "$$")
+      (backward-char))
+     ((and (stringp (car texmathp-why))
+	   (string-equal (substring (car texmathp-why) 0 1) "\$"))
+      ;; Math mode was turned on with $ or $$ - insert a single $.
+      (insert "$")
+      ;; Compatibility, `TeX-math-close-double-dollar' has been removed
+      ;; after AUCTeX 11.87.
+      (if (boundp 'TeX-math-close-double-dollar)
+	  (message
+	   (concat "`TeX-math-close-double-dollar' has been removed,"
+		   "\nplease use `TeX-electric-math' instead.")))
+      (when (and blink-matching-paren
+		 (or (string= (car texmathp-why) "$")
+		     (zerop (mod (save-excursion
+				   (skip-chars-backward "$")) 2))))
+	(save-excursion
+	  (goto-char (cdr texmathp-why))
+	  (if (pos-visible-in-window-p)
+	      (sit-for blink-matching-delay)
+	    (message "Matches %s"
+		     (buffer-substring
+		      (point) (progn (end-of-line) (point))))))))
+     (t
       ;; Math mode was not entered with dollar - we cannot finish it with one.
       (message "Math mode started with `%s' cannot be closed with dollar"
 	       (car texmathp-why))
-      (insert "$")))
+      (insert "$"))))
    (t
     ;; Just somewhere in the text.
-    (insert "$")))
+    (cond
+     ((and TeX-electric-math (TeX-active-mark))
+      (if (> (point) (mark))
+	  (exchange-point-and-mark))
+      (cond
+       ;; $...$ to $$...$$
+       ((and (eq last-command 'TeX-insert-dollar)
+	     (re-search-forward "\\=\\$\\([^$][^z-a]*[^$]\\)\\$" (mark) t))
+	(replace-match "$$\\1$$")
+	(set-mark (match-beginning 0)))
+       ;; \(...\) to \[...\]
+       ((and (eq last-command 'TeX-insert-dollar)
+	     (re-search-forward "\\=\\\\(\\([^z-a]*\\)\\\\)" (mark) t))
+	(replace-match "\\\\[\\1\\\\]")
+	(set-mark (match-beginning 0)))
+       ;; Strip \[...\] or $$...$$
+       ((and (eq last-command 'TeX-insert-dollar)
+	     (or (re-search-forward "\\=\\\\\\[\\([^z-a]*\\)\\\\\\]" (mark) t)
+		 (re-search-forward "\\=\\$\\$\\([^z-a]*\\)\\$\\$" (mark) t)))
+	(replace-match "\\1")
+	(set-mark (match-beginning 0)))
+       (t
+	;; We use `save-excursion' because point must be situated before opening
+	;; symbol.
+	(save-excursion (insert (car TeX-electric-math)))
+	(exchange-point-and-mark)
+	(insert (cdr TeX-electric-math))))
+      ;; Keep the region active.
+      (TeX-activate-region))
+     (TeX-electric-math
+      (insert (car TeX-electric-math))
+      (save-excursion (insert (cdr TeX-electric-math)))
+      (if blink-matching-paren
+	  (progn
+	    (backward-char)
+	    (sit-for blink-matching-delay)
+	    (forward-char))))
+     ;; In any other case just insert a single $.
+     ((insert "$")))))
   (TeX-math-input-method-off))
 
 (defvar TeX-math-input-method-off-regexp
-  "^\\(chinese\\|japanese\\|korean\\|bulgarian\\|russian\\)"
+  (concat "^" (regexp-opt '("chinese" "japanese" "korean" "bulgarian" "russian") t))
   "Regexp matching input methods to be deactivated when entering math mode.")
 
 (defun TeX-math-input-method-off ()
@@ -5189,18 +5587,19 @@ sign.  With optional ARG, insert that many dollar signs."
 
 ;;; Simple Commands
 
-(defun TeX-normal-mode (arg)
+(defun TeX-normal-mode (&optional arg)
   "Remove all information about this buffer, and apply the style hooks again.
 Save buffer first including style information.
 With optional argument ARG, also reload the style hooks."
-  ;; FIXME: Shouldn't it be (&optional arg)?  -- rs
   (interactive "*P")
   (if arg
       (setq TeX-style-hook-list nil
 	    BibTeX-global-style-files nil
 	    BibTeX-global-files nil
+	    BibLaTeX-global-style-files nil
 	    TeX-Biber-global-files nil
-	    TeX-global-input-files nil))
+	    TeX-global-input-files nil
+	    LaTeX-global-class-files nil))
   (let ((TeX-auto-save t))
     (if (buffer-modified-p)
 	(save-buffer)
@@ -5235,7 +5634,7 @@ quotes are inserted only after \"."
   "Alist for overriding the default language-specific quote insertion.
 First element in each item is the name of the language as set by
 the language style file as a string.  Second element is the
-opening quotation mark.  Third elemxent is the closing quotation
+opening quotation mark.  Third element is the closing quotation
 mark.  Opening and closing quotation marks can be specified
 directly as strings or as functions returning a string.  Fourth
 element is a boolean specifying insertion behavior, overriding
@@ -5310,7 +5709,7 @@ With prefix argument FORCE, always inserts \" characters."
 			    (concat (regexp-quote open-quote) "\\|"
 				    (regexp-quote close-quote))
 			    (max (length open-quote) (length close-quote))))
-			 (delete-backward-char (length (match-string 0)))
+			 (delete-char (- (length (match-string 0))))
 			 "\"\"")
 			((< (save-excursion (skip-chars-backward "\"")) -1)
 			 ?\")
@@ -5319,15 +5718,15 @@ With prefix argument FORCE, always inserts \" characters."
 			((save-excursion
 			   (forward-char -1)
 			   (bobp))
-			 (delete-backward-char 1)
+			 (delete-char -1)
 			 open-quote)
 			((save-excursion
 			   (forward-char -2) ;;; at -1 there is double quote
 			   (looking-at "[ \t\n]\\|\\s("))
-			 (delete-backward-char 1)
+			 (delete-char -1)
 			 open-quote)
 			(t
-			 (delete-backward-char 1)
+			 (delete-char -1)
 			 close-quote)))
 	(insert (cond ((bobp)
 		       open-quote)
@@ -5338,12 +5737,12 @@ With prefix argument FORCE, always inserts \" characters."
 		      ((save-excursion
 			 (forward-char (- (length open-quote)))
 			 (looking-at (regexp-quote open-quote)))
-		       (delete-backward-char (length open-quote))
+		       (delete-char (- (length open-quote)))
 		       ?\")
 		      ((save-excursion
 			 (forward-char (- (length close-quote)))
 			 (looking-at (regexp-quote close-quote)))
-		       (delete-backward-char (length close-quote))
+		       (delete-char (- (length close-quote)))
 		       ?\")
 		      ((save-excursion
 			 (forward-char -1)
@@ -5451,35 +5850,21 @@ Your bug report will be posted to the AUCTeX bug reporting list.
 	      (call-process "texdoc" nil 0 nil "--view" doc)))
     (latex-info (latex-mode)
 		(lambda ()
-		  (when (condition-case nil
-			    (save-window-excursion
-			      (let ((buf (generate-new-buffer-name "*info*")))
-				(info "latex" buf)
-				(kill-buffer buf))
-			      t)
-			  (error nil))
-		    (mapcar (lambda (x)
-			      (let ((x (car x)))
-				(if (string-match "\\`\\\\" x)
-				    (substring x 1) x)))
-			    (info-lookup->completions 'symbol 'latex-mode))))
+		  (mapcar (lambda (x)
+			    (let ((x (car x)))
+			      (if (string-match "\\`\\\\" x)
+				  (substring x 1) x)))
+			  (info-lookup->completions 'symbol 'latex-mode)))
 		(lambda (doc)
 		  (info-lookup-symbol (concat "\\" doc) 'latex-mode)))
     (texinfo-info (texinfo-mode)
 		  (lambda ()
-		    (when (condition-case nil
-			      (save-window-excursion
-				(let ((buf (generate-new-buffer-name "*info*")))
-				  (info "texinfo" buf)
-				  (kill-buffer buf))
-				t)
-			    (error nil))
-		      (mapcar (lambda (x)
-				(let ((x (car x)))
-				  (if (string-match "\\`@" x)
-				      (substring x 1) x)))
-			      (info-lookup->completions 'symbol
-							'texinfo-mode))))
+		    (mapcar (lambda (x)
+			      (let ((x (car x)))
+				(if (string-match "\\`@" x)
+				    (substring x 1) x)))
+			    (info-lookup->completions 'symbol
+						      'texinfo-mode)))
 		  (lambda (doc)
 		    (info-lookup-symbol (concat "@" doc) 'texinfo-mode))))
   "Alist of backends used for looking up documentation.
@@ -5587,7 +5972,7 @@ NAME may be a package, a command, or a document."
 	(regexp (concat "\\`\\("
 			(mapconcat (lambda (dir)
 				     (regexp-quote
-				      (expand-file-name 
+				      (expand-file-name
 				       (file-name-as-directory dir))))
 				   (append (when (file-name-directory name)
 					     (list (file-name-directory name)))
@@ -5646,9 +6031,36 @@ NAME may be a package, a command, or a document."
 
 ;; delsel.el, `delete-selection-mode'
 (put 'TeX-newline 'delete-selection t)
-(put 'TeX-insert-dollar 'delete-selection t)
 (put 'TeX-insert-quote 'delete-selection t)
 (put 'TeX-insert-backslash 'delete-selection t)
+
+(defun TeX-how-many (regexp &optional rstart rend)
+  "Compatibily function for `how-many'.
+Supports restriction to a region where the XEmacs version doesn't
+and always returns the number of matches, also in XEmacs and GNU
+Emacs 21."
+  ;; Emacs >= 22 does what we want.
+  (if (>= emacs-major-version 22)
+      (how-many regexp rstart rend)
+    ;; XEmacs and GNU Emacs 21 don't return the number of matches but only print
+    ;; it.
+    (let ((string
+	   (if (featurep 'xemacs)
+	       ;; XEmacs doesn't even support restriction to a region.
+	       (save-excursion
+		 (save-restriction
+		   (when (and (integer-or-marker-p rstart)
+			      (integer-or-marker-p rend))
+		     (narrow-to-region rstart rend)
+		     (goto-char (point-min)))
+		   (how-many regexp)))
+	     (how-many regexp rstart rend))))
+      ;; Hide the message printed by `how-many'.
+      (message "")
+      ;; Select the number of occurrences and convert it to a number.
+      (if (string-match "\\([0-9]+\\).*" string)
+	  (string-to-number (replace-match "\\1" nil nil string))
+	0))))
 
 (provide 'tex)
 

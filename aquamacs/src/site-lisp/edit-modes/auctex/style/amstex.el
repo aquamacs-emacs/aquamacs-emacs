@@ -45,7 +45,8 @@
  (function
   (lambda ()
     (unless (memq major-mode '(plain-tex-mode ams-tex-mode))
-      (TeX-run-style-hooks "amsmath")))))
+      (TeX-run-style-hooks "amsmath"))))
+ LaTeX-dialect)
 
 (defvar LaTeX-amstex-package-options '("noamsfonts" "psamsfonts" 
 				       "intlimits" "nointlimits"

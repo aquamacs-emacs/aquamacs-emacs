@@ -1,8 +1,9 @@
 ;;; varioref.el --- AUCTeX style file with support for varioref.sty
 
-;; Copyright (C) 1999 Free Software Foundation, Inc.
+;; Copyright (C) 1999, 2013 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <dominik@strw.leidenuniv.nl>
+;;         Mads Jensen <mje@inducks.org>
 ;; Maintainer: auctex-devel@gnu.org
 
 ;; This file is part of AUCTeX.
@@ -26,38 +27,53 @@
 
 (TeX-add-style-hook "varioref"
    (lambda ()
-     
+
      (TeX-add-symbols
 
       ;; The macros with label arguments
-      '("vref" TeX-arg-label)
-      '("vpageref" [ "Same page text" ] [ "different page text" ] TeX-arg-label)
-      '("fullref" TeX-arg-label)
+      '("vref" TeX-arg-ref)
+      '("Vref" TeX-arg-ref)
+      '("vrefrange" [ "Same page text" ] TeX-arg-ref TeX-arg-ref)
+      '("vrefrange*" [ "Same page text" ] TeX-arg-ref TeX-arg-ref)
+      '("vref*" TeX-arg-ref)
+      '("Vref" TeX-arg-ref)
+      '("Ref" TeX-arg-ref)
+      '("vpageref" [ "Same page text" ] [ "Different page text" ] TeX-arg-ref)
+      '("vpageref*" [ "Same page text" ] [ "Different page text" ]
+        TeX-arg-ref)
+      '("fullref" TeX-arg-ref)
+      '("labelformat" TeX-arg-counter t)
+
+      '("vpagerefrange" [ "Same page text" ] TeX-arg-ref TeX-arg-ref)
+      '("vpagerefrange*" [ "Same page text" ] TeX-arg-ref TeX-arg-ref)
 
       ;; And the other macros used for customization
       "reftextbefore" "reftextfacebefore"
-      "reftextafter"  "reftextfaceafter"
-      "reftextfaraway" "vreftextvario" "vrefwarning")
+      "reftextafter"  "reftextfaceafter" "reftexlabelrange"
+      "reftextfaraway" "vreftextvario" "vrefwarning"
+      "vpagerefnum" "vrefshowerrors")
 
-     ;; Install completion for labels
+     ;; Install completion for labels.  Only offer completion for
+     ;; commands that take only one reference as an argument
      (setq TeX-complete-list
 	   (append
-	    '(("\\\\vref{\\([^{}\n\r\\%,]*\\)" 1 LaTeX-label-list "}")
-	      ("\\\\vpageref\\(\\[[^]]*\\]\\)*{\\([^{}\n\r\\%,]*\\)" 
+	    '(("\\\\[Vv]ref{\\([^{}\n\r\\%,]*\\)" 1 LaTeX-label-list "}")
+              ("\\\\vref\\*?{\\([^{}\n\r\\%,]*\\)" 1 LaTeX-label-list "}")
+              ("\\\\Ref{\\([^{}\n\r\\%,]*\\)" 1 LaTeX-label-list "}")
+              ("\\\\vref\\*{\\([^{}\n\r\\%,]*\\)" 1 LaTeX-label-list "}")
+              ("\\\\fullref{\\([^{}\n\r\\%,]*\\)" 1 LaTeX-label-list "}")
+              ("\\\\vpageref\\*?\\(\\[[^]]*\\]\\)*{\\([^{}\n\r\\%,]*\\)"
 	       2 LaTeX-label-list "}"))
-	    TeX-complete-list))))
+	    TeX-complete-list)))
+   LaTeX-dialect)
 
-(defvar LaTeX-varioref-package-options '("draft" "final" "afrikaans" 
-				       "american" "austrian" "naustrian"
-				       "brazil" "breton" "catalan" "croatian"
-				       "czech" "danish" "dutch" "english"
-				       "esperanto" "finnish" "french"
-				       "galician" "german" "ngerman" "greek"
-				       "italian" "magyar" "norsk" "nynorsk"
-				       "polish" "portuges" "romanian"
-				       "russian" "slovak" "slovene"
-				       "spanish" "swedish" "turkish"
-				       "francais" "germanb")
+(defvar LaTeX-varioref-package-options
+  '("draft" "final" "afrikaans" "american" "austrian" "naustrian" "basque"
+    "brazil" "breton" "bahasam" "catalan" "croatian" "czech" "danish"
+    "dutch" "english" "esperanto" "finnish" "french" "galician" "german"
+    "icelandic" "ngerman" "greek" "italian" "magyar" "norsk" "nynorsk"
+    "polish" "portuges" "romanian" "russian" "slovak" "slovene"
+    "spanish" "swedish" "turkish" "ukrainian" "francais" "germanb")
   "Package options for the varioref package.")
 
 ;;; varioref.el ends here

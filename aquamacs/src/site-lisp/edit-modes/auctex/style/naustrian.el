@@ -34,6 +34,7 @@
 (TeX-add-style-hook
  "naustrian"
  (lambda ()
-   (TeX-run-style-hooks "ngerman")))
+   (TeX-run-style-hooks "ngerman"))
+ LaTeX-dialect)
 
 ;;; naustrian.el ends here

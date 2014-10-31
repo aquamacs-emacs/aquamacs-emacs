@@ -38,8 +38,8 @@
 
 ;; New versions of this package (if they exist) may be found at:
 ;;   http://people.debian.org/~psg/elisp/bib-cite.el
-;; and in AUCTeX's CVS archive at
-;;   http://savannah.gnu.org/cgi-bin/viewcvs/auctex/auctex/
+;; and in AUCTeX's Git archive at
+;;   http://git.savannah.gnu.org/cgit/auctex.git
 
 ;; Operating Systems:
 ;;  Works in unix, DOS and OS/2.  Developped under Linux.
@@ -756,14 +756,14 @@ runs bib-find, and [mouse-3] runs bib-display."
     ;; Added for version 2.19
     (if (boundp 'tags-always-exact)
 	(progn
-	  (make-local-variable 'tags-always-exact)
-	  (setq tags-always-exact nil)))
+	  (set (make-local-variable 'tags-always-exact) nil)))
     ;; mouse overlay
     (if bib-highlight-mouse-t
 	(progn
 	  (bib-cite-setup-highlight-mouse-keymap)
 	  (bib-highlight-mouse)
-	  (make-local-hook 'after-change-functions)
+	  (when bib-cite-is-XEmacs
+	    (make-local-hook 'after-change-functions))
 	  (add-hook 'after-change-functions
 		    'bib-cite-setup-mouse-function nil t)))
     (if bib-cite-is-XEmacs
@@ -794,8 +794,7 @@ runs bib-find, and [mouse-3] runs bib-display."
 ;; own.
 (defun bib-cite-setup-highlight-mouse-keymap ()
   "Set up the bib-cite text in the current buffer to be clickable."
-  (make-local-variable 'bib-highlight-mouse-keymap)
-  (setq bib-highlight-mouse-keymap
+  (set (make-local-variable 'bib-highlight-mouse-keymap)
    ;;; First, copy the local keymap so we don't have `disappearing' menus
    ;;; when the mouse is moved over a \ref, \label or \cite command.
 
@@ -942,6 +941,7 @@ runs bib-find, and [mouse-3] runs bib-display."
   (eval-after-load
    "bibtex"
    '(progn
+      (add-hook 'bibtex-mode-hook 'TeX-bibtex-set-BibTeX-dialect)
       (cond
        ((lookup-key bibtex-mode-map [menu-bar move/edit])
 	(define-key-after
@@ -1144,8 +1144,7 @@ by using bib-apropos sequentially."
 			    (not (string-equal "*Help*" (buffer-name)))))
 	 (bib-buffer (or (and new-buffer-f (bib-get-bibliography nil))
 			 (current-buffer))))
-    (save-excursion
-      (set-buffer bib-buffer)
+    (with-current-buffer bib-buffer
       (goto-char (point-min))
       (while (and (re-search-forward "^[ \t]*@" nil t)
 		  (re-search-forward keyword nil t))
@@ -1232,8 +1231,7 @@ to create a bibtex file containing only the references used in the document."
       (progn
 	(copy-face 'bold 'red-bold)
 	(set-face-foreground 'red-bold "red")))
-  (save-excursion
-    (set-buffer "*Help*")
+  (with-current-buffer "*Help*"
     (let ((before-change-functions) (after-change-functions))
       (put-text-property (point-min)(or limit (point-max))
 			 'face 'red-bold))))
@@ -1332,8 +1330,7 @@ See variables bib-etags-command and bib-etags-filename"
        (concat bib-etags-append-command the-tags-file " " the-file))
       (setq the-file-list (cdr the-file-list)))
     (if the-tags-buffer                 ;buffer existed; we must refresh it.
-	(save-excursion
-	  (set-buffer the-tags-buffer)
+	(with-current-buffer the-tags-buffer
 	  (revert-buffer t t)))
 
     ;; Check value of tags-file-name against the-tags-file
@@ -1352,8 +1349,7 @@ See variables bib-etags-command and bib-etags-filename"
     ;; Skip this in XEmacs (Changed by Anders Stenman)
     (if (and (not (string-match "XEmacs\\|Lucid" emacs-version))
 	     (get-file-buffer the-tags-file))
-	(save-excursion
-	  (set-buffer (get-file-buffer the-tags-file))
+	(with-current-buffer (get-file-buffer the-tags-file)
 	  (set (make-local-variable 'tags-file-name) the-tags-file))))
 
 
@@ -1414,7 +1410,7 @@ See variables bib-etags-command and bib-etags-filename"
 	  (re-search-forward
 	   (concat
 	    "\\\\\\(" (substring bib-ref-regexp 2)
-	    "\\|label\\|[A-Za-z]*cite[A-Za-z]*\\(\\[.*\\]\\)?\\){[^}]*}")
+	    "\\|label\\|[A-Za-z]*cite[A-Za-z]*\\(\\[[^]]*\\]\\)*\\){[^}]*}")
 	   nil t)
 	(setq s (match-beginning 0))
 	(setq e (match-end 0))
@@ -2186,8 +2182,7 @@ Sets global variable bib-document-TeX-files-warnings."
 	  (kill-buffer tex-buffer)
 	  (error
 	   "Sorry, but this is not a multi-file document (Try C-u C-c C-n if using auctex)")))
-    (save-excursion
-      (set-buffer tex-buffer)
+    (with-current-buffer tex-buffer
       ;; set its directory so relative includes work without expanding
       (setq default-directory dir)
       (insert-file-contents masterfile)
@@ -2237,8 +2232,7 @@ Sets global variable bib-document-citekeys-obarray-warnings."
 			 master-aux master-tex)))
       (let ((work-buffer (get-buffer-create "*bib-cite-work*"))
 	    (keys-obarray (make-vector 201 0)))
-	(save-excursion
-	  (set-buffer work-buffer)
+	(with-current-buffer work-buffer
 	  (insert-file-contents master-aux)
 	  ;; Because we will be looking for \input statements, we need to set
 	  ;; the default directory to that of the master file.
@@ -2353,10 +2347,9 @@ accents embeded in bibtex entries."
 	;; Path is relative to the master directory
 	(default-directory (bib-master-directory))
 	(the-name)(the-warnings)(the-file))
-    (save-excursion
+    (with-current-buffer bib-buffer
       ;; such that forward-sexp works with embeeded \" in german,
       ;; and unbalanced ()
-      (set-buffer bib-buffer)
       (erase-buffer)
       (set-syntax-table text-mode-syntax-table)
 ;;      (if (boundp 'bibtex-mode-syntax-table)
@@ -2385,14 +2378,12 @@ accents embeded in bibtex entries."
 		(and (boundp 'TeX-check-path)
 		     (psg-checkfor-file-list the-name TeX-check-path))))
       (if the-file
-	  (progn
-	    (save-excursion
-	      (set-buffer bib-buffer)
-	      (goto-char (point-max))
-	      (if include-filenames-f
-		  (insert "%%%Filename: " the-file "\n"))
-	      (insert-file-contents the-file nil)
-	      (goto-char 1)))
+	  (with-current-buffer bib-buffer
+	    (goto-char (point-max))
+	    (if include-filenames-f
+		(insert "%%%Filename: " the-file "\n"))
+	    (insert-file-contents the-file nil)
+	    (goto-char 1))
 	(setq the-warnings
 	      (concat the-warnings "Could not read file: " the-name "\n"))))
     (if the-warnings

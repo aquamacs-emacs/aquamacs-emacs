@@ -33,6 +33,7 @@
 (TeX-add-style-hook
  "CJKutf8"
  (lambda ()
-   (TeX-run-style-hooks "CJK")))
+   (TeX-run-style-hooks "CJK"))
+ LaTeX-dialect)
 
 ;;; CJKutf8.el ends here

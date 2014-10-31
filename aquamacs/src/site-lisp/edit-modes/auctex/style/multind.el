@@ -53,7 +53,8 @@
 
     ;; RefTeX support
     (and (fboundp 'reftex-add-index-macros)
-	 (reftex-add-index-macros '(multind)))))
+	 (reftex-add-index-macros '(multind))))
+  LaTeX-dialect)
 
 (defvar LaTeX-multind-package-options nil
   "Package options for the multind package.")

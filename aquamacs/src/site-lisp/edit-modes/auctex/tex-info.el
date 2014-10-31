@@ -35,15 +35,14 @@
   (defalias 'texinfo-mode 'TeX-texinfo-mode))
 
 ;;; Environments:
-
 (defvar Texinfo-environment-list
   '(("cartouche") ("command") ("copying") ("defcv") ("deffn") ("defivar")
     ("defmac") ("defmethod") ("defop") ("defopt") ("defspec")
     ("deftp") ("deftypefn") ("deftypefun") ("deftypevar") ("deftypevr")
     ("defun") ("defvar") ("defvr") ("description") ("detailmenu")
     ("direntry") ("display") ("documentdescription") ("enumerate")
-    ("example") ("flushleft") ("flushright") ("format") ("ftable")
-    ("group") ("ifclear") ("ifdocbook") ("ifhtml") ("ifinfo")
+    ("example") ("float") ("flushleft") ("flushright") ("format") ("ftable")
+    ("group") ("html") ("ifclear") ("ifdocbook") ("ifhtml") ("ifinfo")
     ("ifnotdocbook") ("ifnothtml") ("ifnotinfo") ("ifnotplaintext")
     ("ifnottex") ("ifnotxml") ("ifplaintext") ("ifset") ("iftex")
     ("ifxml") ("ignore") ("itemize") ("lisp") ("macro") ("menu")
@@ -184,7 +183,7 @@ environments."
 	(unless (= (1+ c) count)
 	  (beginning-of-line 0)))
       (setq beg (point)))
-    (set-mark end)
+    (push-mark end)
     (goto-char beg)
     (TeX-activate-region)))
 
@@ -265,7 +264,7 @@ the section."
 	    (when  (looking-at "^\\s-*@node\\_>")
 	      (set boundary (point))))))
 
-      (set-mark end)
+      (push-mark end)
       (goto-char beg)
       (TeX-activate-region) )))
 
@@ -285,7 +284,7 @@ beginning of keyword `@node' or `@bye'."
 		    (progn (beginning-of-line) (point))))))
 
     (when (and beg end)
-      (set-mark end)
+      (push-mark end)
       (goto-char beg)
       (TeX-activate-region) )))
 
@@ -392,10 +391,17 @@ for @node."
   "Hook function to plug Texinfo into RefTeX."
   ;; force recompilation of variables
   (when (string= TeX-base-mode-name "Texinfo")
+    ;; dirty temporary hook to remove when reftex has a Texinfo builtin
+    ;; TODO --- taken on <2014-01-06 mon> --- remove the dirty trick once reftex
+    ;; has been corrected for long enough a time
+    (unless (assq 'Texinfo reftex-label-alist-builtin)
+      (setq reftex-label-alist-builtin (append reftex-label-alist-builtin
+					       '((Texinfo "Texinfo default environments" nil)))))
     (dolist (v `((reftex-section-pre-regexp . "@")
 		 ; section post-regexp must contain exactly one group
 		 (reftex-section-post-regexp . "\\([ \t]+\\)")
 		 (reftex-section-info-function . Texinfo-reftex-section-info)
+		 (reftex-default-label-alist-entries . (Texinfo))
 	       (reftex-section-levels
 		. ,(mapcar
 		    (lambda (x)
@@ -405,7 +411,6 @@ for @node."
 			(cons (car x) (cadr x))))
 		    texinfo-section-list))))
       (set (make-local-variable (car v) ) (cdr v)))
-    (setq reftex-tables-dirty t)
     (reftex-ensure-compiled-variables)))
 
 ;;; Keymap:
@@ -532,43 +537,34 @@ value of `Texinfo-mode-hook'."
   (interactive)
   (kill-all-local-variables)
   (setq TeX-mode-p t)
+  (setq TeX-sentinel-default-function 'TeX-TeX-sentinel)
   ;; Mostly stolen from texinfo.el
   (setq TeX-base-mode-name "Texinfo")
   (setq major-mode 'texinfo-mode)
   (use-local-map Texinfo-mode-map)
   (set-syntax-table texinfo-mode-syntax-table)
-  (make-local-variable 'page-delimiter)
-  (setq page-delimiter
-	(concat
-	 "^@node [ \t]*[Tt]op\\|^@\\("
-	 texinfo-chapter-level-regexp
-	 "\\)"))
-  (make-local-variable 'require-final-newline)
-  (setq require-final-newline t)
-  (make-local-variable 'indent-tabs-mode)
-  (setq indent-tabs-mode nil)
-  (make-local-variable 'paragraph-separate)
-  (setq paragraph-separate
-	(concat "\b\\|^@[a-zA-Z]*[ \n]\\|" paragraph-separate))
-  (make-local-variable 'paragraph-start)
-  (setq paragraph-start
-	(concat "\b\\|^@[a-zA-Z]*[ \n]\\|" paragraph-start))
-  (make-local-variable 'fill-column)
-  (setq fill-column 72)
-  (make-local-variable 'comment-start)
-  (setq comment-start "@c ")
-  (make-local-variable 'comment-start-skip)
-  (setq comment-start-skip "@c +\\|@comment +")
+
+  (set (make-local-variable 'page-delimiter)
+       (concat
+	"^@node [ \t]*[Tt]op\\|^@\\("
+	texinfo-chapter-level-regexp
+	"\\)"))
+  (set (make-local-variable 'require-final-newline) t)
+  (set (make-local-variable 'indent-tabs-mode) nil)
+  (set (make-local-variable 'paragraph-separate)
+       (concat "\b\\|^@[a-zA-Z]*[ \n]\\|" paragraph-separate))
+  (set (make-local-variable 'paragraph-start)
+       (concat "\b\\|^@[a-zA-Z]*[ \n]\\|" paragraph-start))
+  (set (make-local-variable 'fill-column) 72)
+  (set (make-local-variable 'comment-start) "@c ")
+  (set (make-local-variable 'comment-start-skip) "@c +\\|@comment +")
   (set (make-local-variable 'comment-use-syntax) nil)
-  (make-local-variable 'words-include-escapes)
-  (setq words-include-escapes t)
-  (if (not (boundp 'texinfo-imenu-generic-expression))
+  (set (make-local-variable 'words-include-escapes) t)
+  (if (boundp 'texinfo-imenu-generic-expression)
       ;; This was introduced in 19.30.
-      ()
-    (make-local-variable 'imenu-generic-expression)
-    (setq imenu-generic-expression texinfo-imenu-generic-expression))
-  (make-local-variable 'font-lock-defaults)
-  (setq font-lock-defaults
+      (set (make-local-variable 'imenu-generic-expression) texinfo-imenu-generic-expression))
+
+  (set (make-local-variable 'font-lock-defaults)
 	;; COMPATIBILITY for Emacs 20
 	(if (boundp 'texinfo-font-lock-syntactic-keywords)
 	    '(texinfo-font-lock-keywords
@@ -579,48 +575,46 @@ value of `Texinfo-mode-hook'."
   (if (not (boundp 'texinfo-section-list))
       ;; This was included in 19.31.
       ()
-    (make-local-variable 'outline-regexp)
-    (setq outline-regexp
-	  (concat "@\\("
-		  (mapconcat 'car texinfo-section-list "\\>\\|")
-		  "\\>\\)"))
-    (make-local-variable 'outline-level)
-    (setq outline-level 'texinfo-outline-level))
+    (set (make-local-variable 'outline-regexp)
+	 (concat "@\\("
+		 (mapconcat 'car texinfo-section-list "\\>\\|")
+		 "\\>\\)"))
+    (set (make-local-variable 'outline-level) 'texinfo-outline-level))
 
   ;; Mostly AUCTeX stuff
   (easy-menu-add Texinfo-mode-menu Texinfo-mode-map)
   (easy-menu-add Texinfo-command-menu Texinfo-mode-map)
-  (make-local-variable 'TeX-command-current)
-  (setq TeX-command-current 'TeX-command-master)
+  (set (make-local-variable 'TeX-command-current) 'TeX-command-master)
 
   (setq TeX-default-extension "texi")
-  (make-local-variable 'TeX-esc)
-  (setq TeX-esc "@")
+  (set (make-local-variable 'TeX-esc) "@")
 
-  (make-local-variable 'TeX-auto-regexp-list)
-  (setq TeX-auto-regexp-list 'TeX-auto-empty-regexp-list)
-  (make-local-variable 'TeX-auto-update)
-  (setq TeX-auto-update t)
+  (set (make-local-variable 'TeX-auto-regexp-list) 'TeX-auto-empty-regexp-list)
+  (set (make-local-variable 'TeX-auto-update) t)
 
   (setq TeX-command-default "TeX")
   (setq TeX-header-end "%*end")
   (setq TeX-trailer-start (regexp-quote (concat TeX-esc "bye")))
 
-  (make-local-variable 'TeX-complete-list)
-  (setq TeX-complete-list
-	(list (list "@\\([a-zA-Z]*\\)" 1 'TeX-symbol-list nil)
+  (set (make-local-variable 'TeX-complete-list)
+	(list (list "@\\([a-zA-Z]*\\)" 1 'TeX-symbol-list-filtered nil)
 	      (list "" TeX-complete-word)))
 
-  (make-local-variable 'TeX-font-list)
-  (setq TeX-font-list Texinfo-font-list)
-  (make-local-variable 'TeX-font-replace-function)
-  (setq TeX-font-replace-function 'TeX-font-replace-macro)
+  (set (make-local-variable 'TeX-font-list) Texinfo-font-list)
+  (set (make-local-variable 'TeX-font-replace-function) 'TeX-font-replace-macro)
+  (set (make-local-variable 'TeX-style-hook-dialect) :texinfo)
 
   (add-hook 'find-file-hooks (lambda ()
 			       (unless (file-exists-p (buffer-file-name))
 				 (TeX-master-file nil nil t))) nil t)
 
+  (when (and (boundp 'add-log-current-defun-function)
+	     (fboundp 'texinfo-current-defun-name))
+    (setq add-log-current-defun-function
+	  #'texinfo-current-defun-name))
+
   (TeX-add-symbols
+   '("acronym" "Acronym")
    '("appendix" (TeX-arg-literal " ") (TeX-arg-free "Title"))
    '("appendixsec" (TeX-arg-literal " ") (TeX-arg-free "Title"))
    '("appendixsection" (TeX-arg-literal " ") (TeX-arg-free "Title"))
@@ -632,6 +626,10 @@ value of `Texinfo-mode-hook'."
    '("bullet")
    '("bye")
    '("c" (TeX-arg-literal " ") (TeX-arg-free "Comment"))
+   '("caption" "Caption"
+     ;; TODO: caption is meaningful only inside float env. Maybe some checking
+     ;; and warning would be good.
+     )
    '("center" (TeX-arg-literal " ") (TeX-arg-free "Line of text"))
    '("chapheading" (TeX-arg-literal " ") (TeX-arg-free "Title"))
    '("chapter" (TeX-arg-literal " ") (TeX-arg-free "Title"))
@@ -728,6 +726,7 @@ value of `Texinfo-mode-hook'."
    '("thischaptername")
    '("thisfile")
    '("thispage")
+   '("tie")
    '("tindex" (TeX-arg-literal " ") (TeX-arg-free "Entry"))
    '("title" (TeX-arg-literal " ") (TeX-arg-free "Title"))
    '("titlefont" "Text")

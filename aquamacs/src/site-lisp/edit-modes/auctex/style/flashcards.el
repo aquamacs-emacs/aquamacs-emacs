@@ -55,6 +55,7 @@
 				("cardbackstyle" "[{")
 				("cardfrontheadstyle" "[{")
 				("cardfrontfootstyle" "[{"))
-			      'variable))))
+			      'variable)))
+ LaTeX-dialect)
 
 ;;; flashcards.el ends here

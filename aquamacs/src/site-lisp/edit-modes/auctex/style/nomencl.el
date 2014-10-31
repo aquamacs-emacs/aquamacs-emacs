@@ -65,6 +65,7 @@
    (when (and (featurep 'font-latex)
 	      (eq TeX-install-font-lock 'font-latex-setup))
      (font-latex-add-keywords '(("nomenclature" "[{{"))
-			      'reference))))
+			      'reference)))
+ LaTeX-dialect)
 
 ;;; nomencl.el ends here

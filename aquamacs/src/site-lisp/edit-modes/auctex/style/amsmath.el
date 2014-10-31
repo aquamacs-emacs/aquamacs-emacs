@@ -1,6 +1,6 @@
 ;;; amsmath.el --- Style hook for the AMS-LaTeX amsmath package.
 
-;; Copyright (C) 2002, 2005  Free Software Foundation, Inc.
+;; Copyright (C) 2002, 2005-2007, 2012-2014  Free Software Foundation, Inc.
 ;; FIXME: What about the copyright for <= 2001?
 
 ;; Author: Carsten Dominik <dominik@strw.leidenuniv.nl>
@@ -43,8 +43,9 @@
      '("xalignat"   LaTeX-amsmath-env-alignat)
      '("xalignat*"  LaTeX-amsmath-env-alignat)
      '("xxalignat"  LaTeX-amsmath-env-alignat)
-     '("aligned"    LaTeX-amsmath-env-aligned)
-     '("gathered"   LaTeX-amsmath-env-aligned)
+     '("aligned"    ["Vertical position (t or b)"])
+     '("gathered"   ["Vertical position (t or b)"])
+     '("alignedat"  LaTeX-amsmath-env-alignedat)
      "align*" "gather*" "flalign*" "multline*" "equation*"
      "split"
      "cases"
@@ -56,6 +57,7 @@
      '("eqref" TeX-arg-ref)
      '("numberwithin" TeX-arg-counter "Section level")
      '("raisetag" "Dimension")
+     '("shoveright" t) '("shoveleft" t)
      '("intertext" t)
      '("hdotsfor" ["Stretch"] "Number of columns to cover")
      '("xleftarrow" ["Below"] "Above")
@@ -92,7 +94,9 @@
      '("ddddot" t)
      "bmod" "notag"
      "dots" "dotsb" "dotsc" "dotsi" "dotsm" "dotso" "nobreakdash" 
-     "lvert" "rvert" "lVert" "rVert" 
+     '("lvert" TeX-arg-insert-right-brace-maybe)
+     '("lVert" TeX-arg-insert-right-brace-maybe)
+     "rvert" "rVert"
      "iint" "iiint" "iiiint" "idotsint"
      )
     
@@ -100,18 +104,19 @@
 	   (append '(("split"    . LaTeX-item-equation)
 		     ("multline" . LaTeX-item-equation)
 		     ("multline*" . LaTeX-item-equation)
-		     ("gather"   . LaTeX-item-equations)
+		     ("gather"   . LaTeX-item-equation)
 		     ("gather*"  . LaTeX-item-equation)
 		     ("gathered" . LaTeX-item-equation)
-		     ("align"    . LaTeX-item-equations)
+		     ("align"    . LaTeX-item-equation)
 		     ("align*"   . LaTeX-item-equation)
 		     ("aligned"  . LaTeX-item-equation)
-		     ("alignat"  . LaTeX-item-equations)
-		     ("alignat*" . LaTeX-item-equation)
-		     ("xalignat"  . LaTeX-item-equations)
-		     ("xalignat*" . LaTeX-item-equation)
-		     ("xxalignat" . LaTeX-item-equation)
-		     ("flalign"  . LaTeX-item-equations)
+		     ("alignat"  . LaTeX-item-equation-alignat)
+		     ("alignat*" . LaTeX-item-equation-alignat)
+		     ("xalignat"  . LaTeX-item-equation-alignat)
+		     ("xalignat*" . LaTeX-item-equation-alignat)
+		     ("xxalignat" . LaTeX-item-equation-alignat)
+		     ("alignedat" . LaTeX-item-equation-alignat)
+		     ("flalign"  . LaTeX-item-equation)
 		     ("flalign*" . LaTeX-item-equation)
 		     ("matrix" .  LaTeX-item-equation)
 		     ("pmatrix" .  LaTeX-item-equation)
@@ -119,6 +124,7 @@
 		     ("Bmatrix" .  LaTeX-item-equation)
 		     ("vmatrix" .  LaTeX-item-equation)
 		     ("Vmatrix" .  LaTeX-item-equation)
+		     ("subarray" . LaTeX-item-equation)
 		     ("cases"    . LaTeX-item-equation))
 		   LaTeX-item-list))
 
@@ -127,13 +133,23 @@
       (setq LaTeX-amsmath-label LaTeX-equation-label))
 
     (setq LaTeX-label-alist
-	  (append '(("align"      . LaTeX-amsmath-label)
+	  ;; Append amsmath environments to `LaTeX-label-alist', in order not to
+	  ;; override possible custome values.
+	  (append LaTeX-label-alist
+		  '(("align"      . LaTeX-amsmath-label)
 		    ("alignat"    . LaTeX-amsmath-label)
 		    ("xalignat"   . LaTeX-amsmath-label)
-		    ("multline"    . LaTeX-amsmath-label)
+		    ("multline"   . LaTeX-amsmath-label)
 		    ("flalign"    . LaTeX-amsmath-label)
-		    ("gather"     . LaTeX-amsmath-label))
-		  LaTeX-label-alist))
+		    ("gather"     . LaTeX-amsmath-label))))
+
+    (set (make-local-variable 'TeX-braces-association)
+	 (append '(("\\lvert" . "\\rvert")
+		   ("\\lVert" . "\\rVert"))
+		 TeX-braces-association))
+    (set (make-local-variable 'TeX-left-right-braces)
+	 (append '(("\\lvert") ("\\rvert") ("\\lVert") ("\\rVert"))
+		 TeX-left-right-braces))
 
     ;; amsmath includes amstext, amsbsy, & amsopn.
     ;; So we run their hooks, too.
@@ -141,35 +157,64 @@
 
     ;; If RefTeX is loaded, make it recognize the amsmath environments.
     (when (fboundp 'reftex-add-to-label-alist)
-      (reftex-add-to-label-alist '(AMSTeX))))))
+      (reftex-add-to-label-alist '(AMSTeX)))))
+ LaTeX-dialect)
 
 (defun LaTeX-amsmath-env-alignat (env)
+  "Insert ENV with column number specifications.
+Insert suitable number of ampersands also if possible."
   (let ((ncols (read-string "Number of columns: ")))
     (LaTeX-insert-environment env (concat TeX-grop ncols TeX-grcl))
-    (and (not (string= "xxalignat" env))
-	 (not (string= "*" (substring env -1)))
-	 (LaTeX-label env)
-	 (newline-and-indent))))
+    (LaTeX-item-equation-alignat t)))
 
-(defun LaTeX-amsmath-env-aligned (env)
-  (let ((where (read-string "(optional) Vertical position (t or b): ")))
-    (if (string= where "")
-	(setq where "")
-      (setq where (concat "[" where "]")))
-    (LaTeX-insert-environment env where)))
+(defun LaTeX-amsmath-env-alignedat (env)
+  "Insert ENV with position and column number specifications.
+Insert suitable number of ampersands also if possible."
+  (let ((where (read-string "(Optional) Vertical position (t or b): "))
+	(ncols (read-string "Number of columns: ")))
+    (unless (string= where "")
+      (setq where (concat LaTeX-optop where LaTeX-optcl)))
+    (LaTeX-insert-environment env (concat where TeX-grop ncols TeX-grcl))
+    (LaTeX-item-equation-alignat t)))
 
-(defun LaTeX-item-equation ()
-  (end-of-line 0)
-  (just-one-space)
-  (insert "\\\\")
-  (forward-line 1)
-  (indent-according-to-mode))
+(defun LaTeX-item-equation (&optional suppress)
+  "Insert contents to terminate a line in multi-line equations environment.
+Put line break macro on the last line.  If the current environment
+wants \\label, insert it also.
 
-(defun LaTeX-item-equations ()
-  (LaTeX-item-equation)
-  (let ((environment (LaTeX-current-environment 1)))
-    (and (LaTeX-label environment)
-	 (newline-and-indent))))
+If SUPPRESS is non-nil, do not insert line break macro."
+  (unless suppress
+    (end-of-line 0)
+    (just-one-space)
+    (TeX-insert-macro "\\")
+    (forward-line 1)
+    (indent-according-to-mode))
+  (let ((env (LaTeX-current-environment)))
+    (when (and (assoc env LaTeX-label-alist)
+	       (LaTeX-label env 'environment))
+      (LaTeX-newline)
+      (indent-according-to-mode))))
+
+(defun LaTeX-item-equation-alignat (&optional suppress)
+  "Insert contents to terminate a line in multi-line equations environment.
+Put line break macro on the last line.  Next, if the current
+environment wants \\label, insert it also.  And insert suitable number
+of ampersands if possible.
+
+If SUPPRESS is non-nil, do not insert line break macro."
+  (LaTeX-item-equation suppress)
+  (LaTeX-insert-ampersands
+   (concat "\\(?:"
+	   (regexp-quote LaTeX-optop) "[tb]" (regexp-quote LaTeX-optcl)
+	   "\\)?")
+   'LaTeX-amsmath-alignat-number-of-ampersands))
+
+(defun LaTeX-amsmath-alignat-number-of-ampersands (start end)
+  "Return the number of ampersands to insert.
+The number is 2N-1 where N is the number taken from the text between
+START and END."
+  (let ((num (string-to-number (buffer-substring-no-properties start end))))
+    (if (integerp num) (+ num num -1))))
 
 (defvar LaTeX-amsmath-package-options '("intlimits" "nointlimits"
 					"sumlimits" "nosumlimits"

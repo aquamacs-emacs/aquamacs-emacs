@@ -30,8 +30,8 @@
      (TeX-add-symbols
 
       ;; The macros with label arguments
-      '("fref" [ TeX-arg-fancyref-format ] TeX-arg-label)
-      '("Fref" [ TeX-arg-fancyref-format ] TeX-arg-label)
+      '("fref" [ TeX-arg-fancyref-format ] TeX-arg-ref)
+      '("Fref" [ TeX-arg-fancyref-format ] TeX-arg-ref)
 
       ;; The macros which define new prefixes and formats
       '("fancyrefchangeprefix" TeX-arg-macro "Prefix")
@@ -92,7 +92,8 @@
      ;; Fontification
      (when (and (featurep 'font-latex)
 		(eq TeX-install-font-lock 'font-latex-setup))
-       (font-latex-add-keywords '(("fref" "[{") ("Fref" "[{")) 'reference))))
+       (font-latex-add-keywords '(("fref" "[{") ("Fref" "[{")) 'reference)))
+   LaTeX-dialect)
 
 ;; The following list keeps a list of available format names
 ;; Note that this list is only updated when a format is used, not

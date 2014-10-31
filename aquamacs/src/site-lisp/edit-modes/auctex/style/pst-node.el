@@ -1,6 +1,6 @@
 ;;; pst-node.el --- AUCTeX style for `pst-node.sty'
 
-;; Copyright (C) 2007 Free Software Foundation, Inc.
+;; Copyright (C) 2007, 2013 Free Software Foundation, Inc.
 
 ;; Author: Holger Sparr <holger.sparr@gmx.net>
 ;; Created: 21 Jun 2007
@@ -119,8 +119,8 @@
 ;;; Environments
 (defun LaTeX-pstnode-env-psmatrix (env)
   "Return psmatrix environment with arguments."
-  (let ((opt (completing-read-multiple "Options: "
-                                       LaTeX-pstnode-psmatrix-list)))
+  (let ((opt (TeX-completing-read-multiple "Options: "
+					   LaTeX-pstnode-psmatrix-list)))
     (LaTeX-insert-environment env opt)))
 
 (TeX-add-style-hook
@@ -186,6 +186,7 @@
      '("psrowhook" t)
      '("pscolhook" t))
     (TeX-run-style-hooks
-     "pstricks"))))
+     "pstricks")))
+ LaTeX-dialect)
 
 ;;; pst-node.el ends here

@@ -41,6 +41,29 @@
 
 ;;; Code:
 
+(defcustom LaTeX-shortvrb-chars nil
+  "List of characters toggling verbatim mode.
+When your document uses the shortvrb style and you have a
+\\MakeShortVrb{\\|} in your file to write verbatim text as
+|text|, then set this variable to the list (?|).  Then AUCTeX
+fontifies |text| as verbatim.
+
+Preferably, you should do this buffer-locally using a file
+variable near the end of your document like so:
+
+  %% Local Variables:
+  %% LaTeX-shortvrb-chars: (?|)
+  %% End:
+
+When you customize this variable to a non-nil value, then it
+becomes the default value meaning that verbatim fontification is
+always performed for the characters in the list, no matter if
+your document actually defines shortvrb chars using
+\\MakeShortVrb."
+  :group 'LaTeX-style
+  :type '(repeat character))
+(put 'LaTeX-shortvrb-chars 'safe-local-variable 'listp)
+
 (TeX-add-style-hook
  "shortvrb"
  (lambda ()
@@ -51,6 +74,11 @@
      (let (syntax-alist)
        (dolist (char LaTeX-shortvrb-chars)
 	 (add-to-list 'syntax-alist (cons char "|")))
-       (font-latex-add-to-syntax-alist syntax-alist)))))
+       (font-latex-add-to-syntax-alist syntax-alist))))
+ LaTeX-dialect)
+
+;; Don't look for file-local variables before this line, so that the example in
+;; the docstring isn't picked up.
+
 
 ;;; shortvrb.el ends here

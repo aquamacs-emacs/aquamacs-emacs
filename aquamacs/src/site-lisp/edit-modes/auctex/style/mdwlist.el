@@ -55,7 +55,8 @@
      (font-latex-add-keywords '(("makecompactlist" "{{")
 				("suspend" "[{")
 				("resume" "[{["))
-			      'function))))
+			      'function)))
+ LaTeX-dialect)
 
 (defvar LaTeX-mdwlist-package-options nil
   "Package options for the mdwlist package.")

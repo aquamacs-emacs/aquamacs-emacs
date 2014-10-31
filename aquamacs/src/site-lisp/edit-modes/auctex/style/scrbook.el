@@ -57,6 +57,7 @@
 				 ("dictum" "[{"))
 			       'textual)
       ;; Sectioning keywords
-      (font-latex-add-keywords '(("addchap" "[{")) 'sectioning-1))))
+      (font-latex-add-keywords '(("addchap" "[{")) 'sectioning-1)))
+  LaTeX-dialect)
 
 ;;; scrbook.el ends here

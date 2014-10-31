@@ -1,7 +1,7 @@
 ;;; context.el --- Support for ConTeXt documents.
 
-;; Copyright (C) 2003, 2004, 2005, 2006, 2008, 2010 Free Software
-;;   Foundation, Inc.
+;; Copyright (C) 2003-2006, 2008, 2010, 2012, 2014
+;;   Free Software Foundation, Inc.
 
 ;; Maintainer: Berend de Boer <berend@pobox.com>
 ;; Keywords: tex
@@ -301,12 +301,12 @@ The following variables can be set to customize:
 		      ((< val 0)
 		       (ConTeXt-up-section (- val)))
 		      (t val)))
-	 (name (ConTeXt-section-name level))
+	 (name (ConTeXt-numbered-section-name level))
 	 (toc nil)
 	 (title "")
 	 (done-mark (make-marker)))
     (newline)
-    (run-hooks 'ConTeXt-section-hook)
+    (run-hooks 'ConTeXt-numbered-section-hook)
     (newline)
     (if (marker-position done-mark)
 	(goto-char (marker-position done-mark)))
@@ -356,31 +356,53 @@ section."
 					nil t)))
 	(ConTeXt-up-section (1- arg))))))
 
-(defvar ConTeXt-section-list ()
+(defvar ConTeXt-numbered-section-list ()
   "ConTeXt-XX-section-list where XX is the current interface.")
 
-(defun ConTeXt-section-name (level)
+(defvar ConTeXt-unnumbered-section-list ()
+  "ConTeXt-XX-section-list where XX is the current interface.")
+
+(defvar ConTeXt-section-list
+  (append ConTeXt-numbered-section-list ConTeXt-unnumbered-section-list)
+)
+
+(defun ConTeXt-numbered-section-name (level)
   "Return the name of the section corresponding to LEVEL."
-  (let ((entry (TeX-member level ConTeXt-section-list
+  (let ((entry (TeX-member level ConTeXt-numbered-section-list
 			   (function (lambda (a b) (equal a (nth 1 b)))))))
     (if entry
 	(nth 0 entry)
       nil)))
 
-(defun ConTeXt-section-level (name)
-  "Return the level of the section NAME."
-  (let ((entry (TeX-member name ConTeXt-section-list
-			   (function (lambda (a b) (equal a (nth 0 b)))))))
-
+(defun ConTeXt-unnumbered-section-name (level)
+  "Return the name of the section corresponding to LEVEL."
+  (let ((entry (TeX-member level ConTeXt-unnumbered-section-list
+			   (function (lambda (a b) (equal a (nth 1 b)))))))
     (if entry
-	(nth 1 entry)
+	(nth 0 entry)
+      nil)))
+
+(defun ConTeXt-numbered-section-level (name)
+  "Return the level of the section NAME."
+  (let ((entry (TeX-member name ConTeXt-numbered-section-list
+                           (function (lambda (a b) (equal a (nth 0 b)))))))
+    (if entry
+        (nth 1 entry)
+      nil)))
+
+(defun ConTeXt-unnumbered-section-level (name)
+  "Return the level of the section NAME."
+  (let ((entry (TeX-member name ConTeXt-numbered-section-list
+                           (function (lambda (a b) (equal a (nth 0 b)))))))
+    (if entry
+        (nth 1 entry)
       nil)))
 
 
 ;;; Section Hooks.
 
-(defcustom ConTeXt-section-hook
-  '(ConTeXt-section-heading
+(defcustom ConTeXt-numbered-section-hook
+  '(ConTeXt-numbered-section-heading
     ConTeXt-section-title
     ConTeXt-section-ref
     ConTeXt-section-section)
@@ -409,8 +431,8 @@ ConTeXt-section-ref: Insert a reference for this section command.
 
 To get a full featured `ConTeXt-section' command, insert
 
- (setq ConTeXt-section-hook
-			 '(ConTeXt-section-heading
+ (setq ConTeXt-numbered-section-hook
+			 '(ConTeXt-numbered-section-heading
 				 ConTeXt-section-title
 				 ConTeXt-section-section
 				 ConTeXt-section-ref))
@@ -419,18 +441,75 @@ in your .emacs file."
   :group 'ConTeXt-macro
   :type 'hook
   :options
-  '(ConTeXt-section-heading
+  '(ConTeXt-numbered-section-heading
     ConTeXt-section-title
     ConTeXt-section-ref
     ConTeXt-section-section))
 
-(defun ConTeXt-section-heading ()
+(defcustom ConTeXt-unnumbered-section-hook
+  '(ConTeXt-unnumbered-section-heading
+    ConTeXt-section-title
+    ConTeXt-section-ref
+    ConTeXt-section-section)
+  "List of hooks to run when a new section is inserted.
+
+The following variables are set before the hooks are run
+
+level - numeric section level, see the documentation of `ConTeXt-section'.
+name - name of the sectioning command, derived from `level'.
+title - The title of the section, default to an empty string.
+`done-mark' - Position of point afterwards, default nil (meaning end).
+
+The following standard hook exist -
+
+ConTeXt-section-heading: Query the user about the name of the
+sectioning command.  Modifies `level' and `name'.
+
+ConTeXt-section-title: Query the user about the title of the
+section.  Modifies `title'.
+
+ConTeXt-section-section: Insert ConTeXt section command according to
+`name', `title', and `reference'.  If `title' is an empty string,
+`done-mark' will be placed at the point they should be inserted.
+
+ConTeXt-section-ref: Insert a reference for this section command.
+
+To get a full featured `ConTeXt-section' command, insert
+
+ (setq ConTeXt-unnumbered-section-hook
+			 '(ConTeXt-unnumbered-section-heading
+				 ConTeXt-section-title
+				 ConTeXt-section-section
+				 ConTeXt-section-ref))
+
+in your .emacs file."
+  :group 'ConTeXt-macro
+  :type 'hook
+  :options
+  '(ConTeXt-unnumbered-section-heading
+    ConTeXt-section-title
+    ConTeXt-section-ref
+    ConTeXt-section-section))
+
+(defun ConTeXt-numbered-section-heading ()
   "Hook to prompt for ConTeXt section name.
-Insert this hook into `ConTeXt-section-hook' to allow the user to change
+Insert this hook into `ConTeXt-numbered-section-hook' to allow the user to change
 the name of the sectioning command inserted with `\\[ConTeXt-section]'."
   (let ((string (completing-read
 		 (concat "Select level: (default " name ") ")
-		 ConTeXt-section-list
+		 ConTeXt-numbered-section-list
+		 nil nil nil)))
+    ;; Update name
+    (if (not (zerop (length string)))
+	(setq name string))))
+
+(defun ConTeXt-unnumbered-section-heading ()
+  "Hook to prompt for ConTeXt section name.
+Insert this hook into `ConTeXt-unnumbered-section-hook' to allow the user to change
+the name of the sectioning command inserted with `\\[ConTeXt-section]'."
+  (let ((string (completing-read
+		 (concat "Select level: (default " name ") ")
+		 ConTeXt-unnumbered-section-list
 		 nil nil nil)))
     ;; Update name
     (if (not (zerop (length string)))
@@ -438,7 +517,7 @@ the name of the sectioning command inserted with `\\[ConTeXt-section]'."
 
 (defun ConTeXt-section-title ()
   "Hook to prompt for ConTeXt section title.
-Insert this hook into `ConTeXt-section-hook' to allow the user to change
+Insert this hook into `ConTeXt-(un)numbered-section-hook' to allow the user to change
 the title of the section inserted with `\\[ConTeXt-section]."
   (setq title (read-string "What title: ")))
 
@@ -520,11 +599,8 @@ inserted after the sectioning command."
 
 (TeX-auto-add-type "environment" "ConTeXt")
 
-(fset 'ConTeXt-add-environments-auto
-      (symbol-function 'ConTeXt-add-environments))
-(defun ConTeXt-add-environments (&rest environments)
+(defadvice ConTeXt-add-environments (after ConTeXt-invalidate-menu (&rest environments) activate)
   "Add ENVIRONMENTS to the list of known environments."
-  (apply 'ConTeXt-add-environments-auto environments)
   (setq ConTeXt-menu-changed t))
 
 ;; (defvar ConTeXt-environment-list ()
@@ -763,7 +839,7 @@ the contents."
   (interactive)
   (let ((cur (point)))
     (ConTeXt-find-matching-stop inner)
-    (set-mark (point))
+    (push-mark (point))
     (goto-char cur)
     (ConTeXt-find-matching-start inner)
     (TeX-activate-region)))
@@ -912,7 +988,8 @@ If OPTIONAL, only insert it if not empty, and then use square brackets."
    "[][]\\|"  ; display math delimitors (is this applicable to ConTeXt??)
    (ConTeXt-environment-start-name) "\\|"
    (ConTeXt-environment-stop-name) "\\|"
-   (mapconcat 'car ConTeXt-section-list "\\b\\|") "\\b\\|"
+   (mapconcat 'car ConTeXt-numbered-section-list "\\b\\|") "\\b\\|"
+   (mapconcat 'car ConTeXt-unnumbered-section-list "\\b\\|") "\\b\\|"
    (mapconcat 'identity ConTeXt-extra-paragraph-commands "\\b\\|")
    "\\b\\|"
    (mapconcat 'identity ConTeXt-item-list "\\b\\|") "\\b\\)"))
@@ -936,7 +1013,8 @@ header is at the start of a line."
    (regexp-quote TeX-esc)
    "\\("
    (mapconcat 'ConTeXt-environment-full-start-name ConTeXt-section-block-list "\\|") "\\|"
-   (mapconcat 'car ConTeXt-section-list "\\|")
+   (mapconcat 'car ConTeXt-numbered-section-list "\\|")
+   (mapconcat 'car ConTeXt-unnumbered-section-list "\\|")
    "\\)\\b"
    (if TeX-outline-extra
        "\\|"
@@ -1314,7 +1392,8 @@ else.  There might be text before point."
 
 ;; section menu entries
 
-(defvar ConTeXt-section-menu-name "Section  (C-c C-s)")
+(defvar ConTeXt-numbered-section-menu-name "Numbered section  (C-c C-s)")
+(defvar ConTeXt-unnumbered-section-menu-name "Unnumbered section")
 
 (defun ConTeXt-section-enable-symbol (level)
   "Symbol used to enable section LEVEL in the menu bar."
@@ -1326,17 +1405,29 @@ else.  There might be text before point."
     (set (ConTeXt-section-enable-symbol level)
 	 (>= level ConTeXt-largest-level))))
 
-(defun ConTeXt-section-menu (level)
-  "Insert section from menu."
-  (let ((ConTeXt-section-hook (delq 'ConTeXt-section-heading
-				    (copy-sequence ConTeXt-section-hook))))
+(defun ConTeXt-numbered-section-menu (level)
+  "Insert numbered section from menu."
+  (let ((ConTeXt-numbered-section-hook (delq 'ConTeXt-numbered-section-heading
+				    (copy-sequence ConTeXt-numbered-section-hook))))
     (ConTeXt-section level)))
 
-(defun ConTeXt-section-menu-entry (entry)
-  "Create an ENTRY for the section menu."
+(defun ConTeXt-unnumbered-section-menu (level)
+  "Insert unnumbered section from menu."
+  (let ((ConTeXt-unnumbered-section-hook (delq 'ConTeXt-unnumbered-section-heading
+				    (copy-sequence ConTeXt-unnumbered-section-hook))))
+    (ConTeXt-section level)))
+
+(defun ConTeXt-numbered-section-menu-entry (entry)
+  "Create an ENTRY for the numbered section menu."
   (let ((enable (ConTeXt-section-enable-symbol (nth 1 entry))))
     (set enable t)
-    (vector (car entry) (list 'ConTeXt-section-menu (nth 1 entry)) enable)))
+    (vector (car entry) (list 'ConTeXt-numbered-section-menu (nth 1 entry)) enable)))
+
+(defun ConTeXt-unnumbered-section-menu-entry (entry)
+  "Create an ENTRY for the unnumbered section menu."
+  (let ((enable (ConTeXt-section-enable-symbol (nth 1 entry))))
+    (set enable t)
+    (vector (car entry) (list 'ConTeXt-unnumbered-section-menu (nth 1 entry)) enable)))
 
 
 ;; etexshow support
@@ -1368,7 +1459,8 @@ else.  There might be text before point."
    `("ConTeXt"
      (,ConTeXt-project-structure-menu-name)
      (,ConTeXt-section-block-menu-name)
-     (,ConTeXt-section-menu-name)
+     (,ConTeXt-numbered-section-menu-name)
+     (,ConTeXt-unnumbered-section-menu-name)
      ["Add Table of Contents to Emacs Menu" (imenu-add-to-menubar "TOC") t]
      "-"
      ["Macro ..." TeX-insert-macro
@@ -1467,10 +1559,14 @@ else.  There might be text before point."
 			   (mapcar 'ConTeXt-section-block-menu-entry
 				   ConTeXt-section-block-list)))
 	(message "Updating section menu...")
-	(easy-menu-change '("ConTeXt") ConTeXt-section-menu-name
+	(easy-menu-change '("ConTeXt") ConTeXt-numbered-section-menu-name
 			  (LaTeX-split-long-menu
-			   (mapcar 'ConTeXt-section-menu-entry
-				   ConTeXt-section-list)))
+			   (mapcar 'ConTeXt-numbered-section-menu-entry
+				   ConTeXt-numbered-section-list)))
+	(easy-menu-change '("ConTeXt") ConTeXt-unnumbered-section-menu-name
+			  (LaTeX-split-long-menu
+			   (mapcar 'ConTeXt-unnumbered-section-menu-entry
+				   ConTeXt-unnumbered-section-list)))
 	(message "Updating...done")
 	(and menu (easy-menu-return-item ConTeXt-mode-menu menu))
 	)))
@@ -1481,7 +1577,7 @@ else.  There might be text before point."
   "Command line option for texexec to use nonstopmode.")
 
 (defun ConTeXt-expand-options ()
-  "Expand options for texexec command."
+  "Expand options for context command."
   (concat
    (let ((engine (eval (nth 4 (assq TeX-engine (TeX-engine-alist))))))
      (when engine
@@ -1490,7 +1586,7 @@ else.  There might be text before point."
      (format "--interface=%s " ConTeXt-current-interface))
    (when TeX-source-correlate-mode
      (format "--passon=\"%s\" "
-	     (if (eq TeX-source-correlate-method-active 'synctex)
+	     (if (eq (TeX-source-correlate-method-active) 'synctex)
 		 TeX-synctex-tex-flags
 	       TeX-source-specials-tex-flags)))
    (unless TeX-interactive-mode
@@ -1508,6 +1604,8 @@ else.  There might be text before point."
     ConTeXt-other-macro-list
     ConTeXt-project-structure-list
     ConTeXt-section-block-list
+    ConTeXt-numbered-section-list
+    ConTeXt-unnumbered-section-list
     ConTeXt-section-list
     ConTeXt-text
     ConTeXt-item-list
@@ -1651,7 +1749,7 @@ Special commands:
 
 Entering `context-mode' calls the value of `text-mode-hook',
 then the value of `TeX-mode-hook', and then the value
-of context-mode-hook."
+of ConTeXt-mode-hook."
   (interactive)
   (context-guess-current-interface)
   (require (intern (concat "context-" ConTeXt-current-interface)))

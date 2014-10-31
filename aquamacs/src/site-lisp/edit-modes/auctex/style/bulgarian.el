@@ -49,6 +49,7 @@
    (when (fboundp 'font-latex-add-quotes)
      (font-latex-add-quotes '("\"`" "\"'"))
      (font-latex-add-quotes '("\"<" "\">" french)))
-   (run-hooks 'TeX-language-bg-hook)))
+   (run-hooks 'TeX-language-bg-hook))
+ LaTeX-dialect)
 
 ;;; bulgarian.el ends here

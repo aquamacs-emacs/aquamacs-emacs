@@ -54,6 +54,7 @@
    ;; Fontification of quotation marks.
    (when (fboundp 'font-latex-add-quotes)
      (font-latex-add-quotes '("\"<" "\">" french)))
-   (run-hooks 'TeX-language-it-hook)))
+   (run-hooks 'TeX-language-it-hook))
+ LaTeX-dialect)
 
 ;;; italian.el ends here

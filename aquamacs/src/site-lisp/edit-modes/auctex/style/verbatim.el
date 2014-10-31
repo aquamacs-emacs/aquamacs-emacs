@@ -35,7 +35,8 @@
     (LaTeX-add-environments
      "comment")
     (TeX-add-symbols
-     '("verbatiminput" TeX-arg-file)))))
+     '("verbatiminput" TeX-arg-file))))
+ LaTeX-dialect)
 
 (defvar LaTeX-verbatim-package-options nil
   "Package options for the verbatim package.")

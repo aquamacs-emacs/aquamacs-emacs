@@ -75,7 +75,8 @@
 
     ;; RefTeX support
     (and (fboundp 'reftex-add-index-macros)
-	 (reftex-add-index-macros '(index)))))
+	 (reftex-add-index-macros '(index))))
+  LaTeX-dialect)
 
 (defvar LaTeX-index-package-options nil
   "Package options for the index package.")

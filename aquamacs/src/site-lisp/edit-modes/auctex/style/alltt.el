@@ -47,7 +47,8 @@
      (font-latex-set-syntactic-keywords)
      ;; Tell font-lock about the update.
      (setq font-lock-set-defaults nil)
-     (font-lock-set-defaults))))
+     (font-lock-set-defaults)))
+ LaTeX-dialect)
 
 (defvar LaTeX-alltt-package-options nil
   "Package options for the alltt package.")

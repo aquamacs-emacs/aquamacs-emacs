@@ -48,6 +48,7 @@
    (when (fboundp 'font-latex-add-quotes)
      (font-latex-add-quotes '("\"`" "\"'"))
      (font-latex-add-quotes '("\"<" "\">" french)))
-   (run-hooks 'TeX-language-is-hook)))
+   (run-hooks 'TeX-language-is-hook))
+ LaTeX-dialect)
 
 ;;; icelandic.el ends here

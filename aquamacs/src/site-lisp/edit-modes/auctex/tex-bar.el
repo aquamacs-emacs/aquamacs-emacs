@@ -1,6 +1,6 @@
 ;;; tex-bar.el --- toolbar icons on AUCTeX in GNU emacs and XEmacs
 
-;; Copyright (C) 2004, 2005 Free Software Foundation, Inc.
+;; Copyright (C) 2004-2008, 2012-2014 Free Software Foundation, Inc.
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -84,7 +84,7 @@ If there is no help, the empty string is returned."
 
 (defcustom TeX-bar-TeX-buttons
   '(new-file open-file dired kill-buffer save-buffer cut copy paste undo
-	     [separator nil] tex next-error view bibtex)
+	     [separator nil] tex next-error view bibtex spell)
   "List of buttons available in `tex-mode'.
 It should be a list in the same format of the BUTTONS parameter
 in function `toolbarx-install-toolbar', often a symbol that
@@ -114,7 +114,8 @@ alists, see variable `TeX-bar-TeX-all-button-alists'."
 		    (const view)
 		    (const file)
 		    (const bibtex)
-		    (const clean))
+		    (const clean)
+		    (const spell))
 		    ;; (const latex-symbols-experimental)
 	       (repeat (choice (symbol :tag "Label")
 			       (vector :args ((symbol :tag "Label in Emacs ")
@@ -136,8 +137,7 @@ alists, see variable `TeX-bar-TeX-all-button-alists'."
 				       assqs-button-alists)))
     (setq assqs-button-alists (nreverse assqs-button-alists))
     ;; displaying results
-    (save-excursion
-      (set-buffer (get-buffer-create "*TeX tool bar buttons*"))
+    (with-current-buffer (get-buffer-create "*TeX tool bar buttons*")
       (erase-buffer)
       (insert "Available buttons for TeX mode
 ================================")
@@ -196,7 +196,11 @@ the argument BUTTON-ALIST in function `toolbarx-install-toolbar'."
     (clean  :image "delete"
 	    :command (TeX-command "Clean" 'TeX-master-file -1)
 	    :help (lambda (&rest ignored)
-		    (TeX-bar-help-from-command-list "Clean"))))
+		    (TeX-bar-help-from-command-list "Clean")))
+    (spell  :image "spell"
+	    :command (TeX-command "Spell" 'TeX-master-file -1)
+	    :help (lambda (&rest ignored)
+		    (TeX-bar-help-from-command-list "Spell"))))
   ;; latex-symbols-experimental?
   "Alist for button definitions in TeX bar.
 Value should le a list where each element is of format (KEY .
@@ -226,7 +230,7 @@ format of the argument MEANING-ALIST in the mentioned function."
 
 (defcustom TeX-bar-LaTeX-buttons
   '(new-file open-file dired kill-buffer save-buffer cut copy paste undo
-	      [separator nil] latex next-error view bibtex)
+	      [separator nil] latex next-error view bibtex spell)
   "List of buttons available in `latex-mode'.
 It should be a list in the same format of the BUTTONS parameter
 in function `toolbarx-install-toolbar', often a symbol that
@@ -257,6 +261,7 @@ alists, see variable `TeX-bar-LaTeX-all-button-alists'."
 		    (const file)
 		    (const bibtex)
 		    (const clean)
+		    (const spell)
 		    (const latex-symbols-experimental))
 	       (repeat (choice (symbol :tag "Label")
 			       (vector :args ((symbol :tag "Label in Emacs ")
@@ -278,8 +283,7 @@ alists, see variable `TeX-bar-LaTeX-all-button-alists'."
 				       assqs-button-alists)))
     (setq assqs-button-alists (nreverse assqs-button-alists))
     ;; displaying results
-    (save-excursion
-      (set-buffer (get-buffer-create "*TeX tool bar buttons*"))
+    (with-current-buffer (get-buffer-create "*TeX tool bar buttons*")
       (erase-buffer)
       (insert "Available buttons for LaTeX mode
 ================================")
@@ -332,13 +336,19 @@ the argument BUTTON-ALIST in function `toolbarx-install-toolbar'."
 	  :help (lambda (&rest ignored)
 		  (TeX-bar-help-from-command-list "File")))
     (bibtex :image "bibtex"
-	    :command (TeX-command "BibTeX" 'TeX-master-file -1)
+	    :command (TeX-command (if LaTeX-using-Biber "Biber" "BibTeX")
+				  'TeX-master-file -1)
 	    :help (lambda (&rest ignored)
-		    (TeX-bar-help-from-command-list "BibTeX")))
+		    (TeX-bar-help-from-command-list
+		     (if LaTeX-using-Biber "Biber" "BibTeX"))))
     (clean  :image "delete"
 	    :command (TeX-command "Clean" 'TeX-master-file -1)
 	    :help (lambda (&rest ignored)
 		    (TeX-bar-help-from-command-list "Clean")))
+    (spell  :image "spell"
+	    :command (TeX-command "Spell" 'TeX-master-file -1)
+	    :help (lambda (&rest ignored)
+		    (TeX-bar-help-from-command-list "Spell")))
     (latex-symbols-experimental . (:alias :eval-group
 					  LaTeX-symbols-toolbar-switch-contents
 					  LaTeX-symbols-toolbar-contents)))
@@ -361,6 +371,10 @@ format of the argument MEANING-ALIST in the mentioned function."
   (add-to-list 'toolbarx-image-path
 	       (expand-file-name "images" TeX-data-directory))
   (add-hook 'TeX-PDF-mode-hook 'toolbarx-refresh nil t)
+  ;; Refresh the toolbar after styles update because `LaTeX-using-Biber' value
+  ;; could have been changed.  Append the refresh to the hook so it is run after
+  ;; the other styles-related changes.
+  (add-hook 'TeX-update-style-hook 'toolbarx-refresh t t)
   (toolbarx-install-toolbar TeX-bar-LaTeX-buttons
 			    (let ((append-list))
 			      (dolist (elt TeX-bar-LaTeX-all-button-alists)

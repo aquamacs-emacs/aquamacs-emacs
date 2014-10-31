@@ -1,11 +1,10 @@
-;;; dk.el - Setup AUC TeX for editing Danish text.
-
-;; $Id: dk.el,v 1.2 1993/12/15 21:42:40 amanda Exp $
+;;; dk.el - Setup AUCTeX for editing Danish text.
 
 ;;; Code:
 
 (TeX-add-style-hook "dk"
  (function (lambda ()
-   (run-hooks 'TeX-language-dk-hook))))
+	     (run-hooks 'TeX-language-dk-hook)))
+ LaTeX-dialect)
 
 ;;; dk.el ends here

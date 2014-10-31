@@ -1,7 +1,7 @@
 ;;; tex-fold.el --- Fold TeX macros.
 
-;; Copyright (C) 2004, 2005, 2006, 2007, 2008, 2011 Free Software
-;;   Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2006, 2007, 2008, 2011-2012
+;;   Free Software Foundation, Inc.
 
 ;; Author: Ralf Angeli <angeli@caeruleus.net>
 ;; Maintainer: auctex-devel@gnu.org

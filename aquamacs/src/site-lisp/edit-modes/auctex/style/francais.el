@@ -36,6 +36,7 @@
 (TeX-add-style-hook
  "francais"
  (lambda ()
-   (TeX-run-style-hooks "frenchb")))
+   (TeX-run-style-hooks "frenchb"))
+ LaTeX-dialect)
 
 ;;; francais.el ends here

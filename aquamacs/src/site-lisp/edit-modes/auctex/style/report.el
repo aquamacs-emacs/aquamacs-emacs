@@ -1,12 +1,21 @@
 ;;; report.el - Special code for report style.
 
-;; $Id: report.el,v 1.3 2005/03/17 10:02:06 angeli Exp $
-
 ;;; Code:
+
+(defvar LaTeX-report-class-options
+  '("a4paper" "a5paper" "b5paper" "letterpaper" "legalpaper" "executivepaper"
+    "landscape" "10pt" "11pt" "12pt" "oneside" "twoside" "draft" "final"
+    "titlepage" "notitlepage" "openright" "openany" "onecolumn" "twocolumn"
+    "leqno" "fleqn" "openbib")
+  "Package options for the report class.")
 
 (TeX-add-style-hook
  "report"
  (lambda () 
-   (LaTeX-largest-level-set "chapter")))
+   (LaTeX-largest-level-set "chapter")
+   (LaTeX-add-counters "part" "chapter" "section" "subsection" "subsubsection"
+		       "paragraph" "subparagraph" "figure" "table")
+   (LaTeX-add-pagestyles "headings" "myheadings"))
+ LaTeX-dialect)
 
 ;;; report.el ends here

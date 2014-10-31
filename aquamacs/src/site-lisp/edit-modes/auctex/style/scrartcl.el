@@ -6,7 +6,6 @@
 
 ;; Author: Mark Trettin <Mark.Trettin@gmx.de>
 ;; Created: 2002-09-26
-;; Version: $Id: scrartcl.el,v 1.4 2005/03/17 10:02:06 angeli Exp $
 ;; Keywords: tex
 
 ;;; Commentary:
@@ -21,6 +20,7 @@
    (lambda ()
      (LaTeX-largest-level-set "section")
      ;; load basic definitons
-     (TeX-run-style-hooks "scrbase")))
+     (TeX-run-style-hooks "scrbase"))
+   LaTeX-dialect)
 
 ;;; scrartcl.el ends here

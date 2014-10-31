@@ -1,6 +1,7 @@
 ;;; tex-style.el --- Customizable variables for AUCTeX style files
 
-;; Copyright (C) 2005  Free Software Foundation, Inc.
+;; Copyright (C) 2005, 2007, 2009, 2012-2014
+;;   Free Software Foundation, Inc.
 
 ;; Author: Reiner Steib <Reiner.Steib@gmx.de>
 ;; Keywords: tex, wp, convenience
@@ -215,10 +216,13 @@ It can be a list of themes or a function.  If it is the symbol
 
 ;; style/biblatex.el
 
-(defcustom LaTeX-biblatex-use-Biber t
-  "Whether to use Biber with biblatex."
-  :type 'boolean
-  :group 'LaTeX-style)
+(defvar LaTeX-biblatex-use-Biber t
+  "Whether to use Biber with biblatex.
+
+This variable is intended to be used as a file local variable to
+override the autodetection of the biblatex backend.")
+(make-variable-buffer-local 'LaTeX-biblatex-use-Biber)
+(put 'LaTeX-biblatex-use-Biber 'safe-local-variable 'TeX-booleanp)
 
 ;; style/comment.el
 
@@ -260,6 +264,31 @@ When disabled, you have to use mpost on the mp files automatically
 produced by emp.sty and then re-LaTeX the document."
   :type 'boolean
   :group 'LaTeX-style)
+
+;; style/fontspec.el
+
+(defcustom LaTeX-fontspec-arg-font-search t
+  "If `LaTeX-fontspec-arg-font' should search for fonts.
+If the value is t, fonts are retrieved automatically and provided
+for completion.  If the value is nil,
+`LaTeX-fontspec-font-list-default' is used for completion.  If
+the value is `ask', you are asked for the method to use every
+time `LaTeX-fontspec-arg-font' is called.
+
+`LaTeX-fontspec-arg-font' calls `luaotf-load --list=basename' to
+automatically get the list of fonts.  This requires
+`luaotfload-tool' version 2.3 or higher in order to work."
+  :group 'LaTeX-style
+  :type '(choice
+	  (const :tag "Search automatically" t)
+	  (const :tag "Use default font list" nil)
+	  (const :tag "Ask what to do" ask)))
+
+(defcustom LaTeX-fontspec-font-list-default nil
+  "List of default fonts to be used as completion for
+`LaTeX-fontspec-arg-font'."
+  :group 'LaTeX-style
+  :type '(repeat (string :tag "Font")))
 
 ;; style/graphicx.el
 
@@ -361,13 +390,6 @@ Inserting the subdirectory in the filename (as
 					 (read-file-name "Image file: ")
 					 (TeX-master-directory))))
 		 (function :tag "other")))
-
-;; style/shortvrb.el
-
-(defcustom LaTeX-shortvrb-chars '(?|)
-  "List of characters toggling verbatim mode."
-  :group 'LaTeX-style
-  :type '(repeat character))
 
 (provide 'tex-style)
 

@@ -1,6 +1,6 @@
 ;;; letter.el - Special code for letter style.
 
-;; Copyright (C) 1993 Free Software Foundation, Inc.
+;; Copyright (C) 1993, 2012, 2013  Free Software Foundation, Inc.
 
 ;; Author: Per Abrahamsen <abraham@dina.kvl.dk>
 ;; Maintainer: auctex-devel@gnu.org
@@ -25,28 +25,69 @@
 
 ;;; Code:
 
+(defvar LaTeX-letter-class-options
+  '("a4paper" "a5paper" "b5paper" "letterpaper" "legalpaper" "executivepaper"
+    "landscape" "10pt" "11pt" "12pt" "oneside" "twoside" "draft" "final"
+    "leqno" "fleqn")
+  "Package options for the letter class.")
+
 ;; You may want to define this in tex-site.el to contain your
-;; organizations address.  
+;; organizations address.
 (defvar LaTeX-letter-sender-address ""
   "Initial value when prompting for a sender address in the letter style.")
 
-(TeX-add-style-hook "letter"
- (function
-  (lambda ()
-    (LaTeX-add-environments
-     '("letter" LaTeX-env-recipient))
-    (TeX-add-symbols
-     '("name" "Sender: ") 
-     '("address" "Sender address: ")
-     '("signature" "Signature: ")
-     '("opening" "Opening: ")
-     '("closing" "Closing: ")))))
+(TeX-add-style-hook
+ "letter"
+ (lambda ()
+   (LaTeX-add-environments
+    '("letter" LaTeX-env-recipient))
+   (LaTeX-add-pagestyles "headings" "firstpage")
+   (setq LaTeX-default-document-environment "letter")
+   (TeX-add-symbols
+    '("name" "Sender: ")
+    '("address" "Sender address: ")
+    '("signature" "Signature: ")
+    '("opening" "Opening: ")
+    '("closing" "Closing: ")
+    "location"
+    "telephone"
+    "makelabels"
+    "stopbreaks"
+    "startbreaks"
+    "cc"
+    "encl"
+    "ps"
+    "stopletter"
+    "returnaddress"
+    "startlabels"
+    "mlabel"
+    "descriptionlabel"
+    "ccname"
+    "enclname"
+    "pagename"
+    "headtoname")
+
+   ;; Fontification
+   (when (and (featurep 'font-latex)
+	      (eq TeX-install-font-lock 'font-latex-setup))
+     (font-latex-add-keywords '(("name" "{")
+				("address" "{")
+				("signature" "{")
+				("opening" "{")
+				("closing" "{")
+				("location" "{")
+				("telephone" "{")
+				("cc" "{")
+				("encl" "{")
+				("ps" "{"))
+			      'function)))
+ LaTeX-dialect)
 
 (defun LaTeX-env-recipient (environment)
   "Insert ENVIRONMENT and prompt for recipient and address."
   (let ((sender (read-string "Sender: " (user-full-name)))
 	(sender-address (read-string "Sender address: "
-				    LaTeX-letter-sender-address))
+				     LaTeX-letter-sender-address))
 	(recipient (read-string "Recipient: "))
 	(address (read-string "Recipient address: "))
 	(signature (read-string "Signature: "))

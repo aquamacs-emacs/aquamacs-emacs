@@ -8,9 +8,10 @@
  (function
   (lambda ()
     (TeX-add-symbols
-     '("text" t)))))
+     '("text" t))))
+ LaTeX-dialect)
 
-(defvar LaTeX-amstext-package-option nil
+(defvar LaTeX-amstext-package-options nil
   "Package options for the amstext package.")
 
 ;;; amstext.el ends here.

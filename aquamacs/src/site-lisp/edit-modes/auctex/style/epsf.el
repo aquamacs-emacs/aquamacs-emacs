@@ -14,7 +14,8 @@
     "epsflly" "epsfury" "testit" "epsfgetlitbb"
     "epsfnormal" "epsfgetbb" "other" "epsfsetgraph"
     "PsFragSpecialArgs" "epsfaux" "testit" "epsfgrab"
-    "epsfllx" "epsflly" "epsfury" "epsfverbosetrue")))
+    "epsfllx" "epsflly" "epsfury" "epsfverbosetrue"))
+ LaTeX-dialect)
 
 (defun TeX-arg-epsfsize (optional &optional prompt definition)
   "Create a line that print epsf figures at a certain percentage"

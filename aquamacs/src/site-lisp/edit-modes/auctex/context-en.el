@@ -140,17 +140,25 @@
 ;; the level is used to find the section name, so the alternative
 ;; names are never found. Have to start using the section name instead
 ;; of the number.
-(defvar ConTeXt-section-list-en
+(defvar ConTeXt-numbered-section-list-en
   '(("part" 0)
     ("chapter" 1)
     ("section" 2)
     ("subsection" 3)
     ("subsubsection" 4))
-  ;; ("title" 1)
-  ;; ("subject" 2)
-  ;; ("subsubject" 3)
-  ;; ("subsubsubject" 4)
-  "List of the names of ConTeXt sections for its en interface.")
+  "List of the names of ConTeXt numbered sections for its en interface.")
+
+(defvar ConTeXt-unnumbered-section-list-en
+  '(("title" 1)
+    ("subject" 2)
+    ("subsubject" 3)
+    ("subsubsubject" 4))
+  "List of the names of ConTeXt unnumbered sections for its en interface.")
+
+(defvar ConTeXt-section-list-en
+  (append ConTeXt-numbered-section-list-en ConTeXt-unnumbered-section-list-en)
+)
+
 
 (defvar ConTeXt-text-en "text"
   "The ConTeXt en interface body text group.")

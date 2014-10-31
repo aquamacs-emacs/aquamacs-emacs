@@ -18,23 +18,23 @@
 ;; This is a propser (http://prosper.sourceforge.net/) style file for
 ;; AUCTeX.
 
-;;; Installation: 
-;; 
-;; For this file to work you need to have a working installation of 
-;; AucTeX. After that installtion is simple. Put this file into one of 
-;; the directories specified in `TeX-style-path', with the name 
-;; "style" rather than "auto" as it might get over written in the 
-;; latter.  
-;; 
-;; Then stick the current for into your .emacs 
-;; (eval-after-load "latex" 
-;;   '(add-to-list 'LaTeX-style-list '("prosper"))) 
-;;  
+;;; Installation:
 ;;
-;; And that should be it. You check whether it's worked or not by 
-;; opening a prosper document, and trying `LaTeX-environment'. "slide" 
-;; should be available by tab completion and it should ask you about 
-;; overlays.  
+;; For this file to work you need to have a working installation of
+;; AucTeX. After that installtion is simple. Put this file into one of
+;; the directories specified in `TeX-style-path', with the name
+;; "style" rather than "auto" as it might get over written in the
+;; latter.
+;;
+;; Then stick the current for into your .emacs
+;; (eval-after-load "latex"
+;;   '(add-to-list 'LaTeX-style-list '("prosper")))
+;;
+;;
+;; And that should be it. You check whether it's worked or not by
+;; opening a prosper document, and trying `LaTeX-environment'. "slide"
+;; should be available by tab completion and it should ask you about
+;; overlays.
 ;;
 ;; The environment "prosper" should be inserted immediately after the
 ;; document environment.  It will prompt you for options available
@@ -45,7 +45,7 @@
 ;; Currently the documentclass expansion doesn't work, unless you
 ;; enter a documentclass line to let auctex know which style files to
 ;; load. Then delete this and do it again. Not good. I know no way
-;; around this. 
+;; around this.
 
 ;;; Code:
 
@@ -61,8 +61,7 @@
 
 
 
-(defconst LaTeX-prosper-version
-  "$Id: prosper.el,v 1.5 2008/05/25 06:50:33 angeli Exp $"
+(defconst LaTeX-prosper-version "2008-05-25"
   "prosper.el version.")
 
 (defconst LaTeX-prosper-transition-styles '("Split"
@@ -78,7 +77,7 @@
   '("alienglow" "autumn" "azure"
     "contemporain" "darkblue" "default" "frames"
     "lignesbleues" "nuancegris" "troispoints"
-    "alcatel" "gyom" "pascal" "rico"    
+    "alcatel" "gyom" "pascal" "rico"
     ))
 
 (defun LaTeX-prosper-insert-title (optional)
@@ -99,8 +98,8 @@
               (car LaTeX-prosper-transition-history)
             "Replace")))
     (TeX-argument-insert
-     (completing-read 
-      (TeX-argument-prompt nil 
+     (completing-read
+      (TeX-argument-prompt nil
                            (format "Transition (Default %s) " default)
                            t)
       (mapcar 'list LaTeX-prosper-transition-styles)
@@ -116,8 +115,8 @@
    "Slide Style?"
    (mapcar 'list LaTeX-prosper-slide-styles)
    nil nil nil nil "default" ))
-   
-   
+
+
 (defun LaTeX-prosper-insert-options(environment)
   (insert "[" )
   (insert (LaTeX-prosper-slide-style-prompt) " ")
@@ -132,15 +131,15 @@
   (delete-char -1)
   (insert "]"))
 
-(defun LaTeX-prosper-insert-slide (environment) 
-  (if (y-or-n-p "Surround with overlay ?") 
-      (progn (TeX-insert-macro "overlays") 
-             (if (search-backward "{" 0 t) 
-                 (progn 
-                   (goto-char (+ 1 (point))) 
-                   (insert "%\n"))))) 
-  (let ((title (read-string "Title: "))) 
-    (LaTeX-insert-environment "slide" (concat TeX-grop title TeX-grcl)))) 
+(defun LaTeX-prosper-insert-slide (environment)
+  (if (y-or-n-p "Surround with overlay ?")
+      (progn (TeX-insert-macro "overlays")
+             (if (search-backward "{" 0 t)
+                 (progn
+                   (goto-char (+ 1 (point)))
+                   (insert "%\n")))))
+  (let ((title (read-string "Title: ")))
+    (LaTeX-insert-environment "slide" (concat TeX-grop title TeX-grcl))))
 
 
 
@@ -153,7 +152,7 @@
 			'("itemstep" LaTeX-env-item)
 			'("Itemize" LaTeX-env-item))
                        (TeX-add-symbols
-                        '("documentclass" 
+                        '("documentclass"
                           LaTeX-prosper-insert-options
                           LaTeX-prosper-insert-title)
                         '("title" "Title of the presentation")
@@ -186,7 +185,8 @@
 			'("PDForPS" TeX-arg-conditional)
 			'("onlyInPS" t)
 			'("onlyInPDF" t)
-			'("FromSlide" "Number")))))
+			'("FromSlide" "Number"))))
+		    LaTeX-dialect)
 
 
 ;;; prosper.el ends here

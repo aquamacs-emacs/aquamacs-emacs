@@ -1,6 +1,6 @@
 ;;; subfigure.el --- AUCTeX style file for subfigure.sty
 
-;; Copyright (C) 2003, 2005 Free Software Foundation, Inc.
+;; Copyright (C) 2003, 2005, 2013 Free Software Foundation, Inc.
 
 ;; Author: Reiner Steib  <Reiner.Steib@gmx.de>
 ;; Maintainer: auctex-devel@gnu.org
@@ -25,7 +25,7 @@
 
 ;;; Commentary:
 
-;; AUCTeX style file for subfigure.sty
+;; AUCTeX style file for `subfigure.sty'
 
 ;;; Code:
 
@@ -33,18 +33,23 @@
  "subfigure"
  (lambda ()
    (TeX-add-symbols
-    '("subfigure"  [ "list entry" ] [ "sub caption" ] "figure")
-    '("subtable"   [ "list entry" ] [ "sub caption" ] "figure")
-    '("Subref" TeX-arg-label)
-    '("subref" TeX-arg-label))
-   ;; TODO: add \subfig* lengths
+    '("subfigure"  [ "List entry" ] [ "Sub caption" ] "Figure")
+    '("subtable"   [ "List entry" ] [ "Sub caption" ] "Figure")
+    '("Subref" TeX-arg-ref)
+    '("subref" TeX-arg-ref)
+    '("subcapsize" 0)
+    '("subcapfont" 0)
+    '("subcaplabelfont" 0))
+
+   (LaTeX-add-lengths "subfigtopskip" "subfigcapskip" "subfigcaptopadj"
+                      "subfigbottomskip" "subfigcapmargin" "subfiglabelskip")
 
    ;; Install completion for labels:
    (setq TeX-complete-list
 	 (append
-	  '(("\\\\subref{\\([^{}\n\r\\%,]*\\)" 1 LaTeX-label-list "}")
-	    ("\\\\Subref{\\([^{}\n\r\\%,]*\\)" 1 LaTeX-label-list "}"))
-	  TeX-complete-list))
+	  '(("\\\\[Ss]ubref{\\([^{}\n\r\\%,]*\\)" 1 LaTeX-label-list "}")))
+	  TeX-complete-list)
+
    ;; Fontification
    (when (and (featurep 'font-latex)
 	      (eq TeX-install-font-lock 'font-latex-setup))
@@ -53,7 +58,8 @@
 			      'textual)
      (font-latex-add-keywords '(("Subref" "{")
 				("subref" "{"))
-			      'reference))))
+			      'reference)))
+ LaTeX-dialect)
 
 (defvar LaTeX-subfigure-package-options '("normal" "hang" "center"
 					  "centerlast" "nooneline"

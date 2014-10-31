@@ -1,6 +1,6 @@
 ;;; tabularx.el --- AUCTeX style for the tabularx package.
 
-;; Copyright (C) 2009 Free Software Foundation, Inc.
+;; Copyright (C) 2009, 2013 Free Software Foundation, Inc.
 
 ;; Author: Ralf Angeli <angeli@caeruleus.net>
 ;; Maintainer: auctex-devel@gnu.org
@@ -37,6 +37,11 @@
 (TeX-add-style-hook
  "tabularx"
  (lambda ()
+   ;; Make tabularx the default tabular environment
+   (setq LaTeX-default-tabular-environment "tabularx")
+   ;; Use the enhanced tabular indentation
+   (add-to-list 'LaTeX-indent-environment-list
+		'("tabularx" LaTeX-indent-tabular))
    ;; New symbols
    (TeX-add-symbols
     "tracingtabularx"
@@ -47,6 +52,10 @@
     ;; tabular* environment.  However, the supported tokens in the
     ;; format can differ, so at some point in time we might want to
     ;; separate tabular* and tabularx.
-    '("tabularx" LaTeX-env-tabular*))))
+    '("tabularx" LaTeX-env-tabular*))
+   
+   ;; `tabularx' requires array to define the column types
+   (TeX-run-style-hooks "array"))
+ LaTeX-dialect)
 
 ;;; tabularx.el ends here

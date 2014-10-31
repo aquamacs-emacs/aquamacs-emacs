@@ -32,7 +32,8 @@
 (TeX-add-style-hook
  "jura"
  (lambda ()
-   (TeX-run-style-hooks "alphanum")))
+   (TeX-run-style-hooks "alphanum"))
+ LaTeX-dialect)
 
 ;; Local Variables:
 ;; coding: iso-8859-1

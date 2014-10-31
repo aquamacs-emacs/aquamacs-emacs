@@ -1,6 +1,6 @@
 ;;; paralist.el -- AUCTeX style for paralist.sty
 
-;; Copyright (C) 2003, 2004, 2005 Free Software Foundation, Inc.
+;; Copyright (C) 2003-2005, 2014 Free Software Foundation, Inc.
 
 ;; Author:   Ralf Angeli <angeli@iwi.uni-sb.de>
 ;; Maintainer: auctex-devel@gnu.org
@@ -72,17 +72,19 @@
     '("asparaitem" LaTeX-paralist-env-item-opt-label)
     '("inparaitem" LaTeX-paralist-env-item-opt-label)
     '("compactitem" LaTeX-paralist-env-item-opt-label)
-    '("compactdesc" LaTeX-env-item)
-    ;; FIXME: Should not be available if package is loaded with option
-    ;; `olditem':
-    '("itemize" LaTeX-paralist-env-item-opt-label)
-    ;; FIXME: Should not be available if package is loaded with option
-    ;; `oldenum':
-    '("enumerate" LaTeX-paralist-env-item-opt-label)
-    ;; FIXME: Only defined if package is loaded with option
-    ;; `defblank':
-    '("asparablank" LaTeX-env-item)
-    '("inparablank" LaTeX-env-item))
+    '("compactdesc" LaTeX-env-item))
+   ;; Environments (re)defined only when the package is loaded with particular
+   ;; options.
+   (unless (LaTeX-provided-package-options-member "paralist" "olditem")
+     (LaTeX-add-environments
+      '("itemize" LaTeX-paralist-env-item-opt-label)))
+   (unless (LaTeX-provided-package-options-member "paralist" "oldenum")
+     (LaTeX-add-environments
+      '("enumerate" LaTeX-paralist-env-item-opt-label)))
+   (when (LaTeX-provided-package-options-member "paralist" "defblank")
+     (LaTeX-add-environments
+      '("asparablank" LaTeX-env-item)
+      '("inparablank" LaTeX-env-item)))
 
    ;; Fontification
    (when (and (featurep 'font-latex)
@@ -90,7 +92,8 @@
      (font-latex-add-keywords '(("setdefaultitem" "{{{{")
 				("setdefaultenum" "{{{{")
 				("setdefaultleftmargin" "{{{{{{"))
-			      'variable))))
+			      'variable)))
+ LaTeX-dialect)
 
 (defvar LaTeX-paralist-package-options '("newitem" "olditem" "newenum"
 					 "oldenum" "alwaysadjust"

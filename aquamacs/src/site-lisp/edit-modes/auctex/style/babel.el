@@ -1,6 +1,6 @@
-;;; babel.el --- AUCTeX style for `babel.sty'
+;;; babel.el --- AUCTeX style for `babel.sty' version 3.9h.
 
-;; Copyright (C) 2005 Free Software Foundation, Inc.
+;; Copyright (C) 2005, 2007, 2013-2014 Free Software Foundation, Inc.
 
 ;; Author: Ralf Angeli <angeli@iwi.uni-sb.de>
 ;; Maintainer: auctex-devel@gnu.org
@@ -26,34 +26,90 @@
 
 ;;; Commentary:
 
-;; This file adds support for `babel.sty'.
+;; This file adds support for `babel.sty' version 3.9h.
 
 ;;; Code:
 
 (defvar LaTeX-babel-language-list
-  '("acadian" "afrikaans" "american" "austrian""bahasa" "basque" "brazil"
-    "brazilian" "breton" "british" "bulgarian" "canadian" "canadien"
-    "catalan" "croatian" "czech" "danish" "dutch" "english" "esperanto"
-    "estonian" "finnish" "francais" "frenchb" "french" "galician"
-    "german" "germanb" "greek" "polutonikogreek" "hebrew" "hungarian"
-    "icelandic" "irish" "italian" "latin" "lowersorbian" "magyar"
-    "naustrian" "ngerman" "norsk" "samin" "nynorsk" "polish" "portuges"
-    "portuguese" "romanian" "russian" "scottish" "serbian" "slovak"
-    "slovene" "spanish" "swedish" "turkish" "ukrainian" "uppersorbian"
-    "welsh" "UKenglish" "USenglish")
+  '("afrikaans"
+    "bahasa" "indonesian" "indon" "bahasai" "bahasam" "malay" "meyalu"
+    "basque"
+    "breton"
+    "bulgarian"
+    "catalan"
+    "croatian"
+    "czech"
+    "danish"
+    "dutch"
+    "english" "USenglish" "american" "UKenglish" "british"  "canadian"
+    "australian" "newzealand"
+    "esperanto"
+    "estonian"
+    "finnish"
+    "french" "francais" "canadien" "acadian"
+    "galician"
+    "austrian" "german" "germanb" "ngerman" "naustrian"
+    "greek" "polutonikogreek"
+    "hebrew"
+    "icelandic"
+    "interlingua"
+    "irish"
+    "italian"
+    "latin"
+    "lowersorbian"
+    "samin"
+    "norsk" "nynorsk"
+    "polish"
+    "portuges" "portuguese" "brazilian" "brazil"
+    "romanian"
+    "russian"
+    "scottish"
+    "spanish"
+    "slovak"
+    "slovene"
+    "swedish"
+    "serbian"
+    "turkish"
+    "ukrainian"
+    "uppersorbian"
+    "welsh"
+    ;; Extra languages mentioned in the `babel' manual.
+    "albanian" "hindi" "thai" "thaicjk" "latvian" "turkmen" "hungarian" "magyar"
+    "mongolian" "romansh" "lithuanian" "spanglish" "vietnamese" "japanese"
+    "pinyin" "arabinc" "farsi" "ibygreek" "bgreek" "serbianic" "frenchle"
+    "ethiop" "friulan" "frenchb")
   "List of languages supported by the babel LaTeX package.")
-
-(if (fboundp 'defvaralias)
-    (defvaralias 'LaTeX-babel-package-options 'LaTeX-babel-language-list)
-  (defvar LaTeX-babel-package-options LaTeX-babel-language-list
-    "Package options for the babel package."))
 
 (defun LaTeX-babel-active-languages ()
   "Return a list of languages used in the document."
-  (let (active-languages)
-    (dolist (elt LaTeX-babel-language-list)
-      (when (member elt TeX-active-styles)
-	(add-to-list 'active-languages (list elt))))
+  (let (main-language active-languages)
+    ;; Loop over options provided to class and `babel' package at load time.
+    (dolist (elt (append
+		  ;; In most cases there is only one element in the alist, if
+		  ;; there is more than one element, the first one should
+		  ;; contain the class options of the current buffer.  So we can
+		  ;; take the car of `LaTeX-provided-class-options'.
+		  (cdr (car LaTeX-provided-class-options))
+		  (cdr (assoc "babel" LaTeX-provided-package-options))))
+      (setq elt (TeX-split-string "=" elt))
+      (if (equal (car elt) "main")
+	  ;; Starting from version 3.9 of `babel' package, languages can be set
+	  ;; with the following syntax:
+	  ;;   \usepackage[latin.medieval,main=danish,spanish.notilde]{babel}
+	  ;; with `danish' being the default language.  When the default
+	  ;; language is set with the `main' option, we record it and append to
+	  ;; the list at the end.
+	  (setq main-language (car (cdr elt)))
+	;; Get rid of the modifiers (`medieval' and `notilde' in the above
+	;; example).
+	(setq elt (car (TeX-split-string "\\." (car elt))))
+	(if (member elt LaTeX-babel-language-list)
+	    ;; Append element to `active-languages' to respect loading order.
+	    ;; `babel' package uses as default language the last loaded one,
+	    ;; except if it is set with the `main' option.
+	    (add-to-list 'active-languages elt t))))
+    (if main-language
+	(add-to-list 'active-languages main-language t))
     active-languages))
 
 (defun TeX-arg-babel-lang (optional &optional prompt)
@@ -67,9 +123,17 @@
    env (format "{%s}" (completing-read "Language: "
 				       (LaTeX-babel-active-languages)))))
 
+(defun LaTeX-babel-load-languages ()
+  "Load style files of babel active languages."
+  ;; Run style hooks for every active language in loading order, so
+  ;; `TeX-quote-language' will be correctly set.
+  (mapc 'TeX-run-style-hooks (LaTeX-babel-active-languages)))
+
 (TeX-add-style-hook
  "babel"
  (lambda ()
+   (LaTeX-babel-load-languages)
+   (add-hook 'LaTeX-after-usepackage-hook 'LaTeX-babel-load-languages nil t)
    ;; New symbols
    (TeX-add-symbols
     '("selectlanguage" TeX-arg-babel-lang)
@@ -103,6 +167,28 @@
      (font-latex-add-keywords '(("defineshorthand" "{{")
 				("aliasshorthand" "{{")
 				("languageattribute" "{{"))
-			      'variable))))
+			      'variable)))
+ LaTeX-dialect)
+
+(defun LaTeX-babel-package-options ()
+  "Prompt for package options for the babel package."
+  (TeX-read-key-val
+   t
+   (append
+    '(("KeepShorthandsActive")
+      ("activeacute")
+      ("activegrave")
+      ("shorthands")
+      ("safe" ("none" "ref" "bib"))
+      ("math" ("active" "normal"))
+      ("config")
+      ("main" LaTeX-babel-language-list)
+      ("headfoot" LaTeX-babel-language-list)
+      ("noconfigs")
+      ("showlanguages")
+      ("strings" ("generic" "unicode" "encoded"))
+      ("hyphenmap" ("off" "main" "select" "other" "other*"))
+      ("base"))
+    (mapcar 'list LaTeX-babel-language-list))))
 
 ;;; babel.el ends here
