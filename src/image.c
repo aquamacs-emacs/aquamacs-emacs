@@ -553,6 +553,7 @@ static Lisp_Object QCcrop, QCrotation;
 
 static Lisp_Object Qcount, Qextension_data, Qdelay;
 static Lisp_Object Qlaplace, Qemboss, Qedge_detection, Qheuristic;
+static Lisp_Object Qtruedpi, Qscale;
 
 /* Forward function prototypes.  */
 
@@ -1648,6 +1649,14 @@ postprocess_image (struct frame *f, struct image *img)
 	x_laplace (f, img);
       else if (EQ (conversion, Qemboss))
 	x_emboss (f, img);
+#if defined (NS_IMPL_COCOA)
+      else if (CONSP (conversion)
+	       && EQ (XCAR (conversion), Qtruedpi))
+	ns_resize_truedpi_image (img->pixmap, 1, XCDR (conversion), img);
+      else if (CONSP (conversion)
+	       && EQ (XCAR (conversion), Qscale))
+	ns_resize_truedpi_image (img->pixmap, 0, XCDR (conversion), img);
+#endif
       else if (CONSP (conversion)
 	       && EQ (XCAR (conversion), Qedge_detection))
 	{
@@ -9441,6 +9450,8 @@ non-numeric, there is no explicit limit on the size of images.  */);
 
   DEFSYM (Qlaplace, "laplace");
   DEFSYM (Qemboss, "emboss");
+  DEFSYM (Qtruedpi, "truedpi");
+  DEFSYM (Qscale, "scale");
   DEFSYM (Qedge_detection, "edge-detection");
   DEFSYM (Qheuristic, "heuristic");
 

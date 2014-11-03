@@ -174,15 +174,102 @@ ns_set_alpha (void *img, int x, int y, unsigned char a)
   [(EmacsImage *)img setAlphaAtX: x Y: y to: a];
 }
 
+void
+ns_resize_truedpi_image (void *eImg, int respect_dpi, Lisp_Object scale_factor, struct image *img)
+{
+
+  const double STANDARD_DPI = 72.0;  // image resolution
+  
+  /*
+    Resize image and choose appropriate representation out of set of available 
+    representations in image.
+
+    If scale_factor is NIL, choose smallest full-resolution representation available.
+
+    If scale_factor is a number, scale image  by this factor.     
+
+    If respect_dpi is not 0, scale image according to DPI information of 
+    display, assuming 72dpi for the image.
+    
+   */
+  EmacsImage *image = (EmacsImage *) eImg;
+
+  NSImageRep *imgRep;
+  
+  // we'll optimize for the main screen.
+  // needed to pick the right representation e.g., when HiDPI image is provided.
+  if ([image respondsToSelector: @selector (bestRepresentationForRect:context:hints:)])
+    {
+      // Choose the smallest (full-resolution) image representation
+      imgRep = [image bestRepresentationForRect: NSMakeRect(100,100,2,2)  context:nil hints: nil];
+    }
+  else
+    {
+      imgRep = [image bestRepresentationForDevice: nil];
+    }
+  
+  if (imgRep == nil)
+      return;
+
+  // this would retain the size:
+  // [image setSize: NSMakeSize([image size].width, [image size].height)];
+
+  // points = pixels for this port
+  // so we need to scale the image.
+
+  // NS assumes 72dpi= 72/25.4 pix/mm
+  // So we adjust according to the CoreGraphics DPI information
+
+  // use userSpaceScaleFactor?
+  double adj = 1.0;
+  if (! NILP (scale_factor))
+    {
+      if (FLOATP (scale_factor))
+	adj = XFLOAT_DATA (scale_factor);
+      else if (INTEGERP (scale_factor))
+	adj = (double) XINT (scale_factor);
+    
+  
+  
+      NSScreen *screen = [NSScreen mainScreen];
+      CGDirectDisplayID displayID = (CGDirectDisplayID)[[[screen deviceDescription] objectForKey:@"NSScreenNumber"] unsignedIntValue];
+      CGSize physicalSize = CGDisplayScreenSize (displayID);
+      CGRect bounds = CGDisplayBounds (displayID);
+      // display resolution
+      float resx = bounds.size.width / physicalSize.width; // pixels per mm
+      float resy = bounds.size.height / physicalSize.height;
+      // Respect DPI
+      // [image setScalesWhenResized: YES];
+      // pixel=(cm*dpi)/25.4
+      if (respect_dpi)
+	{
+	  [image setSize: NSMakeSize(adj * 25.4 * [imgRep pixelsWide]*resx / STANDARD_DPI,  adj * 25.4 * [imgRep pixelsHigh]*resy / STANDARD_DPI)];
+	}
+      else
+	{
+	  [image setSize: NSMakeSize([imgRep pixelsWide]*adj,   [imgRep pixelsHigh]*adj)];	  
+	}
+      if (img)
+	{
+	  img->width = image.size.width;
+	  img->height = image.size.height;
+	}
+    }
+  else
+    {
+      /* The next two lines cause the DPI of the image to be ignored.
+	 This seems to be the behavior users expect. */
+      // [image setScalesWhenResized: YES];
+      [image setSize: NSMakeSize([imgRep pixelsWide], [imgRep pixelsHigh])];
+    }
+  
+}
 
 /* ==========================================================================
 
    Class supporting bitmaps and images of various sorts.
 
    ========================================================================== */
-
-// extern Lisp_Object Vns_true_dpi_images_adjust;
-/* defined in nsterm.m */
 
 
 @implementation EmacsImage
@@ -232,90 +319,34 @@ static EmacsImage *ImageList = nil;
   // image = [NSImage imageNamed: [NSString stringWithUTF8String: SDATA (found)]];
 
 
-#if 0
-#if defined (NS_IMPL_COCOA) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
-  imgRep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
-#else
+// #if 0
+// #if defined (NS_IMPL_COCOA) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
+//   imgRep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
+// #else
 
-  // on 10.5:
+//   // on 10.5:
 
-  // imgRep = [image bestRepresentationForDevice: nil];
-  imgRep = nil;
+//   // imgRep = [image bestRepresentationForDevice: nil];
+//   imgRep = nil;
 
-  // choose smallest representation
-  NSInteger w = 999999;
-  for (NSImageRep * imageRep in [image representations]) {
-    if ([imageRep pixelsWide] < w) 
-      { w = [imageRep pixelsWide];
-	imgRep = imageRep;
-      }
-  }
+//   // choose smallest representation
+//   NSInteger w = 999999;
+//   for (NSImageRep * imageRep in [image representations]) {
+//     if ([imageRep pixelsWide] < w) 
+//       { w = [imageRep pixelsWide];
+// 	imgRep = imageRep;
+//       }
+//   }
  
 
-#endif
-#else
+// #endif
+// #else
 
-  // we'll optimize for the main screen.
-  // needed to pick the right representation e.g., when HiDPI image is provided.
-  if ([image respondsToSelector: @selector (bestRepresentationForRect:context:hints:)])
-    {
-      // Choose the smallest (full-resolution) image representation
-      imgRep = [image bestRepresentationForRect: NSMakeRect(100,100,2,2)  context:nil hints: nil];
-    }
-  else
-    {
-      imgRep = [image bestRepresentationForDevice: nil];
-    }
-#endif
-
-  if (imgRep == nil)
-    {
-      [image release];
-      return nil;
-    }
-
-  // Respect DPI?
-  
-  /* The next two lines cause the DPI of the image to be ignored.
-     This seems to be the behavior users expect. */
-
-  double adj = 1.0;
-  if (FLOATP (Vns_true_dpi_images_adjust))
-    adj = XFLOAT_DATA (Vns_true_dpi_images_adjust);
-  else if (INTEGERP (Vns_true_dpi_images_adjust))
-    adj = (double) XINT (Vns_true_dpi_images_adjust);
-  
-  if (strstr (SDATA (file), "@true_dpi"))
-    {
-      // this would retain the size:
-      // [image setSize: NSMakeSize([image size].width, [image size].height)];
-
-      // points = pixels for this port
-      // so we need to scale the image.
-
-      // NS assumes 72dpi= 72/25.4 pix/mm
-      // So we adjust according to the CoreGraphics DPI information
-
-      // use userSpaceScaleFactor?
-
-      NSScreen *screen = [NSScreen mainScreen];
-      CGDirectDisplayID displayID = (CGDirectDisplayID)[[[screen deviceDescription] objectForKey:@"NSScreenNumber"] unsignedIntValue];
-      CGSize physicalSize = CGDisplayScreenSize (displayID);
-      CGRect bounds = CGDisplayBounds (displayID);
-      float resx = bounds.size.width / physicalSize.width; // pixels per mm
-      float resy = bounds.size.height / physicalSize.height;
-      [image setScalesWhenResized: YES];
-      [image setSize: NSMakeSize(adj * [image size].width*resx / (72.0/25.4),  adj * [image size].height*resy / (72.0/25.4))];
-    }
-  else
-    {
-      [image setScalesWhenResized: YES];
-      [image setSize: NSMakeSize([imgRep pixelsWide], [imgRep pixelsHigh])];
-    }
-
-  [image setName: [NSString stringWithUTF8String: SSDATA (file)]];
-  [image reference];
-  ImageList = [image imageListSetNext: ImageList];
+    ns_resize_truedpi_image(image, 0, Qnil, nil); // no resize, just choose representation.
+      
+    [image setName: [NSString stringWithUTF8String: SSDATA (file)]];
+    [image reference];
+    ImageList = [image imageListSetNext: ImageList];
 
   return image;
 }
