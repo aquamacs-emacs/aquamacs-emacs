@@ -5515,7 +5515,12 @@ make_lispy_event (struct input_event *event)
 #endif
 
       if (event->kind == NS_MOUSEDRAG_EVENT)
-	{
+	{	  
+	    /* We need to use an alist rather than a vector as the cache
+	       since we can't make a vector long enough.  */
+	    if (NILP (KVAR (current_kboard, system_key_syms)))
+	      kset_system_key_syms (current_kboard, Fcons (Qnil, Qnil));
+
             struct frame *f = XFRAME (event->frame_or_window);
             Lisp_Object position;
             Lisp_Object head;
@@ -5549,7 +5554,8 @@ make_lispy_event (struct input_event *event)
 				      Qfunction_key,
 				      KVAR (current_kboard, Vsystem_key_alist),
 				      0, &KVAR (current_kboard, system_key_syms),
-				      PTRDIFF_MAX);
+				      PTRDIFF_MAX
+				      );
 	}
 
       return modify_event_symbol (event->code - FUNCTION_KEY_OFFSET,
@@ -6525,16 +6531,24 @@ modify_event_symbol (ptrdiff_t symbol_num, int modifiers, Lisp_Object symbol_kin
      we've never used that symbol before.  */
   else
     {
-      if (! VECTORP (*symbol_table)
-	  || ASIZE (*symbol_table) != table_size)
+      /* is it a vector? */
+      if (table_size>=0 && table_size<PTRDIFF_MAX)
 	{
-	  Lisp_Object size;
+	  if (! VECTORP (*symbol_table)
+	      || ASIZE (*symbol_table) != table_size)
+	    {
+	      Lisp_Object size;
 
-	  XSETFASTINT (size, table_size);
-	  *symbol_table = Fmake_vector (size, Qnil);
+	      XSETFASTINT (size, table_size);
+	      *symbol_table = Fmake_vector (size, Qnil);
+	    }
+	  value = AREF (*symbol_table, symbol_num);
 	}
-
-      value = AREF (*symbol_table, symbol_num);
+      else  /* is it an alist? */
+	{
+	  value = Qnil;
+	  *symbol_table = Fcons (Qnil, value);
+	}
     }
 
   /* Have we already used this symbol before?  */

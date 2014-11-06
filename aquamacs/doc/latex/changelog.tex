@@ -6,12 +6,22 @@
 \end{rawhtml}
 \textbf{To all supporters: thank you so much for your donations.  See also: \url{http://aquamacs.org/donations.shtml}. To all users and hackers: Thank You for your support!  We appreciate your bug reports, success stories, ideas and code.  }
 \vskip2em
-\begin{itemize}
-\item On OS X 10.10 ``Yoemite'', clicks on toolbar icons could cause Aquamacs (as well as GNU Emacs 24.4) to become unresponsive.  Until Apple releases an improved version of the operating system, Aquamacs provides a workaround.
+\begin{itemize}  
+\item On OS X 10.10 ``Yosemite'', clicks on toolbar icons could cause Aquamacs (as well as GNU Emacs 24.4) to become unresponsive.  Until Apple releases an improved version of the operating system, Aquamacs provides a workaround.
+\item Color dragging out of the color palette (and other drag\&drop actions) right after startup now works reliably.
 \item AUCTeX has been updated to version 11.88 (from version 11.87). See here for changes: \url{http://www.gnu.org/software/auctex/manual/auctex/Changes.html}.
 \end{itemize}
 \subsection{Changes--- 3.1a}
 
+
+(defun preview-gs-resolution (scale xres yres)
+  "Generate resolution argument for gs.
+Calculated from real-life factor SCALE and XRES and
+YRES, the screen resolution in dpi."
+  (message "scal %s, xres %s, magn %s" scale xres (preview-get-magnification))
+  (format "-r%gx%g"
+	  (round (/ (* (/ 1.0 scale) xres) (preview-get-magnification)))
+	  (round (/ (* (/ 1.0 scale) yres) (preview-get-magnification)))))
 
 \begin{itemize}
 \item Command-Shift-Left/Right now select the text from point to the left or right side of the line, as they did in Aquamacs 2. 
