@@ -1018,6 +1018,10 @@ Get face that determines the foreground color."
 	'echo-area)
        ((eq p 'vertical-line)
 	'default)
+       ((eq p 'right-fringe)
+	'fringe)
+       ((eq p 'left-fringe)
+	'fringe)
        ((eq p (window-point (posn-window pos)))
 	'cursor)
        ((and mark-active (< (region-beginning) p) (< p (region-end)))
@@ -1040,7 +1044,8 @@ EVENT is a mouse event, and ATTRIBUTE is either
     (if (not (windowp (posn-window position)))
 	(error "Position not in text area of window"))
     (let* ((face (ns-face-at-pos position))
-	   (frame (window-frame (posn-window position))))
+	   (frame (window-frame (posn-window position)))
+	   (hint nil))
     (cond
      ((eq face 'cursor)
       (modify-frame-parameters frame (list (cons 'cursor-color
@@ -1049,16 +1054,19 @@ EVENT is a mouse event, and ATTRIBUTE is either
 	(modify-frame-parameters frame (list (cons attribute
                                                  ns-input-color))))
      (t
-	(if (eq attribute 'foreground-color)
+      (if (eq attribute 'foreground-color)
+	  (progn
 	    (set-face-foreground face ns-input-color frame)
-	  (set-face-background face ns-input-color frame))
-	(let ((spec
-	       (list (list t (face-attr-construct face)))))
-	  (put face 'customized-face spec)
-	  (put face 'saved-face spec)
-	  (custom-push-theme 'theme-face face 'user 'set spec)
-	  (put face 'face-modified nil))))
-      (message "%s set for %s." (capitalize (symbol-name attribute)) face))))
+	    (setq hint (or hint (memq face '(default fringe mode-line)))))
+	(set-face-background face ns-input-color frame))
+      (let ((spec
+	     (list (list t (face-attr-construct face)))))
+	(put face 'customized-face spec)
+	(put face 'saved-face spec)
+	(custom-push-theme 'theme-face face 'user 'set spec)
+	(put face 'face-modified nil))))
+    (message "%s set for %s.%s" (capitalize (symbol-name attribute)) face
+	     (if hint " Hold Option while dragging to set background." "")))))
 
 
 (defun ns-set-foreground-at-mouse (event)
