@@ -2986,12 +2986,28 @@ name(\\([^)]+\\))\\)\\|\
 				  snippet)) "Parser"))))))))
 	  (preview-call-hook 'close (car open-data) close-data))))))
 
-;; (let ((wdpi (/ (* 25.4 (display-pixel-width))
-;; 	       (display-mm-width)))
-;;       (hdpi (/ (* 25.4 (display-pixel-height))
-;; 	       (display-mm-height))))
-;;   (sqrt (+ (* wdpi wdpi) (* hdpi hdpi))))
-   
+;; Aquamacs specific function
+(defun preview-frame-monitor-resolution ()
+  (condition-case nil
+      (let* ((att (frame-monitor-attributes (selected-frame)))
+	     (geom (assq 'geometry att))
+	     (mm (assq 'mm-size att))
+	     (w (nth 3 geom))
+	     (h (nth 4 geom))
+	     (mmw (nth 1 mm))
+	     (mmh (nth 2 mm)))
+	(cons (round (/ (* 25.4 w) mmw))
+	      (round (/ (* 25.4 h) mmh))))
+    ;; default if some values aren't available
+    (error nil
+	   (condition-case nil
+	       (cons
+		(round (/ (* 25.4 (display-pixel-width))
+			  (display-mm-width)))
+		(round (/ (* 25.4 (display-pixel-height))
+			  (display-mm-height))))
+	     (error nil (cons 96 96))))))
+  
 (defun preview-get-geometry ()
   "Transfer display geometry parameters from current display.
 Returns list of scale, resolution and colors.  Calculation
@@ -3002,12 +3018,9 @@ is done in current buffer."
 	            ;; preview-scale:
 	            (preview-hook-enquiry preview-scale-function)
 		    ;;  preview-resolution:
-		    (cons (* preview-resolution-factor
-			     (round (/ (* 25.4 (display-pixel-width))
-				       (display-mm-width))))
-			  (* preview-resolution-factor
-			     (round (/ (* 25.4 (display-pixel-height))
-				       (display-mm-height)))))
+		    (let ((res (preview-frame-monitor-resolution)))
+		      (cons (* preview-resolution-factor (car res))
+			    (* preview-resolution-factor (cdr res))))
 		    ;; preview-colors:
 		    (preview-get-colors)))
 	     (preview-min-spec

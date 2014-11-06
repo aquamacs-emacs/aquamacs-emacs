@@ -82,7 +82,7 @@ Consults `preview-transparent-color'."
 
 ;; Aquamacs-specific
 (defun preview-set-image-size (image)
-  (append image `(:conversion ,(cons 'scale (/ 0.8 preview-resolution-factor)))))
+  (append image `(:conversion ,(cons 'scale (/ 1.0 preview-resolution-factor)))))
 
 (defsubst preview-create-icon-1 (file type ascent border)
   `(image
