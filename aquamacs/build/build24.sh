@@ -47,6 +47,11 @@ echo "Compiler flags: $FLAGS"
 
 MACOSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET:-"10.6"}
 export MACOSX_DEPLOYMENT_TARGET
+SDKROOT=${SDKROOT:-"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk"}
+export SDKROOT
+
+echo "MACOSX_DEPLOYMENT_TARGET=" $MACOSX_DEPLOYMENT_TARGET
+echo "SDKROOT=" $SDKROOT
 
 # autoconf must be run via macports to allow its upgrade
 test $OMIT_AUTOGEN || ./autogen.sh ; \
