@@ -135,7 +135,7 @@ If nil, none is specified."
     ("BibTeX" "bibtex %s" TeX-run-BibTeX nil t :help "Run BibTeX")
     ("Biber" "biber %s" TeX-run-Biber nil t :help "Run Biber")
     ,(if (or window-system (getenv "DISPLAY"))
-	'("View" "%V" TeX-run-discard-or-function t t :help "Run Viewer")
+	'("View" "%V" TeX-run-discard-or-function nil t :help "Run Viewer")
        '("View" "dvi2tty -q -w 132 %s" TeX-run-command t t
 	 :help "Run Text viewer"))
     ("Print" "%p" TeX-run-command t t :help "Print the file")
