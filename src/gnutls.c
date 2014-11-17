@@ -154,6 +154,9 @@ DEF_GNUTLS_FN (int, gnutls_x509_crt_import,
 	       (gnutls_x509_crt_t, const gnutls_datum_t *,
 		gnutls_x509_crt_fmt_t));
 DEF_GNUTLS_FN (int, gnutls_x509_crt_init, (gnutls_x509_crt_t *));
+DEF_GNUTLS_FN (int, gnutls_x509_crt_init, (gnutls_digest_algorithm_t,
+					   const gnutls_datum_t*, void *,
+					   size_t*));
 
 static bool
 init_gnutls_functions (void)
@@ -213,6 +216,7 @@ init_gnutls_functions (void)
   LOAD_GNUTLS_FN (library, gnutls_x509_crt_deinit);
   LOAD_GNUTLS_FN (library, gnutls_x509_crt_import);
   LOAD_GNUTLS_FN (library, gnutls_x509_crt_init);
+  LOAD_GNUTLS_FN (library, gnutls_x509_crt_get_fingerprint);
 
   max_log_level = global_gnutls_log_level;
 
@@ -268,6 +272,7 @@ init_gnutls_functions (void)
 #define fn_gnutls_x509_crt_deinit		gnutls_x509_crt_deinit
 #define fn_gnutls_x509_crt_import		gnutls_x509_crt_import
 #define fn_gnutls_x509_crt_init			gnutls_x509_crt_init
+#define fn_gnutls_x509_crt_get_fingerprint	gnutls_x509_crt_get_fingerprint	
 
 #endif /* !WINDOWSNT */
 
@@ -718,14 +723,17 @@ The return value is a property list.  */)
     return Qnil;
 
   /* First get the fingerprint of the certificate. */
-  ret = gnutls_x509_crt_get_fingerprint (XPROCESS (proc)->gnutls_certificate,
-					 GNUTLS_DIG_SHA1, buffer, &size);
+  ret = fn_gnutls_x509_crt_get_fingerprint (XPROCESS (proc)->gnutls_certificate,
+					    GNUTLS_DIG_SHA1, buffer, &size);
   if (ret < GNUTLS_E_SUCCESS)
     return gnutls_make_error (ret);
 
-  hash = make_uninit_string (size * 3 - 1);
+  /* Each byte, except the last, with a colon after it, and "sha1:" in
+     front. */
+  hash = make_uninit_string (size * 3 - 1 + 5);
+  strcpy (SDATA (hash), "sha1:");
   for (int i = 0; i < size; i++)
-    sprintf (SDATA (hash) + i * 3,
+    sprintf (SDATA (hash) + i * 3 + 5,
 	     i == size - 1? "%02x": "%02x:",
 	     buffer[i]);
 
