@@ -18,6 +18,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <config.h>
 #include <errno.h>
+#include <stdio.h>
 
 #include "lisp.h"
 #include "process.h"
@@ -60,6 +61,13 @@ static void gnutls_log_function2 (int, const char*, const char*);
 #ifdef HAVE_GNUTLS3
 static void gnutls_audit_log_function (gnutls_session_t, const char *);
 #endif
+
+#define GNUTLS_MAX_HASH_SIZE 64
+
+static enum
+  {
+    CERTIFICATE_NOT_MATCHING = 2,
+  } extra_peer_verification_t;
 
 
 #ifdef WINDOWSNT
@@ -693,6 +701,86 @@ DEFUN ("gnutls-available-p", Fgnutls_available_p, Sgnutls_available_p, 0, 0, 0,
 #endif
 }
 
+DEFUN ("gnutls-peer-status", Fgnutls_peer_status, Sgnutls_peer_status, 1, 1, 0,
+       doc: /* Return the status of the gnutls PROC peer certificate.
+The return value is a property list.  */)
+  (Lisp_Object proc)
+{
+  int ret;
+  unsigned char buffer[GNUTLS_MAX_HASH_SIZE];
+  size_t size = sizeof (buffer);
+  Lisp_Object hash, warnings = Qnil;
+  unsigned int verification;
+
+  CHECK_PROCESS (proc);
+
+  if (XPROCESS (proc)->gnutls_p == 0)
+    return Qnil;
+
+  /* First get the fingerprint of the certificate. */
+  ret = gnutls_x509_crt_get_fingerprint (XPROCESS (proc)->gnutls_certificate,
+					 GNUTLS_DIG_SHA1, buffer, &size);
+  if (ret < GNUTLS_E_SUCCESS)
+    return gnutls_make_error (ret);
+
+  hash = make_uninit_string (size * 3 - 1);
+  for (int i = 0; i < size; i++)
+    sprintf (SDATA (hash) + i * 3,
+	     i == size - 1? "%02x": "%02x:",
+	     buffer[i]);
+
+  /* Then collect any warnings already computed by the handshake. */
+  verification = XPROCESS (proc)->gnutls_peer_verification;
+
+  if (verification & GNUTLS_CERT_INVALID)
+    warnings = Fcons (list2 (intern (":invalid"),
+			     build_string("certificate could not be verified")),
+		      warnings);
+
+  if (verification & GNUTLS_CERT_REVOKED)
+    warnings = Fcons (list2 (intern (":revoked"),
+			     build_string("certificate was revoked (CRL)")),
+		      warnings);
+
+  if (verification & GNUTLS_CERT_SIGNER_NOT_FOUND)
+    warnings = Fcons (list2 (intern (":signer-not-found"),
+			     build_string("certificate signer was not found")),
+		      warnings);
+
+  if (verification & GNUTLS_CERT_SIGNER_NOT_CA)
+    warnings = Fcons (list2 (intern (":self-signed"),
+			     build_string("certificate signer is not a CA")),
+		      warnings);
+
+  if (verification & GNUTLS_CERT_INSECURE_ALGORITHM)
+    warnings = Fcons (list2 (intern (":insecure"),
+			     build_string("certificate was signed with an insecure algorithm")),
+		      warnings);
+
+  if (verification & GNUTLS_CERT_NOT_ACTIVATED)
+    warnings = Fcons (list2 (intern (":not-activated"),
+			     build_string("certificate is not yet activated")),
+		      warnings);
+
+  if (verification & GNUTLS_CERT_EXPIRED)
+    warnings = Fcons (list2 (intern (":expired"),
+			     build_string("certificate has expired")),
+		      warnings);
+
+  if (XPROCESS (proc)->gnutls_extra_peer_verification &
+      CERTIFICATE_NOT_MATCHING)
+    warnings = Fcons (list2 (intern (":no-host-match"),
+			     build_string("certificate host does not match hostname")),
+		      warnings);
+
+  if (NILP (warnings))
+    return list2 (intern (":fingerprint"), hash);
+  else
+    return list4 (intern (":fingerprint"), hash,
+		  intern (":warnings"), warnings);
+}
+
+
 
 /* Initializes global GnuTLS state to defaults.
 Call `gnutls-global-deinit' when GnuTLS usage is no longer needed.
@@ -1048,6 +1136,8 @@ one trustfile (usually a CA bundle).  */)
   if (ret < GNUTLS_E_SUCCESS)
     return gnutls_make_error (ret);
 
+  XPROCESS (proc)->gnutls_peer_verification = peer_verification;
+
   if (XINT (loglevel) > 0 && peer_verification & GNUTLS_CERT_INVALID)
     message ("%s certificate could not be verified.", c_hostname);
 
@@ -1126,8 +1216,12 @@ one trustfile (usually a CA bundle).  */)
 	  return gnutls_make_error (ret);
 	}
 
+      XPROCESS (proc)->gnutls_certificate = gnutls_verify_cert;
+
       if (!fn_gnutls_x509_crt_check_hostname (gnutls_verify_cert, c_hostname))
 	{
+	  XPROCESS (proc)->gnutls_extra_peer_verification |=
+	    CERTIFICATE_NOT_MATCHING;
           if (verify_error_all
               || !NILP (Fmember (QCgnutls_bootprop_hostname, verify_error)))
             {
@@ -1141,7 +1235,6 @@ one trustfile (usually a CA bundle).  */)
                            c_hostname);
 	    }
 	}
-      fn_gnutls_x509_crt_deinit (gnutls_verify_cert);
     }
 
   /* Set this flag only if the whole initialization succeeded.  */
@@ -1172,6 +1265,8 @@ This function may also return `gnutls-e-again', or
   CHECK_PROCESS (proc);
 
   state = XPROCESS (proc)->gnutls_state;
+
+  fn_gnutls_x509_crt_deinit (XPROCESS (proc)->gnutls_certificate);
 
   ret = fn_gnutls_bye (state,
 		       NILP (cont) ? GNUTLS_SHUT_RDWR : GNUTLS_SHUT_WR);
@@ -1224,6 +1319,7 @@ syms_of_gnutls (void)
   defsubr (&Sgnutls_deinit);
   defsubr (&Sgnutls_bye);
   defsubr (&Sgnutls_available_p);
+  defsubr (&Sgnutls_peer_status);
 
   DEFVAR_INT ("gnutls-log-level", global_gnutls_log_level,
 	      doc: /* Logging level used by the GnuTLS functions.
