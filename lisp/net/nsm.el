@@ -49,7 +49,7 @@
   :group 'nsm
   :type 'file)
 
-(defun nsm-verify-connection (process host port)
+(defun nsm-verify-connection (process host port &optional save-fingerprint)
   "Verify the security status of PROCESS that's connected to HOST:PORT.
 If PROCESS is a gnutls connection, the certificate validity will
 be examined.  If it's a non-TLS connection, it may be compared
@@ -58,9 +58,14 @@ there is something odd about the connection, the user will be
 queried about what to do about it.
 
 The process it returned if everything is OK, and otherwise, the
-process will be deleted and nil is returne."
-  (let ((status (gnutls-peer-status process))
-	(settings (nsm-host-settings (nsm-id host port))))
+process will be deleted and nil is returned.
+
+If SAVE-FINGERPRINT, always save the fingerprint of the
+server (if the connection is a TLS connection).  This is useful
+to keep track of the TLS status of STARTTLS servers."
+  (let* ((status (gnutls-peer-status process))
+	 (id (nsm-id host port))
+	 (settings (nsm-host-settings id)))
     (cond
      ((not (process-live-p process))
       nil)
@@ -68,7 +73,14 @@ process will be deleted and nil is returne."
       ;; This is a non-TLS connection.
       (nsm-check-plain-connection process host port settings))
      (t
-      (nsm-check-tls-connection process host port status settings)))))
+      (let ((process
+	     (nsm-check-tls-connection process host port status settings)))
+	(when (and process save-fingerprint
+		   (null (nsm-host-settings id)))
+	  (nsm-save-host
+	   id (list :id id
+		    :fingerprint (plist-get status :fingerprint))))
+	process)))))
 
 (defun nsm-check-tls-connection (process host port status settings)
   (let ((warnings (plist-get status :warnings)))
@@ -91,6 +103,8 @@ process will be deleted and nil is returne."
 	    (progn
 	      (delete-process process)
 	      nil)
+	  ;; Save the host fingerprint so that we can check it the
+	  ;; next time we connect.
 	  (nsm-save-host (nsm-id host port) status)
 	  process)))
      ((not (equal nsm-security-level 'low))
