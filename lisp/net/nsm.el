@@ -179,24 +179,31 @@ unencrypted."
       t)))
 
 (defun nsm-query-user (message args cert)
-  (let ((responses '((?n . no)
-		     (?s . session)
-		     (?a . always)))
-	(prefix "")
-	response)
-    (while (not response)
-      (setq response
-	    (cdr
-	     (assq (downcase
-		    (read-char (concat prefix
-				       cert "\n"
-				       (apply 'format message args)
-				       "\n\nContinue connecting? (No, Session only, Always)")))
-		   responses)))
-      (unless response
-	(ding)
-	(setq prefix "Invalid choice.\n\n")))
-    response))
+  (let ((buffer (get-buffer-create "*Network Security Manager*")))
+    (with-help-window buffer
+      (with-current-buffer buffer
+	(erase-buffer)
+	(when (> (length cert) 0)
+	  (insert cert "\n"))
+	(insert (apply 'format message args))))
+    (let ((responses '((?n . no)
+		       (?s . session)
+		       (?a . always)))
+	  (prefix "")
+	  response)
+      (while (not response)
+	(setq response
+	      (cdr
+	       (assq (downcase
+		      (read-char
+		       (concat prefix
+			       "Continue connecting? (No, Session only, Always)")))
+		     responses)))
+	(unless response
+	  (ding)
+	  (setq prefix "Invalid choice.  ")))
+      (kill-buffer buffer)
+      response)))
 
 (defun nsm-save-host (id status what permanency)
   (let ((saved
@@ -279,15 +286,43 @@ unencrypted."
 (defun nsm-format-certificate (status)
   (let ((cert (plist-get status :certificate)))
     (when cert
-      (format "Issuer: %s\nHost informasjon: %s\nPublic key: %s, signature: %s, security level: %s\nValid from: %s, valid to: %s\n"
-	      (plist-get cert :issuer)
-	      (plist-get cert :subject)
+      (format "Certificate issued by %s\nIssued to %s\nCertificate host name: %s\nPublic key: %s, signature: %s, security level: %s\nValid from: %s, valid to: %s\n"
+	      (nsm-certificate-part (plist-get cert :issuer) "CN")
+	      (nsm-certificate-part (plist-get cert :subject) "O")
+	      (nsm-certificate-part (plist-get cert :subject) "CN")
 	      (plist-get cert :public-key-algorithm)
 	      (plist-get cert :signature-algorithm)
 	      (propertize (plist-get cert :certificate-security-level)
 			  'face 'bold)
 	      (plist-get cert :valid-from)
 	      (plist-get cert :valid-to)))))
+
+(defun nsm-certificate-part (string part)
+  (cadr (assoc part (nsm-parse-subject string))))
+
+(defun nsm-parse-subject (string)
+  (with-temp-buffer
+    (insert string)
+    (goto-char (point-min))
+    (let ((start (point))
+	  (result nil))
+      (while (not (eobp))
+	(push (replace-regexp-in-string
+	       "[\\]\\(.\\)" "\\1"
+	       (buffer-substring start
+				 (if (re-search-forward "[^\\]," nil 'move)
+				     (1- (point))
+				   (point))))
+	      result)
+	(setq start (point)))
+      (mapcar
+       (lambda (elem)
+	 (let ((pos (cl-position ?= elem)))
+	   (if pos
+	       (list (substring elem 0 pos)
+		     (substring elem (1+ pos)))
+	     elem)))
+       (nreverse result)))))
 
 (provide 'nsm)
 
