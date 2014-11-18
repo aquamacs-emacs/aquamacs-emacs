@@ -306,17 +306,26 @@ unencrypted."
 (defun nsm-format-certificate (status)
   (let ((cert (plist-get status :certificate)))
     (when cert
-      (format "Certificate issued by %s\nIssued to %s\nCertificate host name: %s\nPublic key: %s, signature: %s, security level: %s\nValid from: %s, valid to: %s\n"
-	      (nsm-certificate-part (plist-get cert :issuer) "CN")
-	      (or (nsm-certificate-part (plist-get cert :subject) "O")
-		  (nsm-certificate-part (plist-get cert :subject) "OU"))
-	      (nsm-certificate-part (plist-get cert :subject) "CN")
-	      (plist-get cert :public-key-algorithm)
-	      (plist-get cert :signature-algorithm)
-	      (propertize (plist-get cert :certificate-security-level)
-			  'face 'bold)
-	      (plist-get cert :valid-from)
-	      (plist-get cert :valid-to)))))
+      (with-temp-buffer
+	(insert
+	 "Certificate information\n"
+	 "Issued by:" (nsm-certificate-part (plist-get cert :issuer) "CN") "\n"
+	 "Issued to:" (or (nsm-certificate-part (plist-get cert :subject) "O")
+			  (nsm-certificate-part (plist-get cert :subject) "OU"))
+	 "\n"
+	 "Hostname:" (nsm-certificate-part (plist-get cert :subject) "CN") "\n"
+	 "Public key:" (plist-get cert :public-key-algorithm)
+	 ", signature: " (plist-get cert :signature-algorithm) "\n"
+	 "Security level:"
+	 (propertize (plist-get cert :certificate-security-level)
+		     'face 'bold)
+	 "\n"
+	 "Valid:From " (plist-get cert :valid-from)
+	 " to " (plist-get cert :valid-to) "\n\n")
+	(goto-char (point-min))
+	(while (re-search-forward "^[^:]+:" nil t)
+	  (insert (make-string (- 20 (current-column)) ? )))
+	(buffer-string)))))
 
 (defun nsm-certificate-part (string part)
   (cadr (assoc part (nsm-parse-subject string))))
