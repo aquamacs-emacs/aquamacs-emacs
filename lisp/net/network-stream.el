@@ -129,11 +129,14 @@ values:
 :use-starttls-if-possible is a boolean that says to do opportunistic
 STARTTLS upgrades even if Emacs doesn't have built-in TLS functionality.
 
+:warn-unless-encrypted is a boolean whic, if :return-list is
+non-nil, is used warn the user if the connection isn't encrypted.
+
 :nogreeting is a boolean that can be used to inhibit waiting for
 a greeting from the server.
 
 :nowait is a boolean that says the connection should be made
-  asynchronously, if possible."
+asynchronously, if possible."
   (unless (featurep 'make-network-process)
     (error "Emacs was compiled without networking support"))
   (let ((type (plist-get parameters :type))
@@ -197,6 +200,8 @@ a greeting from the server.
 	(stream (make-network-process :name name :buffer buffer
 				      :host host :service service
 				      :nowait (plist-get parameters :nowait))))
+    (when (plist-get parameters :warn-unless-encrypted)
+      (setq stream (nsm-verify-connection stream host service nil t)))
     (list stream
 	  (network-stream-get-response stream start
 				       (plist-get parameters :end-of-command))
@@ -322,8 +327,10 @@ a greeting from the server.
       (setq stream nil))
     ;; Check certificate validity etc.
     (when builtin-starttls
-      (setq stream (nsm-verify-connection stream host service
-					  (eq resulting-type 'tls))))
+      (setq stream (nsm-verify-connection
+		    stream host service
+		    (eq resulting-type 'tls)
+		    (plist-get parameters :warn-unless-encrypted))))
     ;; Return value:
     (list stream greeting capabilities resulting-type error)))
 

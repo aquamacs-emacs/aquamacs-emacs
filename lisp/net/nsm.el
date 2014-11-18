@@ -50,7 +50,8 @@
   :group 'nsm
   :type 'file)
 
-(defun nsm-verify-connection (process host port &optional save-fingerprint)
+(defun nsm-verify-connection (process host port &optional
+				      save-fingerprint warn-unencrypted)
   "Verify the security status of PROCESS that's connected to HOST:PORT.
 If PROCESS is a gnutls connection, the certificate validity will
 be examined.  If it's a non-TLS connection, it may be compared
@@ -63,7 +64,10 @@ process will be deleted and nil is returned.
 
 If SAVE-FINGERPRINT, always save the fingerprint of the
 server (if the connection is a TLS connection).  This is useful
-to keep track of the TLS status of STARTTLS servers."
+to keep track of the TLS status of STARTTLS servers.
+
+If WARN-UNENCRYPTED, query the user if the connection is
+unencrypted."
   (if (eq nsm-security-level 'low)
       process
     (let* ((status (gnutls-peer-status process))
@@ -74,7 +78,8 @@ to keep track of the TLS status of STARTTLS servers."
 	nil)
        ((not status)
 	;; This is a non-TLS connection.
-	(nsm-check-plain-connection process host port settings))
+	(nsm-check-plain-connection process host port settings
+				    warn-unencrypted))
        (t
 	(let ((process
 	       (nsm-check-tls-connection process host port status settings)))
@@ -135,21 +140,30 @@ to keep track of the TLS status of STARTTLS servers."
       nil
     t))
 
-(defun nsm-check-plain-connection (process host port settings)
+(defun nsm-check-plain-connection (process host port settings warn-unencrypted)
   ;; If this connection used to be TLS, but is now plain, then it's
   ;; possible that we're being Man-In-The-Middled by a proxy that's
   ;; stripping out STARTTLS announcements.
-  (if (and (plist-get settings :fingerprint)
-	   (not (eq (plist-get settings :fingerprint) :none))
-	   (not
-	    (nsm-query
-	     (nsm-id host port) nil 'conditions
-	     "The connection to %s:%s used to be an encrypted\nconnection, but is now unencrypted.  This might mean that there's a\nman-in-the-middle tapping this connection."
-	     host port)))
-      (progn
-	(delete-process process)
-	nil)
-    process))
+  (cond
+   ((and (plist-get settings :fingerprint)
+	 (not (eq (plist-get settings :fingerprint) :none))
+	 (not
+	  (nsm-query
+	   (nsm-id host port) nil 'conditions
+	   "The connection to %s:%s used to be an encrypted\nconnection, but is now unencrypted.  This might mean that there's a\nman-in-the-middle tapping this connection."
+	   host port)))
+    (delete-process process)
+    nil)
+   ((and warn-unencrypted
+	 (not (memq :unencrypted (plist-get settings :conditions)))
+	 (not (nsm-query
+	       (nsm-id host port) nil 'conditions
+	       "The connection to %s:%s is unencrypted."
+	       host port)))
+    (delete-process process)
+    nil)
+   (t
+    process)))
 
 (defun nsm-query (id status what message &rest args)
   (let ((response
