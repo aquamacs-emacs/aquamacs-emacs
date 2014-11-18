@@ -732,13 +732,18 @@ gnutls_certificate_details (gnutls_x509_crt_t cert)
 
   /* Serial. */
   {
-    unsigned char serial[128];
-    size_t serial_size = sizeof (serial);
+    size_t serial_size = 0;
 
-    err = gnutls_x509_crt_get_serial (cert, serial, &serial_size);
-    if (err >= GNUTLS_E_SUCCESS)
-      res = nconc2 (res, list2 (intern (":serial-number"),
-				gnutls_hex_string (serial, serial_size)));
+    err = gnutls_x509_crt_get_serial (cert, NULL, &serial_size);
+    if (err == GNUTLS_E_SHORT_MEMORY_BUFFER) {
+      unsigned char *serial = malloc (serial_size);
+      err = gnutls_x509_crt_get_serial (cert, serial, &serial_size);
+      if (err >= GNUTLS_E_SUCCESS) {
+	res = nconc2 (res, list2 (intern (":serial-number"),
+				  gnutls_hex_string (serial, serial_size)));
+      }
+      free (serial);
+    }
   }
 
   /* Issuer. */
@@ -800,19 +805,28 @@ gnutls_certificate_details (gnutls_x509_crt_t cert)
 
   /* Unique IDs. */
   {
-    char buf[256];                /* if its longer, we won't bother to print it */
-    size_t buf_size = 256;
+    size_t buf_size = 0;
 
-    err = gnutls_x509_crt_get_issuer_unique_id (cert, buf, &buf_size);
-    if (err >= GNUTLS_E_SUCCESS)
-      res = nconc2 (res, list2 (intern (":issuer-unique-id"),
-				make_string (buf, buf_size)));
+    err = gnutls_x509_crt_get_issuer_unique_id (cert, NULL, &buf_size);
+    if (err == GNUTLS_E_SHORT_MEMORY_BUFFER) {
+      unsigned char *buf = malloc (buf_size);
+      err = gnutls_x509_crt_get_issuer_unique_id (cert, buf, &buf_size);
+      if (err >= GNUTLS_E_SUCCESS)
+	res = nconc2 (res, list2 (intern (":issuer-unique-id"),
+				  make_string (buf, buf_size)));
+      free (buf);
+    }
 
-    buf_size = 256;
-    err = gnutls_x509_crt_get_subject_unique_id (cert, buf, &buf_size);
-    if (err >= GNUTLS_E_SUCCESS)
-      res = nconc2 (res, list2 (intern (":subject-unique-id"),
-				make_string (buf, buf_size)));
+    buf_size = 0;
+    err = gnutls_x509_crt_get_subject_unique_id (cert, NULL, &buf_size);
+    if (err == GNUTLS_E_SHORT_MEMORY_BUFFER) {
+      unsigned char *buf = malloc (buf_size);
+      err = gnutls_x509_crt_get_subject_unique_id (cert, buf, &buf_size);
+      if (err >= GNUTLS_E_SUCCESS)
+	res = nconc2 (res, list2 (intern (":subject-unique-id"),
+				  make_string (buf, buf_size)));
+      free (buf);
+    }
   }
 
   /* Signature. */
