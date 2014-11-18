@@ -64,22 +64,24 @@ process will be deleted and nil is returned.
 If SAVE-FINGERPRINT, always save the fingerprint of the
 server (if the connection is a TLS connection).  This is useful
 to keep track of the TLS status of STARTTLS servers."
-  (let* ((status (gnutls-peer-status process))
-	 (id (nsm-id host port))
-	 (settings (nsm-host-settings id)))
-    (cond
-     ((not (process-live-p process))
-      nil)
-     ((not status)
-      ;; This is a non-TLS connection.
-      (nsm-check-plain-connection process host port settings))
-     (t
-      (let ((process
-	     (nsm-check-tls-connection process host port status settings)))
-	(when (and process save-fingerprint
-		   (null (nsm-host-settings id)))
-	  (nsm-save-host id status 'fingerprint 'always))
-	process)))))
+  (if (eq nsm-security-level 'low)
+      process
+    (let* ((status (gnutls-peer-status process))
+	   (id (nsm-id host port))
+	   (settings (nsm-host-settings id)))
+      (cond
+       ((not (process-live-p process))
+	nil)
+       ((not status)
+	;; This is a non-TLS connection.
+	(nsm-check-plain-connection process host port settings))
+       (t
+	(let ((process
+	       (nsm-check-tls-connection process host port status settings)))
+	  (when (and process save-fingerprint
+		     (null (nsm-host-settings id)))
+	    (nsm-save-host id status 'fingerprint 'always))
+	  process))))))
 
 (defun nsm-check-tls-connection (process host port status settings)
   (let ((warnings (plist-get status :warnings)))
@@ -152,7 +154,7 @@ to keep track of the TLS status of STARTTLS servers."
 (defun nsm-query (id status what message &rest args)
   (let ((response
 	 (condition-case nil
-	     (nsm-query-user message args)
+	     (nsm-query-user message args (nsm-format-certificate status))
 	   ;; Make sure we manage to close the process if the user hits
 	   ;; `C-g'.
 	   (quit 'no)
@@ -162,7 +164,7 @@ to keep track of the TLS status of STARTTLS servers."
       (nsm-save-host id status what response)
       t)))
 
-(defun nsm-query-user (message args)
+(defun nsm-query-user (message args cert)
   (let ((responses '((?n . no)
 		     (?s . session)
 		     (?a . always)))
@@ -173,12 +175,13 @@ to keep track of the TLS status of STARTTLS servers."
 	    (cdr
 	     (assq (downcase
 		    (read-char (concat prefix
+				       cert "\n"
 				       (apply 'format message args)
 				       "\n\nContinue connecting? (No, Session only, Always)")))
 		   responses)))
       (unless response
 	(ding)
-	(setq prefix "Invalid choice.\n")))
+	(setq prefix "Invalid choice.\n\n")))
     response))
 
 (defun nsm-save-host (id status what permanency)
@@ -258,6 +261,19 @@ to keep track of the TLS status of STARTTLS servers."
 	 (lambda (elem)
 	   (equal (plist-get elem :id) id))
 	 nsm-temporary-host-settings)))
+
+(defun nsm-format-certificate (status)
+  (let ((cert (plist-get status :certificate)))
+    (when cert
+      (format "Issuer: %s\nHost informasjon: %s\nPublic key: %s, signature: %s, security level: %s\nValid from: %s, valid to: %s\n"
+	      (plist-get cert :issuer)
+	      (plist-get cert :subject)
+	      (plist-get cert :public-key-algorithm)
+	      (plist-get cert :signature-algorithm)
+	      (propertize (plist-get cert :certificate-security-level)
+			  'face 'bold)
+	      (plist-get cert :valid-from)
+	      (plist-get cert :valid-to)))))
 
 (provide 'nsm)
 
