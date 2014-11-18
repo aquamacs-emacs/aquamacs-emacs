@@ -129,7 +129,7 @@ values:
 :use-starttls-if-possible is a boolean that says to do opportunistic
 STARTTLS upgrades even if Emacs doesn't have built-in TLS functionality.
 
-:warn-unless-encrypted is a boolean whic, if :return-list is
+:warn-unless-encrypted is a boolean which, if :return-list is
 non-nil, is used warn the user if the connection isn't encrypted.
 
 :nogreeting is a boolean that can be used to inhibit waiting for
