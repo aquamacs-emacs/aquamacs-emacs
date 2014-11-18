@@ -151,10 +151,6 @@ static Lisp_Object Qkill_emacs_hook;
    but instead should use the virtual terminal under which it was started.  */
 bool inhibit_window_system;
 
-/* If true, a filter or a sentinel is running.  Tested to save the match
-   data on the first attempt to change it inside asynchronous code.  */
-bool running_asynch_code;
-
 #if defined (HAVE_X_WINDOWS) || defined (HAVE_NS)
 /* If true, -d was specified, meaning we're using some window system.  */
 bool display_arg;
@@ -2454,6 +2450,12 @@ Emacs is running.  */);
 
   DEFVAR_BOOL ("noninteractive", noninteractive1,
 	       doc: /* Non-nil means Emacs is running without interactive terminal.  */);
+
+  /* If true, a filter or a sentinel is running.  Tested to save the match
+     data on the first attempt to change it inside asynchronous code.  */
+  DEFVAR_BOOL ("running-asynch-code", running_asynch_code,
+	       doc: /* Non-nil means that asynchronous code is running.
+This could be a process filter, a sentinel or the like.  */);
 
   DEFVAR_LISP ("kill-emacs-hook", Vkill_emacs_hook,
 	       doc: /* Hook run when `kill-emacs' is called.

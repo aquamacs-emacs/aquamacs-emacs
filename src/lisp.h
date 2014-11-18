@@ -4180,8 +4180,6 @@ extern bool fatal_error_in_progress;
 
 /* True means don't do use window-system-specific display code.  */
 extern bool inhibit_window_system;
-/* True means that a filter or a sentinel is running.  */
-extern bool running_asynch_code;
 
 /* Defined in process.c.  */
 extern Lisp_Object QCtype, Qlocal;
