@@ -769,11 +769,19 @@ gnutls_certificate_details (gnutls_x509_crt_t cert)
 
   /* Validity. */
   {
+    char buf[11];
+    size_t buf_size = sizeof (buf);
+    struct tm t;
     time_t tim = gnutls_x509_crt_get_activation_time (cert);
-    res = nconc2 (res, list2 (intern (":valid-from"), make_number (tim)));
+
+    if (gmtime_r (&tim, &t) != NULL &&
+	strftime (buf, buf_size, "%Y-%m-%d", &t) != 0)
+      res = nconc2 (res, list2 (intern (":valid-from"), build_string (buf)));
 
     tim = gnutls_x509_crt_get_expiration_time (cert);
-    res = nconc2 (res, list2 (intern (":valid-to"), make_number (tim)));
+    if (gmtime_r (&tim, &t) != NULL &&
+	strftime (buf, buf_size, "%Y-%m-%d", &t) != 0)
+      res = nconc2 (res, list2 (intern (":valid-to"), build_string (buf)));
   }
 
   /* Subject. */
