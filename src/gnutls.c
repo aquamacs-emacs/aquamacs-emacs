@@ -705,7 +705,7 @@ DEFUN ("gnutls-available-p", Fgnutls_available_p, Sgnutls_available_p, 0, 0, 0,
 }
 
 Lisp_Object
-gnutls_hex_string (unsigned char *buf, size_t buf_size, char *prefix) {
+gnutls_hex_string (char *buf, size_t buf_size, char *prefix) {
   size_t prefix_length = strlen (prefix);
   char *string = malloc (buf_size * 3 + prefix_length);
   Lisp_Object ret;
@@ -715,7 +715,7 @@ gnutls_hex_string (unsigned char *buf, size_t buf_size, char *prefix) {
   for (int i = 0; i < buf_size; i++)
     sprintf (string + i * 3 + prefix_length,
 	     i == buf_size - 1? "%02x": "%02x:",
-	     buf[i]);
+	     ((unsigned char*)buf)[i]);
 
   ret = build_string (string);
   free (string);
@@ -742,7 +742,7 @@ gnutls_certificate_details (gnutls_x509_crt_t cert)
 
     err = gnutls_x509_crt_get_serial (cert, NULL, &serial_size);
     if (err == GNUTLS_E_SHORT_MEMORY_BUFFER) {
-      unsigned char *serial = malloc (serial_size);
+      char *serial = malloc (serial_size);
       err = gnutls_x509_crt_get_serial (cert, serial, &serial_size);
       if (err >= GNUTLS_E_SUCCESS) {
 	res = nconc2 (res, list2 (intern (":serial-number"),
@@ -815,7 +815,7 @@ gnutls_certificate_details (gnutls_x509_crt_t cert)
 
     err = gnutls_x509_crt_get_issuer_unique_id (cert, NULL, &buf_size);
     if (err == GNUTLS_E_SHORT_MEMORY_BUFFER) {
-      unsigned char *buf = malloc (buf_size);
+      char *buf = malloc (buf_size);
       err = gnutls_x509_crt_get_issuer_unique_id (cert, buf, &buf_size);
       if (err >= GNUTLS_E_SUCCESS)
 	res = nconc2 (res, list2 (intern (":issuer-unique-id"),
@@ -826,7 +826,7 @@ gnutls_certificate_details (gnutls_x509_crt_t cert)
     buf_size = 0;
     err = gnutls_x509_crt_get_subject_unique_id (cert, NULL, &buf_size);
     if (err == GNUTLS_E_SHORT_MEMORY_BUFFER) {
-      unsigned char *buf = malloc (buf_size);
+      char *buf = malloc (buf_size);
       err = gnutls_x509_crt_get_subject_unique_id (cert, buf, &buf_size);
       if (err >= GNUTLS_E_SUCCESS)
 	res = nconc2 (res, list2 (intern (":subject-unique-id"),
@@ -868,7 +868,7 @@ The return value is a property list.  */)
   (Lisp_Object proc)
 {
   int ret;
-  unsigned char *buffer;
+  char *buffer;
   size_t size = 0;
   Lisp_Object hash, warnings = Qnil, result = Qnil;
   unsigned int verification;
