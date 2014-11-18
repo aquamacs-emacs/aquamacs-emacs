@@ -167,7 +167,8 @@ unencrypted."
 
 (defun nsm-query (id status what message &rest args)
   ;; If there is no user to answer queries, then say `no' to everything.
-  (if noninteractive
+  (if (or noninteractive
+	  running-asynch-code)
       nil
     (let ((response
 	   (condition-case nil
