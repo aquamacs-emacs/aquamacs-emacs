@@ -26,7 +26,8 @@
 
 (require 'cl-lib)
 
-(defvar nsm-host-settings nil)
+(defvar nsm-permanent-host-settings nil)
+(defvar nsm-temporary-host-settings nil)
 
 (defgroup nsm nil
   "Network Security Manager"
@@ -77,9 +78,7 @@ to keep track of the TLS status of STARTTLS servers."
 	     (nsm-check-tls-connection process host port status settings)))
 	(when (and process save-fingerprint
 		   (null (nsm-host-settings id)))
-	  (nsm-save-host
-	   id (list :id id
-		    :fingerprint (plist-get status :fingerprint))))
+	  (nsm-save-host id status 'fingerprint 'always))
 	process)))))
 
 (defun nsm-check-tls-connection (process host port status settings)
@@ -90,55 +89,67 @@ to keep track of the TLS status of STARTTLS servers."
       ;; want to check whether it's changed anyway.
       (if (not (equal nsm-security-level 'paranoid))
 	  process
-	(if (and settings
-		 (not (equal (plist-get status :fingerprint)
-			     (plist-get settings :fingerprint)))
-		 (not (nsm-query
-		       (nsm-id host port)
-		       status
-		       "The fingerprint for the connection to %s:%s has changed from\n%s to\n%s"
-		       host port
-		       (plist-get status :fingerprint)
-		       (plist-get settings :fingerprint))))
+	(if (not (nsm-fingerprint-ok-p host port status settings))
 	    (progn
 	      (delete-process process)
 	      nil)
 	  ;; Save the host fingerprint so that we can check it the
 	  ;; next time we connect.
-	  (nsm-save-host (nsm-id host port) status)
+	  (nsm-save-host (nsm-id host port) status 'fingerprint 'always)
 	  process)))
      ((not (equal nsm-security-level 'low))
-      ;; We have a warning, so query the user.
-      (if (and (not (nsm-warnings-ok-p status settings))
-	       (not (nsm-query
-		     (nsm-id host port)
-		     status
-		     "The TLS connection to %s:%s is insecure\nfor the following reason%s:\n\n%s"
-		     host port
-		     (if (> (length warnings) 1)
-			 "s" "")
-		     (mapconcat 'cadr warnings "\n"))))
+      ;; We always want to pin the certificate of invalid connections
+      ;; to track man-in-the-middle or the like.
+      (if (not (nsm-fingerprint-ok-p host port status settings))
 	  (progn
 	    (delete-process process)
 	    nil)
-	process)))))
+	;; We have a warning, so query the user.
+	(if (and (not (nsm-warnings-ok-p status settings))
+		 (not (nsm-query
+		       (nsm-id host port) status 'conditions
+		       "The TLS connection to %s:%s is insecure\nfor the following reason%s:\n\n%s"
+		       host port
+		       (if (> (length warnings) 1)
+			   "s" "")
+		       (mapconcat 'cadr warnings "\n"))))
+	    (progn
+	      (delete-process process)
+	      nil)
+	  process))))))
+
+(defun nsm-fingerprint-ok-p (host port status settings)
+  (if (and settings
+	   (not (eq (plist-get settings :fingerprint) :none))
+	   (not (equal (plist-get status :fingerprint)
+		       (plist-get settings :fingerprint)))
+	   (not (nsm-query
+		 (nsm-id host port) status 'fingerprint
+		 "The fingerprint for the connection to %s:%s has changed from\n%s to\n%s"
+		 host port
+		 (plist-get settings :fingerprint)
+		 (plist-get status :fingerprint))))
+      ;; Not OK.
+      nil
+    t))
 
 (defun nsm-check-plain-connection (process host port settings)
   ;; If this connection used to be TLS, but is now plain, then it's
   ;; possible that we're being Man-In-The-Middled by a proxy that's
   ;; stripping out STARTTLS announcements.
   (if (and (plist-get settings :fingerprint)
-	   (nsm-query
-	    (nsm-id host port)
-	    nil
-	    "The connection to %s:%s used to be an encrypted connection, but is now\nunencrypted.  This might mean that there's a man-in-the-middle tapping\nthis connection."
-	    host port))
+	   (not (eq (plist-get settings :fingerprint) :none))
+	   (not
+	    (nsm-query
+	     (nsm-id host port) nil 'conditions
+	     "The connection to %s:%s used to be an encrypted\nconnection, but is now unencrypted.  This might mean that there's a\nman-in-the-middle tapping this connection."
+	     host port)))
       (progn
 	(delete-process process)
 	nil)
     process))
 
-(defun nsm-query (id status message &rest args)
+(defun nsm-query (id status what message &rest args)
   (let ((response
 	 (condition-case nil
 	     (nsm-query-user message args)
@@ -148,7 +159,7 @@ to keep track of the TLS status of STARTTLS servers."
 	   (error 'no))))
     (if (eq response 'no)
 	nil
-      (nsm-save-host id status response)
+      (nsm-save-host id status what response)
       t)))
 
 (defun nsm-query-user (message args)
@@ -170,42 +181,42 @@ to keep track of the TLS status of STARTTLS servers."
 	(setq prefix "Invalid choice.\n")))
     response))
 
-(defun nsm-save-host (id status &optional permanency)
-  (nsm-remove-setting id)
-  (push
-   (list :id id
-	 :fingerprint (if status
-			  (plist-get status :fingerprint)
-			;; Plain connection.
-			:none)
-	 :conditions
-	 (cond
-	  ((not status)
-	   `((:unencrypted ,permanency)))
-	  ((not permanency)
-	   nil)
-	  (t
-	   (mapcar
-	    (lambda (elem)
-	      (list (car elem) permanency))
-	    (plist-get status :warnings)))))
-   nsm-host-settings)
-  (nsm-write-settings))
+(defun nsm-save-host (id status what permanency)
+  (let ((saved
+	 (list :id id
+	       :fingerprint (if status
+				(plist-get status :fingerprint)
+			      ;; Plain connection.
+			      :none))))
+    ;; We either want to save/update the fingerprint or the conditions
+    ;; of the certificate/unencrypted connection.
+    (when (eq what 'conditions)
+      (cond
+       ((not status)
+	(nconc saved `(:conditions (:unencrypted))))
+       ((plist-get status :warnings)
+	(nconc saved
+	       `(:conditions ,(mapcar 'car (plist-get status :warnings)))))))
+    (if (eq permanency 'always)
+	(progn
+	  (nsm-remove-temporary-setting id)
+	  (nsm-remove-permanent-setting id)
+	  (push saved nsm-permanent-host-settings)
+	  (nsm-write-settings))
+      (nsm-remove-temporary-setting id)
+      (push saved nsm-temporary-host-settings))))
 
 (defun nsm-write-settings ()
   (with-temp-file nsm-settings-file
     (insert "(\n")
-    (dolist (setting nsm-host-settings)
-      ;; Only save those settings that are saved for paranoid tracking
-      ;; purposes, or permanent settings.
-      (when (or (null (plist-get setting :conditions))
-		(eq (cadr (car (plist-get setting :conditions))) 'always))
-	(prin1 setting (current-buffer)))
+    (dolist (setting nsm-permanent-host-settings)
+      (insert " ")
+      (prin1 setting (current-buffer))
       (insert "\n"))
     (insert ")\n")))
 
 (defun nsm-read-settings ()
-  (setq nsm-host-settings
+  (setq nsm-permanent-host-settings
 	(with-temp-buffer
 	  (insert-file-contents nsm-settings-file)
 	  (goto-char (point-min))
@@ -215,12 +226,14 @@ to keep track of the TLS status of STARTTLS servers."
   (concat "sha1:" (sha1 (format "%s:%s" host port))))
 
 (defun nsm-host-settings (id)
-  (when (and (not nsm-host-settings)
+  (when (and (not nsm-permanent-host-settings)
 	     (file-exists-p nsm-settings-file))
     (nsm-read-settings))
   (let ((result nil))
-    (dolist (elem nsm-host-settings)
-      (when (equal (plist-get elem :id) id)
+    (dolist (elem (append nsm-temporary-host-settings
+			  nsm-permanent-host-settings))
+      (when (and (not result)
+		 (equal (plist-get elem :id) id))
 	(setq result elem)))
     result))
 
@@ -228,16 +241,23 @@ to keep track of the TLS status of STARTTLS servers."
   (let ((not-ok nil)
 	(conditions (plist-get settings :conditions)))
     (dolist (warning (plist-get status :warnings))
-      (unless (memq (cadr (memq (car warning) conditions))
-		    '(always session))
+      (when (memq (car warning) conditions)
 	(setq not-ok t)))
     not-ok))
 
-(defun nsm-remove-setting (id)
-  (setq nsm-host-settings (cl-delete-if
-			   (lambda (elem)
-			     (equal (plist-get elem :id) id))
-			   nsm-host-settings)))
+(defun nsm-remove-permanent-setting (id)
+  (setq nsm-permanent-host-settings
+	(cl-delete-if
+	 (lambda (elem)
+	   (equal (plist-get elem :id) id))
+	 nsm-permanent-host-settings)))
+
+(defun nsm-remove-temporary-setting (id)
+  (setq nsm-temporary-host-settings
+	(cl-delete-if
+	 (lambda (elem)
+	   (equal (plist-get elem :id) id))
+	 nsm-temporary-host-settings)))
 
 (provide 'nsm)
 
