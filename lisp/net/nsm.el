@@ -166,17 +166,20 @@ unencrypted."
     process)))
 
 (defun nsm-query (id status what message &rest args)
-  (let ((response
-	 (condition-case nil
-	     (nsm-query-user message args (nsm-format-certificate status))
-	   ;; Make sure we manage to close the process if the user hits
-	   ;; `C-g'.
-	   (quit 'no)
-	   (error 'no))))
-    (if (eq response 'no)
-	nil
-      (nsm-save-host id status what response)
-      t)))
+  ;; If there is no user to answer queries, then say `no' to everything.
+  (if noninteractive
+      nil
+    (let ((response
+	   (condition-case nil
+	       (nsm-query-user message args (nsm-format-certificate status))
+	     ;; Make sure we manage to close the process if the user hits
+	     ;; `C-g'.
+	     (quit 'no)
+	     (error 'no))))
+      (if (eq response 'no)
+	  nil
+	(nsm-save-host id status what response)
+	t))))
 
 (defun nsm-query-user (message args cert)
   (let ((buffer (get-buffer-create "*Network Security Manager*")))
