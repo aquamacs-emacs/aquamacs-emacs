@@ -62,8 +62,6 @@ static void gnutls_log_function2 (int, const char*, const char*);
 static void gnutls_audit_log_function (gnutls_session_t, const char *);
 #endif
 
-#define GNUTLS_MAX_HASH_SIZE 64
-
 static enum
   {
     CERTIFICATE_NOT_MATCHING = 2,
@@ -870,8 +868,8 @@ The return value is a property list.  */)
   (Lisp_Object proc)
 {
   int ret;
-  unsigned char buffer[GNUTLS_MAX_HASH_SIZE];
-  size_t size = sizeof (buffer);
+  unsigned char *buffer;
+  size_t size = 0;
   Lisp_Object hash, warnings = Qnil, result = Qnil;
   unsigned int verification;
 
@@ -882,11 +880,20 @@ The return value is a property list.  */)
 
   /* First get the fingerprint of the certificate. */
   ret = fn_gnutls_x509_crt_get_fingerprint (XPROCESS (proc)->gnutls_certificate,
-					    GNUTLS_DIG_SHA1, buffer, &size);
-  if (ret < GNUTLS_E_SUCCESS)
+					    GNUTLS_DIG_SHA1, NULL, &size);
+  if (ret != GNUTLS_E_SHORT_MEMORY_BUFFER)
     return gnutls_make_error (ret);
 
+  buffer = malloc (size);
+  ret = fn_gnutls_x509_crt_get_fingerprint (XPROCESS (proc)->gnutls_certificate,
+					    GNUTLS_DIG_SHA1, buffer, &size);
+  if (ret < GNUTLS_E_SUCCESS) {
+    free (buffer);
+    return gnutls_make_error (ret);
+  }
+
   hash = gnutls_hex_string (buffer, size, "sha1:");
+  free (buffer);
 
   /* Then collect any warnings already computed by the handshake. */
   verification = XPROCESS (proc)->gnutls_peer_verification;
