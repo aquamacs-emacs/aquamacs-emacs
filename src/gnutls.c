@@ -706,6 +706,140 @@ DEFUN ("gnutls-available-p", Fgnutls_available_p, Sgnutls_available_p, 0, 0, 0,
 #endif
 }
 
+
+Lisp_Object
+gnutls_certificate_details (gnutls_x509_crt_t cert)
+{
+  Lisp_Object res = Qnil;
+  int err;
+
+  /* Version. */
+  {
+    int version = gnutls_x509_crt_get_version (cert);
+    if (version >= GNUTLS_E_SUCCESS)
+      res = nconc2 (res, list2 (intern (":version"),
+				make_number (version)));
+  }
+
+  /* Serial. */
+  {
+    unsigned char serial[128];
+    size_t serial_size = sizeof (serial);
+
+    err = gnutls_x509_crt_get_serial (cert, serial, &serial_size);
+    if (err >= GNUTLS_E_SUCCESS) {
+      Lisp_Object ser = make_uninit_string (serial_size * 3 - 1);
+      for (int i = 0; i < serial_size; i++)
+	sprintf (SDATA (ser) + i * 3,
+		 i == serial_size - 1? "%02x": "%02x:",
+		 serial[i]);
+      res = nconc2 (res, list2 (intern (":serial-number"), ser));
+    }
+  }
+
+  /* Issuer. */
+  {
+    size_t dn_size = 0;
+
+    err = gnutls_x509_crt_get_issuer_dn (cert, NULL, &dn_size);
+    if (err >= GNUTLS_E_SUCCESS) {
+      char *dn = malloc (dn_size);
+      err = gnutls_x509_crt_get_issuer_dn (cert, dn, &dn_size);
+      if (err >= GNUTLS_E_SUCCESS) {
+	res = nconc2 (res, list2 (intern (":issuer"),
+				  make_string (dn, dn_size)));
+	free (dn);
+      }
+    }
+  }
+
+  /* Validity. */
+  {
+    time_t tim = gnutls_x509_crt_get_activation_time (cert);
+    res = nconc2 (res, list2 (intern (":valid-from"), make_number (tim)));
+
+    tim = gnutls_x509_crt_get_expiration_time (cert);
+    res = nconc2 (res, list2 (intern (":valid-to"), make_number (tim)));
+  }
+
+  /* Subject. */
+  {
+    size_t dn_size = 0;
+
+    err = gnutls_x509_crt_get_dn (cert, NULL, &dn_size);
+    if (err >= GNUTLS_E_SUCCESS) {
+      char *dn = malloc (dn_size);
+      err = gnutls_x509_crt_get_dn (cert, dn, &dn_size);
+      if (err >= GNUTLS_E_SUCCESS) {
+	res = nconc2 (res, list2 (intern (":subject"),
+				  make_string (dn, dn_size)));
+	free (dn);
+      }
+    }
+  }
+
+  /* SubjectPublicKeyInfo. */
+  {
+    unsigned int bits;
+
+    err = gnutls_x509_crt_get_pk_algorithm (cert, &bits);
+    if (err >= GNUTLS_E_SUCCESS) {
+      const char *name = gnutls_pk_algorithm_get_name (err);
+      if (name)
+	res = nconc2 (res, list2 (intern (":public-key-algorithm"),
+				  build_string (name)));
+
+      name = gnutls_sec_param_get_name (gnutls_pk_bits_to_sec_param
+					(err, bits));
+      res = nconc2 (res, list2 (intern (":certificate-security-level"),
+				build_string (name)));
+    }
+  }
+
+  /* Unique IDs. */
+  {
+    char buf[256];                /* if its longer, we won't bother to print it */
+    size_t buf_size = 256;
+
+    err = gnutls_x509_crt_get_issuer_unique_id (cert, buf, &buf_size);
+    if (err >= GNUTLS_E_SUCCESS)
+      res = nconc2 (res, list2 (intern (":issuer-unique-id"),
+				make_string (buf, buf_size)));
+
+    buf_size = 256;
+    err = gnutls_x509_crt_get_subject_unique_id (cert, buf, &buf_size);
+    if (err >= GNUTLS_E_SUCCESS)
+      res = nconc2 (res, list2 (intern (":subject-unique-id"),
+				make_string (buf, buf_size)));
+  }
+
+  /* Signature. */
+  {
+    size_t buf_size = 0;
+
+    err = gnutls_x509_crt_get_signature_algorithm (cert);
+    if (err >= GNUTLS_E_SUCCESS) {
+      const char *name = gnutls_sign_algorithm_get_name (err);
+      if (name)
+	res = nconc2 (res, list2 (intern (":signature-algorithm"),
+				  build_string (name)));
+
+      err = gnutls_x509_crt_get_signature (cert, NULL, &buf_size);
+      if (err >= GNUTLS_E_SUCCESS) {
+	char *buf = malloc (buf_size);
+	err = gnutls_x509_crt_get_signature (cert, buf, &buf_size);
+	if (err >= GNUTLS_E_SUCCESS) {
+	  res = nconc2 (res, list2 (intern (":signature"),
+				    make_string (buf, buf_size)));
+	  free (buf);
+	}
+      }
+    }
+  }
+
+  return res;
+}
+
 DEFUN ("gnutls-peer-status", Fgnutls_peer_status, Sgnutls_peer_status, 1, 1, 0,
        doc: /* Return the status of the gnutls PROC peer certificate.
 The return value is a property list.  */)
@@ -714,7 +848,7 @@ The return value is a property list.  */)
   int ret;
   unsigned char buffer[GNUTLS_MAX_HASH_SIZE];
   size_t size = sizeof (buffer);
-  Lisp_Object hash, warnings = Qnil;
+  Lisp_Object hash, warnings = Qnil, result = Qnil;
   unsigned int verification;
 
   CHECK_PROCESS (proc);
@@ -781,13 +915,17 @@ The return value is a property list.  */)
 			     build_string("certificate host does not match hostname")),
 		      warnings);
 
-  if (NILP (warnings))
-    return list2 (intern (":fingerprint"), hash);
-  else
-    return list4 (intern (":fingerprint"), hash,
-		  intern (":warnings"), warnings);
-}
+  result = list2 (intern (":fingerprint"), hash);
 
+  if (!NILP (warnings))
+    result = nconc2 (result, list2 (intern (":warnings"), warnings));
+
+  result = nconc2 (result, list2
+		   (intern (":certificate"),
+		    gnutls_certificate_details(XPROCESS (proc)->gnutls_certificate)));
+
+  return result;
+}
 
 
 /* Initializes global GnuTLS state to defaults.
