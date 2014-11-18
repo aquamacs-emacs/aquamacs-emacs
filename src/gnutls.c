@@ -917,12 +917,12 @@ The return value is a property list.  */)
 		      warnings);
 
   if (verification & GNUTLS_CERT_SIGNER_NOT_FOUND)
-    warnings = Fcons (list2 (intern (":signer-not-found"),
-			     build_string("certificate signer was not found")),
+    warnings = Fcons (list2 (intern (":self-signed"),
+			     build_string("certificate signer was not found (self-signed)")),
 		      warnings);
 
   if (verification & GNUTLS_CERT_SIGNER_NOT_CA)
-    warnings = Fcons (list2 (intern (":self-signed"),
+    warnings = Fcons (list2 (intern (":not-ca"),
 			     build_string("certificate signer is not a CA")),
 		      warnings);
 
