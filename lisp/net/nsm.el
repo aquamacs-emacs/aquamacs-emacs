@@ -50,6 +50,14 @@
   :group 'nsm
   :type 'file)
 
+(defcustom nsm-save-host-names nil
+  "If non-nil, always save host names in the structures in `nsm-settings-file'.
+By default, only hosts that have exceptions have their names
+stored in plain text."
+  :version "25.1"
+  :group 'nsm
+  :type 'boolean)
+
 (defun nsm-verify-connection (process host port &optional
 				      save-fingerprint warn-unencrypted)
   "Verify the security status of PROCESS that's connected to HOST:PORT.
@@ -85,7 +93,7 @@ unencrypted."
 	       (nsm-check-tls-connection process host port status settings)))
 	  (when (and process save-fingerprint
 		     (null (nsm-host-settings id)))
-	    (nsm-save-host id status 'fingerprint 'always))
+	    (nsm-save-host host port status 'fingerprint 'always))
 	  process))))))
 
 (defun nsm-check-tls-connection (process host port status settings)
@@ -102,7 +110,7 @@ unencrypted."
 	      nil)
 	  ;; Save the host fingerprint so that we can check it the
 	  ;; next time we connect.
-	  (nsm-save-host (nsm-id host port) status 'fingerprint 'always)
+	  (nsm-save-host host port status 'fingerprint 'always)
 	  process)))
      ((not (equal nsm-security-level 'low))
       ;; We always want to pin the certificate of invalid connections
@@ -114,7 +122,7 @@ unencrypted."
 	;; We have a warning, so query the user.
 	(if (and (not (nsm-warnings-ok-p status settings))
 		 (not (nsm-query
-		       (nsm-id host port) status 'conditions
+		       host port status 'conditions
 		       "The TLS connection to %s:%s is insecure\nfor the following reason%s:\n\n%s"
 		       host port
 		       (if (> (length warnings) 1)
@@ -131,7 +139,7 @@ unencrypted."
 	   (not (equal (plist-get status :fingerprint)
 		       (plist-get settings :fingerprint)))
 	   (not (nsm-query
-		 (nsm-id host port) status 'fingerprint
+		 host port status 'fingerprint
 		 "The fingerprint for the connection to %s:%s has changed from\n%s to\n%s"
 		 host port
 		 (plist-get settings :fingerprint)
@@ -149,7 +157,7 @@ unencrypted."
 	 (not (eq (plist-get settings :fingerprint) :none))
 	 (not
 	  (nsm-query
-	   (nsm-id host port) nil 'conditions
+	   host port nil 'conditions
 	   "The connection to %s:%s used to be an encrypted\nconnection, but is now unencrypted.  This might mean that there's a\nman-in-the-middle tapping this connection."
 	   host port)))
     (delete-process process)
@@ -157,7 +165,7 @@ unencrypted."
    ((and warn-unencrypted
 	 (not (memq :unencrypted (plist-get settings :conditions)))
 	 (not (nsm-query
-	       (nsm-id host port) nil 'conditions
+	       host port nil 'conditions
 	       "The connection to %s:%s is unencrypted."
 	       host port)))
     (delete-process process)
@@ -165,7 +173,7 @@ unencrypted."
    (t
     process)))
 
-(defun nsm-query (id status what message &rest args)
+(defun nsm-query (host port status what message &rest args)
   ;; If there is no user to answer queries, then say `no' to everything.
   (if (or noninteractive
 	  running-asynch-code)
@@ -179,7 +187,7 @@ unencrypted."
 	     (error 'no))))
       (if (eq response 'no)
 	  nil
-	(nsm-save-host id status what response)
+	(nsm-save-host host port status what response)
 	t))))
 
 (defun nsm-query-user (message args cert)
@@ -212,16 +220,21 @@ unencrypted."
       (clear-this-command-keys)
       response)))
 
-(defun nsm-save-host (id status what permanency)
-  (let ((saved
-	 (list :id id
-	       :fingerprint (if status
-				(plist-get status :fingerprint)
-			      ;; Plain connection.
-			      :none))))
+(defun nsm-save-host (host port status what permanency)
+  (let* ((id (nsm-id host port))
+	 (saved
+	  (list :id id
+		:fingerprint (if status
+				 (plist-get status :fingerprint)
+			       ;; Plain connection.
+			       :none))))
+    (when (or (eq what 'conditions)
+	      nsm-save-host-names)
+      (nconc saved (list :host (format "%s:%s" host port))))
     ;; We either want to save/update the fingerprint or the conditions
     ;; of the certificate/unencrypted connection.
     (when (eq what 'conditions)
+      (nconc saved (list :host (format "%s:%s" host port)))
       (cond
        ((not status)
 	(nconc saved `(:conditions (:unencrypted))))
