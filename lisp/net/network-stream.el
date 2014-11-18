@@ -45,6 +45,7 @@
 (require 'tls)
 (require 'starttls)
 (require 'auth-source)
+(require 'nsm)
 
 (autoload 'gnutls-negotiate "gnutls")
 (autoload 'open-gnutls-stream "gnutls")
@@ -319,6 +320,10 @@ a greeting from the server.
 			"' program was found"))))
       (delete-process stream)
       (setq stream nil))
+    ;; Check certificate validity etc.
+    (when builtin-starttls
+      (setq stream (nsm-verify-connection stream host service
+					  (eq resulting-type 'tls))))
     ;; Return value:
     (list stream greeting capabilities resulting-type error)))
 
@@ -352,6 +357,9 @@ a greeting from the server.
 		       'open-tls-stream)
 		     name buffer host service))
 	   (eoc (plist-get parameters :end-of-command)))
+      ;; Check certificate validity etc.
+      (when (and use-builtin-gnutls stream)
+	(setq stream (nsm-verify-connection stream host service)))
       (if (null stream)
 	  (list nil nil nil 'plain)
 	;; If we're using tls.el, we have to delete the output from
