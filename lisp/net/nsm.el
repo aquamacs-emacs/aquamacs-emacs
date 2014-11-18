@@ -99,19 +99,34 @@ unencrypted."
 (defun nsm-check-tls-connection (process host port status settings)
   (let ((warnings (plist-get status :warnings)))
     (cond
+
+     ;; The certificate validated, but perhaps we want to do
+     ;; certificate pinning.
      ((null warnings)
-      ;; The certificate is fine, but if we're paranoid, we might
-      ;; want to check whether it's changed anyway.
-      (if (not (equal nsm-security-level 'paranoid))
-	  process
-	(if (not (nsm-fingerprint-ok-p host port status settings))
-	    (progn
-	      (delete-process process)
-	      nil)
-	  ;; Save the host fingerprint so that we can check it the
-	  ;; next time we connect.
-	  (nsm-save-host host port status 'fingerprint 'always)
-	  process)))
+      (cond
+       ((< (nsm-level nsm-security-level) (nsm-level 'high))
+	process)
+       ;; The certificate is fine, but if we're paranoid, we might
+       ;; want to check whether it's changed anyway.
+       ((and (>= (nsm-level nsm-security-level) (nsm-level 'high))
+	     (not (nsm-fingerprint-ok-p host port status settings)))
+	(delete-process process)
+	nil)
+       ;; We haven't seen this before, and we're paranoid.
+       ((and (eq nsm-security-level 'paranoid)
+	     (null settings)
+	     (not (nsm-new-fingerprint-ok-p host port status)))
+	(delete-process process)
+	nil)
+       ((>= (nsm-level nsm-security-level) (nsm-level 'high))
+	;; Save the host fingerprint so that we can check it the
+	;; next time we connect.
+	(nsm-save-host host port status 'fingerprint 'always)
+	process)
+       (t
+	process)))
+
+     ;; The certificate did not validate.
      ((not (equal nsm-security-level 'low))
       ;; We always want to pin the certificate of invalid connections
       ;; to track man-in-the-middle or the like.
@@ -148,6 +163,13 @@ unencrypted."
       nil
     t))
 
+(defun nsm-new-fingerprint-ok-p (host port status)
+  (nsm-query
+   host port nil 'fingerprint
+   "The fingerprint for the connection to %s:%s is new:\n%s"
+   host port
+   (plist-get status :fingerprint)))
+
 (defun nsm-check-plain-connection (process host port settings warn-unencrypted)
   ;; If this connection used to be TLS, but is now plain, then it's
   ;; possible that we're being Man-In-The-Middled by a proxy that's
@@ -175,8 +197,7 @@ unencrypted."
 
 (defun nsm-query (host port status what message &rest args)
   ;; If there is no user to answer queries, then say `no' to everything.
-  (if (or noninteractive
-	  running-asynch-code)
+  (if noninteractive
       nil
     (let ((response
 	   (condition-case nil
@@ -353,6 +374,14 @@ unencrypted."
 		     (substring elem (1+ pos)))
 	     elem)))
        (nreverse result)))))
+
+(defun nsm-level (symbol)
+  "Return a numerical level for SYMBOL for easier comparison."
+  (cond
+   ((eq symbol 'low) 0)
+   ((eq symbol 'medium) 1)
+   ((eq symbol 'high) 2)
+   (t 3)))
 
 (provide 'nsm)
 
