@@ -203,6 +203,9 @@ unencrypted."
 	  (ding)
 	  (setq prefix "Invalid choice.  ")))
       (kill-buffer buffer)
+      ;; If called from a callback, `read-char' will insert things
+      ;; into the pending input.  Clear that.
+      (clear-this-command-keys)
       response)))
 
 (defun nsm-save-host (id status what permanency)
@@ -288,7 +291,8 @@ unencrypted."
     (when cert
       (format "Certificate issued by %s\nIssued to %s\nCertificate host name: %s\nPublic key: %s, signature: %s, security level: %s\nValid from: %s, valid to: %s\n"
 	      (nsm-certificate-part (plist-get cert :issuer) "CN")
-	      (nsm-certificate-part (plist-get cert :subject) "O")
+	      (or (nsm-certificate-part (plist-get cert :subject) "O")
+		  (nsm-certificate-part (plist-get cert :subject) "OU"))
 	      (nsm-certificate-part (plist-get cert :subject) "CN")
 	      (plist-get cert :public-key-algorithm)
 	      (plist-get cert :signature-algorithm)
