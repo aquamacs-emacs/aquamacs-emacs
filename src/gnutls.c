@@ -707,13 +707,21 @@ DEFUN ("gnutls-available-p", Fgnutls_available_p, Sgnutls_available_p, 0, 0, 0,
 }
 
 Lisp_Object
-gnutls_hex_string (unsigned char *buf, size_t buf_size) {
-  Lisp_Object string = make_uninit_string (buf_size * 3 - 1);
+gnutls_hex_string (unsigned char *buf, size_t buf_size, char *prefix) {
+  size_t prefix_length = strlen (prefix);
+  char *string = malloc (buf_size * 3 + prefix_length);
+  Lisp_Object ret;
+
+  strcpy (string, prefix);
+
   for (int i = 0; i < buf_size; i++)
-    sprintf (SDATA (string) + i * 3,
+    sprintf (string + i * 3 + prefix_length,
 	     i == buf_size - 1? "%02x": "%02x:",
 	     buf[i]);
-  return string;
+
+  ret = build_string (string);
+  free (string);
+  return ret;
 }
 
 Lisp_Object
@@ -740,7 +748,7 @@ gnutls_certificate_details (gnutls_x509_crt_t cert)
       err = gnutls_x509_crt_get_serial (cert, serial, &serial_size);
       if (err >= GNUTLS_E_SUCCESS) {
 	res = nconc2 (res, list2 (intern (":serial-number"),
-				  gnutls_hex_string (serial, serial_size)));
+				  gnutls_hex_string (serial, serial_size, "")));
       }
       free (serial);
     }
@@ -846,7 +854,7 @@ gnutls_certificate_details (gnutls_x509_crt_t cert)
 	err = gnutls_x509_crt_get_signature (cert, buf, &buf_size);
 	if (err >= GNUTLS_E_SUCCESS) {
 	  res = nconc2 (res, list2 (intern (":signature"),
-				    gnutls_hex_string (buf, buf_size)));
+				    gnutls_hex_string (buf, buf_size, "")));
 	}
 	free (buf);
       }
@@ -878,14 +886,7 @@ The return value is a property list.  */)
   if (ret < GNUTLS_E_SUCCESS)
     return gnutls_make_error (ret);
 
-  /* Each byte, except the last, with a colon after it, and "sha1:" in
-     front. */
-  hash = make_uninit_string (size * 3 - 1 + 5);
-  strcpy (SDATA (hash), "sha1:");
-  for (int i = 0; i < size; i++)
-    sprintf (SDATA (hash) + i * 3 + 5,
-	     i == size - 1? "%02x": "%02x:",
-	     buffer[i]);
+  hash = gnutls_hex_string (buffer, size, "sha1:");
 
   /* Then collect any warnings already computed by the handshake. */
   verification = XPROCESS (proc)->gnutls_peer_verification;
