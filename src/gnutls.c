@@ -152,9 +152,37 @@ DEF_GNUTLS_FN (int, gnutls_x509_crt_import,
 	       (gnutls_x509_crt_t, const gnutls_datum_t *,
 		gnutls_x509_crt_fmt_t));
 DEF_GNUTLS_FN (int, gnutls_x509_crt_init, (gnutls_x509_crt_t *));
-DEF_GNUTLS_FN (int, gnutls_x509_crt_init, (gnutls_digest_algorithm_t,
-					   const gnutls_datum_t*, void *,
-					   size_t*));
+DEF_GNUTLS_FN (int, gnutls_x509_crt_get_fingerprint,
+	       (gnutls_digest_algorithm_t,
+		const gnutls_datum_t*, void *, size_t *));
+DEF_GNUTLS_FN (int, gnutls_x509_crt_get_version,
+	       (gnutls_x509_crt_t));
+DEF_GNUTLS_FN (int, gnutls_x509_crt_get_serial,
+	       (gnutls_x509_crt_t, void *, size_t *));
+DEF_GNUTLS_FN (int, gnutls_x509_crt_get_issuer_dn,
+	       (gnutls_x509_crt_t, char *, size_t *));
+DEF_GNUTLS_FN (time_t, gnutls_x509_crt_get_activation_time,
+	       (gnutls_x509_crt_t));
+DEF_GNUTLS_FN (time_t, gnutls_x509_crt_get_expiration_time,
+	       (gnutls_x509_crt_t));
+DEF_GNUTLS_FN (int, gnutls_x509_crt_get_dn,
+	       (gnutls_x509_crt_t, char *, size_t *));
+DEF_GNUTLS_FN (int, gnutls_x509_crt_get_pk_algorithm,
+	       (gnutls_x509_crt_t, unsigned int *));
+DEF_GNUTLS_FN (int, gnutls_pk_algorithm_get_name, (gnutls_pk_algorithm_t));
+DEF_GNUTLS_FN (int, gnutls_pk_bits_to_sec_param,
+	       (gnutls_pk_algorithm_t, unsigned int));
+DEF_GNUTLS_FN (int, gnutls_x509_crt_get_issuer_unique_id,
+	       (gnutls_x509_crt_t, char *, size_t *));
+DEF_GNUTLS_FN (int, gnutls_x509_crt_get_subject_unique_id,
+	       (gnutls_x509_crt_t, char *, size_t *));
+DEF_GNUTLS_FN (int, gnutls_x509_crt_get_signature_algorithm,
+	       (gnutls_x509_crt_t));
+DEF_GNUTLS_FN (int, gnutls_x509_crt_get_signature,
+	       (gnutls_x509_crt_t, char *, size_t *));
+DEF_GNUTLS_FN (int, gnutls_x509_crt_get_key_id,
+	       (gnutls_x509_crt_t, unsigned int,
+		unsigned char *, size_t *_size));
 
 static bool
 init_gnutls_functions (void)
@@ -215,6 +243,20 @@ init_gnutls_functions (void)
   LOAD_GNUTLS_FN (library, gnutls_x509_crt_import);
   LOAD_GNUTLS_FN (library, gnutls_x509_crt_init);
   LOAD_GNUTLS_FN (library, gnutls_x509_crt_get_fingerprint);
+  LOAD_GNUTLS_FN (library, gnutls_x509_crt_get_version);
+  LOAD_GNUTLS_FN (library, gnutls_x509_crt_get_serial);
+  LOAD_GNUTLS_FN (library, gnutls_x509_crt_get_issuer_dn);
+  LOAD_GNUTLS_FN (library, gnutls_x509_crt_get_activation_time);
+  LOAD_GNUTLS_FN (library, gnutls_x509_crt_get_expiration_time);
+  LOAD_GNUTLS_FN (library, gnutls_x509_crt_get_dn);
+  LOAD_GNUTLS_FN (library, gnutls_x509_crt_get_pk_algorithm);
+  LOAD_GNUTLS_FN (library, gnutls_pk_algorithm_get_name);
+  LOAD_GNUTLS_FN (library, gnutls_pk_bits_to_sec_param);
+  LOAD_GNUTLS_FN (library, gnutls_x509_crt_get_issuer_unique_id);
+  LOAD_GNUTLS_FN (library, gnutls_x509_crt_get_subject_unique_id);
+  LOAD_GNUTLS_FN (library, gnutls_x509_crt_get_signature_algorithm);
+  LOAD_GNUTLS_FN (library, gnutls_x509_crt_get_signature);
+  LOAD_GNUTLS_FN (library, gnutls_x509_crt_get_key_id);
 
   max_log_level = global_gnutls_log_level;
 
@@ -271,6 +313,20 @@ init_gnutls_functions (void)
 #define fn_gnutls_x509_crt_import		gnutls_x509_crt_import
 #define fn_gnutls_x509_crt_init			gnutls_x509_crt_init
 #define fn_gnutls_x509_crt_get_fingerprint	gnutls_x509_crt_get_fingerprint	
+#define fn_gnutls_x509_crt_get_version          gnutls_x509_crt_get_version
+#define fn_gnutls_x509_crt_get_serial           gnutls_x509_crt_get_serial
+#define fn_gnutls_x509_crt_get_issuer_dn        gnutls_x509_crt_get_issuer_dn
+#define fn_gnutls_x509_crt_get_activation_time  gnutls_x509_crt_get_activation_time
+#define fn_gnutls_x509_crt_get_expiration_time  gnutls_x509_crt_get_expiration_time
+#define fn_gnutls_x509_crt_get_dn               gnutls_x509_crt_get_dn
+#define fn_gnutls_x509_crt_get_pk_algorithm     gnutls_x509_crt_get_pk_algorithm
+#define fn_gnutls_pk_algorithm_get_name         gnutls_pk_algorithm_get_name
+#define fn_gnutls_pk_bits_to_sec_param          gnutls_pk_bits_to_sec_param
+#define fn_gnutls_x509_crt_get_issuer_unique_id gnutls_x509_crt_get_issuer_unique_id
+#define fn_gnutls_x509_crt_get_subject_unique_id gnutls_x509_crt_get_subject_unique_id
+#define fn_gnutls_x509_crt_get_signature_algorithm gnutls_x509_crt_get_signature_algorithm
+#define fn_gnutls_x509_crt_get_signature        gnutls_x509_crt_get_signature
+#define fn_gnutls_x509_crt_get_key_id           gnutls_x509_crt_get_key_id
 
 #endif /* !WINDOWSNT */
 
@@ -730,7 +786,7 @@ gnutls_certificate_details (gnutls_x509_crt_t cert)
 
   /* Version. */
   {
-    int version = gnutls_x509_crt_get_version (cert);
+    int version = fn_gnutls_x509_crt_get_version (cert);
     if (version >= GNUTLS_E_SUCCESS)
       res = nconc2 (res, list2 (intern (":version"),
 				make_number (version)));
@@ -740,10 +796,10 @@ gnutls_certificate_details (gnutls_x509_crt_t cert)
   {
     size_t serial_size = 0;
 
-    err = gnutls_x509_crt_get_serial (cert, NULL, &serial_size);
+    err = fn_gnutls_x509_crt_get_serial (cert, NULL, &serial_size);
     if (err == GNUTLS_E_SHORT_MEMORY_BUFFER) {
       char *serial = malloc (serial_size);
-      err = gnutls_x509_crt_get_serial (cert, serial, &serial_size);
+      err = fn_gnutls_x509_crt_get_serial (cert, serial, &serial_size);
       if (err >= GNUTLS_E_SUCCESS) {
 	res = nconc2 (res, list2 (intern (":serial-number"),
 				  gnutls_hex_string (serial, serial_size, "")));
@@ -756,10 +812,10 @@ gnutls_certificate_details (gnutls_x509_crt_t cert)
   {
     size_t dn_size = 0;
 
-    err = gnutls_x509_crt_get_issuer_dn (cert, NULL, &dn_size);
+    err = fn_gnutls_x509_crt_get_issuer_dn (cert, NULL, &dn_size);
     if (err == GNUTLS_E_SHORT_MEMORY_BUFFER) {
       char *dn = malloc (dn_size);
-      err = gnutls_x509_crt_get_issuer_dn (cert, dn, &dn_size);
+      err = fn_gnutls_x509_crt_get_issuer_dn (cert, dn, &dn_size);
       if (err >= GNUTLS_E_SUCCESS)
 	res = nconc2 (res, list2 (intern (":issuer"),
 				  make_string (dn, dn_size)));
@@ -772,13 +828,13 @@ gnutls_certificate_details (gnutls_x509_crt_t cert)
     char buf[11];
     size_t buf_size = sizeof (buf);
     struct tm t;
-    time_t tim = gnutls_x509_crt_get_activation_time (cert);
+    time_t tim = fn_gnutls_x509_crt_get_activation_time (cert);
 
     if (gmtime_r (&tim, &t) != NULL &&
 	strftime (buf, buf_size, "%Y-%m-%d", &t) != 0)
       res = nconc2 (res, list2 (intern (":valid-from"), build_string (buf)));
 
-    tim = gnutls_x509_crt_get_expiration_time (cert);
+    tim = fn_gnutls_x509_crt_get_expiration_time (cert);
     if (gmtime_r (&tim, &t) != NULL &&
 	strftime (buf, buf_size, "%Y-%m-%d", &t) != 0)
       res = nconc2 (res, list2 (intern (":valid-to"), build_string (buf)));
@@ -788,10 +844,10 @@ gnutls_certificate_details (gnutls_x509_crt_t cert)
   {
     size_t dn_size = 0;
 
-    err = gnutls_x509_crt_get_dn (cert, NULL, &dn_size);
+    err = fn_gnutls_x509_crt_get_dn (cert, NULL, &dn_size);
     if (err == GNUTLS_E_SHORT_MEMORY_BUFFER) {
       char *dn = malloc (dn_size);
-      err = gnutls_x509_crt_get_dn (cert, dn, &dn_size);
+      err = fn_gnutls_x509_crt_get_dn (cert, dn, &dn_size);
       if (err >= GNUTLS_E_SUCCESS)
 	res = nconc2 (res, list2 (intern (":subject"),
 				  make_string (dn, dn_size)));
@@ -803,14 +859,14 @@ gnutls_certificate_details (gnutls_x509_crt_t cert)
   {
     unsigned int bits;
 
-    err = gnutls_x509_crt_get_pk_algorithm (cert, &bits);
+    err = fn_gnutls_x509_crt_get_pk_algorithm (cert, &bits);
     if (err >= GNUTLS_E_SUCCESS) {
-      const char *name = gnutls_pk_algorithm_get_name (err);
+      const char *name = fn_gnutls_pk_algorithm_get_name (err);
       if (name)
 	res = nconc2 (res, list2 (intern (":public-key-algorithm"),
 				  build_string (name)));
 
-      name = gnutls_sec_param_get_name (gnutls_pk_bits_to_sec_param
+      name = gnutls_sec_param_get_name (fn_gnutls_pk_bits_to_sec_param
 					(err, bits));
       res = nconc2 (res, list2 (intern (":certificate-security-level"),
 				build_string (name)));
@@ -821,10 +877,10 @@ gnutls_certificate_details (gnutls_x509_crt_t cert)
   {
     size_t buf_size = 0;
 
-    err = gnutls_x509_crt_get_issuer_unique_id (cert, NULL, &buf_size);
+    err = fn_gnutls_x509_crt_get_issuer_unique_id (cert, NULL, &buf_size);
     if (err == GNUTLS_E_SHORT_MEMORY_BUFFER) {
       char *buf = malloc (buf_size);
-      err = gnutls_x509_crt_get_issuer_unique_id (cert, buf, &buf_size);
+      err = fn_gnutls_x509_crt_get_issuer_unique_id (cert, buf, &buf_size);
       if (err >= GNUTLS_E_SUCCESS)
 	res = nconc2 (res, list2 (intern (":issuer-unique-id"),
 				  make_string (buf, buf_size)));
@@ -832,10 +888,10 @@ gnutls_certificate_details (gnutls_x509_crt_t cert)
     }
 
     buf_size = 0;
-    err = gnutls_x509_crt_get_subject_unique_id (cert, NULL, &buf_size);
+    err = fn_gnutls_x509_crt_get_subject_unique_id (cert, NULL, &buf_size);
     if (err == GNUTLS_E_SHORT_MEMORY_BUFFER) {
       char *buf = malloc (buf_size);
-      err = gnutls_x509_crt_get_subject_unique_id (cert, buf, &buf_size);
+      err = fn_gnutls_x509_crt_get_subject_unique_id (cert, buf, &buf_size);
       if (err >= GNUTLS_E_SUCCESS)
 	res = nconc2 (res, list2 (intern (":subject-unique-id"),
 				  make_string (buf, buf_size)));
@@ -847,17 +903,17 @@ gnutls_certificate_details (gnutls_x509_crt_t cert)
   {
     size_t buf_size = 0;
 
-    err = gnutls_x509_crt_get_signature_algorithm (cert);
+    err = fn_gnutls_x509_crt_get_signature_algorithm (cert);
     if (err >= GNUTLS_E_SUCCESS) {
       const char *name = gnutls_sign_algorithm_get_name (err);
       if (name)
 	res = nconc2 (res, list2 (intern (":signature-algorithm"),
 				  build_string (name)));
 
-      err = gnutls_x509_crt_get_signature (cert, NULL, &buf_size);
+      err = fn_gnutls_x509_crt_get_signature (cert, NULL, &buf_size);
       if (err == GNUTLS_E_SHORT_MEMORY_BUFFER) {
 	char *buf = malloc (buf_size);
-	err = gnutls_x509_crt_get_signature (cert, buf, &buf_size);
+	err = fn_gnutls_x509_crt_get_signature (cert, buf, &buf_size);
 	if (err >= GNUTLS_E_SUCCESS) {
 	  res = nconc2 (res, list2 (intern (":signature"),
 				    gnutls_hex_string (buf, buf_size, "")));
@@ -871,10 +927,10 @@ gnutls_certificate_details (gnutls_x509_crt_t cert)
   {
     size_t buf_size = 0;
 
-    err = gnutls_x509_crt_get_key_id (cert, 0, NULL, &buf_size);
+    err = fn_gnutls_x509_crt_get_key_id (cert, 0, NULL, &buf_size);
     if (err == GNUTLS_E_SHORT_MEMORY_BUFFER) {
       unsigned char *buf = malloc (buf_size);
-      err = gnutls_x509_crt_get_key_id (cert, 0, buf, &buf_size);
+      err = fn_gnutls_x509_crt_get_key_id (cert, 0, buf, &buf_size);
       if (err >= GNUTLS_E_SUCCESS)
 	  res = nconc2 (res, list2 (intern (":public-key-id"),
 				    gnutls_hex_string ((char *)buf,
