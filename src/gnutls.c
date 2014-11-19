@@ -883,7 +883,7 @@ gnutls_certificate_details (gnutls_x509_crt_t cert)
     }
   }
 
-  /* Public key ID. */
+  /* Certificate fingerprint. */
   {
     size_t buf_size = 0;
 
