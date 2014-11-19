@@ -1183,7 +1183,8 @@ previous `url-http' call, which is being re-attempted."
   (let* ((host (url-host (or url-using-proxy url)))
 	 (port (url-port (or url-using-proxy url)))
 	 (nsm-noninteractive (or url-request-noninteractive
-				 url-http-noninteractive))
+				 (and (boundp 'url-http-noninteractive)
+				      url-http-noninteractive)))
 	 (connection (url-http-find-free-connection host port))
 	 (buffer (or retry-buffer
 		     (generate-new-buffer
