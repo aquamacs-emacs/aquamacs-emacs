@@ -38,10 +38,10 @@
   "How secure the network should be."
   :version "25.1"
   :group 'nsm
-  :type '(choice (const :tag "Low" 'low)
-		 (const :tag "Medium" 'medium)
-		 (const :tag "High" 'high)
-		 (const :tag "Paranoid" 'paranoid)))
+  :type '(choice (const :tag "Low" low)
+		 (const :tag "Medium" medium)
+		 (const :tag "High" high)
+		 (const :tag "Paranoid" paranoid)))
 
 (defcustom nsm-settings-file (expand-file-name "network-security.data"
 						 user-emacs-directory)
