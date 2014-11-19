@@ -183,6 +183,9 @@ DEF_GNUTLS_FN (int, gnutls_x509_crt_get_signature,
 DEF_GNUTLS_FN (int, gnutls_x509_crt_get_key_id,
 	       (gnutls_x509_crt_t, unsigned int,
 		unsigned char *, size_t *_size));
+DEF_GNUTLS_FN (const char*, gnutls_sec_param_get_name, (gnutls_sec_param_t));
+DEF_GNUTLS_FN (const char*, gnutls_sign_algorithm_get_name,
+	       (gnutls_sign_algorithm_t));
 
 static bool
 init_gnutls_functions (void)
@@ -257,6 +260,8 @@ init_gnutls_functions (void)
   LOAD_GNUTLS_FN (library, gnutls_x509_crt_get_signature_algorithm);
   LOAD_GNUTLS_FN (library, gnutls_x509_crt_get_signature);
   LOAD_GNUTLS_FN (library, gnutls_x509_crt_get_key_id);
+  LOAD_GNUTLS_FN (library, gnutls_sec_param_get_name);
+  LOAD_GNUTLS_FN (library, gnutls_sign_algorithm_get_name);
 
   max_log_level = global_gnutls_log_level;
 
@@ -327,6 +332,8 @@ init_gnutls_functions (void)
 #define fn_gnutls_x509_crt_get_signature_algorithm gnutls_x509_crt_get_signature_algorithm
 #define fn_gnutls_x509_crt_get_signature        gnutls_x509_crt_get_signature
 #define fn_gnutls_x509_crt_get_key_id           gnutls_x509_crt_get_key_id
+#define fn_gnutls_sec_param_get_name            gnutls_sec_param_get_name
+#define fn_gnutls_sign_algorithm_get_name       gnutls_sign_algorithm_get_name
 
 #endif /* !WINDOWSNT */
 
@@ -866,8 +873,8 @@ gnutls_certificate_details (gnutls_x509_crt_t cert)
 	res = nconc2 (res, list2 (intern (":public-key-algorithm"),
 				  build_string (name)));
 
-      name = gnutls_sec_param_get_name (fn_gnutls_pk_bits_to_sec_param
-					(err, bits));
+      name = fn_gnutls_sec_param_get_name (fn_gnutls_pk_bits_to_sec_param
+					   (err, bits));
       res = nconc2 (res, list2 (intern (":certificate-security-level"),
 				build_string (name)));
     }
@@ -905,7 +912,7 @@ gnutls_certificate_details (gnutls_x509_crt_t cert)
 
     err = fn_gnutls_x509_crt_get_signature_algorithm (cert);
     if (err >= GNUTLS_E_SUCCESS) {
-      const char *name = gnutls_sign_algorithm_get_name (err);
+      const char *name = fn_gnutls_sign_algorithm_get_name (err);
       if (name)
 	res = nconc2 (res, list2 (intern (":signature-algorithm"),
 				  build_string (name)));
