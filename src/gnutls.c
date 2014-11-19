@@ -867,6 +867,40 @@ gnutls_certificate_details (gnutls_x509_crt_t cert)
     }
   }
 
+  /* Public key ID. */
+  {
+    size_t buf_size = 0;
+
+    err = gnutls_x509_crt_get_key_id (cert, 0, NULL, &buf_size);
+    if (err == GNUTLS_E_SHORT_MEMORY_BUFFER) {
+      unsigned char *buf = malloc (buf_size);
+      err = gnutls_x509_crt_get_key_id (cert, 0, buf, &buf_size);
+      if (err >= GNUTLS_E_SUCCESS)
+	  res = nconc2 (res, list2 (intern (":public-key-id"),
+				    gnutls_hex_string ((char *)buf,
+						       buf_size, "sha1:")));
+      free (buf);
+    }
+  }
+
+  /* Public key ID. */
+  {
+    size_t buf_size = 0;
+
+    err = fn_gnutls_x509_crt_get_fingerprint (cert, GNUTLS_DIG_SHA1,
+					      NULL, &buf_size);
+    if (err == GNUTLS_E_SHORT_MEMORY_BUFFER) {
+      unsigned char *buf = malloc (buf_size);
+      err = fn_gnutls_x509_crt_get_fingerprint (cert, GNUTLS_DIG_SHA1,
+						buf, &buf_size);
+      if (err >= GNUTLS_E_SUCCESS)
+	  res = nconc2 (res, list2 (intern (":certificate-id"),
+				    gnutls_hex_string ((char *)buf,
+						       buf_size, "sha1:")));
+      free (buf);
+    }
+  }
+
   return res;
 }
 
@@ -875,33 +909,13 @@ DEFUN ("gnutls-peer-status", Fgnutls_peer_status, Sgnutls_peer_status, 1, 1, 0,
 The return value is a property list.  */)
   (Lisp_Object proc)
 {
-  int ret;
-  char *buffer;
-  size_t size = 0;
-  Lisp_Object hash, warnings = Qnil, result = Qnil;
+  Lisp_Object warnings = Qnil, result = Qnil;
   unsigned int verification;
 
   CHECK_PROCESS (proc);
 
   if (XPROCESS (proc)->gnutls_p == 0)
     return Qnil;
-
-  /* First get the fingerprint of the certificate. */
-  ret = fn_gnutls_x509_crt_get_fingerprint (XPROCESS (proc)->gnutls_certificate,
-					    GNUTLS_DIG_SHA1, NULL, &size);
-  if (ret != GNUTLS_E_SHORT_MEMORY_BUFFER)
-    return gnutls_make_error (ret);
-
-  buffer = malloc (size);
-  ret = fn_gnutls_x509_crt_get_fingerprint (XPROCESS (proc)->gnutls_certificate,
-					    GNUTLS_DIG_SHA1, buffer, &size);
-  if (ret < GNUTLS_E_SUCCESS) {
-    free (buffer);
-    return gnutls_make_error (ret);
-  }
-
-  hash = gnutls_hex_string (buffer, size, "sha1:");
-  free (buffer);
 
   /* Then collect any warnings already computed by the handshake. */
   verification = XPROCESS (proc)->gnutls_peer_verification;
@@ -947,10 +961,8 @@ The return value is a property list.  */)
 			     build_string("certificate host does not match hostname")),
 		      warnings);
 
-  result = list2 (intern (":fingerprint"), hash);
-
   if (!NILP (warnings))
-    result = nconc2 (result, list2 (intern (":warnings"), warnings));
+    result = list2 (intern (":warnings"), warnings);
 
   result = nconc2 (result, list2
 		   (intern (":certificate"),
