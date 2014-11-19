@@ -344,11 +344,14 @@ unencrypted."
       (with-temp-buffer
 	(insert
 	 "Certificate information\n"
-	 "Issued by:" (nsm-certificate-part (plist-get cert :issuer) "CN") "\n"
-	 "Issued to:" (or (nsm-certificate-part (plist-get cert :subject) "O")
-			  (nsm-certificate-part (plist-get cert :subject) "OU"))
+	 "Issued by:"
+	 (nsm-certificate-part (plist-get cert :issuer) "CN" t) "\n"
+	 "Issued to:"
+	 (or (nsm-certificate-part (plist-get cert :subject) "O")
+	     (nsm-certificate-part (plist-get cert :subject) "OU") t)
 	 "\n"
-	 "Hostname:" (nsm-certificate-part (plist-get cert :subject) "CN") "\n"
+	 "Hostname:"
+	 (nsm-certificate-part (plist-get cert :subject) "CN" t) "\n"
 	 "Public key:" (plist-get cert :public-key-algorithm)
 	 ", signature: " (plist-get cert :signature-algorithm) "\n"
 	 "Security level:"
@@ -362,8 +365,12 @@ unencrypted."
 	  (insert (make-string (- 20 (current-column)) ? )))
 	(buffer-string)))))
 
-(defun nsm-certificate-part (string part)
-  (cadr (assoc part (nsm-parse-subject string))))
+(defun nsm-certificate-part (string part &optional full)
+  (let ((part (cadr (assoc part (nsm-parse-subject string)))))
+    (cond
+     (part part)
+     (full string)
+     (t nil))))
 
 (defun nsm-parse-subject (string)
   (with-temp-buffer
