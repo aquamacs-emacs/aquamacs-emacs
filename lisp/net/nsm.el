@@ -58,6 +58,10 @@ stored in plain text."
   :group 'nsm
   :type 'boolean)
 
+(defvar nsm-noninteractive nil
+  "If non-nil, the connection is opened in a non-interactive context.
+This means that no queries should be performed.")
+
 (defun nsm-verify-connection (process host port &optional
 				      save-fingerprint warn-unencrypted)
   "Verify the security status of PROCESS that's connected to HOST:PORT.
@@ -207,7 +211,8 @@ unencrypted."
 
 (defun nsm-query (host port status what message &rest args)
   ;; If there is no user to answer queries, then say `no' to everything.
-  (if noninteractive
+  (if (or noninteractive
+	  nsm-noninteractive)
       nil
     (let ((response
 	   (condition-case nil
