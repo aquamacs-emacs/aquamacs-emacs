@@ -348,7 +348,7 @@ unencrypted."
 	 (nsm-certificate-part (plist-get cert :issuer) "CN" t) "\n"
 	 "Issued to:"
 	 (or (nsm-certificate-part (plist-get cert :subject) "O")
-	     (nsm-certificate-part (plist-get cert :subject) "OU") t)
+	     (nsm-certificate-part (plist-get cert :subject) "OU" t))
 	 "\n"
 	 "Hostname:"
 	 (nsm-certificate-part (plist-get cert :subject) "CN" t) "\n"
