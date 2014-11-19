@@ -152,19 +152,26 @@ unencrypted."
   (plist-get (plist-get status :certificate) :public-key-id))
 
 (defun nsm-fingerprint-ok-p (host port status settings)
-  (if (and settings
-	   (not (eq (plist-get settings :fingerprint) :none))
-	   (not (equal (nsm-fingerprint status)
-		       (plist-get settings :fingerprint)))
-	   (not (nsm-query
-		 host port status 'fingerprint
-		 "The fingerprint for the connection to %s:%s has changed from\n%s to\n%s"
-		 host port
-		 (plist-get settings :fingerprint)
-		 (nsm-fingerprint status))))
-      ;; Not OK.
-      nil
-    t))
+  (let ((did-query nil))
+    (if (and settings
+	     (not (eq (plist-get settings :fingerprint) :none))
+	     (not (equal (nsm-fingerprint status)
+			 (plist-get settings :fingerprint)))
+	     (not
+	      (setq did-query
+		    (nsm-query
+		     host port status 'fingerprint
+		     "The fingerprint for the connection to %s:%s has changed from\n%s to\n%s"
+		     host port
+		     (plist-get settings :fingerprint)
+		     (nsm-fingerprint status)))))
+	;; Not OK.
+	nil
+      (when did-query
+	;; Remove any exceptions that have been set on the previous
+	;; certificate.
+	(plist-put settings :conditions nil))
+      t)))
 
 (defun nsm-new-fingerprint-ok-p (host port status)
   (nsm-query
