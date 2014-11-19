@@ -148,17 +148,20 @@ unencrypted."
 	      nil)
 	  process))))))
 
+(defun nsm-fingerprint (status)
+  (plist-get (plist-get status :certificate) :public-key-id))
+
 (defun nsm-fingerprint-ok-p (host port status settings)
   (if (and settings
 	   (not (eq (plist-get settings :fingerprint) :none))
-	   (not (equal (plist-get status :fingerprint)
+	   (not (equal (nsm-fingerprint status)
 		       (plist-get settings :fingerprint)))
 	   (not (nsm-query
 		 host port status 'fingerprint
 		 "The fingerprint for the connection to %s:%s has changed from\n%s to\n%s"
 		 host port
 		 (plist-get settings :fingerprint)
-		 (plist-get status :fingerprint))))
+		 (nsm-fingerprint status))))
       ;; Not OK.
       nil
     t))
@@ -168,7 +171,7 @@ unencrypted."
    host port nil 'fingerprint
    "The fingerprint for the connection to %s:%s is new:\n%s"
    host port
-   (plist-get status :fingerprint)))
+   (nsm-fingerprint status)))
 
 (defun nsm-check-plain-connection (process host port settings warn-unencrypted)
   ;; If this connection used to be TLS, but is now plain, then it's
@@ -245,10 +248,9 @@ unencrypted."
   (let* ((id (nsm-id host port))
 	 (saved
 	  (list :id id
-		:fingerprint (if status
-				 (plist-get status :fingerprint)
-			       ;; Plain connection.
-			       :none))))
+		:fingerprint (or (nsm-fingerprint status)
+				 ;; Plain connection.
+				 :none))))
     (when (or (eq what 'conditions)
 	      nsm-save-host-names)
       (nconc saved (list :host (format "%s:%s" host port))))
