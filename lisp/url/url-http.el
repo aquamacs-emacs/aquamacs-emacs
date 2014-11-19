@@ -39,6 +39,7 @@
 (defvar url-http-data)
 (defvar url-http-end-of-headers)
 (defvar url-http-extra-headers)
+(defvar url-http-noninteractive)
 (defvar url-http-method)
 (defvar url-http-no-retry)
 (defvar url-http-process)
@@ -1181,6 +1182,8 @@ previous `url-http' call, which is being re-attempted."
   (cl-check-type url vector "Need a pre-parsed URL.")
   (let* ((host (url-host (or url-using-proxy url)))
 	 (port (url-port (or url-using-proxy url)))
+	 (nsm-noninteractive (or url-request-noninteractive
+				 url-http-noninteractive))
 	 (connection (url-http-find-free-connection host port))
 	 (buffer (or retry-buffer
 		     (generate-new-buffer
@@ -1212,6 +1215,7 @@ previous `url-http' call, which is being re-attempted."
 		       url-http-process
 		       url-http-method
 		       url-http-extra-headers
+		       url-http-noninteractive
 		       url-http-data
 		       url-http-target-url
 		       url-http-no-retry
@@ -1221,6 +1225,7 @@ previous `url-http' call, which is being re-attempted."
 
 	(setq url-http-method (or url-request-method "GET")
 	      url-http-extra-headers url-request-extra-headers
+	      url-http-noninteractive url-request-noninteractive
 	      url-http-data url-request-data
 	      url-http-process connection
 	      url-http-chunked-length nil
