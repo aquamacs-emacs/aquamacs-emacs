@@ -3069,7 +3069,7 @@ Both characters must have the same length of multi-byte form.  */)
 	  else if (!changed)
 	    {
 	      changed = -1;
-	      modify_text (pos, XINT (end));
+	      modify_text (XINT(start), XINT (end));
 
 	      if (! NILP (noundo))
 		{
@@ -3136,8 +3136,9 @@ Both characters must have the same length of multi-byte form.  */)
 
   if (changed > 0)
     {
-      signal_after_change (changed,
-			   last_changed - changed, last_changed - changed);
+      signal_after_change(XINT(start),XINT(end),XINT(end)-XINT(start));
+      //signal_after_change (changed,
+      //last_changed - changed, last_changed - changed);
       update_compositions (changed, last_changed, CHECK_ALL);
     }
 
