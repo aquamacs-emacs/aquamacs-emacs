@@ -158,8 +158,15 @@ Remove from your load-path for optimal printing / export results."))
 		     (progn
 		       (show-paren-mode 0)
 		       (if (or mark-active (not transient-mark-mode) beg)
-			   (htmlize-region (or beg (region-beginning))
-					   (or end (region-end)))
+			   (let ((beg (or beg (region-beginning)))
+				 (end (or end (region-end)))
+				 (mark (if mark-active (mark))))
+			     (if mark
+				 (deactivate-mark))
+			     (unwind-protect
+				 (htmlize-region beg
+						 end)
+			       (if mark (set-mark mark))))
 			 (htmlize-buffer (current-buffer))))
 		   (show-paren-mode show-paren-mode-save))))
       html))
