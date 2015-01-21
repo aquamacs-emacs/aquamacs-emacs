@@ -119,23 +119,22 @@ in HTML format."
 (defun aquamacs-copy-as-html (beg end)
   "Copies the region in HTML format into the clipboard."
   (interactive "r")
-  (when (or (not transient-mark-mode) mark-active beg)
-    (let ((htmlize-white-background t))
-      (let ((x-select-enable-clipboard t)
-	    (buf (aquamacs-convert-to-html-buffer beg end)))
-	;; externally store text as text
-	(ns-store-selection-internal 'CLIPBOARD (buffer-substring beg end) 'txt)
-	(with-current-buffer buf	
-	  ;; internally (not externally) store the HTML
-	  (let ((interprogram-cut-function nil))
-	    (copy-region-as-kill (point-min) (point-max)))
-	  ;; externally add html to the pasteboard
-	  (ns-store-selection-internal 'CLIPBOARD (buffer-string) 'html))
+  (when (or (not transient-mark-mode) mark-active)
+    (let ((x-select-enable-clipboard t)
+	  (buf (aquamacs-convert-to-html-buffer beg end)))
+      ;; externally store text as text
+      (ns-store-selection-internal 'CLIPBOARD (buffer-substring beg end) 'txt)
+      (with-current-buffer buf	
+	;; internally (not externally) store the HTML
+	(let ((interprogram-cut-function nil))
+	  (copy-region-as-kill (point-min) (point-max)))
+	;; externally add html to the pasteboard
+        (ns-store-selection-internal 'CLIPBOARD (buffer-string) 'html))
 
-	;; ns-store-cut-buffer-internal with TYPE 'html doesn't seem to work
-	;; (with-current-buffer buf
-	;;   (ns-store-cut-buffer-internal 'PRIMARY (buffer-string) 'html))
-	(kill-buffer buf)))))
+      ;; ns-store-cut-buffer-internal with TYPE 'html doesn't seem to work
+      ;; (with-current-buffer buf
+      ;;   (ns-store-cut-buffer-internal 'PRIMARY (buffer-string) 'html))
+      (kill-buffer buf))))
 
 (defun aquamacs-convert-to-html-buffer (&optional beg end)
   "Creates a buffer containing an HTML rendering of the current buffer."

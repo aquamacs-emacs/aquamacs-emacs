@@ -781,6 +781,23 @@ the current buffer."
       (setq color (if fg "black" "white")))
     color))
 
+(defun htmlize-color-is-dark-p (color)
+  "Return true if COLOR seems relatively dark."
+  (and color (stringp color)
+       (let ((vals (color-name-to-rgb color)))
+	 (when vals
+	   (< (+ (first vals) (second vals) (third vals)) 1.4)))))
+
+(defun htmlize-invert-color (color)
+  "Invert color.
+The goal is to make a dark color bright, and vice versa."
+  (let ((vals (color-name-to-rgb color)))
+    (when vals
+      (apply #'color-rgb-to-hex
+	     (mapcar (lambda (x) (- 1 x)) vals)))))
+
+
+
 (defun htmlize-face-foreground (face)
   ;; Return the name of the foreground color of FACE.  If FACE does
   ;; not specify a foreground color, return nil.
@@ -792,6 +809,15 @@ the current buffer."
 	 ;; XEmacs.
 	 (and (htmlize-face-specifies-property face 'foreground)
 	      (color-instance-name (face-foreground-instance face))))
+	((and htmlize-white-background
+	      ;; background of this face is dark and we're making it white
+	      (htmlize-color-is-dark-p (or (htmlize-face-color-internal face nil)
+					   (htmlize-face-color-internal 'default nil))))
+	 (if (eq face 'default)
+	     nil
+	   ;; maybe just invert color?
+	   (color-darken-name
+	    (htmlize-face-color-internal face t) 30)))
 	(t
 	 ;; GNU Emacs.
 	 (htmlize-face-color-internal face t))))
