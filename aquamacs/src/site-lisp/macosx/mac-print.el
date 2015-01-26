@@ -120,7 +120,8 @@ in HTML format."
   "Copies the region in HTML format into the clipboard."
   (interactive "r")
   (when (or (not transient-mark-mode) mark-active beg)
-    (let ((htmlize-white-background t))
+    (let ((htmlize-white-background t)
+	  (htmlize-output-type 'inline-css))
       (let ((x-select-enable-clipboard t)
 	    (buf (aquamacs-convert-to-html-buffer beg end)))
 	;; externally store text as text
@@ -137,11 +138,31 @@ in HTML format."
 	;;   (ns-store-cut-buffer-internal 'PRIMARY (buffer-string) 'html))
 	(kill-buffer buf)))))
 
+(defun aquamacs-copy-as-pdf (beg end)
+  "Copies the region formatted into the clipboard.
+The region is rendered as PDF and HTML and is
+copied into the clipboard for use in another application."
+  (interactive "r")
+  (when (or (not transient-mark-mode) mark-active beg)
+    (let ((htmlize-white-background t)
+	  (htmlize-output-type 'inline-css))
+      (let ((x-select-enable-clipboard t)
+	    (buf (aquamacs-convert-to-html-buffer beg end)))
+	;; externally store text as text
+	(ns-store-selection-internal 'CLIPBOARD (buffer-substring beg end) 'txt)
+	(with-current-buffer buf	
+	  ;; internally (not externally) store the HTML
+	  (let ((interprogram-cut-function nil))
+	    (copy-region-as-kill (point-min) (point-max)))
+	  ;; Now render a PDF (copies this and HTML to NS pasteboard)
+	  (ns-render-to-pdf (current-buffer) (window-pixel-width (selected-window)) 100))
+	(kill-buffer buf)))))
+
 (defun aquamacs-convert-to-html-buffer (&optional beg end)
   "Creates a buffer containing an HTML rendering of the current buffer."
 
   (require 'htmlize)
-  (if (not (protect (equal (substring htmlize-version 0 5) "1.23a")))
+  (if (not (protect (equal (substring htmlize-version 0 4) "1.47")))
 	 (message "Warning - possibly incompatible htmlize package installed. 
 Remove from your load-path for optimal printing / export results."))
     (require 'mule) ; for coding-system-get

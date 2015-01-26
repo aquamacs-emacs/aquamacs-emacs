@@ -296,10 +296,10 @@ customization buffer."
 	      :help "Copy selected text in region"))
  
 (define-key-after menu-bar-edit-menu [copy-html]
-  `(menu-item "Copy Styled as HTML" 
-	      aquamacs-copy-as-html
+  `(menu-item "Copy Formatted" 
+	      aquamacs-copy-as-pdf
 	      :enable mark-active
-	      :help "Copy selected text in region as formatted HTML")
+	      :help "Copy selected text in region as formatted PDF and HTML")
   'copy)
 
 (define-key menu-bar-edit-menu [paste]
@@ -513,6 +513,7 @@ left and right margin"))
 ;; 		:button (:toggle . (not mac-print-monochrome-mode)))))
 
 (autoload 'aquamacs-copy-as-html "mac-print" "Copies the region in HTML format into the clipboard." 'interactive nil)
+(autoload 'aquamacs-copy-as-pdf "mac-print" "Copies the region in PDF and HTML format into the clipboard." 'interactive nil)
 (autoload 'aquamacs-print "mac-print" "Prints the current buffer or, if the mark is active, the current region." 'interactive nil)
 (autoload 'aquamacs-page-setup "mac-print" "Show the page setup dialog." 'interactive nil)
 
@@ -1351,7 +1352,7 @@ that should be represented in the Aquamacs menus."
 	 (cd (format "%setc/refcards" (mac-resources-path)))
 	 (shell-command "grep '^\\s*\\\\title{\\(.*\\)}' *.tex" t)
 	 
-	 (beginning-of-buffer)
+	 (goto-char (point-min))
 	 (while
 	     (search-forward-regexp "^\\(.*?\\)\\.tex\\:\\\\title{\\(.*\\)}" nil 'noerr)
 	   (if (file-readable-p (concat (match-string 1) ".pdf"))

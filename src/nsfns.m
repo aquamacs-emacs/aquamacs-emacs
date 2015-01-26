@@ -1982,6 +1982,109 @@ DEFUN ("ns-popup-page-setup-panel", Fns_popup_page_setup_panel, Sns_popup_page_s
   return Qnil;
 }
 
+DEFUN ("ns-render-to-pdf", Fns_render_to_pdf, Sns_render_to_pdf,
+       0, 3, "",
+       doc: /* Render HTML file or buffer SOURCE to PDF.
+If successful, resulting PDF (and the input HTML) are put
+on the pasteboard.*/)
+     (source, width, height)
+     Lisp_Object source, width, height;
+{
+  struct frame *f;
+  check_window_system (NULL);
+  CHECK_NATNUM(width);
+  CHECK_NATNUM(height);
+  if (! BUFFERP (source))
+    {
+     error ("Must give buffer as source for ns-render-to-pdf.");
+    }
+
+  block_input();
+
+  WebView *htmlPage = [[WebView alloc] initWithFrame:NSMakeRect(0,0,XINT (width),XINT (height))
+					   frameName:@"myFrame"
+					   groupName:@"myGroup"];
+
+  /* Render HTML */
+  struct buffer *old_buffer = NULL;
+  if (XBUFFER (source) != current_buffer)
+    {
+      old_buffer = current_buffer;
+      set_buffer_internal_1 (XBUFFER (source));
+    }
+  Lisp_Object string = make_buffer_string (BEGV, ZV, 0);
+  if (old_buffer)
+    set_buffer_internal_1 (old_buffer);
+  
+  [[htmlPage mainFrame] loadHTMLString:
+	[NSString stringWithUTF8String: SDATA (string)] /* is copied */
+			       baseURL:[NSURL fileURLWithPath: [[NSBundle mainBundle] resourcePath]]];
+
+  /* In this case, let's just wait until it's finished. */
+  double current_time = [[NSDate date] timeIntervalSinceReferenceDate];
+  while ([htmlPage  estimatedProgress] > 0.00) {
+    if ([[NSDate date] timeIntervalSinceReferenceDate] - current_time >= .6)
+      break;
+    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.02]];
+  }
+  if ([htmlPage  estimatedProgress] > 0.00)
+    {
+      unblock_input();
+      [htmlPage release];
+      error ("Rendering failed (timeout).");
+    }
+
+  //get the rect for the rendered frame
+  NSRect webFrameRect = [[[[htmlPage mainFrame] frameView] documentView] frame];
+  //get the rect of the current webview
+  NSRect webViewRect = [htmlPage frame];
+
+  //calculate the new frame
+  NSRect newWebViewRect = NSMakeRect(webViewRect.origin.x, 
+				     webViewRect.origin.y - (NSHeight(webFrameRect) - NSHeight(webViewRect)), 
+				     NSWidth(webViewRect), 
+				     NSHeight(webFrameRect));
+  //set the frame
+  [htmlPage setFrame:newWebViewRect];
+	
+  NSRect bounds = [[[[htmlPage mainFrame]frameView]documentView]
+	     bounds];
+
+	/* Alternative way of doing this, via Javascript ...
+  NSString *actualHeightStr = [htmlPage stringByEvaluatingJavaScriptFromString:@"(function(){var a=document.body,b=document.documentElement;return Math.max(a.scrollHeight,b.scrollHeight)})();"];
+  int actualHeight = [actualHeightStr integerValue];
+  NSString *actualWidthStr = [htmlPage stringByEvaluatingJavaScriptFromString:@"(function(){var a=document.body,b=document.documentElement;return Math.max(a.scrollWidth,b.scrollWidth)})();"];
+  int actualWidth = [actualWidthStr integerValue];
+  NSLog(actualWidthStr);
+  NSLog(actualHeightStr);
+  if (actualHeight > 0) // JS above worked as intended
+    {
+      bounds.size.height = actualHeight;
+    }
+  if (actualWidth > 0) // JS above worked as intended
+    {
+      bounds.size.width = actualWidth;
+    }
+
+  */
+
+  /* Note: we could also just use writePDFInsideRect:toPasteboard:
+     but we're concurrently writing HTML as well. */
+
+  NSData *viewImageData=[[[[htmlPage mainFrame] frameView] documentView]
+			  dataWithPDFInsideRect:bounds];
+  PDFDocument *pdf = [[PDFDocument alloc] initWithData:viewImageData];
+  NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
+  [pasteboard clearContents];
+  [pasteboard declareTypes:[NSArray arrayWithObjects:NSPDFPboardType, NSHTMLPboardType, nil] owner:nil];
+  [pasteboard setData:[pdf dataRepresentation] forType:NSPDFPboardType];
+  [pasteboard setData:[NSData dataWithBytes: SDATA (string) length:strlen(SDATA (string))] forType:NSHTMLPboardType];
+  [pdf release];
+  [htmlPage release];
+  unblock_input();
+  return Qnil;
+}
+
 DEFUN ("ns-popup-print-panel", Fns_popup_print_panel, Sns_popup_print_panel,
        0, 2, "",
        doc: /* Pop up the print panel.  */)
@@ -4044,6 +4147,7 @@ be used as the image of the icon representing the frame.  */);
   defsubr (&Sns_popup_print_panel);
   defsubr (&Sns_popup_page_setup_panel);
   defsubr (&Sns_popup_save_panel);
+  defsubr (&Sns_render_to_pdf);
 
   defsubr (&Sx_show_tip);
   defsubr (&Sx_hide_tip);
