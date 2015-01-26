@@ -141,9 +141,9 @@ sheet to carry around)."
 
 
 (defcustom htmlize-white-background nil
-  "*Non-nil means to use neutral background color for default face.
+  "*Non-nil means to use neutral background and black for default face.
 For printing purposes, omitting a background color is usually
-desirable."
+desirable.  The default face is black if non-nil."
   :type 'boolean
   :group 'htmlize)
 
@@ -1061,15 +1061,15 @@ The goal is to make a dark color bright, and vice versa."
 	 ;; XEmacs.
 	 (and (htmlize-face-specifies-property face 'foreground)
 	      (color-instance-name (face-foreground-instance face))))
-	((and nil htmlize-white-background
+	((and htmlize-white-background
 	      ;; background of this face is dark and we're making it white
 	      (htmlize-color-is-dark-p (or (htmlize-face-color-internal face nil)
 					   (htmlize-face-color-internal 'default nil))))
-	 ;; (if (eq face 'default)
-	 ;;     nil
+	 (if (eq face 'default)
+	     "black"
 	   ;; maybe just invert color?
 	   (color-darken-name
-	    (htmlize-face-color-internal face t) 30))
+	    (or (htmlize-face-color-internal face t) "black") 30)))
 	(t
 	 ;; GNU Emacs.
 	 (htmlize-face-color-internal face t))))
