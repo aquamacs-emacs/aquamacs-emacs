@@ -58,6 +58,7 @@
 ;;; Code:
 
 (eval-when-compile (require 'cl-lib))
+(eval-when-compile (require 'subr-x))
 
 ;; Some additional options and constants.
 
@@ -2581,6 +2582,18 @@ search for the first occurrence of STRING or its translation.")
   "Return the function to use for the search.
 Can be changed via `isearch-search-fun-function' for special needs."
   (funcall (or isearch-search-fun-function 'isearch-search-fun-default)))
+
+(defun isearch--replace-groups-in-string (string)
+  "Return a group-folded regexp version of STRING.
+Any character that has an entry in `isearch-groups-alist' is
+replaced with the cdr of that entry (which should be a regexp).
+Other characters are `regexp-quote'd."
+  (apply #'concat
+    (mapcar (lambda (c)
+              (if-let ((entry (assq c isearch-groups-alist)))
+                  (cdr entry)
+                (regexp-quote (string c))))
+      string)))
 
 (defun isearch-search-fun-default ()
   "Return default functions to use for the search."
