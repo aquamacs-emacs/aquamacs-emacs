@@ -272,6 +272,23 @@ Default value, nil, means edit the string instead."
   :version "23.1"
   :group 'isearch)
 
+(defcustom isearch-fold-groups t
+  "Whether regular isearch should do group folding.
+This means some characters will match entire groups of charactes,
+such as \" matching ”, for instance."
+  :type 'boolean
+  :group 'isearch
+  :version "25.1")
+
+(defvar isearch-groups-alist
+  ;; FIXME: Add all the latin accented letters like Ã.
+  '((?\" . "[\"＂“””„⹂〞‟‟❞❝❠“„〝〟🙷🙶🙸❮❯«»‹›󠀢]")
+    (?' . "[`'❟❛❜‘’’‚‛‛‚‘󠀢❮❯«»‹›]")
+    ;; `isearch-fold-groups' doesn't interact with
+    ;; `isearch-lax-whitespace' yet.  So we need to add this here.
+    (?\s . "[ 	\r\n]+"))
+  "Alist of groups to use when `isearch-fold-groups' is non-nil.")
+
 (defcustom isearch-lazy-highlight t
   "Controls the lazy-highlighting during incremental search.
 When non-nil, all text in the buffer matching the current search
