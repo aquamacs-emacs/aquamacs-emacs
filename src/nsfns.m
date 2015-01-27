@@ -1967,8 +1967,8 @@ DEFUN ("ns-popup-page-setup-panel", Fns_popup_page_setup_panel, Sns_popup_page_s
 
   [pageLayout beginSheetWithPrintInfo:[NSPrintInfo sharedPrintInfo]
 		       modalForWindow:[FRAME_NS_VIEW (SELECTED_FRAME ()) window] /* not right. */
-			     delegate:nil
-		       didEndSelector:nil
+			     delegate:FRAME_NS_VIEW (SELECTED_FRAME ())
+		       didEndSelector:@selector(pageLayoutDidEnd:returnCode:contextInfo:)
 			  contextInfo:nil];
   
   /* runModal doesn't work for some reason, even though

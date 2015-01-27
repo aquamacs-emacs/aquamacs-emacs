@@ -4766,7 +4766,7 @@ ns_term_shutdown (int sig)
         [pool release];
         pool = [[NSAutoreleasePool alloc] init];
 
-	/* OSX 10.10.1 seems to swalled AppDefined events when
+	/* OSX 10.10.1 seems to swallow AppDefined events when
 	   other events are put in the queue in rapid succession.
 	   To prevent Emacs becoming unresponsive, we need to
 	   set a reasonable timeout. */
@@ -4926,6 +4926,7 @@ ns_term_shutdown (int sig)
 
   [sheet orderOut:self];
   set_frame_menubar (SELECTED_FRAME (), false, false);
+  x_focus_frame (SELECTED_FRAME ());
 
   NSEvent *theEvent = [NSApp currentEvent];
 
@@ -5946,10 +5947,19 @@ not_in_argv (NSString *arg)
   [printControl setShowsPrintPanel:YES];
   [printControl runOperationModalForWindow: [self window]
   				  delegate:self /* perhaps react to dismissal? */
-  			    didRunSelector:nil
+  			    didRunSelector:@selector(printOperationDidRun:success:contextInfo:)
   			       contextInfo:nil];
 }
 
+- (void)printOperationDidRun:(NSPrintOperation *)printOperation  success:(BOOL)success contextInfo:(void *)contextInfo
+{
+  x_focus_frame (SELECTED_FRAME ());
+}
+
+- (void)pageLayoutDidEnd:(NSPageLayout *)pageLayout returnCode:(int)returnCode  contextInfo: (void *)contextInfo
+{
+  x_focus_frame (SELECTED_FRAME ());
+}
 
 /*****************************************************************************/
 /* Keyboard handling. */
