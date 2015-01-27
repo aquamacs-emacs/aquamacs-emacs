@@ -2621,6 +2621,13 @@ Other characters are `regexp-quote'd."
       're-search-backward-lax-whitespace))
    (isearch-regexp
     (if isearch-forward 're-search-forward 're-search-backward))
+   ;; `isearch-regexp' is essentially a superset of
+   ;; `isearch-fold-groups'.  So fold-groups comes after it.
+   (isearch-fold-groups
+    (lambda (string &optional bound noerror count)
+      (funcall (if isearch-forward #'re-search-forward #'re-search-backward)
+        (isearch--replace-groups-in-string string)
+        bound noerror count)))
    ((and isearch-lax-whitespace search-whitespace-regexp)
     (if isearch-forward
 	'search-forward-lax-whitespace
