@@ -222,6 +222,7 @@ customization buffer."
 		  (cons :tag "Mode / Display name" (symbol :tag "Mode-name") (symbol :tag "Display name"))))
   :set 'set-aquamacs-known-major-modes)
 
+
 (defvar aquamacs-menu-setup-hook nil "Hook run after updating the Aquamacs menu")
 
 
@@ -253,6 +254,26 @@ customization buffer."
       :key-sequence [(,osxkeys-command-key s)]
       ))
 
+
+(require 'recentf)
+(ats "recentf loaded")
+(aquamacs-set-defaults 
+ '((buffers-menu-max-size nil)
+   (recentf-menu-before "Open Directory...")
+   (recentf-max-menu-items 25)
+   ;; must be set before turning on recentf mode
+   (recentf-keep ( mac-is-mounted-volume-p file-remote-p file-readable-p))
+   (recentf-filename-handlers '(abbreviate-file-name))
+   (recentf-menu-filter aquamacs-recentf-show-basenames)))
+
+(setq recentf-menu-items-for-commands
+      (list ["Clear Menu"
+	     recentf-clearlist
+	     :help "Remove all excluded and non-kept files from the recent list"
+	     :active t]))
+(global-set-key "\C-x\ \C-r" 'recentf-open-files)  
+
+(recentf-mode 1) 
 
 ;; redefine this
 (define-key-after menu-bar-file-menu [kill-buffer]
@@ -537,6 +558,8 @@ left and right margin"))
 
 ;(require 'longlines) 
  
+(global-set-key "\C-xw" 'toggle-word-wrap)
+  
 (require 'aquamacs-editing)
 (custom-add-option 'text-mode-hook 'auto-detect-wrap)
 (defun toggle-text-mode-auto-detect-wrap ()
@@ -1222,7 +1245,7 @@ called using the mouse."
 (add-hook 'after-init-hook 'aquamacs-update-new-file-menu)
 
 (run-hooks 'aquamacs-menu-setup-hook)
-) ;; aquamacs-menu-bar-setup
+)
 
 ;;; ONE TIME SETUP
 
@@ -1231,37 +1254,6 @@ called using the mouse."
 ;; customization is always possible
 ;; the existing menu item is badly worded and the C-c/v/x don't apply anyways
 ;; done
-
-
-
-;; Recentf setup
-(require 'recentf)
-(ats "recentf loaded")
-(aquamacs-set-defaults 
- '((buffers-menu-max-size nil)
-   (recentf-menu-before "Open Directory...")
-   (recentf-max-menu-items 25)
-   ;; must be set before turning on recentf mode
-   (recentf-keep ( mac-is-mounted-volume-p file-remote-p file-readable-p))
-   (recentf-filename-handlers '(abbreviate-file-name))
-   (recentf-menu-filter aquamacs-recentf-show-basenames)))
-
-(setq recentf-menu-items-for-commands
-      (list ["Clear Menu"
-	     recentf-clearlist
-	     :help "Remove all excluded and non-kept files from the recent list"
-	     :active t]))
-(global-set-key "\C-x\ \C-r" 'recentf-open-files)  
-
-(recentf-mode 1) 
-
-;; other one-time actions and keybindings
-
-
-(global-set-key "\C-xw" 'toggle-word-wrap)
-
-
-
 
 ;; Quit entry shouldnt be there
 (easy-menu-remove-item global-map  '("menu-bar" "file") 'separator-exit)
