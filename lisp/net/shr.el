@@ -454,7 +454,10 @@ size, and full-buffer size."
     (while (< start (length string))
       (let ((glyphs (font-get-glyphs (font-at start nil string)
 				     start (1+ start) string)))
-	(setq width (+ width (aref (aref glyphs 0) 4))))
+	(if (not (aref glyphs 0))
+	    ;; If we have a degenerate font, just say "10".
+	    10
+	  (setq width (+ width (aref (aref glyphs 0) 4)))))
       (setq start (1+ start)))
     width))
 
@@ -1401,7 +1404,7 @@ The preference is a float determined from `shr-prefer-media-type'."
   (shr-generic dom))
 
 (defun shr-tag-h1 (dom)
-  (shr-heading dom 'bold 'underline))
+  (shr-heading dom '(variable-pitch (:height 1.5 :weight bold))))
 
 (defun shr-tag-h2 (dom)
   (shr-heading dom 'bold))
@@ -1589,7 +1592,8 @@ The preference is a float determined from `shr-prefer-media-type'."
 	  ;; Sum up all the widths from the column.  (There may be
 	  ;; more than one if this is a "colspan" column.)
 	  (dotimes (i (nth 3 column))
-	    (setq align (+ align 20 (aref widths column-number))
+	    (setq align (+ align 20 (aref widths (min (1- (length widths))
+						      column-number)))
 		  column-number (1+ column-number)))
 	  (let ((lines (nth 2 column)))
 	    (dolist (line lines)
