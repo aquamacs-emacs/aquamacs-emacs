@@ -271,7 +271,6 @@ customization buffer."
 	     recentf-clearlist
 	     :help "Remove all excluded and non-kept files from the recent list"
 	     :active t]))
-(global-set-key "\C-x\ \C-r" 'recentf-open-files)  
 
 (recentf-mode 1) 
 
@@ -558,7 +557,6 @@ left and right margin"))
 
 ;(require 'longlines) 
  
-(global-set-key "\C-xw" 'toggle-word-wrap)
   
 (require 'aquamacs-editing)
 (custom-add-option 'text-mode-hook 'auto-detect-wrap)
@@ -1248,6 +1246,9 @@ called using the mouse."
 )
 
 ;;; ONE TIME SETUP
+
+(global-set-key "\C-x\ \C-r" 'recentf-open-files)  
+(global-set-key "\C-xw" 'toggle-word-wrap)
 
 ; 
 ;; we will set the following ones directly
