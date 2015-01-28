@@ -57,18 +57,18 @@ fit these criteria."
   :group 'shr
   :type '(choice (const nil) regexp))
 
-(defcustom shr-table-horizontal-line ?-
+(defcustom shr-table-horizontal-line nil
   "Character used to draw horizontal table lines.
 If nil, don't draw horizontal table lines."
   :group 'shr
   :type '(choice (const nil) character))
 
-(defcustom shr-table-vertical-line ?|
+(defcustom shr-table-vertical-line ?\s
   "Character used to draw vertical table lines."
   :group 'shr
   :type 'character)
 
-(defcustom shr-table-corner ?+
+(defcustom shr-table-corner ?\s
   "Character used to draw table corners."
   :group 'shr
   :type 'character)
@@ -1586,15 +1586,21 @@ The preference is a float determined from `shr-prefer-media-type'."
 	  (insert shr-table-vertical-line "\n"))
 	(dolist (column row)
 	  (goto-char start)
-	  (setq align (+ align 20 (aref widths column-number))
-		column-number (1+ column-number))
+	  ;; Sum up all the widths from the column.  (There may be
+	  ;; more than one if this is a "colspan" column.)
+	  (dotimes (i (nth 3 column))
+	    (setq align (+ align 20 (aref widths column-number))
+		  column-number (1+ column-number)))
 	  (let ((lines (nth 2 column)))
 	    (dolist (line lines)
 	      (end-of-line)
-	      (insert line
-		      (propertize " " 'display
-				  `(space :align-to (,align)))
-		      shr-table-vertical-line)
+	      (let ((start (point)))
+		(insert line
+			(propertize " " 'display
+				    `(space :align-to (,align)))
+			shr-table-vertical-line)
+		(shr-colorize-region
+		 start (1- (point)) (nth 4 column) (nth 5 column)))
 	      (forward-line 1))
 	    ;; Add blank lines at padding at the bottom of the TD,
 	    ;; possibly.
@@ -1604,9 +1610,8 @@ The preference is a float determined from `shr-prefer-media-type'."
 		(insert (propertize " " 'display
 				    `(space :align-to (,align)))
 			shr-table-vertical-line)
-		(when (nth 4 column)
-		  (shr-add-font start (1- (point))
-				(list :background (nth 4 column)))))
+		(shr-colorize-region
+		 start (1- (point)) (nth 4 column) (nth 5 column)))
 	      (forward-line 1)))))
       (unless collapse
 	(shr-insert-table-ruler widths)))))
@@ -1618,7 +1623,9 @@ The preference is a float determined from `shr-prefer-media-type'."
       (shr-indent))
     (insert shr-table-corner)
     (dotimes (i (length widths))
-      (insert (make-string (aref widths i) shr-table-horizontal-line)
+      (insert (make-string (1+ (/ (aref widths i)
+				  (shr-string-pixel-width "-")))
+			   shr-table-horizontal-line)
 	      shr-table-corner))
     (insert "\n")))
 
@@ -1742,8 +1749,7 @@ The preference is a float determined from `shr-prefer-media-type'."
     (let ((bgcolor (dom-attr dom 'bgcolor))
 	  (fgcolor (dom-attr dom 'fgcolor))
 	  (style (dom-attr dom 'style))
-	  (shr-stylesheet shr-stylesheet)
-	  actual-colors)
+	  (shr-stylesheet shr-stylesheet))
       (when style
 	(setq style (and (string-match "color" style)
 			 (shr-parse-style style))))
@@ -1773,8 +1779,11 @@ The preference is a float determined from `shr-prefer-media-type'."
 	    (list max
 		  (count-lines (point-min) (point-max))
 		  (split-string (buffer-string) "\n")
-		  nil
-		  (car actual-colors))
+		  (if (dom-attr dom 'colspan)
+		      (string-to-number (dom-attr dom 'colspan))
+		    1)
+		  (cdr (assq 'color shr-stylesheet))
+		  (cdr (assq 'background-color shr-stylesheet)))
 	  max)))))
 
 (defun shr-buffer-width ()
@@ -1807,7 +1816,7 @@ The preference is a float determined from `shr-prefer-media-type'."
     (dolist (row (dom-non-text-children dom))
       (when (eq (dom-tag row) 'tr)
 	(let ((i 0))
-	  (dolist (column (dom-non-string-children row))
+	  (dolist (column (dom-non-text-children row))
 	    (when (memq (dom-tag column) '(td th))
 	      (let ((width (dom-attr column 'width)))
 		(when (and width
