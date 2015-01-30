@@ -504,15 +504,19 @@ size, and full-buffer size."
 	(put-text-property start (point) 'face 'variable-pitch))))))
 
 (defun shr-fold-lines (start end)
-  (save-restriction
-    (narrow-to-region start end)
-    (goto-char start)
-    (when (get-text-property (point) 'shr-indentation)
-      (shr-fold-line))
-    (while (setq start (next-single-property-change start 'shr-indentation))
-      (goto-char start)
-      (shr-fold-line))
-    (goto-char (point-max))))
+  (if (<= shr-internal-width 0)
+      0
+    (let ((max-width 0))
+      (save-restriction
+	(narrow-to-region start end)
+	(goto-char start)
+	(when (get-text-property (point) 'shr-indentation)
+	  (setq max-width (max max-width (shr-fold-line))))
+	(while (setq start (next-single-property-change start 'shr-indentation))
+	  (goto-char start)
+	  (setq max-width (max max-width (shr-fold-line))))
+	(goto-char (point-max))
+	max-width))))
 
 (defun shr-fold-line ()
   (let ((start (point))
@@ -521,6 +525,7 @@ size, and full-buffer size."
     (when (> indentation 0)
       (insert (make-string indentation ?\s)))
     (let ((widths (shr-glyph-widths start (line-end-position)))
+	  (max-width 0)
 	  (this-width 0)
 	  (i 0))
       (while (< i (length widths))
@@ -530,18 +535,28 @@ size, and full-buffer size."
 		i (1+ i))
 	  (unless (eolp)
 	    (forward-char 1)))
-	(when (>= this-width shr-internal-width)
+	(if (< this-width shr-internal-width)
+	    (setq max-width (max max-width this-width))
 	  ;; We have to do some folding.  First find the first
 	  ;; previous point suitable for folding.
 	  (let ((end (point)))
 	    (shr-find-fill-point (line-beginning-position))
 	    ;; Adjust the index to where we moved when finding the
 	    ;; fill point.
-	    (setq i (+ i (- (point) end))
-		  this-width 0)
+	    (let ((new-index (+ i (- (point) end))))
+	      (if (> new-index i)
+		  (dotimes (idx (- new-index i))
+		    (setq this-width (+ this-width (aref widths (+ i idx)))))
+		(dotimes (idx (- i new-index))
+		  (setq this-width (- this-width (aref widths
+						       (+ new-index idx))))))
+	      (setq max-width (max max-width this-width)
+		    i new-index
+		    this-width 0))
 	    (when (= (preceding-char) ?\s)
 	      (delete-char -1))
-	    (insert "\n")))))))
+	    (insert "\n"))))
+      max-width)))
 
 (defun shr-glyph-widths (start end)
   (let ((widths (make-vector (- end start) 0))
@@ -1700,7 +1715,7 @@ The preference is a float determined from `shr-prefer-media-type'."
     (dolist (row (dom-non-text-children dom))
       (when (eq (dom-tag row) 'tr)
 	(let ((tds nil)
-	      (columns (dom-children row))
+	      (columns (dom-non-text-children row))
 	      (i 0)
 	      (width-column 0)
 	      column)
@@ -1726,7 +1741,7 @@ The preference is a float determined from `shr-prefer-media-type'."
 	      (setq width
 		    (if column
 			(aref widths width-column)
-		      10))
+		      140))
 	      (when (setq colspan (dom-attr column 'colspan))
 		(setq colspan (min (string-to-number colspan)
 				   ;; The colspan may be wrong, so
@@ -1750,7 +1765,10 @@ The preference is a float determined from `shr-prefer-media-type'."
 		      colspan-remaining colspan))
 	      (when (or column
 			(not fill))
-		(let ((data (shr-render-td column width fill)))
+		(let ((data (if (not column)
+				(if fill (list 0 0 nil 1 nil nil)
+				  0)
+			      (shr-render-td column width fill))))
 		  (if (and (not fill)
 			   (> colspan-remaining 0))
 		      (progn
@@ -1770,7 +1788,8 @@ The preference is a float determined from `shr-prefer-media-type'."
     (let ((bgcolor (dom-attr dom 'bgcolor))
 	  (fgcolor (dom-attr dom 'fgcolor))
 	  (style (dom-attr dom 'style))
-	  (shr-stylesheet shr-stylesheet))
+	  (shr-stylesheet shr-stylesheet)
+	  (max-width 0))
       (when style
 	(setq style (and (string-match "color" style)
 			 (shr-parse-style style))))
@@ -1783,8 +1802,18 @@ The preference is a float determined from `shr-prefer-media-type'."
       (let ((shr-internal-width width)
 	    (shr-indentation 0))
 	(shr-descend dom))
+      ;; Compute the max width of all non-foldable lines.
+      (goto-char (point-min))
+      (while (not (eobp))
+	(when (and (not (eolp))
+		   (not (get-text-property (point) 'shr-indentation)))
+	  (end-of-line)
+	  (setq max-width (max max-width (shr-pixel-column))))
+	(forward-line 1))
       (let ((shr-internal-width width))
-	(shr-fold-lines (point-min) (point-max)))
+	(setq max-width (max max-width
+			     (shr-fold-lines (point-min) (point-max)))))
+      (goto-char (point-max))
       ;; Delete padding at the bottom of the TDs.
       (delete-region
        (point)
@@ -1793,21 +1822,16 @@ The preference is a float determined from `shr-prefer-media-type'."
 	 (end-of-line)
 	 (point)))
       (goto-char (point-min))
-      (let ((max 0))
-	(while (not (eobp))
-	  (end-of-line)
-	  (setq max (max max (shr-pixel-column)))
-	  (forward-line 1))
-	(if fill
-	    (list max
-		  (count-lines (point-min) (point-max))
-		  (split-string (buffer-string) "\n")
-		  (if (dom-attr dom 'colspan)
-		      (string-to-number (dom-attr dom 'colspan))
-		    1)
-		  (cdr (assq 'color shr-stylesheet))
-		  (cdr (assq 'background-color shr-stylesheet)))
-	  max)))))
+      (if fill
+	  (list max-width
+		(count-lines (point-min) (point-max))
+		(split-string (buffer-string) "\n")
+		(if (dom-attr dom 'colspan)
+		    (string-to-number (dom-attr dom 'colspan))
+		  1)
+		(cdr (assq 'color shr-stylesheet))
+		(cdr (assq 'background-color shr-stylesheet)))
+	max-width))))
 
 (defun shr-buffer-width ()
   (goto-char (point-min))
