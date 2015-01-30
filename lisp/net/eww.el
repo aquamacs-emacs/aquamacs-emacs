@@ -409,7 +409,6 @@ See the `eww-search-prefix' variable for the search engine used."
 	       (form . eww-tag-form)
 	       (input . eww-tag-input)
 	       (textarea . eww-tag-textarea)
-	       (body . eww-tag-body)
 	       (select . eww-tag-select)
 	       (link . eww-tag-link)
 	       (a . eww-tag-a))))
@@ -494,15 +493,6 @@ See the `eww-search-prefix' variable for the search engine used."
 	      "^ \\| $" ""
 	      (replace-regexp-in-string "[ \t\r\n]+" " " (dom-text dom))))
   (eww-update-header-line-format))
-
-(defun eww-tag-body (dom)
-  (let* ((start (point))
-	 (fgcolor (or (dom-attr dom 'fgcolor) (dom-attr dom 'text)))
-	 (bgcolor (dom-attr dom 'bgcolor))
-	 (shr-stylesheet (list (cons 'color fgcolor)
-			       (cons 'background-color bgcolor))))
-    (shr-generic dom)
-    (shr-colorize-region start (point) fgcolor bgcolor)))
 
 (defun eww-display-raw (buffer &optional encode)
   (let ((data (buffer-substring (point) (point-max))))
