@@ -528,16 +528,16 @@ size, and full-buffer size."
 		    (< this-width shr-internal-width))
 	  (setq this-width (+ this-width (aref widths i))
 		i (1+ i))
-	  (unless (eobp)
+	  (unless (eolp)
 	    (forward-char 1)))
-	(when (< i (length widths))
+	(when (>= this-width shr-internal-width)
 	  ;; We have to do some folding.  First find the first
 	  ;; previous point suitable for folding.
 	  (let ((end (point)))
 	    (shr-find-fill-point (line-beginning-position))
 	    ;; Adjust the index to where we moved when finding the
 	    ;; fill point.
-	    (setq i (+ i (- end (point)))
+	    (setq i (+ i (- (point) end))
 		  this-width 0)
 	    (when (= (preceding-char) ?\s)
 	      (delete-char -1))
