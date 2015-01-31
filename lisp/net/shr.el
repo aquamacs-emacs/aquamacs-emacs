@@ -457,10 +457,11 @@ size, and full-buffer size."
     (while (< start (length string))
       (let ((glyphs (font-get-glyphs (font-at start nil string)
 				     start (1+ start) string)))
-	(if (not (aref glyphs 0))
-	    ;; If we have a degenerate font, just say "10".
-	    10
-	  (setq width (+ width (aref (aref glyphs 0) 4)))))
+	(setq width
+	      (if (not (aref glyphs 0))
+		  ;; If we have a degenerate font, just say "10".
+		  10
+		(+ width (aref (aref glyphs 0) 4)))))
       (setq start (1+ start)))
     width))
 
@@ -572,6 +573,37 @@ size, and full-buffer size."
 		  10
 		(aref (aref glyphs 0) 4))))
       (setq start (1+ start)))
+    widths))
+
+(defun shr-glyph-widths-fast (start end)
+  (let ((widths (make-vector (- end start) 0))
+	(string (buffer-substring start end))
+	(fonts nil)
+	(pos 0)
+	(font-start 0)
+	font last-font)
+    (while (< pos 1)
+      (setq font (font-at pos nil string))
+      (when (and last-font
+		 (not (eq font last-font)))
+	(push (list font-start (1- pos) font) fonts)
+	(setq last-font font
+	      font-start pos))
+      (setq pos (1+ pos)))
+    (push (list font-start pos font) fonts)
+    (setq pos 0)
+    (dolist (spec (nreverse fonts))
+      (let ((glyphs (font-get-glyphs (nth 2 spec)
+				     (nth 0 spec) (nth 1 spec) string)))
+	(dotimes (i (length glyphs))
+	  (let ((glyph (aref glyphs i)))
+	    (aset widths
+		  pos
+		  (if (not glyph)
+		      ;; If we have a degenerate font, just say "10".
+		      10
+		    (aref glyph 4)))
+	    (setq pos (1+ pos))))))
     widths))
 
 (defun shr-find-fill-point (start)
@@ -1410,16 +1442,19 @@ The preference is a float determined from `shr-prefer-media-type'."
 
 (defun shr-tag-li (dom)
   (shr-ensure-newline)
-  (shr-indent)
-  (let* ((bullet
-	  (if (numberp shr-list-mode)
-	      (prog1
-		  (format "%d " shr-list-mode)
-		(setq shr-list-mode (1+ shr-list-mode)))
-	    shr-bullet))
-	 (shr-indentation (+ shr-indentation (length bullet))))
-    (insert bullet)
-    (shr-generic dom)))
+  (let ((start (point)))
+    (shr-indent)
+    (let* ((bullet
+	    (if (numberp shr-list-mode)
+		(prog1
+		    (format "%d " shr-list-mode)
+		  (setq shr-list-mode (1+ shr-list-mode)))
+	      shr-bullet))
+	   (shr-indentation (+ shr-indentation (length bullet))))
+      (insert bullet)
+      (shr-generic dom)
+      (put-text-property start (1+ start)
+			 'shr-indentation 0))))
 
 (defun shr-tag-br (dom)
   (when (and (not (bobp))
