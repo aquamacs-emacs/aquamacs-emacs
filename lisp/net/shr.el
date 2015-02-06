@@ -521,9 +521,9 @@ size, and full-buffer size."
     (let ((max-width 0)
 	  (this-width 0))
       (shr-goto-pixel-column shr-internal-width)
-      (if (< (setq this-width (shr-pixel-column)) shr-internal-width)
-	  (setq max-width (max max-width this-width))
-	(while (> this-width shr-internal-width)
+      (if (eolp)
+	  (setq max-width (max max-width (shr-pixel-column)))
+	(while (not (eolp))
 	  ;; We have to do some folding.  First find the first
 	  ;; previous point suitable for folding.
 	  (let ((end (point)))
@@ -532,21 +532,15 @@ size, and full-buffer size."
 	      (delete-char -1))
 	    (insert "\n"))
 	  (shr-goto-pixel-column shr-internal-width)
-	  (setq this-width (shr-pixel-column)
-		max-width (max max-width this-width))))
+	  (setq max-width (max max-width (shr-pixel-column)))))
       max-width)))
 
 (defun shr-goto-pixel-column (pixels)
   (vertical-motion (cons (/ pixels (frame-char-width)) 0))
-  (if (> (shr-pixel-column) pixels)
-      (while (and (> (shr-pixel-column) pixels)
-		  (not (bolp)))
-	(forward-char -1))
-    (while (and (< (shr-pixel-column) pixels)
-		(not (eolp)))
-      (forward-char 1))
-    (unless (eolp)
-      (forward-char 1))))
+  ;; Vertical-motion goes to the char before or on the pixel, so
+  ;; advance one char.
+  (unless (eolp)
+    (forward-char 1)))
 
 (defun shr-find-fill-point (start)
   (let ((bp (point))
