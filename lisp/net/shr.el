@@ -455,8 +455,11 @@ size, and full-buffer size."
   (load "kinsoku" nil t))
 
 (defun shr-pixel-column ()
-  (car (window-text-pixel-size nil (line-beginning-position) (point)
-			       nil nil nil (current-buffer))))
+  (if (not (get-buffer-window (current-buffer)))
+      (save-window-excursion
+	(set-window-buffer nil (current-buffer))
+	(car (window-text-pixel-size nil (line-beginning-position) (point))))
+    (car (window-text-pixel-size nil (line-beginning-position) (point)))))
 
 (defun shr-string-pixel-width (string)
   (with-temp-buffer
@@ -505,35 +508,12 @@ size, and full-buffer size."
 	(narrow-to-region start end)
 	(goto-char start)
 	(when (get-text-property (point) 'shr-indentation)
-	  (setq max-width (max max-width (shr-fold-line))))
+	  (shr-fold-line))
 	(while (setq start (next-single-property-change start 'shr-indentation))
 	  (goto-char start)
-	  (setq max-width (max max-width (shr-fold-line))))
+	  (shr-fold-line))
 	(goto-char (point-max))
 	max-width))))
-
-(defun shr-fold-line ()
-  (let ((start (point))
-	(indentation (get-text-property (point) 'shr-indentation)))
-    (put-text-property start (1+ start) 'shr-indentation nil)
-    (when (> indentation 0)
-      (insert (make-string indentation ?\s)))
-    (let ((max-width 0)
-	  (this-width 0))
-      (shr-goto-pixel-column shr-internal-width)
-      (if (eolp)
-	  (setq max-width (max max-width (shr-pixel-column)))
-	(while (not (eolp))
-	  ;; We have to do some folding.  First find the first
-	  ;; previous point suitable for folding.
-	  (let ((end (point)))
-	    (shr-find-fill-point (line-beginning-position))
-	    (when (= (preceding-char) ?\s)
-	      (delete-char -1))
-	    (insert "\n"))
-	  (shr-goto-pixel-column shr-internal-width)
-	  (setq max-width (max max-width (shr-pixel-column)))))
-      max-width)))
 
 (defun shr-goto-pixel-column (pixels)
   (vertical-motion (cons (/ pixels (frame-char-width)) 0))
@@ -541,6 +521,26 @@ size, and full-buffer size."
   ;; advance one char.
   (unless (eolp)
     (forward-char 1)))
+
+(defun shr-fold-line ()
+  (let ((indentation (get-text-property (point) 'shr-indentation))
+	(spec (cons (/ shr-internal-width (frame-char-width)) 0)))
+    (put-text-property (point) (1+ (point)) 'shr-indentation nil)
+    (when (> indentation 0)
+      (insert (make-string indentation ?\s)))
+    (vertical-motion spec)
+    (unless (eolp)
+      (forward-char 1))
+    (while (not (eolp))
+      ;; We have to do some folding.  First find the first
+      ;; previous point suitable for folding.
+      (shr-find-fill-point (line-beginning-position))
+      (when (= (preceding-char) ?\s)
+	(delete-char -1))
+      (insert "\n")
+      (vertical-motion spec)
+      (unless (eolp)
+	(forward-char 1)))))
 
 (defun shr-find-fill-point (start)
   (let ((bp (point))
@@ -1587,7 +1587,7 @@ The preference is a float determined from `shr-prefer-media-type'."
 		      (dolist (column row)
 			(setq max (max max (cadr column))))
 		      max)))
-	(dotimes (i height)
+	(dotimes (i (max height 1))
 	  (shr-indent)
 	  (insert shr-table-vertical-line "\n"))
 	(dolist (column row)
@@ -1595,13 +1595,16 @@ The preference is a float determined from `shr-prefer-media-type'."
 	  ;; Sum up all the widths from the column.  (There may be
 	  ;; more than one if this is a "colspan" column.)
 	  (dotimes (i (nth 3 column))
-	    (setq align (+ align 20 (aref widths (min (1- (length widths))
-						      column-number)))
-		  column-number (1+ column-number)))
+	    (if (> column-number (1- (length widths)))
+		(setq align (+ align 20))
+	      (setq align (+ align 20 (aref widths column-number))))
+	    (setq column-number (1+ column-number)))
 	  (let ((lines (nth 2 column)))
 	    (dolist (line lines)
 	      (end-of-line)
 	      (let ((start (point)))
+		(when (> align 1000)
+		  (debug (current-buffer)))
 		(insert line
 			(propertize " " 'display
 				    `(space :align-to (,align)))
@@ -1773,17 +1776,17 @@ The preference is a float determined from `shr-prefer-media-type'."
       (let ((shr-internal-width width)
 	    (shr-indentation 0))
 	(shr-descend dom))
-      ;; Compute the max width of all non-foldable lines.
-      (goto-char (point-min))
-      (while (not (eobp))
-	(when (and (not (eolp))
-		   (not (get-text-property (point) 'shr-indentation)))
-	  (end-of-line)
-	  (setq max-width (max max-width (shr-pixel-column))))
-	(forward-line 1))
       (let ((shr-internal-width width))
-	(setq max-width (max max-width
-			     (shr-fold-lines (point-min) (point-max)))))
+	(shr-fold-lines (point-min) (point-max))
+	;; Compute the max width of all non-foldable lines.
+	(save-window-excursion
+	  (set-window-buffer nil (current-buffer))
+	  (goto-char (point-min))
+	  (while (not (eobp))
+	    (when (not (eolp))
+	      (end-of-line)
+	      (setq max-width (max max-width (shr-pixel-column))))
+	    (forward-line 1))))
       (goto-char (point-max))
       ;; Delete padding at the bottom of the TDs.
       (delete-region
