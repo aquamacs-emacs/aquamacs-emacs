@@ -159,6 +159,7 @@ cid: URL as the argument.")
 (defvar shr-table-separator-length 1)
 (defvar shr-table-separator-pixel-width 0)
 (defvar shr-table-id nil)
+(defvar shr-current-font nil)
 
 (defvar shr-map
   (let ((map (make-sparse-keymap)))
@@ -513,7 +514,8 @@ size, and full-buffer size."
 	  (put-text-property start (1+ start)
 			     'shr-indentation shr-indentation))
 	(when shr-use-fonts
-	  (put-text-property start (point) 'face 'variable-pitch)))))))
+	  (put-text-property start (point) 'face
+			     (or shr-current-font 'variable-pitch))))))))
 
 (defun shr-fold-lines (start end)
   (if (<= shr-internal-width 0)
@@ -528,39 +530,33 @@ size, and full-buffer size."
 	(shr-fold-line))
       (goto-char (point-max)))))
 
-(defun shr-goto-pixel-column (pixels)
-  (if (not shr-use-fonts)
-      (move-to-column pixels)
-    (vertical-motion (cons (/ pixels (frame-char-width)) 0))
-    ;; Vertical-motion goes to the char before or on the pixel, so
-    ;; advance one char.
-    (unless (eolp)
-      (forward-char 1))))
-
 (defun shr-vertical-motion (column)
   (if (not shr-use-fonts)
       (move-to-column column)
-    (vertical-motion
-     (cons (/ shr-internal-width (frame-char-width)) 0))))
+    (vertical-motion t(cons (/ shr-internal-width (frame-char-width)) 0))
+    (unless (eolp)
+      (forward-char 1))))
 
 (defun shr-fold-line ()
-  (let ((indentation (get-text-property (point) 'shr-indentation)))
+  (let ((shr-indentation (get-text-property (point) 'shr-indentation)))
     (put-text-property (point) (1+ (point)) 'shr-indentation nil)
-    (when (> indentation 0)
-      (insert (make-string indentation ?\s)))
     (shr-vertical-motion shr-internal-width)
-    (unless (eolp)
-      (forward-char 1))
     (while (not (eolp))
       ;; We have to do some folding.  First find the first
       ;; previous point suitable for folding.
       (shr-find-fill-point (line-beginning-position))
       (when (= (preceding-char) ?\s)
 	(delete-char -1))
-      (insert "\n")
-      (shr-vertical-motion shr-internal-width)
-      (unless (eolp)
-	(forward-char 1)))))
+      (if (or (bolp)
+	      (= (- (point) (line-beginning-position)) 1))
+	  ;; We had unbreakable text, so just give up and stop folding.
+	  (progn
+	    (shr-indent)
+	    (end-of-line))
+	;; Success; continue.
+	(insert "\n")
+	(shr-indent)
+	(shr-vertical-motion shr-internal-width)))))
 
 (defun shr-find-fill-point (start)
   (let ((bp (point))
@@ -714,7 +710,12 @@ size, and full-buffer size."
 
 (defun shr-indent ()
   (when (> shr-indentation 0)
-    (insert (make-string shr-indentation ? ))))
+    (insert
+     (propertize " "
+		 'display
+		 `(space :align-to (,(if (not shr-use-fonts)
+					 (* shr-indentation (frame-char-width))
+				       shr-indentation)))))))
 
 (defun shr-fontize-dom (dom &rest types)
   (let (shr-start)
@@ -1357,7 +1358,8 @@ The preference is a float determined from `shr-prefer-media-type'."
 	(setq shr-state 'image)))))
 
 (defun shr-tag-pre (dom)
-  (let ((shr-folding-mode 'none))
+  (let ((shr-folding-mode 'none)
+	(shr-current-font 'default))
     (shr-ensure-newline)
     (shr-indent)
     (shr-generic dom)
@@ -1366,7 +1368,8 @@ The preference is a float determined from `shr-prefer-media-type'."
 (defun shr-tag-blockquote (dom)
   (shr-ensure-paragraph)
   (shr-indent)
-  (let ((shr-indentation (+ shr-indentation 4)))
+  (let ((shr-indentation (+ shr-indentation
+			    (* 4 shr-table-separator-pixel-width))))
     (shr-generic dom))
   (shr-ensure-paragraph))
 
@@ -1382,7 +1385,8 @@ The preference is a float determined from `shr-prefer-media-type'."
 
 (defun shr-tag-dd (dom)
   (shr-ensure-newline)
-  (let ((shr-indentation (+ shr-indentation 4)))
+  (let ((shr-indentation (+ shr-indentation
+			    (* 4 shr-table-separator-pixel-width))))
     (shr-generic dom)))
 
 (defun shr-tag-ul (dom)
@@ -1407,11 +1411,12 @@ The preference is a float determined from `shr-prefer-media-type'."
 		    (format "%d " shr-list-mode)
 		  (setq shr-list-mode (1+ shr-list-mode)))
 	      shr-bullet))
-	   (shr-indentation (+ shr-indentation (length bullet))))
+	   (shr-indentation (+ shr-indentation
+			       (shr-string-pixel-width bullet))))
       (insert bullet)
       (shr-generic dom)
       (put-text-property start (1+ start)
-			 'shr-indentation 0))))
+			 'shr-indentation shr-indentation))))
 
 (defun shr-tag-br (dom)
   (when (and (not (bobp))
@@ -1428,8 +1433,8 @@ The preference is a float determined from `shr-prefer-media-type'."
   (shr-generic dom))
 
 (defun shr-tag-h1 (dom)
-  (shr-heading dom (and shr-use-fonts
-			'(variable-pitch (:height 1.5 :weight bold)))))
+  (let ((shr-current-font '(variable-pitch (:height 1.5 :weight bold))))
+    (shr-heading dom 'bold)))
 
 (defun shr-tag-h2 (dom)
   (shr-heading dom 'bold))
@@ -1498,7 +1503,7 @@ The preference is a float determined from `shr-prefer-media-type'."
     ;; This probably won't work very well.
     (when (> (+ (loop for width across sketch-widths
 		      summing (1+ width))
-		shr-indentation 1)
+		shr-indentation shr-table-separator-pixel-width)
 	     (frame-width))
       (setq truncate-lines t))
     ;; Then render the table again with these new "hard" widths.
@@ -1697,7 +1702,8 @@ The preference is a float determined from `shr-prefer-media-type'."
     (insert shr-table-corner)
     (let ((total-width 0))
       (dotimes (i (length widths))
-	(setq total-width (+ total-width (aref widths i) 20))
+	(setq total-width (+ total-width (aref widths i)
+			     (* shr-table-separator-pixel-width 2)))
 	(insert (make-string (1+ (/ (aref widths i)
 				    shr-table-separator-pixel-width))
 			     shr-table-horizontal-line)
