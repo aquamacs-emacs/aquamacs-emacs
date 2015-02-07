@@ -1464,11 +1464,15 @@ The preference is a float determined from `shr-prefer-media-type'."
 	 ;; Do a "test rendering" to see how big each TD is (this can
 	 ;; be smaller (if there's little text) or bigger (if there's
 	 ;; unbreakable text).
-	 (sketch (shr-make-table dom suggested-widths))
+	 (sketch (or (dom-attr dom 'shr-suggested-widths)
+		     (shr-make-table dom suggested-widths nil
+				     'shr-suggested-widths)))
 	 ;; Compute the "natural" width by setting each column to 5000
 	 ;; characters and see how wide they really render.
-	 (natural (shr-make-table
-		   dom (make-vector (length columns) 5000)))
+	 (natural (or (dom-attr dom 'shr-natural-widths)
+		      (shr-make-table
+		       dom (make-vector (length columns) 5000)
+		       nil 'shr-natural-widths)))
 	 (sketch-widths (shr-table-widths sketch natural suggested-widths)))
     ;; This probably won't work very well.
     (when (> (+ (loop for width across sketch-widths
@@ -1502,64 +1506,71 @@ The preference is a float determined from `shr-prefer-media-type'."
 	;; Try to output it anyway.
 	(shr-generic dom)
       ;; It's a real table, so render it.
-      (shr-tag-table-1
-       (nconc
-	(list 'table nil)
-	(if caption `((tr nil (td nil ,@caption))))
-	(cond (header
-	       (if footer
-		   ;; header + body + footer
-		   (if (= nheader nbody)
-		       (if (= nbody nfooter)
-			   `((tr nil (td nil (table nil
-						    (tbody nil ,@header
-							   ,@body ,@footer)))))
-			 (nconc `((tr nil (td nil (table nil
-							 (tbody nil ,@header
-								,@body)))))
-				(if (= nfooter 1)
-				    footer
-				  `((tr nil (td nil (table
-						     nil (tbody
-							  nil ,@footer))))))))
-		     (nconc `((tr nil (td nil (table nil (tbody
-							  nil ,@header)))))
-			    (if (= nbody nfooter)
-				`((tr nil (td nil (table
-						   nil (tbody nil ,@body
-							      ,@footer)))))
-			      (nconc `((tr nil (td nil (table
-							nil (tbody nil
+      (if (dom-attr dom 'shr-fixed-table)
+	  (shr-tag-table-1 dom)
+	;; Only fix up the table once.
+	(let ((table
+	       (nconc
+		(list 'table nil)
+		(if caption `((tr nil (td nil ,@caption))))
+		(cond
+		 (header
+		  (if footer
+		      ;; header + body + footer
+		      (if (= nheader nbody)
+			  (if (= nbody nfooter)
+			      `((tr nil (td nil (table nil
+						       (tbody nil ,@header
+							      ,@body ,@footer)))))
+			    (nconc `((tr nil (td nil (table nil
+							    (tbody nil ,@header
 								   ,@body)))))
-				     (if (= nfooter 1)
-					 footer
-				       `((tr nil (td nil (table
-							  nil
-							  (tbody
-							   nil
-							   ,@footer))))))))))
-		 ;; header + body
-		 (if (= nheader nbody)
-		     `((tr nil (td nil (table nil (tbody nil ,@header
-							 ,@body)))))
-		   (if (= nheader 1)
-		       `(,@header (tr nil (td nil (table
-						   nil (tbody nil ,@body)))))
-		     `((tr nil (td nil (table nil (tbody nil ,@header))))
-		       (tr nil (td nil (table nil (tbody nil ,@body)))))))))
-	      (footer
-	       ;; body + footer
-	       (if (= nbody nfooter)
-		   `((tr nil (td nil (table
-				      nil (tbody nil ,@body ,@footer)))))
-		 (nconc `((tr nil (td nil (table nil (tbody nil ,@body)))))
-			(if (= nfooter 1)
-			    footer
-			  `((tr nil (td nil (table
-					     nil (tbody nil ,@footer)))))))))
-	      (caption
-	       `((tr nil (td nil (table nil (tbody nil ,@body))))))
-	      (body)))))
+				   (if (= nfooter 1)
+				       footer
+				     `((tr nil (td nil (table
+							nil (tbody
+							     nil ,@footer))))))))
+			(nconc `((tr nil (td nil (table nil (tbody
+							     nil ,@header)))))
+			       (if (= nbody nfooter)
+				   `((tr nil (td nil (table
+						      nil (tbody nil ,@body
+								 ,@footer)))))
+				 (nconc `((tr nil (td nil (table
+							   nil (tbody nil
+								      ,@body)))))
+					(if (= nfooter 1)
+					    footer
+					  `((tr nil (td nil (table
+							     nil
+							     (tbody
+							      nil
+							      ,@footer))))))))))
+		    ;; header + body
+		    (if (= nheader nbody)
+			`((tr nil (td nil (table nil (tbody nil ,@header
+							    ,@body)))))
+		      (if (= nheader 1)
+			  `(,@header (tr nil (td nil (table
+						      nil (tbody nil ,@body)))))
+			`((tr nil (td nil (table nil (tbody nil ,@header))))
+			  (tr nil (td nil (table nil (tbody nil ,@body)))))))))
+		 (footer
+		  ;; body + footer
+		  (if (= nbody nfooter)
+		      `((tr nil (td nil (table
+					 nil (tbody nil ,@body ,@footer)))))
+		    (nconc `((tr nil (td nil (table nil (tbody nil ,@body)))))
+			   (if (= nfooter 1)
+			       footer
+			     `((tr nil (td nil (table
+						nil (tbody nil ,@footer)))))))))
+		 (caption
+		  `((tr nil (td nil (table nil (tbody nil ,@body))))))
+		 (body)))))
+	  (dom-set-attribute table 'shr-fixed-table t)
+	  (setcdr dom (cdr table))
+	  (shr-tag-table-1 dom))))
     (when bgcolor
       (shr-colorize-region start (point) (cdr (assq 'color shr-stylesheet))
 			   bgcolor))
@@ -1628,7 +1639,8 @@ The preference is a float determined from `shr-prefer-media-type'."
       (unless collapse
 	(shr-insert-table-ruler widths)))
     (if (equal (buffer-name) "*eww*")
-	(shr-expand-alignments start (point))
+	(save-excursion
+	  (shr-expand-alignments start (point)))
       (unless (= start (point))
 	(put-text-property start (1+ start) 'shr-table-id shr-table-id)))))
 
@@ -1700,11 +1712,13 @@ The preference is a float determined from `shr-prefer-media-type'."
 			       (aref widths i))))))))
     widths))
 
-(defun shr-make-table (dom widths &optional fill)
+(defun shr-make-table (dom widths &optional fill storage-attribute)
   (or (cadr (assoc (list dom widths fill) shr-content-cache))
       (let ((data (shr-make-table-1 dom widths fill)))
 	(push (list (list dom widths fill) data)
 	      shr-content-cache)
+	(when storage-attribute
+	  (dom-set-attribute dom storage-attribute data))
 	data)))
 
 (defun shr-make-table-1 (dom widths &optional fill)
