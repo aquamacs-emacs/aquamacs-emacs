@@ -1499,7 +1499,7 @@ The preference is a float determined from `shr-prefer-media-type'."
 	 (sketch (loop for line in elems
 		       collect (mapcar #'car line)))
 	 (natural (loop for line in elems
-			collect (mapcar (lambda (a) (* 1 (cdr a))) line)))
+			collect (mapcar #'cdr line)))
 	 (sketch-widths (shr-table-widths sketch natural suggested-widths)))
     ;; This probably won't work very well.
     (when (> (+ (loop for width across sketch-widths
@@ -1625,7 +1625,7 @@ The preference is a float determined from `shr-prefer-media-type'."
 	    (column-number 0)
 	    (height (let ((max 0))
 		      (dolist (column row)
-			(setq max (max max (cadr column))))
+			(setq max (max max (nth 2 column))))
 		      max)))
 	(dotimes (i (max height 1))
 	  (shr-indent)
@@ -1634,7 +1634,7 @@ The preference is a float determined from `shr-prefer-media-type'."
 	  (goto-char start)
 	  ;; Sum up all the widths from the column.  (There may be
 	  ;; more than one if this is a "colspan" column.)
-	  (dotimes (i (nth 3 column))
+	  (dotimes (i (nth 4 column))
 	    ;; The colspan directive may be wrong and there may not be
 	    ;; that number of columns.
 	    (when (<= column-number (1- (length widths)))
@@ -1642,7 +1642,7 @@ The preference is a float determined from `shr-prefer-media-type'."
 			     (aref widths column-number)
 			     (* 2 shr-table-separator-pixel-width))))
 	    (setq column-number (1+ column-number)))
-	  (let ((lines (nth 2 column))
+	  (let ((lines (nth 3 column))
 		(pixel-align (if (not shr-use-fonts)
 				 (* align (frame-char-width))
 			       align)))
@@ -1655,7 +1655,7 @@ The preference is a float determined from `shr-prefer-media-type'."
 				    'shr-table-indent shr-table-id)
 			shr-table-vertical-line)
 		(shr-colorize-region
-		 start (1- (point)) (nth 4 column) (nth 5 column)))
+		 start (1- (point)) (nth 5 column) (nth 6 column)))
 	      (forward-line 1))
 	    ;; Add blank lines at padding at the bottom of the TD,
 	    ;; possibly.
@@ -1667,7 +1667,7 @@ The preference is a float determined from `shr-prefer-media-type'."
 				    'shr-table-indent shr-table-id)
 			shr-table-vertical-line)
 		(shr-colorize-region
-		 start (1- (point)) (nth 4 column) (nth 5 column)))
+		 start (1- (point)) (nth 5 column) (nth 6 column)))
 	      (forward-line 1)))))
       (unless collapse
 	(shr-insert-table-ruler widths)))
@@ -1752,7 +1752,7 @@ The preference is a float determined from `shr-prefer-media-type'."
     widths))
 
 (defun shr-make-table (dom widths &optional fill storage-attribute)
-  (or (and nil (cadr (assoc (list dom widths fill) shr-content-cache)))
+  (or (cadr (assoc (list dom widths fill) shr-content-cache))
       (let ((data (shr-make-table-1 dom widths fill)))
 	(push (list (list dom widths fill) data)
 	      shr-content-cache)
@@ -1823,7 +1823,7 @@ The preference is a float determined from `shr-prefer-media-type'."
 		(let ((data (if (not column)
 				(if fill
 				    (list 0 0 nil 1 nil nil)
-				  '(0 . 0))
+				  '(0 0))
 			      (shr-render-td column width fill))))
 		  (if (and (not fill)
 			   (> colspan-remaining 0))
@@ -1831,9 +1831,11 @@ The preference is a float determined from `shr-prefer-media-type'."
 			(when (= colspan-count colspan-remaining)
 			  (setq colspan-width (car data)))
 			(let ((this-width (/ colspan-width colspan-count)))
-			  (push (cons this-width (cdr data)) tds)
+			  (push (cons this-width (cadr data)) tds)
 			  (setq colspan-remaining (1- colspan-remaining))))
-		    (push data tds))))
+		    (if (not fill)
+			(push (cons (car data) (cadr data)) tds)
+		      (push data tds)))))
 	      (setq i (1+ i)
 		    width-column (1+ width-column))))
 	  (push (nreverse tds) trs))))
@@ -1863,10 +1865,19 @@ The preference is a float determined from `shr-prefer-media-type'."
 	       natural
 	       (>= width natural)
 	       natural))
+	(and fill
+	     (let (result)
+	       (dolist (attr (dom-attributes dom))
+		 (let ((name (symbol-name (car attr))))
+		   (when (string-match "shr-td-cache-\\([0-9]+\\)-nil" name)
+		     (let ((cache-width (string-to-number
+					 (match-string 1 name))))
+		       (when (and (>= cache-width width)
+				  (<= (car (cdr attr)) width))
+			 (setq result (cdr attr)))))))
+	       result))
 	(let ((result (shr-render-td-1 dom width fill)))
-	  (if fill
-	      (dom-set-attribute dom cache result)
-	    (dom-set-attribute dom cache (car result)))
+	  (dom-set-attribute dom cache result)
 	  result))))
 
 (defun shr-render-td-1 (dom width fill)
@@ -1875,7 +1886,8 @@ The preference is a float determined from `shr-prefer-media-type'."
 	  (fgcolor (dom-attr dom 'fgcolor))
 	  (style (dom-attr dom 'style))
 	  (shr-stylesheet shr-stylesheet)
-	  (max-width 0))
+	  (max-width 0)
+	  natural-width)
       (when style
 	(setq style (and (string-match "color" style)
 			 (shr-parse-style style))))
@@ -1910,16 +1922,15 @@ The preference is a float determined from `shr-prefer-media-type'."
 	 (end-of-line)
 	 (point)))
       (goto-char (point-min))
-      (if fill
-	  (list max-width
-		(count-lines (point-min) (point-max))
-		(split-string (buffer-string) "\n")
-		(if (dom-attr dom 'colspan)
-		    (string-to-number (dom-attr dom 'colspan))
-		  1)
-		(cdr (assq 'color shr-stylesheet))
-		(cdr (assq 'background-color shr-stylesheet)))
-	(cons max-width natural-width)))))
+      (list max-width
+	    natural-width
+	    (count-lines (point-min) (point-max))
+	    (split-string (buffer-string) "\n")
+	    (if (dom-attr dom 'colspan)
+		(string-to-number (dom-attr dom 'colspan))
+	      1)
+	    (cdr (assq 'color shr-stylesheet))
+	    (cdr (assq 'background-color shr-stylesheet))))))
 
 (defun shr-dom-max-natural-width (dom max)
   (if (eq (dom-tag dom) 'table)
