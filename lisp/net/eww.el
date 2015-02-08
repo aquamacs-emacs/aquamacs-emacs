@@ -643,6 +643,7 @@ the like."
     (define-key map "H" 'eww-list-histories)
     (define-key map "E" 'eww-set-character-encoding)
     (define-key map "S" 'eww-list-buffers)
+    (define-key map "F" 'eww-toggle-fonts)
 
     (define-key map "b" 'eww-add-bookmark)
     (define-key map "B" 'eww-list-bookmarks)
@@ -1414,6 +1415,15 @@ Differences in #targets are ignored."
   (if (null charset)
       (eww-reload nil 'utf-8)
     (eww-reload nil charset)))
+
+(defun eww-toggle-fonts ()
+  "Toggle whether to use monospaced or font-enabled layouts."
+  (interactive)
+  (message "Fonts are now %s"
+	   (if (setq shr-use-fonts (not shr-use-fonts))
+	       "on"
+	     "off"))
+  (eww-reload))
 
 ;;; Bookmarks code
 
