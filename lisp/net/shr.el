@@ -1889,16 +1889,18 @@ The preference is a float determined from `shr-prefer-media-type'."
       (let ((shr-internal-width width)
 	    (shr-indentation 0))
 	(shr-descend dom))
-      (unless fill
-	(setq natural-width
-	      (or (dom-attr dom 'shr-td-cache-natural)
-		  (let ((natural (max (shr-pixel-buffer-width)
-				      (shr-dom-max-natural-width dom 0))))
-		    (dom-set-attribute dom 'shr-td-cache-natural natural)
-		    natural))))
-      (let ((shr-internal-width width))
-	(shr-fold-lines (point-min) (point-max))
-	(setq max-width (shr-pixel-buffer-width)))
+      (save-window-excursion
+	(set-window-buffer nil (current-buffer))
+	(unless fill
+	  (setq natural-width
+		(or (dom-attr dom 'shr-td-cache-natural)
+		    (let ((natural (max (shr-pixel-buffer-width)
+					(shr-dom-max-natural-width dom 0))))
+		      (dom-set-attribute dom 'shr-td-cache-natural natural)
+		      natural))))
+	(let ((shr-internal-width width))
+	  (shr-fold-lines (point-min) (point-max))
+	  (setq max-width (shr-pixel-buffer-width))))
       (goto-char (point-max))
       ;; Delete padding at the bottom of the TDs.
       (delete-region
