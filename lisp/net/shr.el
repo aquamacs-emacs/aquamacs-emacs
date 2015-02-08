@@ -716,7 +716,7 @@ size, and full-buffer size."
     (insert
      (propertize " "
 		 'display
-		 `(space :align-to (,(if (not shr-use-fonts)
+		 `(space :width (,(if (not shr-use-fonts)
 					 (* shr-indentation (frame-char-width))
 				       shr-indentation)))))))
 
@@ -1493,15 +1493,13 @@ The preference is a float determined from `shr-prefer-media-type'."
 	 ;; Do a "test rendering" to see how big each TD is (this can
 	 ;; be smaller (if there's little text) or bigger (if there's
 	 ;; unbreakable text).
-	 (sketch (or (dom-attr dom 'shr-suggested-widths)
-		     (shr-make-table dom suggested-widths nil
-				     'shr-suggested-widths)))
-	 ;; Compute the "natural" width by setting each column to 5000
-	 ;; characters and see how wide they really render.
-	 (natural (or (dom-attr dom 'shr-natural-widths)
-		      (shr-make-table
-		       dom (make-vector (length columns) 5000)
-		       nil 'shr-natural-widths)))
+	 (elems (or (dom-attr dom 'shr-suggested-widths)
+		    (shr-make-table dom suggested-widths nil
+				    'shr-suggested-widths)))
+	 (sketch (loop for line in elems
+		       collect (mapcar #'car line)))
+	 (natural (loop for line in elems
+			collect (mapcar (lambda (a) (* 1 (cdr a))) line)))
 	 (sketch-widths (shr-table-widths sketch natural suggested-widths)))
     ;; This probably won't work very well.
     (when (> (+ (loop for width across sketch-widths
@@ -1754,7 +1752,7 @@ The preference is a float determined from `shr-prefer-media-type'."
     widths))
 
 (defun shr-make-table (dom widths &optional fill storage-attribute)
-  (or (cadr (assoc (list dom widths fill) shr-content-cache))
+  (or (and nil (cadr (assoc (list dom widths fill) shr-content-cache)))
       (let ((data (shr-make-table-1 dom widths fill)))
 	(push (list (list dom widths fill) data)
 	      shr-content-cache)
@@ -1823,16 +1821,17 @@ The preference is a float determined from `shr-prefer-media-type'."
 	      (when (or column
 			(not fill))
 		(let ((data (if (not column)
-				(if fill (list 0 0 nil 1 nil nil)
-				  0)
+				(if fill
+				    (list 0 0 nil 1 nil nil)
+				  '(0 . 0))
 			      (shr-render-td column width fill))))
 		  (if (and (not fill)
 			   (> colspan-remaining 0))
 		      (progn
 			(when (= colspan-count colspan-remaining)
-			  (setq colspan-width data))
+			  (setq colspan-width (car data)))
 			(let ((this-width (/ colspan-width colspan-count)))
-			  (push this-width tds)
+			  (push (cons this-width (cdr data)) tds)
 			  (setq colspan-remaining (1- colspan-remaining))))
 		    (push data tds))))
 	      (setq i (1+ i)
@@ -1861,15 +1860,13 @@ The preference is a float determined from `shr-prefer-media-type'."
     (or (dom-attr dom cache)
 	(let ((natural (dom-attr dom 'shr-td-cache-natural)))
 	  (and (not fill)
-	       nil
 	       natural
 	       (>= width natural)
 	       natural))
 	(let ((result (shr-render-td-1 dom width fill)))
-	  (when (and (>= width 5000)
-		     (not fill))
-	    (dom-set-attribute dom 'shr-td-cache-natural result ))
-	  (dom-set-attribute dom cache result)
+	  (if fill
+	      (dom-set-attribute dom cache result)
+	    (dom-set-attribute dom cache (car result)))
 	  result))))
 
 (defun shr-render-td-1 (dom width fill)
@@ -1892,9 +1889,15 @@ The preference is a float determined from `shr-prefer-media-type'."
       (let ((shr-internal-width width)
 	    (shr-indentation 0))
 	(shr-descend dom))
+      (unless fill
+	(setq natural-width
+	      (or (dom-attr dom 'shr-td-cache-natural)
+		  (let ((natural (max (shr-pixel-buffer-width)
+				      (shr-dom-max-natural-width dom 0))))
+		    (dom-set-attribute dom 'shr-td-cache-natural natural)
+		    natural))))
       (let ((shr-internal-width width))
-	(unless (= shr-internal-width 5000)
-	  (shr-fold-lines (point-min) (point-max)))
+	(shr-fold-lines (point-min) (point-max))
 	(setq max-width (shr-pixel-buffer-width)))
       (goto-char (point-max))
       ;; Delete padding at the bottom of the TDs.
@@ -1914,7 +1917,20 @@ The preference is a float determined from `shr-prefer-media-type'."
 		  1)
 		(cdr (assq 'color shr-stylesheet))
 		(cdr (assq 'background-color shr-stylesheet)))
-	max-width))))
+	(cons max-width natural-width)))))
+
+(defun shr-dom-max-natural-width (dom max)
+  (if (eq (dom-tag dom) 'table)
+      (max max (loop for line in (dom-attr dom 'shr-suggested-widths)
+		     maximize (+
+			       shr-table-separator-length
+			       (loop for elem in line
+				     summing (+ (cdr elem)
+						(* 2 shr-table-separator-length))))))
+    (dolist (child (dom-children dom))
+      (unless (stringp child)
+	(setq max (max (shr-dom-max-natural-width child max)))))
+    max))
 
 (defun shr-buffer-width ()
   (goto-char (point-min))
