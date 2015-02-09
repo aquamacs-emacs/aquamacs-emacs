@@ -1644,44 +1644,45 @@ The preference is a float determined from `shr-prefer-media-type'."
 	  (shr-indent)
 	  (insert shr-table-vertical-line "\n"))
 	(dolist (column row)
-	  (goto-char start)
-	  ;; Sum up all the widths from the column.  (There may be
-	  ;; more than one if this is a "colspan" column.)
-	  (dotimes (i (nth 4 column))
-	    ;; The colspan directive may be wrong and there may not be
-	    ;; that number of columns.
-	    (when (<= column-number (1- (length widths)))
-	      (setq align (+ align
-			     (aref widths column-number)
-			     (* 2 shr-table-separator-pixel-width))))
-	    (setq column-number (1+ column-number)))
-	  (let ((lines (nth 3 column))
-		(pixel-align (if (not shr-use-fonts)
-				 (* align (frame-char-width))
-			       align)))
-	    (dolist (line lines)
-	      (end-of-line)
-	      (let ((start (point)))
-		(insert line
-			(propertize " "
-				    'display `(space :align-to (,pixel-align))
-				    'shr-table-indent shr-table-id)
-			shr-table-vertical-line)
-		(shr-colorize-region
-		 start (1- (point)) (nth 5 column) (nth 6 column)))
-	      (forward-line 1))
-	    ;; Add blank lines at padding at the bottom of the TD,
-	    ;; possibly.
-	    (dotimes (i (- height (length lines)))
-	      (end-of-line)
-	      (let ((start (point)))
-		(insert (propertize " "
-				    'display `(space :align-to (,pixel-align))
-				    'shr-table-indent shr-table-id)
-			shr-table-vertical-line)
-		(shr-colorize-region
-		 start (1- (point)) (nth 5 column) (nth 6 column)))
-	      (forward-line 1)))))
+	  (when (> (nth 2 column) -1)
+	    (goto-char start)
+	    ;; Sum up all the widths from the column.  (There may be
+	    ;; more than one if this is a "colspan" column.)
+	    (dotimes (i (nth 4 column))
+	      ;; The colspan directive may be wrong and there may not be
+	      ;; that number of columns.
+	      (when (<= column-number (1- (length widths)))
+		(setq align (+ align
+			       (aref widths column-number)
+			       (* 2 shr-table-separator-pixel-width))))
+	      (setq column-number (1+ column-number)))
+	    (let ((lines (nth 3 column))
+		  (pixel-align (if (not shr-use-fonts)
+				   (* align (frame-char-width))
+				 align)))
+	      (dolist (line lines)
+		(end-of-line)
+		(let ((start (point)))
+		  (insert line
+			  (propertize " "
+				      'display `(space :align-to (,pixel-align))
+				      'shr-table-indent shr-table-id)
+			  shr-table-vertical-line)
+		  (shr-colorize-region
+		   start (1- (point)) (nth 5 column) (nth 6 column)))
+		(forward-line 1))
+	      ;; Add blank lines at padding at the bottom of the TD,
+	      ;; possibly.
+	      (dotimes (i (- height (length lines)))
+		(end-of-line)
+		(let ((start (point)))
+		  (insert (propertize " "
+				      'display `(space :align-to (,pixel-align))
+				      'shr-table-indent shr-table-id)
+			  shr-table-vertical-line)
+		  (shr-colorize-region
+		   start (1- (point)) (nth 5 column) (nth 6 column)))
+		(forward-line 1))))))
       (unless collapse
 	(shr-insert-table-ruler widths)))
     (if (equal (buffer-name) "*eww*")
@@ -1831,24 +1832,26 @@ The preference is a float determined from `shr-prefer-media-type'."
 		(setq width-column (+ width-column (1- colspan))
 		      colspan-count colspan
 		      colspan-remaining colspan))
-	      (when (or column
-			(not fill))
-		(let ((data (if (not column)
-				(if fill
-				    (list 0 0 nil 1 nil nil)
-				  '(0 0))
-			      (shr-render-td column width fill))))
+	      (when column
+		(let ((data (shr-render-td column width fill)))
 		  (if (and (not fill)
 			   (> colspan-remaining 0))
 		      (progn
-			(when (= colspan-count colspan-remaining)
-			  (setq colspan-width (car data)))
+			(setq colspan-width (car data))
 			(let ((this-width (/ colspan-width colspan-count)))
 			  (push (cons this-width (cadr data)) tds)
 			  (setq colspan-remaining (1- colspan-remaining))))
 		    (if (not fill)
 			(push (cons (car data) (cadr data)) tds)
 		      (push data tds)))))
+	      (when (and colspan
+			 (> colspan 1))
+		(dotimes (c (1- colspan))
+		  (push
+		   (if fill
+		       (list 0 0 -1 nil 1 nil nil)
+		     '(0 . 0))
+		   tds)))
 	      (setq i (1+ i)
 		    width-column (1+ width-column))))
 	  (push (nreverse tds) trs))))
