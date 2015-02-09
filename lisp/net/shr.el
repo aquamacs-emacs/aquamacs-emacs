@@ -1622,6 +1622,8 @@ The preference is a float determined from `shr-prefer-media-type'."
     ;; model isn't strong enough to allow us to put the images actually
     ;; into the tables.
     (when (zerop shr-table-depth)
+      (save-excursion
+	(shr-expand-alignments start (point)))
       (dolist (elem (dom-by-tag dom 'object))
 	(shr-tag-object elem))
       (dolist (elem (dom-by-tag dom 'img))
@@ -1689,11 +1691,8 @@ The preference is a float determined from `shr-prefer-media-type'."
 		(forward-line 1))))))
       (unless collapse
 	(shr-insert-table-ruler widths)))
-    (if (equal (buffer-name) "*eww*")
-	(save-excursion
-	  (shr-expand-alignments start (point)))
-      (unless (= start (point))
-	(put-text-property start (1+ start) 'shr-table-id shr-table-id)))))
+    (unless (= start (point))
+      (put-text-property start (1+ start) 'shr-table-id shr-table-id))))
 
 (defun shr-expand-alignments (start end)
   (while (< (setq start (next-single-property-change
@@ -1881,11 +1880,6 @@ The preference is a float determined from `shr-prefer-media-type'."
 (defun shr-render-td (dom width fill)
   (let ((cache (intern (format "shr-td-cache-%s-%s" width fill))))
     (or (dom-attr dom cache)
-	(let ((natural (dom-attr dom 'shr-td-cache-natural)))
-	  (and (not fill)
-	       natural
-	       (>= width natural)
-	       natural))
 	(and fill
 	     (let (result)
 	       (dolist (attr (dom-attributes dom))
