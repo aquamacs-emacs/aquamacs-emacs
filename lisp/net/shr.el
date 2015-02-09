@@ -560,16 +560,16 @@ size, and full-buffer size."
     (while (not (eolp))
       ;; We have to do some folding.  First find the first
       ;; previous point suitable for folding.
-      (shr-find-fill-point (line-beginning-position))
-      (when (= (preceding-char) ?\s)
-	(delete-char -1))
-      (if (or (bolp)
-	      (= (- (point) (line-beginning-position)) 1))
-	  ;; We had unbreakable text, so just give up and stop folding.
+      (if (not (shr-find-fill-point (line-beginning-position)))
+	  ;; We had unbreakable text (for this width), so just go to
+	  ;; the first space and carry on.
 	  (progn
+	    (beginning-of-line)
 	    (shr-indent)
-	    (end-of-line))
+	    (search-forward " " (line-end-position) t))
 	;; Success; continue.
+	(when (= (preceding-char) ?\s)
+	  (delete-char -1))
 	(insert "\n")
 	(shr-indent)
 	(shr-vertical-motion shr-internal-width)
