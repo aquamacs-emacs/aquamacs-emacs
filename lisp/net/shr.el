@@ -477,6 +477,12 @@ size, and full-buffer size."
 	  (car (window-text-pixel-size nil (line-beginning-position) (point))))
       (car (window-text-pixel-size nil (line-beginning-position) (point))))))
 
+(defun shr-pixel-region ()
+  (- (shr-pixel-column)
+     (save-excursion
+       (goto-char (mark))
+       (shr-pixel-column))))
+
 (defun shr-string-pixel-width (string)
   (if (not shr-use-fonts)
       (length string)
@@ -528,7 +534,8 @@ size, and full-buffer size."
 	(shr-fold-line))
       (while (setq start (next-single-property-change start 'shr-indentation))
 	(goto-char start)
-	(shr-fold-line))
+	(when (bolp)
+	  (shr-fold-line)))
       (goto-char (point-max)))))
 
 (defun shr-vertical-motion (column)
@@ -1739,7 +1746,7 @@ The preference is a float determined from `shr-prefer-media-type'."
 	  (setq i (1+ i)))))
     (let ((extra (- (apply '+ (append suggested-widths nil))
 		    (apply '+ (append widths nil))
-		    (* shr-table-separator-pixel-width 2)))
+		    (* shr-table-separator-pixel-width (length widths))))
 	  (expanded-columns 0))
       ;; We have extra, unused space, so divide this space amongst the
       ;; columns.
@@ -1802,7 +1809,7 @@ The preference is a float determined from `shr-prefer-media-type'."
 	      (setq width
 		    (if column
 			(aref widths width-column)
-		      140))
+		      (* 10 shr-table-separator-pixel-width)))
 	      (when (setq colspan (dom-attr column 'colspan))
 		(setq colspan (min (string-to-number colspan)
 				   ;; The colspan may be wrong, so
