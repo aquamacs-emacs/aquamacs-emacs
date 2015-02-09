@@ -1847,6 +1847,7 @@ The preference is a float determined from `shr-prefer-media-type'."
 	      (when (and colspan
 			 (> colspan 1))
 		(dotimes (c (1- colspan))
+		  (setq i (1+ i))
 		  (push
 		   (if fill
 		       (list 0 0 -1 nil 1 nil nil)
