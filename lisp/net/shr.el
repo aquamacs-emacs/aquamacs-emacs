@@ -512,7 +512,6 @@ size, and full-buffer size."
       (unless (= start (point))
 	;; Mark all lines that should possibly be folded afterwards.
 	(when bolp
-	  (shr-indent)
 	  (shr-mark-fill start))
 	(when shr-use-fonts
 	  (add-face-text-property start (point)
@@ -549,6 +548,8 @@ size, and full-buffer size."
     (shr-indent)
     (setq shr-indentation (or continuation shr-indentation))
     (shr-vertical-motion shr-internal-width)
+    (when (looking-at " $")
+      (delete-region (point) (line-end-position)))
     (while (not (eolp))
       ;; We have to do some folding.  First find the first
       ;; previous point suitable for folding.
@@ -564,7 +565,9 @@ size, and full-buffer size."
 	;; Success; continue.
 	(insert "\n")
 	(shr-indent)
-	(shr-vertical-motion shr-internal-width)))))
+	(shr-vertical-motion shr-internal-width)
+	(when (looking-at " $")
+	  (delete-region (point) (line-end-position)))))))
 
 (defun shr-find-fill-point (start)
   (let ((bp (point))
