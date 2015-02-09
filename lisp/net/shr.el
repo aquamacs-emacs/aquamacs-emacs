@@ -550,9 +550,11 @@ size, and full-buffer size."
 (defun shr-fold-line ()
   (let ((shr-indentation (get-text-property (point) 'shr-indentation))
 	(continuation (get-text-property
-		       (point) 'shr-continuation-indentation)))
+		       (point) 'shr-continuation-indentation))
+	start)
     (put-text-property (point) (1+ (point)) 'shr-indentation nil)
     (shr-indent)
+    (setq start (point))
     (setq shr-indentation (or continuation shr-indentation))
     (shr-vertical-motion shr-internal-width)
     (when (looking-at " $")
@@ -560,21 +562,23 @@ size, and full-buffer size."
     (while (not (eolp))
       ;; We have to do some folding.  First find the first
       ;; previous point suitable for folding.
-      (if (not (shr-find-fill-point (line-beginning-position)))
+      (if (or (not (shr-find-fill-point (line-beginning-position)))
+	      (= (point) start))
 	  ;; We had unbreakable text (for this width), so just go to
 	  ;; the first space and carry on.
 	  (progn
 	    (beginning-of-line)
-	    (shr-indent)
-	    (search-forward " " (line-end-position) t))
-	;; Success; continue.
-	(when (= (preceding-char) ?\s)
-	  (delete-char -1))
-	(insert "\n")
-	(shr-indent)
-	(shr-vertical-motion shr-internal-width)
-	(when (looking-at " $")
-	  (delete-region (point) (line-end-position)))))))
+	    (skip-chars-forward " ")
+	    (search-forward " " (line-end-position) 'move)))
+      ;; Success; continue.
+      (when (= (preceding-char) ?\s)
+	(delete-char -1))
+      (insert "\n")
+      (shr-indent)
+      (setq start (point))
+      (shr-vertical-motion shr-internal-width)
+      (when (looking-at " $")
+	(delete-region (point) (line-end-position))))))
 
 (defun shr-find-fill-point (start)
   (let ((bp (point))
@@ -1954,12 +1958,15 @@ The preference is a float determined from `shr-prefer-media-type'."
 
 (defun shr-dom-max-natural-width (dom max)
   (if (eq (dom-tag dom) 'table)
-      (max max (loop for line in (dom-attr dom 'shr-suggested-widths)
-		     maximize (+
-			       shr-table-separator-length
-			       (loop for elem in line
-				     summing (+ (cdr elem)
-						(* 2 shr-table-separator-length))))))
+      (max max (or
+		(loop for line in (dom-attr dom 'shr-suggested-widths)
+		      maximize (+
+				shr-table-separator-length
+				(loop for elem in line
+				      summing
+				      (+ (cdr elem)
+					 (* 2 shr-table-separator-length)))))
+		0))
     (dolist (child (dom-children dom))
       (unless (stringp child)
 	(setq max (max (shr-dom-max-natural-width child max)))))
