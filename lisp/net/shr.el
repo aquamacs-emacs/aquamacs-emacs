@@ -492,7 +492,7 @@ size, and full-buffer size."
    ((eq shr-folding-mode 'none)
     (insert text))
    (t
-    (when (and (string-match "\\`[ \t\n ]" text)
+    (when (and (string-match "\\`[ \t\n\r ]" text)
 	       (not (bolp))
 	       (not (eq (char-after (1- (point))) ? )))
       (insert " "))
@@ -502,9 +502,9 @@ size, and full-buffer size."
       (save-restriction
 	(narrow-to-region start (point))
 	(goto-char start)
-	(when (looking-at "[ \t\n ]+")
+	(when (looking-at "[ \t\n\r ]+")
 	  (replace-match "" t t))
-	(while (re-search-forward "[ \t\n ]+" nil t)
+	(while (re-search-forward "[ \t\n\r ]+" nil t)
 	  (replace-match " " t t))
 	(goto-char (point-max)))
       ;; We may have removed everything we inserted if if was just
@@ -515,8 +515,9 @@ size, and full-buffer size."
 	  (shr-indent)
 	  (shr-mark-fill start))
 	(when shr-use-fonts
-	  (put-text-property start (point) 'face
-			     (or shr-current-font 'variable-pitch))))))))
+	  (add-face-text-property start (point)
+				  (or shr-current-font 'variable-pitch)
+				  t)))))))
 
 (defun shr-fold-lines (start end)
   (if (<= shr-internal-width 0)
@@ -541,9 +542,12 @@ size, and full-buffer size."
       (forward-char 1))))
 
 (defun shr-fold-line ()
-  (let ((shr-indentation (get-text-property (point) 'shr-indentation)))
+  (let ((shr-indentation (get-text-property (point) 'shr-indentation))
+	(continuation (get-text-property
+		       (point) 'shr-continuation-indentation)))
     (put-text-property (point) (1+ (point)) 'shr-indentation nil)
     (shr-indent)
+    (setq shr-indentation (or continuation shr-indentation))
     (shr-vertical-motion shr-internal-width)
     (while (not (eolp))
       ;; We have to do some folding.  First find the first
@@ -722,10 +726,10 @@ size, and full-buffer size."
 				    shr-indentation)))))))
 
 (defun shr-fontize-dom (dom &rest types)
-  (let (shr-start)
+  (let ((start (point)))
     (shr-generic dom)
     (dolist (type types)
-      (shr-add-font (or shr-start (point)) (point) type))))
+      (shr-add-font start (point) type))))
 
 ;; Add face to the region, but avoid putting the font properties on
 ;; blank text at the start of the line, and the newline at the end, to
@@ -1150,8 +1154,7 @@ ones, in case fg and bg are nil."
   (shr-fontize-dom dom 'italic))
 
 (defun shr-tag-strong (dom)
-  (let ((shr-current-font '(variable-pitch (:weight bold))))
-    (shr-fontize-dom dom 'bold)))
+  (shr-fontize-dom dom 'bold))
 
 (defun shr-tag-u (dom)
   (shr-fontize-dom dom 'underline))
@@ -1410,12 +1413,14 @@ The preference is a float determined from `shr-prefer-media-type'."
 		(prog1
 		    (format "%d " shr-list-mode)
 		  (setq shr-list-mode (1+ shr-list-mode)))
-	      shr-bullet))
-	   (shr-indentation (+ shr-indentation
-			       (shr-string-pixel-width bullet))))
+	      shr-bullet)))
       (insert bullet)
-      (shr-generic dom)
-      (shr-mark-fill start))))
+      (shr-mark-fill start)
+      (let ((shr-indentation (+ shr-indentation
+				(shr-string-pixel-width bullet))))
+	(put-text-property start (1+ start)
+			   'shr-continuation-indentation shr-indentation)
+	(shr-generic dom)))))
 
 (defun shr-mark-fill (start)
   (put-text-property start (1+ start)
@@ -1435,8 +1440,7 @@ The preference is a float determined from `shr-prefer-media-type'."
   (shr-generic dom))
 
 (defun shr-tag-h1 (dom)
-  (let ((shr-current-font '(variable-pitch (:height 1.5 :weight bold))))
-    (shr-heading dom 'bold)))
+  (shr-heading dom '(variable-pitch (:height 1.3 :weight bold))))
 
 (defun shr-tag-h2 (dom)
   (shr-heading dom 'bold))
