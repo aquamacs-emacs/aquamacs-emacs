@@ -1815,6 +1815,7 @@ If RECURSIVE, search recursively."
 		  (start end &optional base-url))
 (declare-function shr-insert-document "shr" (dom))
 (defvar shr-blocked-images)
+(defvar shr-use-fonts)
 (defvar gnus-inhibit-images)
 (autoload 'gnus-blocked-images "gnus-art")
 
@@ -1822,7 +1823,10 @@ If RECURSIVE, search recursively."
   ;; Require since we bind its variables.
   (require 'shr)
   (let ((article-buffer (current-buffer))
-	(shr-width (if shr-use-fonts nil fill-column))
+	(shr-width (if (and (boundp 'shr-use-fonts)
+			    shr-use-fonts)
+		       nil
+		     fill-column))
 	(shr-content-function (lambda (id)
 				(let ((handle (mm-get-content-id id)))
 				  (when handle
