@@ -670,6 +670,7 @@ the last file dropped is selected."
 (global-set-key [drag-n-drop] 'ns-drag-n-drop)
 (global-set-key [C-drag-n-drop] 'ns-drag-n-drop-other-frame)
 (global-set-key [M-drag-n-drop] 'ns-drag-n-drop-as-text)
+(global-set-key [A-M-drag-n-drop] 'ns-drag-n-drop)
 (global-set-key [C-M-drag-n-drop] 'ns-drag-n-drop-as-text-other-frame)
 
 ;;;; Frame-related functions.
