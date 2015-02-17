@@ -4,22 +4,51 @@ Put the following into your initialization file:
   (add-to-list 'load-path py-install-directory)
   (require 'python-mode)
 
+#########
 
-Unless other libraries depend on python.el, unloading 'python is recommended, as it seems to destroy python-mode user defined abbreviations:
-
-  (when (featurep 'python) (unload-feature 'python t))
-
-
-
-;;;;;;;;;
+Selecting a Python shell:
 
 Customize default Python shell as `py-shell-name'
 
-`py-shell-name' might be an installed executable as
-shell command `type' would display, but also a
-PATH/TO/(I)PYTHON, of a virtualenv for example
+`py-shell-name' might be an installed default executable as shell
+command `type' would display, but also a PATH/TO/EXECUTABLE
 
-To change the Python default shell see also INSTALL
+If different flavours of Python are installed, customize
+  py-python-command - python2
+  py-python3-command
+  py-ipython-command
+
+  py-python-command-args
+  py-python3-command-args
+  py-ipython-command-args
+
+You might run code by another installed (I)Python-version than
+default.
+
+Normally this would happen if a shebang in buffer specifies it.
+Shebang precedes default py-shell-name.
+
+In case you will run code by default-shell, ignoring shebang, set
+`py-force-py-shell-name-p' to. This might be done also via menu
+Python/.../Switches
+
+Another way to enforce a different shell is specifiyng a path
+--interactively C-u prompts for that-- or using commands which end in
+version like `py-execute-statement-python3' See menu
+Python/Interpreter/Other/Ignoring Defaults
+
+Naming Python-shell buffers in interactive mode:
+
+M-x py-shell RET ==> "*Python*"
+M-x python RET ==> "*Python*"
+M-x ipython RET ==> "*IPython*"
+M-x python3 RET ==> "*Python3*" 
+
+When Path/To/Executable is given
+C-u python RET ==> "*PTE Python*"
+
+
+#########
 
 Most python-mode.el commands start with prefix `py-'
 
@@ -51,23 +80,21 @@ Install a local shell by evaluating
 
 ;;;;;;;;;
 
-When code is executed from current buffer, either
 
-- python-mode-v5-behavior, a quite simple and effective way.
-  Setting `python-mode-v5-behavior-p' to `t' makes it the default.
+Python code might be processed by an
 
-- if a buffer-file exists and buffer is unchanged, it's file is executed as is.
+- interactive Python shell (DEFAULT)
+- non-interactive Python (`py-fast-process-p')
+  The latter, while design for large output, seems more reliable - see  also PROBLEMS.org.
 
-- in all other cases a temporary file is created.
-  Setback: in case of error, returned error code points
-  here, i.e. indicated error-line-numbers are not that of
-  orginal buffer.
+Both processes might run in 
+- session, i.e. start from possible previous state (DEFAULT)
+- dedicated, (`py-dedicated-process-p') run in separate process
+
+There is also
+- python-mode-v5-behavior
 
 ;;;;;;;;;
-To enable code auto-completion:
-
-  (setq py-load-pymacs-p t)
-
 To use auto-complete, just prepend the following lines:
 
   (require 'auto-complete-config)
@@ -77,30 +104,9 @@ or for company:
 
   (autoload 'company-mode "company" nil t)
 
-If you do not use one of those visual completion interfaces, key bindings exist:
-  - C-tab complete symbol
-  - f1    show help
-  - S-f1  show signature
-  - f2    go to
-
-If `py-complete-function' is set, it takes precedence
-
 ;;;;;;;;;
 
-smart-operator minor mode
-
-for example with key "+"
-inserts " + "
-
-smart-operator extended by augmented-assigments
-C-u +
-inserts " += "
-
-customizable boolean `py-smart-operator-mode-p'
-
-;;;;;;;;;
-
-Beside common moves like `defun', `statement' specific Python-mode edits are delivered:
+Beside common moves like `defun', `statement', block specific Python-mode edits are delivered:
 
 `py-expression' and `py-partial-expression'. 
 
@@ -127,22 +133,6 @@ it yields `'spam','
 
 ;;;;;;;;;
 
-Moving, copying, deleting
-
-When moving over or mark code, commands with suffix
-"-bol" take the correspond beginning of line as start
-resp. end. Commands without that suffix take the
-indentation at the beginning resp. the last printable
-character the end - see in menu PyEdit whats implemented.
-
-While commands "py-beginning..." resp. "py-end..." compute the context, 
-selecting the corresponding beginning or end
-new "py-up...", "py-down..." jump regexp-based to the 
-next element in buffer.
-Listed in PyMenu. 
-
-;;;;;;;;;
-
 Customize boolean `py-set-fill-column-p'
 
 If `t', enables use Python specific `fill-column' according to
@@ -157,13 +147,14 @@ different value of `fill-column' than emacs-wide
 
 ;;;;;;;;;
 
-- customizable `py-output-buffer'.
+- Output
 
   `py-execute-...'-commands arrive in buffer created by
   `py-shell'. It's name is composed WRT to Python
-  version used, it's path etc. If boolean
-  `py-enforce-output-buffer-p' is non-nil, value of
-  `py-output-buffer' is taken instead.
+  version used, it's path etc. 
+
+  Result of commands ending  "-fast"
+  arrives in `py-fast-output-buffer'
   
 ;;;;;;;;;
 
@@ -178,6 +169,17 @@ with IPython, it feels a demi-second slower. Also when
 starting a session, first completion might fail, while
 succeeding afterwards. Any bug reports, which might
 help truck down the issue, are highly appreciated.
+
+;;;;;;;;;
+Auto-completion  
+
+Either use Pymacs and `company-mode' with `pycomplete.el' etc. --load
+stuff from folder completion--
+
+or switch `py-auto-completion-mode-p' - which relies on
+`py-shell-complete', i.e. calls the current Python process.
+
+Extern tools like jedi-server/mode should work too.
 
 ;;;;;;;;;
 

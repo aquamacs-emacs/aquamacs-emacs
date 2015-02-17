@@ -1208,12 +1208,14 @@ Adds default fonts such as `monospace' where appropriate."
                (setq tail (cdr tail)))))
       (pop head))
     (let ((size-list
-           (loop
-            for f in face-list
-            for h = (htmlize-face-attribute-in-buffer f :height)
-            collect (if (eq h 'unspecified) nil h))))
-      (reduce 'htmlize-merge-size (cons nil size-list)))))
-
+	   (loop
+	    for f in face-list
+	    for h = (htmlize-face-attribute-in-buffer f :height)
+	    collect (if (eq h 'unspecified) nil h))))
+      (let ((size
+	     (reduce 'htmlize-merge-size (cons nil size-list))))
+	(if size (round (* htmlize-font-size-scaling-factor size)))))))
+)
 (defun htmlize-face-css-name (face)
   ;; Generate the css-name property for the given face.  Emacs places
   ;; no restrictions on the names of symbols that represent faces --
