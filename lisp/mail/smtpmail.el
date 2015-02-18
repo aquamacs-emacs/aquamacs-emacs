@@ -365,14 +365,7 @@ The list is in preference order.")
 		(make-directory smtpmail-queue-dir t))
 	      (with-current-buffer buffer-data
 		(erase-buffer)
-		(set-buffer-file-coding-system
-		 ;; We will be reading the file with no-conversion in
-		 ;; smtpmail-send-queued-mail below, so write it out
-		 ;; with Unix EOLs.
-		 (coding-system-change-eol-conversion
-		  (or smtpmail-code-conv-from 'undecided)
-		  'unix)
-		 nil t)
+		(set-buffer-file-coding-system smtpmail-code-conv-from nil t)
 		(insert-buffer-substring tembuf)
 		(write-file file-data)
 		(set-buffer buffer-elisp)

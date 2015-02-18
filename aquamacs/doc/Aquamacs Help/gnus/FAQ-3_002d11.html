@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+<title>FAQ 3-11 - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="FAQ-3-_002d-Getting-Messages.html#FAQ-3-_002d-Getting-Messages" title="FAQ 3 - Getting Messages">
+<link rel="prev" href="FAQ-3_002d10.html#FAQ-3_002d10" title="FAQ 3-10">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="FAQ-3-11"></a>
+<a name="FAQ-3_002d11"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="FAQ-3_002d10.html#FAQ-3_002d10">FAQ 3-10</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="FAQ-3-_002d-Getting-Messages.html#FAQ-3-_002d-Getting-Messages">FAQ 3 - Getting Messages</a>
+<hr>
+</div>
+
+<h5 class="subsubheading">Question 3.11</h5>
+
+<p>Can I tell Gnus not to delete the mails on the server it
+retrieves via POP3?
+
+<h5 class="subsubheading">Answer</h5>
+
+<p>First of all, that's not the way POP3 is intended to work,
+if you have the possibility, you should use the IMAP
+Protocol if you want your messages to stay on the
+server. Nevertheless there might be situations where you
+need the feature, but sadly Gnus itself has no predefined
+functionality to do so.
+
+   <p>However this is Gnus county so there are possibilities to
+achieve what you want. The easiest way is to get an external
+program which retrieves copies of the mail and stores them
+on disk, so Gnus can read it from there. On Unix systems you
+could use e.g. fetchmail for this, on MS Windows you can use
+Hamster, an excellent local news and mail server.
+
+   <p>The other solution would be, to replace the method Gnus
+uses to get mail from POP3 servers by one which is capable
+of leaving the mail on the server. If you use XEmacs, get
+the package mail-lib, it includes an enhanced pop3.el,
+look in the file, there's documentation on how to tell
+Gnus to use it and not to delete the retrieved mail. For
+GNU Emacs look for the file epop3.el which can do the same
+(If you know the home of this file, please send me an
+e-mail). You can also tell Gnus to use an external program
+(e.g. fetchmail) to fetch your mail, see the info node
+"Mail Source Specifiers" in the Gnus manual on how to do
+it.
+
+   </body></html>
+

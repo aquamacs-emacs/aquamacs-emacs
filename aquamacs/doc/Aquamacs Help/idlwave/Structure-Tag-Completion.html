@@ -1,0 +1,92 @@
+<html lang="en">
+<head>
+<title>Structure Tag Completion - IDLWAVE User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="IDLWAVE User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Completion.html#Completion" title="Completion">
+<link rel="prev" href="Class-and-Keyword-Inheritance.html#Class-and-Keyword-Inheritance" title="Class and Keyword Inheritance">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents IDLWAVE, a major mode for editing IDL files with
+Emacs, and interacting with an IDL shell run as a subprocess.
+
+This is edition 6.1 of the IDLWAVE User Manual for IDLWAVE
+6.1.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Structure-Tag-Completion"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Class-and-Keyword-Inheritance.html#Class-and-Keyword-Inheritance">Class and Keyword Inheritance</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Completion.html#Completion">Completion</a>
+<hr>
+</div>
+
+<h4 class="subsection">4.4.5 Structure Tag Completion</h4>
+
+<p><a name="index-Completion_002c-structure-tag-167"></a><a name="index-Structure-tag-completion-168"></a>
+In many programs, especially those involving widgets, large structures
+(e.g. the &lsquo;<samp><span class="samp">state</span></samp>&rsquo; structure) are used to communicate among
+routines.  It is very convenient to be able to complete structure tags,
+in the same way as for instance variables (tags) of the &lsquo;<samp><span class="samp">self</span></samp>&rsquo;
+object (see <a href="Object-Method-Completion-and-Class-Ambiguity.html#Object-Method-Completion-and-Class-Ambiguity">Object Method Completion and Class Ambiguity</a>).  Add-in
+code for structure tag completion is available in the form of a loadable
+completion module: <samp><span class="file">idlw-complete-structtag.el</span></samp>.  Tag completion in
+structures is highly ambiguous (much more so than &lsquo;<samp><span class="samp">self</span></samp>&rsquo;
+completion), so <code>idlw-complete-structtag</code> makes an unusual and very
+specific assumption: the exact same variable name is used to refer to
+the structure in all parts of the program.  This is entirely unenforced
+by the IDL language, but is a typical convention.  If you consistently
+refer to the same structure with the same variable name
+(e.g. &lsquo;<samp><span class="samp">state</span></samp>&rsquo;), structure tags which are read from its definition
+in the same file can be used for completion.
+
+   <p>Structure tag completion is not enabled by default.  To enable it,
+simply add the following to your <samp><span class="file">.emacs</span></samp>:
+
+<pre class="lisp">        (add-hook 'idlwave-load-hook
+                  (lambda () (require 'idlw-complete-structtag)))
+</pre>
+   <p>Once enabled, you'll also be able to access online help on the structure
+tags, using the usual methods (see <a href="Online-Help.html#Online-Help">Online Help</a>).  In addition,
+structure variables in the shell will be queried for tag names, similar
+to the way object variables in the shell are queried for method names. 
+So, e.g.:
+
+<pre class="example">     IDL&gt; st.[Tab]
+</pre>
+   <p class="noindent">will complete with all structure fields of the structure
+<code>st</code>.
+
+   </body></html>
+

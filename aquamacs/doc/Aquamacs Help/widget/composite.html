@@ -1,0 +1,144 @@
+<html lang="en">
+<head>
+<title>composite - The Emacs Widget Library</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Emacs Widget Library">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Sexp-Types.html#Sexp-Types" title="Sexp Types">
+<link rel="prev" href="atoms.html#atoms" title="atoms">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="composite"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="atoms.html#atoms">atoms</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Sexp-Types.html#Sexp-Types">Sexp Types</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h4 class="subsection">Composite Sexp Widgets</h4>
+
+<p><a name="index-composite-sexp-widgets-127"></a>
+The syntax for the composite widget construct is:
+
+<pre class="example">     <var>type</var> ::= (<var>construct</var> [<var>keyword</var> <var>argument</var>]...  <var>component</var>...)
+</pre>
+   <p class="noindent">where each <var>component</var> must be a widget type.  Each component widget
+will be displayed in the buffer, and will be editable by the user.
+
+<div class="defun">
+&mdash; Widget: <b>cons</b><var><a name="index-cons-128"></a></var><br>
+<blockquote><p>The value of a <code>cons</code> widget must be a cons-cell whose <span class="sc">car</span>
+and <span class="sc">cdr</span> have two specified types.  It uses this syntax:
+
+     <pre class="example">          <var>type</var> ::= (cons [<var>keyword</var> <var>argument</var>]...  <var>car-type</var> <var>cdr-type</var>)
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Widget: <b>choice</b><var><a name="index-choice-129"></a></var><br>
+<blockquote><p>The value matched by a <code>choice</code> widget must have one of a fixed
+set of types.  The widget's syntax is as follows:
+
+     <pre class="example">          <var>type</var> ::= (choice [<var>keyword</var> <var>argument</var>]...  <var>type</var> ... )
+</pre>
+        <p>The value of a <code>choice</code> widget can be anything that matches any of the
+<var>types</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Widget: <b>list</b><var><a name="index-list-130"></a></var><br>
+<blockquote><p>The value of a <code>list</code> widget must be a list whose element types
+match the specified component types:
+
+     <pre class="example">          <var>type</var> ::= (list [<var>keyword</var> <var>argument</var>]...  <var>component-type</var>...)
+</pre>
+        <p>Thus, <code>(list string number)</code> matches lists of two elements,
+the first being a string and the second being a number. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Widget: <b>vector</b><var><a name="index-vector-131"></a></var><br>
+<blockquote><p>The <code>vector</code> widget is like the <code>list</code> widget but matches
+vectors instead of lists.  Thus, <code>(vector string number)</code> matches
+vectors of two elements, the first being a string and the second being
+a number. 
+</p></blockquote></div>
+
+   <p>The above suffice for specifying fixed size lists and vectors.  To get
+variable length lists and vectors, you can use a <code>choice</code>,
+<code>set</code>, or <code>repeat</code> widget together with the <code>:inline</code>
+keyword.  If any component of a composite widget has the
+<code>:inline</code> keyword set, its value must be a list which will then
+be spliced into the composite.  For example, to specify a list whose
+first element must be a file name, and whose remaining elements should
+either be the symbol <code>t</code> or two strings (file names), you can use
+the following widget specification:
+
+<pre class="example">     (list file
+           (choice (const t)
+                   (list :inline t
+                         :value ("foo" "bar")
+                         string string)))
+</pre>
+   <p>The value of a widget of this type will either have the form
+<code>(file t)</code> or <code>(file </code><var>string</var> <var>string</var><code>)</code>.
+
+   <p>This concept of <code>:inline</code> may be hard to understand.  It was
+certainly hard to implement, so instead of confusing you more by
+trying to explain it here, I'll just suggest you meditate over it for
+a while.
+
+<div class="defun">
+&mdash; Widget: <b>set</b><var><a name="index-set-132"></a></var><br>
+<blockquote><p>Specifies a type whose values are the lists whose elements all belong
+to a given set.  The order of elements of the list is not significant. 
+Here's the syntax:
+
+     <pre class="example">          <var>type</var> ::= (set [<var>keyword</var> <var>argument</var>]...  <var>permitted-element</var> ... )
+</pre>
+        <p>Use <code>const</code> to specify each permitted element, like this:
+<code>(set (const a) (const b))</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Widget: <b>repeat</b><var><a name="index-repeat-133"></a></var><br>
+<blockquote><p>Specifies a list of any number of elements that fit a certain type.
+
+     <pre class="example">          <var>type</var> ::= (repeat [<var>keyword</var> <var>argument</var>]...  <var>type</var>)
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

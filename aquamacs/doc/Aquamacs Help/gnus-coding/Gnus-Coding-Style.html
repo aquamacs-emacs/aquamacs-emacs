@@ -1,0 +1,218 @@
+<html lang="en">
+<head>
+<title>Gnus Coding Style - Gnus Coding Style and Maintainance Guide</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Gnus Coding Style and Maintainance Guide">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="index.html#Top" title="Top">
+<link rel="next" href="Gnus-Maintainance-Guide.html#Gnus-Maintainance-Guide" title="Gnus Maintainance Guide">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2004, 2005, 2007, 2008, 2009, 2010  Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License'' in the Gnus manual.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Gnus-Coding-Style"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Gnus-Maintainance-Guide.html#Gnus-Maintainance-Guide">Gnus Maintainance Guide</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="index.html#Top">Top</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">1 Gnus Coding Style</h2>
+
+<h3 class="section">1.1 Dependencies</h3>
+
+<p>The Gnus distribution contains a lot of libraries that have been written
+for Gnus and used intensively for Gnus.  But many of those libraries are
+useful on their own.  E.g. other Emacs Lisp packages might use the
+<acronym>MIME</acronym> library See <a href="../emacs-mime/index.html#Top">Top</a>.
+
+<h4 class="subsection">1.1.1 General purpose libraries</h4>
+
+     <dl>
+<dt><samp><span class="file">netrc.el</span></samp><dd><samp><span class="file">.netrc</span></samp> parsing functionality. 
+<!-- As of 2005-10-21... -->
+There are no Gnus dependencies in this file.
+
+     <br><dt><samp><span class="file">format-spec.el</span></samp><dd>Functions for formatting arbitrary formatting strings. 
+<!-- As of 2005-10-21... -->
+There are no Gnus dependencies in this file.
+
+     <br><dt><samp><span class="file">hex-util.el</span></samp><dd>Functions to encode/decode hexadecimal string. 
+<!-- As of 2007-08-25... -->
+There are no Gnus dependencies in these files. 
+</dl>
+
+<h4 class="subsection">1.1.2 Encryption and security</h4>
+
+     <dl>
+<dt><samp><span class="file">encrypt.el</span></samp><dd>File encryption routines
+<!-- As of 2005-10-25... -->
+There are no Gnus dependencies in this file.
+
+     <br><dt><samp><span class="file">password.el</span></samp><dd>Read passwords from user, possibly using a password cache. 
+<!-- As of 2005-10-21... -->
+There are no Gnus dependencies in this file.
+
+     <br><dt><samp><span class="file">tls.el</span></samp><dd>TLS/SSL support via wrapper around GnuTLS
+<!-- As of 2005-10-21... -->
+There are no Gnus dependencies in this file.
+
+     <br><dt><samp><span class="file">pgg*.el</span></samp><dd>Glue for the various PGP implementations. 
+<!-- As of 2005-10-21... -->
+There are no Gnus dependencies in these files.
+
+     <br><dt><samp><span class="file">sha1.el</span></samp><dd>SHA1 Secure Hash Algorithm. 
+<!-- As of 2007-08-25... -->
+There are no Gnus dependencies in these files. 
+</dl>
+
+<h4 class="subsection">1.1.3 Networking</h4>
+
+     <dl>
+<dt><samp><span class="file">dig.el</span></samp><dd>Domain Name System dig interface. 
+<!-- As of 2005-10-21... -->
+There are no serious Gnus dependencies in this file.  Uses
+<code>gnus-run-mode-hooks</code> (a wrapper function).
+
+     <br><dt><samp><span class="file">dns.el, dns-mode.el</span></samp><dd>Domain Name Service lookups. 
+<!-- As of 2005-10-21... -->
+There are no Gnus dependencies in these files. 
+</dl>
+
+<h4 class="subsection">1.1.4 Mail and News related RFCs</h4>
+
+     <dl>
+<dt><samp><span class="file">pop3.el</span></samp><dd>Post Office Protocol (RFC 1460) interface. 
+<!-- As of 2005-10-21... -->
+There are no Gnus dependencies in this file.
+
+     <br><dt><samp><span class="file">imap.el</span></samp><dd><acronym>IMAP</acronym> library. 
+<!-- As of 2005-10-21... -->
+There are no Gnus dependencies in this file.
+
+     <br><dt><samp><span class="file">ietf-drums.el</span></samp><dd>Functions for parsing RFC822bis headers. 
+<!-- As of 2005-10-21... -->
+There are no Gnus dependencies in this file.
+
+     <br><dt><samp><span class="file">rfc1843.el</span></samp><dd>HZ (rfc1843) decoding.  HZ is a data format for exchanging files of
+arbitrarily mixed Chinese and <acronym>ASCII</acronym> characters. 
+<!-- As of 2005-10-21... -->
+<code>rfc1843-gnus-setup</code> seem to be useful only for Gnus.  Maybe this
+function should be relocated to remove dependencies on Gnus.  Other
+minor dependencies: <code>gnus-newsgroup-name</code> could be eliminated by
+using an optional argument to <code>rfc1843-decode-article-body</code>.
+
+     <br><dt><samp><span class="file">rfc2045.el</span></samp><dd>Functions for decoding rfc2045 headers
+<!-- As of 2007-08-25... -->
+There are no Gnus dependencies in these files.
+
+     <br><dt><samp><span class="file">rfc2047.el</span></samp><dd>Functions for encoding and decoding rfc2047 messages
+<!-- As of 2007-08-25... -->
+There are no Gnus dependencies in these files. 
+Only a couple of tests for gnusy symbols.
+
+     <br><dt><samp><span class="file">rfc2104.el</span></samp><dd>RFC2104 Hashed Message Authentication Codes
+<!-- As of 2007-08-25... -->
+There are no Gnus dependencies in these files.
+
+     <br><dt><samp><span class="file">rfc2231.el</span></samp><dd>Functions for decoding rfc2231 headers
+<!-- As of 2007-08-25... -->
+There are no Gnus dependencies in these files.
+
+     <br><dt><samp><span class="file">flow-fill.el</span></samp><dd>Interpret RFC2646 "flowed" text. 
+<!-- As of 2005-10-27... -->
+There are no Gnus dependencies in this file.
+
+     <br><dt><samp><span class="file">uudecode.el</span></samp><dd>Elisp native uudecode. 
+<!-- As of 2005-12-06... -->
+There are no Gnus dependencies in this file. 
+<!-- ... but the custom group is gnus-extract. -->
+
+     <br><dt><samp><span class="file">canlock.el</span></samp><dd>Functions for Cancel-Lock feature
+<!-- Cf. draft-ietf-usefor-cancel-lock-01.txt -->
+<!-- Although this draft has expired, Canlock-Lock revived in 2007 when -->
+<!-- major news providers (e.g. news.individual.org) started to use it. -->
+<!-- As of 2007-08-25... -->
+There are no Gnus dependencies in these files.
+
+</dl>
+
+<h4 class="subsection">1.1.5 message</h4>
+
+<p>All message composition from Gnus (both mail and news) takes place in
+Message mode buffers.  Message mode is intended to be a replacement for
+Emacs mail mode.  There should be no Gnus dependencies in
+<samp><span class="file">message.el</span></samp>.  Alas it is not anymore.  Patches and suggestions to
+remove the dependencies are welcome.
+
+<!-- message.el requires nnheader which requires gnus-util. -->
+<h4 class="subsection">1.1.6 Emacs <acronym>MIME</acronym></h4>
+
+<p>The files <samp><span class="file">mml*.el</span></samp> and <samp><span class="file">mm-*.el</span></samp> provide <acronym>MIME</acronym>
+functionality for Emacs.
+
+   <p><acronym>MML</acronym> (<acronym>MIME</acronym> Meta Language) is supposed to be
+independent from Gnus.  Alas it is not anymore.  Patches and suggestions
+to remove the dependencies are welcome.
+
+<h4 class="subsection">1.1.7 Gnus backends</h4>
+
+<p>The files <samp><span class="file">nn*.el</span></samp> provide functionality for accessing NNTP
+(<samp><span class="file">nntp.el</span></samp>), IMAP (<samp><span class="file">nnimap.el</span></samp>) and several other Mail back
+ends (probably <samp><span class="file">nnml.el</span></samp>, <samp><span class="file">nnfolder.el</span></samp> and
+<samp><span class="file">nnmaildir.el</span></samp> are the most widely used mail back ends).
+
+<!-- mm-uu requires nnheader which requires gnus-util.  message.el also -->
+<!-- requires nnheader. -->
+<h3 class="section">1.2 Compatibility</h3>
+
+<p>No Gnus and Gnus 5.10.10 and up should work on:
+     <ul>
+<li>Emacs 21.1 and up. 
+<li>XEmacs 21.4 and up. 
+</ul>
+
+   <p>Gnus 5.10.8 and below should work on:
+     <ul>
+<li>Emacs 20.7 and up. 
+<li>XEmacs 21.1 and up. 
+</ul>
+
+   </body></html>
+

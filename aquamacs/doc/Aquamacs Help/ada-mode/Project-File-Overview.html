@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+<title>Project File Overview - Ada Mode</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Ada Mode">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Project-files.html#Project-files" title="Project files">
+<link rel="prev" href="Project-files.html#Project-files" title="Project files">
+<link rel="next" href="GUI-Editor.html#GUI-Editor" title="GUI Editor">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Project-File-Overview"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="GUI-Editor.html#GUI-Editor">GUI Editor</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Project-files.html#Project-files">Project files</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Project-files.html#Project-files">Project files</a>
+<hr>
+</div>
+
+<h3 class="section">5.1 Project File Overview</h3>
+
+<p>Project files have a simple syntax; they may be edited directly. Each
+line specifies a project variable name and its value, separated by &ldquo;=&rdquo;:
+<pre class="example">     src_dir=/Projects/my_project/src_1
+     src_dir=/Projects/my_project/src_2
+</pre>
+   <p>Some variables (like <code>src_dir</code>) are lists; multiple occurrences
+are concatenated.
+
+   <p>There must be no space between the variable name and &ldquo;=&rdquo;, and no
+trailing spaces.
+
+   <p>Alternately, a GUI editor for project files is available (see <a href="GUI-Editor.html#GUI-Editor">GUI Editor</a>). It uses Emacs widgets, similar to Emacs customize.
+
+   <p>The GUI editor also provides a convenient way to view current project
+settings, if they have been modified using menu commands rather than
+by editing the project file.
+
+   <p>After the first Ada mode build command is invoked, there is always a
+current project file, given by the lisp variable
+<code>ada-prj-default-project-file</code>. Currently, the only way to show
+the current project file is to invoke the GUI editor.
+
+   <p>To find the project file the first time, Ada mode uses the following
+search algorithm:
+
+     <ul>
+<li>If <code>ada-prj-default-project-file</code> is set, use that.
+
+     <li>Otherwise, search for a file in the current directory with
+the same base name as the Ada file, but extension given by
+<code>ada-prj-file-extension</code> (default <code>".adp"</code>).
+
+     <li>If not found, search for <samp><span class="file">*.adp</span></samp> in the current directory; if
+several are found, prompt the user to select one.
+
+     <li>If none are found, use <samp><span class="file">default.adp</span></samp> in the current directory (even
+if it does not exist).
+
+   </ul>
+
+   <p>This algorithm always sets <code>ada-prj-default-project-file</code>, even
+when the file does not actually exist.
+
+   <p>To change the project file before or after the first one is found,
+invoke &lsquo;<samp><span class="samp">Ada | Project | Load ...</span></samp>&rsquo;.
+
+   <p>Or, in lisp, evaluate <code>(ada-set-default-project-file "/path/file.adp")</code>. 
+This sets <code>ada-prj-default-project-file</code>, and reads the project file.
+
+   <p>You can also specify a GNAT project file to &lsquo;<samp><span class="samp">Ada | Project | Load
+...</span></samp>&rsquo; or <code>ada-set-default-project-file</code>. Emacs Ada mode checks the
+file extension; if it is <code>.gpr</code>, the file is treated as a GNAT
+project file. Any other extension is treated as an Emacs Ada mode
+project file.
+
+   </body></html>
+

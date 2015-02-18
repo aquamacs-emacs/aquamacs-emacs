@@ -1,0 +1,133 @@
+<html lang="en">
+<head>
+<title>Lexical Binding - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Variable-Scoping.html#Variable-Scoping" title="Variable Scoping">
+<link rel="prev" href="Dynamic-Binding-Tips.html#Dynamic-Binding-Tips" title="Dynamic Binding Tips">
+<link rel="next" href="Using-Lexical-Binding.html#Using-Lexical-Binding" title="Using Lexical Binding">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
+
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Lexical-Binding"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Using-Lexical-Binding.html#Using-Lexical-Binding">Using Lexical Binding</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Dynamic-Binding-Tips.html#Dynamic-Binding-Tips">Dynamic Binding Tips</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Variable-Scoping.html#Variable-Scoping">Variable Scoping</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.9.3 Lexical Binding</h4>
+
+<p>Optionally, you can create lexical bindings in Emacs Lisp.  A
+lexically bound variable has <dfn>lexical scope</dfn>, meaning that any
+reference to the variable must be located textually within the binding
+construct.
+
+   <p>Here is an example
+(see <a href="Using-Lexical-Binding.html#Using-Lexical-Binding">Using Lexical Binding</a>, for how to actually enable lexical binding):
+
+<pre class="example">     (let ((x 1))    ; <code>x</code><span class="roman"> is lexically bound.</span>
+       (+ x 3))
+          &rArr; 4
+     
+     (defun getx ()
+       x)            ; <code>x</code><span class="roman"> is used ``free'' in this function.</span>
+     
+     (let ((x 1))    ; <code>x</code><span class="roman"> is lexically bound.</span>
+       (getx))
+     error--&gt; Symbol's value as variable is void: x
+</pre>
+   <p class="noindent">Here, the variable <code>x</code> has no global value.  When it is lexically
+bound within a <code>let</code> form, it can be used in the textual confines
+of that <code>let</code> form.  But it can <em>not</em> be used from within a
+<code>getx</code> function called from the <code>let</code> form, since the
+function definition of <code>getx</code> occurs outside the <code>let</code> form
+itself.
+
+   <p><a name="index-lexical-environment-646"></a>  Here is how lexical binding works.  Each binding construct defines a
+<dfn>lexical environment</dfn>, specifying the symbols that are bound
+within the construct and their local values.  When the Lisp evaluator
+wants the current value of a variable, it looks first in the lexical
+environment; if the variable is not specified in there, it looks in
+the symbol's value cell, where the dynamic value is stored.
+
+   <p><a name="index-closures_002c-example-of-using-647"></a>  Lexical bindings have indefinite extent.  Even after a binding
+construct has finished executing, its lexical environment can be
+&ldquo;kept around&rdquo; in Lisp objects called <dfn>closures</dfn>.  A closure is
+created when you define a named or anonymous function with lexical
+binding enabled.  See <a href="Closures.html#Closures">Closures</a>, for details.
+
+   <p>When a closure is called as a function, any lexical variable
+references within its definition use the retained lexical environment. 
+Here is an example:
+
+<pre class="example">     (defvar my-ticker nil)   ; <span class="roman">We will use this dynamically bound</span>
+                              ; <span class="roman">variable to store a closure.</span>
+     
+     (let ((x 0))             ; <code>x</code><span class="roman"> is lexically bound.</span>
+       (setq my-ticker (lambda ()
+                         (setq x (1+ x)))))
+         &rArr; (closure ((x . 0) t) ()
+               (setq x (1+ x)))
+     
+     (funcall my-ticker)
+         &rArr; 1
+     
+     (funcall my-ticker)
+         &rArr; 2
+     
+     (funcall my-ticker)
+         &rArr; 3
+     
+     x                        ; <span class="roman">Note that </span><code>x</code><span class="roman"> has no global value.</span>
+     error--&gt; Symbol's value as variable is void: x
+</pre>
+   <p class="noindent">The <code>let</code> binding defines a lexical environment in which the
+variable <code>x</code> is locally bound to 0.  Within this binding
+construct, we define a lambda expression which increments <code>x</code> by
+one and returns the incremented value.  This lambda expression is
+automatically turned into a closure, in which the lexical environment
+lives on even after the <code>let</code> binding construct has exited.  Each
+time we evaluate the closure, it increments <code>x</code>, using the
+binding of <code>x</code> in that lexical environment.
+
+   <p>Note that functions like <code>symbol-value</code>, <code>boundp</code>, and
+<code>set</code> only retrieve or modify a variable's dynamic binding
+(i.e., the contents of its symbol's value cell).  Also, the code in
+the body of a <code>defun</code> or <code>defmacro</code> cannot refer to
+surrounding lexical variables.
+
+   <p>Currently, lexical binding is not much used within the Emacs
+sources.  However, we expect its importance to increase in the future. 
+Lexical binding opens up a lot more opportunities for optimization, so
+Emacs Lisp code that makes use of lexical binding is likely to run
+faster in future Emacs versions.  Such code is also much more friendly
+to concurrency, which we want to add to Emacs in the near future.
+
+   </body></html>
+

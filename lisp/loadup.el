@@ -120,6 +120,7 @@
 
 (load "cus-face")
 (load "faces")  ; after here, `defface' may be used.
+(load "aquamacs-faces")
 
 (load "button")
 (load "startup")
@@ -329,6 +330,8 @@ lost after dumping")))
 				 (substring name (length base) exelen))))
 			     files)))
       (setq emacs-repository-version (condition-case nil (emacs-repository-get-version)
+                              (error nil)))
+      (setq emacs-git-version (condition-case nil (emacs-git-get-version)
                               (error nil)))
       ;; `emacs-version' is a constant, so we shouldn't change it with `setq'.
       (defconst emacs-version

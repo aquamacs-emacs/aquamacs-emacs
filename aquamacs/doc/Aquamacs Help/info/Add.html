@@ -1,0 +1,132 @@
+<html lang="en">
+<head>
+<title>Add - Info</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Info">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Expert-Info.html#Expert-Info" title="Expert Info">
+<link rel="next" href="Menus.html#Menus" title="Menus">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file describes how to use Info, the on-line, menu-driven GNU
+documentation system.
+
+Copyright (C) 1989, 1992, 1996, 1997, 1998, 1999, 2000, 2001,
+2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License'' in the Emacs manual.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Add"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Menus.html#Menus">Menus</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Expert-Info.html#Expert-Info">Expert Info</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h3 class="section">3.1 Adding a new node to Info</h3>
+
+<p>To add a new topic to the list in the Info directory, you must:
+
+     <ol type=1 start=1>
+<li>Create some nodes, in some file, to document that topic. 
+<li>Put that topic in the menu in the directory.  See <a href="Menus.html#Menus">Menu</a>.
+        </ol>
+
+   <p><a name="index-node-delimiters-90"></a>  The new node can live in an existing documentation file, or in a new
+one.  It must have a &lsquo;<samp><span class="samp">^_</span></samp>&rsquo; character before it (invisible to the
+user; this node has one but you cannot see it), and it ends with either
+a &lsquo;<samp><span class="samp">^_</span></samp>&rsquo;, a &lsquo;<samp><span class="samp">^L</span></samp>&rsquo; (&ldquo;formfeed&rdquo;), or the end of file.<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>
+
+   <p>The &lsquo;<samp><span class="samp">^_</span></samp>&rsquo; starting a node must be followed by a newline or a
+&lsquo;<samp><span class="samp">^L</span></samp>&rsquo; newline, after which comes the node's header line.  The
+header line must give the node's name (by which Info finds it), and
+state the names of the &lsquo;<samp><span class="samp">Next</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Previous</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">Up</span></samp>&rsquo;
+nodes (if there are any).  As you can see, this node's &lsquo;<samp><span class="samp">Up</span></samp>&rsquo; node
+is the node &lsquo;<samp><span class="samp">Expert Info</span></samp>&rsquo;.  The &lsquo;<samp><span class="samp">Next</span></samp>&rsquo; node is &lsquo;<samp><span class="samp">Menus</span></samp>&rsquo;.
+
+   <p><a name="index-node-header-line-format-91"></a><a name="index-format-of-node-headers-92"></a>  The keywords <dfn>Node</dfn>, <dfn>Next</dfn>, <dfn>Previous</dfn>, and <dfn>Up</dfn>
+may appear in any order, anywhere in the header line, but the
+recommended order is the one in this sentence.  Each keyword must be
+followed by a colon, spaces and tabs, and then the appropriate name. 
+The name may be terminated with a tab, a comma, or a newline.  A space
+does not end it; node names may contain spaces.  The case of letters
+in the names is insignificant.
+
+   <p><a name="index-node-name-format-93"></a><a name="index-Directory-node-94"></a>  A node name has two forms.  A node in the current file is named by
+what appears after the &lsquo;<samp><span class="samp">Node: </span></samp>&rsquo; in that node's first line.  For
+example, this node's name is &lsquo;<samp><span class="samp">Add</span></samp>&rsquo;.  A node in another file is
+named by &lsquo;<samp><span class="samp">(</span><var>filename</var><span class="samp">)</span><var>node-within-file</var></samp>&rsquo;, as in
+&lsquo;<samp><span class="samp">(info)Add</span></samp>&rsquo; for this node.  If the file name starts with &lsquo;<samp><span class="samp">./</span></samp>&rsquo;,
+then it is relative to the current directory; otherwise, it is
+relative starting from the standard directory for Info files of your
+site.  The name &lsquo;<samp><span class="samp">(</span><var>filename</var><span class="samp">)Top</span></samp>&rsquo; can be abbreviated to just
+&lsquo;<samp><span class="samp">(</span><var>filename</var><span class="samp">)</span></samp>&rsquo;.  By convention, the name &lsquo;<samp><span class="samp">Top</span></samp>&rsquo; is used
+for the &ldquo;highest&rdquo; node in any single file&mdash;the node whose &lsquo;<samp><span class="samp">Up</span></samp>&rsquo;
+points out of the file.  The &lsquo;<samp><span class="samp">Directory</span></samp>&rsquo; node is <samp><span class="file">(dir)</span></samp>, it
+points to a file <samp><span class="file">dir</span></samp> which holds a large menu listing all the
+Info documents installed on your site.  The &lsquo;<samp><span class="samp">Top</span></samp>&rsquo; node of a
+document file listed in the &lsquo;<samp><span class="samp">Directory</span></samp>&rsquo; should have an &lsquo;<samp><span class="samp">Up:
+(dir)</span></samp>&rsquo; in it.
+
+   <p><a name="index-unstructured-documents-95"></a>  The node name <kbd>*</kbd> is special: it refers to the entire file. 
+Thus, <kbd>g*</kbd> shows you the whole current file.  The use of the
+node <kbd>*</kbd> is to make it possible to make old-fashioned,
+unstructured files into nodes of the tree.
+
+   <p>The &lsquo;<samp><span class="samp">Node:</span></samp>&rsquo; name, in which a node states its own name, must not
+contain a file name, since when Info searches for a node, it does not
+expect a file name to be there.  The &lsquo;<samp><span class="samp">Next</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Previous</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">Up</span></samp>&rsquo; names may contain them.  In this node, since the &lsquo;<samp><span class="samp">Up</span></samp>&rsquo;
+node is in the same file, it was not necessary to use one.
+
+   <p>Note that the nodes in this file have a file name in the header
+line.  The file names are ignored by Info, but they serve as comments
+to help identify the node for the user.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> If
+you put in a &lsquo;<samp><span class="samp">^L</span></samp>&rsquo; to end a new node, be sure that there is a
+&lsquo;<samp><span class="samp">^_</span></samp>&rsquo; after it to start the next one, since &lsquo;<samp><span class="samp">^L</span></samp>&rsquo; cannot
+<em>start</em> a node.  Also, a nicer way to make a node boundary be a
+page boundary as well is to put a &lsquo;<samp><span class="samp">^L</span></samp>&rsquo; <em>right after</em> the
+&lsquo;<samp><span class="samp">^_</span></samp>&rsquo;.</p>
+
+   <hr></div>
+
+   </body></html>
+

@@ -1,0 +1,89 @@
+<html lang="en">
+<head>
+<title>Controlling case sensitivity - GNU Emacs FAQ</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs FAQ">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Common-requests.html#Common-requests" title="Common requests">
+<link rel="prev" href="Replacing-highlighted-text.html#Replacing-highlighted-text" title="Replacing highlighted text">
+<link rel="next" href="Working-with-unprintable-characters.html#Working-with-unprintable-characters" title="Working with unprintable characters">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+2009, 2010 Free Software Foundation, Inc.
+
+Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
+Reuven M. Lerner
+
+Copyright (C) 1992, 1993 Steven Byrnes
+
+Copyright (C) 1990, 1991, 1992 Joseph Brian Wells
+
+
+     This list of frequently asked questions about GNU Emacs with
+     answers (``FAQ'') may be translated into other languages,
+     transformed into other formats (e.g. Texinfo, Info, WWW, WAIS),
+     and updated with new information.
+
+     The same conditions apply to any derivative of the FAQ as apply to
+     the FAQ itself.  Every copy of the FAQ must include this notice or
+     an approved translation, information on who is currently
+     maintaining the FAQ and how to contact them (including their
+     e-mail address), and information on where the latest version of
+     the FAQ is archived (including FTP information).
+
+     The FAQ may be copied and redistributed under these conditions,
+     except that the FAQ may not be embedded in a larger literary work
+     unless that work itself allows free copying and redistribution.
+
+     [This version has been heavily edited since it was included in the
+     Emacs distribution.]
+-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Controlling-case-sensitivity"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Working-with-unprintable-characters.html#Working-with-unprintable-characters">Working with unprintable characters</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Replacing-highlighted-text.html#Replacing-highlighted-text">Replacing highlighted text</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Common-requests.html#Common-requests">Common requests</a>
+<hr>
+</div>
+
+<h3 class="section">5.11 How do I control Emacs's case-sensitivity when searching/replacing?</h3>
+
+<p><a name="index-g_t_0040code_007bcase_002dfold_002dsearch_007d-195"></a><a name="index-Case-sensitivity-of-searches-196"></a><a name="index-Searching-without-case-sensitivity-197"></a><a name="index-Ignoring-case-in-searches-198"></a>
+<!-- FIXME -->
+The value of the variable <code>case-fold-search</code> determines whether
+searches are case sensitive:
+
+<pre class="lisp">     (setq case-fold-search nil) ; make searches case sensitive
+     (setq case-fold-search t)   ; make searches case insensitive
+</pre>
+   <p><a name="index-Case-sensitivity-in-replacements-199"></a><a name="index-Replacing_002c-and-case-sensitivity-200"></a><a name="index-g_t_0040code_007bcase_002dreplace_007d-201"></a>Similarly, for replacing, the variable <code>case-replace</code> determines
+whether replacements preserve case.
+
+   <p>You can also toggle case sensitivity at will in isearch with <kbd>M-c</kbd>.
+
+   <p>To change the case sensitivity just for one major mode, use the major
+mode's hook.  For example:
+
+<pre class="lisp">     (add-hook '<var>foo</var>-mode-hook
+               (lambda ()
+                (setq case-fold-search nil)))
+</pre>
+   </body></html>
+

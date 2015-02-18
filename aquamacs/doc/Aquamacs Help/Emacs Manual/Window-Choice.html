@@ -1,0 +1,90 @@
+<html lang="en">
+<head>
+<title>Window Choice - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Displaying-Buffers.html#Displaying-Buffers" title="Displaying Buffers">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
+
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Window-Choice"></a>
+<p>
+Up:&nbsp;<a rel="up" accesskey="u" href="Displaying-Buffers.html#Displaying-Buffers">Displaying Buffers</a>
+<hr>
+</div>
+
+<h4 class="subsection">20.6.1 How <code>display-buffer</code> works</h4>
+
+<p><a name="index-display_002dbuffer-1411"></a>
+The <code>display-buffer</code> command (as well as commands that call it
+internally) chooses a window to display by following the steps given
+below.  See <a href="../elisp/Choosing-Window.html#Choosing-Window">Choosing a Window for Display</a>, for details about how to alter this
+sequence of steps.
+
+     
+<a name="index-same_002dwindow_002dbuffer_002dnames-1412"></a>
+<a name="index-same_002dwindow_002dregexps-1413"></a>
+<ul><li>First, check if the buffer should be displayed in the selected window
+regardless of other considerations.  You can tell Emacs to do this by
+adding the desired buffer's name to the list
+<code>same-window-buffer-names</code>, or adding a matching regular
+expression to the list <code>same-window-regexps</code>.  By default, these
+variables are <code>nil</code>, so this step is skipped.
+
+     <li>Otherwise, if the buffer is already displayed in an existing window,
+&ldquo;reuse&rdquo; that window.  Normally, only windows on the selected frame
+are considered, but windows on other frames are also reusable if you
+change <code>pop-up-frames</code> (see below) to <code>t</code>.
+
+     <p><a name="index-pop_002dup_002dframes-1414"></a><li>Otherwise, optionally create a new frame and display the buffer there. 
+By default, this step is skipped.  To enable it, change the variable
+<code>pop-up-frames</code> to a non-<code>nil</code> value.  The special value
+<code>graphic-only</code> means to do this only on graphical displays.
+
+     <li>Otherwise, try to create a new window by splitting the selected
+window, and display the buffer in that new window.
+
+     <p><a name="index-split_002dheight_002dthreshold-1415"></a><a name="index-split_002dwidth_002dthreshold-1416"></a>The split can be either vertical or horizontal, depending on the
+variables <code>split-height-threshold</code> and
+<code>split-width-threshold</code>.  These variables should have integer
+values.  If <code>split-height-threshold</code> is smaller than the selected
+window's height, the split puts the new window below.  Otherwise, if
+<code>split-width-threshold</code> is smaller than the window's width, the
+split puts the new window on the right.  If neither condition holds,
+Emacs tries to split so that the new window is below&mdash;but only if the
+window was not split before (to avoid excessive splitting).
+
+     <li>Otherwise, display the buffer in an existing window on the selected
+frame.
+
+     <li>If all the above methods fail for whatever reason, create a new frame
+and display the buffer there. 
+</ul>
+
+   </body></html>
+

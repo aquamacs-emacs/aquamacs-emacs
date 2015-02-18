@@ -1,0 +1,151 @@
+<html lang="en">
+<head>
+<title>Basic Visuals - Speedbar: File/Tag summarizing utility</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Speedbar: File/Tag summarizing utility">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Basic-Navigation.html#Basic-Navigation" title="Basic Navigation">
+<link rel="prev" href="Basic-Key-Bindings.html#Basic-Key-Bindings" title="Basic Key Bindings">
+<link rel="next" href="Mouse-Bindings.html#Mouse-Bindings" title="Mouse Bindings">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Basic-Visuals"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Mouse-Bindings.html#Mouse-Bindings">Mouse Bindings</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Basic-Key-Bindings.html#Basic-Key-Bindings">Basic Key Bindings</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Basic-Navigation.html#Basic-Navigation">Basic Navigation</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h3 class="section">2.2 Basic Visuals</h3>
+
+<p><a name="index-visuals-10"></a>
+Speedbar has visual cues for indicating different types of data.  These
+cues are used consistently across the different speedbar modes to make
+them easier to interpret.
+
+   <p>At a high level, in File mode, there are directory buttons, sub
+directory buttons, file buttons, tag buttons, and expansion buttons. 
+This makes it easy to use the mouse to navigate a directory tree, and
+quickly view files, or a summary of those files.
+
+   <p>The most basic visual effect used to distinguish between these button
+types is color and mouse highlighting.  Anything the mouse highlights
+can be clicked on and is called a button (see <a href="Mouse-Bindings.html#Mouse-Bindings">Mouse Bindings</a>). 
+Anything not highlighted by the mouse will not be clickable.
+
+   <p>Text in speedbar consists of four different types of data.  Knowing how
+to read these textual elements will make it easier to navigate by
+identifying the types of data available.
+
+<h5 class="subsubsection">2.2.0.1 Groups</h5>
+
+<p><a name="index-groups-11"></a>
+Groups summarize information in a single line, and provide a high level
+view of more complex systems, like a directory tree, or manual chapters.
+
+   <p>Groups appear at different indentation levels, and are prefixed with a
+&lsquo;<samp><span class="samp">+</span></samp>&rsquo; in some sort of `box'.  The group name will summarize the
+information within it, and the expansion box will display that
+information inline.  In File mode, directories and files are `groups'
+where the &lsquo;<samp><span class="samp">+</span></samp>&rsquo; is surrounded by brackets like this:
+
+<pre class="example">     &lt;+&gt; include
+     &lt;-&gt; src
+      [+] foo.c
+</pre>
+   <p>In this example, we see both open and closed directories, in addition to
+a file.  The directories have a box consisting of angle brackets, and a
+file uses square brackets.
+
+   <p>In all modes, a group can be `edited' by pressing <kbd>RET</kbd>, meaning a
+file will be opened, or a directory explicitly opened in speedbar.  A
+group can be expanded or contracted using <kbd>+</kbd> or
+<kbd>-</kbd>.  See <a href="Basic-Key-Bindings.html#Basic-Key-Bindings">Basic Key Bindings</a>.
+
+   <p>Sometimes groups may have a &lsquo;<samp><span class="samp">?</span></samp>&rsquo; in its indicator box.  This means
+that it is a group type, but there are no contents, or no known way of
+extracting contents of that group.
+
+   <p>When a group has been expanded, the indicator button changes from
+&lsquo;<samp><span class="samp">+</span></samp>&rsquo; to &lsquo;<samp><span class="samp">-</span></samp>&rsquo;.  This indicates that the contents are being shown. 
+Click the &lsquo;<samp><span class="samp">-</span></samp>&rsquo; button to contract the group, or hide the contents
+currently displayed.
+
+<h5 class="subsubsection">2.2.0.2 Tags</h5>
+
+<p><a name="index-tags-12"></a>
+Tags are the leaf nodes of the tree system.  Tags are generally prefixed
+with a simple character, such as &lsquo;<samp><span class="samp">&gt;</span></samp>&rsquo;.  Tags can only be jumped to using
+<kbd>RET</kbd> or <kbd>e</kbd>.
+
+<h5 class="subsubsection">2.2.0.3 Boolean Flags</h5>
+
+<p>Sometimes a group or tag is given a boolean flag.  These flags appear as
+extra text characters at the end of the line.  File mode uses boolean
+flags, such as a &lsquo;<samp><span class="samp">*</span></samp>&rsquo; to indicate that a file has been checked out
+of a versioning system.
+
+   <p>For additional flags, see
+<!-- Note to self, update these to sub-nodes which are more relevant. -->
+<a href="File-Mode.html#File-Mode">File Mode</a>, and <a href="Version-Control.html#Version-Control">Version Control</a>.
+
+<h5 class="subsubsection">2.2.0.4 Unadorned Text</h5>
+
+<p>Unadorned text generally starts in column 0, without any special symbols
+prefixing them.  In Buffers mode different buffer groups are prefixed
+with a description of what the following buffers are (Files, scratch
+buffers, and invisible buffers.)
+
+   <p>Unadorned text will generally be colorless, and not clickable.
+
+<h5 class="subsubsection">2.2.0.5 Color Cues</h5>
+
+<p>Each type of Group, item indicator, and label is given a different
+color.  The colors chosen are dependent on whether the background color
+is light or dark. 
+Of important note is that the `current item', which may be a buffer or
+file name, is highlighted red, and underlined.
+
+   <p>Colors can be customized from the group <code>speedbar-faces</code>.  Some
+modes, such as for Info, will use the Info colors instead of default
+speedbar colors as an indication of what is currently being displayed.
+
+   <p>The face naming convention mirrors the File display mode.  Modes which
+do not use files will attempt to use the same colors on analogous
+entries.
+
+   </body></html>
+

@@ -1,0 +1,80 @@
+<html lang="en">
+<head>
+<title>VC Pull - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Branches.html#Branches" title="Branches">
+<link rel="prev" href="Switching-Branches.html#Switching-Branches" title="Switching Branches">
+<link rel="next" href="Merging.html#Merging" title="Merging">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
+
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="VC-Pull"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Merging.html#Merging">Merging</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Switching-Branches.html#Switching-Branches">Switching Branches</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Branches.html#Branches">Branches</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">28.1.11.2 Pulling Changes into a Branch</h5>
+
+     <dl>
+<dt><kbd>C-x v +</kbd><dd>On a decentralized version control system, update the current branch
+by &ldquo;pulling in&rdquo; changes from another location.
+
+     <p>On a centralized version control system, update the current VC
+fileset. 
+</dl>
+
+   <p><a name="index-C_002dx-v-_002b-2828"></a><a name="index-vc_002dpull-2829"></a>  On a decentralized version control system, the command <kbd>C-x v +</kbd>
+(<code>vc-pull</code>) updates the current branch and working tree.  It is
+typically used to update a copy of a remote branch.  If you supply a
+prefix argument, the command prompts for the exact version control
+command to use, which lets you specify where to pull changes from. 
+Otherwise, it pulls from a default location determined by the version
+control system.
+
+   <p>Amongst decentralized version control systems, <kbd>C-x v +</kbd> is
+currently supported only by Bazaar, Git, and Mercurial.  On Bazaar, it
+calls <samp><span class="command">bzr pull</span></samp> for ordinary branches (to pull from a master
+branch into a mirroring branch), and <samp><span class="command">bzr update</span></samp> for a bound
+branch (to pull from a central repository).  On Git, it calls
+<samp><span class="command">git pull</span></samp> to fetch changes from a remote repository and merge
+it into the current branch.  On Mercurial, it calls <samp><span class="command">hg pull
+-u</span></samp> to fetch changesets from the default remote repository and update
+the working directory.
+
+   <p>Prior to pulling, you can use <kbd>C-x v I</kbd> (<code>vc-log-incoming</code>)
+to view a log buffer of the changes to be applied.  See <a href="VC-Change-Log.html#VC-Change-Log">VC Change Log</a>.
+
+   <p>On a centralized version control system like CVS, <kbd>C-x v +</kbd>
+updates the current VC fileset from the repository.
+
+   </body></html>
+

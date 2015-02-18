@@ -1,0 +1,163 @@
+<html lang="en">
+<head>
+<title>Packages that Change Keymaps - Untitled</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Untitled">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customization.html#Customization" title="Customization">
+<link rel="prev" href="Key-Bindings.html#Key-Bindings" title="Key Bindings">
+<link rel="next" href="Viper-Specials.html#Viper-Specials" title="Viper Specials">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Packages-that-Change-Keymaps"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Viper-Specials.html#Viper-Specials">Viper Specials</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Key-Bindings.html#Key-Bindings">Key Bindings</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Customization</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.2.1 Packages that Change Keymaps</h4>
+
+<p><a name="index-C_002dc-and-Viper-232"></a><a name="index-Viper-and-C_002dc-233"></a>
+Viper is designed to coexist with all major and minor modes of Emacs.  This
+means that bindings set by those modes are generally available with Viper
+(unless you explicitly prohibit them by setting
+<code>viper-want-emacs-keys-in-vi</code> and <code>viper-want-emacs-keys-in-insert</code> to
+<code>nil</code>). 
+If <code>viper-always</code> is set to <code>t</code> (which is the default), Viper
+will try to bring each buffer
+in the Viper state that is most appropriate for that buffer. 
+Usually, this would be the Vi state, but sometimes it could be the Insert
+state or the Emacs state.
+
+   <p>Some major mode bindings will necessarily be overwritten by Viper.  Indeed, in
+Vi state, most of the 1-character keys are used for Vi-style editing.  This
+usually causes no problems because most packages designed for editing files
+typically do not bind such keys.  Instead, they use key sequences that start
+with <kbd>C-x</kbd> and <kbd>C-c</kbd>.  This is why it was so important for us to
+free up <kbd>C-x</kbd> and <kbd>C-c</kbd>. 
+It is common for language-specific major modes to bind &lt;TAB&gt; and
+<kbd>C-j</kbd> (the line feed) keys to various formatting functions.  This is
+extremely useful, but may require some getting used to for a Vi user.  If you
+decide that this feature is not for you, you can re-bind these keys as
+explained earlier (see <a href="Customization.html#Customization">Customization</a>).
+
+   <p>Binding for &lt;TAB&gt; is one of the most unusual aspects of Viper for many
+novice users.  In Emacs, &lt;TAB&gt; is used to format text and programs, and
+is extremely useful.  For instance, hitting &lt;TAB&gt; causes the current
+line to be re-indented in accordance with the context.  In programming,
+this is very important, since improper automatic indentation would
+immediately alert the programmer to a possible error.  For instance, if a
+<kbd>)</kbd> or a <kbd>"</kbd> is missing somewhere above the current
+line, &lt;TAB&gt; is likely to mis-indent the line.
+
+   <p>For this reason, Viper doesn't change the standard Emacs binding of
+&lt;TAB&gt;, thereby sacrificing Vi compatibility
+(except for users at level 1).  Instead, in Viper, the key
+<kbd>S-tab</kbd> (shift+ tab) is chosen to emulate Vi's &lt;TAB&gt;.
+
+   <p>We should note that on some non-windowing terminals, Shift doesn't modify
+the &lt;TAB&gt; key, so <kbd>S-tab</kbd> behaves as if it were &lt;TAB&gt;.  In such
+a case, you will have to bind <code>viper-insert-tab</code> to some other
+convenient key.
+
+   <p>Some packages, notably Dired, Gnus, Info, etc., attach special meaning to
+common keys like &lt;SPC&gt;, <kbd>x</kbd>, <kbd>d</kbd>, <kbd>v</kbd>, and others.  This
+means that Vi command state is inappropriate for working with these
+packages.  Fortunately, these modes operate on read-only buffers and are
+designed not for editing files, but for special-purpose browsing, reading
+news, mail, etc., and Vi commands are meaningless in these situations.  For
+this reason, Viper doesn't force Vi state on such major modes&mdash;it
+brings them in Emacs state.  You can switch to Vi state by typing <kbd>C-z</kbd>
+if, for instance, you want to do Vi-style search in a buffer (although,
+usually, incremental search, which is bound to <kbd>C-s</kbd>, is sufficient in
+these situations).  But you should then switch back to Emacs state if you
+plan to continue using these major modes productively.  You can also switch
+to Vi temporarily, to execute just one command.  This is done by typing
+<kbd>C-c \</kbd>.  (In some of these modes, <kbd>/</kbd> and <kbd>:</kbd> are bound
+Vi-style, unless these keys perform essential duties.)
+
+   <p>If you would like certain major modes to come up in Emacs state rather than
+Vi state (but Viper thinks otherwise), you should put these major modes
+on the <code>viper-emacs-state-mode-list</code> list and delete them from
+<code>viper-vi-state-mode-list</code>. 
+Likewise, you can force Viper's Insert state on a major mode by putting it
+in <code>viper-insert-state-mode-list</code>. 
+<a name="index-g_t_0040code_007bviper_002demacs_002dstate_002dmode_002dlist_007d-234"></a><a name="index-g_t_0040code_007bviper_002dinsert_002dstate_002dmode_002dlist_007d-235"></a><a name="index-g_t_0040code_007bviper_002dvi_002dstate_002dmode_002dlist_007d-236"></a>
+It is also possible to impose Vi on some major modes, even though they may
+bind common keys to specialized commands.  This might make sense for modes
+that bind only a small number of common keys.  For instance, Viper subverts
+the Shell mode by changing the bindings for <kbd>C-m</kbd> and <kbd>C-d</kbd> using
+<code>viper-add-local-keys</code> described in the section on customization
+(see <a href="Customization.html#Customization">Customization</a>).
+
+   <p>In some cases, some <em>minor</em> modes might override certain essential
+bindings in Vi command state.  This is not a big problem because this
+can happen only in the beginning, when the minor mode kicks in.  Typing
+<code>M-x viper-mode</code> will correct the situation.  Viper knows about
+several such minor modes and takes care of them, so the above trick
+is usually not necessary.  If you find that some minor mode, e.g.,
+<code>nasty-mode</code> interferes with Viper, putting the following in
+<samp><span class="file">.viper</span></samp> should fix the problem:
+<pre class="lisp">     (viper-harness-minor-mode "nasty-mode")
+</pre>
+   <p class="noindent">The argument to <code>viper-harness-minor-mode</code> is the name of the file for the
+offending minor mode with the suffixes <samp><span class="file">.el</span></samp> and <samp><span class="file">.elc</span></samp> removed.
+
+   <p>It may not be always obvious which minor mode is at fault.  The only
+guidance here is to look into the file that defines the minor mode you are
+suspecting, say <samp><span class="file">nasty-mode.el</span></samp>, and see if it has a variable called
+<code>nasty-mode-map</code>.  Then check if there is a statement of the form
+<pre class="lisp">     (define-key nasty-mode-map key function)
+</pre>
+   <p class="noindent">that binds the misbehaving
+keys.  If so, use the above line to harness <code>nasty-mode</code>.  If your
+suspicion is wrong, no harm is done if you harness a minor mode that
+doesn't need to be harnessed.
+
+   <p>It is recommended to harness even those minor modes that don't override
+Viper keys, but still have their own keymaps. A general way to
+make a minor mode, <code>my-mode</code>,
+compatible with Viper is to have the file <samp><span class="file">my-mode.el</span></samp> include the following code:
+
+<pre class="lisp">     (when (fboundp 'viper-harness-minor-mode)
+       (let ((lib (file-name-sans-extension
+                    (file-name-nondirectory load-file-name))))
+         (viper-harness-minor-mode lib)))
+</pre>
+   <p><a name="index-g_t_0040code_007bviper_002dwant_002demacs_002dkeys_002din_002dvi_007d-237"></a><a name="index-g_t_0040code_007bviper_002dwant_002demacs_002dkeys_002din_002dinsert_007d-238"></a><a name="index-g_t_0040code_007bviper_002dalways_007d-239"></a><a name="index-g_t_0040code_007bviper_002dset_002dhooks_007d-240"></a><a name="index-g_t_0040code_007bviper_002dmode_007d-241"></a><a name="index-g_t_0040code_007bviper_002dharness_002dminor_002dmode_007d-242"></a><a name="index-g_t_0040code_007bremove_002dhook_007d-243"></a><a name="index-g_t_0040code_007badd_002dhook_007d-244"></a>
+
+   </body></html>
+

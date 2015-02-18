@@ -1,0 +1,165 @@
+<html lang="en">
+<head>
+<title>Accessing Slots - Enhanced Implementation of Emacs Interpreted Objects</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Making-New-Objects.html#Making-New-Objects" title="Making New Objects">
+<link rel="next" href="Writing-Methods.html#Writing-Methods" title="Writing Methods">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents EIEIO, an object framework for Emacs Lisp.
+
+Copyright (C) 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Accessing-Slots"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Writing-Methods.html#Writing-Methods">Writing Methods</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Making-New-Objects.html#Making-New-Objects">Making New Objects</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h2 class="chapter">5 Accessing Slots</h2>
+
+<p>There are several ways to access slot values in an object.  The naming
+and argument-order conventions are similar to those used for
+referencing vectors (see <a href="../elisp/Vectors.html#Vectors">Vectors</a>).
+
+<div class="defun">
+&mdash; Macro: <b>oset</b><var> object slot value<a name="index-oset-8"></a></var><br>
+<blockquote><p>This macro sets the value behind <var>slot</var> to <var>value</var> in
+<var>object</var>.  It returns <var>value</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>oset-default</b><var> class slot value<a name="index-oset_002ddefault-9"></a></var><br>
+<blockquote><p>This macro sets the <code>:initform</code> for <var>slot</var> in <var>class</var> to
+<var>value</var>.
+
+        <p>This allows the user to set both public and private defaults after the
+class has been constructed, and provides a way to configure the
+default behavior of packages built with classes (the same way
+<code>setq-default</code> does for buffer-local variables).
+
+        <p>For example, if a user wanted all <code>data-objects</code> (see <a href="Building-Classes.html#Building-Classes">Building Classes</a>) to inform a special object of his own devising when they
+changed, this can be arranged by simply executing this bit of code:
+
+     <pre class="example">          (oset-default data-object reference (list my-special-object))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>oref</b><var> obj slot<a name="index-oref-10"></a></var><br>
+<blockquote><p><a name="oref"></a>Retrieve the value stored in <var>obj</var> in the slot named by <var>slot</var>. 
+Slot is the name of the slot when created by <dfn>defclass</dfn> or the label
+created by the <code>:initarg</code> tag. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>oref-default</b><var> obj slot<a name="index-oref_002ddefault-11"></a></var><br>
+<blockquote><p><a name="oref_002ddefault"></a>Gets the default value of <var>obj</var> (maybe a class) for <var>slot</var>. 
+The default value is the value installed in a class with the <code>:initform</code>
+tag.  <var>slot</var> can be the slot name, or the tag specified by the <code>:initarg</code>
+tag in the <dfn>defclass</dfn> call. 
+</p></blockquote></div>
+
+   <p>The following accessors are defined by CLOS to reference or modify
+slot values, and use the previously mentioned set/ref routines.
+
+<div class="defun">
+&mdash; Function: <b>slot-value</b><var> object slot<a name="index-slot_002dvalue-12"></a></var><br>
+<blockquote><p><a name="slot_002dvalue"></a>This function retrieves the value of <var>slot</var> from <var>object</var>. 
+Unlike <code>oref</code>, the symbol for <var>slot</var> must be quoted. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-slot-value</b><var> object slot value<a name="index-set_002dslot_002dvalue-13"></a></var><br>
+<blockquote><p><a name="set_002dslot_002dvalue"></a>This is not a CLOS function, but is meant to mirror <code>slot-value</code> if
+you don't want to use the cl package's <code>setf</code> function.  This
+function sets the value of <var>slot</var> from <var>object</var>.  Unlike
+<code>oset</code>, the symbol for <var>slot</var> must be quoted. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>slot-makeunbound</b><var> object slot<a name="index-slot_002dmakeunbound-14"></a></var><br>
+<blockquote><p>This function unbinds <var>slot</var> in <var>object</var>.  Referencing an
+unbound slot can signal an error. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>object-add-to-list</b><var> object slot item &amp;optional append<a name="index-object_002dadd_002dto_002dlist-15"></a></var><br>
+<blockquote><p><a name="object_002dadd_002dto_002dlist"></a>In OBJECT's <var>slot</var>, add <var>item</var> to the list of elements. 
+Optional argument <var>append</var> indicates we need to append to the list. 
+If <var>item</var> already exists in the list in <var>slot</var>, then it is not added. 
+Comparison is done with <dfn>equal</dfn> through the <dfn>member</dfn> function call. 
+If <var>slot</var> is unbound, bind it to the list containing <var>item</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>object-remove-from-list</b><var> object slot item<a name="index-object_002dremove_002dfrom_002dlist-16"></a></var><br>
+<blockquote><p><a name="object_002dremove_002dfrom_002dlist"></a>In OBJECT's <var>slot</var>, remove occurrences of <var>item</var>. 
+Deletion is done with <dfn>delete</dfn>, which deletes by side effect
+and comparisons are done with <dfn>equal</dfn>. 
+If <var>slot</var> is unbound, do nothing. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>with-slots</b><var> spec-list object &amp;rest body<a name="index-with_002dslots-17"></a></var><br>
+<blockquote><p><a name="with_002dslots"></a>Bind <var>spec-list</var> lexically to slot values in <var>object</var>, and execute <var>body</var>. 
+This establishes a lexical environment for referring to the slots in
+the instance named by the given slot-names as though they were
+variables.  Within such a context the value of the slot can be
+specified by using its slot name, as if it were a lexically bound
+variable.  Both setf and setq can be used to set the value of the
+slot.
+
+        <p><var>spec-list</var> is of a form similar to <dfn>let</dfn>.  For example:
+
+     <pre class="example">            ((VAR1 SLOT1)
+              SLOT2
+              SLOTN
+             (VARN+1 SLOTN+1))
+</pre>
+        <p>Where each <var>var</var> is the local variable given to the associated
+<var>slot</var>.  A slot specified without a variable name is given a
+variable name of the same name as the slot.
+
+     <pre class="example">          (defclass myclass () (x :initarg 1))
+          (setq mc (make-instance 'myclass))
+          (with-slots (x) mc x)                      =&gt; 1
+          (with-slots ((something x)) mc something)  =&gt; 1
+</pre>
+        </blockquote></div>
+
+   </body></html>
+

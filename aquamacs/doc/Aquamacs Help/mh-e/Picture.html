@@ -1,0 +1,97 @@
+<html lang="en">
+<head>
+<title>Picture - The MH-E Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The MH-E Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Editing-Drafts.html#Editing-Drafts" title="Editing Drafts">
+<link rel="prev" href="Signature.html#Signature" title="Signature">
+<link rel="next" href="Adding-Attachments.html#Adding-Attachments" title="Adding Attachments">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is version 8.2 of `The MH-E
+Manual', last updated 2009-06-13.
+
+Copyright (C) 1995, 2001, 2002, 2003, 2005, 2006, 2007, 2008,
+  2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of either:
+
+       a. the GNU Free Documentation License, Version 1.3 or any later
+          version published by the Free Software Foundation; with no
+          Invariant Sections, with the Front-Cover texts being ``A GNU
+          Manual,'' and with the Back-Cover Texts as in (a) below. A
+          copy of the license is included in the section entitled ``GNU
+          Free Documentation License.''
+
+          (a) The FSF's Back-Cover Text is: ``You have the freedom to
+          copy and modify this GNU manual. Buying copies from the FSF
+          supports it in developing GNU and promoting software
+          freedom.''
+
+       b. the GNU General Public License as published by the Free
+          Software Foundation; either version 3, or (at your option)
+          any later version. A copy of the license is included in the
+          section entitled ``GNU General Public License.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Picture"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Adding-Attachments.html#Adding-Attachments">Adding Attachments</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Signature.html#Signature">Signature</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Editing-Drafts.html#Editing-Drafts">Editing Drafts</a>
+<hr>
+</div>
+
+<h3 class="section">9.5 Inserting Your Picture</h3>
+
+<p><a name="index-g_t_0040file_007b_002eface_007d-1375"></a><a name="index-files_002c-_0040file_007b_002eface_007d-1376"></a><a name="index-mh_002dx_002dface_002dfile-1377"></a>
+You can insert your picture in the header of your mail message so that
+recipients see your face in the &lsquo;<samp><span class="samp">From:</span></samp>&rsquo; header field if their
+mail user agent is sophisticated enough. In MH-E, this is done by
+placing your image in the file named by the option
+<code>mh-x-face-file</code> which is <samp><span class="file">~/.face</span></samp> by default.
+
+   <p><a name="index-g_t_0040samp_007bFace_003a_007d-header-field-1378"></a><a name="index-g_t_0040samp_007bX_002dFace_003a_007d-header-field-1379"></a><a name="index-g_t_0040samp_007bX_002dImage_002dURL_003a_007d-header-field-1380"></a><a name="index-header-field_002c-_0040samp_007bFace_003a_007d-1381"></a><a name="index-header-field_002c-_0040samp_007bX_002dFace_003a_007d-1382"></a><a name="index-header-field_002c-_0040samp_007bX_002dImage_002dURL_003a_007d-1383"></a>
+If the file starts with either of the strings &lsquo;<samp><span class="samp">X-Face:</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">Face:</span></samp>&rsquo; or &lsquo;<samp><span class="samp">X-Image-URL:</span></samp>&rsquo; then the contents are added to the
+message header verbatim. Otherwise it is assumed that the file
+contains the value of the &lsquo;<samp><span class="samp">X-Face:</span></samp>&rsquo; header field.
+
+   <p><a name="index-g_t_0040command_007bcompface_007d-1384"></a><a name="index-Unix-commands_002c-_0040command_007bcompface_007d-1385"></a>
+The &lsquo;<samp><span class="samp">X-Face:</span></samp>&rsquo; header field, which is a low-resolution, black and
+white image, can be generated using the
+<a href="ftp://ftp.cs.indiana.edu/pub/faces/compface/compface.tar.Z"><samp><span class="command">compface</span></samp></a> command. The <a href="http://www.dairiki.org/xface/"><cite>Online X-Face Converter</cite></a> is a useful resource for quick
+conversion of images into &lsquo;<samp><span class="samp">X-Face:</span></samp>&rsquo; header fields.
+
+   <p>Use the <a href="http://quimby.gnus.org/circus/face/make-face"><samp><span class="command">make-face</span></samp></a> script to convert a JPEG image to the higher
+resolution, color, &lsquo;<samp><span class="samp">Face:</span></samp>&rsquo; header field.
+
+   <p>The URL of any image can be used for the &lsquo;<samp><span class="samp">X-Image-URL:</span></samp>&rsquo; field and
+no processing of the image is required.
+
+   <p><a name="index-mh_002dx_002dface_002dfile-1386"></a>
+To prevent the setting of any of these header fields, either set
+<code>mh-x-face-file</code> to <code>nil</code>, or simply ensure that the file
+defined by this option doesn't exist.
+
+   <p>See <a href="Viewing.html#Viewing">Viewing</a>, to see how these header fields are displayed in MH-E.
+
+   </body></html>
+

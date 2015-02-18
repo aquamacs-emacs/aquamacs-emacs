@@ -1,0 +1,82 @@
+<html lang="en">
+<head>
+<title>Primary Selection - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Cut-and-Paste.html#Cut-and-Paste" title="Cut and Paste">
+<link rel="prev" href="Clipboard.html#Clipboard" title="Clipboard">
+<link rel="next" href="Secondary-Selection.html#Secondary-Selection" title="Secondary Selection">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
+
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Primary-Selection"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Secondary-Selection.html#Secondary-Selection">Secondary Selection</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Clipboard.html#Clipboard">Clipboard</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Cut-and-Paste.html#Cut-and-Paste">Cut and Paste</a>
+<hr>
+</div>
+
+<h4 class="subsection">12.3.2 Cut and Paste with Other Window Applications</h4>
+
+<p><a name="index-X-cutting-and-pasting-454"></a><a name="index-X-selection-455"></a><a name="index-primary-selection-456"></a><a name="index-selection_002c-primary-457"></a>
+  Under the X Window System, there exists a <dfn>primary selection</dfn>
+containing the last stretch of text selected in an X application
+(usually by dragging the mouse).  Typically, this text can be inserted
+into other X applications by <kbd>mouse-2</kbd> clicks.  The primary
+selection is separate from the clipboard.  Its contents are more
+&ldquo;fragile&rdquo;; they are overwritten each time you select text with the
+mouse, whereas the clipboard is only overwritten by explicit &ldquo;cut&rdquo;
+or &ldquo;copy&rdquo; commands.
+
+   <p>Under X, whenever the region is active (see <a href="Mark.html#Mark">Mark</a>), the text in
+the region is saved in the primary selection.  This applies regardless
+of whether the region was made by dragging or clicking the mouse
+(see <a href="Mouse-Commands.html#Mouse-Commands">Mouse Commands</a>), or by keyboard commands (e.g., by typing
+<kbd>C-&lt;SPC&gt;</kbd> and moving point; see <a href="Setting-Mark.html#Setting-Mark">Setting Mark</a>).
+
+   <p><a name="index-select_002dactive_002dregions-458"></a>  If you change the variable <code>select-active-regions</code> to
+<code>only</code>, Emacs saves only temporarily active regions to the
+primary selection, i.e., those made with the mouse or with shift
+selection (see <a href="Shift-Selection.html#Shift-Selection">Shift Selection</a>).  If you change
+<code>select-active-regions</code> to <code>nil</code>, Emacs avoids saving active
+regions to the primary selection entirely.
+
+   <p>To insert the primary selection into an Emacs buffer, click
+<kbd>mouse-2</kbd> (<code>mouse-yank-primary</code>) where you want to insert it. 
+See <a href="Mouse-Commands.html#Mouse-Commands">Mouse Commands</a>.
+
+   <p><a name="index-MS_002dWindows_002c-and-primary-selection-459"></a>  MS-Windows provides no primary selection, but Emacs emulates it
+within a single Emacs session by storing the selected text internally. 
+Therefore, all the features and commands related to the primary
+selection work on Windows as they do on X, for cutting and pasting
+within the same session, but not across Emacs sessions or with other
+applications.
+
+   </body></html>
+

@@ -1,0 +1,79 @@
+<html lang="en">
+<head>
+<title>Server workarounds - Emacs SMTP Library</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Emacs SMTP Library">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Queued-delivery.html#Queued-delivery" title="Queued delivery">
+<link rel="next" href="Debugging.html#Debugging" title="Debugging">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Server-workarounds"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Debugging.html#Debugging">Debugging</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Queued-delivery.html#Queued-delivery">Queued delivery</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">5 Server workarounds</h2>
+
+<p>Some SMTP servers have special requirements.  The following variables
+implement support for common requirements.
+
+     <dl>
+<dt><code>smtpmail-local-domain</code><dd><a name="index-smtpmail_002dlocal_002ddomain-26"></a>  The variable <code>smtpmail-local-domain</code> controls the hostname sent
+in the first <code>EHLO</code> or <code>HELO</code> command sent to the server. 
+It should only be set if the <code>system-name</code> function returns a
+name that isn't accepted by the server.  Do not set this variable
+unless your server complains.
+
+     <br><dt><code>smtpmail-sendto-domain</code><dd><a name="index-smtpmail_002dsendto_002ddomain-27"></a>  The variable <code>smtpmail-sendto-domain</code> makes the SMTP library
+add &lsquo;<samp><span class="samp">@</span></samp>&rsquo; and the specified value to recipients specified in the
+message when they are sent using the <code>RCPT TO</code> command.  Some
+configurations of sendmail requires this behavior.  Don't bother to
+set this unless you have get an error like:
+
+     <pre class="example">                  Sending failed; SMTP protocol error
+</pre>
+     <p>when sending mail, and the debug buffer (see <a href="Debugging.html#Debugging">Debugging</a>)) contains
+an error such as:
+
+     <pre class="example">                  RCPT TO: <var>someone</var>
+                  501 <var>someone</var>: recipient address must contain a domain
+</pre>
+     </dl>
+
+   </body></html>
+

@@ -1,0 +1,137 @@
+<html lang="en">
+<head>
+<title>Display of Query Results - Emacs Unified Directory Client (EUDC) Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Emacs Unified Directory Client (EUDC) Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Usage.html#Usage" title="Usage">
+<link rel="prev" href="Query-Form.html#Query-Form" title="Query Form">
+<link rel="next" href="Inline-Query-Expansion.html#Inline-Query-Expansion" title="Inline Query Expansion">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents EUDC v1.30b.
+
+EUDC is the Emacs Unified Directory Client, a common interface to
+directory servers using various protocols such as LDAP or the CCSO white
+pages directory system (PH/QI)
+
+Copyright (C) 1998, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Display-of-Query-Results"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Inline-Query-Expansion.html#Inline-Query-Expansion">Inline Query Expansion</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Query-Form.html#Query-Form">Query Form</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Usage.html#Usage">Usage</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h3 class="section">3.3 Display of Query Results</h3>
+
+<p>Upon successful completion of a form query, EUDC will display a buffer
+containing the results of the query.
+
+   <p>The fields that are returned for each record
+are controlled by <code>eudc-default-return-attributes</code> (see <a href="Return-Attributes.html#Return-Attributes">Return Attributes</a>).
+
+   <p>The display of each individual field can be performed by an arbitrary
+function which allows specific processing for binary values, such as
+images or audio samples, as well as values with semantics, such as
+URLs.
+
+<div class="defun">
+&mdash; Variable: <b>eudc-attribute-display-method-alist</b><var><a name="index-eudc_002dattribute_002ddisplay_002dmethod_002dalist-12"></a></var><br>
+<blockquote><p>An alist specifying methods to display attribute values.  Each member of
+the list is of the form <code>(</code><var>name</var><code> . </code><var>func</var><code>)</code> where
+<var>name</var> is a lowercased string naming a directory attribute
+(translated according to <code>eudc-user-attribute-names-alist</code> if
+<code>eudc-use-raw-directory-names</code> is non-<code>nil</code>) and <var>func</var> a
+function that will be passed the corresponding attribute values for
+display. 
+</p></blockquote></div>
+
+   <p>This variable has protocol-local definitions (see see <a href="Server_002fProtocol-Locals.html#Server_002fProtocol-Locals">Server/Protocol Locals</a>).  For instance, it is defined as follows for LDAP:
+
+<pre class="lisp">     (eudc-protocol-set 'eudc-attribute-display-method-alist
+                        '(("jpegphoto" . eudc-display-jpeg-inline)
+                          ("labeledurl" . eudc-display-url)
+                          ("audio" . eudc-display-sound)
+                          ("labeledurl" . eudc-display-url)
+                          ("url" . eudc-display-url))
+                        'ldap)
+</pre>
+   <p>EUDC provides a set of built-in functions to display binary value types:
+
+<div class="defun">
+&mdash; Function: <b>eudc-display-generic-binary</b><var> data<a name="index-eudc_002ddisplay_002dgeneric_002dbinary-13"></a></var><br>
+<blockquote><p>Display a button for unidentified binary <var>data</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>eudc-display-url</b><var> url<a name="index-eudc_002ddisplay_002durl-14"></a></var><br>
+<blockquote><p>Display URL and make it clickable. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>eudc-display-sound</b><var> data<a name="index-eudc_002ddisplay_002dsound-15"></a></var><br>
+<blockquote><p>Display a button to play the sound <var>data</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>eudc-display-jpeg-inline</b><var> data<a name="index-eudc_002ddisplay_002djpeg_002dinline-16"></a></var><br>
+<blockquote><p>Display the JPEG <var>data</var> inline at point if possible. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>eudc-display-jpeg-as-button</b><var> data<a name="index-eudc_002ddisplay_002djpeg_002das_002dbutton-17"></a></var><br>
+<blockquote><p>Display a button for the JPEG <var>data</var>. 
+</p></blockquote></div>
+
+   <p>Right-clicking on a binary value button pops up a contextual menu with
+options to process the value.  Among these are saving the attribute
+value to a file or sending it to an external viewer command.  External
+viewers should expect the value on their standard input and should
+display it or perform arbitrary processing on it.  Messages sent to
+standard output are discarded.  External viewers are listed in the
+variable <code>eudc-external-viewers</code> which you can customize.
+
+<div class="defun">
+&mdash; Variable: <b>eudc-external-viewers</b><var><a name="index-eudc_002dexternal_002dviewers-18"></a></var><br>
+<blockquote><p>This is a list of viewer program specifications.  Each specification is
+a list whose first element is a string naming the viewer for unique
+identification, the second element is the executable program which
+should be invoked and the following elements are arguments that should
+be passed to the program. 
+</p></blockquote></div>
+
+   </body></html>
+

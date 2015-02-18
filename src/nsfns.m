@@ -169,6 +169,34 @@ ns_get_window (Lisp_Object maybeFrame)
   return window;
 }
 
+static NSScreen *
+ns_get_screen (Lisp_Object screen)
+{
+  struct frame *f;
+  struct terminal *terminal;
+
+  if (EQ (Qt, screen)) /* not documented */
+    return [NSScreen mainScreen];
+
+  terminal = get_terminal (screen, 1);
+  if (terminal->type != output_ns)
+    return NULL;
+
+  if (NILP (screen))
+    f = SELECTED_FRAME ();
+  else if (FRAMEP (screen))
+    f = XFRAME (screen);
+  else
+    {
+      struct ns_display_info *dpyinfo = terminal->display_info.ns;
+      f = dpyinfo->x_focus_frame
+        ? dpyinfo->x_focus_frame : dpyinfo->x_highlight_frame;
+    }
+
+  return ((f && FRAME_NS_P (f)) ? [[FRAME_NS_VIEW (f) window] screen]
+	  : NULL);
+}
+
 
 /* Return the X display structure for the display named NAME.
    Open a new connection if necessary.  */
@@ -288,6 +316,13 @@ x_set_foreground_color (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
       error ("Unknown color");
     }
 
+  col = [col colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+
+  if (col == nil)
+    {
+      error ("Unknown color (cannot convert to RGB)");
+    }
+
   [col retain];
   [f->output_data.ns->foreground_color release];
   f->output_data.ns->foreground_color = col;
@@ -314,18 +349,25 @@ x_set_background_color (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
   NSView *view = FRAME_NS_VIEW (f);
   EmacsCGFloat r, g, b, alpha;
 
+
   if (ns_lisp_to_color (arg, &col))
     {
       store_frame_param (f, Qbackground_color, oldval);
       error ("Unknown color");
     }
+  col = [col colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+
+  if (col == nil)
+    {
+      error ("Unknown color (cannot convert to RGB)");
+    }
+  [col retain]; // retain before clearing frame!
 
   /* clear the frame; in some instances the NS-internal GC appears not to
      update, or it does update and cannot clear old text properly */
   if (FRAME_VISIBLE_P (f))
     ns_clear_frame (f);
 
-  [col retain];
   [f->output_data.ns->background_color release];
   f->output_data.ns->background_color = col;
 
@@ -1375,34 +1417,504 @@ x_focus_frame (struct frame *f)
 }
 
 
+DEFUN ("ns-cycle-frame", Fns_cycle_frame, Sns_cycle_frame, 0, 1, "",
+       doc: /* Select the next frame in order.
+arg nil means cycle forwards.  */)
+     (arg)
+     Lisp_Object arg;
+{
+  if ([NSApp respondsToSelector:@selector(_cycleWindowsReversed:)])
+  {
+    [NSApp _cycleWindowsReversed:(NILP(arg) ? FALSE : TRUE)];
+  }
+  return Qnil;
+}
+
+
+DEFUN ("ns-visible-frame-list", Fns_visible_frame_list, Sns_visible_frame_list,
+       0, 0, 0,
+       doc: /* Return a list of all visible NS frames on the current space.  */)
+  (void)
+{
+  Lisp_Object tail, frame;
+  struct frame *f;
+  Lisp_Object value;
+
+  value = Qnil;
+  for (tail = Vframe_list; CONSP (tail); tail = XCDR (tail))
+    {
+      frame = XCAR (tail);
+      if (!FRAMEP (frame))
+	continue;
+      f = XFRAME (frame);
+      if (FRAME_VISIBLE_P (f)
+	  && FRAME_NS_P (f)
+	  && (! ([[FRAME_NS_VIEW (f) window] respondsToSelector:@selector(isOnActiveSpace)]) // (NSAppKitVersionNumber 
+	      || [[FRAME_NS_VIEW (f) window] isOnActiveSpace]))
+	value = Fcons (frame, value);
+    }
+  return value;
+}
+
+DEFUN ("ns-frame-is-on-active-space-p", Fns_frame_is_on_active_space_p, Sns_frame_is_on_active_space_p,
+       0, 1, 0,
+       doc: /* Return non-nil if FRAME is on active space.
+OS X 10.6 only; returns non-nil prior to 10.5 or for non-NS frames.*/)
+  (frame)
+     Lisp_Object frame;
+{
+  struct frame *f;
+  check_window_system (NULL);
+  CHECK_LIVE_FRAME (frame);
+  f = XFRAME (frame);
+  NSWindow *win = [FRAME_NS_VIEW (f) window];
+  if (! ([win respondsToSelector:@selector(isOnActiveSpace)]) // (NSAppKitVersionNumber 
+      || [win isOnActiveSpace])
+    return Qt;
+  return Qnil;
+}
+
+/* Spelling */
+
+DEFUN ("ns-popup-spellchecker-panel", Fns_popup_spellchecker_panel, Sns_popup_spellchecker_panel,
+       0, 0, "",
+       doc: /* Pop up the spell checking panel.
+Shows the NS spell checking panel and brings it to the front.*/)
+     (void)
+{
+  id sc;
+
+  check_window_system (NULL);
+  sc = [NSSpellChecker sharedSpellChecker];
+  
+  block_input();
+  [[sc spellingPanel] orderFront: NSApp];
+
+  // Spelling panel should appear with previous content, not empty.
+  //  [sc updateSpellingPanelWithMisspelledWord:@""]; // no word, no spelling errors
+
+  // found here: http://trac.webkit.org/changeset/19670
+  // // FIXME 4811447: workaround for lack of API 
+  //  	NSSpellChecker *spellChecker = [NSSpellChecker sharedSpellChecker]; 
+  // does not work
+  // if ([sc respondsToSelector:@selector(_updateGrammar)]) 
+  //   [sc performSelector:@selector(_updateGrammar)]; 
+  unblock_input();
+  return Qnil;
+}
+
+DEFUN ("ns-close-spellchecker-panel", Fns_close_spellchecker_panel, Sns_close_spellchecker_panel,
+       0, 0, "",
+       doc: /* Close the spell checking panel.*/)
+     (void)
+{
+  id sc;
+
+  check_window_system (NULL);
+  sc = [NSSpellChecker sharedSpellChecker];
+  
+  block_input();
+  [[sc spellingPanel] close];
+
+  unblock_input();
+  return Qnil;
+}
+
+DEFUN ("ns-spellchecker-panel-visible-p", Fns_spellchecker_panel_visible_p, Sns_spellchecker_panel_visible_p,
+       0, 0, "",
+       doc: /* Return t if spellchecking panel is visible,
+nil otherwise.*/)
+     (void)
+{
+  id sc;
+  BOOL visible;
+
+  check_window_system (NULL);
+  sc = [NSSpellChecker sharedSpellChecker];
+  
+  block_input();
+  visible = [[sc spellingPanel] isVisible];
+
+  unblock_input();
+  return visible ? Qt : Qnil;
+}
+
+
+DEFUN ("ns-spellchecker-show-word", Fns_spellchecker_show_word, Sns_spellchecker_show_word,
+       1, 1, 0,
+       doc: /* Show word WORD in the spellchecking panel. 
+Give empty string to delete word.*/)
+     (str)
+     Lisp_Object str;
+{
+  id sc;
+
+  CHECK_STRING (str);
+  check_window_system (NULL);
+  block_input();
+  sc = [NSSpellChecker sharedSpellChecker];
+  
+  [sc updateSpellingPanelWithMisspelledWord:[NSString stringWithUTF8String: SDATA (str)]]; // no word, no spelling errors
+
+  unblock_input();
+  return Qnil;
+}
+
+
+DEFUN ("ns-spellchecker-learn-word", Fns_spellchecker_learn_word, Sns_spellchecker_learn_word,
+       1, 1, 0,
+       doc: /* Learn word WORD.
+Returns learned word if successful.
+Not available on 10.4.*/)
+     (str)
+     Lisp_Object str;
+{
+  CHECK_STRING (str);
+  check_window_system (NULL);
+  block_input();
+  id sc = [NSSpellChecker sharedSpellChecker];
+
+#ifdef NS_IMPL_COCOA
+  if ([sc respondsToSelector:@selector(learnWord:)]) // (NSAppKitVersionNumber >= 824.0)
+    {
+      
+      [sc learnWord:[NSString stringWithUTF8String: SDATA (str)]];
+      unblock_input();
+      return str;
+    }
+#endif
+  unblock_input();
+  return Qnil;
+}
+
+
+DEFUN ("ns-spellchecker-ignore-word", Fns_spellchecker_ignore_word, Sns_spellchecker_ignore_word,
+       1, 2, 0,
+       doc: /* Ignore word WORD in buffer BUFFER.*/)
+     (str, buffer)
+     Lisp_Object str, buffer;
+{
+  id sc;
+
+  CHECK_STRING (str);
+  check_window_system (NULL);
+  block_input();
+  sc = [NSSpellChecker sharedSpellChecker];
+  
+  NSInteger tag = 1;
+  if (! NILP (buffer)) 
+    {
+      tag = sxhash (buffer, 0);
+    }
+
+  [sc ignoreWord:[NSString stringWithUTF8String: SDATA (str)] inSpellDocumentWithTag:tag];
+  unblock_input();
+  return Qnil;
+}
+
+
+DEFUN ("ns-spellchecker-ignored-words", Fns_spellchecker_ignored_words, Sns_spellchecker_ignored_words,
+       1, 1, 0,
+       doc: /* Return list of words ignored by NSSpellChecker
+for buffer BUFFER */)
+     (buffer)
+     Lisp_Object buffer;
+{
+  id sc;
+
+  check_window_system (NULL);
+  block_input();
+  sc = [NSSpellChecker sharedSpellChecker];
+  
+  NSInteger tag = 1;
+  if (! NILP (buffer)) 
+    {
+      tag = sxhash (buffer, 0);
+    }
+
+  Lisp_Object retval = Qnil;
+  NSArray *words = [sc ignoredWordsInSpellDocumentWithTag:tag];
+  int arrayCount = [words count];
+  int i;
+  for (i = 0; i < arrayCount; i++) {
+    // build Lisp list of strings
+    retval = Fcons (build_string ([[words objectAtIndex:i] UTF8String]),
+		    retval);
+  }
+  unblock_input();
+  return retval;
+}
+
+
+DEFUN ("ns-spellchecker-check-spelling", Fns_spellchecker_check_spelling, Sns_spellchecker_check_spelling,
+       1, 2, 0,
+       doc: /* Check spelling of STRING
+Returns the location of the first misspelled word in a 
+cons cell of form (beginning . length), or nil if all
+words are spelled as in the dictionary.*/)
+     (string, buffer)
+     Lisp_Object string, buffer;
+{
+  id sc;
+
+  CHECK_STRING (string);
+  check_window_system (NULL);
+  block_input();
+  sc = [NSSpellChecker sharedSpellChecker];
+
+  /*  NSRange first_word = nil;   // Invalid initializer!  NSRange is a struct */
+  NSInteger tag = 1;
+  if (! NILP (buffer) ) 
+    {
+      tag = sxhash (buffer, 0);
+    }
+
+  /* unfinished -
+  if ([sc respondsToSelector:@selector(checkString:range:types:options:inSpellDocumentWithTag:orthography:wordCount:)])
+    {
+      NSString *nsString = [NSString stringWithUTF8String: SDATA (string)];
+      NSArray *spelling_result = [sc
+				   checkString:nsString
+					 range:NSMakeRange(0,[nsString size]-1)
+					 types:NSTextCheckingAllSystemTypes - NSTextCheckingTypeGrammar
+				       options:nil
+				     inSpellDocumentWithTag:tag
+				   orthography:nil // difficult to produce 
+				     wordCount:nil];
+				   
+    } else */
+    // { 
+
+      NSRange first_word =  [sc checkSpellingOfString:[NSString stringWithUTF8String: SDATA (string)] startingAt:((NSInteger) 0)
+					     language:nil wrap:NO inSpellDocumentWithTag:tag wordCount:nil];
+
+    // }
+  unblock_input();
+  if (first_word.location == NSNotFound || (int) first_word.location < 0)
+    return Qnil;
+  else
+    return Fcons (make_number (first_word.location), make_number (first_word.length));
+}
+
+
+DEFUN ("ns-spellchecker-check-grammar", Fns_spellchecker_check_grammar, Sns_spellchecker_check_grammar,
+       1, 2, 0,
+       doc: /* Check spelling of SENTENCE.
+BUFFER, if given, idenitifies the document containing list 
+of ignored grammatical constructions. */)
+     (sentence, buffer)
+     Lisp_Object sentence, buffer;
+{
+  id sc;
+
+  CHECK_STRING (sentence);
+  check_window_system (NULL);
+  block_input();
+  sc = [NSSpellChecker sharedSpellChecker];
+
+  NSInteger tag = 1;
+  if (! NILP (buffer) ) 
+    {
+      tag = sxhash (buffer, 0);
+    }
+
+  NSArray *errdetails;
+
+  /* to do: use long version */
+  NSRange first_word = [sc checkGrammarOfString: [NSString stringWithUTF8String: SDATA (sentence)] startingAt:((NSInteger) 0)
+				       language:nil wrap:NO inSpellDocumentWithTag:tag details:&errdetails];
+
+  unblock_input();
+  if (first_word.location < 0)
+    return Qnil;
+  else
+    return Fcons (make_number ((int) first_word.location), make_number ((int) first_word.length));
+}
+
+
+DEFUN ("ns-spellchecker-get-suggestions", Fns_spellchecker_get_suggestions, Sns_spellchecker_get_suggestions,
+       1, 1, 0,
+       doc: /* Get suggestions for WORD.
+If word contains all capital letters, or its first 
+letter is capitalized, the suggested words are
+capitalized in the same way. */)
+     (word)
+     Lisp_Object word;
+{
+  id sc;
+
+  CHECK_STRING (word);
+  check_window_system (NULL);
+  block_input();
+  sc = [NSSpellChecker sharedSpellChecker];
+
+  Lisp_Object retval = Qnil;
+  NSArray *guesses = [sc guessesForWord: [NSString stringWithUTF8String: SDATA (word)]];
+  int arrayCount = [guesses count];
+  int i = arrayCount;
+  while (--i >= 0)
+    retval = Fcons (build_string ([[guesses objectAtIndex:i] UTF8String]),
+		    retval);
+  unblock_input();
+  return retval;
+}
+
+
+DEFUN ("ns-spellchecker-list-languages", Fns_spellchecker_list_languages, Sns_spellchecker_list_languages,
+       0, 0, 0,
+       doc: /* Get all available spell-checking languages.
+Returns nil if not successful.*/)
+     (void)
+{
+  id sc;
+  Lisp_Object retval = Qnil;
+
+  check_window_system (NULL);
+  block_input();
+  sc = [NSSpellChecker sharedSpellChecker];
+
+#ifdef NS_IMPL_COCOA
+  if ([sc respondsToSelector:@selector(availableLanguages)]) // (NSAppKitVersionNumber >= 824.0)
+    {
+      NSArray *langs = [sc availableLanguages];
+      int arrayCount = [langs count];
+      int i;
+      for (i = 0; i < arrayCount; i++) {
+	// build Lisp list of strings
+	retval = Fcons (build_string ([[langs objectAtIndex:i] UTF8String]),
+			retval);
+      }
+    }
+#endif
+  unblock_input();
+  return retval;
+}
+
+
+DEFUN ("ns-spellchecker-current-language", Fns_spellchecker_current_language, Sns_spellchecker_current_language,
+       0, 0, 0,
+       doc: /* Get the current spell-checking language.*/)
+     (void)
+{
+  id sc;
+
+  check_window_system (NULL);
+  block_input();
+  sc = [NSSpellChecker sharedSpellChecker];
+
+  Lisp_Object retval = Qnil;
+  NSString *lang = [sc language];
+  retval = build_string ([lang UTF8String]);
+
+  unblock_input();
+  return retval;
+}
+
+
+DEFUN ("ns-spellchecker-set-language", Fns_spellchecker_set_language, Sns_spellchecker_set_language,
+       1, 1, 0,
+       doc: /* Set spell-checking language.
+LANGUAGE must be one of the languages returned by
+`ns-spellchecker-list-langauges'.*/)
+     (language)
+     Lisp_Object language;
+{
+  id sc;
+
+  CHECK_STRING (language);
+  check_window_system (NULL);
+  block_input();
+  sc = [NSSpellChecker sharedSpellChecker];
+
+  [sc setLanguage: [NSString stringWithUTF8String: SDATA (language)]];
+  unblock_input();
+  return Qnil;
+}
+
+
 DEFUN ("ns-popup-font-panel", Fns_popup_font_panel, Sns_popup_font_panel,
-       0, 1, "",
+       0, 2, "",
        doc: /* Pop up the font panel. */)
-     (Lisp_Object frame)
+     (frame, face)
+     Lisp_Object frame, face;
 {
   struct frame *f = decode_window_system_frame (frame);
   id fm = [NSFontManager sharedFontManager];
+
+  check_window_system (NULL);
+  block_input();
+
+  fm = [NSFontManager sharedFontManager];
   struct font *font = f->output_data.ns->font;
   NSFont *nsfont;
+
+  // default font
   if (EQ (font->driver->type, Qns))
     nsfont = ((struct nsfont_info *)font)->nsfont;
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
   else
     nsfont = (NSFont *) macfont_get_nsctfont (font);
 #endif
+ 
+  // given font
+  if (! NILP (face))
+    {
+      int face_id = lookup_named_face (f, face, 1);
+      if (face_id)
+	{
+	  struct face *face = FACE_FROM_ID (f, face_id);
+	  if (face)
+	    {
+	      if (EQ (face->font->driver->type, Qns))
+		nsfont = ((struct nsfont_info *)face->font)->nsfont;
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+	      else
+		nsfont = (NSFont *) macfont_get_nsctfont (face->font);
+#endif
+	    }
+	}
+    } 
   [fm setSelectedFont: nsfont isMultiple: NO];
   [fm orderFrontFontPanel: NSApp];
+
+  unblock_input();
   return Qnil;
 }
 
 
 DEFUN ("ns-popup-color-panel", Fns_popup_color_panel, Sns_popup_color_panel,
-       0, 1, "",
+       0, 2, "",
        doc: /* Pop up the color panel.  */)
-     (Lisp_Object frame)
+     (frame, color)
+     Lisp_Object frame, color;
 {
+  struct frame *f;
   check_window_system (NULL);
+  check_window_system (NULL);
+  block_input();
+  if (NILP (frame))
+    f = SELECTED_FRAME ();
+  else
+    {
+      CHECK_FRAME (frame);
+      f = XFRAME (frame);
+    }
+  if (!NILP (color))
+    {
+      CHECK_STRING (color);
+      NSColor *col = nil;
+      if (ns_lisp_to_color (color, &col))
+	  error ("Unknown color");
+
+      /* It's unclear whether the color panel copies the color,
+	 or requires us to retain it (probably not).
+	 As a compromise, we're retaining/autoreleasing at this time.
+	 This should not create a leak. */
+      [[NSColorPanel sharedColorPanel] setColor:[[col retain] autorelease]];
+    }
+
   [NSApp orderFrontColorPanel: NSApp];
+  unblock_input();
   return Qnil;
 }
 
@@ -1441,6 +1953,276 @@ ns_run_file_dialog (void)
 #endif
   ns_fd_data.panel = nil;
 }
+
+
+DEFUN ("ns-popup-page-setup-panel", Fns_popup_page_setup_panel, Sns_popup_page_setup_panel,
+       0, 0, "",
+       doc: /* Pop up the page setup panel.  */)
+     (void)
+{
+  check_window_system (NULL);
+  block_input();
+
+  NSPageLayout *pageLayout = [NSPageLayout pageLayout];
+
+  [pageLayout beginSheetWithPrintInfo:[NSPrintInfo sharedPrintInfo]
+		       modalForWindow:[FRAME_NS_VIEW (SELECTED_FRAME ()) window] /* not right. */
+			     delegate:FRAME_NS_VIEW (SELECTED_FRAME ())
+		       didEndSelector:@selector(pageLayoutDidEnd:returnCode:contextInfo:)
+			  contextInfo:nil];
+  
+  /* runModal doesn't work for some reason, even though
+     it would be the right thing to do.  Use the technique from ns_popup_dialog?
+     can't get at the pageLayout window, which we'd need for that. */
+
+  // [pageLayout runModal];
+
+  // [[FRAME_NS_VIEW (SELECTED_FRAME ()) window] makeKeyWindow];
+  unblock_input();
+  return Qnil;
+}
+
+DEFUN ("ns-render-to-pdf", Fns_render_to_pdf, Sns_render_to_pdf,
+       0, 3, "",
+       doc: /* Render HTML file or buffer SOURCE to PDF.
+If successful, resulting PDF (and the input HTML) are put
+on the pasteboard.*/)
+     (source, width, height)
+     Lisp_Object source, width, height;
+{
+  struct frame *f;
+  check_window_system (NULL);
+  CHECK_NATNUM(width);
+  CHECK_NATNUM(height);
+  if (! BUFFERP (source))
+    {
+     error ("Must give buffer as source for ns-render-to-pdf.");
+    }
+
+  block_input();
+
+  WebView *htmlPage = [[WebView alloc] initWithFrame:NSMakeRect(0,0,XINT (width),XINT (height))
+					   frameName:@"myFrame"
+					   groupName:@"myGroup"];
+
+  /* Render HTML */
+  struct buffer *old_buffer = NULL;
+  if (XBUFFER (source) != current_buffer)
+    {
+      old_buffer = current_buffer;
+      set_buffer_internal_1 (XBUFFER (source));
+    }
+  Lisp_Object string = make_buffer_string (BEGV, ZV, 0);
+  if (old_buffer)
+    set_buffer_internal_1 (old_buffer);
+  
+  [[htmlPage mainFrame] loadHTMLString:
+	[NSString stringWithUTF8String: SDATA (string)] /* is copied */
+			       baseURL:[NSURL fileURLWithPath: [[NSBundle mainBundle] resourcePath]]];
+
+  /* In this case, let's just wait until it's finished. */
+  double current_time = [[NSDate date] timeIntervalSinceReferenceDate];
+  while ([htmlPage  estimatedProgress] > 0.00) {
+    if ([[NSDate date] timeIntervalSinceReferenceDate] - current_time >= .6)
+      break;
+    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.02]];
+  }
+  if ([htmlPage  estimatedProgress] > 0.00)
+    {
+      unblock_input();
+      [htmlPage release];
+      error ("Rendering failed (timeout).");
+    }
+
+  //get the rect for the rendered frame
+  NSRect webFrameRect = [[[[htmlPage mainFrame] frameView] documentView] frame];
+  //get the rect of the current webview
+  NSRect webViewRect = [htmlPage frame];
+
+  //calculate the new frame
+  NSRect newWebViewRect = NSMakeRect(webViewRect.origin.x, 
+				     webViewRect.origin.y - (NSHeight(webFrameRect) - NSHeight(webViewRect)), 
+				     NSWidth(webViewRect), 
+				     NSHeight(webFrameRect));
+  //set the frame
+  [htmlPage setFrame:newWebViewRect];
+	
+  NSRect bounds = [[[[htmlPage mainFrame]frameView]documentView]
+	     bounds];
+
+	/* Alternative way of doing this, via Javascript ...
+  NSString *actualHeightStr = [htmlPage stringByEvaluatingJavaScriptFromString:@"(function(){var a=document.body,b=document.documentElement;return Math.max(a.scrollHeight,b.scrollHeight)})();"];
+  int actualHeight = [actualHeightStr integerValue];
+  NSString *actualWidthStr = [htmlPage stringByEvaluatingJavaScriptFromString:@"(function(){var a=document.body,b=document.documentElement;return Math.max(a.scrollWidth,b.scrollWidth)})();"];
+  int actualWidth = [actualWidthStr integerValue];
+  NSLog(actualWidthStr);
+  NSLog(actualHeightStr);
+  if (actualHeight > 0) // JS above worked as intended
+    {
+      bounds.size.height = actualHeight;
+    }
+  if (actualWidth > 0) // JS above worked as intended
+    {
+      bounds.size.width = actualWidth;
+    }
+
+  */
+
+  /* Note: we could also just use writePDFInsideRect:toPasteboard:
+     but we're concurrently writing HTML as well. */
+
+  NSData *viewImageData=[[[[htmlPage mainFrame] frameView] documentView]
+			  dataWithPDFInsideRect:bounds];
+  PDFDocument *pdf = [[PDFDocument alloc] initWithData:viewImageData];
+  NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
+  [pasteboard clearContents];
+  [pasteboard declareTypes:[NSArray arrayWithObjects:NSPDFPboardType, NSHTMLPboardType, nil] owner:nil];
+  [pasteboard setData:[pdf dataRepresentation] forType:NSPDFPboardType];
+  [pasteboard setData:[NSData dataWithBytes: SDATA (string) length:strlen(SDATA (string))] forType:NSHTMLPboardType];
+  [pdf release];
+  [htmlPage release];
+  unblock_input();
+  return Qnil;
+}
+
+DEFUN ("ns-popup-print-panel", Fns_popup_print_panel, Sns_popup_print_panel,
+       0, 2, "",
+       doc: /* Pop up the print panel.  */)
+     (frame, source)
+     Lisp_Object frame, source;
+{
+  struct frame *f;
+  check_window_system (NULL);
+  block_input();
+  if (NILP (frame))
+    f = SELECTED_FRAME ();
+  else
+    {
+      CHECK_FRAME (frame);
+      f = XFRAME (frame);
+    }
+
+  WebView *htmlPage = [[WebView alloc] initWithFrame:NSMakeRect(0,0,300,300)
+					   frameName:@"myFrame"
+					   groupName:@"myGroup"];
+
+
+  if (STRINGP (source))
+    {
+      [[htmlPage mainFrame] loadRequest:[NSURLRequest requestWithURL:
+					      [NSURL fileURLWithPath: 
+						       [NSString stringWithUTF8String: SDATA (source) ]]]];
+    }
+  else if (BUFFERP (source))
+    {
+      struct buffer *old_buffer = NULL;
+      if (XBUFFER (source) != current_buffer)
+	{
+	  old_buffer = current_buffer;
+	  set_buffer_internal_1 (XBUFFER (source));
+	}
+      Lisp_Object string = make_buffer_string (BEGV, ZV, 0);
+      if (old_buffer)
+	  set_buffer_internal_1 (old_buffer);
+
+      [[htmlPage mainFrame] loadHTMLString:
+	    [NSString stringWithUTF8String: SDATA (string)] /* is copied */
+				   baseURL:[NSURL fileURLWithPath: [[NSBundle mainBundle] resourcePath]]];
+    }
+  else
+    {
+      unblock_input();
+      error ("Must give buffer or file path as source for ns-popup-print-panel.");
+    }
+
+  /*
+
+    works for PDF:
+
+  PDFView *pdfView = [[[PDFView alloc] init] retain];
+  PDFDocument *pdfDoc = [[[PDFDocument alloc] initWithURL: [NSURL fileURLWithPath: 
+								    [NSString stringWithUTF8String: SDATA (pdf_file) ]]] retain];
+
+  if (pdfDoc == NULL)
+    {
+      [pdfView release];
+      error("Could not load PDF file.");
+    }
+  
+
+  [pdfView setDocument: pdfDoc];
+  [pdfView setDisplayMode: kPDFDisplaySinglePageContinuous];
+  [pdfView layoutDocumentView];
+
+  [FRAME_NS_VIEW(f) addSubview:pdfView];
+  // this seems to have problems with the run loop or something
+  [pdfView printWithInfo:[NSPrintInfo sharedPrintInfo] autoRotate:NO];
+
+*/
+
+  /* call back when finished loading.
+     delegate implemented in nsterm.m */
+  [htmlPage setFrameLoadDelegate:FRAME_NS_VIEW (f)];
+  
+  unblock_input();
+  return Qnil;
+}
+
+// extern void ns_update_menubar (struct frame *f, bool deep_p, EmacsMenu *submenu);
+
+Lisp_Object save_panel_callback;
+DEFUN ("ns-popup-save-panel", Fns_popup_save_panel, Sns_popup_save_panel,
+       0, 3, "",
+       doc: /* Pop up the save panel as a sheet over the current buffer.  
+Upon completion, the event `ns-save-panel-closed' will be sent,
+with the variable `ns-save-panel-file' containing the selected file
+(nil if cancelled), and `ns-save-panel-buffer' the buffer current
+when `ns-popup-save-panel' was called.
+*/)
+     (prompt, dir, init)
+     Lisp_Object prompt, dir, init;
+{
+  NSSavePanel *panel;
+
+  check_window_system (NULL);
+  block_input();
+
+  NSString *promptS = NILP (prompt) || !STRINGP (prompt) ? nil :
+    [NSString stringWithUTF8String: SDATA (prompt)];
+  NSString *dirS = NILP (dir) || !STRINGP (dir) ?
+    [NSString stringWithUTF8String: SDATA (BVAR (current_buffer, directory))] :
+    [NSString stringWithUTF8String: SDATA (dir)];
+  NSString *initS = NILP (init) || !STRINGP (init) ? nil :
+    [NSString stringWithUTF8String: SDATA (init)];
+
+
+  if ([dirS characterAtIndex: 0] == '~')
+    dirS = [dirS stringByExpandingTildeInPath];
+
+  panel = [EmacsSavePanel savePanel];
+
+  [panel setTitle: promptS];
+
+  [panel setTreatsFilePackagesAsDirectories: YES];
+  [panel setCanSelectHiddenExtension:NO];
+  [panel setExtensionHidden:NO];
+
+  if (dirS) [panel setDirectoryURL: [NSURL fileURLWithPath: dirS]];
+  if (initS) [panel setNameFieldStringValue: [initS lastPathComponent]];
+
+  [panel beginSheetModalForWindow:[FRAME_NS_VIEW (SELECTED_FRAME ()) window]
+		completionHandler: 
+	   ^(NSInteger result) {
+      [((EmacsApp *) NSApp) savePanelDidEnd2: panel returnCode:result contextInfo:current_buffer];
+
+    }];
+    // to do: move code from savePanelDidEnd2 here
+  
+  set_frame_menubar (SELECTED_FRAME (), nil, false);
+  unblock_input();
+  return Qnil;
+}
+
 
 DEFUN ("ns-read-file-name", Fns_read_file_name, Sns_read_file_name, 1, 5, 0,
        doc: /* Use a graphical panel to read a file name, using prompt PROMPT.
@@ -1484,6 +2266,9 @@ Optional arg DIR_ONLY_P, if non-nil, means choose only directories.  */)
 
   [panel setAllowsOtherFileTypes: YES];
   [panel setTreatsFilePackagesAsDirectories: YES];
+  /* must provide - users will have a hard time switching this off otherwise */
+  [panel setCanSelectHiddenExtension:NO];
+  [panel setExtensionHidden:NO];
   [panel setDelegate: fileDelegate];
 
   if (! NILP (dir_only_p))
@@ -1584,7 +2369,6 @@ If OWNER is nil, Emacs is assumed.  */)
   return Qnil;
 }
 
-
 DEFUN ("ns-set-resource", Fns_set_resource, Sns_set_resource, 3, 3, 0,
        doc: /* Set property NAME of OWNER to VALUE, from the defaults database.
 If OWNER is nil, Emacs is assumed.
@@ -1644,6 +2428,22 @@ If omitted or nil, that stands for the selected frame's display.  */)
 }
 
 
+DEFUN ("ns-os-version", Fns_os_version, Sns_os_version, 0, 0, 0,
+       doc: /* Return the version identification of the OS. 
+This is a human-readable string inappropriate for parsing.
+See `x-server-version' for programmatical uses.*/)
+  (void)
+{
+#ifdef NS_IMPL_GNUSTEP
+  return Qnil;
+#else
+
+  NSString * operatingSystemVersionString = [[NSProcessInfo processInfo] operatingSystemVersionString];
+  return build_string([operatingSystemVersionString UTF8String]);
+  
+#endif
+}
+
 DEFUN ("x-server-version", Fx_server_version, Sx_server_version, 0, 1, 0,
        doc: /* Return the version numbers of the server of display TERMINAL.
 The value is a list of three integers: the major and minor
@@ -1691,11 +2491,17 @@ If omitted or nil, that stands for the selected frame's display.
 On \"multi-monitor\" setups this refers to the height in millimeters for
 all physical monitors associated with TERMINAL.  To get information
 for each physical monitor, use `display-monitor-attributes-list'.  */)
-  (Lisp_Object terminal)
+  (Lisp_Object display)
 {
-  struct ns_display_info *dpyinfo = check_ns_display_info (terminal);
+  check_ns_display_info (display);
 
-  return make_number (x_display_pixel_height (dpyinfo) / (92.0/25.4));
+  NSScreen *screen = ns_get_screen (display);
+
+  CGDirectDisplayID displayID = (CGDirectDisplayID)[[[screen deviceDescription] objectForKey:@"NSScreenNumber"] unsignedIntValue];
+  CGSize physicalSize = CGDisplayScreenSize(displayID);
+  
+  // height in mm
+  return make_number ((int) physicalSize.height);
 }
 
 
@@ -1708,11 +2514,17 @@ If omitted or nil, that stands for the selected frame's display.
 On \"multi-monitor\" setups this refers to the width in millimeters for
 all physical monitors associated with TERMINAL.  To get information
 for each physical monitor, use `display-monitor-attributes-list'.  */)
-  (Lisp_Object terminal)
+  (Lisp_Object display)
 {
-  struct ns_display_info *dpyinfo = check_ns_display_info (terminal);
+  check_ns_display_info (display);
 
-  return make_number (x_display_pixel_width (dpyinfo) / (92.0/25.4));
+  NSScreen *screen = ns_get_screen (display);
+
+  CGDirectDisplayID displayID = (CGDirectDisplayID)[[[screen deviceDescription] objectForKey:@"NSScreenNumber"] unsignedIntValue];
+  CGSize physicalSize = CGDisplayScreenSize(displayID);
+  
+  // width in mm
+  return make_number ((int) physicalSize.width);
 }
 
 
@@ -2075,8 +2887,9 @@ DEFUN ("ns-convert-utf8-nfd-to-nfc", Fns_convert_utf8_nfd_to_nfc,
   return ret;
 }
 
-
 #ifdef NS_IMPL_COCOA
+
+
 
 /* Compile and execute the AppleScript SCRIPT and return the error
    status as function value.  A zero is returned if compilation and
@@ -2086,19 +2899,15 @@ DEFUN ("ns-convert-utf8-nfd-to-nfc", Fns_convert_utf8_nfd_to_nfc,
 static int
 ns_do_applescript (Lisp_Object script, Lisp_Object *result)
 {
-  NSAppleEventDescriptor *desc;
-  NSDictionary* errorDict;
-  NSAppleEventDescriptor* returnDescriptor = NULL;
+  NSAppleEventDescriptor* desc;
+  NSAppleEventDescriptor* returnDescriptor;
 
-  NSAppleScript* scriptObject =
-    [[NSAppleScript alloc] initWithSource:
-			     [NSString stringWithUTF8String: SSDATA (script)]];
-
-  returnDescriptor = [scriptObject executeAndReturnError: &errorDict];
-  [scriptObject release];
+  // execute in main thread
+  returnDescriptor = [((EmacsApp*) NSApp) executeApplescript: [NSString stringWithUTF8String: SSDATA (script)]];
 
   *result = Qnil;
 
+  // to do: maybe evaluate the message in errorDict instead, as per API documentation
   if (returnDescriptor != NULL)
     {
       // successful execution
@@ -2166,6 +2975,16 @@ In case the execution fails, an error is signaled. */)
   as_script = script;
   as_result = &result;
 
+  NSWindow *win = [NSApp mainWindow];
+  if (win == nil)
+  {
+    // if application hidden, try to get the first of all windows
+    NSArray *a = [NSApp windows];
+    if ([a count]>0)
+      {
+	win = [a objectAtIndex:0];
+      }
+  }
   /* executing apple script requires the event loop to run, otherwise
      errors aren't returned and executeAndReturnError hangs forever.
      Post an event that runs applescript and then start the event loop.
@@ -2174,7 +2993,7 @@ In case the execution fails, an error is signaled. */)
                             location: NSMakePoint (0, 0)
                        modifierFlags: 0
                            timestamp: 0
-                        windowNumber: [[NSApp mainWindow] windowNumber]
+                        windowNumber: [win windowNumber]
                              context: [NSApp context]
                              subtype: 0
                                data1: 0
@@ -2202,11 +3021,258 @@ In case the execution fails, an error is signaled. */)
 
 
 
+// -- ODB Editor Support ----------------------------------------------------
+
+/*
+ * Code adapted from MacVIM - gui_macvim.m
+ *
+ * The ODB Editor protocol works like this:
+ * - An external program (the server) asks us to open a file and associates
+ *   three things with this file: (1) a server id (a four character code that
+ *   identifies the server), (2) a path that can be used as window title for
+ *   the file (optional), (3) an arbitrary token (optional)
+ *   This is handled in nsterm.m's extractArgumentsFromOdocEvent().
+ * - When a file is saved or closed, we should tell the server about which
+ *   file was modified and also pass back the token
+ *
+ * All communication between Aquamacs and the server is handled via Apple Events.
+ */
+
+OSStatus odb_event (struct buffer *buffer,
+		Lisp_Object parms,
+		const AEEventID action)
+{
+  Lisp_Object Qremote_id = intern("remote-id");
+  Lisp_Object Qremote_token_data = intern("remote-token-data");
+  Lisp_Object Qremote_token_type = intern("remote-token-type");
+
+  Lisp_Object remote_id, remote_token_data, remote_token_type;
+  OSType rid;
+
+  remote_id = Fcdr (Fassq (Qremote_id, parms));
+  remote_token_data = Fcdr (Fassq (Qremote_token_data, parms));
+  remote_token_type = Fcdr (Fassq (Qremote_token_type, parms));
+
+  if (NILP (remote_id))
+    return -1000;
+        
+  if (Fcdr (remote_id))
+    rid = (XUINT (Fcar (remote_id)) << 16) | XUINT (Fcdr (remote_id));
+  else
+    rid = XUINT (remote_id);
+
+  /* Destination Process */
+    NSAppleEventDescriptor *targetDesc = [NSAppleEventDescriptor
+            descriptorWithDescriptorType:typeApplSignature
+                                   bytes:&rid
+                                  length:sizeof(OSType)];
+
+
+    /* file name */
+    NSString *path = [NSString stringWithUTF8String:SDATA (BVAR (current_buffer, filename))];
+    NSData *pathData = [[[NSURL fileURLWithPath:path] absoluteString]
+            dataUsingEncoding:NSUTF8StringEncoding];
+    NSAppleEventDescriptor *pathDesc = [NSAppleEventDescriptor
+            descriptorWithDescriptorType:typeFileURL data:pathData];
+
+    /* Make event */
+    NSAppleEventDescriptor *event = [NSAppleEventDescriptor
+            appleEventWithEventClass:kODBEditorSuite
+                             eventID:action
+                    targetDescriptor:targetDesc
+                            returnID:kAutoGenerateReturnID
+                       transactionID:kAnyTransactionID];
+
+    [event setParamDescriptor:pathDesc forKeyword:keyDirectObject];
+
+    if (! NILP (remote_token_data) && ! NILP (remote_token_type))
+      {
+	NSData *tokenData = [[NSString stringWithUTF8String:SDATA (remote_token_data)]
+			      dataUsingEncoding:NSNonLossyASCIIStringEncoding];
+	if (tokenData)
+	  {
+	    DescType tokenType;
+
+	    if (Fcdr (remote_token_type))
+	      tokenType = (XUINT (Fcar (remote_token_type)) << 16) | XUINT (Fcdr (remote_token_type));
+	    else
+	      tokenType = XUINT (remote_token_type);
+
+	    [event setParamDescriptor: 
+		     [NSAppleEventDescriptor descriptorWithDescriptorType:tokenType
+								     data:tokenData]
+			   forKeyword: keySenderToken];
+	  }
+      }
+
+    return AESendMessage([event aeDesc], NULL, kAENoReply | kAENeverInteract,
+            kAEDefaultTimeout);
+}
+
+
+DEFUN ("ns-send-odb-notification", Fns_send_odb_notification, Sns_send_odb_notification, 3, 3, 0,
+       doc: /* Send ODB notification after file save.
+BUF is the buffer in question.
+TYPE is one of `saved', `closed'.
+PARMS is an association list as communicated for the opening event for the specific buffer.
+ */)
+     (type, buf, parms)
+     Lisp_Object type, buf, parms;
+{
+  struct buffer *buffer;
+
+  if (NILP (buf))
+    buffer = current_buffer;
+  else
+    buffer = XBUFFER (buf);
+
+  CHECK_BUFFER (buf);
+
+  if (EQ (type, intern ("closed")))
+    {
+      OSStatus err_val = odb_event (buffer, parms, kAEClosedFile);
+      if (err_val != noErr)
+	error("Error %d during ODB notification for `closed'.", err_val);
+    }
+  else if (EQ (type, intern ("saved")))
+    {
+      OSStatus err_val = odb_event (buffer, parms, kAEModifiedFile);
+      if (err_val != noErr)
+	error("Error %d during ODB notification for `saved'.", err_val);
+    }
+  else
+    {
+      error ("ODB: TYPE must be one of `closed', `saved'.");
+    }
+    
+  return Qnil;
+}
+
+
+
+DEFUN ("ns-application-hidden-p", Fns_application_hidden_p, Sns_application_hidden_p, 0, 0, 0,
+       doc: /* Returns non-nil if application is hidden. */)
+    (void)
+{
+
+  check_window_system (NULL);
+  return ([NSApp isHidden] == YES ?
+	  Qt : Qnil);
+}
+
 /* ==========================================================================
 
     Miscellaneous functions not called through hooks
 
    ========================================================================== */
+
+
+DEFUN ("ns-launch-URL-with-default-browser", Fns_launch_url_with_default_browser, Sns_launch_url_with_default_browser, 1, 1, 0,
+       doc: /* Launch the URL with the appropriate handler application.
+ file:// URLs are always opened with the system's default browser, i.e.
+ the http:// handler. Return non-nil if the URL has been successfully 
+ launched.*/)
+(URLstring)
+Lisp_Object URLstring;
+{
+  check_window_system (NULL);
+
+  CHECK_STRING (URLstring);
+  if (NILP (URLstring))
+    {
+		error ("URL is nil.");
+		return Qnil;
+    }
+
+	block_input();
+	// get default browser
+	
+	
+	
+	LSLaunchURLSpec spec;
+	OSStatus status;
+	
+	if (strncmp("file:/", SDATA(URLstring), 6) == 0)
+    {
+		/* Build URL to find out what the default handler for http is.
+		 Without an explicit application reference, the launch function
+		 (e.g. LSOpenFromURLSpec or ICLaunchURL) will determine the
+		 default file handler for the file, which is not neccessarily the
+		 default browser.*/
+		
+		FSRef appRef;  // will be discarded
+		char* urlStr = "http://www.gnu.org/"; // just a test URL
+		CFStringRef inURLCfs = CFStringCreateWithCString(NULL, urlStr,	
+														 kCFStringEncodingASCII);
+		CFURLRef inURLRef = CFURLCreateWithString(NULL, inURLCfs, NULL);
+		
+		/* Get application for opening html pages */
+		status = LSGetApplicationForURL(inURLRef, kLSRolesAll, &appRef,
+										&spec.appURL);
+		CFRelease(inURLRef);
+		CFRelease(inURLCfs);
+    } else
+    {
+		spec.appURL = NULL; /* use preferred application */
+		status = noErr;
+    }
+	if (status == noErr) 
+    {
+		/* Open the file / http with the http handler */
+		CFStringRef targetUrlCfs = 
+		CFStringCreateWithCString(NULL, SDATA(URLstring),
+								  kCFStringEncodingASCII);
+		
+		/* CFStringRef targetUrlCfsEscaped = 
+		 CFURLCreateStringByAddingPercentEscapes(NULL, targetUrlCfs, 
+		 NULL, NULL, 
+		 kCFStringEncodingUTF8);
+		 the URL must already be encoded. */
+		CFURLRef targetUrlRef = 
+		CFURLCreateWithString(NULL, targetUrlCfs, NULL);
+		
+		if (targetUrlRef) 
+		{
+			
+			if ( (spec.itemURLs = 
+				  CFArrayCreate(NULL, (const void **)&targetUrlRef, 1, 
+								&kCFTypeArrayCallBacks)) == NULL)
+			{
+				return Qnil;
+			}
+			spec.passThruParams = NULL;
+			spec.launchFlags = kLSLaunchDefaults;
+			spec.asyncRefCon = NULL;
+			status = LSOpenFromURLSpec(&spec, NULL);
+			
+			CFRelease(spec.itemURLs);
+			CFRelease(targetUrlRef);
+		}
+		CFRelease(targetUrlCfs);
+		/* CFRelease(targetUrlCfsEscaped); */
+		unblock_input();
+		
+		if (! targetUrlRef) 
+		{
+			error ("Could not produce valid URL from string.");
+			return Qnil;
+		}
+		if (status != noErr) 
+		{
+			error ("Failed to launch default browser. Error %ld", XINT(status));
+			return Qnil;
+		}
+    } 
+	else
+    {
+		unblock_input();
+		error ("Could not determine default browser. Error %ld", XINT(status));
+		return Qnil;
+    }
+	
+	
+	return Qt;
+}
 
 /* called from frame.c */
 struct ns_display_info *
@@ -2591,6 +3657,38 @@ Internal use only, use `display-monitor-attributes-list' instead.  */)
   return attributes_list;
 }
 
+DEFUN ("display-usable-bounds", Fns_display_usable_bounds,
+       Sns_display_usable_bounds, 0, 1, 0,
+       doc: /* Return the bounds of the usable part of the screen.
+The return value is a list of integers (LEFT TOP WIDTH HEIGHT), which
+are the boundaries of the usable part of the screen, excluding areas
+reserved for the Mac menu, dock, and so forth.
+
+The screen queried corresponds to DISPLAY, which should be either a
+frame, a display name (a string), or terminal ID.  If omitted or nil,
+that stands for the selected frame's display.  If t, the main display is used.
+
+May return nil if a frame passed in DISPLAY is not on any available display.  */)
+     (display)
+     Lisp_Object display;
+{
+  NSScreen *screen;
+  NSRect vScreen;
+
+  check_ns_display_info (display);
+  screen = ns_get_screen (display);
+  if (!screen)
+    return Qnil;
+
+  vScreen = [screen visibleFrame];
+
+  /* NS coordinate system is upside-down.
+     Transform to screen-specific coordinates. */
+  return list4i (vScreen.origin.x,
+		 [screen frame].size.height
+		 - vScreen.size.height - vScreen.origin.y,
+		 vScreen.size.width, vScreen.size.height);
+}
 
 DEFUN ("x-display-planes", Fx_display_planes, Sx_display_planes,
        0, 1, 0,
@@ -2638,6 +3736,7 @@ compute_tip_xy (struct frame *f,
   EmacsView *view = FRAME_NS_VIEW (f);
   struct ns_display_info *dpyinfo = FRAME_DISPLAY_INFO (f);
   NSPoint pt;
+  NSRect vScreen;
 
   /* Start with user-specified or mouse position.  */
   left = Fcdr (Fassq (Qleft, parms));
@@ -2659,11 +3758,13 @@ compute_tip_xy (struct frame *f,
         - height;
     }
 
+  vScreen = [[[view window] screen] visibleFrame];
+
   /* Ensure in bounds.  (Note, screen origin = lower left.) */
-  if (INTEGERP (left))
-    *root_x = pt.x;
-  else if (pt.x + XINT (dx) <= 0)
-    *root_x = 0; /* Can happen for negative dx */
+  /* valid coordinates may be negative */
+  if (pt.x + XINT (dx) <= vScreen.origin.x)
+    //*root_x = vScreen.origin.x; /* Can happen for negative dx */
+    *root_x = [[view window] frame].origin.x;  // better than just the screen origin
   else if (pt.x + XINT (dx) + width
 	   <= x_display_pixel_width (FRAME_DISPLAY_INFO (f)))
     /* It fits to the right of the pointer.  */
@@ -2673,11 +3774,9 @@ compute_tip_xy (struct frame *f,
     *root_x = pt.x - width - XINT (dx);
   else
     /* Put it left justified on the screen -- it ought to fit that way.  */
-    *root_x = 0;
+    *root_x = vScreen.origin.x;
 
-  if (INTEGERP (top))
-    *root_y = pt.y;
-  else if (pt.y - XINT (dy) - height >= 0)
+  if (pt.y - XINT (dy) - height >= vScreen.origin.y)
     /* It fits below the pointer.  */
     *root_y = pt.y - height - XINT (dy);
   else if (pt.y + XINT (dy) + height
@@ -2745,12 +3844,11 @@ Text larger than the specified size is clipped.  */)
   else
     CHECK_NUMBER (dy);
 
+ if (strlen (str) > 0)
+    {
   block_input ();
   if (ns_tooltip == nil)
     ns_tooltip = [[EmacsTooltip alloc] init];
-  else
-    Fx_hide_tip ();
-
   [ns_tooltip setText: str];
   size = [ns_tooltip frame].size;
 
@@ -2761,7 +3859,7 @@ Text larger than the specified size is clipped.  */)
 
   [ns_tooltip showAtX: root_x Y: root_y for: XINT (timeout)];
   unblock_input ();
-
+    }
   UNGCPRO;
   return unbind_to (count, Qnil);
 }
@@ -2775,8 +3873,32 @@ Value is t if tooltip was open, nil otherwise.  */)
   if (ns_tooltip == nil || ![ns_tooltip isActive])
     return Qnil;
   [ns_tooltip hide];
+  ns_tooltip = nil;
   return Qt;
 }
+
+
+DEFUN ("ns-open-help-anchor", Fns_open_help_anchor, Sns_open_help_anchor, 1, 2, 0,
+       doc: /* Show Apple Help  */)
+     (anchor, book)
+     Lisp_Object anchor, book;
+{
+  check_window_system (NULL);
+  block_input();
+  CHECK_STRING (anchor);
+
+  if (! NILP (book) )
+    CHECK_STRING (book);
+
+  [[NSHelpManager sharedHelpManager] openHelpAnchor:[NSString stringWithUTF8String:
+								SDATA (anchor)]
+					     inBook:(NILP (book) ? nil :
+						     [NSString stringWithUTF8String:
+								 SDATA (book)])];
+  unblock_input();
+  return Qnil;
+}
+
 
 
 /* ==========================================================================
@@ -2862,6 +3984,25 @@ handlePanelKeys (NSSavePanel *panel, NSEvent *theEvent)
 }
 
 @implementation EmacsSavePanel
+#ifdef NS_IMPL_COCOA
+
+- (void)becomeKeyWindow
+{
+  [super becomeKeyWindow];
+  [NSApp setMainMenu: [panelMenu retain]];
+
+}
+
+#endif
+- (NSString *) getFilename
+{
+  return ns_filename_from_panel (self);
+}
+- (NSString *) getDirectory
+{
+  return ns_directory_from_panel (self);
+}
+
 - (BOOL)performKeyEquivalent:(NSEvent *)theEvent
 {
   BOOL ret = handlePanelKeys (self, theEvent);
@@ -2903,8 +4044,8 @@ handlePanelKeys (NSSavePanel *panel, NSEvent *theEvent)
 }
 @end
 
-#endif
 
+#endif
 
 /* ==========================================================================
 
@@ -2944,6 +4085,7 @@ be used as the image of the icon representing the frame.  */);
                doc: /* Toolkit version for NS Windowing.  */);
   Vns_version_string = ns_appkit_version_str ();
 
+  defsubr (&Sns_launch_url_with_default_browser);
   defsubr (&Sns_read_file_name);
   defsubr (&Sns_get_resource);
   defsubr (&Sns_set_resource);
@@ -2954,11 +4096,14 @@ be used as the image of the icon representing the frame.  */);
 #ifdef NS_IMPL_COCOA
   defsubr (&Sns_do_applescript);
 #endif
+  defsubr (&Sns_send_odb_notification);
+  defsubr (&Sns_application_hidden_p);
   defsubr (&Sxw_color_defined_p);
   defsubr (&Sxw_color_values);
   defsubr (&Sx_server_max_request_size);
   defsubr (&Sx_server_vendor);
   defsubr (&Sx_server_version);
+  defsubr (&Sns_os_version);
   defsubr (&Sx_display_pixel_width);
   defsubr (&Sx_display_pixel_height);
   defsubr (&Sns_display_monitor_attributes_list);
@@ -2981,12 +4126,35 @@ be used as the image of the icon representing the frame.  */);
   defsubr (&Sns_list_services);
   defsubr (&Sns_perform_service);
   defsubr (&Sns_convert_utf8_nfd_to_nfc);
+  defsubr (&Sns_cycle_frame);
+  defsubr (&Sns_visible_frame_list);
+  defsubr (&Sns_frame_is_on_active_space_p);
+  defsubr (&Sns_popup_spellchecker_panel);
+  defsubr (&Sns_close_spellchecker_panel);
+  defsubr (&Sns_spellchecker_panel_visible_p);
+  defsubr (&Sns_spellchecker_learn_word);
+  defsubr (&Sns_spellchecker_ignore_word);
+  defsubr (&Sns_spellchecker_ignored_words);
+  defsubr (&Sns_spellchecker_show_word);
+  defsubr (&Sns_spellchecker_check_spelling);
+  defsubr (&Sns_spellchecker_check_grammar);
+  defsubr (&Sns_spellchecker_get_suggestions);
+  defsubr (&Sns_spellchecker_list_languages);
+  defsubr (&Sns_spellchecker_current_language);
+  defsubr (&Sns_spellchecker_set_language);
   defsubr (&Sns_popup_font_panel);
   defsubr (&Sns_popup_color_panel);
+  defsubr (&Sns_popup_print_panel);
+  defsubr (&Sns_popup_page_setup_panel);
+  defsubr (&Sns_popup_save_panel);
+  defsubr (&Sns_render_to_pdf);
 
   defsubr (&Sx_show_tip);
   defsubr (&Sx_hide_tip);
 
+  defsubr (&Sns_open_help_anchor);
+
+  staticpro (&as_script);
   as_status = 0;
   as_script = Qnil;
   as_result = 0;

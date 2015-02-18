@@ -1,0 +1,89 @@
+<html lang="en">
+<head>
+<title>Creating Custom Themes - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Easy-Customization.html#Easy-Customization" title="Easy Customization">
+<link rel="prev" href="Custom-Themes.html#Custom-Themes" title="Custom Themes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
+
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Creating-Custom-Themes"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Custom-Themes.html#Custom-Themes">Custom Themes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Easy-Customization.html#Easy-Customization">Easy Customization</a>
+<hr>
+</div>
+
+<h4 class="subsection">48.1.8 Creating Custom Themes</h4>
+
+<p><a name="index-custom-themes_002c-creating-4357"></a>
+<a name="index-customize_002dcreate_002dtheme-4358"></a>  You can define a Custom theme using an interface similar to the
+customization buffer, by typing <kbd>M-x customize-create-theme</kbd>. 
+This switches to a buffer named <samp><span class="file">*Custom Theme*</span></samp>.  It also offers
+to insert some common Emacs faces into the theme (a convenience, since
+Custom themes are often used to customize faces).  If you answer no,
+the theme will initially contain no settings.
+
+   <p>Near the top of the <samp><span class="file">*Custom Theme*</span></samp> buffer are editable fields
+where you can enter the theme's name and description.  The name can be
+anything except &lsquo;<samp><span class="samp">user</span></samp>&rsquo;.  The description is the one that will be
+shown when you invoke <kbd>M-x describe-theme</kbd> for the theme.  Its
+first line should be a brief one-sentence summary; in the buffer made
+by <kbd>M-x customize-themes</kbd>, this sentence is displayed next to the
+theme name.
+
+   <p>To add a new setting to the theme, use the &lsquo;<samp><span class="samp">[Insert Additional
+Face]</span></samp>&rsquo; or &lsquo;<samp><span class="samp">[Insert Additional Variable]</span></samp>&rsquo; buttons.  Each button
+reads a face or variable name using the minibuffer, with completion,
+and inserts a customization entry for the face or variable.  You can
+edit the variable values or face attributes in the same way as in a
+normal customization buffer.  To remove a face or variable from the
+theme, uncheck the checkbox next to its name.
+
+   <p><a name="index-custom_002dtheme_002ddirectory-4359"></a>  After specifying the Custom theme's faces and variables, type
+<kbd>C-x C-s</kbd> (<code>custom-theme-write</code>) or use the buffer's
+&lsquo;<samp><span class="samp">[Save Theme]</span></samp>&rsquo; button.  This saves the theme file, named
+<samp><var>name</var><span class="file">-theme.el</span></samp> where <var>name</var> is the theme name, in the
+directory named by <code>custom-theme-directory</code>.
+
+   <p>From the <samp><span class="file">*Custom Theme*</span></samp> buffer, you can view and edit an
+existing Custom theme by activating the &lsquo;<samp><span class="samp">[Visit Theme]</span></samp>&rsquo; button
+and specifying the theme name.  You can also add the settings of
+another theme into the buffer, using the &lsquo;<samp><span class="samp">[Merge Theme]</span></samp>&rsquo; button. 
+You can import your non-theme settings into a Custom theme by using
+the &lsquo;<samp><span class="samp">[Merge Theme]</span></samp>&rsquo; button and specifying the special theme named
+&lsquo;<samp><span class="samp">user</span></samp>&rsquo;.
+
+   <p>A theme file is simply an Emacs Lisp source file, and loading the
+Custom theme works by loading the Lisp file.  Therefore, you can edit
+a theme file directly instead of using the <samp><span class="file">*Custom Theme*</span></samp>
+buffer.  See <a href="../elisp/Custom-Themes.html#Custom-Themes">Custom Themes</a>, for details.
+
+   </body></html>
+

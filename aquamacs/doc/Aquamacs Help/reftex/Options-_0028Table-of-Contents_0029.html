@@ -1,0 +1,196 @@
+<html lang="en">
+<head>
+<title>Options (Table of Contents) - RefTeX User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="RefTeX User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Options.html#Options" title="Options">
+<link rel="next" href="Options-_0028Defining-Label-Environments_0029.html#Options-_0028Defining-Label-Environments_0029" title="Options (Defining Label Environments)">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents RefTeX, a package to do labels, references,
+citations and indices for LaTeX documents with Emacs.
+
+This is edition 4.31 of the RefTeX User Manual for
+RefTeX 4.31
+
+Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Options-(Table-of-Contents)"></a>
+<a name="Options-_0028Table-of-Contents_0029"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Options-_0028Defining-Label-Environments_0029.html#Options-_0028Defining-Label-Environments_0029">Options (Defining Label Environments)</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Options.html#Options">Options</a>
+<hr>
+</div>
+
+<h3 class="section">8.1 Table of Contents</h3>
+
+<p><a name="index-Options_002c-table-of-contents-441"></a><a name="index-Table-of-contents_002c-options-442"></a>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-include-file-commands</b><var><a name="index-reftex_002dinclude_002dfile_002dcommands-443"></a></var><br>
+<blockquote><p>List of LaTeX commands which input another file. 
+The file name is expected after the command, either in braces or separated
+by whitespace. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-max-section-depth</b><var><a name="index-reftex_002dmax_002dsection_002ddepth-444"></a></var><br>
+<blockquote><p>Maximum depth of section levels in document structure. 
+Standard LaTeX needs 7, default is 12. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-section-levels</b><var><a name="index-reftex_002dsection_002dlevels-445"></a></var><br>
+<blockquote><p>Commands and levels used for defining sections in the document.  The
+<code>car</code> of each cons cell is the name of the section macro.  The
+<code>cdr</code> is a number indicating its level.  A negative level means the
+same as the positive value, but the section will never get a number. 
+The <code>cdr</code> may also be a function which then has to return the
+level.  This list is also used for promotion and demotion of sectioning
+commands.  If you are using a document class which has several sets of
+sectioning commands, promotion only works correctly if this list is
+sorted first by set, then within each set by level.  The promotion
+commands always select the nearest entry with the correct new level.
+
+        </blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-toc-max-level</b><var><a name="index-reftex_002dtoc_002dmax_002dlevel-446"></a></var><br>
+<blockquote><p>The maximum level of toc entries which will be included in the TOC. 
+Section headings with a bigger level will be ignored.  In RefTeX,
+chapters are level 1, sections level 2 etc.  This variable can be
+changed from within the <samp><span class="file">*toc*</span></samp> buffer with the <kbd>t</kbd> key. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-part-resets-chapter</b><var><a name="index-reftex_002dpart_002dresets_002dchapter-447"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means, <code>\part</code> is like any other sectioning command. 
+This means, part numbers will be included in the numbering of chapters, and
+chapter counters will be reset for each part. 
+When <code>nil</code> (the default), parts are special, do not reset the
+chapter counter and also do not show up in chapter numbers. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-auto-recenter-toc</b><var><a name="index-reftex_002dauto_002drecenter_002dtoc-448"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means, turn automatic recentering of <samp><span class="file">*TOC*</span></samp> window on. 
+When active, the <samp><span class="file">*TOC*</span></samp> window will always show the section you
+are currently working in.  Recentering happens whenever Emacs is idle for
+more than <code>reftex-idle-time</code> seconds.
+
+        <p>Value <code>t</code> means, turn on immediately when RefTeX gets started.  Then,
+recentering will work for any toc window created during the session.
+
+        <p>Value <code>frame</code> (the default) means, turn automatic recentering on
+only while the dedicated TOC frame does exist, and do the recentering
+only in that frame.  So when creating that frame (with <kbd>d</kbd> key in an
+ordinary TOC window), the automatic recentering is turned on.  When the
+frame gets destroyed, automatic recentering is turned off again.
+
+        <p>This feature can be turned on and off from the menu
+(Ref-&gt;Options). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-toc-split-windows-horizontally</b><var><a name="index-reftex_002dtoc_002dsplit_002dwindows_002dhorizontally-449"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means, create TOC window by splitting window
+horizontally.  The default is to split vertically. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-toc-split-windows-fraction</b><var><a name="index-reftex_002dtoc_002dsplit_002dwindows_002dfraction-450"></a></var><br>
+<blockquote><p>Fraction of the width or height of the frame to be used for TOC window. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-toc-keep-other-windows</b><var><a name="index-reftex_002dtoc_002dkeep_002dother_002dwindows-451"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means, split the selected window to display the
+<samp><span class="file">*toc*</span></samp> buffer.  This helps to keep the window configuration, but
+makes the <samp><span class="file">*toc*</span></samp> small.  When <code>nil</code>, all other windows except
+the selected one will be deleted, so that the <samp><span class="file">*toc*</span></samp> window fills
+half the frame. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-toc-include-file-boundaries</b><var><a name="index-reftex_002dtoc_002dinclude_002dfile_002dboundaries-452"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means, include file boundaries in <samp><span class="file">*toc*</span></samp> buffer. 
+This flag can be toggled from within the <samp><span class="file">*toc*</span></samp> buffer with the
+<kbd>i</kbd> key. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-toc-include-labels</b><var><a name="index-reftex_002dtoc_002dinclude_002dlabels-453"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means, include labels in <samp><span class="file">*toc*</span></samp> buffer.  This flag
+can be toggled from within the <samp><span class="file">*toc*</span></samp> buffer with the <kbd>l</kbd>
+key. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-toc-include-index-entries</b><var><a name="index-reftex_002dtoc_002dinclude_002dindex_002dentries-454"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means, include index entries in <samp><span class="file">*toc*</span></samp> buffer. 
+This flag can be toggled from within the <samp><span class="file">*toc*</span></samp> buffer with the
+<kbd>i</kbd> key. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-toc-include-context</b><var><a name="index-reftex_002dtoc_002dinclude_002dcontext-455"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means, include context with labels in the <samp><span class="file">*toc*</span></samp>
+buffer.  Context will only be shown if the labels are visible as well. 
+This flag can be toggled from within the <samp><span class="file">*toc*</span></samp> buffer with the
+<kbd>c</kbd> key. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-toc-follow-mode</b><var><a name="index-reftex_002dtoc_002dfollow_002dmode-456"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means, point in <samp><span class="file">*toc*</span></samp> buffer (the
+table-of-contents buffer) will cause other window to follow.  The other
+window will show the corresponding part of the document.  This flag can
+be toggled from within the <samp><span class="file">*toc*</span></samp> buffer with the <kbd>f</kbd>
+key. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Normal Hook: <b>reftex-toc-mode-hook</b><var><a name="index-reftex_002dtoc_002dmode_002dhook-457"></a></var><br>
+<blockquote><p>Normal hook which is run when a <samp><span class="file">*toc*</span></samp> buffer is
+created. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Keymap: <b>reftex-toc-map</b><var><a name="index-reftex_002dtoc_002dmap-458"></a></var><br>
+<blockquote><p>The keymap which is active in the <samp><span class="file">*toc*</span></samp> buffer. 
+(see <a href="Table-of-Contents.html#Table-of-Contents">Table of Contents</a>). 
+</p></blockquote></div>
+
+   </body></html>
+

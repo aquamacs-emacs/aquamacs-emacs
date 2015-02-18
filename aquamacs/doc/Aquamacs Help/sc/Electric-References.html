@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+<title>Electric References - Supercite User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Supercite User's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Reference-Headers.html#Reference-Headers" title="Reference Headers">
+<link rel="prev" href="The-Built_002din-Header-Rewrite-Functions.html#The-Built_002din-Header-Rewrite-Functions" title="The Built-in Header Rewrite Functions">
+<link rel="next" href="Hints-to-MUA-Authors.html#Hints-to-MUA-Authors" title="Hints to MUA Authors">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This document describes Supercite, an Emacs package for citing and
+attributing replies to mail and news messages.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Electric-References"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Hints-to-MUA-Authors.html#Hints-to-MUA-Authors">Hints to MUA Authors</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="The-Built_002din-Header-Rewrite-Functions.html#The-Built_002din-Header-Rewrite-Functions">The Built-in Header Rewrite Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Reference-Headers.html#Reference-Headers">Reference Headers</a>
+<hr>
+</div>
+
+   <p><a name="index-electric-references-99"></a>
+
+<h3 class="section">4.2 Electric References</h3>
+
+<p>By default, when Supercite cites the original message for the first
+time, it just goes ahead and inserts the reference header indexed by
+<code>sc-preferred-header-style</code>.  However, you may want to select
+different reference headers based on the type of reply or forwarding you
+are doing. You may also want to preview the reference header before
+deciding whether to insert it into the reply buffer or not. Supercite
+provides an optional <dfn>electric reference</dfn> mode which you can drop
+into to give you this functionality.
+
+   <p><a name="index-sc_002delectric_002dreferences_002dp-100"></a><a name="index-electric_002dreferences_002dp-_0028sc_002d_0029-101"></a>If the variable <code>sc-electric-references-p</code> is non-<code>nil</code>,
+Supercite will bring up an electric reference mode buffer and place you
+into a recursive edit.  The electric reference buffer is read-only, so
+you cannot directly modify the reference text until you exit electric
+references and insert the text into the reply buffer.  But you can cycle
+through all the reference header rewrite functions in your
+<code>sc-rewrite-header-list</code>.
+
+   <p>You can also set a new preferred header style, jump to any header, or
+jump to the preferred header. The header will be shown in the electric
+reference buffer and the header index and function name will appear in
+the echo area.
+
+   <p>The following commands are available while in electric reference mode
+(shown here with their default key bindings):
+
+     <dl>
+<dt><code>sc-eref-next</code> (<kbd>n</kbd>)<dd><a name="index-sc_002deref_002dnext-102"></a><a name="index-eref_002dnext-_0028sc_002d_0029-103"></a><a name="index-n-104"></a><a name="index-sc_002delectric_002dcircular_002dp-105"></a><a name="index-electric_002dcircular_002dp-_0028sc_002d_0029-106"></a>Displays the next reference header in the electric reference buffer. If
+the variable <code>sc-electric-circular-p</code> is non-<code>nil</code>, invoking
+<code>sc-eref-next</code> while viewing the last reference header in the list
+will wrap around to the first header.
+
+     <br><dt><code>sc-eref-prev</code> (<kbd>p</kbd>)<dd><a name="index-sc_002deref_002dprev-107"></a><a name="index-eref_002dprev-_0028sc_002d_0029-108"></a><a name="index-p-109"></a>Displays the previous reference header in the electric reference buffer. 
+If the variable <code>sc-electric-circular-p</code> is non-<code>nil</code>,
+invoking <code>sc-eref-prev</code> will wrap around to the last header.
+
+     <br><dt><code>sc-eref-goto</code> (<kbd>g</kbd>)<dd><a name="index-sc_002deref_002dgoto-110"></a><a name="index-eref_002dgoto-_0028sc_002d_0029-111"></a><a name="index-g-112"></a>Goes to a specified reference header.  The index (into the
+<code>sc-rewrite-header-list</code>) can be specified as a numeric argument to
+the command.  Otherwise, Supercite will query you for the index in the
+minibuffer.
+
+     <br><dt><code>sc-eref-jump</code> (<kbd>j</kbd>)<dd><a name="index-sc_002deref_002djump-113"></a><a name="index-eref_002djump-_0028sc_002d_0029-114"></a><a name="index-j-115"></a>Display the preferred reference header, i.e., the one indexed by the current
+value of <code>sc-preferred-header-style</code>.
+
+     <br><dt><code>sc-eref-setn</code> (<kbd>s</kbd>)<dd><a name="index-sc_002deref_002dsetn-116"></a><a name="index-eref_002dsetn-_0028sc_002d_0029-117"></a><a name="index-s-118"></a>Set the preferred reference header (i.e.,
+<code>sc-preferred-header-style</code>) to the currently displayed header.
+
+     <br><dt><code>sc-eref-exit</code> (<kbd>C-j</kbd>, &lt;RET&gt;, and &lt;ESC C-c&gt;)<dd><a name="index-RET-119"></a><a name="index-C_002dj-120"></a><a name="index-q-121"></a><a name="index-sc_002deref_002dexit-122"></a><a name="index-eref_002dexit-_0028sc_002d_0029-123"></a>Exit from electric reference mode and insert the current header into the
+reply buffer.
+
+     <br><dt><code>sc-eref-abort</code> (<kbd>q</kbd>, <kbd>x</kbd>)<dd><a name="index-sc_002deref_002dabort-124"></a><a name="index-eref_002dabort-_0028sc_002d_0029-125"></a><a name="index-x-126"></a>Exit from electric reference mode without inserting the current header. 
+</dl>
+
+   <p><a name="index-sc_002delectric_002dmode_002dhook-127"></a><a name="index-electric_002dmode_002dhook-_0028sc_002d_0029-128"></a>Supercite will execute the hook <code>sc-electric-mode-hook</code> before
+entering electric reference mode.
+
+   </body></html>
+

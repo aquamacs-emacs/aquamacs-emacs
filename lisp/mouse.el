@@ -513,10 +513,13 @@ must be one of the symbols `header', `mode', or `vertical'."
   "Move point to the position clicked on with the mouse.
 This should be bound to a mouse click event type."
   (interactive "e")
+  (condition-case nil ;; prevent error message from mouse-minibuffer-check
+      (progn 
   (mouse-minibuffer-check event)
   ;; Use event-end in case called from mouse-drag-region.
   ;; If EVENT is a click, event-end and event-start give same value.
   (posn-set-point (event-end event)))
+    (error nil)))
 
 (defvar mouse-last-region-beg nil)
 (defvar mouse-last-region-end nil)
@@ -634,11 +637,24 @@ This must be bound to a button-down mouse event.
 In Transient Mark mode, the highlighting remains as long as the mark
 remains active.  Otherwise, it remains until the next input event.
 
-If the click is in the echo area, display the `*Messages*' buffer."
+In case of a double click in the echo area, display the `*Messages*' 
+buffer."
   (interactive "e")
+  
+  (let ((click-count (1- (event-click-count start-event))))
+  (let ((w (posn-window (event-start start-event))))
+    (if (and (window-minibuffer-p w)
+	     (not (minibuffer-window-active-p w)))
+	(save-excursion
+	    (if (= click-count 1)
+		(progn
+	  (set-buffer (get-buffer-create "*Messages*"))
+		  (read-event) ;; Swallow the up-event.
+	  (goto-char (point-max))
+		  (display-buffer (current-buffer)))))
   ;; Give temporary modes such as isearch a chance to turn off.
   (run-hooks 'mouse-leave-buffer-hook)
-  (mouse-drag-track start-event t))
+	(mouse-drag-track start-event t)))))
 
 
 (defun mouse-posn-property (pos property)
@@ -1202,7 +1218,8 @@ if `mouse-drag-copy-region' is non-nil)"
       (if mouse-drag-copy-region
           ;; Region already saved in the previous click;
           ;; don't make a duplicate entry, just delete.
-          (delete-region (mark t) (point))
+          (smart-delete-region (mark t) (point))
+	;; to do: the following should be "smart"
         (kill-region (mark t) (point)))
       (setq mouse-selection-click-count 0)
       (setq mouse-save-then-kill-posn nil))
@@ -1228,7 +1245,7 @@ if `mouse-drag-copy-region' is non-nil)"
 	(mouse-set-region-1)
         (when mouse-drag-copy-region
           ;; Region already copied to kill-ring once, so replace.
-          (kill-new (filter-buffer-substring (mark t) (point)) t))
+          (kill-new (smart-spacing-filter-buffer-substring (mark t) (point)) t))
 	;; Arrange for a repeated mouse-3 to kill the region.
 	(setq mouse-save-then-kill-posn click-pt)))
 
@@ -1241,7 +1258,7 @@ if `mouse-drag-copy-region' is non-nil)"
       (exchange-point-and-mark)
       (mouse-set-region-1)
       (when mouse-drag-copy-region
-        (kill-new (filter-buffer-substring (mark t) (point))))
+        (kill-new (smart-spacing-filter-buffer-substring (mark t) (point))))
       (setq mouse-save-then-kill-posn click-pt)))))
 
 
@@ -1630,6 +1647,9 @@ and selects that window."
 	   window))
 	(switch-to-buffer buf)))))
 
+(defvar buffer-menu-modified-string "*")
+(defvar buffer-menu-read-only-string "%")
+
 (defun mouse-buffer-menu-alist (buffers)
   (let (tail
 	(maxlen 0)
@@ -1653,11 +1673,14 @@ and selects that window."
 		  (cons
 		   (cons
 		    (format
-		     (format "%%-%ds  %%s%%s  %%s" maxlen)
+		     (if window-system
+			 "%s %s%s%s  %s"  ; variable-width menu font!
+		       (format "%%-%ds %%s%%s%%s  %%s" maxlen))
 		     (buffer-name elt)
-		     (if (buffer-modified-p elt) "*" " ")
+		     (if (buffer-modified-p elt) buffer-menu-modified-string "")
 		     (with-current-buffer elt
-		       (if buffer-read-only "%" " "))
+		       (if buffer-read-only buffer-menu-read-only-string " "))
+		     ""
 		     (or (buffer-file-name elt)
 			 (with-current-buffer elt
 			   (if list-buffers-directory
@@ -1667,8 +1690,8 @@ and selects that window."
 		    elt)
 		   head))))
       (setq tail (cdr tail)))
-    ;; Compensate for the reversal that the above loop does.
-    (nreverse head)))
+    ;; Should be sorted to keep list stable
+    head))
 
 (defun mouse-buffer-menu-split (title alist)
   ;; If we have lots of buffers, divide them into groups of 20

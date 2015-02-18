@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+<title>Overview - Common Lisp Extensions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Common Lisp Extensions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="index.html#Top" title="Top">
+<link rel="next" href="Program-Structure.html#Program-Structure" title="Program Structure">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the GNU Emacs Common Lisp emulation package.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Overview"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Program-Structure.html#Program-Structure">Program Structure</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="index.html#Top">Top</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">2 Overview</h2>
+
+<p class="noindent">Common Lisp is a huge language, and Common Lisp systems tend to be
+massive and extremely complex.  Emacs Lisp, by contrast, is rather
+minimalist in the choice of Lisp features it offers the programmer. 
+As Emacs Lisp programmers have grown in number, and the applications
+they write have grown more ambitious, it has become clear that Emacs
+Lisp could benefit from many of the conveniences of Common Lisp.
+
+   <p>The <dfn>CL</dfn> package adds a number of Common Lisp functions and
+control structures to Emacs Lisp.  While not a 100% complete
+implementation of Common Lisp, <dfn>CL</dfn> adds enough functionality
+to make Emacs Lisp programming significantly more convenient.
+
+   <p><strong>Please note:</strong> the <dfn>CL</dfn> functions are not standard parts of
+the Emacs Lisp name space, so it is legitimate for users to define
+them with other, conflicting meanings.  To avoid conflicting with
+those user activities, we have a policy that packages installed in
+Emacs must not load <dfn>CL</dfn> at run time.  (It is ok for them to load
+<dfn>CL</dfn> at compile time only, with <code>eval-when-compile</code>, and use
+the macros it provides.)  If you are writing packages that you plan to
+distribute and invite widespread use for, you might want to observe
+the same rule.
+
+   <p>Some Common Lisp features have been omitted from this package
+for various reasons:
+
+     <ul>
+<li>Some features are too complex or bulky relative to their benefit
+to Emacs Lisp programmers.  CLOS and Common Lisp streams are fine
+examples of this group.
+
+     <li>Other features cannot be implemented without modification to the
+Emacs Lisp interpreter itself, such as multiple return values,
+lexical scoping, case-insensitive symbols, and complex numbers. 
+The <dfn>CL</dfn> package generally makes no attempt to emulate these
+features.
+
+     <li>Some features conflict with existing things in Emacs Lisp.  For
+example, Emacs' <code>assoc</code> function is incompatible with the
+Common Lisp <code>assoc</code>.  In such cases, this package usually
+adds the suffix &lsquo;<samp><span class="samp">*</span></samp>&rsquo; to the function name of the Common
+Lisp version of the function (e.g., <code>assoc*</code>). 
+</ul>
+
+   <p>The package described here was written by Dave Gillespie,
+<samp><span class="file">daveg@synaptics.com</span></samp>.  It is a total rewrite of the original
+1986 <samp><span class="file">cl.el</span></samp> package by Cesar Quiroz.  Most features of the
+Quiroz package have been retained; any incompatibilities are
+noted in the descriptions below.  Care has been taken in this
+version to ensure that each function is defined efficiently,
+concisely, and with minimal impact on the rest of the Emacs
+environment.
+
+<ul class="menu">
+<li><a accesskey="1" href="Usage.html#Usage">Usage</a>:                 How to use the CL package
+<li><a accesskey="2" href="Organization.html#Organization">Organization</a>:          The package's five component files
+<li><a accesskey="3" href="Installation.html#Installation">Installation</a>:          Compiling and installing CL
+<li><a accesskey="4" href="Naming-Conventions.html#Naming-Conventions">Naming Conventions</a>:    Notes on CL function names
+</ul>
+
+   </body></html>
+

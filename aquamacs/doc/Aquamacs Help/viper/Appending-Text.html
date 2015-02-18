@@ -1,0 +1,99 @@
+<html lang="en">
+<head>
+<title>Appending Text - Untitled</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Untitled">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Text-Handling.html#Text-Handling" title="Text Handling">
+<link rel="prev" href="Marking.html#Marking" title="Marking">
+<link rel="next" href="Editing-in-Insert-State.html#Editing-in-Insert-State" title="Editing in Insert State">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Appending-Text"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Editing-in-Insert-State.html#Editing-in-Insert-State">Editing in Insert State</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Marking.html#Marking">Marking</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text-Handling.html#Text-Handling">Text Handling</a>
+<hr>
+</div>
+
+<h4 class="subsection">4.2.3 Appending Text</h4>
+
+<p>See <a href="Options.html#Options">Options</a>, to see how to change tab and shiftwidth size.  See the GNU
+Emacs manual, or try <kbd>C-ha tabs</kbd> (If you have turned Emacs help on). 
+Check out the variable <code>indent-tabs-mode</code> to put in just spaces. 
+Also see options for word-wrap.
+
+   <p><a name="index-inserting-396"></a><a name="index-appending-397"></a><a name="index-paste-398"></a><a name="index-put-399"></a>
+     <dl>
+<dt><kbd>&lt;count&gt;  a</kbd><dd>&lt;count&gt; times after the cursor. 
+<br><dt><kbd>&lt;count&gt;  A</kbd><dd>&lt;count&gt; times at the end of line. 
+<br><dt><kbd>&lt;count&gt;  i</kbd><dd>&lt;count&gt; times before the cursor (insert). 
+<br><dt><kbd>&lt;count&gt;  I</kbd><dd>&lt;count&gt; times before the first CHAR of the line
+<br><dt><kbd>&lt;count&gt;  o</kbd><dd>On a new line below the current (open). 
+The count is only useful on a slow terminal. 
+<br><dt><kbd>&lt;count&gt;  O</kbd><dd>On a new line above the current. 
+The count is only useful on a slow terminal. 
+<br><dt><kbd>&lt;count&gt;  &gt;&lt;move&gt;</kbd><dd>Shift the lines described by &lt;count&gt;&lt;move&gt; one
+shiftwidth to the right (layout!). 
+<br><dt><kbd>&lt;count&gt;  &gt;&gt;</kbd><dd>Shift &lt;count&gt; lines one shiftwidth to the right. 
+<br><dt><kbd>&lt;count&gt;  ["&lt;a-z1-9&gt;]p</kbd><dd>Put the contents of the (default undo) buffer
+&lt;count&gt; times after the cursor.  The register will
+be automatically down-cased. 
+<br><dt><kbd>&lt;count&gt;  ["&lt;a-z1-9&gt;]P</kbd><dd>Put the contents of the (default undo) buffer
+&lt;count&gt; times before the cursor.  The register will
+<br><dt><kbd>[&lt;a-z&gt;</kbd><dd>Show contents of textmarker. 
+<br><dt><kbd>]&lt;a-z&gt;</kbd><dd>Show contents of register. 
+<br><dt><kbd>&lt;count&gt;  .</kbd><dd>Repeat previous command &lt;count&gt; times.  For destructive
+commands as well as undo. 
+<br><dt><kbd>f1 1 and f1 2</kbd><dd>While <kbd>.</kbd> repeats the last destructive command,
+these two macros repeat the second-last and the third-last destructive
+commands.  See <a href="Vi-Macros.html#Vi-Macros">Vi Macros</a>, for more information on Vi macros. 
+<br><dt><kbd>C-c M-p and C-c M-n</kbd><dd>In Vi state,
+these commands help peruse the history of Vi's destructive commands. 
+Successive typing of <kbd>C-c M-p</kbd> causes Viper to search the history in
+the direction
+of older commands, while hitting <kbd>C-c M-n</kbd> does so in reverse
+order.  Each command in the history is displayed in the minibuffer.  The
+displayed command can
+then be executed by typing `<kbd>.</kbd>'.
+
+     <p>Since typing the above sequences of keys may be tedious, the
+functions doing the perusing can be bound to unused keyboard keys in the
+<samp><span class="file">~/.viper</span></samp> file.  See <a href="Viper-Specials.html#Viper-Specials">Viper Specials</a>, for details. 
+</dl>
+   <a name="index-g_t_0040kbd_007bC_002dc-M_002dp_007d-400"></a><a name="index-g_t_0040kbd_007bC_002dc-M_002dn_007d-401"></a><a name="index-g_t_0040kbd_007b_002e_007d-402"></a><a name="index-g_t_0040kbd_007b_005d_003ca_002dz_003e_007d-403"></a><a name="index-g_t_0040kbd_007b_005b_003ca_002dz_003e_007d-404"></a><a name="index-g_t_0040kbd_007bP_007d-405"></a><a name="index-g_t_0040kbd_007bp_007d-406"></a><a name="index-g_t_0040kbd_007b_0022_003ca_002dz1_002d9_003ep_007d-407"></a><a name="index-g_t_0040kbd_007b_0022_003ca_002dz1_002d9_003eP_007d-408"></a><a name="index-g_t_0040kbd_007b_003e_003e_007d-409"></a><a name="index-g_t_0040kbd_007b_003e_003cmove_003e_007d-410"></a><a name="index-g_t_0040kbd_007bO_007d-411"></a><a name="index-g_t_0040kbd_007bo_007d-412"></a><a name="index-g_t_0040kbd_007bi_007d-413"></a><a name="index-g_t_0040kbd_007bA_007d-414"></a><a name="index-g_t_0040kbd_007ba_007d-415"></a>
+
+   </body></html>
+

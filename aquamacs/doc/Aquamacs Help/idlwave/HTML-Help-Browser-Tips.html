@@ -1,0 +1,125 @@
+<html lang="en">
+<head>
+<title>HTML Help Browser Tips - IDLWAVE User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="IDLWAVE User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Sources-of-Routine-Info.html#Sources-of-Routine-Info" title="Sources of Routine Info">
+<link rel="next" href="Configuration-Examples.html#Configuration-Examples" title="Configuration Examples">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents IDLWAVE, a major mode for editing IDL files with
+Emacs, and interacting with an IDL shell run as a subprocess.
+
+This is edition 6.1 of the IDLWAVE User Manual for IDLWAVE
+6.1.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="HTML-Help-Browser-Tips"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Configuration-Examples.html#Configuration-Examples">Configuration Examples</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Sources-of-Routine-Info.html#Sources-of-Routine-Info">Sources of Routine Info</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="appendix">Appendix B HTML Help Browser Tips</h2>
+
+<p><a name="index-Browser-Tips-390"></a>
+There are a wide variety of possible browsers to use for displaying
+the online HTML help available with IDLWAVE (starting with version
+5.0). Since IDL v6.2, a single cross-platform HTML help browser, the
+<em>IDL Assistant</em> is distributed with IDL.  If this help browser is
+available, it is the preferred choice, and the default.  The variable
+<code>idlwave-help-use-assistant</code>, enabled by default, controls
+whether this help browser is used.  If you use the IDL Assistant, the
+tips here are not relevant.
+
+   <p>Since IDLWAVE runs on a many different system types, a single browser
+configuration is not possible, but choices abound.  On many systems,
+the default browser configured in <code>browse-url-browser-function</code>,
+and hence inherited by default by
+<code>idlwave-help-browser-function</code>, is Netscape.  Unfortunately, the
+HTML manuals decompiled from the original source contain formatting
+structures which Netscape 4.x does not handle well, though they are
+still readable.  A much better choice is Mozilla, or one of the
+Mozilla-derived browsers such as
+<a href="http://galeon.sourceforge.net/">Galeon</a> (GNU/Linux),
+<a href="http://www.mozilla.org/projects/camino/">Camino</a> (MacOSX), or
+<a href="http://www.mozilla.org/projects/firebird/">Firebird</a> (all
+platforms).  Newer versions of Emacs provide a browser-function choice
+<code>browse-url-gnome-moz</code> which uses the Gnome-configured browser.
+
+   <p>Note that the HTML files decompiled from the help sources contain
+specific references to the &lsquo;<samp><span class="samp">Symbol</span></samp>&rsquo; font, which by default is not
+permitted in normal encodings (it's invalid, technically).  Though it
+only impacts a few symbols, you can trick Mozilla-based browsers into
+recognizing &lsquo;<samp><span class="samp">Symbol</span></samp>&rsquo; by following the directions
+<a href="http://hutchinson.belmont.ma.us/tth/Xfonts.html">here</a>.  With
+this fix in place, HTML help pages look almost identical to their PDF
+equivalents (yet can be bookmarked, browsed as history, searched,
+etc.).
+
+<p class="noindent">Individual platform recommendations:
+
+     <ul>
+<li>Unix/MacOSX: The <a href="http://www.w3m.org"><code>w3m</code></a> browser
+and its associated
+<a href="http://emacs-w3m.namazu.org/"><code>emacs-w3m</code></a> emacs mode
+provide in-buffer browsing with image display, and excellent speed and
+formatting.  Both the Emacs mode and the browser itself must be
+downloaded separately.  To use this browser, include
+
+     <pre class="lisp">          (setq idlwave-help-browser-function 'w3m-browse-url)
+</pre>
+     <p>in your <samp><span class="file">.emacs</span></samp>.  Setting a few other nice <code>w3m</code> options
+cuts down on screen clutter:
+
+     <pre class="lisp">          (setq w3m-use-tab nil
+                w3m-use-header-line nil
+                w3m-use-toolbar nil)
+</pre>
+     <p>If you use a dedicated frame for help, you might want to add the
+following, to get consistent behavior with the <kbd>q</kbd> key:
+
+     <pre class="lisp">          ;; Close my help window when w3m closes.
+          (defadvice w3m-close-window (after idlwave-close activate)
+            (if (boundp 'idlwave-help-frame)
+                (idlwave-help-quit)))
+</pre>
+     <p>Note that you can open the file in an external browser from within
+<code>w3m</code> using <kbd>M</kbd>. 
+</ul>
+
+   </body></html>
+

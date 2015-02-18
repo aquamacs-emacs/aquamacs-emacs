@@ -1,0 +1,152 @@
+<html lang="en">
+<head>
+<title>Processing Mail Tour - The MH-E Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The MH-E Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Tour-Through-MH_002dE.html#Tour-Through-MH_002dE" title="Tour Through MH-E">
+<link rel="prev" href="Reading-Mail-Tour.html#Reading-Mail-Tour" title="Reading Mail Tour">
+<link rel="next" href="Leaving-MH_002dE.html#Leaving-MH_002dE" title="Leaving MH-E">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is version 8.2 of `The MH-E
+Manual', last updated 2009-06-13.
+
+Copyright (C) 1995, 2001, 2002, 2003, 2005, 2006, 2007, 2008,
+  2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of either:
+
+       a. the GNU Free Documentation License, Version 1.3 or any later
+          version published by the Free Software Foundation; with no
+          Invariant Sections, with the Front-Cover texts being ``A GNU
+          Manual,'' and with the Back-Cover Texts as in (a) below. A
+          copy of the license is included in the section entitled ``GNU
+          Free Documentation License.''
+
+          (a) The FSF's Back-Cover Text is: ``You have the freedom to
+          copy and modify this GNU manual. Buying copies from the FSF
+          supports it in developing GNU and promoting software
+          freedom.''
+
+       b. the GNU General Public License as published by the Free
+          Software Foundation; either version 3, or (at your option)
+          any later version. A copy of the license is included in the
+          section entitled ``GNU General Public License.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Processing-Mail-Tour"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Leaving-MH_002dE.html#Leaving-MH_002dE">Leaving MH-E</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Reading-Mail-Tour.html#Reading-Mail-Tour">Reading Mail Tour</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Tour-Through-MH_002dE.html#Tour-Through-MH_002dE">Tour Through MH-E</a>
+<hr>
+</div>
+
+<h3 class="section">3.3 Processing Mail</h3>
+
+<p><a name="index-processing-mail-149"></a><a name="index-g_t_0040key_007bRET_007d-150"></a><a name="index-r-151"></a>
+The first thing we want to do is reply to the message that we sent
+ourselves. Ensure that the cursor is still on the same line as your
+test message and type <kbd>r</kbd>. You are prompted in the minibuffer with
+&lsquo;<samp><span class="samp">Reply to whom:</span></samp>&rsquo;. Here MH-E is asking whether you'd like to reply
+to the original sender only, to the sender and primary recipients, or
+to the sender and all recipients. You can press &lt;TAB&gt; to see these
+choices. If you simply press &lt;RET&gt;, you'll reply only to the
+sender. Press &lt;RET&gt; now.
+
+   <p>You'll find yourself in an Emacs buffer similar to that when you were
+sending the original message, like this:
+
+   <p><table class="cartouche" summary="cartouche" border="1"><tr><td>
+<pre class="smallexample">     To:
+     cc:
+     Subject: Re: Test
+     In-reply-to: &lt;31054.1142621351@stop.mail-abuse.org&gt;
+     References: &lt;31054.1142621351@stop.mail-abuse.org&gt;
+     Comments: In-reply-to Bill Wohler &lt;wohler@stop.mail-abuse.org&gt;
+        message dated "Fri, 17 Mar 2006 10:49:11 -0800."
+     X-Mailer: MH-E 8.1; nmh 1.1; GNU Emacs 23.1
+     --------
+     #
+     
+     --:--  {draft}  All L10     (MH-Letter)----------------------------------
+     To: wohler
+     Subject: Test
+     X-Mailer: MH-E 8.1; nmh 1.1; GNU Emacs 23.1
+     Date: Fri, 17 Mar 2006 10:49:11 -0800
+     From: Bill Wohler &lt;wohler@stop.mail-abuse.org&gt;
+     
+     This is a test message to get the wheels churning...
+     
+     --:--  {show-+inbox} 4   All L1     (MH-Show)----------------------------
+     Type C-c C-c to send message, C-c ? for help
+</pre>
+   </td></tr></table>
+   <i>Composition window during reply</i>
+
+   <p><a name="index-backward_002dchar-152"></a><a name="index-forward_002dchar-153"></a><a name="index-next_002dline-154"></a><a name="index-previous_002dline-155"></a><a name="index-C_002db-156"></a><a name="index-C_002dc-C_002dc-157"></a><a name="index-C_002dc-C_002df-C_002dt-158"></a><a name="index-C_002df-159"></a><a name="index-C_002dn-160"></a><a name="index-C_002dp-161"></a><a name="index-g_t_0040key_007bBS_007d-162"></a>
+By default, MH will not add you to the address list of your replies,
+so if you find that the &lsquo;<samp><span class="samp">To:</span></samp>&rsquo; header field is missing, don't
+worry. In this case, type <kbd>C-c C-f C-t</kbd> to create and go to the
+&lsquo;<samp><span class="samp">To:</span></samp>&rsquo; field, where you can type your login name again. You can
+move around with the arrow keys or with <kbd>C-p</kbd>
+(<code>previous-line</code>), <kbd>C-n</kbd> (<code>next-line</code>), <kbd>C-b</kbd>
+(<code>backward-char</code>), and <kbd>C-f</kbd> (<code>forward-char</code>) and can
+delete the previous character with &lt;BS&gt;. When you're finished
+editing your message, send it with <kbd>C-c C-c</kbd> as before.
+
+   <p><a name="index-g_t_0040command_007brefile_007d-163"></a><a name="index-MH-commands_002c-_0040command_007brefile_007d-164"></a><a name="index-folders-165"></a><a name="index-g_t_0040key_007bSPC_007d-166"></a><a name="index-o-167"></a>
+You'll often want to save messages that were sent to you in an
+organized fashion. This is done with <dfn>folders</dfn>. You can use
+folders to keep messages from your friends, or messages related to a
+particular topic. With your cursor in the MH-Folder buffer and
+positioned on the message you sent to yourself, type <kbd>o</kbd> to output
+(<samp><span class="command">refile</span></samp> in MH parlance) that message to a folder. Enter
+<kbd>test</kbd> at the &lsquo;<samp><span class="samp">Destination folder:</span></samp>&rsquo; prompt and type <kbd>y</kbd>
+(or &lt;SPC&gt;) when MH-E asks to create the folder &lsquo;<samp><span class="samp">+test</span></samp>&rsquo;. Note
+that a &lsquo;<samp><span class="samp">^</span></samp>&rsquo; (caret) appears next to the message number, which
+means that the message has been marked for refiling but has not yet
+been refiled. We'll talk about how the refile is actually carried out
+in a moment.
+
+   <p><a name="index-MH_002dFolder-mode-168"></a><a name="index-modes_002c-MH_002dFolder-169"></a><a name="index-d-170"></a><a name="index-i-171"></a><a name="index-g_t_0040key_007bRET_007d-172"></a><a name="index-n-173"></a><a name="index-p-174"></a><a name="index-x-175"></a>
+Your previous reply is now waiting in the system mailbox. You
+incorporate this mail into your MH-Folder buffer named &lsquo;<samp><span class="samp">+inbox</span></samp>&rsquo;
+with the <kbd>i</kbd> command. Do this now. After the mail is incorporated,
+use <kbd>n</kbd> or <kbd>p</kbd> to move the cursor to the new message, and read
+it with &lt;RET&gt;. Let's delete this message by typing <kbd>d</kbd>. Note
+that a &lsquo;<samp><span class="samp">D</span></samp>&rsquo; appears next to the message number. This means that
+the message is marked for deletion but is not yet deleted. To perform
+the deletion (and the refile we did previously), use the <kbd>x</kbd>
+command.
+
+   <p><a name="index-mh_002dsmail-176"></a><a name="index-m-177"></a><a name="index-M_002dx-mh_002dsmail-178"></a>
+If you want to send another message you can use <kbd>m</kbd> instead of
+<kbd>M-x mh-smail</kbd>. So go ahead, send some mail to your friends!
+
+   <p><a name="index-help-179"></a><a name="index-prefix-characters-180"></a><a name="index-describe_002dmode-181"></a><a name="index-g_t_003f-182"></a><a name="index-C_002dh-m-183"></a><a name="index-F-_003f-184"></a>
+You can get a quick reminder about these commands by typing <kbd>?</kbd>. 
+This lists several <dfn>prefix characters</dfn>. To list the commands
+available via the prefix characters, type the prefix character
+followed by a <kbd>?</kbd>, for example, <kbd>F ?</kbd>. More complete help is
+available with the <kbd>C-h m</kbd> (<code>describe-mode</code>) command.
+
+   </body></html>
+

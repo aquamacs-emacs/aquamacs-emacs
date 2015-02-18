@@ -1,0 +1,67 @@
+<html lang="en">
+<head>
+<title>Scrolling conservatively - rcirc Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="rcirc Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Hacking-and-Tweaking.html#Hacking-and-Tweaking" title="Hacking and Tweaking">
+<link rel="prev" href="Using-fly-spell-mode.html#Using-fly-spell-mode" title="Using fly spell mode">
+<link rel="next" href="Changing-the-time-stamp-format.html#Changing-the-time-stamp-format" title="Changing the time stamp format">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Scrolling-conservatively"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Changing-the-time-stamp-format.html#Changing-the-time-stamp-format">Changing the time stamp format</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Using-fly-spell-mode.html#Using-fly-spell-mode">Using fly spell mode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Hacking-and-Tweaking.html#Hacking-and-Tweaking">Hacking and Tweaking</a>
+<hr>
+</div>
+
+<h3 class="section">4.3 Scrolling conservatively</h3>
+
+<p><a name="index-input-line-202"></a><a name="index-scrolling-203"></a><a name="index-scroll_002dconservatively-204"></a><a name="index-rcirc_002dmode_002dhook-205"></a>
+IRC buffers are constantly growing.  If you want to see as much as
+possible at all times, you would want the prompt at the bottom of the
+window when possible.  The following snippet uses a local value for
+<code>scroll-conservatively</code> to achieve this:
+
+<pre class="example">     (add-hook 'rcirc-mode-hook
+               (lambda ()
+                 (set (make-local-variable 'scroll-conservatively)
+                      8192)))
+</pre>
+   <p>See <a href="../emacs/Scrolling.html#Scrolling">Scrolling conservatively</a>, for details.
+
+   </body></html>
+

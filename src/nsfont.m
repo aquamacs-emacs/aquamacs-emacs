@@ -859,14 +859,39 @@ nsfont_open (struct frame *f, Lisp_Object font_entity, int pixel_size)
 
     /* Metrics etc.; some fonts return an unusually large max advance, so we
        only use it for fonts that have wide characters. */
-    font_info->width = ([sfont numberOfGlyphs] > 2000) ?
+    font_info->width = ([sfont numberOfGlyphs] > 3000) ?
       [sfont maximumAdvancement].width : ns_char_width (sfont, '0');
+
+    if (font_info->width == 0)
+      font_info->width = ns_char_width (sfont, 'e');
+    if (font_info->width == 0)
+      font_info->width = ns_char_width (sfont, '_');
+    if (font_info->width == 0)
+      font_info->width = ns_char_width (sfont, 'J');
+    if (font_info->width == 0)
+      font_info->width = [sfont maximumAdvancement].width;
 
     brect =  [sfont boundingRectForFont];
 
+    /* standard height, similar to Carbon. Emacs.app: was 0.5 by default. */
+    // expand = [sfont isFixedPitch] ? 0.2 : 0;
+    // hshrink = 1;
+    // float expand2 = 0;
+    /* if ascender/descender do not provide enough natural spacing, add some: 
+     this idea did not work well, so expand2 = 0 for now.*/
+
+    // float spc_ratio = expand2 * max (0, ((float) full_height) / hd - 2.8);
+
+    font_info->underpos = 2; /*[sfont underlinePosition] is often clipped out */
     font_info->underpos = [sfont underlinePosition];
     font_info->underwidth = [sfont underlineThickness];
     font_info->size = font->pixel_size;
+    // font_info->voffset = lrint (hshrink * [sfont ascender] + expand * hd / 2
+    // 				+ spc_ratio/2);
+    /* printf("leading+%f  fh/hd=%f asc=%f desc=%f spc-r=spc_ratio=%f\n",
+       [sfont leading], full_height / hd, [sfont ascender],  
+       [sfont descender], spc_ratio);
+    */
 
     /* max bounds */
     font->ascent = font_info->max_bounds.ascent = lrint ([sfont ascender]);
@@ -1199,8 +1224,11 @@ nsfont_draw (struct glyph_string *s, int from, int to, int x, int y,
          ? ns_lookup_indexed_color (NS_FACE_FOREGROUND (face), s->f)
          : FRAME_FOREGROUND_COLOR (s->f));
 
-  bgCol = (flags != NS_DUMPGLYPH_FOREGROUND ? nil
-           : (NS_FACE_BACKGROUND (face) != 0
+  bgCol = ((flags != NS_DUMPGLYPH_FOREGROUND 
+	    /* must draw background when drawing text.
+	       antialiasing looks different otherwise. */
+	    && flags != NS_DUMPGLYPH_CURSOR) ? nil :
+	   (NS_FACE_BACKGROUND (face) != 0
               ? ns_lookup_indexed_color (NS_FACE_BACKGROUND (face), s->f)
               : FRAME_BACKGROUND_COLOR (s->f)));
 

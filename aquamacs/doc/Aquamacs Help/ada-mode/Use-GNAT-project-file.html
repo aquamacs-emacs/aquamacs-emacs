@@ -1,0 +1,118 @@
+<html lang="en">
+<head>
+<title>Use GNAT project file - Ada Mode</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Ada Mode">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Compiling-Examples.html#Compiling-Examples" title="Compiling Examples">
+<link rel="prev" href="Set-source-search-path.html#Set-source-search-path" title="Set source search path">
+<link rel="next" href="Use-multiple-GNAT-project-files.html#Use-multiple-GNAT-project-files" title="Use multiple GNAT project files">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Use-GNAT-project-file"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Use-multiple-GNAT-project-files.html#Use-multiple-GNAT-project-files">Use multiple GNAT project files</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Set-source-search-path.html#Set-source-search-path">Set source search path</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Compiling-Examples.html#Compiling-Examples">Compiling Examples</a>
+<hr>
+</div>
+
+<h3 class="section">6.4 Use GNAT project file</h3>
+
+<p>In this example, we show how to use a GNAT project file, with no Ada
+mode project file.
+
+   <p>Create the directory <samp><span class="file">Example_4</span></samp>, containing:
+
+   <p><samp><span class="file">hello_pkg.ads</span></samp>:
+
+<pre class="example">     package Hello_Pkg is
+        procedure Say_Hello;
+     end Hello_Pkg;
+</pre>
+   <p><samp><span class="file">hello_pkg.adb</span></samp>:
+
+<pre class="example">     with Ada.Text_IO;
+     package Hello_Pkg is
+        procedure Say_Hello
+        is begin
+           Ada.Text_IO.Put_Line ("Hello from hello_pkg.adb");
+        end Say_Hello;
+     end Hello_Pkg;
+</pre>
+   <p>These are the same files from example 1; <samp><span class="file">hello_pkg.adb</span></samp> has an
+error on line 2.
+
+   <p>In addition, create a directory <samp><span class="file">Example_4/Gnat_Project</span></samp>,
+containing these files:
+
+   <p><samp><span class="file">Gnat_Project/hello_4.adb</span></samp>:
+
+<pre class="example">     with Hello_Pkg;
+     with Ada.Text_IO; use Ada.Text_IO;
+     procedure Hello_4
+     is begin
+        Hello_Pkg.Say_Hello;
+        Put_Line ("From hello_4");
+     end Hello_4;
+</pre>
+   <p>There are no errors in this file.
+
+   <p><samp><span class="file">Gnat_Project/hello_4.gpr</span></samp>:
+
+<pre class="example">     Project Hello_4 is
+        for Source_Dirs use (".", "..");
+     end Hello_4;
+</pre>
+   <p>In buffer <samp><span class="file">hello_4.adb</span></samp>, invoke &lsquo;<samp><span class="samp">Ada | Project | Load...</span></samp>&rsquo;, and
+select <samp><span class="file">Example_4/Gnat_Project/hello_4.gpr</span></samp>.
+
+   <p>Then, again in <samp><span class="file">hello_4.adb</span></samp>, invoke &lsquo;<samp><span class="samp">Ada | Set main and
+Build</span></samp>&rsquo;. You should get a <code>*compilation*</code> buffer containing
+something like (the directory paths will be different):
+
+<pre class="example">     cd c:/Examples/Example_4/Gnat_Project/
+     gnatmake -o hello_4 hello_4 -Phello_4.gpr -cargs -gnatq -gnatQ -bargs  -largs
+     gcc -c -g -gnatyt -gnatq -gnatQ -I- -gnatA c:\Examples\Example_4\Gnat_Project\hello_4.adb
+     gcc -c -g -gnatyt -gnatq -gnatQ -I- -gnatA c:\Examples\Example_4\hello_pkg.adb
+     hello_pkg.adb:2:08: keyword "body" expected here [see file name]
+     gnatmake: "c:\examples\example_4\hello_pkg.adb" compilation error
+</pre>
+   <p>Compare the <code>gcc</code> options to the compiler output in <a href="Set-compiler-options.html#Set-compiler-options">Set compiler options</a>; this shows that <samp><span class="file">hello_4.gpr</span></samp> is being used to
+set the compiler options.
+
+   <p>Fixing the error, linking and running the code proceed as in <a href="No-project-files.html#No-project-files">No project files</a>.
+
+   </body></html>
+

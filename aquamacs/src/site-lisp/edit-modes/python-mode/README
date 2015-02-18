@@ -1,0 +1,199 @@
+Put the following into your initialization file:
+
+  (setq py-install-directory "PATH/TO/PYTHON-MODE/")
+  (add-to-list 'load-path py-install-directory)
+  (require 'python-mode)
+
+#########
+
+Selecting a Python shell:
+
+Customize default Python shell as `py-shell-name'
+
+`py-shell-name' might be an installed default executable as shell
+command `type' would display, but also a PATH/TO/EXECUTABLE
+
+If different flavours of Python are installed, customize
+  py-python-command - python2
+  py-python3-command
+  py-ipython-command
+
+  py-python-command-args
+  py-python3-command-args
+  py-ipython-command-args
+
+You might run code by another installed (I)Python-version than
+default.
+
+Normally this would happen if a shebang in buffer specifies it.
+Shebang precedes default py-shell-name.
+
+In case you will run code by default-shell, ignoring shebang, set
+`py-force-py-shell-name-p' to. This might be done also via menu
+Python/.../Switches
+
+Another way to enforce a different shell is specifiyng a path
+--interactively C-u prompts for that-- or using commands which end in
+version like `py-execute-statement-python3' See menu
+Python/Interpreter/Other/Ignoring Defaults
+
+Naming Python-shell buffers in interactive mode:
+
+M-x py-shell RET ==> "*Python*"
+M-x python RET ==> "*Python*"
+M-x ipython RET ==> "*IPython*"
+M-x python3 RET ==> "*Python3*" 
+
+When Path/To/Executable is given
+C-u python RET ==> "*PTE Python*"
+
+
+#########
+
+Most python-mode.el commands start with prefix `py-'
+
+`M-x py- TAB'
+displays a list of them in completion-buffer.
+See also commands list delivered in directory doc.
+
+List virtualenv related `M-x virtualenv- TAB'
+resp. Pymacs commands `M-x pymacs-'
+
+Commands related to a specific shell start with
+it's name as `ipython-complete'.
+Open an installed shell by
+
+M-x SHELL
+
+With prefix C-u user is prompted to specify a PATH-TO-LOCAL-SHELL
+Also evaluating
+
+(py-shell nil DEDICATED PATH-TO-LOCAL-SHELL)
+
+if DEDICATED is set to `t', shell will get an unique name.
+
+Install a local shell by evaluating
+
+(defun MY-LOCAL-SHELL ()
+  (interactive)
+  (py-shell nil DEDICATED PATH-TO-LOCAL-SHELL))
+
+;;;;;;;;;
+
+
+Python code might be processed by an
+
+- interactive Python shell (DEFAULT)
+- non-interactive Python (`py-fast-process-p')
+  The latter, while design for large output, seems more reliable - see  also PROBLEMS.org.
+
+Both processes might run in 
+- session, i.e. start from possible previous state (DEFAULT)
+- dedicated, (`py-dedicated-process-p') run in separate process
+
+There is also
+- python-mode-v5-behavior
+
+;;;;;;;;;
+To use auto-complete, just prepend the following lines:
+
+  (require 'auto-complete-config)
+  (ac-config-default)
+
+or for company:
+
+  (autoload 'company-mode "company" nil t)
+
+;;;;;;;;;
+
+Beside common moves like `defun', `statement', block specific Python-mode edits are delivered:
+
+`py-expression' and `py-partial-expression'. 
+
+Statement below is considered composed of two `py-expression' 
+
+a = ['spam', 'eggs', 100, 1234]
+|_| |_________________________|
+
+Assigment operator and all inside comments is ignored.
+
+`py-partial-expression' would match six sections
+
+ a = ['spam', 'eggs', 100, 1234]
+|_|   |_____|  |____| |__| |__|
+     |_________________________|
+
+When traversing code, `py-partial-expression' climbs down and up
+all levels encountered, i.e. at opening `[' `py-expression' would return ['spam', 'eggs', 100, 1234], while one char behind at `''
+it yields `'spam','
+
+- py-sexp-function, 
+  When set, it's value is called instead of `forward-sexp', `backward-sexp
+  Choices are py-partial-expression, py-expression, default nil
+
+;;;;;;;;;
+
+Customize boolean `py-set-fill-column-p'
+
+If `t', enables use Python specific `fill-column' according to
+
+`py-docstring-fill-column', default is 72
+
+and `py-comment-fill-column, default is 79
+
+Comment- and docstring settings might be disabled by
+any non-integer value, which means: do not use a
+different value of `fill-column' than emacs-wide
+
+;;;;;;;;;
+
+- Output
+
+  `py-execute-...'-commands arrive in buffer created by
+  `py-shell'. It's name is composed WRT to Python
+  version used, it's path etc. 
+
+  Result of commands ending  "-fast"
+  arrives in `py-fast-output-buffer'
+  
+;;;;;;;;;
+
+Python and IPython
+
+Start IPython shell after loading python-mode via M-x
+ipython, not from plain shell.
+
+Executing code through IPython should work as with
+regular Python, also getting completions from. However,
+with IPython, it feels a demi-second slower. Also when
+starting a session, first completion might fail, while
+succeeding afterwards. Any bug reports, which might
+help truck down the issue, are highly appreciated.
+
+;;;;;;;;;
+Auto-completion  
+
+Either use Pymacs and `company-mode' with `pycomplete.el' etc. --load
+stuff from folder completion--
+
+or switch `py-auto-completion-mode-p' - which relies on
+`py-shell-complete', i.e. calls the current Python process.
+
+Extern tools like jedi-server/mode should work too.
+
+;;;;;;;;;
+
+Troubleshooting
+
+Start with Emacs -Q from the directory where python-mode.el lives.
+Open python-mode.el and evaluate it.
+
+Open a file with ending ".py".
+
+M-x python RET
+
+a regular Python-shell should appear
+
+M-x IPython RET
+
+an IPython-shell should be opened

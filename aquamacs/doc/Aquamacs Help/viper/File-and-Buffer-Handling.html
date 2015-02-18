@@ -1,0 +1,128 @@
+<html lang="en">
+<head>
+<title>File and Buffer Handling - Untitled</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Untitled">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Commands.html#Commands" title="Commands">
+<link rel="prev" href="Display.html#Display" title="Display">
+<link rel="next" href="Mapping.html#Mapping" title="Mapping">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="File-and-Buffer-Handling"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Mapping.html#Mapping">Mapping</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Display.html#Display">Display</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
+<hr>
+</div>
+
+<h3 class="section">4.4 File and Buffer Handling</h3>
+
+<p><a name="index-multiple-files-510"></a>
+In all file handling commands, space should be typed before entering the file
+name.  If you need to type a modifier, such as <kbd>&gt;&gt;</kbd> or <kbd>!</kbd>, don't
+put any space between the command and the modifier.
+
+   <p>Note that many Ex commands, e.g., <kbd>:w</kbd>, accept command arguments. The
+effect is that the command would start acting on the current region. For
+instance, if the current region spans the lines 11 through 22, then if you
+type <kbd>1:w</kbd> you would see &lsquo;<samp><span class="samp">:11,22w</span></samp>&rsquo; in the minibuffer.
+
+     <dl>
+<dt><kbd>:q</kbd><dd>Quit buffer except if modified. 
+<br><dt><kbd>:q!</kbd><dd>Quit buffer without checking.  In Viper, these two commands
+are identical.  Confirmation is required if exiting modified buffers that
+visit files. 
+<br><dt><kbd>:suspend</kbd><br><dt><kbd>:stop</kbd><dd>Suspend Viper
+<br><dt><kbd>:[x,y] w</kbd><dd>Write the file.  Viper makes sure that a final newline is always added to
+any file where this newline is missing.  This is done by setting Emacs
+variable <code>require-final-newline</code> to <code>t</code>.  If you don't like this
+feature, use <code>setq-default</code> to set <code>require-final-newline</code> to
+<code>nil</code>.  This must be done in <samp><span class="file">.viper</span></samp> file. 
+<br><dt><kbd>:[x,y] w &lt;name&gt;</kbd><dd>Write to the file &lt;name&gt;. 
+<br><dt><kbd>:[x,y] w&gt;&gt; &lt;name&gt;</kbd><dd>Append the buffer to the file &lt;name&gt;.  There should be no space between
+<kbd>w</kbd> and <kbd>&gt;&gt;</kbd>.  Type space after the <kbd>&gt;&gt;</kbd> and see what happens. 
+<br><dt><kbd>:w! &lt;name&gt;</kbd><dd>Overwrite the file &lt;name&gt;.  In Viper, <kbd>:w</kbd> and <kbd>:w!</kbd> are identical. 
+Confirmation is required for writing to an existing file (if this is not
+the file the buffer is visiting) or to a read-only file. 
+<br><dt><kbd>:x,y w &lt;name&gt;</kbd><dd>Write lines x through y to the file &lt;name&gt;. 
+<br><dt><kbd>:wq</kbd><dd>Write the file and kill buffer. 
+<br><dt><kbd>:r &lt;file&gt; [&lt;file&gt; ...]</kbd><dd>Read file into a buffer, inserting its contents after the current line. 
+<br><dt><kbd>:xit</kbd><dd>Same as <kbd>:wq</kbd>. 
+<br><dt><kbd>:Write</kbd><dt><kbd>:W</kbd><dd>Save all unsaved buffers, asking for confirmation. 
+<br><dt><kbd>:WWrite</kbd><dt><kbd>:WW</kbd><dd>Like <kbd>W</kbd>, but without asking for confirmation. 
+<br><dt><kbd>ZZ</kbd><dd>Save current buffer and kill it.  If user level is 1, then save all files
+and kill Emacs.  Killing Emacs is the wrong way to use it, so you should
+switch to higher user levels as soon as possible. 
+<br><dt><kbd>:x [&lt;file&gt;]</kbd><dd>Save and kill buffer. 
+<br><dt><kbd>:x! [&lt;file&gt;]</kbd><dd><kbd>:w![&lt;file&gt;]</kbd> and <kbd>:q</kbd>. 
+<br><dt><kbd>:pre</kbd><dd>Preserve the file &ndash; autosave buffers. 
+<br><dt><kbd>:rec</kbd><dd>Recover file from autosave. 
+<br><dt><kbd>:f [&lt;file&gt;]</kbd><dd>without the argument, prints file name and character/line information afout
+the currently visited file. With an argument, sets the currently visited
+filename to <samp><span class="file">file</span></samp>. 
+<br><dt><kbd>:cd [&lt;dir&gt;]</kbd><dd>Set the working directory to &lt;dir&gt; (default home directory). 
+<br><dt><kbd>:pwd</kbd><dd>Print present working directory. 
+<br><dt><kbd>:e [+&lt;cmd&gt;] &lt;files&gt;</kbd><dd>Edit files.  If no filename is given, edit the file visited by the current
+buffer.  If buffer was modified or the file changed on disk, ask for
+confirmation.  Unlike Vi, Viper allows <kbd>:e</kbd> to take multiple arguments. 
+The first file is edited the same way as in Vi.  The rest are visited
+in the usual Emacs way. 
+<br><dt><kbd>:e! [+&lt;cmd&gt;] &lt;files&gt;</kbd><dd>Re-edit file.  If no filename, re-edit current file. 
+In Viper, unlike Vi, <kbd>e!</kbd> is identical to <kbd>:e</kbd>.  In both cases, the
+user is asked to confirm if there is a danger of discarding changes to a
+buffer. 
+<br><dt><kbd>:q!</kbd><dd>Quit Vi without writing. 
+<br><dt><kbd>C-^</kbd><dd>Edit the alternate (normally the previous) file. 
+<br><dt><kbd>:rew</kbd><dd>Obsolete
+<br><dt><kbd>:args</kbd><dd>List files not shown anywhere with counts for next
+<br><dt><kbd>:n [count]  [+&lt;cmd&gt;] [&lt;files&gt;]</kbd><dd>Edit &lt;count&gt; file, or edit files.  The count comes from <kbd>:args</kbd>. 
+<br><dt><kbd>:N [count] [+&lt;cmd&gt;] [&lt;files&gt;]</kbd><dd>Like <kbd>:n</kbd>, but the meaning of the variable
+<var>ex-cycle-other-window</var> is reversed. 
+<br><dt><kbd>:b</kbd><dd>Switch to another buffer.  If <var>ex-cycle-other-window</var> is <code>t</code>,
+switch in another window.  Buffer completion is supported. 
+The variable <var>viper-read-buffer-function</var> controls which function is
+actually used to read the buffer name. The default is <code>read-buffer</code>,
+but better alternatives are also available in Emacs (e.g.,
+<code>iswitchb-read-buffer</code>). 
+<a name="index-g_t_0040var_007bviper_002dread_002dbuffer_002dfunction_007d-511"></a><br><dt><kbd>:B</kbd><dd>Like <kbd>:b</kbd>, but the meaning of <var>ex-cycle-other-window</var> is reversed. 
+<br><dt><kbd>:&lt;address&gt;r &lt;name&gt;</kbd><dd>Read the file &lt;name&gt; into the buffer after the line &lt;address&gt;. 
+<br><dt><kbd>v, V, C-v</kbd><dd>Edit a file in current or another window, or in another frame.  File name
+is typed in minibuffer.  File completion and history are supported. 
+</dl>
+   <a name="index-g_t_0040kbd_007bv_007d-512"></a><a name="index-g_t_0040kbd_007bV_007d-513"></a><a name="index-g_t_0040kbd_007b_003aargs_007d-514"></a><a name="index-g_t_0040kbd_007b_003arew_007d-515"></a><a name="index-g_t_0040kbd_007bC_002d_005e_007d-516"></a><a name="index-g_t_0040kbd_007b_003ae_0021_0040_003a-_005b_003cfiles_003e_005d_007d-517"></a><a name="index-g_t_0040kbd_007b_003ae-_005b_003cfiles_003e_005d_007d-518"></a><a name="index-g_t_0040kbd_007b_003aedit-_005b_003cfiles_003e_005d_007d-519"></a><a name="index-g_t_0040kbd_007b_003aedit_0021_0040_003a-_005b_003cfiles_003e_005d_007d-520"></a><a name="index-g_t_0040kbd_007b_003aq_0021_007d-521"></a><a name="index-g_t_0040kbd_007b_003aq_007d-522"></a><a name="index-g_t_0040kbd_007b_003aquit_007d-523"></a><a name="index-g_t_0040kbd_007b_003aquit_0021_007d-524"></a><a name="index-g_t_0040kbd_007b_003af_007d-525"></a><a name="index-g_t_0040kbd_007b_003arec_007d-526"></a><a name="index-g_t_0040kbd_007b_003ar_007d-527"></a><a name="index-g_t_0040kbd_007b_003aread_007d-528"></a><a name="index-g_t_0040kbd_007b_003apre_007d-529"></a><a name="index-g_t_0040kbd_007bZZ_007d-530"></a><a name="index-g_t_0040kbd_007b_003awq_007d-531"></a><a name="index-g_t_0040kbd_007b_003aw-_003cfile_003e_007d-532"></a><a name="index-g_t_0040kbd_007b_003aw_0021_0040_003a-_003cfile_003e_007d-533"></a><a name="index-g_t_0040kbd_007b_003aw-_003e_003e-_003cfile_003e_007d-534"></a><a name="index-g_t_0040kbd_007b_003awrite-_003cfile_003e_007d-535"></a><a name="index-g_t_0040kbd_007b_003awrite_0021_0040_003a-_003cfile_003e_007d-536"></a><a name="index-g_t_0040kbd_007b_003awrite-_003e_003e-_003cfile_003e_007d-537"></a><a name="index-g_t_0040kbd_007b_003aW_007d-538"></a><a name="index-g_t_0040kbd_007b_003aWW_007d-539"></a><a name="index-g_t_0040kbd_007b_003aWrite_007d-540"></a><a name="index-g_t_0040kbd_007b_003aWWrite_007d-541"></a><a name="index-g_t_0040kbd_007b_003aWWrite_007d-542"></a><a name="index-g_t_0040kbd_007b_003ax_007d-543"></a><a name="index-g_t_0040kbd_007b_003ax_0021_007d-544"></a><a name="index-g_t_0040kbd_007b_003asuspend_007d-545"></a><a name="index-g_t_0040kbd_007b_003astop_007d-546"></a><a name="index-g_t_0040kbd_007b_003an-_005b_003ccount_003e-_007c-_003cfile_003e_005d_007d-547"></a><a name="index-g_t_0040kbd_007b_003acd-_005b_003cdir_003e_005d_007d-548"></a><a name="index-g_t_0040kbd_007b_003apwd_007d-549"></a>
+
+   </body></html>
+

@@ -1,0 +1,244 @@
+<html lang="en">
+<head>
+<title>Viewing Attachments - The MH-E Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The MH-E Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Reading-Mail.html#Reading-Mail" title="Reading Mail">
+<link rel="prev" href="Viewing.html#Viewing" title="Viewing">
+<link rel="next" href="HTML.html#HTML" title="HTML">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is version 8.2 of `The MH-E
+Manual', last updated 2009-06-13.
+
+Copyright (C) 1995, 2001, 2002, 2003, 2005, 2006, 2007, 2008,
+  2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of either:
+
+       a. the GNU Free Documentation License, Version 1.3 or any later
+          version published by the Free Software Foundation; with no
+          Invariant Sections, with the Front-Cover texts being ``A GNU
+          Manual,'' and with the Back-Cover Texts as in (a) below. A
+          copy of the license is included in the section entitled ``GNU
+          Free Documentation License.''
+
+          (a) The FSF's Back-Cover Text is: ``You have the freedom to
+          copy and modify this GNU manual. Buying copies from the FSF
+          supports it in developing GNU and promoting software
+          freedom.''
+
+       b. the GNU General Public License as published by the Free
+          Software Foundation; either version 3, or (at your option)
+          any later version. A copy of the license is included in the
+          section entitled ``GNU General Public License.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Viewing-Attachments"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="HTML.html#HTML">HTML</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Viewing.html#Viewing">Viewing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Reading-Mail.html#Reading-Mail">Reading Mail</a>
+<hr>
+</div>
+
+<h3 class="section">6.2 Viewing Attachments</h3>
+
+<p><a name="index-attachments-555"></a><a name="index-body-parts-556"></a><a name="index-g_t_0040command_007bmhshow_007d-557"></a><a name="index-g_t_0040command_007bshow_007d-558"></a><a name="index-MH-commands_002c-_0040command_007bmhshow_007d-559"></a><a name="index-MH-commands_002c-_0040command_007bshow_007d-560"></a><a name="index-MIME-561"></a><a name="index-multimedia-mail-562"></a>
+MH has the ability to display <span class="sc">mime</span> (Multipurpose Internet
+Mail Extensions) messages which are simply messages with additional
+<dfn>body parts</dfn> or <dfn>attachments</dfn>. You can use the MH commands
+<samp><span class="command">show</span></samp><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> or <samp><span class="command">mhshow</span></samp><a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a> from the shell to read <span class="sc">mime</span> messages<a rel="footnote" href="#fn-3" name="fnd-3"><sup>3</sup></a>.
+
+   <p><a name="index-Emacs_002c-packages_002c-mm_002ddecode-563"></a><a name="index-mm_002ddecode-package-564"></a><a name="index-mh_002dtoggle_002dmh_002ddecode_002dmime_002dflag-565"></a><a name="index-g_t_003b-_0028semicolon_0029-566"></a><a name="index-mh_002ddecode_002dmime_002dflag-567"></a>
+MH-E can handle attachments as well if the Gnus &lsquo;<samp><span class="samp">mm-decode</span></samp>&rsquo;
+package is present. If so, the option <code>mh-decode-mime-flag</code> will
+be on. Otherwise, you'll see the <span class="sc">mime</span> body parts rather than text
+or attachments. There isn't much point in turning off the option
+<code>mh-decode-mime-flag</code>; however, you can inspect it if it appears
+that the body parts are not being interpreted correctly or toggle it
+with the command <kbd>;</kbd> (semicolon;
+<code>mh-toggle-mh-decode-mime-flag</code>) to view the raw message. This
+option also controls the display of quoted-printable messages and
+other graphical widgets. See <a href="Viewing.html#Viewing">Viewing</a>.
+
+   <p><a name="index-buttons-568"></a>
+Attachments in MH-E are indicated by <dfn>buttons</dfn> like this:
+
+<pre class="smallexample">     [1. image/jpeg; foo.jpg]...
+</pre>
+   <p><a name="index-mh_002dnext_002dbutton-569"></a><a name="index-mh_002dpress_002dbutton-570"></a><a name="index-mh_002dprev_002dbutton-571"></a><a name="index-g_t_0040key_007bRET_007d-572"></a><a name="index-K-_0040key_007bTAB_007d-573"></a><a name="index-K-S_002d_0040key_007bTAB_007d-574"></a><a name="index-Mouse_002d1-575"></a><a name="index-Mouse_002d2-576"></a>
+To view the contents of the button, use either <kbd>Mouse-1</kbd> or
+<kbd>Mouse-2</kbd> on the button or &lt;RET&gt; (<code>mh-press-button</code>) when
+the cursor is over the button. This command is a toggle so if you use
+it again on the same attachment, it is hidden. If Emacs does not know
+how to display the attachment, then Emacs offers to save the
+attachment in a file. To move the cursor to the next button, use the
+command <kbd>K &lt;TAB&gt;</kbd> (<code>mh-next-button</code>). If the end of the
+buffer is reached then the search wraps over to the start of the
+buffer. To move the cursor to the previous button, use the command
+<kbd>K S-&lt;TAB&gt;</kbd> (<code>mh-prev-button</code>). If the beginning of the
+buffer is reached then the search wraps over to the end of the buffer.
+
+   <p><a name="index-attachments_002c-viewing-577"></a><a name="index-viewing-attachments-578"></a><a name="index-mh_002dfolder_002dtoggle_002dmime_002dpart-579"></a><a name="index-K-v-580"></a>
+Another way to view the contents of a button is to use the command
+<kbd>K v</kbd> (<code>mh-folder-toggle-mime-part</code>). This command displays
+(or hides) the attachment associated with the button under the cursor. 
+If the cursor is not located over a button, then the cursor first
+moves to the next button, wrapping to the beginning of the message if
+necessary. This command has the advantage over the previous commands
+of working from the MH-Folder buffer. You can also provide a numeric
+prefix argument (as in <kbd>4 K v</kbd>) to view the attachment labeled
+with that number. If Emacs does not know how to display the
+attachment, then Emacs offers to save the attachment in a file.
+
+   <p><a name="index-g_t_0040file_007b_002fetc_002fmailcap_007d-581"></a><a name="index-files_002c-_0040file_007b_002fetc_002fmailcap_007d-582"></a><a name="index-mailcap_002dmime_002dinfo-583"></a><a name="index-mh_002ddisplay_002dwith_002dexternal_002dviewer-584"></a><a name="index-K-e-585"></a>
+If Emacs does not know how to view an attachment, you could save it
+into a file and then run some program to open it. It is easier,
+however, to launch the program directly from MH-E with the command
+<kbd>K e</kbd> (<code>mh-display-with-external-viewer</code>). While you'll most
+likely use this to view spreadsheets and documents, it is also useful
+to use your browser to view HTML attachments with higher fidelity than
+what Emacs can provide. This command displays the attachment
+associated with the button under the cursor. If the cursor is not
+located over a button, then the cursor first moves to the next button,
+wrapping to the beginning of the message if necessary. You can provide
+a numeric prefix argument (as in <kbd>4 K e</kbd>) to view the attachment
+labeled with that number. This command tries to provide a reasonable
+default for the viewer by calling the Emacs function
+<code>mailcap-mime-info</code>. This function usually reads the file
+<samp><span class="file">/etc/mailcap</span></samp>.
+
+   <p><a name="index-attachments_002c-saving-586"></a><a name="index-saving-attachments-587"></a><a name="index-mh_002dfolder_002dsave_002dmime_002dpart-588"></a><a name="index-K-o-589"></a>
+Use the command <kbd>K o</kbd> (<code>mh-folder-save-mime-part</code>) to save
+attachments (the mnemonic is &ldquo;output&rdquo;). This command saves the
+attachment associated with the button under the cursor. If the cursor
+is not located over a button, then the cursor first moves to the next
+button, wrapping to the beginning of the message if necessary. You can
+also provide a numeric prefix argument (as in <kbd>3 K o</kbd>) to save the
+attachment labeled with that number. This command prompts you for a
+filename and suggests a specific name if it is available.
+
+   <p><a name="index-g_t_0040command_007bmhn_007d-590"></a><a name="index-g_t_0040command_007bmhstore_007d-591"></a><a name="index-MH-commands_002c-_0040command_007bmhn_007d-592"></a><a name="index-MH-commands_002c-_0040command_007bmhstore_007d-593"></a><a name="index-mh_002dmime_002dsave_002dparts-594"></a><a name="index-K-a-595"></a><a name="index-mh_002dmime_002dsave_002dparts_002ddefault_002ddirectory-596"></a>
+You can save all of the attachments at once with the command <kbd>K a</kbd>
+(<code>mh-mime-save-parts</code>). The attachments are saved in the
+directory specified by the option
+<code>mh-mime-save-parts-default-directory</code> unless you use a prefix
+argument (as in <kbd>C-u K a</kbd>) in which case you are prompted for the
+directory. These directories may be superseded by MH profile
+components, since this function calls on <samp><span class="command">mhstore</span></samp>
+(<samp><span class="command">mhn</span></samp>) to do the work.
+
+   <p><a name="index-mh_002dmime_002dsave_002dparts_002ddefault_002ddirectory-597"></a>
+The default value for the option
+<code>mh-mime-save-parts-default-directory</code> is &lsquo;<samp><span class="samp">Prompt Always</span></samp>&rsquo; so
+that you are always prompted for the directory in which to save the
+attachments. However, if you usually use the same directory within a
+session, then you can set this option to &lsquo;<samp><span class="samp">Prompt the First Time</span></samp>&rsquo;
+to avoid the prompt each time. you can make this directory permanent
+by choosing &lsquo;<samp><span class="samp">Directory</span></samp>&rsquo; and entering the directory's name.
+
+   <p><a name="index-attachments_002c-inline-598"></a><a name="index-inline-attachments-599"></a><a name="index-mh_002dtoggle_002dmime_002dbuttons-600"></a><a name="index-K-t-601"></a><a name="index-mh_002ddisplay_002dbuttons_002dfor_002dinline_002dparts_002dflag-602"></a>
+The sender can request that attachments should be viewed inline so
+that they do not really appear like an attachment at all to the
+reader. Most of the time, this is desirable, so by default MH-E
+suppresses the buttons for inline attachments. On the other hand, you
+may receive code or HTML which the sender has added to his message as
+inline attachments so that you can read them in MH-E. In this case, it
+is useful to see the buttons so that you know you don't have to cut
+and paste the code into a file; you can simply save the attachment. If
+you want to make the buttons visible for inline attachments, you can
+use the command <kbd>K t</kbd> (<code>mh-toggle-mime-buttons</code>) to toggle
+the visibility of these buttons. You can turn on these buttons
+permanently by turning on the option
+<code>mh-display-buttons-for-inline-parts-flag</code>.
+
+   <p>MH-E cannot display all attachments inline however. It can display
+text (including <span class="sc">html</span>) and images.
+
+   <p><a name="index-header-field_002c-_0040samp_007bContent_002dDisposition_003a_007d-603"></a><a name="index-inline-images-604"></a><a name="index-g_t_0040samp_007bContent_002dDisposition_003a_007d-header-field-605"></a><a name="index-mh_002dmax_002dinline_002dimage_002dheight-606"></a><a name="index-mh_002dmax_002dinline_002dimage_002dwidth-607"></a>
+Some older mail programs do not insert the needed
+plumbing<a rel="footnote" href="#fn-4" name="fnd-4"><sup>4</sup></a> to tell MH-E whether to display the attachments inline
+or not. If this is the case, MH-E will display these images inline if
+they are smaller than the window. However, you might want to allow
+larger images to be displayed inline. To do this, you can change the
+options <code>mh-max-inline-image-width</code> and
+<code>mh-max-inline-image-height</code> from their default value of zero to
+a large number. The size of your screen is a good choice for these
+numbers.
+
+   <p><a name="index-alternatives-608"></a><a name="index-attachments_002c-alternatives-609"></a><a name="index-mh_002ddisplay_002dbuttons_002dfor_002dalternatives_002dflag-610"></a>
+Sometimes, a mail program will produce multiple alternatives of an
+attachment in increasing degree of faithfulness to the original
+content. By default, only the preferred alternative is displayed. If
+the option <code>mh-display-buttons-for-alternatives-flag</code> is on, then
+the preferred part is shown inline and buttons are shown for each of
+the other alternatives.
+
+   <p><a name="index-mm_002ddiscouraged_002dalternatives-611"></a>
+Many people prefer to see the &lsquo;<samp><span class="samp">text/plain</span></samp>&rsquo; alternative rather
+than the &lsquo;<samp><span class="samp">text/html</span></samp>&rsquo; alternative. To do this in MH-E, customize
+the option <code>mm-discouraged-alternatives</code>, and add
+&lsquo;<samp><span class="samp">text/html</span></samp>&rsquo;. The next best alternative, if any, will be shown.
+
+   <p><a name="index-mh_002dshow_002dpreferred_002dalternative-612"></a><a name="index-g_t_003a-_0028colon_0029-613"></a>
+Occasionally, though, you might want to see the preferred alternative. 
+The command <kbd>:</kbd> (<code>mh-show-preferred-alternative</code>) displays
+the message with the default preferred alternative. This is as if
+<code>mm-discouraged-alternatives</code> is set to &lsquo;<samp><span class="samp">nil</span></samp>&rsquo;. Use the
+command &lt;RET&gt; (<code>mh-show</code>) to show the message normally again.
+
+   <p><a name="index-K-i-614"></a><a name="index-mh_002dfolder_002dinline_002dmime_002dpart-615"></a>
+You can view the raw contents of an attachment with the command <kbd>K
+i</kbd> (<code>mh-folder-inline-mime-part</code>). This command displays (or
+hides) the contents of the attachment associated with the button under
+the cursor verbatim. If the cursor is not located over a button, then
+the cursor first moves to the next button, wrapping to the beginning
+of the message if necessary. You can also provide a numeric prefix
+argument (as in <kbd>4 K i</kbd>) to view the attachment labeled with that
+number.
+
+   <p>For additional information on buttons, see
+the chapters <a href="http://www.gnus.org/manual/gnus_101.html#SEC101">Article Buttons</a> and
+<a href="http://www.gnus.org/manual/gnus_108.html#SEC108">MIME Commands</a>
+in the <cite>The Gnus Manual</cite>.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> See the section
+<a href="http://rand-mh.sourceforge.net/book/mh/reapre.html">Reading Mail: inc show next prev</a> in the MH book.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> See the section
+<a href="http://rand-mh.sourceforge.net/book/mh/usimim.html#ReMIMa">Reading MIME Mail</a> in
+the MH book.</p>
+
+   <p class="footnote"><small>[<a name="fn-3" href="#fnd-3">3</a>]</small> You
+can call them directly from Emacs if you're running the X Window
+System: type <kbd>M-! xterm -e mhshow </kbd><var>message-number</var>. You can
+leave out the &lsquo;<samp><span class="samp">xterm -e</span></samp>&rsquo; if you use <samp><span class="command">mhlist</span></samp> or
+<samp><span class="command">mhstore</span></samp>.</p>
+
+   <p class="footnote"><small>[<a name="fn-4" href="#fnd-4">4</a>]</small> This plumbing is the &lsquo;<samp><span class="samp">Content-Disposition:</span></samp>&rsquo;
+header field.</p>
+
+   <hr></div>
+
+   </body></html>
+

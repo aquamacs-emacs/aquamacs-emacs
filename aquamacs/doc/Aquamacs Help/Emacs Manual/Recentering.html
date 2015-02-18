@@ -1,0 +1,105 @@
+<html lang="en">
+<head>
+<title>Recentering - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Display.html#Display" title="Display">
+<link rel="prev" href="Scrolling.html#Scrolling" title="Scrolling">
+<link rel="next" href="Auto-Scrolling.html#Auto-Scrolling" title="Auto Scrolling">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
+
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Recentering"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Auto-Scrolling.html#Auto-Scrolling">Auto Scrolling</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Scrolling.html#Scrolling">Scrolling</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
+<hr>
+</div>
+
+<h3 class="section">14.2 Recentering</h3>
+
+     <dl>
+<dt><kbd>C-l</kbd><dd>Scroll the selected window so the current line is the center-most text
+line; on subsequent consecutive invocations, make the current line the
+top line, the bottom line, and so on in cyclic order.  Possibly
+redisplay the screen too (<code>recenter-top-bottom</code>).
+
+     <br><dt><kbd>M-x recenter</kbd><dd>Scroll the selected window so the current line is the center-most text
+line.  Possibly redisplay the screen too.
+
+     <br><dt><kbd>C-M-l</kbd><dd>Scroll heuristically to bring useful information onto the screen
+(<code>reposition-window</code>). 
+</dl>
+
+   <p><a name="index-C_002dl-566"></a><a name="index-recenter_002dtop_002dbottom-567"></a>  The <kbd>C-l</kbd> (<code>recenter-top-bottom</code>) command <dfn>recenters</dfn>
+the selected window, scrolling it so that the current screen line is
+exactly in the center of the window, or as close to the center as
+possible.
+
+   <p>Typing <kbd>C-l</kbd> twice in a row (<kbd>C-l C-l</kbd>) scrolls the window
+so that point is on the topmost screen line.  Typing a third <kbd>C-l</kbd>
+scrolls the window so that point is on the bottom-most screen line. 
+Each successive <kbd>C-l</kbd> cycles through these three positions.
+
+   <p><a name="index-recenter_002dpositions-568"></a>  You can change the cycling order by customizing the list variable
+<code>recenter-positions</code>.  Each list element should be the symbol
+<code>top</code>, <code>middle</code>, or <code>bottom</code>, or a number; an integer
+means to move the line to the specified screen line, while a
+floating-point number between 0.0 and 1.0 specifies a percentage of
+the screen space from the top of the window.  The default,
+<code>(middle top bottom)</code>, is the cycling order described above. 
+Furthermore, if you change the variable <code>scroll-margin</code> to a
+non-zero value <var>n</var>, <kbd>C-l</kbd> always leaves at least <var>n</var>
+screen lines between point and the top or bottom of the window
+(see <a href="Auto-Scrolling.html#Auto-Scrolling">Auto Scrolling</a>).
+
+   <p>You can also give <kbd>C-l</kbd> a prefix argument.  A plain prefix
+argument, <kbd>C-u C-l</kbd>, simply recenters point.  A positive argument
+<var>n</var> puts point <var>n</var> lines down from the top of the window.  An
+argument of zero puts point on the topmost line.  A negative argument
+<var>-n</var> puts point <var>n</var> lines from the bottom of the window.  When
+given an argument, <kbd>C-l</kbd> does not clear the screen or cycle
+through different screen positions.
+
+   <p><a name="index-recenter_002dredisplay-569"></a>  If the variable <code>recenter-redisplay</code> has a non-<code>nil</code>
+value, each invocation of <kbd>C-l</kbd> also clears and redisplays the
+screen; the special value <code>tty</code> (the default) says to do this on
+text-terminal frames only.  Redisplaying is useful in case the screen
+becomes garbled for any reason (see <a href="Screen-Garbled.html#Screen-Garbled">Screen Garbled</a>).
+
+   <p><a name="index-recenter-570"></a>  The more primitive command <kbd>M-x recenter</kbd> behaves like
+<code>recenter-top-bottom</code>, but does not cycle among screen positions.
+
+   <p><a name="index-C_002dM_002dl-571"></a><a name="index-reposition_002dwindow-572"></a>  <kbd>C-M-l</kbd> (<code>reposition-window</code>) scrolls the current window
+heuristically in a way designed to get useful information onto the
+screen.  For example, in a Lisp file, this command tries to get the
+entire current defun onto the screen if possible.
+
+   </body></html>
+

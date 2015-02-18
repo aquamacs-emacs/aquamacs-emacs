@@ -1,0 +1,151 @@
+<html lang="en">
+<head>
+<title>List Functions - Common Lisp Extensions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Common Lisp Extensions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Lists.html#Lists" title="Lists">
+<link rel="prev" href="Lists.html#Lists" title="Lists">
+<link rel="next" href="Substitution-of-Expressions.html#Substitution-of-Expressions" title="Substitution of Expressions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the GNU Emacs Common Lisp emulation package.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="List-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Substitution-of-Expressions.html#Substitution-of-Expressions">Substitution of Expressions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Lists.html#Lists">Lists</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Lists.html#Lists">Lists</a>
+<hr>
+</div>
+
+<h3 class="section">11.1 List Functions</h3>
+
+<p class="noindent">This section describes a number of simple operations on lists,
+i.e., chains of cons cells.
+
+<div class="defun">
+&mdash; Function: <b>caddr</b><var> x<a name="index-caddr-141"></a></var><br>
+<blockquote><p>This function is equivalent to <code>(car (cdr (cdr </code><var>x</var><code>)))</code>. 
+Likewise, this package defines all 28 <code>c</code><var>xxx</var><code>r</code> functions
+where <var>xxx</var> is up to four &lsquo;<samp><span class="samp">a</span></samp>&rsquo;s and/or &lsquo;<samp><span class="samp">d</span></samp>&rsquo;s. 
+All of these functions are <code>setf</code>-able, and calls to them
+are expanded inline by the byte-compiler for maximum efficiency. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>first</b><var> x<a name="index-first-142"></a></var><br>
+<blockquote><p>This function is a synonym for <code>(car </code><var>x</var><code>)</code>.  Likewise,
+the functions <code>second</code>, <code>third</code>, <small class="dots">...</small>, through
+<code>tenth</code> return the given element of the list <var>x</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>rest</b><var> x<a name="index-rest-143"></a></var><br>
+<blockquote><p>This function is a synonym for <code>(cdr </code><var>x</var><code>)</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>endp</b><var> x<a name="index-endp-144"></a></var><br>
+<blockquote><p>Common Lisp defines this function to act like <code>null</code>, but
+signaling an error if <code>x</code> is neither a <code>nil</code> nor a
+cons cell.  This package simply defines <code>endp</code> as a synonym
+for <code>null</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>list-length</b><var> x<a name="index-list_002dlength-145"></a></var><br>
+<blockquote><p>This function returns the length of list <var>x</var>, exactly like
+<code>(length </code><var>x</var><code>)</code>, except that if <var>x</var> is a circular
+list (where the cdr-chain forms a loop rather than terminating
+with <code>nil</code>), this function returns <code>nil</code>.  (The regular
+<code>length</code> function would get stuck if given a circular list.) 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>list*</b><var> arg &amp;rest others<a name="index-list_002a-146"></a></var><br>
+<blockquote><p>This function constructs a list of its arguments.  The final
+argument becomes the <code>cdr</code> of the last cell constructed. 
+Thus, <code>(list* </code><var>a</var> <var>b</var> <var>c</var><code>)</code> is equivalent to
+<code>(cons </code><var>a</var><code> (cons </code><var>b</var> <var>c</var><code>))</code>, and
+<code>(list* </code><var>a</var> <var>b</var><code> nil)</code> is equivalent to
+<code>(list </code><var>a</var> <var>b</var><code>)</code>.
+
+        <p>(Note that this function really is called <code>list*</code> in Common
+Lisp; it is not a name invented for this package like <code>member*</code>
+or <code>defun*</code>.) 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>ldiff</b><var> list sublist<a name="index-ldiff-147"></a></var><br>
+<blockquote><p>If <var>sublist</var> is a sublist of <var>list</var>, i.e., is <code>eq</code> to
+one of the cons cells of <var>list</var>, then this function returns
+a copy of the part of <var>list</var> up to but not including
+<var>sublist</var>.  For example, <code>(ldiff x (cddr x))</code> returns
+the first two elements of the list <code>x</code>.  The result is a
+copy; the original <var>list</var> is not modified.  If <var>sublist</var>
+is not a sublist of <var>list</var>, a copy of the entire <var>list</var>
+is returned. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>copy-list</b><var> list<a name="index-copy_002dlist-148"></a></var><br>
+<blockquote><p>This function returns a copy of the list <var>list</var>.  It copies
+dotted lists like <code>(1 2 . 3)</code> correctly. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>copy-tree</b><var> x &amp;optional vecp<a name="index-copy_002dtree-149"></a></var><br>
+<blockquote><p>This function returns a copy of the tree of cons cells <var>x</var>. 
+Unlike <code>copy-sequence</code> (and its alias <code>copy-list</code>),
+which copies only along the <code>cdr</code> direction, this function
+copies (recursively) along both the <code>car</code> and the <code>cdr</code>
+directions.  If <var>x</var> is not a cons cell, the function simply
+returns <var>x</var> unchanged.  If the optional <var>vecp</var> argument
+is true, this function copies vectors (recursively) as well as
+cons cells. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>tree-equal</b><var> x y </var><tt>&amp;key :test :test-not :key</tt><var><a name="index-tree_002dequal-150"></a></var><br>
+<blockquote><p>This function compares two trees of cons cells.  If <var>x</var> and
+<var>y</var> are both cons cells, their <code>car</code>s and <code>cdr</code>s are
+compared recursively.  If neither <var>x</var> nor <var>y</var> is a cons
+cell, they are compared by <code>eql</code>, or according to the
+specified test.  The <code>:key</code> function, if specified, is
+applied to the elements of both trees.  See <a href="Sequences.html#Sequences">Sequences</a>. 
+</p></blockquote></div>
+
+   </body></html>
+

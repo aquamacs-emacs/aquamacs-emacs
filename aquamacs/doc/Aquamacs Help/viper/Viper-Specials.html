@@ -1,0 +1,369 @@
+<html lang="en">
+<head>
+<title>Viper Specials - Untitled</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Untitled">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customization.html#Customization" title="Customization">
+<link rel="prev" href="Packages-that-Change-Keymaps.html#Packages-that-Change-Keymaps" title="Packages that Change Keymaps">
+<link rel="next" href="Vi-Macros.html#Vi-Macros" title="Vi Macros">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Viper-Specials"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Vi-Macros.html#Vi-Macros">Vi Macros</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Packages-that-Change-Keymaps.html#Packages-that-Change-Keymaps">Packages that Change Keymaps</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Customization</a>
+<hr>
+</div>
+
+<h3 class="section">3.3 Viper Specials</h3>
+
+<p>Viper extends Vi with a number of useful features.  This includes various
+search functions, histories of search strings, Ex commands, insertions, and
+Vi's destructive commands.  In addition, Viper supports file name completion
+and history, completion of Ex commands and variables, and many other
+features.  Some of these features are explained in detail elsewhere in this
+document.  Other features are explained here.
+
+     <dl>
+<dt><code>(viper-buffer-search-enable)</code><br><dt><code>viper-buffer-search-char nil</code><dd>Enable buffer search.  Explicit call to <code>viper-buffer-search-enable</code>
+sets <code>viper-buffer-search-char</code> to <kbd>g</kbd>.  Alternatively, the user can
+set <code>viper-buffer-search-char</code> in <samp><span class="file">.viper</span></samp> to a key sequence
+to be used for buffer search.  There is no need to call
+<code>viper-buffer-search-enable</code> in that case. 
+<a name="index-g_t_0040code_007bviper_002dbuffer_002dsearch_002denable_007d-245"></a><a name="index-g_t_0040code_007bviper_002dbuffer_002dsearch_002dchar_007d-246"></a><br><dt><code>viper-toggle-search-style</code><dd>This function, bound to <kbd>C-c /</kbd>, lets one toggle case-sensitive and
+case-insensitive search, and also switch between plain vanilla search and
+search via regular expressions.  Without the prefix argument, the user is
+asked which mode to toggle.  With prefix argument 1, this toggles
+case-sensitivity.  With prefix argument 2, regular expression/vanilla search
+will be toggled.
+
+     <p>However, we found that the most convenient way to toggle
+these options is to bind a Vi macro to
+bind <kbd>//</kbd> to toggles case sensitivity and to <kbd>///</kbd> to toggles
+vanilla search.  Thus, quickly hitting <kbd>/</kbd> twice will switch Viper from
+case sensitive search to case-insensitive.  Repeating this once again will
+restore the original state.  Likewise, quickly hitting <kbd>/</kbd> three times
+will switch you from vanilla-style search to search via regular expressions. 
+If you hit something other than <kbd>/</kbd> after the first <kbd>/</kbd> or if the
+second <kbd>/</kbd> doesn't follow quickly enough, then Viper will issue the
+usual prompt <kbd>/</kbd> and will wait for input, as usual in Vi. 
+If you don't like this behavior, you can &ldquo;unrecord&rdquo; these macros in your
+<samp><span class="file">~/.viper</span></samp> file.  For instance, if you don't like the above feature, put
+this in <samp><span class="file">~/.viper</span></samp>:
+     <pre class="example">          (viper-set-searchstyle-toggling-macros 'undefine)
+</pre>
+     <p><a name="index-g_t_0040code_007bviper_002dset_002dsearchstyle_002dtoggling_002dmacros_007d-247"></a>
+If you don't like this feature as a default, but would still like to have
+it in some major modes, you can do so by first unsetting it globally, as
+shown above, and then setting it in the desired major modes as follows:
+     <pre class="example">          (viper-set-searchstyle-toggling-macros nil 'c-mode)
+          (viper-set-searchstyle-toggling-macros nil 'lisp-mode)
+</pre>
+     <br><dt><code>Vi-isms in Emacs state</code><dd>Some people find it useful to use the Vi-style search key, `/', to invoke
+search in modes which Viper leaves in emacs-state.  These modes are:
+<code>dired-mode</code>, <code>mh-folder-mode</code>,
+<code>Info-mode</code>, and <code>Buffer-menu-mode</code>
+(more may be added in the future).  So, in the above modes, Viper binds `/'
+so that it will behave Vi-style.  Furthermore, in those major modes, Viper
+binds `:' to invoke ex-style commands, like in vi-state.  And, as described
+above, `//' and `///' get bound to Vi-style macros that toggle
+case-insensitivity and regexp-search.
+
+     <p>If you don't like these features&mdash;which I don't really understand&mdash;you
+can unbind `/' and `:' in <code>viper-dired-modifier-map</code> (for Dired) or in
+<code>viper-slash-and-colon-map</code>, for other modes. 
+<a name="index-g_t_0040code_007bviper_002dslash_002dand_002dcolon_002dmap_007d-248"></a><a name="index-g_t_0040code_007bviper_002ddired_002dmodifier_002dmap_007d-249"></a>
+To unbind the macros `//' and `///' for a major mode where you feel they
+are undesirable, execute <code>viper-set-emacs-state-searchstyle-macros</code> with a
+non-<code>nil</code> argument.  This can be done either interactively, by supplying a
+prefix argument, or by placing
+     <pre class="example">          (viper-set-emacs-state-searchstyle-macros 'undefine)
+</pre>
+     <p><a name="index-g_t_0040code_007bviper_002dset_002demacs_002dstate_002dsearchstyle_002dmacros_007d-250"></a>in the hook to the major mode (e.g., <code>dired-mode-hook</code>). 
+See <a href="Vi-Macros.html#Vi-Macros">Vi Macros</a>, for more information on Vi macros.
+
+     <br><dt><code>viper-heading-start</code><br><dt><code>viper-heading-end</code><dd><a name="index-headings-251"></a><a name="index-sections-252"></a><a name="index-paragraphs-253"></a><a name="index-sentences-254"></a>Regular Expressions for <kbd>[[</kbd> and <kbd>]]</kbd>.  Note that Emacs defines
+Regexps for paragraphs and sentences.  See <a href="../emacs/Paragraphs.html#Paragraphs">Paragraphs and Sentences</a>, for details. 
+<br><dt><code>M-x viper-set-expert-level</code><dd><a name="index-g_t_0040code_007bviper_002dset_002dexpert_002dlevel_007d-255"></a>Change your user level interactively. 
+<br><dt><code>viper-smart-suffix-list  '("" "tex" "c" "cc" "el" "p")</code><dd><a name="index-g_t_0040code_007bviper_002dsmart_002dsuffix_002dlist_007d-256"></a>Viper supports Emacs-style file completion when it prompts the user for a
+file name.  However, in many cases, the same directory may contain files
+with identical prefix but different suffixes, e.g., prog.c, prog.o,
+paper.tex, paper.dvi.  In such cases, completion will stop at the `.'. 
+If the above variable is a list of strings representing suffixes, Viper will
+try these suffixes
+in the order listed and will check if the corresponding file exists.
+
+     <p>For instance, if completion stopped at `paper.' and the user typed
+&lt;RET&gt;,
+then Viper will check if the files `paper.', `paper.tex', `paper.c', etc., exist. 
+It will take the first such file.  If no file exists, Viper will give a chance
+to complete the file name by typing the appropriate suffix.  If `paper.' was
+the intended file name, hitting return will accept it.
+
+     <p>To turn this feature off, set the above variable to <code>nil</code>.
+
+     <br><dt><code>viper-insertion-ring-size  14</code><dd><a name="index-g_t_0040code_007bviper_002dinsertion_002dring_002dsize_007d-257"></a><a name="index-Insertion-ring-258"></a>Viper remembers what was previously inserted in Insert and Replace states. 
+Several such recent insertions are kept in a special ring of strings of size
+<code>viper-insertion-ring-size</code>. 
+If you enter Insert or Replace state you can reinsert strings from this
+ring by typing <kbd>C-c M-p</kbd> or <kbd>C-c M-n</kbd>.  The former will search the
+ring in
+the direction of older insertions, and the latter will search in
+the direction of newer insertions.  Hitting <kbd>C-c M-p</kbd> or <kbd>C-c M-n</kbd>
+in succession
+will undo the previous insertion from the ring and insert the next item on
+the ring.  If a larger ring size is needed, change the value of the above
+variable in the <samp><span class="file">~/.viper</span></samp> file.
+
+     <p>Since typing these sequences of keys may be tedious, it is suggested that the
+user should bind a function key, such as <kbd>f31</kbd>, as follows:
+     <pre class="example">          (define-key viper-insert-global-user-map [f31]
+                      'viper-insert-prev-from-insertion-ring)
+</pre>
+     <p>This binds <kbd>f31</kbd> (which is usually <kbd>R11</kbd> on a Sun workstation)
+to the function that inserts the previous string in the insertion history. 
+To rotate the history in the opposite
+direction, you can either bind an unused key to
+<code>viper-insert-next-from-insertion-ring</code> or hit any digit (1 to 9) then
+<kbd>f31</kbd>.
+
+     <p>One should not bind the above functions to <kbd>M-p</kbd> or <kbd>M-n</kbd>, since
+this will interfere with the minibuffer histories and, possibly, other
+major modes.
+
+     <br><dt><code>viper-command-ring-size  14</code><dd><a name="index-g_t_0040code_007bviper_002dcommand_002dring_002dsize_007d-259"></a><a name="index-Destructive-command-ring-260"></a><a name="index-Destructive-command-history-261"></a>Viper keeps track of the recent history of destructive
+commands, such as <kbd>dw</kbd>, <kbd>i</kbd>, etc. 
+In Vi state,
+the most recent command can be re-executed by hitting `<kbd>.</kbd>', as in Vi. 
+However, repeated typing <kbd>C-c M-p</kbd> will cause Viper to show the
+previous destructive commands in the minibuffer.  Subsequent hitting `<kbd>.</kbd>'
+will execute the command that was displayed last. 
+The key <kbd>C-c M-n</kbd> will cycle through the command history in the
+opposite direction. 
+Since typing <kbd>C-c M-p</kbd> may be tedious, it is more convenient to bind an
+appropriate function to an unused function key on the keyboard and use that
+key.  For instance, the following
+     <pre class="example">          (define-key viper-vi-global-user-map [f31]
+                      'viper-prev-destructive-command)
+</pre>
+     <p>binds the key <kbd>f31</kbd> (which is usually <kbd>R11</kbd> on a Sun workstation)
+to the function that searches the command history in the direction of older
+commands.  To search in the opposite
+direction, you can either bind an unused key to
+<code>viper-next-destructive-command</code> or hit any digit (1 to 9) then <kbd>f31</kbd>.
+
+     <p>One should not bind the above functions to <kbd>M-p</kbd> or <kbd>M-n</kbd>, since
+this will interfere with the minibuffer histories and, possibly, other
+major modes.
+
+     <br><dt><code>viper-minibuffer-vi-face  'viper-minibuffer-vi-face</code><br><dt><code>viper-minibuffer-insert-face  'viper-minibuffer-insert-face</code><br><dt><code>viper-minibuffer-emacs-face  'viper-minibuffer-emacs-face</code><dd>These faces control the appearance of the minibuffer text in the
+corresponding Viper states.  You can change the appearance of these faces
+through Emacs' customization widget, which is accessible through the
+menubar.
+
+     <p>Viper is located in this widget under the <em>Emulations</em> customization
+subgroup of the <em>Editing</em> group.  All Viper faces are grouped together
+in Viper's <em>Highlighting</em> customization subgroup.
+
+     <p>Note that only the text you type in is affected by the above faces. 
+Prompts and minibuffer messages are not affected.
+
+     <p>Purists who do not like adornments in the minibuffer can always zap them by
+putting
+     <pre class="example">          (copy-face 'default 'viper-minibuffer-vi-face)
+          (copy-face 'default 'viper-minibuffer-insert-face)
+          (copy-face 'default 'viper-minibuffer-emacs-face)
+</pre>
+     <p>in the <samp><span class="file">~/.viper</span></samp> file or through the customization widget, as
+described above.  However, in that case, the user will not have any
+indication of the current Viper state in the minibuffer.  (This is important
+if the user accidentally switches to another Viper state by typing &lt;ESC&gt; or
+<kbd>C-z</kbd>). 
+<br><dt><code>M-x viper-go-away</code><dd><a name="index-g_t_0040code_007bviper_002dgo_002daway_007d-262"></a>Make Viper disappear from the face of your running Emacs instance.  If your
+fingers start aching again, <kbd>M-x viper-mode</kbd> might save your day. 
+<br><dt><code>M-x toggle-viper-mode</code><dd><a name="index-g_t_0040code_007btoggle_002dviper_002dmode_007d-263"></a>Toggle Viperization of Emacs on and off. 
+</dl>
+
+   <p><a name="index-Multifile-documents-and-programs-264"></a>
+Viper provides some support for multi-file documents and programs. 
+If a document consists of several files we can designate one of them as a
+master and put the following at the end of that file:
+<pre class="lisp">     ;; Local Variables:
+     ;; eval: (viper-setup-master-buffer "file1" "file2" "file3" "file4")
+     ;; End:
+</pre>
+   <p class="noindent">where <code>file1</code> to <code>file4</code> are names of files related to the master
+file.  Next time, when the master file is visited, the command
+<code>viper-setup-master-buffer</code> will be evaluated and the above files will
+be associated with the master file.  Then, the new Ex command
+<kbd>:RelatedFile</kbd> (abbr. <kbd>:R</kbd>) will display files 1 to 4 one after
+another, so you can edit them.  If a file is not in any Emacs buffer, it
+will be visited.  The command <kbd>PreviousRelatedFile</kbd> (abbr., <kbd>:P</kbd>)
+goes through the file list in the opposite direction. 
+<a name="index-g_t_0040kbd_007b_003aRelatedFile_007d-265"></a><a name="index-g_t_0040kbd_007b_003aPreviousRelatedFile_007d-266"></a>
+These commands are akin to <kbd>:n</kbd> and <kbd>:N</kbd>, but they allow the user to
+focus on relevant files only.
+
+   <p>Note that only the master file needs to have the aforementioned block of
+commands.  Also, ";;" above can be replaced by some other
+markers.  Semicolon is good for Lisp programs, since it is considered a
+comment designator there.  For LaTeX, this could be "%%%", and for C the
+above block should be commented out.
+
+   <p>Even though these commands are sometimes useful, they are no substitute for
+the powerful <em>tag table</em> facility of Emacs.  Viper's <kbd>:tag</kbd> command
+in a primitive interface to Emacs tags.  See <a href="../emacs/Tags.html#Tags">Tags</a>, for more information on tags.
+
+   <p>The following two commands are normally bound to a mouse click and are part
+of Viper.  They work only if Emacs runs as an application under X
+Windows (or under some other window system for which a port of GNU Emacs 20
+is available).  Clicking the mouse when Emacs is invoked in an Xterm window
+(using <code>emacs -nw</code>) will do no good.
+
+     
+<a name="index-mouse-267"></a>
+<a name="index-mouse_002dsearch-268"></a>
+<dl><dt><code>viper-mouse-search-key  (meta shift 1)</code><dd><a name="index-g_t_0040code_007bviper_002dmouse_002dinsert_002dkey_007d-269"></a>This variable controls the <em>mouse-search</em> feature of Viper.  The
+default value
+states that holding Meta and Shift keys while clicking mouse button 1
+should initiate search for a region under the mouse pointer (defined
+below).  This command can take a prefix argument, which indicates the
+occurrence of the pattern to search for.
+
+     <p>Note: while loading initially, Viper binds this mouse action only if it is
+not already bound to something else.  If you want to use the mouse-search
+feature, and the <kbd>Meta-Shift-Mouse-1</kbd> mouse action is already bound to
+something else, you can rebind the mouse-search feature by setting
+<code>viper-mouse-search-key</code> to something else in your <code>~/.viper</code>
+file:
+     <pre class="lisp">          (setq viper-mouse-search-key '(meta 1))
+</pre>
+     <p>This would bind mouse search to the action invoked by pressing the
+Meta key and clicking mouse button 1.  The allowed values of
+<code>viper-mouse-search-key</code> are lists that contain a mouse-button number
+(1,2, or 3) and any combination of the words `control', `meta', and
+`shift'.
+
+     <p>If the requested mouse action (e.g., (meta 1)) is already taken for other
+purposes then you have to confirm your intention by placing the following
+command in <code>~/.viper</code> after setting <code>viper-mouse-search-key</code>:
+     <pre class="lisp">          (viper-bind-mouse-search-key 'force)
+</pre>
+     <p>You can also change this setting interactively, through the customization
+widget of Emacs (type <kbd>:customize</kbd>).
+
+     <p>The region that is chosen as a pattern to search for is determined as
+follows.  If search is invoked via a single click, Viper chooses the region
+that lies between the beginning of the &ldquo;word&rdquo; under the pointer (&ldquo;word&rdquo;
+is understood in Vi sense) and the end of that word.  The only difference
+with Vi's words is that in Lisp major modes `-' is considered an
+alphanumeric symbol.  This is done for the convenience of working with Lisp
+symbols, which often have an `-' in them.  Also, if you click on a
+non-alphanumeric character that is not a word separator (in Vi sense) then
+this character will also be considered alphanumeric, provided that it is
+adjacent (from either side) to an alphanumeric character.  This useful
+feature gives added control over the patterns selected by the mouse click.
+
+     <p>On a double-click, the region is determined by the beginning of the current
+Vi's &ldquo;Word&rdquo; (i.e., the largest non-separator chunk of text) and the End
+of that &ldquo;Word&rdquo; (as determined by the <kbd>E</kbd> command).
+
+     <p>On a triple-click, the region consists of the entire line where the click
+occurred with all leading and trailing spaces and tabs removed.
+
+     <p><a name="index-mouse_002dinsert-270"></a><br><dt><code>viper-mouse-insert-key (meta shift 2)</code><dd><a name="index-g_t_0040code_007bviper_002dmouse_002dinsert_002dkey_007d-271"></a>This variable controls the <em>mouse-insert</em> feature of Viper. 
+The above default value states that
+holding Meta and Shift keys while clicking mouse button 2
+should insert the region surrounding the
+mouse pointer.  The rules defining this region are the same as for
+mouse-search.  This command takes an optional prefix argument, which
+indicates how many such regions to snarf from the buffer and insert.  (In
+case of a triple-click, the prefix argument is ignored.)
+
+     <p>Note: while loading initially, Viper binds this mouse action only if it not
+already bound to something else.  If you want to use this feature and the
+default mouse action is already bound, you can rebind mouse-insert by
+placing this command in <code>~/.viper</code>:
+     <pre class="lisp">          (setq viper-mouse-insert-key '(meta 2))
+</pre>
+     <p>If you want to bind mouse-insert to an action even if this action is
+already taken for other purposes in Emacs, then you should add this command
+to <code>~/.viper</code>, after setting <code>viper-mouse-insert-key</code>:
+     <pre class="lisp">          (viper-bind-mouse-insert-key 'force)
+</pre>
+     <p>This value can also be changed via the Emacs customization widget at the
+menubar.
+
+     <br><dt><code>viper-multiclick-timeout</code><dd>This variable controls the rate at which double-clicking must occur for the
+purpose of mouse search and mouse insert.  By default, this is set to
+<code>double-click-time</code> in Emacs and to
+<code>mouse-track-multi-click-time</code> milliseconds in XEmacs. 
+</dl>
+   <a name="index-g_t_0040kbd_007bS_002dMouse_002d1_007d-272"></a><a name="index-g_t_0040kbd_007bS_002dMouse_002d2_007d-273"></a><a name="index-g_t_0040kbd_007bmeta-shift-button1up_007d-274"></a><a name="index-g_t_0040kbd_007bmeta-shift-button2up_007d-275"></a><a name="index-g_t_0040code_007bviper_002dmulticlick_002dtimeout_007d-276"></a><a name="index-g_t_0040code_007bviper_002dmouse_002dclick_002dinsert_002dword_007d-277"></a><a name="index-g_t_0040code_007bviper_002dmouse_002dclick_002dsearch_002dword_007d-278"></a>
+Note: The above functions search and insert in the selected window of
+the latest active frame.  This means that you can click in another window or
+another frame and have search or insertion done in the frame and window you
+just left.  This lets one use these functions in a multi-frame
+configuration.  However, this may require some getting used to.  For
+instance, if you are typing in a frame, A, and then move the mouse to frame
+B and click to invoke mouse search, search (or insertion) will be performed
+in frame A.  To perform search/insertion in frame B, you will first have to
+shift focus there, which doesn't happen until you type a character or
+perform some other action in frame B&mdash;mouse search doesn't shift focus.
+
+   <p>If you decide that you don't like the above feature and always want
+search/insertion be performed in the frame where the click occurs, don't
+bind (and unbind, if necessary) <code>viper-mouse-catch-frame-switch</code> from
+the mouse event it is bound to.
+
+   <p>Mouse search is integrated with Vi-style search, so you can
+repeat it with <kbd>n</kbd> and <kbd>N</kbd>.  It should be also noted that, while
+case-sensitivity of search in Viper is controlled by the variable
+<code>viper-case-fold-search</code>, the case of mouse search is
+controlled by the Emacs variable <code>case-fold-search</code>, which may be set
+differently from <code>viper-case-fold-search</code>.  Therefore, case-sensitivity
+of mouse search may be different from that of the usual Vi-style search.
+
+   <p>Finally, if the way Viper determines the word to be searched for or to be
+inserted is not what you want, there is a variable,
+<code>viper-surrounding-word-function</code>, which can be changed to indicate
+another function for snarfing words out of the buffer.  The catch is that
+you will then have to write such a function and make it known to your
+Emacs.  The function <code>viper-surrounding-word</code> in <samp><span class="file">viper.el</span></samp> can be
+used as a guiding example.
+
+   </body></html>
+

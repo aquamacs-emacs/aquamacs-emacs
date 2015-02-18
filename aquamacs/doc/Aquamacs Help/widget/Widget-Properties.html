@@ -1,0 +1,141 @@
+<html lang="en">
+<head>
+<title>Widget Properties - The Emacs Widget Library</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The Emacs Widget Library">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Sexp-Types.html#Sexp-Types" title="Sexp Types">
+<link rel="next" href="Defining-New-Widgets.html#Defining-New-Widgets" title="Defining New Widgets">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Widget-Properties"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Defining-New-Widgets.html#Defining-New-Widgets">Defining New Widgets</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Sexp-Types.html#Sexp-Types">Sexp Types</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h3 class="section">Properties</h3>
+
+<p><a name="index-properties-of-widgets-134"></a><a name="index-widget-properties-135"></a>
+You can examine or set the value of a widget by using the widget object
+that was returned by <code>widget-create</code>.
+
+<div class="defun">
+&mdash; Function: <b>widget-value</b><var> widget<a name="index-widget_002dvalue-136"></a></var><br>
+<blockquote><p>Return the current value contained in <var>widget</var>. 
+It is an error to call this function on an uninitialized widget. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>widget-value-set</b><var> widget value<a name="index-widget_002dvalue_002dset-137"></a></var><br>
+<blockquote><p>Set the value contained in <var>widget</var> to <var>value</var>. 
+It is an error to call this function with an invalid <var>value</var>. 
+</p></blockquote></div>
+
+   <p><strong>Important:</strong> You <em>must</em> call <code>widget-setup</code> after
+modifying the value of a widget before the user is allowed to edit the
+widget again.  It is enough to call <code>widget-setup</code> once if you
+modify multiple widgets.  This is currently only necessary if the widget
+contains an editing field, but may be necessary for other widgets in the
+future.
+
+   <p>If your application needs to associate some information with the widget
+objects, for example a reference to the item being edited, it can be
+done with <code>widget-put</code> and <code>widget-get</code>.  The property names
+must begin with a &lsquo;<samp><span class="samp">:</span></samp>&rsquo;.
+
+<div class="defun">
+&mdash; Function: <b>widget-put</b><var> widget property value<a name="index-widget_002dput-138"></a></var><br>
+<blockquote><p>In <var>widget</var> set <var>property</var> to <var>value</var>. 
+<var>property</var> should be a symbol, while <var>value</var> can be anything. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>widget-get</b><var> widget property<a name="index-widget_002dget-139"></a></var><br>
+<blockquote><p>In <var>widget</var> return the value for <var>property</var>. 
+<var>property</var> should be a symbol, the value is what was last set by
+<code>widget-put</code> for <var>property</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>widget-member</b><var> widget property<a name="index-widget_002dmember-140"></a></var><br>
+<blockquote><p>Non-<code>nil</code> if <var>widget</var> has a value (even <code>nil</code>) for
+property <var>property</var>. 
+</p></blockquote></div>
+
+   <p>Occasionally it can be useful to know which kind of widget you have,
+i.e. the name of the widget type you gave when the widget was created.
+
+<div class="defun">
+&mdash; Function: <b>widget-type</b><var> widget<a name="index-widget_002dtype-141"></a></var><br>
+<blockquote><p>Return the name of <var>widget</var>, a symbol. 
+</p></blockquote></div>
+
+   <p><a name="index-active-widget-142"></a><a name="index-inactive-widget-143"></a><a name="index-activate-a-widget-144"></a><a name="index-deactivate-a-widget-145"></a>Widgets can be in two states: active, which means they are modifiable by
+the user, or inactive, which means they cannot be modified by the user. 
+You can query or set the state with the following code:
+
+<pre class="lisp">     ;; Examine if <var>widget</var> is active or not.
+     (if (widget-apply <var>widget</var> :active)
+         (message "Widget is active.")
+       (message "Widget is inactive.")
+     
+     ;; Make <var>widget</var> inactive.
+     (widget-apply <var>widget</var> :deactivate)
+     
+     ;; Make <var>widget</var> active.
+     (widget-apply <var>widget</var> :activate)
+</pre>
+   <p>A widget is inactive if it, or any of its ancestors (found by
+following the <code>:parent</code> link), have been deactivated.  To make sure
+a widget is really active, you must therefore activate both it and
+all its ancestors.
+
+<pre class="lisp">     (while widget
+       (widget-apply widget :activate)
+       (setq widget (widget-get widget :parent)))
+</pre>
+   <p>You can check if a widget has been made inactive by examining the value
+of the <code>:inactive</code> keyword.  If this is non-<code>nil</code>, the widget itself
+has been deactivated.  This is different from using the <code>:active</code>
+keyword, in that the latter tells you if the widget <strong>or</strong> any of
+its ancestors have been deactivated.  Do not attempt to set the
+<code>:inactive</code> keyword directly.  Use the <code>:activate</code>
+<code>:deactivate</code> keywords instead.
+
+   </body></html>
+

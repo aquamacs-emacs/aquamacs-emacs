@@ -136,6 +136,19 @@ is not used)."
 	       (cons (logior (lsh 0 16)  12) 'ns-new-frame)
 	       (cons (logior (lsh 0 16)  13) 'ns-toggle-toolbar)
 	       (cons (logior (lsh 0 16)  14) 'ns-show-prefs)
+	       (cons (logior (lsh 0 16)  17) 'ns-change-color)
+	       (cons (logior (lsh 0 16)  20) 'ns-check-spelling)
+	       (cons (logior (lsh 0 16)  21) 'ns-spelling-change)
+	       (cons (logior (lsh 0 16)  22) 'ns-toggle-fullscreen)
+	       (cons (logior (lsh 0 16)  90) 'ns-application-activated)
+	       (cons (logior (lsh 0 16)  91) 'ns-application-open-untitled)
+	       (cons (logior (lsh 0 16)  92) 'ns-application-reopen)
+	       (cons (logior (lsh 0 16)  93) 'ns-application-restore)
+	       (cons (logior (lsh 0 16)  94) 'ns-application-store-state)
+	       (cons (logior (lsh 0 16)  130) 'ns-about) ;; Aquamacs only
+	       (cons (logior (lsh 0 16)  131) 'ns-check-for-updates) ;; Aquamacs only
+	       (cons (logior (lsh 0 16)  132) 'ns-tool-bar-customized) ;; Aquamacs only
+	       (cons (logior (lsh 0 16)  133) 'ns-save-panel-closed) ;; Aquamacs only
 	       ))))
     (set-terminal-parameter frame 'x-setup-function-keys t)))
 
@@ -147,7 +160,7 @@ is not used)."
 (defun x-handle-switch (switch &optional numeric)
   (let ((aelt (assoc switch command-line-x-option-alist)))
     (if aelt
-	(setq default-frame-alist
+	      (setq default-frame-alist
 	      (cons (cons (nth 3 aelt)
 			  (if numeric
 			      (string-to-number (pop x-invocation-args))
@@ -162,7 +175,7 @@ is not used)."
 (defun x-handle-initial-switch (switch)
   (let ((aelt (assoc switch command-line-x-option-alist)))
     (if aelt
-	(setq initial-frame-alist
+	      (setq initial-frame-alist
 	      (cons (cons (nth 3 aelt)
 			  (or (nth 4 aelt) (pop x-invocation-args)))
 		    initial-frame-alist)))))
@@ -300,7 +313,7 @@ have been processed."
 
 (defvar x-colors
   (if (featurep 'ns) (ns-list-colors)
-    (purecopy
+  (purecopy
      '("gray100" "grey100" "gray99" "grey99" "gray98" "grey98" "gray97"
        "grey97" "gray96" "grey96" "gray95" "grey95" "gray94" "grey94"
        "gray93" "grey93" "gray92" "grey92" "gray91" "grey91" "gray90"

@@ -1,0 +1,199 @@
+<html lang="en">
+<head>
+<title>Untitled</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Untitled">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being "A GNU Manual", and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     "GNU Free Documentation License".
+
+     (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+     modify this GNU manual.  Buying copies from the FSF supports it in
+     developing GNU and promoting software freedom."
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Top" href="index.html#Top">Viper</a>
+<li><a name="toc_Overview" href="Overview.html#Overview">1 Overview of Viper</a>
+<ul>
+<li><a href="Emacs-Preliminaries.html#Emacs-Preliminaries">1.1 Emacs Preliminaries</a>
+<li><a href="Loading-Viper.html#Loading-Viper">1.2 Loading Viper</a>
+<li><a href="States-in-Viper.html#States-in-Viper">1.3 States in Viper</a>
+<ul>
+<li><a href="Emacs-State.html#Emacs-State">1.3.1 Emacs State</a>
+<li><a href="Vi-State.html#Vi-State">1.3.2 Vi State</a>
+<li><a href="Insert-State.html#Insert-State">1.3.3 Insert State</a>
+<li><a href="Replace-State.html#Replace-State">1.3.4 Replace State</a>
+</li></ul>
+<li><a href="The-Minibuffer.html#The-Minibuffer">1.4 The Minibuffer</a>
+<li><a href="Multiple-Files-in-Viper.html#Multiple-Files-in-Viper">1.5 Multiple Files in Viper</a>
+<li><a href="Unimplemented-Features.html#Unimplemented-Features">1.6 Unimplemented Features</a>
+</li></ul>
+<li><a name="toc_Improvements-over-Vi" href="Improvements-over-Vi.html#Improvements-over-Vi">2 Improvements over Vi</a>
+<ul>
+<li><a href="Basics.html#Basics">2.1 Basics</a>
+<li><a href="Undo-and-Backups.html#Undo-and-Backups">2.2 Undo and Backups</a>
+<li><a href="History.html#History">2.3 History</a>
+<li><a href="Macros-and-Registers.html#Macros-and-Registers">2.4 Macros and Registers</a>
+<li><a href="Completion.html#Completion">2.5 Completion</a>
+<li><a href="Improved-Search.html#Improved-Search">2.6 Improved Search</a>
+<li><a href="Abbreviation-Facilities.html#Abbreviation-Facilities">2.7 Abbreviation Facilities</a>
+<li><a href="Movement-and-Markers.html#Movement-and-Markers">2.8 Movement and Markers</a>
+<li><a href="New-Commands.html#New-Commands">2.9 New Commands</a>
+<li><a href="Useful-Packages.html#Useful-Packages">2.10 Useful Packages</a>
+</li></ul>
+<li><a name="toc_Customization" href="Customization.html#Customization">3 Customization</a>
+<ul>
+<li><a href="Rudimentary-Changes.html#Rudimentary-Changes">3.1 Rudimentary Changes</a>
+<li><a href="Key-Bindings.html#Key-Bindings">3.2 Key Bindings</a>
+<ul>
+<li><a href="Packages-that-Change-Keymaps.html#Packages-that-Change-Keymaps">3.2.1 Packages that Change Keymaps</a>
+</li></ul>
+<li><a href="Viper-Specials.html#Viper-Specials">3.3 Viper Specials</a>
+<li><a href="Vi-Macros.html#Vi-Macros">3.4 Vi Macros</a>
+</li></ul>
+<li><a name="toc_Commands" href="Commands.html#Commands">4 Commands</a>
+<ul>
+<li><a href="Groundwork.html#Groundwork">4.1 Groundwork</a>
+<li><a href="Text-Handling.html#Text-Handling">4.2 Text Handling</a>
+<ul>
+<li><a href="Move-Commands.html#Move-Commands">4.2.1 Move Commands</a>
+<li><a href="Marking.html#Marking">4.2.2 Marking</a>
+<li><a href="Appending-Text.html#Appending-Text">4.2.3 Appending Text</a>
+<li><a href="Editing-in-Insert-State.html#Editing-in-Insert-State">4.2.4 Editing in Insert State</a>
+<li><a href="Deleting-Text.html#Deleting-Text">4.2.5 Deleting Text</a>
+<li><a href="Changing-Text.html#Changing-Text">4.2.6 Changing Text</a>
+<li><a href="Search-and-Replace.html#Search-and-Replace">4.2.7 Search and Replace</a>
+<li><a href="Yanking.html#Yanking">4.2.8 Yanking</a>
+<li><a href="Undoing.html#Undoing">4.2.9 Undoing</a>
+</li></ul>
+<li><a href="Display.html#Display">4.3 Display</a>
+<li><a href="File-and-Buffer-Handling.html#File-and-Buffer-Handling">4.4 File and Buffer Handling</a>
+<li><a href="Mapping.html#Mapping">4.5 Mapping</a>
+<li><a href="Shell-Commands.html#Shell-Commands">4.6 Shell Commands</a>
+<li><a href="Options.html#Options">4.7 Options</a>
+<li><a href="Emacs-Related-Commands.html#Emacs-Related-Commands">4.8 Emacs Related Commands</a>
+<li><a href="Mouse_002dbound-Commands.html#Mouse_002dbound-Commands">4.9 Mouse-bound Commands</a>
+</li></ul>
+<li><a name="toc_Acknowledgments" href="Acknowledgments.html#Acknowledgments">Acknowledgments</a>
+<li><a name="toc_GNU-Free-Documentation-License" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">Appendix A GNU Free Documentation License</a>
+<li><a name="toc_Key-Index" href="Key-Index.html#Key-Index">Key Index</a>
+<li><a name="toc_Function-Index" href="Function-Index.html#Function-Index">Function Index</a>
+<li><a name="toc_Variable-Index" href="Variable-Index.html#Variable-Index">Variable Index</a>
+<li><a name="toc_Package-Index" href="Package-Index.html#Package-Index">Package Index</a>
+<li><a name="toc_Concept-Index" href="Concept-Index.html#Concept-Index">Concept Index</a>
+</li></ul>
+</div>
+
+
+
+<div class="node">
+<a name="Top"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Overview.html#Overview">Overview</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="../index.html#DIR">(DIR)</a>
+<hr>
+</div>
+
+<h2 class="unnumbered">Viper</h2>
+
+<p>We believe that one or more of the following statements are adequate
+descriptions of Viper:
+
+<pre class="example">     Viper Is a Package for Emacs Rebels;
+     it is a VI Plan for Emacs Rescue
+     and/or a venomous VI PERil.
+</pre>
+   <p>Technically speaking, Viper is a Vi emulation package for Emacs.  It
+implements all Vi and Ex commands, occasionally improving on them and
+adding many new features.  It gives the user the best of both worlds: Vi
+keystrokes for editing combined with the power of the Emacs environment.
+
+   <p>Viper emulates Vi at several levels, from the one that closely follows Vi
+conventions to the one that departs from many of them.  It has many
+customizable options, which can be used to tailor Viper to the work habits
+of various users. 
+This manual describes Viper, concentrating on the differences from Vi and
+new features of Viper.
+
+   <p>Viper, formerly known as VIP-19, was written by Michael Kifer.  It is based
+on VIP version 3.5 by Masahiko Sato and VIP version 4.4 by Aamod Sane. 
+About 15% of the code still comes from those older packages.
+
+   <p>Viper is intended to be usable without reading this manual &mdash; the defaults
+are set to make Viper as close to Vi as possible.  At startup, Viper will
+try to set the most appropriate default environment for you, based on
+your familiarity with Emacs.  It will also tell you the basic GNU Emacs window
+management commands to help you start immediately.
+
+   <p>Although this manual explains how to customize Viper, some basic
+familiarity with Emacs Lisp is a plus.
+
+   <p>It is recommended that you read the Overview node.  The other nodes may
+be visited as needed.
+
+   <p>Comments and bug reports are welcome. 
+<code>kifer@cs.stonybrook.edu</code> is the current address for Viper bug reports. 
+Please use the Ex command <kbd>:submitReport</kbd> for this purpose.
+
+   <p>Copyright &copy; 1995, 1996, 1997, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+   <blockquote>
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with the Front-Cover texts being &ldquo;A GNU Manual&rdquo;,
+and with the Back-Cover Texts as in (a) below.  A copy of the license
+is included in the section entitled &ldquo;GNU Free Documentation License&rdquo;.
+
+   <p>(a) The FSF's Back-Cover Text is: &ldquo;You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom.&rdquo;
+</blockquote>
+
+<ul class="menu">
+<li><a accesskey="1" href="Overview.html#Overview">Overview</a>:                     Read for a smoother start
+<li><a accesskey="2" href="Improvements-over-Vi.html#Improvements-over-Vi">Improvements over Vi</a>:         New features, Improvements
+<li><a accesskey="3" href="Customization.html#Customization">Customization</a>:                How to customize Viper
+<li><a accesskey="4" href="Commands.html#Commands">Commands</a>:                     Vi and Ex Commands
+
+<li><a accesskey="5" href="Key-Index.html#Key-Index">Key Index</a>:                    Index of Vi and Ex Commands
+<li><a accesskey="6" href="Function-Index.html#Function-Index">Function Index</a>:               Index of Viper Functions
+<li><a accesskey="7" href="Variable-Index.html#Variable-Index">Variable Index</a>:               Index of Viper Variables
+<li><a accesskey="8" href="Package-Index.html#Package-Index">Package Index</a>:                Index of Packages Mentioned in this Document
+<li><a accesskey="9" href="Concept-Index.html#Concept-Index">Concept Index</a>:                Vi, Ex and Emacs concepts
+
+<li><a href="Acknowledgments.html#Acknowledgments">Acknowledgments</a>
+<li><a href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">GNU Free Documentation License</a>:  The license for this documentation.
+
+   </ul>
+
+   </body></html>
+

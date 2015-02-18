@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+<title>Sending PGP - The MH-E Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The MH-E Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Editing-Drafts.html#Editing-Drafts" title="Editing Drafts">
+<link rel="prev" href="Adding-Attachments.html#Adding-Attachments" title="Adding Attachments">
+<link rel="next" href="Checking-Recipients.html#Checking-Recipients" title="Checking Recipients">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is version 8.2 of `The MH-E
+Manual', last updated 2009-06-13.
+
+Copyright (C) 1995, 2001, 2002, 2003, 2005, 2006, 2007, 2008,
+  2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of either:
+
+       a. the GNU Free Documentation License, Version 1.3 or any later
+          version published by the Free Software Foundation; with no
+          Invariant Sections, with the Front-Cover texts being ``A GNU
+          Manual,'' and with the Back-Cover Texts as in (a) below. A
+          copy of the license is included in the section entitled ``GNU
+          Free Documentation License.''
+
+          (a) The FSF's Back-Cover Text is: ``You have the freedom to
+          copy and modify this GNU manual. Buying copies from the FSF
+          supports it in developing GNU and promoting software
+          freedom.''
+
+       b. the GNU General Public License as published by the Free
+          Software Foundation; either version 3, or (at your option)
+          any later version. A copy of the license is included in the
+          section entitled ``GNU General Public License.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Sending-PGP"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Checking-Recipients.html#Checking-Recipients">Checking Recipients</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Adding-Attachments.html#Adding-Attachments">Adding Attachments</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Editing-Drafts.html#Editing-Drafts">Editing Drafts</a>
+<hr>
+</div>
+
+<h3 class="section">9.7 Signing and Encrypting Messages</h3>
+
+<p><a name="index-signing-messages-1461"></a><a name="index-encrypting-messages-1462"></a><a name="index-RFC-3156-1463"></a>
+MH-E can sign and encrypt messages as defined in
+<a href="http://www.rfc-editor.org/rfc/rfc3156.txt">RFC 3156</a>. If you
+should choose to sign or encrypt your message, use one of the
+following commands to do so any time before sending your message.
+
+   <p><a name="index-mh_002dmml_002dsecure_002dmessage_002dencrypt-1464"></a><a name="index-mh_002dmml_002dsecure_002dmessage_002dsign-1465"></a><a name="index-mh_002dmml_002dsecure_002dmessage_002dsignencrypt-1466"></a><a name="index-C_002dc-C_002dm-C_002de-1467"></a><a name="index-C_002dc-C_002dm-C_002ds-1468"></a><a name="index-C_002dc-C_002dm-e-e-1469"></a><a name="index-C_002dc-C_002dm-e-s-1470"></a><a name="index-C_002dc-C_002dm-s-e-1471"></a><a name="index-C_002dc-C_002dm-s-s-1472"></a>
+The command <kbd>C-c C-m C-s</kbd> (<code>mh-mml-secure-message-sign</code>)
+inserts the following tag:
+
+<pre class="smallexample">     &lt;#secure method=pgpmime mode=sign&gt;
+</pre>
+   <p>This is used to sign your message digitally. Likewise, the command
+<kbd>C-c C-m C-e</kbd> (<code>mh-mml-secure-message-encrypt</code>) inserts the
+following tag:
+
+<pre class="smallexample">     &lt;#secure method=pgpmime mode=encrypt&gt;
+</pre>
+   <p>This is used to encrypt your message. Finally, the command <kbd>C-c
+C-m s e</kbd> (<code>mh-mml-secure-message-signencrypt</code>) inserts the
+following tag:
+
+<pre class="smallexample">     &lt;#secure method=pgpmime mode=signencrypt&gt;
+</pre>
+   <p><a name="index-mh_002dmml_002dunsecure_002dmessage-1473"></a><a name="index-C_002dc-C_002dm-C_002dn-1474"></a><a name="index-C_002dc-C_002dm-n-1475"></a><a name="index-mh_002dmml_002dmethod_002ddefault-1476"></a>
+This is used to sign and encrypt your message. In each of these cases,
+a proper multipart message is created for you when you send the
+message. Use the command <kbd>C-c C-m C-n</kbd>
+(<code>mh-mml-unsecure-message</code>) to remove these tags. Use a prefix
+argument (as in <kbd>C-u C-c C-m s e</kbd>) to be prompted for one of the
+possible security methods (see <code>mh-mml-method-default</code>).
+
+   <p><a name="index-mh_002dmml_002dmethod_002ddefault-1477"></a>
+The option <code>mh-mml-method-default</code> is used to select between a
+variety of mail security mechanisms. The default is &lsquo;<samp><span class="samp">PGP (MIME)</span></samp>&rsquo;
+if it is supported; otherwise, the default is &lsquo;<samp><span class="samp">None</span></samp>&rsquo;. Other
+mechanisms include vanilla &lsquo;<samp><span class="samp">PGP</span></samp>&rsquo; and &lsquo;<samp><span class="samp">S/MIME</span></samp>&rsquo;.
+
+   <p><a name="index-g_t_0040samp_007bpgg_007d-customization-group-1478"></a><a name="index-PGG-1479"></a><a name="index-customization-group_002c-_0040samp_007bpgg_007d-1480"></a>
+The &lsquo;<samp><span class="samp">pgg</span></samp>&rsquo; customization group may have some settings which may
+interest you. 
+See
+<a href="http://www.dk.xemacs.org/Documentation/packages/html/pgg.html"><cite>The PGG Manual</cite></a>.
+
+   <p><a name="index-header-field_002c-_0040samp_007bFcc_003a_007d-1481"></a><a name="index-g_t_0040samp_007bFcc_003a_007d-header-field-1482"></a><a name="index-pgg_002dencrypt_002dfor_002dme-1483"></a>
+In particular, I turn on the option <code>pgg-encrypt-for-me</code> so that
+all messages I encrypt are encrypted with my public key as well. If
+you keep a copy of all of your outgoing mail with a &lsquo;<samp><span class="samp">Fcc:</span></samp>&rsquo; header
+field, this setting is vital so that you can read the mail you write!
+
+   </body></html>
+

@@ -1,0 +1,152 @@
+<html lang="en">
+<head>
+<title>Easy Menu - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Menu-Keymaps.html#Menu-Keymaps" title="Menu Keymaps">
+<link rel="prev" href="Modifying-Menus.html#Modifying-Menus" title="Modifying Menus">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
+
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Easy-Menu"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Modifying-Menus.html#Modifying-Menus">Modifying Menus</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Menu-Keymaps.html#Menu-Keymaps">Menu Keymaps</a>
+<hr>
+</div>
+
+<h4 class="subsection">22.17.8 Easy Menu</h4>
+
+<p>The following macro provides a convenient way to define pop-up menus
+and/or menu bar menus.
+
+<div class="defun">
+&mdash; Macro: <b>easy-menu-define</b><var> symbol maps doc menu<a name="index-easy_002dmenu_002ddefine-1670"></a></var><br>
+<blockquote><p>This macro defines a pop-up menu and/or menu bar submenu, whose
+contents are given by <var>menu</var>.
+
+        <p>If <var>symbol</var> is non-<code>nil</code>, it should be a symbol; then this
+macro defines <var>symbol</var> as a function for popping up the menu
+(see <a href="Pop_002dUp-Menus.html#Pop_002dUp-Menus">Pop-Up Menus</a>), with <var>doc</var> as its documentation string. 
+<var>symbol</var> should not be quoted.
+
+        <p>Regardless of the value of <var>symbol</var>, if <var>maps</var> is a keymap,
+the menu is added to that keymap, as a top-level menu for the menu bar
+(see <a href="Menu-Bar.html#Menu-Bar">Menu Bar</a>).  It can also be a list of keymaps, in which case
+the menu is added separately to each of those keymaps.
+
+        <p>The first element of <var>menu</var> must be a string, which serves as the
+menu label.  It may be followed by any number of the following
+keyword-argument pairs:
+
+          <dl>
+<dt><code>:filter </code><var>function</var><dd><var>function</var> must be a function which, if called with one
+argument&mdash;the list of the other menu items&mdash;returns the actual items
+to be displayed in the menu.
+
+          <br><dt><code>:visible </code><var>include</var><dd><var>include</var> is an expression; if it evaluates to <code>nil</code>, the
+menu is made invisible.  <code>:included</code> is an alias for
+<code>:visible</code>.
+
+          <br><dt><code>:active </code><var>enable</var><dd><var>enable</var> is an expression; if it evaluates to <code>nil</code>, the menu
+is not selectable.  <code>:enable</code> is an alias for <code>:active</code>. 
+</dl>
+
+        <p>The remaining elements in <var>menu</var> are menu items.
+
+        <p>A menu item can be a vector of three elements, <code>[</code><var>name</var>
+<var>callback</var> <var>enable</var><code>]</code>.  <var>name</var> is the menu item name (a
+string).  <var>callback</var> is a command to run, or an expression to
+evaluate, when the item is chosen.  <var>enable</var> is an expression; if
+it evaluates to <code>nil</code>, the item is disabled for selection.
+
+        <p>Alternatively, a menu item may have the form:
+
+     <pre class="smallexample">             [ <var>name</var> <var>callback</var> [ <var>keyword</var> <var>arg</var> ]... ]
+</pre>
+        <p class="noindent">where <var>name</var> and <var>callback</var> have the same meanings as above,
+and each optional <var>keyword</var> and <var>arg</var> pair should be one of
+the following:
+
+          <dl>
+<dt><code>:keys </code><var>keys</var><dd><var>keys</var> is a keyboard equivalent to the menu item (a string).  This
+is normally not needed, as keyboard equivalents are computed
+automatically.  <var>keys</var> is expanded with
+<code>substitute-command-keys</code> before it is displayed (see <a href="Keys-in-Documentation.html#Keys-in-Documentation">Keys in Documentation</a>).
+
+          <br><dt><code>:key-sequence </code><var>keys</var><dd><var>keys</var> is a hint for speeding up Emacs's first display of the
+menu.  It should be nil if you know that the menu item has no keyboard
+equivalent; otherwise it should be a string or vector specifying a
+keyboard equivalent for the menu item.
+
+          <br><dt><code>:active </code><var>enable</var><dd><var>enable</var> is an expression; if it evaluates to <code>nil</code>, the item
+is make unselectable..  <code>:enable</code> is an alias for <code>:active</code>.
+
+          <br><dt><code>:visible </code><var>include</var><dd><var>include</var> is an expression; if it evaluates to <code>nil</code>, the
+item is made invisible.  <code>:included</code> is an alias for
+<code>:visible</code>.
+
+          <br><dt><code>:label </code><var>form</var><dd><var>form</var> is an expression that is evaluated to obtain a value which
+serves as the menu item's label (the default is <var>name</var>).
+
+          <br><dt><code>:suffix </code><var>form</var><dd><var>form</var> is an expression that is dynamically evaluated and whose
+value is concatenated with the menu entry's label.
+
+          <br><dt><code>:style </code><var>style</var><dd><var>style</var> is a symbol describing the type of menu item; it should be
+<code>toggle</code> (a checkbox), or <code>radio</code> (a radio button), or
+anything else (meaning an ordinary menu item).
+
+          <br><dt><code>:selected </code><var>selected</var><dd><var>selected</var> is an expression; the checkbox or radio button is
+selected whenever the expression's value is non-nil.
+
+          <br><dt><code>:help </code><var>help</var><dd><var>help</var> is a string describing the menu item. 
+</dl>
+
+        <p>Alternatively, a menu item can be a string.  Then that string appears
+in the menu as unselectable text.  A string consisting of dashes is
+displayed as a separator (see <a href="Menu-Separators.html#Menu-Separators">Menu Separators</a>).
+
+        <p>Alternatively, a menu item can be a list with the same format as
+<var>menu</var>.  This is a submenu. 
+</p></blockquote></div>
+
+   <p>Here is an example of using <code>easy-menu-define</code> to define a menu
+similar to the one defined in the example in <a href="Menu-Bar.html#Menu-Bar">Menu Bar</a>:
+
+<pre class="example">     (easy-menu-define words-menu global-map
+       "Menu for word navigation commands."
+       '("Words"
+          ["Forward word" forward-word]
+          ["Backward word" backward-word]))
+</pre>
+   <!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 1990-1995, 1998-1999, 2001-2013 Free Software -->
+<!-- Foundation, Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+   </body></html>
+

@@ -6,7 +6,8 @@
 ;; Keywords: internal
 ;; Package: emacs
 
-;; This file is part of GNU Emacs.
+;; This file is part of GNU Emacs and Aquamacs Emacs.
+;; Aquamacs-specific Smart Spacing code included.
 
 ;; GNU Emacs is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -3663,6 +3664,12 @@ argument should still be a \"useful\" string for such uses."
 If BEFORE-P is non-nil, prepend STRING to the kill.
 If `interprogram-cut-function' is set, pass the resulting kill to it."
   (let* ((cur (car kill-ring)))
+    ;; when conjoining words, add spaces where appropriate.
+    (and (equal (car-safe (get-text-property 0 'yank-handler cur)) 'smart-spacing-yank-handler)
+	 kill-ring
+	 (smart-spacing-string-is-word-boundary (substring (car kill-ring) -1) 'left)
+	 (setq string (concat (if before-p "" " ") string (if before-p " " ""))))
+
     (kill-new (if before-p (concat string cur) (concat cur string))
 	      (or (= (length cur) 0)
 		  (equal nil (get-text-property 0 'yank-handler cur))))))
@@ -4913,8 +4920,8 @@ and more reliable (no dependence on goal column, etc.)."
     (if (called-interactively-p 'interactive)
 	(condition-case err
 	    (line-move arg nil nil try-vscroll)
-	  ((beginning-of-buffer end-of-buffer)
-	   (signal (car err) (cdr err))))
+	  (beginning-of-buffer (goto-char (point-min)))
+	  (end-of-buffer (goto-char (point-max))))
       (line-move arg nil nil try-vscroll)))
   nil)
 (put 'next-line 'interactive-only 'forward-line)
@@ -4953,8 +4960,8 @@ to use and more reliable (no dependence on goal column, etc.)."
   (if (called-interactively-p 'interactive)
       (condition-case err
 	  (line-move (- arg) nil nil try-vscroll)
-	((beginning-of-buffer end-of-buffer)
-	 (signal (car err) (cdr err))))
+	(beginning-of-buffer (goto-char (point-min)))
+	(end-of-buffer (goto-char (point-max))))
     (line-move (- arg) nil nil try-vscroll))
   nil)
 (put 'previous-line 'interactive-only
@@ -5783,6 +5790,11 @@ other purposes."
 			    (copy-tree fringe-indicator-alist)))))))
 	 (set-default symbol value)))
 
+(defun visual-line-line-range ()
+  (save-excursion
+    (cons (progn (vertical-motion 0) (point))
+	  (progn (vertical-motion 1) (point)))))
+
 (defvar visual-line--saved-state nil)
 
 (define-minor-mode visual-line-mode
@@ -5797,7 +5809,7 @@ visual lines, not logical lines.  See Info node `Visual Line
 Mode' for details."
   :keymap visual-line-mode-map
   :group 'visual-line
-  :lighter " Wrap"
+  :lighter " WordWrap"
   (if visual-line-mode
       (progn
 	(set (make-local-variable 'visual-line--saved-state) nil)
@@ -5805,7 +5817,8 @@ Mode' for details."
 	;; visual-line-mode is turned off.
 	(dolist (var '(line-move-visual truncate-lines
 		       truncate-partial-width-windows
-		       word-wrap fringe-indicator-alist))
+		       word-wrap fringe-indicator-alist
+		       hl-line-range-function))
 	  (if (local-variable-p var)
 	      (push (cons var (symbol-value var))
 		    visual-line--saved-state)))
@@ -5815,12 +5828,14 @@ Mode' for details."
 	      word-wrap t
 	      fringe-indicator-alist
 	      (cons (cons 'continuation visual-line-fringe-indicators)
-		    fringe-indicator-alist)))
+		    fringe-indicator-alist))
+	(set (make-local-variable 'hl-line-range-function) #'visual-line-line-range))
     (kill-local-variable 'line-move-visual)
     (kill-local-variable 'word-wrap)
     (kill-local-variable 'truncate-lines)
     (kill-local-variable 'truncate-partial-width-windows)
     (kill-local-variable 'fringe-indicator-alist)
+    (kill-local-variable 'hl-line-range-function)
     (dolist (saved visual-line--saved-state)
       (set (make-local-variable (car saved)) (cdr saved)))
     (kill-local-variable 'visual-line--saved-state)))
@@ -6218,6 +6233,7 @@ for `auto-fill-function' when turning Auto Fill mode on."
   "Automatically break line at a previous space, in insertion of text."
   nil)
 
+
 (defun turn-on-auto-fill ()
   "Unconditionally turn on Auto Fill mode."
   (auto-fill-mode 1))
@@ -6226,7 +6242,17 @@ for `auto-fill-function' when turning Auto Fill mode on."
   "Unconditionally turn off Auto Fill mode."
   (auto-fill-mode -1))
 
-(custom-add-option 'text-mode-hook 'turn-on-auto-fill)
+(defun toggle-auto-fill ()
+  "Toggle whether to use Auto Fill Mode."
+  (interactive)
+  (unless auto-fill-function 
+    (visual-line-mode 0)
+    (and (boundp 'longlines-mode)
+	 (longlines-mode -1))) ;; turn this off first if it is on
+  (auto-fill-mode)
+  (message "Hard word wrap %s"
+	     (if auto-fill-function
+		 "enabled" "disabled")))
 
 (defun set-fill-column (arg)
   "Set `fill-column' to specified argument.
@@ -6273,14 +6299,18 @@ The variable `selective-display' has a separate value for each buffer."
   "Toggle truncating of long lines for the current buffer.
 When truncating is off, long lines are folded.
 With prefix argument ARG, truncate long lines if ARG is positive,
-otherwise fold them.  Note that in side-by-side windows, this
-command has no effect if `truncate-partial-width-windows' is
-non-nil."
+otherwise don't truncate them.  Note that in side-by-side windows,
+this command has no effect if `truncate-partial-width-windows'
+is non-nil.  This function disables `visual-line-mode' when enabling
+`truncate-lines'."
   (interactive "P")
-  (setq truncate-lines
+  (let ((t2 
 	(if (null arg)
 	    (not truncate-lines)
-	  (> (prefix-numeric-value arg) 0)))
+	  (> (prefix-numeric-value arg) 0))))
+    (if t2
+	(visual-line-mode 0))
+    (setq truncate-lines t2))
   (force-mode-line-update)
   (unless truncate-lines
     (let ((buffer (current-buffer)))
@@ -6291,20 +6321,110 @@ non-nil."
   (message "Truncate long lines %s"
 	   (if truncate-lines "enabled" "disabled")))
 
-(defun toggle-word-wrap (&optional arg)
-  "Toggle whether to use word-wrapping for continuation lines.
-With prefix argument ARG, wrap continuation lines at word boundaries
-if ARG is positive, otherwise wrap them at the right screen edge.
-This command toggles the value of `word-wrap'.  It has no effect
-if long lines are truncated."
-  (interactive "P")
-  (setq word-wrap
-	(if (null arg)
-	    (not word-wrap)
-	  (> (prefix-numeric-value arg) 0)))
+
+(defun set-auto-fill ()
+  "Unconditionally turn on Auto Fill mode."
+  (interactive)
+  (turn-off-longlines)
+  (visual-line-mode 0)
+  (setq truncate-lines nil)
+  (auto-fill-mode 1)
+  (if (interactive-p)
+      (message "Line wrapping set to Line Breaking (Auto Fill) mode in this buffer.")))
+
+(defun set-truncate-lines ()
+  "Turn on Truncate Lines mode in current buffer.
+This function sets `auto-fill-mode', `truncate-lines' and `visual-line-mode'."
+  (interactive)
+  (visual-line-mode 0)
+  (turn-off-longlines)
+  (turn-off-auto-fill)
+  (toggle-truncate-lines t)
+  (if (interactive-p)
+      (message "Line wrapping set to Truncate Lines mode in this buffer.")))
+
+(defun set-line-wrap ()
+  "Turn off Line Wrap mode in current buffer.
+This function sets `auto-fill-mode', `truncate-lines' and `visual-line-mode'."
+  (interactive)
+  (visual-line-mode 0)
+  (turn-off-longlines)
+  (turn-off-auto-fill)
+  (setq truncate-lines nil)
+  (if (interactive-p)
+    (message "Line wrapping set to Wrap mode in this buffer.")))
+
+(defun set-word-wrap ()
+  "Turn on Word Wrap mode in current buffer.
+This function sets `auto-fill-mode', `truncate-lines' and `visual-line-mode'."
+  (interactive)
+  (turn-on-visual-line-mode) ; let it save settings first
+  (turn-off-longlines)
+  (turn-off-auto-fill)
+  (setq truncate-lines nil)
+  (if (interactive-p)
+      (message "Line wrapping set to Word Wrap mode in this buffer.")))
+
+
+(custom-add-option 'text-mode-hook 'set-auto-fill)
+(custom-add-option 'text-mode-hook 'set-word-wrap)
+(custom-add-option 'text-mode-hook 'set-line-wrap)
+(custom-add-option 'text-mode-hook 'set-truncate-lines)
+
+(defun turn-on-word-wrap ()
+  "Turn on Visual Line mode in current buffer.
+See `visual-line-mode'."
+  (visual-line-mode 1))
+
+(defun turn-off-word-wrap ()
+  "Turn off Visual Line mode in current buffer.
+See `visual-line-mode'."
+  (visual-line-mode 0))
+
+(defun toggle-word-wrap ()
+  "Toggle whether to use Word Wrap."
+  (interactive)
+  (if word-wrap
+      (turn-off-word-wrap)
+    (turn-on-word-wrap))
+  (when (interactive-p)
   (force-mode-line-update)
-  (message "Word wrapping %s"
-	   (if word-wrap "enabled" "disabled")))
+    (message "Word Wrap %sabled in this buffer." (if word-wrap "en" "dis"))))
+
+;;  backward compatibility (in case users have it in their customizations)
+
+(defun turn-on-longlines ()
+  "Switch to Word Wrap mode in current buffer.
+`longlines-mode' is deprecated.  Use `visual-line-mode' instead,
+or `set-word-wrap'.  This function calls `set-word-wrap'.
+To turn on the classic `longlines-mode', use `turn-on-longlines*'."
+  (set-word-wrap))
+
+(defun turn-on-longlines* ()
+  "Turn on Longlines mode.
+... unless buffer is read-only."
+  (unless buffer-read-only
+    (require 'longlines)
+    (longlines-mode 1)))
+
+(defun turn-off-longlines ()
+  "Unconditionally turn off Longlines mode."
+  (interactive)
+  (and (boundp 'longlines-mode)
+       (longlines-mode -1)))
+; (custom-add-option 'text-mode-hook 'turn-on-longlines)
+
+(make-obsolete 'longlines-mode 'visual-line-mode "23.1")
+(make-obsolete 'turn-on-longlines 'set-word-wrap "23.1")
+
+(defun toggle-longlines ()
+  "Toggle whether to use Longlines Mode."
+  (interactive)
+  (require 'longlines-mode)
+  (unless longlines-mode 
+    (auto-fill-mode -1))
+  (longlines-mode))
+
 
 (defvar overwrite-mode-textual (purecopy " Ovwrt")
   "The string displayed in the mode line when in overwrite mode.")
@@ -7505,7 +7625,7 @@ front of the list of recently selected ones."
 
 ;;; Handling of Backspace and Delete keys.
 
-(defcustom normal-erase-is-backspace 'maybe
+(defcustom normal-erase-is-backspace t
   "Set the default behavior of the Delete and Backspace keys.
 
 If set to t, Delete key deletes forward and Backspace key deletes
@@ -7851,6 +7971,197 @@ contains the list of implementations currently supported for this command."
              (call-interactively ,varimp-sym)
            (message ,(format "No implementation selected for command `%s'"
                              command-name)))))))
+
+;; Smart spacing
+
+;; Author: David Reitter, david.reitter@gmail.com
+;; Maintainer: David Reitter
+;; Keywords: aquamacs
+ 
+;; This code is part of Aquamacs Emacs
+;; http://aquamacs.org/
+;; Copyright (C) 2009, 2014: David Reitter
+
+;; (defcustom smart-spacing-when-killing-words nil
+;;   "Delete extra spaces when killing words.
+;; Affects commands `aquamacs-kill-word' and `aquamacs-backwards-kill-word'."
+;;   :group 'convenience
+;;   :group 'Aquamacs
+;;   :type '(choice (const nil) (const t)))
+
+(defvar smart-spacing--prev-filter-buffer-substring-function nil)
+(define-minor-mode smart-spacing-mode
+ "Smart spacing: word-wise kill&yank.
+When this mode is enabled, kill and yank operations support
+word-wise editing.  Afer killing (copying) a word or several
+words, the text will be inserted as a full phrase when
+yanking. That means that spaces around the word may be inserted
+during yanking, and spaces and other word delimiters are removed
+during killing as necessary to leave only one space between
+words.
+
+During killing, smart-spacing-mode behaves conservatively.  It
+will never delete more than one extra space at a time.
+
+This feature is part of Aquamacs."
+ :group 'convenience
+ :lighter " Spc"
+
+ (if smart-spacing-mode
+     ;; don't set it again (overwriting the original function)
+       (unless (eq filter-buffer-substring-function
+		   'smart-spacing-filter-buffer-substring)
+	 (setq smart-spacing--prev-filter-buffer-substring-function
+	       filter-buffer-substring-function)
+	 (setq filter-buffer-substring-function
+	       'smart-spacing-filter-buffer-substring))
+   (if (eq filter-buffer-substring-function
+	   'smart-spacing-filter-buffer-substring)
+       (setq filter-buffer-substring-function
+	     (or smart-spacing--prev-filter-buffer-substring-function
+		 ;; default:
+		 #'buffer-substring--filter)))
+   (setq smart-spacing--prev-filter-buffer-substring-function nil)))
+
+(defun turn-on-smart-spacing-mode ()
+  (interactive)
+  (smart-spacing-mode 1))
+
+(defun turn-off-smart-spacing-mode ()
+  (interactive)
+  (smart-spacing-mode 0))
+
+(custom-add-option 'text-mode-hook 'turn-on-smart-spacing-mode)
+
+(define-globalized-minor-mode 
+  global-smart-spacing-mode smart-spacing-mode
+  turn-on-smart-spacing-mode)
+
+(defvar smart-spacing-rules
+  '(("  " . (bidi . 1))
+    ("--" . 1)
+    (" ." . -1)
+    (" )" . -1)
+    ("( " . 1)
+    (" :" . -1)
+    (" ," . -1)
+    (" ;" . -1)
+    (" \"" . -1)
+    ("\" " . 1) 
+    (" '" . -1)
+    ("\n " . 1)
+    (" " . 1) ; buffer boundary
+    ;; ("\n\n" . "\n")
+    )
+  "Assoc list for smart spacing.
+If key is at point after killing text, delete |value| chars to
+the left or the right.  Negative value indicates deletion to the
+left.  If value is a cons (xxx . num), then num characters will
+be deleted either to the left or to the right, depending on where
+the point is when the command is called.")
+
+(defmacro user-buffer-p (buf)
+  "Evaluate to t if buffer BUF is not an internal buffer."
+  `(not (string= (substring (buffer-name ,buf) 0 1) " ")))
+
+(defsubst smart-spacing-end-of-line (pos)
+  (and (<= pos (point-max)) ;; buffer may be narrowed
+       (> pos (point-min))
+       (equal "\n" (buffer-substring-no-properties  (1- pos) pos))))
+
+(defun smart-spacing-filter-buffer-substring (beg end &optional delete)
+  "Like `filter-buffer-substring', but add spaces around content if region is a phrase."
+  (if smart-spacing-mode
+      (let* ((from (min beg end)) (to (max beg end))
+	     (point-at-end (eq (point) end))
+	     (end-of-line (smart-spacing-end-of-line to))
+	     (use-smart-string
+	      (and
+	       (user-buffer-p (current-buffer))
+	       (smart-spacing-char-is-word-boundary (1- from) from)
+	       (smart-spacing-char-is-word-boundary to (1+ to))))
+	     ;; the following is destructive (side-effect).
+	     ;; do after checking for word boundaries.
+	     (filter-buffer-substring-function (or smart-spacing--prev-filter-buffer-substring-function
+						   #'buffer-substring--filter))
+	     (string (filter-buffer-substring beg end delete)))
+	(when use-smart-string
+	  (put-text-property 0 (length string)
+			     'yank-handler
+			     '(smart-spacing-yank-handler nil nil nil)
+			     string)
+	  (when (and (not end-of-line) delete)
+	    (smart-remove-remaining-spaces from point-at-end)))
+	string)
+    ;; smart-spacing is off, but this function is called anyway:
+    (let ((filter-buffer-substring-function (or smart-spacing--prev-filter-buffer-substring-function
+						#'buffer-substring--filter)))
+      (filter-buffer-substring beg end delete))))
+
+(defun smart-delete-region (from to)
+  (if (and smart-spacing-mode
+	   (memq this-command '(cua-delete-region mouse-save-then-kill)))
+      (let ((end-of-line (smart-spacing-end-of-line to)))
+	(delete-region from to)
+	(unless end-of-line
+	  (smart-remove-remaining-spaces (min from to)
+					 (eq (point) (max from to)))))
+    (delete-region from to)))
+
+(defun smart-remove-remaining-spaces (pos point-at-end)
+  "Remove remaining spaces.
+Adheres to `smart-spacing-rules'.
+If POINT-AT-END, behaves as if point was at then end of
+a previously deleted region (now at POS).
+Returns non-nil if spaces were deleted - 1 for forwards, -1 for backwards
+or a cons with a combination."
+  (unless (eq (point-min) (point-max))
+    (let ((del (assoc (buffer-substring-no-properties
+		       (max (point-min) (- pos 1)) 
+		       (max (point-min) (min (1- (point-max)) (1+ pos))))
+		      smart-spacing-rules)))
+      (when del
+	(setq del (cdr del))
+	;; in some cases we want point to end up 
+	;; further to the left or to the right,
+	;; depending on whether it was on the left or the right
+	;; edge of the region
+	(when (consp del)
+	  (if point-at-end
+	      (setq del (cdr del))
+	    (setq del (- (cdr del)))))
+	;; delete either to the left or to the right
+	;; this deletion will keep point in the right place.
+	(delete-region pos (+ del pos))
+	del))))
+
+(defun smart-spacing-char-is-word-boundary (pos &optional side)
+  (or (< pos (point-min))
+      (>= pos (point-max))
+      (not (let ((str (buffer-substring-no-properties pos (1+ pos))))
+	     (smart-spacing-string-is-word-boundary str side)))))
+
+(defun smart-spacing-string-is-word-boundary (str side)
+  (or (string-match "\\w" str)
+      (if (eq side 'left) (or (equal str ".") (equal str ")")))
+      (if (eq side 'right) (equal str "("))))
+
+(defun smart-spacing-yank-handler (string)
+  (let ((opoint (point))) ;; experimental - is this right? DR
+      (when  (and smart-spacing-mode  
+		  major-mode ; paranoia
+		  (user-buffer-p (current-buffer)))
+	(or (smart-spacing-char-is-word-boundary opoint 'right) ; to the right
+	     (setq string (concat string " ")))
+	(or (smart-spacing-char-is-word-boundary (1- opoint) 'left) ; to the left
+	    (setq string (concat " " string))
+	     ))
+      (insert string)))
+
+;; currently not advising backward-delete-char-untabity 
+;; or delete-char
+
+
 
 
 ;; This is here because files in obsolete/ are not scanned for autoloads.

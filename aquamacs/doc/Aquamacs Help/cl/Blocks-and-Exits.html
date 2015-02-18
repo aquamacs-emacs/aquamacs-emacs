@@ -1,0 +1,120 @@
+<html lang="en">
+<head>
+<title>Blocks and Exits - Common Lisp Extensions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Common Lisp Extensions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Control-Structure.html#Control-Structure" title="Control Structure">
+<link rel="prev" href="Conditionals.html#Conditionals" title="Conditionals">
+<link rel="next" href="Iteration.html#Iteration" title="Iteration">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the GNU Emacs Common Lisp emulation package.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Blocks-and-Exits"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Iteration.html#Iteration">Iteration</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Conditionals.html#Conditionals">Conditionals</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Control-Structure.html#Control-Structure">Control Structure</a>
+<hr>
+</div>
+
+<h3 class="section">5.5 Blocks and Exits</h3>
+
+<p class="noindent">Common Lisp <dfn>blocks</dfn> provide a non-local exit mechanism very
+similar to <code>catch</code> and <code>throw</code>, but lexically rather than
+dynamically scoped.  This package actually implements <code>block</code>
+in terms of <code>catch</code>; however, the lexical scoping allows the
+optimizing byte-compiler to omit the costly <code>catch</code> step if the
+body of the block does not actually <code>return-from</code> the block.
+
+<div class="defun">
+&mdash; Special Form: <b>block</b><var> name forms<small class="dots">...</small><a name="index-block-42"></a></var><br>
+<blockquote><p>The <var>forms</var> are evaluated as if by a <code>progn</code>.  However,
+if any of the <var>forms</var> execute <code>(return-from </code><var>name</var><code>)</code>,
+they will jump out and return directly from the <code>block</code> form. 
+The <code>block</code> returns the result of the last <var>form</var> unless
+a <code>return-from</code> occurs.
+
+        <p>The <code>block</code>/<code>return-from</code> mechanism is quite similar to
+the <code>catch</code>/<code>throw</code> mechanism.  The main differences are
+that block <var>name</var>s are unevaluated symbols, rather than forms
+(such as quoted symbols) which evaluate to a tag at run-time; and
+also that blocks are lexically scoped whereas <code>catch</code>/<code>throw</code>
+are dynamically scoped.  This means that functions called from the
+body of a <code>catch</code> can also <code>throw</code> to the <code>catch</code>,
+but the <code>return-from</code> referring to a block name must appear
+physically within the <var>forms</var> that make up the body of the block. 
+They may not appear within other called functions, although they may
+appear within macro expansions or <code>lambda</code>s in the body.  Block
+names and <code>catch</code> names form independent name-spaces.
+
+        <p>In true Common Lisp, <code>defun</code> and <code>defmacro</code> surround
+the function or expander bodies with implicit blocks with the
+same name as the function or macro.  This does not occur in Emacs
+Lisp, but this package provides <code>defun*</code> and <code>defmacro*</code>
+forms which do create the implicit block.
+
+        <p>The Common Lisp looping constructs defined by this package,
+such as <code>loop</code> and <code>dolist</code>, also create implicit blocks
+just as in Common Lisp.
+
+        <p>Because they are implemented in terms of Emacs Lisp <code>catch</code>
+and <code>throw</code>, blocks have the same overhead as actual
+<code>catch</code> constructs (roughly two function calls).  However,
+the optimizing byte compiler will optimize away the <code>catch</code>
+if the block does
+not in fact contain any <code>return</code> or <code>return-from</code> calls
+that jump to it.  This means that <code>do</code> loops and <code>defun*</code>
+functions which don't use <code>return</code> don't pay the overhead to
+support it. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>return-from</b><var> name </var>[<var>result</var>]<var><a name="index-return_002dfrom-43"></a></var><br>
+<blockquote><p>This macro returns from the block named <var>name</var>, which must be
+an (unevaluated) symbol.  If a <var>result</var> form is specified, it
+is evaluated to produce the result returned from the <code>block</code>. 
+Otherwise, <code>nil</code> is returned. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>return</b> [<var>result</var>]<var><a name="index-return-44"></a></var><br>
+<blockquote><p>This macro is exactly like <code>(return-from nil </code><var>result</var><code>)</code>. 
+Common Lisp loops like <code>do</code> and <code>dolist</code> implicitly enclose
+themselves in <code>nil</code> blocks. 
+</p></blockquote></div>
+
+   </body></html>
+

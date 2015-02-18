@@ -1,0 +1,203 @@
+<html lang="en">
+<head>
+<title>Common Lisp Extensions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Common Lisp Extensions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the GNU Emacs Common Lisp emulation package.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being "A GNU Manual", and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     "GNU Free Documentation License".
+
+     (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+     modify this GNU manual.  Buying copies from the FSF supports it in
+     developing GNU and promoting software freedom."
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<h1 class="settitle">Common Lisp Extensions</h1>
+<div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Top" href="index.html#Top">1 Introduction</a>
+<li><a name="toc_Overview" href="Overview.html#Overview">2 Overview</a>
+<ul>
+<li><a href="Usage.html#Usage">2.1 Usage</a>
+<li><a href="Organization.html#Organization">2.2 Organization</a>
+<li><a href="Installation.html#Installation">2.3 Installation</a>
+<li><a href="Naming-Conventions.html#Naming-Conventions">2.4 Naming Conventions</a>
+</li></ul>
+<li><a name="toc_Program-Structure" href="Program-Structure.html#Program-Structure">3 Program Structure</a>
+<ul>
+<li><a href="Argument-Lists.html#Argument-Lists">3.1 Argument Lists</a>
+<li><a href="Time-of-Evaluation.html#Time-of-Evaluation">3.2 Time of Evaluation</a>
+</li></ul>
+<li><a name="toc_Predicates" href="Predicates.html#Predicates">4 Predicates</a>
+<ul>
+<li><a href="Type-Predicates.html#Type-Predicates">4.1 Type Predicates</a>
+<li><a href="Equality-Predicates.html#Equality-Predicates">4.2 Equality Predicates</a>
+</li></ul>
+<li><a name="toc_Control-Structure" href="Control-Structure.html#Control-Structure">5 Control Structure</a>
+<ul>
+<li><a href="Assignment.html#Assignment">5.1 Assignment</a>
+<li><a href="Generalized-Variables.html#Generalized-Variables">5.2 Generalized Variables</a>
+<ul>
+<li><a href="Basic-Setf.html#Basic-Setf">5.2.1 Basic Setf</a>
+<li><a href="Modify-Macros.html#Modify-Macros">5.2.2 Modify Macros</a>
+<li><a href="Customizing-Setf.html#Customizing-Setf">5.2.3 Customizing Setf</a>
+</li></ul>
+<li><a href="Variable-Bindings.html#Variable-Bindings">5.3 Variable Bindings</a>
+<ul>
+<li><a href="Dynamic-Bindings.html#Dynamic-Bindings">5.3.1 Dynamic Bindings</a>
+<li><a href="Lexical-Bindings.html#Lexical-Bindings">5.3.2 Lexical Bindings</a>
+<li><a href="Function-Bindings.html#Function-Bindings">5.3.3 Function Bindings</a>
+<li><a href="Macro-Bindings.html#Macro-Bindings">5.3.4 Macro Bindings</a>
+</li></ul>
+<li><a href="Conditionals.html#Conditionals">5.4 Conditionals</a>
+<li><a href="Blocks-and-Exits.html#Blocks-and-Exits">5.5 Blocks and Exits</a>
+<li><a href="Iteration.html#Iteration">5.6 Iteration</a>
+<li><a href="Loop-Facility.html#Loop-Facility">5.7 Loop Facility</a>
+<ul>
+<li><a href="Loop-Basics.html#Loop-Basics">5.7.1 Loop Basics</a>
+<li><a href="Loop-Examples.html#Loop-Examples">5.7.2 Loop Examples</a>
+<li><a href="For-Clauses.html#For-Clauses">5.7.3 For Clauses</a>
+<li><a href="Iteration-Clauses.html#Iteration-Clauses">5.7.4 Iteration Clauses</a>
+<li><a href="Accumulation-Clauses.html#Accumulation-Clauses">5.7.5 Accumulation Clauses</a>
+<li><a href="Other-Clauses.html#Other-Clauses">5.7.6 Other Clauses</a>
+</li></ul>
+<li><a href="Multiple-Values.html#Multiple-Values">5.8 Multiple Values</a>
+</li></ul>
+<li><a name="toc_Macros" href="Macros.html#Macros">6 Macros</a>
+<li><a name="toc_Declarations" href="Declarations.html#Declarations">7 Declarations</a>
+<li><a name="toc_Symbols" href="Symbols.html#Symbols">8 Symbols</a>
+<ul>
+<li><a href="Property-Lists.html#Property-Lists">8.1 Property Lists</a>
+<li><a href="Creating-Symbols.html#Creating-Symbols">8.2 Creating Symbols</a>
+</li></ul>
+<li><a name="toc_Numbers" href="Numbers.html#Numbers">9 Numbers</a>
+<ul>
+<li><a href="Predicates-on-Numbers.html#Predicates-on-Numbers">9.1 Predicates on Numbers</a>
+<li><a href="Numerical-Functions.html#Numerical-Functions">9.2 Numerical Functions</a>
+<li><a href="Random-Numbers.html#Random-Numbers">9.3 Random Numbers</a>
+<li><a href="Implementation-Parameters.html#Implementation-Parameters">9.4 Implementation Parameters</a>
+</li></ul>
+<li><a name="toc_Sequences" href="Sequences.html#Sequences">10 Sequences</a>
+<ul>
+<li><a href="Sequence-Basics.html#Sequence-Basics">10.1 Sequence Basics</a>
+<li><a href="Mapping-over-Sequences.html#Mapping-over-Sequences">10.2 Mapping over Sequences</a>
+<li><a href="Sequence-Functions.html#Sequence-Functions">10.3 Sequence Functions</a>
+<li><a href="Searching-Sequences.html#Searching-Sequences">10.4 Searching Sequences</a>
+<li><a href="Sorting-Sequences.html#Sorting-Sequences">10.5 Sorting Sequences</a>
+</li></ul>
+<li><a name="toc_Lists" href="Lists.html#Lists">11 Lists</a>
+<ul>
+<li><a href="List-Functions.html#List-Functions">11.1 List Functions</a>
+<li><a href="Substitution-of-Expressions.html#Substitution-of-Expressions">11.2 Substitution of Expressions</a>
+<li><a href="Lists-as-Sets.html#Lists-as-Sets">11.3 Lists as Sets</a>
+<li><a href="Association-Lists.html#Association-Lists">11.4 Association Lists</a>
+</li></ul>
+<li><a name="toc_Structures" href="Structures.html#Structures">12 Structures</a>
+<li><a name="toc_Assertions" href="Assertions.html#Assertions">13 Assertions and Errors</a>
+<li><a name="toc_Efficiency-Concerns" href="Efficiency-Concerns.html#Efficiency-Concerns">Appendix A Efficiency Concerns</a>
+<ul>
+<li><a href="Efficiency-Concerns.html#Efficiency-Concerns">A.1 Macros</a>
+<li><a href="Efficiency-Concerns.html#Efficiency-Concerns">A.2 Error Checking</a>
+<li><a href="Efficiency-Concerns.html#Efficiency-Concerns">A.3 Optimizing Compiler</a>
+</li></ul>
+<li><a name="toc_Common-Lisp-Compatibility" href="Common-Lisp-Compatibility.html#Common-Lisp-Compatibility">Appendix B Common Lisp Compatibility</a>
+<li><a name="toc_Old-CL-Compatibility" href="Old-CL-Compatibility.html#Old-CL-Compatibility">Appendix C Old CL Compatibility</a>
+<ul>
+<li><a href="Old-CL-Compatibility.html#Old-CL-Compatibility">C.1 The <code>cl-compat</code> package</a>
+</li></ul>
+<li><a name="toc_Porting-Common-Lisp" href="Porting-Common-Lisp.html#Porting-Common-Lisp">Appendix D Porting Common Lisp</a>
+<li><a name="toc_GNU-Free-Documentation-License" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">Appendix E GNU Free Documentation License</a>
+<li><a name="toc_Function-Index" href="Function-Index.html#Function-Index">Function Index</a>
+<li><a name="toc_Variable-Index" href="Variable-Index.html#Variable-Index">Variable Index</a>
+</li></ul>
+</div>
+
+
+
+<div class="node">
+<a name="Top"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Overview.html#Overview">Overview</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="../index.html#dir">(dir)</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="../index.html#dir">(dir)</a>
+<hr>
+</div>
+
+<h2 class="chapter">1 Introduction</h2>
+
+<p class="noindent">This document describes a set of Emacs Lisp facilities borrowed from
+Common Lisp.  All the facilities are described here in detail.  While
+this document does not assume any prior knowledge of Common Lisp, it
+does assume a basic familiarity with Emacs Lisp.
+
+   <p>This file documents the GNU Emacs Common Lisp emulation package.
+
+   <p>Copyright &copy; 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+   <blockquote>
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with the Front-Cover texts being &ldquo;A GNU Manual&rdquo;,
+and with the Back-Cover Texts as in (a) below.  A copy of the license
+is included in the section entitled &ldquo;GNU Free Documentation License&rdquo;.
+
+   <p>(a) The FSF's Back-Cover Text is: &ldquo;You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom.&rdquo;
+</blockquote>
+
+<ul class="menu">
+<li><a accesskey="1" href="Overview.html#Overview">Overview</a>:              Installation, usage, etc. 
+<li><a accesskey="2" href="Program-Structure.html#Program-Structure">Program Structure</a>:     Arglists, `eval-when', `defalias'
+<li><a accesskey="3" href="Predicates.html#Predicates">Predicates</a>:            `typep' and `equalp'
+<li><a accesskey="4" href="Control-Structure.html#Control-Structure">Control Structure</a>:     `setf', `do', `loop', etc. 
+<li><a accesskey="5" href="Macros.html#Macros">Macros</a>:                Destructuring, `define-compiler-macro'
+<li><a accesskey="6" href="Declarations.html#Declarations">Declarations</a>:          `proclaim', `declare', etc. 
+<li><a accesskey="7" href="Symbols.html#Symbols">Symbols</a>:               Property lists, `gensym'
+<li><a accesskey="8" href="Numbers.html#Numbers">Numbers</a>:               Predicates, functions, random numbers
+<li><a accesskey="9" href="Sequences.html#Sequences">Sequences</a>:             Mapping, functions, searching, sorting
+<li><a href="Lists.html#Lists">Lists</a>:                 `caddr', `sublis', `member*', `assoc*', etc. 
+<li><a href="Structures.html#Structures">Structures</a>:            `defstruct'
+<li><a href="Assertions.html#Assertions">Assertions</a>:            `check-type', `assert', `ignore-errors'.
+
+<li><a href="Efficiency-Concerns.html#Efficiency-Concerns">Efficiency Concerns</a>:          Hints and techniques
+<li><a href="Common-Lisp-Compatibility.html#Common-Lisp-Compatibility">Common Lisp Compatibility</a>:    All known differences with Steele
+<li><a href="Old-CL-Compatibility.html#Old-CL-Compatibility">Old CL Compatibility</a>:         All known differences with old cl.el
+<li><a href="Porting-Common-Lisp.html#Porting-Common-Lisp">Porting Common Lisp</a>:          Hints for porting Common Lisp code
+
+<li><a href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">GNU Free Documentation License</a>:  The license for this documentation. 
+<li><a href="Function-Index.html#Function-Index">Function Index</a>
+<li><a href="Variable-Index.html#Variable-Index">Variable Index</a>
+</ul>
+
+   </body></html>
+

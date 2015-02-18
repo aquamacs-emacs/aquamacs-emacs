@@ -60,6 +60,10 @@
 
 ;; User options end here.
 
+(defvar report-emacs-bug-tracker-url "http://debbugs.gnu.org/cgi/"
+  "Base URL of the GNU bugtracker.
+Used for querying duplicates and linking to existing bugs.")
+
 (defvar report-emacs-bug-orig-text nil
   "The automatically-created initial text of the bug report.")
 
@@ -182,35 +186,15 @@ Prompts for bug subject.  Leaves you in a mail buffer."
     (unless report-emacs-bug-no-explanations
       ;; Insert warnings for novice users.
       (if (not (equal "bug-gnu-emacs@gnu.org" report-emacs-bug-address))
-	  (insert (format "The report will be sent to %s.\n\n"
+	  (insert (format "The report will be sent to %s
+and may appear in other public locations.\n\n"
 			  report-emacs-bug-address))
-	(insert "This bug report will be sent to the ")
-	(insert-text-button
-	 "Bug-GNU-Emacs"
-	 'face 'link
-	 'help-echo (concat "mouse-2, RET: Follow this link")
-	 'action (lambda (button)
-		   (browse-url "http://lists.gnu.org/archive/html/bug-gnu-emacs/"))
-	 'follow-link t)
-	(insert " mailing list\nand the GNU bug tracker at ")
-	(insert-text-button
-	 "debbugs.gnu.org"
-	 'face 'link
-	 'help-echo (concat "mouse-2, RET: Follow this link")
-	 'action (lambda (button)
-		   (browse-url "http://debbugs.gnu.org/"))
-	 'follow-link t)
+	(insert "The report may appear in public locations.\n\n")))
 
-	(insert ".  Please check that
-the From: line contains a valid email address.  After a delay of up
-to one day, you should receive an acknowledgment at that address.
-
-Please write in English if possible, as the Emacs maintainers
-usually do not have translators for other languages.\n\n")))
-
-    (insert "Please describe exactly what actions triggered the bug, and\n"
-	    "the precise symptoms of the bug.  If you can, give a recipe\n"
-	    "starting from `emacs -Q':\n\n")
+    (insert "Please describe exactly what actions triggered the bug\n"
+	    "and the precise symptoms of the bug.  If you can, give\n"
+	    "a recipe starting with an Aquamacs without customization\n"
+	    "for which see the Help / Diagnose and Report Bug menu:\n\n")
     (let ((txt (delete-and-extract-region
                 (save-excursion (rfc822-goto-eoh) (line-beginning-position 2))
                 (point))))
@@ -232,13 +216,16 @@ usually do not have translators for other languages.\n\n")))
     (insert "\n\nIn " (emacs-version) "\n")
     (if (stringp emacs-repository-version)
 	(insert "Repository revision: " emacs-repository-version "\n"))
+    (if (fboundp 'ns-os-version)
+	(insert (format "Operating System: OS X %s\n"
+			(ns-os-version)))
     (if (fboundp 'x-server-vendor)
 	(condition-case nil
             ;; This is used not only for X11 but also W32 and others.
 	    (insert "Windowing system distributor `" (x-server-vendor)
                     "', version "
 		    (mapconcat 'number-to-string (x-server-version) ".") "\n")
-	  (error t)))
+	    (error t))))
     (let ((lsb (with-temp-buffer
 		 (if (eq 0 (ignore-errors
 			     (call-process "lsb_release" nil '(t nil)

@@ -1,0 +1,162 @@
+<html lang="en">
+<head>
+<title>Tag Decoration Mode - Semantic Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Semantic Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Using-Semantic.html#Using-Semantic" title="Using Semantic">
+<link rel="prev" href="Highlight-Func-Mode.html#Highlight-Func-Mode" title="Highlight Func Mode">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the Semantic library and utilities.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2007,
+2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Tag-Decoration-Mode"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Highlight-Func-Mode.html#Highlight-Func-Mode">Highlight Func Mode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Using-Semantic.html#Using-Semantic">Using Semantic</a>
+<hr>
+</div>
+
+<h3 class="section">2.10 Tag Decoration Mode</h3>
+
+<p><a name="index-semantic_002ddecoration_002dmode-67"></a>
+Semantic Tag Decoration mode &ldquo;decorates&rdquo; each tag based on certain
+arbitrary features of that tag.  Decorations are specified using the
+variable <code>semantic-decoration-styles</code>.
+
+<div class="defun">
+&mdash; Command: <b>global-semantic-decoration-mode</b><var> &amp;optional arg<a name="index-global_002dsemantic_002ddecoration_002dmode-68"></a></var><br>
+<blockquote><p>Toggle Semantic Tag Decoration mode in all Semantic-enabled buffers. 
+With an optional argument <var>arg</var>, enable if <var>arg</var> is positive,
+and disable otherwise. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>semantic-decoration-styles</b><var><a name="index-semantic_002ddecoration_002dstyles-69"></a></var><br>
+<blockquote><p>The value of this variable is a list of decoration styles for Semantic
+Tag Decoration mode.  Each element in this list should have the form
+<code>(</code><var>name</var><code> . </code><var>flag</var><code>)</code>, where <var>name</var> is a style name (a
+symbol) and <var>flag</var> is non-<code>nil</code> if the style is enabled.
+
+        <p>The following styles are available:
+
+          <dl>
+<dt><code>semantic-tag-boundary</code><dd>Place an overline in front of each long tag (excluding prototypes).
+
+          <br><dt><code>semantic-decoration-on-private-members</code><dd>Highlight class members that are designated as private.
+
+          <br><dt><code>semantic-decoration-on-protected-members</code><dd>Highlight class members that are designated as protected.
+
+          <br><dt><code>semantic-decoration-on-includes</code><dd>Highlight class members that are includes.  Clicking on the
+highlighted include statements opens a context menu for configuring
+<i>Semantic</i> includes. 
+</dl>
+        </p></blockquote></div>
+
+   <p>To enable or disable specific decorations, use this function:
+
+<div class="defun">
+&mdash; Command: <b>semantic-toggle-decoration-style</b><var> name &amp;optional arg<a name="index-semantic_002dtoggle_002ddecoration_002dstyle-70"></a></var><br>
+<blockquote><p>Prompt for a decoration style, <var>name</var>, and turn it on or off. 
+With prefix argument <var>arg</var>, turn on if positive, otherwise off. 
+Return non-<code>nil</code> if the decoration style is enabled. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Face: <b>semantic-tag-boundary-face</b><var><a name="index-semantic_002dtag_002dboundary_002dface-71"></a></var><br>
+<blockquote><p>Face for long tags in the <code>semantic-tag-boundary</code> decoration
+style. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Face: <b>semantic-decoration-on-private-members-face</b><var><a name="index-semantic_002ddecoration_002don_002dprivate_002dmembers_002dface-72"></a></var><br>
+<blockquote><p>Face for privately-scoped tags in the
+<code>semantic-decoration-on-private-members</code> decoration style. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Face: <b>semantic-decoration-on-protected-members-face</b><var><a name="index-semantic_002ddecoration_002don_002dprotected_002dmembers_002dface-73"></a></var><br>
+<blockquote><p>Face for protected tags in the
+<code>semantic-decoration-on-protected-members</code> decoration style. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Face: <b>semantic-decoration-on-includes</b><var><a name="index-semantic_002ddecoration_002don_002dincludes-74"></a></var><br>
+<blockquote><p>Face for includes that are not in some other state, in the
+<code>semantic-decoration-on-includes</code> decoration style. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Face: <b>semantic-decoration-on-unknown-includes</b><var><a name="index-semantic_002ddecoration_002don_002dunknown_002dincludes-75"></a></var><br>
+<blockquote><p>Face for includes that cannot be found, in the
+<code>semantic-decoration-on-includes</code> decoration style. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Face: <b>semantic-decoration-on-unparsed-includes</b><var><a name="index-semantic_002ddecoration_002don_002dunparsed_002dincludes-76"></a></var><br>
+<blockquote><p>Face for includes that have not yet been parsed, in the
+<code>semantic-decoration-on-includes</code> decoration style. 
+</p></blockquote></div>
+
+<h4 class="subsection">2.10.1 Creating New Decoration Modes</h4>
+
+<p>You can create new types of decorations using the following function:
+
+<div class="defun">
+&mdash; Function: <b>define-semantic-decoration-style</b><var> name doc &amp;rest flags<a name="index-define_002dsemantic_002ddecoration_002dstyle-77"></a></var><br>
+<blockquote><p>Define a new decoration style with <var>name</var>. 
+<var>doc</var> is a documentation string describing the decoration style <var>name</var>. 
+It is appended to auto-generated doc strings. 
+An Optional list of <var>flags</var> can also be specified.  Flags are:
+  <code>:enabled</code> &lt;value&gt;  - specify the default enabled value for <var>name</var>.
+
+        <p>This defines two new overload functions respectively called <code>NAME-p</code>
+and <code>NAME-highlight</code>, for which you must provide a default
+implementation in respectively the functions <code>NAME-p-default</code> and
+<code>NAME-highlight-default</code>.  Those functions are passed a tag.  <code>NAME-p</code>
+must return non-<code>nil</code> to indicate that the tag should be decorated by
+<code>NAME-highlight</code>.
+
+        <p>To put primary decorations on a tag <code>NAME-highlight</code>, use
+functions like <dfn>semantic-set-tag-face</dfn>,
+<dfn>semantic-set-tag-intangible</dfn>, etc., found in the
+semantic-decorate library.
+
+        <p>To add other kind of decorations on a tag, <code>NAME-highlight</code> must use
+<dfn>semantic-decorate-tag</dfn>, and other functions of the semantic
+decoration <var>api</var> found in this library. 
+</p></blockquote></div>
+
+   </body></html>
+

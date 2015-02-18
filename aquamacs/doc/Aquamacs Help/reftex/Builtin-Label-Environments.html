@@ -1,0 +1,91 @@
+<html lang="en">
+<head>
+<title>Builtin Label Environments - RefTeX User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="RefTeX User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Labels-and-References.html#Labels-and-References" title="Labels and References">
+<link rel="prev" href="Referencing-Labels.html#Referencing-Labels" title="Referencing Labels">
+<link rel="next" href="Defining-Label-Environments.html#Defining-Label-Environments" title="Defining Label Environments">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents RefTeX, a package to do labels, references,
+citations and indices for LaTeX documents with Emacs.
+
+This is edition 4.31 of the RefTeX User Manual for
+RefTeX 4.31
+
+Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Builtin-Label-Environments"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Defining-Label-Environments.html#Defining-Label-Environments">Defining Label Environments</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Labels-and-References.html#Labels-and-References">Labels and References</a>
+<hr>
+</div>
+
+<h3 class="section">3.3 Builtin Label Environments</h3>
+
+<p><a name="index-Builtin-label-environments-82"></a><a name="index-Label-environments_002c-builtin-83"></a><a name="index-Environments_002c-builtin-84"></a><a name="index-reftex_002dlabel_002dalist-85"></a><a name="index-reftex_002dlabel_002dalist_002dbuiltin-86"></a>
+<b>RefTeX</b> needs to be aware of the environments which can be referenced
+with a label (i.e. which carry their own counters).  By default, <b>RefTeX</b>
+recognizes all labeled environments and macros discussed in <cite>The
+LaTeX Companion by Goossens, Mittelbach &amp; Samarin, Addison-Wesley
+1994.</cite>.  These are:
+
+     <ul>
+<li><a name="index-g_t_0040code_007bfigure_007d_002c-LaTeX-environment-87"></a><a name="index-g_t_0040code_007bfigure_002a_007d_002c-LaTeX-environment-88"></a><a name="index-g_t_0040code_007btable_007d_002c-LaTeX-environment-89"></a><a name="index-g_t_0040code_007btable_002a_007d_002c-LaTeX-environment-90"></a><a name="index-g_t_0040code_007bequation_007d_002c-LaTeX-environment-91"></a><a name="index-g_t_0040code_007beqnarray_007d_002c-LaTeX-environment-92"></a><a name="index-g_t_0040code_007benumerate_007d_002c-LaTeX-environment-93"></a><a name="index-g_t_0040code_007b_005cfootnote_007d_002c-LaTeX-macro-94"></a><a name="index-LaTeX-macro-_0040code_007bfootnote_007d-95"></a><a name="index-LaTeX-core-96"></a><code>figure</code>, <code>figure*</code>, <code>table</code>, <code>table*</code>, <code>equation</code>,
+<code>eqnarray</code>, <code>enumerate</code>, the <code>\footnote</code> macro (this is
+the LaTeX core stuff)
+<li><a name="index-AMS_002dLaTeX-97"></a><a name="index-g_t_0040code_007bamsmath_007d_002c-LaTeX-package-98"></a><a name="index-LaTeX-packages_002c-_0040code_007bamsmath_007d-99"></a><a name="index-g_t_0040code_007balign_007d_002c-AMS_002dLaTeX-environment-100"></a><a name="index-g_t_0040code_007bgather_007d_002c-AMS_002dLaTeX-environment-101"></a><a name="index-g_t_0040code_007bmultline_007d_002c-AMS_002dLaTeX-environment-102"></a><a name="index-g_t_0040code_007bflalign_007d_002c-AMS_002dLaTeX-environment-103"></a><a name="index-g_t_0040code_007balignat_007d_002c-AMS_002dLaTeX-environment-104"></a><a name="index-g_t_0040code_007bxalignat_007d_002c-AMS_002dLaTeX-environment-105"></a><a name="index-g_t_0040code_007bxxalignat_007d_002c-AMS_002dLaTeX-environment-106"></a><a name="index-g_t_0040code_007bsubequations_007d_002c-AMS_002dLaTeX-environment-107"></a><code>align</code>, <code>gather</code>, <code>multline</code>, <code>flalign</code>,
+<code>alignat</code>, <code>xalignat</code>, <code>xxalignat</code>, <code>subequations</code>
+(from AMS-LaTeX's <samp><span class="file">amsmath.sty</span></samp> package)
+<li><a name="index-g_t_0040code_007bendnote_007d_002c-LaTeX-package-108"></a><a name="index-LaTeX-packages_002c-_0040code_007bendnote_007d-109"></a><a name="index-g_t_0040code_007b_005cendnote_007d_002c-LaTeX-macro-110"></a>the <code>\endnote</code> macro (from <samp><span class="file">endnotes.sty</span></samp>)
+<li><a name="index-g_t_0040code_007bfancybox_007d_002c-LaTeX-package-111"></a><a name="index-LaTeX-packages_002c-_0040code_007bfancybox_007d-112"></a><a name="index-g_t_0040code_007bBeqnarray_007d_002c-LaTeX-environment-113"></a><code>Beqnarray</code> (<samp><span class="file">fancybox.sty</span></samp>)
+<li><a name="index-g_t_0040code_007bfloatfig_007d_002c-LaTeX-package-114"></a><a name="index-LaTeX-packages_002c-_0040code_007bfloatfig_007d-115"></a><a name="index-g_t_0040code_007bfloatingfig_007d_002c-LaTeX-environment-116"></a><code>floatingfig</code> (<samp><span class="file">floatfig.sty</span></samp>)
+<li><a name="index-g_t_0040code_007blongtable_007d_002c-LaTeX-package-117"></a><a name="index-LaTeX-packages_002c-_0040code_007blongtable_007d-118"></a><a name="index-g_t_0040code_007blongtable_007d_002c-LaTeX-environment-119"></a><code>longtable</code> (<samp><span class="file">longtable.sty</span></samp>)
+<li><a name="index-g_t_0040code_007bpicinpar_007d_002c-LaTeX-package-120"></a><a name="index-LaTeX-packages_002c-_0040code_007bpicinpar_007d-121"></a><a name="index-g_t_0040code_007bfigwindow_007d_002c-LaTeX-environment-122"></a><a name="index-g_t_0040code_007btabwindow_007d_002c-LaTeX-environment-123"></a><code>figwindow</code>, <code>tabwindow</code> (<samp><span class="file">picinpar.sty</span></samp>)
+<li><a name="index-g_t_0040code_007bsidecap_007d_002c-LaTeX-package-124"></a><a name="index-LaTeX-packages_002c-_0040code_007bsidecap_007d-125"></a><a name="index-g_t_0040code_007bSCfigure_007d_002c-LaTeX-environment-126"></a><a name="index-g_t_0040code_007bSCtable_007d_002c-LaTeX-environment-127"></a><code>SCfigure</code>, <code>SCtable</code> (<samp><span class="file">sidecap.sty</span></samp>)
+<li><a name="index-g_t_0040code_007brotating_007d_002c-LaTeX-package-128"></a><a name="index-LaTeX-packages_002c-_0040code_007brotating_007d-129"></a><a name="index-g_t_0040code_007bsidewaysfigure_007d_002c-LaTeX-environment-130"></a><a name="index-g_t_0040code_007bsidewaystable_007d_002c-LaTeX-environment-131"></a><code>sidewaysfigure</code>, <code>sidewaystable</code> (<samp><span class="file">rotating.sty</span></samp>)
+<li><a name="index-g_t_0040code_007bsubfig_007d_002c-LaTeX-package-132"></a><a name="index-LaTeX-packages_002c-_0040code_007bsubfigure_007d-133"></a><a name="index-g_t_0040code_007bsubfigure_007d_002c-LaTeX-environment-134"></a><a name="index-g_t_0040code_007bsubfigure_002a_007d_002c-LaTeX-environment-135"></a><code>subfigure</code>, <code>subfigure*</code>, the <code>\subfigure</code> macro
+(<samp><span class="file">subfigure.sty</span></samp>)
+<li><a name="index-g_t_0040code_007bsupertab_007d_002c-LaTeX-package-136"></a><a name="index-LaTeX-packages_002c-_0040code_007bsupertab_007d-137"></a><a name="index-g_t_0040code_007bsupertabular_007d_002c-LaTeX-environment-138"></a><code>supertabular</code> (<samp><span class="file">supertab.sty</span></samp>)
+<li><a name="index-g_t_0040code_007bwrapfig_007d_002c-LaTeX-package-139"></a><a name="index-LaTeX-packages_002c-_0040code_007bwrapfig_007d-140"></a><a name="index-g_t_0040code_007bwrapfigure_007d_002c-LaTeX-environment-141"></a><code>wrapfigure</code> (<samp><span class="file">wrapfig.sty</span></samp>)
+</ul>
+
+   <p>If you want to use other labeled environments, defined with
+<code>\newtheorem</code>, <b>RefTeX</b> needs to be configured to recognize
+them (see <a href="Defining-Label-Environments.html#Defining-Label-Environments">Defining Label Environments</a>).
+
+   </body></html>
+

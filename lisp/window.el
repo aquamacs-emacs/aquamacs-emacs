@@ -7349,7 +7349,11 @@ Return non-nil if the window was shrunk, nil otherwise."
   (interactive)
   (let ((window-to-delete (selected-window))
 	(buffer-to-kill (current-buffer))
-	(delete-window-hook (lambda () (ignore-errors (delete-window)))))
+	(delete-window-hook (lambda ()
+			      (condition-case nil
+				  (if (eq (window-buffer) buffer-to-kill)
+				      (delete-window))
+				(error nil)))))
     (unwind-protect
 	(progn
 	  (add-hook 'kill-buffer-hook delete-window-hook t t)
@@ -7357,7 +7361,8 @@ Return non-nil if the window was shrunk, nil otherwise."
 	      ;; If `delete-window' failed before, we rerun it to regenerate
 	      ;; the error so it can be seen in the echo area.
 	      (when (eq (selected-window) window-to-delete)
-		(delete-window))))
+		(if (eq (window-buffer) buffer-to-kill)
+		    (delete-window)))))
       ;; If the buffer is not dead for some reason (probably because
       ;; of a `quit' signal), remove the hook again.
       (ignore-errors

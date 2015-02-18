@@ -1,0 +1,99 @@
+<html lang="en">
+<head>
+<title>The Index Phrases File - RefTeX User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="RefTeX User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Index-Support.html#Index-Support" title="Index Support">
+<link rel="prev" href="Creating-Index-Entries.html#Creating-Index-Entries" title="Creating Index Entries">
+<link rel="next" href="Displaying-and-Editing-the-Index.html#Displaying-and-Editing-the-Index" title="Displaying and Editing the Index">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents RefTeX, a package to do labels, references,
+citations and indices for LaTeX documents with Emacs.
+
+This is edition 4.31 of the RefTeX User Manual for
+RefTeX 4.31
+
+Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="The-Index-Phrases-File"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Displaying-and-Editing-the-Index.html#Displaying-and-Editing-the-Index">Displaying and Editing the Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Creating-Index-Entries.html#Creating-Index-Entries">Creating Index Entries</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Index-Support.html#Index-Support">Index Support</a>
+<hr>
+</div>
+
+<h3 class="section">5.2 The Index Phrases File</h3>
+
+<p><a name="index-Index-phrase-file-239"></a><a name="index-Phrase-file-240"></a><a name="index-C_002dc-_007c-241"></a><a name="index-reftex_002dindex_002dvisit_002dphrases_002dbuffer-242"></a><a name="index-Macro-definition-lines_002c-in-phrase-buffer-243"></a>
+<b>RefTeX</b> maintains a file in which phrases can be collected for
+later indexing.  The file is located in the same directory as the master
+file of the document and has the extension <samp><span class="file">.rip</span></samp> (<b>R</b>eftex
+<b>I</b>ndex <b>P</b>hrases).  You can create or visit the file with <kbd>C-c
+|</kbd> (<code>reftex-index-visit-phrases-buffer</code>).  If the file is empty it
+is initialized by inserting a file header which contains the definition
+of the available index macros.  This list is initialized from
+<code>reftex-index-macros</code> (see <a href="Defining-Index-Macros.html#Defining-Index-Macros">Defining Index Macros</a>).  You can
+edit the header as needed, but if you define new LaTeX indexing macros,
+don't forget to add them to <code>reftex-index-macros</code> as well.  Here is
+a phrase file header example:
+
+<pre class="example">     % -*- mode: reftex-index-phrases -*-
+     %                           Key   Macro Format       Repeat
+     %----------------------------------------------------------
+     &gt;&gt;&gt;INDEX_MACRO_DEFINITION:   i    \index{%s}          t
+     &gt;&gt;&gt;INDEX_MACRO_DEFINITION:   I    \index*{%s}         nil
+     &gt;&gt;&gt;INDEX_MACRO_DEFINITION:   g    \glossary{%s}       t
+     &gt;&gt;&gt;INDEX_MACRO_DEFINITION:   n    \index*[name]{%s}   nil
+     %----------------------------------------------------------
+</pre>
+   <p>The macro definition lines consist of a unique letter identifying a
+macro, a format string and the <var>repeat</var> flag, all separated by
+&lt;TAB&gt;.  The format string shows how the macro is to be applied, the
+&lsquo;<samp><span class="samp">%s</span></samp>&rsquo; will be replaced with the index entry.  The repeat flag
+indicates if <var>word</var> is indexed by the macro as
+&lsquo;<samp><span class="samp">\index{</span><var>word</var><span class="samp">}</span></samp>&rsquo; (<var>repeat</var> = <code>nil</code>) or as
+&lsquo;<samp><span class="samp">\index{</span><var>word</var><span class="samp">}</span><var>word</var></samp>&rsquo; (<var>repeat</var> = <code>t</code>).  In the
+above example it is assumed that the macro <code>\index*{</code><var>word</var><code>}</code>
+already typesets its argument in the text, so that it is unnecessary to
+repeat <var>word</var> outside the macro.
+
+<ul class="menu">
+<li><a accesskey="1" href="Collecting-Phrases.html#Collecting-Phrases">Collecting Phrases</a>:                Collecting from document or external. 
+<li><a accesskey="2" href="Consistency-Checks.html#Consistency-Checks">Consistency Checks</a>:                Check for duplicates etc. 
+<li><a accesskey="3" href="Global-Indexing.html#Global-Indexing">Global Indexing</a>:                   The interactive indexing process. 
+</ul>
+
+   </body></html>
+

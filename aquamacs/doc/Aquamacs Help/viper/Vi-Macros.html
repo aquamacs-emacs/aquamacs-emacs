@@ -1,0 +1,311 @@
+<html lang="en">
+<head>
+<title>Vi Macros - Untitled</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Untitled">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customization.html#Customization" title="Customization">
+<link rel="prev" href="Viper-Specials.html#Viper-Specials" title="Viper Specials">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Vi-Macros"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Viper-Specials.html#Viper-Specials">Viper Specials</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Customization</a>
+<hr>
+</div>
+
+<h3 class="section">3.4 Vi Macros</h3>
+
+<p><a name="index-Vi-macros-279"></a>
+Viper supports much enhanced Vi-style macros and also facilitates the use
+of Emacs-style macros.  To define a temporary macro, it is generally more
+convenient to use Emacs keyboard macro facility.  Emacs keyboard macros are
+usually defined anonymously, and the latest macro can be executed by typing
+<kbd>C-x e</kbd> (or <kbd>*</kbd>, if Viper is in Vi state).  If you need to use several
+temporary macros, Viper lets you save them to a
+register (a lowercase letter); such macros can then be executed by typing
+<kbd>@a</kbd> in Vi state (if a macro was previously saved in register
+<kbd>a</kbd>). 
+See <a href="Macros-and-Registers.html#Macros-and-Registers">Macros and Registers</a>, for details.
+
+   <p>If, however, you need to use a macro regularly, it must be given a
+permanent name and saved.  Emacs manual explains how to do this, but
+invocation of named Emacs macros is quite different from Vi's.  First,
+invocation of permanent Emacs macros takes time because it requires typing
+too many keys (to  a Vi user's taste, anyway). 
+Second, binding such macros to function keys, for
+fast access, hogs valuable real estate on the keyboard.
+
+   <p>Vi-style macros are better in that respect, since Vi lets the user overload
+the meaning of key sequences: keys typed in fast succession are treated
+specially, if this key sequence is bound to a macro.
+
+   <p>Viper provides Vi-style keyboard macros through the usual Ex commands,
+<kbd>:map</kbd> and
+<kbd>:map!</kbd>.  These macros are much more powerful in Viper than
+they are in the original Vi and in other emulators.  This is because Viper
+implements an enhanced vi-style
+interface to the powerful Emacs keyboard macro facility.
+
+   <p>First, any Emacs
+command can be executed while defining a macro, not just the Vi
+commands.  In particular, the user can invoke Emacs commands via <kbd>M-x
+command-name</kbd> or by pressing various function keys on the keyboard.  One
+can even use the mouse, although this is usually not useful and is not
+recommended (and macros defined with the use of the mouse cannot be saved in
+command history and in the startup file, for future use).
+
+   <p>Macros defined by mixing Vi and Emacs commands are represented as
+vectors.  So, don't be confused when you see one (usually through the
+history of Ex commands).  For instance, if <kbd>gg</kbd> is defined by typing
+<kbd>l</kbd>, the up-arrow key and <kbd>M-x next-line</kbd>, its definition will look
+as follows in Emacs:
+
+<pre class="example">     [l up (meta x) n e x t - l i n e return]
+</pre>
+   <p>Second, Viper macros are defined in a WYSIWYG style.  This means that
+commands are executed as you type them, so you can see precisely what is
+being defined.  Third, macros can be bound to arbitrary sequences of keys,
+not just to printable keys.  For instance, one can define a macro that will
+be invoked by hitting <kbd>f3</kbd> then <kbd>f2</kbd> function keys.  (The keys
+<kbd>delete</kbd> and <kbd>backspace</kbd> are excluded; also, a macro invocation
+sequence can't start with &lt;ESC&gt;.  Some other keys, such as <kbd>f1</kbd> and
+<kbd>help</kbd>, can't be bound to macros under Emacs, since they
+are bound in <code>key-translation-map</code>, which overrides any other binding
+the user gives to keys.  In general, keys that have a binding in
+<code>key-translation-map</code> can't be bound to a macro.)
+
+   <p>Fourth, in Viper, one can define macros that are specific to a given
+buffer, a given major mode, or macros that are defined for all buffers.  In
+fact, the same macro name can have several different definitions: one
+global, several definitions for various major modes, and
+definitions for various specific buffers.  Buffer-specific definitions
+override mode-specific definitions, which, in turn, override global
+definitions.
+
+   <p>As if all that is not enough, Viper (through its interface to Emacs
+macros) lets the user define keyboard macros that ask for confirmation or
+even prompt the user for input and then continue.  To do this, one should
+type <kbd>C-x q</kbd> (for confirmation) or <kbd>C-u C-x q</kbd> (for prompt). 
+For details, see <a href="../emacs/Keyboard-Macro-Query.html#Keyboard-Macro-Query">Customization</a>
+
+   <p>When the user finishes defining a macro (which is done by typing <kbd>C-x)</kbd> &mdash;
+a departure from Vi), you will be asked whether you want this
+macro to be global, mode-specific, or buffer-specific.  You will also be
+given a chance to save the macro in your <samp><span class="file">~/.viper</span></samp> file. 
+This is the easiest way to save a macro and make
+it permanently available.  If you work your startup files with bare hands,
+here is how Viper saves the above macro so that it will be
+available in Viper's Insert state (and Replace state) in buffer <code>my-buf</code>
+only:
+
+<pre class="example">     (viper-record-kbd-macro "gg" 'insert-state
+            [l up (meta x) n e x t - l i n e return]
+            "my-buf")
+</pre>
+   <p class="noindent">To do the same for Vi state and all buffers with the major mode
+<code>cc-mode</code>, use:
+
+<pre class="example">     (viper-record-kbd-macro "gg" 'vi-state
+            [l up (meta x) n e x t - l i n e return]
+            'cc-mode)
+</pre>
+   <p class="noindent">Both macro names and macro definitions are vectors of symbols that denote
+keys on the keyboard.  Some keys, like <kbd>\</kbd>,  , or digit-keys must
+be escaped with a backslash.  Modified keys are represented as lists.  For
+instance, holding Meta and Control and pressing <kbd>f4</kbd> is represented as
+<kbd>(control meta f4)</kbd>. 
+If all members of a vectors are printable characters (or sequences, such as
+<kbd>\e</kbd>, <kbd>\t</kbd>, for &lt;ESC&gt; and &lt;TAB&gt;), then they can also be represented as
+strings:
+
+<pre class="example">     (viper-record-kbd-macro "aa" 'vi-state  "aaa\e"  "my-buffer")
+</pre>
+   <p class="noindent">Thus, typing <kbd>aa</kbd> fast in Vi state will switch Viper to Insert state
+(due to the first <kbd>a</kbd>), insert <kbd>aa</kbd>, and then it will switch back to Vi
+state.  All this will take effect only in the buffer named <code>my-buffer</code>.
+
+   <p>Note that the last argument to <code>viper-record-kbd-macro</code> must be either a
+string (a buffer name), a symbol representing a major mode, or <code>t</code>;
+the latter says that the macro is to be defined for all buffers
+(which is how macros are defined in original Vi).
+
+   <p>For convenience, Viper also lets you define Vi-style macros in its Emacs
+state.  There is no Ex command, like <kbd>:map</kbd> and <kbd>:map!</kbd> for doing
+this, but the user can include such a macro in the <samp><span class="file">~/.viper</span></samp> file.  The
+only thing is that the <code>viper-record-kbd-macro</code> command should specify
+<code>emacs-state</code> instead of <code>vi-state</code> or <code>insert-state</code>.
+
+   <p>The user can get rid of a macro either by using the Ex commands <kbd>:unmap</kbd>
+and <kbd>:unmap!</kbd> or by issuing a call to <code>viper-unrecord-kbd-macro</code>. 
+The latter is more powerful, since it can delete macros even in
+<code>emacs-state</code>.  However, <code>viper-unrecord-kbd-macro</code> is usually
+needed only when the user needs to get rid of the macros that are already
+predefined in Viper. 
+The syntax is:
+<a name="index-g_t_0040code_007bviper_002dunrecord_002dkbd_002dmacro_007d-280"></a>
+<pre class="example">     (viper-unrecord-kbd-macro macro state)
+</pre>
+   <p class="noindent">The second argument must be <code>vi-state</code>, <code>insert-state</code>, or
+<code>emacs-state</code>.  The first argument is a name of a macro.  To avoid
+mistakes in specifying names of existing macros, type <kbd>M-x
+viper-describe-kbd-macros</kbd> and use a name from the list displayed by this
+command.
+
+   <p>If an error occurs during macro definition, Emacs
+aborts the process, and it must be repeated.  This is analogous to Vi,
+except that in Vi the user doesn't know there is an error until the macro is
+actually run.  All that means that in order for a definition to be
+successful, the user must do some simple planning of the process in
+advance, to avoid errors.  For instance, if you want to map <kbd>gg</kbd> to
+<kbd>llll</kbd> in Vi state, you must make sure that there is enough room on the
+current line.  Since <kbd>l</kbd> moves the cursor forward, it may signal an
+error on reaching the end of line, which will abort the definition.
+
+   <p>These precautions are necessary only when defining macros; they will help
+avoid the need to redo the job.  When macros are actually run, an error
+during the execution will simply terminate the current execution
+(but the macro will remain mapped).
+
+   <p>A macro name can be a string of characters or a vector of keys. 
+The latter makes it possible to define macros bound to, say, double-hits
+on a function key, such as <kbd>up</kbd> or <kbd>f13</kbd>. 
+This is very useful if you run out of function keys on your keyboard; it
+makes Viper macro facility a <em>keyboard doubler</em>, so to speak.
+
+   <p>Elsewhere (See <a href="Key-Bindings.html#Key-Bindings">Key Bindings</a>, for details), we review
+the standard Emacs mechanism for binding function keys to commands. 
+For instance,
+
+<pre class="example">     (global-set-key [f13] 'repeat-complex-command)
+</pre>
+   <p class="noindent">binds the key f13 to the Emacs function that repeats the last minibuffer
+command.  Under Viper, however, you may still use this key for additional
+purposes, if you bind, say, a double-hitting action for that key to some
+other function.  Emacs doesn't allow the user to do that, but Viper does
+this through its keyboard macro facility.  To do this, type <kbd>:map </kbd>
+first.  When you are asked to enter a macro name, hit f13 twice, followed by
+&lt;RET&gt; or &lt;SPC&gt;.
+
+   <p>Emacs will now start the mapping process by actually executing
+Vi and Emacs commands, so that you could see what will happen each time the
+macro is executed.  Suppose now we wanted to bind the key sequence
+<kbd>f13 f13</kbd> to the command <code>eval-last-sexp</code>.  To accomplish this, we
+can type <kbd>M-x eval-last-sexp</kbd> followed by <kbd>C-x )</kbd>. 
+If you answer positively to Viper's offer to save this macro in <samp><span class="file">~/.viper</span></samp>
+for future uses, the following will be inserted in that file:
+
+<pre class="example">     (viper-record-kbd-macro [f16 f16] 'vi-state
+              [(meta x) e v a l - l a s t - s e x p]
+              'lisp-interaction-mode)
+</pre>
+   <p>To illustrate the above point, Viper provides two canned macros, which, by
+default, are bound to <kbd>[f12 \1]</kbd> and <kbd>[f12 \2]</kbd> (invoked by typing
+<kbd>f12</kbd> then <kbd>1</kbd> and <kbd>2</kbd>, respectively).  These macros are useful
+shortcuts to Viper's command ring history.  The first macro will execute the
+second-last destructive command (the last one is executed by <kbd>.</kbd>, as
+usual).  The second macro executes the third-last command.
+
+   <p>If you need to go deeper into the command history, you will have to use
+other commands, as described earlier in this section; or you can bind,
+say, <kbd>f12 \3</kbd> like this:
+
+<pre class="example">     (viper-record-kbd-macro [f12 \3] 'vi-state
+                           [(meta x) r e p e a t - f r o m - h i s t o r y]
+                           t)
+</pre>
+   <p>Note that even though the macro uses the function key <kbd>f12</kbd>, the key is
+actually free and can still be bound to some Emacs function via
+<code>define-key</code> or <code>global-set-key</code>.
+
+   <p>Viper allows the user to define macro names that are prefixes of other macros. 
+For instance, one can define <kbd>[[</kbd> and <kbd>[[[[</kbd> to be macros. 
+If you type the exact sequence of such keys and then pause, Viper will
+execute the right macro.  However, if you don't pause and, say, type
+<kbd>[[[[text</kbd> then the conflict is resolved as follows.  If only one of the
+key sequences, <kbd>[[</kbd> or <kbd>[[[[</kbd> has a definition applicable to the
+current buffer, then, in fact, there is no conflict and the right macro
+will be chosen.  If both have applicable definitions, then the first one
+found will be executed.  Usually this is the macro with a shorter name.  So,
+in our case, <kbd>[[[[text</kbd> will cause the macro <kbd>[[</kbd> to be executed
+twice and then the remaining keys, <kbd>t e x t</kbd>, will be processed.
+
+   <p>When defining macros using <kbd>:map</kbd> or <kbd>:map!</kbd>, the user enters
+the actually keys to be used to invoke the macro.  For instance, you
+should hit the actual key <kbd>f6</kbd> if it is to be part of a macro
+name; you do <em>not</em> write <kbd>f 6</kbd>.  When entering keys, Viper
+displays them as strings or vectors (e.g., <code>"abc"</code> or <code>[f6
+f7 a]</code>).  The same holds for unmapping.  Hitting &lt;TAB&gt; while
+typing a macro name in the <kbd>:unmap</kbd> or <kbd>:unmap!</kbd> command will
+cause name completion.  Completions are displayed as strings or
+vectors.  However, as before, you don't actually type &lsquo;<samp><span class="samp">"</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">[</span></samp>&rsquo;, or &lsquo;<samp><span class="samp">]</span></samp>&rsquo; that appear in the completions.  These are
+meta-symbols that indicate whether the corresponding macro name is a
+vector or a string.
+
+   <p>One last difference from Vi: Vi-style keyboard macros cannot be defined in
+terms of other Vi-style keyboard macros (but named Emacs macros are OK). 
+More precisely, while defining or executing a macro, the special meaning
+of key sequences (as Vi macros) is ignored. 
+This is because it is all too easy to create an infinite loop in this way. 
+Since Viper macros are much more powerful than Vi's it is impossible to
+detect such loops.  In practice, this is not really a limitation but,
+rather, a feature.
+
+   <p>We should also note that Vi macros are disabled in the minibuffer, which
+helps keep some potential troubles away.
+
+   <p>The rate at which the user must type keys in order for them to be
+recognized as a timeout macro is controlled by the variable
+<code>viper-fast-keyseq-timeout</code>, which defaults to 200 milliseconds.
+
+   <p>For the most part, Viper macros defined in <samp><span class="file">~/.viper</span></samp> can be shared
+between X and TTY modes. 
+The problem with TTY may be that the function keys there generate sequences
+of events instead of a single event (as under a window system). 
+Emacs maps some of these sequences back to the logical keys
+(e.g., the sequences generated by the arrow keys are mapped to <kbd>up</kbd>,
+<kbd>left</kbd>, etc.).  However, not all function keys are mapped in this way. 
+Macros that are bound to key sequences that contain such unmapped function
+keys have to be redefined for TTY's (and possibly for every type of TTY you
+may be using).  To do this, start Emacs on an appropriate TTY device and
+define the macro using <kbd>:map</kbd>, as usual.
+
+   <p><a name="index-g_t_0040code_007bviper_002ddescribe_002dkbd_002dmacros_007d-281"></a>Finally, Viper provides a function that conveniently displays all macros
+currently defined.  To see all macros along with their definitions, type
+<kbd>M-x viper-describe-kbd-macros</kbd>.
+
+   </body></html>
+

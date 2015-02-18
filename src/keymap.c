@@ -2155,6 +2155,29 @@ For an approximate inverse of this, see `kbd'.  */)
   goto next_list;
 }
 
+#ifdef HAVE_NS
+extern Lisp_Object Qalt, Qcontrol, Qhyper, Qmeta, Qsuper, Qmodifier_value, Qnone;
+
+/* ^ should be 0x2303 (0xe28c83 in UTF-8) 
+   http://macbiblioblog.blogspot.com/2005/05/special-key-symbols.html*/
+
+/* not used: */
+#define NS_KEYSYMBOL(x) (EQ (ns_command_modifier, x) ? \
+                                   ((EQ (ns_command_modifier, ns_right_command_modifier) || EQ (ns_right_command_modifier, Qnone)) \
+				    ? "\xe2\x8c\x98" : "\xe2\x8c\x98") : /* "\xe2\x87\xa0\xe2\x8c\x98" */ \
+			 (EQ (ns_control_modifier, x) ? \
+			  ((EQ (ns_control_modifier, ns_right_control_modifier) || EQ (ns_right_control_modifier, Qnone)) \
+			   ? "^" : "^" ) :	/* "\xe2\x87\xa0^" */		\
+			  (EQ (ns_alternate_modifier, x) ? \
+                                   ((EQ (ns_alternate_modifier, ns_right_alternate_modifier) || EQ (ns_right_alternate_modifier, Qnone)) \
+                                    ? "\xe2\x8c\xa5" : "\xe2\x8c\xa5") :  /* "\xe2\x87\xa0\xe2\x8c\xa5" */ \
+                           (EQ (ns_right_command_modifier, x) ? "\xe2\x87\xa2\xe2\x8c\x98" : \
+			    (EQ (ns_right_control_modifier, x) ? "\xe2\x87\xa2^" : \
+			     (EQ (ns_right_alternate_modifier, x) ? "\xe2\x87\xa2\xe2\x8c\xa5" : "???"))))))
+#else 
+#define Vns_use_mac_modifier_symbols Qnil
+#define NS_KEYSYMBOL(x) ""
+#endif
 
 char *
 push_key_description (EMACS_INT ch, char *p)
@@ -2176,18 +2199,60 @@ push_key_description (EMACS_INT ch, char *p)
 
   tab_as_ci = (c2 == '\t' && (c & meta_modifier));
 
+  if (! NILP (Vns_use_mac_modifier_symbols))
+    if ((c & 0xFF) >= 'A' && (c & 0xFF) <= 'Z')
+      c |= shift_modifier;
+
+#if HAVE_NS
+  if (c & meta_modifier &&
+      ! (NILP (Vns_use_mac_modifier_symbols) ||
+	 EQ (ns_command_modifier, Qmeta) ||
+	 EQ (ns_right_command_modifier, Qmeta) ||
+	 EQ (ns_control_modifier, Qmeta) ||
+	 EQ (ns_right_control_modifier, Qmeta) ||
+	 EQ (ns_alternate_modifier, Qmeta) ||
+	 EQ (ns_right_alternate_modifier, Qmeta)))
+    {
+      /* Meta is disabled, so prepend key description with Esc */
+      *p++ = 'E';
+      *p++ = 's';
+      *p++ = 'c';
+      *p++ = ' ';
+      c &= ~meta_modifier;
+    }
+#endif /* HAVE_NS */
+
+  /* to do: shift.  upcase. */
   if (c & alt_modifier)
+    { /* to do: translate ns-alt-modifier */
+      if (NILP (Vns_use_mac_modifier_symbols))
     {
       *p++ = 'A';
       *p++ = '-';
+	}
+      else
+	{ char *ns = NS_KEYSYMBOL (Qalt);
+	  while (ns[0])
+	    *p++ = *ns++;
+	  //  0xe28c98 = "place of interest" sign in utf-8
+	}
       c -= alt_modifier;
     }
   if ((c & ctrl_modifier) != 0
       || (c2 < ' ' && c2 != 27 && c2 != '\t' && c2 != Ctl ('M'))
       || tab_as_ci)
     {
+      if (NILP (Vns_use_mac_modifier_symbols))
+	{
       *p++ = 'C';
       *p++ = '-';
+	}
+      else
+	{
+	  char *ns = NS_KEYSYMBOL (Qcontrol);
+	  while (ns[0])
+	    *p++ = *ns++;
+	}
       c &= ~ctrl_modifier;
     }
   if (c & hyper_modifier)
@@ -2198,14 +2263,32 @@ push_key_description (EMACS_INT ch, char *p)
     }
   if (c & meta_modifier)
     {
+      if (NILP (Vns_use_mac_modifier_symbols))
+	{
       *p++ = 'M';
       *p++ = '-';
+	}
+      else
+	{
+	  char *ns = NS_KEYSYMBOL (Qmeta);
+	  while (ns[0])
+	    *p++ = *ns++;
+	}
       c -= meta_modifier;
     }
   if (c & shift_modifier)
     {
+      if (NILP (Vns_use_mac_modifier_symbols))
+	{
       *p++ = 'S';
       *p++ = '-';
+	}
+      else
+	{
+	  *p++ = 0xe2;
+	  *p++ = 0x87;
+	  *p++ = 0xa7;
+	}
       c -= shift_modifier;
     }
   if (c & super_modifier)
@@ -2238,7 +2321,7 @@ push_key_description (EMACS_INT ch, char *p)
 	  *p++ = 'E';
 	  *p++ = 'T';
 	}
-      else
+      else if (NILP (Vns_use_mac_modifier_symbols))
 	{
 	  /* `C-' already added above.  */
 	  if (c > 0 && c <= Ctl ('Z'))
@@ -2246,12 +2329,30 @@ push_key_description (EMACS_INT ch, char *p)
 	  else
 	    *p++ = c + 0100;
 	}
+      else
+	{
+	  /* `C-' already added above.  */
+	  if (c > 0 && c <= Ctl ('Z'))
+	    *p++ = toupper (c + 0140);
+	  else
+	    *p++ = toupper (c + 0100);
+    }
     }
   else if (c == 0177)
     {
+      if (NILP (Vns_use_mac_modifier_symbols))
+	{
       *p++ = 'D';
       *p++ = 'E';
       *p++ = 'L';
+    }
+      else
+	{
+	  *p++ = 0xe2;
+	  *p++ = 0x8c;
+	  *p++ = 0xab;
+	}
+      
     }
   else if (c == ' ')
    {
@@ -2259,8 +2360,16 @@ push_key_description (EMACS_INT ch, char *p)
       *p++ = 'P';
       *p++ = 'C';
     }
-  else if (c < 128)
+  else if (c < 128
+	   || (NILP (BVAR (current_buffer, enable_multibyte_characters))
+	       && SINGLE_BYTE_CHAR_P (c)))
+    {
+      /* display in upper case */
+      if (! NILP (Vns_use_mac_modifier_symbols))
+	*p++ = toupper(c);
+      else
     *p++ = c;
+    }
   else
     {
       /* Now we are sure that C is a valid character code.  */
@@ -2300,6 +2409,12 @@ around function keys and event symbols.  */)
     }
   else if (SYMBOLP (key))	/* Function key or event-symbol.  */
     {
+
+      /* To Do:
+	 Modifiers are included in the function key symbols - e.g., `M-down'.
+	 These are not correctly converted to NS specific keys for that
+	 reason. */
+
       if (NILP (no_angles))
 	{
 	  Lisp_Object result;
@@ -3721,6 +3836,10 @@ syms_of_keymap (void)
 			pure_cons (build_pure_c_string ("SPC"), build_pure_c_string (" ")));
   staticpro (&exclude_keys);
 
+  DEFVAR_LISP ("ns-use-mac-modifier-symbols", Vns_use_mac_modifier_symbols,
+	       doc: /* Use Mac modifier symbols if non-nil  */);
+  Vns_use_mac_modifier_symbols = Qt;
+
   DEFVAR_LISP ("define-key-rebound-commands", Vdefine_key_rebound_commands,
 	       doc: /* List of commands given new key bindings recently.
 This is used for internal purposes during Emacs startup;
@@ -3789,6 +3908,39 @@ be preferred.  */);
   DEFSYM (Qmenu_item, "menu-item");
   DEFSYM (Qremap, "remap");
   DEFSYM (QCadvertised_binding, ":advertised-binding");
+
+  Qsingle_key_description = intern_c_string ("single-key-description");
+  staticpro (&Qsingle_key_description);
+
+  Qkey_description = intern_c_string ("key-description");
+  staticpro (&Qkey_description);
+
+  Qkeymapp = intern_c_string ("keymapp");
+  staticpro (&Qkeymapp);
+
+  Qnon_ascii = intern_c_string ("non-ascii");
+  staticpro (&Qnon_ascii);
+
+  Qmenu_item = intern_c_string ("menu-item");
+  staticpro (&Qmenu_item);
+
+  Qremap = intern_c_string ("remap");
+  staticpro (&Qremap);
+
+  /* Qmodifier_value = intern_c_string ("modifier-value"); */
+  /* Qalt = intern_c_string ("alt"); */
+  /* Fput (Qalt, Qmodifier_value, make_number (alt_modifier)); */
+  /* Qhyper = intern_c_string ("hyper"); */
+  /* Fput (Qhyper, Qmodifier_value, make_number (hyper_modifier)); */
+  /* Qmeta = intern_c_string ("meta"); */
+  /* Fput (Qmeta, Qmodifier_value, make_number (meta_modifier)); */
+  /* Qsuper = intern_c_string ("super"); */
+  /* Fput (Qsuper, Qmodifier_value, make_number (super_modifier)); */
+  /* Qcontrol = intern_c_string ("control"); */
+  /* Fput (Qcontrol, Qmodifier_value, make_number (ctrl_modifier)); */
+
+  QCadvertised_binding = intern_c_string (":advertised-binding");
+  staticpro (&QCadvertised_binding);
 
   command_remapping_vector = Fmake_vector (make_number (2), Qremap);
   staticpro (&command_remapping_vector);

@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>Standard Properties - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Symbol-Properties.html#Symbol-Properties" title="Symbol Properties">
+<link rel="prev" href="Symbol-Plists.html#Symbol-Plists" title="Symbol Plists">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
+
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Standard-Properties"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Symbol-Plists.html#Symbol-Plists">Symbol Plists</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Symbol-Properties.html#Symbol-Properties">Symbol Properties</a>
+<hr>
+</div>
+
+<h4 class="subsection">8.4.2 Standard Symbol Properties</h4>
+
+<p>Here, we list the symbol properties which are used for special
+purposes in Emacs.  In the following table, whenever we say &ldquo;the
+named function&rdquo;, that means the function whose name is the relevant
+symbol; similarly for &ldquo;the named variable&rdquo; etc.
+
+     <dl>
+<dt><code>:advertised-binding</code><dd>This property value specifies the preferred key binding, when showing
+documentation, for the named function.  See <a href="Keys-in-Documentation.html#Keys-in-Documentation">Keys in Documentation</a>.
+
+     <br><dt><code>char-table-extra-slots</code><dd>The value, if non-<code>nil</code>, specifies the number of extra slots in
+the named char-table type.  See <a href="Char_002dTables.html#Char_002dTables">Char-Tables</a>.
+
+     <br><dt><code>customized-face</code><dt><code>face-defface-spec</code><dt><code>saved-face</code><dt><code>theme-face</code><dd>These properties are used to record a face's standard, saved,
+customized, and themed face specs.  Do not set them directly; they are
+managed by <code>defface</code> and related functions.  See <a href="Defining-Faces.html#Defining-Faces">Defining Faces</a>.
+
+     <br><dt><code>customized-value</code><dt><code>saved-value</code><dt><code>standard-value</code><dt><code>theme-value</code><dd>These properties are used to record a customizable variable's standard
+value, saved value, customized-but-unsaved value, and themed values. 
+Do not set them directly; they are managed by <code>defcustom</code> and
+related functions.  See <a href="Variable-Definitions.html#Variable-Definitions">Variable Definitions</a>.
+
+     <br><dt><code>disabled</code><dd>If the value is non-<code>nil</code>, the named function is disabled as a
+command.  See <a href="Disabling-Commands.html#Disabling-Commands">Disabling Commands</a>.
+
+     <br><dt><code>face-documentation</code><dd>The value stores the documentation string of the named face.  This is
+set automatically by <code>defface</code>.  See <a href="Defining-Faces.html#Defining-Faces">Defining Faces</a>.
+
+     <br><dt><code>history-length</code><dd>The value, if non-<code>nil</code>, specifies the maximum minibuffer history
+length for the named history list variable.  See <a href="Minibuffer-History.html#Minibuffer-History">Minibuffer History</a>.
+
+     <br><dt><code>interactive-form</code><dd>The value is an interactive form for the named function.  Normally,
+you should not set this directly; use the <code>interactive</code> special
+form instead.  See <a href="Interactive-Call.html#Interactive-Call">Interactive Call</a>.
+
+     <br><dt><code>menu-enable</code><dd>The value is an expression for determining whether the named menu item
+should be enabled in menus.  See <a href="Simple-Menu-Items.html#Simple-Menu-Items">Simple Menu Items</a>.
+
+     <br><dt><code>mode-class</code><dd>If the value is <code>special</code>, the named major mode is &ldquo;special&rdquo;. 
+See <a href="Major-Mode-Conventions.html#Major-Mode-Conventions">Major Mode Conventions</a>.
+
+     <br><dt><code>permanent-local</code><dd>If the value is non-<code>nil</code>, the named variable is a buffer-local
+variable whose value should not be reset when changing major modes. 
+See <a href="Creating-Buffer_002dLocal.html#Creating-Buffer_002dLocal">Creating Buffer-Local</a>.
+
+     <br><dt><code>permanent-local-hook</code><dd>If the value is non-<code>nil</code>, the named function should not be
+deleted from the local value of a hook variable when changing major
+modes.  See <a href="Setting-Hooks.html#Setting-Hooks">Setting Hooks</a>.
+
+     <br><dt><code>pure</code><dd>If the value is non-<code>nil</code>, the named function is considered to be
+side-effect free.  Calls with constant arguments can be evaluated at
+compile time.  This may shift run time errors to compile time.
+
+     <br><dt><code>risky-local-variable</code><dd>If the value is non-<code>nil</code>, the named variable is considered risky
+as a file-local variable.  See <a href="File-Local-Variables.html#File-Local-Variables">File Local Variables</a>.
+
+     <br><dt><code>safe-function</code><dd>If the value is non-<code>nil</code>, the named function is considered
+generally safe for evaluation.  See <a href="Function-Safety.html#Function-Safety">Function Safety</a>.
+
+     <br><dt><code>safe-local-eval-function</code><dd>If the value is non-<code>nil</code>, the named function is safe to call in
+file-local evaluation forms.  See <a href="File-Local-Variables.html#File-Local-Variables">File Local Variables</a>.
+
+     <br><dt><code>safe-local-variable</code><dd>The value specifies a function for determining safe file-local values
+for the named variable.  See <a href="File-Local-Variables.html#File-Local-Variables">File Local Variables</a>.
+
+     <br><dt><code>side-effect-free</code><dd>A non-<code>nil</code> value indicates that the named function is free of
+side-effects, for determining function safety (see <a href="Function-Safety.html#Function-Safety">Function Safety</a>) as well as for byte compiler optimizations.  Do not set it.
+
+     <br><dt><code>variable-documentation</code><dd>If non-<code>nil</code>, this specifies the named variable's documentation
+string.  This is set automatically by <code>defvar</code> and related
+functions.  See <a href="Defining-Faces.html#Defining-Faces">Defining Faces</a>. 
+</dl>
+   <!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 1990-1994, 1998, 2001-2013 Free Software Foundation, -->
+<!-- Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+
+   </body></html>
+

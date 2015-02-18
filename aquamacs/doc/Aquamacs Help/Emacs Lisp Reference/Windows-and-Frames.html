@@ -1,0 +1,278 @@
+<html lang="en">
+<head>
+<title>Windows and Frames - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Windows.html#Windows" title="Windows">
+<link rel="prev" href="Basic-Windows.html#Basic-Windows" title="Basic Windows">
+<link rel="next" href="Window-Sizes.html#Window-Sizes" title="Window Sizes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
+
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Windows-and-Frames"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Window-Sizes.html#Window-Sizes">Window Sizes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Basic-Windows.html#Basic-Windows">Basic Windows</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
+<hr>
+</div>
+
+<h3 class="section">28.2 Windows and Frames</h3>
+
+<p>Each window belongs to exactly one frame (see <a href="Frames.html#Frames">Frames</a>).
+
+<div class="defun">
+&mdash; Function: <b>window-frame</b><var> window<a name="index-window_002dframe-2224"></a></var><br>
+<blockquote><p>This function returns the frame that the window <var>window</var> belongs
+to.  If <var>window</var> is <code>nil</code>, it defaults to the selected
+window. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>window-list</b><var> &amp;optional frame minibuffer window<a name="index-window_002dlist-2225"></a></var><br>
+<blockquote><p>This function returns a list of live windows belonging to the frame
+<var>frame</var>.  If <var>frame</var> is omitted or <code>nil</code>, it defaults to
+the selected frame.
+
+        <p>The optional argument <var>minibuffer</var> specifies whether to include
+the minibuffer window in the returned list.  If <var>minibuffer</var> is
+<code>t</code>, the minibuffer window is included.  If <var>minibuffer</var> is
+<code>nil</code> or omitted, the minibuffer window is included only if it is
+active.  If <var>minibuffer</var> is neither <code>nil</code> nor <code>t</code>, the
+minibuffer window is never included.
+
+        <p>The optional argument <var>window</var>, if non-<code>nil</code>, should be a live
+window on the specified frame; then <var>window</var> will be the first
+element in the returned list.  If <var>window</var> is omitted or <code>nil</code>,
+the window selected within the frame is the first element. 
+</p></blockquote></div>
+
+   <p><a name="index-window-tree-2226"></a><a name="index-root-window-2227"></a>  Windows in the same frame are organized into a <dfn>window tree</dfn>,
+whose leaf nodes are the live windows.  The internal nodes of a window
+tree are not live; they exist for the purpose of organizing the
+relationships between live windows.  The root node of a window tree is
+called the <dfn>root window</dfn>.  It can be either a live window (if the
+frame has just one window), or an internal window.
+
+   <p>A minibuffer window (see <a href="Minibuffer-Windows.html#Minibuffer-Windows">Minibuffer Windows</a>) is not part of its
+frame's window tree unless the frame is a minibuffer-only frame. 
+Nonetheless, most of the functions in this section accept the
+minibuffer window as an argument.  Also, the function
+<code>window-tree</code> described at the end of this section lists the
+minibuffer window alongside the actual window tree.
+
+<div class="defun">
+&mdash; Function: <b>frame-root-window</b><var> &amp;optional frame-or-window<a name="index-frame_002droot_002dwindow-2228"></a></var><br>
+<blockquote><p>This function returns the root window for <var>frame-or-window</var>.  The
+argument <var>frame-or-window</var> should be either a window or a frame;
+if omitted or <code>nil</code>, it defaults to the selected frame.  If
+<var>frame-or-window</var> is a window, the return value is the root window
+of that window's frame. 
+</p></blockquote></div>
+
+   <p><a name="index-parent-window-2229"></a><a name="index-child-window-2230"></a><a name="index-sibling-window-2231"></a>  When a window is split, there are two live windows where previously
+there was one.  One of these is represented by the same Lisp window
+object as the original window, and the other is represented by a
+newly-created Lisp window object.  Both of these live windows become
+leaf nodes of the window tree, as <dfn>child windows</dfn> of a single
+internal window.  If necessary, Emacs automatically creates this
+internal window, which is also called the <dfn>parent window</dfn>, and
+assigns it to the appropriate position in the window tree.  A set of
+windows that share the same parent are called <dfn>siblings</dfn>.
+
+   <p><a name="index-parent-window-2232"></a>
+
+<div class="defun">
+&mdash; Function: <b>window-parent</b><var> &amp;optional window<a name="index-window_002dparent-2233"></a></var><br>
+<blockquote><p>This function returns the parent window of <var>window</var>.  If
+<var>window</var> is omitted or <code>nil</code>, it defaults to the selected
+window.  The return value is <code>nil</code> if <var>window</var> has no parent
+(i.e., it is a minibuffer window or the root window of its frame). 
+</p></blockquote></div>
+
+   <p>Each internal window always has at least two child windows.  If this
+number falls to one as a result of window deletion, Emacs
+automatically deletes the internal window, and its sole remaining
+child window takes its place in the window tree.
+
+   <p>Each child window can be either a live window, or an internal window
+(which in turn would have its own child windows).  Therefore, each
+internal window can be thought of as occupying a certain rectangular
+<dfn>screen area</dfn>&mdash;the union of the areas occupied by the live
+windows that are ultimately descended from it.
+
+   <p><a name="index-window-combination-2234"></a><a name="index-vertical-combination-2235"></a><a name="index-horizontal-combination-2236"></a>  For each internal window, the screen areas of the immediate children
+are arranged either vertically or horizontally (never both).  If the
+child windows are arranged one above the other, they are said to form
+a <dfn>vertical combination</dfn>; if they are arranged side by side, they
+are said to form a <dfn>horizontal combination</dfn>.  Consider the
+following example:
+
+<pre class="smallexample">          ______________________________________
+         | ______  ____________________________ |
+         ||      || __________________________ ||
+         ||      |||                          |||
+         ||      |||                          |||
+         ||      |||                          |||
+         ||      |||____________W4____________|||
+         ||      || __________________________ ||
+         ||      |||                          |||
+         ||      |||                          |||
+         ||      |||____________W5____________|||
+         ||__W2__||_____________W3_____________ |
+         |__________________W1__________________|
+</pre>
+   <p class="noindent">The root window of this frame is an internal window, <var>W1</var>.  Its
+child windows form a horizontal combination, consisting of the live
+window <var>W2</var> and the internal window <var>W3</var>.  The child windows
+of <var>W3</var> form a vertical combination, consisting of the live
+windows <var>W4</var> and <var>W5</var>.  Hence, the live windows in this
+window tree are <var>W2</var> <var>W4</var>, and <var>W5</var>.
+
+   <p>The following functions can be used to retrieve a child window of an
+internal window, and the siblings of a child window.
+
+<div class="defun">
+&mdash; Function: <b>window-top-child</b><var> window<a name="index-window_002dtop_002dchild-2237"></a></var><br>
+<blockquote><p>This function returns the topmost child window of <var>window</var>, if
+<var>window</var> is an internal window whose children form a vertical
+combination.  For any other type of window, the return value is
+<code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>window-left-child</b><var> window<a name="index-window_002dleft_002dchild-2238"></a></var><br>
+<blockquote><p>This function returns the leftmost child window of <var>window</var>, if
+<var>window</var> is an internal window whose children form a horizontal
+combination.  For any other type of window, the return value is
+<code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>window-child</b><var> window<a name="index-window_002dchild-2239"></a></var><br>
+<blockquote><p>This function returns the first child window of the internal window
+<var>window</var>&mdash;the topmost child window for a vertical combination, or
+the leftmost child window for a horizontal combination.  If
+<var>window</var> is a live window, the return value is <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>window-combined-p</b><var> &amp;optional window horizontal<a name="index-window_002dcombined_002dp-2240"></a></var><br>
+<blockquote><p>This function returns a non-<code>nil</code> value if and only if
+<var>window</var> is part of a vertical combination.  If <var>window</var> is
+omitted or <code>nil</code>, it defaults to the selected one.
+
+        <p>If the optional argument <var>horizontal</var> is non-<code>nil</code>, this
+means to return non-<code>nil</code> if and only if <var>window</var> is part of
+a horizontal combination. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>window-next-sibling</b><var> &amp;optional window<a name="index-window_002dnext_002dsibling-2241"></a></var><br>
+<blockquote><p>This function returns the next sibling of the window <var>window</var>.  If
+omitted or <code>nil</code>, <var>window</var> defaults to the selected window. 
+The return value is <code>nil</code> if <var>window</var> is the last child of
+its parent. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>window-prev-sibling</b><var> &amp;optional window<a name="index-window_002dprev_002dsibling-2242"></a></var><br>
+<blockquote><p>This function returns the previous sibling of the window <var>window</var>. 
+If omitted or <code>nil</code>, <var>window</var> defaults to the selected
+window.  The return value is <code>nil</code> if <var>window</var> is the first
+child of its parent. 
+</p></blockquote></div>
+
+   <p>The functions <code>window-next-sibling</code> and
+<code>window-prev-sibling</code> should not be confused with the functions
+<code>next-window</code> and <code>previous-window</code>, which return the next
+and previous window, respectively, in the cyclic ordering of windows
+(see <a href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic Window Ordering</a>).
+
+   <p>You can use the following functions to find the first live window on a
+frame and the window nearest to a given window.
+
+<div class="defun">
+&mdash; Function: <b>frame-first-window</b><var> &amp;optional frame-or-window<a name="index-frame_002dfirst_002dwindow-2243"></a></var><br>
+<blockquote><p>This function returns the live window at the upper left corner of the
+frame specified by <var>frame-or-window</var>.  The argument
+<var>frame-or-window</var> must denote a window or a live frame and defaults
+to the selected frame.  If <var>frame-or-window</var> specifies a window,
+this function returns the first window on that window's frame.  Under
+the assumption that the frame from our canonical example is selected
+<code>(frame-first-window)</code> returns <var>W2</var>. 
+</p></blockquote></div>
+
+   <p><a name="index-window-in-direction-2244"></a>
+
+<div class="defun">
+&mdash; Function: <b>window-in-direction</b><var> direction &amp;optional window ignore<a name="index-window_002din_002ddirection-2245"></a></var><br>
+<blockquote><p>This function returns the nearest live window in direction
+<var>direction</var> as seen from the position of <code>window-point</code> in
+window <var>window</var>.  The argument <var>direction</var> must be one of
+<code>above</code>, <code>below</code>, <code>left</code> or <code>right</code>.  The optional
+argument <var>window</var> must denote a live window and defaults to the
+selected one.
+
+        <p>This function does not return a window whose <code>no-other-window</code>
+parameter is non-<code>nil</code> (see <a href="Window-Parameters.html#Window-Parameters">Window Parameters</a>).  If the nearest
+window's <code>no-other-window</code> parameter is non-<code>nil</code>, this
+function tries to find another window in the indicated direction whose
+<code>no-other-window</code> parameter is <code>nil</code>.  If the optional
+argument <var>ignore</var> is non-<code>nil</code>, a window may be returned even
+if its <code>no-other-window</code> parameter is non-<code>nil</code>.
+
+        <p>If it doesn't find a suitable window, this function returns <code>nil</code>. 
+</p></blockquote></div>
+
+   <p>The following function allows to retrieve the entire window tree of a
+frame:
+
+<div class="defun">
+&mdash; Function: <b>window-tree</b><var> &amp;optional frame<a name="index-window_002dtree-2246"></a></var><br>
+<blockquote><p>This function returns a list representing the window tree for frame
+<var>frame</var>.  If <var>frame</var> is omitted or <code>nil</code>, it defaults to
+the selected frame.
+
+        <p>The return value is a list of the form <code>(</code><var>root</var> <var>mini</var><code>)</code>,
+where <var>root</var> represents the window tree of the frame's root
+window, and <var>mini</var> is the frame's minibuffer window.
+
+        <p>If the root window is live, <var>root</var> is that window itself. 
+Otherwise, <var>root</var> is a list <code>(</code><var>dir</var> <var>edges</var> <var>w1</var>
+<var>w2</var><code> ...)</code> where <var>dir</var> is <code>nil</code> for a horizontal
+combination and <code>t</code> for a vertical combination, <var>edges</var> gives
+the size and position of the combination, and the remaining elements
+are the child windows.  Each child window may again be a window object
+(for a live window) or a list with the same format as above (for an
+internal window).  The <var>edges</var> element is a list <code>(</code><var>left</var>
+<var>top</var> <var>right</var> <var>bottom</var><code>)</code>, similar to the value returned by
+<code>window-edges</code> (see <a href="Coordinates-and-Windows.html#Coordinates-and-Windows">Coordinates and Windows</a>). 
+</p></blockquote></div>
+
+   </body></html>
+

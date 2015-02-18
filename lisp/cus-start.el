@@ -398,7 +398,7 @@ Leaving \"Default\" unchecked is equivalent with specifying a default of
 	      (choice (const :tag "No modifier (work as function)" none)
 		      (const control) (const meta)
 		      (const alt) (const hyper)
-		      (const super)) "23.1")
+		      (const super) (const none)) "23.1")
 	     (ns-antialias-text ns boolean "23.1")
 	     (ns-auto-hide-menu-bar ns boolean "24.1")
 	     (ns-use-native-fullscreen ns boolean "24.4")

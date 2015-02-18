@@ -1,0 +1,128 @@
+<html lang="en">
+<head>
+<title>Printing - The MH-E Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The MH-E Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Reading-Mail.html#Reading-Mail" title="Reading Mail">
+<link rel="prev" href="Reading-PGP.html#Reading-PGP" title="Reading PGP">
+<link rel="next" href="Files-and-Pipes.html#Files-and-Pipes" title="Files and Pipes">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is version 8.2 of `The MH-E
+Manual', last updated 2009-06-13.
+
+Copyright (C) 1995, 2001, 2002, 2003, 2005, 2006, 2007, 2008,
+  2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of either:
+
+       a. the GNU Free Documentation License, Version 1.3 or any later
+          version published by the Free Software Foundation; with no
+          Invariant Sections, with the Front-Cover texts being ``A GNU
+          Manual,'' and with the Back-Cover Texts as in (a) below. A
+          copy of the license is included in the section entitled ``GNU
+          Free Documentation License.''
+
+          (a) The FSF's Back-Cover Text is: ``You have the freedom to
+          copy and modify this GNU manual. Buying copies from the FSF
+          supports it in developing GNU and promoting software
+          freedom.''
+
+       b. the GNU General Public License as published by the Free
+          Software Foundation; either version 3, or (at your option)
+          any later version. A copy of the license is included in the
+          section entitled ``GNU General Public License.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Printing"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Files-and-Pipes.html#Files-and-Pipes">Files and Pipes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Reading-PGP.html#Reading-PGP">Reading PGP</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Reading-Mail.html#Reading-Mail">Reading Mail</a>
+<hr>
+</div>
+
+<h3 class="section">6.6 Printing Your Mail</h3>
+
+<p><a name="index-printing-672"></a><a name="index-mh_002dps_002dprint_002dmsg-673"></a><a name="index-mh_002dps_002dprint_002dmsg_002dfile-674"></a><a name="index-P-f-675"></a><a name="index-P-p-676"></a><a name="index-mh_002dlpr_002dcommand_002dformat-677"></a><a name="index-mh_002dprint_002dbackground_002dflag-678"></a>
+To print messages in MH-E, use the command <kbd>P p</kbd>
+(<code>mh-ps-print-msg</code>). You can print all the messages in a range
+(as in <kbd>C-u P p 1 3 5-7 last:5 frombob &lt;RET&gt;</kbd>,
+see <a href="Ranges.html#Ranges">Ranges</a>). You can also send the output to a file with <kbd>P f</kbd>
+(<code>mh-ps-print-msg-file</code>). This command will print inline text
+attachments but will not decrypt messages. However, when a message is
+displayed in an MH-Show buffer, then that buffer is used verbatim for
+printing with the caveat that only text attachments, if opened inline,
+are printed. Therefore, encrypted messages can be printed by showing
+and decrypting them first. The commands <kbd>P p</kbd> and <kbd>P f</kbd> do not
+use the options <code>mh-lpr-command-format</code> or
+<code>mh-print-background-flag</code>, described below.
+
+   <p><a name="index-mh_002dps_002dprint_002dtoggle_002dcolor-679"></a><a name="index-P-C-680"></a><a name="index-ps_002dprint_002dcolor_002dp-681"></a>
+Colors are emulated on black-and-white printers with shades of gray. 
+This might produce illegible output, even if your screen colors only
+use shades of gray. If this is the case, try using the command <kbd>P
+C</kbd> (<code>mh-ps-print-toggle-color</code>) to toggle between color, no
+color, and a black and white representation of the colors and see
+which works best. You change this setting permanently by customizing
+the option <code>ps-print-color-p</code>.
+
+   <p><a name="index-mh_002dps_002dprint_002dtoggle_002dfaces-682"></a><a name="index-P-F-683"></a>
+Another related function is the command <kbd>P F</kbd>
+(<code>mh-ps-print-toggle-faces</code>). This command toggles between using
+faces and not. When faces are enabled, the printed message will look
+very similar to the message in the MH-Show buffer.
+
+   <p><a name="index-ps_002dprint-package-684"></a><a name="index-Emacs_002c-packages_002c-ps_002dprint-685"></a>
+MH-E uses the &lsquo;<samp><span class="samp">ps-print</span></samp>&rsquo; package to do the printing, so you can
+customize the printing further by going to the &lsquo;<samp><span class="samp">ps-print</span></samp>&rsquo;
+customization group.
+
+   <p><a name="index-g_t_0040command_007blpr_007d-686"></a><a name="index-g_t_0040command_007bmhl_007d-687"></a><a name="index-MH-commands_002c-_0040command_007bmhl_007d-688"></a><a name="index-Unix-commands_002c-_0040command_007blpr_007d-689"></a><a name="index-mh_002dprint_002dmsg-690"></a><a name="index-P-l-691"></a>
+An alternative to using the &lsquo;<samp><span class="samp">ps-print</span></samp>&rsquo; package is the command
+<kbd>P l</kbd> (<code>mh-print-msg</code>) (the <i>l</i> is for <i>l</i>ine printer or
+<i>l</i>pr). You can print all the messages in a range. The message is
+formatted with <samp><span class="command">mhl</span></samp><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> and printed with the <samp><span class="command">lpr</span></samp> command.
+
+   <p><a name="index-P-f-692"></a><a name="index-P-l-693"></a><a name="index-P-p-694"></a><a name="index-mh_002dlpr_002dcommand_002dformat-695"></a><a name="index-mh_002dprint_002dbackground_002dflag-696"></a>
+The command <kbd>P l</kbd> uses two options. The option
+<code>mh-lpr-command-format</code> contains the Unix command line which
+performs the actual printing. The string can contain one escape,
+&lsquo;<samp><span class="samp">%s</span></samp>&rsquo;, which is replaced by the name of the folder and the message
+number and is useful for print job names. The default setting is
+<code>"lpr -J '%s'"</code>. I use <code>"mpage -h'%s' -b Letter -H1of -mlrtb
+-P"</code> which produces a nice header and adds a bit of margin so the text
+fits within my printer's margins. Normally messages are printed in the
+foreground. If this is slow on your system, you may elect to turn on
+the option <code>mh-print-background-flag</code> to print in the background. 
+If you do this, do not delete the message until it is printed or else
+the output may be truncated. These options are not used by the
+commands <kbd>P p</kbd> or <kbd>P f</kbd>.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> See the section
+<a href="http://rand-mh.sourceforge.net/book/mh/shomes.html#Usisho">Using mhl</a> in the MH
+book.</p>
+
+   <hr></div>
+
+   </body></html>
+

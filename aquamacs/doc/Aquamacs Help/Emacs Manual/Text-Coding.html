@@ -1,0 +1,128 @@
+<html lang="en">
+<head>
+<title>Text Coding - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="International.html#International" title="International">
+<link rel="prev" href="Output-Coding.html#Output-Coding" title="Output Coding">
+<link rel="next" href="Communication-Coding.html#Communication-Coding" title="Communication Coding">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
+
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Text-Coding"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Communication-Coding.html#Communication-Coding">Communication Coding</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Output-Coding.html#Output-Coding">Output Coding</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="International.html#International">International</a>
+<hr>
+</div>
+
+<h3 class="section">22.9 Specifying a Coding System for File Text</h3>
+
+<p>In cases where Emacs does not automatically choose the right coding
+system for a file's contents, you can use these commands to specify
+one:
+
+     <dl>
+<dt><kbd>C-x &lt;RET&gt; f </kbd><var>coding</var><kbd> &lt;RET&gt;</kbd><dd>Use coding system <var>coding</var> to save or revisit the file in
+the current buffer (<code>set-buffer-file-coding-system</code>).
+
+     <br><dt><kbd>C-x &lt;RET&gt; c </kbd><var>coding</var><kbd> &lt;RET&gt;</kbd><dd>Specify coding system <var>coding</var> for the immediately following
+command (<code>universal-coding-system-argument</code>).
+
+     <br><dt><kbd>C-x &lt;RET&gt; r </kbd><var>coding</var><kbd> &lt;RET&gt;</kbd><dd>Revisit the current file using the coding system <var>coding</var>
+(<code>revert-buffer-with-coding-system</code>).
+
+     <br><dt><kbd>M-x recode-region &lt;RET&gt; </kbd><var>right</var><kbd> &lt;RET&gt; </kbd><var>wrong</var><kbd> &lt;RET&gt;</kbd><dd>Convert a region that was decoded using coding system <var>wrong</var>,
+decoding it using coding system <var>right</var> instead. 
+</dl>
+
+   <p><a name="index-C_002dx-RET-f-1646"></a><a name="index-set_002dbuffer_002dfile_002dcoding_002dsystem-1647"></a>  The command <kbd>C-x &lt;RET&gt; f</kbd>
+(<code>set-buffer-file-coding-system</code>) sets the file coding system for
+the current buffer (i.e., the coding system to use when saving or
+reverting the file).  You specify which coding system using the
+minibuffer.  You can also invoke this command by clicking with
+<kbd>Mouse-3</kbd> on the coding system indicator in the mode line
+(see <a href="Mode-Line.html#Mode-Line">Mode Line</a>).
+
+   <p>If you specify a coding system that cannot handle all the characters
+in the buffer, Emacs will warn you about the troublesome characters,
+and ask you to choose another coding system, when you try to save the
+buffer (see <a href="Output-Coding.html#Output-Coding">Output Coding</a>).
+
+   <p><a name="index-specify-end_002dof_002dline-conversion-1648"></a>  You can also use this command to specify the end-of-line conversion
+(see <a href="Coding-Systems.html#Coding-Systems">end-of-line conversion</a>) for encoding the
+current buffer.  For example, <kbd>C-x &lt;RET&gt; f dos &lt;RET&gt;</kbd> will
+cause Emacs to save the current buffer's text with DOS-style
+carriage-return linefeed line endings.
+
+   <p><a name="index-C_002dx-RET-c-1649"></a><a name="index-universal_002dcoding_002dsystem_002dargument-1650"></a>  Another way to specify the coding system for a file is when you visit
+the file.  First use the command <kbd>C-x &lt;RET&gt; c</kbd>
+(<code>universal-coding-system-argument</code>); this command uses the
+minibuffer to read a coding system name.  After you exit the minibuffer,
+the specified coding system is used for <em>the immediately following
+command</em>.
+
+   <p>So if the immediately following command is <kbd>C-x C-f</kbd>, for example,
+it reads the file using that coding system (and records the coding
+system for when you later save the file).  Or if the immediately following
+command is <kbd>C-x C-w</kbd>, it writes the file using that coding system. 
+When you specify the coding system for saving in this way, instead
+of with <kbd>C-x &lt;RET&gt; f</kbd>, there is no warning if the buffer
+contains characters that the coding system cannot handle.
+
+   <p>Other file commands affected by a specified coding system include
+<kbd>C-x i</kbd> and <kbd>C-x C-v</kbd>, as well as the other-window variants
+of <kbd>C-x C-f</kbd>.  <kbd>C-x &lt;RET&gt; c</kbd> also affects commands that
+start subprocesses, including <kbd>M-x shell</kbd> (see <a href="Shell.html#Shell">Shell</a>).  If the
+immediately following command does not use the coding system, then
+<kbd>C-x &lt;RET&gt; c</kbd> ultimately has no effect.
+
+   <p>An easy way to visit a file with no conversion is with the <kbd>M-x
+find-file-literally</kbd> command.  See <a href="Visiting.html#Visiting">Visiting</a>.
+
+   <p>The default value of the variable <code>buffer-file-coding-system</code>
+specifies the choice of coding system to use when you create a new file. 
+It applies when you find a new file, and when you create a buffer and
+then save it in a file.  Selecting a language environment typically sets
+this variable to a good choice of default coding system for that language
+environment.
+
+   <p><a name="index-C_002dx-RET-r-1651"></a><a name="index-revert_002dbuffer_002dwith_002dcoding_002dsystem-1652"></a>  If you visit a file with a wrong coding system, you can correct this
+with <kbd>C-x &lt;RET&gt; r</kbd> (<code>revert-buffer-with-coding-system</code>). 
+This visits the current file again, using a coding system you specify.
+
+   <p><a name="index-recode_002dregion-1653"></a>  If a piece of text has already been inserted into a buffer using the
+wrong coding system, you can redo the decoding of it using <kbd>M-x
+recode-region</kbd>.  This prompts you for the proper coding system, then
+for the wrong coding system that was actually used, and does the
+conversion.  It first encodes the region using the wrong coding system,
+then decodes it again using the proper coding system.
+
+   </body></html>
+

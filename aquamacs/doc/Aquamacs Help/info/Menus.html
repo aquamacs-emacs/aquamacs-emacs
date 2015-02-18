@@ -1,0 +1,116 @@
+<html lang="en">
+<head>
+<title>Menus - Info</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Info">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Expert-Info.html#Expert-Info" title="Expert Info">
+<link rel="prev" href="Add.html#Add" title="Add">
+<link rel="next" href="Cross_002drefs.html#Cross_002drefs" title="Cross-refs">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file describes how to use Info, the on-line, menu-driven GNU
+documentation system.
+
+Copyright (C) 1989, 1992, 1996, 1997, 1998, 1999, 2000, 2001,
+2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License'' in the Emacs manual.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Menus"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Cross_002drefs.html#Cross_002drefs">Cross-refs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Add.html#Add">Add</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Expert-Info.html#Expert-Info">Expert Info</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h3 class="section">3.2 How to Create Menus</h3>
+
+<p>Any node in the Info hierarchy may have a <dfn>menu</dfn>&mdash;a list of subnodes. 
+The <kbd>m</kbd> command searches the current node's menu for the topic which it
+reads from the terminal.
+
+   <p><a name="index-menu-and-menu-entry-format-96"></a>  A menu begins with a line starting with &lsquo;<samp><span class="samp">*&nbsp;Menu:</span></samp>&rsquo;<!-- /@w -->.  The
+rest of the line is a comment.  After the starting line, every line
+that begins with a &lsquo;<samp><span class="samp">* </span></samp>&rsquo; lists a single topic.  The name of the
+topic&mdash;what the user must type at the <kbd>m</kbd>'s command prompt to
+select this topic&mdash;comes right after the star and space, and is
+followed by a colon, spaces and tabs, and the name of the node which
+discusses that topic.  The node name, like node names following
+&lsquo;<samp><span class="samp">Next</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Previous</span></samp>&rsquo; and &lsquo;<samp><span class="samp">Up</span></samp>&rsquo;, may be terminated with a
+tab, comma, or newline; it may also be terminated with a period.
+
+   <p>If the node name and topic name are the same, then rather than
+giving the name twice, the abbreviation &lsquo;<samp><span class="samp">* </span><var>name</var><span class="samp">::</span></samp>&rsquo; may be
+used (and should be used, whenever possible, as it reduces the visual
+clutter in the menu).
+
+   <p>It is considerate to choose the topic names so that they differ
+from each other very near the beginning&mdash;this allows the user to type
+short abbreviations.  In a long menu, it is a good idea to capitalize
+the beginning of each item name which is the minimum acceptable
+abbreviation for it (a long menu is more than 5 or so entries).
+
+   <p>The nodes listed in a node's menu are called its &ldquo;subnodes,&rdquo; and it
+is their &ldquo;superior&rdquo;.  They should each have an &lsquo;<samp><span class="samp">Up:</span></samp>&rsquo; pointing at
+the superior.  It is often useful to arrange all or most of the subnodes
+in a sequence of &lsquo;<samp><span class="samp">Next</span></samp>&rsquo; and &lsquo;<samp><span class="samp">Previous</span></samp>&rsquo; pointers so that
+someone who wants to see them all need not keep revisiting the Menu.
+
+   <p>The Info Directory is simply the menu of the node &lsquo;<samp><span class="samp">(dir)Top</span></samp>&rsquo;&mdash;that
+is, node &lsquo;<samp><span class="samp">Top</span></samp>&rsquo; in file <samp><span class="file">.../info/dir</span></samp>.  You can put new entries
+in that menu just like any other menu.  The Info Directory is <em>not</em> the
+same as the file directory called <samp><span class="file">info</span></samp>.  It happens that many of
+Info's files live in that file directory, but they do not have to; and
+files in that directory are not automatically listed in the Info
+Directory node.
+
+   <p>Also, although the Info node graph is claimed to be a &ldquo;hierarchy,&rdquo;
+in fact it can be <em>any</em> directed graph.  Shared structures and
+pointer cycles are perfectly possible, and can be used if they are
+appropriate to the meaning to be expressed.  There is no need for all
+the nodes in a file to form a connected structure.  In fact, this file
+has two connected components.  You are in one of them, which is under
+the node &lsquo;<samp><span class="samp">Top</span></samp>&rsquo;; the other contains the node &lsquo;<samp><span class="samp">Help</span></samp>&rsquo; which the
+<kbd>h</kbd> command goes to.  In fact, since there is no garbage
+collector on the node graph, nothing terrible happens if a substructure
+is not pointed to, but such a substructure is rather useless since nobody
+can ever find out that it exists.
+
+   </body></html>
+

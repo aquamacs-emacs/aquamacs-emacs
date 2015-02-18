@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+<title>Inserting text at the beginning of each line - GNU Emacs FAQ</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs FAQ">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Common-requests.html#Common-requests" title="Common requests">
+<link rel="prev" href="Changing-the-length-of-a-Tab.html#Changing-the-length-of-a-Tab" title="Changing the length of a Tab">
+<link rel="next" href="Forcing-the-cursor-to-remain-in-the-same-column.html#Forcing-the-cursor-to-remain-in-the-same-column" title="Forcing the cursor to remain in the same column">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+2009, 2010 Free Software Foundation, Inc.
+
+Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
+Reuven M. Lerner
+
+Copyright (C) 1992, 1993 Steven Byrnes
+
+Copyright (C) 1990, 1991, 1992 Joseph Brian Wells
+
+
+     This list of frequently asked questions about GNU Emacs with
+     answers (``FAQ'') may be translated into other languages,
+     transformed into other formats (e.g. Texinfo, Info, WWW, WAIS),
+     and updated with new information.
+
+     The same conditions apply to any derivative of the FAQ as apply to
+     the FAQ itself.  Every copy of the FAQ must include this notice or
+     an approved translation, information on who is currently
+     maintaining the FAQ and how to contact them (including their
+     e-mail address), and information on where the latest version of
+     the FAQ is archived (including FTP information).
+
+     The FAQ may be copied and redistributed under these conditions,
+     except that the FAQ may not be embedded in a larger literary work
+     unless that work itself allows free copying and redistribution.
+
+     [This version has been heavily edited since it was included in the
+     Emacs distribution.]
+-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Inserting-text-at-the-beginning-of-each-line"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Forcing-the-cursor-to-remain-in-the-same-column.html#Forcing-the-cursor-to-remain-in-the-same-column">Forcing the cursor to remain in the same column</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Changing-the-length-of-a-Tab.html#Changing-the-length-of-a-Tab">Changing the length of a Tab</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Common-requests.html#Common-requests">Common requests</a>
+<hr>
+</div>
+
+<h3 class="section">5.33 How do I insert &lt;some text&gt; at the beginning of every line?</h3>
+
+<p><a name="index-Prefixing-a-region-with-some-text-274"></a><a name="index-Prefix-character_002c-inserting-in-mail_002fnews-replies-275"></a><a name="index-Replies-to-mail_002fnews_002c-inserting-a-prefix-character-276"></a><a name="index-g_t_0040code_007bmail_002dyank_002dprefix_007d-277"></a><a name="index-Mail-replies_002c-inserting-a-prefix-character-278"></a><a name="index-News-replies_002c-inserting-a-prefix-character-279"></a>
+To do this to an entire buffer, type <kbd>M-&lt; M-x replace-regexp
+&lt;RET&gt; ^ &lt;RET&gt; your text &lt;RET&gt;</kbd>.
+
+   <p>To do this to a region, use <code>string-insert-rectangle</code>. 
+Set the mark (<kbd>C-&lt;SPC&gt;</kbd>) at the beginning of the first line you
+want to prefix, move the cursor to last line to be prefixed, and type
+<kbd>M-x string-insert-rectangle &lt;RET&gt;</kbd>.  To do this for the whole
+buffer, type <kbd>C-x h M-x string-insert-rectangle &lt;RET&gt;</kbd>.
+
+   <p>If you are trying to prefix a yanked mail message with &lsquo;<samp><span class="samp">&gt;</span></samp>&rsquo;, you
+might want to set the variable <code>mail-yank-prefix</code>.  In Message
+buffers, you can even use <kbd>M-;</kbd> to cite yanked messages (<kbd>M-;</kbd>
+runs the function <code>comment-region</code>, it is a general-purpose
+mechanism to comment regions) (see <a href="Changing-the-included-text-prefix.html#Changing-the-included-text-prefix">Changing the included text prefix</a>).
+
+   </body></html>
+

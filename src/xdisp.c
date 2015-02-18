@@ -2857,12 +2857,12 @@ init_iterator (struct it *it, struct window *w,
   if (base_face_id == DEFAULT_FACE_ID
       && FRAME_WINDOW_P (it->f))
     {
-      if (NATNUMP (BVAR (current_buffer, extra_line_spacing)))
+      if (INTEGERP (BVAR (current_buffer, extra_line_spacing)))
 	it->extra_line_spacing = XFASTINT (BVAR (current_buffer, extra_line_spacing));
       else if (FLOATP (BVAR (current_buffer, extra_line_spacing)))
 	it->extra_line_spacing = (XFLOAT_DATA (BVAR (current_buffer, extra_line_spacing))
 				  * FRAME_LINE_HEIGHT (it->f));
-      else if (it->f->extra_line_spacing > 0)
+      else if (it->f->extra_line_spacing != 0)
 	it->extra_line_spacing = it->f->extra_line_spacing;
       it->max_extra_line_spacing = 0;
     }
@@ -7162,6 +7162,8 @@ get_next_display_element (struct it *it)
     {
       struct face *face = FACE_FROM_ID (it->f, it->face_id);
 
+      if (face) /* is face id valid? */
+	{
       if (it->what == IT_COMPOSITION && it->cmp_it.ch >= 0)
 	{
 	  /* Automatic composition with glyph-string.   */
@@ -7192,6 +7194,7 @@ get_next_display_element (struct it *it)
 	    }
 	  it->face_id = FACE_FOR_CHAR (it->f, face, c, pos, it->string);
 	}
+    }
     }
 #endif	/* HAVE_WINDOW_SYSTEM */
 
@@ -15383,6 +15386,7 @@ try_scrolling (Lisp_Object window, int just_this_one_p,
 	{
 	  clear_glyph_matrix (w->desired_matrix);
 	  ++extra_scroll_margin_lines;
+	  if (extra_scroll_margin_lines < 1000) // workaround bug GH-36
 	  goto too_near_end;
 	}
       rc = SCROLLING_SUCCESS;

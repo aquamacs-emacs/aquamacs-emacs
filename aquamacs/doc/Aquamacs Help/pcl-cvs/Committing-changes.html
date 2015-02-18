@@ -1,0 +1,97 @@
+<html lang="en">
+<head>
+<title>Committing changes - PCL-CVS -- Emacs Front-End to CVS</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="PCL-CVS -- Emacs Front-End to CVS">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Commands.html#Commands" title="Commands">
+<link rel="prev" href="Marking-files.html#Marking-files" title="Marking files">
+<link rel="next" href="Editing-files.html#Editing-files" title="Editing files">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Committing-changes"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Editing-files.html#Editing-files">Editing files</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Marking-files.html#Marking-files">Marking files</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Commands.html#Commands">Commands</a>
+<hr>
+</div>
+
+<h3 class="section">5.6 Committing changes</h3>
+
+<p><a name="index-Committing-changes-58"></a><a name="index-cvs_002dmode_002dcommit-59"></a><a name="index-cvs_002dmode_002dcommit_002dsetup-60"></a><a name="index-c_0040r_007b_002d_002dcommit-files_007d-61"></a><a name="index-C_0040r_007b_002d_002dcommit-files-with-_0040file_007bChangeLog_007d-message_007d-62"></a><a name="index-cvs_002dauto_002drevert_0040r_007b-_0028variable_0029_007d-63"></a><a name="index-Commit-buffer-64"></a><a name="index-Edit-buffer-65"></a><a name="index-Erasing-commit-message-66"></a><a name="index-Reverting-buffers-after-commit-67"></a>
+Committing changes basically works as follows:
+
+     <ol type=1 start=1>
+<li>After having selected the files you want to commit, you type either
+<kbd>c</kbd> or <kbd>C</kbd> which brings up a special buffer
+&lsquo;<samp><span class="samp">*cvs-commit*</span></samp>&rsquo;.
+
+     <li>You type in the log message describing the changes you're about to
+commit (see <a href="Log-Edit-Mode.html#Log-Edit-Mode">Log Edit Mode</a>).
+
+     <li>When you're happy with it, you type <kbd>C-c C-c</kbd> to do the actual
+commit.
+        </ol>
+
+   <p>There's no hidden state, so you can abort the process or pick it up
+again at any time.
+
+   <p><a name="index-log_002dedit_002dconfirm_0040r_007b-_0028variable_0029_007d-68"></a>The set of files actually committed is really decided only during the
+very last step, which is a mixed blessing.  It allows you to go back and
+change your mind about which files to commit, but it also means that you
+might inadvertently change the set of selected files.  To reduce the
+risk of error, <kbd>C-c C-c</kbd> will ask for confirmation if the set of
+selected files has changed between the first step and the last.  You can
+change this last detail with <code>log-edit-confirm</code>.
+
+   <p>As for the difference between <kbd>c</kbd> (i.e. <code>cvs-mode-commit</code>) and
+<kbd>C</kbd> (i.e. <code>cvs-mode-commit-setup</code>) is that the first gets you
+straight to &lsquo;<samp><span class="samp">*cvs-commit*</span></samp>&rsquo; without erasing it or changing anything
+to its content, while the second first erases &lsquo;<samp><span class="samp">*cvs-commit*</span></samp>&rsquo;
+and tries to initialize it with a sane default (it does that by either
+using a template provided by the CVS administrator or by extracting a
+relevant log message from a <samp><span class="file">ChangeLog</span></samp> file).
+
+   <p>If you are editing the files in your Emacs, an automatic
+&lsquo;<samp><span class="samp">revert-buffer</span></samp>&rsquo; will be performed.  (If the file contains
+&lsquo;<samp><span class="samp">$Id$</span></samp>&rsquo; keywords, &lsquo;<samp><span class="samp">cvs commit</span></samp>&rsquo; will write a new file with
+the new values substituted.  The auto-revert makes sure that you get
+them into your buffer.)  The revert will not occur if you have modified
+your buffer, or if &lsquo;<samp><span class="samp">cvs-auto-revert</span></samp>&rsquo; is set to
+&lsquo;<samp><span class="samp">nil</span></samp>&rsquo;.
+
+   </body></html>
+

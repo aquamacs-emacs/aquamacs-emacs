@@ -1,0 +1,125 @@
+<html lang="en">
+<head>
+<title>Idle Completions Mode - Semantic Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Semantic Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Idle-Scheduler.html#Idle-Scheduler" title="Idle Scheduler">
+<link rel="prev" href="Idle-Summary-Mode.html#Idle-Summary-Mode" title="Idle Summary Mode">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the Semantic library and utilities.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2007,
+2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Idle-Completions-Mode"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Idle-Summary-Mode.html#Idle-Summary-Mode">Idle Summary Mode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Idle-Scheduler.html#Idle-Scheduler">Idle Scheduler</a>
+<hr>
+</div>
+
+<h4 class="subsection">2.3.5 Idle Completions Mode</h4>
+
+<p>Semantic Idle Completions mode is a minor mode for performing
+<dfn>code completions</dfn> during idle time.  The completions are
+displayed inline, with keybindings that allow you to cycle through
+different alternatives.
+
+   <p>Semantic Idle Completions mode performs completion based on the
+Semantic Analyzer (see <a href="Analyzer.html#Analyzer">Analyzer</a>).
+
+<div class="defun">
+&mdash; global-semantic-idle-completions-mode: <b>&amp;optional</b><var> arg<a name="index-g_t_0026optional-40"></a></var><br>
+<blockquote><p>This command toggles Semantic Idle Completions mode in every
+<i>Semantic</i>-enabled buffer.  You can also toggle it via the &lsquo;<samp><span class="samp">Show
+Tag Completions</span></samp>&rsquo; menu item in the &lsquo;<samp><span class="samp">Development</span></samp>&rsquo; menu. 
+</p></blockquote></div>
+
+   <p>If the tag at point has at least one completion, Semantic Idle
+Completions mode displays that completion inline&mdash;i.e., as part of
+the buffer text (you can change the display method by customizing
+<code>semantic-complete-inline-analyzer-idle-displayor-class</code>, as
+described below).  The completed part is highlighted, to indicate that
+it is not yet properly inserted into the buffer.  The echo area shows
+the completion, and whether there are other possible completions, like
+this:
+
+<pre class="example">     besselj [1 of 6 matches]
+</pre>
+   <p class="noindent">While the completion is being displayed, the following keybindings
+take effect:
+
+     <dl>
+<dt><kbd>&lt;RET&gt;</kbd><dt><kbd>C-m</kbd><dd>Accept the current completion (<code>semantic-complete-inline-done</code>),
+placing it in the buffer and moving point to the end of the completed
+tag. 
+<br><dt><kbd>M-n</kbd><dd>Select the next possible completion
+(<code>semantic-complete-inline-down</code>).  The new completion is shown
+inline, replacing the old completion. 
+<br><dt><kbd>M-p</kbd><dd>Select the previous possible completion
+(<code>semantic-complete-inline-up</code>). 
+<br><dt><kbd>&lt;TAB&gt;</kbd><br><dt><kbd>C-i</kbd><dd>Accept as much of the completion as possible.  If no additional
+completion can be accepted without ambiguity, select the next possible
+completion (<code>semantic-complete-inline-TAB</code>). 
+<br><dt><kbd>C-g</kbd><dd>Quit without completing (<code>semantic-complete-inline-quit</code>). 
+</dl>
+
+<p class="noindent">You can also exit inline completion by issuing any other Emacs
+command.  The completion text then disappears from the buffer.
+
+<div class="defun">
+&mdash; Command: <b>semantic-complete-analyze-inline-idle</b><var><a name="index-semantic_002dcomplete_002danalyze_002dinline_002didle-41"></a></var><br>
+<blockquote><p>This is the command for performing inline code completion.  It is
+called by Semantic Idle Completions mode during idle time, but you can
+also call it yourself.  It returns immediately, leaving the buffer in
+a state for inline completion. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Option: <b>semantic-complete-inline-analyzer-idle-displayor-class</b><var><a name="index-semantic_002dcomplete_002dinline_002danalyzer_002didle_002ddisplayor_002dclass-42"></a></var><br>
+<blockquote><p>The value of this variable determines how
+<code>semantic-complete-analyze-inline-idle</code> shows its completions. 
+Possible values include:
+
+          <dl>
+<dt><code>semantic-displayor-ghost</code><dd>Display completions &ldquo;inline&rdquo; with the buffer text, as described
+above.  This is the default value.
+
+          <br><dt><code>semantic-displayor-tooltip</code><dd>Display completions in a tooltip.
+
+          <br><dt><code>semantic-displayor-traditional</code><dd>Display completions in a separate window. 
+</dl>
+        </p></blockquote></div>
+
+   </body></html>
+

@@ -1,0 +1,112 @@
+<html lang="en">
+<head>
+<title>Tag Hierarchy Methods - Speedbar: File/Tag summarizing utility</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Speedbar: File/Tag summarizing utility">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customizing.html#Customizing" title="Customizing">
+<link rel="prev" href="Frames-and-Faces.html#Frames-and-Faces" title="Frames and Faces">
+<link rel="next" href="Version-Control.html#Version-Control" title="Version Control">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Tag-Hierarchy-Methods"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Version-Control.html#Version-Control">Version Control</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Frames-and-Faces.html#Frames-and-Faces">Frames and Faces</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customizing.html#Customizing">Customizing</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h3 class="section">6.2 Tag Hierarchy Methods</h3>
+
+<p><a name="index-tag-hierarchy-39"></a><a name="index-tag-groups-40"></a><a name="index-tag-sorting-41"></a>
+When listing tags within a file, it is possible to get an annoyingly
+long list of entries.  Imenu (which generates the tag list in Emacs)
+will group some classes of items automatically.   Even here, however,
+some tag groups can be quite large.
+
+   <p><a name="index-g_t_0040code_007bspeedbar_002dtag_002dhierarchy_002dmethod_007d-42"></a>To solve this problem, tags can be grouped into logical units through a
+hierarchy processor.  The specific variable to use is
+<code>speedbar-tag-hierarchy-method</code>.  There are several methods that
+can be applied in any order.  They are:
+
+     
+<a name="index-g_t_0040code_007bspeedbar_002dtrim_002dwords_002dtag_002dhierarchy_007d-43"></a>
+<dl><dt><code>speedbar-trim-words-tag-hierarchy</code><dd>Find a common prefix for all elements of a group, and trim it off. 
+<a name="index-g_t_0040code_007bspeedbar_002dprefix_002dgroup_002dtag_002dhierarchy_007d-44"></a><br><dt><code>speedbar-prefix-group-tag-hierarchy</code><dd>If a group is too large, place sets of tags into bins based on common
+prefixes. 
+<a name="index-g_t_0040code_007bspeedbar_002dsimple_002dgroup_002dtag_002dhierarchy_007d-45"></a><br><dt><code>speedbar-simple-group-tag-hierarchy</code><dd>Take all items in the top level list not in a group, and stick them into
+a &lsquo;<samp><span class="samp">Tags</span></samp>&rsquo; group. 
+<a name="index-g_t_0040code_007bspeedbar_002dsort_002dtag_002dhierarchy_007d-46"></a><br><dt><code>speedbar-sort-tag-hierarchy</code><dd>Sort all items, leaving groups on top. 
+</dl>
+
+   <p>You can also add your own functions to reorganize tags as you see fit.
+
+   <p>Some other control variables are:
+
+     
+<a name="index-g_t_0040code_007bspeedbar_002dtag_002dgroup_002dname_002dminimum_002dlength_007d-47"></a>
+<dl><dt><code>speedbar-tag-group-name-minimum-length</code><dd>Default value: 4.
+
+     <p>The minimum length of a prefix group name before expanding.  Thus, if
+the <code>speedbar-tag-hierarchy-method</code> includes
+<code>speedbar-prefix-group-tag-hierarchy</code> and one such group's common
+characters is less than this number of characters, then the group name
+will be changed to the form of:
+
+     <pre class="example">          worda to wordb
+</pre>
+     <p>instead of just
+
+     <pre class="example">          word
+</pre>
+     <p>This way we won't get silly looking listings.
+
+     <p><a name="index-g_t_0040code_007bspeedbar_002dtag_002dsplit_002dminimum_002dlength_007d-48"></a><br><dt><code>speedbar-tag-split-minimum-length</code><dd>Default value: 20.
+
+     <p>Minimum length before we stop trying to create sub-lists in tags. 
+This is used by all tag-hierarchy methods that break large lists into
+sub-lists.
+
+     <p><a name="index-g_t_0040code_007bspeedbar_002dtag_002dregroup_002dmaximum_002dlength_007d-49"></a><br><dt><code>speedbar-tag-regroup-maximum-length</code><dd>Default value: 10.
+
+     <p>Maximum length of submenus that are regrouped. 
+If the regrouping option is used, then if two or more short subgroups
+are next to each other, then they are combined until this number of
+items is reached. 
+</dl>
+
+   </body></html>
+

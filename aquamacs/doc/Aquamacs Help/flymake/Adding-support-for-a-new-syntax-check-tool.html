@@ -1,0 +1,103 @@
+<html lang="en">
+<head>
+<title>Adding support for a new syntax check tool - GNU Flymake 0.3</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Flymake 0.3">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Configuring-Flymake.html#Configuring-Flymake" title="Configuring Flymake">
+<link rel="prev" href="Customizable-variables.html#Customizable-variables" title="Customizable variables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for GNU Flymake (version 0.3, April 2004),
+which is a universal on-the-fly syntax checker for GNU Emacs.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Adding-support-for-a-new-syntax-check-tool"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Customizable-variables.html#Customizable-variables">Customizable variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Configuring-Flymake.html#Configuring-Flymake">Configuring Flymake</a>
+<hr>
+</div>
+
+<h3 class="section">4.2 Adding support for a new syntax check tool</h3>
+
+<p><a name="index-Adding-support-for-a-new-syntax-check-tool-13"></a>
+
+<ul class="menu">
+<li><a accesskey="1" href="Example-_002d_002d-Configuring-a-tool-called-directly.html#Example-_002d_002d-Configuring-a-tool-called-directly">Example -- Configuring a tool called directly</a>
+<li><a accesskey="2" href="Example-_002d_002d-Configuring-a-tool-called-via-make.html#Example-_002d_002d-Configuring-a-tool-called-via-make">Example -- Configuring a tool called via make</a>
+</ul>
+
+   <p>Syntax check tools are configured using the
+<code>flymake-allowed-file-name-masks</code> list. Each item of this list
+has the following format:
+
+<pre class="lisp">     (filename-regexp, init-function, cleanup-function, getfname-function)
+</pre>
+     <dl>
+<dt><code>filename-regexp</code><dd>This field is used as a key for locating init/cleanup/getfname
+functions for the buffer.  Items in
+<code>flymake-allowed-file-name-masks</code> are searched sequentially. The
+first item with <code>filename-regexp</code> matching buffer filename is
+selected. If no match is found, <code>flymake-mode</code> is switched off.
+
+     <br><dt><code>init-function</code><dd><code>init-function</code> is required to initialize the syntax check,
+usually by creating a temporary copy of the buffer contents. The
+function must return <code>(list cmd-name arg-list)</code>. If
+<code>init-function</code> returns null, syntax check is aborted, by
+<code>flymake-mode</code> is not switched off.
+
+     <br><dt><code>cleanup-function</code><dd><code>cleanup-function</code> is called after the syntax check process is
+complete and should take care of proper deinitialization, which is
+usually deleting a temporary copy created by the <code>init-function</code>.
+
+     <br><dt><code>getfname-function</code><dd>This function is used for translating filenames reported by the syntax
+check tool into &ldquo;real&rdquo; filenames. Filenames reported by the tool
+will be different from the real ones, as actually the tool works with
+the temporary copy.  In most cases, the default implementation
+provided by Flymake, <code>flymake-get-real-file-name</code>, can be used as
+<code>getfname-function</code>.
+
+   </dl>
+
+   <p>To add support for a new syntax check tool, write corresponding
+<code>init-function</code>, and, optionally <code>cleanup-function</code> and
+<code>getfname-function</code>.  If the format of error messages reported by
+the new tool is not yet supported by Flymake, add a new entry to
+the <code>flymake-err-line-patterns</code> list.
+
+   <p>The following sections contain some examples of configuring Flymake
+support for various syntax check tools.
+
+   </body></html>
+

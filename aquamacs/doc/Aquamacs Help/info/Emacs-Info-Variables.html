@@ -1,0 +1,130 @@
+<html lang="en">
+<head>
+<title>Emacs Info Variables - Info</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Info">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Advanced.html#Advanced" title="Advanced">
+<link rel="prev" href="Create-Info-buffer.html#Create-Info-buffer" title="Create Info buffer">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file describes how to use Info, the on-line, menu-driven GNU
+documentation system.
+
+Copyright (C) 1989, 1992, 1996, 1997, 1998, 1999, 2000, 2001,
+2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License'' in the Emacs manual.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Emacs-Info-Variables"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Create-Info-buffer.html#Create-Info-buffer">Create Info buffer</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Advanced.html#Advanced">Advanced</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h3 class="section">2.6 Emacs Info-mode Variables</h3>
+
+<p>The following variables may modify the behavior of Info-mode in Emacs;
+you may wish to set one or several of these variables interactively,
+or in your init file.  See <a href="../emacs/Examining.html#Examining">Examining and Setting Variables</a>.  The stand-alone Info reader program has its own set of
+variables, described in <a href="../info-stnd/Variables.html#Variables">Manipulating Variables</a>.
+
+     <dl>
+<dt><code>Info-directory-list</code><a name="index-Info_002ddirectory_002dlist-80"></a><dd>The list of directories to search for Info files.  Each element is a
+string (directory name) or <code>nil</code> (try default directory).  If not
+initialized Info uses the environment variable <samp><span class="env">INFOPATH</span></samp> to
+initialize it, or <code>Info-default-directory-list</code> if there is no
+<samp><span class="env">INFOPATH</span></samp> variable in the environment.
+
+     <p>If you wish to customize the Info directory search list for both Emacs
+Info and stand-alone Info, it is best to set the <samp><span class="env">INFOPATH</span></samp>
+environment variable, since that applies to both programs.
+
+     <br><dt><code>Info-additional-directory-list</code><a name="index-Info_002dadditional_002ddirectory_002dlist-81"></a><dd>A list of additional directories to search for Info documentation files. 
+These directories are not searched for merging the <samp><span class="file">dir</span></samp> file.
+
+     <br><dt><code>Info-mode-hook</code><a name="index-Info_002dmode_002dhook-82"></a><dd>Hooks run when <code>Info-mode</code> is called.  By default, it contains
+the hook <code>turn-on-font-lock</code> which enables highlighting of Info
+files.  You can change how the highlighting looks by customizing the
+faces <code>info-node</code>, <code>info-xref</code>, <code>info-xref-visited</code>,
+<code>info-header-xref</code>, <code>info-header-node</code>, <code>info-menu-header</code>,
+<code>info-menu-star</code>, and <code>info-title-</code><var>n</var> (where <var>n</var>
+is the level of the section, a number between 1 and 4).  To customize
+a face, type <kbd>M-x customize-face &lt;RET&gt; </kbd><var>face</var><kbd> &lt;RET&gt;</kbd>,
+where <var>face</var> is one of the face names listed here.
+
+     <br><dt><code>Info-fontify-maximum-menu-size</code><a name="index-Info_002dfontify_002dmaximum_002dmenu_002dsize-83"></a><dd>Maximum size of menu to fontify if <code>font-lock-mode</code> is non-<code>nil</code>.
+
+     <br><dt><code>Info-fontify-visited-nodes</code><a name="index-Info_002dfontify_002dvisited_002dnodes-84"></a><dd>If non-<code>nil</code>, menu items and cross-references pointing to visited
+nodes are displayed in the <code>info-xref-visited</code> face.
+
+     <br><dt><code>Info-use-header-line</code><a name="index-Info_002duse_002dheader_002dline-85"></a><dd>If non-<code>nil</code>, Emacs puts in the Info buffer a header line showing
+the &lsquo;<samp><span class="samp">Next</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Prev</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">Up</span></samp>&rsquo; links.  A header line does
+not scroll with the rest of the buffer, making these links always
+visible.
+
+     <br><dt><code>Info-hide-note-references</code><a name="index-Info_002dhide_002dnote_002dreferences-86"></a><dd>As explained in earlier nodes, the Emacs version of Info normally
+hides some text in menus and cross-references.  You can completely
+disable this feature, by setting this option to <code>nil</code>.  Setting
+it to a value that is neither <code>nil</code> nor <code>t</code> produces an
+intermediate behavior, hiding a limited amount of text, but showing
+all text that could potentially be useful.
+
+     <br><dt><code>Info-scroll-prefer-subnodes</code><a name="index-Info_002dscroll_002dprefer_002dsubnodes-87"></a><dd>If set to a non-<code>nil</code> value, &lt;SPC&gt; and &lt;BACKSPACE&gt; (or
+&lt;DEL&gt;) keys in a menu visit subnodes of the current node before
+scrolling to its end or beginning, respectively.  For example, if the
+node's menu appears on the screen, the next &lt;SPC&gt; moves to a
+subnode indicated by the following menu item.  Setting this option to
+<code>nil</code> results in behavior similar to the stand-alone Info reader
+program, which visits the first subnode from the menu only when you
+hit the end of the current node.  The default is <code>nil</code>.
+
+     <br><dt><code>Info-isearch-search</code><a name="index-Info_002disearch_002dsearch-88"></a><dd>If non-<code>nil</code>, isearch in Info searches through multiple nodes.
+
+     <br><dt><code>Info-enable-active-nodes</code><a name="index-Info_002denable_002dactive_002dnodes-89"></a><dd>When set to a non-<code>nil</code> value, allows Info to execute Lisp code
+associated with nodes.  The Lisp code is executed when the node is
+selected.  The Lisp code to be executed should follow the node
+delimiter (the &lsquo;<samp><span class="samp">DEL</span></samp>&rsquo; character) and an &lsquo;<samp><span class="samp">execute: </span></samp>&rsquo; tag, like
+this:
+
+     <pre class="example">          ^_execute: (message "This is an active node!")
+</pre>
+     </dl>
+
+   </body></html>
+

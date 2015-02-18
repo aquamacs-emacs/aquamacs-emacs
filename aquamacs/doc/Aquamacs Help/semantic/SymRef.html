@@ -1,0 +1,101 @@
+<html lang="en">
+<head>
+<title>SymRef - Semantic Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Semantic Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Using-Semantic.html#Using-Semantic" title="Using Semantic">
+<link rel="prev" href="Speedbar.html#Speedbar" title="Speedbar">
+<link rel="next" href="MRU-Bookmarks.html#MRU-Bookmarks" title="MRU Bookmarks">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the Semantic library and utilities.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2007,
+2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="SymRef"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="MRU-Bookmarks.html#MRU-Bookmarks">MRU Bookmarks</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Speedbar.html#Speedbar">Speedbar</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Using-Semantic.html#Using-Semantic">Using Semantic</a>
+<hr>
+</div>
+
+<h3 class="section">2.6 Symbol References</h3>
+
+<p><a name="index-symref-56"></a>
+<i>Semantic</i> can interface with external <dfn>symbol reference tools</dfn>,
+such as GNU Global and GNU Idutils.  These tools provide information
+about where different tags or symbols appear.
+
+   <p>By default, <i>Semantic</i> tries to look for the best external symbol
+reference tool that can be used.  The supported tools are GNU Global,
+GNU Idutils, CScope, and Grep (the fallback method).  For best
+results, use GNU Global.  However, <i>Semantic</i> does not manage your
+GNU Global tables for you; you must manage them yourself.
+
+<div class="defun">
+&mdash; Variable: <b>semantic-symref-tool</b><var><a name="index-semantic_002dsymref_002dtool-57"></a></var><br>
+<blockquote><p>The value of this variable is a symbol that determines the external
+symbol reference tool to use.  The default value, <code>detect</code>, says
+to look for the best available tool.  Other possible values are
+<code>global</code>, <code>idutils</code>, <code>cscope</code>, and <code>grep</code>.  Note
+that <code>grep</code> is much slower than the others. 
+</p></blockquote></div>
+
+   <p>The commands to display symbol references are <kbd>C-c , g</kbd>
+(<code>semantic-symref-symbol</code> and <kbd>C-c , G</kbd>
+(<code>semantic-symref</code>).  These keybindings are available whenever
+Semantic mode is enabled (see <a href="Semantic-mode-user-commands.html#Semantic-mode-user-commands">Semantic mode user commands</a>).
+
+<div class="defun">
+&mdash; Command: <b>semantic-symref-symbol</b><var> sym<a name="index-semantic_002dsymref_002dsymbol-58"></a></var><br>
+<blockquote><p>This command (normally bound to <kbd>C-c , g</kbd>) prompts for a symbol
+name, and uses an external reference tool to find references to that
+tag. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>semantic-symref</b><var><a name="index-semantic_002dsymref-59"></a></var><br>
+<blockquote><p>This command (normally bound to <kbd>C-c , G</kbd>) uses an external
+reference tool to find references to the current tag. 
+</p></blockquote></div>
+
+   <p>Both <code>semantic-symref-symbol</code> and <code>semantic-symref</code> display
+a list of symbol references in a separate buffer.  The entries are
+organized by file, and by function name.  Typing &lt;RET&gt; on the
+&lsquo;<samp><span class="samp">[+]</span></samp>&rsquo; next to each function name &ldquo;expands&rdquo; that entry, listing
+all references to the target symbol occurring within that function. 
+Typing <kbd>RET</kbd> on a reference line jumps to that reference.
+
+   </body></html>
+

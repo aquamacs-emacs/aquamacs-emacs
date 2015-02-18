@@ -1,0 +1,159 @@
+<html lang="en">
+<head>
+<title>ede-compilation-program - Emacs Development Environment</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Emacs Development Environment">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Compilers.html#Compilers" title="Compilers">
+<link rel="next" href="ede_002dcompiler.html#ede_002dcompiler" title="ede-compiler">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file describes EDE, the Emacs Development Environment.
+
+Copyright (C) 1998, 1999, 2000, 2001, 2004, 2005, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="ede-compilation-program"></a>
+<a name="ede_002dcompilation_002dprogram"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="ede_002dcompiler.html#ede_002dcompiler">ede-compiler</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Compilers.html#Compilers">Compilers</a>
+<hr>
+</div>
+
+<h4 class="subsection">7.8.1 ede-compilation-program</h4>
+
+<p><a name="index-ede_002dcompilation_002dprogram-255"></a>
+     <dl>
+<dt>Inheritance Tree:<dd>
+          <dl>
+<dt><code>eieio-instance-inheritor</code><dd>
+               <dl>
+<dt><code>ede-compilation-program</code><dd>
+                    <dl>
+<dt>Children:<dd>See&nbsp;<a href="ede_002dcompiler.html#ede_002dcompiler">ede-compiler</a>,<!-- /@w --> See&nbsp;<a href="ede_002dlinker.html#ede_002dlinker">ede-linker</a>.<!-- /@w -->
+</dl>
+               </dl>
+          </dl>
+     </dl>
+
+     <dl>
+<dt>Slots:<dd>
+          <dl>
+<dt><code>:parent-instance</code><dd>Type: <code>eieio-instance-inheritor-child</code>
+
+          <p>The parent of this instance. 
+If a slot of this class is reference, and is unbound, then  the parent
+is checked for a value.
+
+          <br><dt><code>:name</code><dd>Type: <code>string</code>
+
+          <p>Name of this type of compiler.
+
+          <br><dt><code>:variables</code><dd>Type: <code>list</code>
+
+          <p>Variables needed in the Makefile for this compiler. 
+An assoc list where each element is (VARNAME . VALUE) where VARNAME
+is a string, and VALUE is either a string, or a list of strings. 
+For example, GCC would define CC=gcc, and emacs would define EMACS=emacs.
+
+          <br><dt><code>:sourcetype</code><dd>Type: <code>list</code>
+
+          <p>A list of <code>ede-sourcecode</code> See <a href="ede_002dsourcecode.html#ede_002dsourcecode">ede-sourcecode</a>. objects this class will handle. 
+This is used to match target objects with the compilers and linkers
+they can use, and which files this object is interested in.
+
+          <br><dt><code>:rules</code><dd>Type: <code>list</code> <br>
+Default Value: <code>nil</code>
+
+          <p>Auxiliary rules needed for this compiler to run. 
+For example, yacc/lex files need additional chain rules, or inferences.
+
+          <br><dt><code>:commands</code><dd>Type: <code>list</code>
+
+          <p>The commands used to execute this compiler. 
+The object which uses this compiler will place these commands after
+it's rule definition.
+
+          <br><dt><code>:autoconf</code><dd>Type: <code>list</code> <br>
+Default Value: <code>nil</code>
+
+          <p>Autoconf function to call if this type of compiler is used. 
+When a project is in Automake mode, this defines the autoconf function to
+call to initialize automake to use this compiler. 
+For example, there may be multiple C compilers, but they all probably
+use the same autoconf form.
+
+          <br><dt><code>:objectextention</code><dd>Type: <code>string</code>
+
+          <p>A string which is the extention used for object files. 
+For example, C code uses .o on unix, and Emacs Lisp uses .elc.
+
+     </dl>
+
+   </dl>
+
+<h5 class="subsubsection">7.8.1.1 Specialized Methods</h5>
+
+<div class="defun">
+&mdash; Method: <b>ede-proj-flush-autoconf</b><var> :AFTER this<a name="index-ede_002dproj_002dflush_002dautoconf-256"></a></var><br>
+<blockquote><p>Flush the configure file (current buffer) to accomodate <var>THIS</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-proj-makefile-insert-rules</b><var> :AFTER this<a name="index-ede_002dproj_002dmakefile_002dinsert_002drules-257"></a></var><br>
+<blockquote><p>Insert rules needed for <var>THIS</var> compiler object. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-proj-makefile-insert-variables</b><var> :AFTER this<a name="index-ede_002dproj_002dmakefile_002dinsert_002dvariables-258"></a></var><br>
+<blockquote><p>Insert variables needed by the compiler <var>THIS</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-proj-makefile-insert-commands</b><var> :AFTER this<a name="index-ede_002dproj_002dmakefile_002dinsert_002dcommands-259"></a></var><br>
+<blockquote><p>Insert the commands needed to use compiler <var>THIS</var>. 
+The object creating makefile rules must call this method for the
+compiler it decides to use after inserting in the rule. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-object-sourcecode</b><var> :AFTER this<a name="index-ede_002dobject_002dsourcecode-260"></a></var><br>
+<blockquote><p>Retrieves the slot <code>sourcetype</code> from an object of class <code>ede-compilation-program</code>
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-proj-tweak-autoconf</b><var> :AFTER this<a name="index-ede_002dproj_002dtweak_002dautoconf-261"></a></var><br>
+<blockquote><p>Tweak the configure file (current buffer) to accomodate <var>THIS</var>. 
+</p></blockquote></div>
+
+   </body></html>
+

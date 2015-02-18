@@ -1,0 +1,425 @@
+<html lang="en">
+<head>
+<title>Searching - The MH-E Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The MH-E Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Tool-Bar.html#Tool-Bar" title="Tool Bar">
+<link rel="next" href="Threading.html#Threading" title="Threading">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is version 8.2 of `The MH-E
+Manual', last updated 2009-06-13.
+
+Copyright (C) 1995, 2001, 2002, 2003, 2005, 2006, 2007, 2008,
+  2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of either:
+
+       a. the GNU Free Documentation License, Version 1.3 or any later
+          version published by the Free Software Foundation; with no
+          Invariant Sections, with the Front-Cover texts being ``A GNU
+          Manual,'' and with the Back-Cover Texts as in (a) below. A
+          copy of the license is included in the section entitled ``GNU
+          Free Documentation License.''
+
+          (a) The FSF's Back-Cover Text is: ``You have the freedom to
+          copy and modify this GNU manual. Buying copies from the FSF
+          supports it in developing GNU and promoting software
+          freedom.''
+
+       b. the GNU General Public License as published by the Free
+          Software Foundation; either version 3, or (at your option)
+          any later version. A copy of the license is included in the
+          section entitled ``GNU General Public License.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Searching"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Threading.html#Threading">Threading</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Tool-Bar.html#Tool-Bar">Tool Bar</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">15 Searching Through Messages</h2>
+
+<p><a name="index-g_t_0040samp_007bSearch_007d-menu-1688"></a><a name="index-menu_002c-_0040samp_007bSearch_007d-1689"></a><a name="index-searching-1690"></a><a name="index-mh_002dsearch-1691"></a><a name="index-F-s-1692"></a>
+Earlier, the command <kbd>F s</kbd> (<code>mh-search</code>) was introduced which
+helps you find messages that lie buried in your folders
+(see <a href="Folders.html#Folders">Folders</a>). This chapter covers this command in more detail. 
+Several commands are used to compose the search criteria and to start
+searching. A couple of them can be found in the &lsquo;<samp><span class="samp">Search</span></samp>&rsquo; menu.
+
+     
+<a name="index-C_002dc-_003f-1693"></a>
+<a name="index-mh_002dhelp-1694"></a>
+<dl><dt><kbd>C-c ?</kbd><dd>Display cheat sheet for the MH-E commands (<code>mh-help</code>). 
+<!--  -->
+<a name="index-g_t_0040samp_007bSearch-_003e-Perform-Search_007d-menu-item-1695"></a><a name="index-menu-item_002c-_0040samp_007bSearch-_003e-Perform-Search_007d-1696"></a><a name="index-C_002dc-C_002dc-1697"></a><a name="index-mh_002dindex_002ddo_002dsearch-1698"></a><br><dt><kbd>C-c C-c</kbd><dd>Find messages using <code>mh-search-program</code>
+(<code>mh-index-do-search</code>). 
+<!--  -->
+<a name="index-g_t_0040samp_007bSearch-_003e-Search-with-pick_007d-menu-item-1699"></a><a name="index-menu-item_002c-_0040samp_007bSearch-_003e-Search-with-pick_007d-1700"></a><a name="index-C_002dc-C_002dp-1701"></a><a name="index-mh_002dpick_002ddo_002dsearch-1702"></a><br><dt><kbd>C-c C-p</kbd><dd>Find messages using <samp><span class="command">pick</span></samp> (<code>mh-pick-do-search</code>). 
+<!--  -->
+<a name="index-C_002dc-_003f-1703"></a><a name="index-mh_002dhelp-1704"></a><br><dt><kbd>C-c ?</kbd><dd>Display cheat sheet for the MH-E commands (<code>mh-help</code>). 
+<!--  -->
+<a name="index-C_002dc-C_002df-C_002da-1705"></a><a name="index-C_002dc-C_002df-a-1706"></a><a name="index-mh_002dto_002dfield-1707"></a><br><dt><kbd>C-c C-f a</kbd><dt><kbd>C-c C-f C-a</kbd><dd>Move to &lsquo;<samp><span class="samp">Mail-Reply-To:</span></samp>&rsquo; header field (<code>mh-to-field</code>). 
+<!--  -->
+<a name="index-C_002dc-C_002df-C_002db-1708"></a><a name="index-C_002dc-C_002df-b-1709"></a><br><dt><kbd>C-c C-f b</kbd><dt><kbd>C-c C-f C-b</kbd><dd>Move to &lsquo;<samp><span class="samp">Bcc:</span></samp>&rsquo; header field (<code>mh-to-field</code>). 
+<!--  -->
+<a name="index-C_002dc-C_002df-C_002dc-1710"></a><a name="index-C_002dc-C_002df-c-1711"></a><br><dt><kbd>C-c C-f c</kbd><dt><kbd>C-c C-f C-c</kbd><dd>Move to &lsquo;<samp><span class="samp">Cc:</span></samp>&rsquo; header field (<code>mh-to-field</code>). 
+<!--  -->
+<a name="index-C_002dc-C_002df-C_002dd-1712"></a><a name="index-C_002dc-C_002df-d-1713"></a><br><dt><kbd>C-c C-f d</kbd><dt><kbd>C-c C-f C-d</kbd><dd>Move to &lsquo;<samp><span class="samp">Dcc:</span></samp>&rsquo; header field (<code>mh-to-field</code>). 
+<!--  -->
+<a name="index-C_002dc-C_002df-C_002df-1714"></a><a name="index-C_002dc-C_002df-f-1715"></a><br><dt><kbd>C-c C-f f</kbd><dt><kbd>C-c C-f C-f</kbd><dd>Move to &lsquo;<samp><span class="samp">Fcc:</span></samp>&rsquo; header field (<code>mh-to-field</code>). 
+<!--  -->
+<a name="index-C_002dc-C_002df-C_002dl-1716"></a><a name="index-C_002dc-C_002df-l-1717"></a><br><dt><kbd>C-c C-f l</kbd><dt><kbd>C-c C-f C-l</kbd><dd>Move to &lsquo;<samp><span class="samp">Mail-Followup-To:</span></samp>&rsquo; header field (<code>mh-to-field</code>). 
+<!--  -->
+<a name="index-C_002dc-C_002df-C_002dm-1718"></a><a name="index-C_002dc-C_002df-m-1719"></a><br><dt><kbd>C-c C-f m</kbd><dt><kbd>C-c C-f C-m</kbd><dd>Move to &lsquo;<samp><span class="samp">From:</span></samp>&rsquo; header field (<code>mh-to-field</code>). 
+<!--  -->
+<a name="index-C_002dc-C_002df-C_002dr-1720"></a><a name="index-C_002dc-C_002df-r-1721"></a><br><dt><kbd>C-c C-f r</kbd><dt><kbd>C-c C-f C-r</kbd><dd>Move to &lsquo;<samp><span class="samp">Reply-To:</span></samp>&rsquo; header field (<code>mh-to-field</code>). 
+<!--  -->
+<a name="index-C_002dc-C_002df-C_002ds-1722"></a><a name="index-C_002dc-C_002df-s-1723"></a><br><dt><kbd>C-c C-f s</kbd><dt><kbd>C-c C-f C-s</kbd><dd>Move to &lsquo;<samp><span class="samp">Subject:</span></samp>&rsquo; header field (<code>mh-to-field</code>). 
+<!--  -->
+<a name="index-C_002dc-C_002df-C_002dt-1724"></a><a name="index-C_002dc-C_002df-t-1725"></a><br><dt><kbd>C-c C-f t</kbd><dt><kbd>C-c C-f C-t</kbd><dd>Move to &lsquo;<samp><span class="samp">To:</span></samp>&rsquo; header field (<code>mh-to-field</code>). 
+</dl>
+
+   <p>Another few commands are available in the MH-Folder buffer resulting
+from a search.
+
+     
+<a name="index-g_t_0040key_007bTAB_007d-1726"></a>
+<a name="index-mh_002dindex_002dnext_002dfolder-1727"></a>
+<dl><dt><kbd>&lt;TAB&gt;</kbd><dd>Jump to the next folder marker (<code>mh-index-next-folder</code>). 
+<!--  -->
+<a name="index-S_002d_0040key_007bTAB_007d-1728"></a><a name="index-mh_002dindex_002dprevious_002dfolder-1729"></a><br><dt><kbd>S-&lt;TAB&gt;</kbd><dd>Jump to the previous folder marker (<code>mh-index-previous-folder</code>). 
+<!--  -->
+<a name="index-v-1730"></a><a name="index-mh_002dindex_002dvisit_002dfolder-1731"></a><br><dt><kbd>v</kbd><dd>Visit original folder from where the message at point was found
+(<code>mh-index-visit-folder</code>). 
+</dl>
+
+   <p><a name="index-g_t_0040samp_007bmh_002dsearch_007d-customization-group-1732"></a><a name="index-customization-group_002c-_0040samp_007bmh_002dsearch_007d-1733"></a>
+There is one option from the &lsquo;<samp><span class="samp">mh-search</span></samp>&rsquo; customization group used
+in searching.
+
+     <dl>
+<dt><code>mh-search-program</code><a name="index-mh_002dsearch_002dprogram-1734"></a><dd>Search program that MH-E shall use (default: &lsquo;<samp><span class="samp">Auto-detect</span></samp>&rsquo;). 
+</dl>
+
+   <p>The following hook is available.
+
+     <dl>
+<dt><code>mh-search-mode-hook</code><a name="index-mh_002dsearch_002dmode_002dhook-1735"></a><dd>Hook run upon entry to <code>mh-search-mode</code> (default: <code>nil</code>). 
+</dl>
+
+   <p>The following face is available.
+
+     <dl>
+<dt><code>mh-search-folder</code><a name="index-mh_002dsearch_002dfolder-1736"></a><dd>Folder heading face in MH-Folder buffers created by searches. 
+</dl>
+
+   <p><a name="index-mh_002dsearch_002dfolder-1737"></a><a name="index-F-s-1738"></a>
+The command <kbd>F s</kbd> (<code>mh-search-folder</code>) helps you find
+messages in your entire corpus of mail. You can search for messages to
+or from a particular person or about a particular subject. In fact,
+you can also search for messages containing selected strings in any
+arbitrary header field or any string found within the messages.
+
+   <p><a name="index-g_t_0040command_007bpick_007d-1739"></a><a name="index-MH-commands_002c-_0040command_007bpick_007d-1740"></a>
+Out of the box, MH-E uses <samp><span class="command">pick</span></samp> to find messages. With a
+little extra effort, you can set an indexing program which rewards you
+with extremely quick results. The drawback is that sometimes the index
+does not contain the words you're looking for. You can still use
+<samp><span class="command">pick</span></samp> in these situations.
+
+   <p>You are prompted for the folder to search. This can be &lsquo;<samp><span class="samp">all</span></samp>&rsquo; to
+search all folders. Note that the search works recursively on the
+listed folder.
+
+   <p><a name="index-MH_002dSearch-mode-1741"></a><a name="index-modes_002c-MH_002dSearch-1742"></a>
+Next, an MH-Search buffer appears where you can enter search criteria.
+
+   <p><table class="cartouche" summary="cartouche" border="1"><tr><td>
+<pre class="smallexample">     From:
+     To:
+     Cc:
+     Date:
+     Subject:
+     --------
+     #
+     
+     
+     
+     
+     
+     
+     
+     
+     --:**  search-pattern   All L7     (MH-Search)---------------------------
+     Type C-c C-c to search messages, C-c C-p to use pick, C-c ? for help
+</pre>
+   </td></tr></table>
+   <i>Search window</i>
+
+   <p><a name="index-g_t_0040command_007bpick_007d-1743"></a><a name="index-MH-commands_002c-_0040command_007bpick_007d-1744"></a>
+Edit this template by entering your search criteria in an appropriate
+header field that is already there, or create a new field yourself. If
+the string you're looking for could be anywhere in a message, then
+place the string underneath the row of dashes.
+
+   <p>As an example, let's say that we want to find messages from Ginnean
+about horseback riding in the Kosciusko National Park (Australia)
+during January, 1994. Normally we would start with a broad search and
+narrow it down if necessary to produce a manageable amount of data,
+but we'll cut to the chase and create a fairly restrictive set of
+criteria as follows:
+
+<pre class="smallexample">     From: ginnean
+     To:
+     Cc:
+     Date: Jan 1994
+     Subject:
+     --------
+     horse
+     kosciusko
+</pre>
+   <p><a name="index-mh_002dto_002dfield-1745"></a><a name="index-C_002dc-C_002df-C_002dt-1746"></a>
+As with MH-Letter mode, MH-Search provides commands like <kbd>C-c C-f
+C-t</kbd> (<code>mh-to-field</code>) to help you fill in the blanks. 
+See <a href="Editing-Message.html#Editing-Message">Editing Message</a>.
+
+   <p><a name="index-F-s-1747"></a><a name="index-mh_002dsearch_002dmode_002dhook-1748"></a>
+If you find that you do the same thing over and over when editing the
+search template, you may wish to bind some shortcuts to keys. This can
+be done with the variable <code>mh-search-mode-hook</code>, which is called
+when <kbd>F s</kbd> is run on a new pattern.
+
+   <p><a name="index-mh_002dindex_002ddo_002dsearch-1749"></a><a name="index-mh_002dpick_002ddo_002dsearch-1750"></a><a name="index-C_002dc-C_002dc-1751"></a><a name="index-C_002dc-C_002dp-1752"></a>
+To perform the search, type <kbd>C-c C-c</kbd> (<code>mh-index-do-search</code>). 
+Sometimes you're searching for text that is either not indexed, or
+hasn't been indexed yet. In this case you can override the default
+method with the pick method by running the command <kbd>C-c C-p</kbd>
+(<code>mh-pick-do-search</code>).
+
+   <p><a name="index-folders_002c-_0040samp_007b_002bmhe_002dindex_007d-1753"></a><a name="index-g_t_0040samp_007b_002bmhe_002dindex_007d-1754"></a><a name="index-mh_002dindex_002dnext_002dfolder-1755"></a><a name="index-mh_002dindex_002dprevious_002dfolder-1756"></a><a name="index-g_t_0040key_007bTAB_007d-1757"></a><a name="index-S_002d_0040key_007bTAB_007d-1758"></a><a name="index-mh_002dsearch_002dfolder-1759"></a>
+The messages that are found are put in a temporary sub-folder of
+&lsquo;<samp><span class="samp">+mhe-index</span></samp>&rsquo; and are displayed in an MH-Folder buffer. This
+buffer is special because it displays messages from multiple folders;
+each set of messages from a given folder has a heading with the folder
+name. The appearance of the heading can be modified by customizing the
+face <code>mh-search-folder</code>. You can jump back and forth between the
+headings using the commands <kbd>&lt;TAB&gt;</kbd>
+(<code>mh-index-next-folder</code>) and <kbd>S-&lt;TAB&gt;</kbd>
+(<code>mh-index-previous-folder</code>).
+
+   <p><a name="index-mh_002dindex_002dvisit_002dfolder-1760"></a><a name="index-mh_002drescan_002dfolder-1761"></a><a name="index-F-r-1762"></a><a name="index-v-1763"></a>
+In addition, the command <kbd>v</kbd> (<code>mh-index-visit-folder</code>) can be
+used to visit the folder of the message at point. Initially, only the
+messages that matched the search criteria are displayed in the folder. 
+While the temporary buffer has its own set of message numbers, the
+actual messages numbers are shown in the visited folder. Thus, the
+command <kbd>v</kbd> is useful to find the actual message number of an
+interesting message, or to view surrounding messages with the command
+<kbd>F r</kbd> <code>mh-rescan-folder</code>. See <a href="Folders.html#Folders">Folders</a>.
+
+   <p><a name="index-mh_002dkill_002dfolder-1764"></a><a name="index-F-k-1765"></a>
+Because this folder is temporary, you'll probably get in the habit of
+killing it when you're done with <kbd>F k</kbd> (<code>mh-kill-folder</code>). 
+See <a href="Folders.html#Folders">Folders</a>.
+
+   <p><a name="index-F-s-1766"></a>
+You can regenerate the results by running <kbd>F s</kbd> with a prefix
+argument.
+
+   <p><a name="index-g_t_0040command_007bprocmail_007d-1767"></a><a name="index-Unix-commands_002c-_0040command_007bprocmail_007d-1768"></a><a name="index-g_t_0040samp_007bX_002dMHE_002dChecksum_003a_007d-header-field-1769"></a><a name="index-header-field_002c-_0040samp_007bX_002dMHE_002dChecksum_003a_007d-1770"></a>
+Note: This command uses an &lsquo;<samp><span class="samp">X-MHE-Checksum:</span></samp>&rsquo; header field to
+cache the MD5 checksum of a message. This means that if an incoming
+message already contains an &lsquo;<samp><span class="samp">X-MHE-Checksum:</span></samp>&rsquo; field, that message
+might not be found by this command. The following <samp><span class="command">procmail</span></samp>
+recipe avoids this problem by renaming the existing header field:
+
+<pre class="smallexample">     :0 wf
+     | formail -R "X-MHE-Checksum" "X-Old-MHE-Checksum"
+</pre>
+   <p>See <a href="Limits.html#Limits">Limits</a>, for an alternative interface to searching.
+
+<h3 class="section">15.1 Configuring Indexed Searches</h3>
+
+<p><a name="index-g_t_0040command_007bgrep_007d-1771"></a><a name="index-g_t_0040command_007bmairix_007d-1772"></a><a name="index-g_t_0040command_007bnamazu_007d-1773"></a><a name="index-g_t_0040command_007bpick_007d-1774"></a><a name="index-g_t_0040command_007bswish_002b_002b_007d-1775"></a><a name="index-g_t_0040command_007bswish_002de_007d-1776"></a><a name="index-Unix-commands_002c-_0040command_007bgrep_007d-1777"></a><a name="index-Unix-commands_002c-_0040command_007bmairix_007d-1778"></a><a name="index-Unix-commands_002c-_0040command_007bnamazu_007d-1779"></a><a name="index-Unix-commands_002c-_0040command_007bpick_007d-1780"></a><a name="index-Unix-commands_002c-_0040command_007bswish_002b_002b_007d-1781"></a><a name="index-Unix-commands_002c-_0040command_007bswish_002de_007d-1782"></a><a name="index-mh_002dsearch-1783"></a><a name="index-F-s-1784"></a><a name="index-mh_002dsearch_002dprogram-1785"></a>
+The command <kbd>F s</kbd> (<code>mh-search</code>) runs the command defined by
+the option <code>mh-search-program</code>. The default value is
+&lsquo;<samp><span class="samp">Auto-detect</span></samp>&rsquo; which means that MH-E will automatically choose one
+of <samp><span class="command">swish++</span></samp>, <samp><span class="command">swish-e</span></samp>, <samp><span class="command">mairix</span></samp>,
+<samp><span class="command">namazu</span></samp>, <samp><span class="command">pick</span></samp> and <samp><span class="command">grep</span></samp> in that order. If,
+for example, you have both <samp><span class="command">swish++</span></samp> and <samp><span class="command">mairix</span></samp>
+installed and you want to use <samp><span class="command">mairix</span></samp>, then you can set this
+option to &lsquo;<samp><span class="samp">mairix</span></samp>&rsquo;.
+
+   <p>The following sub-sections describe how to set up the various indexing
+programs to use with MH-E.
+
+<h4 class="subsection">15.1.1 swish++</h4>
+
+<p><a name="index-g_t_0040command_007bswish_002b_002b_007d-1786"></a><a name="index-Unix-commands_002c-_0040command_007bswish_002b_002b_007d-1787"></a>
+In the examples below, replace <samp><span class="file">/home/user/Mail</span></samp> with the path to
+your MH directory.
+
+   <p>First create the directory <samp><span class="file">/home/user/Mail/.swish++</span></samp>. Then
+create the file <samp><span class="file">/home/user/Mail/.swish++/swish++.conf</span></samp> with the
+following contents:
+
+<pre class="smallexample">     IncludeMeta         Bcc Cc Comments Content-Description From Keywords
+     IncludeMeta         Newsgroups Resent-To Subject To
+     IncludeMeta         Message-Id References In-Reply-To
+     IncludeFile         Mail    *
+     IndexFile           /home/user/Mail/.swish++/swish++.index
+</pre>
+   <p>Use the following command line to generate the swish index. Run this
+daily from cron:
+
+<pre class="smallexample">     find /home/user/Mail -path /home/user/Mail/mhe-index -prune \
+                          -o -path /home/user/Mail/.swish++ -prune \
+                          -o -name "[0-9]*" -print \
+         | index -c /home/user/Mail/.swish++/swish++.conf -
+</pre>
+   <p>This command does not index the folders that hold the results of your
+searches in &lsquo;<samp><span class="samp">+mhe-index</span></samp>&rsquo; since they tend to be ephemeral and the
+original messages are indexed anyway.
+
+   <p><a name="index-g_t_0040command_007bindex_007d-1788"></a><a name="index-Unix-commands_002c-_0040command_007bindex_007d-1789"></a><a name="index-g_t_0040command_007bindex_002b_002b_007d-1790"></a><a name="index-Unix-commands_002c-_0040command_007bindex_002b_002b_007d-1791"></a>
+On some systems (Debian GNU/Linux, for example), use <samp><span class="command">index++</span></samp>
+instead of <samp><span class="command">index</span></samp>.
+
+<h4 class="subsection">15.1.2 swish</h4>
+
+<p><a name="index-g_t_0040command_007bswish_002de_007d-1792"></a><a name="index-Unix-commands_002c-_0040command_007bswish_002de_007d-1793"></a>
+In the examples below, replace <samp><span class="file">/home/user/Mail</span></samp> with the path to
+your MH directory.
+
+   <p>First create the directory <samp><span class="file">/home/user/Mail/.swish</span></samp>. Then create
+the file <samp><span class="file">/home/user/Mail/.swish/config</span></samp> with the following
+contents:
+
+<pre class="smallexample">     DefaultContents TXT*
+     IndexDir /home/user/Mail
+     IndexFile /home/user/Mail/.swish/index
+     IndexName "Mail Index"
+     IndexDescription "Mail Index"
+     IndexPointer "http://nowhere"
+     IndexAdmin "nobody"
+     #MetaNames automatic
+     IndexReport 3
+     FollowSymLinks no
+     UseStemming no
+     IgnoreTotalWordCountWhenRanking yes
+     WordCharacters abcdefghijklmnopqrstuvwxyz0123456789-
+     BeginCharacters abcdefghijklmnopqrstuvwxyz
+     EndCharacters abcdefghijklmnopqrstuvwxyz0123456789
+     IgnoreLimit 50 1000
+     IndexComments 0
+     FileRules filename contains \D
+     FileRules pathname contains /home/user/Mail/.swish
+     FileRules pathname contains /home/user/Mail/mhe-index
+     FileRules filename is index
+</pre>
+   <p>This configuration does not index the folders that hold the results of
+your searches in &lsquo;<samp><span class="samp">+mhe-index</span></samp>&rsquo; since they tend to be ephemeral and
+the original messages are indexed anyway.
+
+   <p>If there are any directories you would like to ignore, append lines
+like the following to <samp><span class="file">config</span></samp>:
+
+<pre class="smallexample">     FileRules pathname contains /home/user/Mail/scripts
+</pre>
+   <p><a name="index-g_t_0040command_007bswish_002de_007d-1794"></a><a name="index-Unix-commands_002c-_0040command_007bswish_002de_007d-1795"></a>
+Use the following command line to generate the swish index. Run this
+daily from cron:
+
+<pre class="smallexample">     swish-e -c /home/user/Mail/.swish/config
+</pre>
+   <h4 class="subsection">15.1.3 mairix</h4>
+
+<p><a name="index-g_t_0040command_007bmairix_007d-1796"></a><a name="index-Unix-commands_002c-_0040command_007bmairix_007d-1797"></a>
+In the examples below, replace <samp><span class="file">/home/user/Mail</span></samp> with the path to
+your MH directory.
+
+   <p>First create the directory <samp><span class="file">/home/user/Mail/.mairix</span></samp>. Then create
+the file <samp><span class="file">/home/user/Mail/.mairix/config</span></samp> with the following
+contents:
+
+<pre class="smallexample">     base=/home/user/Mail
+     
+     # List of folders that should be indexed. 3 dots at the end means there
+     # are subfolders within the folder
+     mh=archive...:inbox:drafts:news:sent:trash
+     
+     vfolder_format=mh
+     database=/home/user/Mail/.mairix/database
+</pre>
+   <p>Use the following command line to generate the mairix index. Run this daily
+from cron:
+
+<pre class="smallexample">     mairix -f /home/user/Mail/.mairix/config
+</pre>
+   <h4 class="subsection">15.1.4 namazu</h4>
+
+<p><a name="index-g_t_0040command_007bnamazu_007d-1798"></a><a name="index-Unix-commands_002c-_0040command_007bnamazu_007d-1799"></a>
+In the examples below, replace <samp><span class="file">/home/user/Mail</span></samp> with the path to
+your MH directory.
+
+   <p>First create the directory <samp><span class="file">/home/user/Mail/.namazu</span></samp>. Then create
+the file <samp><span class="file">/home/user/Mail/.namazu/mknmzrc</span></samp> with the following
+contents:
+
+<pre class="smallexample">     package conf;  # Don't remove this line!
+     $ADDRESS = 'user@localhost';
+     $ALLOW_FILE = "[0-9]*";
+     $EXCLUDE_PATH = "^/home/user/Mail/(mhe-index|spam)";
+</pre>
+   <p>This configuration does not index the folders that hold the results of
+your searches in &lsquo;<samp><span class="samp">+mhe-index</span></samp>&rsquo; since they tend to be ephemeral and
+the original messages are indexed anyway.
+
+   <p>Use the following command line to generate the namazu index. Run this
+daily from cron:
+
+<pre class="smallexample">     mknmz -f /home/user/Mail/.namazu/mknmzrc -O /home/user/Mail/.namazu \
+           -q /home/user/Mail
+</pre>
+   <h4 class="subsection">15.1.5 pick</h4>
+
+<p><a name="index-g_t_0040command_007bpick_007d-1800"></a><a name="index-MH-commands_002c-_0040command_007bpick_007d-1801"></a>
+This search method does not require any setup.
+
+   <p>Read <samp><span class="command">pick</span></samp>(1) or the section
+<a href="http://rand-mh.sourceforge.net/book/mh/finpic.html">Finding Messages with pick</a> in
+the MH book to find out more about how to enter the criteria.
+
+<h4 class="subsection">15.1.6 grep</h4>
+
+<p><a name="index-g_t_0040command_007bgrep_007d-1802"></a><a name="index-Unix-commands_002c-_0040command_007bgrep_007d-1803"></a>
+This search method does not require any setup.
+
+   <p>Unlike the other search methods, this method does not use the
+MH-Search buffer. Instead, you simply enter a regular expression in
+the minibuffer. For help in constructing regular expressions, see your
+man page for <samp><span class="command">grep</span></samp>.
+
+   </body></html>
+

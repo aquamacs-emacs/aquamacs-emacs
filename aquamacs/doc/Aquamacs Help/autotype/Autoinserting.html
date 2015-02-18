@@ -1,0 +1,124 @@
+<html lang="en">
+<head>
+<title>Autoinserting - Features for Automatic Typing</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Features for Automatic Typing">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Inserting-Pairs.html#Inserting-Pairs" title="Inserting Pairs">
+<link rel="next" href="Copyrights.html#Copyrights" title="Copyrights">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1994, 1995, 1999, 2001, 2002, 2003, 2004, 2005,
+2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Autoinserting"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Copyrights.html#Copyrights">Copyrights</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Inserting-Pairs.html#Inserting-Pairs">Inserting Pairs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">6 Autoinserting Text in Empty Files</h2>
+
+<p><a name="index-autoinserting-16"></a>
+<a name="index-auto_002dinsert-17"></a>  <kbd>M-x auto-insert</kbd> will put some predefined text at the beginning of
+the buffer.  The main application for this function, as its name suggests,
+is to have it be called automatically every time an empty, and only an
+empty file is visited.  This is accomplished by putting <code>(add-hook
+'find-file-hook 'auto-insert)</code> into your <samp><span class="file">~/.emacs</span></samp> file
+(see <a href="../emacs/Init-File.html#g_t_0028emacs_0029Init-File">(emacs)Init File</a>).
+
+   <p><a name="index-auto_002dinsert_002dalist-18"></a>  What gets inserted, if anything, is determined by the variable
+<code>auto-insert-alist</code>.  The <span class="sc">car</span>s of this list are each either
+a mode name, making an element applicable when a buffer is in that
+mode.  Or they can be a string, which is a regexp matched against the
+buffer's file name.  In that way different kinds of files that have
+the same mode in Emacs can be distinguished.  The <span class="sc">car</span>s may also
+be cons cells consisting of mode name or regexp as above and an
+additional descriptive string.
+
+   <p>When a matching element is found, the <span class="sc">cdr</span> says what to do.  It may
+be a string, which is a file name, whose contents are to be inserted, if
+that file is found in the directory <code>auto-insert-directory</code> or under a
+absolute file name.  Or it can be a skeleton (see <a href="Skeleton-Language.html#Skeleton-Language">Skeleton Language</a>) to
+be inserted.
+
+   <p>It can also be a function, which allows doing various things.  The function
+can simply insert some text, indeed, it can be skeleton command (see <a href="Using-Skeletons.html#Using-Skeletons">Using Skeletons</a>).  It can be a lambda function which will for example conditionally
+call another function.  Or it can even reset the mode for the buffer. If you
+want to perform several such actions in order, you use a vector, i.e. several
+of the above elements between square brackets (&lsquo;<samp><span class="samp">[...]</span></samp>&rsquo;).
+
+   <p>By default C and C++ headers insert a definition of a symbol derived from
+the filename to prevent multiple inclusions.  C and C++ sources insert an
+include of the header.  Makefiles insert the file makefile.inc if it exists.
+
+   <p>TeX and bibTeX mode files insert the file tex-insert.tex if it exists, while
+LaTeX mode files insert a typical <code>\documentclass</code> frame.  Html
+files insert a skeleton with the usual frame.
+
+   <p>Ada mode files call the Ada header skeleton command.  Emacs lisp
+source files insert the usual header, with a copyright of your
+environment variable <samp><span class="env">$ORGANIZATION</span></samp> or else the FSF, and prompt
+for valid keywords describing the contents.  Files in a <samp><span class="file">bin</span></samp>
+directory for which Emacs could determine no specialized mode
+(see <a href="../emacs/Choosing-Modes.html#g_t_0028emacs_0029Choosing-Modes">(emacs)Choosing Modes</a>) are set to Shell script mode.
+
+   <p><a name="index-define_002dauto_002dinsert-19"></a>  In Lisp (see <a href="../emacs/Init-File.html#g_t_0028emacs_0029Init-File">(emacs)Init File</a>) you can use the function
+<code>define-auto-insert</code> to add to or modify
+<code>auto-insert-alist</code>.  See its documentation with <kbd>C-h f
+define-auto-insert</kbd>.
+
+   <p><a name="index-auto_002dinsert-20"></a>  The variable <code>auto-insert</code> says what to do when <code>auto-insert</code> is
+called non-interactively, e.g. when a newly found file is empty (see above):
+     <dl>
+<dt><code>nil</code><dd>Do nothing. 
+<br><dt><code>t</code><dd>Insert something if possible, i.e. there is a matching entry in
+<code>auto-insert-alist</code>. 
+<br><dt>other<dd>Insert something if possible, but mark as unmodified. 
+</dl>
+
+   <p><a name="index-auto_002dinsert_002dquery-21"></a>  The variable <code>auto-insert-query</code> controls whether to ask about
+inserting something.  When this is <code>nil</code>, inserting is only done with
+<kbd>M-x auto-insert</kbd>.  When this is <code>function</code>, you are queried
+whenever <code>auto-insert</code> is called as a function, such as when Emacs
+visits an empty file and you have set the above-mentioned hook.  Otherwise
+you are alway queried.
+
+   <p><a name="index-auto_002dinsert_002dprompt-22"></a>  When querying, the variable <code>auto-insert-prompt</code>'s value is used as a
+prompt for a y-or-n-type question.  If this includes a &lsquo;<samp><span class="samp">%s</span></samp>&rsquo; construct,
+that is replaced by what caused the insertion rule to be chosen.  This is
+either a descriptive text, the mode-name of the buffer or the regular
+expression that matched the filename.
+
+   </body></html>
+

@@ -1,0 +1,133 @@
+<html lang="en">
+<head>
+<title>ede-proj-target-makefile-program - Emacs Development Environment</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Emacs Development Environment">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Targets.html#Targets" title="Targets">
+<link rel="prev" href="ede_002dproj_002dtarget_002dmakefile_002darchive.html#ede_002dproj_002dtarget_002dmakefile_002darchive" title="ede-proj-target-makefile-archive">
+<link rel="next" href="ede_002dproj_002dtarget_002dmakefile_002dshared_002dobject.html#ede_002dproj_002dtarget_002dmakefile_002dshared_002dobject" title="ede-proj-target-makefile-shared-object">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file describes EDE, the Emacs Development Environment.
+
+Copyright (C) 1998, 1999, 2000, 2001, 2004, 2005, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="ede-proj-target-makefile-program"></a>
+<a name="ede_002dproj_002dtarget_002dmakefile_002dprogram"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="ede_002dproj_002dtarget_002dmakefile_002dshared_002dobject.html#ede_002dproj_002dtarget_002dmakefile_002dshared_002dobject">ede-proj-target-makefile-shared-object</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="ede_002dproj_002dtarget_002dmakefile_002darchive.html#ede_002dproj_002dtarget_002dmakefile_002darchive">ede-proj-target-makefile-archive</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Targets.html#Targets">Targets</a>
+<hr>
+</div>
+
+<h4 class="subsection">7.6.7 ede-proj-target-makefile-program</h4>
+
+<p><a name="index-ede_002dproj_002dtarget_002dmakefile_002dprogram-180"></a>
+     <dl>
+<dt>Inheritance Tree:<dd>
+          <dl>
+<dt><code>eieio-speedbar</code><dd>
+               <dl>
+<dt><code>eieio-speedbar-directory-button</code><dd>
+                    <dl>
+<dt><code>See&nbsp;<a href="ede_002dtarget.html#ede_002dtarget">ede-target</a>.<!-- /@w --></code><dd>
+                         <dl>
+<dt><code>See&nbsp;<a href="ede_002dproj_002dtarget.html#ede_002dproj_002dtarget">ede-proj-target</a>.<!-- /@w --></code><dd>
+                              <dl>
+<dt><code>See&nbsp;<a href="ede_002dproj_002dtarget_002dmakefile.html#ede_002dproj_002dtarget_002dmakefile">ede-proj-target-makefile</a>.<!-- /@w --></code><dd>
+                                   <dl>
+<dt><code>See&nbsp;<a href="ede_002dproj_002dtarget_002dmakefile_002dobjectcode.html#ede_002dproj_002dtarget_002dmakefile_002dobjectcode">ede-proj-target-makefile-objectcode</a>.<!-- /@w --></code><dd>
+                                        <dl>
+<dt><code>ede-proj-target-makefile-program</code><dd>
+                                             <dl>
+<dt>Children:<dd>See&nbsp;<a href="ede_002dproj_002dtarget_002dmakefile_002dshared_002dobject.html#ede_002dproj_002dtarget_002dmakefile_002dshared_002dobject">ede-proj-target-makefile-shared-object</a>.<!-- /@w -->
+</dl>
+                                        </dl>
+                                   </dl>
+                              </dl>
+                         </dl>
+                    </dl>
+               </dl>
+          </dl>
+     </dl>
+
+     <dl>
+<dt>Slots:<dd>
+          <dl>
+<dt><code>:ldlibs</code><dd>Type: <code>list</code> <br>
+Default Value: <code>nil</code>
+
+          <p>Libraries, such as "m" or "Xt" which this program depends on. 
+The linker flag "-l" is automatically prepended.  Do not include a "lib"
+prefix, or a ".so" suffix.
+
+          <p>Note: Currently only used for Automake projects.
+
+          <br><dt><code>:ldflags</code><dd>Type: <code>list</code> <br>
+Default Value: <code>nil</code>
+
+          <p>Additional flags to add when linking this target. 
+Use ldlibs to add addition libraries.  Use this to specify specific
+options to the linker.
+
+          <p>Note: Not currently used.  This bug needs to be fixed.
+
+     </dl>
+
+   </dl>
+
+<h5 class="subsubsection">7.6.7.1 Specialized Methods</h5>
+
+<div class="defun">
+&mdash; Method: <b>project-debug-target</b><var> :AFTER obj<a name="index-project_002ddebug_002dtarget-181"></a></var><br>
+<blockquote><p>Debug a program target <var>OBJ</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-proj-makefile-insert-rules</b><var> :AFTER this<a name="index-ede_002dproj_002dmakefile_002dinsert_002drules-182"></a></var><br>
+<blockquote><p>Insert rules needed by <var>THIS</var> target. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-proj-makefile-insert-automake-post-variables</b><var> :AFTER this<a name="index-ede_002dproj_002dmakefile_002dinsert_002dautomake_002dpost_002dvariables-183"></a></var><br>
+<blockquote><p>Insert bin_PROGRAMS variables needed by target <var>THIS</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-proj-makefile-insert-automake-pre-variables</b><var> :AFTER this<a name="index-ede_002dproj_002dmakefile_002dinsert_002dautomake_002dpre_002dvariables-184"></a></var><br>
+<blockquote><p>Insert bin_PROGRAMS variables needed by target <var>THIS</var>. 
+</p></blockquote></div>
+
+   </body></html>
+

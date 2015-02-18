@@ -890,6 +890,13 @@ do_switch_frame (Lisp_Object frame, int track, int for_deletion, Lisp_Object nor
      the one you're actually typing in.  */
   internal_last_event_frame = Qnil;
 
+  if (NILP (norecord))
+    {
+      block_input();
+      Vframe_list = Fcons (frame, Fdelq (frame, Vframe_list));
+      unblock_input();
+    }
+
   return frame;
 }
 
@@ -910,7 +917,8 @@ redisplay will display FRAME.
 This function returns FRAME, or nil if FRAME has been deleted.  */)
   (Lisp_Object frame, Lisp_Object norecord)
 {
-  return do_switch_frame (frame, 1, 0, norecord);
+  Lisp_Object retval = do_switch_frame (frame, 1, 0, norecord);
+  return retval;
 }
 
 DEFUN ("handle-switch-frame", Fhandle_switch_frame, Shandle_switch_frame, 1, 1, "e",
@@ -1316,7 +1324,6 @@ delete_frame (Lisp_Object frame, Lisp_Object force)
 	   purpose is really to transfer focus.  */
 	Fraise_frame (frame1);
 #endif
-
       do_switch_frame (frame1, 0, 1, Qnil);
       sf = SELECTED_FRAME ();
     }
@@ -1835,7 +1842,7 @@ DEFUN ("visible-frame-list", Fvisible_frame_list, Svisible_frame_list,
 
 DEFUN ("raise-frame", Fraise_frame, Sraise_frame, 0, 1, "",
        doc: /* Bring FRAME to the front, so it occludes any frames it overlaps.
-If FRAME is invisible or iconified, make it visible.
+If FRAME is iconified, make it visible.
 If you don't specify a frame, the selected frame is used.
 If Emacs is displaying on an ordinary terminal or some other device which
 doesn't support multiple overlapping frames, this function selects FRAME.  */)
@@ -1848,7 +1855,7 @@ doesn't support multiple overlapping frames, this function selects FRAME.  */)
   if (FRAME_TERMCAP_P (f))
     /* On a text terminal select FRAME.  */
     Fselect_frame (frame, Qnil);
-  else
+  else if (FRAME_ICONIFIED_P (f))
     /* Do like the documentation says. */
     Fmake_frame_visible (frame);
 
@@ -2885,6 +2892,7 @@ x_set_frame_parameters (struct frame *f, Lisp_Object alist)
 	      if (NATNUMP (param_index)
 		  && (XFASTINT (param_index)
 		      < sizeof (frame_parms)/sizeof (frame_parms[0]))
+		  && FRAME_TERMINAL(f)
                   && FRAME_RIF (f)->frame_parm_handlers[XINT (param_index)])
                 (*(FRAME_RIF (f)->frame_parm_handlers[XINT (param_index)])) (f, val, old_value);
 	    }
@@ -2934,6 +2942,7 @@ x_set_frame_parameters (struct frame *f, Lisp_Object alist)
 	  if (NATNUMP (param_index)
 	      && (XFASTINT (param_index)
 		  < sizeof (frame_parms)/sizeof (frame_parms[0]))
+	      && FRAME_TERMINAL(f)
 	      && FRAME_RIF (f)->frame_parm_handlers[XINT (param_index)])
 	    (*(FRAME_RIF (f)->frame_parm_handlers[XINT (param_index)])) (f, val, old_value);
 	}
@@ -3246,6 +3255,7 @@ x_set_screen_gamma (struct frame *f, Lisp_Object new_value, Lisp_Object old_valu
       if (NATNUMP (parm_index)
 	  && (XFASTINT (parm_index)
 	      < sizeof (frame_parms)/sizeof (frame_parms[0]))
+	  && FRAME_TERMINAL(f)
 	  && FRAME_RIF (f)->frame_parm_handlers[XFASTINT (parm_index)])
 	  (*FRAME_RIF (f)->frame_parm_handlers[XFASTINT (parm_index)])
 	    (f, bgcolor, Qnil);

@@ -7,6 +7,7 @@
 ;;	Scott Bender
 ;;	Christophe de Dinechin
 ;;	Adrian Robert
+;;      David Reitter
 ;; Keywords: terminals
 
 ;; This file is part of GNU Emacs.
@@ -56,6 +57,13 @@
   "GNUstep/Mac OS X specific features."
   :group 'environment)
 
+;; nsterm.m
+(defvar ns-version-string)
+(defvar ns-alternate-modifier)
+(defvar ns-right-alternate-modifier)
+(defvar ns-right-command-modifier)
+(defvar ns-right-control-modifier)
+
 ;;;; Command line argument handling.
 
 (defvar x-invocation-args)
@@ -78,15 +86,31 @@
   (setq x-invocation-args (cdr x-invocation-args)))
 
 (defun ns-parse-geometry (geom)
-  "Parse a Nextstep-style geometry string GEOM.
+  "Parse a Nextstep- or X-style geometry string GEOM.
 Returns an alist of the form ((top . TOP), (left . LEFT) ... ).
 The properties returned may include `top', `left', `height', and `width'."
-  (when (string-match "\\([0-9]+\\)\\( \\([0-9]+\\)\\( \\([0-9]+\\)\
+
+  (or
+   ;; X-Style specification
+   (append
+    (when (string-match "\\([0-9]+\\)x\\([0-9]+\\)" geom)
+      (append
+       (if (match-string 2 geom)
+	   (list (cons 'height (string-to-number (match-string 2 geom)))))
+       (if (match-string 1 geom)
+	   (list (cons 'width (string-to-number (match-string 1 geom)))))))
+    (when (string-match "\\([+-][0-9]+\\)\\([+-][0-9]+\\)" geom)
+      (append
+       (if (match-string 1 geom)
+	   (list (cons 'left (string-to-number (match-string 1 geom)))))
+       (if (match-string 2 geom)
+	   (list (cons 'top (string-to-number (match-string 2 geom))))))))
+
+   ;; NS-Style specification
+   (if (string-match "\\([0-9]+\\)\\( \\([0-9]+\\)\\( \\([0-9]+\\)\
 \\( \\([0-9]+\\) ?\\)?\\)?\\)?"
 		      geom)
-    (apply
-     'append
-     (list
+       (append
       (list (cons 'top (string-to-number (match-string 1 geom))))
       (if (match-string 3 geom)
 	  (list (cons 'left (string-to-number (match-string 3 geom)))))
@@ -159,16 +183,27 @@ The properties returned may include `top', `left', `height', and `width'."
 ;; Special Nextstep-generated events are converted to function keys.  Here
 ;; are the bindings for them.  Note, these keys are actually declared in
 ;; x-setup-function-keys in common-win.
-(define-key global-map [ns-power-off] 'save-buffers-kill-emacs)
-(define-key global-map [ns-open-file] 'ns-find-file)
+(define-key global-map [ns-power-off] 'ns-handle-power-off)
+(define-key global-map [ns-open-file] 'ns-handle-open-file)
 (define-key global-map [ns-open-temp-file] [ns-open-file])
+(define-key global-map [ns-drag-file] 'ns-handle-drag-file)
+(define-key global-map [ns-drag-color] 'ns-set-foreground-at-mouse)
+(define-key global-map [S-ns-drag-color] 'ns-set-background-at-mouse)
+(define-key global-map [ns-drag-text] 'ns-insert-text)
 (define-key global-map [ns-change-font] 'ns-respond-to-change-font)
+(define-key global-map [ns-check-spelling] 'ns-respond-to-find-next-misspelling)
+(define-key global-map [ns-spelling-change] 'ns-respond-to-change-spelling)
 (define-key global-map [ns-open-file-line] 'ns-open-file-select-line)
 (define-key global-map [ns-spi-service-call] 'ns-spi-service-call)
 (define-key global-map [ns-new-frame] 'make-frame)
-(define-key global-map [ns-toggle-toolbar] 'ns-toggle-toolbar)
 (define-key global-map [ns-show-prefs] 'customize)
-
+(define-key global-map [ns-about] 'about-emacs)
+(define-key global-map [ns-toggle-toolbar] 'ns-toggle-toolbar)
+(define-key global-map [ns-toggle-fullscreen] 'ns-toggle-fullscreen)
+(define-key global-map [ns-show-prefs] 'customize)
+(define-key global-map [ns-save-panel-closed] 'ns-handle-save-panel-closed)
+(define-key global-map [ns-application-restore] 'ignore)
+(define-key global-map [ns-application-store-state] 'ignore)
 
 ;; Set up a number of aliases and other layers to pretend we're using
 ;; the Choi/Mitsuharu Carbon port.
@@ -361,7 +396,30 @@ See `ns-insert-working-text'."
     :post-read-conversion 'ns-utf8-nfd-post-read-conversion)
   (set-file-name-coding-system 'utf-8-nfd))
 
+
+(defun ns-handle-save-panel-closed ()
+  "Saves file after NS Save Panel has been closed."
+  (interactive)
+  (if (and ns-save-panel-file
+	   (buffer-live-p ns-save-panel-buffer))
+      (with-current-buffer ns-save-panel-buffer
+	(write-file ns-save-panel-file))
+    (message "File not saved.")))
+
+(defun ns-handle-power-off ()
+  (interactive)
+  (save-buffers-kill-emacs))
+
 ;;;; Inter-app communications support.
+
+
+(defvar ns-input-text)			; nsterm.m
+
+(defun ns-insert-text ()
+  "Insert contents of `ns-input-text' at point."
+  (interactive)
+  (insert ns-input-text)
+  (setq ns-input-text nil))
 
 (defun ns-insert-file ()
   "Insert contents of file `ns-input-file' like insert-file but with less
@@ -371,6 +429,69 @@ prompting.  If file is a directory perform a `find-file' on it."
     (if (file-directory-p f)
         (find-file f)
       (push-mark (+ (point) (cadr (insert-file-contents f)))))))
+
+(make-variable-buffer-local
+ (defvar buffer-odb-parameters nil 
+   "ODB External Editor tokens stored with this buffer."))
+(put 'buffer-odb-parameters 'permanent-local t)
+
+(defun ns-odb-save-function ()
+  (condition-case error-val
+      (ns-send-odb-notification 'saved (current-buffer) buffer-odb-parameters)
+    (error (message "Error during ODB application communication: %s" error-val))))
+(defun ns-odb-kill-function ()
+  (condition-case error-val
+      (ns-send-odb-notification 'closed (current-buffer) buffer-odb-parameters)
+    (error (message "Error during ODB application communication: %s" error-val))))
+
+(defvar ns-input-parms) 			; nsterm.m
+
+(defun ns-handle-drag-file (&optional open-file)
+  "Handle one or more dragged files.
+If OPEN-FILE is non-nil, always open the file."
+  (interactive)
+  (while (car ns-input-file) 
+    (let ((uri (concat "file://" 
+		       (if (file-name-absolute-p (car ns-input-file))
+			   (car ns-input-file)
+			 ;; file may be relative when coming from command line
+			 ;; (NSWorkspace application:openFiles is called then, 
+			 ;; in addition to the command line argument.)
+			 (expand-file-name 
+			  (car ns-input-file)
+			  command-line-default-directory)))))
+      (unwind-protect
+	  (progn
+	    ;; we should really leave it to dnd to 
+	    ;; decide what to do with the file
+	    (require 'dnd)
+	    (let* ((event last-input-event)
+		   (window (or (posn-window (event-start event))
+			       (selected-window)))
+		   action)
+	      ;; (if (memq 'option (mac-ae-keyboard-modifiers ae))
+	      ;; 	(setq action 'copy))
+	      (when (windowp window) (select-window window))
+	      (if open-file
+		  (dnd-open-local-file uri nil)
+		(dnd-handle-one-url window action
+				    uri))
+	      ;; install ODB file save handler
+	      ;; this is installed for completeness - most
+	      ;; applications seem to monitor edited files 
+	      ;; via system means independent of us.
+	      (when ns-input-parms
+		(setq buffer-odb-parameters ns-input-parms)
+		(add-hook 'after-save-hook 'ns-odb-save-function nil 'local)
+		(add-hook 'kill-buffer-hook 'ns-odb-kill-function nil 'local))))
+      (setq ns-input-file (cdr ns-input-file))))))
+
+(defun ns-handle-open-file ()
+  "Handle one or more files to be opened.
+Like `ns-handle-drag-file', but reuse windows unless
+`dnd-open-file-other-window' is non-nil."
+  (interactive)
+  (ns-handle-drag-file t))
 
 (defvar ns-select-overlay nil
   "Overlay used to highlight areas in files requested by Nextstep apps.")
@@ -382,7 +503,7 @@ prompting.  If file is a directory perform a `find-file' on it."
   "Open a buffer containing the file `ns-input-file'.
 Lines are highlighted according to `ns-input-line'."
   (interactive)
-  (ns-find-file)
+  (ns-handle-open-file)
   (cond
    ((and ns-input-line (buffer-modified-p))
     (if ns-select-overlay
@@ -434,7 +555,6 @@ Lines are highlighted according to `ns-input-line'."
      ((string-equal (upcase res) "NO")  nil)
      (t (read res)))))
 
-;; nsterm.m
 
 (declare-function ns-read-file-name "nsfns.m"
 		  (prompt &optional dir mustmatch init dir_only_p))
@@ -550,6 +670,7 @@ the last file dropped is selected."
 (global-set-key [drag-n-drop] 'ns-drag-n-drop)
 (global-set-key [C-drag-n-drop] 'ns-drag-n-drop-other-frame)
 (global-set-key [M-drag-n-drop] 'ns-drag-n-drop-as-text)
+(global-set-key [A-M-drag-n-drop] 'ns-drag-n-drop)
 (global-set-key [C-M-drag-n-drop] 'ns-drag-n-drop-as-text-other-frame)
 
 ;;;; Frame-related functions.
@@ -604,12 +725,23 @@ the last file dropped is selected."
   "Switches the tool bar on and off in frame FRAME.
  If FRAME is nil, the change applies to the selected frame."
   (interactive)
+  (when (= 1 (length (default-value 'tool-bar-map))) ; not yet setup
+      (tool-bar-setup (or frame (selected-frame))))
   (modify-frame-parameters
-   frame (list (cons 'tool-bar-lines
+   (or frame (selected-frame))
+   (list (cons 'tool-bar-lines
 		       (if (> (or (frame-parameter frame 'tool-bar-lines) 0) 0)
 				   0 1)) ))
-  (if (not tool-bar-mode) (tool-bar-mode t)))
+  ;; trigger update of toolbar
+  (force-mode-line-update))
 
+
+(defun ns-toggle-fullscreen (&optional _frame)
+  "Toggles Fullscreen on and off in frame FRAME.
+ If FRAME is nil, the change applies to the selected frame."
+  (interactive)
+  (modify-frame-parameters 
+   nil (list (cons 'fullscreen (if (frame-parameter nil 'fullscreen) nil 'fullboth)))))
 
 ;;;; Dialog-related functions.
 
@@ -675,6 +807,32 @@ come with OS X.
 See the documentation of `create-fontset-from-fontset-spec' for the format.")
 
 (defvar ns-reg-to-script)               ; nsfont.m
+;;;; Spelling panel support.
+
+(autoload 'ns-toggle-spellchecker-panel "flyspell"
+  "Show NSSpellChecker spellingPanel, and call
+ns-highlight-misspelling-and-suggest.  If panel
+is already visible, close it." t) 
+
+(autoload 'ns-highlight-misspelling-and-suggest "flyspell"
+  "Search forward in current buffer for first misspelling, looping if end
+is reached.  If found, set region to the misspelling, apply face
+flyspell-incorrect, and show word in OS X spelling panel" nil)
+
+(defun ns-respond-to-change-spelling (start end)
+  "Respond to changeSpelling: event, expecting ns-spelling-text
+to substitute for selected buffer text."
+  (interactive "r")
+  (if mark-active
+      (delete-region start end))
+  (insert ns-spelling-text))
+
+(defun ns-respond-to-find-next-misspelling ()
+  "Respond to checkSpelling: event.  Also called by Spellchecker
+panel immediately after correcting a word in a buffer."
+  (interactive)
+  (ns-highlight-misspelling-and-suggest)
+  ) 
 
 ;; This maps font registries (not exposed by NS APIs for font selection) to
 ;; Unicode scripts (which can be mapped to Unicode character ranges which are).
@@ -829,40 +987,99 @@ See the documentation of `create-fontset-from-fontset-spec' for the format.")
 
 ;;;; Color support.
 
+
+(defun ns-resolve-remapped-face-in-window (face win)
+  "Not in use.  Currently not fully functional.
+Get face that determines the foreground color."
+  (with-current-buffer (window-buffer win)
+    (let ((result nil)
+	  (fra face-remapping-alist))
+      (while fra
+	(let ((elt (car fra)))
+	  (if (and (eq face (car elt)))
+	      (if (not (face-attribute-relative-p
+			:foreground
+			(face-attribute (cdr elt)
+					:foreground (window-frame win) t)))
+		  (setq result (cdr elt)
+			fra nil))))
+	(setq fra (cdr fra)))
+      result)))
+
 ;; Functions for color panel + drag
 (defun ns-face-at-pos (pos)
-  (let* ((frame (car pos))
-         (frame-pos (cons (cadr pos) (cddr pos)))
-         (window (window-at (car frame-pos) (cdr frame-pos) frame))
-         (window-pos (coordinates-in-window-p frame-pos window))
-         (buffer (window-buffer window))
-         (edges (window-edges window)))
+  (or
+    (let ((p (nth 1 pos)))
+      (cond
+       ((not p)
+	nil)
+       ((eq p 'mode-line)
+	'mode-line)
+       ((eq p 1)
+	'echo-area)
+       ((eq p 'vertical-line)
+	'default)
+       ((eq p 'right-fringe)
+	'fringe)
+       ((eq p 'left-fringe)
+	'fringe)
+       ((eq p (window-point (posn-window pos)))
+	'cursor)
+       ((and mark-active (< (region-beginning) p) (< p (region-end)))
+	'region)
+       (t
+	(let ((faces (get-char-property p 'face (posn-window pos))))
+	  (if (consp faces) (car faces) faces)))))
+    (if (fboundp 'aquamacs-default-face-in-effect)
+	(with-current-buffer (window-buffer (posn-window pos))
+	  (aquamacs-default-face-in-effect)))
+    'default))
+
+(defvar ns-input-color)			; nsterm.m
+
+(defun ns-set-color-at-mouse (event attribute)
+  "Set the color at the mouse location to `ns-input-color'.
+EVENT is a mouse event, and ATTRIBUTE is either
+`foreground-color' or `background-color'."
+  (let ((position (event-end event)))
+    (if (not (windowp (posn-window position)))
+	(error "Position not in text area of window"))
+    (let* ((face (ns-face-at-pos position))
+	   (frame (window-frame (posn-window position)))
+	   (hint nil))
     (cond
-     ((not window-pos)
-      nil)
-     ((eq window-pos 'mode-line)
-      'mode-line)
-     ((eq window-pos 'vertical-line)
-      'default)
-     ((consp window-pos)
-      (with-current-buffer buffer
-        (let ((p (car (compute-motion (window-start window)
-                                      (cons (nth 0 edges) (nth 1 edges))
-                                      (window-end window)
-                                      frame-pos
-                                      (- (window-width window) 1)
-                                      nil
-                                      window))))
-          (cond
-           ((eq p (window-point window))
-            'cursor)
-           ((and mark-active (< (region-beginning) p) (< p (region-end)))
-            'region)
-           (t
-	    (let ((faces (get-char-property p 'face window)))
-	      (if (consp faces) (car faces) faces)))))))
+     ((eq face 'cursor)
+      (modify-frame-parameters frame (list (cons 'cursor-color
+                                                 ns-input-color))))
+     ((not face)
+	(modify-frame-parameters frame (list (cons attribute
+                                                 ns-input-color))))
      (t
-      nil))))
+      (if (eq attribute 'foreground-color)
+	  (progn
+	    (set-face-foreground face ns-input-color frame)
+	    (setq hint (or hint (memq face '(default fringe mode-line)))))
+	(set-face-background face ns-input-color frame))
+      (let ((spec
+	     (list (list t (face-attr-construct face)))))
+	(put face 'customized-face spec)
+	(put face 'saved-face spec)
+	(custom-push-theme 'theme-face face 'user 'set spec)
+	(put face 'face-modified nil))))
+    (message "%s set for %s.%s" (capitalize (symbol-name attribute)) face
+	     (if hint " Hold Option while dragging to set background." "")))))
+
+
+(defun ns-set-foreground-at-mouse (event)
+  "Set the foreground color at the mouse location to `ns-input-color'."
+  (interactive "e")  
+  (ns-set-color-at-mouse event 'foreground-color))
+
+(defun ns-set-background-at-mouse (event)
+  "Set the background color at the mouse location to `ns-input-color'."
+   (interactive "e")
+   (ns-set-color-at-mouse event 'background-color))
+
 
 (defun ns-suspend-error ()
   ;; Don't allow suspending if any of the frames are NS frames.

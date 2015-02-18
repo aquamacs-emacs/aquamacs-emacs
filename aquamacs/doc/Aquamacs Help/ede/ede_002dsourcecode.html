@@ -1,0 +1,147 @@
+<html lang="en">
+<head>
+<title>ede-sourcecode - Emacs Development Environment</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Emacs Development Environment">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Sourcecode.html#Sourcecode" title="Sourcecode">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file describes EDE, the Emacs Development Environment.
+
+Copyright (C) 1998, 1999, 2000, 2001, 2004, 2005, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="ede-sourcecode"></a>
+<a name="ede_002dsourcecode"></a>
+<p>
+Up:&nbsp;<a rel="up" accesskey="u" href="Sourcecode.html#Sourcecode">Sourcecode</a>
+<hr>
+</div>
+
+<h4 class="subsection">7.7.1 ede-sourcecode</h4>
+
+<p><a name="index-ede_002dsourcecode-247"></a>
+     <dl>
+<dt>Inheritance Tree:<dd>
+          <dl>
+<dt><code>eieio-instance-inheritor</code><dd>
+               <dl>
+<dt><code>ede-sourcecode</code><dd>No children
+</dl>
+          </dl>
+     </dl>
+
+     <dl>
+<dt>Slots:<dd>
+          <dl>
+<dt><code>:parent-instance</code><dd>Type: <code>eieio-instance-inheritor-child</code>
+
+          <p>The parent of this instance. 
+If a slot of this class is reference, and is unbound, then  the parent
+is checked for a value.
+
+          <br><dt><code>:name</code><dd>Type: <code>string</code>
+
+          <p>The name of this type of source code. 
+Such as "C" or "Emacs Lisp"
+
+          <br><dt><code>:sourcepattern</code><dd>Type: <code>string</code> <br>
+Default Value: <code>".*"</code>
+
+          <p>Emacs regex matching sourcecode this target accepts.
+
+          <br><dt><code>:auxsourcepattern</code><dd>Type: <code>(or null string)</code> <br>
+Default Value: <code>nil</code>
+
+          <p>Emacs regex matching auxiliary source code this target accepts. 
+Aux source are source code files needed for compilation, which are not comiled
+themselves.
+
+          <br><dt><code>:enable-subdirectories</code><dd>Type: <code>boolean</code> <br>
+Default Value: <code>nil</code>
+
+          <p>Non <code>nil</code> if this sourcecode type uses subdirectores. 
+If sourcecode always lives near the target creating it, this should be nil. 
+If sourcecode can, or typically lives in a subdirectory of the owning
+target, set this to t.
+
+          <br><dt><code>:garbagepattern</code><dd>Type: <code>list</code> <br>
+Default Value: <code>nil</code>
+
+          <p>Shell file regex matching files considered as garbage. 
+This is a list of items added to an <code>rm</code> command when executing a <code>clean</code>
+type directive.
+
+     </dl>
+
+   </dl>
+
+<h5 class="subsubsection">7.7.1.1 Specialized Methods</h5>
+
+<div class="defun">
+&mdash; Method: <b>ede-want-any-files-p</b><var> :AFTER this filenames<a name="index-ede_002dwant_002dany_002dfiles_002dp-248"></a></var><br>
+<blockquote><p>Return non-<code>nil</code> if <var>THIS</var> will accept any files in <var>FILENAMES</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-want-any-source-files-p</b><var> :AFTER this filenames<a name="index-ede_002dwant_002dany_002dsource_002dfiles_002dp-249"></a></var><br>
+<blockquote><p>Return non-<code>nil</code> if <var>THIS</var> will accept any source files in <var>FILENAMES</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-want-any-auxiliary-files-p</b><var> :AFTER this filenames<a name="index-ede_002dwant_002dany_002dauxiliary_002dfiles_002dp-250"></a></var><br>
+<blockquote><p>Return non-<code>nil</code> if <var>THIS</var> will accept any aux files in <var>FILENAMES</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-buffer-header-file</b><var> :AFTER this filename<a name="index-ede_002dbuffer_002dheader_002dfile-251"></a></var><br>
+<blockquote><p>Return a list of file names of header files for <var>THIS</var> with <var>FILENAME</var>. 
+Used to guess header files, but uses the auxsource regular expression. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-want-file-p</b><var> :AFTER this filename<a name="index-ede_002dwant_002dfile_002dp-252"></a></var><br>
+<blockquote><p>Return non-<code>nil</code> if sourcecode definition <var>THIS</var> will take <var>FILENAME</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-want-file-source-p</b><var> :AFTER this filename<a name="index-ede_002dwant_002dfile_002dsource_002dp-253"></a></var><br>
+<blockquote><p>Return non-<code>nil</code> if <var>THIS</var> will take <var>FILENAME</var> as an auxiliary . 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-want-file-auxiliary-p</b><var> :AFTER this filename<a name="index-ede_002dwant_002dfile_002dauxiliary_002dp-254"></a></var><br>
+<blockquote><p>Return non-<code>nil</code> if <var>THIS</var> will take <var>FILENAME</var> as an auxiliary . 
+</p></blockquote></div>
+
+   </body></html>
+

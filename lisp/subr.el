@@ -783,6 +783,25 @@ and then modifies one entry in it."
 
 ;;;; Key binding commands.
 
+(defun subr--check-key-binding (key command)
+  (condition-case nil
+      (let ((b (key-binding key t)))
+	(and b
+	     (if (eq command b)
+		 command
+	       (message "Warning: Key %s already bound to %s %s.  Use `define-key' instead."
+			(key-description key)
+			(cond ((symbolp b) (format "`%s'" b))
+			      ((keymapp b) "a (prefix) keymap or menu")
+			      (t "something else"))
+			(let ((mm
+			       (mapcar
+				(lambda (x)
+				  (car x))
+				(minor-mode-key-binding key))))
+			  (if mm (format "by minor modes %s" mm) ""))))))
+    (error nil)))
+
 (defun global-set-key (key command)
   "Give KEY a global binding as COMMAND.
 COMMAND is the command definition to use; usually it is
@@ -797,7 +816,9 @@ that you make with this function."
   (interactive "KSet key globally: \nCSet key %s to command: ")
   (or (vectorp key) (stringp key)
       (signal 'wrong-type-argument (list 'arrayp key)))
-  (define-key (current-global-map) key command))
+  
+  (define-key (current-global-map) key command)
+  (subr--check-key-binding key command))
 
 (defun local-set-key (key command)
   "Give KEY a local binding as COMMAND.
@@ -815,7 +836,8 @@ cases is shared with all other buffers in the same major mode."
 	(use-local-map (setq map (make-sparse-keymap))))
     (or (vectorp key) (stringp key)
 	(signal 'wrong-type-argument (list 'arrayp key)))
-    (define-key map key command)))
+    (define-key map key command)
+    (subr--check-key-binding key command)))
 
 (defun global-unset-key (key)
   "Remove global binding of KEY.
@@ -1916,9 +1938,10 @@ Value is t if a query was formerly required."
     (or (not process)
         (not (memq (process-status process) '(run stop open listen)))
         (not (process-query-on-exit-flag process))
-        (yes-or-no-p
-	 (format "Buffer %S has a running process; kill it? "
-		 (buffer-name (current-buffer)))))))
+        (not (aquamacs-ask-for-confirmation 
+	      (format "Buffer %S has a running process; keep the buffer? 
+Discarding the buffer would also stop the process." (buffer-name (current-buffer)))
+	      nil "Keep" "Discard"  t 'no-cancel)))))
 
 (add-hook 'kill-buffer-query-functions 'process-kill-buffer-query-function)
 

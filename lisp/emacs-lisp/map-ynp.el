@@ -82,7 +82,6 @@ Returns the number of actions taken."
 	 user-keys mouse-event map prompt char elt def
 	 ;; Non-nil means we should use mouse menus to ask.
 	 use-menus
-	 delayed-switch-frame
          ;; Rebind other-window-scroll-buffer so that subfunctions can set
          ;; it temporarily, without risking affecting the caller.
          (other-window-scroll-buffer other-window-scroll-buffer)
@@ -99,18 +98,22 @@ Returns the number of actions taken."
 	;; Make a list describing a dialog box.
 	(let ((objects (if help (capitalize (nth 1 help))))
 	      (action (if help (capitalize (nth 2 help)))))
-	  (setq map `(("Yes" . act) ("No" . skip)
+	  (setq map `((("Yes" . ?y) . act) 
+		      ((,(format "Do the same with all other%s."
+				 (if help (concat " " (downcase objects))
+				   "s"))
+			. ?!) . suppress)
+		      cancel
 		      ,@(mapcar (lambda (elt)
-				  (cons (with-syntax-table
+				  (cons (cons (with-syntax-table
 					    text-mode-syntax-table
 					  (capitalize (nth 2 elt)))
+					      ;; key equivalent
+					      (nth 1 elt))
 					(vector (nth 1 elt))))
 				action-alist)
-		      (,(if help (concat action " This But No More")
-			  "Do This But No More") . act-and-exit)
-		      (,(if help (concat action " All " objects)
-			  "Do All") . automatic)
-		      ("No For All" . exit))
+		      nil
+		      (("No" . ?n) . skip))
 		use-menus t
 		mouse-event last-nonmenu-event))
       (setq user-keys (if action-alist
@@ -145,7 +148,10 @@ Returns the number of actions taken."
 				     'quit))
 		     ;; Prompt in the echo area.
 		     (let ((cursor-in-echo-area (not no-cursor-in-echo-area))
-			   (message-log-max nil))
+			   (message-log-max nil)
+			   (prompt (if (string-match "\\(.*\\)\n" prompt)
+				       (match-string 1 prompt)
+				     prompt)))
 		       (message (apply 'propertize "%s(y, n, !, ., q, %sor %s) "
 				       minibuffer-prompt-properties)
 				prompt user-keys
@@ -163,7 +169,8 @@ Returns the number of actions taken."
 				(key-description (vector help-char))
 				(single-key-description char)))
 		     (setq def (lookup-key map (vector char))))
-		   (cond ((eq def 'exit)
+
+		   (cond ((or (eq def 'exit) (equal def (cons 'skip 'suppress)))
 			  (setq next (lambda () nil)))
 			 ((eq def 'act)
 			  ;; Act on the object.
@@ -180,7 +187,8 @@ Returns the number of actions taken."
 			 ((eq def 'quit)
 			  (setq quit-flag t)
 			  (funcall try-again))
-			 ((eq def 'automatic)
+			 ((or (eq def 'automatic)
+			      (equal def (cons 'act 'suppress))) 
 			  ;; Act on this and all following objects.
 			  (if (funcall prompter elt)
 			      (progn
@@ -225,6 +233,12 @@ the current %s and exit."
 			  (call-interactively def)
 			  ;; Regurgitated; try again.
 			  (funcall try-again))
+			 ((and (consp def) (eq (cdr def) 'suppress) (symbolp (car def)) (commandp (car def)))
+			  (call-interactively (car def))
+			  (setq actions (1+ actions))
+			  (while (funcall next)
+			    (call-interactively (car def))
+			    (setq actions (1+ actions))))
 			 ((vectorp def)
 			  ;; A user-defined key.
 			  (if (funcall (aref def 0) elt) ;Call its function.
@@ -232,11 +246,24 @@ the current %s and exit."
 			      (setq actions (1+ actions))
 			    ;; Regurgitated; try again.
 			    (funcall try-again)))
+			 ((and (consp def) (eq (cdr def) 'suppress) (vectorp (car def)))
+			  ;; A user-defined key.
+			  (if (funcall (aref (car def) 0) elt) ;Call its function.
+			      ;; The function has eaten this object.
+			      (setq actions (1+ actions))
+			    ;; Regurgitated; try again.
+			    (funcall try-again))
+			  (while (funcall next)
+			    (if (funcall (aref (car def) 0) elt) ;Call its function.
+				;; The function has eaten this object.
+				(setq actions (1+ actions))
+			      ;; Regurgitated; try again.
+			      (funcall try-again))))
 			 ((and (consp char)
 			       (eq (car char) 'switch-frame))
-			  ;; switch-frame event.  Put it off until we're done.
-			  (setq delayed-switch-frame char)
-			  (funcall try-again))
+			  (handle-switch-frame char)
+			  (funcall try-again)
+			  )
 			 (t
 			  ;; Random char.
 			  (message "Type %s for help."
@@ -246,10 +273,7 @@ the current %s and exit."
 			  (funcall try-again))))
 		  (prompt
 		   (funcall actor elt)
-		   (setq actions (1+ actions))))))
-      (if delayed-switch-frame
-	  (setq unread-command-events
-		(cons delayed-switch-frame unread-command-events))))
+		   (setq actions (1+ actions)))))))
     ;; Clear the last prompt from the minibuffer.
     (let ((message-log-max nil))
       (message ""))

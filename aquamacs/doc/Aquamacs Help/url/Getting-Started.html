@@ -1,0 +1,88 @@
+<html lang="en">
+<head>
+<title>Getting Started - URL Programmer's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="URL Programmer's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="index.html#Top" title="Top">
+<link rel="next" href="Retrieving-URLs.html#Retrieving-URLs" title="Retrieving URLs">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the Emacs Lisp URL loading package.
+
+Copyright (C) 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2002,
+2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Getting-Started"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Retrieving-URLs.html#Retrieving-URLs">Retrieving URLs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="index.html#Top">Top</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">1 Getting Started</h2>
+
+<p><a name="index-URLs_002c-definition-1"></a><a name="index-URIs-2"></a>
+<dfn>Uniform Resource Locators</dfn> (URLs) are a specific form of
+<dfn>Uniform Resource Identifiers</dfn> (URI) described in RFC 2396 which
+updates RFC 1738 and RFC 1808.  RFC 2016 defines uniform resource
+agents.
+
+   <p>URIs have the form <var>scheme</var>:<var>scheme-specific-part</var>, where the
+<var>scheme</var>s supported by this library are described below. 
+See <a href="Supported-URL-Types.html#Supported-URL-Types">Supported URL Types</a>.
+
+   <p>FTP, NFS, HTTP, HTTPS, <code>rlogin</code>, <code>telnet</code>, tn3270,
+IRC and gopher URLs all have the form
+
+<pre class="example">     <var>scheme</var>://<span class="roman">[</span><var>userinfo</var>@<span class="roman">]</span><var>hostname</var><span class="roman">[</span>:<var>port</var><span class="roman">]</span><span class="roman">[</span>/<var>path</var><span class="roman">]</span>
+</pre>
+   <p class="noindent">where &lsquo;<samp><span class="samp">[</span></samp>&rsquo; and &lsquo;<samp><span class="samp">]</span></samp>&rsquo; delimit optional parts. 
+<var>userinfo</var> sometimes takes the form <var>username</var>:<var>password</var>
+but you should beware of the security risks of sending cleartext
+passwords.  <var>hostname</var> may be a domain name or a dotted decimal
+address.  If the &lsquo;<samp><span class="samp">:</span><var>port</var></samp>&rsquo; is omitted then the library will
+use the `well known' port for that service when accessing URLs.  With
+the possible exception of <code>telnet</code>, it is rare for ports to be
+specified, and it is possible using a non-standard port may have
+undesired consequences if a different service is listening on that
+port (e.g., an HTTP URL specifying the SMTP port can cause mail to be
+sent). <!-- , but @xref{Other Variables, url-bad-port-list}. -->
+The meaning of the <var>path</var> component depends on the service.
+
+<ul class="menu">
+<li><a accesskey="1" href="Configuration.html#Configuration">Configuration</a>
+<li><a accesskey="2" href="Parsed-URLs.html#Parsed-URLs">Parsed URLs</a>:                  URLs are parsed into vector structures. 
+</ul>
+
+   </body></html>
+

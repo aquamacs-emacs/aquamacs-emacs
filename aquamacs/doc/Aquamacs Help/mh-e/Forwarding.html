@@ -1,0 +1,111 @@
+<html lang="en">
+<head>
+<title>Forwarding - The MH-E Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The MH-E Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Sending-Mail.html#Sending-Mail" title="Sending Mail">
+<link rel="prev" href="Replying.html#Replying" title="Replying">
+<link rel="next" href="Redistributing.html#Redistributing" title="Redistributing">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is version 8.2 of `The MH-E
+Manual', last updated 2009-06-13.
+
+Copyright (C) 1995, 2001, 2002, 2003, 2005, 2006, 2007, 2008,
+  2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of either:
+
+       a. the GNU Free Documentation License, Version 1.3 or any later
+          version published by the Free Software Foundation; with no
+          Invariant Sections, with the Front-Cover texts being ``A GNU
+          Manual,'' and with the Back-Cover Texts as in (a) below. A
+          copy of the license is included in the section entitled ``GNU
+          Free Documentation License.''
+
+          (a) The FSF's Back-Cover Text is: ``You have the freedom to
+          copy and modify this GNU manual. Buying copies from the FSF
+          supports it in developing GNU and promoting software
+          freedom.''
+
+       b. the GNU General Public License as published by the Free
+          Software Foundation; either version 3, or (at your option)
+          any later version. A copy of the license is included in the
+          section entitled ``GNU General Public License.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Forwarding"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Redistributing.html#Redistributing">Redistributing</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Replying.html#Replying">Replying</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Sending-Mail.html#Sending-Mail">Sending Mail</a>
+<hr>
+</div>
+
+<h3 class="section">8.3 Forwarding Mail</h3>
+
+<p><a name="index-g_t_0040command_007bforw_007d-1088"></a><a name="index-draft-1089"></a><a name="index-forwarding-1090"></a><a name="index-MH-commands_002c-_0040command_007bforw_007d-1091"></a><a name="index-mh_002dforward-1092"></a><a name="index-f-1093"></a><a name="index-mh_002dforward_002dhook-1094"></a>
+To forward a message, use the <kbd>f</kbd> (<code>mh-forward</code>) command. You
+are prompted for the &lsquo;<samp><span class="samp">To:</span></samp>&rsquo; and &lsquo;<samp><span class="samp">cc:</span></samp>&rsquo; recipients. You are
+given a draft to edit that looks like it would if you had run the MH
+command <samp><span class="command">forw</span></samp><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>. You can then add some text (see <a href="Editing-Drafts.html#Editing-Drafts">Editing Drafts</a>). 
+You can forward several messages by using a range (see <a href="Ranges.html#Ranges">Ranges</a>). 
+All of the messages in the range are inserted into your draft. The
+hook <code>mh-forward-hook</code> is called on the draft.
+
+   <p><a name="index-g_t_0040file_007b_002emh_005fprofile_007d-1095"></a><a name="index-files_002c-_0040file_007b_002emh_005fprofile_007d-1096"></a><a name="index-MH-profile-component_002c-_0040samp_007bforw_003a_007d-1097"></a><a name="index-g_t_0040samp_007bforw_003a_007d-MH-profile-component-1098"></a><a name="index-mh_002dcompose_002dforward_002das_002dmime_002dflag-1099"></a>
+By default, the option <code>mh-compose-forward-as-mime-flag</code> is on
+which means that the forwarded messages are included as attachments. 
+These are inline attachments so the forwarded message should appear in
+the body of your recipient's mail program. If you would prefer to
+forward your messages verbatim (as text, inline), then turn off this
+option. Forwarding messages verbatim works well for short, textual
+messages, but your recipient won't be able to view any non-textual
+attachments that were in the forwarded message. Be aware that if you
+have &lsquo;<samp><span class="samp">forw: -mime</span></samp>&rsquo; in your MH profile, then forwarded messages
+will always be included as attachments regardless of the settings of
+<code>mh-compose-forward-as-mime-flag</code>.
+
+   <p><a name="index-mh_002dforward_002dsubject_002dformat-1100"></a>
+The format of the &lsquo;<samp><span class="samp">Subject:</span></samp>&rsquo; header field for forwarded messages
+is controlled by the option <code>mh-forward-subject-format</code>. This
+option is a string which includes two escapes (&lsquo;<samp><span class="samp">%s</span></samp>&rsquo;). The first
+&lsquo;<samp><span class="samp">%s</span></samp>&rsquo; is replaced with the sender of the original message, and the
+second one is replaced with the original &lsquo;<samp><span class="samp">Subject:</span></samp>&rsquo;. The default
+value of <code>"%s: %s"</code> takes a message with the header:
+
+<pre class="smallexample">     To: Bill Wohler &lt;wohler@stop.mail-abuse.org&gt;
+     Subject: Re: 49er football
+     From: Greg DesBrisay &lt;gd@stop.mail-abuse.org&gt;
+</pre>
+   <p>and creates a subject header field of:
+
+<pre class="smallexample">     Subject: Greg DesBrisay: Re: 49er football
+</pre>
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> See the section
+<a href="http://rand-mh.sourceforge.net/book/mh/forfor.html">Forwarding Messages: forw</a> in
+the MH book.</p>
+
+   <hr></div>
+
+   </body></html>
+

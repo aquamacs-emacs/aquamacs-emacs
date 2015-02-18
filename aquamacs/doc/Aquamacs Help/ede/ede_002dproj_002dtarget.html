@@ -1,0 +1,260 @@
+<html lang="en">
+<head>
+<title>ede-proj-target - Emacs Development Environment</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Emacs Development Environment">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Targets.html#Targets" title="Targets">
+<link rel="prev" href="ede_002dtarget.html#ede_002dtarget" title="ede-target">
+<link rel="next" href="ede_002dproj_002dtarget_002dmakefile.html#ede_002dproj_002dtarget_002dmakefile" title="ede-proj-target-makefile">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file describes EDE, the Emacs Development Environment.
+
+Copyright (C) 1998, 1999, 2000, 2001, 2004, 2005, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="ede-proj-target"></a>
+<a name="ede_002dproj_002dtarget"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="ede_002dproj_002dtarget_002dmakefile.html#ede_002dproj_002dtarget_002dmakefile">ede-proj-target-makefile</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="ede_002dtarget.html#ede_002dtarget">ede-target</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Targets.html#Targets">Targets</a>
+<hr>
+</div>
+
+<h4 class="subsection">7.6.2 ede-proj-target</h4>
+
+<p><a name="index-ede_002dproj_002dtarget-134"></a>
+     <dl>
+<dt>Inheritance Tree:<dd>
+          <dl>
+<dt><code>eieio-speedbar</code><dd>
+               <dl>
+<dt><code>eieio-speedbar-directory-button</code><dd>
+                    <dl>
+<dt><code>See&nbsp;<a href="ede_002dtarget.html#ede_002dtarget">ede-target</a>.<!-- /@w --></code><dd>
+                         <dl>
+<dt><code>ede-proj-target</code><dd>
+                              <dl>
+<dt>Children:<dd>See&nbsp;<a href="ede_002dproj_002dtarget_002dmakefile.html#ede_002dproj_002dtarget_002dmakefile">ede-proj-target-makefile</a>,<!-- /@w --> ede-proj-target-aux,<!-- /@w --> See&nbsp;<a href="ede_002dproj_002dtarget_002dscheme.html#ede_002dproj_002dtarget_002dscheme">ede-proj-target-scheme</a>.<!-- /@w -->
+</dl>
+                         </dl>
+                    </dl>
+               </dl>
+          </dl>
+     </dl>
+
+     <dl>
+<dt>Slots:<dd>
+          <dl>
+<dt><code>:name</code><dd>Type: <code>string</code>
+
+          <p>Name of this target.
+
+          <br><dt><code>:path</code><dd>Type: <code>string</code>
+
+          <p>The path to the sources of this target. 
+Relative to the path of the project it belongs to.
+
+          <br><dt><code>:auxsource</code><dd>Type: <code>list</code> <br>
+Default Value: <code>nil</code>
+
+          <p>Auxiliary source files included in this target. 
+Each of these is considered equivalent to a source file, but it is not
+distributed, and each should have a corresponding rule to build it.
+
+          <br><dt><code>:compiler</code><dd>Type: <code>(or null symbol)</code> <br>
+Default Value: <code>nil</code>
+
+          <p>The compiler to be used to compile this object. 
+This should be a symbol, which contains the object defining the compiler. 
+This enables save/restore to do so by name, permitting the sharing
+of these compiler resources, and global customization thereof.
+
+          <br><dt><code>:linker</code><dd>Type: <code>(or null symbol)</code> <br>
+Default Value: <code>nil</code>
+
+          <p>The linker to be used to link compiled sources for this object. 
+This should be a symbol, which contains the object defining the linker. 
+This enables save/restore to do so by name, permitting the sharing
+of these linker resources, and global customization thereof.
+
+     </dl>
+
+   </dl>
+
+<h5 class="subsubsection">7.6.2.1 Specialized Methods</h5>
+
+<div class="defun">
+&mdash; Method: <b>project-compile-target</b><var> :AFTER obj &amp;optional command<a name="index-project_002dcompile_002dtarget-135"></a></var><br>
+<blockquote><p>Compile the current target <var>OBJ</var>. 
+Argument <var>COMMAND</var> is the command to use for compiling the target. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>project-debug-target</b><var> :AFTER obj<a name="index-project_002ddebug_002dtarget-136"></a></var><br>
+<blockquote><p>Run the current project target <var>OBJ</var> in a debugger. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-proj-configure-add-missing</b><var> :AFTER this<a name="index-ede_002dproj_002dconfigure_002dadd_002dmissing-137"></a></var><br>
+<blockquote><p>Query if any files needed by <var>THIS</var> provided by automake are missing. 
+Results in &ndash;add-missing being passed to automake. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-proj-flush-autoconf</b><var> :AFTER this<a name="index-ede_002dproj_002dflush_002dautoconf-138"></a></var><br>
+<blockquote><p>Flush the configure file (current buffer) to accomodate <var>THIS</var>. 
+By flushing, remove any cruft that may be in the file.  Subsequent
+calls to <dfn>ede-proj-tweak-autoconf</dfn> can restore items removed by flush. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-proj-makefile-insert-rules</b><var> :AFTER this<a name="index-ede_002dproj_002dmakefile_002dinsert_002drules-139"></a></var><br>
+<blockquote><p>Insert rules needed by <var>THIS</var> target. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>project-remove-file</b><var> :AFTER target file<a name="index-project_002dremove_002dfile-140"></a></var><br>
+<blockquote><p>For <var>TARGET</var>, remove <var>FILE</var>. 
+<var>FILE</var> must be massaged by <dfn>ede-convert-path</dfn>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-proj-configure-create-missing</b><var> :AFTER this<a name="index-ede_002dproj_002dconfigure_002dcreate_002dmissing-141"></a></var><br>
+<blockquote><p>Add any missing files for <var>THIS</var> by creating them. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-proj-makefile-sourcevar</b><var> :AFTER this<a name="index-ede_002dproj_002dmakefile_002dsourcevar-142"></a></var><br>
+<blockquote><p>Return the variable name for <var>THIS</var>'s sources. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-proj-makefile-insert-variables</b><var> :AFTER this &amp;optional moresource<a name="index-ede_002dproj_002dmakefile_002dinsert_002dvariables-143"></a></var><br>
+<blockquote><p>Insert variables needed by target <var>THIS</var>. 
+Optional argument <var>MORESOURCE</var> is a list of additional sources to add to the
+sources variable. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-proj-makefile-insert-automake-post-variables</b><var> :AFTER this<a name="index-ede_002dproj_002dmakefile_002dinsert_002dautomake_002dpost_002dvariables-144"></a></var><br>
+<blockquote><p>Insert variables needed by target <var>THIS</var> in Makefile.am after SOURCES. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-proj-makefile-insert-dist-dependencies</b><var> :AFTER this<a name="index-ede_002dproj_002dmakefile_002dinsert_002ddist_002ddependencies-145"></a></var><br>
+<blockquote><p>Insert any symbols that the DIST rule should depend on. 
+Argument <var>THIS</var> is the target that should insert stuff. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-proj-linkers</b><var> :AFTER obj<a name="index-ede_002dproj_002dlinkers-146"></a></var><br>
+<blockquote><p>List of linkers being used by <var>OBJ</var>. 
+If the <code>linker</code> slot is empty, concoct one on a first match found
+basis for any given type from the <code>availablelinkers</code> slot. 
+Otherwise, return the <code>linker</code> slot. 
+Converts all symbols into the objects to be used. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-proj-makefile-garbage-patterns</b><var> :AFTER this<a name="index-ede_002dproj_002dmakefile_002dgarbage_002dpatterns-147"></a></var><br>
+<blockquote><p>Return a list of patterns that are considered garbage to <var>THIS</var>. 
+These are removed with make clean. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-proj-tweak-autoconf</b><var> :AFTER this<a name="index-ede_002dproj_002dtweak_002dautoconf-148"></a></var><br>
+<blockquote><p>Tweak the configure file (current buffer) to accomodate <var>THIS</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-proj-compilers</b><var> :AFTER obj<a name="index-ede_002dproj_002dcompilers-149"></a></var><br>
+<blockquote><p>List of compilers being used by <var>OBJ</var>. 
+If the <code>compiler</code> slot is empty, concoct one on a first match found
+basis for any given type from the <code>availablecompilers</code> slot. 
+Otherwise, return the <code>compiler</code> slot. 
+Converts all symbols into the objects to be used. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>project-delete-target</b><var> :AFTER this<a name="index-project_002ddelete_002dtarget-150"></a></var><br>
+<blockquote><p>Delete the current target <var>THIS</var> from it's parent project. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-proj-makefile-target-name</b><var> :AFTER this<a name="index-ede_002dproj_002dmakefile_002dtarget_002dname-151"></a></var><br>
+<blockquote><p>Return the name of the main target for <var>THIS</var> target. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>eieio-done-customizing</b><var> :AFTER target<a name="index-eieio_002ddone_002dcustomizing-152"></a></var><br>
+<blockquote><p>Call this when a user finishes customizing this object. 
+Argument <var>TARGET</var> is the project we are completing customization on. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-proj-makefile-insert-user-rules</b><var> :AFTER this<a name="index-ede_002dproj_002dmakefile_002dinsert_002duser_002drules-153"></a></var><br>
+<blockquote><p>Insert user specified rules needed by <var>THIS</var> target. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>project-add-file</b><var> :AFTER this file<a name="index-project_002dadd_002dfile-154"></a></var><br>
+<blockquote><p>Add to target <var>THIS</var> the current buffer represented as <var>FILE</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-proj-makefile-insert-automake-pre-variables</b><var> :AFTER this<a name="index-ede_002dproj_002dmakefile_002dinsert_002dautomake_002dpre_002dvariables-155"></a></var><br>
+<blockquote><p>Insert variables needed by target <var>THIS</var> in Makefile.am before SOURCES. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-proj-makefile-insert-dist-filepatterns</b><var> :AFTER this<a name="index-ede_002dproj_002dmakefile_002dinsert_002ddist_002dfilepatterns-156"></a></var><br>
+<blockquote><p>Insert any symbols that the DIST rule should depend on. 
+Argument <var>THIS</var> is the target that should insert stuff. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-proj-makefile-dependency-files</b><var> :AFTER this<a name="index-ede_002dproj_002dmakefile_002ddependency_002dfiles-157"></a></var><br>
+<blockquote><p>Return a list of source files to convert to dependencies. 
+Argument <var>THIS</var> is the target to get sources from. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-proj-makefile-insert-source-variables</b><var> :AFTER this &amp;optional moresource<a name="index-ede_002dproj_002dmakefile_002dinsert_002dsource_002dvariables-158"></a></var><br>
+<blockquote><p>Insert the source variables needed by <var>THIS</var>. 
+Optional argument <var>MORESOURCE</var> is a list of additional sources to add to the
+sources variable. 
+</p></blockquote></div>
+
+   </body></html>
+

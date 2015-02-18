@@ -1,0 +1,110 @@
+<html lang="en">
+<head>
+<title>Sorting Sequences - Common Lisp Extensions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Common Lisp Extensions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Sequences.html#Sequences" title="Sequences">
+<link rel="prev" href="Searching-Sequences.html#Searching-Sequences" title="Searching Sequences">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the GNU Emacs Common Lisp emulation package.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Sorting-Sequences"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Searching-Sequences.html#Searching-Sequences">Searching Sequences</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Sequences.html#Sequences">Sequences</a>
+<hr>
+</div>
+
+<h3 class="section">10.5 Sorting Sequences</h3>
+
+<div class="defun">
+&mdash; Function: <b>sort*</b><var> seq predicate </var><tt>&amp;key :key</tt><var><a name="index-sort_002a-138"></a></var><br>
+<blockquote><p>This function sorts <var>seq</var> into increasing order as determined
+by using <var>predicate</var> to compare pairs of elements.  <var>predicate</var>
+should return true (non-<code>nil</code>) if and only if its first argument
+is less than (not equal to) its second argument.  For example,
+<code>&lt;</code> and <code>string-lessp</code> are suitable predicate functions
+for sorting numbers and strings, respectively; <code>&gt;</code> would sort
+numbers into decreasing rather than increasing order.
+
+        <p>This function differs from Emacs' built-in <code>sort</code> in that it
+can operate on any type of sequence, not just lists.  Also, it
+accepts a <code>:key</code> argument which is used to preprocess data
+fed to the <var>predicate</var> function.  For example,
+
+     <pre class="example">          (setq data (sort* data 'string-lessp :key 'downcase))
+</pre>
+        <p class="noindent">sorts <var>data</var>, a sequence of strings, into increasing alphabetical
+order without regard to case.  A <code>:key</code> function of <code>car</code>
+would be useful for sorting association lists.  It should only be a
+simple accessor though, it's used heavily in the current
+implementation.
+
+        <p>The <code>sort*</code> function is destructive; it sorts lists by actually
+rearranging the <code>cdr</code> pointers in suitable fashion. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>stable-sort</b><var> seq predicate </var><tt>&amp;key :key</tt><var><a name="index-stable_002dsort-139"></a></var><br>
+<blockquote><p>This function sorts <var>seq</var> <dfn>stably</dfn>, meaning two elements
+which are equal in terms of <var>predicate</var> are guaranteed not to
+be rearranged out of their original order by the sort.
+
+        <p>In practice, <code>sort*</code> and <code>stable-sort</code> are equivalent
+in Emacs Lisp because the underlying <code>sort</code> function is
+stable by default.  However, this package reserves the right to
+use non-stable methods for <code>sort*</code> in the future. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>merge</b><var> type seq1 seq2 predicate </var><tt>&amp;key :key</tt><var><a name="index-merge-140"></a></var><br>
+<blockquote><p>This function merges two sequences <var>seq1</var> and <var>seq2</var> by
+interleaving their elements.  The result sequence, of type <var>type</var>
+(in the sense of <code>concatenate</code>), has length equal to the sum
+of the lengths of the two input sequences.  The sequences may be
+modified destructively.  Order of elements within <var>seq1</var> and
+<var>seq2</var> is preserved in the interleaving; elements of the two
+sequences are compared by <var>predicate</var> (in the sense of
+<code>sort</code>) and the lesser element goes first in the result. 
+When elements are equal, those from <var>seq1</var> precede those from
+<var>seq2</var> in the result.  Thus, if <var>seq1</var> and <var>seq2</var> are
+both sorted according to <var>predicate</var>, then the result will be
+a merged sequence which is (stably) sorted according to
+<var>predicate</var>. 
+</p></blockquote></div>
+
+   </body></html>
+

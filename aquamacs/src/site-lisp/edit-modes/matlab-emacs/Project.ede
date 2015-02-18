@@ -1,0 +1,32 @@
+;; Object ede-proj-project
+;; EDE project file.
+(ede-proj-project "ede-proj-project"
+  :name "matlab-emacs"
+  :version "3.3.0"
+  :file "Project.ede"
+  :targets (list 
+   (ede-proj-target-elisp-autoloads "autoloads"
+    :name "autoloads"
+    :path ""
+    :autoload-file "matlab-load.el"
+    )
+   (ede-proj-target-makefile-miscelaneous "misc"
+    :name "misc"
+    :path ""
+    :source '("ChangeLog" "ChangeLog.old1" "ChangeLog.old2" "INSTALL" "README" "dl_emacs_support.m")
+    )
+   (ede-proj-target-elisp "lisp"
+    :name "lisp"
+    :path ""
+    :source '("matlab.el" "mlint.el" "tlc.el" "matlab-publish.el")
+    :versionsource '("matlab.el")
+    :aux-packages '("eieio")
+    )
+   (ede-proj-target-elisp "cedet"
+    :name "cedet"
+    :path ""
+    :source '("semantic-matlab.el" "semanticdb-matlab.el" "cedet-matlab.el" "company-matlab-shell.el")
+    :aux-packages '("semantic" "semantic-el")
+    )
+   )
+  )

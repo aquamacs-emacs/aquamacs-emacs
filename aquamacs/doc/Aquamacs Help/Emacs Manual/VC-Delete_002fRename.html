@@ -1,0 +1,80 @@
+<html lang="en">
+<head>
+<title>VC Delete/Rename - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Miscellaneous-VC.html#Miscellaneous-VC" title="Miscellaneous VC">
+<link rel="prev" href="Change-Logs-and-VC.html#Change-Logs-and-VC" title="Change Logs and VC">
+<link rel="next" href="Revision-Tags.html#Revision-Tags" title="Revision Tags">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
+
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="VC-Delete%2fRename"></a>
+<a name="VC-Delete_002fRename"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Revision-Tags.html#Revision-Tags">Revision Tags</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Change-Logs-and-VC.html#Change-Logs-and-VC">Change Logs and VC</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Miscellaneous-VC.html#Miscellaneous-VC">Miscellaneous VC</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">28.1.12.2 Deleting and Renaming Version-Controlled Files</h5>
+
+<p><a name="index-renaming-version_002dcontrolled-files-2835"></a>
+     <dl>
+<dt><kbd>M-x vc-delete-file</kbd><dd>Prompt for a file name, delete the file from the working tree, and
+schedule the deletion for committing.
+
+     <br><dt><kbd>M-x vc-rename-file</kbd><dd>Prompt for two file names, <var>VAR</var> and <var>OLD</var>, rename them in the
+working tree, and schedule the renaming for committing. 
+</dl>
+
+   <p><a name="index-vc_002ddelete_002dfile-2836"></a>  If you wish to delete a version-controlled file, use the command
+<kbd>M-x vc-delete-file</kbd>.  This prompts for the file name, and deletes
+it via the version control system.  The file is removed from the
+working tree, and in the VC Directory buffer
+(see <a href="VC-Directory-Mode.html#VC-Directory-Mode">VC Directory Mode</a>),
+it is displayed with the &lsquo;<samp><span class="samp">removed</span></samp>&rsquo; status.  When you commit it,
+the deletion takes effect in the repository.
+
+   <p><a name="index-vc_002drename_002dfile-2837"></a>  To rename a version-controlled file, type <kbd>M-x vc-rename-file</kbd>. 
+This prompts for two arguments: the name of the file you wish to
+rename, and the new name; then it performs the renaming via the
+version control system.  The renaming takes effect immediately in the
+working tree, and takes effect in the repository when you commit the
+renamed file.
+
+   <p>On modern version control systems that have built-in support for
+renaming, the renamed file retains the full change history of the
+original file.  On CVS and older version control systems, the
+<code>vc-rename-file</code> command actually works by creating a copy of the
+old file under the new name, registering it, and deleting the old
+file.  In this case, the change history is not preserved.
+
+   </body></html>
+

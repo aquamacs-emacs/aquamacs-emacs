@@ -1,0 +1,78 @@
+<html lang="en">
+<head>
+<title>Closures - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Functions.html#Functions" title="Functions">
+<link rel="prev" href="Function-Cells.html#Function-Cells" title="Function Cells">
+<link rel="next" href="Obsolete-Functions.html#Obsolete-Functions" title="Obsolete Functions">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
+
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Closures"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Obsolete-Functions.html#Obsolete-Functions">Obsolete Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Function-Cells.html#Function-Cells">Function Cells</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Functions.html#Functions">Functions</a>
+<hr>
+</div>
+
+<h3 class="section">12.9 Closures</h3>
+
+<p>As explained in <a href="Variable-Scoping.html#Variable-Scoping">Variable Scoping</a>, Emacs can optionally enable
+lexical binding of variables.  When lexical binding is enabled, any
+named function that you create (e.g., with <code>defun</code>), as well as
+any anonymous function that you create using the <code>lambda</code> macro
+or the <code>function</code> special form or the <code>#'</code> syntax
+(see <a href="Anonymous-Functions.html#Anonymous-Functions">Anonymous Functions</a>), is automatically converted into a
+<dfn>closure</dfn>.
+
+   <p><a name="index-closure-765"></a>  A closure is a function that also carries a record of the lexical
+environment that existed when the function was defined.  When it is
+invoked, any lexical variable references within its definition use the
+retained lexical environment.  In all other respects, closures behave
+much like ordinary functions; in particular, they can be called in the
+same way as ordinary functions.
+
+   <p>See <a href="Lexical-Binding.html#Lexical-Binding">Lexical Binding</a>, for an example of using a closure.
+
+   <p>Currently, an Emacs Lisp closure object is represented by a list
+with the symbol <code>closure</code> as the first element, a list
+representing the lexical environment as the second element, and the
+argument list and body forms as the remaining elements:
+
+<pre class="example">     ;; <span class="roman">lexical binding is enabled.</span>
+     (lambda (x) (* x x))
+          &rArr; (closure (t) (x) (* x x))
+</pre>
+   <p class="noindent">However, the fact that the internal structure of a closure is
+&ldquo;exposed&rdquo; to the rest of the Lisp world is considered an internal
+implementation detail.  For this reason, we recommend against directly
+examining or altering the structure of closure objects.
+
+   </body></html>
+

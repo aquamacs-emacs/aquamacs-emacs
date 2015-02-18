@@ -1,0 +1,152 @@
+<html lang="en">
+<head>
+<title>Security risks with Emacs - GNU Emacs FAQ</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs FAQ">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Bugs-and-problems.html#Bugs-and-problems" title="Bugs and problems">
+<link rel="prev" href="Shell-mode-loses-the-current-directory.html#Shell-mode-loses-the-current-directory" title="Shell mode loses the current directory">
+<link rel="next" href="Dired-claims-that-no-file-is-on-this-line.html#Dired-claims-that-no-file-is-on-this-line" title="Dired claims that no file is on this line">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+2009, 2010 Free Software Foundation, Inc.
+
+Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
+Reuven M. Lerner
+
+Copyright (C) 1992, 1993 Steven Byrnes
+
+Copyright (C) 1990, 1991, 1992 Joseph Brian Wells
+
+
+     This list of frequently asked questions about GNU Emacs with
+     answers (``FAQ'') may be translated into other languages,
+     transformed into other formats (e.g. Texinfo, Info, WWW, WAIS),
+     and updated with new information.
+
+     The same conditions apply to any derivative of the FAQ as apply to
+     the FAQ itself.  Every copy of the FAQ must include this notice or
+     an approved translation, information on who is currently
+     maintaining the FAQ and how to contact them (including their
+     e-mail address), and information on where the latest version of
+     the FAQ is archived (including FTP information).
+
+     The FAQ may be copied and redistributed under these conditions,
+     except that the FAQ may not be embedded in a larger literary work
+     unless that work itself allows free copying and redistribution.
+
+     [This version has been heavily edited since it was included in the
+     Emacs distribution.]
+-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Security-risks-with-Emacs"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Dired-claims-that-no-file-is-on-this-line.html#Dired-claims-that-no-file-is-on-this-line">Dired claims that no file is on this line</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Shell-mode-loses-the-current-directory.html#Shell-mode-loses-the-current-directory">Shell mode loses the current directory</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Bugs-and-problems.html#Bugs-and-problems">Bugs and problems</a>
+<hr>
+</div>
+
+<h3 class="section">6.10 Are there any security risks in Emacs?</h3>
+
+<p><a name="index-Security-with-Emacs-364"></a><a name="index-g_t_0040samp_007bmovemail_007d-and-security-365"></a><a name="index-g_t_0040code_007bfile_002dlocal_002dvariable_007d-and-security-366"></a><a name="index-Synthetic-X-events-and-security-367"></a><a name="index-X-events-and-security-368"></a>
+     <ul>
+<li>The <samp><span class="file">movemail</span></samp> incident.  (No, this is not a risk.)
+
+     <p>In his book <cite>The Cuckoo's Egg</cite>, Cliff Stoll describes this in
+chapter 4.  The site at LBL had installed the <samp><span class="file">/etc/movemail</span></samp>
+program setuid root.  (As of version 19, <samp><span class="file">movemail</span></samp> is in your
+architecture-specific directory; type <kbd>C-h v exec-directory
+&lt;RET&gt;</kbd> to see what it is.)  Since <code>movemail</code> had not been
+designed for this situation, a security hole was created and users could
+get root privileges.
+
+     <p><code>movemail</code> has since been changed so that this security hole will
+not exist, even if it is installed setuid root.  However,
+<code>movemail</code> no longer needs to be installed setuid root, which
+should eliminate this particular risk.
+
+     <p>We have heard unverified reports that the 1988 Internet worm took
+advantage of this configuration problem.
+
+     <li>The <code>file-local-variable</code> feature.  (Yes, a risk, but easy to
+change.)
+
+     <p>There is an Emacs feature that allows the setting of local values for
+variables when editing a file by including specially formatted text near
+the end of the file.  This feature also includes the ability to have
+arbitrary Emacs Lisp code evaluated when the file is visited. 
+Obviously, there is a potential for Trojan horses to exploit this
+feature.
+
+     <p>As of Emacs 22, Emacs has a list of local variables that are known to
+be safe to set.  If a file tries to set any variable outside this
+list, it asks the user to confirm whether the variables should be set. 
+You can also tell Emacs whether to allow the evaluation of Emacs Lisp
+code found at the bottom of files by setting the variable
+<code>enable-local-eval</code>.
+
+     <p>For more information, see <a href="../emacs/File-Variables.html#File-Variables">File Variables</a>.
+
+     <li>Synthetic X events.  (Yes, a risk; use &lsquo;<samp><span class="samp">MIT-MAGIC-COOKIE-1</span></samp>&rsquo; or
+better.)
+
+     <p>Emacs accepts synthetic X events generated by the <code>SendEvent</code>
+request as though they were regular events.  As a result, if you are
+using the trivial host-based authentication, other users who can open X
+connections to your X workstation can make your Emacs process do
+anything, including run other processes with your privileges.
+
+     <p>The only fix for this is to prevent other users from being able to open
+X connections.  The standard way to prevent this is to use a real
+authentication mechanism, such as &lsquo;<samp><span class="samp">MIT-MAGIC-COOKIE-1</span></samp>&rsquo;.  If using
+the <code>xauth</code> program has any effect, then you are probably using
+&lsquo;<samp><span class="samp">MIT-MAGIC-COOKIE-1</span></samp>&rsquo;.  Your site may be using a superior
+authentication method; ask your system administrator.
+
+     <p>If real authentication is not a possibility, you may be satisfied by
+just allowing hosts access for brief intervals while you start your X
+programs, then removing the access.  This reduces the risk somewhat by
+narrowing the time window when hostile users would have access, but
+<em>does not eliminate the risk</em>.
+
+     <p>On most computers running Unix and X, you enable and disable
+access using the <code>xhost</code> command.  To allow all hosts access to
+your X server, use
+
+     <pre class="example">          xhost +
+</pre>
+     <p class="noindent">at the shell prompt, which (on an HP machine, at least) produces the
+following message:
+
+     <pre class="example">          access control disabled, clients can connect from any host
+</pre>
+     <p>To deny all hosts access to your X server (except those explicitly
+allowed by name), use
+
+     <pre class="example">          xhost -
+</pre>
+     <p>On the test HP computer, this command generated the following message:
+
+     <pre class="example">          access control enabled, only authorized clients can connect
+</pre>
+     </ul>
+
+   </body></html>
+

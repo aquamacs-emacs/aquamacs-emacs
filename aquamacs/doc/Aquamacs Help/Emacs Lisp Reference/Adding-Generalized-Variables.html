@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+<title>Adding Generalized Variables - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Generalized-Variables.html#Generalized-Variables" title="Generalized Variables">
+<link rel="prev" href="Setting-Generalized-Variables.html#Setting-Generalized-Variables" title="Setting Generalized Variables">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
+
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Adding-Generalized-Variables"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Setting-Generalized-Variables.html#Setting-Generalized-Variables">Setting Generalized Variables</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Generalized-Variables.html#Generalized-Variables">Generalized Variables</a>
+<hr>
+</div>
+
+<h4 class="subsection">11.15.2 Defining new <code>setf</code> forms</h4>
+
+<p>This section describes how to define new forms that <code>setf</code> can
+operate on.
+
+<div class="defun">
+&mdash; Macro: <b>gv-define-simple-setter</b><var> name setter &amp;optional fix-return<a name="index-gv_002ddefine_002dsimple_002dsetter-701"></a></var><br>
+<blockquote><p>This macro enables you to easily define <code>setf</code> methods for simple
+cases.  <var>name</var> is the name of a function, macro, or special form. 
+You can use this macro whenever <var>name</var> has a directly
+corresponding <var>setter</var> function that updates it, e.g.,
+<code>(gv-define-simple-setter car setcar)</code>.
+
+        <p>This macro translates a call of the form
+
+     <pre class="example">          (setf (<var>name</var> <var>args</var>...) <var>value</var>)
+</pre>
+        <p>into
+     <pre class="example">          (<var>setter</var> <var>args</var>... <var>value</var>)
+</pre>
+        <p class="noindent">Such a <code>setf</code> call is documented to return <var>value</var>.  This is
+no problem with, e.g., <code>car</code> and <code>setcar</code>, because
+<code>setcar</code> returns the value that it set.  If your <var>setter</var>
+function does not return <var>value</var>, use a non-<code>nil</code> value for
+the <var>fix-return</var> argument of <code>gv-define-simple-setter</code>.  This
+expands into something equivalent to
+     <pre class="example">          (let ((temp <var>value</var>))
+            (<var>setter</var> <var>args</var>... temp)
+            temp)
+</pre>
+        <p>so ensuring that it returns the correct result. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>gv-define-setter</b><var> name arglist &amp;rest body<a name="index-gv_002ddefine_002dsetter-702"></a></var><br>
+<blockquote><p>This macro allows for more complex <code>setf</code> expansions than the
+previous form.  You may need to use this form, for example, if there
+is no simple setter function to call, or if there is one but it
+requires different arguments to the place form.
+
+        <p>This macro expands the form
+<code>(setf (</code><var>name</var> <var>args</var><code>...) </code><var>value</var><code>)</code> by
+first binding the <code>setf</code> argument forms
+<code>(</code><var>value</var> <var>args</var><code>...)</code> according to <var>arglist</var>,
+and then executing <var>body</var>.  <var>body</var> should return a Lisp
+form that does the assignment, and finally returns the value that was
+set.  An example of using this macro is:
+
+     <pre class="example">          (gv-define-setter caar (val x) `(setcar (car ,x) ,val))
+</pre>
+        </blockquote></div>
+
+   <p><a name="index-gv_002ddefine_002dexpander-703"></a><a name="index-gv_002dletplace-704"></a><!-- FIXME?  Not sure what or how much to say about these. -->
+<!-- See cl.texi for an example of using gv-letplace. -->
+For more control over the expansion, see the macro <code>gv-define-expander</code>. 
+The macro <code>gv-letplace</code> can be useful in defining macros that
+perform similarly to <code>setf</code>; for example, the <code>incf</code> macro
+of Common Lisp.  Consult the source file <samp><span class="file">gv.el</span></samp> for more details.
+
+   <p><a name="index-CL-note_002d_002d_002dno-_0040code_007bsetf_007d-functions-705"></a><blockquote>
+<b>Common Lisp note:</b> Common Lisp defines another way to specify the
+<code>setf</code> behavior of a function, namely &ldquo;<code>setf</code> functions&rdquo;,
+whose names are lists <code>(setf </code><var>name</var><code>)</code> rather than symbols. 
+For example, <code>(defun (setf foo) ...)</code> defines the function
+that is used when <code>setf</code> is applied to <code>foo</code>.  Emacs does
+not support this.  It is a compile-time error to use <code>setf</code> on a
+form that has not already had an appropriate expansion defined.  In
+Common Lisp, this is not an error since the function <code>(setf
+</code><var>func</var><code>)</code> might be defined later. 
+</blockquote>
+   <!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 1990-1995, 1998-1999, 2001-2013 Free Software -->
+<!-- Foundation, Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+
+   </body></html>
+

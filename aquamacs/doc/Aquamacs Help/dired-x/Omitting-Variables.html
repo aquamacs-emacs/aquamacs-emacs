@@ -1,0 +1,134 @@
+<html lang="en">
+<head>
+<title>Omitting Variables - Dired Extra Version 2 User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Dired Extra Version 2 User's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Omitting-Files-in-Dired.html#Omitting-Files-in-Dired" title="Omitting Files in Dired">
+<link rel="next" href="Omitting-Examples.html#Omitting-Examples" title="Omitting Examples">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1994, 1995, 1999, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Omitting-Variables"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Omitting-Examples.html#Omitting-Examples">Omitting Examples</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Omitting-Files-in-Dired.html#Omitting-Files-in-Dired">Omitting Files in Dired</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h3 class="section">3.1 Omitting Variables</h3>
+
+<p><a name="index-Customizing-file-omitting-12"></a>The following variables can be used to customize omitting.
+
+     
+<a name="index-dired_002domit_002dmode-13"></a>
+<dl><dt><code>dired-omit-mode</code><dd>
+Default: <code>nil</code>
+
+     <p><a name="index-How-to-make-omitting-the-default-in-Dired-14"></a>If non-<code>nil</code>, &ldquo;uninteresting&rdquo; files are not listed. 
+Uninteresting files are those whose files whose names match regexp
+<code>dired-omit-files</code>, plus those ending with extensions in
+<code>dired-omit-extensions</code>.  <kbd>M-o</kbd> (<code>dired-omit-mode</code>)
+toggles its value, which is buffer-local.  Put
+
+     <pre class="example">          (dired-omit-mode 1)
+</pre>
+     <p class="noindent">inside your <code>dired-mode-hook</code> to have omitting initially turned on in
+<em>every</em> Dired buffer (see <a href="Installation.html#Installation">Installation</a>).  You can then use <kbd>M-o</kbd> to
+unomit in that buffer.
+
+     <p>To enable omitting automatically only in certain directories one can use Dired
+Local Variables and put
+
+     <pre class="example">          Local Variables:
+          dired-omit-mode: t
+          End:
+</pre>
+     <p class="noindent">into a file <samp><span class="file">.dired</span></samp> (the default value of
+<code>dired-local-variables-file</code>) in that directory (see <a href="Local-Variables.html#Local-Variables">Local Variables</a>).
+
+          
+<a name="index-dired_002domit_002dhere_002dalways-15"></a>
+<dl><dt><code>dired-omit-here-always</code><dd>
+This is an interactive function that creates a local variables file exactly
+like the example above (if it does not already exist) in the file
+<code>dired-local-variables-file</code> in the current directory and then refreshes
+the directory listing (see <a href="Local-Variables.html#Local-Variables">Local Variables</a>). 
+</dl>
+
+     <p><a name="index-dired_002domit_002dfiles-16"></a><br><dt><code>dired-omit-files</code><dd>
+Default: <code>"^#\\|\\.$"</code>
+
+     <p>Files whose names match this buffer-local regexp will not be displayed. 
+This only has effect when <code>dired-omit-mode</code>'s value is <code>t</code>.
+
+     <p>The default value omits the special directories <samp><span class="file">.</span></samp> and <samp><span class="file">..</span></samp>  and
+autosave files (plus other files ending in <samp><span class="file">.</span></samp>) (see <a href="Omitting-Examples.html#Omitting-Examples">Omitting Examples</a>).
+
+     <p><a name="index-dired_002domit_002dextensions-17"></a><br><dt><code>dired-omit-extensions</code><dd>
+Default: The elements of <code>completion-ignored-extensions</code>,
+<code>dired-latex-unclean-extensions</code>, <code>dired-bibtex-unclean-extensions</code>
+and <code>dired-texinfo-unclean-extensions</code>.
+
+     <p>If non-<code>nil</code>, a list of extensions (strings) to omit from Dired listings. 
+Its format is the same as that of <code>completion-ignored-extensions</code>.
+
+     <p><a name="index-dired_002domit_002dlocalp-18"></a><br><dt><code>dired-omit-localp</code><dd>
+Default:  <code>no-dir</code>
+
+     <p>The <var>localp</var> argument <code>dired-omit-expunge</code> passes to
+<code>dired-get-filename</code>.  If it is <code>no-dir</code>, omitting is much faster,
+but you can only match against the non-directory part of the file name.  Set it
+to <code>nil</code> if you need to match the whole file name or <code>t</code> to match the
+file name relative to the buffer's top-level directory.
+
+     <br><dt><code>dired-omit-marker-char</code><dd><a name="index-dired_002domit_002dmarker_002dchar-19"></a><a name="index-Omitting-additional-files-20"></a>Default: <kbd>C-o</kbd>
+
+     <p>Temporary marker used by Dired to implement omitting.  Should never be used
+as marker by the user or other packages.  There is one exception to this rule:
+by adding
+
+     <pre class="example">          (setq dired-mark-keys "\C-o")
+          ;; i.e., the value of dired-omit-marker-char
+          ;; (which is not defined yet)
+</pre>
+     <p class="noindent">to your <samp><span class="file">~/.emacs</span></samp>, you can bind the <kbd>C-o</kbd> key to insert a
+<kbd>C-o</kbd> marker, thus causing these files to be omitted in addition to the
+usually omitted files.  Unfortunately the files you omitted manually this way
+will show up again after reverting the buffer, unlike the others.
+
+   </dl>
+
+   </body></html>
+

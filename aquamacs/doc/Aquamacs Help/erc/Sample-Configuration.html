@@ -1,0 +1,134 @@
+<html lang="en">
+<head>
+<title>Sample Configuration - ERC Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="ERC Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Advanced-Usage.html#Advanced-Usage" title="Advanced Usage">
+<link rel="prev" href="Connecting.html#Connecting" title="Connecting">
+<link rel="next" href="Options.html#Options" title="Options">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for ERC version 5.3.
+
+Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     All Emacs Lisp code contained in this document may be used,
+     distributed, and modified without restriction.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Sample-Configuration"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Options.html#Options">Options</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Connecting.html#Connecting">Connecting</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Advanced-Usage.html#Advanced-Usage">Advanced Usage</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h3 class="section">7.2 Sample Configuration</h3>
+
+<p><a name="index-configuration_002c-sample-55"></a>
+Here is an example of configuration settings for ERC.  This can go into
+your Emacs configuration file.  Everything after the <code>(require
+'erc)</code> command can optionally go into <samp><span class="file">~/.emacs.d/.ercrc.el</span></samp>.
+
+<pre class="lisp">     ;;; Sample ERC configuration
+     
+     ;; Add the ERC directory to load path -- you don't need this if you are
+     ;; using the version of ERC that comes with Emacs
+     (add-to-list 'load-path "~/elisp/erc")
+     
+     ;; Load ERC
+     (require 'erc)
+     
+     ;; Load authentication info from an external source.  Put sensitive
+     ;; passwords and the like in here.
+     (load "~/.emacs.d/.erc-auth")
+     
+     ;; This is an example of how to make a new command.  Type "/uptime" to
+     ;; use it.
+     (defun erc-cmd-UPTIME (&amp;rest ignore)
+       "Display the uptime of the system, as well as some load-related
+     stuff, to the current ERC buffer."
+       (let ((uname-output
+              (replace-regexp-in-string
+               ", load average: " "] {Load average} ["
+               ;; Collapse spaces, remove
+               (replace-regexp-in-string
+                " +" " "
+                ;; Remove beginning and trailing whitespace
+                (replace-regexp-in-string
+                 "^ +\\|[ \n]+$" ""
+                 (shell-command-to-string "uptime"))))))
+         (erc-send-message
+          (concat "{Uptime} [" uname-output "]"))))
+     
+     ;; This causes ERC to connect to the Freenode network upon hitting
+     ;; C-c e f.  Replace MYNICK with your IRC nick.
+     (global-set-key "\C-cef" (lambda () (interactive)
+                                (erc :server "irc.freenode.net" :port "6667"
+                                     :nick "MYNICK")))
+     
+     ;; This causes ERC to connect to the IRC server on your own machine (if
+     ;; you have one) upon hitting C-c e b.  Replace MYNICK with your IRC
+     ;; nick.  Often, people like to run bitlbee (http://bitlbee.org/) as an
+     ;; AIM/Jabber/MSN to IRC gateway, so that they can use ERC to chat with
+     ;; people on those networks.
+     (global-set-key "\C-ceb" (lambda () (interactive)
+                                (erc :server "localhost" :port "6667"
+                                     :nick "MYNICK")))
+     
+     ;; Make C-c RET (or C-c C-RET) send messages instead of RET. This has
+     ;; been commented out to avoid confusing new users.
+     ;; (define-key erc-mode-map (kbd "RET") nil)
+     ;; (define-key erc-mode-map (kbd "C-c RET") 'erc-send-current-line)
+     ;; (define-key erc-mode-map (kbd "C-c C-RET") 'erc-send-current-line)
+     
+     ;;; Options
+     
+     ;; Join the #emacs and #erc channels whenever connecting to Freenode.
+     (setq erc-autojoin-channels-alist '(("freenode.net" "#emacs" "#erc")))
+     
+     ;; Interpret mIRC-style color commands in IRC chats
+     (setq erc-interpret-mirc-color t)
+     
+     ;; The following are commented out by default, but users of other
+     ;; non-Emacs IRC clients might find them useful.
+     ;; Kill buffers for channels after /part
+     ;; (setq erc-kill-buffer-on-part t)
+     ;; Kill buffers for private queries after quitting the server
+     ;; (setq erc-kill-queries-on-quit t)
+     ;; Kill buffers for server messages after quitting the server
+     ;; (setq erc-kill-server-buffer-on-quit t)
+</pre>
+   </body></html>
+

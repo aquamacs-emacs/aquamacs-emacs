@@ -1,0 +1,89 @@
+<html lang="en">
+<head>
+<title>Examples - Emacs Sieve Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Emacs Sieve Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Managing-Sieve.html#Managing-Sieve" title="Managing Sieve">
+<link rel="next" href="Manage-Sieve-API.html#Manage-Sieve-API" title="Manage Sieve API">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the Emacs Sieve package, for server-side mail filtering.
+
+Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Examples"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Manage-Sieve-API.html#Manage-Sieve-API">Manage Sieve API</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Managing-Sieve.html#Managing-Sieve">Managing Sieve</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">4 Examples</h2>
+
+<p>If you are not familiar with Sieve, this chapter contains a few simple
+code snippets that you can cut'n'paste and modify at will, until you
+feel more comfortable with the Sieve language to write the rules from
+scratch.
+
+   <p>The following complete Sieve script places all messages with a matching
+&lsquo;<samp><span class="samp">Sender:</span></samp>&rsquo; header into the given mailbox.  Many mailing lists uses
+this format.  The first line makes sure your Sieve server understands
+the <code>fileinto</code> command.
+
+<pre class="example">     require "fileinto";
+     
+     if address "sender" "owner-w3-beta@xemacs.org" {
+             fileinto "INBOX.w3-beta";
+     }
+</pre>
+   <p>A few mailing lists do not use the &lsquo;<samp><span class="samp">Sender:</span></samp>&rsquo; header, but has a
+unique identifier in some other header.  The following is not a
+complete script, it assumes that <code>fileinto</code> has already been
+required.
+
+<pre class="example">     if header :contains "Delivered-To" "auc-tex@sunsite.dk" {
+             fileinto "INBOX.auc-tex";
+     }
+</pre>
+   <p>At last, we have the hopeless mailing lists that does not have any
+unique identifier and you are forced to match on the &lsquo;<samp><span class="samp">To:</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">Cc</span></samp>&rsquo; headers.  As before, this snippet assumes that <code>fileinto</code>
+has been required.
+
+<pre class="example">     if address ["to", "cc"] "kerberos@mit.edu" {
+             fileinto "INBOX.kerberos";
+     }
+</pre>
+   </body></html>
+

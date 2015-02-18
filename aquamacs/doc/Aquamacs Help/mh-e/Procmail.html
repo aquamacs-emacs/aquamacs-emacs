@@ -1,0 +1,201 @@
+<html lang="en">
+<head>
+<title>Procmail - The MH-E Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The MH-E Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Scan-Line-Formats.html#Scan-Line-Formats" title="Scan Line Formats">
+<link rel="next" href="Odds-and-Ends.html#Odds-and-Ends" title="Odds and Ends">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is version 8.2 of `The MH-E
+Manual', last updated 2009-06-13.
+
+Copyright (C) 1995, 2001, 2002, 2003, 2005, 2006, 2007, 2008,
+  2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of either:
+
+       a. the GNU Free Documentation License, Version 1.3 or any later
+          version published by the Free Software Foundation; with no
+          Invariant Sections, with the Front-Cover texts being ``A GNU
+          Manual,'' and with the Back-Cover Texts as in (a) below. A
+          copy of the license is included in the section entitled ``GNU
+          Free Documentation License.''
+
+          (a) The FSF's Back-Cover Text is: ``You have the freedom to
+          copy and modify this GNU manual. Buying copies from the FSF
+          supports it in developing GNU and promoting software
+          freedom.''
+
+       b. the GNU General Public License as published by the Free
+          Software Foundation; either version 3, or (at your option)
+          any later version. A copy of the license is included in the
+          section entitled ``GNU General Public License.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Procmail"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Odds-and-Ends.html#Odds-and-Ends">Odds and Ends</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Scan-Line-Formats.html#Scan-Line-Formats">Scan Line Formats</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="appendix">Appendix B Reading Mailing Lists Effectively</h2>
+
+<p><a name="index-g_t_0040command_007bprocmail_007d-2197"></a><a name="index-g_t_0040command_007bslocal_007d-2198"></a><a name="index-Gnus-2199"></a><a name="index-MH-commands_002c-_0040command_007bslocal_007d-2200"></a><a name="index-Unix-commands_002c-_0040command_007bprocmail_007d-2201"></a><a name="index-mailing-lists_002c-reading-2202"></a>
+This appendix explains how to use <a href="http://www.procmail.org/">procmail</a> to file mail from mailing lists into folders which can then
+be read easily with MH-E<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>. Some mailing lists have such
+high traffic that Gnus must be used and I discuss how to use Gnus
+side-by-side with MH-E.
+
+   <p><a name="index-g_t_0040file_007b_002eprocmailrc_007d-2203"></a><a name="index-files_002c-_0040file_007b_002eprocmailrc_007d-2204"></a>
+First, I'll describe how to put mail from your mailing lists directly
+into an MH folder using <samp><span class="command">procmail</span></samp>. First, add the following
+to <samp><span class="file">~/.procmailrc</span></samp>. While the logging variables aren't strictly
+necessary, they are extremely useful.
+
+<pre class="smallexample">     [1]  # Update PATH so procmail can find myrcvstore, rcvstore and mhparam.
+     [2]  PATH=$PATH:/usr/lib/mh:/usr/bin/mh:$HOME/bin
+     [3]
+     [4]  # Point LOGFILE at the actual log file.
+     [5]  LOGFILE=$HOME/.procmail.log
+     [6]
+     [7]  # This setting provides just the right amount of information.
+     [8]  LOGABSTRACT=all
+     [9]
+     [10] # Uncomment the following line to see how your patterns match.
+     [11] #VERBOSE=yes
+     [12]
+     [13] # Place mail sent to any MH-E mailing list in +mh-e.
+     [14] :0 w: mh-e$LOCKEXT
+     [15] * ^TO.*mh-e-.*.*sourceforge.net
+     [16] | myrcvstore -create +mh-e
+</pre>
+   <p><a name="index-g_t_0040command_007brcvstore_007d-2205"></a><a name="index-MH-commands_002c-_0040command_007brcvstore_007d-2206"></a>
+Line 14 creates a lock file in your mail directory based upon the name
+of the folder. This is done because <samp><span class="command">rcvstore</span></samp> does not
+perform locking. While this lock file will prevent <samp><span class="command">procmail</span></samp>
+from writing to a folder concurrently, there is a slight chance that
+you might lose a message if you're performing operations on a folder
+at the same time <samp><span class="command">rcvstore</span></samp> is placing a message there. You
+have been warned. Now that that disclaimer is out of the way, note
+that I've been using this set-up for over a decade and haven't lost
+anything to my knowledge<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>.
+
+   <p><a name="index-g_t_0040samp_007bUnseen_002dSequence_003a_007d-MH-profile-component-2207"></a><a name="index-MH-profile-component_002c-_0040samp_007bUnseen_002dSequence_003a_007d-2208"></a>
+Line 16 uses the following script, <code>myrcvstore</code>, to massage the
+message as described in the comment and file the message in the given
+folder<a rel="footnote" href="#fn-3" name="fnd-3"><sup>3</sup></a>.
+
+<pre class="smallexample">     #! /bin/sh
+     
+     # Accepts a message on standard input and passes it through rcvstore
+     # after first passing it through any filters. All arguments are passed
+     # on to rcvstore.
+     
+     # Force the "From user date" to become part of header. One reason this
+     # is done is because the presence of the From field confuses dist so
+     # that dist adds a new header, rather than using the existing header.
+     # Note that this should not be done for any message that goes into a
+     # Gnus incoming file (Gnus will thrown an error) nor should it be
+     # applied to any message that goes to the system mailbox because the
+     # entire mailbox will be incorporated as a single message.
+     formail -c -z -R 'From ' X-Envelope-From: |
+     rcvstore $@
+</pre>
+   <p>If your version of <samp><span class="command">rcvstore</span></samp> doesn't add messages to the
+&lsquo;<samp><span class="samp">unseen</span></samp>&rsquo; sequence by default, add the following line to your MH
+profile:
+
+<pre class="smallexample">     Unseen-Sequence: unseen
+</pre>
+   <p>Now view your new messages with the speedbar (see <a href="Speedbar.html#Speedbar">Speedbar</a>) or with
+<kbd>F n</kbd> (<code>mh-index-new-messages</code>). See <a href="Folders.html#Folders">Folders</a>.
+
+   <p>If you're on a mailing list that is so voluminous that it is
+impossible to read every message, it usually better to read the
+mailing list like a newsgroup in a news reader. Emacs has a built-in
+newsreader called Gnus. The remainder of this appendix talks about how
+to use Gnus with an MH message store. The version of Gnus that was
+used to prepare this manual was 5.10. Versions 5.8 through 5.10 should
+work but versions prior to 5.8 use different options.
+
+   <p>This table contains a list of Gnus options that you will have to
+modify. Note that for them to become accessible, you'll have to load
+<samp><span class="file">nnml.el</span></samp> first. This can be done with <kbd>M-x load-library
+&lt;RET&gt; nnml &lt;RET&gt;</kbd>.
+
+     <dl>
+<dt><code>gnus-secondary-select-methods</code><a name="index-gnus_002dsecondary_002dselect_002dmethods-2209"></a><dd>Select the &lsquo;<samp><span class="samp">nnml</span></samp>&rsquo; value. This select method uses directories for
+folders and individual files for messages, just like MH. You do not
+have to set an address. 
+<!--  -->
+<br><dt><code>mail-sources</code><a name="index-mail_002dsources-2210"></a><dd>Select the &lsquo;<samp><span class="samp">Several files in a directory</span></samp>&rsquo; value, check the
+&lsquo;<samp><span class="samp">Path</span></samp>&rsquo; box and enter <samp><span class="file">~/Mail</span></samp> to tell Gnus where to find
+your mail. 
+<!--  -->
+<a name="index-mail_002duser_002dagent-2211"></a><br><dt><code>message-mail-user-agent</code><a name="index-message_002dmail_002duser_002dagent-2212"></a><dd>In order to send mail within Gnus using MH-E, set this option to
+&lsquo;<samp><span class="samp">mail-user-agent</span></samp>&rsquo; and set the <code>mail-user-agent</code> option to
+&lsquo;<samp><span class="samp">Emacs interface to MH</span></samp>&rsquo;. 
+<!--  -->
+<br><dt><code>nnmail-keep-last-article</code><a name="index-nnmail_002dkeep_002dlast_002darticle-2213"></a><dd>Since Gnus keeps track of which messages you have read, it would be
+bad if Gnus expired the last message, for example, message 100, and
+<samp><span class="command">rcvstore</span></samp> gave the next new message number 1. Gnus would then
+ignore it since it thinks that you've read messages 1-100. Turning on
+this option ensures that the last message is never removed thereby
+eliminating this problem. 
+</dl>
+
+   <p>Next add the following to <samp><span class="file">~/.procmailrc</span></samp>. If you don't subscribe
+to the GnuCash mailing list, substitute one to which you are
+subscribed.
+
+<pre class="smallexample">     PATH=$PATH:/usr/bin/mh
+     MAILDIR=$HOME/`mhparam Path`
+     # Place mail sent to the GnuCash mailing list in gnucash.spool, where
+     # Gnus will pick it up.
+     :0:
+     * ^TO.*gnucash.*.*gnucash.org
+     gnucash.spool
+</pre>
+   <p>Wait for some messages to appear in <samp><span class="file">gnucash.spool</span></samp> and run Gnus
+with <kbd>M-x gnus &lt;RET&gt;</kbd>. To view the folder created in the
+example above, you would tell Gnus about it the first time only with
+<kbd>G m gnucash &lt;RET&gt; nnml &lt;RET&gt;</kbd>. In MH-E, this folder is
+known as &lsquo;<samp><span class="samp">+gnucash</span></samp>&rsquo;.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> The MH equivalent, <samp><span class="command">slocal</span></samp>,
+can be used as well, but procmail is more flexible and more packages
+exist for procmail than for slocal.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> See
+<a href="https://savannah.nongnu.org/bugs/?func=detailbug&amp;bug_id=4361&amp;group_id=2166">Savannah issue #4361</a> to see if <samp><span class="command">rcvstore</span></samp> locking is still an
+issue.</p>
+
+   <p class="footnote"><small>[<a name="fn-3" href="#fnd-3">3</a>]</small> The &lsquo;<samp><span class="samp">-create</span></samp>&rsquo; argument wasn't always the default
+to <samp><span class="command">rcvstore</span></samp>.</p>
+
+   <hr></div>
+
+   </body></html>
+

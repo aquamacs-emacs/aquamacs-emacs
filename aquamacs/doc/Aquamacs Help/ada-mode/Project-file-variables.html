@@ -1,0 +1,211 @@
+<html lang="en">
+<head>
+<title>Project file variables - Ada Mode</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Ada Mode">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Project-files.html#Project-files" title="Project files">
+<link rel="prev" href="GUI-Editor.html#GUI-Editor" title="GUI Editor">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Project-file-variables"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="GUI-Editor.html#GUI-Editor">GUI Editor</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Project-files.html#Project-files">Project files</a>
+<hr>
+</div>
+
+<h3 class="section">5.3 Project file variables</h3>
+
+<p>The following variables can be defined in a project file; some can
+also be defined in lisp variables.
+
+   <p>To set a project variable that is a list, specify each element of the
+list on a separate line in the project file.
+
+   <p>Any project variable can be referenced in other project variables,
+using a shell-like notation. For instance, if the variable
+<code>comp_cmd</code> contains <code>${comp_opt}</code>, the value of the
+<code>comp_opt</code> variable will be substituted when <code>comp_cmd</code> is
+used.
+
+   <p>In addition, process environment variables can be referenced using the
+same syntax, or the normal <code>$var</code> syntax.
+
+   <p>Most project variables have defaults that can be changed by setting
+lisp variables; the table below identifies the lisp variable for each
+project variable. Lisp variables corresponding to project variables
+that are lists are lisp lists.
+
+   <p>In general, project variables are evaluated when referenced in
+Emacs Ada mode commands. Relative file paths are expanded to
+absolute relative to <code>${build_dir}</code>.
+
+   <p>Here is the list of variables. In the default values, the current
+directory <code>"."</code> is the project file directory.
+
+     <dl>
+<!-- defined in ada-default-prj-properties; alphabetical order -->
+
+     <dt><code>ada_project_path_sep</code>   [default: <code>":" or ";"</code>]<dd>Path separator for <code>ADA_PROJECT_PATH</code>. It defaults to the correct
+value for a native implementation of GNAT for the current operating
+system. The user must override this when using Windows native GNAT
+with Cygwin Emacs, and perhaps in other cases.
+
+     <p>Lisp variable: <code>ada-prj-ada-project-path-sep</code>.
+
+     <br><dt><code>ada_project_path</code>   [default: <code>""</code>]<dd>A list of directories to search for GNAT project files.
+
+     <p>If set, the <code>ADA_PROJECT_PATH</code> process environment variable is
+set to this value in the Emacs process when the Emacs Ada mode project
+is selected via menu &lsquo;<samp><span class="samp">Ada | Project | Load</span></samp>&rsquo;.
+
+     <p>For <code>ada_project_path</code>, relative file paths are expanded to
+absolute when the Emacs Ada project file is read, rather than when the
+project file is selected.
+
+     <p>For example if the project file is in the directory
+<samp><span class="file">/home/myproject</span></samp>, the environment variable <code>GDS_ROOT</code> is
+set to <code>/home/shared</code>, and the project file contains:
+     <pre class="example">          ada_project_path_sep=:
+          ada_project_path=$GDS_ROOT/makerules
+          ada_project_path=../opentoken
+</pre>
+     <p>the environment variable <code>ADA_PROJECT_PATH</code> will be set to
+<code>"/home/shared/makerules:/home/opentoken/"</code>.
+
+     <p>The default value is not the current value of this environment
+variable, because that will typically have been set by another
+project, and will therefore be incorrect for this project.
+
+     <p>If you have the environment variable set correctly for all of your
+projects, you do not need to set this project variable.
+
+     <br><dt><code>bind_opt</code>       [default: <code>""</code>]<dd>Holds user binder options; used in the default build commands.
+
+     <p>Lisp variable: <code>ada-prj-default-bind-opt</code>.
+
+     <br><dt><code>build_dir</code>      [default: <code>"."</code>]<dd>The compile commands will be issued in this directory.
+
+     <br><dt><code>casing</code>         [default: <code>("~/.emacs_case_exceptions")</code><dd>List of files containing casing exceptions. See the help on
+<code>ada-case-exception-file</code> for more info. 
+<!-- FIXME: section on case exceptions -->
+
+     <p>Lisp variable: <code>ada-case-exception-file</code>.
+
+     <br><dt><code>check_cmd</code>      [default: <code>"${cross_prefix}gnatmake -u -c -gnatc ${gnatmake_opt} ${full_current} -cargs ${comp_opt}"</code>]<dd>Command used to syntax check a single file. 
+The name of the file is substituted for <code>full_current</code>.
+
+     <p>Lisp variable: <code>ada-prj-default-check-cmd</code>
+
+     <br><dt><code>comp_cmd</code>       [default: <code>"${cross_prefix}gnatmake -u -c ${gnatmake_opt} ${full_current} -cargs ${comp_opt}"</code>]<dd>Command used to compile a single file. 
+The name of the file is substituted for <code>full_current</code>.
+
+     <p>Lisp variable: <code>ada-prj-default-comp-cmd</code>.
+
+     <br><dt><code>comp_opt</code>       [default: <code>"-gnatq -gnatQ"</code>]<dd>Holds user compiler options; used in the default compile commands. The
+default value tells gnatmake to generate library files for
+cross-referencing even when there are errors.
+
+     <p>If source code for the project is in multiple directories, the
+appropriate compiler options must be added here. <a href="Set-source-search-path.html#Set-source-search-path">Set source search path</a> for examples of this. Alternately, GNAT project files may
+be used; <a href="Use-GNAT-project-file.html#Use-GNAT-project-file">Use GNAT project file</a>.
+
+     <p>Lisp variable: <code>ada-prj-default-comp-opt</code>.
+
+     <br><dt><code>cross_prefix</code>   [default: <code>""</code>]<dd>Name of target machine in a cross-compilation environment. Used in
+default compile and build commands.
+
+     <br><dt><code>debug_cmd</code>      [default: <code>"${cross_prefix}gdb ${main}"</code>]<dd>Command used to debug the application
+
+     <p>Lisp variable: <code>ada-prj-default-debugger</code>.
+
+     <br><dt><code>debug_post_cmd</code> [default: <code>""</code>]<dd>Command executed after <code>debug_cmd</code>.
+
+     <br><dt><code>debug_pre_cmd</code>  [default: <code>"cd ${build_dir}"</code>]<dd>Command executed before <code>debug_cmd</code>.
+
+     <br><dt><code>gnatfind_opt</code>   [default: <code>"-rf"</code>]<dd>Holds user gnatfind options; used in the default find commands.
+
+     <p>Lisp variable: <code>ada-prj-gnatfind-switches</code>.
+
+     <br><dt><code>gnatmake_opt</code>   [default: <code>"-g"</code>]<dd>Holds user gnatmake options; used in the default build commands.
+
+     <p>Lisp variable: <code>ada-prj-default-gnatmake-opt</code>.
+
+     <br><dt><code>gpr_file</code>   [default: <code>""</code>]<dd>Specify GNAT project file.
+
+     <p>If set, the source and object directories specified in the GNAT
+project file are appended to <code>src_dir</code> and <code>obj_dir</code>. This
+allows specifying Ada source directories with a GNAT project file, and
+other source directories with the Emacs project file.
+
+     <p>In addition, <code>-P{gpr_file}</code> is added to the project variable
+<code>gnatmake_opt</code> whenever it is referenced. With the default
+project variables, this passes the project file to all gnatmake
+commands.
+
+     <p>Lisp variable: <code>ada-prj-default-gpr-file</code>.
+
+     <!-- FIXME: add gnatstub-opts -->
+     <br><dt><code>link_opt</code>       [default: <code>""</code>]<dd>Holds user linker options; used in the default build commands.
+
+     <p>Lisp variable: <code>ada-prj-default-link-opt</code>.
+
+     <br><dt><code>main</code>           [default: current file]<dd>Specifies the name of the executable file for the project; used in the
+default build commands.
+
+     <br><dt><code>make_cmd</code>       [default: <code>"${cross_prefix}gnatmake -o ${main} ${main} ${gnatmake_opt} -cargs ${comp_opt} -bargs ${bind_opt} -largs ${link_opt}"</code>]<dd>Command used to build the application.
+
+     <p>Lisp variable: <code>ada-prj-default-make-cmd</code>.
+
+     <br><dt><code>obj_dir</code>        [default: <code>"."</code>]<dd>A list of directories to search for library files. Ada mode searches
+this list for the &lsquo;<samp><span class="samp">.ali</span></samp>&rsquo; files generated by GNAT that contain
+cross-reference information.
+
+     <p>The compiler commands must place the &lsquo;<samp><span class="samp">.ali</span></samp>&rsquo; files in one of these
+directories; the default commands do that.
+
+     <br><dt><code>remote_machine</code> [default: <code>""</code>]<dd>Name of the machine to log into before issuing the compile and build
+commands. If this variable is empty, the command will be run on the
+local machine.
+
+     <br><dt><code>run_cmd</code>        [default: <code>"./${main}"</code>]<dd>Command used to run the application.
+
+     <br><dt><code>src_dir</code>        [default: <code>"."</code>]<dd>A list of directories to search for source files, both for compile
+commands and source navigation.
+
+   </dl>
+
+   </body></html>
+

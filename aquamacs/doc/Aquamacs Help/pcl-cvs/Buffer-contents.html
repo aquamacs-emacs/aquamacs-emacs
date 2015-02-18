@@ -1,0 +1,154 @@
+<html lang="en">
+<head>
+<title>Buffer contents - PCL-CVS -- Emacs Front-End to CVS</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="PCL-CVS -- Emacs Front-End to CVS">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Getting-started.html#Getting-started" title="Getting started">
+<link rel="next" href="Selected-files.html#Selected-files" title="Selected files">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Buffer-contents"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Selected-files.html#Selected-files">Selected files</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Getting-started.html#Getting-started">Getting started</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">3 Buffer contents</h2>
+
+<p><a name="index-Buffer-contents-7"></a><a name="index-g_t_0040code_007b_002acvs_002a_007d-buffer-contents-8"></a>
+The display contains several columns, some of which are optional. 
+These columns are, from left to right:
+
+     <ul>
+<li>Optionally, the head revision of the file.  This is the latest version
+found in the repository.  It might also contain (instead of the head
+revision) a sub status which typically gives further information about
+how we got to the current state, for example &lsquo;<samp><span class="samp">patched</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">merged</span></samp>&rsquo;, <small class="dots">...</small>
+
+     <li>An asterisk when the file is <dfn>marked</dfn> (see <a href="Selected-files.html#Selected-files">Selected files</a>).
+
+     <li>The actual status of the file wrt the repository.  See below.
+
+     <li>Optionally, the base revision of the file.  This is the version
+which the copy in your working directory is based upon.
+
+     <li>The file name.
+
+   </ul>
+
+   <p>The &lsquo;<samp><span class="samp">file status</span></samp>&rsquo; field can have the following values:
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">Modified</span></samp>&rsquo;<dd>The file is modified in your working directory, and there was no
+modification to the same file in the repository.  This status can have
+the following substatus:
+
+          <dl>
+<dt>&lsquo;<samp><span class="samp">merged</span></samp>&rsquo;<dd>The file was modified in your working directory, and there were
+modifications in the repository as well, but they were merged
+successfully, without conflict, in your working directory. 
+</dl>
+
+     <br><dt>&lsquo;<samp><span class="samp">Conflict</span></samp>&rsquo;<dd>A conflict was detected while trying to merge your changes to <var>file</var>
+with changes from the repository.  <var>file</var> (the copy in your
+working directory) is now the output of the <code>rcsmerge</code> command on
+the two versions; an unmodified copy of your file is also in your
+working directory, with the name <samp><span class="file">.#</span><var>file</var><span class="file">.</span><var>version</var></samp>,
+where <var>version</var> is the RCS revision that your modified file started
+from.  See <a href="Viewing-differences.html#Viewing-differences">Viewing differences</a>, for more details.
+
+     <p>A conflict can also come from a disagreement on the existence of the file
+rather than on its content.  This case is indicated by the following
+possible substatus:
+
+          <dl>
+<dt>&lsquo;<samp><span class="samp">removed</span></samp>&rsquo;<dd>The file is locally removed but a new revision has been committed to
+the repository by someone else.
+
+          <br><dt>&lsquo;<samp><span class="samp">added</span></samp>&rsquo;<dd>The file is locally added and has also been added to the repository
+by someone else.
+
+          <br><dt>&lsquo;<samp><span class="samp">modified</span></samp>&rsquo;<dd>The file is locally modified but someone else has removed it from the
+repository. 
+</dl>
+
+     <br><dt>&lsquo;<samp><span class="samp">Added</span></samp>&rsquo;<dd>The file has been added by you, but it still needs to be checked in to
+the repository.
+
+     <br><dt>&lsquo;<samp><span class="samp">Removed</span></samp>&rsquo;<dd>The file has been removed by you, but it still needs to be checked in to
+the repository.  You can resurrect it by typing <kbd>a</kbd> (see <a href="Adding-and-removing-files.html#Adding-and-removing-files">Adding and removing files</a>).
+
+     <br><dt>&lsquo;<samp><span class="samp">Unknown</span></samp>&rsquo;<dd>A file that was detected in your directory, but that neither appears in
+the repository, nor is present on the list of files that CVS should
+ignore.
+
+     <br><dt>&lsquo;<samp><span class="samp">Up-to-date</span></samp>&rsquo;<dd>The file is up to date with respect to the version in the repository. 
+This status can have a substatus of:
+
+          <dl>
+<dt>&lsquo;<samp><span class="samp">added</span></samp>&rsquo;<dd>You have just added the file to the repository.
+
+          <br><dt>&lsquo;<samp><span class="samp">updated</span></samp>&rsquo;<dd>The file was brought up to date with respect to the repository.  This is
+done for any file that exists in the repository but not in your source,
+and for files that you haven't changed but are not the most recent
+versions available in the repository.
+
+          <br><dt>&lsquo;<samp><span class="samp">patched</span></samp>&rsquo;<dd>The file was brought up to date with respect to the remote repository by
+way of fetching and applying a patch to the file in your source.  This
+is equivalent to &lsquo;<samp><span class="samp">updated</span></samp>&rsquo; except that CVS decided to use a hopefully
+more efficient method.
+
+          <br><dt>&lsquo;<samp><span class="samp">committed</span></samp>&rsquo;<dd>You just committed the file. 
+</dl>
+
+     <br><dt>&lsquo;<samp><span class="samp">Need-Update</span></samp>&rsquo;<dd>Either a newer version than the one in your source is available in the
+repository and you have not modified your checked out version, or the
+file exists in the repository but not in your source.  Use
+&lsquo;<samp><span class="samp">cvs-mode-update</span></samp>&rsquo; bound to <kbd>O</kbd> to update the file.
+
+     <br><dt>&lsquo;<samp><span class="samp">Need-Merge</span></samp>&rsquo;<dd>You have modified the checked out version of the file, and a newer
+version is available in the repository.  A merge will take place when
+you run a &lsquo;<samp><span class="samp">cvs-update</span></samp>&rsquo;.
+
+     <br><dt>&lsquo;<samp><span class="samp">Missing</span></samp>&rsquo;<dd>The file has been unexpectedly removed from your working directory
+although it has not been &lsquo;<samp><span class="samp">cvs remove</span></samp>&rsquo;d. 
+</dl>
+
+   </body></html>
+

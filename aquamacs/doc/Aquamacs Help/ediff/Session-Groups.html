@@ -1,0 +1,167 @@
+<html lang="en">
+<head>
+<title>Session Groups - Ediff User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Ediff User's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Registry-of-Ediff-Sessions.html#Registry-of-Ediff-Sessions" title="Registry of Ediff Sessions">
+<link rel="next" href="Remote-and-Compressed-Files.html#Remote-and-Compressed-Files" title="Remote and Compressed Files">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Ediff, a comprehensive visual interface to Unix diff
+and patch utilities.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Session-Groups"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Remote-and-Compressed-Files.html#Remote-and-Compressed-Files">Remote and Compressed Files</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Registry-of-Ediff-Sessions.html#Registry-of-Ediff-Sessions">Registry of Ediff Sessions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">5 Session Groups</h2>
+
+<p>Several major entries of Ediff perform comparison and merging on
+directories.  On entering <code>ediff-directories</code>,
+<code>ediff-directories3</code>,
+<code>ediff-merge-directories</code>,
+<code>ediff-merge-directories-with-ancestor</code>,
+<code>ediff-directory-revisions</code>,
+<code>ediff-merge-directory-revisions</code>, or
+<code>ediff-merge-directory-revisions-with-ancestor</code>,
+the user is presented with a
+Dired-like buffer that lists files common to the directories involved along
+with their sizes.  (The list of common files can be further filtered through
+a regular expression, which the user is prompted for.)  We call this buffer
+<em>Session Group Panel</em> because all Ediff sessions associated with the
+listed files will have this buffer as a common focal point.
+
+   <p>Clicking button 2 or typing <kbd>RET</kbd> or <kbd>v</kbd> over a
+record describing files invokes Ediff in the appropriate mode on these
+files.  You can come back to the session group buffer associated with a
+particular invocation of Ediff by typing <kbd>M</kbd> in Ediff control buffer of
+that invocation.
+
+   <p>Many commands are available in the session group buffer; some are
+applicable only to certain types of work.  The relevant commands are always
+listed at the top of each session group buffer, so there is no need to
+memorize them.
+
+   <p>In directory comparison or merging, a session group panel displays only the
+files common to all directories involved.  The differences are kept in a
+separate <em>directory difference buffer</em> and are conveniently displayed
+by typing <kbd>D</kbd> to the corresponding session group panel.  Thus, as an
+added benefit, Ediff can be used to compare the contents of up to three
+directories.
+
+   <p><a name="index-Directory-difference-buffer-116"></a>Sometimes it is desirable to copy some files from one directory to another
+without exiting Ediff. The <em>directory difference buffer</em>, which is
+displayed by typing <kbd>D</kbd> as discussed above, can be used for this
+purpose. If a file is, say, in Ediff's Directory A, but is missing in
+Ediff's Directory B (Ediff will refuse to override existing files), then
+typing <kbd>C</kbd> or clicking mouse button 2 over that file (which must be
+displayed in directory difference buffer) will copy that file from
+Directory A to Directory B.
+
+   <p>Session records in session group panels are also marked with <kbd>+</kbd>, for
+active sessions, and with <kbd>-</kbd>, for finished sessions.
+
+   <p>Sometimes, it is convenient to exclude certain sessions from a group. 
+Usually this happens when the user doesn't intend to run Ediff of certain
+files in the group, and the corresponding session records just add clutter
+to the session group buffer.  To help alleviate this problem, the user can
+type <kbd>h</kbd> to mark a session as a candidate for exclusion and <kbd>x</kbd> to
+actually hide the marked sessions.  There actions are reversible: with a
+prefix argument, <kbd>h</kbd> unmarks the session under the cursor, and <kbd>x</kbd>
+brings the hidden sessions into the view (<kbd>x</kbd> doesn't unmark them,
+though, so the user has to explicitly unmark the sessions of interest).
+
+   <p>Group sessions also understand the command <kbd>m</kbd>, which marks sessions
+for future operations (other than hiding) on a group of sessions.  At present,
+the only such group-level operation is the creation of a multi-file patch.
+
+   <p><a name="index-ediff_002dautostore_002dmerges-117"></a>For group sessions created to merge files, Ediff can store all merges
+automatically in a directory.  The user is asked to specify such directory
+if the value of <code>ediff-autostore-merges</code> is non-<code>nil</code>.  If the value is
+<code>nil</code>, nothing is done to the merge buffers&mdash;it will be the user's
+responsibility to save them.  If the value is <code>t</code>, the user will be
+asked where to save the merge buffers in all merge jobs, even those that do
+not originate from a session group.  It the value is neither <code>nil</code> nor
+<code>t</code>, the merge buffer is saved <em>only</em> if this merge session was
+invoked from a session group.  This behavior is implemented in the function
+<code>ediff-maybe-save-and-delete-merge</code>, which is a hook in
+<code>ediff-quit-merge-hook</code>.  The user can supply a different hook, if
+necessary.
+
+   <p>The variable <code>ediff-autostore-merges</code> is buffer-local, so it can be
+set on a per-buffer basis.  Therefore, use <code>setq-default</code> to change
+this variable globally.
+
+   <p><a name="index-Multi_002dfile-patches-118"></a>A multi-file patch is a concatenated output of several runs of the Unix
+<code>diff</code> command (some versions of <code>diff</code> let you create a
+multi-file patch in just one run).  Ediff facilitates creation of
+multi-file patches as follows.  If you are in a session group buffer
+created in response to <code>ediff-directories</code> or
+<code>ediff-directory-revisions</code>, you can mark (by typing <kbd>m</kbd>) the
+desired Ediff sessions and then type <kbd>P</kbd> to create a
+multi-file patch of those marked sessions. 
+Ediff will then display a buffer containing the patch. 
+The patch is generated by invoking <code>diff</code> on all marked individual
+sessions (represented by files) and session groups (represented by
+directories).  Ediff will also recursively descend into any <em>unmarked</em>
+session group and will search for marked sessions there.  In this way, you
+can create multi-file patches that span file subtrees that grow out of
+any given directory.
+
+   <p>In an <code>ediff-directories</code> session, it is enough to just mark the
+requisite sessions.  In <code>ediff-directory-revisions</code> revisions, the
+marked sessions must also be active, or else Ediff will refuse to produce a
+multi-file patch.  This is because, in the latter-style sessions, there are
+many ways to create diff output, and it is easier to handle by running
+Ediff on the inactive sessions.
+
+   <p>Last, but not least, by typing <kbd>==</kbd>, you can quickly find out which
+sessions have identical entries, so you won't have to run Ediff on those
+sessions.  This, however, works only on local, uncompressed files. 
+For compressed or remote files, this command won't report anything. 
+Likewise, you can use <kbd>=h</kbd> to mark sessions with identical entries
+for hiding or, with <kbd>=m</kbd>, for further operations.
+
+   <p>The comparison operations <kbd>==</kbd>, <kbd>=h</kbd>, and <kbd>=m</kbd> can recurse into
+subdirectories to see if they have identical contents (so the user will not
+need to descend into those subdirectories manually). These commands ask the
+user whether or not to do a recursive descent.
+
+   </body></html>
+

@@ -1,0 +1,69 @@
+time nextstep/Aquamacs.app/Contents/MacOS/Aquamacs -eval '(kill-emacs)'
+llvm -O0 -g   user	0m2.766s
+llvm -O1   user	0m3.099s
+llvm -O4 -g  user	0m1.418s
+llvm -O4   user	0m1.393s
+llvm -O4   user	0m1.393s
+llvm -O4 -g -mtune=corei7  user	0m1.425s
+llvm -O4 -mtune=corei7 [with ldflags set]	   0m1.389s
+
+Aquamacs 2.5, as released:	user	0m1.267s
+
+
+(benchmark-run-compiled 512 (sort (number-sequence 1 512) '<))
+llvm -O0 -g (0.295652 5 0.09337699999999993)
+llvm -O1  (0.46867400000000004 4 0.10325600000000001)
+llvm -O4 -g  (0.116087 5 0.053842999999999974)
+llvm -O4  (0.10577800000000001 4 0.04263599999999995)
+llvm -O4 -g -mtune=corei7 (0.097255 2 0.03282800000000008)
+
+(benchmark-run-compiled 100
+      (let* ((list (mapcar 'random (make-list 100 most-positive-fixnum)))
+              (i (length list)))
+         (while (> i 1)
+           (let ((b list))
+             (while (cdr b)
+               (when (< (cadr b) (car b))
+                 (setcar b (prog1 (cadr b)
+                             (setcdr b (cons (car b) (cddr b))))))
+               (setq b (cdr b))))
+           (setq i (1- i)))
+         list))
+llvm -O0 -g (0.251823 4 0.0784069999999999)
+llvm -O1 (0.46903 4 0.12127799999999977)
+llvm -O4 -g   (0.105645 4 0.04278099999999996)
+llvm -O4  (0.10510399999999999 4 0.0418599999999999)
+llvm -O4 -g -mtune=corei7    (0.095194 2 0.03298500000000004)
+
+(benchmark-run 100
+      (let* ((list (mapcar 'random (make-list 100 most-positive-fixnum)))
+              (i (length list)))
+         (while (> i 1)
+           (let ((b list))
+             (while (cdr b)
+               (when (< (cadr b) (car b))
+                 (setcar b (prog1 (cadr b)
+                             (setcdr b (cons (car b) (cddr b))))))
+               (setq b (cdr b))))
+           (setq i (1- i)))
+         list))
+
+llvm -O0 -g (1.265772 4 0.07436499999999979)
+llvm -O1   (2.263457 4 0.1047880000000001)
+llvm -O4 -g   (0.398905 4 0.04372100000000001)
+llvm -O4   (0.38817199999999996 2 0.031108000000000025)
+llvm -O4 -g -mtune=corei7  (0.382821 2 0.030742999999999965)
+
+
+;; first run only counts - loads AUCTEx
+(benchmark-run 1 (find-file
+"~/Dropbox/alignment-article/alignment.tex"))
+llvm -O0 -g  (5.727015 22 0.52315)
+llvm -O1  (5.385236 22 0.6153259999999998)
+llvm -O4 -g -mtune=corei7   (4.327336 22 0.324123)
+llvm -O4 -mtune=corei7  (4.096817 22 0.31961999999999957)
+
+
+time nextstep/Aquamacs.app/Contents/MacOS/Aquamacs -eval '(progn
+(latex-mode) (run-with-idle-timer 0 nil `kill-emacs))'
+user	0m4.826s

@@ -1,0 +1,110 @@
+<html lang="en">
+<head>
+<title>Loop Examples - Common Lisp Extensions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Common Lisp Extensions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Loop-Facility.html#Loop-Facility" title="Loop Facility">
+<link rel="prev" href="Loop-Basics.html#Loop-Basics" title="Loop Basics">
+<link rel="next" href="For-Clauses.html#For-Clauses" title="For Clauses">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the GNU Emacs Common Lisp emulation package.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Loop-Examples"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="For-Clauses.html#For-Clauses">For Clauses</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Loop-Basics.html#Loop-Basics">Loop Basics</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Loop-Facility.html#Loop-Facility">Loop Facility</a>
+<hr>
+</div>
+
+<h4 class="subsection">5.7.2 Loop Examples</h4>
+
+<p class="noindent">Before listing the full set of clauses that are allowed, let's
+look at a few example loops just to get a feel for the <code>loop</code>
+language.
+
+<pre class="example">     (loop for buf in (buffer-list)
+           collect (buffer-file-name buf))
+</pre>
+   <p class="noindent">This loop iterates over all Emacs buffers, using the list
+returned by <code>buffer-list</code>.  For each buffer <code>buf</code>,
+it calls <code>buffer-file-name</code> and collects the results into
+a list, which is then returned from the <code>loop</code> construct. 
+The result is a list of the file names of all the buffers in
+Emacs' memory.  The words <code>for</code>, <code>in</code>, and <code>collect</code>
+are reserved words in the <code>loop</code> language.
+
+<pre class="example">     (loop repeat 20 do (insert "Yowsa\n"))
+</pre>
+   <p class="noindent">This loop inserts the phrase &ldquo;Yowsa&rdquo; twenty times in the
+current buffer.
+
+<pre class="example">     (loop until (eobp) do (munch-line) (forward-line 1))
+</pre>
+   <p class="noindent">This loop calls <code>munch-line</code> on every line until the end
+of the buffer.  If point is already at the end of the buffer,
+the loop exits immediately.
+
+<pre class="example">     (loop do (munch-line) until (eobp) do (forward-line 1))
+</pre>
+   <p class="noindent">This loop is similar to the above one, except that <code>munch-line</code>
+is always called at least once.
+
+<pre class="example">     (loop for x from 1 to 100
+           for y = (* x x)
+           until (&gt;= y 729)
+           finally return (list x (= y 729)))
+</pre>
+   <p class="noindent">This more complicated loop searches for a number <code>x</code> whose
+square is 729.  For safety's sake it only examines <code>x</code>
+values up to 100; dropping the phrase &lsquo;<samp><span class="samp">to 100</span></samp>&rsquo; would
+cause the loop to count upwards with no limit.  The second
+<code>for</code> clause defines <code>y</code> to be the square of <code>x</code>
+within the loop; the expression after the <code>=</code> sign is
+reevaluated each time through the loop.  The <code>until</code>
+clause gives a condition for terminating the loop, and the
+<code>finally</code> clause says what to do when the loop finishes. 
+(This particular example was written less concisely than it
+could have been, just for the sake of illustration.)
+
+   <p>Note that even though this loop contains three clauses (two
+<code>for</code>s and an <code>until</code>) that would have been enough to
+define loops all by themselves, it still creates a single loop
+rather than some sort of triple-nested loop.  You must explicitly
+nest your <code>loop</code> constructs if you want nested loops.
+
+   </body></html>
+

@@ -1,0 +1,174 @@
+<html lang="en">
+<head>
+<title>ede-cpp-root-project - Emacs Development Environment</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Emacs Development Environment">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Project.html#Project" title="Project">
+<link rel="prev" href="ede_002dproject.html#ede_002dproject" title="ede-project">
+<link rel="next" href="ede_002dsimple_002dproject.html#ede_002dsimple_002dproject" title="ede-simple-project">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file describes EDE, the Emacs Development Environment.
+
+Copyright (C) 1998, 1999, 2000, 2001, 2004, 2005, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="ede-cpp-root-project"></a>
+<a name="ede_002dcpp_002droot_002dproject"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="ede_002dsimple_002dproject.html#ede_002dsimple_002dproject">ede-simple-project</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="ede_002dproject.html#ede_002dproject">ede-project</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Project.html#Project">Project</a>
+<hr>
+</div>
+
+<h4 class="subsection">7.5.3 ede-cpp-root-project</h4>
+
+<p><a name="index-ede_002dcpp_002droot_002dproject-52"></a>
+     <dl>
+<dt>Inheritance Tree:<dd>
+          <dl>
+<dt><code>eieio-speedbar</code><dd>
+               <dl>
+<dt><code>eieio-speedbar-directory-button</code><dd>
+                    <dl>
+<dt><code>See&nbsp;<a href="ede_002dproject_002dplaceholder.html#ede_002dproject_002dplaceholder">ede-project-placeholder</a>.<!-- /@w --></code><dd>
+                         <dl>
+<dt><code>See&nbsp;<a href="ede_002dproject.html#ede_002dproject">ede-project</a>.<!-- /@w --></code><dd>
+                              <dl>
+<dt><code>ede-cpp-root-project</code><dd>No children
+</dl>
+                         </dl>
+                    </dl>
+               </dl>
+          </dl>
+     </dl>
+
+   <p>This class implements the <code>ede-cpp-root</code> project type. 
+See <a href="ede_002dcpp_002droot.html#ede_002dcpp_002droot">ede-cpp-root</a>, for information about using this project type.
+
+     <dl>
+<dt>Slots:<dd>
+          <dl>
+<dt><code>:include-path</code><dd>Type: <code>list</code> <br>
+Default Value: <code>(quote ("/include" "../include/"))</code>
+
+          <p>The default locate function expands filenames within a project. 
+If a header file (.h, .hh, etc) name is expanded, and
+the <code>:locate-fcn</code> slot is <code>nil</code>, then the include path is checked
+first, and other directories are ignored.  For very large
+projects, this optimization can save a lot of time.
+
+          <p>Directory names in the path can be relative to the current
+buffer's <code>default-directory</code> (not starting with a /).  Directories
+that are relative to the project's root should start with a /, such
+as  "/include", meaning the directory <code>include</code> off the project root
+directory.
+
+          <br><dt><code>:system-include-path</code><dd>Type: <code>list</code> <br>
+Default Value: <code>nil</code>
+
+          <p>The system include path for files in this project. 
+C files initialized in an ede-cpp-root-project have their semantic
+system include path set to this value.  If this is <code>nil</code>, then the
+semantic path is not modified.
+
+          <br><dt><code>:spp-table</code><dd>Type: <code>list</code> <br>
+Default Value: <code>nil</code>
+
+          <p>C Preprocessor macros for your files. 
+Preprocessor symbols will be used while parsing your files. 
+These macros might be passed in through the command line compiler, or
+are critical symbols derived from header files.  Providing header files
+macro values through this slot improves accuracy and performance. 
+Use `:spp-files' to use these files directly.
+
+          <br><dt><code>:spp-files</code><dd>Type: <code>list</code> <br>
+Default Value: <code>nil</code>
+
+          <p>C header file with Preprocessor macros for your files. 
+The PreProcessor symbols appearing in these files will be used while
+parsing files in this project. 
+See <code>semantic-lex-c-preprocessor-symbol-map</code> for more on how this works.
+
+          <br><dt><code>:header-match-regexp</code><dd>Type: <code>string</code> <br>
+Default Value: <code>"\\.\\(h\\(h\\|xx\\|pp\\|\\+\\+\\)?\\|H\\)$\\|\\&lt;\\w+$"</code>
+
+          <p>Regexp used to identify C/C++ header files.
+
+          <br><dt><code>:locate-fcn</code><dd>Type: <code>(or null function)</code> <br>
+Default Value: <code>nil</code>
+
+          <p>The locate function can be used in place of
+<dfn>ede-expand-filename</dfn> so you can quickly customize your custom target
+to use specialized local routines instead of the EDE routines. 
+The function symbol must take two arguments:
+  NAME - The name of the file to find. 
+  DIR - The directory root for this cpp-root project.
+
+          <p>It should return the fully qualified file name passed in from NAME.  If that file does not
+exist, it should return nil.
+
+     </dl>
+
+   </dl>
+
+<h5 class="subsubsection">7.5.3.1 Specialized Methods</h5>
+
+<div class="defun">
+&mdash; Method: <b>initialize-instance</b><var> :AFTER this &amp;rest fields<a name="index-initialize_002dinstance-53"></a></var><br>
+<blockquote><p>Make sure the <code>:file</code> is fully expanded. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-preprocessor-map</b><var> :AFTER this<a name="index-ede_002dpreprocessor_002dmap-54"></a></var><br>
+<blockquote><p>Get the pre-processor map for project <var>THIS</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-cpp-root-header-file-p</b><var> :AFTER proj name<a name="index-ede_002dcpp_002droot_002dheader_002dfile_002dp-55"></a></var><br>
+<blockquote><p>Non <code>nil</code> if in <var>PROJ</var> the filename <var>NAME</var> is a header. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-system-include-path</b><var> :AFTER this<a name="index-ede_002dsystem_002dinclude_002dpath-56"></a></var><br>
+<blockquote><p>Get the system include path used by project <var>THIS</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-expand-filename-impl</b><var> :AFTER proj name<a name="index-ede_002dexpand_002dfilename_002dimpl-57"></a></var><br>
+<blockquote><p>Within this project <var>PROJ</var>, find the file <var>NAME</var>. 
+This knows details about or source tree. 
+</p></blockquote></div>
+
+   </body></html>
+

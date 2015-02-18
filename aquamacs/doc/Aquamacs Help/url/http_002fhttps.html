@@ -1,0 +1,88 @@
+<html lang="en">
+<head>
+<title>http/https - URL Programmer's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="URL Programmer's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Supported-URL-Types.html#Supported-URL-Types" title="Supported URL Types">
+<link rel="next" href="file_002fftp.html#file_002fftp" title="file/ftp">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the Emacs Lisp URL loading package.
+
+Copyright (C) 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2002,
+2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="http%2fhttps"></a>
+<a name="http_002fhttps"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="file_002fftp.html#file_002fftp">file/ftp</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Supported-URL-Types.html#Supported-URL-Types">Supported URL Types</a>
+<hr>
+</div>
+
+<h3 class="section">3.1 <code>http</code> and <code>https</code></h3>
+
+<p>The scheme <code>http</code> is Hypertext Transfer Protocol.  The library
+supports version 1.1, specified in RFC 2616.  (This supersedes 1.0,
+defined in RFC 1945) HTTP URLs have the following form, where most of
+the parts are optional:
+<pre class="example">     http://<var>user</var>:<var>password</var>@<var>host</var>:<var>port</var>/<var>path</var>?<var>searchpart</var>#<var>fragment</var>
+</pre>
+   <!-- The @code{:@var{port}} part is optional, and @var{port} defaults to -->
+<!-- 80.  The @code{/@var{path}} part, if present, is a slash-separated -->
+<!-- series elements.  The @code{?@var{searchpart}}, if present, is the -->
+<!-- query for a search or the content of a form submission.  The -->
+<!-- @code{#fragment} part, if present, is a location in the document. -->
+   <p>The scheme <code>https</code> is a secure version of <code>http</code>, with
+transmission via SSL.  It is defined in RFC 2069.  Its default port is
+443.  This scheme depends on SSL support in Emacs via the
+<samp><span class="file">ssl.el</span></samp> library and is actually implemented by forcing the
+<code>ssl</code> gateway method to be used.  See <a href="Gateways-in-general.html#Gateways-in-general">Gateways in general</a>.
+
+<div class="defun">
+&mdash; User Option: <b>url-honor-refresh-requests</b><var><a name="index-url_002dhonor_002drefresh_002drequests-30"></a></var><br>
+<blockquote><p>This controls honoring of HTTP &lsquo;<samp><span class="samp">Refresh</span></samp>&rsquo; headers by which
+servers can direct clients to reload documents from the same URL or a
+or different one.  <code>nil</code> means they will not be honored,
+<code>t</code> (the default) means they will always be honored, and
+otherwise the user will be asked on each request. 
+</p></blockquote></div>
+
+<ul class="menu">
+<li><a accesskey="1" href="Cookies.html#Cookies">Cookies</a>
+<li><a accesskey="2" href="HTTP-language_002fcoding.html#HTTP-language_002fcoding">HTTP language/coding</a>
+<li><a accesskey="3" href="HTTP-URL-Options.html#HTTP-URL-Options">HTTP URL Options</a>
+<li><a accesskey="4" href="Dealing-with-HTTP-documents.html#Dealing-with-HTTP-documents">Dealing with HTTP documents</a>
+</ul>
+
+   </body></html>
+

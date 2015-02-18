@@ -1,0 +1,79 @@
+<html lang="en">
+<head>
+<title>FAQ 3-7 - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="FAQ-3-_002d-Getting-Messages.html#FAQ-3-_002d-Getting-Messages" title="FAQ 3 - Getting Messages">
+<link rel="prev" href="FAQ-3_002d6.html#FAQ-3_002d6" title="FAQ 3-6">
+<link rel="next" href="FAQ-3_002d8.html#FAQ-3_002d8" title="FAQ 3-8">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="FAQ-3-7"></a>
+<a name="FAQ-3_002d7"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="FAQ-3_002d8.html#FAQ-3_002d8">FAQ 3-8</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="FAQ-3_002d6.html#FAQ-3_002d6">FAQ 3-6</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="FAQ-3-_002d-Getting-Messages.html#FAQ-3-_002d-Getting-Messages">FAQ 3 - Getting Messages</a>
+<hr>
+</div>
+
+<h5 class="subsubheading">Question 3.7</h5>
+
+<p>And how about local spool files?
+
+<h5 class="subsubheading">Answer</h5>
+
+<p>No problem, this is just one more select method called
+nnspool, so you want this:
+
+<pre class="example">     (add-to-list 'gnus-secondary-select-methods '(nnspool ""))
+</pre>
+   <p class="noindent">Or this if you don't want an NNTP Server as primary news source:
+
+<pre class="example">     (setq gnus-select-method '(nnspool ""))
+</pre>
+   <p class="noindent">Gnus will look for the spool file in /usr/spool/news, if you
+want something different, change the line above to something like this:
+
+<pre class="example">     (add-to-list 'gnus-secondary-select-methods
+                  '(nnspool ""
+                            (nnspool-directory "/usr/local/myspoolddir")))
+</pre>
+   <p class="noindent">This sets the spool directory for this server only. 
+You might have to specify more stuff like the program used
+to post articles, see the Gnus manual on how to do this.
+
+   </body></html>
+

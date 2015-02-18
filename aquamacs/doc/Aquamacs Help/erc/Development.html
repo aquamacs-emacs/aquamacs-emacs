@@ -1,0 +1,145 @@
+<html lang="en">
+<head>
+<title>Development - ERC Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="ERC Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Obtaining-ERC.html#Obtaining-ERC" title="Obtaining ERC">
+<link rel="prev" href="Releases.html#Releases" title="Releases">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for ERC version 5.3.
+
+Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     All Emacs Lisp code contained in this document may be used,
+     distributed, and modified without restriction.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Development"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Releases.html#Releases">Releases</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Obtaining-ERC.html#Obtaining-ERC">Obtaining ERC</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h3 class="section">2.2 Development</h3>
+
+<p><a name="index-development-4"></a>
+Choose the development version if you want to live on the bleeding edge
+of ERC development or try out new features before release.
+
+   <p><a name="index-git-version-control-system_002c-using-5"></a>The git version control system allows you to keep up-to-date with the
+latest changes to the development version of ERC.  It also allows you
+to contribute changes (via commits, if you are have developer access to
+the repository, or via patches, otherwise).  If you would like to
+contribute to ERC development, it is highly recommended that you use
+git.
+
+   <p>If you are new to git, you might find this tutorial helpful:
+<a href="http://www.kernel.org/pub/software/scm/git/docs/gittutorial.html">http://www.kernel.org/pub/software/scm/git/docs/gittutorial.html</a>.
+
+   <p>Downloading ERC with git and staying up-to-date involves the following
+steps.
+
+     <ol type=1 start=1>
+<li>Install git.
+
+          <ul>
+<li>Debian and Ubuntu: <kbd>apt-get install git-core</kbd>. 
+<li>Windows: <a href="http://git.or.cz/gitwiki/WindowsInstall">http://git.or.cz/gitwiki/WindowsInstall</a>. 
+<li>Other operating systems: download, compile, and install the source
+from <a href="http://www.kernel.org/pub/software/scm/git/">http://www.kernel.org/pub/software/scm/git/</a>, or find a git
+package for your operating system. 
+</ul>
+
+     <li>Download the ERC development branch.
+
+     <p>If you have developer access to ERC, do:
+
+     <pre class="example">          git clone ssh://loginname@git.sv.gnu.org/srv/git/erc.git
+</pre>
+     <p>otherwise, do:
+
+     <pre class="example">          git clone git://git.sv.gnu.org/erc.git
+</pre>
+     <p>If you are behind a restrictive firewall, and do not have developer
+access, then do the following instead:
+
+     <pre class="example">          git clone http://git.sv.gnu.org/r/erc.git
+</pre>
+     <li>List upstream changes that are missing from your local copy. 
+Do this whenever you want to see whether new changes have been committed
+to ERC.  If you wish, you may skip this step and proceed directly to
+the &ldquo;update&rdquo; step.
+
+     <pre class="example">          # Change to the source directory you are interested in.
+          cd erc
+          
+          # Fetch new changes from the repository, but don't apply them yet
+          git fetch origin
+          
+          # Display log messages for the new changes
+          git log HEAD..origin
+</pre>
+     <p>&ldquo;origin&rdquo; is git's name for the location where you originally got ERC
+from.  You can change this location at any time by editing the
+<samp><span class="file">.git/config</span></samp> file in the directory where the ERC source was
+placed.
+
+     <p><a name="index-updating-ERC-with-git-6"></a><li>Update to the latest version by pulling in any missing changes.
+
+     <pre class="example">          cd erc
+          git pull origin
+</pre>
+     <p>git will show how many files changed, and will provide a visual display
+for how many lines were changed in each file.
+
+        </ol>
+
+   <p>There are other ways to interact with the ERC repository.
+
+     <ul>
+<li>Browse git repo: <a href="http://git.sv.gnu.org/gitweb/?p=erc.git">http://git.sv.gnu.org/gitweb/?p=erc.git</a>
+<li>Latest development snapshot: <a href="http://mwolson.org/static/dist/erc-latest.tar.gz">http://mwolson.org/static/dist/erc-latest.tar.gz</a>
+<li>Latest development snapshot (zip file): <a href="http://mwolson.org/static/dist/erc-latest.zip">http://mwolson.org/static/dist/erc-latest.zip</a>
+</ul>
+
+   <p>The latest development snapshot can lag behind the git repo by as much
+as 20 minutes, but never more than that.
+
+   <p>For further information on committing changes to ERC and performing
+development, please consult
+<a href="http://emacswiki.org/cgi-bin/wiki/ErcDevelopment">http://emacswiki.org/cgi-bin/wiki/ErcDevelopment</a>.
+
+   </body></html>
+

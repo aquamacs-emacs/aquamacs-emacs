@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>Catalogs - IDLWAVE User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="IDLWAVE User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Sources-of-Routine-Info.html#Sources-of-Routine-Info" title="Sources of Routine Info">
+<link rel="prev" href="Routine-Information-Sources.html#Routine-Information-Sources" title="Routine Information Sources">
+<link rel="next" href="Load_002dPath-Shadows.html#Load_002dPath-Shadows" title="Load-Path Shadows">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents IDLWAVE, a major mode for editing IDL files with
+Emacs, and interacting with an IDL shell run as a subprocess.
+
+This is edition 6.1 of the IDLWAVE User Manual for IDLWAVE
+6.1.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Catalogs"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Load_002dPath-Shadows.html#Load_002dPath-Shadows">Load-Path Shadows</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Routine-Information-Sources.html#Routine-Information-Sources">Routine Information Sources</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Sources-of-Routine-Info.html#Sources-of-Routine-Info">Sources of Routine Info</a>
+<hr>
+</div>
+
+<h3 class="appendixsec">A.3 Catalogs</h3>
+
+<p><a name="index-Catalogs-359"></a>
+<em>Catalogs</em> are files containing scanned information on individual
+routines, including arguments and keywords, calling sequence, file path,
+class and procedure vs. function type, etc.  They represent a way of
+extending the internal built-in information available for IDL system
+routines (see <a href="Routine-Info.html#Routine-Info">Routine Info</a>) to other source collections.
+
+   <p>Starting with version 5.0, there are two types of catalogs available
+with IDLWAVE.  The traditional <em>user catalog</em> and the newer
+<em>library catalogs</em>.  Although they can be used interchangeably, the
+library catalogs are more flexible, and preferred.  There are few
+occasions when a user catalog might be preferred &mdash; read below.  Both
+types of catalogs can coexist without causing problems.
+
+   <p>To facilitate the catalog systems, IDLWAVE stores information it gathers
+from the shell about the IDL search paths, and can write this
+information out automatically, or on-demand (menu <code>Debug-&gt;Save Path
+Info</code>).  On systems with no shell from which to discover the path
+information (e.g. Windows), a library path must be specified in
+<code>idlwave-library-path</code> to allow library catalogs to be located, and
+to setup directories for user catalog scan (see <a href="User-Catalog.html#User-Catalog">User Catalog</a> for
+more on this variable).  Note that, before the shell is running, IDLWAVE
+can only know about the IDL search path by consulting the file pointed
+to by <code>idlwave-path-file</code> (<samp><span class="file">~/.idlwave/idlpath.el</span></samp>, by
+default).  If <code>idlwave-auto-write-path</code> is enabled (which is the
+default), the paths are written out whenever the IDLWAVE shell is
+started.
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-auto-write-path</b> (<code>t</code>)<var><a name="index-idlwave_002dauto_002dwrite_002dpath-360"></a></var><br>
+<blockquote><p>Write out information on the !PATH and !DIR paths from IDL automatically
+when they change and when the Shell is closed.  These paths are needed
+to locate library catalogs. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-library-path</b><var><a name="index-idlwave_002dlibrary_002dpath-361"></a></var><br>
+<blockquote><p>IDL library path for Windows and MacOS.  Under Unix/MacOSX, will be
+obtained from the Shell when run. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-system-directory</b><var><a name="index-idlwave_002dsystem_002ddirectory-362"></a></var><br>
+<blockquote><p>The IDL system directory for Windows and MacOS.  Also needed for
+locating HTML help and the IDL Assistant for IDL v6.2 and later.  Under
+Unix/MacOSX, will be obtained from the Shell and recorded, if run. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-config-directory</b> (<samp><span class="file">~/.idlwave</span></samp>)<var><a name="index-idlwave_002dconfig_002ddirectory-363"></a></var><br>
+<blockquote><p>Default path where IDLWAVE saves configuration information, a user
+catalog (if any), and a cached scan of the XML catalog (IDL v6.2 and
+later). 
+</p></blockquote></div>
+
+<ul class="menu">
+<li><a accesskey="1" href="Library-Catalogs.html#Library-Catalogs">Library Catalogs</a>
+<li><a accesskey="2" href="User-Catalog.html#User-Catalog">User Catalog</a>
+</ul>
+
+   <p><A NAME="LIBRARY_CATALOGS"></A>
+
+   </body></html>
+

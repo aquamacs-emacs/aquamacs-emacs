@@ -1,0 +1,181 @@
+<html lang="en">
+<head>
+<title>Sequence Functions - Common Lisp Extensions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Common Lisp Extensions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Sequences.html#Sequences" title="Sequences">
+<link rel="prev" href="Mapping-over-Sequences.html#Mapping-over-Sequences" title="Mapping over Sequences">
+<link rel="next" href="Searching-Sequences.html#Searching-Sequences" title="Searching Sequences">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the GNU Emacs Common Lisp emulation package.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Sequence-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Searching-Sequences.html#Searching-Sequences">Searching Sequences</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mapping-over-Sequences.html#Mapping-over-Sequences">Mapping over Sequences</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Sequences.html#Sequences">Sequences</a>
+<hr>
+</div>
+
+<h3 class="section">10.3 Sequence Functions</h3>
+
+<p class="noindent">This section describes a number of Common Lisp functions for
+operating on sequences.
+
+<div class="defun">
+&mdash; Function: <b>subseq</b><var> sequence start &amp;optional end<a name="index-subseq-109"></a></var><br>
+<blockquote><p>This function returns a given subsequence of the argument
+<var>sequence</var>, which may be a list, string, or vector. 
+The indices <var>start</var> and <var>end</var> must be in range, and
+<var>start</var> must be no greater than <var>end</var>.  If <var>end</var>
+is omitted, it defaults to the length of the sequence.  The
+return value is always a copy; it does not share structure
+with <var>sequence</var>.
+
+        <p>As an extension to Common Lisp, <var>start</var> and/or <var>end</var>
+may be negative, in which case they represent a distance back
+from the end of the sequence.  This is for compatibility with
+Emacs' <code>substring</code> function.  Note that <code>subseq</code> is
+the <em>only</em> sequence function that allows negative
+<var>start</var> and <var>end</var>.
+
+        <p>You can use <code>setf</code> on a <code>subseq</code> form to replace a
+specified range of elements with elements from another sequence. 
+The replacement is done as if by <code>replace</code>, described below. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>concatenate</b><var> result-type &amp;rest seqs<a name="index-concatenate-110"></a></var><br>
+<blockquote><p>This function concatenates the argument sequences together to
+form a result sequence of type <var>result-type</var>, one of the
+symbols <code>vector</code>, <code>string</code>, or <code>list</code>.  The
+arguments are always copied, even in cases such as
+<code>(concatenate 'list '(1 2 3))</code> where the result is
+identical to an argument. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>fill</b><var> seq item </var><tt>&amp;key :start :end</tt><var><a name="index-fill-111"></a></var><br>
+<blockquote><p>This function fills the elements of the sequence (or the specified
+part of the sequence) with the value <var>item</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>replace</b><var> seq1 seq2 </var><tt>&amp;key :start1 :end1 :start2 :end2</tt><var><a name="index-replace-112"></a></var><br>
+<blockquote><p>This function copies part of <var>seq2</var> into part of <var>seq1</var>. 
+The sequence <var>seq1</var> is not stretched or resized; the amount
+of data copied is simply the shorter of the source and destination
+(sub)sequences.  The function returns <var>seq1</var>.
+
+        <p>If <var>seq1</var> and <var>seq2</var> are <code>eq</code>, then the replacement
+will work correctly even if the regions indicated by the start
+and end arguments overlap.  However, if <var>seq1</var> and <var>seq2</var>
+are lists which share storage but are not <code>eq</code>, and the
+start and end arguments specify overlapping regions, the effect
+is undefined. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>remove*</b><var> item seq </var><tt>&amp;key :test :test-not :key :count :start :end :from-end</tt><var><a name="index-remove_002a-113"></a></var><br>
+<blockquote><p>This returns a copy of <var>seq</var> with all elements matching
+<var>item</var> removed.  The result may share storage with or be
+<code>eq</code> to <var>seq</var> in some circumstances, but the original
+<var>seq</var> will not be modified.  The <code>:test</code>, <code>:test-not</code>,
+and <code>:key</code> arguments define the matching test that is used;
+by default, elements <code>eql</code> to <var>item</var> are removed.  The
+<code>:count</code> argument specifies the maximum number of matching
+elements that can be removed (only the leftmost <var>count</var> matches
+are removed).  The <code>:start</code> and <code>:end</code> arguments specify
+a region in <var>seq</var> in which elements will be removed; elements
+outside that region are not matched or removed.  The <code>:from-end</code>
+argument, if true, says that elements should be deleted from the
+end of the sequence rather than the beginning (this matters only
+if <var>count</var> was also specified). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>delete*</b><var> item seq </var><tt>&amp;key :test :test-not :key :count :start :end :from-end</tt><var><a name="index-delete_002a-114"></a></var><br>
+<blockquote><p>This deletes all elements of <var>seq</var> which match <var>item</var>. 
+It is a destructive operation.  Since Emacs Lisp does not support
+stretchable strings or vectors, this is the same as <code>remove*</code>
+for those sequence types.  On lists, <code>remove*</code> will copy the
+list if necessary to preserve the original list, whereas
+<code>delete*</code> will splice out parts of the argument list. 
+Compare <code>append</code> and <code>nconc</code>, which are analogous
+non-destructive and destructive list operations in Emacs Lisp. 
+</p></blockquote></div>
+
+   <p><a name="index-remove_002dif-115"></a><a name="index-remove_002dif_002dnot-116"></a><a name="index-delete_002dif-117"></a><a name="index-delete_002dif_002dnot-118"></a>The predicate-oriented functions <code>remove-if</code>, <code>remove-if-not</code>,
+<code>delete-if</code>, and <code>delete-if-not</code> are defined similarly.
+
+<div class="defun">
+&mdash; Function: <b>remove-duplicates</b><var> seq </var><tt>&amp;key :test :test-not :key :start :end :from-end</tt><var><a name="index-remove_002dduplicates-119"></a></var><br>
+<blockquote><p>This function returns a copy of <var>seq</var> with duplicate elements
+removed.  Specifically, if two elements from the sequence match
+according to the <code>:test</code>, <code>:test-not</code>, and <code>:key</code>
+arguments, only the rightmost one is retained.  If <code>:from-end</code>
+is true, the leftmost one is retained instead.  If <code>:start</code> or
+<code>:end</code> is specified, only elements within that subsequence are
+examined or removed. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>delete-duplicates</b><var> seq </var><tt>&amp;key :test :test-not :key :start :end :from-end</tt><var><a name="index-delete_002dduplicates-120"></a></var><br>
+<blockquote><p>This function deletes duplicate elements from <var>seq</var>.  It is
+a destructive version of <code>remove-duplicates</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>substitute</b><var> new old seq </var><tt>&amp;key :test :test-not :key :count :start :end :from-end</tt><var><a name="index-substitute-121"></a></var><br>
+<blockquote><p>This function returns a copy of <var>seq</var>, with all elements
+matching <var>old</var> replaced with <var>new</var>.  The <code>:count</code>,
+<code>:start</code>, <code>:end</code>, and <code>:from-end</code> arguments may be
+used to limit the number of substitutions made. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>nsubstitute</b><var> new old seq </var><tt>&amp;key :test :test-not :key :count :start :end :from-end</tt><var><a name="index-nsubstitute-122"></a></var><br>
+<blockquote><p>This is a destructive version of <code>substitute</code>; it performs
+the substitution using <code>setcar</code> or <code>aset</code> rather than
+by returning a changed copy of the sequence. 
+</p></blockquote></div>
+
+   <p><a name="index-substitute_002dif-123"></a><a name="index-substitute_002dif_002dnot-124"></a><a name="index-nsubstitute_002dif-125"></a><a name="index-nsubstitute_002dif_002dnot-126"></a>The <code>substitute-if</code>, <code>substitute-if-not</code>, <code>nsubstitute-if</code>,
+and <code>nsubstitute-if-not</code> functions are defined similarly.  For
+these, a <var>predicate</var> is given in place of the <var>old</var> argument.
+
+   </body></html>
+

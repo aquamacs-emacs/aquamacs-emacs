@@ -1,0 +1,242 @@
+<html lang="en">
+<head>
+<title>Desktop Notifications - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="System-Interface.html#System-Interface" title="System Interface">
+<link rel="prev" href="Session-Management.html#Session-Management" title="Session Management">
+<link rel="next" href="File-Notifications.html#File-Notifications" title="File Notifications">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
+
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Desktop-Notifications"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="File-Notifications.html#File-Notifications">File Notifications</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Session-Management.html#Session-Management">Session Management</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="System-Interface.html#System-Interface">System Interface</a>
+<hr>
+</div>
+
+<h3 class="section">39.18 Desktop Notifications</h3>
+
+<p><a name="index-desktop-notifications-4255"></a>
+Emacs is able to send <dfn>notifications</dfn> on systems that support the
+freedesktop.org Desktop Notifications Specification.  In order to use
+this functionality, Emacs must have been compiled with D-Bus support,
+and the <code>notifications</code> library must be loaded.
+
+<div class="defun">
+&mdash; Function: <b>notifications-notify</b><var> &amp;rest params<a name="index-notifications_002dnotify-4256"></a></var><br>
+<blockquote><p>This function sends a notification to the desktop via D-Bus,
+consisting of the parameters specified by the <var>params</var> arguments. 
+These arguments should consist of alternating keyword and value pairs. 
+The supported keywords and values are as follows:
+
+          <dl>
+<dt><code>:bus </code><var>bus</var><dd>The D-Bus bus.  This argument is needed only if a bus other than
+<code>:session</code> shall be used.
+
+          <br><dt><code>:title </code><var>title</var><dd>The notification title.
+
+          <br><dt><code>:body </code><var>text</var><dd>The notification body text.  Depending on the implementation of the
+notification server, the text could contain HTML markups, like
+&lsquo;<samp><span class="samp">"&lt;b&gt;bold text&lt;/b&gt;"</span></samp>&rsquo;, hyperlinks, or images.  Special HTML
+characters must be encoded, as &lsquo;<samp><span class="samp">"Contact
+&amp;lt;postmaster@localhost&amp;gt;!"</span></samp>&rsquo;.
+
+          <br><dt><code>:app-name </code><var>name</var><dd>The name of the application sending the notification.  The default is
+<code>notifications-application-name</code>.
+
+          <br><dt><code>:replaces-id </code><var>id</var><dd>The notification <var>id</var> that this notification replaces.  <var>id</var>
+must be the result of a previous <code>notifications-notify</code> call.
+
+          <br><dt><code>:app-icon </code><var>icon-file</var><dd>The file name of the notification icon.  If set to <code>nil</code>, no icon
+is displayed.  The default is <code>notifications-application-icon</code>.
+
+          <br><dt><code>:actions (</code><var>key</var> <var>title</var> <var>key</var> <var>title</var><code> ...)</code><dd>A list of actions to be applied.  <var>key</var> and <var>title</var> are both
+strings.  The default action (usually invoked by clicking the
+notification) should have a key named &lsquo;<samp><span class="samp">"default"</span></samp>&rsquo;.  The title can
+be anything, though implementations are free not to display it.
+
+          <br><dt><code>:timeout </code><var>timeout</var><dd>The timeout time in milliseconds since the display of the notification
+at which the notification should automatically close.  If -1, the
+notification's expiration time is dependent on the notification
+server's settings, and may vary for the type of notification.  If 0,
+the notification never expires.  Default value is -1.
+
+          <br><dt><code>:urgency </code><var>urgency</var><dd>The urgency level.  It can be <code>low</code>, <code>normal</code>, or <code>critical</code>.
+
+          <br><dt><code>:action-items</code><dd>When this keyword is given, the <var>title</var> string of the actions is
+interpreted as icon name.
+
+          <br><dt><code>:category </code><var>category</var><dd>The type of notification this is, a string.  See the
+<a href="http://developer.gnome.org/notification-spec/#categories">Desktop Notifications Specification</a> for a list of standard
+categories.
+
+          <br><dt><code>:desktop-entry </code><var>filename</var><dd>This specifies the name of the desktop filename representing the
+calling program, like &lsquo;<samp><span class="samp">"emacs"</span></samp>&rsquo;.
+
+          <br><dt><code>:image-data (</code><var>width</var> <var>height</var> <var>rowstride</var> <var>has-alpha</var> <var>bits</var> <var>channels</var> <var>data</var><code>)</code><dd>This is a raw data image format that describes the width, height,
+rowstride, whether there is an alpha channel, bits per sample,
+channels and image data, respectively.
+
+          <br><dt><code>:image-path </code><var>path</var><dd>This is represented either as a URI (&lsquo;<samp><span class="samp">file://</span></samp>&rsquo; is the only URI
+schema supported right now) or a name in a freedesktop.org-compliant
+icon theme from &lsquo;<samp><span class="samp">$XDG_DATA_DIRS/icons</span></samp>&rsquo;.
+
+          <br><dt><code>:sound-file </code><var>filename</var><dd>The path to a sound file to play when the notification pops up.
+
+          <br><dt><code>:sound-name </code><var>name</var><dd>A themable named sound from the freedesktop.org sound naming
+specification from &lsquo;<samp><span class="samp">$XDG_DATA_DIRS/sounds</span></samp>&rsquo;, to play when the
+notification pops up.  Similar to the icon name, only for sounds. An
+example would be &lsquo;<samp><span class="samp">"message-new-instant"</span></samp>&rsquo;.
+
+          <br><dt><code>:suppress-sound</code><dd>Causes the server to suppress playing any sounds, if it has that
+ability.
+
+          <br><dt><code>:resident</code><dd>When set the server will not automatically remove the notification
+when an action has been invoked. The notification will remain resident
+in the server until it is explicitly removed by the user or by the
+sender. This hint is likely only useful when the server has the
+<code>:persistence</code> capability.
+
+          <br><dt><code>:transient</code><dd>When set the server will treat the notification as transient and
+by-pass the server's persistence capability, if it should exist.
+
+          <br><dt><code>:x </code><var>position</var><dt><code>:y </code><var>position</var><dd>Specifies the X, Y location on the screen that the
+notification should point to.  Both arguments must be used together.
+
+          <br><dt><code>:on-action </code><var>function</var><dd>Function to call when an action is invoked.  The notification <var>id</var>
+and the <var>key</var> of the action are passed as arguments to the
+function.
+
+          <br><dt><code>:on-close </code><var>function</var><dd>Function to call when the notification has been closed by timeout or
+by the user.  The function receive the notification <var>id</var> and the closing
+<var>reason</var> as arguments:
+
+               <ul>
+<li><code>expired</code> if the notification has expired
+<li><code>dismissed</code> if the notification was dismissed by the user
+<li><code>close-notification</code> if the notification was closed by a call to
+<code>notifications-close-notification</code>
+<li><code>undefined</code> if the notification server hasn't provided a reason
+</ul>
+          </dl>
+
+        <p>Which parameters are accepted by the notification server can be
+checked via <code>notifications-get-capabilities</code>.
+
+        <p>This function returns a notification id, an integer, which can be used
+to manipulate the notification item with
+<code>notifications-close-notification</code> or the <code>:replaces-id</code>
+argument of another <code>notifications-notify</code> call.  For example:
+
+     <pre class="example">          (defun my-on-action-function (id key)
+            (message "Message %d, key \"%s\" pressed" id key))
+               &rArr; my-on-action-function
+          
+          (defun my-on-close-function (id reason)
+            (message "Message %d, closed due to \"%s\"" id reason))
+               &rArr; my-on-close-function
+          
+          (notifications-notify
+           :title "Title"
+           :body "This is &lt;b&gt;important&lt;/b&gt;."
+           :actions '("Confirm" "I agree" "Refuse" "I disagree")
+           :on-action 'my-on-action-function
+           :on-close 'my-on-close-function)
+               &rArr; 22
+          
+          A message window opens on the desktop.  Press "I agree"
+               &rArr; Message 22, key "Confirm" pressed
+                  Message 22, closed due to "dismissed"
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>notifications-close-notification</b><var> id &amp;optional bus<a name="index-notifications_002dclose_002dnotification-4257"></a></var><br>
+<blockquote><p>This function closes a notification with identifier <var>id</var>. 
+<var>bus</var> can be a string denoting a D-Bus connection, the default is
+<code>:session</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>notifications-get-capabilities</b><var> &amp;optional bus<a name="index-notifications_002dget_002dcapabilities-4258"></a></var><br>
+<blockquote><p>Returns the capabilities of the notification server, a list of
+symbols.  <var>bus</var> can be a string denoting a D-Bus connection, the
+default is <code>:session</code>.  The following capabilities can be
+expected:
+
+          <dl>
+<dt><code>:actions</code><dd>The server will provide the specified actions to the user.
+
+          <br><dt><code>:body</code><dd>Supports body text.
+
+          <br><dt><code>:body-hyperlinks</code><dd>The server supports hyperlinks in the notifications.
+
+          <br><dt><code>:body-images</code><dd>The server supports images in the notifications.
+
+          <br><dt><code>:body-markup</code><dd>Supports markup in the body text.
+
+          <br><dt><code>:icon-multi</code><dd>The server will render an animation of all the frames in a given image
+array.
+
+          <br><dt><code>:icon-static</code><dd>Supports display of exactly 1 frame of any given image array.  This
+value is mutually exclusive with <code>:icon-multi</code>.
+
+          <br><dt><code>:persistence</code><dd>The server supports persistence of notifications.
+
+          <br><dt><code>:sound</code><dd>The server supports sounds on notifications. 
+</dl>
+
+        <p>Further vendor-specific caps start with <code>:x-vendor</code>, like
+<code>:x-gnome-foo-cap</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>notifications-get-server-information</b><var> &amp;optional bus<a name="index-notifications_002dget_002dserver_002dinformation-4259"></a></var><br>
+<blockquote><p>Return information on the notification server, a list of strings. 
+<var>bus</var> can be a string denoting a D-Bus connection, the default is
+<code>:session</code>.  The returned list is <code>(</code><var>name</var> <var>vendor</var>
+<var>version</var> <var>spec-version</var><code>)</code>.
+
+          <dl>
+<dt><var>name</var><dd>The product name of the server.
+
+          <br><dt><var>vendor</var><dd>The vendor name.  For example, &lsquo;<samp><span class="samp">"KDE"</span></samp>&rsquo;, &lsquo;<samp><span class="samp">"GNOME"</span></samp>&rsquo;.
+
+          <br><dt><var>version</var><dd>The server's version number.
+
+          <br><dt><var>spec-version</var><dd>The specification version the server is compliant with. 
+</dl>
+
+        <p>If <var>SPEC_VERSION</var> is <code>nil</code>, the server supports a
+specification prior to &lsquo;<samp><span class="samp">"1.0"</span></samp>&rsquo;. 
+</p></blockquote></div>
+
+   </body></html>
+

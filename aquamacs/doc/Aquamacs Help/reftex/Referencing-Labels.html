@@ -1,0 +1,226 @@
+<html lang="en">
+<head>
+<title>Referencing Labels - RefTeX User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="RefTeX User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Labels-and-References.html#Labels-and-References" title="Labels and References">
+<link rel="prev" href="Creating-Labels.html#Creating-Labels" title="Creating Labels">
+<link rel="next" href="Builtin-Label-Environments.html#Builtin-Label-Environments" title="Builtin Label Environments">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents RefTeX, a package to do labels, references,
+citations and indices for LaTeX documents with Emacs.
+
+This is edition 4.31 of the RefTeX User Manual for
+RefTeX 4.31
+
+Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Referencing-Labels"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Builtin-Label-Environments.html#Builtin-Label-Environments">Builtin Label Environments</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Creating-Labels.html#Creating-Labels">Creating Labels</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Labels-and-References.html#Labels-and-References">Labels and References</a>
+<hr>
+</div>
+
+<h3 class="section">3.2 Referencing Labels</h3>
+
+<p><a name="index-Referencing-labels-58"></a><a name="index-Labels_002c-referencing-59"></a><a name="index-Selection-buffer_002c-labels-60"></a><a name="index-Selection-process-61"></a><a name="index-g_t_0040code_007b_005cref_007d-62"></a><a name="index-C_002dc-_0029-63"></a><a name="index-reftex_002dreference-64"></a>
+<a name="index-reftex_002dtrust_002dlabel_002dprefix-65"></a><b>RefTeX</b> scans the document in order to find all labels.  To make
+referencing labels easier, it assigns to each label a category, the
+<em>label type</em> (for example section, table, figure, equation, etc.). 
+In order to determine the label type, RefTeX parses around each label
+to see in what kind of environments it is located.  You can speed up
+the parsing by using type-specific prefixes for labels and configuring
+the variable <code>reftex-trust-label-prefix</code>.
+
+   <p>Referencing Labels is really at the heart of <b>RefTeX</b>.  Press <kbd>C-c
+)</kbd> in order to reference a label (reftex-reference).  This will start a
+selection process and finally insert the complete &lsquo;<samp><span class="samp">\ref{label}</span></samp>&rsquo;
+into the buffer.
+
+   <p>First, <b>RefTeX</b> will determine the label category which is required. 
+Often that can be figured out from context.  For example, if you
+write &lsquo;<samp><span class="samp">As shown in eq.</span></samp>&rsquo; and the press <kbd>C-c )</kbd>, <b>RefTeX</b> knows
+that an equation label is going to be referenced.  If it cannot figure
+out what label category is needed, it will query for one.
+
+   <p>You will then be presented with a label selection menu.  This is a
+special buffer which contains an outline of the document along with all
+labels of the given label category.  In addition, next to the label
+there will be one line of context of the label definition, which is some
+text in the buffer near the label definition.  Usually this is
+sufficient to identify the label.  If you are unsure about a certain
+label, pressing &lt;SPC&gt; will show the label definition point in
+another window.
+
+   <p>In order to reference a label, move to cursor to the correct label and
+press &lt;RET&gt;.  You can also reference several labels with a single
+call to <code>reftex-reference</code> by marking entries with the <kbd>m</kbd>
+key (see below).
+
+   <p><a name="index-g_t_003f-66"></a>Here is a list of special commands in the selection buffer.  A summary
+of this information is always available from the selection process by
+pressing <kbd>?</kbd>.
+
+     <dl>
+<dt><b>General</b>
+<br><dt><kbd>?</kbd><dd>Show a summary of available commands.
+
+     <br><dt><kbd>0-9,-</kbd><dd>Prefix argument.
+
+     <br><dt><b>Moving around</b>
+<br><dt><kbd>n</kbd><dd>Go to next label.
+
+     <br><dt><kbd>p</kbd><dd>Go to previous label.
+
+     <br><dt><kbd>b</kbd><dd>Jump back to the position where you last left the selection buffer. 
+Normally this should get you back to the last referenced label.
+
+     <br><dt><kbd>C-c C-n</kbd><dd>Goto next section heading.
+
+     <br><dt><kbd>C-c C-p</kbd><dd>Goto previous section heading.
+
+     <br><dt><kbd>N z</kbd><dd>Jump to section N, using the prefix arg.  For example <kbd>3 z</kbd> jumps to
+section 3.
+
+     <br><dt><b>Displaying Context</b>
+<br><dt><kbd>&lt;SPC&gt;</kbd><dd>Show the surroundings of the definition of the current label in another
+window.  See also the <kbd>f</kbd> key.
+
+     <br><dt><kbd>f</kbd><dd><a name="index-reftex_002drevisit_002dto_002dfollow-67"></a>Toggle follow mode.  When follow mode is active, the other window will
+always display the full context of the current label.  This is similar
+to pressing &lt;SPC&gt; after each cursor motion.  Note that only context
+in files already visited is shown.  <b>RefTeX</b> will not visit a file
+just for follow mode.  See, however, the variable
+<code>reftex-revisit-to-follow</code>.
+
+     <br><dt><kbd>.</kbd><dd>Show insertion point in another window.  This is the point from where you
+called <code>reftex-reference</code>.
+
+     <br><dt><b>Selecting a label and creating the reference</b>
+<br><dt><kbd>&lt;RET&gt;</kbd><dd>Insert a reference to the label at point into the buffer from which the
+selection process was started.  When entries have been marked, &lt;RET&gt;
+references all marked labels.
+
+     <br><dt><kbd>mouse-2</kbd><dd><a name="index-reftex_002dhighlight_002dselection-68"></a>Clicking with mouse button 2 on a label will accept it like &lt;RET&gt;
+would. See also variable <code>reftex-highlight-selection</code>, <a href="Options-_0028Misc_0029.html#Options-_0028Misc_0029">Options (Misc)</a>.
+
+     <p><a name="index-reftex_002dmultiref_002dpunctuation-69"></a><br><dt><kbd>m - + ,</kbd><dd>Mark the current entry.  When several entries have been marked, pressing
+<kbd>RET</kbd> will accept all of them and place them into several
+<code>\ref</code> macros.  The special markers &lsquo;<samp><span class="samp">,-+</span></samp>&rsquo; also store a
+separator to be inserted before the corresponding reference.  So marking
+six entries with the keys &lsquo;<samp><span class="samp">m , , - , +</span></samp>&rsquo; will give a reference list
+like this (see the variable <code>reftex-multiref-punctuation</code>)
+     <pre class="example">          In eqs. (1), (2), (3)--(4), (5) and (6)
+</pre>
+     <br><dt><kbd>u</kbd><dd>Unmark a marked entry.
+
+     <!-- FIXME: Do we need `A' as well for consistency? -->
+     <p><a name="index-LaTeX-packages_002c-_0040code_007bsaferef_007d-70"></a><a name="index-g_t_0040code_007bsaferef_007d_002c-LaTeX-package-71"></a><br><dt><kbd>a</kbd><dd>Accept the marked entries and put all labels as a comma-separated list
+into one <em>single</em> <code>\ref</code> macro.  Some packages like
+<samp><span class="file">saferef.sty</span></samp> support multiple references in this way.
+
+     <br><dt><kbd>l</kbd><dd>Use the last referenced label(s) again.  This is equivalent to moving to
+that label and pressing &lt;RET&gt;.
+
+     <br><dt><kbd>&lt;TAB&gt;</kbd><dd>Enter a label with completion.  This may also be a label which does not
+yet exist in the document.
+
+     <br><dt><kbd>v</kbd><dd><a name="index-g_t_0040code_007bvarioref_007d_002c-LaTeX-package-72"></a><a name="index-g_t_0040code_007b_005cvref_007d-73"></a><a name="index-LaTeX-packages_002c-_0040code_007bvarioref_007d-74"></a>Toggle between <code>\ref</code> and <code>\vref</code> macro for references.  The
+<code>\vref</code> macro is defined in the <code>varioref</code> LaTeX package. 
+With this key you can force <b>RefTeX</b> to insert a <code>\vref</code>
+macro.  The current state of this flag is displayed by the &lsquo;<samp><span class="samp">S&lt;&gt;</span></samp>&rsquo;
+indicator in the mode line of the selection buffer.
+
+     <br><dt><kbd>V</kbd><dd><a name="index-g_t_0040code_007bfancyref_007d_002c-LaTeX-package-75"></a><a name="index-g_t_0040code_007b_005cfref_007d-76"></a><a name="index-g_t_0040code_007b_005cFref_007d-77"></a><a name="index-LaTeX-packages_002c-_0040code_007bfancyref_007d-78"></a>Cycle between <code>\ref</code>, <code>\fref</code> and <code>\Fref</code>.  The
+<code>\fref</code> and <code>\Fref</code> macros are defined in the <code>fancyref</code>
+LaTeX package.  With this key you can force <b>RefTeX</b> to insert a
+<code>\fref</code> or <code>\Fref</code> macro.  The current state of this flag is
+displayed by the &lsquo;<samp><span class="samp">S&lt;&gt;</span></samp>&rsquo; indicator in the mode line of the
+selection buffer.
+
+     <br><dt><b>Exiting</b><dd>
+
+     <br><dt><kbd>q</kbd><dd>Exit the selection process without inserting any reference into the
+buffer.
+
+     <br><dt><b>Controlling what gets displayed</b><dd>
+<a name="index-reftex_002dlabel_002dmenu_002dflags-79"></a>The defaults for the following flags can be configured with the variable
+<code>reftex-label-menu-flags</code> (see <a href="Options-_0028Referencing-Labels_0029.html#Options-_0028Referencing-Labels_0029">Options (Referencing Labels)</a>).
+
+     <br><dt><kbd>c</kbd><dd>Toggle the display of the one-line label definition context in the
+selection buffer.
+
+     <br><dt><kbd>F</kbd><dd>Toggle the display of the file borders of a multifile document in the
+selection buffer.
+
+     <br><dt><kbd>t</kbd><dd>Toggle the display of the table of contents in the selection buffer. 
+With prefix <var>arg</var>, change the maximum level of toc entries displayed
+to <var>arg</var>.  Chapters are level 1, section are level 2.
+
+     <br><dt><kbd>#</kbd><dd>Toggle the display of a label counter in the selection buffer.
+
+     <br><dt><kbd>%</kbd><dd>Toggle the display of labels hidden in comments in the selection
+buffers.  Sometimes, you may have commented out parts of your document. 
+If these parts contain label definitions, <b>RefTeX</b> can still display
+and reference these labels.
+
+     <br><dt><b>Updating the buffer</b>
+<br><dt><kbd>g</kbd><dd>Update the menu.  This will rebuilt the menu from the internal label
+list, but not reparse the document (see <kbd>r</kbd>).
+
+     <br><dt><kbd>r</kbd><dd><a name="index-reftex_002denable_002dpartial_002dscans-80"></a>Reparse the document to update the information on all labels and rebuild
+the menu.  If the variable <code>reftex-enable-partial-scans</code> is
+non-<code>nil</code> and your document is a multifile document, this will
+reparse only a part of the document (the file in which the label at
+point was defined).
+
+     <br><dt><kbd>C-u r</kbd><dd>Reparse the <em>entire</em> document.
+
+     <br><dt><kbd>s</kbd><dd>Switch the label category.  After prompting for another label category,
+a menu for that category will be shown.
+
+     <br><dt><kbd>x</kbd><dd>Reference a label from an external document.  With the LaTeX package
+<code>xr</code> it is possible to reference labels defined in another
+document.  This key will switch to the label menu of an external
+document and let you select a label from there (see <a href="xr-_0028LaTeX-package_0029.html#xr-_0028LaTeX-package_0029">xr</a>).
+
+   </dl>
+
+   <p><a name="index-reftex_002dselect_002dlabel_002dmap-81"></a>In order to define additional commands for the selection process, the
+keymap <code>reftex-select-label-map</code> may be used.
+
+   </body></html>
+

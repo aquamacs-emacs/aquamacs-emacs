@@ -1,0 +1,151 @@
+<html lang="en">
+<head>
+<title>Completion - IDLWAVE User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="IDLWAVE User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode" title="The IDLWAVE Major Mode">
+<link rel="prev" href="Online-Help.html#Online-Help" title="Online Help">
+<link rel="next" href="Routine-Source.html#Routine-Source" title="Routine Source">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents IDLWAVE, a major mode for editing IDL files with
+Emacs, and interacting with an IDL shell run as a subprocess.
+
+This is edition 6.1 of the IDLWAVE User Manual for IDLWAVE
+6.1.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Completion"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Routine-Source.html#Routine-Source">Routine Source</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Online-Help.html#Online-Help">Online Help</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="The-IDLWAVE-Major-Mode.html#The-IDLWAVE-Major-Mode">The IDLWAVE Major Mode</a>
+<hr>
+</div>
+
+<h3 class="section">4.4 Completion</h3>
+
+<p><a name="index-Completion-123"></a><a name="index-Keyword-completion-124"></a><a name="index-Method-completion-125"></a><a name="index-Object-method-completion-126"></a><a name="index-Class-name-completion-127"></a><a name="index-Function-name-completion-128"></a><a name="index-Procedure-name-completion-129"></a>
+<a name="index-M_002d_0040key_007bTAB_007d-130"></a><a name="index-C_002dc-C_002di-131"></a>IDLWAVE offers completion for class names, routine names, keywords,
+system variables, system variable tags, class structure tags, regular
+structure tags and file names.  As in many programming modes, completion
+is bound to <kbd>M-&lt;TAB&gt;</kbd> (or simply <kbd>&lt;TAB&gt;</kbd> in the IDLWAVE
+Shell &mdash; see <a href="Using-the-Shell.html#Using-the-Shell">Using the Shell</a>).  Completion uses exactly the same
+internal information as routine info, so when necessary (rarely) it can
+be updated with <kbd>C-c C-i</kbd> (<code>idlwave-update-routine-info</code>).
+
+   <p>The completion function is context sensitive and figures out what to
+complete based on the location of the point.  Here are example lines and
+what <kbd>M-&lt;TAB&gt;</kbd> would try to complete when the cursor is on the
+position marked with a &lsquo;<samp><span class="samp">_</span></samp>&rsquo;:
+
+<pre class="example">     plo_                    <span class="roman">Procedure</span>
+     x = a_                  <span class="roman">Function</span>
+     plot,xra_               <span class="roman">Keyword of </span><code>plot</code><span class="roman"> procedure</span>
+     plot,x,y,/x_            <span class="roman">Keyword of </span><code>plot</code><span class="roman"> procedure</span>
+     plot,min(_              <span class="roman">Keyword of </span><code>min</code><span class="roman"> function</span>
+     obj -&gt; a_               <span class="roman">Object method (procedure)</span>
+     a[2,3] = obj -&gt; a_      <span class="roman">Object method (function)</span>
+     x = obj_new('IDL_       <span class="roman">Class name</span>
+     x = obj_new('MyCl',a_   <span class="roman">Keyword to </span><code>Init</code><span class="roman"> method in class </span><code>MyCl</code>
+     pro A_                  <span class="roman">Class name</span>
+     pro _                   <span class="roman">Fill in </span><code>Class::</code><span class="roman"> of first method in this file</span>
+     !v_                     <span class="roman">System variable</span>
+     !version.t_             <span class="roman">Structure tag of system variable</span>
+     self.g_                 <span class="roman">Class structure tag in methods</span>
+     state.w_                <span class="roman">Structure tag, if tag completion enabled</span>
+     name = 'a_              <span class="roman">File name (default inside quotes)</span>
+</pre>
+   <p><a name="index-Completion_002c-ambiguity-132"></a><a name="index-Completion_002c-forcing-function-name-133"></a>The only place where completion is ambiguous is procedure/function
+<em>keywords</em> versus <em>functions</em>.  After &lsquo;<samp><span class="samp">plot,x,_</span></samp>&rsquo;, IDLWAVE
+will always assume a keyword to &lsquo;<samp><span class="samp">plot</span></samp>&rsquo;.  However, a function is
+also a possible completion here.  You can force completion of a function
+name at such a location by using a prefix arg: <kbd>C-u M-&lt;TAB&gt;</kbd>.
+
+   <p>Giving two prefix arguments (<kbd>C-u C-u M-&lt;TAB&gt;</kbd>) prompts for a
+regular expression to search among the commands to be completed.  As
+an example, completing a blank line in this way will allow you to
+search for a procedure matching a regexp.
+
+   <p><a name="index-Scrolling-the-_0040file_007b_002aCompletions_002a_007d-window-134"></a><a name="index-Completion_002c-scrolling-135"></a><a name="index-Completion_002c-Online-Help-136"></a><a name="index-Online-Help-in-_0040file_007b_002aCompletions_002a_007d-buffer-137"></a>If the list of completions is too long to fit in the
+<samp><span class="file">*Completions*</span></samp> window, the window can be scrolled by pressing
+<kbd>M-&lt;TAB&gt;</kbd> repeatedly.  Online help (if installed) for each
+possible completion is available by clicking with <kbd>Mouse-3</kbd> on the
+item.  Items for which system online help (from the IDL manual) is
+available will be emphasized (e.g. colored blue).  For other items, the
+corresponding source code or DocLib header will be used as the help
+text.
+
+   <p><a name="index-Completion_002c-cancelling-138"></a><a name="index-Cancelling-completion-139"></a>Completion is not a blocking operation &mdash; you are free to continue
+editing, enter commands, or simply ignore the <samp><span class="file">*Completions*</span></samp>
+buffer during a completion operation.  If, however, the most recent
+command was a completion, <kbd>C-g</kbd> will remove the buffer and restore
+the window configuration.  You can also remove the buffer at any time
+with no negative consequences.
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-keyword-completion-adds-equal</b> (<code>t</code>)<var><a name="index-idlwave_002dkeyword_002dcompletion_002dadds_002dequal-140"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means completion automatically adds &lsquo;<samp><span class="samp">=</span></samp>&rsquo; after
+completed keywords. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-function-completion-adds-paren</b> (<code>t</code>)<var><a name="index-idlwave_002dfunction_002dcompletion_002dadds_002dparen-141"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means completion automatically adds &lsquo;<samp><span class="samp">(</span></samp>&rsquo; after
+completed function.  A value of `2' means also add the closing
+parenthesis and position the cursor between the two. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-completion-restore-window-configuration</b> (<code>t</code>)<var><a name="index-idlwave_002dcompletion_002drestore_002dwindow_002dconfiguration-142"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means restore window configuration after successful
+completion. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>idlwave-highlight-help-links-in-completion</b> (<code>t</code>)<var><a name="index-idlwave_002dhighlight_002dhelp_002dlinks_002din_002dcompletion-143"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means highlight completions for which system help is
+available. 
+</p></blockquote></div>
+
+<ul class="menu">
+<li><a accesskey="1" href="Case-of-Completed-Words.html#Case-of-Completed-Words">Case of Completed Words</a>:      CaseOFcomPletedWords
+<li><a accesskey="2" href="Object-Method-Completion-and-Class-Ambiguity.html#Object-Method-Completion-and-Class-Ambiguity">Object Method Completion and Class Ambiguity</a>:   obj-&gt;Method, what? 
+<li><a accesskey="3" href="Object-Method-Completion-in-the-Shell.html#Object-Method-Completion-in-the-Shell">Object Method Completion in the Shell</a>
+<li><a accesskey="4" href="Class-and-Keyword-Inheritance.html#Class-and-Keyword-Inheritance">Class and Keyword Inheritance</a>:   obj-&gt;Method, _EXTRA=e
+<li><a accesskey="5" href="Structure-Tag-Completion.html#Structure-Tag-Completion">Structure Tag Completion</a>:     Completing state.Tag
+</ul>
+
+   </body></html>
+

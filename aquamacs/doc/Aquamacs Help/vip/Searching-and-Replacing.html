@@ -1,0 +1,93 @@
+<html lang="en">
+<head>
+<title>Searching and Replacing - VIP</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="VIP">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Vi-Commands.html#Vi-Commands" title="Vi Commands">
+<link rel="prev" href="Motion-Commands.html#Motion-Commands" title="Motion Commands">
+<link rel="next" href="Modifying-Commands.html#Modifying-Commands" title="Modifying Commands">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1987, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Searching-and-Replacing"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Modifying-Commands.html#Modifying-Commands">Modifying Commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Motion-Commands.html#Motion-Commands">Motion Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Vi-Commands.html#Vi-Commands">Vi Commands</a>
+<hr>
+</div>
+
+<h3 class="section">2.8 Searching and Replacing</h3>
+
+<p>Following commands are available for searching and replacing.
+
+   <p><a name="index-regular-expression-_0028search_0029-182"></a>
+     <dl>
+<dt><kbd>/ </kbd><var>string</var><kbd> &lt;RET&gt;</kbd><dd><a name="index-g_t057-_0040kbd_007b_002f_007d-_0028_0040code_007bvip_002dsearch_002dforward_007d_0029-183"></a>Search the first occurrence of the string <var>string</var> forward starting
+from point.  Given a count <var>n</var>, the <var>n</var>-th occurrence of
+<var>string</var> will be searched.  If the variable <code>vip-re-search</code> has value
+<code>t</code> then <dfn>regular expression</dfn> search is done and the string
+matching the regular expression <var>string</var> is found.  If you give an
+empty string as <var>string</var> then the search mode will change from vanilla
+search to regular expression search and vice versa
+(<code>vip-search-forward</code>). 
+<br><dt><kbd>? </kbd><var>string</var><kbd> &lt;RET&gt;</kbd><dd><a name="index-g_t077-_0040kbd_007b_003f_007d-_0028_0040code_007bvip_002dsearch_002dbackward_007d_0029-184"></a>Same as <kbd>/</kbd>, except that search is done backward
+(<code>vip-search-backward</code>). 
+<br><dt><kbd>n</kbd><dd><a name="index-g_t156-_0040kbd_007bn_007d-_0028_0040code_007bvip_002dsearch_002dnext_007d_0029-185"></a>Search the previous search pattern in the same direction as before
+(<code>vip-search-next</code>). 
+<br><dt><kbd>N</kbd><dd><a name="index-g_t116-_0040kbd_007bN_007d-_0028_0040code_007bvip_002dsearch_002dNext_007d_0029-186"></a>Search the previous search pattern in the opposite direction
+(<code>vip-search-Next</code>). 
+<br><dt><kbd>C-s</kbd><dd><a name="index-g_t023-_0040kbd_007bC_002ds_007d-_0028_0040code_007bisearch_002dforward_007d_0029-187"></a>Search forward incrementally.  See GNU Emacs Manual for details
+(<code>isearch-forward</code>). 
+<br><dt><kbd>C-r</kbd><dd><a name="index-g_t022-_0040kbd_007bC_002dr_007d-_0028_0040code_007bisearch_002dbackward_007d_0029-188"></a>Search backward incrementally (<code>isearch-backward</code>). 
+<a name="index-vanilla-_0028replacement_0029-189"></a><a name="index-regular-expression-_0028replacement_0029-190"></a><br><dt><kbd>R </kbd><var>string</var><kbd> RET </kbd><var>newstring</var><dd><a name="index-g_t122-_0040kbd_007bR_007d-_0028_0040code_007bvip_002dreplace_002dstring_007d_0029-191"></a>There are two modes of replacement, <dfn>vanilla</dfn> and <dfn>regular expression</dfn>. 
+If the mode is <i>vanilla</i> you will get a prompt &lsquo;<samp><span class="samp">Replace string:</span></samp>&rsquo;,
+and if the mode is <i>regular expression</i> you will ge a prompt
+&lsquo;<samp><span class="samp">Replace regexp:</span></samp>&rsquo;.  The mode is initially <i>vanilla</i>, but you can
+toggle these modes by giving a null string as <var>string</var>.  If the mode is
+vanilla, this command replaces every occurrence of <var>string</var> with
+<var>newstring</var>.  If the mode is regular expression, <var>string</var> is
+treated as a regular expression and every string matching the regular
+expression is replaced with <var>newstring</var> (<code>vip-replace-string</code>). 
+<br><dt><kbd>Q </kbd><var>string</var><kbd> RET </kbd><var>newstring</var><dd><a name="index-g_t121-_0040kbd_007bQ_007d-_0028_0040code_007bvip_002dquery_002dreplace_007d_0029-192"></a>Same as <kbd>R</kbd> except that you will be asked form confirmation before each
+replacement
+<br>(<code>vip-query-replace</code>). 
+<br><dt><kbd>r </kbd><var>ch</var><dd><a name="index-g_t162-_0040kbd_007br_007d-_0028_0040code_007bvip_002dreplace_002dchar_007d_0029-193"></a>Replace the character point is looking at by the character <var>ch</var>.  Give
+count, replace that many characters by <var>ch</var> (<code>vip-replace-char</code>). 
+</dl>
+   The commands <kbd>/</kbd> and <kbd>?</kbd> mark point before move, so that you can
+return to the original point by <kbd>`&nbsp;`</kbd><!-- /@w -->.
+
+   </body></html>
+

@@ -1,0 +1,246 @@
+<html lang="en">
+<head>
+<title>Help-M - Info</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Info">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Getting-Started.html#Getting-Started" title="Getting Started">
+<link rel="prev" href="Help_002dInv.html#Help_002dInv" title="Help-Inv">
+<link rel="next" href="Help_002dXref.html#Help_002dXref" title="Help-Xref">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file describes how to use Info, the on-line, menu-driven GNU
+documentation system.
+
+Copyright (C) 1989, 1992, 1996, 1997, 1998, 1999, 2000, 2001,
+2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License'' in the Emacs manual.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+
+     This document is part of a collection distributed under the GNU
+     Free Documentation License.  If you want to distribute this
+     document separately from the collection, you can do so by adding a
+     copy of the license to the document, as described in section 6 of
+     the license.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Help-M"></a>
+<a name="Help_002dM"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Help_002dXref.html#Help_002dXref">Help-Xref</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Help_002dInv.html#Help_002dInv">Help-Inv</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Getting-Started.html#Getting-Started">Getting Started</a>
+<hr>
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h3 class="section">1.6 Menus and the <kbd>m</kbd> command</h3>
+
+<p><a name="index-menus-in-an-Info-document-23"></a><a name="index-Info-menus-24"></a>  With only the <kbd>n</kbd> (next), <kbd>p</kbd> (previous), <kbd>&lt;SPC&gt;</kbd>,
+<kbd>&lt;BACKSPACE&gt;</kbd>, <kbd>]</kbd> and <kbd>[</kbd> commands for moving between
+nodes, nodes are restricted to a linear sequence.  Menus allow a
+branching structure.  A menu is a list of other nodes you can move to. 
+It is actually just part of the text of the node formatted specially
+so that Info can interpret it.  The beginning of a menu is always
+identified by a line which starts with &lsquo;<samp><span class="samp">*&nbsp;Menu:</span></samp>&rsquo;<!-- /@w -->.  A node
+contains a menu if and only if it has a line in it which starts that
+way.  The only menu you can use at any moment is the one in the node
+you are in.  To use a menu in any other node, you must move to that
+node first.
+
+   <p>After the start of the menu, each line that starts with a &lsquo;<samp><span class="samp">*</span></samp>&rsquo;
+identifies one subtopic.  The line usually contains a brief name for
+the subtopic (followed by a &lsquo;<samp><span class="samp">:</span></samp>&rsquo;, normally hidden in Emacs), the
+name of the node that talks about that subtopic (again, normally
+hidden in Emacs), and optionally some further description of the
+subtopic.  Lines in the menu that do not start with a &lsquo;<samp><span class="samp">*</span></samp>&rsquo; have no
+special meaning&mdash;they are only for the human reader's benefit and do
+not define additional subtopics.  Here is an example:
+
+<pre class="example">     * Foo:  Node about FOO.      This tells about FOO.
+</pre>
+   <p>The subtopic name is Foo, and the node describing it is &lsquo;<samp><span class="samp">Node
+about FOO</span></samp>&rsquo;.  The rest of the line is just for the reader's
+Information.  [[ But this line is not a real menu item, simply because
+there is no line above it which starts with &lsquo;<samp><span class="samp">*&nbsp;Menu:</span></samp>&rsquo;<!-- /@w -->.  Also,
+in a real menu item, the &lsquo;<samp><span class="samp">*</span></samp>&rsquo; would appear at the very start of
+the line.  This is why the &ldquo;normally hidden&rdquo; text in Emacs, namely
+&lsquo;<samp><span class="samp">: Node about FOO.</span></samp>&rsquo;, is actually visible in this example, even
+when Visible mode is off.]]
+
+   <p>When you use a menu to go to another node (in a way that will be
+described soon), what you specify is the subtopic name, the first
+thing in the menu line.  Info uses it to find the menu line, extracts
+the node name from it, and goes to that node.  The reason that there
+is both a subtopic name and a node name is that the node name must be
+meaningful to the computer and may therefore have to be ugly looking. 
+The subtopic name can be chosen just to be convenient for the user to
+specify.  Often the node name is convenient for the user to specify
+and so both it and the subtopic name are the same.  There is an
+abbreviation for this:
+
+<pre class="example">     * Foo::   This tells about FOO.
+</pre>
+   <p class="noindent">This means that the subtopic name and node name are the same; they are
+both &lsquo;<samp><span class="samp">Foo</span></samp>&rsquo;.  (The &lsquo;<samp><span class="samp">::</span></samp>&rsquo; is normally hidden in Emacs.)
+
+<pre class="format">&gt;&gt; Now use &lt;SPC&gt; to find the menu in this node, then come back to
+   the front with a <kbd>b</kbd> and some &lt;SPC&gt;s.  As you see, a menu is
+   actually visible in its node.  If you cannot find a menu in a node
+   by looking at it, then the node does not have a menu and the
+   <kbd>m</kbd> command is not available.
+</pre>
+   <p>If you keep typing &lt;SPC&gt; once the menu appears on the screen, it
+will move to another node (the first one in the menu).  If that
+happens, type &lt;BACKSPACE&gt; to come back.
+
+   <p><a name="index-m-_0040r_007b_0028Info-mode_0029_007d-25"></a>  The command to go to one of the subnodes is <kbd>m</kbd>.  This is very
+different from the commands you have used: it is a command that
+prompts you for more input.
+
+   <p>The Info commands you know do not need additional input; when you
+type one of them, Info processes it instantly and then is ready for
+another command.  The <kbd>m</kbd> command is different: it needs to know
+the <dfn>name of the subtopic</dfn>.  Once you have typed <kbd>m</kbd>, Info
+tries to read the subtopic name.
+
+   <p>Now, in the stand-alone Info, look for the line containing many
+dashes near the bottom of the screen.  (This is the stand-alone
+equivalent for the mode line in Emacs.)  There is one more line
+beneath that one, but usually it is blank.  (In Emacs, this is the
+echo area.)  When it is blank, Info is ready for a command, such as
+<kbd>n</kbd> or <kbd>b</kbd> or &lt;SPC&gt; or <kbd>m</kbd>.  If that line contains
+text ending in a colon, it means Info is reading more input for the
+last command.  You can't type an Info command then, because Info is
+trying to read input, not commands.  You must either give the input
+and finish the command you started, or type <kbd>Control-g</kbd> to cancel
+the command.  When you have done one of those things, the input entry
+line becomes blank again.  Then you can type Info commands again.
+
+   <p><a name="index-Info_002dmenu-26"></a>  The command to go to a subnode via a menu is <kbd>m</kbd>.  After you type
+the <kbd>m</kbd>, the line at the bottom of the screen says &lsquo;<samp><span class="samp">Menu item: </span></samp>&rsquo;. 
+You must then type the name of the subtopic you want, and end it with
+a &lt;RET&gt;.
+
+   <p><a name="index-abbreviating-Info-subnodes-27"></a>  You can abbreviate the subtopic name.  If the abbreviation is not
+unique, the first matching subtopic is chosen.  Some menus put
+the shortest possible abbreviation for each subtopic name in capital
+letters, so you can see how much you need to type.  It does not
+matter whether you use upper case or lower case when you type the
+subtopic.  You should not put any spaces at the end, or inside of the
+item name, except for one space where a space appears in the item in
+the menu.
+
+   <p><a name="index-completion-of-Info-node-names-28"></a>  You can also use the <dfn>completion</dfn> feature to help enter the
+subtopic name.  If you type the &lt;TAB&gt; key after entering part of a
+name, it will fill in more of the name&mdash;as much as Info can deduce
+from the part you have entered.
+
+   <p>If you move the cursor to one of the menu subtopic lines, then you do
+not need to type the argument: you just type a &lt;RET&gt;, and it
+stands for the subtopic of the line you are on.  You can also click
+the middle mouse button directly on the subtopic line to go there.
+
+   <p>Here is a menu to give you a chance to practice.  This menu gives you
+three ways of going to one place, Help-FOO:
+
+<ul class="menu">
+<li><a accesskey="1" href="Help_002dFOO.html#Help_002dFOO">Foo</a>:        A node you can visit for fun. 
+<li><a accesskey="2" href="Help_002dFOO.html#Help_002dFOO">Bar</a>:        We have made two ways to get to the same place. 
+<li><a accesskey="3" href="Help_002dFOO.html#Help_002dFOO">Help-FOO</a>:             And yet another! 
+</ul>
+
+   <p>(Turn Visible mode on if you are using Emacs.)
+
+<pre class="format">&gt;&gt;  Now type just an <kbd>m</kbd> and see what happens:
+</pre>
+   <p>Now you are &ldquo;inside&rdquo; an <kbd>m</kbd> command.  Commands cannot be used
+now; the next thing you will type must be the name of a subtopic.
+
+   <p>You can change your mind about doing the <kbd>m</kbd> by typing
+<kbd>Control-g</kbd>.
+
+<pre class="format">&gt;&gt; Try that now;  notice the bottom line clear.
+</pre>
+   <pre class="format">&gt;&gt; Then type another <kbd>m</kbd>.
+</pre>
+   <pre class="format">&gt;&gt; Now type <kbd>BAR</kbd>, the item name.  Do not type &lt;RET&gt; yet.
+</pre>
+   <p>While you are typing the item name, you can use the &lt;DEL&gt; (or
+&lt;BACKSPACE&gt;) key to cancel one character at a time if you make a
+mistake.
+
+<pre class="format">&gt;&gt; Press &lt;DEL&gt; to cancel the &lsquo;<samp><span class="samp">R</span></samp>&rsquo;.  You could type another <kbd>R</kbd>
+   to replace it.  But you do not have to, since &lsquo;<samp><span class="samp">BA</span></samp>&rsquo; is a valid
+   abbreviation.
+</pre>
+   <pre class="format">&gt;&gt; Now you are ready to go.  Type a &lt;RET&gt;.
+</pre>
+   <p>After visiting &lsquo;<samp><span class="samp">Help-FOO</span></samp>&rsquo;, you should return here.
+
+   <p>Another way to move to the menu subtopic lines and between them is
+to type &lt;TAB&gt;.  Each time you type a &lt;TAB&gt;, you move to the
+next subtopic line.  To move to a previous subtopic line in the
+stand-alone reader, type <kbd>M-&lt;TAB&gt;</kbd>&mdash;that is, press and hold
+the &lt;META&gt; key and then press &lt;TAB&gt;.  (On some keyboards, the
+&lt;META&gt; key might be labeled &lsquo;<samp><span class="samp">Alt</span></samp>&rsquo;.)  In Emacs Info, type
+<kbd>S-&lt;TAB&gt;</kbd> to move to a previous subtopic line (press and hold
+the &lt;Shift&gt; key and then press &lt;TAB&gt;).
+
+   <p>Once you move cursor to a subtopic line, press &lt;RET&gt; to go to
+that subtopic's node.
+
+   <p><a name="index-mouse-support-in-Info-mode-29"></a><a name="index-Mouse_002d2-_0040r_007b_0028Info-mode_0029_007d-30"></a>  If your terminal supports a mouse, you have yet another way of going
+to a subtopic.  Move your mouse pointer to the subtopic line,
+somewhere between the beginning &lsquo;<samp><span class="samp">*</span></samp>&rsquo; and the colon &lsquo;<samp><span class="samp">:</span></samp>&rsquo; which
+ends the subtopic's brief name.  You will see the subtopic's name
+change its appearance (usually, its background color will change), and
+the shape of the mouse pointer will change if your platform supports
+that.  After a while, if you leave the mouse on that spot, a small
+window will pop up, saying &ldquo;Mouse-2: go to that node,&rdquo; or the same
+message may appear at the bottom of the screen.
+
+   <p><kbd>Mouse-2</kbd> is the second button of your mouse counting from the
+left&mdash;the middle button on a 3-button mouse.  (On a 2-button mouse,
+you may have to press both buttons together to &ldquo;press the middle
+button&rdquo;.)  The message tells you pressing <kbd>Mouse-2</kbd> with the
+current position of the mouse pointer (on subtopic in the menu) will
+go to that subtopic.
+
+   <p><a name="index-Info_002dmouse_002dfollow_002dnearest_002dnode-31"></a>  More generally, <kbd>Mouse-2</kbd> in an Info buffer finds the nearest
+link to another node and goes there.  For example, near a cross
+reference it acts like <kbd>f</kbd>, in a menu it acts like <kbd>m</kbd>, on the
+node's header line it acts like <kbd>n</kbd>, <kbd>p</kbd>, or <kbd>u</kbd>, etc.  At
+end of the node's text <kbd>Mouse-2</kbd> moves to the next node, or up if
+there's no next node.
+
+<pre class="format">&gt;&gt; Type <kbd>n</kbd> to see more commands.
+</pre>
+   </body></html>
+

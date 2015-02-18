@@ -1,0 +1,330 @@
+<html lang="en">
+<head>
+<title>Adding Attachments - The MH-E Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The MH-E Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Editing-Drafts.html#Editing-Drafts" title="Editing Drafts">
+<link rel="prev" href="Picture.html#Picture" title="Picture">
+<link rel="next" href="Sending-PGP.html#Sending-PGP" title="Sending PGP">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is version 8.2 of `The MH-E
+Manual', last updated 2009-06-13.
+
+Copyright (C) 1995, 2001, 2002, 2003, 2005, 2006, 2007, 2008,
+  2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of either:
+
+       a. the GNU Free Documentation License, Version 1.3 or any later
+          version published by the Free Software Foundation; with no
+          Invariant Sections, with the Front-Cover texts being ``A GNU
+          Manual,'' and with the Back-Cover Texts as in (a) below. A
+          copy of the license is included in the section entitled ``GNU
+          Free Documentation License.''
+
+          (a) The FSF's Back-Cover Text is: ``You have the freedom to
+          copy and modify this GNU manual. Buying copies from the FSF
+          supports it in developing GNU and promoting software
+          freedom.''
+
+       b. the GNU General Public License as published by the Free
+          Software Foundation; either version 3, or (at your option)
+          any later version. A copy of the license is included in the
+          section entitled ``GNU General Public License.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Adding-Attachments"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Sending-PGP.html#Sending-PGP">Sending PGP</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Picture.html#Picture">Picture</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Editing-Drafts.html#Editing-Drafts">Editing Drafts</a>
+<hr>
+</div>
+
+<h3 class="section">9.6 Adding Attachments</h3>
+
+<p><a name="index-g_t_0040command_007bmhbuild_007d-1387"></a><a name="index-g_t_0040command_007bmhn_007d-1388"></a><a name="index-MH-commands_002c-_0040command_007bmhbuild_007d-1389"></a><a name="index-MH-commands_002c-_0040command_007bmhn_007d-1390"></a><a name="index-MIME-1391"></a><a name="index-multimedia-mail-1392"></a>
+MH-E has the capability to create multimedia messages. It uses the
+<span class="sc">mime</span> (Multipurpose Internet Mail Extensions)
+protocol<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a> The
+<span class="sc">mime</span> protocol allows you to incorporate images, sound, video,
+binary files, and even commands that fetch a file with &lsquo;<samp><span class="samp">ftp</span></samp>&rsquo; when
+your recipient reads the message!
+
+   <p><a name="index-C_002dc-C_002dm-1393"></a>
+If you were to create a multimedia message with plain MH commands, you
+would insert <samp><span class="command">mhbuild</span></samp> or <samp><span class="command">mhn</span></samp> directives (henceforth
+called <dfn>MH-style directives</dfn> into your draft and use the
+<samp><span class="command">mhbuild</span></samp> command in nmh or <samp><span class="command">mhn</span></samp> command in MH and
+GNU mailutils to expand them. MH-E works in much the same way,
+although it provides a handful of commands prefixed with <kbd>C-c C-m</kbd>
+to insert the directives so you don't need to remember the syntax of
+them. Remember: you can always add MH-style directives by
+hand<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>.
+
+   <p><a name="index-MIME-Meta-Language-_0028MML_0029-1394"></a><a name="index-MML-1395"></a><a name="index-mh_002dcompose_002dinsertion-1396"></a>
+In addition to MH-style directives, MH-E also supports MML (<span class="sc">mime</span>
+Meta Language) tags<a rel="footnote" href="#fn-3" name="fnd-3"><sup>3</sup></a>. The option <code>mh-compose-insertion</code> can be used to choose
+between them. By default, this option is set to &lsquo;<samp><span class="samp">MML</span></samp>&rsquo; if it is
+supported since it provides a lot more functionality. This option can
+also be set to &lsquo;<samp><span class="samp">MH</span></samp>&rsquo; if MH-style directives are preferred.
+
+   <p><a name="index-media-types-1397"></a><a name="index-MIME_002c-media-types-1398"></a>
+The MH-E <span class="sc">mime</span> commands require a <dfn>media type</dfn> for each body
+part or attachment. For example, a PDF document is of type
+&lsquo;<samp><span class="samp">application/pdf</span></samp>&rsquo; and an HTML document is of type
+&lsquo;<samp><span class="samp">text/html</span></samp>&rsquo;. Some commands fill in the media type for you,
+whereas others require you to enter one.
+
+   <p><a name="index-g_t_0040command_007bfile_007d-1399"></a><a name="index-g_t_0040file_007b_002fetc_002fmime_002etypes_007d-1400"></a><a name="index-files_002c-_0040file_007b_002fetc_002fmime_002etypes_007d-1401"></a><a name="index-Unix-commands_002c-_0040command_007bfile_007d-1402"></a><a name="index-mailcap_002dmime_002dtypes-1403"></a>
+In the cases where MH-E can do so, it will determine the media type
+automatically. It uses the <samp><span class="command">file</span></samp> command to do this. Failing
+that, the Emacs function <code>mailcap-mime-types</code> is used to provide
+a list from which to choose. This function usually reads the file
+<samp><span class="file">/etc/mime.types</span></samp>.
+
+   <p>Whether the media type is chosen automatically, or you choose it from
+a list, use the type that seems to match best the file that you are
+including. In the case of binaries, the media type
+&lsquo;<samp><span class="samp">application/x-executable</span></samp>&rsquo; can be useful. If you can't find an
+appropriate media type, use &lsquo;<samp><span class="samp">text/plain</span></samp>&rsquo; for text messages and
+&lsquo;<samp><span class="samp">application/octet-stream</span></samp>&rsquo; for everything else.
+
+   <p><a name="index-content-description-1404"></a><a name="index-MIME_002c-content-description-1405"></a>
+You are also sometimes asked for a <dfn>content description</dfn>. This is
+simply an optional brief phrase, in your own words, that describes the
+object. If you don't care to enter a content description, just press
+return and none will be included; however, a reader may skip over
+multimedia fields unless the content description is compelling.
+
+   <p>You can also create your own <span class="sc">mime</span> body parts. In the following
+example, I describe how you can create and edit a &lsquo;<samp><span class="samp">text/enriched</span></samp>&rsquo;
+body part to liven up your plain text messages with boldface,
+underlining, and italics. I include an Emacs function which inserts
+enriched text tags.
+
+<pre class="smalllisp">     (defvar enriched-text-types '(("b" . "bold") ("i" . "italic")
+                                   ("u" . "underline")
+                                   ("s" . "smaller") ("B" . "bigger")
+                                   ("f" . "fixed")
+                                   ("c" . "center"))
+       "Alist of (final-character . tag) choices for add-enriched-text.
+     Additional types can be found in RFC 1563.")
+     
+     (defun add-enriched-text (begin end)
+       "Add enriched text tags around region.
+     The tag used comes from the list enriched-text-types and is
+     specified by the last keystroke of the command.  When called from Lisp,
+     arguments are BEGIN and END."
+       (interactive "r")
+       ;; <span class="roman">Set type to the tag indicated by the last keystroke.</span>
+       (let ((type (cdr (assoc (char-to-string (logior last-input-char ?`<!-- /@w -->))
+                               enriched-text-types))))
+         (save-restriction               ; <span class="roman">restores state from narrow-to-region</span>
+           (narrow-to-region begin end)      ; <span class="roman">narrow view to region</span>
+           (goto-char (point-min))           ; <span class="roman">move to beginning of text</span>
+           (insert "&lt;" type "&gt;")             ; <span class="roman">insert beginning tag</span>
+           (goto-char (point-max))           ; <span class="roman">move to end of text</span>
+           (insert "&lt;/" type "&gt;"))))         ; <span class="roman">insert terminating tag</span>
+     <i>Emacs function for entering enriched text</i>
+</pre>
+   <p>To use the function <code>add-enriched-text</code>, first add it to
+<samp><span class="file">~/.emacs</span></samp> and create key bindings for it (see <a href="Composing.html#Composing">Composing</a>).
+
+   <p>Then, in your plain text message, set the mark with <kbd>C-@</kbd> or
+<kbd>C-&lt;SPC&gt;</kbd>, type in the text to be highlighted, and type <kbd>C-c t
+b</kbd>. This adds &lsquo;<samp><span class="samp">&lt;bold&gt;</span></samp>&rsquo; where you set the mark and adds
+&lsquo;<samp><span class="samp">&lt;/bold&gt;</span></samp>&rsquo; at the location of your cursor, giving you something
+like: &lsquo;<samp><span class="samp">You should be &lt;bold&gt;very&lt;/bold&gt;</span></samp>&rsquo;.
+
+   <p>Before sending this message, use <kbd>C-c C-m C-m</kbd>
+(<code>mh-mml-to-mime</code>)<a rel="footnote" href="#fn-4" name="fnd-4"><sup>4</sup></a> to add
+MIME header fields. Then replace &lsquo;<samp><span class="samp">text/plain</span></samp>&rsquo; with
+&lsquo;<samp><span class="samp">text/enriched</span></samp>&rsquo; in the &lsquo;<samp><span class="samp">Content-Type:</span></samp>&rsquo; header field.
+
+   <p>You may also be interested in investigating <code>sgml-mode</code>.
+
+<h4 class="subheading">Including Files</h4>
+
+<p><a name="index-attachments_002c-inserting-1406"></a><a name="index-images-1407"></a><a name="index-MIME_002c-images-1408"></a><a name="index-MIME_002c-sound-1409"></a><a name="index-MIME_002c-video-1410"></a><a name="index-sound-1411"></a><a name="index-video-1412"></a><a name="index-mh_002dcompose_002dinsertion-1413"></a><a name="index-C_002dc-C_002dm-C_002di-1414"></a><a name="index-C_002dc-C_002dm-i-1415"></a><a name="index-mh_002dcompose_002dinsertion-1416"></a>
+Binaries, images, sound, and video can be inserted in your message
+with the command <kbd>C-c C-m C-i</kbd> (<code>mh-compose-insertion</code>). You
+are prompted for the filename containing the object, the media type if
+it cannot be determined automatically, and a content description. If
+you're using MH-style directives, you will also be prompted for
+additional attributes.
+
+<h4 class="subheading">Forwarding Multimedia Messages</h4>
+
+<p><a name="index-mh_002dcompose_002dforward-1417"></a><a name="index-C_002dc-C_002dm-C_002df-1418"></a><a name="index-C_002dc-C_002dm-f-1419"></a>
+Mail may be forwarded with <span class="sc">mime</span> using the command <kbd>C-c C-m
+C-f</kbd> (<code>mh-compose-forward</code>). You are prompted for a content
+description, the name of the folder in which the messages to forward
+are located, and a range of messages, which defaults to the current
+message in that folder. See <a href="Ranges.html#Ranges">Ranges</a>.
+
+<h4 class="subheading">Including an FTP Reference</h4>
+
+<p><a name="index-g_t_0040command_007bftp_007d-1420"></a><a name="index-MIME_002c-_0040command_007bftp_007d-1421"></a><a name="index-Unix-commands_002c-_0040command_007bftp_007d-1422"></a><a name="index-mh_002dmh_002dcompose_002danon_002dftp-1423"></a><a name="index-C_002dc-C_002dm-C_002dg-1424"></a><a name="index-C_002dc-C_002dm-g-1425"></a>
+You can have your message initiate an <samp><span class="command">ftp</span></samp> transfer when the
+recipient reads the message. To do this, use the command <kbd>C-c C-m
+C-g</kbd> (<code>mh-mh-compose-anon-ftp</code>). You are prompted for the remote
+host and filename, the media type, and the content description.
+
+<h4 class="subheading">Including tar Files</h4>
+
+<p><a name="index-g_t_0040command_007bftp_007d-1426"></a><a name="index-g_t_0040command_007btar_007d-1427"></a><a name="index-MIME_002c-_0040command_007bftp_007d-1428"></a><a name="index-MIME_002c-_0040command_007btar_007d-1429"></a><a name="index-Unix-commands_002c-_0040command_007bftp_007d-1430"></a><a name="index-Unix-commands_002c-_0040command_007btar_007d-1431"></a><a name="index-mh_002dmh_002dcompose_002danon_002dftp-1432"></a><a name="index-mh_002dmh_002dcompose_002dexternal_002dcompressed_002dtar-1433"></a><a name="index-C_002dc-C_002dm-C_002dg-1434"></a><a name="index-C_002dc-C_002dm-C_002dt-1435"></a><a name="index-C_002dc-C_002dm-t-1436"></a>
+If the remote file is a compressed tar file, you can use <kbd>C-c C-m
+C-t</kbd> (<code>mh-mh-compose-external-compressed-tar</code>). Then, in addition
+to retrieving the file via anonymous <em>ftp</em> as per the command
+<kbd>C-c C-m C-g</kbd> (<code>mh-mh-compose-anon-ftp</code>), the file will also
+be uncompressed and untarred. You are prompted for the remote host and
+filename and the content description.
+
+<h4 class="subheading">Including Other External Files</h4>
+
+<p><a name="index-mh_002dmh_002dcompose_002dexternal_002dtype-1437"></a><a name="index-C_002dc-C_002dm-C_002dx-1438"></a><a name="index-C_002dc-C_002dm-x-1439"></a>
+The command <kbd>C-c C-m C-x</kbd> (<code>mh-mh-compose-external-type</code>) is
+a general utility for referencing external files. In fact, all of the
+other commands that insert tags to access external files call this
+command. You are prompted for the access type, remote host and
+filename, and content type. If you provide a prefix argument, you are
+also prompted for a content description, attributes, parameters, and a
+comment.
+
+<h4 class="subheading">Previewing Multimedia Messages</h4>
+
+<p>When you are finished editing a <span class="sc">mime</span> message, it might look like this:
+
+   <p><table class="cartouche" summary="cartouche" border="1"><tr><td>
+<pre class="smallexample">     3 t08/24  root               received fax files on Wed Aug 24 11:00:
+     4+t08/24  To:wohler          Test&lt;&lt;This is a test message to get the
+     
+     
+     
+     
+     
+     --:%%  {+inbox} 4 msgs (1-4)   Bot L4     (MH-Folder Show)---------------
+     To: wohler
+     cc:
+     Subject: Test of MIME
+     --------
+     Here is the SETI@Home logo:
+     
+     &lt;#part type="image/x-xpm" filename="~/lib/images/setiathome.xpm"
+     disposition=inline description="SETI@home logo"&gt;
+     &lt;#/part&gt;
+     --:**  {draft}   All L8     (MH-Letter)----------------------------------
+     
+</pre>
+   </td></tr></table>
+   <i>MH-E </i><span class="sc">mime</span><i> draft</i>
+
+   <p><a name="index-mh_002dmml_002dto_002dmime-1440"></a><a name="index-C_002dc-C_002dm-C_002dm-1441"></a><a name="index-C_002dc-C_002dm-m-1442"></a>
+Typically, you send a message with attachments just like any other
+message (see <a href="Sending-Message.html#Sending-Message">Sending Message</a>).
+
+   <p><a name="index-mh_002dmml_002dto_002dmime-1443"></a><a name="index-C_002dc-C_002dm-C_002dm-1444"></a>
+However, you may take a sneak preview of the <span class="sc">mime</span> encoding if you
+wish by running the command <kbd>C-c C-m C-m</kbd> (<code>mh-mml-to-mime</code>). 
+The following screen shows the <span class="sc">mime</span> encoding specified by the
+tags. You can see why mail user agents are usually built to hide these
+details from the user.
+
+   <p><table class="cartouche" summary="cartouche" border="1"><tr><td>
+<pre class="smallexample">     To: wohler
+     cc:
+     Subject: Test of MIME
+     X-Mailer: MH-E 8.1; nmh 1.1; GNU Emacs 23.1
+     MIME-Version: 1.0
+     Content-Type: multipart/mixed; boundary="=-=-="
+     --------
+     --=-=-=
+     
+     Here is the SETI@Home logo:
+     
+     
+     --=-=-=
+     Content-Type: image/x-xpm
+     Content-Disposition: inline; filename=setiathome.xpm
+     Content-Transfer-Encoding: base64
+     Content-Description: SETI@home logo
+     
+     LyogWFBNICovCnN0YXRpYyBjaGFyICogc2V0aWF0aG9tZV94cG1bXSA9IHsKIjQ1IDQ1IDc2N
+     --:--  {draft}   Top L1     (MH-Letter)----------------------------------
+     
+</pre>
+   </td></tr></table>
+   <i>MH-E </i><span class="sc">mime</span><i> draft ready to send</i>
+
+   <p><a name="index-undo-effects-of-mh_002dmml_002dto_002dmime-1445"></a>
+This action can be undone by running <kbd>C-_</kbd> (<code>undo</code>).
+
+   <p><a name="index-g_t_0040command_007bmhbuild_007d-1446"></a><a name="index-g_t_0040command_007bmhn_007d-1447"></a><a name="index-MH-commands_002c-_0040command_007bmhbuild_007d-1448"></a><a name="index-MH-commands_002c-_0040command_007bmhn_007d-1449"></a><a name="index-undo-effects-of-mh_002dmh_002dto_002dmime-1450"></a><a name="index-mh_002dmh_002dto_002dmime-1451"></a><a name="index-mh_002dmh_002dto_002dmime_002dundo-1452"></a><a name="index-C_002dc-C_002de-1453"></a><a name="index-C_002dc-C_002dm-C_002dm-1454"></a><a name="index-C_002dc-C_002dm-C_002du-1455"></a><a name="index-C_002dc-C_002dm-u-1456"></a>
+If you're using MH-style directives, use <kbd>C-c C-e</kbd>
+(<code>mh-mh-to-mime</code>) instead of <kbd>C-c C-m C-m</kbd>. This runs the
+command <samp><span class="command">mhbuild</span></samp> (<samp><span class="command">mhn</span></samp>) on the message which expands
+the tags<a rel="footnote" href="#fn-5" name="fnd-5"><sup>5</sup></a>. This action can be undone by running <kbd>C-c C-m C-u</kbd>
+(<code>mh-mh-to-mime-undo</code>), which works by reverting to a backup
+file. You are prompted to confirm this action, but you can avoid the
+confirmation by adding an argument (for example, <kbd>C-u C-c C-m
+C-u</kbd>).
+
+   <p><a name="index-C_002dc-C_002de-1457"></a><a name="index-mh_002dmh_002dto_002dmime_002dargs-1458"></a>
+If you wish to pass additional arguments to <samp><span class="command">mhbuild</span></samp>
+(<samp><span class="command">mhn</span></samp>) to affect how it builds your message, use the option
+<code>mh-mh-to-mime-args</code>. For example, you can build a consistency
+check into the message by setting <code>mh-mh-to-mime-args</code> to
+&lsquo;<samp><span class="samp">-check</span></samp>&rsquo;. The recipient of your message can then run
+&lsquo;<samp><span class="samp">mhbuild -check</span></samp>&rsquo; on the message&mdash;<samp><span class="command">mhbuild</span></samp>
+(<samp><span class="command">mhn</span></samp>) will complain if the message has been corrupted on the
+way. The command <kbd>C-c C-e</kbd> only consults this option when given a
+prefix argument (as in <kbd>C-u C-c C-e</kbd>).
+
+   <p><a name="index-C_002dc-C_002de-1459"></a><a name="index-mh_002dmh_002dto_002dmime_002dhook-1460"></a>
+The hook <code>mh-mh-to-mime-hook</code> is called after the message has
+been formatted by <kbd>C-c C-e</kbd>.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> <span class="sc">mime</span> is defined in
+<a href="http://www.rfc-editor.org/rfc/rfc2045.txt">RFC 2045</a>.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> See the section
+<a href="http://rand-mh.sourceforge.net/book/mh/usimim.html#SeMIMa">Sending MIME Mail</a> in
+the MH book.</p>
+
+   <p class="footnote"><small>[<a name="fn-3" href="#fnd-3">3</a>]</small> 
+See the section Composing in
+<a href="http://www.gnus.org/manual/emacs-mime.html"><cite>The Emacs MIME Manual</cite></a>. 
+</p>
+
+   <p class="footnote"><small>[<a name="fn-4" href="#fnd-4">4</a>]</small> Use <kbd>C-c C-e</kbd>
+(<code>mh-mh-to-mime</code>) if you're using MH-style directives.</p>
+
+   <p class="footnote"><small>[<a name="fn-5" href="#fnd-5">5</a>]</small> See the section
+<a href="http://rand-mh.sourceforge.net/book/mh/usimim.html#SeMIMa">Sending MIME Mail</a> in
+the MH book.</p>
+
+   <hr></div>
+
+   </body></html>
+

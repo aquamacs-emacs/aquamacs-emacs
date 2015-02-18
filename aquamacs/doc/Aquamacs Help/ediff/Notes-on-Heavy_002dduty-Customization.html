@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+<title>Notes on Heavy-duty Customization - Ediff User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Ediff User's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customization.html#Customization" title="Customization">
+<link rel="prev" href="Miscellaneous.html#Miscellaneous" title="Miscellaneous">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Ediff, a comprehensive visual interface to Unix diff
+and patch utilities.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Notes-on-Heavy-duty-Customization"></a>
+<a name="Notes-on-Heavy_002dduty-Customization"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Miscellaneous.html#Miscellaneous">Miscellaneous</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Customization</a>
+<hr>
+</div>
+
+<h3 class="section">7.13 Notes on Heavy-duty Customization</h3>
+
+<p>Some users need to customize Ediff in rather sophisticated ways, which
+requires different defaults for different kinds of files (e.g., SGML,
+etc.).  Ediff supports this kind of customization in several ways.  First,
+most customization variables are buffer-local.  Those that aren't are
+usually accessible from within Ediff Control Panel, so one can make them
+local to the panel by calling make-local-variable from within
+<code>ediff-startup-hook</code>.
+
+   <p>Second, the function <code>ediff-setup</code> accepts an optional sixth
+argument which has the form <code>((</code><var>var-name-1</var><code> . </code><var>val-1</var><code>)
+(</code><var>var-name-2</var><code> . </code><var>val-2</var><code>) ...)</code>.  The function
+<code>ediff-setup</code> sets the variables in the list to the respective
+values, locally in the Ediff control buffer.  This is an easy way to
+throw in custom variables (which usually should be buffer-local) that
+can then be tested in various hooks.
+
+   <p>Make sure the variable <code>ediff-job-name</code> and <code>ediff-word-mode</code> are set
+properly in this case, as some things in Ediff depend on this.
+
+   <p>Finally, if you want custom-tailored help messages, you can set the
+variables <code>ediff-brief-help-message-function</code> and
+<code>ediff-long-help-message-function</code>
+to functions that return help strings. 
+<a name="index-ediff_002dstartup_002dhook-233"></a><a name="index-ediff_002dsetup-234"></a><a name="index-ediff_002djob_002dname-235"></a><a name="index-ediff_002dword_002dmode-236"></a><a name="index-ediff_002dbrief_002dhelp_002dmessage_002dfunction-237"></a><a name="index-ediff_002dlong_002dhelp_002dmessage_002dfunction-238"></a>
+When customizing Ediff, some other variables are useful, although they are
+not user-definable.  They are local to the Ediff control buffer, so this
+buffer must be current when you access these variables.  The control buffer
+is accessible via the variable <code>ediff-control-buffer</code>, which is also
+local to that buffer.  It is usually used for checking if the current buffer
+is also the control buffer.
+
+   <p>Other variables of interest are:
+     <dl>
+<dt><code>ediff-buffer-A</code><dd>The first of the data buffers being compared.
+
+     <br><dt><code>ediff-buffer-B</code><dd>The second of the data buffers being compared.
+
+     <br><dt><code>ediff-buffer-C</code><dd>In three-way comparisons, this is the third buffer being compared. 
+In merging, this is the merge buffer. 
+In two-way comparison, this variable is <code>nil</code>.
+
+     <br><dt><code>ediff-window-A</code><dd>The window displaying buffer A.  If buffer A is not visible, this variable
+is <code>nil</code> or it may be a dead window.
+
+     <br><dt><code>ediff-window-B</code><dd>The window displaying buffer B.
+
+     <br><dt><code>ediff-window-C</code><dd>The window displaying buffer C, if any.
+
+     <br><dt><code>ediff-control-frame</code><dd>A dedicated frame displaying the control buffer, if it exists.  It is
+non-<code>nil</code> only if Ediff uses the multiframe display, i.e., when
+the control buffer is in its own frame. 
+</dl>
+
+   </body></html>
+

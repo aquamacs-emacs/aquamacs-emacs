@@ -1,0 +1,148 @@
+<html lang="en">
+<head>
+<title>Defining Index Macros - RefTeX User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="RefTeX User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Index-Support.html#Index-Support" title="Index Support">
+<link rel="prev" href="Builtin-Index-Macros.html#Builtin-Index-Macros" title="Builtin Index Macros">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents RefTeX, a package to do labels, references,
+citations and indices for LaTeX documents with Emacs.
+
+This is edition 4.31 of the RefTeX User Manual for
+RefTeX 4.31
+
+Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Defining-Index-Macros"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Builtin-Index-Macros.html#Builtin-Index-Macros">Builtin Index Macros</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Index-Support.html#Index-Support">Index Support</a>
+<hr>
+</div>
+
+<h3 class="section">5.5 Defining Index Macros</h3>
+
+<p><a name="index-Defining-Index-Macros-275"></a><a name="index-Index-macros_002c-defining-276"></a><a name="index-reftex_002dindex_002dmacros-277"></a>
+When writing a document with an index you will probably define
+additional macros which make entries into the index. 
+Let's look at an example.
+
+<pre class="example">     \newcommand{\ix}[1]{#1\index{#1}}
+     \newcommand{\nindex}[1]{\textit{#1}\index[name]{#1}}
+     \newcommand{\astobj}[1]{\index{Astronomical Objects!#1}}
+</pre>
+   <p>The first macro <code>\ix</code> typesets its argument in the text and places
+it into the index.  The second macro <code>\nindex</code> typesets its
+argument in the text and places it into a separate index with the tag
+&lsquo;<samp><span class="samp">name</span></samp>&rsquo;<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  The last macro also places its argument into the index, but as
+subitems under the main index entry &lsquo;<samp><span class="samp">Astronomical Objects</span></samp>&rsquo;.  Here
+is how to make <b>RefTeX</b> recognize and correctly interpret these
+macros, first with Emacs Lisp.
+
+<pre class="lisp">     (setq reftex-index-macros
+           '(("\\ix{*}" "idx" ?x "" nil nil)
+             ("\\nindex{*}" "name" ?n "" nil nil)
+             ("\\astobj{*}" "idx" ?o "Astronomical Objects!" nil t)))
+</pre>
+   <p>Note that the index tag is &lsquo;<samp><span class="samp">idx</span></samp>&rsquo; for the main index, and
+&lsquo;<samp><span class="samp">name</span></samp>&rsquo; for the name index.  &lsquo;<samp><span class="samp">idx</span></samp>&rsquo; and &lsquo;<samp><span class="samp">glo</span></samp>&rsquo; are reserved
+for the default index and for the glossary.
+
+   <p>The character arguments <code>?x</code>, <code>?n</code>, and <code>?o</code> are for
+quick identification of these macros when <b>RefTeX</b> inserts new
+index entries with <code>reftex-index</code>.  These codes need to be
+unique. <code>?i</code>, <code>?I</code>, and <code>?g</code> are reserved for the
+<code>\index</code>, <code>\index*</code>, and <code>\glossary</code> macros,
+respectively.
+
+   <p>The following string is empty unless your macro adds a superordinate
+entry to the index key - this is the case for the <code>\astobj</code> macro.
+
+   <p>The next entry can be a hook function to exclude certain matches, it
+almost always can be <code>nil</code>.
+
+   <p>The final element in the list indicates if the text being indexed needs
+to be repeated outside the macro.  For the normal index macros, this
+should be <code>t</code>.  Only if the macro typesets the entry in the text
+(like <code>\ix</code> and <code>\nindex</code> in the example do), this should be
+<code>nil</code>.
+
+   <p>To do the same thing with customize, you need to fill in the templates
+like this:
+
+<pre class="example">     Repeat:
+     [INS] [DEL] List:
+                 Macro with args: \ix{*}
+                 Index Tag      : [Value Menu] String: idx
+                 Access Key     : x
+                 Key Prefix     :
+                 Exclusion hook : nil
+                 Repeat Outside : [Toggle]  off (nil)
+     [INS] [DEL] List:
+                 Macro with args: \nindex{*}
+                 Index Tag      : [Value Menu] String: name
+                 Access Key     : n
+                 Key Prefix     :
+                 Exclusion hook : nil
+                 Repeat Outside : [Toggle]  off (nil)
+     [INS] [DEL] List:
+                 Macro with args: \astobj{*}
+                 Index Tag      : [Value Menu] String: idx
+                 Access Key     : o
+                 Key Prefix     : Astronomical Objects!
+                 Exclusion hook : nil
+                 Repeat Outside : [Toggle]  on (non-nil)
+     [INS]
+</pre>
+   <p>With the macro <code>\ix</code> defined, you may want to change the default
+macro used for indexing a text phrase (see <a href="Creating-Index-Entries.html#Creating-Index-Entries">Creating Index Entries</a>). 
+This would be done like this
+
+<pre class="lisp">     (setq reftex-index-default-macro '(?x "idx"))
+</pre>
+   <p>which specifies that the macro identified with the character <code>?x</code> (the
+<code>\ix</code> macro) should be used for indexing phrases and words already
+in the buffer with <kbd>C-c /</kbd> (<code>reftex-index-selection-or-word</code>). 
+The index tag is "idx".
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> We are using the syntax of the <samp><span class="file">index</span></samp> package
+here.</p>
+
+   <hr></div>
+
+   </body></html>
+

@@ -2014,6 +2014,8 @@ With argument, add COUNT copies of the character."
 	    ;; If the string was found but was completely invisible,
 	    ;; it might now be partly visible, so try again.
 	    (prog1 isearch-hidden (setq isearch-hidden nil)))
+    (if (use-region-p)
+	(deactivate-mark))
     ;; In reverse search, adding stuff at
     ;; the end may cause zero or many more chars to be
     ;; matched, in the string following point.
@@ -2048,8 +2050,7 @@ With argument, add COUNT copies of the character."
 		       (min isearch-opoint
 			    isearch-barrier
 			    (1+ isearch-other-end)))))
-      (isearch-search)
-      ))
+      (isearch-search)))
   (isearch-push-state)
   (if isearch-op-fun (funcall isearch-op-fun))
   (isearch-update))
@@ -2946,7 +2947,6 @@ since they have special meaning in a regexp."
 (defvar isearch-lazy-highlight-regexp-lax-whitespace nil)
 (defvar isearch-lazy-highlight-word nil)
 (defvar isearch-lazy-highlight-forward nil)
-(defvar isearch-lazy-highlight-error nil)
 
 (defun lazy-highlight-cleanup (&optional force)
   "Stop lazy highlighting and remove extra highlighting from current buffer.
@@ -2994,10 +2994,7 @@ by other Emacs features."
                  (not (= (window-end)   ; Window may have been split/joined.
 			 isearch-lazy-highlight-window-end))
 		 (not (eq isearch-forward
-			  isearch-lazy-highlight-forward))
-		 ;; In case we are recovering from an error.
-		 (not (equal isearch-error
-			     isearch-lazy-highlight-error))))
+			  isearch-lazy-highlight-forward))))
     ;; something important did indeed change
     (lazy-highlight-cleanup t) ;kill old loop & remove overlays
     (setq isearch-lazy-highlight-error isearch-error)

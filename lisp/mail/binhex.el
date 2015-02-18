@@ -1,4 +1,4 @@
-;;; binhex.el --- decode BinHex-encoded text
+;;; binhex.el --- elisp native binhex decode
 
 ;; Copyright (C) 1998-2014 Free Software Foundation, Inc.
 
@@ -21,11 +21,6 @@
 ;; along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;; Commentary:
-
-;; BinHex is a binary-to-text encoding scheme similar to uuencode.
-;; The command `binhex-decode-region' decodes BinHex-encoded text, via
-;; the external program "hexbin" if that is available, or an Emacs
-;; Lisp implementation if not.
 
 ;;; Code:
 

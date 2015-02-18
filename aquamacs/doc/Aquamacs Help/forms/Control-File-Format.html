@@ -1,0 +1,157 @@
+<html lang="en">
+<head>
+<title>Control File Format - Forms Mode User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Forms Mode User's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Data-File-Format.html#Data-File-Format" title="Data File Format">
+<link rel="next" href="Format-Description.html#Format-Description" title="Format Description">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Forms mode, a form-editing major mode for GNU Emacs.
+
+Copyright (C) 1989, 1997, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Control-File-Format"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Format-Description.html#Format-Description">Format Description</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Data-File-Format.html#Data-File-Format">Data File Format</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">5 Control File Format</h2>
+
+<p><a name="index-control-file-44"></a>The Forms mode <dfn>control file</dfn> serves two purposes.  First, it names
+the data file to use, and defines its format and properties.  Second,
+the Emacs buffer it occupies is used by Forms mode to display the forms.
+
+   <p>The contents of the control file are evaluated as a Lisp program.  It
+should set the following Lisp variables to suitable values:
+
+     
+<a name="index-forms_002dfile-45"></a>
+<dl><dt><code>forms-file</code><dd>This variable specifies the name of the data file.  Example:
+
+     <pre class="example">          (setq forms-file "my/data-file")
+</pre>
+     <p>If the control file doesn't set <code>forms-file</code>, Forms mode
+reports an error.
+
+     <p><a name="index-forms_002dformat_002dlist-46"></a><br><dt><code>forms-format-list</code><dd>This variable describes the way the fields of the record are formatted on
+the screen.  For details, see <a href="Format-Description.html#Format-Description">Format Description</a>.
+
+     <p><a name="index-forms_002dnumber_002dof_002dfields-47"></a><br><dt><code>forms-number-of-fields</code><dd>This variable holds the number of fields in each record of the data
+file.  Example:
+
+     <pre class="example">          (setq forms-number-of-fields 10)
+</pre>
+     </dl>
+
+   <p>If the control file does not set <code>forms-format-list</code> a default
+format is used.  In this situation, Forms mode will deduce the number of
+fields from the data file providing this file exists and
+<code>forms-number-of-records</code> has not been set in the control file.
+
+   <p>The control file can optionally set the following additional Forms mode
+variables.  Most of them have default values that are good for most
+applications.
+
+     
+<a name="index-forms_002dfield_002dsep-48"></a>
+<dl><dt><code>forms-field-sep</code><dd>This variable may be used to designate the string which separates the
+fields in the records of the data file.  If not set, it defaults to the
+string <code>"\t"</code> (a Tab character).  Example:
+
+     <pre class="example">          (setq forms-field-sep "\t")
+</pre>
+     <p><a name="index-forms_002dread_002donly-49"></a><br><dt><code>forms-read-only</code><dd>If the value is non-<code>nil</code>, the data file is treated read-only.  (Forms
+mode also treats the data file as read-only if you don't have access to
+write it.)  Example:
+
+     <pre class="example">          (set forms-read-only t)
+</pre>
+     <p><a name="index-forms_002dmulti_002dline-50"></a><br><dt><code>forms-multi-line</code><dd>This variable specifies the <dfn>pseudo newline</dfn> separator that allows
+multi-line fields.  This separator goes between the &ldquo;lines&rdquo; within a
+field&mdash;thus, the field doesn't really contain multiple lines, but it
+appears that way when displayed in Forms mode.  If the value is
+<code>nil</code>, multi-line text fields are prohibited.  The pseudo newline
+must not be a character contained in <code>forms-field-sep</code>.
+
+     <p>The default value is <code>"\^k"</code>, the character Control-K.  Example:
+
+     <pre class="example">          (setq forms-multi-line "\^k")
+</pre>
+     <p><a name="index-forms_002dread_002dfile_002dfilter-51"></a><br><dt><code>forms-read-file-filter</code><dd>This variable holds the name of a function to be called after the data
+file has been read in. This can be used to transform the contents of the
+data file into a format more suitable for forms processing. 
+If it is <code>nil</code>, no function is called.  For example, to maintain a
+gzipped database:
+
+     <pre class="example">          (defun gzip-read-file-filter ()
+            (shell-command-on-region (point-min) (point-max)
+                                     "gzip -d" t t))
+          (setq forms-read-file-filter 'gzip-read-file-filter)
+</pre>
+     <p><a name="index-forms_002dwrite_002dfile_002dfilter-52"></a><br><dt><code>forms-write-file-filter</code><dd>This variable holds the name of a function to be called before writing
+out the contents of the data file. 
+This can be used to undo the effects of <code>forms-read-file-filter</code>. 
+If it is <code>nil</code>, no function is called.  Example:
+
+     <pre class="example">          (defun gzip-write-file-filter ()
+            (make-variable-buffer-local 'require-final-newline)
+            (setq require-final-newline nil)
+            (shell-command-on-region (point-min) (point-max)
+                                     "gzip" t t))
+          (setq forms-write-file-filter 'gzip-write-file-filter)
+</pre>
+     <p><a name="index-forms_002dnew_002drecord_002dfilter-53"></a><br><dt><code>forms-new-record-filter</code><dd>This variable holds a function to be called whenever a new record is created
+to supply default values for fields.  If it is <code>nil</code>, no function is
+called. 
+See <a href="Modifying-Forms-Contents.html#Modifying-Forms-Contents">Modifying Forms Contents</a>, for details.
+
+     <p><a name="index-forms_002dmodified_002drecord_002dfilter-54"></a><br><dt><code>forms-modified-record-filter</code><dd>This variable holds a function to be called whenever a record is
+modified, just before updating the Forms data file.  If it is
+<code>nil</code>, no function is called. 
+See <a href="Modifying-Forms-Contents.html#Modifying-Forms-Contents">Modifying Forms Contents</a>, for details.
+
+     <p><a name="index-forms_002dinsert_002dafter-55"></a><br><dt><code>forms-insert-after</code><dd>If this variable is not <code>nil</code>, new records are created <em>after</em> the
+current record. Also, upon visiting a file, the initial position will be
+at the last record instead of the first one.
+
+     <p><a name="index-forms_002dcheck_002dnumber_002dof_002dfields-56"></a><br><dt><code>forms-check-number-of-fields</code><dd>Normally each record is checked to contain the correct number of fields. 
+Under certain circumstances, this can be undesirable. 
+If this variable is set to <code>nil</code>, these checks will be bypassed. 
+</dl>
+
+   </body></html>
+

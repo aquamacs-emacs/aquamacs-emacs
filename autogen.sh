@@ -28,6 +28,9 @@
 ## run this script to generate the necessary files.
 ## For more details, see the file INSTALL.REPO.
 
+## Set the AUTOCONFPATH environment variable to specify 
+## an additional search path for autoconf.
+
 ### Code:
 
 ## Tools we need:
@@ -40,6 +43,9 @@ autoconf_min=`sed -n 's/^ *AC_PREREQ(\([0-9\.]*\)).*/\1/p' configure.ac`
 ## This will need improving if more options are ever added to the
 ## AM_INIT_AUTOMAKE call.
 automake_min=`sed -n 's/^ *AM_INIT_AUTOMAKE(\([0-9\.]*\)).*/\1/p' configure.ac`
+
+
+[ x"$AUTOCONFPATH" = x ] || PATH=$AUTOCONFPATH:$PATH
 
 
 ## $1 = program, eg "autoconf".

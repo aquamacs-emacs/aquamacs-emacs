@@ -1,0 +1,145 @@
+<html lang="en">
+<head>
+<title>Problems and Work-Arounds - RefTeX User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="RefTeX User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Optimizations.html#Optimizations" title="Optimizations">
+<link rel="next" href="Imprint.html#Imprint" title="Imprint">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents RefTeX, a package to do labels, references,
+citations and indices for LaTeX documents with Emacs.
+
+This is edition 4.31 of the RefTeX User Manual for
+RefTeX 4.31
+
+Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Problems-and-Work-Arounds"></a>
+<a name="Problems-and-Work_002dArounds"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Imprint.html#Imprint">Imprint</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Optimizations.html#Optimizations">Optimizations</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h3 class="section">6.9 Problems and Work-arounds</h3>
+
+<p><a name="index-Problems-and-work_002darounds-380"></a>
+     <ul>
+<li><b>LaTeX commands</b><br>
+<a name="index-LaTeX-commands_002c-not-found-381"></a><code>\input</code>, <code>\include</code>, and <code>\section</code> (etc.) statements
+have to be first on a line (except for white space).
+
+     <li><b>Commented regions</b><br>
+<a name="index-Labels_002c-commented-out-382"></a><b>RefTeX</b> sees also labels in regions commented out and will refuse to
+make duplicates of such labels.  This is considered to be a feature.
+
+     <li><b>Wrong section numbers</b><br>
+<a name="index-Section-numbers_002c-wrong-383"></a><a name="index-reftex_002denable_002dpartial_002dscans-384"></a>When using partial scans (<code>reftex-enable-partial-scans</code>), the section
+numbers in the table of contents may eventually become wrong.  A full
+scan will fix this.
+
+     <li><b>Local settings</b><br>
+<a name="index-Settings_002c-local-385"></a><a name="index-reftex_002dadd_002dlabel_002denvironments-386"></a><a name="index-reftex_002dset_002dcite_002dformat-387"></a><a name="index-reftex_002dadd_002dsection_002dlevels-388"></a>The label environment definitions in <code>reftex-label-alist</code> are
+global and apply to all documents.  If you need to make definitions
+local to a document, because they would interfere with settings in other
+documents, you should use AUCTeX and set up style files with calls to
+<code>reftex-add-label-environments</code>, <code>reftex-set-cite-format</code>,
+<code>reftex-add-index-macros</code>, and <code>reftex-add-section-levels</code>. 
+Settings made with these functions remain local to the current
+document. See <a href="AUCTeX.html#AUCTeX">AUCTeX</a>.
+
+     <li><b>Funny display in selection buffer</b><br>
+<a name="index-g_t_0040code_007bx_002dsymbol_007d_002c-Emacs-package-389"></a><a name="index-Emacs-packages_002c-_0040code_007bx_002dsymbol_007d-390"></a><a name="index-g_t_0040code_007bisotex_007d_002c-Emacs-package-391"></a><a name="index-Emacs-packages_002c-_0040code_007bisotex_007d-392"></a><a name="index-g_t_0040code_007biso_002dcvt_007d_002c-Emacs-package-393"></a><a name="index-Emacs-packages_002c-_0040code_007biso_002dcvt_007d-394"></a>When using packages which make the buffer representation of a file
+different from its disk representation (e.g. x-symbol, isotex,
+iso-cvt) you may find that <b>RefTeX</b>'s parsing information sometimes
+reflects the disk state of a file.  This happens only in <em>unvisited</em>
+parts of a multifile document, because <b>RefTeX</b> visits these files
+literally for speed reasons.  Then both short context and section
+headings may look different from what you usually see on your screen. 
+In rare cases <code>reftex-toc</code> may have problems to jump to an affected
+section heading.  There are three possible ways to deal with
+this:
+          <ul>
+<li><a name="index-reftex_002dkeep_002dtemporary_002dbuffers-395"></a><code>(setq reftex-keep-temporary-buffers t)</code><br>
+This implies that <b>RefTeX</b> will load all parts of a multifile
+document into Emacs (i.e. there won't be any temporary buffers). 
+<li><a name="index-reftex_002dinitialize_002dtemporary_002dbuffers-396"></a><code>(setq reftex-initialize-temporary-buffers t)</code><br>
+This means full initialization of temporary buffers.  It involves
+a penalty when the same unvisited file is used for lookup often. 
+<li>Set <code>reftex-initialize-temporary-buffers</code> to a list of hook
+functions doing a minimal initialization. 
+</ul>
+     <a name="index-reftex_002drefontify_002dcontext-397"></a>See also the variable <code>reftex-refontify-context</code>.
+
+     <li><b>Labels as arguments to \begin</b><br>
+<a name="index-g_t_0040code_007bpf_007d_002c-LaTeX-package-398"></a><a name="index-LaTeX-packages_002c-_0040code_007bpf_007d-399"></a>Some packages use an additional argument to a <code>\begin</code> macro
+to specify a label.  E.g. Lamport's <samp><span class="file">pf.sty</span></samp> uses both
+     <pre class="example">          \step{<var>label</var>}{<var>claim</var>}   and      \begin{step+}{<var>label</var>}
+                                            <var>claim</var>
+                                         \end{step+}
+</pre>
+     <p class="noindent">We need to trick <b>RefTeX</b> into swallowing this:
+
+     <pre class="lisp">          ;; Configuration for Lamport's pf.sty
+          (setq reftex-label-alist
+            '(("\\step{*}{}"       ?p "st:" "~\\stepref{%s}" 2 ("Step" "St."))
+              ("\\begin{step+}{*}" ?p "st:" "~\\stepref{%s}" 1000)))
+</pre>
+     <p class="noindent">The first line is just a normal configuration for a macro.  For the
+<code>step+</code> environment we actually tell <b>RefTeX</b> to look for the
+<em>macro</em> &lsquo;<samp><span class="samp">\begin{step+}</span></samp>&rsquo; and interpret the <em>first</em>
+argument (which really is a second argument to the macro <code>\begin</code>)
+as a label of type <code>?p</code>.  Argument count for this macro starts only
+after the &lsquo;<samp><span class="samp">{step+}</span></samp>&rsquo;, also when specifying how to get
+context.
+
+     <li><b>Idle timers in XEmacs</b><br>
+<a name="index-Idle-timer-restart-400"></a><a name="index-reftex_002duse_002ditimer_002din_002dxemacs-401"></a>In XEmacs, idle timer restart does not work reliably after fast
+keystrokes.  Therefore <b>RefTeX</b> currently uses the post command
+hook to start the timer used for automatic crossref information.  When
+this bug gets fixed, a real idle timer can be requested with
+     <pre class="lisp">          (setq reftex-use-itimer-in-xemacs t)
+</pre>
+     <li><b>Viper mode</b><br>
+<a name="index-Viper-mode-402"></a><a name="index-Key-bindings_002c-problems-with-Viper-mode-403"></a><a name="index-viper_002dharness_002dminor_002dmode-404"></a>With <i>Viper</i> mode prior to Vipers version 3.01, you need to protect
+<b>RefTeX</b>'s keymaps with
+
+     <pre class="lisp">          (viper-harness-minor-mode "reftex")
+</pre>
+     </ul>
+
+   </body></html>
+

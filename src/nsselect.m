@@ -61,6 +61,10 @@ symbol_to_nsstring (Lisp_Object sym)
   if (EQ (sym, QPRIMARY))     return NXPrimaryPboard;
   if (EQ (sym, QSECONDARY))   return NXSecondaryPboard;
   if (EQ (sym, QTEXT))        return NSStringPboardType;
+  if (EQ (sym, intern ("html")))    return NSHTMLPboardType;
+  if (EQ (sym, intern ("rtf")))    return NSRTFPboardType;
+  if (EQ (sym, intern ("pdf")))    return NSPDFPboardType;
+  if (EQ (sym, intern ("txt")))    return NSStringPboardType;
   return [NSString stringWithUTF8String: SSDATA (SYMBOL_NAME (sym))];
 }
 
@@ -319,6 +323,17 @@ ns_string_to_pasteboard (id pb, Lisp_Object str)
   ns_string_to_pasteboard_internal (pb, str, nil);
 }
 
+void
+ns_string_to_pasteboard_with_type (id pb, Lisp_Object str, Lisp_Object type)
+{
+  NSString *ns_type = (NILP (type) ? nil :
+		       symbol_to_nsstring (type));
+  if (ns_type)
+    /* will add type at the end - this can be a problem. */
+    [pb addTypes: [NSArray arrayWithObject:ns_type] owner: NSApp];
+  ns_string_to_pasteboard_internal (pb, str, ns_type);
+}
+
 
 
 /* ==========================================================================
@@ -518,15 +533,21 @@ SELECTION is a symbol, typically `PRIMARY', `SECONDARY', or `CLIPBOARD'. */)
 
 
 DEFUN ("ns-store-selection-internal", Fns_store_selection_internal,
-       Sns_store_selection_internal, 2, 2, 0,
+       Sns_store_selection_internal, 2, 3, 0,
        doc: /* Sets the string value of SELECTION.
 SELECTION is a symbol, typically `PRIMARY', `SECONDARY', or `CLIPBOARD'. */)
-     (Lisp_Object selection, Lisp_Object string)
+     (Lisp_Object selection, Lisp_Object string, Lisp_Object type)
 {
   id pb;
   check_window_system (NULL);
   pb = ns_symbol_to_pb (selection);
-  if (pb != nil) ns_string_to_pasteboard (pb, string);
+  if (pb != nil) 
+	{
+	  	if (NILP (type))
+  			ns_string_to_pasteboard (pb, string);
+  		else
+			ns_string_to_pasteboard_with_type (pb, string, type);
+	}
   return Qnil;
 }
 

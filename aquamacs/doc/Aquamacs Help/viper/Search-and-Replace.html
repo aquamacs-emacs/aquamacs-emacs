@@ -1,0 +1,101 @@
+<html lang="en">
+<head>
+<title>Search and Replace - Untitled</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Untitled">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Text-Handling.html#Text-Handling" title="Text Handling">
+<link rel="prev" href="Changing-Text.html#Changing-Text" title="Changing Text">
+<link rel="next" href="Yanking.html#Yanking" title="Yanking">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Search-and-Replace"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Yanking.html#Yanking">Yanking</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Changing-Text.html#Changing-Text">Changing Text</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text-Handling.html#Text-Handling">Text Handling</a>
+<hr>
+</div>
+
+<h4 class="subsection">4.2.7 Search and Replace</h4>
+
+<p>See <a href="Groundwork.html#Groundwork">Groundwork</a>, for Ex address syntax.  See <a href="Options.html#Options">Options</a>, to see how to
+get literal (non-regular-expression) search and how to stop search from
+wrapping around.
+
+     <dl>
+<dt><kbd>C-c /</kbd><dd>Toggle case-sensitive search.  With prefix argument, toggle vanilla/regular
+expression search. 
+<br><dt><kbd>&lt;count&gt;  /&lt;string&gt;</kbd><dd>To the &lt;count&gt;th occurrence of &lt;string&gt;.
+
+     <p>Viper does not parse search patterns and does not expand special symbols
+found there (e.g., &lsquo;<samp><span class="samp">~</span></samp>&rsquo; is not expanded to the result of the previous
+substitution).
+
+     <p>After typing <kbd>/</kbd> or <kbd>?</kbd> all the usual Emacs minibuffer commands, such as
+<kbd>M-p</kbd> and <kbd>M-n</kbd> are available. In addition, typing <kbd>C-s</kbd> will
+insert the last search string used by the Emacs incremental search command
+(which is bound to <kbd>C-s</kbd> everywhere except in this case).
+
+     <br><dt><kbd>&lt;count&gt;  ?&lt;string&gt;</kbd><dd>To the &lt;count&gt;th previous occurrence of &lt;string&gt;. 
+<br><dt><kbd>&lt;count&gt;  g&lt;move&gt;</kbd><dd>Search for the text described by move.  (off by default)
+<br><dt><kbd>n</kbd><dd>Repeat latest <kbd>/</kbd> <kbd>?</kbd> (next). 
+<br><dt><kbd>N</kbd><dd>Idem in opposite direction. 
+<br><dt><kbd>%</kbd><dd>Find the next bracket and go to its match
+<br><dt><kbd>:[x,y]g/&lt;string&gt;/&lt;cmd&gt;</kbd><dd><a name="index-text-processing-454"></a>Search globally [from line x to y] for &lt;string&gt;
+and execute the Ex &lt;cmd&gt; on each occurrence. 
+<br><dt><kbd>:[x,y]v/&lt;string&gt;/&lt;cmd&gt;</kbd><dd>Execute &lt;cmd&gt; on the lines that don't match. 
+<br><dt><kbd>#g&lt;move&gt;</kbd><dd>Execute the last keyboard macro for each line in the region. 
+See <a href="Macros-and-Registers.html#Macros-and-Registers">Macros and Registers</a>, for more info. 
+<br><dt><kbd>Q</kbd><dd>Query Replace. 
+<br><dt><kbd>:ta &lt;name&gt;</kbd><dd>Search in the tags file where &lt;name&gt; is defined (file, line), and go to it. 
+<br><dt><kbd>:[x,y]s/&lt;pat&gt;/&lt;repl&gt;/&lt;f&gt;</kbd><dd>Substitute (on lines x through y) the pattern &lt;pat&gt; (default the last
+pattern) with &lt;repl&gt;.  Useful
+flags &lt;f&gt; are &lsquo;<samp><span class="samp">g</span></samp>&rsquo; for &lsquo;<samp><span class="samp">global</span></samp>&rsquo; (i.e. change every
+non-overlapping occurrence of &lt;pat&gt;) and &lsquo;<samp><span class="samp">c</span></samp>&rsquo; for
+&lsquo;<samp><span class="samp">confirm</span></samp>&rsquo; (type &lsquo;<samp><span class="samp">y</span></samp>&rsquo; to confirm a particular
+substitution, else &lsquo;<samp><span class="samp">n</span></samp>&rsquo;).  Instead of <kbd>/</kbd> any
+punctuation character other than &lt;space&gt; &lt;tab&gt; and &lt;lf&gt; can be used as
+delimiter.
+
+     <p>Note: <em>The newline character (inserted as </em><kbd>C-qC-j</kbd><em>)
+can be used in &lt;repl&gt;</em>. 
+<br><dt><kbd>&amp;</kbd><dd>Repeat latest Ex substitute command, e.g. <kbd>:s/wrong/right</kbd>. 
+<br><dt><kbd>:global /&lt;pattern&gt;/&lt;ex-command&gt;</kbd><dt><kbd>:g /&lt;pattern&gt;/&lt;ex-command&gt;</kbd><dd>Execute &lt;ex-command&gt; on all lines that match &lt;pattern&gt;. 
+<br><dt><kbd>:vglobal /&lt;pattern&gt;/&lt;ex-command&gt;</kbd><dt><kbd>:v /&lt;pattern&gt;/&lt;ex-command&gt;</kbd><dd>Execute &lt;ex-command&gt; on all lines that do not match &lt;pattern&gt;. 
+</dl>
+   <a name="index-g_t_0040kbd_007b_0026_007d-455"></a><a name="index-g_t_0040kbd_007b_003asubstitute_002f_003cpat_003e_002f_003crepl_003e_002f_003cf_003e_007d-456"></a><a name="index-g_t_0040kbd_007bQ_007d-457"></a><a name="index-g_t_0040kbd_007b_0023g_003cmove_003e_007d-458"></a><a name="index-g_t_0040kbd_007b_003av_007d-459"></a><a name="index-g_t_0040kbd_007b_003ag_007d-460"></a><a name="index-g_t_0040kbd_007b_003aglobal_007d-461"></a><a name="index-g_t_0040kbd_007b_003avglobal_007d-462"></a><a name="index-g_t_0040kbd_007b_003atag-_003cname_003e_007d-463"></a><a name="index-g_t_0040kbd_007b_0025_007d-464"></a><a name="index-g_t_0040kbd_007bN_007d-465"></a><a name="index-g_t_0040kbd_007bn_007d-466"></a><a name="index-g_t_0040kbd_007bg_003cmove_003e_007d-467"></a><a name="index-g_t_0040kbd_007b_003f_003cstring_003e_007d-468"></a><a name="index-g_t_0040kbd_007b_002f_003cstring_003e_007d-469"></a>
+
+   </body></html>
+

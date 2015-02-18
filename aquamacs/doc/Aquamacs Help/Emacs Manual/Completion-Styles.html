@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+<title>Completion Styles - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Completion.html#Completion" title="Completion">
+<link rel="prev" href="Completion-Exit.html#Completion-Exit" title="Completion Exit">
+<link rel="next" href="Completion-Options.html#Completion-Options" title="Completion Options">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
+
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Completion-Styles"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Completion-Options.html#Completion-Options">Completion Options</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Completion-Exit.html#Completion-Exit">Completion Exit</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Completion.html#Completion">Completion</a>
+<hr>
+</div>
+
+<h4 class="subsection">8.4.4 How Completion Alternatives Are Chosen</h4>
+
+<p><a name="index-completion-style-214"></a>
+  Completion commands work by narrowing a large list of possible
+completion alternatives to a smaller subset that &ldquo;matches&rdquo; what you
+have typed in the minibuffer.  In <a href="Completion-Example.html#Completion-Example">Completion Example</a>, we gave a
+simple example of such matching.  The procedure of determining what
+constitutes a &ldquo;match&rdquo; is quite intricate.  Emacs attempts to offer
+plausible completions under most circumstances.
+
+   <p>Emacs performs completion using one or more <dfn>completion
+styles</dfn>&mdash;sets of criteria for matching minibuffer text to completion
+alternatives.  During completion, Emacs tries each completion style in
+turn.  If a style yields one or more matches, that is used as the list
+of completion alternatives.  If a style produces no matches, Emacs
+falls back on the next style.
+
+   <p><a name="index-completion_002dstyles-215"></a>  The list variable <code>completion-styles</code> specifies the completion
+styles to use.  Each list element is the name of a completion style (a
+Lisp symbol).  The default completion styles are (in order):
+
+     <dl>
+<dt><code>basic</code><dd>A matching completion alternative must have the same beginning as the
+text in the minibuffer before point.  Furthermore, if there is any
+text in the minibuffer after point, the rest of the completion
+alternative must contain that text as a substring.
+
+     <p><a name="index-partial-completion-216"></a><br><dt><code>partial-completion</code><dd>This aggressive completion style divides the minibuffer text into
+words separated by hyphens or spaces, and completes each word
+separately.  (For example, when completing command names,
+&lsquo;<samp><span class="samp">em-l-m</span></samp>&rsquo; completes to &lsquo;<samp><span class="samp">emacs-lisp-mode</span></samp>&rsquo;.)
+
+     <p>Furthermore, a &lsquo;<samp><span class="samp">*</span></samp>&rsquo; in the minibuffer text is treated as a
+<dfn>wildcard</dfn>&mdash;it matches any character at the corresponding
+position in the completion alternative.
+
+     <br><dt><code>emacs22</code><dd>This completion style is similar to <code>basic</code>, except that it
+ignores the text in the minibuffer after point.  It is so-named
+because it corresponds to the completion behavior in Emacs 22. 
+</dl>
+
+<p class="noindent">The following additional completion styles are also defined, and you
+can add them to <code>completion-styles</code> if you wish
+(see <a href="Customization.html#Customization">Customization</a>):
+
+     <dl>
+<dt><code>substring</code><dd>A matching completion alternative must contain the text in the
+minibuffer before point, and the text in the minibuffer after point,
+as substrings (in that same order).
+
+     <p>Thus, if the text in the minibuffer is &lsquo;<samp><span class="samp">foobar</span></samp>&rsquo;, with point
+between &lsquo;<samp><span class="samp">foo</span></samp>&rsquo; and &lsquo;<samp><span class="samp">bar</span></samp>&rsquo;, that matches
+&lsquo;<samp><var>a</var><span class="samp">foo</span><var>b</var><span class="samp">bar</span><var>c</var></samp>&rsquo;, where <var>a</var>, <var>b</var>, and
+<var>c</var> can be any string including the empty string.
+
+     <br><dt><code>initials</code><dd>This very aggressive completion style attempts to complete acronyms
+and initialisms.  For example, when completing command names, it
+matches &lsquo;<samp><span class="samp">lch</span></samp>&rsquo; to &lsquo;<samp><span class="samp">list-command-history</span></samp>&rsquo;. 
+</dl>
+
+<p class="noindent">There is also a very simple completion style called <code>emacs21</code>. 
+In this style, if the text in the minibuffer is &lsquo;<samp><span class="samp">foobar</span></samp>&rsquo;,
+only matches starting with &lsquo;<samp><span class="samp">foobar</span></samp>&rsquo; are considered.
+
+   <p><a name="index-completion_002dcategory_002doverrides-217"></a>You can use different completion styles in different situations,
+by setting the variable <code>completion-category-overrides</code>. 
+For example, the default setting says to use only <code>basic</code>
+and <code>substring</code> completion for buffer names.
+
+   </body></html>
+

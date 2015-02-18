@@ -1,0 +1,87 @@
+<html lang="en">
+<head>
+<title>Delete Commands - VIP</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="VIP">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Modifying-Commands.html#Modifying-Commands" title="Modifying Commands">
+<link rel="prev" href="Modifying-Commands.html#Modifying-Commands" title="Modifying Commands">
+<link rel="next" href="Yank-Commands.html#Yank-Commands" title="Yank Commands">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1987, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Delete-Commands"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Yank-Commands.html#Yank-Commands">Yank Commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Modifying-Commands.html#Modifying-Commands">Modifying Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Modifying-Commands.html#Modifying-Commands">Modifying Commands</a>
+<hr>
+</div>
+
+<h4 class="subsection">2.9.1 Delete Commands</h4>
+
+     <dl>
+<dt><kbd>d </kbd><var>motion-command</var><dd><a name="index-g_t1440-_0040kbd_007bd_007d-_0028_0040code_007bvip_002dcommand_002dargument_007d_0029-197"></a>Delete the region determined by the motion command <var>motion-command</var>. 
+</dl>
+For example, <kbd>d $</kbd> will delete the region between point and end of
+current line since <kbd>$</kbd> is a point command that moves point to end of line. 
+<kbd>d G</kbd> will delete the region between the beginning of current line and
+end of the buffer, since <kbd>G</kbd> is a line command.  A count given to the
+command above will become the count for the associated motion command. 
+Thus, <kbd>3 d w</kbd> will delete three words.
+
+   <p><a name="index-g_t042-_0040kbd_007b_0022_007d-_0028_0040code_007bvip_002dcommand_002dargument_007d_0029-198"></a>It is also possible to save the deleted text into a register you specify. 
+For example, you can say <kbd>" t 3 d w</kbd> to delete three words and save it
+to register <kbd>t</kbd>.  The name of a register is a lower-case letter between
+<kbd>a</kbd> and <kbd>z</kbd>.  If you give an upper-case letter as an argument to
+a delete command, then the deleted text will be appended to the content of
+the register having the corresponding lower-case letter as its name.  So,
+<kbd>" T d w</kbd> will delete a word and append it to register <kbd>t</kbd>.  Other
+modifying commands also accept a register name as their argument, and we
+will not repeat similar explanations.
+
+   <p>We have more delete commands as below.
+
+     <dl>
+<dt><kbd>d d</kbd><dd><a name="index-g_t1442-_0040kbd_007bd-d_007d-199"></a>Delete a line.  Given a count <var>n</var>, delete <var>n</var> lines. 
+<br><dt><kbd>d r</kbd><dd><a name="index-g_t1442-_0040kbd_007bd-r_007d-200"></a>Delete current region. 
+<br><dt><kbd>d R</kbd><dd><a name="index-g_t1441-_0040kbd_007bd-R_007d-201"></a>Expand current region and delete it. 
+<br><dt><kbd>D</kbd><dd><a name="index-g_t104-_0040kbd_007bD_007d-_0028_0040code_007bvip_002dkill_002dline_007d_0029-202"></a>Delete to the end of a line (<code>vip-kill-line</code>). 
+<br><dt><kbd>x</kbd><dd><a name="index-g_t170-_0040kbd_007bx_007d-_0028_0040code_007bvip_002ddelete_002dchar_007d_0029-203"></a>Delete a character after point.  Given <var>n</var>, delete <var>n</var> characters
+(<code>vip-delete-char</code>). 
+<br><dt><kbd>&lt;DEL&gt;</kbd><dd><a name="index-g_t177-_0040kbd_007bDEL_007d-_0028_0040code_007bvip_002ddelete_002dbackward_002dchar_007d_0029-204"></a>Delete a character before point.  Given <var>n</var>, delete <var>n</var> characters
+(<code>vip-delete-backward-char</code>). 
+</dl>
+
+   </body></html>
+

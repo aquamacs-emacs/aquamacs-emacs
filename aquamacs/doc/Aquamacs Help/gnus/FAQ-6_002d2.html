@@ -1,0 +1,97 @@
+<html lang="en">
+<head>
+<title>FAQ 6-2 - Gnus Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Gnus Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="FAQ-6-_002d-Old-messages.html#FAQ-6-_002d-Old-messages" title="FAQ 6 - Old messages">
+<link rel="prev" href="FAQ-6_002d1.html#FAQ-6_002d1" title="FAQ 6-1">
+<link rel="next" href="FAQ-6_002d3.html#FAQ-6_002d3" title="FAQ 6-3">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="FAQ-6-2"></a>
+<a name="FAQ-6_002d2"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="FAQ-6_002d3.html#FAQ-6_002d3">FAQ 6-3</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="FAQ-6_002d1.html#FAQ-6_002d1">FAQ 6-1</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="FAQ-6-_002d-Old-messages.html#FAQ-6-_002d-Old-messages">FAQ 6 - Old messages</a>
+<hr>
+</div>
+
+<h5 class="subsubheading">Question 6.2</h5>
+
+<p>How to archive interesting messages?
+
+<h5 class="subsubheading">Answer</h5>
+
+<p>If you stumble across an interesting message, say in
+gnu.emacs.gnus and want to archive it there are several
+solutions. The first and easiest is to save it to a file
+by saying &lsquo;<samp><span class="samp">O f</span></samp>&rsquo;. However, wouldn't
+it be much more convenient to have more direct access to
+the archived message from Gnus? If you say yes, put this
+snippet by Frank Haun &lt;pille3003@fhaun.de&gt; in
+~/.gnus.el:
+
+<pre class="example">     (defun my-archive-article (&amp;optional n)
+       "Copies one or more article(s) to a corresponding `nnml:' group, e.g.
+     `gnus.ding' goes to `nnml:1.gnus.ding'. And `nnml:List-gnus.ding' goes
+     to `nnml:1.List-gnus-ding'.
+     
+     Use process marks or mark a region in the summary buffer to archive
+     more then one article."
+       (interactive "P")
+       (let ((archive-name
+              (format
+               "nnml:1.%s"
+               (if (featurep 'xemacs)
+                   (replace-in-string gnus-newsgroup-name "^.*:" "")
+                 (replace-regexp-in-string "^.*:" "" gnus-newsgroup-name)))))
+         (gnus-summary-copy-article n archive-name)))
+</pre>
+   <p class="noindent">You can now say &lsquo;<samp><span class="samp">M-x
+my-archive-article</span></samp>&rsquo; in summary buffer to
+archive the article under the cursor in a nnml
+group. (Change nnml to your preferred back end)
+
+   <p>Of course you can also make sure the cache is enabled by saying
+
+<pre class="example">     (setq gnus-use-cache t)
+</pre>
+   <p class="noindent">then you only have to set either the tick or the dormant
+mark for articles you want to keep, setting the read
+mark will remove them from cache.
+
+   </body></html>
+

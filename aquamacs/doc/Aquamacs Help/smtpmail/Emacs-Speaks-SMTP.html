@@ -1,0 +1,113 @@
+<html lang="en">
+<head>
+<title>Emacs Speaks SMTP - Emacs SMTP Library</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Emacs SMTP Library">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="How-Mail-Works.html#How-Mail-Works" title="How Mail Works">
+<link rel="next" href="Authentication.html#Authentication" title="Authentication">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Emacs-Speaks-SMTP"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Authentication.html#Authentication">Authentication</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="How-Mail-Works.html#How-Mail-Works">How Mail Works</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">2 Emacs Speaks SMTP</h2>
+
+<p>Emacs includes a package for sending your mail to a SMTP server and
+have it take care of delivering it to the final destination, rather
+than letting the MTA on your local system take care of it.  This can
+be useful if you don't have a MTA set up on your host, or if your
+machine is often disconnected from the internet.
+
+   <p>Sending mail via SMTP requires configuring your mail user agent
+(see <a href="../emacs/Mail-Methods.html#Mail-Methods">Mail Methods</a>) to use the SMTP library.  How to do
+this should be described for each mail user agent; for the default
+mail user agent the variable <code>send-mail-function</code> (see <a href="../emacs/Mail-Sending.html#Mail-Sending">Mail Sending</a>) is used; for the Message and Gnus user agents the
+variable <code>message-send-mail-function</code> (see <a href="../message/Mail-Variables.html#Mail-Variables">Mail Variables</a>) is used.
+
+<pre class="example">     ;; If you use the default mail user agent.
+     (setq send-mail-function 'smtpmail-send-it)
+     ;; If you use Message or Gnus.
+     (setq message-send-mail-function 'smtpmail-send-it)
+</pre>
+   <p>Before using SMTP you must find out the hostname of the SMTP server
+to use.  Your system administrator should provide you with this
+information, but often it is the same as the server you receive mail
+from.
+
+     <dl>
+<dt><code>smtpmail-smtp-server</code><dd><a name="index-smtpmail_002dsmtp_002dserver-9"></a><a name="index-SMTPSERVER-10"></a>  The variable <code>smtpmail-smtp-server</code> controls the hostname of
+the server to use.  It is a string with an IP address or hostname.  It
+defaults to the contents of the <samp><span class="env">SMTPSERVER</span></samp> environment
+variable, or, if empty, the contents of
+<code>smtpmail-default-smtp-server</code>.
+
+     <br><dt><code>smtpmail-default-smtp-server</code><dd><a name="index-smtpmail_002ddefault_002dsmtp_002dserver-11"></a>  The variable <code>smtpmail-default-smtp-server</code> controls the
+default hostname of the server to use.  It is a string with an IP
+address or hostname.  It must be set before the SMTP library is
+loaded.  It has no effect if set after the SMTP library has been
+loaded, or if <code>smtpmail-smtp-server</code> is defined.  It is usually
+set by system administrators in a site wide initialization file. 
+</dl>
+
+   <p>The following example illustrates what you could put in
+<samp><span class="file">~/.emacs</span></samp> to set the SMTP server name.
+
+<pre class="example">     ;; Send mail using SMTP via mail.example.org.
+     (setq smtpmail-smtp-server "mail.example.org")
+</pre>
+   <p><a name="index-Mail-Submission-12"></a>SMTP is normally used on the registered &ldquo;smtp&rdquo; TCP service port 25. 
+Some environments use SMTP in &ldquo;Mail Submission&rdquo; mode, which uses
+port 587.  Using other ports is not uncommon, either for security by
+obscurity purposes, port forwarding, or otherwise.
+
+     <dl>
+<dt><code>smtpmail-smtp-service</code><dd><a name="index-smtpmail_002dsmtp_002dservice-13"></a>  The variable <code>smtpmail-smtp-service</code> controls the port on the
+server to contact.  It is either a string, in which case it will be
+translated into an integer using system calls, or an integer. 
+</dl>
+
+   <p>The following example illustrates what you could put in
+<samp><span class="file">~/.emacs</span></samp> to set the SMTP service port.
+
+<pre class="example">     ;; Send mail using SMTP on the mail submission port 587.
+     (setq smtpmail-smtp-service 587)
+</pre>
+   </body></html>
+

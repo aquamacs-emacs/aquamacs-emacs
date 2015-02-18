@@ -1,0 +1,82 @@
+<html lang="en">
+<head>
+<title>Deferred updates - SES: Simple Emacs Spreadsheet</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="SES: Simple Emacs Spreadsheet">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="For-Gurus.html#For-Gurus" title="For Gurus">
+<link rel="prev" href="For-Gurus.html#For-Gurus" title="For Gurus">
+<link rel="next" href="Nonrelocatable-references.html#Nonrelocatable-references" title="Nonrelocatable references">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents SES: the Simple Emacs Spreadsheet.
+
+Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Deferred-updates"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Nonrelocatable-references.html#Nonrelocatable-references">Nonrelocatable references</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="For-Gurus.html#For-Gurus">For Gurus</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="For-Gurus.html#For-Gurus">For Gurus</a>
+<hr>
+</div>
+
+<h3 class="section">4.1 Deferred updates</h3>
+
+<p><a name="index-deferred-updates-86"></a><a name="index-updates_002c-deferred-87"></a><a name="index-run_002dwith_002didle_002dtimer-88"></a>
+To save time by avoiding redundant computations, cells that need
+recalculation due to changes in other cells are added to a set.  At
+the end of the command, each cell in the set is recalculated once. 
+This can create a new set of cells that need recalculation.  The
+process is repeated until either the set is empty or it stops changing
+(due to circular references among the cells).  In extreme cases, you
+might see progress messages of the form &ldquo;Recalculating... (<var>nnn</var>
+cells left)&rdquo;.  If you interrupt the calculation using <kbd>C-g</kbd>, the
+spreadsheet will be left in an inconsistent state, so use <kbd>C-_</kbd> or
+<kbd>C-c C-l</kbd> to fix it.
+
+   <p>To save even more time by avoiding redundant writes, cells that have
+changes are added to a set instead of being written immediately to the
+data area.  Each cell in the set is written once, at the end of the
+command.  If you change vast quantities of cells, you might see a
+progress message of the form &ldquo;Writing... (<var>nnn</var> cells left)&rdquo;. 
+These deferred cell-writes cannot be interrupted by <kbd>C-g</kbd>, so
+you'll just have to wait.
+
+   <p>SES uses <code>run-with-idle-timer</code> to move the cell underline when
+Emacs will be scrolling the buffer after the end of a command, and
+also to narrow and underline after <kbd>C-x C-v</kbd>.  This is visible as
+a momentary glitch after C-x C-v and certain scrolling commands.  You
+can type ahead without worrying about the glitch.
+
+   </body></html>
+

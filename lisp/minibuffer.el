@@ -1511,7 +1511,9 @@ It also eliminates runs of equal strings."
 				      (string-width s)))
 				  strings)))
 	   (window (get-buffer-window (current-buffer) 0))
-	   (wwidth (if window (1- (window-width window)) 79))
+	   (wwidth (if (and window (not face-remapping-alist))
+		       (1- (window-width window)) 
+		     45))   ;; hardcoded 45 in Aquamacs until we have a `window-buffer-width' function
 	   (columns (min
 		     ;; At least 2 columns; at least 2 spaces between columns.
 		     (max 2 (/ wwidth (+ 2 length)))
@@ -2159,6 +2161,10 @@ with `minibuffer-local-must-match-map'.")
 
 (define-obsolete-variable-alias 'minibuffer-local-must-match-filename-map
   'minibuffer-local-filename-must-match-map "23.1")
+;; backward-kill-filename defined in files.el
+(define-key minibuffer-local-filename-completion-map 
+  [remap backward-kill-word] 'backward-kill-filename)
+
 (defvar minibuffer-local-filename-must-match-map (make-sparse-keymap))
 (make-obsolete-variable 'minibuffer-local-filename-must-match-map nil "24.1")
 

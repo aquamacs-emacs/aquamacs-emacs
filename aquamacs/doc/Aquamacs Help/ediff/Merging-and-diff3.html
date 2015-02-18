@@ -1,0 +1,242 @@
+<html lang="en">
+<head>
+<title>Merging and diff3 - Ediff User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Ediff User's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Customization.html#Customization" title="Customization">
+<link rel="prev" href="Patch-and-Diff-Programs.html#Patch-and-Diff-Programs" title="Patch and Diff Programs">
+<link rel="next" href="Support-for-Version-Control.html#Support-for-Version-Control" title="Support for Version Control">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents Ediff, a comprehensive visual interface to Unix diff
+and patch utilities.
+
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Merging-and-diff3"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Support-for-Version-Control.html#Support-for-Version-Control">Support for Version Control</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Patch-and-Diff-Programs.html#Patch-and-Diff-Programs">Patch and Diff Programs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Customization</a>
+<hr>
+</div>
+
+<h3 class="section">7.9 Merging and diff3</h3>
+
+<p>Ediff supports three-way comparison via the functions <code>ediff-files3</code> and
+<code>ediff-buffers3</code>.  The interface is the same as for two-way comparison. 
+In three-way comparison and merging, Ediff reports if any two difference
+regions are identical.  For instance, if the current region in buffer A
+is the same as the region in buffer C, then the mode line of buffer A will
+display &lsquo;<samp><span class="samp">[=diff(C)]</span></samp>&rsquo; and the mode line of buffer C will display
+&lsquo;<samp><span class="samp">[=diff(A)]</span></samp>&rsquo;.
+
+   <p>Merging is done according to the following algorithm.
+
+   <p>If a difference region in one of the buffers, say B, differs from the ancestor
+file while the region in the other buffer, A, doesn't, then the merge buffer,
+C, gets B's region.  Similarly when buffer A's region differs from
+the ancestor and B's doesn't, A's region is used.
+
+   <p><a name="index-ediff_002ddefault_002dvariant-207"></a>If both regions in buffers A and B differ from the ancestor file, Ediff
+chooses the region according to the value of the variable
+<code>ediff-default-variant</code>.  If its value is <code>default-A</code> then A's
+region is chosen.  If it is <code>default-B</code> then B's region is chosen. 
+If it is <code>combined</code> then the region in buffer C will look like
+this:
+
+<!-- Use @set to avoid triggering merge conflict detectors like CVS. -->
+<pre class="example">     &lt;&lt;&lt;&lt;&lt;&lt;&lt; variant A
+     the difference region from buffer A
+     &gt;&gt;&gt;&gt;&gt;&gt;&gt; variant B
+     the difference region from buffer B
+     ####### Ancestor
+     the difference region from the ancestor buffer, if available
+     ======= end
+</pre>
+   <p>The above is the default template for the combined region. The user can
+customize this template using the variable
+<code>ediff-combination-pattern</code>.
+
+   <p><a name="index-ediff_002dcombination_002dpattern-208"></a>The variable <code>ediff-combination-pattern</code> specifies the template that
+determines how the combined merged region looks like.  The template is
+represented as a list of the form <code>(STRING1 Symbol1 STRING2 Symbol2
+STRING3 Symbol3 STRING4)</code>. The symbols here must be atoms of the form
+<code>A</code>, <code>B</code>, or <code>Ancestor</code>. They determine the order in which
+the corresponding difference regions (from buffers A, B, and the ancestor
+buffer) are displayed in the merged region of buffer C.  The strings in the
+template determine the text that separates the aforesaid regions. The
+default template is
+
+<pre class="smallexample">     ("&lt;&lt;&lt;&lt;&lt;&lt;&lt; variant A" A "&gt;&gt;&gt;&gt;&gt;&gt;&gt; variant B" B
+        "####### Ancestor" Ancestor "======= end")
+</pre>
+   <p class="noindent">(this is one long line) and the corresponding combined region is shown
+above. The order in which the regions are shown (and the separator
+strings) can be changed by changing the above template. It is even
+possible to add or delete region specifiers in this template (although
+the only possibly useful such modification seems to be the deletion of
+the ancestor).
+
+   <p>In addition to the state of the difference, Ediff displays the state of the
+merge for each region.  If a difference came from buffer A by default
+(because both regions A and B were different from the ancestor and
+<code>ediff-default-variant</code> was set to <code>default-A</code>) then
+&lsquo;<samp><span class="samp">[=diff(A) default-A]</span></samp>&rsquo; is displayed in the mode line.  If the
+difference in buffer C came, say, from buffer B because the difference
+region in that buffer differs from the ancestor, but the region in buffer A
+does not (if merging with an ancestor) then &lsquo;<samp><span class="samp">[=diff(B) prefer-B]</span></samp>&rsquo; is
+displayed.  The indicators default-A/B and prefer-A/B are inspired by
+Emerge and have the same meaning.
+
+   <p>Another indicator of the state of merge is &lsquo;<samp><span class="samp">combined</span></samp>&rsquo;.  It appears
+with any difference region in buffer C that was obtained by combining
+the difference regions in buffers A and B as explained above.
+
+   <p>In addition to the state of merge and state of difference indicators, while
+merging with an ancestor file or buffer, Ediff informs the user when the
+current difference region in the (normally invisible) ancestor buffer is
+empty via the <em>AncestorEmpty</em> indicator.  This helps determine if the
+changes made to the original in variants A and B represent pure insertion
+or deletion of text: if the mode line shows <em>AncestorEmpty</em> and the
+corresponding region in buffers A or B is not empty, this means that new
+text was inserted.  If this indicator is not present and the difference
+regions in buffers A or B are non-empty, this means that text was
+modified.  Otherwise, the original text was deleted.
+
+   <p>Although the ancestor buffer is normally invisible, Ediff maintains
+difference regions there and advances the current difference region
+accordingly.  All highlighting of difference regions is provided in the
+ancestor buffer, except for the fine differences.  Therefore, if desired, the
+user can put the ancestor buffer in a separate frame and watch it
+there.  However, on a TTY, only one frame can be visible at any given time,
+and Ediff doesn't support any single-frame window configuration where all
+buffers, including the ancestor buffer, would be visible.  However, the
+ancestor buffer can be displayed by typing <kbd>/</kbd> to the control
+window.  (Type <kbd>C-l</kbd> to hide it again.)
+
+   <p>Note that the state-of-difference indicators &lsquo;<samp><span class="samp">=diff(A)</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">=diff(B)</span></samp>&rsquo; above are not redundant, even in the presence of a
+state-of-merge indicator.  In fact, the two serve different purposes.
+
+   <p>For instance, if the mode line displays &lsquo;<samp><span class="samp">=diff(B) prefer(B)</span></samp>&rsquo; and
+you copy a difference region from buffer A to buffer C then
+&lsquo;<samp><span class="samp">=diff(B)</span></samp>&rsquo; will change to &lsquo;<samp><span class="samp">diff-A</span></samp>&rsquo; and the mode line will
+display &lsquo;<samp><span class="samp">=diff(A) prefer-B</span></samp>&rsquo;.  This indicates that the difference
+region in buffer C is identical to that in buffer A, but originally
+buffer C's region came from buffer B.  This is useful to know because
+you can recover the original difference region in buffer C by typing
+<kbd>r</kbd>.
+
+   <p>Ediff never changes the state-of-merge indicator, except in response to
+the <kbd>!</kbd> command (see below), in which case the indicator is lost. 
+On the other hand, the state-of-difference indicator is changed
+automatically by the copying/recovery commands, <kbd>a</kbd>, <kbd>b</kbd>, <kbd>r</kbd>,
+<kbd>+</kbd>.
+
+   <p>The <kbd>!</kbd> command loses the information about origins of the regions
+in the merge buffer (default-A, prefer-B, or combined).  This is because
+recomputing differences in this case means running <code>diff3</code> on
+buffers A, B, and the merge buffer, not on the ancestor buffer.  (It
+makes no sense to recompute differences using the ancestor file, since
+in the merging mode Ediff assumes that you have not edited buffers A and
+B, but that you may have edited buffer C, and these changes are to be
+preserved.)  Since some difference regions may disappear as a result of
+editing buffer C and others may arise, there is generally no simple way
+to tell where the various regions in the merge buffer came from.
+
+   <p>In three-way comparison, Ediff tries to disregard regions that consist
+entirely of white space.  For instance, if, say, the current region in
+buffer A consists of the white space only (or if it is empty), Ediff will
+not take it into account for the purpose of computing fine differences.  The
+result is that Ediff can provide a better visual information regarding the
+actual fine differences in the non-white regions in buffers B and
+C.  Moreover, if the regions in buffers B and C differ in the white space
+only, then a message to this effect will be displayed.
+
+   <p><a name="index-ediff_002dmerge_002dwindow_002dshare-209"></a>In the merge mode, the share of the split between window C (the window
+displaying the merge-buffer) and the windows displaying buffers A and B
+is controlled by the variable <code>ediff-merge-window-share</code>.  Its
+default value is 0.5.  To make the merge-buffer window smaller, reduce
+this amount.
+
+   <p>We don't recommend increasing the size of the merge-window to more than
+half the frame (i.e., to increase the value of
+<code>ediff-merge-window-share</code>) to more than 0.5, since it would be
+hard to see the contents of buffers A and B.
+
+   <p>You can temporarily shrink the merge window to just one line by
+typing <kbd>s</kbd>.  This change is temporary, until Ediff finds a reason to
+redraw the screen.  Typing <kbd>s</kbd> again restores the original window size.
+
+   <p>With a positive prefix argument, the <kbd>s</kbd> command will make the merge
+window slightly taller.  This change is persistent.  With `<kbd>-</kbd>' or
+with a negative prefix argument, the command <kbd>s</kbd> makes the merge
+window slightly shorter.  This change also persistent.
+
+   <p><a name="index-ediff_002dshow_002dclashes_002donly-210"></a>Ediff lets you automatically ignore the regions where only one of the
+buffers A and B disagrees with the ancestor.  To do this, set the
+variable <code>ediff-show-clashes-only</code> to non-<code>nil</code>.
+
+   <p>You can toggle this feature interactively by typing <kbd>$$</kbd>.
+
+   <p>Note that this variable affects only the show next/previous difference
+commands.  You can still jump directly to any difference region directly
+using the command <kbd>j</kbd> (with a prefix argument specifying the difference
+number).
+
+   <p><a name="index-ediff_002dautostore_002dmerges-211"></a><a name="index-ediff_002dquit_002dmerge_002dhook-212"></a><a name="index-ediff_002dmaybe_002dsave_002dand_002ddelete_002dmerge-213"></a>The variable <code>ediff-autostore-merges</code> controls what happens to the
+merge buffer when Ediff quits.  If the value is <code>nil</code>, nothing is done
+to the merge buffer&mdash;it will be the user's responsibility to save it. 
+If the value is <code>t</code>, the user will be asked where to save the buffer
+and whether to delete it afterwards.  It the value is neither <code>nil</code> nor
+<code>t</code>, the merge buffer is saved <em>only</em> if this merge session was
+invoked from a group of related Ediff session, such as those that result
+from <code>ediff-merge-directories</code>,
+<code>ediff-merge-directory-revisions</code>, etc. 
+See <a href="Session-Groups.html#Session-Groups">Session Groups</a>.  This behavior is implemented in the function
+<code>ediff-maybe-save-and-delete-merge</code>, which is a hook in
+<code>ediff-quit-merge-hook</code>.  The user can supply a different hook, if
+necessary.
+
+   <p>The variable <code>ediff-autostore-merges</code> is buffer-local, so it can be
+set in a per-buffer manner.  Therefore, use <code>setq-default</code> to globally
+change this variable.
+
+   <p><a name="index-ediff_002dmerge_002dfilename_002dprefix-214"></a>When merge buffers are saved automatically as directed by
+<code>ediff-autostore-merges</code>, Ediff attaches a prefix to each file, as
+specified by the variable <code>ediff-merge-filename-prefix</code>. The default
+is <code>merge_</code>, but this can be changed by the user.
+
+   </body></html>
+

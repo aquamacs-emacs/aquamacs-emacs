@@ -600,6 +600,11 @@ draw_fringe_bitmap_1 (struct window *w, struct glyph_row *row, int left_p, int o
 	face_id = FRINGE_FACE_ID;
     }
 
+  /* Perhaps remap BASE_FACE_ID to a user-specified alternative.  */
+  if (BUFFERP (w->contents))
+    if (face_id == FRINGE_FACE_ID || face_id == DEFAULT_FACE_ID)
+      face_id = lookup_basic_face_for_buffer (XFRAME (w->frame), face_id, w->contents);
+
   fb = get_fringe_bitmap_data (which);
 
   period = fb->period;
@@ -886,10 +891,14 @@ draw_row_fringe_bitmaps (struct window *w, struct glyph_row *row)
   if (row->visible_height <= 0)
     return;
 
-  if (WINDOW_LEFT_FRINGE_WIDTH (w) != 0)
+  if (WINDOW_LEFT_FRINGE_WIDTH (w) != 0) /* keep, due to C-x 3 w/o scroll-b and fringe bug*/
     draw_fringe_bitmap (w, row, 1);
 
-  if (WINDOW_RIGHT_FRINGE_WIDTH (w) != 0)
+  /* always draw the fringe, even if it is turned off:
+     this will fill an otherwise empty (background) between
+     window and scrollbar */
+  /*  if (WINDOW_RIGHT_FRINGE_WIDTH (w) != 0) */
+
     draw_fringe_bitmap (w, row, 0);
 }
 
@@ -1183,7 +1192,7 @@ update_window_fringes (struct window *w, bool keep_current_p)
       if (!row->enabled_p)
 	row = cur;
 
-      left_face_id = right_face_id = DEFAULT_FACE_ID;
+      left_face_id = right_face_id = FRINGE_FACE_ID; /* takes priority if customized */
       left_offset = right_offset = 0;
       periodic_p = 0;
 
@@ -1280,6 +1289,14 @@ update_window_fringes (struct window *w, bool keep_current_p)
       periodic_p = (get_fringe_bitmap_data (left)->period != 0
 		    || get_fringe_bitmap_data (right)->period != 0);
 
+      /* Perhaps remap BASE_FACE_ID to a user-specified alternative.  */
+      if (BUFFERP (w->contents))
+      {
+        if (left_face_id == FRINGE_FACE_ID || left_face_id == DEFAULT_FACE_ID)
+	  left_face_id = lookup_basic_face_for_buffer (XFRAME (w->frame), left_face_id, w->contents);
+        if (right_face_id == FRINGE_FACE_ID || right_face_id == DEFAULT_FACE_ID)
+	  right_face_id = lookup_basic_face_for_buffer (XFRAME (w->frame), right_face_id, w->contents);
+      }
       if (row->y != cur->y
 	  || row->visible_height != cur->visible_height
 	  || row->ends_at_zv_p != cur->ends_at_zv_p

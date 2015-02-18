@@ -1481,13 +1481,19 @@ struct glyph_string
       && WINDOW_PIXEL_HEIGHT (W) > WINDOW_FRAME_LINE_HEIGHT (W))	\
    : false)
 
+
+extern Lisp_Object Qwindow_wants_header_line_function,
+  Vwindow_wants_header_line_function;
+
+/* Value is non-zero if window W wants a header line.  */
 /* Value is true if window W wants a header line and is large enough
    to accommodate it.  */
 #define WINDOW_WANTS_HEADER_LINE_P(W)					\
      (BUFFERP ((W)->contents)						\
       ? (!MINI_WINDOW_P (W)						\
 	 && !(W)->pseudo_window_p					\
-	 && FRAME_WANTS_MODELINE_P (XFRAME (WINDOW_FRAME (W)))		\
+      && FRAME_WANTS_MODELINE_P (XFRAME (WINDOW_FRAME ((W))))		\
+      && !window_header_line_inhibited_p (W)                            \
 	 && !NILP (BVAR (XBUFFER ((W)->contents), header_line_format))	\
 	 && (WINDOW_PIXEL_HEIGHT (W)					\
 	     > (WINDOW_WANTS_MODELINE_P (W)				\
@@ -3066,6 +3072,9 @@ enum tool_bar_item_idx
 
   /* Non-nil if item is enabled.  */
   TOOL_BAR_ITEM_ENABLED_P,
+
+  /* Non-nil if item is visible.  */
+  TOOL_BAR_ITEM_VISIBLE_P,
 
   /* Non-nil if item is selected (pressed).  */
   TOOL_BAR_ITEM_SELECTED_P,

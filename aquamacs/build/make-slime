@@ -1,0 +1,47 @@
+#!/bin/sh
+
+# Build the SLIME installer package
+
+# get release manually here:
+#https://github.com/slime/slime/releases
+
+# call this script from inside the SLIME directory
+
+
+if [ -z "$AQUAMACS_ROOT" ]; then
+    echo "AQUAMACS_ROOT undefined.";
+    exit 1;
+fi
+
+BUILD_DIR=`pwd`
+
+cd $BUILD_DIR
+
+
+# to build 2.0
+# curl -O http://common-lisp.net/project/slime/slime-2.0.tgz
+# tar xzf slime-2.0.tgz
+# mv slime-2.0 slime
+
+cd $BUILD_DIR/doc
+make  
+
+
+# Make info file accessible for Aquamacs
+cd $BUILD_DIR
+mkdir info
+cd info
+ln -s ../doc/slime.info .
+
+# Copy license
+cd $BUILD_DIR
+curl -O http://www.gnu.org/licenses/gpl-3.0.txt || { echo "failed to retrieve license file. aborting.";exit 1; }
+mv gpl-3.0.txt COPYING
+
+# initialization code with autoload
+echo "(require 'slime-autoloads) (slime-setup '(slime-fancy slime-asdf slime-banner)) (setq slime-complete-symbol*-fancy t) (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)" > $BUILD_DIR/site-start.el
+
+cd $BUILD_DIR/..
+mv $BUILD_DIR slime
+/Applications/Developer/PackageMaker.app/Contents/MacOS/PackageMaker --root slime --scripts $AQUAMACS_ROOT/build/slime-scripts --install-to /Library/Application\ Support/Aquamacs\ Emacs/SLIME --id org.aquamacs.slime-plugin --version `date +%Y-%m-%d` --title "SLIME plugin for Aquamacs" --root-volume-only --out Aquamacs-SLIME-`date +%Y-%m-%d`.pkg -v
+

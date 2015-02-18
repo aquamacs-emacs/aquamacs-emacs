@@ -1,0 +1,96 @@
+<html lang="en">
+<head>
+<title>Binding combinations of modifiers and function keys - GNU Emacs FAQ</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Emacs FAQ">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Key-bindings.html#Key-bindings" title="Key bindings">
+<link rel="prev" href="Compose-Character.html#Compose-Character" title="Compose Character">
+<link rel="next" href="Meta-key-does-not-work-in-xterm.html#Meta-key-does-not-work-in-xterm" title="Meta key does not work in xterm">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+2009, 2010 Free Software Foundation, Inc.
+
+Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
+Reuven M. Lerner
+
+Copyright (C) 1992, 1993 Steven Byrnes
+
+Copyright (C) 1990, 1991, 1992 Joseph Brian Wells
+
+
+     This list of frequently asked questions about GNU Emacs with
+     answers (``FAQ'') may be translated into other languages,
+     transformed into other formats (e.g. Texinfo, Info, WWW, WAIS),
+     and updated with new information.
+
+     The same conditions apply to any derivative of the FAQ as apply to
+     the FAQ itself.  Every copy of the FAQ must include this notice or
+     an approved translation, information on who is currently
+     maintaining the FAQ and how to contact them (including their
+     e-mail address), and information on where the latest version of
+     the FAQ is archived (including FTP information).
+
+     The FAQ may be copied and redistributed under these conditions,
+     except that the FAQ may not be embedded in a larger literary work
+     unless that work itself allows free copying and redistribution.
+
+     [This version has been heavily edited since it was included in the
+     Emacs distribution.]
+-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Binding-combinations-of-modifiers-and-function-keys"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Meta-key-does-not-work-in-xterm.html#Meta-key-does-not-work-in-xterm">Meta key does not work in xterm</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Compose-Character.html#Compose-Character">Compose Character</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Key-bindings.html#Key-bindings">Key bindings</a>
+<hr>
+</div>
+
+<h3 class="section">10.12 How do I bind a combination of modifier key and function key?</h3>
+
+<p><a name="index-Modifiers-and-function-keys-475"></a><a name="index-Function-keys-and-modifiers-476"></a><a name="index-Binding-modifiers-and-function-keys-477"></a>
+With Emacs 19 and later, you can represent modified function keys in
+vector format by adding prefixes to the function key symbol.  For
+example (from the Emacs documentation):
+
+<pre class="lisp">     (global-set-key [?\C-x right] 'forward-page)
+</pre>
+   <p class="noindent">where &lsquo;<samp><span class="samp">?\C-x</span></samp>&rsquo; is the Lisp character constant for the character <kbd>C-x</kbd>.
+
+   <p>You can use the modifier keys &lt;Control&gt;, &lt;Meta&gt;, &lt;Hyper&gt;,
+&lt;Super&gt;, &lt;Alt&gt;, and &lt;Shift&gt; with function keys.  To
+represent these modifiers, prepend the strings &lsquo;<samp><span class="samp">C-</span></samp>&rsquo;, &lsquo;<samp><span class="samp">M-</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">H-</span></samp>&rsquo;, &lsquo;<samp><span class="samp">s-</span></samp>&rsquo;, &lsquo;<samp><span class="samp">A-</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">S-</span></samp>&rsquo; to the symbol name.  Here
+is how to make <kbd>H-M-RIGHT</kbd> move forward a word:
+
+<pre class="lisp">     (global-set-key [H-M-right] 'forward-word)
+</pre>
+     <ul>
+<li>Not all modifiers are permitted in all situations.  &lt;Hyper&gt;,
+&lt;Super&gt;, and &lt;Alt&gt; are not available on Unix character
+terminals.  Non-<acronym>ASCII</acronym> keys and mouse events (e.g. <kbd>C-=</kbd> and
+<kbd>Mouse-1</kbd>) also fall under this category.
+
+   </ul>
+
+   <p>See <a href="Binding-keys-to-commands.html#Binding-keys-to-commands">Binding keys to commands</a>, for general key binding instructions.
+
+   </body></html>
+

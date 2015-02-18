@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+<title>Sourcecode objects - Emacs Development Environment</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Emacs Development Environment">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Extending-EDE.html#Extending-EDE" title="Extending EDE">
+<link rel="prev" href="Base-project-methods.html#Base-project-methods" title="Base project methods">
+<link rel="next" href="Compiler-and-Linker-objects.html#Compiler-and-Linker-objects" title="Compiler and Linker objects">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file describes EDE, the Emacs Development Environment.
+
+Copyright (C) 1998, 1999, 2000, 2001, 2004, 2005, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Sourcecode-objects"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Compiler-and-Linker-objects.html#Compiler-and-Linker-objects">Compiler and Linker objects</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Base-project-methods.html#Base-project-methods">Base project methods</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Extending-EDE.html#Extending-EDE">Extending EDE</a>
+<hr>
+</div>
+
+<h3 class="section">7.3 Sourcecode objects</h3>
+
+<p><i>EDE</i> projects track source file / target associates via source code
+objects.  The definitions for this is in <samp><span class="file">ede-source.el</span></samp>.  A source
+code object contains methods that know how to identify a file as being
+of that class, (ie, a C file ends with <samp><span class="file">.c</span></samp>).  Some targets can
+handle many different types of sources which must all be compiled
+together.  For example, a mixed C and C++ program would have
+instantiations of both sourcecode types.
+
+   <p>When a target needs to know if it will accept a source file, it
+references its list of source code objects.  These objects then make
+that decision.
+
+   <p>Source code objects are stored in the target objects as a list of
+symbols, where the symbol's value is the object.  This enables the
+project save file mechanism to work.
+
+   <p>Here is an example for an instantiation of an Emacs Lisp source code object:
+
+<pre class="example">     (defvar ede-source-emacs
+       (ede-sourcecode "ede-emacs-source"
+                       :name "Emacs Lisp"
+                       :sourcepattern "\\.el$"
+                       :garbagepattern '("*.elc"))
+       "Emacs Lisp source code definition.")
+</pre>
+   <p>If you want to recycle parts of an existing sourcecode object, you can
+clone the original, and then just tweak the parts that are different. 
+For example:
+
+<pre class="example">     (defvar ede-source-emacs-autoload
+       (clone ede-source-emacs "ede-source-emacs-autoload"
+              :name "Emacs Lisp Autoload"
+              :sourcepattern "-loaddefs\\.el")
+       "Emacs Lisp autoload source code.")
+</pre>
+   <p>In this case, the garbage pattern is the same.
+
+   <p>See <a href="Sourcecode.html#Sourcecode">Sourcecode</a>.
+
+   </body></html>
+

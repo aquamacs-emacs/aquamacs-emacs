@@ -1,0 +1,118 @@
+<html lang="en">
+<head>
+<title>Introduction - Semantic Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Semantic Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="index.html#Top" title="Top">
+<link rel="next" href="Using-Semantic.html#Using-Semantic" title="Using Semantic">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the Semantic library and utilities.
+
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2007,
+2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Introduction"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Using-Semantic.html#Using-Semantic">Using Semantic</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="index.html#Top">Top</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">1 Introduction</h2>
+
+<p>This chapter gives an overview of <i>Semantic</i> and its goals.
+
+   <p>Ordinarily, Emacs uses regular expressions (and syntax tables) to
+analyze source code for purposes such as syntax highlighting.  This
+approach, though simple and efficient, has its limitations: roughly
+speaking, it only &ldquo;guesses&rdquo; the meaning of each piece of source code
+in the context of the programming language, instead of rigorously
+&ldquo;understanding&rdquo; it.
+
+   <p><i>Semantic</i> provides a new infrastructure to analyze source code using
+<dfn>parsers</dfn> instead of regular expressions.  It contains two
+built-in parser generators (an <acronym>LL</acronym> generator named
+<code>Bovine</code> and an <acronym>LALR</acronym> generator named <code>Wisent</code>,
+both written in Emacs Lisp), and parsers for several common
+programming languages.  It can also make use of <dfn>external
+parsers</dfn>&mdash;programs such as GNU Global and GNU IDUtils.
+
+   <p><i>Semantic</i> provides a uniform, language-independent <acronym>API</acronym> for
+accessing the parser output.  This output can be used by other Emacs
+Lisp programs to implement &ldquo;syntax-aware&rdquo; behavior.  <i>Semantic</i>
+itself includes several such utilities, including user-level Emacs
+commands for navigating, searching, and completing source code.
+
+   <p>The following diagram illustrates the structure of the <i>Semantic</i>
+package:
+
+     <dl>
+<dt><strong>Please Note:</strong><dd>The words in all-capital are those that <i>Semantic</i> itself provides. 
+Others are current or future languages or applications that are not
+distributed along with <i>Semantic</i>. 
+</dl>
+
+<pre class="example">                                                                  Applications
+                                                                      and
+                                                                   Utilities
+                                                                     -------
+                                                                    /       \
+                    +---------------+    +--------+    +--------+
+              C ---&gt;| C      PARSER |---&gt;|        |    |        |
+                    +---------------+    |        |    |        |
+                    +---------------+    | COMMON |    | COMMON |&lt;--- SPEEDBAR
+           Java ---&gt;| JAVA   PARSER |---&gt;| PARSE  |    |        |
+                    +---------------+    | TREE   |    | PARSE  |&lt;--- SEMANTICDB
+                    +---------------+    | FORMAT |    | API    |
+         Scheme ---&gt;| SCHEME PARSER |---&gt;|        |    |        |&lt;--- ecb
+                    +---------------+    |        |    |        |
+                    +---------------+    |        |    |        |
+        Texinfo ---&gt;| TEXI.  PARSER |---&gt;|        |    |        |
+                    +---------------+    |        |    |        |
+     
+                         ...                ...           ...         ...
+     
+                    +---------------+    |        |    |        |
+        Lang. Y ---&gt;| Y      Parser |---&gt;|        |    |        |&lt;--- app. ?
+                    +---------------+    |        |    |        |
+                    +---------------+    |        |    |        |&lt;--- app. ?
+        Lang. Z ---&gt;| Z      Parser |---&gt;|        |    |        |
+                    +---------------+    +--------+    +--------+
+</pre>
+   <ul class="menu">
+<li><a accesskey="1" href="Semantic-Components.html#Semantic-Components">Semantic Components</a>
+</ul>
+
+   </body></html>
+

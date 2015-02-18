@@ -97,9 +97,12 @@ typedef float EmacsCGFloat;
 
    ========================================================================== */
 
+
 /* We override sendEvent: as a means to stop/start the event loop */
 @interface EmacsApp : NSApplication
 {
+  NSAppleEventDescriptor* appleScriptReturnValue;
+
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
   BOOL shouldKeepRunning;
   BOOL isFirst;
@@ -110,6 +113,7 @@ typedef float EmacsCGFloat;
   int nextappdefined;
 #endif
 }
+
 - (void)logNotification: (NSNotification *)notification;
 - (void)antialiasThresholdDidChange:(NSNotification *)notification;
 - (void)sendEvent: (NSEvent *)theEvent;
@@ -118,9 +122,11 @@ typedef float EmacsCGFloat;
 - (void)fd_handler: (id)unused;
 - (void)timeout_handler: (NSTimer *)timedEntry;
 - (BOOL)fulfillService: (NSString *)name withArg: (NSString *)arg;
+- (void)extractArgumentsFromOdocEvent: (NSAppleEventDescriptor *)desc;
 #ifdef NS_IMPL_GNUSTEP
 - (void)sendFromMainThread:(id)unused;
 #endif
+- (void)savePanelDidEnd2:(NSSavePanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 @end
 
 #ifdef NS_IMPL_GNUSTEP
@@ -169,7 +175,7 @@ typedef float EmacsCGFloat;
 /* AppKit-side interface */
 - menuDown: (id)sender;
 - toolbarClicked: (id)item;
-- toggleToolbar: (id)sender;
+- toolbarCustomized: (id)sender;
 - (void)keyDown: (NSEvent *)theEvent;
 - (void)mouseDown: (NSEvent *)theEvent;
 - (void)mouseUp: (NSEvent *)theEvent;
@@ -197,6 +203,16 @@ typedef float EmacsCGFloat;
 @end
 
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 1070
+enum {
+  NSWindowAnimationBehaviorDefault		= 0,
+  NSWindowAnimationBehaviorNone			= 2,
+  NSWindowAnimationBehaviorDocumentWindow	= 3,
+  NSWindowAnimationBehaviorUtilityWindow	= 4,
+  NSWindowAnimationBehaviorAlertPanel		= 5
+};
+#endif
+
 /* Small utility used for processing resize events under Cocoa. */
 @interface EmacsWindow : NSWindow
 {
@@ -204,6 +220,10 @@ typedef float EmacsCGFloat;
 }
 @end
 
+// dummy for 10.5-
+#define NSApplicationPresentationDefault 0
+#define NSApplicationPresentationAutoHideDock (1 <<  0)
+#define NSApplicationPresentationAutoHideMenuBar (1 <<  2)
 
 /* Fullscreen version of the above.  */
 @interface EmacsFSWindow : EmacsWindow
@@ -258,19 +278,31 @@ typedef float EmacsCGFloat;
      EmacsView *emacsView;
      NSMutableDictionary *identifierToItem;
      NSMutableArray *activeIdentifiers;
+     NSMutableArray *availableIdentifiers;
      NSArray *prevIdentifiers;
      unsigned long enablement, prevEnablement;
+     BOOL disableHooks;
    }
 - initForView: (EmacsView *)view withIdentifier: (NSString *)identifier;
 - (void) clearActive;
 - (void) clearAll;
 - (BOOL) changed;
+- (void) addDisplayItemSpacerWithIdx: (int)idx
+				 tag: (int)tag
+				 key: (char *) key;
+
 - (void) addDisplayItemWithImage: (EmacsImage *)img
                              idx: (int)idx
                              tag: (int)tag
                         helpText: (const char *)help
-                         enabled: (BOOL)enabled;
+                         enabled: (BOOL)enabled
+			 visible: (BOOL)visible
+			     key: (char *)key
+		       labelText: (char *)label;
 
+- (void)customizationDidChange;
+- (void)checkCustomizationChange:(NSTimer*)theTimer;
+- (void)runCustomizationPalette:(id)sender;
 /* delegate methods */
 - (NSToolbarItem *)toolbar: (NSToolbar *)toolbar
      itemForItemIdentifier: (NSString *)itemIdentifier
@@ -323,6 +355,18 @@ typedef float EmacsCGFloat;
 - (NSRect) frame;
 @end
 
+@interface EmacsAlertPanel : NSAlert
+{
+  @public
+  Lisp_Object *returnValues;
+  int returnValueCount;
+}
+- init;
+- (void) alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo;
+- (void) processDialogFromList: (Lisp_Object)list;
+
+@end
+
 
 /* ==========================================================================
 
@@ -348,7 +392,6 @@ typedef float EmacsCGFloat;
 - (NSString *)panel: (id)sender userEnteredFilename: (NSString *)filename
           confirmed: (BOOL)okFlag;
 @end
-
 
 /* ==========================================================================
 
@@ -453,6 +496,7 @@ typedef float EmacsCGFloat;
 extern NSArray *ns_send_types, *ns_return_types;
 extern NSString *ns_app_name;
 extern EmacsMenu *mainMenu, *svcsMenu, *dockMenu;
+extern NSMenu *panelMenu;
 
 /* Apple removed the declaration, but kept the implementation */
 #if defined (NS_IMPL_COCOA)
@@ -473,6 +517,9 @@ extern EmacsMenu *mainMenu, *svcsMenu, *dockMenu;
 
 /* Special keycodes that we pass down the event chain */
 #define KEY_NS_POWER_OFF               ((1<<28)|(0<<16)|1)
+#define KEY_NS_DRAG_FILE               ((1<<28)|(0<<16)|4)
+#define KEY_NS_DRAG_COLOR              ((1<<28)|(0<<16)|5)
+#define KEY_NS_DRAG_TEXT               ((1<<28)|(0<<16)|6)
 #define KEY_NS_OPEN_FILE               ((1<<28)|(0<<16)|2)
 #define KEY_NS_OPEN_TEMP_FILE          ((1<<28)|(0<<16)|3)
 #define KEY_NS_CHANGE_FONT             ((1<<28)|(0<<16)|7)
@@ -483,7 +530,19 @@ extern EmacsMenu *mainMenu, *svcsMenu, *dockMenu;
 #define KEY_NS_NEW_FRAME               ((1<<28)|(0<<16)|12)
 #define KEY_NS_TOGGLE_TOOLBAR          ((1<<28)|(0<<16)|13)
 #define KEY_NS_SHOW_PREFS              ((1<<28)|(0<<16)|14)
-
+#define KEY_NS_CHANGE_COLOR            ((1<<28)|(0<<16)|17)
+#define KEY_NS_CHECK_SPELLING          ((1<<28)|(0<<16)|20)
+#define KEY_NS_SPELLING_CHANGE         ((1<<28)|(0<<16)|21)
+#define KEY_NS_TOGGLE_FULLSCREEN       ((1<<28)|(0<<16)|22)
+#define KEY_NS_APPLICATION_ACTIVATED   ((1<<28)|(0<<16)|90)
+#define KEY_NS_APPLICATION_OPEN_UNTITLED ((1<<28)|(0<<16)|91)
+#define KEY_NS_APPLICATION_REOPEN      ((1<<28)|(0<<16)|92)
+#define KEY_NS_APPLICATION_RESTORE     ((1<<28)|(0<<16)|93)
+#define KEY_NS_APPLICATION_STORE_STATE ((1<<28)|(0<<16)|94)
+#define KEY_NS_ABOUT                   ((1<<28)|(0<<16)|130)
+#define KEY_NS_CHECK_FOR_UPDATES       ((1<<28)|(0<<16)|131)
+#define KEY_NS_TOOLBAR_CUSTOMIZED      ((1<<28)|(0<<16)|132)
+#define KEY_NS_SAVE_PANEL_CLOSED       ((1<<28)|(0<<16)|133)
 /* could use list to store these, but rest of emacs has a big infrastructure
    for managing a table of bitmap "records" */
 struct ns_bitmap_record
@@ -897,6 +956,8 @@ extern int ns_select (int nfds, fd_set *readfds, fd_set *writefds,
 extern unsigned long ns_get_rgb_color (struct frame *f,
                                        float r, float g, float b, float a);
 
+extern Lisp_Object ns_frame_list (void);  /* needed by frame.c */
+
 /* From nsterm.m, needed in nsfont.m. */
 #ifdef __OBJC__
 extern void
@@ -925,5 +986,34 @@ extern char gnustep_base_version[];  /* version tracking */
 #define IN_BOUND(min, x, max) (((x) < (min)) \
                                 ? (min) : (((x)>(max)) ? (max) : (x)))
 #define SCREENMAXBOUND(x) (IN_BOUND (-SCREENMAX, x, SCREENMAX))
+
+/* needed somewhere... */
+#define VERTICAL_SCROLL_BAR_WIDTH_TRIM (0)
+
+
+/* ODB / XCode interaction support */
+
+/* The following taken from the MacVIM source code, by Björn Winckler */
+
+// ODB Editor Suite Constants (taken from ODBEditorSuite.h)
+#define keyFileSender		'FSnd'
+#define keyFileSenderToken	'FTok'
+#define keyFileCustomPath	'Burl'
+#define kODBEditorSuite		'R*ch'
+#define kAEModifiedFile		'FMod'
+#define keyNewLocation		'New?'
+#define kAEClosedFile		'FCls'
+#define keySenderToken		'Tokn'
+
+typedef struct
+{
+  int16_t unused1;	   // 0 (not used)
+  int16_t lineNum;	   // line to select (< 0 to specify range)
+  int32_t startRange;   // start of selection range (if line < 0)
+  int32_t endRange;	   // end of selection range (if line < 0)
+  int32_t unused2;	   // 0 (not used)
+  int32_t theDate;	   // modification date/time
+} MMXcodeSelectionRange;
+
 
 #endif	/* HAVE_NS */

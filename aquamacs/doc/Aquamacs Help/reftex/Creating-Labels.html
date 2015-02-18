@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+<title>Creating Labels - RefTeX User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="RefTeX User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Labels-and-References.html#Labels-and-References" title="Labels and References">
+<link rel="next" href="Referencing-Labels.html#Referencing-Labels" title="Referencing Labels">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents RefTeX, a package to do labels, references,
+citations and indices for LaTeX documents with Emacs.
+
+This is edition 4.31 of the RefTeX User Manual for
+RefTeX 4.31
+
+Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Creating-Labels"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Labels-and-References.html#Labels-and-References">Labels and References</a>
+<hr>
+</div>
+
+<h3 class="section">3.1 Creating Labels</h3>
+
+<p><a name="index-Creating-labels-48"></a><a name="index-Labels_002c-creating-49"></a><a name="index-Labels_002c-deriving-from-context-50"></a><a name="index-C_002dc-_0028-51"></a><a name="index-reftex_002dlabel-52"></a>
+In order to create a label in a LaTeX document, press <kbd>C-c (</kbd>
+(<code>reftex-label</code>).  Just like LaTeX, <b>RefTeX</b> is context sensitive
+and will figure out the environment it currently is in and adapt the
+label to that environment.  A label usually consists of a short prefix
+indicating the type of the label and a unique mark.  <b>RefTeX</b> has
+3 different modes to create this mark.
+
+     <ol type=1 start=1>
+<li><a name="index-reftex_002dtranslate_002dto_002dascii_002dfunction-53"></a><a name="index-reftex_002dderive_002dlabel_002dparameters-54"></a><a name="index-reftex_002dlabel_002dillegal_002dre-55"></a><a name="index-reftex_002dabbrev_002dparameters-56"></a>A label can be derived from context.  This means, <b>RefTeX</b> takes
+the context of the label definition and constructs a label from
+that<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  This works best for section labels,
+where the section heading is used to construct a label.  In fact,
+<b>RefTeX</b>'s default settings use this method only for section
+labels.  You will be asked to confirm the derived label, or edit
+it.
+
+     <li>We may also use a simple unique number to identify a label.  This is
+mostly useful for labels where it is difficult to come up with a very
+good descriptive name.  <b>RefTeX</b>'s default settings use this method
+for equations, enumerate items and footnotes.  The author of <b>RefTeX</b>
+tends to write documents with many equations and finds it impossible
+to come up with good names for each of them.  These simple labels are
+inserted without query, and are therefore very fast.  Good descriptive
+names are not really necessary as <b>RefTeX</b> will provide context to
+reference a label (see <a href="Referencing-Labels.html#Referencing-Labels">Referencing Labels</a>).
+
+     <li>The third method is to ask the user for a label.  This is most
+useful for things which are easy to describe briefly and do not turn up
+too frequently in a document.  <b>RefTeX</b> uses this for figures and
+tables.  Of course, one can enter the label directly by typing the full
+&lsquo;<samp><span class="samp">\label{mark}</span></samp>&rsquo;.  The advantage of using <code>reftex-label</code>
+anyway is that <b>RefTeX</b> will know that a new label has been defined. 
+It will then not be necessary to rescan the document in order to access
+this label later.
+        </ol>
+
+   <p><a name="index-reftex_002dinsert_002dlabel_002dflags-57"></a>If you want to change the way certain labels are created, check out the
+variable <code>reftex-insert-label-flags</code> (see <a href="Options-_0028Creating-Labels_0029.html#Options-_0028Creating-Labels_0029">Options (Creating Labels)</a>).
+
+   <p>If you are using AUCTeX to write your LaTeX documents, you can
+set it up to delegate the creation of labels to
+<b>RefTeX</b>. See <a href="AUCTeX.html#AUCTeX">AUCTeX</a>, for more information.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Note that the context may contain constructs which are
+invalid in labels.  <b>RefTeX</b> will therefore strip the accent from
+accented Latin-1 characters and remove everything else which is not
+valid in labels.  This mechanism is safe, but may not be satisfactory
+for non-western languages.  Check the following variables if you need to
+change things: <code>reftex-translate-to-ascii-function</code>,
+<code>reftex-derive-label-parameters</code>, <code>reftex-label-illegal-re</code>,
+<code>reftex-abbrev-parameters</code>.</p>
+
+   <hr></div>
+
+   </body></html>
+

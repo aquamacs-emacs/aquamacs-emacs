@@ -319,6 +319,8 @@ This function does not send a message; it uses the given information
 to initialize a message, which the user can then edit and finally send
 \(or decline to send).  The variable `mail-user-agent' controls which
 mail-sending package is used for editing and sending the message."
+    (let (same-window-buffer-names same-window-regexps)
+      ;; `reporter-compose-outgoing' may pop up the window.
   (let ((reporter-eval-buffer (current-buffer))
 	final-resting-place
 	after-sep-pos
@@ -384,7 +386,7 @@ mail-sending package is used for editing and sending the message."
 	   )
       (message "Please enter your report.  Type %s to send, %s to abort."
 	       sendkey abortkey))
-    ))
+	)))
 
 (defun reporter-bug-hook ()
   "Prohibit sending mail if empty bug report."

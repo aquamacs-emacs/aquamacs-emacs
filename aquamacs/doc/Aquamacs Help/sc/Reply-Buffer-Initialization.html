@@ -1,0 +1,179 @@
+<html lang="en">
+<head>
+<title>Reply Buffer Initialization - Supercite User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Supercite User's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Replying-and-Yanking.html#Replying-and-Yanking" title="Replying and Yanking">
+<link rel="prev" href="Replying-and-Yanking.html#Replying-and-Yanking" title="Replying and Yanking">
+<link rel="next" href="Filling-Cited-Text.html#Filling-Cited-Text" title="Filling Cited Text">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This document describes Supercite, an Emacs package for citing and
+attributing replies to mail and news messages.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Reply-Buffer-Initialization"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Filling-Cited-Text.html#Filling-Cited-Text">Filling Cited Text</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Replying-and-Yanking.html#Replying-and-Yanking">Replying and Yanking</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Replying-and-Yanking.html#Replying-and-Yanking">Replying and Yanking</a>
+<hr>
+</div>
+
+   <p><a name="index-sc_002dcite_002doriginal-144"></a><a name="index-cite_002doriginal-_0028sc_002d_0029-145"></a>
+
+<h3 class="section">6.1 Reply Buffer Initialization</h3>
+
+<p>Executing <code>sc-cite-original</code> performs the following steps as it
+initializes the reply buffer:
+
+     <ol type=1 start=1>
+<li><a name="index-sc_002dpre_002dhook-146"></a><a name="index-pre_002dhook-_0028sc_002d_0029-147"></a><em>Runs </em><code>sc-pre-hook</code><em>.</em>
+This hook variable is run before <code>sc-cite-original</code> does any other
+work.  You could conceivably use this hook to set certain Supercite
+variables based on the reply buffer's mode or name (i.e., to do
+something different based on whether you are replying or following up to
+an article).
+
+     <li><em>Inserts Supercite's keymap.</em>
+<a name="index-sc_002dmode_002dmap_002dprefix-148"></a><a name="index-mode_002dmap_002dprefix-_0028sc_002d_0029-149"></a><a name="index-C_002dc-C_002dp-150"></a><a name="index-keymap-prefix-151"></a>Supercite provides a number of commands for performing post-yank
+modifications to the reply buffer.  These commands are installed on
+Supercite's top-level keymap.  Since Supercite has to interface with a
+wide variety of MUAs, it does not install all of its commands directly
+into the reply buffer's keymap.  Instead, it puts its commands on a
+keymap prefix, then installs this prefix onto the buffer's keymap.  What
+this means is that you typically have to type more characters to invoke
+a Supercite command, but Supercite's key bindings can be made much more
+consistent across MUAs.
+
+     <p>You can control what key Supercite uses as its keymap prefix by changing
+the variable <code>sc-mode-map-prefix</code>.  By default, this variable is
+set to <code>C-c C-p</code>; a finger twister perhaps, but unfortunately the
+best default due to the scarcity of available key bindings in many MUAs.
+
+     <li><em>Turns on Supercite minor mode.</em>
+<a name="index-modeline-152"></a>The modeline of the reply buffer should indicate that Supercite is
+active in that buffer by displaying the string &lsquo;<samp><span class="samp">SC</span></samp>&rsquo;.
+
+     <li><em>Sets the &ldquo;Undo Boundary.&rdquo;</em>
+<a name="index-undo-boundary-153"></a>Supercite sets an undo boundary before it begins to modify the original
+yanked text.  This allows you to easily undo Supercite's changes to
+affect alternative citing styles.
+
+     <li><em>Processes the mail headers.</em>
+<a name="index-sc_002dconfirm_002dalways_002dp-154"></a><a name="index-confirm_002dalways_002dp-_0028sc_002d_0029-155"></a><a name="index-sc_002dmail_002dwarn_002dif_002dnon_002drfc822_002dp-156"></a><a name="index-mail_002dwarn_002dif_002dnon_002drfc822_002dp-_0028sc_002d_0029-157"></a>All previously retrieved info key-value pairs are deleted from the info
+alist, then the mail headers in the body of the yanked message are
+scanned. Info key-value pairs are created for each header found. Also,
+such useful information as the author's name and email address are
+extracted.  If the variable <code>sc-mail-warn-if-non-rfc822-p</code> is
+non-<code>nil</code>, then Supercite will warn you if it finds a mail header
+that does not conform to RFC822.  This is rare and indicates a problem
+either with your MUA or the original author's MUA, or some MTA (mail
+transport agent) along the way.
+
+     <p><a name="index-sc_002dnuke_002dmail_002dheaders-158"></a><a name="index-sc_002dnuke_002dmail_002dheader_002dlist-159"></a><a name="index-nuke_002dmail_002dheaders-_0028sc_002d_0029-160"></a><a name="index-nuke_002dmail_002dheader_002dlist-_0028sc_002d_0029-161"></a>Once the info keys have been extracted from the mail headers, the
+headers are nuked from the reply buffer.  You can control exactly which
+headers are removed or kept, but by default, all headers are removed.
+
+     <p>There are two variables which control mail header nuking.  The variable
+<code>sc-nuke-mail-headers</code> controls the overall behavior of the header
+nuking routines.  By setting this variable to <code>'all</code>, you
+automatically nuke all mail headers.  Likewise, setting this variable to
+<code>'none</code> inhibits nuking of any mail headers.  In between these
+extremes, you can tell Supercite to nuke only a specified list of mail
+headers by setting this variable to <code>'specified</code>, or to keep only a
+specified list of headers by setting it to <code>'keep</code>.
+
+     <p>If <code>sc-nuke-mail-headers</code> is set to <code>'specified</code> or
+<code>'keep</code>, then the variable <code>sc-nuke-mail-header-list</code> is
+consulted for the list of headers to nuke or keep.  This variable
+contains a list of regular expressions.  If the mail header line matches
+a regular expression in this list, the header will be nuked or kept. 
+The line is matched against the regexp using <code>looking-at</code> rooted at
+the beginning of the line.
+
+     <p><a name="index-sc_002dblank_002dlines_002dafter_002dheaders-162"></a><a name="index-blank_002dlines_002dafter_002dheaders-_0028sc_002d_0029-163"></a>If the variable <code>sc-blank-lines-after-headers</code> is non-<code>nil</code>,
+it contains the number of blank lines remaining in the buffer after mail
+headers are nuked.  By default, only one blank line is left in the buffer.
+
+     <li><em>Selects the attribution and citation strings.</em>
+Once the mail headers have been processed, Supercite selects a
+attribution string and a citation string which it will use to cite the
+original message.  See <a href="Selecting-an-Attribution.html#Selecting-an-Attribution">Selecting an Attribution</a>, for details.
+
+     <li><em>Cites the message body.</em>
+<a name="index-sc_002dcite_002dregion_002dlimit-164"></a><a name="index-cite_002dregion_002dlimit-_0028sc_002d_0029b-165"></a>After the selection of the attribution and citation strings, Supercite
+cites the original message by inserting the citation string prefix in
+front of every uncited line.  You may not want Supercite to
+automatically cite very long messages however.  For example, some email
+could contain a smaller header section followed by a huge uuencoded
+message.  It wouldn't make sense to cite the uuencoded message part when
+responding to the original author's short preface.  For this reason,
+Supercite provides a variable which limits the automatic citation of
+long messages to a certain maximum number of lines.  The variable is
+called <code>sc-cite-region-limit</code>.  If this variable contains an
+integer, messages with more lines that this will not be cited at all,
+and a warning message will be displayed.  Supercite has performed
+everything necessary, though, for you to manually cite only the small
+portion of the original message that you want to use.
+
+     <p>If <code>sc-cite-region-limit</code> contains a non-<code>nil</code> value, the
+original message will always be cited, regardless of its size.  If the
+variable contains the value <code>nil</code>, the region will never be cited
+automatically.  Use this if you always want to be able to edit and cite
+the message manually.
+
+     <p><a name="index-sc_002dcite_002dblank_002dlines_002dp-166"></a><a name="index-cite_002dblank_002dlines_002dp-_0028sc_002d_0029-167"></a>The variable <code>sc-cite-blank-lines-p</code> controls whether blank lines
+in the original message should be cited or not.  If this variable is
+non-<code>nil</code>, blank lines will be cited just like non-blank lines. 
+Otherwise, blank lines will be treated as paragraph separators.
+
+     <p>Citing of the original message is highly configurable. Supercite's
+default setup does a pretty good job of citing many common forms of
+previously cited messages.  But there are as many citation styles out
+there as people on the net, or just about!  It would be impossible for
+Supercite to anticipate every style in existence, and you probably
+wouldn't encounter them all anyway.  But you can configure Supercite to
+recognize those styles you see often. 
+See <a href="Configuring-the-Citation-Engine.html#Configuring-the-Citation-Engine">Configuring the Citation Engine</a>, for details.
+
+     <li><em>Runs </em><code>sc-post-hook</code><em>.</em>
+<a name="index-sc_002dpost_002dhook-168"></a><a name="index-post_002dhook-_0028sc_002d_0029-169"></a>This variable is very similar to <code>sc-pre-hook</code>, except that it runs
+after <code>sc-cite-original</code> is finished. This hook is provided mostly
+for completeness and backward compatibility. Perhaps it could be used to
+reset certain variables set in <code>sc-pre-hook</code>.
+        </ol>
+
+   </body></html>
+

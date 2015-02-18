@@ -1,0 +1,165 @@
+<html lang="en">
+<head>
+<title>Sending Mail - The MH-E Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The MH-E Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Folders.html#Folders" title="Folders">
+<link rel="next" href="Editing-Drafts.html#Editing-Drafts" title="Editing Drafts">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is version 8.2 of `The MH-E
+Manual', last updated 2009-06-13.
+
+Copyright (C) 1995, 2001, 2002, 2003, 2005, 2006, 2007, 2008,
+  2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of either:
+
+       a. the GNU Free Documentation License, Version 1.3 or any later
+          version published by the Free Software Foundation; with no
+          Invariant Sections, with the Front-Cover texts being ``A GNU
+          Manual,'' and with the Back-Cover Texts as in (a) below. A
+          copy of the license is included in the section entitled ``GNU
+          Free Documentation License.''
+
+          (a) The FSF's Back-Cover Text is: ``You have the freedom to
+          copy and modify this GNU manual. Buying copies from the FSF
+          supports it in developing GNU and promoting software
+          freedom.''
+
+       b. the GNU General Public License as published by the Free
+          Software Foundation; either version 3, or (at your option)
+          any later version. A copy of the license is included in the
+          section entitled ``GNU General Public License.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Sending-Mail"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Editing-Drafts.html#Editing-Drafts">Editing Drafts</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Folders.html#Folders">Folders</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">8 Sending Mail</h2>
+
+<p><a name="index-sending-mail-984"></a><a name="index-mh_002dsmail-985"></a><a name="index-M_002dx-mh_002dsmail-986"></a>
+You can send a mail message in several ways. You can call <kbd>M-x
+mh-smail</kbd> directly, or from the command line like this:
+
+   <p><a name="index-starting-from-command-line-987"></a>
+<pre class="smallexample">     $ <kbd>emacs -f mh-smail</kbd>
+</pre>
+   <p><a name="index-goto_002daddress_002dat_002dpoint-988"></a><a name="index-mail_002duser_002dagent-989"></a>
+There are some commands that need to send a mail message, such as
+<code>goto-address-at-point</code>. You can configure Emacs to have these
+commands use MH-E by setting the option <code>mail-user-agent</code> to
+&lsquo;<samp><span class="samp">Emacs interface to MH</span></samp>&rsquo;.
+
+   <p><a name="index-g_t_0040samp_007bMessage_007d-menu-990"></a><a name="index-menu_002c-_0040samp_007bMessage_007d-991"></a>
+From within MH-E's MH-Folder mode, other methods of sending mail are
+available as well. These can also be found in the &lsquo;<samp><span class="samp">Message</span></samp>&rsquo; menu.
+
+     
+<a name="index-g_t_0040samp_007bMessage-_003e-Edit-Message-Again_007d-menu-item-992"></a>
+<a name="index-menu-item_002c-_0040samp_007bMessage-_003e-Edit-Message-Again_007d-993"></a>
+<a name="index-e-994"></a>
+<a name="index-mh_002dedit_002dagain-995"></a>
+<dl><dt><kbd>e</kbd><dd>Edit a message to send it again (<code>mh-edit-again</code>). 
+<!--  -->
+<a name="index-g_t_0040samp_007bMessage-_003e-Re_002dedit-a-Bounced-Message_007d-menu-item-996"></a><a name="index-menu-item_002c-_0040samp_007bMessage-_003e-Re_002dedit-a-Bounced-Message_007d-997"></a><a name="index-E-998"></a><a name="index-mh_002dextract_002drejected_002dmail-999"></a><br><dt><kbd>E</kbd><dd>Edit a message that was returned by the mail system
+(<code>mh-extract-rejected-mail</code>). 
+<!--  -->
+<a name="index-g_t_0040samp_007bMessage-_003e-Forward-Message_002e_002e_002e_007d-menu-item-1000"></a><a name="index-menu-item_002c-_0040samp_007bMessage-_003e-Forward-Message_002e_002e_002e_007d-1001"></a><a name="index-f-1002"></a><a name="index-mh_002dforward-1003"></a><br><dt><kbd>f</kbd><dd>Forward message (<code>mh-forward</code>). 
+<!--  -->
+<a name="index-g_t_0040samp_007bMessage-_003e-Reply-to-Message_002e_002e_002e_007d-menu-item-1004"></a><a name="index-menu-item_002c-_0040samp_007bMessage-_003e-Reply-to-Message_002e_002e_002e_007d-1005"></a><a name="index-r-1006"></a><a name="index-mh_002dreply-1007"></a><br><dt><kbd>r</kbd><dd>Reply to a message (<code>mh-reply</code>). 
+<!--  -->
+<a name="index-g_t_0040samp_007bMessage-_003e-Compose-a-New-Message_007d-menu-item-1008"></a><a name="index-menu-item_002c-_0040samp_007bMessage-_003e-Compose-a-New-Message_007d-1009"></a><a name="index-s-1010"></a><a name="index-mh_002dsend-1011"></a><br><dt><kbd>s</kbd><dd>Compose a message (<code>mh-send</code>). 
+<!--  -->
+<a name="index-g_t_0040samp_007bMessage-_003e-Redistribute-Message_002e_002e_002e_007d-menu-item-1012"></a><a name="index-menu-item_002c-_0040samp_007bMessage-_003e-Redistribute-Message_002e_002e_002e_007d-1013"></a><a name="index-M_002dd-1014"></a><a name="index-mh_002dredistribute-1015"></a><br><dt><kbd>M-d</kbd><dd>Redistribute a message (<code>mh-redistribute</code>). 
+<!--  -->
+<a name="index-mh_002dsmail-1016"></a><br><dt><kbd>M-x mh-smail</kbd><dd>Compose a message with the MH mail system. 
+<!--  -->
+<a name="index-mh_002dsmail_002dother_002dwindow-1017"></a><br><dt><kbd>M-x mh-smail-other-window</kbd><dd>Compose a message with the MH mail system in other window. 
+</dl>
+
+   <p><a name="index-g_t_0040samp_007bmh_002dsending_002dmail_007d-customization-group-1018"></a><a name="index-customization-group_002c-_0040samp_007bmh_002dsending_002dmail_007d-1019"></a>
+In addition, several options from the &lsquo;<samp><span class="samp">mh-sending-mail</span></samp>&rsquo;
+customization group are useful when sending mail or replying to mail. 
+They are summarized in the following table.
+
+     <dl>
+<dt><code>mh-compose-forward-as-mime-flag</code><a name="index-mh_002dcompose_002dforward_002das_002dmime_002dflag-1020"></a><dd>On means that messages are forwarded as attachments (default:
+&lsquo;<samp><span class="samp">on</span></samp>&rsquo;). 
+<!--  -->
+<br><dt><code>mh-compose-letter-function</code><a name="index-mh_002dcompose_002dletter_002dfunction-1021"></a><dd>Hook run when starting a new draft (default: <code>nil</code>). 
+<!--  -->
+<br><dt><code>mh-compose-prompt-flag</code><a name="index-mh_002dcompose_002dprompt_002dflag-1022"></a><dd>On means prompt for header fields when composing a new draft (default:
+&lsquo;<samp><span class="samp">off</span></samp>&rsquo;). 
+<!--  -->
+<br><dt><code>mh-forward-subject-format</code><a name="index-mh_002dforward_002dsubject_002dformat-1023"></a><dd>Format string for forwarded message subject (default: <code>"%s:
+%s"</code>). 
+<!--  -->
+<br><dt><code>mh-insert-x-mailer-flag</code><a name="index-mh_002dinsert_002dx_002dmailer_002dflag-1024"></a><dd>On means append an &lsquo;<samp><span class="samp">X-Mailer:</span></samp>&rsquo; header field to the header
+(default: &lsquo;<samp><span class="samp">on</span></samp>&rsquo;). 
+<!--  -->
+<br><dt><code>mh-redist-full-contents-flag</code><a name="index-mh_002dredist_002dfull_002dcontents_002dflag-1025"></a><dd>On means the <samp><span class="command">dist</span></samp> command needs entire letter for
+redistribution (default: &lsquo;<samp><span class="samp">off</span></samp>&rsquo;). 
+<!--  -->
+<br><dt><code>mh-reply-default-reply-to</code><a name="index-mh_002dreply_002ddefault_002dreply_002dto-1026"></a><dd>Sets the person or persons to whom a reply will be sent (default:
+&lsquo;<samp><span class="samp">Prompt</span></samp>&rsquo;). 
+<!--  -->
+<br><dt><code>mh-reply-show-message-flag</code><a name="index-mh_002dreply_002dshow_002dmessage_002dflag-1027"></a><dd>On means the MH-Show buffer is displayed using <kbd>r</kbd>
+(<code>mh-reply</code>) (default: &lsquo;<samp><span class="samp">on</span></samp>&rsquo;). 
+</dl>
+
+   <p>The following hooks are available.
+
+     <dl>
+<dt><code>mh-annotate-msg-hook</code><a name="index-mh_002dannotate_002dmsg_002dhook-1028"></a><dd>Hook run by <code>mh-annotate-msg</code> after annotation (default:
+<code>nil</code>). 
+<!--  -->
+<br><dt><code>mh-forward-hook</code><a name="index-mh_002dforward_002dhook-1029"></a><dd>Hook run by <code>mh-forward</code> on a forwarded letter (default:
+<code>nil</code>). 
+<!--  -->
+<br><dt><code>mh-letter-mode-hook</code><a name="index-mh_002dletter_002dmode_002dhook-1030"></a><dd>Hook run by <code>mh-letter-mode</code> on a new letter (default:
+<code>nil</code>). 
+</dl>
+
+   <p><a name="index-mh_002dannotate_002dmsg-1031"></a><a name="index-mh_002dannotate_002dlist-1032"></a><a name="index-mh_002dannotate_002dmsg_002dhook-1033"></a><a name="index-mh_002dcurrent_002dfolder-1034"></a>
+A hook that is called whenever a message is sent and after the scan
+lines and message are annotated is <code>mh-annotate-msg-hook</code>. Hook
+functions can access the current folder name with
+<code>mh-current-folder</code> and obtain the message numbers of the
+annotated messages with <code>mh-annotate-list</code>.
+
+   <p>The rest of the functions and options introduced here are explained in
+more detail in the following sections.
+
+<ul class="menu">
+<li><a accesskey="1" href="Composing.html#Composing">Composing</a>
+<li><a accesskey="2" href="Replying.html#Replying">Replying</a>
+<li><a accesskey="3" href="Forwarding.html#Forwarding">Forwarding</a>
+<li><a accesskey="4" href="Redistributing.html#Redistributing">Redistributing</a>
+<li><a accesskey="5" href="Editing-Again.html#Editing-Again">Editing Again</a>
+</ul>
+
+   </body></html>
+

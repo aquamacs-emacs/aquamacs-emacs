@@ -1,0 +1,118 @@
+<html lang="en">
+<head>
+<title>Package Menu - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Packages.html#Packages" title="Packages">
+<link rel="next" href="Package-Installation.html#Package-Installation" title="Package Installation">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
+
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Package-Menu"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Package-Installation.html#Package-Installation">Package Installation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Packages.html#Packages">Packages</a>
+<hr>
+</div>
+
+<h3 class="section">47.1 The Package Menu Buffer</h3>
+
+<p><a name="index-package-menu-4289"></a><a name="index-built_002din-package-4290"></a><a name="index-list_002dpackages-4291"></a>
+The command <kbd>M-x list-packages</kbd> brings up the <dfn>package menu</dfn>. 
+This is a buffer listing all the packages that Emacs knows about, one
+on each line, with the following information:
+
+     <ul>
+<li>The package name (e.g., &lsquo;<samp><span class="samp">auctex</span></samp>&rsquo;).
+
+     <li>The package's version number (e.g., &lsquo;<samp><span class="samp">11.86</span></samp>&rsquo;).
+
+     <li>The package's status&mdash;normally one of &lsquo;<samp><span class="samp">available</span></samp>&rsquo; (can be
+downloaded from the package archive), &lsquo;<samp><span class="samp">installed</span></samp>&rsquo;, or
+&lsquo;<samp><span class="samp">built-in</span></samp>&rsquo; (included in Emacs by default).
+
+     <p>The status can also be &lsquo;<samp><span class="samp">new</span></samp>&rsquo;.  This is equivalent to
+&lsquo;<samp><span class="samp">available</span></samp>&rsquo;, except that it means the package became newly
+available on the package archive after your last invocation of
+<kbd>M-x list-packages</kbd>.  In other instances, a package may have the
+status &lsquo;<samp><span class="samp">held</span></samp>&rsquo;, &lsquo;<samp><span class="samp">disabled</span></samp>&rsquo;, or &lsquo;<samp><span class="samp">obsolete</span></samp>&rsquo;. 
+See <a href="Package-Installation.html#Package-Installation">Package Installation</a>.
+
+     <li>A short description of the package. 
+</ul>
+
+<p class="noindent">The <code>list-packages</code> command accesses the network, to retrieve the
+list of available packages from the package archive server.  If the
+network is unavailable, it falls back on the most recently retrieved
+list.
+
+   <p>The following commands are available in the package menu:
+
+     <dl>
+<dt><kbd>h</kbd><dd>Print a short message summarizing how to use the package menu
+(<code>package-menu-quick-help</code>).
+
+     <br><dt><kbd>?</kbd><dt><kbd>&lt;RET&gt;</kbd><dd>Display a help buffer for the package on the current line
+(<code>package-menu-describe-package</code>), similar to the help window
+displayed by the <kbd>C-h P</kbd> command (see <a href="Packages.html#Packages">Packages</a>).
+
+     <br><dt><kbd>i</kbd><dd>Mark the package on the current line for installation
+(<code>package-menu-mark-install</code>).  If the package status is
+&lsquo;<samp><span class="samp">available</span></samp>&rsquo;, this adds an &lsquo;<samp><span class="samp">I</span></samp>&rsquo; character to the start of the
+line; typing <kbd>x</kbd> (see below) will download and install the
+package.
+
+     <br><dt><kbd>d</kbd><dd>Mark the package on the current line for deletion
+(<code>package-menu-mark-delete</code>).  If the package status is
+&lsquo;<samp><span class="samp">installed</span></samp>&rsquo;, this adds a &lsquo;<samp><span class="samp">D</span></samp>&rsquo; character to the start of the
+line; typing <kbd>x</kbd> (see below) will delete the package. 
+See <a href="Package-Files.html#Package-Files">Package Files</a>, for information about what package deletion
+entails.
+
+     <br><dt><kbd>u</kbd><dd>Remove any installation or deletion mark previously added to the
+current line by an <kbd>i</kbd> or <kbd>d</kbd> command.
+
+     <br><dt><kbd>U</kbd><dd>Mark all package with a newer available version for &ldquo;upgrading&rdquo;
+(<code>package-menu-mark-upgrades</code>).  This places an installation mark
+on the new available versions, and a deletion mark on the old
+installed versions.
+
+     <br><dt><kbd>x</kbd><dd>Download and install all packages marked with <kbd>i</kbd>, and their
+dependencies; also, delete all packages marked with <kbd>d</kbd>
+(<code>package-menu-execute</code>).  This also removes the marks.
+
+     <br><dt><kbd>r</kbd><dd>Refresh the package list (<code>package-menu-refresh</code>).  This fetches
+the list of available packages from the package archive again, and
+recomputes the package list. 
+</dl>
+
+<p class="noindent">For example, you can install a package by typing <kbd>i</kbd> on the line
+listing that package, followed by <kbd>x</kbd>.
+
+   </body></html>
+

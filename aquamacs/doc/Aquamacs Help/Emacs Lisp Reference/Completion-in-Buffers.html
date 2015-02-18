@@ -1,0 +1,116 @@
+<html lang="en">
+<head>
+<title>Completion in Buffers - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Completion.html#Completion" title="Completion">
+<link rel="prev" href="Programmed-Completion.html#Programmed-Completion" title="Programmed Completion">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
+
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Completion-in-Buffers"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Programmed-Completion.html#Programmed-Completion">Programmed Completion</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Completion.html#Completion">Completion</a>
+<hr>
+</div>
+
+<h4 class="subsection">20.6.8 Completion in Ordinary Buffers</h4>
+
+<p><a name="index-inline-completion-1244"></a>
+<a name="index-completion_002dat_002dpoint-1245"></a>  Although completion is usually done in the minibuffer, the
+completion facility can also be used on the text in ordinary Emacs
+buffers.  In many major modes, in-buffer completion is performed by
+the <kbd>C-M-i</kbd> or <kbd>M-&lt;TAB&gt;</kbd> command, bound to
+<code>completion-at-point</code>.  See <a href="../emacs/Symbol-Completion.html#Symbol-Completion">Symbol Completion</a>.  This command uses the abnormal hook variable
+<code>completion-at-point-functions</code>:
+
+<div class="defun">
+&mdash; Variable: <b>completion-at-point-functions</b><var><a name="index-completion_002dat_002dpoint_002dfunctions-1246"></a></var><br>
+<blockquote><p>The value of this abnormal hook should be a list of functions, which
+are used to compute a completion table for completing the text at
+point.  It can be used by major modes to provide mode-specific
+completion tables (see <a href="Major-Mode-Conventions.html#Major-Mode-Conventions">Major Mode Conventions</a>).
+
+        <p>When the command <code>completion-at-point</code> runs, it calls the
+functions in the list one by one, without any argument.  Each function
+should return <code>nil</code> if it is unable to produce a completion table
+for the text at point.  Otherwise it should return a list of the form
+
+     <pre class="example">          (<var>start</var> <var>end</var> <var>collection</var> . <var>props</var>)
+</pre>
+        <p class="noindent"><var>start</var> and <var>end</var> delimit the text to complete (which should
+enclose point).  <var>collection</var> is a completion table for completing
+that text, in a form suitable for passing as the second argument to
+<code>try-completion</code> (see <a href="Basic-Completion.html#Basic-Completion">Basic Completion</a>); completion
+alternatives will be generated from this completion table in the usual
+way, via the completion styles defined in <code>completion-styles</code>
+(see <a href="Completion-Variables.html#Completion-Variables">Completion Variables</a>).  <var>props</var> is a property list for
+additional information; any of the properties in
+<code>completion-extra-properties</code> are recognized (see <a href="Completion-Variables.html#Completion-Variables">Completion Variables</a>), as well as the following additional ones:
+
+          <dl>
+<dt><code>:predicate</code><dd>The value should be a predicate that completion candidates need to
+satisfy.
+
+          <br><dt><code>:exclusive</code><dd>If the value is <code>no</code>, then if the completion table fails to match
+the text at point, <code>completion-at-point</code> moves on to the
+next function in <code>completion-at-point-functions</code> instead of
+reporting a completion failure. 
+</dl>
+
+        <p>A function in <code>completion-at-point-functions</code> may also return a
+function.  In that case, that returned function is called, with no
+argument, and it is entirely responsible for performing the
+completion.  We discourage this usage; it is intended to help convert
+old code to using <code>completion-at-point</code>.
+
+        <p>The first function in <code>completion-at-point-functions</code> to return a
+non-<code>nil</code> value is used by <code>completion-at-point</code>.  The
+remaining functions are not called.  The exception to this is when
+there is an <code>:exclusive</code> specification, as described above. 
+</p></blockquote></div>
+
+   <p>The following function provides a convenient way to perform
+completion on an arbitrary stretch of text in an Emacs buffer:
+
+<div class="defun">
+&mdash; Function: <b>completion-in-region</b><var> start end collection &amp;optional predicate<a name="index-completion_002din_002dregion-1247"></a></var><br>
+<blockquote><p>This function completes the text in the current buffer between the
+positions <var>start</var> and <var>end</var>, using <var>collection</var>.  The
+argument <var>collection</var> has the same meaning as in
+<code>try-completion</code> (see <a href="Basic-Completion.html#Basic-Completion">Basic Completion</a>).
+
+        <p>This function inserts the completion text directly into the current
+buffer.  Unlike <code>completing-read</code> (see <a href="Minibuffer-Completion.html#Minibuffer-Completion">Minibuffer Completion</a>), it does not activate the minibuffer.
+
+        <p>For this function to work, point must be somewhere between <var>start</var>
+and <var>end</var>. 
+</p></blockquote></div>
+
+   </body></html>
+

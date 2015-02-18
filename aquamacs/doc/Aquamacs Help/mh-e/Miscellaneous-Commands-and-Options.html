@@ -1,0 +1,158 @@
+<html lang="en">
+<head>
+<title>Miscellaneous Commands and Options - The MH-E Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="The MH-E Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Reading-Mail.html#Reading-Mail" title="Reading Mail">
+<link rel="prev" href="Navigating.html#Navigating" title="Navigating">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is version 8.2 of `The MH-E
+Manual', last updated 2009-06-13.
+
+Copyright (C) 1995, 2001, 2002, 2003, 2005, 2006, 2007, 2008,
+  2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of either:
+
+       a. the GNU Free Documentation License, Version 1.3 or any later
+          version published by the Free Software Foundation; with no
+          Invariant Sections, with the Front-Cover texts being ``A GNU
+          Manual,'' and with the Back-Cover Texts as in (a) below. A
+          copy of the license is included in the section entitled ``GNU
+          Free Documentation License.''
+
+          (a) The FSF's Back-Cover Text is: ``You have the freedom to
+          copy and modify this GNU manual. Buying copies from the FSF
+          supports it in developing GNU and promoting software
+          freedom.''
+
+       b. the GNU General Public License as published by the Free
+          Software Foundation; either version 3, or (at your option)
+          any later version. A copy of the license is included in the
+          section entitled ``GNU General Public License.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Miscellaneous-Commands-and-Options"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Navigating.html#Navigating">Navigating</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Reading-Mail.html#Reading-Mail">Reading Mail</a>
+<hr>
+</div>
+
+<h3 class="section">6.9 Miscellaneous Commands and Options</h3>
+
+<p>This section contains a few more miscellaneous commands and options.
+
+   <p><a name="index-editing-message-756"></a><a name="index-mh_002dmodify-757"></a><a name="index-M-758"></a>
+There are times when you need to edit a message. For example, you may
+need to fix a broken Content-Type header field. You can do this with
+the command <kbd>M</kbd> (<code>mh-modify</code>). It displays the raw message in
+an editable buffer. When you are done editing, save and kill the
+buffer as you would any other.
+
+   <p><a name="index-mh_002dkill_002dfolder-759"></a><a name="index-mh_002dpack_002dfolder-760"></a><a name="index-mh_002ddo_002dnot_002dconfirm_002dflag-761"></a>
+Commands such as <code>mh-pack-folder</code> prompt to confirm whether to
+process outstanding moves and deletes or not before continuing. 
+Turning on the option <code>mh-do-not-confirm-flag</code> means that these
+actions will be performed&mdash;which is usually desired but cannot be
+retracted&mdash;without question<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.
+
+   <p><a name="index-MH_002dFolder-mode-762"></a><a name="index-modes_002c-MH_002dFolder-763"></a><a name="index-mh_002dsummary_002dheight-764"></a>
+The option <code>mh-summary-height</code> controls the number of scan lines
+displayed in the MH-Folder window, including the mode line. The
+default value of this option is &lsquo;<samp><span class="samp">Automatic</span></samp>&rsquo; which means that the
+MH-Folder buffer will maintain the same proportional size if the frame
+is resized. If you'd prefer a fixed height, then choose the
+&lsquo;<samp><span class="samp">Fixed Size</span></samp>&rsquo; option and enter the number of lines you'd like to
+see.
+
+   <p><a name="index-mh_002dbury_002dshow_002dbuffer_002dflag-765"></a>
+Normally the buffer for displaying messages is buried at the bottom at
+the buffer stack. You may wish to disable this feature by turning off
+the option <code>mh-bury-show-buffer-flag</code>. One advantage of not
+burying the show buffer is that one can delete the show buffer more
+easily in an electric buffer list because of its proximity to its
+associated MH-Folder buffer. Try running <kbd>M-x
+electric-buffer-list</kbd> to see what I mean.
+
+   <p><a name="index-g_t_0040file_007b_002eemacs_007d-766"></a><a name="index-files_002c-_0040file_007b_002eemacs_007d-767"></a><a name="index-reading-mail-768"></a>
+Before we leave this section, I'll include a function that I use as a
+front end to MH-E<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>. It toggles between your
+working window configuration, which may be quite involved&mdash;windows
+filled with source, compilation output, man pages, and other
+documentation&mdash;and your MH-E window configuration. Like the rest of
+the customization described in this section, simply add the following
+code to <samp><span class="file">~/.emacs</span></samp>.
+
+   <p><a name="index-mh_002drmail_002c-example-769"></a>
+<pre class="smalllisp">     (defvar my-mh-screen-saved nil
+       "Set to non-<code>nil</code> when MH-E window configuration shown.")
+     (defvar my-normal-screen nil "Normal window configuration.")
+     (defvar my-mh-screen nil "MH-E window configuration.")
+     
+     (defun my-mh-rmail (&amp;optional arg)
+       "Toggle between MH-E and normal screen configurations.
+     With non-<code>nil</code> or prefix argument, <i>inc</i> mailbox as well
+     when going into mail."
+       (interactive "P")                 ; <span class="roman">user callable function, P=prefix arg</span>
+       (setq my-mh-screen-saved          ; <span class="roman">save state</span>
+             (cond
+              ;; <span class="roman">Bring up MH-E screen if arg or normal window configuration.</span>
+              ;; <span class="roman">If arg or +inbox buffer doesn't exist, run mh-rmail.</span>
+              ((or arg (null my-mh-screen-saved))
+               (setq my-normal-screen (current-window-configuration))
+               (if (or arg (null (get-buffer "+inbox")))
+                   (mh-rmail)
+                 (set-window-configuration my-mh-screen))
+               t)                        ; <span class="roman">set my-mh-screen-saved to </span><code>t</code>
+              ;; <span class="roman">Otherwise, save MH-E screen and restore normal screen.</span>
+              (t
+               (setq my-mh-screen (current-window-configuration))
+               (set-window-configuration my-normal-screen)
+               nil))))                   ; <span class="roman">set my-mh-screen-saved to nil</span>
+     
+     (global-set-key "\C-x\r" 'my-mh-rmail)  ;<span class="roman"> call with C-x &lt;RET&gt;</span>
+     
+     <i>Starting MH-E</i>
+</pre>
+   <p>If you type an argument (<kbd>C-u</kbd>) or if <code>my-mh-screen-saved</code> is
+<code>nil</code> (meaning a non-MH-E window configuration), the current
+window configuration is saved, either the &lsquo;<samp><span class="samp">+inbox</span></samp>&rsquo; buffer is
+displayed or <code>mh-rmail</code> is run, and the MH-E window configuration
+is shown. Otherwise, the MH-E window configuration is saved and the
+original configuration is displayed.
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> In previous versions of MH-E,
+this option suppressed the confirmation in <code>mh-kill-folder</code>. 
+Since this kept most users from setting this option,
+<code>mh-kill-folder</code> was modified in version 6.0 to always ask for
+confirmation subject to <code>mh-kill-folder-suppress-prompt-hook</code>. 
+See <a href="Folders.html#Folders">Folders</a>.</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> Stephen Gildea's favorite binding is
+<kbd>(global-set-key "\C-cr" 'mh-rmail)</kbd>.</p>
+
+   <hr></div>
+
+   </body></html>
+

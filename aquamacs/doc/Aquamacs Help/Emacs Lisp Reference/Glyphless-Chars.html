@@ -1,0 +1,134 @@
+<html lang="en">
+<head>
+<title>Glyphless Chars - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Character-Display.html#Character-Display" title="Character Display">
+<link rel="prev" href="Glyphs.html#Glyphs" title="Glyphs">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.3.50.
+
+Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Glyphless-Chars"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Glyphs.html#Glyphs">Glyphs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Character-Display.html#Character-Display">Character Display</a>
+<hr>
+</div>
+
+<h4 class="subsection">38.20.5 Glyphless Character Display</h4>
+
+<p><a name="index-glyphless-characters-4063"></a>
+  <dfn>Glyphless characters</dfn> are characters which are displayed in a
+special way, e.g., as a box containing a hexadecimal code, instead of
+being displayed literally.  These include characters which are
+explicitly defined to be glyphless, as well as characters for which
+there is no available font (on a graphical display), and characters
+which cannot be encoded by the terminal's coding system (on a text
+terminal).
+
+<div class="defun">
+&mdash; Variable: <b>glyphless-char-display</b><var><a name="index-glyphless_002dchar_002ddisplay-4064"></a></var><br>
+<blockquote><p>The value of this variable is a char-table which defines glyphless
+characters and how they are displayed.  Each entry must be one of the
+following display methods:
+
+          <dl>
+<dt><code>nil</code><dd>Display the character in the usual way.
+
+          <br><dt><code>zero-width</code><dd>Don't display the character.
+
+          <br><dt><code>thin-space</code><dd>Display a thin space, 1-pixel wide on graphical displays, or
+1-character wide on text terminals.
+
+          <br><dt><code>empty-box</code><dd>Display an empty box.
+
+          <br><dt><code>hex-code</code><dd>Display a box containing the Unicode codepoint of the character, in
+hexadecimal notation.
+
+          <br><dt>an <acronym>ASCII</acronym> string<dd>Display a box containing that string.
+
+          <br><dt>a cons cell <code>(</code><var>graphical</var><code> . </code><var>text</var><code>)</code><dd>Display with <var>graphical</var> on graphical displays, and with
+<var>text</var> on text terminals.  Both <var>graphical</var> and <var>text</var>
+must be one of the display methods described above. 
+</dl>
+
+     <p class="noindent">The <code>thin-space</code>, <code>empty-box</code>, <code>hex-code</code>, and
+<acronym>ASCII</acronym> string display methods are drawn with the
+<code>glyphless-char</code> face.
+
+        <p>The char-table has one extra slot, which determines how to display any
+character that cannot be displayed with any available font, or cannot
+be encoded by the terminal's coding system.  Its value should be one
+of the above display methods, except <code>zero-width</code> or a cons cell.
+
+        <p>If a character has a non-<code>nil</code> entry in an active display table,
+the display table takes effect; in this case, Emacs does not consult
+<code>glyphless-char-display</code> at all. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>glyphless-char-display-control</b><var><a name="index-glyphless_002dchar_002ddisplay_002dcontrol-4065"></a></var><br>
+<blockquote><p>This user option provides a convenient way to set
+<code>glyphless-char-display</code> for groups of similar characters.  Do
+not set its value directly from Lisp code; the value takes effect only
+via a custom <code>:set</code> function (see <a href="Variable-Definitions.html#Variable-Definitions">Variable Definitions</a>),
+which updates <code>glyphless-char-display</code>.
+
+        <p>Its value should be an alist of elements <code>(</code><var>group</var><code>
+. </code><var>method</var><code>)</code>, where <var>group</var> is a symbol specifying a group of
+characters, and <var>method</var> is a symbol specifying how to display
+them.
+
+        <p><var>group</var> should be one of the following:
+
+          <dl>
+<dt><code>c0-control</code><dd><acronym>ASCII</acronym> control characters <code>U+0000</code> to <code>U+001F</code>,
+excluding the newline and tab characters (normally displayed as escape
+sequences like &lsquo;<samp><span class="samp">^A</span></samp>&rsquo;; see <a href="../emacs/Text-Display.html#Text-Display">How Text Is Displayed</a>).
+
+          <br><dt><code>c1-control</code><dd>Non-<acronym>ASCII</acronym>, non-printing characters <code>U+0080</code> to
+<code>U+009F</code> (normally displayed as octal escape sequences like
+&lsquo;<samp><span class="samp">\230</span></samp>&rsquo;).
+
+          <br><dt><code>format-control</code><dd>Characters of Unicode General Category `Cf', such as &lsquo;<samp><span class="samp">U+200E</span></samp>&rsquo;
+(Left-to-Right Mark), but excluding characters that have graphic
+images, such as &lsquo;<samp><span class="samp">U+00AD</span></samp>&rsquo; (Soft Hyphen).
+
+          <br><dt><code>no-font</code><dd>Characters for there is no suitable font, or which cannot be encoded
+by the terminal's coding system. 
+</dl>
+
+     <!-- FIXME: this can also be `acronym', but that's not currently -->
+     <!-- completely implemented; it applies only to the format-control -->
+     <!-- group, and only works if the acronym is in `char-acronym-table'. -->
+        <p>The <var>method</var> symbol should be one of <code>zero-width</code>,
+<code>thin-space</code>, <code>empty-box</code>, or <code>hex-code</code>.  These have
+the same meanings as in <code>glyphless-char-display</code>, above. 
+</p></blockquote></div>
+
+   </body></html>
+

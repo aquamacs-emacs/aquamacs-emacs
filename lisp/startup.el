@@ -59,10 +59,16 @@ string or function value that this variable has."
   :version "23.1"
   :group 'initialization)
 
+(defcustom show-scratch-buffer-on-startup t
+  "Show the initial frame if it contains the *scratch* buffer on startup.
+If nil, the initial frame remains hidden if the current buffer is *scratch*."
+  :type 'boolean
+  :group 'initialization)
+
 (defcustom inhibit-startup-screen nil
   "Non-nil inhibits the startup screen.
 
-This is for use in your personal init file (but NOT site-start.el),
+This is for use in your personal init file,
 once you are familiar with the contents of the startup screen."
   :type 'boolean
   :group 'initialization)
@@ -681,7 +687,14 @@ It is the default value of the variable `top-level'."
 	  ;; frame-set-background-mode is idempotent, so it won't
 	  ;; cause any harm if it's already been done.
 	  (if (fboundp 'frame-set-background-mode)
-	      (frame-set-background-mode (selected-frame))))
+	      (frame-set-background-mode (selected-frame)))
+
+ 	  ;; time to make the frame visible (Aquamacs)
+	  (unless (and (eq initial-window-system 'ns)
+		       (ns-application-hidden-p))
+	    (if (or show-scratch-buffer-on-startup
+		    (not (equal (buffer-name (current-buffer)) "*scratch*")))
+		(make-frame-visible))))
 
 	;; Now we know the user's default font, so add it to the menu.
 	(if (fboundp 'font-menu-add-default)
@@ -998,6 +1011,9 @@ please check its value")
 
   (run-hooks 'before-init-hook)
 
+  (let ((initial-frame-alist (append '((visibility . nil))
+				      initial-frame-alist)))
+
   ;; Under X, create the X frame and delete the terminal frame.
   (unless (daemonp)
     (if (or noninteractive emacs-basic-display)
@@ -1006,11 +1022,11 @@ please check its value")
 	      no-blinking-cursor t))
     (frame-initialize))
 
-  (when (fboundp 'x-create-frame)
-    ;; Set up the tool-bar (even in tty frames, since Emacs might open a
-    ;; graphical frame later).
-    (unless noninteractive
-      (tool-bar-setup)))
+    ;; allow frame-notice-user-settings to override
+    (setq frame-initial-geometry-arguments
+	  (delete '(visibility . nil) ;
+		  frame-initial-geometry-arguments)))
+
 
   ;; Turn off blinking cursor if so specified in X resources.  This is here
   ;; only because all other settings of no-blinking-cursor are here.
@@ -1028,6 +1044,32 @@ please check its value")
         ;; are dependencies between them.
         (prog1 (nreverse custom-delayed-init-variables)
           (setq custom-delayed-init-variables nil)))
+
+  ;; In Aquamacs, images are loaded when setting up tool-bar
+  ;; which requires image-load-path to be defined, which is a
+  ;; custom variable with delayed initialization.
+  ;; (let ((image-load-path (list (car image-load-path))) ;; speed gain?
+  ;; 	(tool-bar-load-png-only t)) ;; Aquamacs only (speed gain)
+  ;;   (unless (or noninteractive (not (fboundp 'tool-bar-mode)))
+  ;;     ;; Set up the tool-bar.  Do this even in tty frames, so that there
+  ;;     ;; is a tool-bar if Emacs later opens a graphical frame.
+  ;;     (if (or emacs-basic-display
+  ;; 	      (and (numberp (frame-parameter nil 'tool-bar-lines))
+  ;; 		   (<= (frame-parameter nil 'tool-bar-lines) 0)))
+  ;; 	  ;; On a graphical display with the toolbar disabled via X
+  ;; 	  ;; resources, set up the toolbar without enabling it.
+  ;; 	  (tool-bar-setup)
+  ;; 	;; Otherwise, enable tool-bar-mode.
+  ;; 	(tool-bar-mode 1))))
+
+  ;; do this after custom-reevaluate-setting so that image-load-path is available.
+  (when (fboundp 'x-create-frame)
+    ;; Set up the tool-bar (even in tty frames, since Emacs might open a
+    ;; graphical frame later).
+    (unless noninteractive
+      (let (;; (image-load-path (list (car image-load-path))) ;; speed gain?
+	    (tool-bar-load-png-only t)) ;; Aquamacs only (speed gain)
+	(tool-bar-setup))))
 
   (normal-erase-is-backspace-setup-frame)
 
@@ -1067,10 +1109,6 @@ please check its value")
     ;; See cus-edit.el for an example.
     (if site-run-file
 	(load site-run-file t t))
-
-    ;; Sites should not disable this.  Only individuals should disable
-    ;; the startup screen.
-    (setq inhibit-startup-screen nil)
 
     ;; Warn for invalid user name.
     (when init-file-user
@@ -1133,6 +1171,8 @@ please check its value")
 		      ;; into user-init-file.
 		      (setq user-init-file t)
 		      (load user-init-file-1 t t)
+		      (if (fboundp 'aquamacs-load-preferences) 
+			  (aquamacs-load-preferences))
 
 		      (when (eq user-init-file t)
 			;; If we did not find ~/.emacs, try
@@ -1169,12 +1209,7 @@ please check its value")
 			    (setq user-init-file source))))
 
 		      (unless inhibit-default-init
-                        (let ((inhibit-startup-screen nil))
-                          ;; Users are supposed to be told their rights.
-                          ;; (Plus how to get help and how to undo.)
-                          ;; Don't you dare turn this off for anyone
-                          ;; except yourself.
-                          (load "default" t t)))))))))
+                          (load "default" t t))))))))
 	(if init-file-debug
 	    ;; Do this without a condition-case if the user wants to debug.
 	    (funcall inner)
@@ -1466,10 +1501,14 @@ Each element in the list should be a list of strings or pairs
 (defconst fancy-about-text
   `((:face (variable-pitch font-lock-comment-face)
      "This is "
+     :link ("Aquamacs Emacs"
+	    (lambda (button) (browse-url "http://aquamacs.org/"))
+	    "Browse http://aquamacs.org")
+     ", based on "
      :link ("GNU Emacs"
 	    ,(lambda (_button) (browse-url "http://www.gnu.org/software/emacs/"))
 	    "Browse http://www.gnu.org/software/emacs/")
-     ", one component of the "
+     ",\none component of the "
      :link
      ,(lambda ()
        (if (eq system-type 'gnu/linux)
@@ -1479,39 +1518,45 @@ Each element in the list should be a list of strings or pairs
 	     "Browse http://www.gnu.org/gnu/linux-and-gnu.html")
 	 `("GNU" ,(lambda (_button) (describe-gnu-project))
 	   "Display info on the GNU project.")))
-     " operating system.\n"
-     :face (variable-pitch font-lock-builtin-face)
+     " operating system.\n\n"
+     :face ,(lambda ()
+	     (list 'variable-pitch
+		   (list :foreground
+			 (if (eq (frame-parameter nil 'background-mode) 'dark)
+			     "cyan" "darkblue"))))
+       :face '(variable-pitch  :height 130)
+       "Aquamacs is a distribution of GNU Emacs that is adapted for Mac users.\n"
      "\n"
      ,(lambda () (emacs-version))
      "\n"
      :face (variable-pitch (:height 0.8))
      ,(lambda () emacs-copyright)
      "\n\n"
-     :face variable-pitch
+     :face (variable-pitch (:height 0.8))
      :link ("Authors"
 	    ,(lambda (_button)
 	      (view-file (expand-file-name "AUTHORS" data-directory))
 	      (goto-char (point-min))))
-     "\tMany people have contributed code included in GNU Emacs\n"
+     "            \tMany people have contributed code\n"
      :link ("Contributing"
-	    ,(lambda (_button)
-	      (view-file (expand-file-name "CONTRIBUTE" data-directory))
-	      (goto-char (point-min))))
-     "\tHow to contribute improvements to Emacs\n"
+	    ,(lambda (button) (browse-url "http://aquamacs.org/development.shtml")))
+     "\tHow to contribute improvements to Aquamacs\n"
      "\n"
      :link ("GNU and Freedom" ,(lambda (_button) (describe-gnu-project)))
      "\tWhy we developed GNU Emacs, and the GNU operating system\n"
+     :link ("Aquamacs Manual" (lambda (_button) (aquamacs-user-help)))
+     "\tView the Aquamacs manual using Apple Help\n"
+     :link ("Emacs Manual" (lambda (_button) (aquamacs-emacs-manual)))
+     "\tView the Emacs manual using Apple Help\n"
      :link ("Absence of Warranty" ,(lambda (_button) (describe-no-warranty)))
      "\tGNU Emacs comes with "
      :face (variable-pitch (:slant oblique))
      "ABSOLUTELY NO WARRANTY\n"
      :face variable-pitch
      :link ("Copying Conditions" ,(lambda (_button) (describe-copying)))
-     "\tConditions for redistributing and changing Emacs\n"
-     :link ("Getting New Versions" ,(lambda (_button) (describe-distribution)))
-     "\tHow to obtain the latest version of Emacs\n"
+     "\tConditions for redistributing and changing Aquamacs and Emacs\n"
      :link ("Ordering Manuals" ,(lambda (_button) (view-order-manuals)))
-     "\tBuying printed manuals from the FSF\n"
+     "\tBuying printed Emacs manuals from the FSF\n"
      "\n"
      :link ("Emacs Tutorial" ,(lambda (_button) (help-with-tutorial)))
      "\tLearn basic Emacs keystroke commands"
@@ -1634,8 +1679,8 @@ a face or button specification."
     (when img
       (when (> window-width image-width)
 	;; Center the image in the window.
-	(insert (propertize " " 'display
-			    `(space :align-to (+ center (-0.5 . ,img)))))
+;; 	(insert (propertize " " 'display
+;; 			    `(space :align-to (+ center (-0.5 . ,img)))))
 
 	;; Change the color of the XPM version of the splash image
 	;; so that it is visible with a dark frame background.
@@ -1646,8 +1691,8 @@ a face or button specification."
 	;; Insert the image with a help-echo and a link.
 	(make-button (prog1 (point) (insert-image img)) (point)
 		     'face 'default
-		     'help-echo "mouse-2, RET: Browse http://www.gnu.org/"
-		     'action (lambda (_button) (browse-url "http://www.gnu.org/"))
+		     'help-echo "click to view http://www.aquamacs.org/"
+		     'action (lambda (_button) (browse-url "http://www.aquamacs.org/"))
 		     'follow-link t)
 	(insert "\n\n")))))
 
@@ -1787,8 +1832,15 @@ splash screen in another window."
   (let ((frame (fancy-splash-frame)))
     (save-selected-window
       (select-frame frame)
-      (switch-to-buffer "*About GNU Emacs*")
-      (setq buffer-undo-list t)
+      (if (fboundp 'switch-to-buffer-here)
+	  (switch-to-buffer-here "*About Aquamacs Emacs*")
+	(switch-to-buffer "*About Aquamacs Emacs*"))
+      (setq buffer-undo-list t
+	    mode-line-format
+	    (concat "----"
+		    (propertize "%b" 'face 'mode-line-buffer-id)
+		    "%-"))
+      (setq word-wrap t)
       (let ((inhibit-read-only t))
 	(erase-buffer)
 	(if pure-space-overflow
@@ -1812,16 +1864,16 @@ splash screen in another window."
 Returning non-nil does not mean we should necessarily
 use the fancy splash screen, but if we do use it,
 we put it on this frame."
-  (let (chosen-frame)
-    ;; MS-Windows needs this to have a chance to make the initial
-    ;; frame visible.
-    (if (eq (window-system) 'w32)
-	(sit-for 0 t))
-    (dolist (frame (append (frame-list) (list (selected-frame))))
-      (if (and (frame-visible-p frame)
-	       (not (window-minibuffer-p (frame-selected-window frame))))
-	  (setq chosen-frame frame)))
-    chosen-frame))
+  (make-frame 
+   '((name . "About Aquamacs Emacs") 
+     (font . "-apple-lucida grande-medium-r-normal--0-0-0-0-m-0-mac-roman")
+     (width . 75) (height . 40) (minibuffer . t)
+     (background-color . "White") 
+     (foreground-color . "Black") (tool-bar-lines . 0)
+     (vertical-scroll-bars . auto) 
+     (horizontal-scroll-bars . nil) 
+     (left-fringe . 5) (right-fringe . 0)
+     (internal-border-width . 0) (unsplittable . t))))
 
 (defun use-fancy-splash-screens-p ()
   "Return t if fancy splash screens should be used."
@@ -1846,7 +1898,7 @@ If optional argument STARTUP is non-nil, display the startup screen
 after Emacs starts.  If STARTUP is nil, display the About screen.
 If CONCISE is non-nil, display a concise version of the
 splash screen in another window."
-  (let ((splash-buffer (get-buffer-create "*About GNU Emacs*")))
+  (let ((splash-buffer (get-buffer-create "*About Aquamacs Emacs*")))
     (with-current-buffer splash-buffer
       (setq buffer-read-only nil)
       (erase-buffer)
@@ -2112,29 +2164,7 @@ Type \\[describe-distribution] for information on "))
   (let ((resize-mini-windows t))
     (or noninteractive                  ;(input-pending-p) init-file-had-error
 	;; t if the init file says to inhibit the echo area startup message.
-	(and inhibit-startup-echo-area-message
-	     user-init-file
-	     (or (and (get 'inhibit-startup-echo-area-message 'saved-value)
-		      (equal inhibit-startup-echo-area-message
-			     (if (equal init-file-user "")
-				 (user-login-name)
-			       init-file-user)))
-		 ;; Wasn't set with custom; see if .emacs has a setq.
-                 (condition-case nil
-                     (with-temp-buffer
-                       (insert-file-contents user-init-file)
-                       (re-search-forward
-                        (concat
-                         "([ \t\n]*setq[ \t\n]+"
-                         "inhibit-startup-echo-area-message[ \t\n]+"
-                         (regexp-quote
-                          (prin1-to-string
-                           (if (equal init-file-user "")
-                               (user-login-name)
-                             init-file-user)))
-                         "[ \t\n]*)")
-                        nil t))
-                   (error nil))))
+	inhibit-startup-echo-area-message
 	(message "%s" (startup-echo-area-message)))))
 
 (defun display-startup-screen (&optional concise)
@@ -2150,7 +2180,7 @@ screen."
       	(normal-splash-screen t concise))))
 
 (defun display-about-screen ()
-  "Display the *About GNU Emacs* buffer.
+  "Display the *About Aquamacs Emacs* buffer.
 A fancy display is used on graphic displays, normal otherwise."
   (interactive)
   (if (use-fancy-splash-screens-p)
@@ -2371,6 +2401,9 @@ A fancy display is used on graphic displays, normal otherwise."
 		     (while (and hooks
 				 (not (setq did-hook (funcall (car hooks)))))
 		       (setq hooks (cdr hooks)))
+		     ;; OS X sends -psn_ arguments on occasion.
+		     (if (string-match "\\`-psn_"  argi)
+			 (setq did-hook t))
 		     (if (not did-hook)
 			 ;; Presume that the argument is a file name.
 			 (progn
@@ -2455,6 +2488,13 @@ A fancy display is used on graphic displays, normal otherwise."
       ;; keystroke, and that's distracting.
       (when (fboundp 'frame-notice-user-settings)
 	(frame-notice-user-settings))
+
+      ;; time to make the frame visible (Aquamacs)
+      (unless (and (eq initial-window-system 'ns)
+		   (ns-application-hidden-p))
+	(if (or show-scratch-buffer-on-startup
+		(not (equal (buffer-name (current-buffer)) "*scratch*")))
+	    (make-frame-visible)))
 
       ;; If there are no switches to process, we might as well
       ;; run this hook now, and there may be some need to do it

@@ -1,0 +1,106 @@
+<html lang="en">
+<head>
+<title>Citation Styles - RefTeX User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="RefTeX User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Citations.html#Citations" title="Citations">
+<link rel="prev" href="Creating-Citations.html#Creating-Citations" title="Creating Citations">
+<link rel="next" href="Citation-Info.html#Citation-Info" title="Citation Info">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents RefTeX, a package to do labels, references,
+citations and indices for LaTeX documents with Emacs.
+
+This is edition 4.31 of the RefTeX User Manual for
+RefTeX 4.31
+
+Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Citation-Styles"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Citation-Info.html#Citation-Info">Citation Info</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Creating-Citations.html#Creating-Citations">Creating Citations</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Citations.html#Citations">Citations</a>
+<hr>
+</div>
+
+<h3 class="section">4.2 Citation Styles</h3>
+
+<p><a name="index-Citation-styles-205"></a><a name="index-Citation-styles_002c-_0040code_007bnatbib_007d-206"></a><a name="index-Citation-styles_002c-_0040code_007bharvard_007d-207"></a><a name="index-Citation-styles_002c-_0040code_007bchicago_007d-208"></a><a name="index-Citation-styles_002c-_0040code_007bjurabib_007d-209"></a><a name="index-g_t_0040code_007bnatbib_007d_002c-citation-style-210"></a><a name="index-g_t_0040code_007bharvard_007d_002c-citation-style-211"></a><a name="index-g_t_0040code_007bchicago_007d_002c-citation-style-212"></a><a name="index-g_t_0040code_007bjurabib_007d_002c-citation-style-213"></a>
+<a name="index-reftex_002dcite_002dformat-214"></a>The standard LaTeX macro <code>\cite</code> works well with numeric or simple
+key citations.  To deal with the more complex task of author-year
+citations as used in many natural sciences, a variety of packages has
+been developed which define derived forms of the <code>\cite</code> macro. 
+<b>RefTeX</b> can be configured to produce these citation macros as well
+by setting the variable <code>reftex-cite-format</code>.  For the most
+commonly used packages (<code>natbib</code>, <code>harvard</code>, <code>chicago</code>,
+<code>jurabib</code>) this may be done from the menu, under
+<code>Ref-&gt;Citation Styles</code>.  Since there are usually several macros to
+create the citations, executing <code>reftex-citation</code> (<kbd>C-c [</kbd>)
+starts by prompting for the correct macro.  For the Natbib style, this
+looks like this:
+
+<pre class="example">     SELECT A CITATION FORMAT
+     
+     [^M]   \cite{%l}
+     [t]    \citet{%l}
+     [T]    \citet*{%l}
+     [p]    \citep{%l}
+     [P]    \citep*{%l}
+     [e]    \citep[e.g.][]{%l}
+     [s]    \citep[see][]{%l}
+     [a]    \citeauthor{%l}
+     [A]    \citeauthor*{%l}
+     [y]    \citeyear{%l}
+</pre>
+   <p><a name="index-reftex_002dcite_002dprompt_002doptional_002dargs-215"></a>If cite formats contain empty paris of square brackets, RefTeX can
+will prompt for values of these optional arguments if you call the
+<code>reftex-citation</code> command with a <kbd>C-u</kbd> prefix. 
+Following the most generic of these packages, <code>natbib</code>, the builtin
+citation packages always accept the <kbd>t</kbd> key for a <em>textual</em>
+citation (like: <code>Jones et al. (1997) have shown...</code>)  as well as
+the <kbd>p</kbd> key for a parenthetical citation (like: <code>As shown
+earlier (Jones et al, 1997)</code>).
+
+   <p>To make one of these styles the default, customize the variable
+<code>reftex-cite-format</code> or put into <samp><span class="file">.emacs</span></samp>:
+
+<pre class="lisp">     (setq reftex-cite-format 'natbib)
+</pre>
+   <p>You can also use AUCTeX style files to automatically set the
+citation style based on the <code>usepackage</code> commands in a given
+document.  See <a href="Style-Files.html#Style-Files">Style Files</a>, for information on how to set up the style
+files correctly.
+
+   </body></html>
+

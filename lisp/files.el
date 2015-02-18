@@ -1364,6 +1364,35 @@ use with M-x."
     (rename-file encoded new-encoded ok-if-already-exists)
     newname))
 
+(defun forward-filename (arg)
+  "Move point forward arg filenames (backward if arg is negative)."
+  (interactive "p")
+  (if (< arg 0)
+      (progn
+	(backward-char)
+	(while (< arg 0)
+	  (re-search-backward "[/\n]" nil t)
+	  (setq arg (1+ arg)))
+	(forward-char))
+    (forward-char)
+    (while (> 0 arg )
+      (re-search-forward "[/\n]" nil t)
+      (setq arg (1- arg)))
+    (backward-char)))
+
+(defun kill-filename (arg)
+  "Kill characters forward until up to the end of a filename.
+With argument, do this that many times."
+  (interactive "p")
+  (kill-region (point) (progn (forward-filename arg) (point))))
+
+(defun backward-kill-filename (arg)
+  "Kill characters backward up to the beginning of a filename.
+With argument, do this that many times."
+  (interactive "p")
+  (kill-filename (- arg)))
+
+
 (defcustom confirm-nonexistent-file-or-buffer 'after-completion
   "Whether confirmation is requested before visiting a new file or buffer.
 If nil, confirmation is not requested.
@@ -4872,16 +4901,16 @@ Before and after saving the buffer, this function runs
 		  (old new &optional switches no-async buf))
 
 (defvar save-some-buffers-action-alist
-  `((?\C-r
-     ,(lambda (buf)
-        (if (not enable-recursive-minibuffers)
-            (progn (display-buffer buf)
-                   (setq other-window-scroll-buffer buf))
-          (view-buffer buf (lambda (_) (exit-recursive-edit)))
-          (recursive-edit))
-        ;; Return nil to ask about BUF again.
-        nil)
-     ,(purecopy "view this buffer"))
+  `(;; (?\C-r
+    ;;  ,(lambda (buf)
+    ;;     (if (not enable-recursive-minibuffers)
+    ;;         (progn (display-buffer buf)
+    ;;                (setq other-window-scroll-buffer buf))
+    ;;       (view-buffer buf (lambda (_) (exit-recursive-edit)))
+    ;;       (recursive-edit))
+    ;;     ;; Return nil to ask about BUF again.
+    ;;     nil)
+    ;;  ,(purecopy "view this buffer"))
     (?d ,(lambda (buf)
            (if (null (buffer-file-name buf))
                (message "Not applicable: no file")
@@ -4895,7 +4924,7 @@ Before and after saving the buffer, this function runs
                  (recursive-edit))))
            ;; Return nil to ask about BUF again.
            nil)
-	,(purecopy "view changes in this buffer")))
+	,(purecopy "view changes")))
   "ACTION-ALIST argument used in call to `map-y-or-n-p'.")
 (put 'save-some-buffers-action-alist 'risky-local-variable t)
 
@@ -4953,10 +4982,21 @@ change the additional actions you can take on files."
                     (if arg
                         t
                       (setq queried t)
+		      (with-current-buffer buffer
+			(select-window (get-window-for-other-buffer))
+			  (if (and (boundp 'tabbar-mode) tabbar-mode (fboundp 'switch-to-buffer-in-tab))
+			      (switch-to-buffer-in-tab buffer)
+			    (switch-to-buffer buffer))
+			  (select-frame-set-input-focus (window-frame (selected-window)))
+			  (if (fboundp 'smart-move-minibuffer-inside-screen)
+			      (smart-move-minibuffer-inside-screen)))
                       (if (buffer-file-name buffer)
                           (format "Save file %s? "
-                                  (buffer-file-name buffer))
-                        (format "Save buffer %s? "
+				  (if (> (length (buffer-file-name buffer)) 30)
+				      (concat "..." (substring (buffer-file-name buffer) -27))
+				    (buffer-file-name buffer)))
+                        (format "Save buffer %s? 
+The buffer contains unsaved changes which may be lost if you don't save them."
                                 (buffer-name buffer))))))
              (lambda (buffer)
                (with-current-buffer buffer
@@ -5767,11 +5807,26 @@ Also rename any existing auto save file, if it was made in this session."
 	     (recent-auto-save-p))
 	(rename-file osave buffer-auto-save-file-name t))))
 
+
+(defvar auto-save-file-name-prefix "#" "String prepended to auto save file names.")
+(defvar auto-save-file-name-postfix "#" "String appended to auto save file names.")
+
+(defvar aquamacs-untitled-buffer-creation-time nil "Creation time of an untitled buffer.
+If set, this is used to produce a unique auto save file name
+by `make-auto-save-file-name'. Set by `new-empty-buffer' in Aquamacs.")
+(make-variable-buffer-local 'aquamacs-untitled-buffer-creation-time)
+
 (defun make-auto-save-file-name ()
   "Return file name to use for auto-saves of current buffer.
 Does not consider `auto-save-visited-file-name' as that variable is checked
 before calling this function.  You can redefine this for customization.
 See also `auto-save-file-name-p'."
+  (let ((buffer-file-name 
+	 (or buffer-file-name
+	     (if aquamacs-untitled-buffer-creation-time
+		 (format "%suntitled-%s" default-directory
+			 aquamacs-untitled-buffer-creation-time)))))
+			 
   (if buffer-file-name
       (let ((handler (find-file-name-handler buffer-file-name
 					     'make-auto-save-file-name)))
@@ -5814,9 +5869,9 @@ See also `auto-save-file-name-p'."
 				"#" (match-string 1 fn)
 				"." (match-string 3 fn) "#"))
 		    (concat (file-name-directory filename)
-			    "#"
+			    auto-save-file-name-prefix
 			    (file-name-nondirectory filename)
-			    "#")))
+			    auto-save-file-name-postfix)))
 	    ;; Make sure auto-save file names don't contain characters
 	    ;; invalid for the underlying filesystem.
 	    (if (and (memq system-type '(ms-dos windows-nt cygwin))
@@ -5873,7 +5928,7 @@ See also `auto-save-file-name-p'."
       (condition-case ()
 	  (delete-file file-name)
 	(file-error nil))
-      file-name)))
+      file-name))))
 
 (defun auto-save-file-name-p (filename)
   "Return non-nil if FILENAME can be yielded by `make-auto-save-file-name'.

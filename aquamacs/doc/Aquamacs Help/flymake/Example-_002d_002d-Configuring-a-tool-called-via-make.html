@@ -1,0 +1,94 @@
+<html lang="en">
+<head>
+<title>Example -- Configuring a tool called via make - GNU Flymake 0.3</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="GNU Flymake 0.3">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Adding-support-for-a-new-syntax-check-tool.html#Adding-support-for-a-new-syntax-check-tool" title="Adding support for a new syntax check tool">
+<link rel="prev" href="Example-_002d_002d-Configuring-a-tool-called-directly.html#Example-_002d_002d-Configuring-a-tool-called-directly" title="Example -- Configuring a tool called directly">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for GNU Flymake (version 0.3, April 2004),
+which is a universal on-the-fly syntax checker for GNU Emacs.
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Example----Configuring-a-tool-called-via-make"></a>
+<a name="Example-_002d_002d-Configuring-a-tool-called-via-make"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Example-_002d_002d-Configuring-a-tool-called-directly.html#Example-_002d_002d-Configuring-a-tool-called-directly">Example -- Configuring a tool called directly</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Adding-support-for-a-new-syntax-check-tool.html#Adding-support-for-a-new-syntax-check-tool">Adding support for a new syntax check tool</a>
+<hr>
+</div>
+
+<h4 class="subsection">4.2.2 Example &ndash; Configuring a tool called via make</h4>
+
+<p><a name="index-Adding-support-for-C-_0028gcc_002bmake_0029-15"></a>
+In this example we will add support for C files syntax checked by
+<code>gcc</code> called via <code>make</code>.
+
+   <p>We're not required to write any new functions, as Flymake already has
+functions for <code>make</code>. We just add a new entry to the
+<code>flymake-allowed-file-name-masks</code>:
+
+<pre class="lisp">     (setq flymake-allowed-file-name-masks
+           (cons '(".+\\.c$"
+                   flymake-simple-make-init
+                   flymake-simple-cleanup
+                   flymake-get-real-file-name)
+                 flymake-allowed-file-name-masks))
+</pre>
+   <p><code>flymake-simple-make-init</code> builds the following <code>make</code>
+command line:
+
+<pre class="lisp">     (list "make"
+           (list "-s" "-C"
+                 base-dir
+                 (concat "CHK_SOURCES=" source)
+                 "SYNTAX_CHECK_MODE=1"
+                 "check-syntax"))
+</pre>
+   <p><code>base-dir</code> is a directory containing <code>Makefile</code>, see <a href="Locating-the-buildfile.html#Locating-the-buildfile">Locating the buildfile</a>.
+
+   <p>Thus, <code>Makefile</code> must contain the <code>check-syntax</code> target. In
+our case this target might look like this:
+
+<pre class="verbatim">check-syntax:
+	gcc -o nul -S ${CHK_SOURCES}
+</pre>
+
+   <p>The format of error messages reported by <code>gcc</code> is already
+supported by Flymake, so we don't have to add a new entry to
+<code>flymake-err-line-patterns</code>.
+
+   </body></html>
+

@@ -1,0 +1,169 @@
+<html lang="en">
+<head>
+<title>Motion Commands - VIP</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="VIP">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Vi-Commands.html#Vi-Commands" title="Vi Commands">
+<link rel="prev" href="Mark-Commands.html#Mark-Commands" title="Mark Commands">
+<link rel="next" href="Searching-and-Replacing.html#Searching-and-Replacing" title="Searching and Replacing">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1987, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Motion-Commands"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Searching-and-Replacing.html#Searching-and-Replacing">Searching and Replacing</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Mark-Commands.html#Mark-Commands">Mark Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Vi-Commands.html#Vi-Commands">Vi Commands</a>
+<hr>
+</div>
+
+<h3 class="section">2.7 Motion Commands</h3>
+
+<p>Commands for moving around in the current buffer are collected here.  These
+commands are used as an `argument' for the delete, change and yank commands
+to be described in the next section.
+
+     <dl>
+<dt><kbd>h</kbd><dd><a name="index-g_t150-_0040kbd_007bh_007d-_0028_0040code_007bvip_002dbackward_002dchar_007d_0029-147"></a>Move point backward by one character.  Signal error if point is at the
+beginning of buffer, but (unlike Vi) do not complain otherwise
+(<code>vip-backward-char</code>). 
+<br><dt><kbd>l</kbd><dd><a name="index-g_t154-_0040kbd_007bl_007d-_0028_0040code_007bvip_002dforward_002dchar_007d_0029-148"></a>Move point backward by one character.  Signal error if point is at the
+end of buffer, but (unlike Vi) do not complain otherwise
+(<code>vip-forward-char</code>). 
+<br><dt><kbd>j</kbd><dd><a name="index-g_t152-_0040kbd_007bj_007d-_0028_0040code_007bvip_002dnext_002dline_007d_0029-149"></a>Move point to the next line keeping the current column.  If point is on the
+last line of the buffer, a new line will be created and point will move to
+that line (<code>vip-next-line</code>). 
+<br><dt><kbd>k</kbd><dd><a name="index-g_t153-_0040kbd_007bk_007d-_0028_0040code_007bvip_002dprevious_002dline_007d_0029-150"></a>Move point to the previous line keeping the current column
+(<code>vip-next-line</code>). 
+<br><dt><kbd>+</kbd><dd><a name="index-g_t053-_0040kbd_007b_002b_007d-_0028_0040code_007bvip_002dnext_002dline_002dat_002dbol_007d_0029-151"></a>Move point to the next line at the first non-white character.  If point is
+on the last line of the buffer, a new line will be created and point will
+move to the beginning of that line (<code>vip-next-line-at-bol</code>). 
+<br><dt><kbd>-</kbd><dd><a name="index-g_t055-_0040kbd_007b_002d_007d-_0028_0040code_007bvip_002dprevious_002dline_002dat_002dbol_007d_0029-152"></a>Move point to the previous line at the first non-white character
+(<code>vip-previous-line-at-bol</code>). 
+</dl>
+   If a count is given to these commands, the commands will be repeated that
+many times.
+
+     <dl>
+<dt><kbd>0</kbd><dd><a name="index-g_t060-_0040kbd_007b0_007d-_0028_0040code_007bvip_002dbeginning_002dof_002dline_007d_0029-153"></a>Move point to the beginning of line (<code>vip-beginning-of-line</code>). 
+<br><dt><kbd>^</kbd><dd><a name="index-g_t136-_0040kbd_007b_005e_007d-_0028_0040code_007bvip_002dbol_002dand_002dskip_002dwhite_007d_0029-154"></a>Move point to the first non-white character on the line
+(<code>vip-bol-and-skip-white</code>). 
+<br><dt><kbd>$</kbd><dd><a name="index-g_t044-_0040kbd_007b_0024_007d-_0028_0040code_007bvip_002dgoto_002deol_007d_0029-155"></a>Move point to the end of line (<code>vip-goto-eol</code>). 
+<br><dt><var>n</var><kbd> |</kbd><dd><a name="index-g_t174-_0040kbd_007b_007c_007d-_0028_0040code_007bvip_002dgoto_002dcol_007d_0029-156"></a>Move point to the <var>n</var>-th column on the line (<code>vip-goto-col</code>). 
+</dl>
+   Except for the <kbd>|</kbd> command, these commands neglect a count.
+
+   <p><a name="index-word-157"></a>
+     <dl>
+<dt><kbd>w</kbd><dd><a name="index-g_t167-_0040kbd_007bw_007d-_0028_0040code_007bvip_002dforward_002dword_007d_0029-158"></a>Move point forward to the beginning of the next word
+(<code>vip-forward-word</code>). 
+<br><dt><kbd>W</kbd><dd><a name="index-g_t127-_0040kbd_007bW_007d-_0028_0040code_007bvip_002dforward_002dWord_007d_0029-159"></a>Move point forward to the beginning of the next word, where a <dfn>word</dfn> is
+considered as a sequence of non-white characters (<code>vip-forward-Word</code>). 
+<br><dt><kbd>b</kbd><dd><a name="index-g_t142-_0040kbd_007bb_007d-_0028_0040code_007bvip_002dbackward_002dword_007d_0029-160"></a>Move point backward to the beginning of a word (<code>vip-backward-word</code>). 
+<br><dt><kbd>B</kbd><dd><a name="index-g_t102-_0040kbd_007bB_007d-_0028_0040code_007bvip_002dbackward_002dWord_007d_0029-161"></a>Move point backward to the beginning of a word, where a <i>word</i> is
+considered as a sequence of non-white characters (<code>vip-forward-Word</code>). 
+<br><dt><kbd>e</kbd><dd><a name="index-g_t145-_0040kbd_007be_007d-_0028_0040code_007bvip_002dend_002dof_002dword_007d_0029-162"></a>Move point forward to the end of a word (<code>vip-end-of-word</code>). 
+<br><dt><kbd>E</kbd><dd><a name="index-g_t105-_0040kbd_007bE_007d-_0028_0040code_007bvip_002dend_002dof_002dWord_007d_0029-163"></a>Move point forward to the end of a word, where a <i>word</i> is
+considered as a sequence of non-white characters (<code>vip-end-of-Word</code>). 
+</dl>
+   <a name="index-syntax-table-164"></a>Here the meaning of the word `word' for the <kbd>w</kbd>, <kbd>b</kbd> and <kbd>e</kbd>
+commands is determined by the <dfn>syntax table</dfn> effective in the current
+buffer.  Each major mode has its syntax mode, and therefore the meaning of
+a word also changes as the major mode changes.  See GNU Emacs Manual for
+details of syntax table.
+
+     <dl>
+<dt><kbd>H</kbd><dd><a name="index-g_t110-_0040kbd_007bH_007d-_0028_0040code_007bvip_002dwindow_002dtop_007d_0029-165"></a>Move point to the beginning of the <i>home</i> (top) line of the window. 
+Given a count <var>n</var>, go to the <var>n</var>-th line from top
+(<code>vip-window-top</code>). 
+<br><dt><kbd>M</kbd><dd><a name="index-g_t115-_0040kbd_007bM_007d-_0028_0040code_007bvip_002dwindow_002dmiddle_007d_0029-166"></a>Move point to the beginning of the <i>middle</i> line of the window.  Given
+a count <var>n</var>, go to the <var>n</var>-th line from the middle line
+(<code>vip-window-middle</code>). 
+<br><dt><kbd>L</kbd><dd><a name="index-g_t114-_0040kbd_007bL_007d-_0028_0040code_007bvip_002dwindow_002dbottom_007d_0029-167"></a>Move point to the beginning of the <i>lowest</i> (bottom) line of the
+window.  Given count, go to the <var>n</var>-th line from bottom
+(<code>vip-window-bottom</code>). 
+</dl>
+   These commands can be used to go to the desired line visible on the screen.
+
+     <dl>
+<dt><kbd>(</kbd><dd><a name="index-g_t050-_0040kbd_007b_0028_007d-_0028_0040code_007bvip_002dbackward_002dsentence_007d_0029-168"></a>Move point backward to the beginning of the sentence
+(<code>vip-backward-sentence</code>). 
+<br><dt><kbd>)</kbd><dd><a name="index-g_t051-_0040kbd_007b_0029_007d-_0028_0040code_007bvip_002dforward_002dsentence_007d_0029-169"></a>Move point forward to the end of the sentence
+(<code>vip-forward-sentence</code>). 
+<br><dt><kbd>{</kbd><dd><a name="index-g_t173-_0040kbd_007b_0040_007b_007d-_0028_0040code_007bvip_002dbackward_002dparagraph_007d_0029-170"></a>Move point backward to the beginning of the paragraph
+(<code>vip-backward-paragraph</code>). 
+<br><dt><kbd>}</kbd><dd><a name="index-g_t175-_0040kbd_007b_0040_007d_007d-_0028_0040code_007bvip_002dforward_002dparagraph_007d_0029-171"></a>Move point forward to the end of the paragraph
+(<code>vip-forward-paragraph</code>). 
+</dl>
+   A count repeats the effect for these commands.
+
+     <dl>
+<dt><kbd>G</kbd><dd><a name="index-g_t107-_0040kbd_007bG_007d-_0028_0040code_007bvip_002dgoto_002dline_007d_0029-172"></a>Given a count <var>n</var>, move point to the <var>n</var>-th line in the buffer on
+the first non-white character.  Without a count, go to the end of the buffer
+(<code>vip-goto-line</code>). 
+<br><dt><kbd>` `</kbd><dd><a name="index-g_t140-_0040kbd_007b_0060_007d-_0028_0040code_007bvip_002dgoto_002dmark_007d_0029-173"></a>Exchange point and mark (<code>vip-goto-mark</code>). 
+<br><dt><kbd>` </kbd><var>ch</var><dd>Move point to the position stored in the register <var>ch</var>.  <var>ch</var> must
+be a lower-case letter. 
+<br><dt><kbd>' '</kbd><dd><a name="index-g_t047-_0040kbd_007b_0027_007d-_0028_0040code_007bvip_002dgoto_002dmark_002dand_002dskip_002dwhite_007d_0029-174"></a>Exchange point and mark, and then move point to the first non-white
+character on the line (<code>vip-goto-mark-and-skip-white</code>). 
+<br><dt><kbd>' </kbd><var>ch</var><dd>Move point to the position stored in the register <var>ch</var> and skip to the
+first non-white character on the line.  <var>ch</var> must be a lower-case letter. 
+<br><dt><kbd>%</kbd><dd><a name="index-g_t045-_0040kbd_007b_0025_007d-_0028_0040code_007bvip_002dparen_002dmatch_007d_0029-175"></a>Move point to the matching parenthesis if point is looking at <kbd>(</kbd>,
+<kbd>)</kbd>, <kbd>{</kbd>, <kbd>}</kbd>, <kbd>[</kbd> or <kbd>]</kbd>
+<br>(<code>vip-paren-match</code>). 
+</dl>
+   The command <kbd>G</kbd> mark point before move, so that you can return to the
+original point by <kbd>` `</kbd>.  The original point will also be stored in
+the mark ring.
+
+   <p>The following commands are useful for moving points on the line.  A count
+will repeat the effect.
+
+     <dl>
+<dt><kbd>f </kbd><var>ch</var><dd><a name="index-g_t146-_0040kbd_007bf_007d-_0028_0040code_007bvip_002dfind_002dchar_002dforward_007d_0029-176"></a>Move point forward to the character <var>ch</var> on the line.  Signal error if
+<var>ch</var> could not be found (<code>vip-find-char-forward</code>). 
+<br><dt><kbd>F </kbd><var>ch</var><dd><a name="index-g_t106-_0040kbd_007bF_007d-_0028_0040code_007bvip_002dfind_002dchar_002dbackward_007d_0029-177"></a>Move point backward to the character <var>ch</var> on the line.  Signal error if
+<var>ch</var> could not be found (<code>vip-find-char-backward</code>). 
+<br><dt><kbd>t </kbd><var>ch</var><dd><a name="index-g_t164-_0040kbd_007bt_007d-_0028_0040code_007bvip_002dgoto_002dchar_002dforward_007d_0029-178"></a>Move point forward upto the character <var>ch</var> on the line.  Signal error if
+<var>ch</var> could not be found (<code>vip-goto-char-forward</code>). 
+<br><dt><kbd>T </kbd><var>ch</var><dd><a name="index-g_t124-_0040kbd_007bT_007d-_0028_0040code_007bvip_002dgoto_002dchar_002dbackward_007d_0029-179"></a>Move point backward upto the character <var>ch</var> on the line.  Signal error if
+<var>ch</var> could not be found (<code>vip-goto-char-backward</code>). 
+<br><dt><kbd>;</kbd><dd><a name="index-g_t073-_0040kbd_007b_003b_007d-_0028_0040code_007bvip_002drepeat_002dfind_007d_0029-180"></a>Repeat previous <kbd>f</kbd>, <kbd>t</kbd>, <kbd>F</kbd> or <kbd>T</kbd> command
+(<code>vip-repeat-find</code>). 
+<br><dt><kbd>,</kbd><dd><a name="index-g_t054-_0040kbd_007b_002c_007d-_0028_0040code_007bvip_002drepeat_002dfind_002dopposite_007d_0029-181"></a>Repeat previous <kbd>f</kbd>, <kbd>t</kbd>, <kbd>F</kbd> or <kbd>T</kbd> command, in the
+opposite direction (<code>vip-repeat-find-opposite</code>). 
+</dl>
+
+   </body></html>
+

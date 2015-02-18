@@ -1,0 +1,147 @@
+<html lang="en">
+<head>
+<title>Non-Standard Environments - RefTeX User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="RefTeX User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Defining-Label-Environments.html#Defining-Label-Environments" title="Defining Label Environments">
+<link rel="prev" href="Using-_005ceqref.html#Using-_005ceqref" title="Using \eqref">
+<link rel="next" href="Putting-it-Together.html#Putting-it-Together" title="Putting it Together">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents RefTeX, a package to do labels, references,
+citations and indices for LaTeX documents with Emacs.
+
+This is edition 4.31 of the RefTeX User Manual for
+RefTeX 4.31
+
+Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Non-Standard-Environments"></a>
+<a name="Non_002dStandard-Environments"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Putting-it-Together.html#Putting-it-Together">Putting it Together</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Using-_005ceqref.html#Using-_005ceqref">Using \eqref</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Defining-Label-Environments.html#Defining-Label-Environments">Defining Label Environments</a>
+<hr>
+</div>
+
+<h4 class="subsection">3.4.6 Non-standard Environments</h4>
+
+<p><a name="index-Non_002dstandard-environments-160"></a><a name="index-Environments-without-_0040code_007b_005cbegin_007d-161"></a><a name="index-Special-parser-functions-162"></a><a name="index-Parser-functions_002c-for-special-environments-163"></a>
+Some LaTeX packages define environment-like structures without using the
+standard &lsquo;<samp><span class="samp">\begin..\end</span></samp>&rsquo; structure.  <b>RefTeX</b> cannot parse
+these directly, but you can write your own special-purpose parser and
+use it instead of the name of an environment in an entry for
+<code>reftex-label-alist</code>.  The function should check if point is
+currently in the special environment it was written to detect.  If so,
+it must return a buffer position indicating the start of this
+environment.  The return value must be <code>nil</code> on failure to detect
+the environment.  The function is called with one argument <var>bound</var>. 
+If non-<code>nil</code>, <var>bound</var> is a boundary for backwards searches
+which should be observed.  We will discuss two examples.
+
+   <p><a name="index-LaTeX-commands_002c-abbreviated-164"></a>
+Some people define abbreviations for
+environments, like <code>\be</code> for <code>\begin{equation}</code>, and
+<code>\ee</code> for <code>\end{equation}</code>.  The parser function would have
+to search backward for these macros.  When the first match is
+<code>\ee</code>, point is not in this environment.  When the first match is
+<code>\be</code>, point is in this environment and the function must return
+the beginning of the match.  To avoid scanning too far, we can also look
+for empty lines which cannot occur inside an equation environment. 
+Here is the setup:
+
+<pre class="lisp">     ;; Setup entry in reftex-label-alist, using all defaults for equations
+     (setq reftex-label-alist '((detect-be-ee ?e nil nil nil nil)))
+     
+     (defun detect-be-ee (bound)
+       ;; Search backward for the macros or an empty line
+       (if (re-search-backward
+            "\\(^[ \t]*\n\\|\\\\ee\\&gt;\\)\\|\\(\\\\be\\&gt;\\)" bound t)
+           (if (match-beginning 2)
+               (match-beginning 2)  ; Return start of environment
+             nil)                   ; Return nil because env is closed
+         nil))                      ; Return nil for not found
+</pre>
+   <p><a name="index-g_t_0040code_007blinguex_007d_002c-LaTeX-package-165"></a><a name="index-LaTeX-packages_002c-_0040code_007blinguex_007d-166"></a>A more complex example is the <samp><span class="file">linguex.sty</span></samp> package which defines
+list macros &lsquo;<samp><span class="samp">\ex.</span></samp>&rsquo;, &lsquo;<samp><span class="samp">\a.</span></samp>&rsquo;, &lsquo;<samp><span class="samp">\b.</span></samp>&rsquo; etc. for lists which are
+terminated by &lsquo;<samp><span class="samp">\z.</span></samp>&rsquo; or by an empty line.
+
+<pre class="example">     \ex.  \label{ex:12} Some text in an exotic language ...
+           \a. \label{ex:13} more stuff
+           \b. \label{ex:14} still more stuff
+               \a. List on a deeper level
+               \b. Another item
+               \b. and the third one
+           \z.
+           \b. Third item on this level.
+     
+     ... text after the empty line terminating all lists
+</pre>
+   <p>The difficulty is that the &lsquo;<samp><span class="samp">\a.</span></samp>&rsquo; lists can nest and that an empty
+line terminates all list levels in one go.  So we have to count nesting
+levels between &lsquo;<samp><span class="samp">\a.</span></samp>&rsquo; and &lsquo;<samp><span class="samp">\z.</span></samp>&rsquo;.  Here is the implementation
+for <b>RefTeX</b>.
+
+<pre class="lisp">     (setq reftex-label-alist
+           '((detect-linguex ?x "ex:" "~\\ref{%s}" nil ("Example" "Ex."))))
+     
+     (defun detect-linguex (bound)
+       (let ((cnt 0))
+         (catch 'exit
+           (while
+               ;; Search backward for all possible delimiters
+               (re-search-backward
+                (concat "\\(^[ \t]*\n\\)\\|\\(\\\\z\\.\\)\\|"
+                        "\\(\\ex[ig]?\\.\\)\\|\\(\\\\a\\.\\)")
+                nil t)
+             ;; Check which delimiter was matched.
+             (cond
+              ((match-beginning 1)
+               ;; empty line terminates all - return nil
+               (throw 'exit nil))
+              ((match-beginning 2)
+               ;; \z. terminates one list level - decrease nesting count
+               (decf cnt))
+              ((match-beginning 3)
+               ;; \ex. : return match unless there was a \z. on this level
+               (throw 'exit (if (&gt;= cnt 0) (match-beginning 3) nil)))
+              ((match-beginning 4)
+               ;; \a. : return match when on level 0, otherwise
+               ;;       increment nesting count
+               (if (&gt;= cnt 0)
+                   (throw 'exit (match-beginning 4))
+                 (incf cnt))))))))
+</pre>
+   </body></html>
+

@@ -1,0 +1,88 @@
+<html lang="en">
+<head>
+<title>Custom Locate - Emacs Development Environment</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Emacs Development Environment">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Simple-projects.html#Simple-projects" title="Simple projects">
+<link rel="prev" href="ede_002dlinux.html#ede_002dlinux" title="ede-linux">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file describes EDE, the Emacs Development Environment.
+
+Copyright (C) 1998, 1999, 2000, 2001, 2004, 2005, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Custom-Locate"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="ede_002dlinux.html#ede_002dlinux">ede-linux</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Simple-projects.html#Simple-projects">Simple projects</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.1.5 Custom Locate</h4>
+
+<p>The various simple project styles all have one major drawback, which
+is that the files in the project are not completely known to EDE. 
+When the EDE API is used to try and file files by some reference name
+in the project, then that could fail.
+
+   <p>@TODO - Add ID Utils and CScope examples
+
+   <p><i>EDE</i> can therefore use some external locate commands, such as the unix
+&ldquo;locate&rdquo; command, or &ldquo;GNU Global&rdquo;.
+
+   <p>Configuration of the tool you want to use such as <code>locate</code>, or
+<code>global</code> will need to be done without the aid of <i>EDE</i>.  Once
+configured, however, <i>EDE</i> can use it.
+
+   <p>To enable one of these tools, set the variable
+<code>ede-locate-setup-options</code> with the names of different locate
+objects.  <a href="Miscellaneous-commands.html#Miscellaneous-commands">Miscellaneous commands</a>.
+
+   <p>Configure this in your <samp><span class="file">.emacs</span></samp> before loading in CEDET or EDE. 
+If you want to add support for GNU Global, your configuration would
+look like this:
+
+<pre class="example">     (setq ede-locate-setup-options '(ede-locate-global ede-locate-base))
+</pre>
+   <p>That way, when a search needs to be done, it will first try using
+GLOBAL.  If global is not available for that directory, then it will
+revert to the base locate object.  The base object always fails to
+find a file.
+
+   <p>You can add your own locate tool but subclassing from
+<code>ede-locate-base</code>.  The subclass should also implement two
+methods.  See the code in <samp><span class="file">ede-locate.el</span></samp> for GNU Global as a
+simple example.
+
+   </body></html>
+

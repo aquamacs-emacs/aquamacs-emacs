@@ -1,0 +1,87 @@
+<html lang="en">
+<head>
+<title>Selected files - PCL-CVS -- Emacs Front-End to CVS</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="PCL-CVS -- Emacs Front-End to CVS">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Buffer-contents.html#Buffer-contents" title="Buffer contents">
+<link rel="next" href="Commands.html#Commands" title="Commands">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998,
+1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Selected-files"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Commands.html#Commands">Commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Buffer-contents.html#Buffer-contents">Buffer contents</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">4 Selected files</h2>
+
+<p><a name="index-Selected-files-9"></a><a name="index-Marked-files-10"></a><a name="index-File-selection-11"></a><a name="index-Active-files-12"></a><a name="index-Applicable-13"></a>
+Many of the commands work on the current set of <dfn>selected</dfn> files
+which can be either the set of marked files (if any file is marked and
+marks are not ignored) or whichever file or directory the cursor is on.
+
+   <p>If a directory is selected but the command cannot be applied to a
+directory, then it will be applied to the set of files under this
+directory which are in the &lsquo;<samp><span class="samp">*cvs*</span></samp>&rsquo; buffer.
+
+   <p><a name="index-cvs_002dmode_002dforce_002dcommand-14"></a><a name="index-cvs_002dallow_002ddir_002dcommit-15"></a>Furthermore, each command only operates on a subset of the selected
+files, depending on whether or not the command is <dfn>applicable</dfn> to
+each file (based on the file's status).  For example,
+<code>cvs-mode-commit</code> is not applicable to a file whose status is
+&lsquo;<samp><span class="samp">Need-Update</span></samp>&rsquo;.  If it should happen that PCL-CVS guesses the
+applicability wrong, you can override it with the special prefix
+<code>cvs-mode-force-command</code> normally bound to <kbd>M-f</kbd> (and file a
+bug report).  The applicability rule can be slightly changed with
+<code>cvs-allow-dir-commit</code> and <code>cvs-force-dir-tag</code>.
+
+   <p>By default, marks are always in effect (you may change this, however, by
+setting the variable <code>cvs-default-ignore-marks</code>) except for the
+commands that &lsquo;<samp><span class="samp">tag</span></samp>&rsquo; or &lsquo;<samp><span class="samp">diff</span></samp>&rsquo; a file (which can be changed
+with the variable <code>cvs-invert-ignore-marks</code>).
+
+   <p>In addition, you may use the special prefix <code>cvs-mode-toggle-marks</code>
+normally bound to &lt;T&gt; to toggle the use of marks for the following
+command.
+
+   <p>This scheme might seem a little complicated, but once one gets used to
+it, it is quite powerful.
+
+   <p>For commands to mark and unmark files, see <a href="Marking-files.html#Marking-files">Marking files</a>.
+
+   </body></html>
+

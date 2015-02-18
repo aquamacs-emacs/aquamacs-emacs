@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>Assertions - Common Lisp Extensions</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Common Lisp Extensions">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Structures.html#Structures" title="Structures">
+<link rel="next" href="Efficiency-Concerns.html#Efficiency-Concerns" title="Efficiency Concerns">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the GNU Emacs Common Lisp emulation package.
+
+Copyright (C) 1993, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Assertions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Efficiency-Concerns.html#Efficiency-Concerns">Efficiency Concerns</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Structures.html#Structures">Structures</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">13 Assertions and Errors</h2>
+
+<p class="noindent">This section describes two macros that test <dfn>assertions</dfn>, i.e.,
+conditions which must be true if the program is operating correctly. 
+Assertions never add to the behavior of a Lisp program; they simply
+make &ldquo;sanity checks&rdquo; to make sure everything is as it should be.
+
+   <p>If the optimization property <code>speed</code> has been set to 3, and
+<code>safety</code> is less than 3, then the byte-compiler will optimize
+away the following assertions.  Because assertions might be optimized
+away, it is a bad idea for them to include side-effects.
+
+<div class="defun">
+&mdash; Special Form: <b>assert</b><var> test-form </var>[<var>show-args string args<small class="dots">...</small></var>]<var><a name="index-assert-182"></a></var><br>
+<blockquote><p>This form verifies that <var>test-form</var> is true (i.e., evaluates to
+a non-<code>nil</code> value).  If so, it returns <code>nil</code>.  If the test
+is not satisfied, <code>assert</code> signals an error.
+
+        <p>A default error message will be supplied which includes <var>test-form</var>. 
+You can specify a different error message by including a <var>string</var>
+argument plus optional extra arguments.  Those arguments are simply
+passed to <code>error</code> to signal the error.
+
+        <p>If the optional second argument <var>show-args</var> is <code>t</code> instead
+of <code>nil</code>, then the error message (with or without <var>string</var>)
+will also include all non-constant arguments of the top-level
+<var>form</var>.  For example:
+
+     <pre class="example">          (assert (&gt; x 10) t "x is too small: %d")
+</pre>
+        <p>This usage of <var>show-args</var> is an extension to Common Lisp.  In
+true Common Lisp, the second argument gives a list of <var>places</var>
+which can be <code>setf</code>'d by the user before continuing from the
+error.  Since Emacs Lisp does not support continuable errors, it
+makes no sense to specify <var>places</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Special Form: <b>check-type</b><var> form type </var>[<var>string</var>]<var><a name="index-check_002dtype-183"></a></var><br>
+<blockquote><p>This form verifies that <var>form</var> evaluates to a value of type
+<var>type</var>.  If so, it returns <code>nil</code>.  If not, <code>check-type</code>
+signals a <code>wrong-type-argument</code> error.  The default error message
+lists the erroneous value along with <var>type</var> and <var>form</var>
+themselves.  If <var>string</var> is specified, it is included in the
+error message in place of <var>type</var>.  For example:
+
+     <pre class="example">          (check-type x (integer 1 *) "a positive integer")
+</pre>
+        <p>See <a href="Type-Predicates.html#Type-Predicates">Type Predicates</a>, for a description of the type specifiers
+that may be used for <var>type</var>.
+
+        <p>Note that in Common Lisp, the first argument to <code>check-type</code>
+must be a <var>place</var> suitable for use by <code>setf</code>, because
+<code>check-type</code> signals a continuable error that allows the
+user to modify <var>place</var>. 
+</p></blockquote></div>
+
+   <p>The following error-related macro is also defined:
+
+<div class="defun">
+&mdash; Special Form: <b>ignore-errors</b><var> forms<small class="dots">...</small><a name="index-ignore_002derrors-184"></a></var><br>
+<blockquote><p>This executes <var>forms</var> exactly like a <code>progn</code>, except that
+errors are ignored during the <var>forms</var>.  More precisely, if
+an error is signaled then <code>ignore-errors</code> immediately
+aborts execution of the <var>forms</var> and returns <code>nil</code>. 
+If the <var>forms</var> complete successfully, <code>ignore-errors</code>
+returns the result of the last <var>form</var>. 
+</p></blockquote></div>
+
+   </body></html>
+

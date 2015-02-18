@@ -11565,7 +11565,7 @@ detailed description of this mode.
 +----------------------------------------------------------------------+
 |                               GDB Toolbar                            |
 +-----------------------------------+----------------------------------+
-| GUD buffer (I/O of GDB)           | Locals buffer                    |
+|  GUD buffer (I/O of GDB)          |  Locals buffer                   |
 |                                   |                                  |
 |                                   |                                  |
 |                                   |                                  |

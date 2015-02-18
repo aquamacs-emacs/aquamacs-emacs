@@ -1,0 +1,298 @@
+%% techexplHTML.tex 
+%%
+%% modified version of  techexpl.sty 
+%% for smooth compatibility with  LaTeX2HTML
+%%   by Ross Moore  <ross@maths.mq.edu.au>  edited: 8 June 1999
+%%
+%%  techexpl.sty carries the following copyright:
+%% --------------------------------------------------------------------
+%% LaTeX style file for IBM techexplorer Hypermedia documents
+%% --------------------------------------------------------------------
+%%
+%% Copyright (C) 1998 by the IBM Corporation. All Rights Reserved.
+%%
+%% It should be distributed *unchanged*.
+%%
+%% This file provides LaTeX 2e support for many of the IBM
+%% techexplorer Hypermedia Browser control sequences. Some massaging of
+%% documents may be necessary in order to get correct formatting within
+%% both the techexplorer and LaTeX 2e environments.
+%%
+%% Insert into your document via \usepackage{techexpl} after the
+%% \documentclass line. For example:
+%%      \documentclass{article}
+%%      \usepackage{techexpl}
+%%      \begin{document}
+%%      % ...
+%%      \end{document}
+%%
+%% Address questions to techexpl@watson.ibm.com.
+%%
+%% THIS IS A WORK IN PROGRESS!!
+%%
+%% --------------------------------------------------------------------
+%%
+%begin{latexonly}
+\ifx\techexplorerfalse\undefined\else\expandafter\endinput\fi
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{techexpl}
+          [1998/05/012 v1.0 IBM techexplorer Hypermedia Browser support (RSS)]
+%end{latexonly}
+%\RequirePackage{ifthen}
+\RequirePackage[dvips]{color}
+%\RequirePackage{url}
+%%
+%% --------------------------------------------------------------------
+%%
+\newif\iftechexplorer\techexplorerfalse
+%%
+%% --------------------------------------------------------------------
+%% Macro support
+%% --------------------------------------------------------------------
+%
+%begin{latexonly}
+\def\globalnewcommand{\newcommand}
+\def\globalnewenvironment{\newenvironment}
+%
+%end{latexonly}
+%% --------------------------------------------------------------------
+%% Links
+%% --------------------------------------------------------------------
+%
+\providecommand{\techexplorerLinkColor}{blue}
+%
+% SYNTAX: \altLink{alternate text}{primary text}
+%
+\newcommand{\altLink}[2]{{#2}}
+%
+% SYNTAX: \appLink{url}{text}
+%
+%begin{latexonly}
+\def\appLink#1#2{{\color{\techexplorerLinkColor}#2}}
+%end{latexonly}
+\providecommand{\appLink}[2]{\htmladdnormallink{#2}{#1}}
+%
+% SYNTAX: \audioLink{url}{text}
+%
+%begin{latexonly}
+\def\audioLink#1#2{{\color{\techexplorerLinkColor}#2}}
+%end{latexonly}
+\providecommand{\audioLink}[2]{\htmladdnormallink{#2}{#1}}
+%
+% SYNTAX: \docLink[frame]{url}[label]{text}
+%
+%begin{latexonly}
+\def\docLink{\@ifnextchar[%]
+    {\@fdocLink}{\@nfdocLink}}
+\def\@fdocLink[#1]{\@nfdocLink}
+\def\@nfdocLink#1{\@docLinkLabel{#1}}
+\def\@docLinkLabel#1{\@ifnextchar[%]
+    {\@ldocLink{#1}}{\@nldocLink{#1}}}
+\def\@ldocLink#1[#2]{\@nldocLink{#1}}
+\def\@nldocLink#1#2{{\color{\techexplorerLinkColor}#2}}
+%end{latexonly}
+\providecommand{\docLink}[2][]{\HTMLset{thislink}{#2}\fdocLink}
+%begin{latexonly}
+\newcommand{\fdocLink}[2][]{{\color{\techexplorerLinkColor}#2}}
+%end{latexonly}
+\providecommand{\fdocLink}[2][]{\htmladdnormallink{#2}{\HTMLget{thislink}}}
+%
+% SYNTAX: \evalLink{description}{MIMEtype}{appInput}{displayText}
+%
+\providecommand{\evalLink}[4]{{\color{\techexplorerLinkColor}#4}}
+%
+% SYNTAX: \inputboxLink[responseLink]{controlSequence}{inputboxText}{dialogBoxDescription}{dialogBoxCaption}{textToDisplay}
+%
+%begin{latexonly}
+\def\inputboxLink{\@ifnextchar[%]
+    {\@rinputboxLink}{\@inputboxLink}}
+\def\@rinputboxLink[#1]{\@inputboxLink}
+\def\@inputboxLink#1#2#3#4#5{{\color{\techexplorerLinkColor}#5}}
+%end{latexonly}
+\providecommand{\inputboxLink}[6][]{{\color{\techexplorerLinkColor}#6}}
+%
+% SYNTAX: \labelLink{label}{text}
+%
+%begin{latexonly}
+\def\labelLink#1#2{{\color{\techexplorerLinkColor}#2}}
+%end{latexonly}
+\providecommand{\labelLink}[2]{\htmlref{#2}{#1}}
+%
+% SYNTAX: \popupLink{popupText}{popupCaption}{textToDisplay}
+%
+\def\popupLink#1#2#3{{\color{\techexplorerLinkColor}#3}}
+%
+% SYNTAX: \videoLink{url}{text}
+%
+%begin{latexonly}
+\def\videoLink#1#2{{\color{\techexplorerLinkColor}#2}}
+%end{latexonly}
+\providecommand{\videoLink}[2]{\htmladdnormallink{#2}{#1}}
+%
+% SYNTAX: \yesNoLink[responseLink]{controlSequence}{dialogBoxQuestion}{dialogBoxCaption}{textToDisplay}
+%
+%begin{latexonly}
+\def\yesNoLink{\@ifnextchar[%]
+    {\@ryesNoLink}{\@yesNoLink}}
+\def\@ryesNoLink[#1]{\@yesNoLink}
+\def\@yesNoLink#1#2#3#4{{\color{\techexplorerLinkColor}#4}}
+%end{latexonly}
+\providecommand{\yesNoLink}[5][]{{\color{\techexplorerLinkColor}#5}}
+%
+%% --------------------------------------------------------------------
+%% Hierarchical document support
+%% --------------------------------------------------------------------
+%
+% SYNTAX: \aboveTopic{url}
+%
+\def\aboveTopic#1{}
+%
+% SYNTAX: \nextTopic{url}
+%
+\def\nextTopic#1{}
+%
+% SYNTAX: \previousTopic{url}
+%
+\def\previousTopic#1{}
+%
+%% --------------------------------------------------------------------
+%% Boxes
+%% --------------------------------------------------------------------
+%
+% SYNTAX: \buttonbox[invert]{text}
+%
+%begin{latexonly}
+\def\buttonbox{\@ifnextchar[%]
+    {\@ibuttonbox}{\@buttonbox}}
+\def\@ibuttonbox[#1]{\@buttonbox}
+\def\@buttonbox{\fbox}
+%end{latexonly}
+\providecommand{\buttonbox}[1][]{\fbox}
+%
+% SYNTAX: \dialogbox[invert]{text}
+%
+\def\dialogbox{\buttonbox}
+%
+% SYNTAX: \gradientbox[v]{startColor}{endColor}{text}
+%
+%begin{latexonly}
+\def\gradientbox{\@ifnextchar[%]
+    {\@vgradientbox}{\@gradientbox}}
+\def\@vgradientbox[#1]{\@gradientbox}
+\def\@gradientbox#1#2#3{\colorbox{#1}{#3}}
+%end{latexonly}
+\providecommand{\gradientbox}[4][]{\colorbox{#2}{#4}}
+%
+% SYNTAX: \inputbox[width]{controlSequence}{initialContents }
+%
+%begin{latexonly}
+\def\inputbox{\@ifnextchar[%]
+    {\@winputboxbox}{\@inputbox}}
+\def\@winputboxbox[#1]{\@inputbox}
+\def\@inputbox#1#2{\fbox{\hbox spread 1in{#2}}}
+%end{latexonly}
+\providecommand{\inputbox}[3][]{\fbox{#3}}
+%
+%% --------------------------------------------------------------------
+%% Colors
+%% --------------------------------------------------------------------
+%
+\definecolor{aqua}{rgb}{0,1,1}
+\definecolor{darkgray}{gray}{.25}
+\definecolor{fuchsia}{rgb}{1,0,1}
+\definecolor{gray}{gray}{.5}
+\definecolor{lightgray}{gray}{.75}
+\definecolor{lime}{rgb}{0,.5,.5}
+\definecolor{maroon}{rgb}{.5,0,0}
+\definecolor{navy}{rgb}{0,0,.5}
+\definecolor{olive}{rgb}{.5,.5,0}
+\definecolor{purple}{rgb}{.5,0,.5}
+\definecolor{silver}{gray}{.75}
+\definecolor{teal}{rgb}{0,.5,.5}
+%
+% SYNTAX: \backgroundcolor{color}
+%
+\def\backgroundcolor{\pagecolor}
+%
+%% --------------------------------------------------------------------
+%% Features
+%% --------------------------------------------------------------------
+%
+% SYNTAX: \ProvidesFeature{featureName}{majorVersion}{minorVersion}
+%
+\def\ProvidesFeature#1#2#3{}
+%
+% SYNTAX: \RequiresFeature{featureName}{majorVersion}{minorVersion} {missingFeatureText}{oldVersionText}
+%
+\def\RequiresFeature#1#2#3#4#5{}
+%
+%% --------------------------------------------------------------------
+%% Menus
+%% --------------------------------------------------------------------
+%
+% SYNTAX: \newmenu{menuName}{menuDefinition}
+%
+\def\newmenu#1#2{}
+%
+% SYNTAX: \usemenu{menuName}{text}
+%
+\def\usemenu#1#2{#2}
+%
+%% --------------------------------------------------------------------
+%% Multimedia
+%% --------------------------------------------------------------------
+%
+% SYNTAX: \backgroundimage{url}
+%
+\def\backgroundimage#1{}
+%
+% SYNTAX: \backgroundsound{url}
+%
+\def\backgroundsound#1{}
+%
+% SYNTAX: \includeaudio{url}
+%
+\def\includeaudio#1{}
+%
+% SYNTAX: \includevideo[x][y]{autostart}{altText}{url}
+%
+%begin{latexonly}
+\def\includevideo{\@ifnextchar[%]
+    {\@xincludevideo}{\@includevideo}}
+\def\@xincludevideo[#1]{\@ifnextchar[%]
+    {\@xyincludevideo}{\@includevideo}}
+\def\@xyincludevideo[#1]{\@includevideo}
+\def\@includevideo#1#2#3{\fbox{#2}}
+%end{latexonly}
+\providecommand{\includevideo}[1][]{\xincludevideo}
+%begin{latexonly}
+\newcommand{\xincludevideo}[4][]{\fbox{#2}}
+%end{latexonly}
+\providecommand{\xincludevideo}[4][]{\htmladdnormallink{\fbox{#3}}{#4}}
+%
+%% --------------------------------------------------------------------
+%% Miscellaneous
+%% --------------------------------------------------------------------
+%
+\def\bibfile#1{}
+\def\inputonce{\input}
+\def\nocaret{}
+\def\TrueTypeTextFont#1{}
+\def\windowTitle#1{}
+%
+\setcounter{secnumdepth}{0}
+%
+%% --------------------------------------------------------------------
+%% Not done yet
+%% --------------------------------------------------------------------
+%
+% dirlist environment: hack for now
+%begin{latexonly}
+\def\dirlist{\@ifnextchar[%]
+    {\@odirlist}{\@dirlist}}
+\def\@odirlist[#1]{\@dirlist}
+\def\@dirlist{\begin{array}}
+\def\enddirlist{\end{array}}
+%end{latexonly}
+\renewenvironment{dirlist}[1][]{\begin{array}}{\end{array}}
+

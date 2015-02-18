@@ -1,0 +1,112 @@
+<html lang="en">
+<head>
+<title>Changing Text - Untitled</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Untitled">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Text-Handling.html#Text-Handling" title="Text Handling">
+<link rel="prev" href="Deleting-Text.html#Deleting-Text" title="Deleting Text">
+<link rel="next" href="Search-and-Replace.html#Search-and-Replace" title="Search and Replace">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1995, 1996, 1997, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Changing-Text"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Search-and-Replace.html#Search-and-Replace">Search and Replace</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Deleting-Text.html#Deleting-Text">Deleting Text</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text-Handling.html#Text-Handling">Text Handling</a>
+<hr>
+</div>
+
+<h4 class="subsection">4.2.6 Changing Text</h4>
+
+<p><a name="index-joining-lines-428"></a><a name="index-changing-case-429"></a><a name="index-quoting-regions-430"></a><a name="index-substitution-431"></a>
+     <dl>
+<dt><kbd>&lt;count&gt;  r&lt;char&gt;</kbd><dd>Replace &lt;count&gt; chars by &lt;char&gt; - no &lt;esc&gt;. 
+<br><dt><kbd>&lt;count&gt;  R</kbd><dd>Overwrite the rest of the line,
+appending change <var>count - 1</var> times. 
+<br><dt><kbd>&lt;count&gt;  s</kbd><dd>Substitute &lt;count&gt; chars. 
+<br><dt><kbd>&lt;count&gt;  S</kbd><dd>Change &lt;count&gt; lines. 
+<br><dt><kbd>&lt;count&gt;  c&lt;move&gt;</kbd><dd>Change from begin to endpoint of &lt;count&gt;&lt;move&gt;. 
+<br><dt><kbd>&lt;count&gt;  cc</kbd><dd>Change &lt;count&gt; lines. 
+<br><dt><kbd>&lt;count&gt;  C</kbd><dd>The rest of the line and &lt;count&gt; - 1 next lines. 
+<br><dt><kbd>&lt;count&gt;  =&lt;move&gt;</kbd><dd>Reindent the region described by move. 
+<br><dt><kbd>&lt;count&gt;  ~</kbd><dd>Switch lower and upper cases. 
+<br><dt><kbd>&lt;count&gt;  J</kbd><dd>Join &lt;count&gt; lines (default 2). 
+<br><dt><kbd>:[x,y]s/&lt;pat&gt;/&lt;repl&gt;/&lt;f&gt;</kbd><dd>Substitute (on lines x through y) the pattern
+&lt;pat&gt; (default the last pattern) with &lt;repl&gt;.  Useful
+flags &lt;f&gt; are &lsquo;<samp><span class="samp">g</span></samp>&rsquo; for &lsquo;<samp><span class="samp">global</span></samp>&rsquo; (i.e. change every
+non-overlapping occurrence of &lt;pat&gt;) and &lsquo;<samp><span class="samp">c</span></samp>&rsquo; for
+&lsquo;<samp><span class="samp">confirm</span></samp>&rsquo; (type &lsquo;<samp><span class="samp">y</span></samp>&rsquo; to confirm a particular
+substitution, else &lsquo;<samp><span class="samp">n</span></samp>&rsquo; ).  Instead of <kbd>/</kbd> any
+punctuation CHAR unequal to &lt;space&gt; &lt;tab&gt; and &lt;lf&gt; can be used as
+delimiter.
+
+     <p>In Emacs, &lsquo;<samp><span class="samp">\&amp;</span></samp>&rsquo; stands for the last matched expression, so
+<kbd>s/[ab]+/\&amp;\&amp;/</kbd> will double the string matched by <kbd>[ab]</kbd>. 
+Viper doesn't treat &lsquo;<samp><span class="samp">&amp;</span></samp>&rsquo; specially, unlike Vi: use &lsquo;<samp><span class="samp">\&amp;</span></samp>&rsquo; instead.
+
+     <p>Viper does not parse search patterns and does not expand special symbols
+found there (e.g., &lsquo;<samp><span class="samp">~</span></samp>&rsquo; is not expanded to the result of the previous
+substitution).
+
+     <p>Note: <em>The newline character (inserted as </em><kbd>C-qC-j</kbd><em>)
+can be used in &lt;repl&gt;</em>. 
+<br><dt><kbd>:[x,y]copy [z]</kbd><dd>Copy text between <kbd>x</kbd> and <kbd>y</kbd> to the position after <kbd>z</kbd>. 
+<br><dt><kbd>:[x,y]t [z]</kbd><dd>Same as <kbd>:copy</kbd>. 
+<br><dt><kbd>:[x,y]move [z]</kbd><dd>Move text between <kbd>x</kbd> and <kbd>y</kbd> to the position after <kbd>z</kbd>. 
+<br><dt><kbd>&amp;</kbd><dd>Repeat latest Ex substitute command, e.g. 
+<kbd>:s/wrong/right</kbd>. 
+<br><dt><kbd>:x,yp</kbd><dt><kbd>:g/Pat/p</kbd><dt><kbd>:v/Pat/p</kbd><dd>The above commands display certain buffer lines in a
+temporary buffer. The first form above displays the buffer lines between
+<kbd>x</kbd> and <kbd>y</kbd>. The second displays the lines of the buffer, which
+match a given pattern. The third form displays the lines that do <em>not</em>
+match the given pattern. 
+<br><dt><kbd>#c&lt;move&gt;</kbd><dd>Change upper-case characters in the region to lower-case. 
+<br><dt><kbd>#C&lt;move&gt;</kbd><dd>Change lower-case characters in the region to upper-case. 
+<br><dt><kbd>#q&lt;move&gt;</kbd><dd>Insert specified string at the beginning of each line in the region
+<br><dt><kbd>C-c M-p and C-c M-n</kbd><dd>In Insert and Replace states, these keys are bound to commands that peruse
+the history of the text
+previously inserted in other insert or replace commands.  By repeatedly typing
+<kbd>C-c M-p</kbd> or <kbd>C-c M-n</kbd>, you will cause Viper to
+insert these previously used strings one by one. 
+When a new string is inserted, the previous one is deleted.
+
+     <p>In Vi state, these keys are bound to functions that peruse the history of
+destructive Vi commands. 
+See <a href="Viper-Specials.html#Viper-Specials">Viper Specials</a>, for details. 
+</dl>
+   <a name="index-g_t_0040kbd_007bC_002dc-M_002dp_007d-432"></a><a name="index-g_t_0040kbd_007bC_002dc-M_002dn_007d-433"></a><a name="index-g_t_0040kbd_007b_0023q_003cmove_003e-_007d-434"></a><a name="index-g_t_0040kbd_007b_0023C_003cmove_003e_007d-435"></a><a name="index-g_t_0040kbd_007b_0023c_003cmove_003e_007d-436"></a><a name="index-g_t_0040kbd_007b_0026_007d-437"></a><a name="index-g_t_0040kbd_007b_005c_0026_007d-438"></a><a name="index-g_t_0040kbd_007b_003asubstitute_002f_003cpat_003e_002f_003crepl_003e_002f_003cf_003e_007d-439"></a><a name="index-g_t_0040kbd_007b_003as_002f_003cpat_003e_002f_003crepl_003e_002f_003cf_003e_007d-440"></a><a name="index-g_t_0040kbd_007b_003acopy-_005bz_005d_007d-441"></a><a name="index-g_t_0040kbd_007b_003at-_005bz_005d_007d-442"></a><a name="index-g_t_0040kbd_007b_003amove-_005bz_005d_007d-443"></a><a name="index-g_t_0040kbd_007bJ_007d-444"></a><a name="index-g_t_0040kbd_007b_007e_007d-445"></a><a name="index-g_t_0040kbd_007b_003d_003cmove_003e_007d-446"></a><a name="index-g_t_0040kbd_007bC_007d-447"></a><a name="index-g_t_0040kbd_007bcc_007d-448"></a><a name="index-g_t_0040kbd_007bc_003cmove_003e_007d-449"></a><a name="index-g_t_0040kbd_007bS_007d-450"></a><a name="index-g_t_0040kbd_007bs_007d-451"></a><a name="index-g_t_0040kbd_007bR_007d-452"></a><a name="index-g_t_0040kbd_007br_003cchar_003e_007d-453"></a>
+
+   </body></html>
+

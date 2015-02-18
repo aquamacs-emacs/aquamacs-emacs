@@ -1,0 +1,183 @@
+<html lang="en">
+<head>
+<title>Options (Fontification) - RefTeX User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="RefTeX User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Options.html#Options" title="Options">
+<link rel="prev" href="Options-_0028Optimizations_0029.html#Options-_0028Optimizations_0029" title="Options (Optimizations)">
+<link rel="next" href="Options-_0028Misc_0029.html#Options-_0028Misc_0029" title="Options (Misc)">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents RefTeX, a package to do labels, references,
+citations and indices for LaTeX documents with Emacs.
+
+This is edition 4.31 of the RefTeX User Manual for
+RefTeX 4.31
+
+Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Options-(Fontification)"></a>
+<a name="Options-_0028Fontification_0029"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Options-_0028Misc_0029.html#Options-_0028Misc_0029">Options (Misc)</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Options-_0028Optimizations_0029.html#Options-_0028Optimizations_0029">Options (Optimizations)</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Options.html#Options">Options</a>
+<hr>
+</div>
+
+<h3 class="section">8.10 Fontification</h3>
+
+<p><a name="index-Options_002c-fontification-554"></a><a name="index-Fontification_002c-options-555"></a>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-use-fonts</b><var><a name="index-reftex_002duse_002dfonts-556"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means, use fonts in label menu and on-the-fly help. 
+Font-lock must be loaded as well to actually get fontified
+display.  After changing this option, a rescan may be necessary to
+activate it. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-refontify-context</b><var><a name="index-reftex_002drefontify_002dcontext-557"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means, re-fontify the context in the label menu with
+font-lock.  This slightly slows down the creation of the label menu.  It
+is only necessary when you definitely want the context fontified.
+
+        <p>This option may have 3 different values:
+          <dl>
+<dt><code>nil</code><dd>Never refontify. 
+<br><dt><code>t</code><dd>Always refontify. 
+<br><dt><code>1</code><dd>Refontify when necessary, e.g. with old versions of the x-symbol
+package. 
+</dl>
+        The option is ignored when <code>reftex-use-fonts</code> is <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-highlight-selection</b><var><a name="index-reftex_002dhighlight_002dselection-558"></a></var><br>
+<blockquote><p>Non-<code>nil</code> means, highlight selected text in selection and
+<samp><span class="file">*toc*</span></samp> buffers.  Normally, the text near the cursor is the
+<em>selected</em> text, and it is highlighted.  This is the entry most
+keys in the selection and <samp><span class="file">*toc*</span></samp> buffers act on.  However, if you
+mainly use the mouse to select an item, you may find it nice to have
+mouse-triggered highlighting <em>instead</em> or <em>as well</em>. The
+variable may have one of these values:
+
+     <pre class="example">          nil      <span class="roman">No highlighting.</span>
+          cursor   <span class="roman">Highlighting is cursor driven.</span>
+          mouse    <span class="roman">Highlighting is mouse driven.</span>
+          both     <span class="roman">Both cursor and mouse trigger highlighting.</span>
+</pre>
+        <p>Changing this variable requires to rebuild the selection and *toc*
+buffers to become effective (keys <kbd>g</kbd> or <kbd>r</kbd>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-cursor-selected-face</b><var><a name="index-reftex_002dcursor_002dselected_002dface-559"></a></var><br>
+<blockquote><p>Face name to highlight cursor selected item in toc and selection buffers. 
+See also the variable <code>reftex-highlight-selection</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-mouse-selected-face</b><var><a name="index-reftex_002dmouse_002dselected_002dface-560"></a></var><br>
+<blockquote><p>Face name to highlight mouse selected item in toc and selection buffers. 
+See also the variable <code>reftex-highlight-selection</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-file-boundary-face</b><var><a name="index-reftex_002dfile_002dboundary_002dface-561"></a></var><br>
+<blockquote><p>Face name for file boundaries in selection buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-label-face</b><var><a name="index-reftex_002dlabel_002dface-562"></a></var><br>
+<blockquote><p>Face name for labels in selection buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-section-heading-face</b><var><a name="index-reftex_002dsection_002dheading_002dface-563"></a></var><br>
+<blockquote><p>Face name for section headings in toc and selection buffers. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-toc-header-face</b><var><a name="index-reftex_002dtoc_002dheader_002dface-564"></a></var><br>
+<blockquote><p>Face name for the header of a toc buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-bib-author-face</b><var><a name="index-reftex_002dbib_002dauthor_002dface-565"></a></var><br>
+<blockquote><p>Face name for author names in bib selection buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-bib-year-face</b><var><a name="index-reftex_002dbib_002dyear_002dface-566"></a></var><br>
+<blockquote><p>Face name for year in bib selection buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-bib-title-face</b><var><a name="index-reftex_002dbib_002dtitle_002dface-567"></a></var><br>
+<blockquote><p>Face name for article title in bib selection buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-bib-extra-face</b><var><a name="index-reftex_002dbib_002dextra_002dface-568"></a></var><br>
+<blockquote><p>Face name for bibliographic information in bib selection buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-select-mark-face</b><var><a name="index-reftex_002dselect_002dmark_002dface-569"></a></var><br>
+<blockquote><p>Face name for marked entries in the selection buffers. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-index-header-face</b><var><a name="index-reftex_002dindex_002dheader_002dface-570"></a></var><br>
+<blockquote><p>Face name for the header of an index buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-index-section-face</b><var><a name="index-reftex_002dindex_002dsection_002dface-571"></a></var><br>
+<blockquote><p>Face name for the start of a new letter section in the index. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-index-tag-face</b><var><a name="index-reftex_002dindex_002dtag_002dface-572"></a></var><br>
+<blockquote><p>Face name for index names (for multiple indices). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>reftex-index-face</b><var><a name="index-reftex_002dindex_002dface-573"></a></var><br>
+<blockquote><p>Face name for index entries. 
+</p></blockquote></div>
+
+   </body></html>
+

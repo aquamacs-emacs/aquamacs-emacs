@@ -1,0 +1,104 @@
+<html lang="en">
+<head>
+<title>How Mail Works - Emacs SMTP Library</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Emacs SMTP Library">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="index.html#Top" title="Top">
+<link rel="next" href="Emacs-Speaks-SMTP.html#Emacs-Speaks-SMTP" title="Emacs Speaks SMTP">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="How-Mail-Works"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Emacs-Speaks-SMTP.html#Emacs-Speaks-SMTP">Emacs Speaks SMTP</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="index.html#Top">Top</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">1 How Mail Works</h2>
+
+<p><a name="index-SMTP-1"></a><a name="index-MTA-2"></a>   On the internet, mail is sent from mail host to mail host using the
+simple mail transfer protocol (SMTP).  To send and receive mail, you
+must get it from and send it to a mail host.  Every mail host runs a
+mail transfer agent (MTA) such as Exim that accepts mails and passes
+them on.  The communication between a mail host and other clients does
+not necessarily involve SMTP, however.  Here is short overview of what
+is involved.
+
+   <p><a name="index-MUA-3"></a>   The mail program &mdash; also called a mail user agent (MUA) &mdash;
+usually sends outgoing mail to a mail host.  When your computer is
+permanently connected to the internet, it might even be a mail host
+itself.  In this case, the MUA will pipe mail to the
+<samp><span class="file">/usr/lib/sendmail</span></samp> application.  It will take care of your mail
+and pass it on to the next mail host.
+
+   <p><a name="index-ISP-4"></a>   When you are only connected to the internet from time to time, your
+internet service provider (ISP) has probably told you which mail host
+to use.  You must configure your MUA to use that mail host.  Since you
+are reading this manual, you probably want to configure Emacs to use
+SMTP to send mail to that mail host.  More on that in the next
+section.
+
+   <p><a name="index-MDA-5"></a>   Things are different when reading mail.  The mail host responsible
+for your mail keeps it in a file somewhere.  The messages get into the
+file by way of a mail delivery agent (MDA) such as procmail.  These
+delivery agents often allow you to filter and munge your mails before
+you get to see it.  When your computer is that mail host, this file is
+called a spool, and sometimes located in the directory
+<samp><span class="file">/var/spool/mail/</span></samp>.  All your MUA has to do is read mail from the
+spool, then.
+
+   <p><a name="index-POP3-6"></a><a name="index-IMAP-7"></a>   When your computer is not always connected to the internet, you
+must get the mail from the remote mail host using a protocol such as
+POP3 or IMAP.  POP3 essentially downloads all your mail from the mail
+host to your computer.  The mail is stored in some file on your
+computer, and again, all your MUA has to do is read mail from the
+spool.
+
+   <p>When you read mail from various machines, downloading mail from the
+mail host to your current machine is not convenient.  In that case,
+you will probably want to use the IMAP protocol.  Your mail is kept on
+the mail host, and you can read it while you are connected via IMAP to
+the mail host.
+
+   <p><a name="index-Webmail-8"></a>   So how does reading mail via the web work, you ask.  In that case,
+the web interface just allows you to remote-control a MUA on the web
+host.  Whether the web host is also a mail host, and how all the
+pieces interact is completely irrelevant.  You usually cannot use
+Emacs to read mail via the web, unless you use software that parses
+the ever-changing HTML of the web interface.
+
+   </body></html>
+

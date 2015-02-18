@@ -1,0 +1,99 @@
+<html lang="en">
+<head>
+<title>Completion Exit - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Completion.html#Completion" title="Completion">
+<link rel="prev" href="Completion-Commands.html#Completion-Commands" title="Completion Commands">
+<link rel="next" href="Completion-Styles.html#Completion-Styles" title="Completion Styles">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Manual',
+updated for Emacs version 24.3.50.
+
+Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Completion-Exit"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Completion-Styles.html#Completion-Styles">Completion Styles</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Completion-Commands.html#Completion-Commands">Completion Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Completion.html#Completion">Completion</a>
+<hr>
+</div>
+
+<h4 class="subsection">8.4.3 Completion Exit</h4>
+
+<p><a name="index-RET-_0040r_007b_0028completion-in-minibuffer_0029_007d-209"></a><a name="index-minibuffer_002dcomplete_002dand_002dexit-210"></a>  When a command reads an argument using the minibuffer with
+completion, it also controls what happens when you type &lt;RET&gt;
+(<code>minibuffer-complete-and-exit</code>) to submit the argument.  There
+are four types of behavior:
+
+     <ul>
+<li><dfn>Strict completion</dfn> accepts only exact completion matches.  Typing
+&lt;RET&gt; exits the minibuffer only if the minibuffer text is an exact
+match, or completes to one.  Otherwise, Emacs refuses to exit the
+minibuffer; instead it tries to complete, and if no completion can be
+done it momentarily displays &lsquo;<samp><span class="samp">[No match]</span></samp>&rsquo; after the minibuffer
+text.  (You can still leave the minibuffer by typing <kbd>C-g</kbd> to
+cancel the command.)
+
+     <p>An example of a command that uses this behavior is <kbd>M-x</kbd>, since it
+is meaningless for it to accept a non-existent command name.
+
+     <li><dfn>Cautious completion</dfn> is like strict completion, except &lt;RET&gt;
+exits only if the text is already an exact match.  If the text
+completes to an exact match, &lt;RET&gt; performs that completion but
+does not exit yet; you must type a second &lt;RET&gt; to exit.
+
+     <p>Cautious completion is used for reading file names for files that must
+already exist, for example.
+
+     <li><dfn>Permissive completion</dfn> allows any input; the completion
+candidates are just suggestions.  Typing &lt;RET&gt; does not complete,
+it just submits the argument as you have entered it.
+
+     <p><a name="index-minibuffer-confirmation-211"></a><a name="index-confirming-in-the-minibuffer-212"></a><li><dfn>Permissive completion with confirmation</dfn> is like permissive
+completion, with an exception: if you typed &lt;TAB&gt; and this
+completed the text up to some intermediate state (i.e., one that is not
+yet an exact completion match), typing &lt;RET&gt; right afterward does
+not submit the argument.  Instead, Emacs asks for confirmation by
+momentarily displaying &lsquo;<samp><span class="samp">[Confirm]</span></samp>&rsquo; after the text; type &lt;RET&gt;
+again to confirm and submit the text.  This catches a common mistake,
+in which one types &lt;RET&gt; before realizing that &lt;TAB&gt; did not
+complete as far as desired.
+
+     <p><a name="index-confirm_002dnonexistent_002dfile_002dor_002dbuffer-213"></a>You can tweak the confirmation behavior by customizing the variable
+<code>confirm-nonexistent-file-or-buffer</code>.  The default value,
+<code>after-completion</code>, gives the behavior we have just described. 
+If you change it to <code>nil</code>, Emacs does not ask for confirmation,
+falling back on permissive completion.  If you change it to any other
+non-<code>nil</code> value, Emacs asks for confirmation whether or not the
+preceding command was &lt;TAB&gt;.
+
+     <p>This behavior is used by most commands that read file names, like
+<kbd>C-x C-f</kbd>, and commands that read buffer names, like <kbd>C-x b</kbd>. 
+</ul>
+
+   </body></html>
+

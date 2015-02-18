@@ -1,0 +1,135 @@
+<html lang="en">
+<head>
+<title>Authentication - Emacs SMTP Library</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Emacs SMTP Library">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Emacs-Speaks-SMTP.html#Emacs-Speaks-SMTP" title="Emacs Speaks SMTP">
+<link rel="next" href="Queued-delivery.html#Queued-delivery" title="Queued delivery">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Authentication"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Queued-delivery.html#Queued-delivery">Queued delivery</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Emacs-Speaks-SMTP.html#Emacs-Speaks-SMTP">Emacs Speaks SMTP</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">3 Authentication</h2>
+
+<p><a name="index-SASL-14"></a><a name="index-CRAM_002dMD5-15"></a><a name="index-LOGIN-16"></a><a name="index-STARTTLS-17"></a><a name="index-TLS-18"></a><a name="index-SSL-19"></a>Many environments require SMTP clients to authenticate themselves
+before they are allowed to route mail via a server.  The two following
+variables contains the authentication information needed for this.
+
+   <p>The first variable, <code>smtpmail-auth-credentials</code>, instructs the
+SMTP library to use a SASL authentication step, currently only the
+CRAM-MD5 and LOGIN mechanisms are supported and will be selected in
+that order if the server support both.
+
+   <p>The second variable, <code>smtpmail-starttls-credentials</code>, instructs
+the SMTP library to connect to the server using STARTTLS.  This means
+the protocol exchange may be integrity protected and confidential by
+using the Transport Layer Security (TLS) protocol, and optionally also
+authentication of the client and server.
+
+   <p>TLS is a security protocol that is also known as SSL, although
+strictly speaking, SSL is an older variant of TLS.  TLS is backwards
+compatible with SSL.  In most mundane situations, the two terms are
+equivalent.
+
+   <p>The TLS feature uses the elisp package <samp><span class="file">starttls.el</span></samp> (see it for
+more information on customization), which in turn require that at
+least one of the following external tools are installed:
+
+     <ol type=1 start=1>
+<li>The GNUTLS command line tool &lsquo;<samp><span class="samp">gnutls-cli</span></samp>&rsquo;, you can get it from
+<a href="http://www.gnu.org/software/gnutls/">http://www.gnu.org/software/gnutls/</a>.  This is the recommended
+tool, mainly because it can verify the server certificates.
+
+     <li>The &lsquo;<samp><span class="samp">starttls</span></samp>&rsquo; external program, you can get it from
+<samp><span class="file">starttls-*.tar.gz</span></samp> from <a href="ftp://ftp.opaopa.org/pub/elisp/">ftp://ftp.opaopa.org/pub/elisp/</a>.
+        </ol>
+
+   <p>It is not uncommon to use both these mechanisms, e.g., to use STARTTLS
+to achieve integrity and confidentiality and then use SASL for client
+authentication.
+
+     <dl>
+<dt><code>smtpmail-auth-credentials</code><dd><a name="index-smtpmail_002dauth_002dcredentials-20"></a>  The variable <code>smtpmail-auth-credentials</code> contains a list of
+hostname, port, username and password tuples.  When the SMTP library
+connects to a host on a certain port, this variable is searched to
+find a matching entry for that hostname and port.  If an entry is
+found, the authentication process is invoked and the credentials are
+used.
+
+     <p>The hostname field follows the same format as
+<code>smtpmail-smtp-server</code> (i.e., a string) and the port field the
+same format as <code>smtpmail-smtp-service</code> (i.e., a string or an
+integer).  The username and password fields, which either can be
+<code>nil</code> to indicate that the user is prompted for the value
+interactively, should be strings with the username and password,
+respectively, information that is normally provided by system
+administrators.
+
+     <br><dt><code>smtpmail-starttls-credentials</code><dd><a name="index-smtpmail_002dstarttls_002dcredentials-21"></a>  The variable <code>smtpmail-starttls-credentials</code> contains a list of
+tuples with hostname, port, name of file containing client key, and
+name of file containing client certificate.  The processing is similar
+to the previous variable.  The client key and certificate may be
+<code>nil</code> if you do not wish to use client authentication. 
+</dl>
+
+   <p>The following example illustrates what you could put in
+<samp><span class="file">~/.emacs</span></samp> to enable both SASL authentication and STARTTLS.  The
+server name (<code>smtpmail-smtp-server</code>) is <var>hostname</var>, the
+server port (<code>smtpmail-smtp-service</code>) is <var>port</var>, and the
+username and password are <var>username</var> and <var>password</var>
+respectively.
+
+<pre class="example">     ;; Authenticate using this username and password against my server.
+     (setq smtpmail-auth-credentials
+           '(("<var>hostname</var>" "<var>port</var>" "<var>username</var>" "<var>password</var>")))
+     
+     ;; Note that if <var>port</var> is an integer, you must not quote it as a
+     ;; string.  Normally <var>port</var> should be the integer 25, and the example
+     ;; become:
+     (setq smtpmail-auth-credentials
+           '(("<var>hostname</var>" 25 "<var>username</var>" "<var>password</var>")))
+     
+     ;; Use STARTTLS without authentication against the server.
+     (setq smtpmail-starttls-credentials
+           '(("<var>hostname</var>" "<var>port</var>" nil nil)))
+</pre>
+   </body></html>
+

@@ -1,0 +1,196 @@
+<html lang="en">
+<head>
+<title>Overview - TRAMP User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="TRAMP User Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="index.html#Top" title="Top">
+<link rel="next" href="Obtaining-Tramp.html#Obtaining-Tramp" title="Obtaining Tramp">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual'', and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License''.
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="Overview"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Obtaining-Tramp.html#Obtaining-Tramp">Obtaining Tramp</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="index.html#Top">Top</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">1 An overview of <span class="sc">tramp</span></h2>
+
+<p><a name="index-overview-1"></a>
+After the installation of <span class="sc">tramp</span> into your GNU Emacs, you
+will be able to access files on remote machines as though they were
+local.  Access to the remote file system for editing files, version
+control, and <code>dired</code> are transparently enabled.
+
+   <p>Your access to the remote machine can be with the <samp><span class="command">rsh</span></samp>,
+<samp><span class="command">rlogin</span></samp>, <samp><span class="command">telnet</span></samp> programs or with any similar
+connection method.  This connection must pass <acronym>ASCII</acronym>
+successfully to be usable but need not be 8-bit clean.
+
+   <p>The package provides support for <samp><span class="command">ssh</span></samp> connections out of the
+box, one of the more common uses of the package.  This allows
+relatively secure access to machines, especially if <samp><span class="command">ftp</span></samp>
+access is disabled.
+
+   <p>Under Windows, <span class="sc">tramp</span> is integrated with the PuTTY package,
+using the <samp><span class="command">plink</span></samp> program.
+
+   <p>The majority of activity carried out by <span class="sc">tramp</span> requires only that
+the remote login is possible and is carried out at the terminal.  In
+order to access remote files <span class="sc">tramp</span> needs to transfer their content
+to the local machine temporarily.
+
+   <p><span class="sc">tramp</span> can transfer files between the machines in a variety of ways. 
+The details are easy to select, depending on your needs and the
+machines in question.
+
+   <p>The fastest transfer methods for large files rely on a remote file
+transfer package such as <samp><span class="command">rcp</span></samp>, <samp><span class="command">scp</span></samp>, <samp><span class="command">rsync</span></samp>
+or (under Windows) <samp><span class="command">pscp</span></samp>.
+
+   <p>If the remote copy methods are not suitable for you, <span class="sc">tramp</span> also
+supports the use of encoded transfers directly through the shell. 
+This requires that the <samp><span class="command">mimencode</span></samp> or <samp><span class="command">uuencode</span></samp> tools
+are available on the remote machine.  These methods are generally
+faster for small files.
+
+   <p><span class="sc">tramp</span> is still under active development and any problems you encounter,
+trivial or major, should be reported to the <span class="sc">tramp</span> developers. 
+See <a href="Bug-Reports.html#Bug-Reports">Bug Reports</a>.
+
+<h5 class="subsubheading">Behind the scenes</h5>
+
+<p><a name="index-behind-the-scenes-2"></a><a name="index-details-of-operation-3"></a><a name="index-how-it-works-4"></a>
+This section tries to explain what goes on behind the scenes when you
+access a remote file through <span class="sc">tramp</span>.
+
+   <p>Suppose you type <kbd>C-x C-f</kbd> and enter part of an <span class="sc">tramp</span> file name,
+then hit <kbd>&lt;TAB&gt;</kbd> for completion.  Suppose further that this is
+the first time that <span class="sc">tramp</span> is invoked for the host in question.  Here's
+what happens:
+
+     <ul>
+<li><span class="sc">tramp</span> discovers that it needs a connection to the host.  So it
+invokes &lsquo;<samp><span class="samp">telnet </span><var>host</var></samp>&rsquo; or &lsquo;<samp><span class="samp">rsh </span><var>host</var><span class="samp"> -l
+</span><var>user</var></samp>&rsquo; or a similar tool to connect to the remote host. 
+Communication with this process happens through an
+GNU Emacs buffer, that is, the output from the remote end
+goes into a buffer.
+
+     <li>The remote host may prompt for a login name (for <samp><span class="command">telnet</span></samp>). 
+The login name is given in the file name, so <span class="sc">tramp</span> sends the
+login name and a newline.
+
+     <li>The remote host may prompt for a password or pass phrase (for
+<samp><span class="command">rsh</span></samp> or for <samp><span class="command">telnet</span></samp> after sending the login name). 
+<span class="sc">tramp</span> displays the prompt in the minibuffer, asking you for the
+password or pass phrase.
+
+     <p>You enter the password or pass phrase.  <span class="sc">tramp</span> sends it to the remote
+host, followed by a newline.
+
+     <li><span class="sc">tramp</span> now waits for the shell prompt or for a message that the login
+failed.
+
+     <p>If <span class="sc">tramp</span> sees neither of them after a certain period of time
+(a minute, say), then it issues an error message saying that it
+couldn't find the remote shell prompt and shows you what the remote
+host has sent.
+
+     <p>If <span class="sc">tramp</span> sees a &lsquo;<samp><span class="samp">login failed</span></samp>&rsquo; message, it tells you so,
+aborts the login attempt and allows you to try again.
+
+     <li>Suppose that the login was successful and <span class="sc">tramp</span> sees the shell prompt
+from the remote host.  Now <span class="sc">tramp</span> invokes <samp><span class="command">/bin/sh</span></samp> because
+Bourne shells and C shells have different command
+syntaxes.<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>
+
+     <p>After the Bourne shell has come up, <span class="sc">tramp</span> sends a few commands to
+ensure a good working environment.  It turns off echoing, it sets the
+shell prompt, and a few other things.
+
+     <li>Now the remote shell is up and it good working order.  Remember, what
+was supposed to happen is that <span class="sc">tramp</span> tries to find out what files exist
+on the remote host so that it can do filename completion.
+
+     <p>So, <span class="sc">tramp</span> basically issues <samp><span class="command">cd</span></samp> and <samp><span class="command">ls</span></samp> commands and
+also sometimes <samp><span class="command">echo</span></samp> with globbing.  Another command that is
+often used is <samp><span class="command">test</span></samp> to find out whether a file is writable or a
+directory or the like.  The output of each command is parsed for the
+necessary operation.
+
+     <li>Suppose you are finished with filename completion, have entered <kbd>C-x
+C-f</kbd>, a full file name and hit <kbd>&lt;RET&gt;</kbd>.  Now comes the time to
+transfer the file contents from the remote host to the local host so
+that you can edit them.
+
+     <p>See above for an explanation of how <span class="sc">tramp</span> transfers the file contents.
+
+     <p>For inline transfers, <span class="sc">tramp</span> issues a command like &lsquo;<samp><span class="samp">mimencode -b
+/path/to/remote/file</span></samp>&rsquo;, waits until the output has accumulated in the
+buffer that's used for communication, then decodes that output to
+produce the file contents.
+
+     <p>For external transfers, <span class="sc">tramp</span> issues a command like the
+following:
+     <pre class="example">          rcp user@host:/path/to/remote/file /tmp/tramp.4711
+</pre>
+     <p>It then reads the local temporary file <samp><span class="file">/tmp/tramp.4711</span></samp> into a
+buffer and deletes the temporary file.
+
+     <li>You now edit the buffer contents, blithely unaware of what has happened
+behind the scenes.  (Unless you have read this section, that is.)  When
+you are finished, you type <kbd>C-x C-s</kbd> to save the buffer.
+
+     <li>Again, <span class="sc">tramp</span> transfers the file contents to the remote host
+either inline or external.  This is the reverse of what happens when
+reading the file. 
+</ul>
+
+   <p>I hope this has provided you with a basic overview of what happens
+behind the scenes when you open a file with <span class="sc">tramp</span>.
+
+<!-- For the end user -->
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Invoking <samp><span class="command">/bin/sh</span></samp> will fail if your login
+shell doesn't recognize &lsquo;<samp><span class="samp">exec /bin/sh</span></samp>&rsquo; as a valid command. 
+Maybe you use the Scheme shell <samp><span class="command">scsh</span></samp><small class="dots">...</small></p>
+
+   <hr></div>
+
+   </body></html>
+

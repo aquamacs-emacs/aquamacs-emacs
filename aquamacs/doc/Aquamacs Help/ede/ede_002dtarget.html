@@ -1,0 +1,290 @@
+<html lang="en">
+<head>
+<title>ede-target - Emacs Development Environment</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="Emacs Development Environment">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Targets.html#Targets" title="Targets">
+<link rel="next" href="ede_002dproj_002dtarget.html#ede_002dproj_002dtarget" title="ede-proj-target">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file describes EDE, the Emacs Development Environment.
+
+Copyright (C) 1998, 1999, 2000, 2001, 2004, 2005, 2008, 2009,
+2010  Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<a name="ede-target"></a>
+<a name="ede_002dtarget"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="ede_002dproj_002dtarget.html#ede_002dproj_002dtarget">ede-proj-target</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Targets.html#Targets">Targets</a>
+<hr>
+</div>
+
+<h4 class="subsection">7.6.1 ede-target</h4>
+
+<p><a name="index-ede_002dtarget-99"></a>
+     <dl>
+<dt>Inheritance Tree:<dd>
+          <dl>
+<dt><code>eieio-speedbar</code><dd>
+               <dl>
+<dt><code>eieio-speedbar-directory-button</code><dd>
+                    <dl>
+<dt><code>ede-target</code><dd>
+                         <dl>
+<dt>Children:<dd>ede-cpp-root-target,<!-- /@w --> ede-emacs-target-c,<!-- /@w --> ede-emacs-target-el,<!-- /@w --> ede-emacs-target-misc,<!-- /@w --> ede-linux-target-c,<!-- /@w --> ede-linux-target-misc,<!-- /@w --> ede-maven-target-java,<!-- /@w --> ede-maven-target-c,<!-- /@w --> ede-maven-target-misc,<!-- /@w --> ede-simple-target,<!-- /@w --> See&nbsp;<a href="ede_002dproj_002dtarget.html#ede_002dproj_002dtarget">ede-proj-target</a>,<!-- /@w --> See&nbsp;<a href="project_002dam_002dtarget.html#project_002dam_002dtarget">project-am-target</a>.<!-- /@w -->
+</dl>
+                    </dl>
+               </dl>
+          </dl>
+     </dl>
+
+     <dl>
+<dt>Slots:<dd>
+          <dl>
+<dt><code>:name</code><dd>Type: <code>string</code>
+
+          <p>Name of this target.
+
+          <br><dt><code>:path</code><dd>Type: <code>string</code>
+
+          <p>The path to the sources of this target. 
+Relative to the path of the project it belongs to.
+
+          <br><dt><code>:source</code><dd>Type: <code>list</code> <br>
+Default Value: <code>nil</code>
+
+          <p>Source files in this target.
+
+          <br><dt><code>:versionsource</code><dd>Type: <code>list</code> <br>
+Default Value: <code>nil</code>
+
+          <p>Source files with a version string in them. 
+These files are checked for a version string whenever the EDE version
+of the master project is changed.  When strings are found, the version
+previously there is updated.
+
+     </dl>
+
+   </dl>
+
+<h5 class="subsubsection">7.6.1.1 Specialized Methods</h5>
+
+<div class="defun">
+&mdash; Method: <b>ede-preprocessor-map</b><var> :AFTER this<a name="index-ede_002dpreprocessor_002dmap-100"></a></var><br>
+<blockquote><p>Get the pre-processor map for project <var>THIS</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>eieio-speedbar-description</b><var> :AFTER obj<a name="index-eieio_002dspeedbar_002ddescription-101"></a></var><br>
+<blockquote><p>Provide a speedbar description for <var>OBJ</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>project-compile-target</b><var> :AFTER obj &amp;optional command<a name="index-project_002dcompile_002dtarget-102"></a></var><br>
+<blockquote><p>Compile the current target <var>OBJ</var>. 
+Argument <var>COMMAND</var> is the command to use for compiling the target. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>project-debug-target</b><var> :AFTER obj<a name="index-project_002ddebug_002dtarget-103"></a></var><br>
+<blockquote><p>Run the current project target <var>OBJ</var> in a debugger. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-convert-path</b><var> :AFTER this path<a name="index-ede_002dconvert_002dpath-104"></a></var><br>
+<blockquote><p>Convert path in a standard way for a given project. 
+Default to making it project relative. 
+Argument <var>THIS</var> is the project to convert <var>PATH</var> to. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-name</b><var> :AFTER this<a name="index-ede_002dname-105"></a></var><br>
+<blockquote><p>Return the name of <var>THIS</var> targt. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-target-buffer-in-sourcelist</b><var> :AFTER this buffer source<a name="index-ede_002dtarget_002dbuffer_002din_002dsourcelist-106"></a></var><br>
+<blockquote><p>Return non-<code>nil</code> if object <var>THIS</var> is in <var>BUFFER</var> to a <var>SOURCE</var> list. 
+Handles complex path issues. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>eieio-speedbar-derive-line-path</b><var> :AFTER obj &amp;optional depth<a name="index-eieio_002dspeedbar_002dderive_002dline_002dpath-107"></a></var><br>
+<blockquote><p>Return the path to <var>OBJ</var>. 
+Optional <var>DEPTH</var> is the depth we start at. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-buffer-header-file</b><var> :AFTER this buffer<a name="index-ede_002dbuffer_002dheader_002dfile-108"></a></var><br>
+<blockquote><p>There are no default header files in EDE. 
+Do a quick check to see if there is a Header tag in this buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>project-remove-file</b><var> :AFTER ot fnnd<a name="index-project_002dremove_002dfile-109"></a></var><br>
+<blockquote><p>Remove the current buffer from project target <var>OT</var>. 
+Argument <var>FNND</var> is an argument. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-buffer-documentation-files</b><var> :AFTER this buffer<a name="index-ede_002dbuffer_002ddocumentation_002dfiles-110"></a></var><br>
+<blockquote><p>Check for some documentation files for <var>THIS</var>. 
+Also do a quick check to see if there is a Documentation tag in this <var>BUFFER</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-map-target-buffers</b><var> :AFTER this proc<a name="index-ede_002dmap_002dtarget_002dbuffers-111"></a></var><br>
+<blockquote><p>For <var>THIS</var>, execute <var>PROC</var> on all buffers belonging to <var>THIS</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>eieio-speedbar-child-description</b><var> :AFTER obj<a name="index-eieio_002dspeedbar_002dchild_002ddescription-112"></a></var><br>
+<blockquote><p>Provide a speedbar description for a plain-child of <var>OBJ</var>. 
+A plain child is a child element which is not an EIEIO object. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-object-keybindings</b><var> :BEFORE this<a name="index-ede_002dobject_002dkeybindings-113"></a></var><br>
+<blockquote><p>Retrieves the slot <code>keybindings</code> from an object of class <code>ede-target</code>
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-description</b><var> :AFTER this<a name="index-ede_002ddescription-114"></a></var><br>
+<blockquote><p>Return a description suitable for the minibuffer about <var>THIS</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>eieio-speedbar-object-children</b><var> :AFTER this<a name="index-eieio_002dspeedbar_002dobject_002dchildren-115"></a></var><br>
+<blockquote><p>Return the list of speedbar display children for <var>THIS</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-system-include-path</b><var> :AFTER this<a name="index-ede_002dsystem_002dinclude_002dpath-116"></a></var><br>
+<blockquote><p>Get the system include path used by project <var>THIS</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-object-sourcecode</b><var> :BEFORE this<a name="index-ede_002dobject_002dsourcecode-117"></a></var><br>
+<blockquote><p>Retrieves the slot <code>sourcetype</code> from an object of class <code>ede-target</code>
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-expand-filename</b><var> :AFTER this filename &amp;optional force<a name="index-ede_002dexpand_002dfilename-118"></a></var><br>
+<blockquote><p>Return a fully qualified file name based on target <var>THIS</var>. 
+<var>FILENAME</var> should be a filename which occurs in a directory in which <var>THIS</var> works. 
+Optional argument <var>FORCE</var> forces the default filename to be provided even if it
+doesn't exist. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-menu-items-build</b><var> :AFTER obj &amp;optional current<a name="index-ede_002dmenu_002ditems_002dbuild-119"></a></var><br>
+<blockquote><p>Return a list of menu items for building target <var>OBJ</var>. 
+If optional argument <var>CURRENT</var> is non-<code>nil</code>, return sub-menu code. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-want-file-p</b><var> :AFTER this file<a name="index-ede_002dwant_002dfile_002dp-120"></a></var><br>
+<blockquote><p>Return non-<code>nil</code> if <var>THIS</var> target wants <var>FILE</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-update-version-in-source</b><var> :AFTER this version<a name="index-ede_002dupdate_002dversion_002din_002dsource-121"></a></var><br>
+<blockquote><p>In sources for <var>THIS</var>, change version numbers to <var>VERSION</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>project-delete-target</b><var> :AFTER ot<a name="index-project_002ddelete_002dtarget-122"></a></var><br>
+<blockquote><p>Delete the current target <var>OT</var> from it's parent project. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-target-sourcecode</b><var> :AFTER this<a name="index-ede_002dtarget_002dsourcecode-123"></a></var><br>
+<blockquote><p>Return the sourcecode objects which <var>THIS</var> permits. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>eieio-speedbar-child-make-tag-lines</b><var> :AFTER this depth<a name="index-eieio_002dspeedbar_002dchild_002dmake_002dtag_002dlines-124"></a></var><br>
+<blockquote><p>Create a speedbar tag line for a child of <var>THIS</var>. 
+It has depth <var>DEPTH</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>eieio-speedbar-object-buttonname</b><var> :AFTER object<a name="index-eieio_002dspeedbar_002dobject_002dbuttonname-125"></a></var><br>
+<blockquote><p>Return a string to use as a speedbar button for <var>OBJECT</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>eieio-done-customizing</b><var> :AFTER target<a name="index-eieio_002ddone_002dcustomizing-126"></a></var><br>
+<blockquote><p>Call this when a user finishes customizing <var>TARGET</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>project-edit-file-target</b><var> :AFTER ot<a name="index-project_002dedit_002dfile_002dtarget-127"></a></var><br>
+<blockquote><p>Edit the target <var>OT</var> associated w/ this file. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-documentation</b><var> :AFTER this<a name="index-ede_002ddocumentation-128"></a></var><br>
+<blockquote><p>Return a list of files that provides documentation. 
+Documentation is not for object <var>THIS</var>, but is provided by <var>THIS</var> for other
+files in the project. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-want-file-source-p</b><var> :AFTER this file<a name="index-ede_002dwant_002dfile_002dsource_002dp-129"></a></var><br>
+<blockquote><p>Return non-<code>nil</code> if <var>THIS</var> target wants <var>FILE</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-want-file-auxiliary-p</b><var> :AFTER this file<a name="index-ede_002dwant_002dfile_002dauxiliary_002dp-130"></a></var><br>
+<blockquote><p>Return non-<code>nil</code> if <var>THIS</var> target wants <var>FILE</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>project-add-file</b><var> :AFTER ot file<a name="index-project_002dadd_002dfile-131"></a></var><br>
+<blockquote><p>Add the current buffer into project project target <var>OT</var>. 
+Argument <var>FILE</var> is the file to add. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-target-name</b><var> :AFTER this<a name="index-ede_002dtarget_002dname-132"></a></var><br>
+<blockquote><p>Return the name of <var>THIS</var> target, suitable for make or debug style commands. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method: <b>ede-object-menu</b><var> :BEFORE this<a name="index-ede_002dobject_002dmenu-133"></a></var><br>
+<blockquote><p>Retrieves the slot <code>menu</code> from an object of class <code>ede-target</code>
+</p></blockquote></div>
+
+   </body></html>
+

@@ -3942,7 +3942,7 @@ kbd_buffer_get_event (KBOARD **kbp,
       if (event->kind == SELECTION_REQUEST_EVENT
 	  || event->kind == SELECTION_CLEAR_EVENT)
 	{
-#ifdef HAVE_X11
+#ifdef HAVE_X_WINDOWS
 	  struct input_event copy;
 
 	  /* Remove it from the buffer before processing it,
@@ -5473,6 +5473,8 @@ make_lispy_event (struct input_event *event)
       /* NS_NONKEY_EVENTs are just like NON_ASCII_KEYSTROKE_EVENTs,
 	 except that they are non-key events (last-nonmenu-event is nil).  */
     case NS_NONKEY_EVENT:
+      /* special drag events */
+    case NS_MOUSEDRAG_EVENT:
 #endif
 
       /* A function key.  The symbol may need to have modifier prefixes
@@ -5512,6 +5514,30 @@ make_lispy_event (struct input_event *event)
 				     / sizeof (iso_lispy_function_keys[0])));
 #endif
 
+      if (event->kind == NS_MOUSEDRAG_EVENT)
+	{	  
+	    /* We need to use an alist rather than a vector as the cache
+	       since we can't make a vector long enough.  */
+	    if (NILP (KVAR (current_kboard, system_key_syms)))
+	      kset_system_key_syms (current_kboard, Fcons (Qnil, Qnil));
+
+            struct frame *f = XFRAME (event->frame_or_window);
+            Lisp_Object position;
+            Lisp_Object head;
+	    position = make_lispy_position (f, event->x, event->y,
+					    event->timestamp);
+	    head = modify_event_symbol (event->code,
+				        event->modifiers,
+	                                Qfunction_key,
+				        KVAR (current_kboard, Vsystem_key_alist),
+				        0, &KVAR (current_kboard, system_key_syms),
+			  	        (unsigned) -1);
+	    return Fcons (head,
+			  Fcons (Qnil,
+				 Fcons (position,
+					Qnil)));
+        }
+
       /* Handle system-specific or unknown keysyms.  */
       if (event->code & (1 << 28)
 	  || event->code - FUNCTION_KEY_OFFSET < 0
@@ -5528,7 +5554,8 @@ make_lispy_event (struct input_event *event)
 				      Qfunction_key,
 				      KVAR (current_kboard, Vsystem_key_alist),
 				      0, &KVAR (current_kboard, system_key_syms),
-				      PTRDIFF_MAX);
+				      PTRDIFF_MAX
+				      );
 	}
 
       return modify_event_symbol (event->code - FUNCTION_KEY_OFFSET,
@@ -6504,16 +6531,24 @@ modify_event_symbol (ptrdiff_t symbol_num, int modifiers, Lisp_Object symbol_kin
      we've never used that symbol before.  */
   else
     {
-      if (! VECTORP (*symbol_table)
-	  || ASIZE (*symbol_table) != table_size)
+      /* is it a vector? */
+      if (table_size>=0 && table_size<PTRDIFF_MAX)
 	{
-	  Lisp_Object size;
+	  if (! VECTORP (*symbol_table)
+	      || ASIZE (*symbol_table) != table_size)
+	    {
+	      Lisp_Object size;
 
-	  XSETFASTINT (size, table_size);
-	  *symbol_table = Fmake_vector (size, Qnil);
+	      XSETFASTINT (size, table_size);
+	      *symbol_table = Fmake_vector (size, Qnil);
+	    }
+	  value = AREF (*symbol_table, symbol_num);
 	}
-
-      value = AREF (*symbol_table, symbol_num);
+      else  /* is it an alist? */
+	{
+	  value = Qnil;
+	  *symbol_table = Fcons (Qnil, value);
+	}
     }
 
   /* Have we already used this symbol before?  */
@@ -6537,7 +6572,7 @@ modify_event_symbol (ptrdiff_t symbol_num, int modifiers, Lisp_Object symbol_kin
       else if (name_table != 0 && name_table[symbol_num])
 	value = intern (name_table[symbol_num]);
 
-#ifdef HAVE_WINDOW_SYSTEM
+#ifdef HAVE_X11
       if (NILP (value))
 	{
 	  char *name = x_get_keysym_name (symbol_num);
@@ -6642,6 +6677,9 @@ has the same base event type and all the specified modifiers.  */)
 int
 parse_solitary_modifier (Lisp_Object symbol)
 {
+  if (! SYMBOLP (symbol))
+    return 0;
+
   Lisp_Object name = SYMBOL_NAME (symbol);
 
   switch (SREF (name, 0))
@@ -7843,7 +7881,10 @@ parse_menu_item (Lisp_Object item, int inmenubar)
 	if (NILP (keys))
 	  keys = Fwhere_is_internal (def, Qnil, Qt, Qnil, Qnil);
 
-	if (!NILP (keys))
+	if (!NILP (keys)
+	    && !(VECTORP (keys)
+		 && SYMBOLP (AREF (keys, 0))))
+	  /* do not show event symbols in menu */
 	  {
 	    tem = Fkey_description (keys, Qnil);
 	    if (CONSP (prefix))
@@ -8132,6 +8173,7 @@ parse_tool_bar_item (Lisp_Object key, Lisp_Object item)
   /* Set defaults.  */
   set_prop (TOOL_BAR_ITEM_KEY, key);
   set_prop (TOOL_BAR_ITEM_ENABLED_P, Qt);
+  set_prop (TOOL_BAR_ITEM_VISIBLE_P, Qt);
 
   /* Get the caption of the item.  If the caption is not a string,
      evaluate it to get a string.  If we don't get a string, skip this
@@ -8194,10 +8236,14 @@ parse_tool_bar_item (Lisp_Object key, Lisp_Object item)
 	}
       else if (EQ (ikey, QCvisible))
 	{
-	  /* `:visible FORM'.  If got a visible property and that
-	     evaluates to nil then ignore this item.  */
+#ifdef HAVE_NS
+	  /* at least in NS we need all items so users
+	     can configure the toolbar. */
+	    set_prop (TOOL_BAR_ITEM_VISIBLE_P, menu_item_eval_property (value));
+#else
 	  if (NILP (menu_item_eval_property (value)))
 	    return 0;
+#endif
 	}
       else if (EQ (ikey, QChelp))
         /* `:help HELP-STRING'.  */
