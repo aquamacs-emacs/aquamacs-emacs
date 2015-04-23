@@ -378,7 +378,7 @@ define pwinx
   printf "Window %d ", $int
   xgetptr $w->buffer
   set $tem = (struct buffer *) $ptr
-  xgetptr $tem->name_
+  xgetptr $tem->name
   printf "%s", ((struct Lisp_String *) $ptr)->data
   printf "\n"
   xgetptr $w->start
@@ -898,7 +898,7 @@ end
 define xbuffer
   xgetptr $
   print (struct buffer *) $ptr
-  xgetptr $->name_
+  xgetptr $->name
   output ((struct Lisp_String *) $ptr)->data
   echo \n
 end
