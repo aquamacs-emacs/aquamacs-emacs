@@ -1144,10 +1144,6 @@ LISP_MACRO_DEFUN_VOID (CHECK_TYPE,
 		       (int ok, Lisp_Object predicate, Lisp_Object x),
 		       (ok, predicate, x))
 
-/* Deprecated and will be removed soon.  */
-
-#define INTERNAL_FIELD(field) field ## _
-
 /* See the macros in intervals.h.  */
 
 typedef struct interval *INTERVAL;
@@ -2900,7 +2896,7 @@ extern void defvar_kboard (struct Lisp_Kboard_Objfwd *, const char *, int);
 #define DEFVAR_KBOARD(lname, vname, doc)			\
   do {								\
     static struct Lisp_Kboard_Objfwd ko_fwd;			\
-    defvar_kboard (&ko_fwd, lname, offsetof (KBOARD, vname ## _)); \
+    defvar_kboard (&ko_fwd, lname, offsetof (KBOARD, vname)); \
   } while (false)
 
 /* Save and restore the instruction and environment pointers,

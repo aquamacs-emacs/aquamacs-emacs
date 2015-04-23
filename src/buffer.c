@@ -134,227 +134,227 @@ CHECK_OVERLAY (Lisp_Object x)
 static void
 bset_abbrev_mode (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (abbrev_mode) = val;
+  b->abbrev_mode = val;
 }
 static void
 bset_abbrev_table (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (abbrev_table) = val;
+  b->abbrev_table = val;
 }
 static void
 bset_auto_fill_function (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (auto_fill_function) = val;
+  b->auto_fill_function = val;
 }
 static void
 bset_auto_save_file_format (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (auto_save_file_format) = val;
+  b->auto_save_file_format = val;
 }
 static void
 bset_auto_save_file_name (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (auto_save_file_name) = val;
+  b->auto_save_file_name = val;
 }
 static void
 bset_backed_up (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (backed_up) = val;
+  b->backed_up = val;
 }
 static void
 bset_begv_marker (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (begv_marker) = val;
+  b->begv_marker = val;
 }
 static void
 bset_bidi_display_reordering (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (bidi_display_reordering) = val;
+  b->bidi_display_reordering = val;
 }
 static void
 bset_buffer_file_coding_system (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (buffer_file_coding_system) = val;
+  b->buffer_file_coding_system = val;
 }
 static void
 bset_case_fold_search (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (case_fold_search) = val;
+  b->case_fold_search = val;
 }
 static void
 bset_ctl_arrow (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (ctl_arrow) = val;
+  b->ctl_arrow = val;
 }
 static void
 bset_cursor_in_non_selected_windows (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (cursor_in_non_selected_windows) = val;
+  b->cursor_in_non_selected_windows = val;
 }
 static void
 bset_cursor_type (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (cursor_type) = val;
+  b->cursor_type = val;
 }
 static void
 bset_display_table (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (display_table) = val;
+  b->display_table = val;
 }
 static void
 bset_extra_line_spacing (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (extra_line_spacing) = val;
+  b->extra_line_spacing = val;
 }
 static void
 bset_file_format (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (file_format) = val;
+  b->file_format = val;
 }
 static void
 bset_file_truename (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (file_truename) = val;
+  b->file_truename = val;
 }
 static void
 bset_fringe_cursor_alist (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (fringe_cursor_alist) = val;
+  b->fringe_cursor_alist = val;
 }
 static void
 bset_fringe_indicator_alist (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (fringe_indicator_alist) = val;
+  b->fringe_indicator_alist = val;
 }
 static void
 bset_fringes_outside_margins (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (fringes_outside_margins) = val;
+  b->fringes_outside_margins = val;
 }
 static void
 bset_header_line_format (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (header_line_format) = val;
+  b->header_line_format = val;
 }
 static void
 bset_indicate_buffer_boundaries (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (indicate_buffer_boundaries) = val;
+  b->indicate_buffer_boundaries = val;
 }
 static void
 bset_indicate_empty_lines (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (indicate_empty_lines) = val;
+  b->indicate_empty_lines = val;
 }
 static void
 bset_invisibility_spec (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (invisibility_spec) = val;
+  b->invisibility_spec = val;
 }
 static void
 bset_left_fringe_width (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (left_fringe_width) = val;
+  b->left_fringe_width = val;
 }
 static void
 bset_major_mode (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (major_mode) = val;
+  b->major_mode = val;
 }
 static void
 bset_mark (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (mark) = val;
+  b->mark = val;
 }
 static void
 bset_minor_modes (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (minor_modes) = val;
+  b->minor_modes = val;
 }
 static void
 bset_mode_line_format (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (mode_line_format) = val;
+  b->mode_line_format = val;
 }
 static void
 bset_mode_name (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (mode_name) = val;
+  b->mode_name = val;
 }
 static void
 bset_name (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (name) = val;
+  b->name = val;
 }
 static void
 bset_overwrite_mode (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (overwrite_mode) = val;
+  b->overwrite_mode = val;
 }
 static void
 bset_pt_marker (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (pt_marker) = val;
+  b->pt_marker = val;
 }
 static void
 bset_right_fringe_width (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (right_fringe_width) = val;
+  b->right_fringe_width = val;
 }
 static void
 bset_save_length (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (save_length) = val;
+  b->save_length = val;
 }
 static void
 bset_scroll_bar_width (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (scroll_bar_width) = val;
+  b->scroll_bar_width = val;
 }
 static void
 bset_scroll_bar_height (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (scroll_bar_height) = val;
+  b->scroll_bar_height = val;
 }
 static void
 bset_scroll_down_aggressively (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (scroll_down_aggressively) = val;
+  b->scroll_down_aggressively = val;
 }
 static void
 bset_scroll_up_aggressively (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (scroll_up_aggressively) = val;
+  b->scroll_up_aggressively = val;
 }
 static void
 bset_selective_display (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (selective_display) = val;
+  b->selective_display = val;
 }
 static void
 bset_selective_display_ellipses (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (selective_display_ellipses) = val;
+  b->selective_display_ellipses = val;
 }
 static void
 bset_vertical_scroll_bar_type (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (vertical_scroll_bar_type) = val;
+  b->vertical_scroll_bar_type = val;
 }
 static void
 bset_horizontal_scroll_bar_type (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (horizontal_scroll_bar_type) = val;
+  b->horizontal_scroll_bar_type = val;
 }
 static void
 bset_word_wrap (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (word_wrap) = val;
+  b->word_wrap = val;
 }
 static void
 bset_zv_marker (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (zv_marker) = val;
+  b->zv_marker = val;
 }
 
 void
@@ -1591,7 +1591,7 @@ compact_buffer (struct buffer *buffer)
 	 turned off in that buffer.  Calling truncate_undo_list on
 	 Qt tends to return NULL, which effectively turns undo back on.
 	 So don't call truncate_undo_list if undo_list is Qt.  */
-      if (!EQ (buffer->INTERNAL_FIELD (undo_list), Qt))
+      if (!EQ (buffer->undo_list, Qt))
 	truncate_undo_list (buffer);
 
       /* Shrink buffer gaps.  */
