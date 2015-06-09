@@ -1432,6 +1432,9 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
       syms_of_terminal ();
       syms_of_term ();
       syms_of_undo ();
+
+      syms_of_module ();
+
 #ifdef HAVE_SOUND
       syms_of_sound ();
 #endif
