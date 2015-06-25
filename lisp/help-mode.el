@@ -97,6 +97,18 @@ The format is (FUNCTION ARGS...).")
   "Hook run by `help-mode'."
   :type 'hook
   :group 'help)
+
+(defcustom help-quote-translation nil
+  "Style to use for single quotes in help.
+The value is a left single quote character of some style.
+Quote ‘like this’ if the value is ?‘ (left single quotation mark).
+Quote \\'like this\\' if the value is ?\\' (apostrophe).
+Quote \\`like this\\' if the value is ?\\` (grave accent).
+The default value is nil, which means quote with left single quotation mark
+if displayable, and with grave accent otherwise."
+  :type 'character
+  :group 'help)
+
 
 ;; Button types used by help
 
@@ -287,8 +299,36 @@ Commands:
 \\{help-mode-map}"
   (set (make-local-variable 'revert-buffer-function)
        'help-mode-revert-buffer)
+  (setq font-lock-defaults '(nil t))
+  (font-lock-add-keywords
+   nil '(("\\(?:\\=\\|[^\\]\\)\\(\\\\*\\)[`']"
+          (0 (let* ((mbeg (match-beginning 1))
+                    (mend (match-end 1))
+                    (escapes (- mend mbeg)))
+               (unless (get-text-property mend 'help-value)
+                 ;; Collapse all escaped backslashes.
+                 (compose-region mbeg (+ mbeg (- escapes (/ escapes 2))) "")
+                 ;; If there's an even number of backslashes,
+                 ;; translate the quote.
+                 (when (eq (logand escapes 1) 0)
+                   (help--translate-quote mend)))
+               nil)))))
   (set (make-local-variable 'bookmark-make-record-function)
        'help-bookmark-make-record))
+
+(defun help--translate-quote (beg)
+  (let* ((char (char-after beg))
+         (replacement
+          (cond
+           ((or (and (null help-quote-translation)
+                     (char-displayable-p ?‘))
+                (eq help-quote-translation ?‘))
+            (cdr (assq char '((?` . ?‘) (?' . ?’)))))
+           ((eq help-quote-translation ?')
+            ?')
+           (t char))))
+    (unless (eq char replacement)
+      (compose-region beg (1+ beg) replacement))))
 
 ;;;###autoload
 (defun help-mode-setup ()

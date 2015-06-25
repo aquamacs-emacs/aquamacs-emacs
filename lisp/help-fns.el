@@ -746,7 +746,8 @@ it is displayed along with the global value."
 		      (setq from (point))
 		      (pp origval)
 		      (if (< (point) (+ from 20))
-			  (delete-region (1- from) from)))))))
+			  (delete-region (1- from) from)))))
+                (put-text-property val-start-pos (point) 'help-value t)))
 	    (terpri)
 	    (when locus
 	      (cond

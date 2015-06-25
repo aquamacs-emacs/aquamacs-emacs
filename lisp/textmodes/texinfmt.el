@@ -2493,8 +2493,8 @@ surrounded by in angle brackets."
 Enclose the verbatim text, including the delimiters, in braces.  Print
 text exactly as written (but not the delimiters) in a fixed-width.
 
-For example, @verb\{|@|\} results in @ and
-@verb\{+@'e?`!`+} results in @'e?`!`."
+For example, @verb{|@|} results in @ and
+@verb{+@\\'e?\\`!\\`+} results in @\\'e?\\`!\\`."
 
   (let ((delimiter (buffer-substring-no-properties
 		    (1+ texinfo-command-end) (+ 2 texinfo-command-end))))
