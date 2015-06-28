@@ -98,17 +98,6 @@ The format is (FUNCTION ARGS...).")
   :type 'hook
   :group 'help)
 
-(defcustom help-quote-translation nil
-  "Style to use for single quotes in help.
-The value is a left single quote character of some style.
-Quote ‘like this’ if the value is ?‘ (left single quotation mark).
-Quote \\'like this\\' if the value is ?\\' (apostrophe).
-Quote \\`like this\\' if the value is ?\\` (grave accent).
-The default value is nil, which means quote with left single quotation mark
-if displayable, and with grave accent otherwise."
-  :type 'character
-  :group 'help)
-
 
 ;; Button types used by help
 
@@ -301,33 +290,50 @@ Commands:
        'help-mode-revert-buffer)
   (setq font-lock-defaults '(nil t))
   (font-lock-add-keywords
-   nil '(("\\(?:\\=\\|[^\\]\\)\\(\\\\*\\)[`']"
-          (0 (let* ((mbeg (match-beginning 1))
-                    (mend (match-end 1))
-                    (escapes (- mend mbeg)))
-               (unless (get-text-property mend 'help-value)
-                 ;; Collapse all escaped backslashes.
-                 (compose-region mbeg (+ mbeg (- escapes (/ escapes 2))) "")
-                 ;; If there's an even number of backslashes,
-                 ;; translate the quote.
-                 (when (eq (logand escapes 1) 0)
-                   (help--translate-quote mend)))
-               nil)))))
+   nil '(("\\(\\\\~\\)\\(?:\\\\~\\|.\\)"
+          (0 (let ((mbeg (match-beginning 1))
+                   (mend (match-end 1)))
+               (unless (get-text-property mbeg 'help-value)
+                 ;; If we use "" as the third argument, cursor
+                 ;; stumbles once when moving over its position.
+                 (compose-region mbeg
+                                 (1+ mend)
+                                 (buffer-substring-no-properties
+                                  mend (1+ mend)))
+                 (when (= (1+ mend) (match-end 0))
+                   (put-text-property mend (1+ mend) 'help-tilde-escaped t))))
+             t))
+         (help--translate-quotes)))
   (set (make-local-variable 'bookmark-make-record-function)
        'help-bookmark-make-record))
 
+(defun help--translate-quotes (limit)
+  (while (re-search-forward "`\\([^']+\\)'" limit t)
+    (let* ((mbeg (match-beginning 0)))
+      (cond
+       ((get-text-property mbeg 'help-value)
+        ;; Inside the printed value; get out.
+        (goto-char
+         (next-single-char-property-change (point) 'help-value nil limit)))
+       ((get-text-property mbeg 'help-tilde-escaped)
+        ;; The opening quote is escaped, continue after it.
+        (goto-char (1+ mbeg)))
+       ((get-text-property (1- (point)) 'help-tilde-escaped)
+        ;; The closing quote is escaped, look for the next one.
+        (let (found)
+          (while (unless found (search-forward "'" limit t))
+            (unless (get-text-property (1- (point)) 'help-tilde-escaped)
+              (setq found)
+              (help--translate-quote mbeg)
+              (help--translate-quote (1- (point)))))))
+       (t            ; Translate the quotes.
+        (help--translate-quote mbeg)
+        (help--translate-quote (1- (point))))))))
+
 (defun help--translate-quote (beg)
   (let* ((char (char-after beg))
-         (replacement
-          (cond
-           ((or (and (null help-quote-translation)
-                     (char-displayable-p ?‘))
-                (eq help-quote-translation ?‘))
-            (cdr (assq char '((?` . ?‘) (?' . ?’)))))
-           ((eq help-quote-translation ?')
-            ?')
-           (t char))))
-    (unless (eq char replacement)
+         (replacement (cdr (assq char '((?` . ?‘) (?' . ?’))))))
+    (when (char-displayable-p replacement)
       (compose-region beg (1+ beg) replacement))))
 
 ;;;###autoload
