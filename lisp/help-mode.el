@@ -318,17 +318,21 @@ Commands:
        ((get-text-property mbeg 'help-tilde-escaped)
         ;; The opening quote is escaped, continue after it.
         (goto-char (1+ mbeg)))
-       ((get-text-property (1- (point)) 'help-tilde-escaped)
-        ;; The closing quote is escaped, look for the next one.
-        (let (found)
-          (while (unless found (search-forward "'" limit t))
+       (t
+        (let ((mend (unless (get-text-property (1- (point)) 'help-tilde-escaped)
+                      (1- (point)))))
+          ;; The closing quote is escaped, look for the next one.
+          (while (unless mend (search-forward "'" limit t))
             (unless (get-text-property (1- (point)) 'help-tilde-escaped)
-              (setq found)
-              (help--translate-quote mbeg)
-              (help--translate-quote (1- (point)))))))
-       (t            ; Translate the quotes.
-        (help--translate-quote mbeg)
-        (help--translate-quote (1- (point))))))))
+              (setq mend (1- (point)))))
+          (when (and mend
+                     (eq ; Not inside or after a printed value.
+                      (next-single-char-property-change mbeg 'help-value
+                                                        nil mend)
+                      mend))
+            ;; Translate the quotes.
+            (help--translate-quote mbeg)
+            (help--translate-quote mend))))))))
 
 (defun help--translate-quote (beg)
   (let* ((char (char-after beg))
