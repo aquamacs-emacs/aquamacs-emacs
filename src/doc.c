@@ -700,76 +700,50 @@ Return the original STRING if no substitutions are made.
 Otherwise, return a new string.  */)
   (Lisp_Object string)
 {
-  char *buf;
-  bool changed = 0;
-  unsigned char *strp;
-  char *bufp;
-  ptrdiff_t idx;
-  ptrdiff_t bsize;
-  Lisp_Object tem;
-  Lisp_Object keymap;
-  unsigned char *start;
-  ptrdiff_t length, length_byte;
-  Lisp_Object name;
-  struct gcpro gcpro1, gcpro2, gcpro3, gcpro4;
-  bool multibyte;
-  ptrdiff_t nchars;
-
   if (NILP (string))
     return Qnil;
-
   CHECK_STRING (string);
-  tem = Qnil;
-  keymap = Qnil;
-  name = Qnil;
-  GCPRO4 (string, tem, keymap, name);
 
-  multibyte = STRING_MULTIBYTE (string);
-  nchars = 0;
+  ptrdiff_t bsize = SBYTES (string);
+  bool changed = false;
+  Lisp_Object tem = Qnil;
+  Lisp_Object name = Qnil;
 
   /* KEYMAP is either nil (which means search all the active keymaps)
      or a specified local map (which means search just that and the
      global map).  If non-nil, it might come from Voverriding_local_map,
      or from a \\<mapname> construct in STRING itself..  */
-  keymap = Voverriding_local_map;
+  Lisp_Object keymap = Voverriding_local_map;
 
-  bsize = SBYTES (string);
-  bufp = buf = xmalloc (bsize);
+  struct gcpro gcpro1, gcpro2, gcpro3, gcpro4;
+  GCPRO4 (string, tem, keymap, name);
 
-  strp = SDATA (string);
+  bool multibyte = STRING_MULTIBYTE (string);
+  ptrdiff_t nchars = 0;
+
+  char *buf = xmalloc (bsize);
+  char *bufp = buf;
+
+  unsigned char *strp = SDATA (string);
   while (strp < SDATA (string) + SBYTES (string))
     {
+      bool m_x_prefix = false;
+      ptrdiff_t idx;
+      unsigned char *start;
+      ptrdiff_t length, length_byte;
+
       if (strp[0] == '\\' && strp[1] == '=')
 	{
 	  /* \= quotes the next character;
 	     thus, to put in \[ without its special meaning, use \=\[.  */
-	  changed = 1;
 	  strp += 2;
-	  if (multibyte)
-	    {
-	      int len;
-
-	      STRING_CHAR_AND_LENGTH (strp, len);
-	      if (len == 1)
-		*bufp = *strp;
-	      else
-		memcpy (bufp, strp, len);
-	      strp += len;
-	      bufp += len;
-	      nchars++;
-	    }
-	  else
-	    *bufp++ = *strp++, nchars++;
+	  changed = true;
 	}
       else if (strp[0] == '\\' && strp[1] == '[')
 	{
-	  ptrdiff_t start_idx;
-	  bool follow_remap = 1;
-
-	  changed = 1;
 	  strp += 2;		/* skip \[ */
 	  start = strp;
-	  start_idx = start - SDATA (string);
+	  ptrdiff_t start_idx = start - SDATA (string);
 
 	  while ((strp - SDATA (string)
 		  < SBYTES (string))
@@ -783,16 +757,12 @@ Otherwise, return a new string.  */)
 	  idx = strp - SDATA (string);
 	  name = Fintern (make_string ((char *) start, length_byte), Qnil);
 
-	do_remap:
 	  tem = Fwhere_is_internal (name, keymap, Qt, Qnil, Qnil);
-
 	  if (VECTORP (tem) && ASIZE (tem) > 1
-	      && EQ (AREF (tem, 0), Qremap) && SYMBOLP (AREF (tem, 1))
-	      && follow_remap)
+	      && EQ (AREF (tem, 0), Qremap) && SYMBOLP (AREF (tem, 1)))
 	    {
 	      name = AREF (tem, 1);
-	      follow_remap = 0;
-	      goto do_remap;
+	      tem = Fwhere_is_internal (name, keymap, Qt, Qnil, Qnil);
 	    }
 
 	  /* Note the Fwhere_is_internal can GC, so we have to take
@@ -802,18 +772,11 @@ Otherwise, return a new string.  */)
 
 	  if (NILP (tem))	/* but not on any keys */
 	    {
-	      ptrdiff_t offset = bufp - buf;
-	      if (STRING_BYTES_BOUND - 4 < bsize)
-		string_overflow ();
-	      buf = xrealloc (buf, bsize += 4);
-	      bufp = buf + offset;
-	      memcpy (bufp, "M-x ", 4);
-	      bufp += 4;
-	      nchars += 4;
 	      if (multibyte)
 		length = multibyte_chars_in_text (start, length_byte);
 	      else
 		length = length_byte;
+	      m_x_prefix = true;
 	      goto subst;
 	    }
 	  else
@@ -826,17 +789,13 @@ Otherwise, return a new string.  */)
 	 \<foo> just sets the keymap used for \[cmd].  */
       else if (strp[0] == '\\' && (strp[1] == '{' || strp[1] == '<'))
 	{
-	  struct buffer *oldbuf;
-	  ptrdiff_t start_idx;
 	  /* This is for computing the SHADOWS arg for describe_map_tree.  */
 	  Lisp_Object active_maps = Fcurrent_active_maps (Qnil, Qnil);
-	  Lisp_Object earlier_maps;
 	  ptrdiff_t count = SPECPDL_INDEX ();
 
-	  changed = 1;
 	  strp += 2;		/* skip \{ or \< */
 	  start = strp;
-	  start_idx = start - SDATA (string);
+	  ptrdiff_t start_idx = start - SDATA (string);
 
 	  while ((strp - SDATA (string) < SBYTES (string))
 		 && *strp != '}' && *strp != '>')
@@ -866,7 +825,7 @@ Otherwise, return a new string.  */)
 	    }
 
 	  /* Now switch to a temp buffer.  */
-	  oldbuf = current_buffer;
+	  struct buffer *oldbuf = current_buffer;
 	  set_buffer_internal (XBUFFER (Vprin1_to_string_buffer));
 	  /* This is for an unusual case where some after-change
 	     function uses 'format' or 'prin1' or something else that
@@ -889,7 +848,8 @@ Otherwise, return a new string.  */)
 	    {
 	      /* Get the list of active keymaps that precede this one.
 		 If this one's not active, get nil.  */
-	      earlier_maps = Fcdr (Fmemq (tem, Freverse (active_maps)));
+	      Lisp_Object earlier_maps = Fcdr (Fmemq (tem,
+						      Freverse (active_maps)));
 	      describe_map_tree (tem, 1, Fnreverse (earlier_maps),
 				 Qnil, 0, 1, 0, 0, 1);
 	    }
@@ -902,35 +862,44 @@ Otherwise, return a new string.  */)
 	  start = SDATA (tem);
 	  length = SCHARS (tem);
 	  length_byte = SBYTES (tem);
-	subst:
-	  {
-	    ptrdiff_t offset = bufp - buf;
-	    if (STRING_BYTES_BOUND - length_byte < bsize)
-	      string_overflow ();
-	    buf = xrealloc (buf, bsize += length_byte);
-	    bufp = buf + offset;
-	    memcpy (bufp, start, length_byte);
-	    bufp += length_byte;
-	    nchars += length;
-	    /* Check STRING again in case gc relocated it.  */
-	    strp = SDATA (string) + idx;
-	  }
+	subst:;
+	  ptrdiff_t stringtail_len = SBYTES (string) - idx;
+	  ptrdiff_t offset = bufp - buf;
+	  ptrdiff_t old_bufroom = bsize - offset;
+	  ptrdiff_t new_bufroom = old_bufroom - 4 * m_x_prefix - length_byte;
+	  if (new_bufroom < stringtail_len)
+	    {
+	      if (INT_SUBTRACT_OVERFLOW (stringtail_len, new_bufroom))
+		string_overflow ();
+	      ptrdiff_t growth = max (bsize, stringtail_len - new_bufroom);
+	      if (STRING_BYTES_BOUND - bsize < growth)
+		string_overflow ();
+	      buf = xrealloc (buf, bsize += growth);
+	      bufp = buf + offset;
+	    }
+	  if (m_x_prefix)
+	    {
+	      memcpy (bufp, "M-x ", 4);
+	      bufp += 4;
+	      nchars += 4;
+	    }
+	  memcpy (bufp, start, length_byte);
+	  bufp += length_byte;
+	  nchars += length;
+	  /* Check STRING again in case gc relocated it.  */
+	  strp = SDATA (string) + idx;
+	  changed = true;
+	  continue;
 	}
-      else if (! multibyte)		/* just copy other chars */
-	*bufp++ = *strp++, nchars++;
-      else
-	{
-	  int len;
 
-	  STRING_CHAR_AND_LENGTH (strp, len);
-	  if (len == 1)
-	    *bufp = *strp;
-	  else
-	    memcpy (bufp, strp, len);
-	  strp += len;
-	  bufp += len;
-	  nchars++;
-	}
+      /* Just copy one char.  */
+      int len = 1;
+      if (multibyte)
+	STRING_CHAR_AND_LENGTH (strp, len);
+      memcpy (bufp, strp, len);
+      strp += len;
+      bufp += len;
+      nchars++;
     }
 
   if (changed)			/* don't bother if nothing substituted */
