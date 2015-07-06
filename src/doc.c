@@ -696,6 +696,10 @@ as the keymap for future \\=\\[COMMAND] substrings.
 \\=\\= quotes the following character and is discarded;
 thus, \\=\\=\\=\\= puts \\=\\= into the output, and \\=\\=\\=\\[ puts \\=\\[ into the output.
 
+Replacement characters that should not be further transformed have the
+text property `escaped'.  For example, when \\=\\=\\=` is replaced by \\=` in
+the output, the replacement character has the text property `escaped'.
+
 Return the original STRING if no substitutions are made.
 Otherwise, return a new string.  */)
   (Lisp_Object string)
@@ -704,7 +708,6 @@ Otherwise, return a new string.  */)
     return Qnil;
   CHECK_STRING (string);
 
-  ptrdiff_t bsize = SBYTES (string);
   bool changed = false;
   Lisp_Object tem = Qnil;
   Lisp_Object name = Qnil;
@@ -721,40 +724,52 @@ Otherwise, return a new string.  */)
   bool multibyte = STRING_MULTIBYTE (string);
   ptrdiff_t nchars = 0;
 
-  char *buf = xmalloc (bsize);
-  char *bufp = buf;
+  ptrdiff_t count = SPECPDL_INDEX ();
+
+  /* Switch to a temp buffer.  */
+  struct buffer *oldbuf = current_buffer;
+  set_buffer_internal (XBUFFER (Vprin1_to_string_buffer));
+  /* This is for an unusual case where some after-change
+     function uses 'format' or 'prin1' or something else that
+     will thrash Vprin1_to_string_buffer we are using.  */
+  specbind (Qinhibit_modification_hooks, Qt);
 
   unsigned char *strp = SDATA (string);
   while (strp < SDATA (string) + SBYTES (string))
     {
-      bool m_x_prefix = false;
-      ptrdiff_t idx;
-      unsigned char *start;
-      ptrdiff_t length, length_byte;
+      ptrdiff_t opoint = PT;
 
       if (strp[0] == '\\' && strp[1] == '=')
 	{
 	  /* \= quotes the next character;
 	     thus, to put in \[ without its special meaning, use \=\[.  */
 	  strp += 2;
+	  int len = 1;
+	  if (multibyte)
+	    STRING_CHAR_AND_LENGTH (strp, len);
+	  insert_1_both ((char *) strp, 1, len, false, false, false);
+	  strp += len;
+	  nchars++;
+	  Fput_text_property (make_number (opoint), make_number (opoint + 1),
+			      Qescaped, Qt, Qnil);
 	  changed = true;
 	}
       else if (strp[0] == '\\' && strp[1] == '[')
 	{
 	  strp += 2;		/* skip \[ */
-	  start = strp;
+	  unsigned char *start = strp;
 	  ptrdiff_t start_idx = start - SDATA (string);
 
 	  while ((strp - SDATA (string)
 		  < SBYTES (string))
 		 && *strp != ']')
 	    strp++;
-	  length_byte = strp - start;
+	  ptrdiff_t length_byte = strp - start;
 
 	  strp++;		/* skip ] */
 
 	  /* Save STRP in IDX.  */
-	  idx = strp - SDATA (string);
+	  ptrdiff_t idx = strp - SDATA (string);
 	  name = Fintern (make_string ((char *) start, length_byte), Qnil);
 
 	  tem = Fwhere_is_internal (name, keymap, Qt, Qnil, Qnil);
@@ -763,27 +778,34 @@ Otherwise, return a new string.  */)
 	    {
 	      name = AREF (tem, 1);
 	      tem = Fwhere_is_internal (name, keymap, Qt, Qnil, Qnil);
+	      /* Fwhere_is_internal can GC, so we have to take
+		 relocation of string contents into account.  */
 	    }
 
-	  /* Note the Fwhere_is_internal can GC, so we have to take
-	     relocation of string contents into account.  */
-	  strp = SDATA (string) + idx;
-	  start = SDATA (string) + start_idx;
-
+	  ptrdiff_t length;
 	  if (NILP (tem))	/* but not on any keys */
 	    {
+	      insert_1_both ("M-x ", 4, 4, false, false, false);
+	      strp = SDATA (string) + start_idx;
 	      if (multibyte)
-		length = multibyte_chars_in_text (start, length_byte);
+		length = multibyte_chars_in_text (strp, length_byte);
 	      else
 		length = length_byte;
-	      m_x_prefix = true;
-	      goto subst;
+	      insert_1_both ((char *) strp, length, length_byte,
+			     false, false, false);
+	      Fput_text_property (make_number (opoint), make_number (PT),
+				  Qescaped, Qt, Qnil);
 	    }
 	  else
-	    {			/* function is on a key */
+	    {
+	      /* FIXME: Fkey_description doesn't properly mark quote
+		 characters that should be escaped.  */
 	      tem = Fkey_description (tem, Qnil);
-	      goto subst_string;
+	      insert_from_string (tem, 0, 0, SCHARS (tem), SBYTES (tem), true);
 	    }
+
+	  strp = SDATA (string) + idx;
+	  changed = true;
 	}
       /* \{foo} is replaced with a summary of the keymap (symbol-value foo).
 	 \<foo> just sets the keymap used for \[cmd].  */
@@ -791,21 +813,20 @@ Otherwise, return a new string.  */)
 	{
 	  /* This is for computing the SHADOWS arg for describe_map_tree.  */
 	  Lisp_Object active_maps = Fcurrent_active_maps (Qnil, Qnil);
-	  ptrdiff_t count = SPECPDL_INDEX ();
 
 	  strp += 2;		/* skip \{ or \< */
-	  start = strp;
+	  unsigned char *start = strp;
 	  ptrdiff_t start_idx = start - SDATA (string);
 
 	  while ((strp - SDATA (string) < SBYTES (string))
 		 && *strp != '}' && *strp != '>')
 	    strp++;
 
-	  length_byte = strp - start;
+	  ptrdiff_t length_byte = strp - start;
 	  strp++;			/* skip } or > */
 
 	  /* Save STRP in IDX.  */
-	  idx = strp - SDATA (string);
+	  ptrdiff_t idx = strp - SDATA (string);
 
 	  /* Get the value of the keymap in TEM, or nil if undefined.
 	     Do this while still in the user's current buffer
@@ -824,21 +845,16 @@ Otherwise, return a new string.  */)
 		}
 	    }
 
-	  /* Now switch to a temp buffer.  */
-	  struct buffer *oldbuf = current_buffer;
-	  set_buffer_internal (XBUFFER (Vprin1_to_string_buffer));
-	  /* This is for an unusual case where some after-change
-	     function uses 'format' or 'prin1' or something else that
-	     will thrash Vprin1_to_string_buffer we are using.  */
-	  specbind (Qinhibit_modification_hooks, Qt);
-
 	  if (NILP (tem))
 	    {
 	      name = Fsymbol_name (name);
 	      insert_string ("\nUses keymap `");
+	      ptrdiff_t opoint = PT;
 	      insert_from_string (name, 0, 0,
 				  SCHARS (name),
 				  SBYTES (name), 1);
+	      Fput_text_property (make_number (opoint), make_number (PT),
+				  Qescaped, Qt, Qnil);
 	      insert_string ("', which is not currently defined.\n");
 	      if (start[-1] == '<') keymap = Qnil;
 	    }
@@ -853,66 +869,35 @@ Otherwise, return a new string.  */)
 	      describe_map_tree (tem, 1, Fnreverse (earlier_maps),
 				 Qnil, 0, 1, 0, 0, 1);
 	    }
-	  tem = Fbuffer_string ();
-	  Ferase_buffer ();
-	  set_buffer_internal (oldbuf);
-	  unbind_to (count, Qnil);
-
-	subst_string:
-	  start = SDATA (tem);
-	  length = SCHARS (tem);
-	  length_byte = SBYTES (tem);
-	subst:;
-	  ptrdiff_t stringtail_len = SBYTES (string) - idx;
-	  ptrdiff_t offset = bufp - buf;
-	  ptrdiff_t old_bufroom = bsize - offset;
-	  ptrdiff_t new_bufroom = old_bufroom - 4 * m_x_prefix - length_byte;
-	  if (new_bufroom < stringtail_len)
-	    {
-	      if (INT_SUBTRACT_OVERFLOW (stringtail_len, new_bufroom))
-		string_overflow ();
-	      ptrdiff_t growth = max (bsize, stringtail_len - new_bufroom);
-	      if (STRING_BYTES_BOUND - bsize < growth)
-		string_overflow ();
-	      buf = xrealloc (buf, bsize += growth);
-	      bufp = buf + offset;
-	    }
-	  if (m_x_prefix)
-	    {
-	      memcpy (bufp, "M-x ", 4);
-	      bufp += 4;
-	      nchars += 4;
-	    }
-	  memcpy (bufp, start, length_byte);
-	  bufp += length_byte;
-	  nchars += length;
-	  /* Check STRING again in case gc relocated it.  */
-	  strp = SDATA (string) + idx;
 	  changed = true;
-	  continue;
 	}
-
-      /* Just copy one char.  */
-      int len = 1;
-      if (multibyte)
-	STRING_CHAR_AND_LENGTH (strp, len);
-      memcpy (bufp, strp, len);
-      strp += len;
-      bufp += len;
-      nchars++;
+      else
+	{
+	  /* Just copy one char.  */
+	  int len = 1;
+	  if (multibyte)
+	    STRING_CHAR_AND_LENGTH (strp, len);
+	  insert_1_both ((char *) strp, 1, len, false, false, false);
+	  strp += len;
+	  nchars++;
+	}
     }
 
   if (changed)			/* don't bother if nothing substituted */
-    tem = make_string_from_bytes (buf, nchars, bufp - buf);
+    tem = Fbuffer_string ();
   else
     tem = string;
-  xfree (buf);
+
+  Ferase_buffer ();
+  set_buffer_internal (oldbuf);
+  unbind_to (count, Qnil);
   RETURN_UNGCPRO (tem);
 }
 
 void
 syms_of_doc (void)
 {
+  DEFSYM (Qescaped, "escaped");
   DEFSYM (Qfunction_documentation, "function-documentation");
 
   DEFVAR_LISP ("internal-doc-file-name", Vdoc_file_name,
