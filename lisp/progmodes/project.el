@@ -59,14 +59,11 @@ roots of any currently open related projects (if they're meant to
 be edited together).  The directory names should be absolute."
   (list (project-root project)))
 
-(defvar project-vc-root-files '(".git" ".hg" ".bzr"))
-
 (defun project-try-vc (dir)
-  (let* ((fun (lambda (dir)
-                (let ((default-directory dir))
-                  (cl-some #'file-exists-p project-vc-root-files))))
-         (root (locate-dominating-file dir fun)))
-    (when root (cons 'vc root))))
+  (let* ((backend (vc-responsible-backend dir))
+         (root (and backend (ignore-errors
+                              (vc-call-backend backend 'root dir)))))
+    (and root (cons 'vc root))))
 
 (cl-defmethod project-root ((project (head vc)))
   (cdr project))
