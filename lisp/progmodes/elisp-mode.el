@@ -584,6 +584,7 @@ It can be quoted, or be inside a quoted form."
 (declare-function xref-make "xref" (description location))
 (declare-function xref-collect-matches "xref" (symbol dir))
 (declare-function xref-collect-references "xref" (symbol dir))
+(declare-function xref--prune-directories "xref" (dirs))
 
 (defun elisp-xref-find (action id)
   (require 'find-func)
@@ -593,9 +594,7 @@ It can be quoted, or be inside a quoted form."
         (when sym
           (elisp--xref-find-definitions sym))))
     (`references
-     (elisp--xref-find-matches id #'xref-collect-references))
-    (`matches
-     (elisp--xref-find-matches id #'xref-collect-matches))
+     (elisp--xref-find-references id))
     (`apropos
      (elisp--xref-find-apropos id))))
 
@@ -654,28 +653,16 @@ It can be quoted, or be inside a quoted form."
              lst))))
       lst)))
 
-(defvar package-user-dir)
+(declare-function project-source-directories "project")
+(declare-function project-current "project")
 
-(defun elisp--xref-find-matches (symbol fun)
-  (let* ((dirs (sort
-                (mapcar
-                 (lambda (dir)
-                   (file-name-as-directory (expand-file-name dir)))
-                 ;; It's one level above a number of `load-path'
-                 ;; elements (one for each installed package).
-                 ;; Save us some process calls.
-                 (cons package-user-dir load-path))
-                #'string<))
-         (ref dirs))
-    ;; Delete subdirectories from the list.
-    (while (cdr ref)
-      (if (string-prefix-p (car ref) (cadr ref))
-          (setcdr ref (cddr ref))
-        (setq ref (cdr ref))))
+(defun elisp--xref-find-references (symbol)
+  (require 'project)
+  (let ((dirs (xref--prune-directories (project-source-directories
+                                        (project-current)))))
     (cl-mapcan
      (lambda (dir)
-       (and (file-exists-p dir)
-            (funcall fun symbol dir)))
+       (xref-collect-references symbol dir))
      dirs)))
 
 (defun elisp--xref-find-apropos (regexp)
@@ -718,6 +705,12 @@ It can be quoted, or be inside a quoted form."
 
 (cl-defmethod xref-location-group ((l xref-elisp-location))
   (xref-elisp-location-file l))
+
+(cl-defmethod project-source-directories (_backend
+                                          &context
+                                          (major-mode (eql emacs-lisp-mode)))
+  (defvar package-user-dir)
+  (cons package-user-dir load-path))
 
 ;;; Elisp Interaction mode
 

@@ -2087,18 +2087,14 @@ for \\[find-tag] (which see)."
 (defun etags-xref-find (action id)
   (pcase action
     (`definitions (etags--xref-find-definitions id))
-    (`references
-     (etags--xref-find-matches id #'xref-collect-references))
-    (`matches
-     (etags--xref-find-matches id #'xref-collect-matches))
+    (`references  (etags--xref-find-references id))
     (`apropos (etags--xref-find-definitions id t))))
 
-(defun etags--xref-find-matches (input fun)
+(defun etags--xref-find-references (input)
   (let ((dirs (if tags-table-list
                   (mapcar #'file-name-directory tags-table-list)
-                ;; If no tags files are loaded, prompt for the dir.
-                (list (read-directory-name "In directory: " nil nil t)))))
-    (cl-mapcan (lambda (dir) (funcall fun input dir)) dirs)))
+                (project-source-directories (project-current)))))
+    (cl-mapcan (lambda (dir) (xref-collect-references input dir)) dirs)))
 
 (defun etags--xref-find-definitions (pattern &optional regexp?)
   ;; This emulates the behaviour of `find-tag-in-order' but instead of
