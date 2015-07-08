@@ -73,13 +73,20 @@ be edited together).  The directory names should be absolute."
 
 (defun project-try-ede (dir)
   (when (featurep 'ede)
-    (cons 'ede (ede-directory-get-open-project dir 'ROOT))))
+    (let ((project-dir
+           (locate-dominating-file
+            dir
+            (lambda (dir)
+              (ede-directory-get-open-project dir 'ROOT)))))
+      (when project-dir
+        (cons 'ede
+              (ede-directory-get-open-project project-dir 'ROOT))))))
 
 (defun project-ask-user (dir)
   (cons 'user (read-directory-name "Project root: " dir nil t)))
 
 (cl-defmethod project-root ((project (head ede)))
-  (ede-project-root (cdr project)))
+  (ede-project-root-directory (cdr project)))
 
 (provide 'project)
 ;;; project.el ends here
