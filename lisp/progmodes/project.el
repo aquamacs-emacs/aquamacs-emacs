@@ -69,7 +69,6 @@ be edited together).  The directory names should be absolute."
   (cdr project))
 
 (declare-function ede-directory-get-open-project "ede")
-(declare-function ede-project-root "ede")
 
 (defun project-try-ede (dir)
   (when (featurep 'ede)
@@ -82,11 +81,14 @@ be edited together).  The directory names should be absolute."
         (cons 'ede
               (ede-directory-get-open-project project-dir 'ROOT))))))
 
+(cl-defmethod project-root ((project (head ede)))
+  (ede-project-root-directory (cdr project)))
+
 (defun project-ask-user (dir)
   (cons 'user (read-directory-name "Project root: " dir nil t)))
 
-(cl-defmethod project-root ((project (head ede)))
-  (ede-project-root-directory (cdr project)))
+(cl-defmethod project-root ((project (head user)))
+  (cdr project))
 
 (provide 'project)
 ;;; project.el ends here
