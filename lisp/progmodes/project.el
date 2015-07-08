@@ -27,9 +27,9 @@
 
 (require 'cl-generic)
 
-(defvar project-functions '(project-try-vc
-                            project-try-ede
-                            project-ask-user)
+(defvar project-find-functions (list #'project-try-vc
+                                     #'project-try-ede
+                                     #'project-ask-user)
   "Special hook to find the project containing a given directory.
 Each functions on this hook is called in turn with one
 argument (the directory) and should return either nil to mean
@@ -39,23 +39,24 @@ that it is not applicable, or a project instance.")
 (defun project-current (&optional dir)
   "Return the project instance in DIR or `default-directory'."
   (unless dir (setq dir default-directory))
-  (run-hook-with-args-until-success 'project-functions dir))
+  (run-hook-with-args-until-success 'project-find-functions dir))
 
 (cl-defgeneric project-root (project)
-  "Return the root directory of the current project.")
+  "Return the root directory of the current project.
+The directory name should be absolute.")
 
 (cl-defgeneric project-source-directories (project)
   "Return the list of source directories.
 Including any where source (or header, etc) files used by the
 current project may be found.  Including those outside of the
-project tree."
+project tree.  The directory names should be absolute."
   (project-directories project))
 
 (cl-defgeneric project-directories (project)
   "Return the list of directories related to the current project.
 It should include the current project root, then possibly the
 roots of any currently open related projects (if they're meant to
-be edited together)."
+be edited together).  The directory names should be absolute."
   (list (project-root project)))
 
 (defvar project-vc-root-files '(".git" ".hg" ".bzr"))
