@@ -60,7 +60,7 @@ be edited together).  The directory names should be absolute."
   (list (project-root project)))
 
 (defun project-try-vc (dir)
-  (let* ((backend (vc-responsible-backend dir))
+  (let* ((backend (ignore-errors (vc-responsible-backend dir)))
          (root (and backend (ignore-errors
                               (vc-call-backend backend 'root dir)))))
     (and root (cons 'vc root))))
