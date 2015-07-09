@@ -42,7 +42,7 @@ that it is not applicable, or a project instance.")
 The directories in which we can look for the declarations or
 other references to the symbols used in the current buffer.
 Depending on the language, it should include the headers search
-path, load path, class path, or so on.
+path, load path, class path, and so on.
 
 The directory names should be absolute.  Normally set by the
 major mode.  Used in the default implementation of
@@ -61,8 +61,8 @@ The directory name should be absolute.")
 (cl-defgeneric project-search-path (project)
   "Return the list of source directories.
 Including any where source (or header, etc) files used by the
-current project may be found.  Including those outside of the
-project tree.  The directory names should be absolute.
+current project may be found, inside or outside of the project
+tree.  The directory names should be absolute.
 
 A specialized implementation should use the value
 `project-search-path-function', or, better yet, call and combine
@@ -71,6 +71,10 @@ major modes used in the project.  Alternatively, it can return a
 user-configurable value."
   (project--prune-directories
    (nconc (funcall project-search-path-function)
+          ;; Include these, because we don't know any better.
+          ;; But a specialized implementation may include only some of
+          ;; the project's subdirectories, if there are no source
+          ;; files at the top level.
           (project-directories project))))
 
 (cl-defgeneric project-directories (project)

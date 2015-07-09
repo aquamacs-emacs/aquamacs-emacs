@@ -666,7 +666,11 @@ to search in."
   (interactive (list (xref--read-identifier "Find regexp: ")))
   (let* ((dirs (if current-prefix-arg
                    (list (read-directory-name "In directory: "))
-                 (project-search-path (project-current))))
+                 (let ((proj (project-current)))
+                   (project--prune-directories
+                    (nconc
+                     (project-directories proj)
+                     (project-search-path proj))))))
          (xref-find-function
           (lambda (_kind regexp)
             (cl-mapcan
