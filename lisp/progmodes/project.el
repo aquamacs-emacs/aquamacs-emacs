@@ -28,7 +28,6 @@
 (require 'cl-generic)
 
 (defvar project-find-functions (list #'project-try-vc
-                                     #'project-try-ede
                                      #'project-ask-user)
   "Special hook to find the project containing a given directory.
 Each functions on this hook is called in turn with one
@@ -67,22 +66,6 @@ be edited together).  The directory names should be absolute."
 
 (cl-defmethod project-root ((project (head vc)))
   (cdr project))
-
-(declare-function ede-directory-get-open-project "ede")
-
-(defun project-try-ede (dir)
-  (when (featurep 'ede)
-    (let ((project-dir
-           (locate-dominating-file
-            dir
-            (lambda (dir)
-              (ede-directory-get-open-project dir 'ROOT)))))
-      (when project-dir
-        (cons 'ede
-              (ede-directory-get-open-project project-dir 'ROOT))))))
-
-(cl-defmethod project-root ((project (head ede)))
-  (ede-project-root-directory (cdr project)))
 
 (defun project-ask-user (dir)
   (cons 'user (read-directory-name "Project root: " dir nil t)))
