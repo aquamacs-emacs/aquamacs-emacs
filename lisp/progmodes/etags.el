@@ -2090,11 +2090,12 @@ for \\[find-tag] (which see)."
     (`references  (etags--xref-find-references id))
     (`apropos (etags--xref-find-definitions id t))))
 
-(defun etags--xref-find-references (input)
-  (let ((dirs (if tags-table-list
-                  (mapcar #'file-name-directory tags-table-list)
-                (project-source-directories (project-current)))))
-    (cl-mapcan (lambda (dir) (xref-collect-references input dir)) dirs)))
+(defun etags--xref-find-references (symbol)
+  ;; TODO: Merge together with the Elisp impl.
+  (cl-mapcan
+   (lambda (dir)
+     (xref-collect-references symbol dir))
+   (project-search-path (project-current))))
 
 (defun etags--xref-find-definitions (pattern &optional regexp?)
   ;; This emulates the behaviour of `find-tag-in-order' but instead of
@@ -2149,6 +2150,9 @@ for \\[find-tag] (which see)."
 (cl-defmethod xref-location-line ((l xref-etags-location))
   (with-slots (tag-info) l
     (nth 1 tag-info)))
+
+(defun etags-search-path ()
+  (mapcar #'file-name-directory tags-table-list))
 
 
 (provide 'etags)

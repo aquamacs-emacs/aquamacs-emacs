@@ -21,7 +21,7 @@
 
 ;; This file contains generic infrastructure for dealing with
 ;; projects, and a number of public functions: finding the current
-;; root, source directories, related directories, etc.
+;; root, related project directories, search path, etc.
 
 ;;; Code:
 
@@ -34,6 +34,20 @@ Each functions on this hook is called in turn with one
 argument (the directory) and should return either nil to mean
 that it is not applicable, or a project instance.")
 
+(declare-function etags-search-path "etags" ())
+
+(defvar project-search-path-function #'etags-search-path
+  "Function that returns a list of source directories.
+
+The directories in which we can look for the declarations or
+other references to the symbols used in the current buffer.
+Depending on the language, it should include the headers search
+path, load path, class path, or so on.
+
+The directory names should be absolute.  Normally set by the
+major mode.  Used in the default implementation of
+`project-search-path'.")
+
 ;;;###autoload
 (defun project-current (&optional dir)
   "Return the project instance in DIR or `default-directory'."
@@ -44,18 +58,26 @@ that it is not applicable, or a project instance.")
   "Return the root directory of the current project.
 The directory name should be absolute.")
 
-(cl-defgeneric project-source-directories (project)
+(cl-defgeneric project-search-path (project)
   "Return the list of source directories.
 Including any where source (or header, etc) files used by the
 current project may be found.  Including those outside of the
-project tree.  The directory names should be absolute."
-  (project-directories project))
+project tree.  The directory names should be absolute.
+
+A specialized implementation should use the value
+`project-search-path-function', or, better yet, call and combine
+the results from the functions that this value is set to by all
+major modes used in the project.  Alternatively, it can return a
+user-configurable value."
+  (project--prune-directories
+   (nconc (funcall project-search-path-function)
+          (project-directories project))))
 
 (cl-defgeneric project-directories (project)
   "Return the list of directories related to the current project.
-It should include the current project root, then possibly the
-roots of any currently open related projects (if they're meant to
-be edited together).  The directory names should be absolute."
+It should include the current project root, as well as the roots
+of any currently open related projects, if they're meant to be
+edited together.  The directory names should be absolute."
   (list (project-root project)))
 
 (defun project-try-vc (dir)
@@ -72,6 +94,22 @@ be edited together).  The directory names should be absolute."
 
 (cl-defmethod project-root ((project (head user)))
   (cdr project))
+
+(defun project--prune-directories (dirs)
+  "Returns a copy of DIRS sorted, without subdirectories or non-existing ones."
+  (let* ((dirs (sort
+                (mapcar
+                 (lambda (dir)
+                   (file-name-as-directory (expand-file-name dir)))
+                 dirs)
+                #'string<))
+         (ref dirs))
+    ;; Delete subdirectories from the list.
+    (while (cdr ref)
+      (if (string-prefix-p (car ref) (cadr ref))
+          (setcdr ref (cddr ref))
+        (setq ref (cdr ref))))
+    (cl-delete-if-not #'file-exists-p dirs)))
 
 (provide 'project)
 ;;; project.el ends here

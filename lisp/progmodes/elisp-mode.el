@@ -229,6 +229,7 @@ Blank lines separate paragraphs.  Semicolons start comments.
   :group 'lisp
   (defvar xref-find-function)
   (defvar xref-identifier-completion-table-function)
+  (defvar project-search-path-function)
   (lisp-mode-variables nil nil 'elisp)
   (add-hook 'after-load-functions #'elisp--font-lock-flush-elisp-buffers)
   (setq-local electric-pair-text-pairs
@@ -240,6 +241,7 @@ Blank lines separate paragraphs.  Semicolons start comments.
   (setq-local xref-find-function #'elisp-xref-find)
   (setq-local xref-identifier-completion-table-function
               #'elisp--xref-identifier-completion-table)
+  (setq-local project-search-path-function #'elisp-search-path)
   (add-hook 'completion-at-point-functions
             #'elisp-completion-at-point nil 'local))
 
@@ -584,7 +586,6 @@ It can be quoted, or be inside a quoted form."
 (declare-function xref-make "xref" (description location))
 (declare-function xref-collect-matches "xref" (symbol dir))
 (declare-function xref-collect-references "xref" (symbol dir))
-(declare-function xref--prune-directories "xref" (dirs))
 
 (defun elisp-xref-find (action id)
   (require 'find-func)
@@ -653,17 +654,14 @@ It can be quoted, or be inside a quoted form."
              lst))))
       lst)))
 
-(declare-function project-source-directories "project")
+(declare-function project-search-path "project")
 (declare-function project-current "project")
 
 (defun elisp--xref-find-references (symbol)
-  (require 'project)
-  (let ((dirs (xref--prune-directories (project-source-directories
-                                        (project-current)))))
-    (cl-mapcan
-     (lambda (dir)
-       (xref-collect-references symbol dir))
-     dirs)))
+  (cl-mapcan
+   (lambda (dir)
+     (xref-collect-references symbol dir))
+   (project-search-path (project-current))))
 
 (defun elisp--xref-find-apropos (regexp)
   (apply #'nconc
@@ -706,9 +704,7 @@ It can be quoted, or be inside a quoted form."
 (cl-defmethod xref-location-group ((l xref-elisp-location))
   (xref-elisp-location-file l))
 
-(cl-defmethod project-source-directories (_backend
-                                          &context
-                                          (major-mode (eql emacs-lisp-mode)))
+(defun elisp-search-path ()
   (defvar package-user-dir)
   (cons package-user-dir load-path))
 

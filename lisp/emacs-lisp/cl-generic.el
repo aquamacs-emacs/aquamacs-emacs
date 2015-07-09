@@ -936,7 +936,6 @@ Can only be used from within the lexical body of a primary or around method."
 
 (cl--generic-prefill-dispatchers 0 (eql nil))
 (cl--generic-prefill-dispatchers window-system (eql nil))
-(cl--generic-prefill-dispatchers major-mode (eql emacs-lisp-mode))
 
 ;;; Support for cl-defstructs specializers.
 

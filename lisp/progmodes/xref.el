@@ -54,6 +54,7 @@
 (require 'eieio)
 (require 'ring)
 (require 'pcase)
+(require 'project)
 
 (defgroup xref nil "Cross-referencing commands"
   :group 'tools)
@@ -665,11 +666,7 @@ to search in."
   (interactive (list (xref--read-identifier "Find regexp: ")))
   (let* ((dirs (if current-prefix-arg
                    (list (read-directory-name "In directory: "))
-                 (let ((proj (project-current)))
-                   (xref--prune-directories
-                    (nconc
-                     (project-directories proj)
-                     (project-source-directories proj))))))
+                 (project-search-path (project-current))))
          (xref-find-function
           (lambda (_kind regexp)
             (cl-mapcan
@@ -817,23 +814,6 @@ tools are used, and when."
                      (xref-make-file-location file line
                                               (current-column))))))))
 
-(defun xref--prune-directories (dirs)
-  "Returns a copy of DIRS sorted, without subdirectories or non-existing ones."
-  (let* ((dirs (sort
-                (mapcar
-                 (lambda (dir)
-                   (file-name-as-directory (expand-file-name dir)))
-                 dirs)
-                #'string<))
-         (ref dirs))
-    ;; Delete subdirectories from the list.
-    (while (cdr ref)
-      (if (string-prefix-p (car ref) (cadr ref))
-          (setcdr ref (cddr ref))
-        (setq ref (cdr ref))))
-    (cl-delete-if-not #'file-exists-p dirs)))
-
-
 (provide 'xref)
 
 ;;; xref.el ends here
