@@ -26,10 +26,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "commands.h"
 #include "window.h"
 
-/* Last buffer for which undo information was recorded.  */
-/* BEWARE: This is not traced by the GC, so never dereference it!  */
-static struct buffer *last_undo_buffer;
-
 /* Position of point last time we inserted a boundary.  */
 static struct buffer *last_boundary_buffer;
 static ptrdiff_t last_boundary_position;
@@ -58,16 +54,6 @@ record_point (ptrdiff_t pt)
   /* Allocate a cons cell to be the undo boundary after this command.  */
   if (NILP (pending_boundary))
     pending_boundary = Fcons (Qnil, Qnil);
-
-  if ((current_buffer != last_undo_buffer)
-      /* Don't call Fundo_boundary for the first change.  Otherwise we
-	 risk overwriting last_boundary_position in Fundo_boundary with
-	 PT of the current buffer and as a consequence not insert an
-	 undo boundary because last_boundary_position will equal pt in
-	 the test at the end of the present function (Bug#731).  */
-      && (MODIFF > SAVE_MODIFF))
-    Fundo_boundary ();
-  last_undo_buffer = current_buffer;
 
   at_boundary = ! CONSP (BVAR (current_buffer, undo_list))
                 || NILP (XCAR (BVAR (current_buffer, undo_list)));
@@ -138,10 +124,6 @@ record_marker_adjustments (ptrdiff_t from, ptrdiff_t to)
   /* Allocate a cons cell to be the undo boundary after this command.  */
   if (NILP (pending_boundary))
     pending_boundary = Fcons (Qnil, Qnil);
-
-  if (current_buffer != last_undo_buffer)
-    Fundo_boundary ();
-  last_undo_buffer = current_buffer;
 
   for (m = BUF_MARKERS (current_buffer); m; m = m->next)
     {
@@ -228,10 +210,6 @@ record_first_change (void)
   if (EQ (BVAR (current_buffer, undo_list), Qt))
     return;
 
-  if (current_buffer != last_undo_buffer)
-    Fundo_boundary ();
-  last_undo_buffer = current_buffer;
-
   if (base_buffer->base_buffer)
     base_buffer = base_buffer->base_buffer;
 
@@ -259,15 +237,8 @@ record_property_change (ptrdiff_t beg, ptrdiff_t length,
   if (NILP (pending_boundary))
     pending_boundary = Fcons (Qnil, Qnil);
 
-  if (buf != last_undo_buffer)
-    boundary = true;
-  last_undo_buffer = buf;
-
   /* Switch temporarily to the buffer that was changed.  */
   current_buffer = buf;
-
-  if (boundary)
-    Fundo_boundary ();
 
   if (MODIFF <= SAVE_MODIFF)
     record_first_change ();
@@ -383,7 +354,6 @@ truncate_undo_list (struct buffer *b)
       && !NILP (Vundo_outer_limit_function))
     {
       Lisp_Object tem;
-      struct buffer *temp = last_undo_buffer;
 
       /* Normally the function this calls is undo-outer-limit-truncate.  */
       tem = call1 (Vundo_outer_limit_function, make_number (size_so_far));
@@ -394,10 +364,6 @@ truncate_undo_list (struct buffer *b)
 	  unbind_to (count, Qnil);
 	  return;
 	}
-      /* That function probably used the minibuffer, and if so, that
-	 changed last_undo_buffer.  Change it back so that we don't
-	 force next change to make an undo boundary here.  */
-      last_undo_buffer = temp;
     }
 
   if (CONSP (next))
@@ -462,7 +428,6 @@ syms_of_undo (void)
   pending_boundary = Qnil;
   staticpro (&pending_boundary);
 
-  last_undo_buffer = NULL;
   last_boundary_buffer = NULL;
 
   defsubr (&Sundo_boundary);
