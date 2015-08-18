@@ -282,6 +282,43 @@ but another undo command will undo to the previous boundary.  */)
   return Qnil;
 }
 
+DEFUN ("undo-size", Fundo_size, Sundo_size, 0, 0, 0,
+       doc: /* Return the size of `buffer-undo-list'.
+Returns nil if `buffer-undo-list' is t, that is there is no undo list.
+Otherwise, returns the size of `buffer-undo-list' in bytes.*/)
+     (void)
+{
+  // we do not have an undo_list anyway
+  if (EQ (BVAR (current_buffer, undo_list), Qt))
+    return Qnil;
+
+  Lisp_Object prev, next;
+  EMACS_INT size_so_far = 0;
+
+  prev = Qnil;
+  next = BVAR (current_buffer, undo_list);
+
+  while(CONSP (next))
+    {
+      Lisp_Object elt;
+      elt = XCAR (next);
+
+      size_so_far += sizeof (struct Lisp_Cons);
+      if (CONSP (elt))
+        {
+          if (STRINGP (XCAR (elt)))
+            size_so_far += (sizeof (struct Lisp_String) - 1
+                            + SCHARS (XCAR (elt)));
+        }
+
+      // and advance
+      prev = next;
+      next = XCDR (next);
+    }
+
+  return make_number (size_so_far);
+ }
+
 /* At garbage collection time, make an undo list shorter at the end,
    returning the truncated list.  How this is done depends on the
    variables undo-limit, undo-strong-limit and undo-outer-limit.
@@ -430,6 +467,7 @@ syms_of_undo (void)
 
   last_boundary_buffer = NULL;
 
+  defsubr (&Sundo_size);
   defsubr (&Sundo_boundary);
 
   DEFVAR_INT ("undo-limit", undo_limit,
