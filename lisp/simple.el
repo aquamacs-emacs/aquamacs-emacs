@@ -2754,6 +2754,60 @@ with < or <= based on USE-<."
 	     '(0 . 0)))
     '(0 . 0)))
 
+;; Default undo-boundary addition
+(defun undo-has-boundary-p ()
+  "Returns t if `buffer-undo-list' contains a boundary."
+  (when (member nil buffer-undo-list)
+      t))
+
+(defun undo-ensure-boundary ()
+  "Add an `undo-boundary' if `buffer-undo-list' is long.
+
+Return t if an undo boundary has been added.
+
+Normally, Emacs will only garbage collect data from
+`buffer-undo-list' when this list is longer than `undo-limit'. It
+then collects data from after the first `undo-boundary' after
+`undo-limit'. If there are no boundaries in the list,
+`buffer-undo-list' will grow until it reaches
+`undo-outer-limit' (by default a much larger value than
+`undo-limit'), when it will discard the data anyway. In this
+case, however, it is treated as an exceptional case, and the a
+warning is signalled.
+
+This function add an `undo-boundary' to `buffer-undo-list' if
+there is no other `undo-boundary', and `buffer-undo-list' is
+longer than `undo-limit'. It provides a useful default mechanism
+for adding an `undo-boundary' which retains data where possible,
+without signalling warnings to the user."
+  (unless (or
+           buffer-undo-list
+           (undo-has-boundary-p)
+           (< (undo-size)
+              undo-limit))
+    (undo-boundary)
+    t))
+
+(defun undo-auto-boundary ()
+  (mapc
+   (lambda (b)
+     (with-current-buffer b
+       (when (undo-ensure-boundary)
+         (message "undo-auto-boundary added %s" b))))
+   (buffer-list)))
+
+(defvar undo-auto-boundary-timer nil)
+
+(defun undo-auto-boundary-timer ()
+  (message "auto-boundary...")
+  (undo-auto-boundary)
+  (undo-auto-boundary-install-timer)
+  (message "auto-boundary...done"))
+
+(defun undo-auto-boundary-install-timer ()
+  (setq undo-auto-boundary-timer
+        (run-at-time 10 nil #'undo-auto-boundary-timer)))
+
 (defcustom undo-ask-before-discard nil
   "If non-nil ask about discarding undo info for the current command.
 Normally, Emacs discards the undo info for the current command if
