@@ -282,18 +282,26 @@ but another undo command will undo to the previous boundary.  */)
   return Qnil;
 }
 
-DEFUN ("undo-size", Fundo_size, Sundo_size, 0, 0, 0,
+DEFUN ("undo-size", Fundo_size, Sundo_size, 0, 1, 0,
        doc: /* Return the size of `buffer-undo-list'.
-Returns nil if `buffer-undo-list' is t, that is there is no undo list.
+
+If n count till the end of the nth boundary, or the whole list iff n
+is zero.
+
+Returns nil if `buffer-undo-list' is t; that is there is no undo list.
 Otherwise, returns the size of `buffer-undo-list' in bytes.*/)
-     (void)
+     (Lisp_Object n)
 {
   // we do not have an undo_list anyway
   if (EQ (BVAR (current_buffer, undo_list), Qt))
     return Qnil;
 
   Lisp_Object prev, next;
-  EMACS_INT size_so_far = 0;
+  EMACS_INT size_so_far, boundary_so_far, num;
+  if(n){
+    CHECK_NUMBER(n);
+    num = XINT(n);
+  }
 
   prev = Qnil;
   next = BVAR (current_buffer, undo_list);
@@ -306,6 +314,14 @@ Otherwise, returns the size of `buffer-undo-list' in bytes.*/)
       size_so_far += sizeof (struct Lisp_Cons);
       if (CONSP (elt))
         {
+          // we have a boundary, so check we do not have too many
+          if (XCAR (elt) == Qnil)
+            {
+              boundary_so_far = boundary_so_far + 1;
+              if(boundary_so_far >= num)
+                break;
+            }
+
           if (STRINGP (XCAR (elt)))
             size_so_far += (sizeof (struct Lisp_String) - 1
                             + SCHARS (XCAR (elt)));
