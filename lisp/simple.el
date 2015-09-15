@@ -2215,19 +2215,6 @@ A redo record for ordinary undo maps to the following (earlier) undo.")
 (defvar undo-no-redo nil
   "If t, `undo' doesn't go through redo entries.")
 
-(defvar-local undo-buffer-undoably-changed nil
-  "Non-nil means that that the buffer has had a recent undo-able change.
-
-Recent means since the value of this variable was last set explicitly to nil,
-usually as part of the undo machinary.")
-
-(defvar undo-first-undoable-change-hook nil
-  "Normal hook run when a buffer has its first recent undo-able change.
-
-This hook will be run with `current-buffer' as the buffer that
-has changed. Recent means since the value of `undo-buffer-undoably-changed'
-was last set of nil.")
-
 (defvar pending-undo-list nil
   "Within a run of consecutive undo commands, list remaining to be undone.
 If t, we undid all the way to the end of it.")

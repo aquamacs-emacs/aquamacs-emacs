@@ -474,6 +474,8 @@ void
 syms_of_undo (void)
 {
   DEFSYM (Qinhibit_read_only, "inhibit-read-only");
+  DEFSYM (Qundo_first_undoable_change_hook, "undo-first-undoable-change-hook");
+  DEFSYM (Qundo_buffer_undoably_changed, "undo-buffer-undoably-changed");
 
   /* Marker for function call undo list elements.  */
   DEFSYM (Qapply, "apply");
@@ -539,4 +541,22 @@ so it must make sure not to do a lot of consing.  */);
   DEFVAR_BOOL ("undo-inhibit-record-point", undo_inhibit_record_point,
 	       doc: /* Non-nil means do not record `point' in `buffer-undo-list'.  */);
   undo_inhibit_record_point = false;
+
+  DEFVAR_LISP ("undo-first-undoable-change-hook",
+               Vundo_first_undoable_change_hook,
+               doc: /* Normal hook run when a buffer has its first recent undo-able change.
+
+This hook will be run with `current-buffer' as the buffer that
+has changed. Recent means since the value of `undo-buffer-undoably-changed'
+was last set of nil. */);
+  Vundo_first_undoable_change_hook = Qnil;
+
+  DEFVAR_LISP ("undo-buffer-undoably-changed",
+               Vundo_buffer_undoably_changed,
+               doc: /* Non-nil means that that the buffer has had a recent undo-able change.
+
+Recent means since the value of this variable was last set explicitly to nil,
+usually as part of the undo machinary.*/);
+
+  Fmake_variable_buffer_local (Qundo_buffer_undoably_changed);
 }
