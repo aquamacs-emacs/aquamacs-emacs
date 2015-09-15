@@ -308,16 +308,17 @@ Returns nil if `buffer-undo-list' is t; that is there is no undo list.
 Otherwise, returns the size of `buffer-undo-list' in bytes.*/)
      (Lisp_Object n)
 {
-  // we do not have an undo_list anyway
+  // We do not have an undo_list anyway.
   if (EQ (BVAR (current_buffer, undo_list), Qt))
     return Qnil;
 
   Lisp_Object prev, next;
   EMACS_INT size_so_far, boundary_so_far, num;
-  if(n){
-    CHECK_NUMBER(n);
-    num = XINT(n);
-  }
+  if( n )
+    {
+      CHECK_NUMBER(n);
+      num = XINT(n);
+    }
 
   prev = Qnil;
   next = BVAR (current_buffer, undo_list);
@@ -330,8 +331,8 @@ Otherwise, returns the size of `buffer-undo-list' in bytes.*/)
       size_so_far += sizeof (struct Lisp_Cons);
       if (CONSP (elt))
         {
-          // we have a boundary, so check we do not have too many
-          if (XCAR (elt) == Qnil)
+          // We have a boundary, so check we do not have too many.
+          if (NILP (elt))
             {
               boundary_so_far = boundary_so_far + 1;
               if(boundary_so_far >= num)
@@ -562,9 +563,9 @@ so it must make sure not to do a lot of consing.  */);
                Vundo_first_undoable_change_hook,
                doc: /* Normal hook run when a buffer has its first recent undo-able change.
 
-This hook will be run with `current-buffer' as the buffer that
-has changed. Recent means since the value of `undo-buffer-undoably-changed'
-was last set of nil. */);
+This hook will be run with `current-buffer' as the buffer that has
+changed.  Recent means since the value of
+`undo-buffer-undoably-changed' was last set to nil. */);
   Vundo_first_undoable_change_hook = Qnil;
 
   DEFVAR_LISP ("undo-buffer-undoably-changed",
