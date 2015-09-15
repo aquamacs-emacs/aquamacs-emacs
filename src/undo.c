@@ -314,7 +314,7 @@ Otherwise, returns the size of `buffer-undo-list' in bytes.*/)
 
   Lisp_Object prev, next;
   EMACS_INT size_so_far, boundary_so_far, num;
-  if( n )
+  if( ! NILP( n ) )
     {
       CHECK_NUMBER(n);
       num = XINT(n);
