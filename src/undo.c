@@ -55,6 +55,11 @@ record_point (ptrdiff_t pt)
   if (NILP (pending_boundary))
     pending_boundary = Fcons (Qnil, Qnil);
 
+  if(NILP (Vundo_buffer_undoably_changed)){
+    Fset (Qundo_buffer_undoably_changed,Qt);
+    safe_run_hooks (Qundo_first_undoable_change_hook);
+  }
+
   at_boundary = ! CONSP (BVAR (current_buffer, undo_list))
                 || NILP (XCAR (BVAR (current_buffer, undo_list)));
 
@@ -124,6 +129,12 @@ record_marker_adjustments (ptrdiff_t from, ptrdiff_t to)
   /* Allocate a cons cell to be the undo boundary after this command.  */
   if (NILP (pending_boundary))
     pending_boundary = Fcons (Qnil, Qnil);
+
+
+  if(NILP (Vundo_buffer_undoably_changed)){
+    Fset (Qundo_buffer_undoably_changed,Qt);
+    safe_run_hooks (Qundo_first_undoable_change_hook);
+  }
 
   for (m = BUF_MARKERS (current_buffer); m; m = m->next)
     {
@@ -236,6 +247,11 @@ record_property_change (ptrdiff_t beg, ptrdiff_t length,
   /* Allocate a cons cell to be the undo boundary after this command.  */
   if (NILP (pending_boundary))
     pending_boundary = Fcons (Qnil, Qnil);
+
+  if(NILP (Vundo_buffer_undoably_changed)){
+    Fset (Qundo_buffer_undoably_changed,Qt);
+    safe_run_hooks (Qundo_first_undoable_change_hook);
+  }
 
   /* Switch temporarily to the buffer that was changed.  */
   current_buffer = buf;
