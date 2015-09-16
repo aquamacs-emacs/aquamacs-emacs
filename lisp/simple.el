@@ -2805,13 +2805,14 @@ without signalling warnings to the user."
 See also `undo-ensure-boundary'."
   (mapc
    (lambda (b)
-     (with-current-buffer b
-       (message "undo-auto-boundary checking %s" b)
-       (setq undo-buffer-undoably-changed nil)
-       (when (undo-ensure-boundary)
-         (message "undo-auto-boundary added %s" b))))
-   undo-recently-changed-buffers)
-  (setq undo-recently-changed-buffers nil))
+     (when (buffer-live-p b)
+       (with-current-buffer b
+         (message "undo-auto-boundary checking %s" b)
+         (setq undo-buffer-undoably-changed nil)
+         (when (undo-ensure-boundary)
+           (message "undo-auto-boundary added %s" b)))))
+   undo-undoably-changed-buffers)
+  (setq undo-undoably-changed-buffers nil))
 
 (defvar undo-auto-current-boundary-timer nil
   "Current timer which will run `undo-auto-boundary-timer' or nil.")
@@ -2823,9 +2824,9 @@ See also `undo-ensure-boundary'."
 
 (defun undo-auto-boundary-ensure-timer ()
   "Ensure that the `undo-auto-boundary-timer is set."
-  (unless undo-auto-boundary-timer
+  (unless undo-auto-current-boundary-timer
     (setq undo-auto-current-boundary-timer
-          (run-at-time 10 nil #'undo-auto-boundary-timer))))
+          (run-at-time 10 nil 'undo-auto-boundary-timer))))
 
 (defvar undo-undoably-changed-buffers nil
   "List of buffers that have changed recently.
