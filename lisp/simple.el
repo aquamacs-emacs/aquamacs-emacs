@@ -2766,9 +2766,11 @@ with < or <= based on USE-<."
 ;; removed from a buffer with any rapidity and no undo-boundary. In
 ;; this case, the `undo-outer-limit' machinary will operate; this is
 ;; considered to be exceptional the user is warned.
-(defun undo-has-boundary-p ()
+(defun undo-has-two-boundary-p ()
   "Returns t if `buffer-undo-list' contains a boundary."
-  (when (member nil buffer-undo-list)
+  (when
+      (member nil
+              (member nil buffer-undo-list))
     t))
 
 (defun undo-ensure-boundary ()
@@ -2791,11 +2793,11 @@ there is no other `undo-boundary', and `buffer-undo-list' is
 longer than `undo-limit'. It provides a useful default mechanism
 for adding an `undo-boundary' which retains data where possible,
 without signalling warnings to the user."
-  (unless (or
-           buffer-undo-list
-           (undo-has-boundary-p)
-           (< (undo-size)
-              undo-limit))
+  (when (and
+         buffer-undo-list
+         (not (undo-has-two-boundary-p))
+         (> (undo-size)
+            undo-limit))
     (undo-boundary)
     t))
 
@@ -2810,7 +2812,7 @@ See also `undo-ensure-boundary'."
          (message "undo-auto-boundary checking %s" b)
          (setq undo-buffer-undoably-changed nil)
          (when (undo-ensure-boundary)
-           (message "undo-auto-boundary added %s" b)))))
+           (message "undo-auto-boundary boundary added %s" b)))))
    undo-undoably-changed-buffers)
   (setq undo-undoably-changed-buffers nil))
 
