@@ -37,6 +37,25 @@ static ptrdiff_t last_boundary_position;
    an undo-boundary.  */
 static Lisp_Object pending_boundary;
 
+
+/*
+  Run the first-undo-hook if needed
+ */
+void
+run_first_undo_hook()
+{
+  Lisp_Object list;
+
+  list = BVAR(current_buffer, undo_list);
+
+  if (CONSP (list) && NILP (XCAR (list)))
+    {
+      safe_run_hooks(Qundo_first_undoable_change_hook);
+    }
+}
+
+
+
 /* Record point as it was at beginning of this command (if necessary)
    and prepare the undo info for recording a change.
    PT is the position of point that will naturally occur as a result of the
@@ -55,10 +74,7 @@ record_point (ptrdiff_t pt)
   if (NILP (pending_boundary))
     pending_boundary = Fcons (Qnil, Qnil);
 
-  if(NILP (Vundo_buffer_undoably_changed)){
-    Fset (Qundo_buffer_undoably_changed,Qt);
-    safe_run_hooks (Qundo_first_undoable_change_hook);
-  }
+  run_first_undo_hook(current_buffer);
 
   at_boundary = ! CONSP (BVAR (current_buffer, undo_list))
                 || NILP (XCAR (BVAR (current_buffer, undo_list)));
@@ -131,10 +147,7 @@ record_marker_adjustments (ptrdiff_t from, ptrdiff_t to)
     pending_boundary = Fcons (Qnil, Qnil);
 
 
-  if(NILP (Vundo_buffer_undoably_changed)){
-    Fset (Qundo_buffer_undoably_changed,Qt);
-    safe_run_hooks (Qundo_first_undoable_change_hook);
-  }
+  run_first_undo_hook(current_buffer);
 
   for (m = BUF_MARKERS (current_buffer); m; m = m->next)
     {
@@ -248,13 +261,10 @@ record_property_change (ptrdiff_t beg, ptrdiff_t length,
   if (NILP (pending_boundary))
     pending_boundary = Fcons (Qnil, Qnil);
 
-  if(NILP (Vundo_buffer_undoably_changed)){
-    Fset (Qundo_buffer_undoably_changed,Qt);
-    safe_run_hooks (Qundo_first_undoable_change_hook);
-  }
-
   /* Switch temporarily to the buffer that was changed.  */
   current_buffer = buf;
+
+  run_first_undo_hook(buf);
 
   if (MODIFF <= SAVE_MODIFF)
     record_first_change ();
@@ -267,6 +277,7 @@ record_property_change (ptrdiff_t beg, ptrdiff_t length,
 
   current_buffer = obuf;
 }
+
 
 DEFUN ("undo-boundary", Fundo_boundary, Sundo_boundary, 0, 0, 0,
        doc: /* Mark a boundary between units of undo.
@@ -492,7 +503,6 @@ syms_of_undo (void)
 {
   DEFSYM (Qinhibit_read_only, "inhibit-read-only");
   DEFSYM (Qundo_first_undoable_change_hook, "undo-first-undoable-change-hook");
-  DEFSYM (Qundo_buffer_undoably_changed, "undo-buffer-undoably-changed");
 
   /* Marker for function call undo list elements.  */
   DEFSYM (Qapply, "apply");
@@ -564,16 +574,6 @@ so it must make sure not to do a lot of consing.  */);
                doc: /* Normal hook run when a buffer has its first recent undo-able change.
 
 This hook will be run with `current-buffer' as the buffer that has
-changed.  Recent means since the value of
-`undo-buffer-undoably-changed' was last set to nil. */);
+changed.  Recent means since the last boundary. */);
   Vundo_first_undoable_change_hook = Qnil;
-
-  DEFVAR_LISP ("undo-buffer-undoably-changed",
-               Vundo_buffer_undoably_changed,
-               doc: /* Non-nil means that that the buffer has had a recent undo-able change.
-
-Recent means since the value of this variable was last set explicitly to nil,
-usually as part of the undo machinary.*/);
-
-  Fmake_variable_buffer_local (Qundo_buffer_undoably_changed);
 }

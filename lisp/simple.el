@@ -2766,12 +2766,25 @@ with < or <= based on USE-<."
 ;; removed from a buffer with any rapidity and no undo-boundary. In
 ;; this case, the `undo-outer-limit' machinary will operate; this is
 ;; considered to be exceptional the user is warned.
-(defun undo-has-two-boundary-p ()
-  "Returns t if `buffer-undo-list' contains a boundary."
-  (when
-      (member nil
-              (member nil buffer-undo-list))
-    t))
+(defmacro undo-auto-message (&rest args)
+  `(with-current-buffer
+       (get-buffer-create
+        "*undo-auto-log*")
+     (goto-char (point-max))
+     (insert (format ,@args))
+     (insert "\n")))
+
+(undo-auto-message "initialized")
+(with-current-buffer "*undo-auto-log*"
+  (setq buffer-undo-list t))
+
+(defun undo-needs-boundary-p ()
+  "Returns t if `buffer-undo-list' needs a boundary at the start."
+  (and
+   ;; buffer-undo-list can be t
+   (listp buffer-undo-list)
+   ;; first element of buffer-undo-list is nil
+   (not (car buffer-undo-list))))
 
 (defun undo-ensure-boundary ()
   "Add an `undo-boundary' if `buffer-undo-list' is long.
@@ -2795,9 +2808,7 @@ for adding an `undo-boundary' which retains data where possible,
 without signalling warnings to the user."
   (when (and
          buffer-undo-list
-         (not (undo-has-two-boundary-p))
-         (> (undo-size)
-            undo-limit))
+         (undo-needs-boundary-p))
     (undo-boundary)
     t))
 
@@ -2809,10 +2820,9 @@ See also `undo-ensure-boundary'."
    (lambda (b)
      (when (buffer-live-p b)
        (with-current-buffer b
-         (message "undo-auto-boundary checking %s" b)
-         (setq undo-buffer-undoably-changed nil)
+         (undo-auto-message "undo-auto-boundary checking %s" b)
          (when (undo-ensure-boundary)
-           (message "undo-auto-boundary boundary added %s" b)))))
+           (undo-auto-message "undo-auto-boundary boundary added %s" b)))))
    undo-undoably-changed-buffers)
   (setq undo-undoably-changed-buffers nil))
 
@@ -2821,12 +2831,14 @@ See also `undo-ensure-boundary'."
 
 (defun undo-auto-boundary-timer ()
   "Timer which will run `undo-auto-boundary-timer'."
+  (undo-auto-message "running on timer")
   (undo-auto-boundary)
   (setq undo-auto-current-boundary-timer nil))
 
 (defun undo-auto-boundary-ensure-timer ()
   "Ensure that the `undo-auto-boundary-timer is set."
   (unless undo-auto-current-boundary-timer
+    (undo-auto-message "Starting timer")
     (setq undo-auto-current-boundary-timer
           (run-at-time 10 nil 'undo-auto-boundary-timer))))
 
@@ -2842,12 +2854,15 @@ See also `undo-buffer-undoably-changed'.")
 
 (defun undo-auto-boundary-first-undoable-change-hook ()
   "Default value of `undo-boundary-first-undoable-change-hook'."
-  (message "undo-auto adding-to-list %s" (current-buffer))
+  (undo-auto-message "undo-auto adding-to-list %s" (current-buffer))
   (add-to-list 'undo-undoably-changed-buffers (current-buffer))
   (undo-auto-boundary-ensure-timer))
 
 (add-hook 'undo-first-undoable-change-hook
           #'undo-auto-boundary-first-undoable-change-hook)
+
+(add-hook 'post-command-hook
+          #'undo-auto-boundary)
 
 (defcustom undo-ask-before-discard nil
   "If non-nil ask about discarding undo info for the current command.
