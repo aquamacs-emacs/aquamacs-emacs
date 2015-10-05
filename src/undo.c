@@ -37,24 +37,21 @@ static ptrdiff_t last_boundary_position;
    an undo-boundary.  */
 static Lisp_Object pending_boundary;
 
-
 /*
   Run the first-undo-hook if needed
  */
 void
-run_first_undo_hook()
+run_first_undo_hook ()
 {
   Lisp_Object list;
 
-  list = BVAR(current_buffer, undo_list);
+  list = BVAR (current_buffer, undo_list);
 
-  if (CONSP (list) && NILP (XCAR (list)))
+  if (NILP (list) || CONSP (list) && NILP (XCAR (list)))
     {
-      safe_run_hooks(Qundo_first_undoable_change_hook);
+      safe_run_hooks (Qundo_first_undoable_change_hook);
     }
 }
-
-
 
 /* Record point as it was at beginning of this command (if necessary)
    and prepare the undo info for recording a change.
@@ -74,7 +71,7 @@ record_point (ptrdiff_t pt)
   if (NILP (pending_boundary))
     pending_boundary = Fcons (Qnil, Qnil);
 
-  run_first_undo_hook(current_buffer);
+  run_first_undo_hook ();
 
   at_boundary = ! CONSP (BVAR (current_buffer, undo_list))
                 || NILP (XCAR (BVAR (current_buffer, undo_list)));
@@ -147,7 +144,7 @@ record_marker_adjustments (ptrdiff_t from, ptrdiff_t to)
     pending_boundary = Fcons (Qnil, Qnil);
 
 
-  run_first_undo_hook(current_buffer);
+  run_first_undo_hook ();
 
   for (m = BUF_MARKERS (current_buffer); m; m = m->next)
     {
@@ -264,7 +261,7 @@ record_property_change (ptrdiff_t beg, ptrdiff_t length,
   /* Switch temporarily to the buffer that was changed.  */
   current_buffer = buf;
 
-  run_first_undo_hook(buf);
+  run_first_undo_hook ();
 
   if (MODIFF <= SAVE_MODIFF)
     record_first_change ();
@@ -277,7 +274,6 @@ record_property_change (ptrdiff_t beg, ptrdiff_t length,
 
   current_buffer = obuf;
 }
-
 
 DEFUN ("undo-boundary", Fundo_boundary, Sundo_boundary, 0, 0, 0,
        doc: /* Mark a boundary between units of undo.

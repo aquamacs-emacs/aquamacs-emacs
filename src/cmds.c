@@ -222,33 +222,34 @@ to t.  */)
 
 static int nonundocount;
 
-static void
-remove_excessive_undo_boundaries (void)
-{
-  bool remove_boundary = true;
+/* static void */
+/* remove_excessive_undo_boundaries (void) */
+/* { */
+/*   bool remove_boundary = true; */
 
-  if (!EQ (Vthis_command, KVAR (current_kboard, Vlast_command)))
-    nonundocount = 0;
+/*   if (!EQ (Vthis_command, KVAR (current_kboard, Vlast_command))) */
+/*     nonundocount = 0; */
 
-  if (NILP (Vexecuting_kbd_macro))
-    {
-      if (nonundocount <= 0 || nonundocount >= 20)
-	{
-	  remove_boundary = false;
-	  nonundocount = 0;
-	}
-      nonundocount++;
-    }
+/*   if (NILP (Vexecuting_kbd_macro)) */
+/*     { */
+/*       if (nonundocount <= 0 || nonundocount >= 20) */
+/* 	{ */
+/* 	  remove_boundary = false; */
+/* 	  nonundocount = 0; */
+/* 	} */
+/*       nonundocount++; */
+/*     } */
 
-  if (remove_boundary
-      && CONSP (BVAR (current_buffer, undo_list))
-      && NILP (XCAR (BVAR (current_buffer, undo_list)))
-      /* Only remove auto-added boundaries, not boundaries
-	 added by explicit calls to undo-boundary.  */
-      && EQ (BVAR (current_buffer, undo_list), last_undo_boundary))
-    /* Remove the undo_boundary that was just pushed.  */
-    bset_undo_list (current_buffer, XCDR (BVAR (current_buffer, undo_list)));
-}
+/*   if (remove_boundary */
+/*       && CONSP (BVAR (current_buffer, undo_list)) */
+/*       && NILP (XCAR (BVAR (current_buffer, undo_list))) */
+/*       /\* Only remove auto-added boundaries, not boundaries */
+/* 	 added by explicit calls to undo-boundary.  *\/ */
+/*       && EQ (BVAR (current_buffer, undo_list), */
+/*              last_auto_keyboard_undo_boundary)) */
+/*     /\* Remove the undo_boundary that was just pushed.  *\/ */
+/*     bset_undo_list (current_buffer, XCDR (BVAR (current_buffer, undo_list))); */
+/* } */
 
 DEFUN ("delete-char", Fdelete_char, Sdelete_char, 1, 2, "p\nP",
        doc: /* Delete the following N characters (previous if N is negative).
@@ -264,8 +265,9 @@ because it respects values of `delete-active-region' and `overwrite-mode'.  */)
 
   CHECK_NUMBER (n);
 
-  if (abs (XINT (n)) < 2)
-    remove_excessive_undo_boundaries ();
+  // PWL
+  //if (abs (XINT (n)) < 2)
+  //  remove_excessive_undo_boundaries ();
 
   pos = PT + XINT (n);
   if (NILP (killflag))
@@ -310,8 +312,9 @@ At the end, it runs `post-self-insert-hook'.  */)
   if (XFASTINT (n) < 0)
     error ("Negative repetition argument %"pI"d", XFASTINT (n));
 
-  if (XFASTINT (n) < 2)
-    remove_excessive_undo_boundaries ();
+  // PWL remove for now
+  //if (XFASTINT (n) < 2)
+  //remove_excessive_undo_boundaries ();
 
   /* Barf if the key that invoked this was not a character.  */
   if (!CHARACTERP (last_command_event))
