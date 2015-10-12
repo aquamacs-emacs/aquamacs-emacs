@@ -1,6 +1,6 @@
 ;;; data-debug.el --- Data structure debugger
 
-;; Copyright (C) 2007-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2007-2015 Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam  <zappo@gnu.org>
 ;; Old-Version: 0.2
@@ -55,7 +55,7 @@
       (defalias 'data-debug-overlay-p 'extentp)
       (if (not (fboundp 'propertize))
 	  (defun dd-propertize (string &rest properties)
-	    "Mimic 'propertize' in from Emacs 23."
+	    "Mimic `propertize' in from Emacs 23."
 	    (add-text-properties 0 (length string) properties string)
 	    string
 	    )

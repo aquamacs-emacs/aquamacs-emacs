@@ -1,6 +1,6 @@
 ;; ada-xref.el --- for lookup and completion in Ada mode
 
-;; Copyright (C) 1994-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1994-2015 Free Software Foundation, Inc.
 
 ;; Author: Markus Heritsch <Markus.Heritsch@studbox.uni-stuttgart.de>
 ;;      Rolf Ebert <ebert@inf.enst.fr>
@@ -236,7 +236,7 @@ we need to use `/d' or the drive is never changed.")
   "Associative list of project files with properties.
 It has the format: (project project ...)
 A project has the format: (project-file . project-plist)
-\(See 'apropos plist' for operations on property lists).
+\(See `apropos plist' for operations on property lists).
 See `ada-default-prj-properties' for the list of valid properties.
 The current project is retrieved with `ada-xref-current-project'.
 Properties are retrieved with `ada-xref-get-project-field', set with
@@ -286,7 +286,7 @@ On Windows systems, this will properly handle .exe extension as well."
 		    (ada-find-file-in-dir (concat exec-name ".exe") exec-path))))
     (if result
 	result
-      (error "'%s' not found in path" exec-name))))
+      (error "`%s' not found in path" exec-name))))
 
 (defun ada-initialize-runtime-library (cross-prefix)
   "Initialize the variables for the runtime library location.
@@ -420,7 +420,7 @@ As a special case, ${current} is replaced with the name of the current
 file, minus extension but with directory, and ${full_current} is
 replaced by the name including the extension."
 
-  (while (string-match "\\(-[^-\$IO]*[IO]\\)?\${\\([^}]+\\)}" cmd-string)
+  (while (string-match "\\(-[^-$IO]*[IO]\\)?${\\([^}]+\\)}" cmd-string)
     (let (value
 	  (name (match-string 2 cmd-string)))
       (cond
@@ -651,12 +651,6 @@ Call `ada-require-project-file' first to ensure a project exists."
 	(find-file (car (cdr pos)))
 	(goto-char (car pos)))))
 
-(defun ada-convert-file-name (name)
-  "Convert from NAME to a name that can be used by the compilation commands.
-This is overridden on VMS to convert from VMS filenames to Unix filenames."
-  name)
-;; FIXME: use convert-standard-filename instead
-
 (defun ada-set-default-project-file (file)
   "Set FILE as the current project file."
   (interactive "fProject file:")
@@ -673,7 +667,7 @@ the same base name as the Ada file, but extension given by
 `ada-prj-file-extension' (default .adp).  If not found, search for *.adp
 in the current directory; if several are found, and NO-USER-QUESTION
 is non-nil, prompt the user to select one.  If none are found, return
-'default.adp'."
+\"default.adp\"."
 
   (let (selected)
 
@@ -960,7 +954,7 @@ Return new value of PROJECT."
 	(append (mapcar 'directory-file-name compilation-search-path)
 		ada-search-directories))
 
-  ;; return 't', for decent display in message buffer when called interactively
+  ;; return t, for decent display in message buffer when called interactively
   t)
 
 (defun ada-find-references (&optional pos arg local-only)
@@ -1465,7 +1459,7 @@ by replacing the file extension with `.ali'."
 	   (get-file-buffer ali-file-name))
       (kill-buffer (get-file-buffer ali-file-name)))
 
-  (let* ((name      (ada-convert-file-name file))
+  (let* ((name      (convert-standard-filename file))
 	 (body-name (or (ada-get-body-name name) name)))
 
     ;; Always recompile the body when we can.  We thus temporarily switch to a
@@ -1730,7 +1724,7 @@ Information is extracted from the ali file."
 		(concat "^"    (ada-line-of identlist)
 			"."    (ada-column-of identlist)
 			"[ *]" (ada-name-of identlist)
-			"[{\[\(<= ]?\\(.*\\)$") bound t))
+			"[{[(<= ]?\\(.*\\)$") bound t))
 	  (if declaration-found
 	      (ada-set-on-declaration identlist t))
 	  ))
@@ -1762,7 +1756,7 @@ Information is extracted from the ali file."
 		   (concat
 		    "^[0-9]+.[0-9]+[ *]"
 		    (ada-name-of identlist)
-		    "[ <{=\(\[]\\(.\\|\n\\.\\)*\\<"
+		    "[ <{=([]\\(.\\|\n\\.\\)*\\<"
 		    (ada-line-of identlist)
 		    "[^0-9]"
 		    (ada-column-of identlist) "\\>")
@@ -1785,7 +1779,7 @@ Information is extracted from the ali file."
 	      (forward-line -1)
 	      (beginning-of-line))
 	    (unless (looking-at (concat "[0-9]+.[0-9]+[ *]"
-					(ada-name-of identlist) "[ <{=\(\[]"))
+					(ada-name-of identlist) "[ <{=([]"))
 	      (setq declaration-found nil))))
 
       ;; Still no success ! The ali file must be too old, and we need to

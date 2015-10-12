@@ -1,6 +1,6 @@
 /* update-game-score.c --- Update a score file
 
-Copyright (C) 2002-2014 Free Software Foundation, Inc.
+Copyright (C) 2002-2015 Free Software Foundation, Inc.
 
 Author: Colin Walters <walters@debian.org>
 
@@ -21,8 +21,8 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 
 /* This program allows a game to securely and atomically update a
-   score file.  It should be installed setuid, owned by an appropriate
-   user like `games'.
+   score file.  It should be installed either setuid or setgid, owned
+   by an appropriate user or group like `games'.
 
    Alternatively, it can be compiled without HAVE_SHARED_GAME_DIR
    defined, and in that case it will store scores in the user's home
@@ -76,9 +76,8 @@ static int unlock_file (const char *filename, void *state);
 
 struct score_entry
 {
-  intmax_t score;
-  char *username;
-  char *data;
+  char *score;
+  char *user_data;
 };
 
 #define MAX_SCORES min (PTRDIFF_MAX, SIZE_MAX / sizeof (struct score_entry))
@@ -89,7 +88,7 @@ static int push_score (struct score_entry **scores, ptrdiff_t *count,
 		       ptrdiff_t *size, struct score_entry const *newscore);
 static void sort_scores (struct score_entry *scores, ptrdiff_t count,
 			 bool reverse);
-static int write_scores (const char *filename,
+static int write_scores (const char *filename, mode_t mode,
 			 const struct score_entry *scores, ptrdiff_t count);
 
 static _Noreturn void
@@ -102,7 +101,8 @@ lose (const char *msg)
 static _Noreturn void
 lose_syserr (const char *msg)
 {
-  fprintf (stderr, "%s: %s\n", msg, strerror (errno));
+  fprintf (stderr, "%s: %s\n", msg,
+	   errno ? strerror (errno) : "Invalid data in score file");
   exit (EXIT_FAILURE);
 }
 
@@ -122,31 +122,63 @@ get_user_id (void)
 }
 
 static const char *
-get_prefix (bool running_suid, const char *user_prefix)
+get_prefix (bool privileged, const char *user_prefix)
 {
-  if (!running_suid && user_prefix == NULL)
-    lose ("Not using a shared game directory, and no prefix given.");
-  if (running_suid)
+  if (privileged)
     {
 #ifdef HAVE_SHARED_GAME_DIR
       return HAVE_SHARED_GAME_DIR;
 #else
-      lose ("This program was compiled without HAVE_SHARED_GAME_DIR,\n and should not be suid.");
+      lose ("This program was compiled without HAVE_SHARED_GAME_DIR,\n"
+	    "and should not run with elevated privileges.");
 #endif
     }
+  if (user_prefix == NULL)
+    lose ("Not using a shared game directory, and no prefix given.");
   return user_prefix;
+}
+
+static char *
+normalize_integer (char *num)
+{
+  bool neg;
+  char *p;
+  while (*num != '\n' && isspace (*num))
+    num++;
+  neg = *num == '-';
+  num += neg || *num == '-';
+
+  if (*num == '0')
+    {
+      while (*++num == '0')
+	continue;
+      neg &= !!*num;
+      num -= !*num;
+    }
+
+  for (p = num; '0' <= *p && *p <= '9'; p++)
+    continue;
+
+  if (*p || p == num)
+    {
+      errno = 0;
+      return 0;
+    }
+
+  if (neg)
+    *--num = '-';
+  return num;
 }
 
 int
 main (int argc, char **argv)
 {
   int c;
-  bool running_suid;
+  bool running_suid, running_sgid;
   void *lockstate;
   char *scorefile;
-  char *nl;
+  char *end, *nl, *user, *data;
   const char *prefix, *user_prefix = NULL;
-  struct stat buf;
   struct score_entry *scores;
   struct score_entry newscore;
   bool reverse = false;
@@ -169,8 +201,8 @@ main (int argc, char **argv)
 	break;
       case 'm':
 	{
-	  intmax_t m = strtoimax (optarg, 0, 10);
-	  if (m < 0)
+	  intmax_t m = strtoimax (optarg, &end, 10);
+	  if (optarg == end || *end || m < 0)
 	    usage (EXIT_FAILURE);
 	  max_scores = min (m, MAX_SCORES);
 	}
@@ -183,32 +215,40 @@ main (int argc, char **argv)
     usage (EXIT_FAILURE);
 
   running_suid = (getuid () != geteuid ());
+  running_sgid = (getgid () != getegid ());
+  if (running_suid && running_sgid)
+    lose ("This program can run either suid or sgid, but not both.");
 
-  prefix = get_prefix (running_suid, user_prefix);
+  prefix = get_prefix (running_suid || running_sgid, user_prefix);
 
   scorefile = malloc (strlen (prefix) + strlen (argv[optind]) + 2);
   if (!scorefile)
     lose_syserr ("Couldn't allocate score file");
 
-  strcpy (scorefile, prefix);
-  strcat (scorefile, "/");
-  strcat (scorefile, argv[optind]);
+  char *z = stpcpy (scorefile, prefix);
+  *z++ = '/';
+  strcpy (z, argv[optind]);
 
-  newscore.score = strtoimax (argv[optind + 1], 0, 10);
+  newscore.score = normalize_integer (argv[optind + 1]);
+  if (! newscore.score)
+    {
+      fprintf (stderr, "%s: Invalid score\n", argv[optind + 1]);
+      return EXIT_FAILURE;
+    }
 
-  newscore.data = argv[optind + 2];
-  if (strlen (newscore.data) > MAX_DATA_LEN)
-    newscore.data[MAX_DATA_LEN] = '\0';
-  nl = strchr (newscore.data, '\n');
+  user = get_user_id ();
+  if (! user)
+    lose_syserr ("Couldn't determine user id");
+  data = argv[optind + 2];
+  if (strlen (data) > MAX_DATA_LEN)
+    data[MAX_DATA_LEN] = '\0';
+  nl = strchr (data, '\n');
   if (nl)
     *nl = '\0';
-
-  newscore.username = get_user_id ();
-  if (! newscore.username)
-    lose_syserr ("Couldn't determine user id");
-
-  if (stat (scorefile, &buf) < 0)
-    lose_syserr ("Failed to access scores file");
+  newscore.user_data = malloc (strlen (user) + 1 + strlen (data) + 1);
+  if (! newscore.user_data
+      || sprintf (newscore.user_data, "%s %s", user, data) < 0)
+    lose_syserr ("Memory exhausted");
 
   if (lock_file (scorefile, &lockstate) < 0)
     lose_syserr ("Failed to lock scores file");
@@ -234,7 +274,8 @@ main (int argc, char **argv)
 	scores += scorecount - max_scores;
       scorecount = max_scores;
     }
-  if (write_scores (scorefile, scores, scorecount) < 0)
+  if (write_scores (scorefile, running_sgid ? 0664 : 0644,
+		    scores, scorecount) < 0)
     {
       unlock_file (scorefile, lockstate);
       lose_syserr ("Failed to write scores file");
@@ -244,137 +285,75 @@ main (int argc, char **argv)
   exit (EXIT_SUCCESS);
 }
 
-static int
-read_score (FILE *f, struct score_entry *score)
+static char *
+read_score (char *p, struct score_entry *score)
 {
-  int c;
-  if ((c = getc (f)) != EOF)
-    ungetc (c, f);
-  if (feof (f))
-    return 1;
-  for (score->score = 0; (c = getc (f)) != EOF && isdigit (c); )
-    {
-      if (INTMAX_MAX / 10 < score->score)
-	return -1;
-      score->score *= 10;
-      if (INTMAX_MAX - (c - '0') < score->score)
-	return -1;
-      score->score += c - '0';
-    }
-  while ((c = getc (f)) != EOF
-	 && isspace (c))
-    ;
-  if (c == EOF)
-    return -1;
-  ungetc (c, f);
-#ifdef HAVE_GETDELIM
-  {
-    size_t count = 0;
-    score->username = 0;
-    if (getdelim (&score->username, &count, ' ', f) < 1
-	|| score->username == NULL)
-      return -1;
-    /* Trim the space */
-    score->username[strlen (score->username)-1] = '\0';
-  }
-#else
-  {
-    ptrdiff_t unameread = 0;
-    ptrdiff_t unamelen = 30;
-    char *username = malloc (unamelen);
-    if (!username)
-      return -1;
-
-    while ((c = getc (f)) != EOF && c != ' ')
-      {
-	if (unameread >= unamelen - 1)
-	  {
-	    ptrdiff_t unamelen_max = min (PTRDIFF_MAX, SIZE_MAX);
-	    if (unamelen <= unamelen_max / 2)
-	      unamelen *= 2;
-	    else if (unamelen < unamelen_max)
-	      unamelen = unamelen_max;
-	    else
-	      {
-		errno = ENOMEM;
-		return -1;
-	      }
-	    username = realloc (username, unamelen);
-	    if (!username)
-	      return -1;
-	  }
-	username[unameread] = c;
-	unameread++;
-      }
-    if (c == EOF)
-      return -1;
-    username[unameread] = '\0';
-    score->username = username;
-  }
-#endif
-#ifdef HAVE_GETLINE
-  score->data = NULL;
-  errno = 0;
-  {
-    size_t len;
-    if (getline (&score->data, &len, f) < 0)
-      return -1;
-    score->data[strlen (score->data)-1] = '\0';
-  }
-#else
-  {
-    ptrdiff_t cur = 0;
-    ptrdiff_t len = 16;
-    char *buf = malloc (len);
-    if (!buf)
-      return -1;
-    while ((c = getc (f)) != EOF
-	   && c != '\n')
-      {
-	if (cur >= len-1)
-	  {
-	    if (min (PTRDIFF_MAX, SIZE_MAX) / 2 < len)
-	      {
-		errno = ENOMEM;
-		return -1;
-	      }
-	    if (!(buf = realloc (buf, len *= 2)))
-	      return -1;
-	  }
-	buf[cur] = c;
-	cur++;
-      }
-    score->data = buf;
-    score->data[cur] = '\0';
-  }
-#endif
-  return 0;
+  score->score = p;
+  p = strchr (p, ' ');
+  if (!p)
+    return p;
+  *p++ = 0;
+  score->user_data = p;
+  p = strchr (p, '\n');
+  if (!p)
+    return p;
+  *p++ = 0;
+  return p;
 }
 
 static int
 read_scores (const char *filename, struct score_entry **scores,
 	     ptrdiff_t *count, ptrdiff_t *alloc)
 {
-  int readval = -1;
-  ptrdiff_t scorecount = 0;
-  ptrdiff_t cursize = 0;
-  struct score_entry *ret = 0;
-  struct score_entry entry;
+  char *p, *filedata;
+  ptrdiff_t filesize, nread;
+  struct stat st;
   FILE *f = fopen (filename, "r");
-  int retval = -1;
   if (!f)
     return -1;
-  while ((readval = read_score (f, &entry)) == 0)
-    if (push_score (&ret, &scorecount, &cursize, &entry) < 0)
-      return -1;
-  if (readval > 0 && fclose (f) == 0)
+  if (fstat (fileno (f), &st) != 0)
+    return -1;
+  if (! (0 <= st.st_size && st.st_size < min (PTRDIFF_MAX, SIZE_MAX)))
     {
-      *count = scorecount;
-      *alloc = cursize;
-      *scores = ret;
-      retval = 0;
+      errno = EOVERFLOW;
+      return -1;
     }
-  return retval;
+  filesize = st.st_size;
+  filedata = malloc (filesize + 1);
+  if (! filedata)
+    return -1;
+  nread = fread (filedata, 1, filesize + 1, f);
+  if (filesize < nread)
+    {
+      errno = 0;
+      return -1;
+    }
+  if (nread < filesize)
+    filesize = nread;
+  if (ferror (f) || fclose (f) != 0)
+    return -1;
+  filedata[filesize] = 0;
+  if (strlen (filedata) != filesize)
+    {
+      errno = 0;
+      return -1;
+    }
+
+  *scores = 0;
+  *count = *alloc = 0;
+  for (p = filedata; p < filedata + filesize; )
+    {
+      struct score_entry entry;
+      p = read_score (p, &entry);
+      if (!p)
+	{
+	  errno = 0;
+	  return -1;
+	}
+      if (push_score (scores, count, alloc, &entry) < 0)
+	return -1;
+    }
+  return 0;
 }
 
 static int
@@ -382,7 +361,25 @@ score_compare (const void *a, const void *b)
 {
   const struct score_entry *sa = (const struct score_entry *) a;
   const struct score_entry *sb = (const struct score_entry *) b;
-  return (sb->score > sa->score) - (sb->score < sa->score);
+  char *sca = sa->score;
+  char *scb = sb->score;
+  size_t lena, lenb;
+  bool nega = *sca == '-';
+  bool negb = *scb == '-';
+  int diff = nega - negb;
+  if (diff)
+    return diff;
+  if (nega)
+    {
+      char *tmp = sca;
+      sca = scb + 1;
+      scb = tmp + 1;
+    }
+  lena = strlen (sca);
+  lenb = strlen (scb);
+  if (lena != lenb)
+    return lenb < lena ? -1 : 1;
+  return strcmp (scb, sca);
 }
 
 static int
@@ -429,8 +426,8 @@ sort_scores (struct score_entry *scores, ptrdiff_t count, bool reverse)
 }
 
 static int
-write_scores (const char *filename, const struct score_entry *scores,
-	      ptrdiff_t count)
+write_scores (const char *filename, mode_t mode,
+	      const struct score_entry *scores, ptrdiff_t count)
 {
   int fd;
   FILE *f;
@@ -438,31 +435,24 @@ write_scores (const char *filename, const struct score_entry *scores,
   char *tempfile = malloc (strlen (filename) + strlen (".tempXXXXXX") + 1);
   if (!tempfile)
     return -1;
-  strcpy (tempfile, filename);
-  strcat (tempfile, ".tempXXXXXX");
+  strcpy (stpcpy (tempfile, filename), ".tempXXXXXX");
   fd = mkostemp (tempfile, 0);
   if (fd < 0)
     return -1;
 #ifndef DOS_NT
-  if (fchmod (fd, 0644) != 0)
+  if (fchmod (fd, mode) != 0)
     return -1;
 #endif
   f = fdopen (fd, "w");
   if (! f)
     return -1;
   for (i = 0; i < count; i++)
-    if (fprintf (f, "%"PRIdMAX" %s %s\n",
-		 scores[i].score, scores[i].username, scores[i].data)
-	< 0)
+    if (fprintf (f, "%s %s\n", scores[i].score, scores[i].user_data) < 0)
       return -1;
   if (fclose (f) != 0)
     return -1;
   if (rename (tempfile, filename) != 0)
     return -1;
-#ifdef DOS_NT
-  if (chmod (filename, 0644) < 0)
-    return -1;
-#endif
   return 0;
 }
 
@@ -476,33 +466,29 @@ lock_file (const char *filename, void **state)
   char *lockpath = malloc (strlen (filename) + strlen (lockext) + 60);
   if (!lockpath)
     return -1;
-  strcpy (lockpath, filename);
-  strcat (lockpath, lockext);
+  strcpy (stpcpy (lockpath, filename), lockext);
   *state = lockpath;
- trylock:
-  attempts++;
-  /* If the lock is over an hour old, delete it.  */
-  if (stat (lockpath, &buf) == 0
-      && 60 * 60 < time (0) - buf.st_ctime)
-    unlink (lockpath);
-  fd = open (lockpath, O_CREAT | O_EXCL, 0600);
-  if (fd < 0)
+
+  while ((fd = open (lockpath, O_CREAT | O_EXCL, 0600)) < 0)
     {
-      if (errno == EEXIST)
-	{
-	  /* Break the lock; we won't corrupt the file, but we might
-	     lose some scores. */
-	  if (attempts > MAX_ATTEMPTS)
-	    {
-	      unlink (lockpath);
-	      attempts = 0;
-	    }
-	  sleep ((rand () % 2)+1);
-	  goto trylock;
-	}
-      else
+      if (errno != EEXIST)
 	return -1;
+      attempts++;
+
+      /* Break the lock if it is over an hour old, or if we've tried
+	 more than MAX_ATTEMPTS times.  We won't corrupt the file, but
+	 we might lose some scores. */
+      if (MAX_ATTEMPTS < attempts
+	  || (stat (lockpath, &buf) == 0 && 60 * 60 < time (0) - buf.st_ctime))
+	{
+	  if (unlink (lockpath) != 0 && errno != ENOENT)
+	    return -1;
+	  attempts = 0;
+	}
+
+      sleep ((rand () & 1) + 1);
     }
+
   close (fd);
   return 0;
 }

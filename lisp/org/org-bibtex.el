@@ -1,6 +1,6 @@
 ;;; org-bibtex.el --- Org links to BibTeX entries
 ;;
-;; Copyright (C) 2007-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2007-2015 Free Software Foundation, Inc.
 ;;
 ;; Authors: Bastien Guerry <bzg@gnu.org>
 ;;       Carsten Dominik <carsten dot dominik at gmail dot com>
@@ -195,7 +195,7 @@
     (:howpublished . "How something strange has been published.  The first word should be capitalized.")
     (:institution  . "The sponsoring institution of a technical report.")
     (:journal      . "A journal name.")
-    (:key          . "Used for alphabetizing, cross-referencing, and creating a label when the author information is missing.  This field should not be confused with the key that appears in the \cite command and at the beginning of the database entry.")
+    (:key          . "Used for alphabetizing, cross-referencing, and creating a label when the author information is missing.  This field should not be confused with the key that appears in the \\cite command and at the beginning of the database entry.")
     (:month        . "The month in which the work was published or, for an unpublished work, in which it was written.  You should use the standard three-letter abbreviation,")
     (:note         . "Any additional information that can help the reader.  The first word should be capitalized.")
     (:number       . "Any additional information that can help the reader.  The first word should be capitalized.")
@@ -221,7 +221,7 @@
 
 (defcustom org-bibtex-prefix nil
   "Optional prefix for all bibtex property names.
-For example setting to 'BIB_' would allow interoperability with fireforg."
+For example setting to `BIB_' would allow interoperability with fireforg."
   :group 'org-bibtex
   :version "24.1"
   :type  '(choice

@@ -1,6 +1,6 @@
 ;;; userlock.el --- handle file access contention between multiple users
 
-;; Copyright (C) 1985-1986, 2001-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1985-1986, 2001-2015 Free Software Foundation, Inc.
 
 ;; Author: Richard King
 ;; (according to authors.el)
@@ -142,7 +142,7 @@ If you say `r' to revert, the contents of the buffer are refreshed
 from the file on disk.
 If you say `n', the change you started to make will be aborted.
 
-Usually, you should type `n' and then `M-x revert-buffer',
+Usually, you should type `n' and then `\\[revert-buffer]',
 to get the latest version of the file, then make the change again.")
     (with-current-buffer standard-output
       (help-mode))))

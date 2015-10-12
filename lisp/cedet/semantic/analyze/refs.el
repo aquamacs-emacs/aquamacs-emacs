@@ -1,6 +1,6 @@
 ;;; semantic/analyze/refs.el --- Analysis of the references between tags.
 
-;; Copyright (C) 2008-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2008-2015 Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 
@@ -100,7 +100,7 @@ Use `semantic-analyze-current-tag' to debug this fcn."
 ;;
 ;; These accessor methods will calculate the useful bits from the context, and cache values
 ;; into the context.
-(defmethod semantic-analyze-refs-impl ((refs semantic-analyze-references) &optional in-buffer)
+(cl-defmethod semantic-analyze-refs-impl ((refs semantic-analyze-references) &optional in-buffer)
   "Return the implementations derived in the reference analyzer REFS.
 Optional argument IN-BUFFER indicates that the returned tag should be in an active buffer."
   (let ((allhits (oref refs rawsearchdata))
@@ -125,7 +125,7 @@ Optional argument IN-BUFFER indicates that the returned tag should be in an acti
      allhits)
     impl))
 
-(defmethod semantic-analyze-refs-proto ((refs semantic-analyze-references) &optional in-buffer)
+(cl-defmethod semantic-analyze-refs-proto ((refs semantic-analyze-references) &optional in-buffer)
   "Return the prototypes derived in the reference analyzer REFS.
 Optional argument IN-BUFFER indicates that the returned tag should be in an active buffer."
   (let ((allhits (oref refs rawsearchdata))

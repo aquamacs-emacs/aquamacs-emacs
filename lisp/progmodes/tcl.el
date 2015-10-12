@@ -1,6 +1,6 @@
 ;;; tcl.el --- Tcl code editing commands for Emacs
 
-;; Copyright (C) 1994, 1998-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1994, 1998-2015 Free Software Foundation, Inc.
 
 ;; Maintainer: emacs-devel@gnu.org
 ;; Author: Tom Tromey <tromey@redhat.com>
@@ -1028,7 +1028,8 @@ Returns nil if line starts inside a string, t if in a comment."
     (with-current-buffer (process-buffer proc)
       ;; Delete prompt if requested.
       (when (marker-buffer inferior-tcl-delete-prompt-marker)
-        (delete-region (process-mark proc) inferior-tcl-delete-prompt-marker)
+	(let ((inhibit-read-only t))
+	  (delete-region (process-mark proc) inferior-tcl-delete-prompt-marker))
         (set-marker inferior-tcl-delete-prompt-marker nil))))
   (comint-output-filter proc string))
 

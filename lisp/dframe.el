@@ -1,6 +1,6 @@
 ;;; dframe --- dedicate frame support modes  -*- lexical-binding:t -*-
 
-;; Copyright (C) 1996-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1996-2015 Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: file, tags, tools
@@ -688,11 +688,11 @@ Optionally select that frame if necessary."
 Argument FMT is the format string, and ARGS are the arguments for message."
   (save-selected-window
     (if dframe-suppress-message-flag
-	(apply 'format fmt args)
+	(apply #'format-message fmt args)
       (if dframe-attached-frame
           ;; KB: Here we do not need calling `dframe-select-attached-frame'
 	  (select-frame dframe-attached-frame))
-      (apply 'message fmt args))))
+      (apply #'message fmt args))))
 
 (defun dframe-y-or-n-p (prompt)
   "Like `y-or-n-p', but for use in a dedicated frame.

@@ -1,6 +1,6 @@
 ;;; gnus-icalendar.el --- reply to iCalendar meeting requests
 
-;; Copyright (C) 2013-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2013-2015 Free Software Foundation, Inc.
 
 ;; Author: Jan Tatarik <Jan.Tatarik@gmail.com>
 ;; Keywords: mail, icalendar, org
@@ -38,6 +38,7 @@
 (require 'gmm-utils)
 (require 'mm-decode)
 (require 'gnus-sum)
+(require 'gnus-art)
 
 (eval-when-compile (require 'cl))
 
@@ -140,12 +141,13 @@
 (defmethod gnus-icalendar-event:start ((event gnus-icalendar-event))
   (format-time-string "%Y-%m-%d %H:%M" (gnus-icalendar-event:start-time event)))
 
-(defun gnus-icalendar-event--decode-datefield (ical field)
-  (let* ((date (icalendar--get-event-property ical field))
-         (date-props (icalendar--get-event-property-attributes ical field))
-         (tz (plist-get date-props 'TZID)))
-
-    (date-to-time (timezone-make-date-arpa-standard date nil tz))))
+(defun gnus-icalendar-event--decode-datefield (event field zone-map)
+  (let* ((dtdate (icalendar--get-event-property event field))
+         (dtdate-zone (icalendar--find-time-zone
+                       (icalendar--get-event-property-attributes
+                        event field) zone-map))
+         (dtdate-dec (icalendar--decode-isodatetime dtdate nil dtdate-zone)))
+    (apply 'encode-time dtdate-dec)))
 
 (defun gnus-icalendar-event--find-attendee (ical name-or-email)
   (let* ((event (car (icalendar--all-events ical)))
@@ -170,7 +172,9 @@
                           (caddr event))))
 
     (gmm-labels ((attendee-role (prop) (plist-get (cadr prop) 'ROLE))
-                 (attendee-name (prop) (plist-get (cadr prop) 'CN))
+                 (attendee-name (prop)
+                                (or (plist-get (cadr prop) 'CN)
+                                    (replace-regexp-in-string "^.*MAILTO:" "" (caddr prop))))
                  (attendees-by-type (type)
                    (gnus-remove-if-not
                     (lambda (p) (string= (attendee-role p) type))
@@ -201,10 +205,11 @@
                               ("REQ-PARTICIPANT" 'required)
                               ("OPT-PARTICIPANT" 'optional)
                               (_                 'non-participant)))
+         (zone-map (icalendar--convert-all-timezones ical))
          (args (list :method method
                      :organizer organizer
-                     :start-time (gnus-icalendar-event--decode-datefield event 'DTSTART)
-                     :end-time (gnus-icalendar-event--decode-datefield event 'DTEND)
+                     :start-time (gnus-icalendar-event--decode-datefield event 'DTSTART zone-map)
+                     :end-time (gnus-icalendar-event--decode-datefield event 'DTEND zone-map)
                      :rsvp (string= (plist-get (cadr attendee) 'RSVP) "TRUE")
                      :participation-type participation-type
                      :req-participants (car attendee-names)
@@ -452,7 +457,6 @@ Return nil for non-recurring EVENT."
                       "Not replied yet"))
              (props `(("ICAL_EVENT" . "t")
                       ("ID" . ,uid)
-                      ("DT" . ,(gnus-icalendar-event:org-timestamp event))
                       ("ORGANIZER" . ,(gnus-icalendar-event:organizer event))
                       ("LOCATION" . ,(gnus-icalendar-event:location event))
                       ("PARTICIPATION_TYPE" . ,(symbol-name (gnus-icalendar-event:participation-type event)))
@@ -470,7 +474,9 @@ Return nil for non-recurring EVENT."
       (when description
         (save-restriction
           (narrow-to-region (point) (point))
-          (insert description)
+          (insert (gnus-icalendar-event:org-timestamp event)
+                  "\n\n"
+                  description)
           (indent-region (point-min) (point-max) 2)
           (fill-region (point-min) (point-max))))
 
@@ -551,20 +557,31 @@ is searched."
                 (when description
                   (save-restriction
                     (narrow-to-region (point) (point))
-                    (insert "\n" (replace-regexp-in-string "[\n]+$" "\n" description) "\n")
+                    (insert "\n"
+                            (gnus-icalendar-event:org-timestamp event)
+                            "\n\n"
+                            (replace-regexp-in-string "[\n]+$" "\n" description)
+                            "\n")
                     (indent-region (point-min) (point-max) (1+ entry-outline-level))
                     (fill-region (point-min) (point-max))))
 
                 ;; update entry properties
-                (org-entry-put event-pos "DT" (gnus-icalendar-event:org-timestamp event))
-                (org-entry-put event-pos "ORGANIZER" organizer)
-                (org-entry-put event-pos "LOCATION" location)
-                (org-entry-put event-pos "PARTICIPATION_TYPE" (symbol-name participation-type))
-                (org-entry-put event-pos "REQ_PARTICIPANTS" (gnus-icalendar--format-participant-list req-participants))
-                (org-entry-put event-pos "OPT_PARTICIPANTS" (gnus-icalendar--format-participant-list opt-participants))
-                (org-entry-put event-pos "RRULE" recur)
-                (when reply-status (org-entry-put event-pos "REPLY"
-                                                  (capitalize (symbol-name reply-status))))
+                (gmm-labels
+                    ((update-org-entry (position property value)
+                                       (if (or (null value)
+                                               (string= value ""))
+                                           (org-entry-delete position property)
+                                         (org-entry-put position property value))))
+
+                  (update-org-entry event-pos "ORGANIZER" organizer)
+                  (update-org-entry event-pos "LOCATION" location)
+                  (update-org-entry event-pos "PARTICIPATION_TYPE" (symbol-name participation-type))
+                  (update-org-entry event-pos "REQ_PARTICIPANTS" (gnus-icalendar--format-participant-list req-participants))
+                  (update-org-entry event-pos "OPT_PARTICIPANTS" (gnus-icalendar--format-participant-list opt-participants))
+                  (update-org-entry event-pos "RRULE" recur)
+                  (update-org-entry event-pos "REPLY"
+                                    (if reply-status (capitalize (symbol-name reply-status))
+                                      "Not replied yet")))
                 (save-buffer)))))))))
 
 
@@ -661,8 +678,9 @@ Gnus will only offer you the Accept/Tentative/Decline buttons for
 calendar events if any of your identities matches at least one
 RSVP participant.
 
-Your identity is guessed automatically from the variables `user-full-name',
-`user-mail-address', and `gnus-ignored-from-addresses'.
+Your identity is guessed automatically from the variables
+`user-full-name', `user-mail-address',
+`gnus-ignored-from-addresses' and `message-alternative-emails'.
 
 If you need even more aliases you can define them here.  It really
 only makes sense to define names or email addresses."
@@ -688,6 +706,7 @@ These will be used to retrieve the RSVP information from ical events."
                  (list user-full-name (regexp-quote user-mail-address)
                        ; NOTE: these can be lists
                        gnus-ignored-from-addresses ; already regexp-quoted
+                       message-alternative-emails  ;
                        (mapcar #'regexp-quote gnus-icalendar-additional-identities)))))
 
 ;; TODO: make the template customizable

@@ -1,5 +1,5 @@
 @c This is part of the Emacs manual.
-@c Copyright (C) 1985-1987, 1993-1995, 1997, 2000-2014 Free Software
+@c Copyright (C) 1985-1987, 1993-1995, 1997, 2000-2015 Free Software
 @c Foundation, Inc.
 @c See file emacs.texi for copying conditions.
 @node Help
@@ -72,7 +72,7 @@ inputs, but they all support @key{F1}.)
 * Language Help::       Help relating to international language support.
 * Misc Help::           Other help commands.
 * Help Files::          Commands to display auxiliary help files.
-* Help Echo::           Help on active text and tooltips ("balloon help").
+* Help Echo::           Help on active text and tooltips (``balloon help'').
 @end menu
 
 @iftex
@@ -122,7 +122,8 @@ Display the name and documentation of the command that @var{key} runs
 Display a description of your last 300 keystrokes
 (@code{view-lossage}).
 @item C-h m
-Display documentation of the current major mode (@code{describe-mode}).
+Display documentation of the current major mode and minor modes
+(@code{describe-mode}).
 @item C-h n
 Display news of recent Emacs changes (@code{view-emacs-news}).
 @item C-h p
@@ -358,8 +359,11 @@ view, describe, default.
 @end quotation
 
 @vindex apropos-do-all
-  If the variable @code{apropos-do-all} is non-@code{nil}, the apropos
-commands always behave as if they had been given a prefix argument.
+  If the variable @code{apropos-do-all} is non-@code{nil}, most
+apropos commands behave as if they had been given a prefix argument.
+There is one exception: @code{apropos-variable} without a prefix
+argument will always search for all variables, no matter what the
+value of @code{apropos-do-all} is.
 
 @vindex apropos-sort-by-scores
 @cindex apropos search results, order by score
@@ -604,12 +608,13 @@ Display information about where to get external packages
 @item C-h C-f
 Display the Emacs frequently-answered-questions list (@code{view-emacs-FAQ}).
 @item C-h g
-Display information about the GNU Project (@code{describe-gnu-project}).
+Visit a @uref{http://www.gnu.org} page with information about the GNU
+Project (@code{describe-gnu-project}).
 @item C-h C-m
 Display information about ordering printed copies of Emacs manuals
 (@code{view-order-manuals}).
 @item C-h C-n
-Display the ``news'' file, which lists the new features in this
+Display the news, which lists the new features in this
 version of Emacs (@code{view-emacs-news}).
 @item C-h C-o
 Display how to order or download the latest version of
@@ -629,7 +634,8 @@ Emacs (@code{describe-no-warranty}).
 
 @cindex tooltips
 @cindex balloon help
-  In Emacs, stretches of ``active text'' (text that does something
+@cindex active text
+  In Emacs, stretches of @dfn{active text} (text that does something
 special in response to mouse clicks or @key{RET}) often have
 associated help text.  This includes hyperlinks in Emacs buffers, as
 well as parts of the mode line.  On graphical displays, as well as

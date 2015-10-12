@@ -1,6 +1,6 @@
 ;;; auth-source.el --- authentication sources for Gnus and Emacs
 
-;; Copyright (C) 2008-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2008-2015 Free Software Foundation, Inc.
 
 ;; Author: Ted Zlatanov <tzz@lifelogs.com>
 ;; Keywords: news
@@ -242,7 +242,7 @@ EPA/EPG set up, the file will be encrypted and decrypted
 automatically.  See Info node `(epa)Encrypting/decrypting gpg files'
 for details.
 
-It's best to customize this with `M-x customize-variable' because the choices
+It's best to customize this with `\\[customize-variable]' because the choices
 can get pretty complex."
   :group 'auth-source
   :version "24.1" ;; No Gnus
@@ -362,7 +362,7 @@ If the value is not a list, symmetric encryption will be used."
   "Read one of CHOICES by `read-char-choice', or `read-char'.
 `dropdown-list' support is disabled because it doesn't work reliably.
 Only one of CHOICES will be returned.  The PROMPT is augmented
-with \"[a/b/c] \" if CHOICES is '\(?a ?b ?c\)."
+with \"[a/b/c] \" if CHOICES is \(?a ?b ?c)."
   (when choices
     (let* ((prompt-choices
             (apply 'concat (loop for c in choices
@@ -560,7 +560,7 @@ other properties will always hold scalar values.
 Typically the :secret property, if present, contains a password.
 
 Common search keys are :max, :host, :port, and :user.  In
-addition, :create specifies how tokens will be or created.
+addition, :create specifies if and how tokens will be created.
 Finally, :type can specify which backend types you want to check.
 
 A string value is always matched literally.  A symbol is matched
@@ -577,25 +577,25 @@ port keys.
 
 Here's an example:
 
-\(let ((auth-source-creation-defaults '((user . \"defaultUser\")
+\(let ((auth-source-creation-defaults \\='((user . \"defaultUser\")
                                         (A    . \"default A\"))))
-  (auth-source-search :host \"mine\" :type 'netrc :max 1
+  (auth-source-search :host \"mine\" :type \\='netrc :max 1
                       :P \"pppp\" :Q \"qqqq\"
                       :create t))
 
 which says:
 
-\"Search for any entry matching host 'mine' in backends of type
- 'netrc', maximum one result.
+\"Search for any entry matching host `mine' in backends of type
+ `netrc', maximum one result.
 
  Create a new entry if you found none.  The netrc backend will
  automatically require host, user, and port.  The host will be
- 'mine'.  We prompt for the user with default 'defaultUser' and
+ `mine'.  We prompt for the user with default `defaultUser' and
  for the port without a default.  We will not prompt for A, Q,
  or P.  The resulting token will only have keys user, host, and
  port.\"
 
-:create '(A B C) also means to create a token if possible.
+:create \\='(A B C) also means to create a token if possible.
 
 The behavior is like :create t but if the list contains any
 parameter, that parameter will be required in the resulting
@@ -604,32 +604,32 @@ search parameters or from user input.  If any queries are needed,
 the alist `auth-source-creation-defaults' will be checked for the
 default value.  If the user, host, or port are missing, the alist
 `auth-source-creation-prompts' will be used to look up the
-prompts IN THAT ORDER (so the 'user prompt will be queried first,
-then 'host, then 'port, and finally 'secret).  Each prompt string
+prompts IN THAT ORDER (so the `user' prompt will be queried first,
+then `host', then `port', and finally `secret').  Each prompt string
 can use %u, %h, and %p to show the user, host, and port.
 
 Here's an example:
 
-\(let ((auth-source-creation-defaults '((user . \"defaultUser\")
+\(let ((auth-source-creation-defaults \\='((user . \"defaultUser\")
                                         (A    . \"default A\")))
        (auth-source-creation-prompts
-        '((password . \"Enter IMAP password for %h:%p: \"))))
-  (auth-source-search :host '(\"nonesuch\" \"twosuch\") :type 'netrc :max 1
+        \\='((password . \"Enter IMAP password for %h:%p: \"))))
+  (auth-source-search :host \\='(\"nonesuch\" \"twosuch\") :type \\='netrc :max 1
                       :P \"pppp\" :Q \"qqqq\"
-                      :create '(A B Q)))
+                      :create \\='(A B Q)))
 
 which says:
 
-\"Search for any entry matching host 'nonesuch'
- or 'twosuch' in backends of type 'netrc', maximum one result.
+\"Search for any entry matching host `nonesuch'
+ or `twosuch' in backends of type `netrc', maximum one result.
 
  Create a new entry if you found none.  The netrc backend will
  automatically require host, user, and port.  The host will be
- 'nonesuch' and Q will be 'qqqq'.  We prompt for the password
+ `nonesuch' and Q will be `qqqq'.  We prompt for the password
  with the shown prompt.  We will not prompt for Q.  The resulting
  token will have keys user, host, port, A, B, and Q.  It will not
  have P with any value, even though P is used in the search to
- find only entries that have P set to 'pppp'.\"
+ find only entries that have P set to `pppp'.\"
 
 When multiple values are specified in the search parameter, the
 user is prompted for which one.  So :host (X Y Z) would ask the
@@ -650,13 +650,15 @@ property.
 Use `auth-source-delete' in ELisp code instead of calling
 `auth-source-search' directly with this parameter.
 
-:type (X Y Z) will check only those backend types.  'netrc and
-'secrets are the only ones supported right now.
+:type (X Y Z) will check only those backend types.  `netrc' and
+`secrets' are the only ones supported right now.
 
 :max N means to try to return at most N items (defaults to 1).
-When 0 the function will return just t or nil to indicate if any
-matches were found.  More than N items may be returned, depending
-on the search and the backend.
+More than N items may be returned, depending on the search and
+the backend.
+
+When :max is 0 the function will return just t or nil to indicate
+if any matches were found.
 
 :host (X Y Z) means to match only hosts X, Y, or Z according to
 the match rules above.  Defaults to t.
@@ -757,18 +759,22 @@ must call it to obtain the actual value."
       (when auth-source-do-cache
         (auth-source-remember spec found)))
 
-    found))
+    (if (zerop max)
+        (not (null found))
+      found)))
 
 (defun auth-source-search-backends (backends spec max create delete require)
-  (let (matches)
+  (let ((max (if (zerop max) 1 max)) ; stop with 1 match if we're asked for zero
+        matches)
     (dolist (backend backends)
-      (when (> max (length matches))   ; when we need more matches...
+      (when (> max (length matches)) ; if we need more matches...
         (let* ((bmatches (apply
                           (slot-value backend 'search-function)
                           :backend backend
                           :type (slot-value backend :type)
                           ;; note we're overriding whatever the spec
-                          ;; has for :require, :create, and :delete
+                          ;; has for :max, :require, :create, and :delete
+                          :max max
                           :require require
                           :create create
                           :delete delete
@@ -783,6 +789,7 @@ must call it to obtain the actual value."
             (setq matches (append matches bmatches))))))
     matches))
 
+;; (auth-source-search :max 0)
 ;; (auth-source-search :max 1)
 ;; (funcall (plist-get (nth 0 (auth-source-search :max 1)) :secret))
 ;; (auth-source-search :host "nonesuch" :type 'netrc :K 1)
@@ -1090,7 +1097,7 @@ Note that the MAX parameter is used so we can exit the parse early."
           (if (equal item2 "machine")
               (progn
                 (gnus-error 1
-                 "%s: Unexpected 'machine' token at line %d"
+                 "%s: Unexpected `machine' token at line %d"
                  "auth-source-netrc-parse-entries"
                  (auth-source-current-line))
                 (forward-line 1))
@@ -1524,10 +1531,10 @@ list, it matches the original pattern."
            (heads (if (stringp value)
                       (list (list key value))
                     (mapcar (lambda (v) (list key v)) value))))
-      (cl-loop
+      (loop
          for h in heads
          nconc
-           (cl-loop
+           (loop
               for tl in tails
               collect (append h tl))))))
 
@@ -1547,23 +1554,23 @@ matching, do a wider search and narrow it down yourself.
 
 You'll get back all the properties of the token as a plist.
 
-Here's an example that looks for the first item in the 'Login'
+Here's an example that looks for the first item in the `Login'
 Secrets collection:
 
- \(let ((auth-sources '(\"secrets:Login\")))
+ (let ((auth-sources \\='(\"secrets:Login\")))
     (auth-source-search :max 1)
 
-Here's another that looks for the first item in the 'Login'
-Secrets collection whose label contains 'gnus':
+Here's another that looks for the first item in the `Login'
+Secrets collection whose label contains `gnus':
 
- \(let ((auth-sources '(\"secrets:Login\")))
+ (let ((auth-sources \\='(\"secrets:Login\")))
     (auth-source-search :max 1 :label \"gnus\")
 
-And this one looks for the first item in the 'Login' Secrets
+And this one looks for the first item in the `Login' Secrets
 collection that's a Google Chrome entry for the git.gnus.org site
 authentication tokens:
 
- \(let ((auth-sources '(\"secrets:Login\")))
+ (let ((auth-sources \\='(\"secrets:Login\")))
     (auth-source-search :max 1 :signon_realm \"https://git.gnus.org/Git\"))
 "
 
@@ -1653,6 +1660,7 @@ authentication tokens:
 
 ;; (let ((auth-sources '("macos-keychain-internet:/Users/tzz/Library/Keychains/login.keychain"))) (auth-source-search :max 1))
 ;; (let ((auth-sources '("macos-keychain-generic:Login"))) (auth-source-search :max 1 :host "git.gnus.org"))
+;; (let ((auth-sources '("macos-keychain-generic:Login"))) (auth-source-search :max 1))
 
 (defun* auth-source-macos-keychain-search (&rest
                                     spec
@@ -1666,8 +1674,8 @@ matching, do a wider search and narrow it down yourself.
 
 You'll get back all the properties of the token as a plist.
 
-The :type key is either 'macos-keychain-internet or
-'macos-keychain-generic.
+The :type key is either `macos-keychain-internet' or
+`macos-keychain-generic'.
 
 For the internet keychain type, the :label key searches the
 item's labels (\"-l LABEL\" passed to \"/usr/bin/security\").
@@ -1683,19 +1691,19 @@ field), :user maps to \"-a USER\", and :port maps to \"-s PORT\".
 Here's an example that looks for the first item in the default
 generic MacOS Keychain:
 
- \(let ((auth-sources '(macos-keychain-generic)))
+ (let ((auth-sources \\='(macos-keychain-generic)))
     (auth-source-search :max 1)
 
 Here's another that looks for the first item in the internet
-MacOS Keychain collection whose label is 'gnus':
+MacOS Keychain collection whose label is `gnus':
 
- \(let ((auth-sources '(macos-keychain-internet)))
+ (let ((auth-sources \\='(macos-keychain-internet)))
     (auth-source-search :max 1 :label \"gnus\")
 
 And this one looks for the first item in the internet keychain
 entries for git.gnus.org:
 
- \(let ((auth-sources '(macos-keychain-internet\")))
+ (let ((auth-sources \\='(macos-keychain-internet\")))
     (auth-source-search :max 1 :host \"git.gnus.org\"))
 "
   ;; TODO
@@ -1779,29 +1787,29 @@ entries for git.gnus.org:
         (while (not (eobp))
           (cond
            ((looking-at "^password: \"\\(.+\\)\"$")
-            (auth-source-macos-keychain-result-append
-             ret
-             keychain-generic
-             "secret"
-             (lexical-let ((v (match-string 1)))
-               (lambda () v))))
+            (setq ret (auth-source-macos-keychain-result-append
+                       ret
+                       keychain-generic
+                       "secret"
+                       (lexical-let ((v (match-string 1)))
+                         (lambda () v)))))
            ;; TODO: check if this is really the label
            ;; match 0x00000007 <blob>="AppleID"
            ((looking-at "^[ ]+0x00000007 <blob>=\"\\(.+\\)\"")
-            (auth-source-macos-keychain-result-append
-             ret
-             keychain-generic
-             "label"
-             (match-string 1)))
+            (setq ret (auth-source-macos-keychain-result-append
+                       ret
+                       keychain-generic
+                       "label"
+                       (match-string 1))))
            ;; match "crtr"<uint32>="aapl"
            ;; match "svce"<blob>="AppleID"
            ((looking-at "^[ ]+\"\\([a-z]+\\)\"[^=]+=\"\\(.+\\)\"")
-            (auth-source-macos-keychain-result-append
-             ret
-             keychain-generic
-             (match-string 1)
-             (match-string 2))))
-            (forward-line)))
+            (setq ret (auth-source-macos-keychain-result-append
+                       ret
+                       keychain-generic
+                       (match-string 1)
+                       (match-string 2)))))
+          (forward-line)))
       ;; return `ret' iff it has the :secret key
       (and (plist-get ret :secret) (list ret))))
 

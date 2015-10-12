@@ -1,6 +1,6 @@
 @c -*- coding: utf-8 -*-
 @c This is part of the Emacs manual.
-@c Copyright (C) 1985-1987, 1993-1995, 1997, 1999-2014 Free Software
+@c Copyright (C) 1985-1987, 1993-1995, 1997, 1999-2015 Free Software
 @c Foundation, Inc.
 @c See file emacs.texi for copying conditions.
 @node Programs
@@ -88,8 +88,8 @@ Fortran, Icon, IDL (CORBA), IDLWAVE, Java, Javascript, Metafont
 Octave, Pascal, Perl, Pike, PostScript, Prolog, Python, Ruby, Simula, Tcl,
 and VHDL@.  An alternative mode for Perl is called CPerl mode.  Modes are
 also available for the scripting languages of the common GNU and Unix
-shells, VMS DCL, and MS-DOS/MS-Windows @samp{BAT} files, and for
-makefiles, DNS master files, and various sorts of configuration files.
+shells, and MS-DOS/MS-Windows @samp{BAT} files, and for makefiles,
+DNS master files, and various sorts of configuration files.
 
   Ideally, Emacs should have a major mode for each programming
 language that you might want to edit.  If it doesn't have a mode for
@@ -97,7 +97,6 @@ your favorite language, the mode might be implemented in a package not
 distributed with Emacs (@pxref{Packages}); or you can contribute one.
 
 @kindex DEL @r{(programming modes)}
-@findex c-electric-backspace
 @findex backward-delete-char-untabify
   In most programming languages, indentation should vary from line to
 line to illustrate the structure of the program.  Therefore, in most
@@ -383,7 +382,7 @@ the preceding lines; if the region is active, @key{TAB} indents each
 line within the region, not just the current line.
 
   The command @key{RET} (@code{newline}), which was documented in
-@ref{Inserting Text}, does the same as @key{C-j} followed by
+@ref{Inserting Text}, does the same as @kbd{C-j} followed by
 @key{TAB}: it inserts a new line, then adjusts the line's indentation.
 
   When indenting a line that starts within a parenthetical grouping,
@@ -546,7 +545,7 @@ your selected @dfn{style} with the syntactic construct and adds this
 onto the indentation of the @dfn{anchor statement}.
 
 @table @kbd
-@item C-c . @key{RET} @var{style} @key{RET}
+@item C-c . @var{style} @key{RET}
 Select a predefined style @var{style} (@code{c-set-style}).
 @end table
 
@@ -559,7 +558,7 @@ predefined styles, including @code{gnu}, @code{k&r}, @code{bsd},
 styles are primarily intended for one language, but any of them can be
 used with any of the languages supported by these modes.  To find out
 what a style looks like, select it and reindent some code, e.g., by
-typing @key{C-M-q} at the start of a function definition.
+typing @kbd{C-M-q} at the start of a function definition.
 
 @kindex C-c . @r{(C mode)}
 @findex c-set-style
@@ -742,10 +741,10 @@ because of the parentheses.
   The following commands move over groupings delimited by parentheses
 (or whatever else serves as delimiters in the language you are working
 with).  They ignore strings and comments, including any parentheses
-within them, and also ignore parentheses that are ``quoted'' with an
+within them, and also ignore parentheses that are quoted with an
 escape character.  These commands are mainly intended for editing
 programs, but can be useful for editing any text containing
-parentheses.  They are referred to internally as ``list'' commands
+parentheses.  They are referred to internally as ``list commands''
 because in Lisp these groupings are lists.
 
   These commands assume that the starting point is not inside a string
@@ -767,7 +766,7 @@ Move down in parenthesis structure (@code{down-list}).
 @kindex C-M-p
 @findex forward-list
 @findex backward-list
-  The ``list'' commands @kbd{C-M-n} (@code{forward-list}) and
+  The list commands @kbd{C-M-n} (@code{forward-list}) and
 @kbd{C-M-p} (@code{backward-list}) move forward or backward over one
 (or @var{n}) parenthetical groupings.
 
@@ -814,7 +813,8 @@ opening delimiter and closing delimiter are mismatched---such as in
 @code{blink-matching-paren} turns the feature on or off: @code{nil}
 disables it, but the default is @code{t} to enable it.  Set it to
 @code{jump} to make indication work by momentarily moving the cursor
-to the matching opening delimiter.
+to the matching opening delimiter.  Set it to @code{jump-offscreen} to
+make the cursor jump, even if the opening delimiter is off screen.
 
 @item
 @code{blink-matching-delay} says how many seconds to keep indicating
@@ -843,9 +843,9 @@ show-paren-mode}.
   Electric Pair mode, a global minor mode, provides a way to easily
 insert matching delimiters.  Whenever you insert an opening delimiter,
 the matching closing delimiter is automatically inserted as well,
-leaving point between the two. Conversely, when you insert a closing
+leaving point between the two.  Conversely, when you insert a closing
 delimiter over an existing one, no inserting takes places and that
-position is simply skipped over. These variables control additional
+position is simply skipped over.  These variables control additional
 features of Electric Pair mode:
 
 @itemize @bullet
@@ -870,7 +870,9 @@ mode to skip whitespace forward before deciding whether to skip over
 the closing delimiter.
 @end itemize
 
-To toggle Electric Pair mode, type @kbd{M-x electric-pair-mode}.
+To toggle Electric Pair mode, type @kbd{M-x electric-pair-mode}.  To
+toggle the mode in a single buffer, use @kbd{M-x
+electric-pair-local-mode}.
 
 @node Comments
 @section Manipulating Comments
@@ -938,7 +940,7 @@ you use it.
 
   When a region is active (@pxref{Mark}), @kbd{M-;} either adds
 comment delimiters to the region, or removes them.  If every line in
-the region is already a comment, it ``uncomments'' each of those lines
+the region is already a comment, it uncomments each of those lines
 by removing their comment delimiters.  Otherwise, it adds comment
 delimiters to enclose the text in the region.
 
@@ -1132,7 +1134,7 @@ You can also use @kbd{M-x info-lookup-file} to look for documentation
 for a file name.
 
   If you use @kbd{C-h S} in a major mode that does not support it,
-it asks you to specify the ``symbol help mode''.  You should enter
+it asks you to specify the symbol help mode.  You should enter
 a command such as @code{c-mode} that would select a major
 mode which @kbd{C-h S} does support.
 
@@ -1379,8 +1381,8 @@ see @ref{Top, Semantic,, semantic, Semantic}.
 see the Semantic Info manual, which is distributed with Emacs.
 @end iftex
 
-  Most of the ``language aware'' features in Emacs, such as Font Lock
-mode (@pxref{Font Lock}), rely on ``rules of thumb''@footnote{Regular
+  Most of the language-aware features in Emacs, such as Font Lock
+mode (@pxref{Font Lock}), rely on rules of thumb@footnote{Regular
 expressions and syntax tables.} that usually give good results but are
 never completely exact.  In contrast, the parsers used by Semantic
 have an exact understanding of programming language syntax.  This
@@ -1453,7 +1455,7 @@ creates.
 @findex superword-mode
  Superword mode is a buffer-local minor mode that causes editing and
 motion commands to treat symbols (e.g., @samp{this_is_a_symbol}) as words.
-When Subword mode is enabled, the minor mode indicator
+When Superword mode is enabled, the minor mode indicator
 @iftex
 @samp{@math{^2}}
 @end iftex
@@ -1476,15 +1478,16 @@ support Outline minor mode (@pxref{Outline Mode}), which can be used
 with the Foldout package (@pxref{Foldout}).
 
 @ifinfo
-  The ``automatic typing'' features may be useful for writing programs.
+  The automatic typing features may be useful for writing programs.
 @xref{Top,,Autotyping, autotype, Autotyping}.
 @end ifinfo
 
 @findex prettify-symbols-mode
   Prettify Symbols mode is a buffer-local minor mode that replaces
-certain strings with more ``attractive'' versions for display
+certain strings with more attractive versions for display
 purposes.  For example, in Emacs Lisp mode, it replaces the string
-``lambda'' with the Greek lambda character.  You may wish to use this
+@samp{lambda} with the Greek lambda character @samp{λ}.  You may wish
+to use this
 in non-programming modes as well.  You can customize the mode by
 adding more entries to @code{prettify-symbols-alist}.  There is also a
 global version, @code{global-prettify-symbols-mode}, which enables the
@@ -1598,7 +1601,7 @@ Move point to the end of the innermost C statement or sentence; like
   In C mode and related modes, certain printing characters are
 @dfn{electric}---in addition to inserting themselves, they also
 reindent the current line, and optionally also insert newlines.  The
-``electric'' characters are @kbd{@{}, @kbd{@}}, @kbd{:}, @kbd{#},
+electric characters are @kbd{@{}, @kbd{@}}, @kbd{:}, @kbd{#},
 @kbd{;}, @kbd{,}, @kbd{<}, @kbd{>}, @kbd{/}, @kbd{*}, @kbd{(}, and
 @kbd{)}.
 
@@ -1666,7 +1669,7 @@ Delete the entire block of whitespace after point (@code{c-hungry-delete-forward
   As an alternative to the above commands, you can enable @dfn{hungry
 delete mode}.  When this feature is enabled (indicated by @samp{/h} in
 the mode line after the mode name), a single @key{DEL} deletes all
-preceding whitespace, not just one space, and a single @kbd{C-c C-d}
+preceding whitespace, not just one space, and a single @kbd{C-d}
 (but @emph{not} plain @key{Delete}) deletes all following whitespace.
 
 @table @kbd
@@ -1795,7 +1798,7 @@ it work.
 Hide-ifdef minor mode hides selected code within @samp{#if} and
 @samp{#ifdef} preprocessor blocks.  If you change the variable
 @code{hide-ifdef-shadow} to @code{t}, Hide-ifdef minor mode
-``shadows'' preprocessor blocks by displaying them with a less
+shadows preprocessor blocks by displaying them with a less
 prominent face, instead of hiding them entirely.  See the
 documentation string of @code{hide-ifdef-mode} for more information.
 
@@ -1803,7 +1806,7 @@ documentation string of @code{hide-ifdef-mode} for more information.
 @cindex related files
 @findex ff-find-related-file
 @vindex ff-related-file-alist
-Find a file ``related'' in a special way to the file visited by the
+Find a file related in a special way to the file visited by the
 current buffer.  Typically this will be the header file corresponding
 to a C/C++ source file, or vice versa.  The variable
 @code{ff-related-file-alist} specifies how to compute related file

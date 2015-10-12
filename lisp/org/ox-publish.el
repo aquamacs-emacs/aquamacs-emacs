@@ -1,5 +1,5 @@
 ;;; ox-publish.el --- Publish Related Org Mode Files as a Website
-;; Copyright (C) 2006-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2006-2015 Free Software Foundation, Inc.
 
 ;; Author: David O'Toole <dto@gnu.org>
 ;; Maintainer: Carsten Dominik <carsten DOT dominik AT gmail DOT com>
@@ -61,7 +61,7 @@ Blocks could hash sha1 values here.")
 
 (defcustom org-publish-project-alist nil
   "Association list to control publishing behavior.
-Each element of the alist is a publishing 'project.'  The CAR of
+Each element of the alist is a publishing “project”.  The CAR of
 each element is a string, uniquely identifying the project.  The
 CDR of each element is in one of the following forms:
 
@@ -69,12 +69,12 @@ CDR of each element is in one of the following forms:
    alternating keys and values, specifying parameters for the
    publishing process.
 
-     \(:property value :property value ... )
+     (:property value :property value ... )
 
 2. A meta-project definition, specifying of a list of
    sub-projects:
 
-     \(:components (\"project-1\" \"project-2\" ...))
+     (:components (\"project-1\" \"project-2\" ...))
 
 When the CDR of an element of org-publish-project-alist is in
 this second form, the elements of the list after `:components'
@@ -228,7 +228,7 @@ If you create a site-map file, adjust the sorting like this:
   `:sitemap-sort-files'
 
     The site map is normally sorted alphabetically.  You can
-    change this behaviour setting this to `anti-chronologically',
+    change this behavior setting this to `anti-chronologically',
     `chronologically', or nil.
 
   `:sitemap-ignore-case'
@@ -711,7 +711,7 @@ If `:auto-sitemap' is set, publish the sitemap too.  If
 (defun org-publish-org-sitemap (project &optional sitemap-filename)
   "Create a sitemap of pages in set defined by PROJECT.
 Optionally set the filename of the sitemap with SITEMAP-FILENAME.
-Default for SITEMAP-FILENAME is 'sitemap.org'."
+Default for SITEMAP-FILENAME is `sitemap.org'."
   (let* ((project-plist (cdr project))
 	 (dir (file-name-as-directory
 	       (plist-get project-plist :base-directory)))

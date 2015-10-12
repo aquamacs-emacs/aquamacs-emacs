@@ -1,6 +1,7 @@
 ;;; semantic/ia-sb.el --- Speedbar analysis display interactor
 
-;;; Copyright (C) 2002-2004, 2006, 2008-2014 Free Software Foundation, Inc.
+;;; Copyright (C) 2002-2004, 2006, 2008-2015 Free Software Foundation,
+;;; Inc.
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: syntax
@@ -137,7 +138,7 @@ DIRECTORY is the current directory, which is ignored, and ZERO is 0."
 
       )))
 
-(defmethod semantic-ia-sb-show-doc ((context semantic-analyze-context))
+(cl-defmethod semantic-ia-sb-show-doc ((context semantic-analyze-context))
   "Show documentation about CONTEXT if CONTEXT points at a complete symbol."
   (let ((sym (car (reverse (oref context prefix))))
 	(doc nil))
@@ -162,7 +163,7 @@ DIRECTORY is the current directory, which is ignored, and ZERO is 0."
 				  ;; This is from semantic-sb
 				  'semantic-sb-token-jump))))
 
-(defmethod semantic-ia-sb-more-buttons ((context semantic-analyze-context))
+(cl-defmethod semantic-ia-sb-more-buttons ((context semantic-analyze-context))
   "Show a set of speedbar buttons specific to CONTEXT."
   (let ((prefix (oref context prefix)))
     (when prefix
@@ -172,9 +173,9 @@ DIRECTORY is the current directory, which is ignored, and ZERO is 0."
 				  'semantic-sb-token-jump))
     ))
 
-(defmethod semantic-ia-sb-more-buttons ((context semantic-analyze-context-assignment))
+(cl-defmethod semantic-ia-sb-more-buttons ((context semantic-analyze-context-assignment))
   "Show a set of speedbar buttons specific to CONTEXT."
-  (call-next-method)
+  (cl-call-next-method)
   (let ((assignee (oref context assignee)))
     (when assignee
       (speedbar-insert-separator "Assignee")
@@ -182,9 +183,9 @@ DIRECTORY is the current directory, which is ignored, and ZERO is 0."
 				  'speedbar-tag-face
 				  'semantic-sb-token-jump))))
 
-(defmethod semantic-ia-sb-more-buttons ((context semantic-analyze-context-functionarg))
+(cl-defmethod semantic-ia-sb-more-buttons ((context semantic-analyze-context-functionarg))
   "Show a set of speedbar buttons specific to CONTEXT."
-  (call-next-method)
+  (cl-call-next-method)
   (let ((func (oref context function)))
     (when func
       (speedbar-insert-separator "Function")

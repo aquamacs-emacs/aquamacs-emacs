@@ -1,6 +1,6 @@
 ;;; hi-lock.el --- minor mode for interactive automatic highlighting  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2000-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2000-2015 Free Software Foundation, Inc.
 
 ;; Author: David M. Koppelman <koppel@ece.lsu.edu>
 ;; Keywords: faces, minor-mode, matching, display
@@ -362,7 +362,7 @@ Hi-lock: end is found.  A mode is excluded if it's in the list
     (setq hi-lock-archaic-interface-message-used t)
     (if hi-lock-archaic-interface-deduce
         (global-hi-lock-mode hi-lock-mode)
-      (warn
+      (warn "%s"
        "Possible archaic use of (hi-lock-mode).
 Use (global-hi-lock-mode 1) in .emacs to enable hi-lock for all buffers,
 use (hi-lock-mode 1) for individual buffers.  For compatibility with Emacs
@@ -391,7 +391,7 @@ versions before 22 use the following in your init file:
 	(font-lock-remove-keywords nil hi-lock-file-patterns)
 	(setq hi-lock-file-patterns nil))
       (remove-overlays nil nil 'hi-lock-overlay t)
-      (when font-lock-fontified (font-lock-fontify-buffer)))
+      (font-lock-flush))
     (define-key-after menu-bar-edit-menu [hi-lock] nil)
     (remove-hook 'font-lock-mode-hook 'hi-lock-font-lock-hook t)))
 
@@ -596,12 +596,17 @@ then remove all hi-lock highlighting."
         ;; Make `face' the next one to use by default.
         (when (symbolp face)          ;Don't add it if it's a list (bug#13297).
           (add-to-list 'hi-lock--unused-faces (face-name face))))
-      (font-lock-remove-keywords nil (list keyword))
+      ;; FIXME: Calling `font-lock-remove-keywords' causes
+      ;; `font-lock-specified-p' to go from nil to non-nil (because it
+      ;; calls font-lock-set-defaults).  This is yet-another bug in
+      ;; font-lock-add/remove-keywords, which we circumvent here by
+      ;; testing `font-lock-fontified' (bug#19796).
+      (if font-lock-fontified (font-lock-remove-keywords nil (list keyword)))
       (setq hi-lock-interactive-patterns
             (delq keyword hi-lock-interactive-patterns))
       (remove-overlays
        nil nil 'hi-lock-overlay-regexp (hi-lock--hashcons (car keyword)))
-      (when font-lock-fontified (font-lock-fontify-buffer)))))
+      (font-lock-flush))))
 
 ;;;###autoload
 (defun hi-lock-write-interactive-patterns ()
@@ -695,7 +700,7 @@ with completion and history."
       (if (and font-lock-mode (font-lock-specified-p major-mode))
 	  (progn
 	    (font-lock-add-keywords nil (list pattern) t)
-	    (font-lock-fontify-buffer))
+	    (font-lock-flush))
         (let* ((range-min (- (point) (/ hi-lock-highlight-range 2)))
                (range-max (+ (point) (/ hi-lock-highlight-range 2)))
                (search-start
@@ -719,7 +724,7 @@ with completion and history."
     (font-lock-remove-keywords nil hi-lock-file-patterns)
     (setq hi-lock-file-patterns patterns)
     (font-lock-add-keywords nil hi-lock-file-patterns t)
-    (font-lock-fontify-buffer)))
+    (font-lock-flush)))
 
 (defun hi-lock-find-patterns ()
   "Find patterns in current buffer for hi-lock."

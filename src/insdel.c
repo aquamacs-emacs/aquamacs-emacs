@@ -1,5 +1,5 @@
 /* Buffer insertion/deletion and gap motion for GNU Emacs.
-   Copyright (C) 1985-1986, 1993-1995, 1997-2014 Free Software
+   Copyright (C) 1985-1986, 1993-1995, 1997-2015 Free Software
    Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -50,8 +50,6 @@ static Lisp_Object combine_after_change_list;
 
 /* Buffer which combine_after_change_list is about.  */
 static Lisp_Object combine_after_change_buffer;
-
-Lisp_Object Qinhibit_modification_hooks;
 
 static void signal_before_change (ptrdiff_t, ptrdiff_t, ptrdiff_t *);
 
@@ -203,6 +201,25 @@ gap_right (ptrdiff_t charpos, ptrdiff_t bytepos)
   QUIT;
 }
 
+/* If the selected window's old pointm is adjacent or covered by the
+   region from FROM to TO, unsuspend auto hscroll in that window.  */
+
+static void
+adjust_suspend_auto_hscroll (ptrdiff_t from, ptrdiff_t to)
+{
+  if (WINDOWP (selected_window))
+    {
+      struct window *w = XWINDOW (selected_window);
+
+      if (BUFFERP (w->contents)
+	  && XBUFFER (w->contents) == current_buffer
+	  && XMARKER (w->old_pointm)->charpos >= from
+	  && XMARKER (w->old_pointm)->charpos <= to)
+	w->suspend_auto_hscroll = 0;
+    }
+}
+
+
 /* Adjust all markers for a deletion
    whose range in bytes is FROM_BYTE to TO_BYTE.
    The range in charpos is FROM to TO.
@@ -217,6 +234,7 @@ adjust_markers_for_delete (ptrdiff_t from, ptrdiff_t from_byte,
   struct Lisp_Marker *m;
   ptrdiff_t charpos;
 
+  adjust_suspend_auto_hscroll (from, to);
   for (m = BUF_MARKERS (current_buffer); m; m = m->next)
     {
       charpos = m->charpos;
@@ -256,6 +274,7 @@ adjust_markers_for_insert (ptrdiff_t from, ptrdiff_t from_byte,
   ptrdiff_t nchars = to - from;
   ptrdiff_t nbytes = to_byte - from_byte;
 
+  adjust_suspend_auto_hscroll (from, to);
   for (m = BUF_MARKERS (current_buffer); m; m = m->next)
     {
       eassert (m->bytepos >= m->charpos
@@ -321,6 +340,7 @@ adjust_markers_for_replace (ptrdiff_t from, ptrdiff_t from_byte,
   ptrdiff_t diff_chars = new_chars - old_chars;
   ptrdiff_t diff_bytes = new_bytes - old_bytes;
 
+  adjust_suspend_auto_hscroll (from, from + old_chars);
   for (m = BUF_MARKERS (current_buffer); m; m = m->next)
     {
       if (m->bytepos >= prev_to_byte)
@@ -701,7 +721,7 @@ count_combining_after (const unsigned char *string,
 	(2) POS is the last of the current buffer.
 	(3) A character at POS can't be a following byte of multibyte
 	    character.  */
-  if (length > 0 && ASCII_BYTE_P (string[length - 1])) /* case (1) */
+  if (length > 0 && ASCII_CHAR_P (string[length - 1])) /* case (1) */
     return 0;
   if (pos_byte == Z_BYTE)	/* case (2) */
     return 0;
@@ -872,7 +892,6 @@ insert_from_string_1 (Lisp_Object string, ptrdiff_t pos, ptrdiff_t pos_byte,
 		      ptrdiff_t nchars, ptrdiff_t nbytes,
 		      bool inherit, bool before_markers)
 {
-  struct gcpro gcpro1;
   ptrdiff_t outgoing_nbytes = nbytes;
   INTERVAL intervals;
 
@@ -886,7 +905,6 @@ insert_from_string_1 (Lisp_Object string, ptrdiff_t pos, ptrdiff_t pos_byte,
       = count_size_as_multibyte (SDATA (string) + pos_byte,
 				 nbytes);
 
-  GCPRO1 (string);
   /* Do this before moving and increasing the gap,
      because the before-change hooks might move the gap
      or make it smaller.  */
@@ -896,7 +914,6 @@ insert_from_string_1 (Lisp_Object string, ptrdiff_t pos, ptrdiff_t pos_byte,
     move_gap_both (PT, PT_BYTE);
   if (GAP_SIZE < outgoing_nbytes)
     make_gap (outgoing_nbytes - GAP_SIZE);
-  UNGCPRO;
 
   /* Copy the string text into the buffer, perhaps converting
      between single-byte and multibyte.  */
@@ -1180,10 +1197,10 @@ adjust_after_replace (ptrdiff_t from, ptrdiff_t from_byte,
 
   /* Update various buffer positions for the new text.  */
   GAP_SIZE -= len_byte;
-  ZV += len; Z+= len;
+  ZV += len; Z += len;
   ZV_BYTE += len_byte; Z_BYTE += len_byte;
   GPT += len; GPT_BYTE += len_byte;
-  if (GAP_SIZE > 0) *(GPT_ADDR) = 0; /* Put an anchor. */
+  if (GAP_SIZE > 0) *(GPT_ADDR) = 0; /* Put an anchor.  */
 
   if (nchars_del > 0)
     adjust_markers_for_replace (from, from_byte, nchars_del, nbytes_del,
@@ -1206,7 +1223,7 @@ adjust_after_replace (ptrdiff_t from, ptrdiff_t from_byte,
   if (from < PT)
     adjust_point (len - nchars_del, len_byte - nbytes_del);
 
-  /* As byte combining will decrease Z, we must check this again. */
+  /* As byte combining will decrease Z, we must check this again.  */
   if (Z - GPT < END_UNCHANGED)
     END_UNCHANGED = Z - GPT;
 
@@ -1258,14 +1275,12 @@ replace_range (ptrdiff_t from, ptrdiff_t to, Lisp_Object new,
   ptrdiff_t insbytes = SBYTES (new);
   ptrdiff_t from_byte, to_byte;
   ptrdiff_t nbytes_del, nchars_del;
-  struct gcpro gcpro1;
   INTERVAL intervals;
   ptrdiff_t outgoing_insbytes = insbytes;
   Lisp_Object deletion;
 
   check_markers ();
 
-  GCPRO1 (new);
   deletion = Qnil;
 
   if (prepare)
@@ -1274,8 +1289,6 @@ replace_range (ptrdiff_t from, ptrdiff_t to, Lisp_Object new,
       prepare_to_modify_buffer (from, to, &from);
       to = from + range_length;
     }
-
-  UNGCPRO;
 
   /* Make args be valid.  */
   if (from < BEGV)
@@ -1300,8 +1313,6 @@ replace_range (ptrdiff_t from, ptrdiff_t to, Lisp_Object new,
   else if (! STRING_MULTIBYTE (new))
     outgoing_insbytes
       = count_size_as_multibyte (SDATA (new), insbytes);
-
-  GCPRO1 (new);
 
   /* Make sure the gap is somewhere in or next to what we are deleting.  */
   if (from > GPT)
@@ -1404,7 +1415,6 @@ replace_range (ptrdiff_t from, ptrdiff_t to, Lisp_Object new,
 
   MODIFF++;
   CHARS_MODIFF = MODIFF;
-  UNGCPRO;
 
   signal_after_change (from, nchars_del, GPT - from);
   update_compositions (from, GPT, CHECK_BORDER);
@@ -1541,7 +1551,6 @@ del_range_1 (ptrdiff_t from, ptrdiff_t to, bool prepare, bool ret_string)
 {
   ptrdiff_t from_byte, to_byte;
   Lisp_Object deletion;
-  struct gcpro gcpro1;
 
   /* Make args be valid */
   if (from < BEGV)
@@ -1563,10 +1572,8 @@ del_range_1 (ptrdiff_t from, ptrdiff_t to, bool prepare, bool ret_string)
   to_byte = CHAR_TO_BYTE (to);
 
   deletion = del_range_2 (from, from_byte, to, to_byte, ret_string);
-  GCPRO1 (deletion);
   signal_after_change (from, to - from, 0);
   update_compositions (from, from, CHECK_HEAD);
-  UNGCPRO;
   return deletion;
 }
 
@@ -1577,7 +1584,7 @@ del_range_byte (ptrdiff_t from_byte, ptrdiff_t to_byte, bool prepare)
 {
   ptrdiff_t from, to;
 
-  /* Make args be valid */
+  /* Make args be valid.  */
   if (from_byte < BEGV_BYTE)
     from_byte = BEGV_BYTE;
   if (to_byte > ZV_BYTE)
@@ -1659,7 +1666,7 @@ del_range_both (ptrdiff_t from, ptrdiff_t from_byte,
 /* Delete a range of text, specified both as character positions
    and byte positions.  FROM and TO are character positions,
    while FROM_BYTE and TO_BYTE are byte positions.
-   If RET_STRING, the deleted area is returned as a string. */
+   If RET_STRING, the deleted area is returned as a string.  */
 
 Lisp_Object
 del_range_2 (ptrdiff_t from, ptrdiff_t from_byte,
@@ -1758,8 +1765,6 @@ modify_text (ptrdiff_t start, ptrdiff_t end)
   bset_point_before_scroll (current_buffer, Qnil);
 }
 
-Lisp_Object Qregion_extract_function;
-
 /* Check that it is okay to modify the buffer between START and END,
    which are char positions.
 
@@ -1775,9 +1780,11 @@ prepare_to_modify_buffer_1 (ptrdiff_t start, ptrdiff_t end,
 			    ptrdiff_t *preserve_ptr)
 {
   struct buffer *base_buffer;
+  Lisp_Object temp;
 
+  XSETFASTINT (temp, start);
   if (!NILP (BVAR (current_buffer, read_only)))
-    Fbarf_if_buffer_read_only ();
+    Fbarf_if_buffer_read_only (temp);
 
   bset_redisplay (current_buffer);
 
@@ -1786,13 +1793,10 @@ prepare_to_modify_buffer_1 (ptrdiff_t start, ptrdiff_t end,
       if (preserve_ptr)
 	{
 	  Lisp_Object preserve_marker;
-	  struct gcpro gcpro1;
 	  preserve_marker = Fcopy_marker (make_number (*preserve_ptr), Qnil);
-	  GCPRO1 (preserve_marker);
 	  verify_interval_modification (current_buffer, start, end);
 	  *preserve_ptr = marker_position (preserve_marker);
 	  unchain_marker (XMARKER (preserve_marker));
-	  UNGCPRO;
 	}
       else
 	verify_interval_modification (current_buffer, start, end);
@@ -1804,26 +1808,18 @@ prepare_to_modify_buffer_1 (ptrdiff_t start, ptrdiff_t end,
   else
     base_buffer = current_buffer;
 
-#ifdef CLASH_DETECTION
+  if (inhibit_modification_hooks)
+    return;
+
   if (!NILP (BVAR (base_buffer, file_truename))
       /* Make binding buffer-file-name to nil effective.  */
       && !NILP (BVAR (base_buffer, filename))
       && SAVE_MODIFF >= MODIFF)
     lock_file (BVAR (base_buffer, file_truename));
-#else
-  /* At least warn if this file has changed on disk since it was visited.  */
-  if (!NILP (BVAR (base_buffer, filename))
-      && SAVE_MODIFF >= MODIFF
-      && NILP (Fverify_visited_file_modtime (Fcurrent_buffer ()))
-      && !NILP (Ffile_exists_p (BVAR (base_buffer, filename))))
-    call1 (intern ("ask-user-about-supersession-threat"),
-	   BVAR (base_buffer,filename));
-#endif /* not CLASH_DETECTION */
 
   /* If `select-active-regions' is non-nil, save the region text.  */
   /* FIXME: Move this to Elisp (via before-change-functions).  */
   if (!NILP (BVAR (current_buffer, mark_active))
-      && !inhibit_modification_hooks
       && XMARKER (BVAR (current_buffer, mark))->buffer
       && NILP (Vsaved_region_selection)
       && (EQ (Vselect_active_regions, Qonly)
@@ -1834,7 +1830,7 @@ prepare_to_modify_buffer_1 (ptrdiff_t start, ptrdiff_t end,
       = call1 (Fsymbol_value (Qregion_extract_function), Qnil);
 
   signal_before_change (start, end, preserve_ptr);
-  Vdeactivate_mark = Qt;
+  Fset (Qdeactivate_mark, Qt);
 }
 
 /* Like above, but called when we know that the buffer text
@@ -1958,36 +1954,30 @@ signal_before_change (ptrdiff_t start_int, ptrdiff_t end_int,
   Lisp_Object start, end;
   Lisp_Object start_marker, end_marker;
   Lisp_Object preserve_marker;
-  struct gcpro gcpro1, gcpro2, gcpro3;
   ptrdiff_t count = SPECPDL_INDEX ();
   struct rvoe_arg rvoe_arg;
-
-  if (inhibit_modification_hooks)
-    return;
 
   start = make_number (start_int);
   end = make_number (end_int);
   preserve_marker = Qnil;
   start_marker = Qnil;
   end_marker = Qnil;
-  GCPRO3 (preserve_marker, start_marker, end_marker);
 
   specbind (Qinhibit_modification_hooks, Qt);
 
   /* If buffer is unmodified, run a special hook for that case.  The
-   check for Vfirst_change_hook is just a minor optimization. */
+   check for Vfirst_change_hook is just a minor optimization.  */
   if (SAVE_MODIFF >= MODIFF
       && !NILP (Vfirst_change_hook))
     {
       PRESERVE_VALUE;
       PRESERVE_START_END;
-      Frun_hooks (1, &Qfirst_change_hook);
+      run_hook (Qfirst_change_hook);
     }
 
   /* Now run the before-change-functions if any.  */
   if (!NILP (Vbefore_change_functions))
     {
-      Lisp_Object args[3];
       rvoe_arg.location = &Vbefore_change_functions;
       rvoe_arg.errorp = 1;
 
@@ -1998,10 +1988,8 @@ signal_before_change (ptrdiff_t start_int, ptrdiff_t end_int,
       record_unwind_protect_ptr (reset_var_on_error, &rvoe_arg);
 
       /* Actually run the hook functions.  */
-      args[0] = Qbefore_change_functions;
-      args[1] = FETCH_START;
-      args[2] = FETCH_END;
-      Frun_hook_with_args (3, args);
+      CALLN (Frun_hook_with_args, Qbefore_change_functions,
+	     FETCH_START, FETCH_END);
 
       /* There was no error: unarm the reset_on_error.  */
       rvoe_arg.errorp = 0;
@@ -2019,7 +2007,6 @@ signal_before_change (ptrdiff_t start_int, ptrdiff_t end_int,
   if (! NILP (end_marker))
     free_marker (end_marker);
   RESTORE_VALUE;
-  UNGCPRO;
 
   unbind_to (count, Qnil);
 }
@@ -2069,7 +2056,6 @@ signal_after_change (ptrdiff_t charpos, ptrdiff_t lendel, ptrdiff_t lenins)
 
   if (!NILP (Vafter_change_functions))
     {
-      Lisp_Object args[4];
       rvoe_arg.location = &Vafter_change_functions;
       rvoe_arg.errorp = 1;
 
@@ -2077,11 +2063,9 @@ signal_after_change (ptrdiff_t charpos, ptrdiff_t lendel, ptrdiff_t lenins)
       record_unwind_protect_ptr (reset_var_on_error, &rvoe_arg);
 
       /* Actually run the hook functions.  */
-      args[0] = Qafter_change_functions;
-      XSETFASTINT (args[1], charpos);
-      XSETFASTINT (args[2], charpos + lenins);
-      XSETFASTINT (args[3], lendel);
-      Frun_hook_with_args (4, args);
+      CALLN (Frun_hook_with_args, Qafter_change_functions,
+	     make_number (charpos), make_number (charpos + lenins),
+	     make_number (lendel));
 
       /* There was no error: unarm the reset_on_error.  */
       rvoe_arg.errorp = 0;

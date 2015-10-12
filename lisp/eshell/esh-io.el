@@ -1,6 +1,6 @@
 ;;; esh-io.el --- I/O management  -*- lexical-binding:t -*-
 
-;; Copyright (C) 1999-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1999-2015 Free Software Foundation, Inc.
 
 ;; Author: John Wiegley <johnw@gnu.org>
 
@@ -30,6 +30,18 @@
 ;; Otherwise, output redirection and piping are provided in a manner
 ;; consistent with most shells.  Therefore, only unique features are
 ;; mentioned here.
+;;
+;;;_* Redirect to a Buffer or Process
+;;
+;; Buffers and processes can be named with '#<buffer buffer-name>' and
+;; '#<process process-name>', respectively. As a shorthand,
+;; '#<buffer-name>' without the explicit "buffer" arg is equivalent to
+;; '#<buffer buffer-name>'.
+;;
+;;   echo hello > #<buffer *scratch*> # Overwrite '*scratch*' with 'hello'.
+;;   echo hello > #<*scratch*>        # Same as the command above.
+;;
+;;   echo hello > #<process shell> # Pipe "hello" into the shell process.
 ;;
 ;;;_* Insertion
 ;;
@@ -98,27 +110,12 @@ other buffers) ."
   :type 'integer
   :group 'eshell-io)
 
-(defcustom eshell-buffer-shorthand nil
-  "If non-nil, a symbol name can be used for a buffer in redirection.
-If nil, redirecting to a buffer requires buffer name syntax.  If this
-variable is set, redirection directly to Lisp symbols will be
-impossible.
-
-Example:
-
-  echo hello > '*scratch*  ; works if `eshell-buffer-shorthand' is t
-  echo hello > #<buffer *scratch*>  ; always works"
-  :type 'boolean
-  :group 'eshell-io)
-
 (defcustom eshell-print-queue-size 5
   "The size of the print queue, for doing buffered printing.
 This is basically a speed enhancement, to avoid blocking the Lisp code
 from executing while Emacs is redisplaying."
   :type 'integer
   :group 'eshell-io)
-
-(defvar x-select-enable-clipboard)	; term/common-win
 
 (defcustom eshell-virtual-targets
   '(("/dev/eshell" eshell-interactive-print nil)
@@ -128,7 +125,7 @@ from executing while Emacs is redisplaying."
 		   'eshell-kill-append) t)
     ("/dev/clip" (lambda (mode)
 		   (if (eq mode 'overwrite)
-		       (let ((x-select-enable-clipboard t))
+		       (let ((gui-select-enable-clipboard t))
 			 (kill-new "")))
 		   'eshell-clipboard-append) t))
   "Map virtual devices name to Emacs Lisp functions.
@@ -185,7 +182,7 @@ not be added to this variable."
                 #'eshell--apply-redirections))
 
 (defun eshell-parse-redirection ()
-  "Parse an output redirection, such as '2>'."
+  "Parse an output redirection, such as `2>'."
   (if (and (not eshell-current-quoted)
 	   (looking-at "\\([0-9]\\)?\\(<\\|>+\\)&?\\([0-9]\\)?\\s-*"))
       (if eshell-current-argument
@@ -328,7 +325,7 @@ last execution result should not be changed."
 (defun eshell-clipboard-append (string)
   "Call `kill-append' with STRING, if it is indeed a string."
   (if (stringp string)
-      (let ((x-select-enable-clipboard t))
+      (let ((gui-select-enable-clipboard t))
 	(kill-append string nil))))
 
 (defun eshell-get-target (target &optional mode)
@@ -357,21 +354,14 @@ it defaults to `insert'."
 		   (goto-char (point-max))))
 	    (point-marker))))))
 
-   ((or (bufferp target)
-	(and (boundp 'eshell-buffer-shorthand)
-	     (symbol-value 'eshell-buffer-shorthand)
-	     (symbolp target)
-	     (not (memq target '(t nil)))))
-    (let ((buf (if (bufferp target)
-		   target
-		 (get-buffer-create
-		  (symbol-name target)))))
-      (with-current-buffer buf
-	(cond ((eq mode 'overwrite)
-	       (erase-buffer))
-	      ((eq mode 'append)
-	       (goto-char (point-max))))
-	(point-marker))))
+
+   ((bufferp target)
+    (with-current-buffer target
+      (cond ((eq mode 'overwrite)
+             (erase-buffer))
+            ((eq mode 'append)
+             (goto-char (point-max))))
+      (point-marker)))
 
    ((functionp target) nil)
 

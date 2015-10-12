@@ -1,6 +1,6 @@
 ;;; image.el --- image API
 
-;; Copyright (C) 1998-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1998-2015 Free Software Foundation, Inc.
 
 ;; Maintainer: emacs-devel@gnu.org
 ;; Keywords: multimedia
@@ -34,7 +34,7 @@
 
 (defconst image-type-header-regexps
   `(("\\`/[\t\n\r ]*\\*.*XPM.\\*/" . xpm)
-    ("\\`P[1-6]\\\(?:\
+    ("\\`P[1-6]\\(?:\
 \\(?:\\(?:#[^\r\n]*[\r\n]\\)?[[:space:]]\\)+\
 \\(?:\\(?:#[^\r\n]*[\r\n]\\)?[0-9]\\)+\
 \\)\\{2\\}" . pbm)
@@ -357,7 +357,7 @@ Optional DATA-P non-nil means SOURCE is a string containing image data."
 
 (if (fboundp 'image-metadata)           ; eg not --without-x
     (define-obsolete-function-alias 'image-extension-data
-      'image-metadata' "24.1"))
+      'image-metadata "24.1"))
 
 (define-obsolete-variable-alias
     'image-library-alist

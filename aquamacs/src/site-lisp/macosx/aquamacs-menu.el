@@ -307,10 +307,8 @@ customization buffer."
 	      :key-sequence [(,osxkeys-command-key v)]
 	      :enable (and
 		       (or
-			(x-selection-exists-p 'CLIPBOARD)
+			(ns-selection-exists-p 'CLIPBOARD)
 			(cdr yank-menu))
-		       ;; Emacs compiled --without-x doesn't have
-		       ;; x-selection-exists-p.
 		       (not buffer-read-only)
 		       (menu-bar-menu-frame-live-and-visible-p))
 	      :help "Paste (yank) text most recently cut/copied"))
@@ -377,9 +375,10 @@ customization buffer."
 
 (defun aquamacs-install-command-line-tool ()
   (interactive)
-  (call-process "open" nil 0 nil "-a" "Installer" 
-		(format "%s/Contents/Resources/Aquamacs Command Line Tool.mpkg" 
-			aquamacs-mac-application-bundle-directory))
+  (let ((coding-system-for-write 'no-conversion))
+    (call-process "open" nil 0 nil "-a" "Installer" 
+                  (format "%s/Contents/Resources/Aquamacs Command Line Tool.mpkg" 
+                          aquamacs-mac-application-bundle-directory)))
   (message "Call command-line-tool from a shell as `aquamacs', e.g., as \"aquamacs file.txt\""))
 
 

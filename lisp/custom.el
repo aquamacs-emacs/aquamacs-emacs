@@ -1,6 +1,6 @@
 ;;; custom.el --- tools for declaring and initializing options
 ;;
-;; Copyright (C) 1996-1997, 1999, 2001-2014 Free Software Foundation,
+;; Copyright (C) 1996-1997, 1999, 2001-2015 Free Software Foundation,
 ;; Inc.
 ;;
 ;; Author: Per Abrahamsen <abraham@dina.kvl.dk>
@@ -411,7 +411,8 @@ In the ATTS property list, possible attributes are `:family',
 
 See Info node `(elisp) Faces' in the Emacs Lisp manual for more
 information."
-  (declare (doc-string 3))
+  (declare (doc-string 3)
+           (indent 1))
   ;; It is better not to use backquote in this file,
   ;; because that makes a bootstrapping problem
   ;; if you need to recompile all the Lisp files using interpreted code.
@@ -448,8 +449,7 @@ information."
   ;; Record the group on the `current' list.
   (let ((elt (assoc load-file-name custom-current-group-alist)))
     (if elt (setcdr elt symbol)
-      (push (cons (purecopy load-file-name) symbol)
-	    custom-current-group-alist)))
+      (push (cons load-file-name symbol) custom-current-group-alist)))
   (run-hooks 'custom-define-hook)
   symbol)
 
@@ -1214,13 +1214,11 @@ Return t if THEME was successfully loaded, nil otherwise."
     (put theme 'theme-documentation nil))
   (let ((fn (locate-file (concat (symbol-name theme) "-theme.el")
 			 (custom-theme--load-path)
-			 '("" "c")))
-	hash)
+			 '("" "c"))))
     (unless fn
       (error "Unable to find theme file for `%s'" theme))
     (with-temp-buffer
       (insert-file-contents fn)
-      (setq hash (secure-hash 'sha256 (current-buffer)))
       ;; Check file safety with `custom-safe-themes', prompting the
       ;; user if necessary.
       (when (or no-confirm
@@ -1228,8 +1226,9 @@ Return t if THEME was successfully loaded, nil otherwise."
 		(and (memq 'default custom-safe-themes)
 		     (equal (file-name-directory fn)
 			    (expand-file-name "themes/" data-directory)))
-		(member hash custom-safe-themes)
-		(custom-theme-load-confirm hash))
+                (let ((hash (secure-hash 'sha256 (current-buffer))))
+                  (or (member hash custom-safe-themes)
+                      (custom-theme-load-confirm hash))))
 	(let ((custom--inhibit-theme-enable t)
               (buffer-file-name fn))    ;For load-history.
 	  (eval-buffer))

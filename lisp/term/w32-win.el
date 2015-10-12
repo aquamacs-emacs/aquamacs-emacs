@@ -1,6 +1,6 @@
 ;;; w32-win.el --- parse switches controlling interface with W32 window system -*- lexical-binding: t -*-
 
-;; Copyright (C) 1993-1994, 2001-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1993-1994, 2001-2015 Free Software Foundation, Inc.
 
 ;; Author: Kevin Gallo
 ;; Keywords: terminals
@@ -205,13 +205,16 @@ European languages which are distributed with Windows as
 
 See the documentation of `create-fontset-from-fontset-spec' for the format.")
 
-(defun x-win-suspend-error ()
-  "Report an error when a suspend is attempted.
-This returns an error if any Emacs frames are X frames, or always under W32."
+(defun w32-win-suspend-error ()
+  "Report an error when a suspend is attempted."
   (error "Suspending an Emacs running under W32 makes no sense"))
 
 (defvar dynamic-library-alist)
 (defvar libpng-version)                 ; image.c #ifdef HAVE_NTGUI
+(defvar libgif-version)
+(defvar libjpeg-version)
+
+(defvar libgnutls-version)              ; gnutls.c
 
 ;;; Set default known names for external libraries
 (setq dynamic-library-alist
@@ -265,7 +268,9 @@ This returns an error if any Emacs frames are X frames, or always under W32."
        '(gdk-pixbuf "libgdk_pixbuf-2.0-0.dll")
        '(glib "libglib-2.0-0.dll")
        '(gobject "libgobject-2.0-0.dll")
-       '(gnutls "libgnutls-28.dll" "libgnutls-26.dll")
+       (if (>= libgnutls-version 30400)
+	   '(gnutls "libgnutls-30.dll")
+	 '(gnutls "libgnutls-28.dll" "libgnutls-26.dll"))
        '(libxml2 "libxml2-2.dll" "libxml2.dll")
        '(zlib "zlib1.dll" "libz-1.dll")))
 
@@ -285,7 +290,8 @@ This returns an error if any Emacs frames are X frames, or always under W32."
 (declare-function x-parse-geometry "frame.c" (string))
 (defvar x-command-line-resources)
 
-(defun w32-initialize-window-system (&optional _display)
+(cl-defmethod window-system-initialization (&context (window-system (eql w32))
+                                            &optional _display)
   "Initialize Emacs for W32 GUI frames."
   (cl-assert (not w32-initialized))
 
@@ -353,7 +359,7 @@ This returns an error if any Emacs frames are X frames, or always under W32."
                 (cons '(reverse . t) default-frame-alist)))))
 
   ;; Don't let Emacs suspend under Windows.
-  (add-hook 'suspend-hook 'x-win-suspend-error)
+  (add-hook 'suspend-hook #'w32-win-suspend-error)
 
   ;; Turn off window-splitting optimization; w32 is usually fast enough
   ;; that this is only annoying.
@@ -371,9 +377,90 @@ This returns an error if any Emacs frames are X frames, or always under W32."
   (setq w32-initialized t))
 
 (add-to-list 'display-format-alist '("\\`w32\\'" . w32))
-(add-to-list 'handle-args-function-alist '(w32 . x-handle-args))
-(add-to-list 'frame-creation-function-alist '(w32 . x-create-frame-with-faces))
-(add-to-list 'window-system-initialization-alist '(w32 . w32-initialize-window-system))
+(cl-defmethod handle-args-function (args &context (window-system (eql w32)))
+  (x-handle-args args))
+
+(cl-defmethod frame-creation-function (params &context (window-system (eql w32)))
+  (x-create-frame-with-faces params))
+
+;;;; Selections
+
+(declare-function w32-set-clipboard-data "w32select.c"
+		  (string &optional ignored))
+(declare-function w32-get-clipboard-data "w32select.c")
+(declare-function w32-selection-exists-p "w32select.c")
+
+;;; Fix interface to (X-specific) mouse.el
+(defun w32--set-selection (type value)
+  (if (eq type 'CLIPBOARD)
+      (w32-set-clipboard-data value)
+    (put 'x-selections (or type 'PRIMARY) value)))
+
+(defun w32--get-selection  (&optional type data-type)
+  (if (and (eq type 'CLIPBOARD)
+           (eq data-type 'STRING))
+      (with-demoted-errors "w32-get-clipboard-data:%S"
+        (w32-get-clipboard-data))
+    (get 'x-selections (or type 'PRIMARY))))
+
+(defun w32--selection-owner-p (selection)
+  (and (memq selection '(nil PRIMARY SECONDARY))
+       (get 'x-selections (or selection 'PRIMARY))))
+
+(cl-defmethod gui-backend-set-selection (type value
+                                         &context (window-system (eql w32)))
+  (w32--set-selection type value))
+
+(cl-defmethod gui-backend-get-selection (type data-type
+                                         &context (window-system (eql w32)))
+  (w32--get-selection type data-type))
+
+(cl-defmethod gui-backend-selection-owner-p (selection
+                                             &context (window-system (eql w32)))
+  (w32--selection-owner-p selection))
+
+(cl-defmethod gui-backend-selection-exists-p (selection
+                                              &context (window-system (eql w32)))
+  (w32-selection-exists-p selection))
+
+(when (eq system-type 'windows-nt)
+  ;; Make copy&pasting in w32's console interact with the system's clipboard!
+  ;; We could move those cl-defmethods outside of the `when' and use
+  ;; "&context (system-type (eql windows-nt))" instead!
+  (cl-defmethod gui-backend-set-selection (type value
+                                           &context (window-system (eql nil)))
+    (w32--set-selection type value))
+
+  (cl-defmethod gui-backend-get-selection (type data-type
+                                           &context (window-system (eql nil)))
+    (w32--get-selection type data-type))
+
+  (cl-defmethod gui-backend-selection-owner-p (selection
+                                               &context (window-system (eql nil)))
+    (w32--selection-owner-p selection))
+
+  (cl-defmethod gui-selection-exists-p (selection
+                                        &context (window-system (eql nil)))
+    (w32-selection-exists-p selection)))
+
+;; The "Windows" keys on newer keyboards bring up the Start menu
+;; whether you want it or not - make Emacs ignore these keystrokes
+;; rather than beep.
+(global-set-key [lwindow] 'ignore)
+(global-set-key [rwindow] 'ignore)
+
+(declare-function x-server-version "w32fns.c" (&optional terminal))
+
+(defun w32-version ()
+  "Return the MS-Windows version numbers.
+The value is a list of three integers: the major and minor version
+numbers, and the build number."
+  (x-server-version))
+
+(defun w32-using-nt ()
+  "Return non-nil if running on a Windows NT descendant.
+That includes all Windows systems except for 9X/Me."
+  (getenv "SystemRoot"))
 
 (provide 'w32-win)
 

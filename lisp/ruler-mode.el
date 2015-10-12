@@ -1,6 +1,6 @@
 ;;; ruler-mode.el --- display a ruler in the header line
 
-;; Copyright (C) 2001-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2001-2015 Free Software Foundation, Inc.
 
 ;; Author: David Ponce <david@dponce.com>
 ;; Maintainer: David Ponce <david@dponce.com>
@@ -306,7 +306,6 @@ or remove a tab stop.  \\[ruler-mode-toggle-show-tab-stops] or
   "Return a column number relative to the selected window.
 N is a column number relative to selected frame."
   (- n
-     (car (window-edges))
      (or (car (window-margins)) 0)
      (fringe-columns 'left)
      (scroll-bar-columns 'left)))
@@ -321,7 +320,7 @@ START-EVENT is the mouse click event."
     (when (eq start end) ;; mouse click
       (save-selected-window
         (select-window (posn-window start))
-        (setq col (- (car (posn-col-row start)) (car (window-edges))
+        (setq col (- (car (posn-col-row start))
                      (scroll-bar-columns 'left))
               w   (- (ruler-mode-full-window-width)
                      (scroll-bar-columns 'left)
@@ -343,7 +342,7 @@ START-EVENT is the mouse click event."
     (when (eq start end) ;; mouse click
       (save-selected-window
         (select-window (posn-window start))
-        (setq col (- (car (posn-col-row start)) (car (window-edges))
+        (setq col (- (car (posn-col-row start))
                      (scroll-bar-columns 'left))
               w   (- (ruler-mode-full-window-width)
                      (scroll-bar-columns 'left)
@@ -438,6 +437,8 @@ the mouse has been clicked."
   (let ((drags 0)
         event)
     (track-mouse
+      ;; Signal the display engine to freeze the mouse pointer shape.
+      (setq track-mouse 'dragging)
       (while (mouse-movement-p (setq event (read-event)))
         (setq drags (1+ drags))
         (when (eq window (posn-window (event-end event)))
@@ -773,9 +774,5 @@ Optional argument PROPS specifies other text properties to apply."
             ruler rf rm (and (eq 'right sbvt) sb)))))
 
 (provide 'ruler-mode)
-
-;; Local Variables:
-;; coding: utf-8
-;; End:
 
 ;;; ruler-mode.el ends here

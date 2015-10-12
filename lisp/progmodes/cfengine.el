@@ -1,11 +1,11 @@
 ;;; cfengine.el --- mode for editing Cfengine files
 
-;; Copyright (C) 2001-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2001-2015 Free Software Foundation, Inc.
 
 ;; Author: Dave Love <fx@gnu.org>
 ;; Maintainer: Ted Zlatanov <tzz@lifelogs.com>
 ;; Keywords: languages
-;; Version: 1.3
+;; Version: 1.4
 
 ;; This file is part of GNU Emacs.
 
@@ -24,11 +24,8 @@
 
 ;;; Commentary:
 
-;; Provides support for editing GNU Cfengine files, including
+;; Provides support for editing GNU CFEngine files, including
 ;; font-locking, Imenu and indentation, but with no special keybindings.
-
-;; The CFEngine 3.x support doesn't have Imenu support but patches are
-;; welcome.
 
 ;; By default, CFEngine 3.x syntax is used.
 
@@ -49,6 +46,14 @@
 
 ;; (add-hook 'cfengine3-mode-hook 'eldoc-mode)
 
+;; You may also find the command `cfengine3-reformat-json-string'
+;; useful, just bind it to a key you prefer. It will take the current
+;; string and reformat it as JSON. So if you're editing JSON inside
+;; the policy, it's a quick way to make it more legible without
+;; manually reindenting it.  For instance:
+
+;; (global-set-key [(control f4)] 'cfengine3-reformat-json-string)
+
 ;; This is not the same as the mode written by Rolf Ebert
 ;; <ebert@waporo.muc.de>, distributed with cfengine-2.0.5.  It does
 ;; better fontification and indentation, inter alia.
@@ -56,7 +61,7 @@
 ;;; Code:
 
 (autoload 'json-read "json")
-(autoload 'regexp-opt "regexp-opt")
+(autoload 'json-pretty-print "json")
 
 (defgroup cfengine ()
   "Editing CFEngine files."
@@ -84,7 +89,7 @@ will use a fallback syntax definition."
   :group 'cfengine
   :type '(choice file (const nil)))
 
-(defcustom cfengine-parameters-indent '(promise pname 0)
+(defcustom cfengine-parameters-indent '(promise pname 2)
   "Indentation of CFEngine3 promise parameters (hanging indent).
 
 For example, say you have this code:
@@ -105,15 +110,15 @@ You can also choose to indent the start of the word
 
 Finally, you can choose the amount of the indent.
 
-The default is to anchor at promise, indent parameter name, and offset 0:
+The default is to anchor at promise, indent parameter name, and offset 2:
 
 bundle agent rcfiles
 {
   files:
     any::
       \"/tmp/netrc\"
-      comment => \"my netrc\",
-      perms => mog(\"600\", \"tzz\", \"tzz\");
+        comment => \"my netrc\",
+        perms => mog(\"600\", \"tzz\", \"tzz\");
 }
 
 Here we anchor at beginning of line, indent arrow, and offset 10:
@@ -152,7 +157,7 @@ bundle agent rcfiles
   "Whether `cfengine-mode' should print debugging info.")
 
 (defvar cfengine-mode-syntax-cache nil
-  "Cache for `cfengine-mode' syntax trees obtained from 'cf-promises -s json'.")
+  "Cache for `cfengine-mode' syntax trees obtained from `cf-promises -s json'.")
 
 (defconst cfengine3-fallback-syntax
   '((functions
@@ -815,24 +820,26 @@ bundle agent rcfiles
     "List of the action keywords supported by Cfengine.
 This includes those for cfservd as well as cfagent.")
 
-  (defconst cfengine3-defuns
-    (mapcar
-     'symbol-name
-     '(bundle body))
+  (defconst cfengine3-defuns '("bundle" "body")
     "List of the CFEngine 3.x defun headings.")
 
-  (defconst cfengine3-defuns-regex
-    (regexp-opt cfengine3-defuns t)
+  (defconst cfengine3-defuns-regex (regexp-opt cfengine3-defuns t)
     "Regex to match the CFEngine 3.x defuns.")
 
-  (defconst cfengine3-class-selector-regex "\\([[:alnum:]_().&|!:]+\\)::")
+  (defconst cfengine3-defun-full-re (concat "^\\s-*" cfengine3-defuns-regex
+                                            "\\s-+\\(\\(?:\\w\\|\\s_\\)+\\)" ;type
+                                            "\\s-+\\(\\(?:\\w\\|\\s_\\)+\\)" ;id
+                                            )
+    "Regexp matching full defun declaration (excluding argument list).")
+
+  (defconst cfengine3-macro-regex "\\(@[a-zA-Z].+\\)")
+
+  (defconst cfengine3-class-selector-regex "\\([\"']?[[:alnum:]_().$&|!:]+[\"']?\\)::")
 
   (defconst cfengine3-category-regex "\\([[:alnum:]_]+\\):")
 
-  (defconst cfengine3-vartypes
-    (mapcar
-     'symbol-name
-     '(string int real slist ilist rlist irange rrange counter data))
+  (defconst cfengine3-vartypes '("string" "int" "real" "slist" "ilist" "rlist"
+                                 "irange" "rrange" "counter" "data")
     "List of the CFEngine 3.x variable types."))
 
 (defvar cfengine2-font-lock-keywords
@@ -854,6 +861,14 @@ This includes those for cfservd as well as cfagent.")
 
 (defvar cfengine3-font-lock-keywords
   `(
+    ;; Macros
+    (,(concat "^" cfengine3-macro-regex)
+     1 font-lock-error-face)
+
+    ;; invalid macros
+    (,(concat "^[ \t]*" cfengine3-macro-regex)
+     1 font-lock-warning-face)
+
     ;; Defuns.  This happens early so they don't get caught by looser
     ;; patterns.
     (,(concat "\\_<" cfengine3-defuns-regex "\\_>"
@@ -990,12 +1005,12 @@ Intended as the value of `indent-line-function'."
 				   (point))))
       (let ((paragraph-start
 	     ;; Include start of parenthesized block.
-	     "\f\\|[ \t]*$\\|.*\(")
+	     "\f\\|[ \t]*$\\|.*(")
 	    (paragraph-separate
 	     ;; Include action and class lines, start and end of
 	     ;; bracketed blocks and end of parenthesized blocks to
 	     ;; avoid including these in fill.  This isn't ideal.
-	     "[ \t\f]*$\\|.*#\\|.*[\){}]\\|\\s-*[[:alpha:]_().|!]+:")
+	     "[ \t\f]*$\\|.*#\\|.*[){}]\\|\\s-*[[:alpha:]_().|!]+:")
 	    fill-paragraph-function)
 	(fill-paragraph justify))
       t))
@@ -1020,7 +1035,7 @@ Treats body/bundle blocks as defuns."
   t)
 
 (defun cfengine3-indent-line ()
-  "Indent a line in Cfengine 3 mode.
+  "Indent a line in CFEngine 3 mode.
 Intended as the value of `indent-line-function'."
   (let ((pos (- (point-max) (point)))
         parse)
@@ -1032,6 +1047,10 @@ Intended as the value of `indent-line-function'."
         (message "%S" parse))
 
       (cond
+       ;; Macros start at 0.  But make sure we're not inside a string.
+       ((and (not (nth 3 parse))
+             (looking-at (concat cfengine3-macro-regex)))
+        (indent-line-to 0))
        ;; Body/bundle blocks start at 0.
        ((looking-at (concat cfengine3-defuns-regex "\\_>"))
         (indent-line-to 0))
@@ -1106,6 +1125,19 @@ Intended as the value of `indent-line-function'."
     ;; position after the indentation.  Else stay at same point in text.
     (if (> (- (point-max) pos) (point))
         (goto-char (- (point-max) pos)))))
+
+(defun cfengine3-reformat-json-string ()
+  "Reformat the current string as JSON using `json-pretty-print'."
+  (interactive)
+  (let ((ppss (syntax-ppss)))
+    (when (nth 3 ppss)                  ;inside a string
+      (save-excursion
+        (goto-char (nth 8 ppss))
+        (forward-char 1)
+        (let ((start (point)))
+          (forward-sexp 1)
+          (json-pretty-print start
+                             (point)))))))
 
 ;; CFEngine 3.x grammar
 
@@ -1203,18 +1235,22 @@ Intended as the value of `indent-line-function'."
               "???")
             (propertize f 'face 'font-lock-function-name-face)
             (mapconcat (lambda (p)
-                         (let ((type (cdr (assq 'type p)))
+                         (let* ((type (cdr (assq 'type p)))
+                                (description (cdr (assq 'description p)))
+                                (desc-string (if (stringp description)
+                                                 (concat " /" description "/")
+                                               ""))
                                (range (cdr (assq 'range p))))
                            (cond
                             ((not (stringp type)) "???type???")
                             ((not (stringp range)) "???range???")
                             ;; options are lists of possible keywords
                             ((equal type "option")
-                             (propertize (concat "[" range "]")
+                             (propertize (concat "[" range "]" desc-string)
                                          'face
                                          'font-lock-keyword-face))
                             ;; anything else is a type name as a variable
-                            (t (propertize type
+                            (t (propertize (concat type desc-string)
                                            'face
                                            'font-lock-variable-name-face)))))
                        plist
@@ -1231,29 +1267,32 @@ Should not be necessary unless you reinstall CFEngine."
   (setq cfengine-mode-syntax-cache nil))
 
 (defun cfengine3-make-syntax-cache ()
-  "Build the CFEngine 3 syntax cache.
-Calls `cfengine-cf-promises' with \"-s json\""
-  (let ((syntax (cddr (assoc cfengine-cf-promises cfengine-mode-syntax-cache))))
-    (if cfengine-cf-promises
-        (or syntax
-            (with-demoted-errors
-                (with-temp-buffer
-                  (call-process-shell-command cfengine-cf-promises
-                                              nil   ; no input
-                                              t     ; current buffer
-                                              nil   ; no redisplay
-                                              "-s" "json")
-                  (goto-char (point-min))
-                  (setq syntax (json-read))
-                  (setq cfengine-mode-syntax-cache
-                        (cons (cons cfengine-cf-promises syntax)
-                              cfengine-mode-syntax-cache))
-                  (setq cfengine-mode-syntax-functions-regex
-                        (regexp-opt (mapcar (lambda (def)
-                                              (format "%s" (car def)))
-                                            (cdr (assq 'functions syntax)))
-                                    'symbols))))))
-    cfengine3-fallback-syntax))
+  "Build the CFEngine 3 syntax cache and return the syntax.
+Calls `cfengine-cf-promises' with \"-s json\"."
+  (or (cdr (assoc cfengine-cf-promises cfengine-mode-syntax-cache))
+      (let ((syntax (or (when cfengine-cf-promises
+                          (with-demoted-errors "cfengine3-make-syntax-cache: %S"
+                            (with-temp-buffer
+                              (or (zerop (process-file cfengine-cf-promises
+                                                       nil ; no input
+                                                       t   ; output
+                                                       nil ; no redisplay
+                                                       "-s" "json"))
+                                  (error "%s" (buffer-substring
+                                               (point-min)
+                                               (progn (goto-char (point-min))
+                                                      (line-end-position)))))
+                              (goto-char (point-min))
+                              (json-read))))
+                        cfengine3-fallback-syntax)))
+        (push (cons cfengine-cf-promises syntax)
+              cfengine-mode-syntax-cache)
+        (setq cfengine-mode-syntax-functions-regex
+              (regexp-opt (mapcar (lambda (def)
+                                    (format "%s" (car def)))
+                                  (cdr (assq 'functions syntax)))
+                          'symbols))
+        syntax)))
 
 (defun cfengine3-documentation-function ()
   "Document CFengine 3 functions around point.
@@ -1265,7 +1304,6 @@ Use it by enabling `eldoc-mode'."
 
 (defun cfengine3-completion-function ()
   "Return completions for function name around or before point."
-  (cfengine3-make-syntax-cache)
   (let* ((bounds (save-excursion
                    (let ((p (point)))
                      (skip-syntax-backward "w_" (point-at-bol))
@@ -1306,6 +1344,26 @@ Use it by enabling `eldoc-mode'."
     ("=>"  . ?⇒)
     ("::" . ?∷)))
 
+(defun cfengine3-create-imenu-index ()
+  "A function for `imenu-create-index-function'.
+Note: defun name is separated by space such as `body
+package_method opencsw' and imenu will replace spaces according
+to `imenu-space-replacement' (which see)."
+  (goto-char (point-min))
+  (let ((defuns ()))
+    (while (re-search-forward cfengine3-defun-full-re nil t)
+      (push (cons (mapconcat #'match-string '(1 2 3) " ")
+                  (copy-marker (match-beginning 3)))
+            defuns))
+    (nreverse defuns)))
+
+(defun cfengine3-current-defun ()
+  "A function for `add-log-current-defun-function'."
+  (end-of-line)
+  (beginning-of-defun)
+  (and (looking-at cfengine3-defun-full-re)
+       (mapconcat #'match-string '(1 2 3) " ")))
+
 ;;;###autoload
 (define-derived-mode cfengine3-mode prog-mode "CFE3"
   "Major mode for editing CFEngine3 input.
@@ -1332,17 +1390,22 @@ to the action header."
                  (when buffer-file-name
                    (shell-quote-argument buffer-file-name)))))
 
-  (set (make-local-variable 'eldoc-documentation-function)
-       #'cfengine3-documentation-function)
+  ;; For emacs < 25.1 where `eldoc-documentation-function' defaults to
+  ;; nil.
+  (or eldoc-documentation-function
+      (setq-local eldoc-documentation-function #'ignore))
+  (add-function :before-until (local 'eldoc-documentation-function)
+                #'cfengine3-documentation-function)
 
   (add-hook 'completion-at-point-functions
             #'cfengine3-completion-function nil t)
 
   ;; Use defuns as the essential syntax block.
-  (set (make-local-variable 'beginning-of-defun-function)
-       #'cfengine3-beginning-of-defun)
-  (set (make-local-variable 'end-of-defun-function)
-       #'cfengine3-end-of-defun))
+  (setq-local beginning-of-defun-function #'cfengine3-beginning-of-defun)
+  (setq-local end-of-defun-function #'cfengine3-end-of-defun)
+
+  (setq-local imenu-create-index-function #'cfengine3-create-imenu-index)
+  (setq-local add-log-current-defun-function #'cfengine3-current-defun))
 
 ;;;###autoload
 (define-derived-mode cfengine2-mode prog-mode "CFE2"
@@ -1376,15 +1439,18 @@ to the action header."
 
 ;;;###autoload
 (defun cfengine-auto-mode ()
-  "Choose between `cfengine2-mode' and `cfengine3-mode' depending
-on the buffer contents"
-  (let ((v3 nil))
-    (save-restriction
-      (goto-char (point-min))
-      (while (not (or (eobp) v3))
-        (setq v3 (looking-at (concat cfengine3-defuns-regex "\\_>")))
-        (forward-line)))
-    (if v3 (cfengine3-mode) (cfengine2-mode))))
+  "Choose `cfengine2-mode' or `cfengine3-mode' by buffer contents."
+  (interactive)
+  (if (save-excursion
+        (save-restriction
+          (widen)
+          (goto-char (point-min))
+          (forward-comment (point-max))
+          (or (eobp)
+              (re-search-forward
+               (concat "^\\s-*" cfengine3-defuns-regex "\\_>") nil t))))
+      (cfengine3-mode)
+    (cfengine2-mode)))
 
 (defalias 'cfengine-mode 'cfengine3-mode)
 

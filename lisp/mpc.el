@@ -1,6 +1,6 @@
-;;; mpc.el --- A client for the Music Player Daemon   -*- coding: utf-8; lexical-binding: t -*-
+;;; mpc.el --- A client for the Music Player Daemon   -*- lexical-binding: t -*-
 
-;; Copyright (C) 2006-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2006-2015 Free Software Foundation, Inc.
 
 ;; Author: Stefan Monnier <monnier@iro.umontreal.ca>
 ;; Keywords: multimedia
@@ -217,7 +217,7 @@ defaults to 6600 and HOST defaults to localhost."
         (goto-char (point-max))
         (insert-before-markers          ;So it scrolls.
          (replace-regexp-in-string "\n" "\n	"
-                                   (apply 'format format args))
+                                   (apply #'format-message format args))
          "\n"))))
 
 (defun mpc--proc-filter (proc string)
@@ -253,6 +253,7 @@ defaults to 6600 and HOST defaults to localhost."
 
 (defun mpc--proc-connect (host)
   (let ((port 6600)
+        local
         pass)
 
     (when (string-match "\\`\\(?:\\(.*\\)@\\)?\\(.*?\\)\\(?::\\(.*\\)\\)?\\'"
@@ -267,6 +268,11 @@ defaults to 6600 and HOST defaults to localhost."
                 (if (string-match "[^[:digit:]]" v)
                     (string-to-number v)
                   v)))))
+    (when (file-name-absolute-p host)
+      ;; Expand file name because `file-name-absolute-p'
+      ;; considers paths beginning with "~" as absolute
+      (setq host (expand-file-name host))
+      (setq local t))
 
     (mpc--debug "Connecting to %s:%s..." host port)
     (with-current-buffer (get-buffer-create (format " *mpc-%s:%s*" host port))
@@ -279,7 +285,10 @@ defaults to 6600 and HOST defaults to localhost."
       (let* ((coding-system-for-read 'utf-8-unix)
              (coding-system-for-write 'utf-8-unix)
              (proc (condition-case err
-                       (open-network-stream "MPC" (current-buffer) host port)
+                       (make-network-process :name "MPC" :buffer (current-buffer)
+                                             :host (unless local host)
+                                             :service (if local host port)
+                                             :family (if local 'local))
                      (error (user-error (error-message-string err))))))
         (when (processp mpc-proc)
           ;; Inherit the properties of the previous connection.
@@ -891,9 +900,7 @@ If PLAYLIST is t or nil or missing, use the main playlist."
   :type '(choice (const nil) directory))
 
 (defcustom mpc-data-directory
-  (if (and (not (file-directory-p "~/.mpc"))
-           (file-directory-p "~/.emacs.d"))
-      "~/.emacs.d/mpc" "~/.mpc")
+  (locate-user-emacs-file "mpc" ".mpc")
   "Directory where MPC.el stores auxiliary data."
   :type 'directory)
 
@@ -905,8 +912,13 @@ If PLAYLIST is t or nil or missing, use the main playlist."
 (defun mpc-file-local-copy (file)
   ;; Try to set mpc-mpd-music-directory.
   (when (and (null mpc-mpd-music-directory)
-             (string-match "\\`localhost" mpc-host))
-    (let ((files '("~/.mpdconf" "/etc/mpd.conf"))
+             (or (string-match "\\`localhost" mpc-host)
+                 (file-name-absolute-p mpc-host)))
+    (let ((files `(,(let ((xdg (getenv "XDG_CONFIG_HOME")))
+                      (concat (if (and xdg (file-name-absolute-p xdg))
+                                  xdg "~/.config")
+                              "/mpd/mpd.conf"))
+                   "~/.mpdconf" "~/.mpd/mpd.conf" "/etc/mpd.conf"))
           file)
       (while (and files (not file))
         (if (file-exists-p (car files)) (setq file (car files)))
@@ -1024,7 +1036,12 @@ If PLAYLIST is t or nil or missing, use the main playlist."
                          (when (and (null val) (eq tag 'Title))
                            (setq val (cdr (assq 'file info))))
                          (push `(equal ',val (cdr (assq ',tag info))) pred)
-                         val)))))
+                         (cond
+                          ((not (and (eq tag 'Date) (stringp val))) val)
+                          ;; For "date", only keep the year!
+                          ((string-match "[0-9]\\{4\\}" val)
+                           (match-string 0 val))
+                          (t val)))))))
                (space (when size
                         (setq size (string-to-number size))
                         (propertize " " 'display
@@ -1619,7 +1636,7 @@ Return non-nil if a selection was deactivated."
           (setq active
                 (if (listp active) (mpc-intersection active vals) vals))))
 
-      (when (and (listp active))
+      (when (listp active)
         ;; Remove the selections if they are all in conflict with
         ;; other constraints.
         (let ((deactivate t))
@@ -1633,7 +1650,13 @@ Return non-nil if a selection was deactivated."
               (setq selection nil)
               (mapc 'delete-overlay mpc-select)
               (setq mpc-select nil)
-              (mpc-tagbrowser-all-select)))))
+              (mpc-tagbrowser-all-select))))
+
+        ;; Don't bother splitting the "active" elements to the first part if
+        ;; they're the same as the selection.
+        (when (equal (sort (copy-sequence active) #'string-lessp)
+                     (sort (copy-sequence selection) #'string-lessp))
+          (setq active 'all)))
 
       ;; FIXME: This `mpc-sort' takes a lot of time.  Maybe we should
       ;; be more clever and presume the buffer is mostly sorted already.
@@ -1742,7 +1765,7 @@ A value of t means the main playlist.")
                      (completing-read "Rename playlist: "
                                       (mpc-cmd-list 'Playlist)
                                       nil 'require-match)))
-          (newname (read-string (format "Rename '%s' to: " oldname))))
+          (newname (read-string (format-message "Rename `%s' to: " oldname))))
      (if (zerop (length newname))
          (error "Aborted")
        (list oldname newname))))
@@ -1796,7 +1819,9 @@ A value of t means the main playlist.")
   ;; Maintain the volume.
   (setq mpc-volume
         (mpc-volume-widget
-         (string-to-number (cdr (assq 'volume mpc-status))))))
+         (string-to-number (cdr (assq 'volume mpc-status)))))
+  (let ((status-buf (mpc-proc-buffer (mpc-proc) 'status)))
+    (when status-buf (with-current-buffer status-buf (force-mode-line-update)))))
 
 (defvar mpc-volume-step 5)
 
@@ -1866,7 +1891,7 @@ This is used so that they can be compared with `eq', which is needed for
 `text-property-any'.")
 (defun mpc-songs-hashcons (name)
   (or (gethash name mpc-songs-hashcons) (puthash name name mpc-songs-hashcons)))
-(defcustom mpc-songs-format "%2{Disc--}%3{Track} %-5{Time} %25{Title} %20{Album} %20{Artist} %10{Date}"
+(defcustom mpc-songs-format "%2{Disc--}%3{Track} %-5{Time} %25{Title} %20{Album} %20{Artist} %5{Date}"
   "Format used to display each song in the list of songs."
   :type 'string)
 
@@ -2025,7 +2050,7 @@ This is used so that they can be compared with `eq', which is needed for
                  (match-string 1)))))
     (cond
      ((null re) (posn-set-point posn))
-     ((null sn) (error "This song is not in the playlist"))
+     ((null sn) (user-error "This song is not in the playlist"))
      ((null (with-current-buffer plbuf (re-search-forward re nil t)))
       ;; song-file only appears once in the playlist: no ambiguity,
       ;; we're good to go!
@@ -2335,7 +2360,7 @@ This is used so that they can be compared with `eq', which is needed for
     (if (mpc-playlist-add)
         (if (member (cdr (assq 'state (mpc-cmd-status))) '("stop"))
             (mpc-cmd-play))
-      (error "Don't know what to play"))))
+      (user-error "Don't know what to play"))))
 
 (defun mpc-next ()
   "Jump to the next song in the queue."
@@ -2599,7 +2624,8 @@ This is used so that they can be compared with `eq', which is needed for
             (mpc-cmd-move (let ((poss '()))
                             (dotimes (i (length songs))
                                      (push (+ i (length pl)) poss))
-                            (nreverse poss)) dest-pos mpc-songs-playlist)
+                            (nreverse poss))
+                            dest-pos mpc-songs-playlist)
             (message "Added %d songs" (length songs)))))
         (mpc-songs-refresh))
       (t
@@ -2618,6 +2644,8 @@ This is used so that they can be compared with `eq', which is needed for
   (interactive
    (progn
      (if current-prefix-arg
+         ;; FIXME: We should provide some completion here, especially for the
+         ;; case where the user specifies a local socket/file name.
          (setq mpc-host (read-string "MPD host and port: " nil nil mpc-host)))
      nil))
   (let* ((song-buf (mpc-songs-buf))

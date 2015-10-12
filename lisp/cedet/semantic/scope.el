@@ -1,6 +1,6 @@
 ;;; semantic/scope.el --- Analyzer Scope Calculations
 
-;; Copyright (C) 2007-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2007-2015 Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <eric@siege-engine.com>
 
@@ -101,7 +101,7 @@ Saves scoping information between runs of the analyzer.")
 ;;
 ;; Methods for basic management of the structure in semanticdb.
 ;;
-(defmethod semantic-reset ((obj semantic-scope-cache))
+(cl-defmethod semantic-reset ((obj semantic-scope-cache))
   "Reset OBJ back to it's empty settings."
   (oset obj tag nil)
   (oset obj scopetypes nil)
@@ -114,13 +114,13 @@ Saves scoping information between runs of the analyzer.")
   (oset obj typescope nil)
   )
 
-(defmethod semanticdb-synchronize ((cache semantic-scope-cache)
+(cl-defmethod semanticdb-synchronize ((cache semantic-scope-cache)
 				   new-tags)
   "Synchronize a CACHE with some NEW-TAGS."
   (semantic-reset cache))
 
 
-(defmethod semanticdb-partial-synchronize ((cache semantic-scope-cache)
+(cl-defmethod semanticdb-partial-synchronize ((cache semantic-scope-cache)
 					   new-tags)
   "Synchronize a CACHE with some changed NEW-TAGS."
   ;; If there are any includes or datatypes changed, then clear.
@@ -134,10 +134,10 @@ Saves scoping information between runs of the analyzer.")
   "Get the current cached scope, and reset it."
   (when semanticdb-current-table
     (let ((co (semanticdb-cache-get semanticdb-current-table
-				    semantic-scope-cache)))
+				    'semantic-scope-cache)))
       (semantic-reset co))))
 
-(defmethod semantic-scope-set-typecache ((cache semantic-scope-cache)
+(cl-defmethod semantic-scope-set-typecache ((cache semantic-scope-cache)
 					 types-in-scope)
   "Set the :typescope property on CACHE to some types.
 TYPES-IN-SCOPE is a list of type tags whos members are
@@ -706,7 +706,7 @@ The class returned from the scope calculation is variable
       (let* ((TAG  (semantic-current-tag))
 	     (scopecache
 	      (semanticdb-cache-get semanticdb-current-table
-				    semantic-scope-cache))
+				    'semantic-scope-cache))
 	     )
 	(when (not (semantic-equivalent-tag-p TAG (oref scopecache tag)))
 	  (semantic-reset scopecache))
@@ -829,7 +829,7 @@ hits in order, with the first tag being in the closest scope."
 
 ;;; DUMP
 ;;
-(defmethod semantic-analyze-show ((context semantic-scope-cache))
+(cl-defmethod semantic-analyze-show ((context semantic-scope-cache))
   "Insert CONTEXT into the current buffer in a nice way."
   (require 'semantic/analyze)
   (semantic-analyze-princ-sequence (oref context scopetypes) "-> ScopeTypes: " )

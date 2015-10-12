@@ -1,6 +1,6 @@
 ;;; replace.el --- replace commands for Emacs
 
-;; Copyright (C) 1985-1987, 1992, 1994, 1996-1997, 2000-2014 Free
+;; Copyright (C) 1985-1987, 1992, 1994, 1996-1997, 2000-2015 Free
 ;; Software Foundation, Inc.
 
 ;; Maintainer: emacs-devel@gnu.org
@@ -33,6 +33,14 @@
   :type 'boolean
   :group 'matching)
 
+(defcustom replace-character-fold nil
+  "Non-nil means `query-replace' should do character folding in matches.
+This means, for instance, that \\=' will match a large variety of
+unicode quotes."
+  :type 'boolean
+  :group 'matching
+  :version "25.1")
+
 (defcustom replace-lax-whitespace nil
   "Non-nil means `query-replace' matches a sequence of whitespace chars.
 When you enter a space or spaces in the strings to be replaced,
@@ -56,8 +64,8 @@ See `query-replace-from-history-variable' and
 
 (defvar query-replace-defaults nil
   "Default values of FROM-STRING and TO-STRING for `query-replace'.
-This is a cons cell (FROM-STRING . TO-STRING), or nil if there is
-no default value.")
+This is a list of cons cells (FROM-STRING . TO-STRING), or nil
+if there are no default values.")
 
 (defvar query-replace-interactive nil
   "Non-nil means `query-replace' uses the last search string.
@@ -66,6 +74,17 @@ That becomes the \"string to replace\".")
 			"use `M-n' to pull the last incremental search string
 to the minibuffer that reads the string to replace, or invoke replacements
 from Isearch by using a key sequence like `C-s C-s M-%'." "24.3")
+
+(defcustom query-replace-from-to-separator
+  (propertize (if (char-displayable-p ?→) " → " " -> ")
+              'face 'minibuffer-prompt)
+  "String that separates FROM and TO in the history of replacement pairs."
+  ;; Avoids error when attempt to autoload char-displayable-p fails
+  ;; while preparing to dump, also stops customize-rogue listing this.
+  :initialize 'custom-initialize-delay
+  :group 'matching
+  :type 'sexp
+  :version "25.1")
 
 (defcustom query-replace-from-history-variable 'query-replace-history
   "History list to use for the FROM argument of `query-replace' commands.
@@ -125,18 +144,46 @@ See `replace-regexp' and `query-replace-regexp-eval'.")
 (defun query-replace-descr (string)
   (mapconcat 'isearch-text-char-description string ""))
 
+(defun query-replace--split-string (string)
+  "Split string STRING at a character with property `separator'"
+  (let* ((length (length string))
+         (split-pos (text-property-any 0 length 'separator t string)))
+    (if (not split-pos)
+        (substring-no-properties string)
+      (cl-assert (not (text-property-any (1+ split-pos) length 'separator t string)))
+      (cons (substring-no-properties string 0 split-pos)
+            (substring-no-properties string (1+ split-pos) length)))))
+
 (defun query-replace-read-from (prompt regexp-flag)
   "Query and return the `from' argument of a query-replace operation.
 The return value can also be a pair (FROM . TO) indicating that the user
 wants to replace FROM with TO."
   (if query-replace-interactive
       (car (if regexp-flag regexp-search-ring search-ring))
+    ;; Reevaluating will check char-displayable-p that is
+    ;; unavailable while preparing to dump.
+    (custom-reevaluate-setting 'query-replace-from-to-separator)
     (let* ((history-add-new-input nil)
+	   (text-property-default-nonsticky
+	    (cons '(separator . t) text-property-default-nonsticky))
+	   (separator
+	    (when query-replace-from-to-separator
+	      (propertize "\0"
+			  'display query-replace-from-to-separator
+			  'separator t)))
+	   (query-replace-from-to-history
+	    (append
+	     (when separator
+	       (mapcar (lambda (from-to)
+			 (concat (query-replace-descr (car from-to))
+				 separator
+				 (query-replace-descr (cdr from-to))))
+		       query-replace-defaults))
+	     (symbol-value query-replace-from-history-variable)))
+	   (minibuffer-allow-text-properties t) ; separator uses text-properties
 	   (prompt
-	    (if query-replace-defaults
-		(format "%s (default %s -> %s): " prompt
-			(query-replace-descr (car query-replace-defaults))
-			(query-replace-descr (cdr query-replace-defaults)))
+	    (if (and query-replace-defaults separator)
+		(format "%s (default %s): " prompt (car query-replace-from-to-history))
 	      (format "%s: " prompt)))
 	   (from
 	    ;; The save-excursion here is in case the user marks and copies
@@ -144,26 +191,33 @@ wants to replace FROM with TO."
 	    ;; That should not clobber the region for the query-replace itself.
 	    (save-excursion
 	      (if regexp-flag
-		  (read-regexp prompt nil query-replace-from-history-variable)
+		  (read-regexp prompt nil 'query-replace-from-to-history)
 		(read-from-minibuffer
-		 prompt nil nil nil query-replace-from-history-variable
-		 (car (if regexp-flag regexp-search-ring search-ring)) t)))))
+		 prompt nil nil nil 'query-replace-from-to-history
+		 (car (if regexp-flag regexp-search-ring search-ring)) t))))
+           (to))
       (if (and (zerop (length from)) query-replace-defaults)
-	  (cons (car query-replace-defaults)
+	  (cons (caar query-replace-defaults)
 		(query-replace-compile-replacement
-		 (cdr query-replace-defaults) regexp-flag))
-	(add-to-history query-replace-from-history-variable from nil t)
-	;; Warn if user types \n or \t, but don't reject the input.
-	(and regexp-flag
-	     (string-match "\\(\\`\\|[^\\]\\)\\(\\\\\\\\\\)*\\(\\\\[nt]\\)" from)
-	     (let ((match (match-string 3 from)))
-	       (cond
-		((string= match "\\n")
-		 (message "Note: `\\n' here doesn't match a newline; to do that, type C-q C-j instead"))
-		((string= match "\\t")
-		 (message "Note: `\\t' here doesn't match a tab; to do that, just type TAB")))
-	       (sit-for 2)))
-	from))))
+		 (cdar query-replace-defaults) regexp-flag))
+        (setq from (query-replace--split-string from))
+        (when (consp from) (setq to (cdr from) from (car from)))
+        (add-to-history query-replace-from-history-variable from nil t)
+        ;; Warn if user types \n or \t, but don't reject the input.
+        (and regexp-flag
+             (string-match "\\(\\`\\|[^\\]\\)\\(\\\\\\\\\\)*\\(\\\\[nt]\\)" from)
+             (let ((match (match-string 3 from)))
+               (cond
+                ((string= match "\\n")
+                 (message "Note: `\\n' here doesn't match a newline; to do that, type C-q C-j instead"))
+                ((string= match "\\t")
+                 (message "Note: `\\t' here doesn't match a tab; to do that, just type TAB")))
+               (sit-for 2)))
+        (if (not to)
+            from
+          (add-to-history query-replace-to-history-variable to nil t)
+          (add-to-history 'query-replace-defaults (cons from to) nil t)
+          (cons from (query-replace-compile-replacement to regexp-flag)))))))
 
 (defun query-replace-compile-replacement (to regexp-flag)
   "Maybe convert a regexp replacement TO to Lisp.
@@ -216,7 +270,7 @@ the original string if not."
 		 nil nil nil
 		 query-replace-to-history-variable from t)))
        (add-to-history query-replace-to-history-variable to nil t)
-       (setq query-replace-defaults (cons from to))
+       (add-to-history 'query-replace-defaults (cons from to) nil t)
        to))
    regexp-flag))
 
@@ -266,7 +320,7 @@ replace backward.
 
 Fourth and fifth arg START and END specify the region to operate on.
 
-To customize possible responses, change the \"bindings\" in `query-replace-map'."
+To customize possible responses, change the bindings in `query-replace-map'."
   (interactive
    (let ((common
 	  (query-replace-read-args
@@ -421,7 +475,7 @@ for Lisp calls." "22.1"))
 	     ;; Let-bind the history var to disable the "foo -> bar"
 	     ;; default.  Maybe we shouldn't disable this default, but
 	     ;; for now I'll leave it off.  --Stef
-	     (let ((query-replace-to-history-variable nil))
+	     (let ((query-replace-defaults nil))
 	       (query-replace-read-from "Query replace regexp" t)))
 	    (to (list (read-from-minibuffer
 		       (format "Query replace regexp %s with eval: "
@@ -523,6 +577,8 @@ What you probably want is a loop like this:
 which will run faster and will not set the mark or print anything.
 \(You may need a more complex loop if FROM-STRING can match the null string
 and TO-STRING is also null.)"
+  (declare (interactive-only
+	    "use `search-forward' and `replace-match' instead."))
   (interactive
    (let ((common
 	  (query-replace-read-args
@@ -540,8 +596,6 @@ and TO-STRING is also null.)"
 	       (region-end))
 	   (nth 3 common))))
   (perform-replace from-string to-string nil nil delimited nil nil start end backward))
-(put 'replace-string 'interactive-only
-     "use `search-forward' and `replace-match' instead.")
 
 (defun replace-regexp (regexp to-string &optional delimited start end backward)
   "Replace things after point matching REGEXP with TO-STRING.
@@ -597,6 +651,8 @@ What you probably want is a loop like this:
   (while (re-search-forward REGEXP nil t)
     (replace-match TO-STRING nil nil))
 which will run faster and will not set the mark or print anything."
+  (declare (interactive-only
+	    "use `re-search-forward' and `replace-match' instead."))
   (interactive
    (let ((common
 	  (query-replace-read-args
@@ -614,8 +670,6 @@ which will run faster and will not set the mark or print anything."
 	       (region-end))
 	   (nth 3 common))))
   (perform-replace regexp to-string nil t delimited nil nil start end backward))
-(put 'replace-regexp 'interactive-only
-     "use `re-search-forward' and `replace-match' instead.")
 
 
 (defvar regexp-history nil
@@ -1331,7 +1385,7 @@ See also `multi-occur-in-matching-buffers'."
 	   (ido-ignore-item-temp-list bufs))
       (while (not (string-equal
 		   (setq buf (read-buffer
-			      (if (eq read-buffer-function 'ido-read-buffer)
+			      (if (eq read-buffer-function #'ido-read-buffer)
 				  "Next buffer to search (C-j to end): "
 				"Next buffer to search (RET to end): ")
 			      nil t))
@@ -1441,7 +1495,8 @@ See also `multi-occur'."
 		     ;; Don't display regexp if with remaining text
 		     ;; it is longer than window-width.
 		     (if (> (+ (length regexp) 42) (window-width))
-			 "" (format " for `%s'" (query-replace-descr regexp)))))
+			 "" (format-message
+                             " for `%s'" (query-replace-descr regexp)))))
 	  (setq occur-revert-arguments (list regexp nlines bufs))
           (if (= count 0)
               (kill-buffer occur-buf)
@@ -1958,7 +2013,10 @@ It is called with three arguments, as if it were
   ;; outside of this function because then another I-search
   ;; used after `recursive-edit' might override them.
   (let* ((isearch-regexp regexp-flag)
-	 (isearch-word delimited-flag)
+	 (isearch-word (or delimited-flag
+                           (and replace-character-fold
+                                (not regexp-flag)
+                                #'character-fold-to-regexp)))
 	 (isearch-lax-whitespace
 	  replace-lax-whitespace)
 	 (isearch-regexp-lax-whitespace
@@ -2023,7 +2081,13 @@ see the documentation of `replace-match' to find out how to simulate
 `case-replace'.
 
 This function returns nil if and only if there were no matches to
-make, or the user didn't cancel the call."
+make, or the user didn't cancel the call.
+
+REPLACEMENTS is either a string, a list of strings, or a cons cell
+containing a function and its first argument.  The function is
+called to generate each replacement like this:
+  (funcall (car replacements) (cdr replacements) replace-count)
+It must return a string."
   (or map (setq map query-replace-map))
   (and query-flag minibuffer-auto-raise
        (raise-frame (window-frame (minibuffer-window))))
@@ -2079,11 +2143,6 @@ make, or the user didn't cancel the call."
     (when (eq (lookup-key map (vector last-input-event)) 'automatic-all)
       (setq query-flag nil multi-buffer t))
 
-    ;; REPLACEMENTS is either a string, a list of strings, or a cons cell
-    ;; containing a function and its first argument.  The function is
-    ;; called to generate each replacement like this:
-    ;;   (funcall (car replacements) (cdr replacements) replace-count)
-    ;; It must return a string.
     (cond
      ((stringp replacements)
       (setq next-replacement replacements

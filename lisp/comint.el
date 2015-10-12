@@ -1,6 +1,6 @@
 ;;; comint.el --- general command interpreter in a window stuff -*- lexical-binding: t -*-
 
-;; Copyright (C) 1988, 1990, 1992-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1988, 1990, 1992-2015 Free Software Foundation, Inc.
 
 ;; Author: Olin Shivers <shivers@cs.cmu.edu>
 ;;	Simon Marshall <simon@gnu.org>
@@ -184,11 +184,11 @@ narrowing in effect.  This way you will be certain that none of
 the remaining prompts will be accidentally messed up.  You may
 wish to put something like the following in your init file:
 
-\(add-hook 'comint-mode-hook
+\(add-hook \\='comint-mode-hook
 	  (lambda ()
-	    (define-key comint-mode-map [remap kill-region] 'comint-kill-region)
+	    (define-key comint-mode-map [remap kill-region] \\='comint-kill-region)
 	    (define-key comint-mode-map [remap kill-whole-line]
-	      'comint-kill-whole-line)))
+	      \\='comint-kill-whole-line)))
 
 If you sometimes use comint-mode on text-only terminals or with `emacs -nw',
 you might wish to use another binding for `comint-kill-whole-line'."
@@ -472,6 +472,7 @@ executed once when the buffer is created."
     (define-key map "\C-c\C-\\"   'comint-quit-subjob)
     (define-key map "\C-c\C-m" 	  'comint-copy-old-input)
     (define-key map "\C-c\C-o" 	  'comint-delete-output)
+    (define-key map "\C-c\M-o"    'comint-clear-buffer)
     (define-key map "\C-c\C-r" 	  'comint-show-output)
     (define-key map "\C-c\C-e" 	  'comint-show-maximum-output)
     (define-key map "\C-c\C-l" 	  'comint-dynamic-list-input-ring)
@@ -746,11 +747,11 @@ The buffer name is made by surrounding the file name of PROGRAM with `*'s.
 The file name is used to make a symbol name, such as `comint-sh-hook', and any
 hooks on this symbol are run in the buffer.
 See `make-comint' and `comint-exec'."
+  (declare (interactive-only make-comint))
   (interactive "sRun program: ")
   (let ((name (file-name-nondirectory program)))
     (switch-to-buffer (make-comint name program))
     (run-hooks (intern-soft (concat "comint-" name "-hook")))))
-(put 'comint-run 'interactive-only 'make-comint)
 
 (defun comint-exec (buffer name command startfile switches)
   "Start up a process named NAME in buffer BUFFER for Comint modes.
@@ -815,8 +816,6 @@ series of processes in the same Comint buffer.  The hook
 		    (format "COLUMNS=%d" (window-width)))
 	    (list "TERM=emacs"
 		  (format "TERMCAP=emacs:co#%d:tc=unknown:" (window-width))))
-	  (unless (getenv "EMACS")
-	    (list "EMACS=t"))
 	  (list (format "INSIDE_EMACS=%s,comint" emacs-version))
 	  process-environment))
 	(default-directory
@@ -1052,7 +1051,7 @@ See also `comint-read-input-ring'."
       (let ((ch (read-event)))
 	(if (eq ch ?\s)
 	    (set-window-configuration conf)
-	  (setq unread-command-events (list ch)))))))
+	  (push ch unread-command-events))))))
 
 
 (defun comint-regexp-arg (prompt)
@@ -1532,14 +1531,20 @@ the function `isearch-message'."
     ;; the initial comint prompt.
     (if (overlayp comint-history-isearch-message-overlay)
 	(move-overlay comint-history-isearch-message-overlay
-		      (save-excursion (forward-line 0) (point))
+		      (save-excursion
+			(goto-char (comint-line-beginning-position))
+			(forward-line 0)
+			(point))
                       (comint-line-beginning-position))
       (setq comint-history-isearch-message-overlay
-	    (make-overlay (save-excursion (forward-line 0) (point))
+	    (make-overlay (save-excursion
+			    (goto-char (comint-line-beginning-position))
+			    (forward-line 0)
+			    (point))
                           (comint-line-beginning-position)))
       (overlay-put comint-history-isearch-message-overlay 'evaporate t))
     (overlay-put comint-history-isearch-message-overlay
-		 'display (isearch-message-prefix c-q-hack ellipsis))
+		 'display (isearch-message-prefix ellipsis isearch-nonincremental))
     (if (and comint-input-ring-index (not ellipsis))
 	;; Display the current history index.
 	(message "History item: %d" (1+ comint-input-ring-index))
@@ -1576,7 +1581,7 @@ Go to the history element by the absolute history position HIST-POS."
 (defun comint-within-quotes (beg end)
   "Return t if the number of quotes between BEG and END is odd.
 Quotes are single and double."
-  (let ((countsq (comint-how-many-region "\\(^\\|[^\\\\]\\)\'" beg end))
+  (let ((countsq (comint-how-many-region "\\(^\\|[^\\\\]\\)'" beg end))
 	(countdq (comint-how-many-region "\\(^\\|[^\\\\]\\)\"" beg end)))
     (or (= (mod countsq 2) 1) (= (mod countdq 2) 1))))
 
@@ -1769,13 +1774,22 @@ If the Comint is Lucid Common Lisp,
 
 Similarly for Soar, Scheme, etc."
   (interactive)
+  ;; If we're currently completing, stop.  We're definitely done
+  ;; completing, and by sending the input, we might cause side effects
+  ;; that will confuse the code running in the completion
+  ;; post-command-hook.
+  (when completion-in-region-mode
+    (completion-in-region-mode -1))
   ;; Note that the input string does not include its terminal newline.
   (let ((proc (get-buffer-process (current-buffer))))
     (if (not proc) (user-error "Current buffer has no process")
       (widen)
       (let* ((pmark (process-mark proc))
              (intxt (if (>= (point) (marker-position pmark))
-                        (progn (if comint-eol-on-send (end-of-line))
+                        (progn (if comint-eol-on-send
+				   (if comint-use-prompt-regexp
+				       (end-of-line)
+				     (goto-char (field-end))))
                                (buffer-substring pmark (point)))
                       (let ((copy (funcall comint-get-old-input)))
                         (goto-char pmark)
@@ -1914,10 +1928,10 @@ the start, the cdr to the end of the last prompt recognized.")
 Freezes the `font-lock-face' text property in place."
   (when comint-last-prompt
     (with-silent-modifications
-      (add-text-properties
+      (font-lock-prepend-text-property
        (car comint-last-prompt)
        (cdr comint-last-prompt)
-       '(font-lock-face comint-highlight-prompt)))
+       'font-lock-face 'comint-highlight-prompt))
     ;; Reset comint-last-prompt so later on comint-output-filter does
     ;; not remove the font-lock-face text property of the previous
     ;; (this) prompt.
@@ -2068,14 +2082,19 @@ Make backspaces delete the previous character."
 		  (add-text-properties prompt-start (point)
 				       '(read-only t front-sticky (read-only)))))
 	      (when comint-last-prompt
-		(remove-text-properties (car comint-last-prompt)
-					(cdr comint-last-prompt)
-					'(font-lock-face)))
+		;; There might be some keywords here waiting for
+		;; fontification, so no `with-silent-modifications'.
+		(font-lock--remove-face-from-text-property
+		 (car comint-last-prompt)
+		 (cdr comint-last-prompt)
+		 'font-lock-face
+		 'comint-highlight-prompt))
 	      (setq comint-last-prompt
 		    (cons (copy-marker prompt-start) (point-marker)))
-	      (add-text-properties prompt-start (point)
-				   '(rear-nonsticky t
-				     font-lock-face comint-highlight-prompt)))
+	      (font-lock-prepend-text-property prompt-start (point)
+					       'font-lock-face
+					       'comint-highlight-prompt)
+	      (add-text-properties prompt-start (point) '(rear-nonsticky t)))
 	    (goto-char saved-point)))))))
 
 (defun comint-preinput-scroll-to-bottom ()
@@ -2206,7 +2225,10 @@ the current line with any initial string matching the regexp
              (null (get-char-property (setq bof (field-beginning)) 'field)))
 	(field-string-no-properties bof)
       (comint-bol)
-      (buffer-substring-no-properties (point) (line-end-position)))))
+      (buffer-substring-no-properties (point)
+				      (if comint-use-prompt-regexp
+					  (line-end-position)
+					(field-end))))))
 
 (defun comint-copy-old-input ()
   "Insert after prompt old input at point as new input to be edited.
@@ -2264,7 +2286,10 @@ a buffer local variable."
     ;; if there are two fields on a line, then the first one is the
     ;; prompt, and the second one is an input field, and is front-sticky
     ;; (as input fields should be).
-    (constrain-to-field (line-beginning-position) (line-end-position))))
+    (constrain-to-field (if (eq (field-at-pos (point)) 'output)
+                            (line-beginning-position)
+                          (field-beginning))
+                        (line-end-position))))
 
 (defun comint-bol (&optional arg)
   "Go to the beginning of line, then skip past the prompt, if any.
@@ -2416,6 +2441,11 @@ Sets mark to the value of point when this command is run."
 	   (goto-char (field-beginning pos))
 	   (set-window-start (selected-window) (point))))))
 
+(defun comint-clear-buffer ()
+  "Clear the comint buffer."
+  (interactive)
+  (let ((comint-buffer-maximum-size 0))
+    (comint-truncate-buffer)))
 
 (defun comint-interrupt-subjob ()
   "Interrupt the current subjob.
@@ -2820,7 +2850,7 @@ then the filename reader will only accept a file that exists.
 
 A typical use:
  (interactive (comint-get-source \"Compile file: \" prev-lisp-dir/file
-                                 '(lisp-mode) t))"
+                                 \\='(lisp-mode) t))"
   (let* ((def (comint-source-default prev-dir/file source-modes))
 	 (stringfile (comint-extract-string))
 	 (sfile-p (and stringfile
@@ -3335,7 +3365,8 @@ the completions."
 	    (set-window-configuration comint-dynamic-list-completions-config))
 	(if (eq first ?\s)
 	    (set-window-configuration comint-dynamic-list-completions-config)
-	  (setq unread-command-events (listify-key-sequence key)))))))
+	  (setq unread-command-events
+                (nconc (listify-key-sequence key) unread-command-events)))))))
 
 (defun comint-get-next-from-history ()
   "After fetching a line from input history, this fetches the following line.

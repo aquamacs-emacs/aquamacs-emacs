@@ -1,5 +1,5 @@
 /* Terminal hooks for GNU Emacs on the Microsoft Windows API.
-   Copyright (C) 1992, 1999, 2001-2014 Free Software Foundation, Inc.
+   Copyright (C) 1992, 1999, 2001-2015 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -36,8 +36,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "termhooks.h"
 #include "termchar.h"
 #include "dispextern.h"
+#include "menu.h"	/* for tty_menu_show */
 #include "w32term.h"
-#include "w32common.h" /* for os_subtype */
+#include "w32common.h"	/* for os_subtype */
 #include "w32inevt.h"
 
 /* from window.c */
@@ -117,7 +118,7 @@ static void
 w32con_clear_to_end (struct frame *f)
 {
   w32con_clear_end_of_line (f, FRAME_COLS (f) - 1);
-  w32con_ins_del_lines (f, cursor_coords.Y, FRAME_LINES (f) - cursor_coords.Y - 1);
+  w32con_ins_del_lines (f, cursor_coords.Y, FRAME_TOTAL_LINES (f) - cursor_coords.Y - 1);
 }
 
 /* Clear the frame.  */
@@ -132,7 +133,7 @@ w32con_clear_frame (struct frame *f)
   GetConsoleScreenBufferInfo (GetStdHandle (STD_OUTPUT_HANDLE), &info);
 
   /* Remember that the screen buffer might be wider than the window.  */
-  n = FRAME_LINES (f) * info.dwSize.X;
+  n = FRAME_TOTAL_LINES (f) * info.dwSize.X;
   dest.X = dest.Y = 0;
 
   FillConsoleOutputAttribute (cur_screen, char_attr_normal, n, dest, &r);
@@ -174,18 +175,18 @@ w32con_ins_del_lines (struct frame *f, int vpos, int n)
   if (n < 0)
     {
       scroll.Top = vpos - n;
-      scroll.Bottom = FRAME_LINES (f);
+      scroll.Bottom = FRAME_TOTAL_LINES (f);
       dest.Y = vpos;
     }
   else
     {
       scroll.Top = vpos;
-      scroll.Bottom = FRAME_LINES (f) - n;
+      scroll.Bottom = FRAME_TOTAL_LINES (f) - n;
       dest.Y = vpos + n;
     }
   clip.Top = clip.Left = scroll.Left = 0;
   clip.Right = scroll.Right = FRAME_COLS (f);
-  clip.Bottom = FRAME_LINES (f);
+  clip.Bottom = FRAME_TOTAL_LINES (f);
 
   dest.X = 0;
 
@@ -650,11 +651,13 @@ initialize_w32_display (struct terminal *term, int *width, int *height)
 
   term->read_socket_hook = w32_console_read_socket;
   term->mouse_position_hook = w32_console_mouse_position;
+  term->menu_show_hook = tty_menu_show;
 
   /* The following are not used on the console.  */
   term->frame_rehighlight_hook = 0;
   term->frame_raise_lower_hook = 0;
   term->set_vertical_scroll_bar_hook = 0;
+  term->set_horizontal_scroll_bar_hook = 0;
   term->condemn_scroll_bars_hook = 0;
   term->redeem_scroll_bar_hook = 0;
   term->judge_scroll_bars_hook = 0;

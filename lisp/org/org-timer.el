@@ -1,6 +1,6 @@
 ;;; org-timer.el --- The relative timer code for Org-mode
 
-;; Copyright (C) 2008-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2008-2015 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <carsten at orgmode dot org>
 ;; Keywords: outlines, hypermedia, calendar, wp
@@ -195,8 +195,8 @@ it in the buffer."
 (defun org-timer-seconds ()
   (if org-timer-timer-is-countdown
       (- (org-float-time org-timer-start-time)
-	 (org-float-time (current-time)))
-    (- (org-float-time (or org-timer-pause-time (current-time)))
+	 (org-float-time))
+    (- (org-float-time org-timer-pause-time)
        (org-float-time org-timer-start-time))))
 
 ;;;###autoload

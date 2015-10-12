@@ -1,5 +1,5 @@
 /* Definitions and global variables for intervals.
-   Copyright (C) 1993-1994, 2000-2014 Free Software Foundation, Inc.
+   Copyright (C) 1993-1994, 2000-2015 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -197,6 +197,7 @@ set_interval_plist (INTERVAL i, Lisp_Object plist)
 /* Is this interval writable?  Replace later with cache access.  */
 #define INTERVAL_WRITABLE_P(i)					\
   (i && (NILP (textget ((i)->plist, Qread_only))		\
+         || !NILP (textget ((i)->plist, Qinhibit_read_only))	\
 	 || ((CONSP (Vinhibit_read_only)			\
 	      ? !NILP (Fmemq (textget ((i)->plist, Qread_only),	\
 			      Vinhibit_read_only))		\
@@ -222,7 +223,7 @@ set_interval_plist (INTERVAL i, Lisp_Object plist)
 #define TEXT_PROP_MEANS_INVISIBLE(prop)					\
   (EQ (BVAR (current_buffer, invisibility_spec), Qt)			\
    ? !NILP (prop)							\
-   : invisible_p (prop, BVAR (current_buffer, invisibility_spec)))
+   : invisible_prop (prop, BVAR (current_buffer, invisibility_spec)))
 
 /* Declared in alloc.c.  */
 
@@ -268,25 +269,9 @@ extern INTERVAL validate_interval_range (Lisp_Object, Lisp_Object *,
 extern INTERVAL interval_of (ptrdiff_t, Lisp_Object);
 
 /* Defined in xdisp.c.  */
-extern int invisible_p (Lisp_Object, Lisp_Object);
+extern int invisible_prop (Lisp_Object, Lisp_Object);
 
-/* Declared in textprop.c.  */
-
-/* Types of hooks.  */
-extern Lisp_Object Qpoint_left;
-extern Lisp_Object Qpoint_entered;
-extern Lisp_Object Qmodification_hooks;
-extern Lisp_Object Qcategory;
-extern Lisp_Object Qlocal_map;
-extern Lisp_Object Qkeymap;
-
-/* Visual properties text (including strings) may have.  */
-extern Lisp_Object Qfont;
-extern Lisp_Object Qinvisible, Qintangible;
-
-/* Sticky properties.  */
-extern Lisp_Object Qfront_sticky, Qrear_nonsticky;
-
+/* Defined in textprop.c.  */
 extern Lisp_Object copy_text_properties (Lisp_Object, Lisp_Object,
                                          Lisp_Object, Lisp_Object,
                                          Lisp_Object, Lisp_Object);

@@ -659,7 +659,7 @@ No errors are signaled."
     (with-current-buffer "*scratch*"
       (condition-case nil
 	  (progn
-	    (let ((coding-system-for-read 'utf-8)
+	    (let (;(coding-system-for-read 'utf-8)
 		  (buffer-undo-list t))
 	      (if (file-exists-p aquamacs-scratch-file)
 		  ;; if file unreadable, this will trip the condition-case
@@ -680,7 +680,7 @@ No errors are signaled."
 					  "\\.*/_region_.tex") recentf-exclude))))
 	    (setq buffer-save-without-query t)
 	    (put 'buffer-save-without-query 'permanent-local t)
-	    (setq buffer-file-coding-system 'utf-8)
+;	    (setq buffer-file-coding-system 'utf-8)
 	    (add-hook 'before-save-hook
 		      'aquamacs-do-not-save-without-query-if-saved-elsewhere
 		      nil 'local)
@@ -911,12 +911,12 @@ yes-or-no prompts - y or n will do."
   ;;(global-set-key [C-up]        'pager-row-up)
   ;;(global-set-key [C-down]      'pager-row-down)
 
+  (ats "aquamacs-menu ...")
+  (require 'aquamacs-menu) ; before osx_defaults
 
   (require 'aquamacs-autoface-mode)
   (autoload 'aquamacs-styles-mode "aquamacs-styles.el" "Automatically set frame style according to major mode" 'interactive nil)
 
-  (ats "aquamacs-menu ...")
-  (require 'aquamacs-menu) ; before osx_defaults
   (menu-bar-update-buffers) ;; update Buffers menu now
   (aquamacs-update-menu t) ;; initial setup of the menu
 
@@ -1221,6 +1221,32 @@ be killed."
 
 (if (running-on-a-mac-p)
       (defun use-fancy-splash-screens-p () t))
+
+;; overwrite
+(defun first-that (predicate list)
+  "Returns first element from LIST that satisfies PREDICATE"
+  (while (and list (not (funcall predicate (car list))))
+    (setq list (cdr list)))
+  (car list))
+    
+  
+(defun fancy-splash-frame ()
+  "Return the frame to use for the fancy splash screen.
+Returning non-nil does not mean we should necessarily
+use the fancy splash screen, but if we do use it,
+we put it on this frame."
+  (make-frame 
+   `((name . "About Aquamacs Emacs")
+     (font . ,(first-that 'font-exists-p
+                '("-apple-lucida grande-medium-r-normal--0-0-0-0-m-0-mac-roman"
+                "-*-Lucida Grande-normal-normal-normal-*-14-*-*-*-p-0-iso10646-1")))
+     (width . 75) (height . 40) (minibuffer . t)
+     (background-color . "White") 
+     (foreground-color . "Black") (tool-bar-lines . 0)
+     (vertical-scroll-bars . auto) 
+     (horizontal-scroll-bars . nil) 
+     (left-fringe . 5) (right-fringe . 0)
+     (internal-border-width . 0) (unsplittable . t))))
 
 
 ;; -------- UI DEFAULTS -------------

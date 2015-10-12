@@ -1,6 +1,6 @@
 ;;; rng-match.el --- matching of RELAX NG patterns against XML events  -*- lexical-binding:t -*-
 
-;; Copyright (C) 2003, 2007-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2003, 2007-2015 Free Software Foundation, Inc.
 
 ;; Author: James Clark
 ;; Keywords: wp, hypermedia, languages, XML, RelaxNG
@@ -1504,7 +1504,7 @@ nullable and y1 isn't, return a choice
 
 (defun rng-compile-error (&rest args)
   (signal 'rng-compile-error
-	  (list (apply 'format args))))
+	  (list (apply #'format-message args))))
 
 (define-error 'rng-compile-error "Incorrect schema" 'rng-error)
 

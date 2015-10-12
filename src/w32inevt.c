@@ -1,5 +1,5 @@
 /* Input event support for Emacs on the Microsoft Windows API.
-   Copyright (C) 1992-1993, 1995, 2001-2014 Free Software Foundation,
+   Copyright (C) 1992-1993, 1995, 2001-2015 Free Software Foundation,
    Inc.
 
 This file is part of GNU Emacs.
@@ -411,7 +411,7 @@ w32_console_mouse_position (struct frame **f,
 
   *f = get_frame ();
   *bar_window = Qnil;
-  *part = 0;
+  *part = scroll_bar_above_handle;
   SELECTED_FRAME ()->mouse_moved = 0;
 
   XSETINT (*x, movement_pos.X);
@@ -587,7 +587,8 @@ resize_event (WINDOW_BUFFER_SIZE_RECORD *event)
 {
   struct frame *f = get_frame ();
 
-  change_frame_size (f, event->dwSize.X, event->dwSize.Y, 0, 1, 0, 0);
+  change_frame_size (f, event->dwSize.X, event->dwSize.Y
+		     - FRAME_MENU_BAR_LINES (f), 0, 1, 0, 0);
   SET_FRAME_GARBAGED (f);
 }
 
@@ -603,8 +604,8 @@ maybe_generate_resize_event (void)
      if the size hasn't actually changed.  */
   change_frame_size (f,
 		     1 + info.srWindow.Right - info.srWindow.Left,
-		     1 + info.srWindow.Bottom - info.srWindow.Top,
-		     0, 0, 0, 0);
+		     1 + info.srWindow.Bottom - info.srWindow.Top
+		     - FRAME_MENU_BAR_LINES (f), 0, 1, 0, 0);
 }
 
 #if HAVE_W32NOTIFY
@@ -630,7 +631,7 @@ handle_file_notifications (struct input_event *hold_quit)
   if (notification_buffer_in_use)
     {
       DWORD info_size = notifications_size;
-      Lisp_Object cs = intern ("utf-16le");
+      Lisp_Object cs = Qutf_16le;
       Lisp_Object obj = w32_get_watch_object (notifications_desc);
 
       /* notifications_size could be zero when the buffer of
@@ -656,11 +657,12 @@ handle_file_notifications (struct input_event *hold_quit)
 	      Lisp_Object action = lispy_file_action (fni->Action);
 
 	      inev.kind = FILE_NOTIFY_EVENT;
-	      inev.code = (ptrdiff_t)XINT (XIL ((EMACS_INT)notifications_desc));
 	      inev.timestamp = GetTickCount ();
 	      inev.modifiers = 0;
 	      inev.frame_or_window = callback;
 	      inev.arg = Fcons (action, fname);
+	      inev.arg = list3 (make_pointer_integer (notifications_desc),
+				action, fname);
 	      kbd_buffer_store_event_hold (&inev, hold_quit);
 
 	      if (!fni->NextEntryOffset)

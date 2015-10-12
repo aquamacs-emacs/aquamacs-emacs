@@ -1,6 +1,6 @@
 ;;; tsdh-light-theme.el --- Tassilo's light custom theme
 
-;; Copyright (C) 2011-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2011-2015 Free Software Foundation, Inc.
 
 ;; This file is part of GNU Emacs.
 
@@ -25,6 +25,9 @@ Used and created by Tassilo Horn.")
 
 (custom-theme-set-faces
  'tsdh-light
+ '(Info-quoted ((t (:weight bold))))
+ '(ace-jump-face-foreground ((t (:foreground "DeepPink" :box nil :weight bold))))
+ '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground))))
  '(default ((t (:background "white" :foreground "black"))))
  '(diff-added ((t (:inherit diff-changed :background "light green"))))
  '(diff-changed ((t (:background "light steel blue"))))
@@ -35,8 +38,20 @@ Used and created by Tassilo Horn.")
  '(dired-directory ((t (:inherit font-lock-function-name-face :weight bold))))
  '(gnus-button ((t (:inherit button))))
  '(gnus-header-name ((t (:box (:line-width 1 :style released-button) :weight bold))))
- '(header-line ((t (:inherit mode-line :inverse-video t))))
+ '(gnus-group-mail-1 ((t (:inherit gnus-group-mail-1-empty :weight bold))))
+ '(gnus-group-mail-1-empty ((t (:foreground "DodgerBlue4"))))
+ '(gnus-group-mail-2 ((t (:inherit gnus-group-mail-2-empty :weight bold))))
+ '(gnus-group-mail-2-empty ((t (:foreground "DodgerBlue3"))))
+ '(gnus-group-mail-3 ((t (:inherit gnus-group-mail-3-empty :weight bold))))
+ '(gnus-group-mail-3-empty ((t (:foreground "DodgerBlue2"))))
+ '(gnus-group-news-1 ((t (:inherit gnus-group-news-1-empty :weight bold))))
+ '(gnus-group-news-1-empty ((t (:foreground "tomato4"))))
+ '(gnus-group-news-2 ((t (:inherit gnus-group-news-2-empty :weight bold))))
+ '(gnus-group-news-2-empty ((t (:foreground "tomato3"))))
+ '(gnus-group-news-3 ((t (:inherit gnus-group-news-3-empty :weight bold))))
+ '(gnus-group-news-3-empty ((t (:foreground "tomato2")))) '(header-line ((t (:inherit mode-line :inverse-video t))))
  '(hl-line ((t (:background "grey95"))))
+ '(hl-paren-face ((t (:weight bold))) t)
  '(minibuffer-prompt ((t (:background "yellow" :foreground "medium blue" :box (:line-width -1 :color "red" :style released-button) :weight bold))))
  '(mode-line ((t (:background "wheat" :foreground "black" :box (:line-width 1 :color "tan") :family "DejaVu Sans"))))
  '(mode-line-inactive ((t (:inherit mode-line :foreground "dark gray"))))
@@ -64,8 +79,8 @@ Used and created by Tassilo Horn.")
  '(outline-8 ((t (:inherit font-lock-string-face :weight bold))))
  '(rcirc-my-nick ((t (:foreground "LightSkyBlue" :weight bold))))
  '(region ((t (:background "lightgoldenrod1"))))
- '(show-paren-match ((t (:background "LightCyan2"))))
- '(show-paren-mismatch ((t (:background "deep pink"))))
+ '(show-paren-match ((t (:background "Cyan1" :weight bold))))
+ '(show-paren-mismatch ((t (:background "deep pink" :weight bold))))
  '(window-number-face ((t (:foreground "red" :weight bold)))))
 
 (provide-theme 'tsdh-light)

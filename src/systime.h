@@ -1,5 +1,5 @@
 /* systime.h - System-dependent definitions for time manipulations.
-   Copyright (C) 1993-1994, 2002-2014 Free Software Foundation, Inc.
+   Copyright (C) 1993-1994, 2002-2015 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -83,13 +83,25 @@ extern struct timeval make_timeval (struct timespec) ATTRIBUTE_CONST;
 extern void set_waiting_for_input (struct timespec *);
 
 /* When lisp.h is not included Lisp_Object is not defined (this can
-   happen when this files is used outside the src directory).
-   Use GCPRO1 to determine if lisp.h was included.  */
-#ifdef GCPRO1
+   happen when this files is used outside the src directory).  */
+#ifdef EMACS_LISP_H
+
+/* Emacs uses the integer list (HI LO US PS) to represent the time
+   (HI << LO_TIME_BITS) + LO + US / 1e6 + PS / 1e12.  */
+enum { LO_TIME_BITS = 16 };
+
+/* A Lisp time (HI LO US PS), sans the cons cells.  */
+struct lisp_time
+{
+  EMACS_INT hi;
+  int lo, us, ps;
+};
+
 /* defined in editfns.c */
 extern Lisp_Object make_lisp_time (struct timespec);
-extern bool decode_time_components (Lisp_Object, Lisp_Object, Lisp_Object,
-				    Lisp_Object, struct timespec *, double *);
+extern int decode_time_components (Lisp_Object, Lisp_Object, Lisp_Object,
+				   Lisp_Object, struct lisp_time *, double *);
+extern struct timespec lisp_to_timespec (struct lisp_time);
 extern struct timespec lisp_time_argument (Lisp_Object);
 #endif
 

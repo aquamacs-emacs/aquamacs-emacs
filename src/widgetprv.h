@@ -1,5 +1,5 @@
 /* The emacs frame widget private header file.
-   Copyright (C) 1993, 2001-2014 Free Software Foundation, Inc.
+   Copyright (C) 1993, 2001-2015 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -43,7 +43,6 @@ typedef struct {
   int		internal_border_width;	/* internal borders */
   int		interline;		/* skips between lines */
 
-  struct font*	font;			/* font */
   Pixel		foreground_pixel;	/* foreground */
 
   Pixel		cursor_color;		/* text cursor color */

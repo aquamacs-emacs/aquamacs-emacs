@@ -1,5 +1,5 @@
 /* The emacs frame widget.
-   Copyright (C) 1992-1993, 2000-2014 Free Software Foundation, Inc.
+   Copyright (C) 1992-1993, 2000-2015 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -53,37 +53,15 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "character.h"
 #include "font.h"
 
-/* This sucks: this is the first default that x-faces.el tries.  This won't
-   be used unless neither the "Emacs.EmacsFrame" resource nor the
-   "Emacs.EmacsFrame" resource is set; the frame
-   may have the wrong default size if this font doesn't exist, but some other
-   font that x-faces.el does.  The workaround is to specify some font in the
-   resource database; I don't know a solution other than duplicating the font-
-   searching code from x-faces.el in this file.
-
-   This also means that if "Emacs.EmacsFrame" is specified as a non-
-   existent font, then Xt is going to substitute "XtDefaultFont" for it,
-   which is a different size than this one.  The solution for this is to
-   make x-faces.el try to use XtDefaultFont.  The problem with that is that
-   XtDefaultFont is almost certainly variable-width.
-
-   #### Perhaps we could have this code explicitly set XtDefaultFont to this?
- */
-#define DEFAULT_FACE_FONT "-*-courier-medium-r-*-*-*-120-*-*-*-*-iso8859-*"
-
 
 static void EmacsFrameInitialize (Widget request, Widget new, ArgList dum1, Cardinal *dum2);
 static void EmacsFrameDestroy (Widget widget);
 static void EmacsFrameRealize (Widget widget, XtValueMask *mask, XSetWindowAttributes *attrs);
 static void EmacsFrameResize (Widget widget);
-static Boolean EmacsFrameSetValues (Widget cur_widget, Widget req_widget, Widget new_widget, ArgList dum1, Cardinal *dum2);
 static XtGeometryResult EmacsFrameQueryGeometry (Widget widget, XtWidgetGeometry *request, XtWidgetGeometry *result);
 
 
-#undef XtOffset
-#define XtOffset(p_type,field) \
-	((Cardinal) (((char *) (&(((p_type)0)->field))) - ((char *)0)))
-#define offset(field) XtOffset (EmacsFrame, emacs_frame.field)
+#define offset(field) offsetof (EmacsFrameRec, emacs_frame.field)
 
 static XtResource resources[] = {
   {XtNgeometry, XtCGeometry, XtRString, sizeof (String),
@@ -102,8 +80,6 @@ static XtResource resources[] = {
      offset (internal_border_width), XtRImmediate, (XtPointer)4},
   {XtNinterline, XtCInterline, XtRInt, sizeof (int),
      offset (interline), XtRImmediate, (XtPointer)0},
-  {XtNfont,  XtCFont, XtRFontStruct, sizeof (struct font *),
-     offset (font),XtRString, DEFAULT_FACE_FONT},
   {XtNforeground, XtCForeground, XtRPixel, sizeof (Pixel),
      offset (foreground_pixel), XtRString, "XtDefaultForeground"},
   {XtNcursorColor, XtCForeground, XtRPixel, sizeof (Pixel),
@@ -157,7 +133,10 @@ static EmacsFrameClassRec emacsFrameClassRec = {
     /* destroy			*/	EmacsFrameDestroy,
     /* resize			*/	EmacsFrameResize,
     /* expose			*/	XtInheritExpose,
-    /* set_values		*/	EmacsFrameSetValues,
+
+    /* Emacs never does XtSetvalues on this widget, so we have no code
+       for it. */
+    /* set_values		*/	0, /* Not supported */
     /* set_values_hook		*/	0,
     /* set_values_almost	*/	XtInheritSetValuesAlmost,
     /* get_values_hook		*/	0,
@@ -289,8 +268,8 @@ set_frame_size (EmacsFrame ew)
    */
 
   /* Hairily merged geometry */
-  unsigned int w = FRAME_COLS (ew->emacs_frame.frame);
-  unsigned int h = FRAME_LINES (ew->emacs_frame.frame);
+  int w = FRAME_COLS (ew->emacs_frame.frame);
+  int h = FRAME_LINES (ew->emacs_frame.frame);
 
   Widget wmshell = get_wm_shell ((Widget) ew);
   /* Each Emacs shell is now independent and top-level.  */
@@ -404,7 +383,6 @@ set_frame_size (EmacsFrame ew)
     }
 #endif /* 0 */
   {
-    struct frame *f = ew->emacs_frame.frame;
     Dimension pixel_width, pixel_height;
 
     /* Take into account the size of the scrollbar.  Always use the
@@ -412,8 +390,6 @@ set_frame_size (EmacsFrame ew)
        might end up with a frame width that is not a multiple of the
        frame's character width which is bad for vertically split
        windows.  */
-
-    compute_fringe_widths (f, 0);
 
 #if 0 /* This can run Lisp code, and it is dangerous to give
 	 out the frame to Lisp code before it officially exists.
@@ -458,7 +434,7 @@ set_frame_size (EmacsFrame ew)
 static void
 update_wm_hints (EmacsFrame ew)
 {
-  Widget wmshell = get_wm_shell ((Widget)ew);
+  Widget wmshell = get_wm_shell ((Widget) ew);
   int cw;
   int ch;
   Dimension rounded_width;
@@ -472,10 +448,6 @@ update_wm_hints (EmacsFrame ew)
   /* This happens when the frame is just created.  */
   if (! wmshell) return;
 
-#if 0
-  check_frame_size (ew->emacs_frame.frame, &min_cols, &min_rows, 0);
-#endif
-
   pixel_to_char_size (ew, ew->core.width, ew->core.height,
 		      &char_width, &char_height);
   char_to_pixel_size (ew, char_width, char_height,
@@ -485,7 +457,7 @@ update_wm_hints (EmacsFrame ew)
   base_width = (wmshell->core.width - ew->core.width
 		+ (rounded_width - (char_width * cw)));
   base_height = (wmshell->core.height - ew->core.height
-		+ (rounded_height - (char_height * ch)));
+		 + (rounded_height - (char_height * ch)));
 
   /* This is kind of sleazy, but I can't see how else to tell it to
      make it mark the WM_SIZE_HINTS size as user specified.
@@ -505,93 +477,8 @@ update_wm_hints (EmacsFrame ew)
 void
 widget_update_wm_size_hints (Widget widget)
 {
-  EmacsFrame ew = (EmacsFrame)widget;
+  EmacsFrame ew = (EmacsFrame) widget;
   update_wm_hints (ew);
-}
-
-static char setup_frame_cursor_bits[] =
-{
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-};
-
-static void
-setup_frame_gcs (EmacsFrame ew)
-{
-  XGCValues gc_values;
-  struct frame* s = ew->emacs_frame.frame;
-  Pixmap blank_stipple, blank_tile;
-  unsigned long valuemask = (GCForeground | GCBackground | GCGraphicsExposures
-			     | GCStipple | GCTile);
-  Lisp_Object font;
-
-  XSETFONT (font, ew->emacs_frame.font);
-  font = Ffont_xlfd_name (font, Qnil);
-  if (STRINGP (font))
-    {
-      XFontStruct *xfont = XLoadQueryFont (FRAME_DISPLAY_INFO (s)->display,
-					   SSDATA (font));
-      if (xfont)
-	{
-	  gc_values.font = xfont->fid;
-	  valuemask |= GCFont;
-	}
-    }
-
-  /* We have to initialize all of our GCs to have a stipple/tile, otherwise
-     XGetGCValues returns uninitialized data when we query the stipple
-     (instead of None or something sensible) and it makes things hard.
-
-     This should be fixed for real by not querying the GCs but instead having
-     some GC-based cache instead of the current face-based cache which doesn't
-     effectively cache all of the GC settings we need to use.
-   */
-
-  blank_stipple
-    = XCreateBitmapFromData (XtDisplay (ew),
-			     RootWindowOfScreen (XtScreen (ew)),
-			     setup_frame_cursor_bits, 2, 2);
-
-  /* use fg = 0, bg = 1 below, but it's irrelevant since this pixmap should
-     never actually get used as a background tile!
-   */
-  blank_tile
-    = XCreatePixmapFromBitmapData (XtDisplay (ew),
-				   RootWindowOfScreen (XtScreen (ew)),
-				   setup_frame_cursor_bits, 2, 2,
-				   0, 1, ew->core.depth);
-
-  /* Normal video */
-  gc_values.foreground = ew->emacs_frame.foreground_pixel;
-  gc_values.background = ew->core.background_pixel;
-  gc_values.graphics_exposures = False;
-  gc_values.stipple = blank_stipple;
-  gc_values.tile = blank_tile;
-  XChangeGC (XtDisplay (ew), s->output_data.x->normal_gc,
-	     valuemask, &gc_values);
-
-  /* Reverse video style. */
-  gc_values.foreground = ew->core.background_pixel;
-  gc_values.background = ew->emacs_frame.foreground_pixel;
-  gc_values.graphics_exposures = False;
-  gc_values.stipple = blank_stipple;
-  gc_values.tile = blank_tile;
-  XChangeGC (XtDisplay (ew), s->output_data.x->reverse_gc,
-	     valuemask, &gc_values);
-
-  /* Cursor has to have an empty stipple. */
-  gc_values.foreground = ew->core.background_pixel;
-  gc_values.background = ew->emacs_frame.cursor_color;
-  gc_values.graphics_exposures = False;
-  gc_values.tile = blank_tile;
-  gc_values.stipple
-    = XCreateBitmapFromData (XtDisplay (ew),
-			     RootWindowOfScreen (XtScreen (ew)),
-			     setup_frame_cursor_bits, 16, 16);
-  XChangeGC (XtDisplay (ew), s->output_data.x->cursor_gc,
-	     valuemask, &gc_values);
 }
 
 static void
@@ -621,7 +508,6 @@ update_from_various_frame_slots (EmacsFrame ew)
   ew->core.width = FRAME_PIXEL_WIDTH (f);
   ew->core.background_pixel = FRAME_BACKGROUND_PIXEL (f);
   ew->emacs_frame.internal_border_width = f->internal_border_width;
-  ew->emacs_frame.font = x->font;
   ew->emacs_frame.foreground_pixel = FRAME_FOREGROUND_PIXEL (f);
   ew->emacs_frame.cursor_color = x->cursor_pixel;
   ew->core.border_pixel = x->border_pixel;
@@ -630,7 +516,7 @@ update_from_various_frame_slots (EmacsFrame ew)
 static void
 EmacsFrameInitialize (Widget request, Widget new, ArgList dum1, Cardinal *dum2)
 {
-  EmacsFrame ew = (EmacsFrame)new;
+  EmacsFrame ew = (EmacsFrame) new;
 
   if (!ew->emacs_frame.frame)
     {
@@ -656,7 +542,7 @@ resize_cb (Widget widget,
 static void
 EmacsFrameRealize (Widget widget, XtValueMask *mask, XSetWindowAttributes *attrs)
 {
-  EmacsFrame ew = (EmacsFrame)widget;
+  EmacsFrame ew = (EmacsFrame) widget;
 
   /* This used to contain SubstructureRedirectMask, but this turns out
      to be a problem with XIM on Solaris, and events from that mask
@@ -665,7 +551,7 @@ EmacsFrameRealize (Widget widget, XtValueMask *mask, XSetWindowAttributes *attrs
 		       | PropertyChangeMask
 		       | SubstructureNotifyMask);
   *mask |= CWEventMask;
-  XtCreateWindow (widget, InputOutput, (Visual *)CopyFromParent, *mask,
+  XtCreateWindow (widget, InputOutput, (Visual *) CopyFromParent, *mask,
 		  attrs);
   /* Some ConfigureNotify events does not end up in EmacsFrameResize so
      make sure we get them all.  Seen with xfcwm4 for example.  */
@@ -682,121 +568,28 @@ EmacsFrameDestroy (Widget widget)
 static void
 EmacsFrameResize (Widget widget)
 {
-  EmacsFrame ew = (EmacsFrame)widget;
+  EmacsFrame ew = (EmacsFrame) widget;
   struct frame *f = ew->emacs_frame.frame;
+  int width, height;
 
-  /* Always process resize requests pixelwise.  Frame maximizing
-     should work even when frame_resize_pixelwise is nil.  */
-  if (true || frame_resize_pixelwise)
-    {
-      int width, height;
+  pixel_to_text_size (ew, ew->core.width, ew->core.height, &width, &height);
 
-      pixel_to_text_size (ew, ew->core.width, ew->core.height, &width, &height);
-      change_frame_size (f, width, height, 0, 1, 0, 1);
+  frame_size_history_add
+    (f, QEmacsFrameResize, width, height,
+     list2 (make_number (ew->core.width), make_number (ew->core.height)));
 
-      update_wm_hints (ew);
-      update_various_frame_slots (ew);
+  change_frame_size (f, width, height, 0, 1, 0, 1);
 
-      cancel_mouse_face (f);
-    }
-  else
-    {
-      struct x_output *x = f->output_data.x;
-      int columns, rows;
+  update_wm_hints (ew);
+  update_various_frame_slots (ew);
 
-      pixel_to_char_size (ew, ew->core.width, ew->core.height, &columns, &rows);
-      if (columns != FRAME_COLS (f)
-	  || rows != FRAME_LINES (f)
-	  || ew->core.width != FRAME_PIXEL_WIDTH (f)
-	  || ew->core.height + x->menubar_height != FRAME_PIXEL_HEIGHT (f))
-	{
-	  change_frame_size (f, columns, rows, 0, 1, 0, 0);
-	  update_wm_hints (ew);
-	  update_various_frame_slots (ew);
-
-	  cancel_mouse_face (f);
-	}
-    }
-}
-
-static Boolean
-EmacsFrameSetValues (Widget cur_widget, Widget req_widget, Widget new_widget, ArgList dum1, Cardinal *dum2)
-{
-  EmacsFrame cur = (EmacsFrame)cur_widget;
-  EmacsFrame new = (EmacsFrame)new_widget;
-
-  Boolean needs_a_refresh = False;
-  Boolean has_to_recompute_size;
-  Boolean has_to_recompute_gcs;
-  Boolean has_to_update_hints;
-
-  int char_width, char_height;
-  Dimension pixel_width;
-  Dimension pixel_height;
-
-  /* AFAIK, this function is never called. -- Jan D, Oct 2009.  */
-  has_to_recompute_gcs = (cur->emacs_frame.font != new->emacs_frame.font
-			  || (cur->emacs_frame.foreground_pixel
-			      != new->emacs_frame.foreground_pixel)
-			  || (cur->core.background_pixel
-			      != new->core.background_pixel)
-			  );
-
-  has_to_recompute_size = (cur->emacs_frame.font != new->emacs_frame.font
-			   && cur->core.width == new->core.width
-			   && cur->core.height == new->core.height);
-
-  has_to_update_hints = (cur->emacs_frame.font != new->emacs_frame.font);
-
-  if (has_to_recompute_gcs)
-    {
-      setup_frame_gcs (new);
-      needs_a_refresh = True;
-    }
-
-  if (has_to_recompute_size)
-    {
-      /* Don't do this pixelwise, hopefully.  */
-      pixel_width = new->core.width;
-      pixel_height = new->core.height;
-      pixel_to_char_size (new, pixel_width, pixel_height, &char_width,
-			  &char_height);
-      char_to_pixel_size (new, char_width, char_height, &pixel_width,
-			  &pixel_height);
-      new->core.width = pixel_width;
-      new->core.height = pixel_height;
-
-      change_frame_size (new->emacs_frame.frame, char_width, char_height,
-			 1, 0, 0, 0);
-      needs_a_refresh = True;
-    }
-
-  if (has_to_update_hints)
-    update_wm_hints (new);
-
-  update_various_frame_slots (new);
-
-  /* #### This doesn't work, I haven't been able to find ANY kludge that
-     will let (x-create-frame '((iconic . t))) work.  It seems that changes
-     to wm_shell's iconic slot have no effect after it has been realized,
-     and calling XIconifyWindow doesn't work either (even though the window
-     has been created.)  Perhaps there is some property we could smash
-     directly, but I'm sick of this for now.
-   */
-  if (cur->emacs_frame.iconic != new->emacs_frame.iconic)
-    {
-      Widget wmshell = get_wm_shell ((Widget) cur);
-      XtVaSetValues (wmshell, XtNiconic,
-		     (XtArgVal) new->emacs_frame.iconic, NULL);
-    }
-
-  return needs_a_refresh;
+  cancel_mouse_face (f);
 }
 
 static XtGeometryResult
 EmacsFrameQueryGeometry (Widget widget, XtWidgetGeometry *request, XtWidgetGeometry *result)
 {
-  EmacsFrame ew = (EmacsFrame)widget;
+  EmacsFrame ew = (EmacsFrame) widget;
 
   int mask = request->request_mode;
   Dimension ok_width, ok_height;
@@ -829,7 +622,9 @@ EmacsFrameSetCharSize (Widget widget, int columns, int rows)
   EmacsFrame ew = (EmacsFrame) widget;
   struct frame *f = ew->emacs_frame.frame;
 
-  x_set_window_size (f, 0, columns, rows, 0);
+  if (!frame_inhibit_resize (f, 0, Qfont)
+      && !frame_inhibit_resize (f, 1, Qfont))
+    x_set_window_size (f, 0, columns, rows, 0);
 }
 
 

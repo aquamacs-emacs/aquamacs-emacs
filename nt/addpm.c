@@ -1,5 +1,5 @@
 /* Add entries to the GNU Emacs Program Manager folder.
-   Copyright (C) 1995, 2001-2014 Free Software Foundation, Inc.
+   Copyright (C) 1995, 2001-2015 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -38,9 +38,8 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <stdio.h>
 #include <malloc.h>
 
-/* MinGW64 defines _W64 and barfs if _WIN32_IE is defined to anything
-   below 0x500.  */
-#ifndef _W64
+/* MinGW64 barfs if _WIN32_IE is defined to anything below 0x500.  */
+#ifndef MINGW_W64
 #define _WIN32_IE 0x400
 #endif
 /* Request C Object macros for COM interfaces.  */

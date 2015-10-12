@@ -1,6 +1,6 @@
 ;;; ob-ruby.el --- org-babel functions for ruby evaluation
 
-;; Copyright (C) 2009-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2009-2015 Free Software Foundation, Inc.
 
 ;; Author: Eric Schulte
 ;; Keywords: literate programming, reproducible research
@@ -58,7 +58,7 @@
   :type 'string)
 
 (defcustom org-babel-ruby-nil-to 'hline
-  "Replace 'nil' in ruby tables with this before returning."
+  "Replace nil in ruby tables with this before returning."
   :group 'org-babel
   :version "24.4"
   :package-version '(Org . "8.0")

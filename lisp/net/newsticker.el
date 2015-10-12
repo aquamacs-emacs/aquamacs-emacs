@@ -1,14 +1,12 @@
 ;;; newsticker.el --- A Newsticker for Emacs.
 
-;; Copyright (C) 2003-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2003-2015 Free Software Foundation, Inc.
 
 ;; Author:      Ulf Jasper <ulf.jasper@web.de>
 ;; Filename:    newsticker.el
 ;; URL:         http://www.nongnu.org/newsticker
 ;; Created:     17. June 2003
 ;; Keywords:    News, RSS, Atom
-;; Time-stamp:  "6. Dezember 2009, 19:15:18 (ulf)"
-;; Version:     1.99
 
 ;; ======================================================================
 
@@ -28,6 +26,7 @@
 ;; along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
 
 (defconst newsticker-version "1.99" "Version number of newsticker.el.")
+(make-obsolete-variable 'newsticker-version 'emacs-version "25.1")
 
 ;; ======================================================================
 ;;; Commentary:

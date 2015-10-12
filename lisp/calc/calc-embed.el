@@ -1,6 +1,6 @@
 ;;; calc-embed.el --- embed Calc in a buffer
 
-;; Copyright (C) 1990-1993, 2001-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1990-1993, 2001-2015 Free Software Foundation, Inc.
 
 ;; Author: David Gillespie <daveg@synaptics.com>
 ;; Maintainer: Jay Belanger <jay.p.belanger@gmail.com>
@@ -330,10 +330,12 @@
       (if calc-embedded-firsttime-formula
           (run-hooks 'calc-embedded-new-formula-hook))
       (or (eq calc-embedded-quiet t)
-	  (message "Embedded Calc mode enabled; %s to return to normal"
-		   (if calc-embedded-quiet
-		       "Type `C-x * x'"
-		     "Give this command again")))))
+	  (message (concat
+                    "Embedded Calc mode enabled; "
+                    (if calc-embedded-quiet
+                        "Type `C-x * x'"
+                      "Give this command again")
+                    " to return to normal")))))
   (scroll-down 0))    ; fix a bug which occurs when truncate-lines is changed.
 
 

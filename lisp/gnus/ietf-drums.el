@@ -1,6 +1,6 @@
 ;;; ietf-drums.el --- Functions for parsing RFC822bis headers
 
-;; Copyright (C) 1998-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1998-2015 Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;; This file is part of GNU Emacs.
@@ -206,7 +206,6 @@ backslash and doublequote.")
 		   (1+ (point))
 		   (progn (forward-sexp 1) (1- (point))))))))
 	 (t
-	  (message "Unknown symbol: %c" c)
 	  (forward-char 1))))
       ;; If we found no display-name, then we look for comments.
       (if display-name

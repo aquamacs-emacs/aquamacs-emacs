@@ -1,6 +1,6 @@
 /* MS-DOS specific C utilities.          -*- coding: cp850 -*-
 
-Copyright (C) 1993-1997, 1999-2014 Free Software Foundation, Inc.
+Copyright (C) 1993-1997, 1999-2015 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -71,6 +71,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "coding.h"
 #include "disptab.h"
 #include "window.h"
+#include "menu.h"
 #include "buffer.h"
 #include "commands.h"
 #include "blockinput.h"
@@ -566,7 +567,7 @@ dos_set_window_size (int *rows, int *cols)
       };
       int i = 0;
 
-      while (i < sizeof (std_dimension) / sizeof (std_dimension[0]))
+      while (i < ARRAYELTS (std_dimension))
 	{
 	 if (std_dimension[i].need_vga <= have_vga
 	     && std_dimension[i].rows >= *rows)
@@ -1732,7 +1733,7 @@ IT_set_frame_parameters (struct frame *f, Lisp_Object alist)
 
   if (redraw)
     {
-      face_change_count++;	/* forces xdisp.c to recompute basic faces */
+      face_change = true;	/* forces xdisp.c to recompute basic faces */
       if (f == SELECTED_FRAME ())
 	redraw_frame (f);
     }
@@ -1791,7 +1792,7 @@ internal_terminal_init (void)
 	}
 
       Vinitial_window_system = Qpc;
-      Vwindow_system_version = make_number (24); /* RE Emacs version */
+      Vwindow_system_version = make_number (25); /* RE Emacs version */
       tty->terminal->type = output_msdos_raw;
 
       /* If Emacs was dumped on DOS/V machine, forget the stale VRAM
@@ -1863,6 +1864,7 @@ initialize_msdos_display (struct terminal *term)
   term->update_end_hook = IT_update_end;
   term->frame_up_to_date_hook = IT_frame_up_to_date;
   term->mouse_position_hook = 0; /* set later by dos_ttraw */
+  term->menu_show_hook = x_menu_show;
   term->frame_rehighlight_hook = 0;
   term->frame_raise_lower_hook = 0;
   term->set_vertical_scroll_bar_hook = 0;
@@ -3455,7 +3457,7 @@ init_environment (int argc, char **argv, int skip_args)
   static const char * const tempdirs[] = {
     "$TMPDIR", "$TEMP", "$TMP", "c:/"
   };
-  const int imax = sizeof (tempdirs) / sizeof (tempdirs[0]);
+  const int imax = ARRAYELTS (tempdirs);
 
   /* Make sure they have a usable $TMPDIR.  Many Emacs functions use
      temporary files and assume "/tmp" if $TMPDIR is unset, which
@@ -4015,103 +4017,6 @@ unsetenv (const char *name)
 #endif
 
 
-#if __DJGPP__ == 2 && __DJGPP_MINOR__ < 2
-
-/* Augment DJGPP library POSIX signal functions.  This is needed
-   as of DJGPP v2.01, but might be in the library in later releases. */
-
-#include <libc/bss.h>
-
-/* A counter to know when to re-initialize the static sets.  */
-static int sigprocmask_count = -1;
-
-/* Which signals are currently blocked (initially none).  */
-static sigset_t current_mask;
-
-/* Which signals are pending (initially none).  */
-static sigset_t msdos_pending_signals;
-
-/* Previous handlers to restore when the blocked signals are unblocked.  */
-typedef void (*sighandler_t)(int);
-static sighandler_t prev_handlers[320];
-
-/* A signal handler which just records that a signal occurred
-   (it will be raised later, if and when the signal is unblocked).  */
-static void
-sig_suspender (int signo)
-{
-  sigaddset (&msdos_pending_signals, signo);
-}
-
-int
-sigprocmask (int how, const sigset_t *new_set, sigset_t *old_set)
-{
-  int signo;
-  sigset_t new_mask;
-
-  /* If called for the first time, initialize.  */
-  if (sigprocmask_count != __bss_count)
-    {
-      sigprocmask_count = __bss_count;
-      sigemptyset (&msdos_pending_signals);
-      sigemptyset (&current_mask);
-      for (signo = 0; signo < 320; signo++)
-	prev_handlers[signo] = SIG_ERR;
-    }
-
-  if (old_set)
-    *old_set = current_mask;
-
-  if (new_set == 0)
-    return 0;
-
-  if (how != SIG_BLOCK && how != SIG_UNBLOCK && how != SIG_SETMASK)
-    {
-      errno = EINVAL;
-      return -1;
-    }
-
-  sigemptyset (&new_mask);
-
-  /* DJGPP supports upto 320 signals.  */
-  for (signo = 0; signo < 320; signo++)
-    {
-      if (sigismember (&current_mask, signo))
-	sigaddset (&new_mask, signo);
-      else if (sigismember (new_set, signo) && how != SIG_UNBLOCK)
-	{
-	  sigaddset (&new_mask, signo);
-
-	  /* SIGKILL is silently ignored, as on other platforms.  */
-	  if (signo != SIGKILL && prev_handlers[signo] == SIG_ERR)
-	    prev_handlers[signo] = signal (signo, sig_suspender);
-	}
-      if ((   how == SIG_UNBLOCK
-	      && sigismember (&new_mask, signo)
-	      && sigismember (new_set, signo))
-	  || (how == SIG_SETMASK
-	      && sigismember (&new_mask, signo)
-	      && !sigismember (new_set, signo)))
-	{
-	  sigdelset (&new_mask, signo);
-	  if (prev_handlers[signo] != SIG_ERR)
-	    {
-	      signal (signo, prev_handlers[signo]);
-	      prev_handlers[signo] = SIG_ERR;
-	    }
-	  if (sigismember (&msdos_pending_signals, signo))
-	    {
-	      sigdelset (&msdos_pending_signals, signo);
-	      raise (signo);
-	    }
-	}
-    }
-  current_mask = new_mask;
-  return 0;
-}
-
-#endif /* not __DJGPP_MINOR__ < 2 */
-
 #ifndef HAVE_SELECT
 #include "sysselect.h"
 
@@ -4258,15 +4163,7 @@ msdos_abort (void)
   dos_ttcooked ();
   ScreenSetCursor (10, 0);
   cputs ("\r\n\nEmacs aborted!\r\n");
-#if __DJGPP__ == 2 && __DJGPP_MINOR__ < 2
-  if (screen_virtual_segment)
-    dosv_refresh_virtual_screen (2 * 10 * screen_size_X, 4 * screen_size_X);
-  /* Generate traceback, so we could tell whodunit.  */
-  signal (SIGINT, SIG_DFL);
-  __asm__ __volatile__ ("movb $0x1b,%al;call ___djgpp_hw_exception");
-#else  /* __DJGPP_MINOR__ >= 2 */
   raise (SIGABRT);
-#endif /* __DJGPP_MINOR__ >= 2 */
   exit (2);
 }
 

@@ -1,6 +1,6 @@
 ;;; advice-tests.el --- Test suite for the new advice thingy.
 
-;; Copyright (C) 2012-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2012-2015 Free Software Foundation, Inc.
 
 ;; This file is part of GNU Emacs.
 
@@ -160,7 +160,8 @@ function being an around advice."
           (advice-add 'call-interactively :before #'ignore)
           (should (equal (sm-test7.4) '(1 . nil)))
           (should (equal (call-interactively 'sm-test7.4) '(1 . t))))
-      (fset 'call-interactively old))))
+      (advice-remove 'call-interactively #'ignore)
+      (should (eq (symbol-function 'call-interactively) old)))))
 
 (ert-deftest advice-test-interactive ()
   "Check handling of interactive spec."

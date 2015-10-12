@@ -1,6 +1,6 @@
-@c -*-texinfo-*-
+@c -*- mode: texinfo; coding: utf-8 -*-
 @c This is part of the GNU Emacs Lisp Reference Manual.
-@c Copyright (C) 1990-1995, 1998-1999, 2001-2014 Free Software
+@c Copyright (C) 1990-1995, 1998-1999, 2001-2015 Free Software
 @c Foundation, Inc.
 @c See the file elisp.texi for copying conditions.
 @node Functions
@@ -118,7 +118,7 @@ Components}); such a @dfn{named command} can be invoked with
 
 @item closure
 A function object that is much like a lambda expression, except that
-it also encloses an ``environment'' of lexical variable bindings.
+it also encloses an environment of lexical variable bindings.
 @xref{Closures}.
 
 @item byte-code function
@@ -368,7 +368,7 @@ This is what @code{substring} does; @code{nil} as the third argument to
 @quotation
 @b{Common Lisp note:} Common Lisp allows the function to specify what
 default value to use when an optional argument is omitted; Emacs Lisp
-always uses @code{nil}.  Emacs Lisp does not support ``supplied-p''
+always uses @code{nil}.  Emacs Lisp does not support @code{supplied-p}
 variables that tell you whether an argument was explicitly passed.
 @end quotation
 
@@ -660,7 +660,7 @@ already been evaluated.
 
 The argument @var{function} must be either a Lisp function or a
 primitive function.  Special forms and macros are not allowed, because
-they make sense only when given the ``unevaluated'' argument
+they make sense only when given the unevaluated argument
 expressions.  @code{funcall} cannot provide these because, as we saw
 above, it never knows them in the first place.
 
@@ -912,7 +912,7 @@ This macro returns an anonymous function with argument list
 @var{args}, documentation string @var{doc} (if any), interactive spec
 @var{interactive} (if any), and body forms given by @var{body}.
 
-In effect, this macro makes @code{lambda} forms ``self-quoting'':
+In effect, this macro makes @code{lambda} forms self-quoting:
 evaluating a form whose @sc{car} is @code{lambda} yields the form
 itself:
 
@@ -1133,7 +1133,7 @@ argument list and body forms as the remaining elements:
 
 @noindent
 However, the fact that the internal structure of a closure is
-``exposed'' to the rest of the Lisp world is considered an internal
+exposed to the rest of the Lisp world is considered an internal
 implementation detail.  For this reason, we recommend against directly
 examining or altering the structure of closure objects.
 
@@ -1204,24 +1204,25 @@ behavior with:
 
 The arguments @code{:before} and @code{:around} used in the above examples
 specify how the two functions are composed, since there are many different
-ways to do it.  The added function is also called an @emph{advice}.
+ways to do it.  The added function is also called a piece of @emph{advice}.
 
 @menu
 * Core Advising Primitives::    Primitives to manipulate advice.
 * Advising Named Functions::    Advising named functions.
-* Advice combinators::          Ways to compose advices.
-* Porting old advices::         Adapting code using the old defadvice.
+* Advice combinators::          Ways to compose advice.
+* Porting old advice::          Adapting code using the old defadvice.
 @end menu
 
 @node Core Advising Primitives
 @subsection Primitives to manipulate advices
+@cindex advice, add and remove
 
 @defmac add-function where place function &optional props
 This macro is the handy way to add the advice @var{function} to the function
 stored in @var{place} (@pxref{Generalized Variables}).
 
 @var{where} determines how @var{function} is composed with the
-existing function, e.g. whether @var{function} should be called before, or
+existing function, e.g., whether @var{function} should be called before, or
 after the original function.  @xref{Advice combinators}, for the list of
 available ways to compose the two functions.
 
@@ -1245,22 +1246,25 @@ identify which function to remove.  Typically used when @var{function} is an
 anonymous function.
 
 @item depth
-This specifies how to order the advices, in case several advices are present.
-By default, the depth is 0.  A depth of 100 indicates that this advice should
-be kept as deep as possible, whereas a depth of -100 indicates that it
-should stay as the outermost advice.  When two advices specify the same depth,
-the most recently added advice will be outermost.
+This specifies how to order the advice, should several pieces of
+advice be present.  By default, the depth is 0.  A depth of 100
+indicates that this piece of advice should be kept as deep as
+possible, whereas a depth of -100 indicates that it should stay as the
+outermost piece.  When two pieces of advice specify the same depth,
+the most recently added one will be outermost.
 
-For a @code{:before} advice, being outermost means that this advice will be run
-first, before any other advice, whereas being innermost means that it will run
-right before the original function, with no other advice run between itself and
-the original function.  Similarly, for an @code{:after} advice innermost means
-that it will run right after the original function, with no other advice run in
-between, whereas outermost means that it will be run very last after all
-other advices.  An innermost @code{:override} advice will only override the
-original function and other advices will apply to it, whereas an outermost
-@code{:override} advice will override not only the original function but all
-other advices applied to it as well.
+For @code{:before} advice, being outermost means that this advice will
+be run first, before any other advice, whereas being innermost means
+that it will run right before the original function, with no other
+advice run between itself and the original function.  Similarly, for
+@code{:after} advice innermost means that it will run right after the
+original function, with no other advice run in between, whereas
+outermost means that it will be run right at the end after all other
+advice.  An innermost @code{:override} piece of advice will only
+override the original function and other pieces of advice will apply
+to it, whereas an outermost @code{:override} piece of advice will
+override not only the original function but all other advice applied
+to it as well.
 @end table
 
 If @var{function} is not interactive, then the combined function will inherit
@@ -1298,7 +1302,7 @@ function, it can also be the @code{name} of the piece of advice.
 @end defun
 
 @defun advice-function-mapc f function-def
-Call the function @var{f} for every advice that was added to
+Call the function @var{f} for every piece of advice that was added to
 @var{function-def}.  @var{f} is called with two arguments: the advice function
 and its properties.
 @end defun
@@ -1306,13 +1310,14 @@ and its properties.
 @defun advice-eval-interactive-spec spec
 Evaluate the interactive @var{spec} just like an interactive call to a function
 with such a spec would, and then return the corresponding list of arguments
-that was built.  E.g. @code{(advice-eval-interactive-spec "r\nP")} will
+that was built.  E.g., @code{(advice-eval-interactive-spec "r\nP")} will
 return a list of three elements, containing the boundaries of the region and
 the current prefix argument.
 @end defun
 
 @node Advising Named Functions
 @subsection Advising Named Functions
+@cindex advising named functions
 
 A common use of advice is for named functions and macros.
 You could just use @code{add-function} as in:
@@ -1326,7 +1331,7 @@ instead.  This separate set of functions to manipulate pieces of advice applied
 to named functions, offers the following extra features compared to
 @code{add-function}: they know how to deal with macros and autoloaded
 functions, they let @code{describe-function} preserve the original docstring as
-well as document the added advice, and they let you add and remove advices
+well as document the added advice, and they let you add and remove advice
 before a function is even defined.
 
   @code{advice-add} can be useful for altering the behavior of existing calls
@@ -1360,6 +1365,13 @@ called directly from C, and such calls ignore advice; hence, one ends
 up in a confusing situation where some calls (occurring from Lisp
 code) obey the advice and other calls (from C code) do not.
 
+@defmac define-advice symbol (where lambda-list &optional name depth) &rest body
+This macro defines a piece of advice and adds it to the function named
+@var{symbol}.  The advice is an anonymous function if @var{name} is
+nil or a function named @code{symbol@@name}.  See @code{advice-add}
+for explanation of other arguments.
+@end defmac
+
 @defun advice-add symbol where function &optional props
 Add the advice @var{function} to the named function @var{symbol}.
 @var{where} and @var{props} have the same meaning as for @code{add-function}
@@ -1368,23 +1380,23 @@ Add the advice @var{function} to the named function @var{symbol}.
 
 @defun advice-remove symbol function
 Remove the advice @var{function} from the named function @var{symbol}.
-@var{function} can also be the @code{name} of an advice.
+@var{function} can also be the @code{name} of a piece of advice.
 @end defun
 
 @defun advice-member-p function symbol
 Return non-@code{nil} if the advice @var{function} is already in the named
 function @var{symbol}.  @var{function} can also be the @code{name} of
-an advice.
+a piece of advice.
 @end defun
 
 @defun advice-mapc function symbol
-Call @var{function} for every advice that was added to the named function
-@var{symbol}.  @var{function} is called with two arguments: the advice function
-and its properties.
+Call @var{function} for every piece of advice that was added to the
+named function @var{symbol}.  @var{function} is called with two
+arguments: the advice function and its properties.
 @end defun
 
 @node Advice combinators
-@subsection Ways to compose advices
+@subsection Ways to compose advice
 
 Here are the different possible values for the @var{where} argument of
 @code{add-function} and @code{advice-add}, specifying how the advice
@@ -1496,14 +1508,15 @@ More specifically, the composition of the two functions behaves like:
 @end table
 
 
-@node Porting old advices
+@node Porting old advice
 @subsection Adapting code using the old defadvice
+@cindex old advices, porting
 
 A lot of code uses the old @code{defadvice} mechanism, which is largely made
 obsolete by the new @code{advice-add}, whose implementation and semantics is
 significantly simpler.
 
-An old advice such as:
+An old piece of advice such as:
 
 @example
 (defadvice previous-line (before next-line-at-end
@@ -1540,11 +1553,11 @@ whereas the new advice mechanism needs:
 
 Note that @code{ad-activate} had a global effect: it activated all pieces of
 advice enabled for that specified function.  If you wanted to only activate or
-deactivate a particular advice, you needed to @emph{enable} or @emph{disable}
-that advice with @code{ad-enable-advice} and @code{ad-disable-advice}.
+deactivate a particular piece, you needed to @emph{enable} or @emph{disable}
+it with @code{ad-enable-advice} and @code{ad-disable-advice}.
 The new mechanism does away with this distinction.
 
-An around advice such as:
+Around advice such as:
 
 @example
 (defadvice foo (around foo-around)
@@ -1570,12 +1583,12 @@ modify the function's arguments (e.g., with @code{ad-set-arg}), and that would
 affect the argument values seen by the original function, whereas in the new
 @code{:before}, modifying an argument via @code{setq} in the advice has no
 effect on the arguments seen by the original function.
-When porting a @code{before} advice which relied on this behavior, you'll need
-to turn it into a new @code{:around} or @code{:filter-args} advice instead.
+When porting @code{before} advice which relied on this behavior, you'll need
+to turn it into new @code{:around} or @code{:filter-args} advice instead.
 
-Similarly an old @code{after} advice could modify the returned value by
-changing @code{ad-return-value}, whereas a new @code{:after} advice cannot, so
-when porting such an old @code{after} advice, you'll need to turn it into a new
+Similarly old @code{after} advice could modify the returned value by
+changing @code{ad-return-value}, whereas new @code{:after} advice cannot, so
+when porting such old @code{after} advice, you'll need to turn it into new
 @code{:around} or @code{:filter-return} advice instead.
 
 @node Obsolete Functions
@@ -1707,7 +1720,7 @@ performed later on in the same file, just like macros.
 @section The @code{declare} Form
 @findex declare
 
-  @code{declare} is a special macro which can be used to add ``meta''
+  @code{declare} is a special macro which can be used to add meta
 properties to a function or macro: for example, marking it as
 obsolete, or giving its forms a special @key{TAB} indentation
 convention in Emacs Lisp mode.
@@ -1748,6 +1761,10 @@ as a documentation string.
 Indent calls to this function or macro according to @var{indent-spec}.
 This is typically used for macros, though it works for functions too.
 @xref{Indenting Macros}.
+
+@item (interactive-only @var{value})
+Set the function's @code{interactive-only} property to @var{value}.
+@xref{The interactive-only property}.
 
 @item (obsolete @var{current-name} @var{when})
 Mark the function or macro as obsolete, similar to a call to
@@ -1804,7 +1821,7 @@ example, byte-compiling @file{fortran.el} used to warn:
 
 @example
 In end of data:
-fortran.el:2152:1:Warning: the function `gud-find-c-expr' is not
+fortran.el:2152:1:Warning: the function ‘gud-find-c-expr’ is not
     known to be defined.
 @end example
 
@@ -1895,7 +1912,7 @@ list of buffer-local bindings.
 Being quick and simple, @code{unsafep} does a very light analysis and
 rejects many Lisp expressions that are actually safe.  There are no
 known cases where @code{unsafep} returns @code{nil} for an unsafe
-expression.  However, a ``safe'' Lisp expression can return a string
+expression.  However, a safe Lisp expression can return a string
 with a @code{display} property, containing an associated Lisp
 expression to be executed after the string is inserted into a buffer.
 This associated expression can be a virus.  In order to be safe, you

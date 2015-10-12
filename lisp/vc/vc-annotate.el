@@ -1,6 +1,6 @@
 ;;; vc-annotate.el --- VC Annotate Support  -*- lexical-binding: t -*-
 
-;; Copyright (C) 1997-1998, 2000-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1997-1998, 2000-2015 Free Software Foundation, Inc.
 
 ;; Author:     Martin Lorentzson  <emwson@emw.ericsson.se>
 ;; Maintainer: emacs-devel@gnu.org
@@ -40,6 +40,29 @@
 			 :value "20.5"))
   :group 'vc)
 
+(defcustom vc-annotate-background-mode
+  (not (or (eq (or frame-background-mode
+		   (frame-parameter nil 'background-mode))
+	       'dark)
+	   (and (tty-display-color-p) (<= (display-color-cells) 8))))
+  "Non-nil means `vc-annotate-color-map' is applied to the background.
+
+When non-nil, the color range from `vc-annotate-color-map' is applied
+to the background, while the foreground remains default.
+
+When nil, the color range from `vc-annotate-color-map' is applied
+to the foreground, and the color from the option `vc-annotate-background'
+is applied to the background."
+  :type 'boolean
+  :set (lambda (symbol value)
+	 (set-default symbol value)
+	 (when (boundp 'vc-annotate-color-map)
+	   (with-demoted-errors
+	     ;; Update the value of the dependent variable.
+	     (custom-reevaluate-setting 'vc-annotate-color-map))))
+  :version "25.1"
+  :group 'vc)
+
 (defcustom vc-annotate-color-map
   (if (and (tty-display-color-p) (<= (display-color-cells) 8))
       ;; A custom sorted TTY colormap
@@ -71,25 +94,49 @@
 		  (prog1
 		      (cons date x)
 		    (setq date (+ date delta)))) colors))
-    ;; Normal colormap: hue stepped from 0-240deg, value=1., saturation=0.75
-    '(( 20. . "#FF3F3F")
-      ( 40. . "#FF6C3F")
-      ( 60. . "#FF993F")
-      ( 80. . "#FFC63F")
-      (100. . "#FFF33F")
-      (120. . "#DDFF3F")
-      (140. . "#B0FF3F")
-      (160. . "#83FF3F")
-      (180. . "#56FF3F")
-      (200. . "#3FFF56")
-      (220. . "#3FFF83")
-      (240. . "#3FFFB0")
-      (260. . "#3FFFDD")
-      (280. . "#3FF3FF")
-      (300. . "#3FC6FF")
-      (320. . "#3F99FF")
-      (340. . "#3F6CFF")
-      (360. . "#3F3FFF")))
+    (cond
+     ;; Normal colormap for background colors with dark foreground:
+     ;; hue stepped from 0-240deg, value=1., saturation=0.20
+     (vc-annotate-background-mode
+      '(( 20. . "#FFCCCC")
+	( 40. . "#FFD8CC")
+	( 60. . "#FFE4CC")
+	( 80. . "#FFF0CC")
+	(100. . "#FFFCCC")
+	(120. . "#F6FFCC")
+	(140. . "#EAFFCC")
+	(160. . "#DEFFCC")
+	(180. . "#D2FFCC")
+	(200. . "#CCFFD2")
+	(220. . "#CCFFDE")
+	(240. . "#CCFFEA")
+	(260. . "#CCFFF6")
+	(280. . "#CCFCFF")
+	(300. . "#CCF0FF")
+	(320. . "#CCE4FF")
+	(340. . "#CCD8FF")
+	(360. . "#CCCCFF")))
+     ;; Normal colormap for foreground colors on dark background:
+     ;; hue stepped from 0-240deg, value=1., saturation=0.75
+     (t
+      '(( 20. . "#FF3F3F")
+	( 40. . "#FF6C3F")
+	( 60. . "#FF993F")
+	( 80. . "#FFC63F")
+	(100. . "#FFF33F")
+	(120. . "#DDFF3F")
+	(140. . "#B0FF3F")
+	(160. . "#83FF3F")
+	(180. . "#56FF3F")
+	(200. . "#3FFF56")
+	(220. . "#3FFF83")
+	(240. . "#3FFFB0")
+	(260. . "#3FFFDD")
+	(280. . "#3FF3FF")
+	(300. . "#3FC6FF")
+	(320. . "#3F99FF")
+	(340. . "#3F6CFF")
+	(360. . "#3F3FFF")))))
   "Association list of age versus color, for \\[vc-annotate].
 Ages are given in units of fractional days.  Default is eighteen
 steps using a twenty day increment, from red to blue.  For TTY
@@ -98,12 +145,12 @@ all other colors between (excluding black and white)."
   :type 'alist
   :group 'vc)
 
-(defcustom vc-annotate-very-old-color "#3F3FFF"
+(defcustom vc-annotate-very-old-color (if vc-annotate-background-mode "#CCCCFF" "#3F3FFF")
   "Color for lines older than the current color range in \\[vc-annotate]."
   :type 'string
   :group 'vc)
 
-(defcustom vc-annotate-background "black"
+(defcustom vc-annotate-background nil
   "Background color for \\[vc-annotate].
 Default color is used if nil."
   :type '(choice (const :tag "Default background" nil) (color))
@@ -127,7 +174,6 @@ List of factors, used to expand/compress the time scale.  See `vc-annotate'."
     (define-key m "n" 'vc-annotate-next-revision)
     (define-key m "p" 'vc-annotate-prev-revision)
     (define-key m "w" 'vc-annotate-working-revision)
-    (define-key m "v" 'vc-annotate-toggle-annotation-visibility)
     (define-key m "v" 'vc-annotate-toggle-annotation-visibility)
     (define-key m "\C-m" 'vc-annotate-goto-line)
     m)
@@ -206,7 +252,7 @@ cover the range from the oldest annotation to the newest."
   (interactive "P")
   (let ((newest 0.0)
 	(oldest 999999.)		;Any CVS users at the founding of Rome?
-	(current (vc-annotate-convert-time (current-time)))
+	(current (vc-annotate-convert-time))
 	date)
     (message "Redisplaying annotation...")
     ;; Run through this file and find the oldest and newest dates annotated.
@@ -223,7 +269,7 @@ cover the range from the oldest annotation to the newest."
      (/ (- (if full newest current) oldest)
         (vc-annotate-oldest-in-map vc-annotate-color-map))
      (if full newest))
-    (message "Redisplaying annotation...done \(%s\)"
+    (message "Redisplaying annotation...done (%s)"
 	     (if full
 		 (format "Spanned from %.1f to %.1f days old"
 			 (- current oldest)
@@ -347,7 +393,9 @@ Customization variables:
 `vc-annotate-menu-elements' customizes the menu elements of the
 mode-specific menu.  `vc-annotate-color-map' and
 `vc-annotate-very-old-color' define the mapping of time to colors.
-`vc-annotate-background' specifies the background color."
+`vc-annotate-background' specifies the background color.
+`vc-annotate-background-mode' specifies whether the color map
+should be applied to the background or to the foreground."
   (interactive
    (save-current-buffer
      (vc-ensure-vc-buffer)
@@ -534,17 +582,15 @@ the file in question, search for the log entry required and move point."
 	(setq prev-rev
 	      (vc-call-backend vc-annotate-backend 'previous-revision
                                (if filediff fname nil) rev))
-	(if (not prev-rev)
-	    (message "Cannot diff from any revision prior to %s" rev)
-          (vc-diff-internal
-           t
-           ;; The value passed here should follow what
-           ;; `vc-deduce-fileset' returns.
-           (list vc-annotate-backend
-                 (if filediff
-                     (list fname)
-                   nil))
-           prev-rev rev))))))
+	(vc-diff-internal
+         t
+         ;; The value passed here should follow what
+         ;; `vc-deduce-fileset' returns.
+         (list vc-annotate-backend
+               (if filediff
+                   (list fname)
+                 nil))
+         prev-rev rev)))))
 
 (defun vc-annotate-show-diff-revision-at-line ()
   "Visit the diff of the revision at line from its previous revision."
@@ -556,7 +602,10 @@ the file in question, search for the log entry required and move point."
   (interactive)
   (when (eq 'file (vc-call-backend vc-annotate-backend 'revision-granularity))
     (error "The %s backend does not support changeset diffs" vc-annotate-backend))
-  (vc-annotate-show-diff-revision-at-line-internal nil))
+  ;; Make sure `diff-goto-source' will be able to find all files.
+  (let ((default-directory (vc-call-backend vc-annotate-backend
+                                            'root default-directory)))
+    (vc-annotate-show-diff-revision-at-line-internal nil)))
 
 (defun vc-annotate-warp-revision (revspec &optional file)
   "Annotate the revision described by REVSPEC.
@@ -615,11 +664,10 @@ nil if no such cell exists."
      (setq i (+ i 1)))
    tmp-cons))				; Return the appropriate value
 
-(defun vc-annotate-convert-time (time)
-  "Convert a time value to a floating-point number of days.
-The argument TIME is a list as returned by `current-time' or
-`encode-time', only the first two elements of that list are considered."
-  (/ (+ (* (float (car time)) (lsh 1 16)) (cadr time)) 24 3600))
+(defun vc-annotate-convert-time (&optional time)
+  "Convert optional value TIME to a floating-point number of days.
+TIME defaults to the current time."
+  (/ (float-time time) 86400))
 
 (defun vc-annotate-difference (&optional offset)
   "Return the time span in days to the next annotation.
@@ -634,7 +682,7 @@ or OFFSET if present."
 
 (defun vc-default-annotate-current-time (_backend)
   "Return the current time, encoded as fractional days."
-  (vc-annotate-convert-time (current-time)))
+  (vc-annotate-convert-time))
 
 (defvar vc-annotate-offset nil)
 
@@ -666,10 +714,13 @@ The annotations are relative to the current time, unless overridden by OFFSET."
                ;; Make the face if not done.
                (face (or (intern-soft face-name)
                          (let ((tmp-face (make-face (intern face-name))))
-                           (set-face-foreground tmp-face (cdr color))
-                           (when vc-annotate-background
-			     (set-face-background tmp-face
-						  vc-annotate-background))
+                           (cond
+                            (vc-annotate-background-mode
+                             (set-face-background tmp-face (cdr color)))
+                            (t
+                             (set-face-foreground tmp-face (cdr color))
+                             (when vc-annotate-background
+			       (set-face-background tmp-face vc-annotate-background))))
                            tmp-face))))	; Return the face
           (put-text-property start end 'face face)))))
   ;; Pretend to font-lock there were no matches.

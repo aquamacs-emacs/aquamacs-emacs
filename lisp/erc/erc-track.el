@@ -1,6 +1,6 @@
 ;;; erc-track.el --- Track modified channel buffers  -*- lexical-binding:t -*-
 
-;; Copyright (C) 2002-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2002-2015 Free Software Foundation, Inc.
 
 ;; Author: Mario Lang <mlang@delysid.org>
 ;; Maintainer: emacs-devel@gnu.org
@@ -248,10 +248,10 @@ The effect may be disabled by setting this variable to nil."
 Setting this variable only has effects in GNU Emacs versions above 21.3.
 
 Choices are:
-'before-modes - add to the beginning of `mode-line-modes',
-'after-modes  - add to the end of `mode-line-modes',
-t             - add to the end of `global-mode-string',
-nil           - don't add to mode line."
+`before-modes' - add to the beginning of `mode-line-modes',
+`after-modes'  - add to the end of `mode-line-modes',
+t              - add to the end of `global-mode-string',
+nil            - don't add to mode line."
   :group 'erc-track
   :type '(choice (const :tag "Just before mode information" before-modes)
 		 (const :tag "Just after mode information" after-modes)
@@ -858,7 +858,7 @@ Use `erc-make-mode-line-buffer-name' to create buttons."
 			faces (cdr faces)))
 		strings)))
 	   (newobject (erc-modified-channels-object strings)))
-      (unless (equal oldobject newobject)
+      (unless (equal-including-properties oldobject newobject)
 	(setq erc-modified-channels-object newobject)
 	(force-mode-line-update t)))))
 

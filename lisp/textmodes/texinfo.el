@@ -1,6 +1,6 @@
-;;; texinfo.el --- major mode for editing Texinfo files -*- coding: utf-8 -*-
+;;; texinfo.el --- major mode for editing Texinfo files
 
-;; Copyright (C) 1985, 1988-1993, 1996-1997, 2000-2014 Free Software
+;; Copyright (C) 1985, 1988-1993, 1996-1997, 2000-2015 Free Software
 ;; Foundation, Inc.
 
 ;; Author: Robert J. Chassell
@@ -86,7 +86,7 @@ command to gain use of `next-error'."
   "Make Info file from current buffer.
 
 Use the \\[next-error] command to move to the next error
-\(if there are errors\)."
+\(if there are errors)."
   t nil)
 
 (autoload 'kill-compilation
@@ -689,8 +689,8 @@ Puts point on a blank line between them."
   '("example\\>" "smallexample\\>" "lisp\\>"))
 (defun texinfo-insert-quote (&optional arg)
   "Insert the appropriate quote mark for Texinfo.
-Usually inserts the value of `texinfo-open-quote' (normally ``) or
-`texinfo-close-quote' (normally ''), depending on the context.
+Usually inserts the value of `texinfo-open-quote' (normally \\=`\\=`) or
+`texinfo-close-quote' (normally \\='\\='), depending on the context.
 With prefix argument or inside @code or @example, inserts a plain \"."
   (interactive "*P")
   (let ((top (or (save-excursion (re-search-backward "@node\\>" nil t))

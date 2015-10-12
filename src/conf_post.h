@@ -1,6 +1,6 @@
 /* conf_post.h --- configure.ac includes this via AH_BOTTOM
 
-Copyright (C) 1988, 1993-1994, 1999-2002, 2004-2014 Free Software
+Copyright (C) 1988, 1993-1994, 1999-2002, 2004-2015 Free Software
 Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -34,9 +34,10 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <stdbool.h>
 
-/* The pre-C99 <stdbool.h> emulation doesn't work for bool bitfields.
-   Nor does compiling Objective-C with standard GCC.  */
-#if __STDC_VERSION__ < 199901 || NS_IMPL_GNUSTEP
+/* The type of bool bitfields.  Needed to compile Objective-C with
+   standard GCC.  It was also needed to port to pre-C99 compilers,
+   although we don't care about that any more.  */
+#if NS_IMPL_GNUSTEP
 typedef unsigned int bool_bf;
 #else
 typedef bool bool_bf;
@@ -79,6 +80,23 @@ typedef bool bool_bf;
 #define vfork fork
 #endif  /* DARWIN_OS */
 
+/* If HYBRID_MALLOC is defined (e.g., on Cygwin), emacs will use
+   gmalloc before dumping and the system malloc after dumping.
+   hybrid_malloc and friends, defined in gmalloc.c, are wrappers that
+   accomplish this.  */
+#ifdef HYBRID_MALLOC
+#ifdef emacs
+#define malloc hybrid_malloc
+#define realloc hybrid_realloc
+#define calloc hybrid_calloc
+#define free hybrid_free
+#if defined HAVE_GET_CURRENT_DIR_NAME && !defined BROKEN_GET_CURRENT_DIR_NAME
+#define HYBRID_GET_CURRENT_DIR_NAME 1
+#define get_current_dir_name hybrid_get_current_dir_name
+#endif
+#endif
+#endif	/* HYBRID_MALLOC */
+
 /* We have to go this route, rather than the old hpux9 approach of
    renaming the functions via macros.  The system's stdlib.h has fully
    prototyped declarations, which yields a conflicting definition of
@@ -87,10 +105,6 @@ typedef bool bool_bf;
 #ifdef HPUX
 #undef srandom
 #undef random
-/* We try to avoid checking for random and rint on hpux in
-   configure.ac, but some other configure test might check for them as
-   a dependency, so to be safe we also undefine them here.
- */
 #undef HAVE_RANDOM
 #undef HAVE_RINT
 #endif  /* HPUX */
@@ -192,6 +206,13 @@ extern void _DebPrint (const char *fmt, ...);
 #define RE_TRANSLATE_P(TBL) (!EQ (TBL, make_number (0)))
 #endif
 
+/* Tell time_rz.c to use Emacs's getter and setter for TZ.
+   Only Emacs uses time_rz so this is OK.  */
+#define getenv_TZ emacs_getenv_TZ
+#define setenv_TZ emacs_setenv_TZ
+extern char *emacs_getenv_TZ (void);
+extern int emacs_setenv_TZ (char const *);
+
 #include <string.h>
 #include <stdlib.h>
 
@@ -225,16 +246,32 @@ extern void _DebPrint (const char *fmt, ...);
 
 #define ATTRIBUTE_CONST _GL_ATTRIBUTE_CONST
 
+#if 3 <= __GNUC__
+# define ATTRIBUTE_MALLOC __attribute__ ((__malloc__))
+#else
+# define ATTRIBUTE_MALLOC
+#endif
+
+#if (__clang__					\
+     ? __has_attribute (alloc_size)		\
+     : 4 < __GNUC__ + (3 <= __GNUC_MINOR__))
+# define ATTRIBUTE_ALLOC_SIZE(args) __attribute__ ((__alloc_size__ args))
+#else
+# define ATTRIBUTE_ALLOC_SIZE(args)
+#endif
+
+#define ATTRIBUTE_MALLOC_SIZE(args) ATTRIBUTE_MALLOC ATTRIBUTE_ALLOC_SIZE (args)
+
 /* Work around GCC bug 59600: when a function is inlined, the inlined
    code may have its addresses sanitized even if the function has the
-   no_sanitize_address attribute.  This bug is present in GCC 4.8.2
-   and clang 3.3, the latest releases as of December 2013, and the
-   only platforms known to support address sanitization.  When the bug
-   is fixed the #if can be updated accordingly.  */
-#if ADDRESS_SANITIZER
-# define ADDRESS_SANITIZER_WORKAROUND NO_INLINE
+   no_sanitize_address attribute.  This bug is fixed in GCC 4.9.0 and
+   clang 3.4.  */
+#if (! ADDRESS_SANITIZER \
+     || ((4 < __GNUC__ + (9 <= __GNUC_MINOR__)) \
+	 || 3 < __clang_major__ + (4 <= __clang_minor__)))
+# define ADDRESS_SANITIZER_WORKAROUND /* No workaround needed.  */
 #else
-# define ADDRESS_SANITIZER_WORKAROUND
+# define ADDRESS_SANITIZER_WORKAROUND NO_INLINE
 #endif
 
 /* Attribute of functions whose code should not have addresses
@@ -281,8 +318,8 @@ extern void _DebPrint (const char *fmt, ...);
    Other .c files should not define INLINE.
 
    C99 compilers compile functions like 'incr' as C99-style extern
-   inline functions.  Pre-C99 GCCs do something similar with
-   GNU-specific keywords.  Pre-C99 non-GCC compilers use static
+   inline functions.  Buggy GCC implementations do something similar with
+   GNU-specific keywords.  Buggy non-GCC compilers use static
    functions, which bloats the code but is good enough.  */
 
 #ifndef INLINE
@@ -296,12 +333,10 @@ extern void _DebPrint (const char *fmt, ...);
      struct s { ...; t name[FLEXIBLE_ARRAY_MEMBER]; };
    and allocate (offsetof (struct s, name) + N * sizeof (t)) bytes.
    IBM xlc 12.1 claims to do C99 but mishandles flexible array members.  */
-#if 199901 <= __STDC_VERSION__ && !defined __IBMC__
-# define FLEXIBLE_ARRAY_MEMBER
-#elif __GNUC__ && !defined __STRICT_ANSI__
-# define FLEXIBLE_ARRAY_MEMBER 0
-#else
+#ifdef __IBMC__
 # define FLEXIBLE_ARRAY_MEMBER 1
+#else
+# define FLEXIBLE_ARRAY_MEMBER
 #endif
 
 /* Use this to suppress gcc's `...may be used before initialized' warnings. */

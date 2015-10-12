@@ -1,5 +1,5 @@
 /* Functions to manipulate keymaps.
-   Copyright (C) 2001-2014 Free Software Foundation, Inc.
+   Copyright (C) 2001-2015 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -30,9 +30,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #define KEY_DESCRIPTION_SIZE ((2 * 6) + 1 + (CHARACTERBITS / 3) + 1 + 1)
 
 #define KEYMAPP(m) (!NILP (get_keymap (m, false, false)))
-extern Lisp_Object Qkeymap, Qmenu_bar;
-extern Lisp_Object Qremap;
-extern Lisp_Object Qmenu_item;
 extern Lisp_Object current_global_map;
 extern char *push_key_description (EMACS_INT, char *);
 extern Lisp_Object access_keymap (Lisp_Object, Lisp_Object, bool, bool, bool);
@@ -46,7 +43,7 @@ extern void syms_of_keymap (void);
 extern void keys_of_keymap (void);
 
 typedef void (*map_keymap_function_t)
-     (Lisp_Object key, Lisp_Object val, Lisp_Object args, void* data);
+     (Lisp_Object key, Lisp_Object val, Lisp_Object args, void *data);
 extern void map_keymap (Lisp_Object, map_keymap_function_t, Lisp_Object,
 			void *, bool);
 extern void map_keymap_canonical (Lisp_Object map,

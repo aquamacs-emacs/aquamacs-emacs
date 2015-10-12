@@ -1,6 +1,6 @@
 ;;; uce.el --- facilitate reply to unsolicited commercial email
 
-;; Copyright (C) 1996, 1998, 2000-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1996, 1998, 2000-2015 Free Software Foundation, Inc.
 
 ;; Author: stanislav shalunov <shalunov@mccme.ru>
 ;; Created: 10 Dec 1996
@@ -375,7 +375,3 @@ You might need to set `uce-mail-reader' before using this."
 (provide 'uce)
 
 ;;; uce.el ends here
-
-;; Local Variables:
-;; coding: utf-8
-;; End:

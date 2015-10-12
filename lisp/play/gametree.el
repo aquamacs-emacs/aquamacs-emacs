@@ -1,6 +1,6 @@
 ;;; gametree.el --- manage game analysis trees in Emacs
 
-;; Copyright (C) 1997, 1999, 2001-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1997, 1999, 2001-2015 Free Software Foundation, Inc.
 
 ;; Author: Ian T Zimmerman <itz@rahul.net>
 ;; Created: Wed Dec 10 07:41:46 PST 1997
@@ -248,8 +248,8 @@ This value is simply the outline heading level of the current line."
 ;;;; outline layout
 
 (defsubst gametree-show-children-and-entry ()
-  (show-children)
-  (show-entry))
+  (outline-show-children)
+  (outline-show-entry))
 
 (defun gametree-entry-shown-p ()
   (save-excursion
@@ -307,7 +307,7 @@ This value is simply the outline heading level of the current line."
       (if (not first-time)
           (outline-next-visible-heading 1))
       (setq first-time nil)
-      (hide-subtree)
+      (outline-hide-subtree)
       (if (nth 0 layout)
           (funcall (nth 0 layout)))
       (if (not (and (nth 1 layout) (listp (nth 1 layout))))
@@ -324,7 +324,7 @@ This value is simply the outline heading level of the current line."
 (defun gametree-hack-file-layout ()
   (save-excursion
     (goto-char (point-min))
-    (if (looking-at "[^\n]*-\*-[^\n]*gametree-local-layout: \\([^;\n]*\\);")
+    (if (looking-at "[^\n]*-*-[^\n]*gametree-local-layout: \\([^;\n]*\\);")
         (progn
           (goto-char (match-beginning 1))
           (delete-region (point) (match-end 1))
@@ -393,7 +393,7 @@ depth AT-DEPTH or smaller is found."
         (outline-up-heading 1)))
   (beginning-of-line 1)
   (let ((parent-depth (gametree-current-branch-depth)))
-    (show-entry)
+    (outline-show-entry)
     (condition-case nil
         (outline-next-visible-heading 1)
       (error
@@ -590,31 +590,30 @@ shogi, etc.) players, it is a slightly modified version of Outline mode.
   (add-hook 'write-contents-hooks 'gametree-save-and-hack-layout))
 
 ;;;; Goodies for mousing users
-(and (fboundp 'track-mouse)
-     (defun gametree-mouse-break-line-here (event)
-       (interactive "e")
-       (mouse-set-point event)
-       (gametree-break-line-here))
-     (defun gametree-mouse-show-children-and-entry (event)
-       (interactive "e")
-       (mouse-set-point event)
-       (gametree-show-children-and-entry))
-     (defun gametree-mouse-show-subtree (event)
-       (interactive "e")
-       (mouse-set-point event)
-       (show-subtree))
-     (defun gametree-mouse-hide-subtree (event)
-       (interactive "e")
-       (mouse-set-point event)
-       (hide-subtree))
-     (define-key gametree-mode-map [M-down-mouse-2 M-mouse-2]
-       'gametree-mouse-break-line-here)
-     (define-key gametree-mode-map [S-down-mouse-1 S-mouse-1]
-       'gametree-mouse-show-children-and-entry)
-     (define-key gametree-mode-map [S-down-mouse-2 S-mouse-2]
-       'gametree-mouse-show-subtree)
-     (define-key gametree-mode-map [S-down-mouse-3 S-mouse-3]
-       'gametree-mouse-hide-subtree))
+(defun gametree-mouse-break-line-here (event)
+  (interactive "e")
+  (mouse-set-point event)
+  (gametree-break-line-here))
+(defun gametree-mouse-show-children-and-entry (event)
+  (interactive "e")
+  (mouse-set-point event)
+  (gametree-show-children-and-entry))
+(defun gametree-mouse-show-subtree (event)
+  (interactive "e")
+  (mouse-set-point event)
+  (outline-show-subtree))
+(defun gametree-mouse-hide-subtree (event)
+  (interactive "e")
+  (mouse-set-point event)
+  (outline-hide-subtree))
+(define-key gametree-mode-map [M-down-mouse-2 M-mouse-2]
+  'gametree-mouse-break-line-here)
+(define-key gametree-mode-map [S-down-mouse-1 S-mouse-1]
+  'gametree-mouse-show-children-and-entry)
+(define-key gametree-mode-map [S-down-mouse-2 S-mouse-2]
+  'gametree-mouse-show-subtree)
+(define-key gametree-mode-map [S-down-mouse-3 S-mouse-3]
+  'gametree-mouse-hide-subtree)
 
 (provide 'gametree)
 

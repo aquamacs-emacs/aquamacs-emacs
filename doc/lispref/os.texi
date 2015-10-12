@@ -1,6 +1,6 @@
 @c -*-texinfo-*-
 @c This is part of the GNU Emacs Lisp Reference Manual.
-@c Copyright (C) 1990-1995, 1998-1999, 2001-2014 Free Software
+@c Copyright (C) 1990-1995, 1998-1999, 2001-2015 Free Software
 @c Foundation, Inc.
 @c See the file elisp.texi for copying conditions.
 @node System Interface
@@ -194,16 +194,23 @@ It processes any command-line options that were not handled earlier.
 It now exits if the option @code{--batch} was specified.
 
 @item
+If the @file{*scratch*} buffer exists and is empty, it inserts
+@code{(substitute-command-keys initial-scratch-message)} into that buffer.
+
+@item
 If @code{initial-buffer-choice} is a string, it visits the file (or
 directory) with that name.  If it is a function, it calls the function
-with no arguments and selects the buffer that it returns.
+with no arguments and selects the buffer that it returns.  If one file
+is given as a command line argument, that file is visited and its
+buffer displayed alongside @code{initial-buffer-choice}.  If more than
+one file is given, all of the files are visited and the @file{*Buffer
+List*} buffer is displayed alongside @code{initial-buffer-choice}.
+
 @ignore
 @c I do not think this should be mentioned.  AFAICS it is just a dodge
 @c around inhibit-startup-screen not being settable on a site-wide basis.
 If it is @code{t}, it selects the @file{*scratch*} buffer.
 @end ignore
-If the @file{*scratch*} buffer exists and is empty, it inserts
-@code{initial-scratch-message} into that buffer.
 
 @c To make things nice and confusing, the next three items can be
 @c called from two places.  If displaying a startup screen, they are
@@ -244,8 +251,9 @@ options were specified.
 
 @item
 If the option @code{--daemon} was specified, it calls
-@code{server-start} and detaches from the controlling terminal.
-@xref{Emacs Server,,, emacs, The GNU Emacs Manual}.
+@code{server-start}, and on Posix systems also detaches from the
+controlling terminal.  @xref{Emacs Server,,, emacs, The GNU Emacs
+Manual}.
 
 @item
 If started by the X session manager, it calls
@@ -306,6 +314,7 @@ file will not inhibit the message for someone else.
 
 @defopt initial-scratch-message
 This variable, if non-@code{nil}, should be a string, which is
+treated as documentation to be
 inserted into the @file{*scratch*} buffer when Emacs starts up.  If it
 is @code{nil}, the @file{*scratch*} buffer is empty.
 @end defopt
@@ -443,10 +452,13 @@ This variable holds the name of the @file{.emacs.d} directory.  It is
 run on that type of terminal.  The library's name is constructed by
 concatenating the value of the variable @code{term-file-prefix} and the
 terminal type (specified by the environment variable @env{TERM}).
-Normally, @code{term-file-prefix} has the value
-@code{"term/"}; changing this is not recommended.  Emacs finds the file
-in the normal manner, by searching the @code{load-path} directories, and
-trying the @samp{.elc} and @samp{.el} suffixes.
+Normally, @code{term-file-prefix} has the value @code{"term/"};
+changing this is not recommended.  If there is an entry matching
+@env{TERM} in the @code{term-file-aliases} association list,
+Emacs uses the associated value in place of @env{TERM}.
+Emacs finds the file in the normal manner, by searching the
+@code{load-path} directories, and trying the @samp{.elc} and
+@samp{.el} suffixes.
 
 @cindex Termcap
   The usual role of a terminal-specific library is to enable special
@@ -475,7 +487,7 @@ a normal hook that Emacs runs after initializing a new text terminal.
 You could use this hook to define initializations for terminals that do not
 have their own libraries.  @xref{Hooks}.
 
-@defvar term-file-prefix
+@defopt term-file-prefix
 @cindex @env{TERM} environment variable
 If the value of this variable is non-@code{nil}, Emacs loads a
 terminal-specific initialization file as follows:
@@ -490,7 +502,14 @@ init file if you do not wish to load the
 terminal-initialization file.
 
 On MS-DOS, Emacs sets the @env{TERM} environment variable to @samp{internal}.
-@end defvar
+@end defopt
+
+@defopt term-file-aliases
+This variable is an an association list mapping terminal types to
+their aliases.  For example, an element of the form @code{("vt102"
+. "vt100")} means to treat a terminal of type @samp{vt102} like one of
+type @samp{vt100}.
+@end defopt
 
 @defvar tty-setup-hook
 This variable is a normal hook that Emacs runs after initializing a
@@ -706,7 +725,7 @@ another application without doing anything special to Emacs.
 @c have SIGTSTP?
 @cindex SIGTSTP
   Some operating systems (those without @code{SIGTSTP}, or MS-DOS) do
-not support suspension of jobs; on these systems, ``suspension''
+not support suspension of jobs; on these systems, suspension
 actually creates a new shell temporarily as a subprocess of Emacs.
 Then you would exit the shell to return to Emacs.
 
@@ -907,13 +926,6 @@ This function returns the name of the machine you are running on, as a
 string.
 @end defun
 
-  The symbol @code{system-name} is a variable as well as a function.  In
-fact, the function returns whatever value the variable
-@code{system-name} currently holds.  Thus, you can set the variable
-@code{system-name} in case Emacs is confused about the name of your
-system.  The variable is also useful for constructing frame titles
-(@pxref{Frame Titles}).
-
 @c FIXME seems like this section is not the best place for this option?
 @defopt mail-host-address
 If this variable is non-@code{nil}, it is used instead of
@@ -970,7 +982,7 @@ to access the value of @var{variable}.  If @var{value} is omitted or
 removes @var{variable} from the environment.  Otherwise, @var{value}
 should be a string.
 
-@c FIXME: Document `substitute-env-vars'?  --xfq
+@c FIXME: Document 'substitute-env-vars'?  --xfq
 If the optional argument @var{substitute} is non-@code{nil}, Emacs
 calls the function @code{substitute-env-vars} to expand any
 environment variables in @var{value}.
@@ -1001,9 +1013,9 @@ process-environment
 @end group
 @end smallexample
 
-If @code{process-environment} contains ``duplicate'' elements that
+If @code{process-environment} contains multiple elements that
 specify the same environment variable, the first of these elements
-specifies the variable, and the other ``duplicates'' are ignored.
+specifies the variable, and the others are ignored.
 @end defvar
 
 @defvar initial-environment
@@ -1155,7 +1167,7 @@ user-id or login name that isn't defined, it returns @code{nil}.
   The symbols @code{user-login-name}, @code{user-real-login-name} and
 @code{user-full-name} are variables as well as functions.  The functions
 return the same values that the variables hold.  These variables allow
-you to ``fake out'' Emacs by telling the functions what to return.  The
+you to fake out Emacs by telling the functions what to return.  The
 variables are also useful for constructing frame titles (@pxref{Frame
 Titles}).
 
@@ -1198,44 +1210,42 @@ return value is @code{nil}.
 
 @node Time of Day
 @section Time of Day
+@cindex time of day
 
   This section explains how to determine the current time and time
 zone.
 
 @cindex epoch
-  Most of these functions represent time as a list of either four
-integers, @code{(@var{sec-high} @var{sec-low} @var{microsec}
-@var{picosec})}, or of three
-integers, @code{(@var{sec-high} @var{sec-low} @var{microsec})}, or of
-two integers, @code{(@var{sec-high} @var{sec-low})}.  The integers
-@var{sec-high} and @var{sec-low} give the high and low bits of an
-integer number of seconds.  This integer,
+  Most of these functions represent time as a list of four integers
+@code{(@var{sec-high} @var{sec-low} @var{microsec} @var{picosec})}.
+This represents the number of seconds from the @dfn{epoch} (January
+1, 1970 at 00:00 UTC), using the formula:
 @ifnottex
-@var{high} * 2**16 + @var{low},
+@var{high} * 2**16 + @var{low} + @var{micro} * 10**@minus{}6 +
+@var{pico} * 10**@minus{}12.
 @end ifnottex
 @tex
-$high*2^{16}+low$,
+$high*2^{16} + low + micro*10^{-6} + pico*10^{-12}$.
 @end tex
-is the number of seconds from the @dfn{epoch} (0:00 January 1, 1970
-UTC) to the specified time.  The third list element @var{microsec}, if
-present, gives the number of microseconds from the start of that
-second to the specified time.
-Similarly, the fourth list element @var{picosec}, if present, gives
-the number of picoseconds from the start of that microsecond to the
-specified time.
+The return value of @code{current-time} represents time using this
+form, as do the timestamps in the return values of other functions
+such as @code{file-attributes} (@pxref{Definition of
+file-attributes}).  In some cases, functions may return two- or
+three-element lists, with omitted @var{microsec} and @var{picosec}
+components defaulting to zero.
 
-  The return value of @code{current-time} represents time using four
-integers, as do the timestamps in the return value of
-@code{file-attributes} (@pxref{Definition of
-file-attributes}).  In function arguments, e.g., the @var{time-value}
-argument to @code{current-time-string}, two-, three-, and four-integer
-lists are accepted.  You can convert times from the list
-representation into standard human-readable strings using
-@code{current-time-string}, or to other forms using the
-@code{decode-time} and @code{format-time-string} functions documented
-in the following sections.
+@cindex time value
+  Function arguments, e.g., the @var{time} argument to
+@code{current-time-string}, accept a more-general @dfn{time value}
+format, which can be a list of integers as above, or a single number
+for seconds since the epoch, or @code{nil} for the current time.  You
+can convert a time value into a human-readable string using
+@code{current-time-string} and @code{format-time-string}, into a list
+of integers using @code{seconds-to-time}, and into other forms using
+@code{decode-time} and @code{float-time}.  These functions are
+described in the following sections.
 
-@defun current-time-string &optional time-value
+@defun current-time-string &optional time zone
 This function returns the current time and date as a human-readable
 string.  The format does not vary for the initial part of the string,
 which contains the day of week, month, day of month, and time of day
@@ -1246,8 +1256,9 @@ characters from the beginning of the string rather than from the end,
 as the year might not have exactly four digits, and additional
 information may some day be added at the end.
 
-The argument @var{time-value}, if given, specifies a time to format
-(represented as a list of integers), instead of the current time.
+The argument @var{time}, if given, specifies a time to format,
+instead of the current time.  The optional argument @var{zone}
+defaults to the current time zone rule.
 
 @example
 @group
@@ -1266,17 +1277,25 @@ multiple of 1000, but this may change as higher-resolution clocks
 become available.
 @end defun
 
-@defun float-time &optional time-value
+@defun float-time &optional time
 This function returns the current time as a floating-point number of
-seconds since the epoch.  The optional argument @var{time-value}, if
-given, specifies a time (represented as a list of integers) to convert
-instead of the current time.
+seconds since the epoch.  The optional argument @var{time}, if
+given, specifies a time to convert instead of the current time.
 
 @emph{Warning}: Since the result is floating point, it may not be
 exact.  Do not use this function if precise time stamps are required.
+
+@code{time-to-seconds} is an alias for this function.
 @end defun
 
-@defun current-time-zone &optional time-value
+@defun seconds-to-time time
+This function converts a time value to list-of-integer form.
+For example, if @var{time} is a number, @code{(time-to-seconds
+(seconds-to-time @var{time}))} equals the number unless overflow
+or rounding errors occur.
+@end defun
+
+@defun current-time-zone &optional time zone
 @cindex time zone, current
 This function returns a list describing the time zone that the user is
 in.
@@ -1292,29 +1311,42 @@ adjustment, then the value is constant through time.
 If the operating system doesn't supply all the information necessary to
 compute the value, the unknown elements of the list are @code{nil}.
 
-The argument @var{time-value}, if given, specifies a time (represented
-as a list of integers) to analyze instead of the current time.
+The argument @var{time}, if given, specifies a time value to
+analyze instead of the current time.  The optional argument @var{zone}
+defaults to the current time zone rule.
 @end defun
 
-The current time zone is determined by the @env{TZ} environment
+@vindex TZ, environment variable
+The default time zone is determined by the @env{TZ} environment
 variable.  @xref{System Environment}.  For example, you can tell Emacs
-to use universal time with @code{(setenv "TZ" "UTC0")}.  If @env{TZ}
-is not in the environment, Emacs uses a platform-dependent default
-time zone.
+to default to universal time with @code{(setenv "TZ" "UTC0")}.  If
+@env{TZ} is not in the environment, Emacs uses system wall clock time,
+which is a platform-dependent default time zone.
+
+@cindex time zone rule
+Functions that convert to and from local time accept an optional
+@dfn{time zone rule} argument, which specifies the conversion's time
+zone and daylight saving time history.  If the time zone rule is
+omitted or @code{nil}, the conversion uses Emacs's default time zone.
+If it is @code{t}, the conversion uses Universal Time.  If it is
+@code{wall}, the conversion uses the system wall clock time.  If it is
+a string, the conversion uses the time zone rule equivalent to setting
+@env{TZ} to that string.
 
 @node Time Conversion
 @section Time Conversion
 @cindex calendrical information
+@cindex time conversion
 
-  These functions convert time values (lists of two to four integers,
-as explained in the previous section) into calendrical information and
-vice versa.
+  These functions convert time values (@pxref{Time of Day}) into
+calendrical information and vice versa.
 
-  Many 32-bit operating systems are limited to time values containing
-32 bits of information; these systems typically handle only the times
-from 1901-12-13 20:45:52 UTC through 2038-01-19 03:14:07 UTC@.
-However, 64-bit and some 32-bit operating systems have larger time
-values, and can represent times far in the past or future.
+  Many 32-bit operating systems are limited to system times containing
+32 bits of information in their seconds component; these systems
+typically handle only the times from 1901-12-13 20:45:52 UTC through
+2038-01-19 03:14:07 UTC@.  However, 64-bit and some 32-bit operating
+systems have larger seconds components, and can represent times far in
+the past or future.
 
   Time conversion functions always use the Gregorian calendar, even
 for dates before the Gregorian calendar was introduced.  Year numbers
@@ -1322,13 +1354,14 @@ count the number of years since the year 1 B.C., and do not skip zero
 as traditional Gregorian years do; for example, the year number
 @minus{}37 represents the Gregorian year 38 B.C@.
 
-@defun decode-time &optional time
+@defun decode-time &optional time zone
 This function converts a time value into calendrical information.  If
-you don't specify @var{time}, it decodes the current time.  The return
+you don't specify @var{time}, it decodes the current time, and similarly
+@var{zone} defaults to the current time zone rule.  The return
 value is a list of nine elements, as follows:
 
 @example
-(@var{seconds} @var{minutes} @var{hour} @var{day} @var{month} @var{year} @var{dow} @var{dst} @var{zone})
+(@var{seconds} @var{minutes} @var{hour} @var{day} @var{month} @var{year} @var{dow} @var{dst} @var{utcoff})
 @end example
 
 Here is what the elements mean:
@@ -1352,30 +1385,30 @@ The day of week, as an integer between 0 and 6, where 0 stands for
 Sunday.
 @item dst
 @code{t} if daylight saving time is effect, otherwise @code{nil}.
-@item zone
-An integer indicating the time zone, as the number of seconds east of
-Greenwich.
+@item utcoff
+An integer indicating the UTC offset in seconds, i.e., the number of
+seconds east of Greenwich.
 @end table
 
 @strong{Common Lisp Note:} Common Lisp has different meanings for
-@var{dow} and @var{zone}.
+@var{dow} and @var{utcoff}.
 @end defun
 
 @defun encode-time seconds minutes hour day month year &optional zone
 This function is the inverse of @code{decode-time}.  It converts seven
-items of calendrical data into a time value.  For the meanings of the
-arguments, see the table above under @code{decode-time}.
+items of calendrical data into a list-of-integer time value.  For the
+meanings of the arguments, see the table above under
+@code{decode-time}.
 
 Year numbers less than 100 are not treated specially.  If you want them
 to stand for years above 1900, or years above 2000, you must alter them
 yourself before you call @code{encode-time}.
 
-The optional argument @var{zone} defaults to the current time zone and
-its daylight saving time rules.  If specified, it can be either a list
-(as you would get from @code{current-time-zone}), a string as in the
-@env{TZ} environment variable, @code{t} for Universal Time, or an
-integer (as you would get from @code{decode-time}).  The specified
-zone is used without any further alteration for daylight saving time.
+The optional argument @var{zone} defaults to the current time zone rule.
+In addition to the usual time zone rule values, it can also be a list
+(as you would get from @code{current-time-zone}) or an integer (as
+from @code{decode-time}), applied without any further alteration for
+daylight saving time.
 
 If you pass more than seven arguments to @code{encode-time}, the first
 six are used as @var{seconds} through @var{year}, the last argument is
@@ -1399,6 +1432,9 @@ on others, years as early as 1901 do work.
 
 @node Time Parsing
 @section Parsing and Formatting Times
+@cindex time parsing
+@cindex time formatting
+@cindex formatting time values
 
   These functions convert time values to text in a string, and vice versa.
 Time values are lists of two to four integers (@pxref{Time of Day}).
@@ -1408,9 +1444,12 @@ This function parses the time-string @var{string} and returns the
 corresponding time value.
 @end defun
 
-@defun format-time-string format-string &optional time universal
-This function converts @var{time} (or the current time, if @var{time} is
-omitted) to a string according to @var{format-string}.  The argument
+@defun format-time-string format-string &optional time zone
+
+This function converts @var{time} (or the current time, if
+@var{time} is omitted) to a string according to
+@var{format-string}.  The conversion uses the time zone rule @var{zone}
+(or the current time zone rule, if omitted).  The argument
 @var{format-string} may contain @samp{%}-sequences which say to
 substitute parts of the time.  Here is a table of what the
 @samp{%}-sequences mean:
@@ -1506,13 +1545,13 @@ because that is how @samp{%S} normally pads to two positions.
 
 The characters @samp{E} and @samp{O} act as modifiers when used between
 @samp{%} and one of the letters in the table above.  @samp{E} specifies
-using the current locale's ``alternative'' version of the date and time.
+using the current locale's alternative version of the date and time.
 In a Japanese locale, for example, @code{%Ex} might yield a date format
 based on the Japanese Emperors' reigns.  @samp{E} is allowed in
 @samp{%Ec}, @samp{%EC}, @samp{%Ex}, @samp{%EX}, @samp{%Ey}, and
 @samp{%EY}.
 
-@samp{O} means to use the current locale's ``alternative''
+@samp{O} means to use the current locale's alternative
 representation of numbers, instead of the ordinary decimal digits.  This
 is allowed with most letters, all the ones that output numbers.
 
@@ -1528,12 +1567,6 @@ specified by @code{locale-coding-system} (@pxref{Locales}); after
 @code{strftime} returns the resulting string,
 @code{format-time-string} decodes the string using that same coding
 system.
-@end defun
-
-@defun seconds-to-time seconds
-This function converts @var{seconds}, the number of seconds since the
-epoch, to a time value and returns that.  To convert back, use
-@code{float-time} (@pxref{Time of Day}).
 @end defun
 
 @defun format-seconds format-string seconds
@@ -1609,7 +1642,7 @@ When called interactively, it prints the uptime in the echo area.
 
 @defun get-internal-run-time
 This function returns the processor run time used by Emacs as a list
-of four integers: @code{(@var{high} @var{low} @var{microsec}
+of four integers: @code{(@var{sec-high} @var{sec-low} @var{microsec}
 @var{picosec})}, using the same format as @code{current-time}
 (@pxref{Time of Day}).
 
@@ -1631,9 +1664,12 @@ interactively, it prints the duration in the echo area.
 
 @node Time Calculations
 @section Time Calculations
+@cindex time calculations
+@cindex comparing time values
+@cindex calendrical computations
 
   These functions perform calendrical computations using time values
-(the kind of list that @code{current-time} returns).
+(@pxref{Time of Day}).
 
 @defun time-less-p t1 t2
 This returns @code{t} if time value @var{t1} is less than time value
@@ -1642,26 +1678,26 @@ This returns @code{t} if time value @var{t1} is less than time value
 
 @defun time-subtract t1 t2
 This returns the time difference @var{t1} @minus{} @var{t2} between
-two time values, in the same format as a time value.
+two time values, as a time value.
 @end defun
 
 @defun time-add t1 t2
-This returns the sum of two time values, one of which ought to
-represent a time difference rather than a point in time.
+This returns the sum of two time values, as a time value.
+One argument should represent a time difference rather than a point in time.
 Here is how to add a number of seconds to a time value:
 
 @example
-(time-add @var{time} (seconds-to-time @var{seconds}))
+(time-add @var{time} @var{seconds})
 @end example
 @end defun
 
-@defun time-to-days time
+@defun time-to-days time-value
 This function returns the number of days between the beginning of year
-1 and @var{time}.
+1 and @var{time-value}.
 @end defun
 
-@defun time-to-day-in-year time
-This returns the day number within the year corresponding to @var{time}.
+@defun time-to-day-in-year time-value
+This returns the day number within the year corresponding to @var{time-value}.
 @end defun
 
 @defun date-leap-year-p year
@@ -1811,6 +1847,7 @@ cause anything special to happen.
 
 @node Idle Timers
 @section Idle Timers
+@cindex idle timers
 
   Here is how to set up a timer that runs when Emacs is idle for a
 certain length of time.  Aside from how to set them up, idle timers
@@ -1905,8 +1942,7 @@ idleness.  Here's an example:
           (run-with-idle-timer
             ;; Compute an idle time @var{break-length}
             ;; more than the current value.
-            (time-add (current-idle-time)
-                      (seconds-to-time @var{break-length}))
+            (time-add (current-idle-time) @var{break-length})
             nil
             'my-timer-function))))
 @end example
@@ -2156,7 +2192,7 @@ To define system-specific X11 keysyms, set the variable
 This variable's value should be an alist with one element for each
 system-specific keysym.  Each element has the form @code{(@var{code}
 . @var{symbol})}, where @var{code} is the numeric keysym code (not
-including the ``vendor specific'' bit,
+including the vendor-specific bit,
 @ifnottex
 @minus{}2**28),
 @end ifnottex
@@ -2370,7 +2406,7 @@ The path to a sound file to play when the notification pops up.
 @item :sound-name @var{name}
 A themable named sound from the freedesktop.org sound naming
 specification from @samp{$XDG_DATA_DIRS/sounds}, to play when the
-notification pops up.  Similar to the icon name, only for sounds. An
+notification pops up.  Similar to the icon name, only for sounds.  An
 example would be @samp{"message-new-instant"}.
 
 @item :suppress-sound
@@ -2379,9 +2415,9 @@ ability.
 
 @item :resident
 When set the server will not automatically remove the notification
-when an action has been invoked. The notification will remain resident
+when an action has been invoked.  The notification will remain resident
 in the server until it is explicitly removed by the user or by the
-sender. This hint is likely only useful when the server has the
+sender.  This hint is likely only useful when the server has the
 @code{:persistence} capability.
 
 @item :transient
@@ -2444,7 +2480,7 @@ argument of another @code{notifications-notify} call.  For example:
 @end group
 
 @group
-A message window opens on the desktop.  Press "I agree"
+A message window opens on the desktop.  Press ``I agree''.
      @result{} Message 22, key "Confirm" pressed
         Message 22, closed due to "dismissed"
 @end group
@@ -2518,7 +2554,7 @@ The server's version number.
 The specification version the server is compliant with.
 @end table
 
-If @var{SPEC_VERSION} is @code{nil}, the server supports a
+If @var{spec_version} is @code{nil}, the server supports a
 specification prior to @samp{"1.0"}.
 @end defun
 
@@ -2529,7 +2565,7 @@ specification prior to @samp{"1.0"}.
 
 Several operating systems support watching of filesystems for changes
 of files.  If configured properly, Emacs links a respective library
-like @file{gfilenotify}, @file{inotify}, or  @file{w32notify}
+like @file{gfilenotify}, @file{inotify}, or @file{w32notify}
 statically.  These libraries enable watching of filesystems on the
 local machine.
 
@@ -2589,12 +2625,18 @@ any one of the following symbols:
 @item deleted
 @var{file} was deleted
 @item changed
-@var{file} has changed
+@var{file}'s contents has changed; with @file{w32notify} library,
+reports attribute changes as well
 @item renamed
 @var{file} has been renamed to @var{file1}
 @item attribute-changed
 a @var{file} attribute was changed
 @end table
+
+Note that the @file{w32notify} library does not report
+@code{attribute-changed} events.  When some file's attribute, like
+permissions or modification time, has changed, this library reports a
+@code{changed} event.
 
 @var{file} and @var{file1} are the name of the file(s) whose event is
 being reported.  For example:
@@ -2639,31 +2681,13 @@ being reported.  For example:
 @end example
 
 Whether the action @code{renamed} is returned, depends on the used
-watch library.  It can be expected, when a directory is watched, and
-both @var{file} and @var{file1} belong to this directory.  Otherwise,
-the actions @code{deleted} and @code{created} could be returned in a
-random order.
+watch library.  Otherwise, the actions @code{deleted} and
+@code{created} could be returned in a random order.
 
 @example
 @group
 (rename-file "/tmp/foo" "/tmp/bla")
      @result{} Event (35025468 renamed "/tmp/foo" "/tmp/bla")
-@end group
-
-@group
-(file-notify-add-watch
-  "/var/tmp" '(change attribute-change) 'my-notify-callback)
-     @result{} 35025504
-@end group
-
-@group
-(rename-file "/tmp/bla" "/var/tmp/bla")
-     @result{} ;; gfilenotify
-        Event (35025468 renamed "/tmp/bla" "/var/tmp/bla")
-
-     @result{} ;; inotify
-        Event (35025504 created "/var/tmp/bla")
-        Event (35025468 deleted "/tmp/bla")
 @end group
 @end example
 @end defun
@@ -2672,6 +2696,17 @@ random order.
 Removes an existing file watch specified by its @var{descriptor}.
 @var{descriptor} should be an object returned by
 @code{file-notify-add-watch}.
+@end defun
+
+@defun file-notify-valid-p descriptor
+Checks a watch specified by its @var{descriptor} for validity.
+@var{descriptor} should be an object returned by
+@code{file-notify-add-watch}.
+
+A watch can become invalid if the file or directory it watches is
+deleted, or if the watcher thread exits abnormally for any other
+reason.  Removing the watch by calling @code{file-notify-rm-watch}
+also makes it invalid.
 @end defun
 
 @node Dynamic Libraries

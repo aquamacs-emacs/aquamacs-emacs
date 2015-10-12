@@ -1,6 +1,6 @@
 ;;; latin-ltx.el --- Quail package for TeX-style input -*-coding: utf-8;-*-
 
-;; Copyright (C) 2001-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2001-2015 Free Software Foundation, Inc.
 ;; Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
 ;;   2010, 2011
 ;;   National Institute of Advanced Industrial Science and Technology (AIST)
@@ -36,7 +36,7 @@
  "LaTeX-like input method for many characters.
 These characters are from the charsets used by the `utf-8' coding
 system, including many technical ones.  Examples:
- \\'a -> á  \\`{a} -> à
+ \\\\='a -> á  \\\\=`{a} -> à
  \\pi -> π  \\int -> ∫  ^1 -> ¹"
 
  '(("\t" . quail-completion))
@@ -184,7 +184,7 @@ system, including many technical ones.  Examples:
  ("\\H" ?̋)
  ("\\H{}" ?˝)
  ("\\U{o}" ?ő) ("\\Uo" ?ő) ;; FIXME: Was it just a typo?
- 
+
  ("\\OE" ?Œ) ;; ("{\\OE}" ?Œ)
  ("\\oe" ?œ) ;; ("{\\oe}" ?œ)
 
@@ -216,7 +216,7 @@ system, including many technical ones.  Examples:
            (name (if (match-end 1) (capitalize basename) (downcase basename))))
       (concat "^" (if (> (length name) 1) "\\") name)))
   "\\`MODIFIER LETTER \\(?:SMALL\\|CAPITA\\(L\\)\\) \\([[:ascii:]]+\\)\\'")
- 
+
  ;; ((lambda (name char) (format "^%s" (downcase (match-string 1 name))))
  ;;  "\\`MODIFIER LETTER SMALL \\(.\\)\\'")
  ;; ("^\\1" "\\`MODIFIER LETTER CAPITAL \\(.\\)\\'")
@@ -664,7 +664,7 @@ system, including many technical ones.  Examples:
  ;; Probably not useful enough:
  ;; ("\\Telefon" ?☎)			; there are other possibilities
  ;; ("\\Radioactivity" ?☢)
- ;; ("\Biohazard" ?☣)
+ ;; ("\\Biohazard" ?☣)
  ;; ("\\Male" ?♂)
  ;; ("\\Female" ?♀)
  ;; ("\\Lightning" ?☇)
@@ -694,7 +694,7 @@ system, including many technical ones.  Examples:
  ("\\defs" ?≙)				; per fuzz/zed
  ;; ("\\sqrt[3]" ?∛)
  ("\\llbracket" ?\〚) 			; stmaryrd
- ("\\rrbracket" ?\〛) 
+ ("\\rrbracket" ?\〛)
  ;; ("\\lbag" ?\〚) 			; fuzz
  ;; ("\\rbag" ?\〛)
  ("\\ldata" ?\《) 			; fuzz/zed

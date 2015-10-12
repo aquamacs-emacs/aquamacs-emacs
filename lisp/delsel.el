@@ -1,6 +1,6 @@
-;;; delsel.el --- delete selection if you insert
+;;; delsel.el --- delete selection if you insert  -*- lexical-binding:t -*-
 
-;; Copyright (C) 1992, 1997-1998, 2001-2014 Free Software Foundation,
+;; Copyright (C) 1992, 1997-1998, 2001-2015 Free Software Foundation,
 ;; Inc.
 
 ;; Author: Matthieu Devin <devin@lucid.com>
@@ -35,16 +35,12 @@
 ;; property on their symbols; commands which insert text but don't
 ;; have this property won't delete the selection.  It can be one of
 ;; the values:
-;;  'yank
+;;  `yank'
 ;;      For commands which do a yank; ensures the region about to be
 ;;      deleted isn't yanked.
-;;  'supersede
+;;  `supersede'
 ;;      Delete the active region and ignore the current command,
 ;;      i.e. the command will just delete the region.
-;;  'kill
-;;      `kill-region' is used on the selection, rather than
-;;      `delete-region'.  (Text selected with the mouse will typically
-;;      be yankable anyhow.)
 ;;  t
 ;;      The normal case: delete the active region prior to executing
 ;;      the command which will insert replacement text.
@@ -53,6 +49,10 @@
 ;;      The function should return one of the above values or nil.
 
 ;;; Code:
+
+(defvar delete-selection-save-to-register nil
+  "If non-nil, deleted region text is stored in this register.
+Value must be the register (key) to use.")
 
 ;;;###autoload
 (defalias 'pending-delete-mode 'delete-selection-mode)
@@ -72,17 +72,76 @@ point regardless of any selection."
       (remove-hook 'pre-command-hook 'delete-selection-pre-hook)
     (add-hook 'pre-command-hook 'delete-selection-pre-hook)))
 
+(defvar delsel--replace-text-or-position nil)
+
 (defun delete-active-region (&optional killp)
   "Delete the active region.
 If KILLP in not-nil, the active region is killed instead of deleted."
-  (if killp
-      ;; Don't allow `kill-region' to change the value of `this-command'.
-      (let (this-command)
-	(kill-region (point) (mark) t))
-    (funcall region-extract-function 'delete-only))
-  ;; do not add undo-boundary in self-insert-command:
-  (setq last-command this-command)
-  t)
+  (cond
+   (killp
+    ;; Don't allow `kill-region' to change the value of `this-command'.
+    (let (this-command)
+      (kill-region (point) (mark) t)))
+   (delete-selection-save-to-register
+    (set-register delete-selection-save-to-register
+                  (funcall region-extract-function t))
+    (setq delsel--replace-text-or-position
+          (cons (current-buffer)
+                (and (consp buffer-undo-list) (car buffer-undo-list)))))
+   (t
+    (funcall region-extract-function 'delete-only))))
+
+(defun delete-selection-repeat-replace-region (arg)
+  "Repeat replacing text of highlighted region with typed text.
+Search for the next stretch of text identical to the region last replaced
+by typing text over it and replaces it with the same stretch of text.
+With ARG, repeat that many times.  `C-u' means until end of buffer."
+  (interactive "P")
+  (let ((old-text (and delete-selection-save-to-register
+                       (get-register delete-selection-save-to-register)))
+        (count (if (consp arg) (point-max)
+                 (prefix-numeric-value current-prefix-arg))))
+    (if (not (and old-text
+                  (> (length old-text) 0)
+                  (or (stringp delsel--replace-text-or-position)
+                      (buffer-live-p (car delsel--replace-text-or-position)))))
+        (message "No known previous replacement")
+      ;; If this is the first use after overwriting regions,
+      ;; find the replacement text by looking at the undo list.
+      (when (consp delsel--replace-text-or-position)
+        (let ((buffer (car delsel--replace-text-or-position))
+              (elt (cdr delsel--replace-text-or-position)))
+          (setq delsel--replace-text-or-position nil)
+          (with-current-buffer buffer
+            (save-restriction
+              (widen)
+              ;; Find the text that replaced the region via the undo list.
+              (let ((ul buffer-undo-list) u s e)
+                (when elt
+                  (while (consp ul)
+                    (setq u (car ul) ul (cdr ul))
+                    (cond
+                     ((eq u elt) ;; got it
+                      (setq ul nil))
+                     ((and (consp u) (integerp (car u)) (integerp (cdr u)))
+                      (if (and s (= (cdr u) s))
+                          (setq s (car u))
+                        (setq s (car u) e (cdr u)))))))
+                (cond ((and s e (<= s e) (= s (mark t)))
+                       (setq delsel--replace-text-or-position
+                             (filter-buffer-substring s e))
+                       (set-text-properties
+                        0 (length delsel--replace-text-or-position)
+                        nil delsel--replace-text-or-position))
+                      ((and (null s) (eq u elt)) ;; Nothing inserted.
+                       (setq delsel--replace-text-or-position ""))
+                      (t
+                       (message "Cannot locate replacement text"))))))))
+      (while (and (> count 0)
+                  delsel--replace-text-or-position
+                  (search-forward old-text nil t))
+        (replace-match delsel--replace-text-or-position nil t)
+        (setq count (1- count))))))
 
 (defun delete-selection-helper (type)
   "Delete selection according to TYPE:
@@ -103,7 +162,7 @@ If KILLP in not-nil, the active region is killed instead of deleted."
      For commands which need to dynamically determine this behavior.
      FUNCTION should take no argument and return one of the above values or nil."
   (condition-case data
-      (cond ((eq type 'kill)
+      (cond ((eq type 'kill)            ;Deprecated, backward compatibility.
 	     (delete-active-region t)
 	     (if (and overwrite-mode
 		      (eq this-command 'self-insert-command))
@@ -172,10 +231,17 @@ See `delete-selection-helper'."
     (delete-selection-helper (and (symbolp this-command)
                                   (get this-command 'delete-selection)))))
 
-(put 'self-insert-command 'delete-selection
-     (lambda ()
-       (not (run-hook-with-args-until-success
-             'self-insert-uses-region-functions))))
+(defun delete-selection-uses-region-p ()
+  "Return t when the current command will be using the region
+rather than having `delete-selection' delete it, nil otherwise.
+
+This function is intended for use as the value of the
+`delete-selection' property of a command, and shouldn't be used
+for anything else."
+  (not (run-hook-with-args-until-success
+        'self-insert-uses-region-functions)))
+
+(put 'self-insert-command 'delete-selection 'delete-selection-uses-region-p)
 
 (put 'insert-char 'delete-selection t)
 (put 'quoted-insert 'delete-selection t)
@@ -191,7 +257,7 @@ See `delete-selection-helper'."
 (put 'newline-and-indent 'delete-selection t)
 (put 'newline 'delete-selection t)
 (put 'electric-newline-and-maybe-indent 'delete-selection t)
-(put 'open-line 'delete-selection 'kill)
+(put 'open-line 'delete-selection t)
 
 ;; This is very useful for canceling a selection in the minibuffer without
 ;; aborting the minibuffer.

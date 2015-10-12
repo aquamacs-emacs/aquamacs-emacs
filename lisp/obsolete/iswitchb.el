@@ -1,6 +1,6 @@
 ;;; iswitchb.el --- switch between buffers using substrings
 
-;; Copyright (C) 1996-1997, 2000-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1996-1997, 2000-2015 Free Software Foundation, Inc.
 
 ;; Author: Stephen Eglen <stephen@gnu.org>
 ;; Maintainer: Stephen Eglen <stephen@gnu.org>
@@ -175,10 +175,10 @@
 ;; iswitchb-read-buffer has been written to be a drop in replacement
 ;; for the normal buffer selection routine `read-buffer'.  To use
 ;; iswitch for all buffer selections in Emacs, add:
-;; (setq read-buffer-function 'iswitchb-read-buffer)
+;; (setq read-buffer-function #'iswitchb-read-buffer)
 ;; (This variable was introduced in Emacs 20.3.)
 ;; XEmacs users can get the same behavior by doing:
-;; (defalias 'read-buffer 'iswitchb-read-buffer)
+;; (defalias 'read-buffer #'iswitchb-read-buffer)
 ;; since `read-buffer' is defined in lisp.
 
 ;; Using iswitchb for other completion tasks.
@@ -389,8 +389,8 @@ See documentation of `walk-windows' for useful values."
 
 This hook is run during minibuffer setup if `iswitchb' is active.
 For instance:
-\(add-hook 'iswitchb-minibuffer-setup-hook
-	  '\(lambda () (set (make-local-variable 'max-mini-window-height) 3)))
+\(add-hook \\='iswitchb-minibuffer-setup-hook
+	  \\='\(lambda () (set (make-local-variable \\='max-mini-window-height) 3)))
 will constrain the minibuffer to a maximum height of 3 lines when
 iswitchb is running."
   :type 'hook
@@ -586,7 +586,7 @@ in a separate window.
 	   ))))
 
 (defun iswitchb-read-buffer (prompt &optional default require-match
-				    start matches-set)
+				    _predicate start matches-set)
   "Replacement for the built-in `read-buffer'.
 Return the name of a buffer selected.
 PROMPT is the prompt to give to the user.
@@ -1095,7 +1095,7 @@ Return the modified list with the last element prepended to it."
 
 	      (and iswitchb-prompt-newbuffer
 		   (y-or-n-p
-		    (format
+		    (format-message
 		     "No buffer matching `%s', create one? "
 		     buf)))))
 	;; then create a new buffer
@@ -1416,9 +1416,6 @@ See the variable `iswitchb-case' for details."
 	  (isearch-no-upper-case-p iswitchb-text)
 	(isearch-no-upper-case-p iswitchb-text t))))
 
-;; NB obsolete/ is not scanned for autoloads.
-;; If you change any of the following doc, copy the changes to simple.el.
-
 ;;;###autoload
 (define-minor-mode iswitchb-mode
   "Toggle Iswitchb mode.
@@ -1432,10 +1429,6 @@ between buffers using substrings.  See `iswitchb' for details."
   (if iswitchb-mode
       (add-hook 'minibuffer-setup-hook 'iswitchb-minibuffer-setup)
     (remove-hook 'minibuffer-setup-hook 'iswitchb-minibuffer-setup)))
-
-;;;###autoload
-(make-obsolete 'iswitchb-mode
-               "use `icomplete-mode' or `ido-mode' instead." "24.4")
 
 (provide 'iswitchb)
 

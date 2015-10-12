@@ -1,6 +1,6 @@
 ;;; em-hist.el --- history list management  -*- lexical-binding:t -*-
 
-;; Copyright (C) 1999-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1999-2015 Free Software Foundation, Inc.
 
 ;; Author: John Wiegley <johnw@gnu.org>
 
@@ -306,8 +306,9 @@ element, regardless of any text on the command line.  In that case,
 		   eshell-save-history-on-exit
 		   (or (eq eshell-save-history-on-exit t)
 		       (y-or-n-p
-			(format "Save input history for Eshell buffer `%s'? "
-				(buffer-name buf)))))
+			(format-message
+			 "Save input history for Eshell buffer `%s'? "
+			 (buffer-name buf)))))
 	      (eshell-write-history))))))
 
 (defun eshell/history (&rest args)
@@ -520,7 +521,7 @@ See also `eshell-read-history'."
 	(let ((ch (read-event)))
 	  (if (eq ch ?\ )
 	      (set-window-configuration conf)
-	    (setq unread-command-events (list ch))))))))
+	    (push ch unread-command-events)))))))
 
 (defun eshell-hist-word-reference (ref)
   "Return the word designator index referred to by REF."
@@ -638,7 +639,7 @@ matched."
   ;; `!'
   ;;      Start a history substitution, except when followed by a
   ;;      space, tab, the end of the line, = or (.
-  (if (not (string-match "^![^ \t\n=\(]" reference))
+  (if (not (string-match "^![^ \t\n=(]" reference))
       reference
     (setq eshell-history-index nil)
     (let ((event (eshell-hist-parse-event-designator reference)))
@@ -724,7 +725,7 @@ matched."
 	(setq nth (eshell-hist-word-reference nth)))
       (unless (numberp mth)
 	(setq mth (eshell-hist-word-reference mth)))
-      (cons (mapconcat 'identity (eshell-sublist textargs nth mth) "")
+      (cons (mapconcat 'identity (eshell-sublist textargs nth mth) " ")
 	    end))))
 
 (defun eshell-hist-parse-modifier (hist reference)
@@ -737,7 +738,7 @@ matched."
 	  (goto-char (point-min))
 	  (let ((modifiers (cdr (eshell-parse-modifiers))))
 	    (dolist (mod modifiers)
-	      (setq hist (funcall mod hist)))
+	      (setq hist (car (funcall mod (list hist)))))
 	    hist))
       (delete-region here (point)))))
 

@@ -1,6 +1,6 @@
 ;;; erc-networks.el --- IRC networks
 
-;; Copyright (C) 2002, 2004-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2002, 2004-2015 Free Software Foundation, Inc.
 
 ;; Author: Mario Lang <mlang@lexx.delysid.org>
 ;; Maintainer: emacs-devel@gnu.org
@@ -588,7 +588,7 @@ PORTS is either a number, a list of numbers, or a list of port ranges."
     (LagNet "lagnet.org.za")
     (Librenet "librenet.net")
     (LinkNet "link-net.org")
-    (LinuxChix "cats\.meow\.at\\|linuxchix\.org")
+    (LinuxChix "cats\\.meow\\.at\\|linuxchix\\.org")
     (Liquidized "liquidized.net")
     (M-IRC "m-sys.org")
     (MagicStar "magicstar.net")
@@ -782,9 +782,9 @@ PORTS should be a list of either:
   numbers between LOW and HIGH (inclusive) is returned.
 
 As an example:
-  (erc-ports-list '(1)) => (1)
-  (erc-ports-list '((1 5))) => (1 2 3 4 5)
-  (erc-ports-list '(1 (3 5))) => (1 3 4 5)"
+  (erc-ports-list \\='(1)) => (1)
+  (erc-ports-list \\='((1 5))) => (1 2 3 4 5)
+  (erc-ports-list \\='(1 (3 5))) => (1 3 4 5)"
   (let (result)
     (dolist (p ports)
       (cond ((numberp p)
@@ -866,4 +866,3 @@ VALUE is the options value.")
 ;; indent-tabs-mode: t
 ;; tab-width: 8
 ;; End:
-

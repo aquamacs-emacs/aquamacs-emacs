@@ -1,5 +1,5 @@
 /* Definitions for asynchronous process control in GNU Emacs.
-   Copyright (C) 1985, 1994, 2001-2014 Free Software Foundation, Inc.
+   Copyright (C) 1985, 1994, 2001-2015 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -43,25 +43,25 @@ struct Lisp_Process
     /* Name of subprocess terminal.  */
     Lisp_Object tty_name;
 
-    /* Name of this process */
+    /* Name of this process.  */
     Lisp_Object name;
 
     /* List of command arguments that this process was run with.
-       Is set to t for a stopped network process; nil otherwise. */
+       Is set to t for a stopped network process; nil otherwise.  */
     Lisp_Object command;
 
     /* (funcall FILTER PROC STRING)  (if FILTER is non-nil)
-       to dispose of a bunch of chars from the process all at once */
+       to dispose of a bunch of chars from the process all at once.  */
     Lisp_Object filter;
 
-    /* (funcall SENTINEL PROCESS) when process state changes */
+    /* (funcall SENTINEL PROCESS) when process state changes.  */
     Lisp_Object sentinel;
 
     /* (funcall LOG SERVER CLIENT MESSAGE) when a server process
        accepts a connection from a client.  */
     Lisp_Object log;
 
-    /* Buffer that output is going to */
+    /* Buffer that output is going to.  */
     Lisp_Object buffer;
 
     /* t if this is a real child process.  For a network or serial
@@ -73,10 +73,10 @@ struct Lisp_Process
     /* Plist for programs to keep per-process state information, parameters, etc.  */
     Lisp_Object plist;
 
-    /* Symbol indicating the type of process: real, network, serial  */
+    /* Symbol indicating the type of process: real, network, serial.  */
     Lisp_Object type;
 
-    /* Marker set to end of last buffer-inserted output from this process */
+    /* Marker set to end of last buffer-inserted output from this process.  */
     Lisp_Object mark;
 
     /* Symbol indicating status of process.
@@ -98,12 +98,15 @@ struct Lisp_Process
     /* Working buffer for encoding.  */
     Lisp_Object encoding_buf;
 
-    /* Queue for storing waiting writes */
+    /* Queue for storing waiting writes.  */
     Lisp_Object write_queue;
 
 #ifdef HAVE_GNUTLS
     Lisp_Object gnutls_cred_type;
 #endif
+
+    /* Pipe process attached to the standard error of this process.  */
+    Lisp_Object stderrproc;
 
     /* After this point, there are no Lisp_Objects any more.  */
     /* alloc.c assumes that `pid' is the first such non-Lisp slot.  */
@@ -113,9 +116,9 @@ struct Lisp_Process
        A value 0 is used for pseudo-processes such as network or serial
        connections.  */
     pid_t pid;
-    /* Descriptor by which we read from this process */
+    /* Descriptor by which we read from this process.  */
     int infd;
-    /* Descriptor by which we write to this process */
+    /* Descriptor by which we write to this process.  */
     int outfd;
     /* Descriptors that were created for this process and that need
        closing.  Unused entries are negative.  */
@@ -162,6 +165,9 @@ struct Lisp_Process
     gnutls_session_t gnutls_state;
     gnutls_certificate_client_credentials gnutls_x509_cred;
     gnutls_anon_client_credentials_t gnutls_anon_cred;
+    gnutls_x509_crt_t gnutls_certificate;
+    unsigned int gnutls_peer_verification;
+    unsigned int gnutls_extra_peer_verification;
     int gnutls_log_level;
     int gnutls_handshakes_tried;
     bool_bf gnutls_p : 1;
@@ -194,15 +200,6 @@ pset_gnutls_cred_type (struct Lisp_Process *p, Lisp_Object val)
    when exiting.  */
 extern bool inhibit_sentinels;
 
-extern Lisp_Object Qeuid, Qegid, Qcomm, Qstate, Qppid, Qpgrp, Qsess, Qttname;
-extern Lisp_Object Qminflt, Qmajflt, Qcminflt, Qcmajflt, Qutime, Qstime;
-extern Lisp_Object Qcutime, Qpri, Qnice, Qthcount, Qstart, Qvsize, Qrss, Qargs;
-extern Lisp_Object Quser, Qgroup, Qetime, Qpcpu, Qpmem, Qtpgid, Qcstime;
-extern Lisp_Object Qtime, Qctime;
-extern Lisp_Object QCspeed;
-extern Lisp_Object QCbytesize, QCstopbits, QCparity, Qodd, Qeven;
-extern Lisp_Object QCflowcontrol, Qhw, Qsw, QCsummary;
-
 /* Exit statuses for GNU programs that exec other programs.  */
 enum
 {
@@ -213,8 +210,6 @@ enum
 
 /* Defined in callproc.c.  */
 
-extern void block_child_signal (void);
-extern void unblock_child_signal (void);
 extern Lisp_Object encode_current_directory (void);
 extern void record_kill_process (struct Lisp_Process *, Lisp_Object);
 
@@ -227,9 +222,7 @@ extern Lisp_Object system_process_attributes (Lisp_Object);
 
 extern void record_deleted_pid (pid_t, Lisp_Object);
 struct sockaddr;
-#ifdef WINDOWSNT
 extern Lisp_Object conv_sockaddr_to_lisp (struct sockaddr *, int);
-#endif
 extern void hold_keyboard_input (void);
 extern void unhold_keyboard_input (void);
 extern bool kbd_on_hold_p (void);
@@ -240,13 +233,13 @@ extern void add_read_fd (int fd, fd_callback func, void *data);
 extern void delete_read_fd (int fd);
 extern void add_write_fd (int fd, fd_callback func, void *data);
 extern void delete_write_fd (int fd);
-#ifdef NS_IMPL_GNUSTEP
 extern void catch_child_signal (void);
-#endif
 
 #ifdef WINDOWSNT
 extern Lisp_Object network_interface_list (void);
 extern Lisp_Object network_interface_info (Lisp_Object);
 #endif
+
+extern Lisp_Object remove_slash_colon (Lisp_Object);
 
 INLINE_HEADER_END

@@ -1,5 +1,5 @@
 /* Filesystem notifications support for GNU Emacs on the Microsoft Windows API.
-   Copyright (C) 2012-2014 Free Software Foundation, Inc.
+   Copyright (C) 2012-2015 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -118,9 +118,7 @@ BYTE file_notifications[16384];
 DWORD notifications_size;
 void *notifications_desc;
 
-static Lisp_Object Qfile_name, Qdirectory_name, Qattributes, Qsize;
-static Lisp_Object Qlast_write_time, Qlast_access_time, Qcreation_time;
-static Lisp_Object Qsecurity_desc, Qsubtree, watch_list;
+static Lisp_Object watch_list;
 
 /* Signal to the main thread that we have file notifications for it to
    process.  */
@@ -247,7 +245,6 @@ watch_worker (LPVOID arg)
 
   do {
     BOOL status;
-    DWORD sleep_result;
     DWORD bytes_ret = 0;
 
     if (dirwatch->dir)
@@ -275,7 +272,7 @@ watch_worker (LPVOID arg)
     /* Sleep indefinitely until awoken by the I/O completion, which
        could be either a change notification or a cancellation of the
        watch.  */
-    sleep_result = SleepEx (INFINITE, TRUE);
+    SleepEx (INFINITE, TRUE);
   } while (!dirwatch->terminate);
 
   return 0;
@@ -287,7 +284,6 @@ static struct notification *
 start_watching (const char *file, HANDLE hdir, BOOL subdirs, DWORD flags)
 {
   struct notification *dirwatch = xzalloc (sizeof (struct notification));
-  HANDLE thr;
 
   dirwatch->signature = DIRWATCH_SIGNATURE;
   dirwatch->buf = xmalloc (16384);
@@ -532,8 +528,8 @@ generate notifications correctly, though.  */)
       || (w32_major_version == 5 && w32_major_version < 1))
     {
       errno = ENOSYS;
-      report_file_error ("Watching filesystem events is not supported",
-			 Qnil);
+      report_file_notify_error ("Watching filesystem events is not supported",
+				Qnil);
     }
 
   /* filenotify.el always passes us a directory, either the parent
@@ -577,14 +573,14 @@ generate notifications correctly, though.  */)
 					      Vlocale_coding_system, 0);
 	  else
 	    lisp_errstr = build_string (errstr);
-	  report_file_error ("Cannot watch file",
-			     Fcons (lisp_errstr, Fcons (file, Qnil)));
+	  report_file_notify_error ("Cannot watch file",
+				    Fcons (lisp_errstr, Fcons (file, Qnil)));
 	}
       else
-	report_file_error ("Cannot watch file", Fcons (file, Qnil));
+	report_file_notify_error ("Cannot watch file", Fcons (file, Qnil));
     }
   /* Store watch object in watch list. */
-  watch_descriptor = XIL ((EMACS_INT)dirwatch);
+  watch_descriptor = make_pointer_integer (dirwatch);
   watch_object = Fcons (watch_descriptor, callback);
   watch_list = Fcons (watch_object, watch_list);
 
@@ -609,14 +605,14 @@ WATCH-DESCRIPTOR should be an object returned by `w32notify-add-watch'.  */)
   if (!NILP (watch_object))
     {
       watch_list = Fdelete (watch_object, watch_list);
-      dirwatch = (struct notification *)XLI (watch_descriptor);
+      dirwatch = (struct notification *)XINTPTR (watch_descriptor);
       if (w32_valid_pointer_p (dirwatch, sizeof(struct notification)))
 	status = remove_watch (dirwatch);
     }
 
   if (status == -1)
-    report_file_error ("Invalid watch descriptor", Fcons (watch_descriptor,
-							  Qnil));
+    report_file_notify_error ("Invalid watch descriptor",
+			      Fcons (watch_descriptor, Qnil));
 
   return Qnil;
 }
@@ -624,12 +620,36 @@ WATCH-DESCRIPTOR should be an object returned by `w32notify-add-watch'.  */)
 Lisp_Object
 w32_get_watch_object (void *desc)
 {
-  Lisp_Object descriptor = XIL ((EMACS_INT)desc);
+  Lisp_Object descriptor = make_pointer_integer (desc);
 
   /* This is called from the input queue handling code, inside a
      critical section, so we cannot possibly QUIT if watch_list is not
      in the right condition.  */
   return NILP (watch_list) ? Qnil : assoc_no_quit (descriptor, watch_list);
+}
+
+DEFUN ("w32notify-valid-p", Fw32notify_valid_p, Sw32notify_valid_p, 1, 1, 0,
+       doc: /* "Check a watch specified by its WATCH-DESCRIPTOR for validity.
+
+WATCH-DESCRIPTOR should be an object returned by `w32notify-add-watch'.
+
+A watch can become invalid if the directory it watches is deleted, or if
+the watcher thread exits abnormally for any other reason.  Removing the
+watch by calling `w32notify-rm-watch' also makes it invalid.  */)
+     (Lisp_Object watch_descriptor)
+{
+  Lisp_Object watch_object = Fassoc (watch_descriptor, watch_list);
+
+  if (!NILP (watch_object))
+    {
+      struct notification *dirwatch =
+	(struct notification *)XINTPTR (watch_descriptor);
+      if (w32_valid_pointer_p (dirwatch, sizeof(struct notification))
+	  && dirwatch->dir != NULL)
+	return Qt;
+    }
+
+  return Qnil;
 }
 
 void
@@ -644,7 +664,6 @@ syms_of_w32notify (void)
   DEFSYM (Qfile_name, "file-name");
   DEFSYM (Qdirectory_name, "directory-name");
   DEFSYM (Qattributes, "attributes");
-  DEFSYM (Qsize, "size");
   DEFSYM (Qlast_write_time, "last-write-time");
   DEFSYM (Qlast_access_time, "last-access-time");
   DEFSYM (Qcreation_time, "creation-time");
@@ -653,6 +672,7 @@ syms_of_w32notify (void)
 
   defsubr (&Sw32notify_add_watch);
   defsubr (&Sw32notify_rm_watch);
+  defsubr (&Sw32notify_valid_p);
 
   staticpro (&watch_list);
 

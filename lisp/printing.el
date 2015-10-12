@@ -1,6 +1,6 @@
 ;;; printing.el --- printing utilities
 
-;; Copyright (C) 2000-2001, 2003-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2000-2001, 2003-2015 Free Software Foundation, Inc.
 
 ;; Author: Vinicius Jose Latorre <viniciusjl@ig.com.br>
 ;; Maintainer: Vinicius Jose Latorre <viniciusjl@ig.com.br>
@@ -1038,20 +1038,27 @@ Please send all bug fixes and enhancements to
 ;; To avoid compilation gripes
 
 
-(or (fboundp 'subst-char-in-string)	; hacked from subr.el
-    (defun subst-char-in-string (fromchar tochar string &optional inplace)
-      "Replace FROMCHAR with TOCHAR in STRING each time it occurs.
+;; Emacs has this since at least 21.1.
+(when (featurep 'xemacs)
+  (or (fboundp 'subst-char-in-string)	; hacked from subr.el
+      (defun subst-char-in-string (fromchar tochar string &optional inplace)
+	"Replace FROMCHAR with TOCHAR in STRING each time it occurs.
 Unless optional argument INPLACE is non-nil, return a new string."
-      (let ((i (length string))
-	    (newstr (if inplace string (copy-sequence string))))
-	(while (> (setq i (1- i)) 0)
-	  (if (eq (aref newstr i) fromchar)
-	      (aset newstr i tochar)))
-	newstr)))
+	(let ((i (length string))
+	      (newstr (if inplace string (copy-sequence string))))
+	  (while (> (setq i (1- i)) 0)
+	    (if (eq (aref newstr i) fromchar)
+		(aset newstr i tochar)))
+	  newstr))))
 
 
-(or (fboundp 'make-temp-file)		; hacked from subr.el
-    (defun make-temp-file (prefix &optional dir-flag suffix)
+;; Emacs has this since at least 21.1, but the SUFFIX argument
+;; (which this file uses) only since 22.1.  So the fboundp test
+;; wasn't even correct/adequate.  Whatever, no-one is using
+;; this file on older Emacs version, so it's irrelevant.
+(when (featurep 'xemacs)
+  (or (fboundp 'make-temp-file)		; hacked from subr.el
+      (defun make-temp-file (prefix &optional dir-flag suffix)
       "Create a temporary file.
 The returned file name (created by appending some random characters at the end
 of PREFIX, and expanding against `temporary-file-directory' if necessary),
@@ -1086,7 +1093,7 @@ If SUFFIX is non-nil, add that at the end of the file name."
 		nil)
 	      file)
 	  ;; Reset the umask.
-	  (set-default-file-modes umask)))))
+	  (set-default-file-modes umask))))))
 
 
 (eval-when-compile
@@ -1739,14 +1746,14 @@ Examples:
 
 * On GNU or Unix system:
 
-   '((unix      \".\" \"~/bin\" ghostview mpage PATH)
+    ((unix      \".\" \"~/bin\" ghostview mpage PATH)
      (ghostview \"$HOME/bin/gsview-dir\")
      (mpage     \"$HOME/bin/mpage-dir\")
      )
 
 * On Windows system:
 
-   '((windows   \"c:/applications/executables\" PATH ghostview mpage)
+    ((windows   \"c:/applications/executables\" PATH ghostview mpage)
      (ghostview \"c:/gs/gsview-dir\")
      (mpage     \"c:/mpage-dir\")
      )"
@@ -1803,8 +1810,8 @@ Where:
 SYMBOL		It's a symbol to identify a text printer.  It's for
 		setting option `pr-txt-name' and for menu selection.
 		Examples:
-			'prt_06a
-			'my_printer
+			prt_06a
+			my_printer
 
 COMMAND		Name of the program for printing a text file.  On MS-DOS and
 		MS-Windows systems, if the value is an empty string, then Emacs
@@ -1831,7 +1838,7 @@ SWITCHES	List of sexp's to pass as extra options for text printer
 		instead of including an explicit switch on this list.
 		Example:
 		   . for lpr
-			'(\"-#3\" \"-l\")
+			(\"-#3\" \"-l\")
 			nil
 
 NAME		A string that specifies a text printer name.
@@ -1862,13 +1869,13 @@ Examples:
 
 * On GNU or Unix system:
 
-   '((prt_06a \"lpr\" nil \"prt_06a\")
+    ((prt_06a \"lpr\" nil \"prt_06a\")
      (prt_07c nil   nil \"prt_07c\")
      )
 
 * On Windows system:
 
-   '((prt_06a  \"print\"     nil \"/D:\\\\\\\\printers\\\\prt_06a\")
+    ((prt_06a  \"print\"     nil \"/D:\\\\\\\\printers\\\\prt_06a\")
      (prt_07c  nil         nil \"/D:\\\\\\\\printers\\\\prt_07c\")
      (PRN      \"\"          nil \"PRN\")
      (standard \"redpr.exe\" nil \"\")
@@ -1954,8 +1961,8 @@ Where:
 SYMBOL		It's a symbol to identify a PostScript printer.  It's for
 		setting option `pr-ps-name' and for menu selection.
 		Examples:
-			'prt_06a
-			'my_printer
+			prt_06a
+			my_printer
 
 COMMAND		Name of the program for printing a PostScript file.  On MS-DOS
 		and MS-Windows systems, if the value is an empty string then
@@ -1984,11 +1991,11 @@ SWITCHES	List of sexp's to pass as extra options for PostScript printer
 		instead of including an explicit switch on this list.
 		Example:
 		   . for lpr
-			'(\"-#3\" \"-l\")
+			(\"-#3\" \"-l\")
 			nil
 
 		   . for gsprint.exe
-			'(\"-all\" \"-twoup\")
+			(\"-all\" \"-twoup\")
 
 PRINTER-SWITCH	A string that specifies PostScript printer name switch.  If
 		it's necessary to have a space between PRINTER-SWITCH and NAME,
@@ -2050,9 +2057,9 @@ DEFAULT		It's a way to set default values when this entry is selected.
 		which the current setting inherits the context.  Take care with
 		circular inheritance.
 		Examples:
-			'(ps-landscape-mode . nil)
-			'(ps-spool-duplex . t)
-			'(pr-gs-device . (my-gs-device t))
+			(ps-landscape-mode . nil)
+			(ps-spool-duplex . t)
+			(pr-gs-device . (my-gs-device t))
 
 This variable should be modified by customization engine.  If this variable is
 modified by other means (for example, a lisp function), use `pr-update-menus'
@@ -2062,14 +2069,14 @@ Examples:
 
 * On GNU or Unix system:
 
-   '((lps_06b \"lpr\" nil \"-P\" \"lps_06b\")
+    ((lps_06b \"lpr\" nil \"-P\" \"lps_06b\")
      (lps_07c \"lpr\" nil nil  \"lps_07c\")
      (lps_08c nil   nil nil  \"lps_08c\")
      )
 
 * On Windows system:
 
-   '((lps_06a  \"print\"     nil \"/D:\" \"\\\\\\\\printers\\\\lps_06a\")
+    ((lps_06a  \"print\"     nil \"/D:\" \"\\\\\\\\printers\\\\lps_06a\")
      (lps_06b  \"print\"     nil nil   \"\\\\\\\\printers\\\\lps_06b\")
      (lps_07c  \"print\"     nil \"\"    \"/D:\\\\\\\\printers\\\\lps_07c\")
      (lps_08c  nil         nil nil   \"\\\\\\\\printers\\\\lps_08c\")
@@ -2095,7 +2102,7 @@ Also the gsprint utility comes together with gsview distribution.
 As an example of gsprint declaration:
 
    (setq pr-ps-printer-alist
-	 '((A \"gsprint\" (\"-all\" \"-twoup\") \"-printer \" \"lps_015\")
+	 \\='((A \"gsprint\" (\"-all\" \"-twoup\") \"-printer \" \"lps_015\")
 	   (B \"gsprint\" (\"-all\" \"-twoup\") nil \"-printer lps_015\")
 	   ;; some other printer declaration
 	   ))
@@ -2587,9 +2594,9 @@ DEFAULT		It's a way to set default values when this entry is selected.
 		which the current setting inherits the context.  Take care with
 		circular inheritance.
 		Examples:
-			'(ps-landscape-mode . nil)
-			'(ps-spool-duplex . t)
-			'(pr-gs-device . (my-gs-device t))"
+			(ps-landscape-mode . nil)
+			(ps-spool-duplex . t)
+			(pr-gs-device . (my-gs-device t))"
   :type '(repeat
 	  (list
 	   :tag ""
@@ -2683,8 +2690,8 @@ Where:
 SYMBOL		It's a symbol to identify a PostScript utility.  It's for
 		`pr-ps-utility' variable setting and for menu selection.
 		Examples:
-			'mpage
-			'psnup
+			mpage
+			psnup
 
 UTILITY		Name of utility for processing a PostScript file.
 		See also `pr-path-alist'.
@@ -2701,7 +2708,7 @@ MUST-SWITCHES	List of sexp's to pass as options to the PostScript utility
 		program and must be placed before any other switches.
 		Example:
 		    . for psnup:
-			'(\"-q\")
+			(\"-q\")
 
 PAPERSIZE	It's a format string to specify paper size switch.
 		Example:
@@ -2745,7 +2752,7 @@ SWITCHES	List of sexp's to pass as extra options to the PostScript utility
 		program.
 		Example:
 		    . for psnup
-			'(\"-q\")
+			(\"-q\")
 			nil
 
 DEFAULT		It's a way to set default values when this entry is selected.
@@ -2765,9 +2772,9 @@ DEFAULT		It's a way to set default values when this entry is selected.
 		which the current setting inherits the context.  Take care with
 		circular inheritance.
 		Examples:
-			'(pr-file-landscape . nil)
-			'(pr-file-duplex . t)
-			'(pr-gs-device . (my-gs-device t))
+			(pr-file-landscape . nil)
+			(pr-file-duplex . t)
+			(pr-gs-device . (my-gs-device t))
 
 This variable should be modified by customization engine.  If this variable is
 modified by other means (for example, a lisp function), use `pr-update-menus'
@@ -2780,14 +2787,14 @@ Examples:
 
 * On GNU or Unix system:
 
-   '((mpage \"mpage\" nil    \"-b%s\" \"-%d\" \"-l\" \"-t\" \"-T\" \">\" nil)
+    ((mpage \"mpage\" nil    \"-b%s\" \"-%d\" \"-l\" \"-t\" \"-T\" \">\" nil)
      (psnup \"psnup\" (\"-q\") \"-P%s\" \"-%d\" \"-l\" nil  nil  \" \" nil
 	    (pr-file-duplex . nil) (pr-file-tumble . nil))
      )
 
 * On Windows system:
 
-   '((psnup \"c:/psutils/psnup\" (\"-q\") \"-P%s\" \"-%d\" \"-l\" nil nil \" \"
+    ((psnup \"c:/psutils/psnup\" (\"-q\") \"-P%s\" \"-%d\" \"-l\" nil nil \" \"
 	    nil (pr-file-duplex . nil) (pr-file-tumble . nil))
      )
 
@@ -3164,12 +3171,9 @@ See `pr-ps-printer-alist'.")
 
 
 (defmacro pr-save-file-modes (&rest body)
-  "Set temporally file modes to `pr-file-modes'."
-  `(let ((pr--default-file-modes (default-file-modes)))	; save default
-     (set-default-file-modes pr-file-modes)
-     ,@body
-     (set-default-file-modes pr--default-file-modes))) ; restore default
-
+  "Execute BODY with file permissions temporarily set to `pr-file-modes'."
+  (declare (obsolete with-file-modes "25.1"))
+  `(with-file-modes pr-file-modes ,@body))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Keys & Menus
@@ -3192,9 +3196,10 @@ See `pr-ps-printer-alist'.")
 
 
 (defalias 'pr-get-symbol
-  (if (fboundp 'easy-menu-intern)	; hacked from easymenu.el
-      'easy-menu-intern
-    (lambda (s) (if (stringp s) (intern s) s))))
+  (if (featurep 'emacs) 'easy-menu-intern ; since 22.1
+    (if (fboundp 'easy-menu-intern)	; hacked from easymenu.el
+	'easy-menu-intern
+      (lambda (s) (if (stringp s) (intern s) s)))))
 
 
 (defconst pr-menu-spec
@@ -4364,12 +4369,12 @@ Noninteractively, the argument FILENAME is treated as follows: if it is nil,
 send the image to the printer.  If FILENAME is a string, save the PostScript
 image in a file with that name."
   (interactive (list (ps-print-preprint current-prefix-arg)))
-  (pr-save-file-modes
-   (let ((ps-lpr-command         (pr-command pr-ps-command))
-	 (ps-lpr-switches        pr-ps-switches)
-	 (ps-printer-name-option pr-ps-printer-switch)
-	 (ps-printer-name        pr-ps-printer))
-     (ps-despool filename))))
+  (with-file-modes pr-file-modes
+    (let ((ps-lpr-command         (pr-command pr-ps-command))
+	  (ps-lpr-switches        pr-ps-switches)
+	  (ps-printer-name-option pr-ps-printer-switch)
+	  (ps-printer-name        pr-ps-printer))
+      (ps-despool filename))))
 
 
 ;;;###autoload
@@ -5537,8 +5542,8 @@ If menu binding was not done, calls `pr-menu-bind'."
 		 ((file-exists-p res)
 		  (ding)
 		  (setq prompt "exists")
-		  (not (y-or-n-p (format "File `%s' exists; overwrite? "
-					 res))))
+		  (not (y-or-n-p (format-message
+				  "File `%s' exists; overwrite? " res))))
 		 (t nil))
       (setq res (read-file-name
 		 (format "File %s; PostScript file: " prompt)
@@ -5632,12 +5637,12 @@ If menu binding was not done, calls `pr-menu-bind'."
       (goto-char (point-max))
       (insert (format "%s %S\n" cmd args)))
     ;; *Printing Command Output* == show any return message from command
-    (pr-save-file-modes
-     (setq status
-	   (condition-case data
-	       (apply 'call-process cmd nil buffer nil args)
-	     ((quit error)
-	      (error-message-string data)))))
+    (with-file-modes pr-file-modes
+      (setq status
+	    (condition-case data
+		(apply 'call-process cmd nil buffer nil args)
+	      ((quit error)
+	       (error-message-string data)))))
     ;; *Printing Command Output* == show exit status
     (with-current-buffer buffer
       (goto-char (point-max))
@@ -5882,42 +5887,42 @@ If menu binding was not done, calls `pr-menu-bind'."
 
 
 (defun pr-text2ps (kind n-up filename &optional from to)
-  (pr-save-file-modes
-   (let ((ps-n-up-printing n-up)
-	 (ps-spool-config (and (eq ps-spool-config 'setpagedevice)
-			       'setpagedevice)))
-     (pr-delete-file-if-exists filename)
-     (cond (pr-faces-p
-	    (cond (pr-spool-p
-		   ;; pr-faces-p and pr-spool-p
-		   ;; here FILENAME arg is ignored
-		   (cond ((eq kind 'buffer)
-			  (ps-spool-buffer-with-faces))
-			 ((eq kind 'region)
-			  (ps-spool-region-with-faces (or from (point))
-						      (or to (mark))))
-			 ))
-		  ;; pr-faces-p and not pr-spool-p
-		  ((eq kind 'buffer)
-		   (ps-print-buffer-with-faces filename))
-		  ((eq kind 'region)
-		   (ps-print-region-with-faces (or from (point))
-					       (or to (mark)) filename))
-		  ))
-	   (pr-spool-p
-	    ;; not pr-faces-p and pr-spool-p
-	    ;; here FILENAME arg is ignored
-	    (cond ((eq kind 'buffer)
-		   (ps-spool-buffer))
-		  ((eq kind 'region)
-		   (ps-spool-region (or from (point)) (or to (mark))))
-		  ))
-	   ;; not pr-faces-p and not pr-spool-p
-	   ((eq kind 'buffer)
-	    (ps-print-buffer filename))
-	   ((eq kind 'region)
-	    (ps-print-region (or from (point)) (or to (mark)) filename))
-	   ))))
+  (with-file-modes pr-file-modes
+    (let ((ps-n-up-printing n-up)
+	  (ps-spool-config (and (eq ps-spool-config 'setpagedevice)
+				'setpagedevice)))
+      (pr-delete-file-if-exists filename)
+      (cond (pr-faces-p
+	     (cond (pr-spool-p
+		    ;; pr-faces-p and pr-spool-p
+		    ;; here FILENAME arg is ignored
+		    (cond ((eq kind 'buffer)
+			   (ps-spool-buffer-with-faces))
+			  ((eq kind 'region)
+			   (ps-spool-region-with-faces (or from (point))
+						       (or to (mark))))
+			  ))
+		   ;; pr-faces-p and not pr-spool-p
+		   ((eq kind 'buffer)
+		    (ps-print-buffer-with-faces filename))
+		   ((eq kind 'region)
+		    (ps-print-region-with-faces (or from (point))
+						(or to (mark)) filename))
+		   ))
+	    (pr-spool-p
+	     ;; not pr-faces-p and pr-spool-p
+	     ;; here FILENAME arg is ignored
+	     (cond ((eq kind 'buffer)
+		    (ps-spool-buffer))
+		   ((eq kind 'region)
+		    (ps-spool-region (or from (point)) (or to (mark))))
+		   ))
+	    ;; not pr-faces-p and not pr-spool-p
+	    ((eq kind 'buffer)
+	     (ps-print-buffer filename))
+	    ((eq kind 'region)
+	     (ps-print-region (or from (point)) (or to (mark)) filename))
+	    ))))
 
 
 (defun pr-command (command)
@@ -6535,16 +6540,15 @@ COMMAND.exe, COMMAND.bat and COMMAND.com in this order."
 	((or (not (file-exists-p pr-i-out-file))
 	     pr-i-answer-yes
 	     (setq pr-i-answer-yes
-		   (y-or-n-p (format "File `%s' exists; overwrite? "
-				     pr-i-out-file))))
+		   (y-or-n-p (format-message "File `%s' exists; overwrite? "
+					     pr-i-out-file))))
 	 pr-i-out-file)
 	(t
 	 (error "File already exists"))))
 
 
 (defun pr-i-directory ()
-  (or (and (file-directory-p pr-i-directory)
-	   (file-readable-p pr-i-directory))
+  (or (file-accessible-directory-p pr-i-directory)
       (error "Please specify be a readable directory")))
 
 
@@ -6552,8 +6556,7 @@ COMMAND.exe, COMMAND.bat and COMMAND.com in this order."
   (and pr-buffer-verbose
        (message "You can use M-TAB or ESC TAB for file completion"))
   (let ((dir (widget-value widget)))
-    (and (file-directory-p dir)
-	 (file-readable-p dir)
+    (and (file-accessible-directory-p dir)
 	 (setq pr-i-directory dir))))
 
 

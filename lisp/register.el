@@ -1,6 +1,6 @@
 ;;; register.el --- register commands for Emacs      -*- lexical-binding: t; -*-
 
-;; Copyright (C) 1985, 1993-1994, 2001-2014 Free Software Foundation,
+;; Copyright (C) 1985, 1993-1994, 2001-2015 Free Software Foundation,
 ;; Inc.
 
 ;; Maintainer: emacs-devel@gnu.org
@@ -27,11 +27,13 @@
 ;; This package of functions emulates and somewhat extends the venerable
 ;; TECO's `register' feature, which permits you to save various useful
 ;; pieces of buffer state to named variables.  The entry points are
-;; documented in the Emacs user's manual.
+;; documented in the Emacs user's manual: (info "(emacs) Registers").
 
 (eval-when-compile (require 'cl-lib))
 
 ;;; Code:
+
+;; FIXME: Clean up namespace usage!
 
 (cl-defstruct
   (registerv (:constructor nil)
@@ -98,16 +100,12 @@ If nil, do not show register previews, unless `help-char' (or a member of
 
 (defun get-register (register)
   "Return contents of Emacs register named REGISTER, or nil if none."
-  (cdr (assq register register-alist)))
+  (alist-get register register-alist))
 
 (defun set-register (register value)
   "Set contents of Emacs register named REGISTER to VALUE.  Returns VALUE.
 See the documentation of the variable `register-alist' for possible VALUEs."
-  (let ((aelt (assq register register-alist)))
-    (if aelt
-	(setcdr aelt value)
-      (push (cons register value) register-alist))
-    value))
+  (setf (alist-get register register-alist) value))
 
 (defun register-describe-oneline (c)
   "One-line description of register C."
@@ -137,7 +135,8 @@ Format of each entry is controlled by the variable `register-preview-function'."
     (with-current-buffer-window
      buffer
      (cons 'display-buffer-below-selected
-	   '((window-height . fit-window-to-buffer)))
+	   '((window-height . fit-window-to-buffer)
+	     (preserve-size . (nil . t))))
      nil
      (with-current-buffer standard-output
        (setq cursor-in-non-selected-windows nil)
@@ -161,7 +160,7 @@ display such a window regardless."
 			      collect c)))
     (unwind-protect
 	(progn
-	  (while (memq (read-event (propertize prompt 'face 'minibuffer-prompt))
+	  (while (memq (read-key (propertize prompt 'face 'minibuffer-prompt))
 		       help-chars)
 	    (unless (get-buffer-window buffer)
 	      (register-preview buffer 'show-empty)))
@@ -221,7 +220,7 @@ Interactively, reads the register using `register-read-with-preview'."
 (set-advertised-calling-convention 'frame-configuration-to-register
 				   '(register) "24.4")
 
-(make-obsolete 'frame-configuration-to-register 'frameset-to-register' "24.4")
+(make-obsolete 'frame-configuration-to-register 'frameset-to-register "24.4")
 
 (defalias 'register-to-point 'jump-to-register)
 (defun jump-to-register (register &optional delete)
@@ -253,19 +252,22 @@ Interactively, reads the register using `register-read-with-preview'."
       (goto-char (cadr val)))
      ((markerp val)
       (or (marker-buffer val)
-	  (error "That register's buffer no longer exists"))
+	  (user-error "That register's buffer no longer exists"))
       (switch-to-buffer (marker-buffer val))
+      (unless (or (= (point) (marker-position val))
+                  (eq last-command 'jump-to-register))
+        (push-mark))
       (goto-char val))
      ((and (consp val) (eq (car val) 'file))
       (find-file (cdr val)))
      ((and (consp val) (eq (car val) 'file-query))
       (or (find-buffer-visiting (nth 1 val))
 	  (y-or-n-p (format "Visit file %s again? " (nth 1 val)))
-	  (error "Register access aborted"))
+	  (user-error "Register access aborted"))
       (find-file (nth 1 val))
       (goto-char (nth 2 val)))
      (t
-      (error "Register doesn't contain a buffer position or configuration")))))
+      (user-error "Register doesn't contain a buffer position or configuration")))))
 
 (defun register-swap-out ()
   "Turn markers into file-query references when a buffer is killed."
@@ -317,7 +319,7 @@ Interactively, reads the register using `register-read-with-preview'."
 	(set-register register (+ number register-val))))
      ((or (not register-val) (stringp register-val))
       (append-to-register register (region-beginning) (region-end) prefix))
-     (t (error "Register does not contain a number or text")))))
+     (t (user-error "Register does not contain a number or text")))))
 
 (defun view-register (register)
   "Display what is contained in register named REGISTER.
@@ -425,13 +427,14 @@ Interactively, reads the register using `register-read-with-preview'."
   "Insert contents of register REGISTER.  (REGISTER is a character.)
 Normally puts point before and mark after the inserted text.
 If optional second arg is non-nil, puts mark before and point after.
-Interactively, second arg is non-nil if prefix arg is supplied.
+Interactively, second arg is nil if prefix arg is supplied and t
+otherwise.
 
 Interactively, reads the register using `register-read-with-preview'."
   (interactive (progn
 		 (barf-if-buffer-read-only)
 		 (list (register-read-with-preview "Insert register: ")
-		       current-prefix-arg)))
+		       (not current-prefix-arg))))
   (push-mark)
   (let ((val (get-register register)))
     (cond
@@ -449,7 +452,7 @@ Interactively, reads the register using `register-read-with-preview'."
      ((and (markerp val) (marker-position val))
       (princ (marker-position val) (current-buffer)))
      (t
-      (error "Register does not contain text"))))
+      (user-error "Register does not contain text"))))
   (if (not arg) (exchange-point-and-mark)))
 
 (defun copy-to-register (register start end &optional delete-flag region)
@@ -492,7 +495,7 @@ Interactively, reads the register using `register-read-with-preview'."
     (set-register
      register (cond ((not reg) text)
                     ((stringp reg) (concat reg separator text))
-                    (t (error "Register does not contain text")))))
+                    (t (user-error "Register does not contain text")))))
   (setq deactivate-mark t)
   (cond (delete-flag
 	 (delete-region start end))
@@ -516,7 +519,7 @@ Interactively, reads the register using `register-read-with-preview'."
     (set-register
      register (cond ((not reg) text)
                     ((stringp reg) (concat text separator reg))
-                    (t (error "Register does not contain text")))))
+                    (t (user-error "Register does not contain text")))))
   (setq deactivate-mark t)
   (cond (delete-flag
 	 (delete-region start end))

@@ -1,6 +1,6 @@
 ;;; lisp.el --- Lisp editing commands for Emacs  -*- lexical-binding:t -*-
 
-;; Copyright (C) 1985-1986, 1994, 2000-2014 Free Software Foundation,
+;; Copyright (C) 1985-1986, 1994, 2000-2015 Free Software Foundation,
 ;; Inc.
 
 ;; Maintainer: emacs-devel@gnu.org
@@ -57,10 +57,14 @@ Should take the same arguments and behave similarly to `forward-sexp'.")
 
 (defun forward-sexp (&optional arg)
   "Move forward across one balanced expression (sexp).
-With ARG, do it that many times.  Negative arg -N means
-move backward across N balanced expressions.
-This command assumes point is not in a string or comment.
-Calls `forward-sexp-function' to do the work, if that is non-nil."
+With ARG, do it that many times.  Negative arg -N means move
+backward across N balanced expressions.  This command assumes
+point is not in a string or comment.  Calls
+`forward-sexp-function' to do the work, if that is non-nil.  If
+unable to move over a sexp, signal `scan-error' with three
+arguments: a message, the start of the obstacle (usually a
+parenthesis or list marker of some kind), and end of the
+obstacle."
   (interactive "^p")
   (or arg (setq arg 1))
   (if forward-sexp-function
@@ -140,38 +144,92 @@ This command assumes point is not in a string or comment."
       (goto-char (or (scan-lists (point) inc -1) (buffer-end arg)))
       (setq arg (- arg inc)))))
 
-(defun backward-up-list (&optional arg)
+(defun backward-up-list (&optional arg escape-strings no-syntax-crossing)
   "Move backward out of one level of parentheses.
 This command will also work on other parentheses-like expressions
-defined by the current language mode.
-With ARG, do this that many times.
-A negative argument means move forward but still to a less deep spot.
-This command assumes point is not in a string or comment."
-  (interactive "^p")
-  (up-list (- (or arg 1))))
+defined by the current language mode.  With ARG, do this that
+many times.  A negative argument means move forward but still to
+a less deep spot.  If ESCAPE-STRINGS is non-nil (as it is
+interactively), move out of enclosing strings as well.  If
+NO-SYNTAX-CROSSING is non-nil (as it is interactively), prefer to
+break out of any enclosing string instead of moving to the start
+of a list broken across multiple strings.  On error, location of
+point is unspecified."
+  (interactive "^p\nd\nd")
+  (up-list (- (or arg 1)) escape-strings no-syntax-crossing))
 
-(defun up-list (&optional arg)
+(defun up-list (&optional arg escape-strings no-syntax-crossing)
   "Move forward out of one level of parentheses.
 This command will also work on other parentheses-like expressions
-defined by the current language mode.
-With ARG, do this that many times.
-A negative argument means move backward but still to a less deep spot.
-This command assumes point is not in a string or comment."
-  (interactive "^p")
+defined by the current language mode.  With ARG, do this that
+many times.  A negative argument means move backward but still to
+a less deep spot.  If ESCAPE-STRINGS is non-nil (as it is
+interactively), move out of enclosing strings as well. If
+NO-SYNTAX-CROSSING is non-nil (as it is interactively), prefer to
+break out of any enclosing string instead of moving to the start
+of a list broken across multiple strings.  On error, location of
+point is unspecified."
+  (interactive "^p\nd\nd")
   (or arg (setq arg 1))
   (let ((inc (if (> arg 0) 1 -1))
-        pos)
+        (pos nil))
     (while (/= arg 0)
-      (if (null forward-sexp-function)
-          (goto-char (or (scan-lists (point) inc 1) (buffer-end arg)))
-	(condition-case err
-	    (while (progn (setq pos (point))
-			  (forward-sexp inc)
-			  (/= (point) pos)))
-	  (scan-error (goto-char (nth (if (> arg 0) 3 2) err))))
-	(if (= (point) pos)
-            (signal 'scan-error
-                    (list "Unbalanced parentheses" (point) (point)))))
+      (condition-case err
+          (save-restriction
+            ;; If we've been asked not to cross string boundaries
+            ;; and we're inside a string, narrow to that string so
+            ;; that scan-lists doesn't find a match in a different
+            ;; string.
+            (when no-syntax-crossing
+              (let* ((syntax (syntax-ppss))
+                     (string-comment-start (nth 8 syntax)))
+                (when string-comment-start
+                  (save-excursion
+                    (goto-char string-comment-start)
+                    (narrow-to-region
+                     (point)
+                     (if (nth 3 syntax) ; in string
+                         (condition-case nil
+                             (progn (forward-sexp) (point))
+                           (scan-error (point-max)))
+                       (forward-comment 1)
+                       (point)))))))
+            (if (null forward-sexp-function)
+                (goto-char (or (scan-lists (point) inc 1)
+                               (buffer-end arg)))
+              (condition-case err
+                  (while (progn (setq pos (point))
+                                (forward-sexp inc)
+                                (/= (point) pos)))
+                (scan-error (goto-char (nth (if (> arg 0) 3 2) err))))
+              (if (= (point) pos)
+                  (signal 'scan-error
+                          (list "Unbalanced parentheses" (point) (point))))))
+        (scan-error
+         (let ((syntax nil))
+           (or
+            ;; If we bumped up against the end of a list, see whether
+            ;; we're inside a string: if so, just go to the beginning
+            ;; or end of that string.
+            (and escape-strings
+                 (or syntax (setf syntax (syntax-ppss)))
+                 (nth 3 syntax)
+                 (goto-char (nth 8 syntax))
+                 (progn (when (> inc 0)
+                          (forward-sexp))
+                        t))
+            ;; If we narrowed to a comment above and failed to escape
+            ;; it, the error might be our fault, not an indication
+            ;; that we're out of syntax.  Try again from beginning or
+            ;; end of the comment.
+            (and no-syntax-crossing
+                 (or syntax (setf syntax (syntax-ppss)))
+                 (nth 4 syntax)
+                 (goto-char (nth 8 syntax))
+                 (or (< inc 0)
+                     (forward-comment 1))
+                 (setf arg (+ arg inc)))
+            (signal (car err) (cdr err))))))
       (setq arg (- arg inc)))))
 
 (defun kill-sexp (&optional arg)
@@ -205,7 +263,7 @@ This command assumes point is not in a string or comment."
           (backward-up-list arg)
           (kill-sexp)
           (insert current-sexp))
-      (error "Not at a sexp"))))
+      (user-error "Not at a sexp"))))
 
 (defvar beginning-of-defun-function nil
   "If non-nil, function for `beginning-of-defun-raw' to call.
@@ -306,8 +364,7 @@ is called as a function to find the defun's beginning."
 	  (arg-+ve (> arg 0)))
       (save-restriction
 	(widen)
-	(let ((ppss (let (syntax-begin-function
-			  font-lock-beginning-of-syntax-function)
+	(let ((ppss (let (syntax-begin-function)
 		      (syntax-ppss)))
 	      ;; position of least enclosing paren, or nil.
 	      encl-pos)
@@ -464,11 +521,15 @@ it marks the next defun after the ones already marked."
 	     (beginning-of-defun))
 	   (re-search-backward "^\n" (- (point) 1) t)))))
 
-(defun narrow-to-defun (&optional _arg)
+(defvar narrow-to-defun-include-comments nil
+  "If non-nil, `narrow-to-defun' will also show comments preceding the defun.")
+
+(defun narrow-to-defun (&optional include-comments)
   "Make text outside current defun invisible.
-The defun visible is the one that contains point or follows point.
-Optional ARG is ignored."
-  (interactive)
+The current defun is the one that contains point or follows point.
+Preceding comments are included if INCLUDE-COMMENTS is non-nil.
+Interactively, the behavior depends on `narrow-to-defun-include-comments'."
+  (interactive (list narrow-to-defun-include-comments))
   (save-excursion
     (widen)
     (let ((opoint (point))
@@ -504,6 +565,18 @@ Optional ARG is ignored."
 	(setq end (point))
 	(beginning-of-defun)
 	(setq beg (point)))
+      (when include-comments
+	(goto-char beg)
+	;; Move back past all preceding comments (and whitespace).
+	(when (forward-comment -1)
+	  (while (forward-comment -1))
+	  ;; Move forwards past any page breaks within these comments.
+	  (when (and page-delimiter (not (string= page-delimiter "")))
+	    (while (re-search-forward page-delimiter beg t)))
+	  ;; Lastly, move past any empty lines.
+	  (skip-chars-forward "[:space:]\n")
+	  (beginning-of-line)
+	  (setq beg (point))))
       (goto-char end)
       (re-search-backward "^\n" (- (point) 1) t)
       (narrow-to-region beg end))))
@@ -640,7 +713,8 @@ character."
   (condition-case data
       ;; Buffer can't have more than (point-max) sexps.
       (scan-sexps (point-min) (point-max))
-    (scan-error (goto-char (nth 2 data))
+    (scan-error (push-mark)
+		(goto-char (nth 2 data))
 		;; Could print (nth 1 data), which is either
 		;; "Containing expression ends prematurely" or
 		;; "Unbalanced parentheses", but those may not be so
@@ -661,271 +735,25 @@ character."
         )
     (call-interactively 'minibuffer-complete)))
 
-(defun lisp-complete-symbol (&optional predicate)
+(defun lisp-complete-symbol (&optional _predicate)
   "Perform completion on Lisp symbol preceding point.
 Compare that symbol against the known Lisp symbols.
 If no characters can be completed, display a list of possible completions.
 Repeating the command at that point scrolls the list.
 
-When called from a program, optional arg PREDICATE is a predicate
-determining which symbols are considered, e.g. `commandp'.
-If PREDICATE is nil, the context determines which symbols are
-considered.  If the symbol starts just after an open-parenthesis, only
-symbols with function definitions are considered.  Otherwise, all
-symbols with function definitions, values or properties are
-considered."
-  (declare (obsolete completion-at-point "24.4"))
+The context determines which symbols are considered.  If the
+symbol starts just after an open-parenthesis, only symbols with
+function definitions are considered.  Otherwise, all symbols with
+function definitions, values or properties are considered."
+  (declare (obsolete completion-at-point "24.4")
+           (advertised-calling-convention () "25.1"))
   (interactive)
-  (let* ((data (lisp-completion-at-point predicate))
+  (let* ((data (elisp-completion-at-point))
          (plist (nthcdr 3 data)))
     (if (null data)
         (minibuffer-message "Nothing to complete")
       (let ((completion-extra-properties plist))
         (completion-in-region (nth 0 data) (nth 1 data) (nth 2 data)
                               (plist-get plist :predicate))))))
-
-(defun lisp--local-variables-1 (vars sexp)
-  "Return the vars locally bound around the witness, or nil if not found."
-  (let (res)
-    (while
-        (unless
-            (setq res
-                  (pcase sexp
-                    (`(,(or `let `let*) ,bindings)
-                     (let ((vars vars))
-                       (when (eq 'let* (car sexp))
-                         (dolist (binding (cdr (reverse bindings)))
-                           (push (or (car-safe binding) binding) vars)))
-                       (lisp--local-variables-1
-                        vars (car (cdr-safe (car (last bindings)))))))
-                    (`(,(or `let `let*) ,bindings . ,body)
-                     (let ((vars vars))
-                       (dolist (binding bindings)
-                         (push (or (car-safe binding) binding) vars))
-                       (lisp--local-variables-1 vars (car (last body)))))
-                    (`(lambda ,_) (setq sexp nil))
-                    (`(lambda ,args . ,body)
-                     (lisp--local-variables-1
-                      (append args vars) (car (last body))))
-                    (`(condition-case ,_ ,e) (lisp--local-variables-1 vars e))
-                    (`(condition-case ,v ,_ . ,catches)
-                     (lisp--local-variables-1
-                      (cons v vars) (cdr (car (last catches)))))
-                    (`(quote . ,_) (setq sexp nil))
-                    (`(,_ . ,_)
-                     (lisp--local-variables-1 vars (car (last sexp))))
-                    (`lisp--witness--lisp (or vars '(nil)))
-                    (_ nil)))
-          (setq sexp (ignore-errors (butlast sexp)))))
-    res))
-
-(defun lisp--local-variables ()
-  "Return a list of locally let-bound variables at point."
-  (save-excursion
-    (skip-syntax-backward "w_")
-    (let* ((ppss (syntax-ppss))
-           (txt (buffer-substring-no-properties (or (car (nth 9 ppss)) (point))
-                                                (or (nth 8 ppss) (point))))
-           (closer ()))
-      (dolist (p (nth 9 ppss))
-        (push (cdr (syntax-after p)) closer))
-      (setq closer (apply #'string closer))
-      (let* ((sexp (condition-case nil
-                       (car (read-from-string
-                             (concat txt "lisp--witness--lisp" closer)))
-                     (end-of-file nil)))
-             (macroexpand-advice (lambda (expander form &rest args)
-                                   (condition-case nil
-                                       (apply expander form args)
-                                     (error form))))
-             (sexp
-              (unwind-protect
-                  (progn
-                    (advice-add 'macroexpand :around macroexpand-advice)
-                    (macroexpand-all sexp))
-                (advice-remove 'macroexpand macroexpand-advice)))
-             (vars (lisp--local-variables-1 nil sexp)))
-        (delq nil
-              (mapcar (lambda (var)
-                        (and (symbolp var)
-                             (not (string-match (symbol-name var) "\\`[&_]"))
-                             ;; Eliminate uninterned vars.
-                             (intern-soft var)
-                             var))
-                      vars))))))
-
-(defvar lisp--local-variables-completion-table
-  ;; Use `defvar' rather than `defconst' since defconst would purecopy this
-  ;; value, which would doubly fail: it would fail because purecopy can't
-  ;; handle the recursive bytecode object, and it would fail because it would
-  ;; move `lastpos' and `lastvars' to pure space where they'd be immutable!
-  (let ((lastpos nil) (lastvars nil))
-    (letrec ((hookfun (lambda ()
-                        (setq lastpos nil)
-                        (remove-hook 'post-command-hook hookfun))))
-      (completion-table-dynamic
-       (lambda (_string)
-         (save-excursion
-           (skip-syntax-backward "_w")
-           (let ((newpos (cons (point) (current-buffer))))
-             (unless (equal lastpos newpos)
-               (add-hook 'post-command-hook hookfun)
-               (setq lastpos newpos)
-               (setq lastvars
-                     (mapcar #'symbol-name (lisp--local-variables))))))
-         lastvars)))))
-
-;; FIXME: Support for Company brings in features which straddle eldoc.
-;; We should consolidate this, so that major modes can provide all that
-;; data all at once:
-;; - a function to extract "the reference at point" (may be more complex
-;;     than a mere string, to distinguish various namespaces).
-;; - a function to jump to such a reference.
-;; - a function to show the signature/interface of such a reference.
-;; - a function to build a help-buffer about that reference.
-;; FIXME: Those functions should also be used by the normal completion code in
-;; the *Completions* buffer.
-
-(defun lisp--company-doc-buffer (str)
-  (let ((symbol (intern-soft str)))
-    ;; FIXME: we really don't want to "display-buffer and then undo it".
-    (save-window-excursion
-      ;; Make sure we don't display it in another frame, otherwise
-      ;; save-window-excursion won't be able to undo it.
-      (let ((display-buffer-overriding-action
-             '(nil . ((inhibit-switch-frame . t)))))
-        (ignore-errors
-          (cond
-           ((fboundp symbol) (describe-function symbol))
-           ((boundp symbol) (describe-variable symbol))
-           ((featurep symbol) (describe-package symbol))
-           ((facep symbol) (describe-face symbol))
-           (t (signal 'user-error nil)))
-          (help-buffer))))))
-
-(defun lisp--company-doc-string (str)
-  (let* ((symbol (intern-soft str))
-         (doc (if (fboundp symbol)
-                  (documentation symbol t)
-                (documentation-property symbol 'variable-documentation t))))
-    (and (stringp doc)
-         (string-match ".*$" doc)
-         (match-string 0 doc))))
-
-(declare-function find-library-name "find-func" (library))
-
-(defun lisp--company-location (str)
-  (let ((sym (intern-soft str)))
-    (cond
-     ((fboundp sym) (find-definition-noselect sym nil))
-     ((boundp sym) (find-definition-noselect sym 'defvar))
-     ((featurep sym)
-      (require 'find-func)
-      (cons (find-file-noselect (find-library-name
-                                 (symbol-name sym)))
-            0))
-     ((facep sym) (find-definition-noselect sym 'defface)))))
-
-(defun lisp-completion-at-point (&optional _predicate)
-  "Function used for `completion-at-point-functions' in `emacs-lisp-mode'."
-  (with-syntax-table emacs-lisp-mode-syntax-table
-    (let* ((pos (point))
-	   (beg (condition-case nil
-		    (save-excursion
-		      (backward-sexp 1)
-		      (skip-syntax-forward "'")
-		      (point))
-		  (scan-error pos)))
-	   (end
-	    (unless (or (eq beg (point-max))
-			(member (char-syntax (char-after beg))
-                                '(?\s ?\" ?\( ?\))))
-	      (condition-case nil
-		  (save-excursion
-		    (goto-char beg)
-		    (forward-sexp 1)
-		    (when (>= (point) pos)
-		      (point)))
-		(scan-error pos))))
-           (funpos (eq (char-before beg) ?\()) ;t if in function position.
-           (table-etc
-            (if (not funpos)
-                ;; FIXME: We could look at the first element of the list and
-                ;; use it to provide a more specific completion table in some
-                ;; cases.  E.g. filter out keywords that are not understood by
-                ;; the macro/function being called.
-                (list nil (completion-table-merge
-                           lisp--local-variables-completion-table
-                           (apply-partially #'completion-table-with-predicate
-                                            obarray
-                                            ;; Don't include all symbols
-                                            ;; (bug#16646).
-                                            (lambda (sym)
-                                              (or (boundp sym)
-                                                  (fboundp sym)
-                                                  (symbol-plist sym)))
-                                            'strict))
-                      :annotation-function
-                      (lambda (str) (if (fboundp (intern-soft str)) " <f>"))
-                      :company-doc-buffer #'lisp--company-doc-buffer
-                      :company-docsig #'lisp--company-doc-string
-                      :company-location #'lisp--company-location)
-              ;; Looks like a funcall position.  Let's double check.
-              (save-excursion
-                (goto-char (1- beg))
-                (let ((parent
-                       (condition-case nil
-                           (progn (up-list -1) (forward-char 1)
-                                  (let ((c (char-after)))
-                                    (if (eq c ?\() ?\(
-                                      (if (memq (char-syntax c) '(?w ?_))
-                                          (read (current-buffer))))))
-                         (error nil))))
-                  (pcase parent
-                    ;; FIXME: Rather than hardcode special cases here,
-                    ;; we should use something like a symbol-property.
-                    (`declare
-                     (list t (mapcar (lambda (x) (symbol-name (car x)))
-                                     (delete-dups
-                                      ;; FIXME: We should include some
-                                      ;; docstring with each entry.
-                                      (append
-                                       macro-declarations-alist
-                                       defun-declarations-alist)))))
-                    ((and (or `condition-case `condition-case-unless-debug)
-                          (guard (save-excursion
-                                   (ignore-errors
-                                     (forward-sexp 2)
-                                     (< (point) beg)))))
-                     (list t obarray
-                           :predicate (lambda (sym) (get sym 'error-conditions))))
-		    ((and ?\(
-			  (guard (save-excursion
-				   (goto-char (1- beg))
-				   (up-list -1)
-				   (forward-symbol -1)
-				   (looking-at "\\_<let\\*?\\_>"))))
-		     (list t obarray
-			   :predicate #'boundp
-			   :company-doc-buffer #'lisp--company-doc-buffer
-			   :company-docsig #'lisp--company-doc-string
-			   :company-location #'lisp--company-location))
-                    (_ (list nil obarray
-                             :predicate #'fboundp
-                             :company-doc-buffer #'lisp--company-doc-buffer
-                             :company-docsig #'lisp--company-doc-string
-                             :company-location #'lisp--company-location
-                             ))))))))
-      (when end
-        (let ((tail (if (null (car table-etc))
-                        (cdr table-etc)
-                      (cons
-                       (if (memq (char-syntax (or (char-after end) ?\s))
-                                 '(?\s ?>))
-                           (cadr table-etc)
-                         (apply-partially 'completion-table-with-terminator
-                                          " " (cadr table-etc)))
-                       (cddr table-etc)))))
-          `(,beg ,end ,@tail))))))
 
 ;;; lisp.el ends here

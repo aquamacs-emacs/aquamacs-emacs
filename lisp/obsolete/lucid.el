@@ -1,6 +1,6 @@
 ;;; lucid.el --- emulate some Lucid Emacs functions
 
-;; Copyright (C) 1993, 1995, 2001-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1993, 1995, 2001-2015 Free Software Foundation, Inc.
 
 ;; Maintainer: emacs-devel@gnu.org
 ;; Keywords: emulations
@@ -29,27 +29,6 @@
 (require 'cl)
 
 (defalias 'current-time-seconds 'current-time)
-
-(defun read-number (prompt &optional integers-only)
-  "Read a number from the minibuffer.
-Keep reentering the minibuffer until we get suitable input.
-If optional argument INTEGERS-ONLY is non-nil, insist on an integer."
-  (interactive)
-  (let (success
-	(number nil)
-	(predicate (if integers-only 'integerp 'numberp)))
-    (while (not success)
-      (let ((input-string (read-string prompt)))
-	(condition-case ()
-	    (setq number (read input-string))
-	  (error))
-	(if (funcall predicate number)
-	    (setq success t)
-	  (let ((cursor-in-echo-area t))
-	    (message "Please type %s"
-		     (if integers-only "an integer" "a number"))
-	    (sit-for 1)))))
-    number))
 
 (defun real-path-name (name &optional default)
   (file-truename (expand-file-name name default)))

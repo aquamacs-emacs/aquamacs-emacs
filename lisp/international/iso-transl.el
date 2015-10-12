@@ -1,6 +1,6 @@
-;;; iso-transl.el --- keyboard input definitions for ISO 8859-1  -*- coding: utf-8 -*-
+;;; iso-transl.el --- keyboard input for ISO 10646 chars -*- coding: utf-8 -*-
 
-;; Copyright (C) 1987, 1993-1999, 2001-2014 Free Software Foundation,
+;; Copyright (C) 1987, 1993-1999, 2001-2015 Free Software Foundation,
 ;; Inc.
 
 ;; Author: Howard Gayle
@@ -40,6 +40,10 @@
 ;; Note that C-h b will autoload this package, which is one reason
 ;; why the more destructive key sequences (without C-x 8 prefix) are
 ;; only defined in `iso-transl-mode', and are thus reversible.
+
+;; This package supports all characters defined by ISO 8859-1, along
+;; with a few other ISO 10646 characters commonly used in English and
+;; basic math.
 
 ;;; Code:
 
@@ -197,6 +201,31 @@
     ("~o"   . [?õ])
     ("~t"   . [?þ])
     ("~~"   . [?¬])
+    ("_h"   . [?‐])
+    ("_H"   . [?‑])
+    ("_f"   . [?‒])
+    ("_n"   . [?–])
+    ("_m"   . [?—])
+    ("_q"   . [?―])
+    ("["    . [?‘])
+    ("]"    . [?’])
+    ("{"    . [?“])
+    ("}"    . [?”])
+    ("1+"   . [?†])
+    ("2+"   . [?‡])
+    ("**"   . [?•])
+    ("*'"   . [?′])
+    ("*\""  . [?″])
+    ("*E"   . [?€])
+    ("No"   . [?№])
+    ("a<"   . [?←])
+    ("a>"   . [?→])
+    ("a="   . [?↔])
+    ("_-"   . [?−])
+    ("~="   . [?≈])
+    ("/="   . [?≠])
+    ("_<"   . [?≤])
+    ("_>"   . [?≥])
     ("' "   . "'")
     ("` "   . "`")
     ("\" "  . "\"")

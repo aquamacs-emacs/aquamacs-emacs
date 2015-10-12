@@ -1,6 +1,6 @@
 ;;; gnus-group.el --- group mode commands for Gnus
 
-;; Copyright (C) 1996-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1996-2015 Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;; Keywords: news
@@ -23,10 +23,6 @@
 ;;; Commentary:
 
 ;;; Code:
-
-;; For Emacs <22.2 and XEmacs.
-(eval-and-compile
-  (unless (fboundp 'declare-function) (defmacro declare-function (&rest r))))
 
 (eval-when-compile
   (require 'cl))
@@ -159,7 +155,7 @@ list."
 			 (function-item gnus-group-sort-by-rank)
 			 (function :tag "other" nil))))
 
-(defcustom gnus-group-line-format "%M\%S\%p\%P\%5y:%B%(%g%)\n"
+(defcustom gnus-group-line-format "%M\ %S\ %p\ %P\ %5y:%B%(%g%)\n"
   "*Format of group lines.
 It works along the same lines as a normal formatting string,
 with some simple extensions.
@@ -217,7 +213,7 @@ See Info node `(gnus)Formatting Variables'."
   :group 'gnus-group-visual
   :type 'string)
 
-(defcustom gnus-group-mode-line-format "Gnus: %%b {%M\%:%S}"
+(defcustom gnus-group-mode-line-format "Gnus: %%b {%M\ %:%S}"
   "*The format specification for the group mode line.
 It works along the same lines as a normal formatting string,
 with some simple extensions:
@@ -449,7 +445,7 @@ If non-nil, the value should be a string or an alist.  If it is a string,
 e.g. \"nnml:\", in which case `gnus-group-jump-to-group' offers \"Group:
 nnml:\" in the minibuffer prompt.
 
-If it is an alist, it must consist of \(NUMBER .  PROMPT\) pairs, for example:
+If it is an alist, it must consist of \(NUMBER .  PROMPT) pairs, for example:
 \((1 .  \"\") (2 .  \"nnfolder+archive:\")).  The element with number 0 is
 used when no prefix argument is given to `gnus-group-jump-to-group'."
   :version "22.1"
@@ -481,6 +477,26 @@ simple manner.")
   "Function to override finding the next group after listing groups.")
 
 (defvar gnus-group-edit-buffer nil)
+
+(defvar gnus-tmp-news-method)
+(defvar gnus-tmp-colon)
+(defvar gnus-tmp-news-server)
+(defvar gnus-tmp-decoded-group)
+(defvar gnus-tmp-header)
+(defvar gnus-tmp-process-marked)
+(defvar gnus-tmp-summary-live)
+(defvar gnus-tmp-news-method-string)
+(defvar gnus-tmp-group-icon)
+(defvar gnus-tmp-moderated-string)
+(defvar gnus-tmp-newsgroup-description)
+(defvar gnus-tmp-comment)
+(defvar gnus-tmp-qualified-group)
+(defvar gnus-tmp-subscribed)
+(defvar gnus-tmp-number-of-read)
+(defvar gnus-inhibit-demon)
+(defvar gnus-pick-mode)
+(defvar gnus-tmp-marked-mark)
+(defvar gnus-tmp-number-of-unread)
 
 (defvar gnus-group-line-format-alist
   `((?M gnus-tmp-marked-mark ?c)
@@ -1144,8 +1160,7 @@ The following commands are available:
     (let ((gnus-process-mark ?\200)
 	  (gnus-group-update-hook nil)
 	  (gnus-group-marked '("dummy.group"))
-	  (gnus-active-hashtb (make-vector 10 0))
-	  (topic ""))
+	  (gnus-active-hashtb (make-vector 10 0)))
       (gnus-set-active "dummy.group" '(0 . 0))
       (gnus-set-work-buffer)
       (gnus-group-insert-group-line "dummy.group" 0 nil 0 nil)
@@ -1578,7 +1593,7 @@ if it is a string, only list groups matching REGEXP."
 	      gnus-process-mark ? ))
 	 (buffer-read-only nil)
 	 beg end
-	 header gnus-tmp-header)	; passed as parameter to user-funcs.
+         gnus-tmp-header)	; passed as parameter to user-funcs.
     (beginning-of-line)
     (setq beg (point))
     (gnus-add-text-properties
@@ -1596,20 +1611,31 @@ if it is a string, only list groups matching REGEXP."
 		  gnus-indentation ,gnus-group-indentation
 		  gnus-level ,gnus-tmp-level))
     (setq end (point))
-    (when gnus-group-update-tool-bar
-      (gnus-put-text-property beg end 'point-entered
-			      'gnus-tool-bar-update)
-      (gnus-put-text-property beg end 'point-left
-			      'gnus-tool-bar-update))
+    (gnus-group--setup-tool-bar-update beg end)
     (forward-line -1)
     (when (inline (gnus-visual-p 'group-highlight 'highlight))
       (gnus-group-highlight-line gnus-tmp-group beg end))
     (gnus-run-hooks 'gnus-group-update-hook)
     (forward-line)))
 
+(defun gnus-group--setup-tool-bar-update (beg end)
+  (when gnus-group-update-tool-bar
+    (if (fboundp 'cursor-sensor-mode)
+        (progn
+          (unless (bound-and-true-p cursor-sensor-mode)
+            (cursor-sensor-mode 1))
+          (gnus-put-text-property beg end 'cursor-sensor-functions
+                                  '(gnus-tool-bar-update)))
+      (gnus-put-text-property beg end 'point-entered
+                              #'gnus-tool-bar-update)
+      (gnus-put-text-property beg end 'point-left
+                              #'gnus-tool-bar-update))))
+
 (defun gnus-group-update-eval-form (group list)
   "Eval `car' of each element of LIST, and return the first that return t.
 Some value are bound so the form can use them."
+  (defvar group-age) (defvar ticked) (defvar score) (defvar level)
+  (defvar mailp) (defvar total) (defvar unread)
   (when list
     (let* ((entry (gnus-group-entry group))
            (unread (if (numberp (car entry)) (car entry) 0))
@@ -1788,7 +1814,9 @@ already.  If INFO-UNCHANGED is non-nil, dribble buffer is not updated."
   "Get the name of the newsgroup on the current line."
   (let ((group (get-text-property (point-at-bol) 'gnus-group)))
     (when group
-      (symbol-name group))))
+      (if (stringp group)
+	  group
+	(symbol-name group)))))
 
 (defun gnus-group-group-level ()
   "Get the level of the newsgroup on the current line."
@@ -2146,7 +2174,7 @@ be permanent."
 	  (gnus-group-decoded-name group)))
     (let ((regexp "[][\C-@-\t\v-*,/:-@\\^`{-\C-?]*\
 \\(nn[a-z]+\\(?:\\+[^][\C-@-*,/:-@\\^`{-\C-?]+\\)?:\
-\[^][\C-@-*,./:-@\\^`{-\C-?]+\\(?:\\.[^][\C-@-*,./:-@\\^`{-\C-?]+\\)*\
+[^][\C-@-*,./:-@\\^`{-\C-?]+\\(?:\\.[^][\C-@-*,./:-@\\^`{-\C-?]+\\)*\
 \\|[^][\C-@-*,./:-@\\^`{-\C-?]+\\(?:\\.[^][\C-@-*,./:-@\\^`{-\C-?]+\\)+\\)")
 	  (start (point))
 	  (case-fold-search nil))
@@ -2407,7 +2435,7 @@ Valid input formats include:
      ;; URLs providing `group', `start' and `range':
      ((string-match
        ;; http://thread.gmane.org/gmane.emacs.devel/86326/focus=86525
-       "^http://thread\.gmane\.org/\\([^/]+\\)/\\([0-9]+\\)/focus=\\([0-9]+\\)$"
+       "^http://thread\\.gmane\\.org/\\([^/]+\\)/\\([0-9]+\\)/focus=\\([0-9]+\\)$"
        url)
       (setq group (match-string 1 url)
 	    start (string-to-number (match-string 2 url))
@@ -2418,15 +2446,15 @@ Valid input formats include:
      ;; URLs providing `group' and `start':
      ((or (string-match
 	   ;; http://article.gmane.org/gmane.comp.gnu.make.bugs/3584
-	   "^http://\\(?:thread\\|article\\|permalink\\)\.gmane\.org/\\([^/]+\\)/\\([0-9]+\\)"
+	   "^http://\\(?:thread\\|article\\|permalink\\)\\.gmane\\.org/\\([^/]+\\)/\\([0-9]+\\)"
 	   url)
 	  (string-match
 	   ;; Don't advertise these in the doc string yet:
-	   "^\\(?:nntp\\|news\\)://news\.gmane\.org/\\([^/]+\\)/\\([0-9]+\\)"
+	   "^\\(?:nntp\\|news\\)://news\\.gmane\\.org/\\([^/]+\\)/\\([0-9]+\\)"
 	   url)
 	  (string-match
 	   ;; http://news.gmane.org/group/gmane.emacs.gnus.general/thread=65099/force_load=t
-	   "^http://news\.gmane\.org/group/\\([^/]+\\)/thread=\\([0-9]+\\)"
+	   "^http://news\\.gmane\\.org/group/\\([^/]+\\)/thread=\\([0-9]+\\)"
 	   url))
       (setq group (match-string 1 url)
 	    start (string-to-number (match-string 2 url))))
@@ -2459,27 +2487,27 @@ the bug number, and browsing the URL must return mbox output."
     (setq ids (string-to-number ids)))
   (unless (listp ids)
     (setq ids (list ids)))
-  (let ((tmpfile (mm-make-temp-file "gnus-temp-group-"))
-	(coding-system-for-write 'binary)
-	(coding-system-for-read 'binary))
-    (with-temp-file tmpfile
-      (dolist (id ids)
-	(url-insert-file-contents (format mbox-url id)))
-      (goto-char (point-min))
-      ;; Add the debbugs address so that we can respond to reports easily.
-      (while (re-search-forward "^To: " nil t)
-	(end-of-line)
-	(insert (format ", %s@%s" (car ids)
-			(gnus-replace-in-string
-			 (gnus-replace-in-string mbox-url "^http://" "")
-			 "/.*$" ""))))
-      (write-region (point-min) (point-max) tmpfile)
-      (gnus-group-read-ephemeral-group
-       (format "nndoc+ephemeral:bug#%s"
-	       (mapconcat 'number-to-string ids ","))
-       `(nndoc ,tmpfile
-	       (nndoc-article-type mbox))
-       nil window-conf))
+  (let ((tmpfile (mm-make-temp-file "gnus-temp-group-")))
+    (let ((coding-system-for-write 'binary)
+	  (coding-system-for-read 'binary))
+      (with-temp-file tmpfile
+	(mm-disable-multibyte)
+	(dolist (id ids)
+	  (url-insert-file-contents (format mbox-url id)))
+	(goto-char (point-min))
+	;; Add the debbugs address so that we can respond to reports easily.
+	(while (re-search-forward "^To: " nil t)
+	  (end-of-line)
+	  (insert (format ", %s@%s" (car ids)
+			  (gnus-replace-in-string
+			   (gnus-replace-in-string mbox-url "^http://" "")
+			   "/.*$" ""))))))
+    (gnus-group-read-ephemeral-group
+     (format "nndoc+ephemeral:bug#%s"
+	     (mapconcat 'number-to-string ids ","))
+     `(nndoc ,tmpfile
+	     (nndoc-article-type mbox))
+     nil window-conf)
     (delete-file tmpfile)))
 
 (defun gnus-read-ephemeral-debian-bug-group (number)
@@ -2922,7 +2950,7 @@ and NEW-NAME will be prompted for."
 	    (gnus-info-params info))
 	   (t info))
      ;; The proper documentation.
-     (format
+     (gnus-format-message
       "Editing the %s for `%s'."
       (cond
        ((eq part 'method) "select method")
@@ -3111,8 +3139,8 @@ If SOLID (the prefix), create a solid group."
 
 (defvar nnrss-group-alist)
 (eval-when-compile
-  (defun nnrss-discover-feed (arg))
-  (defun nnrss-save-server-data (arg)))
+  (defun nnrss-discover-feed (_arg))
+  (defun nnrss-save-server-data (_arg)))
 (defun gnus-group-make-rss-group (&optional url)
   "Given a URL, discover if there is an RSS feed.
 If there is, use Gnus to create an nnrss group"
@@ -3250,7 +3278,8 @@ mail messages or news articles in files that have numeric names."
       (error "%s is not an nnimap group" group))
     (unless (setq acl (nnimap-acl-get mailbox (cadr method)))
       (error "Server does not support ACL's"))
-    (gnus-edit-form acl (format "Editing the access control list for `%s'.
+    (gnus-edit-form acl (gnus-format-message "\
+Editing the access control list for `%s'.
 
    An access control list is a list of (identifier . rights) elements.
 
@@ -3259,7 +3288,7 @@ mail messages or news articles in files that have numeric names."
 
    Rights is a string listing a (possibly empty) set of alphanumeric
    characters, each character listing a set of operations which is being
-   controlled.  Letters are reserved for ``standard'' rights, listed
+   controlled.  Letters are reserved for \"standard\" rights, listed
    below.  Digits are reserved for implementation or site defined rights.
 
    l - lookup (mailbox is visible to LIST/LSUB commands)
@@ -3761,7 +3790,7 @@ group line."
 		      nil nil (gnus-read-active-file-p))))
   (let ((newsrc (gnus-group-entry group)))
     (cond
-     ((string-match "^[ \t]*$" group)
+     ((string-match "\\`[ \t]*\\'" group)
       (error "Empty group name"))
      (newsrc
       ;; Toggle subscription flag.
@@ -4079,7 +4108,9 @@ If DONT-SCAN is non-nil, scan non-activated groups as well."
       (gnus-group-remove-mark group)
       ;; Bypass any previous denials from the server.
       (gnus-remove-denial (setq method (gnus-find-method-for-group group)))
-      (if (gnus-activate-group group (if dont-scan nil 'scan) nil method)
+      (if (or (and (not dont-scan)
+		   (gnus-request-group-scan group (gnus-get-info group)))
+	      (gnus-activate-group group (if dont-scan nil 'scan) nil method))
 	  (let ((info (gnus-get-info group))
 		(active (gnus-active group)))
 	    (when info
@@ -4316,6 +4347,11 @@ The hook `gnus-suspend-gnus-hook' is called before actually suspending."
 	(gnus-kill-buffer buf)))
     (setq gnus-backlog-articles nil)
     (gnus-kill-gnus-frames)
+    ;; Closing all the backends is useful (for instance) when when the
+    ;; IP addresses have changed and you need to reconnect.
+    (dolist (elem gnus-opened-servers)
+      (gnus-close-server (car elem))
+      (setcar (cdr elem) 'closed))
     (when group-buf
       (bury-buffer group-buf)
       (delete-windows-on group-buf t))))

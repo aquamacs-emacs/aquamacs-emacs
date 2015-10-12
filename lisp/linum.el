@@ -1,6 +1,6 @@
 ;;; linum.el --- display line numbers in the left margin -*- lexical-binding: t -*-
 
-;; Copyright (C) 2008-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2008-2015 Free Software Foundation, Inc.
 
 ;; Author: Markus Triska <markus.triska@gmx.at>
 ;; Maintainer: emacs-devel@gnu.org
@@ -67,7 +67,7 @@ See also `linum-before-numbering-hook'."
 
 (defcustom linum-eager t
   "Whether line numbers should be updated after each command.
-The conservative setting `nil' might miss some buffer changes,
+The conservative setting nil might miss some buffer changes,
 and you have to scroll or press \\[recenter-top-bottom] to update the numbers."
   :group 'linum
   :type 'boolean)
@@ -143,6 +143,17 @@ Linum mode is a buffer-local minor mode."
       (mapc #'delete-overlay linum-available)
       (setq linum-available nil))))
 
+;; Behind display-graphic-p test.
+(declare-function font-info "font.c" (name &optional frame))
+
+(defun linum--face-width (face)
+  (let ((info (font-info (face-font face)))
+	width)
+    (setq width (aref info 11))
+    (if (<= width 0)
+	(setq width (aref info 10)))
+    width))
+
 (defun linum-update-window (win)
   "Update line numbers for the portion visible in window WIN."
   (goto-char (window-start win))
@@ -186,6 +197,10 @@ Linum mode is a buffer-local minor mode."
       (let ((inhibit-point-motion-hooks t))
         (forward-line))
       (setq line (1+ line)))
+    (when (display-graphic-p)
+      (setq width (ceiling
+                   (/ (* width 1.0 (linum--face-width 'linum))
+                      (frame-char-width)))))
     (set-window-margins win width (cdr (window-margins win)))))
 
 (defun linum-after-change (beg end _len)

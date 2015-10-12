@@ -1,11 +1,11 @@
 @c \input texinfo @c -*-texinfo-*-
 @c Uncomment 1st line before texing this file alone.
 @c %**start of header
-@c Copyright (C) 1995, 2001-2014 Free Software Foundation, Inc.
+@c Copyright (C) 1995, 2001-2015 Free Software Foundation, Inc.
 @c
 @c @setfilename gnus-faq.info
 @c @settitle Frequently Asked Questions
-@c @documentencoding UTF-8
+@c @include docstyle.texi
 @c %**end of header
 @c
 
@@ -723,7 +723,7 @@ POP3 mail source.  See @pxref{Mail Source Specifiers} for VALUE.
                 the top of the article buffer?
 * FAQ 4-6::     I'd like Gnus NOT to render HTML-mails but show me the
                 text part if it's available. How to do it?
-* FAQ 4-7::     Can I use some other browser than w3 to render my
+* FAQ 4-7::     Can I use some other browser than shr to render my
                 HTML-mails?
 * FAQ 4-8::     Is there anything I can do to make poorly formatted
                 mails more readable?
@@ -742,6 +742,7 @@ POP3 mail source.  See @pxref{Mail Source Specifiers} for VALUE.
 * FAQ 4-14::    I don't like the way the Summary buffer looks, how to
                 tweak it?
 * FAQ 4-15::    How to split incoming mails in several groups?
+* FAQ 4-16::    How can I ensure more contrast when viewing HTML mail?
 @end menu
 
 @node FAQ 4-1
@@ -868,12 +869,12 @@ too.
 @node FAQ 4-7
 @subsubheading Question 4.7
 
-Can I use some other browser than w3 to render my HTML-mails?
+Can I use some other browser than w3m to render my HTML-mails?
 
 @subsubheading Answer
 
 Only if you use Gnus 5.10 or younger. In this case you've got the
-choice between w3, w3m, links, lynx and html2text, which
+choice between shr, w3m, links, lynx and html2text, which
 one is used can be specified in the variable
 mm-text-html-renderer, so if you want links to render your
 mail say
@@ -891,11 +892,11 @@ more readable?
 
 @subsubheading Answer
 
-Gnus offers you several functions to "wash" incoming mail, you can
+Gnus offers you several functions to ``wash'' incoming mail, you can
 find them if you browse through the menu, item
-Article->Washing. The most interesting ones are probably "Wrap
-long lines" (@samp{W w}), "Decode ROT13"
-(@samp{W r}) and "Outlook Deuglify" which repairs
+Article->Washing. The most interesting ones are probably ``Wrap
+long lines'' (@samp{W w}), ``Decode ROT13''
+(@samp{W r}) and ``Outlook Deuglify'' which repairs
 the dumb quoting used by many users of Microsoft products
 (@samp{W Y f} gives you full deuglify.
 See @samp{W Y C-h} or have a look at the menus for
@@ -1015,8 +1016,8 @@ mail groups. Is this a bug?
 
 No, that's a matter of design of Gnus, fixing this would
 mean reimplementation of major parts of Gnus'
-back ends. Gnus thinks "highest-article-number @minus{}
-lowest-article-number = total-number-of-articles". This
+back ends. Gnus thinks ``highest-article-number @minus{}
+lowest-article-number = total-number-of-articles''. This
 works OK for Usenet groups, but if you delete and move
 many messages in mail groups, this fails. To cure the
 symptom, enter the group via @samp{C-u RET}
@@ -1084,8 +1085,8 @@ You've got to play around with the variable
 gnus-summary-line-format. Its value is a string of
 symbols which stand for things like author, date, subject
 etc. A list of the available specifiers can be found in the
-manual node "Summary Buffer Lines" and the often forgotten
-node "Formatting Variables" and its sub-nodes. There
+manual node ``Summary Buffer Lines'' and the often forgotten
+node ``Formatting Variables'' and its sub-nodes. There
 you'll find useful things like positioning the cursor and
 tabulators which allow you a summary in table form, but
 sadly hard tabulators are broken in 5.8.8.
@@ -1111,7 +1112,7 @@ resulting in:
 :O  \->  ...                                      | 115 |Raymond Scholz       | 1:24
 :O    \->  ...                                    |  19 |Lars Magne Ingebrigt |15:33
 :O     Slow mailing list                          |  13 |Lars Magne Ingebrigt |Sat 23:49
-:O     Re: `@@' mark not documented                |  13 |Lars Magne Ingebrigt |Sat 23:50
+:O     Re: '@@' mark not documented                |  13 |Lars Magne Ingebrigt |Sat 23:50
 :R  >  Re: Gnus still doesn't count messages prope|  23 |Lars Magne Ingebrigt |Sat 23:57
 :O  \->  ...                                      |  18 |Kai Grossjohann      | 0:35
 :O    \->  ...                                    |  13 |Lars Magne Ingebrigt | 0:56
@@ -1184,6 +1185,21 @@ from using them):
     ("Spam" "")))
 @end example
 @noindent
+
+@node FAQ 4-16
+@subsubheading Question 4.16
+
+How can I ensure more contrast when viewing HTML mail?
+
+@subsubheading Answer
+
+Gnus' built-in simple HTML renderer (you use it if the value of
+@code{mm-text-html-renderer} is @code{shr}) uses the colors which are
+declared in the HTML mail.  However, it adjusts them in order to
+prevent situations like dark gray text on black background.  In case
+the results still have a too low contrast for you, increase the values
+of the variables @code{shr-color-visible-distance-min} and
+@code{shr-color-visible-luminance-min}.
 
 @node FAQ 5 - Composing messages
 @subsection Composing messages
@@ -1485,7 +1501,7 @@ entries. Say @samp{c} to create a new
 entry, @samp{b} to search your BBDB and
 @samp{C-o} to add a new field to an
 entry. If you want to add a sender to the BBDB you can
-also just hit `:' on the posting in the summary buffer and
+also just hit @kbd{:} on the posting in the summary buffer and
 you are done. When you now compose a new mail,
 hit @samp{TAB} to cycle through know
 recipients.
@@ -1512,7 +1528,7 @@ and create the actual X-face by saying
 
 @example
 cat file.xbm | xbm2ikon | compface > file.face
-cat file.face | sed 's/\\/\\\\/g;s/\"/\\\"/g;' > file.face.quoted
+cat file.face | sed 's/["\\]/\\&/g' > file.face.quoted
 @end example
 @noindent
 
@@ -1633,7 +1649,7 @@ aren't they and how to fix it?
 
 @subsubheading Answer
 
-The message-ID is an unique identifier for messages you
+The message-ID is a unique identifier for messages you
 send. To make it unique, Gnus need to know which machine
 name to put after the "@@". If the name of the machine
 where Gnus is running isn't suitable (it probably isn't

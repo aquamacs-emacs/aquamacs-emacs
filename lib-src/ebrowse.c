@@ -1,6 +1,6 @@
 /* ebrowse.c --- parsing files for the ebrowse C++ browser
 
-Copyright (C) 1992-2014 Free Software Foundation, Inc.
+Copyright (C) 1992-2015 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -1150,19 +1150,19 @@ sym_scope_1 (struct sym *p)
   if (*scope_buffer)
     {
       ensure_scope_buffer_room (3);
-      strcat (scope_buffer, "::");
+      strcpy (scope_buffer + scope_buffer_len, "::");
       scope_buffer_len += 2;
     }
 
   len = strlen (p->name);
   ensure_scope_buffer_room (len + 1);
-  strcat (scope_buffer, p->name);
+  strcpy (scope_buffer + scope_buffer_len, p->name);
   scope_buffer_len += len;
 
   if (HAS_FLAG (p->flags, F_TEMPLATE))
     {
       ensure_scope_buffer_room (3);
-      strcat (scope_buffer, "<>");
+      strcpy (scope_buffer + scope_buffer_len, "<>");
       scope_buffer_len += 2;
     }
 
@@ -1241,7 +1241,7 @@ dump_sym (FILE *fp, struct sym *root)
     putstr (NULL, fp);
 
   /* Print flags.  */
-  fprintf (fp, "%u", root->flags);
+  fprintf (fp, "%d", root->flags);
   putstr (root->filename, fp);
   putstr (root->regexp, fp);
   fprintf (fp, "%u", (unsigned) root->pos);
@@ -2797,24 +2797,25 @@ operator_name (int *sc)
       s = token_string (LA1);
       MATCH ();
 
-      len = strlen (s) + 10;
+      ptrdiff_t slen = strlen (s);
+      len = slen + 10;
       if (len > id_size)
 	{
 	  size_t new_size = max (len, 2 * id_size);
 	  id = (char *) xrealloc (id, new_size);
 	  id_size = new_size;
 	}
-      strcpy (id, s);
+      char *z = stpcpy (id, s);
 
       /* Vector new or delete?  */
       if (LOOKING_AT ('['))
 	{
-	  strcat (id, "[");
+	  z = stpcpy (z, "[");
 	  MATCH ();
 
 	  if (LOOKING_AT (']'))
 	    {
-	      strcat (id, "]");
+	      strcpy (z, "]");
 	      MATCH ();
 	    }
 	}
@@ -2830,7 +2831,7 @@ operator_name (int *sc)
 	  id = (char *) xrealloc (id, new_size);
 	  id_size = new_size;
 	}
-      strcpy (id, "operator");
+      char *z = stpcpy (id, "operator");
 
       /* Beware access declarations of the form "X::f;" Beware of
 	 `operator () ()'.  Yet another difficulty is found in
@@ -2842,14 +2843,16 @@ operator_name (int *sc)
 	  len += strlen (s) + 2;
 	  if (len > id_size)
 	    {
+	      ptrdiff_t idlen = z - id;
 	      size_t new_size = max (len, 2 * id_size);
 	      id = (char *) xrealloc (id, new_size);
 	      id_size = new_size;
+	      z = id + idlen;
 	    }
 
 	  if (*s != ')' && *s != ']')
-	    strcat (id, " ");
-          strcat (id, s);
+	    *z++ = ' ';
+          z = stpcpy (z, s);
           MATCH ();
 
 	  /* If this is a simple operator like `+', stop now.  */
@@ -3462,9 +3465,9 @@ open_file (char *file)
 	  buffer = (char *) xrealloc (buffer, buffer_size);
 	}
 
-      strcpy (buffer, path->path);
-      strcat (buffer, "/");
-      strcat (buffer, file);
+      char *z = stpcpy (buffer, path->path);
+      *z++ = '/';
+      strcpy (z, file);
       fp = fopen (buffer, "r");
     }
 
@@ -3744,27 +3747,27 @@ main (int argc, char **argv)
 	  fp = fopen (out_filename, "r");
 	  if (fp == NULL)
 	    {
-	      yyerror ("file `%s' must exist for --append", out_filename);
+	      yyerror ("file '%s' must exist for --append", out_filename);
 	      exit (EXIT_FAILURE);
 	    }
 
 	  rc = fseek (fp, 0, SEEK_END);
 	  if (rc == -1)
 	    {
-	      yyerror ("error seeking in file `%s'", out_filename);
+	      yyerror ("error seeking in file '%s'", out_filename);
 	      exit (EXIT_FAILURE);
 	    }
 
 	  rc = ftell (fp);
 	  if (rc == -1)
 	    {
-	      yyerror ("error getting size of file `%s'", out_filename);
+	      yyerror ("error getting size of file '%s'", out_filename);
 	      exit (EXIT_FAILURE);
 	    }
 
 	  else if (rc == 0)
 	    {
-	      yyerror ("file `%s' is empty", out_filename);
+	      yyerror ("file '%s' is empty", out_filename);
 	      /* It may be ok to use an empty file for appending.
 		 exit (EXIT_FAILURE); */
 	    }
@@ -3775,7 +3778,7 @@ main (int argc, char **argv)
       yyout = fopen (out_filename, f_append ? "a" : "w");
       if (yyout == NULL)
 	{
-	  yyerror ("cannot open output file `%s'", out_filename);
+	  yyerror ("cannot open output file '%s'", out_filename);
 	  exit (EXIT_FAILURE);
 	}
     }
@@ -3803,7 +3806,7 @@ main (int argc, char **argv)
           FILE *fp = fopen (input_filenames[i], "r");
 
           if (fp == NULL)
-            yyerror ("cannot open input file `%s'", input_filenames[i]);
+            yyerror ("cannot open input file '%s'", input_filenames[i]);
           else
             {
 	      char *file;

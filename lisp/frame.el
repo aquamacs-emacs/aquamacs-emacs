@@ -1,6 +1,6 @@
-;;; frame.el --- multi-frame management independent of window systems
+;;; frame.el --- multi-frame management independent of window systems  -*- lexical-binding:t -*-
 
-;; Copyright (C) 1993-1994, 1996-1997, 2000-2014 Free Software
+;; Copyright (C) 1993-1994, 1996-1997, 2000-2015 Free Software
 ;; Foundation, Inc.
 
 ;; Maintainer: emacs-devel@gnu.org
@@ -27,21 +27,24 @@
 ;;; Code:
 (eval-when-compile (require 'cl-lib))
 
-(defvar frame-creation-function-alist
-  (list (cons nil
-	      (if (fboundp 'tty-create-frame-with-faces)
-		  'tty-create-frame-with-faces
-                (lambda (_parameters)
-                  (error "Can't create multiple frames without a window system")))))
-  "Alist of window-system dependent functions to call to create a new frame.
+(cl-defgeneric frame-creation-function (params)
+  "Method for window-system dependent functions to create a new frame.
 The window system startup file should add its frame creation
-function to this list, which should take an alist of parameters
+function to this method, which should take an alist of parameters
 as its argument.")
+
+(cl-defmethod frame-creation-function (params
+                                       &context (window-system (eql nil)))
+  ;; It's tempting to get rid of tty-create-frame-with-faces and turn it into
+  ;; this method (i.e. move this method to faces.el), but faces.el is loaded
+  ;; much earlier from loadup.el (before cl-generic and even before
+  ;; cl-preloaded), so we'd first have to reorder that part.
+  (tty-create-frame-with-faces params))
 
 (defvar window-system-default-frame-alist nil
   "Window-system dependent default frame parameters.
 The value should be an alist of elements (WINDOW-SYSTEM . ALIST),
-where WINDOW-SYSTEM is a window system symbol (see `window-system')
+where WINDOW-SYSTEM is a window system symbol (as returned by `framep')
 and ALIST is a frame parameter alist like `default-frame-alist'.
 Then, for frames on WINDOW-SYSTEM, any parameters specified in
 ALIST supersede the corresponding parameters specified in
@@ -149,12 +152,6 @@ This function runs the hook `focus-out-hook'."
 ;; 3) Once the init file is done, we apply any newly set parameters
 ;; in initial-frame-alist to the frame.
 
-;; These are now called explicitly at the proper times,
-;; since that is easier to understand.
-;; Actually using hooks within Emacs is bad for future maintenance. --rms.
-;; (add-hook 'before-init-hook 'frame-initialize)
-;; (add-hook 'window-setup-hook 'frame-notice-user-settings)
-
 ;; If we create the initial frame, this is it.
 (defvar frame-initial-frame nil)
 
@@ -181,10 +178,6 @@ This function runs the hook `focus-out-hook'."
 	    (progn
 	      (setq frame-initial-frame-alist
 		    (append initial-frame-alist default-frame-alist nil))
-	      (or (assq 'horizontal-scroll-bars frame-initial-frame-alist)
-		  (setq frame-initial-frame-alist
-			(cons '(horizontal-scroll-bars . t)
-			      frame-initial-frame-alist)))
 	      (setq frame-initial-frame-alist
 		    (cons (cons 'window-system initial-window-system)
 			  frame-initial-frame-alist))
@@ -209,6 +202,7 @@ This function runs the hook `focus-out-hook'."
   "Non-nil means function `frame-notice-user-settings' wasn't run yet.")
 
 (declare-function tool-bar-mode "tool-bar" (&optional arg))
+(declare-function tool-bar-height "xdisp.c" (&optional frame pixelwise))
 
 (defalias 'tool-bar-lines-needed 'tool-bar-height)
 
@@ -251,6 +245,10 @@ there (in decreasing order of priority)."
 	    (let ((newparms (frame-parameters))
 		  (frame (selected-frame)))
 	      (tty-handle-reverse-video frame newparms)
+	      ;; tty-handle-reverse-video might change the frame's
+	      ;; color parameters, and we need to use the updated
+	      ;; value below.
+	      (setq newparms (frame-parameters))
 	      ;; If we changed the background color, we need to update
 	      ;; the background-mode parameter, and maybe some faces,
 	      ;; too.
@@ -258,64 +256,50 @@ there (in decreasing order of priority)."
 		(unless (or (assq 'background-mode initial-frame-alist)
 			    (assq 'background-mode default-frame-alist))
 		  (frame-set-background-mode frame))
-		(face-set-after-frame-default frame))))))
+		(face-set-after-frame-default frame newparms))))))
 
     ;; If the initial frame is still around, apply initial-frame-alist
     ;; and default-frame-alist to it.
     (when (frame-live-p frame-initial-frame)
-
       ;; When tool-bar has been switched off, correct the frame size
       ;; by the lines added in x-create-frame for the tool-bar and
       ;; switch `tool-bar-mode' off.
       (when (display-graphic-p)
-	(let ((tool-bar-lines (or (assq 'tool-bar-lines initial-frame-alist)
-				  (assq 'tool-bar-lines window-system-frame-alist)
-				  (assq 'tool-bar-lines default-frame-alist))))
-	  (when (and tool-bar-originally-present
-                     (or (null tool-bar-lines)
-                         (null (cdr tool-bar-lines))
-                         (eq 0 (cdr tool-bar-lines))))
-	    (let* ((char-height (frame-char-height frame-initial-frame))
-		   (image-height tool-bar-images-pixel-height)
-		   (margin (cond ((and (consp tool-bar-button-margin)
-				       (integerp (cdr tool-bar-button-margin))
-				       (> tool-bar-button-margin 0))
-				  (cdr tool-bar-button-margin))
-				 ((and (integerp tool-bar-button-margin)
-				       (> tool-bar-button-margin 0))
-				  tool-bar-button-margin)
-				 (t 0)))
-		   (relief (if (and (integerp tool-bar-button-relief)
-				    (> tool-bar-button-relief 0))
-			       tool-bar-button-relief 3))
-		   (lines (/ (+ image-height
-				(* 2 margin)
-				(* 2 relief)
-				(1- char-height))
-			     char-height))
-		   (height (frame-parameter frame-initial-frame 'height))
-		   (newparms (list (cons 'height (- height lines))))
-		   (initial-top (cdr (assq 'top
-					   frame-initial-geometry-arguments)))
+	(let* ((init-lines
+		(assq 'tool-bar-lines initial-frame-alist))
+	       (other-lines
+		(or (assq 'tool-bar-lines window-system-frame-alist)
+		    (assq 'tool-bar-lines default-frame-alist)))
+	       (lines (or init-lines other-lines))
+	       (height (tool-bar-height frame-initial-frame t)))
+	  ;; Adjust frame top if either zero (nil) tool bar lines have
+	  ;; been requested in the most relevant of the frame's alists
+	  ;; or tool bar mode has been explicitly turned off in the
+	  ;; user's init file.
+	  (when (and (> height 0)
+		     (or (and lines
+			      (or (null (cdr lines))
+				  (eq 0 (cdr lines))))
+			 (not tool-bar-mode)))
+	    (let* ((initial-top
+		    (cdr (assq 'top frame-initial-geometry-arguments)))
 		   (top (frame-parameter frame-initial-frame 'top)))
 	      (when (and (consp initial-top) (eq '- (car initial-top)))
 		(let ((adjusted-top
-		       (cond ((and (consp top)
-				   (eq '+ (car top)))
-			      (list '+
-				    (+ (cadr top)
-				       (* lines char-height))))
-			     ((and (consp top)
-				   (eq '- (car top)))
-			      (list '-
-				    (- (cadr top)
-				       (* lines char-height))))
-			     (t (+ top (* lines char-height))))))
-		  (setq newparms
-			(append newparms
-				`((top . ,adjusted-top))
-				nil))))
-	      (modify-frame-parameters frame-initial-frame newparms)
+		       (cond
+			((and (consp top) (eq '+ (car top)))
+			 (list '+ (+ (cadr top) height)))
+			((and (consp top) (eq '- (car top)))
+			 (list '- (- (cadr top) height)))
+			(t (+ top height)))))
+		  (modify-frame-parameters
+		   frame-initial-frame `((top . ,adjusted-top))))))
+	    ;; Reset `tool-bar-mode' when zero tool bar lines have been
+	    ;; requested for the window-system or default frame alists.
+	    (when (and tool-bar-mode
+		       (and other-lines
+			    (or (null (cdr other-lines))
+				(eq 0 (cdr other-lines)))))
 	      (tool-bar-mode -1)))))
 
       ;; The initial frame we create above always has a minibuffer.
@@ -471,6 +455,16 @@ there (in decreasing order of priority)."
 		(frame-set-background-mode frame-initial-frame))
 	      (face-set-after-frame-default frame-initial-frame)
 	      (setq newparms (delq new-bg newparms)))
+
+	    (when (numberp (car frame-size-history))
+	      (setq frame-size-history
+		    (cons (1- (car frame-size-history))
+			  (cons
+			   (list frame-initial-frame
+				 "frame-notice-user-settings"
+				 nil newparms)
+			   (cdr frame-size-history)))))
+
 	    (modify-frame-parameters frame-initial-frame newparms)))))
 
     ;; Restore the original buffer.
@@ -542,7 +536,8 @@ is not considered (see `next-frame')."
 Return nil if we don't know how to interpret DISPLAY."
   ;; MS-Windows doesn't know how to create a GUI frame in a -nw session.
   (if (and (eq system-type 'windows-nt)
-	   (null (window-system)))
+	   (null (window-system))
+	   (not (daemonp)))
       nil
     (cl-loop for descriptor in display-format-alist
 	     for pattern = (car descriptor)
@@ -657,29 +652,28 @@ the new frame according to its own rules."
   (interactive)
   (let* ((display (cdr (assq 'display parameters)))
          (w (cond
-	     ((assq 'terminal parameters)
-	      (let ((type (terminal-live-p (cdr (assq 'terminal parameters)))))
-		(cond
-		 ((eq type t) nil)
-		 ((eq type nil) (error "Terminal %s does not exist"
-                                       (cdr (assq 'terminal parameters))))
-		 (t type))))
-	     ((assq 'window-system parameters)
-	      (cdr (assq 'window-system parameters)))
+             ((assq 'terminal parameters)
+              (let ((type (terminal-live-p
+                           (cdr (assq 'terminal parameters)))))
+                (cond
+                 ((eq t type) nil)
+                 ((null type) (error "Terminal %s does not exist"
+                                     (cdr (assq 'terminal parameters))))
+                 (t type))))
+             ((assq 'window-system parameters)
+              (cdr (assq 'window-system parameters)))
              (display
               (or (window-system-for-display display)
                   (error "Don't know how to interpret display %S"
                          display)))
-	     (t window-system)))
-	 (frame-creation-function (cdr (assq w frame-creation-function-alist)))
+             (t window-system)))
 	 (oldframe (selected-frame))
 	 (params parameters)
 	 frame)
-    (unless frame-creation-function
-      (error "Don't know how to create a frame on window system %s" w))
 
     (unless (get w 'window-system-initialized)
-      (funcall (cdr (assq w window-system-initialization-alist)) display)
+      (let ((window-system w))          ;Hack attack!
+        (window-system-initialization display))
       (setq x-display-name display)
       (put w 'window-system-initialized t))
 
@@ -693,13 +687,26 @@ the new frame according to its own rules."
 	(push p params)))
     ;; Now make the frame.
     (run-hooks 'before-make-frame-hook)
-    (setq frame (funcall frame-creation-function params))
+
+;;     (setq frame-size-history '(1000))
+
+    (setq frame (let ((window-system w)) ;Hack attack!
+                  (frame-creation-function params)))
     (normal-erase-is-backspace-setup-frame frame)
     ;; Inherit the original frame's parameters.
     (dolist (param frame-inherited-parameters)
       (unless (assq param parameters)   ;Overridden by explicit parameters.
         (let ((val (frame-parameter oldframe param)))
           (when val (set-frame-parameter frame param val)))))
+
+    (when (numberp (car frame-size-history))
+      (setq frame-size-history
+	    (cons (1- (car frame-size-history))
+		  (cons (list frame "make-frame")
+			(cdr frame-size-history)))))
+
+    ;; We can run `window-configuration-change-hook' for this frame now.
+    (frame-after-make-frame frame t)
     (run-hook-with-args 'after-make-frame-functions frame)
     frame))
 
@@ -1194,7 +1201,15 @@ To get the frame's current background color, use `frame-parameters'."
   (modify-frame-parameters (selected-frame)
 			   (list (cons 'background-color color-name)))
   (or window-system
-      (face-set-after-frame-default (selected-frame))))
+      (face-set-after-frame-default (selected-frame)
+				    (list
+				     (cons 'background-color color-name)
+				     ;; Pass the foreground-color as
+				     ;; well, if defined, to avoid
+				     ;; losing it when faces are reset
+				     ;; to their defaults.
+				     (assq 'foreground-color
+					   (frame-parameters))))))
 
 (defun set-foreground-color (color-name)
   "Set the foreground color of the selected frame to COLOR-NAME.
@@ -1204,7 +1219,15 @@ To get the frame's current foreground color, use `frame-parameters'."
   (modify-frame-parameters (selected-frame)
 			   (list (cons 'foreground-color color-name)))
   (or window-system
-      (face-set-after-frame-default (selected-frame))))
+      (face-set-after-frame-default (selected-frame)
+				    (list
+				     (cons 'foreground-color color-name)
+				     ;; Pass the background-color as
+				     ;; well, if defined, to avoid
+				     ;; losing it when faces are reset
+				     ;; to their defaults.
+				     (assq 'background-color
+					   (frame-parameters))))))
 
 (defun set-cursor-color (color-name)
   "Set the text cursor color of the selected frame to COLOR-NAME.
@@ -1285,16 +1308,148 @@ On graphical displays, it is displayed on the frame's title bar."
 			   (list (cons 'name name))))
 
 (defun frame-current-scroll-bars (&optional frame)
-  "Return the current scroll-bar settings in frame FRAME.
-Value is a cons (VERTICAL . HORIZ0NTAL) where VERTICAL specifies the
-current location of the vertical scroll-bars (left, right, or nil),
-and HORIZONTAL specifies the current location of the horizontal scroll
-bars (top, bottom, or nil)."
-  (let ((vert (frame-parameter frame 'vertical-scroll-bars))
-	(hor nil))
-    (unless (memq vert '(left right nil))
-      (setq vert default-frame-scroll-bars))
-    (cons vert hor)))
+  "Return the current scroll-bar types for frame FRAME.
+Value is a cons (VERTICAL . HORIZ0NTAL) where VERTICAL specifies
+the current location of the vertical scroll-bars (`left', `right'
+or nil), and HORIZONTAL specifies the current location of the
+horizontal scroll bars (`bottom' or nil).  FRAME must specify a
+live frame and defaults to the selected one."
+  (let* ((frame (window-normalize-frame frame))
+	 (vertical (frame-parameter frame 'vertical-scroll-bars))
+	 (horizontal (frame-parameter frame 'horizontal-scroll-bars)))
+    (unless (memq vertical '(left right nil))
+      (setq vertical default-frame-scroll-bars))
+    (cons vertical (and horizontal 'bottom))))
+
+(declare-function x-frame-geometry "xfns.c" (&optional frame))
+(declare-function w32-frame-geometry "w32fns.c" (&optional frame))
+(declare-function ns-frame-geometry "nsfns.m" (&optional frame))
+
+(defun frame-geometry (&optional frame)
+  "Return geometric attributes of FRAME.
+FRAME must be a live frame and defaults to the selected one.  The return
+value is an association list of the attributes listed below.  All height
+and width values are in pixels.
+
+`outer-position' is a cons of the outer left and top edges of FRAME
+  relative to the origin - the position (0, 0) - of FRAME's display.
+
+`outer-size' is a cons of the outer width and height of FRAME.  The
+  outer size includes the title bar and the external borders as well as
+  any menu and/or tool bar of frame.
+
+`external-border-size' is a cons of the horizontal and vertical width of
+  FRAME's external borders as supplied by the window manager.
+
+`title-bar-size' is a cons of the width and height of the title bar of
+  FRAME as supplied by the window manager.  If both of them are zero,
+  FRAME has no title bar.  If only the width is zero, Emacs was not
+  able to retrieve the width information.
+
+`menu-bar-external', if non-nil, means the menu bar is external (never
+  included in the inner edges of FRAME).
+
+`menu-bar-size' is a cons of the width and height of the menu bar of
+  FRAME.
+
+`tool-bar-external', if non-nil, means the tool bar is external (never
+  included in the inner edges of FRAME).
+
+`tool-bar-position' tells on which side the tool bar on FRAME is and can
+  be one of `left', `top', `right' or `bottom'.  If this is nil, FRAME
+  has no tool bar.
+
+`tool-bar-size' is a cons of the width and height of the tool bar of
+  FRAME.
+
+`internal-border-width' is the width of the internal border of
+  FRAME."
+  (let* ((frame (window-normalize-frame frame))
+	 (frame-type (framep-on-display frame)))
+    (cond
+     ((eq frame-type 'x)
+      (x-frame-geometry frame))
+     ((eq frame-type 'w32)
+      (w32-frame-geometry frame))
+     ((eq frame-type 'ns)
+      (ns-frame-geometry frame))
+     (t
+      (list
+       '(outer-position 0 . 0)
+       (cons 'outer-size (cons (frame-width frame) (frame-height frame)))
+       '(external-border-size 0 . 0)
+       '(title-bar-size 0 . 0)
+       '(menu-bar-external . nil)
+       (let ((menu-bar-lines (frame-parameter frame 'menu-bar-lines)))
+	 (cons 'menu-bar-size
+	       (if menu-bar-lines
+		   (cons (frame-width frame) 1)
+		 1 0)))
+       '(tool-bar-external . nil)
+       '(tool-bar-position . nil)
+       '(tool-bar-size 0 . 0)
+       (cons 'internal-border-width
+	     (frame-parameter frame 'internal-border-width)))))))
+
+(declare-function x-frame-edges "xfns.c" (&optional frame type))
+(declare-function w32-frame-edges "w32fns.c" (&optional frame type))
+(declare-function ns-frame-edges "nsfns.m" (&optional frame type))
+
+(defun frame-edges (&optional frame type)
+  "Return coordinates of FRAME's edges.
+FRAME must be a live frame and defaults to the selected one.  The
+list returned has the form (LEFT TOP RIGHT BOTTOM) where all
+values are in pixels relative to the origin - the position (0, 0)
+- of FRAME's display.  For terminal frames all values are
+relative to LEFT and TOP which are both zero.
+
+Optional argument TYPE specifies the type of the edges.  TYPE
+`outer-edges' means to return the outer edges of FRAME.  TYPE
+`native-edges' (or nil) means to return the native edges of
+FRAME.  TYPE `inner-edges' means to return the inner edges of
+FRAME."
+  (let* ((frame (window-normalize-frame frame))
+	 (frame-type (framep-on-display frame)))
+    (cond
+     ((eq frame-type 'x)
+      (x-frame-edges frame type))
+     ((eq frame-type 'w32)
+      (w32-frame-edges frame type))
+     ((eq frame-type 'ns)
+      (ns-frame-edges frame type))
+     (t
+      (list 0 0 (frame-width frame) (frame-height frame))))))
+
+(declare-function w32-mouse-absolute-pixel-position "w32fns.c")
+(declare-function x-mouse-absolute-pixel-position "xfns.c")
+
+(defun mouse-absolute-pixel-position ()
+  "Return absolute position of mouse cursor in pixels.
+The position is returned as a cons cell (X . Y) of the
+coordinates of the mouse cursor position in pixels relative to a
+position (0, 0) of the selected frame's terminal."
+  (let ((frame-type (framep-on-display)))
+    (cond
+     ((eq frame-type 'x)
+      (x-mouse-absolute-pixel-position))
+     ((eq frame-type 'w32)
+      (w32-mouse-absolute-pixel-position))
+     (t
+      (cons 0 0)))))
+
+(declare-function w32-set-mouse-absolute-pixel-position "w32fns.c" (x y))
+(declare-function x-set-mouse-absolute-pixel-position "xfns.c" (x y))
+
+(defun set-mouse-absolute-pixel-position (x y)
+  "Move mouse pointer to absolute pixel position (X, Y).
+The coordinates X and Y are interpreted in pixels relative to a
+position (0, 0) of the selected frame's terminal."
+  (let ((frame-type (framep-on-display)))
+    (cond
+     ((eq frame-type 'x)
+      (x-set-mouse-absolute-pixel-position x y))
+     ((eq frame-type 'w32)
+      (w32-set-mouse-absolute-pixel-position x y)))))
 
 (defun frame-monitor-attributes (&optional frame)
   "Return the attributes of the physical monitor dominating FRAME.
@@ -1377,8 +1532,8 @@ frame's display)."
   (let ((frame-type (framep-on-display display)))
     (cond
      ((eq frame-type 'pc)
-      ;; MS-DOG frames support selections when Emacs runs inside
-      ;; the Windows' DOS Box.
+      ;; MS-DOS frames support selections when Emacs runs inside
+      ;; a Windows DOS Box.
       (with-no-warnings
        (not (null dos-windows-version))))
      ((memq frame-type '(x w32 ns))
@@ -1733,6 +1888,122 @@ left untouched.  FRAME nil or omitted means use the selected frame."
     'delete-frame-functions "22.1")
 
 
+;;; Window dividers.
+(defgroup window-divider nil
+  "Window dividers."
+  :version "25.1"
+  :group 'frames
+  :group 'windows)
+
+(defcustom window-divider-default-places 'right-only
+  "Default positions of window dividers.
+Possible values are `bottom-only' (dividers on the bottom of each
+window only), `right-only' (dividers on the right of each window
+only), and t (dividers on the bottom and on the right of each
+window).  The default is `right-only'.
+
+The value takes effect if and only if dividers are enabled by
+`window-divider-mode'.
+
+To position dividers on frames individually, use the frame
+parameters `bottom-divider-width' and `right-divider-width'."
+  :type '(choice (const :tag "Bottom only" bottom-only)
+		 (const :tag "Right only" right-only)
+		 (const :tag "Bottom and right" t))
+  :initialize 'custom-initialize-default
+  :set (lambda (symbol value)
+	 (set-default symbol value)
+         (when window-divider-mode
+           (window-divider-mode-apply t)))
+  :version "25.1")
+
+(defun window-divider-width-valid-p (value)
+  "Return non-nil if VALUE is a positive number."
+  (and (numberp value) (> value 0)))
+
+(defcustom window-divider-default-bottom-width 6
+  "Default width of dividers on bottom of windows.
+The value must be a positive integer and takes effect when bottom
+dividers are displayed by `window-divider-mode'.
+
+To adjust bottom dividers for frames individually, use the frame
+parameter `bottom-divider-width'."
+  :type '(restricted-sexp
+          :tag "Default width of bottom dividers"
+          :match-alternatives (frame-window-divider-width-valid-p))
+  :initialize 'custom-initialize-default
+  :set (lambda (symbol value)
+	 (set-default symbol value)
+         (when window-divider-mode
+           (window-divider-mode-apply t)))
+  :version "25.1")
+
+(defcustom window-divider-default-right-width 6
+  "Default width of dividers on the right of windows.
+The value must be a positive integer and takes effect when right
+dividers are displayed by `window-divider-mode'.
+
+To adjust right dividers for frames individually, use the frame
+parameter `right-divider-width'."
+  :type '(restricted-sexp
+          :tag "Default width of right dividers"
+          :match-alternatives (frame-window-divider-width-valid-p))
+  :initialize 'custom-initialize-default
+  :set (lambda (symbol value)
+	 (set-default symbol value)
+         (when window-divider-mode
+	   (window-divider-mode-apply t)))
+  :version "25.1")
+
+(defun window-divider-mode-apply (enable)
+  "Apply window divider places and widths to all frames.
+If ENABLE is nil, apply default places and widths.  Else reset
+all divider widths to zero."
+  (let ((bottom (if (and enable
+                         (memq window-divider-default-places
+                               '(bottom-only t)))
+                    window-divider-default-bottom-width
+                  0))
+        (right (if (and enable
+                        (memq window-divider-default-places
+                              '(right-only t)))
+                   window-divider-default-right-width
+                 0)))
+    (modify-all-frames-parameters
+     (list (cons 'bottom-divider-width bottom)
+           (cons 'right-divider-width right)))
+    (setq default-frame-alist
+          (assq-delete-all
+           'bottom-divider-width default-frame-alist))
+    (setq default-frame-alist
+          (assq-delete-all
+           'right-divider-width default-frame-alist))
+    (when (> bottom 0)
+      (setq default-frame-alist
+            (cons
+             (cons 'bottom-divider-width bottom)
+             default-frame-alist)))
+    (when (> right 0)
+      (setq default-frame-alist
+            (cons
+             (cons 'right-divider-width right)
+             default-frame-alist)))))
+
+(define-minor-mode window-divider-mode
+  "Display dividers between windows (Window Divider mode).
+With a prefix argument ARG, enable Window Divider mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+the mode if ARG is omitted or nil.
+
+The option `window-divider-default-places' specifies on which
+side of a window dividers are displayed.  The options
+`window-divider-default-bottom-width' and
+`window-divider-default-right-width' specify their respective
+widths."
+  :group 'window-divider
+  :global t
+  (window-divider-mode-apply window-divider-mode))
+
 ;; Blinking cursor
 
 (defgroup cursor nil
@@ -1787,8 +2058,12 @@ command starts, by installing a pre-command hook."
 (defun blink-cursor-timer-function ()
   "Timer function of timer `blink-cursor-timer'."
   (internal-show-cursor nil (not (internal-show-cursor-p)))
+  ;; Suspend counting blinks when the w32 menu-bar menu is displayed,
+  ;; since otherwise menu tooltips will behave erratically.
+  (or (and (fboundp 'w32--menu-bar-in-use)
+	   (w32--menu-bar-in-use))
+      (setq blink-cursor-blinks-done (1+ blink-cursor-blinks-done)))
   ;; Each blink is two calls to this function.
-  (setq blink-cursor-blinks-done (1+ blink-cursor-blinks-done))
   (when (and (> blink-cursor-blinks 0)
              (<= (* 2 blink-cursor-blinks) blink-cursor-blinks-done))
     (blink-cursor-suspend)
@@ -1866,57 +2141,56 @@ terminals, cursor blinking is controlled by the terminal."
 ;; Frame maximization/fullscreen
 
 (defun toggle-frame-maximized ()
-  "Toggle maximization state of the selected frame.
-Maximize the selected frame or un-maximize if it is already maximized.
-Respect window manager screen decorations.
-If the frame is in fullscreen mode, don't change its mode,
-just toggle the temporary frame parameter `maximized',
-so the frame will go to the right maximization state
-after disabling fullscreen mode.
+  "Toggle maximization state of selected frame.
+Maximize selected frame or un-maximize if it is already maximized.
+
+If the frame is in fullscreen state, don't change its state, but
+set the frame's `fullscreen-restore' parameter to `maximized', so
+the frame will be maximized after disabling fullscreen state.
 
 Note that with some window managers you may have to set
 `frame-resize-pixelwise' to non-nil in order to make a frame
-appear truly maximized.
+appear truly maximized.  In addition, you may have to set
+`x-frame-normalize-before-maximize' in order to enable
+transitions from one fullscreen state to another.
 
 See also `toggle-frame-fullscreen'."
   (interactive)
-  (if (memq (frame-parameter nil 'fullscreen) '(fullscreen fullboth))
-      (modify-frame-parameters
-       nil
-       `((maximized
-	  . ,(unless (eq (frame-parameter nil 'maximized) 'maximized)
-	       'maximized))))
-    (modify-frame-parameters
-     nil
-     `((fullscreen
-	. ,(unless (eq (frame-parameter nil 'fullscreen) 'maximized)
-	     'maximized))))))
+  (let ((fullscreen (frame-parameter nil 'fullscreen)))
+    (cond
+     ((memq fullscreen '(fullscreen fullboth))
+      (set-frame-parameter nil 'fullscreen-restore 'maximized))
+     ((eq fullscreen 'maximized)
+      (set-frame-parameter nil 'fullscreen nil))
+     (t
+      (set-frame-parameter nil 'fullscreen 'maximized)))))
 
 (defun toggle-frame-fullscreen ()
-  "Toggle fullscreen mode of the selected frame.
-Enable fullscreen mode of the selected frame or disable if it is
-already fullscreen.  Ignore window manager screen decorations.
-When turning on fullscreen mode, remember the previous value of the
-maximization state in the temporary frame parameter `maximized'.
-Restore the maximization state when turning off fullscreen mode.
+  "Toggle fullscreen state of selected frame.
+Make selected frame fullscreen or restore its previous size if it
+is already fullscreen.
+
+Before making the frame fullscreen remember the current value of
+the frame's `fullscreen' parameter in the `fullscreen-restore'
+parameter of the frame.  That value is used to restore the
+frame's fullscreen state when toggling fullscreen the next time.
 
 Note that with some window managers you may have to set
 `frame-resize-pixelwise' to non-nil in order to make a frame
-appear truly fullscreen.
+appear truly fullscreen.  In addition, you may have to set
+`x-frame-normalize-before-maximize' in order to enable
+transitions from one fullscreen state to another.
 
 See also `toggle-frame-maximized'."
   (interactive)
-  (modify-frame-parameters
-   nil
-   `((maximized
-      . ,(unless (memq (frame-parameter nil 'fullscreen) '(fullscreen fullboth))
-	   (frame-parameter nil 'fullscreen)))
-     (fullscreen
-      . ,(if (memq (frame-parameter nil 'fullscreen) '(fullscreen fullboth))
-	     (if (eq (frame-parameter nil 'maximized) 'maximized)
-		 'maximized)
-	   'fullscreen)))))
-
+  (let ((fullscreen (frame-parameter nil 'fullscreen)))
+    (if (memq fullscreen '(fullscreen fullboth))
+	(let ((fullscreen-restore (frame-parameter nil 'fullscreen-restore)))
+	  (if (memq fullscreen-restore '(maximized fullheight fullwidth))
+	      (set-frame-parameter nil 'fullscreen fullscreen-restore)
+	    (set-frame-parameter nil 'fullscreen nil)))
+      (modify-frame-parameters
+       nil `((fullscreen . fullboth) (fullscreen-restore . ,fullscreen))))))
 
 ;;;; Key bindings
 

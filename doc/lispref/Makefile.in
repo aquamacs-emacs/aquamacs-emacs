@@ -1,6 +1,6 @@
 ### @configure_input@
 
-# Copyright (C) 1990-1996, 1998-2014 Free Software Foundation, Inc.
+# Copyright (C) 1990-1996, 1998-2015 Free Software Foundation, Inc.
 
 # This file is part of GNU Emacs.
 
@@ -25,12 +25,10 @@ SHELL = @SHELL@
 # Standard configure variables.
 srcdir = @srcdir@
 
-version=@version@
-
 buildinfodir = $(srcdir)/../../info
 # Directory with the (customized) texinfo.tex file.
 texinfodir = $(srcdir)/../misc
-# Directory with emacsver.texi.
+# Directory with docstyle.tex and emacsver.texi.
 emacsdir =  $(srcdir)/../emacs
 
 prefix = @prefix@
@@ -49,9 +47,8 @@ GZIP_PROG = @GZIP_PROG@
 
 HTML_OPTS = --no-split --html
 
-INFO_EXT=@INFO_EXT@
 # Options used only when making info output.
-INFO_OPTS=@INFO_OPTS@
+INFO_OPTS= --no-split
 
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
@@ -62,8 +59,17 @@ TEXI2DVI = texi2dvi
 TEXI2PDF = texi2pdf
 DVIPS = dvips
 
-ENVADD = TEXINPUTS="$(srcdir):$(texinfodir):$(emacsdir):$(TEXINPUTS)" \
-         MAKEINFO="$(MAKEINFO) $(MAKEINFO_OPTS)"
+# 'make' verbosity.
+AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
+
+AM_V_GEN = $(am__v_GEN_@AM_V@)
+am__v_GEN_ = $(am__v_GEN_@AM_DEFAULT_V@)
+am__v_GEN_0 = @echo "  GEN     " $@;
+am__v_GEN_1 =
+
+ENVADD = \
+  $(AM_V_GEN)TEXINPUTS="$(srcdir):$(texinfodir):$(emacsdir):$(TEXINPUTS)" \
+  MAKEINFO="$(MAKEINFO) $(MAKEINFO_OPTS)"
 
 DVI_TARGETS = elisp.dvi
 HTML_TARGETS = elisp.html
@@ -74,6 +80,7 @@ PS_TARGETS = elisp.ps
 
 srcs = \
   $(srcdir)/elisp.texi \
+  $(emacsdir)/docstyle.texi \
   $(emacsdir)/emacsver.texi \
   $(srcdir)/abbrevs.texi \
   $(srcdir)/anti.texi \
@@ -125,36 +132,36 @@ srcs = \
   $(srcdir)/gpl.texi \
   $(srcdir)/doclicense.texi
 
-mkinfodir = @${MKDIR_P} ${buildinfodir}
+## Disable implicit rules.
+%.texi: ;
 
-.PHONY: info dvi pdf ps
+.PHONY: info dvi html pdf ps
 
-.SUFFIXES: .ps .dvi
-
-.dvi.ps:
-	$(DVIPS) -o $@ $<
-
-info: $(buildinfodir)/elisp$(INFO_EXT)
+info: $(buildinfodir)/elisp.info
 dvi: $(DVI_TARGETS)
 html: $(HTML_TARGETS)
 pdf: $(PDF_TARGETS)
 ps: $(PS_TARGETS)
 
-## Note: "<" is not portable in ordinary make rules.
-$(buildinfodir)/elisp$(INFO_EXT): $(srcs)
-	$(mkinfodir)
-	$(MAKEINFO) $(MAKEINFO_OPTS) $(INFO_OPTS) -o $@ $(srcdir)/elisp.texi
+${buildinfodir}:
+	${MKDIR_P} $@
+
+$(buildinfodir)/elisp.info: $(srcs) | ${buildinfodir}
+	$(AM_V_GEN)$(MAKEINFO) $(MAKEINFO_OPTS) $(INFO_OPTS) -o $@ $<
 
 elisp.dvi: $(srcs)
-	$(ENVADD) $(TEXI2DVI) $(srcdir)/elisp.texi
+	$(ENVADD) $(TEXI2DVI) $<
 
 elisp.html: $(srcs)
-	$(MAKEINFO) $(MAKEINFO_OPTS) $(HTML_OPTS) -o $@ $(srcdir)/elisp.texi
+	$(AM_V_GEN)$(MAKEINFO) $(MAKEINFO_OPTS) $(HTML_OPTS) -o $@ $<
 
 elisp.pdf: $(srcs)
-	$(ENVADD) $(TEXI2PDF) $(srcdir)/elisp.texi
+	$(ENVADD) $(TEXI2PDF) $<
 
-.PHONY: mostlyclean clean distclean maintainer-clean infoclean
+elisp.ps: elisp.dvi
+	$(DVIPS) -o $@ $<
+
+.PHONY: mostlyclean clean distclean bootstrap-clean maintainer-clean infoclean
 
 ## [12] stuff is from two-volume.make.
 mostlyclean:
@@ -165,52 +172,17 @@ mostlyclean:
 clean: mostlyclean
 	rm -f $(DVI_TARGETS) $(HTML_TARGETS) $(PDF_TARGETS) $(PS_TARGETS)
 	rm -f vol[12].dvi vol[12].pdf vol[12].ps
-	rm -f emacs-lispref-${version}.tar*
 
 distclean: clean
 	rm -f Makefile
 
 infoclean:
-	-cd $(buildinfodir) && rm -f elisp$(INFO_EXT) elisp$(INFO_EXT)-[1-9] elisp$(INFO_EXT)-[1-9][0-9]
+	rm -f \
+	  $(buildinfodir)/elisp.info \
+	  $(buildinfodir)/elisp.info-[1-9] \
+	  $(buildinfodir)/elisp.info-[1-9][0-9]
 
-maintainer-clean: distclean infoclean
-
-.PHONY: dist
-
-## Note this excludes the two-volume stuff.
-dist:
-	rm -rf emacs-lispref-${version}
-	mkdir emacs-lispref-${version}
-	cp ${srcdir}/*.texi ${texinfodir}/texinfo.tex \
-	  $(emacsdir)/emacsver.texi ${srcdir}/ChangeLog* \
-	  ${srcdir}/README emacs-lispref-${version}/
-	sed -e 's/@sr[c]dir@/./' -e 's/^\(texinfodir *=\).*/\1 ./' \
-	  -e 's/^\(emacsdir *=\).*/\1 ./' \
-	  -e 's/^\(buildinfodir *=\).*/\1 ./' \
-	  -e 's/^\(clean:.*\)/\1 infoclean/' \
-	  -e "s/@ver[s]ion@/${version}/" \
-	  -e 's/@MAKE[I]NFO@/makeinfo/' -e 's/@MK[D]IR_P@/mkdir -p/' \
-	  -e 's/@IN[F]O_EXT@/.info/' -e 's/@IN[F]O_OPTS@//' \
-	  -e 's|@SH[E]LL@|/bin/bash|' \
-	  -e 's|@[p]refix@|/usr/local|' \
-	  -e 's|@[d]atarootdir@|$${prefix}/share|' \
-	  -e 's|@[d]atadir@|$${datarootdir}|' \
-	  -e 's|@[P]ACKAGE_TARNAME@|emacs|' \
-	  -e 's|@[d]ocdir@|$${datarootdir}/doc/$${PACKAGE_TARNAME}|' \
-	  -e 's|@[d]vidir@|$${docdir}|' \
-	  -e 's|@[h]tmldir@|$${docdir}|' \
-	  -e 's|@[p]dfdir@|$${docdir}|' \
-	  -e 's|@[p]sdir@|$${docdir}|' \
-	  -e 's|@[G]ZIP_PROG@|gzip|' \
-	  -e 's|@IN[S]TALL@|install -c|' \
-	  -e 's|@IN[S]TALL_DATA@|$${INSTALL} -m 644|' \
-	  -e '/@[c]onfigure_input@/d' \
-	  ${srcdir}/Makefile.in > emacs-lispref-${version}/Makefile
-	@if grep '@[a-zA-Z_]*@' emacs-lispref-${version}/Makefile; then \
-	  echo "Unexpanded configure variables in Makefile?" 1>&2; exit 1; \
-	fi
-	tar -cf emacs-lispref-${version}.tar emacs-lispref-${version}
-	rm -rf emacs-lispref-${version}
+bootstrap-clean maintainer-clean: distclean infoclean
 
 .PHONY: install-dvi install-html install-pdf install-ps install-doc
 

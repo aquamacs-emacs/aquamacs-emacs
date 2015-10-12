@@ -7,7 +7,7 @@
 # By default, this script uses the local-time calendar year.
 # Set the UPDATE_COPYRIGHT_YEAR environment variable to override the default.
 
-# Copyright 2013-2014 Free Software Foundation, Inc.
+# Copyright 2013-2015 Free Software Foundation, Inc.
 
 # This file is part of GNU Emacs.
 
@@ -37,7 +37,7 @@ export UPDATE_COPYRIGHT_USE_INTERVALS
 : ${UPDATE_COPYRIGHT_YEAR=$(date +%Y)}
 export UPDATE_COPYRIGHT_YEAR
 
-emacsver=etc/refcards/emacsver.tex
+emacsver=etc/refcards/emacsver.tex.in
 sed 's/\\def\\year[{][0-9]*[}]/\\def\\year{'"$UPDATE_COPYRIGHT_YEAR"'}'/g \
   $emacsver >$emacsver.aux &&
 { cmp -s $emacsver $emacsver.aux ||
@@ -45,14 +45,14 @@ sed 's/\\def\\year[{][0-9]*[}]/\\def\\year{'"$UPDATE_COPYRIGHT_YEAR"'}'/g \
 } &&
 rm $emacsver.aux &&
 
-bzr_files=$(bzr ls -RV --kind file) &&
+repo_files=$(git ls-files) &&
 
 # Do not update the copyright of files that have one or more of the
 # following problems:
 # . They are license files, maintained by the FSF, with their own dates.
 # . Their format cannot withstand changing the contents of copyright strings.
 
-updatable_files=$(find $bzr_files \
+updatable_files=$(find $repo_files \
   ! -name COPYING \
   ! -name doclicense.texi \
   ! -name gpl.texi \

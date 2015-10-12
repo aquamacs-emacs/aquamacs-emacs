@@ -1,5 +1,5 @@
 /* Interfaces to system-dependent kernel and library entries.
-   Copyright (C) 1985-1988, 1993-1995, 1999-2014 Free Software
+   Copyright (C) 1985-1988, 1993-1995, 1999-2015 Free Software
    Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -18,6 +18,14 @@ You should have received a copy of the GNU General Public License
 along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <config.h>
+
+/* If HYBRID_GET_CURRENT_DIR_NAME is defined in conf_post.h, then we
+   need the following before including unistd.h, in order to pick up
+   the right prototype for gget_current_dir_name.  */
+#ifdef HYBRID_GET_CURRENT_DIR_NAME
+#undef get_current_dir_name
+#define get_current_dir_name gget_current_dir_name
+#endif
 
 #include <execinfo.h>
 #include "sysstdio.h"
@@ -46,7 +54,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 # include <sys/user.h>
 # undef frame
 
-# include <sys/resource.h>
 # include <math.h>
 #endif
 
@@ -100,13 +107,13 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #define _P_WAIT 0
 int _cdecl _spawnlp (int, const char *, const char *, ...);
 int _cdecl _getpid (void);
+/* The following is needed for O_CLOEXEC, F_SETFD, FD_CLOEXEC, and
+   several prototypes of functions called below.  */
+#include <sys/socket.h>
 #endif
 
 #include "syssignal.h"
 #include "systime.h"
-
-static void emacs_get_tty (int, struct emacs_tty *);
-static int emacs_set_tty (int, struct emacs_tty *, bool);
 
 /* ULLONG_MAX is missing on Red Hat Linux 7.3; see Bug#11781.  */
 #ifndef ULLONG_MAX
@@ -122,13 +129,12 @@ static const int baud_convert[] =
     1800, 2400, 4800, 9600, 19200, 38400
   };
 
-
-#if !defined (HAVE_GET_CURRENT_DIR_NAME) || defined (BROKEN_GET_CURRENT_DIR_NAME)
-
+#if !defined HAVE_GET_CURRENT_DIR_NAME || defined BROKEN_GET_CURRENT_DIR_NAME \
+  || (defined HYBRID_GET_CURRENT_DIR_NAME)
 /* Return the current working directory.  Returns NULL on errors.
    Any other returned value must be freed with free. This is used
    only when get_current_dir_name is not defined on the system.  */
-char*
+char *
 get_current_dir_name (void)
 {
   char *buf;
@@ -222,7 +228,9 @@ discard_tty_input (void)
 void
 stuff_char (char c)
 {
-  if (! FRAME_TERMCAP_P (SELECTED_FRAME ()))
+  if (! (FRAMEP (selected_frame)
+	 && FRAME_LIVE_P (XFRAME (selected_frame))
+	 && FRAME_TERMCAP_P (XFRAME (selected_frame))))
     return;
 
 /* Should perhaps error if in batch mode */
@@ -255,7 +263,7 @@ init_baud_rate (int fd)
 #endif /* not DOS_NT */
     }
 
-  baud_rate = (emacs_ospeed < sizeof baud_convert / sizeof baud_convert[0]
+  baud_rate = (emacs_ospeed < ARRAYELTS (baud_convert)
 	       ? baud_convert[emacs_ospeed] : 9600);
   if (baud_rate == 0)
     baud_rate = 1200;
@@ -603,6 +611,7 @@ init_sigio (int fd)
 #endif
 }
 
+#ifndef DOS_NT
 static void
 reset_sigio (int fd)
 {
@@ -610,6 +619,7 @@ reset_sigio (int fd)
   fcntl (fd, F_SETFL, old_fcntl_flags[fd]);
 #endif
 }
+#endif
 
 void
 request_sigio (void)
@@ -649,15 +659,29 @@ unrequest_sigio (void)
   interrupts_deferred = 1;
 #endif
 }
+
+#ifndef MSDOS
+/* Block SIGCHLD.  */
 
 void
-ignore_sigio (void)
+block_child_signal (sigset_t *oldset)
 {
-#ifdef USABLE_SIGIO
-  signal (SIGIO, SIG_IGN);
-#endif
+  sigset_t blocked;
+  sigemptyset (&blocked);
+  sigaddset (&blocked, SIGCHLD);
+  sigaddset (&blocked, SIGINT);
+  pthread_sigmask (SIG_BLOCK, &blocked, oldset);
 }
 
+/* Unblock SIGCHLD.  */
+
+void
+unblock_child_signal (sigset_t const *oldset)
+{
+  pthread_sigmask (SIG_SETMASK, oldset, 0);
+}
+
+#endif	/* !MSDOS */
 
 /* Saving and restoring the process group of Emacs's terminal.  */
 
@@ -692,21 +716,21 @@ init_foreground_group (void)
 /* Block and unblock SIGTTOU.  */
 
 void
-block_tty_out_signal (void)
+block_tty_out_signal (sigset_t *oldset)
 {
 #ifdef SIGTTOU
   sigset_t blocked;
   sigemptyset (&blocked);
   sigaddset (&blocked, SIGTTOU);
-  pthread_sigmask (SIG_BLOCK, &blocked, 0);
+  pthread_sigmask (SIG_BLOCK, &blocked, oldset);
 #endif
 }
 
 void
-unblock_tty_out_signal (void)
+unblock_tty_out_signal (sigset_t const *oldset)
 {
 #ifdef SIGTTOU
-  pthread_sigmask (SIG_SETMASK, &empty_mask, 0);
+  pthread_sigmask (SIG_SETMASK, oldset, 0);
 #endif
 }
 
@@ -721,10 +745,11 @@ static void
 tcsetpgrp_without_stopping (int fd, pid_t pgid)
 {
 #ifdef SIGTTOU
+  sigset_t oldset;
   block_input ();
-  block_tty_out_signal ();
+  block_tty_out_signal (&oldset);
   tcsetpgrp (fd, pgid);
-  unblock_tty_out_signal ();
+  unblock_tty_out_signal (&oldset);
   unblock_input ();
 #endif
 }
@@ -751,15 +776,28 @@ widen_foreground_group (int fd)
 /* Getting and setting emacs_tty structures.  */
 
 /* Set *TC to the parameters associated with the terminal FD,
-   or clear it if the parameters are not available.  */
-static void
+   or clear it if the parameters are not available.
+   Return 0 on success, -1 on failure.  */
+int
 emacs_get_tty (int fd, struct emacs_tty *settings)
 {
   /* Retrieve the primary parameters - baud rate, character size, etcetera.  */
-#ifndef DOS_NT
-  /* We have those nifty POSIX tcmumbleattr functions.  */
   memset (&settings->main, 0, sizeof (settings->main));
-  tcgetattr (fd, &settings->main);
+#ifdef DOS_NT
+#ifdef WINDOWSNT
+  HANDLE h = (HANDLE)_get_osfhandle (fd);
+  DWORD console_mode;
+
+  if (h && h != INVALID_HANDLE_VALUE && GetConsoleMode (h, &console_mode))
+    {
+      settings->main = console_mode;
+      return 0;
+    }
+#endif	/* WINDOWSNT */
+  return -1;
+#else	/* !DOS_NT */
+  /* We have those nifty POSIX tcmumbleattr functions.  */
+  return tcgetattr (fd, &settings->main);
 #endif
 }
 
@@ -768,11 +806,26 @@ emacs_get_tty (int fd, struct emacs_tty *settings)
    *SETTINGS.  If FLUSHP, discard input.
    Return 0 if all went well, and -1 (setting errno) if anything failed.  */
 
-static int
+int
 emacs_set_tty (int fd, struct emacs_tty *settings, bool flushp)
 {
   /* Set the primary parameters - baud rate, character size, etcetera.  */
-#ifndef DOS_NT
+#ifdef DOS_NT
+#ifdef WINDOWSNT
+  HANDLE h = (HANDLE)_get_osfhandle (fd);
+
+  if (h && h != INVALID_HANDLE_VALUE)
+    {
+      DWORD new_mode;
+
+      /* Assume the handle is open for input.  */
+      if (flushp)
+	FlushConsoleInputBuffer (h);
+      new_mode = settings->main;
+      SetConsoleMode (h, new_mode);
+    }
+#endif	/* WINDOWSNT */
+#else  /* !DOS_NT */
   int i;
   /* We have those nifty POSIX tcmumbleattr functions.
      William J. Smith <wjs@wiis.wang.com> writes:
@@ -1113,6 +1166,24 @@ tabs_safe_p (int fd)
   return 0;
 #endif /* DOS_NT */
 }
+
+/* Discard echoing.  */
+
+void
+suppress_echo_on_tty (int fd)
+{
+  struct emacs_tty etty;
+
+  emacs_get_tty (fd, &etty);
+#ifdef DOS_NT
+  /* Set raw input mode.  */
+  etty.main = 0;
+#else
+  etty.main.c_lflag &= ~ICANON;	/* Disable buffering */
+  etty.main.c_lflag &= ~ECHO;	/* Disable echoing */
+#endif /* ! WINDOWSNT */
+  emacs_set_tty (fd, &etty, 0);
+}
 
 /* Get terminal size from system.
    Store number of lines into *HEIGHTP and width into *WIDTHP.
@@ -1327,29 +1398,19 @@ setup_pty (int fd)
 }
 #endif /* HAVE_PTYS */
 
-#ifdef HAVE_SOCKETS
-#include <sys/socket.h>
-#include <netdb.h>
-#endif /* HAVE_SOCKETS */
-
-#ifdef TRY_AGAIN
-#ifndef HAVE_H_ERRNO
-extern int h_errno;
-#endif
-#endif /* TRY_AGAIN */
-
 void
 init_system_name (void)
 {
+  char *hostname_alloc = NULL;
+  char *hostname;
 #ifndef HAVE_GETHOSTNAME
   struct utsname uts;
   uname (&uts);
-  Vsystem_name = build_string (uts.nodename);
+  hostname = uts.nodename;
 #else /* HAVE_GETHOSTNAME */
-  char *hostname_alloc = NULL;
   char hostname_buf[256];
   ptrdiff_t hostname_size = sizeof hostname_buf;
-  char *hostname = hostname_buf;
+  hostname = hostname_buf;
 
   /* Try to get the host name; if the buffer is too short, try
      again.  Apparently, the only indication gethostname gives of
@@ -1367,110 +1428,15 @@ init_system_name (void)
       hostname = hostname_alloc = xpalloc (hostname_alloc, &hostname_size, 1,
 					   min (PTRDIFF_MAX, SIZE_MAX), 1);
     }
-#ifdef HAVE_SOCKETS
-  /* Turn the hostname into the official, fully-qualified hostname.
-     Don't do this if we're going to dump; this can confuse system
-     libraries on some machines and make the dumped emacs core dump. */
-#ifndef CANNOT_DUMP
-  if (initialized)
-#endif /* not CANNOT_DUMP */
-    if (! strchr (hostname, '.'))
-      {
-	int count;
-#ifdef HAVE_GETADDRINFO
-        struct addrinfo *res;
-        struct addrinfo hints;
-        int ret;
-
-        memset (&hints, 0, sizeof (hints));
-        hints.ai_socktype = SOCK_STREAM;
-        hints.ai_flags = AI_CANONNAME;
-
-	for (count = 0;; count++)
-	  {
-            if ((ret = getaddrinfo (hostname, NULL, &hints, &res)) == 0
-                || ret != EAI_AGAIN)
-              break;
-
-            if (count >= 5)
-	      break;
-	    Fsleep_for (make_number (1), Qnil);
-	  }
-
-        if (ret == 0)
-          {
-            struct addrinfo *it = res;
-            while (it)
-              {
-                char *fqdn = it->ai_canonname;
-                if (fqdn && strchr (fqdn, '.')
-                    && strcmp (fqdn, "localhost.localdomain") != 0)
-                  break;
-                it = it->ai_next;
-              }
-            if (it)
-              {
-		ptrdiff_t len = strlen (it->ai_canonname);
-		if (hostname_size <= len)
-		  {
-		    hostname_size = len + 1;
-		    hostname = hostname_alloc = xrealloc (hostname_alloc,
-							  hostname_size);
-		  }
-                strcpy (hostname, it->ai_canonname);
-              }
-            freeaddrinfo (res);
-          }
-#else /* !HAVE_GETADDRINFO */
-        struct hostent *hp;
-	for (count = 0;; count++)
-	  {
-
-#ifdef TRY_AGAIN
-	    h_errno = 0;
-#endif
-	    hp = gethostbyname (hostname);
-#ifdef TRY_AGAIN
-	    if (! (hp == 0 && h_errno == TRY_AGAIN))
-#endif
-
-	      break;
-
-	    if (count >= 5)
-	      break;
-	    Fsleep_for (make_number (1), Qnil);
-	  }
-
-	if (hp)
-	  {
-	    char *fqdn = (char *) hp->h_name;
-
-	    if (!strchr (fqdn, '.'))
-	      {
-		/* We still don't have a fully qualified domain name.
-		   Try to find one in the list of alternate names */
-		char **alias = hp->h_aliases;
-		while (*alias
-		       && (!strchr (*alias, '.')
-			   || !strcmp (*alias, "localhost.localdomain")))
-		  alias++;
-		if (*alias)
-		  fqdn = *alias;
-	      }
-	    hostname = fqdn;
-	  }
-#endif /* !HAVE_GETADDRINFO */
-      }
-#endif /* HAVE_SOCKETS */
-  Vsystem_name = build_string (hostname);
-  xfree (hostname_alloc);
 #endif /* HAVE_GETHOSTNAME */
-  {
-    char *p;
-    for (p = SSDATA (Vsystem_name); *p; p++)
-      if (*p == ' ' || *p == '\t')
-	*p = '-';
-  }
+  char *p;
+  for (p = hostname; *p; p++)
+    if (*p == ' ' || *p == '\t')
+      *p = '-';
+  if (! (STRINGP (Vsystem_name) && SBYTES (Vsystem_name) == p - hostname
+	 && strcmp (SSDATA (Vsystem_name), hostname) == 0))
+    Vsystem_name = build_string (hostname);
+  xfree (hostname_alloc);
 }
 
 sigset_t empty_mask;
@@ -1526,9 +1492,6 @@ emacs_sigaction_init (struct sigaction *action, signal_handler_t handler)
       sigaddset (&action->sa_mask, SIGIO);
 #endif
     }
-
-  if (! IEEE_FLOATING_POINT)
-    sigaddset (&action->sa_mask, SIGFPE);
 
   action->sa_handler = handler;
   action->sa_flags = emacs_sigaction_flags ();
@@ -1648,6 +1611,112 @@ handle_arith_signal (int sig)
   pthread_sigmask (SIG_SETMASK, &empty_mask, 0);
   xsignal0 (Qarith_error);
 }
+
+#if defined HAVE_STACK_OVERFLOW_HANDLING && !defined WINDOWSNT
+
+/* Alternate stack used by SIGSEGV handler below.  */
+
+static unsigned char sigsegv_stack[SIGSTKSZ];
+
+
+/* Return true if SIGINFO indicates a stack overflow.  */
+
+static bool
+stack_overflow (siginfo_t *siginfo)
+{
+  /* In theory, a more-accurate heuristic can be obtained by using
+     GNU/Linux pthread_getattr_np along with POSIX pthread_attr_getstack
+     and pthread_attr_getguardsize to find the location and size of the
+     guard area.  In practice, though, these functions are so hard to
+     use reliably that they're not worth bothering with.  E.g., see:
+     https://sourceware.org/bugzilla/show_bug.cgi?id=16291
+     Other operating systems also have problems, e.g., Solaris's
+     stack_violation function is tailor-made for this problem, but it
+     doesn't work on Solaris 11.2 x86-64 with a 32-bit executable.
+
+     GNU libsigsegv is overkill for Emacs; otherwise it might be a
+     candidate here.  */
+
+  if (!siginfo)
+    return false;
+
+  /* The faulting address.  */
+  char *addr = siginfo->si_addr;
+  if (!addr)
+    return false;
+
+  /* The known top and bottom of the stack.  The actual stack may
+     extend a bit beyond these boundaries.  */
+  char *bot = stack_bottom;
+  char *top = near_C_stack_top ();
+
+  /* Log base 2 of the stack heuristic ratio.  This ratio is the size
+     of the known stack divided by the size of the guard area past the
+     end of the stack top.  The heuristic is that a bad address is
+     considered to be a stack overflow if it occurs within
+     stacksize>>LG_STACK_HEURISTIC bytes above the top of the known
+     stack.  This heuristic is not exactly correct but it's good
+     enough in practice.  */
+  enum { LG_STACK_HEURISTIC = 8 };
+
+  if (bot < top)
+    return 0 <= addr - top && addr - top < (top - bot) >> LG_STACK_HEURISTIC;
+  else
+    return 0 <= top - addr && top - addr < (bot - top) >> LG_STACK_HEURISTIC;
+}
+
+
+/* Attempt to recover from SIGSEGV caused by C stack overflow.  */
+
+static void
+handle_sigsegv (int sig, siginfo_t *siginfo, void *arg)
+{
+  /* Hard GC error may lead to stack overflow caused by
+     too nested calls to mark_object.  No way to survive.  */
+  bool fatal = gc_in_progress;
+
+#ifdef FORWARD_SIGNAL_TO_MAIN_THREAD
+  if (!fatal && !pthread_equal (pthread_self (), main_thread))
+    fatal = true;
+#endif
+
+  if (!fatal && stack_overflow (siginfo))
+    siglongjmp (return_to_command_loop, 1);
+
+  /* Otherwise we can't do anything with this.  */
+  deliver_fatal_thread_signal (sig);
+}
+
+/* Return true if we have successfully set up SIGSEGV handler on alternate
+   stack.  Otherwise we just treat SIGSEGV among the rest of fatal signals.  */
+
+static bool
+init_sigsegv (void)
+{
+  struct sigaction sa;
+  stack_t ss;
+
+  ss.ss_sp = sigsegv_stack;
+  ss.ss_size = sizeof (sigsegv_stack);
+  ss.ss_flags = 0;
+  if (sigaltstack (&ss, NULL) < 0)
+    return 0;
+
+  sigfillset (&sa.sa_mask);
+  sa.sa_sigaction = handle_sigsegv;
+  sa.sa_flags = SA_SIGINFO | SA_ONSTACK | emacs_sigaction_flags ();
+  return sigaction (SIGSEGV, &sa, NULL) < 0 ? 0 : 1;
+}
+
+#else /* not HAVE_STACK_OVERFLOW_HANDLING or WINDOWSNT */
+
+static bool
+init_sigsegv (void)
+{
+  return 0;
+}
+
+#endif /* HAVE_STACK_OVERFLOW_HANDLING && !WINDOWSNT */
 
 static void
 deliver_arith_signal (int sig)
@@ -1915,7 +1984,8 @@ init_signals (bool dumping)
 #ifdef SIGBUS
   sigaction (SIGBUS, &thread_fatal_action, 0);
 #endif
-  sigaction (SIGSEGV, &thread_fatal_action, 0);
+  if (!init_sigsegv ())
+    sigaction (SIGSEGV, &thread_fatal_action, 0);
 #ifdef SIGSYS
   sigaction (SIGSYS, &thread_fatal_action, 0);
 #endif
@@ -2095,7 +2165,17 @@ snprintf (char *buf, size_t bufsize, char const *format, ...)
 /* If a backtrace is available, output the top lines of it to stderr.
    Do not output more than BACKTRACE_LIMIT or BACKTRACE_LIMIT_MAX lines.
    This function may be called from a signal handler, so it should
-   not invoke async-unsafe functions like malloc.  */
+   not invoke async-unsafe functions like malloc.
+
+   If BACKTRACE_LIMIT is -1, initialize tables that 'backtrace' uses
+   but do not output anything.  This avoids some problems that can
+   otherwise occur if the malloc arena is corrupted before 'backtrace'
+   is called, since 'backtrace' may call malloc if the tables are not
+   initialized.
+
+   If the static variable THREAD_BACKTRACE_NPOINTERS is nonzero, a
+   fatal error has occurred in some other thread; generate a thread
+   backtrace instead, ignoring BACKTRACE_LIMIT.  */
 void
 emacs_backtrace (int backtrace_limit)
 {
@@ -2112,6 +2192,14 @@ emacs_backtrace (int backtrace_limit)
   else
     {
       buffer = main_backtrace_buffer;
+
+      /* Work around 'backtrace' bug; see Bug#19959 and glibc bug#18084.  */
+      if (bounded_limit < 0)
+	{
+	  backtrace (buffer, 1);
+	  return;
+	}
+
       npointers = backtrace (buffer, bounded_limit + 1);
     }
 
@@ -2133,6 +2221,7 @@ emacs_abort (void)
 #endif
 
 /* Open FILE for Emacs use, using open flags OFLAG and mode MODE.
+   Use binary I/O on systems that care about text vs binary I/O.
    Arrange for subprograms to not inherit the file descriptor.
    Prefer a method that is multithread-safe, if available.
    Do not fail merely because the open was interrupted by a signal.
@@ -2142,6 +2231,8 @@ int
 emacs_open (const char *file, int oflags, int mode)
 {
   int fd;
+  if (! (oflags & O_TEXT))
+    oflags |= O_BINARY;
   oflags |= O_CLOEXEC;
   while ((fd = open (file, oflags, mode)) < 0 && errno == EINTR)
     QUIT;
@@ -2189,7 +2280,7 @@ emacs_pipe (int fd[2])
 #ifdef MSDOS
   return pipe (fd);
 #else  /* !MSDOS */
-  int result = pipe2 (fd, O_CLOEXEC);
+  int result = pipe2 (fd, O_BINARY | O_CLOEXEC);
   if (! O_CLOEXEC && result == 0)
     {
       fcntl (fd[0], F_SETFD, FD_CLOEXEC);
@@ -2628,10 +2719,8 @@ Lisp_Object
 list_system_processes (void)
 {
   Lisp_Object procdir, match, proclist, next;
-  struct gcpro gcpro1, gcpro2;
-  register Lisp_Object tail;
+  Lisp_Object tail;
 
-  GCPRO2 (procdir, match);
   /* For every process on the system, there's a directory in the
      "/proc" pseudo-directory whose name is the numeric ID of that
      process.  */
@@ -2646,7 +2735,6 @@ list_system_processes (void)
       next = XCDR (tail);
       XSETCAR (tail, Fstring_to_number (XCAR (tail), Qnil));
     }
-  UNGCPRO;
 
   /* directory_files_internal returns the files in reverse order; undo
      that.  */
@@ -2668,7 +2756,6 @@ list_system_processes (void)
   struct kinfo_proc *procs;
   size_t i;
 
-  struct gcpro gcpro1;
   Lisp_Object proclist = Qnil;
 
   if (sysctl (mib, 3, NULL, &len, NULL, 0) != 0)
@@ -2681,7 +2768,6 @@ list_system_processes (void)
       return proclist;
     }
 
-  GCPRO1 (proclist);
   len /= sizeof (struct kinfo_proc);
   for (i = 0; i < len; i++)
     {
@@ -2691,7 +2777,6 @@ list_system_processes (void)
       proclist = Fcons (make_fixnum_or_float (procs[i].ki_pid), proclist);
 #endif
     }
-  UNGCPRO;
 
   xfree (procs);
 
@@ -2902,15 +2987,12 @@ system_process_attributes (Lisp_Object pid)
   Lisp_Object attrs = Qnil;
   Lisp_Object cmd_str, decoded_cmd;
   ptrdiff_t count;
-  struct gcpro gcpro1, gcpro2;
 
   CHECK_NUMBER_OR_FLOAT (pid);
   CONS_TO_INTEGER (pid, pid_t, proc_id);
   sprintf (procfn, "/proc/%"pMd, proc_id);
   if (stat (procfn, &st) < 0)
     return attrs;
-
-  GCPRO2 (attrs, decoded_cmd);
 
   /* euid egid */
   uid = st.st_uid;
@@ -3100,7 +3182,6 @@ system_process_attributes (Lisp_Object pid)
       attrs = Fcons (Fcons (Qargs, decoded_cmd), attrs);
     }
 
-  UNGCPRO;
   return attrs;
 }
 
@@ -3139,7 +3220,6 @@ system_process_attributes (Lisp_Object pid)
   gid_t gid;
   Lisp_Object attrs = Qnil;
   Lisp_Object decoded_cmd;
-  struct gcpro gcpro1, gcpro2;
   ptrdiff_t count;
 
   CHECK_NUMBER_OR_FLOAT (pid);
@@ -3147,8 +3227,6 @@ system_process_attributes (Lisp_Object pid)
   sprintf (procfn, "/proc/%"pMd, proc_id);
   if (stat (procfn, &st) < 0)
     return attrs;
-
-  GCPRO2 (attrs, decoded_cmd);
 
   /* euid egid */
   uid = st.st_uid;
@@ -3242,7 +3320,6 @@ system_process_attributes (Lisp_Object pid)
       attrs = Fcons (Fcons (Qargs, decoded_cmd), attrs);
     }
   unbind_to (count, Qnil);
-  UNGCPRO;
   return attrs;
 }
 
@@ -3278,7 +3355,6 @@ system_process_attributes (Lisp_Object pid)
   struct kinfo_proc proc;
   size_t proclen = sizeof proc;
 
-  struct gcpro gcpro1, gcpro2;
   Lisp_Object attrs = Qnil;
   Lisp_Object decoded_comm;
 
@@ -3288,8 +3364,6 @@ system_process_attributes (Lisp_Object pid)
 
   if (sysctl (mib, 4, &proc, &proclen, NULL, 0) != 0)
     return attrs;
-
-  GCPRO2 (attrs, decoded_comm);
 
   attrs = Fcons (Fcons (Qeuid, make_fixnum_or_float (proc.ki_uid)), attrs);
 
@@ -3428,7 +3502,6 @@ system_process_attributes (Lisp_Object pid)
       attrs = Fcons (Fcons (Qargs, decoded_comm), attrs);
     }
 
-  UNGCPRO;
   return attrs;
 }
 
@@ -3443,3 +3516,208 @@ system_process_attributes (Lisp_Object pid)
 }
 
 #endif	/* !defined (WINDOWSNT) */
+
+/* Wide character string collation.  */
+
+#ifdef __STDC_ISO_10646__
+# include <wchar.h>
+# include <wctype.h>
+
+# if defined HAVE_NEWLOCALE || defined HAVE_SETLOCALE
+#  include <locale.h>
+# endif
+# ifndef LC_COLLATE
+#  define LC_COLLATE 0
+# endif
+# ifndef LC_COLLATE_MASK
+#  define LC_COLLATE_MASK 0
+# endif
+# ifndef LC_CTYPE
+#  define LC_CTYPE 0
+# endif
+# ifndef LC_CTYPE_MASK
+#  define LC_CTYPE_MASK 0
+# endif
+
+# ifndef HAVE_NEWLOCALE
+#  undef freelocale
+#  undef locale_t
+#  undef newlocale
+#  undef wcscoll_l
+#  undef towlower_l
+#  define freelocale emacs_freelocale
+#  define locale_t emacs_locale_t
+#  define newlocale emacs_newlocale
+#  define wcscoll_l emacs_wcscoll_l
+#  define towlower_l emacs_towlower_l
+
+typedef char const *locale_t;
+
+static locale_t
+newlocale (int category_mask, char const *locale, locale_t loc)
+{
+  return locale;
+}
+
+static void
+freelocale (locale_t loc)
+{
+}
+
+static char *
+emacs_setlocale (int category, char const *locale)
+{
+#  ifdef HAVE_SETLOCALE
+  errno = 0;
+  char *loc = setlocale (category, locale);
+  if (loc || errno)
+    return loc;
+  errno = EINVAL;
+#  else
+  errno = ENOTSUP;
+#  endif
+  return 0;
+}
+
+static int
+wcscoll_l (wchar_t const *a, wchar_t const *b, locale_t loc)
+{
+  int result = 0;
+  char *oldloc = emacs_setlocale (LC_COLLATE, NULL);
+  int err;
+
+  if (! oldloc)
+    err = errno;
+  else
+    {
+      USE_SAFE_ALLOCA;
+      char *oldcopy = SAFE_ALLOCA (strlen (oldloc) + 1);
+      strcpy (oldcopy, oldloc);
+      if (! emacs_setlocale (LC_COLLATE, loc))
+	err = errno;
+      else
+	{
+	  errno = 0;
+	  result = wcscoll (a, b);
+	  err = errno;
+	  if (! emacs_setlocale (LC_COLLATE, oldcopy))
+	    err = errno;
+	}
+      SAFE_FREE ();
+    }
+
+  errno = err;
+  return result;
+}
+
+static wint_t
+towlower_l (wint_t wc, locale_t loc)
+{
+  wint_t result = wc;
+  char *oldloc = emacs_setlocale (LC_CTYPE, NULL);
+
+  if (oldloc)
+    {
+      USE_SAFE_ALLOCA;
+      char *oldcopy = SAFE_ALLOCA (strlen (oldloc) + 1);
+      strcpy (oldcopy, oldloc);
+      if (emacs_setlocale (LC_CTYPE, loc))
+	{
+	  result = towlower (wc);
+	  emacs_setlocale (LC_COLLATE, oldcopy);
+	}
+      SAFE_FREE ();
+    }
+
+  return result;
+}
+# endif
+
+int
+str_collate (Lisp_Object s1, Lisp_Object s2,
+	     Lisp_Object locale, Lisp_Object ignore_case)
+{
+  int res, err;
+  ptrdiff_t len, i, i_byte;
+  wchar_t *p1, *p2;
+
+  USE_SAFE_ALLOCA;
+
+  /* Convert byte stream to code points.  */
+  len = SCHARS (s1); i = i_byte = 0;
+  SAFE_NALLOCA (p1, 1, len + 1);
+  while (i < len)
+    FETCH_STRING_CHAR_ADVANCE (*(p1+i-1), s1, i, i_byte);
+  *(p1+len) = 0;
+
+  len = SCHARS (s2); i = i_byte = 0;
+  SAFE_NALLOCA (p2, 1, len + 1);
+  while (i < len)
+    FETCH_STRING_CHAR_ADVANCE (*(p2+i-1), s2, i, i_byte);
+  *(p2+len) = 0;
+
+  if (STRINGP (locale))
+    {
+      locale_t loc = newlocale (LC_COLLATE_MASK | LC_CTYPE_MASK,
+				SSDATA (locale), 0);
+      if (!loc)
+	error ("Invalid locale %s: %s", SSDATA (locale), strerror (errno));
+
+      if (! NILP (ignore_case))
+	for (int i = 1; i < 3; i++)
+	  {
+	    wchar_t *p = (i == 1) ? p1 : p2;
+	    for (; *p; p++)
+	      *p = towlower_l (*p, loc);
+	  }
+
+      errno = 0;
+      res = wcscoll_l (p1, p2, loc);
+      err = errno;
+      freelocale (loc);
+    }
+  else
+    {
+      if (! NILP (ignore_case))
+	for (int i = 1; i < 3; i++)
+	  {
+	    wchar_t *p = (i == 1) ? p1 : p2;
+	    for (; *p; p++)
+	      *p = towlower (*p);
+	  }
+
+      errno = 0;
+      res = wcscoll (p1, p2);
+      err = errno;
+    }
+#  ifndef HAVE_NEWLOCALE
+  if (err)
+    error ("Invalid locale or string for collation: %s", strerror (err));
+#  else
+  if (err)
+    error ("Invalid string for collation: %s", strerror (err));
+#  endif
+
+  SAFE_FREE ();
+  return res;
+}
+#endif  /* __STDC_ISO_10646__ */
+
+#ifdef WINDOWSNT
+int
+str_collate (Lisp_Object s1, Lisp_Object s2,
+	     Lisp_Object locale, Lisp_Object ignore_case)
+{
+
+  char *loc = STRINGP (locale) ? SSDATA (locale) : NULL;
+  int res, err = errno;
+
+  errno = 0;
+  res = w32_compare_strings (SDATA (s1), SDATA (s2), loc, !NILP (ignore_case));
+  if (errno)
+    error ("Invalid string for collation: %s", strerror (errno));
+
+  errno = err;
+  return res;
+}
+#endif	/* WINDOWSNT */

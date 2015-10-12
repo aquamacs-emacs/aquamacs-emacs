@@ -1,6 +1,6 @@
 ;;; nndoc.el --- single file access for Gnus
 
-;; Copyright (C) 1995-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1995-2015 Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;;	Masanobu UMEDA <umerin@flab.flab.fujitsu.junet>
@@ -199,7 +199,7 @@ from the document.")
 ;; lines in the body.  For MIME dissections only, ARTICLE-INSERT [5] and
 ;; SUMMARY-INSERT [6] give headers to insert for full article or summary line
 ;; generation, respectively.  Other headers usually follow directly from the
-;; buffer.  Value `nil' means no insert.
+;; buffer.  Value nil means no insert.
 (defvoo nndoc-dissection-alist nil)
 (defvoo nndoc-prepare-body-function nil)
 (defvoo nndoc-generate-head-function nil)
@@ -742,7 +742,7 @@ from the document.")
 				   nil t)
 	    (setq subject (concat (match-string 1) subject))
 	    (setq from (concat (match-string 2) " " from))))))
-    (while (and from (string-match "(\[^)\]*)" from))
+    (while (and from (string-match "([^)]*)" from))
       (setq from (replace-match "" t t from)))
     (insert "From: "  (or from "unknown")
 	    "\nSubject: " (or subject "(no subject)") "\n")

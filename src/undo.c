@@ -1,5 +1,5 @@
 /* undo handling for GNU Emacs.
-   Copyright (C) 1990, 1993-1994, 2000-2014 Free Software Foundation,
+   Copyright (C) 1990, 1993-1994, 2000-2015 Free Software Foundation,
    Inc.
 
 This file is part of GNU Emacs.
@@ -33,12 +33,6 @@ static struct buffer *last_undo_buffer;
 /* Position of point last time we inserted a boundary.  */
 static struct buffer *last_boundary_buffer;
 static ptrdiff_t last_boundary_position;
-
-Lisp_Object Qinhibit_read_only;
-
-/* Marker for function call undo list elements.  */
-
-Lisp_Object Qapply;
 
 /* The first time a command records something for undo.
    it also allocates the undo-boundary object
@@ -218,7 +212,7 @@ record_delete (ptrdiff_t beg, Lisp_Object string, bool record_markers)
 void
 record_change (ptrdiff_t beg, ptrdiff_t length)
 {
-  record_delete (beg, make_buffer_string (beg, beg + length, 1), false);
+  record_delete (beg, make_buffer_string (beg, beg + length, true), false);
   record_insert (beg, length);
 }
 
@@ -256,7 +250,7 @@ record_property_change (ptrdiff_t beg, ptrdiff_t length,
 {
   Lisp_Object lbeg, lend, entry;
   struct buffer *obuf = current_buffer, *buf = XBUFFER (buffer);
-  bool boundary = 0;
+  bool boundary = false;
 
   if (EQ (BVAR (buf, undo_list), Qt))
     return;
@@ -266,7 +260,7 @@ record_property_change (ptrdiff_t beg, ptrdiff_t length,
     pending_boundary = Fcons (Qnil, Qnil);
 
   if (buf != last_undo_buffer)
-    boundary = 1;
+    boundary = true;
   last_undo_buffer = buf;
 
   /* Switch temporarily to the buffer that was changed.  */
@@ -461,6 +455,8 @@ void
 syms_of_undo (void)
 {
   DEFSYM (Qinhibit_read_only, "inhibit-read-only");
+
+  /* Marker for function call undo list elements.  */
   DEFSYM (Qapply, "apply");
 
   pending_boundary = Qnil;
@@ -523,5 +519,5 @@ so it must make sure not to do a lot of consing.  */);
 
   DEFVAR_BOOL ("undo-inhibit-record-point", undo_inhibit_record_point,
 	       doc: /* Non-nil means do not record `point' in `buffer-undo-list'.  */);
-  undo_inhibit_record_point = 0;
+  undo_inhibit_record_point = false;
 }

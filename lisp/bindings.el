@@ -1,6 +1,6 @@
 ;;; bindings.el --- define standard key bindings and some variables
 
-;; Copyright (C) 1985-1987, 1992-1996, 1999-2014 Free Software
+;; Copyright (C) 1985-1987, 1992-1996, 1999-2015 Free Software
 ;; Foundation, Inc.
 
 ;; Maintainer: emacs-devel@gnu.org
@@ -638,7 +638,7 @@ okay.  See `mode-line-format'.")
       ;; file-supersession should all be user-errors!
       `(beginning-of-line beginning-of-buffer end-of-line
 	end-of-buffer end-of-file buffer-read-only
-	file-supersession
+	file-supersession mark-inactive
         user-error ;; That's the main one!
         ))
 
@@ -844,11 +844,11 @@ if `inhibit-field-text-motion' is non-nil."
 (let ((map minibuffer-local-map))
   (define-key map "\en"   'next-history-element)
   (define-key map [next]  'next-history-element)
-  (define-key map [down]  'next-history-element)
+  (define-key map [down]  'next-line-or-history-element)
   (define-key map [XF86Forward] 'next-history-element)
   (define-key map "\ep"   'previous-history-element)
   (define-key map [prior] 'previous-history-element)
-  (define-key map [up]    'previous-history-element)
+  (define-key map [up]    'previous-line-or-history-element)
   (define-key map [XF86Back] 'previous-history-element)
   (define-key map "\es"   'next-matching-history-element)
   (define-key map "\er"   'previous-matching-history-element)
@@ -930,14 +930,15 @@ if `inhibit-field-text-motion' is non-nil."
   "Keymap for search related commands.")
 (define-key esc-map "s" search-map)
 
-(define-key search-map "o"  'occur)
-(define-key search-map "hr" 'highlight-regexp)
-(define-key search-map "hp" 'highlight-phrase)
-(define-key search-map "hl" 'highlight-lines-matching-regexp)
-(define-key search-map "h." 'highlight-symbol-at-point)
-(define-key search-map "hu" 'unhighlight-regexp)
-(define-key search-map "hf" 'hi-lock-find-patterns)
-(define-key search-map "hw" 'hi-lock-write-interactive-patterns)
+(define-key search-map "o"    'occur)
+(define-key search-map "\M-w" 'eww-search-words)
+(define-key search-map "hr"   'highlight-regexp)
+(define-key search-map "hp"   'highlight-phrase)
+(define-key search-map "hl"   'highlight-lines-matching-regexp)
+(define-key search-map "h."   'highlight-symbol-at-point)
+(define-key search-map "hu"   'unhighlight-regexp)
+(define-key search-map "hf"   'hi-lock-find-patterns)
+(define-key search-map "hw"   'hi-lock-write-interactive-patterns)
 
 ;;(defun function-key-error ()
 ;;  (interactive)
@@ -1134,6 +1135,7 @@ if `inhibit-field-text-motion' is non-nil."
 (define-key esc-map "j" 'indent-new-comment-line)
 (define-key esc-map "\C-j" 'indent-new-comment-line)
 (define-key ctl-x-map ";" 'comment-set-column)
+(define-key ctl-x-map [?\C-\;] 'comment-line)
 (define-key ctl-x-map "f" 'set-fill-column)
 (define-key ctl-x-map "$" 'set-selective-display)
 
@@ -1268,9 +1270,9 @@ if `inhibit-field-text-motion' is non-nil."
 (define-key abbrev-map "e" 'expand-abbrev)
 (define-key abbrev-map "'" 'expand-abbrev)
 ;; (define-key ctl-x-map "\C-a" 'add-mode-abbrev)
-;; (define-key ctl-x-map "\+" 'add-global-abbrev)
+;; (define-key ctl-x-map "+" 'add-global-abbrev)
 ;; (define-key ctl-x-map "\C-h" 'inverse-add-mode-abbrev)
-;; (define-key ctl-x-map "\-" 'inverse-add-global-abbrev)
+;; (define-key ctl-x-map "-" 'inverse-add-global-abbrev)
 (define-key esc-map "'" 'abbrev-prefix-mark)
 (define-key ctl-x-map "'" 'expand-abbrev)
 (define-key ctl-x-map "\C-b" 'list-buffers)

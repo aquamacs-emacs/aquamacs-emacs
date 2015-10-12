@@ -1,6 +1,6 @@
 ;;; hashcash.el --- Add hashcash payments to email
 
-;; Copyright (C) 2003-2005, 2007-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2003-2005, 2007-2015 Free Software Foundation, Inc.
 
 ;; Written by: Paul Foley <mycroft@actrix.gen.nz> (1997-2002)
 ;; Maintainer: Paul Foley <mycroft@actrix.gen.nz>
@@ -46,10 +46,6 @@
 ;;    (add-hook 'message-send-hook 'hashcash-wait-or-cancel)
 
 ;;; Code:
-
-;; For Emacs <22.2 and XEmacs.
-(eval-and-compile
-  (unless (fboundp 'declare-function) (defmacro declare-function (&rest r))))
 
 (eval-when-compile (require 'cl))	; for case
 

@@ -1,6 +1,6 @@
 ;;; kermit.el --- additions to shell mode for use with kermit
 
-;; Copyright (C) 1988, 2001-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1988, 2001-2015 Free Software Foundation, Inc.
 
 ;; Author: Jeff Norden <jeff@colgate.csnet>
 ;; Maintainer: emacs-devel@gnu.org
@@ -135,7 +135,7 @@ In this state, use LFD to send a line and end it with a carriage-return."
 (defun kermit-clean-on ()
   "Delete all null characters and ^M's from the kermit output.
 Note that another (perhaps better) way to do this is to use the
-command `kermit | tr -d '\\015''."
+command `kermit | tr -d \\='\\015\\=''."
   (interactive)
   (set-process-filter (get-buffer-process (current-buffer))
 		      'kermit-clean-filter))

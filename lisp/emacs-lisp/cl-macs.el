@@ -1,6 +1,6 @@
-;;; cl-macs.el --- Common Lisp macros  -*- lexical-binding: t; coding: utf-8 -*-
+;;; cl-macs.el --- Common Lisp macros  -*- lexical-binding: t -*-
 
-;; Copyright (C) 1993, 2001-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1993, 2001-2015 Free Software Foundation, Inc.
 
 ;; Author: Dave Gillespie <daveg@synaptics.com>
 ;; Old-Version: 2.02
@@ -70,20 +70,12 @@
       (setq form `(cons ,(car args) ,form)))
     form))
 
+;; Note: `cl--compiler-macro-cXXr' has been copied to
+;; `internal--compiler-macro-cXXr' in subr.el.  If you amend either
+;; one, you may want to amend the other, too.
 ;;;###autoload
-(defun cl--compiler-macro-cXXr (form x)
-  (let* ((head (car form))
-         (n (symbol-name (car form)))
-         (i (- (length n) 2)))
-    (if (not (string-match "c[ad]+r\\'" n))
-        (if (and (fboundp head) (symbolp (symbol-function head)))
-            (cl--compiler-macro-cXXr (cons (symbol-function head) (cdr form))
-                                     x)
-          (error "Compiler macro for cXXr applied to non-cXXr form"))
-      (while (> i (match-beginning 0))
-        (setq x (list (if (eq (aref n i) ?a) 'car 'cdr) x))
-        (setq i (1- i)))
-      x)))
+(define-obsolete-function-alias 'cl--compiler-macro-cXXr
+  'internal--compiler-macro-cXXr "25.1")
 
 ;;; Some predicates for analyzing Lisp forms.
 ;; These are used by various
@@ -135,7 +127,13 @@
 	(t t)))
 
 (defun cl--const-expr-val (x)
-  (and (macroexp-const-p x) (if (consp x) (nth 1 x) x)))
+  "Return the value of X known at compile-time.
+If X is not known at compile time, return nil.  Before testing
+whether X is known at compile time, macroexpand it completely in
+`macroexpand-all-environment'."
+  (let ((x (macroexpand-all x macroexpand-all-environment)))
+    (if (macroexp-const-p x)
+        (if (consp x) (nth 1 x) x))))
 
 (defun cl--expr-contains (x y)
   "Count number of times X refers to Y.  Return nil for 0 times."
@@ -163,7 +161,7 @@
 
 ;;; Symbols.
 
-(defvar cl--gensym-counter)
+(defvar cl--gensym-counter 0)
 ;;;###autoload
 (defun cl-gensym (&optional prefix)
   "Generate a new uninterned symbol.
@@ -214,8 +212,21 @@ The name is made by appending a number to PREFIX, default \"G\"."
 (defconst cl--lambda-list-keywords
   '(&optional &rest &key &allow-other-keys &aux &whole &body &environment))
 
-(defvar cl--bind-block) (defvar cl--bind-defs) (defvar cl--bind-enquote)
-(defvar cl--bind-inits) (defvar cl--bind-lets) (defvar cl--bind-forms)
+;; Internal hacks used in formal arg lists:
+;; - &cl-quote: Added to formal-arglists to mean that any default value
+;;   mentioned in the formal arglist should be considered as implicitly
+;;   quoted rather than evaluated.  This is used in `cl-defsubst' when
+;;   performing compiler-macro-expansion, since at that time the
+;;   arguments hold expressions rather than values.
+;; - &cl-defs (DEF . DEFS): Gives the default value to use for missing
+;;   optional arguments which don't have an explicit default value.
+;;   DEFS is an alist mapping vars to their default default value.
+;;   and DEF is the default default to use for all other vars.
+
+(defvar cl--bind-block) ;Name of surrounding block, only use for `signal' data.
+(defvar cl--bind-defs) ;(DEF . DEFS) giving the "default default" for optargs.
+(defvar cl--bind-enquote)      ;Non-nil if &cl-quote was in the formal arglist!
+(defvar cl--bind-lets) (defvar cl--bind-forms)
 
 (defun cl--transform-lambda (form bind-block)
   "Transform a function form FORM of name BIND-BLOCK.
@@ -225,57 +236,88 @@ function's body.
 FORM is of the form (ARGS . BODY)."
   (let* ((args (car form)) (body (cdr form)) (orig-args args)
 	 (cl--bind-block bind-block) (cl--bind-defs nil) (cl--bind-enquote nil)
-	 (cl--bind-inits nil) (cl--bind-lets nil) (cl--bind-forms nil)
-	 (header nil) (simple-args nil))
-    (while (or (stringp (car body))
-	       (memq (car-safe (car body)) '(interactive declare cl-declare)))
-      (push (pop body) header))
+         (parsed-body (macroexp-parse-body body))
+	 (header (car parsed-body)) (simple-args nil))
+    (setq body (cdr parsed-body))
+    ;; "(. X) to (&rest X)" conversion already done in cl--do-arglist, but we
+    ;; do it here as well, so as to be able to see if we can avoid
+    ;; cl--do-arglist.
     (setq args (if (listp args) (cl-copy-list args) (list '&rest args)))
     (let ((p (last args))) (if (cdr p) (setcdr p (list '&rest (cdr p)))))
-    (if (setq cl--bind-defs (cadr (memq '&cl-defs args)))
-	(setq args (delq '&cl-defs (delq cl--bind-defs args))
-	      cl--bind-defs (cadr cl--bind-defs)))
+    (let ((cl-defs (memq '&cl-defs args)))
+      (when cl-defs
+        (setq cl--bind-defs (cadr cl-defs))
+	;; Remove "&cl-defs DEFS" from args.
+        (setcdr cl-defs (cddr cl-defs))
+	(setq args (delq '&cl-defs args))))
     (if (setq cl--bind-enquote (memq '&cl-quote args))
 	(setq args (delq '&cl-quote args)))
     (if (memq '&whole args) (error "&whole not currently implemented"))
-    (let* ((p (memq '&environment args)) (v (cadr p))
-           (env-exp 'macroexpand-all-environment))
+    (let* ((p (memq '&environment args))
+           (v (cadr p)))
       (if p (setq args (nconc (delq (car p) (delq v args))
-                              (list '&aux (list v env-exp))))))
-    (while (and args (symbolp (car args))
-		(not (memq (car args) '(nil &rest &body &key &aux)))
-		(not (and (eq (car args) '&optional)
-			  (or cl--bind-defs (consp (cadr args))))))
-      (push (pop args) simple-args))
+                              `(&aux (,v macroexpand-all-environment))))))
+    ;; Take away all the simple args whose parsing can be handled more
+    ;; efficiently by a plain old `lambda' than the manual parsing generated
+    ;; by `cl--do-arglist'.
+    (let ((optional nil))
+      (while (and args (symbolp (car args))
+                  (not (memq (car args) '(nil &rest &body &key &aux)))
+                  (or (not optional)
+                      ;; Optional args whose default is nil are simple.
+                      (null (nth 1 (assq (car args) (cdr cl--bind-defs)))))
+                  (not (and (eq (car args) '&optional) (setq optional t)
+                            (car cl--bind-defs))))
+        (push (pop args) simple-args))
+      (when optional
+        (if args (push '&optional args))
+        ;; Don't keep a dummy trailing &optional without actual optional args.
+        (if (eq '&optional (car simple-args)) (pop simple-args))))
     (or (eq cl--bind-block 'cl-none)
 	(setq body (list `(cl-block ,cl--bind-block ,@body))))
-    (if (null args)
-	(cl-list* nil (nreverse simple-args) (nconc (nreverse header) body))
-      (if (memq '&optional simple-args) (push '&optional args))
-      (cl--do-arglist args nil (- (length simple-args)
-                                  (if (memq '&optional simple-args) 1 0)))
-      (setq cl--bind-lets (nreverse cl--bind-lets))
-      (cl-list* (and cl--bind-inits `(cl-eval-when (compile load eval)
-                                ,@(nreverse cl--bind-inits)))
-	     (nconc (nreverse simple-args)
-		    (list '&rest (car (pop cl--bind-lets))))
-	     (nconc (let ((hdr (nreverse header)))
+    (let* ((cl--bind-lets nil) (cl--bind-forms nil)
+           (rest-args
+            (cond
+             ((null args) nil)
+             ((eq (car args) '&aux)
+              (cl--do-&aux args)
+              (setq cl--bind-lets (nreverse cl--bind-lets))
+              nil)
+             (t ;; `simple-args' doesn't handle all the parsing that we need,
+              ;; so we pass the rest to cl--do-arglist which will do
+              ;; "manual" parsing.
+              (let ((slen (length simple-args)))
+                (when (memq '&optional simple-args)
+                  (cl-decf slen))
+                (setq header
                       ;; Macro expansion can take place in the middle of
                       ;; apparently harmless computation, so it should not
                       ;; touch the match-data.
                       (save-match-data
-                        (require 'help-fns)
                         (cons (help-add-fundoc-usage
-                               (if (stringp (car hdr)) (pop hdr))
+                               (if (stringp (car header)) (pop header))
                                ;; Be careful with make-symbol and (back)quote,
                                ;; see bug#12884.
                                (let ((print-gensym nil) (print-quoted t))
                                  (format "%S" (cons 'fn (cl--make-usage-args
                                                          orig-args)))))
-                              hdr)))
-		    (list `(let* ,cl--bind-lets
-                             ,@(nreverse cl--bind-forms)
-                             ,@body)))))))
+                              header)))
+                ;; FIXME: we'd want to choose an arg name for the &rest param
+                ;; and pass that as `expr' to cl--do-arglist, but that ends up
+                ;; generating code with a redundant let-binding, so we instead
+                ;; pass a dummy and then look in cl--bind-lets to find what var
+                ;; this was bound to.
+                (cl--do-arglist args :dummy slen)
+                (setq cl--bind-lets (nreverse cl--bind-lets))
+                ;; (cl-assert (eq :dummy (nth 1 (car cl--bind-lets))))
+                (list '&rest (car (pop cl--bind-lets))))))))
+      `(nil
+        (,@(nreverse simple-args) ,@rest-args)
+        ,@header
+        ,(macroexp-let* cl--bind-lets
+                        (macroexp-progn
+                         `(,@(nreverse cl--bind-forms)
+                           ,@body)))))))
 
 ;;;###autoload
 (defmacro cl-defun (name args &rest body)
@@ -295,6 +337,27 @@ and BODY is implicitly surrounded by (cl-block NAME ...).
            (indent 2))
   (let* ((res (cl--transform-lambda (cons args body) name))
 	 (form `(defun ,name ,@(cdr res))))
+    (if (car res) `(progn ,(car res) ,form) form)))
+
+;;;###autoload
+(defmacro cl-iter-defun (name args &rest body)
+  "Define NAME as a generator function.
+Like normal `iter-defun', except ARGLIST allows full Common Lisp conventions,
+and BODY is implicitly surrounded by (cl-block NAME ...).
+
+\(fn NAME ARGLIST [DOCSTRING] BODY...)"
+  (declare (debug
+            ;; Same as iter-defun but use cl-lambda-list.
+            (&define [&or name ("setf" :name setf name)]
+                     cl-lambda-list
+                     cl-declarations-or-string
+                     [&optional ("interactive" interactive)]
+                     def-body))
+           (doc-string 3)
+           (indent 2))
+  (require 'generator)
+  (let* ((res (cl--transform-lambda (cons args body) name))
+         (form `(iter-defun ,name ,@(cdr res))))
     (if (car res) `(progn ,(car res) ,form) form)))
 
 ;; The lambda list for macros is different from that of normal lambdas.
@@ -384,6 +447,11 @@ its argument list allows full Common Lisp conventions."
    (t x)))
 
 (defun cl--make-usage-args (arglist)
+  (let ((aux (ignore-errors (cl-position '&aux arglist))))
+    (when aux
+      ;; `&aux' args aren't arguments, so let's just drop them from the
+      ;; usage info.
+      (setq arglist (cl-subseq arglist 0 aux))))
   (if (cdr-safe (last arglist))         ;Not a proper list.
       (let* ((last (last arglist))
              (tail (cdr last)))
@@ -392,8 +460,7 @@ its argument list allows full Common Lisp conventions."
               (setcdr last nil)
               (nconc (cl--make-usage-args arglist) (cl--make-usage-var tail)))
           (setcdr last tail)))
-    ;; `orig-args' can contain &cl-defs (an internal
-    ;; CL thingy I don't understand), so remove it.
+    ;; `orig-args' can contain &cl-defs.
     (let ((x (memq '&cl-defs arglist)))
       (when x (setq arglist (delq (car x) (remq (cadr x) arglist)))))
     (let ((state nil))
@@ -420,7 +487,18 @@ its argument list allows full Common Lisp conventions."
                    ))))
               arglist))))
 
-(defun cl--do-arglist (args expr &optional num)   ; uses bind-*
+(defun cl--do-&aux (args)
+  (while (and (eq (car args) '&aux) (pop args))
+    (while (and args (not (memq (car args) cl--lambda-list-keywords)))
+      (if (consp (car args))
+          (if (and cl--bind-enquote (cl-cadar args))
+              (cl--do-arglist (caar args)
+                              `',(cadr (pop args)))
+            (cl--do-arglist (caar args) (cadr (pop args))))
+        (cl--do-arglist (pop args) nil))))
+  (if args (error "Malformed argument list ends with: %S" args)))
+
+(defun cl--do-arglist (args expr &optional num)   ; uses cl--bind-*
   (if (nlistp args)
       (if (or (memq args cl--lambda-list-keywords) (not (symbolp args)))
 	  (error "Invalid argument name: %s" args)
@@ -429,15 +507,14 @@ its argument list allows full Common Lisp conventions."
     (let ((p (last args))) (if (cdr p) (setcdr p (list '&rest (cdr p)))))
     (let ((p (memq '&body args))) (if p (setcar p '&rest)))
     (if (memq '&environment args) (error "&environment used incorrectly"))
-    (let ((save-args args)
-	  (restarg (memq '&rest args))
+    (let ((restarg (memq '&rest args))
 	  (safety (if (cl--compiling-file) cl--optimize-safety 3))
 	  (keys nil)
 	  (laterarg nil) (exactarg nil) minarg)
       (or num (setq num 0))
-      (if (listp (cadr restarg))
-	  (setq restarg (make-symbol "--cl-rest--"))
-	(setq restarg (cadr restarg)))
+      (setq restarg (if (listp (cadr restarg))
+                        (make-symbol "--cl-rest--")
+                      (cadr restarg)))
       (push (list restarg expr) cl--bind-lets)
       (if (eq (car args) '&whole)
 	  (push (list (cl--pop2 args) restarg) cl--bind-lets))
@@ -500,7 +577,12 @@ its argument list allows full Common Lisp conventions."
                              (intern (format ":%s" name)))))
 		   (varg (if (consp (car arg)) (cl-cadar arg) (car arg)))
 		   (def (if (cdr arg) (cadr arg)
-			  (or (car cl--bind-defs) (cadr (assq varg cl--bind-defs)))))
+                          ;; The ordering between those two or clauses is
+                          ;; irrelevant, since in practice only one of the two
+                          ;; is ever non-nil (the car is only used for
+                          ;; cl-deftype which doesn't use the cdr).
+			  (or (car cl--bind-defs)
+                              (cadr (assq varg cl--bind-defs)))))
                    (look `(plist-member ,restarg ',karg)))
 	      (and def cl--bind-enquote (setq def `',def))
 	      (if (cddr arg)
@@ -537,15 +619,8 @@ its argument list allows full Common Lisp conventions."
                                        keys)
                               (car ,var)))))))
 	    (push `(let ((,var ,restarg)) ,check) cl--bind-forms)))
-      (while (and (eq (car args) '&aux) (pop args))
-	(while (and args (not (memq (car args) cl--lambda-list-keywords)))
-	  (if (consp (car args))
-	      (if (and cl--bind-enquote (cl-cadar args))
-		  (cl--do-arglist (caar args)
-				 `',(cadr (pop args)))
-		(cl--do-arglist (caar args) (cadr (pop args))))
-	    (cl--do-arglist (pop args) nil))))
-      (if args (error "Malformed argument list %s" save-args)))))
+      (cl--do-&aux args)
+      nil)))
 
 (defun cl--arglist-args (args)
   (if (nlistp args) (list args)
@@ -564,12 +639,11 @@ its argument list allows full Common Lisp conventions."
   "Bind the variables in ARGS to the result of EXPR and execute BODY."
   (declare (indent 2)
            (debug (&define cl-macro-list def-form cl-declarations def-body)))
-  (let* ((cl--bind-lets nil) (cl--bind-forms nil) (cl--bind-inits nil)
+  (let* ((cl--bind-lets nil) (cl--bind-forms nil)
 	 (cl--bind-defs nil) (cl--bind-block 'cl-none) (cl--bind-enquote nil))
     (cl--do-arglist (or args '(&aux)) expr)
-    (append '(progn) cl--bind-inits
-	    (list `(let* ,(nreverse cl--bind-lets)
-                     ,@(nreverse cl--bind-forms) ,@body)))))
+    (macroexp-let* (nreverse cl--bind-lets)
+                   (macroexp-progn (append (nreverse cl--bind-forms) body)))))
 
 
 ;;; The `cl-eval-when' form.
@@ -619,14 +693,20 @@ The result of the body appears to the compiler as a quoted constant."
 	     (set `(setq ,temp ,form)))
 	(if (and (fboundp 'byte-compile-file-form-defmumble)
 		 (boundp 'this-kind) (boundp 'that-one))
-	    (fset 'byte-compile-file-form
-		  `(lambda (form)
-                     (fset 'byte-compile-file-form
-                           ',(symbol-function 'byte-compile-file-form))
-                     (byte-compile-file-form ',set)
-                     (byte-compile-file-form form)))
-	  (print set (symbol-value 'byte-compile--outbuffer)))
-	`(symbol-value ',temp))
+            ;; Else, we can't output right away, so we have to delay it to the
+            ;; next time we're at the top-level.
+            ;; FIXME: Use advice-add/remove.
+            (fset 'byte-compile-file-form
+                  (let ((old (symbol-function 'byte-compile-file-form)))
+                    (lambda (form)
+                      (fset 'byte-compile-file-form old)
+                      (byte-compile-file-form set)
+                      (byte-compile-file-form form))))
+          ;; If we're not in the middle of compiling something, we can
+          ;; output directly to byte-compile-outbuffer, to make sure
+          ;; temp is set before we use it.
+          (print set byte-compile--outbuffer))
+	temp)
     `',(eval form)))
 
 
@@ -643,30 +723,26 @@ allowed only in the final clause, and matches if no other keys match.
 Key values are compared by `eql'.
 \n(fn EXPR (KEYLIST BODY...)...)"
   (declare (indent 1) (debug (form &rest (sexp body))))
-  (let* ((temp (if (cl--simple-expr-p expr 3) expr (make-symbol "--cl-var--")))
-	 (head-list nil)
-	 (body (cons
-		'cond
-		(mapcar
-		 (function
-		  (lambda (c)
-		    (cons (cond ((memq (car c) '(t otherwise)) t)
-				((eq (car c) 'cl--ecase-error-flag)
-				 `(error "cl-ecase failed: %s, %s"
-                                         ,temp ',(reverse head-list)))
-				((listp (car c))
-				 (setq head-list (append (car c) head-list))
-				 `(cl-member ,temp ',(car c)))
-				(t
-				 (if (memq (car c) head-list)
-				     (error "Duplicate key in case: %s"
-					    (car c)))
-				 (push (car c) head-list)
-				 `(eql ,temp ',(car c))))
-			  (or (cdr c) '(nil)))))
-		 clauses))))
-    (if (eq temp expr) body
-      `(let ((,temp ,expr)) ,body))))
+  (macroexp-let2 macroexp-copyable-p temp expr
+    (let* ((head-list nil))
+      `(cond
+        ,@(mapcar
+           (lambda (c)
+             (cons (cond ((memq (car c) '(t otherwise)) t)
+                         ((eq (car c) 'cl--ecase-error-flag)
+                          `(error "cl-ecase failed: %s, %s"
+                                  ,temp ',(reverse head-list)))
+                         ((listp (car c))
+                          (setq head-list (append (car c) head-list))
+                          `(cl-member ,temp ',(car c)))
+                         (t
+                          (if (memq (car c) head-list)
+                              (error "Duplicate key in case: %s"
+                                     (car c)))
+                          (push (car c) head-list)
+                          `(eql ,temp ',(car c))))
+                   (or (cdr c) '(nil))))
+           clauses)))))
 
 ;;;###autoload
 (defmacro cl-ecase (expr &rest clauses)
@@ -686,24 +762,22 @@ final clause, and matches if no other keys match.
 \n(fn EXPR (TYPE BODY...)...)"
   (declare (indent 1)
            (debug (form &rest ([&or cl-type-spec "otherwise"] body))))
-  (let* ((temp (if (cl--simple-expr-p expr 3) expr (make-symbol "--cl-var--")))
-	 (type-list nil)
-	 (body (cons
-		'cond
-		(mapcar
-		 (function
-		  (lambda (c)
-		    (cons (cond ((eq (car c) 'otherwise) t)
-				((eq (car c) 'cl--ecase-error-flag)
-				 `(error "cl-etypecase failed: %s, %s"
-                                         ,temp ',(reverse type-list)))
-				(t
-				 (push (car c) type-list)
-				 (cl--make-type-test temp (car c))))
-			  (or (cdr c) '(nil)))))
-		 clauses))))
-    (if (eq temp expr) body
-      `(let ((,temp ,expr)) ,body))))
+  (macroexp-let2 macroexp-copyable-p temp expr
+    (let* ((type-list nil))
+      (cons
+       'cond
+       (mapcar
+        (function
+         (lambda (c)
+           (cons (cond ((eq (car c) 'otherwise) t)
+                       ((eq (car c) 'cl--ecase-error-flag)
+                        `(error "cl-etypecase failed: %s, %s"
+                                ,temp ',(reverse type-list)))
+                       (t
+                        (push (car c) type-list)
+                        `(cl-typep ,temp ',(car c))))
+                 (or (cdr c) '(nil)))))
+        clauses)))))
 
 ;;;###autoload
 (defmacro cl-etypecase (expr &rest clauses)
@@ -816,7 +890,8 @@ For more details, see Info node `(cl)Loop Facility'.
                                "repeat" "while" "until" "always" "never"
                                "thereis" "collect" "append" "nconc" "sum"
                                "count" "maximize" "minimize" "if" "unless"
-                               "return"] form]
+                               "return"]
+                          form]
                          ;; Simple default, which covers 99% of the cases.
                          symbolp form)))
   (if (not (memq t (mapcar #'symbolp
@@ -1104,10 +1179,10 @@ For more details, see Info node `(cl)Loop Facility'.
 		(if (memq (car cl--loop-args) '(downto above))
 		    (error "Must specify `from' value for downward cl-loop"))
 		(let* ((down (or (eq (car cl--loop-args) 'downfrom)
-				 (memq (cl-caddr cl--loop-args)
+				 (memq (nth 2 cl--loop-args)
                                        '(downto above))))
 		       (excl (or (memq (car cl--loop-args) '(above below))
-				 (memq (cl-caddr cl--loop-args)
+				 (memq (nth 2 cl--loop-args)
                                        '(above below))))
 		       (start (and (memq (car cl--loop-args)
                                          '(from upfrom downfrom))
@@ -1130,7 +1205,8 @@ For more details, see Info node `(cl)Loop Facility'.
 		  (if end
 		      (push (list
 			     (if down (if excl '> '>=) (if excl '< '<=))
-			     var (or end-var end)) cl--loop-body))
+			     var (or end-var end))
+                            cl--loop-body))
 		  (push (list var (list (if down '- '+) var
 					(or step-var step 1)))
 			loop-for-steps)))
@@ -1188,7 +1264,8 @@ For more details, see Info node `(cl)Loop Facility'.
 		  (push (list temp-vec (pop cl--loop-args)) loop-for-bindings)
 		  (push (list temp-idx -1) loop-for-bindings)
 		  (push `(< (setq ,temp-idx (1+ ,temp-idx))
-                            (length ,temp-vec)) cl--loop-body)
+                            (length ,temp-vec))
+                        cl--loop-body)
 		  (if (eq word 'across-ref)
 		      (push (list var `(aref ,temp-vec ,temp-idx))
 			    cl--loop-symbol-macs)
@@ -1364,7 +1441,8 @@ For more details, see Info node `(cl)Loop Facility'.
 	(if loop-for-sets
 	    (push `(progn
                      ,(cl--loop-let (nreverse loop-for-sets) 'setq ands)
-                     t) cl--loop-body))
+                     t)
+                  cl--loop-body))
 	(if loop-for-steps
 	    (push (cons (if ands 'cl-psetq 'setq)
 			(apply 'append (nreverse loop-for-steps)))
@@ -1382,7 +1460,8 @@ For more details, see Info node `(cl)Loop Facility'.
 	    (push `(progn (push ,what ,var) t) cl--loop-body)
 	  (push `(progn
                    (setq ,var (nconc ,var (list ,what)))
-                   t) cl--loop-body))))
+                   t)
+                cl--loop-body))))
 
      ((memq word '(nconc nconcing append appending))
       (let ((what (pop cl--loop-args))
@@ -1397,7 +1476,9 @@ For more details, see Info node `(cl)Loop Facility'.
                               ,var)
                           `(,(if (memq word '(nconc nconcing))
                                  #'nconc #'append)
-                            ,var ,what))) t) cl--loop-body)))
+                            ,var ,what)))
+                 t)
+              cl--loop-body)))
 
      ((memq word '(concat concating))
       (let ((what (pop cl--loop-args))
@@ -1420,15 +1501,14 @@ For more details, see Info node `(cl)Loop Facility'.
 	(push `(progn (if ,what (cl-incf ,var)) t) cl--loop-body)))
 
      ((memq word '(minimize minimizing maximize maximizing))
-      (let* ((what (pop cl--loop-args))
-	     (temp (if (cl--simple-expr-p what) what
-                     (make-symbol "--cl-var--")))
-	     (var (cl--loop-handle-accum nil))
-	     (func (intern (substring (symbol-name word) 0 3)))
-	     (set `(setq ,var (if ,var (,func ,var ,temp) ,temp))))
-	(push `(progn ,(if (eq temp what) set
-                         `(let ((,temp ,what)) ,set))
-                      t) cl--loop-body)))
+      (push `(progn ,(macroexp-let2 macroexp-copyable-p temp
+                                    (pop cl--loop-args)
+                       (let* ((var (cl--loop-handle-accum nil))
+                              (func (intern (substring (symbol-name word)
+                                                       0 3))))
+                         `(setq ,var (if ,var (,func ,var ,temp) ,temp))))
+                    t)
+            cl--loop-body))
 
      ((eq word 'with)
       (let ((bindings nil))
@@ -1499,7 +1579,8 @@ For more details, see Info node `(cl)Loop Facility'.
       (or cl--loop-result-var
           (setq cl--loop-result-var (make-symbol "--cl-var--")))
       (push `(setq ,cl--loop-result-var ,(pop cl--loop-args)
-                   ,cl--loop-finish-flag nil) cl--loop-body))
+                   ,cl--loop-finish-flag nil)
+            cl--loop-body))
 
      (t
       ;; This is an advertised interface: (info "(cl)Other Clauses").
@@ -1540,7 +1621,7 @@ If BODY is `setq', then use SPECS for assignments rather than for bindings."
               (if (and (cl--unused-var-p temp) (null expr))
                   nil ;; Don't bother declaring/setting `temp' since it won't
 		      ;; be used when `expr' is nil, anyway.
-                (when (or (null temp)
+		(when (or (null temp)
                           (and (eq body 'setq) (cl--unused-var-p temp)))
                   ;; Prefer a fresh uninterned symbol over "_to", to avoid
                   ;; warnings that we set an unused variable.
@@ -1662,7 +1743,7 @@ An implicit nil block is established around the loop.
   (declare (debug ((symbolp form &optional form) cl-declarations body))
            (indent 1))
   (let ((loop `(dolist ,spec ,@body)))
-    (if (advice-member-p #'cl--wrap-in-nil-block 'dolist)
+    (if (advice-member-p 'cl--wrap-in-nil-block 'dolist)
         loop `(cl-block nil ,loop))))
 
 ;;;###autoload
@@ -1675,7 +1756,7 @@ nil.
 \(fn (VAR COUNT [RESULT]) BODY...)"
   (declare (debug cl-dolist) (indent 1))
   (let ((loop `(dotimes ,spec ,@body)))
-    (if (advice-member-p #'cl--wrap-in-nil-block 'dotimes)
+    (if (advice-member-p 'cl--wrap-in-nil-block 'dotimes)
         loop `(cl-block nil ,loop))))
 
 (defvar cl--tagbody-alist nil)
@@ -1705,7 +1786,8 @@ Labels have lexical scope and dynamic extent."
       (unless (eq 'go (car-safe (car-safe block)))
         (push `(go cl--exit) block))
       (push (nreverse block) blocks))
-    (let ((catch-tag (make-symbol "cl--tagbody-tag")))
+    (let ((catch-tag (make-symbol "cl--tagbody-tag"))
+          (cl--tagbody-alist cl--tagbody-alist))
       (push (cons 'cl--exit catch-tag) cl--tagbody-alist)
       (dolist (block blocks)
         (push (cons (car block) catch-tag) cl--tagbody-alist))
@@ -1738,7 +1820,7 @@ from OBARRAY.
      (let (,(car spec))
        (mapatoms #'(lambda (,(car spec)) ,@body)
                  ,@(and (cadr spec) (list (cadr spec))))
-       ,(cl-caddr spec))))
+       ,(nth 2 spec))))
 
 ;;;###autoload
 (defmacro cl-do-all-symbols (spec &rest body)
@@ -1786,6 +1868,8 @@ a `let' form, except that the list of symbols can be computed at run-time."
            (push (list (pop ,syms) (list 'quote (pop ,vals))) ,binds))
          (eval (list 'let ,binds (list 'funcall (list 'quote ,bodyfun))))))))
 
+(defconst cl--labels-magic (make-symbol "cl--labels-magic"))
+
 (defvar cl--labels-convert-cache nil)
 
 (defun cl--labels-convert (f)
@@ -1797,10 +1881,12 @@ a `let' form, except that the list of symbols can be computed at run-time."
    ;; being expanded even though we don't receive it.
    ((eq f (car cl--labels-convert-cache)) (cdr cl--labels-convert-cache))
    (t
-    (let ((found (assq f macroexpand-all-environment)))
-      (if (and found (ignore-errors
-                       (eq (cadr (cl-caddr found)) 'cl-labels-args)))
-          (cadr (cl-caddr (cl-cadddr found)))
+    (let* ((found (assq f macroexpand-all-environment))
+           (replacement (and found
+                             (ignore-errors
+                               (funcall (cdr found) cl--labels-magic)))))
+      (if (and replacement (eq cl--labels-magic (car replacement)))
+          (nth 1 replacement)
         (let ((res `(function ,f)))
           (setq cl--labels-convert-cache (cons f res))
           res))))))
@@ -1809,25 +1895,38 @@ a `let' form, except that the list of symbols can be computed at run-time."
 (defmacro cl-flet (bindings &rest body)
   "Make local function definitions.
 Like `cl-labels' but the definitions are not recursive.
+Each binding can take the form (FUNC EXP) where
+FUNC is the function name, and EXP is an expression that returns the
+function value to which it should be bound, or it can take the more common
+form \(FUNC ARGLIST BODY...) which is a shorthand
+for (FUNC (lambda ARGLIST BODY)).
 
 \(fn ((FUNC ARGLIST BODY...) ...) FORM...)"
   (declare (indent 1) (debug ((&rest (cl-defun)) cl-declarations body)))
   (let ((binds ()) (newenv macroexpand-all-environment))
     (dolist (binding bindings)
-      (let ((var (make-symbol (format "--cl-%s--" (car binding)))))
-	(push (list var `(cl-function (lambda . ,(cdr binding)))) binds)
+      (let ((var (make-symbol (format "--cl-%s--" (car binding))))
+            (args-and-body (cdr binding)))
+        (if (and (= (length args-and-body) 1) (symbolp (car args-and-body)))
+            ;; Optimize (cl-flet ((fun var)) body).
+            (setq var (car args-and-body))
+          (push (list var (if (= (length args-and-body) 1)
+                              (car args-and-body)
+                            `(cl-function (lambda . ,args-and-body))))
+                binds))
 	(push (cons (car binding)
-                    `(lambda (&rest cl-labels-args)
-                       (cl-list* 'funcall ',var
-                                 cl-labels-args)))
+                    (lambda (&rest args)
+                      (if (eq (car args) cl--labels-magic)
+                          (list cl--labels-magic var)
+                        `(funcall ,var ,@args))))
               newenv)))
-    `(let ,(nreverse binds)
-       ,@(macroexp-unprogn
-          (macroexpand-all
-           `(progn ,@body)
-           ;; Don't override lexical-let's macro-expander.
-           (if (assq 'function newenv) newenv
-             (cons (cons 'function #'cl--labels-convert) newenv)))))))
+    ;; FIXME: Eliminate those functions which aren't referenced.
+    (macroexp-let* (nreverse binds)
+                   (macroexpand-all
+                    `(progn ,@body)
+                    ;; Don't override lexical-let's macro-expander.
+                    (if (assq 'function newenv) newenv
+                      (cons (cons 'function #'cl--labels-convert) newenv))))))
 
 ;;;###autoload
 (defmacro cl-flet* (bindings &rest body)
@@ -1854,9 +1953,10 @@ in closures will only work if `lexical-binding' is in use.
       (let ((var (make-symbol (format "--cl-%s--" (car binding)))))
 	(push (list var `(cl-function (lambda . ,(cdr binding)))) binds)
 	(push (cons (car binding)
-                    `(lambda (&rest cl-labels-args)
-                       (cl-list* 'funcall ',var
-                                 cl-labels-args)))
+                    (lambda (&rest args)
+                      (if (eq (car args) cl--labels-magic)
+                          (list cl--labels-magic var)
+                        (cl-list* 'funcall var args))))
               newenv)))
     (macroexpand-all `(letrec ,(nreverse binds) ,@body)
                      ;; Don't override lexical-let's macro-expander.
@@ -1878,13 +1978,14 @@ This is like `cl-flet', but for macros instead of functions.
              cl-declarations body)))
   (if (cdr bindings)
       `(cl-macrolet (,(car bindings)) (cl-macrolet ,(cdr bindings) ,@body))
-    (if (null bindings) (cons 'progn body)
+    (if (null bindings) (macroexp-progn body)
       (let* ((name (caar bindings))
 	     (res (cl--transform-lambda (cdar bindings) name)))
 	(eval (car res))
-	(macroexpand-all (cons 'progn body)
-                         (cons (cons name `(lambda ,@(cdr res)))
-                               macroexpand-all-environment))))))
+	(macroexpand-all (macroexp-progn body)
+			 (cons (cons name
+                                     (eval `(cl-function (lambda ,@(cdr res))) t))
+			       macroexpand-all-environment))))))
 
 (defconst cl--old-macroexpand
   (if (and (boundp 'cl--old-macroexpand)
@@ -2000,8 +2101,8 @@ by EXPANSION, and (setq NAME ...) will act like (setf EXPANSION ...).
                                           macroexpand-all-environment))))
               (if (or (null (cdar bindings)) (cl-cddar bindings))
                   (macroexp--warn-and-return
-                   (format "Malformed `cl-symbol-macrolet' binding: %S"
-                           (car bindings))
+                   (format-message "Malformed `cl-symbol-macrolet' binding: %S"
+                                   (car bindings))
                    expansion)
                 expansion)))
         (fset 'macroexpand previous-macroexpand))))))
@@ -2057,10 +2158,18 @@ values.  For compatibility, (cl-values A B C) is a synonym for (list A B C).
   (declare (debug t))
   (cons 'progn body))
 ;;;###autoload
-(defmacro cl-the (_type form)
-  "At present this ignores TYPE and is simply equivalent to FORM."
+(defmacro cl-the (type form)
+  "Return FORM.  If type-checking is enabled, assert that it is of TYPE."
   (declare (indent 1) (debug (cl-type-spec form)))
-  form)
+  (if (not (or (not (cl--compiling-file))
+               (< cl--optimize-speed 3)
+               (= cl--optimize-safety 3)))
+      form
+    (macroexp-let2 macroexp-copyable-p temp form
+      `(progn (unless (cl-typep ,temp ',type)
+                (signal 'wrong-type-argument
+                        (list ',type ,temp ',form)))
+              ,temp))))
 
 (defvar cl--proclaim-history t)    ; for future compilers
 (defvar cl--declare-stack t)       ; for future compilers
@@ -2317,7 +2426,79 @@ Like `cl-callf', but PLACE is the second argument of FUNC, not the first.
                    (if (symbolp func) (cons func rargs)
                      `(funcall #',func ,@rargs))))))))
 
+;;;###autoload
+(defmacro cl-defsubst (name args &rest body)
+  "Define NAME as a function.
+Like `defun', except the function is automatically declared `inline' and
+the arguments are immutable.
+ARGLIST allows full Common Lisp conventions, and BODY is implicitly
+surrounded by (cl-block NAME ...).
+The function's arguments should be treated as immutable.
+
+\(fn NAME ARGLIST [DOCSTRING] BODY...)"
+  (declare (debug cl-defun) (indent 2))
+  (let* ((argns (cl--arglist-args args))
+	 (real-args (if (eq '&cl-defs (car args)) (cddr args) args))
+         (p argns)
+         ;; (pbody (cons 'progn body))
+         )
+    (while (and p (eq (cl--expr-contains real-args (car p)) 1)) (pop p))
+    `(progn
+       ,(if p nil   ; give up if defaults refer to earlier args
+          `(cl-define-compiler-macro ,name
+             ,(if (memq '&key args)
+                  `(&whole cl-whole &cl-quote ,@args)
+                (cons '&cl-quote args))
+             (cl--defsubst-expand
+              ',argns '(cl-block ,name ,@body)
+              ;; We used to pass `simple' as
+              ;; (not (or unsafe (cl-expr-access-order pbody argns)))
+              ;; But this is much too simplistic since it
+              ;; does not pay attention to the argvs (and
+              ;; cl-expr-access-order itself is also too naive).
+              nil
+              ,(and (memq '&key args) 'cl-whole) nil ,@argns)))
+       (cl-defun ,name ,args ,@body))))
+
+(defun cl--defsubst-expand (argns body simple whole _unsafe &rest argvs)
+  (if (and whole (not (cl--safe-expr-p (cons 'progn argvs)))) whole
+    (if (cl--simple-exprs-p argvs) (setq simple t))
+    (let* ((substs ())
+           (lets (delq nil
+                       (cl-mapcar (lambda (argn argv)
+                                    (if (or simple (macroexp-const-p argv))
+                                        (progn (push (cons argn argv) substs)
+                                               nil)
+                                      (list argn argv)))
+                                  argns argvs))))
+      ;; FIXME: `sublis/subst' will happily substitute the symbol
+      ;; `argn' in places where it's not used as a reference
+      ;; to a variable.
+      ;; FIXME: `sublis/subst' will happily copy `argv' to a different
+      ;; scope, leading to name capture.
+      (setq body (cond ((null substs) body)
+                       ((null (cdr substs))
+                        (cl-subst (cdar substs) (caar substs) body))
+                       (t (cl--sublis substs body))))
+      (if lets `(let ,lets ,body) body))))
+
+(defun cl--sublis (alist tree)
+  "Perform substitutions indicated by ALIST in TREE (non-destructively)."
+  (let ((x (assq tree alist)))
+    (cond
+     (x (cdr x))
+     ((consp tree)
+      (cons (cl--sublis alist (car tree)) (cl--sublis alist (cdr tree))))
+     (t tree))))
+
 ;;; Structures.
+
+(defmacro cl--find-class (type)
+  `(get ,type 'cl--class))
+
+;; Rather than hard code cl-structure-object, we indirect through this variable
+;; for bootstrapping reasons.
+(defvar cl--struct-default-parent nil)
 
 ;;;###autoload
 (defmacro cl-defstruct (struct &rest descs)
@@ -2374,14 +2555,12 @@ non-nil value, that slot cannot be set via `setf'.
 	 (tag (intern (format "cl-struct-%s" name)))
 	 (tag-symbol (intern (format "cl-struct-%s-tags" name)))
 	 (include-descs nil)
-	 (side-eff nil)
+	 (include-name nil)
 	 (type nil)
 	 (named nil)
 	 (forms nil)
+         (docstring (if (stringp (car descs)) (pop descs)))
 	 pred-form pred-check)
-    (if (stringp (car descs))
-	(push `(put ',name 'structure-documentation
-                    ,(pop descs)) forms))
     (setq descs (cons '(cl-tag-slot)
 		      (mapcar (function (lambda (x) (if (consp x) x (list x))))
 			      descs)))
@@ -2406,11 +2585,14 @@ non-nil value, that slot cannot be set via `setf'.
 	      ((eq opt :predicate)
 	       (if args (setq predicate (car args))))
 	      ((eq opt :include)
-	       (setq include (car args)
-		     include-descs (mapcar (function
-					    (lambda (x)
-					      (if (consp x) x (list x))))
-					   (cdr args))))
+               ;; FIXME: Actually, we can include more than once as long as
+               ;; we include EIEIO classes rather than cl-structs!
+               (when include-name (error "Can't :include more than once"))
+               (setq include-name (car args))
+               (setq include-descs (mapcar (function
+                                            (lambda (x)
+                                              (if (consp x) x (list x))))
+                                           (cdr args))))
 	      ((eq opt :print-function)
 	       (setq print-func (car args)))
 	      ((eq opt :type)
@@ -2422,19 +2604,21 @@ non-nil value, that slot cannot be set via `setf'.
 				  descs)))
 	      (t
 	       (error "Slot option %s unrecognized" opt)))))
+    (unless (or include-name type)
+      (setq include-name cl--struct-default-parent))
+    (when include-name (setq include (cl--struct-get-class include-name)))
     (if print-func
 	(setq print-func
               `(progn (funcall #',print-func cl-x cl-s cl-n) t))
-      (or type (and include (not (get include 'cl-struct-print)))
+      (or type (and include (not (cl--struct-class-print include)))
 	  (setq print-auto t
 		print-func (and (or (not (or include type)) (null print-func))
 				`(progn
                                    (princ ,(format "#S(%s" name) cl-s))))))
     (if include
-	(let ((inc-type (get include 'cl-struct-type))
-	      (old-descs (get include 'cl-struct-slots)))
-	  (or inc-type (error "%s is not a struct name" include))
-	  (and type (not (eq (car inc-type) type))
+	(let* ((inc-type (cl--struct-class-type include))
+               (old-descs (cl-struct-slot-info include)))
+	  (and type (not (eq inc-type type))
 	       (error ":type disagrees with :include for %s" name))
 	  (while include-descs
 	    (setcar (memq (or (assq (caar include-descs) old-descs)
@@ -2443,39 +2627,35 @@ non-nil value, that slot cannot be set via `setf'.
 			  old-descs)
 		    (pop include-descs)))
 	  (setq descs (append old-descs (delq (assq 'cl-tag-slot descs) descs))
-		type (car inc-type)
-		named (assq 'cl-tag-slot descs))
-	  (if (cadr inc-type) (setq tag name named t))
-	  (let ((incl include))
-	    (while incl
-	      (push `(cl-pushnew ',tag
-                              ,(intern (format "cl-struct-%s-tags" incl)))
-                    forms)
-	      (setq incl (get incl 'cl-struct-include)))))
+		type inc-type
+		named (if type (assq 'cl-tag-slot descs) 'true))
+	  (if (cl--struct-class-named include) (setq tag name named t)))
       (if type
 	  (progn
 	    (or (memq type '(vector list))
 		(error "Invalid :type specifier: %s" type))
 	    (if named (setq tag name)))
-	(setq type 'vector named 'true)))
+	(setq named 'true)))
     (or named (setq descs (delq (assq 'cl-tag-slot descs) descs)))
-    (push `(defvar ,tag-symbol) forms)
+    (when (and (null predicate) named)
+      (setq predicate (intern (format "cl--struct-%s-p" name))))
     (setq pred-form (and named
 			 (let ((pos (- (length descs)
 				       (length (memq (assq 'cl-tag-slot descs)
 						     descs)))))
-			   (if (eq type 'vector)
-			       `(and (vectorp cl-x)
-				     (>= (length cl-x) ,(length descs))
-				     (memq (aref cl-x ,pos) ,tag-symbol))
-			     (if (= pos 0)
-				 `(memq (car-safe cl-x) ,tag-symbol)
-			       `(and (consp cl-x)
+			   (cond
+                            ((memq type '(nil vector))
+                             `(and (vectorp cl-x)
+                                   (>= (length cl-x) ,(length descs))
+                                   (memq (aref cl-x ,pos) ,tag-symbol)))
+                            ((= pos 0) `(memq (car-safe cl-x) ,tag-symbol))
+                            (t `(and (consp cl-x)
 				     (memq (nth ,pos cl-x) ,tag-symbol))))))
 	  pred-check (and pred-form (> safety 0)
 			  (if (and (eq (cl-caadr pred-form) 'vectorp)
 				   (= safety 1))
-			      (cons 'and (cl-cdddr pred-form)) pred-form)))
+			      (cons 'and (cl-cdddr pred-form))
+                            `(,predicate cl-x))))
     (let ((pos 0) (descp descs))
       (while descp
 	(let* ((desc (pop descp))
@@ -2491,14 +2671,15 @@ non-nil value, that slot cannot be set via `setf'.
 	      (push slot slots)
 	      (push (nth 1 desc) defaults)
 	      (push `(cl-defsubst ,accessor (cl-x)
+                       (declare (side-effect-free t))
                        ,@(and pred-check
 			      (list `(or ,pred-check
-                                         (error "%s accessing a non-%s"
-                                                ',accessor ',name))))
-                       ,(if (eq type 'vector) `(aref cl-x ,pos)
+                                         (signal 'wrong-type-argument
+                                                 (list ',name cl-x)))))
+                       ,(if (memq type '(nil vector)) `(aref cl-x ,pos)
                           (if (= pos 0) '(car cl-x)
-                            `(nth ,pos cl-x)))) forms)
-	      (push (cons accessor t) side-eff)
+                            `(nth ,pos cl-x))))
+                    forms)
               (if (cadr (memq :read-only (cddr desc)))
                   (push `(gv-define-expander ,accessor
                            (lambda (_cl-do _cl-x)
@@ -2529,30 +2710,32 @@ non-nil value, that slot cannot be set via `setf'.
 	(setq pos (1+ pos))))
     (setq slots (nreverse slots)
 	  defaults (nreverse defaults))
-    (and predicate pred-form
-	 (progn (push `(cl-defsubst ,predicate (cl-x)
-                         ,(if (eq (car pred-form) 'and)
-                              (append pred-form '(t))
-                            `(and ,pred-form t))) forms)
-		(push (cons predicate 'error-free) side-eff)))
+    (when pred-form
+      (push `(cl-defsubst ,predicate (cl-x)
+               (declare (side-effect-free error-free))
+               ,(if (eq (car pred-form) 'and)
+                    (append pred-form '(t))
+                  `(and ,pred-form t)))
+            forms)
+      (push `(put ',name 'cl-deftype-satisfies ',predicate) forms))
     (and copier
-	 (progn (push `(defun ,copier (x) (copy-sequence x)) forms)
-		(push (cons copier t) side-eff)))
+         (push `(defalias ',copier #'copy-sequence) forms))
     (if constructor
 	(push (list constructor
-		       (cons '&key (delq nil (copy-sequence slots))))
-		 constrs))
-    (while constrs
-      (let* ((name (caar constrs))
-	     (args (cadr (pop constrs)))
-	     (anames (cl--arglist-args args))
+                    (cons '&key (delq nil (copy-sequence slots))))
+              constrs))
+    (pcase-dolist (`(,cname ,args ,doc) constrs)
+      (let* ((anames (cl--arglist-args args))
 	     (make (cl-mapcar (function (lambda (s d) (if (memq s anames) s d)))
 			    slots defaults)))
-	(push `(cl-defsubst ,name
-                 (&cl-defs '(nil ,@descs) ,@args)
-                 (,type ,@make)) forms)
-	(if (cl--safe-expr-p `(progn ,@(mapcar #'cl-second descs)))
-	    (push (cons name t) side-eff))))
+	(push `(cl-defsubst ,cname
+                   (&cl-defs (nil ,@descs) ,@args)
+                 ,(if (stringp doc) (list doc)
+                    (format "Constructor for objects of type `%s'." name))
+                 ,@(if (cl--safe-expr-p `(progn ,@(mapcar #'cl-second descs)))
+                       '((declare (side-effect-free t))))
+                 (,(or type #'vector) ,@make))
+              forms)))
     (if print-auto (nconc print-func (list '(princ ")" cl-s) t)))
     ;; Don't bother adding to cl-custom-print-functions since it's not used
     ;; by anything anyway!
@@ -2565,28 +2748,125 @@ non-nil value, that slot cannot be set via `setf'.
     ;;                  (and ,pred-form ,print-func))
     ;;                cl-custom-print-functions))
     ;;          forms))
-    (push `(setq ,tag-symbol (list ',tag)) forms)
-    (push `(cl-eval-when (compile load eval)
-             (put ',name 'cl-struct-slots ',descs)
-             (put ',name 'cl-struct-type ',(list type (eq named t)))
-             (put ',name 'cl-struct-include ',include)
-             (put ',name 'cl-struct-print ,print-auto)
-             ,@(mapcar (lambda (x)
-                         `(put ',(car x) 'side-effect-free ',(cdr x)))
-                       side-eff))
-          forms)
-    `(progn ,@(nreverse (cons `',name forms)))))
+    `(progn
+       (defvar ,tag-symbol)
+       ,@(nreverse forms)
+       ;; Call cl-struct-define during compilation as well, so that
+       ;; a subsequent cl-defstruct in the same file can correctly include this
+       ;; struct as a parent.
+       (eval-and-compile
+         (cl-struct-define ',name ,docstring ',include-name
+                           ',type ,(eq named t) ',descs ',tag-symbol ',tag
+                           ',print-auto))
+       ',name)))
 
-;;; Types and assertions.
+;;; Add cl-struct support to pcase
+
+(defun cl--struct-all-parents (class)
+  (when (cl--struct-class-p class)
+    (let ((res ())
+          (classes (list class)))
+      ;; BFS precedence.
+      (while (let ((class (pop classes)))
+               (push class res)
+               (setq classes
+                     (append classes
+                             (cl--class-parents class)))))
+      (nreverse res))))
 
 ;;;###autoload
-(defmacro cl-deftype (name arglist &rest body)
-  "Define NAME as a new data type.
-The type name can then be used in `cl-typecase', `cl-check-type', etc."
-  (declare (debug cl-defmacro) (doc-string 3) (indent 2))
-  `(cl-eval-when (compile load eval)
-     (put ',name 'cl-deftype-handler
-          (cl-function (lambda (&cl-defs '('*) ,@arglist) ,@body)))))
+(pcase-defmacro cl-struct (type &rest fields)
+  "Pcase patterns to match cl-structs.
+Elements of FIELDS can be of the form (NAME PAT) in which case the contents of
+field NAME is matched against PAT, or they can be of the form NAME which
+is a shorthand for (NAME NAME)."
+  (declare (debug (sexp &rest [&or (sexp pcase-PAT) sexp])))
+  `(and (pred (pcase--flip cl-typep ',type))
+        ,@(mapcar
+           (lambda (field)
+             (let* ((name (if (consp field) (car field) field))
+                    (pat (if (consp field) (cadr field) field)))
+               `(app ,(if (eq (cl-struct-sequence-type type) 'list)
+                          `(nth ,(cl-struct-slot-offset type name))
+                        `(pcase--flip aref ,(cl-struct-slot-offset type name)))
+                     ,pat)))
+           fields)))
+
+(defun cl--pcase-mutually-exclusive-p (orig pred1 pred2)
+  "Extra special cases for `cl-typep' predicates."
+  (let* ((x1 pred1) (x2 pred2)
+         (t1
+          (and (eq 'pcase--flip (car-safe x1)) (setq x1 (cdr x1))
+               (eq 'cl-typep (car-safe x1))    (setq x1 (cdr x1))
+               (null (cdr-safe x1))            (setq x1 (car x1))
+               (eq 'quote (car-safe x1))       (cadr x1)))
+         (t2
+          (and (eq 'pcase--flip (car-safe x2)) (setq x2 (cdr x2))
+               (eq 'cl-typep (car-safe x2))    (setq x2 (cdr x2))
+               (null (cdr-safe x2))            (setq x2 (car x2))
+               (eq 'quote (car-safe x2))       (cadr x2))))
+    (or
+     (and (symbolp t1) (symbolp t2)
+          (let ((c1 (cl--find-class t1))
+                (c2 (cl--find-class t2)))
+            (and c1 c2
+                 (not (or (memq c1 (cl--struct-all-parents c2))
+                          (memq c2 (cl--struct-all-parents c1)))))))
+     (let ((c1 (and (symbolp t1) (cl--find-class t1))))
+       (and c1 (cl--struct-class-p c1)
+            (funcall orig (if (eq 'list (cl-struct-sequence-type t1))
+                              'consp 'vectorp)
+                     pred2)))
+     (let ((c2 (and (symbolp t2) (cl--find-class t2))))
+       (and c2 (cl--struct-class-p c2)
+            (funcall orig pred1
+                     (if (eq 'list (cl-struct-sequence-type t2))
+                         'consp 'vectorp))))
+     (funcall orig pred1 pred2))))
+(advice-add 'pcase--mutually-exclusive-p
+            :around #'cl--pcase-mutually-exclusive-p)
+
+
+(defun cl-struct-sequence-type (struct-type)
+  "Return the sequence used to build STRUCT-TYPE.
+STRUCT-TYPE is a symbol naming a struct type.  Return 'vector or
+'list, or nil if STRUCT-TYPE is not a struct type. "
+  (declare (side-effect-free t) (pure t))
+  (cl--struct-class-type (cl--struct-get-class struct-type)))
+
+(defun cl-struct-slot-info (struct-type)
+  "Return a list of slot names of struct STRUCT-TYPE.
+Each entry is a list (SLOT-NAME . OPTS), where SLOT-NAME is a
+slot name symbol and OPTS is a list of slot options given to
+`cl-defstruct'.  Dummy slots that represent the struct name and
+slots skipped by :initial-offset may appear in the list."
+  (declare (side-effect-free t) (pure t))
+  (let* ((class (cl--struct-get-class struct-type))
+         (slots (cl--struct-class-slots class))
+         (type (cl--struct-class-type class))
+         (descs (if type () (list '(cl-tag-slot)))))
+    (dotimes (i (length slots))
+      (let ((slot (aref slots i)))
+        (push `(,(cl--slot-descriptor-name slot)
+                ,(cl--slot-descriptor-initform slot)
+                ,@(if (not (eq (cl--slot-descriptor-type slot) t))
+                      `(:type ,(cl--slot-descriptor-type slot)))
+                ,@(cl--slot-descriptor-props slot))
+              descs)))
+    (nreverse descs)))
+
+(define-error 'cl-struct-unknown-slot "struct %S has no slot %S")
+
+(defun cl-struct-slot-offset (struct-type slot-name)
+  "Return the offset of slot SLOT-NAME in STRUCT-TYPE.
+The returned zero-based slot index is relative to the start of
+the structure data type and is adjusted for any structure name
+and :initial-offset slots.  Signal error if struct STRUCT-TYPE
+does not contain SLOT-NAME."
+  (declare (side-effect-free t) (pure t))
+  (or (gethash slot-name
+               (cl--class-index-table (cl--struct-get-class struct-type)))
+      (signal 'cl-struct-unknown-slot (list struct-type slot-name))))
 
 (defvar byte-compile-function-environment)
 (defvar byte-compile-macro-environment)
@@ -2599,62 +2879,70 @@ Of course, we really can't know that for sure, so it's just a heuristic."
            (or (cdr (assq sym byte-compile-function-environment))
                (cdr (assq sym byte-compile-macro-environment))))))
 
-(defun cl--make-type-test (val type)
-  (if (symbolp type)
-      (cond ((get type 'cl-deftype-handler)
-	     (cl--make-type-test val (funcall (get type 'cl-deftype-handler))))
-	    ((memq type '(nil t)) type)
-	    ((eq type 'null) `(null ,val))
-	    ((eq type 'atom) `(atom ,val))
-	    ((eq type 'float) `(floatp ,val))
-	    ((eq type 'real) `(numberp ,val))
-	    ((eq type 'fixnum) `(integerp ,val))
-	    ;; FIXME: Should `character' accept things like ?\C-\M-a ?  --Stef
-	    ((memq type '(character string-char)) `(characterp ,val))
-	    (t
-	     (let* ((name (symbol-name type))
-		    (namep (intern (concat name "p"))))
-	       (cond
-                ((cl--macroexp-fboundp namep) (list namep val))
-                ((cl--macroexp-fboundp
-                  (setq namep (intern (concat name "-p"))))
-                 (list namep val))
-                (t (list type val))))))
-    (cond ((get (car type) 'cl-deftype-handler)
-	   (cl--make-type-test val (apply (get (car type) 'cl-deftype-handler)
-					 (cdr type))))
-	  ((memq (car type) '(integer float real number))
-	   (delq t `(and ,(cl--make-type-test val (car type))
-			 ,(if (memq (cadr type) '(* nil)) t
-                            (if (consp (cadr type)) `(> ,val ,(cl-caadr type))
-                              `(>= ,val ,(cadr type))))
-			 ,(if (memq (cl-caddr type) '(* nil)) t
-                            (if (consp (cl-caddr type))
-                                `(< ,val ,(cl-caaddr type))
-                              `(<= ,val ,(cl-caddr type)))))))
-	  ((memq (car type) '(and or not))
-	   (cons (car type)
-		 (mapcar (function (lambda (x) (cl--make-type-test val x)))
-			 (cdr type))))
-	  ((memq (car type) '(member cl-member))
-	   `(and (cl-member ,val ',(cdr type)) t))
-	  ((eq (car type) 'satisfies) (list (cadr type) val))
-	  (t (error "Bad type spec: %s" type)))))
+(put 'null 'cl-deftype-satisfies #'null)
+(put 'atom 'cl-deftype-satisfies #'atom)
+(put 'real 'cl-deftype-satisfies #'numberp)
+(put 'fixnum 'cl-deftype-satisfies #'integerp)
+(put 'base-char 'cl-deftype-satisfies #'characterp)
+(put 'character 'cl-deftype-satisfies #'integerp)
 
-(defvar cl--object)
+
 ;;;###autoload
-(defun cl-typep (object type)   ; See compiler macro below.
-  "Check that OBJECT is of type TYPE.
-TYPE is a Common Lisp-style type specifier."
-  (declare (compiler-macro cl--compiler-macro-typep))
-  (let ((cl--object object)) ;; Yuck!!
-    (eval (cl--make-type-test 'cl--object type))))
+(define-inline cl-typep (val type)
+  (inline-letevals (val)
+    (pcase (inline-const-val type)
+      ((and `(,name . ,args) (guard (get name 'cl-deftype-handler)))
+       (inline-quote
+        (cl-typep ,val ',(apply (get name 'cl-deftype-handler) args))))
+      (`(,(and name (or 'integer 'float 'real 'number))
+         . ,(or `(,min ,max) pcase--dontcare))
+       (inline-quote
+        (and (cl-typep ,val ',name)
+             ,(if (memq min '(* nil)) t
+                (if (consp min)
+                    (inline-quote (> ,val ',(car min)))
+                  (inline-quote (>= ,val ',min))))
+             ,(if (memq max '(* nil)) t
+                (if (consp max)
+                    (inline-quote (< ,val ',(car max)))
+                  (inline-quote (<= ,val ',max)))))))
+      (`(not ,type) (inline-quote (not (cl-typep ,val ',type))))
+      (`(,(and name (or 'and 'or)) . ,types)
+       (cond
+        ((null types) (inline-quote ',(eq name 'and)))
+        ((null (cdr types))
+         (inline-quote (cl-typep ,val ',(car types))))
+        (t
+         (let ((head (car types))
+               (rest `(,name . ,(cdr types))))
+           (cond
+            ((eq name 'and)
+             (inline-quote (and (cl-typep ,val ',head)
+                             (cl-typep ,val ',rest))))
+            (t
+             (inline-quote (or (cl-typep ,val ',head)
+                            (cl-typep ,val ',rest)))))))))
+      (`(eql ,v)          (inline-quote (and (eql ,val ',v) t)))
+      (`(member . ,args)  (inline-quote (and (memql ,val ',args) t)))
+      (`(satisfies ,pred) (inline-quote (funcall #',pred ,val)))
+      ((and (pred symbolp) type (guard (get type 'cl-deftype-handler)))
+       (inline-quote
+        (cl-typep ,val ',(funcall (get type 'cl-deftype-handler)))))
+      ((and (pred symbolp) type (guard (get type 'cl-deftype-satisfies)))
+       (inline-quote (funcall #',(get type 'cl-deftype-satisfies) ,val)))
+      ((and (or 'nil 't) type) (inline-quote ',type))
+      ((and (pred symbolp) type)
+       (let* ((name (symbol-name type))
+              (namep (intern (concat name "p"))))
+         (cond
+          ((cl--macroexp-fboundp namep) (inline-quote (funcall #',namep ,val)))
+          ((cl--macroexp-fboundp
+            (setq namep (intern (concat name "-p"))))
+           (inline-quote (funcall #',namep ,val)))
+          ((cl--macroexp-fboundp type) (inline-quote (funcall #',type ,val)))
+          (t (error "Unknown type %S" type)))))
+      (type (error "Bad type spec: %s" type)))))
 
-(defun cl--compiler-macro-typep (form val type)
-  (if (macroexp-const-p type)
-      (macroexp-let2 macroexp-copyable-p temp val
-        (cl--make-type-test temp (cl--const-expr-val type)))
-    form))
 
 ;;;###autoload
 (defmacro cl-check-type (form type &optional string)
@@ -2663,14 +2951,11 @@ STRING is an optional description of the desired type."
   (declare (debug (place cl-type-spec &optional stringp)))
   (and (or (not (cl--compiling-file))
 	   (< cl--optimize-speed 3) (= cl--optimize-safety 3))
-       (let* ((temp (if (cl--simple-expr-p form 3)
-			form (make-symbol "--cl-var--")))
-	      (body `(or ,(cl--make-type-test temp type)
-                         (signal 'wrong-type-argument
-                                 (list ,(or string `',type)
-                                       ,temp ',form)))))
-	 (if (eq temp form) `(progn ,body nil)
-	   `(let ((,temp ,form)) ,body nil)))))
+       (macroexp-let2 macroexp-copyable-p temp form
+         `(progn (or (cl-typep ,temp ',type)
+                     (signal 'wrong-type-argument
+                             (list ,(or string `',type) ,temp ',form)))
+                 nil))))
 
 ;;;###autoload
 (defmacro cl-assert (form &optional show-args string &rest args)
@@ -2690,10 +2975,9 @@ omitted, a default message listing FORM itself is used."
                                            (cdr form))))))
 	 `(progn
             (or ,form
-                ,(if string
-                     `(error ,string ,@sargs ,@args)
-                   `(signal 'cl-assertion-failed
-                            (list ',form ,@sargs))))
+                (cl--assertion-failed
+                 ',form ,@(if (or string sargs args)
+                              `(,string (list ,@sargs) (list ,@args)))))
             nil))))
 
 ;;; Compiler macros.
@@ -2714,7 +2998,12 @@ and then returning foo."
   (let ((p args) (res nil))
     (while (consp p) (push (pop p) res))
     (setq args (nconc (nreverse res) (and p (list '&rest p)))))
-  (let ((fname (make-symbol (concat (symbol-name func) "--cmacro"))))
+  ;; FIXME: The code in bytecomp mishandles top-level expressions that define
+  ;; uninterned functions.  E.g. it would generate code like:
+  ;;    (defalias '#1=#:foo--cmacro #[514 ...])
+  ;;    (put 'foo 'compiler-macro '#:foo--cmacro)
+  ;; So we circumvent this by using an interned name.
+  (let ((fname (intern (concat (symbol-name func) "--cmacro"))))
     `(eval-and-compile
        ;; Name the compiler-macro function, so that `symbol-file' can find it.
        (cl-defun ,fname ,(if (memq '&whole args) (delq '&whole args)
@@ -2761,70 +3050,6 @@ macro that returns its `&whole' argument."
     (if cl-found (setcdr cl-found t)))
   `(throw ,cl-tag ,cl-value))
 
-;;;###autoload
-(defmacro cl-defsubst (name args &rest body)
-  "Define NAME as a function.
-Like `defun', except the function is automatically declared `inline' and
-the arguments are immutable.
-ARGLIST allows full Common Lisp conventions, and BODY is implicitly
-surrounded by (cl-block NAME ...).
-The function's arguments should be treated as immutable.
-
-\(fn NAME ARGLIST [DOCSTRING] BODY...)"
-  (declare (debug cl-defun) (indent 2))
-  (let* ((argns (cl--arglist-args args))
-         (p argns)
-         ;; (pbody (cons 'progn body))
-         )
-    (while (and p (eq (cl--expr-contains args (car p)) 1)) (pop p))
-    `(progn
-       ,(if p nil   ; give up if defaults refer to earlier args
-          `(cl-define-compiler-macro ,name
-             ,(if (memq '&key args)
-                  `(&whole cl-whole &cl-quote ,@args)
-                (cons '&cl-quote args))
-             (cl--defsubst-expand
-              ',argns '(cl-block ,name ,@body)
-              ;; We used to pass `simple' as
-              ;; (not (or unsafe (cl-expr-access-order pbody argns)))
-              ;; But this is much too simplistic since it
-              ;; does not pay attention to the argvs (and
-              ;; cl-expr-access-order itself is also too naive).
-              nil
-              ,(and (memq '&key args) 'cl-whole) nil ,@argns)))
-       (cl-defun ,name ,args ,@body))))
-
-(defun cl--defsubst-expand (argns body simple whole _unsafe &rest argvs)
-  (if (and whole (not (cl--safe-expr-p (cons 'progn argvs)))) whole
-    (if (cl--simple-exprs-p argvs) (setq simple t))
-    (let* ((substs ())
-           (lets (delq nil
-                       (cl-mapcar (lambda (argn argv)
-                                    (if (or simple (macroexp-const-p argv))
-                                        (progn (push (cons argn argv) substs)
-                                               nil)
-                                      (list argn argv)))
-                                  argns argvs))))
-      ;; FIXME: `sublis/subst' will happily substitute the symbol
-      ;; `argn' in places where it's not used as a reference
-      ;; to a variable.
-      ;; FIXME: `sublis/subst' will happily copy `argv' to a different
-      ;; scope, leading to name capture.
-      (setq body (cond ((null substs) body)
-                       ((null (cdr substs))
-                        (cl-subst (cdar substs) (caar substs) body))
-                       (t (cl--sublis substs body))))
-      (if lets `(let ,lets ,body) body))))
-
-(defun cl--sublis (alist tree)
-  "Perform substitutions indicated by ALIST in TREE (non-destructively)."
-  (let ((x (assq tree alist)))
-    (cond
-     (x (cdr x))
-     ((consp tree)
-      (cons (cl--sublis alist (car tree)) (cl--sublis alist (cdr tree))))
-     (t tree))))
-
 ;; Compile-time optimizations for some functions defined in this package.
 
 (defun cl--compiler-macro-member (form a list &rest keys)
@@ -2848,9 +3073,8 @@ The function's arguments should be treated as immutable.
 ;;;###autoload
 (defun cl--compiler-macro-adjoin (form a list &rest keys)
   (if (memq :key keys) form
-    (macroexp-let2 macroexp-copyable-p va a
-      (macroexp-let2 macroexp-copyable-p vlist list
-        `(if (cl-member ,va ,vlist ,@keys) ,vlist (cons ,va ,vlist))))))
+    (macroexp-let2* macroexp-copyable-p ((va a) (vlist list))
+      `(if (cl-member ,va ,vlist ,@keys) ,vlist (cons ,va ,vlist)))))
 
 (defun cl--compiler-macro-get (_form sym prop &optional def)
   (if def
@@ -2873,19 +3097,50 @@ The function's arguments should be treated as immutable.
 
 ;;; Things that are inline.
 (cl-proclaim '(inline cl-acons cl-map cl-concatenate cl-notany
-               cl-notevery cl--set-elt cl-revappend cl-nreconc gethash))
+               cl-notevery cl-revappend cl-nreconc gethash))
 
 ;;; Things that are side-effect-free.
-(mapc (lambda (x) (put x 'side-effect-free t))
+(mapc (lambda (x) (function-put x 'side-effect-free t))
       '(cl-oddp cl-evenp cl-signum last butlast cl-ldiff cl-pairlis cl-gcd
         cl-lcm cl-isqrt cl-floor cl-ceiling cl-truncate cl-round cl-mod cl-rem
         cl-subseq cl-list-length cl-get cl-getf))
 
 ;;; Things that are side-effect-and-error-free.
-(mapc (lambda (x) (put x 'side-effect-free 'error-free))
+(mapc (lambda (x) (function-put x 'side-effect-free 'error-free))
       '(eql cl-list* cl-subst cl-acons cl-equalp
         cl-random-state-p copy-tree cl-sublis))
 
+;;; Types and assertions.
+
+;;;###autoload
+(defmacro cl-deftype (name arglist &rest body)
+  "Define NAME as a new data type.
+The type name can then be used in `cl-typecase', `cl-check-type', etc."
+  (declare (debug cl-defmacro) (doc-string 3) (indent 2))
+  `(cl-eval-when (compile load eval)
+     (put ',name 'cl-deftype-handler
+          (cl-function (lambda (&cl-defs ('*) ,@arglist) ,@body)))))
+
+(cl-deftype extended-char () `(and character (not base-char)))
+
+;;; Additional functions that we can now define because we've defined
+;;; `cl-defsubst' and `cl-typep'.
+
+(define-inline cl-struct-slot-value (struct-type slot-name inst)
+  "Return the value of slot SLOT-NAME in INST of STRUCT-TYPE.
+STRUCT and SLOT-NAME are symbols.  INST is a structure instance."
+  (declare (side-effect-free t))
+  (inline-letevals (struct-type slot-name inst)
+    (inline-quote
+     (progn
+       (unless (cl-typep ,inst ,struct-type)
+         (signal 'wrong-type-argument (list ,struct-type ,inst)))
+       ;; We could use `elt', but since the byte compiler will resolve the
+       ;; branch below at compile time, it's more efficient to use the
+       ;; type-specific accessor.
+       (if (eq (cl-struct-sequence-type ,struct-type) 'list)
+           (nth (cl-struct-slot-offset ,struct-type ,slot-name) ,inst)
+         (aref ,inst (cl-struct-slot-offset ,struct-type ,slot-name)))))))
 
 (run-hooks 'cl-macs-load-hook)
 

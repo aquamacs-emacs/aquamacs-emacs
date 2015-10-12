@@ -1,6 +1,6 @@
 ;;; shell.el --- specialized comint.el for running the shell -*- lexical-binding: t -*-
 
-;; Copyright (C) 1988, 1993-1997, 2000-2014 Free Software Foundation,
+;; Copyright (C) 1988, 1993-1997, 2000-2015 Free Software Foundation,
 ;; Inc.
 
 ;; Author: Olin Shivers <shivers@cs.cmu.edu>
@@ -83,8 +83,8 @@
 ;; tab     completion-at-point		Complete filename/command/history
 ;; m-?     comint-dynamic-list-filename-completions
 ;;					List completions in help buffer
-;; m-c-f   shell-forward-command	Forward a shell command
-;; m-c-b   shell-backward-command	Backward a shell command
+;; c-c c-f shell-forward-command	Forward a shell command
+;; c-c c-b shell-backward-command	Backward a shell command
 ;; 	   dirs				Resync the buffer's dir stack
 ;; 	   shell-dirtrack-mode		Turn dir tracking on/off
 ;;         comint-strip-ctrl-m		Remove trailing ^Ms from output
@@ -584,6 +584,8 @@ buffer."
       (setq shell-dirstack-query
 	    (cond ((string-equal shell "sh") "pwd")
 		  ((string-equal shell "ksh") "echo $PWD ~-")
+		  ;; Bypass any aliases.  TODO all shells could use this.
+		  ((string-equal shell "bash") "command dirs")
 		  (t "dirs")))
       ;; Bypass a bug in certain versions of bash.
       (when (string-equal shell "bash")
@@ -717,7 +719,7 @@ Otherwise, one argument `-i' is passed to the shell.
 
   ;; The buffer's window must be correctly set when we call comint (so
   ;; that comint sets the COLUMNS env var properly).
-  (pop-to-buffer-same-window buffer)
+  (pop-to-buffer buffer)
   (unless (comint-check-proc buffer)
     (let* ((prog (or explicit-shell-file-name
 		     (getenv "ESHELL") shell-file-name))
@@ -1090,10 +1092,12 @@ Copy Shell environment variable to Emacs: ")))
   "Move forward across ARG shell command(s).  Does not cross lines.
 See `shell-command-regexp'."
   (interactive "p")
-  (let ((limit (line-end-position)))
-    (if (re-search-forward (concat shell-command-regexp "\\([;&|][\t ]*\\)+")
-			   limit 'move arg)
-	(skip-syntax-backward " "))))
+  (let ((limit (line-end-position))
+	(pt (point)))
+    (re-search-forward (concat shell-command-regexp "\\([;&|][\t ]*\\)+")
+		       limit 'move arg)
+    (and (/= pt (point))
+	 (skip-syntax-backward " " pt))))
 
 
 (defun shell-backward-command (&optional arg)
@@ -1104,10 +1108,13 @@ See `shell-command-regexp'."
     (when (> limit (point))
       (setq limit (line-beginning-position)))
     (skip-syntax-backward " " limit)
-    (if (re-search-backward
-	 (format "[;&|]+[\t ]*\\(%s\\)" shell-command-regexp) limit 'move arg)
-	(progn (goto-char (match-beginning 1))
-	       (skip-chars-forward ";&|")))))
+    (let ((pt (point)))
+      (if (re-search-backward
+	   (format "[;&|]+[\t ]*\\(%s\\)" shell-command-regexp) limit 'move arg)
+	  (progn (goto-char (match-beginning 1))
+		 (skip-chars-forward ";&|")))
+      (and (/= pt (point))
+	   (skip-syntax-forward " " pt)))))
 
 (defun shell-dynamic-complete-command ()
   "Dynamically complete the command at point.

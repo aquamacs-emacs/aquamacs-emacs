@@ -2,16 +2,15 @@
 
 @include gnus-overrides.texi
 
-@setfilename ../../info/gnus
+@setfilename ../../info/gnus.info
 @settitle Gnus Manual
+@include docstyle.texi
 @syncodeindex fn cp
 @syncodeindex vr cp
 @syncodeindex pg cp
 
-@documentencoding UTF-8
-
 @copying
-Copyright @copyright{} 1995--2014 Free Software Foundation, Inc.
+Copyright @copyright{} 1995--2015 Free Software Foundation, Inc.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -618,6 +617,7 @@ Article Buffer
 
 * Hiding Headers::              Deciding what headers should be displayed.
 * Using MIME::                  Pushing articles through @acronym{MIME} before reading them.
+* HTML::                        Reading @acronym{HTML} messages.
 * Customizing Articles::        Tailoring the look of the articles.
 * Article Keymap::              Keystrokes available in the article buffer.
 * Misc Article::                Other stuff.
@@ -704,7 +704,6 @@ Browsing the Web
 * Archiving Mail::
 * Web Searches::                Creating groups from articles that match a string.
 * RSS::                         Reading RDF site summary.
-* Customizing W3::              Doing stuff to Emacs/W3 from Gnus.
 
 Other Sources
 
@@ -2881,12 +2880,17 @@ news group.
 @item gcc-self
 @cindex gcc-self
 If @code{(gcc-self . t)} is present in the group parameter list, newly
-composed messages will be @code{Gcc}'d to the current group.  If
+composed messages will be @code{gcc}d to the current group.  If
 @code{(gcc-self . none)} is present, no @code{Gcc:} header will be
-generated, if @code{(gcc-self . "string")} is present, this string will
-be inserted literally as a @code{gcc} header.  This parameter takes
-precedence over any default @code{Gcc} rules as described later
-(@pxref{Archived Messages}), with the exception for messages to resend.
+generated, if @code{(gcc-self . "group")} is present, this string will
+be inserted literally as a @code{Gcc:} header.  It should be a group
+name.  The @code{gcc-self} value may also be a list of strings and
+@code{t}, e.g., @code{(gcc-self "group1" "group2" t)} means to
+@code{gcc} the newly composed message into the groups @code{"group1"}
+and @code{"group2"}, and into the current group.  The @code{gcc-self}
+parameter takes precedence over any default @code{Gcc} rules as
+described later (@pxref{Archived Messages}), with the exception for
+messages to resend.
 
 @strong{Caveat}: Adding @code{(gcc-self . t)} to the parameter list of
 @code{nntp} groups (or the like) isn't valid.  An @code{nntp} server
@@ -9078,7 +9082,7 @@ CRs into LF (this takes care of Mac line endings)
 Treat quoted-printable (@code{gnus-article-de-quoted-unreadable}).
 Quoted-Printable is one common @acronym{MIME} encoding employed when
 sending non-@acronym{ASCII} (i.e., 8-bit) articles.  It typically
-makes strings like @samp{d@'ej@`a vu} look like @samp{d=E9j=E0 vu},
+makes strings like @samp{déjà vu} look like @samp{d=E9j=E0 vu},
 which doesn't look very readable to me.  Note that this is usually
 done automatically by Gnus if the message in question has a
 @code{Content-Transfer-Encoding} header that says that this encoding
@@ -9139,9 +9143,6 @@ Use Gnus simple html renderer.
 
 @item gnus-w3m
 Use Gnus rendered based on w3m.
-
-@item w3
-Use Emacs/W3.
 
 @item w3m
 Use @uref{http://emacs-w3m.namazu.org/, emacs-w3m}.
@@ -9804,6 +9805,19 @@ the group (if you want).
 Make all the @acronym{MIME} parts have buttons in front of them.  This is
 mostly useful if you wish to save (or perform other actions) on inlined
 parts.
+
+@item W M h
+@kindex W M h (Summary)
+@findex gnus-mime-buttonize-attachments-in-header
+@vindex gnus-mime-display-attachment-buttons-in-header
+Display @acronym{MIME} part buttons in the end of the header of an
+article (@code{gnus-mime-buttonize-attachments-in-header}).  This
+command toggles the display.  Note that buttons to be added to the
+header are only the ones that aren't inlined in the body.  If you want
+those buttons always to be displayed, set
+@code{gnus-mime-display-attachment-buttons-in-header} to non-@code{nil}.
+The default is @code{t}.  To change the appearance of buttons, customize
+@code{gnus-header-face-alist}.
 
 @item K m
 @kindex K m (Summary)
@@ -11467,7 +11481,7 @@ who wrote the article, the date it was written and the subject of the
 article.  That's well and nice, but there's also lots of information
 most people do not want to see---what systems the article has passed
 through before reaching you, the @code{Message-ID}, the
-@code{References}, etc. ad nauseam---and you'll probably want to get rid
+@code{References}, etc.@: ad nauseam---and you'll probably want to get rid
 of some of those lines.  If you want to keep all those lines in the
 article buffer, you can set @code{gnus-show-all-headers} to @code{t}.
 
@@ -11747,20 +11761,30 @@ Also @pxref{MIME Commands}.
 @section @acronym{HTML}
 @cindex @acronym{HTML}
 
-If you have @code{w3m} installed on your system, Gnus can display
-@acronym{HTML} articles in the article buffer.  There are many Gnus
-add-ons for doing this, using various approaches, but there's one
-(sort of) built-in method that's used by default.
+Gnus can display @acronym{HTML} articles nicely formatted in the
+article buffer.  There are many methods for doing that, but two of
+them are kind of default methods.
 
-For a complete overview, consult @xref{Display Customization,
-,Display Customization, emacs-mime, The Emacs MIME Manual}.  This
-section only describes the default method.
+If your Emacs copy has been built with libxml2 support, then Gnus uses
+Emacs' built-in, plain elisp Simple HTML Renderer @code{shr}
+@footnote{@code{shr} displays colors as declared in the @acronym{HTML}
+article but tries to adjust them in order to be readable.  If you
+prefer more contrast, @xref{FAQ 4-16}.} which is also used by Emacs'
+browser EWW (@pxref{EWW, ,EWW, emacs, The Emacs Manual}).
+
+If your Emacs copy lacks libxml2 support but you have @code{w3m}
+installed on your system, Gnus uses that to render @acronym{HTML} mail
+and display the results in the article buffer (@code{gnus-w3m}).
+
+For a complete overview, consult @xref{Display Customization, ,Display
+Customization, emacs-mime, The Emacs MIME Manual}.  This section only
+describes the default method.
 
 @table @code
 @item mm-text-html-renderer
 @vindex mm-text-html-renderer
-If set to @code{gnus-article-html}, Gnus will use the built-in method,
-that's based on @code{w3m}.
+If set to @code{shr}, Gnus uses its own simple @acronym{HTML}
+renderer.  If set to @code{gnus-w3m}, it uses @code{w3m}.
 
 @item gnus-blocked-images
 @vindex gnus-blocked-images
@@ -11888,8 +11912,8 @@ controlling variable is a predicate list, as described above.
 
 @ifinfo
 @c Avoid sort of redundant entries in the same section for the printed
-@c manual, but add them in info to allow `i gnus-treat-foo-bar RET' or
-@c `i foo-bar'.
+@c manual, but add them in info to allow 'i gnus-treat-foo-bar RET' or
+@c 'i foo-bar'.
 @vindex gnus-treat-buttonize
 @vindex gnus-treat-buttonize-head
 @vindex gnus-treat-capitalize-sentences
@@ -12541,7 +12565,7 @@ Gnus provides a few different methods for storing the mail and news you
 send.  The default method is to use the @dfn{archive virtual server} to
 store the messages.  If you want to disable this completely, the
 @code{gnus-message-archive-group} variable should be @code{nil}.  The
-default is "sent.%Y-%m", which gives you one archive group per month.
+default is @code{"sent.%Y-%m"}, which gives you one archive group per month.
 
 For archiving interesting messages in a group you read, see the
 @kbd{B c} (@code{gnus-summary-copy-article}) command (@pxref{Mail
@@ -12804,10 +12828,12 @@ variable, which is a vector of the following headers: number subject
 from date id references chars lines xref extra.
 
 In the case of a string value, if the @code{match} is a regular
-expression, a @samp{gnus-match-substitute-replacement} is proceed on
-the value to replace the positional parameters @samp{\@var{n}} by the
-corresponding parenthetical matches (see @xref{Replacing Match,,
-Replacing the Text that Matched, elisp, The Emacs Lisp Reference Manual}.)
+expression, or if it takes the form @code{(header @var{match}
+@var{regexp})}, a @samp{gnus-match-substitute-replacement} is proceed
+on the value to replace the positional parameters @samp{\@var{n}} by
+the corresponding parenthetical matches (see @xref{Replacing Match,,
+Replacing the Text that Matched, elisp, The Emacs Lisp Reference
+Manual}.)
 
 @vindex message-reply-headers
 
@@ -12839,6 +12865,10 @@ So here's a new example:
         ;; @r{If I'm replying to Larsi, set the Organization header.}
         ((header "from" "larsi.*org")
          (Organization "Somewhere, Inc."))
+        ;; @r{Reply to a message from the same subaddress the message}
+        ;; @r{was sent to.}
+        ((header "x-original-to" "me\\(\\+.+\\)@@example.org")
+         (address "me\\1@@example.org"))
         ((posting-from-work-p) ;; @r{A user defined function}
          (signature-file "~/.work-signature")
          (address "user@@bar.foo")
@@ -14151,6 +14181,7 @@ from different locations, or with different user agents.
 * Connecting to an IMAP Server::     Getting started with @acronym{IMAP}.
 * Customizing the IMAP Connection::  Variables for @acronym{IMAP} connection.
 * Client-Side IMAP Splitting::       Put mail in the correct mail box.
+* Support for IMAP Extensions::      Getting extensions and labels from servers.
 @end menu
 
 
@@ -14220,6 +14251,10 @@ Encrypted @acronym{STARTTLS} over the normal @acronym{IMAP} port.
 If you need to tunnel via other systems to connect to the server, you
 can use this option, and customize @code{nnimap-shell-program} to be
 what you need.
+
+@item plain
+Non-encrypted and unsafe straight socket connection.
+@acronym{STARTTLS} will not be used even if it is available.
 
 @end table
 
@@ -14295,6 +14330,29 @@ Here's a complete example @code{nnimap} backend with a client-side
             (to "foo@@bar.com" "foo")
             "undecided")))
 @end example
+
+
+@node Support for IMAP Extensions
+@subsection Support for IMAP Extensions
+
+@cindex Gmail
+@cindex X-GM-LABELS
+@cindex IMAP labels
+
+If you're using Google's Gmail, you may want to see your Gmail labels
+when reading your mail.  Gnus can give you this information if you ask
+for @samp{X-GM-LABELS} in the variable @code{gnus-extra-headers}. For
+example:
+
+@example
+(setq gnus-extra-headers
+      '(To Newsgroups X-GM-LABELS))
+@end example
+
+This will result in Gnus storing your labels in message header
+structures for later use.  The content is always a parenthesized
+(possible empty) list.
+
 
 
 @node Getting Mail
@@ -14932,7 +14990,7 @@ this means @samp{gssapi}, @samp{kerberos4}, @samp{digest-md5},
 @samp{cram-md5}, @samp{anonymous} or the default @samp{login}.
 
 @item :program
-When using the `shell' :stream, the contents of this variable is
+When using the @samp{shell} :stream, the contents of this variable is
 mapped into the @code{imap-shell-program} variable.  This should be a
 @code{format}-like string (or list of strings).  Here's an example:
 
@@ -14960,7 +15018,8 @@ corresponding keywords.
 
 @item :mailbox
 The name of the mailbox to get mail from.  The default is @samp{INBOX}
-which normally is the mailbox which receives incoming mail.
+which normally is the mailbox which receives incoming mail. Instead of
+a single mailbox, this can be a list of mailboxes to fetch mail from.
 
 @item :predicate
 The predicate used to find articles to fetch.  The default, @samp{UNSEEN
@@ -16841,11 +16900,7 @@ interfaces to these sources.
 * Archiving Mail::
 * Web Searches::                Creating groups from articles that match a string.
 * RSS::                         Reading RDF site summary.
-* Customizing W3::              Doing stuff to Emacs/W3 from Gnus.
 @end menu
-
-All the web sources require Emacs/W3 and the url library or those
-alternatives to work.
 
 The main caveat with all these web sources is that they probably won't
 work for a very long time.  Gleaning information from the @acronym{HTML} data
@@ -16917,14 +16972,10 @@ group as read.
 
 If the search engine changes its output substantially, @code{nnweb}
 won't be able to parse it and will fail.  One could hardly fault the Web
-providers if they were to do this---their @emph{raison d'@^etre} is to
+providers if they were to do this---their @emph{raison d'être} is to
 make money off of advertisements, not to provide services to the
 community.  Since @code{nnweb} washes the ads off all the articles, one
 might think that the providers might be somewhat miffed.  We'll see.
-
-You must have the @code{url} and @code{W3} package or those alternatives
-(try @code{customize-group} on the @samp{mm-url} variable group)
-installed to be able to use @code{nnweb}.
 
 Virtual server variables:
 
@@ -17121,38 +17172,6 @@ Parameters}) in order to display @samp{text/html} parts only in
  'gnus-parameters
  '("\\`nnrss:" (mm-discouraged-alternatives nil)))
 @end lisp
-
-
-@node Customizing W3
-@subsection Customizing W3
-@cindex W3
-@cindex html
-@cindex url
-@cindex Netscape
-
-Gnus uses the url library to fetch web pages and Emacs/W3 (or those
-alternatives) to display web pages.  Emacs/W3 is documented in its own
-manual, but there are some things that may be more relevant for Gnus
-users.
-
-For instance, a common question is how to make Emacs/W3 follow links
-using the @code{browse-url} functions (which will call some external web
-browser like Netscape).  Here's one way:
-
-@lisp
-(eval-after-load "w3"
-  '(progn
-    (fset 'w3-fetch-orig (symbol-function 'w3-fetch))
-    (defun w3-fetch (&optional url target)
-      (interactive (list (w3-read-url-with-default)))
-      (if (eq major-mode 'gnus-article-mode)
-          (browse-url url)
-        (w3-fetch-orig url target)))))
-@end lisp
-
-Put that in your @file{.emacs} file, and hitting links in W3-rendered
-@acronym{HTML} in the Gnus article buffers will use @code{browse-url} to
-follow the link.
 
 
 @node Other Sources
@@ -17753,7 +17772,7 @@ So you send a ``reminder'' message (actually, a diary one) to yourself.
 @item
 You forget all about it and keep on getting and reading new mail, as usual.
 @item
-From time to time, as you type `g' in the group buffer and as the date
+From time to time, as you type @kbd{g} in the group buffer and as the date
 is getting closer, the message will pop up again to remind you of your
 appointment, just as if it were new and unread.
 @item
@@ -19633,7 +19652,7 @@ Immediately scoring.
 @end table
 
 @item
-If you are scoring on `e' (extra) headers, you will then be prompted for
+If you are scoring on @samp{e} (extra) headers, you will then be prompted for
 the header name on which you wish to score.  This must be a header named
 in gnus-extra-headers, and @samp{TAB} completion is available.
 
@@ -21339,8 +21358,8 @@ variable.
 
 To work correctly the @code{nnir-namazu-remove-prefix} variable must
 also be correct.  This is the prefix to remove from each file name
-returned by Namazu in order to get a proper group name (albeit with `/'
-instead of `.').
+returned by Namazu in order to get a proper group name (albeit with @samp{/}
+instead of @samp{.}).
 
 For example, suppose that Namazu returns file names such as
 @samp{/home/john/Mail/mail/misc/42}.  For this example, use the
@@ -21353,18 +21372,20 @@ correct group name @samp{mail.misc}.
 Extra switches may be passed to the namazu search command by setting the
 variable @code{nnir-namazu-additional-switches}.  It is particularly
 important not to pass any any switches to namazu that will change the
-output format.  Good switches to use include `--sort', `--ascending',
-`--early' and `--late'.  Refer to the Namazu documentation for further
+output format.  Good switches to use include @option{--sort},
+@option{--ascending}, @option{--early} and @option{--late}.
+Refer to the Namazu documentation for further
 information on valid switches.
 
-Mail must first be indexed  with the `mknmz' program.  Read the documentation
-for namazu to create a configuration file.  Here is an example:
+Mail must first be indexed with the @command{mknmz} program.  Read the
+documentation for namazu to create a configuration file.  Here is an
+example:
 
 @cartouche
 @example
  package conf;  # Don't remove this line!
 
- # Paths which will not be indexed. Don't use `^' or `$' anchors.
+ # Paths which will not be indexed. Don't use '^' or '$' anchors.
  $EXCLUDE_PATH = "spam|sent";
 
  # Header fields which should be searchable. case-insensitive
@@ -21436,7 +21457,7 @@ when searching all groups on a server.
 
 @item nnir-summary-line-format
 The format specification to be used for lines in an nnir summary buffer.
-All the items from `gnus-summary-line-format' are available, along with
+All the items from @code{gnus-summary-line-format} are available, along with
 three items unique to nnir summary buffers:
 
 @example
@@ -21450,7 +21471,7 @@ If @code{nil} (the default) this will use @code{gnus-summary-line-format}.
 @item nnir-retrieve-headers-override-function
 If non-@code{nil}, a function that retrieves article headers rather than using
 the gnus built-in function.  This function takes an article list and
-group as arguments and populates the `nntp-server-buffer' with the
+group as arguments and populates the @code{nntp-server-buffer} with the
 retrieved headers.  It should then return either 'nov or 'headers
 indicating the retrieved header format.  Failure to retrieve headers
 should return @code{nil}.
@@ -25890,7 +25911,7 @@ Store custom flags and keywords
 The registry can store custom flags and keywords for a message.  For
 instance, you can mark a message ``To-Do'' this way and the flag will
 persist whether the message is in the nnimap, nnml, nnmaildir,
-etc. backends.
+etc.@: backends.
 
 @item
 Store arbitrary data
@@ -25962,17 +25983,34 @@ the word ``archive'' is not followed.
 
 @defvar gnus-registry-max-entries
 The number (an integer or @code{nil} for unlimited) of entries the
-registry will keep.
+registry will keep.  If the registry has reached or exceeded this
+size, it will reject insertion of new entries.
 @end defvar
 
-@defvar gnus-registry-max-pruned-entries
-The maximum number (an integer or @code{nil} for unlimited) of entries
-the registry will keep after pruning.
+@defvar gnus-registry-prune-factor
+This option (a float between 0 and 1) controls how much the registry
+is cut back during pruning.  In order to prevent constant pruning, the
+registry will be pruned back to less than
+@code{gnus-registry-max-entries}.  This option controls exactly how
+much less: the target is calculated as the maximum number of entries
+minus the maximum number times this factor.  The default is 0.1:
+i.e., if your registry is limited to 50000 entries, pruning will try to
+cut back to 45000 entries.  Entries with keys marked as precious will
+not be pruned.
+@end defvar
+
+@defvar gnus-registry-default-sort-function
+This option specifies how registry entries are sorted during pruning.
+If a function is given, it should sort least valuable entries first,
+as pruning starts from the beginning of the list.  The default value
+is @code{gnus-registry-sort-by-creation-time}, which proposes the
+oldest entries for pruning.  Set to nil to perform no sorting, which
+will speed up the pruning process.
 @end defvar
 
 @defvar gnus-registry-cache-file
 The file where the registry will be stored between Gnus sessions.  By
-default the file name is @code{.gnus.registry.eioio} in the same
+default the file name is @code{.gnus.registry.eieio} in the same
 directory as your @code{.newsrc.eld}.
 @end defvar
 
@@ -26092,10 +26130,10 @@ their @code{:char} property, or showing the marks as full strings.
 
 @lisp
 ;; show the marks as single characters (see the :char property in
-;; `gnus-registry-marks'):
+;; 'gnus-registry-marks'):
 ;; (defalias 'gnus-user-format-function-M 'gnus-registry-article-marks-to-chars)
 
-;; show the marks by name (see `gnus-registry-marks'):
+;; show the marks by name (see 'gnus-registry-marks'):
 ;; (defalias 'gnus-user-format-function-M 'gnus-registry-article-marks-to-names)
 @end lisp
 
@@ -26339,7 +26377,7 @@ XEmacs is distributed as a collection of packages.  You should install
 whatever packages the Gnus XEmacs package requires.  The current
 requirements are @samp{gnus}, @samp{mail-lib}, @samp{xemacs-base},
 @samp{eterm}, @samp{sh-script}, @samp{net-utils}, @samp{os-utils},
-@samp{dired}, @samp{mh-e}, @samp{sieve}, @samp{ps-print}, @samp{W3},
+@samp{dired}, @samp{mh-e}, @samp{sieve}, @samp{ps-print},
 @samp{pgg}, @samp{mailcrypt}, @samp{ecrypto}, and @samp{sasl}.
 
 
@@ -26781,7 +26819,7 @@ David Moore---rewrite of @file{nnvirtual.el} and many other things.
 Kevin Davidson---came up with the name @dfn{ding}, so blame him.
 
 @item
-Fran@,{c}ois Pinard---many, many interesting and thorough bug reports, as
+François Pinard---many, many interesting and thorough bug reports, as
 well as autoconf support.
 
 @end itemize
@@ -26889,7 +26927,7 @@ Gunnar Horrigmo,
 Richard Hoskins,
 Brad Howes,
 Miguel de Icaza,
-Fran@,{c}ois Felix Ingrand,
+François Felix Ingrand,
 Tatsuya Ichikawa, @c Ichikawa
 Ishikawa Ichiro, @c Ishikawa
 Lee Iverson,
@@ -27785,7 +27823,7 @@ As a result of the following change, the @file{~/News/overview/}
 directory is not used any more.  You can safely delete the entire
 hierarchy.
 
-@c FIXME: `gnus-load' is mentioned in README, which is not included in
+@c FIXME: 'gnus-load' is mentioned in README, which is not included in
 @c the repository.  We should find a better place for this item.
 @item
 @code{(require 'gnus-load)}
@@ -28415,6 +28453,19 @@ Gnus.
 New features in Ma Gnus:
 
 @itemize @bullet
+
+@item Changes in summary and article mode
+@c **************************************
+
+@itemize @bullet
+
+@item
+By default, @acronym{MIME} part buttons for attachments (if any) will
+appear in the end of the article header in addition to the bottom of the
+article body, so you can easily find them without scrolling the article
+again and again.  @xref{MIME Commands}.
+
+@end itemize
 
 @item Changes in Message mode and related Gnus features
 @c ****************************************************

@@ -1,6 +1,6 @@
 ;;; info-xref.el --- tests for info-xref.el
 
-;; Copyright (C) 2013-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2013-2015 Free Software Foundation, Inc.
 
 ;; This file is part of GNU Emacs.
 
@@ -64,7 +64,7 @@ RESULT is a list (NBAD NGOOD NUNAVAIL)."
   "Write BODY to texi FILE."
   (with-temp-buffer
     (insert "\
-\input texinfo
+\\input texinfo
 @setfilename "
             (format "%s.info\n" (file-name-sans-extension file))
             "\

@@ -1,9 +1,10 @@
-;;; eudc-hotlist.el --- hotlist management for EUDC -*- coding: utf-8 -*-
+;;; eudc-hotlist.el --- hotlist management for EUDC
 
-;; Copyright (C) 1998-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1998-2015 Free Software Foundation, Inc.
 
 ;; Author: Oscar Figueiredo <oscar@cpe.fr>
-;; Maintainer: Pavel Janík <Pavel@Janik.cz>
+;;         Pavel Janík <Pavel@Janik.cz>
+;; Maintainer: Thomas Fitzsimmons <fitzsim@fitzsim.org>
 ;; Keywords: comm
 ;; Package: eudc
 

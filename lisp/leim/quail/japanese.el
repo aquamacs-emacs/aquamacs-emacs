@@ -1,6 +1,6 @@
 ;;; japanese.el --- Quail package for inputting Japanese  -*-coding: iso-2022-7bit;-*-
 
-;; Copyright (C) 2001-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2001-2015 Free Software Foundation, Inc.
 ;; Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
 ;;   2006, 2007, 2008, 2009, 2010, 2011
 ;;   National Institute of Advanced Industrial Science and Technology (AIST)
@@ -59,8 +59,9 @@
 		 (setq quail-current-str (aref quail-current-key 0))))
 	  (if (integerp control-flag)
 	      (setq unread-command-events
-		    (string-to-list
-		     (substring quail-current-key control-flag)))))))
+		    (append
+		     (substring quail-current-key control-flag)
+                     unread-command-events))))))
   control-flag)
 
 ;; Convert Hiragana <-> Katakana in the current translation region.
@@ -103,7 +104,7 @@
 
 (defun quail-japanese-self-insert-and-switch-to-alpha (key idx)
   (quail-delete-region)
-  (setq unread-command-events (list (aref key (1- idx))))
+  (push (aref key (1- idx)) unread-command-events)
   (quail-japanese-switch-package "q" 1))
 
 (defvar quail-japanese-switch-table
@@ -230,7 +231,7 @@
     ("zk" "↑")
     ("zl" "→")
     ("z;" "゛") ("z:" "゜")
-    ("z\'" "‘") ("z\"" "“")
+    ("z'" "‘") ("z\"" "“")
 
     ("zx" [":-"]) ("zX" [":-)"])
     ("zc" "〇") ("zC" "℃")

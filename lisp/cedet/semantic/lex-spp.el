@@ -1,6 +1,6 @@
 ;;; semantic/lex-spp.el --- Semantic Lexical Pre-processor
 
-;; Copyright (C) 2006-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2006-2015 Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 
@@ -823,7 +823,7 @@ ARGVALUES are values for any arg list, or nil."
 ;; An analyzer that will push tokens from a macro in place
 ;; of the macro symbol.
 ;;
-(defun semantic-lex-spp-anlyzer-do-replace (sym val beg end)
+(defun semantic-lex-spp-analyzer-do-replace (sym val beg end)
   "Do the lexical replacement for SYM with VAL.
 Argument BEG and END specify the bounds of SYM in the buffer."
   (if (not val)
@@ -863,6 +863,9 @@ Argument BEG and END specify the bounds of SYM in the buffer."
       (setq semantic-lex-end-point end)
       )
     ))
+(define-obsolete-function-alias
+  'semantic-lex-spp-anlyzer-do-replace
+  'semantic-lex-spp-analyzer-do-replace "25.1")
 
 (defvar semantic-lex-spp-replacements-enabled t
   "Non-nil means do replacements when finding keywords.
@@ -916,7 +919,7 @@ STR occurs in the current buffer between BEG and END."
     ))
 
 (define-lex-regex-analyzer semantic-lex-spp-replace-or-symbol-or-keyword
-  "Like 'semantic-lex-symbol-or-keyword' plus preprocessor macro replacement."
+  "Like `semantic-lex-symbol-or-keyword' plus preprocessor macro replacement."
   "\\(\\sw\\|\\s_\\)+"
   (let ((str (match-string 0))
 	(beg (match-beginning 0))

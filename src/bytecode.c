@@ -1,5 +1,5 @@
 /* Execution of byte code produced by bytecomp.el.
-   Copyright (C) 1985-1988, 1993, 2000-2014 Free Software Foundation,
+   Copyright (C) 1985-1988, 1993, 2000-2015 Free Software Foundation,
    Inc.
 
 This file is part of GNU Emacs.
@@ -36,8 +36,10 @@ by Hallvard:
 #include <config.h>
 
 #include "lisp.h"
+#include "blockinput.h"
 #include "character.h"
 #include "buffer.h"
+#include "keyboard.h"
 #include "syntax.h"
 #include "window.h"
 
@@ -67,7 +69,6 @@ by Hallvard:
 
 #ifdef BYTE_CODE_METER
 
-Lisp_Object Qbyte_code_meter;
 #define METER_2(code1, code2) AREF (AREF (Vbyte_code_meter, code1), code2)
 #define METER_1(code) METER_2 (0, code)
 
@@ -292,12 +293,10 @@ enum byte_code_op
     Bscan_buffer = 0153, /* No longer generated as of v18.  */
     Bset_mark = 0163, /* this loser is no longer generated as of v18 */
 #endif
-
-    B__dummy__ = 0  /* Pacify C89.  */
 };
 
 /* Whether to maintain a `top' and `bottom' field in the stack frame.  */
-#define BYTE_MAINTAIN_TOP (BYTE_CODE_SAFE || BYTE_MARK_STACK)
+#define BYTE_MAINTAIN_TOP BYTE_CODE_SAFE
 
 /* Structure describing a value stack used during byte-code execution
    in Fbyte_code.  */
@@ -320,12 +319,6 @@ struct byte_stack
   Lisp_Object byte_string;
   const unsigned char *byte_string_start;
 
-#if BYTE_MARK_STACK
-  /* The vector of constants used during byte-code execution.  Storing
-     this here protects it from GC because mark_byte_stack marks it.  */
-  Lisp_Object constants;
-#endif
-
   /* Next entry in byte_stack_list.  */
   struct byte_stack *next;
 };
@@ -333,46 +326,16 @@ struct byte_stack
 /* A list of currently active byte-code execution value stacks.
    Fbyte_code adds an entry to the head of this list before it starts
    processing byte-code, and it removes the entry again when it is
-   done.  Signaling an error truncates the list analogous to
-   gcprolist.  */
+   done.  Signaling an error truncates the list.  */
 
 struct byte_stack *byte_stack_list;
 
 
-/* Mark objects on byte_stack_list.  Called during GC.  */
-
-#if BYTE_MARK_STACK
-void
-mark_byte_stack (void)
-{
-  struct byte_stack *stack;
-  Lisp_Object *obj;
-
-  for (stack = byte_stack_list; stack; stack = stack->next)
-    {
-      /* If STACK->top is null here, this means there's an opcode in
-	 Fbyte_code that wasn't expected to GC, but did.  To find out
-	 which opcode this is, record the value of `stack', and walk
-	 up the stack in a debugger, stopping in frames of Fbyte_code.
-	 The culprit is found in the frame of Fbyte_code where the
-	 address of its local variable `stack' is equal to the
-	 recorded value of `stack' here.  */
-      eassert (stack->top);
-
-      for (obj = stack->bottom; obj <= stack->top; ++obj)
-	mark_object (*obj);
-
-      mark_object (stack->byte_string);
-      mark_object (stack->constants);
-    }
-}
-#endif
-
-/* Unmark objects in the stacks on byte_stack_list.  Relocate program
-   counters.  Called when GC has completed.  */
+/* Relocate program counters in the stacks on byte_stack_list.  Called
+   when GC has completed.  */
 
 void
-unmark_byte_stack (void)
+relocate_byte_stack (void)
 {
   struct byte_stack *stack;
 
@@ -390,7 +353,11 @@ unmark_byte_stack (void)
 
 /* Fetch the next byte from the bytecode stream.  */
 
+#ifdef BYTE_CODE_SAFE
+#define FETCH (eassert (stack.byte_string_start == SDATA (stack.byte_string)), *stack.pc++)
+#else
 #define FETCH *stack.pc++
+#endif
 
 /* Fetch two bytes from the bytecode stream and make a 16-bit number
    out of them.  */
@@ -551,9 +518,6 @@ exec_byte_code (Lisp_Object bytestr, Lisp_Object vector, Lisp_Object maxdepth,
 
   stack.byte_string = bytestr;
   stack.pc = stack.byte_string_start = SDATA (bytestr);
-#if BYTE_MARK_STACK
-  stack.constants = vector;
-#endif
   if (MAX_ALLOCA / word_size <= XFASTINT (maxdepth))
     memory_full (SIZE_MAX);
   top = alloca ((XFASTINT (maxdepth) + 1) * sizeof *top);
@@ -1104,9 +1068,6 @@ exec_byte_code (Lisp_Object bytestr, Lisp_Object vector, Lisp_Object maxdepth,
 	  goto pushhandler;
 	CASE (Bpushconditioncase): /* New in 24.4.  */
 	  {
-	    extern EMACS_INT lisp_eval_depth;
-	    extern int poll_suppress_count;
-	    extern int interrupt_input_blocked;
 	    struct handler *c;
 	    Lisp_Object tag;
 	    int dest;
@@ -1945,10 +1906,10 @@ exec_byte_code (Lisp_Object bytestr, Lisp_Object vector, Lisp_Object maxdepth,
 	  /* Actually this is Bstack_ref with offset 0, but we use Bdup
 	     for that instead.  */
 	  /* CASE (Bstack_ref): */
-         call3 (intern ("error"),
-                build_string ("Invalid byte opcode: op=%s, ptr=%d"),
-                make_number (op),
-                make_number ((stack.pc - 1) - stack.byte_string_start));
+	  call3 (Qerror,
+		 build_string ("Invalid byte opcode: op=%s, ptr=%d"),
+		 make_number (op),
+		 make_number ((stack.pc - 1) - stack.byte_string_start));
 
 	  /* Handy byte-codes for lexical binding.  */
 	CASE (Bstack_ref1):
@@ -2039,9 +2000,9 @@ syms_of_bytecode (void)
 
   DEFVAR_LISP ("byte-code-meter", Vbyte_code_meter,
 	       doc: /* A vector of vectors which holds a histogram of byte-code usage.
-\(aref (aref byte-code-meter 0) CODE) indicates how many times the byte
+(aref (aref byte-code-meter 0) CODE) indicates how many times the byte
 opcode CODE has been executed.
-\(aref (aref byte-code-meter CODE1) CODE2), where CODE1 is not 0,
+(aref (aref byte-code-meter CODE1) CODE2), where CODE1 is not 0,
 indicates how many times the byte opcodes CODE1 and CODE2 have been
 executed in succession.  */);
 

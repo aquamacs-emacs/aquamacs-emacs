@@ -1,6 +1,6 @@
 ;;; sieve-manage.el --- Implementation of the managesieve protocol in elisp
 
-;; Copyright (C) 2001-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2001-2015 Free Software Foundation, Inc.
 
 ;; Author: Simon Josefsson <simon@josefsson.org>
 ;;         Albert Krewinkel <tarleb@moltkeplatz.de>
@@ -70,10 +70,6 @@
 ;; 2013-06-05 Enabled STARTTLS support, fixed bit rot.
 
 ;;; Code:
-
-;; For Emacs <22.2 and XEmacs.
-(eval-and-compile
-  (unless (fboundp 'declare-function) (defmacro declare-function (&rest r))))
 
 (if (locate-library "password-cache")
     (require 'password-cache)

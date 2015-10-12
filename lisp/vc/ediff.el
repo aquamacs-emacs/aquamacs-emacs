@@ -1,6 +1,6 @@
 ;;; ediff.el --- a comprehensive visual interface to diff & patch
 
-;; Copyright (C) 1994-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1994-2015 Free Software Foundation, Inc.
 
 ;; Author: Michael Kifer <kifer@cs.stonybrook.edu>
 ;; Created: February 2, 1994
@@ -963,7 +963,7 @@ If WIND-B is nil, use window next to WIND-A."
 ;;;###autoload
 (defun ediff-regions-wordwise (buffer-A buffer-B &optional startup-hooks)
   "Run Ediff on a pair of regions in specified buffers.
-Regions \(i.e., point and mark\) can be set in advance or marked interactively.
+Regions (i.e., point and mark) can be set in advance or marked interactively.
 This function is effective only for relatively small regions, up to 200
 lines.  For large regions, use `ediff-regions-linewise'."
   (interactive
@@ -1003,7 +1003,7 @@ lines.  For large regions, use `ediff-regions-linewise'."
 ;;;###autoload
 (defun ediff-regions-linewise (buffer-A buffer-B &optional startup-hooks)
   "Run Ediff on a pair of regions in specified buffers.
-Regions \(i.e., point and mark\) can be set in advance or marked interactively.
+Regions (i.e., point and mark) can be set in advance or marked interactively.
 Each region is enlarged to contain full lines.
 This function is effective for large regions, over 100-200
 lines.  For small regions, use `ediff-regions-wordwise'."
@@ -1294,7 +1294,7 @@ buffer."
   (let (rev1 rev2)
     (setq rev1
 	  (read-string
-	   (format
+	   (format-message
 	    "Version 1 to merge (default %s's working version): "
 	    (if (stringp file)
 		(file-name-nondirectory file) "current buffer")))
@@ -1326,7 +1326,7 @@ buffer."
   (let (rev1 rev2 ancestor-rev)
     (setq rev1
 	  (read-string
-	   (format
+	   (format-message
 	    "Version 1 to merge (default %s's working version): "
 	    (if (stringp file)
 		(file-name-nondirectory file) "current buffer")))
@@ -1338,7 +1338,7 @@ buffer."
 		(file-name-nondirectory file) "current buffer")))
 	  ancestor-rev
 	  (read-string
-	   (format
+	   (format-message
 	    "Ancestor version (default %s's base revision): "
 	    (if (stringp file)
 		(file-name-nondirectory file) "current buffer"))))

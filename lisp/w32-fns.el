@@ -1,6 +1,6 @@
 ;;; w32-fns.el --- Lisp routines for 32-bit Windows
 
-;; Copyright (C) 1994, 2001-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1994, 2001-2015 Free Software Foundation, Inc.
 
 ;; Author: Geoff Voelker <voelker@cs.washington.edu>
 ;; Keywords: internal
@@ -26,7 +26,6 @@
 
 ;;; Code:
 (require 'w32-vars)
-(require 'w32-common-fns)
 
 (defvar explicit-shell-file-name)
 
@@ -45,7 +44,7 @@
   (or (bound-and-true-p shell-file-name)
       (getenv "ESHELL")
       (getenv "SHELL")
-      (and (w32-using-nt) "cmd.exe")
+      (and (fboundp 'w32-using-nt) (w32-using-nt) "cmd.exe")
       "command.com"))
 
 (defun w32-system-shell-p (shell-name)

@@ -1,6 +1,6 @@
 ;;; pop3.el --- Post Office Protocol (RFC 1460) interface
 
-;; Copyright (C) 1996-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1996-2015 Free Software Foundation, Inc.
 
 ;; Author: Richard L. Pieri <ratinox@peorth.gweep.net>
 ;; Maintainer: emacs-devel@gnu.org
@@ -82,7 +82,7 @@
 (defcustom pop3-authentication-scheme 'pass
   "*POP3 authentication scheme.
 Defaults to `pass', for the standard USER/PASS authentication.  The other
-valid value is 'apop'."
+valid value is `apop'."
   :type '(choice (const :tag "Normal user/password" pass)
 		 (const :tag "APOP" apop))
   :version "22.1" ;; Oort Gnus
@@ -561,6 +561,7 @@ Returns the process associated with the connection."
 		     'tls)
 		    (t
 		     (or pop3-stream-type 'network)))
+	     :warn-unless-encrypted t
 	     :capability-command "CAPA\r\n"
 	     :end-of-command "^\\(-ERR\\|+OK\\).*\n"
 	     :end-of-capability "^\\.\r?\n\\|^-ERR"

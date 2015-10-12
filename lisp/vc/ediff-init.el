@@ -1,6 +1,6 @@
 ;;; ediff-init.el --- Macros, variables, and defsubsts used by Ediff
 
-;; Copyright (C) 1994-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1994-2015 Free Software Foundation, Inc.
 
 ;; Author: Michael Kifer <kifer@cs.stonybrook.edu>
 ;; Package: ediff
@@ -23,6 +23,8 @@
 ;;; Commentary:
 
 ;;; Code:
+
+(require 'cl-lib)
 
 ;; Start compiler pacifier
 (defvar ediff-metajob-name)
@@ -118,11 +120,8 @@ It needs to be killed when we quit the session.")
     (?C . ediff-buffer-C)))
 
 ;;; Macros
-(defmacro ediff-odd-p (arg)
-  `(eq (logand ,arg 1) 1))
-
-(defmacro ediff-buffer-live-p (buf)
-  `(and ,buf (get-buffer ,buf) (buffer-name (get-buffer ,buf))))
+(defsubst ediff-buffer-live-p (buf)
+  (and buf (get-buffer buf) (buffer-name (get-buffer buf))))
 
 (defmacro ediff-get-buffer (arg)
   `(cond ((eq ,arg 'A) ediff-buffer-A)
@@ -777,7 +776,7 @@ TYPE-OF-EMACS is either 'xemacs or 'emacs."
 
 ;; A var local to each control panel buffer.  Indicates highlighting style
 ;; in effect for this buffer: `face', `ascii',
-;; `off' -- turned off \(on a dumb terminal only\).
+;; `off' -- turned off (on a dumb terminal only).
 (ediff-defvar-local ediff-highlighting-style
   (if (and (ediff-has-face-support-p) ediff-use-faces) 'face 'ascii)
   "")
@@ -949,7 +948,9 @@ this variable represents.")
 
 (defface ediff-current-diff-Ancestor
   (if (featurep 'emacs)
-      '((((class color) (min-colors 16))
+      '((((class color) (min-colors 88))
+	 (:background "VioletRed"))
+	(((class color) (min-colors 16))
 	 (:foreground "Black" :background "VioletRed"))
 	(((class color))
 	 (:foreground "black" :background "magenta3"))
@@ -1057,7 +1058,9 @@ this variable represents.")
 
 (defface ediff-fine-diff-Ancestor
   (if (featurep 'emacs)
-      '((((class color) (min-colors 16))
+      '((((class color) (min-colors 88))
+	 (:background "Green"))
+	(((class color) (min-colors 16))
 	 (:foreground "Black" :background "Green"))
 	(((class color))
 	 (:foreground "red3" :background "green"))
@@ -1091,6 +1094,8 @@ this variable represents.")
   (if (featurep 'emacs)
       `((((type pc))
 	 (:foreground "green3" :background "light grey"))
+	(((class color) (min-colors 88))
+	 (:background "light grey"))
 	(((class color) (min-colors 16))
 	 (:foreground "Black" :background "light grey"))
 	(((class color))
@@ -1115,7 +1120,9 @@ this variable represents.")
 
 (defface ediff-even-diff-B
   (if (featurep 'emacs)
-      `((((class color) (min-colors 16))
+      `((((class color) (min-colors 88))
+	 (:background "Grey"))
+	(((class color) (min-colors 16))
 	 (:foreground "White" :background "Grey"))
 	(((class color))
 	 (:foreground "blue3" :background "Grey" :weight bold))
@@ -1138,6 +1145,8 @@ this variable represents.")
   (if (featurep 'emacs)
       `((((type pc))
 	 (:foreground "yellow3" :background "light grey"))
+	(((class color) (min-colors 88))
+	 (:background "light grey"))
 	(((class color) (min-colors 16))
 	 (:foreground "Black" :background "light grey"))
 	(((class color))
@@ -1164,6 +1173,8 @@ this variable represents.")
   (if (featurep 'emacs)
       `((((type pc))
 	 (:foreground "cyan3" :background "light grey"))
+	(((class color) (min-colors 88))
+	 (:background "Grey"))
 	(((class color) (min-colors 16))
 	 (:foreground "White" :background "Grey"))
 	(((class color))
@@ -1197,6 +1208,8 @@ this variable represents.")
   (if (featurep 'emacs)
       '((((type pc))
 	 (:foreground "green3" :background "gray40"))
+	(((class color) (min-colors 88))
+	 (:background "Grey"))
 	(((class color) (min-colors 16))
 	 (:foreground "White" :background "Grey"))
 	(((class color))
@@ -1222,6 +1235,8 @@ this variable represents.")
   (if (featurep 'emacs)
       '((((type pc))
 	 (:foreground "White" :background "gray40"))
+	(((class color) (min-colors 88))
+	 (:background "light grey"))
 	(((class color) (min-colors 16))
 	 (:foreground "Black" :background "light grey"))
 	(((class color))
@@ -1246,6 +1261,8 @@ this variable represents.")
   (if (featurep 'emacs)
       '((((type pc))
 	 (:foreground "yellow3" :background "gray40"))
+	(((class color) (min-colors 88))
+	 (:background "Grey"))
 	(((class color) (min-colors 16))
 	 (:foreground "White" :background "Grey"))
 	(((class color))
@@ -1268,7 +1285,9 @@ this variable represents.")
 
 (defface ediff-odd-diff-Ancestor
   (if (featurep 'emacs)
-      '((((class color) (min-colors 16))
+      '((((class color) (min-colors 88))
+	 (:background "gray40"))
+	(((class color) (min-colors 16))
 	 (:foreground "cyan3" :background "gray40"))
 	(((class color))
 	 (:foreground "green3" :background "black" :weight bold))
@@ -1326,7 +1345,7 @@ this variable represents.")
 (ediff-defvar-local ediff-current-diff-overlay-Ancestor nil
   "Overlay for the current difference region in the ancestor buffer.")
 
-(defvar ediff-toggle-read-only-function 'toggle-read-only
+(defvar ediff-toggle-read-only-function 'read-only-mode
   "Function to be used to toggle read-only status of the buffer.
 If nil, Ediff tries using the command bound to C-x C-q.")
 
@@ -1436,7 +1455,7 @@ This default should work without changes."
   ;; The value of dif-num is always 1- the one that user sees.
   ;; This is why even face is used when dif-num is odd.
   (ediff-get-symbol-from-alist
-   buf-type (if (ediff-odd-p dif-num)
+   buf-type (if (cl-oddp dif-num)
 		ediff-even-diff-face-alist
 	      ediff-odd-diff-face-alist)
    ))
@@ -1699,6 +1718,9 @@ Unless optional argument INPLACE is non-nil, return a new string."
 	(if (eq (aref newstr i) fromchar)
 	    (aset newstr i tochar)))
       newstr)))
+
+(unless (fboundp 'format-message)
+  (defalias 'format-message 'format))
 
 (defun ediff-abbrev-jobname (jobname)
   (cond ((eq jobname 'ediff-directories)

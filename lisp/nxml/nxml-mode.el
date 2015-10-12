@@ -1,6 +1,6 @@
 ;;; nxml-mode.el --- a new XML mode  -*- lexical-binding:t -*-
 
-;; Copyright (C) 2003-2004, 2007-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2003-2004, 2007-2015 Free Software Foundation, Inc.
 
 ;; Author: James Clark
 ;; Keywords: wp, hypermedia, languages, XML
@@ -449,6 +449,9 @@ reference.")
     (when rng-validate-mode
       (rng-validate-while-idle (current-buffer)))))
 
+(defvar tildify-space-string)
+(defvar tildify-foreach-region-function)
+
 ;;;###autoload
 (define-derived-mode nxml-mode text-mode "nXML"
   ;; We use C-c C-i instead of \\[nxml-balanced-close-start-tag-inline]
@@ -505,6 +508,19 @@ be treated as a single markup item, set the variable
 Many aspects this mode can be customized using
 \\[customize-group] nxml RET."
   ;; (kill-all-local-variables)
+  ;; If encoding does not allow non-break space character, use reference.
+  ;; FIXME: This duplicates code from sgml-mode, perhaps derive from it?
+  ;; FIXME: Perhaps use &nbsp; if possible (e.g. XHTML)?
+  (setq-local tildify-space-string
+              (if (equal (decode-coding-string
+                          (encode-coding-string " " buffer-file-coding-system)
+                          buffer-file-coding-system) " ")
+                  " " "&#160;"))
+  ;; FIXME: Use the fact that we're parsing the document already
+  ;; rather than using regex-based filtering.
+  (setq-local tildify-foreach-region-function
+              (apply-partially 'tildify-foreach-ignore-environments
+                               '(("<! *--" . "-- *>") ("<" . ">"))))
   (set (make-local-variable 'mode-line-process) '((nxml-degraded "/degraded")))
   ;; We'll determine the fill prefix ourselves
   (make-local-variable 'adaptive-fill-mode)
@@ -530,6 +546,7 @@ Many aspects this mode can be customized using
   (setq comment-end-skip "[ \t\r\n]*-->")
   (make-local-variable 'comment-line-break-function)
   (setq comment-line-break-function 'nxml-newline-and-indent)
+  (setq-local comment-quote-nested-function 'nxml-comment-quote-nested)
   (use-local-map nxml-mode-map)
   (save-excursion
     (save-restriction
@@ -1333,6 +1350,18 @@ of the inserted start-tag or nil if none was inserted."
 			      (+ start-tag-indent nxml-child-indent)
 			    start-tag-indent)))))
     inserted-start-tag-pos))
+
+(defun nxml-comment-quote-nested (_cs _ce unp)
+  "Quote nested comments in buffer.
+See `comment-quote-nested-function' for more information."
+  (goto-char (point-min))
+  (save-match-data
+    (while (re-search-forward "-[\\]*-" nil t)
+      (goto-char (match-beginning 0))
+      (forward-char 1)
+      (if unp
+	  (delete-char 1)
+	(insert "\\")))))
 
 ;;; Indentation
 
@@ -2567,7 +2596,7 @@ With a prefix argument, inserts the character directly."
 	       (> (prefix-numeric-value arg) 0))))
     (when (not (eq new nxml-char-ref-extra-display))
       (setq nxml-char-ref-extra-display new)
-      (font-lock-fontify-buffer))))
+      (font-lock-flush))))
 
 (put 'nxml-char-ref 'evaporate t)
 

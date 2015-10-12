@@ -1,6 +1,6 @@
 ;;; esh-util.el --- general utilities  -*- lexical-binding:t -*-
 
-;; Copyright (C) 1999-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1999-2015 Free Software Foundation, Inc.
 
 ;; Author: John Wiegley <johnw@gnu.org>
 
@@ -33,7 +33,7 @@
 ;;; User Variables:
 
 (defcustom eshell-stringify-t t
-  "If non-nil, the string representation of t is 't'.
+  "If non-nil, the string representation of t is \"t\".
 If nil, t will be represented only in the exit code of the function,
 and not printed as a string.  This causes Lisp functions to behave
 similarly to external commands, as far as successful result output."
@@ -88,7 +88,7 @@ specification of filenames (for example, in calling `find-file', or
 some other Lisp function that deals with files, not numbers), add the
 following in your init file:
 
-  (put 'find-file 'eshell-no-numeric-conversions t)
+  (put \\='find-file \\='eshell-no-numeric-conversions t)
 
 Any function with the property `eshell-no-numeric-conversions' set to
 a non-nil value, will be passed strings, not numbers, even when an
@@ -228,7 +228,7 @@ If N or M is nil, it means the end of the list."
 
 (defvar eshell-path-env (getenv "PATH")
   "Content of $PATH.
-It might be different from \(getenv \"PATH\"\), when
+It might be different from \(getenv \"PATH\"), when
 `default-directory' points to a remote host.")
 (make-variable-buffer-local 'eshell-path-env)
 
@@ -539,20 +539,17 @@ Unless optional argument INPLACE is non-nil, return a new string."
 
 (defmacro eshell-with-file-modes (modes &rest forms)
   "Evaluate, with file-modes set to MODES, the given FORMS."
-  `(let ((modes (default-file-modes)))
-     (set-default-file-modes ,modes)
-     (unwind-protect
-	 (progn ,@forms)
-       (set-default-file-modes modes))))
+  (declare (obsolete with-file-modes "25.1"))
+  `(with-file-modes ,modes ,@forms))
 
 (defmacro eshell-with-private-file-modes (&rest forms)
   "Evaluate FORMS with private file modes set."
-  `(eshell-with-file-modes ,eshell-private-file-modes ,@forms))
+  `(with-file-modes ,eshell-private-file-modes ,@forms))
 
 (defsubst eshell-make-private-directory (dir &optional parents)
   "Make DIR with file-modes set to `eshell-private-directory-modes'."
-  (eshell-with-file-modes eshell-private-directory-modes
-			  (make-directory dir parents)))
+  (with-file-modes eshell-private-directory-modes
+    (make-directory dir parents)))
 
 (defsubst eshell-substring (string sublen)
   "Return the beginning of STRING, up to SUBLEN bytes."
@@ -656,7 +653,7 @@ If NOSORT is non-nil, the list is not sorted--its order is unpredictable.
 				   (match-string 6))))
 		      (if (nth 0 moment)
 			  (setcar (nthcdr 5 moment)
-				  (nth 5 (decode-time (current-time))))
+				  (nth 5 (decode-time)))
 			(setcar (nthcdr 0 moment) 0)
 			(setcar (nthcdr 1 moment) 0)
 			(setcar (nthcdr 2 moment) 0))

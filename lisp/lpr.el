@@ -1,6 +1,6 @@
 ;;; lpr.el --- print Emacs buffer on line printer
 
-;; Copyright (C) 1985, 1988, 1992, 1994, 2001-2014 Free Software
+;; Copyright (C) 1985, 1988, 1992, 1994, 2001-2015 Free Software
 ;; Foundation, Inc.
 
 ;; Maintainer: emacs-devel@gnu.org
@@ -49,7 +49,7 @@
 (defcustom printer-name
   (and (eq system-type 'ms-dos) "PRN")
   "The name of a local printer to which data is sent for printing.
-\(Note that PostScript files are sent to `ps-printer-name', which see.\)
+\(Note that PostScript files are sent to `ps-printer-name', which see.)
 
 On Unix-like systems, a string value should be a name understood by
 lpr's -P option; otherwise the value should be nil.

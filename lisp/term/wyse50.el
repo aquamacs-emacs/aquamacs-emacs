@@ -1,6 +1,7 @@
 ;;; wyse50.el --- terminal support code for Wyse 50
 
-;; Copyright (C) 1989, 1993-1994, 2001-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1989, 1993-1994, 2001-2015 Free Software Foundation,
+;; Inc.
 
 ;; Author: Daniel Pfeiffer <occitan@esperanto.org>,
 ;;	Jim Blandy <jimb@occs.cs.oberlin.edu>
@@ -23,7 +24,6 @@
 
 ;;; Commentary:
 
-;; Uses the Emacs 19 terminal initialization features --- won't work with 18.
 ;; Rewritten for Emacs 19 by jimb,  January 1992
 ;; Cleaned up for new terminal package conventions by esr, March 1993
 ;; Should work well for Televideo TVI 925 although it's overkill.

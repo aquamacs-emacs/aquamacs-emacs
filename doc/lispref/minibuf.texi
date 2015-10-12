@@ -1,6 +1,6 @@
 @c -*-texinfo-*-
 @c This is part of the GNU Emacs Lisp Reference Manual.
-@c Copyright (C) 1990-1995, 1998-1999, 2001-2014 Free Software
+@c Copyright (C) 1990-1995, 1998-1999, 2001-2015 Free Software
 @c Foundation, Inc.
 @c See the file elisp.texi for copying conditions.
 @node Minibuffers
@@ -81,7 +81,7 @@ there is an active minibuffer; such a minibuffer is called a
 incrementing the number at the end of the name.  (The names begin with
 a space so that they won't show up in normal buffer lists.)  Of
 several recursive minibuffers, the innermost (or most recently
-entered) is the active minibuffer.  We usually call this ``the''
+entered) is the active minibuffer.  We usually call this @emph{the}
 minibuffer.  You can permit or forbid recursive minibuffers by setting
 the variable @code{enable-recursive-minibuffers}, or by putting
 properties of that name on command symbols (@xref{Recursive Mini}.)
@@ -102,11 +102,12 @@ the minibuffer is in a separate frame.  @xref{Minibuffers and Frames}.
   When Emacs is running in batch mode, any request to read from the
 minibuffer actually reads a line from the standard input descriptor that
 was supplied when Emacs was started.  This supports only basic input:
-none of the special minibuffer features (history, completion,
-password hiding, etc.) are available in batch mode.
+none of the special minibuffer features (history, completion, etc.)@:
+are available in batch mode.
 
 @node Text from Minibuffer
 @section Reading Text Strings with the Minibuffer
+@cindex minibuffer input, reading text strings
 
   The most basic primitive for minibuffer input is
 @code{read-from-minibuffer}, which can be used to read either a string
@@ -262,7 +263,7 @@ The function now has a list of regular expressions that it passes to
 @code{read-from-minibuffer} to obtain the user's input.  The first
 element of the list is the default result in case of empty input.  All
 elements of the list are available to the user as the ``future
-minibuffer history list'' (@pxref{Minibuffer History, future list,,
+minibuffer history'' list (@pxref{Minibuffer History, future list,,
 emacs, The GNU Emacs Manual}).
 
 The optional argument @var{history}, if non-@code{nil}, is a symbol
@@ -390,6 +391,7 @@ following bindings, in addition to those of @code{minibuffer-local-map}:
 
 @node Object from Minibuffer
 @section Reading Lisp Objects with the Minibuffer
+@cindex minibuffer input, reading lisp objects
 
   This section describes functions for reading Lisp objects with the
 minibuffer.
@@ -721,7 +723,7 @@ just one matching completion, and the match is exact, it returns
 @code{t}.  Otherwise, it returns the longest initial sequence common
 to all possible matching completions.
 
-If @var{collection} is an list, the permissible completions are
+If @var{collection} is a list, the permissible completions are
 specified by the elements of the list, each of which should be either
 a string, or a cons cell whose @sc{car} is either a string or a symbol
 (a symbol is converted to a string using @code{symbol-name}).  If the
@@ -893,7 +895,7 @@ pertains to the area after @code{"/usr/"} and before @code{"/doc"}.
 @end defun
 
 If you store a completion alist in a variable, you should mark the
-variable as ``risky'' by giving it a non-@code{nil}
+variable as risky by giving it a non-@code{nil}
 @code{risky-local-variable} property.  @xref{File Local Variables}.
 
 @defvar completion-ignore-case
@@ -1736,7 +1738,7 @@ possible match, and ignore the match if the predicate returns
 
 @item
 A flag specifying the type of completion operation to perform.  This
-is one of the following four values:
+flag may be one of the following values.
 
 @table @code
 @item nil
@@ -1875,11 +1877,34 @@ next function in @code{completion-at-point-functions} instead of
 reporting a completion failure.
 @end table
 
+Supplying a function for @var{collection} is strongly recommended if
+generating the list of completions is an expensive operation.  Emacs
+may internally call functions in @code{completion-at-point-functions}
+many times, but care about the value of @var{collection} for only some
+of these calls.  By supplying a function for @var{collection}, Emacs
+can defer generating completions until necessary.  You can use
+@var{completion-table-dynamic} to create a wrapper function:
+
+@smallexample
+;; Avoid this pattern.
+(let ((beg ...) (end ...) (my-completions (my-make-completions)))
+  (list beg end my-completions))
+
+;; Use this instead.
+(let ((beg ...) (end ...))
+  (list beg
+        end
+        (completion-table-dynamic
+          (lambda (_)
+            (my-make-completions)))))
+@end smallexample
+
 A function in @code{completion-at-point-functions} may also return a
-function.  In that case, that returned function is called, with no
-argument, and it is entirely responsible for performing the
-completion.  We discourage this usage; it is intended to help convert
-old code to using @code{completion-at-point}.
+function instead of a list as described above.  In that case, that
+returned function is called, with no argument, and it is entirely
+responsible for performing the completion.  We discourage this usage;
+it is intended to help convert old code to using
+@code{completion-at-point}.
 
 The first function in @code{completion-at-point-functions} to return a
 non-@code{nil} value is used by @code{completion-at-point}.  The
@@ -1933,7 +1958,7 @@ the call.
 This function asks the user a question, expecting input in the echo
 area.  It returns @code{t} if the user types @kbd{y}, @code{nil} if the
 user types @kbd{n}.  This function also accepts @key{SPC} to mean yes
-and @key{DEL} to mean no.  It accepts @kbd{C-]} to mean ``quit'', like
+and @key{DEL} to mean no.  It accepts @kbd{C-]} to quit, like
 @kbd{C-g}, because the question might look like a minibuffer and for
 that reason the user might try to use @kbd{C-]} to get out.  The answer
 is a single character, with no @key{RET} needed to terminate it.  Upper
@@ -2021,9 +2046,10 @@ Do you really want to remove everything? (yes or no)
 
 @node Multiple Queries
 @section Asking Multiple Y-or-N Questions
+@cindex multiple yes-or-no questions
 
   When you have a series of similar questions to ask, such as ``Do you
-want to save this buffer'' for each buffer in turn, you should use
+want to save this buffer?'' for each buffer in turn, you should use
 @code{map-y-or-n-p} to ask the collection of questions, rather than
 asking each question individually.  This gives the user certain
 convenient facilities such as the ability to answer the whole series at
@@ -2094,7 +2120,7 @@ answer); @var{function} is a function of one argument (an object from
 
 When the user responds with @var{char}, @code{map-y-or-n-p} calls
 @var{function}.  If it returns non-@code{nil}, the object is considered
-``acted upon'', and @code{map-y-or-n-p} advances to the next object in
+acted upon, and @code{map-y-or-n-p} advances to the next object in
 @var{list}.  If it returns @code{nil}, the prompt is repeated for the
 same object.
 
@@ -2124,9 +2150,10 @@ function @code{read-passwd}.
 
 @defun read-passwd prompt &optional confirm default
 This function reads a password, prompting with @var{prompt}.  It does
-not echo the password as the user types it; instead, it echoes @samp{.}
-for each character in the password.  (Note that in batch mode, the
-input is not hidden.)
+not echo the password as the user types it; instead, it echoes
+@samp{.}  for each character in the password.  If you want to apply
+another character to hide the password, let-bind the variable
+@code{read-hide-char} with that character.
 
 The optional argument @var{confirm}, if non-@code{nil}, says to read the
 password twice and insist it must be the same both times.  If it isn't
@@ -2194,8 +2221,8 @@ contents of the minibuffer before the point.
 @section Minibuffer Windows
 @cindex minibuffer windows
 
-  These functions access and select minibuffer windows
-and test whether they are active.
+These functions access and select minibuffer windows, test whether they
+are active and control how they get resized.
 
 @defun active-minibuffer-window
 This function returns the currently active minibuffer window, or
@@ -2236,8 +2263,33 @@ This function returns non-@code{nil} if @var{window} is the currently
 active minibuffer window.
 @end defun
 
+The following two options control whether minibuffer windows are resized
+automatically and how large they can get in the process.
+
+@defopt resize-mini-windows
+This option specifies whether minibuffer windows are resized
+automatically.  The default value is @code{grow-only}, which means that
+a minibuffer window by default expands automatically to accommodate the
+text it displays and shrinks back to one line as soon as the minibuffer
+gets empty.  If the value is @code{t}, Emacs will always try to fit the
+height of a minibuffer window to the text it displays (with a minimum of
+one line).  If the value is @code{nil}, a minibuffer window never
+changes size automatically.  In that case the window resizing commands
+(@pxref{Resizing Windows}) can be used to adjust its height.
+@end defopt
+
+@defopt max-mini-window-height
+This option provides a maximum height for resizing minibuffer windows
+automatically.  A floating-point number specifies a fraction of the
+frame's height; an integer specifies the maximum number of lines.  The
+default value is 0.25.
+@end defopt
+
+
 @node Minibuffer Contents
 @section Minibuffer Contents
+@cindex access minibuffer contents
+@cindex minibuffer contents, accessing
 
   These functions access the minibuffer prompt and contents.
 
@@ -2361,7 +2413,7 @@ arrives, whichever comes first.  The variable
 @code{minibuffer-message-timeout} specifies the number of seconds to
 wait in the absence of input.  It defaults to 2.  If @var{args} is
 non-@code{nil}, the actual message is obtained by passing @var{string}
-and @var{args} through @code{format}.  @xref{Formatting Strings}.
+and @var{args} through @code{format-message}.  @xref{Formatting Strings}.
 @end defun
 
 @deffn Command minibuffer-inactive-mode

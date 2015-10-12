@@ -1,6 +1,6 @@
 ;;; cua-base.el --- emulate CUA key bindings
 
-;; Copyright (C) 1997-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1997-2015 Free Software Foundation, Inc.
 
 ;; Author: Kim F. Storm <storm@cua.dk>
 ;; Keywords: keyboard emulations convenience cua
@@ -277,7 +277,7 @@ enabled."
 
 (defcustom cua-remap-control-v t
   "If non-nil, C-v binding is used for paste (yank).
-Also, M-v is mapped to `cua-repeat-replace-region'."
+Also, M-v is mapped to `delete-selection-repeat-replace-region'."
   :type 'boolean
   :group 'cua)
 
@@ -350,6 +350,8 @@ interpreted as a register number."
   :group 'cua)
 
 (defcustom cua-delete-copy-to-register-0 t
+  ;; FIXME: Obey delete-selection-save-to-register rather than hardcoding
+  ;; register 0.
   "If non-nil, save last deleted region or rectangle to register 0."
   :type 'boolean
   :group 'cua)
@@ -683,7 +685,7 @@ a cons (TYPE . COLOR), then both properties are affected."
 (defvar cua--prefix-override-timer nil)
 (defvar cua--prefix-override-length nil)
 
-(defun cua--prefix-override-replay (arg repeat)
+(defun cua--prefix-override-replay (repeat)
   (let* ((keys (this-command-keys))
 	 (i (length keys))
 	 (key (aref keys (1- i))))
@@ -703,21 +705,23 @@ a cons (TYPE . COLOR), then both properties are affected."
     ;; Don't record this command
     (setq this-command last-command)
     ;; Restore the prefix arg
-    (setq prefix-arg arg)
-    (reset-this-command-lengths)
+    ;; This should make it so that exchange-point-and-mark gets the prefix when
+    ;; you do C-u C-x C-x C-x work (where the C-u is properly passed to the C-x
+    ;; C-x binding after the first C-x C-x was rewritten to just C-x).
+    (prefix-command-preserve-state)
     ;; Push the key back on the event queue
     (setq unread-command-events (cons key unread-command-events))))
 
-(defun cua--prefix-override-handler (arg)
+(defun cua--prefix-override-handler ()
   "Start timer waiting for prefix key to be followed by another key.
 Repeating prefix key when region is active works as a single prefix key."
-  (interactive "P")
-  (cua--prefix-override-replay arg 0))
+  (interactive)
+  (cua--prefix-override-replay 0))
 
-(defun cua--prefix-repeat-handler (arg)
+(defun cua--prefix-repeat-handler ()
   "Repeating prefix key when region is active works as a single prefix key."
-  (interactive "P")
-  (cua--prefix-override-replay arg 1))
+  (interactive)
+  (cua--prefix-override-replay 1))
 
 (defun cua--prefix-copy-handler (arg)
   "Copy region/rectangle, then replay last key."
@@ -740,7 +744,8 @@ Repeating prefix key when region is active works as a single prefix key."
   (when (= (length (this-command-keys)) cua--prefix-override-length)
     (setq unread-command-events (cons 'timeout unread-command-events))
     (if prefix-arg
-      (reset-this-command-lengths)
+        nil
+      ;; FIXME: Why?
       (setq overriding-terminal-local-map nil))
     (cua--select-keymaps)))
 
@@ -753,8 +758,9 @@ Repeating prefix key when region is active works as a single prefix key."
   (call-interactively this-command))
 
 (defun cua--keep-active ()
-  (setq mark-active t
-	deactivate-mark nil))
+  (when (mark t)
+    (setq mark-active t
+          deactivate-mark nil)))
 
 (defun cua--deactivate (&optional now)
   (if (not now)
@@ -788,26 +794,14 @@ Repeating prefix key when region is active works as a single prefix key."
 
 ;;; Region specific commands
 
-(defvar cua--last-deleted-region-pos nil)
-(defvar cua--last-deleted-region-text nil)
+(declare-function delete-active-region "delsel" (&optional killp))
 
 (defun cua-delete-region ()
   "Delete the active region.
 Save a copy in register 0 if `cua-delete-copy-to-register-0' is non-nil."
   (interactive)
-  (let ((start (mark)) (end (point)))
-    (or (<= start end)
-	(setq start (prog1 end (setq end start))))
-    (setq cua--last-deleted-region-text
-          (funcall region-extract-function t))
-    (if cua-delete-copy-to-register-0
-	(set-register ?0 cua--last-deleted-region-text))
-    (setq cua--last-deleted-region-pos
-	  (cons (current-buffer)
-		(and (consp buffer-undo-list)
-		     (car buffer-undo-list))))
-    (cua--deactivate)
-    (/= start end)))
+  (require 'delsel)
+  (delete-active-region))
 
 (defun cua-copy-region (arg)
   "Copy the region to the kill ring.
@@ -954,52 +948,12 @@ See also `exchange-point-and-mark'."
   (cond ((null cua-enable-cua-keys)
 	 (exchange-point-and-mark arg))
 	(arg
-	 (setq mark-active t))
+         (when (mark t) (setq mark-active t)))
 	(t
 	 (let (mark-active)
 	   (exchange-point-and-mark)
-	   (if cua--rectangle
-	       (cua--rectangle-corner 0))))))
-
-;; Typed text that replaced the highlighted region.
-(defvar cua--repeat-replace-text nil)
-
-(defun cua-repeat-replace-region (arg)
-  "Repeat replacing text of highlighted region with typed text.
-Searches for the next stretch of text identical to the region last
-replaced by typing text over it and replaces it with the same stretch
-of text."
-  (interactive "P")
-  (when cua--last-deleted-region-pos
-    (with-current-buffer (car cua--last-deleted-region-pos)
-      (save-restriction
-	(widen)
-	;; Find the text that replaced the region via the undo list.
-	(let ((ul buffer-undo-list)
-	      (elt (cdr cua--last-deleted-region-pos))
-	      u s e)
-	  (when elt
-	    (while (consp ul)
-	      (setq u (car ul) ul (cdr ul))
-	      (cond
-	       ((eq u elt) ;; got it
-		(setq ul nil))
-	       ((and (consp u) (integerp (car u)) (integerp (cdr u)))
-		(if (and s (= (cdr u) s))
-		    (setq s (car u))
-		  (setq s (car u) e (cdr u)))))))
-	  (cond ((and s e (<= s e) (= s (mark t)))
-		 (setq cua--repeat-replace-text (cua--filter-buffer-noprops s e)))
-		((and (null s) (eq u elt)) ;; nothing inserted
-		 (setq cua--repeat-replace-text
-		       ""))
-		(t
-		 (message "Cannot locate replacement text"))))))
-    (setq cua--last-deleted-region-pos nil))
-  (if (and cua--last-deleted-region-text
-	   cua--repeat-replace-text
-	   (search-forward cua--last-deleted-region-text nil t nil))
-      (replace-match cua--repeat-replace-text arg t)))
+       (if cua--rectangle
+           (cua--rectangle-corner 0))))))
 
 (defun cua-help-for-region (&optional help)
   "Show region specific help in echo area."
@@ -1067,7 +1021,7 @@ With a double \\[universal-argument] prefix argument, unconditionally set mark."
     (or (and cua-auto-mark-last-change
 	     (cua-pop-to-last-change))
 	(pop-to-mark-command)))
-   ((and cua-toggle-set-mark mark-active)
+   ((and cua-toggle-set-mark (region-active-p))
     (cua--deactivate)
     (message "Mark cleared"))
    (t
@@ -1156,19 +1110,6 @@ If ARG is the atom `-', scroll upward by nearly full screen."
 	(cancel-timer cua--prefix-override-timer))
     (setq cua--prefix-override-timer nil))
 
-  (cond
-   ;; Only symbol commands can have necessary properties
-   ((not (symbolp this-command))
-    nil)
-
-   ((not (eq (get this-command 'CUA) 'move))
-    nil)
-
-   ;; Set mark if user explicitly said to do so
-   (cua--rectangle ;FIXME: ??
-    (unless mark-active
-      (push-mark-command nil nil))))
-
   ;; Detect extension of rectangles by mouse or other movement
   (setq cua--buffer-and-point-before-command
 	(if cua--rectangle (cons (current-buffer) (point)))))
@@ -1192,7 +1133,7 @@ If ARG is the atom `-', scroll upward by nearly full screen."
   (if cua--debug
       (cond
        (cua--rectangle (cua--rectangle-assert))
-       (mark-active (message "Mark=%d Point=%d" (mark t) (point)))))
+       ((region-active-p) (message "Mark=%d Point=%d" (mark t) (point)))))
 
   (if cua-enable-cursor-indications
       (cua--update-indications))
@@ -1251,7 +1192,7 @@ If ARG is the atom `-', scroll upward by nearly full screen."
 (defun cua--select-keymaps ()
   ;; Setup conditions for selecting the proper keymaps in cua--keymap-alist.
   (setq cua--ena-region-keymap
-	(and mark-active (not deactivate-mark)))
+	(and (region-active-p) (not deactivate-mark)))
   (setq cua--ena-prefix-override-keymap
 	(and cua--ena-region-keymap
 	     cua-enable-cua-keys
@@ -1275,25 +1216,28 @@ If ARG is the atom `-', scroll upward by nearly full screen."
 
 (defvar cua--keymaps-initialized nil)
 
-(defun cua--shift-control-prefix (prefix arg)
+(defun cua--shift-control-prefix (prefix)
   ;; handle S-C-x and S-C-c by emulating the fast double prefix function.
   ;; Don't record this command
   (setq this-command last-command)
   ;; Restore the prefix arg
-  (setq prefix-arg arg)
-  (reset-this-command-lengths)
+  ;; This should make it so that exchange-point-and-mark gets the prefix when
+  ;; you do C-u S-C-x C-x work (where the C-u is properly passed to the C-x
+  ;; C-x binding after the first S-C-x was rewritten to just C-x).
+  (prefix-command-preserve-state)
   ;; Activate the cua--prefix-repeat-keymap
   (setq cua--prefix-override-timer 'shift)
   ;; Push duplicate keys back on the event queue
-  (setq unread-command-events (cons prefix (cons prefix unread-command-events))))
+  (setq unread-command-events
+        (cons prefix (cons prefix unread-command-events))))
 
-(defun cua--shift-control-c-prefix (arg)
-  (interactive "P")
-  (cua--shift-control-prefix ?\C-c arg))
+(defun cua--shift-control-c-prefix ()
+  (interactive)
+  (cua--shift-control-prefix ?\C-c))
 
-(defun cua--shift-control-x-prefix (arg)
-  (interactive "P")
-  (cua--shift-control-prefix ?\C-x arg))
+(defun cua--shift-control-x-prefix ()
+  (interactive)
+  (cua--shift-control-prefix ?\C-x))
 
 (defun cua--init-keymaps ()
   ;; Cache actual rectangle modifier key.
@@ -1333,7 +1277,8 @@ If ARG is the atom `-', scroll upward by nearly full screen."
     (define-key cua--cua-keys-keymap [(control z)] 'undo))
   (when cua-remap-control-v
     (define-key cua--cua-keys-keymap [(control v)] 'yank)
-    (define-key cua--cua-keys-keymap [(meta v)] 'cua-repeat-replace-region))
+    (define-key cua--cua-keys-keymap [(meta v)]
+      'delete-selection-repeat-replace-region))
 
   (define-key cua--prefix-override-keymap [(control x)] 'cua--prefix-override-handler)
   (define-key cua--prefix-override-keymap [(control c)] 'cua--prefix-override-handler)
@@ -1367,41 +1312,12 @@ If ARG is the atom `-', scroll upward by nearly full screen."
   )
 
 
-;; Setup standard movement commands to be recognized by CUA.
-
-(dolist (cmd
- '(forward-char backward-char
-   right-char left-char
-   right-word left-word
-   next-line previous-line
-   forward-word backward-word
-   end-of-line beginning-of-line
-   end-of-visual-line beginning-of-visual-line
-   move-end-of-line move-beginning-of-line
-   end-of-buffer beginning-of-buffer
-   scroll-up scroll-down
-   scroll-up-command scroll-down-command
-   up-list down-list backward-up-list
-   end-of-defun beginning-of-defun
-   forward-sexp backward-sexp
-   forward-list backward-list
-   forward-sentence backward-sentence
-   forward-paragraph backward-paragraph
-   ;; CC mode motion commands
-   c-forward-conditional c-backward-conditional
-   c-down-conditional c-up-conditional
-   c-down-conditional-with-else c-up-conditional-with-else
-   c-beginning-of-statement c-end-of-statement))
-  (put cmd 'CUA 'move))
-
-;; Only called if pc-selection-mode is t, which means pc-select is loaded.
-(declare-function pc-selection-mode "pc-select" (&optional arg))
-
 ;; State prior to enabling cua-mode
 ;; Value is a list with the following elements:
 ;;   delete-selection-mode
 
 (defvar cua--saved-state nil)
+(defvar delete-selection-save-to-register)
 
 ;;;###autoload
 (define-minor-mode cua-mode
@@ -1469,6 +1385,8 @@ the prefix fallback behavior."
       (if (and (boundp 'delete-selection-mode) delete-selection-mode)
           (delete-selection-mode -1)))
     (if cua-highlight-region-shift-only (transient-mark-mode -1))
+    (if cua-delete-copy-to-register-0
+        (setq delete-selection-save-to-register ?0))
     (cua--deactivate))
    (cua--saved-state
     (if (nth 0 cua--saved-state)

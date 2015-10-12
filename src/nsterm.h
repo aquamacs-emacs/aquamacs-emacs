@@ -1,5 +1,5 @@
 /* Definitions and headers for communication with NeXT/Open/GNUstep API.
-   Copyright (C) 1989, 1993, 2005, 2008-2014 Free Software Foundation,
+   Copyright (C) 1989, 1993, 2005, 2008-2015 Free Software Foundation,
    Inc.
 
 This file is part of GNU Emacs.
@@ -27,12 +27,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #ifdef HAVE_NS
 
 #ifdef NS_IMPL_COCOA
-#ifndef MAC_OS_X_VERSION_10_4
-#define MAC_OS_X_VERSION_10_4 1040
-#endif
-#ifndef MAC_OS_X_VERSION_10_5
-#define MAC_OS_X_VERSION_10_5 1050
-#endif
 #ifndef MAC_OS_X_VERSION_10_6
 #define MAC_OS_X_VERSION_10_6 1060
 #endif
@@ -58,21 +52,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
    versions.
    On Cocoa >= 10.5, functions expect CGFloat*. Make compatible type.  */
 #ifdef NS_IMPL_COCOA
-
-#ifndef NS_HAVE_NSINTEGER
-#if defined (__LP64__) && __LP64__
-typedef double CGFloat;
-typedef long NSInteger;
-typedef unsigned long NSUInteger;
-#else
-typedef float CGFloat;
-typedef int NSInteger;
-typedef unsigned int NSUInteger;
-#endif /* not LP64 */
-#endif /* not NS_HAVE_NSINTEGER */
-
 typedef CGFloat EmacsCGFloat;
-
 #elif GNUSTEP_GUI_MAJOR_VERSION > 0 || GNUSTEP_GUI_MINOR_VERSION >= 22
 typedef CGFloat EmacsCGFloat;
 #else
@@ -102,8 +82,7 @@ typedef float EmacsCGFloat;
 @interface EmacsApp : NSApplication
 {
   NSAppleEventDescriptor* appleScriptReturnValue;
-
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
+#ifdef NS_IMPL_COCOA
   BOOL shouldKeepRunning;
   BOOL isFirst;
 #endif
@@ -145,7 +124,7 @@ typedef float EmacsCGFloat;
 
 @class EmacsToolbar;
 
-#if defined (NS_IMPL_COCOA) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
+#ifdef NS_IMPL_COCOA
 @interface EmacsView : NSView <NSTextInput, NSWindowDelegate>
 #else
 @interface EmacsView : NSView <NSTextInput>
@@ -237,7 +216,7 @@ enum {
 
    ========================================================================== */
 
-#if defined (NS_IMPL_COCOA) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
+#ifdef NS_IMPL_COCOA
 @interface EmacsMenu : NSMenu  <NSMenuDelegate>
 #else
 @interface EmacsMenu : NSMenu
@@ -269,7 +248,7 @@ enum {
 
 @class EmacsImage;
 
-#if defined (NS_IMPL_COCOA) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
+#ifdef NS_IMPL_COCOA
 @interface EmacsToolbar : NSToolbar <NSToolbarDelegate>
 #else
 @interface EmacsToolbar : NSToolbar
@@ -337,7 +316,7 @@ enum {
 - (void)timeout_handler: (NSTimer *)timedEntry;
 @end
 
-#if defined (NS_IMPL_COCOA) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
+#ifdef NS_IMPL_COCOA
 @interface EmacsTooltip : NSObject <NSWindowDelegate>
 #else
 @interface EmacsTooltip : NSObject
@@ -401,21 +380,15 @@ enum {
 
 @interface EmacsImage : NSImage
 {
-  id imageListNext;
-  int refCount;
   NSBitmapImageRep *bmRep; /* used for accessing pixel data */
   unsigned char *pixmapData[5]; /* shortcut to access pixel data */
   NSColor *stippleMask;
+  unsigned long xbm_fg;
 }
 + allocInitFromFile: (Lisp_Object)file;
-- reference;
-- imageListSetNext: (id)arg;
-- imageListNext;
 - (void)dealloc;
 - initFromXBM: (unsigned char *)bits width: (int)w height: (int)h
-         flip: (BOOL)flip;
-- initFromSkipXBM: (unsigned char *)bits width: (int)w height: (int)h
-             flip: (BOOL)flip length: (int)length;
+                  fg: (unsigned long)fg bg: (unsigned long)bg;
 - setXBMColor: (NSColor *)color;
 - initForXPMWithDepth: (int)depth width: (int)width height: (int)height;
 - (void)setPixmapData;
@@ -436,7 +409,7 @@ enum {
 
 @interface EmacsScroller : NSScroller
   {
-   Lisp_Object win;
+   struct window *window;
    struct frame *frame;
    NSResponder *prevResponder;
 
@@ -444,7 +417,7 @@ enum {
    CGFloat last_mouse_offset;
    float min_portion;
    int pixel_height;
-   int last_hit_part;
+   enum scroll_bar_part last_hit_part;
 
    BOOL condemned;
 
@@ -456,18 +429,16 @@ enum {
 
 - initFrame: (NSRect )r window: (Lisp_Object)win;
 - (void)setFrame: (NSRect)r;
-- (void)dealloc;
 
 - setPosition: (int) position portion: (int) portion whole: (int) whole;
 - (int) checkSamePosition: (int)position portion: (int)portion
                     whole: (int)whole;
-- (void) getMouseMotionPart: (int *)part window: (Lisp_Object *)window
-                          x: (Lisp_Object *)x y: ( Lisp_Object *)y;
 - (void) sendScrollEventAtLoc: (float)loc fromEvent: (NSEvent *)e;
 - repeatScroll: (NSTimer *)sender;
 - condemn;
 - reprieve;
-- judge;
+- (bool)judge;
++ (CGFloat)scrollerWidth;
 @end
 
 
@@ -666,6 +637,9 @@ struct ns_display_info
   /* The cursor to use for vertical scroll bars. */
   Cursor vertical_scroll_bar_cursor;
 
+  /* The cursor to use for horizontal scroll bars. */
+  Cursor horizontal_scroll_bar_cursor;
+
   /* Information about the range of text currently shown in
      mouse-face.  */
   Mouse_HLInfo mouse_highlight;
@@ -744,8 +718,8 @@ struct ns_output
      value contains an ID of the fontset, else -1.  */
   int fontset; /* only used with font_backend */
 
-  Lisp_Object icon_top;
-  Lisp_Object icon_left;
+  int icon_top;
+  int icon_left;
 
   /* The size of the extra width currently allotted for vertical
      scroll bars, in pixels.  */
@@ -806,12 +780,20 @@ struct x_output
 #endif
 
 /* Compute pixel size for vertical scroll bars */
-#define NS_SCROLL_BAR_WIDTH(f)                              \
-(FRAME_HAS_VERTICAL_SCROLL_BARS (f)                          \
- ? rint (FRAME_CONFIG_SCROLL_BAR_WIDTH (f) > 0               \
-        ? FRAME_CONFIG_SCROLL_BAR_WIDTH (f)                 \
-        : (FRAME_SCROLL_BAR_COLS (f) * FRAME_COLUMN_WIDTH (f)))   \
- : 0)
+#define NS_SCROLL_BAR_WIDTH(f)						\
+  (FRAME_HAS_VERTICAL_SCROLL_BARS (f)					\
+   ? rint (FRAME_CONFIG_SCROLL_BAR_WIDTH (f) > 0			\
+	   ? FRAME_CONFIG_SCROLL_BAR_WIDTH (f)				\
+	   : (FRAME_SCROLL_BAR_COLS (f) * FRAME_COLUMN_WIDTH (f)))	\
+   : 0)
+
+/* Compute pixel size for horizontal scroll bars */
+#define NS_SCROLL_BAR_HEIGHT(f)						\
+  (FRAME_HAS_HORIZONTAL_SCROLL_BARS (f)					\
+   ? rint (FRAME_CONFIG_SCROLL_BAR_HEIGHT (f) > 0			\
+	   ? FRAME_CONFIG_SCROLL_BAR_HEIGHT (f)				\
+	   : (FRAME_SCROLL_BAR_LINES (f) * FRAME_LINE_HEIGHT (f)))	\
+   : 0)
 
 /* Difference btwn char-column-calculated and actual SB widths.
    This is only a concern for rendering when SB on left. */
@@ -819,6 +801,13 @@ struct x_output
 (WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_LEFT (w) ?	\
     (FRAME_SCROLL_BAR_COLS (f) * FRAME_COLUMN_WIDTH (f)	\
         - NS_SCROLL_BAR_WIDTH (f)) : 0)
+
+/* Difference btwn char-line-calculated and actual SB heights.
+   This is only a concern for rendering when SB on top. */
+#define NS_SCROLL_BAR_ADJUST_HORIZONTALLY(w, f)		\
+  (WINDOW_HAS_HORIZONTAL_SCROLL_BARS (w) ?		\
+   (FRAME_SCROLL_BAR_LINES (f) * FRAME_LINE_HEIGHT (f)	\
+    - NS_SCROLL_BAR_HEIGHT (f)) : 0)
 
 /* XXX: fix for GNUstep inconsistent accounting for titlebar */
 #ifdef NS_IMPL_GNUSTEP
@@ -837,8 +826,8 @@ struct x_output
 
 /* First position where characters can be shown (instead of scrollbar, if
    it is on left. */
-#define FIRST_CHAR_POSITION(f) \
-  (! (FRAME_HAS_VERTICAL_SCROLL_BARS_ON_LEFT (f)) ? 0 \
+#define FIRST_CHAR_POSITION(f)				\
+  (! (FRAME_HAS_VERTICAL_SCROLL_BARS_ON_LEFT (f)) ? 0	\
    : FRAME_SCROLL_BAR_COLS (f))
 
 extern struct ns_display_info *ns_term_init (Lisp_Object display_name);
@@ -861,7 +850,6 @@ struct glyph_string;
 void ns_dump_glyphstring (struct glyph_string *s);
 
 /* Implemented in nsterm, published in or needed from nsfns. */
-extern Lisp_Object Qfontsize;
 extern Lisp_Object ns_list_fonts (struct frame *f, Lisp_Object pattern,
                                   int size, int maxnames);
 extern void ns_clear_frame (struct frame *f);
@@ -879,7 +867,7 @@ extern void nxatoms_of_nsselect (void);
 extern int ns_lisp_to_cursor_type (Lisp_Object arg);
 extern Lisp_Object ns_cursor_type_to_lisp (int arg);
 extern void ns_set_name_as_filename (struct frame *f);
-extern void ns_set_doc_edited (struct frame *f, Lisp_Object arg);
+extern void ns_set_doc_edited (void);
 
 extern bool
 ns_defined_color (struct frame *f,
@@ -915,7 +903,7 @@ extern void find_and_call_menu_selection (struct frame *f,
 extern Lisp_Object find_and_return_menu_selection (struct frame *f,
                                                    bool keymaps,
                                                    void *client_data);
-extern Lisp_Object ns_popup_dialog (Lisp_Object position, Lisp_Object header,
+extern Lisp_Object ns_popup_dialog (struct frame *, Lisp_Object header,
                                     Lisp_Object contents);
 
 #define NSAPP_DATA2_RUNASSCRIPT 10
@@ -934,7 +922,8 @@ extern void syms_of_nsselect (void);
 
 /* From nsimage.m, needed in image.c */
 struct image;
-extern void *ns_image_from_XBM (unsigned char *bits, int width, int height);
+extern void *ns_image_from_XBM (unsigned char *bits, int width, int height,
+                                unsigned long fg, unsigned long bg);
 extern void *ns_image_for_XPM (int width, int height, int depth);
 extern void *ns_image_from_file (Lisp_Object file);
 extern bool ns_load_image (struct frame *f, struct image *img,
@@ -959,10 +948,18 @@ extern unsigned long ns_get_rgb_color (struct frame *f,
 extern Lisp_Object ns_frame_list (void);  /* needed by frame.c */
 
 /* From nsterm.m, needed in nsfont.m. */
+extern void ns_init_events ();
+extern void ns_finish_events ();
+
 #ifdef __OBJC__
+/* From nsterm.m, needed in nsfont.m. */
 extern void
 ns_draw_text_decoration (struct glyph_string *s, struct face *face,
                          NSColor *defaultCol, CGFloat width, CGFloat x);
+/* Needed in nsfns.m.  */
+extern void
+ns_set_represented_filename (NSString* fstr, struct frame *f);
+
 #endif
 
 #ifdef NS_IMPL_GNUSTEP
@@ -977,6 +974,7 @@ extern char gnustep_base_version[];  /* version tracking */
 #define SCREENMAX 16000
 
 #define NS_SCROLL_BAR_WIDTH_DEFAULT     [EmacsScroller scrollerWidth]
+#define NS_SCROLL_BAR_HEIGHT_DEFAULT    [EmacsScroller scrollerHeight]
 /* This is to match emacs on other platforms, ugly though it is. */
 #define NS_SELECTION_BG_COLOR_DEFAULT	@"LightGoldenrod2";
 #define NS_SELECTION_FG_COLOR_DEFAULT	@"Black";

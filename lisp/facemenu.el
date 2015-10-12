@@ -1,6 +1,6 @@
 ;;; facemenu.el --- create a face menu for interactively adding fonts to text
 
-;; Copyright (C) 1994-1996, 2001-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1994-1996, 2001-2015 Free Software Foundation, Inc.
 
 ;; Author: Boris Goldowsky <boris@gnu.org>
 ;; Keywords: faces
@@ -458,7 +458,7 @@ These special properties include `invisible', `intangible' and `read-only'."
 
 (defcustom list-colors-sort nil
   "Color sort order for `list-colors-display'.
-`nil' means default implementation-dependent order (defined in `x-colors').
+nil means default implementation-dependent order (defined in `x-colors').
 `name' sorts by color name.
 `rgb' sorts by red, green, blue components.
 `(rgb-dist . COLOR)' sorts by the RGB distance to the specified color.
@@ -732,7 +732,7 @@ effect.  See `facemenu-remove-face-function'."
                                  face
                                (facemenu-active-faces
                                 (cons face
-                                      (if (listp prev)
+                                      (if (face-list-p prev)
                                           prev
                                         (list prev)))
                                 ;; Specify the selected frame

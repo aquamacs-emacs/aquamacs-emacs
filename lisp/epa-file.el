@@ -1,5 +1,5 @@
 ;;; epa-file.el --- the EasyPG Assistant, transparent file encryption -*- lexical-binding: t -*-
-;; Copyright (C) 2006-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2006-2015 Free Software Foundation, Inc.
 
 ;; Author: Daiki Ueno <ueno@unixuser.org>
 ;; Keywords: PGP, GnuPG
@@ -82,12 +82,15 @@ encryption is used."
 		passphrase))))
     (epa-passphrase-callback-function context key-id file)))
 
+(defvar epa-inhibit nil
+  "Non-nil means don't try to decrypt .gpg files when operating on them.")
+
 ;;;###autoload
 (defun epa-file-handler (operation &rest args)
   (save-match-data
     (let ((op (get operation 'epa-file)))
-      (if op
-  	  (apply op args)
+      (if (and op (not epa-inhibit))
+          (apply op args)
   	(epa-file-run-real-handler operation args)))))
 
 (defun epa-file-run-real-handler (operation args)
@@ -105,9 +108,9 @@ encryption is used."
 	(insert (if enable-multibyte-characters
 		    (string-to-multibyte string)
 		  string))
-	  (decode-coding-inserted-region
-	   (point-min) (point-max)
-	   (substring file 0 (string-match epa-file-name-regexp file))
+	(decode-coding-inserted-region
+	 (point-min) (point-max)
+	 (substring file 0 (string-match epa-file-name-regexp file))
 	 visit beg end replace))
     (insert (epa-file--decode-coding-string string (or coding-system-for-read
 						       'undecided)))))
@@ -144,6 +147,7 @@ encryption is used."
      context
      (cons #'epa-progress-callback-function
 	   (format "Decrypting %s" file)))
+    (setf (epg-context-pinentry-mode context) epa-pinentry-mode)
     (unwind-protect
 	(progn
 	  (if replace
@@ -153,15 +157,24 @@ encryption is used."
 	    (error
 	     (if (setq entry (assoc file epa-file-passphrase-alist))
 		 (setcdr entry nil))
-	     ;; Hack to prevent find-file from opening empty buffer
-	     ;; when decryption failed (bug#6568).  See the place
-	     ;; where `find-file-not-found-functions' are called in
-	     ;; `find-file-noselect-1'.
+	     ;; If the decryption program can't be found,
+	     ;; signal that as a non-file error
+	     ;; so that find-file-noselect-1 won't handle it.
+	     ;; Borrowed from jka-compr.el.
+	     (if (and (eq (car error) 'file-error)
+		      (equal (cadr error) "Searching for program"))
+		 (error "Decryption program `%s' not found"
+			(nth 3 error)))
 	     (when (file-exists-p local-file)
+	       ;; Hack to prevent find-file from opening empty buffer
+	       ;; when decryption failed (bug#6568).  See the place
+	       ;; where `find-file-not-found-functions' are called in
+	       ;; `find-file-noselect-1'.
 	       (setq-local epa-file-error error)
 	       (add-hook 'find-file-not-found-functions
 			 'epa-file--find-file-not-found-function
-			 nil t))
+			 nil t)
+	       (epa-display-error context))
 	     (signal 'file-error
 		     (cons "Opening input file" (cdr error)))))
           (set-buffer buf) ;In case timer/filter changed/killed it (bug#16029)!
@@ -221,7 +234,8 @@ encryption is used."
      context
      (cons #'epa-progress-callback-function
 	   (format "Encrypting %s" file)))
-    (epg-context-set-armor context epa-armor)
+    (setf (epg-context-armor context) epa-armor)
+    (setf (epg-context-pinentry-mode context) epa-pinentry-mode)
     (condition-case error
 	(setq string
 	      (epg-encrypt-string
@@ -255,6 +269,7 @@ If no one is selected, symmetric encryption will be performed.  "
 		 (if epa-file-encrypt-to
 		     (epg-list-keys context recipients)))))
       (error
+       (epa-display-error context)
        (if (setq entry (assoc file epa-file-passphrase-alist))
 	   (setcdr entry nil))
        (signal 'file-error (cons "Opening output file" (cdr error)))))

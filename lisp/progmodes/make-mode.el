@@ -1,6 +1,6 @@
 ;;; make-mode.el --- makefile editing commands for Emacs -*- lexical-binding:t -*-
 
-;; Copyright (C) 1992, 1994, 1999-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1992, 1994, 1999-2015 Free Software Foundation, Inc.
 
 ;; Author: Thomas Neumann <tom@smart.bo.open.de>
 ;;	Eric S. Raymond <esr@snark.thyrsus.com>
@@ -1455,7 +1455,7 @@ Fill comments, backslashed lines, and variable definitions specially."
 
 (defun makefile-browser-insert-continuation ()
   "Insert a makefile continuation.
-In the makefile buffer, go to (end-of-line), insert a \'\\\'
+In the makefile buffer, go to (end-of-line), insert a `\\'
 character, insert a new blank line, go to that line and indent by one TAB.
 This is most useful in the process of creating continued lines when copying
 large dependencies from the browser to the client buffer.
@@ -1502,7 +1502,7 @@ Insertion takes place at point."
   (if (zerop (+ (length targets) (length macros)))
       (progn
 	(beep)
-	(message "No macros or targets to browse! Consider running 'makefile-pickup-everything\'"))
+	(message "No macros or targets to browse! Consider running `makefile-pickup-everything'"))
     (let ((browser-buffer (get-buffer-create makefile-browser-buffer-name)))
 	(pop-to-buffer browser-buffer)
 	(makefile-browser-fill targets macros)

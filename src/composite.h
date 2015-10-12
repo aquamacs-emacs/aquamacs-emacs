@@ -1,5 +1,5 @@
 /* Header for composite sequence handler.
-   Copyright (C) 2001-2014 Free Software Foundation, Inc.
+   Copyright (C) 2001-2015 Free Software Foundation, Inc.
    Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011
      National Institute of Advanced Industrial Science and Technology (AIST)
      Registration Number H14PRO021
@@ -156,7 +156,7 @@ struct composition {
   /* How many columns the overall glyphs occupy on the screen.  This
      gives an approximate value for column calculation in
      Fcurrent_column, and etc.  */
-  unsigned short width;
+  int width;
 
   /* Method of the composition.  */
   enum composition_method method;
@@ -190,7 +190,6 @@ extern ptrdiff_t n_compositions;
 #define CHECK_BORDER	(CHECK_HEAD | CHECK_TAIL)
 #define CHECK_ALL	(CHECK_BORDER | CHECK_INSIDE)
 
-extern Lisp_Object Qcomposition;
 extern Lisp_Object composition_hash_table;
 extern ptrdiff_t get_composition_id (ptrdiff_t, ptrdiff_t, ptrdiff_t,
 				     Lisp_Object, Lisp_Object);

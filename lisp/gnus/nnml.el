@@ -1,6 +1,6 @@
 ;;; nnml.el --- mail spool access for Gnus
 
-;; Copyright (C) 1995-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1995-2015 Free Software Foundation, Inc.
 
 ;; Authors: Didier Verna <didier@xemacs.org> (adding compaction)
 ;;	Simon Josefsson <simon@josefsson.org>
@@ -178,7 +178,7 @@ non-nil.")
 		   (> number nnmail-large-newsgroup)
 		   (zerop (% count 20))
 		   (nnheader-message 6 "nnml: Receiving headers... %d%%"
-				     (/ (* count 100) number))))
+				     (floor (* count 100.0) number))))
 
 	    (and (numberp nnmail-large-newsgroup)
 		 (> number nnmail-large-newsgroup)

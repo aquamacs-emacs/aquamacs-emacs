@@ -1,6 +1,6 @@
-@c -*-texinfo-*-
+@c -*- mode: texinfo; coding: utf-8 -*-
 @c This is part of the GNU Emacs Lisp Reference Manual.
-@c Copyright (C) 1990-1995, 1998-2014 Free Software Foundation, Inc.
+@c Copyright (C) 1990-1995, 1998-2015 Free Software Foundation, Inc.
 @c See the file elisp.texi for copying conditions.
 @node Display
 @chapter Emacs Display
@@ -23,7 +23,7 @@ that Emacs presents to the user.
 * Faces::               A face defines a graphics style for text characters:
                           font, colors, etc.
 * Fringes::             Controlling window fringes.
-* Scroll Bars::         Controlling vertical scroll bars.
+* Scroll Bars::         Controlling scroll bars.
 * Window Dividers::     Separating windows visually.
 * Display Property::    Enabling special display features.
 * Images::              Displaying images in Emacs buffers.
@@ -39,6 +39,8 @@ that Emacs presents to the user.
 
 @node Refresh Screen
 @section Refreshing the Screen
+@cindex refresh the screen
+@cindex screen refresh
 
   The function @code{redraw-frame} clears and redisplays the entire
 contents of a given frame (@pxref{Frames}).  This is useful if the
@@ -85,38 +87,13 @@ waiting for input.
 @defun redisplay &optional force
 This function tries immediately to redisplay.  The optional argument
 @var{force}, if non-@code{nil}, forces the redisplay to be performed,
-instead of being preempted, even if input is pending and the variable
-@code{redisplay-dont-pause} is @code{nil} (see below).  If
-@code{redisplay-dont-pause} is non-@code{nil} (the default), this
-function redisplays in any case, i.e., @var{force} does nothing.
+instead of being preempted if input is pending.
 
 The function returns @code{t} if it actually tried to redisplay, and
 @code{nil} otherwise.  A value of @code{t} does not mean that
 redisplay proceeded to completion; it could have been preempted by
 newly arriving input.
 @end defun
-
-@defvar redisplay-dont-pause
-If this variable is @code{nil}, arriving input events preempt
-redisplay; Emacs avoids starting a redisplay, and stops any redisplay
-that is in progress, until the input has been processed.  In
-particular, @code{(redisplay)} returns @code{nil} without actually
-redisplaying, if there is pending input.
-
-The default value is @code{t}, which means that pending input does not
-preempt redisplay.
-@end defvar
-
-@defvar redisplay-preemption-period
-If @code{redisplay-dont-pause} is @code{nil}, this variable specifies
-how many seconds Emacs waits between checks for new input during
-redisplay; if input arrives during this interval, redisplay stops and
-the input is processed.  The default value is 0.1; if the value is
-@code{nil}, Emacs does not check for input during redisplay.
-
-This variable has no effect when @code{redisplay-dont-pause} is
-non-@code{nil} (the default).
-@end defvar
 
 @defvar pre-redisplay-function
 A function run just before redisplay.  It is called with one argument,
@@ -149,7 +126,7 @@ it waits for input, or when the function @code{redisplay} is called.
 @cindex @samp{\} in display
 
   When a line of text extends beyond the right edge of a window, Emacs
-can @dfn{continue} the line (make it ``wrap'' to the next screen
+can @dfn{continue} the line (make it wrap to the next screen
 line), or @dfn{truncate} the line (limit it to one screen line).  The
 additional screen lines used to display a long text line are called
 @dfn{continuation} lines.  Continuation is not the same as filling;
@@ -161,7 +138,7 @@ boundary.  @xref{Filling}.
 indicate truncated and continued lines (@pxref{Fringes}).  On a text
 terminal, a @samp{$} in the rightmost column of the window indicates
 truncation; a @samp{\} on the rightmost column indicates a line that
-``wraps''.  (The display table can specify alternate characters to use
+wraps.  (The display table can specify alternate characters to use
 for this; @pxref{Display Tables}).
 
 @defopt truncate-lines
@@ -270,15 +247,23 @@ messages in the echo area.
 @defun message format-string &rest arguments
 This function displays a message in the echo area.
 @var{format-string} is a format string, and @var{arguments} are the
-objects for its format specifications, like in the @code{format}
+objects for its format specifications, like in the @code{format-message}
 function (@pxref{Formatting Strings}).  The resulting formatted string
 is displayed in the echo area; if it contains @code{face} text
 properties, it is displayed with the specified faces (@pxref{Faces}).
 The string is also added to the @file{*Messages*} buffer, but without
 text properties (@pxref{Logging Messages}).
 
+In a format string containing single quotes, curved quotes @t{‘like
+this’} and grave quotes @t{`like this'} work better than straight
+quotes @t{'like this'}, as @code{message} typically formats every
+straight quote as a curved closing quote.
+
 In batch mode, the message is printed to the standard error stream,
 followed by a newline.
+
+When @code{inhibit-message} is non-@code{nil}, no message will be displayed
+in the echo area, it will only be logged to @samp{*Messages*}.
 
 If @var{format-string} is @code{nil} or the empty string,
 @code{message} clears the echo area; if the echo area has been
@@ -288,22 +273,32 @@ onto the screen immediately.
 
 @example
 @group
-(message "Minibuffer depth is %d."
-         (minibuffer-depth))
- @print{} Minibuffer depth is 0.
-@result{} "Minibuffer depth is 0."
+(message "Reverting `%s'..." (buffer-name))
+ @print{} Reverting ‘subr.el’...
+@result{} "Reverting ‘subr.el’..."
 @end group
 
 @group
 ---------- Echo Area ----------
-Minibuffer depth is 0.
+Reverting ‘subr.el’...
 ---------- Echo Area ----------
 @end group
 @end example
 
 To automatically display a message in the echo area or in a pop-buffer,
 depending on its size, use @code{display-message-or-buffer} (see below).
+
+@strong{Warning:} If you want to use your own string as a message
+verbatim, don't just write @code{(message @var{string})}.  If
+@var{string} contains @samp{%}, @samp{`}, or @samp{'} it may be
+reformatted, with undesirable results.  Instead, use @code{(message
+"%s" @var{string})}.
 @end defun
+
+@defvar inhibit-message
+When this variable is non-@code{nil}, @code{message} and related functions
+will not use the Echo Area to display messages.
+@end defvar
 
 @defmac with-temp-message message &rest body
 This construct displays a message in the echo area temporarily, during
@@ -390,12 +385,12 @@ reporting very fast.
 When this progress reporter is subsequently used, it will display
 @var{message} in the echo area, followed by progress percentage.
 @var{message} is treated as a simple string.  If you need it to depend
-on a filename, for instance, use @code{format} before calling this
+on a filename, for instance, use @code{format-message} before calling this
 function.
 
 The arguments @var{min-value} and @var{max-value} should be numbers
 standing for the starting and final states of the operation.  For
-instance, an operation that ``scans'' a buffer should set these to the
+instance, an operation that scans a buffer should set these to the
 results of @code{point-min} and @code{point-max} correspondingly.
 @var{max-value} should be greater than @var{min-value}.
 
@@ -454,13 +449,13 @@ presented to the user.
 
 @defun progress-reporter-done reporter
 This function should be called when the operation is finished.  It
-prints the message of @var{reporter} followed by word ``done'' in the
+prints the message of @var{reporter} followed by word @samp{done} in the
 echo area.
 
 You should always call this function and not hope for
-@code{progress-reporter-update} to print ``100%''.  Firstly, it may
+@code{progress-reporter-update} to print @samp{100%}.  Firstly, it may
 never print it, there are many good reasons for this not to happen.
-Secondly, ``done'' is more explicit.
+Secondly, @samp{done} is more explicit.
 @end defun
 
 @defmac dotimes-with-progress-reporter (var count [result]) message body@dots{}
@@ -515,13 +510,13 @@ facility combines successive identical messages.  It also combines
 successive related messages for the sake of two cases: question
 followed by answer, and a series of progress messages.
 
-  A ``question followed by an answer'' means two messages like the
+  A question followed by an answer has two messages like the
 ones produced by @code{y-or-n-p}: the first is @samp{@var{question}},
 and the second is @samp{@var{question}...@var{answer}}.  The first
 message conveys no additional information beyond what's in the second,
 so logging the second message discards the first from the log.
 
-  A ``series of progress messages'' means successive messages like
+  A series of progress messages has successive messages like
 those produced by @code{make-progress-reporter}.  They have the form
 @samp{@var{base}...@var{how-far}}, where @var{base} is the same each
 time, while @var{how-far} varies.  Logging each message in the series
@@ -534,6 +529,7 @@ are logged that share a common prefix ending in @samp{...}.
 
 @node Echo Area Customization
 @subsection Echo Area Customization
+@cindex echo area customization
 
   These variables control details of how the echo area works.
 
@@ -646,13 +642,13 @@ for logging the warning.  By default, it is @file{*Warnings*}.
 @end defun
 
 @defun lwarn type level message &rest args
-This function reports a warning using the value of @code{(format
+This function reports a warning using the value of @code{(format-message
 @var{message} @var{args}...)} as the message in the @file{*Warnings*}
 buffer.  In other respects it is equivalent to @code{display-warning}.
 @end defun
 
 @defun warn message &rest args
-This function reports a warning using the value of @code{(format
+This function reports a warning using the value of @code{(format-message
 @var{message} @var{args}...)} as the message, @code{(emacs)} as the
 type, and @code{:warning} as the severity level.  It exists for
 compatibility only; we recommend not using it, because you should
@@ -661,6 +657,7 @@ specify a specific warning type.
 
 @node Warning Variables
 @subsection Warning Variables
+@cindex warning variables
 
   Programs can customize how their warnings appear by binding
 the variables described in this section.
@@ -738,6 +735,7 @@ all.
 
 @node Warning Options
 @subsection Warning Options
+@cindex warning options
 
   These variables are used by users to control what happens
 when a Lisp program reports a warning.
@@ -771,6 +769,7 @@ that warning is not logged.
 
 @node Delayed Warnings
 @subsection Delayed Warnings
+@cindex delayed warnings
 
 Sometimes, you may wish to avoid showing a warning while a command is
 running, and only show it only after the end of the command.  You can
@@ -1094,6 +1093,8 @@ You can use a display table to substitute other text for the ellipsis
 
 @node Temporary Displays
 @section Temporary Displays
+@cindex temporary display
+@cindex temporary buffer display
 
   Temporary displays are used by Lisp programs to put output into a
 buffer and then present it to the user for perusal rather than for
@@ -1186,12 +1187,6 @@ it prints into the buffer named @var{buffer-or-name} and displays that
 buffer in some window.  Unlike @code{with-output-to-temp-buffer},
 however, it does not automatically switch that buffer to Help mode.
 
-Like @code{with-output-to-temp-buffer} it neither makes the buffer
-specified by @var{buffer-or-name} current when executing @var{body}.
-@findex with-current-buffer-window
-The otherwise identical macro @code{with-current-buffer-window} can be
-used to execute @var{body} with that buffer current.
-
 The argument @var{buffer-or-name} specifies the temporary buffer.  It
 can be either a buffer, which must already exist, or a string, in which
 case a buffer of that name is created, if necessary.  The buffer is
@@ -1199,14 +1194,14 @@ marked as unmodified and read-only when @code{with-temp-buffer-window}
 exits.
 
 This macro does not call @code{temp-buffer-show-function}.  Rather, it
-passes the @var{action} argument to @code{display-buffer} in order to
-display the buffer.
+passes the @var{action} argument to @code{display-buffer}
+(@pxref{Choosing Window}) in order to display the buffer.
 
 The value of the last form in @var{body} is returned, unless the
 argument @var{quit-function} is specified.  In that case, it is called
 with two arguments: the window showing the buffer and the result of
-@var{body}.  The final return value is then whatever
-@var{quit-function} returns.
+@var{body}.  The final return value is then whatever @var{quit-function}
+returns.
 
 @vindex temp-buffer-window-setup-hook
 @vindex temp-buffer-window-show-hook
@@ -1214,6 +1209,56 @@ This macro uses the normal hooks @code{temp-buffer-window-setup-hook}
 and @code{temp-buffer-window-show-hook} in place of the analogous hooks
 run by @code{with-output-to-temp-buffer}.
 @end defmac
+
+The two constructs described next are mostly identical to
+@code{with-temp-buffer-window} but differ from it as specified:
+
+@defmac with-current-buffer-window buffer-or-name action quit-function &rest body
+This macro is like @code{with-temp-buffer-window} but unlike that makes
+the buffer specified by @var{buffer-or-name} current for running
+@var{body}.
+@end defmac
+
+@defmac with-displayed-buffer-window buffer-or-name action quit-function &rest body
+This macro is like @code{with-current-buffer-window} but unlike that
+displays the buffer specified by @var{buffer-or-name} @emph{before}
+running @var{body}.
+@end defmac
+
+A window showing a temporary buffer can be fit to the size of that
+buffer using the following mode:
+
+@defopt temp-buffer-resize-mode
+When this minor mode is enabled, windows showing a temporary buffer are
+automatically resized to fit their buffer's contents.
+
+A window is resized if and only if it has been specially created for the
+buffer.  In particular, windows that have shown another buffer before
+are not resized.  By default, this mode uses @code{fit-window-to-buffer}
+(@pxref{Resizing Windows}) for resizing.  You can specify a different
+function by customizing the options @code{temp-buffer-max-height} and
+@code{temp-buffer-max-width} below.
+@end defopt
+
+@defopt temp-buffer-max-height
+This option specifies the maximum height (in lines) of a window
+displaying a temporary buffer when @code{temp-buffer-resize-mode} is
+enabled.  It can also be a function to be called to choose the height
+for such a buffer.  It gets one argument, the buffer, and should return
+a positive integer.  At the time the function is called, the window to
+be resized is selected.
+@end defopt
+
+@defopt temp-buffer-max-width
+This option specifies the maximum width of a window (in columns)
+displaying a temporary buffer when @code{temp-buffer-resize-mode} is
+enabled.  It can also be a function to be called to choose the width for
+such a buffer.  It gets one argument, the buffer, and should return a
+positive integer.  At the time the function is called, the window to be
+resized is selected.
+@end defopt
+
+The following function uses the current buffer for temporal display:
 
 @defun momentary-string-display string position &optional char message
 This function momentarily displays @var{string} in the current buffer at
@@ -1283,6 +1328,7 @@ beginning and end.  It also has properties that you can examine and set;
 these affect the display of the text within the overlay.
 
 @cindex scalability of overlays
+@cindex overlays, scalability
 The visual effect of an overlay is the same as of the corresponding
 text property (@pxref{Text Properties}).  However, due to a different
 implementation, overlays generally don't scale well (many operations
@@ -1305,6 +1351,8 @@ inside the overlay or outside, and likewise for the end of the overlay.
 
 @node Managing Overlays
 @subsection Managing Overlays
+@cindex managing overlays
+@cindex overlays, managing
 
   This section describes the functions to create, delete and move
 overlays, and to examine their contents.  Overlay changes are not
@@ -1321,6 +1369,15 @@ This function creates and returns an overlay that belongs to
 and @var{end} must specify buffer positions; they may be integers or
 markers.  If @var{buffer} is omitted, the overlay is created in the
 current buffer.
+
+@cindex empty overlay
+@cindex overlay, empty
+An overlay whose @var{start} and @var{end} specify the same buffer
+position is known as @dfn{empty}.  A non-empty overlay can become
+empty if the text between its @var{start} and @var{end} is deleted.
+When that happens, the overlay is by default not deleted, but you can
+cause it to be deleted by giving it the @samp{evaporate} property
+(@pxref{Overlay Properties, evaporate property}).
 
 The arguments @var{front-advance} and @var{rear-advance} specify the
 marker insertion type for the start of the overlay and for the end of
@@ -1372,7 +1429,7 @@ The return value is @var{overlay}.
 This is the only valid way to change the endpoints of an overlay.  Do
 not try modifying the markers in the overlay by hand, as that fails to
 update other vital data structures and can cause some overlays to be
-``lost''.
+lost.
 @end defun
 
 @defun remove-overlays &optional start end name value
@@ -1449,7 +1506,7 @@ foo
 @end example
 
   Emacs stores the overlays of each buffer in two lists, divided
-around an arbitrary ``center position''.  One list extends backwards
+around an arbitrary center position.  One list extends backwards
 through the buffer from that center position, and the other extends
 forwards from that center position.  The center position can be anywhere
 in the buffer.
@@ -1465,6 +1522,7 @@ faster if you do @code{(overlay-recenter (point-max))} first.
 
 @node Overlay Properties
 @subsection Overlay Properties
+@cindex overlay properties
 
   Overlay properties are like text properties in that the properties that
 alter how a character is displayed can come from either source.  But in
@@ -1690,8 +1748,11 @@ line at display-time.  @xref{Truncation}.
 @kindex evaporate @r{(overlay property)}
 If this property is non-@code{nil}, the overlay is deleted automatically
 if it becomes empty (i.e., if its length becomes zero).  If you give
-an empty overlay a non-@code{nil} @code{evaporate} property, that deletes
-it immediately.
+an empty overlay (@pxref{Managing Overlays, empty overlay}) a
+non-@code{nil} @code{evaporate} property, that deletes it immediately.
+Note that, unless an overlay has this property, it will not be deleted
+when the text between its starting and ending positions is deleted
+from the buffer.
 
 @item keymap
 @cindex keymap of character (and overlays)
@@ -1717,6 +1778,8 @@ Properties}.
 
 @node Finding Overlays
 @subsection Searching for Overlays
+@cindex searching for overlays
+@cindex overlays, searching for
 
 @defun overlays-at pos &optional sorted
 This function returns a list of all the overlays that cover the character at
@@ -1743,12 +1806,11 @@ overlays that specify property @var{prop} for the character at point:
 
 @defun overlays-in beg end
 This function returns a list of the overlays that overlap the region
-@var{beg} through @var{end}.  ``Overlap'' means that at least one
-character is contained within the overlay and also contained within the
-specified region; however, empty overlays are included in the result if
-they are located at @var{beg}, strictly between @var{beg} and @var{end},
-or at @var{end} when @var{end} denotes the position at the end of the
-buffer.
+@var{beg} through @var{end}.  An overlay overlaps with a region if it
+contains one or more characters in the region; empty overlays
+(@pxref{Managing Overlays, empty overlay}) overlap if they are at
+@var{beg}, strictly between @var{beg} and @var{end}, or at @var{end}
+when @var{end} denotes the position at the end of the buffer.
 @end defun
 
 @defun next-overlay-change pos
@@ -1784,6 +1846,8 @@ changes.
 
 @node Size of Displayed Text
 @section Size of Displayed Text
+@cindex size of text on display
+@cindex character width on display
 
 Since not all characters have the same width, these functions let you
 check the width of a character.  @xref{Primitive Indent}, and
@@ -1842,9 +1906,9 @@ to or less than the display width of @var{ellipsis}.  If
 
 The following function returns the size in pixels of text as if it were
 displayed in a given window.  This function is used by
-@code{fit-window-to-buffer} (@pxref{Resizing Windows}) and
-@code{fit-frame-to-buffer} (@pxref{Size and Position}) to make a window
-exactly as large as the text it contains.
+@code{fit-window-to-buffer} and @code{fit-frame-to-buffer}
+(@pxref{Resizing Windows}) to make a window exactly as large as the text
+it contains.
 
 @defun window-text-pixel-size &optional window from to x-limit y-limit mode-and-header-line
 This function returns the size of the text of @var{window}'s buffer in
@@ -1897,12 +1961,12 @@ height of both, if present, in the return value.
 contents of the line, plus optional additional vertical line spacing
 above or below the display line.
 
-  The height of the line contents is the maximum height of any
-character or image on that display line, including the final newline
-if there is one.  (A display line that is continued doesn't include a
-final newline.)  That is the default line height, if you do nothing to
-specify a greater height.  (In the most common case, this equals the
-height of the default frame font.)
+  The height of the line contents is the maximum height of any character
+or image on that display line, including the final newline if there is
+one.  (A display line that is continued doesn't include a final
+newline.)  That is the default line height, if you do nothing to specify
+a greater height.  (In the most common case, this equals the height of
+the corresponding frame's default font, see @ref{Frame Font}.)
 
   There are several ways to explicitly specify a larger line height,
 either by specifying an absolute height for the display line, or by
@@ -2120,7 +2184,7 @@ stipple patterns.
 Alternative foreground color, a string.  This is like @code{:foreground}
 but the color is only used as a foreground when the background color is
 near to the foreground that would have been used.  This is useful for
-example when marking text (i.e. the region face).  If the text has a foreground
+example when marking text (i.e., the region face).  If the text has a foreground
 that is visible with the region face, that foreground is used.
 If the foreground is near the region face background,
 @code{:distant-foreground} is used instead so the text is readable.
@@ -2274,6 +2338,7 @@ suitable for use with @code{:stipple} (see above).  It returns
 
 @node Defining Faces
 @subsection Defining Faces
+@cindex defining faces
 
 @cindex face spec
   The usual way to define a face is through the @code{defface} macro.
@@ -2448,6 +2513,7 @@ Any other value of @var{spec-type} is reserved for internal use.
 
 @node Attribute Functions
 @subsection Face Attribute Functions
+@cindex face attributes, access and modification
 
   This section describes functions for directly accessing and
 modifying the attributes of a named face.
@@ -2649,6 +2715,8 @@ a non-@code{nil} @code{:inverse-video} attribute.
 
 @node Displaying Faces
 @subsection Displaying Faces
+@cindex displaying faces
+@cindex face merging
 
   When Emacs displays a given piece of text, the visual appearance of
 the text may be determined by faces drawn from different sources.  If
@@ -2670,8 +2738,8 @@ Manual}.
 @item
 If the text lies within an overlay with a non-@code{nil} @code{face}
 property, Emacs applies the face(s) specified by that property.  If
-the overlay has a @code{mouse-face} property and the mouse is ``near
-enough'' to the overlay, Emacs applies the face or face attributes
+the overlay has a @code{mouse-face} property and the mouse is near
+enough to the overlay, Emacs applies the face or face attributes
 specified by the @code{mouse-face} property instead.  @xref{Overlay
 Properties}.
 
@@ -2704,6 +2772,7 @@ at the next level of face merging.
 
 @node Face Remapping
 @subsection Face Remapping
+@cindex face remapping
 
   The variable @code{face-remapping-alist} is used for buffer-local or
 global changes in the appearance of a face.  For instance, it is used
@@ -2751,7 +2820,7 @@ then the new definition of the @code{mode-line} face inherits from the
 functions instead of setting @code{face-remapping-alist} directly, to
 avoid trampling on remappings applied elsewhere.  These functions are
 intended for buffer-local remappings, so they all make
-@code{face-remapping-alist} buffer-local as a side-effect. They manage
+@code{face-remapping-alist} buffer-local as a side-effect.  They manage
 @code{face-remapping-alist} entries of the form
 
 @example
@@ -2776,16 +2845,16 @@ remappings for face @var{face} in the current buffer.  The remaining
 arguments, @var{specs}, should form either a list of face names, or a
 property list of attribute/value pairs.
 
-The return value is a Lisp object that serves as a ``cookie''; you can
+The return value is a Lisp object that serves as a cookie; you can
 pass this object as an argument to @code{face-remap-remove-relative}
 if you need to remove the remapping later.
 
 @example
-;; Remap the `escape-glyph' face into a combination
-;; of the `highlight' and `italic' faces:
+;; Remap the 'escape-glyph' face into a combination
+;; of the 'highlight' and 'italic' faces:
 (face-remap-add-relative 'escape-glyph 'highlight 'italic)
 
-;; Increase the size of the `default' face by 50%:
+;; Increase the size of the 'default' face by 50%:
 (face-remap-add-relative 'default :height 1.5)
 @end example
 @end defun
@@ -2901,12 +2970,13 @@ usually assign faces to around 400 to 600 characters at each call.
 
 @node Basic Faces
 @subsection Basic Faces
+@cindex basic faces
 
 If your Emacs Lisp program needs to assign some faces to text, it is
 often a good idea to use certain existing faces or inherit from them,
 rather than defining entirely new faces.  This way, if other users
 have customized the basic faces to give Emacs a certain look, your
-program will ``fit in'' without additional customization.
+program will fit in without additional customization.
 
   Some of the basic faces defined in Emacs are listed below.  In
 addition to these, you might want to make use of the Font Lock faces
@@ -2931,14 +3001,14 @@ has a bold @code{:weight} attribute), with all other attributes
 unspecified (and so given by @code{default}).
 
 @item shadow
-For ``dimmed out'' text.  For example, it is used for the ignored
+For dimmed-out text.  For example, it is used for the ignored
 part of a filename in the minibuffer (@pxref{Minibuffer File,,
 Minibuffers for File Names, emacs, The GNU Emacs Manual}).
 
 @item link
 @itemx link-visited
 For clickable text buttons that send the user to a different
-buffer or ``location''.
+buffer or location.
 
 @item highlight
 For stretches of text that should temporarily stand out.  For example,
@@ -3067,6 +3137,8 @@ nominal heights and widths would suggest.
 
 @node Font Lookup
 @subsection Looking Up Fonts
+@cindex font lookup
+@cindex looking up fonts
 
 @defun x-list-fonts name &optional reference-face frame maximum width
 This function returns a list of available font names that match
@@ -3124,12 +3196,13 @@ encoding of the font.
 
 @node Fontsets
 @subsection Fontsets
+@cindex fontset
 
   A @dfn{fontset} is a list of fonts, each assigned to a range of
 character codes.  An individual font cannot display the whole range of
 characters that Emacs supports, but a fontset can.  Fontsets have names,
 just as fonts do, and you can use a fontset name in place of a font name
-when you specify the ``font'' for a frame or a face.  Here is
+when you specify the font for a frame or a face.  Here is
 information about defining a fontset under Lisp program control.
 
 @defun create-fontset-from-fontset-spec fontset-spec &optional style-variant-p noerror
@@ -3220,7 +3293,7 @@ field.
 
 @defun set-fontset-font name character font-spec &optional frame add
 This function modifies the existing fontset @var{name} to use the font
-matching with @var{font-spec} for the character @var{character}.
+matching with @var{font-spec} for the specified @var{character}.
 
 If @var{name} is @code{nil}, this function modifies the fontset of the
 selected frame or that of @var{frame} if @var{frame} is not
@@ -3229,10 +3302,10 @@ selected frame or that of @var{frame} if @var{frame} is not
 If @var{name} is @code{t}, this function modifies the default
 fontset, whose short name is @samp{fontset-default}.
 
-@var{character} may be a cons; @code{(@var{from} . @var{to})}, where
-@var{from} and @var{to} are character codepoints.  In that case, use
-@var{font-spec} for all characters in the range @var{from} and @var{to}
-(inclusive).
+In addition to specifying a single codepoint, @var{character} may be a
+cons @code{(@var{from} . @var{to})}, where @var{from} and @var{to} are
+character codepoints.  In that case, use @var{font-spec} for all the
+characters in the range @var{from} and @var{to} (inclusive).
 
 @var{character} may be a charset.  In that case, use
 @var{font-spec} for all character in the charsets.
@@ -3240,12 +3313,21 @@ fontset, whose short name is @samp{fontset-default}.
 @var{character} may be a script name.  In that case, use
 @var{font-spec} for all character in the charsets.
 
+@var{font-spec} may be a font-spec object created by the function
+@code{font-spec} (@pxref{Low-Level Font}).
+
 @var{font-spec} may be a cons; @code{(@var{family} . @var{registry})},
 where @var{family} is a family name of a font (possibly including a
 foundry name at the head), @var{registry} is a registry name of a font
 (possibly including an encoding name at the tail).
 
 @var{font-spec} may be a font name string.
+
+@var{font-spec} may be @code{nil}, which explicitly specifies that
+there's no font for the specified @var{character}.  This is useful,
+for example, to avoid expensive system-wide search for fonts for
+characters that have no glyphs, like those from the Unicode Private
+Use Area (PUA).
 
 The optional argument @var{add}, if non-@code{nil}, specifies how to
 add @var{font-spec} to the font specifications previously set.  If it
@@ -3346,12 +3428,21 @@ The charset registry and encoding of the font, such as
 @item :script
 The script that the font must support (a symbol).
 
+@item :lang
+The language that the font should support.  The value should be a
+symbol whose name is a two-letter ISO-639 language name.  On X, the
+value is matched against the ``Additional Style'' field of the XLFD
+name of a font, if it is non-empty.  On MS-Windows, fonts matching the
+spec are required to support codepages needed for the language.
+Currently, only a small set of CJK languages is supported with this
+property: @samp{ja}, @samp{ko}, and @samp{zh}.
+
 @item :otf
 @cindex OpenType font
 The font must be an OpenType font that supports these OpenType
-features, provided Emacs is compiled with support for @samp{libotf} (a
-library for performing complex text layout in certain scripts).  The
-value must be a list of the form
+features, provided Emacs is compiled with a library, such as
+@samp{libotf} on GNU/Linux, that supports complex text layout for
+scripts which need that.  The value must be a list of the form
 
 @smallexample
 @code{(@var{script-tag} @var{langsys-tag} @var{gsub} @var{gpos})}
@@ -3399,13 +3490,13 @@ frame on which the fonts are to be displayed.  The optional argument
 maximum length of the returned list.  The optional argument
 @var{prefer}, if non-@code{nil}, should be another font spec, which is
 used to control the order of the returned list; the returned font
-entities are sorted in order of decreasing ``closeness'' to that font
+entities are sorted in order of decreasing closeness to that font
 spec.
 @end defun
 
   If you call @code{set-face-attribute} and pass a font spec, font
 entity, or font name string as the value of the @code{:font}
-attribute, Emacs opens the best ``matching'' font that is available
+attribute, Emacs opens the best matching font that is available
 for display.  It then stores the corresponding font object as the
 actual value of the @code{:font} attribute for that face.
 
@@ -3448,6 +3539,124 @@ can contain at most 255 characters), the function returns @code{nil}.
 
 If the optional argument @var{fold-wildcards} is non-@code{nil},
 consecutive wildcards in the XLFD are folded into one.
+@end defun
+
+The following two functions return important information about a font.
+
+@defun font-info name &optional frame
+This function returns information about a font specified by its
+@var{name}, a string, as it is used on @var{frame}.  If @var{frame} is
+omitted or @code{nil}, it defaults to the selected frame.
+
+The value returned by the function is a vector of the form
+@code{[@var{opened-name} @var{full-name} @var{size} @var{height}
+@var{baseline-offset} @var{relative-compose} @var{default-ascent}
+@var{max-width} @var{ascent} @var{descent} @var{space-width}
+@var{average-width} @var{filename} @var{capability}]}.  Here's the
+description of each components of this vector:
+
+@table @var
+@item opened-name
+The name used to open the font, a string.
+
+@item full-name
+The full name of the font, a string.
+
+@item size
+The pixel size of the font.
+
+@item height
+The height of the font in pixels.
+
+@item baseline-offset
+The offset in pixels from the @acronym{ASCII} baseline, positive
+upward.
+
+@item relative-compose
+@itemx default-ascent
+Numbers controlling how to compose characters.
+
+@item ascent
+@itemx descent
+The ascent and descent of this font.  The sum of these two numbers
+should be equal to the value of @var{height} above.
+
+@item space-width
+The width, in pixels, of the font's space character.
+
+@item average-width
+The average width of the font characters.  If this is zero, Emacs uses
+the value of @var{space-width} instead, when it calculates text layout
+on display.
+
+@item filename
+The file name of the font as a string.  This can be @code{nil} if the
+font back-end does not provide a way to find out the font's file name.
+
+@item capability
+A list whose first element is a symbol representing the font type, one
+of @code{x}, @code{opentype}, @code{truetype}, @code{type1},
+@code{pcf}, or @code{bdf}.  For OpenType fonts, the list includes 2
+additional elements describing the @sc{gsub} and @sc{gpos} features
+supported by the font.  Each of these elements is a list of the form
+@code{((@var{script} (@var{langsys} @var{feature} @dots{}) @dots{})
+@dots{})}, where @var{script} is a symbol representing an OpenType
+script tag, @var{langsys} is a symbol representing an OpenType langsys
+tag (or @code{nil}, which stands for the default langsys), and each
+@var{feature} is a symbol representing an OpenType feature tag.
+@end table
+@end defun
+
+@defun query-font font-object
+This function returns information about a @var{font-object}.  (This is
+in contrast to @code{font-info}, which takes the font name, a string,
+as its argument.)
+
+The value returned by the function is a vector of the form
+@code{[@var{name} @var{filename} @var{pixel-size} @var{max-width}
+@var{ascent} @var{descent} @var{space-width} @var{average-width}
+@var{capability}]}.  Here's the description of each components of this
+vector:
+
+@table @var
+@item name
+The font name, a string.
+
+@item filename
+The file name of the font as a string.  This can be @code{nil} if the
+font back-end does not provide a way to find out the font's file name.
+
+@item pixel-size
+The pixel size of the font used to open the font.
+
+@item max-width
+The maximum advance width of the font.
+
+@item ascent
+@itemx descent
+The ascent and descent of this font.  The sum of these two numbers
+gives the font height.
+
+@item space-width
+The width, in pixels, of the font's space character.
+
+@item average-width
+The average width of the font characters.  If this is zero, Emacs uses
+the value of @var{space-width} instead, when it calculates text layout
+on display.
+
+@item capability
+A list whose first element is a symbol representing the font type, one
+of @code{x}, @code{opentype}, @code{truetype}, @code{type1},
+@code{pcf}, or @code{bdf}.  For OpenType fonts, the list includes 2
+additional elements describing the @sc{gsub} and @sc{gpos} features
+supported by the font.  Each of these elements is a list of the form
+@code{((@var{script} (@var{langsys} @var{feature} @dots{}) @dots{})
+@dots{})}, where @var{script} is a symbol representing an OpenType
+script tag, @var{langsys} is a symbol representing an OpenType langsys
+tag (or @code{nil}, which stands for the default langsys), and each
+@var{feature} is a symbol representing an OpenType feature tag.
+@end table
 @end defun
 
 @node Fringes
@@ -3866,101 +4075,163 @@ arrow position.  If either property is not set, the default
 @code{overlay-arrow-string} or @code{overlay-arrow} fringe indicator
 is used.
 
+
 @node Scroll Bars
 @section Scroll Bars
 @cindex scroll bars
 
 Normally the frame parameter @code{vertical-scroll-bars} controls
-whether the windows in the frame have vertical scroll bars, and
-whether they are on the left or right.  The frame parameter
-@code{scroll-bar-width} specifies how wide they are (@code{nil}
-meaning the default).  @xref{Layout Parameters}.
+whether the windows in the frame have vertical scroll bars, and whether
+they are on the left or right.  The frame parameter
+@code{scroll-bar-width} specifies how wide they are (@code{nil} meaning
+the default).
+
+   The frame parameter @code{horizontal-scroll-bars} controls whether
+the windows in the frame have horizontal scroll bars.  The frame
+parameter @code{scroll-bar-height} specifies how high they are
+(@code{nil} meaning the default).  @xref{Layout Parameters}.
+
+@vindex horizontal-scroll-bars-available-p
+   Horizontal scroll bars are not available on all platforms.  The
+function @code{horizontal-scroll-bars-available-p} which takes no
+argument returns non-@code{nil} if they are available on your system.
+
+   The following three functions take as argument a live frame which
+defaults to the selected one.
 
 @defun frame-current-scroll-bars &optional frame
-This function reports the scroll bar type settings for frame
-@var{frame}.  The value is a cons cell
-@code{(@var{vertical-type} .@: @var{horizontal-type})}, where
-@var{vertical-type} is either @code{left}, @code{right}, or @code{nil}
-(which means no scroll bar.)  @var{horizontal-type} is meant to
-specify the horizontal scroll bar type, but since they are not
-implemented, it is always @code{nil}.
+This function reports the scroll bar types for frame @var{frame}.  The
+value is a cons cell @code{(@var{vertical-type} .@:
+@var{horizontal-type})}, where @var{vertical-type} is either
+@code{left}, @code{right}, or @code{nil} (which means no vertical scroll
+bar.)  @var{horizontal-type} is either @code{bottom} or @code{nil}
+(which means no horizontal scroll bar).
 @end defun
 
-@vindex vertical-scroll-bar
-  You can enable or disable scroll bars for a particular buffer,
-by setting the variable @code{vertical-scroll-bar}.  This variable
-automatically becomes buffer-local when set.  The possible values are
-@code{left}, @code{right}, @code{t}, which means to use the
-frame's default, and @code{nil} for no scroll bar.
-
-  You can also control this for individual windows.  Call the function
-@code{set-window-scroll-bars} to specify what to do for a specific window:
-
-@defun set-window-scroll-bars window width &optional vertical-type horizontal-type
-This function sets the width and type of scroll bars for window
-@var{window}.
-
-@var{width} specifies the scroll bar width in pixels (@code{nil} means
-use the width specified for the frame).  @var{vertical-type} specifies
-whether to have a vertical scroll bar and, if so, where.  The possible
-values are @code{left}, @code{right} and @code{nil}, just like the
-values of the @code{vertical-scroll-bars} frame parameter.
-
-The argument @var{horizontal-type} is meant to specify whether and
-where to have horizontal scroll bars, but since they are not
-implemented, it has no effect.  If @var{window} is @code{nil}, the
-selected window is used.
+@defun frame-scroll-bar-width &optional Lisp_Object &optional frame
+This function returns the width of vertical scroll bars of @var{frame}
+in pixels.
 @end defun
+
+@defun frame-scroll-bar-height &optional Lisp_Object &optional frame
+This function returns the height of horizontal scroll bars of
+@var{frame} in pixels.
+@end defun
+
+You can override the frame specific settings for individual windows by
+using the following function:
+
+@defun set-window-scroll-bars window &optional width vertical-type height horizontal-type
+This function sets the width and/or height and the types of scroll bars
+for window @var{window}.
+
+@var{width} specifies the width of the vertical scroll bar in pixels
+(@code{nil} means use the width specified for the frame).
+@var{vertical-type} specifies whether to have a vertical scroll bar and,
+if so, where.  The possible values are @code{left}, @code{right},
+@code{t}, which means to use the frame's default, and @code{nil} for no
+vertical scroll bar.
+
+@var{height} specifies the height of the horizontal scroll bar in pixels
+(@code{nil} means use the height specified for the frame).
+@var{horizontal-type} specifies whether to have a horizontal scroll bar.
+The possible values are @code{bottom}, @code{t}, which means to use the
+frame's default, and @code{nil} for no horizontal scroll bar.
+
+If @var{window} is @code{nil}, the selected window is used.
+@end defun
+
+The following four functions take as argument a live window which
+defaults to the selected one.
 
 @defun window-scroll-bars &optional window
-Report the width and type of scroll bars specified for @var{window}.
-If @var{window} is omitted or @code{nil}, the selected window is used.
-The value is a list of the form @code{(@var{width}
-@var{cols} @var{vertical-type} @var{horizontal-type})}.  The value
-@var{width} is the value that was specified for the width (which may
-be @code{nil}); @var{cols} is the number of columns that the scroll
-bar actually occupies.
+This function returns a list of the form @code{(@var{width}
+@var{columns} @var{vertical-type} @var{height} @var{lines}
+@var{horizontal-type})}.
 
-@var{horizontal-type} is not actually meaningful.
+The value @var{width} is the value that was specified for the width of
+the vertical scroll bar (which may be @code{nil}); @var{columns} is the
+(possibly rounded) number of columns that the vertical scroll bar
+actually occupies.
+
+The value @var{height} is the value that was specified for the height of
+the horizontal scroll bar (which may be @code{nil}); @var{lines} is the
+(possibly rounded) number of lines that the horizontally scroll bar
+actually occupies.
+@end defun
+
+@defun window-current-scroll-bars &optional window
+This function reports the scroll bar type for window @var{window}.  The
+value is a cons cell @code{(@var{vertical-type} .@:
+@var{horizontal-type})}.  Unlike @code{window-scroll-bars}, this reports
+the scroll bar type actually used, once frame defaults and
+@code{scroll-bar-mode} are taken into account.
 @end defun
 
 @defun window-scroll-bar-width &optional window
 This function returns the width in pixels of @var{window}'s vertical
-scrollbar.  @var{window} must be a live window, and defaults to the
-selected window.
+scrollbar.
+@end defun
+
+@defun window-scroll-bar-height &optional window
+This function returns the height in pixels of @var{window}'s horizontal
+scrollbar.
 @end defun
 
 If you don't specify these values for a window with
 @code{set-window-scroll-bars}, the buffer-local variables
-@code{scroll-bar-mode} and @code{scroll-bar-width} in the buffer being
-displayed control the window's vertical scroll bars.  The function
+@code{vertical-scroll-bar}, @code{horizontal-scroll-bar},
+@code{scroll-bar-width} and @code{scroll-bar-height} in the buffer being
+displayed control the window's scroll bars.  The function
 @code{set-window-buffer} examines these variables.  If you change them
-in a buffer that is already visible in a window, you can make the
-window take note of the new values by calling @code{set-window-buffer}
+in a buffer that is already visible in a window, you can make the window
+take note of the new values by calling @code{set-window-buffer}
 specifying the same buffer that is already displayed.
 
-@defopt scroll-bar-mode
-This variable, always local in all buffers, controls whether and where
-to put scroll bars in windows displaying the buffer.  The possible values
-are @code{nil} for no scroll bar, @code{left} to put a scroll bar on
-the left, and @code{right} to put a scroll bar on the right.
-@end defopt
+You can control the appearance of scroll bars for a particular buffer by
+setting the following variables which automatically become buffer-local
+when set.
 
-@defun window-current-scroll-bars &optional window
-This function reports the scroll bar type for window @var{window}.
-If @var{window} is omitted or @code{nil}, the selected window is used.
-The value is a cons cell
-@code{(@var{vertical-type} .@: @var{horizontal-type})}.  Unlike
-@code{window-scroll-bars}, this reports the scroll bar type actually
-used, once frame defaults and @code{scroll-bar-mode} are taken into
-account.
-@end defun
+@defvar vertical-scroll-bar
+This variable specifies the location of the vertical scroll bar.  The
+possible values are @code{left}, @code{right}, @code{t}, which means to
+use the frame's default, and @code{nil} for no scroll bar.
+@end defvar
+
+@defvar horizontal-scroll-bar
+This variable specifies the location of the horizontal scroll bar.  The
+possible values are @code{bottom}, @code{t}, which means to use the
+frame's default, and @code{nil} for no scroll bar.
+@end defvar
 
 @defvar scroll-bar-width
-This variable, always local in all buffers, specifies the width of the
-buffer's scroll bars, measured in pixels.  A value of @code{nil} means
-to use the value specified by the frame.
+This variable specifies the width of the buffer's vertical scroll bars,
+measured in pixels.  A value of @code{nil} means to use the value
+specified by the frame.
 @end defvar
+
+@defvar scroll-bar-height
+This variable specifies the height of the buffer's horizontal scroll
+bar, measured in pixels.  A value of @code{nil} means to use the value
+specified by the frame.
+@end defvar
+
+Finally you can toggle the display of scroll bars on all frames by
+customizing the variables @code{scroll-bar-mode} and
+@code{horizontal-scroll-bar-mode}.
+
+@defopt scroll-bar-mode
+This variable controls whether and where to put vertical scroll bars in
+all frames.  The possible values are @code{nil} for no scroll bars,
+@code{left} to put scroll bars on the left and @code{right} to put
+scroll bars on the right.
+@end defopt
+
+@defopt horizontal-scroll-bar-mode
+This variable controls whether to display horizontal scroll bars on all
+frames.
+@end defopt
+
 
 @node Window Dividers
 @section Window Dividers
@@ -3968,21 +4239,21 @@ to use the value specified by the frame.
 @cindex right dividers
 @cindex bottom dividers
 
-Window dividers are bars drawn between a frame's windows.  A ``right''
+Window dividers are bars drawn between a frame's windows.  A right
 divider is drawn between a window and any adjacent windows on the right.
 Its width (thickness) is specified by the frame parameter
-@code{right-divider-width}.  A ``bottom'' divider is drawn between a
+@code{right-divider-width}.  A bottom divider is drawn between a
 window and adjacent windows on the bottom or the echo area.  Its width
 is specified by the frame parameter @code{bottom-divider-width}.  In
 either case, specifying a width of zero means to not draw such dividers.
 @xref{Layout Parameters}.
 
-   Technically, a right divider ``belongs'' to the window on its left,
+   Technically, a right divider belongs to the window on its left,
 which means that its width contributes to the total width of that
-window.  A bottom divider ``belongs'' to the window above it, which
+window.  A bottom divider belongs to the window above it, which
 means that its width contributes to the total height of that window.
 @xref{Window Sizes}.  When a window has both, a right and a bottom
-divider, the bottom divider ``prevails''.  This means that a bottom
+divider, the bottom divider prevails.  This means that a bottom
 divider is drawn over the full total width of its window while the right
 divider ends above the bottom divider.
 
@@ -4057,6 +4328,7 @@ display specifications and what they mean.
 
 @node Replacing Specs
 @subsection Display Specs That Replace The Text
+@cindex replacing display specs
 
   Some kinds of display specifications specify something to display
 instead of the text that has the property.  These are called
@@ -4069,8 +4341,8 @@ display specification, the first overrides the rest.  Replacing
 display specifications make most other display specifications
 irrelevant, since those don't apply to the replacement.
 
-  For replacing display specifications, ``the text that has the
-property'' means all the consecutive characters that have the same
+  For replacing display specifications, @dfn{the text that has the
+property} means all the consecutive characters that have the same
 Lisp object as their @code{display} property; these characters are
 replaced as a single unit.  If two characters have different Lisp
 objects as their @code{display} properties (i.e., objects which are
@@ -4124,8 +4396,10 @@ width.  @var{width} can also be a @dfn{pixel width} specification
 @item :relative-width @var{factor}
 Specifies that the width of the stretch should be computed from the
 first character in the group of consecutive characters that have the
-same @code{display} property.  The space width is the width of that
-character, multiplied by @var{factor}.
+same @code{display} property.  The space width is the pixel width of
+that character, multiplied by @var{factor}.  (On text-mode terminals,
+the ``pixel width'' of a character is usually 1, but it could be more
+for TABs and double-width CJK characters.)
 
 @item :align-to @var{hpos}
 Specifies that the space should be wide enough to reach @var{hpos}.
@@ -4296,7 +4570,7 @@ Here are the possibilities for @var{height}:
 @table @asis
 @item @code{(+ @var{n})}
 @c FIXME: Add an index for "step"?  --xfq
-This means to use a font that is @var{n} steps larger.  A ``step'' is
+This means to use a font that is @var{n} steps larger.  A @dfn{step} is
 defined by the set of available fonts---specifically, those that match
 what was otherwise specified for this text, in all attributes except
 height.  Each size for which a suitable font is available counts as
@@ -4333,7 +4607,7 @@ not affect the amount of raising or lowering, which is based on the
 faces used for the text.
 @end table
 
-@c We put all the `@code{(when ...)}' on one line to encourage
+@c We put all the '@code{(when ...)}' on one line to encourage
 @c makeinfo's end-of-sentence heuristics to DTRT.  Previously, the dot
 @c was at eol; the info file ended up w/ two spaces rendered after it.
   You can make any display specification conditional.  To do that,
@@ -4573,7 +4847,7 @@ which algorithm.
 Specifies the Laplace edge detection algorithm, which blurs out small
 differences in color while highlighting larger differences.  People
 sometimes consider this useful for displaying the image for a
-``disabled'' button.
+disabled button.
 
 @item (edge-detection :matrix @var{matrix} :color-adjust @var{adjust})
 @cindex edge detection, images
@@ -4638,7 +4912,7 @@ $$\pmatrix{ 2 & -1 &  0 \cr
 @end ifnottex
 
 @item disabled
-Specifies transforming the image so that it looks ``disabled''.
+Specifies transforming the image so that it looks disabled.
 @end table
 
 @item :mask @var{mask}
@@ -4933,6 +5207,7 @@ Supports the @code{:index} property.  @xref{Multi-Frame Images}.
 
 @node Defining Images
 @subsection Defining Images
+@cindex define image
 
   The functions @code{create-image}, @code{defimage} and
 @code{find-image} provide convenient ways to create image descriptors.
@@ -5060,6 +5335,7 @@ Here is an example of using @code{image-load-path-for-library}:
 
 @node Showing Images
 @subsection Showing Images
+@cindex show image
 
   You can use an image descriptor by setting up the @code{display}
 property yourself, but it is easier to use the functions in this
@@ -5100,8 +5376,8 @@ This function inserts @var{image} in the current buffer at point, like
 @code{insert-image}, but splits the image into @var{rows}x@var{cols}
 equally sized slices.
 
-If an image is inserted ``sliced'', Emacs displays each slice as a
-separate image, and allow more intuitive scrolling up/down, instead of
+Emacs displays each slice as a
+separate image, and allows more intuitive scrolling up/down, instead of
 jumping up/down the entire image when paging through a buffer that
 displays (large) images.
 @end defun
@@ -5141,12 +5417,11 @@ This removes only images that were put into @var{buffer} the way
 @cindex size of image
 This function returns the size of an image as a pair
 @w{@code{(@var{width} . @var{height})}}.  @var{spec} is an image
-specification.  @var{pixels} non-@code{nil} means return sizes
-measured in pixels, otherwise return sizes measured in canonical
-character units (fractions of the width/height of the frame's default
-font).  @var{frame} is the frame on which the image will be displayed.
-@var{frame} null or omitted means use the selected frame (@pxref{Input
-Focus}).
+specification.  @var{pixels} non-@code{nil} means return sizes measured
+in pixels, otherwise return sizes measured in the default character size
+of @var{frame} (@pxref{Frame Font}).  @var{frame} is the frame on which
+the image will be displayed.  @var{frame} null or omitted means use the
+selected frame (@pxref{Input Focus}).
 @end defun
 
 @defvar max-image-size
@@ -5179,7 +5454,7 @@ are multiple ``frames'' in the image.  At present, Emacs supports
 multiple frames for GIF, TIFF, and certain ImageMagick formats such as
 DJVM@.
 
-The frames can be used either to represent multiple ``pages'' (this is
+The frames can be used either to represent multiple pages (this is
 usually the case with multi-frame TIFF files, for example), or to
 create animation (usually the case with multi-frame GIF files).
 
@@ -5402,7 +5677,7 @@ so that it's easy to define special-purpose types of buttons for
 specific tasks.
 
 @defun define-button-type name &rest properties
-Define a `button type' called @var{name} (a symbol).
+Define a button type called @var{name} (a symbol).
 The remaining arguments
 form a sequence of @var{property value} pairs, specifying default
 property values for buttons with this type (a button's type may be set
@@ -5509,10 +5784,12 @@ Set @var{button}'s @var{prop} property to @var{val}.
 @end defun
 
 @defun button-activate button &optional use-mouse-action
-Call @var{button}'s @code{action} property (i.e., invoke it).  If
-@var{use-mouse-action} is non-@code{nil}, try to invoke the button's
-@code{mouse-action} property instead of @code{action}; if the button
-has no @code{mouse-action} property, use @code{action} as normal.
+Call @var{button}'s @code{action} property (i.e., invoke the function
+that is the value of that property, passing it the single argument
+@var{button}).  If @var{use-mouse-action} is non-@code{nil}, try to
+invoke the button's @code{mouse-action} property instead of
+@code{action}; if the button has no @code{mouse-action} property, use
+@code{action} as normal.
 @end defun
 
 @defun button-label button
@@ -5553,7 +5830,7 @@ Return @code{t} if button-type @var{type} is a subtype of @var{supertype}.
 These are commands and functions for locating and operating on
 buttons in an Emacs buffer.
 
-@code{push-button} is the command that a user uses to actually `push'
+@code{push-button} is the command that a user uses to actually push
 a button, and is bound by default in the button itself to @key{RET}
 and to @key{mouse-2} using a local keymap in the button's overlay or
 text properties.  Commands that are useful outside the buttons itself,
@@ -5619,7 +5896,7 @@ in the search, instead of starting at the next button.
   The Ewoc package constructs buffer text that represents a structure
 of Lisp objects, and updates the text to follow changes in that
 structure.  This is like the ``view'' component in the
-``model/view/controller'' design paradigm.  Ewoc means ``Emacs's
+``model--view--controller'' design paradigm.  Ewoc means ``Emacs's
 Widget for Object Collections''.
 
   An @dfn{ewoc} is a structure that organizes information required to
@@ -5683,7 +5960,7 @@ new value in its place, like so:
 
 @noindent
 You can also use, as the data element value, a Lisp object (list or
-vector) that is a container for the ``real'' value, or an index into
+vector) that is a container for the real value, or an index into
 some other structure.  The example (@pxref{Abstract Display Example})
 uses the latter approach.
 
@@ -5719,7 +5996,7 @@ Normally, a newline is automatically inserted after the header,
 the footer and every node's textual description.  If @var{nosep}
 is non-@code{nil}, no newline is inserted.  This may be useful for
 displaying an entire ewoc on a single line, for example, or for
-making nodes ``invisible'' by arranging for @var{pretty-printer}
+making nodes invisible by arranging for @var{pretty-printer}
 to do nothing for those nodes.
 
 An ewoc maintains its text in the buffer that is current when
@@ -5839,7 +6116,7 @@ Any @var{args} are passed to @var{map-function}.
 @subsection Abstract Display Example
 
   Here is a simple example using functions of the ewoc package to
-implement a ``color components display'', an area in a buffer that
+implement a @dfn{color components} display, an area in a buffer that
 represents a vector of three integers (itself representing a 24-bit RGB
 value) in various ways.
 
@@ -5898,10 +6175,10 @@ The buffer is in Color Components mode."
 @end example
 
 @cindex controller part, model/view/controller
-  This example can be extended to be a ``color selection widget'' (in
-other words, the controller part of the ``model/view/controller''
+  This example can be extended to be a color selection widget (in
+other words, the ``controller'' part of the ``model--view--controller''
 design paradigm) by defining commands to modify @code{colorcomp-data}
-and to ``finish'' the selection process, and a keymap to tie it all
+and to finish the selection process, and a keymap to tie it all
 together conveniently.
 
 @smallexample
@@ -6151,9 +6428,9 @@ display the character @var{c} as those glyphs; @pxref{Glyphs}).
 
   @strong{Warning:} if you use the display table to change the display
 of newline characters, the whole buffer will be displayed as one long
-``line''.
+line.
 
-  The display table also has six ``extra slots'' which serve special
+  The display table also has six @dfn{extra slots} which serve special
 purposes.  Here is a table of their meanings; @code{nil} in any slot
 means to use the default for that slot, as stated below.
 
@@ -6264,8 +6541,11 @@ no buffer display table.
 @defvar standard-display-table
 The value of this variable is the standard display table, which is
 used when Emacs is displaying a buffer in a window with neither a
-window display table nor a buffer display table defined.  Its default
-is @code{nil}.
+window display table nor a buffer display table defined, or when Emacs
+is outputting text to the standard output or error streams.  Although its
+default is typically @code{nil}, in an interactive session if the
+terminal cannot display curved quotes, its default maps curved quotes
+to ASCII approximations.  @xref{Keys in Documentation}.
 @end defvar
 
 The @file{disp-table} library defines several functions for changing
@@ -6365,7 +6645,8 @@ Display a box containing the Unicode codepoint of the character, in
 hexadecimal notation.
 
 @item an @acronym{ASCII} string
-Display a box containing that string.
+Display a box containing that string.  The string should contain at
+most 6 @acronym{ASCII} characters.
 
 @item a cons cell @code{(@var{graphical} . @var{text})}
 Display with @var{graphical} on graphical displays, and with
@@ -6376,7 +6657,8 @@ must be one of the display methods described above.
 @noindent
 The @code{thin-space}, @code{empty-box}, @code{hex-code}, and
 @acronym{ASCII} string display methods are drawn with the
-@code{glyphless-char} face.
+@code{glyphless-char} face.  On text terminals, a box is emulated by
+square brackets, @samp{[]}.
 
 The char-table has one extra slot, which determines how to display any
 character that cannot be displayed with any available font, or cannot
@@ -6415,7 +6697,7 @@ Non-@acronym{ASCII}, non-printing characters @code{U+0080} to
 @samp{\230}).
 
 @item format-control
-Characters of Unicode General Category `Cf', such as @samp{U+200E}
+Characters of Unicode General Category [Cf], such as @samp{U+200E}
 (Left-to-Right Mark), but excluding characters that have graphic
 images, such as @samp{U+00AD} (Soft Hyphen).
 
@@ -6424,9 +6706,9 @@ Characters for there is no suitable font, or which cannot be encoded
 by the terminal's coding system.
 @end table
 
-@c FIXME: this can also be `acronym', but that's not currently
+@c FIXME: this can also be 'acronym', but that's not currently
 @c completely implemented; it applies only to the format-control
-@c group, and only works if the acronym is in `char-acronym-table'.
+@c group, and only works if the acronym is in 'char-acronym-table'.
 The @var{method} symbol should be one of @code{zero-width},
 @code{thin-space}, @code{empty-box}, or @code{hex-code}.  These have
 the same meanings as in @code{glyphless-char-display}, above.
@@ -6462,8 +6744,8 @@ capability (@samp{vb}).
 @end defopt
 
 @defvar ring-bell-function
-If this is non-@code{nil}, it specifies how Emacs should ``ring the
-bell''.  Its value should be a function of no arguments.  If this is
+If this is non-@code{nil}, it specifies how Emacs should ring the
+bell.  Its value should be a function of no arguments.  If this is
 non-@code{nil}, it takes precedence over the @code{visible-bell}
 variable.
 @end defvar
@@ -6500,8 +6782,9 @@ Emacs is displaying the frame on a character-based terminal.
 This variable holds the value of @code{window-system} used for the
 first frame created by Emacs during startup.  (When Emacs is invoked
 with the @option{--daemon} option, it does not create any initial
-frames, so @code{initial-window-system} is @code{nil}.  @xref{Initial
-Options, daemon,, emacs, The GNU Emacs Manual}.)
+frames, so @code{initial-window-system} is @code{nil}, except on
+MS-Windows, where it is still @code{w32}.  @xref{Initial Options,
+daemon,, emacs, The GNU Emacs Manual}.)
 @end defvar
 
 @defun window-system &optional frame
@@ -6551,10 +6834,9 @@ positions do not increase monotonically with string or buffer
 position.  In performing this @dfn{bidirectional reordering}, Emacs
 follows the Unicode Bidirectional Algorithm (a.k.a.@: @acronym{UBA}),
 which is described in Annex #9 of the Unicode standard
-(@url{http://www.unicode.org/reports/tr9/}).  Emacs currently provides
-a ``Non-isolate Bidirectionality'' class implementation of the
-@acronym{UBA}: it does not yet support the isolate directional
-formatting characters introduced with Unicode Standard v6.3.0.
+(@url{http://www.unicode.org/reports/tr9/}).  Emacs provides a ``Full
+Bidirectionality'' class implementation of the @acronym{UBA},
+consistent with the requirements of the Unicode Standard v8.0.
 
 @defvar bidi-display-reordering
 If the value of this buffer-local variable is non-@code{nil} (the
@@ -6679,7 +6961,7 @@ The function returns the new buffer position as its value.
 when two strings with bidirectional content are juxtaposed in a
 buffer, or otherwise programmatically concatenated into a string of
 text.  A typical problematic case is when a buffer consists of
-sequences of text ``fields'' separated by whitespace or punctuation
+sequences of text fields separated by whitespace or punctuation
 characters, like Buffer Menu mode or Rmail Summary Mode.  Because the
 punctuation characters used as separators have @dfn{weak
 directionality}, they take on the directionality of surrounding text.
@@ -6739,3 +7021,81 @@ affect all Emacs frames and windows.
 appropriate mirrored character in the reordered text.  Lisp programs
 can affect the mirrored display by changing this property.  Again, any
 such changes affect all of Emacs display.
+
+@cindex overriding bidirectional properties
+@cindex directional overrides
+@cindex LRO
+@cindex RLO
+  The bidirectional properties of characters can be overridden by
+inserting into the text special directional control characters,
+LEFT-TO-RIGHT OVERRIDE (@acronym{LRO}) and RIGHT-TO-LEFT OVERRIDE
+(@acronym{RLO}).  Any characters between a @acronym{RLO} and the
+following newline or POP DIRECTIONAL FORMATTING (@acronym{PDF})
+control character, whichever comes first, will be displayed as if they
+were strong right-to-left characters, i.e.@: they will be reversed on
+display.  Similarly, any characters between @acronym{LRO} and
+@acronym{PDF} or newline will display as if they were strong
+left-to-right, and will @emph{not} be reversed even if they are strong
+right-to-left characters.
+
+@cindex phishing using directional overrides
+@cindex malicious use of directional overrides
+  These overrides are useful when you want to make some text
+unaffected by the reordering algorithm, and instead directly control
+the display order.  But they can also be used for malicious purposes,
+known as @dfn{phishing}.  Specifically, a URL on a Web page or a link
+in an email message can be manipulated to make its visual appearance
+unrecognizable, or similar to some popular benign location, while the
+real location, interpreted by a browser in the logical order, is very
+different.
+
+  Emacs provides a primitive that applications can use to detect
+instances of text whose bidirectional properties were overridden so as
+to make a left-to-right character display as if it were a
+right-to-left character, or vise versa.
+
+@defun bidi-find-overridden-directionality from to &optional object
+This function looks at the text of the specified @var{object} between
+positions @var{from} (inclusive) and @var{to} (exclusive), and returns
+the first position where it finds a strong left-to-right character
+whose directional properties were forced to display the character as
+right-to-left, or for a strong right-to-left character that was forced
+to display as left-to-right.  If it finds no such characters in the
+specified region of text, it returns @code{nil}.
+
+The optional argument @var{object} specifies which text to search, and
+defaults to the current buffer.  If @var{object} is non-@code{nil}, it
+can be some other buffer, or it can be a string or a window.  If it is
+a string, the function searches that string.  If it is a window, the
+function searches the buffer displayed in that window.  If a buffer
+whose text you want to examine is displayed in some window, we
+recommend to specify it by that window, rather than pass the buffer to
+the function.  This is because telling the function about the window
+allows it to correctly account for window-specific overlays, which
+might change the result of the function if some text in the buffer is
+covered by overlays.
+@end defun
+
+@cindex copying bidirectional text, preserve visual order
+@cindex visual order, preserve when copying bidirectional text
+  When text that includes mixed right-to-left and left-to-right
+characters and bidirectional controls is copied into a different
+location, it can change its visual appearance, and also can affect the
+visual appearance of the surrounding text at destination.  This is
+because reordering of bidirectional text specified by the
+@acronym{UBA} has non-trivial context-dependent effects both on the
+copied text and on the text at copy destination that will surround it.
+
+  Sometimes, a Lisp program may need to preserve the exact visual
+appearance of the copied text at destination, and of the text that
+surrounds the copy.  Lisp programs can use the following function to
+achieve that effect.
+
+@defun buffer-substring-with-bidi-context start end &optional no-properties
+This function works similar to @code{buffer-substring} (@pxref{Buffer
+Contents}), but it prepends and appends to the copied text bidi
+directional control characters necessary to preserve the visual
+appearance of the text when it is inserted at another place.  Optional
+argument @var{no-properties}, if non-@code{nil}, means remove the text
+properties from the copy of the text.
+@end defun

@@ -1,6 +1,6 @@
 ;;; ns-win.el --- lisp side of interface with NeXT/Open/GNUstep/MacOS X window system  -*- lexical-binding: t -*-
 
-;; Copyright (C) 1993-1994, 2005-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1993-1994, 2005-2015 Free Software Foundation, Inc.
 
 ;; Authors: Carl Edman
 ;;	Christian Limpach
@@ -278,7 +278,7 @@ The properties returned may include `top', `left', `height', and `width'."
 	 (insert ns-input-spi-arg))
 	((string-equal ns-input-spi-name "mail-to")
 	 (compose-mail ns-input-spi-arg))
-	(t (error (concat "Service " ns-input-spi-name " not recognized")))))
+	(t (error "Service %s not recognized" ns-input-spi-name))))
 
 
 ;; Composed key sequence handling for Nextstep system input methods.
@@ -875,56 +875,18 @@ panel immediately after correcting a word in a buffer."
 
 ;;;; Pasteboard support.
 
-(declare-function ns-get-selection-internal "nsselect.m" (buffer))
-(declare-function ns-store-selection-internal "nsselect.m" (buffer string))
-
-(define-obsolete-function-alias 'ns-get-cut-buffer-internal
-  'ns-get-selection-internal "24.1")
 (define-obsolete-function-alias 'ns-store-cut-buffer-internal
-  'ns-store-selection-internal "24.1")
+  'gui-set-selection "24.1")
 
-
-(defun ns-get-pasteboard ()
-  "Returns the value of the pasteboard."
-  (ns-get-selection-internal 'CLIPBOARD))
-
-(defun ns-set-pasteboard (string)
-  "Store STRING into the pasteboard of the Nextstep display server."
-  ;; Check the data type of STRING.
-  (if (not (stringp string)) (error "Nonstring given to pasteboard"))
-  (ns-store-selection-internal 'CLIPBOARD string))
-
-;; We keep track of the last text selected here, so we can check the
-;; current selection against it, and avoid passing back our own text
-;; from x-selection-value.
-(defvar ns-last-selected-text nil)
-
-;; Return the value of the current Nextstep selection.  For
-;; compatibility with older Nextstep applications, this checks cut
-;; buffer 0 before retrieving the value of the primary selection.
-(defun x-selection-value ()
-  (let (text)
-    ;; Consult the selection.  Treat empty strings as if they were unset.
-    (or text (setq text (ns-get-pasteboard)))
-    (if (string= text "") (setq text nil))
-    (cond
-     ((not text) nil)
-     ((eq text ns-last-selected-text) nil)
-     ((string= text ns-last-selected-text)
-      ;; Record the newer string, so subsequent calls can use the `eq' test.
-      (setq ns-last-selected-text text)
-      nil)
-     (t
-      (setq ns-last-selected-text text)))))
 
 (defun ns-copy-including-secondary ()
   (interactive)
   (call-interactively 'kill-ring-save)
-  (ns-store-selection-internal 'SECONDARY
-			       (buffer-substring (point) (mark t))))
+  (gui-set-selection 'SECONDARY (buffer-substring (point) (mark t))))
+
 (defun ns-paste-secondary ()
   (interactive)
-  (insert (ns-get-selection-internal 'SECONDARY)))
+  (insert (gui-get-selection 'SECONDARY)))
 
 
 ;;;; Scrollbar handling.
@@ -1103,7 +1065,8 @@ EVENT is a mouse event, and ATTRIBUTE is either
 
 ;; Do the actual Nextstep Windows setup here; the above code just
 ;; defines functions and variables that we use now.
-(defun ns-initialize-window-system (&optional _display)
+(cl-defmethod window-system-initialization (&context (window-system (eql ns))
+                                            &optional _display)
   "Initialize Emacs for Nextstep (Cocoa / GNUstep) windowing."
   (cl-assert (not ns-initialized))
 
@@ -1176,10 +1139,34 @@ EVENT is a mouse event, and ATTRIBUTE is either
 
 ;; Any display name is OK.
 (add-to-list 'display-format-alist '(".*" . ns))
-(add-to-list 'handle-args-function-alist '(ns . x-handle-args))
-(add-to-list 'frame-creation-function-alist '(ns . x-create-frame-with-faces))
-(add-to-list 'window-system-initialization-alist '(ns . ns-initialize-window-system))
+(cl-defmethod handle-args-function (args &context (window-system (eql ns)))
+  (x-handle-args args))
 
+(cl-defmethod frame-creation-function (params &context (window-system (eql ns)))
+  (x-create-frame-with-faces params))
+
+(declare-function ns-own-selection-internal "nsselect.m" (selection value))
+(declare-function ns-disown-selection-internal "nsselect.m" (selection))
+(declare-function ns-selection-owner-p "nsselect.m" (&optional selection))
+(declare-function ns-selection-exists-p "nsselect.m" (&optional selection))
+(declare-function ns-get-selection "nsselect.m" (selection-symbol target-type))
+
+(cl-defmethod gui-backend-set-selection (selection value
+                                         &context (window-system (eql ns)))
+  (if value (ns-own-selection-internal selection value)
+    (ns-disown-selection-internal selection)))
+
+(cl-defmethod gui-backend-selection-owner-p (selection
+                                             &context (window-system (eql ns)))
+  (ns-selection-owner-p selection))
+
+(cl-defmethod gui-backend-selection-exists-p (selection
+                                              &context (window-system (eql ns)))
+  (ns-selection-exists-p selection))
+
+(cl-defmethod gui-backend-get-selection (selection-symbol target-type
+                                         &context (window-system (eql ns)))
+  (ns-get-selection selection-symbol target-type))
 
 (provide 'ns-win)
 

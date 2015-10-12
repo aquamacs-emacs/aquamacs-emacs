@@ -1,6 +1,6 @@
 ;;; gnus-spec.el --- format spec functions for Gnus
 
-;; Copyright (C) 1996-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1996-2015 Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;; Keywords: news
@@ -24,9 +24,6 @@
 
 ;;; Code:
 
-;; For Emacs <22.2 and XEmacs.
-(eval-and-compile
-  (unless (fboundp 'declare-function) (defmacro declare-function (&rest r))))
 (eval-when-compile (require 'cl))
 (defvar gnus-newsrc-file-version)
 

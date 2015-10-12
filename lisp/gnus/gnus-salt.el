@@ -1,6 +1,6 @@
 ;;; gnus-salt.el --- alternate summary mode interfaces for Gnus
 
-;; Copyright (C) 1996-1999, 2001-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1996-1999, 2001-2015 Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;; Keywords: news
@@ -62,7 +62,7 @@
   :group 'gnus-summary-pick)
 
 (defcustom gnus-summary-pick-line-format
-  "%-5P %U\%R\%z\%I\%(%[%4L: %-23,23n%]%) %s\n"
+  "%-5P %U\ %R\ %z\ %I\ %(%[%4L: %-23,23n%]%) %s\n"
   "*The format specification of the lines in pick buffers.
 It accepts the same format specs that `gnus-summary-line-format' does."
   :type 'string
@@ -504,7 +504,7 @@ Two predefined functions are available:
       (when (setq win (get-buffer-window buf))
 	(select-window win)
 	(when gnus-selected-tree-overlay
-	  (goto-char (or (gnus-overlay-end gnus-selected-tree-overlay) 1)))
+	  (goto-char (or (overlay-end gnus-selected-tree-overlay) 1)))
 	(gnus-tree-minimize)))))
 
 (defun gnus-tree-show-summary ()
@@ -547,7 +547,7 @@ Two predefined functions are available:
     (when tree-window
       (select-window tree-window)
       (when gnus-selected-tree-overlay
-	(goto-char (or (gnus-overlay-end gnus-selected-tree-overlay) 1)))
+	(goto-char (or (overlay-end gnus-selected-tree-overlay) 1)))
       (let* ((top (cond ((< (window-height) 4) 0)
 			((< (window-height) 7) 1)
 			(t 2)))
@@ -858,12 +858,12 @@ it in the environment specified by BINDINGS."
 	(when (or (not gnus-selected-tree-overlay)
 		  (gnus-extent-detached-p gnus-selected-tree-overlay))
 	  ;; Create a new overlay.
-	  (gnus-overlay-put
+	  (overlay-put
 	   (setq gnus-selected-tree-overlay
-		 (gnus-make-overlay (point-min) (1+ (point-min))))
+		 (make-overlay (point-min) (1+ (point-min))))
 	   'face gnus-selected-tree-face))
 	;; Move the overlay to the article.
-	(gnus-move-overlay
+	(move-overlay
 	 gnus-selected-tree-overlay (goto-char (car region)) (cdr region))
 	(gnus-tree-minimize)
 	(gnus-tree-recenter)

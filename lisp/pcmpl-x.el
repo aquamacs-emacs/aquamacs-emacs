@@ -1,6 +1,6 @@
 ;;; pcmpl-x.el --- completion for miscellaneous tools  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2013-2015 Free Software Foundation, Inc.
 
 ;; Author: Leo Liu <sdl.web@gmail.com>
 ;; Keywords: processes, tools, convenience
@@ -223,7 +223,7 @@
 ;;;###autoload
 (defun pcomplete/ack ()
   "Completion for the `ack' command.
-Start an argument with '-' to complete short options and '--' for
+Start an argument with `-' to complete short options and `--' for
 long options."
   ;; No space after =
   (while t

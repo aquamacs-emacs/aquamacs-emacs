@@ -1,5 +1,5 @@
 /* NeXT/Open/GNUstep and MacOSX Cocoa menu and toolbar module.
-   Copyright (C) 2007-2014 Free Software Foundation, Inc.
+   Copyright (C) 2007-2015 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -59,12 +59,7 @@ int menu_trace_num = 0;
 #include "nsmenu_common.c"
 #endif
 
-extern Lisp_Object Qundefined, Qmenu_enable, Qmenu_bar_update_hook;
-extern Lisp_Object QCtoggle, QCradio;
-
-Lisp_Object Qdebug_on_next_call;
 Lisp_Object Vcancel_special_indicator_flag;
-extern Lisp_Object Qoverriding_local_map, Qoverriding_terminal_local_map;
 
 extern long context_menu_value;
 EmacsMenu *mainMenu, *svcsMenu, *dockMenu;
@@ -285,12 +280,8 @@ ns_update_menubar (struct frame *f, bool deep_p, EmacsMenu *submenu)
 
       /* parse stage 2: insert into lucid 'widget_value' structures
          [comments in other terms say not to evaluate lisp code here] */
-      wv = xmalloc_widget_value ();
-      wv->name = "menubar";
-      wv->value = 0;
-      wv->enabled = 1;
+      wv = make_widget_value ("menubar", NULL, true, Qnil);
       wv->button_type = BUTTON_TYPE_NONE;
-      wv->help = Qnil;
       first_wv = wv;
 
       for (i = 0; i < 4*n; i += 4)
@@ -397,12 +388,8 @@ ns_update_menubar (struct frame *f, bool deep_p, EmacsMenu *submenu)
       int n;
       Lisp_Object string;
 
-      wv = xmalloc_widget_value ();
-      wv->name = "menubar";
-      wv->value = 0;
-      wv->enabled = 1;
+      wv = make_widget_value ("menubar", NULL, true, Qnil);
       wv->button_type = BUTTON_TYPE_NONE;
-      wv->help = Qnil;
       first_wv = wv;
 
       /* Make widget-value tree w/ just the top level menu bar strings */
@@ -458,12 +445,8 @@ ns_update_menubar (struct frame *f, bool deep_p, EmacsMenu *submenu)
 	    memcpy (previous_strings[i/4], SDATA (string),
                     min (10, SBYTES (string) + 1));
 
-	  wv = xmalloc_widget_value ();
-	  wv->name = SSDATA (string);
-	  wv->value = 0;
-	  wv->enabled = 1;
+	  wv = make_widget_value (SSDATA (string), NULL, true, Qnil);
 	  wv->button_type = BUTTON_TYPE_NONE;
-	  wv->help = Qnil;
 	  wv->call_data = (void *) (intptr_t) (-1);
 
 #ifdef NS_IMPL_COCOA
@@ -523,10 +506,8 @@ void
 x_activate_menubar (struct frame *f)
 {
 #ifdef NS_IMPL_COCOA
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
   ns_update_menubar (f, true, nil);
   ns_check_pending_open_menu ();
-#endif
 #endif
 }
 /* Utility (from macmenu.c): is this item a separator? */
@@ -587,23 +568,14 @@ name_is_separator (name)
 }
 
 #ifdef NS_IMPL_COCOA
-#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
-extern NSString *NSMenuDidBeginTrackingNotification;
-#endif
-#endif
-
-#ifdef NS_IMPL_COCOA
 -(void)trackingNotification:(NSNotification *)notification
 {
   /* Update menu in menuNeedsUpdate only while tracking menus.  */
   trackingMenu = ([notification name] == NSMenuDidBeginTrackingNotification
                   ? 1 : 0);
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
   if (! trackingMenu) ns_check_menu_open (nil);
-#endif
 }
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
 - (void)menuWillOpen:(NSMenu *)menu
 {
   ++trackingMenu;
@@ -624,7 +596,6 @@ extern NSString *NSMenuDidBeginTrackingNotification;
 {
   --trackingMenu;
 }
-#endif /* OSX >= 10.5 */
 
 #endif /* NS_IMPL_COCOA */
 
@@ -655,8 +626,7 @@ extern NSString *NSMenuDidBeginTrackingNotification;
   if (trackingMenu == 0)
     return;
 /*fprintf (stderr, "Updating menu '%s'\n", [[self title] UTF8String]); NSLog (@"%@\n", event); */
-#if (! defined (NS_IMPL_COCOA) \
-     || MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5)
+#ifdef NS_IMPL_GNUSTEP
   /* Don't know how to do this for anything other than OSX >= 10.5
      This is wrong, as it might run Lisp code in the event loop.  */
   ns_update_menubar (frame, true, self);
@@ -777,9 +747,7 @@ extern NSString *NSMenuDidBeginTrackingNotification;
     {
       NSMenuItem *item = [self itemAtIndex: n];
       NSString *title = [item title];
-      if (([title length] == 0  /* OSX 10.5 */
-	   || [ns_app_name isEqualToString: title]  /* from 10.6 on */
-	   || [@"Apple" isEqualToString: title]) /* older */
+      if ([ns_app_name isEqualToString: title]
           && ![item isSeparatorItem])
         continue;
       [self removeItemAtIndex: n];
@@ -923,7 +891,7 @@ extern NSString *NSMenuDidBeginTrackingNotification;
    ========================================================================== */
 
 Lisp_Object
-ns_menu_show (struct frame *f, int x, int y, bool for_click, bool keymaps,
+ns_menu_show (struct frame *f, int x, int y, int menuflags,
 	      Lisp_Object title, const char **error)
 {
   EmacsMenu *pmenu;
@@ -931,18 +899,15 @@ ns_menu_show (struct frame *f, int x, int y, bool for_click, bool keymaps,
   Lisp_Object tem;
   ptrdiff_t specpdl_count = SPECPDL_INDEX ();
   widget_value *wv, *first_wv = 0;
+  bool keymaps = (menuflags & MENU_KEYMAPS);
 
   block_input ();
 
   p.x = x; p.y = y;
 
   /* now parse stage 2 as in ns_update_menubar */
-  wv = xmalloc_widget_value ();
-  wv->name = "contextmenu";
-  wv->value = 0;
-  wv->enabled = 1;
+  wv = make_widget_value ("contextmenu", NULL, true, Qnil);
   wv->button_type = BUTTON_TYPE_NONE;
-  wv->help = Qnil;
   first_wv = wv;
 
 #if 0
@@ -1013,18 +978,14 @@ ns_menu_show (struct frame *f, int x, int y, bool for_click, bool keymaps,
 	     with its items as a submenu beneath it.  */
 	  if (!keymaps && strcmp (pane_string, ""))
 	    {
-	      wv = xmalloc_widget_value ();
+	      wv = make_widget_value (pane_string, NULL, true, Qnil);
 	      if (save_wv)
 		save_wv->next = wv;
 	      else
 		first_wv->contents = wv;
-	      wv->name = pane_string;
 	      if (keymaps && !NILP (prefix))
 		wv->name++;
-	      wv->value = 0;
-	      wv->enabled = 1;
 	      wv->button_type = BUTTON_TYPE_NONE;
-	      wv->help = Qnil;
 	      save_wv = wv;
 	      prev_wv = 0;
 	    }
@@ -1062,20 +1023,18 @@ ns_menu_show (struct frame *f, int x, int y, bool for_click, bool keymaps,
 	    }
 #endif /* not HAVE_MULTILINGUAL_MENU */
 
-	  wv = xmalloc_widget_value ();
+	  wv = make_widget_value (SSDATA (item_name), NULL, !NILP (enable),
+				  STRINGP (help) ? help : Qnil);
 	  if (prev_wv)
 	    prev_wv->next = wv;
 	  else
 	    save_wv->contents = wv;
-	  wv->name = SSDATA (item_name);
 	  if (!NILP (descrip))
 	    wv->key = SSDATA (descrip);
-	  wv->value = 0;
 	  /* If this item has a null value,
 	     make the call_data null so that it won't display a box
 	     when the mouse is on it.  */
 	  wv->call_data = !NILP (def) ? aref_addr (menu_items, i) : 0;
-	  wv->enabled = !NILP (enable);
 
 	  if (NILP (type))
 	    wv->button_type = BUTTON_TYPE_NONE;
@@ -1088,11 +1047,6 @@ ns_menu_show (struct frame *f, int x, int y, bool for_click, bool keymaps,
 
 	  wv->selected = !NILP (selected);
 
-          if (! STRINGP (help))
-	    help = Qnil;
-
-	  wv->help = help;
-
 	  prev_wv = wv;
 
 	  i += MENU_ITEMS_ITEM_LENGTH;
@@ -1103,24 +1057,19 @@ ns_menu_show (struct frame *f, int x, int y, bool for_click, bool keymaps,
 
   if (!NILP (title))
     {
-      widget_value *wv_title = xmalloc_widget_value ();
-      widget_value *wv_sep = xmalloc_widget_value ();
+      widget_value *wv_title;
+      widget_value *wv_sep = make_widget_value ("--", NULL, false, Qnil);
 
       /* Maybe replace this separator with a bitmap or owner-draw item
 	 so that it looks better.  Having two separators looks odd.  */
-      wv_sep->name = "--";
       wv_sep->next = first_wv->contents;
-      wv_sep->help = Qnil;
 
 #ifndef HAVE_MULTILINGUAL_MENU
       if (STRING_MULTIBYTE (title))
 	title = ENCODE_MENU_STRING (title);
 #endif
-
-      wv_title->name = SSDATA (title);
-      wv_title->enabled = NO;
+      wv_title = make_widget_value (SSDATA (title), NULL, false, Qnil);
       wv_title->button_type = BUTTON_TYPE_NONE;
-      wv_title->help = Qnil;
       wv_title->next = wv_sep;
       first_wv->contents = wv_title;
 
@@ -1175,9 +1124,12 @@ update_frame_tool_bar (struct frame *f)
   EmacsView *view = FRAME_NS_VIEW (f);
   NSWindow *window = [view window];
   EmacsToolbar *toolbar = [view toolbar];
+  int oldh;
 
   if (view == nil || toolbar == nil) return;
   block_input ();
+
+  oldh = FRAME_TOOLBAR_HEIGHT (f);
 
 #ifdef NS_IMPL_COCOA
   [toolbar clearActive];
@@ -1357,8 +1309,13 @@ update_frame_tool_bar (struct frame *f)
   if (FRAME_TOOLBAR_HEIGHT (f) < 0) // happens if frame is fullscreen.
     FRAME_TOOLBAR_HEIGHT (f) = 0;
 
+  if (oldh != FRAME_TOOLBAR_HEIGHT (f))
+    [view updateFrameSize:YES];
   if (view->wait_for_tool_bar && FRAME_TOOLBAR_HEIGHT (f) > 0)
+    {
+      view->wait_for_tool_bar = NO;
       [view setNeedsDisplay: YES];
+    }
 
   unblock_input ();
 }
@@ -1968,16 +1925,18 @@ pop_down_menu (void *arg)
 extern struct timespec timer_check (void);
 
 Lisp_Object
-ns_popup_dialog (Lisp_Object position, Lisp_Object header, Lisp_Object contents)
+ns_popup_dialog (struct frame *f, Lisp_Object header, Lisp_Object contents)
 {
 
   // extern EMACS_TIME timer_check (void);
-  EmacsAlertPanel *dialog;
-  Lisp_Object window, tem, title;
-  struct frame *f;
+  // EmacsAlertPanel *dialog;
+  Lisp_Object window;
   BOOL useSheet = YES;
 
   //NSPoint p;
+  id dialog;
+  Lisp_Object tem, title;
+  NSPoint p;
   BOOL isQ;
   NSAutoreleasePool *pool;
 
@@ -1988,30 +1947,7 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object header, Lisp_Object contents)
   CHECK_CONS (contents);
   isQ = NILP (header);
 
-  if (EQ (position, Qt)
-      || (CONSP (position) && (EQ (XCAR (position), Qmenu_bar)
-                               || EQ (XCAR (position), Qtool_bar))))
-    {
-      window = selected_window;
-    }
-  else if (CONSP (position))
-    {
-      useSheet = NO;
-      Lisp_Object tem;
-      tem = Fcar (position);
-      if (XTYPE (tem) == Lisp_Cons)
-        window = Fcar (Fcdr (position));
-      else
-        {
-          tem = Fcar (Fcdr (position));  /* EVENT_START (position) */
-          window = Fcar (tem);	     /* POSN_WINDOW (tem) */
-        }
-    }
-  else if (WINDOWP (position) || FRAMEP (position))
-    {
-      window = position;
-    }
-  else
+  if (f==NULL)
     {
       useSheet = NO;
     window = Qnil;
@@ -2033,6 +1969,8 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object header, Lisp_Object contents)
   check_window_system (f);
 
     }
+  p.x = (int)f->left_pos + ((int)FRAME_COLUMN_WIDTH (f) * f->text_cols)/2;
+  p.y = (int)f->top_pos + (FRAME_LINE_HEIGHT (f) * f->text_lines)/2;
 
 
   title = Fcar (contents);
@@ -2136,10 +2074,10 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object header, Lisp_Object contents)
   if (ret>=0 && ret < ((EmacsAlertPanel *) dialog)->returnValueCount)
         {
       // *(EMACS_INT*)(&tem)
-      tem = (Lisp_Object) dialog->returnValues[ret];
+	  tem = (Lisp_Object) ((EmacsAlertPanel *) dialog)->returnValues[ret];
       if ([[dialog suppressionButton] state] == NSOnState)
         {
-	  tem = Fcons (tem, dialog->returnValues[[[dialog suppressionButton] tag]]);
+	  tem = Fcons (tem, ((EmacsAlertPanel *) dialog)->returnValues[[[dialog suppressionButton] tag]]);
         }
     }
     unbind_to (specpdl_count, Qnil);  /* calls pop_down_menu */
@@ -2196,7 +2134,11 @@ ns_popup_dialog (Lisp_Object position, Lisp_Object header, Lisp_Object contents)
   area.size.width = ICONSIZE;
   area.size.height= ICONSIZE;
   img = [[NSImage imageNamed: @"NSApplicationIcon"] copy];
+#ifdef NS_IMPL_COCOA
+#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_6
   [img setScalesWhenResized: YES];
+#endif
+#endif
   [img setSize: NSMakeSize (ICONSIZE, ICONSIZE)];
   imgView = [[NSImageView alloc] initWithFrame: area];
   [imgView setImage: img];
@@ -2589,7 +2531,6 @@ This variable only takes effect for newly created tool bars.*/);
   defsubr (&Sns_reset_menu);
   defsubr (&Smenu_or_popup_active_p);
 
-  Qdebug_on_next_call = intern_c_string ("debug-on-next-call");
-  staticpro (&Qdebug_on_next_call);
+  DEFSYM (Qdebug_on_next_call, "debug-on-next-call");
   Vcancel_special_indicator_flag = Fcons(Qnil, Qnil);
 }

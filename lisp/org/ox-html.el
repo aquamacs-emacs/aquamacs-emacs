@@ -1,6 +1,6 @@
 ;;; ox-html.el --- HTML Back-End for Org Export Engine
 
-;; Copyright (C) 2011-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2011-2015 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <carsten at orgmode dot org>
 ;;      Jambunathan K <kjambunathan at gmail dot com>
@@ -581,7 +581,7 @@ The function must accept two parameters:
 The function should return the string to be exported.
 
 For example, the variable could be set to the following function
-in order to mimic default behaviour:
+in order to mimic default behavior:
 
 The default value simply returns the value of CONTENTS."
   :group 'org-export-html
@@ -711,7 +711,7 @@ t              Synonym for `mathjax'."
 When `org-mode' is exporting an `org-mode' file to HTML, links to
 non-html files are directly put into a href tag in HTML.
 However, links to other Org-mode files (recognized by the
-extension `.org.) should become links to the corresponding html
+extension `.org') should become links to the corresponding html
 file, assuming that the linked `org-mode' file will also be
 converted to HTML.
 When nil, the links still point to the plain `.org' file."
@@ -833,7 +833,7 @@ you can reuse them:
 For example:
 
 \(setq org-html-table-row-tags
-      (cons '(cond (top-row-p \"<tr class=\\\"tr-top\\\">\")
+      (cons \\='(cond (top-row-p \"<tr class=\\\"tr-top\\\">\")
                    (bottom-row-p \"<tr class=\\\"tr-bottom\\\">\")
                    (t (if (= (mod row-number 2) 1)
 			  \"<tr class=\\\"tr-odd\\\">\"
@@ -1630,8 +1630,7 @@ used in the preamble or postamble."
     (?c . ,(plist-get info :creator))
     (?C . ,(let ((file (plist-get info :input-file)))
 	     (format-time-string org-html-metadata-timestamp-format
-				 (if file (nth 5 (file-attributes file))
-				   (current-time)))))
+				 (if file (nth 5 (file-attributes file))))))
     (?v . ,(or org-html-validation-link ""))))
 
 (defun org-html--build-pre/postamble (type info)
@@ -1856,7 +1855,7 @@ is the language used for CODE, as a string, or nil."
 		       (funcall lang-mode)
 		       (insert code)
 		       ;; Fontify buffer.
-		       (font-lock-fontify-buffer)
+		       (org-font-lock-ensure)
 		       ;; Remove formatting on newline characters.
 		       (save-excursion
 			 (let ((beg (point-min))
@@ -2599,7 +2598,7 @@ Bind `org-html-standalone-image-predicate' to constrain paragraph
 further.  For example, to check for only captioned standalone
 images, set it to:
 
-  \(lambda (paragraph) (org-element-property :caption paragraph))"
+  (lambda (paragraph) (org-element-property :caption paragraph))"
   (let ((paragraph (case (org-element-type element)
 		     (paragraph element)
 		     (link (org-export-get-parent element)))))

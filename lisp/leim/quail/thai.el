@@ -46,9 +46,9 @@
  "Thai Kesmanee input method with TIS620 keyboard layout
 
 The difference from the ordinal Thai keyboard:
-    '฿' and '๏' are assigned to '\\' and '|' respectively,
-    'ฃ' and 'ฅ' are assigned to '`' and '~' respectively,
-    Don't know where to assign characters '๚' and '๛'."
+    `฿' and `๏' are assigned to `\\' and `|' respectively,
+    `ฃ' and `ฅ' are assigned to `\\=`' and `~' respectively,
+    Don't know where to assign characters `๚' and `๛'."
  nil t t t t nil nil nil nil nil t)
 
 (thai-generate-quail-map
@@ -76,7 +76,7 @@ The difference from the ordinal Thai keyboard:
   "๑" "ฤ" "ฺ" "ฉ" "ฏ" "ฎ" "โ" "ฌ"	; @ .. G
   "็" "ณ" "๋" "ษ" "ศ" "?" "์" "ฯ"	; H .. O
   "ญ" "๐" "ฑ" "ฆ" "ธ" "๊" "ฮ" "\""	; P .. W
-  "\)" "ํ" "\(" "บ" "ฃ" "ล" "ู" "๘"	; X .. _
+  ")" "ํ" "(" "บ" "ฃ" "ล" "ู" "๘"	; X .. _
   "_" "ฟ" "ิ" "แ" "ก" "ำ" "ด" "เ"	; ` .. g
   "้" "ร" "่" "า" "ส" "ท" "ื" "น"	; h .. o
   "ย" "ๆ" "พ" "ห" "ะ" "ี" "อ" "ไ"	; p .. w

@@ -1,6 +1,6 @@
 ;;; sort.el --- commands to sort text in an Emacs buffer
 
-;; Copyright (C) 1986-1987, 1994-1995, 2001-2014 Free Software
+;; Copyright (C) 1986-1987, 1994-1995, 2001-2015 Free Software
 ;; Foundation, Inc.
 
 ;; Author: Howie Kaye
@@ -316,7 +316,7 @@ FIELD, BEG and END.  BEG and END specify region to sort."
 ;;			       (point)
 ;;			       (save-excursion
 ;;				 (re-search-forward
-;;				  "[+-]?[0-9]*\.?[0-9]*\\([eE][+-]?[0-9]+\\)?")
+;;				  "[+-]?[0-9]*\\.?[0-9]*\\([eE][+-]?[0-9]+\\)?")
 ;;				 (point))))))
 ;;		 nil))
 

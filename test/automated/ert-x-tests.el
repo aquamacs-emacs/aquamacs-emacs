@@ -1,6 +1,6 @@
 ;;; ert-x-tests.el --- Tests for ert-x.el
 
-;; Copyright (C) 2008, 2010-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2008, 2010-2015 Free Software Foundation, Inc.
 
 ;; Author: Phil Hagelberg
 ;; 	   Christian Ohler <ohler@gnu.org>
@@ -195,8 +195,9 @@
           (let ((case-fold-search nil))
             (should (string-match (concat
                                    "\\`ert-test-describe-test is a test"
-                                   " defined in `ert-x-tests.elc?'\\.\n\n"
-                                   "Tests `ert-describe-test'\\.\n\\'")
+                                   " defined in"
+                                   " ['`‘]ert-x-tests.elc?['’]\\.\n\n"
+                                   "Tests ['`‘]ert-describe-test['’]\\.\n\\'")
                                   (buffer-string)))))))))
 
 (ert-deftest ert-test-message-log-truncation ()
@@ -223,8 +224,8 @@
   "This test attempts to demonstrate that there is no way to
 force immediate truncation of the *Messages* buffer from Lisp
 \(and hence justifies the existence of
-`ert--force-message-log-buffer-truncation'\): The only way that
-came to my mind was \(message \"\"\), which doesn't have the
+`ert--force-message-log-buffer-truncation'): The only way that
+came to my mind was \(message \"\"), which doesn't have the
 desired effect."
   :tags '(:causes-redisplay)
   (ert-with-buffer-renamed ("*Messages*")

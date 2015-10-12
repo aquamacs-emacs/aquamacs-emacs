@@ -1,6 +1,6 @@
 ;;; org-colview.el --- Column View in Org-mode
 
-;; Copyright (C) 2004-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2004-2015 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <carsten at orgmode dot org>
 ;; Keywords: outlines, hypermedia, calendar, wp
@@ -354,7 +354,7 @@ CPHR is the complex heading regexp to use for parsing ITEM."
   (let (fixitem)
     (if (not cphr)
 	item
-      (unless (string-match "^\*+ " item)
+      (unless (string-match "^\\*+ " item)
 	(setq item (concat "* " item) fixitem t))
       (if (string-match cphr item)
 	  (setq item
@@ -369,7 +369,7 @@ CPHR is the complex heading regexp to use for parsing ITEM."
 	 0 (1+ (match-end 1))
 	 (list 'org-whitespace (* 2 (1- (org-reduced-level (- (match-end 1) (match-beginning 1))))))
 	 item))
-      (if fixitem (replace-regexp-in-string "^\*+ " "" item) item))))
+      (if fixitem (replace-regexp-in-string "^\\*+ " "" item) item))))
 
 (defun org-columns-compact-links (s)
   "Replace [[link][desc]] with [desc] or [link]."
@@ -1086,7 +1086,7 @@ display, or in the #+COLUMNS line of the current buffer."
 (defun org-nofm-to-completion (n m &optional percent)
   (if (not percent)
       (format "[%d/%d]" n m)
-    (format "[%d%%]"(floor (+ 0.5 (* 100. (/ (* 1.0 n) m)))))))
+    (format "[%d%%]" (round (* 100.0 n) m))))
 
 
 (defun org-columns-string-to-number (s fmt)

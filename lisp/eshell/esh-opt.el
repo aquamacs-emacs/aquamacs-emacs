@@ -1,6 +1,6 @@
 ;;; esh-opt.el --- command options processing  -*- lexical-binding:t -*-
 
-;; Copyright (C) 1999-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1999-2015 Free Software Foundation, Inc.
 
 ;; Author: John Wiegley <johnw@gnu.org>
 
@@ -82,7 +82,7 @@ and `eshell-stringify-list'.
 
 For example, OPTIONS might look like:
 
-  '((?C  nil         nil multi-column    \"multi-column display\")
+   ((?C  nil         nil multi-column    \"multi-column display\")
     (nil \"help\"      nil nil             \"show this usage display\")
     (?r  \"reverse\"   nil reverse-list    \"reverse order while sorting\")
     :external \"ls\"
@@ -178,9 +178,9 @@ This code doesn't really need to be macro expanded everywhere."
       (if extcmd
 	  (setq usage
 		(concat usage
-			(format "
+			(format-message "
 This command is implemented in Lisp.  If an unrecognized option is
-passed to this command, the external version '%s'
+passed to this command, the external version `%s'
 will be called instead." extcmd)))))
     (throw 'eshell-usage usage)))
 

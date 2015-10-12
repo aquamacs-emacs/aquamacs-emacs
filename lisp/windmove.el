@@ -1,6 +1,6 @@
 ;;; windmove.el --- directional window-selection routines
 ;;
-;; Copyright (C) 1998-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1998-2015 Free Software Foundation, Inc.
 ;;
 ;; Author: Hovav Shacham (hovav@cs.stanford.edu)
 ;; Created: 17 October 1998
@@ -479,17 +479,17 @@ DIR, ARG, and WINDOW are handled as by `windmove-other-window-loc'.
 If no window is at direction DIR, an error is signaled."
   (let ((other-window (windmove-find-other-window dir arg window)))
     (cond ((null other-window)
-           (error "No window %s from selected window" dir))
+           (user-error "No window %s from selected window" dir))
           ((and (window-minibuffer-p other-window)
                 (not (minibuffer-window-active-p other-window)))
-           (error "Minibuffer is inactive"))
+           (user-error "Minibuffer is inactive"))
           (t
            (select-window other-window)))))
 
 
 ;;; end-user functions
-;; these are all simple interactive wrappers to `windmove-do-
-;; window-select', meant to be bound to keys.
+;; these are all simple interactive wrappers to
+;; `windmove-do-window-select', meant to be bound to keys.
 
 ;;;###autoload
 (defun windmove-left (&optional arg)

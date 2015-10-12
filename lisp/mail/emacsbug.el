@@ -1,6 +1,6 @@
 ;;; emacsbug.el --- command to report Emacs bugs to appropriate mailing list
 
-;; Copyright (C) 1985, 1994, 1997-1998, 2000-2014 Free Software
+;; Copyright (C) 1985, 1994, 1997-1998, 2000-2015 Free Software
 ;; Foundation, Inc.
 
 ;; Author: K. Shane Hartman
@@ -42,11 +42,6 @@
 
 (define-obsolete-variable-alias 'report-emacs-bug-pretest-address
   'report-emacs-bug-address "24.1")
-
-(defcustom report-emacs-bug-address "bug-gnu-emacs@gnu.org"
-  "Address of mailing list for GNU Emacs bugs."
-  :group 'emacsbug
-  :type 'string)
 
 (defcustom report-emacs-bug-no-confirmation nil
   "If non-nil, suppress the confirmations asked for the sake of novice users."
@@ -146,13 +141,18 @@ This requires either the OS X \"open\" command, or the freedesktop
 			   (concat "mailto:" to)))
 	(error "Subject, To or body not found")))))
 
+;; It's the default mail mode, so it seems OK to use its features.
+(autoload 'message-bogus-recipient-p "message")
+(autoload 'message-make-address "message")
+(defvar message-send-mail-function)
+(defvar message-sendmail-envelope-from)
+
 ;;;###autoload
-(defun report-emacs-bug (topic &optional recent-keys)
+(defun report-emacs-bug (topic &optional unused)
   "Report a bug in GNU Emacs.
 Prompts for bug subject.  Leaves you in a mail buffer."
-  ;; This strange form ensures that (recent-keys) is the value before
-  ;; the bug subject string is read.
-  (interactive (reverse (list (recent-keys) (read-string "Bug Subject: "))))
+  (declare (advertised-calling-convention (topic) "24.5"))
+  (interactive "sBug Subject: ")
   ;; The syntax `version;' is preferred to `[version]' because the
   ;; latter could be mistakenly stripped by mailing software.
   (if (eq system-type 'ms-dos)
@@ -174,7 +174,12 @@ Prompts for bug subject.  Leaves you in a mail buffer."
       ;; that report-emacs-bug-orig-text remains valid.  (Bug#5178)
       (message-sort-headers)
       ;; Stop message-mode stealing the properties we will add.
-      (set (make-local-variable 'message-strip-special-text-properties) nil))
+      (set (make-local-variable 'message-strip-special-text-properties) nil)
+      ;; Make sure we default to the From: address as envelope when sending
+      ;; through sendmail.
+      (when (and (not message-sendmail-envelope-from)
+		 (message-bogus-recipient-p (message-make-address)))
+	(set (make-local-variable 'message-sendmail-envelope-from) 'header)))
     (rfc822-goto-eoh)
     (forward-line 1)
     ;; Move the mail signature to the proper place.
@@ -204,7 +209,7 @@ and may appear in other public locations.\n\n"
 
     (insert "If Emacs crashed, and you have the Emacs process in the gdb debugger,\n"
 	    "please include the output from the following gdb commands:\n"
-	    "    `bt full' and `xbacktrace'.\n")
+	    "    'bt full' and 'xbacktrace'.\n")
 
     (let ((debug-file (expand-file-name "DEBUG" data-directory)))
       (if (file-readable-p debug-file)
@@ -222,7 +227,7 @@ and may appear in other public locations.\n\n"
     (if (fboundp 'x-server-vendor)
 	(condition-case nil
             ;; This is used not only for X11 but also W32 and others.
-	    (insert "Windowing system distributor `" (x-server-vendor)
+	    (insert "Windowing system distributor '" (x-server-vendor)
                     "', version "
 		    (mapconcat 'number-to-string (x-server-version) ".") "\n")
 	    (error t))))
@@ -235,9 +240,11 @@ and may appear in other public locations.\n\n"
 	  (insert "System " lsb "\n")))
     (when (and system-configuration-options
 	       (not (equal system-configuration-options "")))
-      (insert "Configured using:\n `configure "
+      (insert "Configured using:\n 'configure "
 	      system-configuration-options "'\n\n")
       (fill-region (line-beginning-position -1) (point)))
+    (insert "Configured features:\n" system-configuration-features "\n\n")
+    (fill-region (line-beginning-position -1) (point))
     (insert "Important settings:\n")
     (mapc
      (lambda (var)
@@ -263,23 +270,6 @@ and may appear in other public locations.\n\n"
       (and (boundp mode) (buffer-local-value mode from-buffer)
 	   (insert (format "  %s: %s\n" mode
 			   (buffer-local-value mode from-buffer)))))
-    (insert "\n")
-    (insert "Recent input:\n")
-    (let ((before-keys (point)))
-      (insert (mapconcat (lambda (key)
-			   (if (or (integerp key)
-				   (symbolp key)
-				   (listp key))
-			       (single-key-description key)
-			     (prin1-to-string key nil)))
-			 (or recent-keys (recent-keys))
-			 " "))
-      (save-restriction
-	(narrow-to-region before-keys (point))
-	(goto-char before-keys)
-	(while (progn (move-to-column 50) (not (eobp)))
-	  (search-forward " " nil t)
-	  (insert "\n"))))
     (let ((message-buf (get-buffer "*Messages*")))
       (if message-buf
 	  (let (beg-pos
@@ -288,11 +278,11 @@ and may appear in other public locations.\n\n"
 	      (goto-char end-pos)
 	      (forward-line -10)
 	      (setq beg-pos (point)))
-	    (insert "\n\nRecent messages:\n")
+	    (insert "\nRecent messages:\n")
 	    (insert-buffer-substring message-buf beg-pos end-pos))))
     ;; After Recent messages, to avoid the messages produced by
     ;; list-load-path-shadows.
-    (unless (looking-back "\n")
+    (unless (looking-back "\n" (1- (point)))
       (insert "\n"))
     (insert "\n")
     (insert "Load-path shadows:\n")
@@ -312,7 +302,7 @@ and may appear in other public locations.\n\n"
 
     (insert (format "\nMemory information:\n"))
     (pp (garbage-collect) (current-buffer))
-    
+
     ;; This is so the user has to type something in order to send easily.
     (use-local-map (nconc (make-sparse-keymap) (current-local-map)))
     (define-key (current-local-map) "\C-c\C-i" 'info-emacs-bug)
@@ -353,10 +343,6 @@ and may appear in other public locations.\n\n"
     (goto-char user-point)))
 
 (define-obsolete-function-alias 'report-emacs-bug-info 'info-emacs-bug "24.3")
-
-;; It's the default mail mode, so it seems OK to use its features.
-(autoload 'message-bogus-recipient-p "message")
-(defvar message-send-mail-function)
 
 (defun report-emacs-bug-hook ()
   "Do some checking before sending a bug report."
@@ -418,7 +404,8 @@ and send the mail again%s."
 					 (regexp-quote (system-name)))
 				 from))
 	       (not (yes-or-no-p
-		     (format "Is `%s' really your email address? " from)))
+		     (format-message "Is `%s' really your email address? "
+                                     from)))
 	       (error "Please edit the From address and try again"))))))
 
 

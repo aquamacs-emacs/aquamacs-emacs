@@ -1,6 +1,6 @@
 ;;; tests/eshell.el --- Eshell test suite
 
-;; Copyright (C) 1999-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1999-2015 Free Software Foundation, Inc.
 
 ;; Author: John Wiegley <johnw@gnu.org>
 
@@ -165,6 +165,37 @@ e.g. \"{(+ 1 2)} 3\" => 3"
   (with-temp-eshell
    (eshell-command-result-p "+ 1 2; + $_ 4"
                              "3\n6\n")))
+
+(ert-deftest eshell-test/escape-nonspecial ()
+  "Test that \"\\c\" and \"c\" are equivalent when \"c\" is not a
+special character."
+  (with-temp-eshell
+   (eshell-command-result-p "echo he\\llo"
+                            "hello\n")))
+
+(ert-deftest eshell-test/escape-nonspecial-unicode ()
+  "Test that \"\\c\" and \"c\" are equivalent when \"c\" is a
+unicode character (unicode characters are nonspecial by
+definition)."
+  (with-temp-eshell
+   (eshell-command-result-p "echo Vid\\éos"
+                            "Vidéos\n")))
+
+(ert-deftest eshell-test/escape-nonspecial-quoted ()
+  "Test that the backslash is preserved for escaped nonspecial
+chars"
+  (with-temp-eshell
+   (eshell-command-result-p "echo \"h\\i\""
+                            ;; Backslashes are doubled for regexp.
+                            "h\\\\i\n")))
+
+(ert-deftest eshell-test/escape-special-quoted ()
+  "Test that the backslash is not preserved for escaped special
+chars"
+  (with-temp-eshell
+   (eshell-command-result-p "echo \"h\\\\i\""
+                            ;; Backslashes are doubled for regexp.
+                            "h\\\\i\n")))
 
 (ert-deftest eshell-test/command-running-p ()
   "Modeline should show no command running"

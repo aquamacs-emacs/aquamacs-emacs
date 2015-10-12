@@ -1,6 +1,6 @@
-;;; fringe.el --- fringe setup and control  -*- coding: utf-8 -*-
+;;; fringe.el --- fringe setup and control
 
-;; Copyright (C) 2002-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2002-2015 Free Software Foundation, Inc.
 
 ;; Author: Simon Josefsson <simon@josefsson.org>
 ;; Maintainer: emacs-devel@gnu.org
@@ -83,9 +83,9 @@
 		  (hollow-small . hollow-square))))
 
 
-(defmacro fringe-bitmap-p (symbol)
+(defun fringe-bitmap-p (symbol)
   "Return non-nil if SYMBOL is a fringe bitmap."
-  `(get ,symbol 'fringe))
+  (get symbol 'fringe))
 
 
 ;; Control presence of fringes

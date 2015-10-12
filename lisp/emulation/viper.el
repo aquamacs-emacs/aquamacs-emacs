@@ -3,7 +3,7 @@
 ;;		 and a venomous VI PERil.
 ;;		 Viper Is also a Package for Emacs Rebels.
 
-;; Copyright (C) 1994-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1994-2015 Free Software Foundation, Inc.
 
 ;; Author: Michael Kifer <kifer@cs.stonybrook.edu>
 ;; Keywords: emulations
@@ -819,7 +819,7 @@ It also can't undo some Viper settings."
 ;; fundamental
 (defun viper-major-mode-change-sentinel ()
   (save-match-data
-    (or (string-match "\*Minibuf-" (buffer-name))
+    (or (string-match "\\*Minibuf-" (buffer-name))
 	(setq viper-new-major-mode-buffer-list
 	      (cons (current-buffer) viper-new-major-mode-buffer-list))))
   ;; change the global value of hook

@@ -1,6 +1,6 @@
 ;;; gnus-cus.el --- customization commands for Gnus
 
-;; Copyright (C) 1996, 1999-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1996, 1999-2015 Free Software Foundation, Inc.
 
 ;; Author: Per Abrahamsen <abraham@dina.kvl.dk>
 ;; Keywords: news
@@ -272,7 +272,7 @@ DOC is a documentation string for the parameter.")
                (repeat (list (string :format "%v" :tag "File name"))))
        "Which score files to use when using score to select articles to fetch.
 
-    `nil'
+    nil
          All articles will be scored to zero (0).
 
     `file'
@@ -436,7 +436,7 @@ to the groups in this topic, then edit the value to suit your taste."
                                        :greedy t
                                        :tag "Agent Parameters"
                                        :format "%t:\n%h%v"
-                                       :doc "\ These agent parameters are
+                                       :doc "These agent parameters are
 recognized by Gnus.  They control article selection and expiration for
 use in the unplugged cache.  Check the [ ] for the parameters you want
 to apply to this group or to the groups in this topic, then edit the

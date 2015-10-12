@@ -1,6 +1,6 @@
 /* Like <fcntl.h>, but with non-working flags defined to 0.
 
-   Copyright (C) 2006-2014 Free Software Foundation, Inc.
+   Copyright (C) 2006-2015 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@
    extern "C" { ... } block, which leads to errors in C++ mode with the
    overridden <sys/stat.h> from gnulib.  These errors are known to be gone
    with g++ version >= 4.3.  */
-#if !(defined __GLIBC__ || defined __UCLIBC__) || (defined __cplusplus && defined GNULIB_NAMESPACE && !(__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)))
+#if !(defined __GLIBC__ || defined __UCLIBC__) || (defined __cplusplus && defined GNULIB_NAMESPACE && (defined __ICC || !(__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3))))
 # include <sys/stat.h>
 #endif
 #@INCLUDE_NEXT@ @NEXT_FCNTL_H@
@@ -53,7 +53,7 @@
    extern "C" { ... } block, which leads to errors in C++ mode with the
    overridden <sys/stat.h> from gnulib.  These errors are known to be gone
    with g++ version >= 4.3.  */
-#if !(defined __GLIBC__ || defined __UCLIBC__) || (defined __cplusplus && defined GNULIB_NAMESPACE && !(__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)))
+#if !(defined __GLIBC__ || defined __UCLIBC__) || (defined __cplusplus && defined GNULIB_NAMESPACE && (defined __ICC || !(__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3))))
 # include <sys/stat.h>
 #endif
 /* The include_next requires a split double-inclusion guard.  */

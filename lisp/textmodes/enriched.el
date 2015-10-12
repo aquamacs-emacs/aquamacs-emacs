@@ -1,6 +1,6 @@
 ;;; enriched.el --- read and save files in text/enriched format
 
-;; Copyright (C) 1994-1996, 2001-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1994-1996, 2001-2015 Free Software Foundation, Inc.
 
 ;; Author: Boris Goldowsky <boris@gnu.org>
 ;; Keywords: wp, faces
@@ -314,7 +314,8 @@ the region, and the START and END of each region."
 ;;;###autoload
 (defun enriched-encode (from to orig-buf)
   (if enriched-verbose (message "Enriched: encoding document..."))
-  (let ((inhibit-read-only t))
+  (let ((inhibit-read-only t)
+	(inhibit-point-motion-hooks t))
     (save-restriction
       (narrow-to-region from to)
       (delete-to-left-margin)

@@ -1,5 +1,5 @@
 /* Definitions and headers for communication on the Microsoft Windows API.
-   Copyright (C) 1995, 2001-2014 Free Software Foundation, Inc.
+   Copyright (C) 1995, 2001-2015 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -21,6 +21,22 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "w32gui.h"
 #include "frame.h"
 #include "atimer.h"
+
+/* Stack alignment stuff.  Every CALLBACK function should have the
+   ALIGN_STACK attribute if it manipulates Lisp objects, because
+   Windows x86 32-bit ABI only guarantees 4-byte stack alignment, and
+   that is what we will get when a Windows function calls us.  The
+   ALIGN_STACK attribute forces GCC to emit a preamble code to
+   re-align the stack at function entry.  Further details about this
+   can be found in http://www.peterstock.co.uk/games/mingw_sse/.  */
+#ifdef __GNUC__
+# if USE_STACK_LISP_OBJECTS && !defined _WIN64 && !defined __x86_64__	\
+  && __GNUC__ + (__GNUC_MINOR__ > 1) >= 5
+#  define ALIGN_STACK __attribute__((force_align_arg_pointer))
+# else
+#  define ALIGN_STACK
+# endif	 /* USE_STACK_LISP_OBJECTS */
+#endif
 
 
 #define BLACK_PIX_DEFAULT(f) PALETTERGB(0,0,0)
@@ -98,6 +114,9 @@ struct w32_display_info
 
   /* The cursor to use for vertical scroll bars.  */
   Cursor vertical_scroll_bar_cursor;
+
+  /* The cursor to use for horizontal scroll bars.  */
+  Cursor horizontal_scroll_bar_cursor;
 
   /* Resource data base */
   XrmDatabase xrdb;
@@ -194,11 +213,18 @@ struct w32_display_info
 
   /* Time of last mouse movement.  */
   Time last_mouse_movement_time;
+
+  /* Value returned by last call of ShowCursor.  */
+  int cursor_display_counter;
 };
 
 /* This is a chain of structures for all the displays currently in use.  */
 extern struct w32_display_info *x_display_list;
 extern struct w32_display_info one_w32_display_info;
+
+/* These 2 are set by w32fns.c and examined in w32term.c.  */
+extern HMENU current_popup_menu;
+extern int menubar_in_use;
 
 extern struct frame *x_window_to_frame (struct w32_display_info *, HWND);
 
@@ -213,14 +239,12 @@ Lisp_Object display_x_get_resource (struct w32_display_info *,
 extern struct w32_display_info *w32_term_init (Lisp_Object,
 					       char *, char *);
 extern int w32_defined_color (struct frame *f, const char *color,
-                              XColor *color_def, int alloc);
-extern void x_set_window_size (struct frame *f, int change_grav,
+                              XColor *color_def, bool alloc_p);
+extern void x_set_window_size (struct frame *f, bool change_gravity,
 			       int width, int height, bool pixelwise);
 extern int x_display_pixel_height (struct w32_display_info *);
 extern int x_display_pixel_width (struct w32_display_info *);
 extern Lisp_Object x_get_focus_frame (struct frame *);
-extern void x_set_mouse_position (struct frame *f, int h, int v);
-extern void x_set_mouse_pixel_position (struct frame *f, int pix_x, int pix_y);
 extern void x_make_frame_visible (struct frame *f);
 extern void x_make_frame_invisible (struct frame *f);
 extern void x_iconify_frame (struct frame *f);
@@ -229,8 +253,11 @@ extern void x_set_menu_bar_lines (struct frame *, Lisp_Object, Lisp_Object);
 extern void x_set_tool_bar_lines (struct frame *f,
                                   Lisp_Object value,
                                   Lisp_Object oldval);
+extern void x_set_internal_border_width (struct frame *f,
+					 Lisp_Object value,
+					 Lisp_Object oldval);
 extern void x_activate_menubar (struct frame *);
-extern int x_bitmap_icon (struct frame *, Lisp_Object);
+extern bool x_bitmap_icon (struct frame *, Lisp_Object);
 extern void initialize_frame_menubar (struct frame *);
 extern void x_free_frame_resources (struct frame *);
 extern void x_real_positions (struct frame *, int *, int *);
@@ -449,6 +476,9 @@ struct scroll_bar {
      place where the user grabbed it.  If the handle isn't currently
      being dragged, this is Qnil.  */
   int dragging;
+
+  /* true if the scroll bar is horizontal.  */
+  bool horizontal;
 };
 
 /* Turning a lisp vector value into a pointer to a struct scroll_bar.  */
@@ -463,8 +493,8 @@ struct scroll_bar {
   (XSETINT ((low),   ((DWORDLONG)(int64))        & 0xffffffff), \
    XSETINT ((high), ((DWORDLONG)(int64) >> 32) & 0xffffffff))
 #else  /* not _WIN64 */
-/* Building a 32-bit C integer from two 16-bit lisp integers.  */
-#define SCROLL_BAR_PACK(low, high) (XINT (high) << 16 | XINT (low))
+/* Building a 32-bit C unsigned integer from two 16-bit lisp integers.  */
+#define SCROLL_BAR_PACK(low, high) ((UINT_PTR)(XINT (high) << 16 | XINT (low)))
 
 /* Setting two lisp integers to the low and high words of a 32-bit C int.  */
 #define SCROLL_BAR_UNPACK(low, high, int32) \
@@ -482,9 +512,9 @@ struct scroll_bar {
 
 /* Return the inside width of a vertical scroll bar, given the outside
    width.  */
-#define VERTICAL_SCROLL_BAR_INSIDE_WIDTH(f,width) \
-  ((width) \
-   - VERTICAL_SCROLL_BAR_LEFT_BORDER \
+#define VERTICAL_SCROLL_BAR_INSIDE_WIDTH(f,width)	\
+  ((width)						\
+   - VERTICAL_SCROLL_BAR_LEFT_BORDER			\
    - VERTICAL_SCROLL_BAR_RIGHT_BORDER)
 
 /* Return the length of the rectangle within which the top of the
@@ -494,13 +524,35 @@ struct scroll_bar {
    This is the real range of motion for the scroll bar, so when we're
    scaling buffer positions to scroll bar positions, we use this, not
    VERTICAL_SCROLL_BAR_INSIDE_HEIGHT.  */
-#define VERTICAL_SCROLL_BAR_TOP_RANGE(f,height) \
+#define VERTICAL_SCROLL_BAR_TOP_RANGE(f,height)				\
   (VERTICAL_SCROLL_BAR_INSIDE_HEIGHT (f, height) - VERTICAL_SCROLL_BAR_MIN_HANDLE)
 
 /* Return the inside height of vertical scroll bar, given the outside
    height.  See VERTICAL_SCROLL_BAR_TOP_RANGE too.  */
-#define VERTICAL_SCROLL_BAR_INSIDE_HEIGHT(f,height) \
+#define VERTICAL_SCROLL_BAR_INSIDE_HEIGHT(f,height)			\
   ((height) - VERTICAL_SCROLL_BAR_TOP_BORDER - VERTICAL_SCROLL_BAR_BOTTOM_BORDER)
+
+/* Return the inside height of a horizontal scroll bar, given the
+   outside height.  */
+#define HORIZONTAL_SCROLL_BAR_INSIDE_HEIGHT(f,height) \
+  ((height)					      \
+   - HORIZONTAL_SCROLL_BAR_TOP_BORDER		      \
+   - HORIZONTAL_SCROLL_BAR_BOTTOM_BORDER)
+
+/* Return the length of the rectangle within which the left of the
+   handle must stay.  This isn't equivalent to the inside width,
+   because the scroll bar handle has a minimum width.
+
+   This is the real range of motion for the scroll bar, so when we're
+   scaling buffer positions to scroll bar positions, we use this, not
+   HORIZONTAL_SCROLL_BAR_INSIDE_WIDTH.  */
+#define HORIZONTAL_SCROLL_BAR_LEFT_RANGE(f,width)			\
+  (HORIZONTAL_SCROLL_BAR_INSIDE_WIDTH (f, width) - HORIZONTAL_SCROLL_BAR_MIN_HANDLE)
+
+/* Return the inside width of horizontal scroll bar, given the outside
+   width.  See HORIZONTAL_SCROLL_BAR_LEFT_RANGE too.  */
+#define HORIZONTAL_SCROLL_BAR_INSIDE_WIDTH(f,width)			\
+  ((width) - HORIZONTAL_SCROLL_BAR_LEFT_BORDER - HORIZONTAL_SCROLL_BAR_RIGHT_BORDER)
 
 
 /* Border widths for scroll bars.
@@ -519,8 +571,14 @@ struct scroll_bar {
 #define VERTICAL_SCROLL_BAR_TOP_BORDER (vertical_scroll_bar_top_border)
 #define VERTICAL_SCROLL_BAR_BOTTOM_BORDER (vertical_scroll_bar_bottom_border)
 
+#define HORIZONTAL_SCROLL_BAR_LEFT_BORDER (horizontal_scroll_bar_left_border)
+#define HORIZONTAL_SCROLL_BAR_RIGHT_BORDER (horizontal_scroll_bar_right_border)
+#define HORIZONTAL_SCROLL_BAR_TOP_BORDER (0)
+#define HORIZONTAL_SCROLL_BAR_BOTTOM_BORDER (0)
+
 /* Minimum lengths for scroll bar handles, in pixels.  */
 #define VERTICAL_SCROLL_BAR_MIN_HANDLE (vertical_scroll_bar_min_handle)
+#define HORIZONTAL_SCROLL_BAR_MIN_HANDLE (horizontal_scroll_bar_min_handle)
 
 struct frame;  /* from frame.h */
 
@@ -582,35 +640,38 @@ do { \
 #define WM_EMACS_KILL                  (WM_EMACS_START + 0)
 #define WM_EMACS_CREATEWINDOW          (WM_EMACS_START + 1)
 #define WM_EMACS_DONE                  (WM_EMACS_START + 2)
-#define WM_EMACS_CREATESCROLLBAR       (WM_EMACS_START + 3)
-#define WM_EMACS_SHOWWINDOW            (WM_EMACS_START + 4)
-#define WM_EMACS_SETWINDOWPOS          (WM_EMACS_START + 5)
-#define WM_EMACS_DESTROYWINDOW         (WM_EMACS_START + 6)
-#define WM_EMACS_TRACKPOPUPMENU        (WM_EMACS_START + 7)
-#define WM_EMACS_SETFOCUS              (WM_EMACS_START + 8)
-#define WM_EMACS_SETFOREGROUND         (WM_EMACS_START + 9)
-#define WM_EMACS_SETLOCALE             (WM_EMACS_START + 10)
-#define WM_EMACS_SETKEYBOARDLAYOUT     (WM_EMACS_START + 11)
-#define WM_EMACS_REGISTER_HOT_KEY      (WM_EMACS_START + 12)
-#define WM_EMACS_UNREGISTER_HOT_KEY    (WM_EMACS_START + 13)
-#define WM_EMACS_TOGGLE_LOCK_KEY       (WM_EMACS_START + 14)
-#define WM_EMACS_TRACK_CARET           (WM_EMACS_START + 15)
-#define WM_EMACS_DESTROY_CARET         (WM_EMACS_START + 16)
-#define WM_EMACS_SHOW_CARET            (WM_EMACS_START + 17)
-#define WM_EMACS_HIDE_CARET            (WM_EMACS_START + 18)
-#define WM_EMACS_SETCURSOR             (WM_EMACS_START + 19)
-#define WM_EMACS_PAINT                 (WM_EMACS_START + 20)
-#define WM_EMACS_BRINGTOTOP            (WM_EMACS_START + 21)
-#define WM_EMACS_INPUT_READY           (WM_EMACS_START + 22)
-#define WM_EMACS_FILENOTIFY            (WM_EMACS_START + 23)
-#define WM_EMACS_END                   (WM_EMACS_START + 24)
+#define WM_EMACS_CREATEVSCROLLBAR      (WM_EMACS_START + 3)
+#define WM_EMACS_CREATEHSCROLLBAR      (WM_EMACS_START + 4)
+#define WM_EMACS_SHOWWINDOW            (WM_EMACS_START + 5)
+#define WM_EMACS_SETWINDOWPOS          (WM_EMACS_START + 6)
+#define WM_EMACS_DESTROYWINDOW         (WM_EMACS_START + 7)
+#define WM_EMACS_TRACKPOPUPMENU        (WM_EMACS_START + 8)
+#define WM_EMACS_SETFOCUS              (WM_EMACS_START + 9)
+#define WM_EMACS_SETFOREGROUND         (WM_EMACS_START + 10)
+#define WM_EMACS_SETLOCALE             (WM_EMACS_START + 11)
+#define WM_EMACS_SETKEYBOARDLAYOUT     (WM_EMACS_START + 12)
+#define WM_EMACS_REGISTER_HOT_KEY      (WM_EMACS_START + 13)
+#define WM_EMACS_UNREGISTER_HOT_KEY    (WM_EMACS_START + 14)
+#define WM_EMACS_TOGGLE_LOCK_KEY       (WM_EMACS_START + 15)
+#define WM_EMACS_TRACK_CARET           (WM_EMACS_START + 16)
+#define WM_EMACS_DESTROY_CARET         (WM_EMACS_START + 17)
+#define WM_EMACS_SHOW_CARET            (WM_EMACS_START + 18)
+#define WM_EMACS_HIDE_CARET            (WM_EMACS_START + 19)
+#define WM_EMACS_SETCURSOR             (WM_EMACS_START + 20)
+#define WM_EMACS_SHOWCURSOR            (WM_EMACS_START + 21)
+#define WM_EMACS_PAINT                 (WM_EMACS_START + 22)
+#define WM_EMACS_BRINGTOTOP            (WM_EMACS_START + 23)
+#define WM_EMACS_INPUT_READY           (WM_EMACS_START + 24)
+#define WM_EMACS_FILENOTIFY            (WM_EMACS_START + 25)
+#define WM_EMACS_END                   (WM_EMACS_START + 26)
 
 #define WND_FONTWIDTH_INDEX    (0)
 #define WND_LINEHEIGHT_INDEX   (4)
 #define WND_BORDER_INDEX       (8)
-#define WND_SCROLLBAR_INDEX    (12)
-#define WND_BACKGROUND_INDEX   (16)
-#define WND_LAST_INDEX         (20)
+#define WND_VSCROLLBAR_INDEX   (12)
+#define WND_HSCROLLBAR_INDEX   (16)
+#define WND_BACKGROUND_INDEX   (20)
+#define WND_LAST_INDEX         (24)
 
 #define WND_EXTRA_BYTES     (WND_LAST_INDEX)
 
@@ -663,6 +724,8 @@ extern BOOL parse_button (int, int, int *, int *);
 
 extern void w32_sys_ring_bell (struct frame *f);
 extern void x_delete_display (struct w32_display_info *dpyinfo);
+
+extern void x_query_color (struct frame *, XColor *);
 
 extern volatile int notification_buffer_in_use;
 extern BYTE file_notifications[16384];
@@ -782,6 +845,7 @@ typedef char guichar_t;
 #define GUI_SDATA(x) ((guichar_t*) SDATA (x))
 
 extern Lisp_Object w32_popup_dialog (struct frame *, Lisp_Object, Lisp_Object);
+extern void w32_arrow_cursor (void);
 
 extern void syms_of_w32term (void);
 extern void syms_of_w32menu (void);

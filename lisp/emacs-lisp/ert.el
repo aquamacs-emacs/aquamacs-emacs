@@ -1,6 +1,6 @@
 ;;; ert.el --- Emacs Lisp Regression Testing  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2007-2008, 2010-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2007-2008, 2010-2015 Free Software Foundation, Inc.
 
 ;; Author: Christian Ohler <ohler@gnu.org>
 ;; Keywords: lisp, tools
@@ -187,7 +187,7 @@ using :expected-result.  See `ert-test-result-type-p' for a
 description of valid values for RESULT-TYPE.
 
 \(fn NAME () [DOCSTRING] [:expected-result RESULT-TYPE] \
-\[:tags '(TAG...)] BODY...)"
+[:tags '(TAG...)] BODY...)"
   (declare (debug (&define :name test
                            name sexp [&optional stringp]
 			   [&rest keywordp sexp] def-body))
@@ -269,7 +269,7 @@ DATA is displayed to the user and should state the reason for skipping."
 (defun ert--special-operator-p (thing)
   "Return non-nil if THING is a symbol naming a special operator."
   (and (symbolp thing)
-       (let ((definition (indirect-function thing t)))
+       (let ((definition (indirect-function thing)))
          (and (subrp definition)
               (eql (cdr (subr-arity definition)) 'unevalled)))))
 
@@ -887,10 +887,10 @@ Valid result types:
 nil -- Never matches.
 t -- Always matches.
 :failed, :passed, :skipped -- Matches corresponding results.
-\(and TYPES...\) -- Matches if all TYPES match.
-\(or TYPES...\) -- Matches if some TYPES match.
-\(not TYPE\) -- Matches if TYPE does not match.
-\(satisfies PREDICATE\) -- Matches if PREDICATE returns true when called with
+\(and TYPES...) -- Matches if all TYPES match.
+\(or TYPES...) -- Matches if some TYPES match.
+\(not TYPE) -- Matches if TYPE does not match.
+\(satisfies PREDICATE) -- Matches if PREDICATE returns true when called with
                            RESULT."
   ;; It would be easy to add `member' and `eql' types etc., but I
   ;; haven't bothered yet.
@@ -946,7 +946,7 @@ a test   -- (i.e., an object of the ert-test data-type) Selects that test.
 a symbol -- Selects the test that the symbol names, errors if none.
 \(member TESTS...) -- Selects the elements of TESTS, a list of tests
     or symbols naming tests.
-\(eql TEST\) -- Selects TEST, a test or a symbol naming a test.
+\(eql TEST) -- Selects TEST, a test or a symbol naming a test.
 \(and SELECTORS...) -- Selects the tests that match all SELECTORS.
 \(or SELECTORS...)  -- Selects the tests that match any of the SELECTORS.
 \(not SELECTOR)     -- Selects all tests that do not match SELECTOR.
@@ -1320,7 +1320,7 @@ RESULT must be an `ert-test-result-with-condition'."
         (unwind-protect
             (progn
               (insert message "\n")
-              (setq end (copy-marker (point)))
+              (setq end (point-marker))
               (goto-char begin)
               (insert "    " prefix)
               (forward-line 1)
@@ -1462,6 +1462,65 @@ the tests)."
           (backtrace))
       (kill-emacs 2))))
 
+
+(defun ert-summarize-tests-batch-and-exit ()
+  "Summarize the results of testing.
+Expects to be called in batch mode, with logfiles as command-line arguments.
+The logfiles should have the `ert-run-tests-batch' format.  When finished,
+this exits Emacs, with status as per `ert-run-tests-batch-and-exit'."
+  (or noninteractive
+      (user-error "This function is only for use in batch mode"))
+  (let ((nlogs (length command-line-args-left))
+        (ntests 0) (nrun 0) (nexpected 0) (nunexpected 0) (nskipped 0)
+        nnotrun logfile notests badtests unexpected)
+    (with-temp-buffer
+      (while (setq logfile (pop command-line-args-left))
+        (erase-buffer)
+        (insert-file-contents logfile)
+        (if (not (re-search-forward "^Running \\([0-9]+\\) tests" nil t))
+            (push logfile notests)
+          (setq ntests (+ ntests (string-to-number (match-string 1))))
+          (if (not (re-search-forward "^\\(Aborted: \\)?\
+Ran \\([0-9]+\\) tests, \\([0-9]+\\) results as expected\
+\\(?:, \\([0-9]+\\) unexpected\\)?\
+\\(?:, \\([0-9]+\\) skipped\\)?" nil t))
+              (push logfile badtests)
+            (if (match-string 1) (push logfile badtests))
+            (setq nrun (+ nrun (string-to-number (match-string 2)))
+                  nexpected (+ nexpected (string-to-number (match-string 3))))
+            (when (match-string 4)
+              (push logfile unexpected)
+              (setq nunexpected (+ nunexpected
+                                   (string-to-number (match-string 4)))))
+            (if (match-string 5)
+                (setq nskipped (+ nskipped
+                                  (string-to-number (match-string 5)))))))))
+    (setq nnotrun (- ntests nrun))
+    (message "\nSUMMARY OF TEST RESULTS")
+    (message "-----------------------")
+    (message "Files examined: %d" nlogs)
+    (message "Ran %d tests%s, %d results as expected%s%s"
+             nrun
+             (if (zerop nnotrun) "" (format ", %d failed to run" nnotrun))
+             nexpected
+             (if (zerop nunexpected)
+                 ""
+               (format ", %d unexpected" nunexpected))
+             (if (zerop nskipped)
+                 ""
+               (format ", %d skipped" nskipped)))
+    (when notests
+      (message "%d files did not contain any tests:" (length notests))
+      (mapc (lambda (l) (message "  %s" l)) notests))
+    (when badtests
+      (message "%d files did not finish:" (length badtests))
+      (mapc (lambda (l) (message "  %s" l)) badtests))
+    (when unexpected
+      (message "%d files contained unexpected results:" (length unexpected))
+      (mapc (lambda (l) (message "  %s" l)) unexpected))
+    (kill-emacs (cond ((or notests badtests (not (zerop nnotrun))) 2)
+                      (unexpected 1)
+                      (t 0)))))
 
 ;;; Utility functions for load/unload actions.
 
@@ -1790,7 +1849,9 @@ non-nil, returns the face for expected results.."
              (when (ert-test-documentation test)
                (insert "    "
                        (propertize
-                        (ert--string-first-line (ert-test-documentation test))
+                        (ert--string-first-line
+                         (substitute-command-keys
+                          (ert-test-documentation test)))
                         'font-lock-face 'font-lock-doc-face)
                        "\n"))
              (cl-etypecase result
@@ -2316,9 +2377,9 @@ To be used in the ERT results buffer."
            (ert--print-backtrace backtrace)
            (debugger-make-xrefs)
            (goto-char (point-min))
-           (insert "Backtrace for test `")
+           (insert (substitute-command-keys "Backtrace for test `"))
            (ert-insert-test-name-button (ert-test-name test))
-           (insert "':\n")))))))
+           (insert (substitute-command-keys "':\n"))))))))
 
 (defun ert-results-pop-to-messages-for-test-at-point ()
   "Display the part of the *Messages* buffer generated during the test at point.
@@ -2337,9 +2398,9 @@ To be used in the ERT results buffer."
         (ert-simple-view-mode)
         (insert (ert-test-result-messages result))
         (goto-char (point-min))
-        (insert "Messages for test `")
+        (insert (substitute-command-keys "Messages for test `"))
         (ert-insert-test-name-button (ert-test-name test))
-        (insert "':\n")))))
+        (insert (substitute-command-keys "':\n"))))))
 
 (defun ert-results-pop-to-should-forms-for-test-at-point ()
   "Display the list of `should' forms executed during the test at point.
@@ -2367,9 +2428,10 @@ To be used in the ERT results buffer."
                      (ert--pp-with-indentation-and-newline form-description)
                      (ert--make-xrefs-region begin (point)))))
         (goto-char (point-min))
-        (insert "`should' forms executed during test `")
+        (insert (substitute-command-keys
+                 "`should' forms executed during test `"))
         (ert-insert-test-name-button (ert-test-name test))
-        (insert "':\n")
+        (insert (substitute-command-keys "':\n"))
         (insert "\n")
         (insert (concat "(Values are shallow copies and may have "
                         "looked different during the test if they\n"
@@ -2446,9 +2508,11 @@ To be used in the ERT results buffer."
           (let ((file-name (and test-name
                                 (symbol-file test-name 'ert-deftest))))
             (when file-name
-              (insert " defined in `" (file-name-nondirectory file-name) "'")
+              (insert (format-message " defined in `%s'"
+                                      (file-name-nondirectory file-name)))
               (save-excursion
-                (re-search-backward "`\\([^`']+\\)'" nil t)
+                (re-search-backward (substitute-command-keys "`\\([^`']+\\)'")
+                                    nil t)
                 (help-xref-button 1 'help-function-def test-name file-name)))
             (insert ".")
             (fill-region-as-paragraph (point-min) (point))
@@ -2460,8 +2524,9 @@ To be used in the ERT results buffer."
                         "this documentation refers to an old definition.")
                 (fill-region-as-paragraph begin (point)))
               (insert "\n\n"))
-            (insert (or (ert-test-documentation test-definition)
-                        "It is not documented.")
+            (insert (substitute-command-keys
+                     (or (ert-test-documentation test-definition)
+                         "It is not documented."))
                     "\n")))))))
 
 (defun ert-results-describe-test-at-point ()
@@ -2478,7 +2543,7 @@ To be used in the ERT results buffer."
 (add-to-list 'minor-mode-alist '(ert--current-run-stats
                                  (:eval
                                   (ert--tests-running-mode-line-indicator))))
-(add-to-list 'emacs-lisp-mode-hook 'ert--activate-font-lock-keywords)
+(add-hook 'emacs-lisp-mode-hook #'ert--activate-font-lock-keywords)
 
 (defun ert--unload-function ()
   "Unload function to undo the side-effects of loading ert.el."
@@ -2489,7 +2554,7 @@ To be used in the ERT results buffer."
   nil)
 
 (defvar ert-unload-hook '())
-(add-hook 'ert-unload-hook 'ert--unload-function)
+(add-hook 'ert-unload-hook #'ert--unload-function)
 
 
 (provide 'ert)

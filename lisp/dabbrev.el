@@ -1,6 +1,6 @@
 ;;; dabbrev.el --- dynamic abbreviation package  -*- lexical-binding: t -*-
 
-;; Copyright (C) 1985-1986, 1992, 1994, 1996-1997, 2000-2014 Free
+;; Copyright (C) 1985-1986, 1992, 1994, 1996-1997, 2000-2015 Free
 ;; Software Foundation, Inc.
 
 ;; Author: Don Morrison
@@ -120,7 +120,7 @@
 
 Example: Set this to \"\\\\$\" for programming languages
 in which variable names may appear with or without a leading `$'.
-\(For example, in Makefiles.\)
+\(For example, in Makefiles.)
 
 Set this to nil if no characters should be skipped."
   :type '(choice regexp
@@ -534,7 +534,7 @@ See also `dabbrev-abbrev-char-regexp' and \\[dabbrev-completion]."
       (if (not (or (eq dabbrev--last-buffer dabbrev--last-buffer-found)
 		   (minibuffer-window-active-p (selected-window))))
 	  (progn
-	    (message "Expansion found in '%s'"
+	    (message "Expansion found in `%s'"
 		     (buffer-name dabbrev--last-buffer))
 	    (setq dabbrev--last-buffer-found dabbrev--last-buffer))
 	(message nil))

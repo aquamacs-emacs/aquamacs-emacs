@@ -1,8 +1,8 @@
 \input texinfo   @c -*- mode: texinfo; -*-
 @c %**start of header
-@setfilename ../../info/efaq
+@setfilename ../../info/efaq.info
 @settitle GNU Emacs FAQ
-@documentencoding UTF-8
+@include docstyle.texi
 @c %**end of header
 
 @include emacsver.texi
@@ -12,7 +12,7 @@
 @c appreciate a notice if you do).
 
 @copying
-Copyright @copyright{} 2001--2014 Free Software Foundation, Inc.@*
+Copyright @copyright{} 2001--2015 Free Software Foundation, Inc.@*
 Copyright @copyright{} 1994, 1995, 1996, 1997, 1998, 1999, 2000
 Reuven M. Lerner@*
 Copyright @copyright{} 1992, 1993 Steven Byrnes@*
@@ -861,7 +861,6 @@ You can get Tkinfo at
 @cindex Files included with Emacs
 @cindex @file{COPYING}, description of file
 @cindex @file{DISTRIB}, description of file
-@cindex @file{GNU}, description of file
 @cindex @file{MACHINES}, description of file
 @cindex @file{NEWS}, description of file
 
@@ -882,9 +881,6 @@ GNU General Public License
 
 @item DISTRIB
 Emacs Availability Information
-
-@item GNU
-The GNU Manifesto
 
 @item MACHINES
 Status of Emacs on Various Machines and Systems
@@ -988,10 +984,8 @@ version; three components indicate a development
 version (e.g., @samp{23.0.50} is what will eventually become @samp{23.1}).
 
 Emacs is under active development, hosted at
-@uref{http://savannah.gnu.org/projects/emacs/, Savannah}.  The source
-code can be retrieved anonymously following the
-@uref{http://savannah.gnu.org/bzr/?group=emacs, instructions}.
-The repository is GNU Bazaar.
+@uref{http://savannah.gnu.org/projects/emacs/, Savannah}.
+Follow the instructions given there to clone the project repository.
 
 Because Emacs undergoes many changes before a release, the version
 number of a development version is not especially meaningful.  It is
@@ -1481,7 +1475,7 @@ machine at which Emacs was invoked.  This is done by setting
 @code{frame-title-format} to the default value of
 
 @lisp
-(multiple-frames "%b" ("" invocation-name "@@" system-name))
+(multiple-frames "%b" ("" invocation-name "@@" (system-name)))
 @end lisp
 
 To modify the behavior such that frame titlebars contain the buffer's
@@ -2101,8 +2095,8 @@ parenthesis, it simply inserts a % like normal.
 (defun match-paren (arg)
   "Go to the matching paren if on a paren; otherwise insert %."
   (interactive "p")
-  (cond ((looking-at "\\s\(") (forward-list 1) (backward-char 1))
-        ((looking-at "\\s\)") (forward-char 1) (backward-list 1))
+  (cond ((looking-at "\\s(") (forward-list 1) (backward-char 1))
+        ((looking-at "\\s)") (forward-char 1) (backward-list 1))
         (t (self-insert-command (or arg 1)))))
 @end lisp
 
@@ -2686,8 +2680,16 @@ variable in the environment.
 @cindex Maximize frame
 @cindex Fullscreen mode
 
-Use the function @code{w32-send-sys-command}.  For example, you can
-put the following in your @file{.emacs} file:
+Beginning with Emacs 24.4 either run Emacs with the @samp{--maximized}
+command-line option or put the following form in your @file{.emacs}
+file:
+
+@lisp
+(add-hook 'emacs-startup-hook 'toggle-frame-maximized)
+@end lisp
+
+With older versions use the function @code{w32-send-sys-command}.  For
+example, you can put the following in your @file{.emacs} file:
 
 @lisp
 (add-hook 'emacs-startup-hook
@@ -3674,7 +3676,7 @@ for deleting the previous character outside of Emacs.  On many Unix
 systems, this command will remap @key{DEL}:
 
 @example
-stty erase `^?'
+stty erase '^?'
 @end example
 
 @item
@@ -3770,8 +3772,8 @@ You can swap two keys (or key sequences) by using the
 into @key{DEL} and @key{DEL} to @kbd{C-h}, use
 
 @lisp
-(keyboard-translate ?\C-h ?\C-?)  ; translate `C-h' to DEL
-(keyboard-translate ?\C-? ?\C-h)  ; translate DEL to `C-h'.
+(keyboard-translate ?\C-h ?\C-?)  ; translate 'C-h' to DEL
+(keyboard-translate ?\C-? ?\C-h)  ; translate DEL to 'C-h'.
 @end lisp
 
 @noindent
@@ -4202,7 +4204,6 @@ fontset, or you can select it by setting the default font in your
 * Replying to the sender of a message::
 * Automatically starting a mail or news reader::
 * Reading news with Emacs::
-* Gnus does not work with NNTP::
 * Making Gnus faster::
 * Catching up in all newsgroups::
 @end menu
@@ -4395,27 +4396,6 @@ Use @kbd{M-x gnus}.  For more information on Gnus, @pxref{Top,, the Gnus
 Manual, gnus, The Gnus Manual}, which includes @ref{Frequently Asked
 Questions,, the Gnus FAQ, gnus, The Gnus Manual}.
 
-
-@node Gnus does not work with NNTP
-@section Why doesn't Gnus work via NNTP?
-@cindex Gnus and NNTP
-@cindex NNTP, Gnus fails to work with
-
-There is a bug in NNTP version 1.5.10, such that when multiple requests
-are sent to the NNTP server, the server only handles the first one
-before blocking waiting for more input which never comes.  NNTP version
-1.5.11 claims to fix this.
-
-You can work around the bug inside Emacs like this:
-
-@lisp
-(setq nntp-maximum-request 1)
-@end lisp
-
-You can find out what version of NNTP your news server is running by
-telnetting to the NNTP port (usually 119) on the news server machine
-(i.e., @kbd{telnet server-machine 119}).  The server should give its
-version number in the welcome message.  Type @kbd{quit} to get out.
 
 @node Making Gnus faster
 @section How do I make Gnus faster?

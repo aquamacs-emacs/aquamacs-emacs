@@ -1,6 +1,6 @@
 ;;;; soap-client.el -- Access SOAP web services from Emacs
 
-;; Copyright (C) 2009-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2009-2015 Free Software Foundation, Inc.
 
 ;; Author: Alexandru Harsanyi <AlexHarsanyi@gmail.com>
 ;; Created: December, 2009
@@ -51,7 +51,8 @@
 
 (defsubst soap-warning (message &rest args)
   "Display a warning MESSAGE with ARGS, using the 'soap-client warning type."
-  (display-warning 'soap-client (apply 'format message args) :warning))
+  (display-warning 'soap-client (apply #'format-message message args)
+                   :warning))
 
 (defgroup soap-client nil
   "Access SOAP web services from Emacs."
@@ -166,7 +167,7 @@ namespace of LOCAL-NAME."
   "Convert LOCAL-NAME into a fully qualified name.
 A fully qualified name is a cons of the namespace name and the
 name of the element itself.  For example \"xsd:string\" is
-converted to \(\"http://www.w3.org/2001/XMLSchema\" . \"string\"\).
+converted to \(\"http://www.w3.org/2001/XMLSchema\" . \"string\").
 
 The USE-TNS argument specifies what to do when LOCAL-NAME has no
 namespace tag.  If USE-TNS is non-nil, the `soap-target-xmlns'
@@ -488,9 +489,9 @@ structure predicate for the type of element you want to retrieve.
 For example, to retrieve a message named \"foo\" when other
 elements named \"foo\" exist in the WSDL you could use:
 
-  (soap-wsdl-get \"foo\" WSDL 'soap-message-p)
+  (soap-wsdl-get \"foo\" WSDL \\='soap-message-p)
 
-If USE-LOCAL-ALIAS-TABLE is not nil, `soap-local-xmlns` will be
+If USE-LOCAL-ALIAS-TABLE is not nil, `soap-local-xmlns' will be
 used to resolve the namespace alias."
   (let ((alias-table (soap-wsdl-alias-table wsdl))
         namespace element-name element)
@@ -1818,9 +1819,9 @@ operations in a WSDL document."
 (provide 'soap-client)
 
 
-;;; Local Variables:
-;;; eval: (outline-minor-mode 1)
-;;; outline-regexp: ";;;;+"
-;;; End:
+;; Local Variables:
+;; eval: (outline-minor-mode 1)
+;; outline-regexp: ";;;;+"
+;; End:
 
 ;;; soap-client.el ends here

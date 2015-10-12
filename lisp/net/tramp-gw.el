@@ -1,6 +1,6 @@
 ;;; tramp-gw.el --- Tramp utility functions for HTTP tunnels and SOCKS gateways
 
-;; Copyright (C) 2007-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2007-2015 Free Software Foundation, Inc.
 
 ;; Author: Michael Albinus <michael.albinus@gmx.de>
 ;; Keywords: comm, processes
@@ -126,8 +126,11 @@
 
 (defun tramp-gw-process-filter (proc string)
   (let ((tramp-verbose 0))
-    (process-send-string
-     (tramp-get-connection-property proc "process" nil) string)))
+    ;; The other process might have been stopped already.  We don't
+    ;; want to be interrupted then.
+    (ignore-errors
+      (process-send-string
+       (tramp-get-connection-property proc "process" nil) string))))
 
 ;;;###tramp-autoload
 (defun tramp-gw-open-connection (vec gw-vec target-vec)
@@ -195,11 +198,12 @@ instead of the host name declared in TARGET-VEC."
     (setq tramp-gw-gw-proc
 	  (funcall
 	   socks-function
-	   (tramp-get-connection-name gw-vec)
-	   (tramp-get-connection-buffer gw-vec)
+	   (let ((tramp-verbose 0)) (tramp-get-connection-name gw-vec))
+	   (let ((tramp-verbose 0)) (tramp-get-connection-buffer gw-vec))
 	   (tramp-file-name-real-host target-vec)
 	   (tramp-file-name-port target-vec)))
     (set-process-sentinel tramp-gw-gw-proc 'tramp-gw-gw-proc-sentinel)
+    (set-process-coding-system tramp-gw-gw-proc 'binary 'binary)
     (tramp-compat-set-process-query-on-exit-flag tramp-gw-gw-proc nil)
     (tramp-message
      vec 4 "Opened %s process `%s'"
@@ -260,6 +264,10 @@ authentication is requested from proxy server, provide it."
 	  (200 (setq found t))
 	  ;; We need basic authentication.
 	  (401 (setq authentication (tramp-gw-basic-authentication nil first)))
+	  ;; Access forbidden.
+	  (403 (tramp-error-with-buffer
+		(current-buffer) tramp-gw-vector 'file-error
+		"Connection to %s:%d forbidden." host service))
 	  ;; Target host not found.
 	  (404 (tramp-error-with-buffer
 		(current-buffer) tramp-gw-vector 'file-error

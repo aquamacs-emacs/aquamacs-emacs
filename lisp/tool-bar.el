@@ -1,6 +1,6 @@
 ;;; tool-bar.el --- setting up the tool bar
 
-;; Copyright (C) 2000-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2000-2015 Free Software Foundation, Inc.
 
 ;; Author: Dave Love <fx@gnu.org>
 ;; Keywords: mouse frames
@@ -242,8 +242,8 @@ ICON.pbm, and finally ICON.xbm, using `find-image'."
 	 (images (cdr is))) 
     (when (and (display-images-p) image)
     (define-key-after map (vector key)
-	`(menu-item ,(symbol-name key)
-		    ,def :image ,images ,@props)))))
+      `(menu-item ,(symbol-name key) ,def :image ,image-exp ,@props))
+    (force-mode-line-update))))
 
 
 ;;;###autoload
@@ -315,7 +315,8 @@ holds a keymap."
             (if (and (consp rest) (consp (car rest)))
                 (setq rest (cdr rest)))
             (append `(menu-item ,(car defn) ,rest)
-		      (list :image image) props))))))))
+                    (list :image image-exp) props))))
+      (force-mode-line-update)))))
 
 ;;; Set up some global items.  Additions/deletions up for grabs.
 

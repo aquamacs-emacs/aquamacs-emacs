@@ -1,6 +1,6 @@
 ;;; ox-odt.el --- OpenDocument Text Exporter for Org Mode
 
-;; Copyright (C) 2010-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2010-2015 Free Software Foundation, Inc.
 
 ;; Author: Jambunathan K <kjambunathan at gmail dot com>
 ;; Keywords: outlines, hypermedia, calendar, wp
@@ -231,13 +231,13 @@ standard Emacs.")
 (defvar org-odt-automatic-styles '()
   "Registry of automatic styles for various OBJECT-TYPEs.
 The variable has the following form:
-\(\(OBJECT-TYPE-A
-  \(\(OBJECT-NAME-A.1 OBJECT-PROPS-A.1\)
-   \(OBJECT-NAME-A.2 OBJECT-PROPS-A.2\) ...\)\)
- \(OBJECT-TYPE-B
-  \(\(OBJECT-NAME-B.1 OBJECT-PROPS-B.1\)
-   \(OBJECT-NAME-B.2 OBJECT-PROPS-B.2\) ...\)\)
- ...\).
+ ((OBJECT-TYPE-A
+   ((OBJECT-NAME-A.1 OBJECT-PROPS-A.1)
+    (OBJECT-NAME-A.2 OBJECT-PROPS-A.2) ...))
+  (OBJECT-TYPE-B
+   ((OBJECT-NAME-B.1 OBJECT-PROPS-B.1)
+    (OBJECT-NAME-B.2 OBJECT-PROPS-B.2) ...))
+  ...).
 
 OBJECT-TYPEs could be \"Section\", \"Table\", \"Figure\" etc.
 OBJECT-PROPS is (typically) a plist created by passing
@@ -262,7 +262,8 @@ This style is much the same as that of \"OrgFixedWidthBlock\"
 except that the foreground and background colors are set
 according to the default face identified by the `htmlfontify'.")
 
-(defvar hfy-optimisations)
+(defvar hfy-optimizations)
+(define-obsolete-variable-alias 'hfy-optimisations 'hfy-optimizations "25.1")
 (defvar org-odt-embedded-formulas-count 0)
 (defvar org-odt-embedded-images-count 0)
 (defvar org-odt-image-size-probe-method
@@ -291,7 +292,7 @@ according to the default face identified by the `htmlfontify'.")
 
 This is an alist where each element is of the form:
 
-  \(STYLE-NAME ATTACH-FMT REF-MODE REF-FMT)
+  (STYLE-NAME ATTACH-FMT REF-MODE REF-FMT)
 
 ATTACH-FMT controls how labels and captions are attached to an
 entity.  It may contain following specifiers - %e and %c.  %e is
@@ -318,7 +319,7 @@ See also `org-odt-format-label'.")
 
 This is a list where each entry is of the form:
 
-  \(CATEGORY-HANDLE OD-VARIABLE LABEL-STYLE CATEGORY-NAME ENUMERATOR-PREDICATE)
+  (CATEGORY-HANDLE OD-VARIABLE LABEL-STYLE CATEGORY-NAME ENUMERATOR-PREDICATE)
 
 CATEGORY_HANDLE identifies the captionable entity in question.
 
@@ -669,11 +670,11 @@ The default value simply returns the value of CONTENTS."
   "Function to format headline text.
 
 This function will be called with 5 arguments:
-TODO      the todo keyword \(string or nil\).
-TODO-TYPE the type of todo \(symbol: `todo', `done', nil\)
-PRIORITY  the priority of the headline \(integer or nil\)
-TEXT      the main headline text \(string\).
-TAGS      the tags string, separated with colons \(string or nil\).
+TODO      the todo keyword (string or nil).
+TODO-TYPE the type of todo (symbol: `todo', `done', nil)
+PRIORITY  the priority of the headline (integer or nil)
+TEXT      the main headline text (string).
+TAGS      the tags string, separated with colons (string or nil).
 
 The function result will be used as headline text."
   :group 'org-export-odt
@@ -846,16 +847,16 @@ TABLE-CELL-STYLE-SELECTOR := `use-first-row-styles'       |
                              `use-banding-rows-styles'    |
                              `use-banding-columns-styles' |
                              `use-first-row-styles'
-ON-OR-OFF                 := `t' | `nil'
+ON-OR-OFF                 := t | nil
 
 For example, with the following configuration
 
 \(setq org-odt-table-styles
-      '\(\(\"TableWithHeaderRowsAndColumns\" \"Custom\"
-         \(\(use-first-row-styles . t\)
-          \(use-first-column-styles . t\)\)\)
-        \(\"TableWithHeaderColumns\" \"Custom\"
-         \(\(use-first-column-styles . t\)\)\)\)\)
+      '((\"TableWithHeaderRowsAndColumns\" \"Custom\"
+         ((use-first-row-styles . t)
+          (use-first-column-styles . t)))
+        (\"TableWithHeaderColumns\" \"Custom\"
+         ((use-first-column-styles . t)))))
 
 1. A table associated with \"TableWithHeaderRowsAndColumns\"
    style will use the following table-cell styles -
@@ -1388,8 +1389,8 @@ original parsed data.  INFO is a plist holding export options."
 	 ((member styles-file-type '("odt" "ott"))
 	  (org-odt--zip-extract styles-file "styles.xml" org-odt-zip-dir)))))
      (t
-      (error (format "Invalid specification of styles.xml file: %S"
-		     org-odt-styles-file))))
+      (error "Invalid specification of styles.xml file: %S"
+             org-odt-styles-file)))
 
     ;; create a manifest entry for styles.xml
     (org-odt-create-manifest-file-entry "text/xml" "styles.xml")
@@ -3116,8 +3117,8 @@ and prefix with \"OrgSrc\".  For example,
 			       (" " "<text:s/>")
 			       ("	" "<text:tab/>")))
 	 (hfy-face-to-css 'org-odt-hfy-face-to-css)
-	 (hfy-optimisations-1 (copy-sequence hfy-optimisations))
-	 (hfy-optimisations (add-to-list 'hfy-optimisations-1
+	 (hfy-optimizations-1 (copy-sequence hfy-optimizations))
+	 (hfy-optimizations (add-to-list 'hfy-optimizations-1
 					 'body-text-only))
 	 (hfy-begin-span-handler
 	  (lambda (style text-block text-id text-begins-block-p)
@@ -3139,7 +3140,7 @@ and prefix with \"OrgSrc\".  For example,
 		 (with-temp-buffer
 		   (insert code)
 		   (funcall lang-mode)
-		   (font-lock-fontify-buffer)
+		   (org-font-lock-ensure)
 		   (buffer-string))))
 	 (fontifier (if use-htmlfontify-p 'org-odt-htmlfontify-string
 		      'org-odt--encode-plain-text))
@@ -3260,7 +3261,7 @@ contextual information."
   "Retrieve styles applicable to a table cell.
 R and C are (zero-based) row and column numbers of the table
 cell.  STYLE-SPEC is an entry in `org-odt-table-styles'
-applicable to the current table.  It is `nil' if the table is not
+applicable to the current table.  It is nil if the table is not
 associated with any style attributes.
 
 Return a cons of (TABLE-CELL-STYLE-NAME . PARAGRAPH-STYLE-NAME).
@@ -4088,8 +4089,8 @@ contextual information."
 					 nil standard-output nil (cdr cmd)))))
 		    (or (zerop exitcode)
 			(error (concat "Unable to create OpenDocument file."
-				       (format "  Zip failed with error (%s)"
-					       err-string)))))
+				       "  Zip failed with error (%s)")
+			       err-string)))
 		  cmds)))
 	     ;; Move the zip file from temporary work directory to
 	     ;; user-mandated location.

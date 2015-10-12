@@ -1,5 +1,5 @@
 /* Window definitions for GNU Emacs.
-   Copyright (C) 1985-1986, 1993, 1995, 1997-2014 Free Software
+   Copyright (C) 1985-1986, 1993, 1995, 1997-2015 Free Software
    Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -128,20 +128,36 @@ struct window
        each one can have its own value of point.  */
     Lisp_Object pointm;
 
+    /* A marker pointing to where in the text point was in this window
+       at the time of last redisplay.  The value is saved for the
+       selected window too.  */
+    Lisp_Object old_pointm;
+
     /* No permanent meaning; used by save-window-excursion's
        bookkeeping.  */
     Lisp_Object temslot;
 
-    /* This window's vertical scroll bar.  This field is only for use
-       by the window-system-dependent code which implements the
-       scroll bars; it can store anything it likes here.  If this
-       window is newly created and we haven't displayed a scroll bar in
-       it yet, or if the frame doesn't have any scroll bars, this is nil.  */
+    /* This window's vertical scroll bar.  This field is only for use by
+       the window-system-dependent code which implements the scroll
+       bars; it can store anything it likes here.  If this window is
+       newly created and we haven't displayed a scroll bar in it yet, or
+       if the frame doesn't have any scroll bars, this is nil.  */
     Lisp_Object vertical_scroll_bar;
 
     /* Type of vertical scroll bar.  A value of nil means
        no scroll bar.  A value of t means use frame value.  */
     Lisp_Object vertical_scroll_bar_type;
+
+    /* This window's horizontal scroll bar.  This field is only for use
+       by the window-system-dependent code which implements the scroll
+       bars; it can store anything it likes here.  If this window is
+       newly created and we haven't displayed a scroll bar in it yet, or
+       if the frame doesn't have any scroll bars, this is nil.  */
+    Lisp_Object horizontal_scroll_bar;
+
+    /* Type of horizontal scroll bar.  A value of nil means
+       no scroll bar.  A value of t means use frame value.  */
+    Lisp_Object horizontal_scroll_bar_type;
 
     /* Display-table to use for displaying chars in this window.
        Nil means use the buffer's own display-table.  */
@@ -179,10 +195,10 @@ struct window
     Lisp_Object next_buffers;
 
     /* Number saying how recently window was selected.  */
-    int use_time;
+    EMACS_INT use_time;
 
     /* Unique number of window assigned when it was created.  */
-    int sequence_number;
+    EMACS_INT sequence_number;
 
     /* The upper left corner pixel coordinates of this window, as
        integers relative to upper left corner of frame = 0, 0.  */
@@ -208,6 +224,10 @@ struct window
     /* Minimum hscroll for automatic hscrolling.  This is the value
        the user has set, by set-window-hscroll for example.  */
     ptrdiff_t min_hscroll;
+
+    /* Maximum line length in pixels within window bound by size of
+       window (set up by set_horizontal_scroll_bar).  */
+    ptrdiff_t hscroll_whole;
 
     /* Displayed buffer's text modification events counter as of last time
        display completed.  */
@@ -236,7 +256,7 @@ struct window
 
     /* Scaling factor for the glyph_matrix size calculation in this window.
        Used if window contains many small images or uses proportional fonts,
-       as the normal  may yield a matrix which is too small.  */
+       as the normal may yield a matrix which is too small.  */
     int nrows_scale_factor, ncols_scale_factor;
 
     /* Intended cursor position.   This is a position within the
@@ -282,6 +302,10 @@ struct window
        A value of -1 means use frame values.  */
     int scroll_bar_width;
 
+    /* Pixel height of scroll bars.
+       A value of -1 means use frame values.  */
+    int scroll_bar_height;
+
     /* Effective height of the mode line, or -1 if not known.  */
     int mode_line_height;
 
@@ -299,7 +323,7 @@ struct window
     /* True if this window is a minibuffer window.  */
     bool_bf mini : 1;
 
-    /* Meaningful only if contents is a window, non-zero if this
+    /* Meaningful only if contents is a window, true if this
        internal window is used in horizontal combination.  */
     bool_bf horizontal : 1;
 
@@ -355,6 +379,10 @@ struct window
     /* True if it needs to be redisplayed.  */
     bool_bf redisplay : 1;
 
+    /* True if auto hscrolling is currently suspended in this
+       window.  */
+    bool_bf suspend_auto_hscroll : 1;
+
     /* Amount by which lines of this window are scrolled in
        y-direction (smooth scrolling).  */
     int vscroll;
@@ -403,6 +431,18 @@ wset_vertical_scroll_bar (struct window *w, Lisp_Object val)
 }
 
 INLINE void
+wset_horizontal_scroll_bar (struct window *w, Lisp_Object val)
+{
+  w->horizontal_scroll_bar = val;
+}
+
+INLINE void
+wset_horizontal_scroll_bar_type (struct window *w, Lisp_Object val)
+{
+  w->horizontal_scroll_bar_type = val;
+}
+
+INLINE void
 wset_prev_buffers (struct window *w, Lisp_Object val)
 {
   w->prev_buffers = val;
@@ -415,8 +455,17 @@ wset_next_buffers (struct window *w, Lisp_Object val)
 }
 
 /* True if W is a minibuffer window.  */
+#define MINI_WINDOW_P(W) ((W)->mini)
 
-#define MINI_WINDOW_P(W)	((W)->mini)
+/* 1 if W is a non-only minibuffer window.  */
+/* The first check is redundant and the second overly complicated. */
+#define MINI_NON_ONLY_WINDOW_P(W)				\
+  (MINI_WINDOW_P (W)						\
+   && (EQ (W->prev, FRAME_ROOT_WINDOW (WINDOW_XFRAME (W)))))
+
+/* 1 if W is a minibuffer-only window.  */
+#define MINI_ONLY_WINDOW_P(W)			\
+  (MINI_WINDOW_P (W) && NILP (W->prev))
 
 /* General window layout:
 
@@ -460,16 +509,17 @@ wset_next_buffers (struct window *w, Lisp_Object val)
 #define WINDOW_VERTICAL_COMBINATION_P(W) \
   (WINDOWP ((W)->contents) && !(W)->horizontal)
 
-#define WINDOW_XFRAME(W) \
-  (XFRAME (WINDOW_FRAME ((W))))
+/* WINDOW's XFRAME.  */
+#define WINDOW_XFRAME(W) (XFRAME (WINDOW_FRAME ((W))))
+
+/* Whether WINDOW is a pseudo window.  */
+#define WINDOW_PSEUDO_P(W) ((W)->pseudo_window_p)
 
 /* Return the canonical column width of the frame of window W.  */
-
 #define WINDOW_FRAME_COLUMN_WIDTH(W) \
   (FRAME_COLUMN_WIDTH (WINDOW_XFRAME ((W))))
 
-/* Return the canonical column width of the frame of window W.  */
-
+/* Return the canonical line height of the frame of window W.  */
 #define WINDOW_FRAME_LINE_HEIGHT(W) \
   (FRAME_LINE_HEIGHT (WINDOW_XFRAME ((W))))
 
@@ -613,6 +663,10 @@ wset_next_buffers (struct window *w, Lisp_Object val)
 #define WINDOW_LEFTMOST_P(W) \
   (WINDOW_LEFT_PIXEL_EDGE (W) == 0)
 
+/* True if window W's has no other windows above in its frame.  */
+#define WINDOW_TOPMOST_P(W) \
+  (WINDOW_TOP_PIXEL_EDGE (W) == 0)
+
 /* True if window W's has no other windows to its right in its frame.  */
 #define WINDOW_RIGHTMOST_P(W)					\
   (WINDOW_RIGHT_PIXEL_EDGE (W)					\
@@ -629,7 +683,6 @@ wset_next_buffers (struct window *w, Lisp_Object val)
 /* Return the frame column at which the text (or left fringe) in
    window W starts.  This is different from the `LEFT_EDGE' because it
    does not include a left-hand scroll bar if any.  */
-
 #define WINDOW_BOX_LEFT_EDGE_COL(W) \
   (WINDOW_LEFT_EDGE_COL (W) \
    + WINDOW_LEFT_SCROLL_BAR_COLS (W))
@@ -644,7 +697,6 @@ wset_next_buffers (struct window *w, Lisp_Object val)
 /* Return the window column before which the text in window W ends.
    This is different from WINDOW_RIGHT_EDGE_COL because it does not
    include a scroll bar or window-separating line on the right edge.  */
-
 #define WINDOW_BOX_RIGHT_EDGE_COL(W) \
   (WINDOW_RIGHT_EDGE_COL (W) \
    - WINDOW_RIGHT_SCROLL_BAR_COLS (W))
@@ -706,114 +758,116 @@ wset_next_buffers (struct window *w, Lisp_Object val)
 #define WINDOW_FRINGES_WIDTH(W)		\
   (WINDOW_LEFT_FRINGE_WIDTH (W) + WINDOW_RIGHT_FRINGE_WIDTH (W))
 
-/* Widths of fringes in columns.  */
-#define WINDOW_FRINGE_COLS(W)			\
-  ((W->left_fringe_width >= 0			\
-    && W->right_fringe_width >= 0)		\
-   ? ((WINDOW_FRINGES_WIDTH (W)			\
-       + WINDOW_FRAME_COLUMN_WIDTH (W) - 1)	\
-      / WINDOW_FRAME_COLUMN_WIDTH (W))		\
-   : FRAME_FRINGE_COLS (WINDOW_XFRAME (W)))
-
-#define WINDOW_LEFT_FRINGE_COLS(W)		\
-  ((WINDOW_LEFT_FRINGE_WIDTH ((W))		\
-    + WINDOW_FRAME_COLUMN_WIDTH (W) - 1)	\
-   / WINDOW_FRAME_COLUMN_WIDTH (W))
-
-#define WINDOW_RIGHT_FRINGE_COLS(W)		\
-  ((WINDOW_RIGHT_FRINGE_WIDTH ((W))		\
-    + WINDOW_FRAME_COLUMN_WIDTH (W) - 1)	\
-   / WINDOW_FRAME_COLUMN_WIDTH (W))
-
 /* Are fringes outside display margins in window W.  */
 #define WINDOW_HAS_FRINGES_OUTSIDE_MARGINS(W)	\
   ((W)->fringes_outside_margins)
 
-/* Say whether scroll bars are currently enabled for window W,
+/* Say whether vertical scroll bars are currently enabled for window W,
    and which side they are on.  */
-#define WINDOW_VERTICAL_SCROLL_BAR_TYPE(w)		\
-  (EQ (w->vertical_scroll_bar_type, Qt)			\
-   ? FRAME_VERTICAL_SCROLL_BAR_TYPE (WINDOW_XFRAME (w))	\
-   : EQ (w->vertical_scroll_bar_type, Qleft)		\
+#define WINDOW_VERTICAL_SCROLL_BAR_TYPE(W)		\
+  (WINDOW_PSEUDO_P (W)					\
+   ? vertical_scroll_bar_none				\
+   : EQ (W->vertical_scroll_bar_type, Qt)		\
+   ? FRAME_VERTICAL_SCROLL_BAR_TYPE (WINDOW_XFRAME (W))	\
+   : EQ (W->vertical_scroll_bar_type, Qleft)		\
    ? vertical_scroll_bar_left				\
-   : EQ (w->vertical_scroll_bar_type, Qright)		\
+   : EQ (W->vertical_scroll_bar_type, Qright)		\
    ? vertical_scroll_bar_right				\
-   : vertical_scroll_bar_none)				\
+   : vertical_scroll_bar_none)
 
-#define WINDOW_HAS_VERTICAL_SCROLL_BAR(w)		\
-  (EQ (w->vertical_scroll_bar_type, Qt)			\
-   ? FRAME_HAS_VERTICAL_SCROLL_BARS (WINDOW_XFRAME (w))	\
-   : !NILP (w->vertical_scroll_bar_type))
+#define WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_LEFT(W)			\
+  (WINDOW_VERTICAL_SCROLL_BAR_TYPE (W) == vertical_scroll_bar_left)
 
-#define WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_LEFT(w)		\
-  (EQ (w->vertical_scroll_bar_type, Qt)				\
-   ? FRAME_HAS_VERTICAL_SCROLL_BARS_ON_LEFT (WINDOW_XFRAME (w))	\
-   : EQ (w->vertical_scroll_bar_type, Qleft))
+#define WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_RIGHT(W)			\
+  (WINDOW_VERTICAL_SCROLL_BAR_TYPE (W) == vertical_scroll_bar_right)
 
-#define WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_RIGHT(w)			\
-  (EQ (w->vertical_scroll_bar_type, Qt)					\
-   ? FRAME_HAS_VERTICAL_SCROLL_BARS_ON_RIGHT (WINDOW_XFRAME (w))	\
-   : EQ (w->vertical_scroll_bar_type, Qright))
+#define WINDOW_HAS_VERTICAL_SCROLL_BAR(W)		\
+  (WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_LEFT (W)		\
+   || WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_RIGHT (W))
+
+#if (defined (HAVE_WINDOW_SYSTEM)					\
+     && ((defined (USE_TOOLKIT_SCROLL_BARS) && !defined (HAVE_NS))	\
+	 || defined (HAVE_NTGUI)))
+# define USE_HORIZONTAL_SCROLL_BARS true
+#else
+# define USE_HORIZONTAL_SCROLL_BARS false
+#endif
+
+/* Say whether horizontal scroll bars are currently enabled for window
+   W.  Horizontal scrollbars exist for toolkit versions only.  */
+#if USE_HORIZONTAL_SCROLL_BARS
+#define WINDOW_HAS_HORIZONTAL_SCROLL_BAR(W)			\
+  ((WINDOW_PSEUDO_P (W) || MINI_NON_ONLY_WINDOW_P (W))		\
+   ? false							\
+   : EQ (W->horizontal_scroll_bar_type, Qt)			\
+   ? FRAME_HAS_HORIZONTAL_SCROLL_BARS (WINDOW_XFRAME (W))	\
+   : EQ (W->horizontal_scroll_bar_type, Qbottom)		\
+   ? true							\
+   : false)
+#else
+#define WINDOW_HAS_HORIZONTAL_SCROLL_BAR(W) false
+#endif
 
 /* Width that a scroll bar in window W should have, if there is one.
    Measured in pixels.  If scroll bars are turned off, this is still
    nonzero.  */
-#define WINDOW_CONFIG_SCROLL_BAR_WIDTH(w)		\
-  (w->scroll_bar_width >= 0				\
-   ? w->scroll_bar_width				\
-   : FRAME_CONFIG_SCROLL_BAR_WIDTH (WINDOW_XFRAME (w)))
+#define WINDOW_CONFIG_SCROLL_BAR_WIDTH(W)		\
+  (W->scroll_bar_width >= 0				\
+   ? W->scroll_bar_width				\
+   : FRAME_CONFIG_SCROLL_BAR_WIDTH (WINDOW_XFRAME (W)))
 
 /* Width that a scroll bar in window W should have, if there is one.
    Measured in columns (characters).  If scroll bars are turned off,
    this is still nonzero.  */
-#define WINDOW_CONFIG_SCROLL_BAR_COLS(w)		\
-  (w->scroll_bar_width >= 0				\
-   ? ((w->scroll_bar_width				\
-       + WINDOW_FRAME_COLUMN_WIDTH (w) - 1)		\
-      / WINDOW_FRAME_COLUMN_WIDTH (w))			\
-   : FRAME_CONFIG_SCROLL_BAR_COLS (WINDOW_XFRAME (w)))
+#define WINDOW_CONFIG_SCROLL_BAR_COLS(W)		\
+  (W->scroll_bar_width >= 0				\
+   ? ((W->scroll_bar_width				\
+       + WINDOW_FRAME_COLUMN_WIDTH (W) - 1)		\
+      / WINDOW_FRAME_COLUMN_WIDTH (W))			\
+   : FRAME_CONFIG_SCROLL_BAR_COLS (WINDOW_XFRAME (W)))
 
 /* Width of left scroll bar in window W, measured in columns
    (characters).  If scroll bars are on the right in this frame, or
    there are no scroll bars, value is 0.  */
-#define WINDOW_LEFT_SCROLL_BAR_COLS(w)	       \
-  (WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_LEFT (w)  \
-   ? (WINDOW_CONFIG_SCROLL_BAR_COLS (w))       \
+#define WINDOW_LEFT_SCROLL_BAR_COLS(W)	       \
+  (WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_LEFT (W)  \
+   ? (WINDOW_CONFIG_SCROLL_BAR_COLS (W))       \
    : 0)
 
 /* Width of right scroll bar in window W, measured in columns
    (characters).  If scroll bars are on the left in this frame, or there
    are no scroll bars, value is 0.  */
-#define WINDOW_RIGHT_SCROLL_BAR_COLS(w)		\
-  (WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_RIGHT (w)	\
-   ? WINDOW_CONFIG_SCROLL_BAR_COLS (w)		\
+#define WINDOW_RIGHT_SCROLL_BAR_COLS(W)		\
+  (WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_RIGHT (W)	\
+   ? WINDOW_CONFIG_SCROLL_BAR_COLS (W)		\
    : 0)
 
 /* Width of a scroll bar in window W, measured in columns.  */
-#define WINDOW_SCROLL_BAR_COLS(w)	       \
-  (WINDOW_HAS_VERTICAL_SCROLL_BAR (w)	       \
-   ? WINDOW_CONFIG_SCROLL_BAR_COLS (w)	       \
+#define WINDOW_SCROLL_BAR_COLS(W)	       \
+  (WINDOW_HAS_VERTICAL_SCROLL_BAR (W)	       \
+   ? WINDOW_CONFIG_SCROLL_BAR_COLS (W)	       \
    : 0)
 
 /* Width of a left scroll bar area in window W, measured in pixels.  */
-#define WINDOW_LEFT_SCROLL_BAR_AREA_WIDTH(w)				\
-  (WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_LEFT (w)				\
-   ? WINDOW_CONFIG_SCROLL_BAR_WIDTH (w)					\
+#define WINDOW_LEFT_SCROLL_BAR_AREA_WIDTH(W)				\
+  (WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_LEFT (W)				\
+   ? WINDOW_CONFIG_SCROLL_BAR_WIDTH (W)					\
    : 0)
 
 /* Width of a right scroll bar area in window W, measured in pixels.  */
-#define WINDOW_RIGHT_SCROLL_BAR_AREA_WIDTH(w)				\
-  (WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_RIGHT (w)				\
-   ? WINDOW_CONFIG_SCROLL_BAR_WIDTH (w)					\
+#define WINDOW_RIGHT_SCROLL_BAR_AREA_WIDTH(W)				\
+  (WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_RIGHT (W)				\
+   ? WINDOW_CONFIG_SCROLL_BAR_WIDTH (W)					\
    : 0)
 
 /* Width of scroll bar area in window W, measured in pixels.  */
-#define WINDOW_SCROLL_BAR_AREA_WIDTH(w)					\
-  (WINDOW_HAS_VERTICAL_SCROLL_BAR (w)					\
-   ? WINDOW_CONFIG_SCROLL_BAR_WIDTH (w)					\
+#define WINDOW_SCROLL_BAR_AREA_WIDTH(W)					\
+  (WINDOW_HAS_VERTICAL_SCROLL_BAR (W)					\
+   ? WINDOW_CONFIG_SCROLL_BAR_WIDTH (W)					\
    : 0)
 
-/* Return the frame position where the scroll bar of window W starts.  */
+/* Return the frame position where the vertical scroll bar of window W
+   starts.  */
 #define WINDOW_SCROLL_BAR_AREA_X(W)		\
   (WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_RIGHT (W)	\
    ? WINDOW_BOX_RIGHT_EDGE_X (W)		\
@@ -829,6 +883,36 @@ wset_next_buffers (struct window *w, Lisp_Object val)
    ? 0									\
    : FRAME_BOTTOM_DIVIDER_WIDTH (WINDOW_XFRAME (W)))
 
+/* Height that a scroll bar in window W should have, if there is one.
+   Measured in pixels.  If scroll bars are turned off, this is still
+   nonzero.  */
+#define WINDOW_CONFIG_SCROLL_BAR_HEIGHT(W)			\
+  (W->scroll_bar_height >= 0					\
+   ? W->scroll_bar_height					\
+   : FRAME_CONFIG_SCROLL_BAR_HEIGHT (WINDOW_XFRAME (W)))
+
+/* Height that a scroll bar in window W should have, if there is one.
+   Measured in lines (characters).  If scroll bars are turned off, this
+   is still nonzero.  */
+#define WINDOW_CONFIG_SCROLL_BAR_LINES(W)		\
+  (W->scroll_bar_height >= 0				\
+   ? ((W->scroll_bar_height				\
+       + WINDOW_FRAME_LINE_HEIGHT (W) - 1)		\
+      / WINDOW_FRAME_LINE_HEIGHT (W))			\
+   : FRAME_CONFIG_SCROLL_BAR_LINES (WINDOW_XFRAME (W)))
+
+/* Height of a scroll bar in window W, measured in columns.  */
+#define WINDOW_SCROLL_BAR_LINES(W)	       \
+  (WINDOW_HAS_HORIZONTAL_SCROLL_BAR (W)	       \
+   ? WINDOW_CONFIG_SCROLL_BAR_LINES (W)	       \
+   : 0)
+
+/* Height of scroll bar area in window W, measured in pixels.  */
+#define WINDOW_SCROLL_BAR_AREA_HEIGHT(W)	\
+  (WINDOW_HAS_HORIZONTAL_SCROLL_BAR (W)		\
+   ? WINDOW_CONFIG_SCROLL_BAR_HEIGHT (W)	\
+   : 0)
+
 /* Height in pixels, and in lines, of the mode line.
    May be zero if W doesn't have a mode line.  */
 #define WINDOW_MODE_LINE_HEIGHT(W)	\
@@ -837,66 +921,62 @@ wset_next_buffers (struct window *w, Lisp_Object val)
    : 0)
 
 #define WINDOW_MODE_LINE_LINES(W)	\
-  (!! WINDOW_WANTS_MODELINE_P ((W)))
+  WINDOW_WANTS_MODELINE_P (W)
 
 /* Height in pixels, and in lines, of the header line.
    Zero if W doesn't have a header line.  */
 #define WINDOW_HEADER_LINE_HEIGHT(W)	\
-  (WINDOW_WANTS_HEADER_LINE_P ((W))	\
+  (WINDOW_WANTS_HEADER_LINE_P (W)	\
    ? CURRENT_HEADER_LINE_HEIGHT (W)	\
    : 0)
 
 #define WINDOW_HEADER_LINE_LINES(W)	\
-  (!! WINDOW_WANTS_HEADER_LINE_P ((W)))
+  WINDOW_WANTS_HEADER_LINE_P (W)
 
-/* Pixel height of window W without mode line and bottom divider.  */
+/* Pixel height of window W without mode line, bottom scroll bar and
+   bottom divider.  */
 #define WINDOW_BOX_HEIGHT_NO_MODE_LINE(W)	\
-  (WINDOW_PIXEL_HEIGHT ((W))			\
+  (WINDOW_PIXEL_HEIGHT (W)			\
    - WINDOW_BOTTOM_DIVIDER_WIDTH (W)		\
-   - WINDOW_MODE_LINE_HEIGHT ((W)))
+   - WINDOW_SCROLL_BAR_AREA_HEIGHT (W)		\
+   - WINDOW_MODE_LINE_HEIGHT (W))
 
 /* Pixel height of window W without mode and header line and bottom
    divider.  */
 #define WINDOW_BOX_TEXT_HEIGHT(W)	\
   (WINDOW_PIXEL_HEIGHT ((W))		\
    - WINDOW_BOTTOM_DIVIDER_WIDTH (W)	\
-   - WINDOW_MODE_LINE_HEIGHT ((W))	\
-   - WINDOW_HEADER_LINE_HEIGHT ((W)))
+   - WINDOW_SCROLL_BAR_AREA_HEIGHT (W)	\
+   - WINDOW_MODE_LINE_HEIGHT (W)	\
+   - WINDOW_HEADER_LINE_HEIGHT (W))
+
+/* Return the frame position where the horizontal scroll bar of window W
+   starts.  */
+#define WINDOW_SCROLL_BAR_AREA_Y(W)			\
+  (WINDOW_TOP_EDGE_Y (W)				\
+   + (WINDOW_HAS_HORIZONTAL_SCROLL_BAR (W)		\
+      ? WINDOW_BOX_HEIGHT_NO_MODE_LINE (W) : 0))
 
 /* Convert window W relative pixel X to frame pixel coordinates.  */
 #define WINDOW_TO_FRAME_PIXEL_X(W, X)	\
   ((X) + WINDOW_BOX_LEFT_EDGE_X ((W)))
 
 /* Convert window W relative pixel Y to frame pixel coordinates.  */
-#define WINDOW_TO_FRAME_PIXEL_Y(W, Y)	\
-  ((Y) + WINDOW_TOP_EDGE_Y ((W)))
+#define WINDOW_TO_FRAME_PIXEL_Y(W, Y)		\
+  ((Y) + WINDOW_TOP_EDGE_Y (W))
 
 /* Convert frame relative pixel X to window relative pixel X.  */
-#define FRAME_TO_WINDOW_PIXEL_X(W, X)	\
+#define FRAME_TO_WINDOW_PIXEL_X(W, X)		\
   ((X) - WINDOW_BOX_LEFT_EDGE_X ((W)))
 
 /* Convert frame relative pixel Y to window relative pixel Y.  */
-#define FRAME_TO_WINDOW_PIXEL_Y(W, Y)	\
-  ((Y) - WINDOW_TOP_EDGE_Y ((W)))
+#define FRAME_TO_WINDOW_PIXEL_Y(W, Y)		\
+  ((Y) - WINDOW_TOP_EDGE_Y (W))
 
 /* Convert a text area relative x-position in window W to frame X
    pixel coordinates.  */
 #define WINDOW_TEXT_TO_FRAME_PIXEL_X(W, X)	\
   (window_box_left ((W), TEXT_AREA) + (X))
-
-/* True if the background of the window W's fringe that is adjacent to
-   a scroll bar is extended to the gap between the fringe and the bar.  */
-
-#define WINDOW_FRINGE_EXTENDED_P(w)			\
-  (WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_LEFT (w)		\
-   ? (WINDOW_LEFTMOST_P (w)				\
-      && WINDOW_LEFT_FRINGE_WIDTH (w)			\
-      && (WINDOW_HAS_FRINGES_OUTSIDE_MARGINS (w)	\
-	  || WINDOW_LEFT_MARGIN_COLS (w) == 0))		\
-   : (WINDOW_RIGHTMOST_P (w)				\
-      && WINDOW_RIGHT_FRINGE_WIDTH (w)			\
-      && (WINDOW_HAS_FRINGES_OUTSIDE_MARGINS (w)	\
-	  || WINDOW_RIGHT_MARGIN_COLS (w) == 0)))
 
 /* This is the window in which the terminal's cursor should be left when
    nothing is being done with it.  This must always be a leaf window, and its
@@ -910,7 +990,7 @@ extern Lisp_Object selected_window;
    recently used window.  Its only users are Fselect_window,
    init_window_once, and make_frame.  */
 
-extern int window_select_count;
+extern EMACS_INT window_select_count;
 
 /* The minibuffer window of the selected frame.
    Note that you cannot test for minibufferness of an arbitrary window
@@ -935,7 +1015,7 @@ extern int window_relative_x_coord (struct window *, enum window_part, int);
 
 void run_window_configuration_change_hook (struct frame *f);
 
-/* Make WINDOW display BUFFER.  RUN_HOOKS_P non-zero means it's allowed
+/* Make WINDOW display BUFFER.  RUN_HOOKS_P means it's allowed
    to run hooks.  See make_frame for a case where it's not allowed.  */
 
 void set_window_buffer (Lisp_Object window, Lisp_Object buffer,
@@ -981,18 +1061,13 @@ extern void bset_update_mode_line (struct buffer *b);
    above already does it, so it's only needed in unusual cases.  */
 extern void redisplay_other_windows (void);
 
-/* If *ROWS or *COLS are too small a size for FRAME, set them to the
-   minimum allowable size.  */
-
-extern void check_frame_size (struct frame *frame, int *width, int *height, bool pixelwise);
-
 /* Return a pointer to the glyph W's physical cursor is on.  Value is
    null if W's current matrix is invalid, so that no meaningful glyph
    can be returned.  */
 
 struct glyph *get_phys_cursor_glyph (struct window *w);
 
-/* Value is non-zero if WINDOW is a valid window.  */
+/* True if WINDOW is a valid window.  */
 #define WINDOW_VALID_P(WINDOW)					\
   (WINDOWP (WINDOW) && !NILP (XWINDOW (WINDOW)->contents))	\
 
@@ -1001,7 +1076,7 @@ struct glyph *get_phys_cursor_glyph (struct window *w);
 #define CHECK_VALID_WINDOW(WINDOW)				\
   CHECK_TYPE (WINDOW_VALID_P (WINDOW), Qwindow_valid_p, WINDOW)
 
-/* Value is non-zero if WINDOW is a live window.  */
+/* True if WINDOW is a live window.  */
 #define WINDOW_LIVE_P(WINDOW)					\
   (WINDOWP (WINDOW) && BUFFERP (XWINDOW (WINDOW)->contents))
 
@@ -1014,8 +1089,6 @@ struct glyph *get_phys_cursor_glyph (struct window *w);
 int window_header_line_inhibited_p(struct window *w);
 
 /* These used to be in lisp.h.  */
-
-extern Lisp_Object Qwindow_live_p;
 extern Lisp_Object Vwindow_list;
 
 extern Lisp_Object window_list (void);
@@ -1028,6 +1101,7 @@ extern int window_body_width (struct window *w, bool);
 extern void temp_output_buffer_show (Lisp_Object);
 extern void replace_buffer_in_windows (Lisp_Object);
 extern void replace_buffer_in_windows_safely (Lisp_Object);
+extern Lisp_Object sanitize_window_sizes (Lisp_Object, Lisp_Object);
 /* This looks like a setter, but it is a bit special.  */
 extern void wset_buffer (struct window *, Lisp_Object);
 extern bool window_outdated (struct window *);

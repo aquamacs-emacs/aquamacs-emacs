@@ -1,6 +1,6 @@
-@c -*-texinfo-*-
+@c -*- mode: texinfo; coding: utf-8 -*-
 @c This is part of the GNU Emacs Lisp Reference Manual.
-@c Copyright (C) 1990-1993, 1995, 1998-1999, 2001-2014 Free Software
+@c Copyright (C) 1990-1993, 1995, 1998-1999, 2001-2015 Free Software
 @c Foundation, Inc.
 @c See the file elisp.texi for copying conditions.
 @node Tips
@@ -398,7 +398,7 @@ Enter the answer (default 42):
 
 @item
 In @code{interactive}, if you use a Lisp expression to produce a list
-of arguments, don't try to provide the ``correct'' default values for
+of arguments, don't try to provide the correct default values for
 region or position arguments.  Instead, provide @code{nil} for those
 arguments if they were not specified, and have the function body
 compute the default value when the argument is @code{nil}.  For
@@ -657,23 +657,29 @@ starting double-quote is not part of the string!
 
 @anchor{Docstring hyperlinks}
 @item
-@iftex
+@cindex curly quotes
+@cindex curved quotes
 When a documentation string refers to a Lisp symbol, write it as it
-would be printed (which usually means in lower case), with single-quotes
-around it.  For example: @samp{`lambda'}.  There are two exceptions:
-write @code{t} and @code{nil} without single-quotes.
-@end iftex
-@ifnottex
-When a documentation string refers to a Lisp symbol, write it as it
-would be printed (which usually means in lower case), with single-quotes
-around it.  For example: @samp{lambda}.  There are two exceptions: write
-t and nil without single-quotes.  (In this manual, we use a different
-convention, with single-quotes for all symbols.)
-@end ifnottex
+would be printed (which usually means in lower case), surrounding
+it with curved single quotes (@t{‘} and @t{’}).  There are
+two exceptions: write @code{t} and @code{nil} without surrounding
+punctuation.  For example: @samp{CODE can be ‘lambda’, nil, or t}.
+@xref{Quotation Marks,,, emacs, The GNU Emacs Manual}, for how to
+enter curved single quotes.
+
+Documentation strings can also use an older single-quoting convention,
+which quotes symbols with grave accent @t{`} and apostrophe
+@t{'}: @t{`like-this'} rather than @t{‘like-this’}.  This
+older convention was designed for now-obsolete displays in which grave
+accent and apostrophe were mirror images.
+
+Documentation using either convention is converted to the user's
+preferred format when it is copied into a help buffer.  @xref{Keys in
+Documentation}.
 
 @cindex hyperlinks in documentation strings
 Help mode automatically creates a hyperlink when a documentation string
-uses a symbol name inside single quotes, if the symbol has either a
+uses a single-quoted symbol name, if the symbol has either a
 function or a variable definition.  You do not need to do anything
 special to make use of this feature.  However, when a symbol has both a
 function definition and a variable definition, and you want to refer to
@@ -715,17 +721,17 @@ followed by the word @samp{face}.  In that case, only the face
 documentation will be shown, even if the symbol is also defined as a
 variable or as a function.
 
-To make a hyperlink to Info documentation, write the name of the Info
-node (or anchor) in single quotes, preceded by @samp{info node},
-@samp{Info node}, @samp{info anchor} or @samp{Info anchor}.  The Info
-file name defaults to @samp{emacs}.  For example,
+To make a hyperlink to Info documentation, write the single-quoted
+name of the Info node (or anchor), preceded by
+@samp{info node}, @samp{Info node}, @samp{info anchor} or @samp{Info
+anchor}.  The Info file name defaults to @samp{emacs}.  For example,
 
 @smallexample
 See Info node `Font Lock' and Info node `(elisp)Font Lock Basics'.
 @end smallexample
 
-Finally, to create a hyperlink to URLs, write the URL in single
-quotes, preceded by @samp{URL}. For example,
+Finally, to create a hyperlink to URLs, write the single-quoted URL,
+preceded by @samp{URL}.  For example,
 
 @smallexample
 The home page for the GNU project has more information (see URL
@@ -766,7 +772,7 @@ is indicative and has a proper subject.
 @item
 The documentation string for a function that is a yes-or-no predicate
 should start with words such as ``Return t if'', to indicate
-explicitly what constitutes ``truth''.  The word ``return'' avoids
+explicitly what constitutes truth.  The word ``return'' avoids
 starting the sentence with lower-case ``t'', which could be somewhat
 distracting.
 
@@ -877,7 +883,7 @@ strings, though.
 Comments that start with three semicolons, @samp{;;;}, should start at
 the left margin.  We use them
 for comments which should be considered a
-``heading'' by Outline minor mode.  By default, comments starting with
+heading by Outline minor mode.  By default, comments starting with
 at least three semicolons (followed by a single space and a
 non-whitespace character) are considered headings, comments starting
 with two or fewer are not.  Historically, triple-semicolon comments have
@@ -918,7 +924,7 @@ explains these conventions, starting with an example:
 @group
 ;;; foo.el --- Support for the Foo programming language
 
-;; Copyright (C) 2010-2014 Your Name
+;; Copyright (C) 2010-2015 Your Name
 @end group
 
 ;; Author: Your Name <yourname@@example.com>
@@ -1062,9 +1068,9 @@ context.
 @item ;;; Change Log:
 This begins an optional log of changes to the file over time.  Don't
 put too much information in this section---it is better to keep the
-detailed logs in a separate @file{ChangeLog} file (as Emacs does),
-and/or to use a version control system.  @samp{History} is an
-alternative to @samp{Change Log}.
+detailed logs in a version control system (as Emacs does) or in a
+separate @file{ChangeLog} file.  @samp{History} is an alternative to
+@samp{Change Log}.
 
 @item ;;; Code:
 This begins the actual code of the program.

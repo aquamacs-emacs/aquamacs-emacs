@@ -1,6 +1,6 @@
 ;;; ede/emacs.el --- Special project for Emacs
 
-;; Copyright (C) 2008-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2008-2015 Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <eric@siege-engine.com>
 
@@ -38,37 +38,12 @@
 (declare-function semanticdb-refresh-table "semantic/db")
 
 ;;; Code:
-(defvar ede-emacs-project-list nil
-  "List of projects created by option `ede-emacs-project'.")
 
-(defun ede-emacs-file-existing (dir)
-  "Find a Emacs project in the list of Emacs projects.
-DIR is the directory to search from."
-  (let ((projs ede-emacs-project-list)
-	(ans nil))
-    (while (and projs (not ans))
-      (let ((root (ede-project-root-directory (car projs))))
-	(when (string-match (concat "^" (regexp-quote root))
-			    (file-name-as-directory dir))
-	  (setq ans (car projs))))
-      (setq projs (cdr projs)))
-    ans))
+;; @TODO - get rid of this.  Stuck in loaddefs right now.
 
-;;;###autoload
 (defun ede-emacs-project-root (&optional dir)
   "Get the root directory for DIR."
-  (when (not dir) (setq dir default-directory))
-  (let ((case-fold-search t)
-	(proj (ede-files-find-existing dir ede-emacs-project-list)))
-    (if proj
-	(ede-up-directory (file-name-directory
-			   (oref proj :file)))
-      ;; No pre-existing project.  Let's take a wild-guess if we have
-      ;; an Emacs project here.
-      (when (string-match "emacs[^/]*" dir)
-	(let ((base (substring dir 0 (match-end 0))))
-	  (when (file-exists-p (expand-file-name "src/emacs.c" base))
-	      base))))))
+  nil)
 
 (defun ede-emacs-version (dir)
   "Find the Emacs version for the Emacs src in DIR.
@@ -118,8 +93,8 @@ m4_define(\\[SXEM4CS_BETA_VERSION\\], \\[\\([0-9]+\\)\\])")
       ;; Return a tuple
       (cons emacs ver))))
 
-(defclass ede-emacs-project (ede-project eieio-instance-tracker)
-  ((tracking-symbol :initform 'ede-emacs-project-list)
+(defclass ede-emacs-project (ede-project)
+  (
    )
   "Project Type for the Emacs source code."
   :method-invocation-order :depth-first)
@@ -129,17 +104,15 @@ m4_define(\\[SXEM4CS_BETA_VERSION\\], \\[\\([0-9]+\\)\\])")
 Return nil if there isn't one.
 Argument DIR is the directory it is created for.
 ROOTPROJ is nil, since there is only one project."
-  (or (ede-files-find-existing dir ede-emacs-project-list)
-      ;; Doesn't already exist, so let's make one.
-      (let* ((vertuple (ede-emacs-version dir))
-	     (proj (ede-emacs-project
-		    (car vertuple)
-		    :name (car vertuple)
-		    :version (cdr vertuple)
-		    :directory (file-name-as-directory dir)
-		    :file (expand-file-name "src/emacs.c"
-					    dir))))
-	(ede-add-project-to-global-list proj))))
+  ;; Doesn't already exist, so let's make one.
+  (let* ((vertuple (ede-emacs-version dir)))
+    (ede-emacs-project
+     (car vertuple)
+     :name (car vertuple)
+     :version (cdr vertuple)
+     :directory (file-name-as-directory dir)
+     :file (expand-file-name "src/emacs.c"
+			     dir))))
 
 ;;;###autoload
 (ede-add-project-autoload
@@ -147,8 +120,6 @@ ROOTPROJ is nil, since there is only one project."
 		       :name "EMACS ROOT"
 		       :file 'ede/emacs
 		       :proj-file "src/emacs.c"
-		       :proj-root-dirmatch "emacs[^/]*"
-		       :proj-root 'ede-emacs-project-root
 		       :load-type 'ede-emacs-load
 		       :class-sym 'ede-emacs-project
 		       :new-p nil
@@ -170,25 +141,25 @@ All directories need at least one target.")
   "EDE Emacs Project target for Misc files.
 All directories need at least one target.")
 
-(defmethod initialize-instance ((this ede-emacs-project)
+(cl-defmethod initialize-instance ((this ede-emacs-project)
 				&rest fields)
   "Make sure the targets slot is bound."
-  (call-next-method)
+  (cl-call-next-method)
   (unless (slot-boundp this 'targets)
     (oset this :targets nil)))
 
 ;;; File Stuff
 ;;
-(defmethod ede-project-root-directory ((this ede-emacs-project)
+(cl-defmethod ede-project-root-directory ((this ede-emacs-project)
 				       &optional file)
   "Return the root for THIS Emacs project with file."
   (ede-up-directory (file-name-directory (oref this file))))
 
-(defmethod ede-project-root ((this ede-emacs-project))
+(cl-defmethod ede-project-root ((this ede-emacs-project))
   "Return my root."
   this)
 
-(defmethod ede-find-subproject-for-directory ((proj ede-emacs-project)
+(cl-defmethod ede-find-subproject-for-directory ((proj ede-emacs-project)
 					      dir)
   "Return PROJ, for handling all subdirs below DIR."
   proj)
@@ -205,7 +176,7 @@ All directories need at least one target.")
       ))
     match))
 
-(defmethod ede-find-target ((proj ede-emacs-project) buffer)
+(cl-defmethod ede-find-target ((proj ede-emacs-project) buffer)
   "Find an EDE target in PROJ for BUFFER.
 If one doesn't exist, create a new one for this directory."
   (let* ((ext (file-name-extension (buffer-file-name buffer)))
@@ -233,7 +204,7 @@ If one doesn't exist, create a new one for this directory."
 
 ;;; UTILITIES SUPPORT.
 ;;
-(defmethod ede-preprocessor-map ((this ede-emacs-target-c))
+(cl-defmethod ede-preprocessor-map ((this ede-emacs-target-c))
   "Get the pre-processor map for Emacs C code.
 All files need the macros from lisp.h!"
   (require 'semantic/db)
@@ -282,7 +253,7 @@ All files need the macros from lisp.h!"
 	(setq dirs (cdr dirs))))
     ans))
 
-(defmethod ede-expand-filename-impl ((proj ede-emacs-project) name)
+(cl-defmethod ede-expand-filename-impl ((proj ede-emacs-project) name)
   "Within this project PROJ, find the file NAME.
 Knows about how the Emacs source tree is organized."
   (let* ((ext (file-name-extension name))
@@ -298,8 +269,17 @@ Knows about how the Emacs source tree is organized."
 		 '("doc"))
 		(t nil)))
 	 )
-    (if (not dirs) (call-next-method)
+    (if (not dirs) (cl-call-next-method)
       (ede-emacs-find-in-directories name dir dirs))
+    ))
+
+;;; Command Support
+;;
+(cl-defmethod project-rescan ((this ede-emacs-project))
+  "Rescan this Emacs project from the sources."
+  (let ((ver (ede-emacs-version (ede-project-root-directory this))))
+    (oset this name (car ver))
+    (oset this version (cdr ver))
     ))
 
 (provide 'ede/emacs)

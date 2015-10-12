@@ -1,6 +1,6 @@
 ;;; gnus-sieve.el --- Utilities to manage sieve scripts for Gnus
 
-;; Copyright (C) 2001-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2001-2015 Free Software Foundation, Inc.
 
 ;; Author: NAGY Andras <nagya@inf.elte.hu>,
 ;;	Simon Josefsson <simon@josefsson.org>
@@ -80,7 +80,7 @@ formatting characters are recognized:
 (defun gnus-sieve-update ()
   "Update the Sieve script in gnus-sieve-file, by replacing the region
 between gnus-sieve-region-start and gnus-sieve-region-end with
-\(gnus-sieve-script gnus-sieve-select-method gnus-sieve-crosspost\), then
+\(gnus-sieve-script gnus-sieve-select-method gnus-sieve-crosspost), then
 execute gnus-sieve-update-shell-command.
 See the documentation for these variables and functions for details."
   (interactive)
@@ -97,7 +97,7 @@ See the documentation for these variables and functions for details."
 (defun gnus-sieve-generate ()
   "Generate the Sieve script in gnus-sieve-file, by replacing the region
 between gnus-sieve-region-start and gnus-sieve-region-end with
-\(gnus-sieve-script gnus-sieve-select-method gnus-sieve-crosspost\).
+\(gnus-sieve-script gnus-sieve-select-method gnus-sieve-crosspost).
 See the documentation for these variables and functions for details."
   (interactive)
   (require 'sieve)
@@ -139,7 +139,7 @@ Return nil if no rule could be guessed."
   "Convert an elisp string list to a Sieve string list.
 
 For example:
-\(gnus-sieve-string-list '(\"to\" \"cc\"))
+\(gnus-sieve-string-list \\='(\"to\" \"cc\"))
   => \"[\\\"to\\\", \\\"cc\\\"]\"
 "
   (concat "[\"" (mapconcat 'identity list "\", \"") "\"]"))
@@ -148,7 +148,7 @@ For example:
   "Convert an elisp test list to a Sieve test list.
 
 For example:
-\(gnus-sieve-test-list '((address \"sender\" \"boss@company.com\") (size :over 4K)))
+\(gnus-sieve-test-list \\='((address \"sender\" \"boss@company.com\") (size :over 4K)))
   => \"(address \\\"sender\\\" \\\"boss@company.com\\\", size :over 4K)\""
   (concat "(" (mapconcat 'gnus-sieve-test list ", ") ")"))
 
@@ -157,13 +157,13 @@ For example:
   "Convert an elisp test token to a Sieve test token.
 
 For example:
-\(gnus-sieve-test-token 'address)
+\(gnus-sieve-test-token \\='address)
   => \"address\"
 
 \(gnus-sieve-test-token \"sender\")
   => \"\\\"sender\\\"\"
 
-\(gnus-sieve-test-token '(\"to\" \"cc\"))
+\(gnus-sieve-test-token \\='(\"to\" \"cc\"))
   => \"[\\\"to\\\", \\\"cc\\\"]\""
   (cond
    ((symbolp token)            ;; Keyword
@@ -184,10 +184,10 @@ For example:
   "Convert an elisp test to a Sieve test.
 
 For example:
-\(gnus-sieve-test '(address \"sender\" \"sieve-admin@extundo.com\"))
+\(gnus-sieve-test \\='(address \"sender\" \"sieve-admin@extundo.com\"))
   => \"address \\\"sender\\\" \\\"sieve-admin@extundo.com\\\"\"
 
-\(gnus-sieve-test '(anyof ((header :contains (\"to\" \"cc\") \"my@address.com\")
+\(gnus-sieve-test \\='(anyof ((header :contains (\"to\" \"cc\") \"my@address.com\")
 			  (size :over 100K))))
   => \"anyof (header :contains [\\\"to\\\", \\\"cc\\\"] \\\"my@address.com\\\",
 	     size :over 100K)\""
@@ -195,9 +195,9 @@ For example:
 
 (defun gnus-sieve-script (&optional method crosspost)
   "Generate a Sieve script based on groups with select method METHOD
-\(or all groups if nil\).  Only groups having a `sieve' parameter are
+\(or all groups if nil).  Only groups having a `sieve' parameter are
 considered.  This parameter should contain an elisp test
-\(see the documentation of gnus-sieve-test for details\).  For each
+\(see the documentation of gnus-sieve-test for details).  For each
 such group, a Sieve IF control structure is generated, having the
 test as the condition and { fileinto \"group.name\"; } as the body.
 

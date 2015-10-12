@@ -1,6 +1,6 @@
 ;;; mule-conf.el --- configure multilingual environment
 
-;; Copyright (C) 1997-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1997-2015 Free Software Foundation, Inc.
 ;; Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011
 ;;   National Institute of Advanced Industrial Science and Technology (AIST)
 ;;   Registration Number H14PRO021
@@ -35,7 +35,9 @@
 
 ;;; Remarks
 
-;; The ISO-IR registry is at http://www.itscj.ipsj.or.jp/ISO-IR/.
+;; The ISO-IR registry is maintained by the Information Processing
+;; Society of Japan/Information Technology Standards Commission of
+;; Japan (IPSJ/ITSCJ) at https://www.itscj.ipsj.or.jp/itscj_english/.
 ;; Standards docs equivalent to iso-2022 and iso-8859 are at
 ;; http://www.ecma.ch/.
 
@@ -902,8 +904,9 @@
   (dolist (script '(devanagari sanskrit bengali tamil telugu assamese
 			       oriya kannada malayalam gujarati punjabi))
     (define-charset (intern (format "%s-cdac" script))
-      (format "Glyphs of %s script for CDAC font.  Subset of `indian-glyph'."
-	      (capitalize (symbol-name script)))
+      (format
+       "Glyphs of %s script for CDAC font.  Subset of `indian-glyph'."
+       (capitalize (symbol-name script)))
       :short-name (format "CDAC %s glyphs" (capitalize (symbol-name script)))
       :supplementary-p t
       :code-space [0 255]
@@ -913,8 +916,9 @@
   (dolist (script '(devanagari bengali punjabi gujarati
 			       oriya tamil telugu kannada malayalam))
     (define-charset (intern (format "%s-akruti" script))
-      (format "Glyphs of %s script for AKRUTI font.  Subset of `indian-glyph'."
-	      (capitalize (symbol-name script)))
+      (format
+       "Glyphs of %s script for AKRUTI font.  Subset of `indian-glyph'."
+       (capitalize (symbol-name script)))
       :short-name (format "AKRUTI %s glyphs" (capitalize (symbol-name script)))
       :supplementary-p t
       :code-space [0 255]

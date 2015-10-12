@@ -1,6 +1,6 @@
 @c -*-texinfo-*-
 @c This is part of the GNU Emacs Lisp Reference Manual.
-@c Copyright (C) 1990-1995, 1998-1999, 2001-2014 Free Software
+@c Copyright (C) 1990-1995, 1998-1999, 2001-2015 Free Software
 @c Foundation, Inc.
 @c See the file elisp.texi for copying conditions.
 @node Files
@@ -55,7 +55,7 @@ to locale @code{system-messages-locale}, and decoded using coding system
 
   Visiting a file means reading a file into a buffer.  Once this is
 done, we say that the buffer is @dfn{visiting} that file, and call the
-file ``the visited file'' of the buffer.
+file @dfn{the visited file} of the buffer.
 
   A file and a buffer are two different things.  A file is information
 recorded permanently in the computer (unless you delete it).  A
@@ -81,6 +81,8 @@ computer program, however, it is good to keep the distinction in mind.
 
 @node Visiting Functions
 @subsection Functions for Visiting Files
+@cindex visiting files, functions for
+@cindex how to visit files
 
   This section describes the functions normally used to visit files.
 For historical reasons, these functions have names starting with
@@ -421,7 +423,7 @@ To do so, execute the following code:
 You might wish to save the file modes value returned by
 @code{backup-buffer} and use that (if non-@code{nil}) to set the mode
 bits of the file that you write.  This is what @code{save-buffer}
-normally does. @xref{Making Backups,, Making Backup Files}.
+normally does.  @xref{Making Backups,, Making Backup Files}.
 
 The hook functions in @code{write-file-functions} are also responsible
 for encoding the data (if desired): they must choose a suitable coding
@@ -651,8 +653,9 @@ and also calls the functions in the list
 @xref{Format Conversion}.
 
 Normally, @code{write-region} displays the message @samp{Wrote
-@var{filename}} in the echo area.  If @var{visit} is neither @code{t}
-nor @code{nil} nor a string, then this message is inhibited.  This
+@var{filename}} in the echo area.  This message is inhibited if
+@var{visit} is neither @code{t} nor @code{nil} nor a string, or if
+Emacs is operating in batch mode (@pxref{Batch Mode}).  This
 feature is useful for programs that use files for internal purposes,
 files that the user does not need to know about.
 @end deffn
@@ -689,7 +692,7 @@ stored in the same directory as the file you are editing.  (On file
 systems that do not support symbolic links, a regular file is used.)
 
   When you access files using NFS, there may be a small probability that
-you and another user will both lock the same file ``simultaneously''.
+you and another user will both lock the same file simultaneously.
 If this happens, it is possible for the two users to make changes
 simultaneously, but Emacs will still warn the user who saves second.
 Also, the detection of modification of a buffer visiting a file changed
@@ -714,15 +717,15 @@ some other job.
 This function locks the file @var{filename}, if the current buffer is
 modified.  The argument @var{filename} defaults to the current buffer's
 visited file.  Nothing is done if the current buffer is not visiting a
-file, or is not modified, or if the system does not support locking.
+file, or is not modified, or if the option @code{create-lockfiles} is
+@code{nil}.
 @end defun
 
 @defun unlock-buffer
 This function unlocks the file being visited in the current buffer,
 if the buffer is modified.  If the buffer is not modified, then
 the file should not be locked, so this function does nothing.  It also
-does nothing if the current buffer is not visiting a file, or if the
-system does not support locking.
+does nothing if the current buffer is not visiting a file, or is not locked.
 @end defun
 
 @defopt create-lockfiles
@@ -936,7 +939,7 @@ $ ls -l diffs
 @cindex MS-DOS and file modes
 @cindex file modes and MS-DOS
 @strong{MS-DOS note:} On MS-DOS, there is no such thing as an
-``executable'' file mode bit.  So @code{file-modes} considers a file
+executable file mode bit.  So @code{file-modes} considers a file
 executable if its name ends in one of the standard executable
 extensions, such as @file{.com}, @file{.bat}, @file{.exe}, and some
 others.  Files that begin with the Unix-standard @samp{#!} signature,
@@ -948,6 +951,8 @@ Unix.  These conventions are also followed by @code{file-attributes}
 
 @node Kinds of Files
 @subsection Distinguishing Kinds of Files
+@cindex file classification
+@cindex classification of file types
 
   This section describes how to distinguish various kinds of files, such
 as directories, symbolic links, and ordinary files.
@@ -1084,7 +1089,7 @@ If you may need to follow symbolic links preceding @samp{..}@:
 appearing as a name component, call @code{file-truename} without prior
 direct or indirect calls to @code{expand-file-name}.  Otherwise, the
 file name component immediately preceding @samp{..} will be
-``simplified away'' before @code{file-truename} is called.  To
+simplified away before @code{file-truename} is called.  To
 eliminate the need for a call to @code{expand-file-name},
 @code{file-truename} handles @samp{~} in the same way that
 @code{expand-file-name} does.  @xref{File Name Expansion,, Functions
@@ -1286,10 +1291,10 @@ has only one name (the name @file{files.texi} in the current default
 directory).
 
 @item "lh"
-is owned by the user with name "lh".
+is owned by the user with name @samp{lh}.
 
 @item "users"
-is in the group with name "users".
+is in the group with name @samp{users}.
 
 @item (20614 64019 50040 152000)
 was last accessed on October 23, 2012, at 20:12:03.050040152 UTC.
@@ -1353,7 +1358,7 @@ On some operating systems, each file can be associated with arbitrary
 and setting two specific sets of extended file attributes: Access
 Control Lists (ACLs) and SELinux contexts.  These extended file
 attributes are used, on some systems, to impose more sophisticated
-file access controls than the basic ``Unix-style'' permissions
+file access controls than the basic Unix-style permissions
 discussed in the previous sections.
 
 @cindex access control list
@@ -1504,8 +1509,8 @@ replaces it with its (recursive) target.
 @cindex file with multiple names
 @cindex file hard link
 This function gives the file named @var{oldname} the additional name
-@var{newname}.  This means that @var{newname} becomes a new ``hard
-link'' to @var{oldname}.
+@var{newname}.  This means that @var{newname} becomes a new hard
+link to @var{oldname}.
 
 In the first part of the following example, we list two files,
 @file{foo} and @file{foo3}.
@@ -1682,7 +1687,7 @@ Emacs and its subprocesses.  Every file created with Emacs initially
 has these permissions, or a subset of them (@code{write-region} will
 not grant execute permissions even if the default file permissions
 allow execution).  On Unix and GNU/Linux, the default permissions are
-given by the bitwise complement of the ``umask'' value.
+given by the bitwise complement of the @samp{umask} value.
 
 The argument @var{mode} should be an integer which specifies the
 permissions, similar to @code{set-file-modes} above.  Only the lowest
@@ -1692,6 +1697,16 @@ The default file permissions have no effect when you save a modified
 version of an existing file; saving a file preserves its existing
 permissions.
 @end defun
+
+@defmac with-file-modes mode body@dots{}
+This macro evaluates the @var{body} forms with the default
+permissions for new files temporarily set to @var{modes} (whose value
+is as for @code{set-file-modes} above).  When finished, it restores
+the original default file permissions, and returns the value of the
+last form in @var{body}.
+
+This is useful for creating private files, for example.
+@end defmac
 
 @defun default-file-modes
 This function returns the default file permissions, as an integer.
@@ -1893,7 +1908,7 @@ return value, but backup version numbers are kept.
 @end defun
 
 @defun file-name-extension filename &optional period
-This function returns @var{filename}'s final ``extension'', if any,
+This function returns @var{filename}'s final extension, if any,
 after applying @code{file-name-sans-versions} to remove any
 version/backup part.  The extension, in a file name, is the part that
 follows the last @samp{.} in the last name component (minus any
@@ -1903,7 +1918,7 @@ This function returns @code{nil} for extensionless file names such as
 @file{foo}.  It returns @code{""} for null extensions, as in
 @file{foo.}.  If the last component of a file name begins with a
 @samp{.}, that @samp{.}  doesn't count as the beginning of an
-extension.  Thus, @file{.emacs}'s ``extension'' is @code{nil}, not
+extension.  Thus, @file{.emacs}'s extension is @code{nil}, not
 @samp{.emacs}.
 
 If @var{period} is non-@code{nil}, then the returned value includes
@@ -2008,6 +2023,11 @@ form.
 (file-relative-name "/foo/bar" "/hack/")
      @result{} "../foo/bar"
 @end example
+@end defun
+
+@defun directory-name-p filename
+This function returns non-@code{nil} if @var{filename} ends with a
+forward slash (@samp{/}) character.
 @end defun
 
 @node Directory Names
@@ -2178,7 +2198,7 @@ In some cases, a leading @samp{..} component can remain in the output:
 
 @noindent
 This is for the sake of filesystems that have the concept of a
-``superroot'' above the root directory @file{/}.  On other filesystems,
+superroot above the root directory @file{/}.  On other filesystems,
 @file{/../} is interpreted exactly the same as @file{/}.
 
 Note that @code{expand-file-name} does @emph{not} expand environment
@@ -2237,7 +2257,7 @@ This function replaces environment variable references in
 @var{filename} with the environment variable values.  Following
 standard Unix shell syntax, @samp{$} is the prefix to substitute an
 environment variable value.  If the input contains @samp{$$}, that is
-converted to @samp{$}; this gives the user a way to ``quote'' a
+converted to @samp{$}; this gives the user a way to quote a
 @samp{$}.
 
 The environment variable name is the series of alphanumeric characters
@@ -2285,6 +2305,8 @@ through the immediately preceding @samp{/}).
 
 @node Unique File Names
 @subsection Generating Unique File Names
+@cindex unique file names
+@cindex temporary files
 
   Some programs need to write temporary files.  Here is the usual way to
 construct a name for such a file:
@@ -2595,6 +2617,14 @@ An error is signaled if @var{directory} is not the name of a directory
 that can be read.
 @end defun
 
+@defun directory-files-recursively directory match &optional include-directories
+Return all files under @var{directory} whose file names match
+@var{match} recursively.  The file names are returned depth first,
+meaning that contents of sub-directories are returned before contents
+of the directories.  If @var{include-directories} is non-@code{nil},
+also return directory names that have matching names.
+@end defun
+
 @defun directory-files-and-attributes directory &optional full-name match-regexp nosort id-format
 This is similar to @code{directory-files} in deciding which files
 to report on and how to report their names.  However, instead
@@ -2824,6 +2854,7 @@ first, before handlers for jobs such as remote file access.
 @code{file-name-nondirectory},
 @code{file-name-sans-versions}, @code{file-newer-than-file-p},
 @code{file-notify-add-watch}, @code{file-notify-rm-watch},
+@code{file-notify-valid-p},
 @code{file-ownership-preserved-p},
 @code{file-readable-p}, @code{file-regular-p},
 @code{file-remote-p}, @code{file-selinux-context},
@@ -2877,6 +2908,7 @@ first, before handlers for jobs such as remote file access.
 @code{file-name-nondirec@discretionary{}{}{}tory},
 @code{file-name-sans-versions}, @code{file-newer-than-file-p},
 @code{file-notify-add-watch}, @code{file-notify-rm-watch},
+@code{file-notify-valid-p},
 @code{file-ownership-pre@discretionary{}{}{}served-p},
 @code{file-readable-p}, @code{file-regular-p},
 @code{file-remote-p}, @code{file-selinux-context},
@@ -2913,7 +2945,7 @@ unlocking the buffer if it is locked.
 possibly others to be added in the future.  It need not implement all
 these operations itself---when it has nothing special to do for a
 certain operation, it can reinvoke the primitive, to handle the
-operation ``in the usual way''.  It should always reinvoke the primitive
+operation in the usual way.  It should always reinvoke the primitive
 for an operation it does not recognize.  Here's one way to do this:
 
 @smallexample
@@ -2946,7 +2978,7 @@ each have handlers.
   Handlers that don't really do anything special for actual access to the
 file---such as the ones that implement completion of host names for
 remote file names---should have a non-@code{nil} @code{safe-magic}
-property.  For instance, Emacs normally ``protects'' directory names
+property.  For instance, Emacs normally protects directory names
 it finds in @code{PATH} from becoming magic, if they look like magic
 file names, by prefixing them with @samp{/:}.  But if the handler that
 would be used for them has a non-@code{nil} @code{safe-magic}
@@ -3322,8 +3354,8 @@ from the buffer is actually written to the file, it intermixes the
 specified annotations at the corresponding positions.  All this takes
 place without modifying the buffer.
 
-@c ??? What about ``overriding'' conversions like those allowed
-@c ??? for `write-region-annotate-functions', below?  --ttn
+@c ??? What about "overriding" conversions like those allowed
+@c ??? for 'write-region-annotate-functions', below?  --ttn
 
   In contrast, when reading, the annotations intermixed with the text
 are handled immediately.  @code{insert-file-contents} sets point to
@@ -3376,8 +3408,8 @@ with one argument, the number of characters inserted, and with point
 at the beginning of the inserted text.  Each function should leave
 point unchanged, and return the new character count describing the
 inserted text as modified by the function.
-@c ??? The docstring mentions a handler from `file-name-handler-alist'
-@c     "intercepting" `insert-file-contents'.  Hmmm.  --ttn
+@c ??? The docstring mentions a handler from 'file-name-handler-alist'
+@c     "intercepting" 'insert-file-contents'.  Hmmm.  --ttn
 @end defvar
 
   We invite users to write Lisp programs to store and retrieve text

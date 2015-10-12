@@ -1,6 +1,6 @@
 ### @configure_input@
 
-# Copyright (C) 2013-2014 Free Software Foundation, Inc.
+# Copyright (C) 2013-2015 Free Software Foundation, Inc.
 
 # This file is part of GNU Emacs.
 
@@ -25,6 +25,9 @@ SHELL = /bin/sh
 
 CC=@CC@
 CFLAGS=@CFLAGS@
+CPPFLAGS = @CPPFLAGS@
+LDFLAGS = @LDFLAGS@
+
 version=@version@
 ## Used in $archlibdir.
 configuration=@configuration@
@@ -37,6 +40,24 @@ WERROR_CFLAGS = @WERROR_CFLAGS@
 
 # Program name transformation.
 TRANSFORM = @program_transform_name@
+
+# 'make' verbosity.
+AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
+
+AM_V_CC = $(am__v_CC_@AM_V@)
+am__v_CC_ = $(am__v_CC_@AM_DEFAULT_V@)
+am__v_CC_0 = @echo "  CC      " $@;
+am__v_CC_1 =
+
+AM_V_CCLD = $(am__v_CCLD_@AM_V@)
+am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
+am__v_CCLD_0 = @echo "  CCLD    " $@;
+am__v_CCLD_1 =
+
+AM_V_RC = $(am__v_RC_@AM_V@)
+am__v_RC_ = $(am__v_RC_@AM_DEFAULT_V@)
+am__v_RC_0 = @echo "  RC      " $@;
+am__v_RC_1 =
 
 # ==================== Where To Install Things ====================
 
@@ -120,7 +141,7 @@ INSTALLABLES = runemacs${EXEEXT} addpm${EXEEXT}
 UTILITIES = cmdproxy${EXEEXT} ddeclient${EXEEXT}
 
 # Things that Emacs runs during the build process.
-DONT_INSTALL = addsection${EXEEXT}
+DONT_INSTALL =
 
 # All files that are created by the linker, i.e., whose names end in ${EXEEXT}.
 EXE_FILES = ${INSTALLABLES} ${UTILITIES} ${DONT_INSTALL}
@@ -141,7 +162,9 @@ BASE_CFLAGS = $(C_SWITCH_SYSTEM) $(C_SWITCH_MACHINE) \
 	      -I. -I${srcdir}
 
 ALL_CFLAGS = ${BASE_CFLAGS} ${PROFILING_CFLAGS} ${LDFLAGS} ${CPPFLAGS} ${CFLAGS}
+## Unused.
 LINK_CFLAGS = ${BASE_CFLAGS} ${LDFLAGS} ${CFLAGS}
+## Unused.
 CPP_CFLAGS = ${BASE_CFLAGS} ${PROFILING_CFLAGS} ${CPPFLAGS} ${CFLAGS}
 
 all: ${EXE_FILES}
@@ -162,7 +185,7 @@ $(DESTDIR)${archlibdir}: all
         fi
 
 .PHONY: install uninstall mostlyclean clean distclean maintainer-clean
-.PHONY: extraclean check tags
+.PHONY: bootstrap-clean extraclean check tags
 
 install: $(DESTDIR)${archlibdir}
 	@echo
@@ -190,10 +213,9 @@ clean: mostlyclean
 	-rm -f ${EXE_FILES}
 
 distclean: clean
-	-rm -f TAGS
-	-rm -f Makefile
+	-rm -f TAGS Makefile *.rc
 
-maintainer-clean: distclean
+bootstrap-clean maintainer-clean: distclean
 	true
 
 extraclean: maintainer-clean
@@ -208,21 +230,19 @@ TAGS: ${EXE_FILES:${EXEEXT}=.c}
 	../lib-src/etags *.[ch]
 
 ## Build the programs
-addsection${EXEEXT}: ${srcdir}/addsection.c
-	$(CC) ${ALL_CFLAGS} ${srcdir}/addsection.c -o addsection${EXEEXT}
-
 addpm${EXEEXT}: ${srcdir}/addpm.c ../src/epaths.h
-	$(CC) ${ALL_CFLAGS} ${srcdir}/addpm.c $(LIBS_ADDPM) -o addpm${EXEEXT}
+	$(AM_V_CCLD)$(CC) ${ALL_CFLAGS} $< $(LIBS_ADDPM) -o $@
 
 ddeclient${EXEEXT}: ${srcdir}/ddeclient.c
-	$(CC) ${ALL_CFLAGS} ${srcdir}/ddeclient.c -o ddeclient${EXEEXT}
+	$(AM_V_CCLD)$(CC) ${ALL_CFLAGS} $< -o $@
 
 cmdproxy${EXEEXT}: ${srcdir}/cmdproxy.c
-	$(CC) ${ALL_CFLAGS} ${srcdir}/cmdproxy.c -o cmdproxy${EXEEXT}
+	$(AM_V_CCLD)$(CC) ${ALL_CFLAGS} $< -o $@
 
 runemacs${EXEEXT}: ${srcdir}/runemacs.c $(EMACSRES)
-	$(CC) ${ALL_CFLAGS} ${srcdir}/runemacs.c $(EMACSRES) -mwindows \
-         -o runemacs${EXEEXT}
+	$(AM_V_CCLD)$(CC) ${ALL_CFLAGS} $^ -mwindows -o $@
 
-emacs.res: ${srcdir}/emacs.rc ${srcdir}/icons/emacs.ico ${srcdir}/$(EMACS_MANIFEST)
-	${WINDRES} -I ${srcdir} -O coff -o emacs.res ${srcdir}/emacs.rc
+## Also used in ../src/Makefile.
+emacs.res ../src/emacs.res: emacs.rc ${srcdir}/icons/emacs.ico \
+  ${srcdir}/icons/hand.cur ${srcdir}/$(EMACS_MANIFEST)
+	$(AM_V_RC)${WINDRES} -I ${srcdir} -O coff -o $@ $<

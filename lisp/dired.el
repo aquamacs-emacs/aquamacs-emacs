@@ -1,7 +1,7 @@
 ;;; dired.el --- directory-browsing commands -*- lexical-binding: t -*-
 
-;; Copyright (C) 1985-1986, 1992-1997, 2000-2014
-;;   Free Software Foundation, Inc.
+;; Copyright (C) 1985-1986, 1992-1997, 2000-2015 Free Software
+;; Foundation, Inc.
 
 ;; Author: Sebastian Kremer <sk@thp.uni-koeln.de>
 ;; Maintainer: emacs-devel@gnu.org
@@ -91,7 +91,7 @@ spaces.  You might want to install ls from GNU Coreutils, which does
 support this option.  Alternatively, you might want to use Emacs's
 own emulation of \"ls\", by using:
   (setq ls-lisp-use-insert-directory-program nil)
-  (require 'ls-lisp)
+  (require \\='ls-lisp)
 This is used by default on MS Windows, which does not have an \"ls\" program.
 Note that `ls-lisp' does not support as many options as GNU ls, though.
 For more details, see Info node `(emacs)ls in Lisp'."
@@ -749,10 +749,16 @@ as an argument to `dired-goto-file'."
   "\"Edit\" directory DIRNAME--delete, rename, print, etc. some files in it.
 Optional second argument SWITCHES specifies the `ls' options used.
 \(Interactively, use a prefix argument to be able to specify SWITCHES.)
-Dired displays a list of files in DIRNAME (which may also have
-shell wildcards appended to select certain files).  If DIRNAME is a cons,
-its first element is taken as the directory name and the rest as an explicit
-list of files to make directory entries for.
+
+If DIRNAME is a string, Dired displays a list of files in DIRNAME (which
+may also have shell wildcards appended to select certain files).
+
+If DIRNAME is a cons, its first element is taken as the directory name
+and the rest as an explicit list of files to make directory entries for.
+In this case, SWITCHES are applied to each of the files separately, and
+therefore switches that control the order of the files in the produced
+listing have no effect.
+
 \\<dired-mode-map>\
 You can flag files for deletion with \\[dired-flag-file-deletion] and then
 delete them by typing \\[dired-do-flagged-delete].
@@ -1912,7 +1918,7 @@ Type \\[dired-mark] to Mark a file or subdirectory for later commands.
   to see why something went wrong.
 Type \\[dired-unmark] to Unmark a file or all files of an inserted subdirectory.
 Type \\[dired-unmark-backward] to back up one line and unmark or unflag.
-Type \\[dired-do-flagged-delete] to delete (eXecute) the files flagged `D'.
+Type \\[dired-do-flagged-delete] to delete (eXpunge) the files flagged `D'.
 Type \\[dired-find-file] to Find the current line's file
   (or dired it in another buffer, if it is a directory).
 Type \\[dired-find-file-other-window] to find file or Dired directory in Other window.
@@ -2850,11 +2856,16 @@ Any other value means to ask for each directory."
 ;; to e.g. recursive-delete-file and put it somewhere else.
 (defun dired-delete-file (file &optional recursive trash) "\
 Delete FILE or directory (possibly recursively if optional RECURSIVE is true.)
-RECURSIVE determines what to do with a non-empty directory.  If RECURSIVE is:
-nil, do not delete.
-`always', delete recursively without asking.
-`top', ask for each directory at top level.
-Anything else, ask for each sub-directory."
+RECURSIVE determines what to do with a non-empty directory.  The effect of
+its possible values is:
+
+  nil           -- do not delete.
+  `always'      -- delete recursively without asking.
+  `top'         -- ask for each directory at top level.
+  Anything else -- ask for each sub-directory.
+
+TRASH non-nil means to trash the file instead of deleting, provided
+`delete-by-moving-to-trash' (which see) is non-nil."
   ;; This test is equivalent to
   ;; (and (file-directory-p fn) (not (file-symlink-p fn)))
   ;; but more efficient
@@ -3059,7 +3070,7 @@ or \"* [3 files]\"."
   (when dired-shrink-to-fit
     ;; Try to not delete window when we want to display less than
     ;; `window-min-height' lines.
-    (fit-window-to-buffer (get-buffer-window buf) nil 1)))
+    (fit-window-to-buffer (get-buffer-window buf) nil 1 nil nil t)))
 
 (defcustom dired-no-confirm nil
   "A list of symbols for commands Dired should not confirm, or t.
@@ -3103,20 +3114,21 @@ argument or confirmation)."
 	  ;; Mark *Marked Files* window as softly-dedicated, to prevent
 	  ;; other buffers e.g. *Completions* from reusing it (bug#17554).
 	  (display-buffer-mark-dedicated 'soft))
-      (with-current-buffer buffer
-	(with-current-buffer-window
-	 buffer
-	 (cons 'display-buffer-below-selected
-	       '((window-height . fit-window-to-buffer)))
-	 #'(lambda (window _value)
-	     (with-selected-window window
-	       (unwind-protect
-		   (apply function args)
-		 (when (window-live-p window)
-		   (quit-restore-window window 'kill)))))
-	 ;; Handle (t FILE) just like (FILE), here.  That value is
-	 ;; used (only in some cases), to mean just one file that was
-	 ;; marked, rather than the current line file.
+      (with-displayed-buffer-window
+       buffer
+       (cons 'display-buffer-below-selected
+	     '((window-height . fit-window-to-buffer)
+	       (preserve-size . (nil . t))))
+       #'(lambda (window _value)
+	   (with-selected-window window
+	     (unwind-protect
+		 (apply function args)
+	       (when (window-live-p window)
+		 (quit-restore-window window 'kill)))))
+       ;; Handle (t FILE) just like (FILE), here.  That value is
+       ;; used (only in some cases), to mean just one file that was
+       ;; marked, rather than the current line file.
+       (with-current-buffer buffer
 	 (dired-format-columns-of-files
 	  (if (eq (car files) t) (cdr files) files))
 	 (remove-text-properties (point-min) (point-max)
@@ -3546,7 +3558,7 @@ Thus, use \\[backward-page] to find the beginning of a group of errors."
       (let ((inhibit-read-only t))
 	(cond ((stringp log)
 	       (insert (if args
-			   (apply (function format) log args)
+			   (apply #'format-message log args)
 			 log)))
 	      ((bufferp log)
 	       (insert-buffer-substring log))
@@ -3555,7 +3567,7 @@ Thus, use \\[backward-page] to find the beginning of a group of errors."
 	       (unless (bolp)
 		 (insert "\n"))
 	       (insert (current-time-string)
-		       "\tBuffer `" (buffer-name obuf) "'\n")
+		       (format-message "\tBuffer `%s'\n" (buffer-name obuf)))
 	       (goto-char (point-max))
 	       (insert "\f\n")))))))
 
@@ -3799,7 +3811,8 @@ Ask means pop up a menu for the user to select one of copy, move or link."
 	    ((memq action '(copy private move link))
 	     (let ((overwrite (and (file-exists-p to)
 				   (y-or-n-p
-				    (format "Overwrite existing file `%s'? " to))))
+				    (format-message
+				     "Overwrite existing file `%s'? " to))))
 		   ;; Binding dired-overwrite-confirmed to nil makes
 		   ;; dired-handle-overwrite a no-op.  We instead use
 		   ;; y-or-n-p, which pops a graphical menu.
@@ -3812,7 +3825,7 @@ Ask means pop up a menu for the user to select one of copy, move or link."
 				(car (find-backup-file-name to)))
 			  (or (eq dired-backup-overwrite 'always)
 			      (y-or-n-p
-			       (format
+			       (format-message
 				"Make backup for existing file `%s'? " to))))
 		 (rename-file to backup-file 0)
 		 (dired-relist-entry backup-file))
@@ -3883,7 +3896,7 @@ Ask means pop up a menu for the user to select one of copy, move or link."
 
 ;;; Start of automatically extracted autoloads.
 
-;;;### (autoloads nil "dired-aux" "dired-aux.el" "6969bb4414a8a31b91342ab922a94efb")
+;;;### (autoloads nil "dired-aux" "dired-aux.el" "637aadf6baffb10be036ba4cec2372f9")
 ;;; Generated autoloads from dired-aux.el
 
 (autoload 'dired-diff "dired-aux" "\
@@ -4386,7 +4399,7 @@ instead.
 
 ;;;***
 
-;;;### (autoloads nil "dired-x" "dired-x.el" "994b5d9fc38059ab641ec271c728e56f")
+;;;### (autoloads nil "dired-x" "dired-x.el" "63be23901985afd2a9aadc64f2aacf37")
 ;;; Generated autoloads from dired-x.el
 
 (autoload 'dired-jump "dired-x" "\

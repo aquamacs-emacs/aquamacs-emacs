@@ -1,6 +1,6 @@
 ;;; lrt.el --- Quail package for inputting Lao characters by LRT method  -*-coding: utf-8;-*-
 
-;; Copyright (C) 1998, 2001-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1998, 2001-2015 Free Software Foundation, Inc.
 ;; Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
 ;;   2006, 2007, 2008, 2009, 2010, 2011
 ;;   National Institute of Advanced Industrial Science and Technology (AIST)
@@ -34,15 +34,16 @@
 ;; key sequence:
 ;;	consonant [+ semi-vowel-sign-lo ] + vowel [+ maa-sakod ] [+ tone-mark ]
 
-(defun quail-lao-update-translation (control-flag)
+(defun quail-lrt-update-translation (control-flag)
   (if (integerp control-flag)
       ;; Non-composable character typed.
       (setq quail-current-str
 	    (buffer-substring (overlay-start quail-overlay)
 			      (overlay-end quail-overlay))
 	    unread-command-events
-	    (string-to-list
-	     (substring quail-current-key control-flag)))
+	    (append
+	     (substring quail-current-key control-flag)
+             unread-command-events))
     (let ((lao-str (lao-transcribe-roman-to-lao-string quail-current-key)))
       (if (> (aref lao-str 0) 255)
 	  (setq quail-current-str lao-str)
@@ -59,7 +60,7 @@
 `\\' (backslash) + `$'		=> ຯ		LAO ELLIPSIS
 "
  nil 'forget-last-selection 'deterministic 'kbd-translate 'show-layout
-  nil nil nil 'quail-lao-update-translation nil t)
+  nil nil nil 'quail-lrt-update-translation nil t)
 
 ;; LRT (Lao Roman Transcription) input method accepts the following
 ;; key sequence:

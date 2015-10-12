@@ -1,6 +1,6 @@
-;;; grep.el --- run `grep' and display the results
+;;; grep.el --- run `grep' and display the results  -*- lexical-binding:t -*-
 
-;; Copyright (C) 1985-1987, 1993-1999, 2001-2014 Free Software
+;; Copyright (C) 1985-1987, 1993-1999, 2001-2015 Free Software
 ;; Foundation, Inc.
 
 ;; Author: Roland McGrath <roland@gnu.org>
@@ -77,11 +77,10 @@ in grep buffers, so if you have globally disabled font-lock-mode,
 you will not get highlighting.
 
 This option sets the environment variable GREP_COLORS to specify
-markers for highlighting and GREP_OPTIONS to add the --color
-option in front of any explicit grep options before starting
-the grep.
+markers for highlighting and adds the --color option in front of
+any explicit grep options before starting the grep.
 
-When this option is `auto', grep uses `--color=auto' to highlight
+When this option is `auto', grep uses `--color' to highlight
 matches only when it outputs to a terminal (when `grep' is the last
 command in the pipe), thus avoiding the use of any potentially-harmful
 escape sequences when standard output goes to a file or pipe.
@@ -97,7 +96,7 @@ To change the default value, use Customize or call the function
   :type '(choice (const :tag "Do not highlight matches with grep markers" nil)
 		 (const :tag "Highlight matches with grep markers" t)
 		 (const :tag "Use --color=always" always)
-		 (const :tag "Use --color=auto" auto)
+		 (const :tag "Use --color" auto)
 		 (other :tag "Not Set" auto-detect))
   :set 'grep-apply-setting
   :version "22.1"
@@ -131,7 +130,7 @@ Customize or call the function `grep-apply-setting'."
 (defcustom grep-template nil
   "The default command to run for \\[lgrep].
 The following place holders should be present in the string:
- <C> - place to put -i if case insensitive grep.
+ <C> - place to put the options like -i and --color.
  <F> - file names and wildcards to search.
  <X> - file names and wildcards to exclude.
  <R> - the regular expression searched for.
@@ -178,7 +177,7 @@ The following place holders should be present in the string:
  <D> - base directory for find
  <X> - find options to restrict or expand the directory list
  <F> - find options to limit the files matched
- <C> - place to put -i if case insensitive grep
+ <C> - place to put the grep options like -i and --color
  <R> - the regular expression searched for.
 In interactive usage, the actual value of this variable is set up
 by `grep-compute-defaults'; to change the default value, use
@@ -345,16 +344,11 @@ Notice that using \\[next-error] or \\[compile-goto-error] modifies
 ;;;###autoload
 (defconst grep-regexp-alist
   '(
-    ;; Rule to match column numbers is commented out since no known grep
-    ;; produces them
-    ;; ("^\\(.+?\\)\\(:[ \t]*\\)\\([1-9][0-9]*\\)\\2\\(?:\\([1-9][0-9]*\\)\\(?:-\\([1-9][0-9]*\\)\\)?\\2\\)?"
-    ;;  1 3 (4 . 5))
-    ;; Note that we want to use as tight a regexp as we can to try and
-    ;; handle weird file names (with colons in them) as well as possible.
-    ;; E.g. we use [1-9][0-9]* rather than [0-9]+ so as to accept ":034:"
-    ;; in file names.
-    ("^\\(.+?\\)\\(:[ \t]*\\)\\([1-9][0-9]*\\)\\2"
-     1 3
+    ;; Use a tight regexp to handle weird file names (with colons
+    ;; in them) as well as possible.  E.g., use [1-9][0-9]* rather
+    ;; than [0-9]+ so as to accept ":034:" in file names.
+    ("^\\(.*?[^/\n]\\):[ \t]*\\([1-9][0-9]*\\)[ \t]*:"
+     1 2
      ;; Calculate column positions (col . end-col) of first grep match on a line
      ((lambda ()
 	(when grep-highlight-matches
@@ -467,10 +461,6 @@ Set up `compilation-exit-message-function' and run `grep-setup-hook'."
     ;; `setenv' modifies `process-environment' let-bound in `compilation-start'
     ;; Any TERM except "dumb" allows GNU grep to use `--color=auto'
     (setenv "TERM" "emacs-grep")
-    (setenv "GREP_OPTIONS"
-	    (concat (getenv "GREP_OPTIONS")
-		    " --color=" (if (eq grep-highlight-matches 'always)
-				    "always" "auto")))
     ;; GREP_COLOR is used in GNU grep 2.5.1, but deprecated in later versions
     (setenv "GREP_COLOR" "01;31")
     ;; GREP_COLORS is used in GNU grep 2.5.2 and later versions
@@ -567,6 +557,18 @@ This function is called from `compilation-filter-hook'."
 			(looking-at
 			 (concat (regexp-quote hello-file)
 				 ":[0-9]+:English")))))))))
+
+    (when (eq grep-highlight-matches 'auto-detect)
+      (setq grep-highlight-matches
+	    (with-temp-buffer
+	      (and (grep-probe grep-program '(nil t nil "--help"))
+		   (progn
+		     (goto-char (point-min))
+		     (search-forward "--color" nil t))
+		   ;; Windows and DOS pipes fail `isatty' detection in Grep.
+		   (if (memq system-type '(windows-nt ms-dos))
+		       'always 'auto)))))
+
     (unless (and grep-command grep-find-command
 		 grep-template grep-find-template)
       (let ((grep-options
@@ -577,7 +579,16 @@ This function is called from `compilation-filter-hook'."
 			 " -e"))))
 	(unless grep-command
 	  (setq grep-command
-		(format "%s %s " grep-program grep-options)))
+		(format "%s %s %s " grep-program
+                        (or
+                         (and grep-highlight-matches
+                              (grep-probe grep-program
+                                          `(nil nil nil "--color" "x" ,null-device)
+                                          nil 1)
+                              (if (eq grep-highlight-matches 'always)
+                                  "--color=always" "--color"))
+                         "")
+                         grep-options)))
 	(unless grep-template
 	  (setq grep-template
 		(format "%s <X> <C> %s <R> <F>" grep-program grep-options)))
@@ -625,28 +636,18 @@ This function is called from `compilation-filter-hook'."
 				(format "%s " null-device)
 			      "")))
 		  (cond ((eq grep-find-use-xargs 'gnu)
-			 (format "%s . <X> -type f <F> -print0 | \"%s\" -0 %s"
+			 (format "%s <D> <X> -type f <F> -print0 | \"%s\" -0 %s"
 				 find-program xargs-program gcmd))
 			((eq grep-find-use-xargs 'exec)
-			 (format "%s . <X> -type f <F> -exec %s {} %s%s"
+			 (format "%s <D> <X> -type f <F> -exec %s {} %s%s"
 				 find-program gcmd null
 				 (shell-quote-argument ";")))
 			((eq grep-find-use-xargs 'exec-plus)
-			 (format "%s . <X> -type f <F> -exec %s %s{} +"
+			 (format "%s <D> <X> -type f <F> -exec %s %s{} +"
 				 find-program gcmd null))
 			(t
-			 (format "%s . <X> -type f <F> -print | \"%s\" %s"
+			 (format "%s <D> <X> -type f <F> -print | \"%s\" %s"
 				 find-program xargs-program gcmd))))))))
-    (when (eq grep-highlight-matches 'auto-detect)
-      (setq grep-highlight-matches
-	    (with-temp-buffer
-	      (and (grep-probe grep-program '(nil t nil "--help"))
-		   (progn
-		     (goto-char (point-min))
-		     (search-forward "--color" nil t))
-		   ;; Windows and DOS pipes fail `isatty' detection in Grep.
-		   (if (memq system-type '(windows-nt ms-dos))
-		       'always 'auto)))))
 
     ;; Save defaults for this host.
     (setq grep-host-defaults-alist
@@ -793,8 +794,8 @@ easily repeat a find command."
 ;; User-friendly interactive API.
 
 (defconst grep-expand-keywords
-  '(("<C>" . (and cf (isearch-no-upper-case-p regexp t) "-i"))
-    ("<D>" . dir)
+  '(("<C>" . (mapconcat #'identity opts " "))
+    ("<D>" . (or dir "."))
     ("<F>" . files)
     ("<N>" . null-device)
     ("<X>" . excl)
@@ -805,16 +806,29 @@ substitution string.  Note dynamic scoping of variables.")
 
 (defun grep-expand-template (template &optional regexp files dir excl)
   "Patch grep COMMAND string replacing <C>, <D>, <F>, <R>, and <X>."
-  (let ((command template)
-	(cf case-fold-search)
-	(case-fold-search nil))
+  (let* ((command template)
+         (env `((opts . ,(let (opts)
+                           (when (and case-fold-search
+                                      (isearch-no-upper-case-p regexp t))
+                             (push "-i" opts))
+                           (cond
+                            ((eq grep-highlight-matches 'always)
+                             (push "--color=always" opts))
+                            ((eq grep-highlight-matches 'auto)
+                             (push "--color" opts)))
+                           opts))
+                (excl . ,excl)
+                (dir . ,dir)
+                (files . ,files)
+                (regexp . ,regexp)))
+         (case-fold-search nil))
     (dolist (kw grep-expand-keywords command)
       (if (string-match (car kw) command)
 	  (setq command
 		(replace-match
 		 (or (if (symbolp (cdr kw))
-			 (symbol-value (cdr kw))
-		       (save-match-data (eval (cdr kw))))
+			 (eval (cdr kw) env)
+		       (save-match-data (eval (cdr kw) env)))
 		     "")
 		 t t command))))))
 
@@ -901,7 +915,7 @@ This command shares argument histories with \\[rgrep] and \\[grep]."
 		(confirm (equal current-prefix-arg '(4))))
 	   (list regexp files dir confirm))))))
   (when (and (stringp regexp) (> (length regexp) 0))
-    (unless (and dir (file-directory-p dir) (file-readable-p dir))
+    (unless (and dir (file-accessible-directory-p dir))
       (setq dir default-directory))
     (let ((command regexp))
       (if (null files)
@@ -982,7 +996,7 @@ to specify a command to run."
 		(confirm (equal current-prefix-arg '(4))))
 	   (list regexp files dir confirm))))))
   (when (and (stringp regexp) (> (length regexp) 0))
-    (unless (and dir (file-directory-p dir) (file-readable-p dir))
+    (unless (and dir (file-accessible-directory-p dir))
       (setq dir default-directory))
     (if (null files)
 	(if (not (string= regexp (if (consp grep-find-command)
@@ -990,58 +1004,7 @@ to specify a command to run."
 				   grep-find-command)))
 	    (compilation-start regexp 'grep-mode))
       (setq dir (file-name-as-directory (expand-file-name dir)))
-      (require 'find-dired)		; for `find-name-arg'
-      (let ((command (grep-expand-template
-		      grep-find-template
-		      regexp
-		      (concat (shell-quote-argument "(")
-			      " " find-name-arg " "
-			      (mapconcat
-			       #'shell-quote-argument
-			       (split-string files)
-			       (concat " -o " find-name-arg " "))
-			      " "
-			      (shell-quote-argument ")"))
-		      dir
-		      (concat
-		       (and grep-find-ignored-directories
-			    (concat "-type d "
-				    (shell-quote-argument "(")
-				    ;; we should use shell-quote-argument here
-				    " -path "
-				    (mapconcat
-				     #'(lambda (ignore)
-					 (cond ((stringp ignore)
-						(shell-quote-argument
-						 (concat "*/" ignore)))
-					       ((consp ignore)
-						(and (funcall (car ignore) dir)
-						     (shell-quote-argument
-						      (concat "*/"
-							      (cdr ignore)))))))
-				     grep-find-ignored-directories
-				     " -o -path ")
-				    " "
-				    (shell-quote-argument ")")
-				    " -prune -o "))
-		       (and grep-find-ignored-files
-			    (concat (shell-quote-argument "!") " -type d "
-				    (shell-quote-argument "(")
-				    ;; we should use shell-quote-argument here
-				    " -name "
-				    (mapconcat
-				     #'(lambda (ignore)
-					 (cond ((stringp ignore)
-						(shell-quote-argument ignore))
-					       ((consp ignore)
-						(and (funcall (car ignore) dir)
-						     (shell-quote-argument
-						      (cdr ignore))))))
-				     grep-find-ignored-files
-				     " -o -name ")
-				    " "
-				    (shell-quote-argument ")")
-				    " -prune -o "))))))
+      (let ((command (rgrep-default-command regexp files nil)))
 	(when command
 	  (if confirm
 	      (setq command
@@ -1054,8 +1017,65 @@ to specify a command to run."
 	  (if (eq next-error-last-buffer (current-buffer))
 	      (setq default-directory dir)))))))
 
+(defun rgrep-default-command (regexp files dir)
+  "Compute the command for \\[rgrep] to use by default."
+  (require 'find-dired)      ; for `find-name-arg'
+  (grep-expand-template
+   grep-find-template
+   regexp
+   (concat (shell-quote-argument "(")
+           " " find-name-arg " "
+           (mapconcat
+            #'shell-quote-argument
+            (split-string files)
+            (concat " -o " find-name-arg " "))
+           " "
+           (shell-quote-argument ")"))
+   dir
+   (concat
+    (and grep-find-ignored-directories
+         (concat "-type d "
+                 (shell-quote-argument "(")
+                 ;; we should use shell-quote-argument here
+                 " -path "
+                 (mapconcat
+                  'identity
+                  (delq nil (mapcar
+                             #'(lambda (ignore)
+                                 (cond ((stringp ignore)
+                                        (shell-quote-argument
+                                         (concat "*/" ignore)))
+                                       ((consp ignore)
+                                        (and (funcall (car ignore) dir)
+                                             (shell-quote-argument
+                                              (concat "*/"
+                                                      (cdr ignore)))))))
+                             grep-find-ignored-directories))
+                  " -o -path ")
+                 " "
+                 (shell-quote-argument ")")
+                 " -prune -o "))
+    (and grep-find-ignored-files
+         (concat (shell-quote-argument "!") " -type d "
+                 (shell-quote-argument "(")
+                 ;; we should use shell-quote-argument here
+                 " -name "
+                 (mapconcat
+                  #'(lambda (ignore)
+                      (cond ((stringp ignore)
+                             (shell-quote-argument ignore))
+                            ((consp ignore)
+                             (and (funcall (car ignore) dir)
+                                  (shell-quote-argument
+                                   (cdr ignore))))))
+                  grep-find-ignored-files
+                  " -o -name ")
+                 " "
+                 (shell-quote-argument ")")
+                 " -prune -o ")))))
+
 ;;;###autoload
-(defun zrgrep (regexp &optional files dir confirm grep-find-template)
+(defun zrgrep (regexp &optional files dir confirm template)
   "Recursively grep for REGEXP in gzipped FILES in tree rooted at DIR.
 Like `rgrep' but uses `zgrep' for `grep-program', sets the default
 file name to `*.gz', and sets `grep-highlight-matches' to `always'."
@@ -1088,12 +1108,10 @@ file name to `*.gz', and sets `grep-highlight-matches' to `always'."
 					    nil default-directory t))
 		  (confirm (equal current-prefix-arg '(4))))
 	     (list regexp files dir confirm grep-find-template)))))))
-  ;; Set `grep-highlight-matches' to `always'
-  ;; since `zgrep' puts filters in the grep output.
-  (let ((grep-highlight-matches 'always))
-    ;; `rgrep' uses the dynamically bound value `grep-find-template'
-    ;; from the argument `grep-find-template' whose value is computed
-    ;; in the `interactive' spec.
+  (let ((grep-find-template template)
+        ;; Set `grep-highlight-matches' to `always'
+        ;; since `zgrep' puts filters in the grep output.
+        (grep-highlight-matches 'always))
     (rgrep regexp files dir confirm)))
 
 ;;;###autoload

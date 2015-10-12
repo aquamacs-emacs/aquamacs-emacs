@@ -1,6 +1,6 @@
 ;;; ert-tests.el --- ERT's self-tests  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2007-2008, 2010-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2007-2008, 2010-2015 Free Software Foundation, Inc.
 
 ;; Author: Christian Ohler <ohler@gnu.org>
 
@@ -345,10 +345,15 @@ This macro is used to test if macroexpansion in `should' works."
         (should (equal actual-condition expected-condition)))))))
 
 (ert-deftest ert-test-deftest ()
+  ;; FIXME: These tests don't look very good.  What is their intent, i.e. what
+  ;; are they really testing?  The precise generated code shouldn't matter, so
+  ;; we should either test the behavior of the code, or else try to express the
+  ;; kind of efficiency guarantees we're looking for.
   (should (equal (macroexpand '(ert-deftest abc () "foo" :tags '(bar)))
 		 '(progn
 		    (ert-set-test 'abc
 				  (progn
+				    "Constructor for objects of type `ert-test'."
 				    (vector 'cl-struct-ert-test 'abc "foo"
 					    #'(lambda nil)
 					    nil ':passed
@@ -363,6 +368,7 @@ This macro is used to test if macroexpansion in `should' works."
 		 '(progn
 		    (ert-set-test 'def
 				  (progn
+				    "Constructor for objects of type `ert-test'."
 				    (vector 'cl-struct-ert-test 'def nil
 					    #'(lambda nil)
 					    nil ':passed 'nil)))
@@ -831,3 +837,7 @@ This macro is used to test if macroexpansion in `should' works."
 (provide 'ert-tests)
 
 ;;; ert-tests.el ends here
+
+;; Local Variables:
+;; no-byte-compile: t
+;; End:

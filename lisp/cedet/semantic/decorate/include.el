@@ -1,6 +1,6 @@
 ;;; semantic/decorate/include.el --- Decoration modes for include statements
 
-;; Copyright (C) 2008-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2008-2015 Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 
@@ -503,7 +503,8 @@ Argument EVENT is the mouse clicked event."
       (princ "Include File: ")
       (princ (semantic-format-tag-name tag nil t))
       (princ "\n\n")
-      (princ "This header file has been marked \"Unknown\".
+      (princ (substitute-command-keys "\
+This header file has been marked \"Unknown\".
 This means that Semantic has not been able to locate this file on disk.
 
 When Semantic cannot find an include file, this means that the
@@ -521,9 +522,9 @@ M-x semantic-add-system-include RET /path/to/includes RET
 
 or, in your .emacs file do:
 
-  (semantic-add-system-include \"/path/to/include\" '")
+  (semantic-add-system-include \"/path/to/include\" \\='"))
       (princ (symbol-name mm))
-      (princ ")
+      (princ (substitute-command-keys ")
 
 to add the path to Semantic's search.
 
@@ -531,7 +532,7 @@ If this is an include file that belongs to your project, then you may
 need to update `semanticdb-project-roots' or better yet, use `ede'
 to manage your project.  See the ede manual for projects that will
 wrap existing project code for Semantic's benefit.
-")
+"))
 
       (when (or (eq mm 'c++-mode) (eq mm 'c-mode))
 	(princ "
@@ -539,7 +540,7 @@ For C/C++ includes located within a project, you can use a special
 EDE project that will wrap an existing build system.  You can do that
 like this in your .emacs file:
 
-  (ede-cpp-root-project \"NAME\" :file \"FILENAME\" :locate-fcn 'MYFCN)
+  (ede-cpp-root-project \"NAME\" :file \"FILENAME\" :locate-fcn \\='MYFCN)
 
 See the CEDET manual, the EDE manual, or the commentary in
 ede/cpp-root.el for more.
@@ -745,7 +746,8 @@ Argument EVENT describes the event that caused this function to be called."
       (when (and (boundp 'ede-object)
 		 (boundp 'ede-object-project)
 		 ede-object)
-	(princ "  This file's project include search is handled by the EDE object:\n")
+	(princ (substitute-command-keys
+		"  This file's project include search is handled by the EDE object:\n"))
 	(princ "    Buffer Target:  ")
 	(princ (object-print ede-object))
 	(princ "\n")
@@ -769,7 +771,8 @@ Argument EVENT describes the event that caused this function to be called."
 	      (princ "\n"))
 	    )))
 
-      (princ "\n  This file's system include path is:\n")
+      (princ (substitute-command-keys
+	      "\n  This file's system include path is:\n"))
       (dolist (dir semantic-dependency-system-include-path)
 	(princ "    ")
 	(princ dir)
@@ -831,7 +834,7 @@ When an include's referring file is parsed, we need to undecorate
 any decorated referring includes.")
 
 
-(defmethod semantic-reset ((obj semantic-decoration-unparsed-include-cache))
+(cl-defmethod semantic-reset ((obj semantic-decoration-unparsed-include-cache))
   "Reset OBJ back to it's empty settings."
   (let ((table (oref obj table)))
     ;; This is a hack.  Add in something better?
@@ -841,13 +844,13 @@ any decorated referring includes.")
 	     ))
     ))
 
-(defmethod semanticdb-partial-synchronize ((cache semantic-decoration-unparsed-include-cache)
+(cl-defmethod semanticdb-partial-synchronize ((cache semantic-decoration-unparsed-include-cache)
 					   new-tags)
   "Synchronize CACHE with some NEW-TAGS."
   (if (semantic-find-tags-by-class 'include new-tags)
       (semantic-reset cache)))
 
-(defmethod semanticdb-synchronize ((cache semantic-decoration-unparsed-include-cache)
+(cl-defmethod semanticdb-synchronize ((cache semantic-decoration-unparsed-include-cache)
 				   new-tags)
   "Synchronize a CACHE with some NEW-TAGS."
   (semantic-reset cache))

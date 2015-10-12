@@ -1,6 +1,6 @@
 ;;; xesam.el --- Xesam interface to search engines.
 
-;; Copyright (C) 2008-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2008-2015 Free Software Foundation, Inc.
 
 ;; Author: Michael Albinus <michael.albinus@gmx.de>
 ;; Keywords: tools, hypermedia
@@ -378,7 +378,7 @@ If PROPERTY is not existing, retrieve it from ENGINE first."
 (defun xesam-search-engines ()
   "Return Xesam search engines, stored in `xesam-search-engines'.
 The first search engine is the name owner of `xesam-service-search'.
-If there is no registered search engine at all, the function returns `nil'."
+If there is no registered search engine at all, the function returns nil."
   (let ((services (dbus-ignore-errors
 		    (dbus-list-queued-owners
 		     :session xesam-service-search)))

@@ -1,6 +1,6 @@
 ;;; ediff-diff.el --- diff-related utilities
 
-;; Copyright (C) 1994-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1994-2015 Free Software Foundation, Inc.
 
 ;; Author: Michael Kifer <kifer@cs.stonybrook.edu>
 ;; Package: ediff
@@ -168,7 +168,7 @@ This variable can be set either in .emacs or toggled interactively.
 Use `setq-default' if setting it in .emacs")
 
 (ediff-defvar-local ediff-auto-refine-limit 14000
-  "Auto-refine only the regions of this size \(in bytes\) or less.")
+  "Auto-refine only the regions of this size (in bytes) or less.")
 
 ;;; General
 
@@ -1373,7 +1373,7 @@ affects only files whose names match the expression."
   ;; Normalize empty filter RE to nil.
   (unless (> (length filter-re) 0) (setq filter-re nil))
   ;; Indicate progress
-  (message "Comparing '%s' and '%s' modulo '%s'" d1 d2 filter-re)
+  (message "Comparing `%s' and `%s' modulo `%s'" d1 d2 filter-re)
   (cond
    ;; D1 & D2 directories => recurse
    ((and (file-directory-p d1)

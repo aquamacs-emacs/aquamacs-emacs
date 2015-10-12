@@ -1,6 +1,6 @@
 ;;; cua-gmrk.el --- CUA unified global mark support
 
-;; Copyright (C) 1997-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1997-2015 Free Software Foundation, Inc.
 
 ;; Author: Kim F. Storm <storm@cua.dk>
 ;; Keywords: keyboard emulations convenience cua mark
@@ -321,7 +321,7 @@ With prefix argument, don't jump to global mark when canceling it."
 (defun cua-cancel-global-mark ()
   "Cancel the global mark."
   (interactive)
-  (if mark-active
+  (if (region-active-p)
       (cua-cancel)
     (if (cua--global-mark-active)
 	(cua--deactivate-global-mark t)))

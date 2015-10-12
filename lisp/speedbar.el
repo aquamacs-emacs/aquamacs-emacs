@@ -1,6 +1,6 @@
 ;;; speedbar --- quick access to files and tags in a frame
 
-;; Copyright (C) 1996-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1996-2015 Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: file, tags, tools
@@ -39,20 +39,8 @@ this version is not backward compatible to 0.14 or earlier.")
 ;;
 ;;; Notes:
 ;;
-;;    Users of really old emacsen without the need timer functions
-;; will not have speedbar updating automatically.  Use "g" to refresh
-;; the display after changing directories.  Remember, do not interrupt
-;; the stealthy updates or your display may not be completely
-;; refreshed.
-;;
 ;;    AUC-TEX users: The imenu tags for AUC-TEX mode don't work very
 ;; well.  Use the imenu keywords from tex-mode.el for better results.
-;;
-;; This file requires the library package assoc (association lists)
-;;     assoc should be available in all modern versions of Emacs.
-;; The custom package is optional (for easy configuration of speedbar)
-;;     http://www.dina.kvl.dk/~abraham/custom/
-;;     custom is available in all versions of Emacs version 20 or better.
 ;;
 ;;; Developing for speedbar
 ;;
@@ -215,7 +203,7 @@ the user is done with the current expansion list.")
     )
   "List of functions to periodically call stealthily.
 This list is of the form:
- '( (\"NAME\" FUNCTION ...)
+  ( (\"NAME\" FUNCTION ...)
     ...)
 where NAME is the name of the major display mode these functions are
 for, and the remaining elements FUNCTION are functions to call in order.
@@ -470,9 +458,9 @@ items is reached."
 (defcustom speedbar-directory-button-trim-method 'span
   "Indicates how the directory button will be displayed.
 Possible values are:
- 'span - span large directories over multiple lines.
- 'trim - trim large directories to only show the last few.
- nil   - no trimming."
+ `span' - span large directories over multiple lines.
+ `trim' - trim large directories to only show the last few.
+ nil    - no trimming."
   :group 'speedbar
   :type '(radio (const :tag "Span large directories over multiple lines."
 		       span)
@@ -2869,7 +2857,7 @@ indicator, then do not add a space."
 	(progn
 	  (goto-char speedbar-ro-to-do-point)
 	  (while (and (not (input-pending-p))
-		      (re-search-forward "^\\([0-9]+\\):\\s-*[[<][+-\?][]>] "
+		      (re-search-forward "^\\([0-9]+\\):\\s-*[[<][+-?][]>] "
 					 nil t))
 	    (setq speedbar-ro-to-do-point (point))
 	    (let ((f (speedbar-line-file)))

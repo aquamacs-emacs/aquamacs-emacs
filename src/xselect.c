@@ -1,5 +1,5 @@
 /* X Selection processing for Emacs.
-   Copyright (C) 1993-1997, 2000-2014 Free Software Foundation, Inc.
+   Copyright (C) 1993-1997, 2000-2015 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -45,23 +45,22 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 struct prop_location;
 struct selection_data;
 
-static void x_decline_selection_request (struct input_event *);
-static int x_convert_selection (struct input_event *, Lisp_Object, Lisp_Object,
-				Atom, int, struct x_display_info *);
-static int waiting_for_other_props_on_window (Display *, Window);
+static void x_decline_selection_request (struct selection_input_event *);
+static bool x_convert_selection (Lisp_Object, Lisp_Object, Atom, bool,
+				 struct x_display_info *);
+static bool waiting_for_other_props_on_window (Display *, Window);
 static struct prop_location *expect_property_change (Display *, Window,
                                                      Atom, int);
 static void unexpect_property_change (struct prop_location *);
 static void wait_for_property_change (struct prop_location *);
-static Lisp_Object x_get_window_property_as_lisp_data (Display *,
+static Lisp_Object x_get_window_property_as_lisp_data (struct x_display_info *,
                                                        Window, Atom,
                                                        Lisp_Object, Atom);
-static Lisp_Object selection_data_to_lisp_data (Display *,
+static Lisp_Object selection_data_to_lisp_data (struct x_display_info *,
 						const unsigned char *,
 						ptrdiff_t, Atom, int);
-static void lisp_data_to_selection_data (Display *, Lisp_Object,
-                                         unsigned char **, Atom *,
-					 ptrdiff_t *, int *, int *);
+static void lisp_data_to_selection_data (struct x_display_info *, Lisp_Object,
+					 struct selection_data *);
 
 /* Printing traces to stderr.  */
 
@@ -80,29 +79,9 @@ static void lisp_data_to_selection_data (Display *, Lisp_Object,
 #define TRACE2(fmt, a0, a1)	(void) 0
 #endif
 
-
-static Lisp_Object QSECONDARY, QSTRING, QINTEGER, QCLIPBOARD, QTIMESTAMP,
-  QTEXT, QDELETE, QMULTIPLE, QINCR, QEMACS_TMP, QTARGETS, QATOM, QNULL,
-  QATOM_PAIR, QCLIPBOARD_MANAGER, QSAVE_TARGETS;
-
-static Lisp_Object QCOMPOUND_TEXT;	/* This is a type of selection.  */
-static Lisp_Object QUTF8_STRING;	/* This is a type of selection.  */
-
-static Lisp_Object Qcompound_text_with_extensions;
-
-static Lisp_Object Qforeign_selection;
-static Lisp_Object Qx_lost_selection_functions, Qx_sent_selection_functions;
-
 /* Bytes needed to represent 'long' data.  This is as per libX11; it
    is not necessarily sizeof (long).  */
 #define X_LONG_SIZE 4
-
-/* Extreme 'short' and 'long' values suitable for libX11.  */
-#define X_SHRT_MAX 0x7fff
-#define X_SHRT_MIN (-1 - X_SHRT_MAX)
-#define X_LONG_MAX 0x7fffffff
-#define X_LONG_MIN (-1 - X_LONG_MAX)
-#define X_ULONG_MAX 0xffffffffUL
 
 /* If this is a smaller number than the max-request-size of the display,
    emacs will use INCR selection transfer when the selection is larger
@@ -137,7 +116,7 @@ selection_quantum (Display *display)
 
 struct selection_event_queue
   {
-    struct input_event event;
+    struct selection_input_event event;
     struct selection_event_queue *next;
   };
 
@@ -147,10 +126,22 @@ static struct selection_event_queue *selection_queue;
 
 static int x_queue_selection_requests;
 
+/* True if the input events are duplicates.  */
+
+static bool
+selection_input_event_equal (struct selection_input_event *a,
+			     struct selection_input_event *b)
+{
+  return (a->kind == b->kind && a->dpyinfo == b->dpyinfo
+	  && a->requestor == b->requestor && a->selection == b->selection
+	  && a->target == b->target && a->property == b->property
+	  && a->time == b->time);
+}
+
 /* Queue up an SELECTION_REQUEST_EVENT *EVENT, to be processed later.  */
 
 static void
-x_queue_event (struct input_event *event)
+x_queue_event (struct selection_input_event *event)
 {
   struct selection_event_queue *queue_tmp;
 
@@ -158,7 +149,7 @@ x_queue_event (struct input_event *event)
      This only happens for large requests which uses the incremental protocol.  */
   for (queue_tmp = selection_queue; queue_tmp; queue_tmp = queue_tmp->next)
     {
-      if (!memcmp (&queue_tmp->event, event, sizeof (*event)))
+      if (selection_input_event_equal (event, &queue_tmp->event))
 	{
 	  TRACE1 ("DECLINE DUP SELECTION EVENT %p", queue_tmp);
 	  x_decline_selection_request (event);
@@ -245,9 +236,8 @@ symbol_to_x_atom (struct x_display_info *dpyinfo, Lisp_Object sym)
    and calls to intern whenever possible.  */
 
 static Lisp_Object
-x_atom_to_symbol (Display *dpy, Atom atom)
+x_atom_to_symbol (struct x_display_info *dpyinfo, Atom atom)
 {
-  struct x_display_info *dpyinfo;
   char *str;
   Lisp_Object val;
 
@@ -268,7 +258,6 @@ x_atom_to_symbol (Display *dpy, Atom atom)
       return QATOM;
     }
 
-  dpyinfo = x_display_info_for_display (dpy);
   if (dpyinfo == NULL)
     return Qnil;
   if (atom == dpyinfo->Xatom_CLIPBOARD)
@@ -295,7 +284,7 @@ x_atom_to_symbol (Display *dpy, Atom atom)
     return QNULL;
 
   block_input ();
-  str = XGetAtomName (dpy, atom);
+  str = XGetAtomName (dpyinfo->display, atom);
   unblock_input ();
   TRACE1 ("XGetAtomName --> %s", str);
   if (! str) return Qnil;
@@ -370,7 +359,7 @@ x_own_selection (Lisp_Object selection_name, Lisp_Object selection_value,
 
 static Lisp_Object
 x_get_local_selection (Lisp_Object selection_symbol, Lisp_Object target_type,
-		       int local_request, struct x_display_info *dpyinfo)
+		       bool local_request, struct x_display_info *dpyinfo)
 {
   Lisp_Object local_value;
   Lisp_Object handler_fn, value, check;
@@ -395,8 +384,6 @@ x_get_local_selection (Lisp_Object selection_symbol, Lisp_Object target_type,
 
       CHECK_SYMBOL (target_type);
       handler_fn = Fcdr (Fassq (target_type, Vselection_converter_alist));
-      /* gcpro is not needed here since nothing but HANDLER_FN
-	 is live, and that ought to be a symbol.  */
 
       if (!NILP (handler_fn))
 	value = call3 (handler_fn,
@@ -441,7 +428,7 @@ x_get_local_selection (Lisp_Object selection_symbol, Lisp_Object target_type,
    meaning we were unable to do what they wanted.  */
 
 static void
-x_decline_selection_request (struct input_event *event)
+x_decline_selection_request (struct selection_input_event *event)
 {
   XEvent reply_base;
   XSelectionEvent *reply = &(reply_base.xselection);
@@ -458,7 +445,7 @@ x_decline_selection_request (struct input_event *event)
      died in the meantime.  Handle that case.  */
   block_input ();
   x_catch_errors (reply->display);
-  XSendEvent (reply->display, reply->requestor, False, 0L, &reply_base);
+  XSendEvent (reply->display, reply->requestor, False, 0, &reply_base);
   XFlush (reply->display);
   x_uncatch_errors ();
   unblock_input ();
@@ -466,7 +453,7 @@ x_decline_selection_request (struct input_event *event)
 
 /* This is the selection request currently being processed.
    It is set to zero when the request is fully processed.  */
-static struct input_event *x_selection_current_request;
+static struct selection_input_event *x_selection_current_request;
 
 /* Display info in x_selection_request.  */
 
@@ -480,7 +467,7 @@ struct selection_data
   ptrdiff_t size;
   int format;
   Atom type;
-  int nofree;
+  bool nofree;
   Atom property;
   /* This can be set to non-NULL during x_reply_selection_request, if
      the selection is waiting for an INCR transfer to complete.  Don't
@@ -508,7 +495,7 @@ x_selection_request_lisp_error (void)
   for (cs = converted_selections; cs; cs = next)
     {
       next = cs->next;
-      if (cs->nofree == 0 && cs->data)
+      if (! cs->nofree && cs->data)
 	xfree (cs->data);
       xfree (cs);
     }
@@ -541,7 +528,7 @@ struct prop_location
   Window window;
   Atom property;
   int desired_state;
-  int arrived;
+  bool arrived;
   struct prop_location *next;
 };
 
@@ -553,6 +540,16 @@ static struct prop_location *property_change_reply_object;
 
 static struct prop_location *property_change_wait_list;
 
+static void
+set_property_change_object (struct prop_location *location)
+{
+  /* Input must be blocked so we don't get the event before we set these.  */
+  if (! input_blocked_p ())
+    emacs_abort ();
+  XSETCAR (property_change_reply, Qnil);
+  property_change_reply_object = location;
+}
+
 
 /* Send the reply to a selection request event EVENT.  */
 
@@ -561,7 +558,7 @@ static int x_reply_selection_request_cnt;
 #endif  /* TRACE_SELECTION */
 
 static void
-x_reply_selection_request (struct input_event *event,
+x_reply_selection_request (struct selection_input_event *event,
                            struct x_display_info *dpyinfo)
 {
   XEvent reply_base;
@@ -632,7 +629,7 @@ x_reply_selection_request (struct input_event *event,
     }
 
   /* Now issue the SelectionNotify event.  */
-  XSendEvent (display, window, False, 0L, &reply_base);
+  XSendEvent (display, window, False, 0, &reply_base);
   XFlush (display);
 
 #ifdef TRACE_SELECTION
@@ -655,6 +652,11 @@ x_reply_selection_request (struct input_event *event,
       {
 	int format_bytes = cs->format / 8;
 	bool had_errors_p = x_had_errors_p (display);
+
+        /* Must set this inside block_input ().  unblock_input may read
+           events and setting property_change_reply in
+           wait_for_property_change is then too late.  */
+        set_property_change_object (cs->wait_object);
 	unblock_input ();
 
 	bytes_remaining = cs->size;
@@ -695,6 +697,8 @@ x_reply_selection_request (struct input_event *event,
 			     : format_bytes);
 	    XFlush (display);
 	    had_errors_p = x_had_errors_p (display);
+            // See comment above about property_change_reply.
+            set_property_change_object (cs->wait_object);
 	    unblock_input ();
 
 	    if (had_errors_p) break;
@@ -710,7 +714,7 @@ x_reply_selection_request (struct input_event *event,
 	   requestor that we're done.  */
 	block_input ();
 	if (! waiting_for_other_props_on_window (display, window))
-	  XSelectInput (display, window, 0L);
+	  XSelectInput (display, window, 0);
 
 	TRACE1 ("Set %s to a 0-length chunk to indicate EOF",
 		XGetAtomName (display, cs->property));
@@ -745,22 +749,19 @@ x_reply_selection_request (struct input_event *event,
    This is called from keyboard.c when such an event is found in the queue.  */
 
 static void
-x_handle_selection_request (struct input_event *event)
+x_handle_selection_request (struct selection_input_event *event)
 {
-  struct gcpro gcpro1, gcpro2;
   Time local_selection_time;
 
-  Display *display = SELECTION_EVENT_DISPLAY (event);
-  struct x_display_info *dpyinfo = x_display_info_for_display (display);
+  struct x_display_info *dpyinfo = SELECTION_EVENT_DPYINFO (event);
   Atom selection = SELECTION_EVENT_SELECTION (event);
-  Lisp_Object selection_symbol = x_atom_to_symbol (display, selection);
+  Lisp_Object selection_symbol = x_atom_to_symbol (dpyinfo, selection);
   Atom target = SELECTION_EVENT_TARGET (event);
-  Lisp_Object target_symbol = x_atom_to_symbol (display, target);
+  Lisp_Object target_symbol = x_atom_to_symbol (dpyinfo, target);
   Atom property = SELECTION_EVENT_PROPERTY (event);
   Lisp_Object local_selection_data;
-  int success = 0;
+  bool success = false;
   ptrdiff_t count = SPECPDL_INDEX ();
-  GCPRO2 (local_selection_data, target_symbol);
 
   if (!dpyinfo) goto DONE;
 
@@ -800,7 +801,7 @@ x_handle_selection_request (struct input_event *event)
 
       if (property == None) goto DONE;
       multprop
-	= x_get_window_property_as_lisp_data (display, requestor, property,
+	= x_get_window_property_as_lisp_data (dpyinfo, requestor, property,
 					      QMULTIPLE, selection);
 
       if (!VECTORP (multprop) || ASIZE (multprop) % 2)
@@ -815,18 +816,18 @@ x_handle_selection_request (struct input_event *event)
 					       AREF (multprop, 2*j+1));
 
 	  if (subproperty != None)
-	    x_convert_selection (event, selection_symbol, subtarget,
-				 subproperty, 1, dpyinfo);
+	    x_convert_selection (selection_symbol, subtarget,
+				 subproperty, true, dpyinfo);
 	}
-      success = 1;
+      success = true;
     }
   else
     {
       if (property == None)
 	property = SELECTION_EVENT_TARGET (event);
-      success = x_convert_selection (event, selection_symbol,
+      success = x_convert_selection (selection_symbol,
 				     target_symbol, property,
-				     0, dpyinfo);
+				     false, dpyinfo);
     }
 
  DONE:
@@ -840,39 +841,30 @@ x_handle_selection_request (struct input_event *event)
   /* Run the `x-sent-selection-functions' abnormal hook.  */
   if (!NILP (Vx_sent_selection_functions)
       && !EQ (Vx_sent_selection_functions, Qunbound))
-    {
-      Lisp_Object args[4];
-      args[0] = Qx_sent_selection_functions;
-      args[1] = selection_symbol;
-      args[2] = target_symbol;
-      args[3] = success ? Qt : Qnil;
-      Frun_hook_with_args (4, args);
-    }
+    CALLN (Frun_hook_with_args, Qx_sent_selection_functions,
+	   selection_symbol, target_symbol, success ? Qt : Qnil);
 
   unbind_to (count, Qnil);
-  UNGCPRO;
 }
 
 /* Perform the requested selection conversion, and write the data to
    the converted_selections linked list, where it can be accessed by
-   x_reply_selection_request.  If FOR_MULTIPLE is non-zero, write out
+   x_reply_selection_request.  If FOR_MULTIPLE, write out
    the data even if conversion fails, using conversion_fail_tag.
 
-   Return 0 if the selection failed to convert, 1 otherwise.  */
+   Return true iff successful.  */
 
-static int
-x_convert_selection (struct input_event *event, Lisp_Object selection_symbol,
+static bool
+x_convert_selection (Lisp_Object selection_symbol,
 		     Lisp_Object target_symbol, Atom property,
-		     int for_multiple, struct x_display_info *dpyinfo)
+		     bool for_multiple, struct x_display_info *dpyinfo)
 {
-  struct gcpro gcpro1;
   Lisp_Object lisp_selection;
   struct selection_data *cs;
-  GCPRO1 (lisp_selection);
 
   lisp_selection
     = x_get_local_selection (selection_symbol, target_symbol,
-			     0, dpyinfo);
+			     false, dpyinfo);
 
   /* A nil return value means we can't perform the conversion.  */
   if (NILP (lisp_selection)
@@ -885,32 +877,26 @@ x_convert_selection (struct input_event *event, Lisp_Object selection_symbol,
 	  cs->size = 1;
 	  cs->format = 32;
 	  cs->type = XA_ATOM;
-	  cs->nofree = 1;
+	  cs->nofree = true;
 	  cs->property = property;
 	  cs->wait_object = NULL;
 	  cs->next = converted_selections;
 	  converted_selections = cs;
 	}
 
-      UNGCPRO;
-      return 0;
+      return false;
     }
 
   /* Otherwise, record the converted selection to binary.  */
   cs = xmalloc (sizeof *cs);
   cs->data = NULL;
-  cs->nofree = 1;
+  cs->nofree = true;
   cs->property = property;
   cs->wait_object = NULL;
   cs->next = converted_selections;
   converted_selections = cs;
-  lisp_data_to_selection_data (SELECTION_EVENT_DISPLAY (event),
-			       lisp_selection,
-			       &(cs->data), &(cs->type),
-			       &(cs->size), &(cs->format),
-			       &(cs->nofree));
-  UNGCPRO;
-  return 1;
+  lisp_data_to_selection_data (dpyinfo, lisp_selection, cs);
+  return true;
 }
 
 /* Handle a SelectionClear event EVENT, which indicates that some
@@ -918,22 +904,21 @@ x_convert_selection (struct input_event *event, Lisp_Object selection_symbol,
    This is called from keyboard.c when such an event is found in the queue.  */
 
 static void
-x_handle_selection_clear (struct input_event *event)
+x_handle_selection_clear (struct selection_input_event *event)
 {
-  Display *display = SELECTION_EVENT_DISPLAY (event);
   Atom selection = SELECTION_EVENT_SELECTION (event);
   Time changed_owner_time = SELECTION_EVENT_TIME (event);
 
   Lisp_Object selection_symbol, local_selection_data;
   Time local_selection_time;
-  struct x_display_info *dpyinfo = x_display_info_for_display (display);
+  struct x_display_info *dpyinfo = SELECTION_EVENT_DPYINFO (event);
   Lisp_Object Vselection_alist;
 
   TRACE0 ("x_handle_selection_clear");
 
   if (!dpyinfo) return;
 
-  selection_symbol = x_atom_to_symbol (display, selection);
+  selection_symbol = x_atom_to_symbol (dpyinfo, selection);
   local_selection_data = LOCAL_SELECTION (selection_symbol, dpyinfo);
 
   /* Well, we already believe that we don't own it, so that's just fine.  */
@@ -965,18 +950,13 @@ x_handle_selection_clear (struct input_event *event)
   tset_selection_alist (dpyinfo->terminal, Vselection_alist);
 
   /* Run the `x-lost-selection-functions' abnormal hook.  */
-  {
-    Lisp_Object args[2];
-    args[0] = Qx_lost_selection_functions;
-    args[1] = selection_symbol;
-    Frun_hook_with_args (2, args);
-  }
+  CALLN (Frun_hook_with_args, Qx_lost_selection_functions, selection_symbol);
 
   redisplay_preserve_echo_area (20);
 }
 
 void
-x_handle_selection_event (struct input_event *event)
+x_handle_selection_event (struct selection_input_event *event)
 {
   TRACE0 ("x_handle_selection_event");
   if (event->kind != SELECTION_REQUEST_EVENT)
@@ -1006,10 +986,8 @@ x_clear_frame_selections (struct frame *f)
 	 && EQ (frame, XCAR (XCDR (XCDR (XCDR (XCAR (t->Vselection_alist)))))))
     {
       /* Run the `x-lost-selection-functions' abnormal hook.  */
-      Lisp_Object args[2];
-      args[0] = Qx_lost_selection_functions;
-      args[1] = Fcar (Fcar (t->Vselection_alist));
-      Frun_hook_with_args (2, args);
+      CALLN (Frun_hook_with_args, Qx_lost_selection_functions,
+	     Fcar (Fcar (t->Vselection_alist)));
 
       tset_selection_alist (t, XCDR (t->Vselection_alist));
     }
@@ -1019,28 +997,23 @@ x_clear_frame_selections (struct frame *f)
     if (CONSP (XCDR (rest))
 	&& EQ (frame, XCAR (XCDR (XCDR (XCDR (XCAR (XCDR (rest))))))))
       {
-	Lisp_Object args[2];
-	args[0] = Qx_lost_selection_functions;
-	args[1] = XCAR (XCAR (XCDR (rest)));
-	Frun_hook_with_args (2, args);
+	CALLN (Frun_hook_with_args, Qx_lost_selection_functions,
+	       XCAR (XCAR (XCDR (rest))));
 	XSETCDR (rest, XCDR (XCDR (rest)));
 	break;
       }
 }
 
-/* Nonzero if any properties for DISPLAY and WINDOW
+/* True if any properties for DISPLAY and WINDOW
    are on the list of what we are waiting for.  */
 
-static int
+static bool
 waiting_for_other_props_on_window (Display *display, Window window)
 {
-  struct prop_location *rest = property_change_wait_list;
-  while (rest)
-    if (rest->display == display && rest->window == window)
-      return 1;
-    else
-      rest = rest->next;
-  return 0;
+  for (struct prop_location *p = property_change_wait_list; p; p = p->next)
+    if (p->display == display && p->window == window)
+      return true;
+  return false;
 }
 
 /* Add an entry to the list of property changes we are waiting for.
@@ -1059,7 +1032,7 @@ expect_property_change (Display *display, Window window,
   pl->property = property;
   pl->desired_state = state;
   pl->next = property_change_wait_list;
-  pl->arrived = 0;
+  pl->arrived = false;
   property_change_wait_list = pl;
   return pl;
 }
@@ -1070,20 +1043,18 @@ expect_property_change (Display *display, Window window,
 static void
 unexpect_property_change (struct prop_location *location)
 {
-  struct prop_location *prev = 0, *rest = property_change_wait_list;
-  while (rest)
+  struct prop_location *prop, **pprev = &property_change_wait_list;
+
+  for (prop = property_change_wait_list; prop; prop = *pprev)
     {
-      if (rest == location)
+      if (prop == location)
 	{
-	  if (prev)
-	    prev->next = rest->next;
-	  else
-	    property_change_wait_list = rest->next;
-	  xfree (rest);
-	  return;
+	  *pprev = prop->next;
+	  xfree (prop);
+	  break;
 	}
-      prev = rest;
-      rest = rest->next;
+      else
+	pprev = &prop->next;
     }
 }
 
@@ -1107,14 +1078,11 @@ wait_for_property_change (struct prop_location *location)
 {
   ptrdiff_t count = SPECPDL_INDEX ();
 
-  if (property_change_reply_object)
-    emacs_abort ();
-
   /* Make sure to do unexpect_property_change if we quit or err.  */
   record_unwind_protect_ptr (wait_for_property_change_unwind, location);
 
-  XSETCAR (property_change_reply, Qnil);
-  property_change_reply_object = location;
+  /* See comment in x_reply_selection_request about setting
+     property_change_reply.  Do not do it here.  */
 
   /* If the event we are waiting for arrives beyond here, it will set
      property_change_reply, because property_change_reply_object says so.  */
@@ -1124,7 +1092,7 @@ wait_for_property_change (struct prop_location *location)
       EMACS_INT secs = timeout / 1000;
       int nsecs = (timeout % 1000) * 1000000;
       TRACE2 ("  Waiting %"pI"d secs, %d nsecs", secs, nsecs);
-      wait_reading_process_output (secs, nsecs, 0, 0,
+      wait_reading_process_output (secs, nsecs, 0, false,
 				   property_change_reply, NULL, 0);
 
       if (NILP (XCAR (property_change_reply)))
@@ -1156,7 +1124,7 @@ x_handle_property_notify (const XPropertyEvent *event)
 		  (event->state == PropertyDelete ? "deletion" : "change"),
 		  XGetAtomName (event->display, event->atom));
 
-	  rest->arrived = 1;
+	  rest->arrived = true;
 
 	  /* If this is the one wait_for_property_change is waiting for,
 	     tell it to wake up.  */
@@ -1222,7 +1190,7 @@ x_get_foreign_selection (Lisp_Object selection_symbol, Lisp_Object target_type,
      during this time.  In fact, the SAVE_TARGETS mechanism requires
      us to handle a clipboard manager's requests before it returns
      SelectionNotify. */
-#if 0
+#if false
   x_start_queuing_selection_requests ();
   record_unwind_protect_void (x_stop_queuing_selection_requests);
 #endif
@@ -1234,7 +1202,7 @@ x_get_foreign_selection (Lisp_Object selection_symbol, Lisp_Object target_type,
   secs = timeout / 1000;
   nsecs = (timeout % 1000) * 1000000;
   TRACE1 ("  Start waiting %"pI"d secs for SelectionNotify", secs);
-  wait_reading_process_output (secs, nsecs, 0, 0,
+  wait_reading_process_output (secs, nsecs, 0, false,
 			       reading_selection_reply, NULL, 0);
   TRACE1 ("  Got event = %d", !NILP (XCAR (reading_selection_reply)));
 
@@ -1245,7 +1213,7 @@ x_get_foreign_selection (Lisp_Object selection_symbol, Lisp_Object target_type,
 
   /* Otherwise, the selection is waiting for us on the requested property.  */
   return
-    x_get_window_property_as_lisp_data (display, requestor_window,
+    x_get_window_property_as_lisp_data (dpyinfo, requestor_window,
 					target_property, target_type,
 					selection_atom);
 }
@@ -1258,7 +1226,7 @@ static void
 x_get_window_property (Display *display, Window window, Atom property,
 		       unsigned char **data_ret, ptrdiff_t *bytes_ret,
 		       Atom *actual_type_ret, int *actual_format_ret,
-		       unsigned long *actual_size_ret, int delete_p)
+		       unsigned long *actual_size_ret)
 {
   ptrdiff_t total_size;
   unsigned long bytes_remaining;
@@ -1283,7 +1251,7 @@ x_get_window_property (Display *display, Window window, Atom property,
 
   /* First probe the thing to find out how big it is.  */
   result = XGetWindowProperty (display, window, property,
-			       0L, 0L, False, AnyPropertyType,
+			       0, 0, False, AnyPropertyType,
 			       actual_type_ret, actual_format_ret,
 			       actual_size_ret,
 			       &bytes_remaining, &tmp_data);
@@ -1299,9 +1267,7 @@ x_get_window_property (Display *display, Window window, Atom property,
   if (total_size_max < bytes_remaining)
     goto size_overflow;
   total_size = bytes_remaining;
-  data = malloc (total_size + 1);
-  if (! data)
-    goto memory_exhausted;
+  data = xmalloc (total_size + 1);
 
   /* Now read, until we've gotten it all.  */
   while (bytes_remaining)
@@ -1352,9 +1318,7 @@ x_get_window_property (Display *display, Window window, Atom property,
 	  if (remaining_lim < 0 || remaining_lim < bytes_remaining)
 	    goto size_overflow;
 	  total_size = offset + bytes_gotten + bytes_remaining;
-	  data1 = realloc (data, total_size + 1);
-	  if (! data1)
-	    goto memory_exhausted;
+	  data1 = xrealloc (data, total_size + 1);
 	  data = data1;
 	}
 
@@ -1386,20 +1350,17 @@ x_get_window_property (Display *display, Window window, Atom property,
   return;
 
  size_overflow:
-  free (data);
+  if (data)
+    xfree (data);
   unblock_input ();
   memory_full (SIZE_MAX);
-
- memory_exhausted:
-  free (data);
-  unblock_input ();
-  memory_full (total_size + 1);
 }
 
 /* Use xfree, not XFree, to free the data obtained with this function.  */
 
 static void
-receive_incremental_selection (Display *display, Window window, Atom property,
+receive_incremental_selection (struct x_display_info *dpyinfo,
+			       Window window, Atom property,
 			       Lisp_Object target_type,
 			       unsigned int min_size_bytes,
 			       unsigned char **data_ret,
@@ -1409,6 +1370,8 @@ receive_incremental_selection (Display *display, Window window, Atom property,
 {
   ptrdiff_t offset = 0;
   struct prop_location *wait_object;
+  Display *display = dpyinfo->display;
+
   if (min (PTRDIFF_MAX, SIZE_MAX) < min_size_bytes)
     memory_full (SIZE_MAX);
   *data_ret = xmalloc (min_size_bytes);
@@ -1427,16 +1390,18 @@ receive_incremental_selection (Display *display, Window window, Atom property,
   block_input ();
   XSelectInput (display, window, STANDARD_EVENT_SET | PropertyChangeMask);
   TRACE1 ("  Delete property %s",
-	  SDATA (SYMBOL_NAME (x_atom_to_symbol (display, property))));
+	  SDATA (SYMBOL_NAME (x_atom_to_symbol (dpyinfo, property))));
   XDeleteProperty (display, window, property);
   TRACE1 ("  Expect new value of property %s",
-	  SDATA (SYMBOL_NAME (x_atom_to_symbol (display, property))));
+	  SDATA (SYMBOL_NAME (x_atom_to_symbol (dpyinfo, property))));
   wait_object = expect_property_change (display, window, property,
 					PropertyNewValue);
   XFlush (display);
+  // See comment in x_reply_selection_request about property_change_reply.
+  set_property_change_object (wait_object);
   unblock_input ();
 
-  while (1)
+  while (true)
     {
       unsigned char *tmp_data;
       ptrdiff_t tmp_size_bytes;
@@ -1450,7 +1415,7 @@ receive_incremental_selection (Display *display, Window window, Atom property,
       TRACE0 ("  Get property value");
       x_get_window_property (display, window, property,
 			     &tmp_data, &tmp_size_bytes,
-			     type_ret, format_ret, size_ret, 1);
+			     type_ret, format_ret, size_ret);
 
       TRACE1 ("  Read increment of %"pD"d bytes", tmp_size_bytes);
 
@@ -1472,6 +1437,8 @@ receive_incremental_selection (Display *display, Window window, Atom property,
       XDeleteProperty (display, window, property);
       wait_object = expect_property_change (display, window, property,
 					    PropertyNewValue);
+      // See comment in x_reply_selection_request about property_change_reply.
+      set_property_change_object (wait_object);
       XFlush (display);
       unblock_input ();
 
@@ -1495,8 +1462,8 @@ receive_incremental_selection (Display *display, Window window, Atom property,
    if this fails.  */
 
 static Lisp_Object
-x_get_window_property_as_lisp_data (Display *display, Window window,
-				    Atom property,
+x_get_window_property_as_lisp_data (struct x_display_info *dpyinfo,
+				    Window window, Atom property,
 				    Lisp_Object target_type,
 				    Atom selection_atom)
 {
@@ -1506,28 +1473,27 @@ x_get_window_property_as_lisp_data (Display *display, Window window,
   unsigned char *data = 0;
   ptrdiff_t bytes = 0;
   Lisp_Object val;
-  struct x_display_info *dpyinfo = x_display_info_for_display (display);
+  Display *display = dpyinfo->display;
 
   TRACE0 ("Reading selection data");
 
   x_get_window_property (display, window, property, &data, &bytes,
-			 &actual_type, &actual_format, &actual_size, 1);
+			 &actual_type, &actual_format, &actual_size);
   if (! data)
     {
-      int there_is_a_selection_owner;
       block_input ();
-      there_is_a_selection_owner
-	= XGetSelectionOwner (display, selection_atom);
+      bool there_is_a_selection_owner
+	= XGetSelectionOwner (display, selection_atom) != 0;
       unblock_input ();
       if (there_is_a_selection_owner)
 	signal_error ("Selection owner couldn't convert",
 		      actual_type
 		      ? list2 (target_type,
-			       x_atom_to_symbol (display, actual_type))
+			       x_atom_to_symbol (dpyinfo, actual_type))
 		      : target_type);
       else
 	signal_error ("No selection",
-		      x_atom_to_symbol (display, selection_atom));
+		      x_atom_to_symbol (dpyinfo, selection_atom));
     }
 
   if (actual_type == dpyinfo->Xatom_INCR)
@@ -1540,7 +1506,7 @@ x_get_window_property_as_lisp_data (Display *display, Window window,
 	 calls xmalloc itself.  */
       xfree (data);
       unblock_input ();
-      receive_incremental_selection (display, window, property, target_type,
+      receive_incremental_selection (dpyinfo, window, property, target_type,
 				     min_size_bytes, &data, &bytes,
 				     &actual_type, &actual_format,
 				     &actual_size);
@@ -1554,7 +1520,7 @@ x_get_window_property_as_lisp_data (Display *display, Window window,
 
   /* It's been read.  Now convert it to a lisp object in some semi-rational
      manner.  */
-  val = selection_data_to_lisp_data (display, data, bytes,
+  val = selection_data_to_lisp_data (dpyinfo, data, bytes,
 				     actual_type, actual_format);
 
   /* Use xfree, not XFree, because x_get_window_property
@@ -1595,11 +1561,10 @@ x_get_window_property_as_lisp_data (Display *display, Window window,
 
 
 static Lisp_Object
-selection_data_to_lisp_data (Display *display, const unsigned char *data,
+selection_data_to_lisp_data (struct x_display_info *dpyinfo,
+			     const unsigned char *data,
 			     ptrdiff_t size, Atom type, int format)
 {
-  struct x_display_info *dpyinfo = x_display_info_for_display (display);
-
   if (type == dpyinfo->Xatom_NULL)
     return QNULL;
 
@@ -1637,13 +1602,13 @@ selection_data_to_lisp_data (Display *display, const unsigned char *data,
       int *idata = (int *) data;
 
       if (size == sizeof (int))
-	return x_atom_to_symbol (display, (Atom) idata[0]);
+	return x_atom_to_symbol (dpyinfo, (Atom) idata[0]);
       else
 	{
 	  Lisp_Object v = make_uninit_vector (size / sizeof (int));
 
 	  for (i = 0; i < size / sizeof (int); i++)
-	    ASET (v, i, x_atom_to_symbol (display, (Atom) idata[i]));
+	    ASET (v, i, x_atom_to_symbol (dpyinfo, (Atom) idata[i]));
 	  return v;
 	}
     }
@@ -1705,15 +1670,13 @@ cons_to_x_long (Lisp_Object obj)
 /* Use xfree, not XFree, to free the data obtained with this function.  */
 
 static void
-lisp_data_to_selection_data (Display *display, Lisp_Object obj,
-			     unsigned char **data_ret, Atom *type_ret,
-			     ptrdiff_t *size_ret,
-			     int *format_ret, int *nofree_ret)
+lisp_data_to_selection_data (struct x_display_info *dpyinfo,
+			     Lisp_Object obj, struct selection_data *cs)
 {
   Lisp_Object type = Qnil;
-  struct x_display_info *dpyinfo = x_display_info_for_display (display);
 
-  *nofree_ret = 0;
+  eassert (cs != NULL);
+  cs->nofree = false;
 
   if (CONSP (obj) && SYMBOLP (XCAR (obj)))
     {
@@ -1725,9 +1688,9 @@ lisp_data_to_selection_data (Display *display, Lisp_Object obj,
 
   if (EQ (obj, QNULL) || (EQ (type, QNULL)))
     {				/* This is not the same as declining */
-      *format_ret = 32;
-      *size_ret = 0;
-      *data_ret = 0;
+      cs->format = 32;
+      cs->size = 0;
+      cs->data = NULL;
       type = QNULL;
     }
   else if (STRINGP (obj))
@@ -1737,19 +1700,19 @@ lisp_data_to_selection_data (Display *display, Lisp_Object obj,
 	signal_error ("Non-ASCII string must be encoded in advance", obj);
       if (NILP (type))
 	type = QSTRING;
-      *format_ret = 8;
-      *size_ret = SBYTES (obj);
-      *data_ret = SDATA (obj);
-      *nofree_ret = 1;
+      cs->format = 8;
+      cs->size = SBYTES (obj);
+      cs->data = SDATA (obj);
+      cs->nofree = true;
     }
   else if (SYMBOLP (obj))
     {
       void *data = xmalloc (sizeof (Atom) + 1);
       Atom *x_atom_ptr = data;
-      *data_ret = data;
-      *format_ret = 32;
-      *size_ret = 1;
-      (*data_ret) [sizeof (Atom)] = 0;
+      cs->data = data;
+      cs->format = 32;
+      cs->size = 1;
+      cs->data[sizeof (Atom)] = 0;
       *x_atom_ptr = symbol_to_x_atom (dpyinfo, obj);
       if (NILP (type)) type = QATOM;
     }
@@ -1757,10 +1720,10 @@ lisp_data_to_selection_data (Display *display, Lisp_Object obj,
     {
       void *data = xmalloc (sizeof (short) + 1);
       short *short_ptr = data;
-      *data_ret = data;
-      *format_ret = 16;
-      *size_ret = 1;
-      (*data_ret) [sizeof (short)] = 0;
+      cs->data = data;
+      cs->format = 16;
+      cs->size = 1;
+      cs->data[sizeof (short)] = 0;
       *short_ptr = XINT (obj);
       if (NILP (type)) type = QINTEGER;
     }
@@ -1772,10 +1735,10 @@ lisp_data_to_selection_data (Display *display, Lisp_Object obj,
     {
       void *data = xmalloc (sizeof (unsigned long) + 1);
       unsigned long *x_long_ptr = data;
-      *data_ret = data;
-      *format_ret = 32;
-      *size_ret = 1;
-      (*data_ret) [sizeof (unsigned long)] = 0;
+      cs->data = data;
+      cs->format = 32;
+      cs->size = 1;
+      cs->data[sizeof (unsigned long)] = 0;
       *x_long_ptr = cons_to_x_long (obj);
       if (NILP (type)) type = QINTEGER;
     }
@@ -1798,10 +1761,10 @@ lisp_data_to_selection_data (Display *display, Lisp_Object obj,
 	    if (!SYMBOLP (AREF (obj, i)))
 	      signal_error ("All elements of selection vector must have same type", obj);
 
-	  *data_ret = data = xnmalloc (size, sizeof *x_atoms);
+	  cs->data = data = xnmalloc (size, sizeof *x_atoms);
 	  x_atoms = data;
-	  *format_ret = 32;
-	  *size_ret = size;
+	  cs->format = 32;
+	  cs->size = size;
 	  for (i = 0; i < size; i++)
 	    x_atoms[i] = symbol_to_x_atom (dpyinfo, AREF (obj, i));
 	}
@@ -1827,11 +1790,11 @@ lisp_data_to_selection_data (Display *display, Lisp_Object obj,
 		  break;
 		}
 	    }
-	  *data_ret = data = xnmalloc (size, data_size);
+	  cs->data = data = xnmalloc (size, data_size);
 	  x_atoms = data;
 	  shorts = data;
-	  *format_ret = format;
-	  *size_ret = size;
+	  cs->format = format;
+	  cs->size = size;
 	  for (i = 0; i < size; i++)
 	    {
 	      if (format == 32)
@@ -1844,7 +1807,7 @@ lisp_data_to_selection_data (Display *display, Lisp_Object obj,
   else
     signal_error (/* Qselection_error */ "Unrecognized selection data", obj);
 
-  *type_ret = symbol_to_x_atom (dpyinfo, type);
+  cs->type = symbol_to_x_atom (dpyinfo, type);
 }
 
 static Lisp_Object
@@ -1927,7 +1890,7 @@ frame_for_x_selection (Lisp_Object object)
     }
   else if (TERMINALP (object))
     {
-      struct terminal *t = get_terminal (object, 1);
+      struct terminal *t = decode_live_terminal (object);
 
       if (t->type == output_x_window)
 	FOR_EACH_FRAME (tail, frame)
@@ -1952,7 +1915,7 @@ DEFUN ("x-own-selection-internal", Fx_own_selection_internal,
        Sx_own_selection_internal, 2, 3, 0,
        doc: /* Assert an X selection of type SELECTION and value VALUE.
 SELECTION is a symbol, typically `PRIMARY', `SECONDARY', or `CLIPBOARD'.
-\(Those are literal upper-case symbol names, since that's what X expects.)
+(Those are literal upper-case symbol names, since that's what X expects.)
 VALUE is typically a string, or a cons of two markers, but may be
 anything that the functions on `selection-converter-alist' know about.
 
@@ -1981,7 +1944,7 @@ DEFUN ("x-get-selection-internal", Fx_get_selection_internal,
        Sx_get_selection_internal, 2, 4, 0,
        doc: /* Return text selected from some X window.
 SELECTION-SYMBOL is typically `PRIMARY', `SECONDARY', or `CLIPBOARD'.
-\(Those are literal upper-case symbol names, since that's what X expects.)
+(Those are literal upper-case symbol names, since that's what X expects.)
 TARGET-TYPE is the type of data desired, typically `STRING'.
 
 TIME-STAMP is the time to use in the XConvertSelection call for foreign
@@ -1996,9 +1959,7 @@ On Nextstep, TIME-STAMP and TERMINAL are unused.  */)
    Lisp_Object time_stamp, Lisp_Object terminal)
 {
   Lisp_Object val = Qnil;
-  struct gcpro gcpro1, gcpro2;
   struct frame *f = frame_for_x_selection (terminal);
-  GCPRO2 (target_type, val); /* we store newly consed data into these */
 
   CHECK_SYMBOL (selection_symbol);
   CHECK_SYMBOL (target_type);
@@ -2007,15 +1968,15 @@ On Nextstep, TIME-STAMP and TERMINAL are unused.  */)
   if (!f)
     error ("X selection unavailable for this frame");
 
-  val = x_get_local_selection (selection_symbol, target_type, 1,
+  val = x_get_local_selection (selection_symbol, target_type, true,
 			       FRAME_DISPLAY_INFO (f));
 
   if (NILP (val) && FRAME_LIVE_P (f))
     {
       Lisp_Object frame;
       XSETFRAME (frame, f);
-      RETURN_UNGCPRO (x_get_foreign_selection (selection_symbol, target_type,
-					       time_stamp, frame));
+      return x_get_foreign_selection (selection_symbol, target_type,
+				      time_stamp, frame);
     }
 
   if (CONSP (val) && SYMBOLP (XCAR (val)))
@@ -2024,7 +1985,7 @@ On Nextstep, TIME-STAMP and TERMINAL are unused.  */)
       if (CONSP (val) && NILP (XCDR (val)))
 	val = XCAR (val);
     }
-  RETURN_UNGCPRO (clean_local_selection_data (val));
+  return clean_local_selection_data (val);
 }
 
 DEFUN ("x-disown-selection-internal", Fx_disown_selection_internal,
@@ -2045,10 +2006,7 @@ On MS-DOS, all this does is return non-nil if we own the selection.  */)
 {
   Time timestamp;
   Atom selection_atom;
-  union {
-    struct selection_input_event sie;
-    struct input_event ie;
-  } event;
+  struct selection_input_event event;
   struct frame *f = frame_for_x_selection (terminal);
   struct x_display_info *dpyinfo;
 
@@ -2077,10 +2035,10 @@ On MS-DOS, all this does is return non-nil if we own the selection.  */)
      the selection owner to None.  The NCD server does, the MIT Sun4 server
      doesn't.  So we synthesize one; this means we might get two, but
      that's ok, because the second one won't have any effect.  */
-  SELECTION_EVENT_DISPLAY (&event.sie) = dpyinfo->display;
-  SELECTION_EVENT_SELECTION (&event.sie) = selection_atom;
-  SELECTION_EVENT_TIME (&event.sie) = timestamp;
-  x_handle_selection_clear (&event.ie);
+  SELECTION_EVENT_DPYINFO (&event) = dpyinfo;
+  SELECTION_EVENT_SELECTION (&event) = selection_atom;
+  SELECTION_EVENT_TIME (&event) = timestamp;
+  x_handle_selection_clear (&event);
 
   return Qt;
 }
@@ -2090,7 +2048,7 @@ DEFUN ("x-selection-owner-p", Fx_selection_owner_p, Sx_selection_owner_p,
        doc: /* Whether the current Emacs process owns the given X Selection.
 The arg should be the name of the selection in question, typically one of
 the symbols `PRIMARY', `SECONDARY', or `CLIPBOARD'.
-\(Those are literal upper-case symbol names, since that's what X expects.)
+(Those are literal upper-case symbol names, since that's what X expects.)
 For convenience, the symbol nil is the same as `PRIMARY',
 and t is the same as `SECONDARY'.
 
@@ -2178,11 +2136,10 @@ x_clipboard_manager_save (Lisp_Object frame)
 static Lisp_Object
 x_clipboard_manager_error_1 (Lisp_Object err)
 {
-  Lisp_Object args[2];
-  args[0] = build_string ("X clipboard manager error: %s\n\
-If the problem persists, set `x-select-enable-clipboard-manager' to nil.");
-  args[1] = CAR (CDR (err));
-  Fmessage (2, args);
+  AUTO_STRING (format, "X clipboard manager error: %s\n\
+If the problem persists, set `%s' to nil.");
+  AUTO_STRING (varname, "x-select-enable-clipboard-manager");
+  CALLN (Fmessage, format, CAR (CDR (err)), varname);
   return Qnil;
 }
 
@@ -2192,8 +2149,8 @@ static Lisp_Object
 x_clipboard_manager_error_2 (Lisp_Object err)
 {
   fprintf (stderr, "Error saving to X clipboard manager.\n\
-If the problem persists, set `x-select-enable-clipboard-manager' \
-to nil.\n");
+If the problem persists, set '%s' \
+to nil.\n", "x-select-enable-clipboard-manager");
   return Qnil;
 }
 
@@ -2249,10 +2206,7 @@ x_clipboard_manager_save_all (void)
       local_frame = XCAR (XCDR (XCDR (XCDR (local_selection))));
       if (FRAME_LIVE_P (XFRAME (local_frame)))
 	{
-	  Lisp_Object args[1];
-	  args[0] = build_string ("Saving clipboard to X clipboard manager...");
-	  Fmessage (1, args);
-
+	  message ("Saving clipboard to X clipboard manager...");
 	  internal_condition_case_1 (x_clipboard_manager_save, local_frame,
 				     Qt, x_clipboard_manager_error_2);
 	}
@@ -2307,22 +2261,37 @@ x_check_property_data (Lisp_Object data)
 void
 x_fill_property_data (Display *dpy, Lisp_Object data, void *ret, int format)
 {
-  long val;
-  long  *d32 = (long  *) ret;
-  short *d16 = (short *) ret;
-  char  *d08 = (char  *) ret;
+  unsigned long val;
+  unsigned long  *d32 = (unsigned long  *) ret;
+  unsigned short *d16 = (unsigned short *) ret;
+  unsigned char  *d08 = (unsigned char  *) ret;
   Lisp_Object iter;
 
   for (iter = data; CONSP (iter); iter = XCDR (iter))
     {
       Lisp_Object o = XCAR (iter);
 
-      if (INTEGERP (o) || FLOATP (o) || CONSP (o))
-	val = cons_to_signed (o, LONG_MIN, LONG_MAX);
+      if (NUMBERP (o) || CONSP (o))
+        {
+          if (CONSP (o)
+	      && RANGED_INTEGERP (X_LONG_MIN >> 16, XCAR (o), X_LONG_MAX >> 16)
+	      && RANGED_INTEGERP (- (1 << 15), XCDR (o), -1))
+            {
+	      /* cons_to_x_long does not handle negative values for v2.
+                 For XDnd, v2 might be y of a window, and can be negative.
+                 The XDnd spec. is not explicit about negative values,
+                 but let's assume negative v2 is sent modulo 2**16.  */
+	      unsigned long v1 = XINT (XCAR (o)) & 0xffff;
+	      unsigned long v2 = XINT (XCDR (o)) & 0xffff;
+	      val = (v1 << 16) | v2;
+            }
+          else
+            val = cons_to_x_long (o);
+        }
       else if (STRINGP (o))
         {
           block_input ();
-          val = (long) XInternAtom (dpy, SSDATA (o), False);
+          val = XInternAtom (dpy, SSDATA (o), False);
           unblock_input ();
         }
       else
@@ -2330,17 +2299,15 @@ x_fill_property_data (Display *dpy, Lisp_Object data, void *ret, int format)
 
       if (format == 8)
 	{
-	  if (CHAR_MIN <= val && val <= CHAR_MAX)
-	    *d08++ = val;
-	  else
+	  if ((1 << 8) < val && val <= X_ULONG_MAX - (1 << 7))
 	    error ("Out of 'char' range");
+	  *d08++ = val;
 	}
       else if (format == 16)
 	{
-	  if (SHRT_MIN <= val && val <= SHRT_MAX)
-	    *d16++ = val;
-	  else
+	  if ((1 << 16) < val && val <= X_ULONG_MAX - (1 << 15))
 	    error ("Out of 'short' range");
+	  *d16++ = val;
 	}
       else
         *d32++ = val;
@@ -2369,45 +2336,8 @@ x_property_data_to_lisp (struct frame *f, const unsigned char *data,
   ptrdiff_t format_bytes = format >> 3;
   if (PTRDIFF_MAX / format_bytes < size)
     memory_full (SIZE_MAX);
-  return selection_data_to_lisp_data (FRAME_X_DISPLAY (f),
-				      data, size * format_bytes, type, format);
-}
-
-/* Get the mouse position in frame relative coordinates.  */
-
-static void
-mouse_position_for_drop (struct frame *f, int *x, int *y)
-{
-  Window root, dummy_window;
-  int dummy;
-
-  block_input ();
-
-  XQueryPointer (FRAME_X_DISPLAY (f),
-                 DefaultRootWindow (FRAME_X_DISPLAY (f)),
-
-                 /* The root window which contains the pointer.  */
-                 &root,
-
-                 /* Window pointer is on, not used  */
-                 &dummy_window,
-
-                 /* The position on that root window.  */
-                 x, y,
-
-                 /* x/y in dummy_window coordinates, not used.  */
-                 &dummy, &dummy,
-
-                 /* Modifier keys and pointer buttons, about which
-                    we don't care.  */
-                 (unsigned int *) &dummy);
-
-
-  /* Absolute to relative.  */
-  *x -= f->left_pos + FRAME_OUTER_TO_INNER_DIFF_X (f);
-  *y -= f->top_pos + FRAME_OUTER_TO_INNER_DIFF_Y (f);
-
-  unblock_input ();
+  return selection_data_to_lisp_data (FRAME_DISPLAY_INFO (f), data,
+				      size * format_bytes, type, format);
 }
 
 DEFUN ("x-get-atom-name", Fx_get_atom_name,
@@ -2486,7 +2416,7 @@ FRAME is on.  If FRAME is nil, the selected frame is used.  */)
 
 /* Convert an XClientMessageEvent to a Lisp event of type DRAG_N_DROP_EVENT.  */
 
-int
+bool
 x_handle_dnd_message (struct frame *f, const XClientMessageEvent *event,
                       struct x_display_info *dpyinfo, struct input_event *bufp)
 {
@@ -2502,7 +2432,7 @@ x_handle_dnd_message (struct frame *f, const XClientMessageEvent *event,
   for (i = 0; i < dpyinfo->x_dnd_atoms_length; ++i)
     if (dpyinfo->x_dnd_atoms[i] == event->message_type) break;
 
-  if (i == dpyinfo->x_dnd_atoms_length) return 0;
+  if (i == dpyinfo->x_dnd_atoms_length) return false;
 
   XSETFRAME (frame, f);
 
@@ -2519,7 +2449,7 @@ x_handle_dnd_message (struct frame *f, const XClientMessageEvent *event,
     }
 
   vec = Fmake_vector (make_number (4), Qnil);
-  ASET (vec, 0, SYMBOL_NAME (x_atom_to_symbol (FRAME_X_DISPLAY (f),
+  ASET (vec, 0, SYMBOL_NAME (x_atom_to_symbol (FRAME_DISPLAY_INFO (f),
 					       event->message_type)));
   ASET (vec, 1, frame);
   ASET (vec, 2, make_number (event->format));
@@ -2529,7 +2459,7 @@ x_handle_dnd_message (struct frame *f, const XClientMessageEvent *event,
 					 event->format,
 					 size));
 
-  mouse_position_for_drop (f, &x, &y);
+  x_relative_mouse_position (f, &x, &y);
   bufp->kind = DRAG_N_DROP_EVENT;
   bufp->frame_or_window = frame;
   bufp->timestamp = CurrentTime;
@@ -2538,7 +2468,7 @@ x_handle_dnd_message (struct frame *f, const XClientMessageEvent *event,
   bufp->arg = vec;
   bufp->modifiers = 0;
 
-  return 1;
+  return true;
 }
 
 DEFUN ("x-send-client-message", Fx_send_client_message,
@@ -2589,7 +2519,7 @@ x_send_client_event (Lisp_Object display, Lisp_Object dest, Lisp_Object from,
   Window wdest;
   XEvent event;
   struct frame *f = decode_window_system_frame (from);
-  int to_root;
+  bool to_root;
 
   CHECK_NUMBER (format);
   CHECK_CONS (values);
@@ -2617,7 +2547,7 @@ x_send_client_event (Lisp_Object display, Lisp_Object dest, Lisp_Object from,
       else
         error ("DEST as a string must be one of PointerWindow or InputFocus");
     }
-  else if (INTEGERP (dest) || FLOATP (dest) || CONSP (dest))
+  else if (NUMBERP (dest) || CONSP (dest))
     CONS_TO_INTEGER (dest, Window, wdest);
   else
     error ("DEST must be a frame, nil, string, number or cons");
@@ -2646,7 +2576,7 @@ x_send_client_event (Lisp_Object display, Lisp_Object dest, Lisp_Object from,
      event then goes to clients selecting for events on the root window.  */
   x_catch_errors (dpyinfo->display);
   {
-    int propagate = to_root ? False : True;
+    bool propagate = !to_root;
     long mask = to_root ? 0xffffff : 0;
 
     XSendEvent (dpyinfo->display, wdest, propagate, mask, &event);
@@ -2683,15 +2613,17 @@ syms_of_xselect (void)
   converted_selections = NULL;
   conversion_fail_tag = None;
 
+  /* FIXME: Duplicate definition in nsselect.c.  */
   DEFVAR_LISP ("selection-converter-alist", Vselection_converter_alist,
 	       doc: /* An alist associating X Windows selection-types with functions.
 These functions are called to convert the selection, with three args:
 the name of the selection (typically `PRIMARY', `SECONDARY', or `CLIPBOARD');
 a desired type to which the selection should be converted;
-and the local selection value (whatever was given to `x-own-selection').
+and the local selection value (whatever was given to
+`x-own-selection-internal').
 
 The function should return the value to send to the X server
-\(typically a string).  A return value of nil
+(typically a string).  A return value of nil
 means that the conversion could not be done.
 A return value which is the symbol `NULL'
 means that a side-effect was executed,
@@ -2700,10 +2632,10 @@ and there is no meaningful selection value.  */);
 
   DEFVAR_LISP ("x-lost-selection-functions", Vx_lost_selection_functions,
 	       doc: /* A list of functions to be called when Emacs loses an X selection.
-\(This happens when some other X client makes its own selection
+(This happens when some other X client makes its own selection
 or when a Lisp program explicitly clears the selection.)
 The functions are called with one argument, the selection type
-\(a symbol, typically `PRIMARY', `SECONDARY', or `CLIPBOARD').  */);
+(a symbol, typically `PRIMARY', `SECONDARY', or `CLIPBOARD').  */);
   Vx_lost_selection_functions = Qnil;
 
   DEFVAR_LISP ("x-sent-selection-functions", Vx_sent_selection_functions,
@@ -2742,19 +2674,20 @@ A value of 0 means wait as long as necessary.  This is initialized from the
   DEFSYM (QCLIPBOARD, "CLIPBOARD");
   DEFSYM (QTIMESTAMP, "TIMESTAMP");
   DEFSYM (QTEXT, "TEXT");
+
+  /* These are types of selection.  */
   DEFSYM (QCOMPOUND_TEXT, "COMPOUND_TEXT");
   DEFSYM (QUTF8_STRING, "UTF8_STRING");
+
   DEFSYM (QDELETE, "DELETE");
   DEFSYM (QMULTIPLE, "MULTIPLE");
   DEFSYM (QINCR, "INCR");
   DEFSYM (QEMACS_TMP, "_EMACS_TMP_");
   DEFSYM (QTARGETS, "TARGETS");
   DEFSYM (QATOM, "ATOM");
-  DEFSYM (QATOM_PAIR, "ATOM_PAIR");
   DEFSYM (QCLIPBOARD_MANAGER, "CLIPBOARD_MANAGER");
   DEFSYM (QSAVE_TARGETS, "SAVE_TARGETS");
   DEFSYM (QNULL, "NULL");
-  DEFSYM (Qcompound_text_with_extensions, "compound-text-with-extensions");
   DEFSYM (Qforeign_selection, "foreign-selection");
   DEFSYM (Qx_lost_selection_functions, "x-lost-selection-functions");
   DEFSYM (Qx_sent_selection_functions, "x-sent-selection-functions");

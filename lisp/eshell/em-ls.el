@@ -1,6 +1,6 @@
 ;;; em-ls.el --- implementation of ls in Lisp  -*- lexical-binding:t -*-
 
-;; Copyright (C) 1999-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1999-2015 Free Software Foundation, Inc.
 
 ;; Author: John Wiegley <johnw@gnu.org>
 
@@ -47,7 +47,7 @@ properties to colorize its output based on the setting of
 (defcustom eshell-ls-date-format "%Y-%m-%d"
   "How to display time information in `eshell-ls-file'.
 This is passed to `format-time-string' as a format string.
-To display the date using the current locale, use \"%b \%e\"."
+To display the date using the current locale, use \"%b \ %e\"."
   :version "24.1"
   :type 'string)
 
@@ -490,7 +490,7 @@ whose cdr is the list of file attributes."
 		" " (format-time-string
 		     (concat
 		      eshell-ls-date-format " "
-		      (if (= (nth 5 (decode-time (current-time)))
+		      (if (= (nth 5 (decode-time))
 			     (nth 5 (decode-time
 				     (nth (cond
 					   ((eq sort-method 'by-atime) 4)

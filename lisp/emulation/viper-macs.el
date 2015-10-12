@@ -1,6 +1,6 @@
 ;;; viper-macs.el --- functions implementing keyboard macros for Viper
 
-;; Copyright (C) 1994-1997, 2000-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1994-1997, 2000-2015 Free Software Foundation, Inc.
 
 ;; Author: Michael Kifer <kifer@cs.stonybrook.edu>
 ;; Package: viper
@@ -327,8 +327,8 @@ Can be used in `viper-custom-file-name' to define permanent macros.
 MACRO-NAME is a string of characters or a vector of keys.  STATE is
 either `vi-state' or `insert-state'.  It specifies the Viper state in which to
 define the macro.  MACRO-BODY is a string that represents the keyboard macro.
-Optional SCOPE says whether the macro should be global \(t\), mode-specific
-\(a major-mode symbol\), or buffer-specific \(buffer name, a string\).
+Optional SCOPE says whether the macro should be global \(t), mode-specific
+\(a major-mode symbol), or buffer-specific \(buffer name, a string).
 If SCOPE is nil, the user is asked to specify the scope."
   (let* (state-name keymap
 	 (macro-alist-var
@@ -369,11 +369,11 @@ If SCOPE is nil, the user is asked to specify the scope."
 	  (setq scope
 		(cond
 		 ((y-or-n-p
-		   (format
+		   (format-message
 		    "Map this macro for buffer `%s' only? "
 		    (buffer-name)))
 		  (setq msg
-			(format
+			(format-message
 			 "%S is mapped to %s for %s in `%s'"
 			 (viper-display-macro macro-name)
 			 (viper-abbreviate-string
@@ -385,11 +385,11 @@ If SCOPE is nil, the user is asked to specify the scope."
 			 state-name (buffer-name)))
 		  (buffer-name))
 		 ((y-or-n-p
-		   (format
+		   (format-message
 		    "Map this macro for the major mode `%S' only? "
 		    major-mode))
 		  (setq msg
-			(format
+			(format-message
 			 "%S is mapped to %s for %s in `%S'"
 			 (viper-display-macro macro-name)
 			 (viper-abbreviate-string
@@ -529,9 +529,9 @@ mistakes in macro names to be passed to this function is to use
     (cond ((and (cdr buf-mapping)
 		(or (and (not (cdr mode-mapping)) (not (cdr global-mapping)))
 		    (y-or-n-p
-		     (format "Unmap %S for `%s' only? "
-			     (viper-display-macro macro-name)
-			     (buffer-name)))))
+		     (format-message "Unmap %S for `%s' only? "
+				     (viper-display-macro macro-name)
+				     (buffer-name)))))
 	   (setq macro-pair buf-mapping)
 	   (message "%S is unmapped for %s in `%s'"
 		    (viper-display-macro macro-name)
@@ -539,9 +539,9 @@ mistakes in macro names to be passed to this function is to use
 	  ((and (cdr mode-mapping)
 		(or (not (cdr global-mapping))
 		    (y-or-n-p
-		     (format "Unmap %S for the major mode `%S' only? "
-			     (viper-display-macro macro-name)
-			     major-mode))))
+		     (format-message "Unmap %S for the major mode `%S' only? "
+				     (viper-display-macro macro-name)
+				     major-mode))))
 	   (setq macro-pair mode-mapping)
 	   (message "%S is unmapped for %s in %S"
 		    (viper-display-macro macro-name) state-name major-mode))
@@ -894,7 +894,7 @@ mistakes in macro names to be passed to this function is to use
   (set-register reg last-kbd-macro))
 
 (defun viper-register-macro (count)
-  "Keyboard macros in registers - a modified \@ command."
+  "Keyboard macros in registers - a modified @ command."
   (interactive "P")
   (let ((reg (downcase (read-char))))
     (cond ((or (and (<= ?a reg) (<= reg ?z)))

@@ -1,6 +1,6 @@
 ;;; timer-tests.el --- tests for timers -*- lexical-binding:t -*-
 
-;; Copyright (C) 2013-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2013-2015 Free Software Foundation, Inc.
 
 ;; This file is part of GNU Emacs.
 
@@ -34,5 +34,9 @@
     (sit-for 0 t)
     (should timer-ran)))
 
-;;; timer-tests.el ends here
+(ert-deftest timer-tests-debug-timer-check ()
+  ;; This function exists only if --enable-checking.
+  (if (fboundp 'debug-timer-check)
+      (should (debug-timer-check)) t))
 
+;;; timer-tests.el ends here

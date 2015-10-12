@@ -1,6 +1,6 @@
 ;;; org-table.el --- The table editor for Org-mode
 
-;; Copyright (C) 2004-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2004-2015 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <carsten at orgmode dot org>
 ;; Keywords: outlines, hypermedia, calendar, wp
@@ -440,8 +440,8 @@ available parameters."
   "Check if the table has a marking column.
 If yes remove the column and the special lines."
   (let ((special (if maybe-quoted
-		     "^[ \t]*| *\\\\?[\#!$*_^/ ] *|"
-		   "^[ \t]*| *[\#!$*_^/ ] *|"))
+		     "^[ \t]*| *\\\\?[#!$*_^/ ] *|"
+		   "^[ \t]*| *[#!$*_^/ ] *|"))
 	(ignore  (if maybe-quoted
 		     "^[ \t]*| *\\\\?[!$_^/] *|"
 		   "^[ \t]*| *[!$_^/] *|")))
@@ -545,8 +545,8 @@ slightly, to make sure a beginning of line in the first line is included.
 SEPARATOR specifies the field separator in the lines.  It can have the
 following values:
 
-'(4)     Use the comma as a field separator
-'(16)    Use a TAB as field separator
+(4)      Use the comma as a field separator
+(16)     Use a TAB as field separator
 integer  When a number, use that many spaces as field separator
 nil      When nil, the command tries to be smart and figure out the
          separator in the following way:
@@ -2351,7 +2351,7 @@ For all numbers larger than LIMIT, shift them by DELTA."
 		     (string-match "^[a-zA-Z][_a-zA-Z0-9]*$" field))
 	    (push (cons field v) org-table-local-parameters)
 	    (push (list field line col) org-table-named-field-locations))))
-      ;; Analyse the line types
+      ;; Analyze the line types.
       (goto-char beg)
       (setq org-table-current-begin-line (org-current-line)
 	    org-table-current-begin-pos (point)
@@ -3183,9 +3183,9 @@ with the prefix ARG."
     (save-excursion
       ;; Insert a temporary formula at right after the table
       (goto-char (org-table-TBLFM-begin))
-      (setq s (set-marker (make-marker) (point)))
+      (setq s (point-marker))
       (insert (concat formula "\n"))
-      (setq e (set-marker (make-marker) (point)))
+      (setq e (point-marker))
       ;; Recalculate the table
       (beginning-of-line 0)		; move to the inserted line
       (skip-chars-backward " \r\n\t")
@@ -3248,7 +3248,7 @@ formulas that use a range of rows or columns, it may often be better
 to anchor the formula with \"I\" row markers, or to offset from the
 borders of the table using the @< @> $< $> makers."
   (let (n nmax len char (start 0))
-    (while (string-match "\\([@$]\\)\\(<+\\|>+\\)\\|\\(remote([^\)]+)\\)"
+    (while (string-match "\\([@$]\\)\\(<+\\|>+\\)\\|\\(remote([^)]+)\\)"
 			 s start)
       (if (match-end 3)
 	  (setq start (match-end 3))
@@ -3404,7 +3404,7 @@ Parameters get priority."
     (if (eq org-table-use-standard-references t)
 	(org-table-fedit-toggle-ref-type))
     (org-goto-line startline)
-    (message "Edit formulas, finish with `C-c C-c' or `C-c ' '.  See menu for more commands.")))
+    (message "%s" "Edit formulas, finish with C-c C-c or C-c '.  See menu for more commands.")))
 
 (defun org-table-fedit-post-command ()
   (when (not (memq this-command '(lisp-complete-symbol)))

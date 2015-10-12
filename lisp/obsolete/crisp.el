@@ -1,6 +1,6 @@
 ;;; crisp.el --- CRiSP/Brief Emacs emulator
 
-;; Copyright (C) 1997-1999, 2001-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1997-1999, 2001-2015 Free Software Foundation, Inc.
 
 ;; Author: Gary D. Foster <Gary.Foster@Corp.Sun.COM>
 ;; Keywords: emulations brief crisp
@@ -22,6 +22,8 @@
 ;; along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;; Commentary:
+
+;; *Note: This package has now moved to elpa.gnu.org.*
 
 ;; Keybindings and minor functions to duplicate the functionality and
 ;; finger-feel of the CRiSP/Brief editor.  This package is designed to

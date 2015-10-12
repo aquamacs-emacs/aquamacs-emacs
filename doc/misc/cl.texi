@@ -1,13 +1,13 @@
 \input texinfo    @c -*-texinfo-*-
-@setfilename ../../info/cl
+@setfilename ../../info/cl.info
 @settitle Common Lisp Extensions
-@documentencoding UTF-8
+@include docstyle.texi
 @include emacsver.texi
 
 @copying
 This file documents the GNU Emacs Common Lisp emulation package.
 
-Copyright @copyright{} 1993, 2001--2014 Free Software Foundation, Inc.
+Copyright @copyright{} 1993, 2001--2015 Free Software Foundation, Inc.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -296,6 +296,13 @@ list.  Also, the function body is enclosed in an implicit block
 called @var{name}; @pxref{Blocks and Exits}.
 @end defmac
 
+@defmac cl-iter-defun name arglist body@dots{}
+This form is identical to the regular @code{iter-defun} form, except
+that @var{arglist} is allowed to be a full Common Lisp argument
+list.  Also, the function body is enclosed in an implicit block
+called @var{name}; @pxref{Blocks and Exits}.
+@end defmac
+
 @defmac cl-defsubst name arglist body@dots{}
 This is just like @code{cl-defun}, except that the function that
 is defined is automatically proclaimed @code{inline}, i.e.,
@@ -563,20 +570,20 @@ When @file{foo.el} is compiled, these variables will be set during
 the compilation itself:
 
 @example
-foo1  foo3  foo5  foo7      ; `compile'
+foo1  foo3  foo5  foo7      ; 'compile'
 @end example
 
 When @file{foo.elc} is loaded, these variables will be set:
 
 @example
-foo2  foo3  foo6  foo7      ; `load'
+foo2  foo3  foo6  foo7      ; 'load'
 @end example
 
 And if @file{foo.el} is loaded uncompiled, these variables will
 be set:
 
 @example
-foo4  foo5  foo6  foo7      ; `eval'
+foo4  foo5  foo6  foo7      ; 'eval'
 @end example
 
 If these seven @code{cl-eval-when}s had been, say, inside a @code{defun},
@@ -971,7 +978,7 @@ a
 The generalized variable @code{buffer-substring}, listed above,
 also works in this way by replacing a portion of the current buffer.
 
-@c FIXME?  Also `eq'? (see cl-lib.el)
+@c FIXME?  Also 'eq'? (see cl-lib.el)
 
 @c Currently commented out in cl.el.
 @ignore
@@ -2237,6 +2244,11 @@ This clause is like @code{always}, except that the loop returns
 This clause stops the loop when the specified form is non-@code{nil};
 in this case, it returns that non-@code{nil} value.  If all the
 values were @code{nil}, the loop returns @code{nil}.
+
+@item iter-by @var{iterator}
+This clause iterates over the values from the specified form, an
+iterator object.  See (@pxref{Generators,,,elisp,GNU Emacs Lisp
+Reference Manual}).
 @end table
 
 @node Accumulation Clauses
@@ -2627,10 +2639,10 @@ In this package, @code{cl-locally} is no different from @code{progn}.
 @end defmac
 
 @defmac cl-the type form
-Type information provided by @code{cl-the} is ignored in this package;
-in other words, @code{(cl-the @var{type} @var{form})} is equivalent to
-@var{form}.  Future byte-compiler optimizations may make use of this
-information.
+@code{cl-the} returns the value of @code{form}, first checking (if
+optimization settings permit) that it is of type @code{type}.  Future
+byte-compiler optimizations may also make use of this information to
+improve runtime efficiency.
 
 For example, @code{mapcar} can map over both lists and arrays.  It is
 hard for the compiler to expand @code{mapcar} into an in-line loop
@@ -2865,14 +2877,8 @@ their names will not conflict with ``real'' variables in the user's
 code.
 
 (Internally, the variable @code{cl--gensym-counter} holds the counter
-used to generate names.  It is incremented after each use.  In Common
-Lisp this is initialized with 0, but this package initializes it with
-a random time-dependent value to avoid trouble when two files that
-each used @code{cl-gensym} in their compilation are loaded together.
-Uninterned symbols become interned when the compiler writes them out
-to a file and the Emacs loader loads them, so their names have to be
-treated a bit more carefully than in Common Lisp where uninterned
-symbols remain uninterned after loading.)
+used to generate names.  It is initialized with zero and incremented
+after each use.)
 @end defun
 
 @defun cl-gentemp &optional x
@@ -2927,6 +2933,12 @@ error if the argument is not an integer.
 @defun cl-evenp integer
 This predicate tests whether @var{integer} is even.  It is an
 error if the argument is not an integer.
+@end defun
+
+@defun cl-digit-char-p char radix
+Test if @var{char} is a digit in the specified @var{radix} (default is
+10).  If true return the decimal value of digit @var{char} in
+@var{radix}.
 @end defun
 
 @node Numerical Functions
@@ -3009,6 +3021,15 @@ of @code{cl-floor}.
 @defun cl-rem number divisor
 This function returns the same value as the second return value
 of @code{cl-truncate}.
+@end defun
+
+@defun cl-parse-integer string &key start end radix junk-allowed
+This function implements the Common Lisp @code{parse-integer}
+function.  It parses an integer in the specified @var{radix} from the
+substring of @var{string} between @var{start} and @var{end}.  Any
+leading and trailing whitespace chars are ignored. It signals an error
+if the substring between @var{start} and @var{end} cannot be parsed as
+an integer unless @var{junk-allowed} is non-nil.
 @end defun
 
 @node Random Numbers
@@ -3679,10 +3700,8 @@ This function is a synonym for @code{(cdr @var{x})}.
 @end defun
 
 @defun cl-endp x
-Common Lisp defines this function to act like @code{null}, but
-signaling an error if @code{x} is neither a @code{nil} nor a
-cons cell.  This package simply defines @code{cl-endp} as a synonym
-for @code{null}.
+This function acts like @code{null}, but signals an error if @code{x}
+is neither a @code{nil} nor a cons cell.
 @end defun
 
 @defun cl-list-length x
@@ -4247,6 +4266,40 @@ of the included type and the first new slot.
 Except as noted, the @code{cl-defstruct} facility of this package is
 entirely compatible with that of Common Lisp.
 
+The @code{cl-defstruct} package also provides a few structure
+introspection functions.
+
+@defun cl-struct-sequence-type struct-type
+This function returns the underlying data structure for
+@code{struct-type}, which is a symbol.  It returns @code{vector} or
+@code{list}, or @code{nil} if @code{struct-type} is not actually a
+structure.
+@end defun
+
+@defun cl-struct-slot-info struct-type
+This function returns a list of slot descriptors for structure
+@code{struct-type}.  Each entry in the list is @code{(name . opts)},
+where @code{name} is the name of the slot and @code{opts} is the list
+of slot options given to @code{defstruct}.  Dummy entries represent
+the slots used for the struct name and that are skipped to implement
+@code{:initial-offset}.
+@end defun
+
+@defun cl-struct-slot-offset struct-type slot-name
+Return the offset of slot @code{slot-name} in @code{struct-type}.  The
+returned zero-based slot index is relative to the start of the
+structure data type and is adjusted for any structure name and
+:initial-offset slots.  Signal error if struct @code{struct-type} does
+not contain @code{slot-name}.
+@end defun
+
+@defun cl-struct-slot-value struct-type slot-name inst
+Return the value of slot @code{slot-name} in @code{inst} of
+@code{struct-type}.  @code{struct} and @code{slot-name} are symbols.
+@code{inst} is a structure instance.  This routine is also a
+@code{setf} place.  Can signal the same errors as @code{cl-struct-slot-offset}.
+@end defun
+
 @node Assertions
 @chapter Assertions and Errors
 
@@ -4415,12 +4468,11 @@ supposed to arise in complying programs; implementations are strongly
 encouraged but not required to signal an error in these situations.
 This package sometimes omits such error checking in the interest of
 compactness and efficiency.  For example, @code{cl-do} variable
-specifiers are supposed to be lists of one, two, or three forms;
-extra forms are ignored by this package rather than signaling a
-syntax error.  The @code{cl-endp} function is simply a synonym for
-@code{null} in this package.  Functions taking keyword arguments
-will accept an odd number of arguments, treating the trailing
-keyword as if it were followed by the value @code{nil}.
+specifiers are supposed to be lists of one, two, or three forms; extra
+forms are ignored by this package rather than signaling a syntax
+error.  Functions taking keyword arguments will accept an odd number
+of arguments, treating the trailing keyword as if it were followed by
+the value @code{nil}.
 
 Argument lists (as processed by @code{cl-defun} and friends)
 @emph{are} checked rigorously except for the minor point just
@@ -4485,10 +4537,7 @@ example, local @code{special} declarations, which are purely
 advisory in Emacs Lisp, do not rigorously obey the scoping rules
 set down in Steele's book.
 
-The variable @code{cl--gensym-counter} starts out with a pseudo-random
-value rather than with zero.  This is to cope with the fact that
-generated symbols become interned when they are written to and
-loaded back from a file.
+The variable @code{cl--gensym-counter} starts out with zero.
 
 The @code{cl-defstruct} facility is compatible, except that structures
 are of type @code{:type vector :named} by default rather than some
@@ -4661,9 +4710,8 @@ exactly the same thing, so this package has not bothered to
 implement a Common Lisp-style @code{make-list}.
 
 @item
-A few more notable Common Lisp features not included in this
-package:  @code{compiler-let}, @code{tagbody}, @code{prog},
-@code{ldb/dpb}, @code{parse-integer}, @code{cerror}.
+A few more notable Common Lisp features not included in this package:
+@code{compiler-let}, @code{prog}, @code{ldb/dpb}, @code{cerror}.
 
 @item
 Recursion.  While recursion works in Emacs Lisp just like it
@@ -4869,7 +4917,7 @@ through the Lisp @code{message} function.
 For those cases where the dynamic scoping of @code{flet} is desired,
 @code{cl-flet} is clearly not a substitute.  The most direct replacement would
 be instead to use @code{cl-letf} to temporarily rebind @code{(symbol-function
-'@var{fun})}.  But in most cases, a better substitute is to use an advice, such
+'@var{fun})}.  But in most cases, a better substitute is to use advice, such
 as:
 
 @example
@@ -4885,7 +4933,7 @@ binding of @code{my-fun-advice-enable}.
 
 @c Bug#411.
 Note that many primitives (e.g., @code{+}) have special byte-compile handling.
-Attempts to redefine such functions using @code{flet}, @code{cl-letf}, or an
+Attempts to redefine such functions using @code{flet}, @code{cl-letf}, or
 advice will fail when byte-compiled.
 @c Or cl-flet.
 @c In such cases, use @code{labels} instead.

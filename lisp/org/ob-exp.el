@@ -1,6 +1,6 @@
 ;;; ob-exp.el --- Exportation of org-babel source blocks
 
-;; Copyright (C) 2009-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2009-2015 Free Software Foundation, Inc.
 
 ;; Authors: Eric Schulte
 ;;	Dan Davison
@@ -98,7 +98,7 @@ be executed."
 
 (defun org-babel-exp-src-block (&rest headers)
   "Process source block for export.
-Depending on the 'export' headers argument, replace the source
+Depending on the `export' headers argument, replace the source
 code block like this:
 
 both ---- display the code and the results

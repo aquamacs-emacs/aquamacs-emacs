@@ -1,6 +1,6 @@
 ;;; help-fns.el --- tests for help-fns.el
 
-;; Copyright (C) 2014 Free Software Foundation, Inc.
+;; Copyright (C) 2014-2015 Free Software Foundation, Inc.
 
 ;; Maintainer: emacs-devel@gnu.org
 
@@ -33,5 +33,28 @@
   (with-current-buffer "*Help*"
     (goto-char (point-min))
     (should (search-forward "autoloaded Lisp macro" (line-end-position)))))
+
+(defun abc\\\[universal-argument\]b\`c\'d\\e\"f (x)
+  "A function with a funny name.
+
+\(fn XYZZY)"
+  x)
+
+(defun defgh\\\[universal-argument\]b\`c\'d\\e\"f (x)
+  "Another function with a funny name."
+  x)
+
+(ert-deftest help-fns-test-funny-names ()
+  "Test for help with functions with funny names."
+  (describe-function 'abc\\\[universal-argument\]b\`c\'d\\e\"f)
+  (with-current-buffer "*Help*"
+    (goto-char (point-min))
+    (should (search-forward
+             "(abc\\\\\\[universal-argument\\]b\\`c\\'d\\\\e\\\"f XYZZY)")))
+  (describe-function 'defgh\\\[universal-argument\]b\`c\'d\\e\"f)
+  (with-current-buffer "*Help*"
+    (goto-char (point-min))
+    (should (search-forward
+             "(defgh\\\\\\[universal-argument\\]b\\`c\\'d\\\\e\\\"f X)"))))
 
 ;;; help-fns.el ends here

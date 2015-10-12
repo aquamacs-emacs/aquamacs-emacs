@@ -6,6 +6,10 @@ if something_wrong?             # ruby-move-to-block-skips-heredoc
   foo
 end
 
+def foo
+  %^bar^
+end
+
 # Percent literals.
 b = %Q{This is a "string"}
 c = %w!foo
@@ -35,6 +39,10 @@ x = toto / foo if /do bar/ =~ "dobar"
 # Regexp options are highlighted.
 
 /foo/xi != %r{bar}mo.tee
+
+foo { /"tee/
+  bar { |qux| /'fee"/ }         # bug#20026
+}
 
 bar(class: XXX) do              # ruby-indent-keyword-label
   foo

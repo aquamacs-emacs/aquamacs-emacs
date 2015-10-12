@@ -1,6 +1,6 @@
 ;;; faces.el --- Lisp faces
 
-;; Copyright (C) 1992-1996, 1998-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1992-1996, 1998-2015 Free Software Foundation, Inc.
 
 ;; Maintainer: emacs-devel@gnu.org
 ;; Keywords: internal
@@ -34,6 +34,26 @@ the terminal-initialization file to be loaded."
   :type '(choice (const :tag "No terminal-specific initialization" nil)
 		 (string :tag "Name of directory with term files"))
   :group 'terminals)
+
+(defcustom term-file-aliases
+  '(("apollo" . "vt100")
+    ("vt102" . "vt100")
+    ("vt125" . "vt100")
+    ("vt201" . "vt200")
+    ("vt220" . "vt200")
+    ("vt240" . "vt200")
+    ("vt300" . "vt200")
+    ("vt320" . "vt200")
+    ("vt400" . "vt200")
+    ("vt420" . "vt200")
+    )
+  "Alist of terminal type aliases.
+Entries are of the form (TYPE . ALIAS), where both elements are strings.
+This means to treat a terminal of type TYPE as if it were of type ALIAS."
+  :type '(alist :key-type (string :tag "Terminal")
+		:value-type (string :tag "Alias"))
+  :group 'terminals
+  :version "25.1")
 
 (declare-function xw-defined-colors "term/common-win" (&optional frame))
 
@@ -129,15 +149,11 @@ REGISTRY, ALTERNATIVE1, ALTERNATIVE2, and etc."
   "Return a list of all defined faces."
   (mapcar #'car face-new-frame-defaults))
 
-(defun make-face (face &optional no-init-from-resources)
+(defun make-face (face)
   "Define a new face with name FACE, a symbol.
 Do not call this directly from Lisp code; use `defface' instead.
 
-If FACE is already known as a face, leave it unmodified.  Return FACE.
-
-NO-INIT-FROM-RESOURCES has been deprecated and is no longer used
-and will go away.  Handling of conditional X resources application
-has been pushed down to make-x-resource-internal itself."
+If FACE is already known as a face, leave it unmodified.  Return FACE."
   (interactive (list (read-from-minibuffer
 		      "Make face: " nil nil t 'face-name-history)))
   (unless (facep face)
@@ -150,11 +166,6 @@ has been pushed down to make-x-resource-internal itself."
     ;; Define frame-local faces for all frames from X resources.
     (make-face-x-resource-internal face))
   face)
-
-;; Handling of whether to apply X resources or not, has been pushed down
-;; to make-face-x-resource-internal itself, thus the optional arg is no
-;; longer evaluated at all and going away.
-(set-advertised-calling-convention 'make-face '(face) "24.4")
 
 (defun make-empty-face (face)
   "Define a new, empty face with name FACE.
@@ -260,6 +271,17 @@ If the optional argument FRAME is given, report on face FACE in that frame.
 If FRAME is t, report on the defaults for face FACE (for new frames).
 If FRAME is omitted or nil, use the selected frame."
   (not (internal-lisp-face-empty-p face frame)))
+
+
+(defun face-list-p (face-or-list)
+  "True if FACE-OR-LIST is a list of faces.
+Return nil if FACE-OR-LIST is a non-nil atom, or a cons cell whose car
+is either 'foreground-color, 'background-color, or a keyword."
+  ;; The logic of merge_face_ref (xfaces.c) is recreated here.
+  (and (listp face-or-list)
+       (not (memq (car face-or-list)
+		  '(foreground-color background-color)))
+       (not (keywordp (car face-or-list)))))
 
 
 
@@ -411,7 +433,7 @@ completely specified)."
 (defun face-attribute-merged-with (attribute value faces &optional frame)
   "Merges ATTRIBUTE, initially VALUE, with faces from FACES until absolute.
 FACES may be either a single face or a list of faces.
-\[This is an internal function.]"
+[This is an internal function.]"
   (cond ((not (face-attribute-relative-p attribute value))
 	 value)
 	((null faces)
@@ -597,7 +619,7 @@ VALUE must be a string specifying the font family
 `:foundry'
 
 VALUE must be a string specifying the font foundry,
-e.g. ``adobe''.  If a font foundry is specified, wild-cards `*'
+e.g., \"adobe\".  If a font foundry is specified, wild-cards `*'
 and `?' are allowed.
 
 `:width'
@@ -731,7 +753,7 @@ is specified, `:italic' is ignored."
   (setq args (purecopy args))
   (let ((where (if (null frame) 0 frame))
 	(spec args)
-	family foundry)
+	family foundry orig-family orig-foundry)
     ;; If we set the new-frame defaults, this face is modified outside Custom.
     (if (memq where '(0 t))
 	(put (or (get face 'face-alias) face) 'face-modified t))
@@ -747,9 +769,16 @@ is specified, `:italic' is ignored."
     (when (or family foundry)
       (when (and (stringp family)
 		 (string-match "\\([^-]*\\)-\\([^-]*\\)" family))
+        (setq orig-foundry foundry
+              orig-family family)
 	(unless foundry
 	  (setq foundry (match-string 1 family)))
-	(setq family (match-string 2 family)))
+	(setq family (match-string 2 family))
+        ;; Reject bogus "families" that are all-digits -- those are some
+        ;; weird font names, like Foobar-12, that end in a number.
+        (when (string-match "\\`[0-9]*\\'" family)
+          (setq family orig-family)
+          (setq foundry orig-foundry)))
       (when (or (stringp family) (eq family 'unspecified))
 	(internal-set-lisp-face-attribute face :family (purecopy family)
 					  where))
@@ -870,7 +899,7 @@ where COLOR is a string or `foreground-color', and STYLE is either
 foreground color.  :style may be omitted, which means to use a line.
 
 FRAME nil or not specified means change face on all frames.
-Use `set-face-attribute' to ``unspecify'' underlining."
+Use `set-face-attribute' to \"unspecify\" underlining."
   (interactive (read-face-and-attribute :underline))
   (set-face-attribute face frame :underline underline))
 
@@ -883,7 +912,7 @@ Use `set-face-attribute' to ``unspecify'' underlining."
 INVERSE-VIDEO-P non-nil means FACE displays explicitly in inverse video.
 INVERSE-VIDEO-P nil means FACE explicitly is not in inverse video.
 FRAME nil or not specified means change face on all frames.
-Use `set-face-attribute' to ``unspecify'' the inverse video attribute."
+Use `set-face-attribute' to \"unspecify\" the inverse video attribute."
   (interactive
    (let ((list (read-face-and-attribute :inverse-video)))
      (list (car list) (if (cadr list) t))))
@@ -976,7 +1005,7 @@ a single face name."
     (setq default (car (split-string default crm-separator t))))
 
   (let ((prompt (if default
-                    (format "%s (default `%s'): " prompt default)
+                    (format-message "%s (default `%s'): " prompt default)
                   (format "%s: " prompt)))
         aliasfaces nonaliasfaces faces)
     ;; Build up the completion tables.
@@ -1107,10 +1136,10 @@ Value is the new attribute value."
   (setq name (concat (upcase (substring name 0 1)) (substring name 1)))
   (let* ((completion-ignore-case t)
 	 (value (completing-read
-		 (if default
-		     (format "%s for face `%s' (default %s): "
-			     name face default)
-		   (format "%s for face `%s': " name face))
+                 (format-message (if default
+                                     "%s for face `%s' (default %s): "
+                                   "%s for face `%s': ")
+                                 name face default)
 		 completion-alist nil nil nil nil default)))
     (if (equal value "") default value)))
 
@@ -1195,7 +1224,8 @@ of a global face.  Value is the new attribute value."
   "Read the name of a font for FACE on FRAME.
 If optional argument FRAME is nil or omitted, use the selected frame."
   (let ((completion-ignore-case t))
-    (completing-read (format "Set font attributes of face `%s' from font: " face)
+    (completing-read (format-message
+                      "Set font attributes of face `%s' from font: " face)
 		     (append (fontset-list) (x-list-fonts "*" nil frame)))))
 
 
@@ -1406,18 +1436,21 @@ If FRAME is omitted or nil, use the selected frame."
 		  (when alias
 		    (setq face alias)
 		    (insert
-		     (format "\n  %s is an alias for the face `%s'.\n%s"
-			     f alias
-			     (if (setq obsolete (get f 'obsolete-face))
-				 (format "  This face is obsolete%s; use `%s' instead.\n"
-					 (if (stringp obsolete)
-					     (format " since %s" obsolete)
-					   "")
-					 alias)
-			       ""))))
+		     (format-message
+                      "\n  %s is an alias for the face `%s'.\n%s"
+                      f alias
+                      (if (setq obsolete (get f 'obsolete-face))
+                          (format-message
+                           "  This face is obsolete%s; use `%s' instead.\n"
+                           (if (stringp obsolete)
+                               (format " since %s" obsolete)
+                             "")
+                           alias)
+                        ""))))
 		  (insert "\nDocumentation:\n"
-			  (or (face-documentation face)
-			      "Not documented as a face.")
+                          (substitute-command-keys
+                           (or (face-documentation face)
+                               "Not documented as a face."))
 			  "\n\n"))
 		(with-current-buffer standard-output
 		  (save-excursion
@@ -1426,15 +1459,16 @@ If FRAME is omitted or nil, use the selected frame."
 		    (help-xref-button 1 'help-customize-face f)))
 		(setq file-name (find-lisp-object-file-name f 'defface))
 		(when file-name
-		  (princ "Defined in `")
-		  (princ (if (symbolp file-name) file-name
-			   (file-name-nondirectory file-name)))
-		  (princ "'")
+		  (princ (substitute-command-keys "Defined in `"))
+		  (princ (file-name-nondirectory file-name))
+		  (princ (substitute-command-keys "'"))
 		  ;; Make a hyperlink to the library.
 		  (unless (symbolp file-name)
-		    (save-excursion
-		      (re-search-backward "`\\([^`']+\\)'" nil t)
-		      (help-xref-button 1 'help-face-def f file-name)))
+		  (save-excursion
+		    (re-search-backward
+                     (substitute-command-keys "`\\([^`']+\\)'") nil t)
+		    (help-xref-button 1 'help-face-def f file-name))
+                  )
 		  (princ ".")
 		  (terpri)
 		  (terpri))
@@ -1913,16 +1947,13 @@ Return nil if there is no face."
                         (get-char-property (point) 'face))))
       (cond ((facep faceprop)
              (push faceprop faces))
-            ((and (listp faceprop)
-                  ;; Don't treat an attribute spec as a list of faces.
-                  (not (keywordp (car faceprop)))
-                  (not (memq (car faceprop)
-                             '(foreground-color background-color))))
+            ((face-list-p faceprop)
              (dolist (face faceprop)
                (if (facep face)
                    (push face faces))))))
-    (setq faces (delete-dups (nreverse faces)))
-    (if multiple faces (car faces))))
+    (if multiple
+        (delete-dups (nreverse faces))
+      (car (last faces)))))
 
 (defun foreground-color-at-point ()
   "Return the foreground color of the character after point."
@@ -2026,7 +2057,7 @@ Value is the new parameter list."
   "Create and return a frame with frame parameters PARAMETERS.
 If PARAMETERS specify a frame name, handle X geometry resources
 for that name.  If PARAMETERS includes a `reverse' parameter, or
-the X resource ``reverseVideo'' is present, handle that."
+the X resource \"reverseVideo\" is present, handle that."
   (setq parameters (x-handle-named-frame-geometry parameters))
   (let* ((params (copy-tree parameters))
 	 (visibility-spec (assq 'visibility parameters))
@@ -2058,17 +2089,16 @@ Calculate the face definitions using the face specs, custom theme
 settings, X resources, and `face-new-frame-defaults'.
 Finally, apply any relevant face attributes found amongst the
 frame parameters in PARAMETERS."
-  (let ((window-system-p (memq (window-system frame) '(x w32))))
-    ;; The `reverse' is so that `default' goes first.
-    (dolist (face (nreverse (face-list)))
-      (condition-case ()
-	  (progn
-	    ;; Initialize faces from face spec and custom theme.
-	    (face-spec-recalc face frame)
-	    ;; Apply attributes specified by face-new-frame-defaults
-	    (internal-merge-in-global-face face frame))
-	;; Don't let invalid specs prevent frame creation.
-	(error nil))))
+  ;; The `reverse' is so that `default' goes first.
+  (dolist (face (nreverse (face-list)))
+    (condition-case ()
+	(progn
+	  ;; Initialize faces from face spec and custom theme.
+	  (face-spec-recalc face frame)
+	  ;; Apply attributes specified by face-new-frame-defaults
+	  (internal-merge-in-global-face face frame))
+      ;; Don't let invalid specs prevent frame creation.
+      (error nil)))
 
   ;; Apply attributes specified by frame parameters.
   (let ((face-params '((foreground-color default :foreground)
@@ -2150,11 +2180,16 @@ This can be used to fine tune the `input-decode-map', for example.")
 The optional TYPE parameter may be used to override the autodetected
 terminal type to a different value.
 
+This consults `term-file-aliases' to map terminal types to their aliases.
+
 If optional argument RUN-HOOK is non-nil, then as a final step,
 this runs the hook `tty-setup-hook'.
 
 If you set `term-file-prefix' to nil, this function does nothing."
   (setq type (or type (tty-type frame)))
+  (let ((alias (tty-find-type
+		(lambda (typ) (assoc typ term-file-aliases)) type)))
+    (if alias (setq type (cdr (assoc alias term-file-aliases)))))
   ;; Load library for our terminal type.
   ;; User init file can set term-file-prefix to nil to prevent this.
   (with-selected-frame frame
@@ -2489,7 +2524,7 @@ is used for the inner part while the first pixel line/column is
 drawn with the `window-divider-first-pixel' face and the last
 pixel line/column with the `window-divider-last-pixel' face."
   :version "24.4"
-  :group 'frames
+  :group 'window-divider
   :group 'basic-faces)
 
 (defface window-divider-first-pixel
@@ -2500,7 +2535,7 @@ line/column is drawn with the foreground of this face.  If you do
 not want to accentuate the first pixel line/column, set this to
 the same as `window-divider' face."
   :version "24.4"
-  :group 'frames
+  :group 'window-divider
   :group 'basic-faces)
 
 (defface window-divider-last-pixel
@@ -2511,7 +2546,7 @@ line/column is drawn with the foreground of this face.  If you do
 not want to accentuate the last pixel line/column, set this to
 the same as `window-divider' face."
   :version "24.4"
-  :group 'frames
+  :group 'window-divider
   :group 'basic-faces)
 
 (defface minibuffer-prompt
@@ -2675,10 +2710,12 @@ It is used for characters of no fonts too."
      :background "turquoise")		; looks OK on tty (becomes cyan)
     (((class color) (background dark))
      :background "steelblue3")		; looks OK on tty (becomes blue)
-    (((background dark))
+    (((background dark) (min-colors 4))
      :background "grey50")
+    (((background light) (min-colors 4))
+     :background "gray")
     (t
-     :background "gray"))
+     :inherit underline))
   "Face used for a matching paren."
   :group 'paren-showing-faces)
 

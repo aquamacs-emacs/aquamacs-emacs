@@ -1,5 +1,5 @@
 /* Header for charset handler.
-   Copyright (C) 2001-2014 Free Software Foundation, Inc.
+   Copyright (C) 2001-2015 Free Software Foundation, Inc.
    Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
      2005, 2006, 2007, 2008, 2009, 2010, 2011
      National Institute of Advanced Industrial Science and Technology (AIST)
@@ -253,8 +253,7 @@ extern struct charset *charset_table;
 extern Lisp_Object Vcharset_ordered_list;
 extern Lisp_Object Vcharset_non_preferred_head;
 
-/* Incremented everytime we change the priority of charsets.  */
-extern unsigned short charset_ordered_list_tick;
+extern EMACS_UINT charset_ordered_list_tick;
 
 extern Lisp_Object Viso_2022_charset_list;
 extern Lisp_Object Vemacs_mule_charset_list;
@@ -403,7 +402,7 @@ extern Lisp_Object Vchar_charset_set;
    Try some optimization before calling decode_char.  */
 
 #define DECODE_CHAR(charset, code)					\
-  ((ASCII_BYTE_P (code) && (charset)->ascii_compatible_p)		\
+  ((ASCII_CHAR_P (code) && (charset)->ascii_compatible_p)		\
    ? (code)								\
    : ((code) < (charset)->min_code || (code) > (charset)->max_code)	\
    ? -1									\
@@ -520,9 +519,6 @@ extern int iso_charset_table[ISO_MAX_DIMENSION][ISO_MAX_CHARS][ISO_MAX_FINAL];
 
 
 
-extern Lisp_Object Qcharsetp;
-
-extern Lisp_Object Qascii;
 extern int charset_ascii, charset_eight_bit;
 extern int charset_unicode;
 extern int charset_jisx0201_roman;

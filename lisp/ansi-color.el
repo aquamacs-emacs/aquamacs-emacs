@@ -1,6 +1,6 @@
 ;;; ansi-color.el --- translate ANSI escape sequences into faces -*- lexical-binding: t -*-
 
-;; Copyright (C) 1999-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1999-2015 Free Software Foundation, Inc.
 
 ;; Author: Alex Schroeder <alex@gnu.org>
 ;; Maintainer: Alex Schroeder <alex@gnu.org>
@@ -154,7 +154,7 @@ foreground and background colors, respectively."
   "Regexp that matches SGR control sequences.")
 
 (defconst ansi-color-drop-regexp
-  "\033\\[\\([ABCDsuK]\\|[12][JK]\\|=[0-9]+[hI]\\|[0-9;]*[Hf]\\)"
+  "\033\\[\\([ABCDsuK]\\|[12][JK]\\|=[0-9]+[hI]\\|[0-9;]*[Hf]\\|\\?[0-9]+[hl]\\)"
   "Regexp that matches ANSI control sequences to silently drop.")
 
 (defconst ansi-color-parameter-regexp "\\([0-9]*\\)[m;]"
@@ -261,7 +261,11 @@ This function can be added to `comint-preoutput-filter-functions'."
     ;; find the next escape sequence
     (while (setq end (string-match ansi-color-regexp string start))
       (setq result (concat result (substring string start end))
-	    start (match-end 0)))
+            start (match-end 0)))
+    ;; eliminate unrecognized escape sequences
+    (while (string-match ansi-color-drop-regexp string)
+      (setq string
+            (replace-match "" nil nil string)))
     ;; save context, add the remainder of the string to the result
     (let (fragment)
       (if (string-match "\033" string start)
@@ -327,6 +331,10 @@ This function can be added to `comint-preoutput-filter-functions'."
     (when codes
       (put-text-property start (length string)
                          'font-lock-face (ansi-color--find-face codes) string))
+    ;; eliminate unrecognized escape sequences
+    (while (string-match ansi-color-drop-regexp string)
+      (setq string
+            (replace-match "" nil nil string)))
     ;; save context, add the remainder of the string to the result
     (let (fragment)
       (if (string-match "\033" string start)

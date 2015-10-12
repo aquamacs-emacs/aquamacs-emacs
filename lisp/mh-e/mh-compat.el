@@ -1,6 +1,6 @@
 ;;; mh-compat.el --- make MH-E compatible with various versions of Emacs
 
-;; Copyright (C) 2006-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2006-2015 Free Software Foundation, Inc.
 
 ;; Author: Bill Wohler <wohler@newt.com>
 ;; Maintainer: Bill Wohler <wohler@newt.com>
@@ -162,7 +162,7 @@ compatibility with versions of Emacs that lack the variable
 
     (let* ((load-path (image-load-path-for-library \"mh-e\" \"mh-logo.xpm\"))
            (image-load-path (cons (car load-path)
-                                  (when (boundp 'image-load-path)
+                                  (when (boundp \\='image-load-path)
                                     image-load-path))))
       (mh-tool-bar-folder-buttons-init))"
   (unless library (error "No library specified"))

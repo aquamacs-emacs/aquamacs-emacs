@@ -1,6 +1,6 @@
 ;;; copyright.el --- update the copyright notice in current buffer
 
-;; Copyright (C) 1991-1995, 1998, 2001-2014 Free Software Foundation,
+;; Copyright (C) 1991-1995, 1998, 2001-2015 Free Software Foundation,
 ;; Inc.
 
 ;; Author: Daniel Pfeiffer <occitan@esperanto.org>
@@ -374,10 +374,5 @@ If FIX is non-nil, run `copyright-fix-years' instead."
       (kill-buffer (current-buffer)))))
 
 (provide 'copyright)
-
-;; For the copyright sign:
-;; Local Variables:
-;; coding: utf-8
-;; End:
 
 ;;; copyright.el ends here

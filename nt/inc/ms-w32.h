@@ -1,6 +1,6 @@
 /* System description file for Windows NT.
 
-Copyright (C) 1993-1995, 2001-2014 Free Software Foundation, Inc.
+Copyright (C) 1993-1995, 2001-2015 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -26,6 +26,16 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <mingw_time.h>
 
+/* MinGW-w64 gcc does not automotically define a macro for
+   differentiating it fom MinGW gcc. We need to test the presence of
+   __MINGW64_VERSION_MAJOR in _mingw.h: */
+#ifdef __MINGW32__
+# include <_mingw.h>
+# ifdef __MINGW64_VERSION_MAJOR
+#  define MINGW_W64
+# endif
+#endif
+
 /* #undef const */
 
 /* Number of chars of output in the buffer of a stdio stream. */
@@ -47,10 +57,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 /* Define HAVE_TIMEVAL if the system supports the BSD style clock values.
    Look in <sys/time.h> for a timeval structure.  */
 #define HAVE_TIMEVAL 1
-
-/* But our select implementation doesn't allow us to make non-blocking
-   connects.  So until that is fixed, this is necessary:  */
-#define BROKEN_NON_BLOCKING_CONNECT 1
 
 /* And the select implementation does 1-byte read-ahead waiting
    for received packets, so datagrams are broken too.  */
@@ -139,7 +145,7 @@ extern char *getenv ();
    versions we still support.  MinGW64 defines this to a higher value
    in its system headers, and is not really compatible with values
    lower than 0x0500, so leave it alone.  */
-#ifndef _W64
+#ifndef MINGW_W64
 # define _WIN32_WINNT 0x0400
 #endif
 
@@ -158,6 +164,7 @@ extern char *getenv ();
 #ifdef HAVE_NTGUI
 # ifndef HAVE_WINDOW_SYSTEM
 #  define HAVE_WINDOW_SYSTEM 1
+#  define POLL_FOR_INPUT 1
 # endif
 #endif
 
@@ -165,7 +172,7 @@ extern char *getenv ();
 
 #ifdef emacs
 
-#ifdef _W64
+#ifdef MINGW_W64
 /* MinGW64 specific stuff.  */
 /* Make sure 'struct timespec' and 'struct timezone' are defined.  */
 #include <sys/types.h>
@@ -179,6 +186,20 @@ extern struct tm * sys_localtime (const time_t *);
    case.  */
 #undef HAVE__SETJMP
 #endif
+
+/* The following is needed for recovery from C stack overflows.  */
+#include <setjmp.h>
+typedef jmp_buf sigjmp_buf;
+#ifdef MINGW_W64
+/* Evidently, MinGW64's longjmp crashes when invoked from an exception
+   handler, see https://sourceforge.net/p/mingw-w64/mailman/message/32421953/.
+   This seems to be an unsolved problem in the MinGW64 runtime.  So we
+   use the GCC intrinsics instead.  FIXME.  */
+#define sigsetjmp(j,m) __builtin_setjmp(j)
+#else
+#define sigsetjmp(j,m) setjmp(j)
+#endif
+extern void w32_reset_stack_overflow_guard (void);
 
 #ifdef _MSC_VER
 #include <sys/timeb.h>
@@ -299,18 +320,6 @@ int _getpid (void);
 #include <time.h>
 #define tzname    _tzname
 
-/* 'struct timespec' is used by time-related functions in lib/ and
-   elsewhere, but we don't use lib/time.h where the structure is
-   defined.  */
-/* MinGW64 defines 'struct timespec' and _TIMESPEC_DEFINED in sys/types.h.  */
-#ifndef _TIMESPEC_DEFINED
-struct timespec
-{
-  time_t	tv_sec;		/* seconds */
-  long int	tv_nsec;	/* nanoseconds */
-};
-#endif
-
 /* Required for functions in lib/time_r.c, since we don't use lib/time.h.  */
 extern struct tm *gmtime_r (time_t const * restrict, struct tm * restrict);
 extern struct tm *localtime_r (time_t const * restrict, struct tm * restrict);
@@ -368,7 +377,7 @@ typedef int sigset_t;
 typedef int ssize_t;
 #endif
 
-#ifdef _W64	/* MinGW64 */
+#ifdef MINGW_W64
 #ifndef _POSIX
 typedef _sigset_t sigset_t;
 #endif
@@ -427,20 +436,36 @@ extern char *get_emacs_configuration_options (void);
 #define _WINSOCK_H
 
 /* Defines size_t and alloca ().  */
-#ifdef emacs
-#define malloc e_malloc
-#define free   e_free
-#define realloc e_realloc
-#define calloc e_calloc
-#endif
+#include <stdlib.h>
+#include <sys/stat.h>
 #ifdef _MSC_VER
 #define alloca _alloca
 #else
 #include <malloc.h>
 #endif
 
-#include <stdlib.h>
-#include <sys/stat.h>
+#ifdef emacs
+
+typedef void * (* malloc_fn)(size_t);
+typedef void * (* realloc_fn)(void *, size_t);
+typedef void (* free_fn)(void *);
+
+extern void *malloc_before_dump(size_t);
+extern void *realloc_before_dump(void *, size_t);
+extern void free_before_dump(void *);
+extern void *malloc_after_dump(size_t);
+extern void *realloc_after_dump(void *, size_t);
+extern void free_after_dump(void *);
+
+extern malloc_fn the_malloc_fn;
+extern realloc_fn the_realloc_fn;
+extern free_fn the_free_fn;
+
+#define malloc(size) (*the_malloc_fn)(size)
+#define free(ptr)   (*the_free_fn)(ptr)
+#define realloc(ptr, size) (*the_realloc_fn)(ptr, size)
+
+#endif
 
 /* Define for those source files that do not include enough NT system files.  */
 #ifndef NULL
@@ -570,5 +595,7 @@ extern void _DebPrint (const char *fmt, ...);
 #endif
 #endif
 
+/* Event name for when emacsclient starts the Emacs daemon on Windows.  */
+#define W32_DAEMON_EVENT "EmacsServerEvent"
 
 /* ============================================================ */

@@ -1,6 +1,6 @@
 ;;; apropos.el --- apropos commands for users and programmers
 
-;; Copyright (C) 1989, 1994-1995, 2001-2014 Free Software Foundation,
+;; Copyright (C) 1989, 1994-1995, 2001-2015 Free Software Foundation,
 ;; Inc.
 
 ;; Author: Joe Wells <jbw@bigbird.bu.edu>
@@ -681,7 +681,8 @@ the output includes key-bindings of commands."
       (apropos-symbols-internal
        symbols apropos-do-all
        (concat
-        (format "Library `%s' provides: %s\nand requires: %s"
+        (format-message
+                "Library `%s' provides: %s\nand requires: %s"
                 file
                 (mapconcat 'apropos-library-button
                            (or provides '(nil)) " and ")
@@ -718,7 +719,7 @@ the output includes key-bindings of commands."
 		 (setq doc (list (car properties)))
 		 (while (setq properties (cdr (cdr properties)))
 		   (setq doc (cons (car properties) doc)))
-		 (mapconcat #'symbol-name (nreverse doc) " "))
+		 (mapconcat (lambda (p) (format "%s" p)) (nreverse doc) " "))
 	       (when (get symbol 'widget-type)
 		 (apropos-documentation-property
 		  symbol 'widget-documentation t))
@@ -726,11 +727,10 @@ the output includes key-bindings of commands."
 		 (let ((alias (get symbol 'face-alias)))
 		   (if alias
 		       (if (facep alias)
-			   (format "%slias for the face `%s'."
-				   (if (get symbol 'obsolete-face)
-				       "Obsolete a"
-				     "A")
-				   alias)
+			   (format-message
+			    "%slias for the face `%s'."
+			    (if (get symbol 'obsolete-face) "Obsolete a" "A")
+			    alias)
 			 ;; Never happens in practice because fails
 			 ;; (facep symbol) test.
 			 "(alias for undefined face)")
@@ -1205,7 +1205,7 @@ If non-nil, TEXT is a string that will be printed as a heading."
     (set-buffer standard-output)
     (princ "Symbol ")
     (prin1 symbol)
-    (princ "'s plist is\n (")
+    (princ (substitute-command-keys "'s plist is\n ("))
     (put-text-property (+ (point-min) 7) (- (point) 14)
 		       'face 'apropos-symbol)
     (insert (apropos-format-plist symbol "\n  "))

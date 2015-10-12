@@ -1,7 +1,7 @@
 ;;; icomplete.el --- minibuffer completion incremental feedback
 
-;; Copyright (C) 1992-1994, 1997, 1999, 2001-2014
-;;   Free Software Foundation, Inc.
+;; Copyright (C) 1992-1994, 1997, 1999, 2001-2015 Free Software
+;; Foundation, Inc.
 
 ;; Author: Ken Manheimer <klm@i.am>
 ;; Maintainer: Ken Manheimer <klm@i.am>
@@ -122,7 +122,7 @@ This hook is run during minibuffer setup if Icomplete is active.
 It is intended for use in customizing Icomplete for interoperation
 with other features and packages.  For instance:
 
-  (add-hook 'icomplete-minibuffer-setup-hook
+  (add-hook \\='icomplete-minibuffer-setup-hook
 	     (lambda () (setq-local max-mini-window-height 3)))
 
 will constrain Emacs to a maximum minibuffer height of 3 lines when
@@ -149,16 +149,26 @@ icompletion is occurring."
 (defvar icomplete-minibuffer-map
   (let ((map (make-sparse-keymap)))
     (define-key map [?\M-\t] 'minibuffer-force-complete)
-    (define-key map [?\C-j]  'minibuffer-force-complete-and-exit)
+    (define-key map [?\C-j]  'icomplete-force-complete-and-exit)
     (define-key map [?\C-.]  'icomplete-forward-completions)
     (define-key map [?\C-,]  'icomplete-backward-completions)
     map)
   "Keymap used by `icomplete-mode' in the minibuffer.")
 
+(defun icomplete-force-complete-and-exit ()
+  "Complete the minibuffer and exit.
+Use the first of the matches if there are any displayed, and use
+the default otherwise."
+  (interactive)
+  (if (or icomplete-show-matches-on-no-input
+          (> (icomplete--field-end) (icomplete--field-beg)))
+      (minibuffer-force-complete-and-exit)
+    (minibuffer-complete-and-exit)))
+
 (defun icomplete-forward-completions ()
   "Step forward completions by one entry.
 Second entry becomes the first and can be selected with
-`minibuffer-force-complete-and-exit'."
+`icomplete-force-complete-and-exit'."
   (interactive)
   (let* ((beg (icomplete--field-beg))
          (end (icomplete--field-end))
@@ -171,7 +181,7 @@ Second entry becomes the first and can be selected with
 (defun icomplete-backward-completions ()
   "Step backward completions by one entry.
 Last entry becomes the first and can be selected with
-`minibuffer-force-complete-and-exit'."
+`icomplete-force-complete-and-exit'."
   (interactive)
   (let* ((beg (icomplete--field-beg))
          (end (icomplete--field-end))
@@ -486,6 +496,19 @@ matches exist."
 		    (and limit (concat icomplete-separator ellipsis))
 		    "}")
 	  (concat determ " [Matched]"))))))
+
+;;; Iswitchb compatibility
+
+;; We moved Iswitchb to `obsolete' in 24.4, but autoloads in files in
+;; `obsolete' aren't obeyed (since that would encourage people to keep using
+;; those packages, oblivious to their obsolescence).  Given the fact that
+;; Iswitchb was very popular, we decided to keep its autoload for a bit longer,
+;; so we moved it here.
+
+;;;###autoload(when (locate-library "obsolete/iswitchb")
+;;;###autoload  (autoload 'iswitchb-mode "iswitchb" "Toggle Iswitchb mode." t)
+;;;###autoload  (make-obsolete 'iswitchb-mode
+;;;###autoload    "use `icomplete-mode' or `ido-mode' instead." "24.4"))
 
 ;;;_* Provide
 (provide 'icomplete)

@@ -1,5 +1,5 @@
 /* Fringe handling (split from xdisp.c).
-   Copyright (C) 1985-1988, 1993-1995, 1997-2014 Free Software
+   Copyright (C) 1985-1988, 1993-1995, 1997-2015 Free Software
    Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -64,10 +64,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
    The `left-fringe' and `right-fringe' display properties
    must specify physical bitmap symbols.
 */
-
-static Lisp_Object Qtruncation, Qcontinuation, Qoverlay_arrow;
-static Lisp_Object Qempty_line, Qtop_bottom;
-static Lisp_Object Qhollow_small;
 
 enum fringe_bitmap_align
 {
@@ -474,15 +470,12 @@ static struct fringe_bitmap standard_bitmaps[] =
 
 #define NO_FRINGE_BITMAP 0
 #define UNDEF_FRINGE_BITMAP 1
-#define MAX_STANDARD_FRINGE_BITMAPS (sizeof (standard_bitmaps)/sizeof (standard_bitmaps[0]))
+#define MAX_STANDARD_FRINGE_BITMAPS ARRAYELTS (standard_bitmaps)
 
 static struct fringe_bitmap **fringe_bitmaps;
 static Lisp_Object *fringe_faces;
 static int max_fringe_bitmaps;
 
-#ifndef HAVE_NS
-static
-#endif
 int max_used_fringe_bitmap = MAX_STANDARD_FRINGE_BITMAPS;
 
 
@@ -594,7 +587,7 @@ draw_fringe_bitmap_1 (struct window *w, struct glyph_row *row, int left_p, int o
   if (face_id == DEFAULT_FACE_ID)
     {
       Lisp_Object face = fringe_faces[which];
-      face_id = NILP (face) ? lookup_named_face (f, Qfringe, 0)
+      face_id = NILP (face) ? lookup_named_face (f, Qfringe, false)
 	: lookup_derived_face (f, face, FRINGE_FACE_ID, 0);
       if (face_id < 0)
 	face_id = FRINGE_FACE_ID;
@@ -642,7 +635,7 @@ draw_fringe_bitmap_1 (struct window *w, struct glyph_row *row, int left_p, int o
       return;
     }
 
-  PREPARE_FACE_FOR_DISPLAY (f, p.face);
+  prepare_face_for_display (f, p.face);
 
   /* Clear left fringe if no bitmap to draw or if bitmap doesn't fill
      the fringe.  */
@@ -1349,98 +1342,6 @@ update_window_fringes (struct window *w, bool keep_current_p)
 }
 
 
-/* Compute actual fringe widths for frame F.
-
-   If REDRAW is 1, redraw F if the fringe settings was actually
-   modified and F is visible.
-
-   Since the combined left and right fringe must occupy an integral
-   number of columns, we may need to add some pixels to each fringe.
-   Typically, we add an equal amount (+/- 1 pixel) to each fringe,
-   but a negative width value is taken literally (after negating it).
-
-   We never make the fringes narrower than specified.
-*/
-
-void
-compute_fringe_widths (struct frame *f, bool redraw_p)
-{
-  int o_left = FRAME_LEFT_FRINGE_WIDTH (f);
-  int o_right = FRAME_RIGHT_FRINGE_WIDTH (f);
-  int o_cols = FRAME_FRINGE_COLS (f);
-
-  Lisp_Object left_fringe = Fassq (Qleft_fringe, f->param_alist);
-  Lisp_Object right_fringe = Fassq (Qright_fringe, f->param_alist);
-  int left_fringe_width, right_fringe_width;
-
-  if (!NILP (left_fringe))
-    left_fringe = Fcdr (left_fringe);
-  if (!NILP (right_fringe))
-    right_fringe = Fcdr (right_fringe);
-
-  left_fringe_width = ((NILP (left_fringe) || !INTEGERP (left_fringe)) ? 8 :
-		       XINT (left_fringe));
-  right_fringe_width = ((NILP (right_fringe) || !INTEGERP (right_fringe)) ? 8 :
-			XINT (right_fringe));
-
-  if (left_fringe_width || right_fringe_width)
-    {
-      int left_wid = eabs (left_fringe_width);
-      int right_wid = eabs (right_fringe_width);
-      int conf_wid = left_wid + right_wid;
-      int font_wid = FRAME_COLUMN_WIDTH (f);
-      int cols = (left_wid + right_wid + font_wid-1) / font_wid;
-      int real_wid = cols * font_wid;
-      if (left_wid && right_wid)
-	{
-	  if (left_fringe_width < 0)
-	    {
-	      /* Left fringe width is fixed, adjust right fringe if necessary */
-	      FRAME_LEFT_FRINGE_WIDTH (f) = left_wid;
-	      FRAME_RIGHT_FRINGE_WIDTH (f) = real_wid - left_wid;
-	    }
-	  else if (right_fringe_width < 0)
-	    {
-	      /* Right fringe width is fixed, adjust left fringe if necessary */
-	      FRAME_LEFT_FRINGE_WIDTH (f) = real_wid - right_wid;
-	      FRAME_RIGHT_FRINGE_WIDTH (f) = right_wid;
-	    }
-	  else
-	    {
-	      /* Adjust both fringes with an equal amount.
-		 Note that we are doing integer arithmetic here, so don't
-		 lose a pixel if the total width is an odd number.  */
-	      int fill = real_wid - conf_wid;
-	      FRAME_LEFT_FRINGE_WIDTH (f) = left_wid + fill/2;
-	      FRAME_RIGHT_FRINGE_WIDTH (f) = right_wid + fill - fill/2;
-	    }
-	}
-      else if (left_fringe_width)
-	{
-	  FRAME_LEFT_FRINGE_WIDTH (f) = real_wid;
-	  FRAME_RIGHT_FRINGE_WIDTH (f) = 0;
-	}
-      else
-	{
-	  FRAME_LEFT_FRINGE_WIDTH (f) = 0;
-	  FRAME_RIGHT_FRINGE_WIDTH (f) = real_wid;
-	}
-      FRAME_FRINGE_COLS (f) = cols;
-    }
-  else
-    {
-      FRAME_LEFT_FRINGE_WIDTH (f) = 0;
-      FRAME_RIGHT_FRINGE_WIDTH (f) = 0;
-      FRAME_FRINGE_COLS (f) = 0;
-    }
-
-  if (redraw_p && FRAME_VISIBLE_P (f))
-    if (o_left != FRAME_LEFT_FRINGE_WIDTH (f) ||
-	o_right != FRAME_RIGHT_FRINGE_WIDTH (f) ||
-	o_cols != FRAME_FRINGE_COLS (f))
-      redraw_frame (f);
-}
-
 
 /* Free resources used by a user-defined bitmap.  */
 
@@ -1521,6 +1422,21 @@ init_fringe_bitmap (int which, struct fringe_bitmap *fb, int once_p)
       unsigned short *bits = fb->bits;
       int j;
 
+#ifdef USE_CAIRO
+      for (j = 0; j < fb->height; j++)
+	{
+	  unsigned short b = *bits;
+#ifdef WORDS_BIGENDIAN
+	  *bits++ = (b << (16 - fb->width));
+#else
+	  b = (unsigned short)((swap_nibble[b & 0xf] << 12)
+			       | (swap_nibble[(b>>4) & 0xf] << 8)
+			       | (swap_nibble[(b>>8) & 0xf] << 4)
+			       | (swap_nibble[(b>>12) & 0xf]));
+	  *bits++ = (b >> (16 - fb->width));
+#endif
+	}
+#else  /* not USE_CAIRO */
       if (fb->width <= 8)
 	{
 	  unsigned char *cbits = (unsigned char *)fb->bits;
@@ -1549,6 +1465,7 @@ init_fringe_bitmap (int which, struct fringe_bitmap *fb, int once_p)
 	      *bits++ = b;
 	    }
 	}
+#endif /* not USE_CAIRO */
 #endif /* HAVE_X_WINDOWS */
 
     }
@@ -1591,13 +1508,7 @@ If BITMAP already exists, the existing definition is replaced.  */)
   int fill1 = 0, fill2 = 0;
 
   CHECK_SYMBOL (bitmap);
-
-  if (STRINGP (bits))
-    h = SCHARS (bits);
-  else if (VECTORP (bits))
-    h = ASIZE (bits);
-  else
-    wrong_type_argument (Qsequencep, bits);
+  h = CHECK_VECTOR_OR_STRING (bits);
 
   if (NILP (height))
     fb.height = h;
@@ -1845,21 +1756,22 @@ init_fringe_once (void)
 void
 init_fringe (void)
 {
-  int i;
-
   max_fringe_bitmaps = MAX_STANDARD_FRINGE_BITMAPS + 20;
 
   fringe_bitmaps = xzalloc (max_fringe_bitmaps * sizeof *fringe_bitmaps);
-  fringe_faces = xmalloc (max_fringe_bitmaps * sizeof *fringe_faces);
 
-  for (i = 0; i < max_fringe_bitmaps; i++)
-    fringe_faces[i] = Qnil;
+  verify (NIL_IS_ZERO);
+  fringe_faces = xzalloc (max_fringe_bitmaps * sizeof *fringe_faces);
 }
 
-#ifdef HAVE_NTGUI
+#if defined (HAVE_NTGUI) || defined (USE_CAIRO)
 
 void
+#ifdef HAVE_NTGUI
 w32_init_fringe (struct redisplay_interface *rif)
+#else
+x_cr_init_fringe (struct redisplay_interface *rif)
+#endif
 {
   int bt;
 
@@ -1872,7 +1784,9 @@ w32_init_fringe (struct redisplay_interface *rif)
       rif->define_fringe_bitmap (bt, fb->bits, fb->height, fb->width);
     }
 }
+#endif
 
+#ifdef HAVE_NTGUI
 void
 w32_reset_fringes (void)
 {

@@ -1,6 +1,6 @@
 ;;; avoid.el --- make mouse pointer stay out of the way of editing
 
-;; Copyright (C) 1993-1994, 2000-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1993-1994, 2000-2015 Free Software Foundation, Inc.
 
 ;; Author: Boris Goldowsky <boris@gnu.org>
 ;; Keywords: mouse
@@ -163,9 +163,9 @@ Analogous to `mouse-position'."
 
 ;(defun mouse-avoidance-point-position-test ()
 ;  (interactive)
-;  (message (format "point=%s mouse=%s"
-;		   (cdr (mouse-avoidance-point-position))
-;		   (cdr (mouse-position)))))
+;  (message "point=%s mouse=%s"
+;	    (cdr (mouse-avoidance-point-position))
+;	    (cdr (mouse-position))))
 
 (defun mouse-avoidance-set-mouse-position (pos)
   ;; Carefully set mouse position to given position (X . Y)

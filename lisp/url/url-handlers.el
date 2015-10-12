@@ -1,6 +1,6 @@
-;;; url-handlers.el --- file-name-handler stuff for URL loading
+;;; url-handlers.el --- file-name-handler stuff for URL loading  -*- lexical-binding:t -*-
 
-;; Copyright (C) 1996-1999, 2004-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1996-1999, 2004-2015 Free Software Foundation, Inc.
 
 ;; Keywords: comm, data, processes, hypermedia
 
@@ -51,7 +51,7 @@
 ;; delete-directory			Finished (DAV)
 ;; delete-file				Finished (DAV)
 ;; diff-latest-backup-file
-;; directory-file-name			unnecessary (what about VMS)?
+;; directory-file-name			unnecessary
 ;; directory-files			Finished (DAV)
 ;; dired-call-process
 ;; dired-compress-file
@@ -111,17 +111,18 @@ the mode if ARG is omitted or nil."
       (push (cons url-handler-regexp 'url-file-handler)
 	    file-name-handler-alist)))
 
-(defcustom url-handler-regexp "\\`\\(https?\\|ftp\\|file\\|nfs\\)://"
+(defcustom url-handler-regexp "\\`\\(https?\\|ftp\\|file\\|nfs\\|ssh\\|scp\\|rsync\\|telnet\\)://"
   "Regular expression for URLs handled by `url-handler-mode'.
 When URL Handler mode is enabled, this regular expression is
 added to `file-name-handler-alist'.
 
 Some valid URL protocols just do not make sense to visit
-interactively \(about, data, info, irc, mailto, etc\).  This
+interactively \(about, data, info, irc, mailto, etc.).  This
 regular expression avoids conflicts with local files that look
-like URLs \(Gnus is particularly bad at this\)."
+like URLs \(Gnus is particularly bad at this)."
   :group 'url
   :type 'regexp
+  :version "25.1"
   :set (lambda (symbol value)
 	 (let ((enable url-handler-mode))
 	   (url-handler-mode 0)
@@ -147,21 +148,30 @@ the arguments that would have been passed to OPERATION."
   ;; Avoid recursive load.
   (if (and load-in-progress url-file-handler-load-in-progress)
       (url-run-real-handler operation args)
-    (let ((url-file-handler-load-in-progress load-in-progress)
-	  (fn (get operation 'url-file-handlers))
-	  (val nil)
-	  (hooked nil))
-      (if (and (not fn) (intern-soft (format "url-%s" operation))
-	       (fboundp (intern-soft (format "url-%s" operation))))
-	  (error "Missing URL handler mapping for %s" operation))
-      (if fn
-	  (setq hooked t
-		val (save-match-data (apply fn args)))
-	(setq hooked nil
-	      val (url-run-real-handler operation args)))
-      (url-debug 'handlers "%s %S%S => %S" (if hooked "Hooked" "Real")
-		 operation args val)
-      val)))
+    (let ((url-file-handler-load-in-progress load-in-progress))
+      ;; Check, whether there are arguments we want pass to Tramp.
+      (if (catch :do
+            (dolist (url (cons default-directory args))
+              (and (member
+                    (url-type (url-generic-parse-url (and (stringp url) url)))
+                    url-tramp-protocols)
+                   (throw :do t))))
+          (apply 'url-tramp-file-handler operation args)
+        ;; Otherwise, let's do the job.
+        (let ((fn (get operation 'url-file-handlers))
+              (val nil)
+              (hooked nil))
+          (if (and (not fn) (intern-soft (format "url-%s" operation))
+                   (fboundp (intern-soft (format "url-%s" operation))))
+              (error "Missing URL handler mapping for %s" operation))
+          (if fn
+              (setq hooked t
+                    val (save-match-data (apply fn args)))
+            (setq hooked nil
+                  val (url-run-real-handler operation args)))
+          (url-debug 'handlers "%s %S%S => %S" (if hooked "Hooked" "Real")
+                     operation args val)
+          val)))))
 
 (defun url-file-handler-identity (&rest args)
   ;; Identity function
@@ -218,7 +228,7 @@ the arguments that would have been passed to OPERATION."
       ;; a local process.
       nil)))
 
-(defun url-handler-file-remote-p (filename &optional identification connected)
+(defun url-handler-file-remote-p (filename &optional identification _connected)
   (let ((url (url-generic-parse-url filename)))
     (if (and (url-type url) (not (equal (url-type url) "file")))
 	;; Maybe we can find a suitable check for CONNECTED.  For now,
@@ -240,7 +250,7 @@ the arguments that would have been passed to OPERATION."
 ;; The actual implementation
 ;;;###autoload
 (defun url-copy-file (url newname &optional ok-if-already-exists
-			  keep-time preserve-uid-gid)
+			  _keep-time _preserve-uid-gid)
   "Copy URL to NEWNAME.  Both args must be strings.
 Signals a `file-already-exists' error if file NEWNAME already exists,
 unless a third argument OK-IF-ALREADY-EXISTS is supplied and non-nil.
@@ -324,19 +334,24 @@ They count bytes from the beginning of the body."
         (unless (cadr size-and-charset)
           ;; If the headers don't specify any particular charset, use the
           ;; usual heuristic/rules that we apply to files.
-          (decode-coding-inserted-region start (point) url visit beg end replace))
-        (list url (car size-and-charset))))))
+          (decode-coding-inserted-region start (point) url
+                                         visit beg end replace))
+        (let ((inserted (car size-and-charset)))
+          (when (fboundp 'after-insert-file-set-coding)
+            (let ((insval (after-insert-file-set-coding inserted visit)))
+              (if insval (setq inserted insval))))
+          (list url inserted))))))
 
 (put 'insert-file-contents 'url-file-handlers 'url-insert-file-contents)
 
-(defun url-file-name-completion (url directory &optional predicate)
+(defun url-file-name-completion (url _directory &optional _predicate)
   ;; Even if it's not implemented, it's not an error to ask for completion,
   ;; in case it's available (bug#14806).
   ;; (error "Unimplemented")
   url)
 (put 'file-name-completion 'url-file-handlers 'url-file-name-completion)
 
-(defun url-file-name-all-completions (file directory)
+(defun url-file-name-all-completions (_file _directory)
   ;; Even if it's not implemented, it's not an error to ask for completion,
   ;; in case it's available (bug#14806).
   ;; (error "Unimplemented")

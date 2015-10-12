@@ -1,6 +1,6 @@
 /* GNU Emacs routines to deal with category tables.
 
-Copyright (C) 1998, 2001-2014 Free Software Foundation, Inc.
+Copyright (C) 1998, 2001-2015 Free Software Foundation, Inc.
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
   2005, 2006, 2007, 2008, 2009, 2010, 2011
   National Institute of Advanced Industrial Science and Technology (AIST)
@@ -41,7 +41,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 static void
 bset_category_table (struct buffer *b, Lisp_Object val)
 {
-  b->INTERNAL_FIELD (category_table) = val;
+  b->category_table_ = val;
 }
 
 /* The version number of the latest category table.  Each category
@@ -53,8 +53,6 @@ bset_category_table (struct buffer *b, Lisp_Object val)
 
    For the moment, we are not using this feature.  */
 static int category_table_version;
-
-static Lisp_Object Qcategory_table, Qcategoryp, Qcategorysetp, Qcategory_table_p;
 
 /* Category set staff.  */
 
@@ -96,7 +94,7 @@ those categories.  */)
   (Lisp_Object categories)
 {
   Lisp_Object val;
-  int len;
+  ptrdiff_t len;
 
   CHECK_STRING (categories);
   val = MAKE_CATEGORY_SET;
@@ -466,7 +464,7 @@ Emacs treats a sequence of word constituent characters as a single
 word (i.e. finds no word boundary between them) only if they belong to
 the same script.  But, exceptions are allowed in the following cases.
 
-\(1) The case that characters are in different scripts is controlled
+(1) The case that characters are in different scripts is controlled
 by the variable `word-combining-categories'.
 
 Emacs finds no word boundary between characters of different scripts
@@ -480,7 +478,7 @@ For instance, to tell that Han characters followed by Hiragana
 characters can form a single word, the element `(?C . ?H)' should be
 in this list.
 
-\(2) The case that character are in the same script is controlled by
+(2) The case that character are in the same script is controlled by
 the variable `word-separating-categories'.
 
 Emacs finds a word boundary between characters of the same script
@@ -493,7 +491,7 @@ between C1 and C2.
 
 For instance, to tell that there's a word boundary between Hiragana
 and Katakana (both are in the same script `kana'),
-the element `(?H . ?K) should be in this list.  */);
+the element `(?H . ?K)' should be in this list.  */);
 
   Vword_combining_categories = Qnil;
 

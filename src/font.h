@@ -1,5 +1,5 @@
 /* font.h -- Interface definition for font handling.
-   Copyright (C) 2006-2014 Free Software Foundation, Inc.
+   Copyright (C) 2006-2015 Free Software Foundation, Inc.
    Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011
      National Institute of Advanced Industrial Science and Technology (AIST)
      Registration Number H13PRO009
@@ -56,7 +56,6 @@ INLINE_HEADER_BEGIN
 	Note: Only the method `open' of a font-driver can create this
 	object, and it should never be modified by Lisp.  */
 
-extern Lisp_Object Qfont_spec, Qfont_entity, Qfont_object;
 
 /* An enumerator for each font property.  This is used as an index to
    the vector of FONT-SPEC and FONT-ENTITY.
@@ -162,9 +161,6 @@ enum font_property_index
     /* List of font-objects opened from the font-entity.  */
     FONT_OBJLIST_INDEX = FONT_SPEC_MAX,
 
-    /* Font-entity from which the font-object is opened.  */
-    FONT_ENTITY_INDEX = FONT_SPEC_MAX,
-
     /* This value is the length of font-entity vector.  */
     FONT_ENTITY_MAX,
 
@@ -181,9 +177,6 @@ enum font_property_index
     /* File name of the font or nil if a file associated with the font
        is not available.  */
     FONT_FILE_INDEX,
-
-    /* Format of the font (symbol) or nil if unknown.  */
-    FONT_FORMAT_INDEX,
 
     /* This value is the length of font-object vector.  */
     FONT_OBJECT_MAX
@@ -245,17 +238,6 @@ enum font_property_index
 #define FONT_BASE(f) ((f)->ascent)
 #define FONT_DESCENT(f) ((f)->descent)
 
-extern Lisp_Object QCspacing, QCdpi, QCscalable, QCotf, QClang, QCscript;
-extern Lisp_Object QCavgwidth, QCantialias, QCfont_entity;
-extern Lisp_Object Qp;
-
-
-/* Important character set symbols.  */
-extern Lisp_Object Qascii_0;
-extern Lisp_Object Qiso8859_1, Qiso10646_1, Qunicode_bmp, Qunicode_sip;
-
-/* Special ADSTYLE properties to avoid fonts used for Latin characters.  */
-extern Lisp_Object Qja, Qko;
 
 /* Structure for a font-spec.  */
 
@@ -431,54 +413,90 @@ struct font_bitmap
 /* Predicates to check various font-related objects.  */
 
 /* True iff X is one of font-spec, font-entity, and font-object.  */
-#define FONTP(x) PSEUDOVECTORP (x, PVEC_FONT)
+INLINE bool
+FONTP (Lisp_Object x)
+{
+  return PSEUDOVECTORP (x, PVEC_FONT);
+}
+
 /* True iff X is font-spec.  */
-#define FONT_SPEC_P(x)	\
-  (FONTP (x) && (ASIZE (x) & PSEUDOVECTOR_SIZE_MASK) == FONT_SPEC_MAX)
+INLINE bool
+FONT_SPEC_P (Lisp_Object x)
+{
+  return FONTP (x) && (ASIZE (x) & PSEUDOVECTOR_SIZE_MASK) == FONT_SPEC_MAX;
+}
+
 /* True iff X is font-entity.  */
-#define FONT_ENTITY_P(x)	\
-  (FONTP (x) && (ASIZE (x) & PSEUDOVECTOR_SIZE_MASK) == FONT_ENTITY_MAX)
+INLINE bool
+FONT_ENTITY_P (Lisp_Object x)
+{
+  return FONTP (x) && (ASIZE (x) & PSEUDOVECTOR_SIZE_MASK) == FONT_ENTITY_MAX;
+}
+
 /* True iff X is font-object.  */
-#define FONT_OBJECT_P(x)	\
-  (FONTP (x) && (ASIZE (x) & PSEUDOVECTOR_SIZE_MASK) == FONT_OBJECT_MAX)
+INLINE bool
+FONT_OBJECT_P (Lisp_Object x)
+{
+  return FONTP (x) && (ASIZE (x) & PSEUDOVECTOR_SIZE_MASK) == FONT_OBJECT_MAX;
+}
 
-/* True iff ENTITY can't be loaded.  */
-#define FONT_ENTITY_NOT_LOADABLE(entity)	\
-  EQ (AREF (entity, FONT_OBJLIST_INDEX), Qt)
+/* Type checking functions for various font-related objects.  */
 
-/* Flag ENTITY not loadable.  */
-#define FONT_ENTITY_SET_NOT_LOADABLE(entity)	\
-  ASET (entity, FONT_OBJLIST_INDEX, Qt)
+INLINE void
+CHECK_FONT (Lisp_Object x)
+{
+  CHECK_TYPE (FONTP (x), Qfont, x);
+}
 
+INLINE void
+CHECK_FONT_SPEC (Lisp_Object x)
+{
+  CHECK_TYPE (FONT_SPEC_P (x), Qfont_spec, x);
+}
 
-/* Check macros for various font-related objects.  */
+INLINE void
+CHECK_FONT_ENTITY (Lisp_Object x)
+{
+  CHECK_TYPE (FONT_ENTITY_P (x), Qfont_entity, x);
+}
 
-#define CHECK_FONT(x)	\
-  do { if (! FONTP (x)) wrong_type_argument (Qfont, x); } while (false)
-#define CHECK_FONT_SPEC(x)	\
-  do { if (! FONT_SPEC_P (x)) wrong_type_argument (Qfont_spec, x); } \
-  while (false)
-#define CHECK_FONT_ENTITY(x)	\
-  do { if (! FONT_ENTITY_P (x)) wrong_type_argument (Qfont_entity, x); } \
-  while (false)
-#define CHECK_FONT_OBJECT(x)	\
-  do { if (! FONT_OBJECT_P (x)) wrong_type_argument (Qfont_object, x); } \
-  while (false)
+INLINE void
+CHECK_FONT_OBJECT (Lisp_Object x)
+{
+  CHECK_TYPE (FONT_OBJECT_P (x), Qfont_object, x);
+}
 
-#define CHECK_FONT_GET_OBJECT(x, font)	\
-  do {					\
-    CHECK_FONT_OBJECT (x);		\
-    font = XFONT_OBJECT (x);		\
-  } while (false)
+/* C pointer extraction functions for various font-related objects.  */
 
-#define XFONT_SPEC(p)	\
-  (eassert (FONT_SPEC_P (p)), (struct font_spec *) XUNTAG (p, Lisp_Vectorlike))
-#define XFONT_ENTITY(p)	\
-  (eassert (FONT_ENTITY_P (p)), \
-   (struct font_entity *) XUNTAG (p, Lisp_Vectorlike))
-#define XFONT_OBJECT(p)	\
-  (eassert (FONT_OBJECT_P (p)), (struct font *) XUNTAG (p, Lisp_Vectorlike))
+INLINE struct font_spec *
+XFONT_SPEC (Lisp_Object p)
+{
+  eassert (FONT_SPEC_P (p));
+  return XUNTAG (p, Lisp_Vectorlike);
+}
+
+INLINE struct font_entity *
+XFONT_ENTITY (Lisp_Object p)
+{
+  eassert (FONT_ENTITY_P (p));
+  return XUNTAG (p, Lisp_Vectorlike);
+}
+
+INLINE struct font *
+XFONT_OBJECT (Lisp_Object p)
+{
+  eassert (FONT_OBJECT_P (p));
+  return XUNTAG (p, Lisp_Vectorlike);
+}
+
 #define XSETFONT(a, b) (XSETPSEUDOVECTOR (a, b, PVEC_FONT))
+
+INLINE struct font *
+CHECK_FONT_GET_OBJECT (Lisp_Object x)
+{
+  CHECK_FONT_OBJECT (x);
+  return XFONT_OBJECT (x);
+}
 
 /* Number of pt per inch (from the TeXbook).  */
 #define PT_PER_INCH 72.27
@@ -564,11 +582,9 @@ struct font_driver
   /* Close FONT.  NOTE: this can be called by GC.  */
   void (*close) (struct font *font);
 
-  /* Optional (if FACE->extra is not used).
-     Prepare FACE for displaying characters by FONT on frame F by
-     storing some data in FACE->extra.  If successful, return 0.
-     Otherwise, return -1.  */
-  int (*prepare_face) (struct frame *f, struct face *face);
+  /* Prepare FACE for displaying characters by FONT on frame F by
+     storing some data in FACE->extra.  */
+  void (*prepare_face) (struct frame *f, struct face *face);
 
   /* Optional.
      Done FACE for displaying characters by FACE->font on frame F.  */
@@ -587,9 +603,9 @@ struct font_driver
   /* Compute the total metrics of the NGLYPHS glyphs specified by
      the font FONT and the sequence of glyph codes CODE, and store the
      result in METRICS.  */
-  int (*text_extents) (struct font *font,
-                       unsigned *code, int nglyphs,
-                       struct font_metrics *metrics);
+  void (*text_extents) (struct font *font,
+			unsigned *code, int nglyphs,
+			struct font_metrics *metrics);
 
 #ifdef HAVE_WINDOW_SYSTEM
 
@@ -614,15 +630,6 @@ struct font_driver
   void (*free_bitmap) (struct font *font, struct font_bitmap *bitmap);
 
 #endif /* HAVE_WINDOW_SYSTEM */
-
-  /* Optional.
-     Return an outline data for glyph-code CODE of FONT.  The format
-     of the outline data depends on the font-driver.  */
-  void *(*get_outline) (struct font *font, unsigned code);
-
-  /* Optional.
-     Free OUTLINE (that is obtained by the above method).  */
-  void (*free_outline) (struct font *font, void *outline);
 
   /* Optional.
      Get coordinates of the INDEXth anchor point of the glyph whose
@@ -725,25 +732,14 @@ struct font_driver_list
   struct font_driver_list *next;
 };
 
-
-/* Chain of arbitrary data specific to each font driver.
-   Each frame has its own font data list at F->font_data_list.  */
-
-struct font_data_list
-{
-  /* Pointer to the font driver.  */
-  struct font_driver *driver;
-  /* Data specific to the font driver.  */
-  void *data;
-  /* Pointer to the next element of the chain.  */
-  struct font_data_list *next;
-};
-
 extern Lisp_Object copy_font_spec (Lisp_Object);
 extern Lisp_Object merge_font_spec (Lisp_Object, Lisp_Object);
 
 extern Lisp_Object font_make_entity (void);
 extern Lisp_Object font_make_object (int, Lisp_Object, int);
+#if defined (HAVE_XFT) || defined (HAVE_FREETYPE) || defined (HAVE_NS)
+extern Lisp_Object font_build_object (int, Lisp_Object, Lisp_Object, double);
+#endif
 
 extern Lisp_Object find_font_encoding (Lisp_Object);
 extern int font_registry_charsets (Lisp_Object, struct charset **,
@@ -789,8 +785,6 @@ extern void font_parse_family_registry (Lisp_Object family,
 extern int font_parse_xlfd (char *name, ptrdiff_t len, Lisp_Object font);
 extern ptrdiff_t font_unparse_xlfd (Lisp_Object font, int pixel_size,
 				    char *name, int bytes);
-extern int font_unparse_fcname (Lisp_Object font, int pixel_size,
-                                char *name, int bytes);
 extern void register_font_driver (struct font_driver *driver, struct frame *f);
 extern void free_font_driver_list (struct frame *f);
 #ifdef ENABLE_CHECKING
@@ -811,11 +805,10 @@ extern void font_fill_lglyph_metrics (Lisp_Object, Lisp_Object);
 extern Lisp_Object font_put_extra (Lisp_Object font, Lisp_Object prop,
                                    Lisp_Object val);
 
-extern int font_put_frame_data (struct frame *f,
-                                struct font_driver *driver,
-                                void *data);
-extern void *font_get_frame_data (struct frame *f,
-                                  struct font_driver *driver);
+#if defined (HAVE_XFT) || defined (HAVE_FREETYPE)
+extern void font_put_frame_data (struct frame *, Lisp_Object, void *);
+extern void *font_get_frame_data (struct frame *f, Lisp_Object);
+#endif /* HAVE_XFT || HAVE_FREETYPE */
 
 extern void font_filter_properties (Lisp_Object font,
 				    Lisp_Object alist,
@@ -831,11 +824,11 @@ extern struct font_driver xfont_driver;
 extern void syms_of_xfont (void);
 extern void syms_of_ftxfont (void);
 #ifdef HAVE_XFT
-extern Lisp_Object Qxft;
 extern struct font_driver xftfont_driver;
-extern void syms_of_xftfont (void);
-#elif defined HAVE_FREETYPE
+#endif
+#if defined HAVE_FREETYPE || defined HAVE_XFT
 extern struct font_driver ftxfont_driver;
+extern void syms_of_xftfont (void);
 #endif
 #ifdef HAVE_BDFFONT
 extern void syms_of_bdffont (void);
@@ -847,17 +840,18 @@ extern struct font_driver uniscribe_font_driver;
 extern void syms_of_w32font (void);
 #endif	/* HAVE_NTGUI */
 #ifdef HAVE_NS
-extern Lisp_Object Qfontsize;
 extern struct font_driver nsfont_driver;
 extern void syms_of_nsfont (void);
 extern void syms_of_macfont (void);
 #endif	/* HAVE_NS */
+#ifdef USE_CAIRO
+extern struct font_driver ftcrfont_driver;
+extern void syms_of_ftcrfont (void);
+#endif
 
 #ifndef FONT_DEBUG
 #define FONT_DEBUG
 #endif
-
-extern Lisp_Object QCfoundry;
 
 extern void font_add_log (const char *, Lisp_Object, Lisp_Object);
 extern void font_deferred_log (const char *, Lisp_Object, Lisp_Object);

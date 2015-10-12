@@ -1,6 +1,6 @@
 ;;; thumbs.el --- Thumbnails previewer for images files
 
-;; Copyright (C) 2004-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2004-2015 Free Software Foundation, Inc.
 
 ;; Author: Jean-Philippe Theberge <jphiltheberge@videotron.ca>
 ;; Maintainer: emacs-devel@gnu.org
@@ -102,7 +102,7 @@ When it reaches that size (in bytes), a warning is sent."
     (or (executable-find "convert")
 	"/usr/X11R6/bin/convert"))
   "Name of conversion program for thumbnails generation.
-It must be 'convert'."
+It must be \"convert\"."
   :type 'string
   :group 'thumbs)
 
@@ -235,7 +235,7 @@ Optional arguments are:
 ARG any arguments to the ACTION command,
 OUTPUT-FORMAT is the file format to output (default is jpeg),
 ACTION-PREFIX is the symbol to place before the ACTION command
-              (defaults to '-' but can sometimes be '+')."
+              (defaults to `-' but can sometimes be `+')."
   (call-process thumbs-conversion-program nil nil nil
 		(or action-prefix "-")
 		action

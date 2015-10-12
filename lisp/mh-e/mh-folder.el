@@ -1,6 +1,6 @@
 ;;; mh-folder.el --- MH-Folder mode
 
-;; Copyright (C) 2002-2003, 2005-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2002-2003, 2005-2015 Free Software Foundation, Inc.
 
 ;; Author: Bill Wohler <wohler@newt.com>
 ;; Maintainer: Bill Wohler <wohler@newt.com>
@@ -755,7 +755,7 @@ You can enter the message NUMBER either before or after typing
 
 In a program, optional non-nil second argument NO-ERROR-IF-NO-MESSAGE
 means return nil instead of signaling an error if message does not
-exist\; in this case, the cursor is positioned near where the message
+exist; in this case, the cursor is positioned near where the message
 would have been. Non-nil third argument DONT-SHOW means not to show
 the message."
   (interactive "NGo to message: ")

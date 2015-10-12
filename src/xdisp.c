@@ -1,6 +1,6 @@
 /* Display generation from window structure and buffer text.
 
-Copyright (C) 1985-1988, 1993-1995, 1997-2014 Free Software Foundation,
+Copyright (C) 1985-1988, 1993-1995, 1997-2015 Free Software Foundation,
 Inc.
 
 This file is part of GNU Emacs.
@@ -324,51 +324,8 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #define INFINITY 10000000
 
-Lisp_Object Qoverriding_local_map, Qoverriding_terminal_local_map;
-Lisp_Object Qwindow_scroll_functions;
-static Lisp_Object Qwindow_text_change_functions;
-static Lisp_Object Qredisplay_end_trigger_functions;
-Lisp_Object Qinhibit_point_motion_hooks;
-static Lisp_Object QCeval, QCpropertize;
-Lisp_Object QCfile, QCdata;
-static Lisp_Object Qfontified;
-static Lisp_Object Qgrow_only;
-static Lisp_Object Qinhibit_eval_during_redisplay;
-static Lisp_Object Qbuffer_position, Qposition, Qobject;
-static Lisp_Object Qright_to_left, Qleft_to_right;
-
-/* Cursor shapes.  */
-Lisp_Object Qbar, Qhbar, Qbox, Qhollow;
-
-/* Pointer shapes.  */
-static Lisp_Object Qarrow, Qhand;
-Lisp_Object Qtext;
-
 /* Holds the list (error).  */
 static Lisp_Object list_of_error;
-
-static Lisp_Object Qfontification_functions;
-
-static Lisp_Object Qwrap_prefix;
-static Lisp_Object Qline_prefix;
-static Lisp_Object Qredisplay_internal;
-
-/* Non-nil means don't actually do any redisplay.  */
-
-Lisp_Object Qinhibit_redisplay;
-
-/* Names of text properties relevant for redisplay.  */
-
-Lisp_Object Qdisplay;
-
-Lisp_Object Qspace, QCalign_to;
-static Lisp_Object QCrelative_width, QCrelative_height;
-Lisp_Object Qleft_margin, Qright_margin;
-static Lisp_Object Qspace_width, Qraise;
-static Lisp_Object Qslice;
-Lisp_Object Qcenter;
-static Lisp_Object Qmargin, Qpointer;
-static Lisp_Object Qline_height;
 
 #ifdef HAVE_WINDOW_SYSTEM
 
@@ -384,7 +341,7 @@ static Lisp_Object Qline_height;
    && (IT)->current_x == (IT)->last_visible_x)
 
 #else /* !HAVE_WINDOW_SYSTEM */
-#define IT_OVERFLOW_NEWLINE_INTO_FRINGE(it) 0
+#define IT_OVERFLOW_NEWLINE_INTO_FRINGE(it) false
 #endif /* HAVE_WINDOW_SYSTEM */
 
 /* Test if the display element loaded in IT, or the underlying buffer
@@ -403,37 +360,11 @@ static Lisp_Object Qline_height;
 	   && (*BYTE_POS_ADDR (IT_BYTEPOS (*it)) == ' '			\
 	       || *BYTE_POS_ADDR (IT_BYTEPOS (*it)) == '\t'))))		\
 
-/* Name of the face used to highlight trailing whitespace.  */
-
-static Lisp_Object Qtrailing_whitespace;
-
-/* Name and number of the face used to highlight escape glyphs.  */
-
-static Lisp_Object Qescape_glyph;
-
-/* Name and number of the face used to highlight non-breaking spaces.  */
-
-static Lisp_Object Qnobreak_space;
-
-/* The symbol `image' which is the car of the lists used to represent
-   images in Lisp.  Also a tool bar style.  */
-
-Lisp_Object Qimage;
-
-/* The image map types.  */
-Lisp_Object QCmap;
-static Lisp_Object QCpointer;
-static Lisp_Object Qrect, Qcircle, Qpoly;
-
-/* Tool bar styles */
-Lisp_Object Qboth, Qboth_horiz, Qtext_image_horiz;
-
-/* Non-zero means print newline to stdout before next mini-buffer
-   message.  */
+/* True means print newline to stdout before next mini-buffer message.  */
 
 bool noninteractive_need_newline;
 
-/* Non-zero means print newline to message log before next message.  */
+/* True means print newline to message log before next message.  */
 
 static bool message_log_need_newline;
 
@@ -477,22 +408,7 @@ static struct text_pos this_line_min_pos;
 
 static struct buffer *this_line_buffer;
 
-
-/* Values of those variables at last redisplay are stored as
-   properties on `overlay-arrow-position' symbol.  However, if
-   Voverlay_arrow_position is a marker, last-arrow-position is its
-   numerical position.  */
-
-static Lisp_Object Qlast_arrow_position, Qlast_arrow_string;
-
-/* Alternative overlay-arrow-string and overlay-arrow-bitmap
-   properties on a symbol in overlay-arrow-variable-list.  */
-
-static Lisp_Object Qoverlay_arrow_string, Qoverlay_arrow_bitmap;
-
-Lisp_Object Qmenu_bar_update_hook;
-
-/* Nonzero if an overlay arrow has been displayed in this window.  */
+/* True if an overlay arrow has been displayed in this window.  */
 
 static bool overlay_arrow_seen;
 
@@ -513,7 +429,7 @@ Lisp_Object echo_area_window;
 
 static Lisp_Object Vmessage_stack;
 
-/* Nonzero means multibyte characters were enabled when the echo area
+/* True means multibyte characters were enabled when the echo area
    message was specified.  */
 
 static bool message_enable_multibyte;
@@ -535,7 +451,7 @@ int update_mode_lines;
 
 int windows_or_buffers_changed;
 
-/* Nonzero after display_mode_line if %l was used and it displayed a
+/* True after display_mode_line if %l was used and it displayed a
    line number.  */
 
 static bool line_number_displayed;
@@ -557,22 +473,17 @@ static Lisp_Object echo_buffer[2];
 
 static Lisp_Object Vwith_echo_area_save_vector;
 
-/* Non-zero means display_echo_area should display the last echo area
+/* True means display_echo_area should display the last echo area
    message again.  Set by redisplay_preserve_echo_area.  */
 
 static bool display_last_displayed_message_p;
 
-/* Nonzero if echo area is being used by print; zero if being used by
+/* True if echo area is being used by print; false if being used by
    message.  */
 
 static bool message_buf_print;
 
-/* The symbol `inhibit-menubar-update' and its DEFVAR_BOOL variable.  */
-
-static Lisp_Object Qinhibit_menubar_update;
-static Lisp_Object Qmessage_truncate_lines;
-
-/* Set to 1 in clear_message to make redisplay_internal aware
+/* Set to true in clear_message to make redisplay_internal aware
    of an emptied echo area.  */
 
 static bool message_cleared_p;
@@ -588,7 +499,7 @@ static struct glyph scratch_glyphs[MAX_SCRATCH_GLYPHS];
 
 static int last_height;
 
-/* Non-zero if there's a help-echo in the echo area.  */
+/* True if there's a help-echo in the echo area.  */
 
 bool help_echo_showing_p;
 
@@ -607,21 +518,21 @@ bool help_echo_showing_p;
    move around the buffer, we can cause the bidi cache to be pushed or
    popped, and therefore we need to restore the cache state when we
    return to the original iterator.  */
-#define SAVE_IT(ITCOPY,ITORIG,CACHE)		\
+#define SAVE_IT(ITCOPY, ITORIG, CACHE)		\
   do {						\
     if (CACHE)					\
-      bidi_unshelve_cache (CACHE, 1);		\
+      bidi_unshelve_cache (CACHE, true);	\
     ITCOPY = ITORIG;				\
     CACHE = bidi_shelve_cache ();		\
-  } while (0)
+  } while (false)
 
-#define RESTORE_IT(pITORIG,pITCOPY,CACHE)	\
+#define RESTORE_IT(pITORIG, pITCOPY, CACHE)	\
   do {						\
     if (pITORIG != pITCOPY)			\
       *(pITORIG) = *(pITCOPY);			\
-    bidi_unshelve_cache (CACHE, 0);		\
+    bidi_unshelve_cache (CACHE, false);		\
     CACHE = NULL;				\
-  } while (0)
+  } while (false)
 
 /* Functions to mark elements as needing redisplay.  */
 enum { REDISPLAY_SOME = 2};	/* Arbitrary choice.  */
@@ -675,7 +586,7 @@ bset_update_mode_line (struct buffer *b)
 
 #ifdef GLYPH_DEBUG
 
-/* Non-zero means print traces of redisplay if compiled with
+/* True means print traces of redisplay if compiled with
    GLYPH_DEBUG defined.  */
 
 bool trace_redisplay_p;
@@ -683,15 +594,13 @@ bool trace_redisplay_p;
 #endif /* GLYPH_DEBUG */
 
 #ifdef DEBUG_TRACE_MOVE
-/* Non-zero means trace with TRACE_MOVE to stderr.  */
-int trace_move;
+/* True means trace with TRACE_MOVE to stderr.  */
+static bool trace_move;
 
 #define TRACE_MOVE(x)	if (trace_move) fprintf x; else (void) 0
 #else
 #define TRACE_MOVE(x)	(void) 0
 #endif
-
-static Lisp_Object Qauto_hscroll_mode;
 
 /* Buffer being redisplayed -- for redisplay_window_error.  */
 
@@ -712,8 +621,8 @@ enum prop_handled
 
 struct props
 {
-  /* The name of the property.  */
-  Lisp_Object *name;
+  /* The symbol index of the name of the property.  */
+  short name;
 
   /* A unique index for the property.  */
   enum prop_idx idx;
@@ -734,14 +643,14 @@ static enum prop_handled handle_fontified_prop (struct it *);
 
 static struct props it_props[] =
 {
-  {&Qfontified,		FONTIFIED_PROP_IDX,	handle_fontified_prop},
+  {SYMBOL_INDEX (Qfontified),	FONTIFIED_PROP_IDX,	handle_fontified_prop},
   /* Handle `face' before `display' because some sub-properties of
      `display' need to know the face.  */
-  {&Qface,		FACE_PROP_IDX,		handle_face_prop},
-  {&Qdisplay,		DISPLAY_PROP_IDX,	handle_display_prop},
-  {&Qinvisible,		INVISIBLE_PROP_IDX,	handle_invisible_prop},
-  {&Qcomposition,	COMPOSITION_PROP_IDX,	handle_composition_prop},
-  {NULL,		0,			NULL}
+  {SYMBOL_INDEX (Qface),	FACE_PROP_IDX,		handle_face_prop},
+  {SYMBOL_INDEX (Qdisplay),	DISPLAY_PROP_IDX,	handle_display_prop},
+  {SYMBOL_INDEX (Qinvisible),	INVISIBLE_PROP_IDX,	handle_invisible_prop},
+  {SYMBOL_INDEX (Qcomposition),	COMPOSITION_PROP_IDX, handle_composition_prop},
+  {0,				0,			NULL}
 };
 
 /* Value is the position described by X.  If X is a marker, value is
@@ -796,9 +705,6 @@ static struct glyph_slice null_glyph_slice = { 0, 0, 0, 0 };
 
 bool redisplaying_p;
 
-static Lisp_Object Qinhibit_free_realized_faces;
-static Lisp_Object Qmode_line_default_help_echo;
-
 /* If a string, XTread_socket generates an event to display that string.
    (The display is done in read_char.)  */
 
@@ -815,23 +721,14 @@ Lisp_Object previous_help_echo_string;
 
 #ifdef HAVE_WINDOW_SYSTEM
 
-/* Non-zero means an hourglass cursor is currently shown.  */
-bool hourglass_shown_p;
+/* True means an hourglass cursor is currently shown.  */
+static bool hourglass_shown_p;
 
 /* If non-null, an asynchronous timer that, when it expires, displays
    an hourglass cursor on all frames.  */
-struct atimer *hourglass_atimer;
+static struct atimer *hourglass_atimer;
 
 #endif /* HAVE_WINDOW_SYSTEM */
-
-/* Name of the face used to display glyphless characters.  */
-static Lisp_Object Qglyphless_char;
-
-/* Symbol for the purpose of Vglyphless_char_display.  */
-static Lisp_Object Qglyphless_char_display;
-
-/* Method symbols for Vglyphless_char_display.  */
-static Lisp_Object Qhex_code, Qempty_box, Qthin_space, Qzero_width;
 
 /* Default number of seconds to wait before displaying an hourglass
    cursor.  */
@@ -847,81 +744,49 @@ static Lisp_Object Qhex_code, Qempty_box, Qthin_space, Qzero_width;
 /* Function prototypes.  */
 
 static void setup_for_ellipsis (struct it *, int);
-static void set_iterator_to_next (struct it *, int);
-static void mark_window_display_accurate_1 (struct window *, int);
-static int single_display_spec_string_p (Lisp_Object, Lisp_Object);
-static int display_prop_string_p (Lisp_Object, Lisp_Object);
-static int row_for_charpos_p (struct glyph_row *, ptrdiff_t);
-static int cursor_row_p (struct glyph_row *);
+static void set_iterator_to_next (struct it *, bool);
+static void mark_window_display_accurate_1 (struct window *, bool);
+static bool row_for_charpos_p (struct glyph_row *, ptrdiff_t);
+static bool cursor_row_p (struct glyph_row *);
 static int redisplay_mode_lines (Lisp_Object, bool);
-static char *decode_mode_spec_coding (Lisp_Object, char *, int);
-
-static Lisp_Object get_it_property (struct it *it, Lisp_Object prop);
 
 static void handle_line_prefix (struct it *);
 
-static void pint2str (char *, int, ptrdiff_t);
-static void pint2hrstr (char *, int, ptrdiff_t);
-static struct text_pos run_window_scroll_functions (Lisp_Object,
-                                                    struct text_pos);
-static int text_outside_line_unchanged_p (struct window *,
-					  ptrdiff_t, ptrdiff_t);
-static void store_mode_line_noprop_char (char);
-static int store_mode_line_noprop (const char *, int, int);
-static void handle_stop (struct it *);
 static void handle_stop_backwards (struct it *, ptrdiff_t);
-static void vmessage (const char *, va_list) ATTRIBUTE_FORMAT_PRINTF (1, 0);
-static void ensure_echo_area_buffers (void);
 static void unwind_with_echo_area_buffer (Lisp_Object);
 static Lisp_Object with_echo_area_buffer_unwind_data (struct window *);
-static int with_echo_area_buffer (struct window *, int,
-                                  int (*) (ptrdiff_t, Lisp_Object),
-                                  ptrdiff_t, Lisp_Object);
-static void clear_garbaged_frames (void);
-static int current_message_1 (ptrdiff_t, Lisp_Object);
-static int truncate_message_1 (ptrdiff_t, Lisp_Object);
+static bool current_message_1 (ptrdiff_t, Lisp_Object);
+static bool truncate_message_1 (ptrdiff_t, Lisp_Object);
 static void set_message (Lisp_Object);
-static int set_message_1 (ptrdiff_t, Lisp_Object);
-static int display_echo_area (struct window *);
-static int display_echo_area_1 (ptrdiff_t, Lisp_Object);
-static int resize_mini_window_1 (ptrdiff_t, Lisp_Object);
+static bool set_message_1 (ptrdiff_t, Lisp_Object);
+static bool display_echo_area_1 (ptrdiff_t, Lisp_Object);
+static bool resize_mini_window_1 (ptrdiff_t, Lisp_Object);
 static void unwind_redisplay (void);
-static int string_char_and_length (const unsigned char *, int *);
-static struct text_pos display_prop_end (struct it *, Lisp_Object,
-                                         struct text_pos);
-static int compute_window_start_on_continuation_line (struct window *);
-static void insert_left_trunc_glyphs (struct it *);
-static struct glyph_row *get_overlay_arrow_glyph_row (struct window *,
-                                                      Lisp_Object);
 static void extend_face_to_end_of_line (struct it *);
-static int append_space_for_newline (struct it *, int);
-static int cursor_row_fully_visible_p (struct window *, int, int);
-static int try_scrolling (Lisp_Object, int, ptrdiff_t, ptrdiff_t, int, int);
-static int try_cursor_movement (Lisp_Object, struct text_pos, int *);
-static int trailing_whitespace_p (ptrdiff_t);
 static intmax_t message_log_check_duplicate (ptrdiff_t, ptrdiff_t);
 static void push_it (struct it *, struct text_pos *);
 static void iterate_out_of_display_property (struct it *);
 static void pop_it (struct it *);
-static void sync_frame_with_window_matrix_rows (struct window *);
 static void redisplay_internal (void);
-static int echo_area_display (int);
+static void echo_area_display (bool);
 static void redisplay_windows (Lisp_Object);
 static void redisplay_window (Lisp_Object, bool);
 static Lisp_Object redisplay_window_error (Lisp_Object);
 static Lisp_Object redisplay_window_0 (Lisp_Object);
 static Lisp_Object redisplay_window_1 (Lisp_Object);
-static int set_cursor_from_row (struct window *, struct glyph_row *,
-				struct glyph_matrix *, ptrdiff_t, ptrdiff_t,
-				int, int);
-static int update_menu_bar (struct frame *, int, int);
-static int try_window_reusing_current_matrix (struct window *);
+static bool set_cursor_from_row (struct window *, struct glyph_row *,
+				 struct glyph_matrix *, ptrdiff_t, ptrdiff_t,
+				 int, int);
+static bool update_menu_bar (struct frame *, bool, bool);
+static bool try_window_reusing_current_matrix (struct window *);
 static int try_window_id (struct window *);
-static int display_line (struct it *);
+static bool display_line (struct it *);
 static int display_mode_lines (struct window *);
 static int display_mode_line (struct window *, enum face_id, Lisp_Object);
-static int display_mode_element (struct it *, int, int, int, Lisp_Object, Lisp_Object, int);
-static int store_mode_line_string (const char *, Lisp_Object, int, int, int, Lisp_Object);
+static int display_mode_element (struct it *, int, int, int, Lisp_Object,
+				 Lisp_Object, bool);
+static int store_mode_line_string (const char *, Lisp_Object, bool, int, int,
+				   Lisp_Object);
 static const char *decode_mode_spec (struct window *, int, int, Lisp_Object *);
 static void display_menu_bar (struct window *);
 static ptrdiff_t display_count_lines (ptrdiff_t, ptrdiff_t, ptrdiff_t,
@@ -930,71 +795,53 @@ static int display_string (const char *, Lisp_Object, Lisp_Object,
                            ptrdiff_t, ptrdiff_t, struct it *, int, int, int, int);
 static void compute_line_metrics (struct it *);
 static void run_redisplay_end_trigger_hook (struct it *);
-static int get_overlay_strings (struct it *, ptrdiff_t);
-static int get_overlay_strings_1 (struct it *, ptrdiff_t, int);
+static bool get_overlay_strings (struct it *, ptrdiff_t);
+static bool get_overlay_strings_1 (struct it *, ptrdiff_t, bool);
 static void next_overlay_string (struct it *);
-static void reseat (struct it *, struct text_pos, int);
-static void reseat_1 (struct it *, struct text_pos, int);
-static void back_to_previous_visible_line_start (struct it *);
-static void reseat_at_next_visible_line_start (struct it *, int);
-static int next_element_from_ellipsis (struct it *);
-static int next_element_from_display_vector (struct it *);
-static int next_element_from_string (struct it *);
-static int next_element_from_c_string (struct it *);
-static int next_element_from_buffer (struct it *);
-static int next_element_from_composition (struct it *);
-static int next_element_from_image (struct it *);
-static int next_element_from_stretch (struct it *);
+static void reseat (struct it *, struct text_pos, bool);
+static void reseat_1 (struct it *, struct text_pos, bool);
+static bool next_element_from_display_vector (struct it *);
+static bool next_element_from_string (struct it *);
+static bool next_element_from_c_string (struct it *);
+static bool next_element_from_buffer (struct it *);
+static bool next_element_from_composition (struct it *);
+static bool next_element_from_image (struct it *);
+static bool next_element_from_stretch (struct it *);
 static void load_overlay_strings (struct it *, ptrdiff_t);
-static int init_from_display_pos (struct it *, struct window *,
-                                  struct display_pos *);
-static void reseat_to_string (struct it *, const char *,
-                              Lisp_Object, ptrdiff_t, ptrdiff_t, int, int);
-static int get_next_display_element (struct it *);
+static bool get_next_display_element (struct it *);
 static enum move_it_result
        move_it_in_display_line_to (struct it *, ptrdiff_t, int,
 				   enum move_operation_enum);
 static void get_visually_first_element (struct it *);
-static void init_to_row_start (struct it *, struct window *,
-                               struct glyph_row *);
-static int init_to_row_end (struct it *, struct window *,
-                            struct glyph_row *);
-static void back_to_previous_line_start (struct it *);
-static int forward_to_next_line_start (struct it *, int *, struct bidi_it *);
-static struct text_pos string_pos_nchars_ahead (struct text_pos,
-                                                Lisp_Object, ptrdiff_t);
-static struct text_pos string_pos (ptrdiff_t, Lisp_Object);
-static struct text_pos c_string_pos (ptrdiff_t, const char *, bool);
-static ptrdiff_t number_of_chars (const char *, bool);
 static void compute_stop_pos (struct it *);
-static void compute_string_pos (struct text_pos *, struct text_pos,
-                                Lisp_Object);
-static int face_before_or_after_it_pos (struct it *, int);
+static int face_before_or_after_it_pos (struct it *, bool);
 static ptrdiff_t next_overlay_change (ptrdiff_t);
 static int handle_display_spec (struct it *, Lisp_Object, Lisp_Object,
-				Lisp_Object, struct text_pos *, ptrdiff_t, int);
+				Lisp_Object, struct text_pos *, ptrdiff_t, bool);
 static int handle_single_display_spec (struct it *, Lisp_Object,
                                        Lisp_Object, Lisp_Object,
-                                       struct text_pos *, ptrdiff_t, int, int);
+                                       struct text_pos *, ptrdiff_t, int, bool);
 static int underlying_face_id (struct it *);
-static int in_ellipses_for_invisible_text_p (struct display_pos *,
-                                             struct window *);
 
-#define face_before_it_pos(IT) face_before_or_after_it_pos ((IT), 1)
-#define face_after_it_pos(IT)  face_before_or_after_it_pos ((IT), 0)
+#define face_before_it_pos(IT) face_before_or_after_it_pos (IT, true)
+#define face_after_it_pos(IT)  face_before_or_after_it_pos (IT, false)
 
 #ifdef HAVE_WINDOW_SYSTEM
 
-static void x_consider_frame_title (Lisp_Object);
-static void update_tool_bar (struct frame *, int);
-static int redisplay_tool_bar (struct frame *);
+static void update_tool_bar (struct frame *, bool);
 static void x_draw_bottom_divider (struct window *w);
 static void notice_overwritten_cursor (struct window *,
                                        enum glyph_row_area,
                                        int, int, int, int);
+static int  normal_char_height (struct font *, int);
+static void normal_char_ascent_descent (struct font *, int, int *, int *);
+
 static void append_stretch_glyph (struct it *, Lisp_Object,
                                   int, int, int);
 
+static Lisp_Object get_it_property (struct it *, Lisp_Object);
+static Lisp_Object calc_line_height_property (struct it *, Lisp_Object,
+					      struct font *, int, bool);
 
 #endif /* HAVE_WINDOW_SYSTEM */
 
@@ -1023,6 +870,8 @@ window_text_bottom_y (struct window *w)
 
   if (WINDOW_WANTS_MODELINE_P (w))
     height -= CURRENT_MODE_LINE_HEIGHT (w);
+
+  height -= WINDOW_SCROLL_BAR_AREA_HEIGHT (w);
 
   return height;
 }
@@ -1068,6 +917,7 @@ window_box_height (struct window *w)
   eassert (height >= 0);
 
   height -= WINDOW_BOTTOM_DIVIDER_WIDTH (w);
+  height -= WINDOW_SCROLL_BAR_AREA_HEIGHT (w);
 
   /* Note: the code below that determines the mode-line/header-line
      height is essentially the same as that contained in the macro
@@ -1141,7 +991,7 @@ window_box_left_offset (struct window *w, enum glyph_row_area area)
    area AREA of window W.  ANY_AREA means return the right edge of the
    whole window, to the left of the right fringe of W.  */
 
-int
+static int
 window_box_right_offset (struct window *w, enum glyph_row_area area)
 {
   /* Don't return more than the window's pixel width.  */
@@ -1388,21 +1238,22 @@ window_hscroll_limited (struct window *w, struct frame *f)
   return window_hscroll;
 }
 
-/* Return 1 if position CHARPOS is visible in window W.
+/* Return true if position CHARPOS is visible in window W.
    CHARPOS < 0 means return info about WINDOW_END position.
    If visible, set *X and *Y to pixel coordinates of top left corner.
    Set *RTOP and *RBOT to pixel height of an invisible area of glyph at POS.
    Set *ROWH and *VPOS to row's visible height and VPOS (row number).  */
 
-int
+bool
 pos_visible_p (struct window *w, ptrdiff_t charpos, int *x, int *y,
 	       int *rtop, int *rbot, int *rowh, int *vpos)
 {
   struct it it;
   void *itdata = bidi_shelve_cache ();
   struct text_pos top;
-  int visible_p = 0;
+  bool visible_p = false;
   struct buffer *old_buffer = NULL;
+  bool r2l = false;
 
   if (FRAME_INITIAL_P (XFRAME (WINDOW_FRAME (w))))
     return visible_p;
@@ -1464,7 +1315,7 @@ pos_visible_p (struct window *w, ptrdiff_t charpos, int *x, int *y,
       if (top_y < window_top_y)
 	visible_p = bottom_y > window_top_y;
       else if (top_y < it.last_visible_y)
-	visible_p = 1;
+	visible_p = true;
       if (bottom_y >= it.last_visible_y
 	  && it.bidi_p && it.bidi_it.scan_dir == -1
 	  && IT_CHARPOS (it) < charpos)
@@ -1484,7 +1335,7 @@ pos_visible_p (struct window *w, ptrdiff_t charpos, int *x, int *y,
 	  move_it_to (&it, charpos, -1, bottom_y + ten_more_lines, -1,
 		      MOVE_TO_POS | MOVE_TO_Y);
 	  if (it.current_y > top_y)
-	    visible_p = 0;
+	    visible_p = false;
 
 	}
       RESTORE_IT (&it, &save_it, save_it_data);
@@ -1522,7 +1373,7 @@ pos_visible_p (struct window *w, ptrdiff_t charpos, int *x, int *y,
 			get_next_display_element (&it2);
 			PRODUCE_GLYPHS (&it2);
 			it2_prev = it2;
-			set_iterator_to_next (&it2, 1);
+			set_iterator_to_next (&it2, true);
 		      } while (it2.method == GET_FROM_DISPLAY_VECTOR
 			       && IT_CHARPOS (it2) < charpos);
 		    }
@@ -1542,13 +1393,12 @@ pos_visible_p (struct window *w, ptrdiff_t charpos, int *x, int *y,
 	      Lisp_Object spec = Fget_char_property (cpos, Qdisplay, Qnil);
 	      Lisp_Object string = string_from_display_spec (spec);
 	      struct text_pos tpos;
-	      int replacing_spec_p;
 	      bool newline_in_string
 		= (STRINGP (string)
 		   && memchr (SDATA (string), '\n', SBYTES (string)));
 
 	      SET_TEXT_POS (tpos, charpos, CHAR_TO_BYTE (charpos));
-	      replacing_spec_p
+	      bool replacing_spec_p
 		= (!NILP (spec)
 		   && handle_display_spec (NULL, spec, Qnil, Qnil, &tpos,
 					   charpos, FRAME_WINDOW_P (it.f)));
@@ -1573,7 +1423,6 @@ pos_visible_p (struct window *w, ptrdiff_t charpos, int *x, int *y,
 		  Lisp_Object startpos, endpos;
 		  EMACS_INT start, end;
 		  struct it it3;
-		  int it3_moved;
 
 		  /* Find the first and the last buffer positions
 		     covered by the display string.  */
@@ -1632,7 +1481,7 @@ pos_visible_p (struct window *w, ptrdiff_t charpos, int *x, int *y,
 		     begins.  */
 		  start_display (&it3, w, top);
 		  move_it_to (&it3, -1, 0, top_y, -1, MOVE_TO_X | MOVE_TO_Y);
-		  /* If it3_moved stays zero after the 'while' loop
+		  /* If it3_moved stays false after the 'while' loop
 		     below, that means we already were at a newline
 		     before the loop (e.g., the display string begins
 		     with a newline), so we don't need to (and cannot)
@@ -1640,7 +1489,7 @@ pos_visible_p (struct window *w, ptrdiff_t charpos, int *x, int *y,
 		     PRODUCE_GLYPHS will not produce anything for a
 		     newline, and thus it3.glyph_row stays at its
 		     stale content it got at top of the window.  */
-		  it3_moved = 0;
+		  bool it3_moved = false;
 		  /* Finally, advance the iterator until we hit the
 		     first display element whose character position is
 		     CHARPOS, or until the first newline from the
@@ -1652,8 +1501,8 @@ pos_visible_p (struct window *w, ptrdiff_t charpos, int *x, int *y,
 		      if (IT_CHARPOS (it3) == charpos
 			  || ITERATOR_AT_END_OF_LINE_P (&it3))
 			break;
-		      it3_moved = 1;
-		      set_iterator_to_next (&it3, 0);
+		      it3_moved = true;
+		      set_iterator_to_next (&it3, false);
 		    }
 		  top_x = it3.current_x - it3.pixel_width;
 		  /* Normally, we would exit the above loop because we
@@ -1688,6 +1537,8 @@ pos_visible_p (struct window *w, ptrdiff_t charpos, int *x, int *y,
 	  *rowh = max (0, (min (bottom_y, it.last_visible_y)
 			   - max (top_y, window_top_y)));
 	  *vpos = it.vpos;
+	  if (it.bidi_it.paragraph_dir == R2L)
+	    r2l = true;
 	}
     }
   else
@@ -1717,21 +1568,33 @@ pos_visible_p (struct window *w, ptrdiff_t charpos, int *x, int *y,
 			   - max (it2.current_y,
 				  WINDOW_HEADER_LINE_HEIGHT (w))));
 	  *vpos = it2.vpos;
+	  if (it2.bidi_it.paragraph_dir == R2L)
+	    r2l = true;
 	}
       else
-	bidi_unshelve_cache (it2data, 1);
+	bidi_unshelve_cache (it2data, true);
     }
-  bidi_unshelve_cache (itdata, 0);
+  bidi_unshelve_cache (itdata, false);
 
   if (old_buffer)
     set_buffer_internal_1 (old_buffer);
 
-  if (visible_p && w->hscroll > 0)
-    *x -=
-      window_hscroll_limited (w, WINDOW_XFRAME (w))
-      * WINDOW_FRAME_COLUMN_WIDTH (w);
+  if (visible_p)
+    {
+      if (w->hscroll > 0)
+	*x -=
+	  window_hscroll_limited (w, WINDOW_XFRAME (w))
+	  * WINDOW_FRAME_COLUMN_WIDTH (w);
+      /* For lines in an R2L paragraph, we need to mirror the X pixel
+         coordinate wrt the text area.  For the reasons, see the
+         commentary in buffer_posn_from_coords and the explanation of
+         the geometry used by the move_it_* functions at the end of
+         the large commentary near the beginning of this file.  */
+      if (r2l)
+	*x = window_box_width (w, TEXT_AREA) - *x - 1;
+    }
 
-#if 0
+#if false
   /* Debugging code.  */
   if (visible_p)
     fprintf (stderr, "+pv pt=%d vs=%d --> x=%d y=%d rt=%d rb=%d rh=%d vp=%d\n",
@@ -1809,7 +1672,7 @@ string_pos (ptrdiff_t charpos, Lisp_Object string)
 
 
 /* Value is a text position, i.e. character and byte position, for
-   character position CHARPOS in C string S.  MULTIBYTE_P non-zero
+   character position CHARPOS in C string S.  MULTIBYTE_P
    means recognize multibyte characters.  */
 
 static struct text_pos
@@ -1841,7 +1704,7 @@ c_string_pos (ptrdiff_t charpos, const char *s, bool multibyte_p)
 
 
 /* Value is the number of characters in C string S.  MULTIBYTE_P
-   non-zero means recognize multibyte characters.  */
+   means recognize multibyte characters.  */
 
 static ptrdiff_t
 number_of_chars (const char *s, bool multibyte_p)
@@ -1904,7 +1767,7 @@ estimate_mode_line_height (struct frame *f, enum face_id face_id)
 	  if (face)
 	    {
 	      if (face->font)
-		height = FONT_HEIGHT (face->font);
+		height = normal_char_height (face->font, -1);
 	      if (face->box_line_width > 0)
 		height += 2 * face->box_line_width;
 	    }
@@ -1919,12 +1782,12 @@ estimate_mode_line_height (struct frame *f, enum face_id face_id)
 
 /* Given a pixel position (PIX_X, PIX_Y) on frame F, return glyph
    co-ordinates in (*X, *Y).  Set *BOUNDS to the rectangle that the
-   glyph at X, Y occupies, if BOUNDS != 0.  If NOCLIP is non-zero, do
+   glyph at X, Y occupies, if BOUNDS != 0.  If NOCLIP, do
    not force the value into range.  */
 
 void
-pixel_to_glyph_coords (struct frame *f, register int pix_x, register int pix_y,
-		       int *x, int *y, NativeRectangle *bounds, int noclip)
+pixel_to_glyph_coords (struct frame *f, int pix_x, int pix_y, int *x, int *y,
+		       NativeRectangle *bounds, bool noclip)
 {
 
 #ifdef HAVE_WINDOW_SYSTEM
@@ -1957,8 +1820,8 @@ pixel_to_glyph_coords (struct frame *f, register int pix_x, register int pix_y,
 
 	  if (pix_y < 0)
 	    pix_y = 0;
-	  else if (pix_y > FRAME_LINES (f))
-	    pix_y = FRAME_LINES (f);
+	  else if (pix_y > FRAME_TOTAL_LINES (f))
+	    pix_y = FRAME_TOTAL_LINES (f);
 	}
     }
 #endif
@@ -2174,7 +2037,10 @@ get_glyph_string_clip_rects (struct glyph_string *s, NativeRectangle *rects, int
 
       if (s->x > r.x)
 	{
-	  r.width -= s->x - r.x;
+	  if (r.width >= s->x - r.x)
+	    r.width -= s->x - r.x;
+	  else	/* R2L hscrolled row with cursor outside text area */
+	    r.width = 0;
 	  r.x = s->x;
 	}
       r.width = min (r.width, glyph->pixel_width);
@@ -2290,16 +2156,13 @@ get_phys_cursor_geometry (struct window *w, struct glyph_row *row,
 			  struct glyph *glyph, int *xp, int *yp, int *heightp)
 {
   struct frame *f = XFRAME (WINDOW_FRAME (w));
-  int x, y, wd, h, h0, y0;
+  int x, y, wd, h, h0, y0, ascent;
 
   /* Compute the width of the rectangle to draw.  If on a stretch
      glyph, and `x-stretch-block-cursor' is nil, don't draw a
      rectangle as wide as the glyph, but use a canonical character
      width instead.  */
-  wd = glyph->pixel_width - 1;
-#if defined (HAVE_NTGUI) || defined (HAVE_NS)
-  wd++; /* Why? */
-#endif
+  wd = glyph->pixel_width;
 
   x = w->phys_cursor.x;
   if (x < 0)
@@ -2313,13 +2176,21 @@ get_phys_cursor_geometry (struct window *w, struct glyph_row *row,
     wd = min (FRAME_COLUMN_WIDTH (f), wd);
   w->phys_cursor_width = wd;
 
-  y = w->phys_cursor.y + row->ascent - glyph->ascent;
+  /* Don't let the hollow cursor glyph descend below the glyph row's
+     ascent value, lest the hollow cursor looks funny.  */
+  y = w->phys_cursor.y;
+  ascent = row->ascent;
+  if (row->ascent < glyph->ascent)
+    {
+      y =- glyph->ascent - row->ascent;
+      ascent = glyph->ascent;
+    }
 
   /* If y is below window bottom, ensure that we still see a cursor.  */
   h0 = min (FRAME_LINE_HEIGHT (f), row->visible_height);
 
-  h = max (h0, glyph->ascent + glyph->descent);
-  h0 = min (h0, glyph->ascent + glyph->descent);
+  h = max (h0, ascent + glyph->descent);
+  h0 = min (h0, ascent + glyph->descent);
 
   y0 = WINDOW_HEADER_LINE_HEIGHT (w);
   if (y < y0)
@@ -2365,7 +2236,7 @@ remember_mouse_glyph (struct frame *f, int gx, int gy, NativeRectangle *rect)
       goto virtual_glyph;
     }
   else if (!f->glyphs_initialized_p
-	   || (window = window_from_coordinates (f, gx, gy, &part, 0),
+	   || (window = window_from_coordinates (f, gx, gy, &part, false),
 	       NILP (window)))
     {
       width = FRAME_SMALLEST_CHAR_WIDTH (f);
@@ -2501,7 +2372,7 @@ remember_mouse_glyph (struct frame *f, int gx, int gy, NativeRectangle *rect)
       gx = WINDOW_PIXEL_WIDTH (w) - width;
       goto row_glyph;
 
-    case ON_SCROLL_BAR:
+    case ON_VERTICAL_SCROLL_BAR:
       gx = (WINDOW_HAS_VERTICAL_SCROLL_BAR_ON_LEFT (w)
 	    ? 0
 	    : (window_box_right_offset (w, RIGHT_MARGIN_AREA)
@@ -2535,7 +2406,7 @@ remember_mouse_glyph (struct frame *f, int gx, int gy, NativeRectangle *rect)
       gy = 0;
       /* The bottom divider prevails. */
       height = WINDOW_PIXEL_HEIGHT (w) - WINDOW_BOTTOM_DIVIDER_WIDTH (w);
-      goto add_edge;;
+      goto add_edge;
 
     case ON_BOTTOM_DIVIDER:
       gx = 0;
@@ -2572,12 +2443,10 @@ remember_mouse_glyph (struct frame *f, int gx, int gy, NativeRectangle *rect)
   STORE_NATIVE_RECT (*rect, gx, gy, width, height);
 
   /* Visible feedback for debugging.  */
-#if 0
-#if HAVE_X_WINDOWS
+#if false && defined HAVE_X_WINDOWS
   XDrawRectangle (FRAME_X_DISPLAY (f), FRAME_X_WINDOW (f),
 		  f->output_data.x->normal_gc,
 		  gx, gy, width, height);
-#endif
 #endif
 }
 
@@ -2623,15 +2492,14 @@ safe__call (bool inhibit_quit, ptrdiff_t nargs, Lisp_Object func, va_list ap)
     {
       ptrdiff_t i;
       ptrdiff_t count = SPECPDL_INDEX ();
-      struct gcpro gcpro1;
-      Lisp_Object *args = alloca (nargs * word_size);
+      Lisp_Object *args;
+      USE_SAFE_ALLOCA;
+      SAFE_ALLOCA_LISP (args, nargs);
 
       args[0] = func;
       for (i = 1; i < nargs; i++)
 	args[i] = va_arg (ap, Lisp_Object);
 
-      GCPRO1 (args[0]);
-      gcpro1.nvars = nargs;
       specbind (Qinhibit_redisplay, Qt);
       if (inhibit_quit)
 	specbind (Qinhibit_quit, Qt);
@@ -2639,7 +2507,7 @@ safe__call (bool inhibit_quit, ptrdiff_t nargs, Lisp_Object func, va_list ap)
 	 so there is no possibility of wanting to redisplay.  */
       val = internal_condition_case_n (Ffuncall, nargs, args, Qt,
 				       safe_eval_handler);
-      UNGCPRO;
+      SAFE_FREE ();
       val = unbind_to (count, val);
     }
 
@@ -2679,8 +2547,6 @@ safe__call1 (bool inhibit_quit, Lisp_Object fn, ...)
   return retval;
 }
 
-static Lisp_Object Qeval;
-
 Lisp_Object
 safe_eval (Lisp_Object sexpr)
 {
@@ -2708,14 +2574,13 @@ safe_call2 (Lisp_Object fn, Lisp_Object arg1, Lisp_Object arg2)
 			      Debugging
  ***********************************************************************/
 
-#if 0
-
 /* Define CHECK_IT to perform sanity checks on iterators.
    This is for debugging.  It is too slow to do unconditionally.  */
 
 static void
-check_it (struct it *it)
+CHECK_IT (struct it *it)
 {
+#if false
   if (it->method == GET_FROM_STRING)
     {
       eassert (STRINGP (it->string));
@@ -2735,25 +2600,17 @@ check_it (struct it *it)
     eassert (it->current.dpvec_index >= 0);
   else
     eassert (it->current.dpvec_index < 0);
+#endif
 }
 
-#define CHECK_IT(IT)	check_it ((IT))
-
-#else /* not 0 */
-
-#define CHECK_IT(IT)	(void) 0
-
-#endif /* not 0 */
-
-
-#if defined GLYPH_DEBUG && defined ENABLE_CHECKING
 
 /* Check that the window end of window W is what we expect it
    to be---the last row in the current matrix displaying text.  */
 
 static void
-check_window_end (struct window *w)
+CHECK_WINDOW_END (struct window *w)
 {
+#if defined GLYPH_DEBUG && defined ENABLE_CHECKING
   if (!MINI_WINDOW_P (w) && w->window_end_valid)
     {
       struct glyph_row *row;
@@ -2762,15 +2619,8 @@ check_window_end (struct window *w)
 		|| MATRIX_ROW_DISPLAYS_TEXT_P (row)
 		|| MATRIX_ROW_VPOS (row, w->current_matrix) == 0));
     }
+#endif
 }
-
-#define CHECK_WINDOW_END(W)	check_window_end ((W))
-
-#else
-
-#define CHECK_WINDOW_END(W)	(void) 0
-
-#endif /* GLYPH_DEBUG and ENABLE_CHECKING */
 
 /***********************************************************************
 		       Iterator initialization
@@ -2811,10 +2661,18 @@ init_iterator (struct it *it, struct window *w,
      free realized faces now because they depend on face definitions
      that might have changed.  Don't free faces while there might be
      desired matrices pending which reference these faces.  */
-  if (face_change_count && !inhibit_free_realized_faces)
+  if (!inhibit_free_realized_faces)
     {
-      face_change_count = 0;
-      free_all_realized_faces (Qnil);
+      if (face_change)
+	{
+	  face_change = false;
+	  free_all_realized_faces (Qnil);
+	}
+      else if (XFRAME (w->frame)->face_change)
+	{
+	  XFRAME (w->frame)->face_change = 0;
+	  free_all_realized_faces (w->frame);
+	}
     }
 
   /* Perhaps remap BASE_FACE_ID to a user-specified alternative.  */
@@ -2833,17 +2691,14 @@ init_iterator (struct it *it, struct window *w,
 	row = MATRIX_HEADER_LINE_ROW (w->desired_matrix);
     }
 
-  /* Clear IT.  */
-  memset (it, 0, sizeof *it);
+  /* Clear IT, and set it->object and other IT's Lisp objects to Qnil.
+     Other parts of redisplay rely on that.  */
+  memclear (it, sizeof *it);
   it->current.overlay_string_index = -1;
   it->current.dpvec_index = -1;
   it->base_face_id = remapped_base_face_id;
-  it->string = Qnil;
   IT_STRING_CHARPOS (*it) = IT_STRING_BYTEPOS (*it) = -1;
   it->paragraph_embedding = L2R;
-  it->bidi_it.string.lstring = Qnil;
-  it->bidi_it.string.s = NULL;
-  it->bidi_it.string.bufpos = 0;
   it->bidi_it.w = w;
 
   /* The window in which we iterate over current_buffer:  */
@@ -2864,7 +2719,6 @@ init_iterator (struct it *it, struct window *w,
 				  * FRAME_LINE_HEIGHT (it->f));
       else if (it->f->extra_line_spacing != 0)
 	it->extra_line_spacing = it->f->extra_line_spacing;
-      it->max_extra_line_spacing = 0;
     }
 
   /* If realized faces have been removed, e.g. because of face
@@ -2876,10 +2730,6 @@ init_iterator (struct it *it, struct window *w,
   if (FRAME_FACE_CACHE (it->f)->used == 0)
     recompute_basic_faces (it->f);
 
-  /* Current value of the `slice', `space-width', and 'height' properties.  */
-  it->slice.x = it->slice.y = it->slice.width = it->slice.height = Qnil;
-  it->space_width = Qnil;
-  it->font_height = Qnil;
   it->override_ascent = -1;
 
   /* Are control characters displayed as `^C'?  */
@@ -2917,21 +2767,19 @@ init_iterator (struct it *it, struct window *w,
   it->tab_width = SANE_TAB_WIDTH (current_buffer);
 
   /* Are lines in the display truncated?  */
-  if (base_face_id != DEFAULT_FACE_ID
-      || it->w->hscroll
-      || (! WINDOW_FULL_WIDTH_P (it->w)
-	  && ((!NILP (Vtruncate_partial_width_windows)
-	       && !INTEGERP (Vtruncate_partial_width_windows))
-	      || (INTEGERP (Vtruncate_partial_width_windows)
-		  /* PXW: Shall we do something about this?  */
-		  && (WINDOW_TOTAL_COLS (it->w)
-		      < XINT (Vtruncate_partial_width_windows))))))
+  if (TRUNCATE != 0)
     it->line_wrap = TRUNCATE;
-  else if (NILP (BVAR (current_buffer, truncate_lines)))
+  if (base_face_id == DEFAULT_FACE_ID
+      && !it->w->hscroll
+      && (WINDOW_FULL_WIDTH_P (it->w)
+	  || NILP (Vtruncate_partial_width_windows)
+	  || (INTEGERP (Vtruncate_partial_width_windows)
+	      /* PXW: Shall we do something about this?  */
+	      && (XINT (Vtruncate_partial_width_windows)
+		  <= WINDOW_TOTAL_COLS (it->w))))
+      && NILP (BVAR (current_buffer, truncate_lines)))
     it->line_wrap = NILP (BVAR (current_buffer, word_wrap))
       ? WINDOW_WRAP : WORD_WRAP;
-  else
-    it->line_wrap = TRUNCATE;
 
   /* Get dimensions of truncation and continuation glyphs.  These are
      displayed as fringe bitmaps under X, but we need them for such
@@ -2970,10 +2818,6 @@ init_iterator (struct it *it, struct window *w,
      produce_special_glyphs, above.  */
   it->glyph_row = row;
   it->area = TEXT_AREA;
-
-  /* Forget any previous info about this row being reversed.  */
-  if (it->glyph_row)
-    it->glyph_row->reversed_p = 0;
 
   /* Get the dimensions of the display area.  The display area
      consists of the visible window area plus a horizontally scrolled
@@ -3083,13 +2927,13 @@ init_iterator (struct it *it, struct window *w,
 	    it->paragraph_embedding = R2L;
 	  else
 	    it->paragraph_embedding = NEUTRAL_DIR;
-	  bidi_unshelve_cache (NULL, 0);
+	  bidi_unshelve_cache (NULL, false);
 	  bidi_init_it (charpos, IT_BYTEPOS (*it), FRAME_WINDOW_P (it->f),
 			&it->bidi_it);
 	}
 
       /* Compute faces etc.  */
-      reseat (it, it->current.pos, 1);
+      reseat (it, it->current.pos, true);
     }
 
   CHECK_IT (it);
@@ -3102,7 +2946,7 @@ void
 start_display (struct it *it, struct window *w, struct text_pos pos)
 {
   struct glyph_row *row;
-  int first_vpos = WINDOW_WANTS_HEADER_LINE_P (w) ? 1 : 0;
+  bool first_vpos = WINDOW_WANTS_HEADER_LINE_P (w);
 
   row = w->desired_matrix->rows + first_vpos;
   init_iterator (it, w, CHARPOS (pos), BYTEPOS (pos), row, DEFAULT_FACE_ID);
@@ -3112,13 +2956,12 @@ start_display (struct it *it, struct window *w, struct text_pos pos)
      position is in a string or image.  */
   if (it->method == GET_FROM_BUFFER && it->line_wrap != TRUNCATE)
     {
-      int start_at_line_beg_p;
       int first_y = it->current_y;
 
       /* If window start is not at a line start, skip forward to POS to
 	 get the correct continuation lines width.  */
-      start_at_line_beg_p = (CHARPOS (pos) == BEGV
-			     || FETCH_BYTE (BYTEPOS (pos) - 1) == '\n');
+      bool start_at_line_beg_p = (CHARPOS (pos) == BEGV
+				  || FETCH_BYTE (BYTEPOS (pos) - 1) == '\n');
       if (!start_at_line_beg_p)
 	{
 	  int new_x;
@@ -3155,7 +2998,7 @@ start_display (struct it *it, struct window *w, struct text_pos pos)
 		     (If we do go to the next line, C-e will not DTRT.)  */
 		  && it->c != '\n')
 		{
-		  set_iterator_to_next (it, 1);
+		  set_iterator_to_next (it, true);
 		  move_it_in_display_line_to (it, -1, -1, 0);
 		}
 
@@ -3183,14 +3026,14 @@ start_display (struct it *it, struct window *w, struct text_pos pos)
 }
 
 
-/* Return 1 if POS is a position in ellipses displayed for invisible
+/* Return true if POS is a position in ellipses displayed for invisible
    text.  W is the window we display, for text property lookup.  */
 
-static int
+static bool
 in_ellipses_for_invisible_text_p (struct display_pos *pos, struct window *w)
 {
   Lisp_Object prop, window;
-  int ellipses_p = 0;
+  bool ellipses_p = false;
   ptrdiff_t charpos = CHARPOS (pos->pos);
 
   /* If POS specifies a position in a display vector, this might
@@ -3204,7 +3047,7 @@ in_ellipses_for_invisible_text_p (struct display_pos *pos, struct window *w)
       && (XSETWINDOW (window, w),
 	  prop = Fget_char_property (make_number (charpos),
 				     Qinvisible, window),
-	  !TEXT_PROP_MEANS_INVISIBLE (prop)))
+	  TEXT_PROP_MEANS_INVISIBLE (prop) == 0))
     {
       prop = Fget_char_property (make_number (charpos - 1), Qinvisible,
 				 window);
@@ -3218,13 +3061,14 @@ in_ellipses_for_invisible_text_p (struct display_pos *pos, struct window *w)
 /* Initialize IT for stepping through current_buffer in window W,
    starting at position POS that includes overlay string and display
    vector/ control character translation position information.  Value
-   is zero if there are overlay strings with newlines at POS.  */
+   is false if there are overlay strings with newlines at POS.  */
 
-static int
+static bool
 init_from_display_pos (struct it *it, struct window *w, struct display_pos *pos)
 {
   ptrdiff_t charpos = CHARPOS (pos->pos), bytepos = BYTEPOS (pos->pos);
-  int i, overlay_strings_with_newlines = 0;
+  int i;
+  bool overlay_strings_with_newlines = false;
 
   /* If POS specifies a position in a display vector, this might
      be for an ellipsis displayed for invisible text.  We won't
@@ -3260,7 +3104,7 @@ init_from_display_pos (struct it *it, struct window *w, struct display_pos *pos)
 
       if (s < e)
 	{
-	  overlay_strings_with_newlines = 1;
+	  overlay_strings_with_newlines = true;
 	  break;
 	}
     }
@@ -3378,13 +3222,13 @@ init_to_row_start (struct it *it, struct window *w, struct glyph_row *row)
 
 /* Initialize IT for stepping through current_buffer in window W
    starting in the line following ROW, i.e. starting at ROW->end.
-   Value is zero if there are overlay strings with newlines at ROW's
+   Value is false if there are overlay strings with newlines at ROW's
    end position.  */
 
-static int
+static bool
 init_to_row_end (struct it *it, struct window *w, struct glyph_row *row)
 {
-  int success = 0;
+  bool success = false;
 
   if (init_from_display_pos (it, w, &row->end))
     {
@@ -3392,7 +3236,7 @@ init_to_row_end (struct it *it, struct window *w, struct glyph_row *row)
 	it->continuation_lines_width
 	  = row->continuation_lines_width + row->pixel_width;
       CHECK_IT (it);
-      success = 1;
+      success = true;
     }
 
   return success;
@@ -3413,14 +3257,13 @@ static void
 handle_stop (struct it *it)
 {
   enum prop_handled handled;
-  int handle_overlay_change_p;
+  bool handle_overlay_change_p;
   struct props *p;
 
   it->dpvec = NULL;
   it->current.dpvec_index = -1;
   handle_overlay_change_p = !it->ignore_overlay_strings_at_pos_p;
-  it->ignore_overlay_strings_at_pos_p = 0;
-  it->ellipsis_p = 0;
+  it->ellipsis_p = false;
 
   /* Use face of preceding text for ellipsis (if invisible) */
   if (it->selective_display_ellipsis_p)
@@ -3492,8 +3335,7 @@ handle_stop (struct it *it)
 		     expected by the rest of the code that processes
 		     overlay strings.  */
 		  || (it->current.overlay_string_index < 0
-		      ? !get_overlay_strings_1 (it, 0, 0)
-		      : 0))
+		      && !get_overlay_strings_1 (it, 0, false)))
 		{
 		  if (it->ellipsis_p)
 		    setup_for_ellipsis (it, 0);
@@ -3510,16 +3352,15 @@ handle_stop (struct it *it)
 		pop_it (it);
 	      else
 		{
-		  it->ignore_overlay_strings_at_pos_p = true;
-		  it->string_from_display_prop_p = 0;
-		  it->from_disp_prop_p = 0;
-		  handle_overlay_change_p = 0;
+		  it->string_from_display_prop_p = false;
+		  it->from_disp_prop_p = false;
+		  handle_overlay_change_p = false;
 		}
 	      handled = HANDLED_RECOMPUTE_PROPS;
 	      break;
 	    }
 	  else if (handled == HANDLED_OVERLAY_STRING_CONSUMED)
-	    handle_overlay_change_p = 0;
+	    handle_overlay_change_p = false;
 	}
 
       if (handled != HANDLED_RECOMPUTE_PROPS)
@@ -3527,7 +3368,7 @@ handle_stop (struct it *it)
 	  /* Don't check for overlay strings below when set to deliver
 	     characters from a display vector.  */
 	  if (it->method == GET_FROM_DISPLAY_VECTOR)
-	    handle_overlay_change_p = 0;
+	    handle_overlay_change_p = false;
 
 	  /* Handle overlay changes.
 	     This sets HANDLED to HANDLED_RECOMPUTE_PROPS
@@ -3599,7 +3440,7 @@ compute_stop_pos (struct it *it)
   /* Get the interval containing IT's position.  Value is a null
      interval if there isn't such an interval.  */
   position = make_number (charpos);
-  iv = validate_interval_range (object, &position, &position, 0);
+  iv = validate_interval_range (object, &position, &position, false);
   if (iv)
     {
       Lisp_Object values_here[LAST_PROP_IDX];
@@ -3607,7 +3448,8 @@ compute_stop_pos (struct it *it)
 
       /* Get properties here.  */
       for (p = it_props; p->handler; ++p)
-	values_here[p->idx] = textget (iv->plist, *p->name);
+	values_here[p->idx] = textget (iv->plist,
+				       builtin_lisp_symbol (p->name));
 
       /* Look for an interval following iv that has different
 	 properties.  */
@@ -3619,9 +3461,8 @@ compute_stop_pos (struct it *it)
 	{
 	  for (p = it_props; p->handler; ++p)
 	    {
-	      Lisp_Object new_value;
-
-	      new_value = textget (next_iv->plist, *p->name);
+	      Lisp_Object new_value = textget (next_iv->plist,
+					       builtin_lisp_symbol (p->name));
 	      if (!EQ (values_here[p->idx], new_value))
 		break;
 	    }
@@ -3669,9 +3510,10 @@ next_overlay_change (ptrdiff_t pos)
   ptrdiff_t i, noverlays;
   ptrdiff_t endpos;
   Lisp_Object *overlays;
+  USE_SAFE_ALLOCA;
 
   /* Get all overlays at the given position.  */
-  GET_OVERLAYS_AT (pos, overlays, noverlays, &endpos, 1);
+  GET_OVERLAYS_AT (pos, overlays, noverlays, &endpos, true);
 
   /* If any of these overlays ends before endpos,
      use its ending point instead.  */
@@ -3685,6 +3527,7 @@ next_overlay_change (ptrdiff_t pos)
       endpos = min (endpos, oendpos);
     }
 
+  SAFE_FREE ();
   return endpos;
 }
 
@@ -3699,7 +3542,7 @@ next_overlay_change (ptrdiff_t pos)
    with `display' property whose value is a string, or a `display'
    text property whose value is a string.  STRING is data about the
    string to iterate; if STRING->lstring is nil, we are iterating a
-   buffer.  FRAME_WINDOW_P is non-zero when we are displaying a window
+   buffer.  FRAME_WINDOW_P is true when we are displaying a window
    on a GUI frame.  DISP_PROP is set to zero if we searched
    MAX_DISP_SCAN characters forward without finding any display
    strings, non-zero otherwise.  It is set to 2 if the display string
@@ -3709,12 +3552,12 @@ ptrdiff_t
 compute_display_string_pos (struct text_pos *position,
 			    struct bidi_string_data *string,
 			    struct window *w,
-			    int frame_window_p, int *disp_prop)
+			    bool frame_window_p, int *disp_prop)
 {
   /* OBJECT = nil means current buffer.  */
   Lisp_Object object, object1;
   Lisp_Object pos, spec, limpos;
-  int string_p = (string && (STRINGP (string->lstring) || string->s));
+  bool string_p = string && (STRINGP (string->lstring) || string->s);
   ptrdiff_t eob = string_p ? string->schars : ZV;
   ptrdiff_t begb = string_p ? 0 : BEGV;
   ptrdiff_t bufpos, charpos = CHARPOS (*position);
@@ -3885,10 +3728,8 @@ handle_fontified_prop (struct it *it)
       else
 	{
 	  Lisp_Object fns, fn;
-	  struct gcpro gcpro1, gcpro2;
 
 	  fns = Qnil;
-	  GCPRO2 (val, fns);
 
 	  for (; CONSP (val); val = XCDR (val))
 	    {
@@ -3913,8 +3754,6 @@ handle_fontified_prop (struct it *it)
 	      else
 		safe_call1 (fn, pos);
 	    }
-
-	  UNGCPRO;
 	}
 
       unbind_to (count, Qnil);
@@ -3976,7 +3815,7 @@ handle_face_prop (struct it *it)
 				   &next_stop,
 				   (IT_CHARPOS (*it)
 				    + TEXT_PROP_DISTANCE_LIMIT),
-				   0, it->base_face_id);
+				   false, it->base_face_id);
 
       /* Is this a start of a run of characters with box face?
 	 Caveat: this can be called for a freshly initialized
@@ -4052,7 +3891,7 @@ handle_face_prop (struct it *it)
 				       &next_stop,
 				       (IT_CHARPOS (*it)
 					+ TEXT_PROP_DISTANCE_LIMIT),
-				       0,
+				       false,
 				       from_overlay);
 	}
       else
@@ -4087,7 +3926,7 @@ handle_face_prop (struct it *it)
 					     IT_STRING_CHARPOS (*it),
 					     bufpos,
 					     &next_stop,
-					     base_face_id, 0);
+					     base_face_id, false);
 
       /* Is this a start of a run of characters with box?  Caveat:
 	 this can be called for a freshly allocated iterator; face_id
@@ -4136,12 +3975,12 @@ underlying_face_id (struct it *it)
 
 
 /* Compute the face one character before or after the current position
-   of IT, in the visual order.  BEFORE_P non-zero means get the face
+   of IT, in the visual order.  BEFORE_P means get the face
    in front (to the left in L2R paragraphs, to the right in R2L
    paragraphs) of IT's screen position.  Value is the ID of the face.  */
 
 static int
-face_before_or_after_it_pos (struct it *it, int before_p)
+face_before_or_after_it_pos (struct it *it, bool before_p)
 {
   int face_id, limit;
   ptrdiff_t next_check_charpos;
@@ -4183,21 +4022,26 @@ face_before_or_after_it_pos (struct it *it, int before_p)
 	      /* With bidi iteration, the character before the current
 		 in the visual order cannot be found by simple
 		 iteration, because "reverse" reordering is not
-		 supported.  Instead, we need to use the move_it_*
-		 family of functions.  */
+		 supported.  Instead, we need to start from the string
+		 beginning and go all the way to the current string
+		 position, remembering the previous position.  */
 	      /* Ignore face changes before the first visible
 		 character on this display line.  */
 	      if (it->current_x <= it->first_visible_x)
 		return it->face_id;
 	      SAVE_IT (it_copy, *it, it_copy_data);
-	      /* Implementation note: Since move_it_in_display_line
-		 works in the iterator geometry, and thinks the first
-		 character is always the leftmost, even in R2L lines,
-		 we don't need to distinguish between the R2L and L2R
-		 cases here.  */
-	      move_it_in_display_line (&it_copy, SCHARS (it_copy.string),
-				       it_copy.current_x - 1, MOVE_TO_X);
-	      charpos = IT_STRING_CHARPOS (it_copy);
+	      IT_STRING_CHARPOS (it_copy) = 0;
+	      bidi_init_it (0, 0, FRAME_WINDOW_P (it_copy.f), &it_copy.bidi_it);
+
+	      do
+		{
+		  charpos = IT_STRING_CHARPOS (it_copy);
+		  if (charpos >= SCHARS (it->string))
+		    break;
+		  bidi_move_to_visually_next (&it_copy.bidi_it);
+		}
+	      while (IT_STRING_CHARPOS (it_copy) != IT_STRING_CHARPOS (*it));
+
 	      RESTORE_IT (it, it, it_copy_data);
 	    }
 	  else
@@ -4229,7 +4073,7 @@ face_before_or_after_it_pos (struct it *it, int before_p)
 					 charpos,
 					 bufpos,
 					 &next_check_charpos,
-					 base_face_id, 0);
+					 base_face_id, false);
 
       /* Correct the face for charsets different from ASCII.  Do it
 	 for the multibyte case only.  The face returned above is
@@ -4277,11 +4121,15 @@ face_before_or_after_it_pos (struct it *it, int before_p)
 	{
 	  if (before_p)
 	    {
+	      int current_x;
+
 	      /* With bidi iteration, the character before the current
 		 in the visual order cannot be found by simple
 		 iteration, because "reverse" reordering is not
 		 supported.  Instead, we need to use the move_it_*
-		 family of functions.  */
+		 family of functions, and move to the previous
+		 character starting from the beginning of the visual
+		 line.  */
 	      /* Ignore face changes before the first visible
 		 character on this display line.  */
 	      if (it->current_x <= it->first_visible_x)
@@ -4292,8 +4140,9 @@ face_before_or_after_it_pos (struct it *it, int before_p)
 		 character is always the leftmost, even in R2L lines,
 		 we don't need to distinguish between the R2L and L2R
 		 cases here.  */
-	      move_it_in_display_line (&it_copy, ZV,
-				       it_copy.current_x - 1, MOVE_TO_X);
+	      current_x = it_copy.current_x;
+	      move_it_vertically_backward (&it_copy, 0);
+	      move_it_in_display_line (&it_copy, ZV, current_x - 1, MOVE_TO_X);
 	      pos = it_copy.current.pos;
 	      RESTORE_IT (it, it, it_copy_data);
 	    }
@@ -4318,7 +4167,7 @@ face_before_or_after_it_pos (struct it *it, int before_p)
       face_id = face_at_buffer_position (it->w,
 					 CHARPOS (pos),
 					 &next_check_charpos,
-					 limit, 0, -1);
+					 limit, false, -1);
 
       /* Correct the face for charsets different from ASCII.  Do it
 	 for the multibyte case only.  The face returned above is
@@ -4347,25 +4196,25 @@ static enum prop_handled
 handle_invisible_prop (struct it *it)
 {
   enum prop_handled handled = HANDLED_NORMALLY;
-  int invis_p;
+  int invis;
   Lisp_Object prop;
 
   if (STRINGP (it->string))
     {
-      Lisp_Object end_charpos, limit, charpos;
+      Lisp_Object end_charpos, limit;
 
       /* Get the value of the invisible text property at the
 	 current position.  Value will be nil if there is no such
 	 property.  */
-      charpos = make_number (IT_STRING_CHARPOS (*it));
-      prop = Fget_text_property (charpos, Qinvisible, it->string);
-      invis_p = TEXT_PROP_MEANS_INVISIBLE (prop);
+      end_charpos = make_number (IT_STRING_CHARPOS (*it));
+      prop = Fget_text_property (end_charpos, Qinvisible, it->string);
+      invis = TEXT_PROP_MEANS_INVISIBLE (prop);
 
-      if (invis_p && IT_STRING_CHARPOS (*it) < it->end_charpos)
+      if (invis != 0 && IT_STRING_CHARPOS (*it) < it->end_charpos)
 	{
 	  /* Record whether we have to display an ellipsis for the
 	     invisible text.  */
-	  int display_ellipsis_p = (invis_p == 2);
+	  bool display_ellipsis_p = (invis == 2);
 	  ptrdiff_t len, endpos;
 
 	  handled = HANDLED_RECOMPUTE_PROPS;
@@ -4376,18 +4225,24 @@ handle_invisible_prop (struct it *it)
 	  XSETINT (limit, len);
 	  do
 	    {
-	      end_charpos = Fnext_single_property_change (charpos, Qinvisible,
-							  it->string, limit);
+	      end_charpos
+		= Fnext_single_property_change (end_charpos, Qinvisible,
+						it->string, limit);
+	      /* Since LIMIT is always an integer, so should be the
+		 value returned by Fnext_single_property_change.  */
+	      eassert (INTEGERP (end_charpos));
 	      if (INTEGERP (end_charpos))
 		{
 		  endpos = XFASTINT (end_charpos);
 		  prop = Fget_text_property (end_charpos, Qinvisible, it->string);
-		  invis_p = TEXT_PROP_MEANS_INVISIBLE (prop);
-		  if (invis_p == 2)
+		  invis = TEXT_PROP_MEANS_INVISIBLE (prop);
+		  if (invis == 2)
 		    display_ellipsis_p = true;
 		}
+	      else /* Should never happen; but if it does, exit the loop.  */
+		endpos = len;
 	    }
-	  while (invis_p && endpos < len);
+	  while (invis != 0 && endpos < len);
 
 	  if (display_ellipsis_p)
 	    it->ellipsis_p = true;
@@ -4405,7 +4260,7 @@ handle_invisible_prop (struct it *it)
 		  if (it->bidi_it.first_elt
 		      && it->bidi_it.charpos < SCHARS (it->string))
 		    bidi_paragraph_init (it->paragraph_embedding,
-					 &it->bidi_it, 1);
+					 &it->bidi_it, true);
 		  /* Bidi-iterate out of the invisible text.  */
 		  do
 		    {
@@ -4421,7 +4276,7 @@ handle_invisible_prop (struct it *it)
 		}
 	      else
 		{
-		  IT_STRING_CHARPOS (*it) = XFASTINT (end_charpos);
+		  IT_STRING_CHARPOS (*it) = endpos;
 		  compute_string_pos (&it->current.string_pos, old, it->string);
 		}
 	    }
@@ -4456,14 +4311,14 @@ handle_invisible_prop (struct it *it)
       pos = make_number (tem);
       prop = get_char_property_and_overlay (pos, Qinvisible, it->window,
 					    &overlay);
-      invis_p = TEXT_PROP_MEANS_INVISIBLE (prop);
+      invis = TEXT_PROP_MEANS_INVISIBLE (prop);
 
       /* If we are on invisible text, skip over it.  */
-      if (invis_p && start_charpos < it->end_charpos)
+      if (invis != 0 && start_charpos < it->end_charpos)
 	{
 	  /* Record whether we have to display an ellipsis for the
 	     invisible text.  */
-	  int display_ellipsis_p = invis_p == 2;
+	  bool display_ellipsis_p = invis == 2;
 
 	  handled = HANDLED_RECOMPUTE_PROPS;
 
@@ -4482,39 +4337,39 @@ handle_invisible_prop (struct it *it)
 		 text in the first place.  If everything to the end of
 		 the buffer was skipped, end the loop.  */
 	      if (newpos == tem || newpos >= ZV)
-		invis_p = 0;
+		invis = 0;
 	      else
 		{
 		  /* We skipped some characters but not necessarily
 		     all there are.  Check if we ended up on visible
 		     text.  Fget_char_property returns the property of
 		     the char before the given position, i.e. if we
-		     get invis_p = 0, this means that the char at
+		     get invis = 0, this means that the char at
 		     newpos is visible.  */
 		  pos = make_number (newpos);
 		  prop = Fget_char_property (pos, Qinvisible, it->window);
-		  invis_p = TEXT_PROP_MEANS_INVISIBLE (prop);
+		  invis = TEXT_PROP_MEANS_INVISIBLE (prop);
 		}
 
 	      /* If we ended up on invisible text, proceed to
 		 skip starting with next_stop.  */
-	      if (invis_p)
+	      if (invis != 0)
 		tem = next_stop;
 
               /* If there are adjacent invisible texts, don't lose the
                  second one's ellipsis.  */
-              if (invis_p == 2)
+              if (invis == 2)
                 display_ellipsis_p = true;
 	    }
-	  while (invis_p);
+	  while (invis != 0);
 
 	  /* The position newpos is now either ZV or on visible text.  */
 	  if (it->bidi_p)
 	    {
 	      ptrdiff_t bpos = CHAR_TO_BYTE (newpos);
-	      int on_newline
+	      bool on_newline
 		= bpos == ZV_BYTE || FETCH_BYTE (bpos) == '\n';
-	      int after_newline
+	      bool after_newline
 		= newpos <= BEGV || FETCH_BYTE (bpos - 1) == '\n';
 
 	      /* If the invisible text ends on a newline or on a
@@ -4530,7 +4385,7 @@ handle_invisible_prop (struct it *it)
 		  bidi_dir_t pdir = it->bidi_it.paragraph_dir;
 
 		  SET_TEXT_POS (tpos, newpos, bpos);
-		  reseat_1 (it, tpos, 0);
+		  reseat_1 (it, tpos, false);
 		  /* If we reseat on a newline/ZV, we need to prep the
 		     bidi iterator for advancing to the next character
 		     after the newline/EOB, keeping the current paragraph
@@ -4538,7 +4393,7 @@ handle_invisible_prop (struct it *it)
 		     prepending/appending glyphs to a glyph row).  */
 		  if (on_newline)
 		    {
-		      it->bidi_it.first_elt = 0;
+		      it->bidi_it.first_elt = false;
 		      it->bidi_it.paragraph_dir = pdir;
 		      it->bidi_it.ch = (bpos == ZV_BYTE) ? -1 : '\n';
 		      it->bidi_it.nchars = 1;
@@ -4567,7 +4422,7 @@ handle_invisible_prop (struct it *it)
 			 text at the beginning, which resets the
 			 FIRST_ELT flag.  */
 		      bidi_paragraph_init (it->paragraph_embedding,
-					   &it->bidi_it, 1);
+					   &it->bidi_it, true);
 		    }
 		  do
 		    {
@@ -4591,6 +4446,27 @@ handle_invisible_prop (struct it *it)
 	      IT_BYTEPOS (*it) = CHAR_TO_BYTE (newpos);
 	    }
 
+	  if (display_ellipsis_p)
+            {
+              /* Make sure that the glyphs of the ellipsis will get
+                 correct `charpos' values.  If we would not update
+                 it->position here, the glyphs would belong to the
+                 last visible character _before_ the invisible
+                 text, which confuses `set_cursor_from_row'.
+
+                 We use the last invisible position instead of the
+                 first because this way the cursor is always drawn on
+                 the first "." of the ellipsis, whenever PT is inside
+                 the invisible text.  Otherwise the cursor would be
+                 placed _after_ the ellipsis when the point is after the
+                 first invisible character.  */
+	      if (!STRINGP (it->object))
+		{
+		  it->position.charpos = newpos - 1;
+		  it->position.bytepos = CHAR_TO_BYTE (it->position.charpos);
+		}
+	    }
+
 	  /* If there are before-strings at the start of invisible
 	     text, and the text is invisible because of a text
 	     property, arrange to show before-strings because 20.x did
@@ -4612,7 +4488,7 @@ handle_invisible_prop (struct it *it)
 		     ended.  So we play it safe here and force the
 		     iterator to check for potential stop positions
 		     immediately after the invisible text.  Note that
-		     if get_overlay_strings returns non-zero, it
+		     if get_overlay_strings returns true, it
 		     normally also pushed the iterator stack, so we
 		     need to update the stop position in the slot
 		     below the current one.  */
@@ -4622,23 +4498,6 @@ handle_invisible_prop (struct it *it)
 	    }
 	  else if (display_ellipsis_p)
             {
-              /* Make sure that the glyphs of the ellipsis will get
-                 correct `charpos' values.  If we would not update
-                 it->position here, the glyphs would belong to the
-                 last visible character _before_ the invisible
-                 text, which confuses `set_cursor_from_row'.
-
-                 We use the last invisible position instead of the
-                 first because this way the cursor is always drawn on
-                 the first "." of the ellipsis, whenever PT is inside
-                 the invisible text.  Otherwise the cursor would be
-                 placed _after_ the ellipsis when the point is after the
-                 first invisible character.  */
-	      if (!STRINGP (it->object))
-		{
-		  it->position.charpos = newpos - 1;
-		  it->position.bytepos = CHAR_TO_BYTE (it->position.charpos);
-		}
 	      it->ellipsis_p = true;
 	      /* Let the ellipsis display before
 		 considering any properties of the following char.
@@ -4683,6 +4542,11 @@ setup_for_ellipsis (struct it *it, int len)
   if (it->saved_face_id < 0 || it->saved_face_id != it->face_id)
     it->saved_face_id = it->face_id = DEFAULT_FACE_ID;
 
+  /* If the ellipsis represents buffer text, it means we advanced in
+     the buffer, so we should no longer ignore overlay strings.  */
+  if (it->method == GET_FROM_BUFFER)
+    it->ignore_overlay_strings_at_pos_p = false;
+
   it->method = GET_FROM_DISPLAY_VECTOR;
   it->ellipsis_p = true;
 }
@@ -4706,7 +4570,7 @@ handle_display_prop (struct it *it)
   struct text_pos *position;
   ptrdiff_t bufpos;
   /* Nonzero if some property replaces the display of the text itself.  */
-  int display_replaced_p = 0;
+  int display_replaced = 0;
 
   if (STRINGP (it->string))
     {
@@ -4743,11 +4607,10 @@ handle_display_prop (struct it *it)
   if (!STRINGP (it->string))
     object = it->w->contents;
 
-  display_replaced_p = handle_display_spec (it, propval, object, overlay,
-					    position, bufpos,
-					    FRAME_WINDOW_P (it->f));
-
-  return display_replaced_p ? HANDLED_RETURN : HANDLED_NORMALLY;
+  display_replaced = handle_display_spec (it, propval, object, overlay,
+					  position, bufpos,
+					  FRAME_WINDOW_P (it->f));
+  return display_replaced != 0 ? HANDLED_RETURN : HANDLED_NORMALLY;
 }
 
 /* Subroutine of handle_display_prop.  Returns non-zero if the display
@@ -4758,7 +4621,7 @@ handle_display_prop (struct it *it)
    compute_display_string_pos, which see.
 
    See handle_single_display_spec for documentation of arguments.
-   frame_window_p is non-zero if the window being redisplayed is on a
+   FRAME_WINDOW_P is true if the window being redisplayed is on a
    GUI frame; this argument is used only if IT is NULL, see below.
 
    IT can be NULL, if this is called by the bidi reordering code
@@ -4769,10 +4632,9 @@ handle_display_prop (struct it *it)
 static int
 handle_display_spec (struct it *it, Lisp_Object spec, Lisp_Object object,
 		     Lisp_Object overlay, struct text_pos *position,
-		     ptrdiff_t bufpos, int frame_window_p)
+		     ptrdiff_t bufpos, bool frame_window_p)
 {
-  int replacing_p = 0;
-  int rv;
+  int replacing = 0;
 
   if (CONSP (spec)
       /* Simple specifications.  */
@@ -4791,11 +4653,12 @@ handle_display_spec (struct it *it, Lisp_Object spec, Lisp_Object object,
     {
       for (; CONSP (spec); spec = XCDR (spec))
 	{
-	  if ((rv = handle_single_display_spec (it, XCAR (spec), object,
-						overlay, position, bufpos,
-						replacing_p, frame_window_p)))
+	  int rv = handle_single_display_spec (it, XCAR (spec), object,
+					       overlay, position, bufpos,
+					       replacing, frame_window_p);
+	  if (rv != 0)
 	    {
-	      replacing_p = rv;
+	      replacing = rv;
 	      /* If some text in a string is replaced, `position' no
 		 longer points to the position of `object'.  */
 	      if (!it || STRINGP (object))
@@ -4807,26 +4670,24 @@ handle_display_spec (struct it *it, Lisp_Object spec, Lisp_Object object,
     {
       ptrdiff_t i;
       for (i = 0; i < ASIZE (spec); ++i)
-	if ((rv = handle_single_display_spec (it, AREF (spec, i), object,
-					      overlay, position, bufpos,
-					      replacing_p, frame_window_p)))
-	  {
-	    replacing_p = rv;
-	    /* If some text in a string is replaced, `position' no
-	       longer points to the position of `object'.  */
-	    if (!it || STRINGP (object))
-	      break;
-	  }
+	{
+	  int rv = handle_single_display_spec (it, AREF (spec, i), object,
+					       overlay, position, bufpos,
+					       replacing, frame_window_p);
+	  if (rv != 0)
+	    {
+	      replacing = rv;
+	      /* If some text in a string is replaced, `position' no
+		 longer points to the position of `object'.  */
+	      if (!it || STRINGP (object))
+		break;
+	    }
+	}
     }
   else
-    {
-      if ((rv = handle_single_display_spec (it, spec, object, overlay,
-					    position, bufpos, 0,
-					    frame_window_p)))
-	replacing_p = rv;
-    }
-
-  return replacing_p;
+    replacing = handle_single_display_spec (it, spec, object, overlay, position,
+					    bufpos, 0, frame_window_p);
+  return replacing;
 }
 
 /* Value is the position of the end of the `display' property starting
@@ -4854,7 +4715,7 @@ display_prop_end (struct it *it, Lisp_Object object, struct text_pos start_pos)
    is the object in which the `display' property was found.  *POSITION
    is the position in OBJECT at which the `display' property was found.
    BUFPOS is the buffer position of OBJECT (different from POSITION if
-   OBJECT is not a buffer).  DISPLAY_REPLACED_P non-zero means that we
+   OBJECT is not a buffer).  DISPLAY_REPLACED non-zero means that we
    previously saw a display specification which already replaced text
    display with something else, for example an image; we ignore such
    properties after the first one has been processed.
@@ -4867,7 +4728,7 @@ display_prop_end (struct it *it, Lisp_Object object, struct text_pos start_pos)
    property ends.
 
    If IT is NULL, only examine the property specification in SPEC, but
-   don't set up IT.  In that case, FRAME_WINDOW_P non-zero means SPEC
+   don't set up IT.  In that case, FRAME_WINDOW_P means SPEC
    is intended to be displayed in a window on a GUI frame.
 
    Value is non-zero if something was found which replaces the display
@@ -4876,13 +4737,12 @@ display_prop_end (struct it *it, Lisp_Object object, struct text_pos start_pos)
 static int
 handle_single_display_spec (struct it *it, Lisp_Object spec, Lisp_Object object,
 			    Lisp_Object overlay, struct text_pos *position,
-			    ptrdiff_t bufpos, int display_replaced_p,
-			    int frame_window_p)
+			    ptrdiff_t bufpos, int display_replaced,
+			    bool frame_window_p)
 {
   Lisp_Object form;
   Lisp_Object location, value;
   struct text_pos start_pos = *position;
-  int valid_p;
 
   /* If SPEC is a list of the form `(when FORM . VALUE)', evaluate FORM.
      If the result is non-nil, use VALUE instead of SPEC.  */
@@ -4899,7 +4759,6 @@ handle_single_display_spec (struct it *it, Lisp_Object spec, Lisp_Object object,
   if (!NILP (form) && !EQ (form, Qt))
     {
       ptrdiff_t count = SPECPDL_INDEX ();
-      struct gcpro gcpro1;
 
       /* Bind `object' to the object having the `display' property, a
 	 buffer or string.  Bind `position' to the position in the
@@ -4911,9 +4770,7 @@ handle_single_display_spec (struct it *it, Lisp_Object spec, Lisp_Object object,
       specbind (Qobject, object);
       specbind (Qposition, make_number (CHARPOS (*position)));
       specbind (Qbuffer_position, make_number (bufpos));
-      GCPRO1 (form);
       form = safe_eval (form);
-      UNGCPRO;
       unbind_to (count, Qnil);
     }
 
@@ -5054,7 +4911,7 @@ handle_single_display_spec (struct it *it, Lisp_Object spec, Lisp_Object object,
 	    {
 	      struct face *face = FACE_FROM_ID (it->f, it->face_id);
 	      it->voffset = - (XFLOATINT (value)
-			       * (FONT_HEIGHT (face->font)));
+			       * (normal_char_height (face->font, -1)));
 	    }
 #endif /* HAVE_WINDOW_SYSTEM */
 	}
@@ -5073,6 +4930,20 @@ handle_single_display_spec (struct it *it, Lisp_Object spec, Lisp_Object object,
     {
       start_pos = *position;
       *position = display_prop_end (it, object, start_pos);
+      /* If the display property comes from an overlay, don't consider
+	 any potential stop_charpos values before the end of that
+	 overlay.  Since display_prop_end will happily find another
+	 'display' property coming from some other overlay or text
+	 property on buffer positions before this overlay's end, we
+	 need to ignore them, or else we risk displaying this
+	 overlay's display string/image twice.  */
+      if (!NILP (overlay))
+	{
+	  ptrdiff_t ovendpos = OVERLAY_POSITION (OVERLAY_END (overlay));
+
+	  if (ovendpos > CHARPOS (*position))
+	    SET_TEXT_POS (*position, ovendpos, CHAR_TO_BYTE (ovendpos));
+	}
     }
   value = Qnil;
 
@@ -5130,13 +5001,13 @@ handle_single_display_spec (struct it *it, Lisp_Object spec, Lisp_Object object,
 
       if (it)
 	{
-	  int face_id = lookup_basic_face (it->f, DEFAULT_FACE_ID);;
+	  int face_id = lookup_basic_face (it->f, DEFAULT_FACE_ID);
 
 	  if (CONSP (XCDR (XCDR (spec))))
 	    {
 	      Lisp_Object face_name = XCAR (XCDR (XCDR (spec)));
 	      int face_id2 = lookup_derived_face (it->f, face_name,
-						  FRINGE_FACE_ID, 0);
+						  FRINGE_FACE_ID, false);
 	      if (face_id2 >= 0)
 		face_id = face_id2;
 	    }
@@ -5210,14 +5081,14 @@ handle_single_display_spec (struct it *it, Lisp_Object spec, Lisp_Object object,
      LOCATION specifies where to display: `left-margin',
      `right-margin' or nil.  */
 
-  valid_p = (STRINGP (value)
+  bool valid_p = (STRINGP (value)
 #ifdef HAVE_WINDOW_SYSTEM
-             || ((it ? FRAME_WINDOW_P (it->f) : frame_window_p)
-		 && valid_image_p (value))
+		  || ((it ? FRAME_WINDOW_P (it->f) : frame_window_p)
+		      && valid_image_p (value))
 #endif /* not HAVE_WINDOW_SYSTEM */
-             || (CONSP (value) && EQ (XCAR (value), Qspace)));
+		  || (CONSP (value) && EQ (XCAR (value), Qspace)));
 
-  if (valid_p && !display_replaced_p)
+  if (valid_p && display_replaced == 0)
     {
       int retval = 1;
 
@@ -5277,7 +5148,7 @@ handle_single_display_spec (struct it *it, Lisp_Object spec, Lisp_Object object,
 	      it->bidi_it.string.s = NULL;
 	      it->bidi_it.string.schars = it->end_charpos;
 	      it->bidi_it.string.bufpos = bufpos;
-	      it->bidi_it.string.from_disp_str = 1;
+	      it->bidi_it.string.from_disp_str = true;
 	      it->bidi_it.string.unibyte = !it->multibyte_p;
 	      it->bidi_it.w = it->w;
 	      bidi_init_it (0, 0, FRAME_WINDOW_P (it->f), &it->bidi_it);
@@ -5320,20 +5191,21 @@ handle_single_display_spec (struct it *it, Lisp_Object spec, Lisp_Object object,
    came, or nil if it came from a text property.  CHARPOS and BYTEPOS
    specify the buffer position covered by PROP.  */
 
-int
+bool
 display_prop_intangible_p (Lisp_Object prop, Lisp_Object overlay,
 			   ptrdiff_t charpos, ptrdiff_t bytepos)
 {
-  int frame_window_p = FRAME_WINDOW_P (XFRAME (selected_frame));
+  bool frame_window_p = FRAME_WINDOW_P (XFRAME (selected_frame));
   struct text_pos position;
 
   SET_TEXT_POS (position, charpos, bytepos);
-  return handle_display_spec (NULL, prop, Qnil, overlay,
-			      &position, charpos, frame_window_p);
+  return (handle_display_spec (NULL, prop, Qnil, overlay,
+			       &position, charpos, frame_window_p)
+	  != 0);
 }
 
 
-/* Return 1 if PROP is a display sub-property value containing STRING.
+/* Return true if PROP is a display sub-property value containing STRING.
 
    Implementation note: this and the following function are really
    special cases of handle_display_spec and
@@ -5341,21 +5213,21 @@ display_prop_intangible_p (Lisp_Object prop, Lisp_Object overlay,
    Until they do, these two pairs must be consistent and must be
    modified in sync.  */
 
-static int
+static bool
 single_display_spec_string_p (Lisp_Object prop, Lisp_Object string)
 {
   if (EQ (string, prop))
-    return 1;
+    return true;
 
   /* Skip over `when FORM'.  */
   if (CONSP (prop) && EQ (XCAR (prop), Qwhen))
     {
       prop = XCDR (prop);
       if (!CONSP (prop))
-	return 0;
+	return false;
       /* Actually, the condition following `when' should be eval'ed,
 	 like handle_single_display_spec does, and we should return
-	 zero if it evaluates to nil.  However, this function is
+	 false if it evaluates to nil.  However, this function is
 	 called only when the buffer was already displayed and some
 	 glyph in the glyph matrix was found to come from a display
 	 string.  Therefore, the condition was already evaluated, and
@@ -5372,20 +5244,20 @@ single_display_spec_string_p (Lisp_Object prop, Lisp_Object string)
       {
 	prop = XCDR (prop);
 	if (!CONSP (prop))
-	  return 0;
+	  return false;
 
 	prop = XCDR (prop);
 	if (!CONSP (prop))
-	  return 0;
+	  return false;
       }
 
   return EQ (prop, string) || (CONSP (prop) && EQ (XCAR (prop), string));
 }
 
 
-/* Return 1 if STRING appears in the `display' property PROP.  */
+/* Return true if STRING appears in the `display' property PROP.  */
 
-static int
+static bool
 display_prop_string_p (Lisp_Object prop, Lisp_Object string)
 {
   if (CONSP (prop)
@@ -5396,7 +5268,7 @@ display_prop_string_p (Lisp_Object prop, Lisp_Object string)
       while (CONSP (prop))
 	{
 	  if (single_display_spec_string_p (XCAR (prop), string))
-	    return 1;
+	    return true;
 	  prop = XCDR (prop);
 	}
     }
@@ -5406,17 +5278,17 @@ display_prop_string_p (Lisp_Object prop, Lisp_Object string)
       ptrdiff_t i;
       for (i = 0; i < ASIZE (prop); ++i)
 	if (single_display_spec_string_p (AREF (prop, i), string))
-	  return 1;
+	  return true;
     }
   else
     return single_display_spec_string_p (prop, string);
 
-  return 0;
+  return false;
 }
 
 /* Look for STRING in overlays and text properties in the current
    buffer, between character positions FROM and TO (excluding TO).
-   BACK_P non-zero means look back (in this case, TO is supposed to be
+   BACK_P means look back (in this case, TO is supposed to be
    less than FROM).
    Value is the first character position where STRING was found, or
    zero if it wasn't found before hitting TO.
@@ -5426,10 +5298,10 @@ display_prop_string_p (Lisp_Object prop, Lisp_Object string)
 
 static ptrdiff_t
 string_buffer_position_lim (Lisp_Object string,
-			    ptrdiff_t from, ptrdiff_t to, int back_p)
+			    ptrdiff_t from, ptrdiff_t to, bool back_p)
 {
   Lisp_Object limit, prop, pos;
-  int found = 0;
+  bool found = false;
 
   pos = make_number (max (from, BEGV));
 
@@ -5440,7 +5312,7 @@ string_buffer_position_lim (Lisp_Object string,
 	{
 	  prop = Fget_char_property (pos, Qdisplay, Qnil);
 	  if (!NILP (prop) && display_prop_string_p (prop, string))
-	    found = 1;
+	    found = true;
 	  else
 	    pos = Fnext_single_char_property_change (pos, Qdisplay, Qnil,
 						     limit);
@@ -5453,7 +5325,7 @@ string_buffer_position_lim (Lisp_Object string,
 	{
 	  prop = Fget_char_property (pos, Qdisplay, Qnil);
 	  if (!NILP (prop) && display_prop_string_p (prop, string))
-	    found = 1;
+	    found = true;
 	  else
 	    pos = Fprevious_single_char_property_change (pos, Qdisplay, Qnil,
 							 limit);
@@ -5478,11 +5350,11 @@ string_buffer_position (Lisp_Object string, ptrdiff_t around_charpos)
   const int MAX_DISTANCE = 1000;
   ptrdiff_t found = string_buffer_position_lim (string, around_charpos,
 						around_charpos + MAX_DISTANCE,
-						0);
+						false);
 
   if (!found)
     found = string_buffer_position_lim (string, around_charpos,
-					around_charpos - MAX_DISTANCE, 1);
+					around_charpos - MAX_DISTANCE, true);
   return found;
 }
 
@@ -5566,7 +5438,7 @@ struct overlay_entry
   Lisp_Object overlay;
   Lisp_Object string;
   EMACS_INT priority;
-  int after_string_p;
+  bool after_string_p;
 };
 
 
@@ -5600,7 +5472,7 @@ next_overlay_string (struct it *it)
 	 they were before overlay strings were processed, and
 	 continue to deliver from current_buffer.  */
 
-      it->ellipsis_p = (it->stack[it->sp - 1].display_ellipsis_p != 0);
+      it->ellipsis_p = it->stack[it->sp - 1].display_ellipsis_p;
       pop_it (it);
       eassert (it->sp > 0
 	       || (NILP (it->string)
@@ -5609,7 +5481,6 @@ next_overlay_string (struct it *it)
 		   && it->stop_charpos <= it->end_charpos));
       it->current.overlay_string_index = -1;
       it->n_overlay_strings = 0;
-      it->overlay_strings_charpos = -1;
       /* If there's an empty display string on the stack, pop the
 	 stack, to resync the bidi iterator with IT's position.  Such
 	 empty strings are pushed onto the stack in
@@ -5617,11 +5488,27 @@ next_overlay_string (struct it *it)
       if (it->sp > 0 && STRINGP (it->string) && !SCHARS (it->string))
 	pop_it (it);
 
+      /* Since we've exhausted overlay strings at this buffer
+	 position, set the flag to ignore overlays until we move to
+	 another position.  The flag is reset in
+	 next_element_from_buffer.  */
+      it->ignore_overlay_strings_at_pos_p = true;
+
       /* If we're at the end of the buffer, record that we have
 	 processed the overlay strings there already, so that
 	 next_element_from_buffer doesn't try it again.  */
-      if (NILP (it->string) && IT_CHARPOS (*it) >= it->end_charpos)
+      if (NILP (it->string)
+	  && IT_CHARPOS (*it) >= it->end_charpos
+	  && it->overlay_strings_charpos >= it->end_charpos)
 	it->overlay_strings_at_end_processed_p = true;
+      /* Note: we reset overlay_strings_charpos only here, to make
+	 sure the just-processed overlays were indeed at EOB.
+	 Otherwise, overlays on text with invisible text property,
+	 which are processed with IT's position past the invisible
+	 text, might fool us into thinking the overlays at EOB were
+	 already processed (linum-mode can cause this, for
+	 example).  */
+      it->overlay_strings_charpos = -1;
     }
   else
     {
@@ -5745,10 +5632,11 @@ load_overlay_strings (struct it *it, ptrdiff_t charpos)
   Lisp_Object overlay, window, str, invisible;
   struct Lisp_Overlay *ov;
   ptrdiff_t start, end;
-  ptrdiff_t size = 20;
   ptrdiff_t n = 0, i, j;
-  int invis_p;
-  struct overlay_entry *entries = alloca (size * sizeof *entries);
+  int invis;
+  struct overlay_entry entriesbuf[20];
+  ptrdiff_t size = ARRAYELTS (entriesbuf);
+  struct overlay_entry *entries = entriesbuf;
   USE_SAFE_ALLOCA;
 
   if (charpos <= 0)
@@ -5756,7 +5644,7 @@ load_overlay_strings (struct it *it, ptrdiff_t charpos)
 
   /* Append the overlay string STRING of overlay OVERLAY to vector
      `entries' which has size `size' and currently contains `n'
-     elements.  AFTER_P non-zero means STRING is an after-string of
+     elements.  AFTER_P means STRING is an after-string of
      OVERLAY.  */
 #define RECORD_OVERLAY_STRING(OVERLAY, STRING, AFTER_P)			\
   do									\
@@ -5778,7 +5666,7 @@ load_overlay_strings (struct it *it, ptrdiff_t charpos)
       entries[n].after_string_p = (AFTER_P);				\
       ++n;								\
     }									\
-  while (0)
+  while (false)
 
   /* Process overlay before the overlay center.  */
   for (ov = current_buffer->overlays_before; ov; ov = ov->next)
@@ -5805,19 +5693,19 @@ load_overlay_strings (struct it *it, ptrdiff_t charpos)
 	 and after-strings from this overlay are visible; start and
 	 end position are indistinguishable.  */
       invisible = Foverlay_get (overlay, Qinvisible);
-      invis_p = TEXT_PROP_MEANS_INVISIBLE (invisible);
+      invis = TEXT_PROP_MEANS_INVISIBLE (invisible);
 
       /* If overlay has a non-empty before-string, record it.  */
-      if ((start == charpos || (end == charpos && invis_p))
+      if ((start == charpos || (end == charpos && invis != 0))
 	  && (str = Foverlay_get (overlay, Qbefore_string), STRINGP (str))
 	  && SCHARS (str))
-	RECORD_OVERLAY_STRING (overlay, str, 0);
+	RECORD_OVERLAY_STRING (overlay, str, false);
 
       /* If overlay has a non-empty after-string, record it.  */
-      if ((end == charpos || (start == charpos && invis_p))
+      if ((end == charpos || (start == charpos && invis != 0))
 	  && (str = Foverlay_get (overlay, Qafter_string), STRINGP (str))
 	  && SCHARS (str))
-	RECORD_OVERLAY_STRING (overlay, str, 1);
+	RECORD_OVERLAY_STRING (overlay, str, true);
     }
 
   /* Process overlays after the overlay center.  */
@@ -5844,19 +5732,19 @@ load_overlay_strings (struct it *it, ptrdiff_t charpos)
       /* If the text ``under'' the overlay is invisible, it has a zero
 	 dimension, and both before- and after-strings apply.  */
       invisible = Foverlay_get (overlay, Qinvisible);
-      invis_p = TEXT_PROP_MEANS_INVISIBLE (invisible);
+      invis = TEXT_PROP_MEANS_INVISIBLE (invisible);
 
       /* If overlay has a non-empty before-string, record it.  */
-      if ((start == charpos || (end == charpos && invis_p))
+      if ((start == charpos || (end == charpos && invis != 0))
 	  && (str = Foverlay_get (overlay, Qbefore_string), STRINGP (str))
 	  && SCHARS (str))
-	RECORD_OVERLAY_STRING (overlay, str, 0);
+	RECORD_OVERLAY_STRING (overlay, str, false);
 
       /* If overlay has a non-empty after-string, record it.  */
-      if ((end == charpos || (start == charpos && invis_p))
+      if ((end == charpos || (start == charpos && invis != 0))
 	  && (str = Foverlay_get (overlay, Qafter_string), STRINGP (str))
 	  && SCHARS (str))
-	RECORD_OVERLAY_STRING (overlay, str, 1);
+	RECORD_OVERLAY_STRING (overlay, str, true);
     }
 
 #undef RECORD_OVERLAY_STRING
@@ -5886,11 +5774,11 @@ load_overlay_strings (struct it *it, ptrdiff_t charpos)
 
 
 /* Get the first chunk of overlay strings at IT's current buffer
-   position, or at CHARPOS if that is > 0.  Value is non-zero if at
+   position, or at CHARPOS if that is > 0.  Value is true if at
    least one overlay string was found.  */
 
-static int
-get_overlay_strings_1 (struct it *it, ptrdiff_t charpos, int compute_stop_p)
+static bool
+get_overlay_strings_1 (struct it *it, ptrdiff_t charpos, bool compute_stop_p)
 {
   /* Get the first OVERLAY_STRING_CHUNK_SIZE overlay strings to
      process.  This fills IT->overlay_strings with strings, and sets
@@ -5965,24 +5853,24 @@ get_overlay_strings_1 (struct it *it, ptrdiff_t charpos, int compute_stop_p)
 	  it->bidi_it.w = it->w;
 	  bidi_init_it (0, 0, FRAME_WINDOW_P (it->f), &it->bidi_it);
 	}
-      return 1;
+      return true;
     }
 
   it->current.overlay_string_index = -1;
-  return 0;
+  return false;
 }
 
-static int
+static bool
 get_overlay_strings (struct it *it, ptrdiff_t charpos)
 {
   it->string = Qnil;
   it->method = GET_FROM_BUFFER;
 
-  (void) get_overlay_strings_1 (it, charpos, 1);
+  get_overlay_strings_1 (it, charpos, true);
 
   CHECK_IT (it);
 
-  /* Value is non-zero if we found at least one overlay string.  */
+  /* Value is true if we found at least one overlay string.  */
   return STRINGP (it->string);
 }
 
@@ -6025,6 +5913,13 @@ push_it (struct it *it, struct text_pos *position)
     case GET_FROM_STRETCH:
       p->u.stretch.object = it->object;
       break;
+    case GET_FROM_BUFFER:
+    case GET_FROM_DISPLAY_VECTOR:
+    case GET_FROM_STRING:
+    case GET_FROM_C_STRING:
+      break;
+    default:
+      emacs_abort ();
     }
   p->position = position ? *position : it->position;
   p->current = it->current;
@@ -6038,7 +5933,7 @@ push_it (struct it *it, struct text_pos *position)
   p->voffset = it->voffset;
   p->string_from_display_prop_p = it->string_from_display_prop_p;
   p->string_from_prefix_prop_p = it->string_from_prefix_prop_p;
-  p->display_ellipsis_p = 0;
+  p->display_ellipsis_p = false;
   p->line_wrap = it->line_wrap;
   p->bidi_p = it->bidi_p;
   p->paragraph_embedding = it->paragraph_embedding;
@@ -6053,7 +5948,7 @@ push_it (struct it *it, struct text_pos *position)
 static void
 iterate_out_of_display_property (struct it *it)
 {
-  int buffer_p = !STRINGP (it->string);
+  bool buffer_p = !STRINGP (it->string);
   ptrdiff_t eob = (buffer_p ? ZV : it->end_charpos);
   ptrdiff_t bob = (buffer_p ? BEGV : 0);
 
@@ -6063,7 +5958,7 @@ iterate_out_of_display_property (struct it *it)
      of a new paragraph, next_element_from_buffer may not have a
      chance to do that.  */
   if (it->bidi_it.first_elt && it->bidi_it.charpos < eob)
-    bidi_paragraph_init (it->paragraph_embedding, &it->bidi_it, 1);
+    bidi_paragraph_init (it->paragraph_embedding, &it->bidi_it, true);
   /* prev_stop can be zero, so check against BEGV as well.  */
   while (it->bidi_it.charpos >= bob
 	 && it->prev_stop <= it->bidi_it.charpos
@@ -6094,7 +5989,8 @@ static void
 pop_it (struct it *it)
 {
   struct iterator_stack_entry *p;
-  int from_display_prop = it->from_disp_prop_p;
+  bool from_display_prop = it->from_disp_prop_p;
+  ptrdiff_t prev_pos = IT_CHARPOS (*it);
 
   eassert (it->sp > 0);
   --it->sp;
@@ -6146,6 +6042,11 @@ pop_it (struct it *it)
 	  it->method = GET_FROM_BUFFER;
 	  it->object = it->w->contents;
 	}
+      break;
+    case GET_FROM_C_STRING:
+      break;
+    default:
+      emacs_abort ();
     }
   it->end_charpos = p->end_charpos;
   it->string_nchars = p->string_nchars;
@@ -6183,6 +6084,11 @@ pop_it (struct it *it)
 		   && IT_STRING_BYTEPOS (*it) == it->bidi_it.bytepos)
 	       || (CONSP (it->object) && it->method == GET_FROM_STRETCH));
     }
+  /* If we move the iterator over text covered by a display property
+     to a new buffer position, any info about previously seen overlays
+     is no longer valid.  */
+  if (from_display_prop && it->sp == 0 && CHARPOS (it->position) != prev_pos)
+    it->ignore_overlay_strings_at_pos_p = false;
 }
 
 
@@ -6205,7 +6111,7 @@ back_to_previous_line_start (struct it *it)
 
 /* Move IT to the next line start.
 
-   Value is non-zero if a newline was found.  Set *SKIPPED_P to 1 if
+   Value is true if a newline was found.  Set *SKIPPED_P to true if
    we skipped over part of the text (as opposed to moving the iterator
    continuously over the text).  Otherwise, don't change the value
    of *SKIPPED_P.
@@ -6224,12 +6130,13 @@ back_to_previous_line_start (struct it *it)
    characters following a newline part of the wrong glyph row, which
    leads to wrong cursor motion.  */
 
-static int
-forward_to_next_line_start (struct it *it, int *skipped_p,
+static bool
+forward_to_next_line_start (struct it *it, bool *skipped_p,
 			    struct bidi_it *bidi_it_prev)
 {
   ptrdiff_t old_selective;
-  int newline_found_p, n;
+  bool newline_found_p = false;
+  int n;
   const int MAX_NEWLINE_DISTANCE = 500;
 
   /* If already on a newline, just consume it to avoid unintended
@@ -6240,9 +6147,9 @@ forward_to_next_line_start (struct it *it, int *skipped_p,
     {
       if (it->bidi_p && bidi_it_prev)
 	*bidi_it_prev = it->bidi_it;
-      set_iterator_to_next (it, 0);
+      set_iterator_to_next (it, false);
       it->c = 0;
-      return 1;
+      return true;
     }
 
   /* Don't handle selective display in the following.  It's (a)
@@ -6254,16 +6161,16 @@ forward_to_next_line_start (struct it *it, int *skipped_p,
 
   /* Scan for a newline within MAX_NEWLINE_DISTANCE display elements
      from buffer text.  */
-  for (n = newline_found_p = 0;
+  for (n = 0;
        !newline_found_p && n < MAX_NEWLINE_DISTANCE;
-       n += STRINGP (it->string) ? 0 : 1)
+       n += !STRINGP (it->string))
     {
       if (!get_next_display_element (it))
-	return 0;
+	return false;
       newline_found_p = it->what == IT_CHARACTER && it->c == '\n';
       if (newline_found_p && it->bidi_p && bidi_it_prev)
 	*bidi_it_prev = it->bidi_it;
-      set_iterator_to_next (it, 0);
+      set_iterator_to_next (it, false);
     }
 
   /* If we didn't find a newline near enough, see if we can use a
@@ -6323,7 +6230,7 @@ forward_to_next_line_start (struct it *it, int *skipped_p,
 	      newline_found_p = ITERATOR_AT_END_OF_LINE_P (it);
 	      if (newline_found_p && it->bidi_p && bidi_it_prev)
 		*bidi_it_prev = it->bidi_it;
-	      set_iterator_to_next (it, 0);
+	      set_iterator_to_next (it, false);
 	    }
 	}
     }
@@ -6360,7 +6267,7 @@ back_to_previous_visible_line_start (struct it *it)
 	Lisp_Object prop;
 	prop = Fget_char_property (make_number (IT_CHARPOS (*it) - 1),
 				   Qinvisible, it->window);
-	if (TEXT_PROP_MEANS_INVISIBLE (prop))
+	if (TEXT_PROP_MEANS_INVISIBLE (prop) != 0)
 	  continue;
       }
 
@@ -6386,9 +6293,9 @@ back_to_previous_visible_line_start (struct it *it)
 	pos = --IT_CHARPOS (it2);
 	--IT_BYTEPOS (it2);
 	it2.sp = 0;
-	bidi_unshelve_cache (NULL, 0);
-	it2.string_from_display_prop_p = 0;
-	it2.from_disp_prop_p = 0;
+	bidi_unshelve_cache (NULL, false);
+	it2.string_from_display_prop_p = false;
+	it2.from_disp_prop_p = false;
 	if (handle_display_prop (&it2) == HANDLED_RETURN
 	    && !NILP (val = get_char_property_and_overlay
 		      (make_number (pos), Qdisplay, Qnil, &overlay))
@@ -6430,25 +6337,25 @@ void
 reseat_at_previous_visible_line_start (struct it *it)
 {
   back_to_previous_visible_line_start (it);
-  reseat (it, it->current.pos, 1);
+  reseat (it, it->current.pos, true);
   CHECK_IT (it);
 }
 
 
 /* Reseat iterator IT on the next visible line start in the current
-   buffer.  ON_NEWLINE_P non-zero means position IT on the newline
+   buffer.  ON_NEWLINE_P means position IT on the newline
    preceding the line start.  Skip over invisible text that is so
    because of selective display.  Compute faces, overlays etc at the
    new position.  Note that this function does not skip over text that
    is invisible because of text properties.  */
 
 static void
-reseat_at_next_visible_line_start (struct it *it, int on_newline_p)
+reseat_at_next_visible_line_start (struct it *it, bool on_newline_p)
 {
-  int newline_found_p, skipped_p = 0;
+  bool skipped_p = false;
   struct bidi_it bidi_it_prev;
-
-  newline_found_p = forward_to_next_line_start (it, &skipped_p, &bidi_it_prev);
+  bool newline_found_p
+    = forward_to_next_line_start (it, &skipped_p, &bidi_it_prev);
 
   /* Skip over lines that are invisible because they are indented
      more than the value of IT->selective.  */
@@ -6501,11 +6408,11 @@ reseat_at_next_visible_line_start (struct it *it, int on_newline_p)
 	      IT_CHARPOS (*it) = it->bidi_it.charpos;
 	      IT_BYTEPOS (*it) = it->bidi_it.bytepos;
 	    }
-	  reseat (it, it->current.pos, 0);
+	  reseat (it, it->current.pos, false);
 	}
     }
   else if (skipped_p)
-    reseat (it, it->current.pos, 0);
+    reseat (it, it->current.pos, false);
 
   CHECK_IT (it);
 }
@@ -6516,17 +6423,17 @@ reseat_at_next_visible_line_start (struct it *it, int on_newline_p)
 		   Changing an iterator's position
 ***********************************************************************/
 
-/* Change IT's current position to POS in current_buffer.  If FORCE_P
-   is non-zero, always check for text properties at the new position.
+/* Change IT's current position to POS in current_buffer.
+   If FORCE_P, always check for text properties at the new position.
    Otherwise, text properties are only looked up if POS >=
    IT->check_charpos of a property.  */
 
 static void
-reseat (struct it *it, struct text_pos pos, int force_p)
+reseat (struct it *it, struct text_pos pos, bool force_p)
 {
   ptrdiff_t original_pos = IT_CHARPOS (*it);
 
-  reseat_1 (it, pos, 0);
+  reseat_1 (it, pos, false);
 
   /* Determine where to check text properties.  Avoid doing it
      where possible because text property lookup is very expensive.  */
@@ -6564,11 +6471,11 @@ reseat (struct it *it, struct text_pos pos, int force_p)
 }
 
 
-/* Change IT's buffer position to POS.  SET_STOP_P non-zero means set
+/* Change IT's buffer position to POS.  SET_STOP_P means set
    IT->stop_pos to POS, also.  */
 
 static void
-reseat_1 (struct it *it, struct text_pos pos, int set_stop_p)
+reseat_1 (struct it *it, struct text_pos pos, bool set_stop_p)
 {
   /* Don't call this function when scanning a C string.  */
   eassert (it->s == NULL);
@@ -6589,22 +6496,22 @@ reseat_1 (struct it *it, struct text_pos pos, int set_stop_p)
   it->area = TEXT_AREA;
   it->multibyte_p = !NILP (BVAR (current_buffer, enable_multibyte_characters));
   it->sp = 0;
-  it->string_from_display_prop_p = 0;
-  it->string_from_prefix_prop_p = 0;
+  it->string_from_display_prop_p = false;
+  it->string_from_prefix_prop_p = false;
 
-  it->from_disp_prop_p = 0;
-  it->face_before_selective_p = 0;
+  it->from_disp_prop_p = false;
+  it->face_before_selective_p = false;
   if (it->bidi_p)
     {
       bidi_init_it (IT_CHARPOS (*it), IT_BYTEPOS (*it), FRAME_WINDOW_P (it->f),
 		    &it->bidi_it);
-      bidi_unshelve_cache (NULL, 0);
+      bidi_unshelve_cache (NULL, false);
       it->bidi_it.paragraph_dir = NEUTRAL_DIR;
       it->bidi_it.string.s = NULL;
       it->bidi_it.string.lstring = Qnil;
       it->bidi_it.string.bufpos = 0;
-      it->bidi_it.string.from_disp_str = 0;
-      it->bidi_it.string.unibyte = 0;
+      it->bidi_it.string.from_disp_str = false;
+      it->bidi_it.string.unibyte = false;
       it->bidi_it.w = it->w;
     }
 
@@ -6678,7 +6585,7 @@ reseat_to_string (struct it *it, const char *s, Lisp_Object string,
 	  it->bidi_it.string.s = NULL;
 	  it->bidi_it.string.schars = it->end_charpos;
 	  it->bidi_it.string.bufpos = 0;
-	  it->bidi_it.string.from_disp_str = 0;
+	  it->bidi_it.string.from_disp_str = false;
 	  it->bidi_it.string.unibyte = !it->multibyte_p;
 	  it->bidi_it.w = it->w;
 	  bidi_init_it (charpos, IT_STRING_BYTEPOS (*it),
@@ -6695,8 +6602,8 @@ reseat_to_string (struct it *it, const char *s, Lisp_Object string,
       IT_STRING_CHARPOS (*it) = IT_STRING_BYTEPOS (*it) = -1;
       if (it->multibyte_p)
 	{
-	  it->current.pos = c_string_pos (charpos, s, 1);
-	  it->end_charpos = it->string_nchars = number_of_chars (s, 1);
+	  it->current.pos = c_string_pos (charpos, s, true);
+	  it->end_charpos = it->string_nchars = number_of_chars (s, true);
 	}
       else
 	{
@@ -6710,7 +6617,7 @@ reseat_to_string (struct it *it, const char *s, Lisp_Object string,
 	  it->bidi_it.string.s = (const unsigned char *) s;
 	  it->bidi_it.string.schars = it->end_charpos;
 	  it->bidi_it.string.bufpos = 0;
-	  it->bidi_it.string.from_disp_str = 0;
+	  it->bidi_it.string.from_disp_str = false;
 	  it->bidi_it.string.unibyte = !it->multibyte_p;
 	  it->bidi_it.w = it->w;
 	  bidi_init_it (charpos, IT_BYTEPOS (*it), FRAME_WINDOW_P (it->f),
@@ -6749,7 +6656,7 @@ reseat_to_string (struct it *it, const char *s, Lisp_Object string,
   it->base_level_stop = 0;
   if (it->bidi_p)
     {
-      it->bidi_it.first_elt = 1;
+      it->bidi_it.first_elt = true;
       it->bidi_it.paragraph_dir = NEUTRAL_DIR;
       it->bidi_it.disp_pos = -1;
     }
@@ -6772,7 +6679,9 @@ reseat_to_string (struct it *it, const char *s, Lisp_Object string,
 
 /* Map enum it_method value to corresponding next_element_from_* function.  */
 
-static int (* get_next_element[NUM_IT_METHODS]) (struct it *it) =
+typedef bool (*next_element_function) (struct it *);
+
+static next_element_function const get_next_element[NUM_IT_METHODS] =
 {
   next_element_from_buffer,
   next_element_from_display_vector,
@@ -6785,7 +6694,7 @@ static int (* get_next_element[NUM_IT_METHODS]) (struct it *it) =
 #define GET_NEXT_DISPLAY_ELEMENT(it) (*get_next_element[(it)->method]) (it)
 
 
-/* Return 1 iff a character at CHARPOS (and BYTEPOS) is composed
+/* Return true iff a character at CHARPOS (and BYTEPOS) is composed
    (possibly with the following characters).  */
 
 #define CHAR_COMPOSED_P(IT,CHARPOS,BYTEPOS,END_CHARPOS)			\
@@ -6908,18 +6817,30 @@ merge_glyphless_glyph_face (struct it *it)
   return face_id;
 }
 
+/* Forget the `escape-glyph' and `glyphless-char' faces.  This should
+   be called before redisplaying windows, and when the frame's face
+   cache is freed.  */
+void
+forget_escape_and_glyphless_faces (void)
+{
+  last_escape_glyph_frame = NULL;
+  last_escape_glyph_face_id = (1 << FACE_ID_BITS);
+  last_glyphless_glyph_frame = NULL;
+  last_glyphless_glyph_face_id = (1 << FACE_ID_BITS);
+}
+
 /* Load IT's display element fields with information about the next
-   display element from the current position of IT.  Value is zero if
+   display element from the current position of IT.  Value is false if
    end of buffer (or C string) is reached.  */
 
-static int
+static bool
 get_next_display_element (struct it *it)
 {
-  /* Non-zero means that we found a display element.  Zero means that
+  /* True means that we found a display element.  False means that
      we hit the end of what we iterate over.  Performance note: the
      function pointer `method' used here turns out to be faster than
      using a sequence of if-statements.  */
-  int success_p;
+  bool success_p;
 
  get_next:
   success_p = GET_NEXT_DISPLAY_ELEMENT (it);
@@ -6931,7 +6852,8 @@ get_next_display_element (struct it *it)
 	 is R..."  */
       /* FIXME: Do we need an exception for characters from display
 	 tables?  */
-      if (it->bidi_p && it->bidi_it.type == STRONG_R)
+      if (it->bidi_p && it->bidi_it.type == STRONG_R
+	  && !inhibit_bidi_mirroring)
 	it->c = bidi_mirror_char (it->c);
       /* Map via display table or translate control characters.
 	 IT->c, IT->len etc. have been set to the next character by
@@ -6946,8 +6868,8 @@ get_next_display_element (struct it *it)
 	{
 	  Lisp_Object dv;
 	  struct charset *unibyte = CHARSET_FROM_ID (charset_unibyte);
-	  int nonascii_space_p = 0;
-	  int nonascii_hyphen_p = 0;
+	  bool nonascii_space_p = false;
+	  bool nonascii_hyphen_p = false;
 	  int c = it->c;	/* This is the character to display.  */
 
 	  if (! it->multibyte_p && ! ASCII_CHAR_P (c))
@@ -6981,11 +6903,11 @@ get_next_display_element (struct it *it)
 		  it->dpvec_face_id = -1;
 		  it->saved_face_id = it->face_id;
 		  it->method = GET_FROM_DISPLAY_VECTOR;
-		  it->ellipsis_p = 0;
+		  it->ellipsis_p = false;
 		}
 	      else
 		{
-		  set_iterator_to_next (it, 0);
+		  set_iterator_to_next (it, false);
 		}
 	      goto get_next;
 	    }
@@ -6995,7 +6917,7 @@ get_next_display_element (struct it *it)
 	      if (it->what == IT_GLYPHLESS)
 		goto done;
 	      /* Don't display this character.  */
-	      set_iterator_to_next (it, 0);
+	      set_iterator_to_next (it, false);
 	      goto get_next;
 	    }
 
@@ -7003,9 +6925,10 @@ get_next_display_element (struct it *it)
 	     non-ASCII spaces and hyphens specially.  */
 	  if (! ASCII_CHAR_P (c) && ! NILP (Vnobreak_char_display))
 	    {
-	      if (c == 0xA0)
+	      if (c == NO_BREAK_SPACE)
 		nonascii_space_p = true;
-	      else if (c == 0xAD || c == 0x2010 || c == 0x2011)
+	      else if (c == SOFT_HYPHEN || c == HYPHEN
+		       || c == NON_BREAKING_HYPHEN)
 		nonascii_hyphen_p = true;
 	    }
 
@@ -7124,7 +7047,7 @@ get_next_display_element (struct it *it)
 		if (CHAR_BYTE8_P (c))
 		  /* Display \200 instead of \17777600.  */
 		  c = CHAR_TO_BYTE8 (c);
-		len = sprintf (str, "%03o", c);
+		len = sprintf (str, "%03o", c + 0u);
 
 		XSETINT (it->ctl_chars[0], escape_glyph);
 		for (i = 0; i < len; i++)
@@ -7141,7 +7064,7 @@ get_next_display_element (struct it *it)
 	      it->dpvec_face_id = face_id;
 	      it->saved_face_id = it->face_id;
 	      it->method = GET_FROM_DISPLAY_VECTOR;
-	      it->ellipsis_p = 0;
+	      it->ellipsis_p = false;
 	      goto get_next;
 	    }
 	  it->char_to_display = c;
@@ -7200,7 +7123,7 @@ get_next_display_element (struct it *it)
 
  done:
   /* Is this character the last one of a run of characters with
-     box?  If yes, set IT->end_of_box_run_p to 1.  */
+     box?  If yes, set IT->end_of_box_run_p to true.  */
   if (it->face_box_p
       && it->s == NULL)
     {
@@ -7257,7 +7180,7 @@ get_next_display_element (struct it *it)
 		    {
 		      next_face_id = face_at_buffer_position
 			(it->w, CHARPOS (pos), &ignore,
-			 CHARPOS (pos) + TEXT_PROP_DISTANCE_LIMIT, 0, -1);
+			 CHARPOS (pos) + TEXT_PROP_DISTANCE_LIMIT, false, -1);
 		      it->end_of_box_run_p
 			= (FACE_FROM_ID (it->f, next_face_id)->box
 			   == FACE_NO_BOX);
@@ -7278,22 +7201,22 @@ get_next_display_element (struct it *it)
   /* If we reached the end of the object we've been iterating (e.g., a
      display string or an overlay string), and there's something on
      IT->stack, proceed with what's on the stack.  It doesn't make
-     sense to return zero if there's unprocessed stuff on the stack,
+     sense to return false if there's unprocessed stuff on the stack,
      because otherwise that stuff will never be displayed.  */
   if (!success_p && it->sp > 0)
     {
-      set_iterator_to_next (it, 0);
+      set_iterator_to_next (it, false);
       success_p = get_next_display_element (it);
     }
 
-  /* Value is 0 if end of buffer or string reached.  */
+  /* Value is false if end of buffer or string reached.  */
   return success_p;
 }
 
 
 /* Move IT to the next display element.
 
-   RESEAT_P non-zero means if called on a newline in buffer text,
+   RESEAT_P means if called on a newline in buffer text,
    skip to the next visible line start.
 
    Functions get_next_display_element and set_iterator_to_next are
@@ -7307,12 +7230,12 @@ get_next_display_element (struct it *it)
    decrement position function which would not be easy to write.  */
 
 void
-set_iterator_to_next (struct it *it, int reseat_p)
+set_iterator_to_next (struct it *it, bool reseat_p)
 {
   /* Reset flags indicating start and end of a sequence of characters
      with box.  Reset them at the start of this function because
      moving the iterator to a new position might set them.  */
-  it->start_of_box_run_p = it->end_of_box_run_p = 0;
+  it->start_of_box_run_p = it->end_of_box_run_p = false;
 
   switch (it->method)
     {
@@ -7321,31 +7244,19 @@ set_iterator_to_next (struct it *it, int reseat_p)
 	 current_buffer.  Advance in the buffer, and maybe skip over
 	 invisible lines that are so because of selective display.  */
       if (ITERATOR_AT_END_OF_LINE_P (it) && reseat_p)
-	reseat_at_next_visible_line_start (it, 0);
+	reseat_at_next_visible_line_start (it, false);
       else if (it->cmp_it.id >= 0)
 	{
 	  /* We are currently getting glyphs from a composition.  */
-	  int i;
-
 	  if (! it->bidi_p)
 	    {
 	      IT_CHARPOS (*it) += it->cmp_it.nchars;
 	      IT_BYTEPOS (*it) += it->cmp_it.nbytes;
-	      if (it->cmp_it.to < it->cmp_it.nglyphs)
-		{
-		  it->cmp_it.from = it->cmp_it.to;
-		}
-	      else
-		{
-		  it->cmp_it.id = -1;
-		  composition_compute_stop_pos (&it->cmp_it, IT_CHARPOS (*it),
-						IT_BYTEPOS (*it),
-						it->end_charpos, Qnil);
-		}
 	    }
-	  else if (! it->cmp_it.reversed_p)
+	  else
 	    {
-	      /* Composition created while scanning forward.  */
+	      int i;
+
 	      /* Update IT's char/byte positions to point to the first
 		 character of the next grapheme cluster, or to the
 		 character visually after the current composition.  */
@@ -7353,52 +7264,34 @@ set_iterator_to_next (struct it *it, int reseat_p)
 		bidi_move_to_visually_next (&it->bidi_it);
 	      IT_BYTEPOS (*it) = it->bidi_it.bytepos;
 	      IT_CHARPOS (*it) = it->bidi_it.charpos;
+	    }
 
-	      if (it->cmp_it.to < it->cmp_it.nglyphs)
-		{
-		  /* Proceed to the next grapheme cluster.  */
-		  it->cmp_it.from = it->cmp_it.to;
-		}
-	      else
-		{
-		  /* No more grapheme clusters in this composition.
-		     Find the next stop position.  */
-		  ptrdiff_t stop = it->end_charpos;
-		  if (it->bidi_it.scan_dir < 0)
-		    /* Now we are scanning backward and don't know
-		       where to stop.  */
-		    stop = -1;
-		  composition_compute_stop_pos (&it->cmp_it, IT_CHARPOS (*it),
-						IT_BYTEPOS (*it), stop, Qnil);
-		}
+	  if ((! it->bidi_p || ! it->cmp_it.reversed_p)
+	      && it->cmp_it.to < it->cmp_it.nglyphs)
+	    {
+	      /* Composition created while scanning forward.  Proceed
+		 to the next grapheme cluster.  */
+	      it->cmp_it.from = it->cmp_it.to;
+	    }
+	  else if ((it->bidi_p && it->cmp_it.reversed_p)
+		   && it->cmp_it.from > 0)
+	    {
+	      /* Composition created while scanning backward.  Proceed
+		 to the previous grapheme cluster.  */
+	      it->cmp_it.to = it->cmp_it.from;
 	    }
 	  else
 	    {
-	      /* Composition created while scanning backward.  */
-	      /* Update IT's char/byte positions to point to the last
-		 character of the previous grapheme cluster, or the
-		 character visually after the current composition.  */
-	      for (i = 0; i < it->cmp_it.nchars; i++)
-		bidi_move_to_visually_next (&it->bidi_it);
-	      IT_BYTEPOS (*it) = it->bidi_it.bytepos;
-	      IT_CHARPOS (*it) = it->bidi_it.charpos;
-	      if (it->cmp_it.from > 0)
-		{
-		  /* Proceed to the previous grapheme cluster.  */
-		  it->cmp_it.to = it->cmp_it.from;
-		}
-	      else
-		{
-		  /* No more grapheme clusters in this composition.
-		     Find the next stop position.  */
-		  ptrdiff_t stop = it->end_charpos;
-		  if (it->bidi_it.scan_dir < 0)
-		    /* Now we are scanning backward and don't know
-		       where to stop.  */
-		    stop = -1;
-		  composition_compute_stop_pos (&it->cmp_it, IT_CHARPOS (*it),
-						IT_BYTEPOS (*it), stop, Qnil);
-		}
+	      /* No more grapheme clusters in this composition.
+		 Find the next stop position.  */
+	      ptrdiff_t stop = it->end_charpos;
+
+	      if (it->bidi_it.scan_dir < 0)
+		/* Now we are scanning backward and don't know
+		   where to stop.  */
+		stop = -1;
+	      composition_compute_stop_pos (&it->cmp_it, IT_CHARPOS (*it),
+					    IT_BYTEPOS (*it), stop, Qnil);
 	    }
 	}
       else
@@ -7416,7 +7309,8 @@ set_iterator_to_next (struct it *it, int reseat_p)
 	      /* If this is a new paragraph, determine its base
 		 direction (a.k.a. its base embedding level).  */
 	      if (it->bidi_it.new_paragraph)
-		bidi_paragraph_init (it->paragraph_embedding, &it->bidi_it, 0);
+		bidi_paragraph_init (it->paragraph_embedding, &it->bidi_it,
+				     false);
 	      bidi_move_to_visually_next (&it->bidi_it);
 	      IT_BYTEPOS (*it) = it->bidi_it.bytepos;
 	      IT_CHARPOS (*it) = it->bidi_it.charpos;
@@ -7468,7 +7362,7 @@ set_iterator_to_next (struct it *it, int reseat_p)
 
       if (it->dpvec + it->current.dpvec_index >= it->dpend)
 	{
-	  int recheck_faces = it->ellipsis_p;
+	  bool recheck_faces = it->ellipsis_p;
 
 	  if (it->s)
 	    it->method = GET_FROM_C_STRING;
@@ -7485,20 +7379,21 @@ set_iterator_to_next (struct it *it, int reseat_p)
 
 	  /* Skip over characters which were displayed via IT->dpvec.  */
 	  if (it->dpvec_char_len < 0)
-	    reseat_at_next_visible_line_start (it, 1);
+	    reseat_at_next_visible_line_start (it, true);
 	  else if (it->dpvec_char_len > 0)
 	    {
-	      if (it->method == GET_FROM_STRING
-		  && it->current.overlay_string_index >= 0
-		  && it->n_overlay_strings > 0)
-		it->ignore_overlay_strings_at_pos_p = true;
 	      it->len = it->dpvec_char_len;
 	      set_iterator_to_next (it, reseat_p);
 	    }
 
 	  /* Maybe recheck faces after display vector.  */
 	  if (recheck_faces)
-	    it->stop_charpos = IT_CHARPOS (*it);
+	    {
+	      if (it->method == GET_FROM_STRING)
+		it->stop_charpos = IT_STRING_CHARPOS (*it);
+	      else
+		it->stop_charpos = IT_CHARPOS (*it);
+	    }
 	}
       break;
 
@@ -7527,61 +7422,63 @@ set_iterator_to_next (struct it *it, int reseat_p)
 	}
       if (it->cmp_it.id >= 0)
 	{
-	  int i;
-
+	  /* We are delivering display elements from a composition.
+	     Update the string position past the grapheme cluster
+	     we've just processed.  */
 	  if (! it->bidi_p)
 	    {
 	      IT_STRING_CHARPOS (*it) += it->cmp_it.nchars;
 	      IT_STRING_BYTEPOS (*it) += it->cmp_it.nbytes;
-	      if (it->cmp_it.to < it->cmp_it.nglyphs)
-		it->cmp_it.from = it->cmp_it.to;
-	      else
-		{
-		  it->cmp_it.id = -1;
-		  composition_compute_stop_pos (&it->cmp_it,
-						IT_STRING_CHARPOS (*it),
-						IT_STRING_BYTEPOS (*it),
-						it->end_charpos, it->string);
-		}
-	    }
-	  else if (! it->cmp_it.reversed_p)
-	    {
-	      for (i = 0; i < it->cmp_it.nchars; i++)
-		bidi_move_to_visually_next (&it->bidi_it);
-	      IT_STRING_BYTEPOS (*it) = it->bidi_it.bytepos;
-	      IT_STRING_CHARPOS (*it) = it->bidi_it.charpos;
-
-	      if (it->cmp_it.to < it->cmp_it.nglyphs)
-		it->cmp_it.from = it->cmp_it.to;
-	      else
-		{
-		  ptrdiff_t stop = it->end_charpos;
-		  if (it->bidi_it.scan_dir < 0)
-		    stop = -1;
-		  composition_compute_stop_pos (&it->cmp_it,
-						IT_STRING_CHARPOS (*it),
-						IT_STRING_BYTEPOS (*it), stop,
-						it->string);
-		}
 	    }
 	  else
 	    {
+	      int i;
+
 	      for (i = 0; i < it->cmp_it.nchars; i++)
 		bidi_move_to_visually_next (&it->bidi_it);
 	      IT_STRING_BYTEPOS (*it) = it->bidi_it.bytepos;
 	      IT_STRING_CHARPOS (*it) = it->bidi_it.charpos;
-	      if (it->cmp_it.from > 0)
-		it->cmp_it.to = it->cmp_it.from;
-	      else
+	    }
+
+	  /* Did we exhaust all the grapheme clusters of this
+	     composition?  */
+	  if ((! it->bidi_p || ! it->cmp_it.reversed_p)
+	      && (it->cmp_it.to < it->cmp_it.nglyphs))
+	    {
+	      /* Not all the grapheme clusters were processed yet;
+		 advance to the next cluster.  */
+	      it->cmp_it.from = it->cmp_it.to;
+	    }
+	  else if ((it->bidi_p && it->cmp_it.reversed_p)
+		   && it->cmp_it.from > 0)
+	    {
+	      /* Likewise: advance to the next cluster, but going in
+		 the reverse direction.  */
+	      it->cmp_it.to = it->cmp_it.from;
+	    }
+	  else
+	    {
+	      /* This composition was fully processed; find the next
+		 candidate place for checking for composed
+		 characters.  */
+	      /* Always limit string searches to the string length;
+		 any padding spaces are not part of the string, and
+		 there cannot be any compositions in that padding.  */
+	      ptrdiff_t stop = SCHARS (it->string);
+
+	      if (it->bidi_p && it->bidi_it.scan_dir < 0)
+		stop = -1;
+	      else if (it->end_charpos < stop)
 		{
-		  ptrdiff_t stop = it->end_charpos;
-		  if (it->bidi_it.scan_dir < 0)
-		    stop = -1;
-		  composition_compute_stop_pos (&it->cmp_it,
-						IT_STRING_CHARPOS (*it),
-						IT_STRING_BYTEPOS (*it), stop,
-						it->string);
+		  /* Cf. PRECISION in reseat_to_string: we might be
+		     limited in how many of the string characters we
+		     need to deliver.  */
+		  stop = it->end_charpos;
 		}
+	      composition_compute_stop_pos (&it->cmp_it,
+					    IT_STRING_CHARPOS (*it),
+					    IT_STRING_BYTEPOS (*it), stop,
+					    it->string);
 	    }
 	}
       else
@@ -7604,12 +7501,17 @@ set_iterator_to_next (struct it *it, int reseat_p)
 	      bidi_move_to_visually_next (&it->bidi_it);
 	      IT_STRING_BYTEPOS (*it) = it->bidi_it.bytepos;
 	      IT_STRING_CHARPOS (*it) = it->bidi_it.charpos;
+	      /* If the scan direction changes, we may need to update
+		 the place where to check for composed characters.  */
 	      if (prev_scan_dir != it->bidi_it.scan_dir)
 		{
-		  ptrdiff_t stop = it->end_charpos;
+		  ptrdiff_t stop = SCHARS (it->string);
 
 		  if (it->bidi_it.scan_dir < 0)
 		    stop = -1;
+		  else if (it->end_charpos < stop)
+		    stop = it->end_charpos;
+
 		  composition_compute_stop_pos (&it->cmp_it,
 						IT_STRING_CHARPOS (*it),
 						IT_STRING_BYTEPOS (*it), stop,
@@ -7626,7 +7528,7 @@ set_iterator_to_next (struct it *it, int reseat_p)
 	     next, if there is one.  */
 	  if (IT_STRING_CHARPOS (*it) >= SCHARS (it->string))
 	    {
-	      it->ellipsis_p = 0;
+	      it->ellipsis_p = false;
 	      next_overlay_string (it);
 	      if (it->ellipsis_p)
 		setup_for_ellipsis (it, 0);
@@ -7678,7 +7580,7 @@ set_iterator_to_next (struct it *it, int reseat_p)
    IT->saved_face_id holds the face id before the display vector--it
    is restored into IT->face_id in set_iterator_to_next.  */
 
-static int
+static bool
 next_element_from_display_vector (struct it *it)
 {
   Lisp_Object gc;
@@ -7757,7 +7659,7 @@ next_element_from_display_vector (struct it *it)
      still the values of the character that had this display table
      entry or was translated, and that's what we want.  */
   it->what = IT_CHARACTER;
-  return 1;
+  return true;
 }
 
 /* Get the first element of string/buffer in the visual order, after
@@ -7765,7 +7667,7 @@ next_element_from_display_vector (struct it *it)
 static void
 get_visually_first_element (struct it *it)
 {
-  int string_p = STRINGP (it->string) || it->s;
+  bool string_p = STRINGP (it->string) || it->s;
   ptrdiff_t eob = (string_p ? it->bidi_it.string.schars : ZV);
   ptrdiff_t bob = (string_p ? 0 : BEGV);
 
@@ -7785,7 +7687,7 @@ get_visually_first_element (struct it *it)
       /* Nothing to do, but reset the FIRST_ELT flag, like
 	 bidi_paragraph_init does, because we are not going to
 	 call it.  */
-      it->bidi_it.first_elt = 0;
+      it->bidi_it.first_elt = false;
     }
   else if (it->bidi_it.charpos == bob
 	   || (!string_p
@@ -7794,7 +7696,7 @@ get_visually_first_element (struct it *it)
     {
       /* If we are at the beginning of a line/string, we can produce
 	 the next element right away.  */
-      bidi_paragraph_init (it->paragraph_embedding, &it->bidi_it, 1);
+      bidi_paragraph_init (it->paragraph_embedding, &it->bidi_it, true);
       bidi_move_to_visually_next (&it->bidi_it);
     }
   else
@@ -7810,7 +7712,7 @@ get_visually_first_element (struct it *it)
 	it->bidi_it.charpos = find_newline_no_quit (IT_CHARPOS (*it),
 						    IT_BYTEPOS (*it), -1,
 						    &it->bidi_it.bytepos);
-      bidi_paragraph_init (it->paragraph_embedding, &it->bidi_it, 1);
+      bidi_paragraph_init (it->paragraph_embedding, &it->bidi_it, true);
       do
 	{
 	  /* Now return to buffer/string position where we were asked
@@ -7864,7 +7766,7 @@ get_visually_first_element (struct it *it)
    If IT->current.overlay_string_index >= 0, the Lisp string is an
    overlay string.  */
 
-static int
+static bool
 next_element_from_string (struct it *it)
 {
   struct text_pos position;
@@ -7875,7 +7777,7 @@ next_element_from_string (struct it *it)
   position = it->current.string_pos;
 
   /* With bidi reordering, the character to display might not be the
-     character at IT_STRING_CHARPOS.  BIDI_IT.FIRST_ELT non-zero means
+     character at IT_STRING_CHARPOS.  BIDI_IT.FIRST_ELT means
      that we were reseat()ed to a new string, whose paragraph
      direction is not known.  */
   if (it->bidi_p && it->bidi_it.first_elt)
@@ -7953,7 +7855,7 @@ next_element_from_string (struct it *it)
       if (IT_STRING_CHARPOS (*it) >= SCHARS (it->string))
 	{
 	  it->what = IT_EOB;
-	  return 0;
+	  return false;
 	}
       else if (CHAR_COMPOSED_P (it, IT_STRING_CHARPOS (*it),
 				IT_STRING_BYTEPOS (*it),
@@ -7962,7 +7864,7 @@ next_element_from_string (struct it *it)
 				: SCHARS (it->string))
 	       && next_element_from_composition (it))
 	{
-	  return 1;
+	  return true;
 	}
       else if (STRING_MULTIBYTE (it->string))
 	{
@@ -7985,7 +7887,7 @@ next_element_from_string (struct it *it)
       if (IT_STRING_CHARPOS (*it) >= it->end_charpos)
 	{
 	  it->what = IT_EOB;
-	  return 0;
+	  return false;
 	}
       else if (IT_STRING_CHARPOS (*it) >= it->string_nchars)
 	{
@@ -8000,7 +7902,7 @@ next_element_from_string (struct it *it)
 				: it->string_nchars)
 	       && next_element_from_composition (it))
 	{
-	  return 1;
+	  return true;
 	}
       else if (STRING_MULTIBYTE (it->string))
 	{
@@ -8019,7 +7921,7 @@ next_element_from_string (struct it *it)
   it->what = IT_CHARACTER;
   it->object = it->string;
   it->position = position;
-  return 1;
+  return true;
 }
 
 
@@ -8027,10 +7929,10 @@ next_element_from_string (struct it *it)
    IT->string_nchars is the maximum number of characters to return
    from the string.  IT->end_charpos may be greater than
    IT->string_nchars when this function is called, in which case we
-   may have to return padding spaces.  Value is zero if end of string
+   may have to return padding spaces.  Value is false if end of string
    reached, including padding spaces.  */
 
-static int
+static bool
 next_element_from_c_string (struct it *it)
 {
   bool success_p = true;
@@ -8039,10 +7941,10 @@ next_element_from_c_string (struct it *it)
   eassert (!it->bidi_p || it->s == it->bidi_it.string.s);
   it->what = IT_CHARACTER;
   BYTEPOS (it->position) = CHARPOS (it->position) = 0;
-  it->object = Qnil;
+  it->object = make_number (0);
 
   /* With bidi reordering, the character to display might not be the
-     character at IT_CHARPOS.  BIDI_IT.FIRST_ELT non-zero means that
+     character at IT_CHARPOS.  BIDI_IT.FIRST_ELT means that
      we were reseated to a new string, whose paragraph direction is
      not known.  */
   if (it->bidi_p && it->bidi_it.first_elt)
@@ -8055,7 +7957,7 @@ next_element_from_c_string (struct it *it)
     {
       /* End of the game.  */
       it->what = IT_EOB;
-      success_p = 0;
+      success_p = false;
     }
   else if (IT_CHARPOS (*it) >= it->string_nchars)
     {
@@ -8077,7 +7979,7 @@ next_element_from_c_string (struct it *it)
    entry.  This function fills IT with the first glyph from the
    ellipsis if an ellipsis is to be displayed.  */
 
-static int
+static bool
 next_element_from_ellipsis (struct it *it)
 {
   if (it->selective_display_ellipsis_p)
@@ -8091,7 +7993,7 @@ next_element_from_ellipsis (struct it *it)
       it->saved_face_id = it->face_id;
       it->method = GET_FROM_BUFFER;
       it->object = it->w->contents;
-      reseat_at_next_visible_line_start (it, 1);
+      reseat_at_next_visible_line_start (it, true);
       it->face_before_selective_p = true;
     }
 
@@ -8101,27 +8003,26 @@ next_element_from_ellipsis (struct it *it)
 
 /* Deliver an image display element.  The iterator IT is already
    filled with image information (done in handle_display_prop).  Value
-   is always 1.  */
+   is always true.  */
 
 
-static int
+static bool
 next_element_from_image (struct it *it)
 {
   it->what = IT_IMAGE;
-  it->ignore_overlay_strings_at_pos_p = 0;
-  return 1;
+  return true;
 }
 
 
 /* Fill iterator IT with next display element from a stretch glyph
    property.  IT->object is the value of the text property.  Value is
-   always 1.  */
+   always true.  */
 
-static int
+static bool
 next_element_from_stretch (struct it *it)
 {
   it->what = IT_STRETCH;
-  return 1;
+  return true;
 }
 
 /* Scan backwards from IT's current position until we find a stop
@@ -8143,13 +8044,13 @@ compute_stop_pos_backwards (struct it *it)
 
   eassert (NILP (it->string) && !it->s);
   eassert (it->bidi_p);
-  it->bidi_p = 0;
+  it->bidi_p = false;
   do
     {
       it->end_charpos = min (charpos + 1, ZV);
       charpos = max (charpos - SCAN_BACK_LIMIT, BEGV);
       SET_TEXT_POS (pos, charpos, CHAR_TO_BYTE (charpos));
-      reseat_1 (it, pos, 0);
+      reseat_1 (it, pos, false);
       compute_stop_pos (it);
       /* We must advance forward, right?  */
       if (it->stop_charpos <= charpos)
@@ -8179,7 +8080,7 @@ compute_stop_pos_backwards (struct it *it)
 static void
 handle_stop_backwards (struct it *it, ptrdiff_t charpos)
 {
-  int bufp = !STRINGP (it->string);
+  bool bufp = !STRINGP (it->string);
   ptrdiff_t where_we_are = (bufp ? IT_CHARPOS (*it) : IT_STRING_CHARPOS (*it));
   struct display_pos save_current = it->current;
   struct text_pos save_position = it->position;
@@ -8188,14 +8089,14 @@ handle_stop_backwards (struct it *it, ptrdiff_t charpos)
 
   /* Scan in strict logical order.  */
   eassert (it->bidi_p);
-  it->bidi_p = 0;
+  it->bidi_p = false;
   do
     {
       it->prev_stop = charpos;
       if (bufp)
 	{
 	  SET_TEXT_POS (pos1, charpos, CHAR_TO_BYTE (charpos));
-	  reseat_1 (it, pos1, 0);
+	  reseat_1 (it, pos1, false);
 	}
       else
 	it->current.string_pos = string_pos (charpos, it->string);
@@ -8217,11 +8118,11 @@ handle_stop_backwards (struct it *it, ptrdiff_t charpos)
 }
 
 /* Load IT with the next display element from current_buffer.  Value
-   is zero if end of buffer reached.  IT->stop_charpos is the next
+   is false if end of buffer reached.  IT->stop_charpos is the next
    position at which to stop and check for text properties or buffer
    end.  */
 
-static int
+static bool
 next_element_from_buffer (struct it *it)
 {
   bool success_p = true;
@@ -8233,7 +8134,7 @@ next_element_from_buffer (struct it *it)
 	       && it->bidi_it.string.s == NULL));
 
   /* With bidi reordering, the character to display might not be the
-     character at IT_CHARPOS.  BIDI_IT.FIRST_ELT non-zero means that
+     character at IT_CHARPOS.  BIDI_IT.FIRST_ELT means that
      we were reseat()ed to a new buffer position, which is potentially
      a different paragraph.  */
   if (it->bidi_p && it->bidi_it.first_elt)
@@ -8246,12 +8147,12 @@ next_element_from_buffer (struct it *it)
     {
       if (IT_CHARPOS (*it) >= it->end_charpos)
 	{
-	  int overlay_strings_follow_p;
+	  bool overlay_strings_follow_p;
 
 	  /* End of the game, except when overlay strings follow that
 	     haven't been returned yet.  */
 	  if (it->overlay_strings_at_end_processed_p)
-	    overlay_strings_follow_p = 0;
+	    overlay_strings_follow_p = false;
 	  else
 	    {
 	      it->overlay_strings_at_end_processed_p = true;
@@ -8264,7 +8165,7 @@ next_element_from_buffer (struct it *it)
 	    {
 	      it->what = IT_EOB;
 	      it->position = it->current.pos;
-	      success_p = 0;
+	      success_p = false;
 	    }
 	}
       else if (!(!it->bidi_p
@@ -8278,6 +8179,7 @@ next_element_from_buffer (struct it *it)
 	     and handle the last stop_charpos that precedes our
 	     current position.  */
 	  handle_stop_backwards (it, it->stop_charpos);
+	  it->ignore_overlay_strings_at_pos_p = false;
 	  return GET_NEXT_DISPLAY_ELEMENT (it);
 	}
       else
@@ -8294,6 +8196,7 @@ next_element_from_buffer (struct it *it)
 		it->base_level_stop = it->stop_charpos;
 	    }
 	  handle_stop (it);
+	  it->ignore_overlay_strings_at_pos_p = false;
 	  return GET_NEXT_DISPLAY_ELEMENT (it);
 	}
     }
@@ -8321,6 +8224,7 @@ next_element_from_buffer (struct it *it)
 	}
       else
 	handle_stop_backwards (it, it->base_level_stop);
+      it->ignore_overlay_strings_at_pos_p = false;
       return GET_NEXT_DISPLAY_ELEMENT (it);
     }
   else
@@ -8329,6 +8233,10 @@ next_element_from_buffer (struct it *it)
 	 character from current_buffer.  */
       unsigned char *p;
       ptrdiff_t stop;
+
+      /* We moved to the next buffer position, so any info about
+	 previously seen overlays is no longer valid.  */
+      it->ignore_overlay_strings_at_pos_p = false;
 
       /* Maybe run the redisplay end trigger hook.  Performance note:
 	 This doesn't seem to cost measurable time.  */
@@ -8342,12 +8250,12 @@ next_element_from_buffer (struct it *it)
 			   stop)
 	  && next_element_from_composition (it))
 	{
-	  return 1;
+	  return true;
 	}
 
       /* Get the next character, maybe multibyte.  */
       p = BYTE_POS_ADDR (IT_BYTEPOS (*it));
-      if (it->multibyte_p && !ASCII_BYTE_P (*p))
+      if (it->multibyte_p && !ASCII_CHAR_P (*p))
 	it->c = STRING_CHAR_AND_LENGTH (p, it->len);
       else
 	it->c = *p, it->len = 1;
@@ -8386,7 +8294,7 @@ next_element_from_buffer (struct it *it)
 	}
     }
 
-  /* Value is zero if end of buffer reached.  */
+  /* Value is false if end of buffer reached.  */
   eassert (!success_p || it->what != IT_CHARACTER || it->len > 0);
   return success_p;
 }
@@ -8397,22 +8305,18 @@ next_element_from_buffer (struct it *it)
 static void
 run_redisplay_end_trigger_hook (struct it *it)
 {
-  Lisp_Object args[3];
-
   /* IT->glyph_row should be non-null, i.e. we should be actually
      displaying something, or otherwise we should not run the hook.  */
   eassert (it->glyph_row);
 
-  /* Set up hook arguments.  */
-  args[0] = Qredisplay_end_trigger_functions;
-  args[1] = it->window;
-  XSETINT (args[2], it->redisplay_end_trigger_charpos);
+  ptrdiff_t charpos = it->redisplay_end_trigger_charpos;
   it->redisplay_end_trigger_charpos = 0;
 
   /* Since we are *trying* to run these functions, don't try to run
      them again, even if they get an error.  */
   wset_redisplay_end_trigger (it->w, Qnil);
-  Frun_hook_with_args (3, args);
+  CALLN (Frun_hook_with_args, Qredisplay_end_trigger_functions, it->window,
+	 make_number (charpos));
 
   /* Notice if it changed the face of the character we are on.  */
   handle_face_prop (it);
@@ -8424,7 +8328,7 @@ run_redisplay_end_trigger_hook (struct it *it)
    get_next_element[].  It is called from next_element_from_buffer and
    next_element_from_string when necessary.  */
 
-static int
+static bool
 next_element_from_composition (struct it *it)
 {
   it->what = IT_COMPOSITION;
@@ -8435,7 +8339,7 @@ next_element_from_composition (struct it *it)
 	{
 	  IT_STRING_CHARPOS (*it) += it->cmp_it.nchars;
 	  IT_STRING_BYTEPOS (*it) += it->cmp_it.nbytes;
-	  return 0;
+	  return false;
 	}
       it->position = it->current.string_pos;
       it->object = it->string;
@@ -8451,20 +8355,21 @@ next_element_from_composition (struct it *it)
 	  if (it->bidi_p)
 	    {
 	      if (it->bidi_it.new_paragraph)
-		bidi_paragraph_init (it->paragraph_embedding, &it->bidi_it, 0);
+		bidi_paragraph_init (it->paragraph_embedding, &it->bidi_it,
+				     false);
 	      /* Resync the bidi iterator with IT's new position.
 		 FIXME: this doesn't support bidirectional text.  */
 	      while (it->bidi_it.charpos < IT_CHARPOS (*it))
 		bidi_move_to_visually_next (&it->bidi_it);
 	    }
-	  return 0;
+	  return false;
 	}
       it->position = it->current.pos;
       it->object = it->w->contents;
       it->c = composition_update_it (&it->cmp_it, IT_CHARPOS (*it),
 				     IT_BYTEPOS (*it), Qnil);
     }
-  return 1;
+  return true;
 }
 
 
@@ -8477,9 +8382,7 @@ next_element_from_composition (struct it *it)
    position after some move_it_ call.  */
 
 #define IT_POS_VALID_AFTER_MOVE_P(it)			\
-  ((it)->method == GET_FROM_STRING			\
-   ? IT_STRING_CHARPOS (*it) == 0			\
-   : 1)
+  ((it)->method != GET_FROM_STRING || IT_STRING_CHARPOS (*it) == 0)
 
 
 /* Move iterator IT to a specified buffer or X position within one
@@ -8525,10 +8428,10 @@ move_it_in_display_line_to (struct it *it,
   struct it wrap_it, atpos_it, atx_it, ppos_it;
   void *wrap_data = NULL, *atpos_data = NULL, *atx_data = NULL;
   void *ppos_data = NULL;
-  int may_wrap = 0;
+  bool may_wrap = false;
   enum it_method prev_method = it->method;
   ptrdiff_t closest_pos IF_LINT (= 0), prev_pos = IT_CHARPOS (*it);
-  int saw_smaller_pos = prev_pos < to_charpos;
+  bool saw_smaller_pos = prev_pos < to_charpos;
 
   /* Don't produce glyphs in produce_glyphs.  */
   saved_glyph_row = it->glyph_row;
@@ -8585,7 +8488,7 @@ move_it_in_display_line_to (struct it *it,
   if (IT_CHARPOS (*it) < CHARPOS (this_line_min_pos))
     SET_TEXT_POS (this_line_min_pos, IT_CHARPOS (*it), IT_BYTEPOS (*it));
 
-  while (1)
+  while (true)
     {
       int x, i, ascent = 0, descent = 0;
 
@@ -8652,7 +8555,7 @@ move_it_in_display_line_to (struct it *it,
 	  if (it->line_wrap == WORD_WRAP && it->area == TEXT_AREA)
 	    {
 	      if (IT_DISPLAYING_WHITESPACE (it))
-		may_wrap = 1;
+		may_wrap = true;
 	      else if (may_wrap)
 		{
 		  /* We have reached a glyph that follows one or more
@@ -8672,7 +8575,7 @@ move_it_in_display_line_to (struct it *it,
 		    }
 		  /* Otherwise, we can wrap here.  */
 		  SAVE_IT (wrap_it, *it, wrap_data);
-		  may_wrap = 0;
+		  may_wrap = false;
 		}
 	    }
 	}
@@ -8695,7 +8598,7 @@ move_it_in_display_line_to (struct it *it,
 	  prev_method = it->method;
 	  if (it->method == GET_FROM_BUFFER)
 	    prev_pos = IT_CHARPOS (*it);
-	  set_iterator_to_next (it, 1);
+	  set_iterator_to_next (it, true);
 	  if (IT_CHARPOS (*it) < CHARPOS (this_line_min_pos))
 	    SET_TEXT_POS (this_line_min_pos,
 			  IT_CHARPOS (*it), IT_BYTEPOS (*it));
@@ -8783,12 +8686,7 @@ move_it_in_display_line_to (struct it *it,
 			 doesn't fit on the line, e.g. a wide image.  */
 		      it->hpos == 0
 		      || (new_x == it->last_visible_x
-			  && FRAME_WINDOW_P (it->f)
-			  /* When word-wrap is ON and we have a valid
-			     wrap point, we don't allow the last glyph
-			     to "just barely fit" on the line.  */
-			  && (it->line_wrap != WORD_WRAP
-			      || wrap_it.sp < 0)))
+			  && FRAME_WINDOW_P (it->f)))
 		    {
 		      ++it->hpos;
 		      it->current_x = new_x;
@@ -8803,7 +8701,16 @@ move_it_in_display_line_to (struct it *it,
 			  if (BUFFER_POS_REACHED_P ())
 			    {
 			      if (it->line_wrap != WORD_WRAP
-				  || wrap_it.sp < 0)
+				  || wrap_it.sp < 0
+				  /* If we've just found whitespace to
+				     wrap, effectively ignore the
+				     previous wrap point -- it is no
+				     longer relevant, but we won't
+				     have an opportunity to update it,
+				     since we've reached the edge of
+				     this screen line.  */
+				  || (may_wrap
+				      && IT_OVERFLOW_NEWLINE_INTO_FRINGE (it)))
 				{
 				  it->hpos = hpos_before_this_char;
 				  it->current_x = x_before_this_char;
@@ -8822,7 +8729,7 @@ move_it_in_display_line_to (struct it *it,
 			  prev_method = it->method;
 			  if (it->method == GET_FROM_BUFFER)
 			    prev_pos = IT_CHARPOS (*it);
-			  set_iterator_to_next (it, 1);
+			  set_iterator_to_next (it, true);
 			  if (IT_CHARPOS (*it) < CHARPOS (this_line_min_pos))
 			    SET_TEXT_POS (this_line_min_pos,
 					  IT_CHARPOS (*it), IT_BYTEPOS (*it));
@@ -8855,7 +8762,8 @@ move_it_in_display_line_to (struct it *it,
 				}
 			      if (ITERATOR_AT_END_OF_LINE_P (it)
 				  && (it->line_wrap != WORD_WRAP
-				      || wrap_it.sp < 0))
+				      || wrap_it.sp < 0
+				      || IT_OVERFLOW_NEWLINE_INTO_FRINGE (it)))
 				{
 				  result = MOVE_NEWLINE_OR_CR;
 				  break;
@@ -8866,7 +8774,26 @@ move_it_in_display_line_to (struct it *it,
 		  else
 		    IT_RESET_X_ASCENT_DESCENT (it);
 
-		  if (wrap_it.sp >= 0)
+		  /* If the screen line ends with whitespace, and we
+		     are under word-wrap, don't use wrap_it: it is no
+		     longer relevant, but we won't have an opportunity
+		     to update it, since we are done with this screen
+		     line.  */
+		  if (may_wrap && IT_OVERFLOW_NEWLINE_INTO_FRINGE (it))
+		    {
+		      /* If we've found TO_X, go back there, as we now
+			 know the last word fits on this screen line.  */
+		      if ((op & MOVE_TO_X) && new_x == it->last_visible_x
+			  && atx_it.sp >= 0)
+			{
+			  RESTORE_IT (it, &atx_it, atx_data);
+			  atpos_it.sp = -1;
+			  atx_it.sp = -1;
+			  result = MOVE_X_REACHED;
+			  break;
+			}
+		    }
+		  else if (wrap_it.sp >= 0)
 		    {
 		      RESTORE_IT (it, &wrap_it, wrap_data);
 		      atpos_it.sp = -1;
@@ -8959,11 +8886,11 @@ move_it_in_display_line_to (struct it *it,
 	prev_pos = IT_CHARPOS (*it);
       /* The current display element has been consumed.  Advance
 	 to the next.  */
-      set_iterator_to_next (it, 1);
+      set_iterator_to_next (it, true);
       if (IT_CHARPOS (*it) < CHARPOS (this_line_min_pos))
 	SET_TEXT_POS (this_line_min_pos, IT_CHARPOS (*it), IT_BYTEPOS (*it));
       if (IT_CHARPOS (*it) < to_charpos)
-	saw_smaller_pos = 1;
+	saw_smaller_pos = true;
       if (it->bidi_p
 	  && (op & MOVE_TO_POS)
 	  && IT_CHARPOS (*it) >= to_charpos
@@ -8981,7 +8908,7 @@ move_it_in_display_line_to (struct it *it,
 		  : WINDOW_RIGHT_FRINGE_WIDTH (it->w)) == 0
 	      || IT_OVERFLOW_NEWLINE_INTO_FRINGE (it))
 	    {
-	      int at_eob_p = 0;
+	      bool at_eob_p = false;
 
 	      if ((at_eob_p = !get_next_display_element (it))
 		  || BUFFER_POS_REACHED_P ()
@@ -9043,13 +8970,13 @@ move_it_in_display_line_to (struct it *it,
  done:
 
   if (atpos_data)
-    bidi_unshelve_cache (atpos_data, 1);
+    bidi_unshelve_cache (atpos_data, true);
   if (atx_data)
-    bidi_unshelve_cache (atx_data, 1);
+    bidi_unshelve_cache (atx_data, true);
   if (wrap_data)
-    bidi_unshelve_cache (wrap_data, 1);
+    bidi_unshelve_cache (wrap_data, true);
   if (ppos_data)
-    bidi_unshelve_cache (ppos_data, 1);
+    bidi_unshelve_cache (ppos_data, true);
 
   /* Restore the iterator settings altered at the beginning of this
      function.  */
@@ -9084,7 +9011,7 @@ move_it_in_display_line (struct it *it,
 	    (it, -1, prev_x, MOVE_TO_X);
 	}
       else
-	bidi_unshelve_cache (save_data, 1);
+	bidi_unshelve_cache (save_data, true);
     }
   else
     move_it_in_display_line_to (it, to_charpos, to_x, op);
@@ -9291,14 +9218,14 @@ move_it_to (struct it *it, ptrdiff_t to_charpos, int to_x, int to_y, int to_vpos
 
 	case MOVE_NEWLINE_OR_CR:
 	  max_current_x = max (it->current_x, max_current_x);
-	  set_iterator_to_next (it, 1);
+	  set_iterator_to_next (it, true);
 	  it->continuation_lines_width = 0;
 	  break;
 
 	case MOVE_LINE_TRUNCATED:
 	  max_current_x = it->last_visible_x;
 	  it->continuation_lines_width = 0;
-	  reseat_at_next_visible_line_start (it, 0);
+	  reseat_at_next_visible_line_start (it, false);
 	  if ((op & MOVE_TO_POS) != 0
 	      && IT_CHARPOS (*it) > to_charpos)
 	    {
@@ -9344,7 +9271,7 @@ move_it_to (struct it *it, ptrdiff_t to_charpos, int to_x, int to_y, int to_vpos
 			      += it->tab_width * face_font->space_width;
 			}
 		    }
-		  set_iterator_to_next (it, 0);
+		  set_iterator_to_next (it, false);
 		}
 	    }
 	  else
@@ -9382,6 +9309,7 @@ move_it_to (struct it *it, ptrdiff_t to_charpos, int to_x, int to_y, int to_vpos
       && it->current_x == it->last_visible_x - 1
       && it->c != '\n'
       && it->c != '\t'
+      && it->w->window_end_valid
       && it->vpos < it->w->window_end_vpos)
     {
       it->continuation_lines_width += it->current_x;
@@ -9392,7 +9320,7 @@ move_it_to (struct it *it, ptrdiff_t to_charpos, int to_x, int to_y, int to_vpos
     }
 
   if (backup_data)
-    bidi_unshelve_cache (backup_data, 1);
+    bidi_unshelve_cache (backup_data, true);
 
   TRACE_MOVE ((stderr, "move_it_to: reached %d\n", reached));
 
@@ -9441,7 +9369,7 @@ move_it_vertically_backward (struct it *it, int dy)
      reseat to skip forward over invisible text, set up the iterator
      to deliver from overlay strings at the new position etc.  So,
      use reseat_1 here.  */
-  reseat_1 (it, it->current.pos, 1);
+  reseat_1 (it, it->current.pos, true);
 
   /* We are now surely at a line start.  */
   it->current_x = it->hpos = 0;	/* FIXME: this is incorrect when bidi
@@ -9511,7 +9439,7 @@ move_it_vertically_backward (struct it *it, int dy)
 	  cp = find_newline_no_quit (cp, bp, -1, NULL);
 	  move_it_to (it, cp, -1, -1, -1, MOVE_TO_POS);
 	}
-      bidi_unshelve_cache (it3data, 1);
+      bidi_unshelve_cache (it3data, true);
     }
   else
     {
@@ -9554,7 +9482,7 @@ move_it_vertically_backward (struct it *it, int dy)
 	     treating terminal frames specially here.  */
 
 	  if (!FRAME_WINDOW_P (it->f))
-	    move_it_vertically (it, target_y - (it->current_y + line_height));
+	    move_it_vertically (it, target_y - it->current_y);
 	  else
 	    {
 	      do
@@ -9603,7 +9531,7 @@ move_it_past_eol (struct it *it)
 
   rc = move_it_in_display_line_to (it, Z, 0, MOVE_TO_POS);
   if (rc == MOVE_NEWLINE_OR_CR)
-    set_iterator_to_next (it, 0);
+    set_iterator_to_next (it, false);
 }
 
 
@@ -9629,7 +9557,7 @@ move_it_by_lines (struct it *it, ptrdiff_t dvpos)
 
       pos = *vmotion (IT_CHARPOS (*it), dvpos, it->w);
       SET_TEXT_POS (textpos, pos.bufpos, pos.bytepos);
-      reseat (it, textpos, 1);
+      reseat (it, textpos, true);
       it->vpos += pos.vpos;
       it->current_y += pos.vpos;
     }
@@ -9690,7 +9618,7 @@ move_it_by_lines (struct it *it, ptrdiff_t dvpos)
 	back_to_previous_visible_line_start (it);
       if (i > 0 && IT_CHARPOS (*it) <= pos_limit)
 	hit_pos_limit = true;
-      reseat (it, it->current.pos, 1);
+      reseat (it, it->current.pos, true);
 
       /* Move further back if we end up in a string or an image.  */
       while (!IT_POS_VALID_AFTER_MOVE_P (it))
@@ -9704,7 +9632,7 @@ move_it_by_lines (struct it *it, ptrdiff_t dvpos)
 	  /* If start of line is still in string or image,
 	     move further back.  */
 	  back_to_previous_visible_line_start (it);
-	  reseat (it, it->current.pos, 1);
+	  reseat (it, it->current.pos, true);
 	  dvpos--;
 	}
 
@@ -9731,7 +9659,7 @@ move_it_by_lines (struct it *it, ptrdiff_t dvpos)
 	  if (IT_CHARPOS (*it) >= start_charpos)
 	    RESTORE_IT (it, &it2, it2data);
 	  else
-	    bidi_unshelve_cache (it2data, 1);
+	    bidi_unshelve_cache (it2data, true);
 	}
       else if (hit_pos_limit && pos_limit > BEGV
 	       && dvpos < 0 && it2.vpos < -dvpos)
@@ -9751,7 +9679,7 @@ move_it_by_lines (struct it *it, ptrdiff_t dvpos)
 	      back_to_previous_visible_line_start (it);
 	      it->vpos--;
 	    }
-	  reseat_1 (it, it->current.pos, 1);
+	  reseat_1 (it, it->current.pos, true);
 	}
       else
 	RESTORE_IT (it, it, it2data);
@@ -9802,26 +9730,25 @@ include the height of the mode- or header-line of WINDOW in the return
 value.  If it is either the symbol `mode-line' or `header-line', include
 only the height of that line, if present, in the return value.  If t,
 include the height of both, if present, in the return value.  */)
-  (Lisp_Object window, Lisp_Object from, Lisp_Object to, Lisp_Object x_limit, Lisp_Object y_limit,
-   Lisp_Object mode_and_header_line)
+  (Lisp_Object window, Lisp_Object from, Lisp_Object to, Lisp_Object x_limit,
+   Lisp_Object y_limit, Lisp_Object mode_and_header_line)
 {
   struct window *w = decode_live_window (window);
-  Lisp_Object buf;
+  Lisp_Object buffer = w->contents;
   struct buffer *b;
   struct it it;
-  struct buffer *old_buffer = NULL;
+  struct buffer *old_b = NULL;
   ptrdiff_t start, end, pos;
   struct text_pos startp;
   void *itdata = NULL;
   int c, max_y = -1, x = 0, y = 0;
 
-  buf = w->contents;
-  CHECK_BUFFER (buf);
-  b = XBUFFER (buf);
+  CHECK_BUFFER (buffer);
+  b = XBUFFER (buffer);
 
   if (b != current_buffer)
     {
-      old_buffer = current_buffer;
+      old_b = current_buffer;
       set_buffer_internal (b);
     }
 
@@ -9896,10 +9823,10 @@ include the height of both, if present, in the return value.  */)
        start_display.  */
     y = y + WINDOW_MODE_LINE_HEIGHT (w);
 
-  bidi_unshelve_cache (itdata, 0);
+  bidi_unshelve_cache (itdata, false);
 
-  if (old_buffer)
-    set_buffer_internal (old_buffer);
+  if (old_b)
+    set_buffer_internal (old_b);
 
   return Fcons (make_number (x), make_number (y));
 }
@@ -9908,36 +9835,53 @@ include the height of both, if present, in the return value.  */)
 			       Messages
  ***********************************************************************/
 
+/* Return the number of arguments the format string FORMAT needs.  */
 
-/* Add a message with format string FORMAT and arguments ARG1 and ARG2
+static ptrdiff_t
+format_nargs (char const *format)
+{
+  ptrdiff_t nargs = 0;
+  for (char const *p = format; (p = strchr (p, '%')); p++)
+    if (p[1] == '%')
+      p++;
+    else
+      nargs++;
+  return nargs;
+}
+
+/* Add a message with format string FORMAT and formatted arguments
    to *Messages*.  */
 
 void
-add_to_log (const char *format, Lisp_Object arg1, Lisp_Object arg2)
+add_to_log (const char *format, ...)
 {
-  Lisp_Object args[3];
-  Lisp_Object msg, fmt;
-  char *buffer;
-  ptrdiff_t len;
-  struct gcpro gcpro1, gcpro2, gcpro3, gcpro4;
+  va_list ap;
+  va_start (ap, format);
+  vadd_to_log (format, ap);
+  va_end (ap);
+}
+
+void
+vadd_to_log (char const *format, va_list ap)
+{
+  ptrdiff_t form_nargs = format_nargs (format);
+  ptrdiff_t nargs = 1 + form_nargs;
+  Lisp_Object args[10];
+  eassert (nargs <= ARRAYELTS (args));
+  AUTO_STRING (args0, format);
+  args[0] = args0;
+  for (ptrdiff_t i = 1; i <= nargs; i++)
+    args[i] = va_arg (ap, Lisp_Object);
+  Lisp_Object msg = Qnil;
+  msg = Fformat_message (nargs, args);
+
+  ptrdiff_t len = SBYTES (msg) + 1;
   USE_SAFE_ALLOCA;
-
-  fmt = msg = Qnil;
-  GCPRO4 (fmt, msg, arg1, arg2);
-
-  args[0] = fmt = build_string (format);
-  args[1] = arg1;
-  args[2] = arg2;
-  msg = Fformat (3, args);
-
-  len = SBYTES (msg) + 1;
-  buffer = SAFE_ALLOCA (len);
+  char *buffer = SAFE_ALLOCA (len);
   memcpy (buffer, SDATA (msg), len);
 
-  message_dolog (buffer, len - 1, 1, 0);
+  message_dolog (buffer, len - 1, true, STRING_MULTIBYTE (msg));
   SAFE_FREE ();
-
-  UNGCPRO;
 }
 
 
@@ -9947,7 +9891,7 @@ void
 message_log_maybe_newline (void)
 {
   if (message_log_need_newline)
-    message_dolog ("", 0, 1, 0);
+    message_dolog ("", 0, true, false);
 }
 
 
@@ -9976,23 +9920,17 @@ message_dolog (const char *m, ptrdiff_t nbytes, bool nlflag, bool multibyte)
       ptrdiff_t point_at_end = 0;
       ptrdiff_t zv_at_end = 0;
       Lisp_Object old_deactivate_mark;
-      struct gcpro gcpro1;
 
       old_deactivate_mark = Vdeactivate_mark;
       oldbuf = current_buffer;
 
       /* Ensure the Messages buffer exists, and switch to it.
          If we created it, set the major-mode.  */
-      {
-        int newbuffer = 0;
-        if (NILP (Fget_buffer (Vmessages_buffer_name))) newbuffer = 1;
-
-        Fset_buffer (Fget_buffer_create (Vmessages_buffer_name));
-
-        if (newbuffer
-	    && !NILP (Ffboundp (intern ("messages-buffer-mode"))))
-          call0 (intern ("messages-buffer-mode"));
-      }
+      bool newbuffer = NILP (Fget_buffer (Vmessages_buffer_name));
+      Fset_buffer (Fget_buffer_create (Vmessages_buffer_name));
+      if (newbuffer
+	  && !NILP (Ffboundp (intern ("messages-buffer-mode"))))
+	call0 (intern ("messages-buffer-mode"));
 
       bset_undo_list (current_buffer, Qt);
       bset_cache_long_scans (current_buffer, Qnil);
@@ -10003,7 +9941,6 @@ message_dolog (const char *m, ptrdiff_t nbytes, bool nlflag, bool multibyte)
       set_marker_restricted_both (oldbegv, Qnil, BEGV, BEGV_BYTE);
       oldzv = message_dolog_marker3;
       set_marker_restricted_both (oldzv, Qnil, ZV, ZV_BYTE);
-      GCPRO1 (old_deactivate_mark);
 
       if (PT == Z)
 	point_at_end = 1;
@@ -10030,10 +9967,8 @@ message_dolog (const char *m, ptrdiff_t nbytes, bool nlflag, bool multibyte)
 	  for (i = 0; i < nbytes; i += char_bytes)
 	    {
 	      c = string_char_and_length (msg + i, &char_bytes);
-	      work[0] = (ASCII_CHAR_P (c)
-			 ? c
-			 : multibyte_char_to_unibyte (c));
-	      insert_1_both (work, 1, 1, 1, 0, 0);
+	      work[0] = CHAR_TO_BYTE8 (c);
+	      insert_1_both (work, 1, 1, true, false, false);
 	    }
 	}
       else if (! multibyte
@@ -10049,20 +9984,21 @@ message_dolog (const char *m, ptrdiff_t nbytes, bool nlflag, bool multibyte)
 	      c = msg[i];
 	      MAKE_CHAR_MULTIBYTE (c);
 	      char_bytes = CHAR_STRING (c, str);
-	      insert_1_both ((char *) str, 1, char_bytes, 1, 0, 0);
+	      insert_1_both ((char *) str, 1, char_bytes, true, false, false);
 	    }
 	}
       else if (nbytes)
-	insert_1_both (m, chars_in_text (msg, nbytes), nbytes, 1, 0, 0);
+	insert_1_both (m, chars_in_text (msg, nbytes), nbytes,
+		       true, false, false);
 
       if (nlflag)
 	{
 	  ptrdiff_t this_bol, this_bol_byte, prev_bol, prev_bol_byte;
 	  printmax_t dups;
 
-	  insert_1_both ("\n", 1, 1, 1, 0, 0);
+	  insert_1_both ("\n", 1, 1, true, false, false);
 
-	  scan_newline (Z, Z_BYTE, BEG, BEG_BYTE, -2, 0);
+	  scan_newline (Z, Z_BYTE, BEG, BEG_BYTE, -2, false);
 	  this_bol = PT;
 	  this_bol_byte = PT_BYTE;
 
@@ -10070,7 +10006,7 @@ message_dolog (const char *m, ptrdiff_t nbytes, bool nlflag, bool multibyte)
 	     If so, combine duplicates.  */
 	  if (this_bol > BEG)
 	    {
-	      scan_newline (PT, PT_BYTE, BEG, BEG_BYTE, -2, 0);
+	      scan_newline (PT, PT_BYTE, BEG, BEG_BYTE, -2, false);
 	      prev_bol = PT;
 	      prev_bol_byte = PT_BYTE;
 
@@ -10079,7 +10015,7 @@ message_dolog (const char *m, ptrdiff_t nbytes, bool nlflag, bool multibyte)
 	      if (dups)
 		{
 		  del_range_both (prev_bol, prev_bol_byte,
-				  this_bol, this_bol_byte, 0);
+				  this_bol, this_bol_byte, false);
 		  if (dups > 1)
 		    {
 		      char dupstr[sizeof " [ times]"
@@ -10089,7 +10025,8 @@ message_dolog (const char *m, ptrdiff_t nbytes, bool nlflag, bool multibyte)
 			 change message_log_check_duplicate.  */
 		      int duplen = sprintf (dupstr, " [%"pMd" times]", dups);
 		      TEMP_SET_PT_BOTH (Z - 1, Z_BYTE - 1);
-		      insert_1_both (dupstr, duplen, duplen, 1, 0, 1);
+		      insert_1_both (dupstr, duplen, duplen,
+				     true, false, true);
 		    }
 		}
 	    }
@@ -10101,8 +10038,8 @@ message_dolog (const char *m, ptrdiff_t nbytes, bool nlflag, bool multibyte)
 	  if (NATNUMP (Vmessage_log_max))
 	    {
 	      scan_newline (Z, Z_BYTE, BEG, BEG_BYTE,
-			    -XFASTINT (Vmessage_log_max) - 1, 0);
-	      del_range_both (BEG, BEG_BYTE, PT, PT_BYTE, 0);
+			    -XFASTINT (Vmessage_log_max) - 1, false);
+	      del_range_both (BEG, BEG_BYTE, PT, PT_BYTE, false);
 	    }
 	}
       BEGV = marker_position (oldbegv);
@@ -10127,13 +10064,12 @@ message_dolog (const char *m, ptrdiff_t nbytes, bool nlflag, bool multibyte)
 	TEMP_SET_PT_BOTH (marker_position (oldpoint),
 			  marker_byte_position (oldpoint));
 
-      UNGCPRO;
       unchain_marker (XMARKER (oldpoint));
       unchain_marker (XMARKER (oldbegv));
       unchain_marker (XMARKER (oldzv));
 
       /* We called insert_1_both above with its 5th argument (PREPARE)
-	 zero, which prevents insert_1_both from calling
+	 false, which prevents insert_1_both from calling
 	 prepare_to_modify_buffer, which in turns prevents us from
 	 incrementing windows_or_buffers_changed even if *Messages* is
 	 shown in some window.  So we must manually set
@@ -10160,14 +10096,14 @@ message_log_check_duplicate (ptrdiff_t prev_bol_byte, ptrdiff_t this_bol_byte)
 {
   ptrdiff_t i;
   ptrdiff_t len = Z_BYTE - 1 - this_bol_byte;
-  int seen_dots = 0;
+  bool seen_dots = false;
   unsigned char *p1 = BUF_BYTE_ADDRESS (current_buffer, prev_bol_byte);
   unsigned char *p2 = BUF_BYTE_ADDRESS (current_buffer, this_bol_byte);
 
   for (i = 0; i < len; i++)
     {
       if (i >= 3 && p1[i - 3] == '.' && p1[i - 2] == '.' && p1[i - 1] == '.')
-	seen_dots = 1;
+	seen_dots = true;
       if (p1[i] != p2[i])
 	return seen_dots;
     }
@@ -10195,9 +10131,6 @@ message_log_check_duplicate (ptrdiff_t prev_bol_byte, ptrdiff_t this_bol_byte)
 void
 message3 (Lisp_Object m)
 {
-  struct gcpro gcpro1;
-
-  GCPRO1 (m);
   clear_message (true, true);
   cancel_echoing ();
 
@@ -10207,17 +10140,35 @@ message3 (Lisp_Object m)
     {
       ptrdiff_t nbytes = SBYTES (m);
       bool multibyte = STRING_MULTIBYTE (m);
+      char *buffer;
       USE_SAFE_ALLOCA;
-      char *buffer = SAFE_ALLOCA (nbytes);
-      memcpy (buffer, SDATA (m), nbytes);
-      message_dolog (buffer, nbytes, 1, multibyte);
+      SAFE_ALLOCA_STRING (buffer, m);
+      message_dolog (buffer, nbytes, true, multibyte);
       SAFE_FREE ();
     }
-  message3_nolog (m);
-
-  UNGCPRO;
+  if (! inhibit_message)
+    message3_nolog (m);
 }
 
+/* Log the message M to stderr.  Log an empty line if M is not a string.  */
+
+static void
+message_to_stderr (Lisp_Object m)
+{
+  if (noninteractive_need_newline)
+    {
+      noninteractive_need_newline = false;
+      fputc ('\n', stderr);
+    }
+  if (STRINGP (m))
+    {
+      Lisp_Object s = ENCODE_SYSTEM (m);
+      fwrite (SDATA (s), SBYTES (s), 1, stderr);
+    }
+  if (!cursor_in_echo_area)
+    fputc ('\n', stderr);
+  fflush (stderr);
+}
 
 /* The non-logging version of message3.
    This does not cancel echoing, because it is used for echoing.
@@ -10230,20 +10181,7 @@ message3_nolog (Lisp_Object m)
   struct frame *sf = SELECTED_FRAME ();
 
   if (FRAME_INITIAL_P (sf))
-    {
-      if (noninteractive_need_newline)
-	putc ('\n', stderr);
-      noninteractive_need_newline = 0;
-      if (STRINGP (m))
-	{
-	  Lisp_Object s = ENCODE_SYSTEM (m);
-
-	  fwrite (SDATA (s), SBYTES (s), 1, stderr);
-	}
-      if (cursor_in_echo_area == 0)
-	fprintf (stderr, "\n");
-      fflush (stderr);
-    }
+    message_to_stderr (m);
   /* Error messages get reported properly by cmd_error, so this must be just an
      informative message; if the frame hasn't really been initialized yet, just
      toss it.  */
@@ -10270,9 +10208,9 @@ message3_nolog (Lisp_Object m)
       else
 	clear_message (true, true);
 
-      do_pending_window_change (0);
-      echo_area_display (1);
-      do_pending_window_change (0);
+      do_pending_window_change (false);
+      echo_area_display (true);
+      do_pending_window_change (false);
       if (FRAME_TERMINAL (f)->frame_up_to_date_hook)
 	(*FRAME_TERMINAL (f)->frame_up_to_date_hook) (f);
     }
@@ -10306,30 +10244,16 @@ message1_nolog (const char *m)
    which gets replaced with STRING.  */
 
 void
-message_with_string (const char *m, Lisp_Object string, int log)
+message_with_string (const char *m, Lisp_Object string, bool log)
 {
   CHECK_STRING (string);
 
+  bool need_message;
   if (noninteractive)
-    {
-      if (m)
-	{
-	  /* ENCODE_SYSTEM below can GC and/or relocate the Lisp
-	     String whose data pointer might be passed to us in M.  So
-	     we use a local copy.  */
-	  char *fmt = xstrdup (m);
-
-	  if (noninteractive_need_newline)
-	    putc ('\n', stderr);
-	  noninteractive_need_newline = 0;
-	  fprintf (stderr, fmt, SDATA (ENCODE_SYSTEM (string)));
-	  if (!cursor_in_echo_area)
-	    fprintf (stderr, "\n");
-	  fflush (stderr);
-	  xfree (fmt);
-	}
-    }
-  else if (INTERACTIVE)
+    need_message = !!m;
+  else if (!INTERACTIVE)
+    need_message = false;
+  else
     {
       /* The frame whose minibuffer we're going to display the message on.
 	 It may be larger than the selected frame, so we need
@@ -10345,37 +10269,39 @@ message_with_string (const char *m, Lisp_Object string, int log)
       /* Error messages get reported properly by cmd_error, so this must be
 	 just an informative message; if the frame hasn't really been
 	 initialized yet, just toss it.  */
-      if (f->glyphs_initialized_p)
+      need_message = f->glyphs_initialized_p;
+    }
+
+  if (need_message)
+    {
+      AUTO_STRING (fmt, m);
+      Lisp_Object msg = CALLN (Fformat_message, fmt, string);
+
+      if (noninteractive)
+	message_to_stderr (msg);
+      else
 	{
-	  Lisp_Object args[2], msg;
-	  struct gcpro gcpro1, gcpro2;
-
-	  args[0] = build_string (m);
-	  args[1] = msg = string;
-	  GCPRO2 (args[0], msg);
-	  gcpro1.nvars = 2;
-
-	  msg = Fformat (2, args);
-
 	  if (log)
 	    message3 (msg);
 	  else
 	    message3_nolog (msg);
 
-	  UNGCPRO;
-
 	  /* Print should start at the beginning of the message
 	     buffer next time.  */
-	  message_buf_print = 0;
+	  message_buf_print = false;
 	}
     }
 }
 
 
 /* Dump an informative message to the minibuf.  If M is 0, clear out
-   any existing message, and let the mini-buffer text show through.  */
+   any existing message, and let the mini-buffer text show through.
 
-static void
+   The message must be safe ASCII and the format must not contain ` or
+   '.  If your message and format do not fit into this category,
+   convert your arguments to Lisp objects and use Fmessage instead.  */
+
+static void ATTRIBUTE_FORMAT_PRINTF (1, 0)
 vmessage (const char *m, va_list ap)
 {
   if (noninteractive)
@@ -10384,9 +10310,9 @@ vmessage (const char *m, va_list ap)
 	{
 	  if (noninteractive_need_newline)
 	    putc ('\n', stderr);
-	  noninteractive_need_newline = 0;
+	  noninteractive_need_newline = false;
 	  vfprintf (stderr, m, ap);
-	  if (cursor_in_echo_area == 0)
+	  if (!cursor_in_echo_area)
 	    fprintf (stderr, "\n");
 	  fflush (stderr);
 	}
@@ -10413,18 +10339,20 @@ vmessage (const char *m, va_list ap)
 	    {
 	      ptrdiff_t len;
 	      ptrdiff_t maxsize = FRAME_MESSAGE_BUF_SIZE (f);
-	      char *message_buf = alloca (maxsize + 1);
+	      USE_SAFE_ALLOCA;
+	      char *message_buf = SAFE_ALLOCA (maxsize + 1);
 
 	      len = doprnt (message_buf, maxsize, m, 0, ap);
 
 	      message3 (make_string (message_buf, len));
+	      SAFE_FREE ();
 	    }
 	  else
 	    message1 (0);
 
 	  /* Print should start at the beginning of the message
 	     buffer next time.  */
-	  message_buf_print = 0;
+	  message_buf_print = false;
 	}
     }
 }
@@ -10437,24 +10365,6 @@ message (const char *m, ...)
   vmessage (m, ap);
   va_end (ap);
 }
-
-
-#if 0
-/* The non-logging version of message.  */
-
-void
-message_nolog (const char *m, ...)
-{
-  Lisp_Object old_log_max;
-  va_list ap;
-  va_start (ap, m);
-  old_log_max = Vmessage_log_max;
-  Vmessage_log_max = Qnil;
-  vmessage (m, ap);
-  Vmessage_log_max = old_log_max;
-  va_end (ap);
-}
-#endif
 
 
 /* Display the current message in the current mini-buffer.  This is
@@ -10520,27 +10430,27 @@ ensure_echo_area_buffers (void)
 
    Value is what FN returns.  */
 
-static int
+static bool
 with_echo_area_buffer (struct window *w, int which,
-		       int (*fn) (ptrdiff_t, Lisp_Object),
+		       bool (*fn) (ptrdiff_t, Lisp_Object),
 		       ptrdiff_t a1, Lisp_Object a2)
 {
   Lisp_Object buffer;
-  int this_one, the_other, clear_buffer_p, rc;
+  bool this_one, the_other, clear_buffer_p, rc;
   ptrdiff_t count = SPECPDL_INDEX ();
 
   /* If buffers aren't live, make new ones.  */
   ensure_echo_area_buffers ();
 
-  clear_buffer_p = 0;
+  clear_buffer_p = false;
 
   if (which == 0)
-    this_one = 0, the_other = 1;
+    this_one = false, the_other = true;
   else if (which > 0)
-    this_one = 1, the_other = 0;
+    this_one = true, the_other = false;
   else
     {
-      this_one = 0, the_other = 1;
+      this_one = false, the_other = true;
       clear_buffer_p = true;
 
       /* We need a fresh one in case the current echo buffer equals
@@ -10583,6 +10493,7 @@ with_echo_area_buffer (struct window *w, int which,
     {
       wset_buffer (w, buffer);
       set_marker_both (w->pointm, buffer, BEG, BEG_BYTE);
+      set_marker_both (w->old_pointm, buffer, BEG, BEG_BYTE);
     }
 
   bset_undo_list (current_buffer, Qt);
@@ -10621,7 +10532,7 @@ with_echo_area_buffer_unwind_data (struct window *w)
   Vwith_echo_area_save_vector = Qnil;
 
   if (NILP (vector))
-    vector = Fmake_vector (make_number (9), Qnil);
+    vector = Fmake_vector (make_number (11), Qnil);
 
   XSETBUFFER (tmp, current_buffer); ASET (vector, i, tmp); ++i;
   ASET (vector, i, Vdeactivate_mark); ++i;
@@ -10633,12 +10544,14 @@ with_echo_area_buffer_unwind_data (struct window *w)
       ASET (vector, i, w->contents); ++i;
       ASET (vector, i, make_number (marker_position (w->pointm))); ++i;
       ASET (vector, i, make_number (marker_byte_position (w->pointm))); ++i;
+      ASET (vector, i, make_number (marker_position (w->old_pointm))); ++i;
+      ASET (vector, i, make_number (marker_byte_position (w->old_pointm))); ++i;
       ASET (vector, i, make_number (marker_position (w->start))); ++i;
       ASET (vector, i, make_number (marker_byte_position (w->start))); ++i;
     }
   else
     {
-      int end = i + 6;
+      int end = i + 8;
       for (; i < end; ++i)
 	ASET (vector, i, Qnil);
     }
@@ -10670,9 +10583,12 @@ unwind_with_echo_area_buffer (Lisp_Object vector)
       set_marker_both (w->pointm, buffer,
 		       XFASTINT (AREF (vector, 5)),
 		       XFASTINT (AREF (vector, 6)));
-      set_marker_both (w->start, buffer,
+      set_marker_both (w->old_pointm, buffer,
 		       XFASTINT (AREF (vector, 7)),
 		       XFASTINT (AREF (vector, 8)));
+      set_marker_both (w->start, buffer,
+		       XFASTINT (AREF (vector, 9)),
+		       XFASTINT (AREF (vector, 10)));
     }
 
   Vwith_echo_area_save_vector = vector;
@@ -10680,10 +10596,10 @@ unwind_with_echo_area_buffer (Lisp_Object vector)
 
 
 /* Set up the echo area for use by print functions.  MULTIBYTE_P
-   non-zero means we will print multibyte.  */
+   means we will print multibyte.  */
 
 void
-setup_echo_area_for_printing (int multibyte_p)
+setup_echo_area_for_printing (bool multibyte_p)
 {
   /* If we can't find an echo area any more, exit.  */
   if (! FRAME_LIVE_P (XFRAME (selected_frame)))
@@ -10729,7 +10645,7 @@ setup_echo_area_for_printing (int multibyte_p)
 	}
 
       message_log_maybe_newline ();
-      message_buf_print = 1;
+      message_buf_print = true;
     }
   else
     {
@@ -10751,15 +10667,15 @@ setup_echo_area_for_printing (int multibyte_p)
 }
 
 
-/* Display an echo area message in window W.  Value is non-zero if W's
-   height is changed.  If display_last_displayed_message_p is
-   non-zero, display the message that was last displayed, otherwise
+/* Display an echo area message in window W.  Value is true if W's
+   height is changed.  If display_last_displayed_message_p,
+   display the message that was last displayed, otherwise
    display the current message.  */
 
-static int
+static bool
 display_echo_area (struct window *w)
 {
-  int i, no_message_p, window_height_changed_p;
+  bool no_message_p, window_height_changed_p;
 
   /* Temporarily disable garbage collections while displaying the echo
      area.  This is done because a GC can print a message itself.
@@ -10772,7 +10688,7 @@ display_echo_area (struct window *w)
      nevertheless because it resizes the window.  But we will have to
      reset the echo_area_buffer in question to nil at the end because
      with_echo_area_buffer will sets it to an empty buffer.  */
-  i = display_last_displayed_message_p ? 1 : 0;
+  bool i = display_last_displayed_message_p;
   no_message_p = NILP (echo_area_buffer[i]);
 
   window_height_changed_p
@@ -10792,21 +10708,25 @@ display_echo_area (struct window *w)
    contains the current echo area message in window W, a mini-window,
    a pointer to which is passed in A1.  A2..A4 are currently not used.
    Change the height of W so that all of the message is displayed.
-   Value is non-zero if height of W was changed.  */
+   Value is true if height of W was changed.  */
 
-static int
+static bool
 display_echo_area_1 (ptrdiff_t a1, Lisp_Object a2)
 {
   intptr_t i1 = a1;
   struct window *w = (struct window *) i1;
   Lisp_Object window;
   struct text_pos start;
-  int window_height_changed_p = 0;
+
+  /* We are about to enter redisplay without going through
+     redisplay_internal, so we need to forget these faces by hand
+     here.  */
+  forget_escape_and_glyphless_faces ();
 
   /* Do this before displaying, so that we have a large enough glyph
      matrix for the display.  If we can't get enough space for the
      whole text, display the last N lines.  That works by setting w->start.  */
-  window_height_changed_p = resize_mini_window (w, 0);
+  bool window_height_changed_p = resize_mini_window (w, false);
 
   /* Use the starting position chosen by resize_mini_window.  */
   SET_TEXT_POS_FROM_MARKER (start, w->start);
@@ -10832,8 +10752,8 @@ resize_echo_area_exactly (void)
     {
       struct window *w = XWINDOW (echo_area_window);
       Lisp_Object resize_exactly = (minibuf_level == 0 ? Qt : Qnil);
-      int resized_p = with_echo_area_buffer (w, 0, resize_mini_window_1,
-					 (intptr_t) w, resize_exactly);
+      bool resized_p = with_echo_area_buffer (w, 0, resize_mini_window_1,
+					      (intptr_t) w, resize_exactly);
       if (resized_p)
 	{
 	  windows_or_buffers_changed = 42;
@@ -10850,7 +10770,7 @@ resize_echo_area_exactly (void)
    size of the text displayed.  A3 and A4 are not used.  Value is what
    resize_mini_window returns.  */
 
-static int
+static bool
 resize_mini_window_1 (ptrdiff_t a1, Lisp_Object exactly)
 {
   intptr_t i1 = a1;
@@ -10867,13 +10787,13 @@ resize_mini_window_1 (ptrdiff_t a1, Lisp_Object exactly)
    to make the end of the contents appear.  This is particularly
    important for y-or-n-p, but seems desirable generally.
 
-   Value is non-zero if the window height has been changed.  */
+   Value is true if the window height has been changed.  */
 
-int
-resize_mini_window (struct window *w, int exact_p)
+bool
+resize_mini_window (struct window *w, bool exact_p)
 {
   struct frame *f = XFRAME (w->frame);
-  int window_height_changed_p = 0;
+  bool window_height_changed_p = false;
 
   eassert (MINI_WINDOW_P (w));
 
@@ -10889,12 +10809,12 @@ resize_mini_window (struct window *w, int exact_p)
      we are running fontification-functions.  We're running these
      functions with safe_call which binds inhibit-redisplay to t.  */
   if (!NILP (Vinhibit_redisplay))
-    return 0;
+    return false;
 
   /* Nil means don't try to resize.  */
   if (NILP (Vresize_mini_windows)
       || (FRAME_X_P (f) && FRAME_X_OUTPUT (f) == NULL))
-    return 0;
+    return false;
 
   if (!FRAME_MINIBUF_ONLY_P (f))
     {
@@ -10959,8 +10879,8 @@ resize_mini_window (struct window *w, int exact_p)
 	    {
 	      int old_height = WINDOW_PIXEL_HEIGHT (w);
 
-	      FRAME_WINDOWS_FROZEN (f) = 1;
-	      grow_mini_window (w, height - WINDOW_PIXEL_HEIGHT (w), 1);
+	      FRAME_WINDOWS_FROZEN (f) = true;
+	      grow_mini_window (w, height - WINDOW_PIXEL_HEIGHT (w), true);
 	      window_height_changed_p = WINDOW_PIXEL_HEIGHT (w) != old_height;
 	    }
 	  else if (height < WINDOW_PIXEL_HEIGHT (w)
@@ -10968,8 +10888,8 @@ resize_mini_window (struct window *w, int exact_p)
 	    {
 	      int old_height = WINDOW_PIXEL_HEIGHT (w);
 
-	      FRAME_WINDOWS_FROZEN (f) = 0;
-	      shrink_mini_window (w, 1);
+	      FRAME_WINDOWS_FROZEN (f) = false;
+	      shrink_mini_window (w, true);
 	      window_height_changed_p = WINDOW_PIXEL_HEIGHT (w) != old_height;
 	    }
 	}
@@ -10980,21 +10900,21 @@ resize_mini_window (struct window *w, int exact_p)
 	    {
 	      int old_height = WINDOW_PIXEL_HEIGHT (w);
 
-	      FRAME_WINDOWS_FROZEN (f) = 1;
-	      grow_mini_window (w, height - WINDOW_PIXEL_HEIGHT (w), 1);
+	      FRAME_WINDOWS_FROZEN (f) = true;
+	      grow_mini_window (w, height - WINDOW_PIXEL_HEIGHT (w), true);
 	      window_height_changed_p = WINDOW_PIXEL_HEIGHT (w) != old_height;
 	    }
 	  else if (height < WINDOW_PIXEL_HEIGHT (w))
 	    {
 	      int old_height = WINDOW_PIXEL_HEIGHT (w);
 
-	      FRAME_WINDOWS_FROZEN (f) = 0;
-	      shrink_mini_window (w, 1);
+	      FRAME_WINDOWS_FROZEN (f) = false;
+	      shrink_mini_window (w, true);
 
 	      if (height)
 		{
-		  FRAME_WINDOWS_FROZEN (f) = 1;
-		  grow_mini_window (w, height - WINDOW_PIXEL_HEIGHT (w), 1);
+		  FRAME_WINDOWS_FROZEN (f) = true;
+		  grow_mini_window (w, height - WINDOW_PIXEL_HEIGHT (w), true);
 		}
 
 	      window_height_changed_p = WINDOW_PIXEL_HEIGHT (w) != old_height;
@@ -11031,22 +10951,22 @@ current_message (void)
 }
 
 
-static int
+static bool
 current_message_1 (ptrdiff_t a1, Lisp_Object a2)
 {
   intptr_t i1 = a1;
   Lisp_Object *msg = (Lisp_Object *) i1;
 
   if (Z > BEG)
-    *msg = make_buffer_string (BEG, Z, 1);
+    *msg = make_buffer_string (BEG, Z, true);
   else
     *msg = Qnil;
-  return 0;
+  return false;
 }
 
 
 /* Push the current message on Vmessage_stack for later restoration
-   by restore_message.  Value is non-zero if the current message isn't
+   by restore_message.  Value is true if the current message isn't
    empty.  This is a relatively infrequent operation, so it's not
    worth optimizing.  */
 
@@ -11117,14 +11037,14 @@ truncate_echo_area (ptrdiff_t nchars)
 /* Helper function for truncate_echo_area.  Truncate the current
    message to at most NCHARS characters.  */
 
-static int
+static bool
 truncate_message_1 (ptrdiff_t nchars, Lisp_Object a2)
 {
   if (BEG + nchars < Z)
     del_range (BEG + nchars, Z);
   if (Z == BEG)
     echo_area_buffer[0] = Qnil;
-  return 0;
+  return false;
 }
 
 /* Set the current message to STRING.  */
@@ -11137,8 +11057,8 @@ set_message (Lisp_Object string)
   message_enable_multibyte = STRING_MULTIBYTE (string);
 
   with_echo_area_buffer (0, -1, set_message_1, 0, string);
-  message_buf_print = 0;
-  help_echo_showing_p = 0;
+  message_buf_print = false;
+  help_echo_showing_p = false;
 
   if (STRINGP (Vdebug_on_message)
       && STRINGP (string)
@@ -11151,7 +11071,7 @@ set_message (Lisp_Object string)
    argument has the same meaning as for set_message.
    This function is called with the echo area buffer being current.  */
 
-static int
+static bool
 set_message_1 (ptrdiff_t a1, Lisp_Object string)
 {
   eassert (STRINGP (string));
@@ -11171,15 +11091,14 @@ set_message_1 (ptrdiff_t a1, Lisp_Object string)
   /* This function takes care of single/multibyte conversion.
      We just have to ensure that the echo area buffer has the right
      setting of enable_multibyte_characters.  */
-  insert_from_string (string, 0, 0, SCHARS (string), SBYTES (string), 1);
+  insert_from_string (string, 0, 0, SCHARS (string), SBYTES (string), true);
 
-  return 0;
+  return false;
 }
 
 
-/* Clear messages.  CURRENT_P non-zero means clear the current
-   message.  LAST_DISPLAYED_P non-zero means clear the message
-   last displayed.  */
+/* Clear messages.  CURRENT_P means clear the current message.
+   LAST_DISPLAYED_P means clear the message last displayed.  */
 
 void
 clear_message (bool current_p, bool last_displayed_p)
@@ -11193,7 +11112,7 @@ clear_message (bool current_p, bool last_displayed_p)
   if (last_displayed_p)
     echo_area_buffer[1] = Qnil;
 
-  message_buf_print = 0;
+  message_buf_print = false;
 }
 
 /* Clear garbaged frames.
@@ -11233,17 +11152,16 @@ clear_garbaged_frames (void)
 }
 
 
-/* Redisplay the echo area of the selected frame.  If UPDATE_FRAME_P
-   is non-zero update selected_frame.  Value is non-zero if the
-   mini-windows height has been changed.  */
+/* Redisplay the echo area of the selected frame.  If UPDATE_FRAME_P, update
+   selected_frame.  */
 
-static int
-echo_area_display (int update_frame_p)
+static void
+echo_area_display (bool update_frame_p)
 {
   Lisp_Object mini_window;
   struct window *w;
   struct frame *f;
-  int window_height_changed_p = 0;
+  bool window_height_changed_p = false;
   struct frame *sf = SELECTED_FRAME ();
 
   mini_window = FRAME_MINIBUF_WINDOW (sf);
@@ -11252,14 +11170,14 @@ echo_area_display (int update_frame_p)
 
   /* Don't display if frame is invisible or not yet initialized.  */
   if (!FRAME_VISIBLE_P (f) || !f->glyphs_initialized_p)
-    return 0;
+    return;
 
 #ifdef HAVE_WINDOW_SYSTEM
   /* When Emacs starts, selected_frame may be the initial terminal
      frame.  If we let this through, a message would be displayed on
      the terminal.  */
   if (FRAME_INITIAL_P (XFRAME (selected_frame)))
-    return 0;
+    return;
 #endif /* HAVE_WINDOW_SYSTEM */
 
   /* Redraw garbaged frames.  */
@@ -11297,7 +11215,7 @@ echo_area_display (int update_frame_p)
 		 pending input.  */
 	      ptrdiff_t count = SPECPDL_INDEX ();
 	      specbind (Qredisplay_dont_pause, Qt);
-	      windows_or_buffers_changed = 44;
+	      fset_redisplay (f);
 	      redisplay_internal ();
 	      unbind_to (count, Qnil);
 	    }
@@ -11306,11 +11224,11 @@ echo_area_display (int update_frame_p)
 	      /* Window configuration is the same as before.
 		 Can do with a display update of the echo area,
 		 unless we displayed some mode lines.  */
-	      update_single_window (w, 1);
+	      update_single_window (w);
 	      flush_frame (f);
 	    }
 	  else
-	    update_frame (f, 1, 1);
+	    update_frame (f, true, true);
 
 	  /* If cursor is in the echo area, make sure that the next
 	     redisplay displays the minibuffer, so that the cursor will
@@ -11333,24 +11251,33 @@ echo_area_display (int update_frame_p)
   if (EQ (mini_window, selected_window))
     CHARPOS (this_line_start_pos) = 0;
 
-  return window_height_changed_p;
+  if (window_height_changed_p)
+    {
+      fset_redisplay (f);
+
+      /* If window configuration was changed, frames may have been
+	 marked garbaged.  Clear them or we will experience
+	 surprises wrt scrolling.
+	 FIXME: How/why/when?  */
+      clear_garbaged_frames ();
+    }
 }
 
-/* Nonzero if W's buffer was changed but not saved.  */
+/* True if W's buffer was changed but not saved.  */
 
-static int
+static bool
 window_buffer_changed (struct window *w)
 {
   struct buffer *b = XBUFFER (w->contents);
 
   eassert (BUFFER_LIVE_P (b));
 
-  return (((BUF_SAVE_MODIFF (b) < BUF_MODIFF (b)) != w->last_had_star));
+  return (BUF_SAVE_MODIFF (b) < BUF_MODIFF (b)) != w->last_had_star;
 }
 
-/* Nonzero if W has %c in its mode line and mode line should be updated.  */
+/* True if W has %c in its mode line and mode line should be updated.  */
 
-static int
+static bool
 mode_line_update_needed (struct window *w)
 {
   return (w->column_number_displayed != -1
@@ -11358,7 +11285,7 @@ mode_line_update_needed (struct window *w)
 	  && (w->column_number_displayed != current_column ()));
 }
 
-/* Nonzero if window start of W is frozen and may not be changed during
+/* True if window start of W is frozen and may not be changed during
    redisplay.  */
 
 static bool
@@ -11370,17 +11297,17 @@ window_frozen_p (struct window *w)
 
       XSETWINDOW (window, w);
       if (MINI_WINDOW_P (w))
-	return 0;
+	return false;
       else if (EQ (window, selected_window))
-	return 0;
+	return false;
       else if (MINI_WINDOW_P (XWINDOW (selected_window))
 	       && EQ (window, Vminibuf_scroll_window))
 	/* This special window can't be frozen too.  */
-	return 0;
+	return false;
       else
-	return 1;
+	return true;
     }
-  return 0;
+  return false;
 }
 
 /***********************************************************************
@@ -11428,7 +11355,7 @@ static Lisp_Object
 format_mode_line_unwind_data (struct frame *target_frame,
 			      struct buffer *obuf,
 			      Lisp_Object owin,
-			      int save_proptrans)
+			      bool save_proptrans)
 {
   Lisp_Object vector, tmp;
 
@@ -11613,7 +11540,7 @@ x_consider_frame_title (Lisp_Object frame)
 	 mode_line_noprop_buf; then display the title.  */
       record_unwind_protect (unwind_format_mode_line,
 			     format_mode_line_unwind_data
-			       (f, current_buffer, selected_window, 0));
+			       (f, current_buffer, selected_window, false));
 
       Fselect_window (f->selected_window, Qt);
       set_buffer_internal_1
@@ -11624,7 +11551,7 @@ x_consider_frame_title (Lisp_Object frame)
       title_start = MODE_LINE_NOPROP_LEN (0);
       init_iterator (&it, XWINDOW (f->selected_window), -1, -1,
 		     NULL, DEFAULT_FACE_ID);
-      display_mode_element (&it, 0, -1, -1, fmt, Qnil, 0);
+      display_mode_element (&it, 0, -1, -1, fmt, Qnil, false);
       len = MODE_LINE_NOPROP_LEN (title_start);
       title = mode_line_noprop_buf + title_start;
       unbind_to (count, Qnil);
@@ -11648,7 +11575,7 @@ x_consider_frame_title (Lisp_Object frame)
 			      Menu Bars
  ***********************************************************************/
 
-/* Non-zero if we will not redisplay all visible windows.  */
+/* True if we will not redisplay all visible windows.  */
 #define REDISPLAY_SOME_P()				\
   ((windows_or_buffers_changed == 0			\
     || windows_or_buffers_changed == REDISPLAY_SOME)	\
@@ -11663,7 +11590,6 @@ prepare_menu_bars (void)
 {
   bool all_windows = windows_or_buffers_changed || update_mode_lines;
   bool some_windows = REDISPLAY_SOME_P ();
-  struct gcpro gcpro1, gcpro2;
   Lisp_Object tooltip_frame;
 
 #ifdef HAVE_WINDOW_SYSTEM
@@ -11736,9 +11662,9 @@ prepare_menu_bars (void)
     {
       Lisp_Object tail, frame;
       ptrdiff_t count = SPECPDL_INDEX ();
-      /* 1 means that update_menu_bar has run its hooks
+      /* True means that update_menu_bar has run its hooks
 	 so any further calls to update_menu_bar shouldn't do so again.  */
-      int menu_bar_hooks_run = 0;
+      bool menu_bar_hooks_run = false;
 
       record_unwind_save_match_data ();
 
@@ -11764,9 +11690,8 @@ prepare_menu_bars (void)
 	      Lisp_Object functions;
 
 	      /* Clear flag first in case we get an error below.  */
-	      FRAME_WINDOW_SIZES_CHANGED (f) = 0;
+	      FRAME_WINDOW_SIZES_CHANGED (f) = false;
 	      functions = Vwindow_size_change_functions;
-	      GCPRO2 (tail, functions);
 
 	      while (CONSP (functions))
 		{
@@ -11774,21 +11699,12 @@ prepare_menu_bars (void)
 		    call1 (XCAR (functions), frame);
 		  functions = XCDR (functions);
 		}
-	      UNGCPRO;
 	    }
 
-	  GCPRO1 (tail);
-	  menu_bar_hooks_run = update_menu_bar (f, 0, menu_bar_hooks_run);
+	  menu_bar_hooks_run = update_menu_bar (f, false, menu_bar_hooks_run);
 #ifdef HAVE_WINDOW_SYSTEM
-	  update_tool_bar (f, 0);
+	  update_tool_bar (f, false);
 #endif
-#ifdef HAVE_NS
-          if (windows_or_buffers_changed
-	      && FRAME_NS_P (f))
-            ns_set_doc_edited
-	      (f, Fbuffer_modified_p (XWINDOW (f->selected_window)->contents));
-#endif
-	  UNGCPRO;
 	}
 
       unbind_to (count, Qnil);
@@ -11796,9 +11712,9 @@ prepare_menu_bars (void)
   else
     {
       struct frame *sf = SELECTED_FRAME ();
-      update_menu_bar (sf, 1, 0);
+      update_menu_bar (sf, true, false);
 #ifdef HAVE_WINDOW_SYSTEM
-      update_tool_bar (sf, 1);
+      update_tool_bar (sf, true);
 #endif
     }
 }
@@ -11808,18 +11724,18 @@ prepare_menu_bars (void)
    before we start to fill in any display lines, because it can call
    eval.
 
-   If SAVE_MATCH_DATA is non-zero, we must save and restore it here.
+   If SAVE_MATCH_DATA, we must save and restore it here.
 
-   If HOOKS_RUN is 1, that means a previous call to update_menu_bar
+   If HOOKS_RUN, a previous call to update_menu_bar
    already ran the menu bar hooks for this redisplay, so there
    is no need to run them again.  The return value is the
    updated value of this flag, to pass to the next call.  */
 
-static int
-update_menu_bar (struct frame *f, int save_match_data, int hooks_run)
+static bool
+update_menu_bar (struct frame *f, bool save_match_data, bool hooks_run)
 {
   Lisp_Object window;
-  register struct window *w;
+  struct window *w;
 
   /* If called recursively during a menu update, do nothing.  This can
      happen when, for instance, an activate-menubar-hook causes a
@@ -11879,7 +11795,7 @@ update_menu_bar (struct frame *f, int save_match_data, int hooks_run)
 
 	      safe_run_hooks (Qmenu_bar_update_hook);
 
-	      hooks_run = 1;
+	      hooks_run = true;
 	    }
 
 	  XSETFRAME (Vmenu_updating_frame, f);
@@ -11895,16 +11811,16 @@ update_menu_bar (struct frame *f, int save_match_data, int hooks_run)
                  the selected frame should be allowed to set it.  */
               if (f == SELECTED_FRAME ())
 #endif
-		set_frame_menubar (f, 0, 0);
+		set_frame_menubar (f, false, false);
 	    }
 	  else
 	    /* On a terminal screen, the menu bar is an ordinary screen
 	       line, and this makes it get updated.  */
-	    w->update_mode_line = 1;
+	    w->update_mode_line = true;
 #else /* ! (USE_X_TOOLKIT || HAVE_NTGUI || HAVE_NS || USE_GTK) */
 	  /* In the non-toolkit version, the menu bar is an ordinary screen
 	     line, and this makes it get updated.  */
-	  w->update_mode_line = 1;
+	  w->update_mode_line = true;
 #endif /* ! (USE_X_TOOLKIT || HAVE_NTGUI || HAVE_NS || USE_GTK) */
 
 	  unbind_to (count, Qnil);
@@ -11920,11 +11836,6 @@ update_menu_bar (struct frame *f, int save_match_data, int hooks_run)
  ***********************************************************************/
 
 #ifdef HAVE_WINDOW_SYSTEM
-
-/* Tool-bar item index of the item on which a mouse button was pressed
-   or -1.  */
-
-int last_tool_bar_item;
 
 /* Select `frame' temporarily without running all the code in
    do_switch_frame.
@@ -11942,17 +11853,17 @@ fast_set_selected_frame (Lisp_Object frame)
 
 /* Update the tool-bar item list for frame F.  This has to be done
    before we start to fill in any display lines.  Called from
-   prepare_menu_bars.  If SAVE_MATCH_DATA is non-zero, we must save
+   prepare_menu_bars.  If SAVE_MATCH_DATA, we must save
    and restore it here.  */
 
 static void
-update_tool_bar (struct frame *f, int save_match_data)
+update_tool_bar (struct frame *f, bool save_match_data)
 {
 #if defined (USE_GTK) || defined (HAVE_NS)
-  int do_update = FRAME_EXTERNAL_TOOL_BAR (f);
+  bool do_update = FRAME_EXTERNAL_TOOL_BAR (f);
 #else
-  int do_update = (WINDOWP (f->tool_bar_window)
-		   && WINDOW_PIXEL_HEIGHT (XWINDOW (f->tool_bar_window)) > 0);
+  bool do_update = (WINDOWP (f->tool_bar_window)
+		    && WINDOW_TOTAL_LINES (XWINDOW (f->tool_bar_window)) > 0);
 #endif
 
   if (do_update)
@@ -11979,7 +11890,6 @@ update_tool_bar (struct frame *f, int save_match_data)
 	  ptrdiff_t count = SPECPDL_INDEX ();
 	  Lisp_Object frame, new_tool_bar;
           int new_n_tool_bar;
-	  struct gcpro gcpro1;
 
 	  /* Set current_buffer to the buffer of the selected
 	     window of the frame, so that we get the right local
@@ -11996,8 +11906,6 @@ update_tool_bar (struct frame *f, int save_match_data)
 	      specbind (Qoverriding_terminal_local_map, Qnil);
 	      specbind (Qoverriding_local_map, Qnil);
 	    }
-
-	  GCPRO1 (new_tool_bar);
 
 	  /* We must temporarily set the selected frame to this frame
 	     before calling tool_bar_items, because the calculation of
@@ -12026,11 +11934,9 @@ update_tool_bar (struct frame *f, int save_match_data)
               block_input ();
               fset_tool_bar_items (f, new_tool_bar);
               f->n_tool_bar_items = new_n_tool_bar;
-              w->update_mode_line = 1;
+              w->update_mode_line = true;
               unblock_input ();
             }
-
-	  UNGCPRO;
 
 	  unbind_to (count, Qnil);
 	  set_buffer_internal_1 (prev);
@@ -12048,11 +11954,9 @@ static void
 build_desired_tool_bar_string (struct frame *f)
 {
   int i, size, size_needed;
-  struct gcpro gcpro1, gcpro2, gcpro3;
-  Lisp_Object image, plist, props;
+  Lisp_Object image, plist;
 
-  image = plist = props = Qnil;
-  GCPRO3 (image, plist, props);
+  image = plist = Qnil;
 
   /* Prepare F->desired_tool_bar_string.  If we can reuse it, do so.
      Otherwise, make a new string.  */
@@ -12071,7 +11975,7 @@ build_desired_tool_bar_string (struct frame *f)
       (f, Fmake_string (make_number (size_needed), make_number (' ')));
   else
     {
-      props = list4 (Qdisplay, Qnil, Qmenu_item, Qnil);
+      AUTO_LIST4 (props, Qdisplay, Qnil, Qmenu_item, Qnil);
       Fremove_text_properties (make_number (0), make_number (size),
 			       props, f->desired_tool_bar_string);
     }
@@ -12084,8 +11988,8 @@ build_desired_tool_bar_string (struct frame *f)
 #define PROP(IDX) \
   AREF (f->tool_bar_items, i * TOOL_BAR_ITEM_NSLOTS + (IDX))
 
-      int enabled_p = !NILP (PROP (TOOL_BAR_ITEM_ENABLED_P));
-      int selected_p = !NILP (PROP (TOOL_BAR_ITEM_SELECTED_P));
+      bool enabled_p = !NILP (PROP (TOOL_BAR_ITEM_ENABLED_P));
+      bool selected_p = !NILP (PROP (TOOL_BAR_ITEM_SELECTED_P));
       int hmargin, vmargin, relief, idx, end;
 
       /* If image is a vector, choose the image according to the
@@ -12184,8 +12088,8 @@ build_desired_tool_bar_string (struct frame *f)
 	 the start of this item's properties in the tool-bar items
 	 vector.  */
       image = Fcons (Qimage, plist);
-      props = list4 (Qdisplay, image,
-		     Qmenu_item, make_number (i * TOOL_BAR_ITEM_NSLOTS));
+      AUTO_LIST4 (props, Qdisplay, image, Qmenu_item,
+		  make_number (i * TOOL_BAR_ITEM_NSLOTS));
 
       /* Let the last image hide all remaining spaces in the tool bar
          string.  The string can be longer than needed when we reuse a
@@ -12198,8 +12102,6 @@ build_desired_tool_bar_string (struct frame *f)
 			    props, f->desired_tool_bar_string);
 #undef PROP
     }
-
-  UNGCPRO;
 }
 
 
@@ -12229,7 +12131,7 @@ display_tool_bar_line (struct it *it, int height)
 
   /* Note that this isn't made use of if the face hasn't a box,
      so there's no need to check the face here.  */
-  it->start_of_box_run_p = 1;
+  it->start_of_box_run_p = true;
 
   while (it->current_x < max_x)
     {
@@ -12281,7 +12183,7 @@ display_tool_bar_line (struct it *it, int height)
       if (ITERATOR_AT_END_OF_LINE_P (it))
 	break;
 
-      set_iterator_to_next (it, 1);
+      set_iterator_to_next (it, true);
     }
 
  out:;
@@ -12300,9 +12202,9 @@ display_tool_bar_line (struct it *it, int height)
 
   extend_face_to_end_of_line (it);
   last = row->glyphs[TEXT_AREA] + row->used[TEXT_AREA] - 1;
-  last->right_box_line_p = 1;
+  last->right_box_line_p = true;
   if (last == row->glyphs[TEXT_AREA])
-    last->left_box_line_p = 1;
+    last->left_box_line_p = true;
 
   /* Make line the desired height and center it vertically.  */
   if ((height -= it->max_ascent + it->max_descent) > 0)
@@ -12324,10 +12226,10 @@ display_tool_bar_line (struct it *it, int height)
       row->extra_line_spacing = 0;
     }
 
-  row->full_width_p = 1;
-  row->continued_p = 0;
-  row->truncated_on_left_p = 0;
-  row->truncated_on_right_p = 0;
+  row->full_width_p = true;
+  row->continued_p = false;
+  row->truncated_on_left_p = false;
+  row->truncated_on_right_p = false;
 
   it->current_x = it->hpos = 0;
   it->current_y += row->height;
@@ -12336,16 +12238,9 @@ display_tool_bar_line (struct it *it, int height)
 }
 
 
-/* Max tool-bar height.  Basically, this is what makes all other windows
-   disappear when the frame gets too small.  Rethink this!  */
-
-#define MAX_FRAME_TOOL_BAR_HEIGHT(f) \
-  ((FRAME_LINE_HEIGHT (f) * FRAME_LINES (f)))
-
 /* Value is the number of pixels needed to make all tool-bar items of
    frame F visible.  The actual number of glyph rows needed is
    returned in *N_ROWS if non-NULL.  */
-
 static int
 tool_bar_height (struct frame *f, int *n_rows, bool pixelwise)
 {
@@ -12359,6 +12254,7 @@ tool_bar_height (struct frame *f, int *n_rows, bool pixelwise)
   /* Initialize an iterator for iteration over
      F->desired_tool_bar_string in the tool-bar window of frame F.  */
   init_iterator (&it, w, -1, -1, temp_row, TOOL_BAR_FACE_ID);
+  temp_row->reversed_p = false;
   it.first_visible_x = 0;
   it.last_visible_x = WINDOW_PIXEL_WIDTH (w);
   reseat_to_string (&it, NULL, f->desired_tool_bar_string, 0, 0, 0, -1);
@@ -12384,11 +12280,6 @@ tool_bar_height (struct frame *f, int *n_rows, bool pixelwise)
 
 #endif /* !USE_GTK && !HAVE_NS */
 
-#if defined USE_GTK || defined HAVE_NS
-EXFUN (Ftool_bar_height, 2) ATTRIBUTE_CONST;
-EXFUN (Ftool_bar_lines_needed, 1) ATTRIBUTE_CONST;
-#endif
-
 DEFUN ("tool-bar-height", Ftool_bar_height, Stool_bar_height,
        0, 2, 0,
        doc: /* Return the number of lines occupied by the tool bar of FRAME.
@@ -12404,11 +12295,11 @@ PIXELWISE non-nil means return the height of the tool bar in pixels.  */)
   if (WINDOWP (f->tool_bar_window)
       && WINDOW_PIXEL_HEIGHT (XWINDOW (f->tool_bar_window)) > 0)
     {
-      update_tool_bar (f, 1);
+      update_tool_bar (f, true);
       if (f->n_tool_bar_items)
 	{
 	  build_desired_tool_bar_string (f);
-	  height = tool_bar_height (f, NULL, NILP (pixelwise) ? 0 : 1);
+	  height = tool_bar_height (f, NULL, !NILP (pixelwise));
 	}
     }
 #endif
@@ -12417,17 +12308,16 @@ PIXELWISE non-nil means return the height of the tool bar in pixels.  */)
 }
 
 
-/* Display the tool-bar of frame F.  Value is non-zero if tool-bar's
+/* Display the tool-bar of frame F.  Value is true if tool-bar's
    height should be changed.  */
-
-static int
+static bool
 redisplay_tool_bar (struct frame *f)
 {
 #if defined (USE_GTK) || defined (HAVE_NS)
 
   if (FRAME_EXTERNAL_TOOL_BAR (f))
     update_frame_tool_bar (f);
-  return 0;
+  return false;
 
 #else /* !USE_GTK && !HAVE_NS */
 
@@ -12441,14 +12331,15 @@ redisplay_tool_bar (struct frame *f)
      can turn off tool-bars by specifying tool-bar-lines zero.  */
   if (!WINDOWP (f->tool_bar_window)
       || (w = XWINDOW (f->tool_bar_window),
-          WINDOW_PIXEL_HEIGHT (w) == 0))
-    return 0;
+          WINDOW_TOTAL_LINES (w) == 0))
+    return false;
 
   /* Set up an iterator for the tool-bar window.  */
   init_iterator (&it, w, -1, -1, w->desired_matrix->rows, TOOL_BAR_FACE_ID);
   it.first_visible_x = 0;
   it.last_visible_x = WINDOW_PIXEL_WIDTH (w);
   row = it.glyph_row;
+  row->reversed_p = false;
 
   /* Build a string that represents the contents of the tool-bar.  */
   build_desired_tool_bar_string (f);
@@ -12464,22 +12355,16 @@ redisplay_tool_bar (struct frame *f)
 
   if (f->n_tool_bar_rows == 0)
     {
-      int new_height = tool_bar_height (f, &f->n_tool_bar_rows, 1);
+      int new_height = tool_bar_height (f, &f->n_tool_bar_rows, true);
 
       if (new_height != WINDOW_PIXEL_HEIGHT (w))
 	{
-	  Lisp_Object frame;
-	  int new_lines = ((new_height + FRAME_LINE_HEIGHT (f) - 1)
-			   / FRAME_LINE_HEIGHT (f));
-
-	  XSETFRAME (frame, f);
-	  Fmodify_frame_parameters (frame,
-				    list1 (Fcons (Qtool_bar_lines,
-						  make_number (new_lines))));
+	  x_change_tool_bar_height (f, new_height);
+	  frame_default_tool_bar_height = new_height;
 	  /* Always do that now.  */
 	  clear_glyph_matrix (w->desired_matrix);
-	  f->fonts_changed = 1;
-	  return 1;
+	  f->fonts_changed = true;
+	  return true;
 	}
     }
 
@@ -12523,20 +12408,17 @@ redisplay_tool_bar (struct frame *f)
 
   /* It doesn't make much sense to try scrolling in the tool-bar
      window, so don't do it.  */
-  w->desired_matrix->no_scrolling_p = 1;
-  w->must_be_updated_p = 1;
+  w->desired_matrix->no_scrolling_p = true;
+  w->must_be_updated_p = true;
 
   if (!NILP (Vauto_resize_tool_bars))
     {
-      /* Do we really allow the toolbar to occupy the whole frame?  */
-      int max_tool_bar_height = MAX_FRAME_TOOL_BAR_HEIGHT (f);
-      int change_height_p = 0;
+      bool change_height_p = true;
 
       /* If we couldn't display everything, change the tool-bar's
 	 height if there is room for more.  */
-      if (IT_STRING_CHARPOS (it) < it.end_charpos
-	  && it.current_y < max_tool_bar_height)
-	change_height_p = 1;
+      if (IT_STRING_CHARPOS (it) < it.end_charpos)
+	change_height_p = true;
 
       /* We subtract 1 because display_tool_bar_line advances the
 	 glyph_row pointer before returning to its caller.  We want to
@@ -12549,66 +12431,42 @@ redisplay_tool_bar (struct frame *f)
 	 FRAME_LINE_HEIGHT, change the tool-bar's height.  */
       if (!MATRIX_ROW_DISPLAYS_TEXT_P (row)
 	  && row->height >= FRAME_LINE_HEIGHT (f))
-	change_height_p = 1;
+	change_height_p = true;
 
       /* If row displays tool-bar items, but is partially visible,
 	 change the tool-bar's height.  */
       if (MATRIX_ROW_DISPLAYS_TEXT_P (row)
-	  && MATRIX_ROW_BOTTOM_Y (row) > it.last_visible_y
-	  && MATRIX_ROW_BOTTOM_Y (row) < max_tool_bar_height)
-	change_height_p = 1;
+	  && MATRIX_ROW_BOTTOM_Y (row) > it.last_visible_y)
+	change_height_p = true;
 
       /* Resize windows as needed by changing the `tool-bar-lines'
 	 frame parameter.  */
       if (change_height_p)
 	{
-	  Lisp_Object frame;
 	  int nrows;
-	  int new_height = tool_bar_height (f, &nrows, 1);
+	  int new_height = tool_bar_height (f, &nrows, true);
 
 	  change_height_p = ((EQ (Vauto_resize_tool_bars, Qgrow_only)
 			      && !f->minimize_tool_bar_window_p)
 			     ? (new_height > WINDOW_PIXEL_HEIGHT (w))
 			     : (new_height != WINDOW_PIXEL_HEIGHT (w)));
-	  f->minimize_tool_bar_window_p = 0;
+	  f->minimize_tool_bar_window_p = false;
 
 	  if (change_height_p)
 	    {
-	      /* Current size of the tool-bar window in canonical line
-		 units.  */
-	      int old_lines = WINDOW_TOTAL_LINES (w);
-	      /* Required size of the tool-bar window in canonical
-		 line units. */
-	      int new_lines = ((new_height + FRAME_LINE_HEIGHT (f) - 1)
-			       / FRAME_LINE_HEIGHT (f));
-	      /* Maximum size of the tool-bar window in canonical line
-		 units that this frame can allow. */
-	      int max_lines =
-		WINDOW_TOTAL_LINES (XWINDOW (FRAME_ROOT_WINDOW (f))) - 1;
+	      x_change_tool_bar_height (f, new_height);
+	      frame_default_tool_bar_height = new_height;
+	      clear_glyph_matrix (w->desired_matrix);
+	      f->n_tool_bar_rows = nrows;
+	      f->fonts_changed = true;
 
-	      /* Don't try to change the tool-bar window size and set
-		 the fonts_changed flag unless really necessary.  That
-		 flag causes redisplay to give up and retry
-		 redisplaying the frame from scratch, so setting it
-		 unnecessarily can lead to nasty redisplay loops.  */
-	      if (new_lines <= max_lines
-		  && eabs (new_lines - old_lines) >= 1)
-		{
-		  XSETFRAME (frame, f);
-		  Fmodify_frame_parameters (frame,
-					    list1 (Fcons (Qtool_bar_lines,
-							  make_number (new_lines))));
-		  clear_glyph_matrix (w->desired_matrix);
-		  f->n_tool_bar_rows = nrows;
-		  f->fonts_changed = 1;
-		  return 1;
-		}
+	      return true;
 	    }
 	}
     }
 
-  f->minimize_tool_bar_window_p = 0;
-  return 0;
+  f->minimize_tool_bar_window_p = false;
+  return false;
 
 #endif /* USE_GTK || HAVE_NS */
 }
@@ -12617,14 +12475,13 @@ redisplay_tool_bar (struct frame *f)
 
 /* Get information about the tool-bar item which is displayed in GLYPH
    on frame F.  Return in *PROP_IDX the index where tool-bar item
-   properties start in F->tool_bar_items.  Value is zero if
+   properties start in F->tool_bar_items.  Value is false if
    GLYPH doesn't display a tool-bar item.  */
 
-static int
+static bool
 tool_bar_item_info (struct frame *f, struct glyph *glyph, int *prop_idx)
 {
   Lisp_Object prop;
-  int success_p;
   int charpos;
 
   /* This function can be called asynchronously, which means we must
@@ -12638,15 +12495,10 @@ tool_bar_item_info (struct frame *f, struct glyph *glyph, int *prop_idx)
      F->tool_bar_items.  */
   prop = Fget_text_property (make_number (charpos),
 			     Qmenu_item, f->current_tool_bar_string);
-  if (INTEGERP (prop))
-    {
-      *prop_idx = XINT (prop);
-      success_p = 1;
-    }
-  else
-    success_p = 0;
-
-  return success_p;
+  if (! INTEGERP (prop))
+    return false;
+  *prop_idx = XINT (prop);
+  return true;
 }
 
 
@@ -12695,12 +12547,12 @@ get_tool_bar_item (struct frame *f, int x, int y, struct glyph **glyph,
 
 /* EXPORT:
    Handle mouse button event on the tool-bar of frame F, at
-   frame-relative coordinates X/Y.  DOWN_P is 1 for a button press,
-   0 for button release.  MODIFIERS is event modifiers for button
+   frame-relative coordinates X/Y.  DOWN_P is true for a button press,
+   false for button release.  MODIFIERS is event modifiers for button
    release.  */
 
 void
-handle_tool_bar_click (struct frame *f, int x, int y, int down_p,
+handle_tool_bar_click (struct frame *f, int x, int y, bool down_p,
 		       int modifiers)
 {
   Mouse_HLInfo *hlinfo = MOUSE_HL_INFO (f);
@@ -12727,7 +12579,7 @@ handle_tool_bar_click (struct frame *f, int x, int y, int down_p,
      where the button was pressed, disregarding where it was
      released.  */
   if (NILP (Vmouse_highlight) && !down_p)
-    prop_idx = last_tool_bar_item;
+    prop_idx = f->last_tool_bar_item;
 
   /* If item is disabled, do nothing.  */
   enabled_p = AREF (f->tool_bar_items, prop_idx + TOOL_BAR_ITEM_ENABLED_P);
@@ -12739,7 +12591,7 @@ handle_tool_bar_click (struct frame *f, int x, int y, int down_p,
       /* Show item in pressed state.  */
       if (!NILP (Vmouse_highlight))
 	show_mouse_face (hlinfo, DRAW_IMAGE_SUNKEN);
-      last_tool_bar_item = prop_idx;
+      f->last_tool_bar_item = prop_idx;
     }
   else
     {
@@ -12764,7 +12616,7 @@ handle_tool_bar_click (struct frame *f, int x, int y, int down_p,
       event.arg = key;
       event.modifiers = modifiers;
       kbd_buffer_store_event (&event);
-      last_tool_bar_item = -1;
+      f->last_tool_bar_item = -1;
     }
 }
 
@@ -12787,7 +12639,8 @@ note_tool_bar_highlight (struct frame *f, int x, int y)
   Lisp_Object enabled_p;
   int prop_idx;
   enum draw_glyphs_face draw = DRAW_IMAGE_RAISED;
-  int mouse_down_p, rc;
+  bool mouse_down_p;
+  int rc;
 
   /* Function note_mouse_highlight is called with negative X/Y
      values when mouse moves outside of the frame.  */
@@ -12814,8 +12667,7 @@ note_tool_bar_highlight (struct frame *f, int x, int y)
   mouse_down_p = (x_mouse_grabbed (dpyinfo)
 		  && f == dpyinfo->last_mouse_frame);
 
-  if (mouse_down_p
-      && last_tool_bar_item != prop_idx)
+  if (mouse_down_p && f->last_tool_bar_item != prop_idx)
     return;
 
   draw = mouse_down_p ? DRAW_IMAGE_SUNKEN : DRAW_IMAGE_RAISED;
@@ -12834,7 +12686,7 @@ note_tool_bar_highlight (struct frame *f, int x, int y)
       hlinfo->mouse_face_beg_col = hpos;
       hlinfo->mouse_face_beg_row = vpos;
       hlinfo->mouse_face_beg_x = x;
-      hlinfo->mouse_face_past_end = 0;
+      hlinfo->mouse_face_past_end = false;
 
       hlinfo->mouse_face_end_col = hpos + 1;
       hlinfo->mouse_face_end_row = vpos;
@@ -12867,20 +12719,17 @@ note_tool_bar_highlight (struct frame *f, int x, int y)
 			 Horizontal scrolling
  ************************************************************************/
 
-static int hscroll_window_tree (Lisp_Object);
-static int hscroll_windows (Lisp_Object);
-
 /* For all leaf windows in the window tree rooted at WINDOW, set their
    hscroll value so that PT is (i) visible in the window, and (ii) so
    that it is not within a certain margin at the window's left and
-   right border.  Value is non-zero if any window's hscroll has been
+   right border.  Value is true if any window's hscroll has been
    changed.  */
 
-static int
+static bool
 hscroll_window_tree (Lisp_Object window)
 {
-  int hscrolled_p = 0;
-  int hscroll_relative_p = FLOATP (Vhscroll_step);
+  bool hscrolled_p = false;
+  bool hscroll_relative_p = FLOATP (Vhscroll_step);
   int hscroll_step_abs = 0;
   double hscroll_step_rel = 0;
 
@@ -12889,7 +12738,7 @@ hscroll_window_tree (Lisp_Object window)
       hscroll_step_rel = XFLOAT_DATA (Vhscroll_step);
       if (hscroll_step_rel < 0)
 	{
-	  hscroll_relative_p = 0;
+	  hscroll_relative_p = false;
 	  hscroll_step_abs = 0;
 	}
     }
@@ -12914,7 +12763,6 @@ hscroll_window_tree (Lisp_Object window)
 	  int text_area_width;
 	  struct glyph_row *cursor_row;
 	  struct glyph_row *bottom_row;
-	  int row_r2l_p;
 
 	  bottom_row = MATRIX_BOTTOM_TEXT_ROW (w->desired_matrix, w);
 	  if (w->cursor.vpos < bottom_row - w->desired_matrix->rows)
@@ -12930,14 +12778,27 @@ hscroll_window_tree (Lisp_Object window)
 	      else
 		cursor_row = bottom_row - 1;
 	    }
-	  row_r2l_p = cursor_row->reversed_p;
+	  bool row_r2l_p = cursor_row->reversed_p;
 
 	  text_area_width = window_box_width (w, TEXT_AREA);
 
 	  /* Scroll when cursor is inside this scroll margin.  */
 	  h_margin = hscroll_margin * WINDOW_FRAME_COLUMN_WIDTH (w);
 
+	  /* If the position of this window's point has explicitly
+	     changed, no more suspend auto hscrolling.  */
+	  if (NILP (Fequal (Fwindow_point (window), Fwindow_old_point (window))))
+	    w->suspend_auto_hscroll = false;
+
+	  /* Remember window point.  */
+	  Fset_marker (w->old_pointm,
+		       ((w == XWINDOW (selected_window))
+			? make_number (BUF_PT (XBUFFER (w->contents)))
+			: Fmarker_position (w->pointm)),
+		       w->contents);
+
 	  if (!NILP (Fbuffer_local_value (Qauto_hscroll_mode, w->contents))
+	      && !w->suspend_auto_hscroll
 	      /* In some pathological cases, like restoring a window
 		 configuration into a frame that is much smaller than
 		 the one from which the configuration was saved, we
@@ -12950,8 +12811,7 @@ hscroll_window_tree (Lisp_Object window)
 		 inside the left margin and the window is already
 		 hscrolled.  */
 	      && ((!row_r2l_p
-		   && ((w->hscroll
-			&& w->cursor.x <= h_margin)
+		   && ((w->hscroll && w->cursor.x <= h_margin)
 		       || (cursor_row->enabled_p
 			   && cursor_row->truncated_on_right_p
 			   && (w->cursor.x >= text_area_width - h_margin))))
@@ -13032,9 +12892,10 @@ hscroll_window_tree (Lisp_Object window)
 		 redisplay.  */
 	      if (w->hscroll != hscroll)
 		{
-		  XBUFFER (w->contents)->prevent_redisplay_optimizations_p = 1;
+		  struct buffer *b = XBUFFER (w->contents);
+		  b->prevent_redisplay_optimizations_p = true;
 		  w->hscroll = hscroll;
-		  hscrolled_p = 1;
+		  hscrolled_p = true;
 		}
 	    }
 	}
@@ -13042,21 +12903,21 @@ hscroll_window_tree (Lisp_Object window)
       window = w->next;
     }
 
-  /* Value is non-zero if hscroll of any leaf window has been changed.  */
+  /* Value is true if hscroll of any leaf window has been changed.  */
   return hscrolled_p;
 }
 
 
 /* Set hscroll so that cursor is visible and not inside horizontal
    scroll margins for all windows in the tree rooted at WINDOW.  See
-   also hscroll_window_tree above.  Value is non-zero if any window's
+   also hscroll_window_tree above.  Value is true if any window's
    hscroll has been changed.  If it has, desired matrices on the frame
    of WINDOW are cleared.  */
 
-static int
+static bool
 hscroll_windows (Lisp_Object window)
 {
-  int hscrolled_p = hscroll_window_tree (window);
+  bool hscrolled_p = hscroll_window_tree (window);
   if (hscrolled_p)
     clear_desired_matrices (XFRAME (WINDOW_FRAME (XWINDOW (window))));
   return hscrolled_p;
@@ -13068,9 +12929,8 @@ hscroll_windows (Lisp_Object window)
 				Redisplay
  ************************************************************************/
 
-/* Variables holding some state of redisplay if GLYPH_DEBUG is defined
-   to a non-zero value.  This is sometimes handy to have in a debugger
-   session.  */
+/* Variables holding some state of redisplay if GLYPH_DEBUG is defined.
+   This is sometimes handy to have in a debugger session.  */
 
 #ifdef GLYPH_DEBUG
 
@@ -13132,29 +12992,29 @@ debug_method_add (struct window *w, char const *fmt, ...)
 #endif /* GLYPH_DEBUG */
 
 
-/* Value is non-zero if all changes in window W, which displays
+/* Value is true if all changes in window W, which displays
    current_buffer, are in the text between START and END.  START is a
    buffer position, END is given as a distance from Z.  Used in
    redisplay_internal for display optimization.  */
 
-static int
+static bool
 text_outside_line_unchanged_p (struct window *w,
 			       ptrdiff_t start, ptrdiff_t end)
 {
-  int unchanged_p = 1;
+  bool unchanged_p = true;
 
   /* If text or overlays have changed, see where.  */
   if (window_outdated (w))
     {
       /* Gap in the line?  */
       if (GPT < start || Z - GPT < end)
-	unchanged_p = 0;
+	unchanged_p = false;
 
       /* Changes start in front of the line, or end after it?  */
       if (unchanged_p
 	  && (BEG_UNCHANGED < start - 1
 	      || END_UNCHANGED < end))
-	unchanged_p = 0;
+	unchanged_p = false;
 
       /* If selective display, can't optimize if changes start at the
 	 beginning of the line.  */
@@ -13162,7 +13022,7 @@ text_outside_line_unchanged_p (struct window *w,
 	  && INTEGERP (BVAR (current_buffer, selective_display))
 	  && XINT (BVAR (current_buffer, selective_display)) > 0
 	  && (BEG_UNCHANGED < start || GPT <= start))
-	unchanged_p = 0;
+	unchanged_p = false;
 
       /* If there are overlays at the start or end of the line, these
 	 may have overlay strings with newlines in them.  A change at
@@ -13175,10 +13035,10 @@ text_outside_line_unchanged_p (struct window *w,
 	{
 	  if (BEG + BEG_UNCHANGED == start
 	      && overlay_touches_p (start))
-	    unchanged_p = 0;
+	    unchanged_p = false;
 	  if (END_UNCHANGED == end
 	      && overlay_touches_p (Z - end))
-	    unchanged_p = 0;
+	    unchanged_p = false;
 	}
 
       /* Under bidi reordering, adding or deleting a character in the
@@ -13190,7 +13050,7 @@ text_outside_line_unchanged_p (struct window *w,
 	 lines to that, but for now just give up this optimization.  */
       if (!NILP (BVAR (XBUFFER (w->contents), bidi_display_reordering))
 	  && NILP (BVAR (XBUFFER (w->contents), bidi_paragraph_direction)))
-	unchanged_p = 0;
+	unchanged_p = false;
     }
 
   return unchanged_p;
@@ -13222,8 +13082,8 @@ overlay_arrow_string_or_property (Lisp_Object var)
   return Voverlay_arrow_string;
 }
 
-/* Return 1 if there are any overlay-arrows in current_buffer.  */
-static int
+/* Return true if there are any overlay-arrows in current_buffer.  */
+static bool
 overlay_arrow_in_current_buffer_p (void)
 {
   Lisp_Object vlist;
@@ -13240,16 +13100,16 @@ overlay_arrow_in_current_buffer_p (void)
       val = find_symbol_value (var);
       if (MARKERP (val)
 	  && current_buffer == XMARKER (val)->buffer)
-	return 1;
+	return true;
     }
-  return 0;
+  return false;
 }
 
 
-/* Return 1 if any overlay_arrows have moved or overlay-arrow-string
+/* Return true if any overlay_arrows have moved or overlay-arrow-string
    has changed.  */
 
-static int
+static bool
 overlay_arrows_changed_p (void)
 {
   Lisp_Object vlist;
@@ -13270,9 +13130,9 @@ overlay_arrows_changed_p (void)
 		Fget (var, Qlast_arrow_position))
 	  || ! (pstr = overlay_arrow_string_or_property (var),
 		EQ (pstr, Fget (var, Qlast_arrow_string))))
-	return 1;
+	return true;
     }
-  return 0;
+  return false;
 }
 
 /* Mark overlay arrows to be updated on next redisplay.  */
@@ -13342,8 +13202,8 @@ overlay_arrow_at_row (struct it *it, struct glyph_row *row)
 #ifdef HAVE_WINDOW_SYSTEM
 	      if (val = Fget (var, Qoverlay_arrow_bitmap), SYMBOLP (val))
 		{
-		  int fringe_bitmap;
-		  if ((fringe_bitmap = lookup_fringe_bitmap (val)) != 0)
+		  int fringe_bitmap = lookup_fringe_bitmap (val);
+		  if (fringe_bitmap != 0)
 		    return make_number (fringe_bitmap);
 		}
 #endif
@@ -13356,11 +13216,11 @@ overlay_arrow_at_row (struct it *it, struct glyph_row *row)
   return Qnil;
 }
 
-/* Return 1 if point moved out of or into a composition.  Otherwise
-   return 0.  PREV_BUF and PREV_PT are the last point buffer and
+/* Return true if point moved out of or into a composition.  Otherwise
+   return false.  PREV_BUF and PREV_PT are the last point buffer and
    position.  BUF and PT are the current point buffer and position.  */
 
-static int
+static bool
 check_point_in_composition (struct buffer *prev_buf, ptrdiff_t prev_pt,
 			    struct buffer *buf, ptrdiff_t pt)
 {
@@ -13375,13 +13235,13 @@ check_point_in_composition (struct buffer *prev_buf, ptrdiff_t prev_pt,
     {
       if (prev_pt == pt)
 	/* Point didn't move.  */
-	return 0;
+	return false;
 
       if (prev_pt > BUF_BEGV (buf) && prev_pt < BUF_ZV (buf)
 	  && find_composition (prev_pt, -1, &start, &end, &prop, buffer)
 	  && composition_valid_p (start, end, prop)
 	  && start < prev_pt && end > prev_pt)
-	/* The last point was within the composition.  Return 1 iff
+	/* The last point was within the composition.  Return true iff
             point moved out of the composition.  */
 	return (pt <= start || pt >= end);
     }
@@ -13405,13 +13265,12 @@ reconsider_clip_changes (struct window *w)
       && w->current_matrix->buffer == b
       && w->current_matrix->zv == BUF_ZV (b)
       && w->current_matrix->begv == BUF_BEGV (b))
-    b->clip_changed = 0;
+    b->clip_changed = false;
 
   /* If display wasn't paused, and W is not a tool bar window, see if
      point has been moved into or out of a composition.  In that case,
-     we set b->clip_changed to 1 to force updating the screen.  If
-     b->clip_changed has already been set to 1, we can skip this
-     check.  */
+     set b->clip_changed to force updating the screen.  If
+     b->clip_changed has already been set, skip this check.  */
   if (!b->clip_changed && w->window_end_valid)
     {
       ptrdiff_t pt = (w == XWINDOW (selected_window)
@@ -13420,7 +13279,7 @@ reconsider_clip_changes (struct window *w)
       if ((w->current_matrix->buffer != b || pt != w->last_point)
 	  && check_point_in_composition (w->current_matrix->buffer,
 					 w->last_point, b, pt))
-	b->clip_changed = 1;
+	b->clip_changed = true;
     }
 }
 
@@ -13448,11 +13307,11 @@ propagate_buffer_redisplay (void)
 
 #define STOP_POLLING					\
 do { if (! polling_stopped_here) stop_polling ();	\
-       polling_stopped_here = 1; } while (0)
+       polling_stopped_here = true; } while (false)
 
 #define RESUME_POLLING					\
 do { if (polling_stopped_here) start_polling ();	\
-       polling_stopped_here = 0; } while (0)
+       polling_stopped_here = false; } while (false)
 
 
 /* Perhaps in the future avoid recentering windows if it
@@ -13464,13 +13323,13 @@ redisplay_internal (void)
   struct window *w = XWINDOW (selected_window);
   struct window *sw;
   struct frame *fr;
-  int pending;
-  bool must_finish = 0, match_p;
+  bool pending;
+  bool must_finish = false, match_p;
   struct text_pos tlbufpos, tlendpos;
   int number_of_visible_frames;
   ptrdiff_t count;
   struct frame *sf;
-  int polling_stopped_here = 0;
+  bool polling_stopped_here = false;
   Lisp_Object tail, frame;
 
   /* True means redisplay has to consider all windows on all
@@ -13479,6 +13338,9 @@ redisplay_internal (void)
 
   /* True means redisplay has to redisplay the miniwindow.  */
   bool update_miniwindow_p = false;
+
+  /* True means we need to redraw frames whose 'redisplay' bit is set.  */
+  bool consider_some_frames_p = false;
 
   TRACE ((stderr, "redisplay_internal %d\n", redisplaying_p));
 
@@ -13511,29 +13373,30 @@ redisplay_internal (void)
      when we leave this function.  */
   count = SPECPDL_INDEX ();
   record_unwind_protect_void (unwind_redisplay);
-  redisplaying_p = 1;
+  redisplaying_p = true;
   specbind (Qinhibit_free_realized_faces, Qnil);
 
   /* Record this function, so it appears on the profiler's backtraces.  */
-  record_in_backtrace (Qredisplay_internal, &Qnil, 0);
+  record_in_backtrace (Qredisplay_internal, 0, 0);
 
   FOR_EACH_FRAME (tail, frame)
-    XFRAME (frame)->already_hscrolled_p = 0;
+    XFRAME (frame)->already_hscrolled_p = false;
 
  retry:
   /* Remember the currently selected window.  */
   sw = w;
 
-  pending = 0;
-  last_escape_glyph_frame = NULL;
-  last_escape_glyph_face_id = (1 << FACE_ID_BITS);
-  last_glyphless_glyph_frame = NULL;
-  last_glyphless_glyph_face_id = (1 << FACE_ID_BITS);
+  pending = false;
+  forget_escape_and_glyphless_faces ();
 
-  /* If face_change_count is non-zero, init_iterator will free all
-     realized faces, which includes the faces referenced from current
-     matrices.  So, we can't reuse current matrices in this case.  */
-  if (face_change_count)
+  inhibit_free_realized_faces = false;
+
+  consider_some_frames_p = false;
+
+  /* If face_change, init_iterator will free all realized faces, which
+     includes the faces referenced from current matrices.  So, we
+     can't reuse current matrices in this case.  */
+  if (face_change)
     windows_or_buffers_changed = 47;
 
   if ((FRAME_TERMCAP_P (sf) || FRAME_MSDOS_P (sf))
@@ -13565,18 +13428,25 @@ redisplay_internal (void)
 	  if (f->fonts_changed)
 	    {
 	      adjust_frame_glyphs (f);
-	      f->fonts_changed = 0;
+	      /* Disable all redisplay optimizations for this frame.
+		 This is because adjust_frame_glyphs resets the
+		 enabled_p flag for all glyph rows of all windows, so
+		 many optimizations will fail anyway, and some might
+		 fail to test that flag and do bogus things as
+		 result.  */
+	      SET_FRAME_GARBAGED (f);
+	      f->fonts_changed = false;
 	    }
 	  /* If cursor type has been changed on the frame
 	     other than selected, consider all frames.  */
 	  if (f != sf && f->cursor_type_changed)
-	    update_mode_lines = 31;
+	    fset_redisplay (f);
 	}
       clear_desired_matrices (f);
     }
 
   /* Notice any pending interrupt request to change frame size.  */
-  do_pending_window_change (1);
+  do_pending_window_change (true);
 
   /* do_pending_window_change could change the selected_window due to
      frame resizing which makes the selected window too small.  */
@@ -13598,10 +13468,10 @@ redisplay_internal (void)
     {
       /* Detect case that we need to write or remove a star in the mode line.  */
       if ((SAVE_MODIFF < MODIFF) != w->last_had_star)
-	  w->update_mode_line = 1;
+	w->update_mode_line = true;
 
       if (mode_line_update_needed (w))
-	w->update_mode_line = 1;
+	w->update_mode_line = true;
 
       /* If reconsider_clip_changes above decided that the narrowing
 	 in the current buffer changed, make sure all other windows
@@ -13623,37 +13493,27 @@ redisplay_internal (void)
 	     echo-area doesn't show through.  */
 	  && !MINI_WINDOW_P (XWINDOW (selected_window))))
     {
-      int window_height_changed_p = echo_area_display (0);
+      echo_area_display (false);
 
       if (message_cleared_p)
 	update_miniwindow_p = true;
 
-      must_finish = 1;
+      must_finish = true;
 
       /* If we don't display the current message, don't clear the
 	 message_cleared_p flag, because, if we did, we wouldn't clear
 	 the echo area in the next redisplay which doesn't preserve
 	 the echo area.  */
       if (!display_last_displayed_message_p)
-	message_cleared_p = 0;
-
-      if (window_height_changed_p)
-	{
-	  windows_or_buffers_changed = 50;
-
-	  /* If window configuration was changed, frames may have been
-	     marked garbaged.  Clear them or we will experience
-	     surprises wrt scrolling.  */
-	  clear_garbaged_frames ();
-	}
+	message_cleared_p = false;
     }
   else if (EQ (selected_window, minibuf_window)
 	   && (current_buffer->clip_changed || window_outdated (w))
-	   && resize_mini_window (w, 0))
+	   && resize_mini_window (w, false))
     {
       /* Resized active mini-window to fit the size of what it is
          showing if its contents might have changed.  */
-      must_finish = 1;
+      must_finish = true;
 
       /* If window configuration was changed, frames may have been
 	 marked garbaged.  Clear them or we will experience
@@ -13678,9 +13538,12 @@ redisplay_internal (void)
   consider_all_windows_p = (update_mode_lines
 			    || windows_or_buffers_changed);
 
-#define AINC(a,i) \
-  if (VECTORP (a) && i >= 0 && i < ASIZE (a) && INTEGERP (AREF (a, i))) \
-    ASET (a, i, make_number (1 + XINT (AREF (a, i))))
+#define AINC(a,i)							\
+  {									\
+    Lisp_Object entry = Fgethash (make_number (i), a, make_number (0));	\
+    if (INTEGERP (entry))						\
+      Fputhash (make_number (i), make_number (1 + XINT (entry)), a);	\
+  }
 
   AINC (Vredisplay__all_windows_cause, windows_or_buffers_changed);
   AINC (Vredisplay__mode_lines_cause, update_mode_lines);
@@ -13699,6 +13562,8 @@ redisplay_internal (void)
       && FRAME_VISIBLE_P (XFRAME (w->frame))
       && !FRAME_OBSCURED_P (XFRAME (w->frame))
       && !XFRAME (w->frame)->cursor_type_changed
+      && !XFRAME (w->frame)->face_change
+      && !XFRAME (w->frame)->redisplay
       /* Make sure recorded data applies to current buffer, etc.  */
       && this_line_buffer == current_buffer
       && match_p
@@ -13748,7 +13613,7 @@ redisplay_internal (void)
 
 	  TRACE ((stderr, "trying display optimization 1\n"));
 	  w->cursor.vpos = -1;
-	  overlay_arrow_seen = 0;
+	  overlay_arrow_seen = false;
 	  it.vpos = this_line_vpos;
 	  it.current_y = this_line_y;
 	  it.glyph_row = MATRIX_ROW (w->desired_matrix, this_line_vpos);
@@ -13803,17 +13668,17 @@ redisplay_internal (void)
 	      else if (w->window_end_vpos == this_line_vpos
 		       && this_line_vpos > 0)
 		w->window_end_vpos = this_line_vpos - 1;
-	      w->window_end_valid = 0;
+	      w->window_end_valid = false;
 
 	      /* Update hint: No need to try to scroll in update_window.  */
-	      w->desired_matrix->no_scrolling_p = 1;
+	      w->desired_matrix->no_scrolling_p = true;
 
 #ifdef GLYPH_DEBUG
 	      *w->desired_matrix->method = 0;
 	      debug_method_add (w, "optimization 1");
 #endif
 #ifdef HAVE_WINDOW_SYSTEM
-	      update_window_fringes (w, 0);
+	      update_window_fringes (w, false);
 #endif
 	      goto update;
 	    }
@@ -13831,7 +13696,7 @@ redisplay_internal (void)
 	{
 	  if (!must_finish)
 	    {
-	      do_pending_window_change (1);
+	      do_pending_window_change (true);
 	      /* If selected_window changed, redisplay again.  */
 	      if (WINDOWP (selected_window)
 		  && (w = XWINDOW (selected_window)) != sw)
@@ -13894,13 +13759,31 @@ redisplay_internal (void)
 #endif
 
   /* Build desired matrices, and update the display.  If
-     consider_all_windows_p is non-zero, do it for all windows on all
-     frames.  Otherwise do it for selected_window, only.  */
+     consider_all_windows_p, do it for all windows on all frames.  If
+     a frame's 'redisplay' flag is set, do it for all windows on each
+     such frame.  Otherwise do it for selected_window, only.  */
 
-  if (consider_all_windows_p)
+  if (!consider_all_windows_p)
     {
       FOR_EACH_FRAME (tail, frame)
-	XFRAME (frame)->updated_p = 0;
+	{
+	  if (XFRAME (frame)->redisplay
+	      && XFRAME (frame) != sf
+	      && !FRAME_INITIAL_P (XFRAME (frame)))
+	    {
+	      consider_some_frames_p = true;
+	      break;
+	    }
+	}
+    }
+
+  if (consider_all_windows_p || consider_some_frames_p)
+    {
+      FOR_EACH_FRAME (tail, frame)
+	{
+	  if (XFRAME (frame)->redisplay || consider_all_windows_p)
+	    XFRAME (frame)->updated_p = false;
+	}
 
       propagate_buffer_redisplay ();
 
@@ -13914,8 +13797,10 @@ redisplay_internal (void)
 	      && !EQ (FRAME_TTY (f)->top_frame, frame))
 	    continue;
 
-	retry_frame:
+	  if (!consider_all_windows_p && !f->redisplay)
+	    continue;
 
+	retry_frame:
 	  if (FRAME_WINDOW_P (f) || FRAME_TERMCAP_P (f) || f == sf)
 	    {
 	      bool gcscrollbars
@@ -13948,14 +13833,18 @@ redisplay_internal (void)
 		  if (f->fonts_changed)
 		    {
 		      adjust_frame_glyphs (f);
-		      f->fonts_changed = 0;
+		      /* Disable all redisplay optimizations for this
+			 frame.  For the reasons, see the comment near
+			 the previous call to adjust_frame_glyphs above.  */
+		      SET_FRAME_GARBAGED (f);
+		      f->fonts_changed = false;
 		      goto retry_frame;
 		    }
 
 		  /* See if we have to hscroll.  */
 		  if (!f->already_hscrolled_p)
 		    {
-		      f->already_hscrolled_p = 1;
+		      f->already_hscrolled_p = true;
 		      if (hscroll_windows (f->root_window))
 			goto retry_frame;
 		    }
@@ -13967,9 +13856,9 @@ redisplay_internal (void)
 		    unrequest_sigio ();
 		  STOP_POLLING;
 
-		  pending |= update_frame (f, 0, 0);
-		  f->cursor_type_changed = 0;
-		  f->updated_p = 1;
+		  pending |= update_frame (f, false, false);
+		  f->cursor_type_changed = false;
+		  f->updated_p = true;
 		}
 	    }
 	}
@@ -13987,7 +13876,7 @@ redisplay_internal (void)
               if (f->updated_p)
                 {
 		  f->redisplay = false;
-                  mark_window_display_accurate (f->root_window, 1);
+                  mark_window_display_accurate (f->root_window, true);
                   if (FRAME_TERMINAL (f)->frame_up_to_date_hook)
                     FRAME_TERMINAL (f)->frame_up_to_date_hook (f);
                 }
@@ -14017,6 +13906,10 @@ redisplay_internal (void)
       if (sf->fonts_changed)
 	goto retry;
 
+      /* Prevent freeing of realized faces, since desired matrices are
+	 pending that reference the faces we computed and cached.  */
+      inhibit_free_realized_faces = true;
+
       /* Prevent various kinds of signals during display update.
 	 stdio is not robust about handling signals,
 	 which can cause an apparent I/O error.  */
@@ -14030,8 +13923,8 @@ redisplay_internal (void)
 	    goto retry;
 
 	  XWINDOW (selected_window)->must_be_updated_p = true;
-	  pending = update_frame (sf, 0, 0);
-	  sf->cursor_type_changed = 0;
+	  pending = update_frame (sf, false, false);
+	  sf->cursor_type_changed = false;
 	}
 
       /* We may have called echo_area_display at the top of this
@@ -14045,8 +13938,8 @@ redisplay_internal (void)
       if (mini_frame != sf && FRAME_WINDOW_P (mini_frame))
 	{
 	  XWINDOW (mini_window)->must_be_updated_p = true;
-	  pending |= update_frame (mini_frame, 0, 0);
-	  mini_frame->cursor_type_changed = 0;
+	  pending |= update_frame (mini_frame, false, false);
+	  mini_frame->cursor_type_changed = false;
 	  if (!pending && hscroll_windows (mini_window))
 	    goto retry;
 	}
@@ -14081,7 +13974,7 @@ redisplay_internal (void)
 	    /* This can happen if b->text->redisplay was set during
 	       jit-lock.  */
 	    propagate_buffer_redisplay ();
-	  mark_window_display_accurate_1 (w, 1);
+	  mark_window_display_accurate_1 (w, true);
 
 	  /* Say overlay arrows are up to date.  */
 	  update_overlay_arrows (1);
@@ -14123,7 +14016,7 @@ redisplay_internal (void)
     }
 
   /* Change frame size now if a change is pending.  */
-  do_pending_window_change (1);
+  do_pending_window_change (true);
 
   /* If we just did a pending size change, or have additional
      visible frames, or selected_window changed, redisplay again.  */
@@ -14139,7 +14032,7 @@ redisplay_internal (void)
 
   if (clear_face_cache_count > CLEAR_FACE_CACHE_COUNT)
     {
-      clear_face_cache (0);
+      clear_face_cache (false);
       clear_face_cache_count = 0;
     }
 
@@ -14152,6 +14045,9 @@ redisplay_internal (void)
 #endif /* HAVE_WINDOW_SYSTEM */
 
  end_of_redisplay:
+#ifdef HAVE_NS
+  ns_set_doc_edited ();
+#endif
   if (interrupt_input && interrupts_deferred)
     request_sigio ();
 
@@ -14180,9 +14076,9 @@ redisplay_preserve_echo_area (int from_where)
     {
       /* We have a previously displayed message, but no current
 	 message.  Redisplay the previous message.  */
-      display_last_displayed_message_p = 1;
+      display_last_displayed_message_p = true;
       redisplay_internal ();
-      display_last_displayed_message_p = 0;
+      display_last_displayed_message_p = false;
     }
   else
     redisplay_internal ();
@@ -14196,17 +14092,17 @@ redisplay_preserve_echo_area (int from_where)
 static void
 unwind_redisplay (void)
 {
-  redisplaying_p = 0;
+  redisplaying_p = false;
 }
 
 
 /* Mark the display of leaf window W as accurate or inaccurate.
-   If ACCURATE_P is non-zero mark display of W as accurate.  If
-   ACCURATE_P is zero, arrange for W to be redisplayed the next
+   If ACCURATE_P, mark display of W as accurate.
+   If !ACCURATE_P, arrange for W to be redisplayed the next
    time redisplay_internal is called.  */
 
 static void
-mark_window_display_accurate_1 (struct window *w, int accurate_p)
+mark_window_display_accurate_1 (struct window *w, bool accurate_p)
 {
   struct buffer *b = XBUFFER (w->contents);
 
@@ -14250,12 +14146,12 @@ mark_window_display_accurate_1 (struct window *w, int accurate_p)
 
 
 /* Mark the display of windows in the window tree rooted at WINDOW as
-   accurate or inaccurate.  If ACCURATE_P is non-zero mark display of
-   windows as accurate.  If ACCURATE_P is zero, arrange for windows to
+   accurate or inaccurate.  If ACCURATE_P, mark display of
+   windows as accurate.  If !ACCURATE_P, arrange for windows to
    be redisplayed the next time redisplay_internal is called.  */
 
 void
-mark_window_display_accurate (Lisp_Object window, int accurate_p)
+mark_window_display_accurate (Lisp_Object window, bool accurate_p)
 {
   struct window *w;
 
@@ -14366,9 +14262,9 @@ redisplay_window_1 (Lisp_Object window)
    which positions recorded in ROW differ from current buffer
    positions.
 
-   Return 0 if cursor is not on this row, 1 otherwise.  */
+   Return true iff cursor is on this row.  */
 
-static int
+static bool
 set_cursor_from_row (struct window *w, struct glyph_row *row,
 		     struct glyph_matrix *matrix,
 		     ptrdiff_t delta, ptrdiff_t delta_bytes,
@@ -14387,12 +14283,12 @@ set_cursor_from_row (struct window *w, struct glyph_row *row,
   /* A glyph beyond the edge of TEXT_AREA which we should never
      touch.  */
   struct glyph *glyphs_end = end;
-  /* Non-zero means we've found a match for cursor position, but that
+  /* True means we've found a match for cursor position, but that
      glyph has the avoid_cursor_p flag set.  */
-  int match_with_avoid_cursor = 0;
-  /* Non-zero means we've seen at least one glyph that came from a
+  bool match_with_avoid_cursor = false;
+  /* True means we've seen at least one glyph that came from a
      display string.  */
-  int string_seen = 0;
+  bool string_seen = false;
   /* Largest and smallest buffer positions seen so far during scan of
      glyph row.  */
   ptrdiff_t bpos_max = pos_before;
@@ -14400,16 +14296,16 @@ set_cursor_from_row (struct window *w, struct glyph_row *row,
   /* Last buffer position covered by an overlay string with an integer
      `cursor' property.  */
   ptrdiff_t bpos_covered = 0;
-  /* Non-zero means the display string on which to display the cursor
+  /* True means the display string on which to display the cursor
      comes from a text property, not from an overlay.  */
-  int string_from_text_prop = 0;
+  bool string_from_text_prop = false;
 
   /* Don't even try doing anything if called for a mode-line or
      header-line row, since the rest of the code isn't prepared to
      deal with such calamities.  */
   eassert (!row->mode_line_p);
   if (row->mode_line_p)
-    return 0;
+    return false;
 
   /* Skip over glyphs not having an object at the start and the end of
      the row.  These are special glyphs like truncation marks on
@@ -14419,14 +14315,14 @@ set_cursor_from_row (struct window *w, struct glyph_row *row,
       if (!row->reversed_p)
 	{
 	  while (glyph < end
-		 && INTEGERP (glyph->object)
+		 && NILP (glyph->object)
 		 && glyph->charpos < 0)
 	    {
 	      x += glyph->pixel_width;
 	      ++glyph;
 	    }
 	  while (end > glyph
-		 && INTEGERP ((end - 1)->object)
+		 && NILP ((end - 1)->object)
 		 /* CHARPOS is zero for blanks and stretch glyphs
 		    inserted by extend_face_to_end_of_line.  */
 		 && (end - 1)->charpos <= 0)
@@ -14444,20 +14340,20 @@ set_cursor_from_row (struct window *w, struct glyph_row *row,
 	  glyph += row->used[TEXT_AREA] - 1;
 
 	  while (glyph > end + 1
-		 && INTEGERP (glyph->object)
+		 && NILP (glyph->object)
 		 && glyph->charpos < 0)
 	    {
 	      --glyph;
 	      x -= glyph->pixel_width;
 	    }
-	  if (INTEGERP (glyph->object) && glyph->charpos < 0)
+	  if (NILP (glyph->object) && glyph->charpos < 0)
 	    --glyph;
 	  /* By default, in reversed rows we put the cursor on the
 	     rightmost (first in the reading order) glyph.  */
 	  for (g = end + 1; g < glyph; g++)
 	    x += g->pixel_width;
 	  while (end < glyph
-		 && INTEGERP ((end + 1)->object)
+		 && NILP ((end + 1)->object)
 		 && (end + 1)->charpos <= 0)
 	    ++end;
 	  glyph_before = glyph + 1;
@@ -14488,7 +14384,7 @@ set_cursor_from_row (struct window *w, struct glyph_row *row,
     while (/* not marched to end of glyph row */
 	   glyph < end
 	   /* glyph was not inserted by redisplay for internal purposes */
-	   && !INTEGERP (glyph->object))
+	   && !NILP (glyph->object))
       {
 	if (BUFFERP (glyph->object))
 	  {
@@ -14504,7 +14400,7 @@ set_cursor_from_row (struct window *w, struct glyph_row *row,
 		   display the cursor.  */
 		if (dpos == 0)
 		  {
-		    match_with_avoid_cursor = 0;
+		    match_with_avoid_cursor = false;
 		    break;
 		  }
 		/* See if we've found a better approximation to
@@ -14521,7 +14417,7 @@ set_cursor_from_row (struct window *w, struct glyph_row *row,
 		  }
 	      }
 	    else if (dpos == 0)
-	      match_with_avoid_cursor = 1;
+	      match_with_avoid_cursor = true;
 	  }
 	else if (STRINGP (glyph->object))
 	  {
@@ -14544,7 +14440,7 @@ set_cursor_from_row (struct window *w, struct glyph_row *row,
 		   ever seen in the row.  */
 		ptrdiff_t prop_pos =
 		  string_buffer_position_lim (glyph->object, pos_before,
-					      pos_after, 0);
+					      pos_after, false);
 
 		if (prop_pos >= pos_before)
 		  bpos_max = prop_pos;
@@ -14570,13 +14466,13 @@ set_cursor_from_row (struct window *w, struct glyph_row *row,
 		  }
 	      }
 
-	    string_seen = 1;
+	    string_seen = true;
 	  }
 	x += glyph->pixel_width;
 	++glyph;
       }
   else if (glyph > end)	/* row is reversed */
-    while (!INTEGERP (glyph->object))
+    while (!NILP (glyph->object))
       {
 	if (BUFFERP (glyph->object))
 	  {
@@ -14590,7 +14486,7 @@ set_cursor_from_row (struct window *w, struct glyph_row *row,
 	      {
 		if (dpos == 0)
 		  {
-		    match_with_avoid_cursor = 0;
+		    match_with_avoid_cursor = false;
 		    break;
 		  }
 		if (0 > dpos && dpos > pos_before - pt_old)
@@ -14605,7 +14501,7 @@ set_cursor_from_row (struct window *w, struct glyph_row *row,
 		  }
 	      }
 	    else if (dpos == 0)
-	      match_with_avoid_cursor = 1;
+	      match_with_avoid_cursor = true;
 	  }
 	else if (STRINGP (glyph->object))
 	  {
@@ -14618,7 +14514,7 @@ set_cursor_from_row (struct window *w, struct glyph_row *row,
 	      {
 		ptrdiff_t prop_pos =
 		  string_buffer_position_lim (glyph->object, pos_before,
-					      pos_after, 0);
+					      pos_after, false);
 
 		if (prop_pos >= pos_before)
 		  bpos_max = prop_pos;
@@ -14635,7 +14531,7 @@ set_cursor_from_row (struct window *w, struct glyph_row *row,
 		    break;
 		  }
 	      }
-	    string_seen = 1;
+	    string_seen = true;
 	  }
 	--glyph;
 	if (glyph == glyphs_end) /* don't dereference outside TEXT_AREA */
@@ -14653,19 +14549,19 @@ set_cursor_from_row (struct window *w, struct glyph_row *row,
 	&& BUFFERP (glyph->object) && glyph->charpos == pt_old)
       && !(bpos_max <= pt_old && pt_old <= bpos_covered))
     {
-      /* An empty line has a single glyph whose OBJECT is zero and
+      /* An empty line has a single glyph whose OBJECT is nil and
 	 whose CHARPOS is the position of a newline on that line.
 	 Note that on a TTY, there are more glyphs after that, which
 	 were produced by extend_face_to_end_of_line, but their
 	 CHARPOS is zero or negative.  */
-      int empty_line_p =
-	(row->reversed_p ? glyph > glyphs_end : glyph < glyphs_end)
-	&& INTEGERP (glyph->object) && glyph->charpos > 0
-	/* On a TTY, continued and truncated rows also have a glyph at
-	   their end whose OBJECT is zero and whose CHARPOS is
-	   positive (the continuation and truncation glyphs), but such
-	   rows are obviously not "empty".  */
-	&& !(row->continued_p || row->truncated_on_right_p);
+      bool empty_line_p =
+	((row->reversed_p ? glyph > glyphs_end : glyph < glyphs_end)
+	 && NILP (glyph->object) && glyph->charpos > 0
+	 /* On a TTY, continued and truncated rows also have a glyph at
+	    their end whose OBJECT is nil and whose CHARPOS is
+	    positive (the continuation and truncation glyphs), but such
+	    rows are obviously not "empty".  */
+	 && !(row->continued_p || row->truncated_on_right_p));
 
       if (row->ends_in_ellipsis_p && pos_after == last_pos)
 	{
@@ -14758,9 +14654,9 @@ set_cursor_from_row (struct window *w, struct glyph_row *row,
 		  ptrdiff_t lim = pos_after
 		    + (pos_after == MATRIX_ROW_END_CHARPOS (row) + delta);
 
-		  string_from_text_prop = 0;
+		  string_from_text_prop = false;
 		  str = glyph->object;
-		  tem = string_buffer_position_lim (str, pos, lim, 0);
+		  tem = string_buffer_position_lim (str, pos, lim, false);
 		  if (tem == 0	/* from overlay */
 		      || pos <= tem)
 		    {
@@ -14789,7 +14685,7 @@ set_cursor_from_row (struct window *w, struct glyph_row *row,
 			  if (tem)
 			    {
 			      cursor = glyph;
-			      string_from_text_prop = 1;
+			      string_from_text_prop = true;
 			    }
 			  for ( ;
 			       (row->reversed_p ? glyph > stop : glyph < stop)
@@ -14838,7 +14734,7 @@ set_cursor_from_row (struct window *w, struct glyph_row *row,
 	      && (row->reversed_p ? end > glyphs_end : end < glyphs_end)
 	      && STRINGP (end->object)
 	      && row->continued_p)
-	    return 0;
+	    return false;
 	}
       /* A truncated row may not include PT among its character positions.
 	 Setting the cursor inside the scroll margin will trigger
@@ -14916,7 +14812,7 @@ set_cursor_from_row (struct window *w, struct glyph_row *row,
 
       /* Don't consider glyphs that are outside TEXT_AREA.  */
       if (!(row->reversed_p ? glyph > glyphs_end : glyph < glyphs_end))
-	return 0;
+	return false;
       /* Keep the candidate whose buffer position is the closest to
 	 point or has the `cursor' property.  */
       if (/* Previous candidate is a glyph in TEXT_AREA of that row.  */
@@ -14939,16 +14835,16 @@ set_cursor_from_row (struct window *w, struct glyph_row *row,
 			  && string_from_text_prop)
 		      /* this candidate is from newline and its
 			 position is not an exact match */
-		      || (INTEGERP (glyph->object)
+		      || (NILP (glyph->object)
 			  && glyph->charpos != pt_old)))))
-	return 0;
+	return false;
       /* If this candidate gives an exact match, use that.  */
       if (!((BUFFERP (glyph->object) && glyph->charpos == pt_old)
 	    /* If this candidate is a glyph created for the
 	       terminating newline of a line, and point is on that
 	       newline, it wins because it's an exact match.  */
 	    || (!row->continued_p
-		&& INTEGERP (glyph->object)
+		&& NILP (glyph->object)
 		&& glyph->charpos == 0
 		&& pt_old == MATRIX_ROW_END_CHARPOS (row) - 1))
 	  /* Otherwise, keep the candidate that comes from a row
@@ -14959,7 +14855,7 @@ set_cursor_from_row (struct window *w, struct glyph_row *row,
 	  && MATRIX_ROW_END_CHARPOS (MATRIX_ROW (matrix, w->cursor.vpos))
 	     - MATRIX_ROW_START_CHARPOS (MATRIX_ROW (matrix, w->cursor.vpos))
 	     < MATRIX_ROW_END_CHARPOS (row) - MATRIX_ROW_START_CHARPOS (row))
-	return 0;
+	return false;
     }
   w->cursor.hpos = glyph - row->glyphs[TEXT_AREA];
   w->cursor.x = x;
@@ -14993,7 +14889,7 @@ set_cursor_from_row (struct window *w, struct glyph_row *row,
 	CHARPOS (this_line_start_pos) = 0;
     }
 
-  return 1;
+  return true;
 }
 
 
@@ -15024,41 +14920,42 @@ run_window_scroll_functions (Lisp_Object window, struct text_pos startp)
 
 
 /* Make sure the line containing the cursor is fully visible.
-   A value of 1 means there is nothing to be done.
+   A value of true means there is nothing to be done.
    (Either the line is fully visible, or it cannot be made so,
    or we cannot tell.)
 
-   If FORCE_P is non-zero, return 0 even if partial visible cursor row
+   If FORCE_P, return false even if partial visible cursor row
    is higher than window.
 
-   If CURRENT_MATRIX_P is non-zero, use the information from the
+   If CURRENT_MATRIX_P, use the information from the
    window's current glyph matrix; otherwise use the desired glyph
    matrix.
 
-   A value of 0 means the caller should do scrolling
+   A value of false means the caller should do scrolling
    as if point had gone off the screen.  */
 
-static int
-cursor_row_fully_visible_p (struct window *w, int force_p, int current_matrix_p)
+static bool
+cursor_row_fully_visible_p (struct window *w, bool force_p,
+			    bool current_matrix_p)
 {
   struct glyph_matrix *matrix;
   struct glyph_row *row;
   int window_height;
 
   if (!make_cursor_line_fully_visible_p)
-    return 1;
+    return true;
 
   /* It's not always possible to find the cursor, e.g, when a window
      is full of overlay strings.  Don't do anything in that case.  */
   if (w->cursor.vpos < 0)
-    return 1;
+    return true;
 
   matrix = current_matrix_p ? w->current_matrix : w->desired_matrix;
   row = MATRIX_ROW (matrix, w->cursor.vpos);
 
   /* If the cursor row is not partially visible, there's nothing to do.  */
   if (!MATRIX_ROW_PARTIALLY_VISIBLE_P (w, row))
-    return 1;
+    return true;
 
   /* If the row the cursor is in is taller than the window's height,
      it's not clear what to do, so do nothing.  */
@@ -15067,19 +14964,19 @@ cursor_row_fully_visible_p (struct window *w, int force_p, int current_matrix_p)
     {
       if (!force_p || MINI_WINDOW_P (w)
 	  || w->vscroll || w->cursor.vpos == 0)
-	return 1;
+	return true;
     }
-  return 0;
+  return false;
 }
 
 
 /* Try scrolling PT into view in window WINDOW.  JUST_THIS_ONE_P
-   non-zero means only WINDOW is redisplayed in redisplay_internal.
+   means only WINDOW is redisplayed in redisplay_internal.
    TEMP_SCROLL_STEP has the same meaning as emacs_scroll_step, and is used
    in redisplay_window to bring a partially visible line into view in
    the case that only the cursor has moved.
 
-   LAST_LINE_MISFIT should be nonzero if we're scrolling because the
+   LAST_LINE_MISFIT should be true if we're scrolling because the
    last screen line's vertical height extends past the end of the screen.
 
    Value is
@@ -15105,17 +15002,18 @@ enum
 #define SCROLL_LIMIT 100
 
 static int
-try_scrolling (Lisp_Object window, int just_this_one_p,
+try_scrolling (Lisp_Object window, bool just_this_one_p,
 	       ptrdiff_t arg_scroll_conservatively, ptrdiff_t scroll_step,
-	       int temp_scroll_step, int last_line_misfit)
+	       bool temp_scroll_step, bool last_line_misfit)
 {
   struct window *w = XWINDOW (window);
   struct frame *f = XFRAME (w->frame);
   struct text_pos pos, startp;
   struct it it;
   int this_scroll_margin, scroll_max, rc, height;
-  int dy = 0, amount_to_scroll = 0, scroll_down_p = 0;
-  int extra_scroll_margin_lines = last_line_misfit ? 1 : 0;
+  int dy = 0, amount_to_scroll = 0;
+  bool scroll_down_p = false;
+  int extra_scroll_margin_lines = last_line_misfit;
   Lisp_Object aggressive;
   /* We will never try scrolling more than this number of lines.  */
   int scroll_limit = SCROLL_LIMIT;
@@ -15198,7 +15096,7 @@ try_scrolling (Lisp_Object window, int just_this_one_p,
 	    return SCROLLING_FAILED;
 
 	  if (dy > 0)
-	    scroll_down_p = 1;
+	    scroll_down_p = true;
 	}
     }
 
@@ -15230,8 +15128,8 @@ try_scrolling (Lisp_Object window, int just_this_one_p,
 		 non-zero margins, because scroll_up_aggressively
 		 means put point that fraction of window height
 		 _from_the_bottom_margin_.  */
-	      if (aggressive_scroll + 2*this_scroll_margin > height)
-		aggressive_scroll = height - 2*this_scroll_margin;
+	      if (aggressive_scroll + 2 * this_scroll_margin > height)
+		aggressive_scroll = height - 2 * this_scroll_margin;
 	      amount_to_scroll = dy + aggressive_scroll;
 	    }
 	}
@@ -15262,11 +15160,13 @@ try_scrolling (Lisp_Object window, int just_this_one_p,
 	    RESTORE_IT (&it, &it, it1data);
 	    move_it_by_lines (&it, 1);
 	    SAVE_IT (it1, it, it1data);
-	  } while (line_bottom_y (&it1) - start_y < amount_to_scroll);
+	  } while (IT_CHARPOS (it) < ZV
+		   && line_bottom_y (&it1) - start_y < amount_to_scroll);
+	  bidi_unshelve_cache (it1data, true);
 	}
 
       /* If STARTP is unchanged, move it down another screen line.  */
-      if (CHARPOS (it.current.pos) == CHARPOS (startp))
+      if (IT_CHARPOS (it) == CHARPOS (startp))
 	move_it_by_lines (&it, 1);
       startp = it.current.pos;
     }
@@ -15324,8 +15224,8 @@ try_scrolling (Lisp_Object window, int just_this_one_p,
 	  start_display (&it, w, startp);
 
 	  if (arg_scroll_conservatively)
-	    amount_to_scroll = max (dy, frame_line_height *
-				    max (scroll_step, temp_scroll_step));
+	    amount_to_scroll = max (dy, frame_line_height
+				    * max (scroll_step, temp_scroll_step));
 	  else if (scroll_step || temp_scroll_step)
 	    amount_to_scroll = scroll_max;
 	  else
@@ -15342,8 +15242,8 @@ try_scrolling (Lisp_Object window, int just_this_one_p,
 		     bottom of the window, if the value of
 		     scroll_down_aggressively happens to be too
 		     large.  */
-		  if (aggressive_scroll + 2*this_scroll_margin > height)
-		    aggressive_scroll = height - 2*this_scroll_margin;
+		  if (aggressive_scroll + 2 * this_scroll_margin > height)
+		    aggressive_scroll = height - 2 * this_scroll_margin;
 		  amount_to_scroll = dy + aggressive_scroll;
 		}
 	    }
@@ -15378,7 +15278,8 @@ try_scrolling (Lisp_Object window, int just_this_one_p,
 
       /* If cursor ends up on a partially visible line,
 	 treat that as being off the bottom of the screen.  */
-      if (! cursor_row_fully_visible_p (w, extra_scroll_margin_lines <= 1, 0)
+      if (! cursor_row_fully_visible_p (w, extra_scroll_margin_lines <= 1,
+					false)
 	  /* It's possible that the cursor is on the first line of the
 	     buffer, which is partially obscured due to a vscroll
 	     (Bug#7537).  In that case, avoid looping forever. */
@@ -15397,18 +15298,18 @@ try_scrolling (Lisp_Object window, int just_this_one_p,
 
 
 /* Compute a suitable window start for window W if display of W starts
-   on a continuation line.  Value is non-zero if a new window start
+   on a continuation line.  Value is true if a new window start
    was computed.
 
    The new window start will be computed, based on W's width, starting
    from the start of the continued line.  It is the start of the
    screen line with the minimum distance from the old start W->start.  */
 
-static int
+static bool
 compute_window_start_on_continuation_line (struct window *w)
 {
   struct text_pos pos, start_pos;
-  int window_start_changed_p = 0;
+  bool window_start_changed_p = false;
 
   SET_TEXT_POS_FROM_MARKER (start_pos, w->start);
 
@@ -15429,7 +15330,7 @@ compute_window_start_on_continuation_line (struct window *w)
 
       /* Find the start of the continued line.  This should be fast
 	 because find_newline is fast (newline cache).  */
-      row = w->desired_matrix->rows + (WINDOW_WANTS_HEADER_LINE_P (w) ? 1 : 0);
+      row = w->desired_matrix->rows + WINDOW_WANTS_HEADER_LINE_P (w);
       init_iterator (&it, w, CHARPOS (start_pos), BYTEPOS (start_pos),
 		     row, DEFAULT_FACE_ID);
       reseat_at_previous_visible_line_start (&it);
@@ -15478,7 +15379,7 @@ compute_window_start_on_continuation_line (struct window *w)
 
 	  /* Set the window start there.  */
 	  SET_MARKER_FROM_TEXT_POS (w->start, pos);
-	  window_start_changed_p = 1;
+	  window_start_changed_p = true;
 	}
     }
 
@@ -15494,7 +15395,7 @@ compute_window_start_on_continuation_line (struct window *w)
    CURSOR_MOVEMENT_CANNOT_BE_USED if this method cannot be used
 
    CURSOR_MOVEMENT_MUST_SCROLL if we know we have to scroll the
-   display.  *SCROLL_STEP is set to 1, under certain circumstances, if
+   display.  *SCROLL_STEP is set to true, under certain circumstances, if
    we want to scroll as if scroll-step were set to 1.  See the code.
 
    CURSOR_MOVEMENT_NEED_LARGER_MATRICES if we need larger matrices, in
@@ -15510,7 +15411,8 @@ enum
 };
 
 static int
-try_cursor_movement (Lisp_Object window, struct text_pos startp, int *scroll_step)
+try_cursor_movement (Lisp_Object window, struct text_pos startp,
+		     bool *scroll_step)
 {
   struct window *w = XWINDOW (window);
   struct frame *f = XFRAME (w->frame);
@@ -15528,7 +15430,8 @@ try_cursor_movement (Lisp_Object window, struct text_pos startp, int *scroll_ste
   /* Likewise there was a check whether window_end_vpos is nil or larger
      than the window.  Now window_end_vpos is int and so never nil, but
      let's leave eassert to check whether it fits in the window.  */
-  eassert (w->window_end_vpos < w->current_matrix->nrows);
+  eassert (!w->window_end_valid
+	   || w->window_end_vpos < w->current_matrix->nrows);
 
   /* Handle case where text has not changed, only point, and it has
      not moved off the frame.  */
@@ -15543,6 +15446,7 @@ try_cursor_movement (Lisp_Object window, struct text_pos startp, int *scroll_ste
       && !update_mode_lines
       && !windows_or_buffers_changed
       && !f->cursor_type_changed
+      && !f->redisplay
       && NILP (Vshow_trailing_whitespace)
       /* This code is not used for mini-buffer for the sake of the case
 	 of redisplaying to replace an echo area message; since in
@@ -15594,7 +15498,7 @@ try_cursor_movement (Lisp_Object window, struct text_pos startp, int *scroll_ste
 
       if (rc == CURSOR_MOVEMENT_CANNOT_BE_USED)
 	{
-	  int scroll_p = 0, must_scroll = 0;
+	  bool scroll_p = false, must_scroll = false;
 	  int last_y = window_text_bottom_y (w) - this_scroll_margin;
 
 	  if (PT > w->last_point)
@@ -15629,7 +15533,7 @@ try_cursor_movement (Lisp_Object window, struct text_pos startp, int *scroll_ste
 		      && PT == MATRIX_ROW_END_CHARPOS (row)
 		      && !row->ends_at_zv_p
 		      && !MATRIX_ROW_ENDS_IN_MIDDLE_OF_CHAR_P (row)))
-		scroll_p = 1;
+		scroll_p = true;
 	    }
 	  else if (PT < w->last_point)
 	    {
@@ -15672,7 +15576,7 @@ try_cursor_movement (Lisp_Object window, struct text_pos startp, int *scroll_ste
 	      /* If within the scroll margin, scroll.  */
 	      if (row->y < top_scroll_margin
 		  && CHARPOS (startp) != BEGV)
-		scroll_p = 1;
+		scroll_p = true;
 	    }
 	  else
 	    {
@@ -15686,7 +15590,7 @@ try_cursor_movement (Lisp_Object window, struct text_pos startp, int *scroll_ste
 	    {
 	      /* if PT is not in the glyph row, give up.  */
 	      rc = CURSOR_MOVEMENT_MUST_SCROLL;
-	      must_scroll = 1;
+	      must_scroll = true;
 	    }
 	  else if (rc != CURSOR_MOVEMENT_SUCCESS
 		   && !NILP (BVAR (XBUFFER (w->contents), bidi_display_reordering)))
@@ -15723,7 +15627,7 @@ try_cursor_movement (Lisp_Object window, struct text_pos startp, int *scroll_ste
 	  else if (rc != CURSOR_MOVEMENT_SUCCESS
 	      && MATRIX_ROW_PARTIALLY_VISIBLE_P (w, row)
 	      /* Make sure this isn't a header line by any chance, since
-		 then MATRIX_ROW_PARTIALLY_VISIBLE_P might yield non-zero.  */
+		 then MATRIX_ROW_PARTIALLY_VISIBLE_P might yield true.  */
 	      && !row->mode_line_p
 	      && make_cursor_line_fully_visible_p)
 	    {
@@ -15737,13 +15641,13 @@ try_cursor_movement (Lisp_Object window, struct text_pos startp, int *scroll_ste
 		     make it fully visible, except when it's taller
 		     than the window, in which case we can't do much
 		     about it.  */
-		  *scroll_step = 1;
+		  *scroll_step = true;
 		  rc = CURSOR_MOVEMENT_MUST_SCROLL;
 		}
 	      else
 		{
 		  set_cursor_from_row (w, row, w->current_matrix, 0, 0, 0, 0);
-		  if (!cursor_row_fully_visible_p (w, 0, 1))
+		  if (!cursor_row_fully_visible_p (w, false, true))
 		    rc = CURSOR_MOVEMENT_MUST_SCROLL;
 		  else
 		    rc = CURSOR_MOVEMENT_SUCCESS;
@@ -15761,11 +15665,11 @@ try_cursor_movement (Lisp_Object window, struct text_pos startp, int *scroll_ste
 	      /* FIXME: Revisit this when glyph ``spilling'' in
 		 continuation lines' rows is implemented for
 		 bidi-reordered rows.  */
-	      int rv = 0;
+	      bool rv = false;
 
 	      do
 		{
-		  int at_zv_p = 0, exact_match_p = 0;
+		  bool at_zv_p = false, exact_match_p = false;
 
 		  if (MATRIX_ROW_START_CHARPOS (row) <= PT
 		      && PT <= MATRIX_ROW_END_CHARPOS (row)
@@ -15792,7 +15696,7 @@ try_cursor_movement (Lisp_Object window, struct text_pos startp, int *scroll_ste
 
 			  exact_match_p =
 			    (BUFFERP (g->object) && g->charpos == PT)
-			    || (INTEGERP (g->object)
+			    || (NILP (g->object)
 				&& (g->charpos == PT
 				    || (g->charpos == 0 && endpos - 1 == PT)));
 			}
@@ -15843,9 +15747,7 @@ try_cursor_movement (Lisp_Object window, struct text_pos startp, int *scroll_ste
   return rc;
 }
 
-#if !defined USE_TOOLKIT_SCROLL_BARS || defined USE_GTK
-static
-#endif
+
 void
 set_vertical_scroll_bar (struct window *w)
 {
@@ -15884,7 +15786,72 @@ set_vertical_scroll_bar (struct window *w)
 }
 
 
-/* Redisplay leaf window WINDOW.  JUST_THIS_ONE_P non-zero means only
+void
+set_horizontal_scroll_bar (struct window *w)
+{
+  int start, end, whole, portion;
+
+  if (!MINI_WINDOW_P (w)
+      || (w == XWINDOW (minibuf_window)
+	  && NILP (echo_area_buffer[0])))
+    {
+      struct buffer *b = XBUFFER (w->contents);
+      struct buffer *old_buffer = NULL;
+      struct it it;
+      struct text_pos startp;
+
+      if (b != current_buffer)
+	{
+	  old_buffer = current_buffer;
+	  set_buffer_internal (b);
+	}
+
+      SET_TEXT_POS_FROM_MARKER (startp, w->start);
+      start_display (&it, w, startp);
+      it.last_visible_x = INT_MAX;
+      whole = move_it_to (&it, -1, INT_MAX, window_box_height (w), -1,
+			  MOVE_TO_X | MOVE_TO_Y);
+      /* whole = move_it_to (&it, w->window_end_pos, INT_MAX,
+			  window_box_height (w), -1,
+			  MOVE_TO_POS | MOVE_TO_X | MOVE_TO_Y); */
+
+      start = w->hscroll * FRAME_COLUMN_WIDTH (WINDOW_XFRAME (w));
+      end = start + window_box_width (w, TEXT_AREA);
+      portion = end - start;
+      /* After enlarging a horizontally scrolled window such that it
+	 gets at least as wide as the text it contains, make sure that
+	 the thumb doesn't fill the entire scroll bar so we can still
+	 drag it back to see the entire text.  */
+      whole = max (whole, end);
+
+      if (it.bidi_p)
+	{
+	  Lisp_Object pdir;
+
+	  pdir = Fcurrent_bidi_paragraph_direction (Qnil);
+	  if (EQ (pdir, Qright_to_left))
+	    {
+	      start = whole - end;
+	      end = start + portion;
+	    }
+	}
+
+      if (old_buffer)
+	set_buffer_internal (old_buffer);
+    }
+  else
+    start = end = whole = portion = 0;
+
+  w->hscroll_whole = whole;
+
+  /* Indicate what this scroll bar ought to be displaying now.  */
+  if (FRAME_TERMINAL (XFRAME (w->frame))->set_horizontal_scroll_bar_hook)
+    (*FRAME_TERMINAL (XFRAME (w->frame))->set_horizontal_scroll_bar_hook)
+      (w, portion, whole, start);
+}
+
+
+/* Redisplay leaf window WINDOW.  JUST_THIS_ONE_P means only
    selected_window is redisplayed.
 
    We can return without actually redisplaying the window if fonts has been
@@ -15942,7 +15909,7 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
   struct buffer *buffer = XBUFFER (w->contents);
   struct buffer *old = current_buffer;
   struct text_pos lpoint, opoint, startp;
-  int update_mode_line;
+  bool update_mode_line;
   int tem;
   struct it it;
   /* Record it now because it's overwritten.  */
@@ -15951,11 +15918,11 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
   /* This is less strict than current_matrix_up_to_date_p.
      It indicates that the buffer contents and narrowing are unchanged.  */
   bool buffer_unchanged_p = false;
-  int temp_scroll_step = 0;
+  bool temp_scroll_step = false;
   ptrdiff_t count = SPECPDL_INDEX ();
   int rc;
   int centering_position = -1;
-  int last_line_misfit = 0;
+  bool last_line_misfit = false;
   ptrdiff_t beg_unchanged, end_unchanged;
   int frame_line_height;
 
@@ -15969,6 +15936,8 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
   if (!just_this_one_p
       && REDISPLAY_SOME_P ()
       && !w->redisplay
+      && !w->update_mode_line
+      && !f->face_change
       && !f->redisplay
       && !buffer->text->redisplay
       && BUF_PT (buffer) == w->last_point)
@@ -16089,7 +16058,7 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
     emacs_abort ();
 
   if (mode_line_update_needed (w))
-    update_mode_line = 1;
+    update_mode_line = true;
 
   /* Point refers normally to the selected window.  For any other
      window, set up appropriate value.  */
@@ -16097,6 +16066,7 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
     {
       ptrdiff_t new_pt = marker_position (w->pointm);
       ptrdiff_t new_pt_byte = marker_byte_position (w->pointm);
+
       if (new_pt < BEGV)
 	{
 	  new_pt = BEGV;
@@ -16151,7 +16121,7 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
     {
       ptrdiff_t it_charpos;
 
-      w->optional_new_start = 0;
+      w->optional_new_start = false;
       start_display (&it, w, startp);
       move_it_to (&it, PT, 0, it.last_visible_y, -1,
 		  MOVE_TO_POS | MOVE_TO_X | MOVE_TO_Y);
@@ -16166,10 +16136,10 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
 	  && !w->force_start)
 	{
 	  if (it_charpos == PT)
-	    w->force_start = 1;
+	    w->force_start = true;
 	  /* IT may overshoot PT if text at PT is invisible.  */
 	  else if (it_charpos > PT && CHARPOS (startp) <= PT)
-	    w->force_start = 1;
+	    w->force_start = true;
 #ifdef GLYPH_DEBUG
 	  if (w->force_start)
 	    {
@@ -16191,9 +16161,9 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
       /* We set this later on if we have to adjust point.  */
       int new_vpos = -1;
 
-      w->force_start = 0;
+      w->force_start = false;
       w->vscroll = 0;
-      w->window_end_valid = 0;
+      w->window_end_valid = false;
 
       /* Forget any recorded base line for line number display.  */
       if (!buffer_unchanged_p)
@@ -16209,8 +16179,8 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
       if (!update_mode_line
 	  || ! NILP (Vwindow_scroll_functions))
 	{
-	  update_mode_line = 1;
-	  w->update_mode_line = 1;
+	  update_mode_line = true;
+	  w->update_mode_line = true;
 	  startp = run_window_scroll_functions (window, startp);
 	}
 
@@ -16226,7 +16196,7 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
 	 the scroll margin (bug#148) -- cyd  */
       if (!try_window (window, startp, 0))
 	{
-	  w->force_start = 1;
+	  w->force_start = true;
 	  clear_glyph_matrix (w->desired_matrix);
 	  goto need_larger_matrices;
 	}
@@ -16239,7 +16209,7 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
 	  new_vpos = window_box_height (w) / 2;
 	}
 
-      if (!cursor_row_fully_visible_p (w, 0, 0))
+      if (!cursor_row_fully_visible_p (w, false, false))
 	{
 	  /* Point does appear, but on a line partly visible at end of window.
 	     Move it back to a fully-visible line.  */
@@ -16332,7 +16302,7 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
 		goto need_larger_matrices;
 	    }
 	}
-      if (w->cursor.vpos < 0 || !cursor_row_fully_visible_p (w, 0, 0))
+      if (w->cursor.vpos < 0 || !cursor_row_fully_visible_p (w, false, false))
 	{
 	  clear_glyph_matrix (w->desired_matrix);
 	  goto try_to_scroll;
@@ -16346,7 +16316,7 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
 
   /* Handle case where text has not changed, only point, and it has
      not moved off the frame, and we are not retrying after hscroll.
-     (current_matrix_up_to_date_p is nonzero when retrying.)  */
+     (current_matrix_up_to_date_p is true when retrying.)  */
   if (current_matrix_up_to_date_p
       && (rc = try_cursor_movement (window, startp, &temp_scroll_step),
 	  rc != CURSOR_MOVEMENT_CANNOT_BE_USED))
@@ -16354,7 +16324,7 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
       switch (rc)
 	{
 	case CURSOR_MOVEMENT_SUCCESS:
-	  used_current_matrix_p = 1;
+	  used_current_matrix_p = true;
 	  goto done;
 
 	case CURSOR_MOVEMENT_MUST_SCROLL:
@@ -16436,7 +16406,7 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
 	     in which case we accept that it is partially visible.  */
 	  && (rtop != 0) == (rbot != 0))
 	{
-	  w->force_start = 1;
+	  w->force_start = true;
 	  SET_TEXT_POS_FROM_MARKER (startp, w->start);
 #ifdef GLYPH_DEBUG
 	  debug_method_add (w, "recomputed window start in continuation line");
@@ -16478,10 +16448,10 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
 	    /* Forget any recorded base line for line number display.  */
 	    w->base_line_number = 0;
 
-	  if (!cursor_row_fully_visible_p (w, 1, 0))
+	  if (!cursor_row_fully_visible_p (w, true, false))
 	    {
 	      clear_glyph_matrix (w->desired_matrix);
-	      last_line_misfit = 1;
+	      last_line_misfit = true;
 	    }
 	    /* Drop through and scroll.  */
 	  else
@@ -16496,8 +16466,8 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
   /* Redisplay the mode line.  Select the buffer properly for that.  */
   if (!update_mode_line)
     {
-      update_mode_line = 1;
-      w->update_mode_line = 1;
+      update_mode_line = true;
+      w->update_mode_line = true;
     }
 
   /* Try to scroll by specified few lines.  */
@@ -16551,13 +16521,13 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
     {
       int window_total_lines
 	= WINDOW_TOTAL_LINES (w) * FRAME_LINE_HEIGHT (f) / frame_line_height;
-      int margin =
-	scroll_margin > 0
+      int margin
+	= scroll_margin > 0
 	? min (scroll_margin, window_total_lines / 4)
 	: 0;
       ptrdiff_t margin_pos = CHARPOS (startp);
       Lisp_Object aggressive;
-      int scrolling_up;
+      bool scrolling_up;
 
       /* If there is a scroll margin at the top of the window, find
 	 its character position.  */
@@ -16611,8 +16581,8 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
 	      if (pt_offset)
 		centering_position -= pt_offset;
 	      centering_position -=
-		frame_line_height * (1 + margin + (last_line_misfit != 0))
-		+ WINDOW_HEADER_LINE_HEIGHT (w);
+		(frame_line_height * (1 + margin + last_line_misfit)
+		 + WINDOW_HEADER_LINE_HEIGHT (w));
 	      /* Don't let point enter the scroll margin near top of
 		 the window.  */
 	      if (centering_position < margin * frame_line_height)
@@ -16719,7 +16689,7 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
 	    get_char_property_and_overlay (make_number (PT), Qinvisible,
 					   Qnil, NULL);
 
-	  if (TEXT_PROP_MEANS_INVISIBLE (val))
+	  if (TEXT_PROP_MEANS_INVISIBLE (val) != 0)
 	    {
 	      ptrdiff_t alt_pos;
 	      Lisp_Object invis_end =
@@ -16746,7 +16716,7 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
       set_cursor_from_row (w, row, w->current_matrix, 0, 0, 0, 0);
     }
 
-  if (!cursor_row_fully_visible_p (w, 0, 0))
+  if (!cursor_row_fully_visible_p (w, false, false))
     {
       /* If vscroll is enabled, disable it and try again.  */
       if (w->vscroll)
@@ -16768,7 +16738,7 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
 	    scroll_margin > 0
 	    ? min (scroll_margin, window_total_lines / 4)
 	    : 0;
-	  int move_down = w->cursor.vpos >= window_total_lines / 2;
+	  bool move_down = w->cursor.vpos >= window_total_lines / 2;
 
 	  move_it_by_lines (&it, move_down ? margin + 1 : -(margin + 1));
 	  clear_glyph_matrix (w->desired_matrix);
@@ -16820,7 +16790,7 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
       if (WINDOW_WANTS_MODELINE_P (w)
 	  && CURRENT_MODE_LINE_HEIGHT (w) != DESIRED_MODE_LINE_HEIGHT (w))
 	{
-	  f->fonts_changed = 1;
+	  f->fonts_changed = true;
 	  w->mode_line_height = -1;
 	  MATRIX_MODE_LINE_ROW (w->current_matrix)->height
 	    = DESIRED_MODE_LINE_HEIGHT (w);
@@ -16831,7 +16801,7 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
       if (WINDOW_WANTS_HEADER_LINE_P (w)
 	  && CURRENT_HEADER_LINE_HEIGHT (w) != DESIRED_HEADER_LINE_HEIGHT (w))
 	{
-	  f->fonts_changed = 1;
+	  f->fonts_changed = true;
 	  w->header_line_height = -1;
 	  MATRIX_HEADER_LINE_ROW (w->current_matrix)->height
 	    = DESIRED_HEADER_LINE_HEIGHT (w);
@@ -16853,7 +16823,7 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
   if (update_mode_line
       && EQ (FRAME_SELECTED_WINDOW (f), window))
     {
-      int redisplay_menu_p = 0;
+      bool redisplay_menu_p;
 
       if (FRAME_WINDOW_P (f))
 	{
@@ -16878,10 +16848,10 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
 	    redisplay_tool_bar (f);
 #else
 	  if (WINDOWP (f->tool_bar_window)
-	      && (FRAME_TOOL_BAR_HEIGHT (f) > 0
+	      && (FRAME_TOOL_BAR_LINES (f) > 0
 		  || !NILP (Vauto_resize_tool_bars))
 	      && redisplay_tool_bar (f))
-	    ignore_mouse_drag_p = 1;
+	    ignore_mouse_drag_p = true;
 #endif
         }
 #endif
@@ -16895,7 +16865,7 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
     {
       update_begin (f);
       block_input ();
-      if (draw_window_fringes (w, 1))
+      if (draw_window_fringes (w, true))
 	{
 	  if (WINDOW_RIGHT_DIVIDER_WIDTH (w))
 	    x_draw_right_divider (w);
@@ -16918,10 +16888,15 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
   ;
  finish_scroll_bars:
 
-  if (WINDOW_HAS_VERTICAL_SCROLL_BAR (w))
+   if (WINDOW_HAS_VERTICAL_SCROLL_BAR (w) || WINDOW_HAS_HORIZONTAL_SCROLL_BAR (w))
     {
-      /* Set the thumb's position and size.  */
-      set_vertical_scroll_bar (w);
+      if (WINDOW_HAS_VERTICAL_SCROLL_BAR (w))
+	/* Set the thumb's position and size.  */
+	set_vertical_scroll_bar (w);
+
+      if (WINDOW_HAS_HORIZONTAL_SCROLL_BAR (w))
+	/* Set the thumb's position and size.  */
+	set_horizontal_scroll_bar (w);
 
       /* Note that we actually used the scroll bar attached to this
 	 window, so it shouldn't be deleted at the end of redisplay.  */
@@ -16973,10 +16948,11 @@ try_window (Lisp_Object window, struct text_pos pos, int flags)
 
   /* Mark cursor position as unknown.  No overlay arrow seen.  */
   w->cursor.vpos = -1;
-  overlay_arrow_seen = 0;
+  overlay_arrow_seen = false;
 
   /* Initialize iterator and info to start at POS.  */
   start_display (&it, w, pos);
+  it.glyph_row->reversed_p = false;
 
   /* Display all lines of W.  */
   while (it.current_y < it.last_visible_y)
@@ -17021,7 +16997,7 @@ try_window (Lisp_Object window, struct text_pos pos, int flags)
 
   /* If bottom moved off end of frame, change mode line percentage.  */
   if (w->window_end_pos <= 0 && Z != IT_CHARPOS (it))
-    w->update_mode_line = 1;
+    w->update_mode_line = true;
 
   /* Set window_end_pos to the offset of the last character displayed
      on the window from the end of current_buffer.  Set
@@ -17029,7 +17005,7 @@ try_window (Lisp_Object window, struct text_pos pos, int flags)
   if (last_text_row)
     {
       eassert (MATRIX_ROW_DISPLAYS_TEXT_P (last_text_row));
-      adjust_window_ends (w, last_text_row, 0);
+      adjust_window_ends (w, last_text_row, false);
       eassert
 	(MATRIX_ROW_DISPLAYS_TEXT_P (MATRIX_ROW (w->desired_matrix,
 						 w->window_end_vpos)));
@@ -17042,7 +17018,7 @@ try_window (Lisp_Object window, struct text_pos pos, int flags)
     }
 
   /* But that is not valid info until redisplay finishes.  */
-  w->window_end_valid = 0;
+  w->window_end_valid = false;
   return 1;
 }
 
@@ -17054,10 +17030,10 @@ try_window (Lisp_Object window, struct text_pos pos, int flags)
 
 /* Try redisplay of window W showing an unchanged buffer with a
    different window start than the last time it was displayed by
-   reusing its current matrix.  Value is non-zero if successful.
+   reusing its current matrix.  Value is true if successful.
    W->start is the new window start.  */
 
-static int
+static bool
 try_window_reusing_current_matrix (struct window *w)
 {
   struct frame *f = XFRAME (w->frame);
@@ -17073,7 +17049,7 @@ try_window_reusing_current_matrix (struct window *w)
 
 #ifdef GLYPH_DEBUG
   if (inhibit_try_window_reusing)
-    return 0;
+    return false;
 #endif
 
   if (/* This function doesn't handle terminal frames.  */
@@ -17081,23 +17057,24 @@ try_window_reusing_current_matrix (struct window *w)
       /* Don't try to reuse the display if windows have been split
 	 or such.  */
       || windows_or_buffers_changed
+      || f->redisplay
       || f->cursor_type_changed)
-    return 0;
+    return false;
 
   /* Can't do this if showing trailing whitespace.  */
   if (!NILP (Vshow_trailing_whitespace))
-    return 0;
+    return false;
 
   /* If top-line visibility has changed, give up.  */
   if (WINDOW_WANTS_HEADER_LINE_P (w)
       != MATRIX_HEADER_LINE_ROW (w->current_matrix)->mode_line_p)
-    return 0;
+    return false;
 
   /* Give up if old or new display is scrolled vertically.  We could
      make this function handle this, but right now it doesn't.  */
   start_row = MATRIX_FIRST_TEXT_ROW (w->current_matrix);
   if (w->vscroll || MATRIX_ROW_PARTIALLY_VISIBLE_P (w, start_row))
-    return 0;
+    return false;
 
   /* The variable new_start now holds the new window start.  The old
      start `start' can be determined from the current matrix.  */
@@ -17115,7 +17092,7 @@ try_window_reusing_current_matrix (struct window *w)
 	 below, and it's certainly not worth the effort since this is
 	 not a frequent case.  */
       if (in_ellipses_for_invisible_text_p (&start_row->start, w))
-	return 0;
+	return false;
 
       IF_DEBUG (debug_method_add (w, "twu1"));
 
@@ -17144,7 +17121,7 @@ try_window_reusing_current_matrix (struct window *w)
 		  || CHARPOS (start) == ZV)
 		{
 		  clear_glyph_matrix (w->desired_matrix);
-		  return 0;
+		  return false;
 		}
 
 	      start_vpos = MATRIX_ROW_VPOS (start_row, w->current_matrix);
@@ -17160,6 +17137,7 @@ try_window_reusing_current_matrix (struct window *w)
 	      && it.current.dpvec_index < 0)
 	    break;
 
+	  it.glyph_row->reversed_p = false;
 	  if (display_line (&it))
 	    last_text_row = it.glyph_row - 1;
 
@@ -17188,7 +17166,7 @@ try_window_reusing_current_matrix (struct window *w)
 	      else
 		{
 		  clear_glyph_matrix (w->desired_matrix);
-		  return 0;
+		  return false;
 		}
 	    }
 
@@ -17208,7 +17186,7 @@ try_window_reusing_current_matrix (struct window *w)
 	      FRAME_RIF (f)->update_window_begin_hook (w);
 	      FRAME_RIF (f)->clear_window_mouse_face (w);
 	      FRAME_RIF (f)->scroll_run_hook (w, &run);
-	      FRAME_RIF (f)->update_window_end_hook (w, 0, 0);
+	      FRAME_RIF (f)->update_window_end_hook (w, false, false);
 	      update_end (f);
 	    }
 
@@ -17238,7 +17216,7 @@ try_window_reusing_current_matrix (struct window *w)
 	      if (row->y + row->height > max_y)
 		row->visible_height -= row->y + row->height - max_y;
 	      if (row->fringe_bitmap_periodic_p)
-		row->redraw_fringe_bitmaps_p = 1;
+		row->redraw_fringe_bitmaps_p = true;
 
 	      it.current_y += row->height;
 
@@ -17251,7 +17229,7 @@ try_window_reusing_current_matrix (struct window *w)
 	  /* Disable lines in the current matrix which are now
 	     below the window.  */
 	  for (++row; row < bottom_row; ++row)
-	    row->enabled_p = row->mode_line_p = 0;
+	    row->enabled_p = row->mode_line_p = false;
 	}
 
       /* Update window_end_pos etc.; last_reused_text_row is the last
@@ -17259,9 +17237,9 @@ try_window_reusing_current_matrix (struct window *w)
 	 The value of last_text_row is the last displayed line
 	 containing text.  */
       if (last_reused_text_row)
-	adjust_window_ends (w, last_reused_text_row, 1);
+	adjust_window_ends (w, last_reused_text_row, true);
       else if (last_text_row)
-	adjust_window_ends (w, last_text_row, 0);
+	adjust_window_ends (w, last_text_row, false);
       else
 	{
 	  /* This window must be completely empty.  */
@@ -17269,15 +17247,15 @@ try_window_reusing_current_matrix (struct window *w)
 	  w->window_end_pos = Z - ZV;
 	  w->window_end_vpos = 0;
 	}
-      w->window_end_valid = 0;
+      w->window_end_valid = false;
 
       /* Update hint: don't try scrolling again in update_window.  */
-      w->desired_matrix->no_scrolling_p = 1;
+      w->desired_matrix->no_scrolling_p = true;
 
 #ifdef GLYPH_DEBUG
       debug_method_add (w, "try_window_reusing_current_matrix 1");
 #endif
-      return 1;
+      return true;
     }
   else if (CHARPOS (new_start) > CHARPOS (start))
     {
@@ -17301,7 +17279,7 @@ try_window_reusing_current_matrix (struct window *w)
 	  || !first_reusable_row->enabled_p
 	  || (MATRIX_ROW_START_CHARPOS (first_reusable_row)
 	      != CHARPOS (new_start)))
-	return 0;
+	return false;
 
       /* We can reuse fully visible rows beginning with
          first_reusable_row to the end of the window.  Set
@@ -17357,7 +17335,7 @@ try_window_reusing_current_matrix (struct window *w)
       if (w->cursor.vpos < 0)
 	{
 	  clear_glyph_matrix (w->desired_matrix);
-	  return 0;
+	  return false;
 	}
 
       /* Scroll the display.  */
@@ -17372,7 +17350,7 @@ try_window_reusing_current_matrix (struct window *w)
 	  FRAME_RIF (f)->update_window_begin_hook (w);
 	  FRAME_RIF (f)->clear_window_mouse_face (w);
 	  FRAME_RIF (f)->scroll_run_hook (w, &run);
-	  FRAME_RIF (f)->update_window_end_hook (w, 0, 0);
+	  FRAME_RIF (f)->update_window_end_hook (w, false, false);
 	  update_end (f);
 	}
 
@@ -17389,7 +17367,7 @@ try_window_reusing_current_matrix (struct window *w)
 	  if (row->y + row->height > max_y)
 	    row->visible_height -= row->y + row->height - max_y;
 	  if (row->fringe_bitmap_periodic_p)
-	    row->redraw_fringe_bitmaps_p = 1;
+	    row->redraw_fringe_bitmaps_p = true;
 	}
 
       /* Scroll the current matrix.  */
@@ -17428,7 +17406,7 @@ try_window_reusing_current_matrix (struct window *w)
 					    0, 0, 0, 0))
 		    {
 		      clear_glyph_matrix (w->desired_matrix);
-		      return 0;
+		      return false;
 		    }
 		}
 	      else
@@ -17452,20 +17430,20 @@ try_window_reusing_current_matrix (struct window *w)
 	 the window end is in reused rows which in turn means that
 	 only its vpos can have changed.  */
       if (last_text_row)
-	adjust_window_ends (w, last_text_row, 0);
+	adjust_window_ends (w, last_text_row, false);
       else
 	w->window_end_vpos -= nrows_scrolled;
 
-      w->window_end_valid = 0;
-      w->desired_matrix->no_scrolling_p = 1;
+      w->window_end_valid = false;
+      w->desired_matrix->no_scrolling_p = true;
 
 #ifdef GLYPH_DEBUG
       debug_method_add (w, "try_window_reusing_current_matrix 2");
 #endif
-      return 1;
+      return true;
     }
 
-  return 0;
+  return false;
 }
 
 
@@ -17716,7 +17694,7 @@ row_containing_pos (struct window *w, ptrdiff_t charpos,
 
   last_y = window_text_bottom_y (w) - dy;
 
-  while (1)
+  while (true)
     {
       /* Give up if we have gone too far.  */
       if (end && row >= end)
@@ -17772,7 +17750,7 @@ row_containing_pos (struct window *w, ptrdiff_t charpos,
 
 /* Try to redisplay window W by reusing its existing display.  W's
    current matrix must be up to date when this function is called,
-   i.e. window_end_valid must be nonzero.
+   i.e., window_end_valid must be true.
 
    Value is
 
@@ -17839,12 +17817,12 @@ try_window_id (struct window *w)
 #endif
 
   /* This is handy for debugging.  */
-#if 0
+#if false
 #define GIVE_UP(X)						\
   do {								\
-    fprintf (stderr, "try_window_id give up %d\n", (X));	\
+    TRACE ((stderr, "try_window_id give up %d\n", (X)));	\
     return 0;							\
-  } while (0)
+  } while (false)
 #else
 #define GIVE_UP(X) return 0
 #endif
@@ -17857,14 +17835,14 @@ try_window_id (struct window *w)
     GIVE_UP (1);
 
   /* This flag is used to prevent redisplay optimizations.  */
-  if (windows_or_buffers_changed || f->cursor_type_changed)
+  if (windows_or_buffers_changed || f->cursor_type_changed || f->redisplay)
     GIVE_UP (2);
 
   /* This function's optimizations cannot be used if overlays have
      changed in the buffer displayed by the window, so give up if they
      have.  */
   if (w->last_overlay_modified != OVERLAY_MODIFF)
-    GIVE_UP (21);
+    GIVE_UP (200);
 
   /* Verify that narrowing has not changed.
      Also verify that we were not told to prevent redisplay optimizations.
@@ -17923,6 +17901,11 @@ try_window_id (struct window *w)
   if (!NILP (BVAR (XBUFFER (w->contents), bidi_display_reordering))
       && NILP (BVAR (XBUFFER (w->contents), bidi_paragraph_direction)))
     GIVE_UP (22);
+
+  /* Give up if the buffer has line-spacing set, as Lisp-level changes
+     to that variable require thorough redisplay.  */
+  if (!NILP (BVAR (XBUFFER (w->contents), extra_line_spacing)))
+    GIVE_UP (23);
 
   /* Make sure beg_unchanged and end_unchanged are up to date.  Do it
      only if buffer has really changed.  The reason is that the gap is
@@ -18085,7 +18068,7 @@ try_window_id (struct window *w)
       if (MATRIX_ROW_ENDS_IN_MIDDLE_OF_CHAR_P (last_unchanged_at_beg_row))
 	GIVE_UP (17);
 
-      if (init_to_row_end (&it, w, last_unchanged_at_beg_row) == 0)
+      if (! init_to_row_end (&it, w, last_unchanged_at_beg_row))
 	GIVE_UP (18);
       start_pos = it.current.pos;
 
@@ -18179,7 +18162,12 @@ try_window_id (struct window *w)
      line where the window_end_vpos is.  */
   w->cursor.vpos = -1;
   last_text_row = NULL;
-  overlay_arrow_seen = 0;
+  overlay_arrow_seen = false;
+  if (it.current_y < it.last_visible_y
+      && !f->fonts_changed
+      && (first_unchanged_at_end_row == NULL
+	  || IT_CHARPOS (it) < stop_pos))
+    it.glyph_row->reversed_p = false;
   while (it.current_y < it.last_visible_y
 	 && !f->fonts_changed
 	 && (first_unchanged_at_end_row == NULL
@@ -18192,6 +18180,21 @@ try_window_id (struct window *w)
   if (f->fonts_changed)
     return -1;
 
+  /* The redisplay iterations in display_line above could have
+     triggered font-lock, which could have done something that
+     invalidates IT->w window's end-point information, on which we
+     rely below.  E.g., one package, which will remain unnamed, used
+     to install a font-lock-fontify-region-function that called
+     bury-buffer, whose side effect is to switch the buffer displayed
+     by IT->w, and that predictably resets IT->w's window_end_valid
+     flag, which we already tested at the entry to this function.
+     Amply punish such packages/modes by giving up on this
+     optimization in those cases.  */
+  if (!w->window_end_valid)
+    {
+      clear_glyph_matrix (w->desired_matrix);
+      return -1;
+    }
 
   /* Compute differences in buffer positions, y-positions etc.  for
      lines reused at the bottom of the window.  Compute what we can
@@ -18295,7 +18298,7 @@ try_window_id (struct window *w)
 	  FRAME_RIF (f)->update_window_begin_hook (w);
 	  FRAME_RIF (f)->clear_window_mouse_face (w);
 	  FRAME_RIF (f)->scroll_run_hook (w, &run);
-	  FRAME_RIF (f)->update_window_end_hook (w, 0, 0);
+	  FRAME_RIF (f)->update_window_end_hook (w, false, false);
 	}
       else
 	{
@@ -18305,7 +18308,7 @@ try_window_id (struct window *w)
 	    = MATRIX_ROW_VPOS (first_unchanged_at_end_row, w->current_matrix);
 	  int from = WINDOW_TOP_EDGE_LINE (w) + from_vpos;
 	  int end = (WINDOW_TOP_EDGE_LINE (w)
-		     + (WINDOW_WANTS_HEADER_LINE_P (w) ? 1 : 0)
+		     + WINDOW_WANTS_HEADER_LINE_P (w)
 		     + window_internal_height (w));
 
 #if defined (HAVE_GPM) || defined (MSDOS)
@@ -18441,7 +18444,7 @@ try_window_id (struct window *w)
 	  /* Is it always sure that the display agrees with lines in
 	     the current matrix?  I don't think so, so we mark rows
 	     displayed invalid in the current matrix by setting their
-	     enabled_p flag to zero.  */
+	     enabled_p flag to false.  */
 	  SET_MATRIX_ROW_ENABLED_P (w->current_matrix, it.vpos, false);
 	  if (display_line (&it))
 	    last_text_row_at_end = it.glyph_row - 1;
@@ -18459,13 +18462,13 @@ try_window_id (struct window *w)
       row = find_last_row_displaying_text (w->current_matrix, &it,
 					   first_unchanged_at_end_row);
       eassert (row && MATRIX_ROW_DISPLAYS_TEXT_P (row));
-      adjust_window_ends (w, row, 1);
+      adjust_window_ends (w, row, true);
       eassert (w->window_end_bytepos >= 0);
       IF_DEBUG (debug_method_add (w, "A"));
     }
   else if (last_text_row_at_end)
     {
-      adjust_window_ends (w, last_text_row_at_end, 0);
+      adjust_window_ends (w, last_text_row_at_end, false);
       eassert (w->window_end_bytepos >= 0);
       IF_DEBUG (debug_method_add (w, "B"));
     }
@@ -18474,7 +18477,7 @@ try_window_id (struct window *w)
       /* We have displayed either to the end of the window or at the
 	 end of the window, i.e. the last row with text is to be found
 	 in the desired matrix.  */
-      adjust_window_ends (w, last_text_row, 0);
+      adjust_window_ends (w, last_text_row, false);
       eassert (w->window_end_bytepos >= 0);
     }
   else if (first_unchanged_at_end_row == NULL
@@ -18483,7 +18486,7 @@ try_window_id (struct window *w)
     {
       /* Displayed to end of window, but no line containing text was
 	 displayed.  Lines were deleted at the end of the window.  */
-      int first_vpos = WINDOW_WANTS_HEADER_LINE_P (w) ? 1 : 0;
+      bool first_vpos = WINDOW_WANTS_HEADER_LINE_P (w);
       int vpos = w->window_end_vpos;
       struct glyph_row *current_row = current_matrix->rows + vpos;
       struct glyph_row *desired_row = desired_matrix->rows + vpos;
@@ -18515,8 +18518,8 @@ try_window_id (struct window *w)
 	     debug_end_vpos = w->window_end_vpos));
 
   /* Record that display has not been completed.  */
-  w->window_end_valid = 0;
-  w->desired_matrix->no_scrolling_p = 1;
+  w->window_end_valid = false;
+  w->desired_matrix->no_scrolling_p = true;
   return 3;
 
 #undef GIVE_UP
@@ -18570,7 +18573,7 @@ dump_glyph (struct glyph_row *row, struct glyph *glyph, int area)
 		? 'B'
 		: (STRINGP (glyph->object)
 		   ? 'S'
-		   : (INTEGERP (glyph->object)
+		   : (NILP (glyph->object)
 		      ? '0'
 		      : '-'))),
 	       glyph->pixel_width,
@@ -18593,7 +18596,7 @@ dump_glyph (struct glyph_row *row, struct glyph *glyph, int area)
 		? 'B'
 		: (STRINGP (glyph->object)
 		   ? 'S'
-		   : (INTEGERP (glyph->object)
+		   : (NILP (glyph->object)
 		      ? '0'
 		      : '-'))),
 	       glyph->pixel_width,
@@ -18614,7 +18617,7 @@ dump_glyph (struct glyph_row *row, struct glyph *glyph, int area)
 		? 'B'
 		: (STRINGP (glyph->object)
 		   ? 'S'
-		   : (INTEGERP (glyph->object)
+		   : (NILP (glyph->object)
 		      ? '0'
 		      : '-'))),
 	       glyph->pixel_width,
@@ -18635,7 +18638,7 @@ dump_glyph (struct glyph_row *row, struct glyph *glyph, int area)
 		? 'B'
 		: (STRINGP (glyph->object)
 		   ? 'S'
-		   : (INTEGERP (glyph->object)
+		   : (NILP (glyph->object)
 		      ? '0'
 		      : '-'))),
 	       glyph->pixel_width,
@@ -18724,10 +18727,10 @@ dump_glyph_row (struct glyph_row *row, int vpos, int glyphs)
   else if (glyphs == 1)
     {
       int area;
+      char s[SHRT_MAX + 4];
 
       for (area = LEFT_MARGIN_AREA; area < LAST_AREA; ++area)
 	{
-	  char *s = alloca (row->used[area] + 4);
 	  int i;
 
 	  for (i = 0; i < row->used[area]; ++i)
@@ -18735,7 +18738,7 @@ dump_glyph_row (struct glyph_row *row, int vpos, int glyphs)
 	      struct glyph *glyph = row->glyphs[area] + i;
 	      if (i == row->used[area] - 1
 		  && area == TEXT_AREA
-		  && INTEGERP (glyph->object)
+		  && NILP (glyph->object)
 		  && glyph->type == CHAR_GLYPH
 		  && glyph->u.ch == ' ')
 		{
@@ -18762,7 +18765,10 @@ DEFUN ("dump-glyph-matrix", Fdump_glyph_matrix,
        doc: /* Dump the current matrix of the selected window to stderr.
 Shows contents of glyph row structures.  With non-nil
 parameter GLYPHS, dump glyphs as well.  If GLYPHS is 1 show
-glyphs in short form, otherwise show glyphs in long form.  */)
+glyphs in short form, otherwise show glyphs in long form.
+
+Interactively, no argument means show glyphs in short form;
+with numeric argument, its value is passed as the GLYPHS flag.  */)
   (Lisp_Object glyphs)
 {
   struct window *w = XWINDOW (selected_window);
@@ -18780,11 +18786,16 @@ glyphs in short form, otherwise show glyphs in long form.  */)
 
 
 DEFUN ("dump-frame-glyph-matrix", Fdump_frame_glyph_matrix,
-       Sdump_frame_glyph_matrix, 0, 0, "", doc: /* */)
+       Sdump_frame_glyph_matrix, 0, 0, "", doc: /* Dump the current glyph matrix of the selected frame to stderr.
+Only text-mode frames have frame glyph matrices.  */)
   (void)
 {
   struct frame *f = XFRAME (selected_frame);
-  dump_glyph_matrix (f->current_matrix, 1);
+
+  if (f->current_matrix)
+    dump_glyph_matrix (f->current_matrix, 1);
+  else
+    fprintf (stderr, "*** This frame doesn't have a frame glyph matrix ***\n");
   return Qnil;
 }
 
@@ -18858,7 +18869,7 @@ usage: (trace-to-stderr STRING &rest OBJECTS)  */)
   (ptrdiff_t nargs, Lisp_Object *args)
 {
   Lisp_Object s = Fformat (nargs, args);
-  fprintf (stderr, "%s", SDATA (s));
+  fwrite (SDATA (s), 1, SBYTES (s), stderr);
   return Qnil;
 }
 
@@ -18880,7 +18891,7 @@ get_overlay_arrow_glyph_row (struct window *w, Lisp_Object overlay_arrow_string)
   struct buffer *buffer = XBUFFER (w->contents);
   struct buffer *old = current_buffer;
   const unsigned char *arrow_string = SDATA (overlay_arrow_string);
-  int arrow_len = SCHARS (overlay_arrow_string);
+  ptrdiff_t arrow_len = SCHARS (overlay_arrow_string);
   const unsigned char *arrow_end = arrow_string + arrow_len;
   const unsigned char *p;
   struct it it;
@@ -18889,6 +18900,7 @@ get_overlay_arrow_glyph_row (struct window *w, Lisp_Object overlay_arrow_string)
 
   set_buffer_temp (buffer);
   init_iterator (&it, w, -1, -1, &scratch_glyph_row, DEFAULT_FACE_ID);
+  scratch_glyph_row.reversed_p = false;
   it.glyph_row->used[TEXT_AREA] = 0;
   SET_TEXT_POS (it.position, 0, 0);
 
@@ -18956,7 +18968,7 @@ insert_left_trunc_glyphs (struct it *it)
   truncate_it.area = TEXT_AREA;
   truncate_it.glyph_row->used[TEXT_AREA] = 0;
   CHARPOS (truncate_it.position) = BYTEPOS (truncate_it.position) = -1;
-  truncate_it.object = make_number (0);
+  truncate_it.object = Qnil;
   produce_special_glyphs (&truncate_it, IT_TRUNCATION);
 
   /* Overwrite glyphs from IT with truncation glyphs.  */
@@ -19200,7 +19212,7 @@ compute_line_metrics (struct it *it)
 
 /* Append one space to the glyph row of iterator IT if doing a
    window-based redisplay.  The space has the same face as
-   IT->face_id.  Value is non-zero if a space was added.
+   IT->face_id.  Value is true if a space was added.
 
    This function is called to make sure that there is always one glyph
    at the end of a glyph row that the cursor can be set on under
@@ -19210,8 +19222,8 @@ compute_line_metrics (struct it *it)
    At the same time this space let's a nicely handle clearing to the
    end of the line if the row ends in italic text.  */
 
-static int
-append_space_for_newline (struct it *it, int default_face_p)
+static bool
+append_space_for_newline (struct it *it, bool default_face_p)
 {
   if (FRAME_WINDOW_P (it->f))
     {
@@ -19229,17 +19241,18 @@ append_space_for_newline (struct it *it, int default_face_p)
 	  int saved_char_to_display = it->char_to_display;
 	  int saved_x = it->current_x;
 	  int saved_face_id = it->face_id;
-	  int saved_box_end = it->end_of_box_run_p;
+	  bool saved_box_end = it->end_of_box_run_p;
 	  struct text_pos saved_pos;
 	  Lisp_Object saved_object;
 	  struct face *face;
+	  struct glyph *g;
 
 	  saved_object = it->object;
 	  saved_pos = it->position;
 
 	  it->what = IT_CHARACTER;
 	  memset (&it->position, 0, sizeof it->position);
-	  it->object = make_number (0);
+	  it->object = Qnil;
 	  it->c = it->char_to_display = ' ';
 	  it->len = 1;
 
@@ -19260,12 +19273,93 @@ append_space_for_newline (struct it *it, int default_face_p)
 		 the end of the row, there will be no stretch glyph,
 		 so leave the box flag set.  */
 	      && saved_x + FRAME_COLUMN_WIDTH (it->f) < it->last_visible_x)
-	    it->end_of_box_run_p = 0;
+	    it->end_of_box_run_p = false;
 
 	  PRODUCE_GLYPHS (it);
 
+#ifdef HAVE_WINDOW_SYSTEM
+	  /* Make sure this space glyph has the right ascent and
+	     descent values, or else cursor at end of line will look
+	     funny, and height of empty lines will be incorrect.  */
+	  g = it->glyph_row->glyphs[TEXT_AREA] + n;
+	  struct font *font = face->font ? face->font : FRAME_FONT (it->f);
+	  if (n == 0)
+	    {
+	      Lisp_Object height, total_height;
+	      int extra_line_spacing = it->extra_line_spacing;
+	      int boff = font->baseline_offset;
+
+	      if (font->vertical_centering)
+		boff = VCENTER_BASELINE_OFFSET (font, it->f) - boff;
+
+	      it->object = saved_object; /* get_it_property needs this */
+	      normal_char_ascent_descent (font, -1, &it->ascent, &it->descent);
+	      /* Must do a subset of line height processing from
+		 x_produce_glyph for newline characters.  */
+	      height = get_it_property (it, Qline_height);
+	      if (CONSP (height)
+		  && CONSP (XCDR (height))
+		  && NILP (XCDR (XCDR (height))))
+		{
+		  total_height = XCAR (XCDR (height));
+		  height = XCAR (height);
+		}
+	      else
+		total_height = Qnil;
+	      height = calc_line_height_property (it, height, font, boff, true);
+
+	      if (it->override_ascent >= 0)
+		{
+		  it->ascent = it->override_ascent;
+		  it->descent = it->override_descent;
+		  boff = it->override_boff;
+		}
+	      if (EQ (height, Qt))
+		extra_line_spacing = 0;
+	      else
+		{
+		  Lisp_Object spacing;
+
+		  it->phys_ascent = it->ascent;
+		  it->phys_descent = it->descent;
+		  if (!NILP (height)
+		      && XINT (height) > it->ascent + it->descent)
+		    it->ascent = XINT (height) - it->descent;
+
+		  if (!NILP (total_height))
+		    spacing = calc_line_height_property (it, total_height, font,
+							 boff, false);
+		  else
+		    {
+		      spacing = get_it_property (it, Qline_spacing);
+		      spacing = calc_line_height_property (it, spacing, font,
+							   boff, false);
+		    }
+		  if (INTEGERP (spacing))
+		    {
+		      extra_line_spacing = XINT (spacing);
+		      if (!NILP (total_height))
+			extra_line_spacing -= (it->phys_ascent + it->phys_descent);
+		    }
+		}
+	      if (extra_line_spacing > 0)
+		{
+		  it->descent += extra_line_spacing;
+		  if (extra_line_spacing > it->max_extra_line_spacing)
+		    it->max_extra_line_spacing = extra_line_spacing;
+		}
+	      it->max_ascent = it->ascent;
+	      it->max_descent = it->descent;
+	      /* Make sure compute_line_metrics recomputes the row height.  */
+	      it->glyph_row->height = 0;
+	    }
+
+	  g->ascent = it->max_ascent;
+	  g->descent = it->max_descent;
+#endif
+
 	  it->override_ascent = -1;
-	  it->constrain_row_ascent_descent_p = 0;
+	  it->constrain_row_ascent_descent_p = false;
 	  it->current_x = saved_x;
 	  it->object = saved_object;
 	  it->position = saved_pos;
@@ -19275,11 +19369,11 @@ append_space_for_newline (struct it *it, int default_face_p)
 	  it->c = saved_c;
 	  it->char_to_display = saved_char_to_display;
 	  it->end_of_box_run_p = saved_box_end;
-	  return 1;
+	  return true;
 	}
     }
 
-  return 0;
+  return false;
 }
 
 
@@ -19334,7 +19428,7 @@ extend_face_to_end_of_line (struct it *it)
 
   /* Set the glyph row flag indicating that the face of the last glyph
      in the text area has to be drawn to the end of the text area.  */
-  it->glyph_row->fill_line_p = 1;
+  it->glyph_row->fill_line_p = true;
 
   /* If current character of IT is not ASCII, make sure we have the
      ASCII face.  This will be automatically undone the next time
@@ -19396,7 +19490,8 @@ extend_face_to_end_of_line (struct it *it)
 	  struct glyph *g;
 	  int row_width, stretch_ascent, stretch_width;
 	  struct text_pos saved_pos;
-	  int saved_face_id, saved_avoid_cursor, saved_box_start;
+	  int saved_face_id;
+	  bool saved_avoid_cursor, saved_box_start;
 
 	  for (row_width = 0, g = row_start; g < row_end; g++)
 	    row_width += g->pixel_width;
@@ -19420,7 +19515,7 @@ extend_face_to_end_of_line (struct it *it)
 	      saved_pos = it->position;
 	      memset (&it->position, 0, sizeof it->position);
 	      saved_avoid_cursor = it->avoid_cursor_p;
-	      it->avoid_cursor_p = 1;
+	      it->avoid_cursor_p = true;
 	      saved_face_id = it->face_id;
 	      saved_box_start = it->start_of_box_run_p;
 	      /* The last row's stretch glyph should get the default
@@ -19430,8 +19525,8 @@ extend_face_to_end_of_line (struct it *it)
 		it->face_id = default_face->id;
 	      else
 		it->face_id = face->id;
-	      it->start_of_box_run_p = 0;
-	      append_stretch_glyph (it, make_number (0), stretch_width,
+	      it->start_of_box_run_p = false;
+	      append_stretch_glyph (it, Qnil, stretch_width,
 				    it->ascent + it->descent, stretch_ascent);
 	      it->position = saved_pos;
 	      it->avoid_cursor_p = saved_avoid_cursor;
@@ -19461,7 +19556,7 @@ extend_face_to_end_of_line (struct it *it)
 
       it->what = IT_CHARACTER;
       memset (&it->position, 0, sizeof it->position);
-      it->object = make_number (0);
+      it->object = Qnil;
       it->c = it->char_to_display = ' ';
       it->len = 1;
 
@@ -19539,10 +19634,10 @@ extend_face_to_end_of_line (struct it *it)
 }
 
 
-/* Value is non-zero if text starting at CHARPOS in current_buffer is
+/* Value is true if text starting at CHARPOS in current_buffer is
    trailing whitespace.  */
 
-static int
+static bool
 trailing_whitespace_p (ptrdiff_t charpos)
 {
   ptrdiff_t bytepos = CHAR_TO_BYTE (charpos);
@@ -19556,9 +19651,9 @@ trailing_whitespace_p (ptrdiff_t charpos)
   if (bytepos >= ZV_BYTE || c == '\n' || c == '\r')
     {
       if (bytepos != PT_BYTE)
-	return 1;
+	return true;
     }
-  return 0;
+  return false;
 }
 
 
@@ -19590,14 +19685,14 @@ highlight_trailing_whitespace (struct frame *f, struct glyph_row *row)
 	{
 	  while (glyph >= start
 		 && glyph->type == CHAR_GLYPH
-		 && INTEGERP (glyph->object))
+		 && NILP (glyph->object))
 	    --glyph;
 	}
       else
 	{
 	  while (glyph <= start
 		 && glyph->type == CHAR_GLYPH
-		 && INTEGERP (glyph->object))
+		 && NILP (glyph->object))
 	    ++glyph;
 	}
 
@@ -19611,7 +19706,7 @@ highlight_trailing_whitespace (struct frame *f, struct glyph_row *row)
 		  && glyph->u.ch == ' '))
 	  && trailing_whitespace_p (glyph->charpos))
 	{
-	  int face_id = lookup_named_face (f, Qtrailing_whitespace, 0);
+	  int face_id = lookup_named_face (f, Qtrailing_whitespace, false);
 	  if (face_id < 0)
 	    return;
 
@@ -19638,13 +19733,13 @@ highlight_trailing_whitespace (struct frame *f, struct glyph_row *row)
 }
 
 
-/* Value is non-zero if glyph row ROW should be
+/* Value is true if glyph row ROW should be
    considered to hold the buffer position CHARPOS.  */
 
-static int
+static bool
 row_for_charpos_p (struct glyph_row *row, ptrdiff_t charpos)
 {
-  int result = 1;
+  bool result = true;
 
   if (charpos == CHARPOS (row->end.pos)
       || charpos == MATRIX_ROW_END_CHARPOS (row))
@@ -19660,7 +19755,7 @@ row_for_charpos_p (struct glyph_row *row, ptrdiff_t charpos)
       if (CHARPOS (row->end.string_pos) >= 0)
 	{
 	  if (row->continued_p)
-	    result = 1;
+	    result = true;
 	  else
 	    {
 	      /* Check for `display' property.  */
@@ -19668,7 +19763,7 @@ row_for_charpos_p (struct glyph_row *row, ptrdiff_t charpos)
 	      struct glyph *end = beg + row->used[TEXT_AREA] - 1;
 	      struct glyph *glyph;
 
-	      result = 0;
+	      result = false;
 	      for (glyph = end; glyph >= beg; --glyph)
 		if (STRINGP (glyph->object))
 		  {
@@ -19692,7 +19787,7 @@ row_for_charpos_p (struct glyph_row *row, ptrdiff_t charpos)
 			    if (!NILP (Fget_char_property (make_number (gpos),
 							   Qcursor, s)))
 			      {
-				result = 1;
+				result = true;
 				break;
 			      }
 			  }
@@ -19714,23 +19809,21 @@ row_for_charpos_p (struct glyph_row *row, ptrdiff_t charpos)
 	     CHARPOS (ROW->end.pos) will equal point after the
 	     invisible text.  We want that position to be displayed
 	     after the ellipsis.  */
-	    result = 0;
+	    result = false;
 	}
       /* If the row ends at ZV, display the cursor at the end of that
 	 row instead of at the start of the row below.  */
-      else if (row->ends_at_zv_p)
-	result = 1;
       else
-	result = 0;
+	result = row->ends_at_zv_p;
     }
 
   return result;
 }
 
-/* Value is non-zero if glyph row ROW should be
+/* Value is true if glyph row ROW should be
    used to hold the cursor.  */
 
-static int
+static bool
 cursor_row_p (struct glyph_row *row)
 {
   return row_for_charpos_p (row, PT);
@@ -19739,11 +19832,11 @@ cursor_row_p (struct glyph_row *row)
 
 
 /* Push the property PROP so that it will be rendered at the current
-   position in IT.  Return 1 if PROP was successfully pushed, 0
+   position in IT.  Return true if PROP was successfully pushed, false
    otherwise.  Called from handle_line_prefix to handle the
    `line-prefix' and `wrap-prefix' properties.  */
 
-static int
+static bool
 push_prefix_prop (struct it *it, Lisp_Object prop)
 {
   struct text_pos pos =
@@ -19751,7 +19844,8 @@ push_prefix_prop (struct it *it, Lisp_Object prop)
 
   eassert (it->method == GET_FROM_BUFFER
 	   || it->method == GET_FROM_DISPLAY_VECTOR
-	   || it->method == GET_FROM_STRING);
+	   || it->method == GET_FROM_STRING
+	   || it->method == GET_FROM_IMAGE);
 
   /* We need to save the current buffer/string position, so it will be
      restored by pop_it, because iterate_out_of_display_property
@@ -19764,11 +19858,11 @@ push_prefix_prop (struct it *it, Lisp_Object prop)
       if (SCHARS (prop) == 0)
 	{
 	  pop_it (it);
-	  return 0;
+	  return false;
 	}
 
       it->string = prop;
-      it->string_from_prefix_prop_p = 1;
+      it->string_from_prefix_prop_p = true;
       it->multibyte_p = STRING_MULTIBYTE (it->string);
       it->current.overlay_string_index = -1;
       IT_STRING_CHARPOS (*it) = IT_STRING_BYTEPOS (*it) = 0;
@@ -19814,10 +19908,10 @@ push_prefix_prop (struct it *it, Lisp_Object prop)
   else
     {
       pop_it (it);		/* bogus display property, give up */
-      return 0;
+      return false;
     }
 
-  return 1;
+  return true;
 }
 
 /* Return the character-property PROP at the current position in IT.  */
@@ -19865,7 +19959,7 @@ handle_line_prefix (struct it *it)
 	 it, it would acquire its own wrap prefix, and so on till the
 	 iterator stack overflows.  So, don't wrap the prefix.  */
       it->line_wrap = TRUNCATE;
-      it->avoid_cursor_p = 1;
+      it->avoid_cursor_p = true;
     }
 }
 
@@ -19938,7 +20032,7 @@ find_row_edges (struct it *it, struct glyph_row *row,
     row->maxpos = it->current.pos;
   else if (row->used[TEXT_AREA])
     {
-      int seen_this_string = 0;
+      bool seen_this_string = false;
       struct glyph_row *r1 = row - 1;
 
       /* Did we see the same display string on the previous row?  */
@@ -19960,16 +20054,15 @@ find_row_edges (struct it *it, struct glyph_row *row,
 	    {
 	      start = r1->glyphs[TEXT_AREA];
 	      end = start + r1->used[TEXT_AREA];
-	      /* Glyphs inserted by redisplay have an integer (zero)
-		 as their object.  */
+	      /* Glyphs inserted by redisplay have nil as their object.  */
 	      while (end > start
-		     && INTEGERP ((end - 1)->object)
+		     && NILP ((end - 1)->object)
 		     && (end - 1)->charpos <= 0)
 		--end;
 	      if (end > start)
 		{
 		  if (EQ ((end - 1)->object, it->object))
-		    seen_this_string = 1;
+		    seen_this_string = true;
 		}
 	      else
 		/* If all the glyphs of the previous row were inserted
@@ -19977,23 +20070,23 @@ find_row_edges (struct it *it, struct glyph_row *row,
 		   produced from a single newline, which is only
 		   possible if that newline came from the same string
 		   as the one which produced this ROW.  */
-		seen_this_string = 1;
+		seen_this_string = true;
 	    }
 	  else
 	    {
 	      end = r1->glyphs[TEXT_AREA] - 1;
 	      start = end + r1->used[TEXT_AREA];
 	      while (end < start
-		     && INTEGERP ((end + 1)->object)
+		     && NILP ((end + 1)->object)
 		     && (end + 1)->charpos <= 0)
 		++end;
 	      if (end < start)
 		{
 		  if (EQ ((end + 1)->object, it->object))
-		    seen_this_string = 1;
+		    seen_this_string = true;
 		}
 	      else
-		seen_this_string = 1;
+		seen_this_string = true;
 	    }
 	}
       /* Take note of each display string that covers a newline only
@@ -20049,18 +20142,19 @@ find_row_edges (struct it *it, struct glyph_row *row,
 
 /* Construct the glyph row IT->glyph_row in the desired matrix of
    IT->w from text at the current position of IT.  See dispextern.h
-   for an overview of struct it.  Value is non-zero if
+   for an overview of struct it.  Value is true if
    IT->glyph_row displays text, as opposed to a line displaying ZV
    only.  */
 
-static int
+static bool
 display_line (struct it *it)
 {
   struct glyph_row *row = it->glyph_row;
   Lisp_Object overlay_arrow_string;
   struct it wrap_it;
   void *wrap_data = NULL;
-  int may_wrap = 0, wrap_x IF_LINT (= 0);
+  bool may_wrap = false;
+  int wrap_x IF_LINT (= 0);
   int wrap_row_used = -1;
   int wrap_row_ascent IF_LINT (= 0), wrap_row_height IF_LINT (= 0);
   int wrap_row_phys_ascent IF_LINT (= 0), wrap_row_phys_height IF_LINT (= 0);
@@ -20079,8 +20173,8 @@ display_line (struct it *it)
       >= it->w->desired_matrix->nrows)
     {
       it->w->nrows_scale_factor++;
-      it->f->fonts_changed = 1;
-      return 0;
+      it->f->fonts_changed = true;
+      return false;
     }
 
   /* Clear the result glyph row and enable it.  */
@@ -20089,9 +20183,9 @@ display_line (struct it *it)
   row->y = it->current_y;
   row->start = it->start;
   row->continuation_lines_width = it->continuation_lines_width;
-  row->displays_text_p = 1;
+  row->displays_text_p = true;
   row->starts_in_middle_of_char_p = it->starts_in_middle_of_char_p;
-  it->starts_in_middle_of_char_p = 0;
+  it->starts_in_middle_of_char_p = false;
 
   /* Arrange the overlays nicely for our purposes.  Usually, we call
      display_line on only one line at a time, in which case this
@@ -20161,8 +20255,8 @@ display_line (struct it *it)
 #define RECORD_MAX_MIN_POS(IT)					\
   do								\
     {								\
-      int composition_p = !STRINGP ((IT)->string)		\
-	&& ((IT)->what == IT_COMPOSITION);			\
+      bool composition_p					\
+	= !STRINGP ((IT)->string) && ((IT)->what == IT_COMPOSITION); \
       ptrdiff_t current_pos =					\
 	composition_p ? (IT)->cmp_it.charpos			\
 		      : IT_CHARPOS (*(IT));			\
@@ -20180,17 +20274,17 @@ display_line (struct it *it)
 	  max_bpos = IT_BYTEPOS (*it);				\
 	}							\
     }								\
-  while (0)
+  while (false)
 
   /* Loop generating characters.  The loop is left with IT on the next
      character to display.  */
-  while (1)
+  while (true)
     {
       int n_glyphs_before, hpos_before, x_before;
       int x, nglyphs;
       int ascent = 0, descent = 0, phys_ascent = 0, phys_descent = 0;
 
-      /* Retrieve the next thing to display.  Value is zero if end of
+      /* Retrieve the next thing to display.  Value is false if end of
 	 buffer reached.  */
       if (!get_next_display_element (it))
 	{
@@ -20199,21 +20293,22 @@ display_line (struct it *it)
 	     first glyph of blank lines not corresponding to any text
 	     to -1.  */
 	  if (IT_OVERFLOW_NEWLINE_INTO_FRINGE (it))
-	    row->exact_window_width_line_p = 1;
-	  else if ((append_space_for_newline (it, 1) && row->used[TEXT_AREA] == 1)
+	    row->exact_window_width_line_p = true;
+	  else if ((append_space_for_newline (it, true)
+		    && row->used[TEXT_AREA] == 1)
 		   || row->used[TEXT_AREA] == 0)
 	    {
 	      row->glyphs[TEXT_AREA]->charpos = -1;
-	      row->displays_text_p = 0;
+	      row->displays_text_p = false;
 
 	      if (!NILP (BVAR (XBUFFER (it->w->contents), indicate_empty_lines))
 		  && (!MINI_WINDOW_P (it->w)
 		      || (minibuf_level && EQ (it->window, minibuf_window))))
-		row->indicate_empty_line_p = 1;
+		row->indicate_empty_line_p = true;
 	    }
 
 	  it->continuation_lines_width = 0;
-	  row->ends_at_zv_p = 1;
+	  row->ends_at_zv_p = true;
 	  /* A row that displays right-to-left text must always have
 	     its last face extended all the way to the end of line,
 	     even if this row ends in ZV, because we still write to
@@ -20245,7 +20340,7 @@ display_line (struct it *it)
 	  if (it->line_wrap == WORD_WRAP && it->area == TEXT_AREA)
 	    {
 	      if (IT_DISPLAYING_WHITESPACE (it))
-		may_wrap = 1;
+		may_wrap = true;
 	      else if (may_wrap)
 		{
 		  SAVE_IT (wrap_it, *it, wrap_data);
@@ -20260,7 +20355,7 @@ display_line (struct it *it)
 		  wrap_row_min_bpos = min_bpos;
 		  wrap_row_max_pos = max_pos;
 		  wrap_row_max_bpos = max_bpos;
-		  may_wrap = 0;
+		  may_wrap = false;
 		}
 	    }
 	}
@@ -20278,7 +20373,7 @@ display_line (struct it *it)
 				  it->max_phys_ascent + it->max_phys_descent);
 	  row->extra_line_spacing = max (row->extra_line_spacing,
 					 it->max_extra_line_spacing);
-	  set_iterator_to_next (it, 1);
+	  set_iterator_to_next (it, true);
 	  /* If we didn't handle the line/wrap prefix above, and the
 	     call to set_iterator_to_next just switched to TEXT_AREA,
 	     process the prefix now.  */
@@ -20368,7 +20463,7 @@ display_line (struct it *it)
 			 fits exactly on the line.  We must continue
 			 the line because we can't draw the cursor
 			 after the glyph.  */
-		      row->continued_p = 1;
+		      row->continued_p = true;
 		      it->current_x = new_x;
 		      it->continuation_lines_width += new_x;
 		      ++it->hpos;
@@ -20376,7 +20471,8 @@ display_line (struct it *it)
 			{
 			  /* If line-wrap is on, check if a previous
 			     wrap point was found.  */
-			  if (wrap_row_used > 0
+			  if (!IT_OVERFLOW_NEWLINE_INTO_FRINGE (it)
+			      && wrap_row_used > 0
 			      /* Even if there is a previous wrap
 				 point, continue the line here as
 				 usual, if (i) the previous character
@@ -20391,21 +20487,33 @@ display_line (struct it *it)
 			     displayed by this row.  */
 			  if (it->bidi_p)
 			    RECORD_MAX_MIN_POS (it);
-			  set_iterator_to_next (it, 1);
+			  set_iterator_to_next (it, true);
 			  if (IT_OVERFLOW_NEWLINE_INTO_FRINGE (it))
 			    {
 			      if (!get_next_display_element (it))
 				{
-				  row->exact_window_width_line_p = 1;
+				  row->exact_window_width_line_p = true;
 				  it->continuation_lines_width = 0;
-				  row->continued_p = 0;
-				  row->ends_at_zv_p = 1;
+				  row->continued_p = false;
+				  row->ends_at_zv_p = true;
 				}
 			      else if (ITERATOR_AT_END_OF_LINE_P (it))
 				{
-				  row->continued_p = 0;
-				  row->exact_window_width_line_p = 1;
+				  row->continued_p = false;
+				  row->exact_window_width_line_p = true;
 				}
+			      /* If line-wrap is on, check if a
+				 previous wrap point was found.  */
+			      else if (wrap_row_used > 0
+				       /* Even if there is a previous wrap
+					  point, continue the line here as
+					  usual, if (i) the previous character
+					  was a space or tab AND (ii) the
+					  current character is not.  */
+				       && (!may_wrap
+					   || IT_DISPLAYING_WHITESPACE (it)))
+				goto back_to_wrap;
+
 			    }
 			}
 		      else if (it->bidi_p)
@@ -20431,7 +20539,7 @@ display_line (struct it *it)
 			     < row->glyphs[1 + TEXT_AREA])
 			produce_special_glyphs (it, IT_CONTINUATION);
 
-		      row->continued_p = 1;
+		      row->continued_p = true;
 		      it->current_x = x_before;
 		      it->continuation_lines_width += x_before;
 
@@ -20463,9 +20571,9 @@ display_line (struct it *it)
 		      min_bpos = wrap_row_min_bpos;
 		      max_pos = wrap_row_max_pos;
 		      max_bpos = wrap_row_max_bpos;
-		      row->continued_p = 1;
-		      row->ends_at_zv_p = 0;
-		      row->exact_window_width_line_p = 0;
+		      row->continued_p = true;
+		      row->ends_at_zv_p = false;
+		      row->exact_window_width_line_p = false;
 		      it->continuation_lines_width += x;
 
 		      /* Make sure that a non-default face is extended
@@ -20484,10 +20592,10 @@ display_line (struct it *it)
 			   : WINDOW_RIGHT_FRINGE_WIDTH (it->w)) == 0)
 			produce_special_glyphs (it, IT_CONTINUATION);
 		      it->continuation_lines_width += it->last_visible_x;
-		      row->ends_in_middle_of_char_p = 1;
-		      row->continued_p = 1;
+		      row->ends_in_middle_of_char_p = true;
+		      row->continued_p = true;
 		      glyph->pixel_width = it->last_visible_x - x;
-		      it->starts_in_middle_of_char_p = 1;
+		      it->starts_in_middle_of_char_p = true;
 		      if (WINDOW_LEFT_MARGIN_WIDTH (it->w) > 0
 			  || WINDOW_RIGHT_MARGIN_WIDTH (it->w) > 0)
 			extend_face_to_end_of_line (it);
@@ -20510,14 +20618,14 @@ display_line (struct it *it)
 			      ? WINDOW_LEFT_FRINGE_WIDTH (it->w)
 			      : WINDOW_RIGHT_FRINGE_WIDTH (it->w)) == 0)
 			produce_special_glyphs (it, IT_CONTINUATION);
-		      row->continued_p = 1;
+		      row->continued_p = true;
 
 		      extend_face_to_end_of_line (it);
 
 		      if (nglyphs > 1 && i > 0)
 			{
-			  row->ends_in_middle_of_char_p = 1;
-			  it->starts_in_middle_of_char_p = 1;
+			  row->ends_in_middle_of_char_p = true;
+			  it->starts_in_middle_of_char_p = true;
 			}
 
 		      /* Restore the height to what it was before the
@@ -20605,7 +20713,7 @@ display_line (struct it *it)
 	  /* Add a space at the end of the line that is used to
 	     display the cursor there.  */
 	  if (!IT_OVERFLOW_NEWLINE_INTO_FRINGE (it))
-	    append_space_for_newline (it, 0);
+	    append_space_for_newline (it, false);
 
 	  /* Extend the face to the end of the line.  */
 	  extend_face_to_end_of_line (it);
@@ -20619,14 +20727,14 @@ display_line (struct it *it)
 	  it->eol_pos = it->current.pos;
 
 	  /* Consume the line end.  This skips over invisible lines.  */
-	  set_iterator_to_next (it, 1);
+	  set_iterator_to_next (it, true);
 	  it->continuation_lines_width = 0;
 	  break;
 	}
 
       /* Proceed with next display element.  Note that this skips
 	 over lines invisible because of selective display.  */
-      set_iterator_to_next (it, 1);
+      set_iterator_to_next (it, true);
 
       /* If we truncate lines, we are done when the last displayed
 	 glyphs reach past the right margin of the window.  */
@@ -20700,22 +20808,22 @@ display_line (struct it *it)
 	      if (!get_next_display_element (it))
 		{
 		  it->continuation_lines_width = 0;
-		  row->ends_at_zv_p = 1;
-		  row->exact_window_width_line_p = 1;
+		  row->ends_at_zv_p = true;
+		  row->exact_window_width_line_p = true;
 		  break;
 		}
 	      if (ITERATOR_AT_END_OF_LINE_P (it))
 		{
-		  row->exact_window_width_line_p = 1;
+		  row->exact_window_width_line_p = true;
 		  goto at_end_of_line;
 		}
 	      it->current_x = x_before;
 	      it->hpos = hpos_before;
 	    }
 
-	  row->truncated_on_right_p = 1;
+	  row->truncated_on_right_p = true;
 	  it->continuation_lines_width = 0;
-	  reseat_at_next_visible_line_start (it, 0);
+	  reseat_at_next_visible_line_start (it, false);
 	  /* We insist below that IT's position be at ZV because in
 	     bidi-reordered lines the character at visible line start
 	     might not be the character that follows the newline in
@@ -20730,7 +20838,7 @@ display_line (struct it *it)
     }
 
   if (wrap_data)
-    bidi_unshelve_cache (wrap_data, 1);
+    bidi_unshelve_cache (wrap_data, true);
 
   /* If line is not empty and hscrolled, maybe insert truncation glyphs
      at the left window margin.  */
@@ -20745,7 +20853,7 @@ display_line (struct it *it)
 		 first glyph of the row if it is an image.  */
 	      && row->glyphs[TEXT_AREA]->type != IMAGE_GLYPH))
 	insert_left_trunc_glyphs (it);
-      row->truncated_on_left_p = 1;
+      row->truncated_on_left_p = true;
     }
 
   /* Remember the position at which this line ends.
@@ -20807,7 +20915,7 @@ display_line (struct it *it)
 	  eassert (INTEGERP (overlay_arrow_string));
 	  row->overlay_arrow_bitmap = XINT (overlay_arrow_string);
 	}
-      overlay_arrow_seen = 1;
+      overlay_arrow_seen = true;
     }
 
   /* Highlight trailing whitespace.  */
@@ -20927,7 +21035,8 @@ See also `bidi-paragraph-direction'.  */)
 	 the previous non-empty line.  */
       if (pos >= ZV && pos > BEGV)
 	DEC_BOTH (pos, bytepos);
-      if (fast_looking_at (build_string ("[\f\t ]*\n"),
+      AUTO_STRING (trailing_white_space, "[\f\t ]*\n");
+      if (fast_looking_at (trailing_white_space,
 			   pos, bytepos, ZV, ZV_BYTE, Qnil) > 0)
 	{
 	  while ((c = FETCH_BYTE (bytepos)) == '\n'
@@ -20946,14 +21055,14 @@ See also `bidi-paragraph-direction'.  */)
       itb.string.s = NULL;
       itb.string.lstring = Qnil;
       itb.string.bufpos = 0;
-      itb.string.from_disp_str = 0;
-      itb.string.unibyte = 0;
+      itb.string.from_disp_str = false;
+      itb.string.unibyte = false;
       /* We have no window to use here for ignoring window-specific
 	 overlays.  Using NULL for window pointer will cause
 	 compute_display_string_pos to use the current buffer.  */
       itb.w = NULL;
-      bidi_paragraph_init (NEUTRAL_DIR, &itb, 1);
-      bidi_unshelve_cache (itb_data, 0);
+      bidi_paragraph_init (NEUTRAL_DIR, &itb, true);
+      bidi_unshelve_cache (itb_data, false);
       set_buffer_temp (old);
       switch (itb.paragraph_dir)
 	{
@@ -20967,6 +21076,143 @@ See also `bidi-paragraph-direction'.  */)
 	  emacs_abort ();
 	}
     }
+}
+
+DEFUN ("bidi-find-overridden-directionality",
+       Fbidi_find_overridden_directionality,
+       Sbidi_find_overridden_directionality, 2, 3, 0,
+       doc: /* Return position between FROM and TO where directionality was overridden.
+
+This function returns the first character position in the specified
+region of OBJECT where there is a character whose `bidi-class' property
+is `L', but which was forced to display as `R' by a directional
+override, and likewise with characters whose `bidi-class' is `R'
+or `AL' that were forced to display as `L'.
+
+If no such character is found, the function returns nil.
+
+OBJECT is a Lisp string or buffer to search for overridden
+directionality, and defaults to the current buffer if nil or omitted.
+OBJECT can also be a window, in which case the function will search
+the buffer displayed in that window.  Passing the window instead of
+a buffer is preferable when the buffer is displayed in some window,
+because this function will then be able to correctly account for
+window-specific overlays, which can affect the results.
+
+Strong directional characters `L', `R', and `AL' can have their
+intrinsic directionality overridden by directional override
+control characters RLO (u+202e) and LRO (u+202d).  See the
+function `get-char-code-property' for a way to inquire about
+the `bidi-class' property of a character.  */)
+  (Lisp_Object from, Lisp_Object to, Lisp_Object object)
+{
+  struct buffer *buf = current_buffer;
+  struct buffer *old = buf;
+  struct window *w = NULL;
+  bool frame_window_p = FRAME_WINDOW_P (SELECTED_FRAME ());
+  struct bidi_it itb;
+  ptrdiff_t from_pos, to_pos, from_bpos;
+  void *itb_data;
+
+  if (!NILP (object))
+    {
+      if (BUFFERP (object))
+	buf = XBUFFER (object);
+      else if (WINDOWP (object))
+	{
+	  w = decode_live_window (object);
+	  buf = XBUFFER (w->contents);
+	  frame_window_p = FRAME_WINDOW_P (XFRAME (w->frame));
+	}
+      else
+	CHECK_STRING (object);
+    }
+
+  if (STRINGP (object))
+    {
+      /* Characters in unibyte strings are always treated by bidi.c as
+	 strong LTR.  */
+      if (!STRING_MULTIBYTE (object)
+	  /* When we are loading loadup.el, the character property
+	     tables needed for bidi iteration are not yet
+	     available.  */
+	  || !NILP (Vpurify_flag))
+	return Qnil;
+
+      validate_subarray (object, from, to, SCHARS (object), &from_pos, &to_pos);
+      if (from_pos >= SCHARS (object))
+	return Qnil;
+
+      /* Set up the bidi iterator.  */
+      itb_data = bidi_shelve_cache ();
+      itb.paragraph_dir = NEUTRAL_DIR;
+      itb.string.lstring = object;
+      itb.string.s = NULL;
+      itb.string.schars = SCHARS (object);
+      itb.string.bufpos = 0;
+      itb.string.from_disp_str = false;
+      itb.string.unibyte = false;
+      itb.w = w;
+      bidi_init_it (0, 0, frame_window_p, &itb);
+    }
+  else
+    {
+      /* Nothing this fancy can happen in unibyte buffers, or in a
+	 buffer that disabled reordering, or if FROM is at EOB.  */
+      if (NILP (BVAR (buf, bidi_display_reordering))
+	  || NILP (BVAR (buf, enable_multibyte_characters))
+	  /* When we are loading loadup.el, the character property
+	     tables needed for bidi iteration are not yet
+	     available.  */
+	  || !NILP (Vpurify_flag))
+	return Qnil;
+
+      set_buffer_temp (buf);
+      validate_region (&from, &to);
+      from_pos = XINT (from);
+      to_pos = XINT (to);
+      if (from_pos >= ZV)
+	return Qnil;
+
+      /* Set up the bidi iterator.  */
+      itb_data = bidi_shelve_cache ();
+      from_bpos = CHAR_TO_BYTE (from_pos);
+      if (from_pos == BEGV)
+	{
+	  itb.charpos = BEGV;
+	  itb.bytepos = BEGV_BYTE;
+	}
+      else if (FETCH_CHAR (from_bpos - 1) == '\n')
+	{
+	  itb.charpos = from_pos;
+	  itb.bytepos = from_bpos;
+	}
+      else
+	itb.charpos = find_newline_no_quit (from_pos, CHAR_TO_BYTE (from_pos),
+					    -1, &itb.bytepos);
+      itb.paragraph_dir = NEUTRAL_DIR;
+      itb.string.s = NULL;
+      itb.string.lstring = Qnil;
+      itb.string.bufpos = 0;
+      itb.string.from_disp_str = false;
+      itb.string.unibyte = false;
+      itb.w = w;
+      bidi_init_it (itb.charpos, itb.bytepos, frame_window_p, &itb);
+    }
+
+  ptrdiff_t found;
+  do {
+    /* For the purposes of this function, the actual base direction of
+       the paragraph doesn't matter, so just set it to L2R.  */
+    bidi_paragraph_init (L2R, &itb, false);
+    while ((found = bidi_find_first_overridden (&itb)) < from_pos)
+      ;
+  } while (found == ZV && itb.ch == '\n' && itb.charpos < to_pos);
+
+  bidi_unshelve_cache (itb_data, false);
+  set_buffer_temp (old);
+
+  return (from_pos <= found && found < to_pos) ? make_number (found) : Qnil;
 }
 
 DEFUN ("move-point-visually", Fmove_point_visually,
@@ -20986,7 +21232,7 @@ Value is the new character position of point.  */)
 
 #define ROW_GLYPH_NEWLINE_P(ROW,GLYPH)		\
   (!(ROW)->continued_p				\
-   && INTEGERP ((GLYPH)->object)		\
+   && NILP ((GLYPH)->object)			\
    && (GLYPH)->type == CHAR_GLYPH		\
    && (GLYPH)->u.ch == ' '			\
    && (GLYPH)->charpos >= 0			\
@@ -21028,7 +21274,7 @@ Value is the new character position of point.  */)
 	      w->cursor.vpos = -1;
 	      return make_number (PT);
 	    }
-	  else if (!INTEGERP (g->object) && !EQ (g->object, gpt->object))
+	  else if (!NILP (g->object) && !EQ (g->object, gpt->object))
 	    {
 	      ptrdiff_t new_pos;
 
@@ -21038,7 +21284,7 @@ Value is the new character position of point.  */)
 		  if ((gpt->resolved_level - row->reversed_p) % 2 == 0)
 		    new_pos += (row->reversed_p ? -dir : dir);
 		  else
-		    new_pos -= (row->reversed_p ? -dir : dir);;
+		    new_pos -= (row->reversed_p ? -dir : dir);
 		}
 	      else if (BUFFERP (g->object))
 		new_pos = g->charpos;
@@ -21065,7 +21311,7 @@ Value is the new character position of point.  */)
 	      return make_number (PT);
 	    }
 	}
-      if (g == e || INTEGERP (g->object))
+      if (g == e || NILP (g->object))
 	{
 	  if (row->truncated_on_left_p || row->truncated_on_right_p)
 	    goto simulate_display;
@@ -21098,7 +21344,7 @@ Value is the new character position of point.  */)
 			 EOB also has one glyph, but its charpos is -1.  */
 		      || (row->ends_at_zv_p
 			  && !row->reversed_p
-			  && INTEGERP (g->object)
+			  && NILP (g->object)
 			  && g->type == CHAR_GLYPH
 			  && g->u.ch == ' '))
 		    {
@@ -21136,7 +21382,7 @@ Value is the new character position of point.  */)
 		      || g->type == STRETCH_GLYPH
 		      || (row->ends_at_zv_p
 			  && row->reversed_p
-			  && INTEGERP (g->object)
+			  && NILP (g->object)
 			  && g->type == CHAR_GLYPH
 			  && g->u.ch == ' '))
 		    {
@@ -21183,6 +21429,14 @@ Value is the new character position of point.  */)
       /* Setup the arena.  */
       SET_TEXT_POS (pt, PT, PT_BYTE);
       start_display (&it, w, pt);
+      /* When lines are truncated, we could be called with point
+	 outside of the windows edges, in which case move_it_*
+	 functions either prematurely stop at window's edge or jump to
+	 the next screen line, whereas we rely below on our ability to
+	 reach point, in order to start from its X coordinate.  So we
+	 need to disregard the window's horizontal extent in that case.  */
+      if (it.line_wrap == TRUNCATE)
+	it.last_visible_x = INFINITY;
 
       if (it.cmp_it.id < 0
 	  && it.method == GET_FROM_STRING
@@ -21274,6 +21528,8 @@ Value is the new character position of point.  */)
 	  if (pt_x > 0)
 	    {
 	      start_display (&it, w, pt);
+	      if (it.line_wrap == TRUNCATE)
+		it.last_visible_x = INFINITY;
 	      reseat_at_previous_visible_line_start (&it);
 	      it.current_x = it.current_y = it.hpos = 0;
 	      if (pt_vpos != 0)
@@ -21386,34 +21642,13 @@ Value is the new character position of point.  */)
       if (it.current_x != target_x)
 	move_it_in_display_line_to (&it, ZV, target_x, MOVE_TO_POS | MOVE_TO_X);
 
-      /* When lines are truncated, the above loop will stop at the
-	 window edge.  But we want to get to the end of line, even if
-	 it is beyond the window edge; automatic hscroll will then
-	 scroll the window to show point as appropriate.  */
-      if (target_is_eol_p && it.line_wrap == TRUNCATE
-	  && get_next_display_element (&it))
-	{
-	  struct text_pos new_pos = it.current.pos;
-
-	  while (!ITERATOR_AT_END_OF_LINE_P (&it))
-	    {
-	      set_iterator_to_next (&it, 0);
-	      if (it.method == GET_FROM_BUFFER)
-		new_pos = it.current.pos;
-	      if (!get_next_display_element (&it))
-		break;
-	    }
-
-	  it.current.pos = new_pos;
-	}
-
       /* If we ended up in a display string that covers point, move to
 	 buffer position to the right in the visual order.  */
       if (dir > 0)
 	{
 	  while (IT_CHARPOS (it) == PT)
 	    {
-	      set_iterator_to_next (&it, 0);
+	      set_iterator_to_next (&it, false);
 	      if (!get_next_display_element (&it))
 		break;
 	    }
@@ -21427,6 +21662,114 @@ Value is the new character position of point.  */)
 
 #undef ROW_GLYPH_NEWLINE_P
 }
+
+DEFUN ("bidi-resolved-levels", Fbidi_resolved_levels,
+       Sbidi_resolved_levels, 0, 1, 0,
+       doc: /* Return the resolved bidirectional levels of characters at VPOS.
+
+The resolved levels are produced by the Emacs bidi reordering engine
+that implements the UBA, the Unicode Bidirectional Algorithm.  Please
+read the Unicode Standard Annex 9 (UAX#9) for background information
+about these levels.
+
+VPOS is the zero-based number of the current window's screen line
+for which to produce the resolved levels.  If VPOS is nil or omitted,
+it defaults to the screen line of point.  If the window displays a
+header line, VPOS of zero will report on the header line, and first
+line of text in the window will have VPOS of 1.
+
+Value is an array of resolved levels, indexed by glyph number.
+Glyphs are numbered from zero starting from the beginning of the
+screen line, i.e. the left edge of the window for left-to-right lines
+and from the right edge for right-to-left lines.  The resolved levels
+are produced only for the window's text area; text in display margins
+is not included.
+
+If the selected window's display is not up-to-date, or if the specified
+screen line does not display text, this function returns nil.  It is
+highly recommended to bind this function to some simple key, like F8,
+in order to avoid these problems.
+
+This function exists mainly for testing the correctness of the
+Emacs UBA implementation, in particular with the test suite.  */)
+  (Lisp_Object vpos)
+{
+  struct window *w = XWINDOW (selected_window);
+  struct buffer *b = XBUFFER (w->contents);
+  int nrow;
+  struct glyph_row *row;
+
+  if (NILP (vpos))
+    {
+      int d1, d2, d3, d4, d5;
+
+      pos_visible_p (w, PT, &d1, &d2, &d3, &d4, &d5, &nrow);
+    }
+  else
+    {
+      CHECK_NUMBER_COERCE_MARKER (vpos);
+      nrow = XINT (vpos);
+    }
+
+  /* We require up-to-date glyph matrix for this window.  */
+  if (w->window_end_valid
+      && !windows_or_buffers_changed
+      && b
+      && !b->clip_changed
+      && !b->prevent_redisplay_optimizations_p
+      && !window_outdated (w)
+      && nrow >= 0
+      && nrow < w->current_matrix->nrows
+      && (row = MATRIX_ROW (w->current_matrix, nrow))->enabled_p
+      && MATRIX_ROW_DISPLAYS_TEXT_P (row))
+    {
+      struct glyph *g, *e, *g1;
+      int nglyphs, i;
+      Lisp_Object levels;
+
+      if (!row->reversed_p)	/* Left-to-right glyph row.  */
+	{
+	  g = g1 = row->glyphs[TEXT_AREA];
+	  e = g + row->used[TEXT_AREA];
+
+	  /* Skip over glyphs at the start of the row that was
+	     generated by redisplay for its own needs.  */
+	  while (g < e
+		 && NILP (g->object)
+		 && g->charpos < 0)
+	    g++;
+	  g1 = g;
+
+	  /* Count the "interesting" glyphs in this row.  */
+	  for (nglyphs = 0; g < e && !NILP (g->object); g++)
+	    nglyphs++;
+
+	  /* Create and fill the array.  */
+	  levels = make_uninit_vector (nglyphs);
+	  for (i = 0; g1 < g; i++, g1++)
+	    ASET (levels, i, make_number (g1->resolved_level));
+	}
+      else			/* Right-to-left glyph row.  */
+	{
+	  g = row->glyphs[TEXT_AREA] + row->used[TEXT_AREA] - 1;
+	  e = row->glyphs[TEXT_AREA] - 1;
+	  while (g > e
+		 && NILP (g->object)
+		 && g->charpos < 0)
+	    g--;
+	  g1 = g;
+	  for (nglyphs = 0; g > e && !NILP (g->object); g--)
+	    nglyphs++;
+	  levels = make_uninit_vector (nglyphs);
+	  for (i = 0; g1 > g; i++, g1--)
+	    ASET (levels, i, make_number (g1->resolved_level));
+	}
+      return levels;
+    }
+  else
+    return Qnil;
+}
+
 
 
 /***********************************************************************
@@ -21505,7 +21848,8 @@ display_menu_bar (struct window *w)
       struct glyph_row *row = it.glyph_row + i;
       clear_glyph_row (row);
       row->enabled_p = true;
-      row->full_width_p = 1;
+      row->full_width_p = true;
+      row->reversed_p = false;
     }
 
   /* Display all items of the menu bar.  */
@@ -21579,18 +21923,17 @@ deep_copy_glyph_row (struct glyph_row *to, struct glyph_row *from)
    glyph number in the row, starting from left, where to start
    displaying the item.
 
-   SUBMENU non-zero means this menu item drops down a submenu, which
+   SUBMENU means this menu item drops down a submenu, which
    should be indicated by displaying a proper visual cue after the
    item text.  */
 
 void
 display_tty_menu_item (const char *item_text, int width, int face_id,
-		       int x, int y, int submenu)
+		       int x, int y, bool submenu)
 {
   struct it it;
   struct frame *f = SELECTED_FRAME ();
   struct window *w = XWINDOW (f->selected_window);
-  int saved_used, saved_truncated, saved_width, saved_reversed;
   struct glyph_row *row;
   size_t item_len = strlen (item_text);
 
@@ -21610,10 +21953,10 @@ display_tty_menu_item (const char *item_text, int width, int face_id,
   row = it.glyph_row;
   /* Start with the row contents from the current matrix.  */
   deep_copy_glyph_row (row, f->current_matrix->rows + y);
-  saved_width = row->full_width_p;
-  row->full_width_p = 1;
-  saved_reversed = row->reversed_p;
-  row->reversed_p = 0;
+  bool saved_width = row->full_width_p;
+  row->full_width_p = true;
+  bool saved_reversed = row->reversed_p;
+  row->reversed_p = false;
   row->enabled_p = true;
 
   /* Arrange for the menu item glyphs to start at (X,Y) and have the
@@ -21621,8 +21964,8 @@ display_tty_menu_item (const char *item_text, int width, int face_id,
   eassert (x < f->desired_matrix->matrix_w);
   it.current_x = it.hpos = x;
   it.current_y = it.vpos = y;
-  saved_used = row->used[TEXT_AREA];
-  saved_truncated = row->truncated_on_right_p;
+  int saved_used = row->used[TEXT_AREA];
+  bool saved_truncated = row->truncated_on_right_p;
   row->used[TEXT_AREA] = x;
   it.face_id = face_id;
   it.line_wrap = TRUNCATE;
@@ -21662,8 +22005,8 @@ display_tty_menu_item (const char *item_text, int width, int face_id,
 			      Mode Line
  ***********************************************************************/
 
-/* Redisplay mode lines in the window tree whose root is WINDOW.  If
-   FORCE is non-zero, redisplay mode lines unconditionally.
+/* Redisplay mode lines in the window tree whose root is WINDOW.
+   If FORCE, redisplay mode lines unconditionally.
    Otherwise, redisplay only mode lines that are garbaged.  Value is
    the number of windows whose mode lines were redisplayed.  */
 
@@ -21735,7 +22078,7 @@ display_mode_lines (struct window *w)
   XFRAME (new_frame)->selected_window = selected_window;
 
   /* These will be set while the mode line specs are processed.  */
-  line_number_displayed = 0;
+  line_number_displayed = false;
   w->column_number_displayed = -1;
 
   if (WINDOW_WANTS_MODELINE_P (w))
@@ -21783,7 +22126,7 @@ display_mode_line (struct window *w, enum face_id face_id, Lisp_Object format)
   it.glyph_row->enabled_p = false;
   prepare_desired_row (w, it.glyph_row, true);
 
-  it.glyph_row->mode_line_p = 1;
+  it.glyph_row->mode_line_p = true;
 
   /* FIXME: This should be controlled by a user option.  But
      supporting such an option is not trivial, since the mode line is
@@ -21791,7 +22134,8 @@ display_mode_line (struct window *w, enum face_id face_id, Lisp_Object format)
   it.paragraph_embedding = L2R;
 
   record_unwind_protect (unwind_format_mode_line,
-			 format_mode_line_unwind_data (NULL, NULL, Qnil, 0));
+			 format_mode_line_unwind_data (NULL, NULL,
+						       Qnil, false));
 
   mode_line_target = MODE_LINE_DISPLAY;
 
@@ -21800,7 +22144,7 @@ display_mode_line (struct window *w, enum face_id face_id, Lisp_Object format)
      values.  */
   push_kboard (FRAME_KBOARD (it.f));
   record_unwind_save_match_data ();
-  display_mode_element (&it, 0, 0, 0, format, Qnil, 0);
+  display_mode_element (&it, 0, 0, 0, format, Qnil, false);
   pop_kboard ();
 
   unbind_to (count, Qnil);
@@ -21809,10 +22153,10 @@ display_mode_line (struct window *w, enum face_id face_id, Lisp_Object format)
   display_string (" ", Qnil, Qnil, 0, 0, &it, 10000, -1, -1, 0);
 
   compute_line_metrics (&it);
-  it.glyph_row->full_width_p = 1;
-  it.glyph_row->continued_p = 0;
-  it.glyph_row->truncated_on_left_p = 0;
-  it.glyph_row->truncated_on_right_p = 0;
+  it.glyph_row->full_width_p = true;
+  it.glyph_row->continued_p = false;
+  it.glyph_row->truncated_on_left_p = false;
+  it.glyph_row->truncated_on_right_p = false;
 
   /* Make a 3D mode-line have a shadow at its right end.  */
   face = FACE_FROM_ID (it.f, face_id);
@@ -21821,7 +22165,7 @@ display_mode_line (struct window *w, enum face_id face_id, Lisp_Object format)
     {
       struct glyph *last = (it.glyph_row->glyphs[TEXT_AREA]
 			    + it.glyph_row->used[TEXT_AREA] - 1);
-      last->right_box_line_p = 1;
+      last->right_box_line_p = true;
     }
 
   return it.glyph_row->height;
@@ -21881,7 +22225,7 @@ move_elt_to_front (Lisp_Object elt, Lisp_Object list)
 
    PROPS is a property list to add to any string we encounter.
 
-   If RISKY is nonzero, remove (disregard) any properties in any string
+   If RISKY, remove (disregard) any properties in any string
    we encounter, and ignore :eval and :propertize.
 
    The global variable `mode_line_target' determines whether the
@@ -21890,10 +22234,10 @@ move_elt_to_front (Lisp_Object elt, Lisp_Object list)
 
 static int
 display_mode_element (struct it *it, int depth, int field_width, int precision,
-		      Lisp_Object elt, Lisp_Object props, int risky)
+		      Lisp_Object elt, Lisp_Object props, bool risky)
 {
   int n = 0, field, prec;
-  int literal = 0;
+  bool literal = false;
 
  tail_recurse:
   if (depth > 100)
@@ -21986,7 +22330,7 @@ display_mode_element (struct it *it, int depth, int field_width, int precision,
 		n += store_mode_line_noprop (SSDATA (elt), -1, prec);
 		break;
 	      case MODE_LINE_STRING:
-		n += store_mode_line_string (NULL, elt, 1, 0, prec, Qnil);
+		n += store_mode_line_string (NULL, elt, true, 0, prec, Qnil);
 		break;
 	      case MODE_LINE_DISPLAY:
 		n += display_string (NULL, elt, Qnil, 0, 0, it,
@@ -22036,11 +22380,11 @@ display_mode_element (struct it *it, int depth, int field_width, int precision,
 		      ptrdiff_t endpos = (precision <= 0
 					  ? string_byte_to_char (elt, offset)
 					  : charpos + nchars);
-
-		      n += store_mode_line_string (NULL,
-						   Fsubstring (elt, make_number (charpos),
-							       make_number (endpos)),
-						   0, 0, 0, Qnil);
+		      Lisp_Object mode_string
+			= Fsubstring (elt, make_number (charpos),
+				      make_number (endpos));
+		      n += store_mode_line_string (NULL, mode_string, false,
+						   0, 0, Qnil);
 		    }
 		    break;
 		  case MODE_LINE_DISPLAY:
@@ -22103,7 +22447,8 @@ display_mode_element (struct it *it, int depth, int field_width, int precision,
 			  Lisp_Object tem = build_string (spec);
 			  props = Ftext_properties_at (make_number (charpos), elt);
 			  /* Should only keep face property in props */
-			  n += store_mode_line_string (NULL, tem, 0, field, prec, props);
+			  n += store_mode_line_string (NULL, tem, false,
+						       field, prec, props);
 			}
 			break;
 		      case MODE_LINE_DISPLAY:
@@ -22156,7 +22501,7 @@ display_mode_element (struct it *it, int depth, int field_width, int precision,
 	/* If the variable is not marked as risky to set
 	   then its contents are risky to use.  */
 	if (NILP (Fget (elt, Qrisky_local_variable)))
-	  risky = 1;
+	  risky = true;
 
 	tem = Fboundp (elt);
 	if (!NILP (tem))
@@ -22165,7 +22510,7 @@ display_mode_element (struct it *it, int depth, int field_width, int precision,
 	    /* If value is a string, output that string literally:
 	       don't check for % within it.  */
 	    if (STRINGP (tem))
-	      literal = 1;
+	      literal = true;
 
 	    if (!EQ (tem, elt))
 	      {
@@ -22319,7 +22664,8 @@ display_mode_element (struct it *it, int depth, int field_width, int precision,
 	  n += store_mode_line_noprop ("", field_width - n, 0);
 	  break;
 	case MODE_LINE_STRING:
-	  n += store_mode_line_string ("", Qnil, 0, field_width - n, 0, Qnil);
+	  n += store_mode_line_string ("", Qnil, false, field_width - n, 0,
+				       Qnil);
 	  break;
 	case MODE_LINE_DISPLAY:
 	  n += display_string ("", Qnil, Qnil, 0, 0, it, field_width - n,
@@ -22343,7 +22689,7 @@ display_mode_element (struct it *it, int depth, int field_width, int precision,
    PRECISION is the maximum number of characters to output from
    STRING.  PRECISION <= 0  means don't truncate the string.
 
-   If COPY_STRING is non-zero, make a copy of LISP_STRING before adding
+   If COPY_STRING, make a copy of LISP_STRING before adding
    properties to the string.
 
    PROPS are the properties to add to the string.
@@ -22351,7 +22697,8 @@ display_mode_element (struct it *it, int depth, int field_width, int precision,
  */
 
 static int
-store_mode_line_string (const char *string, Lisp_Object lisp_string, int copy_string,
+store_mode_line_string (const char *string, Lisp_Object lisp_string,
+			bool copy_string,
 			int field_width, int precision, Lisp_Object props)
 {
   ptrdiff_t len;
@@ -22454,7 +22801,7 @@ are the selected window and the WINDOW's buffer).  */)
   struct window *w;
   struct buffer *old_buffer = NULL;
   int face_id;
-  int no_props = INTEGERP (face);
+  bool no_props = INTEGERP (face);
   ptrdiff_t count = SPECPDL_INDEX ();
   Lisp_Object str;
   int string_start = 0;
@@ -22490,7 +22837,7 @@ are the selected window and the WINDOW's buffer).  */)
   record_unwind_protect (unwind_format_mode_line,
 			 format_mode_line_unwind_data
 			   (XFRAME (WINDOW_FRAME (w)),
-			    old_buffer, selected_window, 1));
+			    old_buffer, selected_window, true));
   mode_line_proptrans_alist = Qnil;
 
   Fselect_window (window, Qt);
@@ -22515,7 +22862,7 @@ are the selected window and the WINDOW's buffer).  */)
     }
 
   push_kboard (FRAME_KBOARD (it.f));
-  display_mode_element (&it, 0, 0, 0, format, Qnil, 0);
+  display_mode_element (&it, 0, 0, 0, format, Qnil, false);
   pop_kboard ();
 
   if (no_props)
@@ -22526,7 +22873,7 @@ are the selected window and the WINDOW's buffer).  */)
   else
     {
       mode_line_string_list = Fnreverse (mode_line_string_list);
-      str = Fmapconcat (intern ("identity"), mode_line_string_list,
+      str = Fmapconcat (Qidentity, mode_line_string_list,
 			empty_unibyte_string);
     }
 
@@ -22676,13 +23023,13 @@ pint2hrstr (char *buf, int width, ptrdiff_t d)
 }
 
 /* Set a mnemonic character for coding_system (Lisp symbol) in BUF.
-   If EOL_FLAG is 1, set also a mnemonic character for end-of-line
+   If EOL_FLAG, set also a mnemonic character for end-of-line
    type of CODING_SYSTEM.  Return updated pointer into BUF.  */
 
 static unsigned char invalid_eol_type[] = "(*invalid*)";
 
 static char *
-decode_mode_spec_coding (Lisp_Object coding_system, register char *buf, int eol_flag)
+decode_mode_spec_coding (Lisp_Object coding_system, char *buf, bool eol_flag)
 {
   Lisp_Object val;
   bool multibyte = !NILP (BVAR (current_buffer, enable_multibyte_characters));
@@ -22724,8 +23071,8 @@ decode_mode_spec_coding (Lisp_Object coding_system, register char *buf, int eol_
 	  else			/* eolvalue is Qunix, Qdos, or Qmac.  */
 	    eoltype = (EQ (eolvalue, Qunix)
 		       ? eol_mnemonic_unix
-		       : (EQ (eolvalue, Qdos) == 1
-			  ? eol_mnemonic_dos : eol_mnemonic_mac));
+		       : EQ (eolvalue, Qdos)
+		       ? eol_mnemonic_dos : eol_mnemonic_mac);
 	}
     }
 
@@ -22739,10 +23086,8 @@ decode_mode_spec_coding (Lisp_Object coding_system, register char *buf, int eol_
 	}
       else if (CHARACTERP (eoltype))
 	{
-	  unsigned char *tmp = alloca (MAX_MULTIBYTE_LENGTH);
 	  int c = XFASTINT (eoltype);
-	  eol_str_len = CHAR_STRING (c, tmp);
-	  eol_str = tmp;
+	  return buf + CHAR_STRING (c, (unsigned char *) buf);
 	}
       else
 	{
@@ -22878,7 +23223,7 @@ decode_mode_spec (struct window *w, register int c, int field_width,
 	}
 
     case 'e':
-#ifndef SYSTEM_MALLOC
+#if !defined SYSTEM_MALLOC && !defined HYBRID_MALLOC
       {
 	if (NILP (Vmemory_full))
 	  return "";
@@ -23012,14 +23357,14 @@ decode_mode_spec (struct window *w, register int c, int field_width,
 				      PT_BYTE, PT, &junk);
 
 	/* Record that we did display the line number.  */
-	line_number_displayed = 1;
+	line_number_displayed = true;
 
 	/* Make the string to show.  */
 	pint2str (decode_mode_spec_buf, width, topline + nlines);
 	return decode_mode_spec_buf;
     no_value:
         {
-	  char* p = decode_mode_spec_buf;
+	  char *p = decode_mode_spec_buf;
 	  int pad = width - 2;
 	  while (pad-- > 0)
 	    *p++ = ' ';
@@ -23135,7 +23480,7 @@ decode_mode_spec (struct window *w, register int c, int field_width,
     case 'Z':
       /* coding-system (including end-of-line type) */
       {
-	int eol_flag = (c == 'Z');
+	bool eol_flag = (c == 'Z');
 	char *p = decode_mode_spec_buf;
 
 	if (! FRAME_WINDOW_P (f))
@@ -23144,15 +23489,15 @@ decode_mode_spec (struct window *w, register int c, int field_width,
 	       to do EOL conversion.  */
 	    p = decode_mode_spec_coding (CODING_ID_NAME
 					 (FRAME_KEYBOARD_CODING (f)->id),
-					 p, 0);
+					 p, false);
 	    p = decode_mode_spec_coding (CODING_ID_NAME
 					 (FRAME_TERMINAL_CODING (f)->id),
-					 p, 0);
+					 p, false);
 	  }
 	p = decode_mode_spec_coding (BVAR (b, buffer_file_coding_system),
 				     p, eol_flag);
 
-#if 0 /* This proves to be annoying; I think we can do without.  -- rms.  */
+#if false /* This proves to be annoying; I think we can do without. -- rms.  */
 #ifdef subprocesses
 	obj = Fget_buffer_process (Fcurrent_buffer ());
 	if (PROCESSP (obj))
@@ -23163,7 +23508,7 @@ decode_mode_spec (struct window *w, register int c, int field_width,
 	      (XPROCESS (obj)->encode_coding_system, p, eol_flag);
 	  }
 #endif /* subprocesses */
-#endif /* 0 */
+#endif /* false */
 	*p = 0;
 	return decode_mode_spec_buf;
       }
@@ -23203,8 +23548,9 @@ display_count_lines (ptrdiff_t start_byte,
 
   /* If we are not in selective display mode,
      check only for newlines.  */
-  int selective_display = (!NILP (BVAR (current_buffer, selective_display))
-			   && !INTEGERP (BVAR (current_buffer, selective_display)));
+  bool selective_display
+    = (!NILP (BVAR (current_buffer, selective_display))
+       && !INTEGERP (BVAR (current_buffer, selective_display)));
 
   if (count > 0)
     {
@@ -23254,7 +23600,7 @@ display_count_lines (ptrdiff_t start_byte,
 	  ceiling = max (limit_byte, ceiling);
 	  ceiling_addr = BYTE_POS_ADDR (ceiling);
 	  base = (cursor = BYTE_POS_ADDR (start_byte - 1) + 1);
-	  while (1)
+	  while (true)
 	    {
 	      if (selective_display)
 		{
@@ -23364,7 +23710,7 @@ display_string (const char *string, Lisp_Object lisp_string, Lisp_Object face_st
 
       it->face_id
 	= face_at_string_position (it->w, face_string, face_string_pos,
-				   0, &endptr, it->base_face_id, 0);
+				   0, &endptr, it->base_face_id, false);
       face = FACE_FROM_ID (it->f, it->face_id);
       it->face_box_p = face->box != FACE_NO_BOX;
     }
@@ -23474,7 +23820,7 @@ display_string (const char *string, Lisp_Object lisp_string, Lisp_Object face_st
 	  break;
 	}
 
-      set_iterator_to_next (it, 1);
+      set_iterator_to_next (it, true);
       if (STRINGP (it->string))
 	it_charpos = IT_STRING_CHARPOS (*it);
       else
@@ -23516,7 +23862,7 @@ display_string (const char *string, Lisp_Object lisp_string, Lisp_Object face_st
 		    }
 		  produce_special_glyphs (it, IT_TRUNCATION);
 		}
-	      row->truncated_on_right_p = 1;
+	      row->truncated_on_right_p = true;
 	    }
 	  break;
 	}
@@ -23531,7 +23877,7 @@ display_string (const char *string, Lisp_Object lisp_string, Lisp_Object face_st
 	      ? WINDOW_RIGHT_FRINGE_WIDTH (it->w)
 	      : WINDOW_LEFT_FRINGE_WIDTH (it->w)) == 0)
 	insert_left_trunc_glyphs (it);
-      row->truncated_on_left_p = 1;
+      row->truncated_on_left_p = true;
     }
 
   it->face_id = saved_face_id;
@@ -23551,9 +23897,9 @@ display_string (const char *string, Lisp_Object lisp_string, Lisp_Object face_st
    and 1 if it's invisible and without an ellipsis.  */
 
 int
-invisible_p (register Lisp_Object propval, Lisp_Object list)
+invisible_prop (Lisp_Object propval, Lisp_Object list)
 {
-  register Lisp_Object tail, proptail;
+  Lisp_Object tail, proptail;
 
   for (tail = list; CONSP (tail); tail = XCDR (tail))
     {
@@ -23673,14 +24019,14 @@ else if the text is replaced by an ellipsis.  */)
 
 */
 
-static int
+static bool
 calc_pixel_width_or_height (double *res, struct it *it, Lisp_Object prop,
-			    struct font *font, int width_p, int *align_to)
+			    struct font *font, bool width_p, int *align_to)
 {
   double pixels;
 
-#define OK_PIXELS(val) ((*res = (double)(val)), 1)
-#define OK_ALIGN_TO(val) ((*align_to = (int)(val)), 1)
+# define OK_PIXELS(val) (*res = (val), true)
+# define OK_ALIGN_TO(val) (*align_to = (val), true)
 
   if (NILP (prop))
     return OK_PIXELS (0);
@@ -23708,15 +24054,19 @@ calc_pixel_width_or_height (double *res, struct it *it, Lisp_Object prop,
 
 	      if (ppi > 0)
 		return OK_PIXELS (ppi / pixels);
-	      return 0;
+	      return false;
 	    }
 	}
 
 #ifdef HAVE_WINDOW_SYSTEM
       if (EQ (prop, Qheight))
-	return OK_PIXELS (font ? FONT_HEIGHT (font) : FRAME_LINE_HEIGHT (it->f));
+	return OK_PIXELS (font
+			  ? normal_char_height (font, -1)
+			  : FRAME_LINE_HEIGHT (it->f));
       if (EQ (prop, Qwidth))
-	return OK_PIXELS (font ? FONT_WIDTH (font) : FRAME_COLUMN_WIDTH (it->f));
+	return OK_PIXELS (font
+			  ? FONT_WIDTH (font)
+			  : FRAME_COLUMN_WIDTH (it->f));
 #else
       if (EQ (prop, Qheight) || EQ (prop, Qwidth))
 	return OK_PIXELS (1);
@@ -23771,12 +24121,12 @@ calc_pixel_width_or_height (double *res, struct it *it, Lisp_Object prop,
 	    return OK_PIXELS (WINDOW_SCROLL_BAR_AREA_WIDTH (it->w));
 	}
 
-      prop = buffer_local_value_1 (prop, it->w->contents);
+      prop = buffer_local_value (prop, it->w->contents);
       if (EQ (prop, Qunbound))
 	prop = Qnil;
     }
 
-  if (INTEGERP (prop) || FLOATP (prop))
+  if (NUMBERP (prop))
     {
       int base_unit = (width_p
 		       ? FRAME_COLUMN_WIDTH (it->f)
@@ -23803,7 +24153,7 @@ calc_pixel_width_or_height (double *res, struct it *it, Lisp_Object prop,
 #endif
 	  if (EQ (car, Qplus) || EQ (car, Qminus))
 	    {
-	      int first = 1;
+	      bool first = true;
 	      double px;
 
 	      pixels = 0;
@@ -23811,9 +24161,9 @@ calc_pixel_width_or_height (double *res, struct it *it, Lisp_Object prop,
 		{
 		  if (!calc_pixel_width_or_height (&px, it, XCAR (cdr),
 						   font, width_p, align_to))
-		    return 0;
+		    return false;
 		  if (first)
-		    pixels = (EQ (car, Qplus) ? px : -px), first = 0;
+		    pixels = (EQ (car, Qplus) ? px : -px), first = false;
 		  else
 		    pixels += px;
 		  cdr = XCDR (cdr);
@@ -23823,12 +24173,12 @@ calc_pixel_width_or_height (double *res, struct it *it, Lisp_Object prop,
 	      return OK_PIXELS (pixels);
 	    }
 
-	  car = buffer_local_value_1 (car, it->w->contents);
+	  car = buffer_local_value (car, it->w->contents);
 	  if (EQ (car, Qunbound))
 	    car = Qnil;
 	}
 
-      if (INTEGERP (car) || FLOATP (car))
+      if (NUMBERP (car))
 	{
 	  double fact;
 	  pixels = XFLOATINT (car);
@@ -23837,13 +24187,24 @@ calc_pixel_width_or_height (double *res, struct it *it, Lisp_Object prop,
 	  if (calc_pixel_width_or_height (&fact, it, cdr,
 					  font, width_p, align_to))
 	    return OK_PIXELS (pixels * fact);
-	  return 0;
+	  return false;
 	}
 
-      return 0;
+      return false;
     }
 
-  return 0;
+  return false;
+}
+
+void
+get_font_ascent_descent (struct font *font, int *ascent, int *descent)
+{
+#ifdef HAVE_WINDOW_SYSTEM
+  normal_char_ascent_descent (font, -1, ascent, descent);
+#else
+  *ascent = 1;
+  *descent = 0;
+#endif
 }
 
 
@@ -23973,14 +24334,14 @@ append_glyph_string (struct glyph_string **head, struct glyph_string **tail,
 
 
 /* Get face and two-byte form of character C in face FACE_ID on frame F.
-   The encoding of C is returned in *CHAR2B.  DISPLAY_P non-zero means
+   The encoding of C is returned in *CHAR2B.  DISPLAY_P means
    make sure that X resources for the face returned are allocated.
    Value is a pointer to a realized face that is ready for display if
-   DISPLAY_P is non-zero.  */
+   DISPLAY_P.  */
 
 static struct face *
 get_char_face_and_encoding (struct frame *f, int c, int face_id,
-			    XChar2b *char2b, int display_p)
+			    XChar2b *char2b, bool display_p)
 {
   struct face *face = FACE_FROM_ID (f, face_id);
   unsigned code = 0;
@@ -24000,7 +24361,7 @@ get_char_face_and_encoding (struct frame *f, int c, int face_id,
 #endif
     {
       eassert (face != NULL);
-      PREPARE_FACE_FOR_DISPLAY (f, face);
+      prepare_face_for_display (f, face);
     }
 
   return face;
@@ -24013,7 +24374,7 @@ get_char_face_and_encoding (struct frame *f, int c, int face_id,
 
 static struct face *
 get_glyph_face_and_encoding (struct frame *f, struct glyph *glyph,
-			     XChar2b *char2b, int *two_byte_p)
+			     XChar2b *char2b)
 {
   struct face *face;
   unsigned code = 0;
@@ -24023,10 +24384,7 @@ get_glyph_face_and_encoding (struct frame *f, struct glyph *glyph,
 
   /* Make sure X resources of the face are allocated.  */
   eassert (face != NULL);
-  PREPARE_FACE_FOR_DISPLAY (f, face);
-
-  if (two_byte_p)
-    *two_byte_p = 0;
+  prepare_face_for_display (f, face);
 
   if (face->font)
     {
@@ -24045,9 +24403,9 @@ get_glyph_face_and_encoding (struct frame *f, struct glyph *glyph,
 
 
 /* Get glyph code of character C in FONT in the two-byte form CHAR2B.
-   Return 1 if FONT has a glyph for C, otherwise return 0.  */
+   Return true iff FONT has a glyph for C.  */
 
-static int
+static bool
 get_char_glyph_code (int c, struct font *font, XChar2b *char2b)
 {
   unsigned code;
@@ -24058,9 +24416,9 @@ get_char_glyph_code (int c, struct font *font, XChar2b *char2b)
     code = font->driver->encode_char (font, c);
 
   if (code == FONT_INVALID_CODE)
-    return 0;
+    return false;
   STORE_XCHAR2B (char2b, (code >> 8), (code & 0xFF));
-  return 1;
+  return true;
 }
 
 
@@ -24101,7 +24459,7 @@ fill_composite_glyph_string (struct glyph_string *s, struct face *base_face,
 				       -1, Qnil);
 
 	  face = get_char_face_and_encoding (s->f, c, face_id,
-					     s->char2b + i, 1);
+					     s->char2b + i, true);
 	  if (face)
 	    {
 	      if (! s->face)
@@ -24133,15 +24491,12 @@ fill_composite_glyph_string (struct glyph_string *s, struct face *base_face,
      characters of the glyph string.  */
   if (s->font == NULL)
     {
-      s->font_not_found_p = 1;
+      s->font_not_found_p = true;
       s->font = FRAME_FONT (s->f);
     }
 
   /* Adjust base line for subscript/superscript text.  */
   s->ybase += s->first_glyph->voffset;
-
-  /* This glyph string must always be drawn with 16-bit functions.  */
-  s->two_byte_p = 1;
 
   return s->cmp_to;
 }
@@ -24233,7 +24588,7 @@ fill_glyph_string (struct glyph_string *s, int face_id,
 {
   struct glyph *glyph, *last;
   int voffset;
-  int glyph_not_available_p;
+  bool glyph_not_available_p;
 
   eassert (s->f == XFRAME (s->w->frame));
   eassert (s->nchars == 0);
@@ -24253,12 +24608,8 @@ fill_glyph_string (struct glyph_string *s, int face_id,
 	 && glyph->face_id == face_id
 	 && glyph->glyph_not_available_p == glyph_not_available_p)
     {
-      int two_byte_p;
-
       s->face = get_glyph_face_and_encoding (s->f, glyph,
-					       s->char2b + s->nchars,
-					       &two_byte_p);
-      s->two_byte_p = two_byte_p;
+					     s->char2b + s->nchars);
       ++s->nchars;
       eassert (s->nchars <= end - start);
       s->width += glyph->pixel_width;
@@ -24274,7 +24625,7 @@ fill_glyph_string (struct glyph_string *s, int face_id,
      characters of the glyph string.  */
   if (s->font == NULL || glyph_not_available_p)
     {
-      s->font_not_found_p = 1;
+      s->font_not_found_p = true;
       s->font = FRAME_FONT (s->f);
     }
 
@@ -24340,7 +24691,7 @@ fill_stretch_glyph_string (struct glyph_string *s, int start, int end)
   s->ybase += voffset;
 
   /* The case that face->gc == 0 is handled when drawing the glyph
-     string by calling PREPARE_FACE_FOR_DISPLAY.  */
+     string by calling prepare_face_for_display.  */
   eassert (s->face);
   return glyph - s->row->glyphs[s->area];
 }
@@ -24360,6 +24711,55 @@ get_per_char_metric (struct font *font, XChar2b *char2b)
   return &metrics;
 }
 
+/* A subroutine that computes "normal" values of ASCENT and DESCENT
+   for FONT.  Values are taken from font-global ones, except for fonts
+   that claim preposterously large values, but whose glyphs actually
+   have reasonable dimensions.  C is the character to use for metrics
+   if the font-global values are too large; if C is negative, the
+   function selects a default character.  */
+static void
+normal_char_ascent_descent (struct font *font, int c, int *ascent, int *descent)
+{
+  *ascent = FONT_BASE (font);
+  *descent = FONT_DESCENT (font);
+
+  if (FONT_TOO_HIGH (font))
+    {
+      XChar2b char2b;
+
+      /* Get metrics of C, defaulting to a reasonably sized ASCII
+	 character.  */
+      if (get_char_glyph_code (c >= 0 ? c : '{', font, &char2b))
+	{
+	  struct font_metrics *pcm = get_per_char_metric (font, &char2b);
+
+	  if (!(pcm->width == 0 && pcm->rbearing == 0 && pcm->lbearing == 0))
+	    {
+	      /* We add 1 pixel to character dimensions as heuristics
+		 that produces nicer display, e.g. when the face has
+		 the box attribute.  */
+	      *ascent = pcm->ascent + 1;
+	      *descent = pcm->descent + 1;
+	    }
+	}
+    }
+}
+
+/* A subroutine that computes a reasonable "normal character height"
+   for fonts that claim preposterously large vertical dimensions, but
+   whose glyphs are actually reasonably sized.  C is the character
+   whose metrics to use for those fonts, or -1 for default
+   character.  */
+static int
+normal_char_height (struct font *font, int c)
+{
+  int ascent, descent;
+
+  normal_char_ascent_descent (font, c, &ascent, &descent);
+
+  return ascent + descent;
+}
+
 /* EXPORT for RIF:
    Set *LEFT and *RIGHT to the left and right overhang of GLYPH on
    frame F.  Overhangs of glyphs other than type CHAR_GLYPH are
@@ -24372,17 +24772,18 @@ x_get_glyph_overhangs (struct glyph *glyph, struct frame *f, int *left, int *rig
 
   if (glyph->type == CHAR_GLYPH)
     {
-      struct face *face;
       XChar2b char2b;
-      struct font_metrics *pcm;
-
-      face = get_glyph_face_and_encoding (f, glyph, &char2b, NULL);
-      if (face->font && (pcm = get_per_char_metric (face->font, &char2b)))
+      struct face *face = get_glyph_face_and_encoding (f, glyph, &char2b);
+      if (face->font)
 	{
-	  if (pcm->rbearing > pcm->width)
-	    *right = pcm->rbearing - pcm->width;
-	  if (pcm->lbearing < 0)
-	    *left = -pcm->lbearing;
+	  struct font_metrics *pcm = get_per_char_metric (face->font, &char2b);
+	  if (pcm)
+	    {
+	      if (pcm->rbearing > pcm->width)
+		*right = pcm->rbearing - pcm->width;
+	      if (pcm->lbearing < 0)
+		*left = -pcm->lbearing;
+	    }
 	}
     }
   else if (glyph->type == COMPOSITE_GLYPH)
@@ -24536,7 +24937,7 @@ set_glyph_string_background_width (struct glyph_string *s, int start, int last_x
 	       || s->hl == DRAW_IMAGE_RAISED
 	       || s->hl == DRAW_IMAGE_SUNKEN))
 	  || s->hl == DRAW_MOUSE_FACE))
-    s->extends_to_end_of_line_p = 1;
+    s->extends_to_end_of_line_p = true;
 
   /* If S extends its face to the end of the line, set its
      background_width to the distance to the right edge of the drawing
@@ -24550,10 +24951,10 @@ set_glyph_string_background_width (struct glyph_string *s, int start, int last_x
 
 /* Compute overhangs and x-positions for glyph string S and its
    predecessors, or successors.  X is the starting x-position for S.
-   BACKWARD_P non-zero means process predecessors.  */
+   BACKWARD_P means process predecessors.  */
 
 static void
-compute_overhangs_and_x (struct glyph_string *s, int x, int backward_p)
+compute_overhangs_and_x (struct glyph_string *s, int x, bool backward_p)
 {
   if (backward_p)
     {
@@ -24616,7 +25017,7 @@ compute_overhangs_and_x (struct glyph_string *s, int x, int backward_p)
 	 append_glyph_string (&HEAD, &TAIL, s);				    \
          s->x = (X);							    \
        }								    \
-     while (0)
+     while (false)
 
 
 /* Add a glyph string for an image glyph to the list of strings
@@ -24637,7 +25038,7 @@ compute_overhangs_and_x (struct glyph_string *s, int x, int backward_p)
 	 ++START;							\
          s->x = (X);							\
        }								\
-     while (0)
+     while (false)
 
 
 /* Add a glyph string for a sequence of character glyphs to the list
@@ -24658,13 +25059,13 @@ compute_overhangs_and_x (struct glyph_string *s, int x, int backward_p)
 	 face_id = (row)->glyphs[area][START].face_id;			   \
 									   \
 	 s = alloca (sizeof *s);					   \
-	 char2b = alloca ((END - START) * sizeof *char2b);		   \
+	 SAFE_NALLOCA (char2b, 1, (END) - (START));			   \
 	 INIT_GLYPH_STRING (s, char2b, w, row, area, START, HL);	   \
 	 append_glyph_string (&HEAD, &TAIL, s);				   \
 	 s->x = (X);							   \
 	 START = fill_glyph_string (s, face_id, START, END, overlaps);	   \
        }								   \
-     while (0)
+     while (false)
 
 
 /* Add a glyph string for a composite sequence to the list of strings
@@ -24686,7 +25087,7 @@ compute_overhangs_and_x (struct glyph_string *s, int x, int backward_p)
     struct glyph_string *first_s = NULL;				    \
     int n;								    \
     									    \
-    char2b = alloca (cmp->glyph_len * sizeof *char2b);			    \
+    SAFE_NALLOCA (char2b, 1, cmp->glyph_len);				    \
     									    \
     /* Make glyph_strings for each glyph sequence that is drawable by	    \
        the same face, and append them to HEAD/TAIL.  */			    \
@@ -24705,7 +25106,7 @@ compute_overhangs_and_x (struct glyph_string *s, int x, int backward_p)
     									    \
     ++START;								    \
     s = first_s;							    \
-  } while (0)
+  } while (false)
 
 
 /* Add a glyph string for a glyph-string sequence to the list of strings
@@ -24721,12 +25122,12 @@ compute_overhangs_and_x (struct glyph_string *s, int x, int backward_p)
     gstring = (composition_gstring_from_id				  \
 	       ((row)->glyphs[area][START].u.cmp.id));			  \
     s = alloca (sizeof *s);						  \
-    char2b = alloca (LGSTRING_GLYPH_LEN (gstring) * sizeof *char2b);	  \
+    SAFE_NALLOCA (char2b, 1, LGSTRING_GLYPH_LEN (gstring));		  \
     INIT_GLYPH_STRING (s, char2b, w, row, area, START, HL);		  \
     append_glyph_string (&(HEAD), &(TAIL), s);				  \
     s->x = (X);								  \
     START = fill_gstring_glyph_string (s, face_id, START, END, overlaps); \
-  } while (0)
+  } while (false)
 
 
 /* Add a glyph string for a sequence of glyphless character's glyphs
@@ -24747,7 +25148,7 @@ compute_overhangs_and_x (struct glyph_string *s, int x, int backward_p)
       START = fill_glyphless_glyph_string (s, face_id, START, END,	    \
 					   overlaps);			    \
     }									    \
-  while (0)
+  while (false)
 
 
 /* Build a list of glyph strings between HEAD and TAIL for the glyphs
@@ -24808,7 +25209,7 @@ compute_overhangs_and_x (struct glyph_string *s, int x, int backward_p)
 	      (X) += s->width;						\
 	    }								\
 	}								\
-    } while (0)
+    } while (false)
 
 
 /* Draw glyphs between START and END in AREA of ROW on window W,
@@ -24873,6 +25274,7 @@ draw_glyphs (struct window *w, int x, struct glyph_row *row,
      BUILD_GLYPH_STRINGS will modify its start parameter.  That's
      the reason we use a separate variable `i'.  */
   i = start;
+  USE_SAFE_ALLOCA;
   BUILD_GLYPH_STRINGS (i, end, head, tail, hl, x, last_x);
   if (tail)
     x_reached = tail->x + tail->background_width;
@@ -24887,7 +25289,7 @@ draw_glyphs (struct window *w, int x, struct glyph_row *row,
       struct glyph_string *h, *t;
       Mouse_HLInfo *hlinfo = MOUSE_HL_INFO (f);
       int mouse_beg_col IF_LINT (= 0), mouse_end_col IF_LINT (= 0);
-      int check_mouse_face = 0;
+      bool check_mouse_face = false;
       int dummy_x = 0;
 
       /* If mouse highlighting is on, we may need to draw adjacent
@@ -24901,7 +25303,7 @@ draw_glyphs (struct window *w, int x, struct glyph_row *row,
 	  if (row_vpos >= hlinfo->mouse_face_beg_row
 	      && row_vpos <= hlinfo->mouse_face_end_row)
 	    {
-	      check_mouse_face = 1;
+	      check_mouse_face = true;
 	      mouse_beg_col = (row_vpos == hlinfo->mouse_face_beg_row)
 		? hlinfo->mouse_face_beg_col : 0;
 	      mouse_end_col = (row_vpos == hlinfo->mouse_face_end_row)
@@ -24944,7 +25346,7 @@ draw_glyphs (struct window *w, int x, struct glyph_row *row,
 	  BUILD_GLYPH_STRINGS (j, start, h, t,
 			       overlap_hl, dummy_x, last_x);
 	  start = i;
-	  compute_overhangs_and_x (t, head->x, 1);
+	  compute_overhangs_and_x (t, head->x, true);
 	  prepend_glyph_string_lists (&head, &tail, h, t);
 	  if (clip_head == NULL)
 	    clip_head = head;
@@ -24973,8 +25375,8 @@ draw_glyphs (struct window *w, int x, struct glyph_row *row,
 	  BUILD_GLYPH_STRINGS (i, start, h, t,
 			       overlap_hl, dummy_x, last_x);
 	  for (s = h; s; s = s->next)
-	    s->background_filled_p = 1;
-	  compute_overhangs_and_x (t, head->x, 1);
+	    s->background_filled_p = true;
+	  compute_overhangs_and_x (t, head->x, true);
 	  prepend_glyph_string_lists (&head, &tail, h, t);
 	}
 
@@ -24999,7 +25401,7 @@ draw_glyphs (struct window *w, int x, struct glyph_row *row,
 			       overlap_hl, x, last_x);
 	  /* Because BUILD_GLYPH_STRINGS updates the first argument,
 	     we don't have `end = i;' here.  */
-	  compute_overhangs_and_x (h, tail->x + tail->width, 0);
+	  compute_overhangs_and_x (h, tail->x + tail->width, false);
 	  append_glyph_string_lists (&head, &tail, h, t);
 	  if (clip_tail == NULL)
 	    clip_tail = tail;
@@ -25026,8 +25428,8 @@ draw_glyphs (struct window *w, int x, struct glyph_row *row,
 	  BUILD_GLYPH_STRINGS (end, i, h, t,
 			       overlap_hl, x, last_x);
 	  for (s = h; s; s = s->next)
-	    s->background_filled_p = 1;
-	  compute_overhangs_and_x (h, tail->x + tail->width, 0);
+	    s->background_filled_p = true;
+	  compute_overhangs_and_x (h, tail->x + tail->width, false);
 	  append_glyph_string_lists (&head, &tail, h, t);
 	}
       if (clip_head || clip_tail)
@@ -25043,7 +25445,7 @@ draw_glyphs (struct window *w, int x, struct glyph_row *row,
     FRAME_RIF (f)->draw_glyph_string (s);
 
 #ifndef HAVE_NS
-  /* When focus a sole frame and move horizontally, this sets on_p to 0
+  /* When focus a sole frame and move horizontally, this clears on_p
      causing a failure to erase prev cursor position. */
   if (area == TEXT_AREA
       && !row->full_width_p
@@ -25072,6 +25474,7 @@ draw_glyphs (struct window *w, int x, struct glyph_row *row,
 
   RELEASE_HDC (hdc, f);
 
+  SAFE_FREE ();
   return x_reached;
 }
 
@@ -25085,7 +25488,7 @@ draw_glyphs (struct window *w, int x, struct glyph_row *row,
 	    < it->glyph_row->glyphs[area + 1]))		\
       {							\
 	it->w->ncols_scale_factor++;			\
-	it->f->fonts_changed = 1;			\
+	it->f->fonts_changed = true;			\
       }							\
   }
 
@@ -25120,14 +25523,14 @@ append_glyph (struct it *it)
       if (it->pixel_width > 0)
 	{
 	  glyph->pixel_width = it->pixel_width;
-	  glyph->padding_p = 0;
+	  glyph->padding_p = false;
 	}
       else
 	{
 	  /* Assure at least 1-pixel width.  Otherwise, cursor can't
 	     be displayed correctly.  */
 	  glyph->pixel_width = 1;
-	  glyph->padding_p = 1;
+	  glyph->padding_p = true;
 	}
       glyph->ascent = it->ascent;
       glyph->descent = it->descent;
@@ -25157,8 +25560,7 @@ append_glyph (struct it *it)
       if (it->bidi_p)
 	{
 	  glyph->resolved_level = it->bidi_it.resolved_level;
-	  if ((it->bidi_it.type & 7) != it->bidi_it.type)
-	    emacs_abort ();
+	  eassert ((it->bidi_it.type & 7) == it->bidi_it.type);
 	  glyph->bidi_type = it->bidi_it.type;
 	}
       else
@@ -25207,13 +25609,13 @@ append_composite_glyph (struct it *it)
       glyph->type = COMPOSITE_GLYPH;
       if (it->cmp_it.ch < 0)
 	{
-	  glyph->u.cmp.automatic = 0;
+	  glyph->u.cmp.automatic = false;
 	  glyph->u.cmp.id = it->cmp_it.id;
 	  glyph->slice.cmp.from = glyph->slice.cmp.to = 0;
 	}
       else
 	{
-	  glyph->u.cmp.automatic = 1;
+	  glyph->u.cmp.automatic = true;
 	  glyph->u.cmp.id = it->cmp_it.id;
 	  glyph->slice.cmp.from = it->cmp_it.from;
 	  glyph->slice.cmp.to = it->cmp_it.to - 1;
@@ -25234,15 +25636,14 @@ append_composite_glyph (struct it *it)
 	}
       glyph->overlaps_vertically_p = (it->phys_ascent > it->ascent
 				      || it->phys_descent > it->descent);
-      glyph->padding_p = 0;
-      glyph->glyph_not_available_p = 0;
+      glyph->padding_p = false;
+      glyph->glyph_not_available_p = false;
       glyph->face_id = it->face_id;
       glyph->font_type = FONT_TYPE_UNKNOWN;
       if (it->bidi_p)
 	{
 	  glyph->resolved_level = it->bidi_it.resolved_level;
-	  if ((it->bidi_it.type & 7) != it->bidi_it.type)
-	    emacs_abort ();
+	  eassert ((it->bidi_it.type & 7) == it->bidi_it.type);
 	  glyph->bidi_type = it->bidi_it.type;
 	}
       ++it->glyph_row->used[area];
@@ -25289,7 +25690,7 @@ produce_image_glyph (struct it *it)
   face = FACE_FROM_ID (it->f, it->face_id);
   eassert (face);
   /* Make sure X resources of the face is loaded.  */
-  PREPARE_FACE_FOR_DISPLAY (it->f, face);
+  prepare_face_for_display (it->f, face);
 
   if (it->image_id < 0)
     {
@@ -25397,6 +25798,15 @@ produce_image_glyph (struct it *it)
       enum glyph_row_area area = it->area;
 
       glyph = it->glyph_row->glyphs[area] + it->glyph_row->used[area];
+      if (it->glyph_row->reversed_p)
+	{
+	  struct glyph *g;
+
+	  /* Make room for the new glyph.  */
+	  for (g = glyph - 1; g >= it->glyph_row->glyphs[it->area]; g--)
+	    g[1] = *g;
+	  glyph = it->glyph_row->glyphs[it->area];
+	}
       if (glyph < it->glyph_row->glyphs[area + 1])
 	{
 	  glyph->charpos = CHARPOS (it->position);
@@ -25420,9 +25830,9 @@ produce_image_glyph (struct it *it)
 	      glyph->left_box_line_p = it->start_of_box_run_p;
 	      glyph->right_box_line_p = it->end_of_box_run_p;
 	    }
-	  glyph->overlaps_vertically_p = 0;
-          glyph->padding_p = 0;
-	  glyph->glyph_not_available_p = 0;
+	  glyph->overlaps_vertically_p = false;
+          glyph->padding_p = false;
+	  glyph->glyph_not_available_p = false;
 	  glyph->face_id = it->face_id;
 	  glyph->u.img_id = img->id;
 	  glyph->slice.img = slice;
@@ -25430,8 +25840,7 @@ produce_image_glyph (struct it *it)
 	  if (it->bidi_p)
 	    {
 	      glyph->resolved_level = it->bidi_it.resolved_level;
-	      if ((it->bidi_it.type & 7) != it->bidi_it.type)
-		emacs_abort ();
+	      eassert ((it->bidi_it.type & 7) == it->bidi_it.type);
 	      glyph->bidi_type = it->bidi_it.type;
 	    }
 	  ++it->glyph_row->used[area];
@@ -25508,9 +25917,9 @@ append_stretch_glyph (struct it *it, Lisp_Object object,
 	  glyph->left_box_line_p = it->start_of_box_run_p;
 	  glyph->right_box_line_p = it->end_of_box_run_p;
 	}
-      glyph->overlaps_vertically_p = 0;
-      glyph->padding_p = 0;
-      glyph->glyph_not_available_p = 0;
+      glyph->overlaps_vertically_p = false;
+      glyph->padding_p = false;
+      glyph->glyph_not_available_p = false;
       glyph->face_id = it->face_id;
       glyph->u.stretch.ascent = ascent;
       glyph->u.stretch.height = height;
@@ -25519,8 +25928,7 @@ append_stretch_glyph (struct it *it, Lisp_Object object,
       if (it->bidi_p)
 	{
 	  glyph->resolved_level = it->bidi_it.resolved_level;
-	  if ((it->bidi_it.type & 7) != it->bidi_it.type)
-	    emacs_abort ();
+	  eassert ((it->bidi_it.type & 7) == it->bidi_it.type);
 	  glyph->bidi_type = it->bidi_it.type;
 	}
       else
@@ -25573,19 +25981,19 @@ produce_stretch_glyph (struct it *it)
   /* (space :width WIDTH :height HEIGHT ...)  */
   Lisp_Object prop, plist;
   int width = 0, height = 0, align_to = -1;
-  int zero_width_ok_p = 0;
+  bool zero_width_ok_p = false;
   double tem;
   struct font *font = NULL;
 
 #ifdef HAVE_WINDOW_SYSTEM
   int ascent = 0;
-  int zero_height_ok_p = 0;
+  bool zero_height_ok_p = false;
 
   if (FRAME_WINDOW_P (it->f))
     {
       struct face *face = FACE_FROM_ID (it->f, it->face_id);
       font = face->font ? face->font : FRAME_FONT (it->f);
-      PREPARE_FACE_FOR_DISPLAY (it->f, face);
+      prepare_face_for_display (it->f, face);
     }
 #endif
 
@@ -25595,15 +26003,13 @@ produce_stretch_glyph (struct it *it)
 
   /* Compute the width of the stretch.  */
   if ((prop = Fplist_get (plist, QCwidth), !NILP (prop))
-      && calc_pixel_width_or_height (&tem, it, prop, font, 1, 0))
+      && calc_pixel_width_or_height (&tem, it, prop, font, true, 0))
     {
       /* Absolute width `:width WIDTH' specified and valid.  */
-      zero_width_ok_p = 1;
+      zero_width_ok_p = true;
       width = (int)tem;
     }
-#ifdef HAVE_WINDOW_SYSTEM
-  else if (FRAME_WINDOW_P (it->f)
-	   && (prop = Fplist_get (plist, QCrelative_width), NUMVAL (prop) > 0))
+  else if (prop = Fplist_get (plist, QCrelative_width), NUMVAL (prop) > 0)
     {
       /* Relative width `:relative-width FACTOR' specified and valid.
 	 Compute the width of the characters having the `glyph'
@@ -25623,12 +26029,12 @@ produce_stretch_glyph (struct it *it)
 
       it2.glyph_row = NULL;
       it2.what = IT_CHARACTER;
-      x_produce_glyphs (&it2);
+      PRODUCE_GLYPHS (&it2);
       width = NUMVAL (prop) * it2.pixel_width;
     }
-#endif	/* HAVE_WINDOW_SYSTEM */
   else if ((prop = Fplist_get (plist, QCalign_to), !NILP (prop))
-	   && calc_pixel_width_or_height (&tem, it, prop, font, 1, &align_to))
+	   && calc_pixel_width_or_height (&tem, it, prop, font, true,
+					  &align_to))
     {
       if (it->glyph_row == NULL || !it->glyph_row->mode_line_p)
 	align_to = (align_to < 0
@@ -25637,7 +26043,7 @@ produce_stretch_glyph (struct it *it)
       else if (align_to < 0)
 	align_to = window_box_left_offset (it->w, TEXT_AREA);
       width = max (0, (int)tem + align_to - it->current_x);
-      zero_width_ok_p = 1;
+      zero_width_ok_p = true;
     }
   else
     /* Nothing specified -> width defaults to canonical char width.  */
@@ -25650,17 +26056,19 @@ produce_stretch_glyph (struct it *it)
   /* Compute height.  */
   if (FRAME_WINDOW_P (it->f))
     {
+      int default_height = normal_char_height (font, ' ');
+
       if ((prop = Fplist_get (plist, QCheight), !NILP (prop))
-	  && calc_pixel_width_or_height (&tem, it, prop, font, 0, 0))
+	  && calc_pixel_width_or_height (&tem, it, prop, font, false, 0))
 	{
 	  height = (int)tem;
-	  zero_height_ok_p = 1;
+	  zero_height_ok_p = true;
 	}
       else if (prop = Fplist_get (plist, QCrelative_height),
 	       NUMVAL (prop) > 0)
-	height = FONT_HEIGHT (font) * NUMVAL (prop);
+	height = default_height * NUMVAL (prop);
       else
-	height = FONT_HEIGHT (font);
+	height = default_height;
 
       if (height <= 0 && (height < 0 || !zero_height_ok_p))
 	height = 1;
@@ -25672,7 +26080,7 @@ produce_stretch_glyph (struct it *it)
           NUMVAL (prop) > 0 && NUMVAL (prop) <= 100)
 	ascent = height * NUMVAL (prop) / 100.0;
       else if (!NILP (prop)
-	       && calc_pixel_width_or_height (&tem, it, prop, font, 0, 0))
+	       && calc_pixel_width_or_height (&tem, it, prop, font, false, 0))
 	ascent = min (max (0, (int)tem), height);
       else
 	ascent = (height * FONT_BASE (font)) / FONT_HEIGHT (font);
@@ -25721,7 +26129,7 @@ produce_stretch_glyph (struct it *it)
     {
       it->ascent = it->phys_ascent = ascent;
       it->descent = it->phys_descent = height - it->ascent;
-      it->nglyphs = width > 0 && height > 0 ? 1 : 0;
+      it->nglyphs = width > 0 && height > 0;
       take_vertical_position_into_account (it);
     }
   else
@@ -25743,7 +26151,7 @@ produce_special_glyphs (struct it *it, enum display_element_type what)
   GLYPH glyph;
 
   temp_it = *it;
-  temp_it.object = make_number (0);
+  temp_it.object = Qnil;
   memset (&temp_it.current, 0, sizeof temp_it.current);
 
   if (what == IT_CONTINUATION)
@@ -25806,7 +26214,7 @@ produce_special_glyphs (struct it *it, enum display_element_type what)
 	    (((temp_it.ascent + temp_it.descent)
 	      * FONT_BASE (font)) / FONT_HEIGHT (font));
 
-	  append_stretch_glyph (&temp_it, make_number (0), stretch_width,
+	  append_stretch_glyph (&temp_it, Qnil, stretch_width,
 				temp_it.ascent + temp_it.descent,
 				stretch_ascent);
 	}
@@ -25834,10 +26242,9 @@ produce_special_glyphs (struct it *it, enum display_element_type what)
 
    Returns height in pixels, or nil.  */
 
-
 static Lisp_Object
 calc_line_height_property (struct it *it, Lisp_Object val, struct font *font,
-			   int boff, int override)
+			   int boff, bool override)
 {
   Lisp_Object face_name = Qnil;
   int ascent, descent, height;
@@ -25865,14 +26272,14 @@ calc_line_height_property (struct it *it, Lisp_Object val, struct font *font,
     }
   else if (EQ (face_name, Qt))
     {
-      override = 0;
+      override = false;
     }
   else
     {
       int face_id;
       struct face *face;
 
-      face_id = lookup_named_face (it->f, face_name, 0);
+      face_id = lookup_named_face (it->f, face_name, false);
       if (face_id < 0)
 	return make_number (-1);
 
@@ -25885,8 +26292,7 @@ calc_line_height_property (struct it *it, Lisp_Object val, struct font *font,
 	boff = VCENTER_BASELINE_OFFSET (font, it->f) - boff;
     }
 
-  ascent = FONT_BASE (font) + boff;
-  descent = FONT_DESCENT (font) - boff;
+  normal_char_ascent_descent (font, -1, &ascent, &descent);
 
   if (override)
     {
@@ -25908,7 +26314,7 @@ calc_line_height_property (struct it *it, Lisp_Object val, struct font *font,
 
 
 /* Append a glyph for a glyphless character to IT->glyph_row.  FACE_ID
-   is a face ID to be used for the glyph.  FOR_NO_FONT is nonzero if
+   is a face ID to be used for the glyph.  FOR_NO_FONT is true if
    and only if this is for a character for which no font was found.
 
    If the display method (it->glyphless_method) is
@@ -25920,7 +26326,7 @@ calc_line_height_property (struct it *it, Lisp_Object val, struct font *font,
    For the other display methods, LEN through LOWER_YOFF are zero.  */
 
 static void
-append_glyphless_glyph (struct it *it, int face_id, int for_no_font, int len,
+append_glyphless_glyph (struct it *it, int face_id, bool for_no_font, int len,
 			short upper_xoff, short upper_yoff,
 			short lower_xoff, short lower_yoff)
 {
@@ -25972,15 +26378,14 @@ append_glyphless_glyph (struct it *it, int face_id, int for_no_font, int len,
 	}
       glyph->overlaps_vertically_p = (it->phys_ascent > it->ascent
 				      || it->phys_descent > it->descent);
-      glyph->padding_p = 0;
-      glyph->glyph_not_available_p = 0;
+      glyph->padding_p = false;
+      glyph->glyph_not_available_p = false;
       glyph->face_id = face_id;
       glyph->font_type = FONT_TYPE_UNKNOWN;
       if (it->bidi_p)
 	{
 	  glyph->resolved_level = it->bidi_it.resolved_level;
-	  if ((it->bidi_it.type & 7) != it->bidi_it.type)
-	    emacs_abort ();
+	  eassert ((it->bidi_it.type & 7) == it->bidi_it.type);
 	  glyph->bidi_type = it->bidi_it.type;
 	}
       ++it->glyph_row->used[area];
@@ -25995,12 +26400,12 @@ append_glyphless_glyph (struct it *it, int face_id, int for_no_font, int len,
    the character.  See the description of enum
    glyphless_display_method in dispextern.h for the detail.
 
-   FOR_NO_FONT is nonzero if and only if this is for a character for
+   FOR_NO_FONT is true if and only if this is for a character for
    which no font was found.  ACRONYM, if non-nil, is an acronym string
    for the character.  */
 
 static void
-produce_glyphless_glyph (struct it *it, int for_no_font, Lisp_Object acronym)
+produce_glyphless_glyph (struct it *it, bool for_no_font, Lisp_Object acronym)
 {
   int face_id;
   struct face *face;
@@ -26013,8 +26418,9 @@ produce_glyphless_glyph (struct it *it, int for_no_font, Lisp_Object acronym)
      ASCII face.  */
   face = FACE_FROM_ID (it->f, it->face_id)->ascii_face;
   font = face->font ? face->font : FRAME_FONT (it->f);
-  it->ascent = FONT_BASE (font) + font->baseline_offset;
-  it->descent = FONT_DESCENT (font) - font->baseline_offset;
+  normal_char_ascent_descent (font, -1, &it->ascent, &it->descent);
+  it->ascent += font->baseline_offset;
+  it->descent -= font->baseline_offset;
   base_height = it->ascent + it->descent;
   base_width = font->average_width;
 
@@ -26048,7 +26454,7 @@ produce_glyphless_glyph (struct it *it, int for_no_font, Lisp_Object acronym)
 
       face = FACE_FROM_ID (it->f, face_id);
       font = face->font ? face->font : FRAME_FONT (it->f);
-      PREPARE_FACE_FOR_DISPLAY (it->f, face);
+      prepare_face_for_display (it->f, face);
 
       if (it->glyphless_method == GLYPHLESS_DISPLAY_ACRONYM)
 	{
@@ -26061,10 +26467,10 @@ produce_glyphless_glyph (struct it *it, int for_no_font, Lisp_Object acronym)
       else
 	{
 	  eassert (it->glyphless_method == GLYPHLESS_DISPLAY_HEX_CODE);
-	  sprintf (buf, "%0*X", it->c < 0x10000 ? 4 : 6, it->c);
+	  sprintf (buf, "%0*X", it->c < 0x10000 ? 4 : 6, it->c + 0u);
 	  str = buf;
 	}
-      for (len = 0; str[len] && ASCII_BYTE_P (str[len]) && len < 6; len++)
+      for (len = 0; str[len] && ASCII_CHAR_P (str[len]) && len < 6; len++)
 	code[len] = font->driver->encode_char (font, str[len]);
       upper_len = (len + 1) / 2;
       font->driver->text_extents (font, code, upper_len,
@@ -26145,7 +26551,7 @@ x_produce_glyphs (struct it *it)
 {
   int extra_line_spacing = it->extra_line_spacing;
 
-  it->glyph_not_available_p = 0;
+  it->glyph_not_available_p = false;
 
   if (it->what == IT_CHARACTER)
     {
@@ -26163,7 +26569,8 @@ x_produce_glyphs (struct it *it)
 	      Lisp_Object acronym = lookup_glyphless_char_display (-1, it);
 
 	      eassert (it->what == IT_GLYPHLESS);
-	  produce_glyphless_glyph (it, 1, STRINGP (acronym) ? acronym : Qnil);
+	  produce_glyphless_glyph (it, true,
+				   STRINGP (acronym) ? acronym : Qnil);
 	  goto done;
 	}
 
@@ -26173,8 +26580,6 @@ x_produce_glyphs (struct it *it)
 
       if (it->char_to_display != '\n' && it->char_to_display != '\t')
 	{
-	  int stretched_p;
-
 	  it->nglyphs = 1;
 
  	  if (it->override_ascent >= 0)
@@ -26202,10 +26607,26 @@ x_produce_glyphs (struct it *it)
 	      it->phys_ascent = pcm->ascent + boff;
 	      it->phys_descent = pcm->descent - boff;
 	      it->pixel_width = pcm->width;
+	      /* Don't use font-global values for ascent and descent
+		 if they result in an exceedingly large line height.  */
+	      if (it->override_ascent < 0)
+		{
+		  if (FONT_TOO_HIGH (font))
+		    {
+		      it->ascent = it->phys_ascent;
+		      it->descent = it->phys_descent;
+		      /* These limitations are enforced by an
+			 assertion near the end of this function.  */
+		      if (it->ascent < 0)
+			it->ascent = 0;
+		      if (it->descent < 0)
+			it->descent = 0;
+		    }
+		}
 	    }
 	  else
 	    {
-	      it->glyph_not_available_p = 1;
+	      it->glyph_not_available_p = true;
 	      it->phys_ascent = it->ascent;
 	      it->phys_descent = it->descent;
 	      it->pixel_width = font->space_width;
@@ -26230,7 +26651,8 @@ x_produce_glyphs (struct it *it)
 
 	  /* If this is a space inside a region of text with
 	     `space-width' property, change its width.  */
-	  stretched_p = it->char_to_display == ' ' && !NILP (it->space_width);
+	  bool stretched_p
+	    = it->char_to_display == ' ' && !NILP (it->space_width);
 	  if (stretched_p)
 	    it->pixel_width *= XFLOATINT (it->space_width);
 
@@ -26289,7 +26711,7 @@ x_produce_glyphs (struct it *it)
 		 in this line, record that fact in a flag of the
 		 glyph row.  This is used to optimize X output code.  */
 	      if (pcm && (pcm->lbearing < 0 || pcm->rbearing > pcm->width))
-		it->glyph_row->contains_overlapping_glyphs_p = 1;
+		it->glyph_row->contains_overlapping_glyphs_p = true;
 	    }
 	  if (! stretched_p && it->pixel_width == 0)
 	    /* We assure that all visible glyphs have at least 1-pixel
@@ -26318,7 +26740,7 @@ x_produce_glyphs (struct it *it)
 	      total_height = XCAR (XCDR (height));
 	      height = XCAR (height);
 	    }
-	  height = calc_line_height_property (it, height, font, boff, 1);
+	  height = calc_line_height_property (it, height, font, boff, true);
 
 	  if (it->override_ascent >= 0)
 	    {
@@ -26328,8 +26750,18 @@ x_produce_glyphs (struct it *it)
 	    }
 	  else
 	    {
-	      it->ascent = FONT_BASE (font) + boff;
-	      it->descent = FONT_DESCENT (font) - boff;
+	      if (FONT_TOO_HIGH (font))
+		{
+		  it->ascent = font->pixel_size + boff - 1;
+		  it->descent = -boff + 1;
+		  if (it->descent < 0)
+		    it->descent = 0;
+		}
+	      else
+		{
+		  it->ascent = FONT_BASE (font) + boff;
+		  it->descent = FONT_DESCENT (font) - boff;
+		}
 	    }
 
 	  if (EQ (height, Qt))
@@ -26346,7 +26778,7 @@ x_produce_glyphs (struct it *it)
 		}
 	      it->phys_ascent = min (it->phys_ascent, it->ascent);
 	      it->phys_descent = min (it->phys_descent, it->descent);
-	      it->constrain_row_ascent_descent_p = 1;
+	      it->constrain_row_ascent_descent_p = true;
 	      extra_line_spacing = 0;
 	    }
 	  else
@@ -26368,11 +26800,13 @@ x_produce_glyphs (struct it *it)
 		it->ascent = XINT (height) - it->descent;
 
 	      if (!NILP (total_height))
-		spacing = calc_line_height_property (it, total_height, font, boff, 0);
+		spacing = calc_line_height_property (it, total_height, font,
+						     boff, false);
 	      else
 		{
 		  spacing = get_it_property (it, Qline_spacing);
-		  spacing = calc_line_height_property (it, spacing, font, boff, 0);
+		  spacing = calc_line_height_property (it, spacing, font,
+						       boff, false);
 		}
 	      if (INTEGERP (spacing))
 		{
@@ -26398,8 +26832,38 @@ x_produce_glyphs (struct it *it)
 
 	      it->pixel_width = next_tab_x - x;
 	      it->nglyphs = 1;
-	      it->ascent = it->phys_ascent = FONT_BASE (font) + boff;
-	      it->descent = it->phys_descent = FONT_DESCENT (font) - boff;
+	      if (FONT_TOO_HIGH (font))
+		{
+		  if (get_char_glyph_code (' ', font, &char2b))
+		    {
+		      pcm = get_per_char_metric (font, &char2b);
+		      if (pcm->width == 0
+			  && pcm->rbearing == 0 && pcm->lbearing == 0)
+			pcm = NULL;
+		    }
+
+		  if (pcm)
+		    {
+		      it->ascent = pcm->ascent + boff;
+		      it->descent = pcm->descent - boff;
+		    }
+		  else
+		    {
+		      it->ascent = font->pixel_size + boff - 1;
+		      it->descent = -boff + 1;
+		    }
+		  if (it->ascent < 0)
+		    it->ascent = 0;
+		  if (it->descent < 0)
+		    it->descent = 0;
+		}
+	      else
+		{
+		  it->ascent = FONT_BASE (font) + boff;
+		  it->descent = FONT_DESCENT (font) - boff;
+		}
+	      it->phys_ascent = it->ascent;
+	      it->phys_descent = it->descent;
 
 	      if (it->glyph_row)
 		{
@@ -26412,6 +26876,22 @@ x_produce_glyphs (struct it *it)
 	      it->pixel_width = 0;
 	      it->nglyphs = 1;
 	    }
+	}
+
+      if (FONT_TOO_HIGH (font))
+	{
+	  int font_ascent, font_descent;
+
+	  /* For very large fonts, where we ignore the declared font
+	     dimensions, and go by per-character metrics instead,
+	     don't let the row ascent and descent values (and the row
+	     height computed from them) be smaller than the "normal"
+	     character metrics.  This avoids unpleasant effects
+	     whereby lines on display would change their height
+	     depending on which characters are shown.  */
+	  normal_char_ascent_descent (font, -1, &font_ascent, &font_descent);
+	  it->max_ascent = max (it->max_ascent, font_ascent);
+	  it->max_descent = max (it->max_descent, font_descent);
 	}
     }
   else if (it->what == IT_COMPOSITION && it->cmp_it.ch < 0)
@@ -26450,31 +26930,27 @@ x_produce_glyphs (struct it *it)
 	  int leftmost, rightmost, lowest, highest;
 	  int lbearing, rbearing;
 	  int i, width, ascent, descent;
-	  int left_padded = 0, right_padded = 0;
 	  int c IF_LINT (= 0); /* cmp->glyph_len can't be zero; see Bug#8512 */
 	  XChar2b char2b;
 	  struct font_metrics *pcm;
-	  int font_not_found_p;
 	  ptrdiff_t pos;
 
 	  for (glyph_len = cmp->glyph_len; glyph_len > 0; glyph_len--)
 	    if ((c = COMPOSITION_GLYPH (cmp, glyph_len - 1)) != '\t')
 	      break;
-	  if (glyph_len < cmp->glyph_len)
-	    right_padded = 1;
+	  bool right_padded = glyph_len < cmp->glyph_len;
 	  for (i = 0; i < glyph_len; i++)
 	    {
 	      if ((c = COMPOSITION_GLYPH (cmp, i)) != '\t')
 		break;
 	      cmp->offsets[i * 2] = cmp->offsets[i * 2 + 1] = 0;
 	    }
-	  if (i > 0)
-	    left_padded = 1;
+	  bool left_padded = i > 0;
 
 	  pos = (STRINGP (it->string) ? IT_STRING_CHARPOS (*it)
 		 : IT_CHARPOS (*it));
 	  /* If no suitable font is found, use the default font.  */
-	  font_not_found_p = font == NULL;
+	  bool font_not_found_p = font == NULL;
 	  if (font_not_found_p)
 	    {
 	      face = face->ascii_face;
@@ -26483,9 +26959,10 @@ x_produce_glyphs (struct it *it)
 	  boff = font->baseline_offset;
 	  if (font->vertical_centering)
 	    boff = VCENTER_BASELINE_OFFSET (font, it->f) - boff;
-	  font_ascent = FONT_BASE (font) + boff;
-	  font_descent = FONT_DESCENT (font) - boff;
-	  font_height = FONT_HEIGHT (font);
+	  normal_char_ascent_descent (font, -1, &font_ascent, &font_descent);
+	  font_ascent +=  boff;
+	  font_descent -= boff;
+	  font_height = font_ascent + font_descent;
 
 	  cmp->font = font;
 
@@ -26493,7 +26970,7 @@ x_produce_glyphs (struct it *it)
 	  if (! font_not_found_p)
 	    {
 	      get_char_face_and_encoding (it->f, c, it->face_id,
-					  &char2b, 0);
+					  &char2b, false);
 	      pcm = get_per_char_metric (font, &char2b);
 	    }
 
@@ -26554,7 +27031,7 @@ x_produce_glyphs (struct it *it)
 	      else
 		{
 		  get_char_face_and_encoding (it->f, ch, face_id,
-					      &char2b, 0);
+					      &char2b, false);
 		  pcm = get_per_char_metric (font, &char2b);
 		}
 	      if (! pcm)
@@ -26692,7 +27169,7 @@ x_produce_glyphs (struct it *it)
       if (it->glyph_row
 	  && (cmp->lbearing < 0
 	      || cmp->rbearing > cmp->pixel_width))
-	it->glyph_row->contains_overlapping_glyphs_p = 1;
+	it->glyph_row->contains_overlapping_glyphs_p = true;
 
       it->pixel_width = cmp->pixel_width;
       it->ascent = it->phys_ascent = cmp->ascent;
@@ -26744,7 +27221,7 @@ x_produce_glyphs (struct it *it)
 				     &metrics);
       if (it->glyph_row
 	  && (metrics.lbearing < 0 || metrics.rbearing > metrics.width))
-	it->glyph_row->contains_overlapping_glyphs_p = 1;
+	it->glyph_row->contains_overlapping_glyphs_p = true;
       it->ascent = it->phys_ascent = metrics.ascent;
       it->descent = it->phys_descent = metrics.descent;
       if (face->box != FACE_NO_BOX)
@@ -26778,7 +27255,7 @@ x_produce_glyphs (struct it *it)
 	append_composite_glyph (it);
     }
   else if (it->what == IT_GLYPHLESS)
-    produce_glyphless_glyph (it, 0, Qnil);
+    produce_glyphless_glyph (it, false, Qnil);
   else if (it->what == IT_IMAGE)
     produce_image_glyph (it);
   else if (it->what == IT_STRETCH)
@@ -26840,7 +27317,7 @@ x_write_glyphs (struct window *w, struct glyph_row *updated_row,
       && w->phys_cursor.vpos == w->output_cursor.vpos
       && chpos >= hpos
       && chpos < hpos + len)
-    w->phys_cursor_on_p = 0;
+    w->phys_cursor_on_p = false;
 
   unblock_input ();
 
@@ -27060,7 +27537,7 @@ set_frame_cursor_types (struct frame *f, Lisp_Object arg)
     FRAME_BLINK_OFF_CURSOR (f) = DEFAULT_CURSOR;
 
   /* Make sure the cursor gets redrawn.  */
-  f->cursor_type_changed = 1;
+  f->cursor_type_changed = true;
 }
 
 
@@ -27068,7 +27545,7 @@ set_frame_cursor_types (struct frame *f, Lisp_Object arg)
 
 /* Return the cursor we want to be displayed in window W.  Return
    width of bar/hbar cursor through WIDTH arg.  Return with
-   ACTIVE_CURSOR arg set to 1 if cursor in window W is `active'
+   ACTIVE_CURSOR arg set to true if cursor in window W is `active'
    (i.e. if the `system caret' should track this cursor).
 
    In a mini-buffer window, we want the cursor only to appear if we
@@ -27079,15 +27556,15 @@ set_frame_cursor_types (struct frame *f, Lisp_Object arg)
 
 static enum text_cursor_kinds
 get_window_cursor_type (struct window *w, struct glyph *glyph, int *width,
-			int *active_cursor)
+			bool *active_cursor)
 {
   struct frame *f = XFRAME (w->frame);
   struct buffer *b = XBUFFER (w->contents);
   int cursor_type = DEFAULT_CURSOR;
   Lisp_Object alt_cursor;
-  int non_selected = 0;
+  bool non_selected = false;
 
-  *active_cursor = 1;
+  *active_cursor = true;
 
   /* Echo area */
   if (cursor_in_echo_area
@@ -27105,20 +27582,20 @@ get_window_cursor_type (struct window *w, struct glyph *glyph, int *width,
 	    return get_specified_cursor_type (BVAR (b, cursor_type), width);
 	}
 
-      *active_cursor = 0;
-      non_selected = 1;
+      *active_cursor = false;
+      non_selected = true;
     }
 
   /* Detect a nonselected window or nonselected frame.  */
   else if (w != XWINDOW (f->selected_window)
 	   || f != FRAME_DISPLAY_INFO (f)->x_highlight_frame)
     {
-      *active_cursor = 0;
+      *active_cursor = false;
 
       if (MINI_WINDOW_P (w) && minibuf_level == 0)
 	return NO_CURSOR;
 
-      non_selected = 1;
+      non_selected = true;
     }
 
   /* Never display a cursor in a window in which cursor-type is nil.  */
@@ -27195,7 +27672,7 @@ get_window_cursor_type (struct window *w, struct glyph *glyph, int *width,
       return FRAME_BLINK_OFF_CURSOR (f);
     }
 
-#if 0
+#if false
   /* Some people liked having a permanently visible blinking cursor,
      while others had very strong opinions against it.  So it was
      decided to remove it.  KFS 2003-09-03 */
@@ -27247,9 +27724,9 @@ notice_overwritten_cursor (struct window *w, enum glyph_row_area area,
 
   if (row->cursor_in_fringe_p)
     {
-      row->cursor_in_fringe_p = 0;
+      row->cursor_in_fringe_p = false;
       draw_fringe_bitmap (w, row, row->reversed_p);
-      w->phys_cursor_on_p = 0;
+      w->phys_cursor_on_p = false;
       return;
     }
 
@@ -27279,7 +27756,7 @@ notice_overwritten_cursor (struct window *w, enum glyph_row_area area,
   if ((y0 < cy0 || y0 >= cy1) && (y1 <= cy0 || y1 >= cy1))
     return;
 
-  w->phys_cursor_on_p = 0;
+  w->phys_cursor_on_p = false;
 }
 
 #endif /* HAVE_WINDOW_SYSTEM */
@@ -27348,7 +27825,7 @@ draw_phys_cursor_glyph (struct window *w, struct glyph_row *row,
        ? (w->phys_cursor.hpos >= 0)
        : (w->phys_cursor.hpos < row->used[TEXT_AREA])))
     {
-      int on_p = w->phys_cursor_on_p;
+      bool on_p = w->phys_cursor_on_p;
       int x1;
       int hpos = w->phys_cursor.hpos;
 
@@ -27389,9 +27866,6 @@ draw_phys_cursor_glyph (struct window *w, struct glyph_row *row,
 
 /* Erase the image of a cursor of window W from the screen.  */
 
-#ifndef HAVE_NTGUI
-static
-#endif
 void
 erase_phys_cursor (struct window *w)
 {
@@ -27399,7 +27873,7 @@ erase_phys_cursor (struct window *w)
   Mouse_HLInfo *hlinfo = MOUSE_HL_INFO (f);
   int hpos = w->phys_cursor.hpos;
   int vpos = w->phys_cursor.vpos;
-  int mouse_face_here_p = 0;
+  bool mouse_face_here_p = false;
   struct glyph_matrix *active_glyphs = w->current_matrix;
   struct glyph_row *cursor_row;
   struct glyph *cursor_glyph;
@@ -27435,7 +27909,7 @@ erase_phys_cursor (struct window *w)
   /* If cursor is in the fringe, erase by drawing actual bitmap there.  */
   if (cursor_row->cursor_in_fringe_p)
     {
-      cursor_row->cursor_in_fringe_p = 0;
+      cursor_row->cursor_in_fringe_p = false;
       draw_fringe_bitmap (w, cursor_row, cursor_row->reversed_p);
       goto mark_cursor_off;
     }
@@ -27466,7 +27940,7 @@ erase_phys_cursor (struct window *w)
 	 end of a line (on a newline).  The cursor appears there, but
 	 mouse highlighting does not.  */
       && cursor_row->used[TEXT_AREA] > hpos && hpos >= 0)
-    mouse_face_here_p = 1;
+    mouse_face_here_p = true;
 
   /* Maybe clear the display under the cursor.  */
   if (w->phys_cursor_type == HOLLOW_BOX_CURSOR)
@@ -27502,15 +27976,14 @@ erase_phys_cursor (struct window *w)
   draw_phys_cursor_glyph (w, cursor_row, hl);
 
  mark_cursor_off:
-  w->phys_cursor_on_p = 0;
+  w->phys_cursor_on_p = false;
   w->phys_cursor_type = NO_CURSOR;
 }
 
 
-/* EXPORT:
-   Display or clear cursor of window W.  If ON is zero, clear the
-   cursor.  If it is non-zero, display the cursor.  If ON is nonzero,
-   where to put the cursor is specified by HPOS, VPOS, X and Y.  */
+/* Display or clear cursor of window W.  If !ON, clear the cursor.
+   If ON, display the cursor; where to put the cursor is specified by
+   HPOS, VPOS, X and Y.  */
 
 void
 display_and_set_cursor (struct window *w, bool on,
@@ -27519,7 +27992,7 @@ display_and_set_cursor (struct window *w, bool on,
   struct frame *f = XFRAME (w->frame);
   int new_cursor_type;
   int new_cursor_width;
-  int active_cursor;
+  bool active_cursor;
   struct glyph_row *glyph_row;
   struct glyph *glyph;
 
@@ -27542,7 +28015,7 @@ display_and_set_cursor (struct window *w, bool on,
      display the cursor.  */
   if (!glyph_row->enabled_p)
     {
-      w->phys_cursor_on_p = 0;
+      w->phys_cursor_on_p = false;
       return;
     }
 
@@ -27574,9 +28047,9 @@ display_and_set_cursor (struct window *w, bool on,
     erase_phys_cursor (w);
 
   /* Don't check phys_cursor_on_p here because that flag is only set
-     to zero in some cases where we know that the cursor has been
+     to false in some cases where we know that the cursor has been
      completely erased, to avoid the extra work of erasing the cursor
-     twice.  In other words, phys_cursor_on_p can be 1 and the cursor
+     twice.  In other words, phys_cursor_on_p can be true and the cursor
      still not be visible, or it has only been partly erased.  */
   if (on)
     {
@@ -27671,7 +28144,7 @@ void
 x_clear_cursor (struct window *w)
 {
   if (FRAME_VISIBLE_P (XFRAME (w->frame)) && w->phys_cursor_on_p)
-    update_window_cursor (w, 0);
+    update_window_cursor (w, false);
 }
 
 #endif /* HAVE_WINDOW_SYSTEM */
@@ -27712,7 +28185,7 @@ show_mouse_face (Mouse_HLInfo *hlinfo, enum draw_glyphs_face draw)
 	 anymore.  This can happen when a window is split.  */
       && hlinfo->mouse_face_end_row < w->current_matrix->nrows)
     {
-      int phys_cursor_on_p = w->phys_cursor_on_p;
+      bool phys_cursor_on_p = w->phys_cursor_on_p;
       struct glyph_row *row, *first, *last;
 
       first = MATRIX_ROW (w->current_matrix, hlinfo->mouse_face_beg_row);
@@ -27766,7 +28239,7 @@ show_mouse_face (Mouse_HLInfo *hlinfo, enum draw_glyphs_face draw)
 		{
 		  end_hpos = row->used[TEXT_AREA];
 		  if (draw == DRAW_NORMAL_TEXT)
-		    row->fill_line_p = 1; /* Clear to end of line */
+		    row->fill_line_p = true; /* Clear to end of line.  */
 		}
 	    }
 	  else if (row->reversed_p && row == first)
@@ -27775,7 +28248,7 @@ show_mouse_face (Mouse_HLInfo *hlinfo, enum draw_glyphs_face draw)
 	    {
 	      end_hpos = row->used[TEXT_AREA];
 	      if (draw == DRAW_NORMAL_TEXT)
-		row->fill_line_p = 1; /* Clear to end of line */
+		row->fill_line_p = true; /* Clear to end of line.  */
 	    }
 
 	  if (end_hpos > start_hpos)
@@ -27805,7 +28278,7 @@ show_mouse_face (Mouse_HLInfo *hlinfo, enum draw_glyphs_face draw)
 	    hpos = row->used[TEXT_AREA] - 1;
 
 	  block_input ();
-	  display_and_set_cursor (w, 1, hpos, w->phys_cursor.vpos,
+	  display_and_set_cursor (w, true, hpos, w->phys_cursor.vpos,
 				  w->phys_cursor.x, w->phys_cursor.y);
 	  unblock_input ();
 	}
@@ -27814,7 +28287,7 @@ show_mouse_face (Mouse_HLInfo *hlinfo, enum draw_glyphs_face draw)
 
 #ifdef HAVE_WINDOW_SYSTEM
   /* Change the mouse cursor.  */
-  if (FRAME_WINDOW_P (f))
+  if (FRAME_WINDOW_P (f) && NILP (do_mouse_tracking))
     {
 #if ! defined (USE_GTK) && ! defined (HAVE_NS)
       if (draw == DRAW_NORMAL_TEXT
@@ -27832,20 +28305,16 @@ show_mouse_face (Mouse_HLInfo *hlinfo, enum draw_glyphs_face draw)
 
 /* EXPORT:
    Clear out the mouse-highlighted active region.
-   Redraw it un-highlighted first.  Value is non-zero if mouse
+   Redraw it un-highlighted first.  Value is true if mouse
    face was actually drawn unhighlighted.  */
 
-int
+bool
 clear_mouse_face (Mouse_HLInfo *hlinfo)
 {
-  int cleared = 0;
-
-  if (!hlinfo->mouse_face_hidden && !NILP (hlinfo->mouse_face_window))
-    {
-      show_mouse_face (hlinfo, DRAW_NORMAL_TEXT);
-      cleared = 1;
-    }
-
+  bool cleared
+    = !hlinfo->mouse_face_hidden && !NILP (hlinfo->mouse_face_window);
+  if (cleared)
+    show_mouse_face (hlinfo, DRAW_NORMAL_TEXT);
   hlinfo->mouse_face_beg_row = hlinfo->mouse_face_beg_col = -1;
   hlinfo->mouse_face_end_row = hlinfo->mouse_face_end_col = -1;
   hlinfo->mouse_face_window = Qnil;
@@ -27985,7 +28454,7 @@ rows_from_pos_range (struct window *w,
 
 	  while (g < e)
 	    {
-	      if (((BUFFERP (g->object) || INTEGERP (g->object))
+	      if (((BUFFERP (g->object) || NILP (g->object))
 		   && start_charpos <= g->charpos && g->charpos < end_charpos)
 		  /* A glyph that comes from DISP_STRING is by
 		     definition to be highlighted.  */
@@ -28040,7 +28509,7 @@ rows_from_pos_range (struct window *w,
 
 	  while (g < e)
 	    {
-	      if (((BUFFERP (g->object) || INTEGERP (g->object))
+	      if (((BUFFERP (g->object) || NILP (g->object))
 		   && ((start_charpos <= g->charpos && g->charpos < end_charpos)
 		       /* If the buffer position of the first glyph in
 			  the row is equal to END_CHARPOS, it means
@@ -28122,7 +28591,7 @@ mouse_face_from_buffer_pos (Lisp_Object window,
 	{
 	  struct glyph *beg = prev->glyphs[TEXT_AREA];
 	  glyph = beg + prev->used[TEXT_AREA];
-	  while (--glyph >= beg && INTEGERP (glyph->object));
+	  while (--glyph >= beg && NILP (glyph->object));
 	  if (glyph < beg
 	      || !(EQ (glyph->object, before_string)
 		   || EQ (glyph->object, disp_string)))
@@ -28133,7 +28602,7 @@ mouse_face_from_buffer_pos (Lisp_Object window,
   if (r2 == NULL)
     {
       r2 = MATRIX_ROW (w->current_matrix, w->window_end_vpos);
-      hlinfo->mouse_face_past_end = 1;
+      hlinfo->mouse_face_past_end = true;
     }
   else if (!NILP (after_string))
     {
@@ -28186,7 +28655,7 @@ mouse_face_from_buffer_pos (Lisp_Object window,
       /* Skip truncation glyphs at the start of the glyph row.  */
       if (MATRIX_ROW_DISPLAYS_TEXT_P (r1))
 	for (; glyph < end
-	       && INTEGERP (glyph->object)
+	       && NILP (glyph->object)
 	       && glyph->charpos < 0;
 	     ++glyph)
 	  x += glyph->pixel_width;
@@ -28195,7 +28664,7 @@ mouse_face_from_buffer_pos (Lisp_Object window,
 	 or DISP_STRING, and the first glyph from buffer whose
 	 position is between START_CHARPOS and END_CHARPOS.  */
       for (; glyph < end
-	     && !INTEGERP (glyph->object)
+	     && !NILP (glyph->object)
 	     && !EQ (glyph->object, disp_string)
 	     && !(BUFFERP (glyph->object)
 		  && (glyph->charpos >= start_charpos
@@ -28237,7 +28706,7 @@ mouse_face_from_buffer_pos (Lisp_Object window,
       /* Skip truncation glyphs at the start of the glyph row.  */
       if (MATRIX_ROW_DISPLAYS_TEXT_P (r1))
 	for (; glyph > end
-	       && INTEGERP (glyph->object)
+	       && NILP (glyph->object)
 	       && glyph->charpos < 0;
 	     --glyph)
 	  ;
@@ -28246,7 +28715,7 @@ mouse_face_from_buffer_pos (Lisp_Object window,
 	 or DISP_STRING, and the first glyph from buffer whose
 	 position is between START_CHARPOS and END_CHARPOS.  */
       for (; glyph > end
-	     && !INTEGERP (glyph->object)
+	     && !NILP (glyph->object)
 	     && !EQ (glyph->object, disp_string)
 	     && !(BUFFERP (glyph->object)
 		  && (glyph->charpos >= start_charpos
@@ -28303,7 +28772,7 @@ mouse_face_from_buffer_pos (Lisp_Object window,
 	 row, and also blanks and stretch glyphs inserted by
 	 extend_face_to_end_of_line.  */
       while (end > glyph
-	     && INTEGERP ((end - 1)->object))
+	     && NILP ((end - 1)->object))
 	--end;
       /* Scan the rest of the glyph row from the end, looking for the
 	 first glyph that comes from BEFORE_STRING, AFTER_STRING, or
@@ -28311,7 +28780,7 @@ mouse_face_from_buffer_pos (Lisp_Object window,
 	 and END_CHARPOS */
       for (--end;
 	     end > glyph
-	     && !INTEGERP (end->object)
+	     && !NILP (end->object)
 	     && !EQ (end->object, disp_string)
 	     && !(BUFFERP (end->object)
 		  && (end->charpos >= start_charpos
@@ -28349,7 +28818,7 @@ mouse_face_from_buffer_pos (Lisp_Object window,
       x = r2->x;
       end++;
       while (end < glyph
-	     && INTEGERP (end->object))
+	     && NILP (end->object))
 	{
 	  x += end->pixel_width;
 	  ++end;
@@ -28360,7 +28829,7 @@ mouse_face_from_buffer_pos (Lisp_Object window,
 	 and END_CHARPOS */
       for ( ;
 	     end < glyph
-	     && !INTEGERP (end->object)
+	     && !NILP (end->object)
 	     && !EQ (end->object, disp_string)
 	     && !(BUFFERP (end->object)
 		  && (end->charpos >= start_charpos
@@ -28413,26 +28882,26 @@ mouse_face_from_buffer_pos (Lisp_Object window,
    mouse_face_from_string_pos), but I leave it here for the time
    being, in case someone would.  */
 
-#if 0	/* not used */
+#if false	/* not used */
 
 /* Find the position of the glyph for position POS in OBJECT in
    window W's current matrix, and return in *X, *Y the pixel
    coordinates, and return in *HPOS, *VPOS the column/row of the glyph.
 
-   RIGHT_P non-zero means return the position of the right edge of the
-   glyph, RIGHT_P zero means return the left edge position.
+   RIGHT_P means return the position of the right edge of the glyph.
+   !RIGHT_P means return the left edge position.
 
    If no glyph for POS exists in the matrix, return the position of
    the glyph with the next smaller position that is in the matrix, if
-   RIGHT_P is zero.  If RIGHT_P is non-zero, and no glyph for POS
+   RIGHT_P is false.  If RIGHT_P, and no glyph for POS
    exists in the matrix, return the position of the glyph with the
    next larger position in OBJECT.
 
-   Value is non-zero if a glyph was found.  */
+   Value is true if a glyph was found.  */
 
-static int
+static bool
 fast_find_string_pos (struct window *w, ptrdiff_t pos, Lisp_Object object,
-		      int *hpos, int *vpos, int *x, int *y, int right_p)
+		      int *hpos, int *vpos, int *x, int *y, bool right_p)
 {
   int yb = window_text_bottom_y (w);
   struct glyph_row *r;
@@ -28507,7 +28976,7 @@ mouse_face_from_string_pos (struct window *w, Mouse_HLInfo *hlinfo,
   struct glyph_row *r;
   struct glyph *g, *e;
   int gx;
-  int found = 0;
+  bool found = false;
 
   /* Find the glyph row with at least one position in the range
      [STARTPOS..ENDPOS), and the first glyph in that row whose
@@ -28528,7 +28997,7 @@ mouse_face_from_string_pos (struct window *w, Mouse_HLInfo *hlinfo,
 		  = MATRIX_ROW_VPOS (r, w->current_matrix);
 		hlinfo->mouse_face_beg_col = g - r->glyphs[TEXT_AREA];
 		hlinfo->mouse_face_beg_x = gx;
-		found = 1;
+		found = true;
 		break;
 	      }
 	}
@@ -28548,7 +29017,7 @@ mouse_face_from_string_pos (struct window *w, Mouse_HLInfo *hlinfo,
 		for (gx = r->x, g1 = r->glyphs[TEXT_AREA]; g1 < g; ++g1)
 		  gx += g1->pixel_width;
 		hlinfo->mouse_face_beg_x = gx;
-		found = 1;
+		found = true;
 		break;
 	      }
 	}
@@ -28565,12 +29034,12 @@ mouse_face_from_string_pos (struct window *w, Mouse_HLInfo *hlinfo,
     {
       g = r->glyphs[TEXT_AREA];
       e = g + r->used[TEXT_AREA];
-      found = 0;
+      found = false;
       for ( ; g < e; ++g)
 	if (EQ (g->object, object)
 	    && startpos <= g->charpos && g->charpos < endpos)
 	  {
-	    found = 1;
+	    found = true;
 	    break;
 	  }
       if (!found)
@@ -28619,11 +29088,11 @@ mouse_face_from_string_pos (struct window *w, Mouse_HLInfo *hlinfo,
 
 /* See if position X, Y is within a hot-spot of an image.  */
 
-static int
+static bool
 on_hot_spot_p (Lisp_Object hot_spot, int x, int y)
 {
   if (!CONSP (hot_spot))
-    return 0;
+    return false;
 
   if (EQ (XCAR (hot_spot), Qrect))
     {
@@ -28631,20 +29100,20 @@ on_hot_spot_p (Lisp_Object hot_spot, int x, int y)
       Lisp_Object rect = XCDR (hot_spot);
       Lisp_Object tem;
       if (!CONSP (rect))
-	return 0;
+	return false;
       if (!CONSP (XCAR (rect)))
-	return 0;
+	return false;
       if (!CONSP (XCDR (rect)))
-	return 0;
+	return false;
       if (!(tem = XCAR (XCAR (rect)), INTEGERP (tem) && x >= XINT (tem)))
-	return 0;
+	return false;
       if (!(tem = XCDR (XCAR (rect)), INTEGERP (tem) && y >= XINT (tem)))
-	return 0;
+	return false;
       if (!(tem = XCAR (XCDR (rect)), INTEGERP (tem) && x <= XINT (tem)))
-	return 0;
+	return false;
       if (!(tem = XCDR (XCDR (rect)), INTEGERP (tem) && y <= XINT (tem)))
-	return 0;
-      return 1;
+	return false;
+      return true;
     }
   else if (EQ (XCAR (hot_spot), Qcircle))
     {
@@ -28653,7 +29122,7 @@ on_hot_spot_p (Lisp_Object hot_spot, int x, int y)
       Lisp_Object lr, lx0, ly0;
       if (CONSP (circ)
 	  && CONSP (XCAR (circ))
-	  && (lr = XCDR (circ), INTEGERP (lr) || FLOATP (lr))
+	  && (lr = XCDR (circ), NUMBERP (lr))
 	  && (lx0 = XCAR (XCAR (circ)), INTEGERP (lx0))
 	  && (ly0 = XCDR (XCAR (circ)), INTEGERP (ly0)))
 	{
@@ -28672,13 +29141,13 @@ on_hot_spot_p (Lisp_Object hot_spot, int x, int y)
 	  Lisp_Object *poly = v->contents;
 	  ptrdiff_t n = v->header.size;
 	  ptrdiff_t i;
-	  int inside = 0;
+	  bool inside = false;
 	  Lisp_Object lx, ly;
 	  int x0, y0;
 
 	  /* Need an even number of coordinates, and at least 3 edges.  */
 	  if (n < 6 || n & 1)
-	    return 0;
+	    return false;
 
 	  /* Count edge segments intersecting line from (X,Y) to (X,infinity).
 	     If count is odd, we are inside polygon.  Pixels on edges
@@ -28686,14 +29155,14 @@ on_hot_spot_p (Lisp_Object hot_spot, int x, int y)
 	     polygon.  */
 	  if ((lx = poly[n-2], !INTEGERP (lx))
 	      || (ly = poly[n-1], !INTEGERP (lx)))
-	    return 0;
+	    return false;
 	  x0 = XINT (lx), y0 = XINT (ly);
 	  for (i = 0; i < n; i += 2)
 	    {
 	      int x1 = x0, y1 = y0;
 	      if ((lx = poly[i], !INTEGERP (lx))
 		  || (ly = poly[i+1], !INTEGERP (ly)))
-		return 0;
+		return false;
 	      x0 = XINT (lx), y0 = XINT (ly);
 
 	      /* Does this segment cross the X line?  */
@@ -28712,7 +29181,7 @@ on_hot_spot_p (Lisp_Object hot_spot, int x, int y)
 	  return inside;
 	}
     }
-  return 0;
+  return false;
 }
 
 Lisp_Object
@@ -28760,7 +29229,7 @@ static void
 define_frame_cursor1 (struct frame *f, Cursor cursor, Lisp_Object pointer)
 {
   /* Do not change cursor shape while dragging mouse.  */
-  if (!NILP (do_mouse_tracking))
+  if (EQ (do_mouse_tracking, Qdragging))
     return;
 
   if (!NILP (pointer))
@@ -28923,8 +29392,8 @@ note_mode_line_or_margin_highlight (Lisp_Object window, int x, int y,
 	  else if (area == ON_MODE_LINE)
 	    {
 	      Lisp_Object default_help
-		= buffer_local_value_1 (Qmode_line_default_help_echo,
-					w->contents);
+		= buffer_local_value (Qmode_line_default_help_echo,
+				      w->contents);
 
 	      if (STRINGP (default_help))
 		{
@@ -28972,6 +29441,7 @@ note_mode_line_or_margin_highlight (Lisp_Object window, int x, int y,
     }
 
   /* Change the mouse face according to what is under X/Y.  */
+  bool mouse_face_shown = false;
   if (STRINGP (string))
     {
       mouse_face = Fget_text_property (pos, Qmouse_face, string);
@@ -29085,22 +29555,27 @@ note_mode_line_or_margin_highlight (Lisp_Object window, int x, int y,
 
 	  hlinfo->mouse_face_beg_row  = vpos;
 	  hlinfo->mouse_face_end_row  = hlinfo->mouse_face_beg_row;
-	  hlinfo->mouse_face_past_end = 0;
+	  hlinfo->mouse_face_past_end = false;
 	  hlinfo->mouse_face_window   = window;
 
 	  hlinfo->mouse_face_face_id = face_at_string_position (w, string,
 								charpos,
 								0, &ignore,
 								glyph->face_id,
-								1);
+								true);
 	  show_mouse_face (hlinfo, DRAW_MOUSE_FACE);
+	  mouse_face_shown = true;
 
 	  if (NILP (pointer))
 	    pointer = Qhand;
 	}
-      else if ((area == ON_MODE_LINE) || (area == ON_HEADER_LINE))
-	clear_mouse_face (hlinfo);
     }
+
+  /* If mouse-face doesn't need to be shown, clear any existing
+     mouse-face.  */
+  if ((area == ON_MODE_LINE || area == ON_HEADER_LINE) && !mouse_face_shown)
+    clear_mouse_face (hlinfo);
+
 #ifdef HAVE_WINDOW_SYSTEM
   if (FRAME_WINDOW_P (f))
     define_frame_cursor1 (f, cursor, pointer);
@@ -29145,7 +29620,7 @@ note_mouse_highlight (struct frame *f, int x, int y)
     return;
 
   /* Which window is that in?  */
-  window = window_from_coordinates (f, x, y, &part, 1);
+  window = window_from_coordinates (f, x, y, &part, true);
 
   /* If displaying active text in another window, clear that.  */
   if (! EQ (window, hlinfo->mouse_face_window)
@@ -29218,7 +29693,8 @@ note_mouse_highlight (struct frame *f, int x, int y)
     else
       cursor = FRAME_X_OUTPUT (f)->nontext_cursor;
   else if (part == ON_LEFT_FRINGE || part == ON_RIGHT_FRINGE
-	   || part == ON_SCROLL_BAR)
+	   || part == ON_VERTICAL_SCROLL_BAR
+	   || part == ON_HORIZONTAL_SCROLL_BAR)
     cursor = FRAME_X_OUTPUT (f)->nontext_cursor;
   else
     cursor = FRAME_X_OUTPUT (f)->text_cursor;
@@ -29238,7 +29714,7 @@ note_mouse_highlight (struct frame *f, int x, int y)
       ptrdiff_t i, noverlays;
       struct buffer *obuf;
       ptrdiff_t obegv, ozv;
-      int same_region;
+      bool same_region;
 
       /* Find the glyph under X/Y.  */
       glyph = x_y_to_hpos_vpos (w, x, y, &hpos, &vpos, &dx, &dy, &area);
@@ -29291,12 +29767,12 @@ note_mouse_highlight (struct frame *f, int x, int y)
       if (glyph == NULL
 	  || area != TEXT_AREA
 	  || !MATRIX_ROW_DISPLAYS_TEXT_P (MATRIX_ROW (w->current_matrix, vpos))
-	  /* Glyph's OBJECT is an integer for glyphs inserted by the
+	  /* Glyph's OBJECT is nil for glyphs inserted by the
 	     display engine for its internal purposes, like truncation
 	     and continuation glyphs and blanks beyond the end of
 	     line's text on text terminals.  If we are over such a
 	     glyph, we are not over any text.  */
-	  || INTEGERP (glyph->object)
+	  || NILP (glyph->object)
 	  /* R2L rows have a stretch glyph at their front, which
 	     stands for no text, whereas L2R rows have no glyphs at
 	     all beyond the end of text.  Treat such stretch glyphs
@@ -29341,10 +29817,12 @@ note_mouse_highlight (struct frame *f, int x, int y)
       /* Is this char mouse-active or does it have help-echo?  */
       position = make_number (pos);
 
+      USE_SAFE_ALLOCA;
+
       if (BUFFERP (object))
 	{
 	  /* Put all the overlays we want in a vector in overlay_vec.  */
-	  GET_OVERLAYS_AT (pos, overlay_vec, noverlays, NULL, 0);
+	  GET_OVERLAYS_AT (pos, overlay_vec, noverlays, NULL, false);
 	  /* Sort overlays into increasing priority order.  */
 	  noverlays = sort_overlays (overlay_vec, noverlays, w);
 	}
@@ -29413,11 +29891,11 @@ note_mouse_highlight (struct frame *f, int x, int y)
 		e = make_number (SCHARS (object));
 	      mouse_face_from_string_pos (w, hlinfo, object,
 					  XINT (s), XINT (e));
-	      hlinfo->mouse_face_past_end = 0;
+	      hlinfo->mouse_face_past_end = false;
 	      hlinfo->mouse_face_window = window;
 	      hlinfo->mouse_face_face_id
 		= face_at_string_position (w, object, pos, 0, &ignore,
-					   glyph->face_id, 1);
+					   glyph->face_id, true);
 	      show_mouse_face (hlinfo, DRAW_MOUSE_FACE);
 	      cursor = No_Cursor;
 	    }
@@ -29622,6 +30100,7 @@ note_mouse_highlight (struct frame *f, int x, int y)
       BEGV = obegv;
       ZV = ozv;
       current_buffer = obuf;
+      SAFE_FREE ();
     }
 
  set_cursor:
@@ -29717,8 +30196,11 @@ expose_area (struct window *w, struct glyph_row *row, XRectangle *r,
       /* Find the last one.  */
       last = first;
       first_x = x;
-      while (last < end
-	     && x < r->x + r->width)
+      /* Use a signed int intermediate value to avoid catastrophic
+	 failures due to comparison between signed and unsigned, when
+	 x is negative (can happen for wide images that are hscrolled).  */
+      int r_end = r->x + r->width;
+      while (last < end && x < r_end)
 	{
 	  x += last->pixel_width;
 	  ++last;
@@ -29735,9 +30217,9 @@ expose_area (struct window *w, struct glyph_row *row, XRectangle *r,
 
 /* Redraw the parts of the glyph row ROW on window W intersecting
    rectangle R.  R is in window-relative coordinates.  Value is
-   non-zero if mouse-face was overwritten.  */
+   true if mouse-face was overwritten.  */
 
-static int
+static bool
 expose_line (struct window *w, struct glyph_row *row, XRectangle *r)
 {
   eassert (row->enabled_p);
@@ -29796,9 +30278,9 @@ expose_overlaps (struct window *w,
 }
 
 
-/* Return non-zero if W's cursor intersects rectangle R.  */
+/* Return true if W's cursor intersects rectangle R.  */
 
-static int
+static bool
 phys_cursor_in_rect_p (struct window *w, XRectangle *r)
 {
   XRectangle cr, result;
@@ -29836,7 +30318,7 @@ phys_cursor_in_rect_p (struct window *w, XRectangle *r)
       return x_intersect_rectangles (&cr, r, &result);
     }
   /* If we don't understand the format, pretend we're not in the hot-spot.  */
-  return 0;
+  return false;
 }
 
 
@@ -29934,22 +30416,22 @@ x_draw_bottom_divider (struct window *w)
 
 /* Redraw the part of window W intersection rectangle FR.  Pixel
    coordinates in FR are frame-relative.  Call this function with
-   input blocked.  Value is non-zero if the exposure overwrites
+   input blocked.  Value is true if the exposure overwrites
    mouse-face.  */
 
-static int
+static bool
 expose_window (struct window *w, XRectangle *fr)
 {
   struct frame *f = XFRAME (w->frame);
   XRectangle wr, r;
-  int mouse_face_overwritten_p = 0;
+  bool mouse_face_overwritten_p = false;
 
   /* If window is not yet fully initialized, do nothing.  This can
      happen when toolkit scroll bars are used and a window is split.
      Reconfiguring the scroll bar will generate an expose for a newly
      created window.  */
   if (w->current_matrix == NULL)
-    return 0;
+    return false;
 
   /* When we're currently updating the window, display and current
      matrix usually don't agree.  Arrange for a thorough display
@@ -29957,7 +30439,7 @@ expose_window (struct window *w, XRectangle *fr)
   if (w->must_be_updated_p)
     {
       SET_FRAME_GARBAGED (f);
-      return 0;
+      return false;
     }
 
   /* Frame-relative pixel rectangle of W.  */
@@ -29970,7 +30452,6 @@ expose_window (struct window *w, XRectangle *fr)
     {
       int yb = window_text_bottom_y (w);
       struct glyph_row *row;
-      int cursor_cleared_p, phys_cursor_on_p;
       struct glyph_row *first_overlapping_row, *last_overlapping_row;
 
       TRACE ((stderr, "expose_window (%d, %d, %d, %d)\n",
@@ -29981,21 +30462,22 @@ expose_window (struct window *w, XRectangle *fr)
       r.y -= WINDOW_TOP_EDGE_Y (w);
 
       /* Turn off the cursor.  */
-      if (!w->pseudo_window_p
-	  && phys_cursor_in_rect_p (w, &r))
-	{
-	  x_clear_cursor (w);
-	  cursor_cleared_p = 1;
-	}
-      else
-	cursor_cleared_p = 0;
+      bool cursor_cleared_p = (!w->pseudo_window_p
+			       && phys_cursor_in_rect_p (w, &r));
+      if (cursor_cleared_p)
+	x_clear_cursor (w);
 
       /* If the row containing the cursor extends face to end of line,
 	 then expose_area might overwrite the cursor outside the
 	 rectangle and thus notice_overwritten_cursor might clear
 	 w->phys_cursor_on_p.  We remember the original value and
 	 check later if it is changed.  */
-      phys_cursor_on_p = w->phys_cursor_on_p;
+      bool phys_cursor_on_p = w->phys_cursor_on_p;
+
+      /* Use a signed int intermediate value to avoid catastrophic
+	 failures due to comparison between signed and unsigned, when
+	 y0 or y1 is negative (can happen for tall images).  */
+      int r_bottom = r.y + r.height;
 
       /* Update lines intersecting rectangle R.  */
       first_overlapping_row = last_overlapping_row = NULL;
@@ -30006,10 +30488,10 @@ expose_window (struct window *w, XRectangle *fr)
 	  int y0 = row->y;
 	  int y1 = MATRIX_ROW_BOTTOM_Y (row);
 
-	  if ((y0 >= r.y && y0 < r.y + r.height)
-	      || (y1 > r.y && y1 < r.y + r.height)
+	  if ((y0 >= r.y && y0 < r_bottom)
+	      || (y1 > r.y && y1 < r_bottom)
 	      || (r.y >= y0 && r.y < y1)
-	      || (r.y + r.height > y0 && r.y + r.height < y1))
+	      || (r_bottom > y0 && r_bottom < y1))
 	    {
 	      /* A header line may be overlapping, but there is no need
 		 to fix overlapping areas for them.  KFS 2005-02-12 */
@@ -30022,7 +30504,7 @@ expose_window (struct window *w, XRectangle *fr)
 
 	      row->clip = fr;
 	      if (expose_line (w, row, &r))
-		mouse_face_overwritten_p = 1;
+		mouse_face_overwritten_p = true;
 	      row->clip = NULL;
 	    }
 	  else if (row->overlapping_p)
@@ -30046,10 +30528,10 @@ expose_window (struct window *w, XRectangle *fr)
       if (WINDOW_WANTS_MODELINE_P (w)
 	  && (row = MATRIX_MODE_LINE_ROW (w->current_matrix),
 	      row->enabled_p)
-	  && row->y < r.y + r.height)
+	  && row->y < r_bottom)
 	{
 	  if (expose_line (w, row, &r))
-	    mouse_face_overwritten_p = 1;
+	    mouse_face_overwritten_p = true;
 	}
 
       if (!w->pseudo_window_p)
@@ -30071,7 +30553,7 @@ expose_window (struct window *w, XRectangle *fr)
 	  /* Turn the cursor on again.  */
 	  if (cursor_cleared_p
 	      || (phys_cursor_on_p && !w->phys_cursor_on_p))
-	    update_window_cursor (w, 1);
+	    update_window_cursor (w, true);
 	}
     }
 
@@ -30082,21 +30564,20 @@ expose_window (struct window *w, XRectangle *fr)
 
 /* Redraw (parts) of all windows in the window tree rooted at W that
    intersect R.  R contains frame pixel coordinates.  Value is
-   non-zero if the exposure overwrites mouse-face.  */
+   true if the exposure overwrites mouse-face.  */
 
-static int
+static bool
 expose_window_tree (struct window *w, XRectangle *r)
 {
   struct frame *f = XFRAME (w->frame);
-  int mouse_face_overwritten_p = 0;
+  bool mouse_face_overwritten_p = false;
 
   while (w && !FRAME_GARBAGED_P (f))
     {
-      if (WINDOWP (w->contents))
-	mouse_face_overwritten_p
-	  |= expose_window_tree (XWINDOW (w->contents), r);
-      else
-	mouse_face_overwritten_p |= expose_window (w, r);
+      mouse_face_overwritten_p
+	|= (WINDOWP (w->contents)
+	    ? expose_window_tree (XWINDOW (w->contents), r)
+	    : expose_window (w, r));
 
       w = NILP (w->next) ? NULL : XWINDOW (w->next);
     }
@@ -30115,7 +30596,7 @@ void
 expose_frame (struct frame *f, int x, int y, int w, int h)
 {
   XRectangle r;
-  int mouse_face_overwritten_p = 0;
+  bool mouse_face_overwritten_p = false;
 
   TRACE ((stderr, "expose_frame "));
 
@@ -30139,8 +30620,8 @@ expose_frame (struct frame *f, int x, int y, int w, int h)
   if (w == 0 || h == 0)
     {
       r.x = r.y = 0;
-      r.width = FRAME_COLUMN_WIDTH (f) * FRAME_COLS (f);
-      r.height = FRAME_LINE_HEIGHT (f) * FRAME_LINES (f);
+      r.width = FRAME_TEXT_WIDTH (f);
+      r.height = FRAME_TEXT_HEIGHT (f);
     }
   else
     {
@@ -30198,15 +30679,15 @@ expose_frame (struct frame *f, int x, int y, int w, int h)
 
 /* EXPORT:
    Determine the intersection of two rectangles R1 and R2.  Return
-   the intersection in *RESULT.  Value is non-zero if RESULT is not
+   the intersection in *RESULT.  Value is true if RESULT is not
    empty.  */
 
-int
+bool
 x_intersect_rectangles (XRectangle *r1, XRectangle *r2, XRectangle *result)
 {
   XRectangle *left, *right;
   XRectangle *upper, *lower;
-  int intersection_p = 0;
+  bool intersection_p = false;
 
   /* Rearrange so that R1 is the left-most rectangle.  */
   if (r1->x < r2->x)
@@ -30242,7 +30723,7 @@ x_intersect_rectangles (XRectangle *r1, XRectangle *r2, XRectangle *result)
 	  result->height = (min (lower->y + lower->height,
 				 upper->y + upper->height)
 			    - result->y);
-	  intersection_p = 1;
+	  intersection_p = true;
 	}
     }
 
@@ -30265,8 +30746,15 @@ syms_of_xdisp (void)
   Vmessage_stack = Qnil;
   staticpro (&Vmessage_stack);
 
+  /* Non-nil means don't actually do any redisplay.  */
   DEFSYM (Qinhibit_redisplay, "inhibit-redisplay");
+
   DEFSYM (Qredisplay_internal, "redisplay_internal (C function)");
+
+  DEFVAR_BOOL("inhibit-message", inhibit_message,
+              doc:  /* Non-nil means calls to `message' are not displayed.
+They are still logged to the *Messages* buffer.  */);
+  inhibit_message = 0;
 
   message_dolog_marker1 = Fmake_marker ();
   staticpro (&message_dolog_marker1);
@@ -30293,6 +30781,7 @@ syms_of_xdisp (void)
   defsubr (&Scurrent_bidi_paragraph_direction);
   defsubr (&Swindow_text_pixel_size);
   defsubr (&Smove_point_visually);
+  defsubr (&Sbidi_find_overridden_directionality);
 
   DEFSYM (Qmenu_bar_update_hook, "menu-bar-update-hook");
   DEFSYM (Qoverriding_terminal_local_map, "overriding-terminal-local-map");
@@ -30303,6 +30792,8 @@ syms_of_xdisp (void)
   DEFSYM (Qinhibit_point_motion_hooks, "inhibit-point-motion-hooks");
   DEFSYM (Qeval, "eval");
   DEFSYM (QCdata, ":data");
+
+  /* Names of text properties relevant for redisplay.  */
   DEFSYM (Qdisplay, "display");
   DEFSYM (Qspace_width, "space-width");
   DEFSYM (Qraise, "raise");
@@ -30322,40 +30813,68 @@ syms_of_xdisp (void)
   DEFSYM (QCfile, ":file");
   DEFSYM (Qfontified, "fontified");
   DEFSYM (Qfontification_functions, "fontification-functions");
+
+  /* Name of the face used to highlight trailing whitespace.  */
   DEFSYM (Qtrailing_whitespace, "trailing-whitespace");
+
+  /* Name and number of the face used to highlight escape glyphs.  */
   DEFSYM (Qescape_glyph, "escape-glyph");
+
+  /* Name and number of the face used to highlight non-breaking spaces.  */
   DEFSYM (Qnobreak_space, "nobreak-space");
+
+  /* The symbol 'image' which is the car of the lists used to represent
+     images in Lisp.  Also a tool bar style.  */
   DEFSYM (Qimage, "image");
+
+  /* Tool bar styles.  */
   DEFSYM (Qtext, "text");
   DEFSYM (Qboth, "both");
   DEFSYM (Qboth_horiz, "both-horiz");
   DEFSYM (Qtext_image_horiz, "text-image-horiz");
+
+  /* The image map types.  */
   DEFSYM (QCmap, ":map");
   DEFSYM (QCpointer, ":pointer");
   DEFSYM (Qrect, "rect");
   DEFSYM (Qcircle, "circle");
   DEFSYM (Qpoly, "poly");
-  DEFSYM (Qmessage_truncate_lines, "message-truncate-lines");
-  DEFSYM (Qgrow_only, "grow-only");
+
   DEFSYM (Qinhibit_menubar_update, "inhibit-menubar-update");
+
+  DEFSYM (Qgrow_only, "grow-only");
   DEFSYM (Qinhibit_eval_during_redisplay, "inhibit-eval-during-redisplay");
   DEFSYM (Qposition, "position");
   DEFSYM (Qbuffer_position, "buffer-position");
   DEFSYM (Qobject, "object");
+
+  /* Cursor shapes.  */
   DEFSYM (Qbar, "bar");
   DEFSYM (Qhbar, "hbar");
   DEFSYM (Qbox, "box");
   DEFSYM (Qhollow, "hollow");
+
+  /* Pointer shapes.  */
   DEFSYM (Qhand, "hand");
   DEFSYM (Qarrow, "arrow");
+  /* also Qtext */
+
+  DEFSYM (Qdragging, "dragging");
+
   DEFSYM (Qinhibit_free_realized_faces, "inhibit-free-realized-faces");
 
-  list_of_error = list1 (list2 (intern_c_string ("error"),
-				intern_c_string ("void-variable")));
+  list_of_error = list1 (list2 (Qerror, Qvoid_variable));
   staticpro (&list_of_error);
 
+  /* Values of those variables at last redisplay are stored as
+     properties on 'overlay-arrow-position' symbol.  However, if
+     Voverlay_arrow_position is a marker, last-arrow-position is its
+     numerical position.  */
   DEFSYM (Qlast_arrow_position, "last-arrow-position");
   DEFSYM (Qlast_arrow_string, "last-arrow-string");
+
+  /* Alternative overlay-arrow-string and overlay-arrow-bitmap
+     properties on a symbol in overlay-arrow-variable-list.  */
   DEFSYM (Qoverlay_arrow_string, "overlay-arrow-string");
   DEFSYM (Qoverlay_arrow_bitmap, "overlay-arrow-bitmap");
 
@@ -30395,6 +30914,7 @@ syms_of_xdisp (void)
 
   DEFSYM (Qright_to_left, "right-to-left");
   DEFSYM (Qleft_to_right, "left-to-right");
+  defsubr (&Sbidi_resolved_levels);
 
 #ifdef HAVE_WINDOW_SYSTEM
   DEFVAR_BOOL ("x-stretch-cursor", x_stretch_cursor_p,
@@ -30426,8 +30946,9 @@ A value of nil means no special handling of these characters.  */);
 
   DEFVAR_LISP ("void-text-area-pointer", Vvoid_text_area_pointer,
     doc: /* The pointer shape to show in void text areas.
-A value of nil means to show the text pointer.  Other options are `arrow',
-`text', `hand', `vdrag', `hdrag', `modeline', and `hourglass'.  */);
+A value of nil means to show the text pointer.  Other options are
+`arrow', `text', `hand', `vdrag', `hdrag', `nhdrag', `modeline', and
+`hourglass'.  */);
   Vvoid_text_area_pointer = Qarrow;
 
   DEFVAR_LISP ("inhibit-redisplay", Vinhibit_redisplay,
@@ -30523,7 +31044,7 @@ line number may be omitted from the mode line.  */);
 
   DEFVAR_BOOL ("highlight-nonselected-windows", highlight_nonselected_windows,
     doc: /* Non-nil means highlight region even in nonselected windows.  */);
-  highlight_nonselected_windows = 0;
+  highlight_nonselected_windows = false;
 
   DEFVAR_BOOL ("multiple-frames", multiple_frames,
     doc: /* Non-nil if more than one frame is visible on this display.
@@ -30533,18 +31054,18 @@ This variable is not guaranteed to be accurate except while processing
 
   DEFVAR_LISP ("frame-title-format", Vframe_title_format,
     doc: /* Template for displaying the title bar of visible frames.
-\(Assuming the window manager supports this feature.)
+(Assuming the window manager supports this feature.)
 
 This variable has the same structure as `mode-line-format', except that
 the %c and %l constructs are ignored.  It is used only on frames for
-which no explicit name has been set \(see `modify-frame-parameters').  */);
+which no explicit name has been set (see `modify-frame-parameters').  */);
 
   DEFVAR_LISP ("icon-title-format", Vicon_title_format,
     doc: /* Template for displaying the title bar of an iconified frame.
-\(Assuming the window manager supports this feature.)
+(Assuming the window manager supports this feature.)
 This variable has the same structure as `mode-line-format' (which see),
 and is used only on frames for which no explicit name has been set
-\(see `modify-frame-parameters').  */);
+(see `modify-frame-parameters').  */);
   Vicon_title_format
     = Vframe_title_format
     = listn (CONSTYPE_PURE, 3,
@@ -30573,9 +31094,12 @@ all the functions in the list are called, with the frame as argument.  */);
   DEFVAR_LISP ("window-scroll-functions", Vwindow_scroll_functions,
     doc: /* List of functions to call before redisplaying a window with scrolling.
 Each function is called with two arguments, the window and its new
-display-start position.  Note that these functions are also called by
-`set-window-buffer'.  Also note that the value of `window-end' is not
-valid when these functions are called.
+display-start position.
+These functions are called whenever the `window-start' marker is modified,
+either to point into another buffer (e.g. via `set-window-buffer') or another
+place in the same buffer.
+Note that the value of `window-end' is not valid when these functions are
+called.
 
 Warning: Do not use this feature to alter the way the window
 is scrolled.  It is not designed for that, and such use probably won't
@@ -30600,9 +31124,9 @@ A positive number means delay autoselection by that many seconds: a
 window is autoselected only after the mouse has remained in that
 window for the duration of the delay.
 A negative number has a similar effect, but causes windows to be
-autoselected only after the mouse has stopped moving.  \(Because of
+autoselected only after the mouse has stopped moving.  (Because of
 the way Emacs compares mouse events, you will occasionally wait twice
-that time before the window gets selected.\)
+that time before the window gets selected.)
 Any other value means to autoselect window instantaneously when the
 mouse pointer enters it.
 
@@ -30623,11 +31147,11 @@ automatically; to decrease the tool-bar height, use \\[recenter].  */);
 
   DEFVAR_BOOL ("auto-raise-tool-bar-buttons", auto_raise_tool_bar_buttons_p,
     doc: /* Non-nil means raise tool-bar buttons when the mouse moves over them.  */);
-  auto_raise_tool_bar_buttons_p = 1;
+  auto_raise_tool_bar_buttons_p = true;
 
   DEFVAR_BOOL ("make-cursor-line-fully-visible", make_cursor_line_fully_visible_p,
     doc: /* Non-nil means to scroll (recenter) cursor line if it is not fully visible.  */);
-  make_cursor_line_fully_visible_p = 1;
+  make_cursor_line_fully_visible_p = true;
 
   DEFVAR_LISP ("tool-bar-border", Vtool_bar_border,
     doc: /* Border below tool-bar in pixels.
@@ -30686,7 +31210,7 @@ displayed according to the current fontset.
 
 Note that this variable affects only how these bytes are displayed,
 but does not change the fact they are interpreted as raw bytes.  */);
-  unibyte_display_via_language_environment = 0;
+  unibyte_display_via_language_environment = false;
 
   DEFVAR_LISP ("max-mini-window-height", Vmax_mini_window_height,
     doc: /* Maximum height for resizing mini-windows (the minibuffer and the echo area).
@@ -30719,7 +31243,7 @@ the frame's other specifications determine how to blink the cursor off.  */);
     doc: /* Allow or disallow automatic horizontal scrolling of windows.
 If non-nil, windows are automatically scrolled horizontally to make
 point visible.  */);
-  automatic_hscrolling_p = 1;
+  automatic_hscrolling_p = true;
   DEFSYM (Qauto_hscroll_mode, "auto-hscroll-mode");
 
   DEFVAR_INT ("hscroll-margin", hscroll_margin,
@@ -30748,7 +31272,7 @@ and `scroll-right' overrides this variable's effect.  */);
   DEFVAR_BOOL ("message-truncate-lines", message_truncate_lines,
     doc: /* If non-nil, messages are truncated instead of resizing the echo area.
 Bind this around calls to `message' to let it take effect.  */);
-  message_truncate_lines = 0;
+  message_truncate_lines = false;
 
   DEFVAR_LISP ("menu-bar-update-hook",  Vmenu_bar_update_hook,
     doc: /* Normal hook run to update the menu bar definitions.
@@ -30764,7 +31288,7 @@ The enable predicate for a menu binding should check this variable.  */);
 
   DEFVAR_BOOL ("inhibit-menubar-update", inhibit_menubar_update,
     doc: /* Non-nil means don't update menu bars.  Internal use only.  */);
-  inhibit_menubar_update = 0;
+  inhibit_menubar_update = false;
 
   DEFVAR_LISP ("wrap-prefix", Vwrap_prefix,
     doc: /* Prefix prepended to all continuation lines at display time.
@@ -30794,24 +31318,30 @@ To add a prefix to continuation lines, use `wrap-prefix'.  */);
 
   DEFVAR_BOOL ("inhibit-eval-during-redisplay", inhibit_eval_during_redisplay,
     doc: /* Non-nil means don't eval Lisp during redisplay.  */);
-  inhibit_eval_during_redisplay = 0;
+  inhibit_eval_during_redisplay = false;
 
   DEFVAR_BOOL ("inhibit-free-realized-faces", inhibit_free_realized_faces,
     doc: /* Non-nil means don't free realized faces.  Internal use only.  */);
-  inhibit_free_realized_faces = 0;
+  inhibit_free_realized_faces = false;
+
+  DEFVAR_BOOL ("inhibit-bidi-mirroring", inhibit_bidi_mirroring,
+    doc: /* Non-nil means don't mirror characters even when bidi context requires that.
+Intended for use during debugging and for testing bidi display;
+see biditest.el in the test suite.  */);
+  inhibit_bidi_mirroring = false;
 
 #ifdef GLYPH_DEBUG
   DEFVAR_BOOL ("inhibit-try-window-id", inhibit_try_window_id,
 	       doc: /* Inhibit try_window_id display optimization.  */);
-  inhibit_try_window_id = 0;
+  inhibit_try_window_id = false;
 
   DEFVAR_BOOL ("inhibit-try-window-reusing", inhibit_try_window_reusing,
 	       doc: /* Inhibit try_window_reusing display optimization.  */);
-  inhibit_try_window_reusing = 0;
+  inhibit_try_window_reusing = false;
 
   DEFVAR_BOOL ("inhibit-try-cursor-movement", inhibit_try_cursor_movement,
 	       doc: /* Inhibit try_cursor_movement display optimization.  */);
-  inhibit_try_cursor_movement = 0;
+  inhibit_try_cursor_movement = false;
 #endif /* GLYPH_DEBUG */
 
   DEFVAR_INT ("overline-margin", overline_margin,
@@ -30833,7 +31363,7 @@ baseline.  The default value is 1.  */);
 	       doc: /* Non-nil means show an hourglass pointer, when Emacs is busy.
 This feature only works when on a window system that can change
 cursor shapes.  */);
-  display_hourglass_p = 1;
+  display_hourglass_p = true;
 
   DEFVAR_LISP ("hourglass-delay", Vhourglass_delay,
 	       doc: /* Seconds to wait before displaying an hourglass pointer when Emacs is busy.  */);
@@ -30841,10 +31371,13 @@ cursor shapes.  */);
 
 #ifdef HAVE_WINDOW_SYSTEM
   hourglass_atimer = NULL;
-  hourglass_shown_p = 0;
+  hourglass_shown_p = false;
 #endif /* HAVE_WINDOW_SYSTEM */
 
+  /* Name of the face used to display glyphless characters.  */
   DEFSYM (Qglyphless_char, "glyphless-char");
+
+  /* Method symbols for Vglyphless_char_display.  */
   DEFSYM (Qhex_code, "hex-code");
   DEFSYM (Qempty_box, "empty-box");
   DEFSYM (Qthin_space, "thin-space");
@@ -30857,6 +31390,7 @@ be redisplayed.  This set can be nil (meaning, only the selected window),
 or t (meaning all windows).  */);
   Vpre_redisplay_function = intern ("ignore");
 
+  /* Symbol for the purpose of Vglyphless_char_display.  */
   DEFSYM (Qglyphless_char_display, "glyphless-char-display");
   Fput (Qglyphless_char_display, Qchar_table_extra_slots, make_number (1));
 
@@ -30890,13 +31424,11 @@ display table takes effect; in this case, Emacs does not consult
 
   DEFVAR_LISP ("redisplay--all-windows-cause", Vredisplay__all_windows_cause,
 	       doc: /*  */);
-  Vredisplay__all_windows_cause
-    = Fmake_vector (make_number (100), make_number (0));
+  Vredisplay__all_windows_cause = Fmake_hash_table (0, NULL);
 
   DEFVAR_LISP ("redisplay--mode-lines-cause", Vredisplay__mode_lines_cause,
 	       doc: /*  */);
-  Vredisplay__mode_lines_cause
-    = Fmake_vector (make_number (100), make_number (0));
+  Vredisplay__mode_lines_cause = Fmake_hash_table (0, NULL);
 }
 
 
@@ -30922,10 +31454,10 @@ init_xdisp (void)
       r->pixel_top = r->top_line * FRAME_LINE_HEIGHT (f);
       r->total_cols = FRAME_COLS (f);
       r->pixel_width = r->total_cols * FRAME_COLUMN_WIDTH (f);
-      r->total_lines = FRAME_LINES (f) - 1 - FRAME_TOP_MARGIN (f);
+      r->total_lines = FRAME_TOTAL_LINES (f) - 1 - FRAME_TOP_MARGIN (f);
       r->pixel_height = r->total_lines * FRAME_LINE_HEIGHT (f);
 
-      m->top_line = FRAME_LINES (f) - 1;
+      m->top_line = FRAME_TOTAL_LINES (f) - 1;
       m->pixel_top = m->top_line * FRAME_LINE_HEIGHT (f);
       m->total_cols = FRAME_COLS (f);
       m->pixel_width = m->total_cols * FRAME_COLUMN_WIDTH (f);
@@ -30951,14 +31483,45 @@ init_xdisp (void)
     mode_line_target = MODE_LINE_DISPLAY;
   }
 
-  help_echo_showing_p = 0;
+  help_echo_showing_p = false;
 }
 
 #ifdef HAVE_WINDOW_SYSTEM
 
 /* Platform-independent portion of hourglass implementation.  */
 
+/* Timer function of hourglass_atimer.  */
+
+static void
+show_hourglass (struct atimer *timer)
+{
+  /* The timer implementation will cancel this timer automatically
+     after this function has run.  Set hourglass_atimer to null
+     so that we know the timer doesn't have to be canceled.  */
+  hourglass_atimer = NULL;
+
+  if (!hourglass_shown_p)
+    {
+      Lisp_Object tail, frame;
+
+      block_input ();
+
+      FOR_EACH_FRAME (tail, frame)
+	{
+	  struct frame *f = XFRAME (frame);
+
+	  if (FRAME_LIVE_P (f) && FRAME_WINDOW_P (f)
+	      && FRAME_RIF (f)->show_hourglass)
+	    FRAME_RIF (f)->show_hourglass (f);
+	}
+
+      hourglass_shown_p = true;
+      unblock_input ();
+    }
+}
+
 /* Cancel a currently active hourglass timer, and start a new one.  */
+
 void
 start_hourglass (void)
 {
@@ -30977,20 +31540,13 @@ start_hourglass (void)
   else
     delay = make_timespec (DEFAULT_HOURGLASS_DELAY, 0);
 
-#ifdef HAVE_NTGUI
-  {
-    extern void w32_note_current_window (void);
-    w32_note_current_window ();
-  }
-#endif /* HAVE_NTGUI */
-
   hourglass_atimer = start_atimer (ATIMER_RELATIVE, delay,
 				   show_hourglass, NULL);
 }
 
-
 /* Cancel the hourglass cursor timer if active, hide a busy cursor if
    shown.  */
+
 void
 cancel_hourglass (void)
 {
@@ -31001,7 +31557,28 @@ cancel_hourglass (void)
     }
 
   if (hourglass_shown_p)
-    hide_hourglass ();
+    {
+      Lisp_Object tail, frame;
+
+      block_input ();
+
+      FOR_EACH_FRAME (tail, frame)
+	{
+	  struct frame *f = XFRAME (frame);
+
+	  if (FRAME_LIVE_P (f) && FRAME_WINDOW_P (f)
+	      && FRAME_RIF (f)->hide_hourglass)
+	    FRAME_RIF (f)->hide_hourglass (f);
+#ifdef HAVE_NTGUI
+	  /* No cursors on non GUI frames - restore to stock arrow cursor.  */
+	  else if (!FRAME_W32_P (f))
+	    w32_arrow_cursor ();
+#endif
+	}
+
+      hourglass_shown_p = false;
+      unblock_input ();
+    }
 }
 
 #endif /* HAVE_WINDOW_SYSTEM */

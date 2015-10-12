@@ -1,6 +1,6 @@
 @c -*-texinfo-*-
 @c This is part of the GNU Emacs Lisp Reference Manual.
-@c Copyright (C) 1990-1994, 1998, 2001-2014 Free Software Foundation,
+@c Copyright (C) 1990-1994, 1998, 2001-2015 Free Software Foundation,
 @c Inc.
 @c See the file elisp.texi for copying conditions.
 @node Evaluation
@@ -104,9 +104,9 @@ interpretation.  @xref{Command Loop}.
   A Lisp object that is intended to be evaluated is called a
 @dfn{form} (or an @dfn{expression}).  How Emacs evaluates a form
 depends on its data type.  Emacs has three different kinds of form
-that are evaluated differently: symbols, lists, and ``all other
-types''.  This section describes all three kinds, one by one, starting
-with the ``all other types'' which are self-evaluating forms.
+that are evaluated differently: symbols, lists, and all other
+types.  This section describes all three kinds, one by one, starting
+with the other types, which are self-evaluating forms.
 
 @menu
 * Self-Evaluating Forms::   Forms that evaluate to themselves.
@@ -116,7 +116,7 @@ with the ``all other types'' which are self-evaluating forms.
                               we find the real function via the symbol.
 * Function Forms::          Forms that call functions.
 * Macro Forms::             Forms that call macros.
-* Special Forms::           "Special forms" are idiosyncratic primitives,
+* Special Forms::           Special forms are idiosyncratic primitives,
                               most of them extremely important.
 * Autoloading::             Functions set up to load files
                               containing their real definitions.
@@ -146,7 +146,7 @@ contents unchanged.
      @result{} 123
 @end group
 @group
-(eval '123)        ; @r{Evaluated ``by hand''---result is the same.}
+(eval '123)        ; @r{Evaluated "by hand"---result is the same.}
      @result{} 123
 @end group
 @group
@@ -805,7 +805,12 @@ message @code{"Lisp nesting exceeds max-lisp-eval-depth"}).
 This limit, with the associated error when it is exceeded, is one way
 Emacs Lisp avoids infinite recursion on an ill-defined function.  If
 you increase the value of @code{max-lisp-eval-depth} too much, such
-code can cause stack overflow instead.
+code can cause stack overflow instead.  On some systems, this overflow
+can be handled.  In that case, normal Lisp evaluation is interrupted
+and control is transferred back to the top level command loop
+(@code{top-level}).  Note that there is no way to enter Emacs Lisp
+debugger in this situation.  @xref{Error Debugging}.
+
 @cindex Lisp nesting error
 
 The depth limit counts internal uses of @code{eval}, @code{apply}, and

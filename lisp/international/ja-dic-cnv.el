@@ -1,6 +1,6 @@
 ;;; ja-dic-cnv.el --- convert a Japanese dictionary (SKK-JISYO.L) to Emacs Lisp
 
-;; Copyright (C) 2001-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2001-2015 Free Software Foundation, Inc.
 
 ;; Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
 ;;   2005, 2006, 2007, 2008, 2009, 2010, 2011
@@ -280,7 +280,7 @@
 		(cons (cons kana candidates) skkdic-okuri-nasi-entries)
 		skkdic-okuri-nasi-entries-count
 		(1+ skkdic-okuri-nasi-entries-count))
-	  (setq ratio (floor (/ (* (point) 100.0) (point-max))))
+	  (setq ratio (floor (* (point) 100.0) (point-max)))
 	  (if (/= (/ prev-ratio 10) (/ ratio 10))
 	      (progn
 		(message "collected %2d%% ..." ratio)
@@ -306,7 +306,7 @@
       (while l
 	(let ((kana (car (car l)))
 	      (candidates (cdr (car l))))
-	  (setq ratio (/ (* count 100) skkdic-okuri-nasi-entries-count)
+	  (setq ratio (floor (* count 100.0) skkdic-okuri-nasi-entries-count)
 		count (1+ count))
 	  (if (/= (/ prev-ratio 10) (/ ratio 10))
 	      (progn

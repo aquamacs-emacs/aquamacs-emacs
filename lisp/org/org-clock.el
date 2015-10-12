@@ -1,6 +1,6 @@
 ;;; org-clock.el --- The time clocking code for Org-mode
 
-;; Copyright (C) 2004-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2004-2015 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <carsten at orgmode dot org>
 ;; Keywords: outlines, hypermedia, calendar, wp
@@ -389,8 +389,8 @@ nil          current clock is not displayed"
 (defcustom org-clock-frame-title-format '(t org-mode-line-string)
   "The value for `frame-title-format' when clocking in.
 
-When `org-clock-clocked-in-display' is set to 'frame-title
-or 'both, clocking in will replace `frame-title-format' with
+When `org-clock-clocked-in-display' is set to `frame-title'
+or `both', clocking in will replace `frame-title-format' with
 this value.  Clocking out will restore `frame-title-format'.
 
 `org-frame-title-string' is a format string using the same
@@ -717,8 +717,9 @@ Notification is shown only once."
 	  (unless org-clock-notification-was-shown
 	    (setq org-clock-notification-was-shown t)
 	    (org-notify
-	     (format "Task '%s' should be finished by now. (%s)"
-		     org-clock-heading org-clock-effort) org-clock-sound))
+	     (format-message "Task `%s' should be finished by now. (%s)"
+                             org-clock-heading org-clock-effort)
+             org-clock-sound))
 	(setq org-clock-notification-was-shown nil)))))
 
 (defun org-notify (notification &optional play-sound)
@@ -937,7 +938,7 @@ was started."
 		(org-clock-jump-to-current-clock clock))
 	      (unless org-clock-resolve-expert
 		(with-output-to-temp-buffer "*Org Clock*"
-		  (princ "Select a Clock Resolution Command:
+		  (princ (format-message "Select a Clock Resolution Command:
 
 i/q      Ignore this question; the same as keeping all the idle time.
 
@@ -946,8 +947,8 @@ k/K      Keep X minutes of the idle time (default is all).  If this
          that many minutes after the time that idling began, and then
          clocked back in at the present time.
 
-g/G      Indicate that you \"got back\" X minutes ago.  This is quite
-         different from 'k': it clocks you out from the beginning of
+g/G      Indicate that you “got back” X minutes ago.  This is quite
+         different from `k': it clocks you out from the beginning of
          the idle period and clock you back in X minutes ago.
 
 s/S      Subtract the idle time from the current clock.  This is the
@@ -959,7 +960,7 @@ C        Cancel the open timer altogether.  It will be as though you
 j/J      Jump to the current clock, to make manual adjustments.
 
 For all these options, using uppercase makes your final state
-to be CLOCKED OUT.")))
+to be CLOCKED OUT."))))
 	      (org-fit-window-to-buffer (get-buffer-window "*Org Clock*"))
 	      (let (char-pressed)
 		(when (featurep 'xemacs)
@@ -1046,9 +1047,9 @@ If `only-dangling-p' is non-nil, only ask to resolve dangling
 			(lambda (clock)
 			  (format
 			   "Dangling clock started %d mins ago"
-			   (floor
-			    (/ (- (org-float-time (current-time))
-				  (org-float-time (cdr clock))) 60))))))
+			   (floor (- (org-float-time)
+				     (org-float-time (cdr clock)))
+				  60)))))
 		   (or last-valid
 		       (cdr clock)))))))))))
 
@@ -1066,9 +1067,11 @@ If `only-dangling-p' is non-nil, only ask to resolve dangling
 (defvar org-x11idle-exists-p
   ;; Check that x11idle exists
   (and (eq window-system 'x)
-       (eq (call-process-shell-command "command" nil nil nil "-v" org-clock-x11idle-program-name) 0)
+       (eq 0 (call-process-shell-command
+              (format "command -v %s" org-clock-x11idle-program-name)))
        ;; Check that x11idle can retrieve the idle time
-       (eq (call-process-shell-command org-clock-x11idle-program-name nil nil nil) 0)))
+       ;; FIXME: Why "..-shell-command" rather than just `call-process'?
+       (eq 0 (call-process-shell-command org-clock-x11idle-program-name))))
 
 (defun org-x11-idle-seconds ()
   "Return the current X11 idle time in seconds."
@@ -1232,7 +1235,7 @@ make this the default behavior.)"
 		   (looking-at
 		    (concat "^[ \t]*" org-clock-string
 			    " \\[\\([0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}"
-			    " *\\sw+\.? +[012][0-9]:[0-5][0-9]\\)\\][ \t]*$")))
+			    " *\\sw+.? +[012][0-9]:[0-5][0-9]\\)\\][ \t]*$")))
 	      (message "Matched %s" (match-string 1))
 	      (setq ts (concat "[" (match-string 1) "]"))
 	      (goto-char (match-end 1))
@@ -1368,7 +1371,7 @@ decides which time to use."
       (current-time))
      ((equal cmt "today")
       (setq org--msg-extra "showing today's task time.")
-      (let* ((dt (decode-time (current-time))))
+      (let* ((dt (decode-time)))
 	(setq dt (append (list 0 0 0) (nthcdr 3 dt)))
 	(if org-extend-today-until
 	    (setf (nth 2 dt) org-extend-today-until))
@@ -1654,7 +1657,8 @@ Optional argument N tells to change by that many units."
   (save-excursion ; Do not replace this with `with-current-buffer'.
     (org-no-warnings (set-buffer (org-clocking-buffer)))
     (goto-char org-clock-marker)
-    (if (org-looking-back (concat "^[ \t]*" org-clock-string ".*"))
+    (if (org-looking-back (concat "^[ \t]*" org-clock-string ".*")
+                          (line-beginning-position))
 	(progn (delete-region (1- (point-at-bol)) (point-at-eol))
 	       (org-remove-empty-drawer-at "LOGBOOK" (point)))
       (message "Clock gone, cancel the timer anyway")
@@ -1927,7 +1931,7 @@ fontified, and then returned."
     (org-mode)
     (org-create-dblock props)
     (org-update-dblock)
-    (font-lock-fontify-buffer)
+    (org-font-lock-ensure)
     (forward-line 2)
     (buffer-substring (point) (progn
 				(re-search-forward "^[ \t]*#\\+END" nil t)
@@ -2029,7 +2033,7 @@ If MSTART is non-nil, use this number to specify the starting day of a
 month (1 is the first day of the month).
 If you can combine both, the month starting day will have priority."
   (if (integerp key) (setq key (intern (number-to-string key))))
-  (let* ((tm (decode-time (or time (current-time))))
+  (let* ((tm (decode-time time))
 	 (s 0) (m (nth 1 tm)) (h (nth 2 tm))
 	 (d (nth 3 tm)) (month (nth 4 tm)) (y (nth 5 tm))
 	 (dow (nth 6 tm))
@@ -2670,10 +2674,8 @@ TIME:      The sum of all time spend in this tree, in minutes.  This time
     (when (and te (listp te))
       (setq te (format "%4d-%02d-%02d" (nth 2 te) (car te) (nth 1 te))))
     ;; Now the times are strings we can parse.
-    (if ts (setq ts (org-float-time
-		     (seconds-to-time (org-matcher-time ts)))))
-    (if te (setq te (org-float-time
-		     (seconds-to-time (org-matcher-time te)))))
+    (if ts (setq ts (org-matcher-time ts)))
+    (if te (setq te (org-matcher-time te)))
     (save-excursion
       (org-clock-sum ts te
 		     (unless (null matcher)
@@ -2813,8 +2815,8 @@ The details of what will be saved are regulated by the variable
 	  (delete-region (point-min) (point-max))
 	  ;;Store clock
 	  (insert (format ";; org-persist.el - %s at %s\n"
-			  system-name (format-time-string
-				       (cdr org-time-stamp-formats))))
+			  (system-name) (format-time-string
+					 (cdr org-time-stamp-formats))))
 	  (if (and (memq org-clock-persist '(t clock))
 		   (setq b (org-clocking-buffer))
 		   (setq b (or (buffer-base-buffer b) b))

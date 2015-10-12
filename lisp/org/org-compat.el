@@ -1,6 +1,6 @@
 ;;; org-compat.el --- Compatibility code for Org-mode
 
-;; Copyright (C) 2004-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2004-2015 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <carsten at orgmode dot org>
 ;; Keywords: outlines, hypermedia, calendar, wp
@@ -241,7 +241,7 @@ ignored in this case."
   (or window (selected-window)))
 
 (defun org-number-sequence (from &optional to inc)
-  "Call `number-sequence or emulate it."
+  "Call `number-sequence' or emulate it."
   (if (fboundp 'number-sequence)
       (number-sequence from to inc)
     (if (or (not to) (= from to))
@@ -295,7 +295,7 @@ Works on both Emacs and XEmacs."
       (setq mark-active t)
       (when (and (boundp 'transient-mark-mode)
 		 (not transient-mark-mode))
-	(setq transient-mark-mode 'lambda))
+	(set (make-local-variable 'transient-mark-mode) 'lambda))
       (when (boundp 'zmacs-regions)
 	(setq zmacs-regions t)))))
 
@@ -411,16 +411,16 @@ Pass BUFFER to the XEmacs version of `move-to-column'."
 	 (when focus-follows-mouse
 	   (set-mouse-position frame (1- (frame-width frame)) 0)))))
 
-(defun org-float-time (&optional time)
-  "Convert time value TIME to a floating point number.
-TIME defaults to the current time."
-  (if (featurep 'xemacs)
-      (time-to-seconds (or time (current-time)))
-    (float-time time)))
+(defalias 'org-float-time
+  (if (featurep 'xemacs) 'time-to-seconds 'float-time))
 
 ;; `user-error' is only available from 24.2.50 on
 (unless (fboundp 'user-error)
   (defalias 'user-error 'error))
+
+;; ‘format-message’ is available only from 25 on
+(unless (fboundp 'format-message)
+  (defalias 'format-message 'format))
 
 (defmacro org-no-popups (&rest body)
   "Suppress popup windows.
@@ -477,6 +477,11 @@ LIMIT."
 	      (goto-char pos)
 	      (looking-at (concat "\\(?:"  regexp "\\)\\'")))))
       (not (null pos)))))
+
+(defalias 'org-font-lock-ensure
+  (if (fboundp 'org-font-lock-ensure)
+      #'font-lock-ensure
+    (lambda (_beg _end) (font-lock-fontify-buffer))))
 
 (defun org-floor* (x &optional y)
   "Return a list of the floor of X and the fractional part of X.

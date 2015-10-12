@@ -1,6 +1,6 @@
 ;;; regexp-tests.el --- Test suite for regular expression handling.
 
-;; Copyright (C) 2013-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2013-2015 Free Software Foundation, Inc.
 
 ;; Author: Stefan Monnier <monnier@iro.umontreal.ca>
 ;; Keywords:       internal
@@ -22,6 +22,8 @@
 ;; along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;; Code:
+
+(require 'regexp-opt)
 
 (ert-deftest regexp-test-regexp-opt ()
   "Test the `compilation-error-regexp-alist' regexps.

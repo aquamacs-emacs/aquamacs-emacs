@@ -1,6 +1,6 @@
 # Build Emacs from a fresh tarball or version-control checkout.
 
-# Copyright (C) 2011-2014 Free Software Foundation, Inc.
+# Copyright (C) 2011-2015 Free Software Foundation, Inc.
 #
 # This file is part of GNU Emacs.
 #
@@ -55,7 +55,9 @@ else
 # Once 'configure' exists, run it.
 # Finally, run the actual 'make'.
 
-default $(filter-out configure Makefile,$(MAKECMDGOALS)): Makefile
+ORDINARY_GOALS = $(filter-out configure Makefile bootstrap,$(MAKECMDGOALS))
+
+default $(ORDINARY_GOALS): Makefile
 	$(MAKE) -f Makefile $(MAKECMDGOALS)
 # Execute in sequence, so that multiple user goals don't conflict.
 .NOTPARALLEL:
@@ -71,6 +73,12 @@ Makefile: configure
 	@echo >&2 'Running ./configure ...'
 	./configure
 	@echo >&2 'Makefile built.'
+
+# 'make bootstrap' in a fresh checkout needn't run 'configure' twice.
+bootstrap: Makefile
+	$(MAKE) -f Makefile all
+
+.PHONY: bootstrap default $(ORDINARY_GOALS)
 
 endif
 endif

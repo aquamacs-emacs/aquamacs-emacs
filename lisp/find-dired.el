@@ -1,6 +1,6 @@
 ;;; find-dired.el --- run a `find' command and dired the output
 
-;; Copyright (C) 1992, 1994-1995, 2000-2014 Free Software Foundation,
+;; Copyright (C) 1992, 1994-1995, 2000-2015 Free Software Foundation,
 ;; Inc.
 
 ;; Author: Roland McGrath <roland@gnu.org>,
@@ -72,10 +72,10 @@ a file listing in the desired format.  LS-SWITCHES is a set of
 
 The two options must be set to compatible values.
 For example, to use human-readable file sizes with GNU ls:
-   \(\"-exec ls -ldh {} +\" . \"-ldh\")
+   (\"-exec ls -ldh {} +\" . \"-ldh\")
 
 To use GNU find's inbuilt \"-ls\" option to list files:
-   \(\"-ls\" . \"-dilsb\")
+   (\"-ls\" . \"-dilsb\")
 since GNU find's output has the same format as using GNU ls with
 the options \"-dilsb\"."
   :version "24.1"	       ; add tests for -ls and -exec + support
@@ -151,7 +151,8 @@ use in place of \"-ls\" as the final argument."
     (let ((find (get-buffer-process (current-buffer))))
       (when find
 	(if (or (not (eq (process-status find) 'run))
-		(yes-or-no-p "A `find' process is running; kill it? "))
+		(yes-or-no-p
+		 (format-message "A `find' process is running; kill it? ")))
 	    (condition-case nil
 		(progn
 		  (interrupt-process find)
@@ -238,7 +239,7 @@ and run Dired on those files.
 PATTERN is a shell wildcard (not an Emacs regexp) and need not be quoted.
 The default command run (after changing into DIR) is
 
-    find . -name 'PATTERN' -ls
+    find . -name \\='PATTERN\\=' -ls
 
 See `find-name-arg' to customize the arguments."
   (interactive

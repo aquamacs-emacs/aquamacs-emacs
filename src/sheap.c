@@ -1,7 +1,7 @@
 /* simulate `sbrk' with an array in .bss, for `unexec' support for Cygwin;
    complete rewrite of xemacs Cygwin `unexec' code
 
-   Copyright (C) 2004-2014 Free Software Foundation, Inc.
+   Copyright (C) 2004-2015 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
 
@@ -44,6 +44,8 @@ int debug_sheap = 0;
 #define BLOCKSIZE 4096
 
 char bss_sbrk_buffer[STATIC_HEAP_SIZE];
+/* The following is needed in gmalloc.c */
+void *bss_sbrk_buffer_end = bss_sbrk_buffer + STATIC_HEAP_SIZE;
 char *bss_sbrk_ptr;
 char *max_bss_sbrk_ptr;
 int bss_sbrk_did_unexec;

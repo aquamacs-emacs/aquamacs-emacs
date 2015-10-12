@@ -1,6 +1,6 @@
 ;;; semantic/ctxt.el --- Context calculations for Semantic tools.
 
-;; Copyright (C) 1999-2014 Free Software Foundation, Inc.
+;; Copyright (C) 1999-2015 Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: syntax
@@ -362,7 +362,7 @@ This skips forward over symbols in a complex reference.
 For example, in the C statement:
   this.that().entry;
 
-If the cursor is on 'this', will move point to the ; after entry.")
+If the cursor is on `this', will move point to the ; after entry.")
 
 (defun semantic-ctxt-end-of-symbol-default (&optional point)
   "Move point to the end of the current symbol under POINT.
