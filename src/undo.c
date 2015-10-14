@@ -37,20 +37,10 @@ static ptrdiff_t last_boundary_position;
    an undo-boundary.  */
 static Lisp_Object pending_boundary;
 
-/*
-  Run the first-undo-hook if needed
- */
 void
-run_first_undo_hook ()
+run_undoable_change ()
 {
-  Lisp_Object list;
-
-  list = BVAR (current_buffer, undo_list);
-
-  if (NILP (list) || CONSP (list) && NILP (XCAR (list)))
-    {
-      safe_run_hooks (Qundo_first_undoable_change_hook);
-    }
+  call0(Qundo_undoable_change);
 }
 
 /* Record point as it was at beginning of this command (if necessary)
@@ -71,7 +61,7 @@ record_point (ptrdiff_t pt)
   if (NILP (pending_boundary))
     pending_boundary = Fcons (Qnil, Qnil);
 
-  run_first_undo_hook ();
+  run_undoable_change ();
 
   at_boundary = ! CONSP (BVAR (current_buffer, undo_list))
                 || NILP (XCAR (BVAR (current_buffer, undo_list)));
@@ -143,8 +133,7 @@ record_marker_adjustments (ptrdiff_t from, ptrdiff_t to)
   if (NILP (pending_boundary))
     pending_boundary = Fcons (Qnil, Qnil);
 
-
-  run_first_undo_hook ();
+  run_undoable_change ();
 
   for (m = BUF_MARKERS (current_buffer); m; m = m->next)
     {
@@ -261,7 +250,8 @@ record_property_change (ptrdiff_t beg, ptrdiff_t length,
   /* Switch temporarily to the buffer that was changed.  */
   current_buffer = buf;
 
-  run_first_undo_hook ();
+  // PWL running with the wrong current-buffer
+  run_undoable_change ();
 
   if (MODIFF <= SAVE_MODIFF)
     record_first_change ();
@@ -302,6 +292,8 @@ but another undo command will undo to the previous boundary.  */)
     }
   last_boundary_position = PT;
   last_boundary_buffer = current_buffer;
+
+  Fset(Qundo_last_boundary,Qnil);
   return Qnil;
 }
 
@@ -498,7 +490,8 @@ void
 syms_of_undo (void)
 {
   DEFSYM (Qinhibit_read_only, "inhibit-read-only");
-  DEFSYM (Qundo_first_undoable_change_hook, "undo-first-undoable-change-hook");
+  DEFSYM (Qundo_undoable_change, "undo-undoable-change");
+  DEFSYM (Qundo_last_boundary, "undo-last-boundary");
 
   /* Marker for function call undo list elements.  */
   DEFSYM (Qapply, "apply");
@@ -572,4 +565,12 @@ so it must make sure not to do a lot of consing.  */);
 This hook will be run with `current-buffer' as the buffer that has
 changed.  Recent means since the last boundary. */);
   Vundo_first_undoable_change_hook = Qnil;
+
+  DEFVAR_LISP ("undo-last-boundary",
+               Vundo_last_boundary,
+               doc: /* TODO
+*/);
+
+  Fmake_variable_buffer_local (Qundo_last_boundary);
+  Vundo_last_boundary = Qnil;
 }

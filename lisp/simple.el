@@ -27,7 +27,6 @@
 ;; major mode or to file-handling.
 
 ;;; Code:
-
 (eval-when-compile (require 'cl-lib))
 
 (declare-function widget-convert "wid-edit" (type &rest args))
@@ -2766,6 +2765,8 @@ with < or <= based on USE-<."
 ;; removed from a buffer with any rapidity and no undo-boundary. In
 ;; this case, the `undo-outer-limit' machinary will operate; this is
 ;; considered to be exceptional the user is warned.
+
+
 (defmacro undo-auto-message (&rest args)
   `(let ((msg
           (format ,@args)))
@@ -2774,14 +2775,12 @@ with < or <= based on USE-<."
           "*undo-auto-log*")
        (goto-char (point-max))
        (insert msg)
-       (insert "\n")
-       (when (get-buffer-window)
-         (recenter))
-       )))
+       (insert "\n"))))
 
-(undo-auto-message "initialized")
-(with-current-buffer "*undo-auto-log*"
+(with-current-buffer
+    (get-buffer-create "*undo-auto-log*")
   (setq buffer-undo-list t))
+(undo-auto-message "initialized")
 
 (defun undo-needs-boundary-p ()
   "Returns non-nil if `buffer-undo-list' needs a boundary at the start."
@@ -2791,15 +2790,34 @@ with < or <= based on USE-<."
    ;; The first element of buffer-undo-list is not nil.
    (car buffer-undo-list)))
 
-(defun undo-ensure-boundary ()
+(defun undo-last-boundary-sic-p (last-boundary)
+  "Returns non-nil if the last boundary was from self-insert-command.
+Returns the actual number of times a self-insert-command has been
+run."
+  (and
+   (eq 'command
+       (car-safe last-boundary))
+   (eq 'self-insert-command
+       (nth 1 last-boundary))
+   (or (nth 2 last-boundary)
+       0)))
+
+(defun undo-ensure-boundary (reason)
   ""
   (when (and
          buffer-undo-list
          (undo-needs-boundary-p))
-    (undo-boundary)
+    (let ((last-sic
+           (undo-last-boundary-sic-p undo-last-boundary)))
+      (when last-sic
+        (setq reason
+              `(command self-insert-command
+                        ,(1+ last-sic))))
+      (undo-boundary)
+      (setq undo-last-boundary reason))
     t))
 
-(defun undo-auto-boundary ()
+(defun undo-auto-boundary (reason)
   "Checks recently change buffers and adds a boundary if necessary.
 
 See also `undo-ensure-boundary'."
@@ -2807,7 +2825,7 @@ See also `undo-ensure-boundary'."
    (lambda (b)
      (when (buffer-live-p b)
        (with-current-buffer b
-         (when (undo-ensure-boundary)
+         (when (undo-ensure-boundary reason)
            (undo-auto-message "undo-auto-boundary boundary added %s" b)))))
    undo-undoably-changed-buffers)
   (setq undo-undoably-changed-buffers nil))
@@ -2817,7 +2835,8 @@ See also `undo-ensure-boundary'."
 
 (defun undo-auto-boundary-timer ()
   "Timer which will run `undo-auto-boundary-timer'."
-  (undo-auto-boundary)
+  (undo-auto-message "running timer")
+  (undo-auto-boundary 'timer)
   (setq undo-auto-current-boundary-timer nil))
 
 (defun undo-auto-boundary-ensure-timer ()
@@ -2844,38 +2863,33 @@ See also `undo-buffer-undoably-changed'.")
 
 (defun undo-auto-post-command-hook ()
   (unless (eq buffer-undo-list t)
-    (undo-auto-boundary)))
+    (undo-auto-boundary `(command ,this-command))))
 
-(defun undo-auto-pre-command-hook()
-  (when (and (eq last-command 'self-insert-command)
-             (eq this-command 'self-insert-command))
-    ;; As last-command was s-i-c, there should be "insert" cons just
-    ;; before this. We need to check that there have not been too many insertions
-    (let ((last-before-nil
-           (cadr buffer-undo-list)))
-      (when
-          (> 20
-             (- (cdr last-before-nil)
-                (car last-before-nil)))
-        (undo-auto-message "Removing last undo")
-        (setq buffer-undo-list
-              (cdr buffer-undo-list))))))
+(defun undo-auto-pre-self-insert-command()
+  (condition-case err
+      (let ((last-sic-count
+             (undo-last-boundary-sic-p undo-last-boundary)))
+        (when
+            last-sic-count
+          (if
+              (< last-sic-count 20)
+              (progn (undo-auto-message "(changed) Removing last undo")
+                     (setq buffer-undo-list
+                           (cdr buffer-undo-list)))
+            (progn (undo-auto-message "Reset sic to 0")
+                   (setq undo-last-boundary
+                         '(command self-insert-command 0))))))
+    (error
+     (undo-auto-message "pre-command-error %s"
+                        (error-message-string err)))))
 
-(defun undo-auto-boundary-change (_ _ _)
-  ;;(undo-auto-message "undo-auto adding-to-list %s" (current-buffer))
-  (unless (eq buffer-undo-list t)
-    (add-to-list 'undo-undoably-changed-buffers
-                 (current-buffer))
-    (undo-auto-boundary-ensure-timer)))
-
-(add-hook 'after-change-functions
-          #'undo-auto-boundary-change)
+(defun undo-undoable-change ()
+  (undo-auto-message "undo-auto adding-to-list %s" (current-buffer))
+  (add-to-list 'undo-undoably-changed-buffers (current-buffer))
+  (undo-auto-boundary-ensure-timer))
 
 (add-hook 'post-command-hook
           #'undo-auto-post-command-hook)
-
-(add-hook 'pre-command-hook
-          #'undo-auto-pre-command-hook)
 
 (defcustom undo-ask-before-discard nil
   "If non-nil ask about discarding undo info for the current command.

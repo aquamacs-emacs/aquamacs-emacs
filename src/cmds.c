@@ -315,6 +315,7 @@ At the end, it runs `post-self-insert-hook'.  */)
   // PWL remove for now
   //if (XFASTINT (n) < 2)
   //remove_excessive_undo_boundaries ();
+  call0(Qundo_auto_pre_self_insert_command);
 
   /* Barf if the key that invoked this was not a character.  */
   if (!CHARACTERP (last_command_event))
@@ -529,6 +530,9 @@ internal_self_insert (int c, EMACS_INT n)
 void
 syms_of_cmds (void)
 {
+  DEFSYM (Qundo_auto_pre_self_insert_command,
+          "undo-auto-pre-self-insert-command" );
+
   DEFSYM (Qkill_forward_chars, "kill-forward-chars");
 
   /* A possible value for a buffer's overwrite-mode variable.  */
