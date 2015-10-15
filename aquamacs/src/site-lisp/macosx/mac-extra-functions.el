@@ -291,7 +291,8 @@ specified in `shell-file-name'."
   
   (message "Shell: %s" shell-file-name)
 
-  (let* ((shell (or shell-file-name "/bin/bash"))   ;; can shell-file-name be nil?
+  (let* ((coding-system-for-write 'raw-text-unix)
+         (shell (or shell-file-name "/bin/bash"))   ;; can shell-file-name be nil?
 	 (command (format "printenv >%s.tmp; mv %s.tmp %s"
 			  environment-temp-file 
 			  environment-temp-file 
