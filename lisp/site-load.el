@@ -52,7 +52,7 @@
 
 ;;X (load "emacs-lisp/cconv")
 ;;X (load "emacs-lisp/macroexp")
-(load "help-fns")
+;;(load "help-fns")
 
 ;;X (load "emacs-lisp/debug")
 ;;X (load "emacs-lisp/bytecomp")
@@ -80,7 +80,7 @@
 (load "paren")
 ;;(load "calendar/time-date")
 (load "timezone")
-(load "calendar/parse-time")
+;;(load "calendar/parse-time")
  
 ;; (load "emacs-lisp/cl-lib") ;; produces error
 
@@ -95,6 +95,7 @@
 (load "emacs-lisp/advice")
 (load "emacs-lisp/nadvice") ;; needed for defadvice
 
+;; (defun aq-preload (_x))
 ;; aquamacs
 ;; the function aq-preload is supplied by the make-aquamacs script
 (aq-preload "aquamacs-macros")
@@ -105,6 +106,7 @@
 ;; no text available if this is compiled in. 
 ;;(aq-preload "aquamacs-mode-specific-themes")
 (load "calendar/time-date")
+(aq-preload "aquamacs-macros")
 (aq-preload "aquamacs-tool-bar")
 (aq-preload "macosx/osx_defaults")
 (aq-preload "aquamacs")
