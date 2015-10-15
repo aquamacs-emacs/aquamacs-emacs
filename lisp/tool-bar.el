@@ -91,8 +91,12 @@ E.g. foo_dis.xpm becomes foo_sel.xpm if EXTENSION is '_sel'."
 	  )))
    image-spec-list))
 
-(defvar tool-bar-load-png-only nil) ;; PNG and TIFF images only
+;; compatibility for future merges
 (defun tool-bar--image-expression (icon)
+  (cdr (tool-bar--image-expression-2 icon)))
+
+(defvar tool-bar-load-png-only nil) ;; PNG and TIFF images only
+(defun tool-bar--image-expression-2 (icon)
   (let* ((fg (face-attribute 'tool-bar :foreground))
 	 (bg (face-attribute 'tool-bar :background))
 	 (colors (nconc (if (eq fg 'unspecified) nil (list :foreground fg))
@@ -237,12 +241,12 @@ use. The function will first try to use low-color/ICON.xpm if
 display-color-cells is less or equal to 256, then ICON.xpm, then
 ICON.pbm, and finally ICON.xbm, using `find-image'."
   (let* ((icon-name (if (consp icon) (car icon) icon))
-	 (is (tool-bar--image-expression icon-name))
-	 (image (car is))
-	 (images (cdr is))) 
+	 (image-exp (tool-bar--image-expression-2 icon-name))
+	 (image (car image-exp))
+	 (images (cdr image-exp))) 
     (when (and (display-images-p) image)
     (define-key-after map (vector key)
-      `(menu-item ,(symbol-name key) ,def :image ,image-exp ,@props))
+      `(menu-item ,(symbol-name key) ,def :image ,images ,@props))
     (force-mode-line-update))))
 
 
@@ -279,9 +283,9 @@ holds a keymap."
   (let* ((icon-name icon)
 	 (menu-bar-map (lookup-key from-map [menu-bar]))
 	 (keys (where-is-internal command menu-bar-map))
-	 (is (tool-bar--image-expression icon-name))
-	 (image (car is))
-	 (images (cdr is)) 
+	 (image-exp-2 (tool-bar--image-expression-2 icon-name))
+	 (image (car image-exp-2))
+	 (image-exp (cdr image-exp-2)) 
 	 submap key)
     (when (and (display-images-p) image)
     ;; We'll pick up the last valid entry in the list of keys if
@@ -328,7 +332,7 @@ holds a keymap."
      (or frame (selected-frame))
  
   (setq tool-bar-separator-image-expression
-	(tool-bar--image-expression "separator"))
+	(tool-bar--image-expression-2 "separator"))
   (tool-bar-add-item-from-menu 'find-file "new" nil :label "New File"
 			       :vert-only t)
   (tool-bar-add-item-from-menu 'menu-find-file-existing "open" nil
