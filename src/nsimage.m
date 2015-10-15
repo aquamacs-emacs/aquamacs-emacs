@@ -292,7 +292,6 @@ static EmacsImage *ImageList = nil;
     image = [image imageListNext];
   if (image != nil)
     {
-      [(EmacsImage *)image reference];
       return image;
     }
   #else
@@ -302,7 +301,6 @@ static EmacsImage *ImageList = nil;
   image2 = [NSImage imageNamed: [NSString stringWithUTF8String: SDATA (file)]];
   if (image2 != nil) // && [image2 isKindOfClass:[EmacsImage class]])
     {
-      [(EmacsImage *)image2 reference];
       return image2;
     }
   #endif
@@ -341,8 +339,6 @@ static EmacsImage *ImageList = nil;
     ns_resize_truedpi_image(image, 0, Qnil, nil); // no resize, just choose representation.
       
   [image setName: [NSString stringWithUTF8String: SSDATA (file)]];
-    [image reference];
-    ImageList = [image imageListSetNext: ImageList];
 
   return image;
 }
