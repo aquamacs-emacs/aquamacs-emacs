@@ -39,14 +39,6 @@
 (require 'aquamacs-tools)
 (require 'aquamacs-macros)
 
-;; Profiling code
-(defmacro ats (txt) nil)
-;; (defvar aq-starttime 0)
-;; (defun ats (txt)
-;;   (message "ATS %s:  %s" (time-since aq-starttime) txt))
-;; (setq aq-starttime (current-time))
-(ats "started")
-
 ;; various functions
 
 (defun aquamacs-find-file (&optional filename)
@@ -870,12 +862,9 @@ yes-or-no prompts - y or n will do."
   (ats "osx_defaults ...")
   (require 'osx_defaults) ;; always load this to define various things
 
-  (if (running-on-a-mac-p)
-      (progn
-	(ats "setup...")
-	(aquamacs-osx-defaults-setup))
-    (eval-when-compile
-      (aquamacs-osx-defaults-setup)))
+  (when (running-on-a-mac-p)
+    (ats "setup...")
+    (aquamacs-osx-defaults-setup))
 
   (ats "osx_defaults done")
 

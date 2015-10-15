@@ -30,6 +30,7 @@
 
 (provide 'aquamacs-bug)
 
+(require 'aquamacs-macros)
 (require 'aquamacs-tools)
 ;; Request by RMS 06/2005: do not report Aquamacs bugs 
 ;; to the Emacs mailing lists.

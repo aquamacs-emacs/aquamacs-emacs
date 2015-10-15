@@ -30,6 +30,7 @@
 
 ;; The following  function needs to be loaded at runtime. 
 
+(eval-when-compile (require 'aquamacs-macros))
 
 (defun aquamacs-mac-initialize  ()
   (defvar aquamacs-mac-application-bundle-directory

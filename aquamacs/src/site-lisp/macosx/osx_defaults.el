@@ -39,6 +39,8 @@
 ; this file needs cleaning up!
 ; move menu stuff to extra package
 
+(eval-when-compile
+  (require 'aquamacs-macros))
 
 (defun aquamacs-create-preferences-dirs ()
   (condition-case err
