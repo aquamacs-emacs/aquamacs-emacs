@@ -1947,22 +1947,11 @@ ns_popup_dialog (struct frame *f, Lisp_Object header, Lisp_Object contents)
   CHECK_CONS (contents);
   isQ = NILP (header);
 
+  
   if (f==NULL)
     {
       useSheet = NO;
-    window = Qnil;
     }
-
-  if (FRAMEP (window))
-    f = XFRAME (window);
-  else if (WINDOWP (window))
-    {
-      CHECK_LIVE_WINDOW (window);
-      f = XFRAME (WINDOW_FRAME (XWINDOW (window)));
-    }
-  else
-    f = nil;
-  //CHECK_WINDOW (window);
 
   if (f) 
     {
