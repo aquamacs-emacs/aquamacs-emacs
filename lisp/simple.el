@@ -2244,7 +2244,10 @@ as an argument limits undo to changes within the current region."
     ;; the next command should not be a "consecutive undo".
     ;; So set `this-command' to something other than `undo'.
     (setq this-command 'undo-start)
-
+    ;; We need to set `undo-last-boundary' to nil as we are about to
+    ;; delete the last boundary, so we want to not assume anything about
+    ;; the boundary before this one
+    (setq undo-last-boundary nil)
     (unless (and (eq last-command 'undo)
 		 (or (eq pending-undo-list t)
 		     ;; If something (a timer or filter?) changed the buffer
