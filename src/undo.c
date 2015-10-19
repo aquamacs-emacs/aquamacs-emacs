@@ -40,7 +40,7 @@ static Lisp_Object pending_boundary;
 void
 run_undoable_change ()
 {
-  call0(Qundo_undoable_change);
+  call0 (Qundo_undoable_change);
 }
 
 /* Record point as it was at beginning of this command (if necessary)
@@ -74,7 +74,8 @@ record_point (ptrdiff_t pt)
   if (at_boundary
       && current_buffer == last_boundary_buffer
       && last_boundary_position != pt)
-    bset_undo_list (current_buffer,
+
+   bset_undo_list (current_buffer,
 		    Fcons (make_number (last_boundary_position),
 			   BVAR (current_buffer, undo_list)));
 }
@@ -248,9 +249,8 @@ record_property_change (ptrdiff_t beg, ptrdiff_t length,
     pending_boundary = Fcons (Qnil, Qnil);
 
   /* Switch temporarily to the buffer that was changed.  */
-  current_buffer = buf;
+  set_buffer_internal (buf);
 
-  // PWL running with the wrong current-buffer
   run_undoable_change ();
 
   if (MODIFF <= SAVE_MODIFF)
@@ -262,7 +262,8 @@ record_property_change (ptrdiff_t beg, ptrdiff_t length,
   bset_undo_list (current_buffer,
 		  Fcons (entry, BVAR (current_buffer, undo_list)));
 
-  current_buffer = obuf;
+  /* Reset the buffer */
+  set_buffer_internal (obuf);
 }
 
 DEFUN ("undo-boundary", Fundo_boundary, Sundo_boundary, 0, 0, 0,
@@ -293,7 +294,7 @@ but another undo command will undo to the previous boundary.  */)
   last_boundary_position = PT;
   last_boundary_buffer = current_buffer;
 
-  Fset(Qundo_last_boundary,Qnil);
+  Fset (Qundo_last_boundary,Qnil);
   return Qnil;
 }
 
@@ -565,12 +566,4 @@ so it must make sure not to do a lot of consing.  */);
 This hook will be run with `current-buffer' as the buffer that has
 changed.  Recent means since the last boundary. */);
   Vundo_first_undoable_change_hook = Qnil;
-
-  DEFVAR_LISP ("undo-last-boundary",
-               Vundo_last_boundary,
-               doc: /* TODO
-*/);
-
-  Fmake_variable_buffer_local (Qundo_last_boundary);
-  Vundo_last_boundary = Qnil;
 }

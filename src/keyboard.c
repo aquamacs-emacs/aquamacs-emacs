@@ -1502,6 +1502,8 @@ command_loop_1 (void)
               }
 #endif
 
+            Fset (Qundo__last_command_amalgamating, Qnil);
+
             /* if (NILP (KVAR (current_kboard, Vprefix_arg))) /\* FIXME: Why?  --Stef  *\/ */
             /*   { */
             /*     Fundo_auto_boundary(); */
@@ -11087,6 +11089,8 @@ syms_of_keyboard (void)
   /* Hooks to run before and after each command.  */
   DEFSYM (Qpre_command_hook, "pre-command-hook");
   DEFSYM (Qpost_command_hook, "post-command-hook");
+
+  DEFSYM (Qundo__last_command_amalgamating, "undo--last-command-amalgamating");
 
   DEFSYM (Qdeferred_action_function, "deferred-action-function");
   DEFSYM (Qdelayed_warnings_hook, "delayed-warnings-hook");

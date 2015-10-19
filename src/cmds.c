@@ -265,9 +265,8 @@ because it respects values of `delete-active-region' and `overwrite-mode'.  */)
 
   CHECK_NUMBER (n);
 
-  // PWL
-  //if (abs (XINT (n)) < 2)
-  //  remove_excessive_undo_boundaries ();
+  if (abs (XINT (n)) < 2)
+    call0(Qundo_auto_pre_amalgamating_command);
 
   pos = PT + XINT (n);
   if (NILP (killflag))
@@ -312,10 +311,10 @@ At the end, it runs `post-self-insert-hook'.  */)
   if (XFASTINT (n) < 0)
     error ("Negative repetition argument %"pI"d", XFASTINT (n));
 
-  // PWL remove for now
-  //if (XFASTINT (n) < 2)
+  if (XFASTINT (n) < 2)
+    call0(Qundo_auto_pre_amalgamating_command);
+
   //remove_excessive_undo_boundaries ();
-  call0(Qundo_auto_pre_self_insert_command);
 
   /* Barf if the key that invoked this was not a character.  */
   if (!CHARACTERP (last_command_event))
@@ -530,8 +529,8 @@ internal_self_insert (int c, EMACS_INT n)
 void
 syms_of_cmds (void)
 {
-  DEFSYM (Qundo_auto_pre_self_insert_command,
-          "undo-auto-pre-self-insert-command" );
+  DEFSYM (Qundo_auto_pre_amalgamating_command,
+          "undo-auto-pre-amalgamating-command" );
 
   DEFSYM (Qkill_forward_chars, "kill-forward-chars");
 
