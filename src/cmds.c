@@ -290,8 +290,6 @@ At the end, it runs `post-self-insert-hook'.  */)
     int character = translate_char (Vtranslation_table_for_input,
 				    XINT (last_command_event));
     int val = internal_self_insert (character, XFASTINT (n));
-    if (val == 2)
-      nonundocount = 0;
     frame_make_pointer_invisible (SELECTED_FRAME ());
   }
 
@@ -528,7 +526,6 @@ keys_of_cmds (void)
 {
   int n;
 
-  nonundocount = 0;
   initial_define_key (global_map, Ctl ('I'), "self-insert-command");
   for (n = 040; n < 0177; n++)
     initial_define_key (global_map, n, "self-insert-command");

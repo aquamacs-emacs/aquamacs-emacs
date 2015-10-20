@@ -2828,7 +2828,7 @@ REASON describes the reason that the boundary is being added; see
 
 (defun undo--auto-boundary-timer ()
   "Timer which will run `undo--auto-boundary-timer'."
-  (undo-auto-boundary 'timer)
+  (undo--auto-boundary 'timer)
   (setq undo-auto-current-boundary-timer nil))
 
 (defun undo--auto-boundary-ensure-timer ()
@@ -2850,7 +2850,7 @@ See also `undo--buffer-undoably-changed'.")
   "Add an `undo-boundary' is appropriate buffers."
   (unless (eq buffer-undo-list t)
     (undo--auto-boundary
-     (if undo--last-command-amalgamating
+     (if undo--this-command-amalgamating
          'amalgamate
        'command))))
 
@@ -2861,7 +2861,7 @@ the previous `undo-boundary' if a series of `self-insert-command'
 calls have been made."
   (let ((last-amalgamating-count
          (undo--last-boundary-amalgamating-p)))
-    (setq undo--last-command-amalgamating t)
+    (setq undo--this-command-amalgamating t)
     (when
         last-amalgamating-count
       (if
@@ -2870,7 +2870,7 @@ calls have been made."
            (eq this-command last-command))
           (setq buffer-undo-list
                 (cdr buffer-undo-list))
-        (setq undo--last-boundary 0)))))
+        (setq undo-last-boundary 0)))))
 
 (defun undo--undoable-change ()
   "Called after every undoable buffer change."

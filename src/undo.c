@@ -40,7 +40,7 @@ static Lisp_Object pending_boundary;
 void
 run_undoable_change ()
 {
-  call0 (Qundo_undoable_change);
+  call0 (Qundo__undoable_change);
 }
 
 /* Record point as it was at beginning of this command (if necessary)
@@ -490,7 +490,7 @@ void
 syms_of_undo (void)
 {
   DEFSYM (Qinhibit_read_only, "inhibit-read-only");
-  DEFSYM (Qundo_undoable_change, "undo-undoable-change");
+  DEFSYM (Qundo__undoable_change, "undo--undoable-change");
   DEFSYM (Qundo_last_boundary, "undo-last-boundary");
 
   /* Marker for function call undo list elements.  */
