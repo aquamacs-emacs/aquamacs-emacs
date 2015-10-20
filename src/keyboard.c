@@ -1502,12 +1502,8 @@ command_loop_1 (void)
               }
 #endif
 
-            Fset (Qundo__last_command_amalgamating, Qnil);
+            Fset (Qundo__this_command_amalgamating, Qnil);
 
-            /* if (NILP (KVAR (current_kboard, Vprefix_arg))) /\* FIXME: Why?  --Stef  *\/ */
-            /*   { */
-            /*     Fundo_auto_boundary(); */
-            /*   } */
             call1 (Qcommand_execute, Vthis_command);
 
 #ifdef HAVE_WINDOW_SYSTEM
@@ -1523,6 +1519,8 @@ command_loop_1 (void)
       kset_last_prefix_arg (current_kboard, Vcurrent_prefix_arg);
 
       safe_run_hooks (Qpost_command_hook);
+
+      call0 (Qundo__auto_post_command);
 
       /* If displaying a message, resize the echo area window to fit
 	 that message's size exactly.  */
@@ -11090,7 +11088,8 @@ syms_of_keyboard (void)
   DEFSYM (Qpre_command_hook, "pre-command-hook");
   DEFSYM (Qpost_command_hook, "post-command-hook");
 
-  DEFSYM (Qundo__last_command_amalgamating, "undo--last-command-amalgamating");
+  DEFSYM (Qundo__this_command_amalgamating, "undo--this-command-amalgamating");
+  DEFSYM (Qundo__auto_post_command, "undo--auto-post-command");
 
   DEFSYM (Qdeferred_action_function, "deferred-action-function");
   DEFSYM (Qdelayed_warnings_hook, "delayed-warnings-hook");

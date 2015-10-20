@@ -2758,21 +2758,6 @@ with < or <= based on USE-<."
 ;; This section adds a new undo-boundary at either after a command is
 ;; called or in some cases on a timer called after a change is made in
 ;; any buffer.
-(defmacro undo-auto-message (&rest args)
-  `(let ((msg
-          (format ,@args)))
-     (with-current-buffer
-         (get-buffer-create
-          "*undo-auto-log*")
-       (goto-char (point-max))
-       (insert msg)
-       (insert "\n"))))
-
-(with-current-buffer
-    (get-buffer-create "*undo-auto-log*")
-  (setq buffer-undo-list t))
-(undo-auto-message "initialized")
-
 (defvar-local undo-last-boundary nil
   "Describe the cause of the last undo-boundary.
 
@@ -2790,15 +2775,21 @@ this section.
 If it is equal to a number, then the last boundary was inserted
 by an amalgamating command.")
 
-(defvar undo--last-command-amalgamating nil)
+(defvar undo-auto-current-boundary-timer nil
+  "Current timer which will run `undo-auto-boundary-timer' or nil.
 
-(defvar undo--amalgamating-commands '(self-insert-command delete-char))
+If set to non-nil, this will effectively disable the timer.")
 
-(defun undo-needs-boundary-p ()
+(defvar undo--this-command-amalgamating nil
+  "Non-nil if `this-command' should be amalgamated.
+This variable is set to nil by the command loop and is set by
+`undo--auto-pre-amalgamating-command'." )
+
+(defun undo--needs-boundary-p ()
   "Return non-nil if `buffer-undo-list' needs a boundary at the start."
   (car-safe buffer-undo-list))
 
-(defun undo-last-boundary-amalgamating-p ()
+(defun undo--last-boundary-amalgamating-p ()
   "Return non-nil if the last boundary was from an amalgamating command.
 Amalgamating commands are either `self-insert-command' and
 `delete-char'.  The return value is actual number of times one of
@@ -2806,15 +2797,15 @@ these commands have been run if non-nil."
   (and (integerp undo-last-boundary)
        undo-last-boundary))
 
-(defun undo-ensure-boundary (reason)
+(defun undo--ensure-boundary (reason)
   "Add an `undo-boundary' to the current buffer if needed.
 REASON describes the reason that the boundary is being added; see
-`undo-last-boundary' for more information. "
+`undo-last-boundary' for more information."
   (when (and
          buffer-undo-list
-         (undo-needs-boundary-p))
+         (undo--needs-boundary-p))
     (let ((last-amalgamating
-           (undo-last-boundary-amalgamating-p)))
+           (undo--last-boundary-amalgamating-p)))
       (when (and last-amalgamating
                  (eq 'amalgamate reason))
         (setq reason (1+ last-amalgamating)))
@@ -2826,55 +2817,53 @@ REASON describes the reason that the boundary is being added; see
     (undo-auto-message "last-boundary now %s" undo-last-boundary)
     t))
 
-(defun undo-auto-boundary (reason)
-  "Checks recently change buffers and adds a boundary if necessary.
-
-See also `undo-ensure-boundary'."
-  (dolist (b undo-undoably-changed-buffers)
+(defun undo--auto-boundary (reason)
+  "Check recently change buffers and add a boundary if necessary.
+REASON describes the reason that the boundary is being added; see
+`undo-last-boundary' for more information."
+  (dolist (b undo--undoably-changed-buffers)
           (when (buffer-live-p b)
             (with-current-buffer b
-              (undo-ensure-boundary reason))))
-  (setq undo-undoably-changed-buffers nil))
+              (undo--ensure-boundary reason))))
+  (setq undo--undoably-changed-buffers nil))
 
-(defvar undo-auto-current-boundary-timer nil
-  "Current timer which will run `undo-auto-boundary-timer' or nil.")
-
-(defun undo-auto-boundary-timer ()
-  "Timer which will run `undo-auto-boundary-timer'."
+(defun undo--auto-boundary-timer ()
+  "Timer which will run `undo--auto-boundary-timer'."
   ;;(undo-auto-message "running timer")
   (undo-auto-boundary 'timer)
   (setq undo-auto-current-boundary-timer nil))
 
-(defun undo-auto-boundary-ensure-timer ()
+(defun undo--auto-boundary-ensure-timer ()
   "Ensure that the `undo-auto-boundary-timer' is set."
   (unless undo-auto-current-boundary-timer
     (setq undo-auto-current-boundary-timer
           (run-at-time 10 nil 'undo-auto-boundary-timer))))
 
-(defvar undo-undoably-changed-buffers nil
+(defvar undo--undoably-changed-buffers nil
   "List of buffers that have changed recently.
 
-This list is maintained by `undo-undoable-change' and
-`undo-auto-boundary' and can be affected by changes to their
+This list is maintained by `undo--undoable-change' and
+`undo--auto-boundary' and can be affected by changes to their
 default values.
 
-See also `undo-buffer-undoably-changed'.")
+See also `undo--buffer-undoably-changed'.")
 
-(defun undo-auto-post-command-hook ()
+(defun undo--auto-post-command ()
+  "Add an `undo-boundary' is appropriate buffers."
   (unless (eq buffer-undo-list t)
-    (undo-auto-boundary
+    (undo--auto-boundary
      (if undo--last-command-amalgamating
          'amalgamate
        'command))))
 
-(defun undo-auto-pre-amalgamating-command ()
+(defun undo--auto-pre-amalgamating-command ()
   "Amalgamate undo if necessary.
 This function is called before `self-insert-command', and removes
 the previous `undo-boundary' if a series of `self-insert-command'
 calls have been made."
   (condition-case err
       (let ((last-amalgamating-count
-             (undo-last-boundary-amalgamating-p)))
+             (undo--last-boundary-amalgamating-p)))
         (setq undo--last-command-amalgamating t)
         (when
             last-amalgamating-count
@@ -2886,19 +2875,15 @@ calls have been made."
                      (setq buffer-undo-list
                            (cdr buffer-undo-list)))
             (progn (undo-auto-message "Reset sic to 0")
-                   (setq undo-last-boundary 0)))))
+                   (setq undo--last-boundary 0)))))
     (error
      (undo-auto-message "pre-command-error %s"
                         (error-message-string err)))))
 
-(defun undo-undoable-change ()
+(defun undo--undoable-change ()
   "Called after every undoable buffer change."
-  ;;(undo-auto-message "undo-auto adding-to-list %s" (current-buffer))
-  (add-to-list 'undo-undoably-changed-buffers (current-buffer))
-  (undo-auto-boundary-ensure-timer))
-
-(add-hook 'post-command-hook
-          #'undo-auto-post-command-hook)
+  (add-to-list 'undo--undoably-changed-buffers (current-buffer))
+  (undo--auto-boundary-ensure-timer))
 
 ;; End auto-boundary section
 

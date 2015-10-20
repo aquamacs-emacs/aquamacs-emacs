@@ -74,8 +74,7 @@ record_point (ptrdiff_t pt)
   if (at_boundary
       && current_buffer == last_boundary_buffer
       && last_boundary_position != pt)
-
-   bset_undo_list (current_buffer,
+    bset_undo_list (current_buffer,
 		    Fcons (make_number (last_boundary_position),
 			   BVAR (current_buffer, undo_list)));
 }
@@ -308,7 +307,7 @@ Returns nil if `buffer-undo-list' is t; that is there is no undo list.
 Otherwise, returns the size of `buffer-undo-list' in bytes.*/)
      (Lisp_Object n)
 {
-  // We do not have an undo_list anyway.
+  /* We do not have an undo_list anyway.*/
   if (EQ (BVAR (current_buffer, undo_list), Qt))
     return Qnil;
 
@@ -331,7 +330,7 @@ Otherwise, returns the size of `buffer-undo-list' in bytes.*/)
       size_so_far += sizeof (struct Lisp_Cons);
       if (CONSP (elt))
         {
-          // We have a boundary, so check we do not have too many.
+          /* We have a boundary, so check we do not have too many.*/
           if (NILP (elt))
             {
               boundary_so_far = boundary_so_far + 1;
@@ -344,7 +343,7 @@ Otherwise, returns the size of `buffer-undo-list' in bytes.*/)
                             + SCHARS (XCAR (elt)));
         }
 
-      // and advance
+      /* and advance */
       prev = next;
       next = XCDR (next);
     }
@@ -558,12 +557,4 @@ so it must make sure not to do a lot of consing.  */);
   DEFVAR_BOOL ("undo-inhibit-record-point", undo_inhibit_record_point,
 	       doc: /* Non-nil means do not record `point' in `buffer-undo-list'.  */);
   undo_inhibit_record_point = false;
-
-  DEFVAR_LISP ("undo-first-undoable-change-hook",
-               Vundo_first_undoable_change_hook,
-               doc: /* Normal hook run when a buffer has its first recent undo-able change.
-
-This hook will be run with `current-buffer' as the buffer that has
-changed.  Recent means since the last boundary. */);
-  Vundo_first_undoable_change_hook = Qnil;
 }
