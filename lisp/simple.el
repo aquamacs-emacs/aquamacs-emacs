@@ -2814,7 +2814,6 @@ REASON describes the reason that the boundary is being added; see
             (if (eq 'amalgamate reason)
                 0
               reason)))
-    (undo-auto-message "last-boundary now %s" undo-last-boundary)
     t))
 
 (defun undo--auto-boundary (reason)
@@ -2829,7 +2828,6 @@ REASON describes the reason that the boundary is being added; see
 
 (defun undo--auto-boundary-timer ()
   "Timer which will run `undo--auto-boundary-timer'."
-  ;;(undo-auto-message "running timer")
   (undo-auto-boundary 'timer)
   (setq undo-auto-current-boundary-timer nil))
 
@@ -2861,24 +2859,18 @@ See also `undo--buffer-undoably-changed'.")
 This function is called before `self-insert-command', and removes
 the previous `undo-boundary' if a series of `self-insert-command'
 calls have been made."
-  (condition-case err
-      (let ((last-amalgamating-count
-             (undo--last-boundary-amalgamating-p)))
-        (setq undo--last-command-amalgamating t)
-        (when
-            last-amalgamating-count
-          (if
-              (and
-               (< last-amalgamating-count 20)
-               (eq this-command last-command))
-              (progn (undo-auto-message "(changed) Removing last undo")
-                     (setq buffer-undo-list
-                           (cdr buffer-undo-list)))
-            (progn (undo-auto-message "Reset sic to 0")
-                   (setq undo--last-boundary 0)))))
-    (error
-     (undo-auto-message "pre-command-error %s"
-                        (error-message-string err)))))
+  (let ((last-amalgamating-count
+         (undo--last-boundary-amalgamating-p)))
+    (setq undo--last-command-amalgamating t)
+    (when
+        last-amalgamating-count
+      (if
+          (and
+           (< last-amalgamating-count 20)
+           (eq this-command last-command))
+          (setq buffer-undo-list
+                (cdr buffer-undo-list))
+        (setq undo--last-boundary 0)))))
 
 (defun undo--undoable-change ()
   "Called after every undoable buffer change."
