@@ -1520,7 +1520,7 @@ command_loop_1 (void)
 
       safe_run_hooks (Qpost_command_hook);
 
-      call0 (Qundo__auto_post_command);
+      call0 (Qundo__auto_add_boundary);
 
       /* If displaying a message, resize the echo area window to fit
 	 that message's size exactly.  */
@@ -11089,7 +11089,7 @@ syms_of_keyboard (void)
   DEFSYM (Qpost_command_hook, "post-command-hook");
 
   DEFSYM (Qundo__this_command_amalgamating, "undo--this-command-amalgamating");
-  DEFSYM (Qundo__auto_post_command, "undo--auto-post-command");
+  DEFSYM (Qundo__auto_add_boundary, "undo--auto-add-boundary");
 
   DEFSYM (Qdeferred_action_function, "deferred-action-function");
   DEFSYM (Qdelayed_warnings_hook, "delayed-warnings-hook");

@@ -2846,7 +2846,7 @@ default values.
 
 See also `undo--buffer-undoably-changed'.")
 
-(defun undo--auto-post-command ()
+(defun undo--auto-add-boundary ()
   "Add an `undo-boundary' is appropriate buffers."
   (unless (eq buffer-undo-list t)
     (undo--auto-boundary
