@@ -485,7 +485,7 @@ names from FILE for completion.  The following predefined FUNCTIONs exists:
  * `tramp-parse-netrc'       for \"~/.netrc\" like files.
  * `tramp-parse-putty'       for PuTTY registered sessions.
 
-FUNCTION can also be a customer defined function.  For more details see
+FUNCTION can also be a user defined function.  For more details see
 the info pages.")
 
 (defconst tramp-echo-mark-marker "_echo"
@@ -4005,7 +4005,7 @@ be granted."
 	      (or (tramp-get-method-parameter vec 'tramp-tmpdir) "/tmp"))))
     (with-tramp-connection-property vec "tmpdir"
       (or (and (file-directory-p dir) (file-writable-p dir)
-	       (file-remote-p dir 'localname))
+	       (tramp-file-name-handler 'file-remote-p dir 'localname))
 	  (tramp-error vec 'file-error "Directory %s not accessible" dir)))
     dir))
 
@@ -4048,6 +4048,9 @@ Return the local name of the temporary file."
   "Like `make-auto-save-file-name' for Tramp files.
 Returns a file name in `tramp-auto-save-directory' for autosaving
 this file, if that variable is non-nil."
+  (when (stringp tramp-auto-save-directory)
+    (setq tramp-auto-save-directory
+	  (expand-file-name tramp-auto-save-directory)))
   ;; Create directory.
   (unless (or (null tramp-auto-save-directory)
 	      (file-exists-p tramp-auto-save-directory))
@@ -4411,8 +4414,6 @@ Only works for Bourne-like shells."
 
 ;;; TODO:
 
-;; * Rewrite `tramp-shell-quote-argument' to abstain from using
-;;   `shell-quote-argument'.
 ;; * In Emacs 21, `insert-directory' shows total number of bytes used
 ;;   by the files in that directory.  Add this here.
 ;; * Avoid screen blanking when hitting `g' in dired.  (Eli Tziperman)

@@ -46,9 +46,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "commands.h"
 #include "character.h"
 #include "buffer.h"
-#include "charset.h"
 #include "keyboard.h"
-#include "frame.h"
 #include "termhooks.h"
 #include "blockinput.h"
 #include "puresize.h"
@@ -341,7 +339,7 @@ Return PARENT.  PARENT should be nil or another keymap.  */)
 	 If we came to the end, add the parent in PREV.  */
       if (!CONSP (list) || KEYMAPP (list))
 	{
-	  CHECK_IMPURE (prev);
+	  CHECK_IMPURE (prev, XCONS (prev));
 	  XSETCDR (prev, parent);
 	  return parent;
 	}
@@ -750,7 +748,7 @@ store_in_keymap (Lisp_Object keymap, register Lisp_Object idx, Lisp_Object def)
 
   /* If we are preparing to dump, and DEF is a menu element
      with a menu item indicator, copy it to ensure it is not pure.  */
-  if (CONSP (def) && PURE_P (def)
+  if (CONSP (def) && PURE_P (XCONS (def))
       && (EQ (XCAR (def), Qmenu_item) || STRINGP (XCAR (def))))
     def = Fcons (XCAR (def), XCDR (def));
 
@@ -798,7 +796,7 @@ store_in_keymap (Lisp_Object keymap, register Lisp_Object idx, Lisp_Object def)
 	  {
 	    if (NATNUMP (idx) && XFASTINT (idx) < ASIZE (elt))
 	      {
-		CHECK_IMPURE (elt);
+		CHECK_IMPURE (elt, XVECTOR (elt));
 		ASET (elt, XFASTINT (idx), def);
 		return def;
 	      }
@@ -851,7 +849,7 @@ store_in_keymap (Lisp_Object keymap, register Lisp_Object idx, Lisp_Object def)
 	      }
 	    else if (EQ (idx, XCAR (elt)))
 	      {
-		CHECK_IMPURE (elt);
+		CHECK_IMPURE (elt, XCONS (elt));
 		XSETCDR (elt, def);
 		return def;
 	      }
@@ -895,7 +893,7 @@ store_in_keymap (Lisp_Object keymap, register Lisp_Object idx, Lisp_Object def)
 	}
       else
 	elt = Fcons (idx, def);
-      CHECK_IMPURE (insertion_point);
+      CHECK_IMPURE (insertion_point, XCONS (insertion_point));
       XSETCDR (insertion_point, Fcons (elt, XCDR (insertion_point)));
     }
   }

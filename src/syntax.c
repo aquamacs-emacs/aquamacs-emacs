@@ -23,12 +23,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <sys/types.h>
 
 #include "lisp.h"
-#include "commands.h"
 #include "character.h"
 #include "buffer.h"
-#include "keymap.h"
 #include "regex.h"
-
 #include "syntax.h"
 #include "intervals.h"
 #include "category.h"
@@ -3672,6 +3669,7 @@ See the info node `(elisp)Syntax Properties' for a description of the
 	      doc: /* Position up to which syntax-table properties have been set.  */);
   syntax_propertize__done = -1;
   DEFSYM (Qinternal__syntax_propertize, "internal--syntax-propertize");
+  Fmake_variable_buffer_local (intern ("syntax-propertize--done"));
 
   words_include_escapes = 0;
   DEFVAR_BOOL ("words-include-escapes", words_include_escapes,

@@ -292,7 +292,9 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include "lisp.h"
 #include "atimer.h"
+#include "composite.h"
 #include "keyboard.h"
+#include "systime.h"
 #include "frame.h"
 #include "window.h"
 #include "termchar.h"
@@ -303,13 +305,11 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "indent.h"
 #include "commands.h"
 #include "keymap.h"
-#include "macros.h"
 #include "disptab.h"
 #include "termhooks.h"
 #include "termopts.h"
 #include "intervals.h"
 #include "coding.h"
-#include "process.h"
 #include "region-cache.h"
 #include "font.h"
 #include "fontset.h"
@@ -434,22 +434,58 @@ static Lisp_Object Vmessage_stack;
 
 static bool message_enable_multibyte;
 
-/* Nonzero if we should redraw the mode lines on the next redisplay.
-   If it has value REDISPLAY_SOME, then only redisplay the mode lines where
-   the `redisplay' bit has been set.  Otherwise, redisplay all mode lines
-   (the number used is then only used to track down the cause for this
-   full-redisplay).  */
+/* At each redisplay cycle, we should refresh everything there is to refresh.
+   To do that efficiently, we use many optimizations that try to make sure we
+   don't waste too much time updating things that haven't changed.
+   The coarsest such optimization is that, in the most common cases, we only
+   look at the selected-window.
 
-int update_mode_lines;
+   To know whether other windows should be considered for redisplay, we use the
+   variable windows_or_buffers_changed: as long as it is 0, it means that we
+   have not noticed anything that should require updating anything else than
+   the selected-window.  If it is set to REDISPLAY_SOME, it means that since
+   last redisplay, some changes have been made which could impact other
+   windows.  To know which ones need redisplay, every buffer, window, and frame
+   has a `redisplay' bit, which (if true) means that this object needs to be
+   redisplayed.  If windows_or_buffers_changed is 0, we know there's no point
+   looking for those `redisplay' bits (actually, there might be some such bits
+   set, but then only on objects which aren't displayed anyway).
 
-/* Nonzero if window sizes or contents other than selected-window have changed
-   since last redisplay that finished.
-   If it has value REDISPLAY_SOME, then only redisplay the windows where
-   the `redisplay' bit has been set.  Otherwise, redisplay all windows
-   (the number used is then only used to track down the cause for this
-   full-redisplay).  */
+   OTOH if it's non-zero we wil have to loop through all windows and then check
+   the `redisplay' bit of the corresponding window, frame, and buffer, in order
+   to decide whether that window needs attention or not.  Note that we can't
+   just look at the frame's redisplay bit to decide that the whole frame can be
+   skipped, since even if the frame's redisplay bit is unset, some of its
+   windows's redisplay bits may be set.
+
+   Mostly for historical reasons, windows_or_buffers_changed can also take
+   other non-zero values.  In that case, the precise value doesn't matter (it
+   encodes the cause of the setting but is only used for debugging purposes),
+   and what it means is that we shouldn't pay attention to any `redisplay' bits
+   and we should simply try and redisplay every window out there.  */
 
 int windows_or_buffers_changed;
+
+/* Nonzero if we should redraw the mode lines on the next redisplay.
+   Similarly to `windows_or_buffers_changed', If it has value REDISPLAY_SOME,
+   then only redisplay the mode lines in those buffers/windows/frames where the
+   `redisplay' bit has been set.
+   For any other value, redisplay all mode lines (the number used is then only
+   used to track down the cause for this full-redisplay).
+
+   Since the frame title uses the same %-constructs as the mode line
+   (except %c and %l), if this variable is non-zero, we also consider
+   redisplaying the title of each frame, see x_consider_frame_title.
+
+   The `redisplay' bits are the same as those used for
+   windows_or_buffers_changed, and setting windows_or_buffers_changed also
+   causes recomputation of the mode lines of all those windows.  IOW this
+   variable only has an effect if windows_or_buffers_changed is zero, in which
+   case we should only need to redisplay the mode-line of those objects with
+   a `redisplay' bit set but not the window's text content (tho we may still
+   need to refresh the text content of the selected-window).  */
+
+int update_mode_lines;
 
 /* True after display_mode_line if %l was used and it displayed a
    line number.  */
@@ -12313,6 +12349,7 @@ PIXELWISE non-nil means return the height of the tool bar in pixels.  */)
 static bool
 redisplay_tool_bar (struct frame *f)
 {
+  f->tool_bar_redisplayed = true;
 #if defined (USE_GTK) || defined (HAVE_NS)
 
   if (FRAME_EXTERNAL_TOOL_BAR (f))
@@ -13339,9 +13376,6 @@ redisplay_internal (void)
   /* True means redisplay has to redisplay the miniwindow.  */
   bool update_miniwindow_p = false;
 
-  /* True means we need to redraw frames whose 'redisplay' bit is set.  */
-  bool consider_some_frames_p = false;
-
   TRACE ((stderr, "redisplay_internal %d\n", redisplaying_p));
 
   /* No redisplay if running in batch mode or frame is not yet fully
@@ -13390,8 +13424,6 @@ redisplay_internal (void)
   forget_escape_and_glyphless_faces ();
 
   inhibit_free_realized_faces = false;
-
-  consider_some_frames_p = false;
 
   /* If face_change, init_iterator will free all realized faces, which
      includes the faces referenced from current matrices.  So, we
@@ -13563,7 +13595,6 @@ redisplay_internal (void)
       && !FRAME_OBSCURED_P (XFRAME (w->frame))
       && !XFRAME (w->frame)->cursor_type_changed
       && !XFRAME (w->frame)->face_change
-      && !XFRAME (w->frame)->redisplay
       /* Make sure recorded data applies to current buffer, etc.  */
       && this_line_buffer == current_buffer
       && match_p
@@ -13759,31 +13790,14 @@ redisplay_internal (void)
 #endif
 
   /* Build desired matrices, and update the display.  If
-     consider_all_windows_p, do it for all windows on all frames.  If
-     a frame's 'redisplay' flag is set, do it for all windows on each
-     such frame.  Otherwise do it for selected_window, only.  */
+     consider_all_windows_p, do it for all windows on all frames that
+     require redisplay, as specified by their 'redisplay' flag.
+     Otherwise do it for selected_window, only.  */
 
-  if (!consider_all_windows_p)
+  if (consider_all_windows_p)
     {
       FOR_EACH_FRAME (tail, frame)
-	{
-	  if (XFRAME (frame)->redisplay
-	      && XFRAME (frame) != sf
-	      && !FRAME_INITIAL_P (XFRAME (frame)))
-	    {
-	      consider_some_frames_p = true;
-	      break;
-	    }
-	}
-    }
-
-  if (consider_all_windows_p || consider_some_frames_p)
-    {
-      FOR_EACH_FRAME (tail, frame)
-	{
-	  if (XFRAME (frame)->redisplay || consider_all_windows_p)
-	    XFRAME (frame)->updated_p = false;
-	}
+	XFRAME (frame)->updated_p = false;
 
       propagate_buffer_redisplay ();
 
@@ -13797,15 +13811,13 @@ redisplay_internal (void)
 	      && !EQ (FRAME_TTY (f)->top_frame, frame))
 	    continue;
 
-	  if (!consider_all_windows_p && !f->redisplay)
-	    continue;
-
 	retry_frame:
 	  if (FRAME_WINDOW_P (f) || FRAME_TERMCAP_P (f) || f == sf)
 	    {
 	      bool gcscrollbars
 		/* Only GC scrollbars when we redisplay the whole frame.  */
 		= f->redisplay || !REDISPLAY_SOME_P ();
+	      bool f_redisplay_flag = f->redisplay;
 	      /* Mark all the scroll bars to be removed; we'll redeem
 		 the ones we want when we redisplay their windows.  */
 	      if (gcscrollbars && FRAME_TERMINAL (f)->condemn_scroll_bars_hook)
@@ -13848,6 +13860,20 @@ redisplay_internal (void)
 		      if (hscroll_windows (f->root_window))
 			goto retry_frame;
 		    }
+
+		  /* If the frame's redisplay flag was not set before
+		     we went about redisplaying its windows, but it is
+		     set now, that means we employed some redisplay
+		     optimizations inside redisplay_windows, and
+		     bypassed producing some screen lines.  But if
+		     f->redisplay is now set, it might mean the old
+		     faces are no longer valid (e.g., if redisplaying
+		     some window called some Lisp which defined a new
+		     face or redefined an existing face), so trying to
+		     use them in update_frame will segfault.
+		     Therefore, we must redisplay this frame.  */
+		  if (!f_redisplay_flag && f->redisplay)
+		    goto retry_frame;
 
 		  /* Prevent various kinds of signals during display
 		     update.  stdio is not robust about handling
@@ -13902,9 +13928,23 @@ redisplay_internal (void)
       /* Compare desired and current matrices, perform output.  */
 
     update:
-      /* If fonts changed, display again.  */
-      if (sf->fonts_changed)
-	goto retry;
+      /* If fonts changed, display again.  Likewise if redisplay_window_1
+	 above caused some change (e.g., a change in faces) that requires
+	 considering the entire frame again.  */
+      if (sf->fonts_changed || sf->redisplay)
+	{
+	  if (sf->redisplay)
+	    {
+	      /* Set this to force a more thorough redisplay.
+		 Otherwise, we might immediately loop back to the
+		 above "else-if" clause (since all the conditions that
+		 led here might still be true), and we will then
+		 infloop, because the selected-frame's redisplay flag
+		 is not (and cannot be) reset.  */
+	      windows_or_buffers_changed = 50;
+	    }
+	  goto retry;
+	}
 
       /* Prevent freeing of realized faces, since desired matrices are
 	 pending that reference the faces we computed and cached.  */
@@ -15446,7 +15486,6 @@ try_cursor_movement (Lisp_Object window, struct text_pos startp,
       && !update_mode_lines
       && !windows_or_buffers_changed
       && !f->cursor_type_changed
-      && !f->redisplay
       && NILP (Vshow_trailing_whitespace)
       /* This code is not used for mini-buffer for the sake of the case
 	 of redisplaying to replace an echo area message; since in
@@ -16819,7 +16858,8 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
 
  finish_menu_bars:
 
-  /* When we reach a frame's selected window, redo the frame's menu bar.  */
+  /* When we reach a frame's selected window, redo the frame's menu
+     bar and the frame's title.  */
   if (update_mode_line
       && EQ (FRAME_SELECTED_WINDOW (f), window))
     {
@@ -16854,6 +16894,7 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
 	    ignore_mouse_drag_p = true;
 #endif
         }
+      x_consider_frame_title (w->frame);
 #endif
     }
 
@@ -17057,7 +17098,6 @@ try_window_reusing_current_matrix (struct window *w)
       /* Don't try to reuse the display if windows have been split
 	 or such.  */
       || windows_or_buffers_changed
-      || f->redisplay
       || f->cursor_type_changed)
     return false;
 
@@ -17835,7 +17875,7 @@ try_window_id (struct window *w)
     GIVE_UP (1);
 
   /* This flag is used to prevent redisplay optimizations.  */
-  if (windows_or_buffers_changed || f->cursor_type_changed || f->redisplay)
+  if (windows_or_buffers_changed || f->cursor_type_changed)
     GIVE_UP (2);
 
   /* This function's optimizations cannot be used if overlays have

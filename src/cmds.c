@@ -25,10 +25,8 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "character.h"
 #include "buffer.h"
 #include "syntax.h"
-#include "window.h"
 #include "keyboard.h"
 #include "keymap.h"
-#include "dispextern.h"
 #include "frame.h"
 
 static int internal_self_insert (int, EMACS_INT);
@@ -307,8 +305,8 @@ At the end, it runs `post-self-insert-hook'.  */)
 {
   CHECK_NUMBER (n);
 
-  if (XFASTINT (n) < 0)
-    error ("Negative repetition argument %"pI"d", XFASTINT (n));
+  if (XINT (n) < 0)
+    error ("Negative repetition argument %"pI"d", XINT (n));
 
   if (XFASTINT (n) < 2)
     remove_excessive_undo_boundaries ();
@@ -316,14 +314,15 @@ At the end, it runs `post-self-insert-hook'.  */)
   /* Barf if the key that invoked this was not a character.  */
   if (!CHARACTERP (last_command_event))
     bitch_at_user ();
-  else {
-    int character = translate_char (Vtranslation_table_for_input,
-				    XINT (last_command_event));
-    int val = internal_self_insert (character, XFASTINT (n));
-    if (val == 2)
-      nonundocount = 0;
-    frame_make_pointer_invisible (SELECTED_FRAME ());
-  }
+  else
+    {
+      int character = translate_char (Vtranslation_table_for_input,
+				      XINT (last_command_event));
+      int val = internal_self_insert (character, XFASTINT (n));
+      if (val == 2)
+	nonundocount = 0;
+      frame_make_pointer_invisible (SELECTED_FRAME ());
+    }
 
   return Qnil;
 }

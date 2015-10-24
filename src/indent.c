@@ -26,10 +26,8 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "category.h"
 #include "composite.h"
 #include "indent.h"
-#include "keyboard.h"
 #include "frame.h"
 #include "window.h"
-#include "termchar.h"
 #include "disptab.h"
 #include "intervals.h"
 #include "dispextern.h"
@@ -2082,7 +2080,11 @@ whether or not it is currently displayed in some window.  */)
 	}
       else
 	it_overshoot_count =
-	  !(it.method == GET_FROM_IMAGE || it.method == GET_FROM_STRETCH);
+	  (!(it.method == GET_FROM_IMAGE
+	     || it.method == GET_FROM_STRETCH)
+	    /* We will overshoot if lines are truncated and PT lies
+	       beyond the right margin of the window.  */
+	    || it.line_wrap == TRUNCATE);
 
       if (start_x_given)
 	{

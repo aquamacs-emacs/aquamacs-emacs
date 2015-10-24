@@ -49,13 +49,6 @@ GNUstep port and post-20 update by Adrian Robert (arobert@cogsci.ucsd.edu)
 #include "macfont.h"
 #endif
 
-#if 0
-int fns_trace_num = 1;
-#define NSTRACE(x)        fprintf (stderr, "%s:%d: [%d] " #x "\n",        \
-                                  __FILE__, __LINE__, ++fns_trace_num)
-#else
-#define NSTRACE(x)
-#endif
 
 #ifdef HAVE_NS
 
@@ -405,7 +398,7 @@ static void
 x_set_icon_name (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
 {
   NSView *view = FRAME_NS_VIEW (f);
-  NSTRACE (x_set_icon_name);
+  NSTRACE ("x_set_icon_name");
 
   /* see if it's changed */
   if (STRINGP (arg))
@@ -477,7 +470,7 @@ ns_set_name_internal (struct frame *f, Lisp_Object name)
 static void
 ns_set_name (struct frame *f, Lisp_Object name, int explicit)
 {
-  NSTRACE (ns_set_name);
+  NSTRACE ("ns_set_name");
 
   /* Make sure that requests from lisp code override requests from
      Emacs redisplay code.  */
@@ -518,7 +511,7 @@ ns_set_name (struct frame *f, Lisp_Object name, int explicit)
 static void
 x_explicitly_set_name (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
 {
-  NSTRACE (x_explicitly_set_name);
+  NSTRACE ("x_explicitly_set_name");
   ns_set_name (f, arg, 1);
 }
 
@@ -529,7 +522,7 @@ x_explicitly_set_name (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
 void
 x_implicitly_set_name (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
 {
-  NSTRACE (x_implicitly_set_name);
+  NSTRACE ("x_implicitly_set_name");
 
   /* Deal with NS specific format t.  */
   if (FRAME_NS_P (f) && ((FRAME_ICONIFIED_P (f) && EQ (Vicon_title_format, Qt))
@@ -546,7 +539,7 @@ x_implicitly_set_name (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
 static void
 x_set_title (struct frame *f, Lisp_Object name, Lisp_Object old_name)
 {
-  NSTRACE (x_set_title);
+  NSTRACE ("x_set_title");
   /* Don't change the title if it's already NAME.  */
   if (EQ (name, f->title))
     return;
@@ -574,7 +567,7 @@ ns_set_name_as_filename (struct frame *f)
   NSAutoreleasePool *pool;
   Lisp_Object encoded_name, encoded_filename;
   NSString *str;
-  NSTRACE (ns_set_name_as_filename);
+  NSTRACE ("ns_set_name_as_filename");
 
   if (f->explicit_name || ! NILP (f->title))
     return;
@@ -720,7 +713,23 @@ x_set_tool_bar_lines (struct frame *f, Lisp_Object value, Lisp_Object oldval)
         }
     }
 
-  x_set_window_size (f, 0, f->text_cols, f->text_lines, 0);
+  {
+    int inhibit
+      = ((f->after_make_frame
+	  && !f->tool_bar_resized
+	  && (EQ (frame_inhibit_implied_resize, Qt)
+	      || (CONSP (frame_inhibit_implied_resize)
+		  && !NILP (Fmemq (Qtool_bar_lines,
+				   frame_inhibit_implied_resize))))
+	  /* This will probably fail to DTRT in the
+	     fullheight/-width cases.  */
+	  && NILP (get_frame_param (f, Qfullscreen)))
+	 ? 0
+	 : 2);
+
+    frame_size_history_add (f, Qupdate_frame_tool_bar, 0, 0, Qnil);
+    adjust_frame_size (f, -1, -1, inhibit, 0, Qtool_bar_lines);
+  }
 }
 
 
@@ -754,7 +763,7 @@ ns_implicitly_set_icon_type (struct frame *f)
   NSAutoreleasePool *pool;
   BOOL setMini = YES;
 
-  NSTRACE (ns_implicitly_set_icon_type);
+  NSTRACE ("ns_implicitly_set_icon_type");
 
   block_input ();
   pool = [[NSAutoreleasePool alloc] init];
@@ -822,7 +831,7 @@ x_set_icon_type (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
   id image = nil;
   BOOL setMini = YES;
 
-  NSTRACE (x_set_icon_type);
+  NSTRACE ("x_set_icon_type");
 
   if (!NILP (arg) && SYMBOLP (arg))
     {
@@ -1123,6 +1132,7 @@ This function is an internal primitive--use `make-frame' instead.  */)
   Lisp_Object parent;
   struct kboard *kb;
   static int desc_ctr = 1;
+  int x_width = 0, x_height = 0;
 
   /* x_get_arg modifies parms.  */
   parms = Fcopy_alist (parms);
@@ -1309,7 +1319,7 @@ This function is an internal primitive--use `make-frame' instead.  */)
                        RES_TYPE_STRING);
 
   parms = get_geometry_from_preferences (dpyinfo, parms);
-  window_prompting = x_figure_window_size (f, parms, 1);
+  window_prompting = x_figure_window_size (f, parms, true, &x_width, &x_height);
 
   tem = x_get_arg (dpyinfo, parms, Qunsplittable, 0, 0, RES_TYPE_BOOLEAN);
   f->no_split = minibuffer_only || (!EQ (tem, Qunbound) && !EQ (tem, Qnil));
@@ -1362,6 +1372,11 @@ This function is an internal primitive--use `make-frame' instead.  */)
 
   /* Allow x_set_window_size, now.  */
   f->can_x_set_window_size = true;
+
+  if (x_width > 0)
+    SET_FRAME_WIDTH (f, x_width);
+  if (x_height > 0)
+    SET_FRAME_HEIGHT (f, x_height);
 
   adjust_frame_size (f, FRAME_TEXT_WIDTH (f), FRAME_TEXT_HEIGHT (f), 0, 1,
 		     Qx_create_frame_2);

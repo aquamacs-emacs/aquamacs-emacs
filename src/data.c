@@ -32,9 +32,6 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "buffer.h"
 #include "keyboard.h"
 #include "frame.h"
-#include "syssignal.h"
-#include "termhooks.h"  /* For FRAME_KBOARD reference in y-or-n-p.  */
-#include "font.h"
 #include "keymap.h"
 
 static void swap_in_symval_forwarding (struct Lisp_Symbol *,
@@ -560,7 +557,7 @@ DEFUN ("setcar", Fsetcar, Ssetcar, 2, 2, 0,
   (register Lisp_Object cell, Lisp_Object newcar)
 {
   CHECK_CONS (cell);
-  CHECK_IMPURE (cell);
+  CHECK_IMPURE (cell, XCONS (cell));
   XSETCAR (cell, newcar);
   return newcar;
 }
@@ -570,7 +567,7 @@ DEFUN ("setcdr", Fsetcdr, Ssetcdr, 2, 2, 0,
   (register Lisp_Object cell, Lisp_Object newcdr)
 {
   CHECK_CONS (cell);
-  CHECK_IMPURE (cell);
+  CHECK_IMPURE (cell, XCONS (cell));
   XSETCDR (cell, newcdr);
   return newcdr;
 }
@@ -2215,10 +2212,10 @@ bool-vector.  IDX starts at 0.  */)
   CHECK_NUMBER (idx);
   idxval = XINT (idx);
   CHECK_ARRAY (array, Qarrayp);
-  CHECK_IMPURE (array);
 
   if (VECTORP (array))
     {
+      CHECK_IMPURE (array, XVECTOR (array));
       if (idxval < 0 || idxval >= ASIZE (array))
 	args_out_of_range (array, idx);
       ASET (array, idxval, newelt);
@@ -2238,6 +2235,7 @@ bool-vector.  IDX starts at 0.  */)
     {
       int c;
 
+      CHECK_IMPURE (array, XSTRING (array));
       if (idxval < 0 || idxval >= SCHARS (array))
 	args_out_of_range (array, idx);
       CHECK_CHARACTER (newelt);
@@ -2602,6 +2600,7 @@ arith_driver (enum arithop code, ptrdiff_t nargs, Lisp_Object *args)
       accum = 0;
       break;
     case Amult:
+    case Adiv:
       accum = 1;
       break;
     case Alogand:
@@ -2657,7 +2656,7 @@ arith_driver (enum arithop code, ptrdiff_t nargs, Lisp_Object *args)
 	    accum *= next;
 	  break;
 	case Adiv:
-	  if (!argnum)
+	  if (! (argnum || nargs == 1))
 	    accum = next;
 	  else
 	    {
@@ -2726,7 +2725,7 @@ float_arith_driver (double accum, ptrdiff_t argnum, enum arithop code,
 	  accum *= next;
 	  break;
 	case Adiv:
-	  if (!argnum)
+	  if (! (argnum || nargs == 1))
 	    accum = next;
 	  else
 	    {
@@ -2781,9 +2780,11 @@ usage: (* &rest NUMBERS-OR-MARKERS)  */)
 }
 
 DEFUN ("/", Fquo, Squo, 1, MANY, 0,
-       doc: /* Return first argument divided by all the remaining arguments.
+       doc: /* Divide number by divisors and return the result.
+With two or more arguments, return first argument divided by the rest.
+With one argument, return 1 divided by the argument.
 The arguments must be numbers or markers.
-usage: (/ DIVIDEND &rest DIVISORS)  */)
+usage: (/ NUMBER &rest DIVISORS)  */)
   (ptrdiff_t nargs, Lisp_Object *args)
 {
   ptrdiff_t argnum;

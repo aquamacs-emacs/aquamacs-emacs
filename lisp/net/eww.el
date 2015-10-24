@@ -564,6 +564,15 @@ Currently this means either text/html or application/xhtml+xml."
 	(delete-region (point-min) (point-max))
 	(insert (or source "no source"))
 	(goto-char (point-min))
+        ;; Decode the source and set the buffer's encoding according
+        ;; to what the HTML source specifies in its 'charset' header,
+        ;; if any.
+        (let ((cs (find-auto-coding "" (point-max))))
+          (when (consp cs)
+            (setq cs (car cs))
+            (when (coding-system-p cs)
+              (decode-coding-region (point-min) (point-max) cs)
+              (setq buffer-file-coding-system last-coding-system-used))))
 	(when (fboundp 'html-mode)
 	  (html-mode))))
     (view-buffer buf)))
@@ -627,7 +636,6 @@ the like."
 
 (defvar eww-mode-map
   (let ((map (make-sparse-keymap)))
-    (set-keymap-parent map special-mode-map)
     (define-key map "g" 'eww-reload) ;FIXME: revert-buffer-function instead!
     (define-key map "G" 'eww)
     (define-key map [?\t] 'shr-next-link)
@@ -1583,8 +1591,6 @@ If CHARSET is nil then use UTF-8."
 
 (defvar eww-bookmark-mode-map
   (let ((map (make-sparse-keymap)))
-    (suppress-keymap map)
-    (define-key map "q" 'quit-window)
     (define-key map [(control k)] 'eww-bookmark-kill)
     (define-key map [(control y)] 'eww-bookmark-yank)
     (define-key map "\r" 'eww-bookmark-browse)
@@ -1601,13 +1607,12 @@ If CHARSET is nil then use UTF-8."
          :active eww-bookmark-kill-ring]))
     map))
 
-(define-derived-mode eww-bookmark-mode nil "eww bookmarks"
+(define-derived-mode eww-bookmark-mode special-mode "eww bookmarks"
   "Mode for listing bookmarks.
 
 \\{eww-bookmark-mode-map}"
   (buffer-disable-undo)
-  (setq buffer-read-only t
-	truncate-lines t))
+  (setq truncate-lines t))
 
 ;;; History code
 
@@ -1670,8 +1675,6 @@ If CHARSET is nil then use UTF-8."
 
 (defvar eww-history-mode-map
   (let ((map (make-sparse-keymap)))
-    (suppress-keymap map)
-    (define-key map "q" 'quit-window)
     (define-key map "\r" 'eww-history-browse)
 ;;    (define-key map "n" 'next-error-no-select)
 ;;    (define-key map "p" 'previous-error-no-select)
@@ -1684,13 +1687,12 @@ If CHARSET is nil then use UTF-8."
          :active (get-text-property (line-beginning-position) 'eww-history)]))
     map))
 
-(define-derived-mode eww-history-mode nil "eww history"
+(define-derived-mode eww-history-mode special-mode "eww history"
   "Mode for listing eww-histories.
 
 \\{eww-history-mode-map}"
   (buffer-disable-undo)
-  (setq buffer-read-only t
-	truncate-lines t))
+  (setq truncate-lines t))
 
 ;;; eww buffers list
 
@@ -1795,8 +1797,6 @@ If CHARSET is nil then use UTF-8."
 
 (defvar eww-buffers-mode-map
   (let ((map (make-sparse-keymap)))
-    (suppress-keymap map)
-    (define-key map "q" 'quit-window)
     (define-key map [(control k)] 'eww-buffer-kill)
     (define-key map "\r" 'eww-buffer-select)
     (define-key map "n" 'eww-buffer-show-next)
@@ -1812,13 +1812,12 @@ If CHARSET is nil then use UTF-8."
          :active (get-text-property (line-beginning-position) 'eww-buffer)]))
     map))
 
-(define-derived-mode eww-buffers-mode nil "eww buffers"
+(define-derived-mode eww-buffers-mode special-mode "eww buffers"
   "Mode for listing buffers.
 
 \\{eww-buffers-mode-map}"
   (buffer-disable-undo)
-  (setq buffer-read-only t
-	truncate-lines t))
+  (setq truncate-lines t))
 
 ;;; Desktop support
 

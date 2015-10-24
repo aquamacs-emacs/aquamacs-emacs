@@ -22,6 +22,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <config.h>
 
 #include <errno.h>
+#include <fcntl.h>
 #include <stdio.h>
 
 #include <sys/types.h>
@@ -59,13 +60,12 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include TERM_HEADER
 #endif /* HAVE_WINDOW_SYSTEM */
 
-#include "commands.h"
+#include "coding.h"
 #include "intervals.h"
 #include "character.h"
 #include "buffer.h"
 #include "window.h"
 
-#include "systty.h"
 #include "atimer.h"
 #include "blockinput.h"
 #include "syssignal.h"
@@ -82,6 +82,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "syntax.h"
 #include "sysselect.h"
 #include "systime.h"
+#include "puresize.h"
 
 #include "gnutls.h"
 

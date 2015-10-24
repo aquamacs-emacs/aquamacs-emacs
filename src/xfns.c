@@ -24,23 +24,15 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include "lisp.h"
 #include "xterm.h"
-#include "menu.h"
 #include "frame.h"
 #include "window.h"
-#include "character.h"
 #include "buffer.h"
-#include "intervals.h"
 #include "dispextern.h"
 #include "keyboard.h"
 #include "blockinput.h"
-#include <epaths.h>
 #include "charset.h"
 #include "coding.h"
-#include "fontset.h"
-#include "systime.h"
 #include "termhooks.h"
-#include "atimer.h"
-#include "termchar.h"
 #include "font.h"
 
 #include <sys/types.h>
@@ -250,19 +242,15 @@ x_real_pos_and_offsets (struct frame *f,
 
   if (! had_errors)
     {
-      unsigned int ign;
+      unsigned int bw, ign;
       Window child, rootw;
 
       /* Get the real coordinates for the WM window upper left corner */
       XGetGeometry (FRAME_X_DISPLAY (f), win,
-                    &rootw, &real_x, &real_y, &ow, &oh, &ign, &ign);
+                    &rootw, &real_x, &real_y, &ow, &oh, &bw, &ign);
 
       if (outer_border)
-        {
-          XWindowAttributes atts;
-          XGetWindowAttributes (FRAME_X_DISPLAY (f), win, &atts);
-          *outer_border = atts.border_width;
-        }
+        *outer_border = bw;
 
       /* Translate real coordinates to coordinates relative to our
          window.  For our window, the upper left corner is 0, 0.
@@ -309,8 +297,7 @@ x_real_pos_and_offsets (struct frame *f,
       had_errors = x_had_errors_p (FRAME_X_DISPLAY (f));
     }
 
-
-  if (dpyinfo->root_window == f->output_data.x->parent_desc)
+  if (!had_errors && dpyinfo->root_window == f->output_data.x->parent_desc)
     {
       /* Try _NET_FRAME_EXTENTS if our parent is the root window.  */
       rc = XGetWindowProperty (dpy, win, dpyinfo->Xatom_net_frame_extents,
@@ -321,20 +308,16 @@ x_real_pos_and_offsets (struct frame *f,
       if (rc == Success && actual_type == target_type && !x_had_errors_p (dpy)
           && actual_size == 4 && actual_format == 32)
         {
-          unsigned int ign;
-          Window rootw;
           long *fe = (long *)tmp_data;
 
-          XGetGeometry (FRAME_X_DISPLAY (f), win,
-                        &rootw, &real_x, &real_y, &ign, &ign, &ign, &ign);
           outer_x = -fe[0];
           outer_y = -fe[2];
           real_x -= fe[0];
           real_y -= fe[2];
         }
-    }
 
-  if (tmp_data) XFree (tmp_data);
+      if (tmp_data) XFree (tmp_data);
+    }
 
   x_uncatch_errors ();
 
@@ -446,7 +429,6 @@ x_defined_color (struct frame *f, const char *color_name,
 		 XColor *color, bool alloc_p)
 {
   bool success_p = false;
-  Display *dpy = FRAME_X_DISPLAY (f);
   Colormap cmap = FRAME_X_COLORMAP (f);
 
   block_input ();
@@ -454,7 +436,7 @@ x_defined_color (struct frame *f, const char *color_name,
   success_p = xg_check_special_colors (f, color_name, color);
 #endif
   if (!success_p)
-    success_p = XParseColor (dpy, cmap, color_name, color) != 0;
+    success_p = x_parse_color (f, color_name, color) != 0;
   if (success_p && alloc_p)
     success_p = x_alloc_nearest_color (f, cmap, color);
   unblock_input ();
@@ -675,15 +657,95 @@ x_set_background_color (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
     }
 }
 
+/* This array must stay in sync with the mouse_cursor_types array below!  */
+enum mouse_cursor {
+  mouse_cursor_text,
+  mouse_cursor_nontext,
+  mouse_cursor_hourglass,
+  mouse_cursor_mode,
+  mouse_cursor_hand,
+  mouse_cursor_horizontal_drag,
+  mouse_cursor_vertical_drag,
+  mouse_cursor_max
+};
+
+struct mouse_cursor_types {
+  /* Printable name for error messages (optional).  */
+  const char *name;
+
+  /* Lisp variable controlling the cursor shape.  */
+  /* FIXME: A couple of these variables are defined in the C code but
+     are not actually accessible from Lisp.  They should probably be
+     made accessible or removed.  */
+  Lisp_Object *shape_var_ptr;
+
+  /* The default shape.  */
+  int default_shape;
+};
+
+/* This array must stay in sync with enum mouse_cursor above!  */
+static const struct mouse_cursor_types mouse_cursor_types[] = {
+  { "text",      &Vx_pointer_shape,                XC_xterm             },
+  { "nontext",   &Vx_nontext_pointer_shape,        XC_left_ptr          },
+  { "hourglass", &Vx_hourglass_pointer_shape,      XC_watch             },
+  { "modeline",  &Vx_mode_pointer_shape,           XC_xterm             },
+  { NULL,        &Vx_sensitive_text_pointer_shape, XC_hand2             },
+  { NULL,        &Vx_window_horizontal_drag_shape, XC_sb_h_double_arrow },
+  { NULL,        &Vx_window_vertical_drag_shape,   XC_sb_v_double_arrow },
+};
+
+struct mouse_cursor_data {
+  /* Last index for which XCreateFontCursor has been called, and thus
+     the last index for which x_request_serial[] is valid.  */
+  int last_cursor_create_request;
+
+  /* Last index for which an X error event was received in response to
+     attempting to create the cursor.  */
+  int error_cursor;
+
+  /* Cursor numbers chosen.  */
+  unsigned int cursor_num[mouse_cursor_max];
+
+  /* Allocated Cursor values, or zero for failed attempts.  */
+  Cursor cursor[mouse_cursor_max];
+
+  /* X serial numbers for the first request sent by XCreateFontCursor.
+     Note that there may be more than one request sent.  */
+  unsigned long x_request_serial[mouse_cursor_max];
+
+  /* If an error has been received, a pointer to where the current
+     error-message text is stored.  */
+  char *error_string;
+};
+
+static void
+x_set_mouse_color_handler (Display *dpy, XErrorEvent *event,
+			   char *error_string, void *data)
+{
+  struct mouse_cursor_data *cursor_data = data;
+  int i;
+
+  cursor_data->error_cursor = -1;
+  cursor_data->error_string = error_string;
+  for (i = 0; i < cursor_data->last_cursor_create_request; i++)
+    {
+      if (event->serial >= cursor_data->x_request_serial[i])
+	cursor_data->error_cursor = i;
+    }
+  if (cursor_data->error_cursor >= 0)
+    /* If we failed to allocate it, don't try to free it.  */
+    cursor_data->cursor[cursor_data->error_cursor] = 0;
+}
+
 static void
 x_set_mouse_color (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
 {
   struct x_output *x = f->output_data.x;
   Display *dpy = FRAME_X_DISPLAY (f);
-  Cursor cursor, nontext_cursor, mode_cursor, hand_cursor;
-  Cursor hourglass_cursor, horizontal_drag_cursor, vertical_drag_cursor;
+  struct mouse_cursor_data cursor_data = { -1, -1 };
   unsigned long pixel = x_decode_color (f, arg, BLACK_PIX_DEFAULT (f));
   unsigned long mask_color = FRAME_BACKGROUND_PIXEL (f);
+  int i;
 
   /* Don't let pointers be invisible.  */
   if (mask_color == pixel)
@@ -695,137 +757,93 @@ x_set_mouse_color (struct frame *f, Lisp_Object arg, Lisp_Object oldval)
   unload_color (f, x->mouse_pixel);
   x->mouse_pixel = pixel;
 
+  for (i = 0; i < mouse_cursor_max; i++)
+    {
+      Lisp_Object shape_var = *mouse_cursor_types[i].shape_var_ptr;
+      if (!NILP (shape_var))
+	{
+	  CHECK_TYPE_RANGED_INTEGER (unsigned, shape_var);
+	  cursor_data.cursor_num[i] = XINT (shape_var);
+	}
+      else
+	cursor_data.cursor_num[i] = mouse_cursor_types[i].default_shape;
+    }
+
   block_input ();
 
   /* It's not okay to crash if the user selects a screwy cursor.  */
-  x_catch_errors (dpy);
+  x_catch_errors_with_handler (dpy, x_set_mouse_color_handler, &cursor_data);
 
-  if (!NILP (Vx_pointer_shape))
+  for (i = 0; i < mouse_cursor_max; i++)
     {
-      CHECK_NUMBER (Vx_pointer_shape);
-      cursor = XCreateFontCursor (dpy, XINT (Vx_pointer_shape));
+      cursor_data.x_request_serial[i] = XNextRequest (dpy);
+      cursor_data.last_cursor_create_request = i;
+      cursor_data.cursor[i] = XCreateFontCursor (dpy,
+						 cursor_data.cursor_num[i]);
     }
-  else
-    cursor = XCreateFontCursor (dpy, XC_xterm);
-  x_check_errors (dpy, "bad text pointer cursor: %s");
 
-  if (!NILP (Vx_nontext_pointer_shape))
+  /* Now sync up and process all received errors from cursor
+     creation.  */
+  if (x_had_errors_p (dpy))
     {
-      CHECK_NUMBER (Vx_nontext_pointer_shape);
-      nontext_cursor
-	= XCreateFontCursor (dpy, XINT (Vx_nontext_pointer_shape));
-    }
-  else
-    nontext_cursor = XCreateFontCursor (dpy, XC_left_ptr);
-  x_check_errors (dpy, "bad nontext pointer cursor: %s");
+      const char *bad_cursor_name = NULL;
+      /* Bounded by X_ERROR_MESSAGE_SIZE in xterm.c.  */
+      size_t message_length = strlen (cursor_data.error_string);
+      char *xmessage = alloca (1 + message_length);
+      memcpy (xmessage, cursor_data.error_string, message_length);
 
-  if (!NILP (Vx_hourglass_pointer_shape))
-    {
-      CHECK_NUMBER (Vx_hourglass_pointer_shape);
-      hourglass_cursor
-	= XCreateFontCursor (dpy, XINT (Vx_hourglass_pointer_shape));
-    }
-  else
-    hourglass_cursor = XCreateFontCursor (dpy, XC_watch);
-  x_check_errors (dpy, "bad hourglass pointer cursor: %s");
+      x_uncatch_errors ();
 
-  if (!NILP (Vx_mode_pointer_shape))
-    {
-      CHECK_NUMBER (Vx_mode_pointer_shape);
-      mode_cursor = XCreateFontCursor (dpy, XINT (Vx_mode_pointer_shape));
-    }
-  else
-    mode_cursor = XCreateFontCursor (dpy, XC_xterm);
-  x_check_errors (dpy, "bad modeline pointer cursor: %s");
+      /* Free any successfully created cursors.  */
+      for (i = 0; i < mouse_cursor_max; i++)
+	if (cursor_data.cursor[i] != 0)
+	  XFreeCursor (dpy, cursor_data.cursor[i]);
 
-  if (!NILP (Vx_sensitive_text_pointer_shape))
-    {
-      CHECK_NUMBER (Vx_sensitive_text_pointer_shape);
-      hand_cursor
-	= XCreateFontCursor (dpy, XINT (Vx_sensitive_text_pointer_shape));
+      /* This should only be able to fail if the server's serial
+	 number tracking is broken.  */
+      if (cursor_data.error_cursor >= 0)
+	bad_cursor_name = mouse_cursor_types[cursor_data.error_cursor].name;
+      if (bad_cursor_name)
+	error ("bad %s pointer cursor: %s", bad_cursor_name, xmessage);
+      else
+	error ("can't set cursor shape: %s", xmessage);
     }
-  else
-    hand_cursor = XCreateFontCursor (dpy, XC_hand2);
 
-  if (!NILP (Vx_window_horizontal_drag_shape))
-    {
-      CHECK_TYPE_RANGED_INTEGER (unsigned, Vx_window_horizontal_drag_shape);
-      horizontal_drag_cursor
-	= XCreateFontCursor (dpy, XINT (Vx_window_horizontal_drag_shape));
-    }
-  else
-    horizontal_drag_cursor
-      = XCreateFontCursor (dpy, XC_sb_h_double_arrow);
-
-  if (!NILP (Vx_window_vertical_drag_shape))
-    {
-      CHECK_NUMBER (Vx_window_vertical_drag_shape);
-      vertical_drag_cursor
-	= XCreateFontCursor (dpy, XINT (Vx_window_vertical_drag_shape));
-    }
-  else
-    vertical_drag_cursor
-      = XCreateFontCursor (dpy, XC_sb_v_double_arrow);
-
-  /* Check and report errors with the above calls.  */
-  x_check_errors (dpy, "can't set cursor shape: %s");
-  x_uncatch_errors ();
+  x_uncatch_errors_after_check ();
 
   {
-    XColor fore_color, back_color;
+    XColor colors[2]; /* 0=foreground, 1=background */
 
-    fore_color.pixel = x->mouse_pixel;
-    x_query_color (f, &fore_color);
-    back_color.pixel = mask_color;
-    x_query_color (f, &back_color);
+    colors[0].pixel = x->mouse_pixel;
+    colors[1].pixel = mask_color;
+    x_query_colors (f, colors, 2);
 
-    XRecolorCursor (dpy, cursor, &fore_color, &back_color);
-    XRecolorCursor (dpy, nontext_cursor, &fore_color, &back_color);
-    XRecolorCursor (dpy, mode_cursor, &fore_color, &back_color);
-    XRecolorCursor (dpy, hand_cursor, &fore_color, &back_color);
-    XRecolorCursor (dpy, hourglass_cursor, &fore_color, &back_color);
-    XRecolorCursor (dpy, horizontal_drag_cursor, &fore_color, &back_color);
-    XRecolorCursor (dpy, vertical_drag_cursor, &fore_color, &back_color);
+    for (i = 0; i < mouse_cursor_max; i++)
+      XRecolorCursor (dpy, cursor_data.cursor[i], &colors[0], &colors[1]);
   }
 
   if (FRAME_X_WINDOW (f) != 0)
-    XDefineCursor (dpy, FRAME_X_WINDOW (f),
-                   f->output_data.x->current_cursor = cursor);
+    {
+      f->output_data.x->current_cursor = cursor_data.cursor[mouse_cursor_text];
+      XDefineCursor (dpy, FRAME_X_WINDOW (f),
+		     f->output_data.x->current_cursor);
+    }
 
-  if (cursor != x->text_cursor
-      && x->text_cursor != 0)
-    XFreeCursor (dpy, x->text_cursor);
-  x->text_cursor = cursor;
+#define INSTALL_CURSOR(FIELD, SHORT_INDEX)				\
+  eassert (x->FIELD != cursor_data.cursor[mouse_cursor_ ## SHORT_INDEX]); \
+  if (x->FIELD != 0)							\
+    XFreeCursor (dpy, x->FIELD);					\
+  x->FIELD = cursor_data.cursor[mouse_cursor_ ## SHORT_INDEX];
 
-  if (nontext_cursor != x->nontext_cursor
-      && x->nontext_cursor != 0)
-    XFreeCursor (dpy, x->nontext_cursor);
-  x->nontext_cursor = nontext_cursor;
+  INSTALL_CURSOR (text_cursor, text);
+  INSTALL_CURSOR (nontext_cursor, nontext);
+  INSTALL_CURSOR (hourglass_cursor, hourglass);
+  INSTALL_CURSOR (modeline_cursor, mode);
+  INSTALL_CURSOR (hand_cursor, hand);
+  INSTALL_CURSOR (horizontal_drag_cursor, horizontal_drag);
+  INSTALL_CURSOR (vertical_drag_cursor, vertical_drag);
 
-  if (hourglass_cursor != x->hourglass_cursor
-      && x->hourglass_cursor != 0)
-    XFreeCursor (dpy, x->hourglass_cursor);
-  x->hourglass_cursor = hourglass_cursor;
-
-  if (mode_cursor != x->modeline_cursor
-      && x->modeline_cursor != 0)
-    XFreeCursor (dpy, f->output_data.x->modeline_cursor);
-  x->modeline_cursor = mode_cursor;
-
-  if (hand_cursor != x->hand_cursor
-      && x->hand_cursor != 0)
-    XFreeCursor (dpy, x->hand_cursor);
-  x->hand_cursor = hand_cursor;
-
-  if (horizontal_drag_cursor != x->horizontal_drag_cursor
-      && x->horizontal_drag_cursor != 0)
-    XFreeCursor (dpy, x->horizontal_drag_cursor);
-  x->horizontal_drag_cursor = horizontal_drag_cursor;
-
-  if (vertical_drag_cursor != x->vertical_drag_cursor
-      && x->vertical_drag_cursor != 0)
-    XFreeCursor (dpy, x->vertical_drag_cursor);
-  x->vertical_drag_cursor = vertical_drag_cursor;
+#undef INSTALL_CURSOR
 
   XFlush (dpy);
   unblock_input ();
@@ -1064,7 +1082,7 @@ x_set_menu_bar_lines (struct frame *f, Lisp_Object value, Lisp_Object oldval)
 #else /* not USE_X_TOOLKIT && not USE_GTK */
   FRAME_MENU_BAR_LINES (f) = nlines;
   FRAME_MENU_BAR_HEIGHT (f) = nlines * FRAME_LINE_HEIGHT (f);
-  adjust_frame_size (f, -1, -1, 2, true, Qmenu_bar_lines);
+  adjust_frame_size (f, -1, -1, 2, true, Qx_set_menu_bar_lines);
   if (FRAME_X_WINDOW (f))
     x_clear_under_internal_border (f);
 
@@ -1186,13 +1204,23 @@ x_change_tool_bar_height (struct frame *f, int height)
 
   /* Recalculate toolbar height.  */
   f->n_tool_bar_rows = 0;
+  if (old_height == 0
+      && (!f->after_make_frame
+	  || NILP (frame_inhibit_implied_resize)
+	  || (CONSP (frame_inhibit_implied_resize)
+	      && NILP (Fmemq (Qtool_bar_lines, frame_inhibit_implied_resize)))))
+    f->tool_bar_redisplayed = f->tool_bar_resized = false;
 
   adjust_frame_size (f, -1, -1,
-		     ((NILP (fullscreen = get_frame_param (f, Qfullscreen))
-		       || EQ (fullscreen, Qfullwidth)) ? 1
+		     ((!f->tool_bar_resized
+		       && (NILP (fullscreen =
+				 get_frame_param (f, Qfullscreen))
+			   || EQ (fullscreen, Qfullwidth))) ? 1
 		      : (old_height == 0 || height == 0) ? 2
 		      : 4),
 		     false, Qtool_bar_lines);
+
+  f->tool_bar_resized = f->tool_bar_redisplayed;
 
   /* adjust_frame_size might not have done anything, garbage frame
      here.  */
@@ -2975,6 +3003,7 @@ This function is an internal primitive--use `make-frame' instead.  */)
   struct x_display_info *dpyinfo = NULL;
   Lisp_Object parent;
   struct kboard *kb;
+  int x_width = 0, x_height = 0;
 
   parms = Fcopy_alist (parms);
 
@@ -3249,7 +3278,7 @@ This function is an internal primitive--use `make-frame' instead.  */)
                        FRAME_TOOL_BAR_POSITION (f), 0, 0, RES_TYPE_SYMBOL);
 
   /* Compute the size of the X window.  */
-  window_prompting = x_figure_window_size (f, parms, true);
+  window_prompting = x_figure_window_size (f, parms, true, &x_width, &x_height);
 
   tem = x_get_arg (dpyinfo, parms, Qunsplittable, 0, 0, RES_TYPE_BOOLEAN);
   f->no_split = minibuffer_only || EQ (tem, Qt);
@@ -3291,12 +3320,6 @@ This function is an internal primitive--use `make-frame' instead.  */)
   x_default_parameter (f, parms, Qalpha, Qnil,
 		       "alpha", "Alpha", RES_TYPE_NUMBER);
 
-  /* Consider frame official, now.  */
-  f->can_x_set_window_size = true;
-
-  adjust_frame_size (f, FRAME_TEXT_WIDTH (f), FRAME_TEXT_HEIGHT (f), 0, true,
-		     Qx_create_frame_2);
-
 #if defined (USE_X_TOOLKIT) || defined (USE_GTK)
   /* Create the menu bar.  */
   if (!minibuffer_only && FRAME_EXTERNAL_MENU_BAR (f))
@@ -3315,12 +3338,23 @@ This function is an internal primitive--use `make-frame' instead.  */)
     }
 #endif /* USE_X_TOOLKIT || USE_GTK */
 
+  /* Consider frame official, now.  */
+  f->can_x_set_window_size = true;
+
+  if (x_width > 0)
+    SET_FRAME_WIDTH (f, x_width);
+  if (x_height > 0)
+    SET_FRAME_HEIGHT (f, x_height);
+
   /* Tell the server what size and position, etc, we want, and how
      badly we want them.  This should be done after we have the menu
      bar so that its size can be taken into account.  */
   block_input ();
   x_wm_set_size_hint (f, window_prompting, false);
   unblock_input ();
+
+  adjust_frame_size (f, FRAME_TEXT_WIDTH (f), FRAME_TEXT_HEIGHT (f),
+		     0, true, Qx_create_frame_2);
 
   /* Process fullscreen parameter here in the hope that normalizing a
      fullheight/fullwidth frame will produce the size set by the last
@@ -5135,6 +5169,7 @@ x_create_tip_frame (struct x_display_info *dpyinfo,
   bool face_change_before = face_change;
   Lisp_Object buffer;
   struct buffer *old_buffer;
+  int x_width = 0, x_height = 0;
 
   if (!dpyinfo->terminal->name)
     error ("Terminal is not live, can't create new frames on it");
@@ -5307,7 +5342,7 @@ x_create_tip_frame (struct x_display_info *dpyinfo,
 
   f->output_data.x->parent_desc = FRAME_DISPLAY_INFO (f)->root_window;
 
-  x_figure_window_size (f, parms, false);
+  x_figure_window_size (f, parms, false, &x_width, &x_height);
 
   {
     XSetWindowAttributes attrs;
@@ -5315,7 +5350,7 @@ x_create_tip_frame (struct x_display_info *dpyinfo,
     Atom type = FRAME_DISPLAY_INFO (f)->Xatom_net_window_type_tooltip;
 
     block_input ();
-    mask = CWBackPixel | CWOverrideRedirect | CWEventMask;
+    mask = CWBackPixel | CWOverrideRedirect | CWEventMask | CWCursor;
     if (DoesSaveUnders (dpyinfo->screen))
       mask |= CWSaveUnder;
 
@@ -5325,6 +5360,9 @@ x_create_tip_frame (struct x_display_info *dpyinfo,
     attrs.override_redirect = True;
     attrs.save_under = True;
     attrs.background_pixel = FRAME_BACKGROUND_PIXEL (f);
+    attrs.cursor =
+      f->output_data.x->current_cursor
+      = f->output_data.x->text_cursor;
     /* Arrange for getting MapNotify and UnmapNotify events.  */
     attrs.event_mask = StructureNotifyMask;
     tip_window

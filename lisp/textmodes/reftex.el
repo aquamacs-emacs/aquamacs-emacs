@@ -306,12 +306,28 @@ If the symbols for the current master file do not exist, they are created."
   (let
       ((master
         (cond
-         ((fboundp 'TeX-master-file) ; AUCTeX is loaded.  Use its mechanism.
+	 ;; Test if we're in a subfile using the subfiles document
+	 ;; class, e.g., \documentclass[main.tex]{subfiles}.  It's
+	 ;; argument is the main file, however it's not really the
+	 ;; master file in `TeX-master-file' or `tex-main-file's
+	 ;; sense.  It should be used for references but not for
+	 ;; compilation, thus subfiles use a setting of
+	 ;; `TeX-master'/`tex-main-file' being themselves.
+	 ((save-excursion
+            (goto-char (point-min))
+            (re-search-forward
+             "^[[:space:]]*\\\\documentclass\\[\\([[:word:].]+\\)\\]{subfiles}"
+             nil t))
+          (match-string-no-properties 1))
+         ;; AUCTeX is loaded.  Use its mechanism.
+         ((fboundp 'TeX-master-file)
           (condition-case nil
               (TeX-master-file t)
             (error (buffer-file-name))))
-         ((fboundp 'tex-main-file) (tex-main-file)) ; Emacs LaTeX mode
-         ((boundp 'TeX-master)       ; The variable is defined - let's use it.
+         ;; Emacs LaTeX mode
+         ((fboundp 'tex-main-file) (tex-main-file))
+         ;; Check the `TeX-master' variable.
+         ((boundp 'TeX-master)
           (cond
            ((eq TeX-master t)
             (buffer-file-name))
@@ -322,6 +338,7 @@ If the symbols for the current master file do not exist, they are created."
            (t
             (setq TeX-master (read-file-name "Master file: "
                                              nil nil t nil)))))
+         ;; Check the `tex-main-file' variable.
          ((boundp 'tex-main-file)
           ;; This is the variable from the default TeX modes.
           (cond
@@ -331,8 +348,9 @@ If the symbols for the current master file do not exist, they are created."
            (t
             ;; In this case, the buffer is its own master.
             (buffer-file-name))))
+         ;; We know nothing about master file.  Assume this is a
+         ;; master file.
          (t
-          ;; Know nothing about master file.  Assume this is a master file.
           (buffer-file-name)))))
     (cond
      ((null master)
@@ -1705,7 +1723,7 @@ When DIE is non-nil, throw an error if file not found."
 (defvar message-stack)
 (if (and (featurep 'xemacs)
          (not (fboundp 'current-message)))
-    (defun current-message (&optional frame)
+    (defun current-message (&optional _frame)
       (cdr (car message-stack))))
 
 (defun reftex-visited-files (list)
@@ -2047,7 +2065,7 @@ IGNORE-WORDS List of words which should be removed from the string."
             (message "Sorry: cannot refontify RefTeX Select buffer."))))
       (rename-buffer oldname))))
 
-(defun reftex-select-font-lock-fontify-region (beg end &optional loudly)
+(defun reftex-select-font-lock-fontify-region (beg end &optional _loudly)
   ;; Fontify a region, but only lines starting with a dot.
   (let ((func (if (fboundp 'font-lock-default-fontify-region)
                   'font-lock-default-fontify-region
@@ -2059,7 +2077,7 @@ IGNORE-WORDS List of words which should be removed from the string."
       (funcall func beg1 end1 nil)
       (goto-char end1))))
 
-(defun reftex-select-font-lock-unfontify (&rest ignore) t)
+(defun reftex-select-font-lock-unfontify (&rest _ignore) t)
 
 (defun reftex-verified-face (&rest faces)
   ;; Return the first valid face in FACES, or nil if none is valid.
@@ -2341,6 +2359,7 @@ output buffer into your mail program, as it gives us important
 information about your RefTeX version and configuration."
   (interactive)
   (require 'reporter)
+  (defvar reporter-prompt-for-summary-p)
   (let ((reporter-prompt-for-summary-p "Bug report subject: "))
     (reporter-submit-bug-report
      "bug-auctex@gnu.org, bug-gnu-emacs@gnu.org"
@@ -2446,7 +2465,7 @@ of ENTRY-LIST is a list of cons cells (\"MACRONAME\" . LEVEL).  See
 
 ;;;***
 
-;;;### (autoloads nil "reftex-cite" "reftex-cite.el" "751df6ee674ea533b755e8cda4ad1cf8")
+;;;### (autoloads nil "reftex-cite" "reftex-cite.el" "7eaa61c05a6578999ea68f1be0fbcf49")
 ;;; Generated autoloads from reftex-cite.el
 
 (autoload 'reftex-default-bibliography "reftex-cite" "\
@@ -2676,7 +2695,7 @@ With no argument, this command toggles
 
 ;;;***
 
-;;;### (autoloads nil "reftex-index" "reftex-index.el" "29cb6e91c2e06592053e9d543f30f0ea")
+;;;### (autoloads nil "reftex-index" "reftex-index.el" "dd2f101c1f789529688790cecb886e02")
 ;;; Generated autoloads from reftex-index.el
 
 (autoload 'reftex-index-selection-or-word "reftex-index" "\

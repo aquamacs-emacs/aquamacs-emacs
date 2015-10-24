@@ -62,6 +62,7 @@
 (defvar file-notify--test-event nil)
 (defvar file-notify--test-events nil)
 (defun file-notify--test-timeout ()
+  "Timeout to wait for arriving events, in seconds."
   (if (file-remote-p temporary-file-directory) 6 3))
 
 (defun file-notify--test-cleanup ()
@@ -324,26 +325,41 @@ Don't wait longer than TIMEOUT seconds for the events to be delivered."
                  file-notify--test-tmpfile
                  '(attribute-change) 'file-notify--test-event-handler))
           (file-notify--test-with-events
-              (file-notify--test-timeout) '(attribute-changed attribute-changed)
+              (file-notify--test-timeout)
+              (if (file-remote-p temporary-file-directory)
+                  ;; In the remote case, `write-region' raises also an
+                  ;; `attribute-changed' event.
+                  '(attribute-changed attribute-changed attribute-changed)
+                '(attribute-changed attribute-changed))
+            ;; We must use short delays between the operations.
+            ;; Otherwise, not all events arrive us in the remote case.
             (write-region
              "any text" nil file-notify--test-tmpfile nil 'no-message)
+            (sleep-for 0.1)
             (set-file-modes file-notify--test-tmpfile 000)
-            (read-event nil nil 0.1) ; In order to distinguish the events.
+            (sleep-for 0.1)
             (set-file-times file-notify--test-tmpfile '(0 0))
+            (sleep-for 0.1)
             (delete-file file-notify--test-tmpfile))
           (file-notify-rm-watch file-notify--test-desc))
 
         ;; Check the global sequence again just to make sure that
         ;; `file-notify--test-events' has been set correctly.
-        (should (equal (mapcar #'cadr file-notify--test-events)
-                       (if (eq file-notify--library 'w32notify)
-                           '(created changed deleted
-                                     created changed changed deleted
-                                     created changed renamed)
-                         '(created changed deleted
-                                   created changed deleted
-                                   created changed renamed
-                                   attribute-changed attribute-changed))))
+        (should (equal
+                 (mapcar #'cadr file-notify--test-events)
+                 (if (eq file-notify--library 'w32notify)
+                     '(created changed deleted
+                       created changed changed deleted
+                       created changed renamed)
+                   (if (file-remote-p temporary-file-directory)
+                       '(created changed deleted
+                         created changed deleted
+                         created changed renamed
+                         attribute-changed attribute-changed attribute-changed)
+                     '(created changed deleted
+                       created changed deleted
+                       created changed renamed
+                       attribute-changed attribute-changed)))))
         (should file-notify--test-results)
         (dolist (result file-notify--test-results)
           ;;(message "%s" (ert-test-result-messages result))

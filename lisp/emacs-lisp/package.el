@@ -889,7 +889,8 @@ untar into a directory named DIR; otherwise, signal an error."
              " --- automatically extracted autoloads\n"
              ";;\n"
              ";;; Code:\n"
-             "(add-to-list 'load-path (or (file-name-directory #$) (car load-path)))\n"
+             ;; `load-path' should contain only directory names
+             "(add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))\n"
              "\n;; Local Variables:\n"
              ";; version-control: never\n"
              ";; no-byte-compile: t\n"
@@ -1364,10 +1365,18 @@ If the archive version is too new, signal an error."
       (dolist (package contents)
         (package--add-to-archive-contents package archive)))))
 
+(defvar package--old-archive-priorities nil
+  "Store currently used `package-archive-priorities'.
+This is the value of `package-archive-priorities' last time
+`package-read-all-archive-contents' was called.  It can be used
+by arbitrary functions to decide whether it is necessary to call
+it again.")
+
 (defun package-read-all-archive-contents ()
   "Re-read `archive-contents', if it exists.
 If successful, set `package-archive-contents'."
   (setq package-archive-contents nil)
+  (setq package--old-archive-priorities package-archive-priorities)
   (dolist (archive package-archives)
     (package-read-archive-contents (car archive))))
 
@@ -1887,7 +1896,7 @@ add a call to it along with some explanatory comments."
 ;;;###autoload
 (defun package-install (pkg &optional dont-select)
   "Install the package PKG.
-PKG can be a package-desc or the package name of one the available packages
+PKG can be a package-desc or a symbol naming one of the available packages
 in an archive in `package-archives'.  Interactively, prompt for its name.
 
 If called interactively or if DONT-SELECT nil, add PKG to
@@ -1918,15 +1927,15 @@ to install it but still mark it as selected."
                 pkg)))
     (unless (or dont-select (package--user-selected-p name))
       (package--save-selected-packages
-       (cons name package-selected-packages))))
-  (if-let ((transaction
-            (if (package-desc-p pkg)
-                (unless (package-installed-p pkg)
-                  (package-compute-transaction (list pkg)
-                                               (package-desc-reqs pkg)))
-              (package-compute-transaction () (list (list pkg))))))
-      (package-download-transaction transaction)
-    (message "`%s' is already installed" (package-desc-full-name pkg))))
+       (cons name package-selected-packages)))
+    (if-let ((transaction
+              (if (package-desc-p pkg)
+                  (unless (package-installed-p pkg)
+                    (package-compute-transaction (list pkg)
+                                                 (package-desc-reqs pkg)))
+                (package-compute-transaction () (list (list pkg))))))
+        (package-download-transaction transaction)
+      (message "`%s' is already installed" name))))
 
 (defun package-strip-rcs-id (str)
   "Strip RCS version ID from the version string STR.
@@ -2675,6 +2684,8 @@ KEYWORDS should be nil or a list of keywords."
             (push pkg info-list)))))
 
     ;; Available and disabled packages:
+    (unless (equal package--old-archive-priorities package-archive-priorities)
+      (package-read-all-archive-contents))
     (dolist (elt package-archive-contents)
       (let ((name (car elt)))
         ;; To be displayed it must be in PACKAGES;
