@@ -370,16 +370,57 @@ customization buffer."
 	      :enable mark-active
 	      :help "Use the selection for your next search"))
 
- 
-;; Command line tool
 
+;; by Xah Leh
+(defun trim-string (string)
+  "Remove white spaces in beginning and ending of STRING.
+White space here is any of: space, tab, emacs newline (line feed, ASCII 10)."
+  (replace-regexp-in-string "\\`[ \t\n]*" ""
+                            (replace-regexp-in-string "[ \t\n]*\\'" "" string)))
+
+(defun aquamacs-message (format-string &rest args)
+  "Like `message', but popup dialog if executing (interactive) command."
+  (if (or  (and last-nonmenu-event 
+		(not (consp last-nonmenu-event))) 
+	   (not use-dialog-box)
+	   (not window-system))
+      (apply #'message format-string args)
+    (x-popup-dialog nil (list (apply #'format format-string args) nil "OK") "")))
+
+
+;; Command line tool
 (defun aquamacs-install-command-line-tool ()
   (interactive)
-  (let ((coding-system-for-write 'no-conversion))
-    (call-process "open" nil 0 nil "-a" "Installer" 
-                  (format "%s/Contents/Resources/Aquamacs Command Line Tool.mpkg" 
-                          aquamacs-mac-application-bundle-directory)))
-  (message "Call command-line-tool from a shell as `aquamacs', e.g., as \"aquamacs file.txt\""))
+  (let ((coding-system-for-write 'no-conversion)
+        (vers nil)
+        (installed "")
+        (bin (format "%s/Contents/MacOS/bin/" aquamacs-mac-application-bundle-directory))
+        (src (format "%s/Contents/Resources/" aquamacs-mac-application-bundle-directory)))
+    (cl-flet ((installer (x)
+                      (call-process "open" nil 0 nil "-a" "Installer" 
+                                    (concat src x))))
+      (condition-case nil
+          (progn
+            (setq vers
+                  (with-temp-buffer (call-process "sw_vers" nil t nil "-productVersion")
+                                    (trim-string (buffer-string))))
+            (if (version<= "10.11" vers) ;; El Capitan
+                (progn
+                  ;; attempt to copy directly
+                  (condition-case nil
+                      (progn
+                        (copy-file (concat bin "aquamacs") "/usr/local/bin/" 'overwrite-if-exists)
+                        (copy-file (concat bin "emacsclient") "/usr/local/bin/" 'overwrite-if-exists)
+                        (setq installed "The command-line tools have been installed.\n"))
+                    (error nil
+                           (installer "Aquamacs Command Line Tool.mpkg"))))
+              ;; open pre-ElCapitan Installer
+              (installer "Aquamacs Command Line Tool PreElCapitan.mpkg")))
+
+        (error nil
+               (installer "Aquamacs Command Line Tool Pre-ElCapitan.mpkg")))
+
+      (aquamacs-message "%sCall command-line-tool from a shell as `aquamacs', e.g., as \"aquamacs file.txt\"" installed))))
 
 
   
