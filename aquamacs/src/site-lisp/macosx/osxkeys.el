@@ -102,13 +102,13 @@ after updating this variable.")
 ;; to prevent isearch from interpreting this event (and aborting)
 (define-key special-event-map [ns-application-store-state] 'ignore)
 
-(aquamacs-set-defaults '((x-select-enable-clipboard t)))
+(aquamacs-set-defaults '((select-enable-clipboard t)))
 
 ;; support copy&paste at the right level
 (setq interprogram-paste-function 'aquamacs-cut-buffer-or-selection-value)
 
 (defun aquamacs-cut-buffer-or-selection-value ()
-  (when x-select-enable-clipboard
+  (when select-enable-clipboard
     (let (text)
       ;; Consult the selection, then the cut buffer.  Treat empty strings
       ;; as if they were unset.
@@ -123,13 +123,13 @@ after updating this variable.")
 	nil)
        (t (setq ns-last-selected-text text))))))
 
-;; overwrite x-select-text, to honor x-select-enable-clipboard
+;; overwrite x-select-text, to honor select-enable-clipboard
 (defun x-select-text (text &optional push)
   "Put TEXT, a string, on the pasteboard.
 Ignored if text was selected by mouse. PUSH is ignored."
   ;; ensure Services know the data type
   (x-own-selection-internal 'PRIMARY text)
-  (when x-select-enable-clipboard
+  (when select-enable-clipboard
     (ns-set-pasteboard text))
   (setq ns-last-selected-text text))
 
@@ -314,7 +314,7 @@ With argument, do this that many times."
   (if (and mouse-secondary-overlay
 	   (overlay-start mouse-secondary-overlay)
 	   (overlay-end mouse-secondary-overlay))
-      (let ((x-select-enable-clipboard t)
+      (let ((select-enable-clipboard t)
 	    (mark-was-active mark-active))
 	(kill-ring-save 
 	 (overlay-start mouse-secondary-overlay) 
@@ -329,7 +329,7 @@ With argument, do this that many times."
   "Kill the secondary selection, and save it in the X clipboard."
   (interactive)
   (if mouse-secondary-overlay
-      (let ((x-select-enable-clipboard t)
+      (let ((select-enable-clipboard t)
 	    (mark-was-active mark-active))
 	(kill-region 
 	 (overlay-start mouse-secondary-overlay)
@@ -444,7 +444,7 @@ Wraps around after throwing and error once."
   (if (and isearch-mode isearch-string (> (length isearch-string) 0))
      (call-interactively (if cua-mode 'cua-paste
 			     'clipboard-yank))
-    (let ((x-select-enable-clipboard t))
+    (let ((select-enable-clipboard t))
       (call-interactively 'isearch-yank-kill))))
 
 (put 'aquamacs-isearch-yank-kill 'delete-selection 'yank)
@@ -1025,8 +1025,8 @@ ns-command-modifier osxkeys-command-key))))
 
 (defvar osx-key--saved-low-priority-map (make-sparse-keymap)
   "Bindings in the global map overwritten when `osx-key-mode' was turned on.")
-(defvar osx-key--saved-x-select-enable-clipboard 'unset
-  "Value of `x-select-enable-clipboard' when `osx-key-mode' was turned on.")
+(defvar osx-key--saved-select-enable-clipboard 'unset
+  "Value of `select-enable-clipboard' when `osx-key-mode' was turned on.")
 
 (define-minor-mode osx-key-mode
   "Toggle Mac Key mode.
@@ -1046,11 +1046,11 @@ keymaps used by this mode. They may be modified where necessary."
   ;; use right mouse click as mouse-3
   (setq mac-wheel-button-is-mouse-2 osx-key-mode)
 
-  (let ((nv osx-key--saved-x-select-enable-clipboard)) 
-    (setq osx-key--saved-x-select-enable-clipboard
+  (let ((nv osx-key--saved-select-enable-clipboard))
+    (setq osx-key--saved-select-enable-clipboard
 	  (cons (not osx-key-mode)
-		x-select-enable-clipboard))
-    (setq x-select-enable-clipboard
+		select-enable-clipboard))
+    (setq select-enable-clipboard
 	  (if (and (consp nv) (eq (car nv) osx-key-mode))
 	      (cdr nv)
 	    ;; use default (in case of various errors)

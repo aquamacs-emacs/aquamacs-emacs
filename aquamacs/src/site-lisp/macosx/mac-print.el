@@ -122,7 +122,7 @@ in HTML format."
   (when (or (not transient-mark-mode) mark-active beg)
     (let ((htmlize-white-background t)
 	  (htmlize-output-type 'inline-css))
-      (let ((x-select-enable-clipboard t)
+      (let ((select-enable-clipboard t)
 	    (buf (aquamacs-convert-to-html-buffer beg end)))
 	;; externally store text as text
 	(ns-store-selection-internal 'CLIPBOARD (buffer-substring beg end) 'txt)
@@ -146,7 +146,7 @@ copied into the clipboard for use in another application."
   (when (or (not transient-mark-mode) mark-active beg)
     (let ((htmlize-white-background t)
 	  (htmlize-output-type 'inline-css))
-      (let ((x-select-enable-clipboard t)
+      (let ((select-enable-clipboard t)
 	    (buf (aquamacs-convert-to-html-buffer beg end)))
 	;; externally store text as text
 	(ns-store-selection-internal 'CLIPBOARD (buffer-substring beg end) 'txt)

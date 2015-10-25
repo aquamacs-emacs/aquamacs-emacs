@@ -1200,7 +1200,7 @@ be killed."
 ;; (global-set-key (vector '(shift drag-mouse-1)) 'mouse-save)
 (global-set-key (vector `(meta shift down-mouse-1)) 'mouse-save-secondary)
 
-(aquamacs-set-defaults '((x-select-enable-clipboard nil)
+(aquamacs-set-defaults '((select-enable-clipboard t)
 			 (cua-mode t)
 			 ;; (mouse-sel-leave-point-near-mouse t)
 			 ))
@@ -1321,7 +1321,7 @@ we put it on this frame."
     ;; (mac-pass-command-to-system  custom-variable)
     (ns-emulate-three-button-mouse  custom-variable)
     (ns-antialias-text  custom-variable)
-    (x-select-enable-clipboard  custom-variable)
+    (select-enable-clipboard  custom-variable)
     (special-display-regexps custom-variable)
     )
   "Options specific to Aquamacs Emacs.  
