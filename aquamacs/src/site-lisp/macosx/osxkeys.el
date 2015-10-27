@@ -102,36 +102,40 @@ after updating this variable.")
 ;; to prevent isearch from interpreting this event (and aborting)
 (define-key special-event-map [ns-application-store-state] 'ignore)
 
-(aquamacs-set-defaults '((select-enable-clipboard t)))
+(aquamacs-set-defaults '((select-enable-clipboard t)
+                         (mouse-drag-copy-region nil)))
+
 
 ;; support copy&paste at the right level
-(setq interprogram-paste-function 'aquamacs-cut-buffer-or-selection-value)
-
-(defun aquamacs-cut-buffer-or-selection-value ()
-  (when select-enable-clipboard
-    (let (text)
-      ;; Consult the selection, then the cut buffer.  Treat empty strings
-      ;; as if they were unset.
-      (or text (setq text (ns-get-pasteboard)))
-      (if (string= text "") (setq text nil))
-      (cond
-       ((not text) nil)
-       ((eq text ns-last-selected-text) nil)
-       ((string= text ns-last-selected-text)
-	;; Record the newer string, so subsequent calls can use the `eq' test.
-	(setq ns-last-selected-text text)
-	nil)
-       (t (setq ns-last-selected-text text))))))
+;; (setq interprogram-paste-function 'aquamacs-cut-buffer-or-selection-value)
+;; (setq interprogram-paste-function 'gui-selection-value)
+;; (setq select-active-regions nil)
+;; (setq select-enable-primary t)
+;; (defun aquamacs-cut-buffer-or-selection-value ()
+;;   (when select-enable-clipboard
+;;     (let (text)
+;;       ;; Consult the selection, then the cut buffer.  Treat empty strings
+;;       ;; as if they were unset.
+;;       (or text (setq text (ns-get-pasteboard)))
+;;       (if (string= text "") (setq text nil))
+;;       (cond
+;;        ((not text) nil)
+;;        ((eq text ns-last-selected-text) nil)
+;;        ((string= text ns-last-selected-text)
+;; 	;; Record the newer string, so subsequent calls can use the `eq' test.
+;; 	(setq ns-last-selected-text text)
+;; 	nil)
+;;        (t (setq ns-last-selected-text text))))))
 
 ;; overwrite x-select-text, to honor select-enable-clipboard
-(defun x-select-text (text &optional push)
-  "Put TEXT, a string, on the pasteboard.
-Ignored if text was selected by mouse. PUSH is ignored."
-  ;; ensure Services know the data type
-  (x-own-selection-internal 'PRIMARY text)
-  (when select-enable-clipboard
-    (ns-set-pasteboard text))
-  (setq ns-last-selected-text text))
+;; (defun x-select-text (text &optional push)
+;;   "Put TEXT, a string, on the pasteboard.
+;; Ignored if text was selected by mouse. PUSH is ignored."
+;;   ;; ensure Services know the data type
+;;   (x-own-selection-internal 'PRIMARY text)
+;;   (when select-enable-clipboard
+;;     (ns-set-pasteboard text))
+;;   (setq ns-last-selected-text text))
 
 (defun aquamacs-left-char ()
   "Move point to the left or the beginning of the region.

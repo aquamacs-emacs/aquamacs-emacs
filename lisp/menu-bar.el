@@ -518,14 +518,16 @@
 (defun clipboard-kill-ring-save (beg end &optional region)
   "Copy region to kill ring, and save in the GUI's clipboard."
   (interactive "r\np")
-  (let ((gui-select-enable-clipboard t))
-    (kill-ring-save beg end region)))
+  (and (or (not transient-mark-mode) (use-region-p)) ;; Aquamacs restriction
+       (let ((gui-select-enable-clipboard t))
+         (kill-ring-save beg end region))))
 
 (defun clipboard-kill-region (beg end &optional region)
   "Kill the region, and save it in the GUI's clipboard."
   (interactive "r\np")
-  (let ((gui-select-enable-clipboard t))
-    (kill-region beg end region)))
+  (and (or (not transient-mark-mode) (use-region-p)) ;; Aquamacs restriction
+       (let ((gui-select-enable-clipboard t))
+         (kill-region beg end region))))
 
 (defun menu-bar-enable-clipboard ()
   "Make CUT, PASTE and COPY (keys and menu bar items) use the clipboard.
