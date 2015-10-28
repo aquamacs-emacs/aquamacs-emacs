@@ -124,7 +124,7 @@ electric.elc \
 emacs-lisp/eldoc.elc \
 cus-start.elc \
 tooltip.elc \
-leim/leim-list.el \
+leim/leim-list.elc \
 emacs-lisp/advice.elc \
 emacs-lisp/nadvice.elc \
 aquamacs/aquamacs-autoface-mode.elc \
