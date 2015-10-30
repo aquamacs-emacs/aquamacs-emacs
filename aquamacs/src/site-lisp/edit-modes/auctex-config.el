@@ -23,10 +23,10 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2008, 2009, Kevin Walzer, David Reitter
+;; Copyright (C) 2005, Kevin Walzer
+;; Copyright (C) 2008, 2009, 2015, David Reitter
 
   
-
 ;; set the PATH to typical locations for TeX stuff
 
 (mapc (lambda (path)
@@ -37,6 +37,7 @@
       (append 
        ; prefer TeXLive installation
        '("/usr/texbin")
+       '("/Library/TeX/texbin")
        ; in case /usr/texbin is missing
        (reverse (sort (file-expand-wildcards 
 		       "/usr/local/texlive/20*/bin") 
