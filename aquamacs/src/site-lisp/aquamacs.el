@@ -1200,11 +1200,6 @@ be killed."
 ;; (global-set-key (vector '(shift drag-mouse-1)) 'mouse-save)
 (global-set-key (vector `(meta shift down-mouse-1)) 'mouse-save-secondary)
 
-(aquamacs-set-defaults '((select-enable-clipboard t)
-			 (cua-mode t)
-			 ;; (mouse-sel-leave-point-near-mouse t)
-			 ))
-
 ;; applications on OS X don't display a splash screen
 (aquamacs-set-defaults '((inhibit-startup-message t)))
 

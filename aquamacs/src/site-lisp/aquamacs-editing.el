@@ -32,6 +32,19 @@
 ;; fill functions are taken from wikipedia-mode.el by Chong Yidong, Uwe Brauer
 ;; license: GPL2, 2007-02-13. Modified by David Reitter for Aquamacs.
 
+
+;; do not copy every killed or selected text into the pasteboard
+(aquamacs-set-defaults '((cua-mode t)
+                         (select-enable-clipboard nil)))
+
+(defun aquamacs-cut-buffer-or-selection-value ()
+  (let ((text (gui-backend-get-selection 'CLIPBOARD 'STRING)))
+    (if (string= text (car-safe kill-ring))
+        (car-safe kill-ring)
+      text)))
+
+(setq interprogram-paste-function 'aquamacs-cut-buffer-or-selection-value)
+
 (defun unfill-region () 
 "Undo filling, deleting stand-alone newlines.
 Newlines that do not end paragraphs, list entries, etc. in the region
