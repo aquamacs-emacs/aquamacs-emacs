@@ -101,7 +101,8 @@ point regardless of any selection."
   "Delete the active region.
 If KILLP in not-nil, the active region is killed instead of deleted."
 
-    (let ((prev-buffer-undo-list buffer-undo-list))
+  (let ((prev-buffer-undo-list buffer-undo-list)
+        (smart-spacing-mode nil))
 
   (cond
    (killp
