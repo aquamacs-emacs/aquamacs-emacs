@@ -74,9 +74,35 @@ point regardless of any selection."
 
 (defvar delsel--replace-text-or-position nil)
 
+
+;; Aquamacs extension
+;; Undo boundaries are inserted after pre-command-hooks are executed (command_loop_1 in keyboard.c).
+;; Thus we cannot prevent an undo boundary from being inserted.  Instead, we will need to
+;; remove the boundary after the text has been inserted.
+(defvar delsel--prev-undo-list nil) ;; saves undo boundary to be deleted
+(make-variable-buffer-local 'delsel--prev-undo-list)
+(defun remove-first-undo-boundary ()
+  (let ((prev buffer-undo-list)
+        (next (cdr buffer-undo-list)))
+    ;; find the next undo boundary
+    (while (car next);; (not (eq delsel--prev-undo-list next));;
+      (pop next)
+      (pop prev))
+    ;; remove this undo boundary
+    (when (and prev
+               ;; As we can't be sure what exactly the insertion command did,
+               ;; we need to check that this is the undo boundary to delete
+               (eq (cdr next) delsel--prev-undo-list))
+      (setcdr prev (cdr next))))
+  (remove-hook 'post-command-hook 'remove-first-undo-boundary 'local))
+
+
 (defun delete-active-region (&optional killp)
   "Delete the active region.
 If KILLP in not-nil, the active region is killed instead of deleted."
+
+    (let ((prev-buffer-undo-list buffer-undo-list))
+
   (cond
    (killp
     ;; Don't allow `kill-region' to change the value of `this-command'.
@@ -89,7 +115,13 @@ If KILLP in not-nil, the active region is killed instead of deleted."
           (cons (current-buffer)
                 (and (consp buffer-undo-list) (car buffer-undo-list)))))
    (t
-    (funcall region-extract-function 'delete-only))))
+    (funcall region-extract-function 'delete-only)))
+
+  ;; if the selection was actually deleted and an undo entry was created
+  (when (not (eq prev-buffer-undo-list buffer-undo-list))
+    ;; remove undo boundary after command has been carried out
+    (setq delsel--prev-undo-list buffer-undo-list)
+    (add-hook 'post-command-hook 'remove-first-undo-boundary 'append 'local))))
 
 (defun delete-selection-repeat-replace-region (arg)
   "Repeat replacing text of highlighted region with typed text.
