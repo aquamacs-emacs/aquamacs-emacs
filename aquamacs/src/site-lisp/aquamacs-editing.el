@@ -37,13 +37,8 @@
 (aquamacs-set-defaults '((cua-mode t)
                          (select-enable-clipboard nil)))
 
-(defun aquamacs-cut-buffer-or-selection-value ()
-  (let ((text (gui-backend-get-selection 'CLIPBOARD 'STRING)))
-    (if (string= text (car-safe kill-ring))
-        (car-safe kill-ring)
-      text)))
-
-(setq interprogram-paste-function 'aquamacs-cut-buffer-or-selection-value)
+;; clipboard-kill-ring-save and clipboard-yank switch on select-enable-clipboard temporarily.
+;; interprogram-paste-function  is gui-selection-value by default.
 
 (defun unfill-region () 
 "Undo filling, deleting stand-alone newlines.
