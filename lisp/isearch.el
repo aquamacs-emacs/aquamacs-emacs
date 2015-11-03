@@ -31,11 +31,7 @@
 ;; is completed.  It uses a recursive-edit to behave this way.
 
 ;; The key bindings active within isearch-mode are defined below in
-;; `isearch-mode-map' which is given bindings close to the default
-;; characters of the original isearch.el.  With `isearch-mode',
-;; however, you can bind multi-character keys and it should be easier
-;; to add new commands.  One bug though: keys with meta-prefix cannot
-;; be longer than two chars.  Also see minibuffer-local-isearch-map
+;; `isearch-mode-map'.  Also see minibuffer-local-isearch-map
 ;; for bindings active during `isearch-edit-string'.
 
 ;; isearch-mode should work even if you switch windows with the mouse,
@@ -235,7 +231,7 @@ If a function, use that function as an `isearch-regexp-function'.
 Example functions are `word-search-regexp' \(`\\[isearch-toggle-word]'),
 `isearch-symbol-regexp' \(`\\[isearch-toggle-symbol]'), and
 `character-fold-to-regexp' \(`\\[isearch-toggle-character-fold]')."
-  ;; :type is set below by `isearch-specify-regexp-function'.
+  ;; :type is set below by `isearch-define-mode-toggle'.
   :type '(choice (const :tag "Literal search" nil)
                  (const :tag "Regexp search" t)
                  (function :tag "Other"))
@@ -520,11 +516,7 @@ This is like `describe-bindings', but displays only Isearch keys."
     (put 'isearch-edit-string      :advertised-binding "\M-se")
 
     (define-key map "\M-se" 'isearch-edit-string)
-    (define-key map "\M-sc" 'isearch-toggle-case-fold)
-    (define-key map "\M-si" 'isearch-toggle-invisible)
-    (define-key map "\M-sr" 'isearch-toggle-regexp)
-    (define-key map "\M-s " 'isearch-toggle-lax-whitespace)
-    ;; More toggles defined by `isearch-specify-regexp-function'.
+    ;; More toggles defined by `isearch-define-mode-toggle'.
 
     (define-key map [?\M-%] 'isearch-query-replace)
     (define-key map [?\C-\M-%] 'isearch-query-replace-regexp)
@@ -962,7 +954,7 @@ used to set the value of `isearch-regexp-function'."
   "This is called after every isearch command to update the display.
 The last thing it does is to run `isearch-update-post-hook'."
   (unless (eq (current-buffer) isearch--current-buffer)
-    (when isearch--current-buffer
+    (when (buffer-live-p isearch--current-buffer)
       (with-current-buffer isearch--current-buffer
         (setq cursor-sensor-inhibit (delq 'isearch cursor-sensor-inhibit))))
     (setq isearch--current-buffer (current-buffer))
@@ -1494,97 +1486,88 @@ Use `isearch-exit' to quit without signaling."
   (interactive)
   (isearch-repeat 'backward))
 
-(defun isearch-toggle-regexp ()
-  "Toggle regexp searching on or off."
-  ;; The status stack is left unchanged.
-  (interactive)
-  (setq isearch-regexp (not isearch-regexp))
-  (if isearch-regexp (setq isearch-regexp-function nil))
-  (setq isearch-success t isearch-adjusted t)
-  (isearch-update))
-
+
 ;;; Toggles for `isearch-regexp-function' and `search-default-regexp-mode'.
-(defmacro isearch-specify-regexp-function (mode function key)
-  "Define a search MODE in which `isearch-regexp-function' is set to FUNCTION.
-Define a command called `isearch-toggle-MODE' and bind it to
-`isearch-mode-map' under `M-s KEY'.
-Also set the `isearch-message-prefix' property of FUNCTION."
+(defmacro isearch-define-mode-toggle (mode key function &optional docstring &rest body)
+  "Define a command called `isearch-toggle-MODE' and bind it to `M-s KEY'.
+The first line of the docstring is auto-generated, the remainder
+may be provided in DOCSTRING.
+If FUNCTION is a symbol, this command first toggles the value of
+`isearch-regexp-function' between nil and FUNCTION.  Also set the
+`isearch-message-prefix' property of FUNCTION.
+The command then executes BODY and updates the isearch prompt."
+  (declare (indent defun))
   (let ((command-name (intern (format "isearch-toggle-%s" mode))))
     `(progn
        (defun ,command-name ()
-         ,(format "Toggle %s searching on or off." mode)
+         ,(format "Toggle %s searching on or off.%s" mode
+                  (if docstring (concat "\n" docstring) ""))
          (interactive)
-         (setq isearch-regexp-function
-               (unless (eq isearch-regexp-function #',function)
-                 #',function))
-         (when isearch-regexp-function (setq isearch-regexp nil))
+         ,@(when function
+             `((setq isearch-regexp-function
+                     (unless (eq isearch-regexp-function #',function)
+                       #',function))
+               (when isearch-regexp-function (setq isearch-regexp nil))))
+         ,@body
          (setq isearch-success t isearch-adjusted t)
          (isearch-update))
        (define-key isearch-mode-map ,(concat "\M-s" key) #',command-name)
-       (put ',function 'isearch-message-prefix ,(format "%s " mode))
-       (cl-callf (lambda (types) (cons 'choice
-                                  (cons '(const :tag ,(capitalize (format "%s search" mode)) ,function)
-                                        (cdr types))))
-           (get 'search-default-regexp-mode 'custom-type)))))
+       ,@(when (symbolp function)
+           `((put ',function 'isearch-message-prefix ,(format "%s " mode))
+             (cl-callf (lambda (types) (cons 'choice
+                                        (cons '(const :tag ,(capitalize (format "%s search" mode)) ,function)
+                                              (cdr types))))
+                 (get 'search-default-regexp-mode 'custom-type)))))))
 
-(isearch-specify-regexp-function word word-search-regexp "w")
-(isearch-specify-regexp-function symbol isearch-symbol-regexp "_")
-(isearch-specify-regexp-function character-fold character-fold-to-regexp "'")
+(isearch-define-mode-toggle word "w" word-search-regexp)
+(isearch-define-mode-toggle symbol "_" isearch-symbol-regexp)
+(isearch-define-mode-toggle character-fold "'" character-fold-to-regexp)
 (put 'character-fold-to-regexp 'isearch-message-prefix "char-fold ")
 
-(defun isearch-toggle-lax-whitespace ()
-  "Toggle whitespace matching in searching on or off.
-In ordinary search, toggles the value of the variable
-`isearch-lax-whitespace'.  In regexp search, toggles the
-value of the variable `isearch-regexp-lax-whitespace'."
-  (interactive)
-  (if isearch-regexp
-      (setq isearch-regexp-lax-whitespace (not isearch-regexp-lax-whitespace))
-    (setq isearch-lax-whitespace (not isearch-lax-whitespace)))
+(isearch-define-mode-toggle regexp "r" nil nil
+  (setq isearch-regexp (not isearch-regexp))
+  (if isearch-regexp (setq isearch-regexp-function nil)))
+
+(defun isearch--momentary-message (string)
+  "Print STRING at the end of the isearch prompt for 1 second"
   (let ((message-log-max nil))
     (message "%s%s [%s]"
-	     (isearch-message-prefix nil isearch-nonincremental)
-	     isearch-message
-	     (if (if isearch-regexp
-		     isearch-regexp-lax-whitespace
-		   isearch-lax-whitespace)
-		 "match spaces loosely"
-	       "match spaces literally")))
-  (setq isearch-success t isearch-adjusted t)
-  (sit-for 1)
-  (isearch-update))
+             (isearch-message-prefix nil isearch-nonincremental)
+             isearch-message
+             string))
+  (sit-for 1))
 
-(defun isearch-toggle-case-fold ()
-  "Toggle case folding in searching on or off.
-Toggles the value of the variable `isearch-case-fold-search'."
-  (interactive)
-  (setq isearch-case-fold-search
-	(if isearch-case-fold-search nil 'yes))
-  (let ((message-log-max nil))
-    (message "%s%s [case %ssensitive]"
-	     (isearch-message-prefix nil isearch-nonincremental)
-	     isearch-message
-	     (if isearch-case-fold-search "in" "")))
-  (setq isearch-success t isearch-adjusted t)
-  (sit-for 1)
-  (isearch-update))
+(isearch-define-mode-toggle lax-whitespace " " nil
+  "In ordinary search, toggles the value of the variable
+`isearch-lax-whitespace'.  In regexp search, toggles the
+value of the variable `isearch-regexp-lax-whitespace'."
+  (isearch--momentary-message
+   (if (if isearch-regexp
+           (setq isearch-regexp-lax-whitespace (not isearch-regexp-lax-whitespace))
+         (setq isearch-lax-whitespace (not isearch-lax-whitespace)))
+       "match spaces loosely"
+     "match spaces literally")))
 
-(defun isearch-toggle-invisible ()
-  "Toggle searching in invisible text on or off.
+(isearch-define-mode-toggle case-fold "c" nil
+  "Toggles the value of the variable `isearch-case-fold-search'."
+  (isearch--momentary-message
+   (if (setq isearch-case-fold-search
+             (if isearch-case-fold-search nil 'yes))
+       "case insensitive"
+     "case sensitive")))
+
+(isearch-define-mode-toggle invisible "i" nil
+  "This determines whether to search inside invisible text or not.
 Toggles the variable `isearch-invisible' between values
 nil and a non-nil value of the option `search-invisible'
 \(or `open' if `search-invisible' is nil)."
-  (interactive)
-  (setq isearch-invisible
-	(if isearch-invisible nil (or search-invisible 'open)))
-  (let ((message-log-max nil))
-    (message "%s%s [match %svisible text]"
-	     (isearch-message-prefix nil isearch-nonincremental)
-	     isearch-message
-	     (if isearch-invisible "in" "")))
-  (setq isearch-success t isearch-adjusted t)
-  (sit-for 1)
-  (isearch-update))
+  "match %svisible text"
+  (isearch--momentary-message
+   (if (setq isearch-invisible
+             (if isearch-invisible
+                 nil (or search-invisible 'open)))
+       "match invisible text"
+     "match visible text")))
 
 
 ;; Word search

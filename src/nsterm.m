@@ -864,6 +864,8 @@ ns_constrain_all_frames (void)
 
   NSTRACE ("ns_constrain_all_frames");
 
+  block_input ();
+
   FOR_EACH_FRAME (tail, frame)
     {
       struct frame *f = XFRAME (frame);
@@ -875,6 +877,8 @@ ns_constrain_all_frames (void)
                           display:NO];
         }
     }
+
+  unblock_input ();
 }
 
 
@@ -1615,7 +1619,7 @@ x_set_window_size (struct frame *f,
   if (view == nil)
     return;
 
-  NSTRACE_RECT ("input", wr);
+  NSTRACE_RECT ("current", wr);
 
 /*fprintf (stderr, "\tsetWindowSize: %d x %d, pixelwise %d, font size %d x %d\n", width, height, pixelwise, FRAME_COLUMN_WIDTH (f), FRAME_LINE_HEIGHT (f));*/
 
@@ -1677,7 +1681,6 @@ x_set_window_size (struct frame *f,
 	   make_number (FRAME_NS_TITLEBAR_HEIGHT (f)),
 	   make_number (FRAME_TOOLBAR_HEIGHT (f))));
 
-  [view setRows: rows andColumns: cols];
   NSTRACE_RECT ("setFrame", wr);
   [window setFrame: wr display: YES];
 
@@ -3792,7 +3795,7 @@ ns_send_appdefined (int value)
               recognize and take as a command to halt the event loop.
    -------------------------------------------------------------------------- */
 {
-  /*NSTRACE ("ns_send_appdefined"); */
+  NSTRACE ("ns_send_appdefined");
 
 #ifdef NS_IMPL_GNUSTEP
   // GNUstep needs postEvent to happen on the main thread.
@@ -4710,6 +4713,8 @@ ns_term_init (Lisp_Object display_name)
   if (ns_initialized) return x_display_list;
   ns_initialized = 1;
 
+  block_input ();
+
   NSTRACE ("ns_term_init");
 
   [outerpool release];
@@ -5030,6 +5035,8 @@ ns_term_init (Lisp_Object display_name)
 
   NSTRACE_MSG ("ns_term_init done");
 
+  unblock_input ();
+
   return dpyinfo;
 }
 
@@ -5065,6 +5072,8 @@ ns_term_shutdown (int sig)
 
 - (id)init
 {
+  NSTRACE ("[EmacsApp init]");
+
   if ((self = [super init]))
     {
 #ifdef NS_IMPL_COCOA
@@ -5081,6 +5090,8 @@ ns_term_shutdown (int sig)
 #ifdef NS_IMPL_COCOA
 - (void)run
 {
+  NSTRACE ("[EmacsApp run]");
+
 #ifndef NSAppKitVersionNumber10_9
 #define NSAppKitVersionNumber10_9 1265
 #endif
@@ -5123,6 +5134,8 @@ ns_term_shutdown (int sig)
 
 - (void)stop: (id)sender
 {
+  NSTRACE ("[EmacsApp stop]");
+
     shouldKeepRunning = NO;
     // Stop possible dialog also.  Noop if no dialog present.
     // The file dialog still leaks 7k - 10k on 10.9 though.
@@ -5132,6 +5145,8 @@ ns_term_shutdown (int sig)
 
 - (void)logNotification: (NSNotification *)notification
 {
+  NSTRACE ("[EmacsApp logNotification]");
+
   const char *name = [[notification name] UTF8String];
   if (!strstr (name, "Update") && !strstr (name, "NSMenu")
       && !strstr (name, "WindowNumber"))
@@ -5147,7 +5162,7 @@ ns_term_shutdown (int sig)
   int type = [theEvent type];
   NSWindow *window = [theEvent window];
 
-/*  NSTRACE ("sendEvent"); */
+  NSTRACE ("[EmacsApp sendEvent]");
 /*fprintf (stderr, "received event of type %d\t%d\n", type);*/
 
 #ifdef NS_IMPL_GNUSTEP
@@ -5355,6 +5370,8 @@ ns_term_shutdown (int sig)
 
 - (void)newFrame: (id)sender
 {
+  NSTRACE ("[EmacsApp newFrame]");
+
   struct frame *emacsframe = SELECTED_FRAME ();
   NSEvent *theEvent = [NSApp currentEvent];
 
@@ -5462,6 +5479,8 @@ typedef struct _AppleEventSelectionRange {
 /* Open a file (used by below, after going into queue read by ns_read_socket) */
 - (BOOL) openFile: (NSString *)fileName
 {
+  NSTRACE ("[EmacsApp openFile]");
+
   struct frame *emacsframe = SELECTED_FRAME ();
   NSEvent *theEvent = [NSApp currentEvent];
 
@@ -5600,7 +5619,8 @@ typedef struct
      When application is loaded, terminate event loop in ns_term_init
    -------------------------------------------------------------------------- */
 {
-  NSTRACE ("applicationDidFinishLaunching");
+  NSTRACE ("[EmacsApp applicationDidFinishLaunching]");
+
 #ifdef NS_IMPL_GNUSTEP
   ((EmacsApp *)self)->applicationDidFinishLaunchingCalled = YES;
 #endif
@@ -5652,6 +5672,8 @@ typedef struct
 
 - (void) terminate: (id)sender
 {
+  NSTRACE ("[EmacsApp terminate]");
+
   struct frame *emacsframe = SELECTED_FRAME ();
 
   if (!emacs_event)
@@ -5688,6 +5710,8 @@ runAlertPanel(NSString *title,
 
 - (NSApplicationTerminateReply)applicationShouldTerminate: (id)sender
 {
+  NSTRACE ("[EmacsApp applicationShouldTerminate]");
+
   bool ret;
 
   if (NILP (ns_confirm_quit)) //   || ns_shutdown_properly  --> TO DO
@@ -5859,6 +5883,7 @@ not_in_argv (NSString *arg)
 /* TODO: these may help w/IO switching btwn terminal and NSApp */
 - (void)applicationWillBecomeActive: (NSNotification *)notification
 {
+  NSTRACE ("[EmacsApp applicationWillBecomeActive]");
   /* When re-activating the application, a selected (key) frame hidden
      with orderOut is brought to the front and made visible.  It's
      unclear why this happens with the NS port (and not in other applications,
@@ -5871,11 +5896,11 @@ not_in_argv (NSString *arg)
   //ns_app_active=YES;
 }
 
-- (void)applicationDidBecomeActive:(NSNotification *)aNotification
+- (void)applicationDidBecomeActive: (NSNotification *)notification
 {
-  NSTRACE ("applicationDidBecomeActive");
-  /* The Activated event is actually "reopen" 
-   So the following seems questionable. */
+  NSTRACE ("[EmacsApp applicationDidBecomeActive]");
+  /* The Activated event is actually "reopen"
+     So the following seems questionable. */
   struct frame *emacsframe = SELECTED_FRAME ();
   NSEvent *theEvent = [NSApp currentEvent];
 
@@ -5924,6 +5949,8 @@ not_in_argv (NSString *arg)
 
 - (void)applicationDidResignActive: (NSNotification *)notification
 {
+  NSTRACE ("[EmacsApp applicationDidResignActive]");
+
   /* Keep hidden frames hidden.  This works OK as a workaround. */
   if (! FRAME_VISIBLE_P (SELECTED_FRAME ()))
     x_make_frame_invisible (SELECTED_FRAME ());
@@ -7046,6 +7073,8 @@ not_in_argv (NSString *arg)
   NSTRACE ("updateFrameSize");
   NSTRACE_SIZE ("Original size", NSMakeSize (oldw, oldh));
   NSTRACE_RECT ("Original frame", wr);
+  NSTRACE_MSG  ("Original columns: %d", cols);
+  NSTRACE_MSG  ("Original rows: %d", rows);
 
   if (! [self isFullscreen])
     {
@@ -7062,12 +7091,18 @@ not_in_argv (NSString *arg)
   if (wait_for_tool_bar)
     {
       if (FRAME_TOOLBAR_HEIGHT (emacsframe) == 0)
-        return;
+        {
+          NSTRACE_MSG ("Waiting for toolbar");
+          return;
+        }
       wait_for_tool_bar = NO;
     }
 
   neww = (int)wr.size.width - emacsframe->border_width;
   newh = (int)wr.size.height - extra;
+
+  NSTRACE_SIZE ("New size", NSMakeSize (neww, newh));
+  NSTRACE_MSG ("tool_bar_height: %d", emacsframe->tool_bar_height);
 
   cols = FRAME_PIXEL_WIDTH_TO_TEXT_COLS (emacsframe, neww);
   rows = FRAME_PIXEL_HEIGHT_TO_TEXT_LINES (emacsframe, newh);
@@ -7077,6 +7112,9 @@ not_in_argv (NSString *arg)
 
   if (rows < MINHEIGHT)
     rows = MINHEIGHT;
+
+  NSTRACE_MSG  ("New columns: %d", cols);
+  NSTRACE_MSG  ("New rows: %d", rows);
 
   if (oldr != rows || oldc != cols || neww != oldw || newh != oldh)
     {
@@ -7094,6 +7132,10 @@ not_in_argv (NSString *arg)
       NSTRACE_RECT ("setFrame", wr);
       [view setFrame: wr];
       [self windowDidMove:nil];   // Update top/left.
+    }
+  else
+    {
+      NSTRACE_MSG ("No change");
     }
 }
 
@@ -7205,6 +7247,12 @@ not_in_argv (NSString *arg)
 - (void)windowDidResize: (NSNotification *)notification
 {
   NSTRACE ("windowDidResize");
+
+  if (emacsframe->output_data.ns->in_animation)
+    {
+      NSTRACE_MSG ("Ignored (in animation)");
+      return;
+    }
 
   if (! [self fsIsNative])
     {
@@ -7479,7 +7527,7 @@ not_in_argv (NSString *arg)
   if (!NILP (tem))
     [win setMiniwindowTitle:
            [NSString stringWithUTF8String: SDATA (tem)]];
-#endif NS_IMPL_GNUSTEP
+#endif // NS_IMPL_GNUSTEP
   {
     NSScreen *screen = [win screen];
 
@@ -8412,6 +8460,7 @@ not_in_argv (NSString *arg)
 
 - (void) setRows: (int) r andColumns: (int) c
 {
+  NSTRACE ("[EmacsView setRows:%d andColumns:%d]", r, c);
   rows = r;
   cols = c;
 }

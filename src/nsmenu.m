@@ -1102,10 +1102,20 @@ free_frame_tool_bar (struct frame *f)
    -------------------------------------------------------------------------- */
 {
   EmacsView *view = FRAME_NS_VIEW (f);
+
+  NSTRACE ("free_frame_tool_bar");
+
   block_input ();
   view->wait_for_tool_bar = NO;
-  [[view toolbar] setVisible: NO];
+
   FRAME_TOOLBAR_HEIGHT (f) = 0;
+
+  /* Note: This trigger an animation, which calls windowDidResize
+     repeatedly. */
+  f->output_data.ns->in_animation = 1;
+  [[view toolbar] setVisible: NO];
+  f->output_data.ns->in_animation = 0;
+
   unblock_input ();
 }
 
@@ -1120,6 +1130,8 @@ update_frame_tool_bar (struct frame *f)
   NSWindow *window = [view window];
   EmacsToolbar *toolbar = [view toolbar];
   int oldh;
+
+  NSTRACE ("update_frame_tool_bar");
 
   if (view == nil || toolbar == nil) return;
   block_input ();
@@ -1272,7 +1284,11 @@ update_frame_tool_bar (struct frame *f)
     }
 
   if (![toolbar isVisible])
+    {
+      f->output_data.ns->in_animation = 1;
       [toolbar setVisible: YES];
+      f->output_data.ns->in_animation = 0;
+    }
 
 #ifdef NS_IMPL_COCOA
   if ([toolbar changed])
@@ -1407,6 +1423,8 @@ Items in this list are always Lisp symbols.*/)
 
 - initForView: (EmacsView *)view withIdentifier: (NSString *)identifier
 {
+  NSTRACE ("[EmacsToolbar initForView: withIdentifier:]");
+
   self = [super initWithIdentifier: identifier];
   emacsView = view;
   [super setSizeMode: NSTOOLBAR_NEEDED_SIZE_MODE];
@@ -1422,6 +1440,8 @@ Items in this list are always Lisp symbols.*/)
 
 - (void)dealloc
 {
+  NSTRACE ("[EmacsToolbar dealloc]");
+
   [prevIdentifiers release];
   [activeIdentifiers release];
   [availableIdentifiers release];
@@ -1431,6 +1451,8 @@ Items in this list are always Lisp symbols.*/)
 
 - (void) clearActive
 {
+  NSTRACE ("[EmacsToolbar clearActive]");
+
   [prevIdentifiers release];
   prevIdentifiers = [activeIdentifiers copy];
   [activeIdentifiers removeAllObjects];
@@ -1444,6 +1466,8 @@ Items in this list are always Lisp symbols.*/)
 
 - (void) clearAll
 {
+  NSTRACE ("[EmacsToolbar clearAll]");
+
   [self clearActive];
   while ([[self items] count] > 0)
     [self removeItemAtIndex: 0];
@@ -1478,6 +1502,8 @@ Items in this list are always Lisp symbols.*/)
 
 - (BOOL) changed
 {
+  NSTRACE ("[EmacsToolbar changed]");
+
   return [activeIdentifiers isEqualToArray: prevIdentifiers] &&
     enablement == prevEnablement ? NO : YES;
 }
@@ -1518,6 +1544,8 @@ Items in this list are always Lisp symbols.*/)
 		          key: (char *)key
 		      labelText: (char *)label
 {
+  NSTRACE ("[EmacsToolbar addDisplayItemWithImage: ...]");
+
 
 
   NSString *label_str = @"";
@@ -1571,6 +1599,7 @@ Items in this list are always Lisp symbols.*/)
    all items to enabled state (for some reason). */
 - (void)validateVisibleItems
 {
+  NSTRACE ("[EmacsToolbar validateVisibleItems]");
 }
 
 
@@ -1580,12 +1609,16 @@ Items in this list are always Lisp symbols.*/)
       itemForItemIdentifier: (NSString *)itemIdentifier
   willBeInsertedIntoToolbar: (BOOL)flag
 {
+  NSTRACE ("[EmacsToolbar toolbar: ...]");
+
   /* look up NSToolbarItem by identifier and return... */
   return [identifierToItem objectForKey: itemIdentifier];
 }
 
 - (NSArray *)toolbarDefaultItemIdentifiers: (NSToolbar *)toolbar
 {
+  NSTRACE ("[EmacsToolbar toolbarDefaultItemIdentifiers:]");
+
   /* return entire set.. */
   return activeIdentifiers;
 }
@@ -1593,6 +1626,8 @@ Items in this list are always Lisp symbols.*/)
 /* for configuration palette */
 - (NSArray *)toolbarAllowedItemIdentifiers: (NSToolbar *)toolbar
 {
+  NSTRACE ("[EmacsToolbar toolbarAllowedItemIdentifiers:]");
+
   /* return entire set... */
   return availableIdentifiers; // [identifierToItem allKeys];
 }

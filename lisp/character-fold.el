@@ -101,16 +101,43 @@
       equiv))
   "Used for folding characters of the same group during search.")
 
+(defun character-fold--make-space-string (n)
+  "Return a string that matches N spaces."
+  (format "\\(?:%s\\|%s\\)"
+          (make-string n ?\s)
+          (apply #'concat
+                 (make-list n (or (aref character-fold-table ?\s) " ")))))
+
 ;;;###autoload
 (defun character-fold-to-regexp (string &optional _lax)
   "Return a regexp matching anything that character-folds into STRING.
 Any character in STRING that has an entry in
 `character-fold-table' is replaced with that entry (which is a
 regexp) and other characters are `regexp-quote'd."
-  (apply #'concat
-         (mapcar (lambda (c) (or (aref character-fold-table c)
-                            (regexp-quote (string c))))
-                 string)))
+  (let* ((spaces 0)
+         (chars (mapcar #'identity string))
+         (out chars))
+    ;; When the user types a space, we want to match the table entry,
+    ;; but we also want the ?\s to be visible to `search-spaces-regexp'.
+    ;; See commit message for a longer description.
+    (while chars
+      (let ((c (car chars)))
+        (setcar chars
+                (cond
+                 ((eq c ?\s)
+                  (setq spaces (1+ spaces))
+                  nil)
+                 ((> spaces 0)
+                  (prog1 (concat (character-fold--make-space-string spaces)
+                                 (or (aref character-fold-table c)
+                                     (regexp-quote (string c))))
+                    (setq spaces 0)))
+                 (t (or (aref character-fold-table c)
+                        (regexp-quote (string c))))))
+        (setq chars (cdr chars))))
+    (concat (apply #'concat out)
+            (when (> spaces 0)
+              (character-fold--make-space-string spaces)))))
 
 
 ;;; Commands provided for completeness.
@@ -129,5 +156,7 @@ which is searched for with `re-search-backward'.
 BOUND NOERROR COUNT are passed to `re-search-backward'."
   (interactive "sSearch: ")
   (re-search-backward (character-fold-to-regexp string) bound noerror count))
+
+(provide 'character-fold)
 
 ;;; character-fold.el ends here
