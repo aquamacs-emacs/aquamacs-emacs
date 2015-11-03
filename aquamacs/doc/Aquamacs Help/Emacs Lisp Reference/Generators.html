@@ -1,0 +1,166 @@
+<html lang="en">
+<head>
+<title>Generators - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Control-Structures.html#Control-Structures" title="Control Structures">
+<link rel="prev" href="Iteration.html#Iteration" title="Iteration">
+<link rel="next" href="Nonlocal-Exits.html#Nonlocal-Exits" title="Nonlocal Exits">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 25.0.50.
+
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Generators"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Nonlocal-Exits.html#Nonlocal-Exits">Nonlocal Exits</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Iteration.html#Iteration">Iteration</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Control-Structures.html#Control-Structures">Control Structures</a>
+<hr>
+</div>
+
+<h3 class="section">10.5 Generators</h3>
+
+<p><a name="index-generators-657"></a>
+  A <dfn>generator</dfn> is a function that produces a potentially-infinite
+stream of values.  Each time the function produces a value, it
+suspends itself and waits for a caller to request the next value.
+
+<div class="defun">
+&mdash; Macro: <b>iter-defun</b><var> name args </var>[<var>doc</var>] [<var>declare</var>] [<var>interactive</var>]<var> body<small class="dots">...</small><a name="index-iter_002ddefun-658"></a></var><br>
+<blockquote><p><code>iter-defun</code> defines a generator function.  A generator function
+has the same signature as a normal function, but works differently. 
+Instead of executing <var>body</var> when called, a generator function
+returns an iterator object.  That iterator runs <var>body</var> to generate
+values, emitting a value and pausing where <code>iter-yield</code> or
+<code>iter-yield-from</code> appears.  When <var>body</var> returns normally,
+<code>iter-next</code> signals <code>iter-end-of-sequence</code> with <var>body</var>'s
+result as its condition data.
+
+        <p>Any kind of Lisp code is valid inside <var>body</var>, but
+<code>iter-yield</code> and <code>iter-yield-from</code> cannot appear inside
+<code>unwind-protect</code> forms.
+
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>iter-lambda</b><var> args </var>[<var>doc</var>] [<var>interactive</var>]<var> body<small class="dots">...</small><a name="index-iter_002dlambda-659"></a></var><br>
+<blockquote><p><code>iter-lambda</code> produces an unnamed generator function that works
+just like a generator function produced with <code>iter-defun</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>iter-yield</b><var> value<a name="index-iter_002dyield-660"></a></var><br>
+<blockquote><p>When it appears inside a generator function, <code>iter-yield</code>
+indicates that the current iterator should pause and return
+<var>value</var> from <code>iter-next</code>.  <code>iter-yield</code> evaluates to the
+<code>value</code> parameter of next call to <code>iter-next</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>iter-yield-from</b><var> iterator<a name="index-iter_002dyield_002dfrom-661"></a></var><br>
+<blockquote><p><code>iter-yield-from</code> yields all the values that <var>iterator</var>
+produces and evaluates to the value that <var>iterator</var>'s generator
+function returns normally.  While it has control, <var>iterator</var>
+receives values sent to the iterator using <code>iter-next</code>. 
+</p></blockquote></div>
+
+   <p>To use a generator function, first call it normally, producing a
+<dfn>iterator</dfn> object.  An iterator is a specific instance of a
+generator.  Then use <code>iter-next</code> to retrieve values from this
+iterator.  When there are no more values to pull from an iterator,
+<code>iter-next</code> raises an <code>iter-end-of-sequence</code> condition with
+the iterator's final value.
+
+   <p>It's important to note that generator function bodies only execute
+inside calls to <code>iter-next</code>.  A call to a function defined with
+<code>iter-defun</code> produces an iterator; you must drive this
+iterator with <code>iter-next</code> for anything interesting to happen. 
+Each call to a generator function produces a <em>different</em>
+iterator, each with its own state.
+
+<div class="defun">
+&mdash; Function: <b>iter-next</b><var> iterator value<a name="index-iter_002dnext-662"></a></var><br>
+<blockquote><p>Retrieve the next value from <var>iterator</var>.  If there are no more
+values to be generated (because <var>iterator</var>'s generator function
+returned), <code>iter-next</code> signals the <code>iter-end-of-sequence</code>
+condition; the data value associated with this condition is the value
+with which <var>iterator</var>'s generator function returned.
+
+        <p><var>value</var> is sent into the iterator and becomes the value to which
+<code>iter-yield</code> evaluates.  <var>value</var> is ignored for the first
+<code>iter-next</code> call to a given iterator, since at the start of
+<var>iterator</var>'s generator function, the generator function is not
+evaluating any <code>iter-yield</code> form. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>iter-close</b><var> iterator<a name="index-iter_002dclose-663"></a></var><br>
+<blockquote><p>If <var>iterator</var> is suspended inside an <code>unwind-protect</code>'s
+<code>bodyform</code> and becomes unreachable, Emacs will eventually run
+unwind handlers after a garbage collection pass.  (Note that
+<code>iter-yield</code> is illegal inside an <code>unwind-protect</code>'s
+<code>unwindforms</code>.)  To ensure that these handlers are run before
+then, use <code>iter-close</code>. 
+</p></blockquote></div>
+
+   <p>Some convenience functions are provided to make working with
+iterators easier:
+
+<div class="defun">
+&mdash; Macro: <b>iter-do</b> (<var>var iterator</var>)<var> body <small class="dots">...</small><a name="index-iter_002ddo-664"></a></var><br>
+<blockquote><p>Run <var>body</var> with <var>var</var> bound to each value that
+<var>iterator</var> produces. 
+</p></blockquote></div>
+
+   <p>The Common Lisp loop facility also contains features for working with
+iterators.  See See <a href="../cl/Loop-Facility.html#Loop-Facility">Loop Facility</a>.
+
+   <p>The following piece of code demonstrates some important principles of
+working with iterators.
+
+<pre class="example">     (iter-defun my-iter (x)
+       (iter-yield (1+ (iter-yield (1+ x))))
+        ;; Return normally
+       -1)
+     
+     (let* ((iter (my-iter 5))
+            (iter2 (my-iter 0)))
+       ;; Prints 6
+       (print (iter-next iter))
+       ;; Prints 9
+       (print (iter-next iter 8))
+       ;; Prints 1; iter and iter2 have distinct states
+       (print (iter-next iter2 nil))
+     
+       ;; We expect the iter sequence to end now
+       (condition-case x
+           (iter-next iter)
+         (iter-end-of-sequence
+           ;; Prints -1, which my-iter returned normally
+           (print (cdr x)))))
+</pre>
+   </body></html>
+

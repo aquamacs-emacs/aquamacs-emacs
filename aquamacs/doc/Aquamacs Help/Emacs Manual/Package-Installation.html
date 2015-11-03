@@ -11,16 +11,16 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Manual',
-updated for Emacs version 24.3.50.
+updated for Emacs version 25.0.50.
 
-Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``The GNU
      Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     with the Front-Cover Texts being ``A GNU Manual,'' and with the
      Back-Cover Texts as in (a) below.  A copy of the license is
      included in the section entitled ``GNU Free Documentation
      License.''
@@ -42,14 +42,14 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Packages.html#Packages">Packages</a>
 <hr>
 </div>
 
-<h3 class="section">47.2 Package Installation</h3>
+<h3 class="section">48.2 Package Installation</h3>
 
-<p><a name="index-package_002dinstall-4292"></a>  Packages are most conveniently installed using the package menu
+<p><a name="index-package_002dinstall-4445"></a>  Packages are most conveniently installed using the package menu
 (see <a href="Package-Menu.html#Package-Menu">Package Menu</a>), but you can also use the command <kbd>M-x
 package-install</kbd>.  This prompts for the name of a package with the
 &lsquo;<samp><span class="samp">available</span></samp>&rsquo; status, then downloads and installs it.
 
-   <p><a name="index-package-requirements-4293"></a>  A package may <dfn>require</dfn> certain other packages to be installed,
+   <p><a name="index-package-requirements-4446"></a>  A package may <dfn>require</dfn> certain other packages to be installed,
 because it relies on functionality provided by them.  When Emacs
 installs such a package, it also automatically downloads and installs
 any required package that is not already installed.  (If a required
@@ -57,7 +57,7 @@ package is somehow unavailable, Emacs signals an error and stops
 installation.)  A package's requirements list is shown in its help
 buffer.
 
-   <p><a name="index-package_002darchives-4294"></a>  By default, packages are downloaded from a single package archive
+   <p><a name="index-package_002darchives-4447"></a>  By default, packages are downloaded from a single package archive
 maintained by the Emacs developers.  This is controlled by the
 variable <code>package-archives</code>, whose value is a list of package
 archives known to Emacs.  Each list element must have the form
@@ -66,6 +66,39 @@ package archive and <var>location</var> is the <acronym>HTTP</acronym> address o
 directory name of the package archive.  You can alter this list if you
 wish to use third party package archives&mdash;but do so at your own risk,
 and use only third parties that you think you can trust!
+
+   <p><a name="Package-Signing"></a><a name="index-package-security-4448"></a><a name="index-package-signing-4449"></a>  The maintainers of package archives can increase the trust that you
+can have in their packages by <dfn>signing</dfn> them.  They generate a
+private/public pair of cryptographic keys, and use the private key to
+create a <dfn>signature file</dfn> for each package.  With the public key, you
+can use the signature files to verify who created the package, and
+that it has not been modified.  A valid signature is not a cast-iron
+guarantee that a package is not malicious, so you should still
+exercise caution.  Package archives should provide instructions
+on how you can obtain their public key.  One way is to download the
+key from a server such as <a href="http://pgp.mit.edu/">http://pgp.mit.edu/</a>. 
+Use <kbd>M-x package-import-keyring</kbd> to import the key into Emacs. 
+Emacs stores package keys in the <samp><span class="file">gnupg</span></samp> subdirectory
+of <code>package-user-dir</code>. 
+The public key for the GNU package archive is distributed with Emacs,
+in the <samp><span class="file">etc/package-keyring.gpg</span></samp>.  Emacs uses it automatically.
+
+   <p><a name="index-package_002dcheck_002dsignature-4450"></a><a name="index-package_002dunsigned_002darchives-4451"></a>  If the user option <code>package-check-signature</code> is non-<code>nil</code>,
+Emacs attempts to verify signatures when you install packages.  If the
+option has the value <code>allow-unsigned</code>, you can still install a
+package that is not signed.  If you use some archives that do not sign
+their packages, you can add them to the list <code>package-unsigned-archives</code>.
+
+   <p>For more information on cryptographic keys and signing,
+see <a href="../gnupg/index.html#Top">Top</a>. 
+Emacs comes with an interface to GNU Privacy Guard,
+see <a href="../epa/index.html#Top">EasyPG</a>.
+
+   <p><a name="index-package_002dpinned_002dpackages-4452"></a>  If you have more than one package archive enabled, and some of them
+offer different versions of the same package, you may find the option
+<code>package-pinned-packages</code> useful.  You can add package/archive
+pairs to this list, to ensure that the specified package is only ever
+downloaded from the specified archive.
 
    <p>Once a package is downloaded and installed, it is <dfn>loaded</dfn> into
 the current Emacs session.  Loading a package is not quite the same as
@@ -80,10 +113,10 @@ the init file (see <a href="Init-File.html#Init-File">Init File</a>).  As an exc
 load packages at startup if invoked with the &lsquo;<samp><span class="samp">-q</span></samp>&rsquo; or
 &lsquo;<samp><span class="samp">--no-init-file</span></samp>&rsquo; options (see <a href="Initial-Options.html#Initial-Options">Initial Options</a>).
 
-   <p><a name="index-package_002denable_002dat_002dstartup-4295"></a>  To disable automatic package loading, change the variable
+   <p><a name="index-package_002denable_002dat_002dstartup-4453"></a>  To disable automatic package loading, change the variable
 <code>package-enable-at-startup</code> to <code>nil</code>.
 
-   <p><a name="index-package_002dinitialize-4296"></a>  The reason automatic package loading occurs after loading the init
+   <p><a name="index-package_002dinitialize-4454"></a>  The reason automatic package loading occurs after loading the init
 file is that user options only receive their customized values after
 loading the init file, including user options which affect the
 packaging system.  In some circumstances, you may want to load
@@ -92,20 +125,20 @@ in your init file depends on a package).  In that case, your init file
 should call the function <code>package-initialize</code>.  It is up to you
 to ensure that relevant user options, such as <code>package-load-list</code>
 (see below), are set up prior to the <code>package-initialize</code> call. 
-You should also set <code>package-enable-at-startup</code> to <code>nil</code>, to
+This will automatically set <code>package-enable-at-startup</code> to <code>nil</code>, to
 avoid loading the packages again after processing the init file. 
 Alternatively, you may choose to completely inhibit package loading at
 startup, and invoke the command <kbd>M-x package-initialize</kbd> to load
 your packages manually.
 
-   <p><a name="index-package_002dload_002dlist-4297"></a>  For finer control over package loading, you can use the variable
+   <p><a name="index-package_002dload_002dlist-4455"></a>  For finer control over package loading, you can use the variable
 <code>package-load-list</code>.  Its value should be a list.  A list element
 of the form <code>(</code><var>name</var> <var>version</var><code>)</code> tells Emacs to load
 version <var>version</var> of the package named <var>name</var>.  Here,
 <var>version</var> should be a version string (corresponding to a specific
 version of the package), or <code>t</code> (which means to load any
 installed version), or <code>nil</code> (which means no version; this
-&ldquo;disables&rdquo; the package, preventing it from being loaded).  A list
+disables the package, preventing it from being loaded).  A list
 element can also be the symbol <code>all</code>, which means to load the
 latest installed version of any package not named by the other list
 elements.  The default value is just <code>'(all)</code>.

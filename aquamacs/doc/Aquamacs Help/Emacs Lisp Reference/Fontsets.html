@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,17 +41,18 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Faces.html#Faces">Faces</a>
 <hr>
 </div>
 
-<h4 class="subsection">38.12.11 Fontsets</h4>
+<h4 class="subsection">37.12.11 Fontsets</h4>
 
-<p>A <dfn>fontset</dfn> is a list of fonts, each assigned to a range of
+<p><a name="index-fontset-4244"></a>
+  A <dfn>fontset</dfn> is a list of fonts, each assigned to a range of
 character codes.  An individual font cannot display the whole range of
 characters that Emacs supports, but a fontset can.  Fontsets have names,
 just as fonts do, and you can use a fontset name in place of a font name
-when you specify the &ldquo;font&rdquo; for a frame or a face.  Here is
+when you specify the font for a frame or a face.  Here is
 information about defining a fontset under Lisp program control.
 
 <div class="defun">
-&mdash; Function: <b>create-fontset-from-fontset-spec</b><var> fontset-spec &amp;optional style-variant-p noerror<a name="index-create_002dfontset_002dfrom_002dfontset_002dspec-3867"></a></var><br>
+&mdash; Function: <b>create-fontset-from-fontset-spec</b><var> fontset-spec &amp;optional style-variant-p noerror<a name="index-create_002dfontset_002dfrom_002dfontset_002dspec-4245"></a></var><br>
 <blockquote><p>This function defines a new fontset according to the specification
 string <var>fontset-spec</var>.  The string should have this format:
 
@@ -73,7 +74,7 @@ function does nothing.
         <p>If optional argument <var>style-variant-p</var> is non-<code>nil</code>, that says
 to create bold, italic and bold-italic variants of the fontset as well. 
 These variant fontsets do not have a short name, only a long one, which
-is made by altering <var>fontpattern</var> to indicate the bold or italic
+is made by altering <var>fontpattern</var> to indicate the bold and/or italic
 status.
 
         <p>The specification string also says which fonts to use in the fontset. 
@@ -124,9 +125,9 @@ Chinese GB2312 characters has a wild card &lsquo;<samp><span class="samp">*</spa
 field.
 
 <div class="defun">
-&mdash; Function: <b>set-fontset-font</b><var> name character font-spec &amp;optional frame add<a name="index-set_002dfontset_002dfont-3868"></a></var><br>
+&mdash; Function: <b>set-fontset-font</b><var> name character font-spec &amp;optional frame add<a name="index-set_002dfontset_002dfont-4246"></a></var><br>
 <blockquote><p>This function modifies the existing fontset <var>name</var> to use the font
-matching with <var>font-spec</var> for the character <var>character</var>.
+matching with <var>font-spec</var> for the specified <var>character</var>.
 
         <p>If <var>name</var> is <code>nil</code>, this function modifies the fontset of the
 selected frame or that of <var>frame</var> if <var>frame</var> is not
@@ -135,10 +136,10 @@ selected frame or that of <var>frame</var> if <var>frame</var> is not
         <p>If <var>name</var> is <code>t</code>, this function modifies the default
 fontset, whose short name is &lsquo;<samp><span class="samp">fontset-default</span></samp>&rsquo;.
 
-        <p><var>character</var> may be a cons; <code>(</code><var>from</var><code> . </code><var>to</var><code>)</code>, where
-<var>from</var> and <var>to</var> are character codepoints.  In that case, use
-<var>font-spec</var> for all characters in the range <var>from</var> and <var>to</var>
-(inclusive).
+        <p>In addition to specifying a single codepoint, <var>character</var> may be a
+cons <code>(</code><var>from</var><code> . </code><var>to</var><code>)</code>, where <var>from</var> and <var>to</var> are
+character codepoints.  In that case, use <var>font-spec</var> for all the
+characters in the range <var>from</var> and <var>to</var> (inclusive).
 
         <p><var>character</var> may be a charset.  In that case, use
 <var>font-spec</var> for all character in the charsets.
@@ -146,12 +147,21 @@ fontset, whose short name is &lsquo;<samp><span class="samp">fontset-default</sp
         <p><var>character</var> may be a script name.  In that case, use
 <var>font-spec</var> for all character in the charsets.
 
+        <p><var>font-spec</var> may be a font-spec object created by the function
+<code>font-spec</code> (see <a href="Low_002dLevel-Font.html#Low_002dLevel-Font">Low-Level Font</a>).
+
         <p><var>font-spec</var> may be a cons; <code>(</code><var>family</var><code> . </code><var>registry</var><code>)</code>,
 where <var>family</var> is a family name of a font (possibly including a
 foundry name at the head), <var>registry</var> is a registry name of a font
 (possibly including an encoding name at the tail).
 
         <p><var>font-spec</var> may be a font name string.
+
+        <p><var>font-spec</var> may be <code>nil</code>, which explicitly specifies that
+there's no font for the specified <var>character</var>.  This is useful,
+for example, to avoid expensive system-wide search for fonts for
+characters that have no glyphs, like those from the Unicode Private
+Use Area (PUA).
 
         <p>The optional argument <var>add</var>, if non-<code>nil</code>, specifies how to
 add <var>font-spec</var> to the font specifications previously set.  If it
@@ -169,7 +179,7 @@ the charset <code>japanese-jisx0208</code>.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>char-displayable-p</b><var> char<a name="index-char_002ddisplayable_002dp-3869"></a></var><br>
+&mdash; Function: <b>char-displayable-p</b><var> char<a name="index-char_002ddisplayable_002dp-4247"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if Emacs ought to be able to display
 <var>char</var>.  More precisely, if the selected frame's fontset has a
 font to display the character set that <var>char</var> belongs to.

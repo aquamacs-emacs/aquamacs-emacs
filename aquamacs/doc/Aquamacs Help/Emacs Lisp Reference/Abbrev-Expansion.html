@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,15 +41,16 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Abbrevs.html#Abbrevs">Abbrevs</a>
 <hr>
 </div>
 
-<h3 class="section">36.4 Looking Up and Expanding Abbreviations</h3>
+<h3 class="section">35.4 Looking Up and Expanding Abbreviations</h3>
 
-<p>Abbrevs are usually expanded by certain interactive commands,
+<p><a name="index-looking-up-abbrevs-3835"></a><a name="index-expanding-abbrevs-3836"></a><a name="index-abbrevs_002c-looking-up-and-expanding-3837"></a>
+  Abbrevs are usually expanded by certain interactive commands,
 including <code>self-insert-command</code>.  This section describes the
 subroutines used in writing such commands, as well as the variables they
 use for communication.
 
 <div class="defun">
-&mdash; Function: <b>abbrev-symbol</b><var> abbrev &amp;optional table<a name="index-abbrev_002dsymbol-3502"></a></var><br>
+&mdash; Function: <b>abbrev-symbol</b><var> abbrev &amp;optional table<a name="index-abbrev_002dsymbol-3838"></a></var><br>
 <blockquote><p>This function returns the symbol representing the abbrev named
 <var>abbrev</var>.  It returns <code>nil</code> if that abbrev is not
 defined.  The optional second argument <var>table</var> is the abbrev table
@@ -59,7 +60,7 @@ global abbrev table.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>abbrev-expansion</b><var> abbrev &amp;optional table<a name="index-abbrev_002dexpansion-3503"></a></var><br>
+&mdash; Function: <b>abbrev-expansion</b><var> abbrev &amp;optional table<a name="index-abbrev_002dexpansion-3839"></a></var><br>
 <blockquote><p>This function returns the string that <var>abbrev</var> would expand into (as
 defined by the abbrev tables used for the current buffer).  It returns
 <code>nil</code> if <var>abbrev</var> is not a valid abbrev. 
@@ -68,19 +69,22 @@ as in <code>abbrev-symbol</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>expand-abbrev</b><var><a name="index-expand_002dabbrev-3504"></a></var><br>
+&mdash; Command: <b>expand-abbrev</b><var><a name="index-expand_002dabbrev-3840"></a></var><br>
 <blockquote><p>This command expands the abbrev before point, if any.  If point does not
-follow an abbrev, this command does nothing.  The command returns the
-abbrev symbol if it did expansion, <code>nil</code> otherwise.
+follow an abbrev, this command does nothing.  To do the expansion, it
+calls the function that is the value of the <code>abbrev-expand-function</code>
+variable, with no arguments, and returns whatever that function does.
 
-        <p>If the abbrev symbol has a hook function that is a symbol whose
-<code>no-self-insert</code> property is non-<code>nil</code>, and if the hook
-function returns <code>nil</code> as its value, then <code>expand-abbrev</code>
-returns <code>nil</code> even though expansion did occur. 
+        <p>The default expansion function returns the abbrev symbol if it did
+expansion, and <code>nil</code> otherwise.  If the abbrev symbol has a hook
+function that is a symbol whose <code>no-self-insert</code> property is
+non-<code>nil</code>, and if the hook function returns <code>nil</code> as its
+value, then the default expansion function returns <code>nil</code>,
+even though expansion did occur. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>abbrev-insert</b><var> abbrev &amp;optional name start end<a name="index-abbrev_002dinsert-3505"></a></var><br>
+&mdash; Function: <b>abbrev-insert</b><var> abbrev &amp;optional name start end<a name="index-abbrev_002dinsert-3841"></a></var><br>
 <blockquote><p>This function inserts the abbrev expansion of <code>abbrev</code>, replacing
 the text between <code>start</code> and <code>end</code>.  If <code>start</code> is
 omitted, it defaults to point.  <code>name</code>, if non-<code>nil</code>, should
@@ -91,7 +95,7 @@ inserted.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>abbrev-prefix-mark</b><var> &amp;optional arg<a name="index-abbrev_002dprefix_002dmark-3506"></a></var><br>
+&mdash; Command: <b>abbrev-prefix-mark</b><var> &amp;optional arg<a name="index-abbrev_002dprefix_002dmark-3842"></a></var><br>
 <blockquote><p>This command marks the current location of point as the beginning of
 an abbrev.  The next call to <code>expand-abbrev</code> will use the text
 from here to point (where it is then) as the abbrev to expand, rather
@@ -104,7 +108,7 @@ next abbrev to be expanded.  The actual expansion removes the hyphen.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>abbrev-all-caps</b><var><a name="index-abbrev_002dall_002dcaps-3507"></a></var><br>
+&mdash; User Option: <b>abbrev-all-caps</b><var><a name="index-abbrev_002dall_002dcaps-3843"></a></var><br>
 <blockquote><p>When this is set non-<code>nil</code>, an abbrev entered entirely in upper
 case is expanded using all upper case.  Otherwise, an abbrev entered
 entirely in upper case is expanded by capitalizing each word of the
@@ -112,7 +116,7 @@ expansion.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>abbrev-start-location</b><var><a name="index-abbrev_002dstart_002dlocation-3508"></a></var><br>
+&mdash; Variable: <b>abbrev-start-location</b><var><a name="index-abbrev_002dstart_002dlocation-3844"></a></var><br>
 <blockquote><p>The value of this variable is a buffer position (an integer or a marker)
 for <code>expand-abbrev</code> to use as the start of the next abbrev to be
 expanded.  The value can also be <code>nil</code>, which means to use the
@@ -122,7 +126,7 @@ also set by <code>abbrev-prefix-mark</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>abbrev-start-location-buffer</b><var><a name="index-abbrev_002dstart_002dlocation_002dbuffer-3509"></a></var><br>
+&mdash; Variable: <b>abbrev-start-location-buffer</b><var><a name="index-abbrev_002dstart_002dlocation_002dbuffer-3845"></a></var><br>
 <blockquote><p>The value of this variable is the buffer for which
 <code>abbrev-start-location</code> has been set.  Trying to expand an abbrev
 in any other buffer clears <code>abbrev-start-location</code>.  This variable
@@ -130,21 +134,21 @@ is set by <code>abbrev-prefix-mark</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>last-abbrev</b><var><a name="index-last_002dabbrev-3510"></a></var><br>
+&mdash; Variable: <b>last-abbrev</b><var><a name="index-last_002dabbrev-3846"></a></var><br>
 <blockquote><p>This is the <code>abbrev-symbol</code> of the most recent abbrev expanded.  This
 information is left by <code>expand-abbrev</code> for the sake of the
 <code>unexpand-abbrev</code> command (see <a href="../emacs/Expanding-Abbrevs.html#Expanding-Abbrevs">Expanding Abbrevs</a>). 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>last-abbrev-location</b><var><a name="index-last_002dabbrev_002dlocation-3511"></a></var><br>
+&mdash; Variable: <b>last-abbrev-location</b><var><a name="index-last_002dabbrev_002dlocation-3847"></a></var><br>
 <blockquote><p>This is the location of the most recent abbrev expanded.  This contains
 information left by <code>expand-abbrev</code> for the sake of the
 <code>unexpand-abbrev</code> command. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>last-abbrev-text</b><var><a name="index-last_002dabbrev_002dtext-3512"></a></var><br>
+&mdash; Variable: <b>last-abbrev-text</b><var><a name="index-last_002dabbrev_002dtext-3848"></a></var><br>
 <blockquote><p>This is the exact expansion text of the most recent abbrev expanded,
 after case conversion (if any).  Its value is <code>nil</code> if the abbrev
 has already been unexpanded.  This contains information left by
@@ -152,24 +156,21 @@ has already been unexpanded.  This contains information left by
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>abbrev-expand-functions</b><var><a name="index-abbrev_002dexpand_002dfunctions-3513"></a></var><br>
-<blockquote><p>This is a wrapper hook (see <a href="Running-Hooks.html#Running-Hooks">Running Hooks</a>) run around the
-<code>expand-abbrev</code> function.  Each function on this hook is called
-with a single argument: a function that performs the normal abbrev
-expansion.  The hook function can hence do anything it wants before
-and after performing the expansion.  It can also choose not to call
-its argument, thus overriding the default behavior; or it may even
-call it several times.  The function should return the abbrev symbol
-if expansion took place. 
+&mdash; Variable: <b>abbrev-expand-function</b><var><a name="index-abbrev_002dexpand_002dfunction-3849"></a></var><br>
+<blockquote><p>The value of this variable is a function that <code>expand-abbrev</code>
+will call with no arguments to do the expansion.  The function can do
+anything it wants before and after performing the expansion. 
+It should return the abbrev symbol if expansion took place. 
 </p></blockquote></div>
 
    <p>The following sample code shows a simple use of
-<code>abbrev-expand-functions</code>.  It assumes that <code>foo-mode</code> is a
+<code>abbrev-expand-function</code>.  It assumes that <code>foo-mode</code> is a
 mode for editing certain files in which lines that start with &lsquo;<samp><span class="samp">#</span></samp>&rsquo;
 are comments.  You want to use Text mode abbrevs for those lines.  The
 regular local abbrev table, <code>foo-mode-abbrev-table</code> is
 appropriate for all other lines.  See <a href="Standard-Abbrev-Tables.html#Standard-Abbrev-Tables">Standard Abbrev Tables</a>, for the
-definitions of <code>local-abbrev-table</code> and <code>text-mode-abbrev-table</code>.
+definitions of <code>local-abbrev-table</code> and <code>text-mode-abbrev-table</code>. 
+See <a href="Advising-Functions.html#Advising-Functions">Advising Functions</a>, for details of <code>add-function</code>.
 
 <pre class="smallexample">     (defun foo-mode-abbrev-expand-function (expand)
        (if (not (save-excursion (forward-line 0) (eq (char-after) ?#)))
@@ -181,9 +182,8 @@ definitions of <code>local-abbrev-table</code> and <code>text-mode-abbrev-table<
      
      (add-hook 'foo-mode-hook
                #'(lambda ()
-                   (add-hook 'abbrev-expand-functions
-                             'foo-mode-abbrev-expand-function
-                             nil t)))
+                   (add-function :around (local 'abbrev-expand-function)
+                                 #'foo-mode-abbrev-expand-function)))
 </pre>
    </body></html>
 

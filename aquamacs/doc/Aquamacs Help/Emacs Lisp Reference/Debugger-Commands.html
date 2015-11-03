@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,9 +41,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Debugger.html#Debugger">Debugger</a>
 <hr>
 </div>
 
-<h4 class="subsection">18.1.6 Debugger Commands</h4>
+<h4 class="subsection">17.1.6 Debugger Commands</h4>
 
-<p><a name="index-debugger-command-list-1000"></a>
+<p><a name="index-debugger-command-list-1098"></a>
   The debugger buffer (in Debugger mode) provides special commands in
 addition to the usual Emacs commands.  The most important use of
 debugger commands is for stepping through code, so that you can see
@@ -55,6 +55,7 @@ the same function.  (To do this, visit the source for the function and
 type <kbd>C-M-x</kbd> on its definition.)  You cannot use the Lisp debugger
 to step through a primitive function.
 
+<!-- FIXME: Add @findex for the following commands?  -xfq -->
    <p>Here is a list of Debugger mode commands:
 
      <dl>
@@ -85,7 +86,8 @@ remove the star from the line in the backtrace buffer.
 <kbd>c</kbd>, but temporarily disable break-on-entry for all functions that
 are set up to do so by <code>debug-on-entry</code>.
 
-     <br><dt><kbd>e</kbd><dd>Read a Lisp expression in the minibuffer, evaluate it, and print the
+     <br><dt><kbd>e</kbd><dd>Read a Lisp expression in the minibuffer, evaluate it (with the
+relevant lexical environment, if applicable), and print the
 value in the echo area.  The debugger alters certain important
 variables, and the current buffer, as part of its operation; <kbd>e</kbd>
 temporarily restores their values from outside the debugger, so you can
@@ -116,9 +118,9 @@ effect as <kbd>c</kbd>, and the specified return value does not matter.
 
      <br><dt><kbd>l</kbd><dd>Display a list of functions that will invoke the debugger when called. 
 This is a list of functions that are set to break on entry by means of
-<code>debug-on-entry</code>.  <strong>Warning:</strong> if you redefine such a
-function and thus cancel the effect of <code>debug-on-entry</code>, it may
-erroneously show up in this list. 
+<code>debug-on-entry</code>.
+
+     <br><dt><kbd>v</kbd><dd>Toggle the display of local variables of the current stack frame. 
 </dl>
 
    </body></html>

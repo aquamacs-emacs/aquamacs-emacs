@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,12 +41,12 @@ Up:&nbsp;<a rel="up" accesskey="u" href="System-Interface.html#System-Interface"
 <hr>
 </div>
 
-<h3 class="section">39.19 Notifications on File Changes</h3>
+<h3 class="section">38.19 Notifications on File Changes</h3>
 
-<p><a name="index-file-notifications-4260"></a>
+<p><a name="index-file-notifications-4707"></a><a name="index-watch_002c-for-filesystem-events-4708"></a>
 Several operating systems support watching of filesystems for changes
 of files.  If configured properly, Emacs links a respective library
-like <samp><span class="file">gfilenotify</span></samp>, <samp><span class="file">inotify</span></samp>, or  <samp><span class="file">w32notify</span></samp>
+like <samp><span class="file">gfilenotify</span></samp>, <samp><span class="file">inotify</span></samp>, or <samp><span class="file">w32notify</span></samp>
 statically.  These libraries enable watching of filesystems on the
 local machine.
 
@@ -59,7 +59,7 @@ changes, there is the Emacs library <code>filenotify</code> which provides a
 unique interface.
 
 <div class="defun">
-&mdash; Function: <b>file-notify-add-watch</b><var> file flags callback<a name="index-file_002dnotify_002dadd_002dwatch-4261"></a></var><br>
+&mdash; Function: <b>file-notify-add-watch</b><var> file flags callback<a name="index-file_002dnotify_002dadd_002dwatch-4709"></a></var><br>
 <blockquote><p>Add a watch for filesystem events pertaining to <var>file</var>.  This
 arranges for filesystem events pertaining to <var>file</var> to be reported
 to Emacs.
@@ -100,10 +100,22 @@ any one of the following symbols:
           <dl>
 <dt><code>created</code><dd><var>file</var> was created
 <br><dt><code>deleted</code><dd><var>file</var> was deleted
-<br><dt><code>changed</code><dd><var>file</var> has changed
+<br><dt><code>changed</code><dd><var>file</var>'s contents has changed; with <samp><span class="file">w32notify</span></samp> library,
+reports attribute changes as well
 <br><dt><code>renamed</code><dd><var>file</var> has been renamed to <var>file1</var>
 <br><dt><code>attribute-changed</code><dd>a <var>file</var> attribute was changed
+<br><dt><code>stopped</code><dd>watching <var>file</var> has been stopped
 </dl>
+
+        <p>Note that the <samp><span class="file">w32notify</span></samp> library does not report
+<code>attribute-changed</code> events.  When some file's attribute, like
+permissions or modification time, has changed, this library reports a
+<code>changed</code> event.
+
+        <p>The <code>stopped</code> event reports, that watching the file has been
+stopped.  This could be because <code>file-notify-rm-watch</code> was called
+(see below), or because the file being watched was deleted, or due to
+another error reported from the underlying library.
 
         <p><var>file</var> and <var>file1</var> are the name of the file(s) whose event is
 being reported.  For example:
@@ -134,34 +146,72 @@ being reported.  For example:
                &rArr; Event (35025468 attribute-changed "/tmp/foo")
 </pre>
         <p>Whether the action <code>renamed</code> is returned, depends on the used
-watch library.  It can be expected, when a directory is watched, and
-both <var>file</var> and <var>file1</var> belong to this directory.  Otherwise,
-the actions <code>deleted</code> and <code>created</code> could be returned in a
-random order.
+watch library.  Otherwise, the actions <code>deleted</code> and
+<code>created</code> could be returned in a random order.
 
      <pre class="example">          (rename-file "/tmp/foo" "/tmp/bla")
                &rArr; Event (35025468 renamed "/tmp/foo" "/tmp/bla")
           
-          (file-notify-add-watch
-            "/var/tmp" '(change attribute-change) 'my-notify-callback)
-               &rArr; 35025504
-          
-          (rename-file "/tmp/bla" "/var/tmp/bla")
-               &rArr; ;; gfilenotify
-                  Event (35025468 renamed "/tmp/bla" "/var/tmp/bla")
-          
-               &rArr; ;; inotify
-                  Event (35025504 created "/var/tmp/bla")
-                  Event (35025468 deleted "/tmp/bla")
+          (delete-file "/tmp/bla")
+               &rArr; Event (35025468 deleted "/tmp/bla")
 </pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>file-notify-rm-watch</b><var> descriptor<a name="index-file_002dnotify_002drm_002dwatch-4262"></a></var><br>
+&mdash; Function: <b>file-notify-rm-watch</b><var> descriptor<a name="index-file_002dnotify_002drm_002dwatch-4710"></a></var><br>
 <blockquote><p>Removes an existing file watch specified by its <var>descriptor</var>. 
 <var>descriptor</var> should be an object returned by
 <code>file-notify-add-watch</code>. 
 </p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>file-notify-valid-p</b><var> descriptor<a name="index-file_002dnotify_002dvalid_002dp-4711"></a></var><br>
+<blockquote><p>Checks a watch specified by its <var>descriptor</var> for validity. 
+<var>descriptor</var> should be an object returned by
+<code>file-notify-add-watch</code>.
+
+        <p>A watch can become invalid if the file or directory it watches is
+deleted, or if the watcher thread exits abnormally for any other
+reason.  Removing the watch by calling <code>file-notify-rm-watch</code>
+also makes it invalid.
+
+     <pre class="example">          (make-directory "/tmp/foo")
+               &rArr; nil
+          
+          (setq desc
+                (file-notify-add-watch
+                  "/tmp/foo" '(change) 'my-notify-callback))
+               &rArr; 35025468
+          
+          (file-notify-valid-p desc)
+               &rArr; t
+          
+          (write-region "bla" nil "/tmp/foo/bla")
+               &rArr; Event (35025468 created "/tmp/foo/.#bla")
+                  Event (35025468 created "/tmp/foo/bla")
+                  Event (35025468 changed "/tmp/foo/bla")
+                  Event (35025468 changed "/tmp/foo/.#bla")
+          
+          ;; Deleting a file in the directory doesn't invalidate the watch.
+          (delete-file "/tmp/foo/bla")
+               &rArr; Event (35025468 deleted "/tmp/foo/bla")
+          
+          (write-region "bla" nil "/tmp/foo/bla")
+               &rArr; Event (35025468 created "/tmp/foo/.#bla")
+                  Event (35025468 created "/tmp/foo/bla")
+                  Event (35025468 changed "/tmp/foo/bla")
+                  Event (35025468 changed "/tmp/foo/.#bla")
+          
+          ;; Deleting the directory invalidates the watch.
+          (delete-directory "/tmp/foo" 'recursive)
+               &rArr; Event (35025468 deleted "/tmp/foo/bla")
+                  Event (35025468 deleted "/tmp/foo")
+                  Event (35025468 stopped "/tmp/foo")
+          
+          (file-notify-valid-p desc)
+               &rArr; nil
+</pre>
+        </blockquote></div>
 
    </body></html>
 

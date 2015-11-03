@@ -1,0 +1,2578 @@
+<html lang="en">
+<head>
+<title>The Emacs Widget Library</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="The Emacs Widget Library">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="top" href="#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2000-2015 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being "A GNU Manual", and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     "GNU Free Documentation License".
+
+     (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+     modify this GNU manual."
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<h1 class="settitle">The Emacs Widget Library</h1>
+   <div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Top" href="#Top">The Emacs Widget Library</a>
+<li><a name="toc_Introduction" href="#Introduction">1 Introduction</a>
+<li><a name="toc_User-Interface" href="#User-Interface">2 User Interface</a>
+<ul>
+<li><a href="#User-Interface">2.1 Editable Text Fields</a>
+<li><a href="#User-Interface">2.2 Buttons</a>
+<li><a href="#User-Interface">2.3 Navigation</a>
+</li></ul>
+<li><a name="toc_Programming-Example" href="#Programming-Example">3 Programming Example</a>
+<li><a name="toc_Setting-Up-the-Buffer" href="#Setting-Up-the-Buffer">4 Setting Up the Buffer</a>
+<li><a name="toc_Basic-Types" href="#Basic-Types">5 Basic Types</a>
+<ul>
+<li><a href="#link">5.1 The <code>link</code> Widget</a>
+<li><a href="#url_002dlink">5.2 The <code>url-link</code> Widget</a>
+<li><a href="#info_002dlink">5.3 The <code>info-link</code> Widget</a>
+<li><a href="#push_002dbutton">5.4 The <code>push-button</code> Widget</a>
+<li><a href="#editable_002dfield">5.5 The <code>editable-field</code> Widget</a>
+<li><a href="#text">5.6 The <code>text</code> Widget</a>
+<li><a href="#menu_002dchoice">5.7 The <code>menu-choice</code> Widget</a>
+<li><a href="#radio_002dbutton_002dchoice">5.8 The <code>radio-button-choice</code> Widget</a>
+<li><a href="#item">5.9 The <code>item</code> Widget</a>
+<li><a href="#choice_002ditem">5.10 The <code>choice-item</code> Widget</a>
+<li><a href="#toggle">5.11 The <code>toggle</code> Widget</a>
+<li><a href="#checkbox">5.12 The <code>checkbox</code> Widget</a>
+<li><a href="#checklist">5.13 The <code>checklist</code> Widget</a>
+<li><a href="#editable_002dlist">5.14 The <code>editable-list</code> Widget</a>
+<li><a href="#group">5.15 The <code>group</code> Widget</a>
+</li></ul>
+<li><a name="toc_Sexp-Types" href="#Sexp-Types">6 Sexp Types</a>
+<ul>
+<li><a href="#constants">6.1 The Constant Widgets</a>
+<li><a href="#generic">6.2 Generic Sexp Widget</a>
+<li><a href="#atoms">6.3 Atomic Sexp Widgets</a>
+<li><a href="#composite">6.4 Composite Sexp Widgets</a>
+</li></ul>
+<li><a name="toc_Widget-Properties" href="#Widget-Properties">7 Properties</a>
+<li><a name="toc_Defining-New-Widgets" href="#Defining-New-Widgets">8 Defining New Widgets</a>
+<li><a name="toc_Widget-Browser" href="#Widget-Browser">9 Widget Browser</a>
+<li><a name="toc_Widget-Minor-Mode" href="#Widget-Minor-Mode">10 Widget Minor Mode</a>
+<li><a name="toc_Utilities" href="#Utilities">11 Utilities</a>
+<li><a name="toc_Widget-Wishlist" href="#Widget-Wishlist">12 Wishlist</a>
+<li><a name="toc_GNU-Free-Documentation-License" href="#GNU-Free-Documentation-License">Appendix A GNU Free Documentation License</a>
+<li><a name="toc_Index" href="#Index">Index</a>
+</li></ul>
+</div>
+
+
+
+<div class="node">
+<a name="Top"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Introduction">Introduction</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#dir">(dir)</a>
+
+</div>
+
+<h2 class="unnumbered">The Emacs Widget Library</h2>
+
+<p>Copyright &copy; 2000&ndash;2015 Free Software Foundation, Inc.
+
+   <blockquote>
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with the Front-Cover Texts being &ldquo;A GNU Manual&rdquo;,
+and with the Back-Cover Texts as in (a) below.  A copy of the license
+is included in the section entitled &ldquo;GNU Free Documentation License&rdquo;.
+
+   <p>(a) The FSF's Back-Cover Text is: &ldquo;You have the freedom to copy and
+modify this GNU manual.&rdquo;
+</blockquote>
+
+<ul class="menu">
+<li><a accesskey="1" href="#Introduction">Introduction</a>
+<li><a accesskey="2" href="#User-Interface">User Interface</a>
+<li><a accesskey="3" href="#Programming-Example">Programming Example</a>
+<li><a accesskey="4" href="#Setting-Up-the-Buffer">Setting Up the Buffer</a>
+<li><a accesskey="5" href="#Basic-Types">Basic Types</a>
+<li><a accesskey="6" href="#Sexp-Types">Sexp Types</a>
+<li><a accesskey="7" href="#Widget-Properties">Widget Properties</a>
+<li><a accesskey="8" href="#Defining-New-Widgets">Defining New Widgets</a>
+<li><a accesskey="9" href="#Widget-Browser">Widget Browser</a>
+<li><a href="#Widget-Minor-Mode">Widget Minor Mode</a>
+<li><a href="#Utilities">Utilities</a>
+<li><a href="#Widget-Wishlist">Widget Wishlist</a>
+<li><a href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>
+<li><a href="#Index">Index</a>
+</ul>
+
+<div class="node">
+<a name="Introduction"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#User-Interface">User Interface</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Top">Top</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">1 Introduction</h2>
+
+<p>Most graphical user interface toolkits provide a number of standard
+user interface controls (sometimes known as &ldquo;widgets&rdquo; or &ldquo;gadgets&rdquo;). 
+Emacs doesn't really support anything like this, except for an
+incredibly powerful text &ldquo;widget.&rdquo;  On the other hand, Emacs does
+provide the necessary primitives to implement many other widgets
+within a text buffer.  The <code>widget</code> package simplifies this task.
+
+   <p><a name="index-basic-widgets-1"></a><a name="index-widgets_002c-basic-types-2"></a>The basic widgets are:
+
+     <dl>
+<dt><code>link</code><dd>Areas of text with an associated action.  Intended for hypertext links
+embedded in text. 
+<br><dt><code>push-button</code><dd>Like link, but intended for stand-alone buttons. 
+<br><dt><code>editable-field</code><dd>An editable text field.  It can be either variable or fixed length. 
+<br><dt><code>menu-choice</code><dd>Allows the user to choose one of multiple options from a menu, each
+option is itself a widget.  Only the selected option will be visible in
+the buffer. 
+<br><dt><code>radio-button-choice</code><dd>Allows the user to choose one of multiple options by activating radio
+buttons.  The options are implemented as widgets.  All options will be
+visible in the buffer. 
+<br><dt><code>item</code><dd>A simple constant widget intended to be used in the <code>menu-choice</code> and
+<code>radio-button-choice</code> widgets. 
+<br><dt><code>choice-item</code><dd>A button item only intended for use in choices.  When invoked, the user
+will be asked to select another option from the choice widget. 
+<br><dt><code>toggle</code><dd>A simple &lsquo;<samp><span class="samp">on</span></samp>&rsquo;/&lsquo;<samp><span class="samp">off</span></samp>&rsquo; switch. 
+<br><dt><code>checkbox</code><dd>A checkbox (&lsquo;<samp><span class="samp">[ ]</span></samp>&rsquo;/&lsquo;<samp><span class="samp">[X]</span></samp>&rsquo;). 
+<br><dt><code>editable-list</code><dd>Create an editable list.  The user can insert or delete items in the
+list.  Each list item is itself a widget. 
+</dl>
+
+   <p>Now, of what possible use can support for widgets be in a text editor? 
+I'm glad you asked.  The answer is that widgets are useful for
+implementing forms.  A <dfn>form</dfn> in Emacs is a buffer where the user is
+supposed to fill out a number of fields, each of which has a specific
+meaning.  The user is not supposed to change or delete any of the text
+between the fields.  Examples of forms in Emacs are the <samp><span class="file">forms</span></samp>
+package (of course), the customize buffers, the mail and news compose
+modes, and the <acronym>HTML</acronym> form support in the <samp><span class="file">w3</span></samp> browser.
+
+   <p><a name="index-widget-library_002c-why-use-it-3"></a>The advantages for a programmer of using the <code>widget</code> package to
+implement forms are:
+
+     <ol type=1 start=1>
+<li>More complex fields than just editable text are supported. 
+<li>You can give the users immediate feedback if they enter invalid data in a
+text field, and sometimes prevent entering invalid data. 
+<li>You can have fixed sized fields, thus allowing multiple fields to be
+lined up in columns. 
+<li>It is simple to query or set the value of a field. 
+<li>Editing happens in the buffer, not in the mini-buffer. 
+<li>Packages using the library get a uniform look, making them easier for
+the user to learn. 
+<li>As support for embedded graphics improve, the widget library will be
+extended to use the GUI features.  This means that your code using the
+widget library will also use the new graphic features automatically.
+        </ol>
+
+<div class="node">
+<a name="User-Interface"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Programming-Example">Programming Example</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Introduction">Introduction</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">2 User Interface</h2>
+
+<p>A form consists of read only text for documentation and some fields,
+where each field contains two parts, a tag and a value.  The tags are
+used to identify the fields, so the documentation can refer to the
+&lsquo;<samp><span class="samp">foo field</span></samp>&rsquo;, meaning the field tagged with &lsquo;<samp><span class="samp">Foo</span></samp>&rsquo;. Here is an
+example form:
+
+<pre class="example">     Here is some documentation.
+     
+     Name: <i>My Name</i>     <strong>Choose</strong>: This option
+     Address:  <i>Some Place
+     In some City
+     Some country.</i>
+     
+     See also <b>_other work_</b> for more information.
+     
+     Numbers: count to three below
+     <b>[INS]</b> <b>[DEL]</b> <i>One</i>
+     <b>[INS]</b> <b>[DEL]</b> <i>Eh, two?</i>
+     <b>[INS]</b> <b>[DEL]</b> <i>Five!</i>
+     <b>[INS]</b>
+     
+     Select multiple:
+     
+     <b>[X]</b> This
+     <b>[ ]</b> That
+     <b>[X]</b> Thus
+     
+     Select one:
+     
+     <b>(*)</b> One
+     <b>( )</b> Another One.
+     <b>( )</b> A Final One.
+     
+     <b>[Apply Form]</b> <b>[Reset Form]</b>
+</pre>
+   <p>The top level widgets in this example are tagged &lsquo;<samp><span class="samp">Name</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">Choose</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Address</span></samp>&rsquo;, &lsquo;<samp><span class="samp">_other work_</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Numbers</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">Select multiple</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Select one</span></samp>&rsquo;, &lsquo;<samp><span class="samp">[Apply Form]</span></samp>&rsquo;, and
+&lsquo;<samp><span class="samp">[Reset Form]</span></samp>&rsquo;.  There are basically two things the user can do
+within a form, namely editing the editable text fields and activating
+the buttons.
+
+<h3 class="section">2.1 Editable Text Fields</h3>
+
+<p>In the example, the value for the &lsquo;<samp><span class="samp">Name</span></samp>&rsquo; is most likely displayed
+in an editable text field, and so are values for each of the members of
+the &lsquo;<samp><span class="samp">Numbers</span></samp>&rsquo; list.  All the normal Emacs editing operations are
+available for editing these fields.  The only restriction is that each
+change you make must be contained within a single editable text field. 
+For example, capitalizing all text from the middle of one field to the
+middle of another field is prohibited.
+
+   <p>Editable text fields are created by the <code>editable-field</code> widget.
+
+   <p><strong>Warning:</strong> In an <code>editable-field</code> widget, the editable
+field must not be adjacent to another widget&mdash;that won't work. 
+You must put some text in between.  Either make this text part of
+the <code>editable-field</code> widget itself, or insert it with
+<code>widget-insert</code>.
+
+   <p>The <code>:format</code> keyword is useful for generating the necessary
+text; for instance, if you give it a value of <code>"Name: %v "</code>,
+the &lsquo;<samp><span class="samp">Name: </span></samp>&rsquo; part will provide the necessary separating text
+before the field and the trailing space will provide the
+separating text after the field.  If you don't include the
+<code>:size</code> keyword, the field will extend to the end of the
+line, and the terminating newline will provide separation after.
+
+   <p><strong>Warning:</strong> In an <code>editable-field</code> widget, the &lsquo;<samp><span class="samp">%v</span></samp>&rsquo; escape
+must be preceded by some other text in the <code>:format</code> string
+(if specified).
+
+   <p>The editing text fields are highlighted with the
+<code>widget-field-face</code> face, making them easy to find.
+
+<div class="defun">
+&mdash; Face: <b>widget-field-face</b><var><a name="index-widget_002dfield_002dface-4"></a></var><br>
+<blockquote><p>Face used for other editing fields. 
+</p></blockquote></div>
+
+<h3 class="section">2.2 Buttons</h3>
+
+<p><a name="index-widget-buttons-5"></a><a name="index-button-widgets-6"></a>Some portions of the buffer have an associated <dfn>action</dfn>, which can
+be <dfn>invoked</dfn> by a standard key or mouse command.  These portions
+are called <dfn>buttons</dfn>.  The default commands for activating a button
+are:
+
+     <dl>
+<dt><kbd>&lt;RET&gt;</kbd><dd>
+
+     <div class="defun">
+&mdash; Command: <b>widget-button-press</b><var> pos &amp;optional event<a name="index-widget_002dbutton_002dpress-7"></a></var><br>
+<blockquote> <p>Invoke the button at <var>pos</var>, defaulting to point. 
+If point is not located on a button, invoke the binding in
+<code>widget-global-map</code> (by default the global map). 
+</p></blockquote></div>
+
+     <p><a name="index-Mouse_002d2-_0040r_007b_0028on-button-widgets_007d_0029-8"></a><br><dt><kbd>Mouse-2</kbd><dd>
+
+     <div class="defun">
+&mdash; Command: <b>widget-button-click</b><var> event<a name="index-widget_002dbutton_002dclick-9"></a></var><br>
+<blockquote> <p>Invoke the button at the location of the mouse pointer.  If the mouse
+pointer is located in an editable text field, invoke the binding in
+<code>widget-global-map</code> (by default the global map). 
+</p></blockquote></div>
+     </dl>
+
+   <p>There are several different kind of buttons, all of which are present in
+the example:
+
+     
+<a name="index-option-field-tag-10"></a>
+<dl><dt><em>The Option Field Tags</em><dd>When you invoke one of these buttons, you will be asked to choose
+between a number of different options.  This is how you edit an option
+field.  Option fields are created by the <code>menu-choice</code> widget.  In
+the example, &lsquo;<samp><b>Choose</b></samp>&rsquo; is an option field tag. 
+<br><dt><em>The &lsquo;</em><samp><b>[INS]</b></samp><em>&rsquo; and &lsquo;</em><samp><b>[DEL]</b></samp><em>&rsquo; buttons</em><dd>Activating these will insert or delete elements from an editable list. 
+The list is created by the <code>editable-list</code> widget. 
+<a name="index-embedded-buttons-11"></a><br><dt><em>Embedded Buttons</em><dd>The &lsquo;<samp><b>_other work_</b></samp>&rsquo; is an example of an embedded
+button.  Embedded buttons are not associated with any fields, but can serve
+any purpose, such as implementing hypertext references.  They are
+usually created by the <code>link</code> widget. 
+<br><dt><em>The &lsquo;</em><samp><b>[ ]</b></samp><em>&rsquo; and &lsquo;</em><samp><b>[X]</b></samp><em>&rsquo; buttons</em><dd>Activating one of these will convert it to the other.  This is useful
+for implementing multiple-choice fields.  You can create them with the
+<code>checkbox</code> widget. 
+<br><dt><em>The &lsquo;</em><samp><b>( )</b></samp><em>&rsquo; and &lsquo;</em><samp><b>(*)</b></samp><em>&rsquo; buttons</em><dd>Only one radio button in a <code>radio-button-choice</code> widget can be
+selected at any time.  When you invoke one of the unselected radio
+buttons, it will be selected and the previous selected radio button will
+become unselected. 
+<br><dt><em>The &lsquo;</em><samp><b>[Apply Form]</b></samp><em>&rsquo; and &lsquo;</em><samp><b>[Reset Form]</b></samp><em>&rsquo; buttons</em><dd>These are explicit buttons made with the <code>push-button</code> widget.  The
+main difference from the <code>link</code> widget is that the buttons will be
+displayed as GUI buttons when possible. 
+</dl>
+
+   <p>To make them easier to locate, buttons are emphasized in the buffer.
+
+<div class="defun">
+&mdash; Face: <b>widget-button-face</b><var><a name="index-widget_002dbutton_002dface-12"></a></var><br>
+<blockquote><p>Face used for buttons. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>widget-mouse-face</b><var><a name="index-widget_002dmouse_002dface-13"></a></var><br>
+<blockquote><p>Face used for highlighting a button when the mouse pointer moves across
+it. 
+</p></blockquote></div>
+
+<h3 class="section">2.3 Navigation</h3>
+
+<p>You can use all the normal Emacs commands to move around in a form
+buffer, plus you will have these additional commands:
+
+     <dl>
+<dt><kbd>&lt;TAB&gt;</kbd><dd>
+
+     <div class="defun">
+&mdash; Command: <b>widget-forward</b><var> &amp;optional count<a name="index-widget_002dforward-14"></a></var><br>
+<blockquote> <p>Move point <var>count</var> buttons or editing fields forward. 
+</p></blockquote></div>
+     <br><dt><kbd>M-&lt;TAB&gt;</kbd><dt><kbd>S-&lt;TAB&gt;</kbd><dd>
+
+     <div class="defun">
+&mdash; Command: <b>widget-backward</b><var> &amp;optional count<a name="index-widget_002dbackward-15"></a></var><br>
+<blockquote> <p>Move point <var>count</var> buttons or editing fields backward. 
+</p></blockquote></div>
+     </dl>
+
+<div class="node">
+<a name="Programming-Example"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Setting-Up-the-Buffer">Setting Up the Buffer</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#User-Interface">User Interface</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">3 Programming Example</h2>
+
+<p><a name="index-widgets_002c-programming-example-16"></a><a name="index-example-of-using-widgets-17"></a>Here is the code to implement the user interface example (see <a href="#User-Interface">User Interface</a>).
+
+<pre class="lisp">     (require 'widget)
+     
+     (eval-when-compile
+       (require 'wid-edit))
+     
+     (defvar widget-example-repeat)
+     
+     (defun widget-example ()
+       "Create the widgets from the Widget manual."
+       (interactive)
+       (switch-to-buffer "*Widget Example*")
+       (kill-all-local-variables)
+       (make-local-variable 'widget-example-repeat)
+       (let ((inhibit-read-only t))
+         (erase-buffer))
+       (remove-overlays)
+       (widget-insert "Here is some documentation.\n\n")
+       (widget-create 'editable-field
+                      :size 13
+                      :format "Name: %v " ; Text after the field!
+                      "My Name")
+       (widget-create 'menu-choice
+                      :tag "Choose"
+                      :value "This"
+                      :help-echo "Choose me, please!"
+                      :notify (lambda (widget &amp;rest ignore)
+                                (message "%s is a good choice!"
+                                         (widget-value widget)))
+                      '(item :tag "This option" :value "This")
+                      '(choice-item "That option")
+                      '(editable-field :menu-tag "No option" "Thus option"))
+       (widget-create 'editable-field
+                      :format "Address: %v"
+                      "Some Place\nIn some City\nSome country.")
+       (widget-insert "\nSee also ")
+       (widget-create 'link
+                      :notify (lambda (&amp;rest ignore)
+                                (widget-value-set widget-example-repeat
+                                                  '("En" "To" "Tre"))
+                                (widget-setup))
+                      "other work")
+       (widget-insert
+         " for more information.\n\nNumbers: count to three below\n")
+       (setq widget-example-repeat
+             (widget-create 'editable-list
+                            :entry-format "%i %d %v"
+                            :notify
+                            (lambda (widget &amp;rest ignore)
+                              (let ((old (widget-get widget
+                                                     ':example-length))
+                                    (new (length (widget-value widget))))
+                                (unless (eq old new)
+                                  (widget-put widget ':example-length new)
+                                  (message "You can count to %d." new))))
+                            :value '("One" "Eh, two?" "Five!")
+                            '(editable-field :value "three")))
+       (widget-insert "\n\nSelect multiple:\n\n")
+       (widget-create 'checkbox t)
+       (widget-insert " This\n")
+       (widget-create 'checkbox nil)
+       (widget-insert " That\n")
+       (widget-create 'checkbox
+                      :notify (lambda (&amp;rest ignore) (message "Tickle"))
+                      t)
+       (widget-insert " Thus\n\nSelect one:\n\n")
+       (widget-create 'radio-button-choice
+                      :value "One"
+                      :notify (lambda (widget &amp;rest ignore)
+                                (message "You selected %s"
+                                         (widget-value widget)))
+                      '(item "One") '(item "Another One.")
+                      '(item "A Final One."))
+       (widget-insert "\n")
+       (widget-create 'push-button
+                      :notify (lambda (&amp;rest ignore)
+                                (if (= (length
+                                        (widget-value widget-example-repeat))
+                                       3)
+                                    (message "Congratulation!")
+                                  (error "Three was the count!")))
+                      "Apply Form")
+       (widget-insert " ")
+       (widget-create 'push-button
+                      :notify (lambda (&amp;rest ignore)
+                                (widget-example))
+                      "Reset Form")
+       (widget-insert "\n")
+       (use-local-map widget-keymap)
+       (widget-setup))
+</pre>
+   <div class="node">
+<a name="Setting-Up-the-Buffer"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Basic-Types">Basic Types</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Programming-Example">Programming Example</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">4 Setting Up the Buffer</h2>
+
+<p>Widgets are created with <code>widget-create</code>, which returns a
+<dfn>widget</dfn> object.  This object can be queried and manipulated by
+other widget functions, until it is deleted with <code>widget-delete</code>. 
+After the widgets have been created, <code>widget-setup</code> must be called
+to enable them.
+
+<div class="defun">
+&mdash; Function: <b>widget-create</b><var> type </var>[<var> keyword argument </var>]<var><small class="dots">...</small><a name="index-widget_002dcreate-18"></a></var><br>
+<blockquote><p>Create and return a widget of type <var>type</var>. 
+The syntax for the <var>type</var> argument is described in <a href="#Basic-Types">Basic Types</a>.
+
+        <p>The keyword arguments can be used to overwrite the keyword arguments
+that are part of <var>type</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>widget-delete</b><var> widget<a name="index-widget_002ddelete-19"></a></var><br>
+<blockquote><p>Delete <var>widget</var> and remove it from the buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>widget-setup</b><var><a name="index-widget_002dsetup-20"></a></var><br>
+<blockquote><p>Set up a buffer to support widgets.
+
+        <p>This should be called after creating all the widgets and before allowing
+the user to edit them. 
+</p></blockquote></div>
+
+   <p>If you want to insert text outside the widgets in the form, the
+recommended way to do that is with <code>widget-insert</code>.
+
+<div class="defun">
+&mdash; Function: <b>widget-insert</b><var><a name="index-widget_002dinsert-21"></a></var><br>
+<blockquote><p>Insert the arguments, either strings or characters, at point. 
+The inserted text will be read-only. 
+</p></blockquote></div>
+
+   <p>There is a standard widget keymap which you might find useful.
+
+   <p><a name="index-widget_002dbutton_002dpress-22"></a><a name="index-widget_002dbutton_002dclick-23"></a>
+
+<div class="defun">
+&mdash; Const: <b>widget-keymap</b><var><a name="index-widget_002dkeymap-24"></a></var><br>
+<blockquote><p>&lt;TAB&gt; and <kbd>C-&lt;TAB&gt;</kbd> are bound to <code>widget-forward</code> and
+<code>widget-backward</code>, respectively.  &lt;RET&gt; and <kbd>Mouse-2</kbd>
+are bound to <code>widget-button-press</code> and
+<code>widget-button-click</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>widget-global-map</b><var><a name="index-widget_002dglobal_002dmap-25"></a></var><br>
+<blockquote><p>Keymap used by <code>widget-button-press</code> and <code>widget-button-click</code>
+when not on a button.  By default this is <code>global-map</code>. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Basic-Types"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Sexp-Types">Sexp Types</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Setting-Up-the-Buffer">Setting Up the Buffer</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">5 Basic Types</h2>
+
+<p>This is the general syntax of a type specification:
+
+<pre class="example">     <var>name</var> ::= (<var>name</var> [<var>keyword</var> <var>argument</var>]... <var>args</var>)
+          |   <var>name</var>
+</pre>
+   <p>Where, <var>name</var> is a widget name, <var>keyword</var> is the name of a
+property, <var>argument</var> is the value of the property, and <var>args</var>
+are interpreted in a widget specific way.
+
+   <p><a name="index-keyword-arguments-26"></a>The following keyword arguments apply to all widgets:
+
+     
+<a name="index-value_0040r_007b-keyword_007d-27"></a>
+<dl><dt><code>:value</code><dd>The initial value for widgets of this type.
+
+     <p><a name="index-format_0040r_007b-keyword_007d-28"></a><br><dt><code>:format</code><dd>This string will be inserted in the buffer when you create a widget. 
+The following &lsquo;<samp><span class="samp">%</span></samp>&rsquo; escapes are available:
+
+          <dl>
+<dt>&lsquo;<samp><span class="samp">%[</span></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">%]</span></samp>&rsquo;<dd>The text inside will be marked as a button.
+
+          <p>By default, the text will be shown in <code>widget-button-face</code>, and
+surrounded by brackets.
+
+          <div class="defun">
+&mdash; User Option: <b>widget-button-prefix</b><var><a name="index-widget_002dbutton_002dprefix-29"></a></var><br>
+<blockquote>      <p>String to prefix buttons. 
+</p></blockquote></div>
+
+          <div class="defun">
+&mdash; User Option: <b>widget-button-suffix</b><var><a name="index-widget_002dbutton_002dsuffix-30"></a></var><br>
+<blockquote>      <p>String to suffix buttons. 
+</p></blockquote></div>
+
+          <br><dt>&lsquo;<samp><span class="samp">%{</span></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">%}</span></samp>&rsquo;<dd>The text inside will be displayed with the face specified by
+<code>:sample-face</code>.
+
+          <br><dt>&lsquo;<samp><span class="samp">%v</span></samp>&rsquo;<dd>This will be replaced with the buffer representation of the widget's
+value.  What this is depends on the widget type.
+
+          <p><strong>Warning:</strong> In an <code>editable-field</code> widget, the &lsquo;<samp><span class="samp">%v</span></samp>&rsquo; escape
+must be preceded by some other text in the format string (if specified).
+
+          <br><dt>&lsquo;<samp><span class="samp">%d</span></samp>&rsquo;<dd>Insert the string specified by <code>:doc</code> here.
+
+          <br><dt>&lsquo;<samp><span class="samp">%h</span></samp>&rsquo;<dd>Like &lsquo;<samp><span class="samp">%d</span></samp>&rsquo;, with the following modifications: If the documentation
+string is more than one line, it will add a button which will toggle
+between showing only the first line, and showing the full text. 
+Furthermore, if there is no <code>:doc</code> property in the widget, it will
+instead examine the <code>:documentation-property</code> property.  If it is a
+lambda expression, it will be called with the widget's value as an
+argument, and the result will be used as the documentation text.
+
+          <br><dt>&lsquo;<samp><span class="samp">%t</span></samp>&rsquo;<dd>Insert the string specified by <code>:tag</code> here, or the <code>princ</code>
+representation of the value if there is no tag.
+
+          <br><dt>&lsquo;<samp><span class="samp">%%</span></samp>&rsquo;<dd>Insert a literal &lsquo;<samp><span class="samp">%</span></samp>&rsquo;. 
+</dl>
+
+     <p><a name="index-button_002dface_0040r_007b-keyword_007d-31"></a><br><dt><code>:button-face</code><dd>Face used to highlight text inside %[ %] in the format.
+
+     <p><a name="index-button_002dprefix_0040r_007b-keyword_007d-32"></a><a name="index-button_002dsuffix_0040r_007b-keyword_007d-33"></a><br><dt><code>:button-prefix</code><dt><code>:button-suffix</code><dd>Text around %[ %] in the format.
+
+     <p>These can be
+          <dl>
+<dt><em>nil</em><dd>No text is inserted.
+
+          <br><dt><em>a string</em><dd>The string is inserted literally.
+
+          <br><dt><em>a symbol</em><dd>The value of the symbol is expanded according to this table. 
+</dl>
+
+     <p><a name="index-doc_0040r_007b-keyword_007d-34"></a><br><dt><code>:doc</code><dd>The string inserted by the &lsquo;<samp><span class="samp">%d</span></samp>&rsquo; escape in the format
+string.
+
+     <p><a name="index-tag_0040r_007b-keyword_007d-35"></a><br><dt><code>:tag</code><dd>The string inserted by the &lsquo;<samp><span class="samp">%t</span></samp>&rsquo; escape in the format
+string.
+
+     <p><a name="index-tag_002dglyph_0040r_007b-keyword_007d-36"></a><br><dt><code>:tag-glyph</code><dd>Name of image to use instead of the string specified by <code>:tag</code> on
+Emacsen that supports it.
+
+     <p><a name="index-help_002decho_0040r_007b-keyword_007d-37"></a><br><dt><code>:help-echo</code><dd>Specifies how to display a message whenever you move to the widget with
+either <code>widget-forward</code> or <code>widget-backward</code> or move the mouse
+over it (using the standard <code>help-echo</code> mechanism).  The argument
+is either a string to display, a function of one argument, the widget,
+which should return a string to display, or a form that evaluates to
+such a string.
+
+     <p><a name="index-follow_002dlink_0040r_007b-keyword_007d-38"></a><br><dt><code>:follow-link</code><dd>Specifies how to interpret a &lt;mouse-1&gt; click on the widget. 
+See <a href="elisp.html#Clickable-Text">Defining Clickable Text</a>.
+
+     <p><a name="index-indent_0040r_007b-keyword_007d-39"></a><br><dt><code>:indent</code><dd>An integer indicating the absolute number of spaces to indent children
+of this widget.
+
+     <p><a name="index-offset_0040r_007b-keyword_007d-40"></a><br><dt><code>:offset</code><dd>An integer indicating how many extra spaces to add to the widget's
+grandchildren compared to this widget.
+
+     <p><a name="index-extra_002doffset_0040r_007b-keyword_007d-41"></a><br><dt><code>:extra-offset</code><dd>An integer indicating how many extra spaces to add to the widget's
+children compared to this widget.
+
+     <p><a name="index-notify_0040r_007b-keyword_007d-42"></a><br><dt><code>:notify</code><dd>A function called each time the widget or a nested widget is changed. 
+The function is called with two or three arguments.  The first argument
+is the widget itself, the second argument is the widget that was
+changed, and the third argument is the event leading to the change, if
+any.
+
+     <p><a name="index-menu_002dtag_0040r_007b-keyword_007d-43"></a><br><dt><code>:menu-tag</code><dd>Tag used in the menu when the widget is used as an option in a
+<code>menu-choice</code> widget.
+
+     <p><a name="index-menu_002dtag_002dget_0040r_007b-keyword_007d-44"></a><br><dt><code>:menu-tag-get</code><dd>Function used for finding the tag when the widget is used as an option
+in a <code>menu-choice</code> widget.  By default, the tag used will be either the
+<code>:menu-tag</code> or <code>:tag</code> property if present, or the <code>princ</code>
+representation of the <code>:value</code> property if not.
+
+     <p><a name="index-match_0040r_007b-keyword_007d-45"></a><br><dt><code>:match</code><dd>Should be a function called with two arguments, the widget and a value,
+and returning non-<code>nil</code> if the widget can represent the specified value.
+
+     <p><a name="index-validate_0040r_007b-keyword_007d-46"></a><br><dt><code>:validate</code><dd>A function which takes a widget as an argument, and returns <code>nil</code>
+if the widget's current value is valid for the widget.  Otherwise it
+should return the widget containing the invalid data, and set that
+widget's <code>:error</code> property to a string explaining the error.
+
+     <p>The following predefined function can be used:
+
+     <div class="defun">
+&mdash; Function: <b>widget-children-validate</b><var> widget<a name="index-widget_002dchildren_002dvalidate-47"></a></var><br>
+<blockquote> <p>All the <code>:children</code> of <var>widget</var> must be valid. 
+</p></blockquote></div>
+
+     <p><a name="index-tab_002dorder_0040r_007b-keyword_007d-48"></a><br><dt><code>:tab-order</code><dd>Specify the order in which widgets are traversed with
+<code>widget-forward</code> or <code>widget-backward</code>.  This is only partially
+implemented.
+
+          <ol type=a start=1>
+<li>Widgets with tabbing order <code>-1</code> are ignored.
+
+          <li>(Unimplemented) When on a widget with tabbing order <var>n</var>, go to the
+next widget in the buffer with tabbing order <var>n+1</var> or <code>nil</code>,
+whichever comes first.
+
+          <li>When on a widget with no tabbing order specified, go to the next widget
+in the buffer with a positive tabbing order, or <code>nil</code>
+          </ol>
+
+     <p><a name="index-parent_0040r_007b-keyword_007d-49"></a><br><dt><code>:parent</code><dd>The parent of a nested widget (e.g., a <code>menu-choice</code> item or an
+element of a <code>editable-list</code> widget).
+
+     <p><a name="index-sibling_002dargs_0040r_007b-keyword_007d-50"></a><br><dt><code>:sibling-args</code><dd>This keyword is only used for members of a <code>radio-button-choice</code> or
+<code>checklist</code>.  The value should be a list of extra keyword
+arguments, which will be used when creating the <code>radio-button</code> or
+<code>checkbox</code> associated with this item.
+
+   </dl>
+
+<div class="defun">
+&mdash; User Option: <b>widget-glyph-directory</b><var><a name="index-widget_002dglyph_002ddirectory-51"></a></var><br>
+<blockquote><p>Directory where glyphs are found. 
+Widget will look here for a file with the same name as specified for the
+image, with either a <samp><span class="file">.xpm</span></samp> (if supported) or <samp><span class="file">.xbm</span></samp> extension. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>widget-glyph-enable</b><var><a name="index-widget_002dglyph_002denable-52"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, allow glyphs to appear on displays where they are supported. 
+</p></blockquote></div>
+
+<ul class="menu">
+<li><a accesskey="1" href="#link">link</a>
+<li><a accesskey="2" href="#url_002dlink">url-link</a>
+<li><a accesskey="3" href="#info_002dlink">info-link</a>
+<li><a accesskey="4" href="#push_002dbutton">push-button</a>
+<li><a accesskey="5" href="#editable_002dfield">editable-field</a>
+<li><a accesskey="6" href="#text">text</a>
+<li><a accesskey="7" href="#menu_002dchoice">menu-choice</a>
+<li><a accesskey="8" href="#radio_002dbutton_002dchoice">radio-button-choice</a>
+<li><a accesskey="9" href="#item">item</a>
+<li><a href="#choice_002ditem">choice-item</a>
+<li><a href="#toggle">toggle</a>
+<li><a href="#checkbox">checkbox</a>
+<li><a href="#checklist">checklist</a>
+<li><a href="#editable_002dlist">editable-list</a>
+<li><a href="#group">group</a>
+</ul>
+
+<div class="node">
+<a name="link"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#url_002dlink">url-link</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Types">Basic Types</a>
+
+</div>
+
+<h3 class="section">5.1 The <code>link</code> Widget</h3>
+
+<p><a name="index-link_0040r_007b-widget_007d-53"></a>
+Syntax:
+
+<pre class="example">     <var>type</var> ::= (link [<var>keyword</var> <var>argument</var>]...  [ <var>value</var> ])
+</pre>
+   <p>The <var>value</var>, if present, is used to initialize the <code>:value</code>
+property.  The value should be a string, which will be inserted in the
+buffer.
+
+   <p>By default the link will be shown in brackets.
+
+<div class="defun">
+&mdash; User Option: <b>widget-link-prefix</b><var><a name="index-widget_002dlink_002dprefix-54"></a></var><br>
+<blockquote><p>String to prefix links. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>widget-link-suffix</b><var><a name="index-widget_002dlink_002dsuffix-55"></a></var><br>
+<blockquote><p>String to suffix links. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="url-link"></a>
+<a name="url_002dlink"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#info_002dlink">info-link</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#link">link</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Types">Basic Types</a>
+
+</div>
+
+<h3 class="section">5.2 The <code>url-link</code> Widget</h3>
+
+<p><a name="index-url_002dlink_0040r_007b-widget_007d-56"></a>
+Syntax:
+
+<pre class="example">     <var>type</var> ::= (url-link [<var>keyword</var> <var>argument</var>]...  <var>url</var>)
+</pre>
+   <p><a name="index-browse_002durl_002dbrowser_002dfunction_0040r_007b_002c-and-_0040code_007burl_002dlink_007d-widget_007d-57"></a>When this link is invoked, the <acronym>WWW</acronym> browser specified by
+<code>browse-url-browser-function</code> will be called with <var>url</var>.
+
+<div class="node">
+<a name="info-link"></a>
+<a name="info_002dlink"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#push_002dbutton">push-button</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#url_002dlink">url-link</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Types">Basic Types</a>
+
+</div>
+
+<h3 class="section">5.3 The <code>info-link</code> Widget</h3>
+
+<p><a name="index-info_002dlink_0040r_007b-widget_007d-58"></a>
+Syntax:
+
+<pre class="example">     <var>type</var> ::= (info-link [<var>keyword</var> <var>argument</var>]...  <var>address</var>)
+</pre>
+   <p>When this link is invoked, the built-in Info reader is started on
+<var>address</var>.
+
+<div class="node">
+<a name="push-button"></a>
+<a name="push_002dbutton"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#editable_002dfield">editable-field</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#info_002dlink">info-link</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Types">Basic Types</a>
+
+</div>
+
+<h3 class="section">5.4 The <code>push-button</code> Widget</h3>
+
+<p><a name="index-push_002dbutton_0040r_007b-widget_007d-59"></a>
+Syntax:
+
+<pre class="example">     <var>type</var> ::= (push-button [<var>keyword</var> <var>argument</var>]...  [ <var>value</var> ])
+</pre>
+   <p>The <var>value</var>, if present, is used to initialize the <code>:value</code>
+property.  The value should be a string, which will be inserted in the
+buffer.
+
+   <p>By default the tag will be shown in brackets.
+
+<div class="defun">
+&mdash; User Option: <b>widget-push-button-prefix</b><var><a name="index-widget_002dpush_002dbutton_002dprefix-60"></a></var><br>
+<blockquote><p>String to prefix push buttons. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>widget-push-button-suffix</b><var><a name="index-widget_002dpush_002dbutton_002dsuffix-61"></a></var><br>
+<blockquote><p>String to suffix push buttons. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="editable-field"></a>
+<a name="editable_002dfield"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#text">text</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#push_002dbutton">push-button</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Types">Basic Types</a>
+
+</div>
+
+<h3 class="section">5.5 The <code>editable-field</code> Widget</h3>
+
+<p><a name="index-editable_002dfield_0040r_007b-widget_007d-62"></a>
+Syntax:
+
+<pre class="example">     <var>type</var> ::= (editable-field [<var>keyword</var> <var>argument</var>]... [ <var>value</var> ])
+</pre>
+   <p>The <var>value</var>, if present, is used to initialize the <code>:value</code>
+property.  The value should be a string, which will be inserted in the
+field.  This widget will match all string values.
+
+   <p>The following extra properties are recognized:
+
+     
+<a name="index-size_0040r_007b-keyword_007d-63"></a>
+<dl><dt><code>:size</code><dd>The width of the editable field.<br>
+By default the field will reach to the end of the line.
+
+     <p><a name="index-value_002dface_0040r_007b-keyword_007d-64"></a><br><dt><code>:value-face</code><dd>Face used for highlighting the editable field.  Default is
+<code>widget-field-face</code>, see <a href="#User-Interface">User Interface</a>.
+
+     <p><a name="index-secret_0040r_007b-keyword_007d-65"></a><br><dt><code>:secret</code><dd>Character used to display the value.  You can set this to, e.g., <code>?*</code>
+if the field contains a password or other secret information.  By
+default, this is <code>nil</code>, and the value is not secret.
+
+     <p><a name="index-valid_002dregexp_0040r_007b-keyword_007d-66"></a><br><dt><code>:valid-regexp</code><dd>By default the <code>:validate</code> function will match the content of the
+field with the value of this attribute.  The default value is <code>""</code>
+which matches everything.
+
+     <p><a name="index-keymap_0040r_007b-keyword_007d-67"></a><a name="index-widget_002dfield_002dkeymap-68"></a><br><dt><code>:keymap</code><dd>Keymap used in the editable field.  The default value is
+<code>widget-field-keymap</code>, which allows you to use all the normal
+editing commands, even if the buffer's major mode suppresses some of
+them.  Pressing &lt;RET&gt; invokes the function specified by
+<code>:action</code>. 
+</dl>
+
+<div class="node">
+<a name="text"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#menu_002dchoice">menu-choice</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#editable_002dfield">editable-field</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Types">Basic Types</a>
+
+</div>
+
+<h3 class="section">5.6 The <code>text</code> Widget</h3>
+
+<p><a name="index-text_0040r_007b-widget_007d-69"></a>
+<a name="index-widget_002dtext_002dkeymap-70"></a>This is just like <code>editable-field</code>, but intended for multiline text
+fields.  The default <code>:keymap</code> is <code>widget-text-keymap</code>, which
+does not rebind the &lt;RET&gt; key.
+
+<div class="node">
+<a name="menu-choice"></a>
+<a name="menu_002dchoice"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#radio_002dbutton_002dchoice">radio-button-choice</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#text">text</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Types">Basic Types</a>
+
+</div>
+
+<h3 class="section">5.7 The <code>menu-choice</code> Widget</h3>
+
+<p><a name="index-menu_002dchoice_0040r_007b-widget_007d-71"></a>
+Syntax:
+
+<pre class="example">     <var>type</var> ::= (menu-choice [<var>keyword</var> <var>argument</var>]... <var>type</var> ... )
+</pre>
+   <p>The <var>type</var> argument represents each possible choice.  The widget's
+value will be that of the chosen <var>type</var> argument.  This widget will
+match any value matching at least one of the specified <var>type</var>
+arguments.
+
+     
+<a name="index-void_0040r_007b-keyword_007d-72"></a>
+<dl><dt><code>:void</code><dd>Widget type used as a fallback when the value does not match any of the
+specified <var>type</var> arguments.
+
+     <p><a name="index-case_002dfold_0040r_007b-keyword_007d-73"></a><br><dt><code>:case-fold</code><dd>Set this to <code>nil</code> if you don't want to ignore case when prompting for a
+choice through the minibuffer.
+
+     <p><a name="index-children_0040r_007b-keyword_007d-74"></a><br><dt><code>:children</code><dd>A list whose <span class="sc">car</span> is the widget representing the currently chosen
+type in the buffer.
+
+     <p><a name="index-choice_0040r_007b-keyword_007d-75"></a><br><dt><code>:choice</code><dd>The current chosen type.
+
+     <p><a name="index-args_0040r_007b-keyword_007d-76"></a><br><dt><code>:args</code><dd>The list of types. 
+</dl>
+
+<div class="node">
+<a name="radio-button-choice"></a>
+<a name="radio_002dbutton_002dchoice"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#item">item</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#menu_002dchoice">menu-choice</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Types">Basic Types</a>
+
+</div>
+
+<h3 class="section">5.8 The <code>radio-button-choice</code> Widget</h3>
+
+<p><a name="index-radio_002dbutton_002dchoice_0040r_007b-widget_007d-77"></a>
+Syntax:
+
+<pre class="example">     <var>type</var> ::= (radio-button-choice [<var>keyword</var> <var>argument</var>]...  <var>type</var> ... )
+</pre>
+   <p>The component types specify the choices, with one radio button for
+each.  The widget's value will be that of the chosen <var>type</var>
+argument.  This widget matches any value that matches at least one of
+the specified <var>type</var> arguments.
+
+   <p>The following extra properties are recognized.
+
+     
+<a name="index-entry_002dformat_0040r_007b-keyword_007d-78"></a>
+<dl><dt><code>:entry-format</code><dd>This string will be inserted for each entry in the list. 
+The following &lsquo;<samp><span class="samp">%</span></samp>&rsquo; escapes are available:
+          <dl>
+<dt>&lsquo;<samp><span class="samp">%v</span></samp>&rsquo;<dd>Replace with the buffer representation of the <var>type</var> widget. 
+<br><dt>&lsquo;<samp><span class="samp">%b</span></samp>&rsquo;<dd>Replace with the radio button. 
+<br><dt>&lsquo;<samp><span class="samp">%%</span></samp>&rsquo;<dd>Insert a literal &lsquo;<samp><span class="samp">%</span></samp>&rsquo;. 
+</dl>
+
+     <p><a name="index-button_002dargs_0040r_007b-keyword_007d-79"></a><br><dt><code>:button-args</code><dd>A list of keywords to pass to the radio buttons.  Useful for setting,
+e.g., the &lsquo;<samp><span class="samp">:help-echo</span></samp>&rsquo; for each button.
+
+     <p><a name="index-buttons_0040r_007b-keyword_007d-80"></a><br><dt><code>:buttons</code><dd>The widgets representing the radio buttons.
+
+     <p><a name="index-children_0040r_007b-keyword_007d-81"></a><br><dt><code>:children</code><dd>The widgets representing each type.
+
+     <p><a name="index-choice_0040r_007b-keyword_007d-82"></a><br><dt><code>:choice</code><dd>The current chosen type
+
+     <p><a name="index-args_0040r_007b-keyword_007d-83"></a><br><dt><code>:args</code><dd>The list of types. 
+</dl>
+
+   <p>You can add extra radio button items to a <code>radio-button-choice</code>
+widget after it has been created with the function
+<code>widget-radio-add-item</code>.
+
+<div class="defun">
+&mdash; Function: <b>widget-radio-add-item</b><var> widget type<a name="index-widget_002dradio_002dadd_002ditem-84"></a></var><br>
+<blockquote><p>Add to <code>radio-button-choice</code> widget <var>widget</var> a new radio button
+item of type <var>type</var>. 
+</p></blockquote></div>
+
+   <p>Please note that such items added after the <code>radio-button-choice</code>
+widget has been created will <strong>not</strong> be properly destructed when
+you call <code>widget-delete</code>.
+
+<div class="node">
+<a name="item"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#choice_002ditem">choice-item</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#radio_002dbutton_002dchoice">radio-button-choice</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Types">Basic Types</a>
+
+</div>
+
+<h3 class="section">5.9 The <code>item</code> Widget</h3>
+
+<p><a name="index-item_0040r_007b-widget_007d-85"></a>
+Syntax:
+
+<pre class="example">     <var>item</var> ::= (item [<var>keyword</var> <var>argument</var>]... <var>value</var>)
+</pre>
+   <p>The <var>value</var>, if present, is used to initialize the <code>:value</code>
+property.  The value should be a string, which will be inserted in the
+buffer.  This widget will only match the specified value.
+
+<div class="node">
+<a name="choice-item"></a>
+<a name="choice_002ditem"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#toggle">toggle</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#item">item</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Types">Basic Types</a>
+
+</div>
+
+<h3 class="section">5.10 The <code>choice-item</code> Widget</h3>
+
+<p><a name="index-choice_002ditem_0040r_007b-widget_007d-86"></a>
+Syntax:
+
+<pre class="example">     <var>item</var> ::= (choice-item [<var>keyword</var> <var>argument</var>]... <var>value</var>)
+</pre>
+   <p>The <var>value</var>, if present, is used to initialize the <code>:value</code>
+property.  The value should be a string, which will be inserted in the
+buffer as a button.  Activating the button of a <code>choice-item</code> is
+equivalent to activating the parent widget.  This widget will only match
+the specified value.
+
+<div class="node">
+<a name="toggle"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#checkbox">checkbox</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#choice_002ditem">choice-item</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Types">Basic Types</a>
+
+</div>
+
+<h3 class="section">5.11 The <code>toggle</code> Widget</h3>
+
+<p><a name="index-toggle_0040r_007b-widget_007d-87"></a>
+Syntax:
+
+<pre class="example">     <var>type</var> ::= (toggle [<var>keyword</var> <var>argument</var>]...)
+</pre>
+   <p>The widget has two possible states, &lsquo;<samp><span class="samp">on</span></samp>&rsquo; and &lsquo;<samp><span class="samp">off</span></samp>&rsquo;, which
+correspond to a <code>t</code> or <code>nil</code> value, respectively.
+
+   <p>The following extra properties are recognized:
+
+     <dl>
+<dt><code>:on</code><dd>A string representing the &lsquo;<samp><span class="samp">on</span></samp>&rsquo; state.  By default the string
+&lsquo;<samp><span class="samp">on</span></samp>&rsquo;. 
+<br><dt><code>:off</code><dd>A string representing the &lsquo;<samp><span class="samp">off</span></samp>&rsquo; state.  By default the string
+&lsquo;<samp><span class="samp">off</span></samp>&rsquo;. 
+<a name="index-on_002dglyph_0040r_007b-keyword_007d-88"></a><br><dt><code>:on-glyph</code><dd>Name of a glyph to be used instead of the &lsquo;<samp><span class="samp">:on</span></samp>&rsquo; text string, on
+emacsen that supports this. 
+<a name="index-off_002dglyph_0040r_007b-keyword_007d-89"></a><br><dt><code>:off-glyph</code><dd>Name of a glyph to be used instead of the &lsquo;<samp><span class="samp">:off</span></samp>&rsquo; text string, on
+emacsen that supports this. 
+</dl>
+
+<div class="node">
+<a name="checkbox"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#checklist">checklist</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#toggle">toggle</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Types">Basic Types</a>
+
+</div>
+
+<h3 class="section">5.12 The <code>checkbox</code> Widget</h3>
+
+<p><a name="index-checkbox_0040r_007b-widget_007d-90"></a>
+This widget has two possible states, &lsquo;<samp><span class="samp">selected</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">unselected</span></samp>&rsquo;, which corresponds to a <code>t</code> or <code>nil</code> value.
+
+   <p>Syntax:
+
+<pre class="example">     <var>type</var> ::= (checkbox [<var>keyword</var> <var>argument</var>]...)
+</pre>
+   <div class="node">
+<a name="checklist"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#editable_002dlist">editable-list</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#checkbox">checkbox</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Types">Basic Types</a>
+
+</div>
+
+<h3 class="section">5.13 The <code>checklist</code> Widget</h3>
+
+<p><a name="index-checklist_0040r_007b-widget_007d-91"></a>
+Syntax:
+
+<pre class="example">     <var>type</var> ::= (checklist [<var>keyword</var> <var>argument</var>]...  <var>type</var> ... )
+</pre>
+   <p>The <var>type</var> arguments represent each checklist item.  The widget's
+value will be a list containing the values of all checked <var>type</var>
+arguments.  The checklist widget will match a list whose elements all
+match at least one of the specified <var>type</var> arguments.
+
+   <p>The following extra properties are recognized:
+
+     
+<a name="index-entry_002dformat_0040r_007b-keyword_007d-92"></a>
+<dl><dt><code>:entry-format</code><dd>This string will be inserted for each entry in the list. 
+The following &lsquo;<samp><span class="samp">%</span></samp>&rsquo; escapes are available:
+          <dl>
+<dt>&lsquo;<samp><span class="samp">%v</span></samp>&rsquo;<dd>Replaced with the buffer representation of the <var>type</var> widget. 
+<br><dt>&lsquo;<samp><span class="samp">%b</span></samp>&rsquo;<dd>Replace with the checkbox. 
+<br><dt>&lsquo;<samp><span class="samp">%%</span></samp>&rsquo;<dd>Insert a literal &lsquo;<samp><span class="samp">%</span></samp>&rsquo;. 
+</dl>
+
+     <p><a name="index-greedy_0040r_007b-keyword_007d-93"></a><br><dt><code>:greedy</code><dd>Usually a checklist will only match if the items are in the exact
+sequence given in the specification.  By setting <code>:greedy</code> to
+non-<code>nil</code>, it will allow the items to come in any sequence. 
+However, if you extract the value they will be in the sequence given
+in the checklist, i.e., the original sequence is forgotten.
+
+     <p><a name="index-button_002dargs_0040r_007b-keyword_007d-94"></a><br><dt><code>:button-args</code><dd>A list of keywords to pass to the checkboxes.  Useful for setting,
+e.g., the &lsquo;<samp><span class="samp">:help-echo</span></samp>&rsquo; for each checkbox.
+
+     <p><a name="index-buttons_0040r_007b-keyword_007d-95"></a><br><dt><code>:buttons</code><dd>The widgets representing the checkboxes.
+
+     <p><a name="index-children_0040r_007b-keyword_007d-96"></a><br><dt><code>:children</code><dd>The widgets representing each type.
+
+     <p><a name="index-args_0040r_007b-keyword_007d-97"></a><br><dt><code>:args</code><dd>The list of types. 
+</dl>
+
+<div class="node">
+<a name="editable-list"></a>
+<a name="editable_002dlist"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#group">group</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#checklist">checklist</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Types">Basic Types</a>
+
+</div>
+
+<h3 class="section">5.14 The <code>editable-list</code> Widget</h3>
+
+<p><a name="index-editable_002dlist_0040r_007b-widget_007d-98"></a>
+Syntax:
+
+<pre class="example">     <var>type</var> ::= (editable-list [<var>keyword</var> <var>argument</var>]... <var>type</var>)
+</pre>
+   <p>The value is a list, where each member represents one widget of type
+<var>type</var>.
+
+   <p>The following extra properties are recognized:
+
+     
+<a name="index-entry_002dformat_0040r_007b-keyword_007d-99"></a>
+<dl><dt><code>:entry-format</code><dd>This string will be inserted for each entry in the list. 
+The following &lsquo;<samp><span class="samp">%</span></samp>&rsquo; escapes are available:
+          <dl>
+<dt>&lsquo;<samp><span class="samp">%v</span></samp>&rsquo;<dd>This will be replaced with the buffer representation of the <var>type</var>
+widget. 
+<br><dt>&lsquo;<samp><span class="samp">%i</span></samp>&rsquo;<dd>Insert the <b>[INS]</b> button. 
+<br><dt>&lsquo;<samp><span class="samp">%d</span></samp>&rsquo;<dd>Insert the <b>[DEL]</b> button. 
+<br><dt>&lsquo;<samp><span class="samp">%%</span></samp>&rsquo;<dd>Insert a literal &lsquo;<samp><span class="samp">%</span></samp>&rsquo;. 
+</dl>
+
+     <p><a name="index-insert_002dbutton_002dargs_0040r_007b-keyword_007d-100"></a><br><dt><code>:insert-button-args</code><dd>A list of keyword arguments to pass to the insert buttons.
+
+     <p><a name="index-delete_002dbutton_002dargs_0040r_007b-keyword_007d-101"></a><br><dt><code>:delete-button-args</code><dd>A list of keyword arguments to pass to the delete buttons.
+
+     <p><a name="index-append_002dbutton_002dargs_0040r_007b-keyword_007d-102"></a><br><dt><code>:append-button-args</code><dd>A list of keyword arguments to pass to the trailing insert button.
+
+     <p><a name="index-buttons_0040r_007b-keyword_007d-103"></a><br><dt><code>:buttons</code><dd>The widgets representing the insert and delete buttons.
+
+     <p><a name="index-children_0040r_007b-keyword_007d-104"></a><br><dt><code>:children</code><dd>The widgets representing the elements of the list.
+
+     <p><a name="index-args_0040r_007b-keyword_007d-105"></a><br><dt><code>:args</code><dd>List whose <span class="sc">car</span> is the type of the list elements. 
+</dl>
+
+<div class="node">
+<a name="group"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#editable_002dlist">editable-list</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Types">Basic Types</a>
+
+</div>
+
+<h3 class="section">5.15 The <code>group</code> Widget</h3>
+
+<p><a name="index-group_0040r_007b-widget_007d-106"></a>
+This widget simply group other widgets together.
+
+   <p>Syntax:
+
+<pre class="example">     <var>type</var> ::= (group [<var>keyword</var> <var>argument</var>]... <var>type</var>...)
+</pre>
+   <p>The value is a list, with one member for each <var>type</var>.
+
+<div class="node">
+<a name="Sexp-Types"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Widget-Properties">Widget Properties</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Basic-Types">Basic Types</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">6 Sexp Types</h2>
+
+<p><a name="index-sexp-types-107"></a>
+A number of widgets for editing <dfn>s-expressions</dfn> (Lisp types), sexp
+for short, are also available.  These basically fall in several
+categories described in this section.
+
+<ul class="menu">
+<li><a accesskey="1" href="#constants">constants</a>
+<li><a accesskey="2" href="#generic">generic</a>
+<li><a accesskey="3" href="#atoms">atoms</a>
+<li><a accesskey="4" href="#composite">composite</a>
+</ul>
+
+<div class="node">
+<a name="constants"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#generic">generic</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Sexp-Types">Sexp Types</a>
+
+</div>
+
+<h3 class="section">6.1 The Constant Widgets</h3>
+
+<p><a name="index-constant-widgets-108"></a>
+The <code>const</code> widget can contain any Lisp expression, but the user is
+prohibited from editing it, which is mainly useful as a component of one
+of the composite widgets.
+
+   <p>The syntax for the <code>const</code> widget is:
+
+<pre class="example">     <var>type</var> ::= (const [<var>keyword</var> <var>argument</var>]...  [ <var>value</var> ])
+</pre>
+   <p>The <var>value</var>, if present, is used to initialize the <code>:value</code>
+property and can be any s-expression.
+
+<div class="defun">
+&mdash; Widget: <b>const</b><var><a name="index-const-109"></a></var><br>
+<blockquote><p>This will display any valid s-expression in an immutable part of the
+buffer. 
+</p></blockquote></div>
+
+   <p>There are two variations of the <code>const</code> widget, namely
+<code>variable-item</code> and <code>function-item</code>.  These should contain a
+symbol with a variable or function binding.  The major difference from
+the <code>const</code> widget is that they will allow the user to see the
+variable or function documentation for the symbol.
+
+<div class="defun">
+&mdash; Widget: <b>variable-item</b><var><a name="index-variable_002ditem-110"></a></var><br>
+<blockquote><p>An immutable symbol that is bound as a variable. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Widget: <b>function-item</b><var><a name="index-function_002ditem-111"></a></var><br>
+<blockquote><p>An immutable symbol that is bound as a function. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="generic"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#atoms">atoms</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#constants">constants</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Sexp-Types">Sexp Types</a>
+
+</div>
+
+<h3 class="section">6.2 Generic Sexp Widget</h3>
+
+<p><a name="index-generic-sexp-widget-112"></a>
+The <code>sexp</code> widget can contain any Lisp expression, and allows the
+user to edit it inline in the buffer.
+
+   <p>The syntax for the <code>sexp</code> widget is:
+
+<pre class="example">     <var>type</var> ::= (sexp [<var>keyword</var> <var>argument</var>]...  [ <var>value</var> ])
+</pre>
+   <div class="defun">
+&mdash; Widget: <b>sexp</b><var><a name="index-sexp-113"></a></var><br>
+<blockquote><p>This will allow you to edit any valid s-expression in an editable buffer
+field.
+
+        <p>The <code>sexp</code> widget takes the same keyword arguments as the
+<code>editable-field</code> widget.  See <a href="#editable_002dfield">editable-field</a>. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="atoms"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#composite">composite</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#generic">generic</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Sexp-Types">Sexp Types</a>
+
+</div>
+
+<h3 class="section">6.3 Atomic Sexp Widgets</h3>
+
+<p><a name="index-atomic-sexp-widget-114"></a>
+The atoms are s-expressions that do not consist of other s-expressions. 
+For example, a string, a file name, or a symbol are atoms, while a list
+is a composite type.  You can edit the value of an atom with the
+following widgets.
+
+   <p>The syntax for all the atoms are:
+
+<pre class="example">     <var>type</var> ::= (<var>construct</var> [<var>keyword</var> <var>argument</var>]...  [ <var>value</var> ])
+</pre>
+   <p>The <var>value</var>, if present, is used to initialize the <code>:value</code>
+property and must be an expression of the same type as the widget. 
+That is, the string widget can only be initialized with a string.
+
+   <p>All the atom widgets take the same keyword arguments as the
+<code>editable-field</code> widget.  See <a href="#editable_002dfield">editable-field</a>.
+
+<div class="defun">
+&mdash; Widget: <b>string</b><var><a name="index-string-115"></a></var><br>
+<blockquote><p>Allows you to edit a string in an editable field. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Widget: <b>regexp</b><var><a name="index-regexp-116"></a></var><br>
+<blockquote><p>Allows you to edit a regular expression in an editable field. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Widget: <b>character</b><var><a name="index-character-117"></a></var><br>
+<blockquote><p>Allows you to enter a character in an editable field. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Widget: <b>file</b><var><a name="index-file-118"></a></var><br>
+<blockquote><p>Allows you to edit a file name in an editable field.
+
+        <p>Keywords:
+          
+<a name="index-must_002dmatch_0040r_007b-keyword_007d-119"></a>
+<dl><dt><code>:must-match</code><dd>If this is set to non-<code>nil</code>, only existing file names will be
+allowed in the minibuffer. 
+</dl>
+        </p></blockquote></div>
+
+<div class="defun">
+&mdash; Widget: <b>directory</b><var><a name="index-directory-120"></a></var><br>
+<blockquote><p>Allows you to edit a directory name in an editable field. 
+Similar to the <code>file</code> widget. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Widget: <b>symbol</b><var><a name="index-symbol-121"></a></var><br>
+<blockquote><p>Allows you to edit a Lisp symbol in an editable field. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Widget: <b>function</b><var><a name="index-function-122"></a></var><br>
+<blockquote><p>Allows you to edit a lambda expression, or a function name with completion. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Widget: <b>variable</b><var><a name="index-variable-123"></a></var><br>
+<blockquote><p>Allows you to edit a variable name, with completion. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Widget: <b>integer</b><var><a name="index-integer-124"></a></var><br>
+<blockquote><p>Allows you to edit an integer in an editable field. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Widget: <b>number</b><var><a name="index-number-125"></a></var><br>
+<blockquote><p>Allows you to edit a number in an editable field. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Widget: <b>boolean</b><var><a name="index-boolean-126"></a></var><br>
+<blockquote><p>Allows you to edit a boolean.  In Lisp this means a variable which is
+either <code>nil</code> meaning false, or non-<code>nil</code> meaning true. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="composite"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#atoms">atoms</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Sexp-Types">Sexp Types</a>
+
+</div>
+
+<h3 class="section">6.4 Composite Sexp Widgets</h3>
+
+<p><a name="index-composite-sexp-widgets-127"></a>
+The syntax for the composite widget construct is:
+
+<pre class="example">     <var>type</var> ::= (<var>construct</var> [<var>keyword</var> <var>argument</var>]...  <var>component</var>...)
+</pre>
+   <p class="noindent">where each <var>component</var> must be a widget type.  Each component widget
+will be displayed in the buffer, and will be editable by the user.
+
+<div class="defun">
+&mdash; Widget: <b>cons</b><var><a name="index-cons-128"></a></var><br>
+<blockquote><p>The value of a <code>cons</code> widget must be a cons-cell whose <span class="sc">car</span>
+and <span class="sc">cdr</span> have two specified types.  It uses this syntax:
+
+     <pre class="example">          <var>type</var> ::= (cons [<var>keyword</var> <var>argument</var>]...  <var>car-type</var> <var>cdr-type</var>)
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Widget: <b>choice</b><var><a name="index-choice-129"></a></var><br>
+<blockquote><p>The value matched by a <code>choice</code> widget must have one of a fixed
+set of types.  The widget's syntax is as follows:
+
+     <pre class="example">          <var>type</var> ::= (choice [<var>keyword</var> <var>argument</var>]...  <var>type</var> ... )
+</pre>
+        <p>The value of a <code>choice</code> widget can be anything that matches any of the
+<var>types</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Widget: <b>list</b><var><a name="index-list-130"></a></var><br>
+<blockquote><p>The value of a <code>list</code> widget must be a list whose element types
+match the specified component types:
+
+     <pre class="example">          <var>type</var> ::= (list [<var>keyword</var> <var>argument</var>]...  <var>component-type</var>...)
+</pre>
+        <p>Thus, <code>(list string number)</code> matches lists of two elements,
+the first being a string and the second being a number. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Widget: <b>vector</b><var><a name="index-vector-131"></a></var><br>
+<blockquote><p>The <code>vector</code> widget is like the <code>list</code> widget but matches
+vectors instead of lists.  Thus, <code>(vector string number)</code> matches
+vectors of two elements, the first being a string and the second being
+a number. 
+</p></blockquote></div>
+
+   <p>The above suffice for specifying fixed size lists and vectors.  To get
+variable length lists and vectors, you can use a <code>choice</code>,
+<code>set</code>, or <code>repeat</code> widget together with the <code>:inline</code>
+keyword.  If any component of a composite widget has the
+<code>:inline</code> keyword set, its value must be a list which will then
+be spliced into the composite.  For example, to specify a list whose
+first element must be a file name, and whose remaining elements should
+either be the symbol <code>t</code> or two strings (file names), you can use
+the following widget specification:
+
+<pre class="example">     (list file
+           (choice (const t)
+                   (list :inline t
+                         :value ("foo" "bar")
+                         string string)))
+</pre>
+   <p>The value of a widget of this type will either have the form
+<code>(file t)</code> or <code>(file </code><var>string</var> <var>string</var><code>)</code>.
+
+   <p>This concept of <code>:inline</code> may be hard to understand.  It was
+certainly hard to implement, so instead of confusing you more by
+trying to explain it here, I'll just suggest you meditate over it for
+a while.
+
+<div class="defun">
+&mdash; Widget: <b>set</b><var><a name="index-set-132"></a></var><br>
+<blockquote><p>Specifies a type whose values are the lists whose elements all belong
+to a given set.  The order of elements of the list is not significant. 
+Here's the syntax:
+
+     <pre class="example">          <var>type</var> ::= (set [<var>keyword</var> <var>argument</var>]...  <var>permitted-element</var> ... )
+</pre>
+        <p>Use <code>const</code> to specify each permitted element, like this:
+<code>(set (const a) (const b))</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Widget: <b>repeat</b><var><a name="index-repeat-133"></a></var><br>
+<blockquote><p>Specifies a list of any number of elements that fit a certain type.
+
+     <pre class="example">          <var>type</var> ::= (repeat [<var>keyword</var> <var>argument</var>]...  <var>type</var>)
+</pre>
+        </blockquote></div>
+
+<div class="node">
+<a name="Widget-Properties"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Defining-New-Widgets">Defining New Widgets</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Sexp-Types">Sexp Types</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">7 Properties</h2>
+
+<p><a name="index-properties-of-widgets-134"></a><a name="index-widget-properties-135"></a>
+You can examine or set the value of a widget by using the widget object
+that was returned by <code>widget-create</code>.
+
+<div class="defun">
+&mdash; Function: <b>widget-value</b><var> widget<a name="index-widget_002dvalue-136"></a></var><br>
+<blockquote><p>Return the current value contained in <var>widget</var>. 
+It is an error to call this function on an uninitialized widget. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>widget-value-set</b><var> widget value<a name="index-widget_002dvalue_002dset-137"></a></var><br>
+<blockquote><p>Set the value contained in <var>widget</var> to <var>value</var>. 
+It is an error to call this function with an invalid <var>value</var>. 
+</p></blockquote></div>
+
+   <p><strong>Important:</strong> You <em>must</em> call <code>widget-setup</code> after
+modifying the value of a widget before the user is allowed to edit the
+widget again.  It is enough to call <code>widget-setup</code> once if you
+modify multiple widgets.  This is currently only necessary if the widget
+contains an editing field, but may be necessary for other widgets in the
+future.
+
+   <p>If your application needs to associate some information with the widget
+objects, for example a reference to the item being edited, it can be
+done with <code>widget-put</code> and <code>widget-get</code>.  The property names
+must begin with a &lsquo;<samp><span class="samp">:</span></samp>&rsquo;.
+
+<div class="defun">
+&mdash; Function: <b>widget-put</b><var> widget property value<a name="index-widget_002dput-138"></a></var><br>
+<blockquote><p>In <var>widget</var> set <var>property</var> to <var>value</var>. 
+<var>property</var> should be a symbol, while <var>value</var> can be anything. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>widget-get</b><var> widget property<a name="index-widget_002dget-139"></a></var><br>
+<blockquote><p>In <var>widget</var> return the value for <var>property</var>. 
+<var>property</var> should be a symbol, the value is what was last set by
+<code>widget-put</code> for <var>property</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>widget-member</b><var> widget property<a name="index-widget_002dmember-140"></a></var><br>
+<blockquote><p>Non-<code>nil</code> if <var>widget</var> has a value (even <code>nil</code>) for
+property <var>property</var>. 
+</p></blockquote></div>
+
+   <p>Occasionally it can be useful to know which kind of widget you have,
+i.e., the name of the widget type you gave when the widget was created.
+
+<div class="defun">
+&mdash; Function: <b>widget-type</b><var> widget<a name="index-widget_002dtype-141"></a></var><br>
+<blockquote><p>Return the name of <var>widget</var>, a symbol. 
+</p></blockquote></div>
+
+   <p><a name="index-active-widget-142"></a><a name="index-inactive-widget-143"></a><a name="index-activate-a-widget-144"></a><a name="index-deactivate-a-widget-145"></a>Widgets can be in two states: active, which means they are modifiable by
+the user, or inactive, which means they cannot be modified by the user. 
+You can query or set the state with the following code:
+
+<pre class="lisp">     ;; Examine if <var>widget</var> is active or not.
+     (if (widget-apply <var>widget</var> :active)
+         (message "Widget is active.")
+       (message "Widget is inactive.")
+     
+     ;; Make <var>widget</var> inactive.
+     (widget-apply <var>widget</var> :deactivate)
+     
+     ;; Make <var>widget</var> active.
+     (widget-apply <var>widget</var> :activate)
+</pre>
+   <p>A widget is inactive if it, or any of its ancestors (found by
+following the <code>:parent</code> link), have been deactivated.  To make sure
+a widget is really active, you must therefore activate both it and
+all its ancestors.
+
+<pre class="lisp">     (while widget
+       (widget-apply widget :activate)
+       (setq widget (widget-get widget :parent)))
+</pre>
+   <p>You can check if a widget has been made inactive by examining the value
+of the <code>:inactive</code> keyword.  If this is non-<code>nil</code>, the widget itself
+has been deactivated.  This is different from using the <code>:active</code>
+keyword, in that the latter tells you if the widget <strong>or</strong> any of
+its ancestors have been deactivated.  Do not attempt to set the
+<code>:inactive</code> keyword directly.  Use the <code>:activate</code>
+<code>:deactivate</code> keywords instead.
+
+<div class="node">
+<a name="Defining-New-Widgets"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Widget-Browser">Widget Browser</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Widget-Properties">Widget Properties</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">8 Defining New Widgets</h2>
+
+<p><a name="index-new-widgets-146"></a><a name="index-defining-new-widgets-147"></a>
+You can define specialized widgets with <code>define-widget</code>.  It allows
+you to create a shorthand for more complex widgets, including specifying
+component widgets and new default values for the keyword
+arguments.
+
+<div class="defun">
+&mdash; Function: <b>define-widget</b><var> name class doc &amp;rest args<a name="index-define_002dwidget-148"></a></var><br>
+<blockquote><p>Define a new widget type named <var>name</var> from <code>class</code>.
+
+        <p><var>name</var> and class should both be symbols, <code>class</code> should be one
+of the existing widget types.
+
+        <p>The third argument <var>doc</var> is a documentation string for the widget.
+
+        <p>After the new widget has been defined, the following two calls will
+create identical widgets:
+
+          <ul>
+<li>
+          <pre class="lisp">               (widget-create <var>name</var>)
+</pre>
+          <li>
+          <pre class="lisp">               (apply widget-create <var>class</var> <var>args</var>)
+</pre>
+          </ul>
+
+        </blockquote></div>
+
+   <p>Using <code>define-widget</code> just stores the definition of the widget type
+in the <code>widget-type</code> property of <var>name</var>, which is what
+<code>widget-create</code> uses.
+
+   <p>If you only want to specify defaults for keywords with no complex
+conversions, you can use <code>identity</code> as your conversion function.
+
+   <p>The following additional keyword arguments are useful when defining new
+widgets:
+     
+<a name="index-convert_002dwidget_0040r_007b-keyword_007d-149"></a>
+<dl><dt><code>:convert-widget</code><dd>Function to convert a widget type before creating a widget of that
+type.  It takes a widget type as an argument, and returns the converted
+widget type.  When a widget is created, this function is called for the
+widget type and all the widget's parent types, most derived first.
+
+     <p>The following predefined functions can be used here:
+
+     <div class="defun">
+&mdash; Function: <b>widget-types-convert-widget</b><var> widget<a name="index-widget_002dtypes_002dconvert_002dwidget-150"></a></var><br>
+<blockquote> <p>Convert <code>:args</code> as widget types in <var>widget</var>. 
+</p></blockquote></div>
+
+     <div class="defun">
+&mdash; Function: <b>widget-value-convert-widget</b><var> widget<a name="index-widget_002dvalue_002dconvert_002dwidget-151"></a></var><br>
+<blockquote> <p>Initialize <code>:value</code> from <code>:args</code> in <var>widget</var>. 
+</p></blockquote></div>
+
+     <p><a name="index-copy_0040r_007b-keyword_007d-152"></a><br><dt><code>:copy</code><dd>Function to deep copy a widget type.  It takes a shallow copy of the
+widget type as an argument (made by <code>copy-sequence</code>), and returns a
+deep copy.  The purpose of this is to avoid having different instances
+of combined widgets share nested attributes.
+
+     <p>The following predefined functions can be used here:
+
+     <div class="defun">
+&mdash; Function: <b>widget-types-copy</b><var> widget<a name="index-widget_002dtypes_002dcopy-153"></a></var><br>
+<blockquote> <p>Copy <code>:args</code> as widget types in <var>widget</var>. 
+</p></blockquote></div>
+
+     <p><a name="index-value_002dto_002dinternal_0040r_007b-keyword_007d-154"></a><br><dt><code>:value-to-internal</code><dd>Function to convert the value to the internal format.  The function
+takes two arguments, a widget and an external value, and returns the
+internal value.  The function is called on the present <code>:value</code>
+when the widget is created, and on any value set later with
+<code>widget-value-set</code>.
+
+     <p><a name="index-value_002dto_002dexternal_0040r_007b-keyword_007d-155"></a><br><dt><code>:value-to-external</code><dd>Function to convert the value to the external format.  The function
+takes two arguments, a widget and an internal value, and returns the
+external value.  The function is called on the present <code>:value</code>
+when the widget is created, and on any value set later with
+<code>widget-value-set</code>.
+
+     <p><a name="index-create_0040r_007b-keyword_007d-156"></a><br><dt><code>:create</code><dd>Function to create a widget from scratch.  The function takes one
+argument, a widget type, and creates a widget of that type, inserts it
+in the buffer, and returns a widget object.
+
+     <p><a name="index-delete_0040r_007b-keyword_007d-157"></a><br><dt><code>:delete</code><dd>Function to delete a widget.  The function takes one argument, a widget,
+and should remove all traces of the widget from the buffer.
+
+     <p>The default value is:
+
+     <div class="defun">
+&mdash; Function: <b>widget-default-delete</b><var> widget<a name="index-widget_002ddefault_002ddelete-158"></a></var><br>
+<blockquote> <p>Remove <var>widget</var> from the buffer. 
+Delete all <code>:children</code> and <code>:buttons</code> in <var>widget</var>. 
+</p></blockquote></div>
+
+     <p>In most cases you should not change this value, but instead use
+<code>:value-delete</code> to make any additional cleanup.
+
+     <p><a name="index-value_002dcreate_0040r_007b-keyword_007d-159"></a><br><dt><code>:value-create</code><dd>Function to expand the &lsquo;<samp><span class="samp">%v</span></samp>&rsquo; escape in the format string.  It will
+be called with the widget as its argument and should insert a
+representation of the widget's value in the buffer.
+
+     <p>Nested widgets should be listed in <code>:children</code> or <code>:buttons</code>
+to make sure they are automatically deleted.
+
+     <p><a name="index-value_002ddelete_0040r_007b-keyword_007d-160"></a><br><dt><code>:value-delete</code><dd>Should remove the representation of the widget's value from the buffer. 
+It will be called with the widget as its argument.  It doesn't have to
+remove the text, but it should release markers and delete nested widgets
+if these are not listed in <code>:children</code> or <code>:buttons</code>.
+
+     <p><a name="index-value_002dget_0040r_007b-keyword_007d-161"></a><br><dt><code>:value-get</code><dd>Function to extract the value of a widget, as it is displayed in the
+buffer.
+
+     <p>The following predefined function can be used here:
+
+     <div class="defun">
+&mdash; Function: <b>widget-value-value-get</b><var> widget<a name="index-widget_002dvalue_002dvalue_002dget-162"></a></var><br>
+<blockquote> <p>Return the <code>:value</code> property of <var>widget</var>. 
+</p></blockquote></div>
+
+     <p><a name="index-format_002dhandler_0040r_007b-keyword_007d-163"></a><br><dt><code>:format-handler</code><dd>Function to handle unknown &lsquo;<samp><span class="samp">%</span></samp>&rsquo; escapes in the format string.  It
+will be called with the widget and the character that follows the
+&lsquo;<samp><span class="samp">%</span></samp>&rsquo; as arguments.  You can set this to allow your widget to handle
+non-standard escapes.
+
+     <p><a name="index-widget_002ddefault_002dformat_002dhandler-164"></a>You should end up calling <code>widget-default-format-handler</code> to handle
+unknown escape sequences, which will handle the &lsquo;<samp><span class="samp">%h</span></samp>&rsquo; and any future
+escape sequences, as well as give an error for unknown escapes.
+
+     <p><a name="index-action_0040r_007b-keyword_007d-165"></a><br><dt><code>:action</code><dd>Function to handle user initiated events.  By default, <code>:notify</code>
+the parent.
+
+     <p>The following predefined function can be used here:
+
+     <div class="defun">
+&mdash; Function: <b>widget-parent-action</b><var> widget &amp;optional event<a name="index-widget_002dparent_002daction-166"></a></var><br>
+<blockquote> <p>Tell <code>:parent</code> of <var>widget</var> to handle the <code>:action</code>. 
+Optional <var>event</var> is the event that triggered the action. 
+</p></blockquote></div>
+
+     <p><a name="index-prompt_002dvalue_0040r_007b-keyword_007d-167"></a><br><dt><code>:prompt-value</code><dd>Function to prompt for a value in the minibuffer.  The function should
+take four arguments, <var>widget</var>, <var>prompt</var>, <var>value</var>, and
+<var>unbound</var> and should return a value for widget entered by the user. 
+<var>prompt</var> is the prompt to use.  <var>value</var> is the default value to
+use, unless <var>unbound</var> is non-<code>nil</code>, in which case there is no default
+value.  The function should read the value using the method most natural
+for this widget, and does not have to check that it matches. 
+</dl>
+
+   <p>If you want to define a new widget from scratch, use the <code>default</code>
+widget as its base.
+
+<div class="defun">
+&mdash; Widget: <b>default</b><var><a name="index-default-168"></a></var><br>
+<blockquote><p>Widget used as a base for other widgets.
+
+        <p>It provides most of the functionality that is referred to as &ldquo;by
+default&rdquo; in this text. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Widget-Browser"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Widget-Minor-Mode">Widget Minor Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Defining-New-Widgets">Defining New Widgets</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">9 Widget Browser</h2>
+
+<p><a name="index-widget-browser-169"></a>
+There is a separate package to browse widgets.  This is intended to help
+programmers who want to examine the content of a widget.  The browser
+shows the value of each keyword, but uses links for certain keywords
+such as &lsquo;<samp><span class="samp">:parent</span></samp>&rsquo;, which avoids printing cyclic structures.
+
+<div class="defun">
+&mdash; Command: <b>widget-browse</b><var> widget<a name="index-widget_002dbrowse-170"></a></var><br>
+<blockquote><p>Create a widget browser for <var>widget</var>. 
+When called interactively, prompt for <var>widget</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>widget-browse-other-window</b><var> widget<a name="index-widget_002dbrowse_002dother_002dwindow-171"></a></var><br>
+<blockquote><p>Create a widget browser for <var>widget</var> and show it in another window. 
+When called interactively, prompt for <var>widget</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>widget-browse-at</b><var> pos<a name="index-widget_002dbrowse_002dat-172"></a></var><br>
+<blockquote><p>Create a widget browser for the widget at <var>pos</var>. 
+When called interactively, use the position of point. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Widget-Minor-Mode"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Utilities">Utilities</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Widget-Browser">Widget Browser</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">10 Widget Minor Mode</h2>
+
+<p><a name="index-widget-minor-mode-173"></a>
+There is a minor mode for manipulating widgets in major modes that
+don't provide any support for widgets themselves.  This is mostly
+intended to be useful for programmers doing experiments.
+
+<div class="defun">
+&mdash; Command: <b>widget-minor-mode</b><var><a name="index-widget_002dminor_002dmode-174"></a></var><br>
+<blockquote><p>Toggle minor mode for traversing widgets. 
+With arg, turn widget mode on if and only if arg is positive. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>widget-minor-mode-keymap</b><var><a name="index-widget_002dminor_002dmode_002dkeymap-175"></a></var><br>
+<blockquote><p>Keymap used in <code>widget-minor-mode</code>. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Utilities"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Widget-Wishlist">Widget Wishlist</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Widget-Minor-Mode">Widget Minor Mode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">11 Utilities</h2>
+
+<p><a name="index-utility-functions-for-widgets-176"></a>
+
+<div class="defun">
+&mdash; Function: <b>widget-prompt-value</b><var> widget prompt </var>[<var> value unbound </var>]<var><a name="index-widget_002dprompt_002dvalue-177"></a></var><br>
+<blockquote><p>Prompt for a value matching <var>widget</var>, using <var>prompt</var>. 
+The current value is assumed to be <var>value</var>, unless <var>unbound</var> is
+non-<code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>widget-get-sibling</b><var> widget<a name="index-widget_002dget_002dsibling-178"></a></var><br>
+<blockquote><p>Get the item which <var>widget</var> is assumed to toggle. 
+This is only meaningful for radio buttons or checkboxes in a list. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Widget-Wishlist"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Utilities">Utilities</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">12 Wishlist</h2>
+
+<p><a name="index-todo-179"></a>
+     <ul>
+<li>It should be possible to add or remove items from a list with <kbd>C-k</kbd>
+and <kbd>C-o</kbd> (suggested by <span class="sc">rms</span>).
+
+     <li>The &lsquo;<samp><span class="samp">[INS]</span></samp>&rsquo; and &lsquo;<samp><span class="samp">[DEL]</span></samp>&rsquo; buttons should be replaced by a single
+dash (&lsquo;<samp><span class="samp">-</span></samp>&rsquo;).  The dash should be a button that, when invoked, asks
+whether you want to add or delete an item (<span class="sc">rms</span> wanted to git rid of
+the ugly buttons, the dash is my idea).
+
+     <li>The <code>menu-choice</code> tag should be prettier, something like the abbreviated
+menus in Open Look.
+
+     <li>Finish <code>:tab-order</code>.
+
+     <li>Make indentation work with glyphs and proportional fonts.
+
+     <li>Add commands to show overview of object and class hierarchies to the
+browser.
+
+     <li>Find a way to disable mouse highlight for inactive widgets.
+
+     <li>Find a way to make glyphs look inactive.
+
+     <li>Add <code>property-list</code> widget.
+
+     <li>Add <code>association-list</code> widget.
+
+     <li>Add <code>key-binding</code> widget.
+
+     <li>Add <code>widget</code> widget for editing widget specifications.
+
+     <li>Find clean way to implement variable length list. 
+See <code>TeX-printer-list</code> for an explanation.
+
+     <li><kbd>C-h</kbd> in <code>widget-prompt-value</code> should give type specific help.
+
+     <li>Add a <code>mailto</code> widget. 
+</ul>
+
+<div class="node">
+<a name="GNU-Free-Documentation-License"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Index">Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Widget-Wishlist">Widget Wishlist</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="appendix">Appendix A GNU Free Documentation License</h2>
+
+<!-- The GNU Free Documentation License. -->
+<div align="center">Version 1.3, 3 November 2008</div>
+
+<!-- This file is intended to be included within another document, -->
+<!-- hence no sectioning command or @node. -->
+<pre class="display">     Copyright &copy; 2000, 2001, 2002, 2007, 2008 Free Software Foundation, Inc.
+     <a href="http://fsf.org/">http://fsf.org/</a>
+     
+     Everyone is permitted to copy and distribute verbatim copies
+     of this license document, but changing it is not allowed.
+</pre>
+     <ol type=1 start=0>
+<li>PREAMBLE
+
+     <p>The purpose of this License is to make a manual, textbook, or other
+functional and useful document <dfn>free</dfn> in the sense of freedom: to
+assure everyone the effective freedom to copy and redistribute it,
+with or without modifying it, either commercially or noncommercially. 
+Secondarily, this License preserves for the author and publisher a way
+to get credit for their work, while not being considered responsible
+for modifications made by others.
+
+     <p>This License is a kind of &ldquo;copyleft&rdquo;, which means that derivative
+works of the document must themselves be free in the same sense.  It
+complements the GNU General Public License, which is a copyleft
+license designed for free software.
+
+     <p>We have designed this License in order to use it for manuals for free
+software, because free software needs free documentation: a free
+program should come with manuals providing the same freedoms that the
+software does.  But this License is not limited to software manuals;
+it can be used for any textual work, regardless of subject matter or
+whether it is published as a printed book.  We recommend this License
+principally for works whose purpose is instruction or reference.
+
+     <li>APPLICABILITY AND DEFINITIONS
+
+     <p>This License applies to any manual or other work, in any medium, that
+contains a notice placed by the copyright holder saying it can be
+distributed under the terms of this License.  Such a notice grants a
+world-wide, royalty-free license, unlimited in duration, to use that
+work under the conditions stated herein.  The &ldquo;Document&rdquo;, below,
+refers to any such manual or work.  Any member of the public is a
+licensee, and is addressed as &ldquo;you&rdquo;.  You accept the license if you
+copy, modify or distribute the work in a way requiring permission
+under copyright law.
+
+     <p>A &ldquo;Modified Version&rdquo; of the Document means any work containing the
+Document or a portion of it, either copied verbatim, or with
+modifications and/or translated into another language.
+
+     <p>A &ldquo;Secondary Section&rdquo; is a named appendix or a front-matter section
+of the Document that deals exclusively with the relationship of the
+publishers or authors of the Document to the Document's overall
+subject (or to related matters) and contains nothing that could fall
+directly within that overall subject.  (Thus, if the Document is in
+part a textbook of mathematics, a Secondary Section may not explain
+any mathematics.)  The relationship could be a matter of historical
+connection with the subject or with related matters, or of legal,
+commercial, philosophical, ethical or political position regarding
+them.
+
+     <p>The &ldquo;Invariant Sections&rdquo; are certain Secondary Sections whose titles
+are designated, as being those of Invariant Sections, in the notice
+that says that the Document is released under this License.  If a
+section does not fit the above definition of Secondary then it is not
+allowed to be designated as Invariant.  The Document may contain zero
+Invariant Sections.  If the Document does not identify any Invariant
+Sections then there are none.
+
+     <p>The &ldquo;Cover Texts&rdquo; are certain short passages of text that are listed,
+as Front-Cover Texts or Back-Cover Texts, in the notice that says that
+the Document is released under this License.  A Front-Cover Text may
+be at most 5 words, and a Back-Cover Text may be at most 25 words.
+
+     <p>A &ldquo;Transparent&rdquo; copy of the Document means a machine-readable copy,
+represented in a format whose specification is available to the
+general public, that is suitable for revising the document
+straightforwardly with generic text editors or (for images composed of
+pixels) generic paint programs or (for drawings) some widely available
+drawing editor, and that is suitable for input to text formatters or
+for automatic translation to a variety of formats suitable for input
+to text formatters.  A copy made in an otherwise Transparent file
+format whose markup, or absence of markup, has been arranged to thwart
+or discourage subsequent modification by readers is not Transparent. 
+An image format is not Transparent if used for any substantial amount
+of text.  A copy that is not &ldquo;Transparent&rdquo; is called &ldquo;Opaque&rdquo;.
+
+     <p>Examples of suitable formats for Transparent copies include plain
+ASCII without markup, Texinfo input format, LaTeX input
+format, SGML or XML using a publicly available
+DTD, and standard-conforming simple HTML,
+PostScript or PDF designed for human modification.  Examples
+of transparent image formats include PNG, XCF and
+JPG.  Opaque formats include proprietary formats that can be
+read and edited only by proprietary word processors, SGML or
+XML for which the DTD and/or processing tools are
+not generally available, and the machine-generated HTML,
+PostScript or PDF produced by some word processors for
+output purposes only.
+
+     <p>The &ldquo;Title Page&rdquo; means, for a printed book, the title page itself,
+plus such following pages as are needed to hold, legibly, the material
+this License requires to appear in the title page.  For works in
+formats which do not have any title page as such, &ldquo;Title Page&rdquo; means
+the text near the most prominent appearance of the work's title,
+preceding the beginning of the body of the text.
+
+     <p>The &ldquo;publisher&rdquo; means any person or entity that distributes copies
+of the Document to the public.
+
+     <p>A section &ldquo;Entitled XYZ&rdquo; means a named subunit of the Document whose
+title either is precisely XYZ or contains XYZ in parentheses following
+text that translates XYZ in another language.  (Here XYZ stands for a
+specific section name mentioned below, such as &ldquo;Acknowledgements&rdquo;,
+&ldquo;Dedications&rdquo;, &ldquo;Endorsements&rdquo;, or &ldquo;History&rdquo;.)  To &ldquo;Preserve the Title&rdquo;
+of such a section when you modify the Document means that it remains a
+section &ldquo;Entitled XYZ&rdquo; according to this definition.
+
+     <p>The Document may include Warranty Disclaimers next to the notice which
+states that this License applies to the Document.  These Warranty
+Disclaimers are considered to be included by reference in this
+License, but only as regards disclaiming warranties: any other
+implication that these Warranty Disclaimers may have is void and has
+no effect on the meaning of this License.
+
+     <li>VERBATIM COPYING
+
+     <p>You may copy and distribute the Document in any medium, either
+commercially or noncommercially, provided that this License, the
+copyright notices, and the license notice saying this License applies
+to the Document are reproduced in all copies, and that you add no other
+conditions whatsoever to those of this License.  You may not use
+technical measures to obstruct or control the reading or further
+copying of the copies you make or distribute.  However, you may accept
+compensation in exchange for copies.  If you distribute a large enough
+number of copies you must also follow the conditions in section 3.
+
+     <p>You may also lend copies, under the same conditions stated above, and
+you may publicly display copies.
+
+     <li>COPYING IN QUANTITY
+
+     <p>If you publish printed copies (or copies in media that commonly have
+printed covers) of the Document, numbering more than 100, and the
+Document's license notice requires Cover Texts, you must enclose the
+copies in covers that carry, clearly and legibly, all these Cover
+Texts: Front-Cover Texts on the front cover, and Back-Cover Texts on
+the back cover.  Both covers must also clearly and legibly identify
+you as the publisher of these copies.  The front cover must present
+the full title with all words of the title equally prominent and
+visible.  You may add other material on the covers in addition. 
+Copying with changes limited to the covers, as long as they preserve
+the title of the Document and satisfy these conditions, can be treated
+as verbatim copying in other respects.
+
+     <p>If the required texts for either cover are too voluminous to fit
+legibly, you should put the first ones listed (as many as fit
+reasonably) on the actual cover, and continue the rest onto adjacent
+pages.
+
+     <p>If you publish or distribute Opaque copies of the Document numbering
+more than 100, you must either include a machine-readable Transparent
+copy along with each Opaque copy, or state in or with each Opaque copy
+a computer-network location from which the general network-using
+public has access to download using public-standard network protocols
+a complete Transparent copy of the Document, free of added material. 
+If you use the latter option, you must take reasonably prudent steps,
+when you begin distribution of Opaque copies in quantity, to ensure
+that this Transparent copy will remain thus accessible at the stated
+location until at least one year after the last time you distribute an
+Opaque copy (directly or through your agents or retailers) of that
+edition to the public.
+
+     <p>It is requested, but not required, that you contact the authors of the
+Document well before redistributing any large number of copies, to give
+them a chance to provide you with an updated version of the Document.
+
+     <li>MODIFICATIONS
+
+     <p>You may copy and distribute a Modified Version of the Document under
+the conditions of sections 2 and 3 above, provided that you release
+the Modified Version under precisely this License, with the Modified
+Version filling the role of the Document, thus licensing distribution
+and modification of the Modified Version to whoever possesses a copy
+of it.  In addition, you must do these things in the Modified Version:
+
+          <ol type=A start=1>
+<li>Use in the Title Page (and on the covers, if any) a title distinct
+from that of the Document, and from those of previous versions
+(which should, if there were any, be listed in the History section
+of the Document).  You may use the same title as a previous version
+if the original publisher of that version gives permission.
+
+          <li>List on the Title Page, as authors, one or more persons or entities
+responsible for authorship of the modifications in the Modified
+Version, together with at least five of the principal authors of the
+Document (all of its principal authors, if it has fewer than five),
+unless they release you from this requirement.
+
+          <li>State on the Title page the name of the publisher of the
+Modified Version, as the publisher.
+
+          <li>Preserve all the copyright notices of the Document.
+
+          <li>Add an appropriate copyright notice for your modifications
+adjacent to the other copyright notices.
+
+          <li>Include, immediately after the copyright notices, a license notice
+giving the public permission to use the Modified Version under the
+terms of this License, in the form shown in the Addendum below.
+
+          <li>Preserve in that license notice the full lists of Invariant Sections
+and required Cover Texts given in the Document's license notice.
+
+          <li>Include an unaltered copy of this License.
+
+          <li>Preserve the section Entitled &ldquo;History&rdquo;, Preserve its Title, and add
+to it an item stating at least the title, year, new authors, and
+publisher of the Modified Version as given on the Title Page.  If
+there is no section Entitled &ldquo;History&rdquo; in the Document, create one
+stating the title, year, authors, and publisher of the Document as
+given on its Title Page, then add an item describing the Modified
+Version as stated in the previous sentence.
+
+          <li>Preserve the network location, if any, given in the Document for
+public access to a Transparent copy of the Document, and likewise
+the network locations given in the Document for previous versions
+it was based on.  These may be placed in the &ldquo;History&rdquo; section. 
+You may omit a network location for a work that was published at
+least four years before the Document itself, or if the original
+publisher of the version it refers to gives permission.
+
+          <li>For any section Entitled &ldquo;Acknowledgements&rdquo; or &ldquo;Dedications&rdquo;, Preserve
+the Title of the section, and preserve in the section all the
+substance and tone of each of the contributor acknowledgements and/or
+dedications given therein.
+
+          <li>Preserve all the Invariant Sections of the Document,
+unaltered in their text and in their titles.  Section numbers
+or the equivalent are not considered part of the section titles.
+
+          <li>Delete any section Entitled &ldquo;Endorsements&rdquo;.  Such a section
+may not be included in the Modified Version.
+
+          <li>Do not retitle any existing section to be Entitled &ldquo;Endorsements&rdquo; or
+to conflict in title with any Invariant Section.
+
+          <li>Preserve any Warranty Disclaimers.
+          </ol>
+
+     <p>If the Modified Version includes new front-matter sections or
+appendices that qualify as Secondary Sections and contain no material
+copied from the Document, you may at your option designate some or all
+of these sections as invariant.  To do this, add their titles to the
+list of Invariant Sections in the Modified Version's license notice. 
+These titles must be distinct from any other section titles.
+
+     <p>You may add a section Entitled &ldquo;Endorsements&rdquo;, provided it contains
+nothing but endorsements of your Modified Version by various
+parties&mdash;for example, statements of peer review or that the text has
+been approved by an organization as the authoritative definition of a
+standard.
+
+     <p>You may add a passage of up to five words as a Front-Cover Text, and a
+passage of up to 25 words as a Back-Cover Text, to the end of the list
+of Cover Texts in the Modified Version.  Only one passage of
+Front-Cover Text and one of Back-Cover Text may be added by (or
+through arrangements made by) any one entity.  If the Document already
+includes a cover text for the same cover, previously added by you or
+by arrangement made by the same entity you are acting on behalf of,
+you may not add another; but you may replace the old one, on explicit
+permission from the previous publisher that added the old one.
+
+     <p>The author(s) and publisher(s) of the Document do not by this License
+give permission to use their names for publicity for or to assert or
+imply endorsement of any Modified Version.
+
+     <li>COMBINING DOCUMENTS
+
+     <p>You may combine the Document with other documents released under this
+License, under the terms defined in section 4 above for modified
+versions, provided that you include in the combination all of the
+Invariant Sections of all of the original documents, unmodified, and
+list them all as Invariant Sections of your combined work in its
+license notice, and that you preserve all their Warranty Disclaimers.
+
+     <p>The combined work need only contain one copy of this License, and
+multiple identical Invariant Sections may be replaced with a single
+copy.  If there are multiple Invariant Sections with the same name but
+different contents, make the title of each such section unique by
+adding at the end of it, in parentheses, the name of the original
+author or publisher of that section if known, or else a unique number. 
+Make the same adjustment to the section titles in the list of
+Invariant Sections in the license notice of the combined work.
+
+     <p>In the combination, you must combine any sections Entitled &ldquo;History&rdquo;
+in the various original documents, forming one section Entitled
+&ldquo;History&rdquo;; likewise combine any sections Entitled &ldquo;Acknowledgements&rdquo;,
+and any sections Entitled &ldquo;Dedications&rdquo;.  You must delete all
+sections Entitled &ldquo;Endorsements.&rdquo;
+
+     <li>COLLECTIONS OF DOCUMENTS
+
+     <p>You may make a collection consisting of the Document and other documents
+released under this License, and replace the individual copies of this
+License in the various documents with a single copy that is included in
+the collection, provided that you follow the rules of this License for
+verbatim copying of each of the documents in all other respects.
+
+     <p>You may extract a single document from such a collection, and distribute
+it individually under this License, provided you insert a copy of this
+License into the extracted document, and follow this License in all
+other respects regarding verbatim copying of that document.
+
+     <li>AGGREGATION WITH INDEPENDENT WORKS
+
+     <p>A compilation of the Document or its derivatives with other separate
+and independent documents or works, in or on a volume of a storage or
+distribution medium, is called an &ldquo;aggregate&rdquo; if the copyright
+resulting from the compilation is not used to limit the legal rights
+of the compilation's users beyond what the individual works permit. 
+When the Document is included in an aggregate, this License does not
+apply to the other works in the aggregate which are not themselves
+derivative works of the Document.
+
+     <p>If the Cover Text requirement of section 3 is applicable to these
+copies of the Document, then if the Document is less than one half of
+the entire aggregate, the Document's Cover Texts may be placed on
+covers that bracket the Document within the aggregate, or the
+electronic equivalent of covers if the Document is in electronic form. 
+Otherwise they must appear on printed covers that bracket the whole
+aggregate.
+
+     <li>TRANSLATION
+
+     <p>Translation is considered a kind of modification, so you may
+distribute translations of the Document under the terms of section 4. 
+Replacing Invariant Sections with translations requires special
+permission from their copyright holders, but you may include
+translations of some or all Invariant Sections in addition to the
+original versions of these Invariant Sections.  You may include a
+translation of this License, and all the license notices in the
+Document, and any Warranty Disclaimers, provided that you also include
+the original English version of this License and the original versions
+of those notices and disclaimers.  In case of a disagreement between
+the translation and the original version of this License or a notice
+or disclaimer, the original version will prevail.
+
+     <p>If a section in the Document is Entitled &ldquo;Acknowledgements&rdquo;,
+&ldquo;Dedications&rdquo;, or &ldquo;History&rdquo;, the requirement (section 4) to Preserve
+its Title (section 1) will typically require changing the actual
+title.
+
+     <li>TERMINATION
+
+     <p>You may not copy, modify, sublicense, or distribute the Document
+except as expressly provided under this License.  Any attempt
+otherwise to copy, modify, sublicense, or distribute it is void, and
+will automatically terminate your rights under this License.
+
+     <p>However, if you cease all violation of this License, then your license
+from a particular copyright holder is reinstated (a) provisionally,
+unless and until the copyright holder explicitly and finally
+terminates your license, and (b) permanently, if the copyright holder
+fails to notify you of the violation by some reasonable means prior to
+60 days after the cessation.
+
+     <p>Moreover, your license from a particular copyright holder is
+reinstated permanently if the copyright holder notifies you of the
+violation by some reasonable means, this is the first time you have
+received notice of violation of this License (for any work) from that
+copyright holder, and you cure the violation prior to 30 days after
+your receipt of the notice.
+
+     <p>Termination of your rights under this section does not terminate the
+licenses of parties who have received copies or rights from you under
+this License.  If your rights have been terminated and not permanently
+reinstated, receipt of a copy of some or all of the same material does
+not give you any rights to use it.
+
+     <li>FUTURE REVISIONS OF THIS LICENSE
+
+     <p>The Free Software Foundation may publish new, revised versions
+of the GNU Free Documentation License from time to time.  Such new
+versions will be similar in spirit to the present version, but may
+differ in detail to address new problems or concerns.  See
+<a href="http://www.gnu.org/copyleft/">http://www.gnu.org/copyleft/</a>.
+
+     <p>Each version of the License is given a distinguishing version number. 
+If the Document specifies that a particular numbered version of this
+License &ldquo;or any later version&rdquo; applies to it, you have the option of
+following the terms and conditions either of that specified version or
+of any later version that has been published (not as a draft) by the
+Free Software Foundation.  If the Document does not specify a version
+number of this License, you may choose any version ever published (not
+as a draft) by the Free Software Foundation.  If the Document
+specifies that a proxy can decide which future versions of this
+License can be used, that proxy's public statement of acceptance of a
+version permanently authorizes you to choose that version for the
+Document.
+
+     <li>RELICENSING
+
+     <p>&ldquo;Massive Multiauthor Collaboration Site&rdquo; (or &ldquo;MMC Site&rdquo;) means any
+World Wide Web server that publishes copyrightable works and also
+provides prominent facilities for anybody to edit those works.  A
+public wiki that anybody can edit is an example of such a server.  A
+&ldquo;Massive Multiauthor Collaboration&rdquo; (or &ldquo;MMC&rdquo;) contained in the
+site means any set of copyrightable works thus published on the MMC
+site.
+
+     <p>&ldquo;CC-BY-SA&rdquo; means the Creative Commons Attribution-Share Alike 3.0
+license published by Creative Commons Corporation, a not-for-profit
+corporation with a principal place of business in San Francisco,
+California, as well as future copyleft versions of that license
+published by that same organization.
+
+     <p>&ldquo;Incorporate&rdquo; means to publish or republish a Document, in whole or
+in part, as part of another Document.
+
+     <p>An MMC is &ldquo;eligible for relicensing&rdquo; if it is licensed under this
+License, and if all works that were first published under this License
+somewhere other than this MMC, and subsequently incorporated in whole
+or in part into the MMC, (1) had no cover texts or invariant sections,
+and (2) were thus incorporated prior to November 1, 2008.
+
+     <p>The operator of an MMC Site may republish an MMC contained in the site
+under CC-BY-SA on the same site at any time before August 1, 2009,
+provided the MMC is eligible for relicensing.
+
+        </ol>
+
+<h3 class="heading">ADDENDUM: How to use this License for your documents</h3>
+
+<p>To use this License in a document you have written, include a copy of
+the License in the document and put the following copyright and
+license notices just after the title page:
+
+<pre class="smallexample">       Copyright (C)  <var>year</var>  <var>your name</var>.
+       Permission is granted to copy, distribute and/or modify this document
+       under the terms of the GNU Free Documentation License, Version 1.3
+       or any later version published by the Free Software Foundation;
+       with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+       Texts.  A copy of the license is included in the section entitled ``GNU
+       Free Documentation License''.
+</pre>
+   <p>If you have Invariant Sections, Front-Cover Texts and Back-Cover Texts,
+replace the &ldquo;with<small class="dots">...</small>Texts.&rdquo; line with this:
+
+<pre class="smallexample">         with the Invariant Sections being <var>list their titles</var>, with
+         the Front-Cover Texts being <var>list</var>, and with the Back-Cover Texts
+         being <var>list</var>.
+</pre>
+   <p>If you have Invariant Sections without Cover Texts, or some other
+combination of the three, merge those two alternatives to suit the
+situation.
+
+   <p>If your document contains nontrivial examples of program code, we
+recommend releasing these examples in parallel under your choice of
+free software license, such as the GNU General Public License,
+to permit their use in free software.
+
+<!-- Local Variables: -->
+<!-- ispell-local-pdict: "ispell-dict" -->
+<!-- End: -->
+<div class="node">
+<a name="Index"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="unnumbered">Index</h2>
+
+<p>This is an alphabetical listing of all concepts, functions, commands,
+variables, and widgets described in this manual.
+
+<ul class="index-cp" compact>
+<li><a href="#index-action_0040r_007b-keyword_007d-165"><code>action</code><span class="roman"> keyword</span></a>: <a href="#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="#index-activate-a-widget-144">activate a widget</a>: <a href="#Widget-Properties">Widget Properties</a></li>
+<li><a href="#index-active-widget-142">active widget</a>: <a href="#Widget-Properties">Widget Properties</a></li>
+<li><a href="#index-append_002dbutton_002dargs_0040r_007b-keyword_007d-102"><code>append-button-args</code><span class="roman"> keyword</span></a>: <a href="#editable_002dlist">editable-list</a></li>
+<li><a href="#index-args_0040r_007b-keyword_007d-105"><code>args</code><span class="roman"> keyword</span></a>: <a href="#editable_002dlist">editable-list</a></li>
+<li><a href="#index-args_0040r_007b-keyword_007d-76"><code>args</code><span class="roman"> keyword</span></a>: <a href="#menu_002dchoice">menu-choice</a></li>
+<li><a href="#index-args_0040r_007b-keyword_007d-97"><code>args</code><span class="roman"> keyword</span></a>: <a href="#checklist">checklist</a></li>
+<li><a href="#index-args_0040r_007b-keyword_007d-83"><code>args</code><span class="roman"> keyword</span></a>: <a href="#radio_002dbutton_002dchoice">radio-button-choice</a></li>
+<li><a href="#index-atomic-sexp-widget-114">atomic sexp widget</a>: <a href="#atoms">atoms</a></li>
+<li><a href="#index-basic-widgets-1">basic widgets</a>: <a href="#Introduction">Introduction</a></li>
+<li><a href="#index-boolean-126"><code>boolean</code></a>: <a href="#atoms">atoms</a></li>
+<li><a href="#index-browse_002durl_002dbrowser_002dfunction_0040r_007b_002c-and-_0040code_007burl_002dlink_007d-widget_007d-57"><code>browse-url-browser-function</code><span class="roman">, and </span><code>url-link</code><span class="roman"> widget</span></a>: <a href="#url_002dlink">url-link</a></li>
+<li><a href="#index-button-widgets-6">button widgets</a>: <a href="#User-Interface">User Interface</a></li>
+<li><a href="#index-button_002dargs_0040r_007b-keyword_007d-94"><code>button-args</code><span class="roman"> keyword</span></a>: <a href="#checklist">checklist</a></li>
+<li><a href="#index-button_002dargs_0040r_007b-keyword_007d-79"><code>button-args</code><span class="roman"> keyword</span></a>: <a href="#radio_002dbutton_002dchoice">radio-button-choice</a></li>
+<li><a href="#index-button_002dface_0040r_007b-keyword_007d-31"><code>button-face</code><span class="roman"> keyword</span></a>: <a href="#Basic-Types">Basic Types</a></li>
+<li><a href="#index-button_002dprefix_0040r_007b-keyword_007d-32"><code>button-prefix</code><span class="roman"> keyword</span></a>: <a href="#Basic-Types">Basic Types</a></li>
+<li><a href="#index-button_002dsuffix_0040r_007b-keyword_007d-33"><code>button-suffix</code><span class="roman"> keyword</span></a>: <a href="#Basic-Types">Basic Types</a></li>
+<li><a href="#index-buttons_0040r_007b-keyword_007d-103"><code>buttons</code><span class="roman"> keyword</span></a>: <a href="#editable_002dlist">editable-list</a></li>
+<li><a href="#index-buttons_0040r_007b-keyword_007d-80"><code>buttons</code><span class="roman"> keyword</span></a>: <a href="#radio_002dbutton_002dchoice">radio-button-choice</a></li>
+<li><a href="#index-buttons_0040r_007b-keyword_007d-95"><code>buttons</code><span class="roman"> keyword</span></a>: <a href="#checklist">checklist</a></li>
+<li><a href="#index-case_002dfold_0040r_007b-keyword_007d-73"><code>case-fold</code><span class="roman"> keyword</span></a>: <a href="#menu_002dchoice">menu-choice</a></li>
+<li><a href="#index-character-117"><code>character</code></a>: <a href="#atoms">atoms</a></li>
+<li><a href="#index-checkbox_0040r_007b-widget_007d-90"><code>checkbox</code><span class="roman"> widget</span></a>: <a href="#checkbox">checkbox</a></li>
+<li><a href="#index-checklist_0040r_007b-widget_007d-91"><code>checklist</code><span class="roman"> widget</span></a>: <a href="#checklist">checklist</a></li>
+<li><a href="#index-children_0040r_007b-keyword_007d-74"><code>children</code><span class="roman"> keyword</span></a>: <a href="#menu_002dchoice">menu-choice</a></li>
+<li><a href="#index-children_0040r_007b-keyword_007d-96"><code>children</code><span class="roman"> keyword</span></a>: <a href="#checklist">checklist</a></li>
+<li><a href="#index-children_0040r_007b-keyword_007d-81"><code>children</code><span class="roman"> keyword</span></a>: <a href="#radio_002dbutton_002dchoice">radio-button-choice</a></li>
+<li><a href="#index-children_0040r_007b-keyword_007d-104"><code>children</code><span class="roman"> keyword</span></a>: <a href="#editable_002dlist">editable-list</a></li>
+<li><a href="#index-choice-129"><code>choice</code></a>: <a href="#composite">composite</a></li>
+<li><a href="#index-choice_0040r_007b-keyword_007d-82"><code>choice</code><span class="roman"> keyword</span></a>: <a href="#radio_002dbutton_002dchoice">radio-button-choice</a></li>
+<li><a href="#index-choice_0040r_007b-keyword_007d-75"><code>choice</code><span class="roman"> keyword</span></a>: <a href="#menu_002dchoice">menu-choice</a></li>
+<li><a href="#index-choice_002ditem_0040r_007b-widget_007d-86"><code>choice-item</code><span class="roman"> widget</span></a>: <a href="#choice_002ditem">choice-item</a></li>
+<li><a href="#index-composite-sexp-widgets-127">composite sexp widgets</a>: <a href="#composite">composite</a></li>
+<li><a href="#index-cons-128"><code>cons</code></a>: <a href="#composite">composite</a></li>
+<li><a href="#index-const-109"><code>const</code></a>: <a href="#constants">constants</a></li>
+<li><a href="#index-constant-widgets-108">constant widgets</a>: <a href="#constants">constants</a></li>
+<li><a href="#index-convert_002dwidget_0040r_007b-keyword_007d-149"><code>convert-widget</code><span class="roman"> keyword</span></a>: <a href="#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="#index-copy_0040r_007b-keyword_007d-152"><code>copy</code><span class="roman"> keyword</span></a>: <a href="#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="#index-create_0040r_007b-keyword_007d-156"><code>create</code><span class="roman"> keyword</span></a>: <a href="#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="#index-deactivate-a-widget-145">deactivate a widget</a>: <a href="#Widget-Properties">Widget Properties</a></li>
+<li><a href="#index-default-168"><code>default</code></a>: <a href="#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="#index-define_002dwidget-148"><code>define-widget</code></a>: <a href="#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="#index-defining-new-widgets-147">defining new widgets</a>: <a href="#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="#index-delete_0040r_007b-keyword_007d-157"><code>delete</code><span class="roman"> keyword</span></a>: <a href="#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="#index-delete_002dbutton_002dargs_0040r_007b-keyword_007d-101"><code>delete-button-args</code><span class="roman"> keyword</span></a>: <a href="#editable_002dlist">editable-list</a></li>
+<li><a href="#index-directory-120"><code>directory</code></a>: <a href="#atoms">atoms</a></li>
+<li><a href="#index-doc_0040r_007b-keyword_007d-34"><code>doc</code><span class="roman"> keyword</span></a>: <a href="#Basic-Types">Basic Types</a></li>
+<li><a href="#index-editable_002dfield_0040r_007b-widget_007d-62"><code>editable-field</code><span class="roman"> widget</span></a>: <a href="#editable_002dfield">editable-field</a></li>
+<li><a href="#index-editable_002dlist_0040r_007b-widget_007d-98"><code>editable-list</code><span class="roman"> widget</span></a>: <a href="#editable_002dlist">editable-list</a></li>
+<li><a href="#index-embedded-buttons-11">embedded buttons</a>: <a href="#User-Interface">User Interface</a></li>
+<li><a href="#index-entry_002dformat_0040r_007b-keyword_007d-99"><code>entry-format</code><span class="roman"> keyword</span></a>: <a href="#editable_002dlist">editable-list</a></li>
+<li><a href="#index-entry_002dformat_0040r_007b-keyword_007d-92"><code>entry-format</code><span class="roman"> keyword</span></a>: <a href="#checklist">checklist</a></li>
+<li><a href="#index-entry_002dformat_0040r_007b-keyword_007d-78"><code>entry-format</code><span class="roman"> keyword</span></a>: <a href="#radio_002dbutton_002dchoice">radio-button-choice</a></li>
+<li><a href="#index-example-of-using-widgets-17">example of using widgets</a>: <a href="#Programming-Example">Programming Example</a></li>
+<li><a href="#index-extra_002doffset_0040r_007b-keyword_007d-41"><code>extra-offset</code><span class="roman"> keyword</span></a>: <a href="#Basic-Types">Basic Types</a></li>
+<li><a href="#index-file-118"><code>file</code></a>: <a href="#atoms">atoms</a></li>
+<li><a href="#index-follow_002dlink_0040r_007b-keyword_007d-38"><code>follow-link</code><span class="roman"> keyword</span></a>: <a href="#Basic-Types">Basic Types</a></li>
+<li><a href="#index-format_0040r_007b-keyword_007d-28"><code>format</code><span class="roman"> keyword</span></a>: <a href="#Basic-Types">Basic Types</a></li>
+<li><a href="#index-format_002dhandler_0040r_007b-keyword_007d-163"><code>format-handler</code><span class="roman"> keyword</span></a>: <a href="#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="#index-function-122"><code>function</code></a>: <a href="#atoms">atoms</a></li>
+<li><a href="#index-function_002ditem-111"><code>function-item</code></a>: <a href="#constants">constants</a></li>
+<li><a href="#index-generic-sexp-widget-112">generic sexp widget</a>: <a href="#generic">generic</a></li>
+<li><a href="#index-greedy_0040r_007b-keyword_007d-93"><code>greedy</code><span class="roman"> keyword</span></a>: <a href="#checklist">checklist</a></li>
+<li><a href="#index-group_0040r_007b-widget_007d-106"><code>group</code><span class="roman"> widget</span></a>: <a href="#group">group</a></li>
+<li><a href="#index-help_002decho_0040r_007b-keyword_007d-37"><code>help-echo</code><span class="roman"> keyword</span></a>: <a href="#Basic-Types">Basic Types</a></li>
+<li><a href="#index-inactive-widget-143">inactive widget</a>: <a href="#Widget-Properties">Widget Properties</a></li>
+<li><a href="#index-indent_0040r_007b-keyword_007d-39"><code>indent</code><span class="roman"> keyword</span></a>: <a href="#Basic-Types">Basic Types</a></li>
+<li><a href="#index-info_002dlink_0040r_007b-widget_007d-58"><code>info-link</code><span class="roman"> widget</span></a>: <a href="#info_002dlink">info-link</a></li>
+<li><a href="#index-insert_002dbutton_002dargs_0040r_007b-keyword_007d-100"><code>insert-button-args</code><span class="roman"> keyword</span></a>: <a href="#editable_002dlist">editable-list</a></li>
+<li><a href="#index-integer-124"><code>integer</code></a>: <a href="#atoms">atoms</a></li>
+<li><a href="#index-item_0040r_007b-widget_007d-85"><code>item</code><span class="roman"> widget</span></a>: <a href="#item">item</a></li>
+<li><a href="#index-keymap_0040r_007b-keyword_007d-67"><code>keymap</code><span class="roman"> keyword</span></a>: <a href="#editable_002dfield">editable-field</a></li>
+<li><a href="#index-keyword-arguments-26">keyword arguments</a>: <a href="#Basic-Types">Basic Types</a></li>
+<li><a href="#index-link_0040r_007b-widget_007d-53"><code>link</code><span class="roman"> widget</span></a>: <a href="#link">link</a></li>
+<li><a href="#index-list-130"><code>list</code></a>: <a href="#composite">composite</a></li>
+<li><a href="#index-match_0040r_007b-keyword_007d-45"><code>match</code><span class="roman"> keyword</span></a>: <a href="#Basic-Types">Basic Types</a></li>
+<li><a href="#index-menu_002dchoice_0040r_007b-widget_007d-71"><code>menu-choice</code><span class="roman"> widget</span></a>: <a href="#menu_002dchoice">menu-choice</a></li>
+<li><a href="#index-menu_002dtag_0040r_007b-keyword_007d-43"><code>menu-tag</code><span class="roman"> keyword</span></a>: <a href="#Basic-Types">Basic Types</a></li>
+<li><a href="#index-menu_002dtag_002dget_0040r_007b-keyword_007d-44"><code>menu-tag-get</code><span class="roman"> keyword</span></a>: <a href="#Basic-Types">Basic Types</a></li>
+<li><a href="#index-Mouse_002d2-_0040r_007b_0028on-button-widgets_007d_0029-8"><code>Mouse-2 </code><span class="roman">(on button widgets</span><code>)</code></a>: <a href="#User-Interface">User Interface</a></li>
+<li><a href="#index-must_002dmatch_0040r_007b-keyword_007d-119"><code>must-match</code><span class="roman"> keyword</span></a>: <a href="#atoms">atoms</a></li>
+<li><a href="#index-new-widgets-146">new widgets</a>: <a href="#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="#index-notify_0040r_007b-keyword_007d-42"><code>notify</code><span class="roman"> keyword</span></a>: <a href="#Basic-Types">Basic Types</a></li>
+<li><a href="#index-number-125"><code>number</code></a>: <a href="#atoms">atoms</a></li>
+<li><a href="#index-off_002dglyph_0040r_007b-keyword_007d-89"><code>off-glyph</code><span class="roman"> keyword</span></a>: <a href="#toggle">toggle</a></li>
+<li><a href="#index-offset_0040r_007b-keyword_007d-40"><code>offset</code><span class="roman"> keyword</span></a>: <a href="#Basic-Types">Basic Types</a></li>
+<li><a href="#index-on_002dglyph_0040r_007b-keyword_007d-88"><code>on-glyph</code><span class="roman"> keyword</span></a>: <a href="#toggle">toggle</a></li>
+<li><a href="#index-option-field-tag-10">option field tag</a>: <a href="#User-Interface">User Interface</a></li>
+<li><a href="#index-parent_0040r_007b-keyword_007d-49"><code>parent</code><span class="roman"> keyword</span></a>: <a href="#Basic-Types">Basic Types</a></li>
+<li><a href="#index-prompt_002dvalue_0040r_007b-keyword_007d-167"><code>prompt-value</code><span class="roman"> keyword</span></a>: <a href="#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="#index-properties-of-widgets-134">properties of widgets</a>: <a href="#Widget-Properties">Widget Properties</a></li>
+<li><a href="#index-push_002dbutton_0040r_007b-widget_007d-59"><code>push-button</code><span class="roman"> widget</span></a>: <a href="#push_002dbutton">push-button</a></li>
+<li><a href="#index-radio_002dbutton_002dchoice_0040r_007b-widget_007d-77"><code>radio-button-choice</code><span class="roman"> widget</span></a>: <a href="#radio_002dbutton_002dchoice">radio-button-choice</a></li>
+<li><a href="#index-regexp-116"><code>regexp</code></a>: <a href="#atoms">atoms</a></li>
+<li><a href="#index-repeat-133"><code>repeat</code></a>: <a href="#composite">composite</a></li>
+<li><a href="#index-secret_0040r_007b-keyword_007d-65"><code>secret</code><span class="roman"> keyword</span></a>: <a href="#editable_002dfield">editable-field</a></li>
+<li><a href="#index-set-132"><code>set</code></a>: <a href="#composite">composite</a></li>
+<li><a href="#index-sexp-113"><code>sexp</code></a>: <a href="#generic">generic</a></li>
+<li><a href="#index-sexp-types-107">sexp types</a>: <a href="#Sexp-Types">Sexp Types</a></li>
+<li><a href="#index-sibling_002dargs_0040r_007b-keyword_007d-50"><code>sibling-args</code><span class="roman"> keyword</span></a>: <a href="#Basic-Types">Basic Types</a></li>
+<li><a href="#index-size_0040r_007b-keyword_007d-63"><code>size</code><span class="roman"> keyword</span></a>: <a href="#editable_002dfield">editable-field</a></li>
+<li><a href="#index-string-115"><code>string</code></a>: <a href="#atoms">atoms</a></li>
+<li><a href="#index-symbol-121"><code>symbol</code></a>: <a href="#atoms">atoms</a></li>
+<li><a href="#index-tab_002dorder_0040r_007b-keyword_007d-48"><code>tab-order</code><span class="roman"> keyword</span></a>: <a href="#Basic-Types">Basic Types</a></li>
+<li><a href="#index-tag_0040r_007b-keyword_007d-35"><code>tag</code><span class="roman"> keyword</span></a>: <a href="#Basic-Types">Basic Types</a></li>
+<li><a href="#index-tag_002dglyph_0040r_007b-keyword_007d-36"><code>tag-glyph</code><span class="roman"> keyword</span></a>: <a href="#Basic-Types">Basic Types</a></li>
+<li><a href="#index-text_0040r_007b-widget_007d-69"><code>text</code><span class="roman"> widget</span></a>: <a href="#text">text</a></li>
+<li><a href="#index-todo-179">todo</a>: <a href="#Widget-Wishlist">Widget Wishlist</a></li>
+<li><a href="#index-toggle_0040r_007b-widget_007d-87"><code>toggle</code><span class="roman"> widget</span></a>: <a href="#toggle">toggle</a></li>
+<li><a href="#index-url_002dlink_0040r_007b-widget_007d-56"><code>url-link</code><span class="roman"> widget</span></a>: <a href="#url_002dlink">url-link</a></li>
+<li><a href="#index-utility-functions-for-widgets-176">utility functions for widgets</a>: <a href="#Utilities">Utilities</a></li>
+<li><a href="#index-valid_002dregexp_0040r_007b-keyword_007d-66"><code>valid-regexp</code><span class="roman"> keyword</span></a>: <a href="#editable_002dfield">editable-field</a></li>
+<li><a href="#index-validate_0040r_007b-keyword_007d-46"><code>validate</code><span class="roman"> keyword</span></a>: <a href="#Basic-Types">Basic Types</a></li>
+<li><a href="#index-value_0040r_007b-keyword_007d-27"><code>value</code><span class="roman"> keyword</span></a>: <a href="#Basic-Types">Basic Types</a></li>
+<li><a href="#index-value_002dcreate_0040r_007b-keyword_007d-159"><code>value-create</code><span class="roman"> keyword</span></a>: <a href="#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="#index-value_002ddelete_0040r_007b-keyword_007d-160"><code>value-delete</code><span class="roman"> keyword</span></a>: <a href="#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="#index-value_002dface_0040r_007b-keyword_007d-64"><code>value-face</code><span class="roman"> keyword</span></a>: <a href="#editable_002dfield">editable-field</a></li>
+<li><a href="#index-value_002dget_0040r_007b-keyword_007d-161"><code>value-get</code><span class="roman"> keyword</span></a>: <a href="#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="#index-value_002dto_002dexternal_0040r_007b-keyword_007d-155"><code>value-to-external</code><span class="roman"> keyword</span></a>: <a href="#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="#index-value_002dto_002dinternal_0040r_007b-keyword_007d-154"><code>value-to-internal</code><span class="roman"> keyword</span></a>: <a href="#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="#index-variable-123"><code>variable</code></a>: <a href="#atoms">atoms</a></li>
+<li><a href="#index-variable_002ditem-110"><code>variable-item</code></a>: <a href="#constants">constants</a></li>
+<li><a href="#index-vector-131"><code>vector</code></a>: <a href="#composite">composite</a></li>
+<li><a href="#index-void_0040r_007b-keyword_007d-72"><code>void</code><span class="roman"> keyword</span></a>: <a href="#menu_002dchoice">menu-choice</a></li>
+<li><a href="#index-widget-browser-169">widget browser</a>: <a href="#Widget-Browser">Widget Browser</a></li>
+<li><a href="#index-widget-buttons-5">widget buttons</a>: <a href="#User-Interface">User Interface</a></li>
+<li><a href="#index-widget-library_002c-why-use-it-3">widget library, why use it</a>: <a href="#Introduction">Introduction</a></li>
+<li><a href="#index-widget-minor-mode-173">widget minor mode</a>: <a href="#Widget-Minor-Mode">Widget Minor Mode</a></li>
+<li><a href="#index-widget-properties-135">widget properties</a>: <a href="#Widget-Properties">Widget Properties</a></li>
+<li><a href="#index-widget_002dbackward-15"><code>widget-backward</code></a>: <a href="#User-Interface">User Interface</a></li>
+<li><a href="#index-widget_002dbrowse-170"><code>widget-browse</code></a>: <a href="#Widget-Browser">Widget Browser</a></li>
+<li><a href="#index-widget_002dbrowse_002dat-172"><code>widget-browse-at</code></a>: <a href="#Widget-Browser">Widget Browser</a></li>
+<li><a href="#index-widget_002dbrowse_002dother_002dwindow-171"><code>widget-browse-other-window</code></a>: <a href="#Widget-Browser">Widget Browser</a></li>
+<li><a href="#index-widget_002dbutton_002dclick-9"><code>widget-button-click</code></a>: <a href="#User-Interface">User Interface</a></li>
+<li><a href="#index-widget_002dbutton_002dclick-23"><code>widget-button-click</code></a>: <a href="#Setting-Up-the-Buffer">Setting Up the Buffer</a></li>
+<li><a href="#index-widget_002dbutton_002dface-12"><code>widget-button-face</code></a>: <a href="#User-Interface">User Interface</a></li>
+<li><a href="#index-widget_002dbutton_002dprefix-29"><code>widget-button-prefix</code></a>: <a href="#Basic-Types">Basic Types</a></li>
+<li><a href="#index-widget_002dbutton_002dpress-22"><code>widget-button-press</code></a>: <a href="#Setting-Up-the-Buffer">Setting Up the Buffer</a></li>
+<li><a href="#index-widget_002dbutton_002dpress-7"><code>widget-button-press</code></a>: <a href="#User-Interface">User Interface</a></li>
+<li><a href="#index-widget_002dbutton_002dsuffix-30"><code>widget-button-suffix</code></a>: <a href="#Basic-Types">Basic Types</a></li>
+<li><a href="#index-widget_002dchildren_002dvalidate-47"><code>widget-children-validate</code></a>: <a href="#Basic-Types">Basic Types</a></li>
+<li><a href="#index-widget_002dcreate-18"><code>widget-create</code></a>: <a href="#Setting-Up-the-Buffer">Setting Up the Buffer</a></li>
+<li><a href="#index-widget_002ddefault_002ddelete-158"><code>widget-default-delete</code></a>: <a href="#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="#index-widget_002ddefault_002dformat_002dhandler-164"><code>widget-default-format-handler</code></a>: <a href="#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="#index-widget_002ddelete-19"><code>widget-delete</code></a>: <a href="#Setting-Up-the-Buffer">Setting Up the Buffer</a></li>
+<li><a href="#index-widget_002dfield_002dface-4"><code>widget-field-face</code></a>: <a href="#User-Interface">User Interface</a></li>
+<li><a href="#index-widget_002dfield_002dkeymap-68"><code>widget-field-keymap</code></a>: <a href="#editable_002dfield">editable-field</a></li>
+<li><a href="#index-widget_002dforward-14"><code>widget-forward</code></a>: <a href="#User-Interface">User Interface</a></li>
+<li><a href="#index-widget_002dget-139"><code>widget-get</code></a>: <a href="#Widget-Properties">Widget Properties</a></li>
+<li><a href="#index-widget_002dget_002dsibling-178"><code>widget-get-sibling</code></a>: <a href="#Utilities">Utilities</a></li>
+<li><a href="#index-widget_002dglobal_002dmap-25"><code>widget-global-map</code></a>: <a href="#Setting-Up-the-Buffer">Setting Up the Buffer</a></li>
+<li><a href="#index-widget_002dglyph_002ddirectory-51"><code>widget-glyph-directory</code></a>: <a href="#Basic-Types">Basic Types</a></li>
+<li><a href="#index-widget_002dglyph_002denable-52"><code>widget-glyph-enable</code></a>: <a href="#Basic-Types">Basic Types</a></li>
+<li><a href="#index-widget_002dinsert-21"><code>widget-insert</code></a>: <a href="#Setting-Up-the-Buffer">Setting Up the Buffer</a></li>
+<li><a href="#index-widget_002dkeymap-24"><code>widget-keymap</code></a>: <a href="#Setting-Up-the-Buffer">Setting Up the Buffer</a></li>
+<li><a href="#index-widget_002dlink_002dprefix-54"><code>widget-link-prefix</code></a>: <a href="#link">link</a></li>
+<li><a href="#index-widget_002dlink_002dsuffix-55"><code>widget-link-suffix</code></a>: <a href="#link">link</a></li>
+<li><a href="#index-widget_002dmember-140"><code>widget-member</code></a>: <a href="#Widget-Properties">Widget Properties</a></li>
+<li><a href="#index-widget_002dminor_002dmode-174"><code>widget-minor-mode</code></a>: <a href="#Widget-Minor-Mode">Widget Minor Mode</a></li>
+<li><a href="#index-widget_002dminor_002dmode_002dkeymap-175"><code>widget-minor-mode-keymap</code></a>: <a href="#Widget-Minor-Mode">Widget Minor Mode</a></li>
+<li><a href="#index-widget_002dmouse_002dface-13"><code>widget-mouse-face</code></a>: <a href="#User-Interface">User Interface</a></li>
+<li><a href="#index-widget_002dparent_002daction-166"><code>widget-parent-action</code></a>: <a href="#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="#index-widget_002dprompt_002dvalue-177"><code>widget-prompt-value</code></a>: <a href="#Utilities">Utilities</a></li>
+<li><a href="#index-widget_002dpush_002dbutton_002dprefix-60"><code>widget-push-button-prefix</code></a>: <a href="#push_002dbutton">push-button</a></li>
+<li><a href="#index-widget_002dpush_002dbutton_002dsuffix-61"><code>widget-push-button-suffix</code></a>: <a href="#push_002dbutton">push-button</a></li>
+<li><a href="#index-widget_002dput-138"><code>widget-put</code></a>: <a href="#Widget-Properties">Widget Properties</a></li>
+<li><a href="#index-widget_002dradio_002dadd_002ditem-84"><code>widget-radio-add-item</code></a>: <a href="#radio_002dbutton_002dchoice">radio-button-choice</a></li>
+<li><a href="#index-widget_002dsetup-20"><code>widget-setup</code></a>: <a href="#Setting-Up-the-Buffer">Setting Up the Buffer</a></li>
+<li><a href="#index-widget_002dtext_002dkeymap-70"><code>widget-text-keymap</code></a>: <a href="#text">text</a></li>
+<li><a href="#index-widget_002dtype-141"><code>widget-type</code></a>: <a href="#Widget-Properties">Widget Properties</a></li>
+<li><a href="#index-widget_002dtypes_002dconvert_002dwidget-150"><code>widget-types-convert-widget</code></a>: <a href="#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="#index-widget_002dtypes_002dcopy-153"><code>widget-types-copy</code></a>: <a href="#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="#index-widget_002dvalue-136"><code>widget-value</code></a>: <a href="#Widget-Properties">Widget Properties</a></li>
+<li><a href="#index-widget_002dvalue_002dconvert_002dwidget-151"><code>widget-value-convert-widget</code></a>: <a href="#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="#index-widget_002dvalue_002dset-137"><code>widget-value-set</code></a>: <a href="#Widget-Properties">Widget Properties</a></li>
+<li><a href="#index-widget_002dvalue_002dvalue_002dget-162"><code>widget-value-value-get</code></a>: <a href="#Defining-New-Widgets">Defining New Widgets</a></li>
+<li><a href="#index-widgets_002c-basic-types-2">widgets, basic types</a>: <a href="#Introduction">Introduction</a></li>
+<li><a href="#index-widgets_002c-programming-example-16">widgets, programming example</a>: <a href="#Programming-Example">Programming Example</a></li>
+   </ul></body></html>
+
+<!--
+
+Local Variables:
+coding: utf-8
+End:
+
+-->

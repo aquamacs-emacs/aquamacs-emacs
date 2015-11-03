@@ -1,0 +1,2413 @@
+<html lang="en">
+<head>
+<title>Emacs MIME Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="Emacs MIME Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="top" href="#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the Emacs MIME interface functionality.
+
+Copyright (C) 1998-2015 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being "A GNU Manual", and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     "GNU Free Documentation License".
+
+     (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+     modify this GNU manual."
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<h1 class="settitle">Emacs MIME Manual</h1>
+   <div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Top" href="#Top">Emacs MIME</a>
+<li><a name="toc_Decoding-and-Viewing" href="#Decoding-and-Viewing">1 Decoding and Viewing</a>
+<ul>
+<li><a href="#Dissection">1.1 Dissection</a>
+<li><a href="#Non_002dMIME">1.2 Non-MIME</a>
+<li><a href="#Handles">1.3 Handles</a>
+<li><a href="#Display">1.4 Display</a>
+<li><a href="#Display-Customization">1.5 Display Customization</a>
+<li><a href="#Files-and-Directories">1.6 Files and Directories</a>
+<li><a href="#New-Viewers">1.7 New Viewers</a>
+</li></ul>
+<li><a name="toc_Composing" href="#Composing">2 Composing</a>
+<ul>
+<li><a href="#Simple-MML-Example">2.1 Simple MML Example</a>
+<li><a href="#MML-Definition">2.2 MML Definition</a>
+<li><a href="#Advanced-MML-Example">2.3 Advanced MML Example</a>
+<li><a href="#Encoding-Customization">2.4 Encoding Customization</a>
+<li><a href="#Charset-Translation">2.5 Charset Translation</a>
+<li><a href="#Conversion">2.6 Conversion</a>
+<li><a href="#Flowed-text">2.7 Flowed text</a>
+</li></ul>
+<li><a name="toc_Interface-Functions" href="#Interface-Functions">3 Interface Functions</a>
+<li><a name="toc_Basic-Functions" href="#Basic-Functions">4 Basic Functions</a>
+<ul>
+<li><a href="#rfc2045">4.1 rfc2045</a>
+<li><a href="#rfc2231">4.2 rfc2231</a>
+<li><a href="#ietf_002ddrums">4.3 ietf-drums</a>
+<li><a href="#rfc2047">4.4 rfc2047</a>
+<li><a href="#time_002ddate">4.5 time-date</a>
+<li><a href="#qp">4.6 qp</a>
+<li><a href="#base64">4.7 base64</a>
+<li><a href="#binhex">4.8 binhex</a>
+<li><a href="#uudecode">4.9 uudecode</a>
+<li><a href="#yenc">4.10 yenc</a>
+<li><a href="#rfc1843">4.11 rfc1843</a>
+<li><a href="#mailcap">4.12 mailcap</a>
+</li></ul>
+<li><a name="toc_Standards" href="#Standards">5 Standards</a>
+<li><a name="toc_GNU-Free-Documentation-License" href="#GNU-Free-Documentation-License">6 GNU Free Documentation License</a>
+<li><a name="toc_Index" href="#Index">7 Index</a>
+</li></ul>
+</div>
+
+
+
+<div class="node">
+<a name="Top"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Decoding-and-Viewing">Decoding and Viewing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#dir">(dir)</a>
+
+</div>
+
+<h2 class="unnumbered">Emacs MIME</h2>
+
+<p>This manual documents the libraries used to compose and display
+<acronym>MIME</acronym> messages.
+
+   <p>This manual is directed at users who want to modify the behavior of
+the <acronym>MIME</acronym> encoding/decoding process or want a more detailed
+picture of how the Emacs <acronym>MIME</acronym> library works, and people who want
+to write functions and commands that manipulate <acronym>MIME</acronym> elements.
+
+   <p><acronym>MIME</acronym> is short for <dfn>Multipurpose Internet Mail Extensions</dfn>. 
+This standard is documented in a number of RFCs; mainly RFC2045 (Format
+of Internet Message Bodies), RFC2046 (Media Types), RFC2047 (Message
+Header Extensions for Non-<acronym>ASCII</acronym> Text), RFC2048 (Registration
+Procedures), RFC2049 (Conformance Criteria and Examples).  It is highly
+recommended that anyone who intends writing <acronym>MIME</acronym>-compliant software
+read at least RFC2045 and RFC2047.
+
+   <p>This file documents the Emacs MIME interface functionality.
+
+   <p>Copyright &copy; 1998&ndash;2015 Free Software Foundation, Inc.
+
+   <blockquote>
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with the Front-Cover Texts being &ldquo;A GNU Manual&rdquo;,
+and with the Back-Cover Texts as in (a) below.  A copy of the license
+is included in the section entitled &ldquo;GNU Free Documentation License&rdquo;.
+
+   <p>(a) The FSF's Back-Cover Text is: &ldquo;You have the freedom to copy and
+modify this GNU manual.&rdquo;
+</blockquote>
+
+<ul class="menu">
+<li><a accesskey="1" href="#Decoding-and-Viewing">Decoding and Viewing</a>:   A framework for decoding and viewing. 
+<li><a accesskey="2" href="#Composing">Composing</a>:              <acronym>MML</acronym>; a language for describing <acronym>MIME</acronym> parts. 
+<li><a accesskey="3" href="#Interface-Functions">Interface Functions</a>:    An abstraction over the basic functions. 
+<li><a accesskey="4" href="#Basic-Functions">Basic Functions</a>:        Utility and basic parsing functions. 
+<li><a accesskey="5" href="#Standards">Standards</a>:              A summary of RFCs and working documents used. 
+<li><a accesskey="6" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>:  The license for this documentation. 
+<li><a accesskey="7" href="#Index">Index</a>:                  Function and variable index. 
+</ul>
+
+<div class="node">
+<a name="Decoding-and-Viewing"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Composing">Composing</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Top">Top</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">1 Decoding and Viewing</h2>
+
+<p>This chapter deals with decoding and viewing <acronym>MIME</acronym> messages on a
+higher level.
+
+   <p>The main idea is to first analyze a <acronym>MIME</acronym> article, and then allow
+other programs to do things based on the list of <dfn>handles</dfn> that are
+returned as a result of this analysis.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Dissection">Dissection</a>:              Analyzing a <acronym>MIME</acronym> message. 
+<li><a accesskey="2" href="#Non_002dMIME">Non-MIME</a>:                Analyzing a non-<acronym>MIME</acronym> message. 
+<li><a accesskey="3" href="#Handles">Handles</a>:                 Handle manipulations. 
+<li><a accesskey="4" href="#Display">Display</a>:                 Displaying handles. 
+<li><a accesskey="5" href="#Display-Customization">Display Customization</a>:   Variables that affect display. 
+<li><a accesskey="6" href="#Files-and-Directories">Files and Directories</a>:   Saving and naming attachments. 
+<li><a accesskey="7" href="#New-Viewers">New Viewers</a>:             How to write your own viewers. 
+</ul>
+
+<div class="node">
+<a name="Dissection"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Non_002dMIME">Non-MIME</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Decoding-and-Viewing">Decoding and Viewing</a>
+
+</div>
+
+<h3 class="section">1.1 Dissection</h3>
+
+<p>The <code>mm-dissect-buffer</code> is the function responsible for dissecting
+a <acronym>MIME</acronym> article.  If given a multipart message, it will recursively
+descend the message, following the structure, and return a tree of
+<acronym>MIME</acronym> handles that describes the structure of the message.
+
+<div class="node">
+<a name="Non-MIME"></a>
+<a name="Non_002dMIME"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Handles">Handles</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Dissection">Dissection</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Decoding-and-Viewing">Decoding and Viewing</a>
+
+</div>
+
+<h3 class="section">1.2 Non-MIME</h3>
+
+<p><a name="index-mm_002duu_002dconfigure_002dlist-1"></a>
+Gnus also understands some non-<acronym>MIME</acronym> attachments, such as
+postscript, uuencode, binhex, yenc, shar, forward, gnatsweb, pgp,
+diff.  Each of these features can be disabled by add an item into
+<code>mm-uu-configure-list</code>.  For example,
+
+<pre class="lisp">     (require 'mm-uu)
+     (add-to-list 'mm-uu-configure-list '(pgp-signed . disabled))
+</pre>
+     <dl>
+<dt><code>postscript</code><dd><a name="index-postscript-2"></a>PostScript file.
+
+     <br><dt><code>uu</code><dd><a name="index-uu-3"></a>Uuencoded file.
+
+     <br><dt><code>binhex</code><dd><a name="index-binhex-4"></a>Binhex encoded file.
+
+     <br><dt><code>yenc</code><dd><a name="index-yenc-5"></a>Yenc encoded file.
+
+     <br><dt><code>shar</code><dd><a name="index-shar-6"></a>Shar archive file.
+
+     <br><dt><code>forward</code><dd><a name="index-forward-7"></a>Non-<acronym>MIME</acronym> forwarded message.
+
+     <br><dt><code>gnatsweb</code><dd><a name="index-gnatsweb-8"></a>Gnatsweb attachment.
+
+     <br><dt><code>pgp-signed</code><dd><a name="index-pgp_002dsigned-9"></a><acronym>PGP</acronym> signed clear text.
+
+     <br><dt><code>pgp-encrypted</code><dd><a name="index-pgp_002dencrypted-10"></a><acronym>PGP</acronym> encrypted clear text.
+
+     <br><dt><code>pgp-key</code><dd><a name="index-pgp_002dkey-11"></a><acronym>PGP</acronym> public keys.
+
+     <br><dt><code>emacs-sources</code><dd><a name="index-emacs_002dsources-12"></a><a name="index-mm_002duu_002demacs_002dsources_002dregexp-13"></a>Emacs source code.  This item works only in the groups matching
+<code>mm-uu-emacs-sources-regexp</code>.
+
+     <br><dt><code>diff</code><dd><a name="index-diff-14"></a><a name="index-mm_002duu_002ddiff_002dgroups_002dregexp-15"></a>Patches.  This is intended for groups where diffs of committed files
+are automatically sent to.  It only works in groups matching
+<code>mm-uu-diff-groups-regexp</code>.
+
+     <br><dt><code>verbatim-marks</code><dd><a name="index-verbatim_002dmarks-16"></a>Slrn-style verbatim marks.
+
+     <br><dt><code>LaTeX</code><dd><a name="index-LaTeX-17"></a>LaTeX documents.  It only works in groups matching
+<code>mm-uu-tex-groups-regexp</code>.
+
+   </dl>
+
+   <p><a name="index-text_002fx_002dverbatim-18"></a><!-- Is @vindex suitable for a face? -->
+<a name="index-mm_002duu_002dextract-19"></a>Some inlined non-<acronym>MIME</acronym> attachments are displayed using the face
+<code>mm-uu-extract</code>.  By default, no <acronym>MIME</acronym> button for these
+parts is displayed.  You can force displaying a button using <kbd>K b</kbd>
+(<code>gnus-summary-display-buttonized</code>) or add <code>text/x-verbatim</code>
+to <code>gnus-buttonized-mime-types</code>, See <a href="gnus.html#MIME-Commands">MIME Commands</a>.
+
+<div class="node">
+<a name="Handles"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Display">Display</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Non_002dMIME">Non-MIME</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Decoding-and-Viewing">Decoding and Viewing</a>
+
+</div>
+
+<h3 class="section">1.3 Handles</h3>
+
+<p>A <acronym>MIME</acronym> handle is a list that fully describes a <acronym>MIME</acronym>
+component.
+
+   <p>The following macros can be used to access elements in a handle:
+
+     <dl>
+<dt><code>mm-handle-buffer</code><dd><a name="index-mm_002dhandle_002dbuffer-20"></a>Return the buffer that holds the contents of the undecoded <acronym>MIME</acronym>
+part.
+
+     <br><dt><code>mm-handle-type</code><dd><a name="index-mm_002dhandle_002dtype-21"></a>Return the parsed <code>Content-Type</code> of the part.
+
+     <br><dt><code>mm-handle-encoding</code><dd><a name="index-mm_002dhandle_002dencoding-22"></a>Return the <code>Content-Transfer-Encoding</code> of the part.
+
+     <br><dt><code>mm-handle-undisplayer</code><dd><a name="index-mm_002dhandle_002dundisplayer-23"></a>Return the object that can be used to remove the displayed part (if it
+has been displayed).
+
+     <br><dt><code>mm-handle-set-undisplayer</code><dd><a name="index-mm_002dhandle_002dset_002dundisplayer-24"></a>Set the undisplayer object.
+
+     <br><dt><code>mm-handle-disposition</code><dd><a name="index-mm_002dhandle_002ddisposition-25"></a>Return the parsed <code>Content-Disposition</code> of the part.
+
+     <br><dt><code>mm-get-content-id</code><dd>Returns the handle(s) referred to by <code>Content-ID</code>.
+
+   </dl>
+
+<div class="node">
+<a name="Display"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Display-Customization">Display Customization</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Handles">Handles</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Decoding-and-Viewing">Decoding and Viewing</a>
+
+</div>
+
+<h3 class="section">1.4 Display</h3>
+
+<p>Functions for displaying, removing and saving.
+
+     <dl>
+<dt><code>mm-display-part</code><dd><a name="index-mm_002ddisplay_002dpart-26"></a>Display the part.
+
+     <br><dt><code>mm-remove-part</code><dd><a name="index-mm_002dremove_002dpart-27"></a>Remove the part (if it has been displayed).
+
+     <br><dt><code>mm-inlinable-p</code><dd><a name="index-mm_002dinlinable_002dp-28"></a>Say whether a <acronym>MIME</acronym> type can be displayed inline.
+
+     <br><dt><code>mm-automatic-display-p</code><dd><a name="index-mm_002dautomatic_002ddisplay_002dp-29"></a>Say whether a <acronym>MIME</acronym> type should be displayed automatically.
+
+     <br><dt><code>mm-destroy-part</code><dd><a name="index-mm_002ddestroy_002dpart-30"></a>Free all resources occupied by a part.
+
+     <br><dt><code>mm-save-part</code><dd><a name="index-mm_002dsave_002dpart-31"></a>Offer to save the part in a file.
+
+     <br><dt><code>mm-pipe-part</code><dd><a name="index-mm_002dpipe_002dpart-32"></a>Offer to pipe the part to some process.
+
+     <br><dt><code>mm-interactively-view-part</code><dd><a name="index-mm_002dinteractively_002dview_002dpart-33"></a>Prompt for a mailcap method to use to view the part.
+
+   </dl>
+
+<div class="node">
+<a name="Display-Customization"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Files-and-Directories">Files and Directories</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Display">Display</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Decoding-and-Viewing">Decoding and Viewing</a>
+
+</div>
+
+<h3 class="section">1.5 Display Customization</h3>
+
+     <dl>
+<dt><code>mm-inline-media-tests</code><dd><a name="index-mm_002dinline_002dmedia_002dtests-34"></a>This is an alist where the key is a <acronym>MIME</acronym> type, the second element
+is a function to display the part <dfn>inline</dfn> (i.e., inside Emacs), and
+the third element is a form to be <code>eval</code>ed to say whether the part
+can be displayed inline.
+
+     <p>This variable specifies whether a part <em>can</em> be displayed inline,
+and, if so, how to do it.  It does not say whether parts are
+<em>actually</em> displayed inline.
+
+     <br><dt><code>mm-inlined-types</code><dd><a name="index-mm_002dinlined_002dtypes-35"></a>This, on the other hand, says what types are to be displayed inline, if
+they satisfy the conditions set by the variable above.  It's a list of
+<acronym>MIME</acronym> media types.
+
+     <br><dt><code>mm-automatic-display</code><dd><a name="index-mm_002dautomatic_002ddisplay-36"></a>This is a list of types that are to be displayed &ldquo;automatically&rdquo;, but
+only if the above variable allows it.  That is, only inlinable parts can
+be displayed automatically.
+
+     <br><dt><code>mm-automatic-external-display</code><dd><a name="index-mm_002dautomatic_002dexternal_002ddisplay-37"></a>This is a list of types that will be displayed automatically in an
+external viewer.
+
+     <br><dt><code>mm-keep-viewer-alive-types</code><dd><a name="index-mm_002dkeep_002dviewer_002dalive_002dtypes-38"></a>This is a list of media types for which the external viewer will not
+be killed when selecting a different article.
+
+     <br><dt><code>mm-attachment-override-types</code><dd><a name="index-mm_002dattachment_002doverride_002dtypes-39"></a>Some <acronym>MIME</acronym> agents create parts that have a content-disposition of
+&lsquo;<samp><span class="samp">attachment</span></samp>&rsquo;.  This variable allows overriding that disposition and
+displaying the part inline.  (Note that the disposition is only
+overridden if we are able to, and want to, display the part inline.)
+
+     <br><dt><code>mm-discouraged-alternatives</code><dd><a name="index-mm_002ddiscouraged_002dalternatives-40"></a>List of <acronym>MIME</acronym> types that are discouraged when viewing
+&lsquo;<samp><span class="samp">multipart/alternative</span></samp>&rsquo;.  Viewing agents are supposed to view the
+last possible part of a message, as that is supposed to be the richest. 
+However, users may prefer other types instead, and this list says what
+types are most unwanted.  If, for instance, &lsquo;<samp><span class="samp">text/html</span></samp>&rsquo; parts are
+very unwanted, and &lsquo;<samp><span class="samp">text/richtext</span></samp>&rsquo; parts are somewhat unwanted,
+you could say something like:
+
+     <pre class="lisp">          (setq mm-discouraged-alternatives
+                '("text/html" "text/richtext")
+                mm-automatic-display
+                (remove "text/html" mm-automatic-display))
+</pre>
+     <p>Adding <code>"image/.*"</code> might also be useful.  Spammers use images as
+the preferred part of &lsquo;<samp><span class="samp">multipart/alternative</span></samp>&rsquo; messages, so you might
+not notice there are other parts.  See also
+<code>gnus-buttonized-mime-types</code>, <a href="gnus.html#MIME-Commands">MIME Commands</a>.  After adding <code>"multipart/alternative"</code> to
+<code>gnus-buttonized-mime-types</code> you can choose manually which
+alternative you'd like to view.  For example, you can set those
+variables like:
+
+     <pre class="lisp">          (setq gnus-buttonized-mime-types
+                '("multipart/alternative" "multipart/signed")
+                mm-discouraged-alternatives
+                '("text/html" "image/.*"))
+</pre>
+     <p>In this case, Gnus will display radio buttons for such a kind of spam
+message as follows:
+
+     <pre class="example">          1.  (*) multipart/alternative  ( ) image/gif
+          
+          2.  (*) text/plain          ( ) text/html
+</pre>
+     <br><dt><code>mm-inline-large-images</code><dd><a name="index-mm_002dinline_002dlarge_002dimages-41"></a>When displaying inline images that are larger than the window, Emacs
+does not enable scrolling, which means that you cannot see the whole
+image. To prevent this, the library tries to determine the image size
+before displaying it inline, and if it doesn't fit the window, the
+library will display it externally (e.g., with &lsquo;<samp><span class="samp">ImageMagick</span></samp>&rsquo; or
+&lsquo;<samp><span class="samp">xv</span></samp>&rsquo;). Setting this variable to <code>t</code> disables this check and
+makes the library display all inline images as inline, regardless of
+their size. If you set this variable to <code>resize</code>, the image will
+be displayed resized to fit in the window, if Emacs has the ability to
+resize images.
+
+     <br><dt><code>mm-inline-large-images-proportion</code><dd><a name="index-mm_002dinline_002dimages_002dmax_002dproportion-42"></a>The proportion used when resizing large images.
+
+     <br><dt><code>mm-inline-override-types</code><dd><a name="index-mm_002dinline_002doverride_002dtypes-43"></a><code>mm-inlined-types</code> may include regular expressions, for example to
+specify that all &lsquo;<samp><span class="samp">text/.*</span></samp>&rsquo; parts be displayed inline.  If a user
+prefers to have a type that matches such a regular expression be treated
+as an attachment, that can be accomplished by setting this variable to a
+list containing that type.  For example assuming <code>mm-inlined-types</code>
+includes &lsquo;<samp><span class="samp">text/.*</span></samp>&rsquo;, then including &lsquo;<samp><span class="samp">text/html</span></samp>&rsquo; in this
+variable will cause &lsquo;<samp><span class="samp">text/html</span></samp>&rsquo; parts to be treated as attachments.
+
+     <br><dt><code>mm-text-html-renderer</code><dd><a name="index-mm_002dtext_002dhtml_002drenderer-44"></a>This selects the function used to render <acronym>HTML</acronym>.  The predefined
+renderers are selected by the symbols <code>gnus-article-html</code>,
+<code>w3m</code><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>, <code>links</code>, <code>lynx</code>,
+<code>w3m-standalone</code> or <code>html2text</code>.  If <code>nil</code> use an
+external viewer.  You can also specify a function, which will be
+called with a <acronym>MIME</acronym> handle as the argument.
+
+     <br><dt><code>mm-inline-text-html-with-images</code><dd><a name="index-mm_002dinline_002dtext_002dhtml_002dwith_002dimages-45"></a>Some <acronym>HTML</acronym> mails might have the trick of spammers using
+&lsquo;<samp><span class="samp">&lt;img&gt;</span></samp>&rsquo; tags.  It is likely to be intended to verify whether you
+have read the mail.  You can prevent your personal information from
+leaking by setting this option to <code>nil</code> (which is the default). 
+For emacs-w3m, you may use the command <kbd>t</kbd> on the image anchor to
+show an image even if it is <code>nil</code>.<a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>
+
+     <br><dt><code>mm-w3m-safe-url-regexp</code><dd><a name="index-mm_002dw3m_002dsafe_002durl_002dregexp-46"></a>A regular expression that matches safe URL names, i.e., URLs that are
+unlikely to leak personal information when rendering <acronym>HTML</acronym>
+email (the default value is &lsquo;<samp><span class="samp">\\`cid:</span></samp>&rsquo;).  If <code>nil</code> consider
+all URLs safe.  In Gnus, this will be overridden according to the value
+of the variable <code>gnus-safe-html-newsgroups</code>, See <a href="gnus.html#Various-Various">Various Various</a>.
+
+     <br><dt><code>mm-inline-text-html-with-w3m-keymap</code><dd><a name="index-mm_002dinline_002dtext_002dhtml_002dwith_002dw3m_002dkeymap-47"></a>You can use emacs-w3m command keys in the inlined text/html part by
+setting this option to non-<code>nil</code>.  The default value is <code>t</code>.
+
+     <br><dt><code>mm-external-terminal-program</code><dd><a name="index-mm_002dexternal_002dterminal_002dprogram-48"></a>The program used to start an external terminal.
+
+     <br><dt><code>mm-enable-external</code><dd><a name="index-mm_002denable_002dexternal-49"></a>Indicate whether external <acronym>MIME</acronym> handlers should be used.
+
+     <p>If <code>t</code>, all defined external <acronym>MIME</acronym> handlers are used.  If
+<code>nil</code>, files are saved to disk (<code>mailcap-save-binary-file</code>). 
+If it is the symbol <code>ask</code>, you are prompted before the external
+<acronym>MIME</acronym> handler is invoked.
+
+     <p>When you launch an attachment through mailcap (see <a href="#mailcap">mailcap</a>) an
+attempt is made to use a safe viewer with the safest options&mdash;this isn't
+the case if you save it to disk and launch it in a different way
+(command line or double-clicking).  Anyhow, if you want to be sure not
+to launch any external programs, set this variable to <code>nil</code> or
+<code>ask</code>.
+
+</dl>
+
+<div class="node">
+<a name="Files-and-Directories"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#New-Viewers">New Viewers</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Display-Customization">Display Customization</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Decoding-and-Viewing">Decoding and Viewing</a>
+
+</div>
+
+<h3 class="section">1.6 Files and Directories</h3>
+
+     <dl>
+<dt><code>mm-default-directory</code><dd><a name="index-mm_002ddefault_002ddirectory-50"></a>The default directory for saving attachments.  If <code>nil</code> use
+<code>default-directory</code>.
+
+     <br><dt><code>mm-tmp-directory</code><dd><a name="index-mm_002dtmp_002ddirectory-51"></a>Directory for storing temporary files.
+
+     <br><dt><code>mm-file-name-rewrite-functions</code><dd><a name="index-mm_002dfile_002dname_002drewrite_002dfunctions-52"></a>A list of functions used for rewriting file names of <acronym>MIME</acronym>
+parts.  Each function is applied successively to the file name. 
+Ready-made functions include
+
+          <dl>
+<dt><code>mm-file-name-delete-control</code><dd><a name="index-mm_002dfile_002dname_002ddelete_002dcontrol-53"></a>Delete all control characters.
+
+          <br><dt><code>mm-file-name-delete-gotchas</code><dd><a name="index-mm_002dfile_002dname_002ddelete_002dgotchas-54"></a>Delete characters that could have unintended consequences when used
+with flawed shell scripts, i.e., &lsquo;<samp><span class="samp">|</span></samp>&rsquo;, &lsquo;<samp><span class="samp">&gt;</span></samp>&rsquo; and &lsquo;<samp><span class="samp">&lt;</span></samp>&rsquo;; and
+&lsquo;<samp><span class="samp">-</span></samp>&rsquo;, &lsquo;<samp><span class="samp">.</span></samp>&rsquo; as the first character.
+
+          <br><dt><code>mm-file-name-delete-whitespace</code><dd><a name="index-mm_002dfile_002dname_002ddelete_002dwhitespace-55"></a>Remove all whitespace.
+
+          <br><dt><code>mm-file-name-trim-whitespace</code><dd><a name="index-mm_002dfile_002dname_002dtrim_002dwhitespace-56"></a>Remove leading and trailing whitespace.
+
+          <br><dt><code>mm-file-name-collapse-whitespace</code><dd><a name="index-mm_002dfile_002dname_002dcollapse_002dwhitespace-57"></a>Collapse multiple whitespace characters.
+
+          <br><dt><code>mm-file-name-replace-whitespace</code><dd><a name="index-mm_002dfile_002dname_002dreplace_002dwhitespace-58"></a><a name="index-mm_002dfile_002dname_002dreplace_002dwhitespace-59"></a>Replace whitespace with underscores.  Set the variable
+<code>mm-file-name-replace-whitespace</code> to any other string if you do
+not like underscores. 
+</dl>
+
+     <p>The standard Emacs functions <code>capitalize</code>, <code>downcase</code>,
+<code>upcase</code> and <code>upcase-initials</code> might also prove useful.
+
+     <br><dt><code>mm-path-name-rewrite-functions</code><dd><a name="index-mm_002dpath_002dname_002drewrite_002dfunctions-60"></a>List of functions used for rewriting the full file names of <acronym>MIME</acronym>
+parts.  This is used when viewing parts externally, and is meant for
+transforming the absolute name so that non-compliant programs can find
+the file where it's saved.
+
+</dl>
+
+<div class="node">
+<a name="New-Viewers"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Files-and-Directories">Files and Directories</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Decoding-and-Viewing">Decoding and Viewing</a>
+
+</div>
+
+<h3 class="section">1.7 New Viewers</h3>
+
+<p>Here's an example viewer for displaying <code>text/enriched</code> inline:
+
+<pre class="lisp">     (defun mm-display-enriched-inline (handle)
+       (let (text)
+         (with-temp-buffer
+           (mm-insert-part handle)
+           (save-window-excursion
+             (enriched-decode (point-min) (point-max))
+             (setq text (buffer-string))))
+         (mm-insert-inline handle text)))
+</pre>
+   <p>We see that the function takes a <acronym>MIME</acronym> handle as its parameter.  It
+then goes to a temporary buffer, inserts the text of the part, does some
+work on the text, stores the result, goes back to the buffer it was
+called from and inserts the result.
+
+   <p>The two important helper functions here are <code>mm-insert-part</code> and
+<code>mm-insert-inline</code>.  The first function inserts the text of the
+handle in the current buffer.  It handles charset and/or content
+transfer decoding.  The second function just inserts whatever text you
+tell it to insert, but it also sets things up so that the text can be
+&ldquo;undisplayed&rdquo; in a convenient manner.
+
+<div class="node">
+<a name="Composing"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Interface-Functions">Interface Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Decoding-and-Viewing">Decoding and Viewing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">2 Composing</h2>
+
+<p><a name="index-Composing-61"></a><a name="index-MIME-Composing-62"></a><a name="index-MML-63"></a><a name="index-MIME-Meta-Language-64"></a>
+Creating a <acronym>MIME</acronym> message is boring and non-trivial.  Therefore,
+a library called <code>mml</code> has been defined that parses a language
+called <acronym>MML</acronym> (<acronym>MIME</acronym> Meta Language) and generates
+<acronym>MIME</acronym> messages.
+
+   <p><a name="index-mml_002dgenerate_002dmime-65"></a>The main interface function is <code>mml-generate-mime</code>.  It will
+examine the contents of the current (narrowed-to) buffer and return a
+string containing the <acronym>MIME</acronym> message.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Simple-MML-Example">Simple MML Example</a>:              An example <acronym>MML</acronym> document. 
+<li><a accesskey="2" href="#MML-Definition">MML Definition</a>:                  All valid <acronym>MML</acronym> elements. 
+<li><a accesskey="3" href="#Advanced-MML-Example">Advanced MML Example</a>:            Another example <acronym>MML</acronym> document. 
+<li><a accesskey="4" href="#Encoding-Customization">Encoding Customization</a>:          Variables that affect encoding. 
+<li><a accesskey="5" href="#Charset-Translation">Charset Translation</a>:             How charsets are mapped from <span class="sc">mule</span> to <acronym>MIME</acronym>. 
+<li><a accesskey="6" href="#Conversion">Conversion</a>:                      Going from <acronym>MIME</acronym> to <acronym>MML</acronym> and vice versa. 
+<li><a accesskey="7" href="#Flowed-text">Flowed text</a>:                     Soft and hard newlines. 
+</ul>
+
+<div class="node">
+<a name="Simple-MML-Example"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#MML-Definition">MML Definition</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Composing">Composing</a>
+
+</div>
+
+<h3 class="section">2.1 Simple MML Example</h3>
+
+<p>Here's a simple &lsquo;<samp><span class="samp">multipart/alternative</span></samp>&rsquo;:
+
+<pre class="example">     &lt;#multipart type=alternative&gt;
+     This is a plain text part.
+     &lt;#part type=text/enriched&gt;
+     &lt;center&gt;This is a centered enriched part&lt;/center&gt;
+     &lt;#/multipart&gt;
+</pre>
+   <p>After running this through <code>mml-generate-mime</code>, we get this:
+
+<pre class="example">     Content-Type: multipart/alternative; boundary="=-=-="
+     
+     
+     --=-=-=
+     
+     
+     This is a plain text part.
+     
+     --=-=-=
+     Content-Type: text/enriched
+     
+     
+     &lt;center&gt;This is a centered enriched part&lt;/center&gt;
+     
+     --=-=-=--
+</pre>
+   <div class="node">
+<a name="MML-Definition"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Advanced-MML-Example">Advanced MML Example</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Simple-MML-Example">Simple MML Example</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Composing">Composing</a>
+
+</div>
+
+<h3 class="section">2.2 MML Definition</h3>
+
+<p>The <acronym>MML</acronym> language is very simple.  It looks a bit like an SGML
+application, but it's not.
+
+   <p>The main concept of <acronym>MML</acronym> is the <dfn>part</dfn>.  Each part can be of a
+different type or use a different charset.  The way to delineate a part
+is with a &lsquo;<samp><span class="samp">&lt;#part ...&gt;</span></samp>&rsquo; tag.  Multipart parts can be introduced
+with the &lsquo;<samp><span class="samp">&lt;#multipart ...&gt;</span></samp>&rsquo; tag.  Parts are ended by the
+&lsquo;<samp><span class="samp">&lt;#/part&gt;</span></samp>&rsquo; or &lsquo;<samp><span class="samp">&lt;#/multipart&gt;</span></samp>&rsquo; tags.  Parts started with the
+&lsquo;<samp><span class="samp">&lt;#part ...&gt;</span></samp>&rsquo; tags are also closed by the next open tag.
+
+   <p>There's also the &lsquo;<samp><span class="samp">&lt;#external ...&gt;</span></samp>&rsquo; tag.  These introduce
+&lsquo;<samp><span class="samp">external/message-body</span></samp>&rsquo; parts.
+
+   <p>Each tag can contain zero or more parameters on the form
+&lsquo;<samp><span class="samp">parameter=value</span></samp>&rsquo;.  The values may be enclosed in quotation marks,
+but that's not necessary unless the value contains white space.  So
+&lsquo;<samp><span class="samp">filename=/home/user/#hello$^yes</span></samp>&rsquo; is perfectly valid.
+
+   <p>The following parameters have meaning in <acronym>MML</acronym>; parameters that have no
+meaning are ignored.  The <acronym>MML</acronym> parameter names are the same as the
+<acronym>MIME</acronym> parameter names; the things in the parentheses say which
+header it will be used in.
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">type</span></samp>&rsquo;<dd>The <acronym>MIME</acronym> type of the part (<code>Content-Type</code>).
+
+     <br><dt>&lsquo;<samp><span class="samp">filename</span></samp>&rsquo;<dd>Use the contents of the file in the body of the part
+(<code>Content-Disposition</code>).
+
+     <br><dt>&lsquo;<samp><span class="samp">recipient-filename</span></samp>&rsquo;<dd>Use this as the file name in the generated <acronym>MIME</acronym> message for
+the recipient.  That is, even if the file is called <samp><span class="file">foo.txt</span></samp>
+locally, use this name instead in the <code>Content-Disposition</code> in
+the sent message.
+
+     <br><dt>&lsquo;<samp><span class="samp">charset</span></samp>&rsquo;<dd>The contents of the body of the part are to be encoded in the character
+set specified (<code>Content-Type</code>). See <a href="#Charset-Translation">Charset Translation</a>.
+
+     <br><dt>&lsquo;<samp><span class="samp">name</span></samp>&rsquo;<dd>Might be used to suggest a file name if the part is to be saved
+to a file (<code>Content-Type</code>).
+
+     <br><dt>&lsquo;<samp><span class="samp">disposition</span></samp>&rsquo;<dd>Valid values are &lsquo;<samp><span class="samp">inline</span></samp>&rsquo; and &lsquo;<samp><span class="samp">attachment</span></samp>&rsquo;
+(<code>Content-Disposition</code>).
+
+     <br><dt>&lsquo;<samp><span class="samp">encoding</span></samp>&rsquo;<dd>Valid values are &lsquo;<samp><span class="samp">7bit</span></samp>&rsquo;, &lsquo;<samp><span class="samp">8bit</span></samp>&rsquo;, &lsquo;<samp><span class="samp">quoted-printable</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">base64</span></samp>&rsquo; (<code>Content-Transfer-Encoding</code>). See <a href="#Charset-Translation">Charset Translation</a>.
+
+     <br><dt>&lsquo;<samp><span class="samp">description</span></samp>&rsquo;<dd>A description of the part (<code>Content-Description</code>).
+
+     <br><dt>&lsquo;<samp><span class="samp">creation-date</span></samp>&rsquo;<dd>RFC822 date when the part was created (<code>Content-Disposition</code>).
+
+     <br><dt>&lsquo;<samp><span class="samp">modification-date</span></samp>&rsquo;<dd>RFC822 date when the part was modified (<code>Content-Disposition</code>).
+
+     <br><dt>&lsquo;<samp><span class="samp">read-date</span></samp>&rsquo;<dd>RFC822 date when the part was read (<code>Content-Disposition</code>).
+
+     <br><dt>&lsquo;<samp><span class="samp">recipients</span></samp>&rsquo;<dd>Who to encrypt/sign the part to.  This field is used to override any
+auto-detection based on the To/CC headers.
+
+     <br><dt>&lsquo;<samp><span class="samp">sender</span></samp>&rsquo;<dd>Identity used to sign the part.  This field is used to override the
+default key used.
+
+     <br><dt>&lsquo;<samp><span class="samp">size</span></samp>&rsquo;<dd>The size (in octets) of the part (<code>Content-Disposition</code>).
+
+     <br><dt>&lsquo;<samp><span class="samp">sign</span></samp>&rsquo;<dd>What technology to sign this <acronym>MML</acronym> part with (<code>smime</code>, <code>pgp</code>
+or <code>pgpmime</code>)
+
+     <br><dt>&lsquo;<samp><span class="samp">encrypt</span></samp>&rsquo;<dd>What technology to encrypt this <acronym>MML</acronym> part with (<code>smime</code>,
+<code>pgp</code> or <code>pgpmime</code>)
+
+   </dl>
+
+   <p>Parameters for &lsquo;<samp><span class="samp">text/plain</span></samp>&rsquo;:
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">format</span></samp>&rsquo;<dd>Formatting parameter for the text, valid values include &lsquo;<samp><span class="samp">fixed</span></samp>&rsquo;
+(the default) and &lsquo;<samp><span class="samp">flowed</span></samp>&rsquo;.  Normally you do not specify this
+manually, since it requires the textual body to be formatted in a
+special way described in RFC 2646.  See <a href="#Flowed-text">Flowed text</a>. 
+</dl>
+
+   <p>Parameters for &lsquo;<samp><span class="samp">application/octet-stream</span></samp>&rsquo;:
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">type</span></samp>&rsquo;<dd>Type of the part; informal&mdash;meant for human readers
+(<code>Content-Type</code>). 
+</dl>
+
+   <p>Parameters for &lsquo;<samp><span class="samp">message/external-body</span></samp>&rsquo;:
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">access-type</span></samp>&rsquo;<dd>A word indicating the supported access mechanism by which the file may
+be obtained.  Values include &lsquo;<samp><span class="samp">ftp</span></samp>&rsquo;, &lsquo;<samp><span class="samp">anon-ftp</span></samp>&rsquo;, &lsquo;<samp><span class="samp">tftp</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">localfile</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">mailserver</span></samp>&rsquo;.  (<code>Content-Type</code>.)
+
+     <br><dt>&lsquo;<samp><span class="samp">expiration</span></samp>&rsquo;<dd>The RFC822 date after which the file may no longer be fetched. 
+(<code>Content-Type</code>.)
+
+     <br><dt>&lsquo;<samp><span class="samp">size</span></samp>&rsquo;<dd>The size (in octets) of the file.  (<code>Content-Type</code>.)
+
+     <br><dt>&lsquo;<samp><span class="samp">permission</span></samp>&rsquo;<dd>Valid values are &lsquo;<samp><span class="samp">read</span></samp>&rsquo; and &lsquo;<samp><span class="samp">read-write</span></samp>&rsquo;
+(<code>Content-Type</code>).
+
+   </dl>
+
+   <p>Parameters for &lsquo;<samp><span class="samp">sign=smime</span></samp>&rsquo;:
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">keyfile</span></samp>&rsquo;<dd>File containing key and certificate for signer.
+
+   </dl>
+
+   <p>Parameters for &lsquo;<samp><span class="samp">encrypt=smime</span></samp>&rsquo;:
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">certfile</span></samp>&rsquo;<dd>File containing certificate for recipient.
+
+   </dl>
+
+<div class="node">
+<a name="Advanced-MML-Example"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Encoding-Customization">Encoding Customization</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#MML-Definition">MML Definition</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Composing">Composing</a>
+
+</div>
+
+<h3 class="section">2.3 Advanced MML Example</h3>
+
+<p>Here's a complex multipart message.  It's a &lsquo;<samp><span class="samp">multipart/mixed</span></samp>&rsquo; that
+contains many parts, one of which is a &lsquo;<samp><span class="samp">multipart/alternative</span></samp>&rsquo;.
+
+<pre class="example">     &lt;#multipart type=mixed&gt;
+     &lt;#part type=image/jpeg filename=~/rms.jpg disposition=inline&gt;
+     &lt;#multipart type=alternative&gt;
+     This is a plain text part.
+     &lt;#part type=text/enriched name=enriched.txt&gt;
+     &lt;center&gt;This is a centered enriched part&lt;/center&gt;
+     &lt;#/multipart&gt;
+     This is a new plain text part.
+     &lt;#part disposition=attachment&gt;
+     This plain text part is an attachment.
+     &lt;#/multipart&gt;
+</pre>
+   <p>And this is the resulting <acronym>MIME</acronym> message:
+
+<pre class="example">     Content-Type: multipart/mixed; boundary="=-=-="
+     
+     
+     --=-=-=
+     
+     
+     
+     --=-=-=
+     Content-Type: image/jpeg;
+      filename="~/rms.jpg"
+     Content-Disposition: inline;
+      filename="~/rms.jpg"
+     Content-Transfer-Encoding: base64
+     
+     /9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRof
+     Hh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/wAALCAAwADABAREA/8QAHwAA
+     AQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQR
+     BRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RF
+     RkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ip
+     qrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/9oACAEB
+     AAA/AO/rifFHjldNuGsrDa0qcSSHkA+gHrXKw+LtWLrMb+RgTyhbr+HSug07xNqV9fQtZrNI
+     AyiaE/NuBPOOOP0rvRNE880KOC8TbXXGCv1FPqjrF4LDR7u5L7SkTFT/ALWOP1xXgTuXfc7E
+     sx6nua6rwp4IvvEM8chCxWxOdzn7wz6V9AaB4S07w9p5itow0rDLSY5Pt9K43xO66P4xs71m
+     2QXiGCbA4yOVJ9+1aYORkdK434lyNH4ahCnG66VT9Nj15JFbPdX0MS43M4VQf5/yr2vSpLnw
+     5ZW8dlCZ8KFXjOPX0/mK6rSPEGt3Angu44fNEReHYNvIH3TzXDeKNO8RX+kSX2ouZkicTIOc
+     L+g7E810ulFjpVtv3bwgB3HJyK5L4quY/C9sVxk3ij/xx6850u7t1mtp/wDlpEw3An3Jr3Dw
+     34gsbWza4nBlhC5LDsaW6+IFgupQyCF3iHH7gA7c9R9ay7zx6t7aX9jHC4smhfBkGCvHGfrm
+     tLQ7hbnRrV1GPkAP1x1/Hr+Ncr8Vzjwrbf8AX6v/AKA9eQRyYlQk8Yx9K6XTNbkgia2ciSIn
+     7p5Ga9Atte0LTLKO6it4i7dVRFJDcZ4PvXN+JvEMF9bILVGXJLSZ4zkjivRPDaeX4b08HOTC
+     pOffmua+KkbS+GLVUGT9tT/0B68eeIpIFYjB70+OOVXyoOM9+M1eaWeCLzHPyHGO/NVWvJJm
+     jQ8KGH1NfQWhXSXmh2c8eArRLwO3HSv/2Q==
+     
+     --=-=-=
+     Content-Type: multipart/alternative; boundary="==-=-="
+     
+     
+     --==-=-=
+     
+     
+     This is a plain text part.
+     
+     --==-=-=
+     Content-Type: text/enriched;
+      name="enriched.txt"
+     
+     
+     &lt;center&gt;This is a centered enriched part&lt;/center&gt;
+     
+     --==-=-=--
+     
+     --=-=-=
+     
+     This is a new plain text part.
+     
+     --=-=-=
+     Content-Disposition: attachment
+     
+     
+     This plain text part is an attachment.
+     
+     --=-=-=--
+</pre>
+   <div class="node">
+<a name="Encoding-Customization"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Charset-Translation">Charset Translation</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Advanced-MML-Example">Advanced MML Example</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Composing">Composing</a>
+
+</div>
+
+<h3 class="section">2.4 Encoding Customization</h3>
+
+     <dl>
+<dt><code>mm-body-charset-encoding-alist</code><dd><a name="index-mm_002dbody_002dcharset_002dencoding_002dalist-66"></a>Mapping from <acronym>MIME</acronym> charset to encoding to use.  This variable is
+usually used except, e.g., when other requirements force a specific
+encoding (digitally signed messages require 7bit encodings).  The
+default is
+
+     <pre class="lisp">          ((iso-2022-jp . 7bit)
+           (iso-2022-jp-2 . 7bit)
+           (utf-16 . base64)
+           (utf-16be . base64)
+           (utf-16le . base64))
+</pre>
+     <p>As an example, if you do not want to have ISO-8859-1 characters
+quoted-printable encoded, you may add <code>(iso-8859-1 . 8bit)</code> to
+this variable.  You can override this setting on a per-message basis
+by using the <code>encoding</code> <acronym>MML</acronym> tag (see <a href="#MML-Definition">MML Definition</a>).
+
+     <br><dt><code>mm-coding-system-priorities</code><dd><a name="index-mm_002dcoding_002dsystem_002dpriorities-67"></a>Prioritize coding systems to use for outgoing messages.  The default
+is <code>nil</code>, which means to use the defaults in Emacs, but is
+<code>(iso-8859-1 iso-2022-jp utf-8)</code> when running Emacs in the Japanese
+language environment.  It is a list of coding system symbols (aliases of
+coding systems are also allowed, use <kbd>M-x describe-coding-system</kbd> to
+make sure you are specifying correct coding system names).  For example,
+if you have configured Emacs to prefer UTF-8, but wish that outgoing
+messages should be sent in ISO-8859-1 if possible, you can set this
+variable to <code>(iso-8859-1)</code>.  You can override this setting on a
+per-message basis by using the <code>charset</code> <acronym>MML</acronym> tag
+(see <a href="#MML-Definition">MML Definition</a>).
+
+     <p>As different hierarchies prefer different charsets, you may want to set
+<code>mm-coding-system-priorities</code> according to the hierarchy in Gnus. 
+Here's an example:
+
+     <!-- Corrections about preferred charsets are welcome.  de, fr and fj -->
+     <!-- should be correct, I don't know about the rest (so these are only -->
+     <!-- examples): -->
+     <pre class="lisp">          (add-to-list 'gnus-newsgroup-variables 'mm-coding-system-priorities)
+          (setq gnus-parameters
+                (nconc
+                 ;; Some charsets are just examples!
+                 '(("^cn\\." ;; Chinese
+                    (mm-coding-system-priorities
+                     '(iso-8859-1 cn-big5 chinese-iso-7bit utf-8)))
+                   ("^cz\\.\\|^pl\\." ;; Central and Eastern European
+                    (mm-coding-system-priorities '(iso-8859-2 utf-8)))
+                   ("^de\\." ;; German language
+                    (mm-coding-system-priorities '(iso-8859-1 iso-8859-15 utf-8)))
+                   ("^fr\\." ;; French
+                    (mm-coding-system-priorities '(iso-8859-15 iso-8859-1 utf-8)))
+                   ("^fj\\." ;; Japanese
+                    (mm-coding-system-priorities
+                     '(iso-8859-1 iso-2022-jp utf-8)))
+                   ("^ru\\." ;; Cyrillic
+                    (mm-coding-system-priorities
+                     '(koi8-r iso-8859-5 iso-8859-1 utf-8))))
+                 gnus-parameters))
+</pre>
+     <br><dt><code>mm-content-transfer-encoding-defaults</code><dd><a name="index-mm_002dcontent_002dtransfer_002dencoding_002ddefaults-68"></a>Mapping from <acronym>MIME</acronym> types to encoding to use.  This variable is usually
+used except, e.g., when other requirements force a safer encoding
+(digitally signed messages require 7bit encoding).  Besides the normal
+<acronym>MIME</acronym> encodings, <code>qp-or-base64</code> may be used to indicate that for
+each case the most efficient of quoted-printable and base64 should be
+used.
+
+     <p><code>qp-or-base64</code> has another effect.  It will fold long lines so that
+MIME parts may not be broken by MTA.  So do <code>quoted-printable</code> and
+<code>base64</code>.
+
+     <p>Note that it affects body encoding only when a part is a raw forwarded
+message (which will be made by <code>gnus-summary-mail-forward</code> with the
+arg 2 for example) or is neither the &lsquo;<samp><span class="samp">text/*</span></samp>&rsquo; type nor the
+&lsquo;<samp><span class="samp">message/*</span></samp>&rsquo; type.  Even though in those cases, you can override
+this setting on a per-message basis by using the <code>encoding</code>
+<acronym>MML</acronym> tag (see <a href="#MML-Definition">MML Definition</a>).
+
+     <br><dt><code>mm-use-ultra-safe-encoding</code><dd><a name="index-mm_002duse_002dultra_002dsafe_002dencoding-69"></a>When this is non-<code>nil</code>, it means that textual parts are encoded as
+quoted-printable if they contain lines longer than 76 characters or
+starting with "From " in the body.  Non-7bit encodings (8bit, binary)
+are generally disallowed.  This reduce the probability that a non-8bit
+clean MTA or MDA changes the message.  This should never be set
+directly, but bound by other functions when necessary (e.g., when
+encoding messages that are to be digitally signed).
+
+</dl>
+
+<div class="node">
+<a name="Charset-Translation"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Conversion">Conversion</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Encoding-Customization">Encoding Customization</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Composing">Composing</a>
+
+</div>
+
+<h3 class="section">2.5 Charset Translation</h3>
+
+<p><a name="index-charsets-70"></a>
+During translation from <acronym>MML</acronym> to <acronym>MIME</acronym>, for each
+<acronym>MIME</acronym> part which has been composed inside Emacs, an appropriate
+charset has to be chosen.
+
+   <p><a name="index-mail_002dparse_002dcharset-71"></a>If you are running a non-<span class="sc">mule</span> Emacs, this process is simple: If the
+part contains any non-<acronym>ASCII</acronym> (8-bit) characters, the <acronym>MIME</acronym> charset
+given by <code>mail-parse-charset</code> (a symbol) is used.  (Never set this
+variable directly, though.  If you want to change the default charset,
+please consult the documentation of the package which you use to process
+<acronym>MIME</acronym> messages. 
+See <a href="message.html#Various-Message-Variables">Various Message Variables</a>, for example.) 
+If there are only <acronym>ASCII</acronym> characters, the <acronym>MIME</acronym> charset US-ASCII is
+used, of course.
+
+   <p><a name="index-MULE-72"></a><a name="index-UTF_002d8-73"></a><a name="index-Unicode-74"></a><a name="index-mm_002dmime_002dmule_002dcharset_002dalist-75"></a>Things are slightly more complicated when running Emacs with <span class="sc">mule</span>
+support.  In this case, a list of the <span class="sc">mule</span> charsets used in the
+part is obtained, and the <span class="sc">mule</span> charsets are translated to
+<acronym>MIME</acronym> charsets by consulting the table provided by Emacs itself
+or the variable <code>mm-mime-mule-charset-alist</code> for XEmacs. 
+If this results in a single <acronym>MIME</acronym> charset, this is used to encode
+the part.  But if the resulting list of <acronym>MIME</acronym> charsets contains more
+than one element, two things can happen: If it is possible to encode the
+part via UTF-8, this charset is used.  (For this, Emacs must support
+the <code>utf-8</code> coding system, and the part must consist entirely of
+characters which have Unicode counterparts.)  If UTF-8 is not available
+for some reason, the part is split into several ones, so that each one
+can be encoded with a single <acronym>MIME</acronym> charset.  The part can only be
+split at line boundaries, though&mdash;if more than one <acronym>MIME</acronym> charset is
+required to encode a single line, it is not possible to encode the part.
+
+   <p>When running Emacs with <span class="sc">mule</span> support, the preferences for which
+coding system to use is inherited from Emacs itself.  This means that
+if Emacs is set up to prefer UTF-8, it will be used when encoding
+messages.  You can modify this by altering the
+<code>mm-coding-system-priorities</code> variable though (see <a href="#Encoding-Customization">Encoding Customization</a>).
+
+   <p>The charset to be used can be overridden by setting the <code>charset</code>
+<acronym>MML</acronym> tag (see <a href="#MML-Definition">MML Definition</a>) when composing the message.
+
+   <p>The encoding of characters (quoted-printable, 8bit, etc.) is orthogonal
+to the discussion here, and is controlled by the variables
+<code>mm-body-charset-encoding-alist</code> and
+<code>mm-content-transfer-encoding-defaults</code> (see <a href="#Encoding-Customization">Encoding Customization</a>).
+
+<div class="node">
+<a name="Conversion"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Flowed-text">Flowed text</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Charset-Translation">Charset Translation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Composing">Composing</a>
+
+</div>
+
+<h3 class="section">2.6 Conversion</h3>
+
+<p><a name="index-mime_002dto_002dmml-76"></a>A (multipart) <acronym>MIME</acronym> message can be converted to <acronym>MML</acronym>
+with the <code>mime-to-mml</code> function.  It works on the message in the
+current buffer, and substitutes <acronym>MML</acronym> markup for <acronym>MIME</acronym>
+boundaries.  Non-textual parts do not have their contents in the buffer,
+but instead have the contents in separate buffers that are referred to
+from the <acronym>MML</acronym> tags.
+
+   <p><a name="index-mml_002dto_002dmime-77"></a>An <acronym>MML</acronym> message can be converted back to <acronym>MIME</acronym> by the
+<code>mml-to-mime</code> function.
+
+   <p>These functions are in certain senses &ldquo;lossy&rdquo;&mdash;you will not get back
+an identical message if you run <code>mime-to-mml</code> and then
+<code>mml-to-mime</code>.  Not only will trivial things like the order of the
+headers differ, but the contents of the headers may also be different. 
+For instance, the original message may use base64 encoding on text,
+while <code>mml-to-mime</code> may decide to use quoted-printable encoding, and
+so on.
+
+   <p>In essence, however, these two functions should be the inverse of each
+other.  The resulting contents of the message should remain equivalent,
+if not identical.
+
+<div class="node">
+<a name="Flowed-text"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Conversion">Conversion</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Composing">Composing</a>
+
+</div>
+
+<h3 class="section">2.7 Flowed text</h3>
+
+<p><a name="index-format_003dflowed-78"></a>
+The Emacs <acronym>MIME</acronym> library will respect the <code>use-hard-newlines</code>
+variable (see <a href="emacs.html#Hard-and-Soft-Newlines">Hard and Soft Newlines</a>) when encoding a message, and the
+&ldquo;format=flowed&rdquo; Content-Type parameter when decoding a message.
+
+   <p>On encoding text, regardless of <code>use-hard-newlines</code>, lines
+terminated by soft newline characters are filled together and wrapped
+after the column decided by <code>fill-flowed-encode-column</code>. 
+Quotation marks (matching &lsquo;<samp><span class="samp">^&gt;* ?</span></samp>&rsquo;) are respected.  The variable
+controls how the text will look in a client that does not support
+flowed text, the default is to wrap after 66 characters.  If hard
+newline characters are not present in the buffer, no flow encoding
+occurs.
+
+   <p>You can customize the value of the <code>mml-enable-flowed</code> variable
+to enable or disable the flowed encoding usage when newline
+characters are present in the buffer.
+
+   <p>On decoding flowed text, lines with soft newline characters are filled
+together and wrapped after the column decided by
+<code>fill-flowed-display-column</code>.  The default is to wrap after
+<code>fill-column</code>.
+
+     <dl>
+<dt><code>mm-fill-flowed</code><dd><a name="index-mm_002dfill_002dflowed-79"></a>If non-<code>nil</code> a format=flowed article will be displayed flowed. 
+</dl>
+
+<div class="node">
+<a name="Interface-Functions"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Basic-Functions">Basic Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Composing">Composing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">3 Interface Functions</h2>
+
+<p><a name="index-interface-functions-80"></a><a name="index-mail_002dparse-81"></a>
+The <code>mail-parse</code> library is an abstraction over the actual
+low-level libraries that are described in the next chapter.
+
+   <p>Standards change, and so programs have to change to fit in the new
+mold.  For instance, RFC2045 describes a syntax for the
+<code>Content-Type</code> header that only allows <acronym>ASCII</acronym> characters in the
+parameter list.  RFC2231 expands on RFC2045 syntax to provide a scheme
+for continuation headers and non-<acronym>ASCII</acronym> characters.
+
+   <p>The traditional way to deal with this is just to update the library
+functions to parse the new syntax.  However, this is sometimes the wrong
+thing to do.  In some instances it may be vital to be able to understand
+both the old syntax as well as the new syntax, and if there is only one
+library, one must choose between the old version of the library and the
+new version of the library.
+
+   <p>The Emacs <acronym>MIME</acronym> library takes a different tack.  It defines a
+series of low-level libraries (<samp><span class="file">rfc2047.el</span></samp>, <samp><span class="file">rfc2231.el</span></samp>
+and so on) that parses strictly according to the corresponding
+standard.  However, normal programs would not use the functions
+provided by these libraries directly, but instead use the functions
+provided by the <code>mail-parse</code> library.  The functions in this
+library are just aliases to the corresponding functions in the latest
+low-level libraries.  Using this scheme, programs get a consistent
+interface they can use, and library developers are free to create
+write code that handles new standards.
+
+   <p>The following functions are defined by this library:
+
+     <dl>
+<dt><code>mail-header-parse-content-type</code><dd><a name="index-mail_002dheader_002dparse_002dcontent_002dtype-82"></a>Parse a <code>Content-Type</code> header and return a list on the following
+format:
+
+     <pre class="lisp">          ("type/subtype"
+           (attribute1 . value1)
+           (attribute2 . value2)
+           ...)
+</pre>
+     <p>Here's an example:
+
+     <pre class="example">          (mail-header-parse-content-type
+           "image/gif; name=\"b980912.gif\"")
+          &rArr; ("image/gif" (name . "b980912.gif"))
+</pre>
+     <br><dt><code>mail-header-parse-content-disposition</code><dd><a name="index-mail_002dheader_002dparse_002dcontent_002ddisposition-83"></a>Parse a <code>Content-Disposition</code> header and return a list on the same
+format as the function above.
+
+     <br><dt><code>mail-content-type-get</code><dd><a name="index-mail_002dcontent_002dtype_002dget-84"></a>Takes two parameters&mdash;a list on the format above, and an attribute. 
+Returns the value of the attribute.
+
+     <pre class="example">          (mail-content-type-get
+           '("image/gif" (name . "b980912.gif")) 'name)
+          &rArr; "b980912.gif"
+</pre>
+     <br><dt><code>mail-header-encode-parameter</code><dd><a name="index-mail_002dheader_002dencode_002dparameter-85"></a>Takes a parameter string and returns an encoded version of the string. 
+This is used for parameters in headers like <code>Content-Type</code> and
+<code>Content-Disposition</code>.
+
+     <br><dt><code>mail-header-remove-comments</code><dd><a name="index-mail_002dheader_002dremove_002dcomments-86"></a>Return a comment-free version of a header.
+
+     <pre class="example">          (mail-header-remove-comments
+           "Gnus/5.070027 (Pterodactyl Gnus v0.27) (Finnish Landrace)")
+          &rArr; "Gnus/5.070027  "
+</pre>
+     <br><dt><code>mail-header-remove-whitespace</code><dd><a name="index-mail_002dheader_002dremove_002dwhitespace-87"></a>Remove linear white space from a header.  Space inside quoted strings
+and comments is preserved.
+
+     <pre class="example">          (mail-header-remove-whitespace
+           "image/gif; name=\"Name with spaces\"")
+          &rArr; "image/gif;name=\"Name with spaces\""
+</pre>
+     <br><dt><code>mail-header-get-comment</code><dd><a name="index-mail_002dheader_002dget_002dcomment-88"></a>Return the last comment in a header.
+
+     <pre class="example">          (mail-header-get-comment
+           "Gnus/5.070027 (Pterodactyl Gnus v0.27) (Finnish Landrace)")
+          &rArr; "Finnish Landrace"
+</pre>
+     <br><dt><code>mail-header-parse-address</code><dd><a name="index-mail_002dheader_002dparse_002daddress-89"></a>Parse an address and return a list containing the mailbox and the
+plaintext name.
+
+     <pre class="example">          (mail-header-parse-address
+           "Hrvoje Niksic &lt;hniksic@srce.hr&gt;")
+          &rArr; ("hniksic@srce.hr" . "Hrvoje Niksic")
+</pre>
+     <br><dt><code>mail-header-parse-addresses</code><dd><a name="index-mail_002dheader_002dparse_002daddresses-90"></a>Parse a string with list of addresses and return a list of elements like
+the one described above.
+
+     <pre class="example">          (mail-header-parse-addresses
+           "Hrvoje Niksic &lt;hniksic@srce.hr&gt;, Steinar Bang &lt;sb@metis.no&gt;")
+          &rArr; (("hniksic@srce.hr" . "Hrvoje Niksic")
+               ("sb@metis.no" . "Steinar Bang"))
+</pre>
+     <br><dt><code>mail-header-parse-date</code><dd><a name="index-mail_002dheader_002dparse_002ddate-91"></a>Parse a date string and return an Emacs time structure.
+
+     <br><dt><code>mail-narrow-to-head</code><dd><a name="index-mail_002dnarrow_002dto_002dhead-92"></a>Narrow the buffer to the header section of the buffer.  Point is placed
+at the beginning of the narrowed buffer.
+
+     <br><dt><code>mail-header-narrow-to-field</code><dd><a name="index-mail_002dheader_002dnarrow_002dto_002dfield-93"></a>Narrow the buffer to the header under point.  Understands continuation
+headers.
+
+     <br><dt><code>mail-header-fold-field</code><dd><a name="index-mail_002dheader_002dfold_002dfield-94"></a>Fold the header under point.
+
+     <br><dt><code>mail-header-unfold-field</code><dd><a name="index-mail_002dheader_002dunfold_002dfield-95"></a>Unfold the header under point.
+
+     <br><dt><code>mail-header-field-value</code><dd><a name="index-mail_002dheader_002dfield_002dvalue-96"></a>Return the value of the field under point.
+
+     <br><dt><code>mail-encode-encoded-word-region</code><dd><a name="index-mail_002dencode_002dencoded_002dword_002dregion-97"></a>Encode the non-<acronym>ASCII</acronym> words in the region.  For instance,
+&lsquo;<samp><span class="samp">Naïve</span></samp>&rsquo; is encoded as &lsquo;<samp><span class="samp">=?iso-8859-1?q?Na=EFve?=</span></samp>&rsquo;.
+
+     <br><dt><code>mail-encode-encoded-word-buffer</code><dd><a name="index-mail_002dencode_002dencoded_002dword_002dbuffer-98"></a>Encode the non-<acronym>ASCII</acronym> words in the current buffer.  This function is
+meant to be called narrowed to the headers of a message.
+
+     <br><dt><code>mail-encode-encoded-word-string</code><dd><a name="index-mail_002dencode_002dencoded_002dword_002dstring-99"></a>Encode the words that need encoding in a string, and return the result.
+
+     <pre class="example">          (mail-encode-encoded-word-string
+           "This is naïve, baby")
+          &rArr; "This is =?iso-8859-1?q?na=EFve,?= baby"
+</pre>
+     <br><dt><code>mail-decode-encoded-word-region</code><dd><a name="index-mail_002ddecode_002dencoded_002dword_002dregion-100"></a>Decode the encoded words in the region.
+
+     <br><dt><code>mail-decode-encoded-word-string</code><dd><a name="index-mail_002ddecode_002dencoded_002dword_002dstring-101"></a>Decode the encoded words in the string and return the result.
+
+     <pre class="example">          (mail-decode-encoded-word-string
+           "This is =?iso-8859-1?q?na=EFve,?= baby")
+          &rArr; "This is naïve, baby"
+</pre>
+     </dl>
+
+   <p>Currently, <code>mail-parse</code> is an abstraction over <code>ietf-drums</code>,
+<code>rfc2047</code>, <code>rfc2045</code> and <code>rfc2231</code>.  These are documented
+in the subsequent sections.
+
+<div class="node">
+<a name="Basic-Functions"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Standards">Standards</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Interface-Functions">Interface Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">4 Basic Functions</h2>
+
+<p>This chapter describes the basic, ground-level functions for parsing and
+handling.  Covered here is parsing <code>From</code> lines, removing comments
+from header lines, decoding encoded words, parsing date headers and so
+on.  High-level functionality is dealt with in the first chapter
+(see <a href="#Decoding-and-Viewing">Decoding and Viewing</a>).
+
+<ul class="menu">
+<li><a accesskey="1" href="#rfc2045">rfc2045</a>:       Encoding <code>Content-Type</code> headers. 
+<li><a accesskey="2" href="#rfc2231">rfc2231</a>:       Parsing <code>Content-Type</code> headers. 
+<li><a accesskey="3" href="#ietf_002ddrums">ietf-drums</a>:    Handling mail headers defined by RFC822bis. 
+<li><a accesskey="4" href="#rfc2047">rfc2047</a>:       En/decoding encoded words in headers. 
+<li><a accesskey="5" href="#time_002ddate">time-date</a>:     Functions for parsing dates and manipulating time. 
+<li><a accesskey="6" href="#qp">qp</a>:            Quoted-Printable en/decoding. 
+<li><a accesskey="7" href="#base64">base64</a>:        Base64 en/decoding. 
+<li><a accesskey="8" href="#binhex">binhex</a>:        Binhex decoding. 
+<li><a accesskey="9" href="#uudecode">uudecode</a>:      Uuencode decoding. 
+<li><a href="#yenc">yenc</a>:          Yenc decoding. 
+<li><a href="#rfc1843">rfc1843</a>:       Decoding HZ-encoded text. 
+<li><a href="#mailcap">mailcap</a>:       How parts are displayed is specified by the <samp><span class="file">.mailcap</span></samp> file
+</ul>
+
+<div class="node">
+<a name="rfc2045"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#rfc2231">rfc2231</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Functions">Basic Functions</a>
+
+</div>
+
+<h3 class="section">4.1 rfc2045</h3>
+
+<p>RFC2045 is the &ldquo;main&rdquo; <acronym>MIME</acronym> document, and as such, one would
+imagine that there would be a lot to implement.  But there isn't, since
+most of the implementation details are delegated to the subsequent
+RFCs.
+
+   <p>So <samp><span class="file">rfc2045.el</span></samp> has only a single function:
+
+     <dl>
+<dt><code>rfc2045-encode-string</code><dd><a name="index-rfc2045_002dencode_002dstring-102"></a>Takes a parameter and a value and returns a &lsquo;<samp><span class="samp">PARAM=VALUE</span></samp>&rsquo; string. 
+<var>value</var> will be quoted if there are non-safe characters in it. 
+</dl>
+
+<div class="node">
+<a name="rfc2231"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#ietf_002ddrums">ietf-drums</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#rfc2045">rfc2045</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Functions">Basic Functions</a>
+
+</div>
+
+<h3 class="section">4.2 rfc2231</h3>
+
+<p>RFC2231 defines a syntax for the <code>Content-Type</code> and
+<code>Content-Disposition</code> headers.  Its snappy name is <dfn>MIME
+Parameter Value and Encoded Word Extensions: Character Sets, Languages,
+and Continuations</dfn>.
+
+   <p>In short, these headers look something like this:
+
+<pre class="example">     Content-Type: application/x-stuff;
+      title*0*=us-ascii'en'This%20is%20even%20more%20;
+      title*1*=%2A%2A%2Afun%2A%2A%2A%20;
+      title*2="isn't it!"
+</pre>
+   <p>They usually aren't this bad, though.
+
+   <p>The following functions are defined by this library:
+
+     <dl>
+<dt><code>rfc2231-parse-string</code><dd><a name="index-rfc2231_002dparse_002dstring-103"></a>Parse a <code>Content-Type</code> header and return a list describing its
+elements.
+
+     <pre class="example">          (rfc2231-parse-string
+           "application/x-stuff;
+           title*0*=us-ascii'en'This%20is%20even%20more%20;
+           title*1*=%2A%2A%2Afun%2A%2A%2A%20;
+           title*2=\"isn't it!\"")
+          &rArr; ("application/x-stuff"
+              (title . "This is even more ***fun*** isn't it!"))
+</pre>
+     <br><dt><code>rfc2231-get-value</code><dd><a name="index-rfc2231_002dget_002dvalue-104"></a>Takes one of the lists on the format above and returns
+the value of the specified attribute.
+
+     <br><dt><code>rfc2231-encode-string</code><dd><a name="index-rfc2231_002dencode_002dstring-105"></a>Encode a parameter in headers likes <code>Content-Type</code> and
+<code>Content-Disposition</code>.
+
+   </dl>
+
+<div class="node">
+<a name="ietf-drums"></a>
+<a name="ietf_002ddrums"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#rfc2047">rfc2047</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#rfc2231">rfc2231</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Functions">Basic Functions</a>
+
+</div>
+
+<h3 class="section">4.3 ietf-drums</h3>
+
+<p><dfn>drums</dfn> is an IETF working group that is working on the replacement
+for RFC822.
+
+   <p>The functions provided by this library include:
+
+     <dl>
+<dt><code>ietf-drums-remove-comments</code><dd><a name="index-ietf_002ddrums_002dremove_002dcomments-106"></a>Remove the comments from the argument and return the results.
+
+     <br><dt><code>ietf-drums-remove-whitespace</code><dd><a name="index-ietf_002ddrums_002dremove_002dwhitespace-107"></a>Remove linear white space from the string and return the results. 
+Spaces inside quoted strings and comments are left untouched.
+
+     <br><dt><code>ietf-drums-get-comment</code><dd><a name="index-ietf_002ddrums_002dget_002dcomment-108"></a>Return the last most comment from the string.
+
+     <br><dt><code>ietf-drums-parse-address</code><dd><a name="index-ietf_002ddrums_002dparse_002daddress-109"></a>Parse an address string and return a list that contains the mailbox and
+the plain text name.
+
+     <br><dt><code>ietf-drums-parse-addresses</code><dd><a name="index-ietf_002ddrums_002dparse_002daddresses-110"></a>Parse a string that contains any number of comma-separated addresses and
+return a list that contains mailbox/plain text pairs.
+
+     <br><dt><code>ietf-drums-parse-date</code><dd><a name="index-ietf_002ddrums_002dparse_002ddate-111"></a>Parse a date string and return an Emacs time structure.
+
+     <br><dt><code>ietf-drums-narrow-to-header</code><dd><a name="index-ietf_002ddrums_002dnarrow_002dto_002dheader-112"></a>Narrow the buffer to the header section of the current buffer.
+
+   </dl>
+
+<div class="node">
+<a name="rfc2047"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#time_002ddate">time-date</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#ietf_002ddrums">ietf-drums</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Functions">Basic Functions</a>
+
+</div>
+
+<h3 class="section">4.4 rfc2047</h3>
+
+<p>RFC2047 (Message Header Extensions for Non-<acronym>ASCII</acronym> Text) specifies how
+non-<acronym>ASCII</acronym> text in headers are to be encoded.  This is actually rather
+complicated, so a number of variables are necessary to tweak what this
+library does.
+
+   <p>The following variables are tweakable:
+
+     <dl>
+<dt><code>rfc2047-header-encoding-alist</code><dd><a name="index-rfc2047_002dheader_002dencoding_002dalist-113"></a>This is an alist of header / encoding-type pairs.  Its main purpose is
+to prevent encoding of certain headers.
+
+     <p>The keys can either be header regexps, or <code>t</code>.
+
+     <p>The values can be <code>nil</code>, in which case the header(s) in question
+won't be encoded, <code>mime</code>, which means that they will be encoded, or
+<code>address-mime</code>, which means the header(s) will be encoded carefully
+assuming they contain addresses.
+
+     <br><dt><code>rfc2047-charset-encoding-alist</code><dd><a name="index-rfc2047_002dcharset_002dencoding_002dalist-114"></a>RFC2047 specifies two forms of encoding&mdash;<code>Q</code> (a
+Quoted-Printable-like encoding) and <code>B</code> (base64).  This alist
+specifies which charset should use which encoding.
+
+     <br><dt><code>rfc2047-encode-function-alist</code><dd><a name="index-rfc2047_002dencode_002dfunction_002dalist-115"></a>This is an alist of encoding / function pairs.  The encodings are
+<code>Q</code>, <code>B</code> and <code>nil</code>.
+
+     <br><dt><code>rfc2047-encoded-word-regexp</code><dd><a name="index-rfc2047_002dencoded_002dword_002dregexp-116"></a>When decoding words, this library looks for matches to this regexp.
+
+     <br><dt><code>rfc2047-encoded-word-regexp-loose</code><dd><a name="index-rfc2047_002dencoded_002dword_002dregexp_002dloose-117"></a>This is a version from which the regexp for the Q encoding pattern of
+<code>rfc2047-encoded-word-regexp</code> is made loose.
+
+     <br><dt><code>rfc2047-encode-encoded-words</code><dd><a name="index-rfc2047_002dencode_002dencoded_002dwords-118"></a>The boolean variable specifies whether encoded words
+(e.g., &lsquo;<samp><span class="samp">=?us-ascii?q?hello?=</span></samp>&rsquo;) should be encoded again. 
+<code>rfc2047-encoded-word-regexp</code> is used to look for such words.
+
+     <br><dt><code>rfc2047-allow-irregular-q-encoded-words</code><dd><a name="index-rfc2047_002dallow_002dirregular_002dq_002dencoded_002dwords-119"></a>The boolean variable specifies whether irregular Q encoded words
+(e.g., &lsquo;<samp><span class="samp">=?us-ascii?q?hello??=</span></samp>&rsquo;) should be decoded.  If it is
+non-<code>nil</code>, <code>rfc2047-encoded-word-regexp-loose</code> is used instead
+of <code>rfc2047-encoded-word-regexp</code> to look for encoded words.
+
+   </dl>
+
+   <p>Those were the variables, and these are this functions:
+
+     <dl>
+<dt><code>rfc2047-narrow-to-field</code><dd><a name="index-rfc2047_002dnarrow_002dto_002dfield-120"></a>Narrow the buffer to the header on the current line.
+
+     <br><dt><code>rfc2047-encode-message-header</code><dd><a name="index-rfc2047_002dencode_002dmessage_002dheader-121"></a>Should be called narrowed to the header of a message.  Encodes according
+to <code>rfc2047-header-encoding-alist</code>.
+
+     <br><dt><code>rfc2047-encode-region</code><dd><a name="index-rfc2047_002dencode_002dregion-122"></a>Encodes all encodable words in the region specified.
+
+     <br><dt><code>rfc2047-encode-string</code><dd><a name="index-rfc2047_002dencode_002dstring-123"></a>Encode a string and return the results.
+
+     <br><dt><code>rfc2047-decode-region</code><dd><a name="index-rfc2047_002ddecode_002dregion-124"></a>Decode the encoded words in the region.
+
+     <br><dt><code>rfc2047-decode-string</code><dd><a name="index-rfc2047_002ddecode_002dstring-125"></a>Decode a string and return the results.
+
+     <br><dt><code>rfc2047-encode-parameter</code><dd><a name="index-rfc2047_002dencode_002dparameter-126"></a>Encode a parameter in the RFC2047-like style.  This is a substitution
+for the <code>rfc2231-encode-string</code> function, that is the standard but
+many mailers don't support it.  See <a href="#rfc2231">rfc2231</a>.
+
+   </dl>
+
+<div class="node">
+<a name="time-date"></a>
+<a name="time_002ddate"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#qp">qp</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#rfc2047">rfc2047</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Functions">Basic Functions</a>
+
+</div>
+
+<h3 class="section">4.5 time-date</h3>
+
+<p>While not really a part of the <acronym>MIME</acronym> library, it is convenient to
+document this library here.  It deals with parsing <code>Date</code> headers
+and manipulating time.  (Not by using tesseracts, though, I'm sorry to
+say.)
+
+   <p>These functions convert between five formats: A date string, an Emacs
+time structure, a decoded time list, a second number, and a day number.
+
+   <p>Here's a bunch of time/date/second/day examples:
+
+<pre class="example">     (parse-time-string "Sat Sep 12 12:21:54 1998 +0200")
+     &rArr; (54 21 12 12 9 1998 6 nil 7200)
+     
+     (date-to-time "Sat Sep 12 12:21:54 1998 +0200")
+     &rArr; (13818 19266)
+     
+     (float-time '(13818 19266))
+     &rArr; 905595714.0
+     
+     (seconds-to-time 905595714.0)
+     &rArr; (13818 19266 0 0)
+     
+     (time-to-days '(13818 19266))
+     &rArr; 729644
+     
+     (days-to-time 729644)
+     &rArr; (961933 512)
+     
+     (time-since '(13818 19266))
+     &rArr; (6797 9607 984839 247000)
+     
+     (time-less-p '(13818 19266) '(13818 19145))
+     &rArr; nil
+     
+     (subtract-time '(13818 19266) '(13818 19145))
+     &rArr; (0 121)
+     
+     (days-between "Sat Sep 12 12:21:54 1998 +0200"
+                   "Sat Sep 07 12:21:54 1998 +0200")
+     &rArr; 5
+     
+     (date-leap-year-p 2000)
+     &rArr; t
+     
+     (time-to-day-in-year '(13818 19266))
+     &rArr; 255
+     
+     (time-to-number-of-days
+      (time-since
+       (date-to-time "Mon, 01 Jan 2001 02:22:26 GMT")))
+     &rArr; 4314.095589286675
+</pre>
+   <p>And finally, we have <code>safe-date-to-time</code>, which does the same as
+<code>date-to-time</code>, but returns a zero time if the date is
+syntactically malformed.
+
+   <p>The five data representations used are the following:
+
+     <dl>
+<dt><var>date</var><dd>An RFC822 (or similar) date string.  For instance: <code>"Sat Sep 12
+12:21:54 1998 +0200"</code>.
+
+     <br><dt><var>time</var><dd>An internal Emacs time.  For instance: <code>(13818 26466 0 0)</code>.
+
+     <br><dt><var>seconds</var><dd>A floating point representation of the internal Emacs time.  For
+instance: <code>905595714.0</code>.
+
+     <br><dt><var>days</var><dd>An integer number representing the number of days since 00000101.  For
+instance: <code>729644</code>.
+
+     <br><dt><var>decoded time</var><dd>A list of decoded time.  For instance: <code>(54 21 12 12 9 1998 6 t
+7200)</code>. 
+</dl>
+
+   <p>All the examples above represent the same moment.
+
+   <p>These are the functions available:
+
+     <dl>
+<dt><code>date-to-time</code><dd>Take a date and return a time.
+
+     <br><dt><code>float-time</code><dd>Take a time and return seconds.  (This is a built-in function.)
+
+     <br><dt><code>seconds-to-time</code><dd>Take seconds and return a time.
+
+     <br><dt><code>time-to-days</code><dd>Take a time and return days.
+
+     <br><dt><code>days-to-time</code><dd>Take days and return a time.
+
+     <br><dt><code>date-to-day</code><dd>Take a date and return days.
+
+     <br><dt><code>time-to-number-of-days</code><dd>Take a time and return the number of days that represents.
+
+     <br><dt><code>safe-date-to-time</code><dd>Take a date and return a time.  If the date is not syntactically valid,
+return a &ldquo;zero&rdquo; time.
+
+     <br><dt><code>time-less-p</code><dd>Take two times and say whether the first time is less (i.e., earlier)
+than the second time.
+
+     <br><dt><code>time-since</code><dd>Take a time and return a time saying how long it was since that time.
+
+     <br><dt><code>subtract-time</code><dd>Take two times and subtract the second from the first.  I.e., return
+the time between the two times.
+
+     <br><dt><code>days-between</code><dd>Take two days and return the number of days between those two days.
+
+     <br><dt><code>date-leap-year-p</code><dd>Take a year number and say whether it's a leap year.
+
+     <br><dt><code>time-to-day-in-year</code><dd>Take a time and return the day number within the year that the time is
+in.
+
+   </dl>
+
+<div class="node">
+<a name="qp"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#base64">base64</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#time_002ddate">time-date</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Functions">Basic Functions</a>
+
+</div>
+
+<h3 class="section">4.6 qp</h3>
+
+<p>This library deals with decoding and encoding Quoted-Printable text.
+
+   <p>Very briefly explained, qp encoding means translating all 8-bit
+characters (and lots of control characters) into things that look like
+&lsquo;<samp><span class="samp">=EF</span></samp>&rsquo;; that is, an equal sign followed by the byte encoded as a hex
+string.
+
+   <p>The following functions are defined by the library:
+
+     <dl>
+<dt><code>quoted-printable-decode-region</code><dd><a name="index-quoted_002dprintable_002ddecode_002dregion-127"></a>QP-decode all the encoded text in the specified region.
+
+     <br><dt><code>quoted-printable-decode-string</code><dd><a name="index-quoted_002dprintable_002ddecode_002dstring-128"></a>Decode the QP-encoded text in a string and return the results.
+
+     <br><dt><code>quoted-printable-encode-region</code><dd><a name="index-quoted_002dprintable_002dencode_002dregion-129"></a>QP-encode all the encodable characters in the specified region.  The third
+optional parameter <var>fold</var> specifies whether to fold long lines. 
+(Long here means 72.)
+
+     <br><dt><code>quoted-printable-encode-string</code><dd><a name="index-quoted_002dprintable_002dencode_002dstring-130"></a>QP-encode all the encodable characters in a string and return the
+results.
+
+   </dl>
+
+<div class="node">
+<a name="base64"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#binhex">binhex</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#qp">qp</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Functions">Basic Functions</a>
+
+</div>
+
+<h3 class="section">4.7 base64</h3>
+
+<p><a name="index-base64-131"></a>
+Base64 is an encoding that encodes three bytes into four characters,
+thereby increasing the size by about 33%.  The alphabet used for
+encoding is very resistant to mangling during transit.
+
+   <p>The following functions are defined by this library:
+
+     <dl>
+<dt><code>base64-encode-region</code><dd><a name="index-base64_002dencode_002dregion-132"></a>base64 encode the selected region.  Return the length of the encoded
+text.  Optional third argument <var>no-line-break</var> means do not break
+long lines into shorter lines.
+
+     <br><dt><code>base64-encode-string</code><dd><a name="index-base64_002dencode_002dstring-133"></a>base64 encode a string and return the result.
+
+     <br><dt><code>base64-decode-region</code><dd><a name="index-base64_002ddecode_002dregion-134"></a>base64 decode the selected region.  Return the length of the decoded
+text.  If the region can't be decoded, return <code>nil</code> and don't
+modify the buffer.
+
+     <br><dt><code>base64-decode-string</code><dd><a name="index-base64_002ddecode_002dstring-135"></a>base64 decode a string and return the result.  If the string can't be
+decoded, <code>nil</code> is returned.
+
+   </dl>
+
+<div class="node">
+<a name="binhex"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#uudecode">uudecode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#base64">base64</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Functions">Basic Functions</a>
+
+</div>
+
+<h3 class="section">4.8 binhex</h3>
+
+<p><a name="index-binhex-136"></a><a name="index-Apple-137"></a><a name="index-Macintosh-138"></a>
+<code>binhex</code> is an encoding that originated in Macintosh environments. 
+The following function is supplied to deal with these:
+
+     <dl>
+<dt><code>binhex-decode-region</code><dd><a name="index-binhex_002ddecode_002dregion-139"></a>Decode the encoded text in the region.  If given a third parameter, only
+decode the <code>binhex</code> header and return the filename.
+
+   </dl>
+
+<div class="node">
+<a name="uudecode"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#yenc">yenc</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#binhex">binhex</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Functions">Basic Functions</a>
+
+</div>
+
+<h3 class="section">4.9 uudecode</h3>
+
+<p><a name="index-uuencode-140"></a><a name="index-uudecode-141"></a>
+<code>uuencode</code> is probably still the most popular encoding of binaries
+used on Usenet, although <code>base64</code> rules the mail world.
+
+   <p>The following function is supplied by this package:
+
+     <dl>
+<dt><code>uudecode-decode-region</code><dd><a name="index-uudecode_002ddecode_002dregion-142"></a>Decode the text in the region. 
+</dl>
+
+<div class="node">
+<a name="yenc"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#rfc1843">rfc1843</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#uudecode">uudecode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Functions">Basic Functions</a>
+
+</div>
+
+<h3 class="section">4.10 yenc</h3>
+
+<p><a name="index-yenc-143"></a>
+<code>yenc</code> is used for encoding binaries on Usenet.  The following
+function is supplied by this package:
+
+     <dl>
+<dt><code>yenc-decode-region</code><dd><a name="index-yenc_002ddecode_002dregion-144"></a>Decode the encoded text in the region.
+
+   </dl>
+
+<div class="node">
+<a name="rfc1843"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#mailcap">mailcap</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#yenc">yenc</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Functions">Basic Functions</a>
+
+</div>
+
+<h3 class="section">4.11 rfc1843</h3>
+
+<p><a name="index-rfc1843-145"></a><a name="index-HZ-146"></a><a name="index-Chinese-147"></a>
+RFC1843 deals with mixing Chinese and <acronym>ASCII</acronym> characters in messages.  In
+essence, RFC1843 switches between <acronym>ASCII</acronym> and Chinese by doing this:
+
+<pre class="example">     This sentence is in <acronym>ASCII</acronym>.
+     The next sentence is in GB.~{&lt;:Ky2;S{#,NpJ)l6HK!#~}Bye.
+</pre>
+   <p>Simple enough, and widely used in China.
+
+   <p>The following functions are available to handle this encoding:
+
+     <dl>
+<dt><code>rfc1843-decode-region</code><dd>Decode HZ-encoded text in the region.
+
+     <br><dt><code>rfc1843-decode-string</code><dd>Decode a HZ-encoded string and return the result.
+
+   </dl>
+
+<div class="node">
+<a name="mailcap"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#rfc1843">rfc1843</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Functions">Basic Functions</a>
+
+</div>
+
+<h3 class="section">4.12 mailcap</h3>
+
+<p>The <samp><span class="file">~/.mailcap</span></samp> file is parsed by most <acronym>MIME</acronym>-aware message
+handlers and describes how elements are supposed to be displayed. 
+Here's an example file:
+
+<pre class="example">     image/*; gimp -8 %s
+     audio/wav; wavplayer %s
+     application/msword; catdoc %s ; copiousoutput ; nametemplate=%s.doc
+</pre>
+   <p>This says that all image files should be displayed with <code>gimp</code>,
+that WAVE audio files should be played by <code>wavplayer</code>, and that
+MS-WORD files should be inlined by <code>catdoc</code>.
+
+   <p>The <code>mailcap</code> library parses this file, and provides functions for
+matching types.
+
+     <dl>
+<dt><code>mailcap-mime-data</code><dd><a name="index-mailcap_002dmime_002ddata-148"></a>This variable is an alist of alists containing backup viewing rules.
+
+   </dl>
+
+   <p>Interface functions:
+
+     <dl>
+<dt><code>mailcap-parse-mailcaps</code><dd><a name="index-mailcap_002dparse_002dmailcaps-149"></a>Parse the <samp><span class="file">~/.mailcap</span></samp> file.
+
+     <br><dt><code>mailcap-mime-info</code><dd>Takes a <acronym>MIME</acronym> type as its argument and returns the matching viewer.
+
+   </dl>
+
+<div class="node">
+<a name="Standards"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Basic-Functions">Basic Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">5 Standards</h2>
+
+<p>The Emacs <acronym>MIME</acronym> library implements handling of various elements
+according to a (somewhat) large number of RFCs, drafts and standards
+documents.  This chapter lists the relevant ones.  They can all be
+fetched from <a href="http://quimby.gnus.org/notes/">http://quimby.gnus.org/notes/</a>.
+
+     <dl>
+<dt><dfn>RFC822</dfn><dt><dfn>STD11</dfn><dd>Standard for the Format of ARPA Internet Text Messages.
+
+     <br><dt><dfn>RFC1036</dfn><dd>Standard for Interchange of USENET Messages
+
+     <br><dt><dfn>RFC2045</dfn><dd>Format of Internet Message Bodies
+
+     <br><dt><dfn>RFC2046</dfn><dd>Media Types
+
+     <br><dt><dfn>RFC2047</dfn><dd>Message Header Extensions for Non-<acronym>ASCII</acronym> Text
+
+     <br><dt><dfn>RFC2048</dfn><dd>Registration Procedures
+
+     <br><dt><dfn>RFC2049</dfn><dd>Conformance Criteria and Examples
+
+     <br><dt><dfn>RFC2231</dfn><dd><acronym>MIME</acronym> Parameter Value and Encoded Word Extensions: Character Sets,
+Languages, and Continuations
+
+     <br><dt><dfn>RFC1843</dfn><dd>HZ&mdash;A Data Format for Exchanging Files of Arbitrarily Mixed Chinese and
+<acronym>ASCII</acronym> characters
+
+     <br><dt><dfn>draft-ietf-drums-msg-fmt-05.txt</dfn><dd>Draft for the successor of RFC822
+
+     <br><dt><dfn>RFC2112</dfn><dd>The <acronym>MIME</acronym> Multipart/Related Content-type
+
+     <br><dt><dfn>RFC1892</dfn><dd>The Multipart/Report Content Type for the Reporting of Mail System
+Administrative Messages
+
+     <br><dt><dfn>RFC2183</dfn><dd>Communicating Presentation Information in Internet Messages: The
+Content-Disposition Header Field
+
+     <br><dt><dfn>RFC2646</dfn><dd>Documentation of the text/plain format parameter for flowed text.
+
+   </dl>
+
+<div class="node">
+<a name="GNU-Free-Documentation-License"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Index">Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Standards">Standards</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">6 GNU Free Documentation License</h2>
+
+<!-- The GNU Free Documentation License. -->
+<div align="center">Version 1.3, 3 November 2008</div>
+
+<!-- This file is intended to be included within another document, -->
+<!-- hence no sectioning command or @node. -->
+<pre class="display">     Copyright &copy; 2000, 2001, 2002, 2007, 2008 Free Software Foundation, Inc.
+     <a href="http://fsf.org/">http://fsf.org/</a>
+     
+     Everyone is permitted to copy and distribute verbatim copies
+     of this license document, but changing it is not allowed.
+</pre>
+     <ol type=1 start=0>
+<li>PREAMBLE
+
+     <p>The purpose of this License is to make a manual, textbook, or other
+functional and useful document <dfn>free</dfn> in the sense of freedom: to
+assure everyone the effective freedom to copy and redistribute it,
+with or without modifying it, either commercially or noncommercially. 
+Secondarily, this License preserves for the author and publisher a way
+to get credit for their work, while not being considered responsible
+for modifications made by others.
+
+     <p>This License is a kind of &ldquo;copyleft&rdquo;, which means that derivative
+works of the document must themselves be free in the same sense.  It
+complements the GNU General Public License, which is a copyleft
+license designed for free software.
+
+     <p>We have designed this License in order to use it for manuals for free
+software, because free software needs free documentation: a free
+program should come with manuals providing the same freedoms that the
+software does.  But this License is not limited to software manuals;
+it can be used for any textual work, regardless of subject matter or
+whether it is published as a printed book.  We recommend this License
+principally for works whose purpose is instruction or reference.
+
+     <li>APPLICABILITY AND DEFINITIONS
+
+     <p>This License applies to any manual or other work, in any medium, that
+contains a notice placed by the copyright holder saying it can be
+distributed under the terms of this License.  Such a notice grants a
+world-wide, royalty-free license, unlimited in duration, to use that
+work under the conditions stated herein.  The &ldquo;Document&rdquo;, below,
+refers to any such manual or work.  Any member of the public is a
+licensee, and is addressed as &ldquo;you&rdquo;.  You accept the license if you
+copy, modify or distribute the work in a way requiring permission
+under copyright law.
+
+     <p>A &ldquo;Modified Version&rdquo; of the Document means any work containing the
+Document or a portion of it, either copied verbatim, or with
+modifications and/or translated into another language.
+
+     <p>A &ldquo;Secondary Section&rdquo; is a named appendix or a front-matter section
+of the Document that deals exclusively with the relationship of the
+publishers or authors of the Document to the Document's overall
+subject (or to related matters) and contains nothing that could fall
+directly within that overall subject.  (Thus, if the Document is in
+part a textbook of mathematics, a Secondary Section may not explain
+any mathematics.)  The relationship could be a matter of historical
+connection with the subject or with related matters, or of legal,
+commercial, philosophical, ethical or political position regarding
+them.
+
+     <p>The &ldquo;Invariant Sections&rdquo; are certain Secondary Sections whose titles
+are designated, as being those of Invariant Sections, in the notice
+that says that the Document is released under this License.  If a
+section does not fit the above definition of Secondary then it is not
+allowed to be designated as Invariant.  The Document may contain zero
+Invariant Sections.  If the Document does not identify any Invariant
+Sections then there are none.
+
+     <p>The &ldquo;Cover Texts&rdquo; are certain short passages of text that are listed,
+as Front-Cover Texts or Back-Cover Texts, in the notice that says that
+the Document is released under this License.  A Front-Cover Text may
+be at most 5 words, and a Back-Cover Text may be at most 25 words.
+
+     <p>A &ldquo;Transparent&rdquo; copy of the Document means a machine-readable copy,
+represented in a format whose specification is available to the
+general public, that is suitable for revising the document
+straightforwardly with generic text editors or (for images composed of
+pixels) generic paint programs or (for drawings) some widely available
+drawing editor, and that is suitable for input to text formatters or
+for automatic translation to a variety of formats suitable for input
+to text formatters.  A copy made in an otherwise Transparent file
+format whose markup, or absence of markup, has been arranged to thwart
+or discourage subsequent modification by readers is not Transparent. 
+An image format is not Transparent if used for any substantial amount
+of text.  A copy that is not &ldquo;Transparent&rdquo; is called &ldquo;Opaque&rdquo;.
+
+     <p>Examples of suitable formats for Transparent copies include plain
+ASCII without markup, Texinfo input format, LaTeX input
+format, SGML or XML using a publicly available
+DTD, and standard-conforming simple HTML,
+PostScript or PDF designed for human modification.  Examples
+of transparent image formats include PNG, XCF and
+JPG.  Opaque formats include proprietary formats that can be
+read and edited only by proprietary word processors, SGML or
+XML for which the DTD and/or processing tools are
+not generally available, and the machine-generated HTML,
+PostScript or PDF produced by some word processors for
+output purposes only.
+
+     <p>The &ldquo;Title Page&rdquo; means, for a printed book, the title page itself,
+plus such following pages as are needed to hold, legibly, the material
+this License requires to appear in the title page.  For works in
+formats which do not have any title page as such, &ldquo;Title Page&rdquo; means
+the text near the most prominent appearance of the work's title,
+preceding the beginning of the body of the text.
+
+     <p>The &ldquo;publisher&rdquo; means any person or entity that distributes copies
+of the Document to the public.
+
+     <p>A section &ldquo;Entitled XYZ&rdquo; means a named subunit of the Document whose
+title either is precisely XYZ or contains XYZ in parentheses following
+text that translates XYZ in another language.  (Here XYZ stands for a
+specific section name mentioned below, such as &ldquo;Acknowledgements&rdquo;,
+&ldquo;Dedications&rdquo;, &ldquo;Endorsements&rdquo;, or &ldquo;History&rdquo;.)  To &ldquo;Preserve the Title&rdquo;
+of such a section when you modify the Document means that it remains a
+section &ldquo;Entitled XYZ&rdquo; according to this definition.
+
+     <p>The Document may include Warranty Disclaimers next to the notice which
+states that this License applies to the Document.  These Warranty
+Disclaimers are considered to be included by reference in this
+License, but only as regards disclaiming warranties: any other
+implication that these Warranty Disclaimers may have is void and has
+no effect on the meaning of this License.
+
+     <li>VERBATIM COPYING
+
+     <p>You may copy and distribute the Document in any medium, either
+commercially or noncommercially, provided that this License, the
+copyright notices, and the license notice saying this License applies
+to the Document are reproduced in all copies, and that you add no other
+conditions whatsoever to those of this License.  You may not use
+technical measures to obstruct or control the reading or further
+copying of the copies you make or distribute.  However, you may accept
+compensation in exchange for copies.  If you distribute a large enough
+number of copies you must also follow the conditions in section 3.
+
+     <p>You may also lend copies, under the same conditions stated above, and
+you may publicly display copies.
+
+     <li>COPYING IN QUANTITY
+
+     <p>If you publish printed copies (or copies in media that commonly have
+printed covers) of the Document, numbering more than 100, and the
+Document's license notice requires Cover Texts, you must enclose the
+copies in covers that carry, clearly and legibly, all these Cover
+Texts: Front-Cover Texts on the front cover, and Back-Cover Texts on
+the back cover.  Both covers must also clearly and legibly identify
+you as the publisher of these copies.  The front cover must present
+the full title with all words of the title equally prominent and
+visible.  You may add other material on the covers in addition. 
+Copying with changes limited to the covers, as long as they preserve
+the title of the Document and satisfy these conditions, can be treated
+as verbatim copying in other respects.
+
+     <p>If the required texts for either cover are too voluminous to fit
+legibly, you should put the first ones listed (as many as fit
+reasonably) on the actual cover, and continue the rest onto adjacent
+pages.
+
+     <p>If you publish or distribute Opaque copies of the Document numbering
+more than 100, you must either include a machine-readable Transparent
+copy along with each Opaque copy, or state in or with each Opaque copy
+a computer-network location from which the general network-using
+public has access to download using public-standard network protocols
+a complete Transparent copy of the Document, free of added material. 
+If you use the latter option, you must take reasonably prudent steps,
+when you begin distribution of Opaque copies in quantity, to ensure
+that this Transparent copy will remain thus accessible at the stated
+location until at least one year after the last time you distribute an
+Opaque copy (directly or through your agents or retailers) of that
+edition to the public.
+
+     <p>It is requested, but not required, that you contact the authors of the
+Document well before redistributing any large number of copies, to give
+them a chance to provide you with an updated version of the Document.
+
+     <li>MODIFICATIONS
+
+     <p>You may copy and distribute a Modified Version of the Document under
+the conditions of sections 2 and 3 above, provided that you release
+the Modified Version under precisely this License, with the Modified
+Version filling the role of the Document, thus licensing distribution
+and modification of the Modified Version to whoever possesses a copy
+of it.  In addition, you must do these things in the Modified Version:
+
+          <ol type=A start=1>
+<li>Use in the Title Page (and on the covers, if any) a title distinct
+from that of the Document, and from those of previous versions
+(which should, if there were any, be listed in the History section
+of the Document).  You may use the same title as a previous version
+if the original publisher of that version gives permission.
+
+          <li>List on the Title Page, as authors, one or more persons or entities
+responsible for authorship of the modifications in the Modified
+Version, together with at least five of the principal authors of the
+Document (all of its principal authors, if it has fewer than five),
+unless they release you from this requirement.
+
+          <li>State on the Title page the name of the publisher of the
+Modified Version, as the publisher.
+
+          <li>Preserve all the copyright notices of the Document.
+
+          <li>Add an appropriate copyright notice for your modifications
+adjacent to the other copyright notices.
+
+          <li>Include, immediately after the copyright notices, a license notice
+giving the public permission to use the Modified Version under the
+terms of this License, in the form shown in the Addendum below.
+
+          <li>Preserve in that license notice the full lists of Invariant Sections
+and required Cover Texts given in the Document's license notice.
+
+          <li>Include an unaltered copy of this License.
+
+          <li>Preserve the section Entitled &ldquo;History&rdquo;, Preserve its Title, and add
+to it an item stating at least the title, year, new authors, and
+publisher of the Modified Version as given on the Title Page.  If
+there is no section Entitled &ldquo;History&rdquo; in the Document, create one
+stating the title, year, authors, and publisher of the Document as
+given on its Title Page, then add an item describing the Modified
+Version as stated in the previous sentence.
+
+          <li>Preserve the network location, if any, given in the Document for
+public access to a Transparent copy of the Document, and likewise
+the network locations given in the Document for previous versions
+it was based on.  These may be placed in the &ldquo;History&rdquo; section. 
+You may omit a network location for a work that was published at
+least four years before the Document itself, or if the original
+publisher of the version it refers to gives permission.
+
+          <li>For any section Entitled &ldquo;Acknowledgements&rdquo; or &ldquo;Dedications&rdquo;, Preserve
+the Title of the section, and preserve in the section all the
+substance and tone of each of the contributor acknowledgements and/or
+dedications given therein.
+
+          <li>Preserve all the Invariant Sections of the Document,
+unaltered in their text and in their titles.  Section numbers
+or the equivalent are not considered part of the section titles.
+
+          <li>Delete any section Entitled &ldquo;Endorsements&rdquo;.  Such a section
+may not be included in the Modified Version.
+
+          <li>Do not retitle any existing section to be Entitled &ldquo;Endorsements&rdquo; or
+to conflict in title with any Invariant Section.
+
+          <li>Preserve any Warranty Disclaimers.
+          </ol>
+
+     <p>If the Modified Version includes new front-matter sections or
+appendices that qualify as Secondary Sections and contain no material
+copied from the Document, you may at your option designate some or all
+of these sections as invariant.  To do this, add their titles to the
+list of Invariant Sections in the Modified Version's license notice. 
+These titles must be distinct from any other section titles.
+
+     <p>You may add a section Entitled &ldquo;Endorsements&rdquo;, provided it contains
+nothing but endorsements of your Modified Version by various
+parties&mdash;for example, statements of peer review or that the text has
+been approved by an organization as the authoritative definition of a
+standard.
+
+     <p>You may add a passage of up to five words as a Front-Cover Text, and a
+passage of up to 25 words as a Back-Cover Text, to the end of the list
+of Cover Texts in the Modified Version.  Only one passage of
+Front-Cover Text and one of Back-Cover Text may be added by (or
+through arrangements made by) any one entity.  If the Document already
+includes a cover text for the same cover, previously added by you or
+by arrangement made by the same entity you are acting on behalf of,
+you may not add another; but you may replace the old one, on explicit
+permission from the previous publisher that added the old one.
+
+     <p>The author(s) and publisher(s) of the Document do not by this License
+give permission to use their names for publicity for or to assert or
+imply endorsement of any Modified Version.
+
+     <li>COMBINING DOCUMENTS
+
+     <p>You may combine the Document with other documents released under this
+License, under the terms defined in section 4 above for modified
+versions, provided that you include in the combination all of the
+Invariant Sections of all of the original documents, unmodified, and
+list them all as Invariant Sections of your combined work in its
+license notice, and that you preserve all their Warranty Disclaimers.
+
+     <p>The combined work need only contain one copy of this License, and
+multiple identical Invariant Sections may be replaced with a single
+copy.  If there are multiple Invariant Sections with the same name but
+different contents, make the title of each such section unique by
+adding at the end of it, in parentheses, the name of the original
+author or publisher of that section if known, or else a unique number. 
+Make the same adjustment to the section titles in the list of
+Invariant Sections in the license notice of the combined work.
+
+     <p>In the combination, you must combine any sections Entitled &ldquo;History&rdquo;
+in the various original documents, forming one section Entitled
+&ldquo;History&rdquo;; likewise combine any sections Entitled &ldquo;Acknowledgements&rdquo;,
+and any sections Entitled &ldquo;Dedications&rdquo;.  You must delete all
+sections Entitled &ldquo;Endorsements.&rdquo;
+
+     <li>COLLECTIONS OF DOCUMENTS
+
+     <p>You may make a collection consisting of the Document and other documents
+released under this License, and replace the individual copies of this
+License in the various documents with a single copy that is included in
+the collection, provided that you follow the rules of this License for
+verbatim copying of each of the documents in all other respects.
+
+     <p>You may extract a single document from such a collection, and distribute
+it individually under this License, provided you insert a copy of this
+License into the extracted document, and follow this License in all
+other respects regarding verbatim copying of that document.
+
+     <li>AGGREGATION WITH INDEPENDENT WORKS
+
+     <p>A compilation of the Document or its derivatives with other separate
+and independent documents or works, in or on a volume of a storage or
+distribution medium, is called an &ldquo;aggregate&rdquo; if the copyright
+resulting from the compilation is not used to limit the legal rights
+of the compilation's users beyond what the individual works permit. 
+When the Document is included in an aggregate, this License does not
+apply to the other works in the aggregate which are not themselves
+derivative works of the Document.
+
+     <p>If the Cover Text requirement of section 3 is applicable to these
+copies of the Document, then if the Document is less than one half of
+the entire aggregate, the Document's Cover Texts may be placed on
+covers that bracket the Document within the aggregate, or the
+electronic equivalent of covers if the Document is in electronic form. 
+Otherwise they must appear on printed covers that bracket the whole
+aggregate.
+
+     <li>TRANSLATION
+
+     <p>Translation is considered a kind of modification, so you may
+distribute translations of the Document under the terms of section 4. 
+Replacing Invariant Sections with translations requires special
+permission from their copyright holders, but you may include
+translations of some or all Invariant Sections in addition to the
+original versions of these Invariant Sections.  You may include a
+translation of this License, and all the license notices in the
+Document, and any Warranty Disclaimers, provided that you also include
+the original English version of this License and the original versions
+of those notices and disclaimers.  In case of a disagreement between
+the translation and the original version of this License or a notice
+or disclaimer, the original version will prevail.
+
+     <p>If a section in the Document is Entitled &ldquo;Acknowledgements&rdquo;,
+&ldquo;Dedications&rdquo;, or &ldquo;History&rdquo;, the requirement (section 4) to Preserve
+its Title (section 1) will typically require changing the actual
+title.
+
+     <li>TERMINATION
+
+     <p>You may not copy, modify, sublicense, or distribute the Document
+except as expressly provided under this License.  Any attempt
+otherwise to copy, modify, sublicense, or distribute it is void, and
+will automatically terminate your rights under this License.
+
+     <p>However, if you cease all violation of this License, then your license
+from a particular copyright holder is reinstated (a) provisionally,
+unless and until the copyright holder explicitly and finally
+terminates your license, and (b) permanently, if the copyright holder
+fails to notify you of the violation by some reasonable means prior to
+60 days after the cessation.
+
+     <p>Moreover, your license from a particular copyright holder is
+reinstated permanently if the copyright holder notifies you of the
+violation by some reasonable means, this is the first time you have
+received notice of violation of this License (for any work) from that
+copyright holder, and you cure the violation prior to 30 days after
+your receipt of the notice.
+
+     <p>Termination of your rights under this section does not terminate the
+licenses of parties who have received copies or rights from you under
+this License.  If your rights have been terminated and not permanently
+reinstated, receipt of a copy of some or all of the same material does
+not give you any rights to use it.
+
+     <li>FUTURE REVISIONS OF THIS LICENSE
+
+     <p>The Free Software Foundation may publish new, revised versions
+of the GNU Free Documentation License from time to time.  Such new
+versions will be similar in spirit to the present version, but may
+differ in detail to address new problems or concerns.  See
+<a href="http://www.gnu.org/copyleft/">http://www.gnu.org/copyleft/</a>.
+
+     <p>Each version of the License is given a distinguishing version number. 
+If the Document specifies that a particular numbered version of this
+License &ldquo;or any later version&rdquo; applies to it, you have the option of
+following the terms and conditions either of that specified version or
+of any later version that has been published (not as a draft) by the
+Free Software Foundation.  If the Document does not specify a version
+number of this License, you may choose any version ever published (not
+as a draft) by the Free Software Foundation.  If the Document
+specifies that a proxy can decide which future versions of this
+License can be used, that proxy's public statement of acceptance of a
+version permanently authorizes you to choose that version for the
+Document.
+
+     <li>RELICENSING
+
+     <p>&ldquo;Massive Multiauthor Collaboration Site&rdquo; (or &ldquo;MMC Site&rdquo;) means any
+World Wide Web server that publishes copyrightable works and also
+provides prominent facilities for anybody to edit those works.  A
+public wiki that anybody can edit is an example of such a server.  A
+&ldquo;Massive Multiauthor Collaboration&rdquo; (or &ldquo;MMC&rdquo;) contained in the
+site means any set of copyrightable works thus published on the MMC
+site.
+
+     <p>&ldquo;CC-BY-SA&rdquo; means the Creative Commons Attribution-Share Alike 3.0
+license published by Creative Commons Corporation, a not-for-profit
+corporation with a principal place of business in San Francisco,
+California, as well as future copyleft versions of that license
+published by that same organization.
+
+     <p>&ldquo;Incorporate&rdquo; means to publish or republish a Document, in whole or
+in part, as part of another Document.
+
+     <p>An MMC is &ldquo;eligible for relicensing&rdquo; if it is licensed under this
+License, and if all works that were first published under this License
+somewhere other than this MMC, and subsequently incorporated in whole
+or in part into the MMC, (1) had no cover texts or invariant sections,
+and (2) were thus incorporated prior to November 1, 2008.
+
+     <p>The operator of an MMC Site may republish an MMC contained in the site
+under CC-BY-SA on the same site at any time before August 1, 2009,
+provided the MMC is eligible for relicensing.
+
+        </ol>
+
+<h3 class="heading">ADDENDUM: How to use this License for your documents</h3>
+
+<p>To use this License in a document you have written, include a copy of
+the License in the document and put the following copyright and
+license notices just after the title page:
+
+<pre class="smallexample">       Copyright (C)  <var>year</var>  <var>your name</var>.
+       Permission is granted to copy, distribute and/or modify this document
+       under the terms of the GNU Free Documentation License, Version 1.3
+       or any later version published by the Free Software Foundation;
+       with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+       Texts.  A copy of the license is included in the section entitled ``GNU
+       Free Documentation License''.
+</pre>
+   <p>If you have Invariant Sections, Front-Cover Texts and Back-Cover Texts,
+replace the &ldquo;with<small class="dots">...</small>Texts.&rdquo; line with this:
+
+<pre class="smallexample">         with the Invariant Sections being <var>list their titles</var>, with
+         the Front-Cover Texts being <var>list</var>, and with the Back-Cover Texts
+         being <var>list</var>.
+</pre>
+   <p>If you have Invariant Sections without Cover Texts, or some other
+combination of the three, merge those two alternatives to suit the
+situation.
+
+   <p>If your document contains nontrivial examples of program code, we
+recommend releasing these examples in parallel under your choice of
+free software license, such as the GNU General Public License,
+to permit their use in free software.
+
+<!-- Local Variables: -->
+<!-- ispell-local-pdict: "ispell-dict" -->
+<!-- End: -->
+<div class="node">
+<a name="Index"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">7 Index</h2>
+
+<ul class="index-cp" compact>
+<li><a href="#index-Apple-137">Apple</a>: <a href="#binhex">binhex</a></li>
+<li><a href="#index-base64-131">base64</a>: <a href="#base64">base64</a></li>
+<li><a href="#index-base64_002ddecode_002dregion-134"><code>base64-decode-region</code></a>: <a href="#base64">base64</a></li>
+<li><a href="#index-base64_002ddecode_002dstring-135"><code>base64-decode-string</code></a>: <a href="#base64">base64</a></li>
+<li><a href="#index-base64_002dencode_002dregion-132"><code>base64-encode-region</code></a>: <a href="#base64">base64</a></li>
+<li><a href="#index-base64_002dencode_002dstring-133"><code>base64-encode-string</code></a>: <a href="#base64">base64</a></li>
+<li><a href="#index-binhex-4"><code>binhex</code></a>: <a href="#Non_002dMIME">Non-MIME</a></li>
+<li><a href="#index-binhex-136">binhex</a>: <a href="#binhex">binhex</a></li>
+<li><a href="#index-binhex_002ddecode_002dregion-139"><code>binhex-decode-region</code></a>: <a href="#binhex">binhex</a></li>
+<li><a href="#index-charsets-70">charsets</a>: <a href="#Charset-Translation">Charset Translation</a></li>
+<li><a href="#index-Chinese-147">Chinese</a>: <a href="#rfc1843">rfc1843</a></li>
+<li><a href="#index-Composing-61">Composing</a>: <a href="#Composing">Composing</a></li>
+<li><a href="#index-diff-14"><code>diff</code></a>: <a href="#Non_002dMIME">Non-MIME</a></li>
+<li><a href="#index-emacs_002dsources-12"><code>emacs-sources</code></a>: <a href="#Non_002dMIME">Non-MIME</a></li>
+<li><a href="#index-format_003dflowed-78">format=flowed</a>: <a href="#Flowed-text">Flowed text</a></li>
+<li><a href="#index-forward-7"><code>forward</code></a>: <a href="#Non_002dMIME">Non-MIME</a></li>
+<li><a href="#index-gnatsweb-8"><code>gnatsweb</code></a>: <a href="#Non_002dMIME">Non-MIME</a></li>
+<li><a href="#index-HZ-146">HZ</a>: <a href="#rfc1843">rfc1843</a></li>
+<li><a href="#index-ietf_002ddrums_002dget_002dcomment-108"><code>ietf-drums-get-comment</code></a>: <a href="#ietf_002ddrums">ietf-drums</a></li>
+<li><a href="#index-ietf_002ddrums_002dnarrow_002dto_002dheader-112"><code>ietf-drums-narrow-to-header</code></a>: <a href="#ietf_002ddrums">ietf-drums</a></li>
+<li><a href="#index-ietf_002ddrums_002dparse_002daddress-109"><code>ietf-drums-parse-address</code></a>: <a href="#ietf_002ddrums">ietf-drums</a></li>
+<li><a href="#index-ietf_002ddrums_002dparse_002daddresses-110"><code>ietf-drums-parse-addresses</code></a>: <a href="#ietf_002ddrums">ietf-drums</a></li>
+<li><a href="#index-ietf_002ddrums_002dparse_002ddate-111"><code>ietf-drums-parse-date</code></a>: <a href="#ietf_002ddrums">ietf-drums</a></li>
+<li><a href="#index-ietf_002ddrums_002dremove_002dcomments-106"><code>ietf-drums-remove-comments</code></a>: <a href="#ietf_002ddrums">ietf-drums</a></li>
+<li><a href="#index-ietf_002ddrums_002dremove_002dwhitespace-107"><code>ietf-drums-remove-whitespace</code></a>: <a href="#ietf_002ddrums">ietf-drums</a></li>
+<li><a href="#index-interface-functions-80">interface functions</a>: <a href="#Interface-Functions">Interface Functions</a></li>
+<li><a href="#index-LaTeX-17">LaTeX</a>: <a href="#Non_002dMIME">Non-MIME</a></li>
+<li><a href="#index-Macintosh-138">Macintosh</a>: <a href="#binhex">binhex</a></li>
+<li><a href="#index-mail_002dcontent_002dtype_002dget-84"><code>mail-content-type-get</code></a>: <a href="#Interface-Functions">Interface Functions</a></li>
+<li><a href="#index-mail_002ddecode_002dencoded_002dword_002dregion-100"><code>mail-decode-encoded-word-region</code></a>: <a href="#Interface-Functions">Interface Functions</a></li>
+<li><a href="#index-mail_002ddecode_002dencoded_002dword_002dstring-101"><code>mail-decode-encoded-word-string</code></a>: <a href="#Interface-Functions">Interface Functions</a></li>
+<li><a href="#index-mail_002dencode_002dencoded_002dword_002dbuffer-98"><code>mail-encode-encoded-word-buffer</code></a>: <a href="#Interface-Functions">Interface Functions</a></li>
+<li><a href="#index-mail_002dencode_002dencoded_002dword_002dregion-97"><code>mail-encode-encoded-word-region</code></a>: <a href="#Interface-Functions">Interface Functions</a></li>
+<li><a href="#index-mail_002dencode_002dencoded_002dword_002dstring-99"><code>mail-encode-encoded-word-string</code></a>: <a href="#Interface-Functions">Interface Functions</a></li>
+<li><a href="#index-mail_002dheader_002dencode_002dparameter-85"><code>mail-header-encode-parameter</code></a>: <a href="#Interface-Functions">Interface Functions</a></li>
+<li><a href="#index-mail_002dheader_002dfield_002dvalue-96"><code>mail-header-field-value</code></a>: <a href="#Interface-Functions">Interface Functions</a></li>
+<li><a href="#index-mail_002dheader_002dfold_002dfield-94"><code>mail-header-fold-field</code></a>: <a href="#Interface-Functions">Interface Functions</a></li>
+<li><a href="#index-mail_002dheader_002dget_002dcomment-88"><code>mail-header-get-comment</code></a>: <a href="#Interface-Functions">Interface Functions</a></li>
+<li><a href="#index-mail_002dheader_002dnarrow_002dto_002dfield-93"><code>mail-header-narrow-to-field</code></a>: <a href="#Interface-Functions">Interface Functions</a></li>
+<li><a href="#index-mail_002dheader_002dparse_002daddress-89"><code>mail-header-parse-address</code></a>: <a href="#Interface-Functions">Interface Functions</a></li>
+<li><a href="#index-mail_002dheader_002dparse_002daddresses-90"><code>mail-header-parse-addresses</code></a>: <a href="#Interface-Functions">Interface Functions</a></li>
+<li><a href="#index-mail_002dheader_002dparse_002dcontent_002ddisposition-83"><code>mail-header-parse-content-disposition</code></a>: <a href="#Interface-Functions">Interface Functions</a></li>
+<li><a href="#index-mail_002dheader_002dparse_002dcontent_002dtype-82"><code>mail-header-parse-content-type</code></a>: <a href="#Interface-Functions">Interface Functions</a></li>
+<li><a href="#index-mail_002dheader_002dparse_002ddate-91"><code>mail-header-parse-date</code></a>: <a href="#Interface-Functions">Interface Functions</a></li>
+<li><a href="#index-mail_002dheader_002dremove_002dcomments-86"><code>mail-header-remove-comments</code></a>: <a href="#Interface-Functions">Interface Functions</a></li>
+<li><a href="#index-mail_002dheader_002dremove_002dwhitespace-87"><code>mail-header-remove-whitespace</code></a>: <a href="#Interface-Functions">Interface Functions</a></li>
+<li><a href="#index-mail_002dheader_002dunfold_002dfield-95"><code>mail-header-unfold-field</code></a>: <a href="#Interface-Functions">Interface Functions</a></li>
+<li><a href="#index-mail_002dnarrow_002dto_002dhead-92"><code>mail-narrow-to-head</code></a>: <a href="#Interface-Functions">Interface Functions</a></li>
+<li><a href="#index-mail_002dparse-81">mail-parse</a>: <a href="#Interface-Functions">Interface Functions</a></li>
+<li><a href="#index-mail_002dparse_002dcharset-71"><code>mail-parse-charset</code></a>: <a href="#Charset-Translation">Charset Translation</a></li>
+<li><a href="#index-mailcap_002dmime_002ddata-148"><code>mailcap-mime-data</code></a>: <a href="#mailcap">mailcap</a></li>
+<li><a href="#index-mailcap_002dparse_002dmailcaps-149"><code>mailcap-parse-mailcaps</code></a>: <a href="#mailcap">mailcap</a></li>
+<li><a href="#index-MIME-Composing-62">MIME Composing</a>: <a href="#Composing">Composing</a></li>
+<li><a href="#index-MIME-Meta-Language-64">MIME Meta Language</a>: <a href="#Composing">Composing</a></li>
+<li><a href="#index-mime_002dto_002dmml-76"><code>mime-to-mml</code></a>: <a href="#Conversion">Conversion</a></li>
+<li><a href="#index-mm_002dattachment_002doverride_002dtypes-39"><code>mm-attachment-override-types</code></a>: <a href="#Display-Customization">Display Customization</a></li>
+<li><a href="#index-mm_002dautomatic_002ddisplay-36"><code>mm-automatic-display</code></a>: <a href="#Display-Customization">Display Customization</a></li>
+<li><a href="#index-mm_002dautomatic_002ddisplay_002dp-29"><code>mm-automatic-display-p</code></a>: <a href="#Display">Display</a></li>
+<li><a href="#index-mm_002dautomatic_002dexternal_002ddisplay-37"><code>mm-automatic-external-display</code></a>: <a href="#Display-Customization">Display Customization</a></li>
+<li><a href="#index-mm_002dbody_002dcharset_002dencoding_002dalist-66"><code>mm-body-charset-encoding-alist</code></a>: <a href="#Encoding-Customization">Encoding Customization</a></li>
+<li><a href="#index-mm_002dcoding_002dsystem_002dpriorities-67"><code>mm-coding-system-priorities</code></a>: <a href="#Encoding-Customization">Encoding Customization</a></li>
+<li><a href="#index-mm_002dcontent_002dtransfer_002dencoding_002ddefaults-68"><code>mm-content-transfer-encoding-defaults</code></a>: <a href="#Encoding-Customization">Encoding Customization</a></li>
+<li><a href="#index-mm_002ddefault_002ddirectory-50"><code>mm-default-directory</code></a>: <a href="#Files-and-Directories">Files and Directories</a></li>
+<li><a href="#index-mm_002ddestroy_002dpart-30"><code>mm-destroy-part</code></a>: <a href="#Display">Display</a></li>
+<li><a href="#index-mm_002ddiscouraged_002dalternatives-40"><code>mm-discouraged-alternatives</code></a>: <a href="#Display-Customization">Display Customization</a></li>
+<li><a href="#index-mm_002ddisplay_002dpart-26"><code>mm-display-part</code></a>: <a href="#Display">Display</a></li>
+<li><a href="#index-mm_002denable_002dexternal-49"><code>mm-enable-external</code></a>: <a href="#Display-Customization">Display Customization</a></li>
+<li><a href="#index-mm_002dexternal_002dterminal_002dprogram-48"><code>mm-external-terminal-program</code></a>: <a href="#Display-Customization">Display Customization</a></li>
+<li><a href="#index-mm_002dfile_002dname_002dcollapse_002dwhitespace-57"><code>mm-file-name-collapse-whitespace</code></a>: <a href="#Files-and-Directories">Files and Directories</a></li>
+<li><a href="#index-mm_002dfile_002dname_002ddelete_002dcontrol-53"><code>mm-file-name-delete-control</code></a>: <a href="#Files-and-Directories">Files and Directories</a></li>
+<li><a href="#index-mm_002dfile_002dname_002ddelete_002dgotchas-54"><code>mm-file-name-delete-gotchas</code></a>: <a href="#Files-and-Directories">Files and Directories</a></li>
+<li><a href="#index-mm_002dfile_002dname_002ddelete_002dwhitespace-55"><code>mm-file-name-delete-whitespace</code></a>: <a href="#Files-and-Directories">Files and Directories</a></li>
+<li><a href="#index-mm_002dfile_002dname_002dreplace_002dwhitespace-58"><code>mm-file-name-replace-whitespace</code></a>: <a href="#Files-and-Directories">Files and Directories</a></li>
+<li><a href="#index-mm_002dfile_002dname_002drewrite_002dfunctions-52"><code>mm-file-name-rewrite-functions</code></a>: <a href="#Files-and-Directories">Files and Directories</a></li>
+<li><a href="#index-mm_002dfile_002dname_002dtrim_002dwhitespace-56"><code>mm-file-name-trim-whitespace</code></a>: <a href="#Files-and-Directories">Files and Directories</a></li>
+<li><a href="#index-mm_002dfill_002dflowed-79"><code>mm-fill-flowed</code></a>: <a href="#Flowed-text">Flowed text</a></li>
+<li><a href="#index-mm_002dhandle_002dbuffer-20"><code>mm-handle-buffer</code></a>: <a href="#Handles">Handles</a></li>
+<li><a href="#index-mm_002dhandle_002ddisposition-25"><code>mm-handle-disposition</code></a>: <a href="#Handles">Handles</a></li>
+<li><a href="#index-mm_002dhandle_002dencoding-22"><code>mm-handle-encoding</code></a>: <a href="#Handles">Handles</a></li>
+<li><a href="#index-mm_002dhandle_002dset_002dundisplayer-24"><code>mm-handle-set-undisplayer</code></a>: <a href="#Handles">Handles</a></li>
+<li><a href="#index-mm_002dhandle_002dtype-21"><code>mm-handle-type</code></a>: <a href="#Handles">Handles</a></li>
+<li><a href="#index-mm_002dhandle_002dundisplayer-23"><code>mm-handle-undisplayer</code></a>: <a href="#Handles">Handles</a></li>
+<li><a href="#index-mm_002dinlinable_002dp-28"><code>mm-inlinable-p</code></a>: <a href="#Display">Display</a></li>
+<li><a href="#index-mm_002dinline_002dimages_002dmax_002dproportion-42"><code>mm-inline-images-max-proportion</code></a>: <a href="#Display-Customization">Display Customization</a></li>
+<li><a href="#index-mm_002dinline_002dlarge_002dimages-41"><code>mm-inline-large-images</code></a>: <a href="#Display-Customization">Display Customization</a></li>
+<li><a href="#index-mm_002dinline_002dmedia_002dtests-34"><code>mm-inline-media-tests</code></a>: <a href="#Display-Customization">Display Customization</a></li>
+<li><a href="#index-mm_002dinline_002doverride_002dtypes-43"><code>mm-inline-override-types</code></a>: <a href="#Display-Customization">Display Customization</a></li>
+<li><a href="#index-mm_002dinline_002dtext_002dhtml_002dwith_002dimages-45"><code>mm-inline-text-html-with-images</code></a>: <a href="#Display-Customization">Display Customization</a></li>
+<li><a href="#index-mm_002dinline_002dtext_002dhtml_002dwith_002dw3m_002dkeymap-47"><code>mm-inline-text-html-with-w3m-keymap</code></a>: <a href="#Display-Customization">Display Customization</a></li>
+<li><a href="#index-mm_002dinlined_002dtypes-35"><code>mm-inlined-types</code></a>: <a href="#Display-Customization">Display Customization</a></li>
+<li><a href="#index-mm_002dinteractively_002dview_002dpart-33"><code>mm-interactively-view-part</code></a>: <a href="#Display">Display</a></li>
+<li><a href="#index-mm_002dkeep_002dviewer_002dalive_002dtypes-38"><code>mm-keep-viewer-alive-types</code></a>: <a href="#Display-Customization">Display Customization</a></li>
+<li><a href="#index-mm_002dmime_002dmule_002dcharset_002dalist-75"><code>mm-mime-mule-charset-alist</code></a>: <a href="#Charset-Translation">Charset Translation</a></li>
+<li><a href="#index-mm_002dpath_002dname_002drewrite_002dfunctions-60"><code>mm-path-name-rewrite-functions</code></a>: <a href="#Files-and-Directories">Files and Directories</a></li>
+<li><a href="#index-mm_002dpipe_002dpart-32"><code>mm-pipe-part</code></a>: <a href="#Display">Display</a></li>
+<li><a href="#index-mm_002dremove_002dpart-27"><code>mm-remove-part</code></a>: <a href="#Display">Display</a></li>
+<li><a href="#index-mm_002dsave_002dpart-31"><code>mm-save-part</code></a>: <a href="#Display">Display</a></li>
+<li><a href="#index-mm_002dtext_002dhtml_002drenderer-44"><code>mm-text-html-renderer</code></a>: <a href="#Display-Customization">Display Customization</a></li>
+<li><a href="#index-mm_002dtmp_002ddirectory-51"><code>mm-tmp-directory</code></a>: <a href="#Files-and-Directories">Files and Directories</a></li>
+<li><a href="#index-mm_002duse_002dultra_002dsafe_002dencoding-69"><code>mm-use-ultra-safe-encoding</code></a>: <a href="#Encoding-Customization">Encoding Customization</a></li>
+<li><a href="#index-mm_002duu_002dconfigure_002dlist-1"><code>mm-uu-configure-list</code></a>: <a href="#Non_002dMIME">Non-MIME</a></li>
+<li><a href="#index-mm_002duu_002ddiff_002dgroups_002dregexp-15"><code>mm-uu-diff-groups-regexp</code></a>: <a href="#Non_002dMIME">Non-MIME</a></li>
+<li><a href="#index-mm_002duu_002demacs_002dsources_002dregexp-13"><code>mm-uu-emacs-sources-regexp</code></a>: <a href="#Non_002dMIME">Non-MIME</a></li>
+<li><a href="#index-mm_002duu_002dextract-19"><code>mm-uu-extract</code></a>: <a href="#Non_002dMIME">Non-MIME</a></li>
+<li><a href="#index-mm_002dw3m_002dsafe_002durl_002dregexp-46"><code>mm-w3m-safe-url-regexp</code></a>: <a href="#Display-Customization">Display Customization</a></li>
+<li><a href="#index-MML-63">MML</a>: <a href="#Composing">Composing</a></li>
+<li><a href="#index-mml_002dgenerate_002dmime-65"><code>mml-generate-mime</code></a>: <a href="#Composing">Composing</a></li>
+<li><a href="#index-mml_002dto_002dmime-77"><code>mml-to-mime</code></a>: <a href="#Conversion">Conversion</a></li>
+<li><a href="#index-MULE-72">MULE</a>: <a href="#Charset-Translation">Charset Translation</a></li>
+<li><a href="#index-pgp_002dencrypted-10"><code>pgp-encrypted</code></a>: <a href="#Non_002dMIME">Non-MIME</a></li>
+<li><a href="#index-pgp_002dkey-11"><code>pgp-key</code></a>: <a href="#Non_002dMIME">Non-MIME</a></li>
+<li><a href="#index-pgp_002dsigned-9"><code>pgp-signed</code></a>: <a href="#Non_002dMIME">Non-MIME</a></li>
+<li><a href="#index-postscript-2"><code>postscript</code></a>: <a href="#Non_002dMIME">Non-MIME</a></li>
+<li><a href="#index-quoted_002dprintable_002ddecode_002dregion-127"><code>quoted-printable-decode-region</code></a>: <a href="#qp">qp</a></li>
+<li><a href="#index-quoted_002dprintable_002ddecode_002dstring-128"><code>quoted-printable-decode-string</code></a>: <a href="#qp">qp</a></li>
+<li><a href="#index-quoted_002dprintable_002dencode_002dregion-129"><code>quoted-printable-encode-region</code></a>: <a href="#qp">qp</a></li>
+<li><a href="#index-quoted_002dprintable_002dencode_002dstring-130"><code>quoted-printable-encode-string</code></a>: <a href="#qp">qp</a></li>
+<li><a href="#index-rfc1843-145">rfc1843</a>: <a href="#rfc1843">rfc1843</a></li>
+<li><a href="#index-rfc2045_002dencode_002dstring-102"><code>rfc2045-encode-string</code></a>: <a href="#rfc2045">rfc2045</a></li>
+<li><a href="#index-rfc2047_002dallow_002dirregular_002dq_002dencoded_002dwords-119"><code>rfc2047-allow-irregular-q-encoded-words</code></a>: <a href="#rfc2047">rfc2047</a></li>
+<li><a href="#index-rfc2047_002dcharset_002dencoding_002dalist-114"><code>rfc2047-charset-encoding-alist</code></a>: <a href="#rfc2047">rfc2047</a></li>
+<li><a href="#index-rfc2047_002ddecode_002dregion-124"><code>rfc2047-decode-region</code></a>: <a href="#rfc2047">rfc2047</a></li>
+<li><a href="#index-rfc2047_002ddecode_002dstring-125"><code>rfc2047-decode-string</code></a>: <a href="#rfc2047">rfc2047</a></li>
+<li><a href="#index-rfc2047_002dencode_002dencoded_002dwords-118"><code>rfc2047-encode-encoded-words</code></a>: <a href="#rfc2047">rfc2047</a></li>
+<li><a href="#index-rfc2047_002dencode_002dfunction_002dalist-115"><code>rfc2047-encode-function-alist</code></a>: <a href="#rfc2047">rfc2047</a></li>
+<li><a href="#index-rfc2047_002dencode_002dmessage_002dheader-121"><code>rfc2047-encode-message-header</code></a>: <a href="#rfc2047">rfc2047</a></li>
+<li><a href="#index-rfc2047_002dencode_002dparameter-126"><code>rfc2047-encode-parameter</code></a>: <a href="#rfc2047">rfc2047</a></li>
+<li><a href="#index-rfc2047_002dencode_002dregion-122"><code>rfc2047-encode-region</code></a>: <a href="#rfc2047">rfc2047</a></li>
+<li><a href="#index-rfc2047_002dencode_002dstring-123"><code>rfc2047-encode-string</code></a>: <a href="#rfc2047">rfc2047</a></li>
+<li><a href="#index-rfc2047_002dencoded_002dword_002dregexp-116"><code>rfc2047-encoded-word-regexp</code></a>: <a href="#rfc2047">rfc2047</a></li>
+<li><a href="#index-rfc2047_002dencoded_002dword_002dregexp_002dloose-117"><code>rfc2047-encoded-word-regexp-loose</code></a>: <a href="#rfc2047">rfc2047</a></li>
+<li><a href="#index-rfc2047_002dheader_002dencoding_002dalist-113"><code>rfc2047-header-encoding-alist</code></a>: <a href="#rfc2047">rfc2047</a></li>
+<li><a href="#index-rfc2047_002dnarrow_002dto_002dfield-120"><code>rfc2047-narrow-to-field</code></a>: <a href="#rfc2047">rfc2047</a></li>
+<li><a href="#index-rfc2231_002dencode_002dstring-105"><code>rfc2231-encode-string</code></a>: <a href="#rfc2231">rfc2231</a></li>
+<li><a href="#index-rfc2231_002dget_002dvalue-104"><code>rfc2231-get-value</code></a>: <a href="#rfc2231">rfc2231</a></li>
+<li><a href="#index-rfc2231_002dparse_002dstring-103"><code>rfc2231-parse-string</code></a>: <a href="#rfc2231">rfc2231</a></li>
+<li><a href="#index-shar-6"><code>shar</code></a>: <a href="#Non_002dMIME">Non-MIME</a></li>
+<li><a href="#index-text_002fx_002dverbatim-18">text/x-verbatim</a>: <a href="#Non_002dMIME">Non-MIME</a></li>
+<li><a href="#index-Unicode-74">Unicode</a>: <a href="#Charset-Translation">Charset Translation</a></li>
+<li><a href="#index-UTF_002d8-73">UTF-8</a>: <a href="#Charset-Translation">Charset Translation</a></li>
+<li><a href="#index-uu-3"><code>uu</code></a>: <a href="#Non_002dMIME">Non-MIME</a></li>
+<li><a href="#index-uudecode-141">uudecode</a>: <a href="#uudecode">uudecode</a></li>
+<li><a href="#index-uudecode_002ddecode_002dregion-142"><code>uudecode-decode-region</code></a>: <a href="#uudecode">uudecode</a></li>
+<li><a href="#index-uuencode-140">uuencode</a>: <a href="#uudecode">uudecode</a></li>
+<li><a href="#index-verbatim_002dmarks-16">verbatim-marks</a>: <a href="#Non_002dMIME">Non-MIME</a></li>
+<li><a href="#index-yenc-5"><code>yenc</code></a>: <a href="#Non_002dMIME">Non-MIME</a></li>
+<li><a href="#index-yenc-143">yenc</a>: <a href="#yenc">yenc</a></li>
+<li><a href="#index-yenc_002ddecode_002dregion-144"><code>yenc-decode-region</code></a>: <a href="#yenc">yenc</a></li>
+   </ul><div class="footnote">
+<hr>
+<a name="texinfo-footnotes-in-document"></a><h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> See <a href="http://emacs-w3m.namazu.org/">http://emacs-w3m.namazu.org/</a> for more
+information about emacs-w3m</p>
+
+   <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> The command <kbd>T</kbd>
+will load all images.  If you have set the option
+<code>w3m-key-binding</code> to <code>info</code>, use <kbd>i</kbd> or <kbd>I</kbd>
+instead.</p>
+
+   <hr></div>
+
+</body></html>
+
+<!--
+
+Local Variables:
+coding: utf-8
+End:
+
+-->

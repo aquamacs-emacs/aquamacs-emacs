@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,7 +41,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
 <hr>
 </div>
 
-<h3 class="section">28.17 Quitting Windows</h3>
+<h3 class="section">27.18 Quitting Windows</h3>
 
 <p>When you want to get rid of a window used for displaying a buffer, you
 can call <code>delete-window</code> or <code>delete-windows-on</code>
@@ -51,7 +51,7 @@ buffer is shown on a separate frame, you might want to call
 hand, a window has been reused for displaying the buffer, you might
 prefer showing the buffer previously shown in that window, by calling the
 function <code>switch-to-prev-buffer</code> (see <a href="Window-History.html#Window-History">Window History</a>). 
-Finally, you might want to either bury (see <a href="The-Buffer-List.html#The-Buffer-List">The Buffer List</a>) or kill
+Finally, you might want to either bury (see <a href="Buffer-List.html#Buffer-List">Buffer List</a>) or kill
 (see <a href="Killing-Buffers.html#Killing-Buffers">Killing Buffers</a>) the window's buffer.
 
    <p>The following command uses information on how the window for
@@ -59,7 +59,7 @@ displaying the buffer was obtained in the first place, thus attempting
 to automate the above decisions for you.
 
 <div class="defun">
-&mdash; Command: <b>quit-window</b><var> &amp;optional kill window<a name="index-quit_002dwindow-2390"></a></var><br>
+&mdash; Command: <b>quit-window</b><var> &amp;optional kill window<a name="index-quit_002dwindow-2591"></a></var><br>
 <blockquote><p>This command quits <var>window</var> and buries its buffer.  The argument
 <var>window</var> must be a live window and defaults to the selected one. 
 With prefix argument <var>kill</var> non-<code>nil</code>, it kills the buffer
@@ -68,7 +68,7 @@ described next to deal with the window and its buffer.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>quit-restore-window</b><var> &amp;optional window bury-or-kill<a name="index-quit_002drestore_002dwindow-2391"></a></var><br>
+&mdash; Function: <b>quit-restore-window</b><var> &amp;optional window bury-or-kill<a name="index-quit_002drestore_002dwindow-2592"></a></var><br>
 <blockquote><p>This function tries to restore the state of <var>window</var> that existed
 before its buffer was displayed in it.  The optional argument
 <var>window</var> must be a live window and defaults to the selected one.
@@ -127,14 +127,16 @@ buffer again without killing the buffer.
 one window that should be either quit, or whose buffer should be buried.
 
 <div class="defun">
-&mdash; User Option: <b>frame-auto-hide-function</b><var><a name="index-frame_002dauto_002dhide_002dfunction-2392"></a></var><br>
+&mdash; User Option: <b>frame-auto-hide-function</b><var><a name="index-frame_002dauto_002dhide_002dfunction-2593"></a></var><br>
 <blockquote><p>The function specified by this option is called to automatically hide
 frames.  This function is called with one argument&mdash;a frame.
 
-        <p>The function specified here is called by <code>bury-buffer</code> (see <a href="The-Buffer-List.html#The-Buffer-List">The Buffer List</a>) when the selected window is dedicated and shows the buffer
-to bury.  It is also called by <code>quit-restore-window</code> (see above)
-when the frame of the window to quit has been specially created for
-displaying that window's buffer and the buffer is not killed.
+        <p>The function specified here is called by <code>bury-buffer</code>
+(see <a href="Buffer-List.html#Buffer-List">Buffer List</a>) when the selected window is dedicated and shows
+the buffer to bury.  It is also called by <code>quit-restore-window</code>
+(see above) when the frame of the window to quit has been specially
+created for displaying that window's buffer and the buffer is not
+killed.
 
         <p>The default is to call <code>iconify-frame</code> (see <a href="Visibility-of-Frames.html#Visibility-of-Frames">Visibility of Frames</a>).  Alternatively, you may specify either <code>delete-frame</code>
 (see <a href="Deleting-Frames.html#Deleting-Frames">Deleting Frames</a>) to remove the frame from its display,

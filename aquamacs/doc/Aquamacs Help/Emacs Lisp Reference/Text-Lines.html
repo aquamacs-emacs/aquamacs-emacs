@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,9 +41,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Motion.html#Motion">Motion</a>
 <hr>
 </div>
 
-<h4 class="subsection">30.2.4 Motion by Text Lines</h4>
+<h4 class="subsection">29.2.4 Motion by Text Lines</h4>
 
-<p><a name="index-lines-2742"></a>
+<p><a name="index-lines-3017"></a>
   Text lines are portions of the buffer delimited by newline characters,
 which are regarded as part of the previous line.  The first text line
 begins at the beginning of the buffer, and the last text line ends at
@@ -53,7 +53,7 @@ of the window, by line continuation in display, or by how tabs and
 control characters are displayed.
 
 <div class="defun">
-&mdash; Command: <b>beginning-of-line</b><var> &amp;optional count<a name="index-beginning_002dof_002dline-2743"></a></var><br>
+&mdash; Command: <b>beginning-of-line</b><var> &amp;optional count<a name="index-beginning_002dof_002dline-3018"></a></var><br>
 <blockquote><p>This function moves point to the beginning of the current line.  With an
 argument <var>count</var> not <code>nil</code> or 1, it moves forward
 <var>count</var>&minus;1 lines and then to the beginning of the line.
@@ -73,13 +73,13 @@ is signaled.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>line-beginning-position</b><var> &amp;optional count<a name="index-line_002dbeginning_002dposition-2744"></a></var><br>
+&mdash; Function: <b>line-beginning-position</b><var> &amp;optional count<a name="index-line_002dbeginning_002dposition-3019"></a></var><br>
 <blockquote><p>Return the position that <code>(beginning-of-line </code><var>count</var><code>)</code>
 would move to. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>end-of-line</b><var> &amp;optional count<a name="index-end_002dof_002dline-2745"></a></var><br>
+&mdash; Command: <b>end-of-line</b><var> &amp;optional count<a name="index-end_002dof_002dline-3020"></a></var><br>
 <blockquote><p>This function moves point to the end of the current line.  With an
 argument <var>count</var> not <code>nil</code> or 1, it moves forward
 <var>count</var>&minus;1 lines and then to the end of the line.
@@ -96,18 +96,19 @@ is signaled.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>line-end-position</b><var> &amp;optional count<a name="index-line_002dend_002dposition-2746"></a></var><br>
+&mdash; Function: <b>line-end-position</b><var> &amp;optional count<a name="index-line_002dend_002dposition-3021"></a></var><br>
 <blockquote><p>Return the position that <code>(end-of-line </code><var>count</var><code>)</code>
 would move to. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>forward-line</b><var> &amp;optional count<a name="index-forward_002dline-2747"></a></var><br>
-<blockquote><p><a name="index-beginning-of-line-2748"></a>This function moves point forward <var>count</var> lines, to the beginning of
-the line.  If <var>count</var> is negative, it moves point
-&minus;<var>count</var> lines backward, to the beginning of a line.  If
-<var>count</var> is zero, it moves point to the beginning of the current
-line.  If <var>count</var> is <code>nil</code>, that means 1.
+&mdash; Command: <b>forward-line</b><var> &amp;optional count<a name="index-forward_002dline-3022"></a></var><br>
+<blockquote><p><a name="index-beginning-of-line-3023"></a>This function moves point forward <var>count</var> lines, to the beginning of
+the line following that.  If <var>count</var> is negative, it moves point
+&minus;<var>count</var> lines backward, to the beginning of a line
+preceding that.  If <var>count</var> is zero, it moves point to the
+beginning of the current line.  If <var>count</var> is <code>nil</code>, that
+means 1.
 
         <p>If <code>forward-line</code> encounters the beginning or end of the buffer (or
 of the accessible portion) before finding that many lines, it sets point
@@ -116,14 +117,18 @@ there.  No error is signaled.
         <p><code>forward-line</code> returns the difference between <var>count</var> and the
 number of lines actually moved.  If you attempt to move down five lines
 from the beginning of a buffer that has only three lines, point stops at
-the end of the last line, and the value will be 2.
+the end of the last line, and the value will be 2.  As an explicit
+exception, if the last accessible line is non-empty, but has no
+newline (e.g., if the buffer ends without a newline), the function
+sets point to the end of that line, and the value returned by the
+function counts that line as one line successfully moved.
 
         <p>In an interactive call, <var>count</var> is the numeric prefix argument. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>count-lines</b><var> start end<a name="index-count_002dlines-2749"></a></var><br>
-<blockquote><p><a name="index-lines-in-region-2750"></a><a name="Definition-of-count_002dlines"></a>This function returns the number of lines between the positions
+&mdash; Function: <b>count-lines</b><var> start end<a name="index-count_002dlines-3024"></a></var><br>
+<blockquote><p><a name="index-lines-in-region-3025"></a><a name="Definition-of-count_002dlines"></a>This function returns the number of lines between the positions
 <var>start</var> and <var>end</var> in the current buffer.  If <var>start</var> and
 <var>end</var> are equal, then it returns 0.  Otherwise it returns at least
 1, even if <var>start</var> and <var>end</var> are on the same line.  This is
@@ -132,8 +137,8 @@ least one line unless it is empty.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>count-words</b><var> start end<a name="index-count_002dwords-2751"></a></var><br>
-<blockquote><p><a name="index-words-in-region-2752"></a>This function returns the number of words between the positions
+&mdash; Command: <b>count-words</b><var> start end<a name="index-count_002dwords-3026"></a></var><br>
+<blockquote><p><a name="index-words-in-region-3027"></a>This function returns the number of words between the positions
 <var>start</var> and <var>end</var> in the current buffer.
 
         <p>This function can also be called interactively.  In that case, it
@@ -142,8 +147,8 @@ in the buffer, or in the region if the region is active.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>line-number-at-pos</b><var> &amp;optional pos<a name="index-line_002dnumber_002dat_002dpos-2753"></a></var><br>
-<blockquote><p><a name="index-line-number-2754"></a>This function returns the line number in the current buffer
+&mdash; Function: <b>line-number-at-pos</b><var> &amp;optional pos<a name="index-line_002dnumber_002dat_002dpos-3028"></a></var><br>
+<blockquote><p><a name="index-line-number-3029"></a>This function returns the line number in the current buffer
 corresponding to the buffer position <var>pos</var>.  If <var>pos</var> is <code>nil</code>
 or omitted, the current buffer position is used. 
 </p></blockquote></div>

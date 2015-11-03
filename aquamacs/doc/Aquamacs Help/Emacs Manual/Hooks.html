@@ -11,16 +11,16 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Manual',
-updated for Emacs version 24.3.50.
+updated for Emacs version 25.0.50.
 
-Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``The GNU
      Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     with the Front-Cover Texts being ``A GNU Manual,'' and with the
      Back-Cover Texts as in (a) below.  A copy of the license is
      included in the section entitled ``GNU Free Documentation
      License.''
@@ -42,9 +42,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
 <hr>
 </div>
 
-<h4 class="subsection">48.2.2 Hooks</h4>
+<h4 class="subsection">49.2.2 Hooks</h4>
 
-<p><a name="index-hook-4363"></a><a name="index-running-a-hook-4364"></a>
+<p><a name="index-hook-4521"></a><a name="index-running-a-hook-4522"></a>
   <dfn>Hooks</dfn> are an important mechanism for customizing Emacs.  A
 hook is a Lisp variable which holds a list of functions, to be called
 on some well-defined occasion.  (This is called <dfn>running the
@@ -52,13 +52,13 @@ hook</dfn>.)  The individual functions in the list are called the <dfn>hook
 functions</dfn> of the hook.  For example, the hook <code>kill-emacs-hook</code>
 runs just before exiting Emacs (see <a href="Exiting.html#Exiting">Exiting</a>).
 
-   <p><a name="index-normal-hook-4365"></a>  Most hooks are <dfn>normal hooks</dfn>.  This means that when Emacs runs
+   <p><a name="index-normal-hook-4523"></a>  Most hooks are <dfn>normal hooks</dfn>.  This means that when Emacs runs
 the hook, it calls each hook function in turn, with no arguments.  We
 have made an effort to keep most hooks normal, so that you can use
 them in a uniform way.  Every variable whose name ends in &lsquo;<samp><span class="samp">-hook</span></samp>&rsquo;
 is a normal hook.
 
-   <p><a name="index-abnormal-hook-4366"></a>  A few hooks are <dfn>abnormal hooks</dfn>.  Their names end in
+   <p><a name="index-abnormal-hook-4524"></a>  A few hooks are <dfn>abnormal hooks</dfn>.  Their names end in
 &lsquo;<samp><span class="samp">-functions</span></samp>&rsquo;, instead of &lsquo;<samp><span class="samp">-hook</span></samp>&rsquo; (some old code may also use
 the deprecated suffix &lsquo;<samp><span class="samp">-hooks</span></samp>&rsquo;).  What
 makes these hooks abnormal is the way its functions are
@@ -69,7 +69,7 @@ one hook function returns a non-<code>nil</code> value, the rest are not
 called at all (see <a href="Visiting.html#Visiting">Visiting</a>).  The documentation of each abnormal
 hook variable explains how its functions are used.
 
-   <p><a name="index-add_002dhook-4367"></a>  You can set a hook variable with <code>setq</code> like any other Lisp
+   <p><a name="index-add_002dhook-4525"></a>  You can set a hook variable with <code>setq</code> like any other Lisp
 variable, but the recommended way to add a function to a hook (either
 normal or abnormal) is to use <code>add-hook</code>, as shown by the
 following examples.  See <a href="../elisp/Hooks.html#Hooks">Hooks</a>, for details.
@@ -108,7 +108,7 @@ customize the indentation of C code:
      (add-hook 'c-mode-common-hook
        (lambda () (c-add-style "my-style" my-c-style t)))
 </pre>
-   <p><a name="index-Prog-mode-4368"></a><a name="index-program-editing-4369"></a>  Major mode hooks also apply to other major modes <dfn>derived</dfn> from
+   <p><a name="index-Prog-mode-4526"></a><a name="index-program-editing-4527"></a>  Major mode hooks also apply to other major modes <dfn>derived</dfn> from
 the original mode (see <a href="../elisp/Derived-Modes.html#Derived-Modes">Derived Modes</a>).  For instance, HTML mode is derived from Text mode
 (see <a href="HTML-Mode.html#HTML-Mode">HTML Mode</a>); when HTML mode is enabled, it runs
 <code>text-mode-hook</code> before running <code>html-mode-hook</code>.  This
@@ -123,13 +123,13 @@ they are executed does not matter.  Any dependence on the order is
 asking for trouble.  However, the order is predictable: the hook
 functions are executed in the order they appear in the hook.
 
-   <p><a name="index-remove_002dhook-4370"></a>  If you play with adding various different versions of a hook
+   <p><a name="index-remove_002dhook-4528"></a>  If you play with adding various different versions of a hook
 function by calling <code>add-hook</code> over and over, remember that all
 the versions you added will remain in the hook variable together.  You
 can clear out individual functions by calling <code>remove-hook</code>, or
 do <code>(setq </code><var>hook-variable</var><code> nil)</code> to remove everything.
 
-   <p><a name="index-buffer_002dlocal-hooks-4371"></a>  If the hook variable is buffer-local, the buffer-local variable will
+   <p><a name="index-buffer_002dlocal-hooks-4529"></a>  If the hook variable is buffer-local, the buffer-local variable will
 be used instead of the global variable.  However, if the buffer-local
 variable contains the element <code>t</code>, the global hook variable will
 be run as well.

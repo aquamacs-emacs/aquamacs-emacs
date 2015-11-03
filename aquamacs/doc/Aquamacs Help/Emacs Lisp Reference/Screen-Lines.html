@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,9 +41,10 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Motion.html#Motion">Motion</a>
 <hr>
 </div>
 
-<h4 class="subsection">30.2.5 Motion by Screen Lines</h4>
+<h4 class="subsection">29.2.5 Motion by Screen Lines</h4>
 
-<p>The line functions in the previous section count text lines, delimited
+<p><a name="index-screen-lines_002c-moving-by-3030"></a>
+  The line functions in the previous section count text lines, delimited
 only by newline characters.  By contrast, these functions count screen
 lines, which are defined by the way the text appears on the screen.  A
 text line is a single screen line if it is short enough to fit the width
@@ -62,12 +63,10 @@ in, and even on the selected window (because the width, the truncation
 flag, and display table may vary between windows).  See <a href="Usual-Display.html#Usual-Display">Usual Display</a>.
 
    <p>These functions scan text to determine where screen lines break, and
-thus take time proportional to the distance scanned.  If you intend to
-use them heavily, Emacs provides caches which may improve the
-performance of your code.  See <a href="Truncation.html#Truncation">cache-long-scans</a>.
+thus take time proportional to the distance scanned.
 
 <div class="defun">
-&mdash; Function: <b>vertical-motion</b><var> count &amp;optional window<a name="index-vertical_002dmotion-2755"></a></var><br>
+&mdash; Function: <b>vertical-motion</b><var> count &amp;optional window cur-col<a name="index-vertical_002dmotion-3031"></a></var><br>
 <blockquote><p>This function moves point to the start of the screen line <var>count</var>
 screen lines down from the screen line containing point.  If <var>count</var>
 is negative, it moves up instead.
@@ -75,7 +74,11 @@ is negative, it moves up instead.
         <p>The <var>count</var> argument can be a cons cell, <code>(</code><var>cols</var><code>
 . </code><var>lines</var><code>)</code>, instead of an integer.  Then the function moves by
 <var>lines</var> screen lines, and puts point <var>cols</var> columns from the
-start of that screen line.
+visual start of that screen line.  Note that <var>cols</var> are counted
+from the <em>visual</em> start of the line; if the window is scrolled
+horizontally (see <a href="Horizontal-Scrolling.html#Horizontal-Scrolling">Horizontal Scrolling</a>), the column on which point
+will end is in addition to the number of columns by which the text is
+scrolled.
 
         <p>The return value is the number of screen lines over which point was
 moved.  The value may be less in absolute value than <var>count</var> if
@@ -84,11 +87,19 @@ the beginning or end of the buffer was reached.
         <p>The window <var>window</var> is used for obtaining parameters such as the
 width, the horizontal scrolling, and the display table.  But
 <code>vertical-motion</code> always operates on the current buffer, even if
-<var>window</var> currently displays some other buffer. 
+<var>window</var> currently displays some other buffer.
+
+        <p>The optional argument <var>cur-col</var> specifies the current column when
+the function is called.  This is the window-relative horizontal
+coordinate of point, measured in units of font width of the frame's
+default face.  Providing it speeds up the function, especially in very
+long lines, because it doesn't have to go back in the buffer in order
+to determine the current column.  Note that <var>cur-col</var> is also
+counted from the visual start of the line. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>count-screen-lines</b><var> &amp;optional beg end count-final-newline window<a name="index-count_002dscreen_002dlines-2756"></a></var><br>
+&mdash; Function: <b>count-screen-lines</b><var> &amp;optional beg end count-final-newline window<a name="index-count_002dscreen_002dlines-3032"></a></var><br>
 <blockquote><p>This function returns the number of screen lines in the text from
 <var>beg</var> to <var>end</var>.  The number of screen lines may be different
 from the number of actual lines, due to line continuation, the display
@@ -110,7 +121,7 @@ any buffer, whether or not it is currently displayed in some window.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>move-to-window-line</b><var> count<a name="index-move_002dto_002dwindow_002dline-2757"></a></var><br>
+&mdash; Command: <b>move-to-window-line</b><var> count<a name="index-move_002dto_002dwindow_002dline-3033"></a></var><br>
 <blockquote><p>This function moves point with respect to the text currently displayed
 in the selected window.  It moves point to the beginning of the screen
 line <var>count</var> screen lines from the top of the window.  If
@@ -132,7 +143,7 @@ the top line in the window numbered 0.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>compute-motion</b><var> from frompos to topos width offsets window<a name="index-compute_002dmotion-2758"></a></var><br>
+&mdash; Function: <b>compute-motion</b><var> from frompos to topos width offsets window<a name="index-compute_002dmotion-3034"></a></var><br>
 <blockquote><p>This function scans the current buffer, calculating screen positions. 
 It scans the buffer forward from position <var>from</var>, assuming that is
 at screen coordinates <var>frompos</var>, to position <var>to</var> or coordinates

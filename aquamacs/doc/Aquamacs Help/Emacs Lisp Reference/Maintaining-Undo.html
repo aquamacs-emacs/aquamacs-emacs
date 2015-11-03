@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,7 +41,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
 <hr>
 </div>
 
-<h3 class="section">32.10 Maintaining Undo Lists</h3>
+<h3 class="section">31.10 Maintaining Undo Lists</h3>
 
 <p>This section describes how to enable and disable undo information for
 a given buffer.  It also explains how the undo list is truncated
@@ -54,7 +54,7 @@ disable undo recording with the following two functions, or by setting
 <code>buffer-undo-list</code> yourself.
 
 <div class="defun">
-&mdash; Command: <b>buffer-enable-undo</b><var> &amp;optional buffer-or-name<a name="index-buffer_002denable_002dundo-2916"></a></var><br>
+&mdash; Command: <b>buffer-enable-undo</b><var> &amp;optional buffer-or-name<a name="index-buffer_002denable_002dundo-3205"></a></var><br>
 <blockquote><p>This command enables recording undo information for buffer
 <var>buffer-or-name</var>, so that subsequent changes can be undone.  If no
 argument is supplied, then the current buffer is used.  This function
@@ -66,8 +66,8 @@ You cannot specify any other buffer.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>buffer-disable-undo</b><var> &amp;optional buffer-or-name<a name="index-buffer_002ddisable_002dundo-2917"></a></var><br>
-<blockquote><p><a name="index-disabling-undo-2918"></a>This function discards the undo list of <var>buffer-or-name</var>, and disables
+&mdash; Command: <b>buffer-disable-undo</b><var> &amp;optional buffer-or-name<a name="index-buffer_002ddisable_002dundo-3206"></a></var><br>
+<blockquote><p><a name="index-disabling-undo-3207"></a>This function discards the undo list of <var>buffer-or-name</var>, and disables
 further recording of undo information.  As a result, it is no longer
 possible to undo either previous changes or any subsequent changes.  If
 the undo list of <var>buffer-or-name</var> is already disabled, this function
@@ -79,7 +79,7 @@ cannot specify any other buffer.  This function returns <code>nil</code>.
 
    <p>As editing continues, undo lists get longer and longer.  To prevent
 them from using up all available memory space, garbage collection trims
-them back to size limits you can set.  (For this purpose, the &ldquo;size&rdquo;
+them back to size limits you can set.  (For this purpose, the size
 of an undo list measures the cons cells that make up the list, plus the
 strings of deleted text.)  Three variables control the range of acceptable
 sizes: <code>undo-limit</code>, <code>undo-strong-limit</code> and
@@ -88,13 +88,13 @@ number of bytes occupied, which includes both saved text and other
 data.
 
 <div class="defun">
-&mdash; User Option: <b>undo-limit</b><var><a name="index-undo_002dlimit-2919"></a></var><br>
+&mdash; User Option: <b>undo-limit</b><var><a name="index-undo_002dlimit-3208"></a></var><br>
 <blockquote><p>This is the soft limit for the acceptable size of an undo list.  The
 change group at which this size is exceeded is the last one kept. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>undo-strong-limit</b><var><a name="index-undo_002dstrong_002dlimit-2920"></a></var><br>
+&mdash; User Option: <b>undo-strong-limit</b><var><a name="index-undo_002dstrong_002dlimit-3209"></a></var><br>
 <blockquote><p>This is the upper limit for the acceptable size of an undo list.  The
 change group at which this size is exceeded is discarded itself (along
 with all older change groups).  There is one exception: the very latest
@@ -102,14 +102,14 @@ change group is only discarded if it exceeds <code>undo-outer-limit</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>undo-outer-limit</b><var><a name="index-undo_002douter_002dlimit-2921"></a></var><br>
+&mdash; User Option: <b>undo-outer-limit</b><var><a name="index-undo_002douter_002dlimit-3210"></a></var><br>
 <blockquote><p>If at garbage collection time the undo info for the current command
 exceeds this limit, Emacs discards the info and displays a warning. 
 This is a last ditch limit to prevent memory overflow. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>undo-ask-before-discard</b><var><a name="index-undo_002dask_002dbefore_002ddiscard-2922"></a></var><br>
+&mdash; User Option: <b>undo-ask-before-discard</b><var><a name="index-undo_002dask_002dbefore_002ddiscard-3211"></a></var><br>
 <blockquote><p>If this variable is non-<code>nil</code>, when the undo info exceeds
 <code>undo-outer-limit</code>, Emacs asks in the echo area whether to
 discard the info.  The default value is <code>nil</code>, which means to

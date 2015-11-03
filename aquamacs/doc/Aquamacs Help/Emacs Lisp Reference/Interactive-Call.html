@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,9 +41,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Command-Loop.html#Command-Loop">Command
 <hr>
 </div>
 
-<h3 class="section">21.3 Interactive Call</h3>
+<h3 class="section">20.3 Interactive Call</h3>
 
-<p><a name="index-interactive-call-1324"></a>
+<p><a name="index-interactive-call-1445"></a>
   After the command loop has translated a key sequence into a command,
 it invokes that command using the function <code>command-execute</code>.  If
 the command is a function, <code>command-execute</code> calls
@@ -56,7 +56,7 @@ keyboard macro.  It does not refer to the key sequence used to invoke
 a command (see <a href="Keymaps.html#Keymaps">Keymaps</a>).
 
 <div class="defun">
-&mdash; Function: <b>commandp</b><var> object &amp;optional for-call-interactively<a name="index-commandp-1325"></a></var><br>
+&mdash; Function: <b>commandp</b><var> object &amp;optional for-call-interactively<a name="index-commandp-1446"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if <var>object</var> is a command. 
 Otherwise, it returns <code>nil</code>.
 
@@ -79,7 +79,7 @@ realistic example of using <code>commandp</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>call-interactively</b><var> command &amp;optional record-flag keys<a name="index-call_002dinteractively-1326"></a></var><br>
+&mdash; Function: <b>call-interactively</b><var> command &amp;optional record-flag keys<a name="index-call_002dinteractively-1447"></a></var><br>
 <blockquote><p>This function calls the interactively callable function <var>command</var>,
 providing arguments according to its interactive calling specifications. 
 It returns whatever <var>command</var> returns.
@@ -104,7 +104,7 @@ they are considered commands, because they are not functions.  If
 <var>command</var> is a symbol, then <code>call-interactively</code> uses its
 function definition.
 
-        <p><a name="index-record-command-history-1327"></a>If <var>record-flag</var> is non-<code>nil</code>, then this command and its
+        <p><a name="index-record-command-history-1448"></a>If <var>record-flag</var> is non-<code>nil</code>, then this command and its
 arguments are unconditionally added to the list <code>command-history</code>. 
 Otherwise, the command is added only if it uses the minibuffer to read
 an argument.  See <a href="Command-History.html#Command-History">Command History</a>.
@@ -117,8 +117,8 @@ See <a href="Definition-of-this_002dcommand_002dkeys_002dvector.html#Definition-
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>command-execute</b><var> command &amp;optional record-flag keys special<a name="index-command_002dexecute-1328"></a></var><br>
-<blockquote><p><a name="index-keyboard-macro-execution-1329"></a>This function executes <var>command</var>.  The argument <var>command</var> must
+&mdash; Function: <b>command-execute</b><var> command &amp;optional record-flag keys special<a name="index-command_002dexecute-1449"></a></var><br>
+<blockquote><p><a name="index-keyboard-macro-execution-1450"></a>This function executes <var>command</var>.  The argument <var>command</var> must
 satisfy the <code>commandp</code> predicate; i.e., it must be an interactively
 callable function or a keyboard macro.
 
@@ -139,19 +139,19 @@ argument and not clear it.  This is used for executing special events
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>execute-extended-command</b><var> prefix-argument<a name="index-execute_002dextended_002dcommand-1330"></a></var><br>
-<blockquote><p><a name="index-read-command-name-1331"></a>This function reads a command name from the minibuffer using
+&mdash; Command: <b>execute-extended-command</b><var> prefix-argument<a name="index-execute_002dextended_002dcommand-1451"></a></var><br>
+<blockquote><p><a name="index-read-command-name-1452"></a>This function reads a command name from the minibuffer using
 <code>completing-read</code> (see <a href="Completion.html#Completion">Completion</a>).  Then it uses
 <code>command-execute</code> to call the specified command.  Whatever that
 command returns becomes the value of <code>execute-extended-command</code>.
 
-        <p><a name="index-execute-with-prefix-argument-1332"></a>If the command asks for a prefix argument, it receives the value
+        <p><a name="index-execute-with-prefix-argument-1453"></a>If the command asks for a prefix argument, it receives the value
 <var>prefix-argument</var>.  If <code>execute-extended-command</code> is called
 interactively, the current raw prefix argument is used for
 <var>prefix-argument</var>, and thus passed on to whatever command is run.
 
      <!-- !!! Should this be @kindex? -->
-        <p><a name="index-g_t_0040kbd_007bM_002dx_007d-1333"></a><code>execute-extended-command</code> is the normal definition of <kbd>M-x</kbd>,
+        <p><a name="index-g_t_0040kbd_007bM_002dx_007d-1454"></a><code>execute-extended-command</code> is the normal definition of <kbd>M-x</kbd>,
 so it uses the string &lsquo;<samp><span class="samp">M-x&nbsp;</span></samp>&rsquo;<!-- /@w --> as a prompt.  (It would be better
 to take the prompt from the events used to invoke
 <code>execute-extended-command</code>, but that is painful to implement.)  A

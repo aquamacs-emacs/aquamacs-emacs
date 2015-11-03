@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,9 +41,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Processes.html#Processes">Processes</a>
 <hr>
 </div>
 
-<h3 class="section">37.4 Creating an Asynchronous Process</h3>
+<h3 class="section">36.4 Creating an Asynchronous Process</h3>
 
-<p><a name="index-asynchronous-subprocess-3557"></a>
+<p><a name="index-asynchronous-subprocess-3898"></a>
   In this section, we describe how to create an <dfn>asynchronous
 process</dfn>.  After an asynchronous process is created, it runs in
 parallel with Emacs, and Emacs can communicate with it using the
@@ -52,7 +52,7 @@ communication is only partially asynchronous: Emacs sends data to the
 process only when certain functions are called, and Emacs accepts data
 from the process only while waiting for input or for a time delay.
 
-   <p><a name="index-pty-3558"></a><a name="index-pipe-3559"></a>  An asynchronous process is controlled either via a <dfn>pty</dfn>
+   <p><a name="index-pty-3899"></a><a name="index-pipe-3900"></a>  An asynchronous process is controlled either via a <dfn>pty</dfn>
 (pseudo-terminal) or a <dfn>pipe</dfn>.  The choice of pty or pipe is made
 when creating the process, based on the value of the variable
 <code>process-connection-type</code> (see below).  Ptys are usually
@@ -66,7 +66,7 @@ large (around 500 byte) messages.  Also, the total number of ptys is
 limited on many systems and it is good not to waste them.
 
 <div class="defun">
-&mdash; Function: <b>start-process</b><var> name buffer-or-name program &amp;rest args<a name="index-start_002dprocess-3560"></a></var><br>
+&mdash; Function: <b>start-process</b><var> name buffer-or-name program &amp;rest args<a name="index-start_002dprocess-3901"></a></var><br>
 <blockquote><p>This function creates a new asynchronous subprocess and starts the
 program <var>program</var> running in it.  It returns a process object that
 stands for the new subprocess in Lisp.  The argument <var>name</var>
@@ -113,7 +113,7 @@ finishes, and another message is inserted in the buffer for it.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>start-file-process</b><var> name buffer-or-name program &amp;rest args<a name="index-start_002dfile_002dprocess-3561"></a></var><br>
+&mdash; Function: <b>start-file-process</b><var> name buffer-or-name program &amp;rest args<a name="index-start_002dfile_002dprocess-3902"></a></var><br>
 <blockquote><p>Like <code>start-process</code>, this function starts a new asynchronous
 subprocess running <var>program</var> in it, and returns its process
 object.
@@ -140,7 +140,7 @@ this function does nothing and returns <code>nil</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>start-process-shell-command</b><var> name buffer-or-name command<a name="index-start_002dprocess_002dshell_002dcommand-3562"></a></var><br>
+&mdash; Function: <b>start-process-shell-command</b><var> name buffer-or-name command<a name="index-start_002dprocess_002dshell_002dcommand-3903"></a></var><br>
 <blockquote><p>This function is like <code>start-process</code>, except that it uses a shell
 to execute the specified command.  The argument <var>command</var> is a shell
 command name.  The variable <code>shell-file-name</code> specifies which shell to
@@ -156,14 +156,14 @@ you should also consider the security implications.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>start-file-process-shell-command</b><var> name buffer-or-name command<a name="index-start_002dfile_002dprocess_002dshell_002dcommand-3563"></a></var><br>
+&mdash; Function: <b>start-file-process-shell-command</b><var> name buffer-or-name command<a name="index-start_002dfile_002dprocess_002dshell_002dcommand-3904"></a></var><br>
 <blockquote><p>This function is like <code>start-process-shell-command</code>, but uses
 <code>start-file-process</code> internally.  Because of this, <var>command</var>
 can also be executed on remote hosts, depending on <code>default-directory</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>process-connection-type</b><var><a name="index-process_002dconnection_002dtype-3564"></a></var><br>
+&mdash; Variable: <b>process-connection-type</b><var><a name="index-process_002dconnection_002dtype-3905"></a></var><br>
 <blockquote><p>This variable controls the type of device used to communicate with
 asynchronous subprocesses.  If it is non-<code>nil</code>, then ptys are
 used, when available.  Otherwise, pipes are used.
@@ -178,6 +178,98 @@ with one subprocess by binding the variable around the call to
 </pre>
         <p>To determine whether a given subprocess actually got a pipe or a pty,
 use the function <code>process-tty-name</code> (see <a href="Process-Information.html#Process-Information">Process Information</a>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>make-process</b><var> &amp;rest args<a name="index-make_002dprocess-3906"></a></var><br>
+<blockquote><p>This function is like <code>start-process</code>, but takes keyword arguments.
+
+        <p>The arguments <var>args</var> are a list of keyword/argument pairs. 
+Omitting a keyword is always equivalent to specifying it with value
+<code>nil</code>.  Here are the meaningful keywords:
+
+          <dl>
+<dt>:name <var>name</var><dd>Use the string <var>name</var> as the process name.  It is modified if
+necessary to make it unique.
+
+          <br><dt>:buffer <var>buffer</var><dd>Use <var>buffer</var> as the process buffer.
+
+          <br><dt>:command <var>command</var><dd>Use <var>command</var> as the command line of the process.  <var>command</var>
+is a list starting with the program's executable file name, followed
+by strings to give to program as arguments.
+
+          <br><dt>:coding <var>coding</var><dd>If <var>coding</var> is a symbol, it specifies the coding system to be
+used for both reading and writing of data from and to the
+connection.  If <var>coding</var> is a cons cell
+<code>(</code><var>decoding</var><code>&nbsp;.&nbsp;</code><var>encoding</var><code>)</code><!-- /@w -->, then <var>decoding</var>
+will be used for reading and <var>encoding</var> for writing.
+
+          <p>If <var>coding</var> is <code>nil</code>, the default rules for finding the
+coding system will apply.  See <a href="Default-Coding-Systems.html#Default-Coding-Systems">Default Coding Systems</a>.
+
+          <br><dt>:connection-type <var>TYPE</var><dd>Initialize the type of device used to communicate with the subprocess. 
+Possible values are <code>pty</code> to use a pty, <code>pipe</code> to use a
+pipe, or <code>nil</code> to use the default derived from the value of
+the <code>process-connection-type</code> variable.
+
+          <br><dt>:noquery <var>query-flag</var><dd>Initialize the process query flag to <var>query-flag</var>. 
+See <a href="Query-Before-Exit.html#Query-Before-Exit">Query Before Exit</a>.
+
+          <br><dt>:stop <var>stopped</var><dd>If <var>stopped</var> is non-<code>nil</code>, start the process in the
+stopped state.
+
+          <br><dt>:filter <var>filter</var><dd>Initialize the process filter to <var>filter</var>.
+
+          <br><dt>:sentinel <var>sentinel</var><dd>Initialize the process sentinel to <var>sentinel</var>.
+
+          <br><dt>:stderr <var>stderr</var><dd>Associate <var>stderr</var> with the standard error of the process. 
+<var>stderr</var> is either a buffer or a pipe process created with
+<code>make-pipe-process</code>. 
+</dl>
+
+        <p>The original argument list, modified with the actual connection
+information, is available via the <code>process-contact</code> function. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>make-pipe-process</b><var> &amp;rest args<a name="index-make_002dpipe_002dprocess-3907"></a></var><br>
+<blockquote><p>This function creates a bidirectional pipe which can be attached to a
+child process (currently only useful with the <code>:stderr</code> keyword
+of <code>make-process</code>).
+
+        <p>The arguments <var>args</var> are a list of keyword/argument pairs. 
+Omitting a keyword is always equivalent to specifying it with value
+<code>nil</code>, except for <code>:coding</code>. 
+Here are the meaningful keywords:
+
+          <dl>
+<dt>:name <var>name</var><dd>Use the string <var>name</var> as the process name.  It is modified if
+necessary to make it unique.
+
+          <br><dt>:buffer <var>buffer</var><dd>Use <var>buffer</var> as the process buffer.
+
+          <br><dt>:coding <var>coding</var><dd>If <var>coding</var> is a symbol, it specifies the coding system to be
+used for both reading and writing of data from and to the
+connection.  If <var>coding</var> is a cons cell
+<code>(</code><var>decoding</var><code>&nbsp;.&nbsp;</code><var>encoding</var><code>)</code><!-- /@w -->, then <var>decoding</var>
+will be used for reading and <var>encoding</var> for writing.
+
+          <p>If <var>coding</var> is <code>nil</code>, the default rules for finding the
+coding system will apply.  See <a href="Default-Coding-Systems.html#Default-Coding-Systems">Default Coding Systems</a>.
+
+          <br><dt>:noquery <var>query-flag</var><dd>Initialize the process query flag to <var>query-flag</var>. 
+See <a href="Query-Before-Exit.html#Query-Before-Exit">Query Before Exit</a>.
+
+          <br><dt>:stop <var>stopped</var><dd>If <var>stopped</var> is non-<code>nil</code>, start the process in the
+stopped state.
+
+          <br><dt>:filter <var>filter</var><dd>Initialize the process filter to <var>filter</var>.
+
+          <br><dt>:sentinel <var>sentinel</var><dd>Initialize the process sentinel to <var>sentinel</var>. 
+</dl>
+
+        <p>The original argument list, modified with the actual connection
+information, is available via the <code>process-contact</code> function. 
 </p></blockquote></div>
 
    </body></html>

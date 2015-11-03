@@ -10,15 +10,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -39,13 +39,13 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Debugger.html#Debugger">Debugger</a>
 <hr>
 </div>
 
-<h4 class="subsection">18.1.8 Internals of the Debugger</h4>
+<h4 class="subsection">17.1.8 Internals of the Debugger</h4>
 
 <p>This section describes functions and variables used internally by the
 debugger.
 
 <div class="defun">
-&mdash; Variable: <b>debugger</b><var><a name="index-debugger-1004"></a></var><br>
+&mdash; Variable: <b>debugger</b><var><a name="index-debugger-1103"></a></var><br>
 <blockquote><p>The value of this variable is the function to call to invoke the
 debugger.  Its value must be a function of any number of arguments, or,
 more typically, the name of a function.  This function should invoke
@@ -58,8 +58,8 @@ of <code>debug</code> (see <a href="Invoking-the-Debugger.html#Invoking-the-Debu
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>backtrace</b><var><a name="index-backtrace-1005"></a></var><br>
-<blockquote><p><a name="index-run-time-stack-1006"></a><a name="index-call-stack-1007"></a>This function prints a trace of Lisp function calls currently active. 
+&mdash; Command: <b>backtrace</b><var><a name="index-backtrace-1104"></a></var><br>
+<blockquote><p><a name="index-run-time-stack-1105"></a><a name="index-call-stack-1106"></a>This function prints a trace of Lisp function calls currently active. 
 This is the function used by <code>debug</code> to fill up the
 <samp><span class="file">*Backtrace*</span></samp> buffer.  It is written in C, since it must have access
 to the stack to determine which function calls are active.  The return
@@ -102,8 +102,8 @@ forms are elided.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>debug-on-next-call</b><var><a name="index-debug_002don_002dnext_002dcall-1008"></a></var><br>
-<blockquote><p><a name="index-g_t_0040code_007beval_007d_002c-and-debugging-1009"></a><a name="index-g_t_0040code_007bapply_007d_002c-and-debugging-1010"></a><a name="index-g_t_0040code_007bfuncall_007d_002c-and-debugging-1011"></a>If this variable is non-<code>nil</code>, it says to call the debugger before
+&mdash; Variable: <b>debug-on-next-call</b><var><a name="index-debug_002don_002dnext_002dcall-1107"></a></var><br>
+<blockquote><p><a name="index-g_t_0040code_007beval_007d_002c-and-debugging-1108"></a><a name="index-g_t_0040code_007bapply_007d_002c-and-debugging-1109"></a><a name="index-g_t_0040code_007bfuncall_007d_002c-and-debugging-1110"></a>If this variable is non-<code>nil</code>, it says to call the debugger before
 the next <code>eval</code>, <code>apply</code> or <code>funcall</code>.  Entering the
 debugger sets <code>debug-on-next-call</code> to <code>nil</code>.
 
@@ -111,7 +111,7 @@ debugger sets <code>debug-on-next-call</code> to <code>nil</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>backtrace-debug</b><var> level flag<a name="index-backtrace_002ddebug-1012"></a></var><br>
+&mdash; Function: <b>backtrace-debug</b><var> level flag<a name="index-backtrace_002ddebug-1111"></a></var><br>
 <blockquote><p>This function sets the debug-on-exit flag of the stack frame <var>level</var>
 levels down the stack, giving it the value <var>flag</var>.  If <var>flag</var> is
 non-<code>nil</code>, this will cause the debugger to be entered when that
@@ -122,7 +122,7 @@ the debugger.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>command-debug-status</b><var><a name="index-command_002ddebug_002dstatus-1013"></a></var><br>
+&mdash; Variable: <b>command-debug-status</b><var><a name="index-command_002ddebug_002dstatus-1112"></a></var><br>
 <blockquote><p>This variable records the debugging status of the current interactive
 command.  Each time a command is called interactively, this variable is
 bound to <code>nil</code>.  The debugger can set this variable to leave
@@ -135,7 +135,7 @@ invocation.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>backtrace-frame</b><var> frame-number<a name="index-backtrace_002dframe-1014"></a></var><br>
+&mdash; Function: <b>backtrace-frame</b><var> frame-number<a name="index-backtrace_002dframe-1113"></a></var><br>
 <blockquote><p>The function <code>backtrace-frame</code> is intended for use in Lisp
 debuggers.  It returns information about what computation is happening
 in the stack frame <var>frame-number</var> levels down.
@@ -158,7 +158,7 @@ is represented as the tail of the list <var>arg-values</var>.
 
 <!-- *-texinfo-*- -->
 <!-- This is part of the GNU Emacs Lisp Reference Manual. -->
-<!-- Copyright (C) 1992-1994, 1998-1999, 2001-2013 Free Software -->
+<!-- Copyright (C) 1992-1994, 1998-1999, 2001-2015 Free Software -->
 <!-- Foundation, Inc. -->
 <!-- See the file elisp.texi for copying conditions. -->
 <!-- This file can also be used by an independent Edebug User -->

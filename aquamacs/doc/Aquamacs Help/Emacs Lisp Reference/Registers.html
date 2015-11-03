@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,9 +41,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
 <hr>
 </div>
 
-<h3 class="section">32.21 Registers</h3>
+<h3 class="section">31.21 Registers</h3>
 
-<p><a name="index-registers-3088"></a>
+<p><a name="index-registers-3388"></a>
   A register is a sort of variable used in Emacs editing that can hold a
 variety of different kinds of values.  Each register is named by a
 single character.  All <acronym>ASCII</acronym> characters and their meta variants
@@ -52,7 +52,7 @@ Thus, there are 255 possible registers.  A register is designated in
 Emacs Lisp by the character that is its name.
 
 <div class="defun">
-&mdash; Variable: <b>register-alist</b><var><a name="index-register_002dalist-3089"></a></var><br>
+&mdash; Variable: <b>register-alist</b><var><a name="index-register_002dalist-3389"></a></var><br>
 <blockquote><p>This variable is an alist of elements of the form <code>(</code><var>name</var><code> . 
 </code><var>contents</var><code>)</code>.  Normally, there is one element for each Emacs
 register that has been used.
@@ -93,33 +93,34 @@ confirmation first.
 otherwise stated.
 
 <div class="defun">
-&mdash; Function: <b>get-register</b><var> reg<a name="index-get_002dregister-3090"></a></var><br>
+&mdash; Function: <b>get-register</b><var> reg<a name="index-get_002dregister-3390"></a></var><br>
 <blockquote><p>This function returns the contents of the register
 <var>reg</var>, or <code>nil</code> if it has no contents. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-register</b><var> reg value<a name="index-set_002dregister-3091"></a></var><br>
+&mdash; Function: <b>set-register</b><var> reg value<a name="index-set_002dregister-3391"></a></var><br>
 <blockquote><p>This function sets the contents of register <var>reg</var> to <var>value</var>. 
 A register can be set to any value, but the other register functions
 expect only certain data types.  The return value is <var>value</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>view-register</b><var> reg<a name="index-view_002dregister-3092"></a></var><br>
+&mdash; Command: <b>view-register</b><var> reg<a name="index-view_002dregister-3392"></a></var><br>
 <blockquote><p>This command displays what is contained in register <var>reg</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>insert-register</b><var> reg &amp;optional beforep<a name="index-insert_002dregister-3093"></a></var><br>
+&mdash; Command: <b>insert-register</b><var> reg &amp;optional beforep<a name="index-insert_002dregister-3393"></a></var><br>
 <blockquote><p>This command inserts contents of register <var>reg</var> into the current
 buffer.
 
         <p>Normally, this command puts point before the inserted text, and the
 mark after it.  However, if the optional second argument <var>beforep</var>
-is non-<code>nil</code>, it puts the mark before and point after. 
-You can pass a non-<code>nil</code> second argument <var>beforep</var> to this
-function interactively by supplying any prefix argument.
+is non-<code>nil</code>, it puts the mark before and point after.
+
+        <p>When called interactively, the command defaults to putting point after
+text, and a prefix argument inverts this behavior.
 
         <p>If the register contains a rectangle, then the rectangle is inserted
 with its upper left corner at point.  This means that text is inserted
@@ -128,6 +129,18 @@ in the current line and underneath it on successive lines.
         <p>If the register contains something other than saved text (a string) or
 a rectangle (a list), currently useless things happen.  This may be
 changed in the future. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>register-read-with-preview</b><var> prompt<a name="index-register_002dread_002dwith_002dpreview-3394"></a></var><br>
+<blockquote><p><a name="index-register-preview-3395"></a>This function reads and returns a register name, prompting with
+<var>prompt</var> and possibly showing a preview of the existing registers
+and their contents.  The preview is shown in a temporary window, after
+the delay specified by the user option <code>register-preview-delay</code>,
+if its value and <code>register-alist</code> are both non-<code>nil</code>.  The
+preview is also shown if the user requests help (e.g., by typing the
+help character).  We recommend that all interactive commands which
+read register names use this function. 
 </p></blockquote></div>
 
    </body></html>

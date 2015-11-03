@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,22 +41,22 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
 <hr>
 </div>
 
-<h3 class="section">29.14 Mouse Position</h3>
+<h3 class="section">28.15 Mouse Position</h3>
 
-<p><a name="index-mouse-position-2645"></a><a name="index-position-of-mouse-2646"></a>
+<p><a name="index-mouse-position-2916"></a><a name="index-position-of-mouse-2917"></a>
   The functions <code>mouse-position</code> and <code>set-mouse-position</code>
 give access to the current position of the mouse.
 
 <div class="defun">
-&mdash; Function: <b>mouse-position</b><var><a name="index-mouse_002dposition-2647"></a></var><br>
+&mdash; Function: <b>mouse-position</b><var><a name="index-mouse_002dposition-2918"></a></var><br>
 <blockquote><p>This function returns a description of the position of the mouse.  The
 value looks like <code>(</code><var>frame</var> <var>x</var><code> . </code><var>y</var><code>)</code>, where <var>x</var>
-and <var>y</var> are integers giving the position in characters relative to
-the top left corner of the inside of <var>frame</var>. 
+and <var>y</var> are integers giving the (possibly rounded) position in
+multiples of the default character size of <var>frame</var> (see <a href="Frame-Font.html#Frame-Font">Frame Font</a>) relative to the native position of <var>frame</var> (see <a href="Frame-Geometry.html#Frame-Geometry">Frame Geometry</a>). 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>mouse-position-function</b><var><a name="index-mouse_002dposition_002dfunction-2648"></a></var><br>
+&mdash; Variable: <b>mouse-position-function</b><var><a name="index-mouse_002dposition_002dfunction-2919"></a></var><br>
 <blockquote><p>If non-<code>nil</code>, the value of this variable is a function for
 <code>mouse-position</code> to call.  <code>mouse-position</code> calls this
 function just before returning, with its normal return value as the
@@ -67,32 +67,57 @@ sole argument, and it returns whatever this function returns to it.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-mouse-position</b><var> frame x y<a name="index-set_002dmouse_002dposition-2649"></a></var><br>
+&mdash; Function: <b>set-mouse-position</b><var> frame x y<a name="index-set_002dmouse_002dposition-2920"></a></var><br>
 <blockquote><p>This function <dfn>warps the mouse</dfn> to position <var>x</var>, <var>y</var> in
 frame <var>frame</var>.  The arguments <var>x</var> and <var>y</var> are integers,
-giving the position in characters relative to the top left corner of the
-inside of <var>frame</var>.  If <var>frame</var> is not visible, this function
-does nothing.  The return value is not significant. 
+giving the position in multiples of the default character size of
+<var>frame</var> (see <a href="Frame-Font.html#Frame-Font">Frame Font</a>) relative to the native position of
+<var>frame</var> (see <a href="Frame-Geometry.html#Frame-Geometry">Frame Geometry</a>).
+
+        <p>The resulting mouse position is constrained to the native frame of
+<var>frame</var>.  If <var>frame</var> is not visible, this function does nothing. 
+The return value is not significant. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>mouse-pixel-position</b><var><a name="index-mouse_002dpixel_002dposition-2650"></a></var><br>
+&mdash; Function: <b>mouse-pixel-position</b><var><a name="index-mouse_002dpixel_002dposition-2921"></a></var><br>
 <blockquote><p>This function is like <code>mouse-position</code> except that it returns
 coordinates in units of pixels rather than units of characters. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-mouse-pixel-position</b><var> frame x y<a name="index-set_002dmouse_002dpixel_002dposition-2651"></a></var><br>
+&mdash; Function: <b>set-mouse-pixel-position</b><var> frame x y<a name="index-set_002dmouse_002dpixel_002dposition-2922"></a></var><br>
 <blockquote><p>This function warps the mouse like <code>set-mouse-position</code> except that
 <var>x</var> and <var>y</var> are in units of pixels rather than units of
-characters.  These coordinates are not required to be within the frame.
+characters.
 
-        <p>If <var>frame</var> is not visible, this function does nothing.  The return
-value is not significant. 
+        <p>The resulting mouse position is not constrained to the native frame of
+<var>frame</var>.  If <var>frame</var> is not visible, this function does nothing. 
+The return value is not significant. 
+</p></blockquote></div>
+
+   <p>On a graphical terminal the following two functions allow to retrieve
+and set the absolute position of the mouse cursor.
+
+<div class="defun">
+&mdash; Function: <b>mouse-absolute-pixel-position</b><var><a name="index-mouse_002dabsolute_002dpixel_002dposition-2923"></a></var><br>
+<blockquote><p>This function returns a cons cell (<var>x</var> . <var>y</var>) of the coordinates
+of the mouse cursor position in pixels, relative to a position (0, 0) of
+the selected frame's display. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>frame-pointer-visible-p</b><var> &amp;optional frame<a name="index-frame_002dpointer_002dvisible_002dp-2652"></a></var><br>
+&mdash; Function: <b>set-mouse-absolute-pixel-position</b><var> x y<a name="index-set_002dmouse_002dabsolute_002dpixel_002dposition-2924"></a></var><br>
+<blockquote><p>This function moves the mouse cursor to the position (<var>x</var>, <var>y</var>). 
+The coordinates <var>x</var> and <var>y</var> are interpreted in pixels relative
+to a position (0, 0) of the selected frame's display. 
+</p></blockquote></div>
+
+   <p>The following function can tell whether the mouse cursor is currently
+visible on a frame:
+
+<div class="defun">
+&mdash; Function: <b>frame-pointer-visible-p</b><var> &amp;optional frame<a name="index-frame_002dpointer_002dvisible_002dp-2925"></a></var><br>
 <blockquote><p>This predicate function returns non-<code>nil</code> if the mouse pointer
 displayed on <var>frame</var> is visible; otherwise it returns <code>nil</code>. 
 <var>frame</var> omitted or <code>nil</code> means the selected frame.  This is

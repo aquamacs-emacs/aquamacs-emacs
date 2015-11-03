@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -43,7 +43,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
 
 <h3 class="section">11.3 Local Variables</h3>
 
-<p><a name="index-binding-local-variables-615"></a><a name="index-local-variables-616"></a><a name="index-local-binding-617"></a><a name="index-global-binding-618"></a>
+<p><a name="index-binding-local-variables-715"></a><a name="index-local-variables-716"></a><a name="index-local-binding-717"></a><a name="index-global-binding-718"></a>
   Global variables have values that last until explicitly superseded
 with new values.  Sometimes it is useful to give a variable a
 <dfn>local value</dfn>&mdash;a value that takes effect only within a certain
@@ -61,7 +61,7 @@ take effect within the body of the <code>let</code> form.
    <p>We also speak of the <dfn>global binding</dfn>, which is where
 (conceptually) the global value is kept.
 
-   <p><a name="index-shadowing-of-variables-619"></a>  Establishing a local binding saves away the variable's previous
+   <p><a name="index-shadowing-of-variables-719"></a>  Establishing a local binding saves away the variable's previous
 value (or lack of one).  We say that the previous value is
 <dfn>shadowed</dfn>.  Both global and local values may be shadowed.  If a
 local binding is in effect, using <code>setq</code> on the local variable
@@ -69,14 +69,14 @@ stores the specified value in the local binding.  When that local
 binding is no longer in effect, the previously shadowed value (or lack
 of one) comes back.
 
-   <p><a name="index-current-binding-620"></a>  A variable can have more than one local binding at a time (e.g., if
+   <p><a name="index-current-binding-720"></a>  A variable can have more than one local binding at a time (e.g., if
 there are nested <code>let</code> forms that bind the variable).  The
 <dfn>current binding</dfn> is the local binding that is actually in effect. 
 It determines the value returned by evaluating the variable symbol,
 and it is the binding acted on by <code>setq</code>.
 
    <p>For most purposes, you can think of the current binding as the
-&ldquo;innermost&rdquo; local binding, or the global binding if there is no
+innermost local binding, or the global binding if there is no
 local binding.  To be more precise, a rule called the <dfn>scoping
 rule</dfn> determines where in a program a local binding takes effect.  The
 default scoping rule in Emacs Lisp is called <dfn>dynamic scoping</dfn>,
@@ -89,7 +89,7 @@ alternative scoping rule called <dfn>lexical scoping</dfn>, See <a href="Variabl
 bindings:
 
 <div class="defun">
-&mdash; Special Form: <b>let</b> (<var>bindings<small class="dots">...</small></var>)<var> forms<small class="dots">...</small><a name="index-let-621"></a></var><br>
+&mdash; Special Form: <b>let</b> (<var>bindings<small class="dots">...</small></var>)<var> forms<small class="dots">...</small><a name="index-let-721"></a></var><br>
 <blockquote><p>This special form sets up local bindings for a certain set of
 variables, as specified by <var>bindings</var>, and then evaluates all of
 the <var>forms</var> in textual order.  Its return value is the value of
@@ -117,7 +117,7 @@ Here is an example of this: <code>z</code> is bound to the old value of
         </blockquote></div>
 
 <div class="defun">
-&mdash; Special Form: <b>let*</b> (<var>bindings<small class="dots">...</small></var>)<var> forms<small class="dots">...</small><a name="index-let_002a-622"></a></var><br>
+&mdash; Special Form: <b>let*</b> (<var>bindings<small class="dots">...</small></var>)<var> forms<small class="dots">...</small><a name="index-let_002a-722"></a></var><br>
 <blockquote><p>This special form is like <code>let</code>, but it binds each variable right
 after computing its local value, before computing the local value for
 the next variable.  Therefore, an expression in <var>bindings</var> can
@@ -148,11 +148,11 @@ bindings:
    <p>Variables can also have buffer-local bindings (see <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables">Buffer-Local Variables</a>); a few variables have terminal-local bindings
 (see <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>).  These kinds of bindings work somewhat
 like ordinary local bindings, but they are localized depending on
-&ldquo;where&rdquo; you are in Emacs.
+where you are in Emacs.
 
 <div class="defun">
-&mdash; User Option: <b>max-specpdl-size</b><var><a name="index-max_002dspecpdl_002dsize-623"></a></var><br>
-<blockquote><p><a name="Definition-of-max_002dspecpdl_002dsize"></a><a name="index-variable-limit-error-624"></a><a name="index-evaluation-error-625"></a><a name="index-infinite-recursion-626"></a>This variable defines the limit on the total number of local variable
+&mdash; User Option: <b>max-specpdl-size</b><var><a name="index-max_002dspecpdl_002dsize-723"></a></var><br>
+<blockquote><p><a name="Definition-of-max_002dspecpdl_002dsize"></a><a name="index-variable-limit-error-724"></a><a name="index-evaluation-error-725"></a><a name="index-infinite-recursion-726"></a>This variable defines the limit on the total number of local variable
 bindings and <code>unwind-protect</code> cleanups (see <a href="Cleanups.html#Cleanups">Cleaning Up from Nonlocal Exits</a>) that are allowed before Emacs
 signals an error (with data <code>"Variable binding depth exceeds
 max-specpdl-size"</code>).

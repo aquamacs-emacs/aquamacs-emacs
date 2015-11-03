@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,14 +41,15 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Images.html#Images">Images</a>
 <hr>
 </div>
 
-<h4 class="subsection">38.16.9 Showing Images</h4>
+<h4 class="subsection">37.17.9 Showing Images</h4>
 
-<p>You can use an image descriptor by setting up the <code>display</code>
+<p><a name="index-show-image-4351"></a>
+  You can use an image descriptor by setting up the <code>display</code>
 property yourself, but it is easier to use the functions in this
 section.
 
 <div class="defun">
-&mdash; Function: <b>insert-image</b><var> image &amp;optional string area slice<a name="index-insert_002dimage-3945"></a></var><br>
+&mdash; Function: <b>insert-image</b><var> image &amp;optional string area slice<a name="index-insert_002dimage-4352"></a></var><br>
 <blockquote><p>This function inserts <var>image</var> in the current buffer at point.  The
 value <var>image</var> should be an image descriptor; it could be a value
 returned by <code>create-image</code>, or the value of a symbol defined with
@@ -67,7 +68,7 @@ buffer's text.
 Otherwise, <var>slice</var> is a list <code>(</code><var>x</var> <var>y</var> <var>width</var>
 <var>height</var><code>)</code> which specifies the <var>x</var> and <var>y</var> positions and
 <var>width</var> and <var>height</var> of the image area to insert.  Integer
-values are in units of pixels.  A floating point number in the range
+values are in units of pixels.  A floating-point number in the range
 0.0&ndash;1.0 stands for that fraction of the width or height of the entire
 image.
 
@@ -75,22 +76,22 @@ image.
 it a <code>display</code> property which specifies <var>image</var>.  See <a href="Display-Property.html#Display-Property">Display Property</a>. 
 </p></blockquote></div>
 
-   <p><a name="index-slice_002c-image-3946"></a><a name="index-image-slice-3947"></a>
+   <p><a name="index-slice_002c-image-4353"></a><a name="index-image-slice-4354"></a>
 
 <div class="defun">
-&mdash; Function: <b>insert-sliced-image</b><var> image &amp;optional string area rows cols<a name="index-insert_002dsliced_002dimage-3948"></a></var><br>
+&mdash; Function: <b>insert-sliced-image</b><var> image &amp;optional string area rows cols<a name="index-insert_002dsliced_002dimage-4355"></a></var><br>
 <blockquote><p>This function inserts <var>image</var> in the current buffer at point, like
 <code>insert-image</code>, but splits the image into <var>rows</var>x<var>cols</var>
 equally sized slices.
 
-        <p>If an image is inserted &ldquo;sliced&rdquo;, Emacs displays each slice as a
-separate image, and allow more intuitive scrolling up/down, instead of
+        <p>Emacs displays each slice as a
+separate image, and allows more intuitive scrolling up/down, instead of
 jumping up/down the entire image when paging through a buffer that
 displays (large) images. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>put-image</b><var> image pos &amp;optional string area<a name="index-put_002dimage-3949"></a></var><br>
+&mdash; Function: <b>put-image</b><var> image pos &amp;optional string area<a name="index-put_002dimage-4356"></a></var><br>
 <blockquote><p>This function puts image <var>image</var> in front of <var>pos</var> in the
 current buffer.  The argument <var>pos</var> should be an integer or a
 marker.  It specifies the buffer position where the image should appear. 
@@ -112,7 +113,7 @@ property whose value is the image.  (Whew!)
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>remove-images</b><var> start end &amp;optional buffer<a name="index-remove_002dimages-3950"></a></var><br>
+&mdash; Function: <b>remove-images</b><var> start end &amp;optional buffer<a name="index-remove_002dimages-4357"></a></var><br>
 <blockquote><p>This function removes images in <var>buffer</var> between positions
 <var>start</var> and <var>end</var>.  If <var>buffer</var> is omitted or <code>nil</code>,
 images are removed from the current buffer.
@@ -123,25 +124,25 @@ images are removed from the current buffer.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>image-size</b><var> spec &amp;optional pixels frame<a name="index-image_002dsize-3951"></a></var><br>
-<blockquote><p>This function returns the size of an image as a pair
+&mdash; Function: <b>image-size</b><var> spec &amp;optional pixels frame<a name="index-image_002dsize-4358"></a></var><br>
+<blockquote><p><a name="index-size-of-image-4359"></a>This function returns the size of an image as a pair
 <code>(</code><var>width</var><code>&nbsp;.&nbsp;</code><var>height</var><code>)</code><!-- /@w -->.  <var>spec</var> is an image
-specification.  <var>pixels</var> non-<code>nil</code> means return sizes
-measured in pixels, otherwise return sizes measured in canonical
-character units (fractions of the width/height of the frame's default
-font).  <var>frame</var> is the frame on which the image will be displayed. 
-<var>frame</var> null or omitted means use the selected frame (see <a href="Input-Focus.html#Input-Focus">Input Focus</a>). 
+specification.  <var>pixels</var> non-<code>nil</code> means return sizes measured
+in pixels, otherwise return sizes measured in the default character size
+of <var>frame</var> (see <a href="Frame-Font.html#Frame-Font">Frame Font</a>).  <var>frame</var> is the frame on which
+the image will be displayed.  <var>frame</var> null or omitted means use the
+selected frame (see <a href="Input-Focus.html#Input-Focus">Input Focus</a>). 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>max-image-size</b><var><a name="index-max_002dimage_002dsize-3952"></a></var><br>
+&mdash; Variable: <b>max-image-size</b><var><a name="index-max_002dimage_002dsize-4360"></a></var><br>
 <blockquote><p>This variable is used to define the maximum size of image that Emacs
 will load.  Emacs will refuse to load (and display) any image that is
 larger than this limit.
 
         <p>If the value is an integer, it directly specifies the maximum
-image height and width, measured in pixels.  If it is a floating
-point number, it specifies the maximum image height and width
+image height and width, measured in pixels.  If it is floating
+point, it specifies the maximum image height and width
 as a ratio to the frame height and width.  If the value is
 non-numeric, there is no explicit limit on the size of images.
 
@@ -149,7 +150,7 @@ non-numeric, there is no explicit limit on the size of images.
 from accidentally being loaded into Emacs.  It only takes effect the
 first time an image is loaded.  Once an image is placed in the image
 cache, it can always be displayed, even if the value of
-<var>max-image-size</var> is subsequently changed (see <a href="Image-Cache.html#Image-Cache">Image Cache</a>). 
+<code>max-image-size</code> is subsequently changed (see <a href="Image-Cache.html#Image-Cache">Image Cache</a>). 
 </p></blockquote></div>
 
    </body></html>

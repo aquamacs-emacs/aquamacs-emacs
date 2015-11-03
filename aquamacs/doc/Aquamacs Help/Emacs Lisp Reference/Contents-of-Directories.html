@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,9 +41,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
 <hr>
 </div>
 
-<h3 class="section">25.9 Contents of Directories</h3>
+<h3 class="section">24.9 Contents of Directories</h3>
 
-<p><a name="index-directory_002doriented-functions-2040"></a><a name="index-file-names-in-directory-2041"></a>
+<p><a name="index-directory_002doriented-functions-2200"></a><a name="index-file-names-in-directory-2201"></a>
   A directory is a kind of file that contains other files entered under
 various names.  Directories are a feature of the file system.
 
@@ -53,7 +53,7 @@ the latter case, it can optionally display information about each file,
 depending on the options passed to the <code>ls</code> command.
 
 <div class="defun">
-&mdash; Function: <b>directory-files</b><var> directory &amp;optional full-name match-regexp nosort<a name="index-directory_002dfiles-2042"></a></var><br>
+&mdash; Function: <b>directory-files</b><var> directory &amp;optional full-name match-regexp nosort<a name="index-directory_002dfiles-2202"></a></var><br>
 <blockquote><p>This function returns a list of the names of the files in the directory
 <var>directory</var>.  By default, the list is in alphabetical order.
 
@@ -83,7 +83,16 @@ that can be read.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>directory-files-and-attributes</b><var> directory &amp;optional full-name match-regexp nosort id-format<a name="index-directory_002dfiles_002dand_002dattributes-2043"></a></var><br>
+&mdash; Function: <b>directory-files-recursively</b><var> directory match &amp;optional include-directories<a name="index-directory_002dfiles_002drecursively-2203"></a></var><br>
+<blockquote><p>Return all files under <var>directory</var> whose file names match
+<var>match</var> recursively.  The file names are returned depth first,
+meaning that contents of sub-directories are returned before contents
+of the directories.  If <var>include-directories</var> is non-<code>nil</code>,
+also return directory names that have matching names. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>directory-files-and-attributes</b><var> directory &amp;optional full-name match-regexp nosort id-format<a name="index-directory_002dfiles_002dand_002dattributes-2204"></a></var><br>
 <blockquote><p>This is similar to <code>directory-files</code> in deciding which files
 to report on and how to report their names.  However, instead
 of returning a list of file names, it returns for each file a
@@ -94,7 +103,7 @@ corresponding argument to <code>file-attributes</code> (see <a href="Definition-
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>file-expand-wildcards</b><var> pattern &amp;optional full<a name="index-file_002dexpand_002dwildcards-2044"></a></var><br>
+&mdash; Function: <b>file-expand-wildcards</b><var> pattern &amp;optional full<a name="index-file_002dexpand_002dwildcards-2205"></a></var><br>
 <blockquote><p>This function expands the wildcard pattern <var>pattern</var>, returning
 a list of file names that match it.
 
@@ -108,7 +117,7 @@ normally also relative to the current default directory.  However, if
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>insert-directory</b><var> file switches &amp;optional wildcard full-directory-p<a name="index-insert_002ddirectory-2045"></a></var><br>
+&mdash; Function: <b>insert-directory</b><var> file switches &amp;optional wildcard full-directory-p<a name="index-insert_002ddirectory-2206"></a></var><br>
 <blockquote><p>This function inserts (in the current buffer) a directory listing for
 directory <var>file</var>, formatted with <code>ls</code> according to
 <var>switches</var>.  It leaves point after the inserted text. 
@@ -144,7 +153,7 @@ as any other option.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>insert-directory-program</b><var><a name="index-insert_002ddirectory_002dprogram-2046"></a></var><br>
+&mdash; Variable: <b>insert-directory-program</b><var><a name="index-insert_002ddirectory_002dprogram-2207"></a></var><br>
 <blockquote><p>This variable's value is the program to run to generate a directory listing
 for the function <code>insert-directory</code>.  It is ignored on systems
 which generate the listing with Lisp code. 

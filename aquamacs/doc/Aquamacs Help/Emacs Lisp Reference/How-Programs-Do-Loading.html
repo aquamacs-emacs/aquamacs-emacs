@@ -10,15 +10,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -49,7 +49,7 @@ file if it isn't already loaded (see <a href="Named-Features.html#Named-Features
 all these facilities call the <code>load</code> function to do the work.
 
 <div class="defun">
-&mdash; Function: <b>load</b><var> filename &amp;optional missing-ok nomessage nosuffix must-suffix<a name="index-load-848"></a></var><br>
+&mdash; Function: <b>load</b><var> filename &amp;optional missing-ok nomessage nosuffix must-suffix<a name="index-load-981"></a></var><br>
 <blockquote><p>This function finds and opens a file of Lisp code, evaluates all the
 forms in it, and closes the file.
 
@@ -70,7 +70,7 @@ indeed find it.)
 of the file before trying other file names.  It decompresses and loads
 it if it exists.  It looks for compressed versions by appending each
 of the suffixes in <code>jka-compr-load-suffixes</code> to the file name. 
-The value of this variable must be a list of strings. Its standard
+The value of this variable must be a list of strings.  Its standard
 value is <code>(".gz")</code>.
 
         <p>If the optional argument <var>nosuffix</var> is non-<code>nil</code>, then
@@ -86,6 +86,10 @@ being tried.
 <code>load</code> insists that the file name used must end in either
 &lsquo;<samp><span class="samp">.el</span></samp>&rsquo; or &lsquo;<samp><span class="samp">.elc</span></samp>&rsquo; (possibly extended with a compression
 suffix), unless it contains an explicit directory name.
+
+        <p>If the option <code>load-prefer-newer</code> is non-<code>nil</code>, then when
+searching suffixes, <code>load</code> selects whichever version of a file
+(&lsquo;<samp><span class="samp">.elc</span></samp>&rsquo;, &lsquo;<samp><span class="samp">.el</span></samp>&rsquo;, etc.) has been modified most recently.
 
         <p>If <var>filename</var> is a relative file name, such as <samp><span class="file">foo</span></samp> or
 <samp><span class="file">baz/foo.bar</span></samp>, <code>load</code> searches for the file using the variable
@@ -110,7 +114,7 @@ See <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>.
 
      <!-- This is referred to from the Macros chapter. -->
      <!-- Not sure if it should be the other way round. -->
-        <p><a name="index-eager-macro-expansion-849"></a>When loading an uncompiled file, Emacs tries to expand any macros
+        <p><a name="index-eager-macro-expansion-982"></a>When loading an uncompiled file, Emacs tries to expand any macros
 that the file contains (see <a href="Macros.html#Macros">Macros</a>).  We refer to this as
 <dfn>eager macro expansion</dfn>.  Doing this (rather than deferring
 the expansion until the relevant code runs) can significantly speed
@@ -130,11 +134,11 @@ during compilation.  See <a href="Compiling-Macros.html#Compiling-Macros">Compil
 in the echo area during loading unless <var>nomessage</var> is
 non-<code>nil</code>.
 
-        <p><a name="index-load-errors-850"></a>Any unhandled errors while loading a file terminate loading.  If the
+        <p><a name="index-load-errors-983"></a>Any unhandled errors while loading a file terminate loading.  If the
 load was done for the sake of <code>autoload</code>, any function definitions
 made during the loading are undone.
 
-        <p><a name="index-file_002derror-851"></a>If <code>load</code> can't find the file to load, then normally it signals the
+        <p><a name="index-file_002derror-984"></a>If <code>load</code> can't find the file to load, then normally it signals the
 error <code>file-error</code> (with &lsquo;<samp><span class="samp">Cannot open load file
 </span><var>filename</var></samp>&rsquo;).  But if <var>missing-ok</var> is non-<code>nil</code>, then
 <code>load</code> just returns <code>nil</code>.
@@ -147,7 +151,7 @@ See below.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>load-file</b><var> filename<a name="index-load_002dfile-852"></a></var><br>
+&mdash; Command: <b>load-file</b><var> filename<a name="index-load_002dfile-985"></a></var><br>
 <blockquote><p>This command loads the file <var>filename</var>.  If <var>filename</var> is a
 relative file name, then the current default directory is assumed. 
 This command does not use <code>load-path</code>, and does not append
@@ -157,27 +161,27 @@ precisely the file name to load.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>load-library</b><var> library<a name="index-load_002dlibrary-853"></a></var><br>
+&mdash; Command: <b>load-library</b><var> library<a name="index-load_002dlibrary-986"></a></var><br>
 <blockquote><p>This command loads the library named <var>library</var>.  It is equivalent to
 <code>load</code>, except for the way it reads its argument interactively. 
 See <a href="../emacs/Lisp-Libraries.html#Lisp-Libraries">Lisp Libraries</a>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>load-in-progress</b><var><a name="index-load_002din_002dprogress-854"></a></var><br>
+&mdash; Variable: <b>load-in-progress</b><var><a name="index-load_002din_002dprogress-987"></a></var><br>
 <blockquote><p>This variable is non-<code>nil</code> if Emacs is in the process of loading a
 file, and it is <code>nil</code> otherwise. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>load-file-name</b><var><a name="index-load_002dfile_002dname-855"></a></var><br>
+&mdash; Variable: <b>load-file-name</b><var><a name="index-load_002dfile_002dname-988"></a></var><br>
 <blockquote><p>When Emacs is in the process of loading a file, this variable's value
 is the name of that file, as Emacs found it during the search
 described earlier in this section. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>load-read-function</b><var><a name="index-load_002dread_002dfunction-856"></a></var><br>
+&mdash; Variable: <b>load-read-function</b><var><a name="index-load_002dread_002dfunction-989"></a></var><br>
 <blockquote><p><a name="Definition-of-load_002dread_002dfunction"></a><!-- do not allow page break at anchor; work around Texinfo deficiency. -->
 This variable specifies an alternate expression-reading function for
 <code>load</code> and <code>eval-region</code> to use instead of <code>read</code>. 

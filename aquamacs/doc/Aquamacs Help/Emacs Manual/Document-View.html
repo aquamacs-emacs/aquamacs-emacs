@@ -5,21 +5,21 @@
 <meta name="description" content="GNU Emacs Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Gnus.html#Gnus" title="Gnus">
-<link rel="next" href="Shell.html#Shell" title="Shell">
+<link rel="prev" href="Network-Security.html#Network-Security" title="Network Security">
+<link rel="next" href="EWW.html#EWW" title="EWW">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Manual',
-updated for Emacs version 24.3.50.
+updated for Emacs version 25.0.50.
 
-Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``The GNU
      Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     with the Front-Cover Texts being ``A GNU Manual,'' and with the
      Back-Cover Texts as in (a) below.  A copy of the license is
      included in the section entitled ``GNU Free Documentation
      License.''
@@ -35,22 +35,23 @@ Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 <div class="node">
 <a name="Document-View"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Shell.html#Shell">Shell</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Gnus.html#Gnus">Gnus</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="EWW.html#EWW">EWW</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Network-Security.html#Network-Security">Network Security</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
 <hr>
 </div>
 
-<h2 class="chapter">35 Document Viewing</h2>
+<h2 class="chapter">36 Document Viewing</h2>
 
-<p><a name="index-DVI-file-3869"></a><a name="index-PDF-file-3870"></a><a name="index-PS-file-3871"></a><a name="index-PostScript-file-3872"></a><a name="index-OpenDocument-file-3873"></a><a name="index-Microsoft-Office-file-3874"></a><a name="index-DocView-mode-3875"></a><a name="index-mode_002c-DocView-3876"></a><a name="index-document-viewer-_0028DocView_0029-3877"></a><a name="index-doc_002dview_002dmode-3878"></a>
+<p><a name="index-DVI-file-4040"></a><a name="index-PDF-file-4041"></a><a name="index-PS-file-4042"></a><a name="index-PostScript-file-4043"></a><a name="index-OpenDocument-file-4044"></a><a name="index-Microsoft-Office-file-4045"></a><a name="index-DocView-mode-4046"></a><a name="index-mode_002c-DocView-4047"></a><a name="index-document-viewer-_0028DocView_0029-4048"></a><a name="index-doc_002dview_002dmode-4049"></a>
   DocView mode is a major mode for viewing DVI, PostScript (PS), PDF,
 OpenDocument, and Microsoft Office documents.  It provides features
 such as slicing, zooming, and searching inside documents.  It works by
 converting the document to a set of images using the <samp><span class="command">gs</span></samp>
-(GhostScript) command and other external tools <a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>, and displaying those images.
+(GhostScript) or <samp><span class="command">mudraw</span></samp>/<samp><span class="command">pdfdraw</span></samp> (MuPDF) commands
+and other external tools <a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>, and displaying those images.
 
-   <p><a name="index-doc_002dview_002dtoggle_002ddisplay-3879"></a><a name="index-doc_002dview_002dtoggle_002ddisplay-3880"></a><a name="index-doc_002dview_002dminor_002dmode-3881"></a>  When you visit a document file that can be displayed with DocView
+   <p><a name="index-doc_002dview_002dtoggle_002ddisplay-4050"></a><a name="index-doc_002dview_002dtoggle_002ddisplay-4051"></a><a name="index-doc_002dview_002dminor_002dmode-4052"></a>  When you visit a document file that can be displayed with DocView
 mode, Emacs automatically uses DocView mode <a rel="footnote" href="#fn-2" name="fnd-2"><sup>2</sup></a>.  As an exception, when you visit a PostScript file, Emacs
 switches to PS mode, a major mode for editing PostScript files as
 text; however, it also enables DocView minor mode, so you can type
@@ -58,6 +59,16 @@ text; however, it also enables DocView minor mode, so you can type
 mode or DocView minor mode, repeating <kbd>C-c C-c</kbd>
 (<code>doc-view-toggle-display</code>) toggles between DocView and the
 underlying file contents.
+
+   <p><a name="index-doc_002dview_002dopen_002dtext-4053"></a>  When you visit a file which would normally be handled by DocView
+mode but some requirement is not met (e.g., you operate in a terminal
+frame or emacs has no PNG support), you are queried if you want to
+view the document's contents as plain text.  If you confirm, the
+buffer is put in text mode and DocView minor mode is activated.  Thus,
+by typing <kbd>C-c C-c</kbd> you switch to the fallback mode.  With another
+<kbd>C-c C-c</kbd> you return to DocView mode.  The plain text contents can
+also be displayed from within DocView mode by typing <kbd>C-c C-t</kbd>
+(<code>doc-view-open-text</code>).
 
    <p>You can explicitly enable DocView mode with the command <code>M-x
 doc-view-mode</code>.  You can toggle DocView minor mode with <code>M-x
@@ -80,9 +91,9 @@ that has been formatted.
 
    <div class="footnote">
 <hr>
-<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> <code>gs</code> is
-a hard requirement.  For DVI files, <code>dvipdf</code> or <code>dvipdfm</code> is
-needed.  For OpenDocument and Microsoft Office documents, the
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> For PostScript files, GhostScript
+is a hard requirement.  For DVI files, <code>dvipdf</code> or <code>dvipdfm</code>
+is needed.  For OpenDocument and Microsoft Office documents, the
 <code>unoconv</code> tool is needed.</p>
 
    <p class="footnote"><small>[<a name="fn-2" href="#fnd-2">2</a>]</small> The needed

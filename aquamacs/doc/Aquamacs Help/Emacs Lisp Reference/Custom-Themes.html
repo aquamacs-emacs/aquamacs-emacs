@@ -10,15 +10,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,7 +41,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Custo
 
 <h3 class="section">14.6 Custom Themes</h3>
 
-<p><dfn>Custom themes</dfn> are collections of settings that can be enabled
+<p><a name="index-custom-themes-967"></a>  <dfn>Custom themes</dfn> are collections of settings that can be enabled
 or disabled as a unit.  See <a href="../emacs/Custom-Themes.html#Custom-Themes">Custom Themes</a>.  Each Custom theme is defined by an Emacs Lisp source file,
 which should follow the conventions described in this section. 
 (Instead of writing a Custom theme by hand, you can also create one
@@ -53,7 +53,7 @@ be a call to <code>deftheme</code>, and the last form should be a call to
 <code>provide-theme</code>.
 
 <div class="defun">
-&mdash; Macro: <b>deftheme</b><var> theme &amp;optional doc<a name="index-deftheme-836"></a></var><br>
+&mdash; Macro: <b>deftheme</b><var> theme &amp;optional doc<a name="index-deftheme-968"></a></var><br>
 <blockquote><p>This macro declares <var>theme</var> (a symbol) as the name of a Custom
 theme.  The optional argument <var>doc</var> should be a string describing
 the theme; this is the description shown when the user invokes the
@@ -61,13 +61,13 @@ the theme; this is the description shown when the user invokes the
 Themes*</span></samp>&rsquo; buffer.
 
         <p>Two special theme names are disallowed (using them causes an error):
-<code>user</code> is a &ldquo;dummy&rdquo; theme that stores the user's direct
-customization settings, and <code>changed</code> is a &ldquo;dummy&rdquo; theme that
+<code>user</code> is a dummy theme that stores the user's direct
+customization settings, and <code>changed</code> is a dummy theme that
 stores changes made outside of the Customize system. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Macro: <b>provide-theme</b><var> theme<a name="index-provide_002dtheme-837"></a></var><br>
+&mdash; Macro: <b>provide-theme</b><var> theme<a name="index-provide_002dtheme-969"></a></var><br>
 <blockquote><p>This macro declares that the theme named <var>theme</var> has been fully
 specified. 
 </p></blockquote></div>
@@ -78,7 +78,7 @@ specifying the theme settings: usually a call to
 <code>custom-theme-set-faces</code>.
 
 <div class="defun">
-&mdash; Function: <b>custom-theme-set-variables</b><var> theme &amp;rest args<a name="index-custom_002dtheme_002dset_002dvariables-838"></a></var><br>
+&mdash; Function: <b>custom-theme-set-variables</b><var> theme &amp;rest args<a name="index-custom_002dtheme_002dset_002dvariables-970"></a></var><br>
 <blockquote><p>This function specifies the Custom theme <var>theme</var>'s variable
 settings.  <var>theme</var> should be a symbol.  Each argument in
 <var>args</var> should be a list of the form
@@ -90,7 +90,7 @@ settings.  <var>theme</var> should be a symbol.  Each argument in
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>custom-theme-set-faces</b><var> theme &amp;rest args<a name="index-custom_002dtheme_002dset_002dfaces-839"></a></var><br>
+&mdash; Function: <b>custom-theme-set-faces</b><var> theme &amp;rest args<a name="index-custom_002dtheme_002dset_002dfaces-971"></a></var><br>
 <blockquote><p>This function specifies the Custom theme <var>theme</var>'s face settings. 
 <var>theme</var> should be a symbol.  Each argument in <var>args</var> should be
 a list of the form
@@ -102,7 +102,7 @@ a list of the form
 </p></blockquote></div>
 
    <p>In theory, a theme file can also contain other Lisp forms, which
-would be evaluated when loading the theme, but that is &ldquo;bad form&rdquo;. 
+would be evaluated when loading the theme, but that is bad form. 
 To protect against loading themes containing malicious code, Emacs
 displays the source file and asks for confirmation from the user
 before loading any non-built-in theme for the first time.
@@ -111,7 +111,7 @@ before loading any non-built-in theme for the first time.
 disabling themes:
 
 <div class="defun">
-&mdash; Function: <b>custom-theme-p</b><var> theme<a name="index-custom_002dtheme_002dp-840"></a></var><br>
+&mdash; Function: <b>custom-theme-p</b><var> theme<a name="index-custom_002dtheme_002dp-972"></a></var><br>
 <blockquote><p>This function return a non-<code>nil</code> value if <var>theme</var> (a symbol)
 is the name of a Custom theme (i.e., a Custom theme which has been
 loaded into Emacs, whether or not the theme is enabled).  Otherwise,
@@ -119,7 +119,19 @@ it returns <code>nil</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>load-theme</b><var> theme &amp;optional no-confirm no-enable<a name="index-load_002dtheme-841"></a></var><br>
+&mdash; Variable: <b>custom-known-themes</b><var><a name="index-custom_002dknown_002dthemes-973"></a></var><br>
+<blockquote><p>The value of this variable is a list of themes loaded into Emacs. 
+Each theme is represented by a Lisp symbol (the theme name).  The
+default value of this variable is a list containing two dummy
+themes: <code>(user changed)</code>.  The <code>changed</code> theme stores
+settings made before any Custom themes are applied (e.g., variables
+set outside of Customize).  The <code>user</code> theme stores settings the
+user has customized and saved.  Any additional themes declared with
+the <code>deftheme</code> macro are added to the front of this list. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>load-theme</b><var> theme &amp;optional no-confirm no-enable<a name="index-load_002dtheme-974"></a></var><br>
 <blockquote><p>This function loads the Custom theme named <var>theme</var> from its source
 file, looking for the source file in the directories specified by the
 variable <code>custom-theme-load-path</code>.  See <a href="../emacs/Custom-Themes.html#Custom-Themes">Custom Themes</a>.  It also <dfn>enables</dfn> the theme (unless the
@@ -130,20 +142,20 @@ confirmation before loading the theme, unless the optional argument
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>enable-theme</b><var> theme<a name="index-enable_002dtheme-842"></a></var><br>
+&mdash; Command: <b>enable-theme</b><var> theme<a name="index-enable_002dtheme-975"></a></var><br>
 <blockquote><p>This function enables the Custom theme named <var>theme</var>.  It signals
 an error if no such theme has been loaded. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>disable-theme</b><var> theme<a name="index-disable_002dtheme-843"></a></var><br>
+&mdash; Command: <b>disable-theme</b><var> theme<a name="index-disable_002dtheme-976"></a></var><br>
 <blockquote><p>This function disables the Custom theme named <var>theme</var>.  The theme
 remains loaded, so that a subsequent call to <code>enable-theme</code> will
 re-enable it. 
 </p></blockquote></div>
    <!-- *-texinfo-*- -->
 <!-- This is part of the GNU Emacs Lisp Reference Manual. -->
-<!-- Copyright (C) 1990-1995, 1998-1999, 2001-2013 Free Software -->
+<!-- Copyright (C) 1990-1995, 1998-1999, 2001-2015 Free Software -->
 <!-- Foundation, Inc. -->
 <!-- See the file elisp.texi for copying conditions. -->
 

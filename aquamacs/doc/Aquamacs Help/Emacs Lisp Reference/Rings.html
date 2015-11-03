@@ -10,15 +10,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,68 +41,68 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Sequences-Arrays-Vectors.html#Sequences
 
 <h3 class="section">6.8 Managing a Fixed-Size Ring of Objects</h3>
 
-<p><a name="index-ring-data-structure-434"></a>  A <dfn>ring</dfn> is a fixed-size data structure that supports insertion,
+<p><a name="index-ring-data-structure-519"></a>  A <dfn>ring</dfn> is a fixed-size data structure that supports insertion,
 deletion, rotation, and modulo-indexed reference and traversal.  An
 efficient ring data structure is implemented by the <code>ring</code>
 package.  It provides the functions listed in this section.
 
-   <p>Note that several &ldquo;rings&rdquo; in Emacs, like the kill ring and the
+   <p>Note that several rings in Emacs, like the kill ring and the
 mark ring, are actually implemented as simple lists, <em>not</em> using
 the <code>ring</code> package; thus the following functions won't work on
 them.
 
 <div class="defun">
-&mdash; Function: <b>make-ring</b><var> size<a name="index-make_002dring-435"></a></var><br>
+&mdash; Function: <b>make-ring</b><var> size<a name="index-make_002dring-520"></a></var><br>
 <blockquote><p>This returns a new ring capable of holding <var>size</var> objects. 
 <var>size</var> should be an integer. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>ring-p</b><var> object<a name="index-ring_002dp-436"></a></var><br>
+&mdash; Function: <b>ring-p</b><var> object<a name="index-ring_002dp-521"></a></var><br>
 <blockquote><p>This returns <code>t</code> if <var>object</var> is a ring, <code>nil</code> otherwise. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>ring-size</b><var> ring<a name="index-ring_002dsize-437"></a></var><br>
+&mdash; Function: <b>ring-size</b><var> ring<a name="index-ring_002dsize-522"></a></var><br>
 <blockquote><p>This returns the maximum capacity of the <var>ring</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>ring-length</b><var> ring<a name="index-ring_002dlength-438"></a></var><br>
+&mdash; Function: <b>ring-length</b><var> ring<a name="index-ring_002dlength-523"></a></var><br>
 <blockquote><p>This returns the number of objects that <var>ring</var> currently contains. 
 The value will never exceed that returned by <code>ring-size</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>ring-elements</b><var> ring<a name="index-ring_002delements-439"></a></var><br>
+&mdash; Function: <b>ring-elements</b><var> ring<a name="index-ring_002delements-524"></a></var><br>
 <blockquote><p>This returns a list of the objects in <var>ring</var>, in order, newest first. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>ring-copy</b><var> ring<a name="index-ring_002dcopy-440"></a></var><br>
+&mdash; Function: <b>ring-copy</b><var> ring<a name="index-ring_002dcopy-525"></a></var><br>
 <blockquote><p>This returns a new ring which is a copy of <var>ring</var>. 
 The new ring contains the same (<code>eq</code>) objects as <var>ring</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>ring-empty-p</b><var> ring<a name="index-ring_002dempty_002dp-441"></a></var><br>
+&mdash; Function: <b>ring-empty-p</b><var> ring<a name="index-ring_002dempty_002dp-526"></a></var><br>
 <blockquote><p>This returns <code>t</code> if <var>ring</var> is empty, <code>nil</code> otherwise. 
 </p></blockquote></div>
 
    <p>The newest element in the ring always has index 0.  Higher indices
 correspond to older elements.  Indices are computed modulo the ring
-length.  General_Index &minus;1 corresponds to the oldest element, &minus;2
+length.  Index &minus;1 corresponds to the oldest element, &minus;2
 to the next-oldest, and so forth.
 
 <div class="defun">
-&mdash; Function: <b>ring-ref</b><var> ring index<a name="index-ring_002dref-442"></a></var><br>
+&mdash; Function: <b>ring-ref</b><var> ring index<a name="index-ring_002dref-527"></a></var><br>
 <blockquote><p>This returns the object in <var>ring</var> found at index <var>index</var>. 
 <var>index</var> may be negative or greater than the ring length.  If
 <var>ring</var> is empty, <code>ring-ref</code> signals an error. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>ring-insert</b><var> ring object<a name="index-ring_002dinsert-443"></a></var><br>
+&mdash; Function: <b>ring-insert</b><var> ring object<a name="index-ring_002dinsert-528"></a></var><br>
 <blockquote><p>This inserts <var>object</var> into <var>ring</var>, making it the newest
 element, and returns <var>object</var>.
 
@@ -111,7 +111,7 @@ make room for the new element.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>ring-remove</b><var> ring &amp;optional index<a name="index-ring_002dremove-444"></a></var><br>
+&mdash; Function: <b>ring-remove</b><var> ring &amp;optional index<a name="index-ring_002dremove-529"></a></var><br>
 <blockquote><p>Remove an object from <var>ring</var>, and return that object.  The
 argument <var>index</var> specifies which item to remove; if it is
 <code>nil</code>, that means to remove the oldest item.  If <var>ring</var> is
@@ -119,7 +119,7 @@ empty, <code>ring-remove</code> signals an error.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>ring-insert-at-beginning</b><var> ring object<a name="index-ring_002dinsert_002dat_002dbeginning-445"></a></var><br>
+&mdash; Function: <b>ring-insert-at-beginning</b><var> ring object<a name="index-ring_002dinsert_002dat_002dbeginning-530"></a></var><br>
 <blockquote><p>This inserts <var>object</var> into <var>ring</var>, treating it as the oldest
 element.  The return value is not significant.
 
@@ -127,7 +127,7 @@ element.  The return value is not significant.
 room for the inserted element. 
 </p></blockquote></div>
 
-   <p><a name="index-fifo-data-structure-446"></a>  If you are careful not to exceed the ring size, you can
+   <p><a name="index-fifo-data-structure-531"></a>  If you are careful not to exceed the ring size, you can
 use the ring as a first-in-first-out queue.  For example:
 
 <pre class="lisp">     (let ((fifo (make-ring 5)))
@@ -140,7 +140,7 @@ use the ring as a first-in-first-out queue.  For example:
 </pre>
    <!-- *-texinfo-*- -->
 <!-- This is part of the GNU Emacs Lisp Reference Manual. -->
-<!-- Copyright (C) 1999, 2001-2013 Free Software Foundation, Inc. -->
+<!-- Copyright (C) 1999, 2001-2015 Free Software Foundation, Inc. -->
 <!-- See the file elisp.texi for copying conditions. -->
    </body></html>
 

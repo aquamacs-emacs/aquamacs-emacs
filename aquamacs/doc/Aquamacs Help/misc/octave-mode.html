@@ -1,0 +1,943 @@
+<html lang="en">
+<head>
+<title>Octave Mode</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="Octave Mode">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="top" href="#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1996-2015 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being "A GNU Manual," and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     "GNU Free Documentation License."
+
+     (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+     modify this GNU manual."
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<h1 class="settitle">Octave Mode</h1>
+<div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Top" href="#Top">Octave Mode</a>
+<li><a name="toc_Overview" href="#Overview">1 Overview</a>
+<li><a name="toc_Using-Octave-Mode" href="#Using-Octave-Mode">2 Using Octave Mode</a>
+<li><a name="toc_Running-Octave-from-Within-Emacs" href="#Running-Octave-from-Within-Emacs">3 Running Octave from Within Emacs</a>
+<li><a name="toc_GNU-Free-Documentation-License" href="#GNU-Free-Documentation-License">4 GNU Free Documentation License</a>
+<li><a name="toc_Key-Index" href="#Key-Index">Key Index</a>
+<li><a name="toc_Variable-Index" href="#Variable-Index">Variable Index</a>
+<li><a name="toc_Lisp-Function-Index" href="#Lisp-Function-Index">Function Index</a>
+<li><a name="toc_Concept-Index" href="#Concept-Index">Concept Index</a>
+</li></ul>
+</div>
+
+
+
+<div class="node">
+<a name="Top"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Overview">Overview</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#dir">(dir)</a>
+
+</div>
+
+<h2 class="unnumbered">Octave Mode</h2>
+
+<p>Copyright &copy; 1996&ndash;2015 Free Software Foundation, Inc.
+
+   <blockquote>
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with the Front-Cover Texts being &ldquo;A GNU Manual,&rdquo;
+and with the Back-Cover Texts as in (a) below.  A copy of the license
+is included in the section entitled &ldquo;GNU Free Documentation License.&rdquo;
+
+   <p>(a) The FSF's Back-Cover Text is: &ldquo;You have the freedom to copy and
+modify this GNU manual.&rdquo;
+</blockquote>
+
+<ul class="menu">
+<li><a accesskey="1" href="#Overview">Overview</a>
+<li><a accesskey="2" href="#Using-Octave-Mode">Using Octave Mode</a>
+<li><a accesskey="3" href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a>
+<li><a accesskey="4" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>
+<li><a accesskey="5" href="#Key-Index">Key Index</a>
+<li><a accesskey="6" href="#Variable-Index">Variable Index</a>
+<li><a accesskey="7" href="#Lisp-Function-Index">Lisp Function Index</a>
+<li><a accesskey="8" href="#Concept-Index">Concept Index</a>
+</ul>
+
+<div class="node">
+<a name="Overview"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Using-Octave-Mode">Using Octave Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Top">Top</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">1 Overview</h2>
+
+<p>The development of Octave code can greatly be facilitated using Emacs
+with Octave mode, a major mode for editing Octave files which can
+e.g. automatically indent the code, do some of the typing (with
+Abbrev mode) and show keywords, comments, strings, etc. in different
+faces (with Font-lock mode on devices that support it).
+
+   <p>It is also possible to run Octave from within Emacs, either by
+directly entering commands at the prompt in a buffer in Inferior
+Octave mode, or by interacting with Octave from within a file with
+Octave code.  This is useful in particular for debugging Octave code.
+
+<div class="node">
+<a name="Using-Octave-Mode"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Overview">Overview</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">2 Using Octave Mode</h2>
+
+<p><a name="index-Using-Octave-Mode-1"></a>
+In Octave mode, the following special Emacs commands can be used in
+addition to the standard Emacs commands.
+
+     <dl>
+<dt><kbd>C-M-j</kbd><dd><a name="index-C_002dM_002dj-2"></a><a name="index-octave_002dindent_002dnew_002dcomment_002dline-3"></a><a name="index-octave_002dcontinuation_002dstring-4"></a>Break Octave line at point, continuing comment if within one.  Insert
+<code>octave-continuation-string</code> before breaking the line unless
+inside a list.  Signal an error if within a single-quoted string.
+
+     <br><dt><kbd>C-c ;</kbd><dd><a name="index-C_002dc-_003b-5"></a><a name="index-octave_002dupdate_002dfunction_002dfile_002dcomment-6"></a>Query replace function names in function file comment.
+
+     <br><dt><kbd>C-c C-p</kbd><dd><a name="index-C_002dc-C_002dp-7"></a><a name="index-octave_002dprevious_002dcode_002dline-8"></a>Move one line of Octave code backward, skipping empty and comment
+lines (<code>octave-previous-code-line</code>).  With numeric prefix
+argument <var>n</var>, move that many code lines backward (forward if
+<var>n</var> is negative).
+
+     <br><dt><kbd>C-c C-n</kbd><dd><a name="index-C_002dc-C_002dn-9"></a><a name="index-octave_002dnext_002dcode_002dline-10"></a>Move one line of Octave code forward, skipping empty and comment lines
+(<code>octave-next-code-line</code>).  With numeric prefix argument <var>n</var>,
+move that many code lines forward (backward if <var>n</var> is negative).
+
+     <br><dt><kbd>C-c C-a</kbd><dd><a name="index-C_002dc-C_002da-11"></a><a name="index-octave_002dbeginning_002dof_002dline-12"></a>Move to the beginning of the physical line
+(<code>octave-beginning-of-line</code>).  If point is in an empty or comment
+line, simply go to its beginning; otherwise, move backwards to the
+beginning of the first code line which is not inside a continuation
+statement, i.e., which does not follow a code line ending in
+&lsquo;<samp><span class="samp">...</span></samp>&rsquo;  or &lsquo;<samp><span class="samp">\</span></samp>&rsquo;, or is inside an open parenthesis list.
+
+     <br><dt><kbd>C-c C-e</kbd><dd><a name="index-C_002dc-C_002de-13"></a><a name="index-octave_002dend_002dof_002dline-14"></a>Move to the end of the physical line (<code>octave-end-of-line</code>).  If
+point is in a code line, move forward to the end of the first Octave
+code line which does not end in &lsquo;<samp><span class="samp">...</span></samp>&rsquo; or &lsquo;<samp><span class="samp">\</span></samp>&rsquo; or is inside an
+open parenthesis list.  Otherwise, simply go to the end of the current
+line.
+
+     <br><dt><kbd>C-c M-C-h</kbd><dd><a name="index-C_002dc-M_002dC_002dh-15"></a><a name="index-octave_002dmark_002dblock-16"></a>Put point at the beginning of this block, mark at the end
+(<code>octave-mark-block</code>).  The block marked is the one that contains
+point or follows point.
+
+     <br><dt><kbd>C-c ]</kbd><dd><a name="index-C_002dc-_005d-17"></a>Close the current block on a separate line (<code>smie-close-block</code>). 
+An error is signaled if no block to close is found.
+
+     <br><dt><kbd>C-c C-f</kbd><dd><a name="index-C_002dc-C_002df-18"></a><a name="index-octave_002dinsert_002ddefun-19"></a>Insert a function skeleton, prompting for the function's name, arguments
+and return values which have to be entered without parentheses
+(<code>octave-insert-defun</code>). 
+     in one of your Emacs startup files. 
+</dl>
+
+   <p>The following variables can be used to customize Octave mode.
+
+     <dl>
+<dt><code>octave-blink-matching-block</code><a name="index-octave_002dblink_002dmatching_002dblock-20"></a><dd>Non-<code>nil</code> means show matching begin of block when inserting a space,
+newline or &lsquo;<samp><span class="samp">;</span></samp>&rsquo; after an else or end keyword.  Default is <code>t</code>. 
+This is an extremely useful feature for automatically verifying that the
+keywords match&mdash;if they don't, an error message is displayed.
+
+     <br><dt><code>octave-block-offset</code><a name="index-octave_002dblock_002doffset-21"></a><dd>Extra indentation applied to statements in block structures. 
+Default is 2.
+
+     <br><dt><code>octave-continuation-offset</code><a name="index-octave_002dcontinuation_002doffset-22"></a><dd>Extra indentation applied to Octave continuation lines. 
+Default is 4.
+
+     <br><dt><code>octave-font-lock-texinfo-comment</code><a name="index-octave_002dfont_002dlock_002dtexinfo_002dcomment-23"></a><dd>Highlight texinfo comment blocks.  The default value is <code>t</code>. 
+</dl>
+
+   <p>If Font Lock mode is enabled, Octave mode will display
+
+     <ul>
+<li>strings in <code>font-lock-string-face</code>
+
+     <li>comments in <code>font-lock-comment-face</code>
+
+     <li>the Octave reserved words (such as all block keywords) and the text
+functions (such as &lsquo;<samp><span class="samp">cd</span></samp>&rsquo; or &lsquo;<samp><span class="samp">who</span></samp>&rsquo;) which are also reserved
+using <code>font-lock-keyword-face</code>
+
+     <li>the built-in operators (&lsquo;<samp><span class="samp">&amp;&amp;</span></samp>&rsquo;, &lsquo;<samp><span class="samp">==</span></samp>&rsquo;, <small class="dots">...</small>) using
+<code>font-lock-reference-face</code>
+
+     <li>and the function names in function declarations in
+<code>font-lock-function-name-face</code>.
+
+     <li>Function comments blocks in <code>octave-function-comment-block</code>
+</ul>
+
+   <p><a name="index-Imenu-Support-24"></a>There is also rudimentary support for Imenu (see <a href="emacs.html#Imenu">Imenu</a>).  Currently, function names can be indexed.
+
+   <p><a name="index-ElDoc-Mode-Support-25"></a><a name="index-octave_002deldoc_002dmessage_002dstyle-26"></a>ElDoc mode (see <a href="emacs.html#Lisp-Doc">Lisp Doc</a>) is
+supported.  By customizing <code>octave-eldoc-message-style</code> it can be
+changed from displaying one or multi line hints.
+
+<!-- @cindex TAGS -->
+<!-- @cindex Emacs TAGS files -->
+<!-- @cindex @file{octave-tags} -->
+<!-- You can generate TAGS files for Emacs from Octave @file{.m} files using -->
+<!-- the shell script @file{octave-tags} that is installed alongside your copy of -->
+<!-- Octave. -->
+   <p><a name="index-octave_002dmode_002dhook-27"></a>Customization of Octave mode can be performed by modification of the
+variable <code>octave-mode-hook</code>.
+
+<div class="node">
+<a name="Running-Octave-from-Within-Emacs"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Using-Octave-Mode">Using Octave Mode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">3 Running Octave from Within Emacs</h2>
+
+<p><a name="index-Inferior-Octave-Mode-28"></a>
+Octave mode provides commands for running an inferior
+Octave process in a special Emacs buffer.  Use
+<pre class="lisp">     M-x run-octave
+</pre>
+   <p class="noindent">to directly start an inferior Octave process.
+
+   <p><a name="index-inferior_002doctave_002dbuffer-29"></a>This will start Octave in a special buffer the name of which is
+specified by the variable <code>inferior-octave-buffer</code> and defaults
+to <samp><span class="file">*Inferior Octave*</span></samp>.  From within this buffer, you can
+interact with the inferior Octave process &ldquo;as usual&rdquo;, i.e., by
+entering Octave commands at the prompt.  The buffer is in Inferior
+Octave mode, which is derived from the standard Comint mode, a major
+mode for interacting with an inferior interpreter.  See the
+documentation for <code>comint-mode</code> for more details, and use
+<kbd>C-h b</kbd> to find out about available special keybindings.
+
+   <p>You can also communicate with an inferior Octave process from within
+files with Octave code (i.e., buffers in Octave mode), using the
+following commands.
+
+     <dl>
+<dt><kbd>C-c C-i l</kbd><dd><a name="index-C_002dc-C_002di-l-30"></a><a name="index-octave_002dsend_002dline-31"></a><a name="index-octave_002dsend_002dline_002dauto_002dforward-32"></a>Send the current line to the inferior Octave process
+(<code>octave-send-line</code>).  With positive prefix argument <var>n</var>,
+send that many lines.  If <code>octave-send-line-auto-forward</code> is
+non-<code>nil</code>, go to the next unsent code line.
+
+     <br><dt><kbd>C-c C-i b</kbd><dd><a name="index-C_002dc-C_002di-b-33"></a><a name="index-octave_002dsend_002dblock-34"></a>Send the current block to the inferior Octave process
+(<code>octave-send-block</code>).
+
+     <br><dt><kbd>C-c C-i f</kbd><dd><a name="index-C_002dc-C_002di-f-35"></a><a name="index-octave_002dsend_002ddefun-36"></a>Send the current function to the inferior Octave process
+(<code>octave-send-defun</code>).
+
+     <br><dt><kbd>C-c C-i r</kbd><dd><a name="index-C_002dc-C_002di-r-37"></a><a name="index-octave_002dsend_002dregion-38"></a>Send the region to the inferior Octave process
+(<code>octave-send-region</code>).
+
+     <br><dt><kbd>C-c C-i a</kbd><dd><a name="index-C_002dc-C_002di-a-39"></a><a name="index-octave_002dsend_002dbuffer-40"></a>Send the entire buffer to the inferior Octave process
+(<code>octave-send-buffer</code>).  If the buffer is associated with a file
+then sourcing the buffer by using <kbd>C-c C-l</kbd>
+(<code>octave-source-file</code>) should be preferred.
+
+     <br><dt><kbd>C-c C-i s</kbd><dd><a name="index-C_002dc-C_002di-s-41"></a><a name="index-octave_002dshow_002dprocess_002dbuffer-42"></a>Make sure that <code>inferior-octave-buffer</code> is displayed
+(<code>octave-show-process-buffer</code>).
+
+     <br><dt><kbd>C-c C-i q</kbd><dd><a name="index-C_002dc-C_002di-q-43"></a><a name="index-octave_002dhide_002dprocess_002dbuffer-44"></a>Delete all windows that display the inferior Octave buffer
+(<code>octave-hide-process-buffer</code>).
+
+     <br><dt><kbd>C-c C-i k</kbd><dd><a name="index-C_002dc-C_002di-k-45"></a><a name="index-octave_002dkill_002dprocess-46"></a>Kill the inferior Octave process and its buffer
+(<code>octave-kill-process</code>).
+
+     <br><dt><kbd>C-c C-l</kbd><dd><a name="index-C_002dc-C_002dl-47"></a><a name="index-octave_002dsource_002dfile-48"></a>Parse and execute the current file in the inferior Octave buffer
+(<code>octave-source-file</code>).  This is done using Octave's
+<code>source</code> function.
+
+     <br><dt><kbd>M-.</kbd><dd><a name="index-M_002d_002e-49"></a><a name="index-octave_002dfind_002ddefinition-50"></a><a name="index-octave_002dsource_002ddirectories-51"></a>Find the definition of a function or variable.  Functions implemented
+in C++ can be found if variable <code>octave-source-directories</code> is
+set correctly (<code>octave-find-definition</code>).
+
+     <br><dt><kbd>C-h d</kbd><dd><a name="index-C_002dh-d-52"></a><a name="index-octave_002dhelp-53"></a><a name="index-octave_002dhelp_002dbuffer-54"></a>Display the documentation for function (<code>octave-help</code>).  The
+buffer name can be changed by customizing <code>octave-help-buffer</code>.
+
+     <br><dt><kbd>C-h a</kbd><dd><a name="index-C_002dh-a-55"></a><a name="index-octave_002dlookfor-56"></a>Search for a given string in all the first sentence of function help
+strings (<code>octave-lookfor</code>).  With a <code>universal-argument</code> the
+entire help string is searched.
+
+   </dl>
+
+   <p>The effect of the commands which send code to the Octave process can be
+customized by the following variables.
+
+     <dl>
+<dt><code>octave-send-echo-input</code><a name="index-octave_002dsend_002decho_002dinput-57"></a><dd>Non-<code>nil</code> means echo input sent to the inferior Octave process. 
+Default is <code>t</code>.
+
+     <br><dt><code>octave-send-show-buffer</code><a name="index-octave_002dsend_002dshow_002dbuffer-58"></a><dd>Non-<code>nil</code> means display the buffer running the Octave process after
+sending a command (but without selecting it). 
+Default is <code>t</code>. 
+</dl>
+
+   <p>If you send code and there is no inferior Octave process yet, it will
+be started automatically.
+
+   <p><a name="index-inferior_002doctave_002dstartup_002dargs-59"></a>The startup of the inferior Octave process is highly customizable. 
+The variable <code>inferior-octave-startup-args</code> can be used for
+specifying command lines arguments to be passed to Octave on startup
+as a list of strings.  For example, to suppress the startup message
+and use &ldquo;traditional&rdquo; mode, set this to <code>("-q" "--traditional")</code>. 
+You can also specify a startup file of Octave commands to be loaded on
+startup; note that these commands will not produce any visible output
+in the process buffer.  Which file to use is controlled by the
+variable <code>inferior-octave-startup-file</code>.  The default is
+<samp><span class="file">~/.emacs-octave</span></samp> or if this file is not found
+<samp><span class="file">~/.emacs.d/init_octave.m</span></samp>.
+
+   <p><a name="index-inferior_002doctave_002dprompt_002dread_002donly-60"></a>By customizing <code>inferior-octave-prompt-read-only</code> the prompt can
+be changed to be read only.  The default value is the same as
+<code>comint-prompt-read-only</code>.
+
+   <p><a name="index-inferior_002doctave_002dmode_002dhook-61"></a>And finally, <code>inferior-octave-mode-hook</code> is run after starting
+the process and putting its buffer into Inferior Octave mode.  Hence,
+if you like the up and down arrow keys to behave in the interaction
+buffer as in the shell, and you want this buffer to use nice colors,
+add
+<pre class="lisp">     (add-hook 'inferior-octave-mode-hook
+               (lambda ()
+                 (define-key inferior-octave-mode-map [up]
+                   'comint-previous-input)
+                 (define-key inferior-octave-mode-map [down]
+                   'comint-next-input)))
+</pre>
+   <p class="noindent">to your <samp><span class="file">.emacs</span></samp> or <samp><span class="file">init.el</span></samp> file.  You could also swap the
+roles of <kbd>C-a</kbd> (<code>beginning-of-line</code>) and <code>C-c C-a</code>
+(<code>comint-bol</code>) using this hook.
+
+   <p><a name="index-inferior_002doctave_002dprompt-62"></a><blockquote>
+<strong>Note</strong> that if you set your Octave prompts to something different
+from the defaults, make sure that <code>inferior-octave-prompt</code> matches
+them.  Otherwise, <em>nothing</em> will work, because Emacs will not know
+when Octave is waiting for input, or done sending output. 
+</blockquote>
+
+<div class="node">
+<a name="GNU-Free-Documentation-License"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Key-Index">Key Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">4 GNU Free Documentation License</h2>
+
+<!-- The GNU Free Documentation License. -->
+<div align="center">Version 1.3, 3 November 2008</div>
+
+<!-- This file is intended to be included within another document, -->
+<!-- hence no sectioning command or @node. -->
+<pre class="display">     Copyright &copy; 2000, 2001, 2002, 2007, 2008 Free Software Foundation, Inc.
+     <a href="http://fsf.org/">http://fsf.org/</a>
+     
+     Everyone is permitted to copy and distribute verbatim copies
+     of this license document, but changing it is not allowed.
+</pre>
+     <ol type=1 start=0>
+<li>PREAMBLE
+
+     <p>The purpose of this License is to make a manual, textbook, or other
+functional and useful document <dfn>free</dfn> in the sense of freedom: to
+assure everyone the effective freedom to copy and redistribute it,
+with or without modifying it, either commercially or noncommercially. 
+Secondarily, this License preserves for the author and publisher a way
+to get credit for their work, while not being considered responsible
+for modifications made by others.
+
+     <p>This License is a kind of &ldquo;copyleft&rdquo;, which means that derivative
+works of the document must themselves be free in the same sense.  It
+complements the GNU General Public License, which is a copyleft
+license designed for free software.
+
+     <p>We have designed this License in order to use it for manuals for free
+software, because free software needs free documentation: a free
+program should come with manuals providing the same freedoms that the
+software does.  But this License is not limited to software manuals;
+it can be used for any textual work, regardless of subject matter or
+whether it is published as a printed book.  We recommend this License
+principally for works whose purpose is instruction or reference.
+
+     <li>APPLICABILITY AND DEFINITIONS
+
+     <p>This License applies to any manual or other work, in any medium, that
+contains a notice placed by the copyright holder saying it can be
+distributed under the terms of this License.  Such a notice grants a
+world-wide, royalty-free license, unlimited in duration, to use that
+work under the conditions stated herein.  The &ldquo;Document&rdquo;, below,
+refers to any such manual or work.  Any member of the public is a
+licensee, and is addressed as &ldquo;you&rdquo;.  You accept the license if you
+copy, modify or distribute the work in a way requiring permission
+under copyright law.
+
+     <p>A &ldquo;Modified Version&rdquo; of the Document means any work containing the
+Document or a portion of it, either copied verbatim, or with
+modifications and/or translated into another language.
+
+     <p>A &ldquo;Secondary Section&rdquo; is a named appendix or a front-matter section
+of the Document that deals exclusively with the relationship of the
+publishers or authors of the Document to the Document's overall
+subject (or to related matters) and contains nothing that could fall
+directly within that overall subject.  (Thus, if the Document is in
+part a textbook of mathematics, a Secondary Section may not explain
+any mathematics.)  The relationship could be a matter of historical
+connection with the subject or with related matters, or of legal,
+commercial, philosophical, ethical or political position regarding
+them.
+
+     <p>The &ldquo;Invariant Sections&rdquo; are certain Secondary Sections whose titles
+are designated, as being those of Invariant Sections, in the notice
+that says that the Document is released under this License.  If a
+section does not fit the above definition of Secondary then it is not
+allowed to be designated as Invariant.  The Document may contain zero
+Invariant Sections.  If the Document does not identify any Invariant
+Sections then there are none.
+
+     <p>The &ldquo;Cover Texts&rdquo; are certain short passages of text that are listed,
+as Front-Cover Texts or Back-Cover Texts, in the notice that says that
+the Document is released under this License.  A Front-Cover Text may
+be at most 5 words, and a Back-Cover Text may be at most 25 words.
+
+     <p>A &ldquo;Transparent&rdquo; copy of the Document means a machine-readable copy,
+represented in a format whose specification is available to the
+general public, that is suitable for revising the document
+straightforwardly with generic text editors or (for images composed of
+pixels) generic paint programs or (for drawings) some widely available
+drawing editor, and that is suitable for input to text formatters or
+for automatic translation to a variety of formats suitable for input
+to text formatters.  A copy made in an otherwise Transparent file
+format whose markup, or absence of markup, has been arranged to thwart
+or discourage subsequent modification by readers is not Transparent. 
+An image format is not Transparent if used for any substantial amount
+of text.  A copy that is not &ldquo;Transparent&rdquo; is called &ldquo;Opaque&rdquo;.
+
+     <p>Examples of suitable formats for Transparent copies include plain
+ASCII without markup, Texinfo input format, LaTeX input
+format, SGML or XML using a publicly available
+DTD, and standard-conforming simple HTML,
+PostScript or PDF designed for human modification.  Examples
+of transparent image formats include PNG, XCF and
+JPG.  Opaque formats include proprietary formats that can be
+read and edited only by proprietary word processors, SGML or
+XML for which the DTD and/or processing tools are
+not generally available, and the machine-generated HTML,
+PostScript or PDF produced by some word processors for
+output purposes only.
+
+     <p>The &ldquo;Title Page&rdquo; means, for a printed book, the title page itself,
+plus such following pages as are needed to hold, legibly, the material
+this License requires to appear in the title page.  For works in
+formats which do not have any title page as such, &ldquo;Title Page&rdquo; means
+the text near the most prominent appearance of the work's title,
+preceding the beginning of the body of the text.
+
+     <p>The &ldquo;publisher&rdquo; means any person or entity that distributes copies
+of the Document to the public.
+
+     <p>A section &ldquo;Entitled XYZ&rdquo; means a named subunit of the Document whose
+title either is precisely XYZ or contains XYZ in parentheses following
+text that translates XYZ in another language.  (Here XYZ stands for a
+specific section name mentioned below, such as &ldquo;Acknowledgements&rdquo;,
+&ldquo;Dedications&rdquo;, &ldquo;Endorsements&rdquo;, or &ldquo;History&rdquo;.)  To &ldquo;Preserve the Title&rdquo;
+of such a section when you modify the Document means that it remains a
+section &ldquo;Entitled XYZ&rdquo; according to this definition.
+
+     <p>The Document may include Warranty Disclaimers next to the notice which
+states that this License applies to the Document.  These Warranty
+Disclaimers are considered to be included by reference in this
+License, but only as regards disclaiming warranties: any other
+implication that these Warranty Disclaimers may have is void and has
+no effect on the meaning of this License.
+
+     <li>VERBATIM COPYING
+
+     <p>You may copy and distribute the Document in any medium, either
+commercially or noncommercially, provided that this License, the
+copyright notices, and the license notice saying this License applies
+to the Document are reproduced in all copies, and that you add no other
+conditions whatsoever to those of this License.  You may not use
+technical measures to obstruct or control the reading or further
+copying of the copies you make or distribute.  However, you may accept
+compensation in exchange for copies.  If you distribute a large enough
+number of copies you must also follow the conditions in section 3.
+
+     <p>You may also lend copies, under the same conditions stated above, and
+you may publicly display copies.
+
+     <li>COPYING IN QUANTITY
+
+     <p>If you publish printed copies (or copies in media that commonly have
+printed covers) of the Document, numbering more than 100, and the
+Document's license notice requires Cover Texts, you must enclose the
+copies in covers that carry, clearly and legibly, all these Cover
+Texts: Front-Cover Texts on the front cover, and Back-Cover Texts on
+the back cover.  Both covers must also clearly and legibly identify
+you as the publisher of these copies.  The front cover must present
+the full title with all words of the title equally prominent and
+visible.  You may add other material on the covers in addition. 
+Copying with changes limited to the covers, as long as they preserve
+the title of the Document and satisfy these conditions, can be treated
+as verbatim copying in other respects.
+
+     <p>If the required texts for either cover are too voluminous to fit
+legibly, you should put the first ones listed (as many as fit
+reasonably) on the actual cover, and continue the rest onto adjacent
+pages.
+
+     <p>If you publish or distribute Opaque copies of the Document numbering
+more than 100, you must either include a machine-readable Transparent
+copy along with each Opaque copy, or state in or with each Opaque copy
+a computer-network location from which the general network-using
+public has access to download using public-standard network protocols
+a complete Transparent copy of the Document, free of added material. 
+If you use the latter option, you must take reasonably prudent steps,
+when you begin distribution of Opaque copies in quantity, to ensure
+that this Transparent copy will remain thus accessible at the stated
+location until at least one year after the last time you distribute an
+Opaque copy (directly or through your agents or retailers) of that
+edition to the public.
+
+     <p>It is requested, but not required, that you contact the authors of the
+Document well before redistributing any large number of copies, to give
+them a chance to provide you with an updated version of the Document.
+
+     <li>MODIFICATIONS
+
+     <p>You may copy and distribute a Modified Version of the Document under
+the conditions of sections 2 and 3 above, provided that you release
+the Modified Version under precisely this License, with the Modified
+Version filling the role of the Document, thus licensing distribution
+and modification of the Modified Version to whoever possesses a copy
+of it.  In addition, you must do these things in the Modified Version:
+
+          <ol type=A start=1>
+<li>Use in the Title Page (and on the covers, if any) a title distinct
+from that of the Document, and from those of previous versions
+(which should, if there were any, be listed in the History section
+of the Document).  You may use the same title as a previous version
+if the original publisher of that version gives permission.
+
+          <li>List on the Title Page, as authors, one or more persons or entities
+responsible for authorship of the modifications in the Modified
+Version, together with at least five of the principal authors of the
+Document (all of its principal authors, if it has fewer than five),
+unless they release you from this requirement.
+
+          <li>State on the Title page the name of the publisher of the
+Modified Version, as the publisher.
+
+          <li>Preserve all the copyright notices of the Document.
+
+          <li>Add an appropriate copyright notice for your modifications
+adjacent to the other copyright notices.
+
+          <li>Include, immediately after the copyright notices, a license notice
+giving the public permission to use the Modified Version under the
+terms of this License, in the form shown in the Addendum below.
+
+          <li>Preserve in that license notice the full lists of Invariant Sections
+and required Cover Texts given in the Document's license notice.
+
+          <li>Include an unaltered copy of this License.
+
+          <li>Preserve the section Entitled &ldquo;History&rdquo;, Preserve its Title, and add
+to it an item stating at least the title, year, new authors, and
+publisher of the Modified Version as given on the Title Page.  If
+there is no section Entitled &ldquo;History&rdquo; in the Document, create one
+stating the title, year, authors, and publisher of the Document as
+given on its Title Page, then add an item describing the Modified
+Version as stated in the previous sentence.
+
+          <li>Preserve the network location, if any, given in the Document for
+public access to a Transparent copy of the Document, and likewise
+the network locations given in the Document for previous versions
+it was based on.  These may be placed in the &ldquo;History&rdquo; section. 
+You may omit a network location for a work that was published at
+least four years before the Document itself, or if the original
+publisher of the version it refers to gives permission.
+
+          <li>For any section Entitled &ldquo;Acknowledgements&rdquo; or &ldquo;Dedications&rdquo;, Preserve
+the Title of the section, and preserve in the section all the
+substance and tone of each of the contributor acknowledgements and/or
+dedications given therein.
+
+          <li>Preserve all the Invariant Sections of the Document,
+unaltered in their text and in their titles.  Section numbers
+or the equivalent are not considered part of the section titles.
+
+          <li>Delete any section Entitled &ldquo;Endorsements&rdquo;.  Such a section
+may not be included in the Modified Version.
+
+          <li>Do not retitle any existing section to be Entitled &ldquo;Endorsements&rdquo; or
+to conflict in title with any Invariant Section.
+
+          <li>Preserve any Warranty Disclaimers.
+          </ol>
+
+     <p>If the Modified Version includes new front-matter sections or
+appendices that qualify as Secondary Sections and contain no material
+copied from the Document, you may at your option designate some or all
+of these sections as invariant.  To do this, add their titles to the
+list of Invariant Sections in the Modified Version's license notice. 
+These titles must be distinct from any other section titles.
+
+     <p>You may add a section Entitled &ldquo;Endorsements&rdquo;, provided it contains
+nothing but endorsements of your Modified Version by various
+parties&mdash;for example, statements of peer review or that the text has
+been approved by an organization as the authoritative definition of a
+standard.
+
+     <p>You may add a passage of up to five words as a Front-Cover Text, and a
+passage of up to 25 words as a Back-Cover Text, to the end of the list
+of Cover Texts in the Modified Version.  Only one passage of
+Front-Cover Text and one of Back-Cover Text may be added by (or
+through arrangements made by) any one entity.  If the Document already
+includes a cover text for the same cover, previously added by you or
+by arrangement made by the same entity you are acting on behalf of,
+you may not add another; but you may replace the old one, on explicit
+permission from the previous publisher that added the old one.
+
+     <p>The author(s) and publisher(s) of the Document do not by this License
+give permission to use their names for publicity for or to assert or
+imply endorsement of any Modified Version.
+
+     <li>COMBINING DOCUMENTS
+
+     <p>You may combine the Document with other documents released under this
+License, under the terms defined in section 4 above for modified
+versions, provided that you include in the combination all of the
+Invariant Sections of all of the original documents, unmodified, and
+list them all as Invariant Sections of your combined work in its
+license notice, and that you preserve all their Warranty Disclaimers.
+
+     <p>The combined work need only contain one copy of this License, and
+multiple identical Invariant Sections may be replaced with a single
+copy.  If there are multiple Invariant Sections with the same name but
+different contents, make the title of each such section unique by
+adding at the end of it, in parentheses, the name of the original
+author or publisher of that section if known, or else a unique number. 
+Make the same adjustment to the section titles in the list of
+Invariant Sections in the license notice of the combined work.
+
+     <p>In the combination, you must combine any sections Entitled &ldquo;History&rdquo;
+in the various original documents, forming one section Entitled
+&ldquo;History&rdquo;; likewise combine any sections Entitled &ldquo;Acknowledgements&rdquo;,
+and any sections Entitled &ldquo;Dedications&rdquo;.  You must delete all
+sections Entitled &ldquo;Endorsements.&rdquo;
+
+     <li>COLLECTIONS OF DOCUMENTS
+
+     <p>You may make a collection consisting of the Document and other documents
+released under this License, and replace the individual copies of this
+License in the various documents with a single copy that is included in
+the collection, provided that you follow the rules of this License for
+verbatim copying of each of the documents in all other respects.
+
+     <p>You may extract a single document from such a collection, and distribute
+it individually under this License, provided you insert a copy of this
+License into the extracted document, and follow this License in all
+other respects regarding verbatim copying of that document.
+
+     <li>AGGREGATION WITH INDEPENDENT WORKS
+
+     <p>A compilation of the Document or its derivatives with other separate
+and independent documents or works, in or on a volume of a storage or
+distribution medium, is called an &ldquo;aggregate&rdquo; if the copyright
+resulting from the compilation is not used to limit the legal rights
+of the compilation's users beyond what the individual works permit. 
+When the Document is included in an aggregate, this License does not
+apply to the other works in the aggregate which are not themselves
+derivative works of the Document.
+
+     <p>If the Cover Text requirement of section 3 is applicable to these
+copies of the Document, then if the Document is less than one half of
+the entire aggregate, the Document's Cover Texts may be placed on
+covers that bracket the Document within the aggregate, or the
+electronic equivalent of covers if the Document is in electronic form. 
+Otherwise they must appear on printed covers that bracket the whole
+aggregate.
+
+     <li>TRANSLATION
+
+     <p>Translation is considered a kind of modification, so you may
+distribute translations of the Document under the terms of section 4. 
+Replacing Invariant Sections with translations requires special
+permission from their copyright holders, but you may include
+translations of some or all Invariant Sections in addition to the
+original versions of these Invariant Sections.  You may include a
+translation of this License, and all the license notices in the
+Document, and any Warranty Disclaimers, provided that you also include
+the original English version of this License and the original versions
+of those notices and disclaimers.  In case of a disagreement between
+the translation and the original version of this License or a notice
+or disclaimer, the original version will prevail.
+
+     <p>If a section in the Document is Entitled &ldquo;Acknowledgements&rdquo;,
+&ldquo;Dedications&rdquo;, or &ldquo;History&rdquo;, the requirement (section 4) to Preserve
+its Title (section 1) will typically require changing the actual
+title.
+
+     <li>TERMINATION
+
+     <p>You may not copy, modify, sublicense, or distribute the Document
+except as expressly provided under this License.  Any attempt
+otherwise to copy, modify, sublicense, or distribute it is void, and
+will automatically terminate your rights under this License.
+
+     <p>However, if you cease all violation of this License, then your license
+from a particular copyright holder is reinstated (a) provisionally,
+unless and until the copyright holder explicitly and finally
+terminates your license, and (b) permanently, if the copyright holder
+fails to notify you of the violation by some reasonable means prior to
+60 days after the cessation.
+
+     <p>Moreover, your license from a particular copyright holder is
+reinstated permanently if the copyright holder notifies you of the
+violation by some reasonable means, this is the first time you have
+received notice of violation of this License (for any work) from that
+copyright holder, and you cure the violation prior to 30 days after
+your receipt of the notice.
+
+     <p>Termination of your rights under this section does not terminate the
+licenses of parties who have received copies or rights from you under
+this License.  If your rights have been terminated and not permanently
+reinstated, receipt of a copy of some or all of the same material does
+not give you any rights to use it.
+
+     <li>FUTURE REVISIONS OF THIS LICENSE
+
+     <p>The Free Software Foundation may publish new, revised versions
+of the GNU Free Documentation License from time to time.  Such new
+versions will be similar in spirit to the present version, but may
+differ in detail to address new problems or concerns.  See
+<a href="http://www.gnu.org/copyleft/">http://www.gnu.org/copyleft/</a>.
+
+     <p>Each version of the License is given a distinguishing version number. 
+If the Document specifies that a particular numbered version of this
+License &ldquo;or any later version&rdquo; applies to it, you have the option of
+following the terms and conditions either of that specified version or
+of any later version that has been published (not as a draft) by the
+Free Software Foundation.  If the Document does not specify a version
+number of this License, you may choose any version ever published (not
+as a draft) by the Free Software Foundation.  If the Document
+specifies that a proxy can decide which future versions of this
+License can be used, that proxy's public statement of acceptance of a
+version permanently authorizes you to choose that version for the
+Document.
+
+     <li>RELICENSING
+
+     <p>&ldquo;Massive Multiauthor Collaboration Site&rdquo; (or &ldquo;MMC Site&rdquo;) means any
+World Wide Web server that publishes copyrightable works and also
+provides prominent facilities for anybody to edit those works.  A
+public wiki that anybody can edit is an example of such a server.  A
+&ldquo;Massive Multiauthor Collaboration&rdquo; (or &ldquo;MMC&rdquo;) contained in the
+site means any set of copyrightable works thus published on the MMC
+site.
+
+     <p>&ldquo;CC-BY-SA&rdquo; means the Creative Commons Attribution-Share Alike 3.0
+license published by Creative Commons Corporation, a not-for-profit
+corporation with a principal place of business in San Francisco,
+California, as well as future copyleft versions of that license
+published by that same organization.
+
+     <p>&ldquo;Incorporate&rdquo; means to publish or republish a Document, in whole or
+in part, as part of another Document.
+
+     <p>An MMC is &ldquo;eligible for relicensing&rdquo; if it is licensed under this
+License, and if all works that were first published under this License
+somewhere other than this MMC, and subsequently incorporated in whole
+or in part into the MMC, (1) had no cover texts or invariant sections,
+and (2) were thus incorporated prior to November 1, 2008.
+
+     <p>The operator of an MMC Site may republish an MMC contained in the site
+under CC-BY-SA on the same site at any time before August 1, 2009,
+provided the MMC is eligible for relicensing.
+
+        </ol>
+
+<h3 class="heading">ADDENDUM: How to use this License for your documents</h3>
+
+<p>To use this License in a document you have written, include a copy of
+the License in the document and put the following copyright and
+license notices just after the title page:
+
+<pre class="smallexample">       Copyright (C)  <var>year</var>  <var>your name</var>.
+       Permission is granted to copy, distribute and/or modify this document
+       under the terms of the GNU Free Documentation License, Version 1.3
+       or any later version published by the Free Software Foundation;
+       with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+       Texts.  A copy of the license is included in the section entitled ``GNU
+       Free Documentation License''.
+</pre>
+   <p>If you have Invariant Sections, Front-Cover Texts and Back-Cover Texts,
+replace the &ldquo;with<small class="dots">...</small>Texts.&rdquo; line with this:
+
+<pre class="smallexample">         with the Invariant Sections being <var>list their titles</var>, with
+         the Front-Cover Texts being <var>list</var>, and with the Back-Cover Texts
+         being <var>list</var>.
+</pre>
+   <p>If you have Invariant Sections without Cover Texts, or some other
+combination of the three, merge those two alternatives to suit the
+situation.
+
+   <p>If your document contains nontrivial examples of program code, we
+recommend releasing these examples in parallel under your choice of
+free software license, such as the GNU General Public License,
+to permit their use in free software.
+
+<!-- Local Variables: -->
+<!-- ispell-local-pdict: "ispell-dict" -->
+<!-- End: -->
+<div class="node">
+<a name="Key-Index"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Variable-Index">Variable Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="unnumbered">Key Index</h2>
+
+<ul class="index-ky" compact>
+<li><a href="#index-C_002dc-_003b-5"><code>C-c ;</code></a>: <a href="#Using-Octave-Mode">Using Octave Mode</a></li>
+<li><a href="#index-C_002dc-_005d-17"><code>C-c ]</code></a>: <a href="#Using-Octave-Mode">Using Octave Mode</a></li>
+<li><a href="#index-C_002dc-C_002da-11"><code>C-c C-a</code></a>: <a href="#Using-Octave-Mode">Using Octave Mode</a></li>
+<li><a href="#index-C_002dc-C_002de-13"><code>C-c C-e</code></a>: <a href="#Using-Octave-Mode">Using Octave Mode</a></li>
+<li><a href="#index-C_002dc-C_002df-18"><code>C-c C-f</code></a>: <a href="#Using-Octave-Mode">Using Octave Mode</a></li>
+<li><a href="#index-C_002dc-C_002di-a-39"><code>C-c C-i a</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-C_002dc-C_002di-b-33"><code>C-c C-i b</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-C_002dc-C_002di-f-35"><code>C-c C-i f</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-C_002dc-C_002di-k-45"><code>C-c C-i k</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-C_002dc-C_002di-l-30"><code>C-c C-i l</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-C_002dc-C_002di-q-43"><code>C-c C-i q</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-C_002dc-C_002di-r-37"><code>C-c C-i r</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-C_002dc-C_002di-s-41"><code>C-c C-i s</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-C_002dc-C_002dl-47"><code>C-c C-l</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-C_002dc-C_002dn-9"><code>C-c C-n</code></a>: <a href="#Using-Octave-Mode">Using Octave Mode</a></li>
+<li><a href="#index-C_002dc-C_002dp-7"><code>C-c C-p</code></a>: <a href="#Using-Octave-Mode">Using Octave Mode</a></li>
+<li><a href="#index-C_002dc-M_002dC_002dh-15"><code>C-c M-C-h</code></a>: <a href="#Using-Octave-Mode">Using Octave Mode</a></li>
+<li><a href="#index-C_002dh-a-55"><code>C-h a</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-C_002dh-d-52"><code>C-h d</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-C_002dM_002dj-2"><code>C-M-j</code></a>: <a href="#Using-Octave-Mode">Using Octave Mode</a></li>
+<li><a href="#index-M_002d_002e-49"><code>M-.</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+   </ul><div class="node">
+<a name="Variable-Index"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Lisp-Function-Index">Lisp Function Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Key-Index">Key Index</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="unnumbered">Variable Index</h2>
+
+
+
+<ul class="index-vr" compact>
+<li><a href="#index-inferior_002doctave_002dbuffer-29"><code>inferior-octave-buffer</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-inferior_002doctave_002dmode_002dhook-61"><code>inferior-octave-mode-hook</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-inferior_002doctave_002dprompt-62"><code>inferior-octave-prompt</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-inferior_002doctave_002dprompt_002dread_002donly-60"><code>inferior-octave-prompt-read-only</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-inferior_002doctave_002dstartup_002dargs-59"><code>inferior-octave-startup-args</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-octave_002dblink_002dmatching_002dblock-20"><code>octave-blink-matching-block</code></a>: <a href="#Using-Octave-Mode">Using Octave Mode</a></li>
+<li><a href="#index-octave_002dblock_002doffset-21"><code>octave-block-offset</code></a>: <a href="#Using-Octave-Mode">Using Octave Mode</a></li>
+<li><a href="#index-octave_002dcontinuation_002doffset-22"><code>octave-continuation-offset</code></a>: <a href="#Using-Octave-Mode">Using Octave Mode</a></li>
+<li><a href="#index-octave_002dcontinuation_002dstring-4"><code>octave-continuation-string</code></a>: <a href="#Using-Octave-Mode">Using Octave Mode</a></li>
+<li><a href="#index-octave_002deldoc_002dmessage_002dstyle-26"><code>octave-eldoc-message-style</code></a>: <a href="#Using-Octave-Mode">Using Octave Mode</a></li>
+<li><a href="#index-octave_002dfont_002dlock_002dtexinfo_002dcomment-23"><code>octave-font-lock-texinfo-comment</code></a>: <a href="#Using-Octave-Mode">Using Octave Mode</a></li>
+<li><a href="#index-octave_002dhelp_002dbuffer-54"><code>octave-help-buffer</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-octave_002dmode_002dhook-27"><code>octave-mode-hook</code></a>: <a href="#Using-Octave-Mode">Using Octave Mode</a></li>
+<li><a href="#index-octave_002dsend_002decho_002dinput-57"><code>octave-send-echo-input</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-octave_002dsend_002dline_002dauto_002dforward-32"><code>octave-send-line-auto-forward</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-octave_002dsend_002dshow_002dbuffer-58"><code>octave-send-show-buffer</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-octave_002dsource_002ddirectories-51"><code>octave-source-directories</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+   </ul><div class="node">
+<a name="Lisp-Function-Index"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Concept-Index">Concept Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Variable-Index">Variable Index</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="unnumbered">Function Index</h2>
+
+
+
+<ul class="index-fn" compact>
+<li><a href="#index-octave_002dbeginning_002dof_002dline-12"><code>octave-beginning-of-line</code></a>: <a href="#Using-Octave-Mode">Using Octave Mode</a></li>
+<li><a href="#index-octave_002dend_002dof_002dline-14"><code>octave-end-of-line</code></a>: <a href="#Using-Octave-Mode">Using Octave Mode</a></li>
+<li><a href="#index-octave_002dfind_002ddefinition-50"><code>octave-find-definition</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-octave_002dhelp-53"><code>octave-help</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-octave_002dhide_002dprocess_002dbuffer-44"><code>octave-hide-process-buffer</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-octave_002dindent_002dnew_002dcomment_002dline-3"><code>octave-indent-new-comment-line</code></a>: <a href="#Using-Octave-Mode">Using Octave Mode</a></li>
+<li><a href="#index-octave_002dinsert_002ddefun-19"><code>octave-insert-defun</code></a>: <a href="#Using-Octave-Mode">Using Octave Mode</a></li>
+<li><a href="#index-octave_002dkill_002dprocess-46"><code>octave-kill-process</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-octave_002dlookfor-56"><code>octave-lookfor</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-octave_002dmark_002dblock-16"><code>octave-mark-block</code></a>: <a href="#Using-Octave-Mode">Using Octave Mode</a></li>
+<li><a href="#index-octave_002dnext_002dcode_002dline-10"><code>octave-next-code-line</code></a>: <a href="#Using-Octave-Mode">Using Octave Mode</a></li>
+<li><a href="#index-octave_002dprevious_002dcode_002dline-8"><code>octave-previous-code-line</code></a>: <a href="#Using-Octave-Mode">Using Octave Mode</a></li>
+<li><a href="#index-octave_002dsend_002dblock-34"><code>octave-send-block</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-octave_002dsend_002dbuffer-40"><code>octave-send-buffer</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-octave_002dsend_002ddefun-36"><code>octave-send-defun</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-octave_002dsend_002dline-31"><code>octave-send-line</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-octave_002dsend_002dregion-38"><code>octave-send-region</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-octave_002dshow_002dprocess_002dbuffer-42"><code>octave-show-process-buffer</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-octave_002dsource_002dfile-48"><code>octave-source-file</code></a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-octave_002dupdate_002dfunction_002dfile_002dcomment-6"><code>octave-update-function-file-comment</code></a>: <a href="#Using-Octave-Mode">Using Octave Mode</a></li>
+   </ul><div class="node">
+<a name="Concept-Index"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Lisp-Function-Index">Lisp Function Index</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="unnumbered">Concept Index</h2>
+
+
+
+<ul class="index-cp" compact>
+<li><a href="#index-ElDoc-Mode-Support-25">ElDoc Mode Support</a>: <a href="#Using-Octave-Mode">Using Octave Mode</a></li>
+<li><a href="#index-Imenu-Support-24">Imenu Support</a>: <a href="#Using-Octave-Mode">Using Octave Mode</a></li>
+<li><a href="#index-Inferior-Octave-Mode-28">Inferior Octave Mode</a>: <a href="#Running-Octave-from-Within-Emacs">Running Octave from Within Emacs</a></li>
+<li><a href="#index-Using-Octave-Mode-1">Using Octave Mode</a>: <a href="#Using-Octave-Mode">Using Octave Mode</a></li>
+   </ul></body></html>
+
+<!--
+
+Local Variables:
+coding: utf-8
+End:
+
+-->

@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -43,28 +43,29 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
 
 <h3 class="section">11.9 Scoping Rules for Variable Bindings</h3>
 
-<p>When you create a local binding for a variable, that binding takes
+<p><a name="index-scoping-rule-738"></a>
+  When you create a local binding for a variable, that binding takes
 effect only within a limited portion of the program (see <a href="Local-Variables.html#Local-Variables">Local Variables</a>).  This section describes exactly what this means.
 
-   <p><a name="index-scope-638"></a><a name="index-extent-639"></a>  Each local binding has a certain <dfn>scope</dfn> and <dfn>extent</dfn>. 
+   <p><a name="index-scope-739"></a><a name="index-extent-740"></a>  Each local binding has a certain <dfn>scope</dfn> and <dfn>extent</dfn>. 
 <dfn>Scope</dfn> refers to <em>where</em> in the textual source code the
 binding can be accessed.  <dfn>Extent</dfn> refers to <em>when</em>, as the
 program is executing, the binding exists.
 
-   <p><a name="index-dynamic-binding-640"></a><a name="index-indefinite-scope-641"></a><a name="index-dynamic-extent-642"></a>  By default, the local bindings that Emacs creates are <dfn>dynamic
-bindings</dfn>.  Such a binding has <dfn>indefinite scope</dfn>, meaning that
-any part of the program can potentially access the variable binding. 
-It also has <dfn>dynamic extent</dfn>, meaning that the binding lasts only
+   <p><a name="index-dynamic-binding-741"></a><a name="index-dynamic-scope-742"></a><a name="index-dynamic-extent-743"></a>  By default, the local bindings that Emacs creates are <dfn>dynamic
+bindings</dfn>.  Such a binding has <dfn>dynamic scope</dfn>, meaning that any
+part of the program can potentially access the variable binding.  It
+also has <dfn>dynamic extent</dfn>, meaning that the binding lasts only
 while the binding construct (such as the body of a <code>let</code> form) is
 being executed.
 
-   <p><a name="index-lexical-binding-643"></a><a name="index-lexical-scope-644"></a><a name="index-indefinite-extent-645"></a>  Emacs can optionally create <dfn>lexical bindings</dfn>.  A lexical
+   <p><a name="index-lexical-binding-744"></a><a name="index-lexical-scope-745"></a><a name="index-indefinite-extent-746"></a>  Emacs can optionally create <dfn>lexical bindings</dfn>.  A lexical
 binding has <dfn>lexical scope</dfn>, meaning that any reference to the
-variable must be located textually within the binding construct.  It
-also has <dfn>indefinite extent</dfn>, meaning that under some
-circumstances the binding can live on even after the binding construct
-has finished executing, by means of special objects called
-<dfn>closures</dfn>.
+variable must be located textually within the binding
+construct<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  It also has
+<dfn>indefinite extent</dfn>, meaning that under some circumstances the
+binding can live on even after the binding construct has finished
+executing, by means of special objects called <dfn>closures</dfn>.
 
    <p>The following subsections describe dynamic binding and lexical
 binding in greater detail, and how to enable lexical binding in Emacs
@@ -76,6 +77,13 @@ Lisp programs.
 <li><a accesskey="3" href="Lexical-Binding.html#Lexical-Binding">Lexical Binding</a>:          A different type of local variable binding. 
 <li><a accesskey="4" href="Using-Lexical-Binding.html#Using-Lexical-Binding">Using Lexical Binding</a>:    How to enable lexical binding. 
 </ul>
+
+   <div class="footnote">
+<hr>
+<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> With some exceptions; for instance, a lexical
+binding can also be accessed from the Lisp debugger.</p>
+
+   <hr></div>
 
    </body></html>
 

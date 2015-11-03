@@ -1,0 +1,2199 @@
+<html lang="en">
+<head>
+<title>URL Programmer's Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="URL Programmer's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="top" href="#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the manual for the `url' Emacs Lisp library.
+
+Copyright (C) 1993-1999, 2002, 2004-2015 Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being "A GNU Manual," and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     "GNU Free Documentation License".
+
+     (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+     modify this GNU manual."
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<h1 class="settitle">URL Programmer's Manual</h1>
+   <div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Top" href="#Top">URL</a>
+<li><a name="toc_Introduction" href="#Introduction">1 Introduction</a>
+<li><a name="toc_URI-Parsing" href="#URI-Parsing">2 URI Parsing</a>
+<ul>
+<li><a href="#Parsed-URIs">2.1 Parsed URI structures</a>
+<li><a href="#URI-Encoding">2.2 URI Encoding</a>
+</li></ul>
+<li><a name="toc_Retrieving-URLs" href="#Retrieving-URLs">3 Retrieving URLs</a>
+<li><a name="toc_Supported-URL-Types" href="#Supported-URL-Types">4 Supported URL Types</a>
+<ul>
+<li><a href="#http_002fhttps">4.1 <code>http</code> and <code>https</code></a>
+<ul>
+<li><a href="#Cookies">4.1.1 Cookies</a>
+<li><a href="#HTTP-language_002fcoding">4.1.2 Language and Encoding Preferences</a>
+<li><a href="#HTTP-URL-Options">4.1.3 HTTP URL Options</a>
+<li><a href="#Dealing-with-HTTP-documents">4.1.4 Dealing with HTTP documents</a>
+</li></ul>
+<li><a href="#file_002fftp">4.2 file and ftp</a>
+<li><a href="#info">4.3 info</a>
+<li><a href="#mailto">4.4 mailto</a>
+<li><a href="#news_002fnntp_002fsnews">4.5 <code>news</code>, <code>nntp</code> and <code>snews</code></a>
+<li><a href="#rlogin_002ftelnet_002ftn3270">4.6 rlogin, telnet and tn3270</a>
+<li><a href="#irc">4.7 irc</a>
+<li><a href="#data">4.8 data</a>
+<li><a href="#nfs">4.9 nfs</a>
+<li><a href="#ldap">4.10 ldap</a>
+<li><a href="#man">4.11 man</a>
+</li></ul>
+<li><a name="toc_General-Facilities" href="#General-Facilities">5 General Facilities</a>
+<ul>
+<li><a href="#Disk-Caching">5.1 Disk Caching</a>
+<li><a href="#Proxies">5.2 Proxies and Gatewaying</a>
+<li><a href="#Gateways-in-general">5.3 Gateways in General</a>
+<ul>
+<li><a href="#Suppressing-network-connections">5.3.1 Suppressing Network Connections</a>
+</li></ul>
+<li><a href="#History">5.4 History</a>
+</li></ul>
+<li><a name="toc_Customization" href="#Customization">6 Customization</a>
+<li><a name="toc_GNU-Free-Documentation-License" href="#GNU-Free-Documentation-License">Appendix A GNU Free Documentation License</a>
+<li><a name="toc_Function-Index" href="#Function-Index">Command and Function Index</a>
+<li><a name="toc_Variable-Index" href="#Variable-Index">Variable Index</a>
+<li><a name="toc_Concept-Index" href="#Concept-Index">Concept Index</a>
+</li></ul>
+</div>
+
+
+
+<div class="node">
+<a name="Top"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Introduction">Introduction</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#dir">(dir)</a>
+
+</div>
+
+<h2 class="unnumbered">URL</h2>
+
+<p>This is the manual for the <code>url</code> Emacs Lisp library.
+
+   <p>Copyright &copy; 1993&ndash;1999, 2002, 2004&ndash;2015 Free Software
+Foundation, Inc.
+
+   <blockquote>
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with the Front-Cover Texts being &ldquo;A GNU Manual,&rdquo;
+and with the Back-Cover Texts as in (a) below.  A copy of the license
+is included in the section entitled &ldquo;GNU Free Documentation License&rdquo;.
+
+   <p>(a) The FSF's Back-Cover Text is: &ldquo;You have the freedom to copy and
+modify this GNU manual.&rdquo;
+</blockquote>
+
+<ul class="menu">
+<li><a accesskey="1" href="#Introduction">Introduction</a>:                 About the <code>url</code> library. 
+<li><a accesskey="2" href="#URI-Parsing">URI Parsing</a>:                  Parsing (and unparsing) URIs. 
+<li><a accesskey="3" href="#Retrieving-URLs">Retrieving URLs</a>:              How to use this package to retrieve a URL. 
+<li><a accesskey="4" href="#Supported-URL-Types">Supported URL Types</a>:          Descriptions of URL types currently supported. 
+<li><a accesskey="5" href="#General-Facilities">General Facilities</a>:           URLs can be cached, accessed via a gateway
+                                and tracked in a history list. 
+<li><a accesskey="6" href="#Customization">Customization</a>:                Variables you can alter. 
+<li><a accesskey="7" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>:  The license for this documentation. 
+<li><a accesskey="8" href="#Function-Index">Function Index</a>
+<li><a accesskey="9" href="#Variable-Index">Variable Index</a>
+<li><a href="#Concept-Index">Concept Index</a>
+</ul>
+
+<div class="node">
+<a name="Introduction"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#URI-Parsing">URI Parsing</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Top">Top</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">1 Introduction</h2>
+
+<p><a name="index-URL-1"></a><a name="index-URI-2"></a><a name="index-uniform-resource-identifier-3"></a><a name="index-uniform-resource-locator-4"></a>
+A <dfn>Uniform Resource Identifier</dfn> (URI) is a specially-formatted
+name, such as an Internet address, that identifies some name or
+resource.  The format of URIs is described in RFC 3986, which updates
+and replaces the earlier RFCs 2732, 2396, 1808, and 1738.  A
+<dfn>Uniform Resource Locator</dfn> (URL) is an older but still-common
+term, which basically refers to a URI corresponding to a resource that
+can be accessed (usually over a network) in a specific way.
+
+   <p>Here are some examples of URIs (taken from RFC 3986):
+
+<pre class="example">     ftp://ftp.is.co.za/rfc/rfc1808.txt
+     http://www.ietf.org/rfc/rfc2396.txt
+     ldap://[2001:db8::7]/c=GB?objectClass?one
+     mailto:John.Doe@example.com
+     news:comp.infosystems.www.servers.unix
+     tel:+1-816-555-1212
+     telnet://192.0.2.16:80/
+     urn:oasis:names:specification:docbook:dtd:xml:4.1.2
+</pre>
+   <p>This manual describes the <code>url</code> library, an Emacs Lisp library
+for parsing URIs and retrieving the resources to which they refer. 
+(The library is so-named for historical reasons; nowadays, the &ldquo;URI&rdquo;
+terminology is regarded as the more general one, and &ldquo;URL&rdquo; is
+technically obsolete despite its widespread vernacular usage.)
+
+<div class="node">
+<a name="URI-Parsing"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Retrieving-URLs">Retrieving URLs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Introduction">Introduction</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">2 URI Parsing</h2>
+
+<p>A URI consists of several <dfn>components</dfn>, each having a different
+meaning.  For example, the URI
+
+<pre class="example">     http://www.gnu.org/software/emacs/
+</pre>
+   <p class="noindent">specifies the scheme component &lsquo;<samp><span class="samp">http</span></samp>&rsquo;, the hostname component
+&lsquo;<samp><span class="samp">www.gnu.org</span></samp>&rsquo;, and the path component &lsquo;<samp><span class="samp">/software/emacs/</span></samp>&rsquo;.
+
+   <p><a name="index-parsed-URIs-5"></a>  The format of URIs is specified by RFC 3986.  The <code>url</code> library
+provides the Lisp function <code>url-generic-parse-url</code>, a (mostly)
+standard-compliant URI parser, as well as function
+<code>url-recreate-url</code>, which converts a parsed URI back into a URI
+string.
+
+<div class="defun">
+&mdash; Function: <b>url-generic-parse-url</b><var> uri-string<a name="index-url_002dgeneric_002dparse_002durl-6"></a></var><br>
+<blockquote><p>This function returns a parsed version of the string <var>uri-string</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>url-recreate-url</b><var> uri-obj<a name="index-url_002drecreate_002durl-7"></a></var><br>
+<blockquote><p><a name="index-unparsing-URLs-8"></a>Given a parsed URI, this function returns the corresponding URI string. 
+</p></blockquote></div>
+
+   <p><a name="index-parsed-URI-9"></a>  The return value of <code>url-generic-parse-url</code>, and the argument
+expected by <code>url-recreate-url</code>, is a <dfn>parsed URI</dfn>: a CL
+structure whose slots hold the various components of the URI. 
+See <a href="cl.html#Top">the CL Manual</a>, for
+details about CL structures.  Most of the other functions in the
+<code>url</code> library act on parsed URIs.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Parsed-URIs">Parsed URIs</a>:            Format of parsed URI structures. 
+<li><a accesskey="2" href="#URI-Encoding">URI Encoding</a>:           Non-<acronym>ASCII</acronym> characters in URIs. 
+</ul>
+
+<div class="node">
+<a name="Parsed-URIs"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#URI-Encoding">URI Encoding</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#URI-Parsing">URI Parsing</a>
+
+</div>
+
+<h3 class="section">2.1 Parsed URI structures</h3>
+
+<p>Each parsed URI structure contains the following slots:
+
+     <dl>
+<dt><code>type</code><dd>The URI scheme (a string, e.g., <code>http</code>).  See <a href="#Supported-URL-Types">Supported URL Types</a>, for a list of schemes that the <code>url</code> library knows how to
+process.  This slot can also be <code>nil</code>, if the URI is not fully
+specified.
+
+     <br><dt><code>user</code><dd>The user name (a string), or <code>nil</code>.
+
+     <br><dt><code>password</code><dd>The user password (a string), or <code>nil</code>.  The use of this URI
+component is strongly discouraged; nowadays, passwords are transmitted
+by other means, not as part of a URI.
+
+     <br><dt><code>host</code><dd>The host name (a string), or <code>nil</code>.  If present, this is
+typically a domain name or IP address.
+
+     <br><dt><code>port</code><dd>The port number (an integer), or <code>nil</code>.  Omitting this component
+usually means to use the &ldquo;standard&rdquo; port associated with the URI
+scheme.
+
+     <br><dt><code>filename</code><dd>The combination of the &ldquo;path&rdquo; and &ldquo;query&rdquo; components of the URI (a
+string), or <code>nil</code>.  If the query component is present, it is the
+substring following the first &lsquo;<samp><span class="samp">?</span></samp>&rsquo; character, and the path
+component is the substring before the &lsquo;<samp><span class="samp">?</span></samp>&rsquo;.  The meaning of these
+components is scheme-dependent; they do not necessarily refer to a
+file on a disk.
+
+     <br><dt><code>target</code><dd>The fragment component (a string), or <code>nil</code>.  The fragment
+component specifies a &ldquo;secondary resource&rdquo;, such as a section of a
+webpage.
+
+     <br><dt><code>fullness</code><dd>This is <code>t</code> if the URI is fully specified, i.e., the
+hierarchical components of the URI (the hostname and/or username
+and/or password) are preceded by &lsquo;<samp><span class="samp">//</span></samp>&rsquo;. 
+</dl>
+
+   <p><a name="index-url_002dtype-10"></a><a name="index-url_002duser-11"></a><a name="index-url_002dpassword-12"></a><a name="index-url_002dhost-13"></a><a name="index-url_002dport-14"></a><a name="index-url_002dfilename-15"></a><a name="index-url_002dtarget-16"></a><a name="index-url_002dattributes-17"></a><a name="index-url_002dfullness-18"></a>These slots have accessors named <code>url-</code><var>part</var>, where
+<var>part</var> is the slot name.  For example, the accessor for the
+<code>host</code> slot is the function <code>url-host</code>.  The <code>url-port</code>
+accessor returns the default port for the URI scheme if the parsed
+URI's <var>port</var> slot is <code>nil</code>.
+
+   <p>The slots can be set using <code>setf</code>.  For example:
+
+<pre class="example">     (setf (url-port url) 80)
+</pre>
+   <div class="node">
+<a name="URI-Encoding"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Parsed-URIs">Parsed URIs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#URI-Parsing">URI Parsing</a>
+
+</div>
+
+<h3 class="section">2.2 URI Encoding</h3>
+
+<p><a name="index-percent-encoding-19"></a>  The <code>url-generic-parse-url</code> parser does not obey RFC 3986 in
+one respect: it allows non-<acronym>ASCII</acronym> characters in URI strings.
+
+   <p>Strictly speaking, RFC 3986 compatible URIs may only consist of
+<acronym>ASCII</acronym> characters; non-<acronym>ASCII</acronym> characters are
+represented by converting them to UTF-8 byte sequences, and performing
+<dfn>percent encoding</dfn> on the bytes.  For example, the o-umlaut
+character is converted to the UTF-8 byte sequence &lsquo;<samp><span class="samp">\xD3\xA7</span></samp>&rsquo;,
+then percent encoded to &lsquo;<samp><span class="samp">%D3%A7</span></samp>&rsquo;.  (Certain &ldquo;reserved&rdquo;
+<acronym>ASCII</acronym> characters must also be percent encoded when they
+appear in URI components.)
+
+   <p>The function <code>url-encode-url</code> can be used to convert a URI
+string containing arbitrary characters to one that is properly
+percent-encoded in accordance with RFC 3986.
+
+<div class="defun">
+&mdash; Function: <b>url-encode-url</b><var> url-string<a name="index-url_002dencode_002durl-20"></a></var><br>
+<blockquote><p>This function return a properly URI-encoded version of
+<var>url-string</var>.  It also performs <dfn>URI normalization</dfn>,
+e.g., converting the scheme component to lowercase if it was
+previously uppercase. 
+</p></blockquote></div>
+
+   <p>To convert between a string containing arbitrary characters and a
+percent-encoded all-<acronym>ASCII</acronym> string, use the functions
+<code>url-hexify-string</code> and <code>url-unhex-string</code>:
+
+<div class="defun">
+&mdash; Function: <b>url-hexify-string</b><var> string &amp;optional allowed-chars<a name="index-url_002dhexify_002dstring-21"></a></var><br>
+<blockquote><p>This function performs percent-encoding on <var>string</var>, and returns
+the result.
+
+        <p>If <var>string</var> is multibyte, it is first converted to a UTF-8 byte
+string.  Each byte corresponding to an allowed character is left
+as-is, while all other bytes are converted to a three-character
+sequence: &lsquo;<samp><span class="samp">%</span></samp>&rsquo; followed by two upper-case hex digits.
+
+        <p><a name="index-url_002dunreserved_002dchars-22"></a><a name="index-unreserved-characters-23"></a>The allowed characters are specified by <var>allowed-chars</var>.  If this
+argument is <code>nil</code>, the allowed characters are those specified as
+<dfn>unreserved characters</dfn> by RFC 3986 (see the variable
+<code>url-unreserved-chars</code>).  Otherwise, <var>allowed-chars</var> should
+be a vector whose <var>n</var>-th element is non-<code>nil</code> if character
+<var>n</var> is allowed. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>url-unhex-string</b><var> string &amp;optional allow-newlines<a name="index-url_002dunhex_002dstring-24"></a></var><br>
+<blockquote><p>This function replaces percent-encoding sequences in <var>string</var> with
+their character equivalents, and returns the resulting string.
+
+        <p>If <var>allow-newlines</var> is non-<code>nil</code>, it allows the decoding of
+carriage returns and line feeds, which are normally forbidden in URIs. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Retrieving-URLs"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Supported-URL-Types">Supported URL Types</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#URI-Parsing">URI Parsing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">3 Retrieving URLs</h2>
+
+<p>The <code>url</code> library defines the following three functions for
+retrieving the data specified by a URL.  The actual retrieval protocol
+depends on the URL's URI scheme, and is performed by lower-level
+scheme-specific functions.  (Those lower-level functions are not
+documented here, and generally should not be called directly.)
+
+   <p>In each of these functions, the <var>url</var> argument can be either a
+string or a parsed URL structure.  If it is a string, that string is
+passed through <code>url-encode-url</code> before using it, to ensure that
+it is properly URI-encoded (see <a href="#URI-Encoding">URI Encoding</a>).
+
+<div class="defun">
+&mdash; Function: <b>url-retrieve-synchronously</b><var> url<a name="index-url_002dretrieve_002dsynchronously-25"></a></var><br>
+<blockquote><p>This function synchronously retrieves the data specified by <var>url</var>,
+and returns a buffer containing the data.  The return value is
+<code>nil</code> if there is no data associated with the URL (as is the case
+for <code>dired</code>, <code>info</code>, and <code>mailto</code> URLs). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>url-retrieve</b><var> url callback &amp;optional cbargs silent no-cookies<a name="index-url_002dretrieve-26"></a></var><br>
+<blockquote><p>This function retrieves <var>url</var> asynchronously, calling the function
+<var>callback</var> when the object has been completely retrieved.  The
+return value is the buffer into which the data will be inserted, or
+<code>nil</code> if the process has already completed.
+
+        <p>The callback function is called this way:
+
+     <pre class="example">          (apply <var>callback</var> <var>status</var> <var>cbargs</var>)
+</pre>
+        <p class="noindent">where <var>status</var> is a plist representing what happened during the
+retrieval, with most recent events first, or an empty list if no
+events have occurred.  Each pair in the plist is one of:
+
+          <dl>
+<dt><code>(:redirect </code><var>redirected-to</var><code>)</code><dd>This means that the request was redirected to the URL
+<var>redirected-to</var>.
+
+          <br><dt><code>(:error (</code><var>error-symbol</var><code> . </code><var>data</var><code>))</code><dd>This means that an error occurred.  If so desired, the error can be
+signaled with <code>(signal </code><var>error-symbol</var> <var>data</var><code>)</code>. 
+</dl>
+
+        <p>When the callback function is called, the current buffer is the one
+containing the retrieved data (if any).  The buffer also contains any
+MIME headers associated with the data retrieval.
+
+        <p>If the optional argument <var>silent</var> is non-<code>nil</code>, progress
+messages are suppressed.  If the optional argument <var>no-cookies</var> is
+non-<code>nil</code>, cookies are not stored or sent. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>url-queue-retrieve</b><var> url callback &amp;optional cbargs silent no-cookies<a name="index-url_002dqueue_002dretrieve-27"></a></var><br>
+<blockquote><p>This function acts like <code>url-retrieve</code>, but with limits on the
+number of concurrently-running network processes.  The option
+<code>url-queue-parallel-processes</code> controls the number of concurrent
+processes, and the option <code>url-queue-timeout</code> sets a timeout in
+seconds.
+
+        <p>To use this function, you must <code>(require 'url-queue)</code>. 
+</p></blockquote></div>
+
+   <p><a name="index-url_002dqueue_002dparallel_002dprocesses-28"></a>
+
+<div class="defun">
+&mdash; User Option: <b>url-queue-parallel-processes</b><var><a name="index-url_002dqueue_002dparallel_002dprocesses-29"></a></var><br>
+<blockquote><p>The value of this option is an integer specifying the maximum number
+of concurrent <code>url-queue-retrieve</code> network processes.  If the
+number of <code>url-queue-retrieve</code> calls is larger than this number,
+later ones are queued until earlier ones are finished. 
+</p></blockquote></div>
+
+   <p><a name="index-url_002dqueue_002dtimeout-30"></a>
+
+<div class="defun">
+&mdash; User Option: <b>url-queue-timeout</b><var><a name="index-url_002dqueue_002dtimeout-31"></a></var><br>
+<blockquote><p>The value of this option is a number specifying the maximum lifetime
+of a <code>url-queue-retrieve</code> network process, once it is started. 
+If a process is not finished by then, it is killed and removed from
+the queue. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Supported-URL-Types"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#General-Facilities">General Facilities</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Retrieving-URLs">Retrieving URLs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">4 Supported URL Types</h2>
+
+<p>This chapter describes functions and variables affecting URL retrieval
+for specific schemes.
+
+<ul class="menu">
+<li><a accesskey="1" href="#http_002fhttps">http/https</a>:                   Hypertext Transfer Protocol. 
+<li><a accesskey="2" href="#file_002fftp">file/ftp</a>:                     Local files and FTP archives. 
+<li><a accesskey="3" href="#info">info</a>:                         Emacs "Info" pages. 
+<li><a accesskey="4" href="#mailto">mailto</a>:                       Sending email. 
+<li><a accesskey="5" href="#news_002fnntp_002fsnews">news/nntp/snews</a>:              Usenet news. 
+<li><a accesskey="6" href="#rlogin_002ftelnet_002ftn3270">rlogin/telnet/tn3270</a>:         Remote host connectivity. 
+<li><a accesskey="7" href="#irc">irc</a>:                          Internet Relay Chat. 
+<li><a accesskey="8" href="#data">data</a>:                         Embedded data URLs. 
+<li><a accesskey="9" href="#nfs">nfs</a>:                          Networked File System
+<li><a href="#ldap">ldap</a>:                         Lightweight Directory Access Protocol
+<li><a href="#man">man</a>:                          Unix man pages. 
+</ul>
+
+<div class="node">
+<a name="http%2fhttps"></a>
+<a name="http_002fhttps"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#file_002fftp">file/ftp</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Supported-URL-Types">Supported URL Types</a>
+
+</div>
+
+<h3 class="section">4.1 <code>http</code> and <code>https</code></h3>
+
+<p>The <code>http</code> scheme refers to the Hypertext Transfer Protocol.  The
+<code>url</code> library supports HTTP version 1.1, specified in RFC 2616. 
+Its default port is 80.
+
+   <p>The <code>https</code> scheme is a secure version of <code>http</code>, with
+transmission via SSL.  It is defined in RFC 2069, and its default port
+is 443.  When using <code>https</code>, the <code>url</code> library performs SSL
+encryption via the <code>ssl</code> library, by forcing the <code>ssl</code>
+gateway method to be used.  See <a href="#Gateways-in-general">Gateways in general</a>.
+
+<div class="defun">
+&mdash; User Option: <b>url-honor-refresh-requests</b><var><a name="index-url_002dhonor_002drefresh_002drequests-32"></a></var><br>
+<blockquote><p>If this option is non-<code>nil</code> (the default), the <code>url</code> library
+honors the HTTP &lsquo;<samp><span class="samp">Refresh</span></samp>&rsquo; header, which is used by servers to
+direct clients to reload documents from the same URL or a or different
+one.  If the value is <code>nil</code>, the &lsquo;<samp><span class="samp">Refresh</span></samp>&rsquo; header is
+ignored; any other value means to ask the user on each request. 
+</p></blockquote></div>
+
+<ul class="menu">
+<li><a accesskey="1" href="#Cookies">Cookies</a>
+<li><a accesskey="2" href="#HTTP-language_002fcoding">HTTP language/coding</a>
+<li><a accesskey="3" href="#HTTP-URL-Options">HTTP URL Options</a>
+<li><a accesskey="4" href="#Dealing-with-HTTP-documents">Dealing with HTTP documents</a>
+</ul>
+
+<div class="node">
+<a name="Cookies"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#HTTP-language_002fcoding">HTTP language/coding</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#http_002fhttps">http/https</a>
+
+</div>
+
+<h4 class="subsection">4.1.1 Cookies</h4>
+
+<p><a name="index-url_002dcookie_002ddelete-33"></a>
+
+<div class="defun">
+&mdash; Function: <b>url-cookie-list</b><var><a name="index-url_002dcookie_002dlist-34"></a></var><br>
+<blockquote><p>This command creates a <samp><span class="file">*url cookies*</span></samp> buffer listing the current
+cookies, if there are any.  You can remove a cookie using the
+<kbd>C-k</kbd> (<code>url-cookie-delete</code>) command. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-cookie-file</b><var><a name="index-url_002dcookie_002dfile-35"></a></var><br>
+<blockquote><p>The file in which cookies are stored, defaulting to <samp><span class="file">cookies</span></samp> in
+the directory specified by <code>url-configuration-directory</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-cookie-confirmation</b><var><a name="index-url_002dcookie_002dconfirmation-36"></a></var><br>
+<blockquote><p>Specifies whether confirmation is require to accept cookies. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-cookie-multiple-line</b><var><a name="index-url_002dcookie_002dmultiple_002dline-37"></a></var><br>
+<blockquote><p>Specifies whether to put all cookies for the server on one line in the
+HTTP request to satisfy broken servers like
+<a href="http://www.hotmail.com">http://www.hotmail.com</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-cookie-trusted-urls</b><var><a name="index-url_002dcookie_002dtrusted_002durls-38"></a></var><br>
+<blockquote><p>A list of regular expressions matching URLs from which to accept
+cookies always. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-cookie-untrusted-urls</b><var><a name="index-url_002dcookie_002duntrusted_002durls-39"></a></var><br>
+<blockquote><p>A list of regular expressions matching URLs from which to reject
+cookies always. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-cookie-save-interval</b><var><a name="index-url_002dcookie_002dsave_002dinterval-40"></a></var><br>
+<blockquote><p>The number of seconds between automatic saves of cookies to disk. 
+Default is one hour. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="HTTP-language%2fcoding"></a>
+<a name="HTTP-language_002fcoding"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#HTTP-URL-Options">HTTP URL Options</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Cookies">Cookies</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#http_002fhttps">http/https</a>
+
+</div>
+
+<h4 class="subsection">4.1.2 Language and Encoding Preferences</h4>
+
+<p>HTTP allows clients to express preferences for the language and
+encoding of documents which servers may honor.  For each of these
+variables, the value is a string; it can specify a single choice, or
+it can be a comma-separated list.
+
+   <p>Normally, this list is ordered by descending preference.  However, each
+element can be followed by &lsquo;<samp><span class="samp">;q=</span><var>priority</var></samp>&rsquo; to specify its
+preference level, a decimal number from 0 to 1; e.g., for
+<code>url-mime-language-string</code>, <code>"de,&nbsp;en-gb;q=0.8,&nbsp;en;q=0.7"</code><!-- /@w -->.  An element that has no &lsquo;<samp><span class="samp">;q</span></samp>&rsquo; specification has
+preference level 1.
+
+<div class="defun">
+&mdash; User Option: <b>url-mime-charset-string</b><var><a name="index-url_002dmime_002dcharset_002dstring-41"></a></var><br>
+<blockquote><p><a name="index-character-sets-42"></a><a name="index-coding-systems-43"></a>This variable specifies a preference for character sets when documents
+can be served in more than one encoding.
+
+        <p>HTTP allows specifying a series of MIME charsets which indicate your
+preferred character set encodings, e.g., Latin-9 or Big5, and these
+can be weighted.  The default series is generated automatically from
+the associated MIME types of all defined coding systems, sorted by the
+coding system priority specified in Emacs.  See <a href="emacs.html#Recognize-Coding">Recognizing Coding Systems</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-mime-language-string</b><var><a name="index-url_002dmime_002dlanguage_002dstring-44"></a></var><br>
+<blockquote><p><a name="index-language-preferences-45"></a>A string specifying the preferred language when servers can serve
+files in several languages.  Use RFC 1766 abbreviations, e.g.,
+&lsquo;<samp><span class="samp">en</span></samp>&rsquo; for English, &lsquo;<samp><span class="samp">de</span></samp>&rsquo; for German.
+
+        <p>The string can be <code>"*"</code> to get the first available language (as
+opposed to the default). 
+</p></blockquote></div>
+
+<div class="node">
+<a name="HTTP-URL-Options"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Dealing-with-HTTP-documents">Dealing with HTTP documents</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#HTTP-language_002fcoding">HTTP language/coding</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#http_002fhttps">http/https</a>
+
+</div>
+
+<h4 class="subsection">4.1.3 HTTP URL Options</h4>
+
+<p>HTTP supports an &lsquo;<samp><span class="samp">OPTIONS</span></samp>&rsquo; method describing things supported by
+the URL.
+
+<div class="defun">
+&mdash; Function: <b>url-http-options</b><var> url<a name="index-url_002dhttp_002doptions-46"></a></var><br>
+<blockquote><p>Returns a property list describing options available for URL.  The
+property list members are:
+
+          <dl>
+<dt><code>methods</code><dd>A list of symbols specifying what HTTP methods the resource
+supports.
+
+          <br><dt><code>dav</code><dd><a name="index-DAV-47"></a>A list of numbers specifying what DAV protocol/schema versions are
+supported.
+
+          <br><dt><code>dasl</code><dd><a name="index-DASL-48"></a>A list of supported DASL search types supported (string form).
+
+          <br><dt><code>ranges</code><dd>A list of the units available for use in partial document fetches.
+
+          <br><dt><code>p3p</code><dd><a name="index-P3P-49"></a>The <dfn>Platform For Privacy Protection</dfn> description for the resource. 
+Currently this is just the raw header contents. 
+</dl>
+
+        </blockquote></div>
+
+<div class="node">
+<a name="Dealing-with-HTTP-documents"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#HTTP-URL-Options">HTTP URL Options</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#http_002fhttps">http/https</a>
+
+</div>
+
+<h4 class="subsection">4.1.4 Dealing with HTTP documents</h4>
+
+<p>HTTP URLs are retrieved into a buffer containing the HTTP headers
+followed by the body.  Since the headers are quasi-MIME, they may be
+processed using the MIME library.  See <a href="emacs-mime.html#Top">Emacs MIME</a>.
+
+<div class="node">
+<a name="file%2fftp"></a>
+<a name="file_002fftp"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#info">info</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#http_002fhttps">http/https</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Supported-URL-Types">Supported URL Types</a>
+
+</div>
+
+<h3 class="section">4.2 file and ftp</h3>
+
+<p><a name="index-files-50"></a><a name="index-FTP-51"></a><a name="index-File-Transfer-Protocol-52"></a><a name="index-compressed-files-53"></a><a name="index-dired-54"></a>
+The <code>ftp</code> and <code>file</code> schemes are defined in RFC 1808.  The
+<code>url</code> library treats &lsquo;<samp><span class="samp">ftp:</span></samp>&rsquo; and &lsquo;<samp><span class="samp">file:</span></samp>&rsquo; as synonymous. 
+Such URLs have the form
+
+<pre class="example">     ftp://<var>user</var>:<var>password</var>@<var>host</var>:<var>port</var>/<var>file</var>
+     file://<var>user</var>:<var>password</var>@<var>host</var>:<var>port</var>/<var>file</var>
+</pre>
+   <p class="noindent">If the URL specifies a local file, it is retrieved by reading the file
+contents in the usual way.  If it specifies a remote file, it is
+retrieved using the Ange-FTP package.  See <a href="emacs.html#Remote-Files">Remote Files</a>.
+
+   <p>When retrieving a compressed file, it is automatically uncompressed
+if it has the file suffix <samp><span class="file">.z</span></samp>, <samp><span class="file">.gz</span></samp>, <samp><span class="file">.Z</span></samp>,
+<samp><span class="file">.bz2</span></samp>, or <samp><span class="file">.xz</span></samp>.  (The list of supported suffixes is
+hard-coded, and cannot be altered by customizing
+<code>jka-compr-compression-info-list</code>.)
+
+<div class="defun">
+&mdash; User Option: <b>url-directory-index-file</b><var><a name="index-url_002ddirectory_002dindex_002dfile-55"></a></var><br>
+<blockquote><p>This option specifies the filename to look for when a <code>file</code> or
+<code>ftp</code> URL specifies a directory.  The default is
+<samp><span class="file">index.html</span></samp>.  If this file exists and is readable, it is viewed. 
+Otherwise, Emacs visits the directory using Dired. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="info"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#mailto">mailto</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#file_002fftp">file/ftp</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Supported-URL-Types">Supported URL Types</a>
+
+</div>
+
+<h3 class="section">4.3 info</h3>
+
+<p><a name="index-Info-56"></a><a name="index-Texinfo-57"></a><a name="index-Info_002dgoto_002dnode-58"></a>
+The <code>info</code> scheme is non-standard.  Such URLs have the form
+
+<pre class="example">     info:<var>file</var>#<var>node</var>
+</pre>
+   <p class="noindent">and are retrieved by invoking <code>Info-goto-node</code> with argument
+&lsquo;<samp><span class="samp">(</span><var>file</var><span class="samp">)</span><var>node</var></samp>&rsquo;.  If &lsquo;<samp><span class="samp">#</span><var>node</var></samp>&rsquo; is omitted, the
+&lsquo;<samp><span class="samp">Top</span></samp>&rsquo; node is opened.
+
+<div class="node">
+<a name="mailto"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#news_002fnntp_002fsnews">news/nntp/snews</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#info">info</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Supported-URL-Types">Supported URL Types</a>
+
+</div>
+
+<h3 class="section">4.4 mailto</h3>
+
+<p><a name="index-mailto-59"></a><a name="index-email-60"></a>A <code>mailto</code> URL specifies an email message to be sent to a given
+email address.  For example, &lsquo;<samp><span class="samp">mailto:foo@bar.com</span></samp>&rsquo; specifies
+sending a message to &lsquo;<samp><span class="samp">foo@bar.com</span></samp>&rsquo;.  The &ldquo;retrieval method&rdquo;
+for such URLs is to open a mail composition buffer in which the
+appropriate content (e.g., the recipient address) has been filled in.
+
+   <p>As defined in RFC 6068, a <code>mailto</code> URL can have the form
+
+<pre class="example">     &lsquo;<samp><span class="samp">mailto:</span><var>mailbox</var><span class="samp">[?</span><var>header</var><span class="samp">=</span><var>contents</var><span class="samp">[&amp;</span><var>header</var><span class="samp">=</span><var>contents</var><span class="samp">]]</span></samp>&rsquo;
+</pre>
+   <p class="noindent">where an arbitrary number of <var>header</var>s can be added.  If the
+<var>header</var> is &lsquo;<samp><span class="samp">body</span></samp>&rsquo;, then <var>contents</var> is put in the message
+body; otherwise, a <var>header</var> header field is created with
+<var>contents</var> as its contents.  Note that the <code>url</code> library does
+not perform any checking of <var>header</var> or <var>contents</var>, so you
+should check them before sending the message.
+
+<div class="defun">
+&mdash; User Option: <b>url-mail-command</b><var><a name="index-url_002dmail_002dcommand-61"></a></var><br>
+<blockquote><p><a name="index-mail_002duser_002dagent-62"></a>The value of this variable is the function called whenever url needs
+to send mail.  This should normally be left its default, which is the
+standard mail-composition command <code>compose-mail</code>.  See <a href="emacs.html#Sending-Mail">Sending Mail</a>. 
+</p></blockquote></div>
+
+   <p>If the document containing the <code>mailto</code> URL itself possessed a
+known URL, Emacs automatically inserts an &lsquo;<samp><span class="samp">X-Url-From</span></samp>&rsquo; header
+field into the mail buffer, specifying that URL.
+
+<div class="node">
+<a name="news%2fnntp%2fsnews"></a>
+<a name="news_002fnntp_002fsnews"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#rlogin_002ftelnet_002ftn3270">rlogin/telnet/tn3270</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#mailto">mailto</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Supported-URL-Types">Supported URL Types</a>
+
+</div>
+
+<h3 class="section">4.5 <code>news</code>, <code>nntp</code> and <code>snews</code></h3>
+
+<p><a name="index-news-63"></a><a name="index-network-news-64"></a><a name="index-usenet-65"></a><a name="index-NNTP-66"></a><a name="index-snews-67"></a>
+The <code>news</code>, <code>nntp</code>, and <code>snews</code> schemes, defined in RFC
+1738, are used for reading Usenet newsgroups.  For compatibility with
+non-standard-compliant news clients, the <code>url</code> library allows
+host and port fields to be included in <code>news</code> URLs, even though
+they are properly only allowed for <code>nntp</code> and <code>snews</code>.
+
+   <p><code>news</code> and <code>nntp</code> URLs have the following form:
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">news:</span><var>newsgroup</var></samp>&rsquo;<dd>Retrieves a list of messages in <var>newsgroup</var>;
+<br><dt>&lsquo;<samp><span class="samp">news:</span><var>message-id</var></samp>&rsquo;<dd>Retrieves the message with the given <var>message-id</var>;
+<br><dt>&lsquo;<samp><span class="samp">news:*</span></samp>&rsquo;<dd>Retrieves a list of all available newsgroups;
+<br><dt>&lsquo;<samp><span class="samp">nntp://</span><var>host</var><span class="samp">:</span><var>port</var><span class="samp">/</span><var>newsgroup</var></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">nntp://</span><var>host</var><span class="samp">:</span><var>port</var><span class="samp">/</span><var>message-id</var></samp>&rsquo;<dt>&lsquo;<samp><span class="samp">nntp://</span><var>host</var><span class="samp">:</span><var>port</var><span class="samp">/*</span></samp>&rsquo;<dd>Similar to the &lsquo;<samp><span class="samp">news</span></samp>&rsquo; versions. 
+</dl>
+
+   <p>The default port for <code>nntp</code> (and <code>news</code>) is 119.  The
+difference between an <code>nntp</code> URL and a <code>news</code> URL is that an
+<code>nttp</code> URL may specify an article by its number.  The
+&lsquo;<samp><span class="samp">snews</span></samp>&rsquo; scheme is the same as &lsquo;<samp><span class="samp">nntp</span></samp>&rsquo;, except that it is
+tunneled through SSL and has default port 563.
+
+   <p>These URLs are retrieved via the Gnus package.
+
+   <p><a name="index-environment-variable-68"></a><a name="index-NNTPSERVER-69"></a>
+
+<div class="defun">
+&mdash; User Option: <b>url-news-server</b><var><a name="index-url_002dnews_002dserver-70"></a></var><br>
+<blockquote><p>This variable specifies the default news server from which to fetch
+news, if no server was specified in the URL.  The default value,
+<code>nil</code>, means to use the server specified by the standard
+environment variable &lsquo;<samp><span class="samp">NNTPSERVER</span></samp>&rsquo;, or &lsquo;<samp><span class="samp">news</span></samp>&rsquo; if that
+environment variable is unset. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="rlogin%2ftelnet%2ftn3270"></a>
+<a name="rlogin_002ftelnet_002ftn3270"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#irc">irc</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#news_002fnntp_002fsnews">news/nntp/snews</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Supported-URL-Types">Supported URL Types</a>
+
+</div>
+
+<h3 class="section">4.6 rlogin, telnet and tn3270</h3>
+
+<p><a name="index-rlogin-71"></a><a name="index-telnet-72"></a><a name="index-tn3270-73"></a><a name="index-terminal-emulation-74"></a><a name="index-terminal_002demulator-75"></a>
+These URL schemes are defined in RFC 1738, and are used for logging in
+via a terminal emulator.  They have the form
+
+<pre class="example">     telnet://<var>user</var>:<var>password</var>@<var>host</var>:<var>port</var>
+</pre>
+   <p class="noindent">but the <var>password</var> component is ignored.
+
+   <p>To handle rlogin, telnet and tn3270 URLs, a <code>rlogin</code>,
+<code>telnet</code> or <code>tn3270</code> (the program names and arguments are
+hardcoded) session is run in a <code>terminal-emulator</code> buffer. 
+Well-known ports are used if the URL does not specify a port.
+
+<div class="node">
+<a name="irc"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#data">data</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#rlogin_002ftelnet_002ftn3270">rlogin/telnet/tn3270</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Supported-URL-Types">Supported URL Types</a>
+
+</div>
+
+<h3 class="section">4.7 irc</h3>
+
+<p><a name="index-IRC-76"></a><a name="index-Internet-Relay-Chat-77"></a><a name="index-ZEN-IRC-78"></a><a name="index-ERC-79"></a><a name="index-rcirc-80"></a>
+  The <code>irc</code> scheme is defined in the Internet Draft at
+<a href="http://www.w3.org/Addressing/draft-mirashi-url-irc-01.txt">http://www.w3.org/Addressing/draft-mirashi-url-irc-01.txt</a> (which
+was never approved as an RFC).  Such URLs have the form
+
+<pre class="example">     irc://<var>host</var>:<var>port</var>/<var>target</var>,<var>needpass</var>
+</pre>
+   <p class="noindent">and are retrieved by opening an <acronym>IRC</acronym> session using the
+function specified by <code>url-irc-function</code>.
+
+<div class="defun">
+&mdash; User Option: <b>url-irc-function</b><var><a name="index-url_002dirc_002dfunction-81"></a></var><br>
+<blockquote><p>The value of this option is a function, which is called to open an IRC
+connection for <code>irc</code> URLs.  This function must take five
+arguments, <var>host</var>, <var>port</var>, <var>channel</var>, <var>user</var> and
+<var>password</var>.  The <var>channel</var> argument specifies the channel to
+join immediately, and may be <code>nil</code>.
+
+        <p>The default is <code>url-irc-rcirc</code>, which uses the Rcirc package. 
+Other options are <code>url-irc-erc</code> (which uses ERC) and
+<code>url-irc-zenirc</code> (which uses ZenIRC). 
+</p></blockquote></div>
+
+<div class="node">
+<a name="data"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#nfs">nfs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#irc">irc</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Supported-URL-Types">Supported URL Types</a>
+
+</div>
+
+<h3 class="section">4.8 data</h3>
+
+<p><a name="index-data-URLs-82"></a>
+  The <code>data</code> scheme, defined in RFC 2397, contains MIME data in
+the URL itself.  Such URLs have the form
+
+<pre class="example">     data:<span class="roman">[</span><var>media-type</var><span class="roman">]</span><span class="roman">[</span>;<var>base64</var><span class="roman">]</span>,<var>data</var>
+</pre>
+   <p class="noindent"><var>media-type</var> is a MIME &lsquo;<samp><span class="samp">Content-Type</span></samp>&rsquo; string, possibly
+including parameters.  It defaults to
+&lsquo;<samp><span class="samp">text/plain;charset=US-ASCII</span></samp>&rsquo;.  The &lsquo;<samp><span class="samp">text/plain</span></samp>&rsquo; can be
+omitted but the charset parameter supplied.  If &lsquo;<samp><span class="samp">;base64</span></samp>&rsquo; is
+present, the <var>data</var> are base64-encoded.
+
+<div class="node">
+<a name="nfs"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#ldap">ldap</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#data">data</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Supported-URL-Types">Supported URL Types</a>
+
+</div>
+
+<h3 class="section">4.9 nfs</h3>
+
+<p><a name="index-NFS-83"></a><a name="index-Network-File-System-84"></a><a name="index-automounter-85"></a>
+The <code>nfs</code> scheme, defined in RFC 2224, is similar to <code>ftp</code>
+except that it points to a file on a remote host that is handled by an
+NFS automounter on the local host.  Such URLs have the form
+
+<pre class="example">     nfs://<var>user</var>:<var>password</var>@<var>host</var>:<var>port</var>/<var>file</var>
+</pre>
+   <div class="defun">
+&mdash; Variable: <b>url-nfs-automounter-directory-spec</b><var><a name="index-url_002dnfs_002dautomounter_002ddirectory_002dspec-86"></a></var><br>
+        </div>
+   A string saying how to invoke the NFS automounter.  Certain &lsquo;<samp><span class="samp">%</span></samp>&rsquo;
+sequences are recognized:
+
+     <dl>
+<dt>&lsquo;<samp><span class="samp">%h</span></samp>&rsquo;<dd>The hostname of the NFS server;
+<br><dt>&lsquo;<samp><span class="samp">%n</span></samp>&rsquo;<dd>The port number of the NFS server;
+<br><dt>&lsquo;<samp><span class="samp">%u</span></samp>&rsquo;<dd>The username to use to authenticate;
+<br><dt>&lsquo;<samp><span class="samp">%p</span></samp>&rsquo;<dd>The password to use to authenticate;
+<br><dt>&lsquo;<samp><span class="samp">%f</span></samp>&rsquo;<dd>The filename on the remote server;
+<br><dt>&lsquo;<samp><span class="samp">%%</span></samp>&rsquo;<dd>A literal &lsquo;<samp><span class="samp">%</span></samp>&rsquo;. 
+</dl>
+
+   <p>Each can be used any number of times.
+
+<div class="node">
+<a name="ldap"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#man">man</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#nfs">nfs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Supported-URL-Types">Supported URL Types</a>
+
+</div>
+
+<h3 class="section">4.10 ldap</h3>
+
+<p><a name="index-LDAP-87"></a><a name="index-Lightweight-Directory-Access-Protocol-88"></a>
+The LDAP scheme is defined in RFC 2255.
+
+<div class="node">
+<a name="man"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#ldap">ldap</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Supported-URL-Types">Supported URL Types</a>
+
+</div>
+
+<h3 class="section">4.11 man</h3>
+
+<p><a name="index-g_t_0040command_007bman_007d-89"></a><a name="index-Unix-man-pages-90"></a><a name="index-man-91"></a>
+The <code>man</code> scheme is a non-standard one.  Such URLs have the form
+
+<pre class="example">     &lsquo;<samp><span class="samp">man:</span><var>page-spec</var></samp>&rsquo;
+</pre>
+   <p class="noindent">and are retrieved by passing <var>page-spec</var> to the Lisp function
+<code>man</code>.
+
+<div class="node">
+<a name="General-Facilities"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Customization">Customization</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Supported-URL-Types">Supported URL Types</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">5 General Facilities</h2>
+
+<ul class="menu">
+<li><a accesskey="1" href="#Disk-Caching">Disk Caching</a>
+<li><a accesskey="2" href="#Proxies">Proxies</a>
+<li><a accesskey="3" href="#Gateways-in-general">Gateways in general</a>
+<li><a accesskey="4" href="#History">History</a>
+</ul>
+
+<div class="node">
+<a name="Disk-Caching"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Proxies">Proxies</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#General-Facilities">General Facilities</a>
+
+</div>
+
+<h3 class="section">5.1 Disk Caching</h3>
+
+<p><a name="index-Caching-92"></a><a name="index-Persistent-Cache-93"></a><a name="index-Disk-Cache-94"></a>
+The disk cache stores retrieved documents locally, whence they can be
+retrieved more quickly.  When requesting a URL that is in the cache,
+the library checks to see if the page has changed since it was last
+retrieved from the remote machine.  If not, the local copy is used,
+saving the transmission over the network. 
+<a name="index-Cleaning-the-cache-95"></a><a name="index-Clearing-the-cache-96"></a><a name="index-Cache-cleaning-97"></a>Currently the cache isn't cleared automatically. 
+<!-- Running the @code{clean-cache} shell script -->
+<!-- fist is recommended, to allow for future cleaning of the cache.  This -->
+<!-- shell script will remove all files that have not been accessed since it -->
+<!-- was last run.  To keep the cache pared down, it is recommended that this -->
+<!-- script be run from @i{at} or @i{cron} (see the manual pages for -->
+<!-- crontab(5) or at(1) for more information) -->
+
+<div class="defun">
+&mdash; User Option: <b>url-automatic-caching</b><var><a name="index-url_002dautomatic_002dcaching-98"></a></var><br>
+<blockquote><p>Setting this variable non-<code>nil</code> causes documents to be cached
+automatically. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-cache-directory</b><var><a name="index-url_002dcache_002ddirectory-99"></a></var><br>
+<blockquote><p>This variable specifies the
+directory to store the cache files.  It defaults to sub-directory
+<samp><span class="file">cache</span></samp> of <code>url-configuration-directory</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-cache-creation-function</b><var><a name="index-url_002dcache_002dcreation_002dfunction-100"></a></var><br>
+<blockquote><p>The cache relies on a scheme for mapping URLs to files in the cache. 
+This variable names a function which sets the type of cache to use. 
+It takes a URL as argument and returns the absolute file name of the
+corresponding cache file.  The two supplied possibilities are
+<code>url-cache-create-filename-using-md5</code> and
+<code>url-cache-create-filename-human-readable</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>url-cache-create-filename-using-md5</b><var> url<a name="index-url_002dcache_002dcreate_002dfilename_002dusing_002dmd5-101"></a></var><br>
+<blockquote><p>Creates a cache file name from <var>url</var> using MD5 hashing. 
+This is creates entries with very few cache collisions and is fast. 
+<a name="index-MD5-102"></a>
+     <pre class="smallexample">          (url-cache-create-filename-using-md5 "http://www.example.com/foo/bar")
+            &rArr; "/home/fx/.url/cache/fx/http/com/example/www/b8a35774ad20db71c7c3409a5410e74f"
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>url-cache-create-filename-human-readable</b><var> url<a name="index-url_002dcache_002dcreate_002dfilename_002dhuman_002dreadable-103"></a></var><br>
+<blockquote><p>Creates a cache file name from <var>url</var> more obviously connected to
+<var>url</var> than for <code>url-cache-create-filename-using-md5</code>, but
+more likely to conflict with other files.
+     <pre class="smallexample">          (url-cache-create-filename-human-readable "http://www.example.com/foo/bar")
+            &rArr; "/home/fx/.url/cache/fx/http/com/example/www/foo/bar"
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>url-cache-expired</b><var><a name="index-url_002dcache_002dexpired-104"></a></var><br>
+<blockquote><p>This function returns non-<code>nil</code> if a cache entry has expired (or is absent). 
+The arguments are a URL and optional expiration delay in seconds
+(default <var>url-cache-expire-time</var>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-cache-expire-time</b><var><a name="index-url_002dcache_002dexpire_002dtime-105"></a></var><br>
+<blockquote><p>This variable is the default number of seconds to use for the
+expire-time argument of the function <code>url-cache-expired</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>url-fetch-from-cache</b><var><a name="index-url_002dfetch_002dfrom_002dcache-106"></a></var><br>
+<blockquote><p>This function takes a URL as its argument and returns a buffer
+containing the data cached for that URL. 
+</p></blockquote></div>
+
+<!-- Fixme: never actually used currently? -->
+<!-- @defopt url-standalone-mode -->
+<!-- @cindex Relying on cache -->
+<!-- @cindex Cache only mode -->
+<!-- @cindex Standalone mode -->
+<!-- If this variable is non-@code{nil}, the library relies solely on the -->
+<!-- cache for fetching documents and avoids checking if they have changed -->
+<!-- on remote servers. -->
+<!-- @end defopt -->
+<!-- With a large cache of documents on the local disk, it can be very handy -->
+<!-- when traveling, or any other time the network connection is not active -->
+<!-- (a laptop with a dial-on-demand PPP connection, etc.).  Emacs/W3 can rely -->
+<!-- solely on its cache, and avoid checking to see if the page has changed -->
+<!-- on the remote server.  In the case of a dial-on-demand PPP connection, -->
+<!-- this will keep the phone line free as long as possible, only bringing up -->
+<!-- the PPP connection when asking for a page that is not located in the -->
+<!-- cache.  This is very useful for demonstrations as well. -->
+<div class="node">
+<a name="Proxies"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Gateways-in-general">Gateways in general</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Disk-Caching">Disk Caching</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#General-Facilities">General Facilities</a>
+
+</div>
+
+<h3 class="section">5.2 Proxies and Gatewaying</h3>
+
+<!-- fixme: check/document url-ns stuff -->
+<p><a name="index-proxy-servers-107"></a><a name="index-proxies-108"></a><a name="index-environment-variables-109"></a><a name="index-HTTP_005fPROXY-110"></a>Proxy servers are commonly used to provide gateways through firewalls
+or as caches serving some more-or-less local network.  Each protocol
+(HTTP, FTP, etc.) can have a different gateway server.  Proxying is
+conventionally configured commonly amongst different programs through
+environment variables of the form <var>protocol</var><code>_proxy</code>, where
+<var>protocol</var> is one of the supported network protocols (<code>http</code>,
+<code>ftp</code> etc.).  The library recognizes such variables in either
+upper or lower case.  Their values are of one of the forms:
+     <ul>
+<li><var>host</var><code>:</code><var>port</var>
+<li>A full URL;
+<li>Simply a host name. 
+</ul>
+
+   <p><a name="index-NO_005fPROXY-111"></a>The <code>NO_PROXY</code> environment variable specifies URLs that should be
+excluded from proxying (on servers that should be contacted directly). 
+This should be a comma-separated list of hostnames, domain names, or a
+mixture of both.  Asterisks can be used as wildcards, but other
+clients may not support that.  Domain names may be indicated by a
+leading dot.  For example:
+<pre class="example">     NO_PROXY="*.aventail.com,home.com,.seanet.com"
+</pre>
+   <p class="noindent">says to contact all machines in the &lsquo;<samp><span class="samp">aventail.com</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">seanet.com</span></samp>&rsquo; domains directly, as well as the machine named
+&lsquo;<samp><span class="samp">home.com</span></samp>&rsquo;.  If <code>NO_PROXY</code> isn't defined, <code>no_PROXY</code>
+and <code>no_proxy</code> are also tried, in that order.
+
+   <p>Proxies may also be specified directly in Lisp.
+
+<div class="defun">
+&mdash; User Option: <b>url-proxy-services</b><var><a name="index-url_002dproxy_002dservices-112"></a></var><br>
+<blockquote><p>This variable is an alist of URL schemes and proxy servers that
+gateway them.  The items are of the form <code>(</code><var>scheme</var><code>&nbsp;.&nbsp;</code><var>host</var><code>:</code><var>portnumber</var><code>)</code><!-- /@w -->, says that the URL <var>scheme</var> is
+gatewayed through <var>portnumber</var> on the specified <var>host</var>.  An
+exception is the pseudo scheme <code>"no_proxy"</code>, which is paired with
+a regexp matching host names not to be proxied.  This variable is
+initialized from the environment as above.
+
+     <pre class="example">          (setq url-proxy-services
+                '(("http"     . "proxy.aventail.com:80")
+                  ("no_proxy" . "^.*\\(aventail\\|seanet\\)\\.com")))
+</pre>
+        </blockquote></div>
+
+<div class="node">
+<a name="Gateways-in-general"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#History">History</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Proxies">Proxies</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#General-Facilities">General Facilities</a>
+
+</div>
+
+<h3 class="section">5.3 Gateways in General</h3>
+
+<p><a name="index-gateways-113"></a><a name="index-firewalls-114"></a>
+The library provides a general gateway layer through which all
+networking passes.  It can both control access to the network and
+provide access through gateways in firewalls.  This may make direct
+connections in some cases and pass through some sort of gateway in
+others.<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>  The library's basic function responsible for
+making connections is <code>url-open-stream</code>.
+
+<div class="defun">
+&mdash; Function: <b>url-open-stream</b><var> name buffer host service<a name="index-url_002dopen_002dstream-115"></a></var><br>
+<blockquote><p><a name="index-opening-a-stream-116"></a><a name="index-stream_002c-opening-117"></a>Open a stream to <var>host</var>, possibly via a gateway.  The other
+arguments are as for <code>open-network-stream</code>.  This will not make a
+connection if <code>url-gateway-unplugged</code> is non-<code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>url-gateway-local-host-regexp</b><var><a name="index-url_002dgateway_002dlocal_002dhost_002dregexp-118"></a></var><br>
+<blockquote><p>This is a regular expression that matches local hosts that do not
+require the use of a gateway.  If <code>nil</code>, all connections are made
+through the gateway. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>url-gateway-method</b><var><a name="index-url_002dgateway_002dmethod-119"></a></var><br>
+<blockquote><p>This variable controls which gateway method is used.  It may be useful
+to bind it temporarily in some applications.  It has values taken from
+a list of symbols.  Possible values are:
+
+          <dl>
+<dt><code>telnet</code><dd><a name="index-g_t_0040command_007btelnet_007d-120"></a>Use this method if you must first telnet and log into a gateway host,
+and then run telnet from that host to connect to outside machines.
+
+          <br><dt><code>rlogin</code><dd><a name="index-g_t_0040command_007brlogin_007d-121"></a>This method is identical to <code>telnet</code>, but uses <samp><span class="command">rlogin</span></samp>
+to log into the remote machine without having to send the username and
+password over the wire every time.
+
+          <br><dt><code>socks</code><dd><a name="index-g_t_0040sc_007bsocks_007d-122"></a>Use if the firewall has a <span class="sc">socks</span> gateway running on it.  The
+<span class="sc">socks</span> v5 protocol is defined in RFC 1928.
+
+          <!-- @item ssl -->
+          <!-- This probably shouldn't be documented -->
+          <!-- Fixme: why not? - fx -->
+          <br><dt><code>native</code><dd>This method uses Emacs's builtin networking directly.  This is the
+default.  It can be used only if there is no firewall blocking access. 
+</dl>
+        </p></blockquote></div>
+
+   <p>The following variables control the gateway methods.
+
+<div class="defun">
+&mdash; User Option: <b>url-gateway-telnet-host</b><var><a name="index-url_002dgateway_002dtelnet_002dhost-123"></a></var><br>
+<blockquote><p>The gateway host to telnet to.  Once logged in there, you then telnet
+out to the hosts you want to connect to. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-gateway-telnet-parameters</b><var><a name="index-url_002dgateway_002dtelnet_002dparameters-124"></a></var><br>
+<blockquote><p>This should be a list of parameters to pass to the <samp><span class="command">telnet</span></samp> program. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-gateway-telnet-password-prompt</b><var><a name="index-url_002dgateway_002dtelnet_002dpassword_002dprompt-125"></a></var><br>
+<blockquote><p>This is a regular expression that matches the password prompt when
+logging in. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-gateway-telnet-login-prompt</b><var><a name="index-url_002dgateway_002dtelnet_002dlogin_002dprompt-126"></a></var><br>
+<blockquote><p>This is a regular expression that matches the username prompt when
+logging in. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-gateway-telnet-user-name</b><var><a name="index-url_002dgateway_002dtelnet_002duser_002dname-127"></a></var><br>
+<blockquote><p>The username to log in with. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-gateway-telnet-password</b><var><a name="index-url_002dgateway_002dtelnet_002dpassword-128"></a></var><br>
+<blockquote><p>The password to send when logging in. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-gateway-prompt-pattern</b><var><a name="index-url_002dgateway_002dprompt_002dpattern-129"></a></var><br>
+<blockquote><p>This is a regular expression that matches the shell prompt. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-gateway-rlogin-host</b><var><a name="index-url_002dgateway_002drlogin_002dhost-130"></a></var><br>
+<blockquote><p>Host to &lsquo;<samp><span class="samp">rlogin</span></samp>&rsquo; to before telnetting out. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-gateway-rlogin-parameters</b><var><a name="index-url_002dgateway_002drlogin_002dparameters-131"></a></var><br>
+<blockquote><p>Parameters to pass to &lsquo;<samp><span class="samp">rsh</span></samp>&rsquo;. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-gateway-rlogin-user-name</b><var><a name="index-url_002dgateway_002drlogin_002duser_002dname-132"></a></var><br>
+<blockquote><p>User name to use when logging in to the gateway. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-gateway-prompt-pattern</b><var><a name="index-url_002dgateway_002dprompt_002dpattern-133"></a></var><br>
+<blockquote><p>This is a regular expression that matches the shell prompt. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>socks-server</b><var><a name="index-socks_002dserver-134"></a></var><br>
+<blockquote><p>This specifies the default server, it takes the form
+<code>("Default&nbsp;server"&nbsp;</code><var>server</var><code>&nbsp;</code><var>port</var><code>&nbsp;</code><var>version</var><code>)</code><!-- /@w -->
+where <var>version</var> can be either 4 or 5. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>socks-password</b><var><a name="index-socks_002dpassword-135"></a></var><br>
+<blockquote><p>If this is <code>nil</code> then you will be asked for the password,
+otherwise it will be used as the password for authenticating you to
+the <span class="sc">socks</span> server. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>socks-username</b><var><a name="index-socks_002dusername-136"></a></var><br>
+<blockquote><p>This is the username to use when authenticating yourself to the
+<span class="sc">socks</span> server.  By default this is your login name. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>socks-timeout</b><var><a name="index-socks_002dtimeout-137"></a></var><br>
+<blockquote><p>This controls how long, in seconds, to wait for responses from the
+<span class="sc">socks</span> server; it is 5 by default. 
+</p></blockquote></div>
+   <!-- fixme: these have been effectively commented-out in the code -->
+<!-- @defopt socks-server-aliases -->
+<!-- This a list of server aliases.  It is a list of aliases of the form -->
+<!-- @var{(alias hostname port version)}. -->
+<!-- @end defopt -->
+<!-- @defopt socks-network-aliases -->
+<!-- This a list of network aliases.  Each entry in the list takes the form -->
+<!-- @var{(alias (network))} where @var{alias} is a string that names the -->
+<!-- @var{network}.  The networks can contain a pair (not a dotted pair) of -->
+<!-- @sc{ip} addresses which specify a range of @sc{ip} addresses, an @sc{ip} -->
+<!-- address and a netmask, a domain name or a unique hostname or @sc{ip} -->
+<!-- address. -->
+<!-- @end defopt -->
+<!-- @defopt socks-redirection-rules -->
+<!-- This a list of redirection rules.  Each rule take the form -->
+<!-- @var{(Destination network Connection type)} where @var{Destination -->
+<!-- network} is a network alias from @code{socks-network-aliases} and -->
+<!-- @var{Connection type} can be @code{nil} in which case a direct -->
+<!-- connection is used, or it can be an alias from -->
+<!-- @code{socks-server-aliases} in which case that server is used as a -->
+<!-- proxy. -->
+<!-- @end defopt -->
+
+<div class="defun">
+&mdash; User Option: <b>socks-nslookup-program</b><var><a name="index-socks_002dnslookup_002dprogram-138"></a></var><br>
+<blockquote><p><a name="index-g_t_0040command_007bnslookup_007d-139"></a>This the &lsquo;<samp><span class="samp">nslookup</span></samp>&rsquo; program.  It is <code>"nslookup"</code> by default. 
+</p></blockquote></div>
+
+<ul class="menu">
+<li><a accesskey="1" href="#Suppressing-network-connections">Suppressing network connections</a>
+</ul>
+<!-- * Broken hostname resolution:: -->
+
+<div class="node">
+<a name="Suppressing-network-connections"></a>
+<p><hr>
+Up:&nbsp;<a rel="up" accesskey="u" href="#Gateways-in-general">Gateways in general</a>
+
+</div>
+
+<h4 class="subsection">5.3.1 Suppressing Network Connections</h4>
+
+<p><a name="index-network-connections_002c-suppressing-140"></a><a name="index-suppressing-network-connections-141"></a><a name="index-bugs_002c-HTML-142"></a><a name="index-HTML-_0060_0060bugs_0027_0027-143"></a>In some circumstances it is desirable to suppress making network
+connections.  A typical case is when rendering HTML in a mail user
+agent, when external URLs should not be activated, particularly to
+avoid &ldquo;bugs&rdquo; which &ldquo;call home&rdquo; by fetch single-pixel images and the
+like.  To arrange this, bind the following variable for the duration
+of such processing.
+
+<div class="defun">
+&mdash; Variable: <b>url-gateway-unplugged</b><var><a name="index-url_002dgateway_002dunplugged-144"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code> new network connections are never
+opened by the URL library. 
+</p></blockquote></div>
+
+<!-- @node Broken hostname resolution -->
+<!-- @subsection Broken Hostname Resolution -->
+<!-- @cindex hostname resolver -->
+<!-- @cindex resolver, hostname -->
+<!-- Some C libraries do not include the hostname resolver routines in -->
+<!-- their static libraries.  If Emacs was linked statically, and was not -->
+<!-- linked with the resolver libraries, it will not be able to get to any -->
+<!-- machines off the local network.  This is characterized by being able -->
+<!-- to reach someplace with a raw ip number, but not its hostname -->
+<!-- (@url{http://129.79.254.191/} works, but -->
+<!-- @url{http://www.cs.indiana.edu/} doesn't).  This used to happen on -->
+<!-- SunOS4 and Ultrix, but is now probably now rare.  If Emacs can't be -->
+<!-- rebuilt linked against the resolver library, it can use the external -->
+<!-- @command{nslookup} program instead. -->
+<!-- @defopt url-gateway-broken-resolution -->
+<!-- @cindex @code{nslookup} program -->
+<!-- @cindex program, @code{nslookup} -->
+<!-- If non-@code{nil}, this variable says to use the program specified by -->
+<!-- @code{url-gateway-nslookup-program} program to do hostname resolution. -->
+<!-- @end defopt -->
+<!-- @defopt url-gateway-nslookup-program -->
+<!-- The name of the program to do hostname lookup if Emacs can't do it -->
+<!-- directly.  This program should expect a single argument on the command -->
+<!-- line-the hostname to resolve-and should produce output similar to -->
+<!-- the standard Unix @command{nslookup} program: -->
+<!-- @example -->
+<!-- Name: www.cs.indiana.edu -->
+<!-- Address: 129.79.254.191 -->
+<!-- @end example -->
+<!-- @end defopt -->
+<div class="node">
+<a name="History"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Gateways-in-general">Gateways in general</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#General-Facilities">General Facilities</a>
+
+</div>
+
+<h3 class="section">5.4 History</h3>
+
+<p><a name="index-url_002ddo_002dsetup-145"></a>The library can maintain a global history list tracking URLs accessed. 
+URL completion can be done from it.  The history mechanism is set up
+automatically via <code>url-do-setup</code> when it is configured to be on. 
+Note that the size of the history list is currently not limited.
+
+   <p><a name="index-url_002dhistory_002dhash_002dtable-146"></a>The history &ldquo;list&rdquo; is actually a hash table,
+<code>url-history-hash-table</code>.  It contains access times keyed by URL
+strings.  The times are in the format returned by <code>current-time</code>.
+
+<div class="defun">
+&mdash; Function: <b>url-history-update-url</b><var> url time<a name="index-url_002dhistory_002dupdate_002durl-147"></a></var><br>
+<blockquote><p>This function updates the history table with an entry for <var>url</var>
+accessed at the given <var>time</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-history-track</b><var><a name="index-url_002dhistory_002dtrack-148"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, the library will keep track of all the URLs
+accessed.  If it is <code>t</code>, the list is saved to disk at the end of
+each Emacs session.  The default is <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-history-file</b><var><a name="index-url_002dhistory_002dfile-149"></a></var><br>
+<blockquote><p>The file storing the history list between sessions.  It defaults to
+<samp><span class="file">history</span></samp> in <code>url-configuration-directory</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-history-save-interval</b><var><a name="index-url_002dhistory_002dsave_002dinterval-150"></a></var><br>
+<blockquote><p><a name="index-url_002dhistory_002dsetup_002dsave_002dtimer-151"></a>The number of seconds between automatic saves of the history list. 
+Default is one hour.  Note that if you change this variable directly,
+rather than using Custom, after <code>url-do-setup</code> has been run, you
+need to run the function <code>url-history-setup-save-timer</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>url-history-parse-history</b><var> &amp;optional fname<a name="index-url_002dhistory_002dparse_002dhistory-152"></a></var><br>
+<blockquote><p>Parses the history file <var>fname</var> (default <code>url-history-file</code>)
+and sets up the history list. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>url-history-save-history</b><var> &amp;optional fname<a name="index-url_002dhistory_002dsave_002dhistory-153"></a></var><br>
+<blockquote><p>Saves the current history to file <var>fname</var> (default
+<code>url-history-file</code>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>url-completion-function</b><var> string predicate function<a name="index-url_002dcompletion_002dfunction-154"></a></var><br>
+<blockquote><p>You can use this function to do completion of URLs from the history. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Customization"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#General-Facilities">General Facilities</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">6 Customization</h2>
+
+<p><a name="index-environment-variables-155"></a>  The following environment variables affect the <code>url</code> library's
+operation at startup.
+
+     <dl>
+<dt><code>TMPDIR</code><dd><a name="index-TMPDIR-156"></a><a name="index-url_002dtemporary_002ddirectory-157"></a>If this is defined, <var>url-temporary-directory</var> is initialized from
+it. 
+</dl>
+
+   <p>The following user options affect the general operation of
+<code>url</code> library.
+
+<div class="defun">
+&mdash; User Option: <b>url-configuration-directory</b><var><a name="index-url_002dconfiguration_002ddirectory-158"></a></var><br>
+<blockquote><p><a name="index-configuration-files-159"></a>The value of this variable specifies the name of the directory where
+the <code>url</code> library stores its various configuration files, cache
+files, etc.
+
+        <p>The default value specifies a subdirectory named <samp><span class="file">url/</span></samp> in the
+standard Emacs user data directory specified by the variable
+<code>user-emacs-directory</code> (normally <samp><span class="file">~/.emacs.d</span></samp>).  However,
+the old default was <samp><span class="file">~/.url</span></samp>, and this directory is used instead
+if it exists. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-debug</b><var><a name="index-url_002ddebug-160"></a></var><br>
+<blockquote><p><a name="index-debugging-161"></a>Specifies the types of debug messages which are logged to
+the <samp><span class="file">*URL-DEBUG*</span></samp> buffer. 
+<code>t</code> means log all messages. 
+A number means log all messages and show them with <code>message</code>. 
+It may also be a list of the types of messages to be logged. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-personal-mail-address</b><var><a name="index-url_002dpersonal_002dmail_002daddress-162"></a></var><br>
+        </div>
+
+<div class="defun">
+&mdash; User Option: <b>url-privacy-level</b><var><a name="index-url_002dprivacy_002dlevel-163"></a></var><br>
+        </div>
+
+<div class="defun">
+&mdash; User Option: <b>url-uncompressor-alist</b><var><a name="index-url_002duncompressor_002dalist-164"></a></var><br>
+        </div>
+
+<div class="defun">
+&mdash; User Option: <b>url-passwd-entry-func</b><var><a name="index-url_002dpasswd_002dentry_002dfunc-165"></a></var><br>
+        </div>
+
+<div class="defun">
+&mdash; User Option: <b>url-standalone-mode</b><var><a name="index-url_002dstandalone_002dmode-166"></a></var><br>
+        </div>
+
+<div class="defun">
+&mdash; User Option: <b>url-bad-port-list</b><var><a name="index-url_002dbad_002dport_002dlist-167"></a></var><br>
+        </div>
+
+<div class="defun">
+&mdash; User Option: <b>url-max-password-attempts</b><var><a name="index-url_002dmax_002dpassword_002dattempts-168"></a></var><br>
+        </div>
+
+<div class="defun">
+&mdash; User Option: <b>url-temporary-directory</b><var><a name="index-url_002dtemporary_002ddirectory-169"></a></var><br>
+        </div>
+
+<div class="defun">
+&mdash; User Option: <b>url-show-status</b><var><a name="index-url_002dshow_002dstatus-170"></a></var><br>
+        </div>
+
+<div class="defun">
+&mdash; User Option: <b>url-confirmation-func</b><var><a name="index-url_002dconfirmation_002dfunc-171"></a></var><br>
+<blockquote><p>The function to use for asking yes or no functions.  This is normally
+either <code>y-or-n-p</code> or <code>yes-or-no-p</code>, but could be another
+function taking a single argument (the prompt) and returning <code>t</code>
+only if an affirmative answer is given. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>url-gateway-method</b><var><a name="index-url_002dgateway_002dmethod-172"></a></var><br>
+<blockquote><!-- fixme: describe gatewaying -->
+        <p>A symbol specifying the type of gateway support to use for connections
+from the local machine.  The supported methods are:
+
+          <dl>
+<dt><code>telnet</code><dd>Run telnet in a subprocess to connect;
+<br><dt><code>rlogin</code><dd>Rlogin to another machine to connect;
+<br><dt><code>socks</code><dd>Connect through a socks server;
+<br><dt><code>ssl</code><dd>Connect with SSL;
+<br><dt><code>native</code><dd>Connect directly. 
+</dl>
+        </p></blockquote></div>
+
+<div class="node">
+<a name="GNU-Free-Documentation-License"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Function-Index">Function Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Customization">Customization</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="appendix">Appendix A GNU Free Documentation License</h2>
+
+<!-- The GNU Free Documentation License. -->
+<div align="center">Version 1.3, 3 November 2008</div>
+
+<!-- This file is intended to be included within another document, -->
+<!-- hence no sectioning command or @node. -->
+<pre class="display">     Copyright &copy; 2000, 2001, 2002, 2007, 2008 Free Software Foundation, Inc.
+     <a href="http://fsf.org/">http://fsf.org/</a>
+     
+     Everyone is permitted to copy and distribute verbatim copies
+     of this license document, but changing it is not allowed.
+</pre>
+     <ol type=1 start=0>
+<li>PREAMBLE
+
+     <p>The purpose of this License is to make a manual, textbook, or other
+functional and useful document <dfn>free</dfn> in the sense of freedom: to
+assure everyone the effective freedom to copy and redistribute it,
+with or without modifying it, either commercially or noncommercially. 
+Secondarily, this License preserves for the author and publisher a way
+to get credit for their work, while not being considered responsible
+for modifications made by others.
+
+     <p>This License is a kind of &ldquo;copyleft&rdquo;, which means that derivative
+works of the document must themselves be free in the same sense.  It
+complements the GNU General Public License, which is a copyleft
+license designed for free software.
+
+     <p>We have designed this License in order to use it for manuals for free
+software, because free software needs free documentation: a free
+program should come with manuals providing the same freedoms that the
+software does.  But this License is not limited to software manuals;
+it can be used for any textual work, regardless of subject matter or
+whether it is published as a printed book.  We recommend this License
+principally for works whose purpose is instruction or reference.
+
+     <li>APPLICABILITY AND DEFINITIONS
+
+     <p>This License applies to any manual or other work, in any medium, that
+contains a notice placed by the copyright holder saying it can be
+distributed under the terms of this License.  Such a notice grants a
+world-wide, royalty-free license, unlimited in duration, to use that
+work under the conditions stated herein.  The &ldquo;Document&rdquo;, below,
+refers to any such manual or work.  Any member of the public is a
+licensee, and is addressed as &ldquo;you&rdquo;.  You accept the license if you
+copy, modify or distribute the work in a way requiring permission
+under copyright law.
+
+     <p>A &ldquo;Modified Version&rdquo; of the Document means any work containing the
+Document or a portion of it, either copied verbatim, or with
+modifications and/or translated into another language.
+
+     <p>A &ldquo;Secondary Section&rdquo; is a named appendix or a front-matter section
+of the Document that deals exclusively with the relationship of the
+publishers or authors of the Document to the Document's overall
+subject (or to related matters) and contains nothing that could fall
+directly within that overall subject.  (Thus, if the Document is in
+part a textbook of mathematics, a Secondary Section may not explain
+any mathematics.)  The relationship could be a matter of historical
+connection with the subject or with related matters, or of legal,
+commercial, philosophical, ethical or political position regarding
+them.
+
+     <p>The &ldquo;Invariant Sections&rdquo; are certain Secondary Sections whose titles
+are designated, as being those of Invariant Sections, in the notice
+that says that the Document is released under this License.  If a
+section does not fit the above definition of Secondary then it is not
+allowed to be designated as Invariant.  The Document may contain zero
+Invariant Sections.  If the Document does not identify any Invariant
+Sections then there are none.
+
+     <p>The &ldquo;Cover Texts&rdquo; are certain short passages of text that are listed,
+as Front-Cover Texts or Back-Cover Texts, in the notice that says that
+the Document is released under this License.  A Front-Cover Text may
+be at most 5 words, and a Back-Cover Text may be at most 25 words.
+
+     <p>A &ldquo;Transparent&rdquo; copy of the Document means a machine-readable copy,
+represented in a format whose specification is available to the
+general public, that is suitable for revising the document
+straightforwardly with generic text editors or (for images composed of
+pixels) generic paint programs or (for drawings) some widely available
+drawing editor, and that is suitable for input to text formatters or
+for automatic translation to a variety of formats suitable for input
+to text formatters.  A copy made in an otherwise Transparent file
+format whose markup, or absence of markup, has been arranged to thwart
+or discourage subsequent modification by readers is not Transparent. 
+An image format is not Transparent if used for any substantial amount
+of text.  A copy that is not &ldquo;Transparent&rdquo; is called &ldquo;Opaque&rdquo;.
+
+     <p>Examples of suitable formats for Transparent copies include plain
+ASCII without markup, Texinfo input format, LaTeX input
+format, SGML or XML using a publicly available
+DTD, and standard-conforming simple HTML,
+PostScript or PDF designed for human modification.  Examples
+of transparent image formats include PNG, XCF and
+JPG.  Opaque formats include proprietary formats that can be
+read and edited only by proprietary word processors, SGML or
+XML for which the DTD and/or processing tools are
+not generally available, and the machine-generated HTML,
+PostScript or PDF produced by some word processors for
+output purposes only.
+
+     <p>The &ldquo;Title Page&rdquo; means, for a printed book, the title page itself,
+plus such following pages as are needed to hold, legibly, the material
+this License requires to appear in the title page.  For works in
+formats which do not have any title page as such, &ldquo;Title Page&rdquo; means
+the text near the most prominent appearance of the work's title,
+preceding the beginning of the body of the text.
+
+     <p>The &ldquo;publisher&rdquo; means any person or entity that distributes copies
+of the Document to the public.
+
+     <p>A section &ldquo;Entitled XYZ&rdquo; means a named subunit of the Document whose
+title either is precisely XYZ or contains XYZ in parentheses following
+text that translates XYZ in another language.  (Here XYZ stands for a
+specific section name mentioned below, such as &ldquo;Acknowledgements&rdquo;,
+&ldquo;Dedications&rdquo;, &ldquo;Endorsements&rdquo;, or &ldquo;History&rdquo;.)  To &ldquo;Preserve the Title&rdquo;
+of such a section when you modify the Document means that it remains a
+section &ldquo;Entitled XYZ&rdquo; according to this definition.
+
+     <p>The Document may include Warranty Disclaimers next to the notice which
+states that this License applies to the Document.  These Warranty
+Disclaimers are considered to be included by reference in this
+License, but only as regards disclaiming warranties: any other
+implication that these Warranty Disclaimers may have is void and has
+no effect on the meaning of this License.
+
+     <li>VERBATIM COPYING
+
+     <p>You may copy and distribute the Document in any medium, either
+commercially or noncommercially, provided that this License, the
+copyright notices, and the license notice saying this License applies
+to the Document are reproduced in all copies, and that you add no other
+conditions whatsoever to those of this License.  You may not use
+technical measures to obstruct or control the reading or further
+copying of the copies you make or distribute.  However, you may accept
+compensation in exchange for copies.  If you distribute a large enough
+number of copies you must also follow the conditions in section 3.
+
+     <p>You may also lend copies, under the same conditions stated above, and
+you may publicly display copies.
+
+     <li>COPYING IN QUANTITY
+
+     <p>If you publish printed copies (or copies in media that commonly have
+printed covers) of the Document, numbering more than 100, and the
+Document's license notice requires Cover Texts, you must enclose the
+copies in covers that carry, clearly and legibly, all these Cover
+Texts: Front-Cover Texts on the front cover, and Back-Cover Texts on
+the back cover.  Both covers must also clearly and legibly identify
+you as the publisher of these copies.  The front cover must present
+the full title with all words of the title equally prominent and
+visible.  You may add other material on the covers in addition. 
+Copying with changes limited to the covers, as long as they preserve
+the title of the Document and satisfy these conditions, can be treated
+as verbatim copying in other respects.
+
+     <p>If the required texts for either cover are too voluminous to fit
+legibly, you should put the first ones listed (as many as fit
+reasonably) on the actual cover, and continue the rest onto adjacent
+pages.
+
+     <p>If you publish or distribute Opaque copies of the Document numbering
+more than 100, you must either include a machine-readable Transparent
+copy along with each Opaque copy, or state in or with each Opaque copy
+a computer-network location from which the general network-using
+public has access to download using public-standard network protocols
+a complete Transparent copy of the Document, free of added material. 
+If you use the latter option, you must take reasonably prudent steps,
+when you begin distribution of Opaque copies in quantity, to ensure
+that this Transparent copy will remain thus accessible at the stated
+location until at least one year after the last time you distribute an
+Opaque copy (directly or through your agents or retailers) of that
+edition to the public.
+
+     <p>It is requested, but not required, that you contact the authors of the
+Document well before redistributing any large number of copies, to give
+them a chance to provide you with an updated version of the Document.
+
+     <li>MODIFICATIONS
+
+     <p>You may copy and distribute a Modified Version of the Document under
+the conditions of sections 2 and 3 above, provided that you release
+the Modified Version under precisely this License, with the Modified
+Version filling the role of the Document, thus licensing distribution
+and modification of the Modified Version to whoever possesses a copy
+of it.  In addition, you must do these things in the Modified Version:
+
+          <ol type=A start=1>
+<li>Use in the Title Page (and on the covers, if any) a title distinct
+from that of the Document, and from those of previous versions
+(which should, if there were any, be listed in the History section
+of the Document).  You may use the same title as a previous version
+if the original publisher of that version gives permission.
+
+          <li>List on the Title Page, as authors, one or more persons or entities
+responsible for authorship of the modifications in the Modified
+Version, together with at least five of the principal authors of the
+Document (all of its principal authors, if it has fewer than five),
+unless they release you from this requirement.
+
+          <li>State on the Title page the name of the publisher of the
+Modified Version, as the publisher.
+
+          <li>Preserve all the copyright notices of the Document.
+
+          <li>Add an appropriate copyright notice for your modifications
+adjacent to the other copyright notices.
+
+          <li>Include, immediately after the copyright notices, a license notice
+giving the public permission to use the Modified Version under the
+terms of this License, in the form shown in the Addendum below.
+
+          <li>Preserve in that license notice the full lists of Invariant Sections
+and required Cover Texts given in the Document's license notice.
+
+          <li>Include an unaltered copy of this License.
+
+          <li>Preserve the section Entitled &ldquo;History&rdquo;, Preserve its Title, and add
+to it an item stating at least the title, year, new authors, and
+publisher of the Modified Version as given on the Title Page.  If
+there is no section Entitled &ldquo;History&rdquo; in the Document, create one
+stating the title, year, authors, and publisher of the Document as
+given on its Title Page, then add an item describing the Modified
+Version as stated in the previous sentence.
+
+          <li>Preserve the network location, if any, given in the Document for
+public access to a Transparent copy of the Document, and likewise
+the network locations given in the Document for previous versions
+it was based on.  These may be placed in the &ldquo;History&rdquo; section. 
+You may omit a network location for a work that was published at
+least four years before the Document itself, or if the original
+publisher of the version it refers to gives permission.
+
+          <li>For any section Entitled &ldquo;Acknowledgements&rdquo; or &ldquo;Dedications&rdquo;, Preserve
+the Title of the section, and preserve in the section all the
+substance and tone of each of the contributor acknowledgements and/or
+dedications given therein.
+
+          <li>Preserve all the Invariant Sections of the Document,
+unaltered in their text and in their titles.  Section numbers
+or the equivalent are not considered part of the section titles.
+
+          <li>Delete any section Entitled &ldquo;Endorsements&rdquo;.  Such a section
+may not be included in the Modified Version.
+
+          <li>Do not retitle any existing section to be Entitled &ldquo;Endorsements&rdquo; or
+to conflict in title with any Invariant Section.
+
+          <li>Preserve any Warranty Disclaimers.
+          </ol>
+
+     <p>If the Modified Version includes new front-matter sections or
+appendices that qualify as Secondary Sections and contain no material
+copied from the Document, you may at your option designate some or all
+of these sections as invariant.  To do this, add their titles to the
+list of Invariant Sections in the Modified Version's license notice. 
+These titles must be distinct from any other section titles.
+
+     <p>You may add a section Entitled &ldquo;Endorsements&rdquo;, provided it contains
+nothing but endorsements of your Modified Version by various
+parties&mdash;for example, statements of peer review or that the text has
+been approved by an organization as the authoritative definition of a
+standard.
+
+     <p>You may add a passage of up to five words as a Front-Cover Text, and a
+passage of up to 25 words as a Back-Cover Text, to the end of the list
+of Cover Texts in the Modified Version.  Only one passage of
+Front-Cover Text and one of Back-Cover Text may be added by (or
+through arrangements made by) any one entity.  If the Document already
+includes a cover text for the same cover, previously added by you or
+by arrangement made by the same entity you are acting on behalf of,
+you may not add another; but you may replace the old one, on explicit
+permission from the previous publisher that added the old one.
+
+     <p>The author(s) and publisher(s) of the Document do not by this License
+give permission to use their names for publicity for or to assert or
+imply endorsement of any Modified Version.
+
+     <li>COMBINING DOCUMENTS
+
+     <p>You may combine the Document with other documents released under this
+License, under the terms defined in section 4 above for modified
+versions, provided that you include in the combination all of the
+Invariant Sections of all of the original documents, unmodified, and
+list them all as Invariant Sections of your combined work in its
+license notice, and that you preserve all their Warranty Disclaimers.
+
+     <p>The combined work need only contain one copy of this License, and
+multiple identical Invariant Sections may be replaced with a single
+copy.  If there are multiple Invariant Sections with the same name but
+different contents, make the title of each such section unique by
+adding at the end of it, in parentheses, the name of the original
+author or publisher of that section if known, or else a unique number. 
+Make the same adjustment to the section titles in the list of
+Invariant Sections in the license notice of the combined work.
+
+     <p>In the combination, you must combine any sections Entitled &ldquo;History&rdquo;
+in the various original documents, forming one section Entitled
+&ldquo;History&rdquo;; likewise combine any sections Entitled &ldquo;Acknowledgements&rdquo;,
+and any sections Entitled &ldquo;Dedications&rdquo;.  You must delete all
+sections Entitled &ldquo;Endorsements.&rdquo;
+
+     <li>COLLECTIONS OF DOCUMENTS
+
+     <p>You may make a collection consisting of the Document and other documents
+released under this License, and replace the individual copies of this
+License in the various documents with a single copy that is included in
+the collection, provided that you follow the rules of this License for
+verbatim copying of each of the documents in all other respects.
+
+     <p>You may extract a single document from such a collection, and distribute
+it individually under this License, provided you insert a copy of this
+License into the extracted document, and follow this License in all
+other respects regarding verbatim copying of that document.
+
+     <li>AGGREGATION WITH INDEPENDENT WORKS
+
+     <p>A compilation of the Document or its derivatives with other separate
+and independent documents or works, in or on a volume of a storage or
+distribution medium, is called an &ldquo;aggregate&rdquo; if the copyright
+resulting from the compilation is not used to limit the legal rights
+of the compilation's users beyond what the individual works permit. 
+When the Document is included in an aggregate, this License does not
+apply to the other works in the aggregate which are not themselves
+derivative works of the Document.
+
+     <p>If the Cover Text requirement of section 3 is applicable to these
+copies of the Document, then if the Document is less than one half of
+the entire aggregate, the Document's Cover Texts may be placed on
+covers that bracket the Document within the aggregate, or the
+electronic equivalent of covers if the Document is in electronic form. 
+Otherwise they must appear on printed covers that bracket the whole
+aggregate.
+
+     <li>TRANSLATION
+
+     <p>Translation is considered a kind of modification, so you may
+distribute translations of the Document under the terms of section 4. 
+Replacing Invariant Sections with translations requires special
+permission from their copyright holders, but you may include
+translations of some or all Invariant Sections in addition to the
+original versions of these Invariant Sections.  You may include a
+translation of this License, and all the license notices in the
+Document, and any Warranty Disclaimers, provided that you also include
+the original English version of this License and the original versions
+of those notices and disclaimers.  In case of a disagreement between
+the translation and the original version of this License or a notice
+or disclaimer, the original version will prevail.
+
+     <p>If a section in the Document is Entitled &ldquo;Acknowledgements&rdquo;,
+&ldquo;Dedications&rdquo;, or &ldquo;History&rdquo;, the requirement (section 4) to Preserve
+its Title (section 1) will typically require changing the actual
+title.
+
+     <li>TERMINATION
+
+     <p>You may not copy, modify, sublicense, or distribute the Document
+except as expressly provided under this License.  Any attempt
+otherwise to copy, modify, sublicense, or distribute it is void, and
+will automatically terminate your rights under this License.
+
+     <p>However, if you cease all violation of this License, then your license
+from a particular copyright holder is reinstated (a) provisionally,
+unless and until the copyright holder explicitly and finally
+terminates your license, and (b) permanently, if the copyright holder
+fails to notify you of the violation by some reasonable means prior to
+60 days after the cessation.
+
+     <p>Moreover, your license from a particular copyright holder is
+reinstated permanently if the copyright holder notifies you of the
+violation by some reasonable means, this is the first time you have
+received notice of violation of this License (for any work) from that
+copyright holder, and you cure the violation prior to 30 days after
+your receipt of the notice.
+
+     <p>Termination of your rights under this section does not terminate the
+licenses of parties who have received copies or rights from you under
+this License.  If your rights have been terminated and not permanently
+reinstated, receipt of a copy of some or all of the same material does
+not give you any rights to use it.
+
+     <li>FUTURE REVISIONS OF THIS LICENSE
+
+     <p>The Free Software Foundation may publish new, revised versions
+of the GNU Free Documentation License from time to time.  Such new
+versions will be similar in spirit to the present version, but may
+differ in detail to address new problems or concerns.  See
+<a href="http://www.gnu.org/copyleft/">http://www.gnu.org/copyleft/</a>.
+
+     <p>Each version of the License is given a distinguishing version number. 
+If the Document specifies that a particular numbered version of this
+License &ldquo;or any later version&rdquo; applies to it, you have the option of
+following the terms and conditions either of that specified version or
+of any later version that has been published (not as a draft) by the
+Free Software Foundation.  If the Document does not specify a version
+number of this License, you may choose any version ever published (not
+as a draft) by the Free Software Foundation.  If the Document
+specifies that a proxy can decide which future versions of this
+License can be used, that proxy's public statement of acceptance of a
+version permanently authorizes you to choose that version for the
+Document.
+
+     <li>RELICENSING
+
+     <p>&ldquo;Massive Multiauthor Collaboration Site&rdquo; (or &ldquo;MMC Site&rdquo;) means any
+World Wide Web server that publishes copyrightable works and also
+provides prominent facilities for anybody to edit those works.  A
+public wiki that anybody can edit is an example of such a server.  A
+&ldquo;Massive Multiauthor Collaboration&rdquo; (or &ldquo;MMC&rdquo;) contained in the
+site means any set of copyrightable works thus published on the MMC
+site.
+
+     <p>&ldquo;CC-BY-SA&rdquo; means the Creative Commons Attribution-Share Alike 3.0
+license published by Creative Commons Corporation, a not-for-profit
+corporation with a principal place of business in San Francisco,
+California, as well as future copyleft versions of that license
+published by that same organization.
+
+     <p>&ldquo;Incorporate&rdquo; means to publish or republish a Document, in whole or
+in part, as part of another Document.
+
+     <p>An MMC is &ldquo;eligible for relicensing&rdquo; if it is licensed under this
+License, and if all works that were first published under this License
+somewhere other than this MMC, and subsequently incorporated in whole
+or in part into the MMC, (1) had no cover texts or invariant sections,
+and (2) were thus incorporated prior to November 1, 2008.
+
+     <p>The operator of an MMC Site may republish an MMC contained in the site
+under CC-BY-SA on the same site at any time before August 1, 2009,
+provided the MMC is eligible for relicensing.
+
+        </ol>
+
+<h3 class="heading">ADDENDUM: How to use this License for your documents</h3>
+
+<p>To use this License in a document you have written, include a copy of
+the License in the document and put the following copyright and
+license notices just after the title page:
+
+<pre class="smallexample">       Copyright (C)  <var>year</var>  <var>your name</var>.
+       Permission is granted to copy, distribute and/or modify this document
+       under the terms of the GNU Free Documentation License, Version 1.3
+       or any later version published by the Free Software Foundation;
+       with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+       Texts.  A copy of the license is included in the section entitled ``GNU
+       Free Documentation License''.
+</pre>
+   <p>If you have Invariant Sections, Front-Cover Texts and Back-Cover Texts,
+replace the &ldquo;with<small class="dots">...</small>Texts.&rdquo; line with this:
+
+<pre class="smallexample">         with the Invariant Sections being <var>list their titles</var>, with
+         the Front-Cover Texts being <var>list</var>, and with the Back-Cover Texts
+         being <var>list</var>.
+</pre>
+   <p>If you have Invariant Sections without Cover Texts, or some other
+combination of the three, merge those two alternatives to suit the
+situation.
+
+   <p>If your document contains nontrivial examples of program code, we
+recommend releasing these examples in parallel under your choice of
+free software license, such as the GNU General Public License,
+to permit their use in free software.
+
+<!-- Local Variables: -->
+<!-- ispell-local-pdict: "ispell-dict" -->
+<!-- End: -->
+<div class="node">
+<a name="Function-Index"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Variable-Index">Variable Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="unnumbered">Command and Function Index</h2>
+
+<ul class="index-fn" compact>
+<li><a href="#index-Info_002dgoto_002dnode-58"><code>Info-goto-node</code></a>: <a href="#info">info</a></li>
+<li><a href="#index-man-91"><code>man</code></a>: <a href="#man">man</a></li>
+<li><a href="#index-terminal_002demulator-75"><code>terminal-emulator</code></a>: <a href="#rlogin_002ftelnet_002ftn3270">rlogin/telnet/tn3270</a></li>
+<li><a href="#index-url_002dattributes-17"><code>url-attributes</code></a>: <a href="#Parsed-URIs">Parsed URIs</a></li>
+<li><a href="#index-url_002dcache_002dcreate_002dfilename_002dhuman_002dreadable-103"><code>url-cache-create-filename-human-readable</code></a>: <a href="#Disk-Caching">Disk Caching</a></li>
+<li><a href="#index-url_002dcache_002dcreate_002dfilename_002dusing_002dmd5-101"><code>url-cache-create-filename-using-md5</code></a>: <a href="#Disk-Caching">Disk Caching</a></li>
+<li><a href="#index-url_002dcache_002dexpired-104"><code>url-cache-expired</code></a>: <a href="#Disk-Caching">Disk Caching</a></li>
+<li><a href="#index-url_002dcompletion_002dfunction-154"><code>url-completion-function</code></a>: <a href="#History">History</a></li>
+<li><a href="#index-url_002dcookie_002ddelete-33"><code>url-cookie-delete</code></a>: <a href="#Cookies">Cookies</a></li>
+<li><a href="#index-url_002dcookie_002dlist-34"><code>url-cookie-list</code></a>: <a href="#Cookies">Cookies</a></li>
+<li><a href="#index-url_002ddo_002dsetup-145"><code>url-do-setup</code></a>: <a href="#History">History</a></li>
+<li><a href="#index-url_002dencode_002durl-20"><code>url-encode-url</code></a>: <a href="#URI-Encoding">URI Encoding</a></li>
+<li><a href="#index-url_002dfetch_002dfrom_002dcache-106"><code>url-fetch-from-cache</code></a>: <a href="#Disk-Caching">Disk Caching</a></li>
+<li><a href="#index-url_002dfilename-15"><code>url-filename</code></a>: <a href="#Parsed-URIs">Parsed URIs</a></li>
+<li><a href="#index-url_002dfullness-18"><code>url-fullness</code></a>: <a href="#Parsed-URIs">Parsed URIs</a></li>
+<li><a href="#index-url_002dgeneric_002dparse_002durl-6"><code>url-generic-parse-url</code></a>: <a href="#URI-Parsing">URI Parsing</a></li>
+<li><a href="#index-url_002dhexify_002dstring-21"><code>url-hexify-string</code></a>: <a href="#URI-Encoding">URI Encoding</a></li>
+<li><a href="#index-url_002dhistory_002dparse_002dhistory-152"><code>url-history-parse-history</code></a>: <a href="#History">History</a></li>
+<li><a href="#index-url_002dhistory_002dsave_002dhistory-153"><code>url-history-save-history</code></a>: <a href="#History">History</a></li>
+<li><a href="#index-url_002dhistory_002dsetup_002dsave_002dtimer-151"><code>url-history-setup-save-timer</code></a>: <a href="#History">History</a></li>
+<li><a href="#index-url_002dhistory_002dupdate_002durl-147"><code>url-history-update-url</code></a>: <a href="#History">History</a></li>
+<li><a href="#index-url_002dhost-13"><code>url-host</code></a>: <a href="#Parsed-URIs">Parsed URIs</a></li>
+<li><a href="#index-url_002dhttp_002doptions-46"><code>url-http-options</code></a>: <a href="#HTTP-URL-Options">HTTP URL Options</a></li>
+<li><a href="#index-url_002dopen_002dstream-115"><code>url-open-stream</code></a>: <a href="#Gateways-in-general">Gateways in general</a></li>
+<li><a href="#index-url_002dpassword-12"><code>url-password</code></a>: <a href="#Parsed-URIs">Parsed URIs</a></li>
+<li><a href="#index-url_002dport-14"><code>url-port</code></a>: <a href="#Parsed-URIs">Parsed URIs</a></li>
+<li><a href="#index-url_002dqueue_002dretrieve-27"><code>url-queue-retrieve</code></a>: <a href="#Retrieving-URLs">Retrieving URLs</a></li>
+<li><a href="#index-url_002drecreate_002durl-7"><code>url-recreate-url</code></a>: <a href="#URI-Parsing">URI Parsing</a></li>
+<li><a href="#index-url_002dretrieve-26"><code>url-retrieve</code></a>: <a href="#Retrieving-URLs">Retrieving URLs</a></li>
+<li><a href="#index-url_002dretrieve_002dsynchronously-25"><code>url-retrieve-synchronously</code></a>: <a href="#Retrieving-URLs">Retrieving URLs</a></li>
+<li><a href="#index-url_002dtarget-16"><code>url-target</code></a>: <a href="#Parsed-URIs">Parsed URIs</a></li>
+<li><a href="#index-url_002dtype-10"><code>url-type</code></a>: <a href="#Parsed-URIs">Parsed URIs</a></li>
+<li><a href="#index-url_002dunhex_002dstring-24"><code>url-unhex-string</code></a>: <a href="#URI-Encoding">URI Encoding</a></li>
+<li><a href="#index-url_002duser-11"><code>url-user</code></a>: <a href="#Parsed-URIs">Parsed URIs</a></li>
+   </ul><div class="node">
+<a name="Variable-Index"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Concept-Index">Concept Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Function-Index">Function Index</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="unnumbered">Variable Index</h2>
+
+
+
+<ul class="index-vr" compact>
+<li><a href="#index-HTTP_005fPROXY-110"><code>HTTP_PROXY</code></a>: <a href="#Proxies">Proxies</a></li>
+<li><a href="#index-mail_002duser_002dagent-62"><code>mail-user-agent</code></a>: <a href="#mailto">mailto</a></li>
+<li><a href="#index-NNTPSERVER-69"><code>NNTPSERVER</code></a>: <a href="#news_002fnntp_002fsnews">news/nntp/snews</a></li>
+<li><a href="#index-NO_005fPROXY-111"><code>NO_PROXY</code></a>: <a href="#Proxies">Proxies</a></li>
+<li><a href="#index-socks_002dnslookup_002dprogram-138"><code>socks-nslookup-program</code></a>: <a href="#Gateways-in-general">Gateways in general</a></li>
+<li><a href="#index-socks_002dpassword-135"><code>socks-password</code></a>: <a href="#Gateways-in-general">Gateways in general</a></li>
+<li><a href="#index-socks_002dserver-134"><code>socks-server</code></a>: <a href="#Gateways-in-general">Gateways in general</a></li>
+<li><a href="#index-socks_002dtimeout-137"><code>socks-timeout</code></a>: <a href="#Gateways-in-general">Gateways in general</a></li>
+<li><a href="#index-socks_002dusername-136"><code>socks-username</code></a>: <a href="#Gateways-in-general">Gateways in general</a></li>
+<li><a href="#index-TMPDIR-156"><code>TMPDIR</code></a>: <a href="#Customization">Customization</a></li>
+<li><a href="#index-url_002dautomatic_002dcaching-98"><code>url-automatic-caching</code></a>: <a href="#Disk-Caching">Disk Caching</a></li>
+<li><a href="#index-url_002dbad_002dport_002dlist-167"><code>url-bad-port-list</code></a>: <a href="#Customization">Customization</a></li>
+<li><a href="#index-url_002dcache_002dcreation_002dfunction-100"><code>url-cache-creation-function</code></a>: <a href="#Disk-Caching">Disk Caching</a></li>
+<li><a href="#index-url_002dcache_002ddirectory-99"><code>url-cache-directory</code></a>: <a href="#Disk-Caching">Disk Caching</a></li>
+<li><a href="#index-url_002dcache_002dexpire_002dtime-105"><code>url-cache-expire-time</code></a>: <a href="#Disk-Caching">Disk Caching</a></li>
+<li><a href="#index-url_002dconfiguration_002ddirectory-158"><code>url-configuration-directory</code></a>: <a href="#Customization">Customization</a></li>
+<li><a href="#index-url_002dconfirmation_002dfunc-171"><code>url-confirmation-func</code></a>: <a href="#Customization">Customization</a></li>
+<li><a href="#index-url_002dcookie_002dconfirmation-36"><code>url-cookie-confirmation</code></a>: <a href="#Cookies">Cookies</a></li>
+<li><a href="#index-url_002dcookie_002dfile-35"><code>url-cookie-file</code></a>: <a href="#Cookies">Cookies</a></li>
+<li><a href="#index-url_002dcookie_002dmultiple_002dline-37"><code>url-cookie-multiple-line</code></a>: <a href="#Cookies">Cookies</a></li>
+<li><a href="#index-url_002dcookie_002dsave_002dinterval-40"><code>url-cookie-save-interval</code></a>: <a href="#Cookies">Cookies</a></li>
+<li><a href="#index-url_002dcookie_002dtrusted_002durls-38"><code>url-cookie-trusted-urls</code></a>: <a href="#Cookies">Cookies</a></li>
+<li><a href="#index-url_002dcookie_002duntrusted_002durls-39"><code>url-cookie-untrusted-urls</code></a>: <a href="#Cookies">Cookies</a></li>
+<li><a href="#index-url_002ddebug-160"><code>url-debug</code></a>: <a href="#Customization">Customization</a></li>
+<li><a href="#index-url_002ddirectory_002dindex_002dfile-55"><code>url-directory-index-file</code></a>: <a href="#file_002fftp">file/ftp</a></li>
+<li><a href="#index-url_002dgateway_002dlocal_002dhost_002dregexp-118"><code>url-gateway-local-host-regexp</code></a>: <a href="#Gateways-in-general">Gateways in general</a></li>
+<li><a href="#index-url_002dgateway_002dmethod-172"><code>url-gateway-method</code></a>: <a href="#Customization">Customization</a></li>
+<li><a href="#index-url_002dgateway_002dmethod-119"><code>url-gateway-method</code></a>: <a href="#Gateways-in-general">Gateways in general</a></li>
+<li><a href="#index-url_002dgateway_002dprompt_002dpattern-129"><code>url-gateway-prompt-pattern</code></a>: <a href="#Gateways-in-general">Gateways in general</a></li>
+<li><a href="#index-url_002dgateway_002drlogin_002dhost-130"><code>url-gateway-rlogin-host</code></a>: <a href="#Gateways-in-general">Gateways in general</a></li>
+<li><a href="#index-url_002dgateway_002drlogin_002dparameters-131"><code>url-gateway-rlogin-parameters</code></a>: <a href="#Gateways-in-general">Gateways in general</a></li>
+<li><a href="#index-url_002dgateway_002drlogin_002duser_002dname-132"><code>url-gateway-rlogin-user-name</code></a>: <a href="#Gateways-in-general">Gateways in general</a></li>
+<li><a href="#index-url_002dgateway_002dtelnet_002dhost-123"><code>url-gateway-telnet-host</code></a>: <a href="#Gateways-in-general">Gateways in general</a></li>
+<li><a href="#index-url_002dgateway_002dtelnet_002dlogin_002dprompt-126"><code>url-gateway-telnet-login-prompt</code></a>: <a href="#Gateways-in-general">Gateways in general</a></li>
+<li><a href="#index-url_002dgateway_002dtelnet_002dparameters-124"><code>url-gateway-telnet-parameters</code></a>: <a href="#Gateways-in-general">Gateways in general</a></li>
+<li><a href="#index-url_002dgateway_002dtelnet_002dpassword-128"><code>url-gateway-telnet-password</code></a>: <a href="#Gateways-in-general">Gateways in general</a></li>
+<li><a href="#index-url_002dgateway_002dtelnet_002dpassword_002dprompt-125"><code>url-gateway-telnet-password-prompt</code></a>: <a href="#Gateways-in-general">Gateways in general</a></li>
+<li><a href="#index-url_002dgateway_002dtelnet_002duser_002dname-127"><code>url-gateway-telnet-user-name</code></a>: <a href="#Gateways-in-general">Gateways in general</a></li>
+<li><a href="#index-url_002dgateway_002dunplugged-144"><code>url-gateway-unplugged</code></a>: <a href="#Suppressing-network-connections">Suppressing network connections</a></li>
+<li><a href="#index-url_002dhistory_002dfile-149"><code>url-history-file</code></a>: <a href="#History">History</a></li>
+<li><a href="#index-url_002dhistory_002dhash_002dtable-146"><code>url-history-hash-table</code></a>: <a href="#History">History</a></li>
+<li><a href="#index-url_002dhistory_002dsave_002dinterval-150"><code>url-history-save-interval</code></a>: <a href="#History">History</a></li>
+<li><a href="#index-url_002dhistory_002dtrack-148"><code>url-history-track</code></a>: <a href="#History">History</a></li>
+<li><a href="#index-url_002dhonor_002drefresh_002drequests-32"><code>url-honor-refresh-requests</code></a>: <a href="#http_002fhttps">http/https</a></li>
+<li><a href="#index-url_002dirc_002dfunction-81"><code>url-irc-function</code></a>: <a href="#irc">irc</a></li>
+<li><a href="#index-url_002dmail_002dcommand-61"><code>url-mail-command</code></a>: <a href="#mailto">mailto</a></li>
+<li><a href="#index-url_002dmax_002dpassword_002dattempts-168"><code>url-max-password-attempts</code></a>: <a href="#Customization">Customization</a></li>
+<li><a href="#index-url_002dmime_002dcharset_002dstring-41"><code>url-mime-charset-string</code></a>: <a href="#HTTP-language_002fcoding">HTTP language/coding</a></li>
+<li><a href="#index-url_002dmime_002dlanguage_002dstring-44"><code>url-mime-language-string</code></a>: <a href="#HTTP-language_002fcoding">HTTP language/coding</a></li>
+<li><a href="#index-url_002dnews_002dserver-70"><code>url-news-server</code></a>: <a href="#news_002fnntp_002fsnews">news/nntp/snews</a></li>
+<li><a href="#index-url_002dnfs_002dautomounter_002ddirectory_002dspec-86"><code>url-nfs-automounter-directory-spec</code></a>: <a href="#nfs">nfs</a></li>
+<li><a href="#index-url_002dpasswd_002dentry_002dfunc-165"><code>url-passwd-entry-func</code></a>: <a href="#Customization">Customization</a></li>
+<li><a href="#index-url_002dpersonal_002dmail_002daddress-162"><code>url-personal-mail-address</code></a>: <a href="#Customization">Customization</a></li>
+<li><a href="#index-url_002dprivacy_002dlevel-163"><code>url-privacy-level</code></a>: <a href="#Customization">Customization</a></li>
+<li><a href="#index-url_002dproxy_002dservices-112"><code>url-proxy-services</code></a>: <a href="#Proxies">Proxies</a></li>
+<li><a href="#index-url_002dqueue_002dparallel_002dprocesses-28"><code>url-queue-parallel-processes</code></a>: <a href="#Retrieving-URLs">Retrieving URLs</a></li>
+<li><a href="#index-url_002dqueue_002dtimeout-30"><code>url-queue-timeout</code></a>: <a href="#Retrieving-URLs">Retrieving URLs</a></li>
+<li><a href="#index-url_002dshow_002dstatus-170"><code>url-show-status</code></a>: <a href="#Customization">Customization</a></li>
+<li><a href="#index-url_002dstandalone_002dmode-166"><code>url-standalone-mode</code></a>: <a href="#Customization">Customization</a></li>
+<li><a href="#index-url_002dtemporary_002ddirectory-169"><code>url-temporary-directory</code></a>: <a href="#Customization">Customization</a></li>
+<li><a href="#index-url_002duncompressor_002dalist-164"><code>url-uncompressor-alist</code></a>: <a href="#Customization">Customization</a></li>
+<li><a href="#index-url_002dunreserved_002dchars-22"><code>url-unreserved-chars</code></a>: <a href="#URI-Encoding">URI Encoding</a></li>
+   </ul><div class="node">
+<a name="Concept-Index"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Variable-Index">Variable Index</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="unnumbered">Concept Index</h2>
+
+
+
+<ul class="index-cp" compact>
+<li><a href="#index-automounter-85">automounter</a>: <a href="#nfs">nfs</a></li>
+<li><a href="#index-bugs_002c-HTML-142">bugs, HTML</a>: <a href="#Suppressing-network-connections">Suppressing network connections</a></li>
+<li><a href="#index-Cache-cleaning-97">Cache cleaning</a>: <a href="#Disk-Caching">Disk Caching</a></li>
+<li><a href="#index-Caching-92">Caching</a>: <a href="#Disk-Caching">Disk Caching</a></li>
+<li><a href="#index-character-sets-42">character sets</a>: <a href="#HTTP-language_002fcoding">HTTP language/coding</a></li>
+<li><a href="#index-Cleaning-the-cache-95">Cleaning the cache</a>: <a href="#Disk-Caching">Disk Caching</a></li>
+<li><a href="#index-Clearing-the-cache-96">Clearing the cache</a>: <a href="#Disk-Caching">Disk Caching</a></li>
+<li><a href="#index-coding-systems-43">coding systems</a>: <a href="#HTTP-language_002fcoding">HTTP language/coding</a></li>
+<li><a href="#index-compressed-files-53">compressed files</a>: <a href="#file_002fftp">file/ftp</a></li>
+<li><a href="#index-configuration-files-159">configuration files</a>: <a href="#Customization">Customization</a></li>
+<li><a href="#index-DASL-48">DASL</a>: <a href="#HTTP-URL-Options">HTTP URL Options</a></li>
+<li><a href="#index-data-URLs-82">data URLs</a>: <a href="#data">data</a></li>
+<li><a href="#index-DAV-47">DAV</a>: <a href="#HTTP-URL-Options">HTTP URL Options</a></li>
+<li><a href="#index-debugging-161">debugging</a>: <a href="#Customization">Customization</a></li>
+<li><a href="#index-dired-54">dired</a>: <a href="#file_002fftp">file/ftp</a></li>
+<li><a href="#index-Disk-Cache-94">Disk Cache</a>: <a href="#Disk-Caching">Disk Caching</a></li>
+<li><a href="#index-email-60">email</a>: <a href="#mailto">mailto</a></li>
+<li><a href="#index-environment-variable-68">environment variable</a>: <a href="#news_002fnntp_002fsnews">news/nntp/snews</a></li>
+<li><a href="#index-environment-variables-109">environment variables</a>: <a href="#Proxies">Proxies</a></li>
+<li><a href="#index-environment-variables-155">environment variables</a>: <a href="#Customization">Customization</a></li>
+<li><a href="#index-ERC-79">ERC</a>: <a href="#irc">irc</a></li>
+<li><a href="#index-File-Transfer-Protocol-52">File Transfer Protocol</a>: <a href="#file_002fftp">file/ftp</a></li>
+<li><a href="#index-files-50">files</a>: <a href="#file_002fftp">file/ftp</a></li>
+<li><a href="#index-firewalls-114">firewalls</a>: <a href="#Gateways-in-general">Gateways in general</a></li>
+<li><a href="#index-FTP-51">FTP</a>: <a href="#file_002fftp">file/ftp</a></li>
+<li><a href="#index-gateways-113">gateways</a>: <a href="#Gateways-in-general">Gateways in general</a></li>
+<li><a href="#index-HTML-_0060_0060bugs_0027_0027-143">HTML &ldquo;bugs&rdquo;</a>: <a href="#Suppressing-network-connections">Suppressing network connections</a></li>
+<li><a href="#index-Info-56">Info</a>: <a href="#info">info</a></li>
+<li><a href="#index-Internet-Relay-Chat-77">Internet Relay Chat</a>: <a href="#irc">irc</a></li>
+<li><a href="#index-IRC-76">IRC</a>: <a href="#irc">irc</a></li>
+<li><a href="#index-language-preferences-45">language preferences</a>: <a href="#HTTP-language_002fcoding">HTTP language/coding</a></li>
+<li><a href="#index-LDAP-87">LDAP</a>: <a href="#ldap">ldap</a></li>
+<li><a href="#index-Lightweight-Directory-Access-Protocol-88">Lightweight Directory Access Protocol</a>: <a href="#ldap">ldap</a></li>
+<li><a href="#index-mailto-59">mailto</a>: <a href="#mailto">mailto</a></li>
+<li><a href="#index-g_t_0040command_007bman_007d-89"><samp><span class="command">man</span></samp></a>: <a href="#man">man</a></li>
+<li><a href="#index-MD5-102">MD5</a>: <a href="#Disk-Caching">Disk Caching</a></li>
+<li><a href="#index-network-connections_002c-suppressing-140">network connections, suppressing</a>: <a href="#Suppressing-network-connections">Suppressing network connections</a></li>
+<li><a href="#index-Network-File-System-84">Network File System</a>: <a href="#nfs">nfs</a></li>
+<li><a href="#index-network-news-64">network news</a>: <a href="#news_002fnntp_002fsnews">news/nntp/snews</a></li>
+<li><a href="#index-news-63">news</a>: <a href="#news_002fnntp_002fsnews">news/nntp/snews</a></li>
+<li><a href="#index-NFS-83">NFS</a>: <a href="#nfs">nfs</a></li>
+<li><a href="#index-NNTP-66">NNTP</a>: <a href="#news_002fnntp_002fsnews">news/nntp/snews</a></li>
+<li><a href="#index-g_t_0040command_007bnslookup_007d-139"><samp><span class="command">nslookup</span></samp></a>: <a href="#Gateways-in-general">Gateways in general</a></li>
+<li><a href="#index-opening-a-stream-116">opening a stream</a>: <a href="#Gateways-in-general">Gateways in general</a></li>
+<li><a href="#index-P3P-49">P3P</a>: <a href="#HTTP-URL-Options">HTTP URL Options</a></li>
+<li><a href="#index-parsed-URI-9">parsed URI</a>: <a href="#URI-Parsing">URI Parsing</a></li>
+<li><a href="#index-parsed-URIs-5">parsed URIs</a>: <a href="#URI-Parsing">URI Parsing</a></li>
+<li><a href="#index-percent-encoding-19">percent encoding</a>: <a href="#URI-Encoding">URI Encoding</a></li>
+<li><a href="#index-Persistent-Cache-93">Persistent Cache</a>: <a href="#Disk-Caching">Disk Caching</a></li>
+<li><a href="#index-proxies-108">proxies</a>: <a href="#Proxies">Proxies</a></li>
+<li><a href="#index-proxy-servers-107">proxy servers</a>: <a href="#Proxies">Proxies</a></li>
+<li><a href="#index-rcirc-80">rcirc</a>: <a href="#irc">irc</a></li>
+<li><a href="#index-g_t_0040command_007brlogin_007d-121"><samp><span class="command">rlogin</span></samp></a>: <a href="#Gateways-in-general">Gateways in general</a></li>
+<li><a href="#index-rlogin-71">rlogin</a>: <a href="#rlogin_002ftelnet_002ftn3270">rlogin/telnet/tn3270</a></li>
+<li><a href="#index-snews-67">snews</a>: <a href="#news_002fnntp_002fsnews">news/nntp/snews</a></li>
+<li><a href="#index-g_t_0040sc_007bsocks_007d-122"><span class="sc">socks</span></a>: <a href="#Gateways-in-general">Gateways in general</a></li>
+<li><a href="#index-stream_002c-opening-117">stream, opening</a>: <a href="#Gateways-in-general">Gateways in general</a></li>
+<li><a href="#index-suppressing-network-connections-141">suppressing network connections</a>: <a href="#Suppressing-network-connections">Suppressing network connections</a></li>
+<li><a href="#index-g_t_0040command_007btelnet_007d-120"><samp><span class="command">telnet</span></samp></a>: <a href="#Gateways-in-general">Gateways in general</a></li>
+<li><a href="#index-telnet-72">telnet</a>: <a href="#rlogin_002ftelnet_002ftn3270">rlogin/telnet/tn3270</a></li>
+<li><a href="#index-terminal-emulation-74">terminal emulation</a>: <a href="#rlogin_002ftelnet_002ftn3270">rlogin/telnet/tn3270</a></li>
+<li><a href="#index-Texinfo-57">Texinfo</a>: <a href="#info">info</a></li>
+<li><a href="#index-tn3270-73">tn3270</a>: <a href="#rlogin_002ftelnet_002ftn3270">rlogin/telnet/tn3270</a></li>
+<li><a href="#index-uniform-resource-identifier-3">uniform resource identifier</a>: <a href="#Introduction">Introduction</a></li>
+<li><a href="#index-uniform-resource-locator-4">uniform resource locator</a>: <a href="#Introduction">Introduction</a></li>
+<li><a href="#index-Unix-man-pages-90">Unix man pages</a>: <a href="#man">man</a></li>
+<li><a href="#index-unparsing-URLs-8">unparsing URLs</a>: <a href="#URI-Parsing">URI Parsing</a></li>
+<li><a href="#index-unreserved-characters-23">unreserved characters</a>: <a href="#URI-Encoding">URI Encoding</a></li>
+<li><a href="#index-URI-2">URI</a>: <a href="#Introduction">Introduction</a></li>
+<li><a href="#index-URL-1">URL</a>: <a href="#Introduction">Introduction</a></li>
+<li><a href="#index-usenet-65">usenet</a>: <a href="#news_002fnntp_002fsnews">news/nntp/snews</a></li>
+<li><a href="#index-ZEN-IRC-78">ZEN IRC</a>: <a href="#irc">irc</a></li>
+   </ul><div class="footnote">
+<hr>
+<a name="texinfo-footnotes-in-document"></a><h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Proxies (which only operate over HTTP) are
+implemented using this.</p>
+
+   <hr></div>
+
+</body></html>
+
+<!--
+
+Local Variables:
+coding: utf-8
+End:
+
+-->

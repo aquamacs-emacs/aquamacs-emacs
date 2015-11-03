@@ -10,15 +10,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -39,15 +39,15 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Reading-Input.html#Reading-Input">Readi
 <hr>
 </div>
 
-<h4 class="subsection">21.8.6 Miscellaneous Event Input Features</h4>
+<h4 class="subsection">20.8.6 Miscellaneous Event Input Features</h4>
 
-<p>This section describes how to &ldquo;peek ahead&rdquo; at events without using
+<p>This section describes how to peek ahead at events without using
 them up, how to check for pending input, and how to discard pending
 input.  See also the function <code>read-passwd</code> (see <a href="Reading-a-Password.html#Reading-a-Password">Reading a Password</a>).
 
 <div class="defun">
-&mdash; Variable: <b>unread-command-events</b><var><a name="index-unread_002dcommand_002devents-1454"></a></var><br>
-<blockquote><p><a name="index-next-input-1455"></a><a name="index-peeking-at-input-1456"></a>This variable holds a list of events waiting to be read as command
+&mdash; Variable: <b>unread-command-events</b><var><a name="index-unread_002dcommand_002devents-1584"></a></var><br>
+<blockquote><p><a name="index-next-input-1585"></a><a name="index-peeking-at-input-1586"></a>This variable holds a list of events waiting to be read as command
 input.  The events are used in the order they appear in the list, and
 removed one by one as they are used.
 
@@ -56,7 +56,7 @@ and then decides not to use it.  Storing the event in this variable
 causes it to be processed normally, by the command loop or by the
 functions to read command input.
 
-        <p><a name="index-prefix-argument-unreading-1457"></a>For example, the function that implements numeric prefix arguments reads
+        <p><a name="index-prefix-argument-unreading-1587"></a>For example, the function that implements numeric prefix arguments reads
 any number of digits.  When it finds a non-digit event, it must unread
 the event so that it can be read normally by the command loop. 
 Likewise, incremental search uses this feature to unread events with no
@@ -73,26 +73,30 @@ most recently unread will be reread first.
         <p>Events read from this list are not normally added to the current
 command's key sequence (as returned by, e.g., <code>this-command-keys</code>),
 as the events will already have been added once as they were read for
-the first time.  An element of the form <code>(t . </code><var>event</var><code>)</code>
+the first time.  An element of the form <code>(t&nbsp;.&nbsp;</code><var>event</var><code>)</code><!-- /@w -->
 forces <var>event</var> to be added to the current command's key sequence. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>listify-key-sequence</b><var> key<a name="index-listify_002dkey_002dsequence-1458"></a></var><br>
+&mdash; Function: <b>listify-key-sequence</b><var> key<a name="index-listify_002dkey_002dsequence-1588"></a></var><br>
 <blockquote><p>This function converts the string or vector <var>key</var> to a list of
 individual events, which you can put in <code>unread-command-events</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>input-pending-p</b><var><a name="index-input_002dpending_002dp-1459"></a></var><br>
-<blockquote><p><a name="index-waiting-for-command-key-input-1460"></a>This function determines whether any command input is currently
+&mdash; Function: <b>input-pending-p</b><var> &amp;optional check-timers<a name="index-input_002dpending_002dp-1589"></a></var><br>
+<blockquote><p><a name="index-waiting-for-command-key-input-1590"></a>This function determines whether any command input is currently
 available to be read.  It returns immediately, with value <code>t</code> if
 there is available input, <code>nil</code> otherwise.  On rare occasions it
-may return <code>t</code> when no input is available. 
+may return <code>t</code> when no input is available.
+
+        <p>If the optional argument <var>check-timers</var> is non-<code>nil</code>, then if
+no input is available, Emacs runs any timers which are ready. 
+See <a href="Timers.html#Timers">Timers</a>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>last-input-event</b><var><a name="index-last_002dinput_002devent-1461"></a></var><br>
+&mdash; Variable: <b>last-input-event</b><var><a name="index-last_002dinput_002devent-1591"></a></var><br>
 <blockquote><p>This variable records the last terminal input event read, whether
 as part of a command or explicitly by a Lisp program.
 
@@ -111,7 +115,7 @@ this expression) remains the value of <code>last-command-event</code>.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Macro: <b>while-no-input</b><var> body<small class="dots">...</small><a name="index-while_002dno_002dinput-1462"></a></var><br>
+&mdash; Macro: <b>while-no-input</b><var> body<small class="dots">...</small><a name="index-while_002dno_002dinput-1592"></a></var><br>
 <blockquote><p>This construct runs the <var>body</var> forms and returns the value of the
 last one&mdash;but only if no input arrives.  If any input arrives during
 the execution of the <var>body</var> forms, it aborts them (working much
@@ -134,8 +138,8 @@ like this:
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>discard-input</b><var><a name="index-discard_002dinput-1463"></a></var><br>
-<blockquote><p><a name="index-flushing-input-1464"></a><a name="index-discarding-input-1465"></a><a name="index-keyboard-macro_002c-terminating-1466"></a>This function discards the contents of the terminal input buffer and
+&mdash; Function: <b>discard-input</b><var><a name="index-discard_002dinput-1593"></a></var><br>
+<blockquote><p><a name="index-flushing-input-1594"></a><a name="index-discarding-input-1595"></a><a name="index-keyboard-macro_002c-terminating-1596"></a>This function discards the contents of the terminal input buffer and
 cancels any keyboard macro that might be in the process of definition. 
 It returns <code>nil</code>.
 

@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,9 +41,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Display-Property.html#Display-Property"
 <hr>
 </div>
 
-<h4 class="subsection">38.15.2 Specified Spaces</h4>
+<h4 class="subsection">37.16.2 Specified Spaces</h4>
 
-<p><a name="index-spaces_002c-specified-height-or-width-3915"></a><a name="index-variable_002dwidth-spaces-3916"></a>
+<p><a name="index-spaces_002c-specified-height-or-width-4317"></a><a name="index-variable_002dwidth-spaces-4318"></a>
   To display a space of specified width and/or height, use a display
 specification of the form <code>(space . </code><var>props</var><code>)</code>, where
 <var>props</var> is a property list (a list of alternating properties and
@@ -53,15 +53,17 @@ place of <em>all</em> of those characters.  These are the properties you
 can use in <var>props</var> to specify the weight of the space:
 
      <dl>
-<dt><code>:width </code><var>width</var><dd>If <var>width</var> is an integer or floating point number, it specifies
+<dt><code>:width </code><var>width</var><dd>If <var>width</var> is a number, it specifies
 that the space width should be <var>width</var> times the normal character
 width.  <var>width</var> can also be a <dfn>pixel width</dfn> specification
 (see <a href="Pixel-Specification.html#Pixel-Specification">Pixel Specification</a>).
 
      <br><dt><code>:relative-width </code><var>factor</var><dd>Specifies that the width of the stretch should be computed from the
 first character in the group of consecutive characters that have the
-same <code>display</code> property.  The space width is the width of that
-character, multiplied by <var>factor</var>.
+same <code>display</code> property.  The space width is the pixel width of
+that character, multiplied by <var>factor</var>.  (On text-mode terminals,
+the &ldquo;pixel width&rdquo; of a character is usually 1, but it could be more
+for TABs and double-width CJK characters.)
 
      <br><dt><code>:align-to </code><var>hpos</var><dd>Specifies that the space should be wide enough to reach <var>hpos</var>. 
 If <var>hpos</var> is a number, it is measured in units of the normal
@@ -74,7 +76,7 @@ also specify the height of the space, with these properties:
 
      <dl>
 <dt><code>:height </code><var>height</var><dd>Specifies the height of the space. 
-If <var>height</var> is an integer or floating point number, it specifies
+If <var>height</var> is a number, it specifies
 that the space height should be <var>height</var> times the normal character
 height.  The <var>height</var> may also be a <dfn>pixel height</dfn> specification
 (see <a href="Pixel-Specification.html#Pixel-Specification">Pixel Specification</a>).

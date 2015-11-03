@@ -10,16 +10,16 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Manual',
-updated for Emacs version 24.3.50.
+updated for Emacs version 25.0.50.
 
-Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``The GNU
      Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     with the Front-Cover Texts being ``A GNU Manual,'' and with the
      Back-Cover Texts as in (a) below.  A copy of the license is
      included in the section entitled ``GNU Free Documentation
      License.''
@@ -45,15 +45,15 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Autorevert.html#Autorevert">Autorevert<
 <p>This section is intended for Elisp programmers who would like to add
 support for auto-reverting new types of buffers.
 
-   <p>To support auto-reverting the buffer must first of all have a
+   <p>To support auto-reverting the buffer must first of all have a suitable
 <code>revert-buffer-function</code>.  See <a href="../elisp/Definition-of-revert_002dbuffer_002dfunction.html#Definition-of-revert_002dbuffer_002dfunction">Reverting</a>.
 
-   <p>In addition, it <em>must</em> have a <code>buffer-stale-function</code>.
+   <p>In addition, it must have a suitable <code>buffer-stale-function</code>.
 
 <!-- FIXME only defvar in all of doc/emacs! -->
 <div class="defun">
-&mdash; Variable: <b>buffer-stale-function</b><var><a name="index-buffer_002dstale_002dfunction-1097"></a></var><br>
-<blockquote><p>The value of this variable is a function to check whether a non-file
+&mdash; Variable: <b>buffer-stale-function</b><var><a name="index-buffer_002dstale_002dfunction-1140"></a></var><br>
+<blockquote><p>The value of this variable is a function to check whether a
 buffer needs reverting.  This should be a function with one optional
 argument <var>noconfirm</var>.  The function should return non-<code>nil</code>
 if the buffer should be reverted.  The buffer is current when this
@@ -73,7 +73,7 @@ ignore the <var>noconfirm</var> argument.
         <p>If you just want to automatically auto-revert every
 <code>auto-revert-interval</code> seconds (like the Buffer Menu), use:
 
-     <pre class="example">          (set (make-local-variable 'buffer-stale-function)
+     <pre class="example">          (setq-local buffer-stale-function
                #'(lambda (&amp;optional noconfirm) 'fast))
 </pre>
         <p class="noindent">in the buffer's mode function.
@@ -88,7 +88,7 @@ also be useful if the function is consulted for purposes other than
 auto-reverting. 
 </p></blockquote></div>
 
-   <p>Once the buffer has a <code>revert-buffer-function</code> and a
+   <p>Once the buffer has a suitable <code>revert-buffer-function</code> and
 <code>buffer-stale-function</code>, several problems usually remain.
 
    <p>The buffer will only auto-revert if it is marked unmodified.  Hence,

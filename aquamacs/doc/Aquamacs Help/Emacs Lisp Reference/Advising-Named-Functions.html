@@ -1,0 +1,127 @@
+<html lang="en">
+<head>
+<title>Advising Named Functions - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Advising-Functions.html#Advising-Functions" title="Advising Functions">
+<link rel="prev" href="Core-Advising-Primitives.html#Core-Advising-Primitives" title="Core Advising Primitives">
+<link rel="next" href="Advice-combinators.html#Advice-combinators" title="Advice combinators">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 25.0.50.
+
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Advising-Named-Functions"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Advice-combinators.html#Advice-combinators">Advice combinators</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Core-Advising-Primitives.html#Core-Advising-Primitives">Core Advising Primitives</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Advising-Functions.html#Advising-Functions">Advising Functions</a>
+<hr>
+</div>
+
+<h4 class="subsection">12.10.2 Advising Named Functions</h4>
+
+<p><a name="index-advising-named-functions-883"></a>
+A common use of advice is for named functions and macros. 
+You could just use <code>add-function</code> as in:
+
+<pre class="example">     (add-function :around (symbol-function '<var>fun</var>) #'his-tracing-function)
+</pre>
+   <p>But you should use <code>advice-add</code> and <code>advice-remove</code> for that
+instead.  This separate set of functions to manipulate pieces of advice applied
+to named functions, offers the following extra features compared to
+<code>add-function</code>: they know how to deal with macros and autoloaded
+functions, they let <code>describe-function</code> preserve the original docstring as
+well as document the added advice, and they let you add and remove advice
+before a function is even defined.
+
+   <p><code>advice-add</code> can be useful for altering the behavior of existing calls
+to an existing function without having to redefine the whole function. 
+However, it can be a source of bugs, since existing callers to the function may
+assume the old behavior, and work incorrectly when the behavior is changed by
+advice.  Advice can also cause confusion in debugging, if the person doing the
+debugging does not notice or remember that the function has been modified
+by advice.
+
+   <p>For these reasons, advice should be reserved for the cases where you
+cannot modify a function's behavior in any other way.  If it is
+possible to do the same thing via a hook, that is preferable
+(see <a href="Hooks.html#Hooks">Hooks</a>).  If you simply want to change what a particular key
+does, it may be better to write a new command, and remap the old
+command's key bindings to the new one (see <a href="Remapping-Commands.html#Remapping-Commands">Remapping Commands</a>). 
+In particular, Emacs's own source files should not put advice on
+functions in Emacs.  (There are currently a few exceptions to this
+convention, but we aim to correct them.)
+
+   <p>Special forms (see <a href="Special-Forms.html#Special-Forms">Special Forms</a>) cannot be advised, however macros can
+be advised, in much the same way as functions.  Of course, this will not affect
+code that has already been macro-expanded, so you need to make sure the advice
+is installed before the macro is expanded.
+
+   <p>It is possible to advise a primitive (see <a href="What-Is-a-Function.html#What-Is-a-Function">What Is a Function</a>),
+but one should typically <em>not</em> do so, for two reasons.  Firstly,
+some primitives are used by the advice mechanism, and advising them
+could cause an infinite recursion.  Secondly, many primitives are
+called directly from C, and such calls ignore advice; hence, one ends
+up in a confusing situation where some calls (occurring from Lisp
+code) obey the advice and other calls (from C code) do not.
+
+<div class="defun">
+&mdash; Macro: <b>define-advice</b><var> symbol </var>(<var>where lambda-list &amp;optional name depth</var>)<var> &amp;rest body<a name="index-define_002dadvice-884"></a></var><br>
+<blockquote><p>This macro defines a piece of advice and adds it to the function named
+<var>symbol</var>.  The advice is an anonymous function if <var>name</var> is
+nil or a function named <code>symbol@name</code>.  See <code>advice-add</code>
+for explanation of other arguments. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>advice-add</b><var> symbol where function &amp;optional props<a name="index-advice_002dadd-885"></a></var><br>
+<blockquote><p>Add the advice <var>function</var> to the named function <var>symbol</var>. 
+<var>where</var> and <var>props</var> have the same meaning as for <code>add-function</code>
+(see <a href="Core-Advising-Primitives.html#Core-Advising-Primitives">Core Advising Primitives</a>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>advice-remove</b><var> symbol function<a name="index-advice_002dremove-886"></a></var><br>
+<blockquote><p>Remove the advice <var>function</var> from the named function <var>symbol</var>. 
+<var>function</var> can also be the <code>name</code> of a piece of advice. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>advice-member-p</b><var> function symbol<a name="index-advice_002dmember_002dp-887"></a></var><br>
+<blockquote><p>Return non-<code>nil</code> if the advice <var>function</var> is already in the named
+function <var>symbol</var>.  <var>function</var> can also be the <code>name</code> of
+a piece of advice. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>advice-mapc</b><var> function symbol<a name="index-advice_002dmapc-888"></a></var><br>
+<blockquote><p>Call <var>function</var> for every piece of advice that was added to the
+named function <var>symbol</var>.  <var>function</var> is called with two
+arguments: the advice function and its properties. 
+</p></blockquote></div>
+
+   </body></html>
+

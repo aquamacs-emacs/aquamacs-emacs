@@ -10,15 +10,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -39,14 +39,17 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Overlays.html#Overlays">Overlays</a>
 <hr>
 </div>
 
-<h4 class="subsection">38.9.3 Searching for Overlays</h4>
+<h4 class="subsection">37.9.3 Searching for Overlays</h4>
+
+<p><a name="index-searching-for-overlays-4148"></a><a name="index-overlays_002c-searching-for-4149"></a>
 
 <div class="defun">
-&mdash; Function: <b>overlays-at</b><var> pos<a name="index-overlays_002dat-3785"></a></var><br>
-<blockquote><p>This function returns a list of all the overlays that cover the
-character at position <var>pos</var> in the current buffer.  The list is in
-no particular order.  An overlay contains position <var>pos</var> if it
-begins at or before <var>pos</var>, and ends after <var>pos</var>.
+&mdash; Function: <b>overlays-at</b><var> pos &amp;optional sorted<a name="index-overlays_002dat-4150"></a></var><br>
+<blockquote><p>This function returns a list of all the overlays that cover the character at
+position <var>pos</var> in the current buffer.  If <var>sorted</var> is non-<code>nil</code>,
+the list is in decreasing order of priority, otherwise it is in no particular
+order.  An overlay contains position <var>pos</var> if it begins at or before
+<var>pos</var>, and ends after <var>pos</var>.
 
         <p>To illustrate usage, here is a Lisp function that returns a list of the
 overlays that specify property <var>prop</var> for the character at point:
@@ -64,25 +67,24 @@ overlays that specify property <var>prop</var> for the character at point:
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>overlays-in</b><var> beg end<a name="index-overlays_002din-3786"></a></var><br>
+&mdash; Function: <b>overlays-in</b><var> beg end<a name="index-overlays_002din-4151"></a></var><br>
 <blockquote><p>This function returns a list of the overlays that overlap the region
-<var>beg</var> through <var>end</var>.  &ldquo;Overlap&rdquo; means that at least one
-character is contained within the overlay and also contained within the
-specified region; however, empty overlays are included in the result if
-they are located at <var>beg</var>, strictly between <var>beg</var> and <var>end</var>,
-or at <var>end</var> when <var>end</var> denotes the position at the end of the
-buffer. 
+<var>beg</var> through <var>end</var>.  An overlay overlaps with a region if it
+contains one or more characters in the region; empty overlays
+(see <a href="Managing-Overlays.html#Managing-Overlays">empty overlay</a>) overlap if they are at
+<var>beg</var>, strictly between <var>beg</var> and <var>end</var>, or at <var>end</var>
+when <var>end</var> denotes the position at the end of the buffer. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>next-overlay-change</b><var> pos<a name="index-next_002doverlay_002dchange-3787"></a></var><br>
+&mdash; Function: <b>next-overlay-change</b><var> pos<a name="index-next_002doverlay_002dchange-4152"></a></var><br>
 <blockquote><p>This function returns the buffer position of the next beginning or end
 of an overlay, after <var>pos</var>.  If there is none, it returns
 <code>(point-max)</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>previous-overlay-change</b><var> pos<a name="index-previous_002doverlay_002dchange-3788"></a></var><br>
+&mdash; Function: <b>previous-overlay-change</b><var> pos<a name="index-previous_002doverlay_002dchange-4153"></a></var><br>
 <blockquote><p>This function returns the buffer position of the previous beginning or
 end of an overlay, before <var>pos</var>.  If there is none, it returns
 <code>(point-min)</code>. 

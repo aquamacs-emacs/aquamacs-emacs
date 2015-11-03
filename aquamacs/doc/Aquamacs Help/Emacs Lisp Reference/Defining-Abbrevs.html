@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,39 +41,40 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Abbrevs.html#Abbrevs">Abbrevs</a>
 <hr>
 </div>
 
-<h3 class="section">36.2 Defining Abbrevs</h3>
+<h3 class="section">35.2 Defining Abbrevs</h3>
 
-<p><code>define-abbrev</code> is the low-level basic function for defining an
+<p><a name="index-defining-abbrevs-3825"></a>
+  <code>define-abbrev</code> is the low-level basic function for defining an
 abbrev in an abbrev table.
 
    <p>When a major mode defines a system abbrev, it should call
 <code>define-abbrev</code> and specify <code>t</code> for the <code>:system</code>
-property.  Be aware that any saved non-&ldquo;system&rdquo; abbrevs are restored
+property.  Be aware that any saved non-system abbrevs are restored
 at startup, i.e., before some major modes are loaded.  Therefore, major
 modes should not assume that their abbrev tables are empty when they
 are first loaded.
 
 <div class="defun">
-&mdash; Function: <b>define-abbrev</b><var> abbrev-table name expansion &amp;optional hook &amp;rest props<a name="index-define_002dabbrev-3494"></a></var><br>
+&mdash; Function: <b>define-abbrev</b><var> abbrev-table name expansion &amp;optional hook &amp;rest props<a name="index-define_002dabbrev-3826"></a></var><br>
 <blockquote><p>This function defines an abbrev named <var>name</var>, in
 <var>abbrev-table</var>, to expand to <var>expansion</var> and call <var>hook</var>,
 with properties <var>props</var> (see <a href="Abbrev-Properties.html#Abbrev-Properties">Abbrev Properties</a>).  The return
 value is <var>name</var>.  The <code>:system</code> property in <var>props</var> is
 treated specially here: if it has the value <code>force</code>, then it will
-overwrite an existing definition even for a non-&ldquo;system&rdquo; abbrev of
+overwrite an existing definition even for a non-system abbrev of
 the same name.
 
         <p><var>name</var> should be a string.  The argument <var>expansion</var> is
 normally the desired expansion (a string), or <code>nil</code> to undefine
 the abbrev.  If it is anything but a string or <code>nil</code>, then the
-abbreviation &ldquo;expands&rdquo; solely by running <var>hook</var>.
+abbreviation expands solely by running <var>hook</var>.
 
         <p>The argument <var>hook</var> is a function or <code>nil</code>.  If <var>hook</var> is
 non-<code>nil</code>, then it is called with no arguments after the abbrev is
 replaced with <var>expansion</var>; point is located at the end of
 <var>expansion</var> when <var>hook</var> is called.
 
-        <p><a name="index-g_t_0040code_007bno_002dself_002dinsert_007d-property-3495"></a>If <var>hook</var> is a non-<code>nil</code> symbol whose <code>no-self-insert</code>
+        <p><a name="index-g_t_0040code_007bno_002dself_002dinsert_007d-property-3827"></a>If <var>hook</var> is a non-<code>nil</code> symbol whose <code>no-self-insert</code>
 property is non-<code>nil</code>, <var>hook</var> can explicitly control whether
 to insert the self-inserting input character that triggered the
 expansion.  If <var>hook</var> returns non-<code>nil</code> in this case, that
@@ -88,7 +89,7 @@ does not do this for a system abbrev, since those aren't saved anyway.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>only-global-abbrevs</b><var><a name="index-only_002dglobal_002dabbrevs-3496"></a></var><br>
+&mdash; User Option: <b>only-global-abbrevs</b><var><a name="index-only_002dglobal_002dabbrevs-3828"></a></var><br>
 <blockquote><p>If this variable is non-<code>nil</code>, it means that the user plans to use
 global abbrevs only.  This tells the commands that define mode-specific
 abbrevs to define global ones instead.  This variable does not alter the

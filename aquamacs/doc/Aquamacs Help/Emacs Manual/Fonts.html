@@ -11,16 +11,16 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Manual',
-updated for Emacs version 24.3.50.
+updated for Emacs version 25.0.50.
 
-Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``The GNU
      Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     with the Front-Cover Texts being ``A GNU Manual,'' and with the
      Back-Cover Texts as in (a) below.  A copy of the license is
      included in the section entitled ``GNU Free Documentation
      License.''
@@ -44,14 +44,15 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
 
 <h3 class="section">21.8 Fonts</h3>
 
-<p><a name="index-fonts-1486"></a>
+<p><a name="index-fonts-1546"></a>
   By default, Emacs displays text on graphical displays using a
-12-point monospace font.  There are several different ways to specify
+10-point monospace font.  There are several different ways to specify
 a different font:
 
      <ul>
-<li>Click on &lsquo;<samp><span class="samp">Set Default Font</span></samp>&rsquo; in the &lsquo;<samp><span class="samp">Options</span></samp>&rsquo; menu.  To save
-this for future sessions, click on &lsquo;<samp><span class="samp">Save Options</span></samp>&rsquo; in the
+<li>Click on &lsquo;<samp><span class="samp">Set Default Font</span></samp>&rsquo; in the &lsquo;<samp><span class="samp">Options</span></samp>&rsquo; menu.  This
+makes the selected font the default on all existing graphical frames. 
+To save this for future sessions, click on &lsquo;<samp><span class="samp">Save Options</span></samp>&rsquo; in the
 &lsquo;<samp><span class="samp">Options</span></samp>&rsquo; menu.
 
      <li>Add a line to your init file, modifying the variable
@@ -61,7 +62,10 @@ this for future sessions, click on &lsquo;<samp><span class="samp">Save Options<
      <pre class="example">          (add-to-list 'default-frame-alist
                        '(font . "DejaVu Sans Mono-10"))
 </pre>
-     <p><a name="index-X-defaults-file-1487"></a><a name="index-X-resources-file-1488"></a><li>Add an &lsquo;<samp><span class="samp">emacs.font</span></samp>&rsquo; X resource setting to your X resource file,
+     <p class="noindent">This makes the font the default on all graphical frames created after
+restarting Emacs with that init file.
+
+     <p><a name="index-X-defaults-file-1547"></a><a name="index-X-resources-file-1548"></a><li>Add an &lsquo;<samp><span class="samp">emacs.font</span></samp>&rsquo; X resource setting to your X resource file,
 like this:
 
      <pre class="example">          emacs.font: DejaVu Sans Mono-12
@@ -82,13 +86,13 @@ For this to work, Emacs must have been compiled with Gconf support.
 command can be helpful.  It describes the character at point, and
 names the font that it's rendered in.
 
-   <p><a name="index-fontconfig-1489"></a>  On X, there are four different ways to express a &ldquo;font name&rdquo;.  The
+   <p><a name="index-fontconfig-1549"></a>  On X, there are four different ways to express a font name.  The
 first is to use a <dfn>Fontconfig pattern</dfn>.  Fontconfig patterns have
 the following form:
 
 <pre class="example">     <var>fontname</var>[-<var>fontsize</var>][:<var>name1</var>=<var>values1</var>][:<var>name2</var>=<var>values2</var>]...
 </pre>
-   <p class="noindent">Within this format, any of the elements in braces may be omitted. 
+   <p class="noindent">Within this format, any of the elements in brackets may be omitted. 
 Here, <var>fontname</var> is the <dfn>family name</dfn> of the font, such as
 &lsquo;<samp><span class="samp">Monospace</span></samp>&rsquo; or &lsquo;<samp><span class="samp">DejaVu Sans Mono</span></samp>&rsquo;; <var>fontsize</var> is the
 <dfn>point size</dfn> of the font (one <dfn>printer's point</dfn> is about 1/72
@@ -129,7 +133,7 @@ style, which overrides the slant and weight properties.
 Fontconfig manual, which is distributed with Fontconfig and available
 online at <a href="http://fontconfig.org/fontconfig-user.html">http://fontconfig.org/fontconfig-user.html</a>.
 
-   <p><a name="index-GTK-font-pattern-1490"></a>  The second way to specify a font is to use a <dfn>GTK font pattern</dfn>. 
+   <p><a name="index-GTK-font-pattern-1550"></a>  The second way to specify a font is to use a <dfn>GTK font pattern</dfn>. 
 These have the syntax
 
 <pre class="example">     <var>fontname</var> [<var>properties</var>] [<var>fontsize</var>]
@@ -154,7 +158,7 @@ omitted, a default width is used.
 <pre class="example">     Monospace 12
      Monospace Bold Italic 12
 </pre>
-   <p><a name="index-XLFD-1491"></a><a name="index-X-Logical-Font-Description-1492"></a>  The third way to specify a font is to use an <dfn>XLFD</dfn> (<dfn>X
+   <p><a name="index-XLFD-1551"></a><a name="index-X-Logical-Font-Description-1552"></a>  The third way to specify a font is to use an <dfn>XLFD</dfn> (<dfn>X
 Logical Font Description</dfn>).  This is the traditional method for
 specifying fonts under X.  Each XLFD consists of fourteen words or
 numbers, separated by dashes, like this:
@@ -186,7 +190,10 @@ Some font names support other values.
 &lsquo;<samp><span class="samp">semicondensed</span></samp>&rsquo;, or &lsquo;<samp><span class="samp">extended</span></samp>&rsquo;.  Some font names support
 other values. 
 <br><dt><var>style</var><dd>An optional additional style name.  Usually it is empty&mdash;most XLFDs
-have two hyphens in a row at this point. 
+have two hyphens in a row at this point.  The style name can also
+specify a two-letter ISO-639 language name, like &lsquo;<samp><span class="samp">ja</span></samp>&rsquo; or
+&lsquo;<samp><span class="samp">ko</span></samp>&rsquo;; some fonts that support CJK scripts have that spelled out
+in the style name part. 
 <br><dt><var>pixels</var><dd>The font height, in pixels. 
 <br><dt><var>height</var><dd>The font height on the screen, measured in tenths of a printer's
 point.  This is the point size of the font, times ten.  For a given
@@ -209,21 +216,21 @@ have.  Normally you should use &lsquo;<samp><span class="samp">iso8859</span></s
 &lsquo;<samp><span class="samp">1</span></samp>&rsquo; for <var>encoding</var>. 
 </dl>
 
-   <p>The fourth and final method of specifying a font is to use a &ldquo;font
-nickname&rdquo;.  Certain fonts have shorter nicknames, which you can use
+   <p>The fourth and final method of specifying a font is to use a font
+nickname.  Certain fonts have shorter nicknames, which you can use
 instead of a normal font specification.  For instance, &lsquo;<samp><span class="samp">6x13</span></samp>&rsquo; is
 equivalent to
 
 <pre class="example">     -misc-fixed-medium-r-semicondensed--13-*-*-*-c-60-iso8859-1
 </pre>
-   <p><a name="index-client_002dside-fonts-1493"></a><a name="index-server_002dside-fonts-1494"></a>  On X, Emacs recognizes two types of fonts: <dfn>client-side</dfn> fonts,
+   <p><a name="index-client_002dside-fonts-1553"></a><a name="index-server_002dside-fonts-1554"></a>  On X, Emacs recognizes two types of fonts: <dfn>client-side</dfn> fonts,
 which are provided by the Xft and Fontconfig libraries, and
 <dfn>server-side</dfn> fonts, which are provided by the X server itself. 
 Most client-side fonts support advanced font features such as
 antialiasing and subpixel hinting, while server-side fonts do not. 
 Fontconfig and GTK patterns match only client-side fonts.
 
-   <p><a name="index-listing-system-fonts-1495"></a>  You will probably want to use a fixed-width default font&mdash;that is,
+   <p><a name="index-listing-system-fonts-1555"></a>  You will probably want to use a fixed-width default font&mdash;that is,
 a font in which all characters have the same width.  For Xft and
 Fontconfig fonts, you can use the <samp><span class="command">fc-list</span></samp> command to list
 the available fixed-width fonts, like this:

@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,9 +41,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Edebug.html#Edebug">Edebug</a>
 <hr>
 </div>
 
-<h4 class="subsection">18.2.3 Edebug Execution Modes</h4>
+<h4 class="subsection">17.2.3 Edebug Execution Modes</h4>
 
-<p><a name="index-Edebug-execution-modes-1026"></a>Edebug supports several execution modes for running the program you are
+<p><a name="index-Edebug-execution-modes-1125"></a>Edebug supports several execution modes for running the program you are
 debugging.  We call these alternatives <dfn>Edebug execution modes</dfn>; do
 not confuse them with major or minor modes.  The current Edebug execution mode
 determines how far Edebug continues execution before stopping&mdash;whether
@@ -88,6 +88,26 @@ can still stop the program by typing <kbd>S</kbd>, or any editing command.
    <p>In general, the execution modes earlier in the above list run the
 program more slowly or stop sooner than the modes later in the list.
 
+   <p>When you enter a new Edebug level, Edebug will normally stop at the
+first instrumented function it encounters.  If you prefer to stop only
+at a break point, or not at all (for example, when gathering coverage
+data), change the value of <code>edebug-initial-mode</code> from its default
+<code>step</code> to <code>go</code>, or <code>Go-nonstop</code>, or one of its other
+values (see <a href="Edebug-Options.html#Edebug-Options">Edebug Options</a>).  You can do this readily with
+<kbd>C-x C-a C-m</kbd> (<code>edebug-set-initial-mode</code>):
+
+<div class="defun">
+&mdash; Command: <b>edebug-set-initial-mode</b><var><a name="index-edebug_002dset_002dinitial_002dmode-1126"></a></var><br>
+<blockquote><p><a name="index-C_002dx-C_002da-C_002dm-1127"></a>This command, bound to <kbd>C-x C-a C-m</kbd>, sets
+<code>edebug-initial-mode</code>.  It prompts you for a key to indicate the
+mode.  You should enter one of the eight keys listed above, which sets
+the corresponding mode. 
+</p></blockquote></div>
+
+   <p>Note that you may reenter the same Edebug level several times if, for
+example, an instrumented function is called several times from one
+command.
+
    <p>While executing or tracing, you can interrupt the execution by typing
 any Edebug command.  Edebug stops the program at the next stop point and
 then executes the command you typed.  For example, typing <kbd>t</kbd> during
@@ -99,22 +119,15 @@ to interrupt execution may be read by the function instead.  You can
 avoid such unintended results by paying attention to when your program
 wants input.
 
-   <p><a name="index-keyboard-macros-_0028Edebug_0029-1027"></a>Keyboard macros containing the commands in this section do not
+   <p><a name="index-keyboard-macros-_0028Edebug_0029-1128"></a>Keyboard macros containing the commands in this section do not
 completely work: exiting from Edebug, to resume the program, loses track
 of the keyboard macro.  This is not easy to fix.  Also, defining or
 executing a keyboard macro outside of Edebug does not affect commands
 inside Edebug.  This is usually an advantage.  See also the
 <code>edebug-continue-kbd-macro</code> option in <a href="Edebug-Options.html#Edebug-Options">Edebug Options</a>.
 
-   <p>When you enter a new Edebug level, the initial execution mode comes
-from the value of the variable <code>edebug-initial-mode</code>
-(see <a href="Edebug-Options.html#Edebug-Options">Edebug Options</a>).  By default, this specifies step mode.  Note
-that you may reenter the same Edebug level several times if, for
-example, an instrumented function is called several times from one
-command.
-
 <div class="defun">
-&mdash; User Option: <b>edebug-sit-for-seconds</b><var><a name="index-edebug_002dsit_002dfor_002dseconds-1028"></a></var><br>
+&mdash; User Option: <b>edebug-sit-for-seconds</b><var><a name="index-edebug_002dsit_002dfor_002dseconds-1129"></a></var><br>
 <blockquote><p>This option specifies how many seconds to wait between execution steps
 in trace mode or continue mode.  The default is 1 second. 
 </p></blockquote></div>

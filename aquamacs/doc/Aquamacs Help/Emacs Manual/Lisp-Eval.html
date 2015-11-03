@@ -11,16 +11,16 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Manual',
-updated for Emacs version 24.3.50.
+updated for Emacs version 25.0.50.
 
-Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``The GNU
      Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     with the Front-Cover Texts being ``A GNU Manual,'' and with the
      Back-Cover Texts as in (a) below.  A copy of the license is
      included in the section entitled ``GNU Free Documentation
      License.''
@@ -44,8 +44,8 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Building.html#Building">Building</a>
 
 <h3 class="section">27.9 Evaluating Emacs Lisp Expressions</h3>
 
-<p><a name="index-Emacs-Lisp-mode-2703"></a><a name="index-mode_002c-Emacs-Lisp-2704"></a>
-<a name="index-emacs_002dlisp_002dmode-2705"></a>  Emacs Lisp mode is the major mode for editing Emacs Lisp.  Its mode
+<p><a name="index-Emacs-Lisp-mode-2839"></a><a name="index-mode_002c-Emacs-Lisp-2840"></a><a name="index-evaluation_002c-Emacs-Lisp-2841"></a>
+<a name="index-emacs_002dlisp_002dmode-2842"></a>  Emacs Lisp mode is the major mode for editing Emacs Lisp.  Its mode
 command is <kbd>M-x emacs-lisp-mode</kbd>.
 
    <p>Emacs provides several commands for evaluating Emacs Lisp
@@ -66,24 +66,28 @@ the echo area (<code>eval-defun</code>).
 <br><dt><kbd>M-x eval-buffer</kbd><dd>Evaluate all the Emacs Lisp expressions in the buffer. 
 </dl>
 
-   <p><a name="index-M_002d_003a-2706"></a><a name="index-eval_002dexpression-2707"></a>  <kbd>M-:</kbd> (<code>eval-expression</code>) reads an expression using the
+   <p><a name="index-M_002d_003a-2843"></a><a name="index-eval_002dexpression-2844"></a>  <kbd>M-:</kbd> (<code>eval-expression</code>) reads an expression using the
 minibuffer, and evaluates it.  (Before evaluating the expression, the
 current buffer switches back to the buffer that was current when you
 typed <kbd>M-:</kbd>, not the minibuffer into which you typed the
 expression.)
 
-   <p><a name="index-C_002dx-C_002de-2708"></a><a name="index-eval_002dlast_002dsexp-2709"></a>  The command <kbd>C-x C-e</kbd> (<code>eval-last-sexp</code>) evaluates the
+   <p><a name="index-C_002dx-C_002de-2845"></a><a name="index-eval_002dlast_002dsexp-2846"></a>  The command <kbd>C-x C-e</kbd> (<code>eval-last-sexp</code>) evaluates the
 Emacs Lisp expression preceding point in the buffer, and displays the
 value in the echo area.  When the result of an evaluation is an
-integer, you can type <kbd>C-x C-e</kbd> a second time to display the value
-of the integer result in additional formats (octal, hexadecimal, and
-character).
+integer, it is displayed together with the value in other formats
+(octal, hexadecimal, and character).
 
    <p>If <kbd>M-:</kbd> or <kbd>C-x C-e</kbd> is given a prefix argument, it inserts
 the value into the current buffer at point, rather than displaying it
-in the echo area.  The argument's value does not matter.
+in the echo area.  If the prefix argument is zero, any integer output
+is inserted together with its value in other formats (octal,
+hexadecimal, and character).  Such a prefix argument also prevents
+abbreviation of the output according to the variables
+<code>eval-expression-print-level</code> and <code>eval-expression-print-length</code>
+(see below).
 
-   <p><a name="index-C_002dM_002dx-_0040r_007b_0028Emacs-Lisp-mode_0029_007d-2710"></a><a name="index-eval_002ddefun-2711"></a>  The <code>eval-defun</code> command is bound to <kbd>C-M-x</kbd> in Emacs Lisp
+   <p><a name="index-C_002dM_002dx-_0040r_007b_0028Emacs-Lisp-mode_0029_007d-2847"></a><a name="index-eval_002ddefun-2848"></a>  The <code>eval-defun</code> command is bound to <kbd>C-M-x</kbd> in Emacs Lisp
 mode.  It evaluates the top-level Lisp expression containing or
 following point, and prints the value in the echo area.  In this
 context, a top-level expression is referred to as a &ldquo;defun&rdquo;, but it
@@ -100,16 +104,18 @@ not have this special feature.
    <p>With a prefix argument, <kbd>C-M-x</kbd> instruments the function
 definition for Edebug, the Emacs Lisp Debugger.  See <a href="../elisp/Instrumenting.html#Instrumenting">Instrumenting for Edebug</a>.
 
-   <p><a name="index-eval_002dregion-2712"></a><a name="index-eval_002dbuffer-2713"></a>  The command <kbd>M-x eval-region</kbd> parses the text of the region as
+   <p><a name="index-eval_002dregion-2849"></a><a name="index-eval_002dbuffer-2850"></a>  The command <kbd>M-x eval-region</kbd> parses the text of the region as
 one or more Lisp expressions, evaluating them one by one.  <kbd>M-x
 eval-buffer</kbd> is similar but evaluates the entire buffer.
 
-   <p><a name="index-eval_002dexpression_002dprint_002dlevel-2714"></a><a name="index-eval_002dexpression_002dprint_002dlength-2715"></a><a name="index-eval_002dexpression_002ddebug_002don_002derror-2716"></a>  The options <code>eval-expression-print-level</code> and
+   <p><a name="index-eval_002dexpression_002dprint_002dlevel-2851"></a><a name="index-eval_002dexpression_002dprint_002dlength-2852"></a><a name="index-eval_002dexpression_002ddebug_002don_002derror-2853"></a>  The options <code>eval-expression-print-level</code> and
 <code>eval-expression-print-length</code> control the maximum depth and
 length of lists to print in the result of the evaluation commands
-before abbreviating them.  <code>eval-expression-debug-on-error</code>
-controls whether evaluation errors invoke the debugger when these
-commands are used; its default is <code>t</code>.
+before abbreviating them.  Supplying a zero prefix argument to
+<code>eval-expression</code> or <code>eval-last-sexp</code> causes lists to be
+printed in full.  <code>eval-expression-debug-on-error</code> controls
+whether evaluation errors invoke the debugger when these commands are
+used; its default is <code>t</code>.
 
    </body></html>
 

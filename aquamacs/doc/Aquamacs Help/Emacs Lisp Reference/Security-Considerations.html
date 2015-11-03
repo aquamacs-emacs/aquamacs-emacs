@@ -1,0 +1,137 @@
+<html lang="en">
+<head>
+<title>Security Considerations - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="System-Interface.html#System-Interface" title="System Interface">
+<link rel="prev" href="Dynamic-Libraries.html#Dynamic-Libraries" title="Dynamic Libraries">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 25.0.50.
+
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Security-Considerations"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Dynamic-Libraries.html#Dynamic-Libraries">Dynamic Libraries</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="System-Interface.html#System-Interface">System Interface</a>
+<hr>
+</div>
+
+<h3 class="section">38.21 Security Considerations</h3>
+
+<p><a name="index-security-4714"></a><a name="index-hardening-4715"></a>
+Like any application, Emacs can be run in a secure environment, where
+the operating system enforces rules about access and the like.  With
+some care, Emacs-based applications can also be part of a security
+perimeter that checks such rules.  Although the default settings for
+Emacs work well for a typical software development environment, they
+may require adjustment in environments containing untrusted users that
+may include attackers.  Here is a compendium of security issues that
+may be helpful if you are developing such applications.  It is by no
+means complete; it is intended to give you an idea of the security
+issues involved, rather than to be a security checklist.
+
+     <dl>
+<dt>Access control<dd>Although Emacs normally respects access permissions of the underlying
+operating system, in some cases it handles accesses specially.  For
+example, file names can have handlers that treat the files specially,
+with their own access checking.  See <a href="Magic-File-Names.html#Magic-File-Names">Magic File Names</a>.  Also, a
+buffer can be read-only even if the corresponding file is writeable,
+and vice versa, which can result in messages such as &lsquo;<samp><span class="samp">File passwd
+is write-protected; try to save anyway? (yes or no)</span></samp>&rsquo;.  See <a href="Read-Only-Buffers.html#Read-Only-Buffers">Read Only Buffers</a>.
+
+     <br><dt>Authentication<dd>Emacs has several functions that deal with passwords, e.g.,
+<code>password-read</code>.  Although these functions do not attempt to
+broadcast passwords to the world, their implementations are not proof
+against determined attackers with access to Emacs internals.  For
+example, even if Elisp code attempts to scrub a password from
+its memory after using it, remnants of the password may still reside
+in the garbage-collected free list.
+
+     <br><dt>Code injection<dd>Emacs can send commands to many other applications, and applications
+should take care that strings sent as operands of these commands are
+not misinterpreted as directives.  For example, when sending a shell
+command to rename a file <var>a</var> to <var>b</var>, do not simply use the
+string <code>mv </code><var>a</var> <var>b</var>, because either file name might start
+with &lsquo;<samp><span class="samp">-</span></samp>&rsquo;, or might contain shell metacharacters like &lsquo;<samp><span class="samp">;</span></samp>&rsquo;. 
+Although functions like <code>shell-quote-argument</code> can help avoid
+this sort of problem, they are not panaceas; for example, on a POSIX
+platform <code>shell-quote-argument</code> quotes shell metacharacters but
+not leading &lsquo;<samp><span class="samp">-</span></samp>&rsquo;.  See <a href="Shell-Arguments.html#Shell-Arguments">Shell Arguments</a>.
+
+     <br><dt>Coding systems<dd>Emacs attempts to infer the coding systems of the files and network
+connections it accesses.  If it makes a mistake, or if the other
+parties to the network connection disagree with Emacs's deductions,
+the resulting system could be unreliable.  Also, even when it infers
+correctly, Emacs often can use bytes that other programs cannot.  For
+example, although to Emacs the NUL (all bits zero) byte is just a
+character like any other, many other applications treat it as a string
+terminator and mishandle strings or files containing NUL bytes.
+
+     <br><dt>Environment and configuration variables<dd>POSIX specifies several environment variables that can affect how
+Emacs behaves.  Any environment variable whose name consists entirely
+of uppercase ASCII letters, digits, and the underscore may affect the
+internal behavior of Emacs.  Emacs uses several such variables, e.g.,
+<samp><span class="env">EMACSLOADPATH</span></samp>.  See <a href="Library-Search.html#Library-Search">Library Search</a>.  On some platforms some
+environment variables (e.g., <samp><span class="env">PATH</span></samp>, <samp><span class="env">POSIXLY_CORRECT</span></samp>,
+<samp><span class="env">SHELL</span></samp>, <samp><span class="env">TMPDIR</span></samp>) need to have properly-configured values in
+order to get standard behavior for any utility Emacs might invoke. 
+Even seemingly-benign variables like <samp><span class="env">TZ</span></samp> may have security
+implications.
+
+     <p>Emacs has customization and other variables with similar
+considerations.  For example, if the variable <code>shell-file-name</code>
+specifies a shell with nonstandard behavior, an Emacs-based
+application may misbehave.
+
+     <br><dt>Installation<dd>When Emacs is installed, if the installation directory hierarchy can
+be modified by untrusted users, the application cannot be trusted. 
+This applies also to the directory hierarchies of the programs that
+Emacs uses, and of the files that Emacs reads and writes.
+
+     <br><dt>Network access<dd>Emacs often accesses the network, and you may want to configure it to
+avoid network accesses that it would normally do.  For example, unless
+you set <code>tramp-mode</code> to <code>nil</code>, file names using a certain
+syntax are interpreted as being network files, and are retrieved
+across the network.  See <a href="../tramp/index.html#Top">The Tramp Manual</a>.
+
+     <br><dt>Race conditions<dd>Emacs applications have the same sort of race-condition issues that
+other applications do.  For example, even when
+<code>(file-readable-p "foo.txt")</code> returns <code>t</code>, it could be that
+<samp><span class="file">foo.txt</span></samp> is unreadable because some other program changed the
+file's permissions between the call to <code>file-readable-p</code> and now.
+
+     <br><dt>Resource limits<dd>When Emacs exhausts memory or other operating system resources, its
+behavior can be less reliable, in that computations that ordinarily
+run to completion may abort back to the top level.  This may cause
+Emacs to neglect operations that it normally would have done. 
+</dl>
+
+<!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 2010-2015 Free Software Foundation, Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+   </body></html>
+

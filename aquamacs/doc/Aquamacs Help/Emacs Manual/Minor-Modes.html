@@ -11,16 +11,16 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Manual',
-updated for Emacs version 24.3.50.
+updated for Emacs version 25.0.50.
 
-Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``The GNU
      Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     with the Front-Cover Texts being ``A GNU Manual,'' and with the
      Back-Cover Texts as in (a) below.  A copy of the license is
      included in the section entitled ``GNU Free Documentation
      License.''
@@ -44,7 +44,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Modes.html#Modes">Modes</a>
 
 <h3 class="section">23.2 Minor Modes</h3>
 
-<p><a name="index-minor-modes-1724"></a><a name="index-mode_002c-minor-1725"></a>
+<p><a name="index-minor-modes-1851"></a><a name="index-mode_002c-minor-1852"></a>
   A minor mode is an optional editing mode that alters the behavior of
 Emacs in some well-defined way.  Unlike major modes, any number of
 minor modes can be in effect at any time.  Some minor modes are
@@ -59,7 +59,7 @@ enabled, just after the major mode indicator.  For example,
 &lsquo;<samp><span class="samp">Fill</span></samp>&rsquo; in the mode line means that Auto Fill mode is enabled. 
 See <a href="Mode-Line.html#Mode-Line">Mode Line</a>.
 
-   <p><a name="index-mode-commands-for-minor-modes-1726"></a>  Like major modes, each minor mode is associated with a <dfn>mode
+   <p><a name="index-mode-commands-for-minor-modes-1853"></a>  Like major modes, each minor mode is associated with a <dfn>mode
 command</dfn>, whose name consists of the mode name followed by
 &lsquo;<samp><span class="samp">-mode</span></samp>&rsquo;.  For instance, the mode command for Auto Fill mode is
 <code>auto-fill-mode</code>.  But unlike a major mode command, which simply
@@ -104,6 +104,11 @@ becoming too long.  See <a href="Filling.html#Filling">Filling</a>.
      <li>Auto Save mode saves the buffer contents periodically to reduce the
 amount of work you can lose in case of a crash.  See <a href="Auto-Save.html#Auto-Save">Auto Save</a>.
 
+     <li>Electric Quote mode automatically converts quotation marks.  For
+example, it requotes text typed <tt>`like this'</tt> to text <tt>‘like
+this’</tt>.  You can control what kind of text it operates in, and you can
+disable it entirely in individual buffers.  See <a href="Quotation-Marks.html#Quotation-Marks">Quotation Marks</a>.
+
      <li>Enriched mode enables editing and saving of formatted text. 
 See <a href="Enriched-Text.html#Enriched-Text">Enriched Text</a>.
 
@@ -114,12 +119,12 @@ See <a href="Spelling.html#Spelling">Spelling</a>.
 programs.  It is enabled globally by default, but you can disable it
 in individual buffers.  See <a href="Faces.html#Faces">Faces</a>.
 
-     <p><a name="index-linum_002dmode-1727"></a><a name="index-Linum-mode-1728"></a><li>Linum mode displays each line's line number in the window's left margin.
+     <p><a name="index-linum_002dmode-1854"></a><a name="index-Linum-mode-1855"></a><li>Linum mode displays each line's line number in the window's left margin.
 
      <li>Outline minor mode provides similar facilities to the major mode
 called Outline mode.  See <a href="Outline-Mode.html#Outline-Mode">Outline Mode</a>.
 
-     <p><a name="index-Overwrite-mode-1729"></a><a name="index-mode_002c-Overwrite-1730"></a><a name="index-overwrite_002dmode-1731"></a><a name="index-INSERT-1732"></a><li>Overwrite mode causes ordinary printing characters to replace existing
+     <p><a name="index-Overwrite-mode-1856"></a><a name="index-mode_002c-Overwrite-1857"></a><a name="index-overwrite_002dmode-1858"></a><a name="index-INSERT-1859"></a><li>Overwrite mode causes ordinary printing characters to replace existing
 text instead of shoving it to the right.  For example, if point is in
 front of the &lsquo;<samp><span class="samp">B</span></samp>&rsquo; in &lsquo;<samp><span class="samp">FOOBAR</span></samp>&rsquo;, then in Overwrite mode typing
 a <kbd>G</kbd> changes it to &lsquo;<samp><span class="samp">FOOGAR</span></samp>&rsquo;, instead of producing
@@ -129,13 +134,13 @@ digit&mdash;this gives you a way to insert a character instead of
 replacing an existing character.  The mode command,
 <code>overwrite-mode</code>, is bound to the &lt;Insert&gt; key.
 
-     <p><a name="index-binary_002doverwrite_002dmode-1733"></a><li>Binary Overwrite mode is a variant of Overwrite mode for editing
+     <p><a name="index-binary_002doverwrite_002dmode-1860"></a><li>Binary Overwrite mode is a variant of Overwrite mode for editing
 binary files; it treats newlines and tabs like other characters, so
 that they overwrite other characters and can be overwritten by them. 
 In Binary Overwrite mode, digits after <kbd>C-q</kbd> specify an octal
 character code, as usual.
 
-     <li>Visual Line mode performs &ldquo;word wrapping&rdquo;, causing long lines to be
+     <li>Visual Line mode performs word wrapping, causing long lines to be
 wrapped at word boundaries.  See <a href="Visual-Line-Mode.html#Visual-Line-Mode">Visual Line Mode</a>. 
 </ul>
 
@@ -149,7 +154,7 @@ mode line.  See <a href="Mode-Line.html#Mode-Line">Mode Line</a>.
 in the region, if the region is active.  See <a href="Using-Region.html#Using-Region">Using Region</a>.
 
      <li>Icomplete mode displays an indication of available completions when
-you are in the minibuffer and completion is active.  See <a href="Completion-Options.html#Completion-Options">Completion Options</a>.
+you are in the minibuffer and completion is active.  See <a href="Icomplete.html#Icomplete">Icomplete</a>.
 
      <li>Line Number mode enables display of the current line number in the
 mode line.  It is enabled by default.  See <a href="Mode-Line.html#Mode-Line">Mode Line</a>.

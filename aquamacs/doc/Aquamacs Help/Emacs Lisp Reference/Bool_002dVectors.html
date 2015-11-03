@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -44,7 +44,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Sequences-Arrays-Vectors.html#Sequences
 
 <h3 class="section">6.7 Bool-vectors</h3>
 
-<p><a name="index-Bool_002dvectors-431"></a>
+<p><a name="index-Bool_002dvectors-507"></a>
   A bool-vector is much like a vector, except that it stores only the
 values <code>t</code> and <code>nil</code>.  If you try to store any non-<code>nil</code>
 value into an element of the bool-vector, the effect is to store
@@ -52,25 +52,99 @@ value into an element of the bool-vector, the effect is to store
 and the length cannot be changed once the bool-vector is created. 
 Bool-vectors are constants when evaluated.
 
-   <p>There are two special functions for working with bool-vectors; aside
+   <p>Several functions work specifically with bool-vectors; aside
 from that, you manipulate them with same functions used for other kinds
 of arrays.
 
 <div class="defun">
-&mdash; Function: <b>make-bool-vector</b><var> length initial<a name="index-make_002dbool_002dvector-432"></a></var><br>
+&mdash; Function: <b>make-bool-vector</b><var> length initial<a name="index-make_002dbool_002dvector-508"></a></var><br>
 <blockquote><p>Return a new bool-vector of <var>length</var> elements,
 each one initialized to <var>initial</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>bool-vector-p</b><var> object<a name="index-bool_002dvector_002dp-433"></a></var><br>
+&mdash; Function: <b>bool-vector</b><var> &amp;rest objects<a name="index-bool_002dvector-509"></a></var><br>
+<blockquote><p>This function creates and returns a bool-vector whose elements are the
+arguments, <var>objects</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>bool-vector-p</b><var> object<a name="index-bool_002dvector_002dp-510"></a></var><br>
 <blockquote><p>This returns <code>t</code> if <var>object</var> is a bool-vector,
 and <code>nil</code> otherwise. 
 </p></blockquote></div>
 
-   <p>Here is an example of creating, examining, and updating a
-bool-vector.  Note that the printed form represents up to 8 boolean
-values as a single character.
+   <p>There are also some bool-vector set operation functions, described below:
+
+<div class="defun">
+&mdash; Function: <b>bool-vector-exclusive-or</b><var> a b &amp;optional c<a name="index-bool_002dvector_002dexclusive_002dor-511"></a></var><br>
+<blockquote><p>Return <dfn>bitwise exclusive or</dfn> of bool vectors <var>a</var> and <var>b</var>. 
+If optional argument <var>c</var> is given, the result of this operation is
+stored into <var>c</var>.  All arguments should be bool vectors of the same length. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>bool-vector-union</b><var> a b &amp;optional c<a name="index-bool_002dvector_002dunion-512"></a></var><br>
+<blockquote><p>Return <dfn>bitwise or</dfn> of bool vectors <var>a</var> and <var>b</var>.  If
+optional argument <var>c</var> is given, the result of this operation is
+stored into <var>c</var>.  All arguments should be bool vectors of the same length. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>bool-vector-intersection</b><var> a b &amp;optional c<a name="index-bool_002dvector_002dintersection-513"></a></var><br>
+<blockquote><p>Return <dfn>bitwise and</dfn> of bool vectors <var>a</var> and <var>b</var>.  If
+optional argument <var>c</var> is given, the result of this operation is
+stored into <var>c</var>.  All arguments should be bool vectors of the same length. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>bool-vector-set-difference</b><var> a b &amp;optional c<a name="index-bool_002dvector_002dset_002ddifference-514"></a></var><br>
+<blockquote><p>Return <dfn>set difference</dfn> of bool vectors <var>a</var> and <var>b</var>.  If
+optional argument <var>c</var> is given, the result of this operation is
+stored into <var>c</var>.  All arguments should be bool vectors of the same length. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>bool-vector-not</b><var> a &amp;optional b<a name="index-bool_002dvector_002dnot-515"></a></var><br>
+<blockquote><p>Return <dfn>set complement</dfn> of bool vector <var>a</var>.  If optional
+argument <var>b</var> is given, the result of this operation is stored into
+<var>b</var>.  All arguments should be bool vectors of the same length. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>bool-vector-subsetp</b><var> a b<a name="index-bool_002dvector_002dsubsetp-516"></a></var><br>
+<blockquote><p>Return <code>t</code> if every <code>t</code> value in <var>a</var> is also t in
+<var>b</var>, <code>nil</code> otherwise.  All arguments should be bool vectors of the
+same length. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>bool-vector-count-consecutive</b><var> a b i<a name="index-bool_002dvector_002dcount_002dconsecutive-517"></a></var><br>
+<blockquote><p>Return the number of consecutive elements in <var>a</var> equal <var>b</var>
+starting at <var>i</var>.  <code>a</code> is a bool vector, <var>b</var> is <code>t</code>
+or <code>nil</code>, and <var>i</var> is an index into <code>a</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>bool-vector-count-population</b><var> a<a name="index-bool_002dvector_002dcount_002dpopulation-518"></a></var><br>
+<blockquote><p>Return the number of elements that are <code>t</code> in bool vector <var>a</var>. 
+</p></blockquote></div>
+
+   <p>The printed form represents up to 8 boolean values as a single
+character:
+
+<pre class="example">     (bool-vector t nil t nil)
+          &rArr; #&amp;4"^E"
+     (bool-vector)
+          &rArr; #&amp;0""
+</pre>
+   <p>You can use <code>vconcat</code> to print a bool-vector like other vectors:
+
+<pre class="example">     (vconcat (bool-vector nil t nil t))
+          &rArr; [nil t nil t]
+</pre>
+   <p>Here is another example of creating, examining, and updating a
+bool-vector:
 
 <pre class="example">     (setq bv (make-bool-vector 5 t))
           &rArr; #&amp;5"^_"

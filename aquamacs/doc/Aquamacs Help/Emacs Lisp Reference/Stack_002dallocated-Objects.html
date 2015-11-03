@@ -1,0 +1,72 @@
+<html lang="en">
+<head>
+<title>Stack-allocated Objects - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" title="GNU Emacs Internals">
+<link rel="prev" href="Garbage-Collection.html#Garbage-Collection" title="Garbage Collection">
+<link rel="next" href="Memory-Usage.html#Memory-Usage" title="Memory Usage">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 25.0.50.
+
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Stack-allocated-Objects"></a>
+<a name="Stack_002dallocated-Objects"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Memory-Usage.html#Memory-Usage">Memory Usage</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Garbage-Collection.html#Garbage-Collection">Garbage Collection</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="GNU-Emacs-Internals.html#GNU-Emacs-Internals">GNU Emacs Internals</a>
+<hr>
+</div>
+
+<h3 class="section">E.4 Stack-allocated Objects</h3>
+
+<p><a name="index-stack-allocated-Lisp-objects-4797"></a><a name="index-Lisp-objects_002c-stack_002dallocated-4798"></a>  The garbage collector described above is used to manage data visible
+from Lisp programs, as well as most of the data internally used by the
+Lisp interpreter.  Sometimes it may be useful to allocate temporary
+internal objects using the C stack of the interpreter.  This can help
+performance, as stack allocation is typically faster than using heap
+memory to allocate and the garbage collector to free.  The downside is
+that using such objects after they are freed results in undefined
+behavior, so uses should be well thought out and carefully debugged by
+using the <code>GC_CHECK_MARKED_OBJECTS</code> feature (see
+<samp><span class="file">src/alloc.c</span></samp>).  In particular, stack-allocated objects should
+never be made visible to user Lisp code.
+
+   <p>Currently, cons cells and strings can be allocated this way.  This
+is implemented by C macros like <code>AUTO_CONS</code> and
+<code>AUTO_STRING</code> that define a named <code>Lisp_Object</code> with block
+lifetime.  These objects are not freed by the garbage collector;
+instead, they have automatic storage duration, i.e., they are
+allocated like local variables and are automatically freed at the end
+of execution of the C block that defined the object.
+
+   <p>For performance reasons, stack-allocated strings are limited to
+<acronym>ASCII</acronym> characters, and many of these strings are immutable,
+i.e., calling <code>ASET</code> on them produces undefined behavior.
+
+   </body></html>
+

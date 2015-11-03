@@ -7,19 +7,19 @@
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Information-about-Files.html#Information-about-Files" title="Information about Files">
 <link rel="prev" href="Truenames.html#Truenames" title="Truenames">
-<link rel="next" href="Locating-Files.html#Locating-Files" title="Locating Files">
+<link rel="next" href="Extended-Attributes.html#Extended-Attributes" title="Extended Attributes">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -35,58 +35,41 @@ Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 <div class="node">
 <a name="File-Attributes"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Locating-Files.html#Locating-Files">Locating Files</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Extended-Attributes.html#Extended-Attributes">Extended Attributes</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Truenames.html#Truenames">Truenames</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Information-about-Files.html#Information-about-Files">Information about Files</a>
 <hr>
 </div>
 
-<h4 class="subsection">25.6.4 Other Information about Files</h4>
+<h4 class="subsection">24.6.4 File Attributes</h4>
 
-<p>This section describes the functions for getting detailed
-information about a file, other than its contents.  This information
-includes the mode bits that control access permissions, the owner and
-group numbers, the number of names, the inode number, the size, and
-the times of access and modification.
+<p><a name="index-file-attributes-2105"></a>
+  This section describes the functions for getting detailed
+information about a file, including the owner and group numbers, the
+number of names, the inode number, the size, and the times of access
+and modification.
 
 <div class="defun">
-&mdash; Function: <b>file-modes</b><var> filename<a name="index-file_002dmodes-1950"></a></var><br>
-<blockquote><p><a name="index-file-permissions-1951"></a><a name="index-permissions_002c-file-1952"></a><a name="index-file-attributes-1953"></a><a name="index-file-modes-1954"></a>This function returns the <dfn>mode bits</dfn> describing the <dfn>file
-permissions</dfn> of <var>filename</var>, as an integer.  It recursively follows
-symbolic links in <var>filename</var> at all levels.  If <var>filename</var>
-does not exist, the return value is <code>nil</code>.
+&mdash; Function: <b>file-newer-than-file-p</b><var> filename1 filename2<a name="index-file_002dnewer_002dthan_002dfile_002dp-2106"></a></var><br>
+<blockquote><p><a name="index-file-age-2107"></a><a name="index-file-modification-time-2108"></a>This function returns <code>t</code> if the file <var>filename1</var> is
+newer than file <var>filename2</var>.  If <var>filename1</var> does not
+exist, it returns <code>nil</code>.  If <var>filename1</var> does exist, but
+<var>filename2</var> does not, it returns <code>t</code>.
 
-        <p>See <a href="../coreutils/File-permissions.html#File-permissions">File permissions</a>, for a description of mode bits.  If the low-order bit is 1,
-then the file is executable by all users, if the second-lowest-order
-bit is 1, then the file is writable by all users, etc.  The highest
-value returnable is 4095 (7777 octal), meaning that everyone has read,
-write, and execute permission, that the <acronym>SUID</acronym> bit is set for
-both others and group, and that the sticky bit is set.
+        <p>In the following example, assume that the file <samp><span class="file">aug-19</span></samp> was written
+on the 19th, <samp><span class="file">aug-20</span></samp> was written on the 20th, and the file
+<samp><span class="file">no-file</span></samp> doesn't exist at all.
 
-     <pre class="example">          (file-modes "~/junk/diffs")
-               &rArr; 492               ; <span class="roman">Decimal integer.</span>
-          (format "%o" 492)
-               &rArr; "754"             ; <span class="roman">Convert to octal.</span>
-          
-          (set-file-modes "~/junk/diffs" #o666)
+     <pre class="example">          (file-newer-than-file-p "aug-19" "aug-20")
                &rArr; nil
-          
-          $ ls -l diffs
-          -rw-rw-rw- 1 lewis lewis 3063 Oct 30 16:00 diffs
+          (file-newer-than-file-p "aug-20" "aug-19")
+               &rArr; t
+          (file-newer-than-file-p "aug-19" "no-file")
+               &rArr; t
+          (file-newer-than-file-p "no-file" "aug-19")
+               &rArr; nil
 </pre>
-        <p>See <a href="Changing-Files.html#Changing-Files">Changing Files</a>, for functions that change file permissions,
-such as <code>set-file-modes</code>.
-
-        <p><a name="index-MS_002dDOS-and-file-modes-1955"></a><a name="index-file-modes-and-MS_002dDOS-1956"></a><strong>MS-DOS note:</strong> On MS-DOS, there is no such thing as an
-&ldquo;executable&rdquo; file mode bit.  So <code>file-modes</code> considers a file
-executable if its name ends in one of the standard executable
-extensions, such as <samp><span class="file">.com</span></samp>, <samp><span class="file">.bat</span></samp>, <samp><span class="file">.exe</span></samp>, and some
-others.  Files that begin with the Unix-standard &lsquo;<samp><span class="samp">#!</span></samp>&rsquo; signature,
-such as shell and Perl scripts, are also considered executable. 
-Directories are also reported as executable, for compatibility with
-Unix.  These conventions are also followed by <code>file-attributes</code>,
-below. 
-</p></blockquote></div>
+        </blockquote></div>
 
    <p>If the <var>filename</var> argument to the next two functions is a
 symbolic link, then these function do <em>not</em> replace it with its
@@ -94,26 +77,7 @@ target.  However, they both recursively follow symbolic links at all
 levels of parent directories.
 
 <div class="defun">
-&mdash; Function: <b>file-nlinks</b><var> filename<a name="index-file_002dnlinks-1957"></a></var><br>
-<blockquote><p>This function returns the number of names (i.e., hard links) that
-file <var>filename</var> has.  If the file does not exist, this function
-returns <code>nil</code>.  Note that symbolic links have no effect on this
-function, because they are not considered to be names of the files
-they link to.
-
-     <pre class="example">          $ ls -l foo*
-          -rw-rw-rw- 2 rms rms 4 Aug 19 01:27 foo
-          -rw-rw-rw- 2 rms rms 4 Aug 19 01:27 foo1
-          
-          (file-nlinks "foo")
-               &rArr; 2
-          (file-nlinks "doesnt-exist")
-               &rArr; nil
-</pre>
-        </blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>file-attributes</b><var> filename &amp;optional id-format<a name="index-file_002dattributes-1958"></a></var><br>
+&mdash; Function: <b>file-attributes</b><var> filename &amp;optional id-format<a name="index-file_002dattributes-2109"></a></var><br>
 <blockquote><p><a name="Definition-of-file_002dattributes"></a>This function returns a list of attributes of file <var>filename</var>.  If
 the specified file cannot be opened, it returns <code>nil</code>. 
 The optional parameter <var>id-format</var> specifies the preferred format
@@ -135,8 +99,7 @@ links, can be created by using the <code>add-name-to-file</code> function
 (see <a href="Changing-Files.html#Changing-Files">Changing Files</a>).
 
           <li>The file's <acronym>UID</acronym>, normally as a string.  However, if it does
-not correspond to a named user, the value is an integer or a floating
-point number.
+not correspond to a named user, the value is a number.
 
           <li>The file's <acronym>GID</acronym>, likewise.
 
@@ -146,7 +109,7 @@ value of <code>current-time</code>; see <a href="Time-of-Day.html#Time-of-Day">T
 some FAT-based filesystems, only the date of last access is recorded,
 so this time will always hold the midnight of the day of last access.
 
-          <p><a name="index-modification-time-of-file-1959"></a><li>The time of last modification as a list of four integers (as above). 
+          <p><a name="index-modification-time-of-file-2110"></a><li>The time of last modification as a list of four integers (as above). 
 This is the last time when the file's contents were modified.
 
           <li>The time of last status change as a list of four integers (as above). 
@@ -154,8 +117,8 @@ This is the time of the last change to the file's access mode bits,
 its owner and group, and other information recorded in the filesystem
 for the file, beyond the file's contents.
 
-          <li>The size of the file in bytes.  If the size is too large to fit in a
-Lisp integer, this is a floating point number.
+          <li>The size of the file in bytes.  This is floating point if the size is
+too large to fit in a Lisp integer.
 
           <li>The file's modes, as a string of ten letters or dashes,
 as in &lsquo;<samp><span class="samp">ls -l</span></samp>&rsquo;.
@@ -199,9 +162,9 @@ for both of these numbers.
           <br><dt><code>1</code><dd>has only one name (the name <samp><span class="file">files.texi</span></samp> in the current default
 directory).
 
-          <br><dt><code>"lh"</code><dd>is owned by the user with name "lh".
+          <br><dt><code>"lh"</code><dd>is owned by the user with name &lsquo;<samp><span class="samp">lh</span></samp>&rsquo;.
 
-          <br><dt><code>"users"</code><dd>is in the group with name "users".
+          <br><dt><code>"users"</code><dd>is in the group with name &lsquo;<samp><span class="samp">users</span></samp>&rsquo;.
 
           <br><dt><code>(20614 64019 50040 152000)</code><dd>was last accessed on October 23, 2012, at 20:12:03.050040152 UTC.
 
@@ -223,47 +186,24 @@ end-of-line format is CR-LF.)
 </dl>
         </p></blockquote></div>
 
-   <p><a name="index-SELinux-context-1960"></a>  SELinux is a Linux kernel feature which provides more sophisticated
-file access controls than ordinary &ldquo;Unix-style&rdquo; file permissions. 
-If Emacs has been compiled with SELinux support on a system with
-SELinux enabled, you can use the function <code>file-selinux-context</code>
-to retrieve a file's SELinux security context.  For the function
-<code>set-file-selinux-context</code>, see <a href="Changing-Files.html#Changing-Files">Changing Files</a>.
-
 <div class="defun">
-&mdash; Function: <b>file-selinux-context</b><var> filename<a name="index-file_002dselinux_002dcontext-1961"></a></var><br>
-<blockquote><p>This function returns the SELinux security context of the file
-<var>filename</var>.  This return value is a list of the form
-<code>(</code><var>user</var> <var>role</var> <var>type</var> <var>range</var><code>)</code>, whose elements
-are the context's user, role, type, and range respectively, as Lisp
-strings.  See the SELinux documentation for details about what these
-actually mean.
+&mdash; Function: <b>file-nlinks</b><var> filename<a name="index-file_002dnlinks-2111"></a></var><br>
+<blockquote><p>This function returns the number of names (i.e., hard links) that
+file <var>filename</var> has.  If the file does not exist, this function
+returns <code>nil</code>.  Note that symbolic links have no effect on this
+function, because they are not considered to be names of the files
+they link to.
 
-        <p>If the file does not exist or is inaccessible, or if the system does
-not support SELinux, or if Emacs was not compiled with SELinux
-support, then the return value is <code>(nil nil nil nil)</code>. 
-</p></blockquote></div>
-
-   <p><a name="index-access-control-list-1962"></a><a name="index-ACL-entries-1963"></a>  If Emacs has been compiled with <dfn>ACL</dfn> (access control list)
-support, you can use the function <code>file-acl</code> to retrieve a file's
-ACL entries.  The interface implementation is platform-specific; on
-GNU/Linux and BSD, Emacs uses the POSIX ACL interface, while on
-MS-Windows Emacs emulates the POSIX ACL interface with native file
-security APIs.
-
-<div class="defun">
-&mdash; Function: <b>file-acl</b><var> filename<a name="index-file_002dacl-1964"></a></var><br>
-<blockquote><p>This function returns the ACL entries of the file <var>filename</var>.  The
-return value is a platform-dependent object containing some
-representation of the ACL entries.  Don't use it for anything except
-passing it to the <code>set-file-acl</code> function (see <a href="Changing-Files.html#Changing-Files">set-file-acl</a>).
-
-        <p>If the file does not exist or is inaccessible, or if Emacs was unable to
-determine the ACL entries, then the return value is <code>nil</code>.  The
-latter can happen for local files if Emacs was not compiled with ACL
-support, or for remote files if the file handler returns nil for the
-file's ACL entries. 
-</p></blockquote></div>
+     <pre class="example">          $ ls -l foo*
+          -rw-rw-rw- 2 rms rms 4 Aug 19 01:27 foo
+          -rw-rw-rw- 2 rms rms 4 Aug 19 01:27 foo1
+          
+          (file-nlinks "foo")
+               &rArr; 2
+          (file-nlinks "doesnt-exist")
+               &rArr; nil
+</pre>
+        </blockquote></div>
 
    </body></html>
 

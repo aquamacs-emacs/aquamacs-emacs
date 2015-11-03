@@ -10,15 +10,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,7 +41,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Functions.html#Functions">Functions</a>
 
 <h3 class="section">12.1 What Is a Function?</h3>
 
-<p><a name="index-return-value-706"></a><a name="index-value-of-function-707"></a><a name="index-argument-708"></a>  In a general sense, a function is a rule for carrying out a
+<p><a name="index-return-value-814"></a><a name="index-value-of-function-815"></a><a name="index-argument-816"></a>  In a general sense, a function is a rule for carrying out a
 computation given input values called <dfn>arguments</dfn>.  The result of
 the computation is called the <dfn>value</dfn> or <dfn>return value</dfn> of the
 function.  The computation can also have side effects, such as lasting
@@ -69,7 +69,7 @@ Emacs Lisp.
 written in Lisp.  These are described in the following section. 
 See <a href="Lambda-Expressions.html#Lambda-Expressions">Lambda Expressions</a>.
 
-     <br><dt><dfn>primitive</dfn><dd><a name="index-primitive-709"></a><a name="index-subr-710"></a><a name="index-built_002din-function-711"></a>A function which is callable from Lisp but is actually written in C. 
+     <br><dt><dfn>primitive</dfn><dd><a name="index-primitive-817"></a><a name="index-subr-818"></a><a name="index-built_002din-function-819"></a>A function which is callable from Lisp but is actually written in C. 
 Primitives are also called <dfn>built-in functions</dfn>, or <dfn>subrs</dfn>. 
 Examples include functions like <code>car</code> and <code>append</code>.  In
 addition, all special forms (see below) are also considered
@@ -88,13 +88,13 @@ arguments, or may evaluate them in an unusual order, or several times.
 Examples include <code>if</code>, <code>and</code>, and <code>while</code>. 
 See <a href="Special-Forms.html#Special-Forms">Special Forms</a>.
 
-     <br><dt><dfn>macro</dfn><dd><a name="index-macro-712"></a>A construct defined in Lisp, which differs from a function in that it
+     <br><dt><dfn>macro</dfn><dd><a name="index-macro-820"></a>A construct defined in Lisp, which differs from a function in that it
 translates a Lisp expression into another expression which is to be
 evaluated instead of the original expression.  Macros enable Lisp
 programmers to do the sorts of things that special forms can do. 
 See <a href="Macros.html#Macros">Macros</a>.
 
-     <br><dt><dfn>command</dfn><dd><a name="index-command-713"></a>An object which can be invoked via the <code>command-execute</code>
+     <br><dt><dfn>command</dfn><dd><a name="index-command-821"></a>An object which can be invoked via the <code>command-execute</code>
 primitive, usually due to the user typing in a key sequence
 <dfn>bound</dfn> to that command.  See <a href="Interactive-Call.html#Interactive-Call">Interactive Call</a>.  A command is
 usually a function; if the function is written in Lisp, it is made
@@ -108,13 +108,13 @@ is a command if its function cell contains a command (see <a href="Symbol-Compon
 <kbd>M-x</kbd>.
 
      <br><dt><dfn>closure</dfn><dd>A function object that is much like a lambda expression, except that
-it also encloses an &ldquo;environment&rdquo; of lexical variable bindings. 
+it also encloses an environment of lexical variable bindings. 
 See <a href="Closures.html#Closures">Closures</a>.
 
      <br><dt><dfn>byte-code function</dfn><dd>A function that has been compiled by the byte compiler. 
 See <a href="Byte_002dCode-Type.html#Byte_002dCode-Type">Byte-Code Type</a>.
 
-     <br><dt><dfn>autoload object</dfn><dd><a name="index-autoload-object-714"></a>A place-holder for a real function.  If the autoload object is called,
+     <br><dt><dfn>autoload object</dfn><dd><a name="index-autoload-object-822"></a>A place-holder for a real function.  If the autoload object is called,
 Emacs loads the file containing the definition of the real function,
 and then calls the real function.  See <a href="Autoload.html#Autoload">Autoload</a>. 
 </dl>
@@ -123,7 +123,7 @@ and then calls the real function.  See <a href="Autoload.html#Autoload">Autoload
 function:
 
 <div class="defun">
-&mdash; Function: <b>functionp</b><var> object<a name="index-functionp-715"></a></var><br>
+&mdash; Function: <b>functionp</b><var> object<a name="index-functionp-823"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if <var>object</var> is any kind of
 function, i.e., can be passed to <code>funcall</code>.  Note that
 <code>functionp</code> returns <code>t</code> for symbols that are function names,
@@ -134,7 +134,7 @@ and returns <code>nil</code> for special forms.
 a symbol as its function definition.
 
 <div class="defun">
-&mdash; Function: <b>subrp</b><var> object<a name="index-subrp-716"></a></var><br>
+&mdash; Function: <b>subrp</b><var> object<a name="index-subrp-824"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if <var>object</var> is a built-in function
 (i.e., a Lisp primitive).
 
@@ -146,7 +146,7 @@ a symbol as its function definition.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>byte-code-function-p</b><var> object<a name="index-byte_002dcode_002dfunction_002dp-717"></a></var><br>
+&mdash; Function: <b>byte-code-function-p</b><var> object<a name="index-byte_002dcode_002dfunction_002dp-825"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if <var>object</var> is a byte-code
 function.  For example:
 
@@ -156,7 +156,7 @@ function.  For example:
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>subr-arity</b><var> subr<a name="index-subr_002darity-718"></a></var><br>
+&mdash; Function: <b>subr-arity</b><var> subr<a name="index-subr_002darity-826"></a></var><br>
 <blockquote><p>This function provides information about the argument list of a
 primitive, <var>subr</var>.  The returned value is a pair
 <code>(</code><var>min</var><code> . </code><var>max</var><code>)</code>.  <var>min</var> is the minimum number of

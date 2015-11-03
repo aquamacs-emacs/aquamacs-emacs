@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,7 +41,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
 <hr>
 </div>
 
-<h3 class="section">38.22 Window Systems</h3>
+<h3 class="section">37.23 Window Systems</h3>
 
 <p>Emacs works with several window systems, most notably the X Window
 System.  Both Emacs and X use the term &ldquo;window&rdquo;, but use it
@@ -49,12 +49,12 @@ differently.  An Emacs frame is a single window as far as X is
 concerned; the individual Emacs windows are not known to X at all.
 
 <div class="defun">
-&mdash; Variable: <b>window-system</b><var><a name="index-window_002dsystem-4072"></a></var><br>
+&mdash; Variable: <b>window-system</b><var><a name="index-window_002dsystem-4486"></a></var><br>
 <blockquote><p>This terminal-local variable tells Lisp programs what window system
 Emacs is using for displaying the frame.  The possible values are
 
           <dl>
-<dt><code>x</code><dd><a name="index-X-Window-System-4073"></a>Emacs is displaying the frame using X. 
+<dt><code>x</code><dd><a name="index-X-Window-System-4487"></a>Emacs is displaying the frame using X. 
 <br><dt><code>w32</code><dd>Emacs is displaying the frame using native MS-Windows GUI. 
 <br><dt><code>ns</code><dd>Emacs is displaying the frame using the Nextstep interface (used on
 GNUstep and Mac OS X). 
@@ -64,15 +64,16 @@ GNUstep and Mac OS X).
         </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>initial-window-system</b><var><a name="index-initial_002dwindow_002dsystem-4074"></a></var><br>
+&mdash; Variable: <b>initial-window-system</b><var><a name="index-initial_002dwindow_002dsystem-4488"></a></var><br>
 <blockquote><p>This variable holds the value of <code>window-system</code> used for the
 first frame created by Emacs during startup.  (When Emacs is invoked
 with the <samp><span class="option">--daemon</span></samp> option, it does not create any initial
-frames, so <code>initial-window-system</code> is <code>nil</code>.  See <a href="../emacs/Initial-Options.html#Initial-Options">daemon</a>.) 
+frames, so <code>initial-window-system</code> is <code>nil</code>, except on
+MS-Windows, where it is still <code>w32</code>.  See <a href="../emacs/Initial-Options.html#Initial-Options">daemon</a>.) 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>window-system</b><var> &amp;optional frame<a name="index-window_002dsystem-4075"></a></var><br>
+&mdash; Function: <b>window-system</b><var> &amp;optional frame<a name="index-window_002dsystem-4489"></a></var><br>
 <blockquote><p>This function returns a symbol whose name tells what window system is
 used for displaying <var>frame</var> (which defaults to the currently
 selected frame).  The list of possible symbols it returns is the same
@@ -86,19 +87,6 @@ graphic displays.  That is because <code>window-system</code> is not a good
 indicator of Emacs capabilities on a given display type.  Instead, use
 <code>display-graphic-p</code> or any of the other <code>display-*-p</code>
 predicates described in <a href="Display-Feature-Testing.html#Display-Feature-Testing">Display Feature Testing</a>.
-
-<div class="defun">
-&mdash; Variable: <b>window-setup-hook</b><var><a name="index-window_002dsetup_002dhook-4076"></a></var><br>
-<blockquote><p>This variable is a normal hook which Emacs runs after handling the
-initialization files.  Emacs runs this hook after it has completed
-loading your init file, the default initialization file (if
-any), and the terminal-specific Lisp code, and running the hook
-<code>term-setup-hook</code>.
-
-        <p>This hook is used for internal purposes: setting up communication with
-the window system, and creating the initial window.  Users should not
-interfere with it. 
-</p></blockquote></div>
 
    </body></html>
 

@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,9 +41,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Input-Events.html#Input-Events">Input E
 <hr>
 </div>
 
-<h4 class="subsection">21.7.8 Motion Events</h4>
+<h4 class="subsection">20.7.8 Motion Events</h4>
 
-<p><a name="index-motion-event-1374"></a><a name="index-mouse-motion-events-1375"></a>
+<p><a name="index-motion-event-1498"></a><a name="index-mouse-motion-events-1499"></a>
 Emacs sometimes generates <dfn>mouse motion</dfn> events to describe motion
 of the mouse without any button activity.  Mouse motion events are
 represented by lists that look like this:
@@ -51,7 +51,10 @@ represented by lists that look like this:
 <pre class="example">     (mouse-movement POSITION)
 </pre>
    <p class="noindent"><var>position</var> is a mouse position list (see <a href="Click-Events.html#Click-Events">Click Events</a>),
-specifying the current position of the mouse cursor.
+specifying the current position of the mouse cursor.  As with the
+end-position of a drag event, this position list may represent a
+location outside the boundaries of the initially selected frame, in
+which case the list contains that frame in place of a window.
 
    <p>The special form <code>track-mouse</code> enables generation of motion
 events within its body.  Outside of <code>track-mouse</code> forms, Emacs

@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,35 +41,36 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
 <hr>
 </div>
 
-<h3 class="section">38.8 Temporary Displays</h3>
+<h3 class="section">37.8 Temporary Displays</h3>
 
-<p>Temporary displays are used by Lisp programs to put output into a
+<p><a name="index-temporary-display-4093"></a><a name="index-temporary-buffer-display-4094"></a>
+  Temporary displays are used by Lisp programs to put output into a
 buffer and then present it to the user for perusal rather than for
 editing.  Many help commands use this feature.
 
 <div class="defun">
-&mdash; Macro: <b>with-output-to-temp-buffer</b><var> buffer-name forms<small class="dots">...</small><a name="index-with_002doutput_002dto_002dtemp_002dbuffer-3743"></a></var><br>
-<blockquote><p>This function executes <var>forms</var> while arranging to insert any output
-they print into the buffer named <var>buffer-name</var>, which is first
-created if necessary, and put into Help mode.  Finally, the buffer is
-displayed in some window, but not selected.  (See the similar
-form <code>with-temp-buffer-window</code> below.)
+&mdash; Macro: <b>with-output-to-temp-buffer</b><var> buffer-name body<small class="dots">...</small><a name="index-with_002doutput_002dto_002dtemp_002dbuffer-4095"></a></var><br>
+<blockquote><p>This function executes the forms in <var>body</var> while arranging to insert
+any output they print into the buffer named <var>buffer-name</var>, which is
+first created if necessary, and put into Help mode.  (See the similar
+form <code>with-temp-buffer-window</code> below.)  Finally, the buffer is
+displayed in some window, but that window is not selected.
 
-        <p>If the <var>forms</var> do not change the major mode in the output buffer,
-so that it is still Help mode at the end of their execution, then
-<code>with-output-to-temp-buffer</code> makes this buffer read-only at the
-end, and also scans it for function and variable names to make them
+        <p>If the forms in <var>body</var> do not change the major mode in the output
+buffer, so that it is still Help mode at the end of their execution,
+then <code>with-output-to-temp-buffer</code> makes this buffer read-only at
+the end, and also scans it for function and variable names to make them
 into clickable cross-references.  See <a href="Docstring-hyperlinks.html#Docstring-hyperlinks">Tips for Documentation Strings</a>, in particular the item on hyperlinks in
 documentation strings, for more details.
 
-        <p>The string <var>buffer-name</var> specifies the temporary buffer, which
-need not already exist.  The argument must be a string, not a buffer. 
-The buffer is erased initially (with no questions asked), and it is
-marked as unmodified after <code>with-output-to-temp-buffer</code> exits.
+        <p>The string <var>buffer-name</var> specifies the temporary buffer, which need
+not already exist.  The argument must be a string, not a buffer.  The
+buffer is erased initially (with no questions asked), and it is marked
+as unmodified after <code>with-output-to-temp-buffer</code> exits.
 
         <p><code>with-output-to-temp-buffer</code> binds <code>standard-output</code> to the
-temporary buffer, then it evaluates the forms in <var>forms</var>.  Output
-using the Lisp output functions within <var>forms</var> goes by default to
+temporary buffer, then it evaluates the forms in <var>body</var>.  Output
+using the Lisp output functions within <var>body</var> goes by default to
 that buffer (but screen display and messages in the echo area, although
 they are &ldquo;output&rdquo; in the general sense of the word, are not affected). 
 See <a href="Output-Functions.html#Output-Functions">Output Functions</a>.
@@ -77,7 +78,7 @@ See <a href="Output-Functions.html#Output-Functions">Output Functions</a>.
         <p>Several hooks are available for customizing the behavior
 of this construct; they are listed below.
 
-        <p>The value of the last form in <var>forms</var> is returned.
+        <p>The value of the last form in <var>body</var> is returned.
 
      <pre class="example">          ---------- Buffer: foo ----------
            This is the contents of foo.
@@ -99,7 +100,7 @@ of this construct; they are listed below.
         </blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>temp-buffer-show-function</b><var><a name="index-temp_002dbuffer_002dshow_002dfunction-3744"></a></var><br>
+&mdash; User Option: <b>temp-buffer-show-function</b><var><a name="index-temp_002dbuffer_002dshow_002dfunction-4096"></a></var><br>
 <blockquote><p>If this variable is non-<code>nil</code>, <code>with-output-to-temp-buffer</code>
 calls it as a function to do the job of displaying a help buffer.  The
 function gets one argument, which is the buffer it should display.
@@ -111,7 +112,7 @@ selected.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>temp-buffer-setup-hook</b><var><a name="index-temp_002dbuffer_002dsetup_002dhook-3745"></a></var><br>
+&mdash; Variable: <b>temp-buffer-setup-hook</b><var><a name="index-temp_002dbuffer_002dsetup_002dhook-4097"></a></var><br>
 <blockquote><p>This normal hook is run by <code>with-output-to-temp-buffer</code> before
 evaluating <var>body</var>.  When the hook runs, the temporary buffer is
 current.  This hook is normally set up with a function to put the
@@ -119,44 +120,98 @@ buffer in Help mode.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>temp-buffer-show-hook</b><var><a name="index-temp_002dbuffer_002dshow_002dhook-3746"></a></var><br>
+&mdash; Variable: <b>temp-buffer-show-hook</b><var><a name="index-temp_002dbuffer_002dshow_002dhook-4098"></a></var><br>
 <blockquote><p>This normal hook is run by <code>with-output-to-temp-buffer</code> after
 displaying the temporary buffer.  When the hook runs, the temporary buffer
 is current, and the window it was displayed in is selected. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Macro: <b>with-temp-buffer-window</b><var> buffer-or-name action quit-function forms<small class="dots">...</small><a name="index-with_002dtemp_002dbuffer_002dwindow-3747"></a></var><br>
-<blockquote><p>This macro is similar to <code>with-output-to-temp-buffer</code>. 
-Like that construct, it executes <var>forms</var> while arranging to insert
-any output they print into the buffer named <var>buffer-or-name</var>. 
-Finally, the buffer is displayed in some window, but not selected. 
-Unlike <code>with-output-to-temp-buffer</code>, this does not switch to Help
-mode.
+&mdash; Macro: <b>with-temp-buffer-window</b><var> buffer-or-name action quit-function body<small class="dots">...</small><a name="index-with_002dtemp_002dbuffer_002dwindow-4099"></a></var><br>
+<blockquote><p>This macro is similar to <code>with-output-to-temp-buffer</code>.  Like that
+construct, it executes <var>body</var> while arranging to insert any output
+it prints into the buffer named <var>buffer-or-name</var> and displays that
+buffer in some window.  Unlike <code>with-output-to-temp-buffer</code>,
+however, it does not automatically switch that buffer to Help mode.
 
-        <p>The argument <var>buffer-or-name</var> specifies the temporary buffer. 
-It can be either a buffer, which must already exist, or a string,
-in which case a buffer of that name is created if necessary. 
-The buffer is marked as unmodified and read-only when
-<code>with-temp-buffer-window</code> exits.
+        <p>The argument <var>buffer-or-name</var> specifies the temporary buffer.  It
+can be either a buffer, which must already exist, or a string, in which
+case a buffer of that name is created, if necessary.  The buffer is
+marked as unmodified and read-only when <code>with-temp-buffer-window</code>
+exits.
 
         <p>This macro does not call <code>temp-buffer-show-function</code>.  Rather, it
-passes the <var>action</var> argument to <code>display-buffer</code> in order to
-display the buffer.
+passes the <var>action</var> argument to <code>display-buffer</code>
+(see <a href="Choosing-Window.html#Choosing-Window">Choosing Window</a>) in order to display the buffer.
 
-        <p>The value of the last form in <var>forms</var> is returned, unless the
-argument <var>quit-function</var> is specified.  In that case,
-it is called with two arguments: the window showing the buffer
-and the result of <var>forms</var>.  The final return value is then
-whatever <var>quit-function</var> returns.
+        <p>The value of the last form in <var>body</var> is returned, unless the
+argument <var>quit-function</var> is specified.  In that case, it is called
+with two arguments: the window showing the buffer and the result of
+<var>body</var>.  The final return value is then whatever <var>quit-function</var>
+returns.
 
-        <p><a name="index-temp_002dbuffer_002dwindow_002dsetup_002dhook-3748"></a><a name="index-temp_002dbuffer_002dwindow_002dshow_002dhook-3749"></a>This macro uses the normal hooks <code>temp-buffer-window-setup-hook</code>
+        <p><a name="index-temp_002dbuffer_002dwindow_002dsetup_002dhook-4100"></a><a name="index-temp_002dbuffer_002dwindow_002dshow_002dhook-4101"></a>This macro uses the normal hooks <code>temp-buffer-window-setup-hook</code>
 and <code>temp-buffer-window-show-hook</code> in place of the analogous hooks
 run by <code>with-output-to-temp-buffer</code>. 
 </p></blockquote></div>
 
+   <p>The two constructs described next are mostly identical to
+<code>with-temp-buffer-window</code> but differ from it as specified:
+
 <div class="defun">
-&mdash; Function: <b>momentary-string-display</b><var> string position &amp;optional char message<a name="index-momentary_002dstring_002ddisplay-3750"></a></var><br>
+&mdash; Macro: <b>with-current-buffer-window</b><var> buffer-or-name action quit-function &amp;rest body<a name="index-with_002dcurrent_002dbuffer_002dwindow-4102"></a></var><br>
+<blockquote><p>This macro is like <code>with-temp-buffer-window</code> but unlike that makes
+the buffer specified by <var>buffer-or-name</var> current for running
+<var>body</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>with-displayed-buffer-window</b><var> buffer-or-name action quit-function &amp;rest body<a name="index-with_002ddisplayed_002dbuffer_002dwindow-4103"></a></var><br>
+<blockquote><p>This macro is like <code>with-current-buffer-window</code> but unlike that
+displays the buffer specified by <var>buffer-or-name</var> <em>before</em>
+running <var>body</var>. 
+</p></blockquote></div>
+
+   <p>A window showing a temporary buffer can be fit to the size of that
+buffer using the following mode:
+
+<div class="defun">
+&mdash; User Option: <b>temp-buffer-resize-mode</b><var><a name="index-temp_002dbuffer_002dresize_002dmode-4104"></a></var><br>
+<blockquote><p>When this minor mode is enabled, windows showing a temporary buffer are
+automatically resized to fit their buffer's contents.
+
+        <p>A window is resized if and only if it has been specially created for the
+buffer.  In particular, windows that have shown another buffer before
+are not resized.  By default, this mode uses <code>fit-window-to-buffer</code>
+(see <a href="Resizing-Windows.html#Resizing-Windows">Resizing Windows</a>) for resizing.  You can specify a different
+function by customizing the options <code>temp-buffer-max-height</code> and
+<code>temp-buffer-max-width</code> below. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>temp-buffer-max-height</b><var><a name="index-temp_002dbuffer_002dmax_002dheight-4105"></a></var><br>
+<blockquote><p>This option specifies the maximum height (in lines) of a window
+displaying a temporary buffer when <code>temp-buffer-resize-mode</code> is
+enabled.  It can also be a function to be called to choose the height
+for such a buffer.  It gets one argument, the buffer, and should return
+a positive integer.  At the time the function is called, the window to
+be resized is selected. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>temp-buffer-max-width</b><var><a name="index-temp_002dbuffer_002dmax_002dwidth-4106"></a></var><br>
+<blockquote><p>This option specifies the maximum width of a window (in columns)
+displaying a temporary buffer when <code>temp-buffer-resize-mode</code> is
+enabled.  It can also be a function to be called to choose the width for
+such a buffer.  It gets one argument, the buffer, and should return a
+positive integer.  At the time the function is called, the window to be
+resized is selected. 
+</p></blockquote></div>
+
+   <p>The following function uses the current buffer for temporal display:
+
+<div class="defun">
+&mdash; Function: <b>momentary-string-display</b><var> string position &amp;optional char message<a name="index-momentary_002dstring_002ddisplay-4107"></a></var><br>
 <blockquote><p>This function momentarily displays <var>string</var> in the current buffer at
 <var>position</var>.  It has no effect on the undo list or on the buffer's
 modification status.

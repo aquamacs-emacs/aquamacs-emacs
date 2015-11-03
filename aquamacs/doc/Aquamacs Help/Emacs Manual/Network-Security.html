@@ -1,0 +1,143 @@
+<html lang="en">
+<head>
+<title>Network Security - GNU Emacs Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Gnus.html#Gnus" title="Gnus">
+<link rel="next" href="Document-View.html#Document-View" title="Document View">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Manual',
+updated for Emacs version 25.0.50.
+
+Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``The GNU
+     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
+     with the Front-Cover Texts being ``A GNU Manual,'' and with the
+     Back-Cover Texts as in (a) below.  A copy of the license is
+     included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Network-Security"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Document-View.html#Document-View">Document View</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Gnus.html#Gnus">Gnus</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="chapter">35 Network Security</h2>
+
+<p><a name="index-network-security-manager-4031"></a><a name="index-NSM-4032"></a><a name="index-encryption-4033"></a><a name="index-SSL-4034"></a><a name="index-TLS-4035"></a><a name="index-STARTTLS-4036"></a>
+Whenever Emacs establishes any network connection, it passes the
+established connection to the <dfn>Network Security Manager</dfn>
+(<acronym>NSM</acronym>).  <acronym>NSM</acronym> is responsible for enforcing the
+network security under your control.
+
+   <p><a name="index-network_002dsecurity_002dlevel-4037"></a>The <code>network-security-level</code> variable determines the security
+level that <acronym>NSM</acronym> enforces.  If its value is <code>low</code>, no
+security checks are performed.
+
+   <p>If this variable is <code>medium</code> (which is the default), a number of
+checks will be performed.  If as result <acronym>NSM</acronym> determines that
+the network connection might not be trustworthy, it will make you
+aware of that, and will ask you what to do about the network
+connection.
+
+   <p>You can decide to register a permanent security exception for an
+unverified connection, a temporary exception, or refuse the connection
+entirely.
+
+   <p>Below is a list of the checks done on the <code>medium</code> level.
+
+     <dl>
+<dt>unable to verify a <acronym>TLS</acronym> certificate<dd>If the connection is a <acronym>TLS</acronym>, <acronym>SSL</acronym> or
+<acronym>STARTTLS</acronym> connection, <acronym>NSM</acronym> will check whether
+the certificate used to establish the identity of the server we're
+connecting to can be verified.
+
+     <p>While an invalid certificate is often the cause for concern (there
+could be a Man-in-the-Middle hijacking your network connection and
+stealing your password), there may be valid reasons for going ahead
+with the connection anyway.  For instance, the server may be using a
+self-signed certificate, or the certificate may have expired.  It's up
+to you to determine whether it's acceptable to continue with the
+connection.
+
+     <br><dt>a self-signed certificate has changed<dd>If you've previously accepted a self-signed certificate, but it has
+now changed, that could mean that the server has just changed the
+certificate, but it might also mean that the network connection has
+been hijacked.
+
+     <br><dt>previously encrypted connection now unencrypted<dd>If the connection is unencrypted, but it was encrypted in previous
+sessions, this might mean that there is a proxy between you and the
+server that strips away <acronym>STARTTLS</acronym> announcements, leaving the
+connection unencrypted.  This is usually very suspicious.
+
+     <br><dt>talking to an unencrypted service when sending a password<dd>When connecting to an <acronym>IMAP</acronym> or <acronym>POP3</acronym> server, these
+should usually be encrypted, because it's common to send passwords
+over these connections.  Similarly, if you're sending email via
+<acronym>SMTP</acronym> that requires a password, you usually want that
+connection to be encrypted.  If the connection isn't encrypted,
+<acronym>NSM</acronym> will warn you.
+
+   </dl>
+
+   <p>If <code>network-security-level</code> is <code>high</code>, the following checks
+will be made, in addition to the above:
+
+     <dl>
+<dt>a validated certificate changes the public key<dd>Servers change their keys occasionally, and that is normally nothing
+to be concerned about.  However, if you are worried that your network
+connections are being hijacked by agencies who have access to pliable
+Certificate Authorities which issue new certificates for third-party
+services, you may want to keep track of these changes.
+
+     <br><dt>Diffie-Hellman low prime bits<dd>When doing the public key exchange, the number of prime bits
+should be high to ensure that the channel can't be eavesdropped on by
+third parties.  If this number is too low, you will be warned.
+
+     <br><dt><acronym>RC4</acronym> stream cipher<dd>The <acronym>RC4</acronym> stream cipher is believed to be of low quality and
+may allow eavesdropping by third parties.
+
+     <br><dt><acronym>SSL1</acronym>, <acronym>SSL2</acronym> and <acronym>SSL3</acronym><dd>The protocols older than <acronym>TLS1.0</acronym> are believed to be
+vulnerable to a variety of attacks, and you may want to avoid using
+these if what you're doing requires higher security. 
+</dl>
+
+   <p>Finally, if <code>network-security-level</code> is <code>paranoid</code>, you will
+also be notified the first time <acronym>NSM</acronym> sees any new
+certificate.  This will allow you to inspect all the certificates from
+all the connections that Emacs makes.
+
+   <p>The following additional variables can be used to control details of
+<acronym>NSM</acronym> operation:
+
+     <dl>
+<dt><code>nsm-settings-file</code><dd><a name="index-nsm_002dsettings_002dfile-4038"></a>This is the file where <acronym>NSM</acronym> stores details about connections. 
+It defaults to <samp><span class="file">~/.emacs.d/network-security.data</span></samp>.
+
+     <br><dt><code>nsm-save-host-names</code><dd><a name="index-nsm_002dsave_002dhost_002dnames-4039"></a>By default, host names will not be saved for non-<code>STARTTLS</code>
+connections.  Instead a host/port hash is used to identify connections. 
+This means that one can't casually read the settings file to see what
+servers the user has connected to.  If this variable is <code>t</code>,
+<acronym>NSM</acronym> will also save host names in the nsm-settings-file. 
+</dl>
+
+   </body></html>
+

@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -43,8 +43,8 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Tips.html#Tips">Tips</a>
 
 <h3 class="section">D.6 Tips for Documentation Strings</h3>
 
-<p><a name="index-documentation-strings_002c-conventions-and-tips-4299"></a>
-<a name="index-checkdoc_002dminor_002dmode-4300"></a>  Here are some tips and conventions for the writing of documentation
+<p><a name="index-documentation-strings_002c-conventions-and-tips-4752"></a>
+<a name="index-checkdoc_002dminor_002dmode-4753"></a>  Here are some tips and conventions for the writing of documentation
 strings.  You can check many of these conventions by running the command
 <kbd>M-x checkdoc-minor-mode</kbd>.
 
@@ -61,10 +61,12 @@ little space in a running Emacs.
 60 characters.  The first line should not be wider than 67 characters
 or it will look bad in the output of <code>apropos</code>.
 
-     <p>You can fill the text if that looks good.  However, rather than blindly
-filling the entire documentation string, you can often make it much more
-readable by choosing certain line breaks with care.  Use blank lines
-between sections if the documentation string is long.
+     <p><a name="index-emacs_002dlisp_002ddocstring_002dfill_002dcolumn-4754"></a>You can fill the text if that looks good.  Emacs Lisp mode fills
+documentation strings to the width specified by
+<code>emacs-lisp-docstring-fill-column</code>.  However, you can sometimes
+make a documentation string much more readable by adjusting its line
+breaks with care.  Use blank lines between sections if the
+documentation string is long.
 
      <li>The first line of the documentation string should consist of one or two
 complete sentences that stand on their own as a summary.  <kbd>M-x
@@ -129,14 +131,25 @@ line.  This looks nice in the source code, but looks bizarre when users
 view the documentation.  Remember that the indentation before the
 starting double-quote is not part of the string!
 
-     <p><a name="Docstring-hyperlinks"></a><li>When a documentation string refers to a Lisp symbol, write it as it
-would be printed (which usually means in lower case), with single-quotes
-around it.  For example: &lsquo;<samp><span class="samp">lambda</span></samp>&rsquo;.  There are two exceptions: write
-t and nil without single-quotes.  (In this manual, we use a different
-convention, with single-quotes for all symbols.)
+     <p><a name="Docstring-hyperlinks"></a><li><a name="index-curly-quotes-4755"></a><a name="index-curved-quotes-4756"></a>When a documentation string refers to a Lisp symbol, write it as it
+would be printed (which usually means in lower case), surrounding
+it with curved single quotes (<tt>‘</tt> and <tt>’</tt>).  There are
+two exceptions: write <code>t</code> and <code>nil</code> without surrounding
+punctuation.  For example: &lsquo;<samp><span class="samp">CODE can be ‘lambda’, nil, or t</span></samp>&rsquo;. 
+See <a href="../emacs/Quotation-Marks.html#Quotation-Marks">Quotation Marks</a>, for how to
+enter curved single quotes.
 
-     <p><a name="index-hyperlinks-in-documentation-strings-4301"></a>Help mode automatically creates a hyperlink when a documentation string
-uses a symbol name inside single quotes, if the symbol has either a
+     <p>Documentation strings can also use an older single-quoting convention,
+which quotes symbols with grave accent <tt>`</tt> and apostrophe
+<tt>'</tt>: <tt>`like-this'</tt> rather than <tt>‘like-this’</tt>.  This
+older convention was designed for now-obsolete displays in which grave
+accent and apostrophe were mirror images.
+
+     <p>Documentation using either convention is converted to the user's
+preferred format when it is copied into a help buffer.  See <a href="Keys-in-Documentation.html#Keys-in-Documentation">Keys in Documentation</a>.
+
+     <p><a name="index-hyperlinks-in-documentation-strings-4757"></a>Help mode automatically creates a hyperlink when a documentation string
+uses a single-quoted symbol name, if the symbol has either a
 function or a variable definition.  You do not need to do anything
 special to make use of this feature.  However, when a symbol has both a
 function definition and a variable definition, and you want to refer to
@@ -172,15 +185,15 @@ followed by the word &lsquo;<samp><span class="samp">face</span></samp>&rsquo;. 
 documentation will be shown, even if the symbol is also defined as a
 variable or as a function.
 
-     <p>To make a hyperlink to Info documentation, write the name of the Info
-node (or anchor) in single quotes, preceded by &lsquo;<samp><span class="samp">info node</span></samp>&rsquo;,
-&lsquo;<samp><span class="samp">Info node</span></samp>&rsquo;, &lsquo;<samp><span class="samp">info anchor</span></samp>&rsquo; or &lsquo;<samp><span class="samp">Info anchor</span></samp>&rsquo;.  The Info
-file name defaults to &lsquo;<samp><span class="samp">emacs</span></samp>&rsquo;.  For example,
+     <p>To make a hyperlink to Info documentation, write the single-quoted
+name of the Info node (or anchor), preceded by
+&lsquo;<samp><span class="samp">info node</span></samp>&rsquo;, &lsquo;<samp><span class="samp">Info node</span></samp>&rsquo;, &lsquo;<samp><span class="samp">info anchor</span></samp>&rsquo; or &lsquo;<samp><span class="samp">Info
+anchor</span></samp>&rsquo;.  The Info file name defaults to &lsquo;<samp><span class="samp">emacs</span></samp>&rsquo;.  For example,
 
      <pre class="smallexample">          See Info node `Font Lock' and Info node `(elisp)Font Lock Basics'.
 </pre>
-     <p>Finally, to create a hyperlink to URLs, write the URL in single
-quotes, preceded by &lsquo;<samp><span class="samp">URL</span></samp>&rsquo;. For example,
+     <p>Finally, to create a hyperlink to URLs, write the single-quoted URL,
+preceded by &lsquo;<samp><span class="samp">URL</span></samp>&rsquo;.  For example,
 
      <pre class="smallexample">          The home page for the GNU project has more information (see URL
           `http://www.gnu.org/').
@@ -215,7 +228,7 @@ is indicative and has a proper subject.
 
      <li>The documentation string for a function that is a yes-or-no predicate
 should start with words such as &ldquo;Return t if&rdquo;, to indicate
-explicitly what constitutes &ldquo;truth&rdquo;.  The word &ldquo;return&rdquo; avoids
+explicitly what constitutes truth.  The word &ldquo;return&rdquo; avoids
 starting the sentence with lower-case &ldquo;t&rdquo;, which could be somewhat
 distracting.
 

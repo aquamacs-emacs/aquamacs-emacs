@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,13 +41,14 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Images.html#Images">Images</a>
 <hr>
 </div>
 
-<h4 class="subsection">38.16.8 Defining Images</h4>
+<h4 class="subsection">37.17.8 Defining Images</h4>
 
-<p>The functions <code>create-image</code>, <code>defimage</code> and
+<p><a name="index-define-image-4345"></a>
+  The functions <code>create-image</code>, <code>defimage</code> and
 <code>find-image</code> provide convenient ways to create image descriptors.
 
 <div class="defun">
-&mdash; Function: <b>create-image</b><var> file-or-data &amp;optional type data-p &amp;rest props<a name="index-create_002dimage-3940"></a></var><br>
+&mdash; Function: <b>create-image</b><var> file-or-data &amp;optional type data-p &amp;rest props<a name="index-create_002dimage-4346"></a></var><br>
 <blockquote><p>This function creates and returns an image descriptor which uses the
 data in <var>file-or-data</var>.  <var>file-or-data</var> can be a file name or
 a string containing the image data; <var>data-p</var> should be <code>nil</code>
@@ -61,6 +62,7 @@ from the file's name.
         <p>The remaining arguments, <var>props</var>, specify additional image
 properties&mdash;for example,
 
+     <!-- ':heuristic-mask' is not documented? -->
      <pre class="example">          (create-image "foo.xpm" 'xpm nil :heuristic-mask t)
 </pre>
         <p>The function returns <code>nil</code> if images of this type are not
@@ -68,7 +70,7 @@ supported.  Otherwise it returns an image descriptor.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Macro: <b>defimage</b><var> symbol specs &amp;optional doc<a name="index-defimage-3941"></a></var><br>
+&mdash; Macro: <b>defimage</b><var> symbol specs &amp;optional doc<a name="index-defimage-4347"></a></var><br>
 <blockquote><p>This macro defines <var>symbol</var> as an image name.  The arguments
 <var>specs</var> is a list which specifies how to display the image. 
 The third argument, <var>doc</var>, is an optional documentation string.
@@ -95,14 +97,14 @@ as <code>nil</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>find-image</b><var> specs<a name="index-find_002dimage-3942"></a></var><br>
+&mdash; Function: <b>find-image</b><var> specs<a name="index-find_002dimage-4348"></a></var><br>
 <blockquote><p>This function provides a convenient way to find an image satisfying one
 of a list of image specifications <var>specs</var>.
 
         <p>Each specification in <var>specs</var> is a property list with contents
 depending on image type.  All specifications must at least contain the
 properties <code>:type </code><var>type</var> and either <code>:file&nbsp;</code><var>file</var><!-- /@w -->
-or <code>:data&nbsp;</code><var>DATA</var><!-- /@w -->, where <var>type</var> is a symbol specifying
+or <code>:data&nbsp;</code><var>data</var><!-- /@w -->, where <var>type</var> is a symbol specifying
 the image type, e.g., <code>xbm</code>, <var>file</var> is the file to load the
 image from, and <var>data</var> is a string containing the actual image data. 
 The first specification in the list whose <var>type</var> is supported, and
@@ -113,7 +115,7 @@ returned.  If no specification is satisfied, <code>nil</code> is returned.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>image-load-path</b><var><a name="index-image_002dload_002dpath-3943"></a></var><br>
+&mdash; Variable: <b>image-load-path</b><var><a name="index-image_002dload_002dpath-4349"></a></var><br>
 <blockquote><p>This variable's value is a list of locations in which to search for
 image files.  If an element is a string or a variable symbol whose
 value is a string, the string is taken to be the name of a directory
@@ -134,7 +136,7 @@ should specify the image as follows:
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>image-load-path-for-library</b><var> library image &amp;optional path no-error<a name="index-image_002dload_002dpath_002dfor_002dlibrary-3944"></a></var><br>
+&mdash; Function: <b>image-load-path-for-library</b><var> library image &amp;optional path no-error<a name="index-image_002dload_002dpath_002dfor_002dlibrary-4350"></a></var><br>
 <blockquote><p>This function returns a suitable search path for images used by the
 Lisp package <var>library</var>.
 

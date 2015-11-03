@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -43,7 +43,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Loading.html#Loading">Loading</a>
 
 <h3 class="section">15.5 Autoload</h3>
 
-<p><a name="index-autoload-868"></a>
+<p><a name="index-autoload-1004"></a>
   The <dfn>autoload</dfn> facility lets you register the existence of a
 function or macro, but put off loading the file that defines it.  The
 first call to the function automatically loads the proper library, in
@@ -53,7 +53,7 @@ Autoloading can also be triggered by looking up the documentation of
 the function or macro (see <a href="Documentation-Basics.html#Documentation-Basics">Documentation Basics</a>).
 
    <p>There are two ways to set up an autoloaded function: by calling
-<code>autoload</code>, and by writing a special &ldquo;magic&rdquo; comment in the
+<code>autoload</code>, and by writing a &ldquo;magic&rdquo; comment in the
 source before the real definition.  <code>autoload</code> is the low-level
 primitive for autoloading; any Lisp program can call <code>autoload</code> at
 any time.  Magic comments are the most convenient way to make a function
@@ -63,7 +63,7 @@ nothing on their own, but they serve as a guide for the command
 and arranges to execute them when Emacs is built.
 
 <div class="defun">
-&mdash; Function: <b>autoload</b><var> function filename &amp;optional docstring interactive type<a name="index-autoload-869"></a></var><br>
+&mdash; Function: <b>autoload</b><var> function filename &amp;optional docstring interactive type<a name="index-autoload-1005"></a></var><br>
 <blockquote><p>This function defines the function (or macro) named <var>function</var> so as
 to load automatically from <var>filename</var>.  The string <var>filename</var>
 specifies the file to load to get the real definition of <var>function</var>.
@@ -102,7 +102,7 @@ happen when a Lisp program gets the keymap from the value of a variable
 and calls <code>define-key</code>; not even if the variable name is the same
 symbol <var>function</var>.
 
-        <p><a name="index-function-cell-in-autoload-870"></a>If <var>function</var> already has a non-void function definition that is not
+        <p><a name="index-function-cell-in-autoload-1006"></a>If <var>function</var> already has a non-void function definition that is not
 an autoload object, this function does nothing and returns <code>nil</code>. 
 Otherwise, it constructs an autoload object (see <a href="Autoload-Type.html#Autoload-Type">Autoload Type</a>),
 and stores it as the function definition for <var>function</var>.  The
@@ -123,7 +123,7 @@ not a macro or a keymap.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>autoloadp</b><var> object<a name="index-autoloadp-871"></a></var><br>
+&mdash; Function: <b>autoloadp</b><var> object<a name="index-autoloadp-1007"></a></var><br>
 <blockquote><p>This function returns non-<code>nil</code> if <var>object</var> is an autoload
 object.  For example, to check if <code>run-prolog</code> is defined as an
 autoloaded function, evaluate
@@ -132,7 +132,7 @@ autoloaded function, evaluate
 </pre>
         </blockquote></div>
 
-   <p><a name="index-autoload-errors-872"></a>  The autoloaded file usually contains other definitions and may require
+   <p><a name="index-autoload-errors-1008"></a>  The autoloaded file usually contains other definitions and may require
 or provide one or more features.  If the file is not completely loaded
 (due to an error in the evaluation of its contents), any function
 definitions or <code>provide</code> calls that occurred during the load are
@@ -146,7 +146,7 @@ subroutines not loaded successfully because they come later in the file.
 macro, then an error is signaled with data <code>"Autoloading failed to
 define function </code><var>function-name</var><code>"</code>.
 
-   <p><a name="index-update_002dfile_002dautoloads-873"></a><a name="index-update_002ddirectory_002dautoloads-874"></a><a name="index-magic-autoload-comment-875"></a><a name="index-autoload-cookie-876"></a><a name="autoload-cookie"></a>A magic autoload comment (often called an <dfn>autoload cookie</dfn>)
+   <p><a name="index-update_002dfile_002dautoloads-1009"></a><a name="index-update_002ddirectory_002dautoloads-1010"></a><a name="index-magic-autoload-comment-1011"></a><a name="index-autoload-cookie-1012"></a><a name="autoload-cookie"></a>A magic autoload comment (often called an <dfn>autoload cookie</dfn>)
 consists of &lsquo;<samp><span class="samp">;;;###autoload</span></samp>&rsquo;, on a line by itself,
 just before the real definition of the function in its
 autoloadable source file.  The command <kbd>M-x update-file-autoloads</kbd>
@@ -206,7 +206,7 @@ autoloading with a magic comment:
      
      \(fn)" t nil)
 </pre>
-   <p class="noindent"><a name="index-g_t_0040code_007bfn_007d-in-function_0027s-documentation-string-877"></a>The backslash and newline immediately following the double-quote are a
+   <p class="noindent"><a name="index-g_t_0040code_007bfn_007d-in-function_0027s-documentation-string-1013"></a>The backslash and newline immediately following the double-quote are a
 convention used only in the preloaded uncompiled Lisp files such as
 <samp><span class="file">loaddefs.el</span></samp>; they tell <code>make-docfile</code> to put the
 documentation string in the <samp><span class="file">etc/DOC</span></samp> file.  See <a href="Building-Emacs.html#Building-Emacs">Building Emacs</a>. 
@@ -230,7 +230,7 @@ different from the default <samp><span class="file">loaddefs.el</span></samp>.  
 variables to control this:
 
 <div class="defun">
-&mdash; Variable: <b>generate-autoload-cookie</b><var><a name="index-generate_002dautoload_002dcookie-878"></a></var><br>
+&mdash; Variable: <b>generate-autoload-cookie</b><var><a name="index-generate_002dautoload_002dcookie-1014"></a></var><br>
 <blockquote><p>The value of this variable should be a string whose syntax is a Lisp
 comment.  <kbd>M-x update-file-autoloads</kbd> copies the Lisp form that
 follows the cookie into the autoload file it generates.  The default
@@ -238,10 +238,10 @@ value of this variable is <code>";;;###autoload"</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>generated-autoload-file</b><var><a name="index-generated_002dautoload_002dfile-879"></a></var><br>
+&mdash; Variable: <b>generated-autoload-file</b><var><a name="index-generated_002dautoload_002dfile-1015"></a></var><br>
 <blockquote><p>The value of this variable names an Emacs Lisp file where the autoload
 calls should go.  The default value is <samp><span class="file">loaddefs.el</span></samp>, but you can
-override that, e.g., in the &ldquo;Local Variables&rdquo; section of a
+override that, e.g., in the local variables section of a
 <samp><span class="file">.el</span></samp> file (see <a href="File-Local-Variables.html#File-Local-Variables">File Local Variables</a>).  The autoload file is
 assumed to contain a trailer starting with a formfeed character. 
 </p></blockquote></div>
@@ -250,7 +250,7 @@ assumed to contain a trailer starting with a formfeed character.
 specified by an autoload object:
 
 <div class="defun">
-&mdash; Function: <b>autoload-do-load</b><var> autoload &amp;optional name macro-only<a name="index-autoload_002ddo_002dload-880"></a></var><br>
+&mdash; Function: <b>autoload-do-load</b><var> autoload &amp;optional name macro-only<a name="index-autoload_002ddo_002dload-1016"></a></var><br>
 <blockquote><p>This function performs the loading specified by <var>autoload</var>, which
 should be an autoload object.  The optional argument <var>name</var>, if
 non-<code>nil</code>, should be a symbol whose function value is

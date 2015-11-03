@@ -10,16 +10,16 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Manual',
-updated for Emacs version 24.3.50.
+updated for Emacs version 25.0.50.
 
-Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``The GNU
      Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     with the Front-Cover Texts being ``A GNU Manual,'' and with the
      Back-Cover Texts as in (a) below.  A copy of the license is
      included in the section entitled ``GNU Free Documentation
      License.''
@@ -52,7 +52,7 @@ We thank them for their generosity as well.
 
    <p>This list is intended to mention every contributor of a major package or
 feature we currently distribute; if you know of someone we have omitted,
-please report that as a manual bug.  More comprehensive information is
+please make a bug report.  More comprehensive information is
 available in the <samp><span class="file">ChangeLog</span></samp> files, summarized in the file
 <samp><span class="file">etc/AUTHORS</span></samp> in the distribution.
 
@@ -83,12 +83,12 @@ files.
 
      <li>Michael Albinus wrote <samp><span class="file">dbus.el</span></samp>, a package that implements the
 D-Bus message bus protocol; <samp><span class="file">zeroconf.el</span></samp>, a mode for browsing
-Avahi services; <samp><span class="file">xesam.el</span></samp>, a Xesam-based search engine
-interface; and <samp><span class="file">secrets.el</span></samp>, an interface to keyring daemons for
-storing confidential data.  He and Kai Großjohann wrote the Tramp package, which
-provides transparent remote file editing using rcp, ssh, ftp, and
-other network protocols.  He and Daniel Pittman wrote
-<samp><span class="file">tramp-cache.el</span></samp>.
+Avahi services; <samp><span class="file">secrets.el</span></samp>, an interface to keyring daemons for
+storing confidential data; and <samp><span class="file">filenotify.el</span></samp> and the associated
+low-level interface routines, for watching file status changes. 
+He and Kai Großjohann wrote the Tramp package, which provides
+transparent remote file editing using ssh, ftp, and other network
+protocols.  He and Daniel Pittman wrote <samp><span class="file">tramp-cache.el</span></samp>.
 
      <li>Ralf Angeli wrote <samp><span class="file">scroll-lock.el</span></samp>, a minor mode which keeps the
 point vertically fixed by scrolling the window when moving up and down
@@ -114,7 +114,8 @@ moving the mouse in particular patterns.
 
      <li>Juanma Barranquero wrote <samp><span class="file">emacs-lock.el</span></samp> (based on the original
 version by Tom Wurgler), which makes it harder to exit with valuable
-buffers unsaved.  He also made many other contributions to other
+buffers unsaved; and <samp><span class="file">frameset.el</span></samp>, for saving and restoring the
+frame/window setup.  He also made many other contributions to other
 areas, including MS Windows support.
 
      <li>Eli Barzilay wrote <samp><span class="file">calculator.el</span></samp>, a desktop calculator for
@@ -141,8 +142,8 @@ by Oliver Seidel), a package for maintaining <samp><span class="file">TODO</span
 
      <li>Anna M. Bigatti wrote <samp><span class="file">cal-html.el</span></samp>, which produces HTML calendars.
 
-     <li>Ray Blaak and Simon South wrote <samp><span class="file">delphi.el</span></samp>, a mode for editing
-Delphi (Object Pascal) source code.
+     <li>Ray Blaak and Simon South wrote <samp><span class="file">opascal.el</span></samp>, a mode for editing
+Object Pascal source code.
 
      <li>Martin Blais, Stefan Merten, and David Goodger wrote <samp><span class="file">rst.el</span></samp>, a
 mode for editing reStructuredText documents.
@@ -167,7 +168,7 @@ directory changes in shell buffers; <samp><span class="file">filecache.el</span>
 which directories your files are in; <samp><span class="file">locate.el</span></samp>, which
 interfaces to the <code>locate</code> command; <samp><span class="file">find-lisp.el</span></samp>, an Emacs
 Lisp emulation of the <samp><span class="command">find</span></samp> program; <samp><span class="file">net-utils.el</span></samp>; and
-the &ldquo;generic mode&rdquo; feature.
+the generic mode feature.
 
      <li>Emmanuel Briot wrote <samp><span class="file">xml.el</span></samp>, an XML parser for Emacs; and
 <samp><span class="file">ada-prj.el</span></samp>, editing of Ada mode project files, as well as
@@ -199,13 +200,15 @@ for editing IDL and WAVE CL.
      <li>Bob Chassell wrote <samp><span class="file">texnfo-upd.el</span></samp>, <samp><span class="file">texinfo.el</span></samp>, and
 <samp><span class="file">makeinfo.el</span></samp>, modes and utilities for working with Texinfo files;
 and <samp><span class="file">page-ext.el</span></samp>, commands for extended page handling.  He also
-wrote the &ldquo;Introduction to programming in Emacs Lisp&rdquo; manual.
+wrote the Emacs Lisp introduction.  See <a href="../eintr/index.html#Top">Top</a>.
 
      <li>Jihyun Cho wrote <samp><span class="file">hanja-util.el</span></samp> and <samp><span class="file">hangul.el</span></samp>, utilities
 for Korean Hanja.
 
      <li>Andrew Choi and Yamamoto Mitsuharu wrote the Carbon support, used
-prior to Emacs 23 for Mac OS.
+prior to Emacs 23 for Mac OS.  Yamamoto Mitsuharu continued to
+contribute to Mac OS support in the newer Nextstep port; and also
+improved support for multi-monitor displays.
 
      <li>Chong Yidong was the Emacs co-maintainer from Emacs 23 to 24.3.  He made many
 improvements to the Emacs display engine.  He also wrote
@@ -236,9 +239,9 @@ package for easy definition of major and minor modes.
 for compiled Emacs Lisp code.
 
      <li>Mathias Dahl wrote <samp><span class="file">image-dired.el</span></samp>, a package for viewing image
-files as &ldquo;thumbnails&rdquo;.
+files as thumbnails.
 
-     <li>Julien Danjou wrote an implementation of &ldquo;Desktop Notifications&rdquo;
+     <li>Julien Danjou wrote an implementation of desktop notifications
 (<samp><span class="file">notifications.el</span></samp>, and related packages for ERC and Gnus);
 and <samp><span class="file">color.el</span></samp>, a library for general color manipulation. 
 He also made various contributions to Gnus.
@@ -282,8 +285,7 @@ other portability fixes to the C code; as well as his contributions
 to VC and the calendar.
 
      <li>Stephen Eglen wrote <samp><span class="file">mspools.el</span></samp>, which tells you which Procmail
-folders have mail waiting in them; and <samp><span class="file">iswitchb.el</span></samp>, a feature
-for incremental reading and completion of buffer names.
+folders have mail waiting in them.
 
      <li>Torbjörn Einarsson wrote <samp><span class="file">f90.el</span></samp>, a mode for Fortran 90 files.
 
@@ -315,9 +317,11 @@ placeholders; <samp><span class="file">mail-hist.el</span></samp>, a history mec
 mail messages; and <samp><span class="file">saveplace.el</span></samp>, for preserving point's
 location in files between editing sessions.
 
-     <li>Gary Foster wrote <samp><span class="file">crisp.el</span></samp>, the emulation for CRiSP and Brief
-editors; and <samp><span class="file">scroll-all.el</span></samp>, a mode for scrolling several buffers
+     <li>Gary Foster wrote <samp><span class="file">scroll-all.el</span></samp>, a mode for scrolling several buffers
 together.
+
+     <li>Romain Francoise contributed ACL (Access Control List) support,
+for preserving extended file attributes on backup and copy.
 
      <li>Noah Friedman wrote <samp><span class="file">rlogin.el</span></samp>, an interface to Rlogin,
 <samp><span class="file">type-break.el</span></samp>, which reminds you to take periodic breaks from
@@ -447,13 +451,14 @@ Emacs, including: <samp><span class="file">dns.el</span></samp> for Domain Name 
 <samp><span class="file">time-date.el</span></samp> for general date and time handling. 
 He also wrote <samp><span class="file">network-stream.el</span></samp>, for opening network processes;
 <samp><span class="file">url-queue.el</span></samp>, for controlling parallel downloads of URLs;
-and implemented libxml2 support. 
+and implemented libxml2 support.  He also wrote <samp><span class="file">eww.el</span></samp>,
+an Emacs Lisp web browser; and implemented native zlib decompression. 
 Components of Gnus have also been written by: Nagy Andras, David
 Blacka, Scott Byer, Ludovic Courtès, Julien Danjou, Kevin Greiner, Kai
 Großjohann, Joe Hildebrand, Paul Jarc, Simon Josefsson, Sascha
 Lüdecke, David Moore, Jim Radford, Benjamin Rutt, Raymond Scholz,
-Thomas Steffen, Reiner Steib, Didier Verna, Ilja Weis, Katsumi
-Yamaoka, Teodor Zlatanov, and others (see <a href="../gnus/Contributors.html#Contributors">Contributors</a>).
+Thomas Steffen, Reiner Steib, Jan Tatarik, Didier Verna, Ilja Weis,
+Katsumi Yamaoka, Teodor Zlatanov, and others (see <a href="../gnus/Contributors.html#Contributors">Contributors</a>).
 
      <li>Andrew Innes contributed extensively to the MS-Windows support.
 
@@ -467,10 +472,10 @@ diary entries to and from the iCalendar format;
 <samp><span class="file">newsticker.el</span></samp>, an RSS and Atom based Newsticker; and
 <samp><span class="file">bubbles.el</span></samp>, a puzzle game.
 
-     <li>Kyle Jones wrote <samp><span class="file">life.el</span></samp>, a package to play Conway's &ldquo;life&rdquo; game.
+     <li>Kyle Jones wrote <samp><span class="file">life.el</span></samp>, a package to play Conway's Game of Life.
 
      <li>Terry Jones wrote <samp><span class="file">shadow.el</span></samp>, a package for finding potential
-load-path problems when some Lisp file &ldquo;shadows&rdquo; another.
+load-path problems when some Lisp file shadows another.
 
      <li>Simon Josefsson wrote <samp><span class="file">dns-mode.el</span></samp>, an editing mode for Domain
 Name System master files; <samp><span class="file">dig.el</span></samp>, a Domain Name System interface;
@@ -512,7 +517,7 @@ buffers.
 
      <li>Michael Kifer wrote <code>ediff</code>, an interactive interface to the
 <samp><span class="command">diff</span></samp>, <samp><span class="command">patch</span></samp>, and <samp><span class="command">merge</span></samp> programs; and
-Viper, another emulator of the VI editor.
+Viper, an emulator of the VI editor.
 
      <li>Richard King wrote the first version of <samp><span class="file">userlock.el</span></samp> and
 <samp><span class="file">filelock.c</span></samp>, which provide simple support for multiple users
@@ -595,7 +600,10 @@ searches; the code in <samp><span class="file">files-x.el</span></samp> for hand
 directory-local variables; and the <code>info-finder</code> feature that
 creates a virtual Info manual of package keywords.
 
-     <li>Károly Lőrentey wrote the &ldquo;multi-terminal&rdquo; code, which allows
+     <li>Leo Liu wrote <samp><span class="file">pcmpl-x.el</span></samp>, providing completion for
+miscellaneous external tools; and revamped support for Octave in Emacs 24.4.
+
+     <li>Károly Lőrentey wrote the multi-terminal code, which allows
 Emacs to run on graphical and text terminals simultaneously.
 
      <li>Martin Lorentzon wrote <samp><span class="file">vc-annotate.el</span></samp>, support for version
@@ -611,7 +619,7 @@ Autoconf files; <samp><span class="file">cfengine.el</span></samp>, a mode for e
 <samp><span class="file">elide-head.el</span></samp>, a package for eliding boilerplate text from file
 headers; <samp><span class="file">hl-line.el</span></samp>, a minor mode for highlighting the line in
 the current window on which point is; <samp><span class="file">cap-words.el</span></samp>, a minor mode
-for motion in &ldquo;CapitalizedWordIdentifiers&rdquo;; <samp><span class="file">latin1-disp.el</span></samp>, a
+for motion in <code>CapitalizedWordIdentifiers</code>; <samp><span class="file">latin1-disp.el</span></samp>, a
 package that lets you display ISO 8859 characters on Latin-1 terminals
 by setting up appropriate display tables; the version of
 <samp><span class="file">python.el</span></samp> used prior to Emacs 24.3; <samp><span class="file">smiley.el</span></samp>, a
@@ -689,11 +697,10 @@ modes.
 command with its arguments.
 
      <li>Richard Mlynarik wrote <samp><span class="file">cl-indent.el</span></samp>, a package for indenting
-Common Lisp code; <samp><span class="file">ebuff-menu.el</span></samp>, an &ldquo;electric&rdquo; browser for
+Common Lisp code; <samp><span class="file">ebuff-menu.el</span></samp>, an electric browser for
 buffer listings; <samp><span class="file">ehelp.el</span></samp>, bindings for browsing help screens;
-<samp><span class="file">rfc822.el</span></samp>, a parser for E-mail addresses in the RFC-822 format,
-used in mail messages and news articles; and <samp><span class="file">terminal.el</span></samp>, a
-terminal emulator for Emacs subprocesses.
+and <samp><span class="file">rfc822.el</span></samp>, a parser for E-mail addresses in the RFC-822 format,
+used in mail messages and news articles.
 
      <li>Gerd Möllmann was the Emacs maintainer from the beginning of Emacs 21
 development until the release of 21.1.  He wrote the new display
@@ -704,7 +711,8 @@ facility.  He also wrote <code>ebrowse</code>, the C<tt>++</tt> browser;
 <samp><span class="file">authors.el</span></samp>, a package for maintaining the <samp><span class="file">AUTHORS</span></samp> file;
 and <samp><span class="file">rx.el</span></samp>, a regular expression constructor.
 
-     <li>Stefan Monnier was the Emacs (co-)maintainer from Emacs 23 onwards.  He added
+     <li>Stefan Monnier was the Emacs (co-)maintainer from Emacs 23 until
+late in the development of 25.1.  He added
 support for Arch and Subversion to VC, re-wrote much of the Emacs server
 to use the built-in networking primitives, and re-wrote the abbrev and
 minibuffer completion code for Emacs 23.  He also wrote <code>PCL-CVS</code>,
@@ -714,12 +722,12 @@ text; <samp><span class="file">smerge-mode.el</span></samp>, a minor mode for re
 conflicts; <samp><span class="file">diff-mode.el</span></samp>, a mode for viewing and editing context
 diffs; <samp><span class="file">css-mode.el</span></samp> for Cascading Style Sheets;
 <samp><span class="file">bibtex-style.el</span></samp> for BibTeX Style files; <samp><span class="file">mpc.el</span></samp>, a
-client for the &ldquo;Music Player Daemon&rdquo;; <samp><span class="file">smie.el</span></samp>, a generic
+client for the Music Player Daemon (MPD); <samp><span class="file">smie.el</span></samp>, a generic
 indentation engine; and <samp><span class="file">pcase.el</span></samp>, implementing ML-style pattern
 matching.  In Emacs 24, he integrated the lexical binding code,
 cleaned up the CL namespace (making it acceptable to use CL
-functions at runtime), and added generalized variables to core Emacs
-Lisp.
+functions at runtime), added generalized variables to core Emacs
+Lisp, and implemented a new lightweight advice mechanism.
 
      <li>Morioka Tomohiko wrote several packages for MIME support in Gnus and
 elsewhere.
@@ -741,8 +749,6 @@ a mode for editing makefiles.
 
      <li>Thien-Thi Nguyen and Dan Nicolaescu wrote <samp><span class="file">hideshow.el</span></samp>, a minor
 mode for selectively displaying blocks of text.
-
-     <li>Jurgen Nickelsen wrote <samp><span class="file">ws-mode.el</span></samp>, providing WordStar emulation.
 
      <li>Dan Nicolaescu added support for running Emacs as a daemon.  He also
 wrote <samp><span class="file">romanian.el</span></samp>, support for editing Romanian text;
@@ -780,7 +786,7 @@ game to fill all squares on the field.
      <li>Jeff Peck wrote <samp><span class="file">sun.el</span></samp>, key bindings for sunterm keys.
 
      <li>Damon Anton Permezel wrote <samp><span class="file">hanoi.el</span></samp>, an animated demonstration of
-the &ldquo;Towers of Hanoi&rdquo; puzzle.
+the Towers of Hanoi puzzle.
 
      <li>William M. Perry wrote <samp><span class="file">mailcap.el</span></samp> (with Lars Magne
 Ingebrigtsen), a MIME media types configuration facility;
@@ -840,7 +846,7 @@ source code version control systems, with Paul Eggert; <samp><span class="file">
 a package for running source-level debuggers like GDB and SDB in
 Emacs; <samp><span class="file">asm-mode.el</span></samp>, a mode for editing assembly language code;
 <samp><span class="file">AT386.el</span></samp>, terminal support package for IBM's AT keyboards;
-<samp><span class="file">cookie1.el</span></samp>, support for &ldquo;fortune-cookie&rdquo; programs like
+<samp><span class="file">cookie1.el</span></samp>, support for fortune-cookie programs like
 <samp><span class="file">yow.el</span></samp> and <samp><span class="file">spook.el</span></samp>; <samp><span class="file">finder.el</span></samp>, a package for
 finding Emacs Lisp packages by keyword and topic; <samp><span class="file">keyswap.el</span></samp>,
 code to swap the &lt;BS&gt; and &lt;DEL&gt; keys; <samp><span class="file">loadhist.el</span></samp>,
@@ -866,10 +872,8 @@ system's designated mail client.
      <li>Alex Rezinsky wrote <samp><span class="file">which-func.el</span></samp>, a mode that shows the name
 of the current function in the mode line.
 
-     <li>Rob Riepel wrote <samp><span class="file">tpu-edt.el</span></samp> and its associated files, providing
-an emulation of the VMS TPU text editor emulating the VMS EDT editor,
-and <samp><span class="file">vt-control.el</span></samp>, providing some control functions for the DEC
-VT line of terminals.
+     <li>Rob Riepel wrote <samp><span class="file">vt-control.el</span></samp>, providing some control
+functions for the DEC VT line of terminals.
 
      <li>Nick Roberts wrote <samp><span class="file">t-mouse.el</span></samp>, for mouse support in text
 terminals; and <samp><span class="file">gdb-ui.el</span></samp>, a graphical user interface to GDB. 
@@ -884,7 +888,8 @@ into &ldquo;handwriting&rdquo;.
      <li>Guillermo J. Rozas wrote <samp><span class="file">scheme.el</span></samp>, a mode for editing Scheme and
 DSSSL code.
 
-     <li>Martin Rudalics implemented improved display-buffer handling in Emacs 24.
+     <li>Martin Rudalics implemented improved display-buffer handling in Emacs 24;
+and implemented pixel-wise resizing of windows and frames.
 
      <li>Ivar Rummelhoff wrote <samp><span class="file">winner.el</span></samp>, which records recent window
 configurations so you can move back to them.
@@ -900,8 +905,6 @@ references in Info files.
 
      <li>James B. Salem and Brewster Kahle wrote <samp><span class="file">completion.el</span></samp>, providing
 dynamic word completion.
-
-     <li>Masahiko Sato wrote <samp><span class="file">vip.el</span></samp>, an emulation of the VI editor.
 
      <li>Holger Schauer wrote <samp><span class="file">fortune.el</span></samp>, a package for using fortune in
 message signatures.
@@ -979,27 +982,26 @@ selecting regions to follow many other systems.
 
      <li>Richard Stallman invented Emacs.  He is the original author of GNU
 Emacs, and has been Emacs maintainer over several non-contiguous
-periods.  In addition to much of the &ldquo;core&rdquo; Emacs code, he has
+periods.  In addition to much of the core Emacs code, he has
 written <samp><span class="file">easymenu.el</span></samp>, a facility for defining Emacs menus;
 <samp><span class="file">image-mode.el</span></samp>, support for visiting image files;
 <samp><span class="file">menu-bar.el</span></samp>, the Emacs menu bar support code;
 <samp><span class="file">paren.el</span></samp>, a package to make matching parentheses stand out in
 color; and also co-authored portions of CC mode.
 
-     <li>Sam Steingold wrote <samp><span class="file">gulp.el</span></samp>, a facility for asking package
-maintainers for updated versions of their packages via e-mail, and
-<samp><span class="file">midnight.el</span></samp>, a package for running a command every midnight.
+     <li>Sam Steingold wrote <samp><span class="file">midnight.el</span></samp>, a package for running a
+command every midnight.
 
      <li>Ake Stenhoff and Lars Lindberg wrote <samp><span class="file">imenu.el</span></samp>, a framework for
 browsing indices made from buffer contents.
 
-     <li>Peter Stephenson wrote <samp><span class="file">vcursor.el</span></samp>, which implements a &ldquo;virtual
-cursor&rdquo; that you can move with the keyboard and use for copying text.
+     <li>Peter Stephenson wrote <samp><span class="file">vcursor.el</span></samp>, which implements a virtual
+cursor that you can move with the keyboard and use for copying text.
 
      <li>Ken Stevens wrote <samp><span class="file">ispell.el</span></samp>, a spell-checker interface.
 
      <li>Kim F. Storm made many improvements to the Emacs display engine,
-process support, and networking support. He also wrote
+process support, and networking support.  He also wrote
 <samp><span class="file">bindat.el</span></samp>, a package for encoding and decoding binary data;
 CUA mode, which allows Emacs to emulate the standard CUA key
 bindings; <samp><span class="file">ido.el</span></samp>, a package for selecting buffers and files
@@ -1022,7 +1024,7 @@ editing text in Slovak language.
 the keyboard.
 
      <li>Jean-Philippe Theberge wrote <samp><span class="file">thumbs.el</span></samp>, a package for viewing
-image files as &ldquo;thumbnails&rdquo;.
+image files as thumbnails.
 
      <li>Spencer Thomas wrote the original <samp><span class="file">dabbrev.el</span></samp>, providing a command
 which completes the partial word before point, based on other nearby
@@ -1058,7 +1060,7 @@ mh-e interface for Gnus; <samp><span class="file">gnus-msg.el</span></samp>, a m
 for Gnus; and <samp><span class="file">timezone.el</span></samp>, providing functions for dealing with
 time zones.
 
-     <li>Neil W. Van Dyke wrote <samp><span class="file">webjump.el</span></samp>, a &ldquo;hot links&rdquo; package.
+     <li>Neil W. Van Dyke wrote <samp><span class="file">webjump.el</span></samp>, a Web hotlist package.
 
      <li>Didier Verna wrote <samp><span class="file">rect.el</span></samp>, a package of functions for
 operations on rectangle regions of text.  He also contributed to Gnus
@@ -1139,7 +1141,7 @@ manual pages without the <code>man</code> command.
 
      <li>Masatake Yamato wrote <samp><span class="file">ld-script.el</span></samp>, an editing mode for GNU
 linker scripts, and contributed subword handling and style
-&ldquo;guessing&rdquo; in CC mode.
+guessing in CC mode.
 
      <li>Jonathan Yavner wrote <samp><span class="file">testcover.el</span></samp>, a package for keeping track
 of the testing status of Emacs Lisp code; <samp><span class="file">unsafep.el</span></samp> to determine
@@ -1163,7 +1165,8 @@ zone out in front of Emacs.
      <li>Eli Zaretskii made many standard Emacs features work on MS-DOS and
 Microsoft Windows.  He also wrote <samp><span class="file">tty-colors.el</span></samp>, which
 implements transparent mapping of X colors to tty colors; and
-<samp><span class="file">rxvt.el</span></samp>.  He implemented support for bidirectional text.
+<samp><span class="file">rxvt.el</span></samp>.  He implemented support for bidirectional text,
+and also menus on text-mode terminals.
 
      <li>Jamie Zawinski wrote much of the support for faces and X selections. 
 With Hallvard Furuseth, he wrote the optimizing byte compiler used

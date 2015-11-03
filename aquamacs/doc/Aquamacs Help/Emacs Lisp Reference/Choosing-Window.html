@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,7 +41,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
 <hr>
 </div>
 
-<h3 class="section">28.12 Choosing a Window for Display</h3>
+<h3 class="section">27.13 Choosing a Window for Display</h3>
 
 <p>The command <code>display-buffer</code> flexibly chooses a window for
 display, and displays a specified buffer in that window.  It can be
@@ -49,7 +49,7 @@ called interactively, via the key binding <kbd>C-x 4 C-o</kbd>.  It is also
 used as a subroutine by many functions and commands, including
 <code>switch-to-buffer</code> and <code>pop-to-buffer</code> (see <a href="Switching-Buffers.html#Switching-Buffers">Switching Buffers</a>).
 
-   <p><a name="index-display-action-2353"></a><a name="index-action-function_002c-for-_0040code_007bdisplay_002dbuffer_007d-2354"></a><a name="index-action-alist_002c-for-_0040code_007bdisplay_002dbuffer_007d-2355"></a>  This command performs several complex steps to find a window to
+   <p><a name="index-display-action-2550"></a><a name="index-action-function_002c-for-_0040code_007bdisplay_002dbuffer_007d-2551"></a><a name="index-action-alist_002c-for-_0040code_007bdisplay_002dbuffer_007d-2552"></a>  This command performs several complex steps to find a window to
 display in.  These steps are described by means of <dfn>display
 actions</dfn>, which have the form <code>(</code><var>function</var><code> . </code><var>alist</var><code>)</code>. 
 Here, <var>function</var> is either a function or a list of functions,
@@ -69,7 +69,7 @@ of them manages to display the buffer and returns a non-<code>nil</code>
 value.
 
 <div class="defun">
-&mdash; Command: <b>display-buffer</b><var> buffer-or-name &amp;optional action frame<a name="index-display_002dbuffer-2356"></a></var><br>
+&mdash; Command: <b>display-buffer</b><var> buffer-or-name &amp;optional action frame<a name="index-display_002dbuffer-2553"></a></var><br>
 <blockquote><p>This command makes <var>buffer-or-name</var> appear in some window, without
 selecting the window or making the buffer current.  The argument
 <var>buffer-or-name</var> must be a buffer or the name of an existing
@@ -94,7 +94,10 @@ actions from the following sources (in order):
 
      <p class="noindent">Each action function is called in turn, passing the buffer as the
 first argument and the combined action alist as the second argument,
-until one of the functions returns non-<code>nil</code>.
+until one of the functions returns non-<code>nil</code>.  The caller can
+pass <code>(allow-no-window . t)</code> as an element of the action alist to
+indicate its readiness to handle the case of not displaying the
+buffer in a window.
 
         <p>The argument <var>action</var> can also have a non-<code>nil</code>, non-list
 value.  This has the special meaning that the buffer should be
@@ -109,14 +112,14 @@ It is equivalent to adding an element <code>(reusable-frames
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>display-buffer-overriding-action</b><var><a name="index-display_002dbuffer_002doverriding_002daction-2357"></a></var><br>
+&mdash; Variable: <b>display-buffer-overriding-action</b><var><a name="index-display_002dbuffer_002doverriding_002daction-2554"></a></var><br>
 <blockquote><p>The value of this variable should be a display action, which is
 treated with the highest priority by <code>display-buffer</code>.  The
 default value is empty, i.e., <code>(nil . nil)</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>display-buffer-alist</b><var><a name="index-display_002dbuffer_002dalist-2358"></a></var><br>
+&mdash; User Option: <b>display-buffer-alist</b><var><a name="index-display_002dbuffer_002dalist-2555"></a></var><br>
 <blockquote><p>The value of this option is an alist mapping conditions to display
 actions.  Each condition may be either a regular expression matching a
 buffer name or a function that takes two arguments: a buffer name and
@@ -128,14 +131,14 @@ corresponding display action to display the buffer.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>display-buffer-base-action</b><var><a name="index-display_002dbuffer_002dbase_002daction-2359"></a></var><br>
+&mdash; User Option: <b>display-buffer-base-action</b><var><a name="index-display_002dbuffer_002dbase_002daction-2556"></a></var><br>
 <blockquote><p>The value of this option should be a display action.  This option can
-be used to define a &ldquo;standard&rdquo; display action for calls to
+be used to define a standard display action for calls to
 <code>display-buffer</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Constant: <b>display-buffer-fallback-action</b><var><a name="index-display_002dbuffer_002dfallback_002daction-2360"></a></var><br>
+&mdash; Constant: <b>display-buffer-fallback-action</b><var><a name="index-display_002dbuffer_002dfallback_002daction-2557"></a></var><br>
 <blockquote><p>This display action specifies the fallback behavior for
 <code>display-buffer</code> if no other display actions are given. 
 </p></blockquote></div>

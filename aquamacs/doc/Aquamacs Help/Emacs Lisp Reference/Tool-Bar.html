@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,9 +41,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Menu-Keymaps.html#Menu-Keymaps">Menu Ke
 <hr>
 </div>
 
-<h4 class="subsection">22.17.6 Tool bars</h4>
+<h4 class="subsection">21.17.6 Tool bars</h4>
 
-<p><a name="index-tool-bar-1659"></a>
+<p><a name="index-tool-bar-1794"></a>
   A <dfn>tool bar</dfn> is a row of clickable icons at the top of a frame,
 just below the menu bar.  See <a href="../emacs/Tool-Bars.html#Tool-Bars">Tool Bars</a>.  Emacs normally shows a tool bar on graphical displays.
 
@@ -56,13 +56,13 @@ If the value is <code>grow-only</code>, the tool bar expands automatically,
 but does not contract automatically.
 
    <p>The tool bar contents are controlled by a menu keymap attached to a
-fake &ldquo;function key&rdquo; called <code>tool-bar</code> (much like the way the menu
+fake function key called <code>tool-bar</code> (much like the way the menu
 bar is controlled).  So you define a tool bar item using
 <code>define-key</code>, like this:
 
 <pre class="example">     (define-key global-map [tool-bar <var>key</var>] <var>item</var>)
 </pre>
-   <p class="noindent">where <var>key</var> is a fake &ldquo;function key&rdquo; to distinguish this item from
+   <p class="noindent">where <var>key</var> is a fake function key to distinguish this item from
 other items, and <var>item</var> is a menu item key binding (see <a href="Extended-Menu-Items.html#Extended-Menu-Items">Extended Menu Items</a>), which says how to display this item and how it behaves.
 
    <p>The usual menu keymap item properties, <code>:visible</code>,
@@ -71,7 +71,7 @@ tool bar bindings and have their normal meanings.  The <var>real-binding</var>
 in the item must be a command, not a keymap; in other words, it does not
 work to define a tool bar icon as a prefix key.
 
-   <p>The <code>:help</code> property specifies a &ldquo;help-echo&rdquo; string to display
+   <p>The <code>:help</code> property specifies a help-echo string to display
 while the mouse is on that item.  This is displayed in the same way as
 <code>help-echo</code> text properties (see <a href="Help-display.html#Help-display">Help display</a>).
 
@@ -90,6 +90,9 @@ one of them is used, depending on circumstances:
 <br><dt>item 3<dd>Used when the item is disabled and deselected. 
 </dl>
      </dl>
+
+   <p>The GTK+ and NS versions of Emacs ignores items 1 to 3, because disabled and/or
+deselected images are autocomputed from item 0.
 
    <p>If <var>image</var> is a single image specification, Emacs draws the tool bar
 button in disabled state by applying an edge-detection algorithm to the
@@ -117,7 +120,7 @@ accommodated conveniently, and the default bindings make this easy by
 using an indirection through <code>tool-bar-map</code>.
 
 <div class="defun">
-&mdash; Variable: <b>tool-bar-map</b><var><a name="index-tool_002dbar_002dmap-1660"></a></var><br>
+&mdash; Variable: <b>tool-bar-map</b><var><a name="index-tool_002dbar_002dmap-1795"></a></var><br>
 <blockquote><p>By default, the global map binds <code>[tool-bar]</code> as follows:
 
      <pre class="example">          (global-set-key [tool-bar]
@@ -136,7 +139,7 @@ Info mode, completely replace the global tool bar by making
 follows.
 
 <div class="defun">
-&mdash; Function: <b>tool-bar-add-item</b><var> icon def key &amp;rest props<a name="index-tool_002dbar_002dadd_002ditem-1661"></a></var><br>
+&mdash; Function: <b>tool-bar-add-item</b><var> icon def key &amp;rest props<a name="index-tool_002dbar_002dadd_002ditem-1796"></a></var><br>
 <blockquote><p>This function adds an item to the tool bar by modifying
 <code>tool-bar-map</code>.  The image to use is defined by <var>icon</var>, which
 is the base name of an XPM, XBM or PBM image file to be located by
@@ -159,7 +162,7 @@ property list elements to add to the menu item specification.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>tool-bar-add-item-from-menu</b><var> command icon &amp;optional map &amp;rest props<a name="index-tool_002dbar_002dadd_002ditem_002dfrom_002dmenu-1662"></a></var><br>
+&mdash; Function: <b>tool-bar-add-item-from-menu</b><var> command icon &amp;optional map &amp;rest props<a name="index-tool_002dbar_002dadd_002ditem_002dfrom_002dmenu-1797"></a></var><br>
 <blockquote><p>This function is a convenience for defining tool bar items which are
 consistent with existing menu bar bindings.  The binding of
 <var>command</var> is looked up in the menu bar in <var>map</var> (default
@@ -175,7 +178,7 @@ property list elements to add to the menu item specification.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>tool-bar-local-item-from-menu</b><var> command icon in-map &amp;optional from-map &amp;rest props<a name="index-tool_002dbar_002dlocal_002ditem_002dfrom_002dmenu-1663"></a></var><br>
+&mdash; Function: <b>tool-bar-local-item-from-menu</b><var> command icon in-map &amp;optional from-map &amp;rest props<a name="index-tool_002dbar_002dlocal_002ditem_002dfrom_002dmenu-1798"></a></var><br>
 <blockquote><p>This function is used for making non-global tool bar items.  Use it
 like <code>tool-bar-add-item-from-menu</code> except that <var>in-map</var>
 specifies the local map to make the definition in.  The argument
@@ -184,7 +187,7 @@ specifies the local map to make the definition in.  The argument
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>auto-resize-tool-bars</b><var><a name="index-auto_002dresize_002dtool_002dbars-1664"></a></var><br>
+&mdash; Variable: <b>auto-resize-tool-bars</b><var><a name="index-auto_002dresize_002dtool_002dbars-1799"></a></var><br>
 <blockquote><p>If this variable is non-<code>nil</code>, the tool bar automatically resizes to
 show all defined tool bar items&mdash;but not larger than a quarter of the
 frame's height.
@@ -198,27 +201,27 @@ line, so this variable has no effect.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>auto-raise-tool-bar-buttons</b><var><a name="index-auto_002draise_002dtool_002dbar_002dbuttons-1665"></a></var><br>
+&mdash; Variable: <b>auto-raise-tool-bar-buttons</b><var><a name="index-auto_002draise_002dtool_002dbar_002dbuttons-1800"></a></var><br>
 <blockquote><p>If this variable is non-<code>nil</code>, tool bar items display
 in raised form when the mouse moves over them. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>tool-bar-button-margin</b><var><a name="index-tool_002dbar_002dbutton_002dmargin-1666"></a></var><br>
+&mdash; Variable: <b>tool-bar-button-margin</b><var><a name="index-tool_002dbar_002dbutton_002dmargin-1801"></a></var><br>
 <blockquote><p>This variable specifies an extra margin to add around tool bar items. 
 The value is an integer, a number of pixels.  The default is 4. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>tool-bar-button-relief</b><var><a name="index-tool_002dbar_002dbutton_002drelief-1667"></a></var><br>
+&mdash; Variable: <b>tool-bar-button-relief</b><var><a name="index-tool_002dbar_002dbutton_002drelief-1802"></a></var><br>
 <blockquote><p>This variable specifies the shadow width for tool bar items. 
 The value is an integer, a number of pixels.  The default is 1. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>tool-bar-border</b><var><a name="index-tool_002dbar_002dborder-1668"></a></var><br>
+&mdash; Variable: <b>tool-bar-border</b><var><a name="index-tool_002dbar_002dborder-1803"></a></var><br>
 <blockquote><p>This variable specifies the height of the border drawn below the tool
-bar area.  An integer value specifies height as a number of pixels. 
+bar area.  An integer specifies height as a number of pixels. 
 If the value is one of <code>internal-border-width</code> (the default) or
 <code>border-width</code>, the tool bar border height corresponds to the
 corresponding frame parameter. 

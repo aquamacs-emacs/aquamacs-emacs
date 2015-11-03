@@ -10,15 +10,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -39,9 +39,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Major-Modes.html#Major-Modes">Major Mod
 <hr>
 </div>
 
-<h4 class="subsection">23.2.1 Major Mode Conventions</h4>
+<h4 class="subsection">22.2.1 Major Mode Conventions</h4>
 
-<p><a name="index-major-mode-conventions-1687"></a><a name="index-conventions-for-writing-major-modes-1688"></a>
+<p><a name="index-major-mode-conventions-1822"></a><a name="index-conventions-for-writing-major-modes-1823"></a>
   The code for every major mode should follow various coding
 conventions, including conventions for local keymap and syntax table
 initialization, function and variable names, and hooks.
@@ -86,7 +86,7 @@ which documentation to print.
 &ldquo;pretty&rdquo; name of the mode, usually a string (but see <a href="Mode-Line-Data.html#Mode-Line-Data">Mode Line Data</a>, for other possible forms).  The name of the mode appears
 in the mode line.
 
-     <li><a name="index-functions-in-modes-1689"></a>Since all global names are in the same name space, all the global
+     <li><a name="index-functions-in-modes-1824"></a>Since all global names are in the same name space, all the global
 variables, constants, and functions that are part of the mode should
 have names that start with the major mode name (or with an abbreviation
 of it if the name is long).  See <a href="Coding-Conventions.html#Coding-Conventions">Coding Conventions</a>.
@@ -97,7 +97,7 @@ probably useful.  So the mode should set <code>indent-line-function</code>
 to a suitable function, and probably customize other variables
 for indentation.  See <a href="Auto_002dIndentation.html#Auto_002dIndentation">Auto-Indentation</a>.
 
-     <li><a name="index-keymaps-in-modes-1690"></a>The major mode should usually have its own keymap, which is used as the
+     <li><a name="index-keymaps-in-modes-1825"></a>The major mode should usually have its own keymap, which is used as the
 local keymap in all buffers in that mode.  The major mode command should
 call <code>use-local-map</code> to install this local map.  See <a href="Active-Keymaps.html#Active-Keymaps">Active Keymaps</a>, for more information.
 
@@ -116,14 +116,14 @@ reserved for users.
 
      <p>A major mode can also rebind the keys <kbd>M-n</kbd>, <kbd>M-p</kbd> and
 <kbd>M-s</kbd>.  The bindings for <kbd>M-n</kbd> and <kbd>M-p</kbd> should normally
-be some kind of &ldquo;moving forward and backward&rdquo;, but this does not
+be some kind of moving forward and backward, but this does not
 necessarily mean cursor motion.
 
      <p>It is legitimate for a major mode to rebind a standard key sequence if
-it provides a command that does &ldquo;the same job&rdquo; in a way better
+it provides a command that does the same job in a way better
 suited to the text this mode is used for.  For example, a major mode
 for editing a programming language might redefine <kbd>C-M-a</kbd> to
-&ldquo;move to the beginning of a function&rdquo; in a way that works better for
+move to the beginning of a function in a way that works better for
 that language.
 
      <p>It is also legitimate for a major mode to rebind a standard key
@@ -145,14 +145,14 @@ each user to decide.  However, a major mode should customize other
 variables so that Auto-Fill mode will work usefully <em>if</em> the user
 decides to use it.
 
-     <li><a name="index-syntax-tables-in-modes-1691"></a>The mode may have its own syntax table or may share one with other
+     <li><a name="index-syntax-tables-in-modes-1826"></a>The mode may have its own syntax table or may share one with other
 related modes.  If it has its own syntax table, it should store this in
 a variable named <var>modename</var><code>-mode-syntax-table</code>.  See <a href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>.
 
      <li>If the mode handles a language that has a syntax for comments, it should
 set the variables that define the comment syntax.  See <a href="../emacs/Options-for-Comments.html#Options-for-Comments">Options Controlling Comments</a>.
 
-     <li><a name="index-abbrev-tables-in-modes-1692"></a>The mode may have its own abbrev table or may share one with other
+     <li><a name="index-abbrev-tables-in-modes-1827"></a>The mode may have its own abbrev table or may share one with other
 related modes.  If it has its own abbrev table, it should store this
 in a variable named <var>modename</var><code>-mode-abbrev-table</code>.  If the
 major mode command defines any abbrevs itself, it should pass <code>t</code>
@@ -181,7 +181,7 @@ this mode.
 more buffer-local entries to the special hook
 <code>completion-at-point-functions</code>.  See <a href="Completion-in-Buffers.html#Completion-in-Buffers">Completion in Buffers</a>.
 
-     <li><a name="index-buffer_002dlocal-variables-in-modes-1693"></a>To make a buffer-local binding for an Emacs customization variable, use
+     <li><a name="index-buffer_002dlocal-variables-in-modes-1828"></a>To make a buffer-local binding for an Emacs customization variable, use
 <code>make-local-variable</code> in the major mode command, not
 <code>make-variable-buffer-local</code>.  The latter function would make the
 variable local to every buffer in which it is subsequently set, which
@@ -193,7 +193,7 @@ mode to have such global effects.  See <a href="Buffer_002dLocal-Variables.html#
 which is used only within that package.  Using it on a variable used by
 other packages would interfere with them.
 
-     <li><a name="index-mode-hook-1694"></a><a name="index-major-mode-hook-1695"></a>Each major mode should have a normal <dfn>mode hook</dfn> named
+     <li><a name="index-mode-hook-1829"></a><a name="index-major-mode-hook-1830"></a>Each major mode should have a normal <dfn>mode hook</dfn> named
 <var>modename</var><code>-mode-hook</code>.  The very last thing the major mode command
 should do is to call <code>run-mode-hooks</code>.  This runs the normal
 hook <code>change-major-mode-after-body-hook</code>, the mode hook,
@@ -218,7 +218,7 @@ external file), then the major mode command symbol should have a
 property named <code>mode-class</code> with value <code>special</code>, put on as
 follows:
 
-     <p><a name="index-mode_002dclass-_0040r_007b_0028property_0029_007d-1696"></a><a name="index-g_t_0040code_007bspecial_007d-modes-1697"></a>
+     <p><a name="index-mode_002dclass-_0040r_007b_0028property_0029_007d-1831"></a><a name="index-g_t_0040code_007bspecial_007d-modes-1832"></a>
      <pre class="example">          (put 'funny-mode 'mode-class 'special)
 </pre>
      <p class="noindent">This tells Emacs that new buffers created while the current buffer is in
@@ -247,7 +247,7 @@ the form that adds the element (see <a href="autoload-cookie.html#autoload-cooki
 not autoload the mode command, it is sufficient to add the element in
 the file that contains the mode definition.
 
-     <li><a name="index-mode-loading-1698"></a>The top-level forms in the file defining the mode should be written so
+     <li><a name="index-mode-loading-1833"></a>The top-level forms in the file defining the mode should be written so
 that they may be evaluated more than once without adverse consequences. 
 For instance, use <code>defvar</code> or <code>defcustom</code> to set mode-related
 variables, so that they are not reinitialized if they already have a

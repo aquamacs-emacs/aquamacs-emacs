@@ -10,15 +10,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -39,9 +39,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Faces.html#Faces">Faces</a>
 <hr>
 </div>
 
-<h4 class="subsection">38.12.1 Face Attributes</h4>
+<h4 class="subsection">37.12.1 Face Attributes</h4>
 
-<p><a name="index-face-attributes-3802"></a>
+<p><a name="index-face-attributes-4170"></a>
   <dfn>Face attributes</dfn> determine the visual appearance of a face. 
 The following table lists all the face attributes, their possible
 values, and their effects.
@@ -74,11 +74,11 @@ the <code>:family</code> attribute (a string).  See <a href="../emacs/Fonts.html
      <br><dt><code>:height</code><dd>The height of the font.  In the simplest case, this is an integer in
 units of 1/10 point.
 
-     <p>The value can also be a floating point number or a function, which
+     <p>The value can also be floating point or a function, which
 specifies the height relative to an <dfn>underlying face</dfn>
-(see <a href="Displaying-Faces.html#Displaying-Faces">Displaying Faces</a>).  If the value is a floating point number,
-that specifies the amount by which to scale the height of the
-underlying face.  If the value is a function, that function is called
+(see <a href="Displaying-Faces.html#Displaying-Faces">Displaying Faces</a>).  A floating-point value
+specifies the amount by which to scale the height of the
+underlying face.  A function value is called
 with one argument, the height of the underlying face, and returns the
 height of the new face.  If the function is passed an integer
 argument, it must return an integer.
@@ -94,7 +94,7 @@ variable-brightness text, any weight greater than normal is displayed
 as extra bright, and any weight less than normal is displayed as
 half-bright.
 
-     <p><a name="index-italic-text-3803"></a><br><dt><code>:slant</code><dd>Font slant&mdash;one of the symbols <code>italic</code>, <code>oblique</code>,
+     <p><a name="index-italic-text-4171"></a><br><dt><code>:slant</code><dd>Font slant&mdash;one of the symbols <code>italic</code>, <code>oblique</code>,
 <code>normal</code>, <code>reverse-italic</code>, or <code>reverse-oblique</code>.  On
 text terminals that support variable-brightness text, slanted text is
 displayed as half-bright.
@@ -104,10 +104,18 @@ name, or a hexadecimal color specification.  See <a href="Color-Names.html#Color
 black-and-white displays, certain shades of gray are implemented by
 stipple patterns.
 
+     <br><dt><code>:distant-foreground</code><dd>Alternative foreground color, a string.  This is like <code>:foreground</code>
+but the color is only used as a foreground when the background color is
+near to the foreground that would have been used.  This is useful for
+example when marking text (i.e., the region face).  If the text has a foreground
+that is visible with the region face, that foreground is used. 
+If the foreground is near the region face background,
+<code>:distant-foreground</code> is used instead so the text is readable.
+
      <br><dt><code>:background</code><dd>Background color, a string.  The value can be a system-defined color
 name, or a hexadecimal color specification.  See <a href="Color-Names.html#Color-Names">Color Names</a>.
 
-     <p><a name="index-underlined-text-3804"></a><br><dt><code>:underline</code><dd>Whether or not characters should be underlined, and in what
+     <p><a name="index-underlined-text-4172"></a><br><dt><code>:underline</code><dd>Whether or not characters should be underlined, and in what
 way.  The possible values of the <code>:underline</code> attribute are:
 
           <dl>
@@ -125,15 +133,15 @@ use a straight or wavy line.  Omitting the attribute <code>:style</code>
 means to use a straight line. 
 </dl>
 
-     <p><a name="index-overlined-text-3805"></a><br><dt><code>:overline</code><dd>Whether or not characters should be overlined, and in what color. 
+     <p><a name="index-overlined-text-4173"></a><br><dt><code>:overline</code><dd>Whether or not characters should be overlined, and in what color. 
 If the value is <code>t</code>, overlining uses the foreground color of the
 face.  If the value is a string, overlining uses that color.  The
 value <code>nil</code> means do not overline.
 
-     <p><a name="index-strike_002dthrough-text-3806"></a><br><dt><code>:strike-through</code><dd>Whether or not characters should be strike-through, and in what
+     <p><a name="index-strike_002dthrough-text-4174"></a><br><dt><code>:strike-through</code><dd>Whether or not characters should be strike-through, and in what
 color.  The value is used like that of <code>:overline</code>.
 
-     <p><a name="index-g_t2D-box-3807"></a><a name="index-g_t3D-box-3808"></a><br><dt><code>:box</code><dd>Whether or not a box should be drawn around characters, its color, the
+     <p><a name="index-g_t2D-box-4175"></a><a name="index-g_t3D-box-4176"></a><br><dt><code>:box</code><dd>Whether or not a box should be drawn around characters, its color, the
 width of the box lines, and 3D appearance.  Here are the possible
 values of the <code>:box</code> attribute, and what they mean:
 
@@ -198,7 +206,7 @@ font matching those wildcards.  Specifying this attribute also changes
 the values of the <code>:family</code>, <code>:foundry</code>, <code>:width</code>,
 <code>:height</code>, <code>:weight</code>, and <code>:slant</code> attributes.
 
-     <br><dt><code>:inherit</code><dd>The name of a face from which to inherit attributes, or a list of face
+     <p><a name="index-inheritance_002c-for-faces-4177"></a><br><dt><code>:inherit</code><dd>The name of a face from which to inherit attributes, or a list of face
 names.  Attributes from inherited faces are merged into the face like
 an underlying face would be, with higher priority than underlying
 faces (see <a href="Displaying-Faces.html#Displaying-Faces">Displaying Faces</a>).  If a list of faces is used,
@@ -207,26 +215,26 @@ faces.
 </dl>
 
 <div class="defun">
-&mdash; Function: <b>font-family-list</b><var> &amp;optional frame<a name="index-font_002dfamily_002dlist-3809"></a></var><br>
+&mdash; Function: <b>font-family-list</b><var> &amp;optional frame<a name="index-font_002dfamily_002dlist-4178"></a></var><br>
 <blockquote><p>This function returns a list of available font family names.  The
 optional argument <var>frame</var> specifies the frame on which the text is
 to be displayed; if it is <code>nil</code>, the selected frame is used. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>underline-minimum-offset</b><var><a name="index-underline_002dminimum_002doffset-3810"></a></var><br>
+&mdash; User Option: <b>underline-minimum-offset</b><var><a name="index-underline_002dminimum_002doffset-4179"></a></var><br>
 <blockquote><p>This variable specifies the minimum distance between the baseline and
 the underline, in pixels, when displaying underlined text. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>x-bitmap-file-path</b><var><a name="index-x_002dbitmap_002dfile_002dpath-3811"></a></var><br>
+&mdash; User Option: <b>x-bitmap-file-path</b><var><a name="index-x_002dbitmap_002dfile_002dpath-4180"></a></var><br>
 <blockquote><p>This variable specifies a list of directories for searching
 for bitmap files, for the <code>:stipple</code> attribute. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>bitmap-spec-p</b><var> object<a name="index-bitmap_002dspec_002dp-3812"></a></var><br>
+&mdash; Function: <b>bitmap-spec-p</b><var> object<a name="index-bitmap_002dspec_002dp-4181"></a></var><br>
 <blockquote><p>This returns <code>t</code> if <var>object</var> is a valid bitmap specification,
 suitable for use with <code>:stipple</code> (see above).  It returns
 <code>nil</code> otherwise. 

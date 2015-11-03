@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,9 +41,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
 <hr>
 </div>
 
-<h3 class="section">29.4 Terminal Parameters</h3>
+<h3 class="section">28.5 Terminal Parameters</h3>
 
-<p><a name="index-terminal-parameters-2599"></a>
+<p><a name="index-terminal-parameters-2866"></a>
   Each terminal has a list of associated parameters.  These
 <dfn>terminal parameters</dfn> are mostly a convenient way of storage for
 terminal-local variables, but some terminal parameters have a special
@@ -55,21 +55,21 @@ a frame; the latter means use that frame's terminal.  An argument of
 <code>nil</code> means the selected frame's terminal.
 
 <div class="defun">
-&mdash; Function: <b>terminal-parameters</b><var> &amp;optional terminal<a name="index-terminal_002dparameters-2600"></a></var><br>
+&mdash; Function: <b>terminal-parameters</b><var> &amp;optional terminal<a name="index-terminal_002dparameters-2867"></a></var><br>
 <blockquote><p>This function returns an alist listing all the parameters of
 <var>terminal</var> and their values. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>terminal-parameter</b><var> terminal parameter<a name="index-terminal_002dparameter-2601"></a></var><br>
+&mdash; Function: <b>terminal-parameter</b><var> terminal parameter<a name="index-terminal_002dparameter-2868"></a></var><br>
 <blockquote><p>This function returns the value of the parameter <var>parameter</var> (a
 symbol) of <var>terminal</var>.  If <var>terminal</var> has no setting for
 <var>parameter</var>, this function returns <code>nil</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-terminal-parameter</b><var> terminal parameter value<a name="index-set_002dterminal_002dparameter-2602"></a></var><br>
-<blockquote><p>This function sets the parameter <var>parm</var> of <var>terminal</var> to the
+&mdash; Function: <b>set-terminal-parameter</b><var> terminal parameter value<a name="index-set_002dterminal_002dparameter-2869"></a></var><br>
+<blockquote><p>This function sets the parameter <var>parameter</var> of <var>terminal</var> to the
 specified <var>value</var>, and returns the previous value of that
 parameter. 
 </p></blockquote></div>
@@ -85,6 +85,16 @@ meaning:
 terminal.  See <a href="../emacs/DEL-Does-Not-Delete.html#DEL-Does-Not-Delete">DEL Does Not Delete</a>. 
 <br><dt><code>terminal-initted</code><dd>After the terminal is initialized, this is set to the
 terminal-specific initialization function. 
+<br><dt><code>tty-mode-set-strings</code><dd>When present, a list of strings containing escape sequences that Emacs
+will output while configuring a tty for rendering.  Emacs emits these
+strings only when configuring a terminal: if you want to enable a mode
+on a terminal that is already active (for example, while in
+<code>tty-setup-hook</code>), explicitly output the necessary escape
+sequence using <code>send-string-to-terminal</code> in addition to adding
+the sequence to <code>tty-mode-set-strings</code>. 
+<br><dt><code>tty-mode-reset-strings</code><dd>When present, a list of strings that undo the effects of the strings
+in <code>tty-mode-set-strings</code>.  Emacs emits these strings when
+exiting, deleting a terminal, or suspending itself. 
 </dl>
 
    </body></html>

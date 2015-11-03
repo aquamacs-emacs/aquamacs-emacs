@@ -6,20 +6,20 @@
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" title="GNU Emacs Internals">
-<link rel="prev" href="Memory-Usage.html#Memory-Usage" title="Memory Usage">
+<link rel="prev" href="C-Dialect.html#C-Dialect" title="C Dialect">
 <link rel="next" href="Object-Internals.html#Object-Internals" title="Object Internals">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -36,14 +36,14 @@ Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 <a name="Writing-Emacs-Primitives"></a>
 <p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Object-Internals.html#Object-Internals">Object Internals</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Memory-Usage.html#Memory-Usage">Memory Usage</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="C-Dialect.html#C-Dialect">C Dialect</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="GNU-Emacs-Internals.html#GNU-Emacs-Internals">GNU Emacs Internals</a>
 <hr>
 </div>
 
-<h3 class="section">E.5 Writing Emacs Primitives</h3>
+<h3 class="section">E.7 Writing Emacs Primitives</h3>
 
-<p><a name="index-primitive-function-internals-4347"></a><a name="index-writing-Emacs-primitives-4348"></a>
+<p><a name="index-primitive-function-internals-4809"></a><a name="index-writing-Emacs-primitives-4810"></a>
   Lisp primitives are Lisp functions implemented in C.  The details of
 interfacing the C function so that Lisp can call it are handled by a few
 C macros.  The only way to really understand how to write new C code is
@@ -53,19 +53,15 @@ to read the source, but we can explain some things here.
 <samp><span class="file">eval.c</span></samp>.  (An ordinary function would have the same general
 appearance.)
 
-   <p><a name="index-garbage-collection-protection-4349"></a>
 <pre class="smallexample">     DEFUN ("or", For, Sor, 0, UNEVALLED, 0,
        doc: /* Eval args until one of them yields non-nil, then return
      that value.
      The remaining args are not evalled at all.
      If all args return nil, return nil.
-     usage: (or CONDITIONS ...)  */)
+     usage: (or CONDITIONS...)  */)
        (Lisp_Object args)
      {
-       register Lisp_Object val = Qnil;
-       struct gcpro gcpro1;
-     
-       GCPRO1 (args);
+       Lisp_Object val = Qnil;
      
        while (CONSP (args))
          {
@@ -73,13 +69,13 @@ appearance.)
            if (!NILP (val))
              break;
            args = XCDR (args);
+           QUIT;
          }
      
-       UNGCPRO;
        return val;
      }
 </pre>
-   <p><a name="index-g_t_0040code_007bDEFUN_007d_002c-C-macro-to-define-Lisp-primitives-4350"></a>  Let's start with a precise explanation of the arguments to the
+   <p><a name="index-g_t_0040code_007bDEFUN_007d_002c-C-macro-to-define-Lisp-primitives-4811"></a>  Let's start with a precise explanation of the arguments to the
 <code>DEFUN</code> macro.  Here is a template for them:
 
 <pre class="example">     DEFUN (<var>lname</var>, <var>fname</var>, <var>sname</var>, <var>min</var>, <var>max</var>, <var>interactive</var>, <var>doc</var>)
@@ -112,7 +108,7 @@ equivalent of <code>&amp;rest</code>).  Both <code>UNEVALLED</code> and <code>MA
 macros.  If <var>max</var> is a number, it must be more than <var>min</var> but
 less than 8.
 
-     <p><a name="index-interactive-specification-in-primitives-4351"></a><br><dt><var>interactive</var><dd>This is an interactive specification, a string such as might be used
+     <p><a name="index-interactive-specification-in-primitives-4812"></a><br><dt><var>interactive</var><dd>This is an interactive specification, a string such as might be used
 as the argument of <code>interactive</code> in a Lisp function.  In the case
 of <code>or</code>, it is 0 (a null pointer), indicating that <code>or</code>
 cannot be called interactively.  A value of <code>""</code> indicates a
@@ -160,35 +156,23 @@ address of a block containing their values.  These have types
 can determine the actual data type only at run time; so if you want
 a primitive to accept only a certain type of argument, you must check
 the type explicitly using a suitable predicate (see <a href="Type-Predicates.html#Type-Predicates">Type Predicates</a>). 
-<a name="index-type-checking-internals-4352"></a>
-<a name="index-g_t_0040code_007bGCPRO_007d-and-_0040code_007bUNGCPRO_007d-4353"></a><a name="index-protect-C-variables-from-garbage-collection-4354"></a>  Within the function <code>For</code> itself, note the use of the macros
-<code>GCPRO1</code> and <code>UNGCPRO</code>.  These macros are defined for the
-sake of the few platforms which do not use Emacs' default
-stack-marking garbage collector.  The <code>GCPRO1</code> macro &ldquo;protects&rdquo;
-a variable from garbage collection, explicitly informing the garbage
-collector that that variable and all its contents must be as
-accessible.  GC protection is necessary in any function which can
-perform Lisp evaluation by calling <code>eval_sub</code> or <code>Feval</code> as
-a subroutine, either directly or indirectly.
+<a name="index-type-checking-internals-4813"></a>
+<a name="index-garbage-collection-protection-4814"></a><a name="index-protect-C-variables-from-garbage-collection-4815"></a>  Within the function <code>For</code> itself, the local variable
+<code>args</code> refers to objects controlled by Emacs's stack-marking
+garbage collector.  Although the garbage collector does not reclaim
+objects reachable from C <code>Lisp_Object</code> stack variables, it may
+move non-object components of an object, such as string contents; so
+functions that access non-object components must take care to refetch
+their addresses after performing Lisp evaluation.  Lisp evaluation can
+occur via calls to <code>eval_sub</code> or <code>Feval</code>, either directly or
+indirectly.
 
-   <p>It suffices to ensure that at least one pointer to each object is
-GC-protected.  Thus, a particular local variable can do without
-protection if it is certain that the object it points to will be
-preserved by some other pointer (such as another local variable that
-has a <code>GCPRO</code>).  Otherwise, the local variable needs a
-<code>GCPRO</code>.
-
-   <p>The macro <code>GCPRO1</code> protects just one local variable.  If you
-want to protect two variables, use <code>GCPRO2</code> instead; repeating
-<code>GCPRO1</code> will not work.  Macros <code>GCPRO3</code>, <code>GCPRO4</code>,
-<code>GCPRO5</code>, and <code>GCPRO6</code> also exist.  All these macros
-implicitly use local variables such as <code>gcpro1</code>; you must declare
-these explicitly, with type <code>struct gcpro</code>.  Thus, if you use
-<code>GCPRO2</code>, you must declare <code>gcpro1</code> and <code>gcpro2</code>.
-
-   <p><code>UNGCPRO</code> cancels the protection of the variables that are
-protected in the current function.  It is necessary to do this
-explicitly.
+   <p><a name="index-g_t_0040code_007bQUIT_007d_002c-use-in-Lisp-primitives-4816"></a>  Note the call to the <code>QUIT</code> macro inside the loop: this macro
+checks whether the user pressed <kbd>C-g</kbd>, and if so, aborts the
+processing.  You should do that in any loop that can potentially
+require a large number of iterations; in this case, the list of
+arguments could be very long.  This increases Emacs responsiveness and
+improves user experience.
 
    <p>You must not use C initializers for static or global variables unless
 the variables are never written once Emacs is dumped.  These variables
@@ -196,7 +180,7 @@ with initializers are allocated in an area of memory that becomes
 read-only (on certain operating systems) as a result of dumping Emacs. 
 See <a href="Pure-Storage.html#Pure-Storage">Pure Storage</a>.
 
-   <p><a name="index-g_t_0040code_007bdefsubr_007d_002c-Lisp-symbol-for-a-primitive-4355"></a>  Defining the C function is not enough to make a Lisp primitive
+   <p><a name="index-g_t_0040code_007bdefsubr_007d_002c-Lisp-symbol-for-a-primitive-4817"></a>  Defining the C function is not enough to make a Lisp primitive
 available; you must also create the Lisp symbol for the primitive and
 store a suitable subr object in its function cell.  The code looks like
 this:
@@ -214,7 +198,7 @@ file, add to it a <code>syms_of_</code><var>filename</var> (e.g.,
 of these functions are called, and add a call to
 <code>syms_of_</code><var>filename</var> there.
 
-   <p><a name="Defining-Lisp-variables-in-C"></a><a name="index-byte_002dboolean_002dvars-4356"></a><a name="index-defining-Lisp-variables-in-C-4357"></a><a name="index-g_t_0040code_007bDEFVAR_005fINT_007d_002c-_0040code_007bDEFVAR_005fLISP_007d_002c-_0040code_007bDEFVAR_005fBOOL_007d-4358"></a>  The function <code>syms_of_</code><var>filename</var> is also the place to define
+   <p><a name="Defining-Lisp-variables-in-C"></a><a name="index-byte_002dboolean_002dvars-4818"></a><a name="index-defining-Lisp-variables-in-C-4819"></a><a name="index-g_t_0040code_007bDEFVAR_005fINT_007d_002c-_0040code_007bDEFVAR_005fLISP_007d_002c-_0040code_007bDEFVAR_005fBOOL_007d-4820"></a>  The function <code>syms_of_</code><var>filename</var> is also the place to define
 any C variables that are to be visible as Lisp variables. 
 <code>DEFVAR_LISP</code> makes a C variable of type <code>Lisp_Object</code> visible
 in Lisp.  <code>DEFVAR_INT</code> makes a C variable of type <code>int</code>
@@ -224,11 +208,11 @@ with a value that is either <code>t</code> or <code>nil</code>.  Note that varia
 defined with <code>DEFVAR_BOOL</code> are automatically added to the list
 <code>byte-boolean-vars</code> used by the byte compiler.
 
-   <p><a name="index-defining-customization-variables-in-C-4359"></a>  If you want to make a Lisp variables that is defined in C behave
+   <p><a name="index-defining-customization-variables-in-C-4821"></a>  If you want to make a Lisp variables that is defined in C behave
 like one declared with <code>defcustom</code>, add an appropriate entry to
 <samp><span class="file">cus-start.el</span></samp>.
 
-   <p><a name="index-g_t_0040code_007bstaticpro_007d_002c-protection-from-GC-4360"></a>  If you define a file-scope C variable of type <code>Lisp_Object</code>,
+   <p><a name="index-g_t_0040code_007bstaticpro_007d_002c-protection-from-GC-4822"></a>  If you define a file-scope C variable of type <code>Lisp_Object</code>,
 you must protect it from garbage-collection by calling <code>staticpro</code>
 in <code>syms_of_</code><var>filename</var>, like this:
 
@@ -263,12 +247,12 @@ of macros and functions to manipulate Lisp objects.
      
        switch (coordinates_in_window (w, x, y))
          {
-         case ON_NOTHING:            /* NOT in window at all. */
+         case ON_NOTHING:            /* NOT in window at all.  */
            return Qnil;
      
          ...
      
-         case ON_MODE_LINE:          /* In mode line of window. */
+         case ON_MODE_LINE:          /* In mode line of window.  */
            return Qmode_line;
      
          ...
@@ -289,9 +273,7 @@ the Lisp function <code>funcall</code> accepts an unlimited number of
 arguments, in C it takes two: the number of Lisp-level arguments, and a
 one-dimensional array containing their values.  The first Lisp-level
 argument is the Lisp function to call, and the rest are the arguments to
-pass to it.  Since <code>Ffuncall</code> can call the evaluator, you must
-protect pointers from garbage collection around the call to
-<code>Ffuncall</code>.
+pass to it.
 
    <p>The C functions <code>call0</code>, <code>call1</code>, <code>call2</code>, and so on,
 provide handy ways to call a Lisp function conveniently with a fixed

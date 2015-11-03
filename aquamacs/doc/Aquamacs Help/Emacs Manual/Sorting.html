@@ -10,16 +10,16 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Manual',
-updated for Emacs version 24.3.50.
+updated for Emacs version 25.0.50.
 
-Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``The GNU
      Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     with the Front-Cover Texts being ``A GNU Manual,'' and with the
      Back-Cover Texts as in (a) below.  A copy of the license is
      included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,18 +41,18 @@ Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
 <hr>
 </div>
 
-<h2 class="chapter">39 Sorting Text</h2>
+<h2 class="chapter">41 Sorting Text</h2>
 
-<p><a name="index-sorting-4108"></a>
+<p><a name="index-sorting-4283"></a>
   Emacs provides several commands for sorting text in the buffer.  All
 operate on the contents of the region. 
 They divide the text of the region into many <dfn>sort records</dfn>,
 identify a <dfn>sort key</dfn> for each record, and then reorder the records
 into the order determined by the sort keys.  The records are ordered so
 that their keys are in alphabetical order, or, for numeric sorting, in
-numeric order.  In alphabetic sorting, all upper-case letters `A' through
-`Z' come before lower-case `a', in accord with the <acronym>ASCII</acronym> character
-sequence.
+numeric order.  In alphabetic sorting, all upper-case letters &lsquo;<samp><span class="samp">A</span></samp>&rsquo;
+through &lsquo;<samp><span class="samp">Z</span></samp>&rsquo; come before lower-case &lsquo;<samp><span class="samp">a</span></samp>&rsquo;, in accordance with the
+<acronym>ASCII</acronym> character sequence.
 
    <p>The various sort commands differ in how they divide the text into sort
 records and in which part of each record is used as the sort key.  Most of
@@ -61,7 +61,7 @@ paragraphs or pages as sort records.  Most of the sort commands use each
 entire sort record as its own sort key, but some use only a portion of the
 record as the sort key.
 
-   <p><a name="index-sort_002dlines-4109"></a><a name="index-sort_002dparagraphs-4110"></a><a name="index-sort_002dpages-4111"></a><a name="index-sort_002dfields-4112"></a><a name="index-sort_002dnumeric_002dfields-4113"></a><a name="index-sort_002dnumeric_002dbase-4114"></a>
+   <p><a name="index-sort_002dlines-4284"></a><a name="index-sort_002dparagraphs-4285"></a><a name="index-sort_002dpages-4286"></a><a name="index-sort_002dfields-4287"></a><a name="index-sort_002dnumeric_002dfields-4288"></a><a name="index-sort_002dnumeric_002dbase-4289"></a>
      <dl>
 <dt><kbd>M-x sort-lines</kbd><dd>Divide the region into lines, and sort by comparing the entire
 text of a line.  A numeric argument means sort into descending order.
@@ -94,11 +94,12 @@ to <code>sort-numeric-base</code>, but numbers beginning with &lsquo;<samp><span
 &lsquo;<samp><span class="samp">0</span></samp>&rsquo; are interpreted as hexadecimal and octal, respectively.
 
      <br><dt><kbd>M-x sort-columns</kbd><dd>Like <kbd>M-x sort-fields</kbd> except that the text within each line
-used for comparison comes from a fixed range of columns.  See below
-for an explanation.
+used for comparison comes from a fixed range of columns.  With a
+prefix argument, sort in reverse order.  See below for more details
+on this command.
 
-     <br><dt><kbd>M-x reverse-region</kbd><dd>Reverse the order of the lines in the region.  This is useful for
-sorting into descending order by fields or columns, since those sort
+     <p><a name="index-reverse_002dregion-4290"></a><br><dt><kbd>M-x reverse-region</kbd><dd>Reverse the order of the lines in the region.  This is useful for
+sorting into descending order by fields, since those sort
 commands do not have a feature for doing that. 
 </dl>
 
@@ -130,7 +131,7 @@ you use <kbd>C-u 2 M-x sort-fields</kbd> instead, you get this:
    <p class="noindent">where the sort keys were &lsquo;<samp><span class="samp">Emacs</span></samp>&rsquo;, &lsquo;<samp><span class="samp">If</span></samp>&rsquo;, &lsquo;<samp><span class="samp">buffer</span></samp>&rsquo;,
 &lsquo;<samp><span class="samp">systems</span></samp>&rsquo; and &lsquo;<samp><span class="samp">the</span></samp>&rsquo;.
 
-   <p><a name="index-sort_002dcolumns-4115"></a>  <kbd>M-x sort-columns</kbd> requires more explanation.  You specify the
+   <p><a name="index-sort_002dcolumns-4291"></a>  <kbd>M-x sort-columns</kbd> requires more explanation.  You specify the
 columns by putting point at one of the columns and the mark at the other
 column.  Because this means you cannot put point or the mark at the
 beginning of the first line of the text you want to sort, this command
@@ -149,12 +150,12 @@ the mark, except that the text on each line to the left or right of the
 rectangle moves along with the text inside the rectangle. 
 See <a href="Rectangles.html#Rectangles">Rectangles</a>.
 
-   <p><a name="index-sort_002dfold_002dcase-4116"></a>  Many of the sort commands ignore case differences when comparing, if
+   <p><a name="index-sort_002dfold_002dcase-4292"></a>  Many of the sort commands ignore case differences when comparing, if
 <code>sort-fold-case</code> is non-<code>nil</code>.
 
 <!-- Picture Mode documentation -->
 <!-- This is part of the Emacs manual. -->
-<!-- Copyright (C) 2004-2013 Free Software Foundation, Inc. -->
+<!-- Copyright (C) 2004-2015 Free Software Foundation, Inc. -->
 <!-- See file emacs.texi for copying conditions. -->
 <!-- This file is included either in emacs-xtra.texi (when producing the -->
 <!-- printed version) or in the main Emacs manual (for the on-line version). -->

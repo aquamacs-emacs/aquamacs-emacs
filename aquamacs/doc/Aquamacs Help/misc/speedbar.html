@@ -1,0 +1,1908 @@
+<html lang="en">
+<head>
+<title>Speedbar: File/Tag summarizing utility</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="Speedbar: File/Tag summarizing utility">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="top" href="#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1999-2015 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being "A GNU Manual", and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     "GNU Free Documentation License".
+
+     (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+     modify this GNU manual."
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<h1 class="settitle">Speedbar: File/Tag summarizing utility</h1>
+<div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Top" href="#Top">Speedbar</a>
+<li><a name="toc_Introduction" href="#Introduction">1 Introduction</a>
+<li><a name="toc_Basic-Navigation" href="#Basic-Navigation">2 Basic Navigation</a>
+<ul>
+<li><a href="#Basic-Key-Bindings">2.1 Basic Key Bindings</a>
+<li><a href="#Basic-Visuals">2.2 Basic Visuals</a>
+<ul>
+<li><a href="#Basic-Visuals">2.2.1 Groups</a>
+<ul>
+<li><a href="#Basic-Visuals">2.2.1.1 Tags</a>
+<li><a href="#Basic-Visuals">2.2.1.2 Boolean Flags</a>
+<li><a href="#Basic-Visuals">2.2.1.3 Unadorned Text</a>
+<li><a href="#Basic-Visuals">2.2.1.4 Color Cues</a>
+</li></ul>
+</li></ul>
+<li><a href="#Mouse-Bindings">2.3 Mouse Bindings</a>
+<li><a href="#Displays-Submenu">2.4 Displays Submenu</a>
+</li></ul>
+<li><a name="toc_File-Mode" href="#File-Mode">3 File Mode</a>
+<ul>
+<li><a href="#Directory-Display">3.1 Directory Display</a>
+<li><a href="#Hidden-Files">3.2 Hidden Files</a>
+<li><a href="#File-Key-Bindings">3.3 File Key Bindings</a>
+</li></ul>
+<li><a name="toc_Buffer-Mode" href="#Buffer-Mode">4 Buffer Mode</a>
+<li><a name="toc_Minor-Modes" href="#Minor-Modes">5 Minor Display Modes</a>
+<ul>
+<li><a href="#RMAIL">5.1 RMAIL</a>
+<li><a href="#Info">5.2 Info</a>
+<li><a href="#GDB">5.3 GDB</a>
+</li></ul>
+<li><a name="toc_Customizing" href="#Customizing">6 Customizing</a>
+<ul>
+<li><a href="#Frames-and-Faces">6.1 Frames and Faces</a>
+<li><a href="#Tag-Hierarchy-Methods">6.2 Tag Hierarchy Methods</a>
+<li><a href="#Version-Control">6.3 Version Control</a>
+<li><a href="#Hooks">6.4 Hooks</a>
+</li></ul>
+<li><a name="toc_Extending" href="#Extending">7 Extending</a>
+<ul>
+<li><a href="#Minor-Display-Modes">7.1 Minor Display Modes</a>
+<li><a href="#Major-Display-Modes">7.2 Major Display Modes</a>
+<li><a href="#Tagging-Extensions">7.3 Tagging Extensions</a>
+<li><a href="#Creating-a-display">7.4 Creating a display</a>
+</li></ul>
+<li><a name="toc_GNU-Free-Documentation-License" href="#GNU-Free-Documentation-License">Appendix A GNU Free Documentation License</a>
+<li><a name="toc_Index" href="#Index">Concept Index</a>
+</li></ul>
+</div>
+
+
+
+<div class="node">
+<a name="Top"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Introduction">Introduction</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#dir">(dir)</a>
+
+</div>
+
+<h2 class="unnumbered">Speedbar</h2>
+
+<p>Speedbar is a program for Emacs which can be used to summarize
+information related to the current buffer.  Its original inspiration
+is the &ldquo;explorer&rdquo; often used in modern development environments, office
+packages, and web browsers.
+
+   <p>Speedbar displays a narrow frame in which a tree view is shown.  This
+tree view defaults to containing a list of files and directories.  Files
+can be &ldquo;expanded&rdquo; to list tags inside. Directories can be expanded to
+list the files within itself.  Each file or tag can be jumped to
+immediately.
+
+   <p>Speedbar expands upon &ldquo;explorer&rdquo; windows by maintaining context with the
+user.  For example, when using the file view, the current buffer's file
+is highlighted.  Speedbar also mimics the explorer windows by providing
+multiple display modes.  These modes come in two flavors.  Major display
+modes remain consistent across buffers, and minor display modes appear
+only when a buffer of the applicable type is shown.  This allows
+authors of other packages to provide speedbar summaries customized to
+the needs of that mode.
+
+   <p>Throughout this manual, activities are defined as &ldquo;clicking on&rdquo;, or
+&ldquo;expanding&rdquo; items.  Clicking means using <kbd>Mouse-2</kbd> on a
+button.  Expanding refers to clicking on an expansion button to display
+an expanded summary of the entry the expansion button is
+on.  See <a href="#Basic-Navigation">Basic Navigation</a>.
+
+   <p>Copyright &copy; 1999&ndash;2015 Free Software Foundation, Inc.
+
+   <blockquote>
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with the Front-Cover Texts being &ldquo;A GNU Manual&rdquo;,
+and with the Back-Cover Texts as in (a) below.  A copy of the license
+is included in the section entitled &ldquo;GNU Free Documentation License&rdquo;.
+
+   <p>(a) The FSF's Back-Cover Text is: &ldquo;You have the freedom to copy and
+modify this GNU manual.&rdquo;
+</blockquote>
+
+<ul class="menu">
+<li><a accesskey="1" href="#Introduction">Introduction</a>:      Basics of speedbar. 
+<li><a accesskey="2" href="#Basic-Navigation">Basic Navigation</a>:  Basics of speedbar common between all modes. 
+<li><a accesskey="3" href="#File-Mode">File Mode</a>:         Summarizing files. 
+<li><a accesskey="4" href="#Buffer-Mode">Buffer Mode</a>:       Summarizing buffers. 
+<li><a accesskey="5" href="#Minor-Modes">Minor Modes</a>:       Additional minor modes such as Info and RMAIL. 
+<li><a accesskey="6" href="#Customizing">Customizing</a>:       Changing speedbar behavior. 
+<li><a accesskey="7" href="#Extending">Extending</a>:         Extend speedbar for your own project. 
+<li><a accesskey="8" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>:  The license for this documentation. 
+<li><a accesskey="9" href="#Index">Index</a>
+</ul>
+
+<div class="node">
+<a name="Introduction"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Basic-Navigation">Basic Navigation</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Top">Top</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">1 Introduction</h2>
+
+<p><a name="index-introduction-1"></a>
+To start using speedbar use the command <kbd>M-x speedbar RET</kbd> or
+select it from the &lsquo;<samp><span class="samp">Options-&gt;Show/Hide</span></samp>&rsquo; sub-menu.  This command
+will open a new frame to summarize the local files.  On X Window
+systems or on MS-Windows, speedbar's frame is twenty characters wide,
+and will mimic the height of the frame from which it was started.  It
+positions itself to the left or right of the frame you started it
+from.
+
+   <p>To use speedbar effectively, it is important to understand its
+relationship with the frame you started it from.  This frame is the
+<dfn>attached frame</dfn> which speedbar will use as a reference point.  Once
+started, speedbar watches the contents of this frame, and attempts to
+make its contents relevant to the buffer loaded into the attached
+frame.  In addition, all requests made in speedbar that require the
+display of another buffer will display in the attached frame.
+
+   <p>When used in terminal mode, the new frame appears the same size as the
+terminal.  Since it is not visible while working in the attached frame,
+speedbar will save time by using the <dfn>slowbar mode</dfn>, where no tracking is
+done until speedbar is requested to show itself (i.e., the speedbar's
+frame becomes the selected frame).
+
+   <p><a name="index-g_t_0040code_007bspeedbar_002dget_002dfocus_007d-2"></a>The function to use when switching between frames using the keyboard is
+<code>speedbar-get-focus</code>.  This function will toggle between frames, and
+it's useful to bind it to a key in terminal mode.  See <a href="#Customizing">Customizing</a>.
+
+<div class="node">
+<a name="Basic-Navigation"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#File-Mode">File Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Introduction">Introduction</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">2 Basic Navigation</h2>
+
+<p>Speedbar can display different types of data, and has several display
+and behavior modes.  These modes all have a common behavior, menu
+system, and look.  If one mode is learned, then the other modes are easy
+to use.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Basic-Key-Bindings">Basic Key Bindings</a>
+<li><a accesskey="2" href="#Basic-Visuals">Basic Visuals</a>
+<li><a accesskey="3" href="#Mouse-Bindings">Mouse Bindings</a>
+<li><a accesskey="4" href="#Displays-Submenu">Displays Submenu</a>
+</ul>
+
+<div class="node">
+<a name="Basic-Key-Bindings"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Basic-Visuals">Basic Visuals</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Navigation">Basic Navigation</a>
+
+</div>
+
+<h3 class="section">2.1 Basic Key Bindings</h3>
+
+<p><a name="index-key-bindings-3"></a>
+These key bindings are common across all modes:
+
+     <dl>
+<dt><kbd>Q</kbd><dd><a name="index-quitting-speedbar-4"></a>Quit speedbar, and kill the frame. 
+<br><dt><kbd>q</kbd><dd>Quit speedbar, and hide the frame.  This makes it faster to restore the
+speedbar frame, than if you press <kbd>Q</kbd>. 
+<br><dt><kbd>g</kbd><dd><a name="index-refresh-speedbar-display-5"></a>Refresh whatever contents are in speedbar. 
+<br><dt><kbd>t</kbd><dd><a name="index-slowbar-mode-6"></a>Toggle speedbar to and from slowbar mode.  In slowbar mode, frame
+tracking is not done. 
+<br><dt><kbd>n</kbd><dt><kbd>p</kbd><dd><a name="index-navigation-7"></a>Move, respectively, to the next or previous item.  A summary of that
+item will be displayed in the attached frame's minibuffer. 
+<br><dt><kbd>M-n</kbd><dt><kbd>M-p</kbd><dd>Move to the next or previous item in a restricted fashion.  If a list is
+open, the cursor will skip over it.  If the cursor is in an open list,
+it will not leave it. 
+<br><dt><kbd>C-M-n</kbd><dt><kbd>C-M-p</kbd><dd>Move forwards and backwards across extended groups.  This lets you
+quickly skip over all files, directories, or other common sub-items at
+the same current depth. 
+<br><dt><kbd>C-x b</kbd><dd>Switch buffers in the attached frame. 
+</dl>
+
+   <p>Speedbar can handle multiple modes.  Two are provided by default. 
+These modes are File mode, and Buffers mode.  There are accelerators to
+switch into these different modes.
+
+   <p><a name="index-mode-switching-hotkeys-8"></a>
+     <dl>
+<dt><kbd>b</kbd><dd>Switch into Quick Buffers mode (see <a href="#Buffer-Mode">Buffer Mode</a>).  After one use, the
+previous display mode is restored. 
+<br><dt><kbd>f</kbd><dd>Switch into File mode. 
+<br><dt><kbd>r</kbd><dd>Switch back to the previous mode. 
+</dl>
+
+   <p>Some modes provide groups, lists and tags.  See <a href="#Basic-Visuals">Basic Visuals</a>.  When
+these are available, some additional common bindings are available.
+
+   <p><a name="index-common-keys-9"></a>
+     <dl>
+<dt><kbd>RET</kbd><dt><kbd>e</kbd><dd>Edit/Open the current group or tag.  This behavior is dependent on the
+mode.  In general, files or buffers are opened in the attached frame,
+and directories or group nodes are expanded locally. 
+<br><dt><kbd>+</kbd><dt><kbd>=</kbd><dd>Expand the current group, displaying sub items. 
+When used with a prefix argument, any data that may have been cached is
+flushed.  This is similar to a power click.  See <a href="#Mouse-Bindings">Mouse Bindings</a>. 
+<br><dt><kbd>-</kbd><dd>Contract the current group, hiding sub items. 
+</dl>
+
+<div class="node">
+<a name="Basic-Visuals"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Mouse-Bindings">Mouse Bindings</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Basic-Key-Bindings">Basic Key Bindings</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Navigation">Basic Navigation</a>
+
+</div>
+
+<h3 class="section">2.2 Basic Visuals</h3>
+
+<p><a name="index-visuals-10"></a>
+Speedbar has visual cues for indicating different types of data.  These
+cues are used consistently across the different speedbar modes to make
+them easier to interpret.
+
+   <p>At a high level, in File mode, there are directory buttons, sub
+directory buttons, file buttons, tag buttons, and expansion buttons. 
+This makes it easy to use the mouse to navigate a directory tree, and
+quickly view files, or a summary of those files.
+
+   <p>The most basic visual effect used to distinguish between these button
+types is color and mouse highlighting.  Anything the mouse highlights
+can be clicked on and is called a button (see <a href="#Mouse-Bindings">Mouse Bindings</a>). 
+Anything not highlighted by the mouse will not be clickable.
+
+   <p>Text in speedbar consists of four different types of data.  Knowing how
+to read these textual elements will make it easier to navigate by
+identifying the types of data available.
+
+<h4 class="subsection">2.2.1 Groups</h4>
+
+<p><a name="index-groups-11"></a>
+Groups summarize information in a single line, and provide a high level
+view of more complex systems, like a directory tree, or manual chapters.
+
+   <p>Groups appear at different indentation levels, and are prefixed with a
+&lsquo;<samp><span class="samp">+</span></samp>&rsquo; in some sort of &ldquo;box&rdquo;.  The group name will summarize the
+information within it, and the expansion box will display that
+information inline.  In File mode, directories and files are &ldquo;groups&rdquo;
+where the &lsquo;<samp><span class="samp">+</span></samp>&rsquo; is surrounded by brackets like this:
+
+<pre class="example">     &lt;+&gt; include
+     &lt;-&gt; src
+      [+] foo.c
+</pre>
+   <p>In this example, we see both open and closed directories, in addition to
+a file.  The directories have a box consisting of angle brackets, and a
+file uses square brackets.
+
+   <p>In all modes, a group can be &ldquo;edited&rdquo; by pressing <kbd>RET</kbd>, meaning a
+file will be opened, or a directory explicitly opened in speedbar.  A
+group can be expanded or contracted using <kbd>+</kbd> or
+<kbd>-</kbd>.  See <a href="#Basic-Key-Bindings">Basic Key Bindings</a>.
+
+   <p>Sometimes groups may have a &lsquo;<samp><span class="samp">?</span></samp>&rsquo; in its indicator box.  This means
+that it is a group type, but there are no contents, or no known way of
+extracting contents of that group.
+
+   <p>When a group has been expanded, the indicator button changes from
+&lsquo;<samp><span class="samp">+</span></samp>&rsquo; to &lsquo;<samp><span class="samp">-</span></samp>&rsquo;.  This indicates that the contents are being shown. 
+Click the &lsquo;<samp><span class="samp">-</span></samp>&rsquo; button to contract the group, or hide the contents
+currently displayed.
+
+<h5 class="subsubsection">2.2.1.1 Tags</h5>
+
+<p><a name="index-tags-12"></a>
+Tags are the leaf nodes of the tree system.  Tags are generally prefixed
+with a simple character, such as &lsquo;<samp><span class="samp">&gt;</span></samp>&rsquo;.  Tags can only be jumped to using
+<kbd>RET</kbd> or <kbd>e</kbd>.
+
+<h5 class="subsubsection">2.2.1.2 Boolean Flags</h5>
+
+<p>Sometimes a group or tag is given a boolean flag.  These flags appear as
+extra text characters at the end of the line.  File mode uses boolean
+flags, such as a &lsquo;<samp><span class="samp">*</span></samp>&rsquo; to indicate that a file has been checked out
+of a versioning system.
+
+   <p>For additional flags, see
+<!-- Note to self, update these to sub-nodes which are more relevant. -->
+<a href="#File-Mode">File Mode</a>, and <a href="#Version-Control">Version Control</a>.
+
+<h5 class="subsubsection">2.2.1.3 Unadorned Text</h5>
+
+<p>Unadorned text generally starts in column 0, without any special symbols
+prefixing them.  In Buffers mode different buffer groups are prefixed
+with a description of what the following buffers are (Files, scratch
+buffers, and invisible buffers.)
+
+   <p>Unadorned text will generally be colorless, and not clickable.
+
+<h5 class="subsubsection">2.2.1.4 Color Cues</h5>
+
+<p>Each type of Group, item indicator, and label is given a different
+color.  The colors chosen are dependent on whether the background color
+is light or dark. 
+Of important note is that the &ldquo;current item&rdquo;, which may be a buffer or
+file name, is highlighted red, and underlined.
+
+   <p>Colors can be customized from the group <code>speedbar-faces</code>.  Some
+modes, such as for Info, will use the Info colors instead of default
+speedbar colors as an indication of what is currently being displayed.
+
+   <p>The face naming convention mirrors the File display mode.  Modes which
+do not use files will attempt to use the same colors on analogous
+entries.
+
+<div class="node">
+<a name="Mouse-Bindings"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Displays-Submenu">Displays Submenu</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Basic-Visuals">Basic Visuals</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Navigation">Basic Navigation</a>
+
+</div>
+
+<h3 class="section">2.3 Mouse Bindings</h3>
+
+<p><a name="index-mouse-bindings-13"></a>
+The mouse has become a common information navigation tool.  Speedbar
+will use the mouse to navigate file systems, buffer lists, and other
+data.  The different textual cues provide buttons which can be clicked
+on (see <a href="#Basic-Visuals">Basic Visuals</a>).  Anything that highlights can be clicked on
+with the mouse, or affected by the menu.
+
+   <p>The mouse bindings are:
+
+     <dl>
+<dt><kbd>Mouse-1</kbd><dd>Move cursor to that location. 
+<br><dt><kbd>Mouse-2</kbd><dt><kbd>Double-Mouse-1</kbd><dd>Activate the current button.  <kbd>Double-Mouse-1</kbd> is called a <dfn>double
+click</dfn> on other platforms, and is useful for windows users with two
+button mice. 
+<!-- Isn't it true that with two-button mice, the right button is Mouse-2? -->
+<!-- On GNU/Linux, the right button is Mouse-3. -->
+<br><dt><kbd>S-Mouse-2</kbd><dt><kbd>S-Double-Mouse-1</kbd><dd><a name="index-power-click-14"></a>This has the same effect as <kbd>Mouse-2</kbd>, except it is called a power
+click.  This means that if a group with an expansion button &lsquo;<samp><span class="samp">+</span></samp>&rsquo; is
+clicked, any caches are flushed, and subitems re-read.  If it is a name,
+it will be opened in a new frame. 
+<br><dt><kbd>Mouse-3</kbd><dd>Activate the speedbar menu.  The item selected affects the line clicked,
+not the line where the cursor was. 
+<br><dt><kbd>Mouse-1 </kbd><span class="roman">(mode line)</span><dd>Activate the menu.  This affects the item the cursor is on before the
+click, since the mouse was not clicked on anything. 
+<br><dt><kbd>C-Mouse-1</kbd><dd>Buffers sub-menu.  The buffer in the attached frame is switched. 
+</dl>
+
+   <p>When the mouse moves over buttons in speedbar, details of that item
+should be displayed in the minibuffer of the attached frame.  Sometimes
+this can contain extra information such as file permissions, or tag
+location.
+
+<div class="node">
+<a name="Displays-Submenu"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Mouse-Bindings">Mouse Bindings</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Basic-Navigation">Basic Navigation</a>
+
+</div>
+
+<h3 class="section">2.4 Displays Submenu</h3>
+
+<p><a name="index-displays-submenu-15"></a>
+You can display different data by using different display modes.  These
+specialized modes make it easier to navigate the relevant pieces of
+information, such as files and directories, or buffers.
+
+   <p>In the main menu, found by clicking <kbd>Mouse-3</kbd>, there is a submenu
+labeled &lsquo;<samp><span class="samp">Displays</span></samp>&rsquo;.  This submenu lets you easily choose between
+different display modes.
+
+   <p>The contents are modes currently loaded into emacs.  By default, this
+would include Files, Quick Buffers, and Buffers.  Other major display
+modes such as Info are loaded separately.
+
+<div class="node">
+<a name="File-Mode"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Buffer-Mode">Buffer Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Basic-Navigation">Basic Navigation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">3 File Mode</h2>
+
+<p><a name="index-file-mode-16"></a>
+File mode displays a summary of your current directory.  You can display
+files in the attached frame, or summarize the tags found in files.  You
+can even see if a file is checked out of a version control system, or
+has some associated object file.
+
+   <p>Advanced behavior, like copying and renaming files, is also provided.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Directory-Display">Directory Display</a>:    What the display means. 
+<li><a accesskey="2" href="#Hidden-Files">Hidden Files</a>:         How to display hidden files. 
+<li><a accesskey="3" href="#File-Key-Bindings">File Key Bindings</a>:    Performing file operations. 
+</ul>
+
+<div class="node">
+<a name="Directory-Display"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Hidden-Files">Hidden Files</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#File-Mode">File Mode</a>
+
+</div>
+
+<h3 class="section">3.1 Directory Display</h3>
+
+<p><a name="index-directory-display-17"></a>
+There are three major sections in the display.  The first line or two is
+the root directory speedbar is currently viewing.  You can jump to one
+of the parent directories by clicking on the name of the directory you
+wish to jump to.
+
+   <p>Next, directories are listed.  A directory starts with the group
+indicator button &lsquo;<samp><span class="samp">&lt;+&gt;</span></samp>&rsquo;.  Clicking the directory name makes speedbar
+load that directory as the root directory for its display.  Clicking the
+&lsquo;<samp><span class="samp">&lt;+&gt;</span></samp>&rsquo; button will list all directories and files beneath.
+
+   <p>Next, files are listed.  Files start with the group indicator &lsquo;<samp><span class="samp">[+]</span></samp>&rsquo;
+or &lsquo;<samp><span class="samp">[?]</span></samp>&rsquo;.  You can jump to a file in the attached frame by clicking
+on the file name.  You can expand a file and look at its tags by
+clicking on the &lsquo;<samp><span class="samp">[+]</span></samp>&rsquo; symbol near the file name.
+
+   <p>A typical session might look like this:
+
+<pre class="example">     ~/lisp/
+     &lt;+&gt; checkdoc
+     &lt;+&gt; eieio
+     &lt;-&gt; speedbar
+      [+] Makefile
+      [+] rpm.el #
+      [+] sb-gud.el #
+      [+] sb-info.el #
+      [+] sb-rmail.el #
+      [+] sb-w3.el
+      [-] speedbar.el *!
+       {+} Types
+       {+} Variables
+       {+} def (group)
+       {+} speedbar-
+      [+] speedbar.texi *
+     &lt;+&gt; testme
+     [+] align.el
+     [+] autoconf.el
+</pre>
+   <p>In this example, you can see several directories.  The directory
+<samp><span class="file">speedbar</span></samp> has been opened inline.  Inside the directory
+<samp><span class="file">speedbar</span></samp>, the file <samp><span class="file">speedbar.el</span></samp> has its tags exposed. 
+These tags are extensive, and they are summarized into tag groups.
+
+   <p>Files get additional boolean flags associated with them.  Valid flags are:
+
+   <p><a name="index-file-flags-18"></a>
+     <dl>
+<dt><code>*</code><dd>This file has been checked out of a version control
+system.  See <a href="#Version-Control">Version Control</a>. 
+<a name="index-g_t_0040code_007bspeedbar_002dobj_002dalist_007d-19"></a><br><dt><code>#</code><dd>This file has an up to date object file associated with it.  The
+variable <code>speedbar-obj-alist</code> defines how speedbar determines this
+value. 
+<br><dt><code>!</code><dd>This file has an out of date object file associated with it. 
+</dl>
+
+   <p>A Tag group is prefixed with the symbol &lsquo;<samp><span class="samp">{+}</span></samp>&rsquo;.  Clicking this
+symbol will show all symbols that have been organized into that group. 
+Different types of files have unique tagging methods as defined by their
+major mode.  Tags are generated with either the <code>imenu</code> package, or
+through the <code>etags</code> interface.
+
+   <p>Tag groups are defined in multiple ways which make it easier to find the
+tag you are looking for.  Imenu keywords explicitly create groups, and
+speedbar will automatically create groups if tag lists are too long.
+
+   <p>In our example, Imenu created the groups &lsquo;<samp><span class="samp">Types</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">Variables</span></samp>&rsquo;.  All remaining top-level symbols are then regrouped
+based on the variable <code>speedbar-tag-hierarchy-method</code>.  The
+subgroups &lsquo;<samp><span class="samp">def</span></samp>&rsquo; and &lsquo;<samp><span class="samp">speedbar-</span></samp>&rsquo; are groupings where the first
+few characters of the given symbols are specified in the group name. 
+Some group names may say something like &lsquo;<samp><span class="samp">speedbar-t to speedbar-v</span></samp>&rsquo;,
+indicating that all symbols which alphabetically fall between those
+categories are included in that sub-group.  See <a href="#Tag-Hierarchy-Methods">Tag Hierarchy Methods</a>.
+
+<div class="node">
+<a name="Hidden-Files"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#File-Key-Bindings">File Key Bindings</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Directory-Display">Directory Display</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#File-Mode">File Mode</a>
+
+</div>
+
+<h3 class="section">3.2 Hidden Files</h3>
+
+<p><a name="index-hidden-files-20"></a>
+On GNU and Unix systems, a hidden file is a file whose name starts
+with a period.  They are hidden from a regular directory listing
+because the user is not generally interested in them.
+
+   <p>In speedbar, a hidden file is a file which isn't very interesting and
+might prove distracting to the user.  Any uninteresting files are
+removed from the File display.  There are two levels of uninterest in
+speedbar.  The first level of uninterest are files which have no
+expansion method, or way of extracting tags.  The second level is any
+file that matches the same pattern used for completion in
+<code>find-file</code>.  This is derived from the variable
+<code>completion-ignored-extensions</code>.
+
+   <p>You can toggle the display of uninteresting files from the toggle menu
+item &lsquo;<samp><span class="samp">Show All Files</span></samp>&rsquo;.  This will display all level one hidden files. 
+These files will be shown with a &lsquo;<samp><span class="samp">?</span></samp>&rsquo; indicator.  Level 2 hidden
+files will still not be shown.
+
+   <p>Object files fall into the category of level 2 hidden files.  You can
+determine their presence by the &lsquo;<samp><span class="samp">#</span></samp>&rsquo; and &lsquo;<samp><span class="samp">!</span></samp>&rsquo; file indicators. 
+See <a href="#Directory-Display">Directory Display</a>.
+
+<div class="node">
+<a name="File-Key-Bindings"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Hidden-Files">Hidden Files</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#File-Mode">File Mode</a>
+
+</div>
+
+<h3 class="section">3.3 File Key Bindings</h3>
+
+<p><a name="index-file-key-bindings-21"></a>
+File mode has key bindings permitting different file system operations
+such as copy or rename.  These commands all operate on the <dfn>current
+file</dfn>.  In this case, the current file is the file at point, or clicked
+on when pulling up the menu.
+
+     <dl>
+<dt><kbd>U</kbd><dd>Move the entire speedbar display up one directory. 
+<br><dt><kbd>I</kbd><dd>Display information in the minibuffer about this line.  This is the same
+information shown when navigating with <kbd>n</kbd> and <kbd>p</kbd>, or moving
+the mouse over an item. 
+<br><dt><kbd>B</kbd><dd>Byte compile the Emacs Lisp file on this line. 
+<br><dt><kbd>L</kbd><dd>Load the Emacs Lisp file on this line.  If a <samp><span class="file">.elc</span></samp> file exists,
+optionally load that. 
+<br><dt><kbd>C</kbd><dd>Copy the current file to some other location. 
+<br><dt><kbd>R</kbd><dd>Rename the current file, possibly moving it to some other location. 
+<br><dt><kbd>D</kbd><dd>Delete the current file. 
+<br><dt><kbd>O</kbd><dd>Delete the current file's object file.  Use the symbols &lsquo;<samp><span class="samp">#</span></samp>&rsquo; and
+&lsquo;<samp><span class="samp">!</span></samp>&rsquo; to determine if there is an object file available. 
+</dl>
+
+   <p>One menu item toggles the display of all available files.  By default,
+only files which Emacs understands, and knows how to convert into a tag
+list, are shown.  By showing all files, additional files such as text files are
+also displayed, but they are prefixed with the &lsquo;<samp><span class="samp">[?]</span></samp>&rsquo; symbol.  This
+means that it is a file, but Emacs doesn't know how to expand it.
+
+<div class="node">
+<a name="Buffer-Mode"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Minor-Modes">Minor Modes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#File-Mode">File Mode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">4 Buffer Mode</h2>
+
+<p><a name="index-buffer-mode-22"></a>
+Buffer mode is very similar to File mode, except that instead of
+tracking the current directory and all files available there, the
+current list of Emacs buffers is shown.
+
+   <p>These buffers can have their tags expanded in the same way as files,
+and uses the same unknown file indicator (see <a href="#File-Mode">File Mode</a>).
+
+   <p>Buffer mode does not have file operation bindings, but the following
+buffer specific key bindings are available:
+
+     <dl>
+<dt><kbd>k</kbd><dd>Kill this buffer.  Do not touch its file. 
+<br><dt><kbd>r</kbd><dd>Revert this buffer, reloading from disk. 
+</dl>
+
+   <p>In addition to Buffer mode, there is also Quick Buffer mode.  In fact,
+Quick Buffers is bound to the <kbd>b</kbd> key.  The only difference between
+Buffers and Quick Buffers is that after one operation  is performed
+which affects the attached frame, the display is immediately reverted to
+the last displayed mode.
+
+   <p>Thus, if you are in File mode, and you need quick access to a buffer,
+press <kbd>b</kbd>, click on the buffer you want, and speedbar will revert
+back to File mode.
+
+<div class="node">
+<a name="Minor-Modes"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Customizing">Customizing</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Buffer-Mode">Buffer Mode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">5 Minor Display Modes</h2>
+
+<p><a name="index-minor-display-modes-23"></a>
+For some buffers, a list of files and tags makes no sense.  This could
+be because files are not currently in reference (such as web pages), or
+that the files you might be interested have special properties (such as
+email folders.)
+
+   <p>In these cases, a minor display mode is needed.  A minor display mode
+will override any major display mode currently being displayed for the
+duration of the specialized buffer's use.  Minor display modes
+will follow the general rules of their major counterparts in terms of
+key bindings and visuals, but will have specialized behaviors.
+
+<ul class="menu">
+<li><a accesskey="1" href="#RMAIL">RMAIL</a>:   Managing folders. 
+<li><a accesskey="2" href="#Info">Info</a>:    Browsing topics. 
+<li><a accesskey="3" href="#GDB">GDB</a>:     Watching expressions or managing the current
+            stack trace. 
+</ul>
+
+<div class="node">
+<a name="RMAIL"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Info">Info</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Minor-Modes">Minor Modes</a>
+
+</div>
+
+<h3 class="section">5.1 RMAIL</h3>
+
+<p><a name="index-RMAIL-24"></a>
+When using RMAIL, speedbar will display two sections.  The first is a
+layer one reply button.  Clicking here will initialize a reply buffer
+showing only this email address in the &lsquo;<samp><span class="samp">To:</span></samp>&rsquo; field.
+
+   <p>The second section lists all RMAIL folders in the same directory as your
+main RMAIL folder.  The general rule is that RMAIL folders always appear
+in all caps, or numbers.  It is possible to save mail in folders with
+lower case letters, but there is no clean way of detecting such RMAIL folders
+without opening them all.
+
+   <p>Each folder can be visited by clicking the name.  You can move mail from
+the current RMAIL folder into a different folder by clicking the
+&lsquo;<samp><span class="samp">&lt;M&gt;</span></samp>&rsquo; button.  The &lsquo;<samp><span class="samp">M</span></samp>&rsquo; stands for Move.
+
+   <p>In this way you can manage your existing RMAIL folders fairly easily
+using the mouse.
+
+<div class="node">
+<a name="Info"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#GDB">GDB</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#RMAIL">RMAIL</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Minor-Modes">Minor Modes</a>
+
+</div>
+
+<h3 class="section">5.2 Info</h3>
+
+<p><a name="index-Info-25"></a>
+When browsing Info files, all local relevant information is displayed in
+the info buffer and a topical high-level view is provided in speedbar. 
+All top-level info nodes are shown in the speedbar frame, and can be
+jumped to by clicking the name.
+
+   <p>You can open these nodes with the &lsquo;<samp><span class="samp">[+]</span></samp>&rsquo; button to see what sub-topics
+are available.  Since these sub-topics are not examined until you click
+the &lsquo;<samp><span class="samp">[+]</span></samp>&rsquo; button, sometimes a &lsquo;<samp><span class="samp">[?]</span></samp>&rsquo; will appear when you click on
+a &lsquo;<samp><span class="samp">[+]</span></samp>&rsquo;, indicating that there are no sub-topics.
+
+<div class="node">
+<a name="GDB"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Info">Info</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Minor-Modes">Minor Modes</a>
+
+</div>
+
+<h3 class="section">5.3 GDB</h3>
+
+<p><a name="index-gdb-26"></a><a name="index-gud-27"></a>
+You can debug an application with GDB in Emacs using graphical mode or
+text command mode (see <a href="emacs.html#GDB-Graphical-Interface">GDB Graphical Interface</a>).
+
+   <p>If you are using graphical mode you can see how selected variables
+change each time your program stops (see <a href="emacs.html#Watch-Expressions">Watch Expressions</a>).
+
+   <p>If you are using text command mode, speedbar can show
+you the current stack when the current buffer is the <samp><span class="file">*gdb*</span></samp>
+buffer.  Usually, it will just report that there is no stack, but when
+the application is stopped, the current stack will be shown.
+
+   <p>You can click on any stack element and gdb will move to that stack
+level.  You can then check variables local to that level at the GDB
+prompt.
+
+<div class="node">
+<a name="Customizing"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Extending">Extending</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Minor-Modes">Minor Modes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">6 Customizing</h2>
+
+<p><a name="index-customizing-28"></a>
+Speedbar is highly customizable, with a plethora of control elements. 
+Since speedbar is so visual and reduces so much information, this is an
+important aspect of its behavior.
+
+   <p>In general, there are three custom groups you can use to quickly modify
+speedbar's behavior.
+
+     <dl>
+<dt><code>speedbar</code><dd>Basic speedbar behaviors. 
+<br><dt><code>speedbar-vc</code><dd>Customizations regarding version control handling. 
+<br><dt><code>speedbar-faces</code><dd>Customize speedbar's many colors and fonts. 
+</dl>
+
+<ul class="menu">
+<li><a accesskey="1" href="#Frames-and-Faces">Frames and Faces</a>:         Visible behaviors. 
+<li><a accesskey="2" href="#Tag-Hierarchy-Methods">Tag Hierarchy Methods</a>:    Customizing how tags are displayed. 
+<li><a accesskey="3" href="#Version-Control">Version Control</a>:          Adding new VC detection modes. 
+<li><a accesskey="4" href="#Hooks">Hooks</a>:                    The many hooks you can use. 
+</ul>
+
+<div class="node">
+<a name="Frames-and-Faces"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Tag-Hierarchy-Methods">Tag Hierarchy Methods</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Customizing">Customizing</a>
+
+</div>
+
+<h3 class="section">6.1 Frames and Faces</h3>
+
+<p><a name="index-faces-29"></a><a name="index-frame-parameters-30"></a>
+There are several faces speedbar generates to provide a consistent
+color scheme across display types.  You can customize these faces using
+your favorite method.  They are:
+
+     
+<a name="index-g_t_0040code_007bspeedbar_002dbutton_002dface_007d-31"></a>
+<dl><dt>speedbar-button-face<dd>Face used on expand/contract buttons. 
+<a name="index-g_t_0040code_007bspeedbar_002dfile_002dface_007d-32"></a><br><dt>speedbar-file-face<dd>Face used on Files.  Should also be used on non-directory like nodes. 
+<a name="index-g_t_0040code_007bspeedbar_002ddirectory_002dface_007d-33"></a><br><dt>speedbar-directory-face<dd>Face used for directories, or nodes which consist of groups of other nodes. 
+<a name="index-g_t_0040code_007bspeedbar_002dtag_002dface_007d-34"></a><br><dt>speedbar-tag-face<dd>Face used for tags in a file, or for leaf items. 
+<a name="index-g_t_0040code_007bspeedbar_002dselected_002dface_007d-35"></a><br><dt>speedbar-selected-face<dd>Face used to highlight the selected item.  This would be the current
+file being edited. 
+<a name="index-g_t_0040code_007bspeedbar_002dhighlight_002dface_007d-36"></a><br><dt>speedbar-highlight-face<dd>Face used when the mouse passes over a button. 
+</dl>
+
+   <p>You can also customize speedbar's initial frame parameters.  How this is
+accomplished is dependent on your platform being Emacs or XEmacs.
+
+   <p><a name="index-g_t_0040code_007bspeedbar_002dframe_002dparameters_007d_002c-Emacs-37"></a>In Emacs, change the alist <code>speedbar-frame-parameters</code>.  This
+variable is used to set up initial details.  Height is also
+automatically added when speedbar is created, though you can override
+it.
+
+   <p><a name="index-g_t_0040code_007bspeedbar_002dframe_002dplist_007d_002c-XEmacs-38"></a>In XEmacs, change the plist <code>speedbar-frame-plist</code>.  This is the
+XEmacs way of doing the same thing.
+
+<div class="node">
+<a name="Tag-Hierarchy-Methods"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Version-Control">Version Control</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Frames-and-Faces">Frames and Faces</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Customizing">Customizing</a>
+
+</div>
+
+<h3 class="section">6.2 Tag Hierarchy Methods</h3>
+
+<p><a name="index-tag-hierarchy-39"></a><a name="index-tag-groups-40"></a><a name="index-tag-sorting-41"></a>
+When listing tags within a file, it is possible to get an annoyingly
+long list of entries.  Imenu (which generates the tag list in Emacs)
+will group some classes of items automatically.   Even here, however,
+some tag groups can be quite large.
+
+   <p><a name="index-g_t_0040code_007bspeedbar_002dtag_002dhierarchy_002dmethod_007d-42"></a>To solve this problem, tags can be grouped into logical units through a
+hierarchy processor.  The specific variable to use is
+<code>speedbar-tag-hierarchy-method</code>.  There are several methods that
+can be applied in any order.  They are:
+
+     
+<a name="index-g_t_0040code_007bspeedbar_002dtrim_002dwords_002dtag_002dhierarchy_007d-43"></a>
+<dl><dt><code>speedbar-trim-words-tag-hierarchy</code><dd>Find a common prefix for all elements of a group, and trim it off. 
+<a name="index-g_t_0040code_007bspeedbar_002dprefix_002dgroup_002dtag_002dhierarchy_007d-44"></a><br><dt><code>speedbar-prefix-group-tag-hierarchy</code><dd>If a group is too large, place sets of tags into bins based on common
+prefixes. 
+<a name="index-g_t_0040code_007bspeedbar_002dsimple_002dgroup_002dtag_002dhierarchy_007d-45"></a><br><dt><code>speedbar-simple-group-tag-hierarchy</code><dd>Take all items in the top level list not in a group, and stick them into
+a &lsquo;<samp><span class="samp">Tags</span></samp>&rsquo; group. 
+<a name="index-g_t_0040code_007bspeedbar_002dsort_002dtag_002dhierarchy_007d-46"></a><br><dt><code>speedbar-sort-tag-hierarchy</code><dd>Sort all items, leaving groups on top. 
+</dl>
+
+   <p>You can also add your own functions to reorganize tags as you see fit.
+
+   <p>Some other control variables are:
+
+     
+<a name="index-g_t_0040code_007bspeedbar_002dtag_002dgroup_002dname_002dminimum_002dlength_007d-47"></a>
+<dl><dt><code>speedbar-tag-group-name-minimum-length</code><dd>Default value: 4.
+
+     <p>The minimum length of a prefix group name before expanding.  Thus, if
+the <code>speedbar-tag-hierarchy-method</code> includes
+<code>speedbar-prefix-group-tag-hierarchy</code> and one such group's common
+characters is less than this number of characters, then the group name
+will be changed to the form of:
+
+     <pre class="example">          worda to wordb
+</pre>
+     <p>instead of just
+
+     <pre class="example">          word
+</pre>
+     <p>This way we won't get silly looking listings.
+
+     <p><a name="index-g_t_0040code_007bspeedbar_002dtag_002dsplit_002dminimum_002dlength_007d-48"></a><br><dt><code>speedbar-tag-split-minimum-length</code><dd>Default value: 20.
+
+     <p>Minimum length before we stop trying to create sub-lists in tags. 
+This is used by all tag-hierarchy methods that break large lists into
+sub-lists.
+
+     <p><a name="index-g_t_0040code_007bspeedbar_002dtag_002dregroup_002dmaximum_002dlength_007d-49"></a><br><dt><code>speedbar-tag-regroup-maximum-length</code><dd>Default value: 10.
+
+     <p>Maximum length of submenus that are regrouped. 
+If the regrouping option is used, then if two or more short subgroups
+are next to each other, then they are combined until this number of
+items is reached. 
+</dl>
+
+<div class="node">
+<a name="Version-Control"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Hooks">Hooks</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Tag-Hierarchy-Methods">Tag Hierarchy Methods</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Customizing">Customizing</a>
+
+</div>
+
+<h3 class="section">6.3 Version Control</h3>
+
+<p><a name="index-version-control-50"></a><a name="index-vc-extensions-51"></a>
+When using the file mode in speedbar, information regarding a version
+control system adds small details to the display.  If a file is in a
+version control system, and is &ldquo;checked out&rdquo; or &ldquo;locked&rdquo; locally, an
+asterisk &lsquo;<samp><span class="samp">*</span></samp>&rsquo; appears at the end of the file name.  In addition,
+the directory name for Version Control systems are left out of the
+speedbar display.
+
+   <p><a name="index-g_t_0040code_007bspeedbar_002ddirectory_002dunshown_002dregexp_007d-52"></a>You can easily add new version control systems into speedbar's detection
+scheme.  To make a directory &ldquo;disappear&rdquo; from the list, use the variable
+<code>speedbar-directory-unshown-regexp</code>.
+
+   <p><a name="index-g_t_0040code_007bspeedbar_002dvc_002dpath_002denable_002dhook_007d-53"></a>Next, you need to write entries for two hooks.  The first is
+<code>speedbar-vc-path-enable-hook</code> which will enable a VC check in the
+current directory for the group of files being checked.  Your hook
+function should take one parameter (the directory to check) and return
+<code>t</code> if your VC method is in control here.
+
+   <p><a name="index-g_t_0040code_007bspeedbar_002dvc_002din_002dcontrol_002dhook_007d-54"></a>The second function is <code>speedbar-vc-in-control-hook</code>.  This hook
+takes two parameters, the <var>path</var> of the file to check, and the
+<var>file</var> name.  Return <code>t</code> if you want to have the asterisk
+placed near this file.
+
+   <p><a name="index-g_t_0040code_007bspeedbar_002dvc_002dindicator_007d-55"></a>Lastly, you can change the VC indicator using the variable
+<code>speedbar-vc-indicator</code>, and specify a single character string.
+
+<div class="node">
+<a name="Hooks"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Version-Control">Version Control</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Customizing">Customizing</a>
+
+</div>
+
+<h3 class="section">6.4 Hooks</h3>
+
+<p><a name="index-hooks-56"></a>
+There are several hooks in speedbar allowing custom behaviors to be
+added.  Available hooks are:
+
+     
+<a name="index-g_t_0040code_007bspeedbar_002dvisiting_002dfile_002dhook_007d-57"></a>
+<dl><dt><code>speedbar-visiting-file-hook</code><dd>Hooks run when speedbar visits a file in the selected frame. 
+<a name="index-g_t_0040code_007bspeedbar_002dvisiting_002dtag_002dhook_007d-58"></a><br><dt><code>speedbar-visiting-tag-hook</code><dd>Hooks run when speedbar visits a tag in the selected frame. 
+<a name="index-g_t_0040code_007bspeedbar_002dload_002dhook_007d-59"></a><br><dt><code>speedbar-load-hook</code><dd>Hooks run when speedbar is loaded. 
+<a name="index-g_t_0040code_007bspeedbar_002dreconfigure_002dkeymaps_002dhook_007d-60"></a><br><dt><code>speedbar-reconfigure-keymaps-hook</code><dd>Hooks run when the keymaps are regenerated.  Keymaps are reconfigured
+whenever modes change.  This will let you add custom key bindings. 
+<a name="index-g_t_0040code_007bspeedbar_002dbefore_002dpopup_002dhook_007d-61"></a><br><dt><code>speedbar-before-popup-hook</code><dd>Hooks called before popping up the speedbar frame. 
+New frames are often popped up when &ldquo;power clicking&rdquo; on an item to view
+it. 
+<a name="index-g_t_0040code_007bspeedbar_002dbefore_002ddelete_002dhook_007d-62"></a><br><dt><code>speedbar-before-delete-hook</code><dd>Hooks called before deleting or hiding the speedbar frame. 
+<a name="index-g_t_0040code_007bspeedbar_002dmode_002dhook_007d-63"></a><br><dt><code>speedbar-mode-hook</code><dd>Hooks called after creating a speedbar buffer. 
+<a name="index-g_t_0040code_007bspeedbar_002dtimer_002dhook_007d-64"></a><br><dt><code>speedbar-timer-hook</code><dd>Hooks called after running the speedbar timer function. 
+<a name="index-g_t_0040code_007bspeedbar_002dscanner_002dreset_002dhook_007d-65"></a><br><dt><code>speedbar-scanner-reset-hook</code><dd>Hook called whenever generic scanners are reset. 
+Set this to implement your own scanning or rescan safe functions with
+state data. 
+</dl>
+
+<div class="node">
+<a name="Extending"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Customizing">Customizing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">7 Extending</h2>
+
+<p><a name="index-extending-66"></a>
+Speedbar can run different types of Major display modes such as Files
+(see <a href="#File-Mode">File Mode</a>), and Buffers (see <a href="#Buffer-Mode">Buffer Mode</a>).  It can also manage
+different minor display modes for use with buffers handling specialized
+data.
+
+   <p>These major and minor display modes are handled through an extension
+system which permits specialized keymaps and menu extensions, in
+addition to a unique rendering function.  You can also specify a wide
+range of tagging functions.  The default uses <code>imenu</code>, but new
+tagging methods can be easily added.  In this chapter, you will
+learn how to write your own major or minor display modes, and how to
+create specialized tagging functions.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Minor-Display-Modes">Minor Display Modes</a>:     How to create a minor display mode. 
+<li><a accesskey="2" href="#Major-Display-Modes">Major Display Modes</a>:     How to create a major display mode. 
+<li><a accesskey="3" href="#Tagging-Extensions">Tagging Extensions</a>:      How to create your own tagging methods. 
+<li><a accesskey="4" href="#Creating-a-display">Creating a display</a>:      How to insert buttons and hierarchies. 
+</ul>
+
+<div class="node">
+<a name="Minor-Display-Modes"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Major-Display-Modes">Major Display Modes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Extending">Extending</a>
+
+</div>
+
+<h3 class="section">7.1 Minor Display Modes</h3>
+
+<p><a name="index-create-minor-display-mode-67"></a>
+A <dfn>minor display mode</dfn> is a mode useful when using a specific type of
+buffer.  This mode might not be useful for any other kind of data or
+mode, or may just be more useful that a files or buffers based mode when
+working with a specialized mode.
+
+   <p>Examples that already exist for speedbar include RMAIL, Info, and gdb. 
+These modes display information specific to the major mode shown in the
+attached frame.
+
+   <p>To enable a minor display mode in your favorite Major mode, follow these
+steps.  The string &lsquo;<samp><var>name</var></samp>&rsquo; is the name of the major mode being
+augmented with speedbar.
+
+     <ol type=1 start=1>
+<li>Create the keymap variable <var>name</var><code>-speedbar-key-map</code>.
+
+     <li>Create a function, named whatever you like, which assigns values into your
+keymap.  Use this command to create the keymap before assigning
+bindings:
+
+     <pre class="smallexample">              (setq <var>name</var>-speedbar-key-map (speedbar-make-specialized-keymap))
+</pre>
+     <p>This function creates a special keymap for use in speedbar.
+
+     <li>Call your install function, or assign it to a hook like this:
+
+     <pre class="smallexample">          (if (featurep 'speedbar)
+              (<var>name</var>-install-speedbar-variables)
+            (add-hook 'speedbar-load-hook '<var>name</var>-install-speedbar-variables))
+</pre>
+     <li>Create an easymenu compatible vector named
+<var>name</var><code>-speedbar-menu-items</code>.  This will be spliced into
+speedbar's control menu.
+
+     <li>Create a function called <var>name</var><code>-speedbar-buttons</code>.  This function
+should take one variable, which is the buffer for which it will create
+buttons.   At this time <code>(current-buffer)</code> will point to the
+uncleared speedbar buffer.
+        </ol>
+
+   <p>When writing <var>name</var><code>-speedbar-buttons</code>, the first thing you will
+want to do is execute a check to see if you need to re-create your
+display.  If it needs to be cleared, you need to erase the speedbar
+buffer yourself, and start drawing buttons.  See <a href="#Creating-a-display">Creating a display</a>.
+
+<div class="node">
+<a name="Major-Display-Modes"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Tagging-Extensions">Tagging Extensions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Minor-Display-Modes">Minor Display Modes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Extending">Extending</a>
+
+</div>
+
+<h3 class="section">7.2 Major Display Modes</h3>
+
+<p><a name="index-create-major-display-mode-68"></a>
+Creating a <dfn>Major Display Mode</dfn> for speedbar requires authoring a keymap,
+an easy-menu segment, and writing several functions.  These items can be
+given any name, and are made the same way as in a minor display mode
+(see <a href="#Minor-Display-Modes">Minor Display Modes</a>).  Once this is done, these items need to be
+registered.
+
+   <p>Because this setup activity may or may not have speedbar available when
+it is being loaded, it is necessary to create an install function.  This
+function should create and initialize the keymap, and add your
+expansions into the customization tables.
+
+   <p><a name="index-g_t_0040code_007bspeedbar_002dmake_002dspecialized_002dkeymap_007d-69"></a>When creating the keymap, use the function
+<code>speedbar-make-specialized-keymap</code> instead of other keymap making
+functions.  This will provide you with the initial bindings needed. 
+Some common speedbar functions you might want to bind are:
+
+     
+<a name="index-g_t_0040code_007bspeedbar_002dedit_002dline_007d-70"></a>
+<dl><dt><code>speedbar-edit-line</code><dd>Edit the item on the current line. 
+<a name="index-g_t_0040code_007bspeedbar_002dexpand_002dline_007d-71"></a><br><dt><code>speedbar-expand-line</code><dd>Expand the item under the cursor. 
+With a numeric argument (<kbd>C-u</kbd>), flush cached data before expanding. 
+<a name="index-g_t_0040code_007bspeedbar_002dcontract_002dline_007d-72"></a><br><dt><code>speedbar-contract-line</code><dd>Contract the item under the cursor. 
+</dl>
+
+   <p><a name="index-g_t_0040code_007bspeedbar_002dline_002dpath_007d-73"></a>These function require that function <code>speedbar-line-path</code> be
+correctly overloaded to work.
+
+   <p>Next, register your extension like this;
+
+<pre class="example">       (speedbar-add-expansion-list '("MyExtension"
+                                      MyExtension-speedbar-menu-items
+                                      MyExtension-speedbar-key-map
+                                      MyExtension-speedbar-buttons))
+</pre>
+   <p>There are no limitations to the names you use.
+
+   <p>The first parameter is the string representing your display mode. 
+The second parameter is a variable name containing an easymenu compatible
+menu definition.  This will be stuck in the middle of speedbar's menu. 
+The third parameter is the variable name containing the keymap we
+discussed earlier. 
+The last parameter is a function which draws buttons for your mode. 
+This function must take two parameters.  The directory currently being
+displayed, and the depth at which you should start rendering buttons. 
+The function will then draw (starting at the current cursor position)
+any buttons deemed necessary based on the input parameters. 
+See <a href="#Creating-a-display">Creating a display</a>.
+
+   <p>Next, you need to register function overrides.  This may look something
+like this:
+
+<pre class="example">     (speedbar-add-mode-functions-list
+      '("MYEXTENSION"
+        (speedbar-item-info . MyExtension-speedbar-item-info)
+        (speedbar-line-path . MyExtension-speedbar-line-path)))
+</pre>
+   <p>The first element in the list is the name of you extension.  The second
+is an alist of functions to overload.  The function to overload is
+first, followed by what you want called instead.
+
+   <p>For <code>speedbar-line-path</code> your function should take an optional DEPTH
+parameter.  This is the starting depth for heavily indented lines.  If
+it is not provided, you can derive it like this:
+
+<pre class="example">     (save-match-data
+       (if (not depth)
+           (progn
+             (beginning-of-line)
+             (looking-at "^\\([0-9]+\\):")
+             (setq depth (string-to-int (match-string 1)))))
+</pre>
+   <p class="noindent">where the depth is stored as invisible text at the beginning of each
+line.
+
+   <p>The path returned should be the full path name of the file associated
+with that line.  If the cursor is on a tag, then the file containing
+that tag should be returned.  This is critical for built in file based
+functions to work (meaning less code for you to write).  If your display
+does not deal in files, you do not need to overload this function.
+
+   <p><a name="index-g_t_0040code_007bspeedbar_002ditem_002dinfo_007d-74"></a>The function <code>speedbar-item-info</code>, however, is very likely to need
+overloading.  This function takes no parameters and must derive a text
+summary to display in the minibuffer.
+
+   <p>There are several helper functions you can use if you are going to use
+built in tagging.  These functions can be <code>or</code>ed since each one
+returns non-<code>nil</code> if it displays a message.  They are:
+
+     
+<a name="index-g_t_0040code_007bspeedbar_002ditem_002dinfo_002dfile_002dhelper_007d-75"></a>
+<dl><dt><code>speedbar-item-info-file-helper</code><dd>This takes an optional <var>filename</var> parameter.  You can derive your own
+filename, or it will derive it using a (possibly overloaded) function
+<code>speedbar-line-file</code>.  It shows details about a file. 
+<a name="index-g_t_0040code_007bspeedbar_002ditem_002dinfo_002dtag_002dhelper_007d-76"></a><br><dt><code>speedbar-item-info-tag-helper</code><dd>If the current line is a tag, then display information about that tag,
+such as its parent file, and location. 
+</dl>
+
+   <p>Your custom function might look like this:
+
+<pre class="example">     (defun MyExtension-item-info ()
+       "Display information about the current line."
+       (or (speedbar-item-info-tag-helper)
+           (message "Interesting detail.")))
+</pre>
+   <p>Once you have done all this, speedbar will show an entry in the
+&lsquo;<samp><span class="samp">Displays</span></samp>&rsquo; menu declaring that your extension is available.
+
+<div class="node">
+<a name="Tagging-Extensions"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Creating-a-display">Creating a display</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Major-Display-Modes">Major Display Modes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Extending">Extending</a>
+
+</div>
+
+<h3 class="section">7.3 Tagging Extensions</h3>
+
+<p>It is possible to create new methods for tagging files in speedbar. 
+To do this, you need two basic functions, one function to fetch the
+tags from a buffer, the other to insert them below the filename.
+
+<div class="defun">
+&mdash; Function: <b>my-fetch-dynamic-tags</b><var> file<a name="index-my_002dfetch_002ddynamic_002dtags-77"></a></var><br>
+<blockquote><p>Parse <var>file</var> for a list of tags.  Return the list, or <code>t</code> if there was
+an error. 
+</p></blockquote></div>
+
+   <p>The non-error return value can be anything, as long as it can be
+inserted by its paired function:
+
+<div class="defun">
+&mdash; Function: <b>my-insert-tag-list</b><var> level lst<a name="index-my_002dinsert_002dtag_002dlist-78"></a></var><br>
+<blockquote><p>Insert a list of tags <var>lst</var> started at indentation level
+<var>level</var>.  Creates buttons for each tag, and provides any other
+display information required. 
+</p></blockquote></div>
+
+   <p><a name="index-g_t_0040code_007bspeedbar_002dcreate_002dtag_002dhierarchy_007d-79"></a>It is often useful to use <code>speedbar-create-tag-hierarchy</code> on your
+token list.  See that function's documentation for details on what it
+requires.
+
+   <p><a name="index-g_t_0040code_007bspeedbar_002ddynamic_002dtags_002dfunction_002dlist_007d-80"></a>Once these two functions are written, modify the variable
+<code>speedbar-dynamic-tags-function-list</code> to include your parser at the
+beginning, like this:
+
+<pre class="example">     (add-to-list 'speedbar-dynamic-tags-function-list
+                  '(my-fetch-dynamic-tags . my-insert-tag-list))
+</pre>
+   <p>If your parser is only good for a few types of files, make sure that it
+is either a buffer local modification, or that the tag generator returns
+<code>t</code> for non valid buffers.
+
+<div class="node">
+<a name="Creating-a-display"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Tagging-Extensions">Tagging Extensions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Extending">Extending</a>
+
+</div>
+
+<h3 class="section">7.4 Creating a display</h3>
+
+<p><a name="index-creating-a-display-81"></a>
+Rendering a display in speedbar is completely flexible.  When your
+button function is called, see <a href="#Minor-Display-Modes">Minor Display Modes</a>, and <a href="#Major-Display-Modes">Major Display Modes</a>, you have control to <code>insert</code> anything you want.
+
+   <p>The conventions allow almost anything to be inserted, but several helper
+functions are provided to make it easy to create the standardized
+buttons.
+
+   <p>To understand the built in functions, each &ldquo;button&rdquo; in speedbar consists
+of four important pieces of data.  The text to be displayed, token
+data to be associated with the text, a function to call, and some face to
+display it in.
+
+   <p>When a function is provided, then that text becomes mouse activated,
+meaning the mouse will highlight the text.
+
+   <p>Additionally, for data which can form deep trees, each line is given a
+depth which indicates how far down the tree it is.  This information is
+stored in invisible text at the beginning of each line, and is used by
+the navigation commands.
+
+<div class="defun">
+&mdash; Function: <b>speedbar-insert-button</b><var> text face mouse function &amp;optional token prevline<a name="index-speedbar_002dinsert_002dbutton-82"></a></var><br>
+<blockquote><p>This function inserts one button into the current location. 
+<var>text</var> is the text to insert.  <var>face</var> is the face in which it
+will be displayed.   <var>mouse</var> is the face to display over the text
+when the mouse passes over it.  <var>function</var> is called whenever the
+user clicks on the text.
+
+        <p>The optional argument <var>token</var> is extra data to associated with the
+text.  Lastly <var>prevline</var> should be non-<code>nil</code> if you want this line to
+appear directly after the last button which was created instead of on
+the next line. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>speedbar-make-tag-line</b><var> exp-button-type exp-button-char exp-button-function exp-button-data tag-button tag-button-function tag-button-data tag-button-face depth<a name="index-speedbar_002dmake_002dtag_002dline-83"></a></var><br>
+<blockquote>
+        <p>Create a tag line with <var>exp-button-type</var> for the small expansion
+button.  This is the button that expands or contracts a node (if
+applicable), and <var>exp-button-char</var> the character in it (&lsquo;<samp><span class="samp">+</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">-</span></samp>&rsquo;, &lsquo;<samp><span class="samp">?</span></samp>&rsquo;, etc.).  <var>exp-button-function</var> is the function
+to call if it's clicked on.  Button types are <code>bracket</code>,
+<code>angle</code>, <code>curly</code>, <code>expandtag</code>, <code>statictag</code>, and
+<code>nil</code>.  <var>exp-button-data</var> is extra data attached to the text
+forming the expansion button.
+
+        <p>Next, <var>tag-button</var> is the text of the tag. 
+<var>tag-button-function</var> is the function to call if clicked on, and
+<var>tag-button-data</var> is the data to attach to the text field (such a
+tag positioning, etc.).  <var>tag-button-face</var> is a face used for this
+type of tag.
+
+        <p>Lastly, <var>depth</var> shows the depth of expansion.
+
+        <p>This function assumes that the cursor is in the speedbar window at the
+position to insert a new item, and that the new item will end with a CR. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>speedbar-insert-generic-list</b><var> level list expand-fun find-fun<a name="index-speedbar_002dinsert_002dgeneric_002dlist-84"></a></var><br>
+<blockquote>
+        <p>At <var>level</var>, (the current indentation level desired) insert a generic
+multi-level alist <var>list</var>.  Associations with lists get &lsquo;<samp><span class="samp">{+}</span></samp>&rsquo;
+tags (to expand into more nodes) and those with positions or other data
+just get a &lsquo;<samp><span class="samp">&gt;</span></samp>&rsquo; as the indicator.  &lsquo;<samp><span class="samp">{+}</span></samp>&rsquo; buttons will have the
+function <var>expand-fun</var> and the token is the <code>cdr</code> list.  The
+token name will have the function <var>find-fun</var> and not token.
+
+        <p>Each element of the list can have one of these forms:
+
+          <dl>
+<dt><code>(</code><var>name</var><code> . marker-or-number)</code><dd>One tag at this level. 
+<br><dt><code>(</code><var>name</var><code> (</code><var>name</var><code> . marker-or-number) (</code><var>name</var><code> . marker-or-number) ... )</code><dd>One group of tags. 
+<br><dt><code>(</code><var>name</var><code> marker-or-number (</code><var>name</var><code> . marker-or-number) ... )</code><dd>One Group of tags where the group has a starting position. 
+</dl>
+
+        <p>When you use <code>speedbar-insert-generic-list</code>, there are some
+variables you can set buffer-locally to change the behavior.  The most
+obvious is <code>speedbar-tag-hierarchy-method</code>. 
+See <a href="#Tag-Hierarchy-Methods">Tag Hierarchy Methods</a>.
+
+     <div class="defun">
+&mdash; Variable: <b>speedbar-generic-list-group-expand-button-type</b><var><a name="index-speedbar_002dgeneric_002dlist_002dgroup_002dexpand_002dbutton_002dtype-85"></a></var><br>
+<blockquote> <p>This is the button type used for groups of tags, whether expanded
+or added in via a hierarchy method.  Two good values are
+<code>curly</code> and <code>expandtag</code>.  Curly is the default button, and
+<code>expandtag</code> is useful if the groups also has a position. 
+</p></blockquote></div>
+
+     <div class="defun">
+&mdash; Variable: <b>speedbar-generic-list-tag-button-type</b><var><a name="index-speedbar_002dgeneric_002dlist_002dtag_002dbutton_002dtype-86"></a></var><br>
+<blockquote> <p>This is the button type used for a single tag. 
+Two good values are <code>nil</code> and <code>statictag</code>. 
+<code>nil</code> is the default, and <code>statictag</code> has the same width as
+<code>expandtag</code>. 
+</p></blockquote></div>
+
+        </blockquote></div>
+
+<div class="node">
+<a name="GNU-Free-Documentation-License"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Index">Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Extending">Extending</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="appendix">Appendix A GNU Free Documentation License</h2>
+
+<!-- The GNU Free Documentation License. -->
+<div align="center">Version 1.3, 3 November 2008</div>
+
+<!-- This file is intended to be included within another document, -->
+<!-- hence no sectioning command or @node. -->
+<pre class="display">     Copyright &copy; 2000, 2001, 2002, 2007, 2008 Free Software Foundation, Inc.
+     <a href="http://fsf.org/">http://fsf.org/</a>
+     
+     Everyone is permitted to copy and distribute verbatim copies
+     of this license document, but changing it is not allowed.
+</pre>
+     <ol type=1 start=0>
+<li>PREAMBLE
+
+     <p>The purpose of this License is to make a manual, textbook, or other
+functional and useful document <dfn>free</dfn> in the sense of freedom: to
+assure everyone the effective freedom to copy and redistribute it,
+with or without modifying it, either commercially or noncommercially. 
+Secondarily, this License preserves for the author and publisher a way
+to get credit for their work, while not being considered responsible
+for modifications made by others.
+
+     <p>This License is a kind of &ldquo;copyleft&rdquo;, which means that derivative
+works of the document must themselves be free in the same sense.  It
+complements the GNU General Public License, which is a copyleft
+license designed for free software.
+
+     <p>We have designed this License in order to use it for manuals for free
+software, because free software needs free documentation: a free
+program should come with manuals providing the same freedoms that the
+software does.  But this License is not limited to software manuals;
+it can be used for any textual work, regardless of subject matter or
+whether it is published as a printed book.  We recommend this License
+principally for works whose purpose is instruction or reference.
+
+     <li>APPLICABILITY AND DEFINITIONS
+
+     <p>This License applies to any manual or other work, in any medium, that
+contains a notice placed by the copyright holder saying it can be
+distributed under the terms of this License.  Such a notice grants a
+world-wide, royalty-free license, unlimited in duration, to use that
+work under the conditions stated herein.  The &ldquo;Document&rdquo;, below,
+refers to any such manual or work.  Any member of the public is a
+licensee, and is addressed as &ldquo;you&rdquo;.  You accept the license if you
+copy, modify or distribute the work in a way requiring permission
+under copyright law.
+
+     <p>A &ldquo;Modified Version&rdquo; of the Document means any work containing the
+Document or a portion of it, either copied verbatim, or with
+modifications and/or translated into another language.
+
+     <p>A &ldquo;Secondary Section&rdquo; is a named appendix or a front-matter section
+of the Document that deals exclusively with the relationship of the
+publishers or authors of the Document to the Document's overall
+subject (or to related matters) and contains nothing that could fall
+directly within that overall subject.  (Thus, if the Document is in
+part a textbook of mathematics, a Secondary Section may not explain
+any mathematics.)  The relationship could be a matter of historical
+connection with the subject or with related matters, or of legal,
+commercial, philosophical, ethical or political position regarding
+them.
+
+     <p>The &ldquo;Invariant Sections&rdquo; are certain Secondary Sections whose titles
+are designated, as being those of Invariant Sections, in the notice
+that says that the Document is released under this License.  If a
+section does not fit the above definition of Secondary then it is not
+allowed to be designated as Invariant.  The Document may contain zero
+Invariant Sections.  If the Document does not identify any Invariant
+Sections then there are none.
+
+     <p>The &ldquo;Cover Texts&rdquo; are certain short passages of text that are listed,
+as Front-Cover Texts or Back-Cover Texts, in the notice that says that
+the Document is released under this License.  A Front-Cover Text may
+be at most 5 words, and a Back-Cover Text may be at most 25 words.
+
+     <p>A &ldquo;Transparent&rdquo; copy of the Document means a machine-readable copy,
+represented in a format whose specification is available to the
+general public, that is suitable for revising the document
+straightforwardly with generic text editors or (for images composed of
+pixels) generic paint programs or (for drawings) some widely available
+drawing editor, and that is suitable for input to text formatters or
+for automatic translation to a variety of formats suitable for input
+to text formatters.  A copy made in an otherwise Transparent file
+format whose markup, or absence of markup, has been arranged to thwart
+or discourage subsequent modification by readers is not Transparent. 
+An image format is not Transparent if used for any substantial amount
+of text.  A copy that is not &ldquo;Transparent&rdquo; is called &ldquo;Opaque&rdquo;.
+
+     <p>Examples of suitable formats for Transparent copies include plain
+ASCII without markup, Texinfo input format, LaTeX input
+format, SGML or XML using a publicly available
+DTD, and standard-conforming simple HTML,
+PostScript or PDF designed for human modification.  Examples
+of transparent image formats include PNG, XCF and
+JPG.  Opaque formats include proprietary formats that can be
+read and edited only by proprietary word processors, SGML or
+XML for which the DTD and/or processing tools are
+not generally available, and the machine-generated HTML,
+PostScript or PDF produced by some word processors for
+output purposes only.
+
+     <p>The &ldquo;Title Page&rdquo; means, for a printed book, the title page itself,
+plus such following pages as are needed to hold, legibly, the material
+this License requires to appear in the title page.  For works in
+formats which do not have any title page as such, &ldquo;Title Page&rdquo; means
+the text near the most prominent appearance of the work's title,
+preceding the beginning of the body of the text.
+
+     <p>The &ldquo;publisher&rdquo; means any person or entity that distributes copies
+of the Document to the public.
+
+     <p>A section &ldquo;Entitled XYZ&rdquo; means a named subunit of the Document whose
+title either is precisely XYZ or contains XYZ in parentheses following
+text that translates XYZ in another language.  (Here XYZ stands for a
+specific section name mentioned below, such as &ldquo;Acknowledgements&rdquo;,
+&ldquo;Dedications&rdquo;, &ldquo;Endorsements&rdquo;, or &ldquo;History&rdquo;.)  To &ldquo;Preserve the Title&rdquo;
+of such a section when you modify the Document means that it remains a
+section &ldquo;Entitled XYZ&rdquo; according to this definition.
+
+     <p>The Document may include Warranty Disclaimers next to the notice which
+states that this License applies to the Document.  These Warranty
+Disclaimers are considered to be included by reference in this
+License, but only as regards disclaiming warranties: any other
+implication that these Warranty Disclaimers may have is void and has
+no effect on the meaning of this License.
+
+     <li>VERBATIM COPYING
+
+     <p>You may copy and distribute the Document in any medium, either
+commercially or noncommercially, provided that this License, the
+copyright notices, and the license notice saying this License applies
+to the Document are reproduced in all copies, and that you add no other
+conditions whatsoever to those of this License.  You may not use
+technical measures to obstruct or control the reading or further
+copying of the copies you make or distribute.  However, you may accept
+compensation in exchange for copies.  If you distribute a large enough
+number of copies you must also follow the conditions in section 3.
+
+     <p>You may also lend copies, under the same conditions stated above, and
+you may publicly display copies.
+
+     <li>COPYING IN QUANTITY
+
+     <p>If you publish printed copies (or copies in media that commonly have
+printed covers) of the Document, numbering more than 100, and the
+Document's license notice requires Cover Texts, you must enclose the
+copies in covers that carry, clearly and legibly, all these Cover
+Texts: Front-Cover Texts on the front cover, and Back-Cover Texts on
+the back cover.  Both covers must also clearly and legibly identify
+you as the publisher of these copies.  The front cover must present
+the full title with all words of the title equally prominent and
+visible.  You may add other material on the covers in addition. 
+Copying with changes limited to the covers, as long as they preserve
+the title of the Document and satisfy these conditions, can be treated
+as verbatim copying in other respects.
+
+     <p>If the required texts for either cover are too voluminous to fit
+legibly, you should put the first ones listed (as many as fit
+reasonably) on the actual cover, and continue the rest onto adjacent
+pages.
+
+     <p>If you publish or distribute Opaque copies of the Document numbering
+more than 100, you must either include a machine-readable Transparent
+copy along with each Opaque copy, or state in or with each Opaque copy
+a computer-network location from which the general network-using
+public has access to download using public-standard network protocols
+a complete Transparent copy of the Document, free of added material. 
+If you use the latter option, you must take reasonably prudent steps,
+when you begin distribution of Opaque copies in quantity, to ensure
+that this Transparent copy will remain thus accessible at the stated
+location until at least one year after the last time you distribute an
+Opaque copy (directly or through your agents or retailers) of that
+edition to the public.
+
+     <p>It is requested, but not required, that you contact the authors of the
+Document well before redistributing any large number of copies, to give
+them a chance to provide you with an updated version of the Document.
+
+     <li>MODIFICATIONS
+
+     <p>You may copy and distribute a Modified Version of the Document under
+the conditions of sections 2 and 3 above, provided that you release
+the Modified Version under precisely this License, with the Modified
+Version filling the role of the Document, thus licensing distribution
+and modification of the Modified Version to whoever possesses a copy
+of it.  In addition, you must do these things in the Modified Version:
+
+          <ol type=A start=1>
+<li>Use in the Title Page (and on the covers, if any) a title distinct
+from that of the Document, and from those of previous versions
+(which should, if there were any, be listed in the History section
+of the Document).  You may use the same title as a previous version
+if the original publisher of that version gives permission.
+
+          <li>List on the Title Page, as authors, one or more persons or entities
+responsible for authorship of the modifications in the Modified
+Version, together with at least five of the principal authors of the
+Document (all of its principal authors, if it has fewer than five),
+unless they release you from this requirement.
+
+          <li>State on the Title page the name of the publisher of the
+Modified Version, as the publisher.
+
+          <li>Preserve all the copyright notices of the Document.
+
+          <li>Add an appropriate copyright notice for your modifications
+adjacent to the other copyright notices.
+
+          <li>Include, immediately after the copyright notices, a license notice
+giving the public permission to use the Modified Version under the
+terms of this License, in the form shown in the Addendum below.
+
+          <li>Preserve in that license notice the full lists of Invariant Sections
+and required Cover Texts given in the Document's license notice.
+
+          <li>Include an unaltered copy of this License.
+
+          <li>Preserve the section Entitled &ldquo;History&rdquo;, Preserve its Title, and add
+to it an item stating at least the title, year, new authors, and
+publisher of the Modified Version as given on the Title Page.  If
+there is no section Entitled &ldquo;History&rdquo; in the Document, create one
+stating the title, year, authors, and publisher of the Document as
+given on its Title Page, then add an item describing the Modified
+Version as stated in the previous sentence.
+
+          <li>Preserve the network location, if any, given in the Document for
+public access to a Transparent copy of the Document, and likewise
+the network locations given in the Document for previous versions
+it was based on.  These may be placed in the &ldquo;History&rdquo; section. 
+You may omit a network location for a work that was published at
+least four years before the Document itself, or if the original
+publisher of the version it refers to gives permission.
+
+          <li>For any section Entitled &ldquo;Acknowledgements&rdquo; or &ldquo;Dedications&rdquo;, Preserve
+the Title of the section, and preserve in the section all the
+substance and tone of each of the contributor acknowledgements and/or
+dedications given therein.
+
+          <li>Preserve all the Invariant Sections of the Document,
+unaltered in their text and in their titles.  Section numbers
+or the equivalent are not considered part of the section titles.
+
+          <li>Delete any section Entitled &ldquo;Endorsements&rdquo;.  Such a section
+may not be included in the Modified Version.
+
+          <li>Do not retitle any existing section to be Entitled &ldquo;Endorsements&rdquo; or
+to conflict in title with any Invariant Section.
+
+          <li>Preserve any Warranty Disclaimers.
+          </ol>
+
+     <p>If the Modified Version includes new front-matter sections or
+appendices that qualify as Secondary Sections and contain no material
+copied from the Document, you may at your option designate some or all
+of these sections as invariant.  To do this, add their titles to the
+list of Invariant Sections in the Modified Version's license notice. 
+These titles must be distinct from any other section titles.
+
+     <p>You may add a section Entitled &ldquo;Endorsements&rdquo;, provided it contains
+nothing but endorsements of your Modified Version by various
+parties&mdash;for example, statements of peer review or that the text has
+been approved by an organization as the authoritative definition of a
+standard.
+
+     <p>You may add a passage of up to five words as a Front-Cover Text, and a
+passage of up to 25 words as a Back-Cover Text, to the end of the list
+of Cover Texts in the Modified Version.  Only one passage of
+Front-Cover Text and one of Back-Cover Text may be added by (or
+through arrangements made by) any one entity.  If the Document already
+includes a cover text for the same cover, previously added by you or
+by arrangement made by the same entity you are acting on behalf of,
+you may not add another; but you may replace the old one, on explicit
+permission from the previous publisher that added the old one.
+
+     <p>The author(s) and publisher(s) of the Document do not by this License
+give permission to use their names for publicity for or to assert or
+imply endorsement of any Modified Version.
+
+     <li>COMBINING DOCUMENTS
+
+     <p>You may combine the Document with other documents released under this
+License, under the terms defined in section 4 above for modified
+versions, provided that you include in the combination all of the
+Invariant Sections of all of the original documents, unmodified, and
+list them all as Invariant Sections of your combined work in its
+license notice, and that you preserve all their Warranty Disclaimers.
+
+     <p>The combined work need only contain one copy of this License, and
+multiple identical Invariant Sections may be replaced with a single
+copy.  If there are multiple Invariant Sections with the same name but
+different contents, make the title of each such section unique by
+adding at the end of it, in parentheses, the name of the original
+author or publisher of that section if known, or else a unique number. 
+Make the same adjustment to the section titles in the list of
+Invariant Sections in the license notice of the combined work.
+
+     <p>In the combination, you must combine any sections Entitled &ldquo;History&rdquo;
+in the various original documents, forming one section Entitled
+&ldquo;History&rdquo;; likewise combine any sections Entitled &ldquo;Acknowledgements&rdquo;,
+and any sections Entitled &ldquo;Dedications&rdquo;.  You must delete all
+sections Entitled &ldquo;Endorsements.&rdquo;
+
+     <li>COLLECTIONS OF DOCUMENTS
+
+     <p>You may make a collection consisting of the Document and other documents
+released under this License, and replace the individual copies of this
+License in the various documents with a single copy that is included in
+the collection, provided that you follow the rules of this License for
+verbatim copying of each of the documents in all other respects.
+
+     <p>You may extract a single document from such a collection, and distribute
+it individually under this License, provided you insert a copy of this
+License into the extracted document, and follow this License in all
+other respects regarding verbatim copying of that document.
+
+     <li>AGGREGATION WITH INDEPENDENT WORKS
+
+     <p>A compilation of the Document or its derivatives with other separate
+and independent documents or works, in or on a volume of a storage or
+distribution medium, is called an &ldquo;aggregate&rdquo; if the copyright
+resulting from the compilation is not used to limit the legal rights
+of the compilation's users beyond what the individual works permit. 
+When the Document is included in an aggregate, this License does not
+apply to the other works in the aggregate which are not themselves
+derivative works of the Document.
+
+     <p>If the Cover Text requirement of section 3 is applicable to these
+copies of the Document, then if the Document is less than one half of
+the entire aggregate, the Document's Cover Texts may be placed on
+covers that bracket the Document within the aggregate, or the
+electronic equivalent of covers if the Document is in electronic form. 
+Otherwise they must appear on printed covers that bracket the whole
+aggregate.
+
+     <li>TRANSLATION
+
+     <p>Translation is considered a kind of modification, so you may
+distribute translations of the Document under the terms of section 4. 
+Replacing Invariant Sections with translations requires special
+permission from their copyright holders, but you may include
+translations of some or all Invariant Sections in addition to the
+original versions of these Invariant Sections.  You may include a
+translation of this License, and all the license notices in the
+Document, and any Warranty Disclaimers, provided that you also include
+the original English version of this License and the original versions
+of those notices and disclaimers.  In case of a disagreement between
+the translation and the original version of this License or a notice
+or disclaimer, the original version will prevail.
+
+     <p>If a section in the Document is Entitled &ldquo;Acknowledgements&rdquo;,
+&ldquo;Dedications&rdquo;, or &ldquo;History&rdquo;, the requirement (section 4) to Preserve
+its Title (section 1) will typically require changing the actual
+title.
+
+     <li>TERMINATION
+
+     <p>You may not copy, modify, sublicense, or distribute the Document
+except as expressly provided under this License.  Any attempt
+otherwise to copy, modify, sublicense, or distribute it is void, and
+will automatically terminate your rights under this License.
+
+     <p>However, if you cease all violation of this License, then your license
+from a particular copyright holder is reinstated (a) provisionally,
+unless and until the copyright holder explicitly and finally
+terminates your license, and (b) permanently, if the copyright holder
+fails to notify you of the violation by some reasonable means prior to
+60 days after the cessation.
+
+     <p>Moreover, your license from a particular copyright holder is
+reinstated permanently if the copyright holder notifies you of the
+violation by some reasonable means, this is the first time you have
+received notice of violation of this License (for any work) from that
+copyright holder, and you cure the violation prior to 30 days after
+your receipt of the notice.
+
+     <p>Termination of your rights under this section does not terminate the
+licenses of parties who have received copies or rights from you under
+this License.  If your rights have been terminated and not permanently
+reinstated, receipt of a copy of some or all of the same material does
+not give you any rights to use it.
+
+     <li>FUTURE REVISIONS OF THIS LICENSE
+
+     <p>The Free Software Foundation may publish new, revised versions
+of the GNU Free Documentation License from time to time.  Such new
+versions will be similar in spirit to the present version, but may
+differ in detail to address new problems or concerns.  See
+<a href="http://www.gnu.org/copyleft/">http://www.gnu.org/copyleft/</a>.
+
+     <p>Each version of the License is given a distinguishing version number. 
+If the Document specifies that a particular numbered version of this
+License &ldquo;or any later version&rdquo; applies to it, you have the option of
+following the terms and conditions either of that specified version or
+of any later version that has been published (not as a draft) by the
+Free Software Foundation.  If the Document does not specify a version
+number of this License, you may choose any version ever published (not
+as a draft) by the Free Software Foundation.  If the Document
+specifies that a proxy can decide which future versions of this
+License can be used, that proxy's public statement of acceptance of a
+version permanently authorizes you to choose that version for the
+Document.
+
+     <li>RELICENSING
+
+     <p>&ldquo;Massive Multiauthor Collaboration Site&rdquo; (or &ldquo;MMC Site&rdquo;) means any
+World Wide Web server that publishes copyrightable works and also
+provides prominent facilities for anybody to edit those works.  A
+public wiki that anybody can edit is an example of such a server.  A
+&ldquo;Massive Multiauthor Collaboration&rdquo; (or &ldquo;MMC&rdquo;) contained in the
+site means any set of copyrightable works thus published on the MMC
+site.
+
+     <p>&ldquo;CC-BY-SA&rdquo; means the Creative Commons Attribution-Share Alike 3.0
+license published by Creative Commons Corporation, a not-for-profit
+corporation with a principal place of business in San Francisco,
+California, as well as future copyleft versions of that license
+published by that same organization.
+
+     <p>&ldquo;Incorporate&rdquo; means to publish or republish a Document, in whole or
+in part, as part of another Document.
+
+     <p>An MMC is &ldquo;eligible for relicensing&rdquo; if it is licensed under this
+License, and if all works that were first published under this License
+somewhere other than this MMC, and subsequently incorporated in whole
+or in part into the MMC, (1) had no cover texts or invariant sections,
+and (2) were thus incorporated prior to November 1, 2008.
+
+     <p>The operator of an MMC Site may republish an MMC contained in the site
+under CC-BY-SA on the same site at any time before August 1, 2009,
+provided the MMC is eligible for relicensing.
+
+        </ol>
+
+<h3 class="heading">ADDENDUM: How to use this License for your documents</h3>
+
+<p>To use this License in a document you have written, include a copy of
+the License in the document and put the following copyright and
+license notices just after the title page:
+
+<pre class="smallexample">       Copyright (C)  <var>year</var>  <var>your name</var>.
+       Permission is granted to copy, distribute and/or modify this document
+       under the terms of the GNU Free Documentation License, Version 1.3
+       or any later version published by the Free Software Foundation;
+       with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+       Texts.  A copy of the license is included in the section entitled ``GNU
+       Free Documentation License''.
+</pre>
+   <p>If you have Invariant Sections, Front-Cover Texts and Back-Cover Texts,
+replace the &ldquo;with<small class="dots">...</small>Texts.&rdquo; line with this:
+
+<pre class="smallexample">         with the Invariant Sections being <var>list their titles</var>, with
+         the Front-Cover Texts being <var>list</var>, and with the Back-Cover Texts
+         being <var>list</var>.
+</pre>
+   <p>If you have Invariant Sections without Cover Texts, or some other
+combination of the three, merge those two alternatives to suit the
+situation.
+
+   <p>If your document contains nontrivial examples of program code, we
+recommend releasing these examples in parallel under your choice of
+free software license, such as the GNU General Public License,
+to permit their use in free software.
+
+<!-- Local Variables: -->
+<!-- ispell-local-pdict: "ispell-dict" -->
+<!-- End: -->
+<div class="node">
+<a name="Index"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="unnumbered">Concept Index</h2>
+
+<ul class="index-cp" compact>
+<li><a href="#index-buffer-mode-22">buffer mode</a>: <a href="#Buffer-Mode">Buffer Mode</a></li>
+<li><a href="#index-common-keys-9">common keys</a>: <a href="#Basic-Key-Bindings">Basic Key Bindings</a></li>
+<li><a href="#index-create-major-display-mode-68">create major display mode</a>: <a href="#Major-Display-Modes">Major Display Modes</a></li>
+<li><a href="#index-create-minor-display-mode-67">create minor display mode</a>: <a href="#Minor-Display-Modes">Minor Display Modes</a></li>
+<li><a href="#index-creating-a-display-81">creating a display</a>: <a href="#Creating-a-display">Creating a display</a></li>
+<li><a href="#index-customizing-28">customizing</a>: <a href="#Customizing">Customizing</a></li>
+<li><a href="#index-directory-display-17">directory display</a>: <a href="#Directory-Display">Directory Display</a></li>
+<li><a href="#index-displays-submenu-15">displays submenu</a>: <a href="#Displays-Submenu">Displays Submenu</a></li>
+<li><a href="#index-extending-66">extending</a>: <a href="#Extending">Extending</a></li>
+<li><a href="#index-faces-29">faces</a>: <a href="#Frames-and-Faces">Frames and Faces</a></li>
+<li><a href="#index-file-flags-18">file flags</a>: <a href="#Directory-Display">Directory Display</a></li>
+<li><a href="#index-file-key-bindings-21">file key bindings</a>: <a href="#File-Key-Bindings">File Key Bindings</a></li>
+<li><a href="#index-file-mode-16">file mode</a>: <a href="#File-Mode">File Mode</a></li>
+<li><a href="#index-frame-parameters-30">frame parameters</a>: <a href="#Frames-and-Faces">Frames and Faces</a></li>
+<li><a href="#index-gdb-26">gdb</a>: <a href="#GDB">GDB</a></li>
+<li><a href="#index-groups-11">groups</a>: <a href="#Basic-Visuals">Basic Visuals</a></li>
+<li><a href="#index-gud-27">gud</a>: <a href="#GDB">GDB</a></li>
+<li><a href="#index-hidden-files-20">hidden files</a>: <a href="#Hidden-Files">Hidden Files</a></li>
+<li><a href="#index-hooks-56">hooks</a>: <a href="#Hooks">Hooks</a></li>
+<li><a href="#index-Info-25">Info</a>: <a href="#Info">Info</a></li>
+<li><a href="#index-introduction-1">introduction</a>: <a href="#Introduction">Introduction</a></li>
+<li><a href="#index-key-bindings-3">key bindings</a>: <a href="#Basic-Key-Bindings">Basic Key Bindings</a></li>
+<li><a href="#index-minor-display-modes-23">minor display modes</a>: <a href="#Minor-Modes">Minor Modes</a></li>
+<li><a href="#index-mode-switching-hotkeys-8">mode switching hotkeys</a>: <a href="#Basic-Key-Bindings">Basic Key Bindings</a></li>
+<li><a href="#index-mouse-bindings-13">mouse bindings</a>: <a href="#Mouse-Bindings">Mouse Bindings</a></li>
+<li><a href="#index-my_002dfetch_002ddynamic_002dtags-77"><code>my-fetch-dynamic-tags</code></a>: <a href="#Tagging-Extensions">Tagging Extensions</a></li>
+<li><a href="#index-my_002dinsert_002dtag_002dlist-78"><code>my-insert-tag-list</code></a>: <a href="#Tagging-Extensions">Tagging Extensions</a></li>
+<li><a href="#index-navigation-7">navigation</a>: <a href="#Basic-Key-Bindings">Basic Key Bindings</a></li>
+<li><a href="#index-power-click-14">power click</a>: <a href="#Mouse-Bindings">Mouse Bindings</a></li>
+<li><a href="#index-quitting-speedbar-4">quitting speedbar</a>: <a href="#Basic-Key-Bindings">Basic Key Bindings</a></li>
+<li><a href="#index-refresh-speedbar-display-5">refresh speedbar display</a>: <a href="#Basic-Key-Bindings">Basic Key Bindings</a></li>
+<li><a href="#index-RMAIL-24">RMAIL</a>: <a href="#RMAIL">RMAIL</a></li>
+<li><a href="#index-slowbar-mode-6">slowbar mode</a>: <a href="#Basic-Key-Bindings">Basic Key Bindings</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dbefore_002ddelete_002dhook_007d-62"><code>speedbar-before-delete-hook</code></a>: <a href="#Hooks">Hooks</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dbefore_002dpopup_002dhook_007d-61"><code>speedbar-before-popup-hook</code></a>: <a href="#Hooks">Hooks</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dbutton_002dface_007d-31"><code>speedbar-button-face</code></a>: <a href="#Frames-and-Faces">Frames and Faces</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dcontract_002dline_007d-72"><code>speedbar-contract-line</code></a>: <a href="#Major-Display-Modes">Major Display Modes</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dcreate_002dtag_002dhierarchy_007d-79"><code>speedbar-create-tag-hierarchy</code></a>: <a href="#Tagging-Extensions">Tagging Extensions</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002ddirectory_002dface_007d-33"><code>speedbar-directory-face</code></a>: <a href="#Frames-and-Faces">Frames and Faces</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002ddirectory_002dunshown_002dregexp_007d-52"><code>speedbar-directory-unshown-regexp</code></a>: <a href="#Version-Control">Version Control</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002ddynamic_002dtags_002dfunction_002dlist_007d-80"><code>speedbar-dynamic-tags-function-list</code></a>: <a href="#Tagging-Extensions">Tagging Extensions</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dedit_002dline_007d-70"><code>speedbar-edit-line</code></a>: <a href="#Major-Display-Modes">Major Display Modes</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dexpand_002dline_007d-71"><code>speedbar-expand-line</code></a>: <a href="#Major-Display-Modes">Major Display Modes</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dfile_002dface_007d-32"><code>speedbar-file-face</code></a>: <a href="#Frames-and-Faces">Frames and Faces</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dframe_002dparameters_007d_002c-Emacs-37"><code>speedbar-frame-parameters</code>, Emacs</a>: <a href="#Frames-and-Faces">Frames and Faces</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dframe_002dplist_007d_002c-XEmacs-38"><code>speedbar-frame-plist</code>, XEmacs</a>: <a href="#Frames-and-Faces">Frames and Faces</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dget_002dfocus_007d-2"><code>speedbar-get-focus</code></a>: <a href="#Introduction">Introduction</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dhighlight_002dface_007d-36"><code>speedbar-highlight-face</code></a>: <a href="#Frames-and-Faces">Frames and Faces</a></li>
+<li><a href="#index-speedbar_002dinsert_002dbutton-82"><code>speedbar-insert-button</code></a>: <a href="#Creating-a-display">Creating a display</a></li>
+<li><a href="#index-speedbar_002dinsert_002dgeneric_002dlist-84"><code>speedbar-insert-generic-list</code></a>: <a href="#Creating-a-display">Creating a display</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002ditem_002dinfo_007d-74"><code>speedbar-item-info</code></a>: <a href="#Major-Display-Modes">Major Display Modes</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002ditem_002dinfo_002dfile_002dhelper_007d-75"><code>speedbar-item-info-file-helper</code></a>: <a href="#Major-Display-Modes">Major Display Modes</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002ditem_002dinfo_002dtag_002dhelper_007d-76"><code>speedbar-item-info-tag-helper</code></a>: <a href="#Major-Display-Modes">Major Display Modes</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dline_002dpath_007d-73"><code>speedbar-line-path</code></a>: <a href="#Major-Display-Modes">Major Display Modes</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dload_002dhook_007d-59"><code>speedbar-load-hook</code></a>: <a href="#Hooks">Hooks</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dmake_002dspecialized_002dkeymap_007d-69"><code>speedbar-make-specialized-keymap</code></a>: <a href="#Major-Display-Modes">Major Display Modes</a></li>
+<li><a href="#index-speedbar_002dmake_002dtag_002dline-83"><code>speedbar-make-tag-line</code></a>: <a href="#Creating-a-display">Creating a display</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dmode_002dhook_007d-63"><code>speedbar-mode-hook</code></a>: <a href="#Hooks">Hooks</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dobj_002dalist_007d-19"><code>speedbar-obj-alist</code></a>: <a href="#Directory-Display">Directory Display</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dprefix_002dgroup_002dtag_002dhierarchy_007d-44"><code>speedbar-prefix-group-tag-hierarchy</code></a>: <a href="#Tag-Hierarchy-Methods">Tag Hierarchy Methods</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dreconfigure_002dkeymaps_002dhook_007d-60"><code>speedbar-reconfigure-keymaps-hook</code></a>: <a href="#Hooks">Hooks</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dscanner_002dreset_002dhook_007d-65"><code>speedbar-scanner-reset-hook</code></a>: <a href="#Hooks">Hooks</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dselected_002dface_007d-35"><code>speedbar-selected-face</code></a>: <a href="#Frames-and-Faces">Frames and Faces</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dsimple_002dgroup_002dtag_002dhierarchy_007d-45"><code>speedbar-simple-group-tag-hierarchy</code></a>: <a href="#Tag-Hierarchy-Methods">Tag Hierarchy Methods</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dsort_002dtag_002dhierarchy_007d-46"><code>speedbar-sort-tag-hierarchy</code></a>: <a href="#Tag-Hierarchy-Methods">Tag Hierarchy Methods</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dtag_002dface_007d-34"><code>speedbar-tag-face</code></a>: <a href="#Frames-and-Faces">Frames and Faces</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dtag_002dgroup_002dname_002dminimum_002dlength_007d-47"><code>speedbar-tag-group-name-minimum-length</code></a>: <a href="#Tag-Hierarchy-Methods">Tag Hierarchy Methods</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dtag_002dhierarchy_002dmethod_007d-42"><code>speedbar-tag-hierarchy-method</code></a>: <a href="#Tag-Hierarchy-Methods">Tag Hierarchy Methods</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dtag_002dregroup_002dmaximum_002dlength_007d-49"><code>speedbar-tag-regroup-maximum-length</code></a>: <a href="#Tag-Hierarchy-Methods">Tag Hierarchy Methods</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dtag_002dsplit_002dminimum_002dlength_007d-48"><code>speedbar-tag-split-minimum-length</code></a>: <a href="#Tag-Hierarchy-Methods">Tag Hierarchy Methods</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dtimer_002dhook_007d-64"><code>speedbar-timer-hook</code></a>: <a href="#Hooks">Hooks</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dtrim_002dwords_002dtag_002dhierarchy_007d-43"><code>speedbar-trim-words-tag-hierarchy</code></a>: <a href="#Tag-Hierarchy-Methods">Tag Hierarchy Methods</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dvc_002din_002dcontrol_002dhook_007d-54"><code>speedbar-vc-in-control-hook</code></a>: <a href="#Version-Control">Version Control</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dvc_002dindicator_007d-55"><code>speedbar-vc-indicator</code></a>: <a href="#Version-Control">Version Control</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dvc_002dpath_002denable_002dhook_007d-53"><code>speedbar-vc-path-enable-hook</code></a>: <a href="#Version-Control">Version Control</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dvisiting_002dfile_002dhook_007d-57"><code>speedbar-visiting-file-hook</code></a>: <a href="#Hooks">Hooks</a></li>
+<li><a href="#index-g_t_0040code_007bspeedbar_002dvisiting_002dtag_002dhook_007d-58"><code>speedbar-visiting-tag-hook</code></a>: <a href="#Hooks">Hooks</a></li>
+<li><a href="#index-tag-groups-40">tag groups</a>: <a href="#Tag-Hierarchy-Methods">Tag Hierarchy Methods</a></li>
+<li><a href="#index-tag-hierarchy-39">tag hierarchy</a>: <a href="#Tag-Hierarchy-Methods">Tag Hierarchy Methods</a></li>
+<li><a href="#index-tag-sorting-41">tag sorting</a>: <a href="#Tag-Hierarchy-Methods">Tag Hierarchy Methods</a></li>
+<li><a href="#index-tags-12">tags</a>: <a href="#Basic-Visuals">Basic Visuals</a></li>
+<li><a href="#index-vc-extensions-51">vc extensions</a>: <a href="#Version-Control">Version Control</a></li>
+<li><a href="#index-version-control-50">version control</a>: <a href="#Version-Control">Version Control</a></li>
+<li><a href="#index-visuals-10">visuals</a>: <a href="#Basic-Visuals">Basic Visuals</a></li>
+   </ul></body></html>
+
+<!--
+
+Local Variables:
+coding: utf-8
+End:
+
+-->

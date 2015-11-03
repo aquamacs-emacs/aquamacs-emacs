@@ -10,15 +10,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -39,7 +39,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Nonlocal-Exits.html#Nonlocal-Exits">Non
 <hr>
 </div>
 
-<h4 class="subsection">10.5.1 Explicit Nonlocal Exits: <code>catch</code> and <code>throw</code></h4>
+<h4 class="subsection">10.6.1 Explicit Nonlocal Exits: <code>catch</code> and <code>throw</code></h4>
 
 <p>Most control constructs affect only the flow of control within the
 construct itself.  The function <code>throw</code> is the exception to this
@@ -90,7 +90,7 @@ before exit from it, it has access to that <code>catch</code>.  This is why
 <code>throw</code> can be used in commands such as <code>exit-recursive-edit</code>
 that throw back to the editor command loop (see <a href="Recursive-Editing.html#Recursive-Editing">Recursive Editing</a>).
 
-   <p><a name="index-CL-note_002d_002d_002donly-_0040code_007bthrow_007d-in-Emacs-568"></a><blockquote>
+   <p><a name="index-CL-note_002d_002d_002donly-_0040code_007bthrow_007d-in-Emacs-666"></a><blockquote>
 <b>Common Lisp note:</b> Most other versions of Lisp, including Common Lisp,
 have several ways of transferring control nonsequentially: <code>return</code>,
 <code>return-from</code>, and <code>go</code>, for example.  Emacs Lisp has only
@@ -99,8 +99,8 @@ these.  See <a href="../cl/Blocks-and-Exits.html#Blocks-and-Exits">Blocks and Ex
 </blockquote>
 
 <div class="defun">
-&mdash; Special Form: <b>catch</b><var> tag body<small class="dots">...</small><a name="index-catch-569"></a></var><br>
-<blockquote><p><a name="index-tag-on-run-time-stack-570"></a><code>catch</code> establishes a return point for the <code>throw</code> function. 
+&mdash; Special Form: <b>catch</b><var> tag body<small class="dots">...</small><a name="index-catch-667"></a></var><br>
+<blockquote><p><a name="index-tag-on-run-time-stack-668"></a><code>catch</code> establishes a return point for the <code>throw</code> function. 
 The return point is distinguished from other such return points by
 <var>tag</var>, which may be any Lisp object except <code>nil</code>.  The argument
 <var>tag</var> is evaluated normally before the return point is established.
@@ -117,7 +117,7 @@ second argument of <code>throw</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>throw</b><var> tag value<a name="index-throw-571"></a></var><br>
+&mdash; Function: <b>throw</b><var> tag value<a name="index-throw-669"></a></var><br>
 <blockquote><p>The purpose of <code>throw</code> is to return from a return point previously
 established with <code>catch</code>.  The argument <var>tag</var> is used to choose
 among the various existing return points; it must be <code>eq</code> to the value
@@ -127,7 +127,7 @@ the innermost one is used.
         <p>The argument <var>value</var> is used as the value to return from that
 <code>catch</code>.
 
-        <p><a name="index-no_002dcatch-572"></a>If no return point is in effect with tag <var>tag</var>, then a <code>no-catch</code>
+        <p><a name="index-no_002dcatch-670"></a>If no return point is in effect with tag <var>tag</var>, then a <code>no-catch</code>
 error is signaled with data <code>(</code><var>tag</var> <var>value</var><code>)</code>. 
 </p></blockquote></div>
 

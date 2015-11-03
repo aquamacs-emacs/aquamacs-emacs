@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -43,7 +43,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Byte-Compilation.html#Byte-Compilation"
 
 <h3 class="section">16.2 Byte-Compilation Functions</h3>
 
-<p><a name="index-compilation-functions-905"></a>
+<p><a name="index-compilation-functions-1043"></a>
   You can byte-compile an individual function or macro definition with
 the <code>byte-compile</code> function.  You can compile a whole file with
 <code>byte-compile-file</code>, or several files with
@@ -54,7 +54,7 @@ the <code>byte-compile</code> function.  You can compile a whole file with
 in a buffer called <samp><span class="file">*Compile-Log*</span></samp>, which uses Compilation mode. 
 See <a href="../emacs/Compilation-Mode.html#Compilation-Mode">Compilation Mode</a>.
 
-   <p><a name="index-macro-compilation-906"></a>  Be careful when writing macro calls in files that you intend to
+   <p><a name="index-macro-compilation-1044"></a>  Be careful when writing macro calls in files that you intend to
 byte-compile.  Since macro calls are expanded when they are compiled,
 the macros need to be loaded into Emacs or the byte compiler will not
 do the right thing.  The usual way to handle this is with
@@ -72,7 +72,7 @@ compile a call to such a function before its definition is known, the
 call will still work right, it will just run slower.
 
 <div class="defun">
-&mdash; Function: <b>byte-compile</b><var> symbol<a name="index-byte_002dcompile-907"></a></var><br>
+&mdash; Function: <b>byte-compile</b><var> symbol<a name="index-byte_002dcompile-1045"></a></var><br>
 <blockquote><p>This function byte-compiles the function definition of <var>symbol</var>,
 replacing the previous definition with the compiled one.  The function
 definition of <var>symbol</var> must be the actual code for the function;
@@ -95,7 +95,7 @@ definition of <var>symbol</var> (see <a href="Byte_002dCode-Objects.html#Byte_00
 </pre>
         <p>If <var>symbol</var>'s definition is a byte-code function object,
 <code>byte-compile</code> does nothing and returns <code>nil</code>.  It does not
-&ldquo;compile the symbol's definition again&rdquo;, since the original
+compile the symbol's definition again, since the original
 (non-compiled) code has already been replaced in the symbol's function
 cell by the byte-compiled code.
 
@@ -105,7 +105,7 @@ compiled code but does not store it anywhere.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>compile-defun</b><var> &amp;optional arg<a name="index-compile_002ddefun-908"></a></var><br>
+&mdash; Command: <b>compile-defun</b><var> &amp;optional arg<a name="index-compile_002ddefun-1046"></a></var><br>
 <blockquote><p>This command reads the defun containing point, compiles it, and
 evaluates the result.  If you use this on a defun that is actually a
 function definition, the effect is to install a compiled version of that
@@ -117,7 +117,7 @@ in the current buffer after the form it compiled.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>byte-compile-file</b><var> filename &amp;optional load<a name="index-byte_002dcompile_002dfile-909"></a></var><br>
+&mdash; Command: <b>byte-compile-file</b><var> filename &amp;optional load<a name="index-byte_002dcompile_002dfile-1047"></a></var><br>
 <blockquote><p>This function compiles a file of Lisp code named <var>filename</var> into a
 file of byte-code.  The output file's name is made by changing the
 &lsquo;<samp><span class="samp">.el</span></samp>&rsquo; suffix into &lsquo;<samp><span class="samp">.elc</span></samp>&rsquo;; if <var>filename</var> does not end in
@@ -149,8 +149,8 @@ after compiling it.  Interactively, <var>load</var> is the prefix argument.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>byte-recompile-directory</b><var> directory &amp;optional flag force<a name="index-byte_002drecompile_002ddirectory-910"></a></var><br>
-<blockquote><p><a name="index-library-compilation-911"></a>This command recompiles every &lsquo;<samp><span class="samp">.el</span></samp>&rsquo; file in <var>directory</var> (or
+&mdash; Command: <b>byte-recompile-directory</b><var> directory &amp;optional flag force<a name="index-byte_002drecompile_002ddirectory-1048"></a></var><br>
+<blockquote><p><a name="index-library-compilation-1049"></a>This command recompiles every &lsquo;<samp><span class="samp">.el</span></samp>&rsquo; file in <var>directory</var> (or
 its subdirectories) that needs recompilation.  A file needs
 recompilation if a &lsquo;<samp><span class="samp">.elc</span></samp>&rsquo; file exists but is older than the
 &lsquo;<samp><span class="samp">.el</span></samp>&rsquo; file.
@@ -171,7 +171,7 @@ and asks about each subdirectory as well.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>batch-byte-compile</b><var> &amp;optional noforce<a name="index-batch_002dbyte_002dcompile-912"></a></var><br>
+&mdash; Function: <b>batch-byte-compile</b><var> &amp;optional noforce<a name="index-batch_002dbyte_002dcompile-1050"></a></var><br>
 <blockquote><p>This function runs <code>byte-compile-file</code> on files specified on the
 command line.  This function must be used only in a batch execution of
 Emacs, as it kills Emacs on completion.  An error in one file does not

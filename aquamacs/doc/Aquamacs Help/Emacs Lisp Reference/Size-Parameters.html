@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,35 +41,62 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Window-Frame-Parameters.html#Window-Fra
 <hr>
 </div>
 
-<h5 class="subsubsection">29.3.3.3 Size Parameters</h5>
+<h5 class="subsubsection">28.4.3.3 Size Parameters</h5>
 
-<p><a name="index-window-size-on-display-2524"></a>
+<p><a name="index-window-size-on-display-2796"></a>
   Frame parameters specify frame sizes in character units.  On
 graphical displays, the <code>default</code> face determines the actual
 pixel sizes of these character units (see <a href="Face-Attributes.html#Face-Attributes">Face Attributes</a>).
 
      
-<a name="index-height_002c-a-frame-parameter-2525"></a>
-<dl><dt><code>height</code><dd>The height of the frame contents, in characters.  (To get the height in
-pixels, call <code>frame-pixel-height</code>; see <a href="Size-and-Position.html#Size-and-Position">Size and Position</a>.)
+<a name="index-height_002c-a-frame-parameter-2797"></a>
+<dl><dt><code>height</code><dd>The height of the frame's text area (see <a href="Frame-Geometry.html#Frame-Geometry">Frame Geometry</a>), in
+characters.
 
-     <p><a name="index-width_002c-a-frame-parameter-2526"></a><br><dt><code>width</code><dd>The width of the frame contents, in characters.  (To get the width in
-pixels, call <code>frame-pixel-width</code>; see <a href="Size-and-Position.html#Size-and-Position">Size and Position</a>.)
+     <p><a name="index-width_002c-a-frame-parameter-2798"></a><br><dt><code>width</code><dd>The width of the frame's text area (see <a href="Frame-Geometry.html#Frame-Geometry">Frame Geometry</a>), in
+characters.
 
-     <p><a name="index-user_002dsize_002c-a-frame-parameter-2527"></a><br><dt><code>user-size</code><dd>This does for the size parameters <code>height</code> and <code>width</code> what
+     <p><a name="index-user_002dsize_002c-a-frame-parameter-2799"></a><br><dt><code>user-size</code><dd>This does for the size parameters <code>height</code> and <code>width</code> what
 the <code>user-position</code> parameter (see <a href="Position-Parameters.html#Position-Parameters">user-position</a>) does for the position parameters <code>top</code> and
 <code>left</code>.
 
-     <p><a name="index-full_002dscreen-frames-2528"></a><a name="index-fullscreen_002c-a-frame-parameter-2529"></a><br><dt><code>fullscreen</code><dd>Specify that width, height or both shall be maximized.  The value
-<code>fullwidth</code> specifies that width shall be as wide as possible. 
-The value <code>fullheight</code> specifies that height shall be as tall as
-possible.  The value <code>fullboth</code> specifies that both the width and
-the height shall be set to the size of the screen.  The value
-<code>maximized</code> specifies that the frame shall be maximized.  The
-difference between <code>maximized</code> and <code>fullboth</code> is that the
-former can still be resized by dragging window manager decorations
-with the mouse, while the latter really covers the whole screen and
-does not allow resizing by mouse dragging. 
+     <p><a name="index-fullboth-frames-2800"></a><a name="index-fullheight-frames-2801"></a><a name="index-fullwidth-frames-2802"></a><a name="index-maximized-frames-2803"></a><a name="index-fullscreen_002c-a-frame-parameter-2804"></a><br><dt><code>fullscreen</code><dd>This parameter specifies whether to maximize the frame's width, height
+or both.  Its value can be <code>fullwidth</code>, <code>fullheight</code>,
+<code>fullboth</code>, or <code>maximized</code>.  A <dfn>fullwidth</dfn> frame is as
+wide as possible, a <dfn>fullheight</dfn> frame is as tall as possible, and
+a <dfn>fullboth</dfn> frame is both as wide and as tall as possible.  A
+<dfn>maximized</dfn> frame is like a &ldquo;fullboth&rdquo; frame, except that it usually
+keeps its title bar and the buttons for resizing
+and closing the frame.  Also, maximized frames typically avoid hiding
+any task bar or panels displayed on the desktop.  A &ldquo;fullboth&rdquo; frame,
+on the other hand, usually omits the title bar and occupies the entire
+available screen space.
+
+     <p>Full-height and full-width frames are more similar to maximized
+frames in this regard.  However, these typically display an external
+border which might be absent with maximized frames.  Hence the heights
+of maximized and full-height frames and the widths of maximized and
+full-width frames often differ by a few pixels.
+
+     <p>With some window managers you may have to customize the variable
+<code>frame-resize-pixelwise</code> (see <a href="Size-and-Position.html#Size-and-Position">Size and Position</a>) in order to
+make a frame truly appear maximized or full-screen.  Moreover,
+some window managers might not support smooth transition between the
+various full-screen or maximization states.  Customizing the variable
+<code>x-frame-normalize-before-maximize</code> can help to overcome that.
+
+     <p><a name="index-fullscreen_002drestore_002c-a-frame-parameter-2805"></a><br><dt><code>fullscreen-restore</code><dd>This parameter specifies the desired fullscreen state of the frame
+after invoking the <code>toggle-frame-fullscreen</code> command (see <a href="../emacs/Frame-Commands.html#Frame-Commands">Frame Commands</a>) in the &ldquo;fullboth&rdquo; state. 
+Normally this parameter is installed automatically by that command when
+toggling the state to fullboth.  If, however, you start Emacs in the
+&ldquo;fullboth&rdquo; state, you have to specify the desired behavior in your initial
+file as, for example
+
+     <pre class="example">          (setq default-frame-alist
+              '((fullscreen . fullboth) (fullscreen-restore . fullheight)))
+</pre>
+     <p>This will give a new frame full height after typing in it &lt;F11&gt; for
+the first time. 
 </dl>
 
    </body></html>

@@ -10,16 +10,16 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Manual',
-updated for Emacs version 24.3.50.
+updated for Emacs version 25.0.50.
 
-Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``The GNU
      Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     with the Front-Cover Texts being ``A GNU Manual,'' and with the
      Back-Cover Texts as in (a) below.  A copy of the license is
      included in the section entitled ``GNU Free Documentation
      License.''
@@ -42,13 +42,13 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Deletion-and-Killing.html#Deletion-and-
 
 <h4 class="subsection">12.1.1 Deletion</h4>
 
-<p><a name="index-delete_002dbackward_002dchar-404"></a><a name="index-delete_002dchar-405"></a>
+<p><a name="index-delete_002dbackward_002dchar-406"></a><a name="index-delete_002dchar-407"></a>
   Deletion means erasing text and not saving it in the kill ring.  For
 the most part, the Emacs commands that delete text are those that
 erase just one character or only whitespace.
 
      <dl>
-<dt><kbd>&lt;DEL&gt;</kbd><dt><kbd>&lt;Backspace&gt;</kbd><dd>Delete the previous character, or the text in the region if it is
+<dt><kbd>&lt;DEL&gt;</kbd><dt><kbd>&lt;BACKSPACE&gt;</kbd><dd>Delete the previous character, or the text in the region if it is
 active (<code>delete-backward-char</code>).
 
      <br><dt><kbd>&lt;Delete&gt;</kbd><dd>Delete the next character, or the text in the region if it is active
@@ -68,12 +68,11 @@ indentation following it (<code>delete-indentation</code>).
 (<code>delete-backward-char</code>), &lt;delete&gt;
 (<code>delete-forward-char</code>), and <kbd>C-d</kbd> (<code>delete-char</code>). 
 See <a href="Erasing.html#Erasing">Erasing</a>.  With a numeric argument, they delete the specified
-number of characters.  If the numeric argument is omitted or one, they
-delete all the text in the region if it is active (see <a href="Using-Region.html#Using-Region">Using Region</a>).
+number of characters.  If the numeric argument is omitted or one,
+&lt;DEL&gt; and &lt;delete&gt; delete all the text in the region if it is
+active (see <a href="Using-Region.html#Using-Region">Using Region</a>).
 
-<!-- FIXME: `cycle-spacing' should be documented, too.  (Maybe not in -->
-<!-- this node, tho.)  -xfq -->
-   <p><a name="index-M_002d_005c-406"></a><a name="index-delete_002dhorizontal_002dspace-407"></a><a name="index-M_002dSPC-408"></a><a name="index-just_002done_002dspace-409"></a>  The other delete commands are those that delete only whitespace
+   <p><a name="index-M_002d_005c-408"></a><a name="index-delete_002dhorizontal_002dspace-409"></a><a name="index-M_002dSPC-410"></a><a name="index-just_002done_002dspace-411"></a><a name="index-cycle_002dspacing-412"></a>  The other delete commands are those that delete only whitespace
 characters: spaces, tabs and newlines.  <kbd>M-\</kbd>
 (<code>delete-horizontal-space</code>) deletes all the spaces and tab
 characters before and after point.  With a prefix argument, this only
@@ -83,7 +82,11 @@ point, regardless of the number of spaces that existed previously
 (even if there were none before).  With a numeric argument <var>n</var>, it
 leaves <var>n</var> spaces before point if <var>n</var> is positive; if <var>n</var>
 is negative, it deletes newlines in addition to spaces and tabs,
-leaving <var>-n</var> spaces before point.
+leaving <var>-n</var> spaces before point.  The command <code>cycle-spacing</code>
+acts like a more flexible version of <code>just-one-space</code>.  It
+does different things if you call it repeatedly in succession. 
+The first call acts like <code>just-one-space</code>, the next removes
+all whitespace, and a third call restores the original whitespace.
 
    <p><kbd>C-x C-o</kbd> (<code>delete-blank-lines</code>) deletes all blank lines
 after the current line.  If the current line is blank, it deletes all
@@ -93,6 +96,16 @@ the current line).  On a solitary blank line, it deletes that line.
    <p><kbd>M-^</kbd> (<code>delete-indentation</code>) joins the current line and the
 previous line, by deleting a newline and all surrounding spaces, usually
 leaving a single space.  See <a href="Indentation.html#Indentation">M-^</a>.
+
+<!-- Not really sure where to put this... -->
+   <p><a name="index-delete_002dduplicate_002dlines-413"></a>  The command <code>delete-duplicate-lines</code> searches the region for
+identical lines, and removes all but one copy of each.  Normally it
+keeps the first instance of each repeated line, but with a <kbd>C-u</kbd>
+prefix argument it keeps the last.  With a <kbd>C-u C-u</kbd> prefix
+argument, it only searches for adjacent identical lines.  This is a
+more efficient mode of operation, useful when the lines have already
+been sorted.  With a <kbd>C-u C-u C-u</kbd> prefix argument, it retains
+repeated blank lines.
 
    </body></html>
 

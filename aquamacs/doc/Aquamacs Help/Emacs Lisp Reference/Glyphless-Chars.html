@@ -10,15 +10,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -39,9 +39,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Character-Display.html#Character-Displa
 <hr>
 </div>
 
-<h4 class="subsection">38.20.5 Glyphless Character Display</h4>
+<h4 class="subsection">37.21.5 Glyphless Character Display</h4>
 
-<p><a name="index-glyphless-characters-4063"></a>
+<p><a name="index-glyphless-characters-4477"></a>
   <dfn>Glyphless characters</dfn> are characters which are displayed in a
 special way, e.g., as a box containing a hexadecimal code, instead of
 being displayed literally.  These include characters which are
@@ -51,7 +51,7 @@ which cannot be encoded by the terminal's coding system (on a text
 terminal).
 
 <div class="defun">
-&mdash; Variable: <b>glyphless-char-display</b><var><a name="index-glyphless_002dchar_002ddisplay-4064"></a></var><br>
+&mdash; Variable: <b>glyphless-char-display</b><var><a name="index-glyphless_002dchar_002ddisplay-4478"></a></var><br>
 <blockquote><p>The value of this variable is a char-table which defines glyphless
 characters and how they are displayed.  Each entry must be one of the
 following display methods:
@@ -69,7 +69,8 @@ following display methods:
           <br><dt><code>hex-code</code><dd>Display a box containing the Unicode codepoint of the character, in
 hexadecimal notation.
 
-          <br><dt>an <acronym>ASCII</acronym> string<dd>Display a box containing that string.
+          <br><dt>an <acronym>ASCII</acronym> string<dd>Display a box containing that string.  The string should contain at
+most 6 <acronym>ASCII</acronym> characters.
 
           <br><dt>a cons cell <code>(</code><var>graphical</var><code> . </code><var>text</var><code>)</code><dd>Display with <var>graphical</var> on graphical displays, and with
 <var>text</var> on text terminals.  Both <var>graphical</var> and <var>text</var>
@@ -78,7 +79,8 @@ must be one of the display methods described above.
 
      <p class="noindent">The <code>thin-space</code>, <code>empty-box</code>, <code>hex-code</code>, and
 <acronym>ASCII</acronym> string display methods are drawn with the
-<code>glyphless-char</code> face.
+<code>glyphless-char</code> face.  On text terminals, a box is emulated by
+square brackets, &lsquo;<samp><span class="samp">[]</span></samp>&rsquo;.
 
         <p>The char-table has one extra slot, which determines how to display any
 character that cannot be displayed with any available font, or cannot
@@ -91,7 +93,7 @@ the display table takes effect; in this case, Emacs does not consult
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>glyphless-char-display-control</b><var><a name="index-glyphless_002dchar_002ddisplay_002dcontrol-4065"></a></var><br>
+&mdash; User Option: <b>glyphless-char-display-control</b><var><a name="index-glyphless_002dchar_002ddisplay_002dcontrol-4479"></a></var><br>
 <blockquote><p>This user option provides a convenient way to set
 <code>glyphless-char-display</code> for groups of similar characters.  Do
 not set its value directly from Lisp code; the value takes effect only
@@ -114,7 +116,7 @@ sequences like &lsquo;<samp><span class="samp">^A</span></samp>&rsquo;; see <a h
 <code>U+009F</code> (normally displayed as octal escape sequences like
 &lsquo;<samp><span class="samp">\230</span></samp>&rsquo;).
 
-          <br><dt><code>format-control</code><dd>Characters of Unicode General Category `Cf', such as &lsquo;<samp><span class="samp">U+200E</span></samp>&rsquo;
+          <br><dt><code>format-control</code><dd>Characters of Unicode General Category [Cf], such as &lsquo;<samp><span class="samp">U+200E</span></samp>&rsquo;
 (Left-to-Right Mark), but excluding characters that have graphic
 images, such as &lsquo;<samp><span class="samp">U+00AD</span></samp>&rsquo; (Soft Hyphen).
 
@@ -122,9 +124,9 @@ images, such as &lsquo;<samp><span class="samp">U+00AD</span></samp>&rsquo; (Sof
 by the terminal's coding system. 
 </dl>
 
-     <!-- FIXME: this can also be `acronym', but that's not currently -->
+     <!-- FIXME: this can also be 'acronym', but that's not currently -->
      <!-- completely implemented; it applies only to the format-control -->
-     <!-- group, and only works if the acronym is in `char-acronym-table'. -->
+     <!-- group, and only works if the acronym is in 'char-acronym-table'. -->
         <p>The <var>method</var> symbol should be one of <code>zero-width</code>,
 <code>thin-space</code>, <code>empty-box</code>, or <code>hex-code</code>.  These have
 the same meanings as in <code>glyphless-char-display</code>, above. 

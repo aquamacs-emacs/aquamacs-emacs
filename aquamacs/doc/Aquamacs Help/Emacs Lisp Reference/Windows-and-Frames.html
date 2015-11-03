@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,19 +41,19 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
 <hr>
 </div>
 
-<h3 class="section">28.2 Windows and Frames</h3>
+<h3 class="section">27.2 Windows and Frames</h3>
 
 <p>Each window belongs to exactly one frame (see <a href="Frames.html#Frames">Frames</a>).
 
 <div class="defun">
-&mdash; Function: <b>window-frame</b><var> window<a name="index-window_002dframe-2224"></a></var><br>
+&mdash; Function: <b>window-frame</b><var> &amp;optional window<a name="index-window_002dframe-2392"></a></var><br>
 <blockquote><p>This function returns the frame that the window <var>window</var> belongs
 to.  If <var>window</var> is <code>nil</code>, it defaults to the selected
 window. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>window-list</b><var> &amp;optional frame minibuffer window<a name="index-window_002dlist-2225"></a></var><br>
+&mdash; Function: <b>window-list</b><var> &amp;optional frame minibuffer window<a name="index-window_002dlist-2393"></a></var><br>
 <blockquote><p>This function returns a list of live windows belonging to the frame
 <var>frame</var>.  If <var>frame</var> is omitted or <code>nil</code>, it defaults to
 the selected frame.
@@ -71,7 +71,7 @@ element in the returned list.  If <var>window</var> is omitted or <code>nil</cod
 the window selected within the frame is the first element. 
 </p></blockquote></div>
 
-   <p><a name="index-window-tree-2226"></a><a name="index-root-window-2227"></a>  Windows in the same frame are organized into a <dfn>window tree</dfn>,
+   <p><a name="index-window-tree-2394"></a><a name="index-root-window-2395"></a>  Windows in the same frame are organized into a <dfn>window tree</dfn>,
 whose leaf nodes are the live windows.  The internal nodes of a window
 tree are not live; they exist for the purpose of organizing the
 relationships between live windows.  The root node of a window tree is
@@ -86,7 +86,7 @@ minibuffer window as an argument.  Also, the function
 minibuffer window alongside the actual window tree.
 
 <div class="defun">
-&mdash; Function: <b>frame-root-window</b><var> &amp;optional frame-or-window<a name="index-frame_002droot_002dwindow-2228"></a></var><br>
+&mdash; Function: <b>frame-root-window</b><var> &amp;optional frame-or-window<a name="index-frame_002droot_002dwindow-2396"></a></var><br>
 <blockquote><p>This function returns the root window for <var>frame-or-window</var>.  The
 argument <var>frame-or-window</var> should be either a window or a frame;
 if omitted or <code>nil</code>, it defaults to the selected frame.  If
@@ -94,7 +94,7 @@ if omitted or <code>nil</code>, it defaults to the selected frame.  If
 of that window's frame. 
 </p></blockquote></div>
 
-   <p><a name="index-parent-window-2229"></a><a name="index-child-window-2230"></a><a name="index-sibling-window-2231"></a>  When a window is split, there are two live windows where previously
+   <p><a name="index-parent-window-2397"></a><a name="index-child-window-2398"></a><a name="index-sibling-window-2399"></a>  When a window is split, there are two live windows where previously
 there was one.  One of these is represented by the same Lisp window
 object as the original window, and the other is represented by a
 newly-created Lisp window object.  Both of these live windows become
@@ -104,10 +104,10 @@ internal window, which is also called the <dfn>parent window</dfn>, and
 assigns it to the appropriate position in the window tree.  A set of
 windows that share the same parent are called <dfn>siblings</dfn>.
 
-   <p><a name="index-parent-window-2232"></a>
+   <p><a name="index-parent-window-2400"></a>
 
 <div class="defun">
-&mdash; Function: <b>window-parent</b><var> &amp;optional window<a name="index-window_002dparent-2233"></a></var><br>
+&mdash; Function: <b>window-parent</b><var> &amp;optional window<a name="index-window_002dparent-2401"></a></var><br>
 <blockquote><p>This function returns the parent window of <var>window</var>.  If
 <var>window</var> is omitted or <code>nil</code>, it defaults to the selected
 window.  The return value is <code>nil</code> if <var>window</var> has no parent
@@ -125,7 +125,7 @@ internal window can be thought of as occupying a certain rectangular
 <dfn>screen area</dfn>&mdash;the union of the areas occupied by the live
 windows that are ultimately descended from it.
 
-   <p><a name="index-window-combination-2234"></a><a name="index-vertical-combination-2235"></a><a name="index-horizontal-combination-2236"></a>  For each internal window, the screen areas of the immediate children
+   <p><a name="index-window-combination-2402"></a><a name="index-vertical-combination-2403"></a><a name="index-horizontal-combination-2404"></a>  For each internal window, the screen areas of the immediate children
 are arranged either vertically or horizontally (never both).  If the
 child windows are arranged one above the other, they are said to form
 a <dfn>vertical combination</dfn>; if they are arranged side by side, they
@@ -151,13 +151,13 @@ child windows form a horizontal combination, consisting of the live
 window <var>W2</var> and the internal window <var>W3</var>.  The child windows
 of <var>W3</var> form a vertical combination, consisting of the live
 windows <var>W4</var> and <var>W5</var>.  Hence, the live windows in this
-window tree are <var>W2</var> <var>W4</var>, and <var>W5</var>.
+window tree are <var>W2</var>, <var>W4</var>, and <var>W5</var>.
 
    <p>The following functions can be used to retrieve a child window of an
 internal window, and the siblings of a child window.
 
 <div class="defun">
-&mdash; Function: <b>window-top-child</b><var> window<a name="index-window_002dtop_002dchild-2237"></a></var><br>
+&mdash; Function: <b>window-top-child</b><var> &amp;optional window<a name="index-window_002dtop_002dchild-2405"></a></var><br>
 <blockquote><p>This function returns the topmost child window of <var>window</var>, if
 <var>window</var> is an internal window whose children form a vertical
 combination.  For any other type of window, the return value is
@@ -165,7 +165,7 @@ combination.  For any other type of window, the return value is
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>window-left-child</b><var> window<a name="index-window_002dleft_002dchild-2238"></a></var><br>
+&mdash; Function: <b>window-left-child</b><var> &amp;optional window<a name="index-window_002dleft_002dchild-2406"></a></var><br>
 <blockquote><p>This function returns the leftmost child window of <var>window</var>, if
 <var>window</var> is an internal window whose children form a horizontal
 combination.  For any other type of window, the return value is
@@ -173,7 +173,7 @@ combination.  For any other type of window, the return value is
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>window-child</b><var> window<a name="index-window_002dchild-2239"></a></var><br>
+&mdash; Function: <b>window-child</b><var> window<a name="index-window_002dchild-2407"></a></var><br>
 <blockquote><p>This function returns the first child window of the internal window
 <var>window</var>&mdash;the topmost child window for a vertical combination, or
 the leftmost child window for a horizontal combination.  If
@@ -181,7 +181,7 @@ the leftmost child window for a horizontal combination.  If
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>window-combined-p</b><var> &amp;optional window horizontal<a name="index-window_002dcombined_002dp-2240"></a></var><br>
+&mdash; Function: <b>window-combined-p</b><var> &amp;optional window horizontal<a name="index-window_002dcombined_002dp-2408"></a></var><br>
 <blockquote><p>This function returns a non-<code>nil</code> value if and only if
 <var>window</var> is part of a vertical combination.  If <var>window</var> is
 omitted or <code>nil</code>, it defaults to the selected one.
@@ -192,7 +192,7 @@ a horizontal combination.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>window-next-sibling</b><var> &amp;optional window<a name="index-window_002dnext_002dsibling-2241"></a></var><br>
+&mdash; Function: <b>window-next-sibling</b><var> &amp;optional window<a name="index-window_002dnext_002dsibling-2409"></a></var><br>
 <blockquote><p>This function returns the next sibling of the window <var>window</var>.  If
 omitted or <code>nil</code>, <var>window</var> defaults to the selected window. 
 The return value is <code>nil</code> if <var>window</var> is the last child of
@@ -200,7 +200,7 @@ its parent.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>window-prev-sibling</b><var> &amp;optional window<a name="index-window_002dprev_002dsibling-2242"></a></var><br>
+&mdash; Function: <b>window-prev-sibling</b><var> &amp;optional window<a name="index-window_002dprev_002dsibling-2410"></a></var><br>
 <blockquote><p>This function returns the previous sibling of the window <var>window</var>. 
 If omitted or <code>nil</code>, <var>window</var> defaults to the selected
 window.  The return value is <code>nil</code> if <var>window</var> is the first
@@ -217,7 +217,7 @@ and previous window, respectively, in the cyclic ordering of windows
 frame and the window nearest to a given window.
 
 <div class="defun">
-&mdash; Function: <b>frame-first-window</b><var> &amp;optional frame-or-window<a name="index-frame_002dfirst_002dwindow-2243"></a></var><br>
+&mdash; Function: <b>frame-first-window</b><var> &amp;optional frame-or-window<a name="index-frame_002dfirst_002dwindow-2411"></a></var><br>
 <blockquote><p>This function returns the live window at the upper left corner of the
 frame specified by <var>frame-or-window</var>.  The argument
 <var>frame-or-window</var> must denote a window or a live frame and defaults
@@ -227,10 +227,10 @@ the assumption that the frame from our canonical example is selected
 <code>(frame-first-window)</code> returns <var>W2</var>. 
 </p></blockquote></div>
 
-   <p><a name="index-window-in-direction-2244"></a>
+   <p><a name="index-window-in-direction-2412"></a>
 
 <div class="defun">
-&mdash; Function: <b>window-in-direction</b><var> direction &amp;optional window ignore<a name="index-window_002din_002ddirection-2245"></a></var><br>
+&mdash; Function: <b>window-in-direction</b><var> direction &amp;optional window ignore sign wrap mini<a name="index-window_002din_002ddirection-2413"></a></var><br>
 <blockquote><p>This function returns the nearest live window in direction
 <var>direction</var> as seen from the position of <code>window-point</code> in
 window <var>window</var>.  The argument <var>direction</var> must be one of
@@ -246,6 +246,23 @@ function tries to find another window in the indicated direction whose
 argument <var>ignore</var> is non-<code>nil</code>, a window may be returned even
 if its <code>no-other-window</code> parameter is non-<code>nil</code>.
 
+        <p>If the optional argument <var>sign</var> is a negative number, it means to
+use the right or bottom edge of <var>window</var> as reference position
+instead of <code>window-point</code>.  If <var>sign</var> is a positive number, it
+means to use the left or top edge of <var>window</var> as reference position.
+
+        <p>If the optional argument <var>wrap</var> is non-<code>nil</code>, this means to
+wrap <var>direction</var> around frame borders.  For example, if <var>window</var>
+is at the top of the frame and <var>direction</var> is <code>above</code>, then
+return the minibuffer window provided the frame has one, and a window at
+the bottom of the frame otherwise.
+
+        <p>If the optional argument <var>mini</var> is <code>nil</code>, this means to return
+the minibuffer window if and only if it is currently active.  If
+<var>mini</var> is non-<code>nil</code>, it returns the minibuffer window even when
+it's not active.  However, if <var>wrap</var> non-<code>nil</code>, it always acts
+as if <var>mini</var> were <code>nil</code>.
+
         <p>If it doesn't find a suitable window, this function returns <code>nil</code>. 
 </p></blockquote></div>
 
@@ -253,7 +270,7 @@ if its <code>no-other-window</code> parameter is non-<code>nil</code>.
 frame:
 
 <div class="defun">
-&mdash; Function: <b>window-tree</b><var> &amp;optional frame<a name="index-window_002dtree-2246"></a></var><br>
+&mdash; Function: <b>window-tree</b><var> &amp;optional frame<a name="index-window_002dtree-2414"></a></var><br>
 <blockquote><p>This function returns a list representing the window tree for frame
 <var>frame</var>.  If <var>frame</var> is omitted or <code>nil</code>, it defaults to
 the selected frame.

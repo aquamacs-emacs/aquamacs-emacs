@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,9 +41,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Packaging.html#Packaging">Packaging</a>
 <hr>
 </div>
 
-<h3 class="section">40.2 Simple Packages</h3>
+<h3 class="section">39.2 Simple Packages</h3>
 
-<p><a name="index-single-file-package-4275"></a><a name="index-simple-package-4276"></a>
+<p><a name="index-single-file-package-4726"></a><a name="index-simple-package-4727"></a>
   A simple package consists of a single Emacs Lisp source file.  The
 file must conform to the Emacs Lisp library header conventions
 (see <a href="Library-Headers.html#Library-Headers">Library Headers</a>).  The package's attributes are taken from
@@ -56,7 +56,8 @@ the various headers, as illustrated by the following example:
      ;; Author: J. R. Hacker &lt;jrh@example.com&gt;
      ;; Version: 1.3
      ;; Package-Requires: ((flange "1.0"))
-     ;; Keywords: frobnicate
+     ;; Keywords: multimedia, frobnicate
+     ;; URL: http://example.com/jrhacker/superfrobnicate
      
      ...
      
@@ -89,6 +90,11 @@ characters in the commentary itself.)
 the package dependencies.  In the above example, the package depends
 on the &lsquo;<samp><span class="samp">flange</span></samp>&rsquo; package, version 1.0 or higher.  See <a href="Library-Headers.html#Library-Headers">Library Headers</a>, for a description of the &lsquo;<samp><span class="samp">Package-Requires</span></samp>&rsquo; header.  If
 the header is omitted, the package has no dependencies.
+
+   <p>The &lsquo;<samp><span class="samp">Keywords</span></samp>&rsquo; and &lsquo;<samp><span class="samp">URL</span></samp>&rsquo; headers are optional, but recommended. 
+The command <code>describe-package</code> uses these to add links to its
+output.  The &lsquo;<samp><span class="samp">Keywords</span></samp>&rsquo; header should contain at least one
+standard keyword from the <code>finder-known-keywords</code> list.
 
    <p>The file ought to also contain one or more autoload magic comments,
 as explained in <a href="Packaging-Basics.html#Packaging-Basics">Packaging Basics</a>.  In the above example, a magic

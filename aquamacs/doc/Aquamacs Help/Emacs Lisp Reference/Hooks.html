@@ -10,15 +10,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -39,16 +39,16 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Modes.html#Modes">Modes</a>
 <hr>
 </div>
 
-<h3 class="section">23.1 Hooks</h3>
+<h3 class="section">22.1 Hooks</h3>
 
-<p><a name="index-hooks-1672"></a>
+<p><a name="index-hooks-1808"></a>
   A <dfn>hook</dfn> is a variable where you can store a function or functions
 to be called on a particular occasion by an existing program.  Emacs
 provides hooks for the sake of customization.  Most often, hooks are set
 up in the init file (see <a href="Init-File.html#Init-File">Init File</a>), but Lisp programs can set them also. 
 See <a href="Standard-Hooks.html#Standard-Hooks">Standard Hooks</a>, for a list of some standard hook variables.
 
-   <p><a name="index-normal-hook-1673"></a>  Most of the hooks in Emacs are <dfn>normal hooks</dfn>.  These variables
+   <p><a name="index-normal-hook-1809"></a>  Most of the hooks in Emacs are <dfn>normal hooks</dfn>.  These variables
 contain lists of functions to be called with no arguments.  By
 convention, whenever the hook name ends in &lsquo;<samp><span class="samp">-hook</span></samp>&rsquo;, that tells
 you it is normal.  We try to make all hooks normal, as much as
@@ -68,17 +68,18 @@ of the valid kinds of functions that <code>funcall</code> accepts (see <a href="
 <code>add-hook</code> knows how to deal with this.  You can add hooks either
 globally or buffer-locally with <code>add-hook</code>.
 
-   <p><a name="index-abnormal-hook-1674"></a>  If the hook variable's name does not end with &lsquo;<samp><span class="samp">-hook</span></samp>&rsquo;, that
+   <p><a name="index-abnormal-hook-1810"></a>  If the hook variable's name does not end with &lsquo;<samp><span class="samp">-hook</span></samp>&rsquo;, that
 indicates it is probably an <dfn>abnormal hook</dfn>.  That means the hook
 functions are called with arguments, or their return values are used
 in some way.  The hook's documentation says how the functions are
 called.  You can use <code>add-hook</code> to add a function to an abnormal
 hook, but you must write the function to follow the hook's calling
-convention.
+convention.  By convention, abnormal hook names end in &lsquo;<samp><span class="samp">-functions</span></samp>&rsquo;.
 
-   <p>By convention, abnormal hook names end in &lsquo;<samp><span class="samp">-functions</span></samp>&rsquo;.  If the
-variable's name ends in &lsquo;<samp><span class="samp">-function</span></samp>&rsquo;, then its value is just a single
-function, not a list of functions.
+   <p><a name="index-single_002dfunction-hook-1811"></a>If the variable's name ends in &lsquo;<samp><span class="samp">-function</span></samp>&rsquo;, then its value is
+just a single function, not a list of functions.  <code>add-hook</code> cannot be
+used to modify such a <em>single function hook</em>, and you have to use
+<code>add-function</code> instead (see <a href="Advising-Functions.html#Advising-Functions">Advising Functions</a>).
 
 <ul class="menu">
 <li><a accesskey="1" href="Running-Hooks.html#Running-Hooks">Running Hooks</a>:     How to run a hook. 

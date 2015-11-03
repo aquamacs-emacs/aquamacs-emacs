@@ -10,15 +10,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,12 +41,12 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Hash-Tables.html#Hash-Tables">Hash Tabl
 
 <h3 class="section">7.1 Creating Hash Tables</h3>
 
-<p><a name="index-creating-hash-tables-449"></a>
+<p><a name="index-creating-hash-tables-534"></a>
   The principal function for creating a hash table is
 <code>make-hash-table</code>.
 
 <div class="defun">
-&mdash; Function: <b>make-hash-table</b><var> &amp;rest keyword-args<a name="index-make_002dhash_002dtable-450"></a></var><br>
+&mdash; Function: <b>make-hash-table</b><var> &amp;rest keyword-args<a name="index-make_002dhash_002dtable-535"></a></var><br>
 <blockquote><p>This function creates a new hash table according to the specified
 arguments.  The arguments should consist of alternating keywords
 (particular symbols recognized specially) and values corresponding to
@@ -61,14 +61,14 @@ default is <code>eql</code>; <code>eq</code> and <code>equal</code> are other
 alternatives:
 
                <dl>
-<dt><code>eql</code><dd>Keys which are numbers are &ldquo;the same&rdquo; if they are <code>equal</code>, that
+<dt><code>eql</code><dd>Keys which are numbers are the same if they are <code>equal</code>, that
 is, if they are equal in value and either both are integers or both
-are floating point numbers; otherwise, two distinct objects are never
-&ldquo;the same&rdquo;.
+are floating point; otherwise, two distinct objects are never
+the same.
 
-               <br><dt><code>eq</code><dd>Any two distinct Lisp objects are &ldquo;different&rdquo; as keys.
+               <br><dt><code>eq</code><dd>Any two distinct Lisp objects are different as keys.
 
-               <br><dt><code>equal</code><dd>Two Lisp objects are &ldquo;the same&rdquo;, as keys, if they are equal
+               <br><dt><code>equal</code><dd>Two Lisp objects are the same, as keys, if they are equal
 according to <code>equal</code>. 
 </dl>
 
@@ -113,34 +113,25 @@ doing that takes some extra time.
 
           <p>The default size is 65.
 
-          <br><dt><code>:rehash-size </code><var>rehash-size</var><dd>When you add an association to a hash table and the table is &ldquo;full&rdquo;,
+          <br><dt><code>:rehash-size </code><var>rehash-size</var><dd>When you add an association to a hash table and the table is full,
 it grows automatically.  This value specifies how to make the hash table
 larger, at that time.
 
           <p>If <var>rehash-size</var> is an integer, it should be positive, and the hash
 table grows by adding that much to the nominal size.  If
-<var>rehash-size</var> is a floating point number, it had better be greater
+<var>rehash-size</var> is floating point, it had better be greater
 than 1, and the hash table grows by multiplying the old size by that
 number.
 
           <p>The default value is 1.5.
 
-          <br><dt><code>:rehash-threshold </code><var>threshold</var><dd>This specifies the criterion for when the hash table is &ldquo;full&rdquo; (so
+          <br><dt><code>:rehash-threshold </code><var>threshold</var><dd>This specifies the criterion for when the hash table is full (so
 it should be made larger).  The value, <var>threshold</var>, should be a
-positive floating point number, no greater than 1.  The hash table is
-&ldquo;full&rdquo; whenever the actual number of entries exceeds this fraction
+positive floating-point number, no greater than 1.  The hash table is
+full whenever the actual number of entries exceeds this fraction
 of the nominal size.  The default for <var>threshold</var> is 0.8. 
 </dl>
         </p></blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>makehash</b><var> &amp;optional test<a name="index-makehash-451"></a></var><br>
-<blockquote><p>This is equivalent to <code>make-hash-table</code>, but with a different style
-argument list.  The argument <var>test</var> specifies the method
-of key lookup.
-
-        <p>This function is obsolete. Use <code>make-hash-table</code> instead. 
-</p></blockquote></div>
 
    <p>You can also create a new hash table using the printed representation
 for hash tables.  The Lisp reader can read this printed

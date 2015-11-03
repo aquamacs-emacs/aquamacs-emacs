@@ -6,20 +6,20 @@
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Buffer-Convenience.html#Buffer-Convenience" title="Buffer Convenience">
-<link rel="next" href="Iswitchb.html#Iswitchb" title="Iswitchb">
+<link rel="next" href="Icomplete.html#Icomplete" title="Icomplete">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Manual',
-updated for Emacs version 24.3.50.
+updated for Emacs version 25.0.50.
 
-Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``The GNU
      Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     with the Front-Cover Texts being ``A GNU Manual,'' and with the
      Back-Cover Texts as in (a) below.  A copy of the license is
      included in the section entitled ``GNU Free Documentation
      License.''
@@ -35,39 +35,43 @@ Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 <div class="node">
 <a name="Uniquify"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Iswitchb.html#Iswitchb">Iswitchb</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Icomplete.html#Icomplete">Icomplete</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Buffer-Convenience.html#Buffer-Convenience">Buffer Convenience</a>
 <hr>
 </div>
 
 <h4 class="subsection">19.7.1 Making Buffer Names Unique</h4>
 
-<p><a name="index-unique-buffer-names-1351"></a><a name="index-directories-in-buffer-names-1352"></a>  When several buffers visit identically-named files, Emacs must give
-the buffers distinct names.  The usual method for making buffer names
-unique adds &lsquo;<samp><span class="samp">&lt;2&gt;</span></samp>&rsquo;, &lsquo;<samp><span class="samp">&lt;3&gt;</span></samp>&rsquo;, etc. to the end of the buffer
-names (all but one of them).
+<p><a name="index-unique-buffer-names-1407"></a><a name="index-directories-in-buffer-names-1408"></a>  When several buffers visit identically-named files, Emacs must give
+the buffers distinct names.  The default method adds a suffix based on
+the names of the directories that contain the files.  For example, if
+you visit files <samp><span class="file">/foo/bar/mumble/name</span></samp> and
+<samp><span class="file">/baz/quux/mumble/name</span></samp> at the same time, their buffers will be
+named &lsquo;<samp><span class="samp">name&lt;bar/mumble&gt;</span></samp>&rsquo; and &lsquo;<samp><span class="samp">name&lt;quux/mumble&gt;</span></samp>&rsquo;, respectively. 
+Emacs adds as many directory parts as are needed to make a unique name.
 
-   <p><a name="index-uniquify_002dbuffer_002dname_002dstyle-1353"></a>  Other methods work by adding parts of each file's directory to the
-buffer name.  To select one, load the library <samp><span class="file">uniquify</span></samp> (e.g.,
-using <code>(require 'uniquify)</code>), and customize the variable
-<code>uniquify-buffer-name-style</code> (see <a href="Easy-Customization.html#Easy-Customization">Easy Customization</a>).
+   <p><a name="index-uniquify_002dbuffer_002dname_002dstyle-1409"></a>  You can choose from several different styles for constructing unique
+buffer names, by customizing the option <code>uniquify-buffer-name-style</code>.
 
-   <p>To begin with, the <code>forward</code> naming method includes part of the
-file's directory name at the beginning of the buffer name; using this
-method, buffers visiting the files <samp><span class="file">/u/rms/tmp/Makefile</span></samp> and
+   <p>The <code>forward</code> naming method includes part of the file's
+directory name at the beginning of the buffer name; using this method,
+buffers visiting the files <samp><span class="file">/u/rms/tmp/Makefile</span></samp> and
 <samp><span class="file">/usr/projects/zaphod/Makefile</span></samp> would be named
-&lsquo;<samp><span class="samp">tmp/Makefile</span></samp>&rsquo; and &lsquo;<samp><span class="samp">zaphod/Makefile</span></samp>&rsquo;, respectively (instead
-of &lsquo;<samp><span class="samp">Makefile</span></samp>&rsquo; and &lsquo;<samp><span class="samp">Makefile&lt;2&gt;</span></samp>&rsquo;).
+&lsquo;<samp><span class="samp">tmp/Makefile</span></samp>&rsquo; and &lsquo;<samp><span class="samp">zaphod/Makefile</span></samp>&rsquo;.
 
    <p>In contrast, the <code>post-forward</code> naming method would call the
-buffers &lsquo;<samp><span class="samp">Makefile|tmp</span></samp>&rsquo; and &lsquo;<samp><span class="samp">Makefile|zaphod</span></samp>&rsquo;, and the
+buffers &lsquo;<samp><span class="samp">Makefile|tmp</span></samp>&rsquo; and &lsquo;<samp><span class="samp">Makefile|zaphod</span></samp>&rsquo;.  The default
+method <code>post-forward-angle-brackets</code> is like <code>post-forward</code>,
+except that it encloses the unique path in angle brackets.  The
 <code>reverse</code> naming method would call them &lsquo;<samp><span class="samp">Makefile\tmp</span></samp>&rsquo; and
 &lsquo;<samp><span class="samp">Makefile\zaphod</span></samp>&rsquo;.  The nontrivial difference between
 <code>post-forward</code> and <code>reverse</code> occurs when just one directory
 name is not enough to distinguish two files; then <code>reverse</code> puts
 the directory names in reverse order, so that <samp><span class="file">/top/middle/file</span></samp>
 becomes &lsquo;<samp><span class="samp">file\middle\top</span></samp>&rsquo;, while <code>post-forward</code> puts them in
-forward order after the file name, as in &lsquo;<samp><span class="samp">file|top/middle</span></samp>&rsquo;.
+forward order after the file name, as in &lsquo;<samp><span class="samp">file|top/middle</span></samp>&rsquo;.  If
+<code>uniquify-buffer-name-style</code> is set to <code>nil</code>, the buffer
+names simply get &lsquo;<samp><span class="samp">&lt;2&gt;</span></samp>&rsquo;, &lsquo;<samp><span class="samp">&lt;3&gt;</span></samp>&rsquo;, etc. appended.
 
    <p>Which rule to follow for putting the directory names in the buffer
 name is not very important if you are going to <em>look</em> at the

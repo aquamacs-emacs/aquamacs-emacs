@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,11 +41,11 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
 <hr>
 </div>
 
-<h3 class="section">38.3 Truncation</h3>
+<h3 class="section">37.3 Truncation</h3>
 
-<p><a name="index-line-wrapping-3683"></a><a name="index-line-truncation-3684"></a><a name="index-continuation-lines-3685"></a><a name="index-g_t_0040samp_007b_0024_007d-in-display-3686"></a><a name="index-g_t_0040samp_007b_005c_007d-in-display-3687"></a>
+<p><a name="index-line-wrapping-4028"></a><a name="index-line-truncation-4029"></a><a name="index-continuation-lines-4030"></a><a name="index-g_t_0040samp_007b_0024_007d-in-display-4031"></a><a name="index-g_t_0040samp_007b_005c_007d-in-display-4032"></a>
   When a line of text extends beyond the right edge of a window, Emacs
-can <dfn>continue</dfn> the line (make it &ldquo;wrap&rdquo; to the next screen
+can <dfn>continue</dfn> the line (make it wrap to the next screen
 line), or <dfn>truncate</dfn> the line (limit it to one screen line).  The
 additional screen lines used to display a long text line are called
 <dfn>continuation</dfn> lines.  Continuation is not the same as filling;
@@ -57,11 +57,11 @@ boundary.  See <a href="Filling.html#Filling">Filling</a>.
 indicate truncated and continued lines (see <a href="Fringes.html#Fringes">Fringes</a>).  On a text
 terminal, a &lsquo;<samp><span class="samp">$</span></samp>&rsquo; in the rightmost column of the window indicates
 truncation; a &lsquo;<samp><span class="samp">\</span></samp>&rsquo; on the rightmost column indicates a line that
-&ldquo;wraps&rdquo;.  (The display table can specify alternate characters to use
+wraps.  (The display table can specify alternate characters to use
 for this; see <a href="Display-Tables.html#Display-Tables">Display Tables</a>).
 
 <div class="defun">
-&mdash; User Option: <b>truncate-lines</b><var><a name="index-truncate_002dlines-3688"></a></var><br>
+&mdash; User Option: <b>truncate-lines</b><var><a name="index-truncate_002dlines-4033"></a></var><br>
 <blockquote><p>If this buffer-local variable is non-<code>nil</code>, lines that extend
 beyond the right edge of the window are truncated; otherwise, they are
 continued.  As a special exception, the variable
@@ -71,8 +71,8 @@ entire frame width).
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>truncate-partial-width-windows</b><var><a name="index-truncate_002dpartial_002dwidth_002dwindows-3689"></a></var><br>
-<blockquote><p><a name="index-partial_002dwidth-windows-3690"></a>This variable controls line truncation in <dfn>partial-width</dfn> windows. 
+&mdash; User Option: <b>truncate-partial-width-windows</b><var><a name="index-truncate_002dpartial_002dwidth_002dwindows-4034"></a></var><br>
+<blockquote><p><a name="index-partial_002dwidth-windows-4035"></a>This variable controls line truncation in <dfn>partial-width</dfn> windows. 
 A partial-width window is one that does not occupy the entire frame
 width (see <a href="Splitting-Windows.html#Splitting-Windows">Splitting Windows</a>).  If the value is <code>nil</code>, line
 truncation is determined by the variable <code>truncate-lines</code> (see
@@ -89,7 +89,7 @@ truncated in every partial-width window, regardless of the value of
 a window, that forces truncation.
 
 <div class="defun">
-&mdash; Variable: <b>wrap-prefix</b><var><a name="index-wrap_002dprefix-3691"></a></var><br>
+&mdash; Variable: <b>wrap-prefix</b><var><a name="index-wrap_002dprefix-4036"></a></var><br>
 <blockquote><p>If this buffer-local variable is non-<code>nil</code>, it defines a
 <dfn>wrap prefix</dfn> which Emacs displays at the start of every
 continuation line.  (If lines are truncated, <code>wrap-prefix</code> is
@@ -103,7 +103,7 @@ over the <code>wrap-prefix</code> variable.  See <a href="Special-Properties.htm
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>line-prefix</b><var><a name="index-line_002dprefix-3692"></a></var><br>
+&mdash; Variable: <b>line-prefix</b><var><a name="index-line_002dprefix-4037"></a></var><br>
 <blockquote><p>If this buffer-local variable is non-<code>nil</code>, it defines a
 <dfn>line prefix</dfn> which Emacs displays at the start of every
 non-continuation line.  Its value may be a string or an image
@@ -115,24 +115,6 @@ as a <code>display</code> text property.  See <a href="Display-Property.html#Dis
         <p>A line prefix may also be specified for regions of text using the
 <code>line-prefix</code> text or overlay property.  This takes precedence
 over the <code>line-prefix</code> variable.  See <a href="Special-Properties.html#Special-Properties">Special Properties</a>. 
-</p></blockquote></div>
-
-   <p>If your buffer contains <em>very</em> long lines, and you use
-continuation to display them, computing the continuation lines can
-make redisplay slow.  The column computation and indentation functions
-also become slow.  Then you might find it advisable to set
-<code>cache-long-scans</code> to <code>t</code>.
-
-<div class="defun">
-&mdash; Variable: <b>cache-long-scans</b><var><a name="index-cache_002dlong_002dscans-3693"></a></var><br>
-<blockquote><p>If this variable is non-<code>nil</code>, various indentation and motion
-functions, and Emacs redisplay, cache the results of scanning the
-buffer, and consult the cache to avoid rescanning regions of the buffer
-unless they are modified.
-
-        <p>Turning on the cache slows down processing of short lines somewhat.
-
-        <p>This variable is automatically buffer-local in every buffer. 
 </p></blockquote></div>
 
    </body></html>

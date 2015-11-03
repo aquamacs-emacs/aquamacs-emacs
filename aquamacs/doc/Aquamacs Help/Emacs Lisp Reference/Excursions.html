@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,14 +41,14 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Positions.html#Positions">Positions</a>
 <hr>
 </div>
 
-<h3 class="section">30.3 Excursions</h3>
+<h3 class="section">29.3 Excursions</h3>
 
-<p><a name="index-excursion-2778"></a>
-  It is often useful to move point &ldquo;temporarily&rdquo; within a localized
+<p><a name="index-excursion-3055"></a>
+  It is often useful to move point temporarily within a localized
 portion of the program.  This is called an <dfn>excursion</dfn>, and it is
 done with the <code>save-excursion</code> special form.  This construct
-remembers the initial identity of the current buffer, and its values
-of point and the mark, and restores them after the excursion
+remembers the initial identity of the current buffer, and its value
+of point, and restores them after the excursion
 completes.  It is the standard way to move point within one part of a
 program and avoid affecting the rest of the program, and is used
 thousands of times in the Lisp sources of Emacs.
@@ -59,25 +59,25 @@ instead (see <a href="Current-Buffer.html#Current-Buffer">Current Buffer</a>).  
 window configurations, see the forms described in <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a> and in <a href="Frame-Configurations.html#Frame-Configurations">Frame Configurations</a>. <!-- frameset? -->
 
 <div class="defun">
-&mdash; Special Form: <b>save-excursion</b><var> body<small class="dots">...</small><a name="index-save_002dexcursion-2779"></a></var><br>
-<blockquote><p><a name="index-mark-excursion-2780"></a><a name="index-point-excursion-2781"></a>This special form saves the identity of the current buffer and the
-values of point and the mark in it, evaluates <var>body</var>, and finally
-restores the buffer and its saved values of point and the mark.  All
-three saved values are restored even in case of an abnormal exit via
+&mdash; Special Form: <b>save-excursion</b><var> body<small class="dots">...</small><a name="index-save_002dexcursion-3056"></a></var><br>
+<blockquote><p><a name="index-point-excursion-3057"></a>This special form saves the identity of the current buffer and the
+value of point in it, evaluates <var>body</var>, and finally
+restores the buffer and its saved value of point.  Both saved values are
+restored even in case of an abnormal exit via
 <code>throw</code> or error (see <a href="Nonlocal-Exits.html#Nonlocal-Exits">Nonlocal Exits</a>).
 
         <p>The value returned by <code>save-excursion</code> is the result of the last
 form in <var>body</var>, or <code>nil</code> if no body forms were given. 
 </p></blockquote></div>
 
-   <p>Because <code>save-excursion</code> only saves point and mark for the
+   <p>Because <code>save-excursion</code> only saves point for the
 buffer that was current at the start of the excursion, any changes
-made to point and/or mark in other buffers, during the excursion, will
+made to point in other buffers, during the excursion, will
 remain in effect afterward.  This frequently leads to unintended
 consequences, so the byte compiler warns if you call <code>set-buffer</code>
 during an excursion:
 
-<pre class="example">     Warning: Use `with-current-buffer' rather than
+<pre class="example">     Warning: Use ‘with-current-buffer’ rather than
               save-excursion+set-buffer
 </pre>
    <p class="noindent">To avoid such problems, you should call <code>save-excursion</code> only
@@ -90,7 +90,7 @@ after setting the desired current buffer, as in the following example:
            (goto-char (point-max))
            (insert string))))
 </pre>
-   <p><a name="index-window-excursions-2782"></a>  Likewise, <code>save-excursion</code> does not restore window-buffer
+   <p><a name="index-window-excursions-3058"></a>  Likewise, <code>save-excursion</code> does not restore window-buffer
 correspondences altered by functions such as <code>switch-to-buffer</code>.
 
    <p><strong>Warning:</strong> Ordinary insertion of text adjacent to the saved
@@ -100,10 +100,12 @@ type <code>nil</code>.  See <a href="Marker-Insertion-Types.html#Marker-Insertio
 saved point value is restored, it normally comes before the inserted
 text.
 
-   <p>Although <code>save-excursion</code> saves the location of the mark, it does
-not prevent functions which modify the buffer from setting
-<code>deactivate-mark</code>, and thus causing the deactivation of the mark
-after the command finishes.  See <a href="The-Mark.html#The-Mark">The Mark</a>.
+<div class="defun">
+&mdash; Macro: <b>save-mark-and-excursion</b><var> body<small class="dots">...</small><a name="index-save_002dmark_002dand_002dexcursion-3059"></a></var><br>
+<blockquote><p><a name="index-mark-excursion-3060"></a><a name="index-point-excursion-3061"></a>This macro is like <code>save-excursion</code>, but also saves and restores
+the mark location and <code>mark-active</code>.  This macro does what
+<code>save-excursion</code> did before Emacs 25.1. 
+</p></blockquote></div>
 
    </body></html>
 

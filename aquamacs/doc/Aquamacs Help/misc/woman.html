@@ -1,0 +1,2075 @@
+<html lang="en">
+<head>
+<title>WoMan: Browse Unix Manual Pages &quot;W.O. (without) Man&quot;</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="WoMan: Browse Unix Manual Pages &quot;W.O. (without) Man&quot;">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="top" href="#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents WoMan: A program to browse Unix manual pages "W.O.
+(without) man".
+
+Copyright (C) 2001-2015 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being "A GNU Manual," and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     "GNU Free Documentation License."
+
+     (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+     modify this GNU manual."
+-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<h1 class="settitle">WoMan: Browse Unix Manual Pages &quot;W.O. (without) Man&quot;</h1>
+<div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Top" href="#Top">WoMan: Browse Unix Manual Pages &ldquo;W.O. (without) Man&rdquo;</a>
+<li><a name="toc_Introduction" href="#Introduction">1 Introduction</a>
+<li><a name="toc_Background" href="#Background">2 Background</a>
+<li><a name="toc_Finding" href="#Finding">3 Finding and Formatting Man Pages</a>
+<ul>
+<li><a href="#Topic">3.1 Topic Interface</a>
+<ul>
+<li><a href="#Cache">3.1.1 The WoMan Topic Cache</a>
+<li><a href="#Word-at-point">3.1.2 Using the "Word at Point" as a Topic Suggestion</a>
+</li></ul>
+<li><a href="#Filename">3.2 Filename Interface</a>
+<li><a href="#Automatic">3.3 Automatic Interface</a>
+</li></ul>
+<li><a name="toc_Browsing" href="#Browsing">4 Browsing Man Pages</a>
+<ul>
+<li><a href="#Fonts">4.1 Fonts and Faces</a>
+<li><a href="#Navigation">4.2 Navigation</a>
+<li><a href="#References">4.3 Following References</a>
+<li><a href="#Changing">4.4 Changing the Current Man Page</a>
+<li><a href="#Convenience">4.5 Convenience Key Bindings</a>
+<li><a href="#Imenu">4.6 Imenu Support; Contents Menu</a>
+</li></ul>
+<li><a name="toc_Customization" href="#Customization">5 Customization</a>
+<ul>
+<li><a href="#Interface-Options">5.1 Interface Options</a>
+<li><a href="#Formatting-Options">5.2 Formatting Options</a>
+<li><a href="#Faces">5.3 Faces</a>
+<li><a href="#Special-symbols">5.4 Special symbols</a>
+</li></ul>
+<li><a name="toc_Log" href="#Log">6 The *WoMan-Log* Buffer</a>
+<li><a name="toc_Technical" href="#Technical">7 Technical Details</a>
+<li><a name="toc_Bugs" href="#Bugs">8 Reporting Bugs</a>
+<li><a name="toc_Acknowledgments" href="#Acknowledgments">9 Acknowledgments</a>
+<li><a name="toc_GNU-Free-Documentation-License" href="#GNU-Free-Documentation-License">Appendix A GNU Free Documentation License</a>
+<li><a name="toc_Command-Index" href="#Command-Index">Command Index</a>
+<li><a name="toc_Variable-Index" href="#Variable-Index">Variable Index</a>
+<li><a name="toc_Keystroke-Index" href="#Keystroke-Index">Keystroke Index</a>
+<li><a name="toc_Concept-Index" href="#Concept-Index">Concept Index</a>
+</li></ul>
+</div>
+
+
+
+<!-- =================================================================== -->
+<div class="node">
+<a name="Top"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Introduction">Introduction</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#dir">(dir)</a>
+
+</div>
+
+<h2 class="unnumbered">WoMan: Browse Unix Manual Pages &ldquo;W.O. (without) Man&rdquo;</h2>
+
+<pre class="display">     As distributed with Emacs 25.0.50.
+     
+     Francis J. Wright
+     <a href="http://centaur.maths.qmw.ac.uk/">School of Mathematical Sciences</a>
+     Queen Mary and Westfield College (University of London)
+     Mile End Road, London E1 4NS, UK
+</pre>
+<p>This file documents WoMan: A program to browse Unix manual pages &ldquo;W.O. 
+(without) man&rdquo;.
+
+<p>Copyright &copy; 2001&ndash;2015 Free Software Foundation, Inc.
+
+<blockquote>
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with the Front-Cover Texts being &ldquo;A GNU Manual,&rdquo;
+and with the Back-Cover Texts as in (a) below.  A copy of the license
+is included in the section entitled &ldquo;GNU Free Documentation License.&rdquo;
+
+<p>(a) The FSF's Back-Cover Text is: &ldquo;You have the freedom to copy and
+modify this GNU manual.&rdquo;
+</blockquote>
+
+<ul class="menu">
+<li><a accesskey="1" href="#Introduction">Introduction</a>:         Introduction
+<li><a accesskey="2" href="#Background">Background</a>:           Background
+<li><a accesskey="3" href="#Finding">Finding</a>:              Finding and Formatting Man Pages
+<li><a accesskey="4" href="#Browsing">Browsing</a>:             Browsing Man Pages
+<li><a accesskey="5" href="#Customization">Customization</a>:        Customization
+<li><a accesskey="6" href="#Log">Log</a>:                  The *WoMan-Log* Buffer
+<li><a accesskey="7" href="#Technical">Technical</a>:            Technical Details
+<li><a accesskey="8" href="#Bugs">Bugs</a>:                 Reporting Bugs
+<li><a accesskey="9" href="#Acknowledgments">Acknowledgments</a>:      Acknowledgments
+<li><a href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>:  The license for this documentation. 
+<li><a href="#Command-Index">Command Index</a>:        Command Index
+<li><a href="#Variable-Index">Variable Index</a>:       Variable Index
+<li><a href="#Keystroke-Index">Keystroke Index</a>:      Keystroke Index
+<li><a href="#Concept-Index">Concept Index</a>:        Concept Index
+</ul>
+
+<!-- =================================================================== -->
+<div class="node">
+<a name="Introduction"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Background">Background</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Top">Top</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">1 Introduction</h2>
+
+<p><a name="index-introduction-1"></a>
+This version of WoMan should run with GNU Emacs 20.3 or later on any
+platform.  It has not been tested, and may not run, with any other
+version of Emacs.  It was developed primarily on various versions of
+Microsoft Windows, but has also been tested on MS-DOS, and various
+versions of UNIX and GNU/Linux.
+
+<p>WoMan is distributed with GNU Emacs.
+
+<p>WoMan implements a subset of the formatting performed by the Emacs
+<code>man</code> (or <code>manual-entry</code>) command to format a Unix-style
+<dfn>manual page</dfn> (usually abbreviated to <dfn>man page</dfn>) for display,
+but without calling any external programs.  It is intended to emulate
+the whole of the <code>roff -man</code> macro package, plus those <code>roff</code>
+requests (see <a href="#Background">Background</a>) that are most commonly used
+in man pages.  However, the emulation is modified to include the
+reformatting done by the Emacs <code>man</code> command.  No hyphenation is
+performed.
+
+     <dl>
+<dt><b>Advantages</b><dd>Much more direct, does not require any external programs.  Supports
+completion on man page names. 
+<br><dt><b>Disadvantages</b><dd>Not a complete emulation.  Currently no support for <code>eqn</code> or
+<code>tbl</code>.  Slightly slower for large man pages (but usually faster for
+small- and medium-size pages). 
+</dl>
+
+<p>This browser works quite well on simple well-written man files.  It
+works less well on idiosyncratic files that &ldquo;break the rules&rdquo; or use
+the more obscure <code>roff</code> requests directly.  Current test results
+are available in the file
+<a href="http://centaur.maths.qmw.ac.uk/Emacs/WoMan/files/woman.status"><samp><span class="file">woman.status</span></samp></a>.
+
+<p>WoMan supports the use of compressed man files via
+<code>auto-compression-mode</code> by turning it on if necessary.  But you may
+need to adjust the user option <code>woman-file-compression-regexp</code>. 
+See <a href="#Interface-Options">Interface Options</a>.
+
+<p>Brief help on the WoMan interactive commands and user options, all of
+which begin with the prefix <code>woman-</code> (or occasionally
+<code>WoMan-</code>), is available most easily by loading WoMan and then
+either running the command <code>woman-mini-help</code> or selecting the WoMan
+menu option &lsquo;<samp><span class="samp">Mini Help</span></samp>&rsquo;.
+
+<p>Guidance on reporting bugs is given below.  See <a href="#Bugs">Reporting Bugs</a>.
+
+<!-- =================================================================== -->
+<div class="node">
+<a name="Background"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Finding">Finding</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Introduction">Introduction</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">2 Background</h2>
+
+<p><a name="index-background-2"></a>
+WoMan is a browser for traditional Unix-style manual page documentation. 
+Each such document is conventionally referred to as a <dfn>manual page</dfn>,
+or <dfn>man page</dfn> for short, even though some are very much longer than
+one page.  A man page is a document written using the Unix &ldquo;man&rdquo;
+macros, which are themselves written in the nroff/troff text processing
+markup language.  <code>nroff</code> and <code>troff</code> are text processors
+originally written for the UNIX operating system by Joseph F. Ossanna at
+Bell Laboratories, Murray Hill, New Jersey, USA.  They are closely
+related, and except in the few cases where the distinction between them
+is important I will refer to them both ambiguously as <code>roff</code>.
+
+<p><code>roff</code> markup consists of <dfn>requests</dfn> and <dfn>escape
+sequences</dfn>.  A request occupies a complete line and begins with either a
+period or an apostrophe.  An escape sequence is embedded
+within the input text and begins (by default) with a backslash.  The
+original man macro package defines 20 new <code>roff</code> requests
+implemented as macros, which were considered to be sufficient for
+writing man pages.  But whilst in principle man pages use only the man
+macros, in practice a significant number use many other <code>roff</code>
+requests.
+
+<p>The distinction between <code>troff</code> and <code>nroff</code> is that
+<code>troff</code> was designed to drive a phototypesetter whereas
+<code>nroff</code> was designed to produce essentially <acronym>ASCII</acronym> output for a
+character-based device similar to a teletypewriter (usually abbreviated
+to &ldquo;teletype&rdquo; or &ldquo;tty&rdquo;).  Hence, <code>troff</code> supports much finer
+control over output positioning than does <code>nroff</code> and can be seen
+as a forerunner of TeX.  Traditionally, man pages are either
+formatted by <code>troff</code> for typesetting or by <code>nroff</code> for
+printing on a character printer or displaying on a screen.  Of course,
+over the last 25 years or so, the distinction between typeset output on
+paper and characters on a screen has become blurred by the fact that
+most screens now support bit-mapped displays, so that any information
+that can be printed can also be rendered on screen, the only difference
+being the resolution.
+
+<p>Nevertheless, Unix-style manual page documentation is still normally
+browsed on screen by running a program called <code>man</code>.  This program
+looks in a predefined set of directories for the man page matching a
+specified topic, then either formats the source file by running
+<code>nroff</code> or recovers a pre-formatted file, and displays it via a
+pager such as <code>more</code>.  <code>nroff</code> normally formats for a printer,
+so it paginates the output, numbers the pages, etc., most of which is
+irrelevant when the document is browsed as a continuous scrollable
+document on screen.  The only concession to on-screen browsing normally
+implemented by the <code>man</code> program is to squeeze consecutive blank
+lines into a single blank line.
+
+<p>For some time, Emacs has offered an improved interface for browsing man
+pages in the form of the Emacs <code>man</code> (or <code>manual-entry</code>)
+command, see <a href="emacs.html#Documentation">man</a>. 
+This command runs <code>man</code> as described above, perhaps in
+the background, and then post-processes the output to remove much of the
+<code>nroff</code> pagination such as page headers and footers, and places the
+result into an Emacs buffer.  It puts this buffer into a special major
+mode, which is tailored for man page browsing, and provides a number of
+useful navigation commands, support for following references, etc.  It
+provides some support for special display faces (fonts), but no special
+menu or mouse support.  The Emacs man package appears to have been
+developed over about 10 years, from the late 1980s to the late 1990s.
+
+<p>There is considerable inefficiency in having <code>nroff</code> paginate a
+document and then removing most of the pagination!
+
+<p>WoMan is an Emacs Lisp library that provides an emulation of the
+functionality of the Emacs <code>man</code> command, the main difference being
+that WoMan does not use any external programs.  The only situation in
+which WoMan might use an external program is when the source file is
+compressed, when WoMan will use the standard Emacs automatic
+decompression facility, which does call an external program.
+
+<p>I began developing WoMan in the Spring of 1997 and the first version was
+released in May 1997.  The original motivation for WoMan was the fact
+that many GNU and Unix programs are ported to other platforms and come
+with Unix-style manual page documentation.  This may be difficult to
+read because ports of the Unix-style <code>man</code> program can be a little
+awkward to set up.  I decided that it should not be too hard to emulate
+the 20 <code>man</code> macros directly, without treating them as macros and
+largely ignoring the underlying <code>roff</code> requests, given the text
+processing capabilities of Emacs.  This proved to be essentially true,
+and it did not take a great deal of work to be able to format simple man
+pages acceptably.
+
+<p>One problem arose with the significant number of man pages that use
+<code>roff</code> requests in addition to the <code>man</code> macros, and since
+releasing the first version of WoMan I have been continually extending
+it to support more <code>roff</code> requests.  WoMan can now format a
+significant proportion of the man pages that I have tested, either well
+or at least readably.  However, I have added capabilities partly by
+making additional passes through the document, a design that is
+fundamentally flawed.  This can only be solved by a major re-design of
+WoMan to handle the major formatting within a single recursive pass,
+rather than the present multiple passes without any significant
+recursion.  There are some <code>roff</code> requests that cannot be handled
+satisfactorily within the present design.  Some of these are currently
+handled by kludges that &ldquo;usually more or less work.&rdquo;
+
+<p>The principle advantage of WoMan is that it does not require <code>man</code>,
+and indeed the name WoMan is a contraction of &ldquo;without man.&rdquo;  But it
+has other advantages.  It does not paginate the document, so it does not
+need to un-paginate it again, thereby saving time.  It could take full
+advantage of the display capabilities available to it, and I hope to
+develop WoMan to take advantage of developments in Emacs itself.  At
+present, WoMan uses several display faces to support bold and italic
+text, to indicate other fonts, etc.  The default faces are also
+colored, but the choice of faces is customizable.  WoMan provides menu
+support for navigation and mouse support for following references, in
+addition to the navigation facilities provided by <code>man</code> mode. 
+WoMan has (this) texinfo documentation!
+
+<p>WoMan <em>does not</em> replace <code>man</code>, although it does use a number
+of the facilities implemented in the Emacs <code>man</code> library.  WoMan
+and man can happily co-exist, which is very useful for comparison and
+debugging purposes.
+
+<div class="node">
+<a name="Finding"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Browsing">Browsing</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Background">Background</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">3 Finding and Formatting Man Pages</h2>
+
+<p><a name="index-using_002c-finding-man-pages-3"></a><a name="index-using_002c-formatting-man-pages-4"></a><a name="index-finding-man-pages-5"></a><a name="index-formatting-man-pages-6"></a><a name="index-man-pages_002c-finding-7"></a><a name="index-man-pages_002c-formatting-8"></a>
+WoMan provides three user interfaces for finding and formatting man pages:
+
+     <ul>
+<li>a topic interface similar to that provided by the standard Emacs
+<code>man</code> command;
+
+     <li>a family of filename interfaces analogous to the standard Emacs
+<code>view-file</code> command;
+
+     <li>an automatic interface that detects the file type from its contents. 
+(This is currently neither well tested, well supported nor recommended!) 
+</ul>
+
+<p>The topic and filename interfaces support completion in the usual way.
+
+<p>The topic interface is generally the most convenient for regular use,
+although it may require some special setup, especially if your machine
+does not already have a conventional <code>man</code> installation (which
+WoMan tries to detect).
+
+<p>The simplest filename interface command <code>woman-find-file</code> can
+always be used with no setup at all (provided WoMan is installed and
+loaded or set up to autoload).
+
+<p>The automatic interface always requires special setup.
+
+<h3 class="heading">Case-Dependence of Filenames</h3>
+
+<p><a name="index-case_002dsensitivity-9"></a><a name="index-w32_002ddowncase_002dfile_002dnames-10"></a>By default, WoMan ignores case in file pathnames only when it seems
+appropriate.  Microsoft Windows users who want complete case
+independence should set the special NTEmacs variable
+<code>w32-downcase-file-names</code> to <code>t</code> and use all lower case when
+setting WoMan file paths.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Topic">Topic</a>:                Topic Interface
+<li><a accesskey="2" href="#Filename">Filename</a>:             Filename Interface
+<li><a accesskey="3" href="#Automatic">Automatic</a>:            Automatic Interface
+</ul>
+
+<div class="node">
+<a name="Topic"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Filename">Filename</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Finding">Finding</a>
+
+</div>
+
+<h3 class="section">3.1 Topic Interface</h3>
+
+<p><a name="index-topic-interface-11"></a>
+The topic interface is accessed principally via the command
+<code>woman</code>.  The same command can be accessed via the menu item
+&lsquo;<samp><span class="samp">Help-&gt;Manuals-&gt;Read Man Page (WoMan)...</span></samp>&rsquo; once WoMan has been
+loaded.  The command reads a manual topic in the minibuffer, which can
+be the <dfn>basename</dfn> of a man file anywhere in the man file
+structure.  The &ldquo;basename&rdquo; in this context means the filename
+without any directory component and without any extension or suffix
+components that relate to the file type.  So, for example, if there is
+a compressed source file in Chapter 5 of the UNIX Programmer's Manual
+with the full pathname <samp><span class="file">/usr/local/man/man5/man.conf.5.gz</span></samp> then
+the topic is <code>man.conf</code>.  Provided WoMan is configured correctly,
+this topic will appear among the completions offered by <code>woman</code>. 
+If more than one file has the same topic name then WoMan will prompt
+for which file to format.  Completion of topics is case insensitive.
+
+<p>Clearly, <code>woman</code> has to know where to look for man files and there
+are two customizable user options that store this information:
+<code>woman-manpath</code> and <code>woman-path</code>.  See <a href="#Interface-Options">Interface Options</a>.  If <code>woman-manpath</code> is not set explicitly then
+WoMan tries to pick up the information that would be used by the
+<code>man</code> command, as follows.  If the environment variable
+<code>MANPATH</code> is set, which seems to be the standard mechanism under
+UNIX, then WoMan parses that.  Otherwise, if WoMan can find a
+configuration file named (by default) <samp><span class="file">man.conf</span></samp> (or something very
+similar), which seems to be the standard mechanism under GNU/Linux, then
+it parses that.  To be precise, &ldquo;something very similar&rdquo; means
+starting with &lsquo;<samp><span class="samp">man</span></samp>&rsquo; and ending with &lsquo;<samp><span class="samp">.conf</span></samp>&rsquo; and possibly more
+lowercase letters, e.g., <samp><span class="file">manual.configuration</span></samp>. 
+The search path and/or precise full path name for this file are set by
+the value of the customizable user option <code>woman-man.conf-path</code>. 
+If all else fails, WoMan uses a plausible default man search path.
+
+<p>If the above default configuration does not work correctly for any
+reason then simply customize the value of <code>woman-manpath</code>.  To
+access man files that are not in a conventional man file hierarchy,
+customize the value of <code>woman-path</code> to include the directories
+containing the files.  In this way, <code>woman</code> can access manual files
+<em>anywhere</em> in the entire file system.
+
+<p>There are two differences between <code>woman-manpath</code> and
+<code>woman-path</code>.  Firstly, the elements of <code>woman-manpath</code> must
+be directories that contain <em>directories of</em> man files, whereas the
+elements of <code>woman-path</code> must be directories that contain man files
+<em>directly</em>.  Secondly, the last directory component of each element
+of <code>woman-path</code> is treated as a regular (Emacs) match expression
+rather than a fixed name, which allows collections of related
+directories to be specified succinctly.  Also, elements of
+<code>woman-manpath</code> can be conses, indicating a mapping from
+&lsquo;<samp><span class="samp">PATH</span></samp>&rsquo; environment variable components to man directory
+hierarchies.
+
+<p>For topic completion to work, WoMan must build a list of all the manual
+files that it can access, which can be very slow, especially if a
+network is involved.  For this reason, it caches various amounts of
+information, after which retrieving it from the cache is very fast.  If
+the cache ever gets out of synchronism with reality, running the
+<code>woman</code> command with a prefix argument (e.g., <kbd>C-u M-x woman</kbd>)
+will force it to rebuild its cache.  This is necessary only if the names
+or locations of any man files change; it is not necessary if only their
+contents change.  It would always be necessary if such a change occurred
+whilst Emacs were running and after WoMan has been loaded.  It may be
+necessary if such a change occurs between Emacs sessions and persistent
+caching is used, although WoMan can detect some changes that invalidate
+its cache and rebuild it automatically.
+
+<p>Customize the variable <code>woman-cache-filename</code> to save the cache
+between Emacs sessions.  This is recommended only if the <code>woman</code>
+command is too slow the first time it is run in an Emacs session, while
+it builds its cache in main memory, which <em>may</em> be <em>very</em>
+slow.  See <a href="#Cache">The WoMan Topic Cache</a>, for further details.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Cache">Cache</a>:                The WoMan Topic Cache
+<li><a accesskey="2" href="#Word-at-point">Word at point</a>:        Using the "Word at Point" as a Topic Suggestion
+</ul>
+
+<div class="node">
+<a name="Cache"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Word-at-point">Word at point</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Topic">Topic</a>
+
+</div>
+
+<h4 class="subsection">3.1.1 The WoMan Topic Cache</h4>
+
+<p><a name="index-topic-cache-12"></a><a name="index-cache_002c-topic-13"></a>
+The amount of information that WoMan caches (in main memory and,
+optionally, saved to disc) is controlled by the user option
+<code>woman-cache-level</code>.  There is a trade-off between the speed with
+which WoMan can find a file and the size of the cache, and the default
+setting gives a reasonable compromise.
+
+<p>The <code>woman</code> command always performs a certain amount of caching in
+main memory, but it can also write its cache to the filestore as a
+persistent cache under control of the user option
+<code>woman-cache-filename</code>.  If persistent caching is turned on then
+WoMan re-loads its internal cache from the cache file almost
+instantaneously, so that there is never any perceptible start-up delay
+<em>except</em> when WoMan rebuilds its cache.  Persistent caching is
+currently turned off by default.  This is because users with persistent
+caching turned on may overlook the need to force WoMan to rebuild its
+cache the first time they run it after they have installed new man
+files; with persistent caching turned off, WoMan automatically rebuilds
+its cache every time it is run in a new Emacs session.
+
+<p>A prefix argument always causes the <code>woman</code> command (only) to
+rebuild its topic cache, and to re-save it to
+<code>woman-cache-filename</code> if this variable has a non-<code>nil</code> value.  This
+is necessary if the <em>names</em> of any of the directories or files in
+the paths specified by <code>woman-manpath</code> or <code>woman-path</code> change. 
+If WoMan user options that affect the cache are changed then WoMan will
+automatically update its cache file on disc (if one is in use) the next
+time it is run in a new Emacs session.
+
+<div class="node">
+<a name="Word-at-point"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Cache">Cache</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Topic">Topic</a>
+
+</div>
+
+<h4 class="subsection">3.1.2 Using the "Word at Point" as a Topic Suggestion</h4>
+
+<p><a name="index-word-at-point-14"></a><a name="index-point_002c-word-at-15"></a>
+By default, the <code>woman</code> command uses the word nearest to point in
+the current buffer as a suggestion for the topic to look up, if it
+exists as a valid topic.  The topic can be confirmed or edited in the
+minibuffer.
+
+<p>You can also bind the variable <code>woman-use-topic-at-point</code> locally
+to a non-<code>nil</code> value (using <code>let</code>), in which case
+<code>woman</code> will can use the suggested topic without confirmation if
+possible.  This may be useful to provide special private key bindings,
+e.g., this key binding for <kbd>C-c w</kbd> runs WoMan on the topic at
+point without seeking confirmation:
+
+<pre class="lisp">     (global-set-key "\C-cw"
+                     (lambda ()
+                       (interactive)
+                       (let ((woman-use-topic-at-point t))
+                         (woman))))
+</pre>
+<div class="node">
+<a name="Filename"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Automatic">Automatic</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Topic">Topic</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Finding">Finding</a>
+
+</div>
+
+<h3 class="section">3.2 Filename Interface</h3>
+
+<p><a name="index-filename-interface-16"></a>
+The commands in this family are completely independent of the topic
+interface, caching mechanism, etc.
+
+<p><a name="index-woman_002dfind_002dfile-17"></a>The filename interface is accessed principally via the extended command
+<code>woman-find-file</code>, which is available without any configuration at
+all (provided WoMan is installed and loaded or set up to autoload). 
+This command can be used to browse any accessible man file, regardless
+of its filename or location.  If the file is compressed then automatic
+file decompression must already be turned on (e.g., see the
+&lsquo;<samp><span class="samp">Help-&gt;Options</span></samp>&rsquo; submenu)&mdash;it is turned on automatically only by
+the <code>woman</code> topic interface.
+
+<p><a name="index-woman_002ddired_002dfind_002dfile-18"></a>Once WoMan is loaded (or if specially set up), various additional
+commands in this family are available.  In a dired buffer, the command
+<code>woman-dired-find-file</code> allows the file on the same line as point
+to be formatted and browsed by WoMan.  It is bound to the key <kbd>W</kbd> in
+the dired mode map and added to the dired major mode menu.  It may also
+be bound to <kbd>w</kbd>, unless this key is bound by another library, which
+it is by <code>dired-x</code>, for example.  Because it is quite likely that
+other libraries will extend the capabilities of such a commonly used
+mode as dired, the precise key bindings added by WoMan to the dired mode
+map are controlled by the user option <code>woman-dired-keys</code>.
+
+<p><a name="index-woman_002dtar_002dextract_002dfile-19"></a>When a tar (Tape ARchive) file is visited in Emacs, it is opened in tar
+mode, which parses the tar file and shows a dired-like view of its
+contents.  The WoMan command <code>woman-tar-extract-file</code> allows the
+file on the same line as point to be formatted and browsed by WoMan.  It
+is bound to the key <kbd>w</kbd> in the tar mode map and added to the tar
+major mode menu.
+
+<p>The command <code>woman-reformat-last-file</code>, which is bound to the key
+<kbd>R</kbd> in WoMan mode and available on the major mode menu, reformats
+the last file formatted by WoMan.  This may occasionally be useful if
+formatting parameters, such as the fill column, are changed, or perhaps
+if the buffer is somehow corrupted.
+
+<p><a name="index-woman_002ddecode_002dbuffer-20"></a>The command <code>woman-decode-buffer</code> can be used to decode and browse
+the current buffer if it is visiting a man file, although it is
+primarily used internally by WoMan.
+
+<div class="node">
+<a name="Automatic"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Filename">Filename</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Finding">Finding</a>
+
+</div>
+
+<h3 class="section">3.3 Automatic Interface</h3>
+
+<p><a name="index-automatic-interface-21"></a>
+Emacs provides an interface to detect automatically the format of a file
+and decode it when it is visited.  It is used primarily by the
+facilities for editing rich (i.e., formatted) text, as a way to store
+formatting information transparently as <acronym>ASCII</acronym> markup.  WoMan can in
+principle use this interface, but it must be configured explicitly.
+
+<p>This use of WoMan does not seem to be particularly advantageous, so it
+is not really supported.  It originated during early experiments on how
+best to implement WoMan, before I implemented the current topic
+interface, and I subsequently stopped using it.  I might revive it as a
+mechanism for storing pre-formatted WoMan files, somewhat analogous to
+the standard Unix <code>catman</code> facility.  In the meantime, it exists
+for anyone who wants to experiment with it.  Once it is set up it is
+simply a question of visiting the file and there is no WoMan-specific
+user interface!
+
+<p>To use it, put something like this in your <samp><span class="file">.emacs</span></samp> file.  [The
+call to <code>set-visited-file-name</code> is to avoid font-locking triggered
+by automatic major mode selection.]
+
+<pre class="lisp">     (autoload 'woman-decode-region "woman")
+     
+     (add-to-list 'format-alist
+                  '(man "Unix man-page source format" "\\.\\(TH\\|ig\\) "
+                        woman-decode-region nil nil
+                        (lambda (arg)
+                          set-visited-file-name
+                          (file-name-sans-extension buffer-file-name))))
+</pre>
+<!-- =================================================================== -->
+<div class="node">
+<a name="Browsing"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Customization">Customization</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Finding">Finding</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">4 Browsing Man Pages</h2>
+
+<p><a name="index-using_002c-browsing-man-pages-22"></a><a name="index-browsing-man-pages-23"></a><a name="index-man-pages_002c-browsing-24"></a>
+Once a man page has been found and formatted, WoMan provides a browsing
+interface that is essentially the same as that provided by the standard
+Emacs <code>man</code> command (and much of the code is inherited from the
+<code>man</code> library, which WoMan currently requires).  Many WoMan
+facilities can be accessed from the WoMan major mode menu as well as via
+key bindings, etc.
+
+<p>WoMan does not produce any page breaks or page numbers, and in fact does
+not paginate the man page at all, since this is not appropriate for
+continuous online browsing.  It produces a document header line that is
+constructed from the standard man page header and footer.  Apart from
+that, the appearance of the formatted man page should be almost
+identical to what would be produced by <code>man</code>, with consecutive
+blank lines squeezed to a single blank line.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Fonts">Fonts</a>:                Fonts and Faces
+<li><a accesskey="2" href="#Navigation">Navigation</a>:           Navigation
+<li><a accesskey="3" href="#References">References</a>:           Following References
+<li><a accesskey="4" href="#Changing">Changing</a>:             Changing the Current Man Page
+<li><a accesskey="5" href="#Convenience">Convenience</a>:          Convenience Key Bindings
+<li><a accesskey="6" href="#Imenu">Imenu</a>:                Imenu Support; Contents Menu
+</ul>
+
+<div class="node">
+<a name="Fonts"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Navigation">Navigation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Browsing">Browsing</a>
+
+</div>
+
+<h3 class="section">4.1 Fonts and Faces</h3>
+
+<p><a name="index-fonts-25"></a><a name="index-faces-26"></a>
+Fonts used by <code>roff</code> are handled by WoMan as faces, the details of
+which are customizable.  See <a href="#Faces">Faces</a>.  WoMan supports both the
+italic and bold fonts normally used in man pages, together with a single
+face to represent all unknown fonts (which are occasionally used in
+&ldquo;non-standard&rdquo; man pages, usually to represent a &ldquo;typewriter&rdquo; font)
+and a face to indicate additional symbols introduced by WoMan.  This
+currently means the characters ^ and _ used to indicate super- and
+sub-scripts, which are not displayed well by WoMan.
+
+<div class="node">
+<a name="Navigation"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#References">References</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Fonts">Fonts</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Browsing">Browsing</a>
+
+</div>
+
+<h3 class="section">4.2 Navigation</h3>
+
+<p><a name="index-navigation-27"></a>
+Man (and hence WoMan) mode can be thought of as a superset of view mode. 
+The buffer cannot be edited, so keys that would normally self-insert are
+used for navigation.  The WoMan key bindings are a minor modification of
+the <code>man</code> key bindings.
+
+     <dl>
+<dt><kbd>&lt;SPC&gt;</kbd><dd><a name="index-SPC-28"></a><a name="index-scroll_002dup-29"></a>Scroll the man page up the window (<code>scroll-up</code>).
+
+     <br><dt><kbd>&lt;DEL&gt;</kbd><dt><kbd>S-&lt;SPC&gt;</kbd><dd><a name="index-DEL-30"></a><a name="index-S_002dSPC-31"></a><a name="index-scroll_002ddown-32"></a>Scroll the man page down the window (<code>scroll-down</code>).
+
+     <br><dt><kbd>n</kbd><dd><a name="index-n-33"></a><a name="index-Man_002dnext_002dsection-34"></a>Move point to the Nth next section&mdash;default 1 (<code>Man-next-section</code>).
+
+     <br><dt><kbd>p</kbd><dd><a name="index-p-35"></a><a name="index-Man_002dprevious_002dsection-36"></a>Move point to Nth previous section&mdash;default 1
+(<code>Man-previous-section</code>).
+
+     <br><dt><kbd>g</kbd><dd><a name="index-g-37"></a><a name="index-Man_002dgoto_002dsection-38"></a>Move point to the specified section (<code>Man-goto-section</code>).
+
+     <br><dt><kbd>s</kbd><dd><a name="index-s-39"></a><a name="index-Man_002dgoto_002dsee_002dalso_002dsection-40"></a>Move point to the &ldquo;SEE ALSO&rdquo; section
+(<code>Man-goto-see-also-section</code>).  Actually the section moved to is
+described by <code>Man-see-also-regexp</code>. 
+</dl>
+
+<div class="node">
+<a name="References"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Changing">Changing</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Navigation">Navigation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Browsing">Browsing</a>
+
+</div>
+
+<h3 class="section">4.3 Following References</h3>
+
+<p><a name="index-following-references-41"></a><a name="index-references-42"></a>
+Man pages usually contain a &ldquo;SEE ALSO&rdquo; section containing references
+to other man pages.  If these man pages are installed then WoMan can
+easily be directed to follow the reference, i.e., to find and format the
+man page.  When the mouse is passed over a correctly formatted reference
+it is highlighted, in which case clicking the middle button
+<kbd>Mouse-2</kbd> will cause WoMan to follow the reference.  Alternatively,
+when point is over such a reference the key &lt;RET&gt; will follow the
+reference.
+
+<p>Any word in the buffer can be used as a reference by clicking
+<kbd>Mouse-2</kbd> over it provided the Meta key is also used (although in
+general such a &ldquo;reference&rdquo; will not lead to a man page). 
+Alternatively, the key <kbd>r</kbd> allows completion to be used to select a
+reference to follow, based on the word at point as default.
+
+     <dl>
+<dt><kbd>Mouse-2</kbd><dd><a name="index-Mouse_002d2-43"></a><a name="index-woman_002dmouse_002d2-44"></a>Run WoMan with word under mouse as topic (<code>woman-mouse-2</code>).  The
+word must be mouse-highlighted unless <code>woman-mouse-2</code> is used with
+the Meta key.
+
+     <br><dt><kbd>&lt;RET&gt;</kbd><dd><a name="index-RET-45"></a><a name="index-man_002dfollow-46"></a>Get the man page for the topic under (or nearest to) point
+(<code>man-follow</code>).
+
+     <br><dt><kbd>r</kbd><dd><a name="index-r-47"></a><a name="index-Man_002dfollow_002dmanual_002dreference-48"></a>Get one of the man pages referred to in the &ldquo;SEE ALSO&rdquo; section
+(<code>Man-follow-manual-reference</code>).  Specify which reference to use;
+default is based on word at point. 
+</dl>
+
+<div class="node">
+<a name="Changing"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Convenience">Convenience</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#References">References</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Browsing">Browsing</a>
+
+</div>
+
+<h3 class="section">4.4 Changing the Current Man Page</h3>
+
+<p><a name="index-changing-current-man-page-49"></a><a name="index-current-man-page_002c-changing-50"></a>
+The man page currently being browsed by WoMan can be changed in several
+ways.  The command <code>woman</code> can be invoked to format another man
+page, or the current WoMan buffer can be buried or killed.  WoMan
+maintains a ring of formatted man pages, and it is possible to move
+forwards and backwards in this ring by moving to the next or previous
+man page.  It is sometimes useful to reformat the current page, for
+example after the right margin (the wrap column) or some other
+formatting parameter has been changed.
+
+<p>Buffers formatted by Man and WoMan are completely unrelated, even though
+some of the commands to manipulate them are superficially the same (and
+share code).
+
+     <dl>
+<dt><kbd>m</kbd><dd><a name="index-m-51"></a><a name="index-man-52"></a>Run the command <code>man</code> to get a Un*x manual page and put it in a
+buffer.  This command is the top-level command in the man package.  It
+runs a Un*x command to retrieve and clean a man page in the background
+and places the results in a Man mode (man page browsing) buffer.  If a
+man buffer already exists for this man page, it will display
+immediately.  This works exactly the same if WoMan is loaded, except
+that the formatting time is displayed in the mini-buffer.
+
+     <br><dt><kbd>w</kbd><dd><a name="index-w-53"></a><a name="index-woman-54"></a>Run the command <code>woman</code> exactly as if the extended command or menu
+item had been used.
+
+     <br><dt><kbd>q</kbd><dd><a name="index-q-55"></a><a name="index-Man_002dquit-56"></a>Bury the buffer containing the current man page (<code>Man-quit</code>),
+i.e., move it to the bottom of the buffer stack.
+
+     <br><dt><kbd>k</kbd><dd><a name="index-k-57"></a><a name="index-Man_002dkill-58"></a>Kill the buffer containing the current man page (<code>Man-kill</code>),
+i.e., delete it completely so that it can be retrieved only by formatting
+the page again.
+
+     <br><dt><kbd>M-p</kbd><dd><a name="index-M_002dp-59"></a><a name="index-WoMan_002dprevious_002dmanpage-60"></a>Find the previous WoMan buffer (<code>WoMan-previous-manpage</code>).
+
+     <br><dt><kbd>M-n</kbd><dd><a name="index-M_002dn-61"></a><a name="index-WoMan_002dnext_002dmanpage-62"></a>Find the next WoMan buffer (<code>WoMan-next-manpage</code>).
+
+     <br><dt><kbd>R</kbd><dd><a name="index-R-63"></a><a name="index-woman_002dreformat_002dlast_002dfile-64"></a>Call WoMan to reformat the last man page formatted by WoMan
+(<code>woman-reformat-last-file</code>), e.g., after changing the fill column. 
+</dl>
+
+<div class="node">
+<a name="Convenience"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Imenu">Imenu</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Changing">Changing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Browsing">Browsing</a>
+
+</div>
+
+<h3 class="section">4.5 Convenience Key Bindings</h3>
+
+<p><a name="index-convenience-key-bindings-65"></a><a name="index-key-bindings_002c-convenience-66"></a>
+     <dl>
+<dt><kbd>-</kbd><dd><a name="index-g_t_002d-67"></a><a name="index-negative_002dargument-68"></a>Begin a negative numeric argument for the next command
+(<code>negative-argument</code>).
+
+     <br><dt><kbd>0 .. 9</kbd><dd><a name="index-g_t0-_002e_002e-9-69"></a><a name="index-digit_002dargument-70"></a>Part of the numeric argument for the next command
+(<code>digit-argument</code>).
+
+     <br><dt><kbd>&lt;</kbd><dd><a name="index-g_t_003c-71"></a><dt><kbd>.</kbd><dd><a name="index-g_t_002e-72"></a><a name="index-beginning_002dof_002dbuffer-73"></a>Move point to the beginning of the buffer; leave mark at previous
+position (<code>beginning-of-buffer</code>).
+
+     <br><dt><kbd>&gt;</kbd><dd><a name="index-g_t_003e-74"></a><a name="index-end_002dof_002dbuffer-75"></a>Move point to the end of the buffer; leave mark at previous position
+(<code>end-of-buffer</code>).
+
+     <br><dt><kbd>?</kbd><dd><a name="index-g_t_003f-76"></a><a name="index-describe_002dmode-77"></a>Display documentation of current major mode and minor modes
+(<code>describe-mode</code>).  The major mode description comes first,
+followed by the minor modes, each on a separate page. 
+</dl>
+
+<div class="node">
+<a name="Imenu"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Convenience">Convenience</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Browsing">Browsing</a>
+
+</div>
+
+<h3 class="section">4.6 Imenu Support; Contents Menu</h3>
+
+<p><a name="index-imenu-support-78"></a><a name="index-contents-menu-79"></a>
+The WoMan menu provides an option to make a contents menu for the
+current man page (using <code>imenu</code>).  Alternatively, if you customize
+the option <code>woman-imenu</code> to <code>t</code> then WoMan will do it
+automatically for every man page.  The menu title is set by the option
+<code>woman-imenu-title</code>, which is &ldquo;CONTENTS&rdquo; by default.  The menu
+shows manual sections and subsections by default, but you can change
+this by customizing <code>woman-imenu-generic-expression</code>.
+
+<p>WoMan is configured not to replace spaces in an imenu
+<samp><span class="file">*Completion*</span></samp> buffer.  For further documentation on the use of
+imenu, such as menu sorting, see the source file <samp><span class="file">imenu.el</span></samp>, which
+is distributed with GNU Emacs.
+
+<!-- =================================================================== -->
+<div class="node">
+<a name="Customization"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Log">Log</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Browsing">Browsing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">5 Customization</h2>
+
+<p><a name="index-customization-80"></a>
+All WoMan user options are customizable, and it is recommended to
+change them only via the standard Emacs customization facilities. 
+WoMan defines a top-level customization group called <code>WoMan</code>
+under the parent group <code>Help</code>.  It can be accessed either via the
+standard Emacs facilities, e.g., via the &lsquo;<samp><span class="samp">Help-&gt;Customize</span></samp>&rsquo;
+submenu, or via the WoMan major mode menu.
+
+<p>The top-level WoMan group contains only a few general options and three
+subgroups.  The hooks are provided only for special purposes that, for
+example, require code to be executed, and should be changed only via
+<code>Customization</code> or the function <code>add-hook</code>.  Most
+customization should be possible via existing user options.
+
+     <dl>
+<dt><code>woman-show-log</code><a name="index-woman_002dshow_002dlog-81"></a><dd>A boolean value that defaults to <code>nil</code>.  If non-<code>nil</code> then show the
+<samp><span class="file">*WoMan-Log*</span></samp> buffer if appropriate, i.e., if any warning messages
+are written to it.  See <a href="#Log">The *WoMan-Log* Buffer</a>.
+
+     <br><dt><code>woman-pre-format-hook</code><a name="index-woman_002dpre_002dformat_002dhook-82"></a><dd>A hook run immediately before formatting a buffer.  It might, for
+example, be used for face customization.  See <a href="#Faces">Faces</a>,
+however.
+
+     <br><dt><code>woman-post-format-hook</code><a name="index-woman_002dpost_002dformat_002dhook-83"></a><dd>A hook run immediately after formatting a buffer.  It might, for
+example, be used for installing a dynamic menu using <code>imenu</code>. 
+(However. in this case it is better to use the built-in WoMan
+<code>imenu</code> support.  See <a href="#Imenu">Imenu Support; Contents Menu</a>.) 
+</dl>
+
+<h3 class="heading">Customization Subgroups</h3>
+
+     <dl>
+<dt><code>WoMan Interface</code><dd>These options control the process of locating the appropriate file to
+browse, and the appearance of the browsing interface.
+
+     <br><dt><code>WoMan Formatting</code><dd>These options control the layout that WoMan uses to format the man page.
+
+     <br><dt><code>WoMan Faces</code><dd>These options control the display faces that WoMan uses to format the
+man page. 
+</dl>
+
+<ul class="menu">
+<li><a accesskey="1" href="#Interface-Options">Interface Options</a>
+<li><a accesskey="2" href="#Formatting-Options">Formatting Options</a>
+<li><a accesskey="3" href="#Faces">Faces</a>
+<li><a accesskey="4" href="#Special-symbols">Special symbols</a>
+</ul>
+
+<div class="node">
+<a name="Interface-Options"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Formatting-Options">Formatting Options</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Customization">Customization</a>
+
+</div>
+
+<h3 class="section">5.1 Interface Options</h3>
+
+<p><a name="index-interface-options-84"></a>
+These options control the process of locating the appropriate file to
+browse, and the appearance of the browsing interface.
+
+     <dl>
+<dt><code>woman-man.conf-path</code><a name="index-woman_002dman_002econf_002dpath-85"></a><dd>A list of strings representing directories to search and/or files to try
+for a man configuration file.  The default is
+
+     <pre class="lisp">          ("/etc" "/usr/local/lib")
+</pre>
+     <p class="noindent">[for GNU/Linux and Cygwin respectively.]  A trailing separator (<samp><span class="file">/</span></samp>
+for UNIX etc.) on directories is optional and the filename matched if a
+directory is specified is the first to match the regexp
+<code>man.*\.conf</code>.  If the environment variable <code>MANPATH</code> is not
+set but a configuration file is found then it is parsed instead (or as
+well) to provide a default value for <code>woman-manpath</code>.
+
+     <br><dt><code>woman-manpath</code><a name="index-woman_002dmanpath-86"></a><dd>A list of strings representing <em>directory trees</em> to search for Unix
+manual files.  Each element should be the name of a directory that
+contains subdirectories of the form <samp><span class="file">man?</span></samp>, or more precisely
+subdirectories selected by the value of <code>woman-manpath-man-regexp</code>. 
+Non-directory and unreadable files are ignored.  This can also contain
+conses, with the car indicating a <code>PATH</code> variable component mapped
+to the directory tree given in the cdr.
+
+     <p><a name="index-g_t_0040code_007bMANPATH_007d_002c-environment-variable-87"></a>If not set then the environment variable <code>MANPATH</code> is used.  If no
+such environment variable is found, the default list is determined by
+consulting the man configuration file if found.  By default this is
+expected to be either <samp><span class="file">/etc/man.config</span></samp> or
+<samp><span class="file">/usr/local/lib/man.conf</span></samp>, which is controlled by the user option
+<code>woman-man.conf-path</code>.  An empty substring of <code>MANPATH</code>
+denotes the default list.  Otherwise, the default value of this variable
+is
+
+     <pre class="lisp">          ("/usr/man" "/usr/local/man")
+</pre>
+     <p>Any environment variables (names of which must have the Unix-style form
+<code>$NAME</code>, e.g., <code>$HOME</code>, <code>$EMACSDATA</code>, <code>$EMACS_DIR</code>,
+regardless of platform) are evaluated first but each element must
+evaluate to a <em>single</em> directory name.  Trailing <samp><span class="file">/</span></samp>s are
+ignored.  (Specific directories in <code>woman-path</code> are also searched.)
+
+     <p>On Microsoft platforms I recommend including drive letters explicitly,
+e.g.:
+
+     <pre class="lisp">          ("C:/Cygwin/usr/man" "C:/usr/man" "C:/usr/local/man")
+</pre>
+     <p><a name="index-directory-separator-character-88"></a><a name="index-g_t_0040code_007bMANPATH_007d_002c-directory-separator-89"></a>The <code>MANPATH</code> environment variable may be set using DOS
+semi-colon-separated or Unix-style colon-separated syntax (but not
+mixed).
+
+     <br><dt><code>woman-manpath-man-regexp</code><a name="index-woman_002dmanpath_002dman_002dregexp-90"></a><dd>A regular expression to match man directories <em>under</em> the
+<code>woman-manpath</code> directories.  These normally have names of the form
+<samp><span class="file">man?</span></samp>.  Its default value is <code>"[Mm][Aa][Nn]"</code>, which is
+case-insensitive mainly for the benefit of Microsoft platforms.  Its
+purpose is to avoid directories such as <samp><span class="file">cat?</span></samp>, <samp><span class="file">.</span></samp>,
+<samp><span class="file">..</span></samp>, etc.
+
+     <br><dt><code>woman-path</code><a name="index-woman_002dpath-91"></a><dd>A list of strings representing <em>specific directories</em> to search for
+Unix manual files.  For example
+
+     <pre class="lisp">          ("/emacs/etc")
+</pre>
+     <p>These directories are searched in addition to the directory trees
+specified in <code>woman-manpath</code>.  Each element should be a directory
+string or <code>nil</code>, which represents the current directory when the
+path is expanded and cached.  However, the last component (only) of each
+directory string is treated as a regexp (Emacs, not shell) and the
+string is expanded into a list of matching directories.  Non-directory
+and unreadable files are ignored.  The default value on MS-DOS is
+
+     <pre class="lisp">          ("$DJDIR/info" "$DJDIR/man/cat[1-9onlp]")
+</pre>
+     <p class="noindent">and on other platforms is <code>nil</code>.
+
+     <p>Any environment variables (names of which must have the Unix-style form
+<code>$NAME</code>, e.g., <code>$HOME</code>, <code>$EMACSDATA</code>, <code>$EMACS_DIR</code>,
+regardless of platform) are evaluated first but each element must
+evaluate to a <em>single</em> directory name (regexp, see above).  For
+example
+
+     <pre class="lisp">          ("$EMACSDATA")
+</pre>
+     <p class="noindent">or equivalently
+
+     <pre class="lisp">          ("$EMACS_DIR/etc")
+</pre>
+     <p class="noindent">Trailing <samp><span class="file">/</span></samp>s are discarded.  (The directory trees in
+<code>woman-manpath</code> are also searched.)  On Microsoft platforms I
+recommend including drive letters explicitly.
+
+     <br><dt><code>woman-cache-level</code><a name="index-woman_002dcache_002dlevel-92"></a><dd>A positive integer representing the level of topic caching:
+
+          <ol type=1 start=1>
+<li>cache only the topic and directory lists (uses minimal memory, but not
+recommended);
+<li>cache also the directories for each topic (faster, without using much
+more memory);
+<li>cache also the actual filenames for each topic (fastest, but uses twice
+as much memory).
+          </ol>
+
+     <p>The default value is currently 2, a good general compromise.  If the
+<code>woman</code> command is slow to find files then try 3, which may be
+particularly beneficial with large remote-mounted man directories.  Run
+the <code>woman</code> command with a prefix argument or delete the cache file
+<code>woman-cache-filename</code> for a change to take effect.  (Values &lt; 1
+behave like 1; values &gt; 3 behave like 3.)
+
+     <br><dt><code>woman-cache-filename</code><a name="index-woman_002dcache_002dfilename-93"></a><dd>Either a string representing the full pathname of the WoMan directory
+and topic cache file, or <code>nil</code>.  It is used to save and restore the
+cache between Emacs sessions.  This is especially useful with
+remote-mounted man page files!  The default value of <code>nil</code>
+suppresses this action.  The &ldquo;standard&rdquo; non-<code>nil</code> filename is
+<samp><span class="file">~/.wmncach.el</span></samp>.  Remember that a prefix argument forces the
+<code>woman</code> command to update and re-write the cache.
+
+     <br><dt><code>woman-dired-keys</code><a name="index-woman_002ddired_002dkeys-94"></a><dd>A list of <code>dired</code> mode keys to be defined to run WoMan on the
+current file, e.g., <code>("w" "W")</code> or any non-<code>nil</code> atom to
+automatically define <kbd>w</kbd> and <kbd>W</kbd> if they are unbound, or
+<code>nil</code> to do nothing.  Default is <code>t</code>.
+
+     <br><dt><code>woman-imenu-generic-expression</code><a name="index-woman_002dimenu_002dgeneric_002dexpression-95"></a><dd>Imenu support for Sections and Subsections: an alist with elements of
+the form <code>(MENU-TITLE REGEXP INDEX)</code>&mdash;see the documentation for
+<code>imenu-generic-expression</code>.  Default value is
+
+     <pre class="lisp">          ((nil "\n\\([A-Z].*\\)" 1)  ; SECTION, but not TITLE
+           ("*Subsections*" "^   \\([A-Z].*\\)" 1))
+</pre>
+     <br><dt><code>woman-imenu</code><a name="index-woman_002dimenu-96"></a><dd>A boolean value that defaults to <code>nil</code>.  If non-<code>nil</code> then WoMan adds
+a Contents menu to the menubar by calling <code>imenu-add-to-menubar</code>.
+
+     <br><dt><code>woman-imenu-title</code><a name="index-woman_002dimenu_002dtitle-97"></a><dd>A string representing the title to use if WoMan adds a Contents menu to
+the menubar.  Default is <code>"CONTENTS"</code>.
+
+     <br><dt><code>woman-use-topic-at-point</code><a name="index-woman_002duse_002dtopic_002dat_002dpoint-98"></a><dd>A boolean value that defaults to <code>nil</code>.  If non-<code>nil</code> then
+the <code>woman</code> command uses the word at point as the topic,
+<em>without interactive confirmation</em>, if it exists as a topic.
+
+     <br><dt><code>woman-use-topic-at-point-default</code><a name="index-woman_002duse_002dtopic_002dat_002dpoint_002ddefault-99"></a><dd>A boolean value representing the default value for
+<code>woman-use-topic-at-point</code>.  The default value is <code>nil</code>. 
+[The variable <code>woman-use-topic-at-point</code> may be <code>let</code>-bound
+when <code>woman</code> is loaded, in which case its global value does not
+get defined.  The function <code>woman-file-name</code> sets it to this
+value if it is unbound.]
+
+     <br><dt><code>woman-uncompressed-file-regexp</code><a name="index-woman_002duncompressed_002dfile_002dregexp-100"></a><dd>A regular match expression used to select man source files (ignoring any
+compression extension).  The default value is
+<code>"\\.\\([0-9lmnt]\\w*\\)"</code> [which means a filename extension is
+required].
+
+     <p><em>Do not change this unless you are sure you know what you are doing!</em>
+
+     <p>The SysV standard man pages use two character suffixes, and this is
+becoming more common in the GNU world.  For example, the man pages in
+the <code>ncurses</code> package include <samp><span class="file">toe.1m</span></samp>, <samp><span class="file">form.3x</span></samp>, etc.
+
+     <p><strong>Please note:</strong> an optional compression regexp will be appended,
+so this regexp <em>must not</em> end with any kind of string terminator
+such as <code>$</code> or <code>\\'</code>.
+
+     <br><dt><code>woman-file-compression-regexp</code><a name="index-woman_002dfile_002dcompression_002dregexp-101"></a><dd>A regular match expression used to match compressed man file extensions
+for which decompressors are available and handled by auto-compression
+mode.  It should begin with <code>\\.</code> and end with <code>\\'</code> and
+<em>must not</em> be optional.  The default value is
+<code>"\\.\\(g?z\\|bz2\\|xz\\)\\'"</code>, which matches the <code>gzip</code>,
+<code>bzip2</code>, and <code>xz</code> compression extensions.
+
+     <p><em>Do not change this unless you are sure you know what you are doing!</em>
+
+     <p>[It should be compatible with the <code>car</code> of
+<code>jka-compr-file-name-handler-entry</code>, but that is unduly
+complicated, includes an inappropriate extension (<samp><span class="file">.tgz</span></samp>) and is
+not loaded by default!]
+
+     <br><dt><code>woman-use-own-frame</code><a name="index-woman_002duse_002down_002dframe-102"></a><dd>If non-<code>nil</code> then use a dedicated frame for displaying WoMan windows. 
+This is useful only when WoMan is run under a window system such as X or
+Microsoft Windows that supports real multiple frames, in which case the
+default value is non-<code>nil</code>. 
+</dl>
+
+<div class="node">
+<a name="Formatting-Options"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Faces">Faces</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Interface-Options">Interface Options</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Customization">Customization</a>
+
+</div>
+
+<h3 class="section">5.2 Formatting Options</h3>
+
+<p><a name="index-formatting-options-103"></a>
+These options control the layout that WoMan uses to format the man page.
+
+     <dl>
+<dt><code>woman-fill-column</code><a name="index-woman_002dfill_002dcolumn-104"></a><dd>An integer specifying the right margin for formatted text.  Default is
+65.
+
+     <br><dt><code>woman-fill-frame</code><a name="index-woman_002dfill_002dframe-105"></a><dd>A boolean value.  If non-<code>nil</code> then most of the frame width is used,
+overriding the value of <code>woman-fill-column</code>.  Default is <code>nil</code>.
+
+     <br><dt><code>woman-default-indent</code><a name="index-woman_002ddefault_002dindent-106"></a><dd>An integer specifying the default prevailing indent for the <code>-man</code>
+macros.  Default is 5.  Set this variable to 7 to emulate GNU/Linux man
+formatting.
+
+     <br><dt><code>woman-bold-headings</code><a name="index-woman_002dbold_002dheadings-107"></a><dd>A boolean value.  If non-<code>nil</code> then embolden section and subsection
+headings.  Default is <code>t</code>.  [Heading emboldening is <em>not</em> standard
+<code>man</code> behavior.]
+
+     <br><dt><code>woman-ignore</code><a name="index-woman_002dignore-108"></a><dd>A boolean value.  If non-<code>nil</code> then unrecognized requests etc. are
+ignored.  Default is <code>t</code>.  This gives the standard <code>roff</code> behavior. 
+If <code>nil</code> then they are left in the buffer, which may aid debugging.
+
+     <br><dt><code>woman-preserve-ascii</code><a name="index-woman_002dpreserve_002dascii-109"></a><dd>A boolean value.  If non-<code>nil</code> then preserve <acronym>ASCII</acronym> characters in the
+WoMan buffer.  Otherwise, non-<acronym>ASCII</acronym> characters (that display as
+<acronym>ASCII</acronym>) may remain, which is irrelevant unless the buffer is to be
+saved to a file.  Default is <code>nil</code>.
+
+     <br><dt><code>woman-emulation</code><a name="index-woman_002demulation-110"></a><dd>WoMan emulation, currently either <code>nroff</code> or <code>troff</code>.  Default
+is <code>nroff</code>.  <code>troff</code> emulation is experimental and largely
+untested. 
+</dl>
+
+<div class="node">
+<a name="Faces"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Special-symbols">Special symbols</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Formatting-Options">Formatting Options</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Customization">Customization</a>
+
+</div>
+
+<h3 class="section">5.3 Faces</h3>
+
+<p><a name="index-faces-111"></a>
+These options control the display faces that WoMan uses to format the
+man page.
+
+     <dl>
+<dt><code>woman-fontify</code><a name="index-woman_002dfontify-112"></a><dd>A boolean value.  If non-<code>nil</code> then WoMan assumes that face support is
+available.  It defaults to a non-<code>nil</code> value if the display supports
+either colors or different fonts.
+
+     <br><dt><code>woman-italic-face</code><a name="index-woman_002ditalic_002dface-113"></a><dd>Face for italic font in man pages.  Default: italic, underlined,
+foreground red.  This is overkill!  <code>troff</code> uses just italic;
+<code>nroff</code> uses just underline.  You should probably select either
+italic or underline as you prefer, but not both, although italic and
+underline work together perfectly well!
+
+     <br><dt><code>woman-bold-face</code><a name="index-woman_002dbold_002dface-114"></a><dd>Face for bold font in man pages.  Default: bold, foreground blue.
+
+     <br><dt><code>woman-unknown-face</code><a name="index-woman_002dunknown_002dface-115"></a><dd>Face for all unknown fonts in man pages.  Default: foreground brown. 
+Brown is a good compromise: it is distinguishable from the default but
+not enough so as to make font errors look terrible.  (Files that use
+non-standard fonts seem to do so badly or in idiosyncratic ways!)
+
+     <br><dt><code>woman-addition-face</code><a name="index-woman_002daddition_002dface-116"></a><dd>Face for all additions made by WoMan to man pages. 
+Default: foreground orange. 
+</dl>
+
+<div class="node">
+<a name="Special-symbols"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Faces">Faces</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Customization">Customization</a>
+
+</div>
+
+<h3 class="section">5.4 Special symbols</h3>
+
+<p><a name="index-special-symbols-117"></a>
+This section currently applies <em>only</em> to Microsoft Windows.
+
+<p>WoMan provides partial experimental support for special symbols,
+initially only for MS-Windows and only for MS-Windows fonts.  This
+includes both non-<acronym>ASCII</acronym> characters from the main text font and use
+of a separate symbol font.  Later, support will be added for other font
+types (e.g., <code>bdf</code> fonts) and for the X Window System.  In Emacs
+20.7, the current support works partially under Windows 9x but may not
+work on any other platform.
+
+     <dl>
+<dt><code>woman-use-extended-font</code><a name="index-woman_002duse_002dextended_002dfont-118"></a><dd>A boolean value.  If non-<code>nil</code> then WoMan may use non-<acronym>ASCII</acronym> characters
+from the default font.  Default is <code>t</code>.
+
+     <br><dt><code>woman-use-symbol-font</code><a name="index-woman_002duse_002dsymbol_002dfont-119"></a><dd>A boolean value.  If non-<code>nil</code> then WoMan may use the symbol font. 
+Default is <code>nil</code>, mainly because it may change the line spacing (at
+least in NTEmacs 20).
+
+     <br><dt><code>woman-symbol-font</code><a name="index-woman_002dsymbol_002dfont-120"></a><dd>A string describing the symbol font to use for special characters. 
+It should be compatible with, and the same size as, the default text font. 
+Under MS-Windows, the default is
+
+     <pre class="lisp">          "-*-Symbol-normal-r-*-*-*-*-96-96-p-*-ms-symbol"
+</pre>
+     </dl>
+
+<!-- =================================================================== -->
+<div class="node">
+<a name="Log"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Technical">Technical</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Customization">Customization</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">6 The *WoMan-Log* Buffer</h2>
+
+<p><a name="index-log-buffer-121"></a><a name="index-buffer_002c-log-122"></a>
+This is modeled on the Emacs byte-compiler.  It logs all files
+formatted by WoMan and the time taken.  If WoMan finds anything that it
+cannot handle then it writes a warning to this buffer.  If the variable
+<code>woman-show-log</code> is non-<code>nil</code> (by default it is <code>nil</code>) then
+WoMan automatically displays this buffer.  See <a href="#Interface-Options">Interface Options</a>.  Many WoMan warnings can be completely ignored,
+because they are reporting the fact that WoMan has ignored requests that
+it is correct for WoMan to ignore.  In some future version this level of
+paranoia may be reduced, but not until WoMan is deemed more reliable. 
+At present, all warnings should be treated with some suspicion. 
+Uninterpreted escape sequences are also logged (in some cases).
+
+<p>By resetting the variable <code>woman-ignore</code> to <code>nil</code> (by default
+it is <code>t</code>), uninterpreted <code>roff</code> requests can optionally be
+left in the formatted buffer to indicate precisely where they occurred. 
+See <a href="#Interface-Options">Interface Options</a>.
+
+<!-- =================================================================== -->
+<div class="node">
+<a name="Technical"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Bugs">Bugs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Log">Log</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">7 Technical Details</h2>
+
+<p><a name="index-technical-details-123"></a><a name="index-horizontal-spacing-124"></a><a name="index-spacing_002c-horizontal-and-vertical-125"></a><a name="index-vertical-spacing-126"></a><a name="index-resolution-127"></a>
+
+<h3 class="heading">Horizontal and vertical spacing and resolution</h3>
+
+<p>WoMan currently assumes 10 characters per inch horizontally, hence a
+horizontal resolution of 24 basic units, and 5 lines per inch
+vertically, hence a vertical resolution of 48 basic units. 
+(<code>nroff</code> uses 240 per inch.)
+
+<h3 class="heading">Vertical spacing and blank lines</h3>
+
+<p>The number of consecutive blank lines in the formatted buffer should be
+either 0 or 1.  A blank line should leave a space like .sp 1. 
+Current policy is to output vertical space only immediately before text
+is output.
+
+<!-- =================================================================== -->
+<div class="node">
+<a name="Bugs"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Acknowledgments">Acknowledgments</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Technical">Technical</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">8 Reporting Bugs</h2>
+
+<p><a name="index-reporting-bugs-128"></a><a name="index-bugs_002c-reporting-129"></a>
+If WoMan fails completely, or formats a file incorrectly (i.e.,
+obviously wrongly or significantly differently from <code>man</code>) or
+inelegantly, then please
+
+     <ol type=1 start=1>
+<li>try the latest version of <samp><span class="file">woman.el</span></samp> from the Emacs repository
+on <a href="http://savannah.gnu.org/projects/emacs/">http://savannah.gnu.org/projects/emacs/</a>.  If it still fails, please
+
+     <li>use <kbd>M-x report-emacs-bug</kbd> to send a bug report. 
+Please include the entry from the
+<samp><span class="file">*WoMan-Log*</span></samp> buffer relating to the problem file, together with
+a brief description of the problem.  Please indicate where you got the
+man source file from, but do not send it unless asked to send it.
+     </ol>
+
+<!-- =================================================================== -->
+<div class="node">
+<a name="Acknowledgments"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Bugs">Bugs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">9 Acknowledgments</h2>
+
+<p><a name="index-acknowledgments-130"></a>
+For Heather, Kathryn and Madelyn, the women in my life (although they
+will probably never use it)!
+
+<p>I also thank the following for helpful suggestions, bug reports, code
+fragments, general interest, etc.:
+
+<blockquote>
+<!-- jari.aalto@@cs.tpu.fi -->
+Jari Aalto,
+<!-- dean@@dra.com -->
+Dean Andrews,
+<!-- barranquero@@laley-actualidad.es -->
+Juanma Barranquero,
+<!-- kb@@cs.umb.edu -->
+Karl Berry,
+<!-- jchapman@@netcomuk.co.uk -->
+Jim Chapman,
+<!-- frederic.corne@@erli.fr -->
+Frederic Corne,
+<!-- craft@@alacritech.com -->
+Peter Craft,
+<!-- ccurley@@trib.com -->
+Charles Curley,
+<!-- jdavidso@@teknowledge.com -->
+Jim Davidson,
+<!-- Kevin.DElia@@mci.com -->
+Kevin D'Elia,
+<!-- jpff@@maths.bath.ac.uk -->
+John Fitch,
+<!-- jwfrosch@@rish.b17c.ingr.com -->
+Hans Frosch,
+<!-- ggp@@informix.com -->
+Guy Gascoigne-Piggford,
+<!-- gorkab@@sanchez.com -->
+Brian Gorka,
+<!-- nhe@@lyngso-industri.dk -->
+Nicolai Henriksen,
+<!-- the@@software-ag.de -->
+Thomas Herchenroeder,
+<!-- ahinds@@thegrid.net -->
+Alexander Hinds,
+<!-- sth@@hacon.de -->
+Stefan Hornburg,
+<!-- tjump@@cais.com -->
+Theodore Jump,
+<!-- paulk@@mathworks.com -->
+Paul Kinnucan,
+<!-- jonas@@init.se -->
+Jonas Linde,
+<!-- andrewm@@optimation.co.nz -->
+Andrew McRae,
+<!-- howard@@silverstream.com -->
+Howard Melman,
+<!-- dennis@@math.binghamton.edu -->
+Dennis Pixton,
+<!-- raman@@Adobe.com -->
+T. V. Raman,
+<!-- bruce.ravel@@nist.gov -->
+Bruce Ravel,
+<!-- benny@@crocodial.de -->
+Benjamin Riefenstahl,
+<!-- kruland@@seistl.com -->
+Kevin Ruland,
+<!-- tom@@platte.com -->
+Tom Schutter,
+<!-- wxshi@@ma.neweb.ne.jp -->
+Wei-Xue Shi,
+<!-- fabio@@joplin.colorado.edu -->
+Fabio Somenzi,
+<!-- ks@@ic.uva.nl -->
+Karel Sprenger,
+<!-- szurgot@@itribe.net -->
+Chris Szurgot,
+<!-- pat@@po.cwru.edu -->
+Paul A. Thompson,
+<!-- arrigo@@maths.qmw.ac.uk -->
+Arrigo Triulzi,
+<!-- voelker@@cs.washington.edu -->
+Geoff Voelker,
+<!-- eliz@@is.elta.co.il -->
+Eli Zaretskii
+</blockquote>
+
+<!-- =================================================================== -->
+<!-- END OF MANUAL TEXT -->
+<div class="node">
+<a name="GNU-Free-Documentation-License"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Command-Index">Command Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Acknowledgments">Acknowledgments</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="appendix">Appendix A GNU Free Documentation License</h2>
+
+<!-- The GNU Free Documentation License. -->
+<div align="center">Version 1.3, 3 November 2008</div>
+
+<!-- This file is intended to be included within another document, -->
+<!-- hence no sectioning command or @node. -->
+<pre class="display">     Copyright &copy; 2000, 2001, 2002, 2007, 2008 Free Software Foundation, Inc.
+     <a href="http://fsf.org/">http://fsf.org/</a>
+     
+     Everyone is permitted to copy and distribute verbatim copies
+     of this license document, but changing it is not allowed.
+</pre>
+     <ol type=1 start=0>
+<li>PREAMBLE
+
+     <p>The purpose of this License is to make a manual, textbook, or other
+functional and useful document <dfn>free</dfn> in the sense of freedom: to
+assure everyone the effective freedom to copy and redistribute it,
+with or without modifying it, either commercially or noncommercially. 
+Secondarily, this License preserves for the author and publisher a way
+to get credit for their work, while not being considered responsible
+for modifications made by others.
+
+     <p>This License is a kind of &ldquo;copyleft&rdquo;, which means that derivative
+works of the document must themselves be free in the same sense.  It
+complements the GNU General Public License, which is a copyleft
+license designed for free software.
+
+     <p>We have designed this License in order to use it for manuals for free
+software, because free software needs free documentation: a free
+program should come with manuals providing the same freedoms that the
+software does.  But this License is not limited to software manuals;
+it can be used for any textual work, regardless of subject matter or
+whether it is published as a printed book.  We recommend this License
+principally for works whose purpose is instruction or reference.
+
+     <li>APPLICABILITY AND DEFINITIONS
+
+     <p>This License applies to any manual or other work, in any medium, that
+contains a notice placed by the copyright holder saying it can be
+distributed under the terms of this License.  Such a notice grants a
+world-wide, royalty-free license, unlimited in duration, to use that
+work under the conditions stated herein.  The &ldquo;Document&rdquo;, below,
+refers to any such manual or work.  Any member of the public is a
+licensee, and is addressed as &ldquo;you&rdquo;.  You accept the license if you
+copy, modify or distribute the work in a way requiring permission
+under copyright law.
+
+     <p>A &ldquo;Modified Version&rdquo; of the Document means any work containing the
+Document or a portion of it, either copied verbatim, or with
+modifications and/or translated into another language.
+
+     <p>A &ldquo;Secondary Section&rdquo; is a named appendix or a front-matter section
+of the Document that deals exclusively with the relationship of the
+publishers or authors of the Document to the Document's overall
+subject (or to related matters) and contains nothing that could fall
+directly within that overall subject.  (Thus, if the Document is in
+part a textbook of mathematics, a Secondary Section may not explain
+any mathematics.)  The relationship could be a matter of historical
+connection with the subject or with related matters, or of legal,
+commercial, philosophical, ethical or political position regarding
+them.
+
+     <p>The &ldquo;Invariant Sections&rdquo; are certain Secondary Sections whose titles
+are designated, as being those of Invariant Sections, in the notice
+that says that the Document is released under this License.  If a
+section does not fit the above definition of Secondary then it is not
+allowed to be designated as Invariant.  The Document may contain zero
+Invariant Sections.  If the Document does not identify any Invariant
+Sections then there are none.
+
+     <p>The &ldquo;Cover Texts&rdquo; are certain short passages of text that are listed,
+as Front-Cover Texts or Back-Cover Texts, in the notice that says that
+the Document is released under this License.  A Front-Cover Text may
+be at most 5 words, and a Back-Cover Text may be at most 25 words.
+
+     <p>A &ldquo;Transparent&rdquo; copy of the Document means a machine-readable copy,
+represented in a format whose specification is available to the
+general public, that is suitable for revising the document
+straightforwardly with generic text editors or (for images composed of
+pixels) generic paint programs or (for drawings) some widely available
+drawing editor, and that is suitable for input to text formatters or
+for automatic translation to a variety of formats suitable for input
+to text formatters.  A copy made in an otherwise Transparent file
+format whose markup, or absence of markup, has been arranged to thwart
+or discourage subsequent modification by readers is not Transparent. 
+An image format is not Transparent if used for any substantial amount
+of text.  A copy that is not &ldquo;Transparent&rdquo; is called &ldquo;Opaque&rdquo;.
+
+     <p>Examples of suitable formats for Transparent copies include plain
+ASCII without markup, Texinfo input format, LaTeX input
+format, SGML or XML using a publicly available
+DTD, and standard-conforming simple HTML,
+PostScript or PDF designed for human modification.  Examples
+of transparent image formats include PNG, XCF and
+JPG.  Opaque formats include proprietary formats that can be
+read and edited only by proprietary word processors, SGML or
+XML for which the DTD and/or processing tools are
+not generally available, and the machine-generated HTML,
+PostScript or PDF produced by some word processors for
+output purposes only.
+
+     <p>The &ldquo;Title Page&rdquo; means, for a printed book, the title page itself,
+plus such following pages as are needed to hold, legibly, the material
+this License requires to appear in the title page.  For works in
+formats which do not have any title page as such, &ldquo;Title Page&rdquo; means
+the text near the most prominent appearance of the work's title,
+preceding the beginning of the body of the text.
+
+     <p>The &ldquo;publisher&rdquo; means any person or entity that distributes copies
+of the Document to the public.
+
+     <p>A section &ldquo;Entitled XYZ&rdquo; means a named subunit of the Document whose
+title either is precisely XYZ or contains XYZ in parentheses following
+text that translates XYZ in another language.  (Here XYZ stands for a
+specific section name mentioned below, such as &ldquo;Acknowledgements&rdquo;,
+&ldquo;Dedications&rdquo;, &ldquo;Endorsements&rdquo;, or &ldquo;History&rdquo;.)  To &ldquo;Preserve the Title&rdquo;
+of such a section when you modify the Document means that it remains a
+section &ldquo;Entitled XYZ&rdquo; according to this definition.
+
+     <p>The Document may include Warranty Disclaimers next to the notice which
+states that this License applies to the Document.  These Warranty
+Disclaimers are considered to be included by reference in this
+License, but only as regards disclaiming warranties: any other
+implication that these Warranty Disclaimers may have is void and has
+no effect on the meaning of this License.
+
+     <li>VERBATIM COPYING
+
+     <p>You may copy and distribute the Document in any medium, either
+commercially or noncommercially, provided that this License, the
+copyright notices, and the license notice saying this License applies
+to the Document are reproduced in all copies, and that you add no other
+conditions whatsoever to those of this License.  You may not use
+technical measures to obstruct or control the reading or further
+copying of the copies you make or distribute.  However, you may accept
+compensation in exchange for copies.  If you distribute a large enough
+number of copies you must also follow the conditions in section 3.
+
+     <p>You may also lend copies, under the same conditions stated above, and
+you may publicly display copies.
+
+     <li>COPYING IN QUANTITY
+
+     <p>If you publish printed copies (or copies in media that commonly have
+printed covers) of the Document, numbering more than 100, and the
+Document's license notice requires Cover Texts, you must enclose the
+copies in covers that carry, clearly and legibly, all these Cover
+Texts: Front-Cover Texts on the front cover, and Back-Cover Texts on
+the back cover.  Both covers must also clearly and legibly identify
+you as the publisher of these copies.  The front cover must present
+the full title with all words of the title equally prominent and
+visible.  You may add other material on the covers in addition. 
+Copying with changes limited to the covers, as long as they preserve
+the title of the Document and satisfy these conditions, can be treated
+as verbatim copying in other respects.
+
+     <p>If the required texts for either cover are too voluminous to fit
+legibly, you should put the first ones listed (as many as fit
+reasonably) on the actual cover, and continue the rest onto adjacent
+pages.
+
+     <p>If you publish or distribute Opaque copies of the Document numbering
+more than 100, you must either include a machine-readable Transparent
+copy along with each Opaque copy, or state in or with each Opaque copy
+a computer-network location from which the general network-using
+public has access to download using public-standard network protocols
+a complete Transparent copy of the Document, free of added material. 
+If you use the latter option, you must take reasonably prudent steps,
+when you begin distribution of Opaque copies in quantity, to ensure
+that this Transparent copy will remain thus accessible at the stated
+location until at least one year after the last time you distribute an
+Opaque copy (directly or through your agents or retailers) of that
+edition to the public.
+
+     <p>It is requested, but not required, that you contact the authors of the
+Document well before redistributing any large number of copies, to give
+them a chance to provide you with an updated version of the Document.
+
+     <li>MODIFICATIONS
+
+     <p>You may copy and distribute a Modified Version of the Document under
+the conditions of sections 2 and 3 above, provided that you release
+the Modified Version under precisely this License, with the Modified
+Version filling the role of the Document, thus licensing distribution
+and modification of the Modified Version to whoever possesses a copy
+of it.  In addition, you must do these things in the Modified Version:
+
+          <ol type=A start=1>
+<li>Use in the Title Page (and on the covers, if any) a title distinct
+from that of the Document, and from those of previous versions
+(which should, if there were any, be listed in the History section
+of the Document).  You may use the same title as a previous version
+if the original publisher of that version gives permission.
+
+          <li>List on the Title Page, as authors, one or more persons or entities
+responsible for authorship of the modifications in the Modified
+Version, together with at least five of the principal authors of the
+Document (all of its principal authors, if it has fewer than five),
+unless they release you from this requirement.
+
+          <li>State on the Title page the name of the publisher of the
+Modified Version, as the publisher.
+
+          <li>Preserve all the copyright notices of the Document.
+
+          <li>Add an appropriate copyright notice for your modifications
+adjacent to the other copyright notices.
+
+          <li>Include, immediately after the copyright notices, a license notice
+giving the public permission to use the Modified Version under the
+terms of this License, in the form shown in the Addendum below.
+
+          <li>Preserve in that license notice the full lists of Invariant Sections
+and required Cover Texts given in the Document's license notice.
+
+          <li>Include an unaltered copy of this License.
+
+          <li>Preserve the section Entitled &ldquo;History&rdquo;, Preserve its Title, and add
+to it an item stating at least the title, year, new authors, and
+publisher of the Modified Version as given on the Title Page.  If
+there is no section Entitled &ldquo;History&rdquo; in the Document, create one
+stating the title, year, authors, and publisher of the Document as
+given on its Title Page, then add an item describing the Modified
+Version as stated in the previous sentence.
+
+          <li>Preserve the network location, if any, given in the Document for
+public access to a Transparent copy of the Document, and likewise
+the network locations given in the Document for previous versions
+it was based on.  These may be placed in the &ldquo;History&rdquo; section. 
+You may omit a network location for a work that was published at
+least four years before the Document itself, or if the original
+publisher of the version it refers to gives permission.
+
+          <li>For any section Entitled &ldquo;Acknowledgements&rdquo; or &ldquo;Dedications&rdquo;, Preserve
+the Title of the section, and preserve in the section all the
+substance and tone of each of the contributor acknowledgements and/or
+dedications given therein.
+
+          <li>Preserve all the Invariant Sections of the Document,
+unaltered in their text and in their titles.  Section numbers
+or the equivalent are not considered part of the section titles.
+
+          <li>Delete any section Entitled &ldquo;Endorsements&rdquo;.  Such a section
+may not be included in the Modified Version.
+
+          <li>Do not retitle any existing section to be Entitled &ldquo;Endorsements&rdquo; or
+to conflict in title with any Invariant Section.
+
+          <li>Preserve any Warranty Disclaimers.
+          </ol>
+
+     <p>If the Modified Version includes new front-matter sections or
+appendices that qualify as Secondary Sections and contain no material
+copied from the Document, you may at your option designate some or all
+of these sections as invariant.  To do this, add their titles to the
+list of Invariant Sections in the Modified Version's license notice. 
+These titles must be distinct from any other section titles.
+
+     <p>You may add a section Entitled &ldquo;Endorsements&rdquo;, provided it contains
+nothing but endorsements of your Modified Version by various
+parties&mdash;for example, statements of peer review or that the text has
+been approved by an organization as the authoritative definition of a
+standard.
+
+     <p>You may add a passage of up to five words as a Front-Cover Text, and a
+passage of up to 25 words as a Back-Cover Text, to the end of the list
+of Cover Texts in the Modified Version.  Only one passage of
+Front-Cover Text and one of Back-Cover Text may be added by (or
+through arrangements made by) any one entity.  If the Document already
+includes a cover text for the same cover, previously added by you or
+by arrangement made by the same entity you are acting on behalf of,
+you may not add another; but you may replace the old one, on explicit
+permission from the previous publisher that added the old one.
+
+     <p>The author(s) and publisher(s) of the Document do not by this License
+give permission to use their names for publicity for or to assert or
+imply endorsement of any Modified Version.
+
+     <li>COMBINING DOCUMENTS
+
+     <p>You may combine the Document with other documents released under this
+License, under the terms defined in section 4 above for modified
+versions, provided that you include in the combination all of the
+Invariant Sections of all of the original documents, unmodified, and
+list them all as Invariant Sections of your combined work in its
+license notice, and that you preserve all their Warranty Disclaimers.
+
+     <p>The combined work need only contain one copy of this License, and
+multiple identical Invariant Sections may be replaced with a single
+copy.  If there are multiple Invariant Sections with the same name but
+different contents, make the title of each such section unique by
+adding at the end of it, in parentheses, the name of the original
+author or publisher of that section if known, or else a unique number. 
+Make the same adjustment to the section titles in the list of
+Invariant Sections in the license notice of the combined work.
+
+     <p>In the combination, you must combine any sections Entitled &ldquo;History&rdquo;
+in the various original documents, forming one section Entitled
+&ldquo;History&rdquo;; likewise combine any sections Entitled &ldquo;Acknowledgements&rdquo;,
+and any sections Entitled &ldquo;Dedications&rdquo;.  You must delete all
+sections Entitled &ldquo;Endorsements.&rdquo;
+
+     <li>COLLECTIONS OF DOCUMENTS
+
+     <p>You may make a collection consisting of the Document and other documents
+released under this License, and replace the individual copies of this
+License in the various documents with a single copy that is included in
+the collection, provided that you follow the rules of this License for
+verbatim copying of each of the documents in all other respects.
+
+     <p>You may extract a single document from such a collection, and distribute
+it individually under this License, provided you insert a copy of this
+License into the extracted document, and follow this License in all
+other respects regarding verbatim copying of that document.
+
+     <li>AGGREGATION WITH INDEPENDENT WORKS
+
+     <p>A compilation of the Document or its derivatives with other separate
+and independent documents or works, in or on a volume of a storage or
+distribution medium, is called an &ldquo;aggregate&rdquo; if the copyright
+resulting from the compilation is not used to limit the legal rights
+of the compilation's users beyond what the individual works permit. 
+When the Document is included in an aggregate, this License does not
+apply to the other works in the aggregate which are not themselves
+derivative works of the Document.
+
+     <p>If the Cover Text requirement of section 3 is applicable to these
+copies of the Document, then if the Document is less than one half of
+the entire aggregate, the Document's Cover Texts may be placed on
+covers that bracket the Document within the aggregate, or the
+electronic equivalent of covers if the Document is in electronic form. 
+Otherwise they must appear on printed covers that bracket the whole
+aggregate.
+
+     <li>TRANSLATION
+
+     <p>Translation is considered a kind of modification, so you may
+distribute translations of the Document under the terms of section 4. 
+Replacing Invariant Sections with translations requires special
+permission from their copyright holders, but you may include
+translations of some or all Invariant Sections in addition to the
+original versions of these Invariant Sections.  You may include a
+translation of this License, and all the license notices in the
+Document, and any Warranty Disclaimers, provided that you also include
+the original English version of this License and the original versions
+of those notices and disclaimers.  In case of a disagreement between
+the translation and the original version of this License or a notice
+or disclaimer, the original version will prevail.
+
+     <p>If a section in the Document is Entitled &ldquo;Acknowledgements&rdquo;,
+&ldquo;Dedications&rdquo;, or &ldquo;History&rdquo;, the requirement (section 4) to Preserve
+its Title (section 1) will typically require changing the actual
+title.
+
+     <li>TERMINATION
+
+     <p>You may not copy, modify, sublicense, or distribute the Document
+except as expressly provided under this License.  Any attempt
+otherwise to copy, modify, sublicense, or distribute it is void, and
+will automatically terminate your rights under this License.
+
+     <p>However, if you cease all violation of this License, then your license
+from a particular copyright holder is reinstated (a) provisionally,
+unless and until the copyright holder explicitly and finally
+terminates your license, and (b) permanently, if the copyright holder
+fails to notify you of the violation by some reasonable means prior to
+60 days after the cessation.
+
+     <p>Moreover, your license from a particular copyright holder is
+reinstated permanently if the copyright holder notifies you of the
+violation by some reasonable means, this is the first time you have
+received notice of violation of this License (for any work) from that
+copyright holder, and you cure the violation prior to 30 days after
+your receipt of the notice.
+
+     <p>Termination of your rights under this section does not terminate the
+licenses of parties who have received copies or rights from you under
+this License.  If your rights have been terminated and not permanently
+reinstated, receipt of a copy of some or all of the same material does
+not give you any rights to use it.
+
+     <li>FUTURE REVISIONS OF THIS LICENSE
+
+     <p>The Free Software Foundation may publish new, revised versions
+of the GNU Free Documentation License from time to time.  Such new
+versions will be similar in spirit to the present version, but may
+differ in detail to address new problems or concerns.  See
+<a href="http://www.gnu.org/copyleft/">http://www.gnu.org/copyleft/</a>.
+
+     <p>Each version of the License is given a distinguishing version number. 
+If the Document specifies that a particular numbered version of this
+License &ldquo;or any later version&rdquo; applies to it, you have the option of
+following the terms and conditions either of that specified version or
+of any later version that has been published (not as a draft) by the
+Free Software Foundation.  If the Document does not specify a version
+number of this License, you may choose any version ever published (not
+as a draft) by the Free Software Foundation.  If the Document
+specifies that a proxy can decide which future versions of this
+License can be used, that proxy's public statement of acceptance of a
+version permanently authorizes you to choose that version for the
+Document.
+
+     <li>RELICENSING
+
+     <p>&ldquo;Massive Multiauthor Collaboration Site&rdquo; (or &ldquo;MMC Site&rdquo;) means any
+World Wide Web server that publishes copyrightable works and also
+provides prominent facilities for anybody to edit those works.  A
+public wiki that anybody can edit is an example of such a server.  A
+&ldquo;Massive Multiauthor Collaboration&rdquo; (or &ldquo;MMC&rdquo;) contained in the
+site means any set of copyrightable works thus published on the MMC
+site.
+
+     <p>&ldquo;CC-BY-SA&rdquo; means the Creative Commons Attribution-Share Alike 3.0
+license published by Creative Commons Corporation, a not-for-profit
+corporation with a principal place of business in San Francisco,
+California, as well as future copyleft versions of that license
+published by that same organization.
+
+     <p>&ldquo;Incorporate&rdquo; means to publish or republish a Document, in whole or
+in part, as part of another Document.
+
+     <p>An MMC is &ldquo;eligible for relicensing&rdquo; if it is licensed under this
+License, and if all works that were first published under this License
+somewhere other than this MMC, and subsequently incorporated in whole
+or in part into the MMC, (1) had no cover texts or invariant sections,
+and (2) were thus incorporated prior to November 1, 2008.
+
+     <p>The operator of an MMC Site may republish an MMC contained in the site
+under CC-BY-SA on the same site at any time before August 1, 2009,
+provided the MMC is eligible for relicensing.
+
+     </ol>
+
+<h3 class="heading">ADDENDUM: How to use this License for your documents</h3>
+
+<p>To use this License in a document you have written, include a copy of
+the License in the document and put the following copyright and
+license notices just after the title page:
+
+<pre class="smallexample">       Copyright (C)  <var>year</var>  <var>your name</var>.
+       Permission is granted to copy, distribute and/or modify this document
+       under the terms of the GNU Free Documentation License, Version 1.3
+       or any later version published by the Free Software Foundation;
+       with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+       Texts.  A copy of the license is included in the section entitled ``GNU
+       Free Documentation License''.
+</pre>
+<p>If you have Invariant Sections, Front-Cover Texts and Back-Cover Texts,
+replace the &ldquo;with<small class="dots">...</small>Texts.&rdquo; line with this:
+
+<pre class="smallexample">         with the Invariant Sections being <var>list their titles</var>, with
+         the Front-Cover Texts being <var>list</var>, and with the Back-Cover Texts
+         being <var>list</var>.
+</pre>
+<p>If you have Invariant Sections without Cover Texts, or some other
+combination of the three, merge those two alternatives to suit the
+situation.
+
+<p>If your document contains nontrivial examples of program code, we
+recommend releasing these examples in parallel under your choice of
+free software license, such as the GNU General Public License,
+to permit their use in free software.
+
+<!-- Local Variables: -->
+<!-- ispell-local-pdict: "ispell-dict" -->
+<!-- End: -->
+<div class="node">
+<a name="Command-Index"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Variable-Index">Variable Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="unnumbered">Command Index</h2>
+
+<ul class="index-fn" compact>
+<li><a href="#index-beginning_002dof_002dbuffer-73"><code>beginning-of-buffer</code></a>: <a href="#Convenience">Convenience</a></li>
+<li><a href="#index-describe_002dmode-77"><code>describe-mode</code></a>: <a href="#Convenience">Convenience</a></li>
+<li><a href="#index-digit_002dargument-70"><code>digit-argument</code></a>: <a href="#Convenience">Convenience</a></li>
+<li><a href="#index-end_002dof_002dbuffer-75"><code>end-of-buffer</code></a>: <a href="#Convenience">Convenience</a></li>
+<li><a href="#index-man-52"><code>man</code></a>: <a href="#Changing">Changing</a></li>
+<li><a href="#index-man_002dfollow-46"><code>man-follow</code></a>: <a href="#References">References</a></li>
+<li><a href="#index-Man_002dfollow_002dmanual_002dreference-48"><code>Man-follow-manual-reference</code></a>: <a href="#References">References</a></li>
+<li><a href="#index-Man_002dgoto_002dsection-38"><code>Man-goto-section</code></a>: <a href="#Navigation">Navigation</a></li>
+<li><a href="#index-Man_002dgoto_002dsee_002dalso_002dsection-40"><code>Man-goto-see-also-section</code></a>: <a href="#Navigation">Navigation</a></li>
+<li><a href="#index-Man_002dkill-58"><code>Man-kill</code></a>: <a href="#Changing">Changing</a></li>
+<li><a href="#index-Man_002dnext_002dsection-34"><code>Man-next-section</code></a>: <a href="#Navigation">Navigation</a></li>
+<li><a href="#index-Man_002dprevious_002dsection-36"><code>Man-previous-section</code></a>: <a href="#Navigation">Navigation</a></li>
+<li><a href="#index-Man_002dquit-56"><code>Man-quit</code></a>: <a href="#Changing">Changing</a></li>
+<li><a href="#index-negative_002dargument-68"><code>negative-argument</code></a>: <a href="#Convenience">Convenience</a></li>
+<li><a href="#index-scroll_002ddown-32"><code>scroll-down</code></a>: <a href="#Navigation">Navigation</a></li>
+<li><a href="#index-scroll_002dup-29"><code>scroll-up</code></a>: <a href="#Navigation">Navigation</a></li>
+<li><a href="#index-woman-54"><code>woman</code></a>: <a href="#Changing">Changing</a></li>
+<li><a href="#index-woman_002ddecode_002dbuffer-20"><code>woman-decode-buffer</code></a>: <a href="#Filename">Filename</a></li>
+<li><a href="#index-woman_002ddired_002dfind_002dfile-18"><code>woman-dired-find-file</code></a>: <a href="#Filename">Filename</a></li>
+<li><a href="#index-woman_002dfind_002dfile-17"><code>woman-find-file</code></a>: <a href="#Filename">Filename</a></li>
+<li><a href="#index-woman_002dmouse_002d2-44"><code>woman-mouse-2</code></a>: <a href="#References">References</a></li>
+<li><a href="#index-WoMan_002dnext_002dmanpage-62"><code>WoMan-next-manpage</code></a>: <a href="#Changing">Changing</a></li>
+<li><a href="#index-WoMan_002dprevious_002dmanpage-60"><code>WoMan-previous-manpage</code></a>: <a href="#Changing">Changing</a></li>
+<li><a href="#index-woman_002dreformat_002dlast_002dfile-64"><code>woman-reformat-last-file</code></a>: <a href="#Changing">Changing</a></li>
+<li><a href="#index-woman_002dtar_002dextract_002dfile-19"><code>woman-tar-extract-file</code></a>: <a href="#Filename">Filename</a></li>
+</ul><div class="node">
+<a name="Variable-Index"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Keystroke-Index">Keystroke Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Command-Index">Command Index</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="unnumbered">Variable Index</h2>
+
+
+
+<ul class="index-vr" compact>
+<li><a href="#index-w32_002ddowncase_002dfile_002dnames-10"><code>w32-downcase-file-names</code></a>: <a href="#Finding">Finding</a></li>
+<li><a href="#index-woman_002daddition_002dface-116"><code>woman-addition-face</code></a>: <a href="#Faces">Faces</a></li>
+<li><a href="#index-woman_002dbold_002dface-114"><code>woman-bold-face</code></a>: <a href="#Faces">Faces</a></li>
+<li><a href="#index-woman_002dbold_002dheadings-107"><code>woman-bold-headings</code></a>: <a href="#Formatting-Options">Formatting Options</a></li>
+<li><a href="#index-woman_002dcache_002dfilename-93"><code>woman-cache-filename</code></a>: <a href="#Interface-Options">Interface Options</a></li>
+<li><a href="#index-woman_002dcache_002dlevel-92"><code>woman-cache-level</code></a>: <a href="#Interface-Options">Interface Options</a></li>
+<li><a href="#index-woman_002ddefault_002dindent-106"><code>woman-default-indent</code></a>: <a href="#Formatting-Options">Formatting Options</a></li>
+<li><a href="#index-woman_002ddired_002dkeys-94"><code>woman-dired-keys</code></a>: <a href="#Interface-Options">Interface Options</a></li>
+<li><a href="#index-woman_002demulation-110"><code>woman-emulation</code></a>: <a href="#Formatting-Options">Formatting Options</a></li>
+<li><a href="#index-woman_002dfile_002dcompression_002dregexp-101"><code>woman-file-compression-regexp</code></a>: <a href="#Interface-Options">Interface Options</a></li>
+<li><a href="#index-woman_002dfill_002dcolumn-104"><code>woman-fill-column</code></a>: <a href="#Formatting-Options">Formatting Options</a></li>
+<li><a href="#index-woman_002dfill_002dframe-105"><code>woman-fill-frame</code></a>: <a href="#Formatting-Options">Formatting Options</a></li>
+<li><a href="#index-woman_002dfontify-112"><code>woman-fontify</code></a>: <a href="#Faces">Faces</a></li>
+<li><a href="#index-woman_002dignore-108"><code>woman-ignore</code></a>: <a href="#Formatting-Options">Formatting Options</a></li>
+<li><a href="#index-woman_002dimenu-96"><code>woman-imenu</code></a>: <a href="#Interface-Options">Interface Options</a></li>
+<li><a href="#index-woman_002dimenu_002dgeneric_002dexpression-95"><code>woman-imenu-generic-expression</code></a>: <a href="#Interface-Options">Interface Options</a></li>
+<li><a href="#index-woman_002dimenu_002dtitle-97"><code>woman-imenu-title</code></a>: <a href="#Interface-Options">Interface Options</a></li>
+<li><a href="#index-woman_002ditalic_002dface-113"><code>woman-italic-face</code></a>: <a href="#Faces">Faces</a></li>
+<li><a href="#index-woman_002dman_002econf_002dpath-85"><code>woman-man.conf-path</code></a>: <a href="#Interface-Options">Interface Options</a></li>
+<li><a href="#index-woman_002dmanpath-86"><code>woman-manpath</code></a>: <a href="#Interface-Options">Interface Options</a></li>
+<li><a href="#index-woman_002dmanpath_002dman_002dregexp-90"><code>woman-manpath-man-regexp</code></a>: <a href="#Interface-Options">Interface Options</a></li>
+<li><a href="#index-woman_002dpath-91"><code>woman-path</code></a>: <a href="#Interface-Options">Interface Options</a></li>
+<li><a href="#index-woman_002dpost_002dformat_002dhook-83"><code>woman-post-format-hook</code></a>: <a href="#Customization">Customization</a></li>
+<li><a href="#index-woman_002dpre_002dformat_002dhook-82"><code>woman-pre-format-hook</code></a>: <a href="#Customization">Customization</a></li>
+<li><a href="#index-woman_002dpreserve_002dascii-109"><code>woman-preserve-ascii</code></a>: <a href="#Formatting-Options">Formatting Options</a></li>
+<li><a href="#index-woman_002dshow_002dlog-81"><code>woman-show-log</code></a>: <a href="#Customization">Customization</a></li>
+<li><a href="#index-woman_002dsymbol_002dfont-120"><code>woman-symbol-font</code></a>: <a href="#Special-symbols">Special symbols</a></li>
+<li><a href="#index-woman_002duncompressed_002dfile_002dregexp-100"><code>woman-uncompressed-file-regexp</code></a>: <a href="#Interface-Options">Interface Options</a></li>
+<li><a href="#index-woman_002dunknown_002dface-115"><code>woman-unknown-face</code></a>: <a href="#Faces">Faces</a></li>
+<li><a href="#index-woman_002duse_002dextended_002dfont-118"><code>woman-use-extended-font</code></a>: <a href="#Special-symbols">Special symbols</a></li>
+<li><a href="#index-woman_002duse_002down_002dframe-102"><code>woman-use-own-frame</code></a>: <a href="#Interface-Options">Interface Options</a></li>
+<li><a href="#index-woman_002duse_002dsymbol_002dfont-119"><code>woman-use-symbol-font</code></a>: <a href="#Special-symbols">Special symbols</a></li>
+<li><a href="#index-woman_002duse_002dtopic_002dat_002dpoint-98"><code>woman-use-topic-at-point</code></a>: <a href="#Interface-Options">Interface Options</a></li>
+<li><a href="#index-woman_002duse_002dtopic_002dat_002dpoint_002ddefault-99"><code>woman-use-topic-at-point-default</code></a>: <a href="#Interface-Options">Interface Options</a></li>
+</ul><!-- Without a page throw here, the page length seems to get reset to the -->
+<!-- depth of the index that fits on the page after the previous index. -->
+<!-- This must be a bug! -->
+<div class="node">
+<a name="Keystroke-Index"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Concept-Index">Concept Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Variable-Index">Variable Index</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="unnumbered">Keystroke Index</h2>
+
+
+
+<ul class="index-ky" compact>
+<li><a href="#index-g_t_002d-67"><code>-</code></a>: <a href="#Convenience">Convenience</a></li>
+<li><a href="#index-g_t_002e-72"><code>.</code></a>: <a href="#Convenience">Convenience</a></li>
+<li><a href="#index-g_t0-_002e_002e-9-69"><code>0 .. 9</code></a>: <a href="#Convenience">Convenience</a></li>
+<li><a href="#index-g_t_003c-71"><code>&lt;</code></a>: <a href="#Convenience">Convenience</a></li>
+<li><a href="#index-g_t_003e-74"><code>&gt;</code></a>: <a href="#Convenience">Convenience</a></li>
+<li><a href="#index-g_t_003f-76"><code>?</code></a>: <a href="#Convenience">Convenience</a></li>
+<li><a href="#index-DEL-30"><code>DEL</code></a>: <a href="#Navigation">Navigation</a></li>
+<li><a href="#index-g-37"><code>g</code></a>: <a href="#Navigation">Navigation</a></li>
+<li><a href="#index-k-57"><code>k</code></a>: <a href="#Changing">Changing</a></li>
+<li><a href="#index-m-51"><code>m</code></a>: <a href="#Changing">Changing</a></li>
+<li><a href="#index-M_002dn-61"><code>M-n</code></a>: <a href="#Changing">Changing</a></li>
+<li><a href="#index-M_002dp-59"><code>M-p</code></a>: <a href="#Changing">Changing</a></li>
+<li><a href="#index-Mouse_002d2-43"><code>Mouse-2</code></a>: <a href="#References">References</a></li>
+<li><a href="#index-n-33"><code>n</code></a>: <a href="#Navigation">Navigation</a></li>
+<li><a href="#index-p-35"><code>p</code></a>: <a href="#Navigation">Navigation</a></li>
+<li><a href="#index-q-55"><code>q</code></a>: <a href="#Changing">Changing</a></li>
+<li><a href="#index-r-47"><code>r</code></a>: <a href="#References">References</a></li>
+<li><a href="#index-R-63"><code>R</code></a>: <a href="#Changing">Changing</a></li>
+<li><a href="#index-RET-45"><code>RET</code></a>: <a href="#References">References</a></li>
+<li><a href="#index-s-39"><code>s</code></a>: <a href="#Navigation">Navigation</a></li>
+<li><a href="#index-S_002dSPC-31"><code>S-SPC</code></a>: <a href="#Navigation">Navigation</a></li>
+<li><a href="#index-SPC-28"><code>SPC</code></a>: <a href="#Navigation">Navigation</a></li>
+<li><a href="#index-w-53"><code>w</code></a>: <a href="#Changing">Changing</a></li>
+</ul><!-- Without a page throw here, the page length seems to get reset to the -->
+<!-- depth of the index that fits on the page after the previous index. -->
+<!-- This must be a bug! -->
+<div class="node">
+<a name="Concept-Index"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Keystroke-Index">Keystroke Index</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="unnumbered">Concept Index</h2>
+
+
+
+<ul class="index-cp" compact>
+<li><a href="#index-acknowledgments-130">acknowledgments</a>: <a href="#Acknowledgments">Acknowledgments</a></li>
+<li><a href="#index-automatic-interface-21">automatic interface</a>: <a href="#Automatic">Automatic</a></li>
+<li><a href="#index-background-2">background</a>: <a href="#Background">Background</a></li>
+<li><a href="#index-browsing-man-pages-23">browsing man pages</a>: <a href="#Browsing">Browsing</a></li>
+<li><a href="#index-buffer_002c-log-122">buffer, log</a>: <a href="#Log">Log</a></li>
+<li><a href="#index-bugs_002c-reporting-129">bugs, reporting</a>: <a href="#Bugs">Bugs</a></li>
+<li><a href="#index-cache_002c-topic-13">cache, topic</a>: <a href="#Cache">Cache</a></li>
+<li><a href="#index-case_002dsensitivity-9">case-sensitivity</a>: <a href="#Finding">Finding</a></li>
+<li><a href="#index-changing-current-man-page-49">changing current man page</a>: <a href="#Changing">Changing</a></li>
+<li><a href="#index-contents-menu-79">contents menu</a>: <a href="#Imenu">Imenu</a></li>
+<li><a href="#index-convenience-key-bindings-65">convenience key bindings</a>: <a href="#Convenience">Convenience</a></li>
+<li><a href="#index-current-man-page_002c-changing-50">current man page, changing</a>: <a href="#Changing">Changing</a></li>
+<li><a href="#index-customization-80">customization</a>: <a href="#Customization">Customization</a></li>
+<li><a href="#index-directory-separator-character-88">directory separator character</a>: <a href="#Interface-Options">Interface Options</a></li>
+<li><a href="#index-faces-111">faces</a>: <a href="#Faces">Faces</a></li>
+<li><a href="#index-faces-26">faces</a>: <a href="#Fonts">Fonts</a></li>
+<li><a href="#index-filename-interface-16">filename interface</a>: <a href="#Filename">Filename</a></li>
+<li><a href="#index-finding-man-pages-5">finding man pages</a>: <a href="#Finding">Finding</a></li>
+<li><a href="#index-following-references-41">following references</a>: <a href="#References">References</a></li>
+<li><a href="#index-fonts-25">fonts</a>: <a href="#Fonts">Fonts</a></li>
+<li><a href="#index-formatting-man-pages-6">formatting man pages</a>: <a href="#Finding">Finding</a></li>
+<li><a href="#index-formatting-options-103">formatting options</a>: <a href="#Formatting-Options">Formatting Options</a></li>
+<li><a href="#index-horizontal-spacing-124">horizontal spacing</a>: <a href="#Technical">Technical</a></li>
+<li><a href="#index-imenu-support-78">imenu support</a>: <a href="#Imenu">Imenu</a></li>
+<li><a href="#index-interface-options-84">interface options</a>: <a href="#Interface-Options">Interface Options</a></li>
+<li><a href="#index-introduction-1">introduction</a>: <a href="#Introduction">Introduction</a></li>
+<li><a href="#index-key-bindings_002c-convenience-66">key bindings, convenience</a>: <a href="#Convenience">Convenience</a></li>
+<li><a href="#index-log-buffer-121">log buffer</a>: <a href="#Log">Log</a></li>
+<li><a href="#index-man-pages_002c-browsing-24">man pages, browsing</a>: <a href="#Browsing">Browsing</a></li>
+<li><a href="#index-man-pages_002c-finding-7">man pages, finding</a>: <a href="#Finding">Finding</a></li>
+<li><a href="#index-man-pages_002c-formatting-8">man pages, formatting</a>: <a href="#Finding">Finding</a></li>
+<li><a href="#index-g_t_0040code_007bMANPATH_007d_002c-directory-separator-89"><code>MANPATH</code>, directory separator</a>: <a href="#Interface-Options">Interface Options</a></li>
+<li><a href="#index-g_t_0040code_007bMANPATH_007d_002c-environment-variable-87"><code>MANPATH</code>, environment variable</a>: <a href="#Interface-Options">Interface Options</a></li>
+<li><a href="#index-navigation-27">navigation</a>: <a href="#Navigation">Navigation</a></li>
+<li><a href="#index-point_002c-word-at-15">point, word at</a>: <a href="#Word-at-point">Word at point</a></li>
+<li><a href="#index-references-42">references</a>: <a href="#References">References</a></li>
+<li><a href="#index-reporting-bugs-128">reporting bugs</a>: <a href="#Bugs">Bugs</a></li>
+<li><a href="#index-resolution-127">resolution</a>: <a href="#Technical">Technical</a></li>
+<li><a href="#index-spacing_002c-horizontal-and-vertical-125">spacing, horizontal and vertical</a>: <a href="#Technical">Technical</a></li>
+<li><a href="#index-special-symbols-117">special symbols</a>: <a href="#Special-symbols">Special symbols</a></li>
+<li><a href="#index-technical-details-123">technical details</a>: <a href="#Technical">Technical</a></li>
+<li><a href="#index-topic-cache-12">topic cache</a>: <a href="#Cache">Cache</a></li>
+<li><a href="#index-topic-interface-11">topic interface</a>: <a href="#Topic">Topic</a></li>
+<li><a href="#index-using_002c-browsing-man-pages-22">using, browsing man pages</a>: <a href="#Browsing">Browsing</a></li>
+<li><a href="#index-using_002c-finding-man-pages-3">using, finding man pages</a>: <a href="#Finding">Finding</a></li>
+<li><a href="#index-using_002c-formatting-man-pages-4">using, formatting man pages</a>: <a href="#Finding">Finding</a></li>
+<li><a href="#index-vertical-spacing-126">vertical spacing</a>: <a href="#Technical">Technical</a></li>
+<li><a href="#index-word-at-point-14">word at point</a>: <a href="#Word-at-point">Word at point</a></li>
+</ul></body></html>
+
+<!--
+
+Local Variables:
+coding: utf-8
+End:
+
+-->

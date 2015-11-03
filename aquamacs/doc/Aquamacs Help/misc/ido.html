@@ -1,0 +1,1442 @@
+<html lang="en">
+<head>
+<title>Interactive Do</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="Interactive Do">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="top" href="#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents the Ido package for GNU Emacs.
+
+Copyright (C) 2013-2015 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being "A GNU Manual", and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     "GNU Free Documentation License".
+
+     (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+     modify this GNU manual."
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<h1 class="settitle">Interactive Do</h1>
+<div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Top" href="#Top">Interactive Do</a>
+<li><a name="toc_Overview" href="#Overview">1 Overview</a>
+<ul>
+<li><a href="#Activation">1.1 Activation</a>
+<li><a href="#Working-Directories">1.2 Working Directories</a>
+</li></ul>
+<li><a name="toc_Matching" href="#Matching">2 Matching</a>
+<ul>
+<li><a href="#Interactive-Substring-Matching">2.1 Interactive Substring Matching</a>
+<li><a href="#Prefix-Matching">2.2 Prefix Matching</a>
+<li><a href="#Flexible-Matching">2.3 Flexible Matching</a>
+<li><a href="#Regexp-Matching">2.4 Regular Expression Matching</a>
+</li></ul>
+<li><a name="toc_Highlighting" href="#Highlighting">3 Highlighting</a>
+<li><a name="toc_Hidden-Buffers-and-Files" href="#Hidden-Buffers-and-Files">4 Hidden Buffers and Files</a>
+<li><a name="toc_Customization" href="#Customization">5 Customization</a>
+<ul>
+<li><a href="#Changing-List-Order">5.1 Changing List Order</a>
+<li><a href="#Find-File-At-Point">5.2 Find File At Point</a>
+<li><a href="#Ignoring">5.3 Ignoring Buffers and Files</a>
+<li><a href="#Misc-Customization">5.4 Miscellaneous Customization</a>
+</li></ul>
+<li><a name="toc_Misc" href="#Misc">6 Miscellaneous</a>
+<ul>
+<li><a href="#All-Matching">6.1 All Matching</a>
+<li><a href="#Replacement">6.2 Replacement</a>
+<li><a href="#Other-Packages">6.3 Other Packages</a>
+</li></ul>
+<li><a name="toc_GNU-Free-Documentation-License" href="#GNU-Free-Documentation-License">Appendix A GNU Free Documentation License</a>
+<li><a name="toc_Variable-Index" href="#Variable-Index">Variable Index</a>
+</li></ul>
+</div>
+
+
+
+<div class="node">
+<a name="Top"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Overview">Overview</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#dir">(dir)</a>
+
+</div>
+
+<h2 class="unnumbered">Interactive Do</h2>
+
+<p>This file documents the Ido package for GNU Emacs.
+
+   <p>Copyright &copy; 2013-2015 Free Software Foundation, Inc.
+
+   <blockquote>
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with the Front-Cover Texts being &ldquo;A GNU Manual&rdquo;,
+and with the Back-Cover Texts as in (a) below.  A copy of the license
+is included in the section entitled &ldquo;GNU Free Documentation License&rdquo;.
+
+   <p>(a) The FSF's Back-Cover Text is: &ldquo;You have the freedom to copy and
+modify this GNU manual.&rdquo;
+</blockquote>
+
+<ul class="menu">
+<li><a accesskey="1" href="#Overview">Overview</a>:                     Basics, activation. 
+<li><a accesskey="2" href="#Matching">Matching</a>:                     Interactivity, matching, scrolling. 
+<li><a accesskey="3" href="#Highlighting">Highlighting</a>:                 Highlighting of matching items. 
+<li><a accesskey="4" href="#Hidden-Buffers-and-Files">Hidden Buffers and Files</a>:     Hidden buffers, files, and directories. 
+<li><a accesskey="5" href="#Customization">Customization</a>:                Change the Ido functionality. 
+<li><a accesskey="6" href="#Misc">Misc</a>:                         Various other features.
+
+</li></ul>
+<p>Appendices
+</p>
+<ul class="menu">
+<li><a accesskey="7" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>:   The license for this documentation.
+
+</li></ul>
+<p>Indexes
+</p>
+<ul class="menu">
+<li><a accesskey="8" href="#Variable-Index">Variable Index</a>:               An entry for each documented variable.
+
+</li></ul>
+<p>--- The Detailed Node Listing ---
+
+<p>Overview
+
+</p>
+<ul class="menu">
+<li><a accesskey="9" href="#Activation">Activation</a>:                   How to use this package. 
+<li><a href="#Working-Directories">Working Directories</a>:          Where files have most recently been opened.
+
+</li></ul>
+<p>Matching
+
+</p>
+<ul class="menu">
+<li><a href="#Interactive-Substring-Matching">Interactive Substring Matching</a>:   Interactivity, matching, scrolling. 
+<li><a href="#Prefix-Matching">Prefix Matching</a>:              Standard completion. 
+<li><a href="#Flexible-Matching">Flexible Matching</a>:            More flexible matching. 
+<li><a href="#Regexp-Matching">Regexp Matching</a>:              Matching using regular expression.
+
+</li></ul>
+<p>Customization
+
+</p>
+<ul class="menu">
+<li><a href="#Changing-List-Order">Changing List Order</a>:          Changing the list of files. 
+<li><a href="#Find-File-At-Point">Find File At Point</a>:           Make Ido guess the context. 
+<li><a href="#Ignoring">Ignoring</a>:                     Ignorance is bliss. 
+<li><a href="#Misc-Customization">Misc Customization</a>:           Miscellaneous customization for Ido.
+
+</li></ul>
+<p>Miscellaneous
+
+</p>
+<ul class="menu">
+<li><a href="#All-Matching">All Matching</a>:                 Seeing all the matching buffers or files. 
+<li><a href="#Replacement">Replacement</a>:                  Replacement for <code>read-buffer</code> and <code>read-file-name</code>. 
+<li><a href="#Other-Packages">Other Packages</a>:               Don't want to depend on <code>ido-everywhere</code>?
+
+   </ul>
+
+<div class="node">
+<a name="Overview"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Matching">Matching</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Top">Top</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">1 Overview</h2>
+
+<p><a name="index-overview-1"></a>
+This document describes a set of features that can interactively do
+things with buffers and files.  All the features are described here
+in detail.
+
+   <p>The <dfn>Ido</dfn> package can let you switch between buffers and visit
+files and directories with a minimum of keystrokes.  It is a superset
+of Iswitchb, the interactive buffer switching package by Stephen
+Eglen.
+
+   <p><a name="index-author-of-Ido-2"></a><a name="index-Iswitchb-3"></a>This package was originally written by Kim F. Storm, based on the
+ <samp><span class="file">iswitchb.el</span></samp> package by Stephen Eglen.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Activation">Activation</a>:                   How to use this package. 
+<li><a accesskey="2" href="#Working-Directories">Working Directories</a>:          Where files have most recently been opened. 
+</ul>
+
+<div class="node">
+<a name="Activation"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Working-Directories">Working Directories</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Overview">Overview</a>
+
+</div>
+
+<h3 class="section">1.1 Activation</h3>
+
+<p><a name="index-activation-4"></a><a name="index-installation-5"></a>
+This package is distributed with Emacs, so there is no need to install
+any additional files in order to start using it.  To activate, use
+<kbd>M-x ido-mode</kbd>.
+
+<p class="noindent">You may wish to add the following expressions to your initialization
+file (see <a href="emacs.html#Init-File">The Emacs Initialization File</a>), if you make frequent use of features from this
+package.
+
+<pre class="example">     (require 'ido)
+     (ido-mode t)
+</pre>
+   <div class="node">
+<a name="Working-Directories"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Activation">Activation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Overview">Overview</a>
+
+</div>
+
+<h3 class="section">1.2 Working Directories</h3>
+
+<p><a name="index-working-directories-6"></a>
+<a name="index-ido_002dwork_002ddirectory_002dlist-7"></a><dfn>Working directories</dfn> are directories where files have most
+recently been opened.  The current directory is inserted at the front
+of this <code>ido-work-directory-list</code> whenever a file is opened with
+<code>ido-find-file</code> and other file-related functions.
+
+<!-- @cindex merge -->
+<!-- or maybe a new node for ``merge'' -->
+<!-- @deffn Command ido-merge-work-directories -->
+<!-- @deffn Command ido-prev-work-directory -->
+<!-- @deffn Command ido-next-work-directory -->
+<!-- @deffn Command ido-forget-work-directory -->
+<!-- @defvar ido-use-merged-list -->
+<!-- @defvar ido-try-merged-list -->
+<!-- @defvar ido-pre-merge-state -->
+<div class="defun">
+&mdash; User Option: <b>ido-max-work-directory-list</b><var><a name="index-ido_002dmax_002dwork_002ddirectory_002dlist-8"></a></var><br>
+<blockquote><p>This user option specifies maximum number of working directories to
+record. 
+</p></blockquote></div>
+
+<!-- see (info "(elisp) File Name Completion") -->
+<div class="defun">
+&mdash; User Option: <b>ido-max-dir-file-cache</b><var><a name="index-ido_002dmax_002ddir_002dfile_002dcache-9"></a></var><br>
+<blockquote><p>This user option specifies maximum number of working directories to be
+cached.  This is the size of the cache of
+<code>file-name-all-completions</code> results.  Each cache entry is time
+stamped with the modification time of the directory.  Some systems,
+like MS-Windows, have unreliable directory modification times, so you
+may choose to disable caching on such systems, or explicitly refresh
+the cache contents using the command <code>ido-reread-directory</code>
+(usually <kbd>C-l</kbd>) in the minibuffer. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Matching"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Highlighting">Highlighting</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Overview">Overview</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">2 Matching</h2>
+
+<p><a name="index-matching-10"></a>
+This section describes features of this package that have to
+do with various kinds of <em>matching</em>: among buffers, files, and directories.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Interactive-Substring-Matching">Interactive Substring Matching</a>:   Interactivity, matching, scrolling. 
+<li><a accesskey="2" href="#Prefix-Matching">Prefix Matching</a>:              Standard completion. 
+<li><a accesskey="3" href="#Flexible-Matching">Flexible Matching</a>:            More flexible matching. 
+<li><a accesskey="4" href="#Regexp-Matching">Regexp Matching</a>:              Matching using regular expression. 
+</ul>
+
+<div class="node">
+<a name="Interactive-Substring-Matching"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Prefix-Matching">Prefix Matching</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Matching">Matching</a>
+
+</div>
+
+<h3 class="section">2.1 Interactive Substring Matching</h3>
+
+<p><a name="index-interactive-substring-matching-11"></a><a name="index-substring_002c-interactive-matching-12"></a><a name="index-matching_002c-using-substring-13"></a>
+As you type in a substring, the list of buffers or files currently
+matching the substring are displayed as you type.  The list is
+ordered so that the most recent buffers or files visited come at
+the start of the list.
+
+   <p>The buffer or file at the start of the list will be the one visited
+when you press &lt;RET&gt;.  By typing more of the substring, the list
+is narrowed down so that gradually the buffer or file you want will be
+at the top of the list.  Alternatively, you can use <kbd>C-s</kbd> and
+<kbd>C-r</kbd> (or the right and left arrow keys) to rotate buffer or file
+names in the list until the one you want is at the top of the list.
+
+   <p>Completion is also available so that you can see what is common to
+all of the matching buffers or files as you type.
+
+   <p>For example, if there are two buffers called <samp><span class="file">123456</span></samp> and
+<samp><span class="file">123</span></samp>, with <samp><span class="file">123456</span></samp> the most recent, when using
+<code>ido-switch-buffer</code>, you first of all get presented with the list
+of all the buffers
+
+<pre class="example">     Buffer: {123456 | 123}
+</pre>
+   <p>If you then press <kbd>2</kbd>:
+
+<pre class="example">     Buffer: 2[3]{123456 | 123}
+</pre>
+   <p>The list in {...} are the matching buffers, most recent first
+(buffers visible in the current frame are put at the end of the list
+by default).  At any time you can select the item at the head of the
+list by pressing &lt;RET&gt;.  You can also put the first element at the
+end of the list by pressing <kbd>C-s</kbd> or <kbd>&lt;right&gt;</kbd>, or bring the
+last element to the head of the list by pressing <kbd>C-r</kbd> or
+<kbd>&lt;left&gt;</kbd>.
+
+   <p>The item in [...] indicates what can be added to your input by
+pressing &lt;TAB&gt; (<code>ido-complete</code>).  In this case, you will get
+"3" added to your input.
+
+   <p>So, press &lt;TAB&gt;:
+
+<pre class="example">     Buffer: 23{123456 | 123}
+</pre>
+   <p>At this point, you still have two matching buffers.  If you want the
+first buffer in the list, you can simply press &lt;RET&gt;.  If you want
+the second in the list, you can press <kbd>C-s</kbd> to move it to the top
+of the list and then press &lt;RET&gt; to select it.
+
+   <p>However, if you type <kbd>4</kbd>, you'll only have one match left:
+
+<pre class="example">     Buffer: 234[123456]
+</pre>
+   <p>Since there is only one matching buffer left, it is given in [] and it
+is shown in the <code>ido-only-match</code> face (ForestGreen).  You can now
+press &lt;TAB&gt; or &lt;RET&gt; to go to that buffer.
+
+   <p>If you want to create a new buffer named <samp><span class="file">234</span></samp>, you can press
+<kbd>C-j</kbd> (<code>ido-select-text</code>) instead of &lt;TAB&gt; or &lt;RET&gt;.
+
+   <p>If instead, you type <kbd>a</kbd>:
+
+<pre class="example">     Buffer: 234a [No match]
+</pre>
+   <p>There are no matching buffers.  If you press &lt;RET&gt; or &lt;TAB&gt;,
+you can be prompted to create a new buffer called <samp><span class="file">234a</span></samp>.
+
+   <p>Of course, where this function comes in really useful is when you can
+specify the buffer using only a few keystrokes.  In the above example,
+the quickest way to get to the <samp><span class="file">123456</span></samp> file would be just to
+type <kbd>4</kbd> and then &lt;RET&gt; (assuming there isn't any newer buffer
+with <kbd>4</kbd> in its name).
+
+   <p>Likewise, if you use <kbd>C-x C-f</kbd> (<code>ido-find-file</code>), the list of
+files and directories in the current directory is provided in the same
+fashion as the buffers above.  The files and directories are normally
+sorted in alphabetical order, but the most recently visited directory
+is placed first to speed up navigating to directories that you have
+visited recently.
+
+   <p>In addition to scrolling through the list using <kbd>&lt;right&gt;</kbd> and
+<kbd>&lt;left&gt;</kbd>, you can use <kbd>&lt;up&gt;</kbd> and <kbd>&lt;down&gt;</kbd> to quickly
+scroll the list to the next or previous subdirectory.
+
+   <p>To go down into a subdirectory, and continue the file selection on
+the files in that directory, simply move the directory to the head
+of the list and hit &lt;RET&gt;.
+
+   <p>To go up to the parent directory, delete any partial file name already
+specified (e.g., using &lt;DEL&gt;) and hit &lt;DEL&gt;.
+
+<!-- @deffn Command ido-delete-backward-updir -->
+   <p><a name="index-root-directory-14"></a><a name="index-home-directory-15"></a>To go to the root directory (on the current drive), enter two slashes. 
+On MS-DOS or Windows, to select the root of another drive, enter
+&lsquo;<samp><span class="samp">X:/</span></samp>&rsquo; where &lsquo;<samp><span class="samp">X</span></samp>&rsquo; is the drive letter.  To go to the home
+directory, enter &lsquo;<samp><span class="samp">~/</span></samp>&rsquo;.  To enter Dired for this directory, use
+<kbd>C-d</kbd>.
+
+<!-- TODO: a new node for ftp hosts -->
+   <p><a name="index-ftp-hosts-16"></a>You can also visit files on other hosts using the ange-ftp
+notations &lsquo;<samp><span class="samp">/host:</span></samp>&rsquo; and &lsquo;<samp><span class="samp">/user@host:</span></samp>&rsquo;. 
+<!-- @defopt ido-record-ftp-work-directories -->
+<!-- @defopt ido-merge-ftp-work-directories -->
+<!-- @defopt ido-cache-ftp-work-directory-time -->
+<!-- @defopt ido-slow-ftp-hosts -->
+<!-- @defopt ido-slow-ftp-host-regexps -->
+
+   <p>You can type <kbd>M-p</kbd> and <kbd>M-n</kbd> to change to previous/next
+directories from the history, <kbd>M-s</kbd> to search for a file matching
+your input, and <kbd>M-k</kbd> to remove the current directory from the history.
+
+   <p>If for some reason you cannot specify the proper file using
+<code>ido-find-file</code>, you can press <kbd>C-f</kbd> to enter the normal
+<code>find-file</code>.  You can also press <kbd>C-b</kbd> to drop into
+<code>ido-switch-buffer</code>.
+
+<!-- @kindex C-x b -->
+<!-- @deffn Command ido-switch-buffer -->
+<!-- This command switch to another buffer interactively. -->
+<!-- @end deffn -->
+<!-- @kindex C-x C-f -->
+<!-- @deffn Command ido-find-file -->
+<!-- Edit file with name obtained via minibuffer. -->
+<!-- @end deffn -->
+<!-- @kindex C-x d -->
+<!-- @findex ido-dired -->
+<!-- @deffn Command ido-dired -->
+<!-- Call Dired the Ido way. -->
+<!-- @end deffn -->
+<div class="node">
+<a name="Prefix-Matching"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Flexible-Matching">Flexible Matching</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Interactive-Substring-Matching">Interactive Substring Matching</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Matching">Matching</a>
+
+</div>
+
+<h3 class="section">2.2 Prefix Matching</h3>
+
+<p><a name="index-prefix-matching-17"></a><a name="index-matching_002c-using-prefix-18"></a><a name="index-standard-way-of-completion-19"></a>
+The standard way of completion with *nix shells and Emacs is to insert
+a <dfn>prefix</dfn> and then hitting &lt;TAB&gt; (or another completion key). 
+Cause of this behavior has become second nature to a lot of Emacs
+users Ido offers in addition to the default substring matching method
+(look above) also the prefix matching method.  The kind of matching is
+the only difference to the description of the substring matching
+above.
+
+   <p><a name="index-toggle-prefix-matching-20"></a>You can toggle prefix matching with <kbd>C-p</kbd>
+(<code>ido-toggle-prefix</code>).
+
+   <p>For example, if you have two buffers <samp><span class="file">123456</span></samp> and <samp><span class="file">123</span></samp> then
+hitting <kbd>2</kbd> does not match because <kbd>2</kbd> is not a prefix in any
+of the buffer names.
+
+<div class="node">
+<a name="Flexible-Matching"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Regexp-Matching">Regexp Matching</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Prefix-Matching">Prefix Matching</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Matching">Matching</a>
+
+</div>
+
+<h3 class="section">2.3 Flexible Matching</h3>
+
+<p><a name="index-flexible-matching-21"></a>
+
+<div class="defun">
+&mdash; User Option: <b>ido-enable-flex-matching</b><var><a name="index-ido_002denable_002dflex_002dmatching-22"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, Ido will do flexible string matching.  Flexible
+matching means that if the entered string does not match any item, any
+item containing the entered characters in the given sequence will
+match. 
+</p></blockquote></div>
+
+<p class="noindent">If <code>ido-enable-flex-matching</code> is non-<code>nil</code>, Ido will do a
+more flexible matching (unless regexp matching is active) to find
+possible matches among the available buffer or file names if no
+matches are found using the normal prefix or substring matching.
+
+   <p>The flexible matching implies that any item which simply contains all
+of the entered characters in the specified sequence will match.
+
+   <p>For example, if you have four files <samp><span class="file">alpha</span></samp>, <samp><span class="file">beta</span></samp>,
+<samp><span class="file">gamma</span></samp>, and <samp><span class="file">delta</span></samp>, entering &lsquo;<samp><span class="samp">aa</span></samp>&rsquo; will match
+<samp><span class="file">alpha</span></samp> and <samp><span class="file">gamma</span></samp>, while &lsquo;<samp><span class="samp">ea</span></samp>&rsquo; matches <samp><span class="file">beta</span></samp> and
+<samp><span class="file">delta</span></samp>.  If prefix matching is also active, &lsquo;<samp><span class="samp">aa</span></samp>&rsquo; only
+matches <samp><span class="file">alpha</span></samp>, while &lsquo;<samp><span class="samp">ea</span></samp>&rsquo; does not match any files.
+
+<div class="node">
+<a name="Regexp-Matching"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Flexible-Matching">Flexible Matching</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Matching">Matching</a>
+
+</div>
+
+<h3 class="section">2.4 Regular Expression Matching</h3>
+
+<p><a name="index-regexp-matching-23"></a><a name="index-matching_002c-using-regular-expression-24"></a>
+There is limited provision for regexp matching within Ido, enabled
+through <code>ido-enable-regexp</code> (toggle with <kbd>C-t</kbd>).  This allows
+you to type &lsquo;<samp><span class="samp">[ch]$</span></samp>&rsquo; for example and see all file names ending in
+&lsquo;<samp><span class="samp">c</span></samp>&rsquo; or &lsquo;<samp><span class="samp">h</span></samp>&rsquo;.
+
+<div class="defun">
+&mdash; User Option: <b>ido-enable-regexp</b><var><a name="index-ido_002denable_002dregexp-25"></a></var><br>
+<blockquote><p>If the value of this user option is non-<code>nil</code>, Ido will do regexp
+matching.  The value of this user option can be toggled within
+ido-mode using <code>ido-toggle-regexp</code>. 
+</p></blockquote></div>
+
+   <p><strong>Please notice:</strong> Ido-style completion is inhibited when you
+enable regexp matching.
+
+<div class="node">
+<a name="Highlighting"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Hidden-Buffers-and-Files">Hidden Buffers and Files</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Matching">Matching</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">3 Highlighting</h2>
+
+<p><a name="index-highlighting-26"></a>
+The highlighting of matching items is controlled via
+<code>ido-use-faces</code>.  The faces used are <code>ido-first-match</code>,
+<code>ido-only-match</code> and <code>ido-subdir</code>.
+
+   <p>Coloring of the matching item was suggested by Carsten Dominik.
+
+<div class="node">
+<a name="Hidden-Buffers-and-Files"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Customization">Customization</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Highlighting">Highlighting</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">4 Hidden Buffers and Files</h2>
+
+<p><a name="index-hidden-buffers-and-files-27"></a>
+Normally, Ido does not include hidden buffers (whose name starts with
+a space) and hidden files and directories (whose name starts with
+&lsquo;<samp><span class="samp">.</span></samp>&rsquo;) in the list of possible completions.  However, if the
+substring you enter does not match any of the visible buffers or
+files, Ido will automatically look for completions among the hidden
+buffers or files.
+
+   <p>You can toggle display of the hidden buffers and files with <kbd>C-a</kbd>
+(<code>ido-toggle-ignore</code>).
+
+<!-- @deffn Command ido-toggle-ignore -->
+<div class="node">
+<a name="Customization"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Misc">Misc</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Hidden-Buffers-and-Files">Hidden Buffers and Files</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">5 Customization</h2>
+
+<p><a name="index-customization-28"></a>
+You can customize the <code>ido</code> group to change Ido functionality:
+
+<pre class="example">     M-x customize-group RET ido RET
+</pre>
+   <p class="noindent">or customize a certain variable:
+
+<pre class="example">     M-x customize-variable RET ido-xxxxx
+</pre>
+   <p>To modify the keybindings, use the <code>ido-setup-hook</code>.  For example:
+
+<pre class="example">     (add-hook 'ido-setup-hook 'ido-my-keys)
+     
+     (defun ido-my-keys ()
+      "Add my keybindings for Ido."
+      (define-key ido-completion-map " " 'ido-next-match))
+</pre>
+   <!-- @defopt ido-setup-hook -->
+<!-- a new node for Ido hooks? -->
+<ul class="menu">
+<li><a accesskey="1" href="#Changing-List-Order">Changing List Order</a>:          Changing the list of files. 
+<li><a accesskey="2" href="#Find-File-At-Point">Find File At Point</a>:           Make Ido guess the context. 
+<li><a accesskey="3" href="#Ignoring">Ignoring</a>:                     Ignorance is bliss. 
+<li><a accesskey="4" href="#Misc-Customization">Misc Customization</a>:           Miscellaneous customization for Ido. 
+</ul>
+
+<div class="node">
+<a name="Changing-List-Order"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Find-File-At-Point">Find File At Point</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Customization">Customization</a>
+
+</div>
+
+<h3 class="section">5.1 Changing List Order</h3>
+
+<p><a name="index-changing-order-of-the-list-29"></a>
+By default, the list of current files is most recent first,
+oldest last, with the exception that the files visible in the
+current frame are put at the end of the list.  A hook exists to
+allow other functions to order the list.  For example, if you add:
+
+<pre class="example">     (add-hook 'ido-make-buffer-list-hook 'ido-summary-buffers-to-end)
+</pre>
+   <p class="noindent">then all files matching "Summary" are moved to the end of the list. 
+(I find this handy for keeping the INBOX Summary and so on out of the
+way.)  It also moves files matching &lsquo;<samp><span class="samp">output\*$</span></samp>&rsquo; to the end of the
+list (these are created by AUCTeX when compiling.)  Other functions
+could be made available which alter the list of matching files (either
+deleting or rearranging elements.)
+
+<div class="node">
+<a name="Find-File-At-Point"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Ignoring">Ignoring</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Changing-List-Order">Changing List Order</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Customization">Customization</a>
+
+</div>
+
+<h3 class="section">5.2 Find File At Point</h3>
+
+<p><a name="index-find-file-at-point-30"></a><a name="index-ffap-31"></a>
+Find File At Point, also known generally as &ldquo;ffap&rdquo;, is an
+intelligent system for opening files, and URLs.
+
+   <p>The following expression will make Ido guess the context:
+
+<pre class="example">     (setq ido-use-filename-at-point 'guess)
+</pre>
+   <!-- @defopt ido-use-filename-at-point -->
+<!-- If the value of this user option is non-@code{nil}, ... -->
+<!-- @end defopt -->
+   <p>You can disable URL ffap support by toggling
+<code>ido-use-url-at-point</code>.
+
+<div class="defun">
+&mdash; User Option: <b>ido-use-url-at-point</b><var><a name="index-ido_002duse_002durl_002dat_002dpoint-32"></a></var><br>
+<blockquote><p>If the value of this user option is non-<code>nil</code>, Ido will look for
+a URL at point.  If found, call <code>find-file-at-point</code> to visit it. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Ignoring"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Misc-Customization">Misc Customization</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Find-File-At-Point">Find File At Point</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Customization">Customization</a>
+
+</div>
+
+<h3 class="section">5.3 Ignoring Buffers and Files</h3>
+
+<p><a name="index-ignoring-33"></a><a name="index-regexp_002c-ignore-buffers-and-files-34"></a>
+Ido is capable of ignoring buffers, directories, files and extensions
+using regular expression.
+
+<div class="defun">
+&mdash; User Option: <b>ido-ignore-buffers</b><var><a name="index-ido_002dignore_002dbuffers-35"></a></var><br>
+<blockquote><p>This variable takes a list of regular expressions for buffers to
+ignore in <code>ido-switch-buffer</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>ido-ignore-directories</b><var><a name="index-ido_002dignore_002ddirectories-36"></a></var><br>
+<blockquote><p>This variable takes a list of regular expressions for (sub)directories
+names to ignore in <code>ido-dired</code> and <code>ido-find-file</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>ido-ignore-files</b><var><a name="index-ido_002dignore_002dfiles-37"></a></var><br>
+<blockquote><p>This variable takes a list of regular expressions for files to ignore
+in <code>ido-find-file</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>ido-ignore-unc-host-regexps</b><var><a name="index-ido_002dignore_002dunc_002dhost_002dregexps-38"></a></var><br>
+<blockquote><p>This variable takes a list of regular expressions matching UNC hosts
+to ignore.  The letter case will be ignored if
+<code>ido-downcase-unc-hosts</code> is non-<code>nil</code>. 
+</p></blockquote></div>
+
+<!-- FIXME: Where to add this variable?  This node or ``working directory''? -->
+<!-- @defopt ido-work-directory-list-ignore-regexps -->
+   <p>To make Ido use <code>completion-ignored-extensions</code> you need to
+enable it:
+
+<pre class="example">     (setq ido-ignore-extensions t)
+</pre>
+   <p>Now you can customize <code>completion-ignored-extensions</code> as well. 
+Go ahead and add all the useless object files, backup files, shared
+library files and other computing flotsam you don't want Ido to show.
+
+   <p><strong>Please notice:</strong> Ido will still complete the ignored elements
+if it would otherwise not show any other matches.  So if you type out
+the name of an ignored file, Ido will still let you open it just fine.
+
+<div class="node">
+<a name="Misc-Customization"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Ignoring">Ignoring</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Customization">Customization</a>
+
+</div>
+
+<h3 class="section">5.4 Miscellaneous Customization</h3>
+
+<p><a name="index-miscellaneous-customization-for-Ido-39"></a>
+<!-- Variables described in this sections may be moved to new nodes in -->
+<!-- the future. -->
+
+<div class="defun">
+&mdash; User Option: <b>ido-mode</b><var><a name="index-ido_002dmode-40"></a></var><br>
+<blockquote><p>This user option determines for which functional group (buffer and
+files) Ido behavior should be enabled. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>ido-case-fold</b><var><a name="index-ido_002dcase_002dfold-41"></a></var><br>
+<blockquote><p>If the value of this user option is non-<code>nil</code>, searching of
+buffer and file names should ignore case. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>ido-show-dot-for-dired</b><var><a name="index-ido_002dshow_002ddot_002dfor_002ddired-42"></a></var><br>
+<blockquote><p>If the value of this user option is non-<code>nil</code>, always put
+&lsquo;<samp><span class="samp">.</span></samp>&rsquo;  as the first item in file name lists.  This allows the
+current directory to be opened immediately with Dired
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>ido-enable-dot-prefix</b><var><a name="index-ido_002denable_002ddot_002dprefix-43"></a></var><br>
+<blockquote><p>If the value of this user option is non-<code>nil</code>, Ido will match
+leading dot as prefix.  I.e., hidden files and buffers will match only
+if you type a dot as first char (even if <code>ido-enable-prefix</code> is
+<code>nil</code>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>ido-confirm-unique-completion</b><var><a name="index-ido_002dconfirm_002dunique_002dcompletion-44"></a></var><br>
+<blockquote><p>If the value of this user option is non-<code>nil</code>, even a unique
+completion must be confirmed.  This means that <code>ido-complete</code>
+(&lt;TAB&gt;) must always be followed by <code>ido-exit-minibuffer</code>
+(&lt;RET&gt;) even when there is only one unique completion. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>ido-cannot-complete-command</b><var><a name="index-ido_002dcannot_002dcomplete_002dcommand-45"></a></var><br>
+<blockquote><p>When <code>ido-complete</code> can't complete any more, it will run the
+command specified by this user option.  The most useful values are
+<code>ido-completion-help</code>, which pops up a window with completion
+alternatives, or <code>ido-next-match</code> or <code>ido-prev-match</code>, which
+cycle the buffer list. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>ido-max-file-prompt-width</b><var><a name="index-ido_002dmax_002dfile_002dprompt_002dwidth-46"></a></var><br>
+<blockquote><p>This user option specifies the upper limit of the prompt string.  If
+its value is an integer, it specifies the number of characters of the
+string.  If its value is a floating point number, it specifies a
+fraction of the frame width. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>ido-max-window-height</b><var><a name="index-ido_002dmax_002dwindow_002dheight-47"></a></var><br>
+<blockquote><p>If the value of this user option is non-<code>nil</code>, its value will
+override the variable <code>max-mini-window-height</code>, which is the
+maximum height for resizing mini-windows (the minibuffer and the echo
+area).  If it's a floating point number, it specifies a fraction of
+the mini-window frame's height.  If it's an integer, it specifies the
+number of lines. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>ido-record-commands</b><var><a name="index-ido_002drecord_002dcommands-48"></a></var><br>
+<blockquote><p>If the value of this user option is non-<code>nil</code>, Ido will record
+commands in the variable <code>command-history</code>.  Note that non-Ido
+equivalent is recorded. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>ido-all-frames</b><var><a name="index-ido_002dall_002dframes-49"></a></var><br>
+<blockquote><p>This user option will be passed to <code>walk-windows</code> as its
+<var>all-frames</var> argument when Ido is finding buffers.  See <a href="elisp.html#Cyclic-Window-Ordering">Cyclic Ordering of Windows</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>ido-minibuffer-setup-hook</b><var><a name="index-ido_002dminibuffer_002dsetup_002dhook-50"></a></var><br>
+<blockquote><p>This hook variable contains Ido-specific customization of minibuffer
+setup.  It is run during minibuffer setup if Ido is active, and is
+intended for use in customizing ido for interoperation with other
+packages. 
+</p></blockquote></div>
+
+<!-- @defopt ido-enable-tramp-completion -->
+<!-- cross-reference to tramp.texi -->
+<!-- @cindex UNC host names, completion -->
+<!-- @defopt ido-unc-hosts -->
+<!-- @defopt ido-downcase-unc-hosts -->
+<!-- @defopt ido-cache-unc-host-shares-time -->
+<!-- @defopt ido-enable-last-directory-history -->
+<!-- @defopt ido-max-work-file-list -->
+<!-- @defopt ido-work-directory-match-only -->
+<!-- @defopt ido-auto-merge-work-directories-length -->
+<!-- @defopt ido-auto-merge-delay-time -->
+<!-- @defopt ido-auto-merge-inhibit-characters-regexp -->
+<!-- @defopt ido-merged-indicator -->
+<!-- @defopt ido-max-directory-size -->
+<!-- @defopt ido-rotate-file-list-default -->
+<!-- @defopt ido-enter-matching-directory -->
+<!-- @defopt ido-create-new-buffer -->
+<!-- @defopt ido-separator -->
+<!-- @defopt ido-decorations -->
+<!-- @defopt ido-use-virtual-buffers -->
+<!-- @defopt ido-use-faces -->
+<!-- @defopt ido-make-file-list-hook -->
+<!-- @defopt ido-make-dir-list-hook -->
+<!-- @defopt ido-make-buffer-list-hook -->
+<!-- @defopt ido-rewrite-file-prompt-functions -->
+<!-- @defopt ido-completion-buffer -->
+<!-- @defopt ido-completion-buffer-all-completions -->
+<!-- @defopt ido-save-directory-list-file -->
+<!-- @defopt ido-read-file-name-as-directory-commands -->
+<!-- @defopt ido-read-file-name-non-ido -->
+<!-- @defopt ido-before-fallback-functions -->
+<!-- @defopt ido-buffer-disable-smart-matches -->
+<div class="node">
+<a name="Misc"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Customization">Customization</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">6 Miscellaneous</h2>
+
+<p><a name="index-miscellaneous-51"></a>
+After <kbd>C-x b</kbd> (<code>ido-switch-buffer</code>), the buffer at the head
+of the list can be killed by pressing <kbd>C-k</kbd>.  If the buffer needs
+saving, you will be queried before the buffer is killed.
+
+   <p>Likewise, after <kbd>C-x C-f</kbd>, you can delete (i.e., physically
+remove) the file at the head of the list with <kbd>C-k</kbd>.  You will
+always be asked for confirmation before deleting the file.
+
+   <p>If you enter <kbd>C-x b</kbd> to switch to a buffer visiting a given file,
+and you find that the file you are after is not in any buffer, you can
+press <kbd>C-f</kbd> to immediately drop into <code>ido-find-file</code>.  And
+you can switch back to buffer selection with <kbd>C-b</kbd>.
+
+<!-- @deffn Command ido-magic-forward-char -->
+<!-- @deffn Command ido-magic-backward-char -->
+   <p>You can also use Ido in your Emacs Lisp programs:
+
+<pre class="example">     (setq my-pkgs (list "CEDET" "Gnus" "Rcirc" "Tramp" "Org" "all-of-them"))
+     (ido-completing-read "What's your favorite package? " my-pkgs)
+</pre>
+   <ul class="menu">
+<li><a accesskey="1" href="#All-Matching">All Matching</a>:                 Seeing all the matching buffers or files. 
+<li><a accesskey="2" href="#Replacement">Replacement</a>:                  Replacement for <code>read-buffer</code> and <code>read-file-name</code>. 
+<li><a accesskey="3" href="#Other-Packages">Other Packages</a>:               Don't want to depend on <code>ido-everywhere</code>? 
+</ul>
+
+<div class="node">
+<a name="All-Matching"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Replacement">Replacement</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Misc">Misc</a>
+
+</div>
+
+<h3 class="section">6.1 All Matching</h3>
+
+<p><a name="index-all-matching-52"></a><a name="index-seeing-all-the-matching-buffers-or-files-53"></a>
+If you have many matching files, they may not all fit onto one line of
+the minibuffer.  Normally, the minibuffer window will grow to show you
+more of the matching files (depending on the value of the variables
+<code>resize-mini-windows</code> and <code>max-mini-window-height</code>).  If you
+want Ido to behave differently from the default minibuffer resizing
+behavior, set the variable <code>ido-max-window-height</code>.
+
+   <p>Also, to improve the responsiveness of Ido, the maximum number of
+matching items is limited to 12, but you can increase or removed this
+limit via the <code>ido-max-prospects</code> user option.
+
+<!-- @defopt ido-max-prospects -->
+   <p>To see a full list of all matching buffers in a separate buffer, hit
+<kbd>?</kbd> or press &lt;TAB&gt; when there are no further completions to
+the substring.  Repeated &lt;TAB&gt; presses will scroll you through
+this separate buffer.
+
+<div class="node">
+<a name="Replacement"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Other-Packages">Other Packages</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#All-Matching">All Matching</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Misc">Misc</a>
+
+</div>
+
+<h3 class="section">6.2 Replacement</h3>
+
+<p class="noindent"><code>ido-read-buffer</code> and <code>ido-read-file-name</code> have been written
+to be drop in replacements for the normal buffer and file name reading
+functions <code>read-buffer</code> and <code>read-file-name</code>.
+
+   <p>To use ido for all buffer and file selections in Emacs, customize the
+variable <code>ido-everywhere</code>.
+
+<!-- @deffn Command ido-everywhere -->
+<!-- @defopt ido-everywhere -->
+<div class="node">
+<a name="Other-Packages"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Replacement">Replacement</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Misc">Misc</a>
+
+</div>
+
+<h3 class="section">6.3 Other Packages</h3>
+
+<p><a name="index-other-packages-54"></a><a name="index-used-by-other-packages-55"></a>
+If you don't want to rely on the <code>ido-everywhere</code> functionality,
+<code>ido-read-buffer</code>, <code>ido-read-file-name</code>, and
+<code>ido-read-directory-name</code> can be used by other packages to read a
+buffer name, a file name, or a directory name in the <em>Ido</em> way.
+
+<!-- @node Cheatsheet -->
+<!-- * History and Acknowledgments::     How Ido came into being -->
+<!-- @node History and Acknowledgments -->
+<!-- @appendix History and Acknowledgments -->
+<div class="node">
+<a name="GNU-Free-Documentation-License"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Variable-Index">Variable Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Misc">Misc</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="appendix">Appendix A GNU Free Documentation License</h2>
+
+<!-- The GNU Free Documentation License. -->
+<div align="center">Version 1.3, 3 November 2008</div>
+
+<!-- This file is intended to be included within another document, -->
+<!-- hence no sectioning command or @node. -->
+<pre class="display">     Copyright &copy; 2000, 2001, 2002, 2007, 2008 Free Software Foundation, Inc.
+     <a href="http://fsf.org/">http://fsf.org/</a>
+     
+     Everyone is permitted to copy and distribute verbatim copies
+     of this license document, but changing it is not allowed.
+</pre>
+     <ol type=1 start=0>
+<li>PREAMBLE
+
+     <p>The purpose of this License is to make a manual, textbook, or other
+functional and useful document <dfn>free</dfn> in the sense of freedom: to
+assure everyone the effective freedom to copy and redistribute it,
+with or without modifying it, either commercially or noncommercially. 
+Secondarily, this License preserves for the author and publisher a way
+to get credit for their work, while not being considered responsible
+for modifications made by others.
+
+     <p>This License is a kind of &ldquo;copyleft&rdquo;, which means that derivative
+works of the document must themselves be free in the same sense.  It
+complements the GNU General Public License, which is a copyleft
+license designed for free software.
+
+     <p>We have designed this License in order to use it for manuals for free
+software, because free software needs free documentation: a free
+program should come with manuals providing the same freedoms that the
+software does.  But this License is not limited to software manuals;
+it can be used for any textual work, regardless of subject matter or
+whether it is published as a printed book.  We recommend this License
+principally for works whose purpose is instruction or reference.
+
+     <li>APPLICABILITY AND DEFINITIONS
+
+     <p>This License applies to any manual or other work, in any medium, that
+contains a notice placed by the copyright holder saying it can be
+distributed under the terms of this License.  Such a notice grants a
+world-wide, royalty-free license, unlimited in duration, to use that
+work under the conditions stated herein.  The &ldquo;Document&rdquo;, below,
+refers to any such manual or work.  Any member of the public is a
+licensee, and is addressed as &ldquo;you&rdquo;.  You accept the license if you
+copy, modify or distribute the work in a way requiring permission
+under copyright law.
+
+     <p>A &ldquo;Modified Version&rdquo; of the Document means any work containing the
+Document or a portion of it, either copied verbatim, or with
+modifications and/or translated into another language.
+
+     <p>A &ldquo;Secondary Section&rdquo; is a named appendix or a front-matter section
+of the Document that deals exclusively with the relationship of the
+publishers or authors of the Document to the Document's overall
+subject (or to related matters) and contains nothing that could fall
+directly within that overall subject.  (Thus, if the Document is in
+part a textbook of mathematics, a Secondary Section may not explain
+any mathematics.)  The relationship could be a matter of historical
+connection with the subject or with related matters, or of legal,
+commercial, philosophical, ethical or political position regarding
+them.
+
+     <p>The &ldquo;Invariant Sections&rdquo; are certain Secondary Sections whose titles
+are designated, as being those of Invariant Sections, in the notice
+that says that the Document is released under this License.  If a
+section does not fit the above definition of Secondary then it is not
+allowed to be designated as Invariant.  The Document may contain zero
+Invariant Sections.  If the Document does not identify any Invariant
+Sections then there are none.
+
+     <p>The &ldquo;Cover Texts&rdquo; are certain short passages of text that are listed,
+as Front-Cover Texts or Back-Cover Texts, in the notice that says that
+the Document is released under this License.  A Front-Cover Text may
+be at most 5 words, and a Back-Cover Text may be at most 25 words.
+
+     <p>A &ldquo;Transparent&rdquo; copy of the Document means a machine-readable copy,
+represented in a format whose specification is available to the
+general public, that is suitable for revising the document
+straightforwardly with generic text editors or (for images composed of
+pixels) generic paint programs or (for drawings) some widely available
+drawing editor, and that is suitable for input to text formatters or
+for automatic translation to a variety of formats suitable for input
+to text formatters.  A copy made in an otherwise Transparent file
+format whose markup, or absence of markup, has been arranged to thwart
+or discourage subsequent modification by readers is not Transparent. 
+An image format is not Transparent if used for any substantial amount
+of text.  A copy that is not &ldquo;Transparent&rdquo; is called &ldquo;Opaque&rdquo;.
+
+     <p>Examples of suitable formats for Transparent copies include plain
+ASCII without markup, Texinfo input format, LaTeX input
+format, SGML or XML using a publicly available
+DTD, and standard-conforming simple HTML,
+PostScript or PDF designed for human modification.  Examples
+of transparent image formats include PNG, XCF and
+JPG.  Opaque formats include proprietary formats that can be
+read and edited only by proprietary word processors, SGML or
+XML for which the DTD and/or processing tools are
+not generally available, and the machine-generated HTML,
+PostScript or PDF produced by some word processors for
+output purposes only.
+
+     <p>The &ldquo;Title Page&rdquo; means, for a printed book, the title page itself,
+plus such following pages as are needed to hold, legibly, the material
+this License requires to appear in the title page.  For works in
+formats which do not have any title page as such, &ldquo;Title Page&rdquo; means
+the text near the most prominent appearance of the work's title,
+preceding the beginning of the body of the text.
+
+     <p>The &ldquo;publisher&rdquo; means any person or entity that distributes copies
+of the Document to the public.
+
+     <p>A section &ldquo;Entitled XYZ&rdquo; means a named subunit of the Document whose
+title either is precisely XYZ or contains XYZ in parentheses following
+text that translates XYZ in another language.  (Here XYZ stands for a
+specific section name mentioned below, such as &ldquo;Acknowledgements&rdquo;,
+&ldquo;Dedications&rdquo;, &ldquo;Endorsements&rdquo;, or &ldquo;History&rdquo;.)  To &ldquo;Preserve the Title&rdquo;
+of such a section when you modify the Document means that it remains a
+section &ldquo;Entitled XYZ&rdquo; according to this definition.
+
+     <p>The Document may include Warranty Disclaimers next to the notice which
+states that this License applies to the Document.  These Warranty
+Disclaimers are considered to be included by reference in this
+License, but only as regards disclaiming warranties: any other
+implication that these Warranty Disclaimers may have is void and has
+no effect on the meaning of this License.
+
+     <li>VERBATIM COPYING
+
+     <p>You may copy and distribute the Document in any medium, either
+commercially or noncommercially, provided that this License, the
+copyright notices, and the license notice saying this License applies
+to the Document are reproduced in all copies, and that you add no other
+conditions whatsoever to those of this License.  You may not use
+technical measures to obstruct or control the reading or further
+copying of the copies you make or distribute.  However, you may accept
+compensation in exchange for copies.  If you distribute a large enough
+number of copies you must also follow the conditions in section 3.
+
+     <p>You may also lend copies, under the same conditions stated above, and
+you may publicly display copies.
+
+     <li>COPYING IN QUANTITY
+
+     <p>If you publish printed copies (or copies in media that commonly have
+printed covers) of the Document, numbering more than 100, and the
+Document's license notice requires Cover Texts, you must enclose the
+copies in covers that carry, clearly and legibly, all these Cover
+Texts: Front-Cover Texts on the front cover, and Back-Cover Texts on
+the back cover.  Both covers must also clearly and legibly identify
+you as the publisher of these copies.  The front cover must present
+the full title with all words of the title equally prominent and
+visible.  You may add other material on the covers in addition. 
+Copying with changes limited to the covers, as long as they preserve
+the title of the Document and satisfy these conditions, can be treated
+as verbatim copying in other respects.
+
+     <p>If the required texts for either cover are too voluminous to fit
+legibly, you should put the first ones listed (as many as fit
+reasonably) on the actual cover, and continue the rest onto adjacent
+pages.
+
+     <p>If you publish or distribute Opaque copies of the Document numbering
+more than 100, you must either include a machine-readable Transparent
+copy along with each Opaque copy, or state in or with each Opaque copy
+a computer-network location from which the general network-using
+public has access to download using public-standard network protocols
+a complete Transparent copy of the Document, free of added material. 
+If you use the latter option, you must take reasonably prudent steps,
+when you begin distribution of Opaque copies in quantity, to ensure
+that this Transparent copy will remain thus accessible at the stated
+location until at least one year after the last time you distribute an
+Opaque copy (directly or through your agents or retailers) of that
+edition to the public.
+
+     <p>It is requested, but not required, that you contact the authors of the
+Document well before redistributing any large number of copies, to give
+them a chance to provide you with an updated version of the Document.
+
+     <li>MODIFICATIONS
+
+     <p>You may copy and distribute a Modified Version of the Document under
+the conditions of sections 2 and 3 above, provided that you release
+the Modified Version under precisely this License, with the Modified
+Version filling the role of the Document, thus licensing distribution
+and modification of the Modified Version to whoever possesses a copy
+of it.  In addition, you must do these things in the Modified Version:
+
+          <ol type=A start=1>
+<li>Use in the Title Page (and on the covers, if any) a title distinct
+from that of the Document, and from those of previous versions
+(which should, if there were any, be listed in the History section
+of the Document).  You may use the same title as a previous version
+if the original publisher of that version gives permission.
+
+          <li>List on the Title Page, as authors, one or more persons or entities
+responsible for authorship of the modifications in the Modified
+Version, together with at least five of the principal authors of the
+Document (all of its principal authors, if it has fewer than five),
+unless they release you from this requirement.
+
+          <li>State on the Title page the name of the publisher of the
+Modified Version, as the publisher.
+
+          <li>Preserve all the copyright notices of the Document.
+
+          <li>Add an appropriate copyright notice for your modifications
+adjacent to the other copyright notices.
+
+          <li>Include, immediately after the copyright notices, a license notice
+giving the public permission to use the Modified Version under the
+terms of this License, in the form shown in the Addendum below.
+
+          <li>Preserve in that license notice the full lists of Invariant Sections
+and required Cover Texts given in the Document's license notice.
+
+          <li>Include an unaltered copy of this License.
+
+          <li>Preserve the section Entitled &ldquo;History&rdquo;, Preserve its Title, and add
+to it an item stating at least the title, year, new authors, and
+publisher of the Modified Version as given on the Title Page.  If
+there is no section Entitled &ldquo;History&rdquo; in the Document, create one
+stating the title, year, authors, and publisher of the Document as
+given on its Title Page, then add an item describing the Modified
+Version as stated in the previous sentence.
+
+          <li>Preserve the network location, if any, given in the Document for
+public access to a Transparent copy of the Document, and likewise
+the network locations given in the Document for previous versions
+it was based on.  These may be placed in the &ldquo;History&rdquo; section. 
+You may omit a network location for a work that was published at
+least four years before the Document itself, or if the original
+publisher of the version it refers to gives permission.
+
+          <li>For any section Entitled &ldquo;Acknowledgements&rdquo; or &ldquo;Dedications&rdquo;, Preserve
+the Title of the section, and preserve in the section all the
+substance and tone of each of the contributor acknowledgements and/or
+dedications given therein.
+
+          <li>Preserve all the Invariant Sections of the Document,
+unaltered in their text and in their titles.  Section numbers
+or the equivalent are not considered part of the section titles.
+
+          <li>Delete any section Entitled &ldquo;Endorsements&rdquo;.  Such a section
+may not be included in the Modified Version.
+
+          <li>Do not retitle any existing section to be Entitled &ldquo;Endorsements&rdquo; or
+to conflict in title with any Invariant Section.
+
+          <li>Preserve any Warranty Disclaimers.
+          </ol>
+
+     <p>If the Modified Version includes new front-matter sections or
+appendices that qualify as Secondary Sections and contain no material
+copied from the Document, you may at your option designate some or all
+of these sections as invariant.  To do this, add their titles to the
+list of Invariant Sections in the Modified Version's license notice. 
+These titles must be distinct from any other section titles.
+
+     <p>You may add a section Entitled &ldquo;Endorsements&rdquo;, provided it contains
+nothing but endorsements of your Modified Version by various
+parties&mdash;for example, statements of peer review or that the text has
+been approved by an organization as the authoritative definition of a
+standard.
+
+     <p>You may add a passage of up to five words as a Front-Cover Text, and a
+passage of up to 25 words as a Back-Cover Text, to the end of the list
+of Cover Texts in the Modified Version.  Only one passage of
+Front-Cover Text and one of Back-Cover Text may be added by (or
+through arrangements made by) any one entity.  If the Document already
+includes a cover text for the same cover, previously added by you or
+by arrangement made by the same entity you are acting on behalf of,
+you may not add another; but you may replace the old one, on explicit
+permission from the previous publisher that added the old one.
+
+     <p>The author(s) and publisher(s) of the Document do not by this License
+give permission to use their names for publicity for or to assert or
+imply endorsement of any Modified Version.
+
+     <li>COMBINING DOCUMENTS
+
+     <p>You may combine the Document with other documents released under this
+License, under the terms defined in section 4 above for modified
+versions, provided that you include in the combination all of the
+Invariant Sections of all of the original documents, unmodified, and
+list them all as Invariant Sections of your combined work in its
+license notice, and that you preserve all their Warranty Disclaimers.
+
+     <p>The combined work need only contain one copy of this License, and
+multiple identical Invariant Sections may be replaced with a single
+copy.  If there are multiple Invariant Sections with the same name but
+different contents, make the title of each such section unique by
+adding at the end of it, in parentheses, the name of the original
+author or publisher of that section if known, or else a unique number. 
+Make the same adjustment to the section titles in the list of
+Invariant Sections in the license notice of the combined work.
+
+     <p>In the combination, you must combine any sections Entitled &ldquo;History&rdquo;
+in the various original documents, forming one section Entitled
+&ldquo;History&rdquo;; likewise combine any sections Entitled &ldquo;Acknowledgements&rdquo;,
+and any sections Entitled &ldquo;Dedications&rdquo;.  You must delete all
+sections Entitled &ldquo;Endorsements.&rdquo;
+
+     <li>COLLECTIONS OF DOCUMENTS
+
+     <p>You may make a collection consisting of the Document and other documents
+released under this License, and replace the individual copies of this
+License in the various documents with a single copy that is included in
+the collection, provided that you follow the rules of this License for
+verbatim copying of each of the documents in all other respects.
+
+     <p>You may extract a single document from such a collection, and distribute
+it individually under this License, provided you insert a copy of this
+License into the extracted document, and follow this License in all
+other respects regarding verbatim copying of that document.
+
+     <li>AGGREGATION WITH INDEPENDENT WORKS
+
+     <p>A compilation of the Document or its derivatives with other separate
+and independent documents or works, in or on a volume of a storage or
+distribution medium, is called an &ldquo;aggregate&rdquo; if the copyright
+resulting from the compilation is not used to limit the legal rights
+of the compilation's users beyond what the individual works permit. 
+When the Document is included in an aggregate, this License does not
+apply to the other works in the aggregate which are not themselves
+derivative works of the Document.
+
+     <p>If the Cover Text requirement of section 3 is applicable to these
+copies of the Document, then if the Document is less than one half of
+the entire aggregate, the Document's Cover Texts may be placed on
+covers that bracket the Document within the aggregate, or the
+electronic equivalent of covers if the Document is in electronic form. 
+Otherwise they must appear on printed covers that bracket the whole
+aggregate.
+
+     <li>TRANSLATION
+
+     <p>Translation is considered a kind of modification, so you may
+distribute translations of the Document under the terms of section 4. 
+Replacing Invariant Sections with translations requires special
+permission from their copyright holders, but you may include
+translations of some or all Invariant Sections in addition to the
+original versions of these Invariant Sections.  You may include a
+translation of this License, and all the license notices in the
+Document, and any Warranty Disclaimers, provided that you also include
+the original English version of this License and the original versions
+of those notices and disclaimers.  In case of a disagreement between
+the translation and the original version of this License or a notice
+or disclaimer, the original version will prevail.
+
+     <p>If a section in the Document is Entitled &ldquo;Acknowledgements&rdquo;,
+&ldquo;Dedications&rdquo;, or &ldquo;History&rdquo;, the requirement (section 4) to Preserve
+its Title (section 1) will typically require changing the actual
+title.
+
+     <li>TERMINATION
+
+     <p>You may not copy, modify, sublicense, or distribute the Document
+except as expressly provided under this License.  Any attempt
+otherwise to copy, modify, sublicense, or distribute it is void, and
+will automatically terminate your rights under this License.
+
+     <p>However, if you cease all violation of this License, then your license
+from a particular copyright holder is reinstated (a) provisionally,
+unless and until the copyright holder explicitly and finally
+terminates your license, and (b) permanently, if the copyright holder
+fails to notify you of the violation by some reasonable means prior to
+60 days after the cessation.
+
+     <p>Moreover, your license from a particular copyright holder is
+reinstated permanently if the copyright holder notifies you of the
+violation by some reasonable means, this is the first time you have
+received notice of violation of this License (for any work) from that
+copyright holder, and you cure the violation prior to 30 days after
+your receipt of the notice.
+
+     <p>Termination of your rights under this section does not terminate the
+licenses of parties who have received copies or rights from you under
+this License.  If your rights have been terminated and not permanently
+reinstated, receipt of a copy of some or all of the same material does
+not give you any rights to use it.
+
+     <li>FUTURE REVISIONS OF THIS LICENSE
+
+     <p>The Free Software Foundation may publish new, revised versions
+of the GNU Free Documentation License from time to time.  Such new
+versions will be similar in spirit to the present version, but may
+differ in detail to address new problems or concerns.  See
+<a href="http://www.gnu.org/copyleft/">http://www.gnu.org/copyleft/</a>.
+
+     <p>Each version of the License is given a distinguishing version number. 
+If the Document specifies that a particular numbered version of this
+License &ldquo;or any later version&rdquo; applies to it, you have the option of
+following the terms and conditions either of that specified version or
+of any later version that has been published (not as a draft) by the
+Free Software Foundation.  If the Document does not specify a version
+number of this License, you may choose any version ever published (not
+as a draft) by the Free Software Foundation.  If the Document
+specifies that a proxy can decide which future versions of this
+License can be used, that proxy's public statement of acceptance of a
+version permanently authorizes you to choose that version for the
+Document.
+
+     <li>RELICENSING
+
+     <p>&ldquo;Massive Multiauthor Collaboration Site&rdquo; (or &ldquo;MMC Site&rdquo;) means any
+World Wide Web server that publishes copyrightable works and also
+provides prominent facilities for anybody to edit those works.  A
+public wiki that anybody can edit is an example of such a server.  A
+&ldquo;Massive Multiauthor Collaboration&rdquo; (or &ldquo;MMC&rdquo;) contained in the
+site means any set of copyrightable works thus published on the MMC
+site.
+
+     <p>&ldquo;CC-BY-SA&rdquo; means the Creative Commons Attribution-Share Alike 3.0
+license published by Creative Commons Corporation, a not-for-profit
+corporation with a principal place of business in San Francisco,
+California, as well as future copyleft versions of that license
+published by that same organization.
+
+     <p>&ldquo;Incorporate&rdquo; means to publish or republish a Document, in whole or
+in part, as part of another Document.
+
+     <p>An MMC is &ldquo;eligible for relicensing&rdquo; if it is licensed under this
+License, and if all works that were first published under this License
+somewhere other than this MMC, and subsequently incorporated in whole
+or in part into the MMC, (1) had no cover texts or invariant sections,
+and (2) were thus incorporated prior to November 1, 2008.
+
+     <p>The operator of an MMC Site may republish an MMC contained in the site
+under CC-BY-SA on the same site at any time before August 1, 2009,
+provided the MMC is eligible for relicensing.
+
+        </ol>
+
+<h3 class="heading">ADDENDUM: How to use this License for your documents</h3>
+
+<p>To use this License in a document you have written, include a copy of
+the License in the document and put the following copyright and
+license notices just after the title page:
+
+<pre class="smallexample">       Copyright (C)  <var>year</var>  <var>your name</var>.
+       Permission is granted to copy, distribute and/or modify this document
+       under the terms of the GNU Free Documentation License, Version 1.3
+       or any later version published by the Free Software Foundation;
+       with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+       Texts.  A copy of the license is included in the section entitled ``GNU
+       Free Documentation License''.
+</pre>
+   <p>If you have Invariant Sections, Front-Cover Texts and Back-Cover Texts,
+replace the &ldquo;with<small class="dots">...</small>Texts.&rdquo; line with this:
+
+<pre class="smallexample">         with the Invariant Sections being <var>list their titles</var>, with
+         the Front-Cover Texts being <var>list</var>, and with the Back-Cover Texts
+         being <var>list</var>.
+</pre>
+   <p>If you have Invariant Sections without Cover Texts, or some other
+combination of the three, merge those two alternatives to suit the
+situation.
+
+   <p>If your document contains nontrivial examples of program code, we
+recommend releasing these examples in parallel under your choice of
+free software license, such as the GNU General Public License,
+to permit their use in free software.
+
+<!-- Local Variables: -->
+<!-- ispell-local-pdict: "ispell-dict" -->
+<!-- End: -->
+<!-- @node Function Index -->
+<!-- @unnumbered Function Index -->
+<!-- @printindex fn -->
+<div class="node">
+<a name="Variable-Index"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="unnumbered">Variable Index</h2>
+
+<ul class="index-vr" compact>
+<li><a href="#index-ido_002dall_002dframes-49"><code>ido-all-frames</code></a>: <a href="#Misc-Customization">Misc Customization</a></li>
+<li><a href="#index-ido_002dcannot_002dcomplete_002dcommand-45"><code>ido-cannot-complete-command</code></a>: <a href="#Misc-Customization">Misc Customization</a></li>
+<li><a href="#index-ido_002dcase_002dfold-41"><code>ido-case-fold</code></a>: <a href="#Misc-Customization">Misc Customization</a></li>
+<li><a href="#index-ido_002dconfirm_002dunique_002dcompletion-44"><code>ido-confirm-unique-completion</code></a>: <a href="#Misc-Customization">Misc Customization</a></li>
+<li><a href="#index-ido_002denable_002ddot_002dprefix-43"><code>ido-enable-dot-prefix</code></a>: <a href="#Misc-Customization">Misc Customization</a></li>
+<li><a href="#index-ido_002denable_002dflex_002dmatching-22"><code>ido-enable-flex-matching</code></a>: <a href="#Flexible-Matching">Flexible Matching</a></li>
+<li><a href="#index-ido_002denable_002dregexp-25"><code>ido-enable-regexp</code></a>: <a href="#Regexp-Matching">Regexp Matching</a></li>
+<li><a href="#index-ido_002dignore_002dbuffers-35"><code>ido-ignore-buffers</code></a>: <a href="#Ignoring">Ignoring</a></li>
+<li><a href="#index-ido_002dignore_002ddirectories-36"><code>ido-ignore-directories</code></a>: <a href="#Ignoring">Ignoring</a></li>
+<li><a href="#index-ido_002dignore_002dfiles-37"><code>ido-ignore-files</code></a>: <a href="#Ignoring">Ignoring</a></li>
+<li><a href="#index-ido_002dignore_002dunc_002dhost_002dregexps-38"><code>ido-ignore-unc-host-regexps</code></a>: <a href="#Ignoring">Ignoring</a></li>
+<li><a href="#index-ido_002dmax_002ddir_002dfile_002dcache-9"><code>ido-max-dir-file-cache</code></a>: <a href="#Working-Directories">Working Directories</a></li>
+<li><a href="#index-ido_002dmax_002dfile_002dprompt_002dwidth-46"><code>ido-max-file-prompt-width</code></a>: <a href="#Misc-Customization">Misc Customization</a></li>
+<li><a href="#index-ido_002dmax_002dwindow_002dheight-47"><code>ido-max-window-height</code></a>: <a href="#Misc-Customization">Misc Customization</a></li>
+<li><a href="#index-ido_002dmax_002dwork_002ddirectory_002dlist-8"><code>ido-max-work-directory-list</code></a>: <a href="#Working-Directories">Working Directories</a></li>
+<li><a href="#index-ido_002dminibuffer_002dsetup_002dhook-50"><code>ido-minibuffer-setup-hook</code></a>: <a href="#Misc-Customization">Misc Customization</a></li>
+<li><a href="#index-ido_002dmode-40"><code>ido-mode</code></a>: <a href="#Misc-Customization">Misc Customization</a></li>
+<li><a href="#index-ido_002drecord_002dcommands-48"><code>ido-record-commands</code></a>: <a href="#Misc-Customization">Misc Customization</a></li>
+<li><a href="#index-ido_002dshow_002ddot_002dfor_002ddired-42"><code>ido-show-dot-for-dired</code></a>: <a href="#Misc-Customization">Misc Customization</a></li>
+<li><a href="#index-ido_002duse_002durl_002dat_002dpoint-32"><code>ido-use-url-at-point</code></a>: <a href="#Find-File-At-Point">Find File At Point</a></li>
+<li><a href="#index-ido_002dwork_002ddirectory_002dlist-7"><code>ido-work-directory-list</code></a>: <a href="#Working-Directories">Working Directories</a></li>
+   </ul></body></html>
+
+<!--
+
+Local Variables:
+coding: utf-8
+End:
+
+-->

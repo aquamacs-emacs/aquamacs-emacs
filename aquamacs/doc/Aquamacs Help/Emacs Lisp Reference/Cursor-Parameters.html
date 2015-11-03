@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,13 +41,13 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Window-Frame-Parameters.html#Window-Fra
 <hr>
 </div>
 
-<h5 class="subsubsection">29.3.3.7 Cursor Parameters</h5>
+<h5 class="subsubsection">28.4.3.7 Cursor Parameters</h5>
 
-<p><a name="index-cursor_002c-and-frame-parameters-2556"></a>
+<p><a name="index-cursor_002c-and-frame-parameters-2838"></a>
   This frame parameter controls the way the cursor looks.
 
      
-<a name="index-cursor_002dtype_002c-a-frame-parameter-2557"></a>
+<a name="index-cursor_002dtype_002c-a-frame-parameter-2839"></a>
 <dl><dt><code>cursor-type</code><dd>How to display the cursor.  Legitimate values are:
 
           <dl>
@@ -61,12 +61,12 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Window-Frame-Parameters.html#Window-Fra
 </dl>
      </dl>
 
-   <p><a name="index-cursor_002dtype-2558"></a>The <code>cursor-type</code> frame parameter may be overridden by the
+   <p><a name="index-cursor_002dtype-2840"></a>The <code>cursor-type</code> frame parameter may be overridden by the
 variables <code>cursor-type</code> and
 <code>cursor-in-non-selected-windows</code>:
 
 <div class="defun">
-&mdash; Variable: <b>cursor-type</b><var><a name="index-cursor_002dtype-2559"></a></var><br>
+&mdash; Variable: <b>cursor-type</b><var><a name="index-cursor_002dtype-2841"></a></var><br>
 <blockquote><p>This buffer-local variable controls how the cursor looks in a selected
 window showing the buffer.  If its value is <code>t</code>, that means to
 use the cursor specified by the <code>cursor-type</code> frame parameter. 
@@ -75,7 +75,7 @@ and it overrides the <code>cursor-type</code> frame parameter.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>cursor-in-non-selected-windows</b><var><a name="index-cursor_002din_002dnon_002dselected_002dwindows-2560"></a></var><br>
+&mdash; User Option: <b>cursor-in-non-selected-windows</b><var><a name="index-cursor_002din_002dnon_002dselected_002dwindows-2842"></a></var><br>
 <blockquote><p>This buffer-local variable controls how the cursor looks in a window
 that is not selected.  It supports the same values as the
 <code>cursor-type</code> frame parameter; also, <code>nil</code> means don't
@@ -85,12 +85,26 @@ becomes hollow box, and bar becomes a narrower bar).
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>blink-cursor-alist</b><var><a name="index-blink_002dcursor_002dalist-2561"></a></var><br>
+&mdash; User Option: <b>x-stretch-cursor</b><var><a name="index-x_002dstretch_002dcursor-2843"></a></var><br>
+<blockquote><p>This variable controls the width of the block cursor displayed on
+extra-wide glyphs such as a tab or a stretch of white space.  By
+default, the block cursor is only as wide as the font's default
+character, and will not cover all of the width of the glyph under it
+if that glyph is extra-wide.  A non-<code>nil</code> value of this variable
+means draw the block cursor as wide as the glyph under it.  The
+default value is <code>nil</code>.
+
+        <p>This variable has no effect on text-mode frames, since the text-mode
+cursor is drawn by the terminal out of Emacs's control. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; User Option: <b>blink-cursor-alist</b><var><a name="index-blink_002dcursor_002dalist-2844"></a></var><br>
 <blockquote><p>This variable specifies how to blink the cursor.  Each element has the
 form <code>(</code><var>on-state</var><code> . </code><var>off-state</var><code>)</code>.  Whenever the cursor
 type equals <var>on-state</var> (comparing using <code>equal</code>), the
 corresponding <var>off-state</var> specifies what the cursor looks like
-when it blinks &ldquo;off&rdquo;.  Both <var>on-state</var> and <var>off-state</var>
+when it blinks off.  Both <var>on-state</var> and <var>off-state</var>
 should be suitable values for the <code>cursor-type</code> frame parameter.
 
         <p>There are various defaults for how to blink each type of cursor, if

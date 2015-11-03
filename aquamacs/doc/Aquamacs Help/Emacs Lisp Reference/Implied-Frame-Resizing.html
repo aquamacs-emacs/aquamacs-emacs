@@ -1,0 +1,98 @@
+<html lang="en">
+<head>
+<title>Implied Frame Resizing - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Frame-Geometry.html#Frame-Geometry" title="Frame Geometry">
+<link rel="prev" href="Size-and-Position.html#Size-and-Position" title="Size and Position">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 25.0.50.
+
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Implied-Frame-Resizing"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Size-and-Position.html#Size-and-Position">Size and Position</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Frame-Geometry.html#Frame-Geometry">Frame Geometry</a>
+<hr>
+</div>
+
+<h4 class="subsection">28.3.4 Implied Frame Resizing</h4>
+
+<p><a name="index-implied-frame-resizing-2769"></a><a name="index-implied-resizing-of-frame-2770"></a>
+By default, Emacs tries to keep the number of lines and columns of a
+frame's text area unaltered when, for example, adding or removing the
+menu bar, changing the default font or setting the width of the frame's
+scroll bars.  This means, however, that in such case Emacs must ask the
+window manager to resize the outer frame in order to accommodate the
+size change.  Note that wrapping a menu or tool bar usually does not
+resize the frame's outer size, hence this will alter the number of
+displayed lines.
+
+   <p>Occasionally, such <dfn>implied frame resizing</dfn> may be unwanted, for
+example, when the frame is maximized or made full-screen (where it's
+turned off by default).  In other cases you can disable implied resizing
+with the following option:
+
+<div class="defun">
+&mdash; User Option: <b>frame-inhibit-implied-resize</b><var><a name="index-frame_002dinhibit_002dimplied_002dresize-2771"></a></var><br>
+<blockquote><p>If this option is <code>nil</code>, changing font, menu bar, tool bar,
+internal borders, fringes or scroll bars of a specific frame may
+implicitly resize the frame's display area in order to preserve the
+number of columns or lines the frame displays.  If this option is
+non-<code>nil</code>, no implied resizing is done.
+
+        <p>The value of this option can be also be a list of frame parameters.  In
+that case, implied resizing is inhibited when changing a parameter that
+appears in this list.  The frame parameters currently handled by this
+option are: <code>font</code>, <code>font-backend</code>,
+<code>internal-border-width</code>, <code>menu-bar-lines</code> and
+<code>tool-bar-lines</code>.
+
+        <p>Changing any of the <code>scroll-bar-width</code>, <code>scroll-bar-height</code>,
+<code>vertical-scroll-bars</code>, <code>horizontal-scroll-bars</code>,
+<code>left-fringe</code> and <code>right-fringe</code> frame parameters is handled
+as if the frame contained just one live window.  This means, for
+example, that removing vertical scroll bars on a frame containing
+several side by side windows will shrink the outer frame width by the
+width of one scroll bar provided this option is <code>nil</code> and keep it
+unchanged if this option is either <code>t</code> or a list containing
+<code>vertical-scroll-bars</code>.
+
+        <p>The default value is <code>'(tool-bar-lines)</code> for Lucid, Motif and
+Windows (which means that adding/removing a tool bar there does not
+change the outer frame height), <code>nil</code> on all other window systems
+including GTK+ (which means that changing any of the parameters listed
+above may change the size of the outer frame), and <code>t</code> otherwise
+(which means the outer frame size never changes implicitly when there's
+no window system support).
+
+        <p>Note that when a frame is not large enough to accommodate a change of
+any of the parameters listed above, Emacs may try to enlarge the frame
+even if this option is non-<code>nil</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

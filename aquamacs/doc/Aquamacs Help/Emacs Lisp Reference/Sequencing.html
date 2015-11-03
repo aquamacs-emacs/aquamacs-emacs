@@ -10,15 +10,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,7 +41,8 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Control-Structures.html#Control-Structu
 
 <h3 class="section">10.1 Sequencing</h3>
 
-<p>Evaluating forms in the order they appear is the most common way
+<p><a name="index-sequencing-635"></a><a name="index-sequential-execution-636"></a>
+  Evaluating forms in the order they appear is the most common way
 control passes from one form to another.  In some contexts, such as in a
 function body, this happens automatically.  Elsewhere you must use a
 control structure construct to do this: <code>progn</code>, the simplest
@@ -56,11 +57,11 @@ that order.  These forms are called the <dfn>body</dfn> of the <code>progn</code
 The value of the last form in the body becomes the value of the entire
 <code>progn</code>.  <code>(progn)</code> returns <code>nil</code>.
 
-   <p><a name="index-implicit-_0040code_007bprogn_007d-548"></a>  In the early days of Lisp, <code>progn</code> was the only way to execute
+   <p><a name="index-implicit-_0040code_007bprogn_007d-637"></a>  In the early days of Lisp, <code>progn</code> was the only way to execute
 two or more forms in succession and use the value of the last of them. 
 But programmers found they often needed to use a <code>progn</code> in the
 body of a function, where (at that time) only one form was allowed.  So
-the body of a function was made into an &ldquo;implicit <code>progn</code>&rdquo;:
+the body of a function was made into an implicit <code>progn</code>:
 several forms are allowed just as in the body of an actual <code>progn</code>. 
 Many other control structures likewise contain an implicit <code>progn</code>. 
 As a result, <code>progn</code> is not used as much as it was many years ago. 
@@ -68,7 +69,7 @@ It is needed now most often inside an <code>unwind-protect</code>, <code>and</co
 <code>or</code>, or in the <var>then</var>-part of an <code>if</code>.
 
 <div class="defun">
-&mdash; Special Form: <b>progn</b><var> forms<small class="dots">...</small><a name="index-progn-549"></a></var><br>
+&mdash; Special Form: <b>progn</b><var> forms<small class="dots">...</small><a name="index-progn-638"></a></var><br>
 <blockquote><p>This special form evaluates all of the <var>forms</var>, in textual
 order, returning the result of the final form.
 
@@ -86,7 +87,7 @@ order, returning the result of the final form.
 different values:
 
 <div class="defun">
-&mdash; Special Form: <b>prog1</b><var> form1 forms<small class="dots">...</small><a name="index-prog1-550"></a></var><br>
+&mdash; Special Form: <b>prog1</b><var> form1 forms<small class="dots">...</small><a name="index-prog1-639"></a></var><br>
 <blockquote><p>This special form evaluates <var>form1</var> and all of the <var>forms</var>, in
 textual order, returning the result of <var>form1</var>.
 
@@ -106,7 +107,7 @@ textual order, returning the result of <var>form1</var>.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Special Form: <b>prog2</b><var> form1 form2 forms<small class="dots">...</small><a name="index-prog2-551"></a></var><br>
+&mdash; Special Form: <b>prog2</b><var> form1 form2 forms<small class="dots">...</small><a name="index-prog2-640"></a></var><br>
 <blockquote><p>This special form evaluates <var>form1</var>, <var>form2</var>, and all of the
 following <var>forms</var>, in textual order, returning the result of
 <var>form2</var>.

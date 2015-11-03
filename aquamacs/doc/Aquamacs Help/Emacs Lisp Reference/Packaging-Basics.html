@@ -10,15 +10,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -39,9 +39,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Packaging.html#Packaging">Packaging</a>
 <hr>
 </div>
 
-<h3 class="section">40.1 Packaging Basics</h3>
+<h3 class="section">39.1 Packaging Basics</h3>
 
-<p><a name="index-package-attributes-4267"></a><a name="index-package-name-4268"></a><a name="index-package-version-4269"></a><a name="index-dependencies-4270"></a><a name="index-package-dependencies-4271"></a>
+<p><a name="index-package-attributes-4718"></a><a name="index-package-name-4719"></a><a name="index-package-version-4720"></a><a name="index-dependencies-4721"></a><a name="index-package-dependencies-4722"></a>
   A package is either a <dfn>simple package</dfn> or a <dfn>multi-file
 package</dfn>.  A simple package is stored in a package archive as a single
 Emacs Lisp file, while a multi-file package is stored as a tar file
@@ -80,7 +80,7 @@ installing this package also automatically installs its dependencies;
 if any dependency cannot be found, the package cannot be installed. 
 </dl>
 
-   <p><a name="index-content-directory_002c-package-4272"></a>  Installing a package, either via the command <code>package-install-file</code>,
+   <p><a name="index-content-directory_002c-package-4723"></a>  Installing a package, either via the command <code>package-install-file</code>,
 or via the Package Menu, creates a subdirectory of
 <code>package-user-dir</code> named <samp><var>name</var><span class="file">-</span><var>version</var></samp>, where
 <var>name</var> is the package's name and <var>version</var> its version
@@ -89,7 +89,7 @@ package's <dfn>content directory</dfn>.  It is where Emacs puts the
 package's contents (the single Lisp file for a simple package, or the
 files extracted from a multi-file package).
 
-   <p><a name="index-package-autoloads-4273"></a>  Emacs then searches every Lisp file in the content directory for
+   <p><a name="index-package-autoloads-4724"></a>  Emacs then searches every Lisp file in the content directory for
 autoload magic comments (see <a href="Autoload.html#Autoload">Autoload</a>).  These autoload
 definitions are saved to a file named <samp><var>name</var><span class="file">-autoloads.el</span></samp>
 in the content directory.  They are typically used to autoload the
@@ -113,11 +113,13 @@ package loading is disabled if the user option
 <code>package-enable-at-startup</code> is <code>nil</code>.
 
 <div class="defun">
-&mdash; Command: <b>package-initialize</b><var> &amp;optional no-activate<a name="index-package_002dinitialize-4274"></a></var><br>
+&mdash; Command: <b>package-initialize</b><var> &amp;optional no-activate<a name="index-package_002dinitialize-4725"></a></var><br>
 <blockquote><p>This function initializes Emacs' internal record of which packages are
 installed, and loads them.  The user option <code>package-load-list</code>
 specifies which packages to load; by default, all installed packages
-are loaded.  See <a href="../emacs/Package-Installation.html#Package-Installation">Package Installation</a>.
+are loaded.  If called during startup, this function also sets
+<code>package-enable-at-startup</code> to <code>nil</code>, to avoid accidentally
+loading the packages twice.  See <a href="../emacs/Package-Installation.html#Package-Installation">Package Installation</a>.
 
         <p>The optional argument <var>no-activate</var>, if non-<code>nil</code>, causes
 Emacs to update its record of installed packages without actually

@@ -10,16 +10,16 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Manual',
-updated for Emacs version 24.3.50.
+updated for Emacs version 25.0.50.
 
-Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``The GNU
      Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     with the Front-Cover Texts being ``A GNU Manual,'' and with the
      Back-Cover Texts as in (a) below.  A copy of the license is
      included in the section entitled ``GNU Free Documentation
      License.''
@@ -42,7 +42,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Modes.html#Modes">Modes</a>
 
 <h3 class="section">23.3 Choosing File Modes</h3>
 
-<p><a name="index-choosing-a-major-mode-1734"></a><a name="index-choosing-a-minor-mode-1735"></a><a name="index-auto_002dmode_002dalist-1736"></a>  When you visit a file, Emacs chooses a major mode automatically. 
+<p><a name="index-choosing-a-major-mode-1861"></a><a name="index-choosing-a-minor-mode-1862"></a><a name="index-auto_002dmode_002dalist-1863"></a>  When you visit a file, Emacs chooses a major mode automatically. 
 Normally, it makes the choice based on the file name&mdash;for example,
 files whose names end in &lsquo;<samp><span class="samp">.c</span></samp>&rsquo; are normally edited in C mode&mdash;but
 sometimes it chooses the major mode based on special text in the file. 
@@ -77,7 +77,7 @@ preferences.  If you personally want to use a minor mode for a
 particular file type, it is better to enable the minor mode via a
 major mode hook (see <a href="Major-Modes.html#Major-Modes">Major Modes</a>).
 
-   <p><a name="index-interpreter_002dmode_002dalist-1737"></a>  Second, if there is no file variable specifying a major mode, Emacs
+   <p><a name="index-interpreter_002dmode_002dalist-1864"></a>  Second, if there is no file variable specifying a major mode, Emacs
 checks whether the file's contents begin with &lsquo;<samp><span class="samp">#!</span></samp>&rsquo;.  If so, that
 indicates that the file can serve as an executable shell command,
 which works by running an interpreter named on the file's first line
@@ -94,7 +94,7 @@ on the second line in such files as well as on the first line.  The
 same is true for man pages which start with the magic string
 &lsquo;<samp><span class="samp">'\"</span></samp>&rsquo; to specify a list of troff preprocessors.
 
-   <p><a name="index-magic_002dmode_002dalist-1738"></a>  Third, Emacs tries to determine the major mode by looking at the
+   <p><a name="index-magic_002dmode_002dalist-1865"></a>  Third, Emacs tries to determine the major mode by looking at the
 text at the start of the buffer, based on the variable
 <code>magic-mode-alist</code>.  By default, this variable is <code>nil</code> (an
 empty list), so Emacs skips this step; however, you can customize it
@@ -137,7 +137,7 @@ the element has the form <code>(</code><var>regexp</var> <var>mode-function</var
 <var>mode-function</var>, Emacs discards the suffix that matched
 <var>regexp</var> and searches the list again for another match.
 
-   <p><a name="index-auto_002dmode_002dcase_002dfold-1739"></a>  On GNU/Linux and other systems with case-sensitive file names, Emacs
+   <p><a name="index-auto_002dmode_002dcase_002dfold-1866"></a>  On GNU/Linux and other systems with case-sensitive file names, Emacs
 performs a case-sensitive search through <code>auto-mode-alist</code>; if
 this search fails, it performs a second case-insensitive search
 through the alist.  To suppress the second search, change the variable
@@ -145,31 +145,32 @@ through the alist.  To suppress the second search, change the variable
 case-insensitive file names, such as Microsoft Windows, Emacs performs
 a single case-insensitive search through <code>auto-mode-alist</code>.
 
-   <p><a name="index-magic_002dfallback_002dmode_002dalist-1740"></a>  Finally, if Emacs <em>still</em> hasn't found a major mode to use, it
+   <p><a name="index-magic_002dfallback_002dmode_002dalist-1867"></a>  Finally, if Emacs <em>still</em> hasn't found a major mode to use, it
 compares the text at the start of the buffer to the variable
 <code>magic-fallback-mode-alist</code>.  This variable works like
 <code>magic-mode-alist</code>, described above, except that is consulted
 only after <code>auto-mode-alist</code>.  By default,
 <code>magic-fallback-mode-alist</code> contains forms that check for image
-files, HTML/XML/SGML files, and PostScript files.
+files, HTML/XML/SGML files, PostScript files, and Unix style Conf
+files.
 
-   <p><a name="index-normal_002dmode-1741"></a>  If you have changed the major mode of a buffer, you can return to
+   <p><a name="index-normal_002dmode-1868"></a>  If you have changed the major mode of a buffer, you can return to
 the major mode Emacs would have chosen automatically, by typing
 <kbd>M-x normal-mode</kbd>.  This is the same function that
 <code>find-file</code> calls to choose the major mode.  It also processes
 the file's &lsquo;<samp><span class="samp">-*-</span></samp>&rsquo; line or local variables list (if any). 
 See <a href="File-Variables.html#File-Variables">File Variables</a>.
 
-   <p><a name="index-change_002dmajor_002dmode_002dwith_002dfile_002dname-1742"></a>  The commands <kbd>C-x C-w</kbd> and <code>set-visited-file-name</code> change to
+   <p><a name="index-change_002dmajor_002dmode_002dwith_002dfile_002dname-1869"></a>  The commands <kbd>C-x C-w</kbd> and <code>set-visited-file-name</code> change to
 a new major mode if the new file name implies a mode (see <a href="Saving.html#Saving">Saving</a>). 
 (<kbd>C-x C-s</kbd> does this too, if the buffer wasn't visiting a file.) 
 However, this does not happen if the buffer contents specify a major
-mode, and certain &ldquo;special&rdquo; major modes do not allow the mode to
+mode, and certain special major modes do not allow the mode to
 change.  You can turn off this mode-changing feature by setting
 <code>change-major-mode-with-file-name</code> to <code>nil</code>.
 
 <!-- This is part of the Emacs manual. -->
-<!-- Copyright (C) 1985-1987, 1993-1995, 1997, 2001-2013 Free Software -->
+<!-- Copyright (C) 1985-1987, 1993-1995, 1997, 2001-2015 Free Software -->
 <!-- Foundation, Inc. -->
 <!-- See file emacs.texi for copying conditions. -->
    </body></html>

@@ -1,0 +1,1163 @@
+<html lang="en">
+<head>
+<title>EasyPG Assistant User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="EasyPG Assistant User's Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="top" href="#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file describes EasyPG Assistant 1.0.0.
+
+Copyright (C) 2007-2015 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being "A GNU Manual," and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     "GNU Free Documentation License".
+
+     (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+     modify this GNU manual."
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<h1 class="settitle">EasyPG Assistant User's Manual</h1>
+<div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Top" href="#Top">EasyPG Assistant user's manual</a>
+<li><a name="toc_Overview" href="#Overview">1 Overview</a>
+<li><a name="toc_Quick-start" href="#Quick-start">2 Quick start</a>
+<li><a name="toc_Commands" href="#Commands">3 Commands</a>
+<ul>
+<li><a href="#Key-management">3.1 Key management</a>
+<li><a href="#Cryptographic-operations-on-regions">3.2 Cryptographic operations on regions</a>
+<li><a href="#Cryptographic-operations-on-files">3.3 Cryptographic operations on files</a>
+<li><a href="#Dired-integration">3.4 Dired integration</a>
+<li><a href="#Mail_002dmode-integration">3.5 Mail-mode integration</a>
+<li><a href="#Encrypting_002fdecrypting-gpg-files">3.6 Encrypting/decrypting gpg files</a>
+</li></ul>
+<li><a name="toc_Caching-Passphrases" href="#Caching-Passphrases">4 Caching Passphrases</a>
+<li><a name="toc_Bug-Reports" href="#Bug-Reports">5 Bug Reports</a>
+<li><a name="toc_GNU-Free-Documentation-License" href="#GNU-Free-Documentation-License">Appendix A GNU Free Documentation License</a>
+<li><a name="toc_Key-Index" href="#Key-Index">Key Index</a>
+<li><a name="toc_Function-Index" href="#Function-Index">Function Index</a>
+<li><a name="toc_Variable-Index" href="#Variable-Index">Variable Index</a>
+</li></ul>
+</div>
+
+
+
+<div class="node">
+<a name="Top"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Overview">Overview</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#dir">(dir)</a>
+
+</div>
+
+<h2 class="unnumbered">EasyPG Assistant user's manual</h2>
+
+<p>EasyPG Assistant is an Emacs user interface to GNU Privacy Guard
+(GnuPG, see <a href="gnupg.html#Top">Top</a>).
+
+   <p>EasyPG Assistant is a part of the package called EasyPG, an all-in-one
+GnuPG interface for Emacs.  EasyPG also contains the library interface
+called EasyPG Library.
+
+   <p>This file describes EasyPG Assistant 1.0.0.
+
+   <p>Copyright &copy; 2007&ndash;2015 Free Software Foundation, Inc.
+
+   <blockquote>
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with the Front-Cover Texts being &ldquo;A GNU Manual,&rdquo;
+and with the Back-Cover Texts as in (a) below.  A copy of the license
+is included in the section entitled &ldquo;GNU Free Documentation License&rdquo;.
+
+   <p>(a) The FSF's Back-Cover Text is: &ldquo;You have the freedom to copy and
+modify this GNU manual.&rdquo;
+</blockquote>
+
+<ul class="menu">
+<li><a accesskey="1" href="#Overview">Overview</a>
+<li><a accesskey="2" href="#Quick-start">Quick start</a>
+<li><a accesskey="3" href="#Commands">Commands</a>
+<li><a accesskey="4" href="#Caching-Passphrases">Caching Passphrases</a>
+<li><a accesskey="5" href="#Bug-Reports">Bug Reports</a>
+<li><a accesskey="6" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>:   The license for this documentation. 
+<li><a accesskey="7" href="#Key-Index">Key Index</a>
+<li><a accesskey="8" href="#Function-Index">Function Index</a>
+<li><a accesskey="9" href="#Variable-Index">Variable Index</a>
+</ul>
+
+<div class="node">
+<a name="Overview"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Quick-start">Quick start</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Top">Top</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">1 Overview</h2>
+
+<p>EasyPG Assistant provides the following features.
+
+     <ul>
+<li>Key management. 
+<li>Cryptographic operations on regions. 
+<li>Cryptographic operations on files. 
+<li>Dired integration. 
+<li>Mail-mode integration. 
+<li>Automatic encryption/decryption of *.gpg files. 
+</ul>
+
+<div class="node">
+<a name="Quick-start"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Commands">Commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Overview">Overview</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">2 Quick start</h2>
+
+<p>EasyPG Assistant commands are prefixed by &lsquo;<samp><span class="samp">epa-</span></samp>&rsquo;.  For example,
+
+     <ul>
+<li>To browse your keyring, type <kbd>M-x epa-list-keys</kbd>
+
+     <li>To create a cleartext signature of the region, type <kbd>M-x epa-sign-region</kbd>
+
+     <li>To encrypt a file, type <kbd>M-x epa-encrypt-file</kbd>
+</ul>
+
+   <p>EasyPG Assistant provides several cryptographic features which can be
+integrated into other Emacs functionalities.  For example, automatic
+encryption/decryption of <samp><span class="file">*.gpg</span></samp> files.
+
+<div class="node">
+<a name="Commands"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Caching-Passphrases">Caching Passphrases</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Quick-start">Quick start</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">3 Commands</h2>
+
+<p>This chapter introduces various commands for typical use cases.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Key-management">Key management</a>
+<li><a accesskey="2" href="#Cryptographic-operations-on-regions">Cryptographic operations on regions</a>
+<li><a accesskey="3" href="#Cryptographic-operations-on-files">Cryptographic operations on files</a>
+<li><a accesskey="4" href="#Dired-integration">Dired integration</a>
+<li><a accesskey="5" href="#Mail_002dmode-integration">Mail-mode integration</a>
+<li><a accesskey="6" href="#Encrypting_002fdecrypting-gpg-files">Encrypting/decrypting gpg files</a>
+</ul>
+
+<div class="node">
+<a name="Key-management"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Cryptographic-operations-on-regions">Cryptographic operations on regions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Commands">Commands</a>
+
+</div>
+
+<h3 class="section">3.1 Key management</h3>
+
+<p>Probably the first step of using EasyPG Assistant is to browse your
+keyring.  <kbd>M-x epa-list-keys</kbd> is corresponding to &lsquo;<samp><span class="samp">gpg
+--list-keys</span></samp>&rsquo; from the command line.
+
+<div class="defun">
+&mdash; Command: <b>epa-list-keys</b><var> name mode<a name="index-epa_002dlist_002dkeys-1"></a></var><br>
+<blockquote><p>Show all keys matched with <var>name</var> from the public keyring. 
+</p></blockquote></div>
+
+<p class="noindent">The output looks as follows.
+
+<pre class="example">       u A5B6B2D4B15813FE Daiki Ueno &lt;ueno@unixuser.org&gt;
+</pre>
+   <p class="noindent">A character on the leftmost column indicates the trust level of the
+key.  If it is &lsquo;<samp><span class="samp">u</span></samp>&rsquo;, the key is marked as ultimately trusted.  The
+second column is the key ID, and the rest is the user ID.
+
+   <p>You can move over entries by &lt;TAB&gt;.  If you type &lt;RET&gt; or
+click button1 on an entry, you will see more detailed information
+about the key you selected.
+
+<pre class="example">      u Daiki Ueno &lt;ueno@unixuser.org&gt;
+      u A5B6B2D4B15813FE 1024bits DSA
+             Created: 2001-10-09
+             Expires: 2007-09-04
+             Capabilities: sign certify
+             Fingerprint: 8003 7CD0 0F1A 9400 03CA  50AA A5B6 B2D4 B158 13FE
+      u 4447461B2A9BEA2D 2048bits ELGAMAL_E
+             Created: 2001-10-09
+             Expires: 2007-09-04
+             Capabilities: encrypt
+             Fingerprint: 9003 D76B 73B7 4A8A E588  10AF 4447 461B 2A9B EA2D
+</pre>
+   <p class="noindent">To browse your private keyring, use <kbd>M-x epa-list-secret-keys</kbd>.
+
+<div class="defun">
+&mdash; Command: <b>epa-list-secret-keys</b><var> name<a name="index-epa_002dlist_002dsecret_002dkeys-2"></a></var><br>
+<blockquote><p>Show all keys matched with <var>name</var> from the private keyring. 
+</p></blockquote></div>
+
+<p class="noindent">In <samp><span class="file">*Keys*</span></samp> buffer, several commands are available.  The common
+use case is to export some keys to a file.  To do that, type <kbd>m</kbd>
+to select keys, type <kbd>o</kbd>, and then supply the filename.
+
+   <p>Below are other commands related to key management.  Some of them take
+a file as input/output, and others take the current region.
+
+<div class="defun">
+&mdash; Command: <b>epa-insert-keys</b><var> keys<a name="index-epa_002dinsert_002dkeys-3"></a></var><br>
+<blockquote><p>Insert selected <var>keys</var> after the point.  It will let you select
+keys before insertion.  By default, it will encode keys in the OpenPGP
+armor format. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>epa-import-keys</b><var> file<a name="index-epa_002dimport_002dkeys-4"></a></var><br>
+<blockquote><p>Import keys from <var>file</var> to your keyring. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>epa-import-keys-region</b><var> start end<a name="index-epa_002dimport_002dkeys_002dregion-5"></a></var><br>
+<blockquote><p>Import keys from the current region between <var>start</var> and <var>end</var>
+to your keyring. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>epa-import-armor-in-region</b><var> start end<a name="index-epa_002dimport_002darmor_002din_002dregion-6"></a></var><br>
+<blockquote><p>Import keys in the OpenPGP armor format in the current region between
+<var>start</var> and <var>end</var>.  The difference from
+<code>epa-import-keys-region</code> is that
+<code>epa-import-armor-in-region</code> searches armors in the region and
+applies <code>epa-import-keys-region</code> to each of them. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>epa-delete-keys</b><var> allow-secret<a name="index-epa_002ddelete_002dkeys-7"></a></var><br>
+<blockquote><p>Delete selected keys.  If <var>allow-secret</var> is non-<code>nil</code>, it
+also delete the secret keys. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Cryptographic-operations-on-regions"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Cryptographic-operations-on-files">Cryptographic operations on files</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Key-management">Key management</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Commands">Commands</a>
+
+</div>
+
+<h3 class="section">3.2 Cryptographic operations on regions</h3>
+
+<div class="defun">
+&mdash; Command: <b>epa-decrypt-region</b><var> start end<a name="index-epa_002ddecrypt_002dregion-8"></a></var><br>
+<blockquote><p>Decrypt the current region between <var>start</var> and <var>end</var>.  It
+replaces the region with the decrypted text. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>epa-decrypt-armor-in-region</b><var> start end<a name="index-epa_002ddecrypt_002darmor_002din_002dregion-9"></a></var><br>
+<blockquote><p>Decrypt OpenPGP armors in the current region between <var>start</var> and
+<var>end</var>.  The difference from <code>epa-decrypt-region</code> is that
+<code>epa-decrypt-armor-in-region</code> searches armors in the region
+and applies <code>epa-decrypt-region</code> to each of them.  That is, this
+command does not alter the original text around armors. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>epa-verify-region</b><var> start end<a name="index-epa_002dverify_002dregion-10"></a></var><br>
+<blockquote><p>Verify the current region between <var>start</var> and <var>end</var>.  It sends
+the verification result to the minibuffer or a popup window.  It
+replaces the region with the signed text. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>epa-verify-cleartext-in-region</b><var><a name="index-epa_002dverify_002dcleartext_002din_002dregion-11"></a></var><br>
+<blockquote><p>Verify OpenPGP cleartext blocks in the current region between
+<var>start</var> and <var>end</var>.  The difference from
+<code>epa-verify-region</code> is that <code>epa-verify-cleartext-in-region</code>
+searches OpenPGP cleartext blocks in the region and applies
+<code>epa-verify-region</code> to each of them.  That is, this command does
+not alter the original text around OpenPGP cleartext blocks. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>epa-sign-region</b><var> start end signers type<a name="index-epa_002dsign_002dregion-12"></a></var><br>
+<blockquote><p>Sign the current region between <var>start</var> and <var>end</var>.  By
+default, it creates a cleartext signature.  If a prefix argument is
+given, it will let you select signing keys, and then a signature
+type. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>epa-encrypt-region</b><var> start end recipients sign signers<a name="index-epa_002dencrypt_002dregion-13"></a></var><br>
+<blockquote><p>Encrypt the current region between <var>start</var> and <var>end</var>.  It will
+let you select recipients.  If a prefix argument is given, it will
+also ask you whether or not to sign the text before encryption and if
+you answered yes, it will let you select the signing keys. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Cryptographic-operations-on-files"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Dired-integration">Dired integration</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Cryptographic-operations-on-regions">Cryptographic operations on regions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Commands">Commands</a>
+
+</div>
+
+<h3 class="section">3.3 Cryptographic operations on files</h3>
+
+<div class="defun">
+&mdash; Command: <b>epa-decrypt-file</b><var> file &amp;optional output<a name="index-epa_002ddecrypt_002dfile-14"></a></var><br>
+<blockquote><p>Decrypt <var>file</var>.  If you do not specify the name <var>output</var> to
+use for the decrypted file, this function prompts for the value to use. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>epa-verify-file</b><var> file<a name="index-epa_002dverify_002dfile-15"></a></var><br>
+<blockquote><p>Verify <var>file</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>epa-sign-file</b><var> file signers type<a name="index-epa_002dsign_002dfile-16"></a></var><br>
+<blockquote><p>Sign <var>file</var>.  If a prefix argument is given, it will let you
+select signing keys, and then a signature type. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>epa-encrypt-file</b><var> file recipients<a name="index-epa_002dencrypt_002dfile-17"></a></var><br>
+<blockquote><p>Encrypt <var>file</var>.  It will let you select recipients. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Dired-integration"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Mail_002dmode-integration">Mail-mode integration</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Cryptographic-operations-on-files">Cryptographic operations on files</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Commands">Commands</a>
+
+</div>
+
+<h3 class="section">3.4 Dired integration</h3>
+
+<p>EasyPG Assistant extends Dired Mode for GNU Emacs to allow users to
+easily do cryptographic operations on files.  For example,
+
+<pre class="example">     M-x dired
+     (mark some files)
+     : e (or M-x epa-dired-do-encrypt)
+     (select recipients by 'm' and click [OK])
+</pre>
+   <p class="noindent">The following keys are assigned.
+
+     <dl>
+<dt><kbd>: d</kbd><dd><a name="index-g_t_0040kbd_007b_003a-d_007d-18"></a><a name="index-epa_002ddired_002ddo_002ddecrypt-19"></a>Decrypt marked files.
+
+     <br><dt><kbd>: v</kbd><dd><a name="index-g_t_0040kbd_007b_003a-v_007d-20"></a><a name="index-epa_002ddired_002ddo_002dverify-21"></a>Verify marked files.
+
+     <br><dt><kbd>: s</kbd><dd><a name="index-g_t_0040kbd_007b_003a-s_007d-22"></a><a name="index-epa_002ddired_002ddo_002dsign-23"></a>Sign marked files.
+
+     <br><dt><kbd>: e</kbd><dd><a name="index-g_t_0040kbd_007b_003a-e_007d-24"></a><a name="index-epa_002ddired_002ddo_002dencrypt-25"></a>Encrypt marked files.
+
+   </dl>
+
+<div class="node">
+<a name="Mail-mode-integration"></a>
+<a name="Mail_002dmode-integration"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Encrypting_002fdecrypting-gpg-files">Encrypting/decrypting gpg files</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Dired-integration">Dired integration</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Commands">Commands</a>
+
+</div>
+
+<h3 class="section">3.5 Mail-mode integration</h3>
+
+<p>EasyPG Assistant provides a minor mode <code>epa-mail-mode</code> to help
+user compose inline OpenPGP messages.  Inline OpenPGP is a traditional
+style of sending signed/encrypted emails by embedding raw OpenPGP
+blobs inside a message body, not using modern MIME format.
+
+   <p>NOTE: Inline OpenPGP is not recommended and you should consider to use
+PGP/MIME.  See
+<a href="http://josefsson.org/inline-openpgp-considered-harmful.html">Inline OpenPGP in E-mail is bad, Mm'kay?</a>.
+
+<p class="noindent">Once <code>epa-mail-mode</code> is enabled, the following keys are assigned. 
+You can do it by <kbd>C-u 1 M-x epa-mail-mode</kbd> or through the Customize
+interface.  Try <kbd>M-x customize-variable epa-global-mail-mode</kbd>.
+
+     <dl>
+<dt><kbd>C-c C-e C-d and C-c C-e d</kbd><dd><a name="index-g_t_0040kbd_007bC_002dc-C_002de-C_002dd_007d-26"></a><a name="index-g_t_0040kbd_007bC_002dc-C_002de-d_007d-27"></a><a name="index-epa_002dmail_002ddecrypt-28"></a>Decrypt OpenPGP armors in the current buffer.
+
+     <br><dt><kbd>C-c C-e C-v and C-c C-e v</kbd><dd><a name="index-g_t_0040kbd_007bC_002dc-C_002de-C_002dv_007d-29"></a><a name="index-g_t_0040kbd_007bC_002dc-C_002de-v_007d-30"></a><a name="index-epa_002dmail_002dverify-31"></a>Verify OpenPGP cleartext signed messages in the current buffer.
+
+     <br><dt><kbd>C-c C-e C-s and C-c C-e s</kbd><dd><a name="index-g_t_0040kbd_007bC_002dc-C_002de-C_002ds_007d-32"></a><a name="index-g_t_0040kbd_007bC_002dc-C_002de-s_007d-33"></a><a name="index-epa_002dmail_002dsign-34"></a>Compose a signed message from the current buffer.
+
+     <br><dt><kbd>C-c C-e C-e and C-c C-e e</kbd><dd><a name="index-g_t_0040kbd_007bC_002dc-C_002de-C_002de_007d-35"></a><a name="index-g_t_0040kbd_007bC_002dc-C_002de-e_007d-36"></a><a name="index-epa_002dmail_002dencrypt-37"></a><a name="index-epa_002dmail_002daliases-38"></a>Compose an encrypted message from the current buffer. 
+By default it tries to build the recipient list from &lsquo;<samp><span class="samp">to</span></samp>&rsquo;,
+&lsquo;<samp><span class="samp">cc</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">bcc</span></samp>&rsquo; fields of the mail header.  To include your
+key in the recipient list, use &lsquo;<samp><span class="samp">encrypt-to</span></samp>&rsquo; option in
+<samp><span class="file">~/.gnupg/gpg.conf</span></samp>.  This function translates recipient
+addresses using the <code>epa-mail-aliases</code> list.  You can also
+use that option to ignore specific recipients for encryption purposes.
+
+   </dl>
+
+<div class="node">
+<a name="Encrypting%2fdecrypting-gpg-files"></a>
+<a name="Encrypting_002fdecrypting-gpg-files"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Mail_002dmode-integration">Mail-mode integration</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Commands">Commands</a>
+
+</div>
+
+<h3 class="section">3.6 Encrypting/decrypting gpg files</h3>
+
+<p>By default, every file whose name ends with <samp><span class="file">.gpg</span></samp> will be
+treated as encrypted.  That is, when you open such a file, the
+decrypted text is inserted in the buffer rather than encrypted one. 
+Similarly, when you save the buffer to a <samp><span class="file">foo.gpg</span></samp> file,
+encrypted data is written.
+
+   <p>The file name pattern for encrypted files can be controlled by
+<var>epa-file-name-regexp</var>.
+
+<div class="defun">
+&mdash; Variable: <b>epa-file-name-regexp</b><var><a name="index-epa_002dfile_002dname_002dregexp-39"></a></var><br>
+<blockquote><p>Regexp which matches filenames treated as encrypted. 
+</p></blockquote></div>
+
+   <p>You can disable this behavior with <kbd>M-x epa-file-disable</kbd>, and
+then get it back with <kbd>M-x epa-file-enable</kbd>.
+
+<div class="defun">
+&mdash; Command: <b>epa-file-disable</b><var><a name="index-epa_002dfile_002ddisable-40"></a></var><br>
+<blockquote><p>Disable automatic encryption/decryption of *.gpg files. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>epa-file-enable</b><var><a name="index-epa_002dfile_002denable-41"></a></var><br>
+<blockquote><p>Enable automatic encryption/decryption of *.gpg files. 
+</p></blockquote></div>
+
+<p class="noindent">By default, <code>epa-file</code> will try to use symmetric encryption, aka
+password-based encryption.  If you want to use public key encryption
+instead, do <kbd>M-x epa-file-select-keys</kbd>, which pops up the key
+selection dialog.
+
+<div class="defun">
+&mdash; Command: <b>epa-file-select-keys</b><var><a name="index-epa_002dfile_002dselect_002dkeys-42"></a></var><br>
+<blockquote><p>Select recipient keys to encrypt the currently visiting file with
+public key encryption. 
+</p></blockquote></div>
+
+   <p>You can also change the default behavior with the variable
+<var>epa-file-select-keys</var>.
+
+<div class="defun">
+&mdash; Variable: <b>epa-file-select-keys</b><var><a name="index-epa_002dfile_002dselect_002dkeys-43"></a></var><br>
+<blockquote><p>Control whether or not to pop up the key selection dialog. 
+</p></blockquote></div>
+
+   <p>For frequently visited files, it might be a good idea to tell Emacs
+which encryption method should be used through See <a href="emacs.html#File-Variables">File Variables</a>.  Use the <code>epa-file-encrypt-to</code> local
+variable for this. 
+<a name="index-epa_002dfile_002dencrypt_002dto-44"></a>
+For example, if you want an Elisp file to be encrypted with a
+public key associated with an email address &lsquo;<samp><span class="samp">ueno@unixuser.org</span></samp>&rsquo;,
+add the following line to the beginning of the file.
+
+   <p><table class="cartouche" summary="cartouche" border="1"><tr><td>
+<pre class="lisp">     ;; -*- epa-file-encrypt-to: ("ueno@unixuser.org") -*-
+</pre>
+   </td></tr></table>
+
+   <p>Instead, if you want the file always (regardless of the value of the
+<code>epa-file-select-keys</code> variable) encrypted with symmetric
+encryption, change the line as follows.
+
+   <p><table class="cartouche" summary="cartouche" border="1"><tr><td>
+<pre class="lisp">     ;; -*- epa-file-encrypt-to: nil -*-
+</pre>
+   </td></tr></table>
+
+   <p>Other variables which control the automatic encryption/decryption
+behavior are below.
+
+<div class="defun">
+&mdash; Variable: <b>epa-file-cache-passphrase-for-symmetric-encryption</b><var><a name="index-epa_002dfile_002dcache_002dpassphrase_002dfor_002dsymmetric_002dencryption-45"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, cache passphrase for symmetric encryption.  The
+default value is <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>epa-file-inhibit-auto-save</b><var><a name="index-epa_002dfile_002dinhibit_002dauto_002dsave-46"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, disable auto-saving when opening an encrypted file. 
+The default value is <code>t</code>. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Caching-Passphrases"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Bug-Reports">Bug Reports</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Commands">Commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">4 Caching Passphrases</h2>
+
+<p>Typing passphrases is an irritating task if you frequently open and
+close the same file.  GnuPG and EasyPG Assistant provide mechanisms to
+remember your passphrases.  However, the configuration is a bit
+confusing since it depends on your GnuPG installation (GnuPG version 1 or
+GnuPG version 2), encryption method (symmetric or public key), and whether or
+not you want to use gpg-agent.  Here are some questions:
+
+     <ol type=1 start=1>
+<li>Do you use GnuPG version 2 instead of GnuPG version 1? 
+<li>Do you use symmetric encryption rather than public key encryption? 
+<li>Do you want to use gpg-agent?
+        </ol>
+
+   <p>Here are configurations depending on your answers:
+
+   <p><table summary=""><tr align="left"><td valign="top"><b>1</b> </td><td valign="top"><b>2</b> </td><td valign="top"><b>3</b> </td><td valign="top">Configuration
+<br></td></tr><tr align="left"><td valign="top">Yes </td><td valign="top">Yes </td><td valign="top">Yes </td><td valign="top">Set up gpg-agent. 
+<br></td></tr><tr align="left"><td valign="top">Yes </td><td valign="top">Yes </td><td valign="top">No </td><td valign="top">You can't, without gpg-agent. 
+<br></td></tr><tr align="left"><td valign="top">Yes </td><td valign="top">No </td><td valign="top">Yes </td><td valign="top">Set up gpg-agent. 
+<br></td></tr><tr align="left"><td valign="top">Yes </td><td valign="top">No </td><td valign="top">No </td><td valign="top">You can't, without gpg-agent. 
+<br></td></tr><tr align="left"><td valign="top">No </td><td valign="top">Yes </td><td valign="top">Yes </td><td valign="top">Set up elisp passphrase cache. 
+<br></td></tr><tr align="left"><td valign="top">No </td><td valign="top">Yes </td><td valign="top">No </td><td valign="top">Set up elisp passphrase cache. 
+<br></td></tr><tr align="left"><td valign="top">No </td><td valign="top">No </td><td valign="top">Yes </td><td valign="top">Set up gpg-agent. 
+<br></td></tr><tr align="left"><td valign="top">No </td><td valign="top">No </td><td valign="top">No </td><td valign="top">You can't, without gpg-agent.
+   <br></td></tr></table>
+
+   <p>To set up gpg-agent, follow the instruction in GnuPG manual. 
+see <a href="gnupg.html#Invoking-GPG_002dAGENT">Invoking GPG-AGENT</a>.
+
+   <p>To set up elisp passphrase cache, set
+<code>epa-file-cache-passphrase-for-symmetric-encryption</code>. 
+See <a href="#Encrypting_002fdecrypting-gpg-files">Encrypting/decrypting gpg files</a>.
+
+<div class="node">
+<a name="Bug-Reports"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Caching-Passphrases">Caching Passphrases</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">5 Bug Reports</h2>
+
+<p>Bugs and problems with EasyPG Assistant are actively worked on by the
+Emacs development team.  Feature requests and suggestions are also
+more than welcome.  Use <kbd>M-x report-emacs-bug</kbd>, see <a href="emacs.html#Bugs">Bugs</a>.
+
+   <p>When submitting a bug report, please try to describe in excruciating
+detail the steps required to reproduce the problem.  Also try to
+collect necessary information to fix the bug, such as:
+
+     <ul>
+<li>the GnuPG version.  Send the output of &lsquo;<samp><span class="samp">gpg --version</span></samp>&rsquo;. 
+<li>the GnuPG configuration.  Send the contents of <samp><span class="file">~/.gnupg/gpg.conf</span></samp>. 
+</ul>
+
+   <p>Before reporting the bug, you should set <code>epg-debug</code> in the
+<samp><span class="file">~/.emacs</span></samp> file and repeat the bug.  Then, include the contents
+of the <samp><span class="file"> *epg-debug*</span></samp> buffer.  Note that the first letter of the
+buffer name is a whitespace.
+
+<div class="node">
+<a name="GNU-Free-Documentation-License"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Key-Index">Key Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Bug-Reports">Bug Reports</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="appendix">Appendix A GNU Free Documentation License</h2>
+
+<!-- The GNU Free Documentation License. -->
+<div align="center">Version 1.3, 3 November 2008</div>
+
+<!-- This file is intended to be included within another document, -->
+<!-- hence no sectioning command or @node. -->
+<pre class="display">     Copyright &copy; 2000, 2001, 2002, 2007, 2008 Free Software Foundation, Inc.
+     <a href="http://fsf.org/">http://fsf.org/</a>
+     
+     Everyone is permitted to copy and distribute verbatim copies
+     of this license document, but changing it is not allowed.
+</pre>
+     <ol type=1 start=0>
+<li>PREAMBLE
+
+     <p>The purpose of this License is to make a manual, textbook, or other
+functional and useful document <dfn>free</dfn> in the sense of freedom: to
+assure everyone the effective freedom to copy and redistribute it,
+with or without modifying it, either commercially or noncommercially. 
+Secondarily, this License preserves for the author and publisher a way
+to get credit for their work, while not being considered responsible
+for modifications made by others.
+
+     <p>This License is a kind of &ldquo;copyleft&rdquo;, which means that derivative
+works of the document must themselves be free in the same sense.  It
+complements the GNU General Public License, which is a copyleft
+license designed for free software.
+
+     <p>We have designed this License in order to use it for manuals for free
+software, because free software needs free documentation: a free
+program should come with manuals providing the same freedoms that the
+software does.  But this License is not limited to software manuals;
+it can be used for any textual work, regardless of subject matter or
+whether it is published as a printed book.  We recommend this License
+principally for works whose purpose is instruction or reference.
+
+     <li>APPLICABILITY AND DEFINITIONS
+
+     <p>This License applies to any manual or other work, in any medium, that
+contains a notice placed by the copyright holder saying it can be
+distributed under the terms of this License.  Such a notice grants a
+world-wide, royalty-free license, unlimited in duration, to use that
+work under the conditions stated herein.  The &ldquo;Document&rdquo;, below,
+refers to any such manual or work.  Any member of the public is a
+licensee, and is addressed as &ldquo;you&rdquo;.  You accept the license if you
+copy, modify or distribute the work in a way requiring permission
+under copyright law.
+
+     <p>A &ldquo;Modified Version&rdquo; of the Document means any work containing the
+Document or a portion of it, either copied verbatim, or with
+modifications and/or translated into another language.
+
+     <p>A &ldquo;Secondary Section&rdquo; is a named appendix or a front-matter section
+of the Document that deals exclusively with the relationship of the
+publishers or authors of the Document to the Document's overall
+subject (or to related matters) and contains nothing that could fall
+directly within that overall subject.  (Thus, if the Document is in
+part a textbook of mathematics, a Secondary Section may not explain
+any mathematics.)  The relationship could be a matter of historical
+connection with the subject or with related matters, or of legal,
+commercial, philosophical, ethical or political position regarding
+them.
+
+     <p>The &ldquo;Invariant Sections&rdquo; are certain Secondary Sections whose titles
+are designated, as being those of Invariant Sections, in the notice
+that says that the Document is released under this License.  If a
+section does not fit the above definition of Secondary then it is not
+allowed to be designated as Invariant.  The Document may contain zero
+Invariant Sections.  If the Document does not identify any Invariant
+Sections then there are none.
+
+     <p>The &ldquo;Cover Texts&rdquo; are certain short passages of text that are listed,
+as Front-Cover Texts or Back-Cover Texts, in the notice that says that
+the Document is released under this License.  A Front-Cover Text may
+be at most 5 words, and a Back-Cover Text may be at most 25 words.
+
+     <p>A &ldquo;Transparent&rdquo; copy of the Document means a machine-readable copy,
+represented in a format whose specification is available to the
+general public, that is suitable for revising the document
+straightforwardly with generic text editors or (for images composed of
+pixels) generic paint programs or (for drawings) some widely available
+drawing editor, and that is suitable for input to text formatters or
+for automatic translation to a variety of formats suitable for input
+to text formatters.  A copy made in an otherwise Transparent file
+format whose markup, or absence of markup, has been arranged to thwart
+or discourage subsequent modification by readers is not Transparent. 
+An image format is not Transparent if used for any substantial amount
+of text.  A copy that is not &ldquo;Transparent&rdquo; is called &ldquo;Opaque&rdquo;.
+
+     <p>Examples of suitable formats for Transparent copies include plain
+ASCII without markup, Texinfo input format, LaTeX input
+format, SGML or XML using a publicly available
+DTD, and standard-conforming simple HTML,
+PostScript or PDF designed for human modification.  Examples
+of transparent image formats include PNG, XCF and
+JPG.  Opaque formats include proprietary formats that can be
+read and edited only by proprietary word processors, SGML or
+XML for which the DTD and/or processing tools are
+not generally available, and the machine-generated HTML,
+PostScript or PDF produced by some word processors for
+output purposes only.
+
+     <p>The &ldquo;Title Page&rdquo; means, for a printed book, the title page itself,
+plus such following pages as are needed to hold, legibly, the material
+this License requires to appear in the title page.  For works in
+formats which do not have any title page as such, &ldquo;Title Page&rdquo; means
+the text near the most prominent appearance of the work's title,
+preceding the beginning of the body of the text.
+
+     <p>The &ldquo;publisher&rdquo; means any person or entity that distributes copies
+of the Document to the public.
+
+     <p>A section &ldquo;Entitled XYZ&rdquo; means a named subunit of the Document whose
+title either is precisely XYZ or contains XYZ in parentheses following
+text that translates XYZ in another language.  (Here XYZ stands for a
+specific section name mentioned below, such as &ldquo;Acknowledgements&rdquo;,
+&ldquo;Dedications&rdquo;, &ldquo;Endorsements&rdquo;, or &ldquo;History&rdquo;.)  To &ldquo;Preserve the Title&rdquo;
+of such a section when you modify the Document means that it remains a
+section &ldquo;Entitled XYZ&rdquo; according to this definition.
+
+     <p>The Document may include Warranty Disclaimers next to the notice which
+states that this License applies to the Document.  These Warranty
+Disclaimers are considered to be included by reference in this
+License, but only as regards disclaiming warranties: any other
+implication that these Warranty Disclaimers may have is void and has
+no effect on the meaning of this License.
+
+     <li>VERBATIM COPYING
+
+     <p>You may copy and distribute the Document in any medium, either
+commercially or noncommercially, provided that this License, the
+copyright notices, and the license notice saying this License applies
+to the Document are reproduced in all copies, and that you add no other
+conditions whatsoever to those of this License.  You may not use
+technical measures to obstruct or control the reading or further
+copying of the copies you make or distribute.  However, you may accept
+compensation in exchange for copies.  If you distribute a large enough
+number of copies you must also follow the conditions in section 3.
+
+     <p>You may also lend copies, under the same conditions stated above, and
+you may publicly display copies.
+
+     <li>COPYING IN QUANTITY
+
+     <p>If you publish printed copies (or copies in media that commonly have
+printed covers) of the Document, numbering more than 100, and the
+Document's license notice requires Cover Texts, you must enclose the
+copies in covers that carry, clearly and legibly, all these Cover
+Texts: Front-Cover Texts on the front cover, and Back-Cover Texts on
+the back cover.  Both covers must also clearly and legibly identify
+you as the publisher of these copies.  The front cover must present
+the full title with all words of the title equally prominent and
+visible.  You may add other material on the covers in addition. 
+Copying with changes limited to the covers, as long as they preserve
+the title of the Document and satisfy these conditions, can be treated
+as verbatim copying in other respects.
+
+     <p>If the required texts for either cover are too voluminous to fit
+legibly, you should put the first ones listed (as many as fit
+reasonably) on the actual cover, and continue the rest onto adjacent
+pages.
+
+     <p>If you publish or distribute Opaque copies of the Document numbering
+more than 100, you must either include a machine-readable Transparent
+copy along with each Opaque copy, or state in or with each Opaque copy
+a computer-network location from which the general network-using
+public has access to download using public-standard network protocols
+a complete Transparent copy of the Document, free of added material. 
+If you use the latter option, you must take reasonably prudent steps,
+when you begin distribution of Opaque copies in quantity, to ensure
+that this Transparent copy will remain thus accessible at the stated
+location until at least one year after the last time you distribute an
+Opaque copy (directly or through your agents or retailers) of that
+edition to the public.
+
+     <p>It is requested, but not required, that you contact the authors of the
+Document well before redistributing any large number of copies, to give
+them a chance to provide you with an updated version of the Document.
+
+     <li>MODIFICATIONS
+
+     <p>You may copy and distribute a Modified Version of the Document under
+the conditions of sections 2 and 3 above, provided that you release
+the Modified Version under precisely this License, with the Modified
+Version filling the role of the Document, thus licensing distribution
+and modification of the Modified Version to whoever possesses a copy
+of it.  In addition, you must do these things in the Modified Version:
+
+          <ol type=A start=1>
+<li>Use in the Title Page (and on the covers, if any) a title distinct
+from that of the Document, and from those of previous versions
+(which should, if there were any, be listed in the History section
+of the Document).  You may use the same title as a previous version
+if the original publisher of that version gives permission.
+
+          <li>List on the Title Page, as authors, one or more persons or entities
+responsible for authorship of the modifications in the Modified
+Version, together with at least five of the principal authors of the
+Document (all of its principal authors, if it has fewer than five),
+unless they release you from this requirement.
+
+          <li>State on the Title page the name of the publisher of the
+Modified Version, as the publisher.
+
+          <li>Preserve all the copyright notices of the Document.
+
+          <li>Add an appropriate copyright notice for your modifications
+adjacent to the other copyright notices.
+
+          <li>Include, immediately after the copyright notices, a license notice
+giving the public permission to use the Modified Version under the
+terms of this License, in the form shown in the Addendum below.
+
+          <li>Preserve in that license notice the full lists of Invariant Sections
+and required Cover Texts given in the Document's license notice.
+
+          <li>Include an unaltered copy of this License.
+
+          <li>Preserve the section Entitled &ldquo;History&rdquo;, Preserve its Title, and add
+to it an item stating at least the title, year, new authors, and
+publisher of the Modified Version as given on the Title Page.  If
+there is no section Entitled &ldquo;History&rdquo; in the Document, create one
+stating the title, year, authors, and publisher of the Document as
+given on its Title Page, then add an item describing the Modified
+Version as stated in the previous sentence.
+
+          <li>Preserve the network location, if any, given in the Document for
+public access to a Transparent copy of the Document, and likewise
+the network locations given in the Document for previous versions
+it was based on.  These may be placed in the &ldquo;History&rdquo; section. 
+You may omit a network location for a work that was published at
+least four years before the Document itself, or if the original
+publisher of the version it refers to gives permission.
+
+          <li>For any section Entitled &ldquo;Acknowledgements&rdquo; or &ldquo;Dedications&rdquo;, Preserve
+the Title of the section, and preserve in the section all the
+substance and tone of each of the contributor acknowledgements and/or
+dedications given therein.
+
+          <li>Preserve all the Invariant Sections of the Document,
+unaltered in their text and in their titles.  Section numbers
+or the equivalent are not considered part of the section titles.
+
+          <li>Delete any section Entitled &ldquo;Endorsements&rdquo;.  Such a section
+may not be included in the Modified Version.
+
+          <li>Do not retitle any existing section to be Entitled &ldquo;Endorsements&rdquo; or
+to conflict in title with any Invariant Section.
+
+          <li>Preserve any Warranty Disclaimers.
+          </ol>
+
+     <p>If the Modified Version includes new front-matter sections or
+appendices that qualify as Secondary Sections and contain no material
+copied from the Document, you may at your option designate some or all
+of these sections as invariant.  To do this, add their titles to the
+list of Invariant Sections in the Modified Version's license notice. 
+These titles must be distinct from any other section titles.
+
+     <p>You may add a section Entitled &ldquo;Endorsements&rdquo;, provided it contains
+nothing but endorsements of your Modified Version by various
+parties&mdash;for example, statements of peer review or that the text has
+been approved by an organization as the authoritative definition of a
+standard.
+
+     <p>You may add a passage of up to five words as a Front-Cover Text, and a
+passage of up to 25 words as a Back-Cover Text, to the end of the list
+of Cover Texts in the Modified Version.  Only one passage of
+Front-Cover Text and one of Back-Cover Text may be added by (or
+through arrangements made by) any one entity.  If the Document already
+includes a cover text for the same cover, previously added by you or
+by arrangement made by the same entity you are acting on behalf of,
+you may not add another; but you may replace the old one, on explicit
+permission from the previous publisher that added the old one.
+
+     <p>The author(s) and publisher(s) of the Document do not by this License
+give permission to use their names for publicity for or to assert or
+imply endorsement of any Modified Version.
+
+     <li>COMBINING DOCUMENTS
+
+     <p>You may combine the Document with other documents released under this
+License, under the terms defined in section 4 above for modified
+versions, provided that you include in the combination all of the
+Invariant Sections of all of the original documents, unmodified, and
+list them all as Invariant Sections of your combined work in its
+license notice, and that you preserve all their Warranty Disclaimers.
+
+     <p>The combined work need only contain one copy of this License, and
+multiple identical Invariant Sections may be replaced with a single
+copy.  If there are multiple Invariant Sections with the same name but
+different contents, make the title of each such section unique by
+adding at the end of it, in parentheses, the name of the original
+author or publisher of that section if known, or else a unique number. 
+Make the same adjustment to the section titles in the list of
+Invariant Sections in the license notice of the combined work.
+
+     <p>In the combination, you must combine any sections Entitled &ldquo;History&rdquo;
+in the various original documents, forming one section Entitled
+&ldquo;History&rdquo;; likewise combine any sections Entitled &ldquo;Acknowledgements&rdquo;,
+and any sections Entitled &ldquo;Dedications&rdquo;.  You must delete all
+sections Entitled &ldquo;Endorsements.&rdquo;
+
+     <li>COLLECTIONS OF DOCUMENTS
+
+     <p>You may make a collection consisting of the Document and other documents
+released under this License, and replace the individual copies of this
+License in the various documents with a single copy that is included in
+the collection, provided that you follow the rules of this License for
+verbatim copying of each of the documents in all other respects.
+
+     <p>You may extract a single document from such a collection, and distribute
+it individually under this License, provided you insert a copy of this
+License into the extracted document, and follow this License in all
+other respects regarding verbatim copying of that document.
+
+     <li>AGGREGATION WITH INDEPENDENT WORKS
+
+     <p>A compilation of the Document or its derivatives with other separate
+and independent documents or works, in or on a volume of a storage or
+distribution medium, is called an &ldquo;aggregate&rdquo; if the copyright
+resulting from the compilation is not used to limit the legal rights
+of the compilation's users beyond what the individual works permit. 
+When the Document is included in an aggregate, this License does not
+apply to the other works in the aggregate which are not themselves
+derivative works of the Document.
+
+     <p>If the Cover Text requirement of section 3 is applicable to these
+copies of the Document, then if the Document is less than one half of
+the entire aggregate, the Document's Cover Texts may be placed on
+covers that bracket the Document within the aggregate, or the
+electronic equivalent of covers if the Document is in electronic form. 
+Otherwise they must appear on printed covers that bracket the whole
+aggregate.
+
+     <li>TRANSLATION
+
+     <p>Translation is considered a kind of modification, so you may
+distribute translations of the Document under the terms of section 4. 
+Replacing Invariant Sections with translations requires special
+permission from their copyright holders, but you may include
+translations of some or all Invariant Sections in addition to the
+original versions of these Invariant Sections.  You may include a
+translation of this License, and all the license notices in the
+Document, and any Warranty Disclaimers, provided that you also include
+the original English version of this License and the original versions
+of those notices and disclaimers.  In case of a disagreement between
+the translation and the original version of this License or a notice
+or disclaimer, the original version will prevail.
+
+     <p>If a section in the Document is Entitled &ldquo;Acknowledgements&rdquo;,
+&ldquo;Dedications&rdquo;, or &ldquo;History&rdquo;, the requirement (section 4) to Preserve
+its Title (section 1) will typically require changing the actual
+title.
+
+     <li>TERMINATION
+
+     <p>You may not copy, modify, sublicense, or distribute the Document
+except as expressly provided under this License.  Any attempt
+otherwise to copy, modify, sublicense, or distribute it is void, and
+will automatically terminate your rights under this License.
+
+     <p>However, if you cease all violation of this License, then your license
+from a particular copyright holder is reinstated (a) provisionally,
+unless and until the copyright holder explicitly and finally
+terminates your license, and (b) permanently, if the copyright holder
+fails to notify you of the violation by some reasonable means prior to
+60 days after the cessation.
+
+     <p>Moreover, your license from a particular copyright holder is
+reinstated permanently if the copyright holder notifies you of the
+violation by some reasonable means, this is the first time you have
+received notice of violation of this License (for any work) from that
+copyright holder, and you cure the violation prior to 30 days after
+your receipt of the notice.
+
+     <p>Termination of your rights under this section does not terminate the
+licenses of parties who have received copies or rights from you under
+this License.  If your rights have been terminated and not permanently
+reinstated, receipt of a copy of some or all of the same material does
+not give you any rights to use it.
+
+     <li>FUTURE REVISIONS OF THIS LICENSE
+
+     <p>The Free Software Foundation may publish new, revised versions
+of the GNU Free Documentation License from time to time.  Such new
+versions will be similar in spirit to the present version, but may
+differ in detail to address new problems or concerns.  See
+<a href="http://www.gnu.org/copyleft/">http://www.gnu.org/copyleft/</a>.
+
+     <p>Each version of the License is given a distinguishing version number. 
+If the Document specifies that a particular numbered version of this
+License &ldquo;or any later version&rdquo; applies to it, you have the option of
+following the terms and conditions either of that specified version or
+of any later version that has been published (not as a draft) by the
+Free Software Foundation.  If the Document does not specify a version
+number of this License, you may choose any version ever published (not
+as a draft) by the Free Software Foundation.  If the Document
+specifies that a proxy can decide which future versions of this
+License can be used, that proxy's public statement of acceptance of a
+version permanently authorizes you to choose that version for the
+Document.
+
+     <li>RELICENSING
+
+     <p>&ldquo;Massive Multiauthor Collaboration Site&rdquo; (or &ldquo;MMC Site&rdquo;) means any
+World Wide Web server that publishes copyrightable works and also
+provides prominent facilities for anybody to edit those works.  A
+public wiki that anybody can edit is an example of such a server.  A
+&ldquo;Massive Multiauthor Collaboration&rdquo; (or &ldquo;MMC&rdquo;) contained in the
+site means any set of copyrightable works thus published on the MMC
+site.
+
+     <p>&ldquo;CC-BY-SA&rdquo; means the Creative Commons Attribution-Share Alike 3.0
+license published by Creative Commons Corporation, a not-for-profit
+corporation with a principal place of business in San Francisco,
+California, as well as future copyleft versions of that license
+published by that same organization.
+
+     <p>&ldquo;Incorporate&rdquo; means to publish or republish a Document, in whole or
+in part, as part of another Document.
+
+     <p>An MMC is &ldquo;eligible for relicensing&rdquo; if it is licensed under this
+License, and if all works that were first published under this License
+somewhere other than this MMC, and subsequently incorporated in whole
+or in part into the MMC, (1) had no cover texts or invariant sections,
+and (2) were thus incorporated prior to November 1, 2008.
+
+     <p>The operator of an MMC Site may republish an MMC contained in the site
+under CC-BY-SA on the same site at any time before August 1, 2009,
+provided the MMC is eligible for relicensing.
+
+        </ol>
+
+<h3 class="heading">ADDENDUM: How to use this License for your documents</h3>
+
+<p>To use this License in a document you have written, include a copy of
+the License in the document and put the following copyright and
+license notices just after the title page:
+
+<pre class="smallexample">       Copyright (C)  <var>year</var>  <var>your name</var>.
+       Permission is granted to copy, distribute and/or modify this document
+       under the terms of the GNU Free Documentation License, Version 1.3
+       or any later version published by the Free Software Foundation;
+       with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+       Texts.  A copy of the license is included in the section entitled ``GNU
+       Free Documentation License''.
+</pre>
+   <p>If you have Invariant Sections, Front-Cover Texts and Back-Cover Texts,
+replace the &ldquo;with<small class="dots">...</small>Texts.&rdquo; line with this:
+
+<pre class="smallexample">         with the Invariant Sections being <var>list their titles</var>, with
+         the Front-Cover Texts being <var>list</var>, and with the Back-Cover Texts
+         being <var>list</var>.
+</pre>
+   <p>If you have Invariant Sections without Cover Texts, or some other
+combination of the three, merge those two alternatives to suit the
+situation.
+
+   <p>If your document contains nontrivial examples of program code, we
+recommend releasing these examples in parallel under your choice of
+free software license, such as the GNU General Public License,
+to permit their use in free software.
+
+<!-- Local Variables: -->
+<!-- ispell-local-pdict: "ispell-dict" -->
+<!-- End: -->
+<div class="node">
+<a name="Key-Index"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Function-Index">Function Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="unnumbered">Key Index</h2>
+
+<ul class="index-ky" compact>
+<li><a href="#index-g_t_0040kbd_007b_003a-d_007d-18"><kbd>: d</kbd></a>: <a href="#Dired-integration">Dired integration</a></li>
+<li><a href="#index-g_t_0040kbd_007b_003a-e_007d-24"><kbd>: e</kbd></a>: <a href="#Dired-integration">Dired integration</a></li>
+<li><a href="#index-g_t_0040kbd_007b_003a-s_007d-22"><kbd>: s</kbd></a>: <a href="#Dired-integration">Dired integration</a></li>
+<li><a href="#index-g_t_0040kbd_007b_003a-v_007d-20"><kbd>: v</kbd></a>: <a href="#Dired-integration">Dired integration</a></li>
+<li><a href="#index-g_t_0040kbd_007bC_002dc-C_002de-C_002dd_007d-26"><kbd>C-c C-e C-d</kbd></a>: <a href="#Mail_002dmode-integration">Mail-mode integration</a></li>
+<li><a href="#index-g_t_0040kbd_007bC_002dc-C_002de-C_002de_007d-35"><kbd>C-c C-e C-e</kbd></a>: <a href="#Mail_002dmode-integration">Mail-mode integration</a></li>
+<li><a href="#index-g_t_0040kbd_007bC_002dc-C_002de-C_002ds_007d-32"><kbd>C-c C-e C-s</kbd></a>: <a href="#Mail_002dmode-integration">Mail-mode integration</a></li>
+<li><a href="#index-g_t_0040kbd_007bC_002dc-C_002de-C_002dv_007d-29"><kbd>C-c C-e C-v</kbd></a>: <a href="#Mail_002dmode-integration">Mail-mode integration</a></li>
+<li><a href="#index-g_t_0040kbd_007bC_002dc-C_002de-d_007d-27"><kbd>C-c C-e d</kbd></a>: <a href="#Mail_002dmode-integration">Mail-mode integration</a></li>
+<li><a href="#index-g_t_0040kbd_007bC_002dc-C_002de-e_007d-36"><kbd>C-c C-e e</kbd></a>: <a href="#Mail_002dmode-integration">Mail-mode integration</a></li>
+<li><a href="#index-g_t_0040kbd_007bC_002dc-C_002de-s_007d-33"><kbd>C-c C-e s</kbd></a>: <a href="#Mail_002dmode-integration">Mail-mode integration</a></li>
+<li><a href="#index-g_t_0040kbd_007bC_002dc-C_002de-v_007d-30"><kbd>C-c C-e v</kbd></a>: <a href="#Mail_002dmode-integration">Mail-mode integration</a></li>
+   </ul><div class="node">
+<a name="Function-Index"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Variable-Index">Variable Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Key-Index">Key Index</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="unnumbered">Function Index</h2>
+
+
+
+<ul class="index-fn" compact>
+<li><a href="#index-epa_002ddecrypt_002darmor_002din_002dregion-9"><code>epa-decrypt-armor-in-region</code></a>: <a href="#Cryptographic-operations-on-regions">Cryptographic operations on regions</a></li>
+<li><a href="#index-epa_002ddecrypt_002dfile-14"><code>epa-decrypt-file</code></a>: <a href="#Cryptographic-operations-on-files">Cryptographic operations on files</a></li>
+<li><a href="#index-epa_002ddecrypt_002dregion-8"><code>epa-decrypt-region</code></a>: <a href="#Cryptographic-operations-on-regions">Cryptographic operations on regions</a></li>
+<li><a href="#index-epa_002ddelete_002dkeys-7"><code>epa-delete-keys</code></a>: <a href="#Key-management">Key management</a></li>
+<li><a href="#index-epa_002ddired_002ddo_002ddecrypt-19"><code>epa-dired-do-decrypt</code></a>: <a href="#Dired-integration">Dired integration</a></li>
+<li><a href="#index-epa_002ddired_002ddo_002dencrypt-25"><code>epa-dired-do-encrypt</code></a>: <a href="#Dired-integration">Dired integration</a></li>
+<li><a href="#index-epa_002ddired_002ddo_002dsign-23"><code>epa-dired-do-sign</code></a>: <a href="#Dired-integration">Dired integration</a></li>
+<li><a href="#index-epa_002ddired_002ddo_002dverify-21"><code>epa-dired-do-verify</code></a>: <a href="#Dired-integration">Dired integration</a></li>
+<li><a href="#index-epa_002dencrypt_002dfile-17"><code>epa-encrypt-file</code></a>: <a href="#Cryptographic-operations-on-files">Cryptographic operations on files</a></li>
+<li><a href="#index-epa_002dencrypt_002dregion-13"><code>epa-encrypt-region</code></a>: <a href="#Cryptographic-operations-on-regions">Cryptographic operations on regions</a></li>
+<li><a href="#index-epa_002dfile_002ddisable-40"><code>epa-file-disable</code></a>: <a href="#Encrypting_002fdecrypting-gpg-files">Encrypting/decrypting gpg files</a></li>
+<li><a href="#index-epa_002dfile_002denable-41"><code>epa-file-enable</code></a>: <a href="#Encrypting_002fdecrypting-gpg-files">Encrypting/decrypting gpg files</a></li>
+<li><a href="#index-epa_002dfile_002dselect_002dkeys-42"><code>epa-file-select-keys</code></a>: <a href="#Encrypting_002fdecrypting-gpg-files">Encrypting/decrypting gpg files</a></li>
+<li><a href="#index-epa_002dimport_002darmor_002din_002dregion-6"><code>epa-import-armor-in-region</code></a>: <a href="#Key-management">Key management</a></li>
+<li><a href="#index-epa_002dimport_002dkeys-4"><code>epa-import-keys</code></a>: <a href="#Key-management">Key management</a></li>
+<li><a href="#index-epa_002dimport_002dkeys_002dregion-5"><code>epa-import-keys-region</code></a>: <a href="#Key-management">Key management</a></li>
+<li><a href="#index-epa_002dinsert_002dkeys-3"><code>epa-insert-keys</code></a>: <a href="#Key-management">Key management</a></li>
+<li><a href="#index-epa_002dlist_002dkeys-1"><code>epa-list-keys</code></a>: <a href="#Key-management">Key management</a></li>
+<li><a href="#index-epa_002dlist_002dsecret_002dkeys-2"><code>epa-list-secret-keys</code></a>: <a href="#Key-management">Key management</a></li>
+<li><a href="#index-epa_002dmail_002ddecrypt-28"><code>epa-mail-decrypt</code></a>: <a href="#Mail_002dmode-integration">Mail-mode integration</a></li>
+<li><a href="#index-epa_002dmail_002dencrypt-37"><code>epa-mail-encrypt</code></a>: <a href="#Mail_002dmode-integration">Mail-mode integration</a></li>
+<li><a href="#index-epa_002dmail_002dsign-34"><code>epa-mail-sign</code></a>: <a href="#Mail_002dmode-integration">Mail-mode integration</a></li>
+<li><a href="#index-epa_002dmail_002dverify-31"><code>epa-mail-verify</code></a>: <a href="#Mail_002dmode-integration">Mail-mode integration</a></li>
+<li><a href="#index-epa_002dsign_002dfile-16"><code>epa-sign-file</code></a>: <a href="#Cryptographic-operations-on-files">Cryptographic operations on files</a></li>
+<li><a href="#index-epa_002dsign_002dregion-12"><code>epa-sign-region</code></a>: <a href="#Cryptographic-operations-on-regions">Cryptographic operations on regions</a></li>
+<li><a href="#index-epa_002dverify_002dcleartext_002din_002dregion-11"><code>epa-verify-cleartext-in-region</code></a>: <a href="#Cryptographic-operations-on-regions">Cryptographic operations on regions</a></li>
+<li><a href="#index-epa_002dverify_002dfile-15"><code>epa-verify-file</code></a>: <a href="#Cryptographic-operations-on-files">Cryptographic operations on files</a></li>
+<li><a href="#index-epa_002dverify_002dregion-10"><code>epa-verify-region</code></a>: <a href="#Cryptographic-operations-on-regions">Cryptographic operations on regions</a></li>
+   </ul><div class="node">
+<a name="Variable-Index"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Function-Index">Function Index</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="unnumbered">Variable Index</h2>
+
+
+
+<ul class="index-vr" compact>
+<li><a href="#index-epa_002dfile_002dcache_002dpassphrase_002dfor_002dsymmetric_002dencryption-45"><code>epa-file-cache-passphrase-for-symmetric-encryption</code></a>: <a href="#Encrypting_002fdecrypting-gpg-files">Encrypting/decrypting gpg files</a></li>
+<li><a href="#index-epa_002dfile_002dencrypt_002dto-44"><code>epa-file-encrypt-to</code></a>: <a href="#Encrypting_002fdecrypting-gpg-files">Encrypting/decrypting gpg files</a></li>
+<li><a href="#index-epa_002dfile_002dinhibit_002dauto_002dsave-46"><code>epa-file-inhibit-auto-save</code></a>: <a href="#Encrypting_002fdecrypting-gpg-files">Encrypting/decrypting gpg files</a></li>
+<li><a href="#index-epa_002dfile_002dname_002dregexp-39"><code>epa-file-name-regexp</code></a>: <a href="#Encrypting_002fdecrypting-gpg-files">Encrypting/decrypting gpg files</a></li>
+<li><a href="#index-epa_002dfile_002dselect_002dkeys-43"><code>epa-file-select-keys</code></a>: <a href="#Encrypting_002fdecrypting-gpg-files">Encrypting/decrypting gpg files</a></li>
+<li><a href="#index-epa_002dmail_002daliases-38"><code>epa-mail-aliases</code></a>: <a href="#Mail_002dmode-integration">Mail-mode integration</a></li>
+   </ul></body></html>
+
+<!--
+
+Local Variables:
+coding: utf-8
+End:
+
+-->

@@ -11,16 +11,16 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Manual',
-updated for Emacs version 24.3.50.
+updated for Emacs version 25.0.50.
 
-Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``The GNU
      Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     with the Front-Cover Texts being ``A GNU Manual,'' and with the
      Back-Cover Texts as in (a) below.  A copy of the license is
      included in the section entitled ``GNU Free Documentation
      License.''
@@ -52,7 +52,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
 <br><dt><kbd>C-Mouse-2</kbd><dd>In the mode line of a window, split that window. 
 </dl>
 
-   <p><a name="index-C_002dx-2-1371"></a><a name="index-split_002dwindow_002dbelow-1372"></a>  <kbd>C-x 2</kbd> (<code>split-window-below</code>) splits the selected window
+   <p><a name="index-C_002dx-2-1422"></a><a name="index-split_002dwindow_002dbelow-1423"></a>  <kbd>C-x 2</kbd> (<code>split-window-below</code>) splits the selected window
 into two windows, one above the other.  After splitting, the selected
 window is the upper one, and the newly split-off window is below. 
 Both windows have the same value of point as before, and display the
@@ -63,7 +63,7 @@ window.  A positive numeric argument specifies how many lines to give
 to the top window; a negative numeric argument specifies how many
 lines to give to the bottom window.
 
-   <p><a name="index-split_002dwindow_002dkeep_002dpoint-1373"></a>  If you change the variable <code>split-window-keep-point</code> to
+   <p><a name="index-split_002dwindow_002dkeep_002dpoint-1424"></a>  If you change the variable <code>split-window-keep-point</code> to
 <code>nil</code>, <kbd>C-x 2</kbd> instead adjusts the portion of the buffer
 displayed by the two windows, as well as the value of point in each
 window, in order to keep the text on the screen as close as possible
@@ -71,14 +71,14 @@ to what it was before; furthermore, if point was in the lower half of
 the original window, the bottom window is selected instead of the
 upper one.
 
-   <p><a name="index-C_002dx-3-1374"></a><a name="index-split_002dwindow_002dright-1375"></a>  <kbd>C-x 3</kbd> (<code>split-window-right</code>) splits the selected window
+   <p><a name="index-C_002dx-3-1425"></a><a name="index-split_002dwindow_002dright-1426"></a>  <kbd>C-x 3</kbd> (<code>split-window-right</code>) splits the selected window
 into two side-by-side windows.  The left window is the selected one;
 the right window displays the same portion of the same buffer, and has
 the same value of point.  A positive numeric argument specifies how
 many columns to give the left window; a negative numeric argument
 specifies how many columns to give the right window.
 
-   <p><a name="index-truncate_002dpartial_002dwidth_002dwindows-1376"></a>  When you split a window with <kbd>C-x 3</kbd>, each resulting window
+   <p><a name="index-truncate_002dpartial_002dwidth_002dwindows-1427"></a>  When you split a window with <kbd>C-x 3</kbd>, each resulting window
 occupies less than the full width of the frame.  If it becomes too
 narrow, the buffer may be difficult to read if continuation lines are
 in use (see <a href="Continuation-Lines.html#Continuation-Lines">Continuation Lines</a>).  Therefore, Emacs automatically
@@ -96,12 +96,23 @@ lines in every partial-width window regardless of its width.
    <p>On text terminals, side-by-side windows are separated by a vertical
 divider which is drawn using the <code>vertical-border</code> face.
 
-   <p><a name="index-C_002dMouse_002d2-_0040r_007b_0028mode-line_0029_007d-1377"></a><a name="index-C_002dMouse_002d2-_0040r_007b_0028scroll-bar_0029_007d-1378"></a>  If you click <kbd>C-Mouse-2</kbd> in the mode line of a window, that
+   <p><a name="index-C_002dMouse_002d2-_0040r_007b_0028mode-line_0029_007d-1428"></a><a name="index-C_002dMouse_002d2-_0040r_007b_0028scroll-bar_0029_007d-1429"></a>  If you click <kbd>C-Mouse-2</kbd> in the mode line of a window, that
 splits the window, putting a vertical divider where you click. 
 Depending on how Emacs is compiled, you can also split a window by
 clicking <kbd>C-Mouse-2</kbd> in the scroll bar, which puts a horizontal
 divider where you click (this feature does not work when Emacs uses
 GTK+ scroll bars).
+
+   <p><a name="index-window_002dresize_002dpixelwise-1430"></a>  By default, when you split a window, Emacs gives each of the
+resulting windows dimensions that are an integral multiple of the
+default font size of the frame.  That might subdivide the screen
+estate unevenly between the resulting windows.  If you set the
+variable <code>window-resize-pixelwise</code> to a non-<code>nil</code> value,
+Emacs will give each window the same number of pixels (give or take
+one pixel if the initial dimension was an odd number of pixels).  Note
+that when a frame's pixel size is not a multiple of the frame's
+character size, at least one window may get resized pixelwise even if
+this option is <code>nil</code>.
 
    </body></html>
 

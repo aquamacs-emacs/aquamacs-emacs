@@ -6,20 +6,20 @@
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Display.html#Display" title="Display">
-<link rel="prev" href="Width.html#Width" title="Width">
+<link rel="prev" href="Size-of-Displayed-Text.html#Size-of-Displayed-Text" title="Size of Displayed Text">
 <link rel="next" href="Faces.html#Faces" title="Faces">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -36,31 +36,31 @@ Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 <a name="Line-Height"></a>
 <p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Faces.html#Faces">Faces</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Width.html#Width">Width</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Size-of-Displayed-Text.html#Size-of-Displayed-Text">Size of Displayed Text</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
 <hr>
 </div>
 
-<h3 class="section">38.11 Line Height</h3>
+<h3 class="section">37.11 Line Height</h3>
 
-<p><a name="index-line-height-3792"></a><a name="index-height-of-a-line-3793"></a>
+<p><a name="index-line-height-4160"></a><a name="index-height-of-a-line-4161"></a>
   The total height of each display line consists of the height of the
 contents of the line, plus optional additional vertical line spacing
 above or below the display line.
 
-   <p>The height of the line contents is the maximum height of any
-character or image on that display line, including the final newline
-if there is one.  (A display line that is continued doesn't include a
-final newline.)  That is the default line height, if you do nothing to
-specify a greater height.  (In the most common case, this equals the
-height of the default frame font.)
+   <p>The height of the line contents is the maximum height of any character
+or image on that display line, including the final newline if there is
+one.  (A display line that is continued doesn't include a final
+newline.)  That is the default line height, if you do nothing to specify
+a greater height.  (In the most common case, this equals the height of
+the corresponding frame's default font, see <a href="Frame-Font.html#Frame-Font">Frame Font</a>.)
 
    <p>There are several ways to explicitly specify a larger line height,
 either by specifying an absolute height for the display line, or by
 specifying vertical space.  However, no matter what you specify, the
 actual line height can never be less than the default.
 
-   <p><a name="index-line_002dheight-_0040r_007b_0028text-property_0029_007d-3794"></a>  A newline can have a <code>line-height</code> text or overlay property
+   <p><a name="index-line_002dheight-_0040r_007b_0028text-property_0029_007d-4162"></a>  A newline can have a <code>line-height</code> text or overlay property
 that controls the total height of the display line ending in that
 newline.
 
@@ -76,7 +76,7 @@ First Emacs uses <var>height</var> as a height spec to control extra space
 to bring the total line height up to <var>total</var>.  In this case, the
 other ways to specify the line spacing are ignored.
 
-   <p><a name="index-height-spec-3795"></a>  Any other kind of property value is a height spec, which translates
+   <p><a name="index-height-spec-4163"></a>  Any other kind of property value is a height spec, which translates
 into a number&mdash;the specified line height.  There are several ways to
 write a height spec; here's how each of them translates into a number:
 
@@ -106,17 +106,17 @@ parts of Emacs text.
 lines in a frame, using the <code>line-spacing</code> frame parameter
 (see <a href="Layout-Parameters.html#Layout-Parameters">Layout Parameters</a>).  However, if the default value of
 <code>line-spacing</code> is non-<code>nil</code>, it overrides the
-frame's <code>line-spacing</code> parameter.  An integer value specifies the
-number of pixels put below lines.  A floating point number specifies
+frame's <code>line-spacing</code> parameter.  An integer specifies the
+number of pixels put below lines.  A floating-point number specifies
 the spacing relative to the frame's default line height.
 
-   <p><a name="index-line_002dspacing-3796"></a>  You can specify the line spacing for all lines in a buffer via the
-buffer-local <code>line-spacing</code> variable.  An integer value specifies
-the number of pixels put below lines.  A floating point number
+   <p><a name="index-line_002dspacing-4164"></a>  You can specify the line spacing for all lines in a buffer via the
+buffer-local <code>line-spacing</code> variable.  An integer specifies
+the number of pixels put below lines.  A floating-point number
 specifies the spacing relative to the default frame line height.  This
 overrides line spacings specified for the frame.
 
-   <p><a name="index-line_002dspacing-_0040r_007b_0028text-property_0029_007d-3797"></a>  Finally, a newline can have a <code>line-spacing</code> text or overlay
+   <p><a name="index-line_002dspacing-_0040r_007b_0028text-property_0029_007d-4165"></a>  Finally, a newline can have a <code>line-spacing</code> text or overlay
 property that overrides the default frame line spacing and the buffer
 local <code>line-spacing</code> variable, for the display line ending in
 that newline.

@@ -10,15 +10,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -46,7 +46,7 @@ binding is enabled if the buffer-local variable <code>lexical-binding</code>
 is non-<code>nil</code>:
 
 <div class="defun">
-&mdash; Variable: <b>lexical-binding</b><var><a name="index-lexical_002dbinding-648"></a></var><br>
+&mdash; Variable: <b>lexical-binding</b><var><a name="index-lexical_002dbinding-749"></a></var><br>
 <blockquote><p>If this buffer-local variable is non-<code>nil</code>, Emacs Lisp files and
 buffers are evaluated using lexical binding instead of dynamic
 binding.  (However, special variables are still dynamically bound; see
@@ -61,7 +61,7 @@ first line of a file.
 lexical binding is enabled if the <var>lexical</var> argument to
 <code>eval</code> is non-<code>nil</code>.  See <a href="Eval.html#Eval">Eval</a>.
 
-   <p><a name="index-special-variables-649"></a>  Even when lexical binding is enabled, certain variables will
+   <p><a name="index-special-variables-750"></a>  Even when lexical binding is enabled, certain variables will
 continue to be dynamically bound.  These are called <dfn>special
 variables</dfn>.  Every variable that has been defined with <code>defvar</code>,
 <code>defcustom</code> or <code>defconst</code> is a special variable
@@ -69,7 +69,7 @@ variables</dfn>.  Every variable that has been defined with <code>defvar</code>,
 lexical binding.
 
 <div class="defun">
-&mdash; Function: <b>special-variable-p</b><var> symbol<a name="index-special_002dvariable_002dp-650"></a></var><br>
+&mdash; Function: <b>special-variable-p</b><var> symbol<a name="index-special_002dvariable_002dp-751"></a></var><br>
 <blockquote><p>This function returns non-<code>nil</code> if <var>symbol</var> is a special
 variable (i.e., it has a <code>defvar</code>, <code>defcustom</code>, or
 <code>defconst</code> variable definition).  Otherwise, the return value is
@@ -81,19 +81,19 @@ discouraged.  Doing so gives rise to unspecified behavior when lexical
 binding mode is enabled (it may use lexical binding sometimes, and
 dynamic binding other times).
 
-   <p>Converting an Emacs Lisp program to lexical binding is pretty easy. 
-First, add a file-local variable setting of <code>lexical-binding</code> to
-<code>t</code> in the Emacs Lisp source file.  Second, check that every
-variable in the program which needs to be dynamically bound has a
-variable definition, so that it is not inadvertently bound lexically.
+   <p>Converting an Emacs Lisp program to lexical binding is easy.  First,
+add a file-local variable setting of <code>lexical-binding</code> to
+<code>t</code> in the header line of the Emacs Lisp source file (see <a href="File-Local-Variables.html#File-Local-Variables">File Local Variables</a>).  Second, check that every variable in the program
+which needs to be dynamically bound has a variable definition, so that
+it is not inadvertently bound lexically.
 
-   <p>A simple way to find out which variables need a variable definition
+   <p><a name="index-free-variable-752"></a><a name="index-unused-lexical-variable-753"></a>  A simple way to find out which variables need a variable definition
 is to byte-compile the source file.  See <a href="Byte-Compilation.html#Byte-Compilation">Byte Compilation</a>.  If a
 non-special variable is used outside of a <code>let</code> form, the
-byte-compiler will warn about reference or assignment to a &ldquo;free
-variable&rdquo;.  If a non-special variable is bound but not used within a
-<code>let</code> form, the byte-compiler will warn about an &ldquo;unused lexical
-variable&rdquo;.  The byte-compiler will also issue a warning if you use a
+byte-compiler will warn about reference or assignment to a free
+variable.  If a non-special variable is bound but not used within a
+<code>let</code> form, the byte-compiler will warn about an unused lexical
+variable.  The byte-compiler will also issue a warning if you use a
 special variable as a function argument.
 
    <p>(To silence byte-compiler warnings about unused variables, just use

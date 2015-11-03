@@ -1,0 +1,110 @@
+<html lang="en">
+<head>
+<title>Extended Attributes - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Information-about-Files.html#Information-about-Files" title="Information about Files">
+<link rel="prev" href="File-Attributes.html#File-Attributes" title="File Attributes">
+<link rel="next" href="Locating-Files.html#Locating-Files" title="Locating Files">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 25.0.50.
+
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Extended-Attributes"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Locating-Files.html#Locating-Files">Locating Files</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="File-Attributes.html#File-Attributes">File Attributes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Information-about-Files.html#Information-about-Files">Information about Files</a>
+<hr>
+</div>
+
+<h4 class="subsection">24.6.5 Extended File Attributes</h4>
+
+<p><a name="index-extended-file-attributes-2112"></a>
+On some operating systems, each file can be associated with arbitrary
+<dfn>extended file attributes</dfn>.  At present, Emacs supports querying
+and setting two specific sets of extended file attributes: Access
+Control Lists (ACLs) and SELinux contexts.  These extended file
+attributes are used, on some systems, to impose more sophisticated
+file access controls than the basic Unix-style permissions
+discussed in the previous sections.
+
+   <p><a name="index-access-control-list-2113"></a><a name="index-ACL-entries-2114"></a><a name="index-SELinux-context-2115"></a>  A detailed explanation of ACLs and SELinux is beyond the scope of
+this manual.  For our purposes, each file can be associated with an
+<dfn>ACL</dfn>, which specifies its properties under an ACL-based file
+control system, and/or an <dfn>SELinux context</dfn>, which specifies its
+properties under the SELinux system.
+
+<div class="defun">
+&mdash; Function: <b>file-acl</b><var> filename<a name="index-file_002dacl-2116"></a></var><br>
+<blockquote><p>This function returns the ACL for the file <var>filename</var>.  The exact
+Lisp representation of the ACL is unspecified (and may change in
+future Emacs versions), but it is the same as what <code>set-file-acl</code>
+takes for its <var>acl</var> argument (see <a href="Changing-Files.html#Changing-Files">Changing Files</a>).
+
+        <p>The underlying ACL implementation is platform-specific; on GNU/Linux
+and BSD, Emacs uses the POSIX ACL interface, while on MS-Windows Emacs
+emulates the POSIX ACL interface with native file security APIs.
+
+        <p>If Emacs was not compiled with ACL support, or the file does not exist
+or is inaccessible, or Emacs was unable to determine the ACL entries
+for any other reason, then the return value is <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>file-selinux-context</b><var> filename<a name="index-file_002dselinux_002dcontext-2117"></a></var><br>
+<blockquote><p>This function returns the SELinux context of the file <var>filename</var>,
+as a list of the form <code>(</code><var>user</var> <var>role</var> <var>type</var>
+<var>range</var><code>)</code>.  The list elements are the context's user, role, type,
+and range respectively, as Lisp strings; see the SELinux documentation
+for details about what these actually mean.  The return value has the
+same form as what <code>set-file-selinux-context</code> takes for its
+<var>context</var> argument (see <a href="Changing-Files.html#Changing-Files">Changing Files</a>).
+
+        <p>If Emacs was not compiled with SELinux support, or the file does not
+exist or is inaccessible, or if the system does not support SELinux,
+then the return value is <code>(nil nil nil nil)</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>file-extended-attributes</b><var> filename<a name="index-file_002dextended_002dattributes-2118"></a></var><br>
+<blockquote><p>This function returns an alist of the Emacs-recognized extended
+attributes of file <var>filename</var>.  Currently, it serves as a
+convenient way to retrieve both the ACL and SELinux context; you can
+then call the function <code>set-file-extended-attributes</code>, with the
+returned alist as its second argument, to apply the same file access
+attributes to another file (see <a href="Changing-Files.html#Changing-Files">Changing Files</a>).
+
+        <p>One of the elements is <code>(acl . </code><var>acl</var><code>)</code>, where <var>acl</var> has
+the same form returned by <code>file-acl</code>.
+
+        <p>Another element is <code>(selinux-context . </code><var>context</var><code>)</code>, where
+<var>context</var> is the SELinux context, in the same form returned by
+<code>file-selinux-context</code>. 
+</p></blockquote></div>
+
+   </body></html>
+

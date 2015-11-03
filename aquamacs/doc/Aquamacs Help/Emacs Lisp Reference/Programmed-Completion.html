@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,9 +41,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Completion.html#Completion">Completion<
 <hr>
 </div>
 
-<h4 class="subsection">20.6.7 Programmed Completion</h4>
+<h4 class="subsection">19.6.7 Programmed Completion</h4>
 
-<p><a name="index-programmed-completion-1242"></a>
+<p><a name="index-programmed-completion-1352"></a>
   Sometimes it is not possible or convenient to create an alist or
 an obarray containing all the intended possible completions ahead
 of time.  In such a case, you can supply your own function to compute
@@ -69,7 +69,7 @@ possible match, and ignore the match if the predicate returns
 <code>nil</code>.
 
      <li>A flag specifying the type of completion operation to perform.  This
-is one of the following four values:
+flag may be one of the following values.
 
           <dl>
 <dt><code>nil</code><dd>This specifies a <code>try-completion</code> operation.  The function should
@@ -130,13 +130,21 @@ the same as for <code>display-sort-function</code>.
 </dl>
 
 <div class="defun">
-&mdash; Function: <b>completion-table-dynamic</b><var> function<a name="index-completion_002dtable_002ddynamic-1243"></a></var><br>
+&mdash; Function: <b>completion-table-dynamic</b><var> function<a name="index-completion_002dtable_002ddynamic-1353"></a></var><br>
 <blockquote><p>This function is a convenient way to write a function that can act as
 a programmed completion function.  The argument <var>function</var> should be
 a function that takes one argument, a string, and returns an alist of
 possible completions of it.  You can think of
 <code>completion-table-dynamic</code> as a transducer between that interface
 and the interface for programmed completion functions. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>completion-table-with-cache</b><var> function &amp;optional ignore-case<a name="index-completion_002dtable_002dwith_002dcache-1354"></a></var><br>
+<blockquote><p>This is a wrapper for <code>completion-table-dynamic</code> that saves the
+last argument-result pair.  This means that multiple lookups with the
+same argument only need to call <var>function</var> once.  This can be useful
+when a slow operation is involved, such as calling an external process. 
 </p></blockquote></div>
 
    </body></html>

@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,15 +41,16 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Command-Loop.html#Command-Loop">Command
 <hr>
 </div>
 
-<h3 class="section">21.5 Information from the Command Loop</h3>
+<h3 class="section">20.5 Information from the Command Loop</h3>
 
-<p>The editor command loop sets several Lisp variables to keep status
+<p><a name="index-command-loop-variables-1458"></a>
+The editor command loop sets several Lisp variables to keep status
 records for itself and for commands that are run.  With the exception of
 <code>this-command</code> and <code>last-command</code> it's generally a bad idea to
 change any of these variables in a Lisp program.
 
 <div class="defun">
-&mdash; Variable: <b>last-command</b><var><a name="index-last_002dcommand-1335"></a></var><br>
+&mdash; Variable: <b>last-command</b><var><a name="index-last_002dcommand-1459"></a></var><br>
 <blockquote><p>This variable records the name of the previous command executed by the
 command loop (the one before the current command).  Normally the value
 is a symbol with a function definition, but this is not guaranteed.
@@ -63,21 +64,21 @@ buffer-local.  See <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>real-last-command</b><var><a name="index-real_002dlast_002dcommand-1336"></a></var><br>
+&mdash; Variable: <b>real-last-command</b><var><a name="index-real_002dlast_002dcommand-1460"></a></var><br>
 <blockquote><p>This variable is set up by Emacs just like <code>last-command</code>,
 but never altered by Lisp programs. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>last-repeatable-command</b><var><a name="index-last_002drepeatable_002dcommand-1337"></a></var><br>
+&mdash; Variable: <b>last-repeatable-command</b><var><a name="index-last_002drepeatable_002dcommand-1461"></a></var><br>
 <blockquote><p>This variable stores the most recently executed command that was not
 part of an input event.  This is the command <code>repeat</code> will try to
 repeat, See <a href="../emacs/Repeating.html#Repeating">Repeating</a>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>this-command</b><var><a name="index-this_002dcommand-1338"></a></var><br>
-<blockquote><p><a name="index-current-command-1339"></a>This variable records the name of the command now being executed by
+&mdash; Variable: <b>this-command</b><var><a name="index-this_002dcommand-1462"></a></var><br>
+<blockquote><p><a name="index-current-command-1463"></a>This variable records the name of the command now being executed by
 the editor command loop.  Like <code>last-command</code>, it is normally a symbol
 with a function definition.
 
@@ -86,7 +87,7 @@ copies its value into <code>last-command</code> when the command finishes
 (unless the command specified a prefix argument for the following
 command).
 
-        <p><a name="index-kill-command-repetition-1340"></a>Some commands set this variable during their execution, as a flag for
+        <p><a name="index-kill-command-repetition-1464"></a>Some commands set this variable during their execution, as a flag for
 whatever command runs next.  In particular, the functions for killing text
 set <code>this-command</code> to <code>kill-region</code> so that any kill commands
 immediately following will know to append the killed text to the
@@ -111,7 +112,7 @@ restore the old value in case of error&mdash;a feature of <code>let</code> which
 in this case does precisely what we want to avoid.
 
 <div class="defun">
-&mdash; Variable: <b>this-original-command</b><var><a name="index-this_002doriginal_002dcommand-1341"></a></var><br>
+&mdash; Variable: <b>this-original-command</b><var><a name="index-this_002doriginal_002dcommand-1465"></a></var><br>
 <blockquote><p>This has the same value as <code>this-command</code> except when command
 remapping occurs (see <a href="Remapping-Commands.html#Remapping-Commands">Remapping Commands</a>).  In that case,
 <code>this-command</code> gives the command actually run (the result of
@@ -120,7 +121,7 @@ was specified to run but remapped into another command.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>this-command-keys</b><var><a name="index-this_002dcommand_002dkeys-1342"></a></var><br>
+&mdash; Function: <b>this-command-keys</b><var><a name="index-this_002dcommand_002dkeys-1466"></a></var><br>
 <blockquote><p>This function returns a string or vector containing the key sequence
 that invoked the present command, plus any previous commands that
 generated the prefix argument for this command.  Any events read by the
@@ -138,14 +139,14 @@ fit in a string.  See <a href="Input-Events.html#Input-Events">Input Events</a>.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>this-command-keys-vector</b><var><a name="index-this_002dcommand_002dkeys_002dvector-1343"></a></var><br>
+&mdash; Function: <b>this-command-keys-vector</b><var><a name="index-this_002dcommand_002dkeys_002dvector-1467"></a></var><br>
 <blockquote><p><a name="Definition-of-this_002dcommand_002dkeys_002dvector"></a>Like <code>this-command-keys</code>, except that it always returns the events
 in a vector, so you don't need to deal with the complexities of storing
 input events in a string (see <a href="Strings-of-Events.html#Strings-of-Events">Strings of Events</a>). 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>clear-this-command-keys</b><var> &amp;optional keep-record<a name="index-clear_002dthis_002dcommand_002dkeys-1344"></a></var><br>
+&mdash; Function: <b>clear-this-command-keys</b><var> &amp;optional keep-record<a name="index-clear_002dthis_002dcommand_002dkeys-1468"></a></var><br>
 <blockquote><p>This function empties out the table of events for
 <code>this-command-keys</code> to return.  Unless <var>keep-record</var> is
 non-<code>nil</code>, it also empties the records that the function
@@ -155,7 +156,7 @@ echoing inadvertently as part of the next command in certain cases.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>last-nonmenu-event</b><var><a name="index-last_002dnonmenu_002devent-1345"></a></var><br>
+&mdash; Variable: <b>last-nonmenu-event</b><var><a name="index-last_002dnonmenu_002devent-1469"></a></var><br>
 <blockquote><p>This variable holds the last input event read as part of a key sequence,
 not counting events resulting from mouse menus.
 
@@ -165,7 +166,7 @@ up a menu.  It is also used internally by <code>y-or-n-p</code>
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>last-command-event</b><var><a name="index-last_002dcommand_002devent-1346"></a></var><br>
+&mdash; Variable: <b>last-command-event</b><var><a name="index-last_002dcommand_002devent-1470"></a></var><br>
 <blockquote><p>This variable is set to the last input event that was read by the
 command loop as part of a command.  The principal use of this variable
 is in <code>self-insert-command</code>, which uses it to decide which
@@ -179,7 +180,7 @@ character to insert.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>last-event-frame</b><var><a name="index-last_002devent_002dframe-1347"></a></var><br>
+&mdash; Variable: <b>last-event-frame</b><var><a name="index-last_002devent_002dframe-1471"></a></var><br>
 <blockquote><p>This variable records which frame the last input event was directed to. 
 Usually this is the frame that was selected when the event was
 generated, but if that frame has redirected input focus to another

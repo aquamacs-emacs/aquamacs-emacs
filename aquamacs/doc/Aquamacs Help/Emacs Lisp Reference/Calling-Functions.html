@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -43,7 +43,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Functions.html#Functions">Functions</a>
 
 <h3 class="section">12.5 Calling Functions</h3>
 
-<p><a name="index-function-invocation-740"></a><a name="index-calling-a-function-741"></a>
+<p><a name="index-function-invocation-849"></a><a name="index-calling-a-function-850"></a>
   Defining functions is only half the battle.  Functions don't do
 anything until you <dfn>call</dfn> them, i.e., tell them to run.  Calling a
 function is also known as <dfn>invocation</dfn>.
@@ -61,7 +61,7 @@ the function <code>funcall</code>.  When you also need to determine at run
 time how many arguments to pass, use <code>apply</code>.
 
 <div class="defun">
-&mdash; Function: <b>funcall</b><var> function &amp;rest arguments<a name="index-funcall-742"></a></var><br>
+&mdash; Function: <b>funcall</b><var> function &amp;rest arguments<a name="index-funcall-851"></a></var><br>
 <blockquote><p><code>funcall</code> calls <var>function</var> with <var>arguments</var>, and returns
 whatever <var>function</var> returns.
 
@@ -77,7 +77,7 @@ already been evaluated.
 
         <p>The argument <var>function</var> must be either a Lisp function or a
 primitive function.  Special forms and macros are not allowed, because
-they make sense only when given the &ldquo;unevaluated&rdquo; argument
+they make sense only when given the unevaluated argument
 expressions.  <code>funcall</code> cannot provide these because, as we saw
 above, it never knows them in the first place.
 
@@ -94,7 +94,7 @@ above, it never knows them in the first place.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>apply</b><var> function &amp;rest arguments<a name="index-apply-743"></a></var><br>
+&mdash; Function: <b>apply</b><var> function &amp;rest arguments<a name="index-apply-852"></a></var><br>
 <blockquote><p><code>apply</code> calls <var>function</var> with <var>arguments</var>, just like
 <code>funcall</code> but with one difference: the last of <var>arguments</var> is a
 list of objects, which are passed to <var>function</var> as separate
@@ -122,7 +122,7 @@ primitive function; special forms and macros do not make sense in
         <p>For an interesting example of using <code>apply</code>, see <a href="Definition-of-mapcar.html#Definition-of-mapcar">Definition of mapcar</a>. 
 </p></blockquote></div>
 
-   <p><a name="index-partial-application-of-functions-744"></a><a name="index-currying-745"></a>  Sometimes it is useful to fix some of the function's arguments at
+   <p><a name="index-partial-application-of-functions-853"></a><a name="index-currying-854"></a>  Sometimes it is useful to fix some of the function's arguments at
 certain values, and leave the rest of arguments for when the function
 is actually called.  The act of fixing some of the function's
 arguments is called <dfn>partial application</dfn> of the function<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>. 
@@ -133,7 +133,7 @@ combined.
    <p>Here's how to do partial application in Emacs Lisp:
 
 <div class="defun">
-&mdash; Function: <b>apply-partially</b><var> func &amp;rest args<a name="index-apply_002dpartially-746"></a></var><br>
+&mdash; Function: <b>apply-partially</b><var> func &amp;rest args<a name="index-apply_002dpartially-855"></a></var><br>
 <blockquote><p>This function returns a new function which, when called, will call
 <var>func</var> with the list of arguments composed from <var>args</var> and
 additional arguments specified at the time of the call.  If <var>func</var>
@@ -152,7 +152,7 @@ built-in function:
 </pre>
         </blockquote></div>
 
-   <p><a name="index-functionals-747"></a>  It is common for Lisp functions to accept functions as arguments or
+   <p><a name="index-functionals-856"></a>  It is common for Lisp functions to accept functions as arguments or
 find them in data structures (especially in hook variables and property
 lists) and call them using <code>funcall</code> or <code>apply</code>.  Functions
 that accept function arguments are often called <dfn>functionals</dfn>.
@@ -162,12 +162,12 @@ function as the argument.  Here are two different kinds of no-op
 function:
 
 <div class="defun">
-&mdash; Function: <b>identity</b><var> arg<a name="index-identity-748"></a></var><br>
+&mdash; Function: <b>identity</b><var> arg<a name="index-identity-857"></a></var><br>
 <blockquote><p>This function returns <var>arg</var> and has no side effects. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>ignore</b><var> &amp;rest args<a name="index-ignore-749"></a></var><br>
+&mdash; Function: <b>ignore</b><var> &amp;rest args<a name="index-ignore-858"></a></var><br>
 <blockquote><p>This function ignores any arguments and returns <code>nil</code>. 
 </p></blockquote></div>
 

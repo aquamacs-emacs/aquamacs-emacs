@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,15 +41,16 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Reading-Input.html#Reading-Input">Readi
 <hr>
 </div>
 
-<h4 class="subsection">21.8.3 Modifying and Translating Input Events</h4>
+<h4 class="subsection">20.8.3 Modifying and Translating Input Events</h4>
 
-<p>Emacs modifies every event it reads according to
+<p><a name="index-modifiers-of-events-1571"></a><a name="index-translating-input-events-1572"></a><a name="index-event-translation-1573"></a>
+  Emacs modifies every event it reads according to
 <code>extra-keyboard-modifiers</code>, then translates it through
 <code>keyboard-translate-table</code> (if applicable), before returning it
 from <code>read-event</code>.
 
 <div class="defun">
-&mdash; Variable: <b>extra-keyboard-modifiers</b><var><a name="index-extra_002dkeyboard_002dmodifiers-1445"></a></var><br>
+&mdash; Variable: <b>extra-keyboard-modifiers</b><var><a name="index-extra_002dkeyboard_002dmodifiers-1574"></a></var><br>
 <blockquote><p>This variable lets Lisp programs &ldquo;press&rdquo; the modifier keys on the
 keyboard.  The value is a character.  Only the modifiers of the
 character matter.  Each time the user types a keyboard key, it is
@@ -62,7 +63,7 @@ character for this purpose, but as a character with no modifiers.
 Thus, setting <code>extra-keyboard-modifiers</code> to zero cancels any
 modification.
 
-        <p>When using a window system, the program can &ldquo;press&rdquo; any of the
+        <p>When using a window system, the program can press any of the
 modifier keys in this way.  Otherwise, only the &lt;CTL&gt; and &lt;META&gt;
 keys can be virtually pressed.
 
@@ -71,7 +72,7 @@ the keyboard, and has no effect on mouse events or any other events.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>keyboard-translate-table</b><var><a name="index-keyboard_002dtranslate_002dtable-1446"></a></var><br>
+&mdash; Variable: <b>keyboard-translate-table</b><var><a name="index-keyboard_002dtranslate_002dtable-1575"></a></var><br>
 <blockquote><p>This terminal-local variable is the translate table for keyboard
 characters.  It lets you reshuffle the keys on the keyboard without
 changing any command bindings.  Its value is normally a char-table, or
@@ -95,7 +96,7 @@ if you want to translate characters after input methods operate.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>keyboard-translate</b><var> from to<a name="index-keyboard_002dtranslate-1447"></a></var><br>
+&mdash; Function: <b>keyboard-translate</b><var> from to<a name="index-keyboard_002dtranslate-1576"></a></var><br>
 <blockquote><p>This function modifies <code>keyboard-translate-table</code> to translate
 character code <var>from</var> into character code <var>to</var>.  It creates
 the keyboard translate table if necessary. 

@@ -10,16 +10,16 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Manual',
-updated for Emacs version 24.3.50.
+updated for Emacs version 25.0.50.
 
-Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``The GNU
      Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     with the Front-Cover Texts being ``A GNU Manual,'' and with the
      Back-Cover Texts as in (a) below.  A copy of the license is
      included in the section entitled ``GNU Free Documentation
      License.''
@@ -43,14 +43,14 @@ Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
 
 <h2 class="chapter">5 Entering Emacs</h2>
 
-<p><a name="index-entering-Emacs-45"></a><a name="index-starting-Emacs-46"></a>
+<p><a name="index-entering-Emacs-46"></a><a name="index-starting-Emacs-47"></a>
   The usual way to invoke Emacs is with the shell command
 <samp><span class="command">emacs</span></samp>.  From a terminal window running in the X Window
 System, you can run Emacs in the background with <samp><span class="command">emacs &amp;</span></samp>;
 this way, Emacs won't tie up the terminal window, so you can use it to
 run other shell commands.
 
-   <p><a name="index-startup-screen-47"></a>  When Emacs starts up, the initial frame displays a special buffer
+   <p><a name="index-startup-screen-48"></a>  When Emacs starts up, the initial frame displays a special buffer
 named &lsquo;<samp><span class="samp">*GNU Emacs*</span></samp>&rsquo;.  This <dfn>startup screen</dfn> contains
 information about Emacs and <dfn>links</dfn> to common tasks that are
 useful for beginning users.  For instance, activating the &lsquo;<samp><span class="samp">Emacs
@@ -85,7 +85,7 @@ existing Emacs session.  See <a href="Emacs-Server.html#Emacs-Server">Emacs Serv
 certain Lisp files, where to put the initial frame, and so forth. 
 See <a href="Emacs-Invocation.html#Emacs-Invocation">Emacs Invocation</a>.
 
-   <p><a name="index-inhibit_002dstartup_002dscreen-48"></a>  If the variable <code>inhibit-startup-screen</code> is non-<code>nil</code>,
+   <p><a name="index-inhibit_002dstartup_002dscreen-49"></a>  If the variable <code>inhibit-startup-screen</code> is non-<code>nil</code>,
 Emacs does not display the startup screen.  In that case, if one or
 more files were specified on the command line, Emacs simply displays
 those files; otherwise, it displays a buffer named <samp><span class="file">*scratch*</span></samp>,
@@ -96,11 +96,13 @@ See <a href="Lisp-Interaction.html#Lisp-Interaction">Lisp Interaction</a>.  You 
 (see <a href="Init-File.html#Init-File">Init File</a>).<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>
 
    <p>You can also force Emacs to display a file or directory at startup
-by setting the variable <code>initial-buffer-choice</code> to a
-non-<code>nil</code> value.  (In that case, even if you specify one or more
-files on the command line, Emacs opens but does not display them.) 
-The value of <code>initial-buffer-choice</code> should be the name of
-the desired file or directory.
+by setting the variable <code>initial-buffer-choice</code> to a string
+naming that file or directory.  The value of
+<code>initial-buffer-choice</code> may also be a function (of no arguments)
+that should return a buffer which is then displayed. 
+If <code>initial-buffer-choice</code> is non-<code>nil</code>, then if you specify
+any files on the command line, Emacs still visits them, but does not
+display them initially.
 
    <div class="footnote">
 <hr>

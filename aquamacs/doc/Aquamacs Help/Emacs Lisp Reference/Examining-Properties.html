@@ -10,15 +10,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -39,9 +39,10 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Text-Properties.html#Text-Properties">T
 <hr>
 </div>
 
-<h4 class="subsection">32.19.1 Examining Text Properties</h4>
+<h4 class="subsection">31.19.1 Examining Text Properties</h4>
 
-<p>The simplest way to examine text properties is to ask for the value of
+<p><a name="index-examining-text-properties-3297"></a><a name="index-text-properties_002c-examining-3298"></a>
+  The simplest way to examine text properties is to ask for the value of
 a particular property of a particular character.  For that, use
 <code>get-text-property</code>.  Use <code>text-properties-at</code> to get the
 entire property list of a character.  See <a href="Property-Search.html#Property-Search">Property Search</a>, for
@@ -52,7 +53,7 @@ positions in a string start from 0, whereas positions in a buffer start
 from 1.
 
 <div class="defun">
-&mdash; Function: <b>get-text-property</b><var> pos prop &amp;optional object<a name="index-get_002dtext_002dproperty-3008"></a></var><br>
+&mdash; Function: <b>get-text-property</b><var> pos prop &amp;optional object<a name="index-get_002dtext_002dproperty-3299"></a></var><br>
 <blockquote><p>This function returns the value of the <var>prop</var> property of the
 character after position <var>pos</var> in <var>object</var> (a buffer or
 string).  The argument <var>object</var> is optional and defaults to the
@@ -64,7 +65,7 @@ the <var>prop</var> property of that symbol.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>get-char-property</b><var> position prop &amp;optional object<a name="index-get_002dchar_002dproperty-3009"></a></var><br>
+&mdash; Function: <b>get-char-property</b><var> position prop &amp;optional object<a name="index-get_002dchar_002dproperty-3300"></a></var><br>
 <blockquote><p>This function is like <code>get-text-property</code>, except that it checks
 overlays first and then text properties.  See <a href="Overlays.html#Overlays">Overlays</a>.
 
@@ -78,7 +79,15 @@ text properties are considered, since strings never have overlays.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>get-char-property-and-overlay</b><var> position prop &amp;optional object<a name="index-get_002dchar_002dproperty_002dand_002doverlay-3010"></a></var><br>
+&mdash; Function: <b>get-pos-property</b><var> position prop &amp;optional object<a name="index-get_002dpos_002dproperty-3301"></a></var><br>
+<blockquote><p>This function is like <code>get-char-property</code>, except that it pays
+attention to properties' stickiness and overlays' advancement settings
+instead of the property of the character at (i.e., right after)
+<var>position</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>get-char-property-and-overlay</b><var> position prop &amp;optional object<a name="index-get_002dchar_002dproperty_002dand_002doverlay-3302"></a></var><br>
 <blockquote><p>This is like <code>get-char-property</code>, but gives extra information
 about the overlay that the property value comes from.
 
@@ -93,7 +102,7 @@ the <span class="sc">cdr</span> of the value are <code>nil</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>char-property-alias-alist</b><var><a name="index-char_002dproperty_002dalias_002dalist-3011"></a></var><br>
+&mdash; Variable: <b>char-property-alias-alist</b><var><a name="index-char_002dproperty_002dalias_002dalist-3303"></a></var><br>
 <blockquote><p>This variable holds an alist which maps property names to a list of
 alternative property names.  If a character does not specify a direct
 value for a property, the alternative property names are consulted in
@@ -103,14 +112,14 @@ properties take precedence over this variable.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>text-properties-at</b><var> position &amp;optional object<a name="index-text_002dproperties_002dat-3012"></a></var><br>
+&mdash; Function: <b>text-properties-at</b><var> position &amp;optional object<a name="index-text_002dproperties_002dat-3304"></a></var><br>
 <blockquote><p>This function returns the entire property list of the character at
 <var>position</var> in the string or buffer <var>object</var>.  If <var>object</var> is
 <code>nil</code>, it defaults to the current buffer. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>default-text-properties</b><var><a name="index-default_002dtext_002dproperties-3013"></a></var><br>
+&mdash; Variable: <b>default-text-properties</b><var><a name="index-default_002dtext_002dproperties-3305"></a></var><br>
 <blockquote><p>This variable holds a property list giving default values for text
 properties.  Whenever a character does not specify a value for a
 property, neither directly, through a category symbol, or through

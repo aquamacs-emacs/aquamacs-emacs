@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,9 +41,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
 <hr>
 </div>
 
-<h3 class="section">28.19 The Window Start and End Positions</h3>
+<h3 class="section">27.20 The Window Start and End Positions</h3>
 
-<p><a name="index-window-start-position-2401"></a><a name="index-display_002dstart-position-2402"></a>
+<p><a name="index-window-start-position-2602"></a><a name="index-display_002dstart-position-2603"></a>
   Each window maintains a marker used to keep track of a buffer position
 that specifies where in the buffer display should start.  This position
 is called the <dfn>display-start</dfn> position of the window (or just the
@@ -61,8 +61,8 @@ readjustment.  To test such code, put it into a command and bind the
 command to a key.
 
 <div class="defun">
-&mdash; Function: <b>window-start</b><var> &amp;optional window<a name="index-window_002dstart-2403"></a></var><br>
-<blockquote><p><a name="index-window-top-line-2404"></a>This function returns the display-start position of window
+&mdash; Function: <b>window-start</b><var> &amp;optional window<a name="index-window_002dstart-2604"></a></var><br>
+<blockquote><p><a name="index-window-top-line-2605"></a>This function returns the display-start position of window
 <var>window</var>.  If <var>window</var> is <code>nil</code>, the selected window is
 used.
 
@@ -78,10 +78,10 @@ window-start position; if you move point, do not expect the window-start
 position to change in response until after the next redisplay. 
 </p></blockquote></div>
 
-   <p><a name="index-window-end-position-2405"></a>
+   <p><a name="index-window-end-position-2606"></a>
 
 <div class="defun">
-&mdash; Function: <b>window-end</b><var> &amp;optional window update<a name="index-window_002dend-2406"></a></var><br>
+&mdash; Function: <b>window-end</b><var> &amp;optional window update<a name="index-window_002dend-2607"></a></var><br>
 <blockquote><p>This function returns the position where display of its buffer ends in
 <var>window</var>.  The default for <var>window</var> is the selected window.
 
@@ -107,7 +107,7 @@ text will end if scrolling is not required.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-window-start</b><var> window position &amp;optional noforce<a name="index-set_002dwindow_002dstart-2407"></a></var><br>
+&mdash; Function: <b>set-window-start</b><var> window position &amp;optional noforce<a name="index-set_002dwindow_002dstart-2608"></a></var><br>
 <blockquote><p>This function sets the display-start position of <var>window</var> to
 <var>position</var> in <var>window</var>'s buffer.  It returns <var>position</var>.
 
@@ -121,7 +121,7 @@ screen.  If this does place point off screen, the display routines move
 point to the left margin on the middle line in the window.
 
         <p>For example, if point is&nbsp;1<!-- /@w --> and you set the start of the window
-to&nbsp;37<!-- /@w -->, the start of the next line, point will be &ldquo;above&rdquo; the top
+to&nbsp;37<!-- /@w -->, the start of the next line, point will be above the top
 of the window.  The display routines will automatically move point if
 it is still 1 when redisplay occurs.  Here is an example:
 
@@ -161,15 +161,17 @@ position that works well with point, and thus <var>position</var> is not used.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>pos-visible-in-window-p</b><var> &amp;optional position window partially<a name="index-pos_002dvisible_002din_002dwindow_002dp-2408"></a></var><br>
+&mdash; Function: <b>pos-visible-in-window-p</b><var> &amp;optional position window partially<a name="index-pos_002dvisible_002din_002dwindow_002dp-2609"></a></var><br>
 <blockquote><p>This function returns non-<code>nil</code> if <var>position</var> is within the
 range of text currently visible on the screen in <var>window</var>.  It
-returns <code>nil</code> if <var>position</var> is scrolled vertically out of view. 
-Locations that are partially obscured are not considered visible unless
-<var>partially</var> is non-<code>nil</code>.  The argument <var>position</var> defaults
-to the current position of point in <var>window</var>; <var>window</var>, to the
-selected window.  If <var>position</var> is <code>t</code>, that means to check the
-last visible position in <var>window</var>.
+returns <code>nil</code> if <var>position</var> is scrolled vertically out of
+view.  Locations that are partially obscured are not considered
+visible unless <var>partially</var> is non-<code>nil</code>.  The argument
+<var>position</var> defaults to the current position of point in
+<var>window</var>; <var>window</var> defaults to the selected window.  If
+<var>position</var> is <code>t</code>, that means to check either the first
+visible position of the last screen line in <var>window</var>, or the
+end-of-buffer position, whichever comes first.
 
         <p>This function considers only vertical scrolling.  If <var>position</var> is
 out of view only because <var>window</var> has been scrolled horizontally,
@@ -198,7 +200,7 @@ position (zero-based row number) of that row.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>window-line-height</b><var> &amp;optional line window<a name="index-window_002dline_002dheight-2409"></a></var><br>
+&mdash; Function: <b>window-line-height</b><var> &amp;optional line window<a name="index-window_002dline_002dheight-2610"></a></var><br>
 <blockquote><p>This function returns the height of text line <var>line</var> in
 <var>window</var>.  If <var>line</var> is one of <code>header-line</code> or
 <code>mode-line</code>, <code>window-line-height</code> returns information about

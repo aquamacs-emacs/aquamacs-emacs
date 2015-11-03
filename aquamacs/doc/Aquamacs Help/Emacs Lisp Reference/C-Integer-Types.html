@@ -10,15 +10,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -39,9 +39,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="GNU-Emacs-Internals.html#GNU-Emacs-Inte
 <hr>
 </div>
 
-<h3 class="section">E.7 C Integer Types</h3>
+<h3 class="section">E.9 C Integer Types</h3>
 
-<p><a name="index-integer-types-_0028C-programming-language_0029-4369"></a>
+<p><a name="index-integer-types-_0028C-programming-language_0029-4831"></a>
 Here are some guidelines for use of integer types in the Emacs C
 source code.  These guidelines sometimes give competing advice; common
 sense is advised.
@@ -54,7 +54,7 @@ fit in <code>int</code> range.
      <li>Do not assume that signed integer arithmetic wraps around on overflow. 
 This is no longer true of Emacs porting targets: signed integer
 overflow has undefined behavior in practice, and can dump core or
-even cause earlier or later code to behave &ldquo;illogically&rdquo;.  Unsigned
+even cause earlier or later code to behave illogically.  Unsigned
 overflow does wrap around reliably, modulo a power of two.
 
      <li>Prefer signed types to unsigned, as code gets confusing when signed
@@ -64,7 +64,9 @@ similar advice may apply to the unsigned counterparts (e.g.,
 <code>size_t</code> instead of <code>ptrdiff_t</code>, or <code>uintptr_t</code> instead
 of <code>intptr_t</code>).
 
-     <li>Prefer <code>int</code> for Emacs character codes, in the range 0 .. 0x3FFFFF.
+     <li>Prefer <code>int</code> for Emacs character codes, in the range 0 .. 0x3FFFFF. 
+More generally, prefer <code>int</code> for integers known to be in
+<code>int</code> range, e.g., screen column counts.
 
      <li>Prefer <code>ptrdiff_t</code> for sizes, i.e., for integers bounded by the
 maximum size of any individual C object or by the maximum number of
@@ -73,6 +75,16 @@ for signed types.  Using <code>ptrdiff_t</code> limits objects to
 <code>PTRDIFF_MAX</code> bytes, but larger objects would cause trouble
 anyway since they would break pointer subtraction, so this does not
 impose an arbitrary limit.
+
+     <li>Avoid <code>ssize_t</code> except when communicating to low-level APIs that
+have <code>ssize_t</code>-related limitations.  Although it's equivalent to
+<code>ptrdiff_t</code> on typical platforms, <code>ssize_t</code> is occasionally
+narrower, so using it for size-related calculations could overflow. 
+Also, <code>ptrdiff_t</code> is more ubiquitous and better-standardized, has
+standard <code>printf</code> formats, and is the basis for Emacs's internal
+size-overflow checking.  When using <code>ssize_t</code>, please note that
+POSIX requires support only for values in the range &minus;1 .. 
+<code>SSIZE_MAX</code>.
 
      <li>Prefer <code>intptr_t</code> for internal representations of pointers, or
 for integers bounded only by the number of objects that can exist at
@@ -92,31 +104,32 @@ signed, unless this assumption is known to be safe.  For example,
 although <code>off_t</code> is always signed, <code>time_t</code> need not be.
 
      <li>Prefer the Emacs-defined type <code>printmax_t</code> for representing
-values that might be any signed integer value that can be printed,
+values that might be any signed integer that can be printed,
 using a <code>printf</code>-family function.
 
      <li>Prefer <code>intmax_t</code> for representing values that might be any
 signed integer value.
 
-     <li>In bitfields, prefer <code>unsigned int</code> or <code>signed int</code> to
-<code>int</code>, as <code>int</code> is less portable: it might be signed, and
-might not be.  Single-bit bit fields are invariably <code>unsigned
-int</code> so that their values are 0 and 1.
-
-     <li>In C, Emacs commonly uses <code>bool</code>, 1, and 0 for boolean values. 
-Using <code>bool</code> for booleans can make programs easier to read and a
-bit faster than using <code>int</code>.  Although it is also OK to use
-<code>int</code>, this older style is gradually being phased out.  When
+     <li>Prefer <code>bool</code>, <code>false</code> and <code>true</code> for booleans. 
+Using <code>bool</code> can make programs easier to read and a bit faster than
+using <code>int</code>.  Although it is also OK to use <code>int</code>, <code>0</code>
+and <code>1</code>, this older style is gradually being phased out.  When
 using <code>bool</code>, respect the limitations of the replacement
 implementation of <code>bool</code>, as documented in the source file
-<samp><span class="file">lib/stdbool.in.h</span></samp>, so that Emacs remains portable to pre-C99
-platforms. 
+<samp><span class="file">lib/stdbool.in.h</span></samp>.  In particular, boolean bitfields should be of type
+<code>bool_bf</code>, not <code>bool</code>, so that they work correctly even when
+compiling Objective C with standard GCC.
+
+     <li>In bitfields, prefer <code>unsigned int</code> or <code>signed int</code> to
+<code>int</code>, as <code>int</code> is less portable: it might be signed, and
+might not be.  Single-bit bit fields should be <code>unsigned int</code> or
+<code>bool_bf</code> so that their values are 0 or 1. 
 </ul>
 
 <!-- FIXME Mention src/globals.h somewhere in this file? -->
 <!-- *-texinfo-*- -->
 <!-- This is part of the GNU Emacs Lisp Reference Manual. -->
-<!-- Copyright (C) 1990-1993, 1999, 2001-2013 Free Software Foundation, -->
+<!-- Copyright (C) 1990-1993, 1999, 2001-2015 Free Software Foundation, -->
 <!-- Inc. -->
 <!-- See the file elisp.texi for copying conditions. -->
    </body></html>

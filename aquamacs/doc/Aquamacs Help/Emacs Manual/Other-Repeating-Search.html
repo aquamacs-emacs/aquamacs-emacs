@@ -10,16 +10,16 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Manual',
-updated for Emacs version 24.3.50.
+updated for Emacs version 25.0.50.
 
-Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``The GNU
      Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     with the Front-Cover Texts being ``A GNU Manual,'' and with the
      Back-Cover Texts as in (a) below.  A copy of the license is
      included in the section entitled ``GNU Free Documentation
      License.''
@@ -48,7 +48,7 @@ no upper-case letters and <code>case-fold-search</code> is non-<code>nil</code>.
 Aside from <code>occur</code> and its variants, all operate on the text from
 point to the end of the buffer, or on the region if it is active.
 
-   <p><a name="index-list_002dmatching_002dlines-895"></a><a name="index-occur-896"></a><a name="index-multi_002doccur-897"></a><a name="index-multi_002doccur_002din_002dmatching_002dbuffers-898"></a><a name="index-how_002dmany-899"></a><a name="index-flush_002dlines-900"></a><a name="index-keep_002dlines-901"></a>
+   <p><a name="index-list_002dmatching_002dlines-935"></a><a name="index-occur-936"></a><a name="index-multi_002doccur-937"></a><a name="index-multi_002doccur_002din_002dmatching_002dbuffers-938"></a><a name="index-how_002dmany-939"></a><a name="index-flush_002dlines-940"></a><a name="index-keep_002dlines-941"></a>
      <dl>
 <dt><kbd>M-x multi-isearch-buffers</kbd><dd>Prompt for one or more buffer names, ending with &lt;RET&gt;; then,
 begin a multi-buffer incremental search in those buffers.  (If the
@@ -60,20 +60,34 @@ matching that regexp.
      <br><dt><kbd>M-x multi-isearch-buffers-regexp</kbd><dd>This command is just like <code>multi-isearch-buffers</code>, except it
 performs an incremental regexp search.
 
-     <p><a name="index-Occur-mode-902"></a><a name="index-mode_002c-Occur-903"></a><br><dt><kbd>M-x occur</kbd><dd>Prompt for a regexp, and display a list showing each line in the
+     <br><dt><kbd>M-x multi-isearch-files</kbd><dd>Prompt for one or more file names, ending with &lt;RET&gt;; then,
+begin a multi-file incremental search in those files.  (If the
+search fails in one file, the next <kbd>C-s</kbd> tries searching the
+next specified file, and so forth.)  With a prefix argument, prompt
+for a regexp and begin a multi-file incremental search in files
+matching that regexp.
+
+     <br><dt><kbd>M-x multi-isearch-files-regexp</kbd><dd>This command is just like <code>multi-isearch-files</code>, except it
+performs an incremental regexp search.
+
+     <p>In some modes that set the buffer-local variable
+<code>multi-isearch-next-buffer-function</code> (e.g., in Change Log mode)
+a multi-file incremental search is activated automatically.
+
+     <p><a name="index-Occur-mode-942"></a><a name="index-mode_002c-Occur-943"></a><br><dt><kbd>M-x occur</kbd><dd>Prompt for a regexp, and display a list showing each line in the
 buffer that contains a match for it.  To limit the search to part of
 the buffer, narrow to that part (see <a href="Narrowing.html#Narrowing">Narrowing</a>).  A numeric
 argument <var>n</var> specifies that <var>n</var> lines of context are to be
 displayed before and after each matching line.
 
-     <p><a name="index-RET-_0040r_007b_0028Occur-mode_0029_007d-904"></a><a name="index-o-_0040r_007b_0028Occur-mode_0029_007d-905"></a><a name="index-C_002do-_0040r_007b_0028Occur-mode_0029_007d-906"></a>In the <samp><span class="file">*Occur*</span></samp> buffer, you can click on each entry, or move
+     <p><a name="index-RET-_0040r_007b_0028Occur-mode_0029_007d-944"></a><a name="index-o-_0040r_007b_0028Occur-mode_0029_007d-945"></a><a name="index-C_002do-_0040r_007b_0028Occur-mode_0029_007d-946"></a>In the <samp><span class="file">*Occur*</span></samp> buffer, you can click on each entry, or move
 point there and type &lt;RET&gt;, to visit the corresponding position in
 the buffer that was searched.  <kbd>o</kbd> and <kbd>C-o</kbd> display the match
 in another window; <kbd>C-o</kbd> does not select it.  Alternatively, you
 can use the <kbd>C-x `</kbd> (<code>next-error</code>) command to visit the
 occurrences one by one (see <a href="Compilation-Mode.html#Compilation-Mode">Compilation Mode</a>).
 
-     <p><a name="index-Occur-Edit-mode-907"></a><a name="index-mode_002c-Occur-Edit-908"></a>Typing <kbd>e</kbd> in the <samp><span class="file">*Occur*</span></samp> buffer switches to Occur Edit
+     <p><a name="index-Occur-Edit-mode-947"></a><a name="index-mode_002c-Occur-Edit-948"></a>Typing <kbd>e</kbd> in the <samp><span class="file">*Occur*</span></samp> buffer switches to Occur Edit
 mode, in which edits made to the entries are also applied to the text
 in the originating buffer.  Type <kbd>C-c C-c</kbd> to return to Occur
 mode.
@@ -81,7 +95,7 @@ mode.
      <p>The command <kbd>M-x list-matching-lines</kbd> is a synonym for <kbd>M-x
 occur</kbd>.
 
-     <p><a name="index-M_002ds-o-909"></a><br><dt><kbd>M-s o</kbd><dd>Run <code>occur</code> using the search string of the last incremental
+     <p><a name="index-M_002ds-o-949"></a><br><dt><kbd>M-s o</kbd><dd>Run <code>occur</code> using the search string of the last incremental
 string search.  You can also run <kbd>M-s o</kbd> when an incremental
 search is active; this uses the current search string.
 
@@ -121,7 +135,7 @@ it never deletes lines that are only partially contained in the region
 </dl>
 
 <!-- This is part of the Emacs manual. -->
-<!-- Copyright (C) 1985-1987, 1993-1995, 1997, 2001-2013 Free Software -->
+<!-- Copyright (C) 1985-1987, 1993-1995, 1997, 2001-2015 Free Software -->
 <!-- Foundation, Inc. -->
 <!-- See file emacs.texi for copying conditions. -->
    </body></html>

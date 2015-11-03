@@ -1,0 +1,2584 @@
+<html lang="en">
+<head>
+<title>Wisent Parser Development</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="Wisent Parser Development">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="top" href="#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1988-1993, 1995, 1998-2004, 2007, 2012-2015
+Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being "A GNU Manual," and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     "GNU Free Documentation License".
+
+     (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+     modify this GNU manual."
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<h1 class="settitle">Wisent Parser Development</h1>
+<div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Top" href="#Top">Wisent Parser Development</a>
+<li><a name="toc_Wisent-Overview" href="#Wisent-Overview">1 Wisent Overview</a>
+<li><a name="toc_Wisent-Grammar" href="#Wisent-Grammar">2 Wisent Grammar</a>
+<ul>
+<li><a href="#Grammar-format">2.1 Grammar format</a>
+<li><a href="#Example">2.2 Example</a>
+<li><a href="#Compiling-a-grammar">2.3 Compiling a grammar</a>
+<li><a href="#Conflicts">2.4 Conflicts</a>
+<ul>
+<li><a href="#Grammar-Debugging">2.4.1 Grammar debugging</a>
+<li><a href="#Understanding-the-automaton">2.4.2 Understanding the automaton</a>
+</li></ul>
+</li></ul>
+<li><a name="toc_Wisent-Parsing" href="#Wisent-Parsing">3 Wisent Parsing</a>
+<ul>
+<li><a href="#Writing-a-lexer">3.1 What the parser must receive</a>
+<li><a href="#Actions-goodies">3.2 Variables and macros useful in grammar actions.</a>
+<li><a href="#Report-errors">3.3 The error reporting function</a>
+<li><a href="#Error-recovery">3.4 Error recovery</a>
+<li><a href="#Debugging-actions">3.5 Debugging semantic actions</a>
+</li></ul>
+<li><a name="toc_Wisent-Semantic" href="#Wisent-Semantic">4 How to use Wisent with Semantic</a>
+<ul>
+<li><a href="#Grammar-styles">4.1 Grammar styles</a>
+<ul>
+<li><a href="#Iterative-style">4.1.1 Iterative style</a>
+<li><a href="#Bison-style">4.1.2 Bison style</a>
+<li><a href="#Mixed-style">4.1.3 Mixed style</a>
+<li><a href="#Start-nonterminals">4.1.4 Start nonterminals</a>
+<li><a href="#Useful-functions">4.1.5 Useful functions</a>
+</li></ul>
+<li><a href="#Wisent-Lex">4.2 The Wisent Lex lexer</a>
+</li></ul>
+<li><a name="toc_GNU-Free-Documentation-License" href="#GNU-Free-Documentation-License">Appendix A GNU Free Documentation License</a>
+<li><a name="toc_Index" href="#Index">Index</a>
+</li></ul>
+</div>
+
+
+
+<div class="node">
+<a name="Top"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Wisent-Overview">Wisent Overview</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#dir">(dir)</a>
+
+</div>
+
+<h2 class="unnumbered">Wisent Parser Development</h2>
+
+<p>Wisent (the European Bison ;-) is an Emacs Lisp implementation of the
+GNU Compiler Compiler Bison.
+
+   <p>This manual describes how to use Wisent to develop grammars for
+programming languages, and how to use grammars to parse language
+source in Emacs buffers.
+
+   <p>It also describes how Wisent is used with the <i>Semantic</i> tool set
+described in the <a href="semantic.html#Top">Semantic Manual</a>.
+
+   <p>Copyright &copy; 1988&ndash;1993, 1995, 1998&ndash;2004, 2007, 2012&ndash;2015
+Free Software Foundation, Inc.
+
+<!-- Since we are both GNU manuals, we do not need to ack each other here. -->
+   <blockquote>
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with the Front-Cover Texts being &ldquo;A GNU Manual,&rdquo;
+and with the Back-Cover Texts as in (a) below.  A copy of the license
+is included in the section entitled &ldquo;GNU Free Documentation License&rdquo;.
+
+   <p>(a) The FSF's Back-Cover Text is: &ldquo;You have the freedom to copy and
+modify this GNU manual.&rdquo;
+</blockquote>
+
+<ul class="menu">
+<li><a accesskey="1" href="#Wisent-Overview">Wisent Overview</a>
+<li><a accesskey="2" href="#Wisent-Grammar">Wisent Grammar</a>
+<li><a accesskey="3" href="#Wisent-Parsing">Wisent Parsing</a>
+<li><a accesskey="4" href="#Wisent-Semantic">Wisent Semantic</a>
+<li><a accesskey="5" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>
+<li><a accesskey="6" href="#Index">Index</a>
+</ul>
+
+<div class="node">
+<a name="Wisent-Overview"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Wisent-Grammar">Wisent Grammar</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Top">Top</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">1 Wisent Overview</h2>
+
+<p><dfn>Wisent</dfn> (the European Bison) is an implementation in Emacs Lisp
+of the GNU Compiler Compiler Bison. Its code is a port of the C code
+of GNU Bison 1.28 &amp; 1.31.
+
+   <p>For more details on the basic concepts for understanding Wisent, it is
+worthwhile to read the <a href="bison.html#Top">Bison Manual</a>.
+
+   <p>Wisent can generate compilers compatible with the <i>Semantic</i> tool set. 
+See the <a href="semantic.html#Top">Semantic Manual</a>.
+
+   <p>It benefits from these Bison features:
+
+     <ul>
+<li>It uses a fast but not so space-efficient encoding for the parse
+tables, described in Corbett's PhD thesis from Berkeley:
+<blockquote>
+<cite>Static Semantics in Compiler Error Recovery</cite><br>
+June 1985, Report No. UCB/CSD 85/251. 
+</blockquote>
+
+     <li>For generating the lookahead sets, Wisent uses the well-known
+technique of F. DeRemer and T. Pennello described in:
+<blockquote>
+<cite>Efficient Computation of LALR(1) Look-Ahead Sets</cite><br>
+October 1982, ACM TOPLAS Vol 4 No 4, 615&ndash;49,
+<a href="http://dx.doi.org/10.1145/69622.357187">http://dx.doi.org/10.1145/69622.357187</a>. 
+</blockquote>
+
+     <li>Wisent resolves shift/reduce conflicts using operator precedence and
+associativity.
+
+     <li>Parser error recovery is accomplished using rules which match the
+special token <code>error</code>. 
+</ul>
+
+   <p>Nevertheless there are some fundamental differences between Bison and
+Wisent.
+
+     <ul>
+<li>Wisent is intended to be used in Emacs.  It reads and produces Emacs
+Lisp data structures.  All the additional code used in grammars is
+Emacs Lisp code.
+
+     <li>Contrary to Bison, Wisent does not generate a parser which combines
+Emacs Lisp code and grammar constructs.  They exist separately. 
+Wisent reads the grammar from a Lisp data structure and then generates
+grammar constructs as tables.  Afterward, the derived tables can be
+included and byte-compiled in separate Emacs Lisp files, and be used
+at a later time by the Wisent's parser engine.
+
+     <li>Wisent allows multiple start nonterminals and allows a call to the
+parsing function to be made for a particular start nonterminal.  For
+example, this is particularly useful to parse a region of an Emacs
+buffer.  <i>Semantic</i> heavily depends on the availability of this feature. 
+</ul>
+
+<div class="node">
+<a name="Wisent-Grammar"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Wisent-Parsing">Wisent Parsing</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Wisent-Overview">Wisent Overview</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">2 Wisent Grammar</h2>
+
+<p><a name="index-context_002dfree-grammar-1"></a><a name="index-rule-2"></a>In order for Wisent to parse a language, it must be described by a
+<dfn>context-free grammar</dfn>.  That is a grammar specified as rules that
+can be applied regardless of context.  For more information, see
+<a href="bison.html#Language-and-Grammar">Language and Grammar</a>, in the Bison manual.
+
+   <p><a name="index-terminal-3"></a><a name="index-nonterminal-4"></a>The formal grammar is formulated using <dfn>terminal</dfn> and
+<dfn>nonterminal</dfn> items.  Terminals can be Emacs Lisp symbols or
+characters, and nonterminals are symbols only.
+
+   <p><a name="index-token-5"></a>Terminals (also known as <dfn>tokens</dfn>) represent the lexical
+elements of the language like numbers, strings, etc..
+
+   <p>For example &lsquo;<samp><span class="samp">PLUS</span></samp>&rsquo; can represent the operator &lsquo;<samp><span class="samp">+</span></samp>&rsquo;.
+
+   <p>Nonterminal symbols are described by rules:
+
+<pre class="example">     RESULT == COMPONENTS...
+</pre>
+   <p>&lsquo;<samp><span class="samp">RESULT</span></samp>&rsquo; is a nonterminal that this rule describes and
+&lsquo;<samp><span class="samp">COMPONENTS</span></samp>&rsquo; are various terminals and nonterminals that are put
+together by this rule.
+
+   <p>For example, this rule:
+
+<pre class="example">     exp == exp PLUS exp
+</pre>
+   <p>Says that two groupings of type &lsquo;<samp><span class="samp">exp</span></samp>&rsquo;, with a &lsquo;<samp><span class="samp">PLUS</span></samp>&rsquo; token
+in between, can be combined into a larger grouping of type &lsquo;<samp><span class="samp">exp</span></samp>&rsquo;.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Grammar-format">Grammar format</a>
+<li><a accesskey="2" href="#Example">Example</a>
+<li><a accesskey="3" href="#Compiling-a-grammar">Compiling a grammar</a>
+<li><a accesskey="4" href="#Conflicts">Conflicts</a>
+</ul>
+
+<div class="node">
+<a name="Grammar-format"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Example">Example</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Wisent-Grammar">Wisent Grammar</a>
+
+</div>
+
+<h3 class="section">2.1 Grammar format</h3>
+
+<p><a name="index-grammar-format-6"></a>To be acceptable by Wisent a context-free grammar must respect a
+particular format.  That is, must be represented as an Emacs Lisp list
+of the form:
+
+   <p><code>(</code><var>terminals</var> <var>assocs</var><code> . </code><var>non-terminals</var><code>)</code>
+
+     <dl>
+<dt><var>terminals</var><dd>Is the list of terminal symbols used in the grammar.
+
+     <p><a name="index-associativity-7"></a><br><dt><var>assocs</var><dd>Specify the associativity of <var>terminals</var>.  It is <code>nil</code> when
+there is no associativity defined, or an alist of
+<code>(</code><var>assoc-type</var><code>&nbsp;.&nbsp;</code><var>assoc-value</var><code>)</code><!-- /@w --> elements.
+
+     <p><var>assoc-type</var> must be one of the <code>default-prec</code>,
+<code>nonassoc</code>, <code>left</code> or <code>right</code> symbols.  When
+<var>assoc-type</var> is <code>default-prec</code>, <var>assoc-value</var> must be
+<code>nil</code> or <code>t</code> (the default).  Otherwise it is a list of
+tokens which must have been previously declared in <var>terminals</var>.
+
+     <p>For details, see <a href="bison.html#Contextual-Precedence">Contextual Precedence</a>, in the
+Bison manual.
+
+     <br><dt><var>non-terminals</var><dd>Is the list of nonterminal definitions.  Each definition has the form:
+
+     <p><code>(</code><var>nonterm</var><code> . </code><var>rules</var><code>)</code>
+
+     <p>Where <var>nonterm</var> is the nonterminal symbol defined and
+<var>rules</var> the list of rules that describe this nonterminal.  Each
+rule is a list:
+
+     <p><code>(</code><var>components</var><code> [</code><var>precedence</var><code>] [</code><var>action</var><code>])</code>
+
+     <p>Where:
+
+          <dl>
+<dt><var>components</var><dd>Is a list of various terminals and nonterminals that are put together
+by this rule.
+
+          <p>For example,
+
+          <pre class="example">               (exp ((exp ?+ exp))          ;; exp: exp '+' exp
+                    )                       ;;    ;
+</pre>
+          <p>Says that two groupings of type &lsquo;<samp><span class="samp">exp</span></samp>&rsquo;, with a &lsquo;<samp><span class="samp">+</span></samp>&rsquo; token in
+between, can be combined into a larger grouping of type &lsquo;<samp><span class="samp">exp</span></samp>&rsquo;.
+
+          <p><a name="index-grammar-coding-conventions-8"></a>By convention, a nonterminal symbol should be in lower case, such as
+&lsquo;<samp><span class="samp">exp</span></samp>&rsquo;, &lsquo;<samp><span class="samp">stmt</span></samp>&rsquo; or &lsquo;<samp><span class="samp">declaration</span></samp>&rsquo;.  Terminal symbols
+should be upper case to distinguish them from nonterminals: for
+example, &lsquo;<samp><span class="samp">INTEGER</span></samp>&rsquo;, &lsquo;<samp><span class="samp">IDENTIFIER</span></samp>&rsquo;, &lsquo;<samp><span class="samp">IF</span></samp>&rsquo; or
+&lsquo;<samp><span class="samp">RETURN</span></samp>&rsquo;.  A terminal symbol that represents a particular keyword
+in the language is conventionally the same as that keyword converted
+to upper case.  The terminal symbol <code>error</code> is reserved for error
+recovery.
+
+          <p><a name="index-middle_002drule-actions-9"></a>Scattered among the components can be <dfn>middle-rule</dfn> actions. 
+Usually only <var>action</var> is provided (see <a href="#action">action</a>).
+
+          <p>If <var>components</var> in a rule is <code>nil</code>, it means that the rule
+can match the empty string.  For example, here is how to define a
+comma-separated sequence of zero or more &lsquo;<samp><span class="samp">exp</span></samp>&rsquo; groupings:
+
+          <pre class="smallexample">               (expseq  (nil)               ;; expseq: ;; empty
+                        ((expseq1))         ;;       | expseq1
+                        )                   ;;       ;
+               
+               (expseq1 ((exp))             ;; expseq1: exp
+                        ((expseq1 ?, exp))  ;;        | expseq1 ',' exp
+                        )                   ;;        ;
+</pre>
+          <p><a name="index-precedence-level-10"></a><br><dt><var>precedence</var><dd>Assign the rule the precedence of the given terminal item, overriding
+the precedence that would be deduced for it, that is the one of the
+last terminal in it.  Notice that only terminals declared in
+<var>assocs</var> have a precedence level.  The altered rule precedence
+then affects how conflicts involving that rule are resolved.
+
+          <p><var>precedence</var> is an optional vector of one terminal item.
+
+          <p>Here is how <var>precedence</var> solves the problem of unary minus. 
+First, declare a precedence for a fictitious terminal symbol named
+<code>UMINUS</code>.  There are no tokens of this type, but the symbol
+serves to stand for its precedence:
+
+          <pre class="example">               ...
+               ((default-prec t) ;; This is the default
+                (left '+' '-')
+                (left '*')
+                (left UMINUS))
+</pre>
+          <p>Now the precedence of <code>UMINUS</code> can be used in specific rules:
+
+          <pre class="smallexample">               (exp    ...                  ;; exp:    ...
+                        ((exp ?- exp))      ;;         | exp '-' exp
+                       ...                  ;;         ...
+                        ((?- exp) [UMINUS]) ;;         | '-' exp %prec UMINUS
+                       ...                  ;;         ...
+                       )                    ;;         ;
+</pre>
+          <p>If you forget to append <code>[UMINUS]</code> to the rule for unary minus,
+Wisent silently assumes that minus has its usual precedence.  This
+kind of problem can be tricky to debug, since one typically discovers
+the mistake only by testing the code.
+
+          <p>Using <code>(default-prec nil)</code> declaration makes it easier to
+discover this kind of problem systematically.  It causes rules that
+lack a <var>precedence</var> modifier to have no precedence, even if the
+last terminal symbol mentioned in their components has a declared
+precedence.
+
+          <p>If <code>(default-prec nil)</code> is in effect, you must specify
+<var>precedence</var> for all rules that participate in precedence conflict
+resolution.  Then you will see any shift/reduce conflict until you
+tell Wisent how to resolve it, either by changing your grammar or by
+adding an explicit precedence.  This will probably add declarations to
+the grammar, but it helps to protect against incorrect rule
+precedences.
+
+          <p>The effect of <code>(default-prec nil)</code> can be reversed by giving
+<code>(default-prec t)</code>, which is the default.
+
+          <p>For more details, see <a href="bison.html#Contextual-Precedence">Contextual Precedence</a>, in the
+Bison manual.
+
+          <p>It is important to understand that <var>assocs</var> declarations defines
+associativity but also assign a precedence level to terminals.  All
+terminals declared in the same <code>left</code>, <code>right</code> or
+<code>nonassoc</code> association get the same precedence level.  The
+precedence level is increased at each new association.
+
+          <p>On the other hand, <var>precedence</var> explicitly assign the precedence
+level of the given terminal to a rule.
+
+          <p><a name="index-semantic-actions-11"></a><br><dt><var><a name="action"></a>action</var><dd>An action is an optional Emacs Lisp function call, like this:
+
+          <p><code>(identity $1)</code>
+
+          <p>The result of an action determines the semantic value of a rule.
+
+          <p>From an implementation standpoint, the function call will be embedded
+in a lambda expression, and several useful local variables will be
+defined:
+
+               
+<a name="index-g_t_0024N-12"></a>
+<dl><dt><code>$</code><var>n</var><dd>Where <var>n</var> is a positive integer.  Like in Bison, the value of
+<code>$</code><var>n</var> is the semantic value of the <var>n</var>th element of
+<var>components</var>, starting from 1.  It can be of any Lisp data
+type.
+
+               <p><a name="index-g_t_0024region_0040var_007bn_007d-13"></a><br><dt><code>$regionN</code><dd>Where <var>n</var> is a positive integer.  For each <code>$</code><var>n</var>
+variable defined there is a corresponding <code>$region</code><var>n</var>
+variable.  Its value is a pair <code>(</code><var>start-pos</var><code> . 
+</code><var>end-pos</var><code>)</code> that represent the start and end positions (in the
+lexical input stream) of the <code>$</code><var>n</var> value.  It can be
+<code>nil</code> when the component positions are not available, like for an
+empty string component for example.
+
+               <p><a name="index-g_t_0024region-14"></a><br><dt><code>$region</code><dd>Its value is the leftmost and rightmost positions of input data
+matched by all <var>components</var> in the rule.  This is a pair
+<code>(</code><var>leftmost-pos</var><code> .  </code><var>rightmost-pos</var><code>)</code>.  It can be
+<code>nil</code> when components positions are not available.
+
+               <p><a name="index-g_t_0024nterm-15"></a><br><dt><code>$nterm</code><dd>This variable is initialized with the nonterminal symbol
+(<var>nonterm</var>) the rule belongs to.  It could be useful to improve
+error reporting or debugging.  It is also used to automatically
+provide incremental re-parse entry points for <i>Semantic</i> tags
+(see <a href="#Wisent-Semantic">Wisent Semantic</a>).
+
+               <p><a name="index-g_t_0024action-16"></a><br><dt><code>$action</code><dd>The value of <code>$action</code> is the symbolic name of the current
+semantic action (see <a href="#Debugging-actions">Debugging actions</a>). 
+</dl>
+
+          <p>When an action is not specified a default value is supplied, it is
+<code>(identity $1)</code>.  This means that the default semantic value of a
+rule is the value of its first component.  Excepted for a rule
+matching the empty string, for which the default action is to return
+<code>nil</code>. 
+</dl>
+     </dl>
+
+<div class="node">
+<a name="Example"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Compiling-a-grammar">Compiling a grammar</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Grammar-format">Grammar format</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Wisent-Grammar">Wisent Grammar</a>
+
+</div>
+
+<h3 class="section">2.2 Example</h3>
+
+<p><a name="index-grammar-example-17"></a>Here is an example to parse simple infix arithmetic expressions.  See
+<a href="bison.html#Infix-Calc">Infix Calc</a>, in the Bison manual for details.
+
+<pre class="lisp">     '(
+       ;; Terminals
+       (NUM)
+     
+       ;; Terminal associativity &amp; precedence
+       ((nonassoc ?=)
+        (left ?- ?+)
+        (left ?* ?/)
+        (left NEG)
+        (right ?^))
+     
+       ;; Rules
+       (input
+        ((line))
+        ((input line)
+         (format "%s %s" $1 $2))
+        )
+     
+       (line
+        ((?;)
+         (progn ";"))
+        ((exp ?;)
+         (format "%s;" $1))
+        ((error ?;)
+         (progn "Error;")))
+        )
+     
+       (exp
+        ((NUM)
+         (string-to-number $1))
+        ((exp ?= exp)
+         (= $1 $3))
+        ((exp ?+ exp)
+         (+ $1 $3))
+        ((exp ?- exp)
+         (- $1 $3))
+        ((exp ?* exp)
+         (* $1 $3))
+        ((exp ?/ exp)
+         (/ $1 $3))
+        ((?- exp) [NEG]
+         (- $2))
+        ((exp ?^ exp)
+         (expt $1 $3))
+        ((?\( exp ?\))
+         (progn $2))
+        )
+       )
+</pre>
+   <p>In the bison-like <dfn>WY</dfn> format (see <a href="#Wisent-Semantic">Wisent Semantic</a>) the
+grammar looks like this:
+
+<pre class="example">     %token &lt;number&gt; NUM
+     
+     %nonassoc '=' ;; comparison
+     %left '-' '+'
+     %left '*' '/'
+     %left NEG     ;; negation--unary minus
+     %right '^'    ;; exponentiation
+     
+     %%
+     
+     input:
+         line
+       | input line
+         (format "%s %s" $1 $2)
+       ;
+     
+     line:
+         ';'
+         {";"}
+       | exp ';'
+         (format "%s;" $1)
+       | error ';'
+         {"Error;"}
+       ;
+     
+     exp:
+         NUM
+         (string-to-number $1)
+       | exp '=' exp
+         (= $1 $3)
+       | exp '+' exp
+         (+ $1 $3)
+       | exp '-' exp
+         (- $1 $3)
+       | exp '*' exp
+         (* $1 $3)
+       | exp '/' exp
+         (/ $1 $3)
+       | '-' exp %prec NEG
+         (- $2)
+       | exp '^' exp
+         (expt $1 $3)
+       | '(' exp ')'
+         {$2}
+       ;
+     
+     %%
+</pre>
+   <div class="node">
+<a name="Compiling-a-grammar"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Conflicts">Conflicts</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Example">Example</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Wisent-Grammar">Wisent Grammar</a>
+
+</div>
+
+<h3 class="section">2.3 Compiling a grammar</h3>
+
+<p><a name="index-automaton-18"></a>After providing a context-free grammar in a suitable format, it must
+be translated into a set of tables (an <dfn>automaton</dfn>) that will be
+used to derive the parser.  Like Bison, Wisent translates grammars that
+must be <dfn>LALR(1)</dfn>.
+
+   <p><a name="index-LALR_00281_0029-grammar-19"></a><a name="index-look_002dahead-token-20"></a>A grammar is <acronym>LALR(1)</acronym> if it is possible to tell how to parse
+any portion of an input string with just a single token of look-ahead:
+the <dfn>look-ahead token</dfn>.  See <a href="bison.html#Language-and-Grammar">Language and Grammar</a>, in the Bison manual for more information.
+
+   <p><a name="index-grammar-compilation-21"></a>Grammar translation (compilation) is achieved by the function:
+
+   <p><a name="index-compiling-a-grammar-22"></a><a name="index-wisent_002dsingle_002dstart_002dflag-23"></a><a name="index-wisent_002dcompile_002dgrammar-24"></a>
+
+<div class="defun">
+&mdash; Function: <b>wisent-compile-grammar</b><var> grammar &amp;optional start-list<a name="index-wisent_002dcompile_002dgrammar-25"></a></var><br>
+<blockquote><p>Compile <var>grammar</var> and return an <acronym>LALR(1)</acronym> automaton.
+
+        <p>Optional argument <var>start-list</var> is a list of start symbols
+(nonterminals).  If <code>nil</code> the first nonterminal defined in the
+grammar is the default start symbol.  If <var>start-list</var> contains
+only one element, it defines the start symbol.  If <var>start-list</var>
+contains more than one element, all are defined as potential start
+symbols, unless <code>wisent-single-start-flag</code> is non-<code>nil</code>.  In
+that case the first element of <var>start-list</var> defines the start
+symbol and others are ignored.
+
+        <p>The <acronym>LALR(1)</acronym> automaton is a vector of the form:
+
+        <p><code>[</code><var>actions gotos starts functions</var><code>]</code>
+
+          <dl>
+<dt><var>actions</var><dd>A state/token matrix telling the parser what to do at every state
+based on the current look-ahead token.  That is shift, reduce, accept
+or error.  See also <a href="#Wisent-Parsing">Wisent Parsing</a>.
+
+          <br><dt><var>gotos</var><dd>A state/nonterminal matrix telling the parser the next state to go to
+after reducing with each rule.
+
+          <br><dt><var>starts</var><dd>An alist which maps the allowed start symbols (nonterminals) to
+lexical tokens that will be first shifted into the parser stack.
+
+          <br><dt><var>functions</var><dd>An obarray of semantic action symbols.  A semantic action is actually
+an Emacs Lisp function (lambda expression). 
+</dl>
+        </p></blockquote></div>
+
+<div class="node">
+<a name="Conflicts"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Compiling-a-grammar">Compiling a grammar</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Wisent-Grammar">Wisent Grammar</a>
+
+</div>
+
+<h3 class="section">2.4 Conflicts</h3>
+
+<p>Normally, a grammar should produce an automaton where at each state
+the parser has only one action to do (see <a href="#Wisent-Parsing">Wisent Parsing</a>).
+
+   <p><a name="index-ambiguous-grammar-26"></a>In certain cases, a grammar can produce an automaton where, at some
+states, there are more than one action possible.  Such a grammar is
+<dfn>ambiguous</dfn>, and generates <dfn>conflicts</dfn>.
+
+   <p><a name="index-deterministic-automaton-27"></a>The parser can't be driven by an automaton which isn't completely
+<dfn>deterministic</dfn>, that is which contains conflicts.  It is
+necessary to resolve the conflicts to eliminate them.  Wisent resolves
+conflicts like Bison does.
+
+   <p><a name="index-grammar-conflicts-28"></a><a name="index-conflicts-resolution-29"></a>There are two sorts of conflicts:
+
+     
+<a name="index-shift_002freduce-conflicts-30"></a>
+<dl><dt><dfn>shift/reduce conflicts</dfn><dd>When either a shift or a reduction would be valid at the same state.
+
+     <p>Such conflicts are resolved by choosing to shift, unless otherwise
+directed by operator precedence declarations. 
+See <a href="bison.html#Shift_002fReduce">Shift/Reduce</a>, in the Bison manual for more
+information.
+
+     <p><a name="index-reduce_002freduce-conflicts-31"></a><br><dt><dfn>reduce/reduce conflicts</dfn><dd>That occurs if there are two or more rules that apply to the same
+sequence of input.  This usually indicates a serious error in the
+grammar.
+
+     <p>Such conflicts are resolved by choosing to use the rule that appears
+first in the grammar, but it is very risky to rely on this.  Every
+reduce/reduce conflict must be studied and usually eliminated.  See
+<a href="bison.html#Reduce_002fReduce">Reduce/Reduce</a>, in the Bison manual for more
+information. 
+</dl>
+
+<ul class="menu">
+<li><a accesskey="1" href="#Grammar-Debugging">Grammar Debugging</a>
+<li><a accesskey="2" href="#Understanding-the-automaton">Understanding the automaton</a>
+</ul>
+
+<div class="node">
+<a name="Grammar-Debugging"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Understanding-the-automaton">Understanding the automaton</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Conflicts">Conflicts</a>
+
+</div>
+
+<h4 class="subsection">2.4.1 Grammar debugging</h4>
+
+<p><a name="index-grammar-debugging-32"></a><a name="index-grammar-verbose-description-33"></a>To help writing a new grammar, <code>wisent-compile-grammar</code> can
+produce a verbose report containing a detailed description of the
+grammar and parser (equivalent to what Bison reports with the
+<samp><span class="option">--verbose</span></samp> option).
+
+   <p>To enable the verbose report you can set to non-<code>nil</code> the
+variable:
+
+   <p><a name="index-wisent_002dverbose_002dflag-34"></a>
+
+<div class="defun">
+&mdash; Option: <b>wisent-verbose-flag</b><var><a name="index-wisent_002dverbose_002dflag-35"></a></var><br>
+<blockquote><p>non-<code>nil</code> means to report verbose information on generated parser. 
+</p></blockquote></div>
+
+   <p>Or interactively use the command:
+
+   <p><a name="index-wisent_002dtoggle_002dverbose_002dflag-36"></a>
+
+<div class="defun">
+&mdash; Command: <b>wisent-toggle-verbose-flag</b><var><a name="index-wisent_002dtoggle_002dverbose_002dflag-37"></a></var><br>
+<blockquote><p>Toggle whether to report verbose information on generated parser. 
+</p></blockquote></div>
+
+   <p>The verbose report is printed in the temporary buffer
+<samp><span class="file">*wisent-log*</span></samp> when running interactively, or in file
+<samp><span class="file">wisent.output</span></samp> when running in batch mode.  Different
+reports are separated from each other by a line like this:
+
+<pre class="example">     *** Wisent <var>source-file</var> - 2002-06-27 17:33
+</pre>
+   <p>where <var>source-file</var> is the name of the Emacs Lisp file from which
+the grammar was read.  See <a href="#Understanding-the-automaton">Understanding the automaton</a>, for
+details on the verbose report.
+
+     <dl>
+<dt><strong>Please Note</strong><dd>To help debugging the grammar compiler itself, you can set this
+variable to print the content of some internal data structures:
+
+     <p><a name="index-wisent_002ddebug_002dflag-38"></a>
+
+     <div class="defun">
+&mdash; Variable: <b>wisent-debug-flag</b><var><a name="index-wisent_002ddebug_002dflag-39"></a></var><br>
+<blockquote> <p>non-<code>nil</code> means enable some debug stuff. 
+</p></blockquote></div>
+     </dl>
+
+<div class="node">
+<a name="Understanding-the-automaton"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Grammar-Debugging">Grammar Debugging</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Conflicts">Conflicts</a>
+
+</div>
+
+<h4 class="subsection">2.4.2 Understanding the automaton</h4>
+
+<p><a name="index-understanding-the-automaton-40"></a>This section (took from the manual of Bison 1.49) describes how to use
+the verbose report printed by <code>wisent-compile-grammar</code> to
+understand the generated automaton, to tune or fix a grammar.
+
+   <p>We will use the following example:
+
+<pre class="example">     (let ((wisent-verbose-flag t)) ;; Print a verbose report!
+       (wisent-compile-grammar
+        '((NUM STR)                          ; %token NUM STR
+     
+          ((left ?+ ?-)                      ; %left '+' '-';
+           (left ?*))                        ; %left '*'
+     
+          (exp                               ; exp:
+           ((exp ?+ exp))                    ;    exp '+' exp
+           ((exp ?- exp))                    ;  | exp '-' exp
+           ((exp ?* exp))                    ;  | exp '*' exp
+           ((exp ?/ exp))                    ;  | exp '/' exp
+           ((NUM))                           ;  | NUM
+           )                                 ;  ;
+     
+          (useless                           ; useless:
+           ((STR))                           ;    STR
+           )                                 ;  ;
+          )
+        'nil)                                ; no %start declarations
+       )
+</pre>
+   <p>When evaluating the above expression, grammar compilation first issues
+the following two clear messages:
+
+<pre class="example">     Grammar contains 1 useless nonterminals and 1 useless rules
+     Grammar contains 7 shift/reduce conflicts
+</pre>
+   <p>The <samp><span class="file">*wisent-log*</span></samp> buffer details things!
+
+   <p>The first section reports conflicts that were solved using precedence
+and/or associativity:
+
+<pre class="example">     Conflict in state 7 between rule 1 and token '+' resolved as reduce.
+     Conflict in state 7 between rule 1 and token '-' resolved as reduce.
+     Conflict in state 7 between rule 1 and token '*' resolved as shift.
+     Conflict in state 8 between rule 2 and token '+' resolved as reduce.
+     Conflict in state 8 between rule 2 and token '-' resolved as reduce.
+     Conflict in state 8 between rule 2 and token '*' resolved as shift.
+     Conflict in state 9 between rule 3 and token '+' resolved as reduce.
+     Conflict in state 9 between rule 3 and token '-' resolved as reduce.
+     Conflict in state 9 between rule 3 and token '*' resolved as reduce.
+</pre>
+   <p>The next section reports useless tokens, nonterminal and rules (note
+that useless tokens might be used by the scanner):
+
+<pre class="example">     Useless nonterminals:
+     
+        useless
+     
+     
+     Terminals which are not used:
+     
+        STR
+     
+     
+     Useless rules:
+     
+     #6     useless: STR;
+</pre>
+   <p>The next section lists states that still have conflicts:
+
+<pre class="example">     State 7 contains 1 shift/reduce conflict.
+     State 8 contains 1 shift/reduce conflict.
+     State 9 contains 1 shift/reduce conflict.
+     State 10 contains 4 shift/reduce conflicts.
+</pre>
+   <p>The next section reproduces the grammar used:
+
+<pre class="example">     Grammar
+     
+       Number, Rule
+       1       exp -&gt; exp '+' exp
+       2       exp -&gt; exp '-' exp
+       3       exp -&gt; exp '*' exp
+       4       exp -&gt; exp '/' exp
+       5       exp -&gt; NUM
+</pre>
+   <p>And reports the uses of the symbols:
+
+<pre class="example">     Terminals, with rules where they appear
+     
+     $EOI (-1)
+     error (1)
+     NUM (2) 5
+     STR (3) 6
+     '+' (4) 1
+     '-' (5) 2
+     '*' (6) 3
+     '/' (7) 4
+     
+     
+     Nonterminals, with rules where they appear
+     
+     exp (8)
+         on left: 1 2 3 4 5, on right: 1 2 3 4
+</pre>
+   <p>The report then details the automaton itself, describing each state
+with it set of <dfn>items</dfn>, also known as <dfn>pointed rules</dfn>.  Each
+item is a production rule together with a point (marked by &lsquo;<samp><span class="samp">.</span></samp>&rsquo;)
+that the input cursor.
+
+<pre class="example">     state 0
+     
+         NUM shift, and go to state 1
+     
+         exp go to state 2
+</pre>
+   <p>State 0 corresponds to being at the very beginning of the parsing, in
+the initial rule, right before the start symbol (&lsquo;<samp><span class="samp">exp</span></samp>&rsquo;).  When
+the parser returns to this state right after having reduced a rule
+that produced an &lsquo;<samp><span class="samp">exp</span></samp>&rsquo;, it jumps to state 2.  If there is no such
+transition on a nonterminal symbol, and the lookahead is a &lsquo;<samp><span class="samp">NUM</span></samp>&rsquo;,
+then this token is shifted on the parse stack, and the control flow
+jumps to state 1.  Any other lookahead triggers a parse error.
+
+   <p>In the state 1...
+
+<pre class="example">     state 1
+     
+         exp  -&gt;  NUM .   (rule 5)
+     
+         $default    reduce using rule 5 (exp)
+</pre>
+   <p>the rule 5, &lsquo;<samp><span class="samp">exp: NUM;</span></samp>&rsquo;, is completed.  Whatever the lookahead
+(&lsquo;<samp><span class="samp">$default</span></samp>&rsquo;), the parser will reduce it.  If it was coming from
+state 0, then, after this reduction it will return to state 0, and
+will jump to state 2 (&lsquo;<samp><span class="samp">exp: go to state 2</span></samp>&rsquo;).
+
+<pre class="example">     state 2
+     
+         exp  -&gt;  exp . '+' exp   (rule 1)
+         exp  -&gt;  exp . '-' exp   (rule 2)
+         exp  -&gt;  exp . '*' exp   (rule 3)
+         exp  -&gt;  exp . '/' exp   (rule 4)
+     
+         $EOI        shift, and go to state 11
+         '+' shift, and go to state 3
+         '-' shift, and go to state 4
+         '*' shift, and go to state 5
+         '/' shift, and go to state 6
+</pre>
+   <p>In state 2, the automaton can only shift a symbol.  For instance,
+because of the item &lsquo;<samp><span class="samp">exp -&gt; exp . '+' exp</span></samp>&rsquo;, if the lookahead if
+&lsquo;<samp><span class="samp">+</span></samp>&rsquo;, it will be shifted on the parse stack, and the automaton
+control will jump to state 3, corresponding to the item
+&lsquo;<samp><span class="samp">exp -&gt; exp . '+' exp</span></samp>&rsquo;:
+
+<pre class="example">     state 3
+     
+         exp  -&gt;  exp '+' . exp   (rule 1)
+     
+         NUM shift, and go to state 1
+     
+         exp go to state 7
+</pre>
+   <p>Since there is no default action, any other token than those listed
+above will trigger a parse error.
+
+   <p>The interpretation of states 4 to 6 is straightforward:
+
+<pre class="example">     state 4
+     
+         exp  -&gt;  exp '-' . exp   (rule 2)
+     
+         NUM shift, and go to state 1
+     
+         exp go to state 8
+     
+     
+     
+     state 5
+     
+         exp  -&gt;  exp '*' . exp   (rule 3)
+     
+         NUM shift, and go to state 1
+     
+         exp go to state 9
+     
+     
+     
+     state 6
+     
+         exp  -&gt;  exp '/' . exp   (rule 4)
+     
+         NUM shift, and go to state 1
+     
+         exp go to state 10
+</pre>
+   <p>As was announced in beginning of the report, &lsquo;<samp><span class="samp">State 7 contains 1
+shift/reduce conflict.</span></samp>&rsquo;:
+
+<pre class="example">     state 7
+     
+         exp  -&gt;  exp . '+' exp   (rule 1)
+         exp  -&gt;  exp '+' exp .   (rule 1)
+         exp  -&gt;  exp . '-' exp   (rule 2)
+         exp  -&gt;  exp . '*' exp   (rule 3)
+         exp  -&gt;  exp . '/' exp   (rule 4)
+     
+         '*' shift, and go to state 5
+         '/' shift, and go to state 6
+     
+         '/' [reduce using rule 1 (exp)]
+         $default    reduce using rule 1 (exp)
+</pre>
+   <p>Indeed, there are two actions associated to the lookahead &lsquo;<samp><span class="samp">/</span></samp>&rsquo;:
+either shifting (and going to state 6), or reducing rule 1.  The
+conflict means that either the grammar is ambiguous, or the parser
+lacks information to make the right decision.  Indeed the grammar is
+ambiguous, as, since we did not specify the precedence of &lsquo;<samp><span class="samp">/</span></samp>&rsquo;,
+the sentence &lsquo;<samp><span class="samp">NUM + NUM / NUM</span></samp>&rsquo; can be parsed as &lsquo;<samp><span class="samp">NUM + (NUM
+/ NUM)</span></samp>&rsquo;, which corresponds to shifting &lsquo;<samp><span class="samp">/</span></samp>&rsquo;, or as &lsquo;<samp><span class="samp">(NUM +
+NUM) / NUM</span></samp>&rsquo;, which corresponds to reducing rule 1.
+
+   <p>Because in <acronym>LALR(1)</acronym> parsing a single decision can be made,
+Wisent arbitrarily chose to disable the reduction, see
+<a href="#Conflicts">Conflicts</a>.  Discarded actions are reported in between square
+brackets.
+
+   <p>Note that all the previous states had a single possible action: either
+shifting the next token and going to the corresponding state, or
+reducing a single rule.  In the other cases, i.e., when shifting
+<em>and</em> reducing is possible or when <em>several</em> reductions are
+possible, the lookahead is required to select the action.  State 7 is
+one such state: if the lookahead is &lsquo;<samp><span class="samp">*</span></samp>&rsquo; or &lsquo;<samp><span class="samp">/</span></samp>&rsquo; then the
+action is shifting, otherwise the action is reducing rule 1.  In other
+words, the first two items, corresponding to rule 1, are not eligible
+when the lookahead is &lsquo;<samp><span class="samp">*</span></samp>&rsquo;, since we specified that &lsquo;<samp><span class="samp">*</span></samp>&rsquo; has
+higher precedence that &lsquo;<samp><span class="samp">+</span></samp>&rsquo;.  More generally, some items are
+eligible only with some set of possible lookaheads.
+
+   <p>States 8 to 10 are similar:
+
+<pre class="example">     state 8
+     
+         exp  -&gt;  exp . '+' exp   (rule 1)
+         exp  -&gt;  exp . '-' exp   (rule 2)
+         exp  -&gt;  exp '-' exp .   (rule 2)
+         exp  -&gt;  exp . '*' exp   (rule 3)
+         exp  -&gt;  exp . '/' exp   (rule 4)
+     
+         '*' shift, and go to state 5
+         '/' shift, and go to state 6
+     
+         '/' [reduce using rule 2 (exp)]
+         $default    reduce using rule 2 (exp)
+     
+     
+     state 9
+     
+         exp  -&gt;  exp . '+' exp   (rule 1)
+         exp  -&gt;  exp . '-' exp   (rule 2)
+         exp  -&gt;  exp . '*' exp   (rule 3)
+         exp  -&gt;  exp '*' exp .   (rule 3)
+         exp  -&gt;  exp . '/' exp   (rule 4)
+     
+         '/' shift, and go to state 6
+     
+         '/' [reduce using rule 3 (exp)]
+         $default    reduce using rule 3 (exp)
+     
+     
+     state 10
+     
+         exp  -&gt;  exp . '+' exp   (rule 1)
+         exp  -&gt;  exp . '-' exp   (rule 2)
+         exp  -&gt;  exp . '*' exp   (rule 3)
+         exp  -&gt;  exp . '/' exp   (rule 4)
+         exp  -&gt;  exp '/' exp .   (rule 4)
+     
+         '+' shift, and go to state 3
+         '-' shift, and go to state 4
+         '*' shift, and go to state 5
+         '/' shift, and go to state 6
+     
+         '+' [reduce using rule 4 (exp)]
+         '-' [reduce using rule 4 (exp)]
+         '*' [reduce using rule 4 (exp)]
+         '/' [reduce using rule 4 (exp)]
+         $default    reduce using rule 4 (exp)
+</pre>
+   <p>Observe that state 10 contains conflicts due to the lack of precedence
+of &lsquo;<samp><span class="samp">/</span></samp>&rsquo; wrt &lsquo;<samp><span class="samp">+</span></samp>&rsquo;, &lsquo;<samp><span class="samp">-</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">*</span></samp>&rsquo;, but also because the
+associativity of &lsquo;<samp><span class="samp">/</span></samp>&rsquo; is not specified.
+
+   <p>Finally, the state 11 (plus 12) is named the <dfn>final state</dfn>, or the
+<dfn>accepting state</dfn>:
+
+<pre class="example">     state 11
+     
+         $EOI        shift, and go to state 12
+     
+     
+     
+     state 12
+     
+         $default    accept
+</pre>
+   <p>The end of input is shifted &lsquo;<samp><span class="samp">$EOI shift,</span></samp>&rsquo; and the parser exits
+successfully (&lsquo;<samp><span class="samp">go to state 12</span></samp>&rsquo;, that terminates).
+
+<div class="node">
+<a name="Wisent-Parsing"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Wisent-Semantic">Wisent Semantic</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Wisent-Grammar">Wisent Grammar</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">3 Wisent Parsing</h2>
+
+<p><a name="index-bottom_002dup-parser-41"></a><a name="index-shift_002dreduce-parser-42"></a>The Wisent's parser is what is called a <dfn>bottom-up</dfn> or
+<dfn>shift-reduce</dfn> parser which repeatedly:
+
+     
+<a name="index-shift-43"></a>
+<dl><dt><dfn>shift</dfn><dd>That is pushes the value of the last lexical token read (the
+look-ahead token) into a value stack, and reads a new one.
+
+     <p><a name="index-reduce-44"></a><br><dt><dfn>reduce</dfn><dd>That is replaces a nonterminal by its semantic value.  The values of
+the components which form the right hand side of a rule are popped
+from the value stack and reduced by the semantic action of this rule. 
+The result is pushed back on top of value stack. 
+</dl>
+
+   <p>The parser will stop on:
+
+     
+<a name="index-accept-45"></a>
+<dl><dt><dfn>accept</dfn><dd>When all input has been successfully parsed.  The semantic value of
+the start nonterminal is on top of the value stack.
+
+     <p><a name="index-syntax-error-46"></a><br><dt><dfn>error</dfn><dd>When a syntax error (an unexpected token in input) has been detected. 
+At this point the parser issues an error message and either stops or
+calls a recovery routine to try to resume parsing. 
+</dl>
+
+   <p><a name="index-table_002ddriven-parser-47"></a>The above elementary actions are driven by the <acronym>LALR(1)</acronym>
+automaton built by <code>wisent-compile-grammar</code> from a context-free
+grammar.
+
+   <p>The Wisent's parser is entered by calling the function:
+
+   <p><a name="index-wisent_002dparse-48"></a>
+
+<div class="defun">
+&mdash; Function: <b>wisent-parse</b><var> automaton lexer &amp;optional error start<a name="index-wisent_002dparse-49"></a></var><br>
+<blockquote><p>Parse input using the automaton specified in <var>automaton</var>.
+
+          <dl>
+<dt><var>automaton</var><dd>Is an <acronym>LALR(1)</acronym> automaton generated by
+<code>wisent-compile-grammar</code> (see <a href="#Wisent-Grammar">Wisent Grammar</a>).
+
+          <br><dt><var>lexer</var><dd>Is a function with no argument called by the parser to obtain the next
+terminal (token) in input (see <a href="#Writing-a-lexer">Writing a lexer</a>).
+
+          <br><dt><var>error</var><dd>Is an optional reporting function called when a parse error occurs. 
+It receives a message string to report.  It defaults to the function
+<code>wisent-message</code> (see <a href="#Report-errors">Report errors</a>).
+
+          <br><dt><var>start</var><dd>Specify the start symbol (nonterminal) used by the parser as its goal. 
+It defaults to the start symbol defined in the grammar
+(see <a href="#Wisent-Grammar">Wisent Grammar</a>). 
+</dl>
+        </p></blockquote></div>
+
+   <p>The following two normal hooks permit to do some useful processing
+respectively before to start parsing, and after the parser terminated.
+
+   <p><a name="index-wisent_002dpre_002dparse_002dhook-50"></a>
+
+<div class="defun">
+&mdash; Variable: <b>wisent-pre-parse-hook</b><var><a name="index-wisent_002dpre_002dparse_002dhook-51"></a></var><br>
+<blockquote><p>Normal hook run just before entering the <var>LR</var> parser engine. 
+</p></blockquote></div>
+
+   <p><a name="index-wisent_002dpost_002dparse_002dhook-52"></a>
+
+<div class="defun">
+&mdash; Variable: <b>wisent-post-parse-hook</b><var><a name="index-wisent_002dpost_002dparse_002dhook-53"></a></var><br>
+<blockquote><p>Normal hook run just after the <var>LR</var> parser engine terminated. 
+</p></blockquote></div>
+
+<ul class="menu">
+<li><a accesskey="1" href="#Writing-a-lexer">Writing a lexer</a>
+<li><a accesskey="2" href="#Actions-goodies">Actions goodies</a>
+<li><a accesskey="3" href="#Report-errors">Report errors</a>
+<li><a accesskey="4" href="#Error-recovery">Error recovery</a>
+<li><a accesskey="5" href="#Debugging-actions">Debugging actions</a>
+</ul>
+
+<div class="node">
+<a name="Writing-a-lexer"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Actions-goodies">Actions goodies</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Wisent-Parsing">Wisent Parsing</a>
+
+</div>
+
+<h3 class="section">3.1 What the parser must receive</h3>
+
+<p>It is important to understand that the parser does not parse
+characters, but lexical tokens, and does not know anything about
+characters in text streams!
+
+   <p><a name="index-lexical-analysis-54"></a><a name="index-lexer-55"></a><a name="index-scanner-56"></a>Reading input data to produce lexical tokens is performed by a lexer
+(also called a scanner) in a lexical analysis step, before the syntax
+analysis step performed by the parser.  The parser automatically calls
+the lexer when it needs the next token to parse.
+
+   <p><a name="index-lexical-tokens-57"></a>A Wisent's lexer is an Emacs Lisp function with no argument.  It must
+return a valid lexical token of the form:
+
+   <p><code>(</code><var>token-class value</var><code> [</code><var>start</var><code> . </code><var>end</var><code>])</code>
+
+     <dl>
+<dt><var>token-class</var><dd>Is a category of lexical token identifying a terminal as specified in
+the grammar (see <a href="#Wisent-Grammar">Wisent Grammar</a>).  It can be a symbol or a character
+literal.
+
+     <br><dt><var>value</var><dd>Is the value of the lexical token.  It can be of any valid Emacs Lisp
+data type.
+
+     <br><dt><var>start</var><dt><var>end</var><dd>Are the optional beginning and ending positions of <var>value</var> in the
+input stream. 
+</dl>
+
+   <p>When there are no more tokens to read the lexer must return the token
+<code>(list wisent-eoi-term)</code> to each request.
+
+   <p><a name="index-wisent_002deoi_002dterm-58"></a>
+
+<div class="defun">
+&mdash; Variable: <b>wisent-eoi-term</b><var><a name="index-wisent_002deoi_002dterm-59"></a></var><br>
+<blockquote><p>Predefined constant, End-Of-Input terminal symbol. 
+</p></blockquote></div>
+
+   <p><code>wisent-lex</code> is an example of a lexer that reads lexical tokens
+produced by a <i>Semantic</i> lexer, and translates them into lexical tokens
+suitable to the Wisent parser.  See also <a href="#Wisent-Lex">Wisent Lex</a>.
+
+   <p>To call the lexer in a semantic action use the function
+<code>wisent-lexer</code>.  See also <a href="#Actions-goodies">Actions goodies</a>.
+
+<div class="node">
+<a name="Actions-goodies"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Report-errors">Report errors</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Writing-a-lexer">Writing a lexer</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Wisent-Parsing">Wisent Parsing</a>
+
+</div>
+
+<h3 class="section">3.2 Variables and macros useful in grammar actions.</h3>
+
+<p><a name="index-wisent_002dinput-60"></a>
+
+<div class="defun">
+&mdash; Variable: <b>wisent-input</b><var><a name="index-wisent_002dinput-61"></a></var><br>
+<blockquote><p>The last token read. 
+This variable only has meaning in the scope of <code>wisent-parse</code>. 
+</p></blockquote></div>
+
+   <p><a name="index-wisent_002dlexer-62"></a>
+
+<div class="defun">
+&mdash; Function: <b>wisent-lexer</b><var><a name="index-wisent_002dlexer-63"></a></var><br>
+<blockquote><p>Obtain the next terminal in input. 
+</p></blockquote></div>
+
+   <p><a name="index-wisent_002dregion-64"></a>
+
+<div class="defun">
+&mdash; Function: <b>wisent-region</b><var> &amp;rest positions<a name="index-wisent_002dregion-65"></a></var><br>
+<blockquote><p>Return the start/end positions of the region including
+<var>positions</var>.  Each element of <var>positions</var> is a pair
+<code>(</code><var>start-pos</var><code>&nbsp;.&nbsp;&nbsp;</code><var>end-pos</var><code>)</code><!-- /@w --> or <code>nil</code>.  The
+returned value is the pair <code>(</code><var>min-start-pos</var><code>&nbsp;.&nbsp;</code><var>max-end-pos</var><code>)</code><!-- /@w --> or <code>nil</code> if no <var>positions</var> are
+available. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Report-errors"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Error-recovery">Error recovery</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Actions-goodies">Actions goodies</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Wisent-Parsing">Wisent Parsing</a>
+
+</div>
+
+<h3 class="section">3.3 The error reporting function</h3>
+
+<p><a name="index-error-reporting-66"></a>When the parser encounters a syntax error it calls a user-defined
+function.  It must be an Emacs Lisp function with one argument: a
+string containing the message to report.
+
+   <p>By default the parser uses this function to report error messages:
+
+   <p><a name="index-wisent_002dmessage-67"></a>
+
+<div class="defun">
+&mdash; Function: <b>wisent-message</b><var> string &amp;rest args<a name="index-wisent_002dmessage-68"></a></var><br>
+<blockquote><p>Print a one-line message if <code>wisent-parse-verbose-flag</code> is set. 
+Pass <var>string</var> and <var>args</var> arguments to <dfn>message</dfn>. 
+</p></blockquote></div>
+
+     <dl>
+<dt><strong>Please Note:</strong><dd><code>wisent-message</code> uses the following function to print lexical
+tokens:
+
+     <div class="defun">
+&mdash; Function: <b>wisent-token-to-string</b><var> token<a name="index-wisent_002dtoken_002dto_002dstring-69"></a></var><br>
+<blockquote> <p>Return a printed representation of lexical token <var>token</var>. 
+</p></blockquote></div>
+
+     <p>The general printed form of a lexical token is:
+
+     <p><var>token</var><code>(</code><var>value</var><code>)@</code><var>location</var><!-- /@w -->
+</dl>
+
+   <p>To control the verbosity of the parser you can set to non-<code>nil</code>
+this variable:
+
+   <p><a name="index-wisent_002dparse_002dverbose_002dflag-70"></a>
+
+<div class="defun">
+&mdash; Option: <b>wisent-parse-verbose-flag</b><var><a name="index-wisent_002dparse_002dverbose_002dflag-71"></a></var><br>
+<blockquote><p>non-<code>nil</code> means to issue more messages while parsing. 
+</p></blockquote></div>
+
+   <p>Or interactively use the command:
+
+   <p><a name="index-wisent_002dparse_002dtoggle_002dverbose_002dflag-72"></a>
+
+<div class="defun">
+&mdash; Command: <b>wisent-parse-toggle-verbose-flag</b><var><a name="index-wisent_002dparse_002dtoggle_002dverbose_002dflag-73"></a></var><br>
+<blockquote><p>Toggle whether to issue more messages while parsing. 
+</p></blockquote></div>
+
+   <p>When the error reporting function is entered the variable
+<code>wisent-input</code> contains the unexpected token as returned by the
+lexer.
+
+   <p>The error reporting function can be called from a semantic action too
+using the special macro <code>wisent-error</code>.  When called from a
+semantic action entered by error recovery (see <a href="#Error-recovery">Error recovery</a>) the
+value of the variable <code>wisent-recovering</code> is non-<code>nil</code>.
+
+<div class="node">
+<a name="Error-recovery"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Debugging-actions">Debugging actions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Report-errors">Report errors</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Wisent-Parsing">Wisent Parsing</a>
+
+</div>
+
+<h3 class="section">3.4 Error recovery</h3>
+
+<p><a name="index-error-recovery-74"></a>The error recovery mechanism of the Wisent's parser conforms to the
+one Bison uses.  See <a href="bison.html#Error-Recovery">Error Recovery</a>, in the Bison
+manual for details.
+
+   <p><a name="index-error-token-75"></a>To recover from a syntax error you must write rules to recognize the
+special token <code>error</code>.  This is a terminal symbol that is
+automatically defined and reserved for error handling.
+
+   <p>When the parser encounters a syntax error, it pops the state stack
+until it finds a state that allows shifting the <code>error</code> token. 
+After it has been shifted, if the old look-ahead token is not
+acceptable to be shifted next, the parser reads tokens and discards
+them until it finds a token which is acceptable.
+
+   <p><a name="index-error-recovery-strategy-76"></a>Strategies for error recovery depend on the choice of error rules in
+the grammar.  A simple and useful strategy is simply to skip the rest
+of the current statement if an error is detected:
+
+<pre class="example">     (statement (( error ?; )) ;; on error, skip until ';' is read
+                )
+</pre>
+   <p>It is also useful to recover to the matching close-delimiter of an
+opening-delimiter that has already been parsed:
+
+<pre class="example">     (primary (( ?{ expr  ?} ))
+              (( ?{ error ?} ))
+              ...
+              )
+</pre>
+   <p><a name="index-error-recovery-actions-77"></a>Note that error recovery rules may have actions, just as any other
+rules can.  Here are some predefined hooks, variables, functions or
+macros, useful in such actions:
+
+   <p><a name="index-wisent_002dnerrs-78"></a>
+
+<div class="defun">
+&mdash; Variable: <b>wisent-nerrs</b><var><a name="index-wisent_002dnerrs-79"></a></var><br>
+<blockquote><p>The number of parse errors encountered so far. 
+</p></blockquote></div>
+
+   <p><a name="index-wisent_002drecovering-80"></a>
+
+<div class="defun">
+&mdash; Variable: <b>wisent-recovering</b><var><a name="index-wisent_002drecovering-81"></a></var><br>
+<blockquote><p>non-<code>nil</code> means that the parser is recovering. 
+This variable only has meaning in the scope of <code>wisent-parse</code>. 
+</p></blockquote></div>
+
+   <p><a name="index-wisent_002derror-82"></a>
+
+<div class="defun">
+&mdash; Function: <b>wisent-error</b><var> msg<a name="index-wisent_002derror-83"></a></var><br>
+<blockquote><p>Call the user supplied error reporting function with message
+<var>msg</var> (see <a href="#Report-errors">Report errors</a>).
+
+        <p>For an example of use, See <a href="#wisent_002dskip_002dtoken">wisent-skip-token</a>. 
+</p></blockquote></div>
+
+   <p><a name="index-wisent_002derrok-84"></a>
+
+<div class="defun">
+&mdash; Function: <b>wisent-errok</b><var><a name="index-wisent_002derrok-85"></a></var><br>
+<blockquote><p>Resume generating error messages immediately for subsequent syntax
+errors.
+
+        <p>The parser suppress error message for syntax errors that happens
+shortly after the first, until three consecutive input tokens have
+been successfully shifted.
+
+        <p>Calling <code>wisent-errok</code> in an action, make error messages resume
+immediately.  No error messages will be suppressed if you call it in
+an error rule's action.
+
+        <p>For an example of use, See <a href="#wisent_002dskip_002dtoken">wisent-skip-token</a>. 
+</p></blockquote></div>
+
+   <p><a name="index-wisent_002dclearin-86"></a>
+
+<div class="defun">
+&mdash; Function: <b>wisent-clearin</b><var><a name="index-wisent_002dclearin-87"></a></var><br>
+<blockquote><p>Discard the current lookahead token. 
+This will cause a new lexical token to be read.
+
+        <p>In an error rule's action the previous lookahead token is reanalyzed
+immediately.  <code>wisent-clearin</code> may be called to clear this token.
+
+        <p>For example, suppose that on a parse error, an error handling routine
+is called that advances the input stream to some point where parsing
+should once again commence.  The next symbol returned by the lexical
+scanner is probably correct.  The previous lookahead token ought to
+be discarded with <code>wisent-clearin</code>.
+
+        <p>For an example of use, See <a href="#wisent_002dskip_002dtoken">wisent-skip-token</a>. 
+</p></blockquote></div>
+
+   <p><a name="index-wisent_002dabort-88"></a>
+
+<div class="defun">
+&mdash; Function: <b>wisent-abort</b><var><a name="index-wisent_002dabort-89"></a></var><br>
+<blockquote><p>Abort parsing and save the lookahead token. 
+</p></blockquote></div>
+
+   <p><a name="index-wisent_002dset_002dregion-90"></a>
+
+<div class="defun">
+&mdash; Function: <b>wisent-set-region</b><var> start end<a name="index-wisent_002dset_002dregion-91"></a></var><br>
+<blockquote><p>Change the region of text matched by the current nonterminal. 
+<var>start</var> and <var>end</var> are respectively the beginning and end
+positions of the region occupied by the group of components associated
+to this nonterminal.  If <var>start</var> or <var>end</var> values are not a
+valid positions the region is set to <code>nil</code>.
+
+        <p>For an example of use, See <a href="#wisent_002dskip_002dtoken">wisent-skip-token</a>. 
+</p></blockquote></div>
+
+   <p><a name="index-wisent_002ddiscarding_002dtoken_002dfunctions-92"></a>
+
+<div class="defun">
+&mdash; Variable: <b>wisent-discarding-token-functions</b><var><a name="index-wisent_002ddiscarding_002dtoken_002dfunctions-93"></a></var><br>
+<blockquote><p>List of functions to be called when discarding a lexical token. 
+These functions receive the lexical token discarded. 
+When the parser encounters unexpected tokens, it can discards them,
+based on what directed by error recovery rules.  Either when the
+parser reads tokens until one is found that can be shifted, or when an
+semantic action calls the function <code>wisent-skip-token</code> or
+<code>wisent-skip-block</code>. 
+For language specific hooks, make sure you define this as a local
+hook.
+
+        <p>For example, in <i>Semantic</i>, this hook is set to the function
+<code>wisent-collect-unmatched-syntax</code> to collect unmatched lexical
+tokens (see <a href="#Useful-functions">Useful functions</a>). 
+</p></blockquote></div>
+
+   <p><a name="index-wisent_002dskip_002dtoken-94"></a>
+
+<div class="defun">
+&mdash; Function: <b>wisent-skip-token</b><var><a name="index-wisent_002dskip_002dtoken-95"></a></var><br>
+<blockquote><p><a name="wisent_002dskip_002dtoken"></a>Skip the lookahead token in order to resume parsing. 
+Return <code>nil</code>. 
+Must be used in error recovery semantic actions.
+
+        <p>It typically looks like this:
+
+     <pre class="lisp">          (wisent-message "%s: skip %s" $action
+                          (wisent-token-to-string wisent-input))
+          (run-hook-with-args
+           'wisent-discarding-token-functions wisent-input)
+          (wisent-clearin)
+          (wisent-errok)))
+</pre>
+        </blockquote></div>
+
+   <p><a name="index-wisent_002dskip_002dblock-96"></a>
+
+<div class="defun">
+&mdash; Function: <b>wisent-skip-block</b><var><a name="index-wisent_002dskip_002dblock-97"></a></var><br>
+<blockquote><p>Safely skip a block in order to resume parsing. 
+Return <code>nil</code>. 
+Must be used in error recovery semantic actions.
+
+        <p>A block is data between an open-delimiter (syntax class <code>(</code>) and
+a matching close-delimiter (syntax class <code>)</code>):
+
+     <pre class="example">          (a parenthesized block)
+          [a block between brackets]
+          {a block between braces}
+</pre>
+        <p>The following example uses <code>wisent-skip-block</code> to safely skip a
+block delimited by &lsquo;<samp><span class="samp">LBRACE</span></samp>&rsquo; (<code>{</code>) and &lsquo;<samp><span class="samp">RBRACE</span></samp>&rsquo;
+(<code>}</code>) tokens, when a syntax error occurs in
+&lsquo;<samp><span class="samp">other-components</span></samp>&rsquo;:
+
+     <pre class="example">          (block ((LBRACE other-components RBRACE))
+                 ((LBRACE RBRACE))
+                 ((LBRACE error)
+                  (wisent-skip-block))
+                 )
+</pre>
+        </blockquote></div>
+
+<div class="node">
+<a name="Debugging-actions"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Error-recovery">Error recovery</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Wisent-Parsing">Wisent Parsing</a>
+
+</div>
+
+<h3 class="section">3.5 Debugging semantic actions</h3>
+
+<p><a name="index-semantic-action-symbols-98"></a>Each semantic action is represented by a symbol interned in an
+<dfn>obarray</dfn> that is part of the <acronym>LALR(1)</acronym> automaton
+(see <a href="#Compiling-a-grammar">Compiling a grammar</a>).  <code>symbol-function</code> on a semantic
+action symbol return the semantic action lambda expression.
+
+   <p>A semantic action symbol name has the form
+<var>nonterminal</var><code>:</code><var>index</var>, where <var>nonterminal</var> is the
+name of the nonterminal symbol the action belongs to, and <var>index</var>
+is an action sequence number within the scope of <var>nonterminal</var>. 
+For example, this nonterminal definition:
+
+<pre class="example">     input:
+        line                     [<code>input:0</code>]
+      | input line
+        (format "%s %s" $1 $2)   [<code>input:1</code>]
+      ;
+</pre>
+   <p>Will produce two semantic actions, and associated symbols:
+
+     <dl>
+<dt><code>input:0</code><dd>A default action that returns <code>$1</code>.
+
+     <br><dt><code>input:1</code><dd>That returns <code>(format "%s %s" $1 $2)</code>. 
+</dl>
+
+   <p><a name="index-debugging-semantic-actions-99"></a>Debugging uses the Lisp debugger to investigate what is happening
+during execution of semantic actions. 
+Three commands are available to debug semantic actions.  They receive
+two arguments:
+
+     <ul>
+<li>The automaton that contains the semantic action.
+
+     <li>The semantic action symbol. 
+</ul>
+
+   <p><a name="index-wisent_002ddebug_002don_002dentry-100"></a>
+
+<div class="defun">
+&mdash; Command: <b>wisent-debug-on-entry</b><var> automaton function<a name="index-wisent_002ddebug_002don_002dentry-101"></a></var><br>
+<blockquote><p>Request <var>automaton</var>'s <var>function</var> to invoke debugger each time it is called. 
+<var>function</var> must be a semantic action symbol that exists in <var>automaton</var>. 
+</p></blockquote></div>
+
+   <p><a name="index-wisent_002dcancel_002ddebug_002don_002dentry-102"></a>
+
+<div class="defun">
+&mdash; Command: <b>wisent-cancel-debug-on-entry</b><var> automaton function<a name="index-wisent_002dcancel_002ddebug_002don_002dentry-103"></a></var><br>
+<blockquote><p>Undo effect of <code>wisent-debug-on-entry</code> on <var>automaton</var>'s <var>function</var>. 
+<var>function</var> must be a semantic action symbol that exists in <var>automaton</var>. 
+</p></blockquote></div>
+
+   <p><a name="index-wisent_002ddebug_002dshow_002dentry-104"></a>
+
+<div class="defun">
+&mdash; Command: <b>wisent-debug-show-entry</b><var> automaton function<a name="index-wisent_002ddebug_002dshow_002dentry-105"></a></var><br>
+<blockquote><p>Show the source of <var>automaton</var>'s semantic action <var>function</var>. 
+<var>function</var> must be a semantic action symbol that exists in <var>automaton</var>. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Wisent-Semantic"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Wisent-Parsing">Wisent Parsing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">4 How to use Wisent with Semantic</h2>
+
+<p><a name="index-tags-106"></a>This section presents how the Wisent's parser can be used to produce
+<dfn>tags</dfn> for the <i>Semantic</i> tool set.
+
+   <p><i>Semantic</i> tags form a hierarchy of Emacs Lisp data structures that
+describes a program in a way independent of programming languages. 
+Tags map program declarations, like functions, methods, variables,
+data types, classes, includes, grammar rules, etc..
+
+   <p><a name="index-WY-grammar-format-107"></a>To use the Wisent parser with <i>Semantic</i> you have to define
+your grammar in <dfn>WY</dfn> form, a grammar format very close
+to the one used by Bison.
+
+   <p>Please see <a href="grammar-fw.html#Top">Semantic Grammar Framework Manual</a>
+for more information on <i>Semantic</i> grammars.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Grammar-styles">Grammar styles</a>
+<li><a accesskey="2" href="#Wisent-Lex">Wisent Lex</a>
+</ul>
+
+<div class="node">
+<a name="Grammar-styles"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Wisent-Lex">Wisent Lex</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Wisent-Semantic">Wisent Semantic</a>
+
+</div>
+
+<h3 class="section">4.1 Grammar styles</h3>
+
+<p><a name="index-grammar-styles-108"></a><i>Semantic</i> parsing heavily depends on how you wrote the grammar. 
+There are mainly two styles to write a Wisent's grammar intended to be
+used with the <i>Semantic</i> tool set: the <dfn>Iterative style</dfn> and the
+<dfn>Bison style</dfn>.  Each one has pros and cons, and in certain cases
+it can be worth a mix of the two styles!
+
+<ul class="menu">
+<li><a accesskey="1" href="#Iterative-style">Iterative style</a>
+<li><a accesskey="2" href="#Bison-style">Bison style</a>
+<li><a accesskey="3" href="#Mixed-style">Mixed style</a>
+<li><a accesskey="4" href="#Start-nonterminals">Start nonterminals</a>
+<li><a accesskey="5" href="#Useful-functions">Useful functions</a>
+</ul>
+
+<div class="node">
+<a name="Iterative-style"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Bison-style">Bison style</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Grammar-styles">Grammar styles</a>
+
+</div>
+
+<h4 class="subsection">4.1.1 Iterative style</h4>
+
+<p><a name="index-grammar-iterative-style-109"></a>The <dfn>iterative style</dfn> is the preferred style to use with <i>Semantic</i>. 
+It relies on an iterative parser back-end mechanism which parses start
+nonterminals one at a time and automagically skips unexpected lexical
+tokens in input.
+
+   <p>Compared to rule-based iterative functions (see <a href="#Bison-style">Bison style</a>),
+iterative parsers are better in that they can handle obscure errors
+more cleanly.
+
+   <p><a name="index-raw-tag-110"></a>Each start nonterminal must produces a <dfn>raw tag</dfn> by calling a
+<code>TAG</code>-like grammar macro with appropriate parameters.  See also
+<a href="#Start-nonterminals">Start nonterminals</a>.
+
+   <p><a name="index-expanded-tag-111"></a>Then, each parsing iteration automatically translates a raw tag into
+<dfn>expanded tags</dfn>, updating the raw tag structure with internal
+properties and buffer related data.
+
+   <p>After parsing completes, it results in a tree of expanded tags.
+
+   <p>The following example is a snippet of the iterative style Java grammar
+provided in the <i>Semantic</i> distribution in the file
+<samp><span class="file">semantic/wisent/java-tags.wy</span></samp>.
+
+<pre class="example">     ...
+     ;; Alternate entry points
+     ;;    - Needed by partial re-parse
+     %start formal_parameter
+     ...
+     ;;    - Needed by EXPANDFULL clauses
+     %start formal_parameters
+     ...
+     
+     formal_parameter_list
+       : PAREN_BLOCK
+         (EXPANDFULL $1 formal_parameters)
+       ;
+     
+     formal_parameters
+       : LPAREN
+         ()
+       | RPAREN
+         ()
+       | formal_parameter COMMA
+       | formal_parameter RPAREN
+       ;
+     
+     formal_parameter
+       : formal_parameter_modifier_opt type variable_declarator_id
+         (VARIABLE-TAG $3 $2 nil :typemodifiers $1)
+       ;
+</pre>
+   <p><a name="index-EXPANDFULL-112"></a>It shows the use of the <code>EXPANDFULL</code> grammar macro to parse a
+&lsquo;<samp><span class="samp">PAREN_BLOCK</span></samp>&rsquo; which contains a &lsquo;<samp><span class="samp">formal_parameter_list</span></samp>&rsquo;. 
+<code>EXPANDFULL</code> tells to recursively parse &lsquo;<samp><span class="samp">formal_parameters</span></samp>&rsquo;
+inside &lsquo;<samp><span class="samp">PAREN_BLOCK</span></samp>&rsquo;.  The parser iterates until it digested all
+available input data inside the &lsquo;<samp><span class="samp">PAREN_BLOCK</span></samp>&rsquo;, trying to match
+any of the &lsquo;<samp><span class="samp">formal_parameters</span></samp>&rsquo; rules:
+
+     <ul>
+<li>&lsquo;<samp><span class="samp">LPAREN</span></samp>&rsquo;
+
+     <li>&lsquo;<samp><span class="samp">RPAREN</span></samp>&rsquo;
+
+     <li>&lsquo;<samp><span class="samp">formal_parameter COMMA</span></samp>&rsquo;
+
+     <li>&lsquo;<samp><span class="samp">formal_parameter RPAREN</span></samp>&rsquo;
+</ul>
+
+   <p>At each iteration it will return a &lsquo;<samp><span class="samp">formal_parameter</span></samp>&rsquo; raw tag,
+or <code>nil</code> to skip unwanted (single &lsquo;<samp><span class="samp">LPAREN</span></samp>&rsquo; or &lsquo;<samp><span class="samp">RPAREN</span></samp>&rsquo;
+for example) or unexpected input data.  Those raw tags will be
+automatically expanded by the iterative back-end parser.
+
+<div class="node">
+<a name="Bison-style"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Mixed-style">Mixed style</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Iterative-style">Iterative style</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Grammar-styles">Grammar styles</a>
+
+</div>
+
+<h4 class="subsection">4.1.2 Bison style</h4>
+
+<p><a name="index-grammar-bison-style-113"></a>What we call the <dfn>Bison style</dfn> is the traditional style of Bison's
+grammars.  Compared to iterative style, it is not straightforward to
+use grammars written in Bison style in <i>Semantic</i>.  Mainly because such
+grammars are designed to parse the whole input data in one pass, and
+don't use the iterative parser back-end mechanism (see <a href="#Iterative-style">Iterative style</a>).  With Bison style the parser is called once to parse the
+grammar start nonterminal.
+
+   <p>The following example is a snippet of the Bison style Java grammar
+provided in the <i>Semantic</i> distribution in the file
+<samp><span class="file">semantic/wisent/java.wy</span></samp>.
+
+<pre class="example">     %start formal_parameter
+     ...
+     
+     formal_parameter_list
+       : formal_parameter_list COMMA formal_parameter
+         (cons $3 $1)
+       | formal_parameter
+         (list $1)
+       ;
+     
+     formal_parameter
+       : formal_parameter_modifier_opt type variable_declarator_id
+         (EXPANDTAG
+          (VARIABLE-TAG $3 $2 :typemodifiers $1)
+          )
+       ;
+</pre>
+   <p>The first consequence is that syntax errors are not automatically
+handled by <i>Semantic</i>.  Thus, it is necessary to explicitly handle
+them at the grammar level, providing error recovery rules to skip
+unexpected input data.
+
+   <p>The second consequence is that the iterative parser can't do automatic
+tag expansion, except for the start nonterminal value.  It is
+necessary to explicitly expand tags from concerned semantic actions by
+calling the grammar macro <code>EXPANDTAG</code> with a raw tag as
+parameter.  See also <a href="#Start-nonterminals">Start nonterminals</a>, for incremental
+re-parse considerations.
+
+<div class="node">
+<a name="Mixed-style"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Start-nonterminals">Start nonterminals</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Bison-style">Bison style</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Grammar-styles">Grammar styles</a>
+
+</div>
+
+<h4 class="subsection">4.1.3 Mixed style</h4>
+
+<p><a name="index-grammar-mixed-style-114"></a>
+<pre class="example">     %start grammar
+     ;; Reparse
+     %start prologue epilogue declaration nonterminal rule
+     ...
+     
+     %%
+     
+     grammar:
+         prologue
+       | epilogue
+       | declaration
+       | nonterminal
+       | PERCENT_PERCENT
+       ;
+     ...
+     
+     nonterminal:
+         SYMBOL COLON rules SEMI
+         (TAG $1 'nonterminal :children $3)
+       ;
+     
+     rules:
+         lifo_rules
+         (apply 'nconc (nreverse $1))
+       ;
+     
+     lifo_rules:
+         lifo_rules OR rule
+         (cons $3 $1)
+       | rule
+         (list $1)
+       ;
+     
+     rule:
+         rhs
+         (let* ((rhs $1)
+                name type comps prec action elt)
+           ...
+           (EXPANDTAG
+            (TAG name 'rule :type type :value comps :prec prec :expr action)
+            ))
+       ;
+</pre>
+   <p>This example shows how iterative and Bison styles can be combined in
+the same grammar to obtain a good compromise between grammar
+complexity and an efficient parsing strategy in an interactive
+environment.
+
+   <p>&lsquo;<samp><span class="samp">nonterminal</span></samp>&rsquo; is parsed using iterative style via the main
+&lsquo;<samp><span class="samp">grammar</span></samp>&rsquo; rule.  The semantic action uses the <code>TAG</code> macro to
+produce a raw tag, automagically expanded by <i>Semantic</i>.
+
+   <p>But &lsquo;<samp><span class="samp">rules</span></samp>&rsquo; part is parsed in Bison style! Why?
+
+   <p>Rule delimiters are the colon (<code>:</code>), that follows the nonterminal
+name, and a final semicolon (<code>;</code>).  Unfortunately these
+delimiters are not <code>open-paren</code>/<code>close-paren</code> type, and the
+Emacs' syntactic analyzer can't easily isolate data between them to
+produce a &lsquo;<samp><span class="samp">RULES_PART</span></samp>&rsquo; parenthesis-block-like lexical token. 
+Consequently it is not possible to use <code>EXPANDFULL</code> to iterate in
+&lsquo;<samp><span class="samp">RULES_PART</span></samp>&rsquo;, like this:
+
+<pre class="example">     nonterminal:
+         SYMBOL COLON rules SEMI
+         (TAG $1 'nonterminal :children $3)
+       ;
+     
+     rules:
+         RULES_PART  ;; <strong>Map a parenthesis-block-like lexical token</strong>
+         (EXPANDFULL $1 'rules)
+       ;
+     
+     rules:
+         COLON
+         ()
+         OR
+         ()
+         SEMI
+         ()
+         rhs
+         rhs
+         (let* ((rhs $1)
+                name type comps prec action elt)
+           ...
+           (TAG name 'rule :type type :value comps :prec prec :expr action)
+           )
+       ;
+</pre>
+   <p>In such cases, when it is difficult for Emacs to obtain
+parenthesis-block-like lexical tokens, the best solution is to use the
+traditional Bison style with error recovery!
+
+   <p>In some extreme cases, it can also be convenient to extend the lexer,
+to deliver new lexical tokens, to simplify the grammar.
+
+<div class="node">
+<a name="Start-nonterminals"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Useful-functions">Useful functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Mixed-style">Mixed style</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Grammar-styles">Grammar styles</a>
+
+</div>
+
+<h4 class="subsection">4.1.4 Start nonterminals</h4>
+
+<p><a name="index-start-nonterminals-115"></a><a name="index-g_t_0040code_007breparse_002dsymbol_007d-property-116"></a>When you write a grammar for <i>Semantic</i>, it is important to carefully
+indicate the start nonterminals.  Each one defines an entry point in
+the grammar, and after parsing its semantic value is returned to the
+back-end iterative engine.  Consequently:
+
+   <p><strong>The semantic value of a start nonterminal must be a produced
+by a TAG like grammar macro</strong>.
+
+   <p>Start nonterminals are declared by <code>%start</code> statements.  When
+nothing is specified the first nonterminal that appears in the grammar
+is the start nonterminal.
+
+   <p>Generally, the following nonterminals must be declared as start
+symbols:
+
+     <ul>
+<li>The main grammar entry point
+<blockquote>
+Of course! 
+</blockquote>
+
+     <li>nonterminals passed to <code>EXPAND</code>/<code>EXPANDFULL</code>
+<blockquote>
+These grammar macros recursively parse a part of input data, based on
+rules of the given nonterminal.
+
+     <p>For example, the following will parse &lsquo;<samp><span class="samp">PAREN_BLOCK</span></samp>&rsquo; data using
+the &lsquo;<samp><span class="samp">formal_parameters</span></samp>&rsquo; rules:
+
+     <pre class="example">          formal_parameter_list
+            : PAREN_BLOCK
+              (EXPANDFULL $1 formal_parameters)
+            ;
+</pre>
+     <p>The semantic value of &lsquo;<samp><span class="samp">formal_parameters</span></samp>&rsquo; becomes the value of
+the <code>EXPANDFULL</code> expression.  It is a list of <i>Semantic</i> tags
+spliced in the tags tree.
+
+     <p>Because the automaton must know that &lsquo;<samp><span class="samp">formal_parameters</span></samp>&rsquo; is a
+start symbol, you must declare it like this:
+
+     <pre class="example">          %start formal_parameters
+</pre>
+     </blockquote>
+     </ul>
+
+   <p><a name="index-incremental-re_002dparse-117"></a><a name="index-reparse_002dsymbol-118"></a>The <code>EXPANDFULL</code> macro has a side effect it is important to know,
+related to the incremental re-parse mechanism of <i>Semantic</i>: the
+nonterminal symbol parameter passed to <code>EXPANDFULL</code> also becomes
+the <code>reparse-symbol</code> property of the tag returned by the
+<code>EXPANDFULL</code> expression.
+
+   <p>When buffer's data mapped by a tag is modified, <i>Semantic</i>
+schedules an incremental re-parse of that data, using the tag's
+<code>reparse-symbol</code> property as start nonterminal.
+
+   <p><strong>The rules associated to such start symbols must be carefully
+reviewed to ensure that the incremental parser will work!</strong>
+
+   <p>Things are a little bit different when the grammar is written in Bison
+style.
+
+   <p><strong>The </strong><code>reparse-symbol</code><strong> property is set to the nonterminal
+symbol the rule that explicitly uses </strong><code>EXPANDTAG</code><strong> belongs to.</strong>
+
+   <p>For example:
+
+<pre class="example">     rule:
+         rhs
+         (let* ((rhs $1)
+                name type comps prec action elt)
+           ...
+           (EXPANDTAG
+            (TAG name 'rule :type type :value comps :prec prec :expr action)
+            ))
+       ;
+</pre>
+   <p>Set the <code>reparse-symbol</code> property of the expanded tag to
+&lsquo;<samp><span class="samp">rule</span></samp>&rsquo;.  A important consequence is that:
+
+   <p><strong>Every nonterminal having any rule that calls </strong><code>EXPANDTAG</code><strong>
+in a semantic action, should be declared as a start symbol!</strong>
+
+<div class="node">
+<a name="Useful-functions"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Start-nonterminals">Start nonterminals</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Grammar-styles">Grammar styles</a>
+
+</div>
+
+<h4 class="subsection">4.1.5 Useful functions</h4>
+
+<p>Here is a description of some predefined functions it might be useful
+to know when writing new code to use Wisent in <i>Semantic</i>:
+
+   <p><a name="index-wisent_002dcollect_002dunmatched_002dsyntax-119"></a>
+
+<div class="defun">
+&mdash; Function: <b>wisent-collect-unmatched-syntax</b><var> input<a name="index-wisent_002dcollect_002dunmatched_002dsyntax-120"></a></var><br>
+<blockquote><p>Add <var>input</var> lexical token to the cache of unmatched tokens, in
+variable <code>semantic-unmatched-syntax-cache</code>.
+
+        <p>See implementation of the function <code>wisent-skip-token</code> in
+<a href="#Error-recovery">Error recovery</a>, for an example of use. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Wisent-Lex"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Grammar-styles">Grammar styles</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Wisent-Semantic">Wisent Semantic</a>
+
+</div>
+
+<h3 class="section">4.2 The Wisent Lex lexer</h3>
+
+<p><a name="index-semantic_002dlex-121"></a>The lexical analysis step of <i>Semantic</i> is performed by the general
+function <code>semantic-lex</code>.  For more information, see <a href="semantic-langdev.html#Writing-Lexers">Writing Lexers</a>.
+
+   <p><code>semantic-lex</code> produces lexical tokens of the form:
+
+<pre class="example">     <code>(</code><var>token-class start</var><code> . </code><var>end</var><code>)</code>
+</pre>
+     <dl>
+<dt><var>token-class</var><dd>Is a symbol that identifies a lexical token class, like <code>symbol</code>,
+<code>string</code>, <code>number</code>, or <code>PAREN_BLOCK</code>.
+
+     <br><dt><var>start</var><dt><var>end</var><dd>Are the start and end positions of mapped data in the input buffer. 
+</dl>
+
+   <p>The Wisent's parser doesn't depend on the nature of analyzed input
+stream (buffer, string, etc.), and requires that lexical tokens have a
+different form (see <a href="#Writing-a-lexer">Writing a lexer</a>):
+
+<pre class="example">     <code>(</code><var>token-class value</var><code> [</code><var>start</var><code> . </code><var>end</var><code>])</code>
+</pre>
+   <p><a name="index-lexical-token-mapping-122"></a><code>wisent-lex</code> is the default Wisent's lexer used in <i>Semantic</i>.
+
+   <p><a name="index-wisent_002dlex_002distream-123"></a><a name="index-wisent_002dlex-124"></a>
+
+<div class="defun">
+&mdash; Function: <b>wisent-lex</b><var><a name="index-wisent_002dlex-125"></a></var><br>
+<blockquote><p>Return the next available lexical token in Wisent's form.
+
+        <p>The variable <code>wisent-lex-istream</code> contains the list of lexical
+tokens produced by <code>semantic-lex</code>.  Pop the next token available
+and convert it to a form suitable for the Wisent's parser. 
+</p></blockquote></div>
+
+   <p>Mapping of lexical tokens as produced by <code>semantic-lex</code> into
+equivalent Wisent lexical tokens is straightforward:
+
+<pre class="example">     (<var>token-class start</var> . <var>end</var>)
+          &rArr; (<var>token-class value start</var> . <var>end</var>)
+</pre>
+   <p><var>value</var> is the input <code>buffer-substring</code> from <var>start</var> to
+<var>end</var>.
+
+<div class="node">
+<a name="GNU-Free-Documentation-License"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Index">Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Wisent-Semantic">Wisent Semantic</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="appendix">Appendix A GNU Free Documentation License</h2>
+
+<!-- The GNU Free Documentation License. -->
+<div align="center">Version 1.3, 3 November 2008</div>
+
+<!-- This file is intended to be included within another document, -->
+<!-- hence no sectioning command or @node. -->
+<pre class="display">     Copyright &copy; 2000, 2001, 2002, 2007, 2008 Free Software Foundation, Inc.
+     <a href="http://fsf.org/">http://fsf.org/</a>
+     
+     Everyone is permitted to copy and distribute verbatim copies
+     of this license document, but changing it is not allowed.
+</pre>
+     <ol type=1 start=0>
+<li>PREAMBLE
+
+     <p>The purpose of this License is to make a manual, textbook, or other
+functional and useful document <dfn>free</dfn> in the sense of freedom: to
+assure everyone the effective freedom to copy and redistribute it,
+with or without modifying it, either commercially or noncommercially. 
+Secondarily, this License preserves for the author and publisher a way
+to get credit for their work, while not being considered responsible
+for modifications made by others.
+
+     <p>This License is a kind of &ldquo;copyleft&rdquo;, which means that derivative
+works of the document must themselves be free in the same sense.  It
+complements the GNU General Public License, which is a copyleft
+license designed for free software.
+
+     <p>We have designed this License in order to use it for manuals for free
+software, because free software needs free documentation: a free
+program should come with manuals providing the same freedoms that the
+software does.  But this License is not limited to software manuals;
+it can be used for any textual work, regardless of subject matter or
+whether it is published as a printed book.  We recommend this License
+principally for works whose purpose is instruction or reference.
+
+     <li>APPLICABILITY AND DEFINITIONS
+
+     <p>This License applies to any manual or other work, in any medium, that
+contains a notice placed by the copyright holder saying it can be
+distributed under the terms of this License.  Such a notice grants a
+world-wide, royalty-free license, unlimited in duration, to use that
+work under the conditions stated herein.  The &ldquo;Document&rdquo;, below,
+refers to any such manual or work.  Any member of the public is a
+licensee, and is addressed as &ldquo;you&rdquo;.  You accept the license if you
+copy, modify or distribute the work in a way requiring permission
+under copyright law.
+
+     <p>A &ldquo;Modified Version&rdquo; of the Document means any work containing the
+Document or a portion of it, either copied verbatim, or with
+modifications and/or translated into another language.
+
+     <p>A &ldquo;Secondary Section&rdquo; is a named appendix or a front-matter section
+of the Document that deals exclusively with the relationship of the
+publishers or authors of the Document to the Document's overall
+subject (or to related matters) and contains nothing that could fall
+directly within that overall subject.  (Thus, if the Document is in
+part a textbook of mathematics, a Secondary Section may not explain
+any mathematics.)  The relationship could be a matter of historical
+connection with the subject or with related matters, or of legal,
+commercial, philosophical, ethical or political position regarding
+them.
+
+     <p>The &ldquo;Invariant Sections&rdquo; are certain Secondary Sections whose titles
+are designated, as being those of Invariant Sections, in the notice
+that says that the Document is released under this License.  If a
+section does not fit the above definition of Secondary then it is not
+allowed to be designated as Invariant.  The Document may contain zero
+Invariant Sections.  If the Document does not identify any Invariant
+Sections then there are none.
+
+     <p>The &ldquo;Cover Texts&rdquo; are certain short passages of text that are listed,
+as Front-Cover Texts or Back-Cover Texts, in the notice that says that
+the Document is released under this License.  A Front-Cover Text may
+be at most 5 words, and a Back-Cover Text may be at most 25 words.
+
+     <p>A &ldquo;Transparent&rdquo; copy of the Document means a machine-readable copy,
+represented in a format whose specification is available to the
+general public, that is suitable for revising the document
+straightforwardly with generic text editors or (for images composed of
+pixels) generic paint programs or (for drawings) some widely available
+drawing editor, and that is suitable for input to text formatters or
+for automatic translation to a variety of formats suitable for input
+to text formatters.  A copy made in an otherwise Transparent file
+format whose markup, or absence of markup, has been arranged to thwart
+or discourage subsequent modification by readers is not Transparent. 
+An image format is not Transparent if used for any substantial amount
+of text.  A copy that is not &ldquo;Transparent&rdquo; is called &ldquo;Opaque&rdquo;.
+
+     <p>Examples of suitable formats for Transparent copies include plain
+ASCII without markup, Texinfo input format, LaTeX input
+format, SGML or XML using a publicly available
+DTD, and standard-conforming simple HTML,
+PostScript or PDF designed for human modification.  Examples
+of transparent image formats include PNG, XCF and
+JPG.  Opaque formats include proprietary formats that can be
+read and edited only by proprietary word processors, SGML or
+XML for which the DTD and/or processing tools are
+not generally available, and the machine-generated HTML,
+PostScript or PDF produced by some word processors for
+output purposes only.
+
+     <p>The &ldquo;Title Page&rdquo; means, for a printed book, the title page itself,
+plus such following pages as are needed to hold, legibly, the material
+this License requires to appear in the title page.  For works in
+formats which do not have any title page as such, &ldquo;Title Page&rdquo; means
+the text near the most prominent appearance of the work's title,
+preceding the beginning of the body of the text.
+
+     <p>The &ldquo;publisher&rdquo; means any person or entity that distributes copies
+of the Document to the public.
+
+     <p>A section &ldquo;Entitled XYZ&rdquo; means a named subunit of the Document whose
+title either is precisely XYZ or contains XYZ in parentheses following
+text that translates XYZ in another language.  (Here XYZ stands for a
+specific section name mentioned below, such as &ldquo;Acknowledgements&rdquo;,
+&ldquo;Dedications&rdquo;, &ldquo;Endorsements&rdquo;, or &ldquo;History&rdquo;.)  To &ldquo;Preserve the Title&rdquo;
+of such a section when you modify the Document means that it remains a
+section &ldquo;Entitled XYZ&rdquo; according to this definition.
+
+     <p>The Document may include Warranty Disclaimers next to the notice which
+states that this License applies to the Document.  These Warranty
+Disclaimers are considered to be included by reference in this
+License, but only as regards disclaiming warranties: any other
+implication that these Warranty Disclaimers may have is void and has
+no effect on the meaning of this License.
+
+     <li>VERBATIM COPYING
+
+     <p>You may copy and distribute the Document in any medium, either
+commercially or noncommercially, provided that this License, the
+copyright notices, and the license notice saying this License applies
+to the Document are reproduced in all copies, and that you add no other
+conditions whatsoever to those of this License.  You may not use
+technical measures to obstruct or control the reading or further
+copying of the copies you make or distribute.  However, you may accept
+compensation in exchange for copies.  If you distribute a large enough
+number of copies you must also follow the conditions in section 3.
+
+     <p>You may also lend copies, under the same conditions stated above, and
+you may publicly display copies.
+
+     <li>COPYING IN QUANTITY
+
+     <p>If you publish printed copies (or copies in media that commonly have
+printed covers) of the Document, numbering more than 100, and the
+Document's license notice requires Cover Texts, you must enclose the
+copies in covers that carry, clearly and legibly, all these Cover
+Texts: Front-Cover Texts on the front cover, and Back-Cover Texts on
+the back cover.  Both covers must also clearly and legibly identify
+you as the publisher of these copies.  The front cover must present
+the full title with all words of the title equally prominent and
+visible.  You may add other material on the covers in addition. 
+Copying with changes limited to the covers, as long as they preserve
+the title of the Document and satisfy these conditions, can be treated
+as verbatim copying in other respects.
+
+     <p>If the required texts for either cover are too voluminous to fit
+legibly, you should put the first ones listed (as many as fit
+reasonably) on the actual cover, and continue the rest onto adjacent
+pages.
+
+     <p>If you publish or distribute Opaque copies of the Document numbering
+more than 100, you must either include a machine-readable Transparent
+copy along with each Opaque copy, or state in or with each Opaque copy
+a computer-network location from which the general network-using
+public has access to download using public-standard network protocols
+a complete Transparent copy of the Document, free of added material. 
+If you use the latter option, you must take reasonably prudent steps,
+when you begin distribution of Opaque copies in quantity, to ensure
+that this Transparent copy will remain thus accessible at the stated
+location until at least one year after the last time you distribute an
+Opaque copy (directly or through your agents or retailers) of that
+edition to the public.
+
+     <p>It is requested, but not required, that you contact the authors of the
+Document well before redistributing any large number of copies, to give
+them a chance to provide you with an updated version of the Document.
+
+     <li>MODIFICATIONS
+
+     <p>You may copy and distribute a Modified Version of the Document under
+the conditions of sections 2 and 3 above, provided that you release
+the Modified Version under precisely this License, with the Modified
+Version filling the role of the Document, thus licensing distribution
+and modification of the Modified Version to whoever possesses a copy
+of it.  In addition, you must do these things in the Modified Version:
+
+          <ol type=A start=1>
+<li>Use in the Title Page (and on the covers, if any) a title distinct
+from that of the Document, and from those of previous versions
+(which should, if there were any, be listed in the History section
+of the Document).  You may use the same title as a previous version
+if the original publisher of that version gives permission.
+
+          <li>List on the Title Page, as authors, one or more persons or entities
+responsible for authorship of the modifications in the Modified
+Version, together with at least five of the principal authors of the
+Document (all of its principal authors, if it has fewer than five),
+unless they release you from this requirement.
+
+          <li>State on the Title page the name of the publisher of the
+Modified Version, as the publisher.
+
+          <li>Preserve all the copyright notices of the Document.
+
+          <li>Add an appropriate copyright notice for your modifications
+adjacent to the other copyright notices.
+
+          <li>Include, immediately after the copyright notices, a license notice
+giving the public permission to use the Modified Version under the
+terms of this License, in the form shown in the Addendum below.
+
+          <li>Preserve in that license notice the full lists of Invariant Sections
+and required Cover Texts given in the Document's license notice.
+
+          <li>Include an unaltered copy of this License.
+
+          <li>Preserve the section Entitled &ldquo;History&rdquo;, Preserve its Title, and add
+to it an item stating at least the title, year, new authors, and
+publisher of the Modified Version as given on the Title Page.  If
+there is no section Entitled &ldquo;History&rdquo; in the Document, create one
+stating the title, year, authors, and publisher of the Document as
+given on its Title Page, then add an item describing the Modified
+Version as stated in the previous sentence.
+
+          <li>Preserve the network location, if any, given in the Document for
+public access to a Transparent copy of the Document, and likewise
+the network locations given in the Document for previous versions
+it was based on.  These may be placed in the &ldquo;History&rdquo; section. 
+You may omit a network location for a work that was published at
+least four years before the Document itself, or if the original
+publisher of the version it refers to gives permission.
+
+          <li>For any section Entitled &ldquo;Acknowledgements&rdquo; or &ldquo;Dedications&rdquo;, Preserve
+the Title of the section, and preserve in the section all the
+substance and tone of each of the contributor acknowledgements and/or
+dedications given therein.
+
+          <li>Preserve all the Invariant Sections of the Document,
+unaltered in their text and in their titles.  Section numbers
+or the equivalent are not considered part of the section titles.
+
+          <li>Delete any section Entitled &ldquo;Endorsements&rdquo;.  Such a section
+may not be included in the Modified Version.
+
+          <li>Do not retitle any existing section to be Entitled &ldquo;Endorsements&rdquo; or
+to conflict in title with any Invariant Section.
+
+          <li>Preserve any Warranty Disclaimers.
+          </ol>
+
+     <p>If the Modified Version includes new front-matter sections or
+appendices that qualify as Secondary Sections and contain no material
+copied from the Document, you may at your option designate some or all
+of these sections as invariant.  To do this, add their titles to the
+list of Invariant Sections in the Modified Version's license notice. 
+These titles must be distinct from any other section titles.
+
+     <p>You may add a section Entitled &ldquo;Endorsements&rdquo;, provided it contains
+nothing but endorsements of your Modified Version by various
+parties&mdash;for example, statements of peer review or that the text has
+been approved by an organization as the authoritative definition of a
+standard.
+
+     <p>You may add a passage of up to five words as a Front-Cover Text, and a
+passage of up to 25 words as a Back-Cover Text, to the end of the list
+of Cover Texts in the Modified Version.  Only one passage of
+Front-Cover Text and one of Back-Cover Text may be added by (or
+through arrangements made by) any one entity.  If the Document already
+includes a cover text for the same cover, previously added by you or
+by arrangement made by the same entity you are acting on behalf of,
+you may not add another; but you may replace the old one, on explicit
+permission from the previous publisher that added the old one.
+
+     <p>The author(s) and publisher(s) of the Document do not by this License
+give permission to use their names for publicity for or to assert or
+imply endorsement of any Modified Version.
+
+     <li>COMBINING DOCUMENTS
+
+     <p>You may combine the Document with other documents released under this
+License, under the terms defined in section 4 above for modified
+versions, provided that you include in the combination all of the
+Invariant Sections of all of the original documents, unmodified, and
+list them all as Invariant Sections of your combined work in its
+license notice, and that you preserve all their Warranty Disclaimers.
+
+     <p>The combined work need only contain one copy of this License, and
+multiple identical Invariant Sections may be replaced with a single
+copy.  If there are multiple Invariant Sections with the same name but
+different contents, make the title of each such section unique by
+adding at the end of it, in parentheses, the name of the original
+author or publisher of that section if known, or else a unique number. 
+Make the same adjustment to the section titles in the list of
+Invariant Sections in the license notice of the combined work.
+
+     <p>In the combination, you must combine any sections Entitled &ldquo;History&rdquo;
+in the various original documents, forming one section Entitled
+&ldquo;History&rdquo;; likewise combine any sections Entitled &ldquo;Acknowledgements&rdquo;,
+and any sections Entitled &ldquo;Dedications&rdquo;.  You must delete all
+sections Entitled &ldquo;Endorsements.&rdquo;
+
+     <li>COLLECTIONS OF DOCUMENTS
+
+     <p>You may make a collection consisting of the Document and other documents
+released under this License, and replace the individual copies of this
+License in the various documents with a single copy that is included in
+the collection, provided that you follow the rules of this License for
+verbatim copying of each of the documents in all other respects.
+
+     <p>You may extract a single document from such a collection, and distribute
+it individually under this License, provided you insert a copy of this
+License into the extracted document, and follow this License in all
+other respects regarding verbatim copying of that document.
+
+     <li>AGGREGATION WITH INDEPENDENT WORKS
+
+     <p>A compilation of the Document or its derivatives with other separate
+and independent documents or works, in or on a volume of a storage or
+distribution medium, is called an &ldquo;aggregate&rdquo; if the copyright
+resulting from the compilation is not used to limit the legal rights
+of the compilation's users beyond what the individual works permit. 
+When the Document is included in an aggregate, this License does not
+apply to the other works in the aggregate which are not themselves
+derivative works of the Document.
+
+     <p>If the Cover Text requirement of section 3 is applicable to these
+copies of the Document, then if the Document is less than one half of
+the entire aggregate, the Document's Cover Texts may be placed on
+covers that bracket the Document within the aggregate, or the
+electronic equivalent of covers if the Document is in electronic form. 
+Otherwise they must appear on printed covers that bracket the whole
+aggregate.
+
+     <li>TRANSLATION
+
+     <p>Translation is considered a kind of modification, so you may
+distribute translations of the Document under the terms of section 4. 
+Replacing Invariant Sections with translations requires special
+permission from their copyright holders, but you may include
+translations of some or all Invariant Sections in addition to the
+original versions of these Invariant Sections.  You may include a
+translation of this License, and all the license notices in the
+Document, and any Warranty Disclaimers, provided that you also include
+the original English version of this License and the original versions
+of those notices and disclaimers.  In case of a disagreement between
+the translation and the original version of this License or a notice
+or disclaimer, the original version will prevail.
+
+     <p>If a section in the Document is Entitled &ldquo;Acknowledgements&rdquo;,
+&ldquo;Dedications&rdquo;, or &ldquo;History&rdquo;, the requirement (section 4) to Preserve
+its Title (section 1) will typically require changing the actual
+title.
+
+     <li>TERMINATION
+
+     <p>You may not copy, modify, sublicense, or distribute the Document
+except as expressly provided under this License.  Any attempt
+otherwise to copy, modify, sublicense, or distribute it is void, and
+will automatically terminate your rights under this License.
+
+     <p>However, if you cease all violation of this License, then your license
+from a particular copyright holder is reinstated (a) provisionally,
+unless and until the copyright holder explicitly and finally
+terminates your license, and (b) permanently, if the copyright holder
+fails to notify you of the violation by some reasonable means prior to
+60 days after the cessation.
+
+     <p>Moreover, your license from a particular copyright holder is
+reinstated permanently if the copyright holder notifies you of the
+violation by some reasonable means, this is the first time you have
+received notice of violation of this License (for any work) from that
+copyright holder, and you cure the violation prior to 30 days after
+your receipt of the notice.
+
+     <p>Termination of your rights under this section does not terminate the
+licenses of parties who have received copies or rights from you under
+this License.  If your rights have been terminated and not permanently
+reinstated, receipt of a copy of some or all of the same material does
+not give you any rights to use it.
+
+     <li>FUTURE REVISIONS OF THIS LICENSE
+
+     <p>The Free Software Foundation may publish new, revised versions
+of the GNU Free Documentation License from time to time.  Such new
+versions will be similar in spirit to the present version, but may
+differ in detail to address new problems or concerns.  See
+<a href="http://www.gnu.org/copyleft/">http://www.gnu.org/copyleft/</a>.
+
+     <p>Each version of the License is given a distinguishing version number. 
+If the Document specifies that a particular numbered version of this
+License &ldquo;or any later version&rdquo; applies to it, you have the option of
+following the terms and conditions either of that specified version or
+of any later version that has been published (not as a draft) by the
+Free Software Foundation.  If the Document does not specify a version
+number of this License, you may choose any version ever published (not
+as a draft) by the Free Software Foundation.  If the Document
+specifies that a proxy can decide which future versions of this
+License can be used, that proxy's public statement of acceptance of a
+version permanently authorizes you to choose that version for the
+Document.
+
+     <li>RELICENSING
+
+     <p>&ldquo;Massive Multiauthor Collaboration Site&rdquo; (or &ldquo;MMC Site&rdquo;) means any
+World Wide Web server that publishes copyrightable works and also
+provides prominent facilities for anybody to edit those works.  A
+public wiki that anybody can edit is an example of such a server.  A
+&ldquo;Massive Multiauthor Collaboration&rdquo; (or &ldquo;MMC&rdquo;) contained in the
+site means any set of copyrightable works thus published on the MMC
+site.
+
+     <p>&ldquo;CC-BY-SA&rdquo; means the Creative Commons Attribution-Share Alike 3.0
+license published by Creative Commons Corporation, a not-for-profit
+corporation with a principal place of business in San Francisco,
+California, as well as future copyleft versions of that license
+published by that same organization.
+
+     <p>&ldquo;Incorporate&rdquo; means to publish or republish a Document, in whole or
+in part, as part of another Document.
+
+     <p>An MMC is &ldquo;eligible for relicensing&rdquo; if it is licensed under this
+License, and if all works that were first published under this License
+somewhere other than this MMC, and subsequently incorporated in whole
+or in part into the MMC, (1) had no cover texts or invariant sections,
+and (2) were thus incorporated prior to November 1, 2008.
+
+     <p>The operator of an MMC Site may republish an MMC contained in the site
+under CC-BY-SA on the same site at any time before August 1, 2009,
+provided the MMC is eligible for relicensing.
+
+        </ol>
+
+<h3 class="heading">ADDENDUM: How to use this License for your documents</h3>
+
+<p>To use this License in a document you have written, include a copy of
+the License in the document and put the following copyright and
+license notices just after the title page:
+
+<pre class="smallexample">       Copyright (C)  <var>year</var>  <var>your name</var>.
+       Permission is granted to copy, distribute and/or modify this document
+       under the terms of the GNU Free Documentation License, Version 1.3
+       or any later version published by the Free Software Foundation;
+       with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+       Texts.  A copy of the license is included in the section entitled ``GNU
+       Free Documentation License''.
+</pre>
+   <p>If you have Invariant Sections, Front-Cover Texts and Back-Cover Texts,
+replace the &ldquo;with<small class="dots">...</small>Texts.&rdquo; line with this:
+
+<pre class="smallexample">         with the Invariant Sections being <var>list their titles</var>, with
+         the Front-Cover Texts being <var>list</var>, and with the Back-Cover Texts
+         being <var>list</var>.
+</pre>
+   <p>If you have Invariant Sections without Cover Texts, or some other
+combination of the three, merge those two alternatives to suit the
+situation.
+
+   <p>If your document contains nontrivial examples of program code, we
+recommend releasing these examples in parallel under your choice of
+free software license, such as the GNU General Public License,
+to permit their use in free software.
+
+<!-- Local Variables: -->
+<!-- ispell-local-pdict: "ispell-dict" -->
+<!-- End: -->
+<div class="node">
+<a name="Index"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="unnumbered">Index</h2>
+
+<ul class="index-cp" compact>
+<li><a href="#index-g_t_0024action-16"><code>$action</code></a>: <a href="#Grammar-format">Grammar format</a></li>
+<li><a href="#index-g_t_0024N-12"><code>$N</code></a>: <a href="#Grammar-format">Grammar format</a></li>
+<li><a href="#index-g_t_0024nterm-15"><code>$nterm</code></a>: <a href="#Grammar-format">Grammar format</a></li>
+<li><a href="#index-g_t_0024region-14"><code>$region</code></a>: <a href="#Grammar-format">Grammar format</a></li>
+<li><a href="#index-g_t_0024region_0040var_007bn_007d-13"><code>$region</code><var>n</var></a>: <a href="#Grammar-format">Grammar format</a></li>
+<li><a href="#index-accept-45">accept</a>: <a href="#Wisent-Parsing">Wisent Parsing</a></li>
+<li><a href="#index-ambiguous-grammar-26">ambiguous grammar</a>: <a href="#Conflicts">Conflicts</a></li>
+<li><a href="#index-associativity-7">associativity</a>: <a href="#Grammar-format">Grammar format</a></li>
+<li><a href="#index-automaton-18">automaton</a>: <a href="#Compiling-a-grammar">Compiling a grammar</a></li>
+<li><a href="#index-bottom_002dup-parser-41">bottom-up parser</a>: <a href="#Wisent-Parsing">Wisent Parsing</a></li>
+<li><a href="#index-compiling-a-grammar-22">compiling a grammar</a>: <a href="#Compiling-a-grammar">Compiling a grammar</a></li>
+<li><a href="#index-conflicts-resolution-29">conflicts resolution</a>: <a href="#Conflicts">Conflicts</a></li>
+<li><a href="#index-context_002dfree-grammar-1">context-free grammar</a>: <a href="#Wisent-Grammar">Wisent Grammar</a></li>
+<li><a href="#index-debugging-semantic-actions-99">debugging semantic actions</a>: <a href="#Debugging-actions">Debugging actions</a></li>
+<li><a href="#index-deterministic-automaton-27">deterministic automaton</a>: <a href="#Conflicts">Conflicts</a></li>
+<li><a href="#index-error-recovery-74">error recovery</a>: <a href="#Error-recovery">Error recovery</a></li>
+<li><a href="#index-error-recovery-actions-77">error recovery actions</a>: <a href="#Error-recovery">Error recovery</a></li>
+<li><a href="#index-error-recovery-strategy-76">error recovery strategy</a>: <a href="#Error-recovery">Error recovery</a></li>
+<li><a href="#index-error-reporting-66">error reporting</a>: <a href="#Report-errors">Report errors</a></li>
+<li><a href="#index-error-token-75">error token</a>: <a href="#Error-recovery">Error recovery</a></li>
+<li><a href="#index-expanded-tag-111">expanded tag</a>: <a href="#Iterative-style">Iterative style</a></li>
+<li><a href="#index-EXPANDFULL-112"><code>EXPANDFULL</code></a>: <a href="#Iterative-style">Iterative style</a></li>
+<li><a href="#index-grammar-bison-style-113">grammar bison style</a>: <a href="#Bison-style">Bison style</a></li>
+<li><a href="#index-grammar-coding-conventions-8">grammar coding conventions</a>: <a href="#Grammar-format">Grammar format</a></li>
+<li><a href="#index-grammar-compilation-21">grammar compilation</a>: <a href="#Compiling-a-grammar">Compiling a grammar</a></li>
+<li><a href="#index-grammar-conflicts-28">grammar conflicts</a>: <a href="#Conflicts">Conflicts</a></li>
+<li><a href="#index-grammar-debugging-32">grammar debugging</a>: <a href="#Grammar-Debugging">Grammar Debugging</a></li>
+<li><a href="#index-grammar-example-17">grammar example</a>: <a href="#Example">Example</a></li>
+<li><a href="#index-grammar-format-6">grammar format</a>: <a href="#Grammar-format">Grammar format</a></li>
+<li><a href="#index-grammar-iterative-style-109">grammar iterative style</a>: <a href="#Iterative-style">Iterative style</a></li>
+<li><a href="#index-grammar-mixed-style-114">grammar mixed style</a>: <a href="#Mixed-style">Mixed style</a></li>
+<li><a href="#index-grammar-styles-108">grammar styles</a>: <a href="#Grammar-styles">Grammar styles</a></li>
+<li><a href="#index-grammar-verbose-description-33">grammar verbose description</a>: <a href="#Grammar-Debugging">Grammar Debugging</a></li>
+<li><a href="#index-incremental-re_002dparse-117">incremental re-parse</a>: <a href="#Start-nonterminals">Start nonterminals</a></li>
+<li><a href="#index-LALR_00281_0029-grammar-19">LALR(1) grammar</a>: <a href="#Compiling-a-grammar">Compiling a grammar</a></li>
+<li><a href="#index-lexer-55">lexer</a>: <a href="#Writing-a-lexer">Writing a lexer</a></li>
+<li><a href="#index-lexical-analysis-54">lexical analysis</a>: <a href="#Writing-a-lexer">Writing a lexer</a></li>
+<li><a href="#index-lexical-token-mapping-122">lexical token mapping</a>: <a href="#Wisent-Lex">Wisent Lex</a></li>
+<li><a href="#index-lexical-tokens-57">lexical tokens</a>: <a href="#Writing-a-lexer">Writing a lexer</a></li>
+<li><a href="#index-look_002dahead-token-20">look-ahead token</a>: <a href="#Compiling-a-grammar">Compiling a grammar</a></li>
+<li><a href="#index-middle_002drule-actions-9">middle-rule actions</a>: <a href="#Grammar-format">Grammar format</a></li>
+<li><a href="#index-nonterminal-4">nonterminal</a>: <a href="#Wisent-Grammar">Wisent Grammar</a></li>
+<li><a href="#index-precedence-level-10">precedence level</a>: <a href="#Grammar-format">Grammar format</a></li>
+<li><a href="#index-raw-tag-110">raw tag</a>: <a href="#Iterative-style">Iterative style</a></li>
+<li><a href="#index-reduce-44">reduce</a>: <a href="#Wisent-Parsing">Wisent Parsing</a></li>
+<li><a href="#index-reduce_002freduce-conflicts-31">reduce/reduce conflicts</a>: <a href="#Conflicts">Conflicts</a></li>
+<li><a href="#index-reparse_002dsymbol-118">reparse-symbol</a>: <a href="#Start-nonterminals">Start nonterminals</a></li>
+<li><a href="#index-g_t_0040code_007breparse_002dsymbol_007d-property-116"><code>reparse-symbol</code> property</a>: <a href="#Start-nonterminals">Start nonterminals</a></li>
+<li><a href="#index-rule-2">rule</a>: <a href="#Wisent-Grammar">Wisent Grammar</a></li>
+<li><a href="#index-scanner-56">scanner</a>: <a href="#Writing-a-lexer">Writing a lexer</a></li>
+<li><a href="#index-semantic-action-symbols-98">semantic action symbols</a>: <a href="#Debugging-actions">Debugging actions</a></li>
+<li><a href="#index-semantic-actions-11">semantic actions</a>: <a href="#Grammar-format">Grammar format</a></li>
+<li><a href="#index-semantic_002dlex-121"><code>semantic-lex</code></a>: <a href="#Wisent-Lex">Wisent Lex</a></li>
+<li><a href="#index-shift-43">shift</a>: <a href="#Wisent-Parsing">Wisent Parsing</a></li>
+<li><a href="#index-shift_002dreduce-parser-42">shift-reduce parser</a>: <a href="#Wisent-Parsing">Wisent Parsing</a></li>
+<li><a href="#index-shift_002freduce-conflicts-30">shift/reduce conflicts</a>: <a href="#Conflicts">Conflicts</a></li>
+<li><a href="#index-start-nonterminals-115">start nonterminals</a>: <a href="#Start-nonterminals">Start nonterminals</a></li>
+<li><a href="#index-syntax-error-46">syntax error</a>: <a href="#Wisent-Parsing">Wisent Parsing</a></li>
+<li><a href="#index-table_002ddriven-parser-47">table-driven parser</a>: <a href="#Wisent-Parsing">Wisent Parsing</a></li>
+<li><a href="#index-tags-106">tags</a>: <a href="#Wisent-Semantic">Wisent Semantic</a></li>
+<li><a href="#index-terminal-3">terminal</a>: <a href="#Wisent-Grammar">Wisent Grammar</a></li>
+<li><a href="#index-token-5">token</a>: <a href="#Wisent-Grammar">Wisent Grammar</a></li>
+<li><a href="#index-understanding-the-automaton-40">understanding the automaton</a>: <a href="#Understanding-the-automaton">Understanding the automaton</a></li>
+<li><a href="#index-wisent_002dabort-89"><code>wisent-abort</code></a>: <a href="#Error-recovery">Error recovery</a></li>
+<li><a href="#index-wisent_002dcancel_002ddebug_002don_002dentry-103"><code>wisent-cancel-debug-on-entry</code></a>: <a href="#Debugging-actions">Debugging actions</a></li>
+<li><a href="#index-wisent_002dclearin-86"><code>wisent-clearin</code></a>: <a href="#Error-recovery">Error recovery</a></li>
+<li><a href="#index-wisent_002dcollect_002dunmatched_002dsyntax-120"><code>wisent-collect-unmatched-syntax</code></a>: <a href="#Useful-functions">Useful functions</a></li>
+<li><a href="#index-wisent_002dcompile_002dgrammar-24"><code>wisent-compile-grammar</code></a>: <a href="#Compiling-a-grammar">Compiling a grammar</a></li>
+<li><a href="#index-wisent_002ddebug_002dflag-38"><code>wisent-debug-flag</code></a>: <a href="#Grammar-Debugging">Grammar Debugging</a></li>
+<li><a href="#index-wisent_002ddebug_002don_002dentry-100"><code>wisent-debug-on-entry</code></a>: <a href="#Debugging-actions">Debugging actions</a></li>
+<li><a href="#index-wisent_002ddebug_002dshow_002dentry-105"><code>wisent-debug-show-entry</code></a>: <a href="#Debugging-actions">Debugging actions</a></li>
+<li><a href="#index-wisent_002ddiscarding_002dtoken_002dfunctions-92"><code>wisent-discarding-token-functions</code></a>: <a href="#Error-recovery">Error recovery</a></li>
+<li><a href="#index-wisent_002deoi_002dterm-59"><code>wisent-eoi-term</code></a>: <a href="#Writing-a-lexer">Writing a lexer</a></li>
+<li><a href="#index-wisent_002derrok-85"><code>wisent-errok</code></a>: <a href="#Error-recovery">Error recovery</a></li>
+<li><a href="#index-wisent_002derror-83"><code>wisent-error</code></a>: <a href="#Error-recovery">Error recovery</a></li>
+<li><a href="#index-wisent_002dinput-60"><code>wisent-input</code></a>: <a href="#Actions-goodies">Actions goodies</a></li>
+<li><a href="#index-wisent_002dlex-124"><code>wisent-lex</code></a>: <a href="#Wisent-Lex">Wisent Lex</a></li>
+<li><a href="#index-wisent_002dlex_002distream-123"><code>wisent-lex-istream</code></a>: <a href="#Wisent-Lex">Wisent Lex</a></li>
+<li><a href="#index-wisent_002dlexer-63"><code>wisent-lexer</code></a>: <a href="#Actions-goodies">Actions goodies</a></li>
+<li><a href="#index-wisent_002dmessage-67"><code>wisent-message</code></a>: <a href="#Report-errors">Report errors</a></li>
+<li><a href="#index-wisent_002dnerrs-78"><code>wisent-nerrs</code></a>: <a href="#Error-recovery">Error recovery</a></li>
+<li><a href="#index-wisent_002dparse-49"><code>wisent-parse</code></a>: <a href="#Wisent-Parsing">Wisent Parsing</a></li>
+<li><a href="#index-wisent_002dparse_002dtoggle_002dverbose_002dflag-72"><code>wisent-parse-toggle-verbose-flag</code></a>: <a href="#Report-errors">Report errors</a></li>
+<li><a href="#index-wisent_002dparse_002dverbose_002dflag-70"><code>wisent-parse-verbose-flag</code></a>: <a href="#Report-errors">Report errors</a></li>
+<li><a href="#index-wisent_002dpost_002dparse_002dhook-53"><code>wisent-post-parse-hook</code></a>: <a href="#Wisent-Parsing">Wisent Parsing</a></li>
+<li><a href="#index-wisent_002dpre_002dparse_002dhook-50"><code>wisent-pre-parse-hook</code></a>: <a href="#Wisent-Parsing">Wisent Parsing</a></li>
+<li><a href="#index-wisent_002drecovering-81"><code>wisent-recovering</code></a>: <a href="#Error-recovery">Error recovery</a></li>
+<li><a href="#index-wisent_002dregion-65"><code>wisent-region</code></a>: <a href="#Actions-goodies">Actions goodies</a></li>
+<li><a href="#index-wisent_002dset_002dregion-91"><code>wisent-set-region</code></a>: <a href="#Error-recovery">Error recovery</a></li>
+<li><a href="#index-wisent_002dsingle_002dstart_002dflag-23"><code>wisent-single-start-flag</code></a>: <a href="#Compiling-a-grammar">Compiling a grammar</a></li>
+<li><a href="#index-wisent_002dskip_002dblock-97"><code>wisent-skip-block</code></a>: <a href="#Error-recovery">Error recovery</a></li>
+<li><a href="#index-wisent_002dskip_002dtoken-95"><code>wisent-skip-token</code></a>: <a href="#Error-recovery">Error recovery</a></li>
+<li><a href="#index-wisent_002dtoggle_002dverbose_002dflag-36"><code>wisent-toggle-verbose-flag</code></a>: <a href="#Grammar-Debugging">Grammar Debugging</a></li>
+<li><a href="#index-wisent_002dtoken_002dto_002dstring-69"><code>wisent-token-to-string</code></a>: <a href="#Report-errors">Report errors</a></li>
+<li><a href="#index-wisent_002dverbose_002dflag-35"><code>wisent-verbose-flag</code></a>: <a href="#Grammar-Debugging">Grammar Debugging</a></li>
+<li><a href="#index-WY-grammar-format-107">WY grammar format</a>: <a href="#Wisent-Semantic">Wisent Semantic</a></li>
+   </ul></body></html>
+
+<!--
+
+Local Variables:
+coding: utf-8
+End:
+
+-->

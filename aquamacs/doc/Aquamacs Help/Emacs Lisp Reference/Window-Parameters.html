@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,21 +41,21 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
 <hr>
 </div>
 
-<h3 class="section">28.25 Window Parameters</h3>
+<h3 class="section">27.26 Window Parameters</h3>
 
-<p><a name="index-window-parameters-2466"></a>
+<p><a name="index-window-parameters-2667"></a>
 This section describes how window parameters can be used to associate
 additional information with windows.
 
 <div class="defun">
-&mdash; Function: <b>window-parameter</b><var> window parameter<a name="index-window_002dparameter-2467"></a></var><br>
+&mdash; Function: <b>window-parameter</b><var> window parameter<a name="index-window_002dparameter-2668"></a></var><br>
 <blockquote><p>This function returns <var>window</var>'s value for <var>parameter</var>.  The
 default for <var>window</var> is the selected window.  If <var>window</var> has no
 setting for <var>parameter</var>, this function returns <code>nil</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>window-parameters</b><var> &amp;optional window<a name="index-window_002dparameters-2468"></a></var><br>
+&mdash; Function: <b>window-parameters</b><var> &amp;optional window<a name="index-window_002dparameters-2669"></a></var><br>
 <blockquote><p>This function returns all parameters of <var>window</var> and their values. 
 The default for <var>window</var> is the selected window.  The return value
 is either <code>nil</code>, or an association list whose elements have the form
@@ -63,7 +63,7 @@ is either <code>nil</code>, or an association list whose elements have the form
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-window-parameter</b><var> window parameter value<a name="index-set_002dwindow_002dparameter-2469"></a></var><br>
+&mdash; Function: <b>set-window-parameter</b><var> window parameter value<a name="index-set_002dwindow_002dparameter-2670"></a></var><br>
 <blockquote><p>This function sets <var>window</var>'s value of <var>parameter</var> to
 <var>value</var> and returns <var>value</var>.  The default for <var>window</var>
 is the selected window. 
@@ -80,7 +80,7 @@ parameters reset to <code>nil</code>.  The following variable allows you to
 override the standard behavior:
 
 <div class="defun">
-&mdash; Variable: <b>window-persistent-parameters</b><var><a name="index-window_002dpersistent_002dparameters-2470"></a></var><br>
+&mdash; Variable: <b>window-persistent-parameters</b><var><a name="index-window_002dpersistent_002dparameters-2671"></a></var><br>
 <blockquote><p>This variable is an alist specifying which parameters get saved by
 <code>current-window-configuration</code> and <code>window-state-get</code>, and
 subsequently restored by <code>set-window-configuration</code> and
@@ -112,7 +112,7 @@ such special behavior by binding the following variable to a
 non-<code>nil</code> value:
 
 <div class="defun">
-&mdash; Variable: <b>ignore-window-parameters</b><var><a name="index-ignore_002dwindow_002dparameters-2471"></a></var><br>
+&mdash; Variable: <b>ignore-window-parameters</b><var><a name="index-ignore_002dwindow_002dparameters-2672"></a></var><br>
 <blockquote><p>If this variable is non-<code>nil</code>, some standard functions do not
 process window parameters.  The functions currently affected by this are
 <code>split-window</code>, <code>delete-window</code>, <code>delete-other-windows</code>,
@@ -145,6 +145,14 @@ code:
 
      <br><dt><code>clone-of</code><dd>This parameter specifies the window that this one has been cloned
 from.  It is installed by <code>window-state-get</code> (see <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a>).
+
+     <br><dt><code>preserved-size</code><dd>This parameter specifies a buffer, a direction where <code>nil</code> means
+vertical and <code>t</code> horizontal, and a size in pixels.  If this window
+displays the specified buffer and its size in the indicated direction
+equals the size specified by this parameter, then Emacs will try to
+preserve the size of this window in the indicated direction.  This
+parameter is installed and updated by the function
+<code>window-preserve-size</code> (see <a href="Preserving-Window-Sizes.html#Preserving-Window-Sizes">Preserving Window Sizes</a>).
 
      <br><dt><code>quit-restore</code><dd>This parameter is installed by the buffer display functions
 (see <a href="Choosing-Window.html#Choosing-Window">Choosing Window</a>) and consulted by <code>quit-restore-window</code>

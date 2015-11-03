@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,9 +41,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Processes.html#Processes">Processes</a>
 <hr>
 </div>
 
-<h3 class="section">37.10 Sentinels: Detecting Process Status Changes</h3>
+<h3 class="section">36.10 Sentinels: Detecting Process Status Changes</h3>
 
-<p><a name="index-process-sentinel-3617"></a><a name="index-sentinel-_0028of-process_0029-3618"></a>
+<p><a name="index-process-sentinel-3961"></a><a name="index-sentinel-_0028of-process_0029-3962"></a>
   A <dfn>process sentinel</dfn> is a function that is called whenever the
 associated process changes status for any reason, including signals
 (whether sent by Emacs or caused by the process's own actions) that
@@ -114,11 +114,11 @@ a new sentinel.
 while executing sentinels.  See <a href="Match-Data.html#Match-Data">Match Data</a>.
 
 <div class="defun">
-&mdash; Function: <b>set-process-sentinel</b><var> process sentinel<a name="index-set_002dprocess_002dsentinel-3619"></a></var><br>
+&mdash; Function: <b>set-process-sentinel</b><var> process sentinel<a name="index-set_002dprocess_002dsentinel-3963"></a></var><br>
 <blockquote><p>This function associates <var>sentinel</var> with <var>process</var>.  If
-<var>sentinel</var> is <code>nil</code>, then the process will have no sentinel. 
-The default behavior when there is no sentinel is to insert a message in
-the process's buffer when the process status changes.
+<var>sentinel</var> is <code>nil</code>, then the process will have the default
+sentinel, which inserts a message in the process's buffer when the
+process status changes.
 
         <p>Changes in process sentinels take effect immediately&mdash;if the sentinel
 is slated to be run but has not been called yet, and you specify a new
@@ -126,23 +126,26 @@ sentinel, the eventual call to the sentinel will use the new one.
 
      <pre class="smallexample">          (defun msg-me (process event)
              (princ
-               (format "Process: %s had the event `%s'" process event)))
+               (format "Process: %s had the event '%s'" process event)))
           (set-process-sentinel (get-process "shell") 'msg-me)
                &rArr; msg-me
           (kill-process (get-process "shell"))
-               -| Process: #&lt;process shell&gt; had the event `killed'
+               -| Process: #&lt;process shell&gt; had the event 'killed'
                &rArr; #&lt;process shell&gt;
 </pre>
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>process-sentinel</b><var> process<a name="index-process_002dsentinel-3620"></a></var><br>
-<blockquote><p>This function returns the sentinel of <var>process</var>, or <code>nil</code> if it
-has none. 
+&mdash; Function: <b>process-sentinel</b><var> process<a name="index-process_002dsentinel-3964"></a></var><br>
+<blockquote><p>This function returns the sentinel of <var>process</var>. 
 </p></blockquote></div>
 
+   <p>In case a process status changes need to be passed to several sentinels, you
+can use <code>add-function</code> to combine an existing sentinel with a new one. 
+See <a href="Advising-Functions.html#Advising-Functions">Advising Functions</a>.
+
 <div class="defun">
-&mdash; Function: <b>waiting-for-user-input-p</b><var><a name="index-waiting_002dfor_002duser_002dinput_002dp-3621"></a></var><br>
+&mdash; Function: <b>waiting-for-user-input-p</b><var><a name="index-waiting_002dfor_002duser_002dinput_002dp-3965"></a></var><br>
 <blockquote><p>While a sentinel or filter function is running, this function returns
 non-<code>nil</code> if Emacs was waiting for keyboard input from the user at
 the time the sentinel or filter function was called, or <code>nil</code> if it

@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -43,7 +43,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
 
 <h3 class="section">11.12 Directory Local Variables</h3>
 
-<p><a name="index-directory-local-variables-685"></a>
+<p><a name="index-directory-local-variables-789"></a>
   A directory can specify local variable values common to all files in
 that directory; Emacs uses these to create buffer-local bindings for
 those variables in buffers visiting any file in that directory.  This
@@ -55,7 +55,7 @@ variables: by putting them in a special file, or by defining a
 <dfn>project class</dfn> for that directory.
 
 <div class="defun">
-&mdash; Constant: <b>dir-locals-file</b><var><a name="index-dir_002dlocals_002dfile-686"></a></var><br>
+&mdash; Constant: <b>dir-locals-file</b><var><a name="index-dir_002dlocals_002dfile-790"></a></var><br>
 <blockquote><p>This constant is the name of the file where Emacs expects to find the
 directory-local variables.  The name of the file is
 <samp><span class="file">.dir-locals.el</span></samp><a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>.  A file by that name in a directory causes Emacs to apply its
@@ -69,7 +69,7 @@ specifies local variables as a specially formatted list; see
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>hack-dir-local-variables</b><var><a name="index-hack_002ddir_002dlocal_002dvariables-687"></a></var><br>
+&mdash; Function: <b>hack-dir-local-variables</b><var><a name="index-hack_002ddir_002dlocal_002dvariables-791"></a></var><br>
 <blockquote><p>This function reads the <code>.dir-locals.el</code> file and stores the
 directory-local variables in <code>file-local-variables-alist</code> that is
 local to the buffer visiting any file in the directory, without
@@ -81,7 +81,7 @@ function works by calling <code>dir-locals-set-class-variables</code> and
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>hack-dir-local-variables-non-file-buffer</b><var><a name="index-hack_002ddir_002dlocal_002dvariables_002dnon_002dfile_002dbuffer-688"></a></var><br>
+&mdash; Function: <b>hack-dir-local-variables-non-file-buffer</b><var><a name="index-hack_002ddir_002dlocal_002dvariables_002dnon_002dfile_002dbuffer-792"></a></var><br>
 <blockquote><p>This function looks for directory-local variables, and immediately
 applies them in the current buffer.  It is intended to be called in
 the mode commands for non-file buffers, such as Dired buffers, to let
@@ -91,7 +91,7 @@ and its parent directories.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>dir-locals-set-class-variables</b><var> class variables<a name="index-dir_002dlocals_002dset_002dclass_002dvariables-689"></a></var><br>
+&mdash; Function: <b>dir-locals-set-class-variables</b><var> class variables<a name="index-dir_002dlocals_002dset_002dclass_002dvariables-793"></a></var><br>
 <blockquote><p>This function defines a set of variable settings for the named
 <var>class</var>, which is a symbol.  You can later assign the class to one
 or more directories, and Emacs will apply those variable settings to
@@ -114,7 +114,7 @@ of the two forms accepted by this function in <var>variables</var>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>dir-locals-set-directory-class</b><var> directory class &amp;optional mtime<a name="index-dir_002dlocals_002dset_002ddirectory_002dclass-690"></a></var><br>
+&mdash; Function: <b>dir-locals-set-directory-class</b><var> directory class &amp;optional mtime<a name="index-dir_002dlocals_002dset_002ddirectory_002dclass-794"></a></var><br>
 <blockquote><p>This function assigns <var>class</var> to all the files in <code>directory</code>
 and its subdirectories.  Thereafter, all the variable settings
 specified for <var>class</var> will be applied to any visited file in
@@ -130,17 +130,24 @@ directly, not via a file, this argument should be <code>nil</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>dir-locals-class-alist</b><var><a name="index-dir_002dlocals_002dclass_002dalist-691"></a></var><br>
+&mdash; Variable: <b>dir-locals-class-alist</b><var><a name="index-dir_002dlocals_002dclass_002dalist-795"></a></var><br>
 <blockquote><p>This alist holds the class symbols and the associated variable
 settings.  It is updated by <code>dir-locals-set-class-variables</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>dir-locals-directory-cache</b><var><a name="index-dir_002dlocals_002ddirectory_002dcache-692"></a></var><br>
+&mdash; Variable: <b>dir-locals-directory-cache</b><var><a name="index-dir_002dlocals_002ddirectory_002dcache-796"></a></var><br>
 <blockquote><p>This alist holds directory names, their assigned class names, and
 modification times of the associated directory local variables file
 (if there is one).  The function <code>dir-locals-set-directory-class</code>
 updates this list. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>enable-dir-local-variables</b><var><a name="index-enable_002ddir_002dlocal_002dvariables-797"></a></var><br>
+<blockquote><p>If <code>nil</code>, directory-local variables are ignored.  This variable
+may be useful for modes that want to ignore directory-locals while
+still respecting file-local variables (see <a href="File-Local-Variables.html#File-Local-Variables">File Local Variables</a>). 
 </p></blockquote></div>
 
    <div class="footnote">

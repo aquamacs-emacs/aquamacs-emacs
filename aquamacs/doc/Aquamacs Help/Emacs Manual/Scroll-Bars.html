@@ -7,20 +7,20 @@
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Frames.html#Frames" title="Frames">
 <link rel="prev" href="Frame-Parameters.html#Frame-Parameters" title="Frame Parameters">
-<link rel="next" href="Drag-and-Drop.html#Drag-and-Drop" title="Drag and Drop">
+<link rel="next" href="Window-Dividers.html#Window-Dividers" title="Window Dividers">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Manual',
-updated for Emacs version 24.3.50.
+updated for Emacs version 25.0.50.
 
-Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``The GNU
      Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     with the Front-Cover Texts being ``A GNU Manual,'' and with the
      Back-Cover Texts as in (a) below.  A copy of the license is
      included in the section entitled ``GNU Free Documentation
      License.''
@@ -36,7 +36,7 @@ Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
 <div class="node">
 <a name="Scroll-Bars"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Drag-and-Drop.html#Drag-and-Drop">Drag and Drop</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="Window-Dividers.html#Window-Dividers">Window Dividers</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="Frame-Parameters.html#Frame-Parameters">Frame Parameters</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
 <hr>
@@ -44,10 +44,10 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
 
 <h3 class="section">21.12 Scroll Bars</h3>
 
-<p><a name="index-Scroll-Bar-mode-1503"></a><a name="index-mode_002c-Scroll-Bar-1504"></a>
-  On graphical displays, there is a <dfn>scroll bar</dfn> on the side of
-each Emacs window.  Clicking <kbd>Mouse-1</kbd> on the scroll bar's up and
-down buttons scrolls the window by one line at a time.  Clicking
+<p><a name="index-Scroll-Bar-mode-1563"></a><a name="index-mode_002c-Scroll-Bar-1564"></a><a name="index-Vertical-Scroll-Bar-1565"></a>
+  On graphical displays, there is a <dfn>vertical scroll bar</dfn> on the
+side of each Emacs window.  Clicking <kbd>Mouse-1</kbd> on the scroll bar's
+up and down buttons scrolls the window by one line at a time.  Clicking
 <kbd>Mouse-1</kbd> above or below the scroll bar's inner box scrolls the
 window by nearly the entire height of the window, like <kbd>M-v</kbd> and
 <kbd>C-v</kbd> respectively (see <a href="Moving-Point.html#Moving-Point">Moving Point</a>).  Dragging the inner box
@@ -59,23 +59,61 @@ anywhere on the scroll bar scrolls forward like <kbd>C-v</kbd>, while
 <kbd>Mouse-3</kbd> scrolls backward like <kbd>M-v</kbd>.  Clicking <kbd>Mouse-2</kbd>
 in the scroll bar lets you drag the inner box up and down.
 
-   <p><a name="index-scroll_002dbar_002dmode-1505"></a><a name="index-toggle_002dscroll_002dbar-1506"></a>  To toggle the use of scroll bars, type <kbd>M-x scroll-bar-mode</kbd>. 
-This command applies to all frames, including frames yet to be
-created.  To toggle scroll bars for just the selected frame, use the
-command <kbd>M-x toggle-scroll-bar</kbd>.
+   <p><a name="index-scroll_002dbar_002dmode-1566"></a><a name="index-toggle_002dscroll_002dbar-1567"></a>  To toggle the use of vertical scroll bars, type <kbd>M-x
+scroll-bar-mode</kbd>.  This command applies to all frames, including frames
+yet to be created.  To toggle vertical scroll bars for just the selected
+frame, use the command <kbd>M-x toggle-scroll-bar</kbd>.
 
-   <p><a name="index-scroll_002dbar_002dmode-1507"></a>  To control the use of scroll bars at startup, customize the variable
-<code>scroll-bar-mode</code>.  Its value should be either <code>right</code> (put
-scroll bars on the right side of windows), <code>left</code> (put them on
-the left), or <code>nil</code> (disable scroll bars).  By default, Emacs
-puts scroll bars on the right if it was compiled with GTK+ support on
-the X Window System, and on MS-Windows or Mac OS; Emacs puts scroll
-bars on the left if compiled on the X Window System without GTK+
-support (following the old convention for X applications).
+   <p><a name="index-scroll_002dbar_002dmode-1568"></a>  To control the use of vertical scroll bars at startup, customize the
+variable <code>scroll-bar-mode</code>.  Its value should be either
+<code>right</code> (put scroll bars on the right side of windows), <code>left</code>
+(put them on the left), or <code>nil</code> (disable vertical scroll bars). 
+By default, Emacs puts scroll bars on the right if it was compiled with
+GTK+ support on the X Window System, and on MS-Windows or Mac OS; Emacs
+puts scroll bars on the left if compiled on the X Window System without
+GTK+ support (following the old convention for X applications).
 
-   <p><a name="index-scroll_002dbar_002dwidth-1508"></a><a name="index-width-of-the-scroll-bar-1509"></a>  You can also use the X resource &lsquo;<samp><span class="samp">verticalScrollBars</span></samp>&rsquo; to enable
+   <p><a name="index-scroll_002dbar_002dwidth-1569"></a><a name="index-width-of-the-vertical-scroll-bar-1570"></a>  You can also use the X resource &lsquo;<samp><span class="samp">verticalScrollBars</span></samp>&rsquo; to enable
 or disable the scroll bars (see <a href="Resources.html#Resources">Resources</a>).  To control the scroll
 bar width, change the <code>scroll-bar-width</code> frame parameter
+(see <a href="../elisp/Frame-Parameters.html#Frame-Parameters">Frame Parameters</a>).
+
+   <p><a name="index-scroll_002dbar_002dadjust_002dthumb_002dportion-1571"></a><a name="index-overscrolling-1572"></a>If you're using Emacs on X (with GTK+ or Motif), you can customize the
+variable <code>scroll-bar-adjust-thumb-portion</code> to control
+<dfn>overscrolling</dfn> of the scroll bar, i.e., dragging the thumb down even
+when the end of the buffer is visible.  If its value is
+non-<code>nil</code>, the scroll bar can be dragged downwards even if the
+end of the buffer is shown; if <code>nil</code>, the thumb will be at the
+bottom when the end of the buffer is shown.  You can not over-scroll
+when the entire buffer is visible.
+
+   <p><a name="index-scroll_002dbar-face-1573"></a>  The visual appearance of the scroll bars is controlled by the
+<code>scroll-bar</code> face.
+
+   <p><a name="index-Horizontal-Scroll-Bar-1574"></a><a name="index-Horizontal-Scroll-Bar-mode-1575"></a>  On graphical displays with toolkit support, Emacs may also supply a
+<dfn>horizontal scroll bar</dfn> on the bottom of each window.  Clicking
+<kbd>Mouse-1</kbd> on the that scroll bar's left and right buttons scrolls
+the window horizontally by one column at a time.  Clicking <kbd>Mouse-1</kbd>
+on the left or right of the scroll bar's inner box scrolls the window by
+four columns.  Dragging the inner box scrolls the window continuously.
+
+   <p>Note that such horizontal scrolling can make the window's position of
+point disappear on the left or the right.  Typing a character to insert
+text or moving point with a keyboard command will usually bring it back
+into view.
+
+   <p><a name="index-horizontal_002dscroll_002dbar_002dmode-1576"></a>  To toggle the use of horizontal scroll bars, type <kbd>M-x
+horizontal-scroll-bar-mode</kbd>.  This command applies to all frames,
+including frames yet to be created.  To toggle horizontal scroll bars
+for just the selected frame, use the command <kbd>M-x
+toggle-horizontal-scroll-bar</kbd>.
+
+   <p><a name="index-horizontal_002dscroll_002dbar_002dmode-1577"></a>  To control the use of horizontal scroll bars at startup, customize the
+variable <code>horizontal-scroll-bar-mode</code>.
+
+   <p><a name="index-scroll_002dbar_002dheight-1578"></a><a name="index-height-of-the-horizontal-scroll-bar-1579"></a>  You can also use the X resource &lsquo;<samp><span class="samp">horizontalScrollBars</span></samp>&rsquo; to enable
+or disable horizontal scroll bars (see <a href="Resources.html#Resources">Resources</a>).  To control the
+scroll bar height, change the <code>scroll-bar-height</code> frame parameter
 (see <a href="../elisp/Frame-Parameters.html#Frame-Parameters">Frame Parameters</a>).
 
    </body></html>

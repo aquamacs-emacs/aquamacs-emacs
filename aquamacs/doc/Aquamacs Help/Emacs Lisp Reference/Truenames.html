@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,9 +41,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Information-about-Files.html#Informatio
 <hr>
 </div>
 
-<h4 class="subsection">25.6.3 Truenames</h4>
+<h4 class="subsection">24.6.3 Truenames</h4>
 
-<p><a name="index-truename-_0028of-file_0029-1947"></a>
+<p><a name="index-truename-_0028of-file_0029-2100"></a>
   The <dfn>truename</dfn> of a file is the name that you get by following
 symbolic links at all levels until none remain, then simplifying away
 &lsquo;<samp><span class="samp">.</span></samp>&rsquo; and &lsquo;<samp><span class="samp">..</span></samp>&rsquo; appearing as name components.  This results
@@ -53,7 +53,7 @@ the number of hard links to the file.  However, truenames are useful
 because they eliminate symbolic links as a cause of name variation.
 
 <div class="defun">
-&mdash; Function: <b>file-truename</b><var> filename<a name="index-file_002dtruename-1948"></a></var><br>
+&mdash; Function: <b>file-truename</b><var> filename<a name="index-file_002dtruename-2101"></a></var><br>
 <blockquote><p>This function returns the truename of the file <var>filename</var>.  If the
 argument is not an absolute file name, this function first expands it
 against <code>default-directory</code>.
@@ -62,17 +62,17 @@ against <code>default-directory</code>.
 <code>substitute-in-file-name</code> does that.  See <a href="Definition-of-substitute_002din_002dfile_002dname.html#Definition-of-substitute_002din_002dfile_002dname">Definition of substitute-in-file-name</a>.
 
         <p>If you may need to follow symbolic links preceding &lsquo;<samp><span class="samp">..</span></samp>&rsquo;
-appearing as a name component, you should make sure to call
-<code>file-truename</code> without prior direct or indirect calls to
-<code>expand-file-name</code>, as otherwise the file name component
-immediately preceding &lsquo;<samp><span class="samp">..</span></samp>&rsquo; will be &ldquo;simplified away&rdquo; before
-<code>file-truename</code> is called.  To eliminate the need for a call to
-<code>expand-file-name</code>, <code>file-truename</code> handles &lsquo;<samp><span class="samp">~</span></samp>&rsquo; in the
-same way that <code>expand-file-name</code> does.  See <a href="File-Name-Expansion.html#File-Name-Expansion">Functions that Expand Filenames</a>. 
+appearing as a name component, call <code>file-truename</code> without prior
+direct or indirect calls to <code>expand-file-name</code>.  Otherwise, the
+file name component immediately preceding &lsquo;<samp><span class="samp">..</span></samp>&rsquo; will be
+simplified away before <code>file-truename</code> is called.  To
+eliminate the need for a call to <code>expand-file-name</code>,
+<code>file-truename</code> handles &lsquo;<samp><span class="samp">~</span></samp>&rsquo; in the same way that
+<code>expand-file-name</code> does.  See <a href="File-Name-Expansion.html#File-Name-Expansion">Functions that Expand Filenames</a>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>file-chase-links</b><var> filename &amp;optional limit<a name="index-file_002dchase_002dlinks-1949"></a></var><br>
+&mdash; Function: <b>file-chase-links</b><var> filename &amp;optional limit<a name="index-file_002dchase_002dlinks-2102"></a></var><br>
 <blockquote><p>This function follows symbolic links, starting with <var>filename</var>,
 until it finds a file name which is not the name of a symbolic link. 
 Then it returns that file name.  This function does <em>not</em> follow
@@ -96,7 +96,23 @@ we would have:
           ;; <span class="roman">Assuming that </span><samp><span class="file">/home</span></samp><span class="roman"> is not a symbolic link.</span>
           &rArr; "/home/foo/hello"
 </pre>
-   <p>See <a href="Buffer-File-Name.html#Buffer-File-Name">Buffer File Name</a>, for related information.
+   <div class="defun">
+&mdash; Function: <b>file-equal-p</b><var> file1 file2<a name="index-file_002dequal_002dp-2103"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if the files <var>file1</var> and
+<var>file2</var> name the same file.  This is similar to comparing their
+truenames, except that remote file names are also handled in an
+appropriate manner.  If <var>file1</var> or <var>file2</var> does not exist, the
+return value is unspecified. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>file-in-directory-p</b><var> file dir<a name="index-file_002din_002ddirectory_002dp-2104"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if <var>file</var> is a file in directory
+<var>dir</var>, or in a subdirectory of <var>dir</var>.  It also returns
+<code>t</code> if <var>file</var> and <var>dir</var> are the same directory.  It
+compares the truenames of the two directories.  If <var>dir</var> does not
+name an existing directory, the return value is <code>nil</code>. 
+</p></blockquote></div>
 
    </body></html>
 

@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,28 +41,31 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Documentation.html#Documentation">Docum
 <hr>
 </div>
 
-<h3 class="section">24.2 Access to Documentation Strings</h3>
+<h3 class="section">23.2 Access to Documentation Strings</h3>
+
+<p><a name="index-accessing-documentation-strings-1989"></a>
 
 <div class="defun">
-&mdash; Function: <b>documentation-property</b><var> symbol property &amp;optional verbatim<a name="index-documentation_002dproperty-1849"></a></var><br>
+&mdash; Function: <b>documentation-property</b><var> symbol property &amp;optional verbatim<a name="index-documentation_002dproperty-1990"></a></var><br>
 <blockquote><p>This function returns the documentation string recorded in
 <var>symbol</var>'s property list under property <var>property</var>.  It is
 most often used to look up the documentation strings of variables, for
 which <var>property</var> is <code>variable-documentation</code>.  However, it
 can also be used to look up other kinds of documentation, such as for
 customization groups (but for function documentation, use the
-<code>documentation</code> command, below).
+<code>documentation</code> function, below).
 
-        <p>If the value recorded in the property list refers to a documentation
-string stored in a <samp><span class="file">DOC</span></samp> file or a byte-compiled
-file, it looks up that string and returns it.  If the property value
-isn't <code>nil</code>, isn't a string, and doesn't refer to text in a file,
-then it is evaluated as a Lisp expression to obtain a string.
+        <p>If the property value refers to a documentation string stored in the
+<samp><span class="file">DOC</span></samp> file or a byte-compiled file, this function looks up that
+string and returns it.
 
-        <p>The last thing this function does is pass the string through
-<code>substitute-command-keys</code> to substitute actual key bindings
-(see <a href="Keys-in-Documentation.html#Keys-in-Documentation">Keys in Documentation</a>).  However, it skips this step if
-<var>verbatim</var> is non-<code>nil</code>.
+        <p>If the property value isn't <code>nil</code>, isn't a string, and doesn't
+refer to text in a file, then it is evaluated as a Lisp expression to
+obtain a string.
+
+        <p>Finally, this function passes the string through
+<code>substitute-command-keys</code> to substitute key bindings (see <a href="Keys-in-Documentation.html#Keys-in-Documentation">Keys in Documentation</a>).  It skips this step if <var>verbatim</var> is
+non-<code>nil</code>.
 
      <pre class="smallexample">          (documentation-property 'command-line-processed
              'variable-documentation)
@@ -75,7 +78,7 @@ then it is evaluated as a Lisp expression to obtain a string.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>documentation</b><var> function &amp;optional verbatim<a name="index-documentation-1850"></a></var><br>
+&mdash; Function: <b>documentation</b><var> function &amp;optional verbatim<a name="index-documentation-1991"></a></var><br>
 <blockquote><p>This function returns the documentation string of <var>function</var>.  It
 handles macros, named keyboard macros, and special forms, as well as
 ordinary functions.
@@ -83,28 +86,29 @@ ordinary functions.
         <p>If <var>function</var> is a symbol, this function first looks for the
 <code>function-documentation</code> property of that symbol; if that has a
 non-<code>nil</code> value, the documentation comes from that value (if the
-value is not a string, it is evaluated).  If <var>function</var> is not a
-symbol, or if it has no <code>function-documentation</code> property, then
-<code>documentation</code> extracts the documentation string from the actual
-function definition, reading it from a file if called for.
+value is not a string, it is evaluated).
 
-        <p>Finally, unless <var>verbatim</var> is non-<code>nil</code>, it calls
-<code>substitute-command-keys</code> so as to return a value containing the
-actual (current) key bindings.
+        <p>If <var>function</var> is not a symbol, or if it has no
+<code>function-documentation</code> property, then <code>documentation</code>
+extracts the documentation string from the actual function definition,
+reading it from a file if called for.
 
-        <p>The function <code>documentation</code> signals a <code>void-function</code> error
+        <p>Finally, unless <var>verbatim</var> is non-<code>nil</code>, this function calls
+<code>substitute-command-keys</code>.  The result is the documentation
+string to return.
+
+        <p>The <code>documentation</code> function signals a <code>void-function</code> error
 if <var>function</var> has no function definition.  However, it is OK if
 the function definition has no documentation string.  In that case,
 <code>documentation</code> returns <code>nil</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>face-documentation</b><var> face<a name="index-face_002ddocumentation-1851"></a></var><br>
+&mdash; Function: <b>face-documentation</b><var> face<a name="index-face_002ddocumentation-1992"></a></var><br>
 <blockquote><p>This function returns the documentation string of <var>face</var> as a
 face. 
 </p></blockquote></div>
 
-<!-- Wordy to prevent overfull hboxes.  -rjc 15mar92 -->
    <p>Here is an example of using the two functions, <code>documentation</code> and
 <code>documentation-property</code>, to display the documentation strings for
 several symbols in a <samp><span class="file">*Help*</span></samp> buffer.
@@ -113,7 +117,7 @@ several symbols in a <samp><span class="file">*Help*</span></samp> buffer.
 <pre class="smallexample">     (defun describe-symbols (pattern)
        "Describe the Emacs Lisp symbols matching PATTERN.
      All symbols that have PATTERN in their name are described
-     in the `*Help*' buffer."
+     in the *Help* buffer."
        (interactive "sDescribe symbols matching: ")
        (let ((describe-func
               (function
@@ -166,26 +170,38 @@ but provides more information.
      <!-- Do not blithely break or fill these lines. -->
      <!-- That makes them incorrect. -->
      
+     minibuffer-temporary-goal-position      Variable
+     not documented
+     
      set-goal-column Keys: C-x C-n
      Set the current horizontal position as a goal for C-n and C-p.
      <!-- DO NOT put a blank line here!  That is factually inaccurate! -->
      Those commands will move to this position in the line moved to
      rather than trying to keep the same horizontal position.
-     With a non-nil argument, clears out the goal column
+     With a non-nil argument ARG, clears out the goal column
      so that C-n and C-p resume vertical motion.
-     The goal column is stored in the variable `goal-column'.
+     The goal column is stored in the variable ‘goal-column’.
+     
+     (fn ARG)
      
      temporary-goal-column   Variable
      Current goal column for vertical motion.
-     It is the column where point was
-     at the start of current run of vertical motion commands.
-     When the `track-eol' feature is doing its job, the value is 9999.
+     It is the column where point was at the start of the current run
+     of vertical motion commands.
+     
+     When moving by visual lines via the function ‘line-move-visual’, it is a cons
+     cell (COL . HSCROLL), where COL is the x-position, in pixels,
+     divided by the default column width, and HSCROLL is the number of
+     columns by which window is scrolled from left margin.
+     
+     When the ‘track-eol’ feature is doing its job, the value is
+     ‘most-positive-fixnum’.
      ---------- Buffer: *Help* ----------
 </pre>
    <p><a name="Definition-of-Snarf_002ddocumentation"></a>
 
 <div class="defun">
-&mdash; Function: <b>Snarf-documentation</b><var> filename<a name="index-Snarf_002ddocumentation-1852"></a></var><br>
+&mdash; Function: <b>Snarf-documentation</b><var> filename<a name="index-Snarf_002ddocumentation-1993"></a></var><br>
 <blockquote><p>This function is used when building Emacs, just before the runnable
 Emacs is dumped.  It finds the positions of the documentation strings
 stored in the file <var>filename</var>, and records those positions into
@@ -199,7 +215,7 @@ for in the directory <code>doc-directory</code>.  Usually <var>filename</var> is
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>doc-directory</b><var><a name="index-doc_002ddirectory-1853"></a></var><br>
+&mdash; Variable: <b>doc-directory</b><var><a name="index-doc_002ddirectory-1994"></a></var><br>
 <blockquote><p>This variable holds the name of the directory which should contain the
 file <code>"DOC"</code> that contains documentation strings for
 built-in and preloaded functions and variables.

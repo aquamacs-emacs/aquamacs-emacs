@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,18 +41,18 @@ Up:&nbsp;<a rel="up" accesskey="u" href="System-Interface.html#System-Interface"
 <hr>
 </div>
 
-<h3 class="section">39.11 Idle Timers</h3>
+<h3 class="section">38.11 Idle Timers</h3>
 
-<p>Here is how to set up a timer that runs when Emacs is idle for a
+<p><a name="index-idle-timers-4667"></a>
+  Here is how to set up a timer that runs when Emacs is idle for a
 certain length of time.  Aside from how to set them up, idle timers
 work just like ordinary timers.
 
 <div class="defun">
-&mdash; Command: <b>run-with-idle-timer</b><var> secs repeat function &amp;rest args<a name="index-run_002dwith_002didle_002dtimer-4223"></a></var><br>
+&mdash; Command: <b>run-with-idle-timer</b><var> secs repeat function &amp;rest args<a name="index-run_002dwith_002didle_002dtimer-4668"></a></var><br>
 <blockquote><p>Set up a timer which runs the next time Emacs is idle for <var>secs</var>
-seconds.  The value of <var>secs</var> may be an integer or a floating
-point number; a value of the type returned by <code>current-idle-time</code>
-is also allowed.
+seconds.  The value of <var>secs</var> may be a number or a value of the type
+returned by <code>current-idle-time</code>.
 
         <p>If <var>repeat</var> is <code>nil</code>, the timer runs just once, the first time
 Emacs remains idle for a long enough time.  More often <var>repeat</var> is
@@ -63,7 +63,7 @@ remains idle for <var>secs</var> seconds.
 can use in calling <code>cancel-timer</code> (see <a href="Timers.html#Timers">Timers</a>). 
 </p></blockquote></div>
 
-   <p><a name="index-idleness-4224"></a>  Emacs becomes <dfn>idle</dfn> when it starts waiting for user input, and
+   <p><a name="index-idleness-4669"></a>  Emacs becomes <dfn>idle</dfn> when it starts waiting for user input, and
 it remains idle until the user provides some input.  If a timer is set
 for five seconds of idleness, it runs approximately five seconds after
 Emacs first becomes idle.  Even if <var>repeat</var> is non-<code>nil</code>,
@@ -104,7 +104,7 @@ is to reschedule with an appropriate increment of the current value of
 the idleness time, as described below.
 
 <div class="defun">
-&mdash; Function: <b>current-idle-time</b><var><a name="index-current_002didle_002dtime-4225"></a></var><br>
+&mdash; Function: <b>current-idle-time</b><var><a name="index-current_002didle_002dtime-4670"></a></var><br>
 <blockquote><p>If Emacs is idle, this function returns the length of time Emacs has
 been idle, as a list of four integers: <code>(</code><var>sec-high</var>
 <var>sec-low</var> <var>microsec</var> <var>picosec</var><code>)</code>, using the same format as
@@ -134,8 +134,7 @@ idleness.  Here's an example:
                (run-with-idle-timer
                  ;; Compute an idle time <var>break-length</var>
                  ;; more than the current value.
-                 (time-add (current-idle-time)
-                           (seconds-to-time <var>break-length</var>))
+                 (time-add (current-idle-time) <var>break-length</var>)
                  nil
                  'my-timer-function))))
 </pre>

@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,9 +41,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Motion.html#Motion">Motion</a>
 <hr>
 </div>
 
-<h4 class="subsection">30.2.6 Moving over Balanced Expressions</h4>
+<h4 class="subsection">29.2.6 Moving over Balanced Expressions</h4>
 
-<p><a name="index-sexp-motion-2759"></a><a name="index-Lisp-expression-motion-2760"></a><a name="index-list-motion-2761"></a><a name="index-balanced-parenthesis-motion-2762"></a>
+<p><a name="index-sexp-motion-3035"></a><a name="index-Lisp-expression-motion-3036"></a><a name="index-list-motion-3037"></a><a name="index-balanced-parenthesis-motion-3038"></a>
   Here are several functions concerned with balanced-parenthesis
 expressions (also called <dfn>sexps</dfn> in connection with moving across
 them in Emacs).  The syntax table controls how these functions interpret
@@ -51,34 +51,45 @@ various characters; see <a href="Syntax-Tables.html#Syntax-Tables">Syntax Tables
 sexps.  For user-level commands, see <a href="../emacs/Parentheses.html#Parentheses">Commands for Editing with Parentheses</a>.
 
 <div class="defun">
-&mdash; Command: <b>forward-list</b><var> &amp;optional arg<a name="index-forward_002dlist-2763"></a></var><br>
+&mdash; Command: <b>forward-list</b><var> &amp;optional arg<a name="index-forward_002dlist-3039"></a></var><br>
 <blockquote><p>This function moves forward across <var>arg</var> (default 1) balanced groups of
 parentheses.  (Other syntactic entities such as words or paired string
 quotes are ignored.) 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>backward-list</b><var> &amp;optional arg<a name="index-backward_002dlist-2764"></a></var><br>
+&mdash; Command: <b>backward-list</b><var> &amp;optional arg<a name="index-backward_002dlist-3040"></a></var><br>
 <blockquote><p>This function moves backward across <var>arg</var> (default 1) balanced groups of
 parentheses.  (Other syntactic entities such as words or paired string
 quotes are ignored.) 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>up-list</b><var> &amp;optional arg<a name="index-up_002dlist-2765"></a></var><br>
-<blockquote><p>This function moves forward out of <var>arg</var> (default 1) levels of parentheses. 
-A negative argument means move backward but still to a less deep spot. 
+&mdash; Command: <b>up-list</b><var> &amp;optional arg escape-strings no-syntax-crossing<a name="index-up_002dlist-3041"></a></var><br>
+<blockquote><p>This function moves forward out of <var>arg</var> (default 1) levels of
+parentheses.  A negative argument means move backward but still to a
+less deep spot.  If <var>escape-strings</var> is non-<code>nil</code> (as it is
+interactively), move out of enclosing strings as well.  If
+<var>no-syntax-crossing</var> is non-<code>nil</code> (as it is interactively), prefer
+to break out of any enclosing string instead of moving to the start of
+a list broken across multiple strings.  On error, location of point is
+unspecified. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>down-list</b><var> &amp;optional arg<a name="index-down_002dlist-2766"></a></var><br>
+&mdash; Command: <b>backward-up-list</b><var> &amp;optional arg escape-strings no-syntax-crossing<a name="index-backward_002dup_002dlist-3042"></a></var><br>
+<blockquote><p>This function is just like <code>up-list</code>, but with a negated argument. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>down-list</b><var> &amp;optional arg<a name="index-down_002dlist-3043"></a></var><br>
 <blockquote><p>This function moves forward into <var>arg</var> (default 1) levels of
 parentheses.  A negative argument means move backward but still go
 deeper in parentheses (&minus;<var>arg</var> levels). 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>forward-sexp</b><var> &amp;optional arg<a name="index-forward_002dsexp-2767"></a></var><br>
+&mdash; Command: <b>forward-sexp</b><var> &amp;optional arg<a name="index-forward_002dsexp-3044"></a></var><br>
 <blockquote><p>This function moves forward across <var>arg</var> (default 1) balanced expressions. 
 Balanced expressions include both those delimited by parentheses and
 other kinds, such as words and string constants. 
@@ -98,12 +109,12 @@ See <a href="Parsing-Expressions.html#Parsing-Expressions">Parsing Expressions</
         </blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>backward-sexp</b><var> &amp;optional arg<a name="index-backward_002dsexp-2768"></a></var><br>
+&mdash; Command: <b>backward-sexp</b><var> &amp;optional arg<a name="index-backward_002dsexp-3045"></a></var><br>
 <blockquote><p>This function moves backward across <var>arg</var> (default 1) balanced expressions. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>beginning-of-defun</b><var> &amp;optional arg<a name="index-beginning_002dof_002ddefun-2769"></a></var><br>
+&mdash; Command: <b>beginning-of-defun</b><var> &amp;optional arg<a name="index-beginning_002dof_002ddefun-3046"></a></var><br>
 <blockquote><p>This function moves back to the <var>arg</var>th beginning of a defun.  If
 <var>arg</var> is negative, this actually moves forward, but it still moves
 to the beginning of a defun, not to the end of one.  <var>arg</var> defaults
@@ -111,7 +122,7 @@ to 1.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>end-of-defun</b><var> &amp;optional arg<a name="index-end_002dof_002ddefun-2770"></a></var><br>
+&mdash; Command: <b>end-of-defun</b><var> &amp;optional arg<a name="index-end_002dof_002ddefun-3047"></a></var><br>
 <blockquote><p>This function moves forward to the <var>arg</var>th end of a defun.  If
 <var>arg</var> is negative, this actually moves backward, but it still moves
 to the end of a defun, not to the beginning of one.  <var>arg</var> defaults
@@ -119,7 +130,7 @@ to 1.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>defun-prompt-regexp</b><var><a name="index-defun_002dprompt_002dregexp-2771"></a></var><br>
+&mdash; User Option: <b>defun-prompt-regexp</b><var><a name="index-defun_002dprompt_002dregexp-3048"></a></var><br>
 <blockquote><p>If non-<code>nil</code>, this buffer-local variable holds a regular
 expression that specifies what text can appear before the
 open-parenthesis that starts a defun.  That is to say, a defun begins
@@ -128,7 +139,7 @@ followed by a character with open-parenthesis syntax.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>open-paren-in-column-0-is-defun-start</b><var><a name="index-open_002dparen_002din_002dcolumn_002d0_002dis_002ddefun_002dstart-2772"></a></var><br>
+&mdash; User Option: <b>open-paren-in-column-0-is-defun-start</b><var><a name="index-open_002dparen_002din_002dcolumn_002d0_002dis_002ddefun_002dstart-3049"></a></var><br>
 <blockquote><p>If this variable's value is non-<code>nil</code>, an open parenthesis in
 column 0 is considered to be the start of a defun.  If it is
 <code>nil</code>, an open parenthesis in column 0 has no special meaning. 
@@ -136,7 +147,7 @@ The default is <code>t</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>beginning-of-defun-function</b><var><a name="index-beginning_002dof_002ddefun_002dfunction-2773"></a></var><br>
+&mdash; Variable: <b>beginning-of-defun-function</b><var><a name="index-beginning_002dof_002ddefun_002dfunction-3050"></a></var><br>
 <blockquote><p>If non-<code>nil</code>, this variable holds a function for finding the
 beginning of a defun.  The function <code>beginning-of-defun</code>
 calls this function instead of using its normal method, passing it its
@@ -146,7 +157,7 @@ should move back by that many functions, like
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>end-of-defun-function</b><var><a name="index-end_002dof_002ddefun_002dfunction-2774"></a></var><br>
+&mdash; Variable: <b>end-of-defun-function</b><var><a name="index-end_002dof_002ddefun_002dfunction-3051"></a></var><br>
 <blockquote><p>If non-<code>nil</code>, this variable holds a function for finding the end of
 a defun.  The function <code>end-of-defun</code> calls this function instead
 of using its normal method. 

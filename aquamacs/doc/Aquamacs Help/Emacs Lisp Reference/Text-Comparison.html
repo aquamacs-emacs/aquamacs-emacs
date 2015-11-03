@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -43,10 +43,10 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Strings-and-Characters.html#Strings-and
 
 <h3 class="section">4.5 Comparison of Characters and Strings</h3>
 
-<p><a name="index-string-equality-247"></a>
+<p><a name="index-string-equality-255"></a><a name="index-text-comparison-256"></a>
 
 <div class="defun">
-&mdash; Function: <b>char-equal</b><var> character1 character2<a name="index-char_002dequal-248"></a></var><br>
+&mdash; Function: <b>char-equal</b><var> character1 character2<a name="index-char_002dequal-257"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if the arguments represent the same
 character, <code>nil</code> otherwise.  This function ignores differences
 in case if <code>case-fold-search</code> is non-<code>nil</code>.
@@ -60,7 +60,7 @@ in case if <code>case-fold-search</code> is non-<code>nil</code>.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>string=</b><var> string1 string2<a name="index-string_003d-249"></a></var><br>
+&mdash; Function: <b>string=</b><var> string1 string2<a name="index-string_003d-258"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if the characters of the two strings
 match exactly.  Symbols are also allowed as arguments, in which case
 the symbol names are used.  Case is always significant, regardless of
@@ -68,8 +68,10 @@ the symbol names are used.  Case is always significant, regardless of
 
         <p>This function is equivalent to <code>equal</code> for comparing two strings
 (see <a href="Equality-Predicates.html#Equality-Predicates">Equality Predicates</a>).  In particular, the text properties of
-the two strings are ignored.  But if either argument is not a string
-or symbol, an error is signaled.
+the two strings are ignored; use <code>equal-including-properties</code> if
+you need to distinguish between strings that differ only in their text
+properties.  However, unlike <code>equal</code>, if either argument is not a
+string or symbol, <code>string=</code> signals an error.
 
      <pre class="example">          (string= "abc" "abc")
                &rArr; t
@@ -95,14 +97,66 @@ Lisp programmers ever get confronted with.  See <a href="Text-Representations.ht
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>string-equal</b><var> string1 string2<a name="index-string_002dequal-250"></a></var><br>
+&mdash; Function: <b>string-equal</b><var> string1 string2<a name="index-string_002dequal-259"></a></var><br>
 <blockquote><p><code>string-equal</code> is another name for <code>string=</code>. 
 </p></blockquote></div>
 
-   <p><a name="index-lexical-comparison-251"></a>
+<div class="defun">
+&mdash; Function: <b>string-collate-equalp</b><var> string1 string2 &amp;optional locale ignore-case<a name="index-string_002dcollate_002dequalp-260"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if <var>string1</var> and <var>string2</var> are
+equal with respect to collation rules.  A collation rule is not only
+determined by the lexicographic order of the characters contained in
+<var>string1</var> and <var>string2</var>, but also further rules about
+relations between these characters.  Usually, it is defined by the
+<var>locale</var> environment Emacs is running with.
+
+        <p>For example, characters with different coding points but
+the same meaning might be considered as equal, like different grave
+accent Unicode characters:
+
+     <pre class="example">          (string-collate-equalp (string ?\uFF40) (string ?\u1FEF))
+               &rArr; t
+</pre>
+        <p>The optional argument <var>locale</var>, a string, overrides the setting of
+your current locale identifier for collation.  The value is system
+dependent; a <var>locale</var> <code>"en_US.UTF-8"</code> is applicable on POSIX
+systems, while it would be, e.g., <code>"enu_USA.1252"</code> on MS-Windows
+systems.
+
+        <p>If <var>ignore-case</var> is non-<code>nil</code>, characters are converted to lower-case
+before comparing them.
+
+        <p>To emulate Unicode-compliant collation on MS-Windows systems,
+bind <code>w32-collate-ignore-punctuation</code> to a non-<code>nil</code> value, since
+the codeset part of the locale cannot be <code>"UTF-8"</code> on MS-Windows.
+
+        <p>If your system does not support a locale environment, this function
+behaves like <code>string-equal</code>.
+
+        <p>Do <em>not</em> use this function to compare file names for equality, only
+for sorting them. 
+</p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>string&lt;</b><var> string1 string2<a name="index-string_003c-252"></a></var><br>
+&mdash; Function: <b>string-prefix-p</b><var> string1 string2 &amp;optional ignore-case<a name="index-string_002dprefix_002dp-261"></a></var><br>
+<blockquote><p>This function returns non-<code>nil</code> if <var>string1</var> is a prefix of
+<var>string2</var>; i.e., if <var>string2</var> starts with <var>string1</var>.  If
+the optional argument <var>ignore-case</var> is non-<code>nil</code>, the
+comparison ignores case differences. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>string-suffix-p</b><var> suffix string &amp;optional ignore-case<a name="index-string_002dsuffix_002dp-262"></a></var><br>
+<blockquote><p>This function returns non-<code>nil</code> if <var>suffix</var> is a suffix of
+<var>string</var>; i.e., if <var>string</var> ends with <var>suffix</var>.  If the
+optional argument <var>ignore-case</var> is non-<code>nil</code>, the comparison
+ignores case differences. 
+</p></blockquote></div>
+
+   <p><a name="index-lexical-comparison-263"></a>
+
+<div class="defun">
+&mdash; Function: <b>string&lt;</b><var> string1 string2<a name="index-string_003c-264"></a></var><br>
 <blockquote><!-- (findex string< causes problems for permuted index!!) -->
         <p>This function compares two strings a character at a time.  It
 scans both the strings at the same time to find the first pair of corresponding
@@ -148,12 +202,49 @@ are used.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>string-lessp</b><var> string1 string2<a name="index-string_002dlessp-253"></a></var><br>
+&mdash; Function: <b>string-lessp</b><var> string1 string2<a name="index-string_002dlessp-265"></a></var><br>
 <blockquote><p><code>string-lessp</code> is another name for <code>string&lt;</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>string-prefix-p</b><var> string1 string2 &amp;optional ignore-case<a name="index-string_002dprefix_002dp-254"></a></var><br>
+&mdash; Function: <b>string-collate-lessp</b><var> string1 string2 &amp;optional locale ignore-case<a name="index-string_002dcollate_002dlessp-266"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if <var>string1</var> is less than
+<var>string2</var> in collation order.  A collation order is not only
+determined by the lexicographic order of the characters contained in
+<var>string1</var> and <var>string2</var>, but also further rules about
+relations between these characters.  Usually, it is defined by the
+<var>locale</var> environment Emacs is running with.
+
+        <p>For example, punctuation and whitespace characters might be considered
+less significant for <a href="Sorting.html#Sorting">sorting</a>.
+
+     <pre class="example">          (sort '("11" "12" "1 1" "1 2" "1.1" "1.2") 'string-collate-lessp)
+               &rArr; ("11" "1 1" "1.1" "12" "1 2" "1.2")
+</pre>
+        <p>The optional argument <var>locale</var>, a string, overrides the setting of
+your current locale identifier for collation.  The value is system
+dependent; a <var>locale</var> <code>"en_US.UTF-8"</code> is applicable on POSIX
+systems, while it would be, e.g., <code>"enu_USA.1252"</code> on MS-Windows
+systems.  The <var>locale</var> <code>"POSIX"</code> lets <code>string-collate-lessp</code>
+behave like <code>string-lessp</code>:
+
+     <pre class="example">          (sort '("11" "12" "1 1" "1 2" "1.1" "1.2")
+                (lambda (s1 s2) (string-collate-lessp s1 s2 "POSIX")))
+               &rArr; ("1 1" "1 2" "1.1" "1.2" "11" "12")
+</pre>
+        <p>If <var>ignore-case</var> is non-<code>nil</code>, characters are converted to lower-case
+before comparing them.
+
+        <p>To emulate Unicode-compliant collation on MS-Windows systems,
+bind <code>w32-collate-ignore-punctuation</code> to a non-<code>nil</code> value, since
+the codeset part of the locale cannot be <code>"UTF-8"</code> on MS-Windows.
+
+        <p>If your system does not support a locale environment, this function
+behaves like <code>string-lessp</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>string-prefix-p</b><var> string1 string2 &amp;optional ignore-case<a name="index-string_002dprefix_002dp-267"></a></var><br>
 <blockquote><p>This function returns non-<code>nil</code> if <var>string1</var> is a prefix of
 <var>string2</var>; i.e., if <var>string2</var> starts with <var>string1</var>.  If
 the optional argument <var>ignore-case</var> is non-<code>nil</code>, the
@@ -161,7 +252,15 @@ comparison ignores case differences.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>compare-strings</b><var> string1 start1 end1 string2 start2 end2 &amp;optional ignore-case<a name="index-compare_002dstrings-255"></a></var><br>
+&mdash; Function: <b>string-suffix-p</b><var> suffix string &amp;optional ignore-case<a name="index-string_002dsuffix_002dp-268"></a></var><br>
+<blockquote><p>This function returns non-<code>nil</code> if <var>suffix</var> is a suffix of
+<var>string</var>; i.e., if <var>string</var> ends with <var>suffix</var>.  If the
+optional argument <var>ignore-case</var> is non-<code>nil</code>, the comparison
+ignores case differences. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>compare-strings</b><var> string1 start1 end1 string2 start2 end2 &amp;optional ignore-case<a name="index-compare_002dstrings-269"></a></var><br>
 <blockquote><p>This function compares a specified part of <var>string1</var> with a
 specified part of <var>string2</var>.  The specified part of <var>string1</var>
 runs from index <var>start1</var> (inclusive) up to index <var>end1</var>
@@ -171,7 +270,7 @@ string.  Likewise, the specified part of <var>string2</var> runs from index
 <var>start2</var> up to index <var>end2</var>.
 
         <p>The strings are compared by the numeric values of their characters. 
-For instance, <var>str1</var> is considered &ldquo;smaller than&rdquo; <var>str2</var> if
+For instance, <var>str1</var> is considered less than <var>str2</var> if
 its first differing character has a smaller numeric value.  If
 <var>ignore-case</var> is non-<code>nil</code>, characters are converted to
 lower-case before comparing them.  Unibyte strings are converted to
@@ -188,7 +287,7 @@ specified portion) is less.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>assoc-string</b><var> key alist &amp;optional case-fold<a name="index-assoc_002dstring-256"></a></var><br>
+&mdash; Function: <b>assoc-string</b><var> key alist &amp;optional case-fold<a name="index-assoc_002dstring-270"></a></var><br>
 <blockquote><p>This function works like <code>assoc</code>, except that <var>key</var> must be a
 string or symbol, and comparison is done using <code>compare-strings</code>. 
 Symbols are converted to strings before testing. 

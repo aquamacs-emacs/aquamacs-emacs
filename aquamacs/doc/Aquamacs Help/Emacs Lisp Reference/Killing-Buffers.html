@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,9 +41,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Buffers.html#Buffers">Buffers</a>
 <hr>
 </div>
 
-<h3 class="section">27.10 Killing Buffers</h3>
+<h3 class="section">26.10 Killing Buffers</h3>
 
-<p><a name="index-killing-buffers-2191"></a><a name="index-buffers_002c-killing-2192"></a>
+<p><a name="index-killing-buffers-2358"></a><a name="index-buffers_002c-killing-2359"></a>
   <dfn>Killing a buffer</dfn> makes its name unknown to Emacs and makes the
 memory space it occupied available for other use.
 
@@ -64,20 +64,20 @@ that the buffer being killed isn't current).  See <a href="Current-Buffer.html#C
 buffers (see <a href="Indirect-Buffers.html#Indirect-Buffers">Indirect Buffers</a>),
 the indirect buffers are automatically killed as well.
 
-   <p><a name="index-live-buffer-2193"></a>  The <code>buffer-name</code> of a buffer is <code>nil</code> if, and only if,
+   <p><a name="index-live-buffer-2360"></a>  The <code>buffer-name</code> of a buffer is <code>nil</code> if, and only if,
 the buffer is killed.  A buffer that has not been killed is called a
 <dfn>live</dfn> buffer.  To test whether a buffer is live or killed, use
 the function <code>buffer-live-p</code> (see below).
 
 <div class="defun">
-&mdash; Command: <b>kill-buffer</b><var> &amp;optional buffer-or-name<a name="index-kill_002dbuffer-2194"></a></var><br>
+&mdash; Command: <b>kill-buffer</b><var> &amp;optional buffer-or-name<a name="index-kill_002dbuffer-2361"></a></var><br>
 <blockquote><p>This function kills the buffer <var>buffer-or-name</var>, freeing all its
 memory for other uses or to be returned to the operating system.  If
 <var>buffer-or-name</var> is <code>nil</code> or omitted, it kills the current
 buffer.
 
         <p>Any processes that have this buffer as the <code>process-buffer</code> are
-sent the <code>SIGHUP</code> (&ldquo;hangup&rdquo;) signal, which normally causes them
+sent the <code>SIGHUP</code> (hangup) signal, which normally causes them
 to terminate.  See <a href="Signals-to-Processes.html#Signals-to-Processes">Signals to Processes</a>.
 
         <p>If the buffer is visiting a file and contains unsaved changes,
@@ -108,7 +108,7 @@ returns <code>nil</code> if the user refuses to confirm or if
         </blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>kill-buffer-query-functions</b><var><a name="index-kill_002dbuffer_002dquery_002dfunctions-2195"></a></var><br>
+&mdash; Variable: <b>kill-buffer-query-functions</b><var><a name="index-kill_002dbuffer_002dquery_002dfunctions-2362"></a></var><br>
 <blockquote><p>Before confirming unsaved changes, <code>kill-buffer</code> calls the functions
 in the list <code>kill-buffer-query-functions</code>, in order of appearance,
 with no arguments.  The buffer being killed is the current buffer when
@@ -118,7 +118,7 @@ ask for confirmation from the user.  If any of them returns <code>nil</code>,
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>kill-buffer-hook</b><var><a name="index-kill_002dbuffer_002dhook-2196"></a></var><br>
+&mdash; Variable: <b>kill-buffer-hook</b><var><a name="index-kill_002dbuffer_002dhook-2363"></a></var><br>
 <blockquote><p>This is a normal hook run by <code>kill-buffer</code> after asking all the
 questions it is going to ask, just before actually killing the buffer. 
 The buffer to be killed is current when the hook functions run. 
@@ -127,7 +127,7 @@ is not cleared by changing major modes.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>buffer-offer-save</b><var><a name="index-buffer_002doffer_002dsave-2197"></a></var><br>
+&mdash; User Option: <b>buffer-offer-save</b><var><a name="index-buffer_002doffer_002dsave-2364"></a></var><br>
 <blockquote><p>This variable, if non-<code>nil</code> in a particular buffer, tells
 <code>save-buffers-kill-emacs</code> and <code>save-some-buffers</code> (if the
 second optional argument to that function is <code>t</code>) to offer to
@@ -138,7 +138,7 @@ for any reason.  See <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-V
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>buffer-save-without-query</b><var><a name="index-buffer_002dsave_002dwithout_002dquery-2198"></a></var><br>
+&mdash; Variable: <b>buffer-save-without-query</b><var><a name="index-buffer_002dsave_002dwithout_002dquery-2365"></a></var><br>
 <blockquote><p>This variable, if non-<code>nil</code> in a particular buffer, tells
 <code>save-buffers-kill-emacs</code> and <code>save-some-buffers</code> to save
 this buffer (if it's modified) without asking the user.  The variable
@@ -146,7 +146,7 @@ automatically becomes buffer-local when set for any reason.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>buffer-live-p</b><var> object<a name="index-buffer_002dlive_002dp-2199"></a></var><br>
+&mdash; Function: <b>buffer-live-p</b><var> object<a name="index-buffer_002dlive_002dp-2366"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if <var>object</var> is a live buffer (a
 buffer which has not been killed), <code>nil</code> otherwise. 
 </p></blockquote></div>

@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,16 +41,16 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Images.html#Images">Images</a>
 <hr>
 </div>
 
-<h4 class="subsection">38.16.6 ImageMagick Images</h4>
+<h4 class="subsection">37.17.6 ImageMagick Images</h4>
 
-<p><a name="index-ImageMagick-images-3934"></a><a name="index-images_002c-support-for-more-formats-3935"></a>
+<p><a name="index-ImageMagick-images-4338"></a><a name="index-images_002c-support-for-more-formats-4339"></a>
   If you build Emacs with ImageMagick support, you can use the
 ImageMagick library to load many image formats (see <a href="../emacs/File-Conveniences.html#File-Conveniences">File Conveniences</a>).  The image type symbol
 for images loaded via ImageMagick is <code>imagemagick</code>, regardless of
 the actual underlying image format.
 
 <div class="defun">
-&mdash; Function: <b>imagemagick-types</b><var><a name="index-imagemagick_002dtypes-3936"></a></var><br>
+&mdash; Function: <b>imagemagick-types</b><var><a name="index-imagemagick_002dtypes-4340"></a></var><br>
 <blockquote><p>This function returns a list of image file extensions supported by the
 current ImageMagick installation.  Each list element is a symbol
 representing an internal ImageMagick name for an image type, such as
@@ -58,7 +58,7 @@ representing an internal ImageMagick name for an image type, such as
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>imagemagick-enabled-types</b><var><a name="index-imagemagick_002denabled_002dtypes-3937"></a></var><br>
+&mdash; User Option: <b>imagemagick-enabled-types</b><var><a name="index-imagemagick_002denabled_002dtypes-4341"></a></var><br>
 <blockquote><p>The value of this variable is a list of ImageMagick image types which
 Emacs may attempt to render using ImageMagick.  Each list element
 should be one of the symbols in the list returned by
@@ -69,11 +69,22 @@ Regardless of the value of this variable,
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>imagemagick-types-inhibit</b><var><a name="index-imagemagick_002dtypes_002dinhibit-3938"></a></var><br>
+&mdash; User Option: <b>imagemagick-types-inhibit</b><var><a name="index-imagemagick_002dtypes_002dinhibit-4342"></a></var><br>
 <blockquote><p>The value of this variable lists the ImageMagick image types which
 should never be rendered using ImageMagick, regardless of the value of
 <code>imagemagick-enabled-types</code>.  A value of <code>t</code> disables
 ImageMagick entirely. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>image-format-suffixes</b><var><a name="index-image_002dformat_002dsuffixes-4343"></a></var><br>
+<blockquote><p>This variable is an alist mapping image types to file name extensions. 
+Emacs uses this in conjunction with the <code>:format</code> image property
+(see below) to give a hint to the ImageMagick library as to the type
+of an image.  Each element has the form <code>(</code><var>type</var>
+<var>extension</var><code>)</code>, where <var>type</var> is a symbol specifying an image
+content-type, and <var>extension</var> is a string that specifies the
+associated file name extension. 
 </p></blockquote></div>
 
    <p>Images loaded with ImageMagick support the following additional
@@ -85,12 +96,12 @@ color, which is used as the image's background color if the image
 supports transparency.  If the value is <code>nil</code>, it defaults to the
 frame's background color.
 
-     <br><dt><code>:width, :height</code><dd>The <code>:width</code> and <code>:height</code> keywords are used for scaling the
+     <br><dt><code>:width </code><var>width</var><code>, :height </code><var>height</var><dd>The <code>:width</code> and <code>:height</code> keywords are used for scaling the
 image.  If only one of them is specified, the other one will be
 calculated so as to preserve the aspect ratio.  If both are specified,
 aspect ratio may not be preserved.
 
-     <br><dt><code>:max-width, :max-height</code><dd>The <code>:max-width</code> and <code>:max-height</code> keywords are used for
+     <br><dt><code>:max-width </code><var>max-width</var><code>, :max-height </code><var>max-height</var><dd>The <code>:max-width</code> and <code>:max-height</code> keywords are used for
 scaling if the size of the image of the image exceeds these values. 
 If <code>:width</code> is set it will have precedence over <code>max-width</code>,
 and if <code>:height</code> is set it will have precedence over
@@ -98,16 +109,14 @@ and if <code>:height</code> is set it will have precedence over
 wish.  <code>:max-width</code> and <code>:max-height</code> will always preserve
 the aspect ratio.
 
-     <br><dt><code>:format</code><dd>ImageMagick tries to auto-detect the image type, but it isn't always
-able to.  By using <code>:format-type</code>, we can give ImageMagick a hint
-to try to help it.  It's used in conjunction with the
-<code>image-format-suffixes</code> variable, which provides a mapping from
-content types to file name suffixes.  This is then given to
-ImageMagick as a file name hint.
+     <br><dt><code>:format </code><var>type</var><dd>The value, <var>type</var>, should be a symbol specifying the type of the
+image data, as found in <code>image-format-suffixes</code>.  This is used
+when the image does not have an associated file name, to provide a
+hint to ImageMagick to help it detect the image type.
 
-     <br><dt><code>:rotation</code><dd>Specifies a rotation angle in degrees.
+     <br><dt><code>:rotation </code><var>angle</var><dd>Specifies a rotation angle in degrees.
 
-     <br><dt><code>:index</code><dd><!-- Doesn't work: http://debbugs.gnu.org/7978 -->
+     <br><dt><code>:index </code><var>frame</var><dd><!-- Doesn't work: http://debbugs.gnu.org/7978 -->
 See <a href="Multi_002dFrame-Images.html#Multi_002dFrame-Images">Multi-Frame Images</a>. 
 </dl>
 

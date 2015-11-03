@@ -9,15 +9,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -39,7 +39,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Conditionals.html#Conditionals">Conditi
 
 <h4 class="subsection">10.2.1 Pattern matching case statement</h4>
 
-<p><a name="index-pcase-557"></a><a name="index-pattern-matching-558"></a>
+<p><a name="index-pcase-646"></a><a name="index-pattern-matching-647"></a>
 To compare a particular value against various possible cases, the macro
 <code>pcase</code> can come handy.  It takes the following form:
 
@@ -64,17 +64,18 @@ between a few different constant values:
 was returned by <code>(get-return-code x)</code>.
 
    <p>To give a more complex example, a simple interpreter for a little
-expression language could look like:
+expression language could look like (note that this example requires
+lexical binding):
 
 <pre class="example">     (defun evaluate (exp env)
        (pcase exp
-         (`(add ,x ,y)         (+ (evaluate x env) (evaluate y env)))
-         (`(call ,fun ,arg)    (funcall (evaluate fun) (evaluate arg env)))
-         (`(fn ,arg ,body)     (lambda (val)
-                                 (evaluate body (cons (cons arg val) env))))
-         ((pred numberp)       exp)
-         ((pred symbolp)       (cdr (assq exp env)))
-         (_                    (error "Unknown expression %S" exp))))
+         (`(add ,x ,y)       (+ (evaluate x env) (evaluate y env)))
+         (`(call ,fun ,arg)  (funcall (evaluate fun env) (evaluate arg env)))
+         (`(fn ,arg ,body)   (lambda (val)
+                               (evaluate body (cons (cons arg val) env))))
+         ((pred numberp)     exp)
+         ((pred symbolp)     (cdr (assq exp env)))
+         (_                  (error "Unknown expression %S" exp))))
 </pre>
    <p>Where <code>`(add ,x ,y)</code> is a pattern that checks that <code>exp</code> is a three
 element list starting with the symbol <code>add</code>, then extracts the second and
@@ -82,6 +83,13 @@ third elements and binds them to the variables <code>x</code> and <code>y</code>
 <code>(pred numberp)</code> is a pattern that simply checks that <code>exp</code>
 is a number, and <code>_</code> is the catch-all pattern that matches anything.
 
+   <p>Here are some sample programs including their evaluation results:
+
+<pre class="example">     (evaluate '(add 1 2) nil)                 ;=&gt; 3
+     (evaluate '(add x y) '((x . 1) (y . 2)))  ;=&gt; 3
+     (evaluate '(call (fn x (add 1 x)) 2) nil) ;=&gt; 3
+     (evaluate '(sub 1 2) nil)                 ;=&gt; error
+</pre>
    <p>There are two kinds of patterns involved in <code>pcase</code>, called
 <em>U-patterns</em> and <em>Q-patterns</em>.  The <var>upattern</var> mentioned above
 are U-patterns and can take the following forms:
@@ -96,8 +104,11 @@ that location.
 
      <p>More specifically, a Q-pattern can take the following forms:
           <dl>
-<dt><code>(</code><var>qpattern1</var><code> . </code><var>qpattern2</var><code>)</code><dd>This pattern matches any cons cell whose <code>car</code> matches <var>QPATTERN1</var> and
-whose <code>cdr</code> matches <var>PATTERN2</var>. 
+<dt><code>(</code><var>qpattern1</var><code> . </code><var>qpattern2</var><code>)</code><dd>This pattern matches any cons cell whose <code>car</code> matches <var>qpattern1</var> and
+whose <code>cdr</code> matches <var>qpattern2</var>. 
+<br><dt><code>[</code><var>qpattern1</var> <var>qpattern2</var><code> ... </code><var>qpatternm</var><code>]</code><dd>This pattern matches a vector of length <var>M</var> whose 0..(<var>M</var>-1)th
+elements match <var>qpattern1</var>, <var>qpattern2</var> <small class="dots">...</small> <var>qpatternm</var>,
+respectively. 
 <br><dt><var>atom</var><dd>This pattern matches any atom <code>equal</code> to <var>atom</var>. 
 <br><dt><code>,</code><var>upattern</var><dd>This pattern matches any object that matches the <var>upattern</var>. 
 </dl>

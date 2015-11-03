@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,12 +41,12 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Read-and-Print.html#Read-and-Print">Rea
 <hr>
 </div>
 
-<h3 class="section">19.5 Output Functions</h3>
+<h3 class="section">18.5 Output Functions</h3>
 
 <p>This section describes the Lisp functions for printing Lisp
 objects&mdash;converting objects into their printed representation.
 
-   <p><a name="index-g_t_0040samp_007b_0022_007d-in-printing-1121"></a><a name="index-g_t_0040samp_007b_005c_007d-in-printing-1122"></a><a name="index-quoting-characters-in-printing-1123"></a><a name="index-escape-characters-in-printing-1124"></a>  Some of the Emacs printing functions add quoting characters to the
+   <p><a name="index-g_t_0040samp_007b_0022_007d-in-printing-1227"></a><a name="index-g_t_0040samp_007b_005c_007d-in-printing-1228"></a><a name="index-quoting-characters-in-printing-1229"></a><a name="index-escape-characters-in-printing-1230"></a>  Some of the Emacs printing functions add quoting characters to the
 output when necessary so that it can be read properly.  The quoting
 characters used are &lsquo;<samp><span class="samp">"</span></samp>&rsquo; and &lsquo;<samp><span class="samp">\</span></samp>&rsquo;; they distinguish strings from
 symbols, and prevent punctuation characters in strings and symbols from
@@ -79,8 +79,8 @@ operation:
 <code>standard-output</code>.
 
 <div class="defun">
-&mdash; Function: <b>print</b><var> object &amp;optional stream<a name="index-print-1125"></a></var><br>
-<blockquote><p><a name="index-Lisp-printer-1126"></a>The <code>print</code> function is a convenient way of printing.  It outputs
+&mdash; Function: <b>print</b><var> object &amp;optional stream<a name="index-print-1231"></a></var><br>
+<blockquote><p><a name="index-Lisp-printer-1232"></a>The <code>print</code> function is a convenient way of printing.  It outputs
 the printed representation of <var>object</var> to <var>stream</var>, printing in
 addition one newline before <var>object</var> and another after it.  Quoting
 characters are used.  <code>print</code> returns <var>object</var>.  For example:
@@ -99,7 +99,7 @@ characters are used.  <code>print</code> returns <var>object</var>.  For example
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>prin1</b><var> object &amp;optional stream<a name="index-prin1-1127"></a></var><br>
+&mdash; Function: <b>prin1</b><var> object &amp;optional stream<a name="index-prin1-1233"></a></var><br>
 <blockquote><p>This function outputs the printed representation of <var>object</var> to
 <var>stream</var>.  It does not print newlines to separate output as
 <code>print</code> does, but it does use quoting characters just like
@@ -114,7 +114,7 @@ characters are used.  <code>print</code> returns <var>object</var>.  For example
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>princ</b><var> object &amp;optional stream<a name="index-princ-1128"></a></var><br>
+&mdash; Function: <b>princ</b><var> object &amp;optional stream<a name="index-princ-1234"></a></var><br>
 <blockquote><p>This function outputs the printed representation of <var>object</var> to
 <var>stream</var>.  It returns <var>object</var>.
 
@@ -132,20 +132,23 @@ spacing between calls.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>terpri</b><var> &amp;optional stream<a name="index-terpri-1129"></a></var><br>
-<blockquote><p><a name="index-newline-in-print-1130"></a>This function outputs a newline to <var>stream</var>.  The name stands
-for &ldquo;terminate print&rdquo;. 
+&mdash; Function: <b>terpri</b><var> &amp;optional stream ensure<a name="index-terpri-1235"></a></var><br>
+<blockquote><p><a name="index-newline-in-print-1236"></a>This function outputs a newline to <var>stream</var>.  The name stands for
+&ldquo;terminate print&rdquo;.  If <var>ensure</var> is non-<code>nil</code> no newline is printed
+if <var>stream</var> is already at the beginning of a line.  Note in this
+case <var>stream</var> can not be a function and an error is signalled if
+it is.  This function returns <code>t</code> if a newline is printed. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>write-char</b><var> character &amp;optional stream<a name="index-write_002dchar-1131"></a></var><br>
+&mdash; Function: <b>write-char</b><var> character &amp;optional stream<a name="index-write_002dchar-1237"></a></var><br>
 <blockquote><p>This function outputs <var>character</var> to <var>stream</var>.  It returns
 <var>character</var>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>prin1-to-string</b><var> object &amp;optional noescape<a name="index-prin1_002dto_002dstring-1132"></a></var><br>
-<blockquote><p><a name="index-object-to-string-1133"></a>This function returns a string containing the text that <code>prin1</code>
+&mdash; Function: <b>prin1-to-string</b><var> object &amp;optional noescape<a name="index-prin1_002dto_002dstring-1238"></a></var><br>
+<blockquote><p><a name="index-object-to-string-1239"></a>This function returns a string containing the text that <code>prin1</code>
 would have printed for the same argument.
 
      <pre class="example">          (prin1-to-string 'foo)
@@ -167,7 +170,7 @@ the printed representation of a Lisp object as a string.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Macro: <b>with-output-to-string</b><var> body<small class="dots">...</small><a name="index-with_002doutput_002dto_002dstring-1134"></a></var><br>
+&mdash; Macro: <b>with-output-to-string</b><var> body<small class="dots">...</small><a name="index-with_002doutput_002dto_002dstring-1240"></a></var><br>
 <blockquote><p>This macro executes the <var>body</var> forms with <code>standard-output</code> set
 up to feed output into a string.  Then it returns that string.
 
@@ -181,11 +184,15 @@ up to feed output into a string.  Then it returns that string.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>pp</b><var> object &amp;optional stream<a name="index-pp-1135"></a></var><br>
+&mdash; Function: <b>pp</b><var> object &amp;optional stream<a name="index-pp-1241"></a></var><br>
 <blockquote><p>This function outputs <var>object</var> to <var>stream</var>, just like
-<code>prin1</code>, but does it in a more &ldquo;pretty&rdquo; way.  That is, it'll
+<code>prin1</code>, but does it in a prettier way.  That is, it'll
 indent and fill the object to make it more readable for humans. 
 </p></blockquote></div>
+
+   <p>If you need to use binary I/O in batch mode, e.g., use the functions
+described in this section to write out arbitrary binary data or avoid
+conversion of newlines on non-Posix hosts, see <a href="Input-Functions.html#Input-Functions">set-binary-mode</a>.
 
    </body></html>
 

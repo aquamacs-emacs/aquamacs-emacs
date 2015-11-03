@@ -6,20 +6,20 @@
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
 <link rel="up" href="Windows.html#Windows" title="Windows">
-<link rel="prev" href="Resizing-Windows.html#Resizing-Windows" title="Resizing Windows">
+<link rel="prev" href="Preserving-Window-Sizes.html#Preserving-Window-Sizes" title="Preserving Window Sizes">
 <link rel="next" href="Deleting-Windows.html#Deleting-Windows" title="Deleting Windows">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -36,22 +36,22 @@ Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 <a name="Splitting-Windows"></a>
 <p>
 Next:&nbsp;<a rel="next" accesskey="n" href="Deleting-Windows.html#Deleting-Windows">Deleting Windows</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Resizing-Windows.html#Resizing-Windows">Resizing Windows</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Preserving-Window-Sizes.html#Preserving-Window-Sizes">Preserving Window Sizes</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
 <hr>
 </div>
 
-<h3 class="section">28.5 Splitting Windows</h3>
+<h3 class="section">27.6 Splitting Windows</h3>
 
-<p><a name="index-splitting-windows-2297"></a><a name="index-window-splitting-2298"></a>
+<p><a name="index-splitting-windows-2485"></a><a name="index-window-splitting-2486"></a>
 This section describes functions for creating a new window by
 <dfn>splitting</dfn> an existing one.
 
 <div class="defun">
-&mdash; Function: <b>split-window</b><var> &amp;optional window size side<a name="index-split_002dwindow-2299"></a></var><br>
+&mdash; Function: <b>split-window</b><var> &amp;optional window size side pixelwise<a name="index-split_002dwindow-2487"></a></var><br>
 <blockquote><p>This function creates a new live window next to the window
 <var>window</var>.  If <var>window</var> is omitted or <code>nil</code>, it defaults
-to the selected window.  That window is &ldquo;split&rdquo;, and reduced in
+to the selected window.  That window is split, and reduced in
 size.  The space is taken up by the new window, which is returned.
 
         <p>The optional second argument <var>size</var> determines the sizes of
@@ -63,12 +63,23 @@ value of <var>side</var>).  If <var>size</var> is a negative number, the new
 window is given &minus;<var>size</var> lines (or columns).
 
         <p>If <var>size</var> is <code>nil</code>, this function obeys the variables
-<code>window-min-height</code> and <code>window-min-width</code>.  See <a href="../emacs/Change-Window.html#Change-Window">Deleting and Rearranging Windows</a>.  Thus, it signals an error if splitting would result in
-making a window smaller than those variables specify.  However, a
+<code>window-min-height</code> and <code>window-min-width</code> (see <a href="Window-Sizes.html#Window-Sizes">Window Sizes</a>).  Thus, it signals an error if splitting would result in making
+a window smaller than those variables specify.  However, a
 non-<code>nil</code> value for <var>size</var> causes those variables to be
-ignored; in that case, the smallest allowable window is considered to
-be one that has space for a text area one line tall and/or two columns
+ignored; in that case, the smallest allowable window is considered to be
+one that has space for a text area one line tall and/or two columns
 wide.
+
+        <p>Hence, if <var>size</var> is specified, it's the caller's responsibility to
+check whether the emanating windows are large enough to encompass all
+areas like a mode line or a scroll bar.  The function
+<code>window-min-size</code> (see <a href="Window-Sizes.html#Window-Sizes">Window Sizes</a>) can be used to determine
+the minimum requirements of <var>window</var> in this regard.  Since the new
+window usually inherits areas like the mode line or the scroll bar
+from <var>window</var>, that function is also a good guess for the minimum
+size of the new window.  The caller should specify a smaller size only
+if it correspondingly removes an inherited area before the next
+redisplay.
 
         <p>The optional third argument <var>side</var> determines the position of the
 new window relative to <var>window</var>.  If it is <code>nil</code> or
@@ -80,6 +91,10 @@ these cases, <var>size</var> specifies a total window height, in lines.
 the right of <var>window</var>.  If <var>side</var> is <code>left</code>, the new
 window is placed on the left of <var>window</var>.  In both these cases,
 <var>size</var> specifies a total window width, in columns.
+
+        <p>The optional fourth argument <var>pixelwise</var>, if non-<code>nil</code>, means
+to interpret <var>size</var> in units of pixels, instead of lines and
+columns.
 
         <p>If <var>window</var> is a live window, the new window inherits various
 properties from it, including margins and scroll bars.  If
@@ -148,7 +163,7 @@ the new root window.
 the selected window.  These call <code>split-window</code> internally.
 
 <div class="defun">
-&mdash; Command: <b>split-window-right</b><var> &amp;optional size<a name="index-split_002dwindow_002dright-2300"></a></var><br>
+&mdash; Command: <b>split-window-right</b><var> &amp;optional size<a name="index-split_002dwindow_002dright-2488"></a></var><br>
 <blockquote><p>This function splits the selected window into two side-by-side
 windows, putting the selected window on the left.  If <var>size</var> is
 positive, the left window gets <var>size</var> columns; if <var>size</var> is
@@ -156,7 +171,7 @@ negative, the right window gets &minus;<var>size</var> columns.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>split-window-below</b><var> &amp;optional size<a name="index-split_002dwindow_002dbelow-2301"></a></var><br>
+&mdash; Command: <b>split-window-below</b><var> &amp;optional size<a name="index-split_002dwindow_002dbelow-2489"></a></var><br>
 <blockquote><p>This function splits the selected window into two windows, one above
 the other, leaving the upper window selected.  If <var>size</var> is
 positive, the upper window gets <var>size</var> lines; if <var>size</var> is
@@ -164,7 +179,7 @@ negative, the lower window gets &minus;<var>size</var> lines.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; User Option: <b>split-window-keep-point</b><var><a name="index-split_002dwindow_002dkeep_002dpoint-2302"></a></var><br>
+&mdash; User Option: <b>split-window-keep-point</b><var><a name="index-split_002dwindow_002dkeep_002dpoint-2490"></a></var><br>
 <blockquote><p>If the value of this variable is non-<code>nil</code> (the default),
 <code>split-window-below</code> behaves as described above.
 

@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,9 +41,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Processes.html#Processes">Processes</a>
 <hr>
 </div>
 
-<h3 class="section">37.14 Network Connections</h3>
+<h3 class="section">36.14 Network Connections</h3>
 
-<p><a name="index-network-connection-3631"></a><a name="index-TCP-3632"></a><a name="index-UDP-3633"></a>
+<p><a name="index-network-connection-3975"></a><a name="index-TCP-3976"></a><a name="index-UDP-3977"></a>
   Emacs Lisp programs can open stream (TCP) and datagram (UDP) network
 connections (see <a href="Datagrams.html#Datagrams">Datagrams</a>) to other processes on the same machine
 or other machines. 
@@ -95,9 +95,9 @@ packets may be queued but input may be lost.  You can use the function
 <code>process-command</code> to determine whether a network connection or
 server is stopped; a non-<code>nil</code> value means yes.
 
-   <p><a name="index-network-connection_002c-encrypted-3634"></a><a name="index-encrypted-network-connections-3635"></a><a name="index-g_t_0040acronym_007bTLS_007d-network-connections-3636"></a><a name="index-g_t_0040acronym_007bSTARTTLS_007d-network-connections-3637"></a>Emacs can create encrypted network connections, using either built-in
+   <p><a name="index-network-connection_002c-encrypted-3978"></a><a name="index-encrypted-network-connections-3979"></a><a name="index-g_t_0040acronym_007bTLS_007d-network-connections-3980"></a><a name="index-g_t_0040acronym_007bSTARTTLS_007d-network-connections-3981"></a>Emacs can create encrypted network connections, using either built-in
 or external support.  The built-in support uses the GnuTLS
-(&ldquo;Transport Layer Security&rdquo;) library; see
+Transport Layer Security Library; see
 <a href="http://www.gnu.org/software/gnutls/">the GnuTLS project page</a>. 
 If your Emacs was compiled with GnuTLS support, the function
 <code>gnutls-available-p</code> is defined and returns non-<code>nil</code>.  For
@@ -109,7 +109,7 @@ transparently handle the details of creating encrypted connections for
 you, using whatever support is available.
 
 <div class="defun">
-&mdash; Function: <b>open-network-stream</b><var> name buffer host service &amp;rest parameters<a name="index-open_002dnetwork_002dstream-3638"></a></var><br>
+&mdash; Function: <b>open-network-stream</b><var> name buffer host service &amp;rest parameters<a name="index-open_002dnetwork_002dstream-3982"></a></var><br>
 <blockquote><p>This function opens a TCP connection, with optional encryption, and
 returns a process object that represents the connection.
 
@@ -118,7 +118,7 @@ is modified as necessary to make it unique.
 
         <p>The <var>buffer</var> argument is the buffer to associate with the
 connection.  Output from the connection is inserted in the buffer,
-unless you specify a filter function to handle the output.  If
+unless you specify your own filter function to handle the output.  If
 <var>buffer</var> is <code>nil</code>, it means that the connection is not
 associated with any buffer.
 
@@ -136,7 +136,7 @@ that are mainly relevant to encrypted connections:
 
                <dl>
 <dt><code>plain</code><dd>An ordinary, unencrypted connection. 
-<br><dt><code>tls</code><dt><code>ssl</code><dd>A <acronym>TLS</acronym> (&ldquo;Transport Layer Security&rdquo;) connection. 
+<br><dt><code>tls</code><dt><code>ssl</code><dd>A <acronym>TLS</acronym> (Transport Layer Security) connection. 
 <br><dt><code>nil</code><dt><code>network</code><dd>Start with a plain connection, and if parameters &lsquo;<samp><span class="samp">:success</span></samp>&rsquo;
 and &lsquo;<samp><span class="samp">:capability-command</span></samp>&rsquo; are supplied, try to upgrade to an encrypted
 connection via <acronym>STARTTLS</acronym>.  If that fails, retain the
@@ -161,6 +161,11 @@ if supported.
 
           <br><dt><code>:use-starttls-if-possible </code><var>boolean</var><dd>If non-<code>nil</code>, do opportunistic <acronym>STARTTLS</acronym> upgrades even if Emacs
 doesn't have built-in <acronym>TLS</acronym> support.
+
+          <br><dt><code>:warn-unless-encrypted </code><var>boolean</var><dd>If non-<code>nil</code>, and <code>:return-value</code> is also non-<code>nil</code>,
+Emacs will warn if the connection isn't encrypted.  This is useful for
+protocols like <acronym>IMAP</acronym> and the like, where most users would
+expect the network traffic to be encrypted.
 
           <br><dt><code>:client-certificate </code><var>list-or-t</var><dd>Either a list of the form <code>(</code><var>key-file</var> <var>cert-file</var><code>)</code>,
 naming the certificate key file and certificate file itself, or

@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,39 +41,36 @@ Up:&nbsp;<a rel="up" accesskey="u" href="System-Interface.html#System-Interface"
 <hr>
 </div>
 
-<h3 class="section">39.5 Time of Day</h3>
+<h3 class="section">38.5 Time of Day</h3>
 
-<p>This section explains how to determine the current time and time
+<p><a name="index-time-of-day-4626"></a>
+  This section explains how to determine the current time and time
 zone.
 
-   <p><a name="index-epoch-4196"></a>  Most of these functions represent time as a list of either four
-integers, <code>(</code><var>sec-high</var> <var>sec-low</var> <var>microsec</var>
-<var>picosec</var><code>)</code>, or of three
-integers, <code>(</code><var>sec-high</var> <var>sec-low</var> <var>microsec</var><code>)</code>, or of
-two integers, <code>(</code><var>sec-high</var> <var>sec-low</var><code>)</code>.  The integers
-<var>sec-high</var> and <var>sec-low</var> give the high and low bits of an
-integer number of seconds.  This integer number,
-<var>high</var> * 2**16 + <var>low</var>,
-is the number of seconds from the <dfn>epoch</dfn> (0:00 January 1, 1970
-UTC) to the specified time.  The third list element <var>microsec</var>, if
-present, gives the number of microseconds from the start of that
-second to the specified time. 
-Similarly, the fourth list element <var>picosec</var>, if present, gives
-the number of picoseconds from the start of that microsecond to the
-specified time.
+   <p><a name="index-epoch-4627"></a>  Most of these functions represent time as a list of four integers
+<code>(</code><var>sec-high</var> <var>sec-low</var> <var>microsec</var> <var>picosec</var><code>)</code>. 
+This represents the number of seconds from the <dfn>epoch</dfn> (January
+1, 1970 at 00:00 UTC), using the formula:
+<var>high</var> * 2**16 + <var>low</var> + <var>micro</var> * 10**&minus;6 +
+<var>pico</var> * 10**&minus;12. 
+The return value of <code>current-time</code> represents time using this
+form, as do the timestamps in the return values of other functions
+such as <code>file-attributes</code> (see <a href="Definition-of-file_002dattributes.html#Definition-of-file_002dattributes">Definition of file-attributes</a>).  In some cases, functions may return two- or
+three-element lists, with omitted <var>microsec</var> and <var>picosec</var>
+components defaulting to zero.
 
-   <p>The return value of <code>current-time</code> represents time using four
-integers, as do the timestamps in the return value of
-<code>file-attributes</code> (see <a href="Definition-of-file_002dattributes.html#Definition-of-file_002dattributes">Definition of file-attributes</a>).  In function arguments, e.g., the <var>time-value</var>
-argument to <code>current-time-string</code>, two-, three-, and four-integer
-lists are accepted.  You can convert times from the list
-representation into standard human-readable strings using
-<code>current-time</code>, or to other forms using the <code>decode-time</code>
-and <code>format-time-string</code> functions documented in the following
-sections.
+   <p><a name="index-time-value-4628"></a>  Function arguments, e.g., the <var>time</var> argument to
+<code>current-time-string</code>, accept a more-general <dfn>time value</dfn>
+format, which can be a list of integers as above, or a single number
+for seconds since the epoch, or <code>nil</code> for the current time.  You
+can convert a time value into a human-readable string using
+<code>current-time-string</code> and <code>format-time-string</code>, into a list
+of integers using <code>seconds-to-time</code>, and into other forms using
+<code>decode-time</code> and <code>float-time</code>.  These functions are
+described in the following sections.
 
 <div class="defun">
-&mdash; Function: <b>current-time-string</b><var> &amp;optional time-value<a name="index-current_002dtime_002dstring-4197"></a></var><br>
+&mdash; Function: <b>current-time-string</b><var> &amp;optional time zone<a name="index-current_002dtime_002dstring-4629"></a></var><br>
 <blockquote><p>This function returns the current time and date as a human-readable
 string.  The format does not vary for the initial part of the string,
 which contains the day of week, month, day of month, and time of day
@@ -84,8 +81,9 @@ characters from the beginning of the string rather than from the end,
 as the year might not have exactly four digits, and additional
 information may some day be added at the end.
 
-        <p>The argument <var>time-value</var>, if given, specifies a time to format
-(represented as a list of integers), instead of the current time.
+        <p>The argument <var>time</var>, if given, specifies a time to format,
+instead of the current time.  The optional argument <var>zone</var>
+defaults to the current time zone rule.
 
      <pre class="example">          (current-time-string)
                &rArr; "Wed Oct 14 22:21:05 1987"
@@ -93,7 +91,7 @@ information may some day be added at the end.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>current-time</b><var><a name="index-current_002dtime-4198"></a></var><br>
+&mdash; Function: <b>current-time</b><var><a name="index-current_002dtime-4630"></a></var><br>
 <blockquote><p>This function returns the current time, represented as a list of four
 integers <code>(</code><var>sec-high</var> <var>sec-low</var> <var>microsec</var> <var>picosec</var><code>)</code>. 
 These integers have trailing zeros on systems that return time with
@@ -103,19 +101,28 @@ become available.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>float-time</b><var> &amp;optional time-value<a name="index-float_002dtime-4199"></a></var><br>
+&mdash; Function: <b>float-time</b><var> &amp;optional time<a name="index-float_002dtime-4631"></a></var><br>
 <blockquote><p>This function returns the current time as a floating-point number of
-seconds since the epoch.  The optional argument <var>time-value</var>, if
-given, specifies a time (represented as a list of integers) to convert
-instead of the current time.
+seconds since the epoch.  The optional argument <var>time</var>, if
+given, specifies a time to convert instead of the current time.
 
         <p><em>Warning</em>: Since the result is floating point, it may not be
-exact.  Do not use this function if precise time stamps are required. 
+exact.  Do not use this function if precise time stamps are required.
+
+        <p><code>time-to-seconds</code> is an alias for this function. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>current-time-zone</b><var> &amp;optional time-value<a name="index-current_002dtime_002dzone-4200"></a></var><br>
-<blockquote><p>This function returns a list describing the time zone that the user is
+&mdash; Function: <b>seconds-to-time</b><var> time<a name="index-seconds_002dto_002dtime-4632"></a></var><br>
+<blockquote><p>This function converts a time value to list-of-integer form. 
+For example, if <var>time</var> is a number, <code>(time-to-seconds
+(seconds-to-time </code><var>time</var><code>))</code> equals the number unless overflow
+or rounding errors occur. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>current-time-zone</b><var> &amp;optional time zone<a name="index-current_002dtime_002dzone-4633"></a></var><br>
+<blockquote><p><a name="index-time-zone_002c-current-4634"></a>This function returns a list describing the time zone that the user is
 in.
 
         <p>The value has the form <code>(</code><var>offset</var> <var>name</var><code>)</code>.  Here
@@ -129,15 +136,25 @@ adjustment, then the value is constant through time.
         <p>If the operating system doesn't supply all the information necessary to
 compute the value, the unknown elements of the list are <code>nil</code>.
 
-        <p>The argument <var>time-value</var>, if given, specifies a time (represented
-as a list of integers) to analyze instead of the current time. 
+        <p>The argument <var>time</var>, if given, specifies a time value to
+analyze instead of the current time.  The optional argument <var>zone</var>
+defaults to the current time zone rule. 
 </p></blockquote></div>
 
-   <p>The current time zone is determined by the <samp><span class="env">TZ</span></samp> environment
+   <p><a name="index-TZ_002c-environment-variable-4635"></a>The default time zone is determined by the <samp><span class="env">TZ</span></samp> environment
 variable.  See <a href="System-Environment.html#System-Environment">System Environment</a>.  For example, you can tell Emacs
-to use universal time with <code>(setenv "TZ" "UTC0")</code>.  If <samp><span class="env">TZ</span></samp>
-is not in the environment, Emacs uses a platform-dependent default
-time zone.
+to default to universal time with <code>(setenv "TZ" "UTC0")</code>.  If
+<samp><span class="env">TZ</span></samp> is not in the environment, Emacs uses system wall clock time,
+which is a platform-dependent default time zone.
+
+   <p><a name="index-time-zone-rule-4636"></a>Functions that convert to and from local time accept an optional
+<dfn>time zone rule</dfn> argument, which specifies the conversion's time
+zone and daylight saving time history.  If the time zone rule is
+omitted or <code>nil</code>, the conversion uses Emacs's default time zone. 
+If it is <code>t</code>, the conversion uses Universal Time.  If it is
+<code>wall</code>, the conversion uses the system wall clock time.  If it is
+a string, the conversion uses the time zone rule equivalent to setting
+<samp><span class="env">TZ</span></samp> to that string.
 
    </body></html>
 

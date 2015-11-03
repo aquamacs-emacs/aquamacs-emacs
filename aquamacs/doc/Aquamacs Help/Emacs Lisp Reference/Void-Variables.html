@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,27 +41,28 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
 <hr>
 </div>
 
-<h3 class="section">11.4 When a Variable is &ldquo;Void&rdquo;</h3>
+<h3 class="section">11.4 When a Variable is Void</h3>
 
-<p><a name="index-g_t_0040code_007bvoid_002dvariable_007d-error-627"></a><a name="index-void-variable-628"></a>
+<p><a name="index-g_t_0040code_007bvoid_002dvariable_007d-error-727"></a><a name="index-void-variable-728"></a>
   We say that a variable is void if its symbol has an unassigned value
-cell (see <a href="Symbol-Components.html#Symbol-Components">Symbol Components</a>).  Under Emacs Lisp's default dynamic
-binding rules (see <a href="Variable-Scoping.html#Variable-Scoping">Variable Scoping</a>), the value cell stores the
-variable's current (local or global) value.  Note that an unassigned
-value cell is <em>not</em> the same as having <code>nil</code> in the value
-cell.  The symbol <code>nil</code> is a Lisp object and can be the value of
-a variable, just as any other object can be; but it is still a value. 
-If a variable is void, trying to evaluate the variable signals a
-<code>void-variable</code> error rather than a value.
+cell (see <a href="Symbol-Components.html#Symbol-Components">Symbol Components</a>).
 
-   <p>Under lexical binding rules, the value cell only holds the
-variable's global value, i.e., the value outside of any lexical
-binding construct.  When a variable is lexically bound, the local value
-is determined by the lexical environment; the variable may have a
-local value if its symbol's value cell is unassigned.
+   <p>Under Emacs Lisp's default dynamic scoping rule (see <a href="Variable-Scoping.html#Variable-Scoping">Variable Scoping</a>), the value cell stores the variable's current (local or
+global) value.  Note that an unassigned value cell is <em>not</em> the
+same as having <code>nil</code> in the value cell.  The symbol <code>nil</code> is
+a Lisp object and can be the value of a variable, just as any other
+object can be; but it is still a value.  If a variable is void, trying
+to evaluate the variable signals a <code>void-variable</code> error, instead
+of returning a value.
+
+   <p>Under the optional lexical scoping rule, the value cell only holds
+the variable's global value&mdash;the value outside of any lexical binding
+construct.  When a variable is lexically bound, the local value is
+determined by the lexical environment; hence, variables can have local
+values even if their symbols' value cells are unassigned.
 
 <div class="defun">
-&mdash; Function: <b>makunbound</b><var> symbol<a name="index-makunbound-629"></a></var><br>
+&mdash; Function: <b>makunbound</b><var> symbol<a name="index-makunbound-729"></a></var><br>
 <blockquote><p>This function empties out the value cell of <var>symbol</var>, making the
 variable void.  It returns <var>symbol</var>.
 
@@ -97,7 +98,7 @@ unless the reexposed binding is void too.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>boundp</b><var> variable<a name="index-boundp-630"></a></var><br>
+&mdash; Function: <b>boundp</b><var> variable<a name="index-boundp-730"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if <var>variable</var> (a symbol) is not
 void, and <code>nil</code> if it is void.
 

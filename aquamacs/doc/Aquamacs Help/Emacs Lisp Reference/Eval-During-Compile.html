@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -43,11 +43,12 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Byte-Compilation.html#Byte-Compilation"
 
 <h3 class="section">16.5 Evaluation During Compilation</h3>
 
-<p>These features permit you to write code to be evaluated during
+<p><a name="index-eval-during-compilation-1059"></a>
+  These features permit you to write code to be evaluated during
 compilation of a program.
 
 <div class="defun">
-&mdash; Special Form: <b>eval-and-compile</b><var> body<small class="dots">...</small><a name="index-eval_002dand_002dcompile-921"></a></var><br>
+&mdash; Special Form: <b>eval-and-compile</b><var> body<small class="dots">...</small><a name="index-eval_002dand_002dcompile-1060"></a></var><br>
 <blockquote><p>This form marks <var>body</var> to be evaluated both when you compile the
 containing code and when you run it (whether compiled or not).
 
@@ -75,20 +76,20 @@ warnings about &ldquo;not known to be defined&rdquo; suppressed).
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Special Form: <b>eval-when-compile</b><var> body<small class="dots">...</small><a name="index-eval_002dwhen_002dcompile-922"></a></var><br>
+&mdash; Special Form: <b>eval-when-compile</b><var> body<small class="dots">...</small><a name="index-eval_002dwhen_002dcompile-1061"></a></var><br>
 <blockquote><p>This form marks <var>body</var> to be evaluated at compile time but not when
 the compiled program is loaded.  The result of evaluation by the
 compiler becomes a constant which appears in the compiled program.  If
 you load the source file, rather than compiling it, <var>body</var> is
 evaluated normally.
 
-        <p><a name="index-compile_002dtime-constant-923"></a>If you have a constant that needs some calculation to produce,
+        <p><a name="index-compile_002dtime-constant-1062"></a>If you have a constant that needs some calculation to produce,
 <code>eval-when-compile</code> can do that at compile-time.  For example,
 
      <pre class="lisp">          (defvar my-regexp
             (eval-when-compile (regexp-opt '("aaa" "aba" "abb"))))
 </pre>
-        <p><a name="index-macros_002c-at-compile-time-924"></a>If you're using another package, but only need macros from it (the
+        <p><a name="index-macros_002c-at-compile-time-1063"></a>If you're using another package, but only need macros from it (the
 byte compiler will expand those), then <code>eval-when-compile</code> can be
 used to load it for compiling, but not executing.  For example,
 

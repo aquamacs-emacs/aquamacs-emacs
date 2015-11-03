@@ -1,0 +1,114 @@
+<html lang="en">
+<head>
+<title>Porting old advice - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Advising-Functions.html#Advising-Functions" title="Advising Functions">
+<link rel="prev" href="Advice-combinators.html#Advice-combinators" title="Advice combinators">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 25.0.50.
+
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Porting-old-advice"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Advice-combinators.html#Advice-combinators">Advice combinators</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Advising-Functions.html#Advising-Functions">Advising Functions</a>
+<hr>
+</div>
+
+<h4 class="subsection">12.10.4 Adapting code using the old defadvice</h4>
+
+<p><a name="index-old-advices_002c-porting-889"></a>
+A lot of code uses the old <code>defadvice</code> mechanism, which is largely made
+obsolete by the new <code>advice-add</code>, whose implementation and semantics is
+significantly simpler.
+
+   <p>An old piece of advice such as:
+
+<pre class="example">     (defadvice previous-line (before next-line-at-end
+                                      (&amp;optional arg try-vscroll))
+       "Insert an empty line when moving up from the top line."
+       (if (and next-line-add-newlines (= arg 1)
+                (save-excursion (beginning-of-line) (bobp)))
+           (progn
+             (beginning-of-line)
+             (newline))))
+</pre>
+   <p>could be translated in the new advice mechanism into a plain function:
+
+<pre class="example">     (defun previous-line--next-line-at-end (&amp;optional arg try-vscroll)
+       "Insert an empty line when moving up from the top line."
+       (if (and next-line-add-newlines (= arg 1)
+                (save-excursion (beginning-of-line) (bobp)))
+           (progn
+             (beginning-of-line)
+             (newline))))
+</pre>
+   <p>Obviously, this does not actually modify <code>previous-line</code>.  For that the
+old advice needed:
+<pre class="example">     (ad-activate 'previous-line)
+</pre>
+   <p>whereas the new advice mechanism needs:
+<pre class="example">     (advice-add 'previous-line :before #'previous-line--next-line-at-end)
+</pre>
+   <p>Note that <code>ad-activate</code> had a global effect: it activated all pieces of
+advice enabled for that specified function.  If you wanted to only activate or
+deactivate a particular piece, you needed to <em>enable</em> or <em>disable</em>
+it with <code>ad-enable-advice</code> and <code>ad-disable-advice</code>. 
+The new mechanism does away with this distinction.
+
+   <p>Around advice such as:
+
+<pre class="example">     (defadvice foo (around foo-around)
+       "Ignore case in `foo'."
+       (let ((case-fold-search t))
+         ad-do-it))
+     (ad-activate 'foo)
+</pre>
+   <p>could translate into:
+
+<pre class="example">     (defun foo--foo-around (orig-fun &amp;rest args)
+       "Ignore case in `foo'."
+       (let ((case-fold-search t))
+         (apply orig-fun args)))
+     (advice-add 'foo :around #'foo--foo-around)
+</pre>
+   <p>Regarding the advice's <em>class</em>, note that the new <code>:before</code> is not
+quite equivalent to the old <code>before</code>, because in the old advice you could
+modify the function's arguments (e.g., with <code>ad-set-arg</code>), and that would
+affect the argument values seen by the original function, whereas in the new
+<code>:before</code>, modifying an argument via <code>setq</code> in the advice has no
+effect on the arguments seen by the original function. 
+When porting <code>before</code> advice which relied on this behavior, you'll need
+to turn it into new <code>:around</code> or <code>:filter-args</code> advice instead.
+
+   <p>Similarly old <code>after</code> advice could modify the returned value by
+changing <code>ad-return-value</code>, whereas new <code>:after</code> advice cannot, so
+when porting such old <code>after</code> advice, you'll need to turn it into new
+<code>:around</code> or <code>:filter-return</code> advice instead.
+
+   </body></html>
+

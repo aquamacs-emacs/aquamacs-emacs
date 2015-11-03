@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,20 +41,21 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Searching-and-Matching.html#Searching-a
 <hr>
 </div>
 
-<h3 class="section">34.4 Regular Expression Searching</h3>
+<h3 class="section">33.4 Regular Expression Searching</h3>
 
-<p><a name="index-regular-expression-searching-3366"></a><a name="index-regexp-searching-3367"></a><a name="index-searching-for-regexp-3368"></a>
+<p><a name="index-regular-expression-searching-3689"></a><a name="index-regexp-searching-3690"></a><a name="index-searching-for-regexp-3691"></a>
   In GNU Emacs, you can search for the next match for a regular
-expression either incrementally or not.  For incremental search
-commands, see <a href="../emacs/Regexp-Search.html#Regexp-Search">Regular Expression Search</a>.  Here we describe only the search functions
-useful in programs.  The principal one is <code>re-search-forward</code>.
+expression (see <a href="Syntax-of-Regexps.html#Syntax-of-Regexps">Syntax of Regexps</a>) either incrementally or not. 
+For incremental search commands, see <a href="../emacs/Regexp-Search.html#Regexp-Search">Regular Expression Search</a>.  Here we describe
+only the search functions useful in programs.  The principal one is
+<code>re-search-forward</code>.
 
    <p>These search functions convert the regular expression to multibyte if
 the buffer is multibyte; they convert the regular expression to unibyte
 if the buffer is unibyte.  See <a href="Text-Representations.html#Text-Representations">Text Representations</a>.
 
 <div class="defun">
-&mdash; Command: <b>re-search-forward</b><var> regexp &amp;optional limit noerror repeat<a name="index-re_002dsearch_002dforward-3369"></a></var><br>
+&mdash; Command: <b>re-search-forward</b><var> regexp &amp;optional limit noerror repeat<a name="index-re_002dsearch_002dforward-3692"></a></var><br>
 <blockquote><p>This function searches forward in the current buffer for a string of
 text that is matched by the regular expression <var>regexp</var>.  The
 function skips over any amount of text that is not matched by
@@ -99,7 +100,7 @@ the &lsquo;<samp><span class="samp">t</span></samp>&rsquo; of &lsquo;<samp><span
         </blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>re-search-backward</b><var> regexp &amp;optional limit noerror repeat<a name="index-re_002dsearch_002dbackward-3370"></a></var><br>
+&mdash; Command: <b>re-search-backward</b><var> regexp &amp;optional limit noerror repeat<a name="index-re_002dsearch_002dbackward-3693"></a></var><br>
 <blockquote><p>This function searches backward in the current buffer for a string of
 text that is matched by the regular expression <var>regexp</var>, leaving
 point at the beginning of the first text found.
@@ -120,7 +121,7 @@ not worth the trouble of implementing that.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>string-match</b><var> regexp string &amp;optional start<a name="index-string_002dmatch-3371"></a></var><br>
+&mdash; Function: <b>string-match</b><var> regexp string &amp;optional start<a name="index-string_002dmatch-3694"></a></var><br>
 <blockquote><p>This function returns the index of the start of the first match for
 the regular expression <var>regexp</var> in <var>string</var>, or <code>nil</code> if
 there is no match.  If <var>start</var> is non-<code>nil</code>, the search starts
@@ -138,7 +139,7 @@ at that index in <var>string</var>.
         <p class="noindent">The index of the first character of the
 string is 0, the index of the second character is 1, and so on.
 
-        <p>After this function returns, the index of the first character beyond
+        <p>If this function finds a match, the index of the first character beyond
 the match is available as <code>(match-end 0)</code>.  See <a href="Match-Data.html#Match-Data">Match Data</a>.
 
      <pre class="example">          (string-match
@@ -151,13 +152,13 @@ the match is available as <code>(match-end 0)</code>.  See <a href="Match-Data.h
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>string-match-p</b><var> regexp string &amp;optional start<a name="index-string_002dmatch_002dp-3372"></a></var><br>
+&mdash; Function: <b>string-match-p</b><var> regexp string &amp;optional start<a name="index-string_002dmatch_002dp-3695"></a></var><br>
 <blockquote><p>This predicate function does what <code>string-match</code> does, but it
 avoids modifying the match data. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>looking-at</b><var> regexp<a name="index-looking_002dat-3373"></a></var><br>
+&mdash; Function: <b>looking-at</b><var> regexp<a name="index-looking_002dat-3696"></a></var><br>
 <blockquote><p>This function determines whether the text in the current buffer directly
 following point matches the regular expression <var>regexp</var>.  &ldquo;Directly
 following&rdquo; means precisely that: the search is &ldquo;anchored&rdquo; and it can
@@ -182,7 +183,7 @@ were anywhere else, the result would be <code>nil</code>.
         </blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>looking-back</b><var> regexp &amp;optional limit greedy<a name="index-looking_002dback-3374"></a></var><br>
+&mdash; Function: <b>looking-back</b><var> regexp &amp;optional limit greedy<a name="index-looking_002dback-3697"></a></var><br>
 <blockquote><p>This function returns <code>t</code> if <var>regexp</var> matches the text
 immediately before point (i.e., ending at point), and <code>nil</code> otherwise.
 
@@ -216,13 +217,13 @@ plans to add a <code>looking-back-p</code> function.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>looking-at-p</b><var> regexp<a name="index-looking_002dat_002dp-3375"></a></var><br>
+&mdash; Function: <b>looking-at-p</b><var> regexp<a name="index-looking_002dat_002dp-3698"></a></var><br>
 <blockquote><p>This predicate function works like <code>looking-at</code>, but without
 updating the match data. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>search-spaces-regexp</b><var><a name="index-search_002dspaces_002dregexp-3376"></a></var><br>
+&mdash; Variable: <b>search-spaces-regexp</b><var><a name="index-search_002dspaces_002dregexp-3699"></a></var><br>
 <blockquote><p>If this variable is non-<code>nil</code>, it should be a regular expression
 that says how to search for whitespace.  In that case, any group of
 spaces in a regular expression being searched for stands for use of

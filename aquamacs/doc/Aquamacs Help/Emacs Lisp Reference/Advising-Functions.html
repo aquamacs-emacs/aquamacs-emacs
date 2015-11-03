@@ -5,20 +5,21 @@
 <meta name="description" content="GNU Emacs Lisp Reference Manual">
 <meta name="generator" content="makeinfo 4.13">
 <link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Byte-Compilation.html#Byte-Compilation" title="Byte Compilation">
-<link rel="next" href="Debugging.html#Debugging" title="Debugging">
+<link rel="up" href="Functions.html#Functions" title="Functions">
+<link rel="prev" href="Closures.html#Closures" title="Closures">
+<link rel="next" href="Obsolete-Functions.html#Obsolete-Functions" title="Obsolete Functions">
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -34,61 +35,76 @@ Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
 <div class="node">
 <a name="Advising-Functions"></a>
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Debugging.html#Debugging">Debugging</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Byte-Compilation.html#Byte-Compilation">Byte Compilation</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Obsolete-Functions.html#Obsolete-Functions">Obsolete Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Closures.html#Closures">Closures</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Functions.html#Functions">Functions</a>
 <hr>
 </div>
 
-<h2 class="chapter">17 Advising Emacs Lisp Functions</h2>
+<h3 class="section">12.10 Advising Emacs Lisp Functions</h3>
 
-<p><a name="index-advising-functions-933"></a>
-  The <dfn>advice</dfn> feature lets you add to the existing definition of
+<p><a name="index-advising-functions-875"></a><a name="index-piece-of-advice-876"></a>
+When you need to modify a function defined in another library, or when you need
+to modify a hook like <var>foo</var><code>-function</code>, a process filter, or basically
+any variable or object field which holds a function value, you can use the
+appropriate setter function, such as <code>fset</code> or <code>defun</code> for named
+functions, <code>setq</code> for hook variables, or <code>set-process-filter</code> for
+process filters, but those are often too blunt, completely throwing away the
+previous value.
+
+   <p>The <dfn>advice</dfn> feature lets you add to the existing definition of
 a function, by <dfn>advising the function</dfn>.  This is a cleaner method
-for a library to customize functions defined within Emacs&mdash;cleaner
 than redefining the whole function.
 
-   <p><a name="index-piece-of-advice-934"></a>  Each function can have multiple <dfn>pieces of advice</dfn>, each of
-which can be separately defined and then <dfn>enabled</dfn> or
-<dfn>disabled</dfn>.  All the enabled pieces of advice for any given
-function actually take effect when you <dfn>activate advice</dfn> for that
-function, or when you define or redefine the function.  Note that
-enabling a piece of advice and activating advice for a function are
-not the same thing.
+   <p>Emacs's advice system provides two sets of primitives for that: the core set,
+for function values held in variables and object fields (with the corresponding
+primitives being <code>add-function</code> and <code>remove-function</code>) and another
+set layered on top of it for named functions (with the main primitives being
+<code>advice-add</code> and <code>advice-remove</code>).
 
-   <p>Advice is useful for altering the behavior of existing calls to an
-existing function.  If you want the new behavior for new function
-calls or new key bindings, you should define a new function or
-command, and have it use the existing function as a subroutine.
+   <p>For example, in order to trace the calls to the process filter of a process
+<var>proc</var>, you could use:
 
-   <p>Advising a function can cause confusion in debugging, since people
-who debug calls to the original function may not notice that it has
-been modified with advice.  Therefore, if you have the possibility to
-change the code of that function to run a hook, please solve the
-problem that way.  Advice should be reserved for the cases where you
-cannot get the function changed.  In particular, Emacs's own source
-files should not put advice on functions in Emacs.  There are
-currently a few exceptions to this convention, but we aim to correct
-them.
+<pre class="example">     (defun my-tracing-function (proc string)
+       (message "Proc %S received %S" proc string))
+     
+     (add-function :before (process-filter <var>proc</var>) #'my-tracing-function)
+</pre>
+   <p>This will cause the process's output to be passed to <code>my-tracing-function</code>
+before being passed to the original process filter.  <code>my-tracing-function</code>
+receives the same arguments as the original function.  When you're done with
+it, you can revert to the untraced behavior with:
 
-   <p>Unless you know what you are doing, do <em>not</em> advise a primitive
-(see <a href="What-Is-a-Function.html#What-Is-a-Function">What Is a Function</a>).  Some primitives are used by the advice
-mechanism; advising them could cause an infinite recursion.  Also,
-many primitives are called directly from C code.  Calls to the
-primitive from Lisp code will take note of the advice, but calls from
-C code will ignore the advice.
+<pre class="example">     (remove-function (process-filter <var>proc</var>) #'my-tracing-function)
+</pre>
+   <p>Similarly, if you want to trace the execution of the function named
+<code>display-buffer</code>, you could use:
+
+<pre class="example">     (defun his-tracing-function (orig-fun &amp;rest args)
+       (message "display-buffer called with args %S" args)
+       (let ((res (apply orig-fun args)))
+         (message "display-buffer returned %S" res)
+         res))
+     
+     (advice-add 'display-buffer :around #'his-tracing-function)
+</pre>
+   <p>Here, <code>his-tracing-function</code> is called instead of the original function
+and receives the original function (additionally to that function's arguments)
+as argument, so it can call it if and when it needs to. 
+When you're tired of seeing this output, you can revert to the untraced
+behavior with:
+
+<pre class="example">     (advice-remove 'display-buffer #'his-tracing-function)
+</pre>
+   <p>The arguments <code>:before</code> and <code>:around</code> used in the above examples
+specify how the two functions are composed, since there are many different
+ways to do it.  The added function is also called a piece of <em>advice</em>.
 
 <ul class="menu">
-<li><a accesskey="1" href="Simple-Advice.html#Simple-Advice">Simple Advice</a>:            A simple example to explain the basics of advice. 
-<li><a accesskey="2" href="Defining-Advice.html#Defining-Advice">Defining Advice</a>:          Detailed description of <code>defadvice</code>. 
-<li><a accesskey="3" href="Around_002dAdvice.html#Around_002dAdvice">Around-Advice</a>:            Wrapping advice around a function's definition. 
-<li><a accesskey="4" href="Computed-Advice.html#Computed-Advice">Computed Advice</a>:          ...is to <code>defadvice</code> as <code>fset</code> is to <code>defun</code>. 
-<li><a accesskey="5" href="Activation-of-Advice.html#Activation-of-Advice">Activation of Advice</a>:     Advice doesn't do anything until you activate it. 
-<li><a accesskey="6" href="Enabling-Advice.html#Enabling-Advice">Enabling Advice</a>:          You can enable or disable each piece of advice. 
-<li><a accesskey="7" href="Preactivation.html#Preactivation">Preactivation</a>:            Preactivation is a way of speeding up the
-                              loading of compiled advice. 
-<li><a accesskey="8" href="Argument-Access-in-Advice.html#Argument-Access-in-Advice">Argument Access in Advice</a>:  How advice can access the function's arguments. 
-<li><a accesskey="9" href="Combined-Definition.html#Combined-Definition">Combined Definition</a>:      How advice is implemented. 
+<li><a accesskey="1" href="Core-Advising-Primitives.html#Core-Advising-Primitives">Core Advising Primitives</a>:     Primitives to manipulate advice. 
+<li><a accesskey="2" href="Advising-Named-Functions.html#Advising-Named-Functions">Advising Named Functions</a>:     Advising named functions. 
+<li><a accesskey="3" href="Advice-combinators.html#Advice-combinators">Advice combinators</a>:           Ways to compose advice. 
+<li><a accesskey="4" href="Porting-old-advice.html#Porting-old-advice">Porting old advice</a>:           Adapting code using the old defadvice. 
 </ul>
 
    </body></html>

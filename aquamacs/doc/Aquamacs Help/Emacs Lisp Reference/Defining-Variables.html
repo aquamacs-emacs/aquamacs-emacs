@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -43,7 +43,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
 
 <h3 class="section">11.5 Defining Global Variables</h3>
 
-<p><a name="index-variable-definition-631"></a>
+<p><a name="index-variable-definition-731"></a>
   A <dfn>variable definition</dfn> is a construct that announces your
 intention to use a symbol as a global variable.  It uses the special
 forms <code>defvar</code> or <code>defconst</code>, which are documented below.
@@ -67,24 +67,29 @@ initializes it only if it is originally void.
 (which calls <code>defvar</code> as a subroutine).  See <a href="Variable-Definitions.html#Variable-Definitions">Variable Definitions</a>.
 
 <div class="defun">
-&mdash; Special Form: <b>defvar</b><var> symbol </var>[<var>value </var>[<var>doc-string</var>]]<var><a name="index-defvar-632"></a></var><br>
+&mdash; Special Form: <b>defvar</b><var> symbol </var>[<var>value </var>[<var>doc-string</var>]]<var><a name="index-defvar-732"></a></var><br>
 <blockquote><p>This special form defines <var>symbol</var> as a variable.  Note that
 <var>symbol</var> is not evaluated; the symbol to be defined should appear
 explicitly in the <code>defvar</code> form.  The variable is marked as
 <dfn>special</dfn>, meaning that it should always be dynamically bound
 (see <a href="Variable-Scoping.html#Variable-Scoping">Variable Scoping</a>).
 
-        <p>If <var>symbol</var> is void and <var>value</var> is specified, <code>defvar</code>
-evaluates <var>value</var> and sets <var>symbol</var> to the result.  But if
-<var>symbol</var> already has a value (i.e., it is not void), <var>value</var>
-is not even evaluated, and <var>symbol</var>'s value remains unchanged.  If
-<var>value</var> is omitted, the value of <var>symbol</var> is not changed in
-any case.
+        <p>If <var>value</var> is specified, and <var>symbol</var> is void (i.e., it has no
+dynamically bound value; see <a href="Void-Variables.html#Void-Variables">Void Variables</a>), then <var>value</var> is
+evaluated and <var>symbol</var> is set to the result.  But if <var>symbol</var>
+is not void, <var>value</var> is not evaluated, and <var>symbol</var>'s value is
+left unchanged.  If <var>value</var> is omitted, the value of <var>symbol</var>
+is not changed in any case.
 
         <p>If <var>symbol</var> has a buffer-local binding in the current buffer,
-<code>defvar</code> operates on the default value, which is buffer-independent,
-not the current (buffer-local) binding.  It sets the default value if
+<code>defvar</code> acts on the default value, which is buffer-independent,
+rather than the buffer-local binding.  It sets the default value if
 the default value is void.  See <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables">Buffer-Local Variables</a>.
+
+        <p>If <var>symbol</var> is already lexically bound (e.g., if the <code>defvar</code>
+form occurs in a <code>let</code> form with lexical binding enabled), then
+<code>defvar</code> sets the dynamic value.  The lexical binding remains in
+effect until its binding construct exits.  See <a href="Variable-Scoping.html#Variable-Scoping">Variable Scoping</a>.
 
         <p>When you evaluate a top-level <code>defvar</code> form with <kbd>C-M-x</kbd> in
 Emacs Lisp mode (<code>eval-defun</code>), a special feature of
@@ -112,10 +117,10 @@ it a documentation string:
 at top level in a file where its value does not matter. 
 </p></blockquote></div>
 
-   <p><a name="index-constant-variables-633"></a>
+   <p><a name="index-constant-variables-733"></a>
 
 <div class="defun">
-&mdash; Special Form: <b>defconst</b><var> symbol value </var>[<var>doc-string</var>]<var><a name="index-defconst-634"></a></var><br>
+&mdash; Special Form: <b>defconst</b><var> symbol value </var>[<var>doc-string</var>]<var><a name="index-defconst-734"></a></var><br>
 <blockquote><p>This special form defines <var>symbol</var> as a value and initializes it. 
 It informs a person reading your code that <var>symbol</var> has a standard
 global value, established here, that should not be changed by the user

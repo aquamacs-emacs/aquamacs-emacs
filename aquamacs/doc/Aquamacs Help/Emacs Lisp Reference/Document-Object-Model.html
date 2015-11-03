@@ -1,0 +1,137 @@
+<html lang="en">
+<head>
+<title>Document Object Model - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Parsing-HTML_002fXML.html#Parsing-HTML_002fXML" title="Parsing HTML/XML">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 25.0.50.
+
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Document-Object-Model"></a>
+<p>
+Up:&nbsp;<a rel="up" accesskey="u" href="Parsing-HTML_002fXML.html#Parsing-HTML_002fXML">Parsing HTML/XML</a>
+<hr>
+</div>
+
+<h4 class="subsection">31.26.1 Document Object Model</h4>
+
+<p><a name="index-HTML-DOM-3417"></a><a name="index-XML-DOM-3418"></a><a name="index-DOM-3419"></a><a name="index-Document-Object-Model-3420"></a>
+The <acronym>DOM</acronym> returned by <code>libxml-parse-html-region</code> (and the
+other <acronym>XML</acronym> parsing functions) is a tree structure where each
+node has a node name (called a <dfn>tag</dfn>), and optional key/value
+<dfn>attribute</dfn> list, and then a list of <dfn>child nodes</dfn>.  The child
+nodes are either strings or <acronym>DOM</acronym> objects.
+
+<pre class="example">     (body ((width . "101"))
+      (div ((class . "thing"))
+       "Foo"
+       (div nil
+        "Yes")))
+</pre>
+   <div class="defun">
+&mdash; Function: <b>dom-node</b><var> tag &amp;optional attributes &amp;rest children<a name="index-dom_002dnode-3421"></a></var><br>
+<blockquote><p>This function creates a <acronym>DOM</acronym> node of type <var>tag</var>.  If
+given, <var>attributes</var> should be a key/value pair list. 
+If given, <var>children</var> should be <acronym>DOM</acronym> nodes. 
+</p></blockquote></div>
+
+   <p>The following functions can be used to work with this structure.  Each
+function takes a <acronym>DOM</acronym> node, or a list of nodes.  In the
+latter case, only the first node in the list is used.
+
+   <p>Simple accessors:
+
+     <dl>
+<dt><code>dom-tag </code><var>node</var><dd>Return the <dfn>tag</dfn> (also called &ldquo;node name&rdquo;) of the node.
+
+     <br><dt><code>dom-attr </code><var>node</var> <var>attribute</var><dd>Return the value of <var>attribute</var> in the node.  A common usage
+would be:
+
+     <pre class="lisp">          (dom-attr img 'href)
+          =&gt; "http://fsf.org/logo.png"
+</pre>
+     <br><dt><code>dom-children </code><var>node</var><dd>Return all the children of the node.
+
+     <br><dt><code>dom-non-text-children </code><var>node</var><dd>Return all the non-string children of the node.
+
+     <br><dt><code>dom-attributes </code><var>node</var><dd>Return the key/value pair list of attributes of the node.
+
+     <br><dt><code>dom-text </code><var>node</var><dd>Return all the textual elements of the node as a concatenated string.
+
+     <br><dt><code>dom-texts </code><var>node</var><dd>Return all the textual elements of the node, as well as the textual
+elements of all the children of the node, recursively, as a
+concatenated string.  This function also takes an optional separator
+to be inserted between the textual elements.
+
+     <br><dt><code>dom-parent </code><var>dom</var> <var>node</var><dd>Return the parent of <var>node</var> in <var>dom</var>. 
+</dl>
+
+   <p>The following are functions for altering the <acronym>DOM</acronym>.
+
+     <dl>
+<dt><code>dom-set-attribute </code><var>node</var> <var>attribute</var> <var>value</var><dd>Set the <var>attribute</var> of the node to <var>value</var>.
+
+     <br><dt><code>dom-append-child </code><var>node</var> <var>child</var><dd>Append <var>child</var> as the last child of <var>node</var>.
+
+     <br><dt><code>dom-add-child-before </code><var>node</var> <var>child</var> <var>before</var><dd>Add <var>child</var> to <var>node</var>'s child list before the <var>before</var>
+node.  If <var>before</var> is <code>nil</code>, make <var>child</var> the first child.
+
+     <br><dt><code>dom-set-attributes </code><var>node</var> <var>attributes</var><dd>Replace all the attributes of the node with a new key/value list. 
+</dl>
+
+   <p>The following are functions for searching for elements in the
+<acronym>DOM</acronym>.  They all return lists of matching nodes.
+
+     <dl>
+<dt><code>dom-by-tag </code><var>dom</var> <var>tag</var><dd>Return all nodes in <var>dom</var> that are of type <var>tag</var>.  A typical
+use would be:
+
+     <pre class="lisp">          (dom-by-tag dom 'td)
+          =&gt; '((td ...) (td ...) (td ...))
+</pre>
+     <br><dt><code>dom-by-class </code><var>dom</var> <var>match</var><dd>Return all nodes in <var>dom</var> that have class names that match
+<var>match</var>, which is a regular expression.
+
+     <br><dt><code>dom-by-style </code><var>dom</var> <var>style</var><dd>Return all nodes in <var>dom</var> that have styles that match <var>match</var>,
+which is a regular expression.
+
+     <br><dt><code>dom-by-id </code><var>dom</var> <var>style</var><dd>Return all nodes in <var>dom</var> that have IDs that match <var>match</var>,
+which is a regular expression.
+
+     <br><dt><code>dom-strings </code><var>dom</var><dd>Return all strings in <var>DOM</var>.
+
+   </dl>
+
+   <p>Utility functions:
+
+     <dl>
+<dt><code>dom-pp </code><var>dom</var><code> &amp;optional </code><var>remove-empty</var><dd>Pretty-print <var>dom</var> at point.  If <var>remove-empty</var>, don't print
+textual nodes that just contain white-space. 
+</dl>
+
+   </body></html>
+

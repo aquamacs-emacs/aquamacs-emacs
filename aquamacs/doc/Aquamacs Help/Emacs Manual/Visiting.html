@@ -11,16 +11,16 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Manual',
-updated for Emacs version 24.3.50.
+updated for Emacs version 25.0.50.
 
-Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``The GNU
      Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     with the Front-Cover Texts being ``A GNU Manual,'' and with the
      Back-Cover Texts as in (a) below.  A copy of the license is
      included in the section entitled ``GNU Free Documentation
      License.''
@@ -44,7 +44,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
 
 <h3 class="section">18.2 Visiting Files</h3>
 
-<p><a name="index-visiting-files-1014"></a><a name="index-open-file-1015"></a>
+<p><a name="index-visiting-files-1057"></a><a name="index-open-file-1058"></a>
      <dl>
 <dt><kbd>C-x C-f</kbd><dd>Visit a file (<code>find-file</code>). 
 <br><dt><kbd>C-x C-r</kbd><dd>Visit a file for viewing, without allowing changes to it
@@ -58,11 +58,11 @@ alter what is displayed in the selected frame.
 <br><dt><kbd>M-x find-file-literally</kbd><dd>Visit a file with no conversion of the contents. 
 </dl>
 
-   <p><a name="index-files_002c-visiting-and-saving-1016"></a><a name="index-saving-files-1017"></a>  <dfn>Visiting</dfn> a file means reading its contents into an Emacs
+   <p><a name="index-files_002c-visiting-and-saving-1059"></a><a name="index-saving-files-1060"></a>  <dfn>Visiting</dfn> a file means reading its contents into an Emacs
 buffer so you can edit them.  Emacs makes a new buffer for each file
 that you visit.
 
-   <p><a name="index-C_002dx-C_002df-1018"></a><a name="index-find_002dfile-1019"></a>  To visit a file, type <kbd>C-x C-f</kbd> (<code>find-file</code>) and use the
+   <p><a name="index-C_002dx-C_002df-1061"></a><a name="index-find_002dfile-1062"></a>  To visit a file, type <kbd>C-x C-f</kbd> (<code>find-file</code>) and use the
 minibuffer to enter the name of the desired file.  While in the
 minibuffer, you can abort the command by typing <kbd>C-g</kbd>.  See <a href="File-Names.html#File-Names">File Names</a>, for details about entering file names into minibuffers.
 
@@ -74,15 +74,15 @@ the mode line (see <a href="Mode-Line.html#Mode-Line">Mode Line</a>).  Emacs nor
 buffer name from the file name, omitting the directory name.  For
 example, a file named <samp><span class="file">/usr/rms/emacs.tex</span></samp> is visited in a buffer
 named &lsquo;<samp><span class="samp">emacs.tex</span></samp>&rsquo;.  If there is already a buffer with that name,
-Emacs constructs a unique name; the normal method is to append
-&lsquo;<samp><span class="samp">&lt;2&gt;</span></samp>&rsquo;, &lsquo;<samp><span class="samp">&lt;3&gt;</span></samp>&rsquo;, and so on, but you can select other methods. 
-See <a href="Uniquify.html#Uniquify">Uniquify</a>.
+Emacs constructs a unique name; the normal method is to add a suffix
+based on the directory name (e.g., &lsquo;<samp><span class="samp">&lt;rms&gt;</span></samp>&rsquo;, &lsquo;<samp><span class="samp">&lt;tmp&gt;</span></samp>&rsquo;,
+and so on), but you can select other methods.  See <a href="Uniquify.html#Uniquify">Uniquify</a>.
 
-   <p><a name="index-creating-files-1020"></a>  To create a new file, just visit it using the same command, <kbd>C-x
+   <p><a name="index-creating-files-1063"></a>  To create a new file, just visit it using the same command, <kbd>C-x
 C-f</kbd>.  Emacs displays &lsquo;<samp><span class="samp">(New file)</span></samp>&rsquo; in the echo area, but in other
 respects behaves as if you had visited an existing empty file.
 
-   <p><a name="index-modified-_0028buffer_0029-1021"></a>  After visiting a file, the changes you make with editing commands are
+   <p><a name="index-modified-_0028buffer_0029-1064"></a>  After visiting a file, the changes you make with editing commands are
 made in the Emacs buffer.  They do not take effect in the visited
 file, until you <dfn>save</dfn> the buffer (see <a href="Saving.html#Saving">Saving</a>).  If a buffer
 contains changes that have not been saved, we say the buffer is
@@ -95,7 +95,7 @@ to the existing buffer instead of making another copy.  Before doing
 so, it checks whether the file has changed since you last visited or
 saved it.  If the file has changed, Emacs offers to reread it.
 
-   <p><a name="index-large_002dfile_002dwarning_002dthreshold-1022"></a><a name="index-file_002c-warning-when-size-is-large-1023"></a><a name="index-size-of-file_002c-warning-when-visiting-1024"></a><a name="index-maximum-buffer-size-exceeded_002c-error-message-1025"></a>  If you try to visit a file larger than
+   <p><a name="index-large_002dfile_002dwarning_002dthreshold-1065"></a><a name="index-file_002c-warning-when-size-is-large-1066"></a><a name="index-size-of-file_002c-warning-when-visiting-1067"></a><a name="index-maximum-buffer-size-exceeded_002c-error-message-1068"></a>  If you try to visit a file larger than
 <code>large-file-warning-threshold</code> (the default is 10000000, which is
 about 10 megabytes), Emacs asks you for confirmation first.  You can
 answer <kbd>y</kbd> to proceed with visiting the file.  Note, however, that
@@ -105,7 +105,7 @@ by the integers that Emacs can represent (see <a href="Buffers.html#Buffers">Buf
 try, Emacs displays an error message saying that the maximum buffer
 size has been exceeded.
 
-   <p><a name="index-wildcard-characters-in-file-names-1026"></a><a name="index-find_002dfile_002dwildcards-1027"></a>  If the file name you specify contains shell-style wildcard
+   <p><a name="index-wildcard-characters-in-file-names-1069"></a><a name="index-find_002dfile_002dwildcards-1070"></a>  If the file name you specify contains shell-style wildcard
 characters, Emacs visits all the files that match it.  (On
 case-insensitive filesystems, Emacs matches the wildcards disregarding
 the letter case.)  Wildcards include &lsquo;<samp><span class="samp">?</span></samp>&rsquo;, &lsquo;<samp><span class="samp">*</span></samp>&rsquo;, and
@@ -114,7 +114,7 @@ name in the minibuffer, you need to type <kbd>C-q ?</kbd>.  See <a href="Quoted-
 actually contains wildcard characters.  You can disable the wildcard
 feature by customizing <code>find-file-wildcards</code>.
 
-   <p><a name="index-C_002dx-C_002dv-1028"></a><a name="index-find_002dalternate_002dfile-1029"></a>  If you visit the wrong file unintentionally by typing its name
+   <p><a name="index-C_002dx-C_002dv-1071"></a><a name="index-find_002dalternate_002dfile-1072"></a>  If you visit the wrong file unintentionally by typing its name
 incorrectly, type <kbd>C-x C-v</kbd> (<code>find-alternate-file</code>) to visit
 the file you really wanted.  <kbd>C-x C-v</kbd> is similar to <kbd>C-x
 C-f</kbd>, but it kills the current buffer (after first offering to save it
@@ -123,7 +123,7 @@ it inserts the entire default file name in the buffer, with point just
 after the directory part; this is convenient if you made a slight
 error in typing the name.
 
-   <p><a name="index-find_002dfile_002drun_002ddired-1030"></a>  If you &ldquo;visit&rdquo; a file that is actually a directory, Emacs invokes
+   <p><a name="index-find_002dfile_002drun_002ddired-1073"></a>  If you visit a file that is actually a directory, Emacs invokes
 Dired, the Emacs directory browser.  See <a href="Dired.html#Dired">Dired</a>.  You can disable
 this behavior by setting the variable <code>find-file-run-dired</code> to
 <code>nil</code>; in that case, it is an error to try to visit a directory.
@@ -138,11 +138,11 @@ that you won't go ahead and make changes that you'll have trouble
 saving afterward.  You can make the buffer writable with <kbd>C-x C-q</kbd>
 (<code>read-only-mode</code>).  See <a href="Misc-Buffer.html#Misc-Buffer">Misc Buffer</a>.
 
-   <p><a name="index-C_002dx-C_002dr-1031"></a><a name="index-find_002dfile_002dread_002donly-1032"></a>  If you want to visit a file as read-only in order to protect
+   <p><a name="index-C_002dx-C_002dr-1074"></a><a name="index-find_002dfile_002dread_002donly-1075"></a>  If you want to visit a file as read-only in order to protect
 yourself from entering changes accidentally, visit it with the command
 <kbd>C-x C-r</kbd> (<code>find-file-read-only</code>) instead of <kbd>C-x C-f</kbd>.
 
-   <p><a name="index-C_002dx-4-f-1033"></a><a name="index-find_002dfile_002dother_002dwindow-1034"></a>  <kbd>C-x 4 f</kbd> (<code>find-file-other-window</code>) is like <kbd>C-x C-f</kbd>
+   <p><a name="index-C_002dx-4-f-1076"></a><a name="index-find_002dfile_002dother_002dwindow-1077"></a>  <kbd>C-x 4 f</kbd> (<code>find-file-other-window</code>) is like <kbd>C-x C-f</kbd>
 except that the buffer containing the specified file is selected in another
 window.  The window that was selected before <kbd>C-x 4 f</kbd> continues to
 show the same buffer it was already showing.  If this command is used when
@@ -150,20 +150,20 @@ only one window is being displayed, that window is split in two, with one
 window showing the same buffer as before, and the other one showing the
 newly requested file.  See <a href="Windows.html#Windows">Windows</a>.
 
-   <p><a name="index-C_002dx-5-f-1035"></a><a name="index-find_002dfile_002dother_002dframe-1036"></a>  <kbd>C-x 5 f</kbd> (<code>find-file-other-frame</code>) is similar, but opens a
+   <p><a name="index-C_002dx-5-f-1078"></a><a name="index-find_002dfile_002dother_002dframe-1079"></a>  <kbd>C-x 5 f</kbd> (<code>find-file-other-frame</code>) is similar, but opens a
 new frame, or selects any existing frame showing the specified file. 
 See <a href="Frames.html#Frames">Frames</a>.
 
-   <p><a name="index-file-selection-dialog-1037"></a>  On graphical displays, there are two additional methods for visiting
+   <p><a name="index-file-selection-dialog-1080"></a>  On graphical displays, there are two additional methods for visiting
 files.  Firstly, when Emacs is built with a suitable GUI toolkit,
 commands invoked with the mouse (by clicking on the menu bar or tool
-bar) use the toolkit's standard &ldquo;File Selection&rdquo; dialog instead of
+bar) use the toolkit's standard file selection dialog instead of
 prompting for the file name in the minibuffer.  On GNU/Linux and Unix
 platforms, Emacs does this when built with GTK, LessTif, and Motif
 toolkits; on MS-Windows and Mac, the GUI version does that by default. 
 For information on how to customize this, see <a href="Dialog-Boxes.html#Dialog-Boxes">Dialog Boxes</a>.
 
-   <p>Secondly, Emacs supports &ldquo;drag and drop&rdquo;: dropping a file into an
+   <p>Secondly, Emacs supports drag and drop: dropping a file into an
 ordinary Emacs window visits the file using that window.  As an
 exception, dropping a file into a window displaying a Dired buffer
 moves or copies the file into the displayed directory.  For details,
@@ -171,7 +171,7 @@ see <a href="Drag-and-Drop.html#Drag-and-Drop">Drag and Drop</a>, and <a href="M
 
    <p>On text-mode terminals and on graphical displays when Emacs was
 built without a GUI toolkit, you can visit files via the menu-bar
-&ldquo;File&rdquo; menu, which has a &ldquo;Visit New File&rdquo; item.
+&lsquo;<samp><span class="samp">File</span></samp>&rsquo; menu, which has a &lsquo;<samp><span class="samp">Visit New File</span></samp>&rsquo; item.
 
    <p>Each time you visit a file, Emacs automatically scans its contents
 to detect what character encoding and end-of-line convention it uses,
@@ -180,7 +180,7 @@ convention within the buffer.  When you save the buffer, Emacs
 performs the inverse conversion, writing the file to disk with its
 original encoding and end-of-line convention.  See <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>.
 
-   <p><a name="index-find_002dfile_002dliterally-1038"></a>  If you wish to edit a file as a sequence of <acronym>ASCII</acronym>
+   <p><a name="index-find_002dfile_002dliterally-1081"></a>  If you wish to edit a file as a sequence of <acronym>ASCII</acronym>
 characters with no special encoding or conversion, use the <kbd>M-x
 find-file-literally</kbd> command.  This visits a file, like <kbd>C-x C-f</kbd>,
 but does not do format conversion (see <a href="../elisp/Format-Conversion.html#Format-Conversion">Format Conversion</a>), character code
@@ -190,7 +190,7 @@ of <code>require-final-newline</code> (see <a href="Customize-Save.html#Customiz
 already visited the same file in the usual (non-literal) manner, this
 command asks you whether to visit it literally instead.
 
-   <p><a name="index-find_002dfile_002dhook-1039"></a><a name="index-find_002dfile_002dnot_002dfound_002dfunctions-1040"></a>  Two special hook variables allow extensions to modify the operation
+   <p><a name="index-find_002dfile_002dhook-1082"></a><a name="index-find_002dfile_002dnot_002dfound_002dfunctions-1083"></a>  Two special hook variables allow extensions to modify the operation
 of visiting files.  Visiting a file that does not exist runs the
 functions in <code>find-file-not-found-functions</code>; this variable holds
 a list of functions, which are called one by one (with no arguments)

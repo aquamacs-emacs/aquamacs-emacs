@@ -11,16 +11,16 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Manual',
-updated for Emacs version 24.3.50.
+updated for Emacs version 25.0.50.
 
-Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``The GNU
      Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     with the Front-Cover Texts being ``A GNU Manual,'' and with the
      Back-Cover Texts as in (a) below.  A copy of the license is
      included in the section entitled ``GNU Free Documentation
      License.''
@@ -44,16 +44,16 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Microsoft-Windows.html#Microsoft-Window
 
 <h3 class="section">G.3 File Names on MS-Windows</h3>
 
-<p><a name="index-file-names-on-MS_002dWindows-4728"></a>
+<p><a name="index-file-names-on-MS_002dWindows-4953"></a>
   MS-Windows and MS-DOS normally use a backslash, &lsquo;<samp><span class="samp">\</span></samp>&rsquo;, to
 separate name units within a file name, instead of the slash used on
 other systems.  Emacs on MS-DOS/MS-Windows permits use of either slash or
 backslash, and also knows about drive letters in file names.
 
-   <p><a name="index-file_002dname-completion_002c-on-MS_002dWindows-4729"></a>  On MS-DOS/MS-Windows, file names are case-insensitive, so Emacs by
+   <p><a name="index-file_002dname-completion_002c-on-MS_002dWindows-4954"></a>  On MS-DOS/MS-Windows, file names are case-insensitive, so Emacs by
 default ignores letter-case in file names during completion.
 
-   <p><a name="index-w32_002dget_002dtrue_002dfile_002dattributes-4730"></a>  The variable <code>w32-get-true-file-attributes</code> controls whether
+   <p><a name="index-w32_002dget_002dtrue_002dfile_002dattributes-4955"></a>  The variable <code>w32-get-true-file-attributes</code> controls whether
 Emacs should issue additional system calls to determine more
 accurately file attributes in primitives like <code>file-attributes</code>
 and <code>directory-files-and-attributes</code>.  These additional calls are
@@ -70,7 +70,34 @@ removable and remote volumes, where this could potentially slow down
 Dired and other related features.  The value of <code>nil</code> means never
 issue those system calls.  Non-<code>nil</code> values are more useful on
 NTFS volumes, which support hard links and file security, than on FAT,
-FAT32, and XFAT volumes.
+FAT32, and exFAT volumes.
+
+   <p><a name="index-file-names_002c-invalid-characters-on-MS_002dWindows-4956"></a>  Unlike Unix, MS-Windows file systems restrict the set of characters
+that can be used in a file name.  The following characters are not
+allowed:
+
+     <ul>
+<li>Shell redirection symbols &lsquo;<samp><span class="samp">&lt;</span></samp>&rsquo;, &lsquo;<samp><span class="samp">&gt;</span></samp>&rsquo;, and &lsquo;<samp><span class="samp">|</span></samp>&rsquo;.
+
+     <li>Colon &lsquo;<samp><span class="samp">:</span></samp>&rsquo; (except after the drive letter).
+
+     <li>Forward slash &lsquo;<samp><span class="samp">/</span></samp>&rsquo; and backslash &lsquo;<samp><span class="samp">\</span></samp>&rsquo; (except as directory
+separators).
+
+     <li>Wildcard characters &lsquo;<samp><span class="samp">*</span></samp>&rsquo; and &lsquo;<samp><span class="samp">?</span></samp>&rsquo;.
+
+     <li>Control characters whose codepoints are 1 through 31 decimal.  In
+particular, newlines in file names are not allowed.
+
+     <li>The null character, whose codepoint is zero (this limitation exists on
+Unix filesystems as well). 
+</ul>
+
+<p class="noindent">In addition, referencing any file whose name matches a DOS character
+device, such as <samp><span class="file">NUL</span></samp> or <samp><span class="file">LPT1</span></samp> or <samp><span class="file">PRN</span></samp> or <samp><span class="file">CON</span></samp>,
+with or without any file-name extension, will always resolve to those
+character devices, in any directory.  Therefore, only use such file
+names when you want to use the corresponding character device.
 
    </body></html>
 

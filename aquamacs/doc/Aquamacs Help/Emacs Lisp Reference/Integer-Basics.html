@@ -10,15 +10,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -42,13 +42,13 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Numbers.html#Numbers">Numbers</a>
 <h3 class="section">3.1 Integer Basics</h3>
 
 <p>The range of values for an integer depends on the machine.  The
-minimum range is &minus;536870912 to 536870911 (30 bits; i.e.,
--2**29
+minimum range is &minus;536,870,912 to 536,870,911 (30 bits; i.e.,
+&minus;2**29
 to
 2**29 &minus; 1),
 but many machines provide a wider range.  Many examples in this
 chapter assume the minimum integer width of 30 bits. 
-<a name="index-overflow-132"></a>
+<a name="index-overflow-133"></a>
   The Lisp reader reads an integer as a sequence of digits with optional
 initial sign and optional final period.  An integer that is out of the
 Emacs range is treated as a floating-point number.
@@ -57,11 +57,12 @@ Emacs range is treated as a floating-point number.
       1.              ; <span class="roman">The integer 1.</span>
      +1               ; <span class="roman">Also the integer 1.</span>
      -1               ; <span class="roman">The integer &minus;1.</span>
-      1073741825      ; <span class="roman">The floating point number 1073741825.0.</span>
+      9000000000000000000
+                      ; <span class="roman">The floating-point number 9e18.</span>
       0               ; <span class="roman">The integer 0.</span>
      -0               ; <span class="roman">The integer 0.</span>
 </pre>
-   <p><a name="index-integers-in-specific-radix-133"></a><a name="index-radix-for-reading-an-integer-134"></a><a name="index-base-for-reading-an-integer-135"></a><a name="index-hex-numbers-136"></a><a name="index-octal-numbers-137"></a><a name="index-reading-numbers-in-hex_002c-octal_002c-and-binary-138"></a>  The syntax for integers in bases other than 10 uses &lsquo;<samp><span class="samp">#</span></samp>&rsquo;
+   <p><a name="index-integers-in-specific-radix-134"></a><a name="index-radix-for-reading-an-integer-135"></a><a name="index-base-for-reading-an-integer-136"></a><a name="index-hex-numbers-137"></a><a name="index-octal-numbers-138"></a><a name="index-reading-numbers-in-hex_002c-octal_002c-and-binary-139"></a>  The syntax for integers in bases other than 10 uses &lsquo;<samp><span class="samp">#</span></samp>&rsquo;
 followed by a letter that specifies the radix: &lsquo;<samp><span class="samp">b</span></samp>&rsquo; for binary,
 &lsquo;<samp><span class="samp">o</span></samp>&rsquo; for octal, &lsquo;<samp><span class="samp">x</span></samp>&rsquo; for hex, or &lsquo;<samp><var>radix</var><span class="samp">r</span></samp>&rsquo; to
 specify radix <var>radix</var>.  Case is not significant for the letter
@@ -91,16 +92,16 @@ use the &lsquo;<samp><span class="samp">...</span></samp>&rsquo; notation to mak
 
 <pre class="example">     1111...111111 (30 bits total)
 </pre>
-   <p class="noindent"><a name="index-two_0027s-complement-139"></a>&minus;1 is represented as 30 ones.  (This is called <dfn>two's
+   <p class="noindent"><a name="index-two_0027s-complement-140"></a>&minus;1 is represented as 30 ones.  (This is called <dfn>two's
 complement</dfn> notation.)
 
-   <p>The negative integer, &minus;5, is creating by subtracting 4 from
-&minus;1.  In binary, the decimal integer 4 is 100.  Consequently,
+   <p>Subtracting 4 from &minus;1 returns the negative integer &minus;5. 
+In binary, the decimal integer 4 is 100.  Consequently,
 &minus;5 looks like this:
 
 <pre class="example">     1111...111011 (30 bits total)
 </pre>
-   <p>In this implementation, the largest 30-bit binary integer value is
+   <p>In this implementation, the largest 30-bit binary integer is
 536,870,911 in decimal.  In binary, it looks like this:
 
 <pre class="example">     0111...111111 (30 bits total)
@@ -119,25 +120,33 @@ arguments to such functions may be either numbers or markers, we often
 give these arguments the name <var>number-or-marker</var>.  When the argument
 value is a marker, its position value is used and its buffer is ignored.
 
-   <p><a name="index-largest-Lisp-integer-number-140"></a><a name="index-maximum-Lisp-integer-number-141"></a>
+   <p><a name="index-largest-Lisp-integer-141"></a><a name="index-maximum-Lisp-integer-142"></a>
 
 <div class="defun">
-&mdash; Variable: <b>most-positive-fixnum</b><var><a name="index-most_002dpositive_002dfixnum-142"></a></var><br>
-<blockquote><p>The value of this variable is the largest integer that Emacs Lisp
-can handle. 
+&mdash; Variable: <b>most-positive-fixnum</b><var><a name="index-most_002dpositive_002dfixnum-143"></a></var><br>
+<blockquote><p>The value of this variable is the largest integer that Emacs Lisp can
+handle.  Typical values are
+2**29 &minus; 1
+on 32-bit and
+2**61 &minus; 1
+on 64-bit platforms. 
 </p></blockquote></div>
 
-   <p><a name="index-smallest-Lisp-integer-number-143"></a><a name="index-minimum-Lisp-integer-number-144"></a>
+   <p><a name="index-smallest-Lisp-integer-144"></a><a name="index-minimum-Lisp-integer-145"></a>
 
 <div class="defun">
-&mdash; Variable: <b>most-negative-fixnum</b><var><a name="index-most_002dnegative_002dfixnum-145"></a></var><br>
+&mdash; Variable: <b>most-negative-fixnum</b><var><a name="index-most_002dnegative_002dfixnum-146"></a></var><br>
 <blockquote><p>The value of this variable is the smallest integer that Emacs Lisp can
-handle.  It is negative. 
+handle.  It is negative.  Typical values are
+&minus;2**29
+on 32-bit and
+&minus;2**61
+on 64-bit platforms. 
 </p></blockquote></div>
 
    <p>In Emacs Lisp, text characters are represented by integers.  Any
-integer between zero and the value of <code>max-char</code>, inclusive, is
-considered to be valid as a character.  See <a href="String-Basics.html#String-Basics">String Basics</a>.
+integer between zero and the value of <code>(max-char)</code>, inclusive, is
+considered to be valid as a character.  See <a href="Character-Codes.html#Character-Codes">Character Codes</a>.
 
    </body></html>
 

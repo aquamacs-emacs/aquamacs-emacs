@@ -1,0 +1,2732 @@
+<html lang="en">
+<head>
+<title>Semantic Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="Semantic Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="top" href="#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents the Semantic library and utilities.
+
+Copyright (C) 1999-2005, 2007, 2009-2015 Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being "A GNU Manual," and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     "GNU Free Documentation License."
+
+     (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+     modify this GNU manual."
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<h1 class="settitle">Semantic Manual</h1>
+<div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Top" href="#Top">Semantic Manual</a>
+<li><a name="toc_Introduction" href="#Introduction">1 Introduction</a>
+<ul>
+<li><a href="#Semantic-Components">1.1 Semantic Components</a>
+</li></ul>
+<li><a name="toc_Using-Semantic" href="#Using-Semantic">2 Using Semantic</a>
+<ul>
+<li><a href="#Semantic-mode">2.1 Semantic mode</a>
+<ul>
+<li><a href="#Semantic-mode-user-commands">2.1.1 Semantic mode user commands</a>
+</li></ul>
+<li><a href="#SemanticDB">2.2 Semantic Database</a>
+<ul>
+<li><a href="#Semanticdb-Tag-Storage">2.2.1 Semanticdb Tag Storage</a>
+<li><a href="#Semanticdb-Search-Configuration">2.2.2 Semanticdb Search Configuration</a>
+<ul>
+<li><a href="#Search-Throttle">2.2.2.1 SemanticDB Search Throttle</a>
+<li><a href="#Semanticdb-Roots">2.2.2.2 SemanticDB project roots</a>
+<li><a href="#Include-paths">2.2.2.3 Include Paths</a>
+<li><a href="#Semanticdb-search-debugging-commands">2.2.2.4 Semanticdb search debugging commands</a>
+</li></ul>
+<li><a href="#Changing-Backends">2.2.3 Changing Backends</a>
+<li><a href="#Create-System-Databases">2.2.4 Create System Databases</a>
+</li></ul>
+<li><a href="#Idle-Scheduler">2.3 Idle Scheduler</a>
+<ul>
+<li><a href="#Reparsing-Options">2.3.1 Reparsing Options</a>
+<li><a href="#Idle-Working-Options">2.3.2 Idle Working Options</a>
+<li><a href="#Debugging-Idle-Time-Issues">2.3.3 Debugging Idle Time Issues</a>
+<li><a href="#Idle-Summary-Mode">2.3.4 Idle Summary Mode</a>
+<li><a href="#Idle-Completions-Mode">2.3.5 Idle Completions Mode</a>
+</li></ul>
+<li><a href="#Analyzer">2.4 Analyzer</a>
+<ul>
+<li><a href="#Smart-Completion">2.4.1 Smart Completion</a>
+<li><a href="#Smart-Summary">2.4.2 Smart Summary</a>
+<li><a href="#Smart-Jump">2.4.3 Smart Jump</a>
+<li><a href="#Analyzer-Debug">2.4.4 Debugging the Semantic Analyzer</a>
+<ul>
+<li><a href="#Analyzer-Debug">2.4.4.1 Step 1: Check the context</a>
+<li><a href="#Analyzer-Debug">2.4.4.2 Step 2 : Check your include path</a>
+<li><a href="#Analyzer-Debug">2.4.4.3 Step 3: Check the local scope</a>
+<li><a href="#Analyzer-Debug">2.4.4.4 Step 4: Check the typecache</a>
+<li><a href="#Analyzer-Debug">2.4.4.5 Step 5: Check the parser</a>
+</li></ul>
+</li></ul>
+<li><a href="#Speedbar">2.5 Speedbar</a>
+<li><a href="#SymRef">2.6 Symbol References</a>
+<li><a href="#MRU-Bookmarks">2.7 MRU Bookmarks mode</a>
+<li><a href="#Sticky-Func-Mode">2.8 Sticky Function mode</a>
+<li><a href="#Highlight-Func-Mode">2.9 Highlight Func Mode</a>
+<li><a href="#Tag-Decoration-Mode">2.10 Tag Decoration Mode</a>
+<ul>
+<li><a href="#Tag-Decoration-Mode">2.10.1 Creating New Decoration Modes</a>
+</li></ul>
+</li></ul>
+<li><a name="toc_Semantic-Internals" href="#Semantic-Internals">3 Semantic Internals</a>
+<ul>
+<li><a href="#Parser-code">3.1 Parser code</a>
+<li><a href="#Tag-handling">3.2 Tag handling</a>
+<li><a href="#Semanticdb-Internals">3.3 Semanticdb Internals</a>
+<li><a href="#Analyzer-Internals">3.4 Analyzer Internals</a>
+<li><a href="#Tools">3.5 Tools</a>
+<li><a href="#Tests">3.6 Tests</a>
+</li></ul>
+<li><a name="toc_Glossary" href="#Glossary">Appendix A Glossary</a>
+<li><a name="toc_GNU-Free-Documentation-License" href="#GNU-Free-Documentation-License">Appendix B GNU Free Documentation License</a>
+<li><a name="toc_Index" href="#Index">Index</a>
+</li></ul>
+</div>
+
+
+
+<div class="node">
+<a name="Top"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Introduction">Introduction</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#dir">(dir)</a>
+
+</div>
+
+<h2 class="unnumbered">Semantic Manual</h2>
+
+<p><i>Semantic</i> is a suite of Emacs libraries and utilities for parsing
+source code.  At its core is a lexical analyzer and two parser
+generators (<code>bovinator</code> and <code>wisent</code>) written in Emacs Lisp. 
+<i>Semantic</i> provides a variety of tools for making use of the parser
+output, including user commands for code navigation and completion, as
+well as enhancements for imenu, speedbar, whichfunc, eldoc,
+hippie-expand, and several other parts of Emacs.
+
+   <p>To send bug reports, or participate in discussions about semantic,
+use the mailing list cedet-semantic@sourceforge.net via the URL:
+<a href="http://lists.sourceforge.net/lists/listinfo/cedet-semantic">http://lists.sourceforge.net/lists/listinfo/cedet-semantic</a>
+
+   <p>This manual documents the Semantic library and utilities.
+
+   <p>Copyright &copy; 1999&ndash;2005, 2007, 2009&ndash;2015 Free Software
+Foundation, Inc.
+
+   <blockquote>
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with the Front-Cover Texts being &ldquo;A GNU Manual,&rdquo;
+and with the Back-Cover Texts as in (a) below.  A copy of the license
+is included in the section entitled &ldquo;GNU Free Documentation License.&rdquo;
+
+   <p>(a) The FSF's Back-Cover Text is: &ldquo;You have the freedom to copy and
+modify this GNU manual.&rdquo;
+</blockquote>
+
+<ul class="menu">
+<li><a accesskey="1" href="#Introduction">Introduction</a>
+<li><a accesskey="2" href="#Using-Semantic">Using Semantic</a>
+<li><a accesskey="3" href="#Semantic-Internals">Semantic Internals</a>
+<li><a accesskey="4" href="#Glossary">Glossary</a>
+<li><a accesskey="5" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>
+<li><a accesskey="6" href="#Index">Index</a>
+</ul>
+
+<div class="node">
+<a name="Introduction"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Using-Semantic">Using Semantic</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Top">Top</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">1 Introduction</h2>
+
+<p>This chapter gives an overview of <i>Semantic</i> and its goals.
+
+   <p>Ordinarily, Emacs uses regular expressions (and syntax tables) to
+analyze source code for purposes such as syntax highlighting.  This
+approach, though simple and efficient, has its limitations: roughly
+speaking, it only &ldquo;guesses&rdquo; the meaning of each piece of source code
+in the context of the programming language, instead of rigorously
+&ldquo;understanding&rdquo; it.
+
+   <p><i>Semantic</i> provides a new infrastructure to analyze source code using
+<dfn>parsers</dfn> instead of regular expressions.  It contains two
+built-in parser generators (an <acronym>LL</acronym> generator named
+<code>Bovine</code> and an <acronym>LALR</acronym> generator named <code>Wisent</code>,
+both written in Emacs Lisp), and parsers for several common
+programming languages.  It can also make use of <dfn>external
+parsers</dfn>&mdash;programs such as GNU Global and GNU IDUtils.
+
+   <p><i>Semantic</i> provides a uniform, language-independent <acronym>API</acronym> for
+accessing the parser output.  This output can be used by other Emacs
+Lisp programs to implement &ldquo;syntax-aware&rdquo; behavior.  <i>Semantic</i>
+itself includes several such utilities, including user-level Emacs
+commands for navigating, searching, and completing source code.
+
+   <p>The following diagram illustrates the structure of the <i>Semantic</i>
+package:
+
+     <dl>
+<dt><strong>Please Note:</strong><dd>The words in all-capital are those that <i>Semantic</i> itself provides. 
+Others are current or future languages or applications that are not
+distributed along with <i>Semantic</i>. 
+</dl>
+
+<pre class="example">                                                                  Applications
+                                                                      and
+                                                                   Utilities
+                                                                     -------
+                                                                    /       \
+                    +---------------+    +--------+    +--------+
+              C ---&gt;| C      PARSER |---&gt;|        |    |        |
+                    +---------------+    |        |    |        |
+                    +---------------+    | COMMON |    | COMMON |&lt;--- SPEEDBAR
+           Java ---&gt;| JAVA   PARSER |---&gt;| PARSE  |    |        |
+                    +---------------+    | TREE   |    | PARSE  |&lt;--- SEMANTICDB
+                    +---------------+    | FORMAT |    | API    |
+         Scheme ---&gt;| SCHEME PARSER |---&gt;|        |    |        |&lt;--- ecb
+                    +---------------+    |        |    |        |
+                    +---------------+    |        |    |        |
+        Texinfo ---&gt;| TEXI.  PARSER |---&gt;|        |    |        |
+                    +---------------+    |        |    |        |
+     
+                         ...                ...           ...         ...
+     
+                    +---------------+    |        |    |        |
+        Lang. Y ---&gt;| Y      Parser |---&gt;|        |    |        |&lt;--- app. ?
+                    +---------------+    |        |    |        |
+                    +---------------+    |        |    |        |&lt;--- app. ?
+        Lang. Z ---&gt;| Z      Parser |---&gt;|        |    |        |
+                    +---------------+    +--------+    +--------+
+</pre>
+   <ul class="menu">
+<li><a accesskey="1" href="#Semantic-Components">Semantic Components</a>
+</ul>
+
+<div class="node">
+<a name="Semantic-Components"></a>
+<p><hr>
+Up:&nbsp;<a rel="up" accesskey="u" href="#Introduction">Introduction</a>
+
+</div>
+
+<h3 class="section">1.1 Semantic Components</h3>
+
+<p>In this section, we provide a more detailed description of the major
+components of <i>Semantic</i>, and how they interact with one another.
+
+   <p>The first step in parsing a source code file is to break it up into
+its fundamental components.  This step is called lexical analysis:
+
+<pre class="example">             syntax table, keywords list, and options
+                              |
+                              |
+                              v
+         input file  ----&gt;  Lexer   ----&gt; token stream
+</pre>
+   <p class="noindent">The output of the lexical analyzer is a list of tokens that make up
+the file.  The next step is the actual parsing, shown below:
+
+<pre class="example">                         parser tables
+                              |
+                              v
+         token stream ---&gt;  Parser  ----&gt; parse tree
+</pre>
+   <p class="noindent">The end result, the parse tree, is <i>Semantic</i>'s internal
+representation of the language grammar.  <i>Semantic</i> provides an
+<acronym>API</acronym> for Emacs Lisp programs to access the parse tree.
+
+   <p>Parsing large files can take several seconds or more.  By default,
+<i>Semantic</i> automatically caches parse trees by saving them in your
+<samp><span class="file">.emacs.d</span></samp> directory.  When you revisit a previously-parsed file,
+the parse tree is automatically reloaded from this cache, to save
+time.  See <a href="#SemanticDB">SemanticDB</a>.
+
+<div class="node">
+<a name="Using-Semantic"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Semantic-Internals">Semantic Internals</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Introduction">Introduction</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">2 Using Semantic</h2>
+
+<!-- This is part of the Semantic manual. -->
+<!-- Copyright (C) 1999-2005, 2007, 2009-2015 Free Software Foundation, -->
+<!-- Inc. -->
+<!-- See file semantic.texi for copying conditions. -->
+<p>You can begin using <i>Semantic</i> by enabling Semantic mode, a global
+minor mode: type <kbd>M-x semantic-mode</kbd>, or open the &lsquo;<samp><span class="samp">Tools</span></samp>&rsquo;
+menu and click on the menu item named &lsquo;<samp><span class="samp">Source Code Parsers
+(Semantic)</span></samp>&rsquo;.  See <a href="#Semantic-mode">Semantic mode</a>.
+
+   <p>When Semantic mode is turned on, Emacs automatically parses each file
+you visit.  You can then use <i>Semantic</i> user commands in those
+buffers (see <a href="#Semantic-mode-user-commands">Semantic mode user commands</a>).  You can also choose to
+enable a number of &ldquo;helper&rdquo; minor modes for saving tags, displaying
+tag information, and so forth.
+
+   <p>To enable Semantic mode each time you start Emacs, add the line
+<code>(semantic-mode 1)</code> to your initialization file.  See <a href="emacs.html#Init-File">Init File</a>.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Semantic-mode">Semantic mode</a>:        Global minor mode for <i>Semantic</i>. 
+<li><a accesskey="2" href="#SemanticDB">SemanticDB</a>:           Caching parsed buffers between sessions. 
+<li><a accesskey="3" href="#Idle-Scheduler">Idle Scheduler</a>:       <i>Semantic</i> actions that occur when idle. 
+<li><a accesskey="4" href="#Analyzer">Analyzer</a>:             Semantic tools for analyzing code. 
+<li><a accesskey="5" href="#Speedbar">Speedbar</a>:             Using <i>Semantic</i> with the Speedbar. 
+<li><a accesskey="6" href="#SymRef">SymRef</a>:               Interface to symbol reference tools. 
+<li><a accesskey="7" href="#MRU-Bookmarks">MRU Bookmarks</a>:        Managing tag "bookmarks". 
+<li><a accesskey="8" href="#Sticky-Func-Mode">Sticky Func Mode</a>:     Showing declarations in the header line. 
+<li><a accesskey="9" href="#Highlight-Func-Mode">Highlight Func Mode</a>:  Highlight the current function declaration. 
+<li><a href="#Tag-Decoration-Mode">Tag Decoration Mode</a>:  Minor mode to decorate tags. 
+</ul>
+
+<div class="node">
+<a name="Semantic-mode"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#SemanticDB">SemanticDB</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Using-Semantic">Using Semantic</a>
+
+</div>
+
+<h3 class="section">2.1 Semantic mode</h3>
+
+<p><a name="index-Semantic-mode-1"></a>
+Semantic mode is a global minor mode for <i>Semantic</i> as a whole.  When
+enabled, each file you visit is automatically parsed, provided its
+major mode is specified in the variable
+<code>semantic-new-buffer-setup-functions</code> (the default value of this
+variable sets up parsing for all the parsers included with Emacs, but
+you may add to it if you install additional parsers).
+
+   <p>In each parser-enabled buffer, a number of <i>Semantic</i> commands are
+available for navigating, querying, and editing source code. 
+See <a href="#Semantic-mode-user-commands">Semantic mode user commands</a>.  Enabling Semantic mode also
+installs a &lsquo;<samp><span class="samp">Development</span></samp>&rsquo; menu on the menu-bar, with many of these
+commands.
+
+   <p>In addition, enabling Semantic mode turns on certain auxiliary global
+minor modes.  The variable <code>semantic-default-submodes</code> determines
+which auxiliary modes are enabled; the defaults are SemanticDB mode
+(see <a href="#SemanticDB">SemanticDB</a>) and Global Semantic Idle Scheduler mode
+(see <a href="#Idle-Scheduler">Idle Scheduler</a>).  You can also toggle the auxiliary minor
+modes separately, using their mode functions (e.g., <kbd>M-x
+semanticdb-minor-mode</kbd>), or via the &lsquo;<samp><span class="samp">Development</span></samp>&rsquo; menu.  The
+various auxiliary minor modes are described in the following sections.
+
+<div class="defun">
+&mdash; Variable: <b>semantic-new-buffer-setup-functions</b><var><a name="index-semantic_002dnew_002dbuffer_002dsetup_002dfunctions-2"></a></var><br>
+<blockquote><p>The value of this variable is an alist of functions to call for
+setting up <i>Semantic</i> parsing in the buffer.  Each element has the
+form <code>(</code><var>mode</var><code> . </code><var>fn</var><code>)</code>, where <var>mode</var> is a value of
+<code>major-mode</code> for the buffer and <var>fn</var> is the corresponding
+function for setting up the parser.  <var>fn</var> is called, with no
+arguments, after the major mode is initialized (and after the mode
+hooks have been run).
+
+        <p>The default value enables <i>Semantic</i> for all supported major modes
+(i.e., C, C++, Scheme, Javascript, Java, HTML, SRecode, and Make), but
+you can remove modes from this list if you don't want to use
+<i>Semantic</i> with them. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>semantic-default-submodes</b><var><a name="index-semantic_002ddefault_002dsubmodes-3"></a></var><br>
+<blockquote><p>The value of this variable is a list of symbols, specifying the
+auxiliary minor modes to enable when enabling Semantic mode.  The
+valid mode symbols are:
+
+          <ul>
+<li><code>global-semantic-idle-scheduler-mode</code> (see <a href="#Idle-Scheduler">Idle Scheduler</a>). 
+<li><code>global-semanticdb-minor-mode</code> (see <a href="#SemanticDB">SemanticDB</a>). 
+<li><code>global-semantic-idle-summary-mode</code> (see <a href="#Idle-Summary-Mode">Idle Summary Mode</a>). 
+<li><code>global-semantic-idle-completions-mode</code> (see <a href="#Idle-Completions-Mode">Idle Completions Mode</a>). 
+<li><code>global-semantic-highlight-func-mode</code> (see <a href="#Highlight-Func-Mode">Highlight Func Mode</a>). 
+<li><code>global-semantic-decoration-mode</code> (see <a href="#Tag-Decoration-Mode">Tag Decoration Mode</a>). 
+<li><code>global-semantic-stickyfunc-mode</code> (see <a href="#Sticky-Func-Mode">Sticky Func Mode</a>). 
+<li><code>global-semantic-mru-bookmark-mode</code> (see <a href="#MRU-Bookmarks">MRU Bookmarks</a>). 
+</ul>
+        </p></blockquote></div>
+
+<ul class="menu">
+<li><a accesskey="1" href="#Semantic-mode-user-commands">Semantic mode user commands</a>
+</ul>
+
+<div class="node">
+<a name="Semantic-mode-user-commands"></a>
+<p><hr>
+Up:&nbsp;<a rel="up" accesskey="u" href="#Semantic-mode">Semantic mode</a>
+
+</div>
+
+<h4 class="subsection">2.1.1 Semantic mode user commands</h4>
+
+<p>Semantic mode provides a number of commands for navigating, querying,
+and editing source code in a language-aware manner.  These commands
+generally act on <dfn>tags</dfn>, which are the source-code units deemed
+&ldquo;important&rdquo; by the present programming language (e.g., functions in
+the C programming language).
+
+   <p>These commands may be used in any buffer that has been parsed by
+<i>Semantic</i>.  Several of them prompt for a tag name using the
+minibuffer; here, the <kbd>TAB</kbd> key can be used to complete tag names. 
+Others act on the <dfn>current tag</dfn>, meaning the tag at (or around)
+point.
+
+     <dl>
+<dt><kbd>C-c , j</kbd><dd>Prompt for a tag defined in the current file, and move point to it
+(<code>semantic-complete-jump-local</code>).
+
+     <br><dt><kbd>C-c , J</kbd><dd>Prompt for a tag defined in any file that Emacs has parsed, and move
+point to it (<code>semantic-complete-jump</code>).
+
+     <br><dt><kbd>C-c , l</kbd><dd>Display a list of the possible completions of the current tag
+(<code>semantic-analyze-possible-completions</code>).
+
+     <br><dt><kbd>C-c , g</kbd><dd>Prompt for a tag, and display a list of tags that call it
+(<code>semantic-symref-symbol</code>).  This relies on the presence of an
+external symbol reference tool.  See <a href="#SymRef">SymRef</a>.
+
+     <br><dt><kbd>C-c , G</kbd><dd>Display a list of tags that call the current tag
+(<code>semantic-symref</code>).  This relies on the presence of an external
+symbol reference tool.  See <a href="#SymRef">SymRef</a>.
+
+     <br><dt><kbd>C-c , p</kbd><dd>Move point to the previous tag (<code>senator-previous-tag</code>).
+
+     <br><dt><kbd>C-c , n</kbd><dd>Move point to the next tag (<code>senator-next-tag</code>).
+
+     <br><dt><kbd>C-c , u</kbd><dd>Move point &ldquo;up&rdquo; one reference (<code>senator-go-to-up-reference</code>). 
+The meaning of &ldquo;up&rdquo; is language-dependent; in C++, for instance,
+this means moving to the parent of the current tag.
+
+     <br><dt><kbd>C-c, &lt;SPC&gt;</kbd><dd>Display a list of possible completions for the symbol at point
+(<code>semantic-complete-analyze-inline</code>).  This also activates a
+special set of keybindings for choosing a completion: &lt;RET&gt;
+accepts the current completion, <kbd>M-n</kbd> and <kbd>M-p</kbd> cycle through
+possible completions, &lt;TAB&gt; completes as far as possible and then
+cycles, and <kbd>C-g</kbd> or any other key aborts the completion. 
+See <a href="#Smart-Completion">Smart Completion</a>.
+
+     <br><dt><kbd>C-c , C-w</kbd><dd>Kill the current tag (<code>senator-kill-tag</code>).  This removes the text
+for that tag, placing it in the kill ring.  You can retrieve the text
+with <kbd>C-y</kbd>.  This also places the tag in the <dfn>tag ring</dfn>, so
+that you can yank it with <kbd>\C-c,\C-y</kbd>, below.
+
+     <br><dt><kbd>C-c , M-w</kbd><dd>Copy the current tag into the kill ring as well as the tag ring
+(<code>senator-copy-tag</code>).
+
+     <br><dt><kbd>C-c , C-y</kbd><dd>Yank a tag from the tag ring (<code>senator-yank-tag</code>).
+
+     <br><dt><kbd>C-c , r</kbd><dd>Copy the current tag into a register
+(<code>senator-copy-tag-to-register</code>).  With an optional argument,
+kill it as well.  This allows you to insert or jump to that tag with
+the usual register commands.  See <a href="emacs.html#Registers">Registers</a>.
+
+     <br><dt><kbd>C-c , up</kbd><dd>Transpose the current tag with the previous one
+(<code>senator-transpose-tags-up</code>).
+
+     <br><dt><kbd>C-c , down</kbd><dd>Transpose the current tag with the next one
+(<code>senator-transpose-tags-down</code>). 
+</dl>
+
+<div class="node">
+<a name="SemanticDB"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Idle-Scheduler">Idle Scheduler</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Semantic-mode">Semantic mode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Using-Semantic">Using Semantic</a>
+
+</div>
+
+<h3 class="section">2.2 Semantic Database</h3>
+
+<p><a name="index-SemanticDB-4"></a>
+The Semantic Database (SemanticDB) caches the results of parsing
+source code files.  This data can be saved to disk when you exit
+Emacs, and reloaded automatically when you subsequently revisit the
+same source code files.  This saves time by eliminating the need to
+re-parse unmodified files.
+
+   <p>SemanticDB also provides an <acronym>API</acronym> that programs can use to
+acquire information about source code tags.  This information can be
+accessed without loading the original the source files into memory. 
+It can also be used to create alternate &ldquo;back-ends&rdquo; for storing tag
+information in alternative on-disk formats.
+
+   <p>By default, SemanticDB is enabled together with Semantic mode.  To
+disable it, remove it from <code>semantic-default-submodes</code>
+(see <a href="#Semantic-mode">Semantic mode</a>).  You can also enable or disable SemanticDB
+with <kbd>M-x global-semanticdb-minor-mode</kbd>.
+
+<div class="defun">
+&mdash; Command: <b>global-semanticdb-minor-mode</b><var><a name="index-global_002dsemanticdb_002dminor_002dmode-5"></a></var><br>
+<blockquote><p>Toggle SemanticDB mode.  When enabled, any source code parsed by
+<i>Semantic</i> is cached in a database. 
+</p></blockquote></div>
+
+   <p>SemanticDB offers a large number of customizable options, which are
+described in the following subsections.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Semanticdb-Tag-Storage">Semanticdb Tag Storage</a>
+<li><a accesskey="2" href="#Semanticdb-Search-Configuration">Semanticdb Search Configuration</a>
+<li><a accesskey="3" href="#Changing-Backends">Changing Backends</a>
+<li><a accesskey="4" href="#Create-System-Databases">Create System Databases</a>
+</ul>
+
+<div class="node">
+<a name="Semanticdb-Tag-Storage"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Semanticdb-Search-Configuration">Semanticdb Search Configuration</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#SemanticDB">SemanticDB</a>
+
+</div>
+
+<h4 class="subsection">2.2.1 Semanticdb Tag Storage</h4>
+
+<p>Each time you exit Emacs, any data cached by SemanticDB is saved in
+the directory <samp><span class="file">.emacs.d/semanticdb/</span></samp>, located in your home
+directory.  Within this directory, the cache data is written into a
+set of files according to a SemanticDB-specific filename convention. 
+If the SemanticDB directory does not exist, Emacs first asks if you
+want to create it.
+
+   <p>You can change the name of the SemanticDB directory by customizing the
+variable <code>semanticdb-default-save-directory</code>.
+
+<div class="defun">
+&mdash; Option: <b>semanticdb-default-save-directory</b><var><a name="index-semanticdb_002ddefault_002dsave_002ddirectory-6"></a></var><br>
+<blockquote><p>The name of the directory where SemanticDB cache files are saved.  If
+the value is <code>nil</code>, SemanticDB saves its data into a single file,
+in the current directory, whose filename is given by
+<code>semanticdb-default-file-name</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Option: <b>semanticdb-default-file-name</b><var><a name="index-semanticdb_002ddefault_002dfile_002dname-7"></a></var><br>
+<blockquote><p>The name of a cache file in which to save SemanticDB, when
+<code>semanticdb-default-save-directory</code> is <code>nil</code>. 
+</p></blockquote></div>
+
+   <p>You can force SemanticDB to save the data from only certain files, or
+suppress saving altogether, by customizing
+<code>semanticdb-persistent-path</code>:
+
+<div class="defun">
+&mdash; Option: <b>semanticdb-persistent-path</b><var><a name="index-semanticdb_002dpersistent_002dpath-8"></a></var><br>
+<blockquote><p>List of valid paths for SemanticDB to cache.  Each element should be a
+directory name (a string); then the parse data from any file in that
+directory is saved.
+
+        <p>As a special exception, the value of this variable can be a list
+containing a single symbol: <code>never</code>, <code>always</code>, or
+<code>project</code>.  The symbol <code>never</code> disables saving anywhere;
+<code>always</code> enables saving everywhere; and <code>project</code> enables
+saving directory based on the variable
+<code>semanticdb-project-predicate-functions</code>.
+
+        <p>The default value is <code>(always)</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>semanticdb-project-predicate-functions</b><var><a name="index-semanticdb_002dproject_002dpredicate_002dfunctions-9"></a></var><br>
+<blockquote><p>The value of this variable is a list of predicates for indicating that
+a directory belongs to a project.  This list is used when the value of
+<code>semanticdb-persistent-path</code> is <code>(project)</code>.  If the list is
+empty, all paths are considered valid.
+
+        <p>Project management packages, such as EDE (see <a href="ede.html#Top">Top</a>), may add their own predicates with <dfn>add-hook</dfn> to this
+variable.  This allows SemanticDB to save tag caches in directories
+controlled by them. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Option: <b>semanticdb-save-database-functions</b><var><a name="index-semanticdb_002dsave_002ddatabase_002dfunctions-10"></a></var><br>
+<blockquote><p>Abnormal hook run after a database is saved.  Each function is called
+with one argument, the object representing the database recently
+written. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Semanticdb-Search-Configuration"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Changing-Backends">Changing Backends</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Semanticdb-Tag-Storage">Semanticdb Tag Storage</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#SemanticDB">SemanticDB</a>
+
+</div>
+
+<h4 class="subsection">2.2.2 Semanticdb Search Configuration</h4>
+
+<p>When another part of <i>Semantic</i> (or another Emacs package using
+<i>Semantic</i>) queries the SemanticDB library for a source code tag, the
+search need not be limited to tags defined within the current file. 
+It can include tags defined elsewhere, such as <dfn>header files</dfn>
+referenced by the current file (e.g., via the C/C++ <code>#include</code>
+directive).  While performing the search, the SemanticDB library may
+even automatically visit other files and parse them, if necessary.
+
+   <p>The variable <code>semanticdb-find-default-throttle</code> determines how
+aggressively SemanticDB searches for source code tags.  See <a href="#Search-Throttle">Search Throttle</a>.
+
+   <p>The details of SemanticDB searches can vary from language to
+language.  In C/C++ code, for example, SemanticDB distinguishes
+between <dfn>project header files</dfn> and <dfn>system header files</dfn>,
+based on whether the <code>#include</code> directive uses the <code>""</code> or
+<code>&lt;&gt;</code> filename delimiter.  SemanticDB looks for system header in
+the <dfn>system include path</dfn> (see <a href="#Include-paths">Include paths</a>).
+
+<ul class="menu">
+<li><a accesskey="1" href="#Search-Throttle">Search Throttle</a>:      Controlling how semanticdb searches occur. 
+<li><a accesskey="2" href="#Semanticdb-Roots">Semanticdb Roots</a>:     Specifying the root of different projects. 
+<li><a accesskey="3" href="#Include-paths">Include paths</a>:        Specifying the directories to search. 
+<li><a accesskey="4" href="#Semanticdb-search-debugging-commands">Semanticdb search debugging commands</a>
+</ul>
+
+<div class="node">
+<a name="Search-Throttle"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Semanticdb-Roots">Semanticdb Roots</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Semanticdb-Search-Configuration">Semanticdb Search Configuration</a>
+
+</div>
+
+<h5 class="subsubsection">2.2.2.1 SemanticDB Search Throttle</h5>
+
+<p>The SemanticDB <dfn>search throttle</dfn> determines how aggressive
+SemanticDB searches are.  It is controlled by the variable
+<code>semanticdb-find-default-throttle</code>.  The default value of this
+variable aims for maximum accuracy, at the expense of search time.
+
+   <p>Other parts of the <i>Semantic</i> package, particularly the different
+language parsers, may change the value of
+<code>semanticdb-find-default-throttle</code>.  You can override its value,
+for a given major mode, like this:
+
+<pre class="example">     (setq-mode-local c-mode
+                      semanticdb-find-default-throttle
+                      '(project unloaded system recursive))
+</pre>
+   <div class="defun">
+&mdash; Variable: <b>semanticdb-find-default-throttle</b><var><a name="index-semanticdb_002dfind_002ddefault_002dthrottle-11"></a></var><br>
+<blockquote><p>The default throttle for <code>semanticdb-find</code> routines. 
+The throttle controls how detailed the list of database
+tables is for a symbol lookup.  The value is a list with
+the following keys:
+
+          <dl>
+<dt><code>file</code><dd>The file the search is being performed from.  This option is here for
+completeness only, and is assumed to always be on. 
+<br><dt><code>local</code><dd>Tables from the same local directory are included.  This includes
+files directly referenced by a file name which might be in a different
+directory. 
+<br><dt><code>project</code><dd>Tables from the same local project are included If <code>project</code> is
+specified, then <code>local</code> is assumed. 
+<br><dt><code>unloaded</code><dd>If a table is not in memory, load it.  If it is not cached on disk
+either, get the source, parse it, and create the table. 
+<br><dt><code>system</code><dd>Tables from system databases.  These are specifically tables
+from system header files, or language equivalent. 
+<br><dt><code>recursive</code><dd>For include based searches, includes tables referenced by included
+files. 
+<br><dt><code>omniscience</code><dd>Included system databases which are omniscience, or somehow know
+everything.  Omniscience databases are found in
+<code>semanticdb-project-system-databases</code>.  The Emacs Lisp system
+<var>db</var> is an omniscience database. 
+</dl>
+        </p></blockquote></div>
+
+<div class="node">
+<a name="Semanticdb-Roots"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Include-paths">Include paths</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Search-Throttle">Search Throttle</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Semanticdb-Search-Configuration">Semanticdb Search Configuration</a>
+
+</div>
+
+<h5 class="subsubsection">2.2.2.2 SemanticDB project roots</h5>
+
+<p>The <code>project</code> setting in the SemanticDB search throttle
+(see <a href="#Search-Throttle">Search Throttle</a>) tells SemanticDB to search within the
+current single code project.  For <i>Semantic</i>'s point of view,
+<dfn>projects</dfn> are determined by their top-level directories, or
+<dfn>project roots</dfn>; every subdirectory of a project root is
+considered part of the same project.
+
+   <p>If you use EDE for project management, it will set the project roots
+automatically.  See <a href="ede.html#Top">Top</a>.  You can also specify
+them yourself.
+
+<div class="defun">
+&mdash; Option: <b>semanticdb-project-roots</b><var><a name="index-semanticdb_002dproject_002droots-12"></a></var><br>
+<blockquote><p>The value of this variable is a list of directories (strings) that are
+project roots.  All subdirectories of a project root are considered
+part of the same project.  This variable can be overridden by
+<code>semanticdb-project-root-functions</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>semanticdb-project-root-functions</b><var><a name="index-semanticdb_002dproject_002droot_002dfunctions-13"></a></var><br>
+<blockquote><p>The value of this variable is a list of functions to determine a given
+directory's project root.  These functions are called, one at a time,
+with one argument (the directory name), and must return either
+<code>nil</code>, a string (the project root), or a list of strings
+(multiple project roots, for complex systems).  The first
+non-<code>nil</code> return value, if any, is taken to be the project root,
+overriding <code>semanticdb-project-roots</code>. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Include-paths"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Semanticdb-search-debugging-commands">Semanticdb search debugging commands</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Semanticdb-Roots">Semanticdb Roots</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Semanticdb-Search-Configuration">Semanticdb Search Configuration</a>
+
+</div>
+
+<h5 class="subsubsection">2.2.2.3 Include Paths</h5>
+
+<p>System include paths are standard locations to find source code tags,
+such as the <dfn>header files</dfn> in <samp><span class="file">/usr/include</span></samp> and its
+subdirectories on Unix-like operating systems.
+
+   <p>You can add and remove system include paths using the following
+commands:
+
+<div class="defun">
+&mdash; Command: <b>semantic-add-system-include</b><var> dir &amp;optional mode<a name="index-semantic_002dadd_002dsystem_002dinclude-14"></a></var><br>
+<blockquote><p>Prompts for a directory, <var>dir</var>, and add it as a system include
+path for the current major mode.  When called non-interactively, the
+major mode can be specified with the <var>mode</var> argument. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>semantic-remove-system-include</b><var> dir &amp;optional mode<a name="index-semantic_002dremove_002dsystem_002dinclude-15"></a></var><br>
+<blockquote><p>Prompt for a directory, <var>dir</var>, and remove it from the system
+include path for the current major mode (or <var>mode</var>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>semantic-customize-system-include-path</b><var> &amp;optional mode<a name="index-semantic_002dcustomize_002dsystem_002dinclude_002dpath-16"></a></var><br>
+<blockquote><p>Customize the system include path for the current major mode (or
+<var>mode</var>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>semanticdb-implied-include-tags</b><var><a name="index-semanticdb_002dimplied_002dinclude_002dtags-17"></a></var><br>
+<blockquote><p>Include tags implied for all files of a given mode.  You can set this
+variable with <code>defvar-mode-local</code> for a particular mode so that
+any symbols that exist for all files for that mode are included. 
+</p></blockquote></div>
+
+<!-- @xref{Search Optimization}, for more information on include paths. -->
+<div class="node">
+<a name="Semanticdb-search-debugging-commands"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Include-paths">Include paths</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Semanticdb-Search-Configuration">Semanticdb Search Configuration</a>
+
+</div>
+
+<h5 class="subsubsection">2.2.2.4 Semanticdb search debugging commands</h5>
+
+<p>You can use <kbd>M-x semanticdb-dump-all-table-summary</kbd> to see the
+list of databases that will be searched from a given buffer.  You can
+follow up with <kbd>M-x semanticdb-find-test-translate-path</kbd> to then
+make sure specific tables from the path are discovered correctly. 
+Alternately, you can get a list of include files <i>Semantic</i>
+encountered, but could not find on disk using <kbd>M-x
+semanticdb-find-adebug-lost-includes</kbd>.
+
+<div class="defun">
+&mdash; Command: <b>semanticdb-dump-all-table-summary</b><var><a name="index-semanticdb_002ddump_002dall_002dtable_002dsummary-18"></a></var><br>
+<blockquote><p>Dump a list of all databases in Emacs memory. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>semanticdb-find-test-translate-path</b><var> &amp;optional arg<a name="index-semanticdb_002dfind_002dtest_002dtranslate_002dpath-19"></a></var><br>
+<blockquote><p>Call and output results of <dfn>semanticdb-find-translate-path</dfn>.  In
+the displayed buffer, you can type &lt;SPC&gt; to expand items.  With
+<var>arg</var> non-<code>nil</code>, specify a <var>brutish</var> translation. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>semanticdb-find-adebug-lost-includes</b><var><a name="index-semanticdb_002dfind_002dadebug_002dlost_002dincludes-20"></a></var><br>
+<blockquote><p>Translate the current path, then display the lost includes. 
+Examines the variable <code>semanticdb-find-lost-includes</code>. 
+</p></blockquote></div>
+
+   <p>Lastly, you can test an explicit search term using this command:
+
+<div class="defun">
+&mdash; Command: <b>semantic-adebug-searchdb</b><var> regex<a name="index-semantic_002dadebug_002dsearchdb-21"></a></var><br>
+<blockquote><p>Search the semanticdb for <var>regex</var> for the current buffer. 
+Display the results as a debug list. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Changing-Backends"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Create-System-Databases">Create System Databases</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Semanticdb-Search-Configuration">Semanticdb Search Configuration</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#SemanticDB">SemanticDB</a>
+
+</div>
+
+<h4 class="subsection">2.2.3 Changing Backends</h4>
+
+<p>If you want to use some other form of backend, you can use this
+variable to choose which back end class to use for your general tag
+storage.
+
+   <p>The default is to save databases in flat files.  Alternatively, you
+could write a new database backend that stores tags into a database,
+or other storage system.
+
+<div class="defun">
+&mdash; Variable: <b>semanticdb-new-database-class</b><var><a name="index-semanticdb_002dnew_002ddatabase_002dclass-22"></a></var><br>
+<blockquote><p>The default type of database created for new files.  This can be
+changed on a per file basis, so that some directories are saved using
+one mechanism, and some directories via a different mechanism. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Create-System-Databases"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Changing-Backends">Changing Backends</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#SemanticDB">SemanticDB</a>
+
+</div>
+
+<h4 class="subsection">2.2.4 Create System Databases</h4>
+
+<p>If your supported language stores the system libraries in readily
+available parsable source code, you can pre-generate database files
+for them once, which will be used over and over for tools such as
+summary-mode, or the analyzer.
+
+<div class="defun">
+&mdash; Command: <b>semanticdb-create-ebrowse-database</b><var> dir<a name="index-semanticdb_002dcreate_002debrowse_002ddatabase-23"></a></var><br>
+<blockquote><p>Create an Ebrowse database for directory <var>dir</var>.  The database file
+is stored in ~/.semanticdb, or whichever directory is specified by
+<code>semanticdb-default-system-save-directory</code>. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Idle-Scheduler"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Analyzer">Analyzer</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#SemanticDB">SemanticDB</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Using-Semantic">Using Semantic</a>
+
+</div>
+
+<h3 class="section">2.3 Idle Scheduler</h3>
+
+<p><a name="index-Idle-Scheduler-24"></a>
+The <dfn>Semantic Idle Scheduler</dfn> is a part of <i>Semantic</i> that
+performs various operations while Emacs is waiting for user input
+(idle time).  Its primary job is to perform buffer parsing during idle
+time.  You can also use the Idle Scheduler to display function
+prototypes (see <a href="#Idle-Summary-Mode">Idle Summary Mode</a>) or symbol completions
+(see <a href="#Idle-Completions-Mode">Idle Completions Mode</a>).
+
+<div class="defun">
+&mdash; Command: <b>global-semantic-idle-scheduler-mode</b><var> &amp;optional arg<a name="index-global_002dsemantic_002didle_002dscheduler_002dmode-25"></a></var><br>
+<blockquote><p>This command toggles Semantic Idle Scheduler mode in every
+<i>Semantic</i>-enabled buffer.  This minor mode ensures that the buffer
+is automatically reparsed whenever Emacs is idle.  If there is
+additional idle time, it runs jobs scheduled by other parts of
+<i>Semantic</i>, such as Semantic Idle Summary mode (see <a href="#Idle-Summary-Mode">Idle Summary Mode</a>) and Semantic Idle Completions mode (see <a href="#Idle-Completions-Mode">Idle Completions Mode</a>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Option: <b>semantic-idle-scheduler-idle-time</b><var><a name="index-semantic_002didle_002dscheduler_002didle_002dtime-26"></a></var><br>
+<blockquote><p>The value of this variable is the amount of idle time, in seconds,
+before the Semantic idle scheduler activates.  The default is 1. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Option: <b>semantic-idle-scheduler-verbose-flag</b><var><a name="index-semantic_002didle_002dscheduler_002dverbose_002dflag-27"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code>, the idle scheduler prints verbose
+messages while running, which are useful for debugging. 
+</p></blockquote></div>
+
+<ul class="menu">
+<li><a accesskey="1" href="#Reparsing-Options">Reparsing Options</a>:           Reparsing the current buffer in idle time. 
+<li><a accesskey="2" href="#Idle-Working-Options">Idle Working Options</a>:        Options for extra work done at idle time. 
+<li><a accesskey="3" href="#Debugging-Idle-Time-Issues">Debugging Idle Time Issues</a>:  How to produce good bug reports. 
+<li><a accesskey="4" href="#Idle-Summary-Mode">Idle Summary Mode</a>:           Display prototype of symbol under cursor. 
+<li><a accesskey="5" href="#Idle-Completions-Mode">Idle Completions Mode</a>:       Smart completion pop-up help. 
+</ul>
+
+<div class="node">
+<a name="Reparsing-Options"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Idle-Working-Options">Idle Working Options</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Idle-Scheduler">Idle Scheduler</a>
+
+</div>
+
+<h4 class="subsection">2.3.1 Reparsing Options</h4>
+
+<p>When activated during idle time, the Semantic idle scheduler
+automatically reparses all buffers that need it.  Any arriving user
+input cancels this, returning Emacs to its normal editing behavior.
+
+<div class="defun">
+&mdash; Option: <b>semantic-idle-scheduler-max-buffer-size</b><var><a name="index-semantic_002didle_002dscheduler_002dmax_002dbuffer_002dsize-28"></a></var><br>
+<blockquote><p>Maximum size in bytes of buffers automatically reparsed.  If this
+value is less than or equal to <var>0</var>, buffers are automatically
+reparsed regardless of their size. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Option: <b>semantic-idle-scheduler-no-working-message</b><var><a name="index-semantic_002didle_002dscheduler_002dno_002dworking_002dmessage-29"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, disable display of working messages while reparsing. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Option: <b>semantic-idle-scheduler-working-in-modeline-flag</b><var><a name="index-semantic_002didle_002dscheduler_002dworking_002din_002dmodeline_002dflag-30"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, show working messages in the mode line.  Normally,
+re-parsing shows messages in the minibuffer; this moves the parse
+message to the modeline instead. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>semantic-before-idle-scheduler-reparse-hook</b><var><a name="index-semantic_002dbefore_002didle_002dscheduler_002dreparse_002dhook-31"></a></var><br>
+<blockquote><p>This normal hook is run just before the idle scheduler begins
+reparsing.  If any hook function throws an error, the value of this
+variable is reset to <code>nil</code>.  This hook is not protected from
+lexical errors. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>semantic-after-idle-scheduler-reparse-hook</b><var><a name="index-semantic_002dafter_002didle_002dscheduler_002dreparse_002dhook-32"></a></var><br>
+<blockquote>
+        <p>This normal hook is run after the idle scheduler finishes reparsing. 
+If any hook throws an error, this variable is reset to <code>nil</code>. 
+This hook is not protected from lexical errors. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Idle-Working-Options"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Debugging-Idle-Time-Issues">Debugging Idle Time Issues</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Reparsing-Options">Reparsing Options</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Idle-Scheduler">Idle Scheduler</a>
+
+</div>
+
+<h4 class="subsection">2.3.2 Idle Working Options</h4>
+
+<p>In addition to reparsing buffers, the Semantic idle scheduler performs
+additional operations, including the following:
+
+     <ul>
+<li>Creating the include path caches required for symbol lookup. 
+<li>Create data type caches. 
+<li>Saving SemanticDB caches to disk. 
+<li>Speculatively parsing the files in the same directory as the current
+buffer. 
+</ul>
+
+   <p>Because this extra work is quite time-consuming, it is only carried
+out after a longer idle delay.  The following features control how the
+idle work is performed.
+
+<div class="defun">
+&mdash; Option: <b>semantic-idle-scheduler-work-idle-time</b><var><a name="index-semantic_002didle_002dscheduler_002dwork_002didle_002dtime-33"></a></var><br>
+<blockquote><p>The value of this variable is the amount of idle time, in seconds,
+before commencing idle work.  The default is 60. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Option: <b>semantic-idle-work-parse-neighboring-files-flag</b><var><a name="index-semantic_002didle_002dwork_002dparse_002dneighboring_002dfiles_002dflag-34"></a></var><br>
+<blockquote><p>If the value of this variable is non-<code>nil</code>, the Semantic idle
+scheduler uses idle work time to parse files in the same directory as
+the current buffer.  This improves the accuracy of tag searches and
+saves time when visiting those files later, at the cost of doing a lot
+of parsing.  The default is <code>t</code>. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Debugging-Idle-Time-Issues"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Idle-Summary-Mode">Idle Summary Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Idle-Working-Options">Idle Working Options</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Idle-Scheduler">Idle Scheduler</a>
+
+</div>
+
+<h4 class="subsection">2.3.3 Debugging Idle Time Issues</h4>
+
+<p>If you see an error signaled during idle time, it could be an
+indication of a more serious issue elsewhere.  It is not enough to
+enable <code>debug-on-error</code>, because the idle scheduler inhibits the
+debugger.  Instead, use the following commands to debug the error:
+
+<div class="defun">
+&mdash; Command: <b>semantic-debug-idle-function</b><var><a name="index-semantic_002ddebug_002didle_002dfunction-35"></a></var><br>
+<blockquote><p>Run the Semantic idle function with debugging turned on. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>semantic-debug-idle-work-function</b><var><a name="index-semantic_002ddebug_002didle_002dwork_002dfunction-36"></a></var><br>
+<blockquote><p>Run the Semantic idle work function with debugging turned on. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Idle-Summary-Mode"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Idle-Completions-Mode">Idle Completions Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Debugging-Idle-Time-Issues">Debugging Idle Time Issues</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Idle-Scheduler">Idle Scheduler</a>
+
+</div>
+
+<h4 class="subsection">2.3.4 Idle Summary Mode</h4>
+
+<p>Semantic Idle Summary mode is a minor mode that displays a short
+summary of the symbol at point, such as its function prototype, in the
+echo area.  Its functionality is similar to what ElDoc mode provides
+for Emacs Lisp (see <a href="emacs.html#Lisp-Doc">Lisp Doc</a>).
+
+<div class="defun">
+&mdash; global-semantic-idle-summary-mode: <b>&amp;optional</b><var> arg<a name="index-g_t_0026optional-37"></a></var><br>
+<blockquote><p>This command toggles Semantic Idle Summary mode in all
+<i>Semantic</i>-enabled buffers.  You can also toggle it via the
+&lsquo;<samp><span class="samp">Show Tag Summaries</span></samp>&rsquo; menu item in the &lsquo;<samp><span class="samp">Development</span></samp>&rsquo; menu. 
+</p></blockquote></div>
+
+   <p>When Semantic Idle Summary mode is active, a summary of the tag at
+point is displayed in the echo area.  This display takes place during
+the idle time, as given by <code>semantic-idle-scheduler-idle-time</code>
+(see <a href="#Idle-Scheduler">Idle Scheduler</a>).
+
+   <p>You can override the method for getting the current tag to display by
+setting <code>idle-summary-current-symbol-info</code>.
+
+<div class="defun">
+&mdash; Option: <b>semantic-idle-summary-function</b><var><a name="index-semantic_002didle_002dsummary_002dfunction-38"></a></var><br>
+<blockquote><p>The value of this variable should be a function to call to display tag
+information during idle time.  See the variable
+<code>semantic-format-tag-functions</code> for a list of useful functions. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>semantic-idle-summary-out-of-context-faces</b><var><a name="index-semantic_002didle_002dsummary_002dout_002dof_002dcontext_002dfaces-39"></a></var><br>
+<blockquote><p>The value of this variable is a list of font-lock faces indicating
+useless summary contexts.  These are generally faces used to highlight
+comments or strings.  Semantic Idle Summary mode does not display its
+usual summary if the text at point has one of these faces. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Idle-Completions-Mode"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Idle-Summary-Mode">Idle Summary Mode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Idle-Scheduler">Idle Scheduler</a>
+
+</div>
+
+<h4 class="subsection">2.3.5 Idle Completions Mode</h4>
+
+<p>Semantic Idle Completions mode is a minor mode for performing
+<dfn>code completions</dfn> during idle time.  The completions are
+displayed inline, with keybindings that allow you to cycle through
+different alternatives.
+
+   <p>Semantic Idle Completions mode performs completion based on the
+Semantic Analyzer (see <a href="#Analyzer">Analyzer</a>).
+
+<div class="defun">
+&mdash; global-semantic-idle-completions-mode: <b>&amp;optional</b><var> arg<a name="index-g_t_0026optional-40"></a></var><br>
+<blockquote><p>This command toggles Semantic Idle Completions mode in every
+<i>Semantic</i>-enabled buffer.  You can also toggle it via the &lsquo;<samp><span class="samp">Show
+Tag Completions</span></samp>&rsquo; menu item in the &lsquo;<samp><span class="samp">Development</span></samp>&rsquo; menu. 
+</p></blockquote></div>
+
+   <p>If the tag at point has at least one completion, Semantic Idle
+Completions mode displays that completion inline&mdash;i.e., as part of
+the buffer text (you can change the display method by customizing
+<code>semantic-complete-inline-analyzer-idle-displayor-class</code>, as
+described below).  The completed part is highlighted, to indicate that
+it is not yet properly inserted into the buffer.  The echo area shows
+the completion, and whether there are other possible completions, like
+this:
+
+<pre class="example">     besselj [1 of 6 matches]
+</pre>
+   <p class="noindent">While the completion is being displayed, the following keybindings
+take effect:
+
+     <dl>
+<dt><kbd>&lt;RET&gt;</kbd><dt><kbd>C-m</kbd><dd>Accept the current completion (<code>semantic-complete-inline-done</code>),
+placing it in the buffer and moving point to the end of the completed
+tag. 
+<br><dt><kbd>M-n</kbd><dd>Select the next possible completion
+(<code>semantic-complete-inline-down</code>).  The new completion is shown
+inline, replacing the old completion. 
+<br><dt><kbd>M-p</kbd><dd>Select the previous possible completion
+(<code>semantic-complete-inline-up</code>). 
+<br><dt><kbd>&lt;TAB&gt;</kbd><br><dt><kbd>C-i</kbd><dd>Accept as much of the completion as possible.  If no additional
+completion can be accepted without ambiguity, select the next possible
+completion (<code>semantic-complete-inline-TAB</code>). 
+<br><dt><kbd>C-g</kbd><dd>Quit without completing (<code>semantic-complete-inline-quit</code>). 
+</dl>
+
+<p class="noindent">You can also exit inline completion by issuing any other Emacs
+command.  The completion text then disappears from the buffer.
+
+<div class="defun">
+&mdash; Command: <b>semantic-complete-analyze-inline-idle</b><var><a name="index-semantic_002dcomplete_002danalyze_002dinline_002didle-41"></a></var><br>
+<blockquote><p>This is the command for performing inline code completion.  It is
+called by Semantic Idle Completions mode during idle time, but you can
+also call it yourself.  It returns immediately, leaving the buffer in
+a state for inline completion. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Option: <b>semantic-complete-inline-analyzer-idle-displayor-class</b><var><a name="index-semantic_002dcomplete_002dinline_002danalyzer_002didle_002ddisplayor_002dclass-42"></a></var><br>
+<blockquote><p>The value of this variable determines how
+<code>semantic-complete-analyze-inline-idle</code> shows its completions. 
+Possible values include:
+
+          <dl>
+<dt><code>semantic-displayor-ghost</code><dd>Display completions &ldquo;inline&rdquo; with the buffer text, as described
+above.  This is the default value.
+
+          <br><dt><code>semantic-displayor-tooltip</code><dd>Display completions in a tooltip.
+
+          <br><dt><code>semantic-displayor-traditional</code><dd>Display completions in a separate window. 
+</dl>
+        </p></blockquote></div>
+
+<div class="node">
+<a name="Analyzer"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Speedbar">Speedbar</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Idle-Scheduler">Idle Scheduler</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Using-Semantic">Using Semantic</a>
+
+</div>
+
+<h3 class="section">2.4 Analyzer</h3>
+
+<p><a name="index-Analyzer-43"></a>
+The Semantic Analyzer is a library for performing context analysis on
+source code.  It provides user commands for displaying, completing,
+and navigating through source code.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Smart-Completion">Smart Completion</a>:        Performing code completion. 
+<li><a accesskey="2" href="#Smart-Summary">Smart Summary</a>:           Displaying help on a symbol. 
+<li><a accesskey="3" href="#Smart-Jump">Smart Jump</a>:              Jumping to the definition of a tag. 
+<li><a accesskey="4" href="#Analyzer-Debug">Analyzer Debug</a>:          Debugging problems with the analyzer. 
+</ul>
+
+<div class="node">
+<a name="Smart-Completion"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Smart-Summary">Smart Summary</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Analyzer">Analyzer</a>
+
+</div>
+
+<h4 class="subsection">2.4.1 Smart Completion</h4>
+
+<p>The Semantic Analyzer can be used to perform code completion in a
+manner that takes the local context into account.  (In addition to the
+user commands in this section, Semantic Idle Completions mode also
+uses the Semantic Analyzer.  See <a href="#Idle-Completions-Mode">Idle Completions Mode</a>.)
+
+<div class="defun">
+&mdash; Command: <b>semantic-analyze-possible-completions</b><var> context<a name="index-semantic_002danalyze_002dpossible_002dcompletions-44"></a></var><br>
+<blockquote><p>This is the most basic command for Semantic Analyzer-based completion. 
+Called interactively, it displays a list of the possible completions
+for the symbol at point.
+
+        <p>When called from a Lisp program,
+<code>semantic-analyze-possible-completions</code> does not display a
+completions list.  The argument <var>context</var> should be either a
+buffer position, or a context object.  The return value is a list of
+<i>Semantic</i> tag objects that complete the symbol for <var>context</var>,
+based on the following criteria:
+
+          <ul>
+<li>Elements currently in scope. 
+<li>Constants currently in scope. 
+<li>Elements matching the context's <code>:prefix</code>. 
+<li>Type of the completion matching the type of the context. 
+</ul>
+
+        <p>Most of the other commands documented in this section call
+<code>semantic-analyze-possible-completions</code> internally. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>semantic-complete-analyze-inline</b><var><a name="index-semantic_002dcomplete_002danalyze_002dinline-45"></a></var><br>
+<blockquote><p>This command is bound to <kbd>C-c , &lt;SPC&gt;</kbd> when Semantic mode is
+enabled (see <a href="#Semantic-mode-user-commands">Semantic mode user commands</a>).  It displays a list of
+possible completions for the symbol at point, and activates a special
+set of keybindings for choosing a completion.
+
+        <p>You can type &lt;RET&gt; to accept the current completion, <kbd>M-n</kbd> and
+<kbd>M-p</kbd> to cycle through the possible completions, &lt;TAB&gt; to
+complete as far as possible and then cycle through completions, and
+either <kbd>C-g</kbd> or any other key to abort the completion.
+
+        <p>This command is similar to the completion performed by Semantic Idle
+Completions mode.  The main difference is that it is called
+explicitly, whereas Semantic Idle Completions mode completes during
+idle time (see <a href="#Idle-Completions-Mode">Idle Completions Mode</a>). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Option: <b>semantic-complete-inline-analyzer-idle-displayor-class</b><var><a name="index-semantic_002dcomplete_002dinline_002danalyzer_002didle_002ddisplayor_002dclass-46"></a></var><br>
+<blockquote><p>The value of this variable determines how
+<code>semantic-complete-analyze-inline</code> shows its completions. 
+Possible values include:
+
+          <dl>
+<dt><code>semantic-displayor-traditional</code><dd>Display completions in a separate window.  This is the default value.
+
+          <br><dt><code>semantic-displayor-ghost</code><dd>Display completions &ldquo;inline&rdquo; with the buffer text, similar to the
+default behavior of Semantic Idle Completions mode (see <a href="#Idle-Completions-Mode">Idle Completions Mode</a>).
+
+          <br><dt><code>semantic-displayor-tooltip</code><dd>Display completions in a tooltip. 
+</dl>
+        </p></blockquote></div>
+
+   <p>In addition to <code>semantic-complete-analyze-inline</code>, you can use
+the simpler command <code>semantic-ia-complete-symbol point</code>.  This
+behaves like the usual <kbd>M-&lt;TAB&gt;</kbd> (<code>complete-symbol</code>)
+command (see <a href="emacs.html#Symbol-Completion">Symbol Completion</a>), except it
+uses the Semantic Analyzer.
+
+<div class="defun">
+&mdash; Command: <b>semantic-ia-complete-symbol</b><var> point<a name="index-semantic_002dia_002dcomplete_002dsymbol-47"></a></var><br>
+<blockquote><p>Complete the current symbol at <var>point</var>. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Smart-Summary"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Smart-Jump">Smart Jump</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Smart-Completion">Smart Completion</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Analyzer">Analyzer</a>
+
+</div>
+
+<h4 class="subsection">2.4.2 Smart Summary</h4>
+
+<p>You can use the following commands to obtain information about the
+code at point:
+
+<div class="defun">
+&mdash; Command: <b>semantic-ia-show-summary</b><var> pos<a name="index-semantic_002dia_002dshow_002dsummary-48"></a></var><br>
+<blockquote><p>Display a summary for the symbol at <var>pos</var>.  Called interactively,
+<var>pos</var> defaults to point. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>semantic-ia-show-doc</b><var> pos<a name="index-semantic_002dia_002dshow_002ddoc-49"></a></var><br>
+<blockquote><p>Display the code-level documentation for the symbol at <var>pos</var>. 
+Called interactively, <var>pos</var> defaults to point. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>semantic-ia-describe-class</b><var> typename<a name="index-semantic_002dia_002ddescribe_002dclass-50"></a></var><br>
+<blockquote><p>Prompt for the name of a data type, <var>typename</var>, and display its
+components.  For instance, if the type in question is a class, this
+displays the methods and member variables. 
+</p></blockquote></div>
+
+   <p>You can also use Semantic Idle Summary mode to show information about
+the current symbol in the echo area during idle time.  See <a href="#Idle-Summary-Mode">Idle Summary Mode</a>.
+
+<div class="node">
+<a name="Smart-Jump"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Analyzer-Debug">Analyzer Debug</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Smart-Summary">Smart Summary</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Analyzer">Analyzer</a>
+
+</div>
+
+<h4 class="subsection">2.4.3 Smart Jump</h4>
+
+<p>The Semantic Analyzer can be used to jump directly to the definition
+for a code symbol.
+
+<div class="defun">
+&mdash; Command: <b>semantic-ia-fast-jump</b><var> pos<a name="index-semantic_002dia_002dfast_002djump-51"></a></var><br>
+<blockquote><p>Jump to the definition for the symbol at <var>pos</var>.  Called
+interactively, <var>pos</var> defaults to point. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>semantic-ia-fast-mouse-jump</b><var> event<a name="index-semantic_002dia_002dfast_002dmouse_002djump-52"></a></var><br>
+<blockquote><p>Jump to the definition for the symbol at the position of the mouse
+event <var>event</var>.  This command is meant to be bound to a mouse
+command, like this:
+
+     <pre class="example">          (global-set-key '[(S-mouse-1)] semantic-ia-fast-mouse-jump)
+</pre>
+        </blockquote></div>
+
+   <p>These commands are often more accurate than the <code>find-tag</code>
+command (see <a href="emacs.html#Tags">Tags</a>), because the Semantic
+Analyzer is context-sensitive.
+
+   <p>You can also use <kbd>C-c , j</kbd> (<code>semantic-complete-jump-local</code>)
+and <kbd>C-c , J</kbd> (<code>semantic-complete-jump</code>) to navigate tags. 
+See <a href="#Semantic-mode-user-commands">Semantic mode user commands</a>.  Those commands do not make use of
+the Semantic Analyzer.
+
+<div class="node">
+<a name="Analyzer-Debug"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Smart-Jump">Smart Jump</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Analyzer">Analyzer</a>
+
+</div>
+
+<h4 class="subsection">2.4.4 Debugging the Semantic Analyzer</h4>
+
+<p>If the Semantic Analyzer does not analyze your code properly, you can
+take steps to identify and solve the problem.  This section was
+written with C/C++ in mind, but should be relevant for any typed
+language.
+
+<h5 class="subsubsection">2.4.4.1 Step 1: Check the context</h5>
+
+<p>To check the current context, type <kbd>M-x
+semantic-analyze-current-context</kbd>.
+
+<div class="defun">
+&mdash; Command: <b>semantic-analyze-current-context</b><var> pos<a name="index-semantic_002danalyze_002dcurrent_002dcontext-53"></a></var><br>
+<blockquote><p>Analyze the context at <var>pos</var>.  This function is used by most of
+the other Semantic Analyzer commands to obtain the context of the code
+at a given buffer position.  The return value is an EIEIO object
+describing the context at <var>pos</var> (see <a href="eieio.html#Top">Top</a>).
+
+        <p>When called interactively, this displays a <samp><span class="file">*Semantic Context
+Analysis*</span></samp> buffer containing a summary of the context at point. 
+</p></blockquote></div>
+
+<p class="noindent">The Prefix section of the <samp><span class="file">*Semantic Context Analysis*</span></samp> buffer
+lists the tags based on the text at point.  If it shows only a simple
+string, the Semantic was unable to identify what the data type was.
+
+   <p>The first item in the list of the prefix is the first lookup failure
+in the chain, and that is the item to focus debugging effort on.  For
+example:
+
+<pre class="example">     Context Type: #&lt;semantic-analyze-context context&gt;
+     Bounds: (182 . 185)
+     Prefix: Foo* bar
+             int bbb (const char* y)
+     Prefix Types: class Foo {}
+     --------
+     -&gt; Local Vars: int argc
+                    char** argv
+</pre>
+   <p>In this example you can see that the prefix has two fully found tags. 
+In the following example, the symbol &ldquo;bbb&rdquo; is incomplete, and could
+not be found:
+
+<pre class="example">     Context Type: #&lt;semantic-analyze-context context&gt;
+     Bounds: (182 . 184)
+     Prefix: Foo* bar
+             "bb"
+     Prefix Classes: 'function
+                     'variable
+     Prefix Types: class Foo {}
+     --------
+     -&gt; Local Vars: int argc
+                    char** argv
+</pre>
+   <h5 class="subsubsection">2.4.4.2 Step 2 : Check your include path</h5>
+
+<p>Once you know the missing symbol, check your include path.  The header
+or include file containing the needed definition may not be in the
+list of headers <i>Semantic</i> is searching through.  To get a basic
+list, you can use <kbd>M-x semanticdb-find-test-translate-path</kbd>. 
+See <a href="#Semanticdb-search-debugging-commands">Semanticdb search debugging commands</a>.
+
+   <p>If items should be loaded but aren't, or if you see some tables that
+have no tags in them, then you you may have an incorrectly-set search
+throttle (see <a href="#Search-Throttle">Search Throttle</a>).  For example,
+
+<pre class="example">     *#&lt;semanticdb-table main.cpp (4 tags DIRTY)&gt;
+     *#&lt;semanticdb-table foo.hh (0 tags DIRTY)&gt;
+</pre>
+   <p>Here, <i>Semantic</i> found <samp><span class="file">foo.hh</span></samp>, but there are 0 tags.  This may
+be because you had set the throttle to avoid reading and parsing files
+that Emacs has not visited.  To fix this, visit the file and let
+<i>Semantic</i> parse it.
+
+   <p>For C++, check also that the &lsquo;<samp><span class="samp">#include</span></samp>&rsquo; statements for your
+project-level files use quotes, not angle brackets; angle brackets are
+for system files.
+
+<h5 class="subsubsection">2.4.4.3 Step 3: Check the local scope</h5>
+
+<p>If your data type is somehow abbreviated based on scope, such as from
+a <code>using</code> statement, you should make sure that the symbol you
+want is in the local scope.  Examine the scope with <kbd>M-x
+semantic-calculate-scope</kbd>.  The scope structure is displayed in ADEBUG
+mode, so use <kbd>SPC</kbd> to expand different elements and looking for
+your symbol.
+
+   <p>If your symbol should be in the scope, but you cannot find it, then
+you may have found a language support bug in the local-variable
+parser, or using statement parser.
+
+   <p>Calling <kbd>M-x bovinate</kbd> should force a reset on the scope in case
+there is merely some bad state.
+
+<pre class="example">      ] Name: Cache
+      ] Class: #'semantic-scope-cache
+      ] :table #&lt;semanticdb-table testsubclass.cpp (13 tags DIRTY)&gt;
+      ] tag createMoose : class moose
+      ] scopetypes 'nil
+      ] parents #&lt;TAG LIST: 1 entries&gt;
+      ] scope #&lt;TAG LIST: 22 entries&gt;
+      ] fullscope #&lt;TAG LIST: 23 entries&gt;
+      ] localvar #&lt;TAG LIST: 6 entries&gt;
+</pre>
+   <p>In the above sample output, the <code>tag</code> slot specifies where within
+you source this scope is relevant.  <code>Parents</code> should contain any
+in scope parents, such as the class a method belongs to. 
+<code>Localvar</code> should contain your local variables.  <code>Scope</code>
+should contain datatypes in scope due to a <code>using</code> statement or
+the like.
+
+<h5 class="subsubsection">2.4.4.4 Step 4: Check the typecache</h5>
+
+<p>For complex typed languages like C++, <i>Semantic</i> creates a typecache,
+or an optimized search table with all the various data types in it. 
+Elements in the typecache do not obey local scope.  It only contains
+fully qualified names.  You can examine the typecache with
+<kbd>M-x semanticdb-typecache-dump</kbd>.
+
+   <p>If your data types are not in the typecache, there may be some parsing
+error or other bug.  Calling <kbd>M-x bovinate</kbd> should force a reset on
+the typecache in case there is merely some bad state.
+
+<pre class="example">     ]#&lt;semanticdb-typecache /home/zappo/cedet/semantic/tests/testsubclass.cpp&gt;
+        ] Name: /home/zappo/cedet/semantic/tests/testsubclass.cpp
+        ] Class: #'semanticdb-typecache
+        ] filestream 'nil
+        ] includestream #&lt;TAG LIST: 84 entries&gt;
+        ] stream 'nil
+        ] dependants 'nil
+</pre>
+   <p>In the above example, the output of <kbd>M-x semanticdb-typecache-dump</kbd>
+was expanded one level.  The <code>filestream</code> slot should contain
+datatypes in the current file.  The <code>includestream</code> should
+contain all the datatypes in all included header files.
+
+   <p>The <code>dependants</code> slot will specify other files that depend on
+this one.
+
+<h5 class="subsubsection">2.4.4.5 Step 5: Check the parser</h5>
+
+<p>Go to the location where your unfound tag should be.  You can call
+<kbd>M-x bovinate</kbd>, and see a dump of the raw tag structure.  To see a
+navigable tree, use <kbd>M-x semantic-adebug-bovinate</kbd> instead.  You
+can then look to make sure your tag has been properly parsed.
+
+   <p>If it has not, then you may have found a parser bug.  To get a feel
+how <i>Semantic</i> treats your file, type <kbd>M-x
+global-semantic-show-unmatched-syntax-mode</kbd>.  This causes any syntax
+it cannot parse to be underlined in red.
+
+   <p>If your type is not parsable, it could be for a couple of reasons:
+
+     <ol type=1 start=1>
+<li>If there is a MACRO keyword used in the definition of the type, you
+may need to update the <code>semantic-lex-c-preprocessor-symbol-map</code>
+to account for it.
+
+     <li>Or perhaps the parser needs to be fixed.
+        </ol>
+
+<div class="node">
+<a name="Speedbar"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#SymRef">SymRef</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Analyzer">Analyzer</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Using-Semantic">Using Semantic</a>
+
+</div>
+
+<h3 class="section">2.5 Speedbar</h3>
+
+<p><a name="index-speedbar-54"></a>
+You can integrate <i>Semantic</i> with the Speedbar. 
+See <a href="emacs.html#Speedbar">Speedbar</a>.  To do this, add the following
+line to your init file:
+
+<pre class="example">     (add-hook 'speedbar-load-hook (lambda () (require 'semantic/sb)))
+</pre>
+   <p class="noindent">Or, alternatively:
+
+<pre class="example">     (require 'semantic/sb)
+</pre>
+   <p>Once installed, the Speedbar will use <i>Semantic</i> to find and display
+tags.  Tags from <i>Semantic</i> are displayed with more details than
+ordinary Speedbar tags, such as function arguments and return type.
+
+   <p>In addition, you can use the Speedbar to show the output of the
+Semantic Analyzer (see <a href="#Analyzer">Analyzer</a>).  To do this, go to the
+&lsquo;<samp><span class="samp">Display</span></samp>&rsquo; menu item on the Speedbar menu and select
+&lsquo;<samp><span class="samp">Analyze</span></samp>&rsquo;; or type <kbd>M-x semantic-speedbar-analysis</kbd>.
+
+<div class="defun">
+&mdash; Command: <b>semantic-speedbar-analysis</b><var><a name="index-semantic_002dspeedbar_002danalysis-55"></a></var><br>
+<blockquote><p>Start the Speedbar in Semantic Analysis mode. 
+</p></blockquote></div>
+
+   <p>In Semantic Analysis mode, the Speedbar displays information about the
+local context, such as the current function, local arguments and
+variables, and details on the prefix (the current symbol).  Each entry
+has an &lsquo;<samp><span class="samp">&lt;i&gt;</span></samp>&rsquo; button; clicking on this shows a summary of what
+<i>Semantic</i> knows about that variable or type.  The Speedbar also
+displays a list of possible completions at point.
+
+<div class="node">
+<a name="SymRef"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#MRU-Bookmarks">MRU Bookmarks</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Speedbar">Speedbar</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Using-Semantic">Using Semantic</a>
+
+</div>
+
+<h3 class="section">2.6 Symbol References</h3>
+
+<p><a name="index-symref-56"></a>
+<i>Semantic</i> can interface with external <dfn>symbol reference tools</dfn>,
+such as GNU Global and GNU Idutils.  These tools provide information
+about where different tags or symbols appear.
+
+   <p>By default, <i>Semantic</i> tries to look for the best external symbol
+reference tool that can be used.  The supported tools are GNU Global,
+GNU Idutils, CScope, and Grep (the fallback method).  For best
+results, use GNU Global.  However, <i>Semantic</i> does not manage your
+GNU Global tables for you; you must manage them yourself.
+
+<div class="defun">
+&mdash; Variable: <b>semantic-symref-tool</b><var><a name="index-semantic_002dsymref_002dtool-57"></a></var><br>
+<blockquote><p>The value of this variable is a symbol that determines the external
+symbol reference tool to use.  The default value, <code>detect</code>, says
+to look for the best available tool.  Other possible values are
+<code>global</code>, <code>idutils</code>, <code>cscope</code>, and <code>grep</code>.  Note
+that <code>grep</code> is much slower than the others. 
+</p></blockquote></div>
+
+   <p>The commands to display symbol references are <kbd>C-c , g</kbd>
+(<code>semantic-symref-symbol</code> and <kbd>C-c , G</kbd>
+(<code>semantic-symref</code>).  These keybindings are available whenever
+Semantic mode is enabled (see <a href="#Semantic-mode-user-commands">Semantic mode user commands</a>).
+
+<div class="defun">
+&mdash; Command: <b>semantic-symref-symbol</b><var> sym<a name="index-semantic_002dsymref_002dsymbol-58"></a></var><br>
+<blockquote><p>This command (normally bound to <kbd>C-c , g</kbd>) prompts for a symbol
+name, and uses an external reference tool to find references to that
+tag. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Command: <b>semantic-symref</b><var><a name="index-semantic_002dsymref-59"></a></var><br>
+<blockquote><p>This command (normally bound to <kbd>C-c , G</kbd>) uses an external
+reference tool to find references to the current tag. 
+</p></blockquote></div>
+
+   <p>Both <code>semantic-symref-symbol</code> and <code>semantic-symref</code> display
+a list of symbol references in a separate buffer.  The entries are
+organized by file, and by function name.  Typing &lt;RET&gt; on the
+&lsquo;<samp><span class="samp">[+]</span></samp>&rsquo; next to each function name &ldquo;expands&rdquo; that entry, listing
+all references to the target symbol occurring within that function. 
+Typing <kbd>RET</kbd> on a reference line jumps to that reference.
+
+<div class="node">
+<a name="MRU-Bookmarks"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Sticky-Func-Mode">Sticky Func Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#SymRef">SymRef</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Using-Semantic">Using Semantic</a>
+
+</div>
+
+<h3 class="section">2.7 MRU Bookmarks mode</h3>
+
+<p><a name="index-semantic_002dmru_002dbookmark_002dmode-60"></a>
+Semantic MRU Bookmarks mode is a minor mode that keeps track of the
+tags you have edited, allowing you to quickly return to them later
+(MRU stands for &ldquo;Most Recently Used&rdquo;).
+
+<div class="defun">
+&mdash; Command: <b>global-semantic-mru-bookmark-mode</b><var> &amp;optional arg<a name="index-global_002dsemantic_002dmru_002dbookmark_002dmode-61"></a></var><br>
+<blockquote><p>Toggle Semantic MRU Bookmarks mode globally.  The minor mode can be
+turned on only if the current buffer was set up for parsing.  With
+argument <var>arg</var>, turn the minor mode if <var>arg</var> is positive, and
+off otherwise. 
+</p></blockquote></div>
+
+   <p>Semantic MRU Bookmarks mode takes note of each tag you edit. 
+Afterwards, you can type <kbd>C-x B</kbd>
+(<code>semantic-mrub-switch-tags</code>) to return to a tag.  This command
+prompts for a tag name, completing with the names of edited tags; at
+the prompt, you can use <kbd>M-p</kbd> and <kbd>M-n</kbd> to cycle through tags
+in order of last modification time.
+
+<div class="node">
+<a name="Sticky-Func-Mode"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Highlight-Func-Mode">Highlight Func Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#MRU-Bookmarks">MRU Bookmarks</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Using-Semantic">Using Semantic</a>
+
+</div>
+
+<h3 class="section">2.8 Sticky Function mode</h3>
+
+<p>Semantic Sticky Function minor mode displays a header line that shows
+the declaration line of the function or tag on the topmost line in the
+text area.  This allows you to keep that declaration line in view at
+all times, even if it is scrolls off the &ldquo;top&rdquo; of the screen.
+
+   <p>In addition, clicking <kbd>Mouse-1</kbd> on the header line opens a context
+menu that contains menu items for copying, killing, or narrowing to
+that tag.
+
+<div class="defun">
+&mdash; Command: <b>global-semantic-stickyfunc-mode</b><var> &amp;optional arg<a name="index-global_002dsemantic_002dstickyfunc_002dmode-62"></a></var><br>
+<blockquote><p>Toggle Semantic Sticky Function mode in all Semantic-enabled buffers. 
+With an optional argument <var>arg</var>, enable if <var>arg</var> is positive,
+and disable otherwise. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>semantic-stickyfunc-sticky-classes</b><var><a name="index-semantic_002dstickyfunc_002dsticky_002dclasses-63"></a></var><br>
+<blockquote><p>The value of this variable is a list of tag classes that Semantic
+Sticky Function mode makes &ldquo;sticky&rdquo;.  The default is
+<code>'(function type)</code>, meaning function declarations and type
+declarations.  Other possible tag classes are <code>variable</code>,
+<code>include</code>, and <code>package</code>. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Highlight-Func-Mode"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Tag-Decoration-Mode">Tag Decoration Mode</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Sticky-Func-Mode">Sticky Func Mode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Using-Semantic">Using Semantic</a>
+
+</div>
+
+<h3 class="section">2.9 Highlight Func Mode</h3>
+
+<p><a name="index-semantic_002dhighlight_002dfunc_002dmode-64"></a>
+Semantic Highlight Function minor mode highlights the declaration line
+of the current function or tag (that is to say, the first line that
+describes the rest of the construct).
+
+   <p>In addition, clicking <kbd>Mouse-3</kbd> on the highlighted declaration
+line opens a context menu that contains menu items for copying,
+killing, or narrowing to that tag.
+
+   <p>The tag classes highlighted by Semantic Highlight Function mode are
+the same ones given by <code>semantic-stickyfunc-sticky-classes</code>. 
+See <a href="#Sticky-Func-Mode">Sticky Func Mode</a>.
+
+<div class="defun">
+&mdash; Function: <b>global-semantic-highlight-func-mode</b><var> &amp;optional arg<a name="index-global_002dsemantic_002dhighlight_002dfunc_002dmode-65"></a></var><br>
+<blockquote><p>Toggle Semantic Highlight Function mode in all Semantic-enabled
+buffers.  With an optional argument <var>arg</var>, enable if <var>arg</var> is
+positive, and disable otherwise. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Face: <b>semantic-highlight-func-current-tag-face</b><var><a name="index-semantic_002dhighlight_002dfunc_002dcurrent_002dtag_002dface-66"></a></var><br>
+<blockquote><p>This face is used to highlight declaration lines in Semantic Highlight
+Func mode. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Tag-Decoration-Mode"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Highlight-Func-Mode">Highlight Func Mode</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Using-Semantic">Using Semantic</a>
+
+</div>
+
+<h3 class="section">2.10 Tag Decoration Mode</h3>
+
+<p><a name="index-semantic_002ddecoration_002dmode-67"></a>
+Semantic Tag Decoration mode &ldquo;decorates&rdquo; each tag based on certain
+arbitrary features of that tag.  Decorations are specified using the
+variable <code>semantic-decoration-styles</code>.
+
+<div class="defun">
+&mdash; Command: <b>global-semantic-decoration-mode</b><var> &amp;optional arg<a name="index-global_002dsemantic_002ddecoration_002dmode-68"></a></var><br>
+<blockquote><p>Toggle Semantic Tag Decoration mode in all Semantic-enabled buffers. 
+With an optional argument <var>arg</var>, enable if <var>arg</var> is positive,
+and disable otherwise. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>semantic-decoration-styles</b><var><a name="index-semantic_002ddecoration_002dstyles-69"></a></var><br>
+<blockquote><p>The value of this variable is a list of decoration styles for Semantic
+Tag Decoration mode.  Each element in this list should have the form
+<code>(</code><var>name</var><code> . </code><var>flag</var><code>)</code>, where <var>name</var> is a style name (a
+symbol) and <var>flag</var> is non-<code>nil</code> if the style is enabled.
+
+        <p>The following styles are available:
+
+          <dl>
+<dt><code>semantic-tag-boundary</code><dd>Place an overline in front of each long tag (excluding prototypes).
+
+          <br><dt><code>semantic-decoration-on-private-members</code><dd>Highlight class members that are designated as private.
+
+          <br><dt><code>semantic-decoration-on-protected-members</code><dd>Highlight class members that are designated as protected.
+
+          <br><dt><code>semantic-decoration-on-includes</code><dd>Highlight class members that are includes.  Clicking on the
+highlighted include statements opens a context menu for configuring
+<i>Semantic</i> includes. 
+</dl>
+        </p></blockquote></div>
+
+   <p>To enable or disable specific decorations, use this function:
+
+<div class="defun">
+&mdash; Command: <b>semantic-toggle-decoration-style</b><var> name &amp;optional arg<a name="index-semantic_002dtoggle_002ddecoration_002dstyle-70"></a></var><br>
+<blockquote><p>Prompt for a decoration style, <var>name</var>, and turn it on or off. 
+With prefix argument <var>arg</var>, turn on if positive, otherwise off. 
+Return non-<code>nil</code> if the decoration style is enabled. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Face: <b>semantic-tag-boundary-face</b><var><a name="index-semantic_002dtag_002dboundary_002dface-71"></a></var><br>
+<blockquote><p>Face for long tags in the <code>semantic-tag-boundary</code> decoration
+style. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Face: <b>semantic-decoration-on-private-members-face</b><var><a name="index-semantic_002ddecoration_002don_002dprivate_002dmembers_002dface-72"></a></var><br>
+<blockquote><p>Face for privately-scoped tags in the
+<code>semantic-decoration-on-private-members</code> decoration style. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Face: <b>semantic-decoration-on-protected-members-face</b><var><a name="index-semantic_002ddecoration_002don_002dprotected_002dmembers_002dface-73"></a></var><br>
+<blockquote><p>Face for protected tags in the
+<code>semantic-decoration-on-protected-members</code> decoration style. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Face: <b>semantic-decoration-on-includes</b><var><a name="index-semantic_002ddecoration_002don_002dincludes-74"></a></var><br>
+<blockquote><p>Face for includes that are not in some other state, in the
+<code>semantic-decoration-on-includes</code> decoration style. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Face: <b>semantic-decoration-on-unknown-includes</b><var><a name="index-semantic_002ddecoration_002don_002dunknown_002dincludes-75"></a></var><br>
+<blockquote><p>Face for includes that cannot be found, in the
+<code>semantic-decoration-on-includes</code> decoration style. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Face: <b>semantic-decoration-on-unparsed-includes</b><var><a name="index-semantic_002ddecoration_002don_002dunparsed_002dincludes-76"></a></var><br>
+<blockquote><p>Face for includes that have not yet been parsed, in the
+<code>semantic-decoration-on-includes</code> decoration style. 
+</p></blockquote></div>
+
+<h4 class="subsection">2.10.1 Creating New Decoration Modes</h4>
+
+<p>You can create new types of decorations using the following function:
+
+<div class="defun">
+&mdash; Function: <b>define-semantic-decoration-style</b><var> name doc &amp;rest flags<a name="index-define_002dsemantic_002ddecoration_002dstyle-77"></a></var><br>
+<blockquote><p>Define a new decoration style with <var>name</var>. 
+<var>doc</var> is a documentation string describing the decoration style <var>name</var>. 
+It is appended to auto-generated doc strings. 
+An optional list of <var>flags</var> can also be specified.  Flags are:
+  <code>:enabled</code> &lt;value&gt;  - specify the default enabled value for <var>name</var>.
+
+        <p>This defines two new overload functions respectively called <code>NAME-p</code>
+and <code>NAME-highlight</code>, for which you must provide a default
+implementation in respectively the functions <code>NAME-p-default</code> and
+<code>NAME-highlight-default</code>.  Those functions are passed a tag.  <code>NAME-p</code>
+must return non-<code>nil</code> to indicate that the tag should be decorated by
+<code>NAME-highlight</code>.
+
+        <p>To put primary decorations on a tag <code>NAME-highlight</code>, use
+functions like <dfn>semantic-set-tag-face</dfn>,
+<dfn>semantic-set-tag-intangible</dfn>, etc., found in the
+semantic-decorate library.
+
+        <p>To add other kind of decorations on a tag, <code>NAME-highlight</code> must use
+<dfn>semantic-decorate-tag</dfn>, and other functions of the semantic
+decoration <var>api</var> found in this library. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Semantic-Internals"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Glossary">Glossary</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Using-Semantic">Using Semantic</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">3 Semantic Internals</h2>
+
+<p>This chapter provides an overview of the internals of <i>Semantic</i>. 
+This information is usually not needed by application developers or
+grammar developers; it is useful mostly for the hackers who would like
+to learn more about how <i>Semantic</i> works.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Parser-code">Parser code</a>:           Code used for the parsers
+<li><a accesskey="2" href="#Tag-handling">Tag handling</a>:          Code used for manipulating tags
+<li><a accesskey="3" href="#Semanticdb-Internals">Semanticdb Internals</a>:  Code used in the semantic database
+<li><a accesskey="4" href="#Analyzer-Internals">Analyzer Internals</a>:    Code used in the code analyzer
+<li><a accesskey="5" href="#Tools">Tools</a>:                 Code used in user tools
+<li><a accesskey="6" href="#Tests">Tests</a>:                 Code used for testing
+</ul>
+
+<div class="node">
+<a name="Parser-code"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Tag-handling">Tag handling</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Semantic-Internals">Semantic Internals</a>
+
+</div>
+
+<h3 class="section">3.1 Parser code</h3>
+
+<p><i>Semantic</i> parsing code is spread across a range of files.
+
+     <dl>
+<dt><samp><span class="file">semantic.el</span></samp><dd>The core infrastructure sets up buffers for parsing, and has all the
+core parsing routines.  Most parsing routines are overloadable, so the
+actual implementation may be somewhere else.
+
+     <br><dt><samp><span class="file">semantic-edit.el</span></samp><dd>Incremental reparse based on user edits.
+
+     <br><dt><samp><span class="file">semantic-grammar.el</span></samp><dt><samp><span class="file">semantic-grammar.wy</span></samp><dd>Parser for the different grammar languages, and a major mode for
+editing grammars in Emacs.
+
+     <br><dt><samp><span class="file">semantic-lex.el</span></samp><dd>Infrastructure for implementing lexical analyzers.  Provides macros
+for creating individual analyzers for specific features, and a way to
+combine them together.
+
+     <br><dt><samp><span class="file">semantic-lex-spp.el</span></samp><dd>Infrastructure for a lexical symbolic preprocessor.  This was written
+to implement the C preprocessor, but could be used for other lexical
+preprocessors.
+
+     <br><dt><samp><span class="file">bovine/bovine-grammar.el</span></samp><dt><samp><span class="file">bovine/bovine-grammar-macros.el</span></samp><dt><samp><span class="file">bovine/semantic-bovine.el</span></samp><dd>The &ldquo;bovine&rdquo; grammar.  This is the first grammar mode written for
+<i>Semantic</i> and is useful for simple creating simple parsers.
+
+     <br><dt><samp><span class="file">wisent/wisent.el</span></samp><dt><samp><span class="file">wisent/bison-wisent.el</span></samp><dt><samp><span class="file">wisent/semantic-wisent.el</span></samp><dt><samp><span class="file">wisent/semantic-debug-grammar.el</span></samp><dd>A port of bison to Emacs.  This infrastructure lets you create LALR
+based parsers for <i>Semantic</i>.
+
+     <br><dt><samp><span class="file">semantic-ast.el</span></samp><dd>Manage Abstract Syntax Trees for parsers.
+
+     <br><dt><samp><span class="file">semantic-debug.el</span></samp><dd>Infrastructure for debugging grammars.
+
+     <br><dt><samp><span class="file">semantic-util.el</span></samp><dd>Various utilities for manipulating tags, such as describing the tag
+under point, adding labels, and the all important
+<code>semantic-something-to-tag-table</code>.
+
+   </dl>
+
+<div class="node">
+<a name="Tag-handling"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Semanticdb-Internals">Semanticdb Internals</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Parser-code">Parser code</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Semantic-Internals">Semantic Internals</a>
+
+</div>
+
+<h3 class="section">3.2 Tag handling</h3>
+
+<p>A tag represents an individual item found in a buffer, such as a
+function or variable.  Tag handling is handled in several source
+files.
+
+     <dl>
+<dt><samp><span class="file">semantic-tag.el</span></samp><dd>Basic tag creation, queries, cloning, binding, and unbinding.
+
+     <br><dt><samp><span class="file">semantic-tag-write.el</span></samp><dd>Write a tag or tag list to a stream.  These routines are used by
+<samp><span class="file">semanticdb-file.el</span></samp> when saving a list of tags.
+
+     <br><dt><samp><span class="file">semantic-tag-file.el</span></samp><dd>Files associated with tags.  Goto-tag, file for include, and file for
+a prototype.
+
+     <br><dt><samp><span class="file">semantic-tag-ls.el</span></samp><dd>Language dependent features of a tag, such as parent calculation, slot
+protection, and other states like abstract, virtual, static, and leaf.
+
+     <br><dt><samp><span class="file">semantic-dep.el</span></samp><dd>Include file handling.  Contains the include path concepts, and
+routines for looking up file names in the include path.
+
+     <br><dt><samp><span class="file">semantic-format.el</span></samp><dd>Convert a tag into a nicely formatted and colored string.  Use
+<code>semantic-test-all-format-tag-functions</code> to test different output
+options.
+
+     <br><dt><samp><span class="file">semantic-find.el</span></samp><dd>Find tags matching different conditions in a tag table. 
+These routines are used by <samp><span class="file">semanticdb-find.el</span></samp> once the database
+has been converted into a simpler tag table.
+
+     <br><dt><samp><span class="file">semantic-sort.el</span></samp><dd>Sorting lists of tags in different ways.  Includes sorting a plain
+list of tags forward or backward.  Includes binning tags based on
+attributes (bucketize), and tag adoption for multiple references to
+the same thing.
+
+     <br><dt><samp><span class="file">semantic-doc.el</span></samp><dd>Capture documentation comments from near a tag.
+
+   </dl>
+
+<div class="node">
+<a name="Semanticdb-Internals"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Analyzer-Internals">Analyzer Internals</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Tag-handling">Tag handling</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Semantic-Internals">Semantic Internals</a>
+
+</div>
+
+<h3 class="section">3.3 Semanticdb Internals</h3>
+
+<p><acronym>Semanticdb</acronym> complexity is certainly an issue.  It is a rather
+hairy problem to try and solve.
+
+     <dl>
+<dt><samp><span class="file">semanticdb.el</span></samp><dd>Defines a <dfn>database</dfn> and a <dfn>table</dfn> base class.  You can
+instantiate these classes, and use them, but they are not persistent.
+
+     <p>This file also provides support for <code>semanticdb-minor-mode</code>,
+which automatically associates files with tables in databases so that
+tags are <em>saved</em> while a buffer is not in memory.
+
+     <p>The database and tables both also provide applicable cache information,
+and cache flushing system.  The semanticdb search routines use caches
+to save data structures that are complex to calculate.
+
+     <p>Lastly, it provides the concept of <dfn>project root</dfn>.  It is a system
+by which a file can be associated with the root of a project, so if
+you have a tree of directories and source files, it can find the root,
+and allow a tag-search to span all available databases in that
+directory hierarchy.
+
+     <br><dt><samp><span class="file">semanticdb-file.el</span></samp><dd>Provides a subclass of the basic table so that it can be saved to
+disk.  Implements all the code needed to unbind/rebind tags to a
+buffer and writing them to a file.
+
+     <br><dt><samp><span class="file">semanticdb-el.el</span></samp><dd>Implements a special kind of <dfn>system</dfn> database that uses Emacs
+internals to perform queries.
+
+     <br><dt><samp><span class="file">semanticdb-ebrowse.el</span></samp><dd>Implements a system database that uses Ebrowse to parse files into a
+table that can be queried for tag names.  Successful tag hits during a
+find causes <i>Semantic</i> to pick up and parse the reference files to
+get the full details.
+
+     <br><dt><samp><span class="file">semanticdb-find.el</span></samp><dd>Infrastructure for searching groups <i>Semantic</i> databases, and dealing
+with the search results format.
+
+     <br><dt><samp><span class="file">semanticdb-ref.el</span></samp><dd>Tracks crossreferences.   Cross references are needed when buffer is
+reparsed, and must alert other tables that any dependent caches may
+need to be flushed.  References are in the form of include files.
+
+   </dl>
+
+<div class="node">
+<a name="Analyzer-Internals"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Tools">Tools</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Semanticdb-Internals">Semanticdb Internals</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Semantic-Internals">Semantic Internals</a>
+
+</div>
+
+<h3 class="section">3.4 Analyzer Internals</h3>
+
+<p>The <i>Semantic</i> analyzer is a complex engine which has been broken
+down across several modules.  When the <i>Semantic</i> analyzer fails,
+start with <code>semantic-analyze-debug-assist</code>, then dive into some
+of these files.
+
+     <dl>
+<dt><samp><span class="file">semantic-analyze.el</span></samp><dd>The core analyzer for defining the <dfn>current context</dfn>.  The
+current context is an object that contains references to aspects of
+the local context including the current prefix, and a tag list
+defining what the prefix means.
+
+     <br><dt><samp><span class="file">semantic-analyze-complete.el</span></samp><dd>Provides <code>semantic-analyze-possible-completions</code>.
+
+     <br><dt><samp><span class="file">semantic-analyze-debug.el</span></samp><dd>The analyzer debugger.  Useful when attempting to get everything
+configured.
+
+     <br><dt><samp><span class="file">semantic-analyze-fcn.el</span></samp><dd>Various support functions needed by the analyzer.
+
+     <br><dt><samp><span class="file">semantic-ctxt.el</span></samp><dd>Local context parser.  Contains overloadable functions used to move
+around through different scopes, get local variables, and collect the
+current prefix used when doing completion.
+
+     <br><dt><samp><span class="file">semantic-scope.el</span></samp><dd>Calculate <dfn>scope</dfn> for a location in a buffer.  The scope includes
+local variables, and tag lists in scope for various reasons, such as
+C++ using statements.
+
+     <br><dt><samp><span class="file">semanticdb-typecache.el</span></samp><dd>The typecache is part of <code>semanticdb</code>, but is used primarily by
+the analyzer to look up datatypes and complex names.  The typecache is
+bound across source files and builds a master lookup table for data
+type names.
+
+     <br><dt><samp><span class="file">semantic-ia.el</span></samp><dd>Interactive Analyzer functions.  Simple routines that do completion or
+lookups based on the results from the Analyzer.  These routines are
+meant as examples for application writers, but are quite useful as
+they are.
+
+     <br><dt><samp><span class="file">semantic-ia-sb.el</span></samp><dd>Speedbar support for the analyzer, displaying context info, and
+completion lists.
+
+   </dl>
+
+<div class="node">
+<a name="Tools"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Tests">Tests</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Analyzer-Internals">Analyzer Internals</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Semantic-Internals">Semantic Internals</a>
+
+</div>
+
+<h3 class="section">3.5 Tools</h3>
+
+<p>These files contain various tools a user can use.
+
+     <dl>
+<dt><samp><span class="file">semantic-idle.el</span></samp><dd>Idle scheduler for <i>Semantic</i>.  Manages reparsing buffers after
+edits, and large work tasks in idle time.  Includes modes for showing
+summary help and pop-up completion.
+
+     <br><dt><samp><span class="file">senator.el</span></samp><dd>The <i>Semantic</i> navigator.  Provides many ways to move through a
+buffer based on the active tag table.
+
+     <br><dt><samp><span class="file">semantic-decorate.el</span></samp><dd>A minor mode for decorating tags based on details from the parser. 
+Includes overlines for functions, or coloring class fields based on
+protection.
+
+     <br><dt><samp><span class="file">semantic-decorate-include.el</span></samp><dd>A decoration mode for include files, which assists users in setting up
+parsing for their includes.
+
+     <br><dt><samp><span class="file">semantic-complete.el</span></samp><dd>Advanced completion prompts for reading tag names in the minibuffer, or
+inline in a buffer.
+
+     <br><dt><samp><span class="file">semantic-imenu.el</span></samp><dd>Imenu support for using <i>Semantic</i> tags in imenu.
+
+     <br><dt><samp><span class="file">semantic-mru-bookmark.el</span></samp><dd>Automatic bookmarking based on tags.  Jump to locations you've been
+before based on tag name.
+
+     <br><dt><samp><span class="file">semantic-sb.el</span></samp><dd>Support for <i>Semantic</i> tag usage in Speedbar.
+
+     <br><dt><samp><span class="file">semantic-util-modes.el</span></samp><dd>A bunch of small minor-modes that exposes aspects of the semantic
+parser state.  Includes <code>semantic-stickyfunc-mode</code>.
+
+     <br><dt><samp><span class="file">document.el</span></samp><dt><samp><span class="file">document-vars.el</span></samp><dd>Create an update comments for tags.
+
+     <br><dt><samp><span class="file">semantic-adebug.el</span></samp><dd>Extensions of <samp><span class="file">data-debug.el</span></samp> for <i>Semantic</i>.
+
+     <br><dt><samp><span class="file">semantic-chart.el</span></samp><dd>Draw some charts from stats generated from parsing.
+
+     <br><dt><samp><span class="file">semantic-elp.el</span></samp><dd>Profiler for helping to optimize the <i>Semantic</i> analyzer.
+
+   </dl>
+
+<div class="node">
+<a name="Tests"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Tools">Tools</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Semantic-Internals">Semantic Internals</a>
+
+</div>
+
+<h3 class="section">3.6 Tests</h3>
+
+     <dl>
+<dt><samp><span class="file">semantic-utest.el</span></samp><dd>Basic testing of parsing and incremental parsing for most supported
+languages.
+
+     <br><dt><samp><span class="file">semantic-ia-utest.el</span></samp><dd>Test the semantic analyzer's ability to provide smart completions.
+
+     <br><dt><samp><span class="file">semantic-utest-c.el</span></samp><dd>Tests for the C parser's lexical pre-processor.
+
+     <br><dt><samp><span class="file">semantic-regtest.el</span></samp><dd>Regression tests from the older Semantic 1.x API.
+
+</dl>
+
+<div class="node">
+<a name="Glossary"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Semantic-Internals">Semantic Internals</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="appendix">Appendix A Glossary</h2>
+
+     <dl>
+<dt>BNF<dd>In semantic 1.4, a BNF file represented &ldquo;Bovine Normal Form&rdquo;, the
+grammar file used for the 1.4 parser generator.  This was a play on
+Backus-Naur Form which proved too confusing.
+
+     <br><dt>bovinate<dd>A verb representing what happens when a bovine parser parses a file.
+
+     <br><dt>bovine lambda<dd>In a bovine, or LL parser, the bovine lambda is a function to execute
+when a specific set of match rules has succeeded in matching text from
+the buffer.
+
+     <br><dt>bovine parser<dd>A parser using the bovine parser generator.  It is an LL parser
+suitable for small simple languages.
+
+     <br><dt>context
+<br><dt>LALR
+<br><dt>lexer<dd>A program which converts text into a stream of tokens by analyzing
+them lexically.  Lexers will commonly create strings, symbols,
+keywords and punctuation, and strip whitespaces and comments.
+
+     <br><dt>LL
+<br><dt>nonterminal<dd>A nonterminal symbol or simply a nonterminal stands for a class of
+syntactically equivalent groupings.  A nonterminal symbol name is used
+in writing grammar rules.
+
+     <br><dt>overloadable<dd>Some functions are defined via <code>define-overload</code>. 
+These can be overloaded via ....
+
+     <br><dt>parser<dd>A program that converts <b>tokens</b> to <b>tags</b>.
+
+     <br><dt>tag<dd>A tag is a representation of some entity in a language file, such as a
+function, variable, or include statement.  In semantic, the word tag is
+used the same way it is used for the etags or ctags tools.
+
+     <p>A tag is usually bound to a buffer region via overlay, or it just
+specifies character locations in a file.
+
+     <br><dt>token<dd>A single atomic item returned from a lexer.  It represents some set
+of characters found in a buffer.
+
+     <br><dt>token stream<dd>The output of the lexer as well as the input to the parser.
+
+     <br><dt>wisent parser<dd>A parser using the wisent parser generator.  It is a port of bison to
+Emacs Lisp.  It is an LALR parser suitable for complex languages. 
+</dl>
+
+<div class="node">
+<a name="GNU-Free-Documentation-License"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Index">Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Glossary">Glossary</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="appendix">Appendix B GNU Free Documentation License</h2>
+
+<!-- The GNU Free Documentation License. -->
+<div align="center">Version 1.3, 3 November 2008</div>
+
+<!-- This file is intended to be included within another document, -->
+<!-- hence no sectioning command or @node. -->
+<pre class="display">     Copyright &copy; 2000, 2001, 2002, 2007, 2008 Free Software Foundation, Inc.
+     <a href="http://fsf.org/">http://fsf.org/</a>
+     
+     Everyone is permitted to copy and distribute verbatim copies
+     of this license document, but changing it is not allowed.
+</pre>
+     <ol type=1 start=0>
+<li>PREAMBLE
+
+     <p>The purpose of this License is to make a manual, textbook, or other
+functional and useful document <dfn>free</dfn> in the sense of freedom: to
+assure everyone the effective freedom to copy and redistribute it,
+with or without modifying it, either commercially or noncommercially. 
+Secondarily, this License preserves for the author and publisher a way
+to get credit for their work, while not being considered responsible
+for modifications made by others.
+
+     <p>This License is a kind of &ldquo;copyleft&rdquo;, which means that derivative
+works of the document must themselves be free in the same sense.  It
+complements the GNU General Public License, which is a copyleft
+license designed for free software.
+
+     <p>We have designed this License in order to use it for manuals for free
+software, because free software needs free documentation: a free
+program should come with manuals providing the same freedoms that the
+software does.  But this License is not limited to software manuals;
+it can be used for any textual work, regardless of subject matter or
+whether it is published as a printed book.  We recommend this License
+principally for works whose purpose is instruction or reference.
+
+     <li>APPLICABILITY AND DEFINITIONS
+
+     <p>This License applies to any manual or other work, in any medium, that
+contains a notice placed by the copyright holder saying it can be
+distributed under the terms of this License.  Such a notice grants a
+world-wide, royalty-free license, unlimited in duration, to use that
+work under the conditions stated herein.  The &ldquo;Document&rdquo;, below,
+refers to any such manual or work.  Any member of the public is a
+licensee, and is addressed as &ldquo;you&rdquo;.  You accept the license if you
+copy, modify or distribute the work in a way requiring permission
+under copyright law.
+
+     <p>A &ldquo;Modified Version&rdquo; of the Document means any work containing the
+Document or a portion of it, either copied verbatim, or with
+modifications and/or translated into another language.
+
+     <p>A &ldquo;Secondary Section&rdquo; is a named appendix or a front-matter section
+of the Document that deals exclusively with the relationship of the
+publishers or authors of the Document to the Document's overall
+subject (or to related matters) and contains nothing that could fall
+directly within that overall subject.  (Thus, if the Document is in
+part a textbook of mathematics, a Secondary Section may not explain
+any mathematics.)  The relationship could be a matter of historical
+connection with the subject or with related matters, or of legal,
+commercial, philosophical, ethical or political position regarding
+them.
+
+     <p>The &ldquo;Invariant Sections&rdquo; are certain Secondary Sections whose titles
+are designated, as being those of Invariant Sections, in the notice
+that says that the Document is released under this License.  If a
+section does not fit the above definition of Secondary then it is not
+allowed to be designated as Invariant.  The Document may contain zero
+Invariant Sections.  If the Document does not identify any Invariant
+Sections then there are none.
+
+     <p>The &ldquo;Cover Texts&rdquo; are certain short passages of text that are listed,
+as Front-Cover Texts or Back-Cover Texts, in the notice that says that
+the Document is released under this License.  A Front-Cover Text may
+be at most 5 words, and a Back-Cover Text may be at most 25 words.
+
+     <p>A &ldquo;Transparent&rdquo; copy of the Document means a machine-readable copy,
+represented in a format whose specification is available to the
+general public, that is suitable for revising the document
+straightforwardly with generic text editors or (for images composed of
+pixels) generic paint programs or (for drawings) some widely available
+drawing editor, and that is suitable for input to text formatters or
+for automatic translation to a variety of formats suitable for input
+to text formatters.  A copy made in an otherwise Transparent file
+format whose markup, or absence of markup, has been arranged to thwart
+or discourage subsequent modification by readers is not Transparent. 
+An image format is not Transparent if used for any substantial amount
+of text.  A copy that is not &ldquo;Transparent&rdquo; is called &ldquo;Opaque&rdquo;.
+
+     <p>Examples of suitable formats for Transparent copies include plain
+ASCII without markup, Texinfo input format, LaTeX input
+format, SGML or XML using a publicly available
+DTD, and standard-conforming simple HTML,
+PostScript or PDF designed for human modification.  Examples
+of transparent image formats include PNG, XCF and
+JPG.  Opaque formats include proprietary formats that can be
+read and edited only by proprietary word processors, SGML or
+XML for which the DTD and/or processing tools are
+not generally available, and the machine-generated HTML,
+PostScript or PDF produced by some word processors for
+output purposes only.
+
+     <p>The &ldquo;Title Page&rdquo; means, for a printed book, the title page itself,
+plus such following pages as are needed to hold, legibly, the material
+this License requires to appear in the title page.  For works in
+formats which do not have any title page as such, &ldquo;Title Page&rdquo; means
+the text near the most prominent appearance of the work's title,
+preceding the beginning of the body of the text.
+
+     <p>The &ldquo;publisher&rdquo; means any person or entity that distributes copies
+of the Document to the public.
+
+     <p>A section &ldquo;Entitled XYZ&rdquo; means a named subunit of the Document whose
+title either is precisely XYZ or contains XYZ in parentheses following
+text that translates XYZ in another language.  (Here XYZ stands for a
+specific section name mentioned below, such as &ldquo;Acknowledgements&rdquo;,
+&ldquo;Dedications&rdquo;, &ldquo;Endorsements&rdquo;, or &ldquo;History&rdquo;.)  To &ldquo;Preserve the Title&rdquo;
+of such a section when you modify the Document means that it remains a
+section &ldquo;Entitled XYZ&rdquo; according to this definition.
+
+     <p>The Document may include Warranty Disclaimers next to the notice which
+states that this License applies to the Document.  These Warranty
+Disclaimers are considered to be included by reference in this
+License, but only as regards disclaiming warranties: any other
+implication that these Warranty Disclaimers may have is void and has
+no effect on the meaning of this License.
+
+     <li>VERBATIM COPYING
+
+     <p>You may copy and distribute the Document in any medium, either
+commercially or noncommercially, provided that this License, the
+copyright notices, and the license notice saying this License applies
+to the Document are reproduced in all copies, and that you add no other
+conditions whatsoever to those of this License.  You may not use
+technical measures to obstruct or control the reading or further
+copying of the copies you make or distribute.  However, you may accept
+compensation in exchange for copies.  If you distribute a large enough
+number of copies you must also follow the conditions in section 3.
+
+     <p>You may also lend copies, under the same conditions stated above, and
+you may publicly display copies.
+
+     <li>COPYING IN QUANTITY
+
+     <p>If you publish printed copies (or copies in media that commonly have
+printed covers) of the Document, numbering more than 100, and the
+Document's license notice requires Cover Texts, you must enclose the
+copies in covers that carry, clearly and legibly, all these Cover
+Texts: Front-Cover Texts on the front cover, and Back-Cover Texts on
+the back cover.  Both covers must also clearly and legibly identify
+you as the publisher of these copies.  The front cover must present
+the full title with all words of the title equally prominent and
+visible.  You may add other material on the covers in addition. 
+Copying with changes limited to the covers, as long as they preserve
+the title of the Document and satisfy these conditions, can be treated
+as verbatim copying in other respects.
+
+     <p>If the required texts for either cover are too voluminous to fit
+legibly, you should put the first ones listed (as many as fit
+reasonably) on the actual cover, and continue the rest onto adjacent
+pages.
+
+     <p>If you publish or distribute Opaque copies of the Document numbering
+more than 100, you must either include a machine-readable Transparent
+copy along with each Opaque copy, or state in or with each Opaque copy
+a computer-network location from which the general network-using
+public has access to download using public-standard network protocols
+a complete Transparent copy of the Document, free of added material. 
+If you use the latter option, you must take reasonably prudent steps,
+when you begin distribution of Opaque copies in quantity, to ensure
+that this Transparent copy will remain thus accessible at the stated
+location until at least one year after the last time you distribute an
+Opaque copy (directly or through your agents or retailers) of that
+edition to the public.
+
+     <p>It is requested, but not required, that you contact the authors of the
+Document well before redistributing any large number of copies, to give
+them a chance to provide you with an updated version of the Document.
+
+     <li>MODIFICATIONS
+
+     <p>You may copy and distribute a Modified Version of the Document under
+the conditions of sections 2 and 3 above, provided that you release
+the Modified Version under precisely this License, with the Modified
+Version filling the role of the Document, thus licensing distribution
+and modification of the Modified Version to whoever possesses a copy
+of it.  In addition, you must do these things in the Modified Version:
+
+          <ol type=A start=1>
+<li>Use in the Title Page (and on the covers, if any) a title distinct
+from that of the Document, and from those of previous versions
+(which should, if there were any, be listed in the History section
+of the Document).  You may use the same title as a previous version
+if the original publisher of that version gives permission.
+
+          <li>List on the Title Page, as authors, one or more persons or entities
+responsible for authorship of the modifications in the Modified
+Version, together with at least five of the principal authors of the
+Document (all of its principal authors, if it has fewer than five),
+unless they release you from this requirement.
+
+          <li>State on the Title page the name of the publisher of the
+Modified Version, as the publisher.
+
+          <li>Preserve all the copyright notices of the Document.
+
+          <li>Add an appropriate copyright notice for your modifications
+adjacent to the other copyright notices.
+
+          <li>Include, immediately after the copyright notices, a license notice
+giving the public permission to use the Modified Version under the
+terms of this License, in the form shown in the Addendum below.
+
+          <li>Preserve in that license notice the full lists of Invariant Sections
+and required Cover Texts given in the Document's license notice.
+
+          <li>Include an unaltered copy of this License.
+
+          <li>Preserve the section Entitled &ldquo;History&rdquo;, Preserve its Title, and add
+to it an item stating at least the title, year, new authors, and
+publisher of the Modified Version as given on the Title Page.  If
+there is no section Entitled &ldquo;History&rdquo; in the Document, create one
+stating the title, year, authors, and publisher of the Document as
+given on its Title Page, then add an item describing the Modified
+Version as stated in the previous sentence.
+
+          <li>Preserve the network location, if any, given in the Document for
+public access to a Transparent copy of the Document, and likewise
+the network locations given in the Document for previous versions
+it was based on.  These may be placed in the &ldquo;History&rdquo; section. 
+You may omit a network location for a work that was published at
+least four years before the Document itself, or if the original
+publisher of the version it refers to gives permission.
+
+          <li>For any section Entitled &ldquo;Acknowledgements&rdquo; or &ldquo;Dedications&rdquo;, Preserve
+the Title of the section, and preserve in the section all the
+substance and tone of each of the contributor acknowledgements and/or
+dedications given therein.
+
+          <li>Preserve all the Invariant Sections of the Document,
+unaltered in their text and in their titles.  Section numbers
+or the equivalent are not considered part of the section titles.
+
+          <li>Delete any section Entitled &ldquo;Endorsements&rdquo;.  Such a section
+may not be included in the Modified Version.
+
+          <li>Do not retitle any existing section to be Entitled &ldquo;Endorsements&rdquo; or
+to conflict in title with any Invariant Section.
+
+          <li>Preserve any Warranty Disclaimers.
+          </ol>
+
+     <p>If the Modified Version includes new front-matter sections or
+appendices that qualify as Secondary Sections and contain no material
+copied from the Document, you may at your option designate some or all
+of these sections as invariant.  To do this, add their titles to the
+list of Invariant Sections in the Modified Version's license notice. 
+These titles must be distinct from any other section titles.
+
+     <p>You may add a section Entitled &ldquo;Endorsements&rdquo;, provided it contains
+nothing but endorsements of your Modified Version by various
+parties&mdash;for example, statements of peer review or that the text has
+been approved by an organization as the authoritative definition of a
+standard.
+
+     <p>You may add a passage of up to five words as a Front-Cover Text, and a
+passage of up to 25 words as a Back-Cover Text, to the end of the list
+of Cover Texts in the Modified Version.  Only one passage of
+Front-Cover Text and one of Back-Cover Text may be added by (or
+through arrangements made by) any one entity.  If the Document already
+includes a cover text for the same cover, previously added by you or
+by arrangement made by the same entity you are acting on behalf of,
+you may not add another; but you may replace the old one, on explicit
+permission from the previous publisher that added the old one.
+
+     <p>The author(s) and publisher(s) of the Document do not by this License
+give permission to use their names for publicity for or to assert or
+imply endorsement of any Modified Version.
+
+     <li>COMBINING DOCUMENTS
+
+     <p>You may combine the Document with other documents released under this
+License, under the terms defined in section 4 above for modified
+versions, provided that you include in the combination all of the
+Invariant Sections of all of the original documents, unmodified, and
+list them all as Invariant Sections of your combined work in its
+license notice, and that you preserve all their Warranty Disclaimers.
+
+     <p>The combined work need only contain one copy of this License, and
+multiple identical Invariant Sections may be replaced with a single
+copy.  If there are multiple Invariant Sections with the same name but
+different contents, make the title of each such section unique by
+adding at the end of it, in parentheses, the name of the original
+author or publisher of that section if known, or else a unique number. 
+Make the same adjustment to the section titles in the list of
+Invariant Sections in the license notice of the combined work.
+
+     <p>In the combination, you must combine any sections Entitled &ldquo;History&rdquo;
+in the various original documents, forming one section Entitled
+&ldquo;History&rdquo;; likewise combine any sections Entitled &ldquo;Acknowledgements&rdquo;,
+and any sections Entitled &ldquo;Dedications&rdquo;.  You must delete all
+sections Entitled &ldquo;Endorsements.&rdquo;
+
+     <li>COLLECTIONS OF DOCUMENTS
+
+     <p>You may make a collection consisting of the Document and other documents
+released under this License, and replace the individual copies of this
+License in the various documents with a single copy that is included in
+the collection, provided that you follow the rules of this License for
+verbatim copying of each of the documents in all other respects.
+
+     <p>You may extract a single document from such a collection, and distribute
+it individually under this License, provided you insert a copy of this
+License into the extracted document, and follow this License in all
+other respects regarding verbatim copying of that document.
+
+     <li>AGGREGATION WITH INDEPENDENT WORKS
+
+     <p>A compilation of the Document or its derivatives with other separate
+and independent documents or works, in or on a volume of a storage or
+distribution medium, is called an &ldquo;aggregate&rdquo; if the copyright
+resulting from the compilation is not used to limit the legal rights
+of the compilation's users beyond what the individual works permit. 
+When the Document is included in an aggregate, this License does not
+apply to the other works in the aggregate which are not themselves
+derivative works of the Document.
+
+     <p>If the Cover Text requirement of section 3 is applicable to these
+copies of the Document, then if the Document is less than one half of
+the entire aggregate, the Document's Cover Texts may be placed on
+covers that bracket the Document within the aggregate, or the
+electronic equivalent of covers if the Document is in electronic form. 
+Otherwise they must appear on printed covers that bracket the whole
+aggregate.
+
+     <li>TRANSLATION
+
+     <p>Translation is considered a kind of modification, so you may
+distribute translations of the Document under the terms of section 4. 
+Replacing Invariant Sections with translations requires special
+permission from their copyright holders, but you may include
+translations of some or all Invariant Sections in addition to the
+original versions of these Invariant Sections.  You may include a
+translation of this License, and all the license notices in the
+Document, and any Warranty Disclaimers, provided that you also include
+the original English version of this License and the original versions
+of those notices and disclaimers.  In case of a disagreement between
+the translation and the original version of this License or a notice
+or disclaimer, the original version will prevail.
+
+     <p>If a section in the Document is Entitled &ldquo;Acknowledgements&rdquo;,
+&ldquo;Dedications&rdquo;, or &ldquo;History&rdquo;, the requirement (section 4) to Preserve
+its Title (section 1) will typically require changing the actual
+title.
+
+     <li>TERMINATION
+
+     <p>You may not copy, modify, sublicense, or distribute the Document
+except as expressly provided under this License.  Any attempt
+otherwise to copy, modify, sublicense, or distribute it is void, and
+will automatically terminate your rights under this License.
+
+     <p>However, if you cease all violation of this License, then your license
+from a particular copyright holder is reinstated (a) provisionally,
+unless and until the copyright holder explicitly and finally
+terminates your license, and (b) permanently, if the copyright holder
+fails to notify you of the violation by some reasonable means prior to
+60 days after the cessation.
+
+     <p>Moreover, your license from a particular copyright holder is
+reinstated permanently if the copyright holder notifies you of the
+violation by some reasonable means, this is the first time you have
+received notice of violation of this License (for any work) from that
+copyright holder, and you cure the violation prior to 30 days after
+your receipt of the notice.
+
+     <p>Termination of your rights under this section does not terminate the
+licenses of parties who have received copies or rights from you under
+this License.  If your rights have been terminated and not permanently
+reinstated, receipt of a copy of some or all of the same material does
+not give you any rights to use it.
+
+     <li>FUTURE REVISIONS OF THIS LICENSE
+
+     <p>The Free Software Foundation may publish new, revised versions
+of the GNU Free Documentation License from time to time.  Such new
+versions will be similar in spirit to the present version, but may
+differ in detail to address new problems or concerns.  See
+<a href="http://www.gnu.org/copyleft/">http://www.gnu.org/copyleft/</a>.
+
+     <p>Each version of the License is given a distinguishing version number. 
+If the Document specifies that a particular numbered version of this
+License &ldquo;or any later version&rdquo; applies to it, you have the option of
+following the terms and conditions either of that specified version or
+of any later version that has been published (not as a draft) by the
+Free Software Foundation.  If the Document does not specify a version
+number of this License, you may choose any version ever published (not
+as a draft) by the Free Software Foundation.  If the Document
+specifies that a proxy can decide which future versions of this
+License can be used, that proxy's public statement of acceptance of a
+version permanently authorizes you to choose that version for the
+Document.
+
+     <li>RELICENSING
+
+     <p>&ldquo;Massive Multiauthor Collaboration Site&rdquo; (or &ldquo;MMC Site&rdquo;) means any
+World Wide Web server that publishes copyrightable works and also
+provides prominent facilities for anybody to edit those works.  A
+public wiki that anybody can edit is an example of such a server.  A
+&ldquo;Massive Multiauthor Collaboration&rdquo; (or &ldquo;MMC&rdquo;) contained in the
+site means any set of copyrightable works thus published on the MMC
+site.
+
+     <p>&ldquo;CC-BY-SA&rdquo; means the Creative Commons Attribution-Share Alike 3.0
+license published by Creative Commons Corporation, a not-for-profit
+corporation with a principal place of business in San Francisco,
+California, as well as future copyleft versions of that license
+published by that same organization.
+
+     <p>&ldquo;Incorporate&rdquo; means to publish or republish a Document, in whole or
+in part, as part of another Document.
+
+     <p>An MMC is &ldquo;eligible for relicensing&rdquo; if it is licensed under this
+License, and if all works that were first published under this License
+somewhere other than this MMC, and subsequently incorporated in whole
+or in part into the MMC, (1) had no cover texts or invariant sections,
+and (2) were thus incorporated prior to November 1, 2008.
+
+     <p>The operator of an MMC Site may republish an MMC contained in the site
+under CC-BY-SA on the same site at any time before August 1, 2009,
+provided the MMC is eligible for relicensing.
+
+        </ol>
+
+<h3 class="heading">ADDENDUM: How to use this License for your documents</h3>
+
+<p>To use this License in a document you have written, include a copy of
+the License in the document and put the following copyright and
+license notices just after the title page:
+
+<pre class="smallexample">       Copyright (C)  <var>year</var>  <var>your name</var>.
+       Permission is granted to copy, distribute and/or modify this document
+       under the terms of the GNU Free Documentation License, Version 1.3
+       or any later version published by the Free Software Foundation;
+       with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+       Texts.  A copy of the license is included in the section entitled ``GNU
+       Free Documentation License''.
+</pre>
+   <p>If you have Invariant Sections, Front-Cover Texts and Back-Cover Texts,
+replace the &ldquo;with<small class="dots">...</small>Texts.&rdquo; line with this:
+
+<pre class="smallexample">         with the Invariant Sections being <var>list their titles</var>, with
+         the Front-Cover Texts being <var>list</var>, and with the Back-Cover Texts
+         being <var>list</var>.
+</pre>
+   <p>If you have Invariant Sections without Cover Texts, or some other
+combination of the three, merge those two alternatives to suit the
+situation.
+
+   <p>If your document contains nontrivial examples of program code, we
+recommend releasing these examples in parallel under your choice of
+free software license, such as the GNU General Public License,
+to permit their use in free software.
+
+<!-- Local Variables: -->
+<!-- ispell-local-pdict: "ispell-dict" -->
+<!-- End: -->
+<div class="node">
+<a name="Index"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="unnumbered">Index</h2>
+
+<ul class="index-cp" compact>
+<li><a href="#index-g_t_0026optional-37"><code>&amp;optional</code></a>: <a href="#Idle-Summary-Mode">Idle Summary Mode</a></li>
+<li><a href="#index-g_t_0026optional-40"><code>&amp;optional</code></a>: <a href="#Idle-Completions-Mode">Idle Completions Mode</a></li>
+<li><a href="#index-Analyzer-43">Analyzer</a>: <a href="#Analyzer">Analyzer</a></li>
+<li><a href="#index-define_002dsemantic_002ddecoration_002dstyle-77"><code>define-semantic-decoration-style</code></a>: <a href="#Tag-Decoration-Mode">Tag Decoration Mode</a></li>
+<li><a href="#index-global_002dsemantic_002ddecoration_002dmode-68"><code>global-semantic-decoration-mode</code></a>: <a href="#Tag-Decoration-Mode">Tag Decoration Mode</a></li>
+<li><a href="#index-global_002dsemantic_002dhighlight_002dfunc_002dmode-65"><code>global-semantic-highlight-func-mode</code></a>: <a href="#Highlight-Func-Mode">Highlight Func Mode</a></li>
+<li><a href="#index-global_002dsemantic_002didle_002dscheduler_002dmode-25"><code>global-semantic-idle-scheduler-mode</code></a>: <a href="#Idle-Scheduler">Idle Scheduler</a></li>
+<li><a href="#index-global_002dsemantic_002dmru_002dbookmark_002dmode-61"><code>global-semantic-mru-bookmark-mode</code></a>: <a href="#MRU-Bookmarks">MRU Bookmarks</a></li>
+<li><a href="#index-global_002dsemantic_002dstickyfunc_002dmode-62"><code>global-semantic-stickyfunc-mode</code></a>: <a href="#Sticky-Func-Mode">Sticky Func Mode</a></li>
+<li><a href="#index-global_002dsemanticdb_002dminor_002dmode-5"><code>global-semanticdb-minor-mode</code></a>: <a href="#SemanticDB">SemanticDB</a></li>
+<li><a href="#index-Idle-Scheduler-24">Idle Scheduler</a>: <a href="#Idle-Scheduler">Idle Scheduler</a></li>
+<li><a href="#index-Semantic-mode-1">Semantic mode</a>: <a href="#Semantic-mode">Semantic mode</a></li>
+<li><a href="#index-semantic_002dadd_002dsystem_002dinclude-14"><code>semantic-add-system-include</code></a>: <a href="#Include-paths">Include paths</a></li>
+<li><a href="#index-semantic_002dadebug_002dsearchdb-21"><code>semantic-adebug-searchdb</code></a>: <a href="#Semanticdb-search-debugging-commands">Semanticdb search debugging commands</a></li>
+<li><a href="#index-semantic_002dafter_002didle_002dscheduler_002dreparse_002dhook-32"><code>semantic-after-idle-scheduler-reparse-hook</code></a>: <a href="#Reparsing-Options">Reparsing Options</a></li>
+<li><a href="#index-semantic_002danalyze_002dcurrent_002dcontext-53"><code>semantic-analyze-current-context</code></a>: <a href="#Analyzer-Debug">Analyzer Debug</a></li>
+<li><a href="#index-semantic_002danalyze_002dpossible_002dcompletions-44"><code>semantic-analyze-possible-completions</code></a>: <a href="#Smart-Completion">Smart Completion</a></li>
+<li><a href="#index-semantic_002dbefore_002didle_002dscheduler_002dreparse_002dhook-31"><code>semantic-before-idle-scheduler-reparse-hook</code></a>: <a href="#Reparsing-Options">Reparsing Options</a></li>
+<li><a href="#index-semantic_002dcomplete_002danalyze_002dinline-45"><code>semantic-complete-analyze-inline</code></a>: <a href="#Smart-Completion">Smart Completion</a></li>
+<li><a href="#index-semantic_002dcomplete_002danalyze_002dinline_002didle-41"><code>semantic-complete-analyze-inline-idle</code></a>: <a href="#Idle-Completions-Mode">Idle Completions Mode</a></li>
+<li><a href="#index-semantic_002dcomplete_002dinline_002danalyzer_002didle_002ddisplayor_002dclass-42"><code>semantic-complete-inline-analyzer-idle-displayor-class</code></a>: <a href="#Idle-Completions-Mode">Idle Completions Mode</a></li>
+<li><a href="#index-semantic_002dcomplete_002dinline_002danalyzer_002didle_002ddisplayor_002dclass-46"><code>semantic-complete-inline-analyzer-idle-displayor-class</code></a>: <a href="#Smart-Completion">Smart Completion</a></li>
+<li><a href="#index-semantic_002dcustomize_002dsystem_002dinclude_002dpath-16"><code>semantic-customize-system-include-path</code></a>: <a href="#Include-paths">Include paths</a></li>
+<li><a href="#index-semantic_002ddebug_002didle_002dfunction-35"><code>semantic-debug-idle-function</code></a>: <a href="#Debugging-Idle-Time-Issues">Debugging Idle Time Issues</a></li>
+<li><a href="#index-semantic_002ddebug_002didle_002dwork_002dfunction-36"><code>semantic-debug-idle-work-function</code></a>: <a href="#Debugging-Idle-Time-Issues">Debugging Idle Time Issues</a></li>
+<li><a href="#index-semantic_002ddecoration_002dmode-67">semantic-decoration-mode</a>: <a href="#Tag-Decoration-Mode">Tag Decoration Mode</a></li>
+<li><a href="#index-semantic_002ddecoration_002don_002dincludes-74"><code>semantic-decoration-on-includes</code></a>: <a href="#Tag-Decoration-Mode">Tag Decoration Mode</a></li>
+<li><a href="#index-semantic_002ddecoration_002don_002dprivate_002dmembers_002dface-72"><code>semantic-decoration-on-private-members-face</code></a>: <a href="#Tag-Decoration-Mode">Tag Decoration Mode</a></li>
+<li><a href="#index-semantic_002ddecoration_002don_002dprotected_002dmembers_002dface-73"><code>semantic-decoration-on-protected-members-face</code></a>: <a href="#Tag-Decoration-Mode">Tag Decoration Mode</a></li>
+<li><a href="#index-semantic_002ddecoration_002don_002dunknown_002dincludes-75"><code>semantic-decoration-on-unknown-includes</code></a>: <a href="#Tag-Decoration-Mode">Tag Decoration Mode</a></li>
+<li><a href="#index-semantic_002ddecoration_002don_002dunparsed_002dincludes-76"><code>semantic-decoration-on-unparsed-includes</code></a>: <a href="#Tag-Decoration-Mode">Tag Decoration Mode</a></li>
+<li><a href="#index-semantic_002ddecoration_002dstyles-69"><code>semantic-decoration-styles</code></a>: <a href="#Tag-Decoration-Mode">Tag Decoration Mode</a></li>
+<li><a href="#index-semantic_002ddefault_002dsubmodes-3"><code>semantic-default-submodes</code></a>: <a href="#Semantic-mode">Semantic mode</a></li>
+<li><a href="#index-semantic_002dhighlight_002dfunc_002dcurrent_002dtag_002dface-66"><code>semantic-highlight-func-current-tag-face</code></a>: <a href="#Highlight-Func-Mode">Highlight Func Mode</a></li>
+<li><a href="#index-semantic_002dhighlight_002dfunc_002dmode-64">semantic-highlight-func-mode</a>: <a href="#Highlight-Func-Mode">Highlight Func Mode</a></li>
+<li><a href="#index-semantic_002dia_002dcomplete_002dsymbol-47"><code>semantic-ia-complete-symbol</code></a>: <a href="#Smart-Completion">Smart Completion</a></li>
+<li><a href="#index-semantic_002dia_002ddescribe_002dclass-50"><code>semantic-ia-describe-class</code></a>: <a href="#Smart-Summary">Smart Summary</a></li>
+<li><a href="#index-semantic_002dia_002dfast_002djump-51"><code>semantic-ia-fast-jump</code></a>: <a href="#Smart-Jump">Smart Jump</a></li>
+<li><a href="#index-semantic_002dia_002dfast_002dmouse_002djump-52"><code>semantic-ia-fast-mouse-jump</code></a>: <a href="#Smart-Jump">Smart Jump</a></li>
+<li><a href="#index-semantic_002dia_002dshow_002ddoc-49"><code>semantic-ia-show-doc</code></a>: <a href="#Smart-Summary">Smart Summary</a></li>
+<li><a href="#index-semantic_002dia_002dshow_002dsummary-48"><code>semantic-ia-show-summary</code></a>: <a href="#Smart-Summary">Smart Summary</a></li>
+<li><a href="#index-semantic_002didle_002dscheduler_002didle_002dtime-26"><code>semantic-idle-scheduler-idle-time</code></a>: <a href="#Idle-Scheduler">Idle Scheduler</a></li>
+<li><a href="#index-semantic_002didle_002dscheduler_002dmax_002dbuffer_002dsize-28"><code>semantic-idle-scheduler-max-buffer-size</code></a>: <a href="#Reparsing-Options">Reparsing Options</a></li>
+<li><a href="#index-semantic_002didle_002dscheduler_002dno_002dworking_002dmessage-29"><code>semantic-idle-scheduler-no-working-message</code></a>: <a href="#Reparsing-Options">Reparsing Options</a></li>
+<li><a href="#index-semantic_002didle_002dscheduler_002dverbose_002dflag-27"><code>semantic-idle-scheduler-verbose-flag</code></a>: <a href="#Idle-Scheduler">Idle Scheduler</a></li>
+<li><a href="#index-semantic_002didle_002dscheduler_002dwork_002didle_002dtime-33"><code>semantic-idle-scheduler-work-idle-time</code></a>: <a href="#Idle-Working-Options">Idle Working Options</a></li>
+<li><a href="#index-semantic_002didle_002dscheduler_002dworking_002din_002dmodeline_002dflag-30"><code>semantic-idle-scheduler-working-in-modeline-flag</code></a>: <a href="#Reparsing-Options">Reparsing Options</a></li>
+<li><a href="#index-semantic_002didle_002dsummary_002dfunction-38"><code>semantic-idle-summary-function</code></a>: <a href="#Idle-Summary-Mode">Idle Summary Mode</a></li>
+<li><a href="#index-semantic_002didle_002dsummary_002dout_002dof_002dcontext_002dfaces-39"><code>semantic-idle-summary-out-of-context-faces</code></a>: <a href="#Idle-Summary-Mode">Idle Summary Mode</a></li>
+<li><a href="#index-semantic_002didle_002dwork_002dparse_002dneighboring_002dfiles_002dflag-34"><code>semantic-idle-work-parse-neighboring-files-flag</code></a>: <a href="#Idle-Working-Options">Idle Working Options</a></li>
+<li><a href="#index-semantic_002dmru_002dbookmark_002dmode-60">semantic-mru-bookmark-mode</a>: <a href="#MRU-Bookmarks">MRU Bookmarks</a></li>
+<li><a href="#index-semantic_002dnew_002dbuffer_002dsetup_002dfunctions-2"><code>semantic-new-buffer-setup-functions</code></a>: <a href="#Semantic-mode">Semantic mode</a></li>
+<li><a href="#index-semantic_002dremove_002dsystem_002dinclude-15"><code>semantic-remove-system-include</code></a>: <a href="#Include-paths">Include paths</a></li>
+<li><a href="#index-semantic_002dspeedbar_002danalysis-55"><code>semantic-speedbar-analysis</code></a>: <a href="#Speedbar">Speedbar</a></li>
+<li><a href="#index-semantic_002dstickyfunc_002dsticky_002dclasses-63"><code>semantic-stickyfunc-sticky-classes</code></a>: <a href="#Sticky-Func-Mode">Sticky Func Mode</a></li>
+<li><a href="#index-semantic_002dsymref-59"><code>semantic-symref</code></a>: <a href="#SymRef">SymRef</a></li>
+<li><a href="#index-semantic_002dsymref_002dsymbol-58"><code>semantic-symref-symbol</code></a>: <a href="#SymRef">SymRef</a></li>
+<li><a href="#index-semantic_002dsymref_002dtool-57"><code>semantic-symref-tool</code></a>: <a href="#SymRef">SymRef</a></li>
+<li><a href="#index-semantic_002dtag_002dboundary_002dface-71"><code>semantic-tag-boundary-face</code></a>: <a href="#Tag-Decoration-Mode">Tag Decoration Mode</a></li>
+<li><a href="#index-semantic_002dtoggle_002ddecoration_002dstyle-70"><code>semantic-toggle-decoration-style</code></a>: <a href="#Tag-Decoration-Mode">Tag Decoration Mode</a></li>
+<li><a href="#index-SemanticDB-4">SemanticDB</a>: <a href="#SemanticDB">SemanticDB</a></li>
+<li><a href="#index-semanticdb_002dcreate_002debrowse_002ddatabase-23"><code>semanticdb-create-ebrowse-database</code></a>: <a href="#Create-System-Databases">Create System Databases</a></li>
+<li><a href="#index-semanticdb_002ddefault_002dfile_002dname-7"><code>semanticdb-default-file-name</code></a>: <a href="#Semanticdb-Tag-Storage">Semanticdb Tag Storage</a></li>
+<li><a href="#index-semanticdb_002ddefault_002dsave_002ddirectory-6"><code>semanticdb-default-save-directory</code></a>: <a href="#Semanticdb-Tag-Storage">Semanticdb Tag Storage</a></li>
+<li><a href="#index-semanticdb_002ddump_002dall_002dtable_002dsummary-18"><code>semanticdb-dump-all-table-summary</code></a>: <a href="#Semanticdb-search-debugging-commands">Semanticdb search debugging commands</a></li>
+<li><a href="#index-semanticdb_002dfind_002dadebug_002dlost_002dincludes-20"><code>semanticdb-find-adebug-lost-includes</code></a>: <a href="#Semanticdb-search-debugging-commands">Semanticdb search debugging commands</a></li>
+<li><a href="#index-semanticdb_002dfind_002ddefault_002dthrottle-11"><code>semanticdb-find-default-throttle</code></a>: <a href="#Search-Throttle">Search Throttle</a></li>
+<li><a href="#index-semanticdb_002dfind_002dtest_002dtranslate_002dpath-19"><code>semanticdb-find-test-translate-path</code></a>: <a href="#Semanticdb-search-debugging-commands">Semanticdb search debugging commands</a></li>
+<li><a href="#index-semanticdb_002dimplied_002dinclude_002dtags-17"><code>semanticdb-implied-include-tags</code></a>: <a href="#Include-paths">Include paths</a></li>
+<li><a href="#index-semanticdb_002dnew_002ddatabase_002dclass-22"><code>semanticdb-new-database-class</code></a>: <a href="#Changing-Backends">Changing Backends</a></li>
+<li><a href="#index-semanticdb_002dpersistent_002dpath-8"><code>semanticdb-persistent-path</code></a>: <a href="#Semanticdb-Tag-Storage">Semanticdb Tag Storage</a></li>
+<li><a href="#index-semanticdb_002dproject_002dpredicate_002dfunctions-9"><code>semanticdb-project-predicate-functions</code></a>: <a href="#Semanticdb-Tag-Storage">Semanticdb Tag Storage</a></li>
+<li><a href="#index-semanticdb_002dproject_002droot_002dfunctions-13"><code>semanticdb-project-root-functions</code></a>: <a href="#Semanticdb-Roots">Semanticdb Roots</a></li>
+<li><a href="#index-semanticdb_002dproject_002droots-12"><code>semanticdb-project-roots</code></a>: <a href="#Semanticdb-Roots">Semanticdb Roots</a></li>
+<li><a href="#index-semanticdb_002dsave_002ddatabase_002dfunctions-10"><code>semanticdb-save-database-functions</code></a>: <a href="#Semanticdb-Tag-Storage">Semanticdb Tag Storage</a></li>
+<li><a href="#index-speedbar-54">speedbar</a>: <a href="#Speedbar">Speedbar</a></li>
+<li><a href="#index-symref-56">symref</a>: <a href="#SymRef">SymRef</a></li>
+   </ul></body></html>
+
+<!--
+
+Local Variables:
+coding: utf-8
+End:
+
+-->

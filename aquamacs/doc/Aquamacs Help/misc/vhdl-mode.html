@@ -1,0 +1,1652 @@
+<html lang="en">
+<head>
+<title>VHDL Mode, an Emacs mode for editing VHDL code</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="VHDL Mode, an Emacs mode for editing VHDL code">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="top" href="#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This file documents VHDL Mode, an Emacs mode for editing VHDL code.
+
+Copyright (C) 1995-2008, 2010, 2012, 2015 Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being "A GNU Manual," and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     "GNU Free Documentation License."
+
+     (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+     modify this GNU manual."
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<h1 class="settitle">VHDL Mode, an Emacs mode for editing VHDL code</h1>
+   <div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Top" href="#Top">VHDL Mode, an Emacs mode for editing VHDL code</a>
+<li><a name="toc_Introduction" href="#Introduction">1 Introduction</a>
+<li><a name="toc_Getting-Connected" href="#Getting-Connected">2 Getting Connected</a>
+<li><a name="toc_New-Indentation-Engine" href="#New-Indentation-Engine">3 New Indentation Engine</a>
+<ul>
+<li><a href="#Syntactic-Analysis">3.1 Syntactic Analysis</a>
+<li><a href="#Indentation-Calculation">3.2 Indentation Calculation</a>
+</li></ul>
+<li><a name="toc_Customizing-Indentation" href="#Customizing-Indentation">4 Customizing Indentation</a>
+<ul>
+<li><a href="#Interactive-Customization">4.1 Interactive Customization</a>
+<li><a href="#Permanent-Customization">4.2 Permanent Indentation</a>
+<li><a href="#Styles">4.3 Styles</a>
+<ul>
+<li><a href="#Built_002din-Styles">4.3.1 Built-in Styles</a>
+<li><a href="#Adding-Styles">4.3.2 Adding Styles</a>
+<li><a href="#File-Styles">4.3.3 File Styles</a>
+</li></ul>
+<li><a href="#Advanced-Customizations">4.4 Advanced Customizations</a>
+<ul>
+<li><a href="#Custom-Indentation-Functions">4.4.1 Custom Indentation Functions</a>
+<li><a href="#Other-Special-Indentations">4.4.2 Other Special Indentations</a>
+</li></ul>
+</li></ul>
+<li><a name="toc_Syntactic-Symbols" href="#Syntactic-Symbols">5 Syntactic Symbols</a>
+<li><a name="toc_Frequently-Asked-Questions" href="#Frequently-Asked-Questions">6 Frequently Asked Questions</a>
+<li><a name="toc_Getting-the-latest-VHDL-Mode-release" href="#Getting-the-latest-VHDL-Mode-release">7 Getting the latest VHDL Mode release</a>
+<li><a name="toc_Sample-_002eemacs-File" href="#Sample-_002eemacs-File">8 Sample <samp><span class="file">.emacs</span></samp> file</a>
+<li><a name="toc_Limitations-and-Known-Bugs" href="#Limitations-and-Known-Bugs">9 Limitations and Known Bugs</a>
+<li><a name="toc_Mailing-Lists-and-Submitting-Bug-Reports" href="#Mailing-Lists-and-Submitting-Bug-Reports">10 Mailing Lists and Submitting Bug Reports</a>
+<li><a name="toc_GNU-Free-Documentation-License" href="#GNU-Free-Documentation-License">Appendix A GNU Free Documentation License</a>
+<li><a name="toc_Concept-Index" href="#Concept-Index">Concept Index</a>
+<li><a name="toc_Command-Index" href="#Command-Index">Command Index</a>
+<li><a name="toc_Key-Index" href="#Key-Index">Key Index</a>
+<li><a name="toc_Variable-Index" href="#Variable-Index">Variable Index</a>
+</li></ul>
+</div>
+
+
+
+<div class="node">
+<a name="Top"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Introduction">Introduction</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#dir">(dir)</a>
+
+</div>
+
+<h2 class="unnumbered">VHDL Mode, an Emacs mode for editing VHDL code</h2>
+
+<p>This file documents VHDL Mode, an Emacs mode for editing VHDL code.
+
+   <p>Copyright &copy; 1995&ndash;2008, 2010, 2012, 2015 Free Software
+Foundation, Inc.
+
+   <blockquote>
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with the Front-Cover texts being &ldquo;A GNU Manual,&rdquo;
+and with the Back-Cover Texts as in (a) below.  A copy of the license
+is included in the section entitled &ldquo;GNU Free Documentation License.&rdquo;
+
+   <p>(a) The FSF's Back-Cover Text is: &ldquo;You have the freedom to copy and
+modify this GNU manual.&rdquo;
+</blockquote>
+
+<ul class="menu">
+<li><a accesskey="1" href="#Introduction">Introduction</a>
+<li><a accesskey="2" href="#Getting-Connected">Getting Connected</a>
+<li><a accesskey="3" href="#New-Indentation-Engine">New Indentation Engine</a>
+<li><a accesskey="4" href="#Customizing-Indentation">Customizing Indentation</a>
+<li><a accesskey="5" href="#Syntactic-Symbols">Syntactic Symbols</a>
+<li><a accesskey="6" href="#Frequently-Asked-Questions">Frequently Asked Questions</a>
+<li><a accesskey="7" href="#Getting-the-latest-VHDL-Mode-release">Getting the latest VHDL Mode release</a>
+<li><a accesskey="8" href="#Sample-_002eemacs-File">Sample .emacs File</a>
+<li><a accesskey="9" href="#Limitations-and-Known-Bugs">Limitations and Known Bugs</a>
+<li><a href="#Mailing-Lists-and-Submitting-Bug-Reports">Mailing Lists and Submitting Bug Reports</a>
+<li><a href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>:  The license for this documentation. 
+<li><a href="#Concept-Index">Concept Index</a>
+<li><a href="#Command-Index">Command Index</a>:                Command Index
+<li><a href="#Key-Index">Key Index</a>:                    Key Index
+<li><a href="#Variable-Index">Variable Index</a>:               Variable Index
+</ul>
+
+<div class="node">
+<a name="Introduction"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Getting-Connected">Getting Connected</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Top">Top</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">1 Introduction</h2>
+
+<p><a name="index-Introduction-1"></a>
+Welcome to VHDL Mode. This is a GNU Emacs mode for editing files
+containing VHDL code.
+
+   <p>This manual will describe the following:
+
+     <ul>
+<li>How to get started using VHDL Mode.
+
+     <li>How the indentation engine works.
+
+     <li>How to customize the indentation engine.
+
+   </ul>
+
+   <p><a name="index-vhdl_002dversion-2"></a>The major version number was incremented to 3 with the addition of
+many new features for editing VHDL code to the new indentation engine,
+which was introduced in major version 2. To find the minor revision
+number of this release, use <kbd>M-x vhdl-version RET</kbd>.
+
+   <p>A special word of thanks goes to Rod Whitby, who wrote the
+VHDL Mode indentation engine, and to Barry Warsaw, who wrote
+the CC Mode indentation engine that formed the basis
+thereof. Their manuals were also the basis for this manual.
+
+   <p>This manual is not very up-to-date. It basically contains the
+indentation machine documentation by Rod Whitby with only minor
+adaptions. A short documentation of the entire VHDL Mode is available
+within the mode itself by typing <kbd>C-c C-h</kbd>. Also, all commands and
+customization of most variables are available through the menu, which
+makes everything highly self-explaining.
+
+<div class="node">
+<a name="Getting-Connected"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#New-Indentation-Engine">New Indentation Engine</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Introduction">Introduction</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">2 Getting Connected</h2>
+
+<p><a name="index-Getting-Connected-3"></a>
+To get started, simply visit a <samp><span class="file">.vhd</span></samp> file in Emacs; or type
+<kbd>M-x vhdl-mode RET</kbd>.
+
+<div class="node">
+<a name="New-Indentation-Engine"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Customizing-Indentation">Customizing Indentation</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Getting-Connected">Getting Connected</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">3 New Indentation Engine</h2>
+
+<p><a name="index-New-Indentation-Engine-4"></a>
+VHDL Mode has a new indentation engine, providing a simplified, yet
+flexible and general mechanism for customizing indentation. It breaks
+indentation calculation into two steps. First for the line of code being
+indented, VHDL Mode analyzes what kind of language construct it's
+looking at, then it applies user defined offsets to the current line
+based on this analysis.
+
+   <p>This section will briefly cover how indentation is calculated in
+VHDL Mode. It is important to understand the indentation model
+being used so that you will know how to customize VHDL Mode for
+your personal coding style.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Syntactic-Analysis">Syntactic Analysis</a>:        Step 1 -- Syntactic Analysis
+<li><a accesskey="2" href="#Indentation-Calculation">Indentation Calculation</a>:   Step 2 -- Indentation Calculation
+</ul>
+
+<div class="node">
+<a name="Syntactic-Analysis"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Indentation-Calculation">Indentation Calculation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#New-Indentation-Engine">New Indentation Engine</a>
+
+</div>
+
+<h3 class="section">3.1 Syntactic Analysis</h3>
+
+<p><a name="index-Syntactic-Analysis-5"></a>
+<a name="index-vhdl_002doffsets_002dalist-6"></a><a name="index-offsets_002dalist-_0028vhdl_002d_0029-7"></a><a name="index-relative-buffer-position-8"></a><a name="index-syntactic-symbol-9"></a><a name="index-syntactic-component-10"></a><a name="index-syntactic-component-list-11"></a><a name="index-relative-buffer-position-12"></a>The first thing VHDL Mode does when indenting a line of code, is
+to analyze the line, determining the <dfn>syntactic component list</dfn> of
+the construct on that line.  A <dfn>syntactic component</dfn> consists of a
+pair of information (in lisp parlance, a <em>cons cell</em>), where the
+first part is a <dfn>syntactic symbol</dfn>, and the second part is a
+<dfn>relative buffer position</dfn>.  Syntactic symbols describe elements of
+VHDL code, e.g., <code>statement</code>, <code>comment</code>, <code>block-open</code>,
+<code>block-close</code>, etc.  See <a href="#Syntactic-Symbols">Syntactic Symbols</a>, for a complete list
+of currently recognized syntactic symbols and their semantics.  Also,
+the variable <code>vhdl-offsets-alist</code> contains the list of currently
+supported syntactic symbols.
+
+   <p>Conceptually, a line of VHDL code is always indented relative to the
+indentation of some line higher up in the buffer.  This is represented
+by the relative buffer position in the syntactic component.
+
+   <p>It might help to see an example. Suppose we had the following code as
+the only thing in a VHDL Mode buffer <a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>:
+<pre class="example">     
+       1: inverter : process
+       2: begin
+       3:   q &lt;= not d;
+       4:   wait on d;
+       5: end inverter;
+</pre>
+   <p><a name="index-C_002dc-C_002dx-13"></a><a name="index-vhdl_002dshow_002dsyntactic_002dinformation-14"></a><a name="index-show_002dsyntactic_002dinformation-_0028vhdl_002d_0029-15"></a>We can use the command <kbd>C-c C-x</kbd>
+(<code>vhdl-show-syntactic-information</code>) to simply report what the
+syntactic analysis is for the current line.  Running this command on
+line 4 of example 1, we'd see in the echo area:
+<pre class="example">     
+     ((statement . 28))
+     
+</pre>
+   <p>This tells us that the line is a statement and it is indented relative
+to buffer position 28, which happens to be the &lsquo;<samp><span class="samp">q</span></samp>&rsquo; on line 3.  If
+you were to move point to line 3 and hit <kbd>C-c C-x</kbd>, you would see:
+<pre class="example">     
+     ((statement-block-intro . 20))
+     
+</pre>
+   <p>This indicates that line 3 is the first statement in a block, and is
+indented relative to buffer position 20, which is the &lsquo;<samp><span class="samp">b</span></samp>&rsquo; in the
+<code>begin</code> keyword on line 2.
+
+   <p><a name="index-comment-only-line-16"></a>Syntactic component lists can contain more than one component, and
+individual syntactic components need not have relative buffer positions. 
+The most common example of this is a line that contains a <dfn>comment
+only line</dfn>.
+<pre class="example">     
+     %%% TBD %%%
+</pre>
+   <p class="noindent">Hitting <kbd>C-c C-x</kbd> on line 3 of the example gives us:
+<pre class="example">     
+     ((comment-intro) (block-intro . 46))
+     
+</pre>
+   <p class="noindent">so you can see that the syntactic component list contains two syntactic
+components.  Also notice that the first component,
+&lsquo;<samp><span class="samp">(comment-intro)</span></samp>&rsquo; has no relative buffer position.
+
+<div class="node">
+<a name="Indentation-Calculation"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Syntactic-Analysis">Syntactic Analysis</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#New-Indentation-Engine">New Indentation Engine</a>
+
+</div>
+
+<h3 class="section">3.2 Indentation Calculation</h3>
+
+<p><a name="index-Indentation-Calculation-17"></a>
+<a name="index-vhdl_002doffsets_002dalist-18"></a><a name="index-offsets_002dalist-_0028vhdl_002d_0029-19"></a>Indentation for the current line is calculated using the syntactic
+component list derived in step 1 above (see <a href="#Syntactic-Analysis">Syntactic Analysis</a>).  Each component contributes to the final total indentation
+of the line in two ways.
+
+   <p>First, the syntactic symbols are looked up in the <code>vhdl-offsets-alist</code>
+variable, which is an association list of syntactic symbols and the
+offsets to apply for those symbols.  These offsets are added to the
+running total.
+
+   <p>Second, if the component has a relative buffer position, VHDL Mode
+adds the column number of that position to the running total.  By adding
+up the offsets and columns for every syntactic component on the list,
+the final total indentation for the current line is computed.
+
+   <p>Let's use our code example above to see how this works.  Here is our
+example again.
+<pre class="example">     
+       1: inverter : process
+       2: begin
+       3:   q &lt;= not d;
+       4:   wait on d;
+       5: end inverter;
+</pre>
+   <p><a name="index-TAB-20"></a>Let's say point is on line 3 and we hit the &lt;TAB&gt; key to re-indent
+the line.  Remember that the syntactic component list for that
+line is:
+<pre class="example">     
+     ((statement-block-intro . 20))
+     
+</pre>
+   <p class="noindent">VHDL Mode looks up <code>statement-block-intro</code> in the
+<code>vhdl-offsets-alist</code> variable.  Let's say it finds the value &lsquo;<samp><span class="samp">2</span></samp>&rsquo;;
+it adds this to the running total (initialized to zero), yielding a
+running total indentation of 2 spaces.
+
+   <p>Next VHDL Mode goes to buffer position 20 and asks for the
+current column.  Since the <code>begin</code> keyword at buffer position 20 is
+in column zero, it adds &lsquo;<samp><span class="samp">0</span></samp>&rsquo; to the running total.  Since there is
+only one syntactic component on the list for this line, indentation
+calculation is complete, and the total indentation for the line is 2
+spaces. 
+Simple, huh?
+
+   <p>Actually, the mode usually just does The Right Thing without you having
+to think about it in this much detail.  But when customizing
+indentation, it's helpful to understand the general indentation model
+being used.
+
+   <p><a name="index-vhdl_002decho_002dsyntactic_002dinformation_002dp-21"></a><a name="index-echo_002dsyntactic_002dinformation_002dp-_0028vhdl_002d_0029-22"></a><a name="index-TAB-23"></a>To help you configure VHDL Mode, you can set the variable
+<code>vhdl-echo-syntactic-information-p</code> to non-<code>nil</code> so that the
+syntactic component list and calculated offset will always be echoed in
+the minibuffer when you hit <kbd>TAB</kbd>.
+
+<div class="node">
+<a name="Customizing-Indentation"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Syntactic-Symbols">Syntactic Symbols</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#New-Indentation-Engine">New Indentation Engine</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">4 Customizing Indentation</h2>
+
+<p><a name="index-Customizing-Indentation-24"></a>
+<a name="index-vhdl_002dset_002doffset-25"></a><a name="index-set_002doffset-_0028vhdl_002d_0029-26"></a>The <code>vhdl-offsets-alist</code> variable is where you customize all your
+indentations.  You simply need to decide what additional offset you want
+to add for every syntactic symbol.  You can use the command <kbd>C-c
+O</kbd> (<code>vhdl-set-offset</code>) as the way to set offsets, both
+interactively and from your mode hook.  Also, you can set up
+<em>styles</em> of indentation.  Most likely, you'll find one of the
+pre-defined styles will suit your needs, but if not, this section will
+describe how to set up basic editing configurations.  See <a href="#Styles">Styles</a>, for
+an explanation of how to set up named styles.
+
+   <p><a name="index-vhdl_002dbasic_002doffset-27"></a><a name="index-basic_002doffset-_0028vhdl_002d_0029-28"></a>As mentioned previously, the variable <code>vhdl-offsets-alist</code> is an
+association list between syntactic symbols and the offsets to be applied
+for those symbols.  In fact, these offset values can be an integer, a
+function or variable name, or one of the following symbols: <code>+</code>,
+<code>-</code>, <code>++</code>, <code>--</code>, <code>*</code>, or <code>/</code>.  The symbol
+values have the following meanings:
+
+     <ul>
+<li><code>+</code>  &ndash;  1 x <code>vhdl-basic-offset</code>
+<li><code>-</code>  &ndash;  -1 x <code>vhdl-basic-offset</code>
+<li><code>++</code> &ndash;  2 x <code>vhdl-basic-offset</code>
+<li><code>--</code> &ndash;  -2 x <code>vhdl-basic-offset</code>
+<li><code>*</code>  &ndash;  0.5 x <code>vhdl-basic-offset</code>
+<li><code>/</code>  &ndash;  -0.5 x <code>vhdl-basic-offset</code>
+
+   </ul>
+
+<p class="noindent">So, for example, because most of the default offsets are defined in
+terms of <code>+</code>, <code>-</code>, and <code>0</code>, if you like the general
+indentation style, but you use 2 spaces instead of 4 spaces per level,
+you can probably achieve your style just by changing
+<code>vhdl-basic-offset</code> like so (in your <samp><span class="file">.emacs</span></samp> file):
+<pre class="example">     
+     (setq vhdl-basic-offset 2)
+     
+</pre>
+   <p>To change indentation styles more radically, you will want to change the
+value associated with the syntactic symbols in the
+<code>vhdl-offsets-alist</code> variable.  First, I'll show you how to do that
+interactively, then I'll describe how to make changes to your
+<samp><span class="file">.emacs</span></samp> file so that your changes are more permanent.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Interactive-Customization">Interactive Customization</a>
+<li><a accesskey="2" href="#Permanent-Customization">Permanent Customization</a>
+<li><a accesskey="3" href="#Styles">Styles</a>
+<li><a accesskey="4" href="#Advanced-Customizations">Advanced Customizations</a>
+</ul>
+
+<div class="node">
+<a name="Interactive-Customization"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Permanent-Customization">Permanent Customization</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Customizing-Indentation">Customizing Indentation</a>
+
+</div>
+
+<h3 class="section">4.1 Interactive Customization</h3>
+
+<p><a name="index-Interactive-Customization-29"></a>
+As an example of how to customize indentation, let's change the
+style of the example above from:
+<pre class="example">     
+       1: inverter : process
+       2: begin
+       3:   q &lt;= not d;
+       4:   wait on d;
+       5: end inverter;
+</pre>
+   <p class="noindent">to:
+<pre class="example">     
+       1: inverter : process
+       2: begin
+       3:     q &lt;= not d;
+       4:     wait on d;
+       5: end inverter;
+</pre>
+   <p>In other words, we want to change the indentation of the statements
+inside the inverter process.  Notice that the construct we want to
+change starts on line 3.  To change the indentation of a line, we need
+to see which syntactic component affect the offset calculations for that
+line.  Hitting <kbd>C-c C-x</kbd> on line 3 yields:
+<pre class="example">     
+     ((statement-block-intro . 20))
+     
+</pre>
+   <p><a name="index-vhdl_002dset_002doffset-30"></a><a name="index-set_002doffset-_0028vhdl_002d_0029-31"></a><a name="index-C_002dc-O-32"></a>So we know that to change the offset of the first signal assignment, we need to
+change the indentation for the <code>statement-block-intro</code> syntactic
+symbol.  To do this interactively, just hit <kbd>C-c O</kbd>
+(<code>vhdl-set-offset</code>).  This prompts you for the syntactic symbol to
+change, providing a reasonable default.  In this case, the default is
+<code>statement-block-intro</code>, which is just the syntactic symbol we want to
+change!
+
+   <p>After you hit return, VHDL Mode will then prompt you for the new
+offset value, with the old value as the default.  The default in this
+case is &lsquo;<samp><span class="samp">+</span></samp>&rsquo;, so hit backspace to delete the &lsquo;<samp><span class="samp">+</span></samp>&rsquo;, then hit
+&lsquo;<samp><span class="samp">++</span></samp>&rsquo; and <kbd>RET</kbd>.  This will associate an offset of twice the
+basic indent with the syntactic symbol <code>statement-block-intro</code> in
+the <code>vhdl-offsets-alist</code> variable.
+
+   <p><a name="index-vhdl_002dindent_002ddefun-33"></a><a name="index-indent_002ddefun-_0028vhdl_002d_0029-34"></a>To check your changes quickly, just enter <kbd>M-x vhdl-indent-defun</kbd> to
+reindent the entire function.  The example should now look like:
+<pre class="example">     
+       1: inverter : process
+       2: begin
+       3:     q &lt;= not d;
+       4:     wait on d;
+       5: end inverter;
+</pre>
+   <p>Notice how just changing the offset on line 3 is all we needed to do. 
+Since the other affected lines are indented relative to line 3, they are
+automatically indented the way you'd expect.  For more complicated
+examples, this may not always work.  The general approach to take is to
+always start adjusting offsets for lines higher up in the file, then
+re-indent and see if any following lines need further adjustments.
+
+<div class="node">
+<a name="Permanent-Customization"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Styles">Styles</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Interactive-Customization">Interactive Customization</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Customizing-Indentation">Customizing Indentation</a>
+
+</div>
+
+<h3 class="section">4.2 Permanent Indentation</h3>
+
+<p><a name="index-Permanent-Indentation-35"></a>
+<a name="index-vhdl_002dmode_002dhook-36"></a><a name="index-hooks-37"></a>To make this change permanent, you need to add some lisp code to your
+<samp><span class="file">.emacs</span></samp> file.  VHDL Mode provides a <code>vhdl-mode-hook</code>
+that you can use to customize your language editing styles.  This hook
+gets run as the last thing when you enter VHDL Mode.
+
+   <p>Here's a simplified example of what you can add to your <samp><span class="file">.emacs</span></samp>
+file to make the changes described in the previous section
+(<a href="#Interactive-Customization">Interactive Customization</a>) more permanent.  See the Emacs
+manuals for more information on customizing Emacs via hooks. 
+See <a href="#Sample-_002eemacs-File">Sample .emacs File</a>, for a more complete sample <samp><span class="file">.emacs</span></samp> file.
+
+<pre class="example">     
+     (defun my-vhdl-mode-hook ()
+       ;; my customizations for all of vhdl-mode
+       (vhdl-set-offset 'statement-block-intro '++)
+       ;; other customizations can go here
+       )
+     (add-hook 'vhdl-mode-hook 'my-vhdl-mode-hook)
+</pre>
+   <p>For complex customizations, you will probably want to set up a
+<em>style</em> that groups all your customizations under a single
+name.  See <a href="#Styles">Styles</a>.
+
+   <p>The offset value can also be a function, and this is how power users
+gain enormous flexibility in customizing indentation.  See <a href="#Advanced-Customizations">Advanced Customizations</a>.
+
+<div class="node">
+<a name="Styles"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Advanced-Customizations">Advanced Customizations</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Permanent-Customization">Permanent Customization</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Customizing-Indentation">Customizing Indentation</a>
+
+</div>
+
+<h3 class="section">4.3 Styles</h3>
+
+<p><a name="index-Styles-38"></a>
+Most people only need to edit code formatted in just a few well-defined
+and consistent styles.  For example, their organization might impose a
+&ldquo;blessed&rdquo; style that all its programmers must conform to.  Similarly,
+people who work on GNU software will have to use the GNU coding style on
+C code.  Some shops are more lenient, allowing some variety of coding
+styles, and as programmers come and go, there could be a number of
+styles in use.  For this reason, VHDL Mode makes it convenient for
+you to set up logical groupings of customizations called <dfn>styles</dfn>,
+associate a single name for any particular style, and pretty easily
+start editing new or existing code using these styles.  This chapter
+describes how to set up styles and how to edit your C code using styles.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Built_002din-Styles">Built-in Styles</a>
+<li><a accesskey="2" href="#Adding-Styles">Adding Styles</a>
+<li><a accesskey="3" href="#File-Styles">File Styles</a>
+</ul>
+
+<div class="node">
+<a name="Built-in-Styles"></a>
+<a name="Built_002din-Styles"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Adding-Styles">Adding Styles</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Styles">Styles</a>
+
+</div>
+
+<h4 class="subsection">4.3.1 Built-in Styles</h4>
+
+<p><a name="index-Built_002din-Styles-39"></a>
+If you're lucky, one of VHDL Mode's built-in styles might be just
+what you're looking for.  Some of the most common VHDL styles are
+already built-in.  These include:
+
+     <ul>
+<li><a name="index-IEEE-style-40"></a><code>GNU</code> &ndash; the coding style in the IEEE Language Reference Manual.
+
+   </ul>
+
+   <p><a name="index-vhdl_002dset_002dstyle-41"></a><a name="index-set_002dstyle-_0028vhdl_002d_0029-42"></a>If you'd like to experiment with these built-in styles you can simply
+type <kbd>M-x vhdl-set-style RET</kbd> in a VHDL Mode buffer.
+
+   <p>You will be prompted for one of the above styles (with completion). 
+Enter one of the styles and hit <kbd>RET</kbd>.  Note however that setting a
+style in this way does <em>not</em> automatically re-indent your file.
+
+   <p>Once you find a built-in style you like, you can make the change
+permanent by adding a call to your <samp><span class="file">.emacs</span></samp> file.  Let's say for
+example that you want to use the <code>IEEE</code> style in all your
+files.  You would add this:
+<pre class="example">     
+     (defun my-vhdl-mode-hook ()
+       ;; use IEEE style for all VHDL code
+       (vhdl-set-style "IEEE")
+       ;; other customizations can go here
+       )
+     (add-hook 'vhdl-mode-hook 'my-vhdl-mode-hook)
+</pre>
+   <p class="noindent">See <a href="#Permanent-Customization">Permanent Customization</a>.
+
+<div class="node">
+<a name="Adding-Styles"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#File-Styles">File Styles</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Built_002din-Styles">Built-in Styles</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Styles">Styles</a>
+
+</div>
+
+<h4 class="subsection">4.3.2 Adding Styles</h4>
+
+<p><a name="index-Adding-Styles-43"></a>
+<a name="index-vhdl_002dstyle_002dalist-44"></a><a name="index-style_002dalist-_0028vhdl_002d_0029-45"></a><a name="index-vhdl_002dadd_002dstyle-46"></a><a name="index-add_002dstyle-_0028vhdl_002d_0029-47"></a>If none of the built-in styles is appropriate, you'll probably want to
+add a new style definition.  Styles are kept in the <code>vhdl-style-alist</code>
+variable, but you probably won't want to modify this variable directly. 
+VHDL Mode provides a function, called <code>vhdl-add-style</code>, that you
+can use to easily add new styles or update existing styles.  This
+function takes two arguments, a <var>stylename</var> string, and an
+association list <var>description</var> of style customizations.  If
+<var>stylename</var> is not already in <code>vhdl-style-alist</code>, the new style is
+added, otherwise the style already associated with <var>stylename</var> is
+changed to the new <var>description</var>.  This function also takes an
+optional third argument, which if non-<code>nil</code>, automatically
+institutes the new style in the current buffer.
+
+   <p>The sample <samp><span class="file">.emacs</span></samp> file provides a concrete example of how a new
+style can be added and automatically set.  See <a href="#Sample-_002eemacs-File">Sample .emacs File</a>.
+
+<div class="node">
+<a name="File-Styles"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Adding-Styles">Adding Styles</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Styles">Styles</a>
+
+</div>
+
+<h4 class="subsection">4.3.3 File Styles</h4>
+
+<p><a name="index-File-Styles-48"></a>
+<a name="index-local-variables-49"></a>The Emacs manual describes how you can customize certain variables on a
+per-file basis by including a <dfn>Local Variable</dfn> block at the end of
+the file.  So far, you've only seen a functional interface to
+VHDL Mode, which is highly inconvenient for use in a Local Variable
+block.  VHDL Mode provides two variables that make it easier for
+you to customize your style on a per-file basis.
+
+   <p><a name="index-vhdl_002dfile_002dstyle-50"></a><a name="index-file_002dstyle-_0028vhdl_002d_0029-51"></a><a name="index-vhdl_002dfile_002doffsets-52"></a><a name="index-file_002doffsets-_0028vhdl_002d_0029-53"></a>
+The variable <code>vhdl-file-style</code> can be set to a style name string as
+described in <a href="#Built_002din-Styles">Built-in Styles</a>.  When the file is visited,
+VHDL Mode will automatically set the file's style to this style
+using <code>vhdl-set-style</code>.
+
+   <p><a name="index-vhdl_002doffsets_002dalist-54"></a><a name="index-offsets_002dalist-_0028vhdl_002d_0029-55"></a><a name="index-vhdl_002dset_002doffset-56"></a><a name="index-set_002doffset-_0028vhdl_002d_0029-57"></a>Another variable, <code>vhdl-file-offsets</code>, takes an association list
+similar to what is allowed in <code>vhdl-offsets-alist</code>.  When the file is
+visited, VHDL Mode will automatically institute these offsets using
+<code>vhdl-set-offset</code>.  See <a href="#Customizing-Indentation">Customizing Indentation</a>.
+
+   <p>Note that file style settings (i.e., <code>vhdl-file-style</code>) are applied
+before file offset settings (i.e., <code>vhdl-file-offsets</code>).
+
+<div class="node">
+<a name="Advanced-Customizations"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Styles">Styles</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Customizing-Indentation">Customizing Indentation</a>
+
+</div>
+
+<h3 class="section">4.4 Advanced Customizations</h3>
+
+<p><a name="index-Advanced-Customizations-58"></a>
+<a name="index-vhdl_002dstyle_002dalist-59"></a><a name="index-style_002dalist-_0028vhdl_002d_0029-60"></a><a name="index-vhdl_002dbasic_002doffset-61"></a><a name="index-basic_002doffset-_0028vhdl_002d_0029-62"></a>For most users, VHDL Mode will support their coding styles with
+very little need for customizations.  Usually, one of the standard
+styles defined in <code>vhdl-style-alist</code> will do the trick.  Sometimes,
+one of the syntactic symbol offsets will need to be tweaked slightly, or
+perhaps <code>vhdl-basic-offset</code> will need to be changed.  However, some
+styles require a more advanced ability for customization, and one of the
+real strengths of VHDL Mode is that the syntactic analysis model
+provides a very flexible framework for customizing indentation. This
+allows you to perform special indentation calculations for situations
+not handled by the mode directly.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Custom-Indentation-Functions">Custom Indentation Functions</a>
+<li><a accesskey="2" href="#Other-Special-Indentations">Other Special Indentations</a>
+</ul>
+
+<div class="node">
+<a name="Custom-Indentation-Functions"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Other-Special-Indentations">Other Special Indentations</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Advanced-Customizations">Advanced Customizations</a>
+
+</div>
+
+<h4 class="subsection">4.4.1 Custom Indentation Functions</h4>
+
+<p><a name="index-Custom-Indentation-Functions-63"></a>
+<a name="index-custom-indentation-functions-64"></a>One of the most common ways to customize VHDL Mode is by writing
+<dfn>custom indentation functions</dfn> and associating them with specific
+syntactic symbols (see <a href="#Syntactic-Symbols">Syntactic Symbols</a>).  VHDL Mode itself
+uses custom indentation functions to provide more sophisticated
+indentation, for example when lining up selected signal assignments:
+<pre class="example">     
+     %%% TBD %%%
+</pre>
+   <p>In this example, the <code>statement-cont</code> syntactic symbol has an
+offset of <code>+</code>, and <code>vhdl-basic-offset</code> is 2, so lines 4
+through 6 are simply indented two spaces to the right of line 3.  But
+perhaps we'd like VHDL Mode to be a little more intelligent so
+that it offsets the waveform descriptions relative to the signal
+assignment operator in line 3.  To do this, we have to write a custom
+indentation function which finds the column of signal assignment
+operator on the first line of the statement.  Here is the lisp code
+(from the <samp><span class="file">vhdl-mode.el</span></samp> source file) that implements this:
+<pre class="example">     
+     (defun vhdl-lineup-statement-cont (langelem)
+       ;; line up statement-cont after the assignment operator
+       (save-excursion
+         (let* ((relpos (cdr langelem))
+     	   (assignp (save-excursion
+     		     (goto-char (vhdl-point 'boi))
+     		     (and (re-search-forward "\\(&lt;\\|:\\)="
+     					     (vhdl-point 'eol) t)
+     			  (- (point) (vhdl-point 'boi)))))
+     	   (curcol (progn
+     		     (goto-char relpos)
+     		     (current-column)))
+     	   foundp)
+           (while (and (not foundp)
+     		  (&lt; (point) (vhdl-point 'eol)))
+     	(re-search-forward "\\(&lt;\\|:\\)=\\|(" (vhdl-point 'eol) 'move)
+     	(if (vhdl-in-literal (cdr langelem))
+     	    (forward-char)
+     	  (if (= (preceding-char) ?\()
+     	      ;; skip over any parenthesized expressions
+     	      (goto-char (min (vhdl-point 'eol)
+     			      (scan-lists (point) 1 1)))
+     	    ;; found an assignment operator (not at eol)
+     	    (setq foundp (not (looking-at "\\s-*$"))))))
+           (if (not foundp)
+     	  ;; there's no assignment operator on the line
+     	  vhdl-basic-offset
+     	;; calculate indentation column after assign and ws, unless
+     	;; our line contains an assignment operator
+     	(if (not assignp)
+     	    (progn
+     	      (forward-char)
+     	      (skip-chars-forward " \t")
+     	      (setq assignp 0)))
+     	(- (current-column) assignp curcol))
+           )))
+</pre>
+   <p class="noindent">Custom indent functions take a single argument, which is a syntactic
+component cons cell (see <a href="#Syntactic-Analysis">Syntactic Analysis</a>).  The
+function returns an integer offset value that will be added to the
+running total indentation for the lne.  Note that what actually gets
+returned is the difference between the column that the signal assignment
+operator is on, and the column of the buffer relative position passed in
+the function's argument.  Remember that VHDL Mode automatically
+adds in the column of the component's relative buffer position and we
+don't want that value added into the final total twice.
+
+   <p><a name="index-statement_002dcont-syntactic-symbol-65"></a><a name="index-vhdl_002dlineup_002dstatement_002dcont-66"></a><a name="index-lineup_002dstatement_002dcont-_0028vhdl_002d_0029-67"></a>Now, to associate the function <code>vhdl-lineup-statement-cont</code> with the
+<code>statement-cont</code> syntactic symbol, we can add something like the
+following to our <code>vhdl-mode-hook</code>:
+<pre class="example">     
+     (vhdl-set-offset 'statement-cont 'vhdl-lineup-statement-cont)
+     
+</pre>
+   <p><a name="index-vhdl_002dindent_002ddefun-68"></a>Now the function looks like this after re-indenting (using <kbd>M-x
+vhdl-indent-defun</kbd>):
+<pre class="example">     
+     %%% TBD %%%
+</pre>
+   <p><a name="index-vhdl_002doffsets_002dalist-69"></a><a name="index-offsets_002dalist-_0028vhdl_002d_0029-70"></a>Custom indentation functions can be as simple or as complex as you like,
+and any syntactic symbol that appears in <code>vhdl-offsets-alist</code> can have
+a custom indentation function associated with it.  Note however that
+using many custom indentation functions may have a performance impact on
+VHDL Mode.
+
+<div class="node">
+<a name="Other-Special-Indentations"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Custom-Indentation-Functions">Custom Indentation Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Advanced-Customizations">Advanced Customizations</a>
+
+</div>
+
+<h4 class="subsection">4.4.2 Other Special Indentations</h4>
+
+<p><a name="index-Other-Special-Indentations-71"></a>
+<a name="index-vhdl_002dspecial_002dindent_002dhook-72"></a><a name="index-special_002dindent_002dhook-_0028vhdl_002d_0029-73"></a>One other variable is available for you to customize VHDL Mode:
+<code>vhdl-special-indent-hook</code>.  This is a standard hook variable that
+is called after every line is indented by VHDL Mode.  You can use
+it to do any special indentation or line adjustments your style
+dictates, such as adding extra indentation to the port map clause in a
+component instantiation, etc.  Note however, that you should not change
+<code>point</code> or <code>mark</code> inside your <code>vhdl-special-indent-hook</code>
+functions.
+
+<div class="node">
+<a name="Syntactic-Symbols"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Frequently-Asked-Questions">Frequently Asked Questions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Customizing-Indentation">Customizing Indentation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">5 Syntactic Symbols</h2>
+
+<p><a name="index-Syntactic-Symbols-74"></a>
+<a name="index-vhdl_002doffsets_002dalist-75"></a>The complete list of recognized syntactic symbols is described in the
+<code>vhdl-offsets-alist</code> variable.  This chapter will provide some
+examples to help clarify these symbols.
+
+   <p><a name="index-g_t_002dopen-syntactic-symbols-76"></a><a name="index-g_t_002dclose-syntactic-symbols-77"></a>Most syntactic symbol names follow a general naming convention.  When a
+line begins with a <code>begin</code> or <code>end</code> keyword, the syntactic
+symbol will contain the suffix <code>-open</code> or <code>-close</code>
+respectively.
+
+   <p><a name="index-g_t_002dintro-syntactic-symbols-78"></a><a name="index-g_t_002dcont-syntactic-symbols-79"></a><a name="index-g_t_002dblock_002dintro-syntactic-symbols-80"></a>Usually, a distinction is made between the first line that introduces a
+construct and lines that continue a construct, and the syntactic symbols
+that represent these lines will contain the suffix <code>-intro</code> or
+<code>-cont</code> respectively.  As a sub-classification of this scheme, a
+line which is the first of a particular block construct will contain the
+suffix <code>-block-intro</code>.
+
+   <p><strong>&lt;TBD&gt; include the name and a brief example of every syntactic
+symbol currently recognized</strong>
+
+<div class="node">
+<a name="Frequently-Asked-Questions"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Getting-the-latest-VHDL-Mode-release">Getting the latest VHDL Mode release</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Syntactic-Symbols">Syntactic Symbols</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">6 Frequently Asked Questions</h2>
+
+<p><a name="index-Frequently-Asked-Questions-81"></a>
+<a name="index-C_002dx-h-82"></a><a name="index-ESC-C_002d_005c-83"></a><a name="index-ESC-C_002dq-84"></a><a name="index-ESC-C_002du-85"></a><a name="index-RET-86"></a><a name="index-LFD-87"></a><a name="index-newline_002dand_002dindent-88"></a><blockquote>
+
+   <p><strong>Q.</strong> <em>How do I re-indent the whole file?</em>
+
+   <p><strong>A.</strong> Visit the file and hit <kbd>C-x h</kbd> to mark the whole
+buffer. Then hit <kbd>&lt;ESC&gt; C-\</kbd> to re-indent the entire region
+which you've just marked. Or just enter <kbd>M-x vhdl-indent-buffer</kbd>.
+   <pre class="sp">
+
+
+</pre>
+
+<strong>Q.</strong> <em>How do I re-indent the entire function?</em>
+
+   <p><strong>A.</strong> Hit <kbd>&lt;ESC&gt; C-h</kbd> to mark the entire function. Then
+hit <kbd>&lt;ESC&gt; C-\</kbd> to re-indent the entire region which you've just
+marked.
+   <pre class="sp">
+
+
+</pre>
+
+<strong>Q.</strong> <em>How do I re-indent the current block?</em>
+
+   <p><strong>A.</strong> First move to the brace which opens the block with
+<kbd>&lt;ESC&gt; C-u</kbd>, then re-indent that expression with
+<kbd>&lt;ESC&gt; C-q</kbd>.
+   <pre class="sp">
+
+
+</pre>
+
+<strong>Q.</strong> <em>How do I re-indent the current statement?</em>
+
+   <p><strong>A.</strong> First move to the beginning of the statement with
+<kbd>&lt;ESC&gt; a</kbd>, then re-indent that expression with <kbd>&lt;ESC&gt;
+C-q</kbd>.
+   <pre class="sp">
+
+
+</pre>
+
+<strong>Q.</strong> <em>I put </em><code>(vhdl-set-offset 'statement-cont 0)</code><em>
+in my </em><samp><span class="file">.emacs</span></samp><em> file but I get an error saying that
+</em><code>vhdl-set-offset</code><em>'s function definition is void.</em>
+
+   <p><strong>A.</strong> This means that VHDL Mode wasn't loaded into your
+Emacs session by the time the <code>vhdl-set-offset</code> call was reached,
+mostly likely because VHDL Mode is being autoloaded.  Instead
+of putting the <code>vhdl-set-offset</code> line in your top-level
+<samp><span class="file">.emacs</span></samp> file, put it in your <code>vhdl-mode-hook</code>, or
+simply add the following to the top of your <samp><span class="file">.emacs</span></samp> file:
+<pre class="example">     
+     (require 'vhdl-mode)
+     
+</pre>
+   <p>See the sample <samp><span class="file">.emacs</span></samp> file <a href="#Sample-_002eemacs-File">Sample .emacs File</a> for
+details.
+
+   </blockquote>
+
+<div class="node">
+<a name="Getting-the-latest-VHDL-Mode-release"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Sample-_002eemacs-File">Sample .emacs File</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Frequently-Asked-Questions">Frequently Asked Questions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">7 Getting the latest VHDL Mode release</h2>
+
+<p><a name="index-Getting-the-latest-VHDL-Mode-release-89"></a>
+The best way to be sure you always have the latest VHDL Mode release
+is to join the <code>vhdl-mode-announce</code> mailing list.  If you are a
+brave soul, and wish to participate in beta testing of new releases of
+VHDL Mode, you may also join the <code>vhdl-mode-victims</code> mailing
+list.  Send email to the maintainer <a href="mailto:reto@gnu.org">reto@gnu.org</a> to join
+either of these lists.
+
+   <p>The official Emacs VHDL Mode Home Page can be found at
+<a href="http://www.iis.ee.ethz.ch/~zimmi/emacs/vhdl-mode.html">http://www.iis.ee.ethz.ch/~zimmi/emacs/vhdl-mode.html</a>.
+
+<div class="node">
+<a name="Sample-.emacs-File"></a>
+<a name="Sample-_002eemacs-File"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Limitations-and-Known-Bugs">Limitations and Known Bugs</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Getting-the-latest-VHDL-Mode-release">Getting the latest VHDL Mode release</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">8 Sample <samp><span class="file">.emacs</span></samp> file</h2>
+
+<p><a name="index-Sample-_0040file_007b_002eemacs_007d-file-90"></a>
+Most customizations can be done using the &ldquo;Customize&rdquo; entry in the
+VHDL Mode menu, which requires no editing of the .emacs file. 
+If you want to customize indentation, here you go:
+
+<pre class="example">     ;; Here's a sample .emacs file that might help you along the way.  Just
+     ;; copy this region and paste it into your .emacs file.  You may want to
+     ;; change some of the actual values.
+     
+     (defconst my-vhdl-style
+       '((vhdl-tab-always-indent        . t)
+         (vhdl-comment-only-line-offset . 4)
+         (vhdl-offsets-alist            . ((arglist-close    . vhdl-lineup-arglist)
+                                           (statement-cont   . 0)
+                                           (case-alternative . 4)
+                                           (block-open       . 0)))
+         (vhdl-echo-syntactic-information-p . t)
+         )
+       "My VHDL Programming Style")
+     
+     ;; Customizations for vhdl-mode
+     (defun my-vhdl-mode-hook ()
+       ;; add my personal style and set it for the current buffer
+       (vhdl-add-style "PERSONAL" my-vhdl-style t)
+       ;; offset customizations not in my-vhdl-style
+       (vhdl-set-offset 'statement-case-intro '++)
+       ;; other customizations
+       (setq tab-width 8
+             ;; this will make sure spaces are used instead of tabs
+             indent-tabs-mode nil)
+       ;; keybindings for VHDL are put in vhdl-mode-map
+       (define-key vhdl-mode-map "\C-m" 'newline-and-indent)
+       )
+     
+     (add-hook 'vhdl-mode-hook 'my-vhdl-mode-hook)
+</pre>
+   <div class="node">
+<a name="Limitations-and-Known-Bugs"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Mailing-Lists-and-Submitting-Bug-Reports">Mailing Lists and Submitting Bug Reports</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Sample-_002eemacs-File">Sample .emacs File</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">9 Limitations and Known Bugs</h2>
+
+<p><a name="index-Limitations-and-Known-Bugs-91"></a>
+     <ul>
+<li>Re-indenting large regions or expressions can be slow.
+
+   </ul>
+
+<div class="node">
+<a name="Mailing-Lists-and-Submitting-Bug-Reports"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Limitations-and-Known-Bugs">Limitations and Known Bugs</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">10 Mailing Lists and Submitting Bug Reports</h2>
+
+<p><a name="index-Mailing-Lists-and-Submitting-Bug-Reports-92"></a>
+<a name="index-C_002dc-C_002db-93"></a><a name="index-vhdl_002dsubmit_002dbug_002dreport-94"></a><a name="index-submit_002dbug_002dreport-_0028vhdl_002d_0029-95"></a><a name="index-beta-testers-mailing-list-96"></a><a name="index-announcement-mailing-list-97"></a>To report bugs, use the <kbd>C-c C-b</kbd> (<code>vhdl-submit-bug-report</code>)
+command.  This provides vital information I need to reproduce your
+problem.  Make sure you include a concise, but complete code example. 
+Please try to boil your example down to just the essential code needed
+to reproduce the problem, and include an exact recipe of steps needed to
+expose the bug.  Be especially sure to include any code that appears
+<em>before</em> your bug example.
+
+   <p>For other help or suggestions, send a message to <a href="mailto:reto@gnu.org">reto@gnu.org</a>.
+
+   <p>Send an add message to <a href="mailto:reto@gnu.org">reto@gnu.org</a> to get on the
+<code>vhdl-mode-victims</code> beta testers list where beta releases of
+VHDL Mode are posted.  Note that you shouldn't expect beta
+releases to be as stable as public releases.
+
+   <p>There is also an announce only list where the latest public releases
+of VHDL Mode are posted.  Send an add message to
+<a href="mailto:reto@gnu.org">reto@gnu.org</a> to be added to this list.
+
+<div class="node">
+<a name="GNU-Free-Documentation-License"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Concept-Index">Concept Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Mailing-Lists-and-Submitting-Bug-Reports">Mailing Lists and Submitting Bug Reports</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="appendix">Appendix A GNU Free Documentation License</h2>
+
+<!-- The GNU Free Documentation License. -->
+<div align="center">Version 1.3, 3 November 2008</div>
+
+<!-- This file is intended to be included within another document, -->
+<!-- hence no sectioning command or @node. -->
+<pre class="display">     Copyright &copy; 2000, 2001, 2002, 2007, 2008 Free Software Foundation, Inc.
+     <a href="http://fsf.org/">http://fsf.org/</a>
+     
+     Everyone is permitted to copy and distribute verbatim copies
+     of this license document, but changing it is not allowed.
+</pre>
+     <ol type=1 start=0>
+<li>PREAMBLE
+
+     <p>The purpose of this License is to make a manual, textbook, or other
+functional and useful document <dfn>free</dfn> in the sense of freedom: to
+assure everyone the effective freedom to copy and redistribute it,
+with or without modifying it, either commercially or noncommercially. 
+Secondarily, this License preserves for the author and publisher a way
+to get credit for their work, while not being considered responsible
+for modifications made by others.
+
+     <p>This License is a kind of &ldquo;copyleft&rdquo;, which means that derivative
+works of the document must themselves be free in the same sense.  It
+complements the GNU General Public License, which is a copyleft
+license designed for free software.
+
+     <p>We have designed this License in order to use it for manuals for free
+software, because free software needs free documentation: a free
+program should come with manuals providing the same freedoms that the
+software does.  But this License is not limited to software manuals;
+it can be used for any textual work, regardless of subject matter or
+whether it is published as a printed book.  We recommend this License
+principally for works whose purpose is instruction or reference.
+
+     <li>APPLICABILITY AND DEFINITIONS
+
+     <p>This License applies to any manual or other work, in any medium, that
+contains a notice placed by the copyright holder saying it can be
+distributed under the terms of this License.  Such a notice grants a
+world-wide, royalty-free license, unlimited in duration, to use that
+work under the conditions stated herein.  The &ldquo;Document&rdquo;, below,
+refers to any such manual or work.  Any member of the public is a
+licensee, and is addressed as &ldquo;you&rdquo;.  You accept the license if you
+copy, modify or distribute the work in a way requiring permission
+under copyright law.
+
+     <p>A &ldquo;Modified Version&rdquo; of the Document means any work containing the
+Document or a portion of it, either copied verbatim, or with
+modifications and/or translated into another language.
+
+     <p>A &ldquo;Secondary Section&rdquo; is a named appendix or a front-matter section
+of the Document that deals exclusively with the relationship of the
+publishers or authors of the Document to the Document's overall
+subject (or to related matters) and contains nothing that could fall
+directly within that overall subject.  (Thus, if the Document is in
+part a textbook of mathematics, a Secondary Section may not explain
+any mathematics.)  The relationship could be a matter of historical
+connection with the subject or with related matters, or of legal,
+commercial, philosophical, ethical or political position regarding
+them.
+
+     <p>The &ldquo;Invariant Sections&rdquo; are certain Secondary Sections whose titles
+are designated, as being those of Invariant Sections, in the notice
+that says that the Document is released under this License.  If a
+section does not fit the above definition of Secondary then it is not
+allowed to be designated as Invariant.  The Document may contain zero
+Invariant Sections.  If the Document does not identify any Invariant
+Sections then there are none.
+
+     <p>The &ldquo;Cover Texts&rdquo; are certain short passages of text that are listed,
+as Front-Cover Texts or Back-Cover Texts, in the notice that says that
+the Document is released under this License.  A Front-Cover Text may
+be at most 5 words, and a Back-Cover Text may be at most 25 words.
+
+     <p>A &ldquo;Transparent&rdquo; copy of the Document means a machine-readable copy,
+represented in a format whose specification is available to the
+general public, that is suitable for revising the document
+straightforwardly with generic text editors or (for images composed of
+pixels) generic paint programs or (for drawings) some widely available
+drawing editor, and that is suitable for input to text formatters or
+for automatic translation to a variety of formats suitable for input
+to text formatters.  A copy made in an otherwise Transparent file
+format whose markup, or absence of markup, has been arranged to thwart
+or discourage subsequent modification by readers is not Transparent. 
+An image format is not Transparent if used for any substantial amount
+of text.  A copy that is not &ldquo;Transparent&rdquo; is called &ldquo;Opaque&rdquo;.
+
+     <p>Examples of suitable formats for Transparent copies include plain
+ASCII without markup, Texinfo input format, LaTeX input
+format, SGML or XML using a publicly available
+DTD, and standard-conforming simple HTML,
+PostScript or PDF designed for human modification.  Examples
+of transparent image formats include PNG, XCF and
+JPG.  Opaque formats include proprietary formats that can be
+read and edited only by proprietary word processors, SGML or
+XML for which the DTD and/or processing tools are
+not generally available, and the machine-generated HTML,
+PostScript or PDF produced by some word processors for
+output purposes only.
+
+     <p>The &ldquo;Title Page&rdquo; means, for a printed book, the title page itself,
+plus such following pages as are needed to hold, legibly, the material
+this License requires to appear in the title page.  For works in
+formats which do not have any title page as such, &ldquo;Title Page&rdquo; means
+the text near the most prominent appearance of the work's title,
+preceding the beginning of the body of the text.
+
+     <p>The &ldquo;publisher&rdquo; means any person or entity that distributes copies
+of the Document to the public.
+
+     <p>A section &ldquo;Entitled XYZ&rdquo; means a named subunit of the Document whose
+title either is precisely XYZ or contains XYZ in parentheses following
+text that translates XYZ in another language.  (Here XYZ stands for a
+specific section name mentioned below, such as &ldquo;Acknowledgements&rdquo;,
+&ldquo;Dedications&rdquo;, &ldquo;Endorsements&rdquo;, or &ldquo;History&rdquo;.)  To &ldquo;Preserve the Title&rdquo;
+of such a section when you modify the Document means that it remains a
+section &ldquo;Entitled XYZ&rdquo; according to this definition.
+
+     <p>The Document may include Warranty Disclaimers next to the notice which
+states that this License applies to the Document.  These Warranty
+Disclaimers are considered to be included by reference in this
+License, but only as regards disclaiming warranties: any other
+implication that these Warranty Disclaimers may have is void and has
+no effect on the meaning of this License.
+
+     <li>VERBATIM COPYING
+
+     <p>You may copy and distribute the Document in any medium, either
+commercially or noncommercially, provided that this License, the
+copyright notices, and the license notice saying this License applies
+to the Document are reproduced in all copies, and that you add no other
+conditions whatsoever to those of this License.  You may not use
+technical measures to obstruct or control the reading or further
+copying of the copies you make or distribute.  However, you may accept
+compensation in exchange for copies.  If you distribute a large enough
+number of copies you must also follow the conditions in section 3.
+
+     <p>You may also lend copies, under the same conditions stated above, and
+you may publicly display copies.
+
+     <li>COPYING IN QUANTITY
+
+     <p>If you publish printed copies (or copies in media that commonly have
+printed covers) of the Document, numbering more than 100, and the
+Document's license notice requires Cover Texts, you must enclose the
+copies in covers that carry, clearly and legibly, all these Cover
+Texts: Front-Cover Texts on the front cover, and Back-Cover Texts on
+the back cover.  Both covers must also clearly and legibly identify
+you as the publisher of these copies.  The front cover must present
+the full title with all words of the title equally prominent and
+visible.  You may add other material on the covers in addition. 
+Copying with changes limited to the covers, as long as they preserve
+the title of the Document and satisfy these conditions, can be treated
+as verbatim copying in other respects.
+
+     <p>If the required texts for either cover are too voluminous to fit
+legibly, you should put the first ones listed (as many as fit
+reasonably) on the actual cover, and continue the rest onto adjacent
+pages.
+
+     <p>If you publish or distribute Opaque copies of the Document numbering
+more than 100, you must either include a machine-readable Transparent
+copy along with each Opaque copy, or state in or with each Opaque copy
+a computer-network location from which the general network-using
+public has access to download using public-standard network protocols
+a complete Transparent copy of the Document, free of added material. 
+If you use the latter option, you must take reasonably prudent steps,
+when you begin distribution of Opaque copies in quantity, to ensure
+that this Transparent copy will remain thus accessible at the stated
+location until at least one year after the last time you distribute an
+Opaque copy (directly or through your agents or retailers) of that
+edition to the public.
+
+     <p>It is requested, but not required, that you contact the authors of the
+Document well before redistributing any large number of copies, to give
+them a chance to provide you with an updated version of the Document.
+
+     <li>MODIFICATIONS
+
+     <p>You may copy and distribute a Modified Version of the Document under
+the conditions of sections 2 and 3 above, provided that you release
+the Modified Version under precisely this License, with the Modified
+Version filling the role of the Document, thus licensing distribution
+and modification of the Modified Version to whoever possesses a copy
+of it.  In addition, you must do these things in the Modified Version:
+
+          <ol type=A start=1>
+<li>Use in the Title Page (and on the covers, if any) a title distinct
+from that of the Document, and from those of previous versions
+(which should, if there were any, be listed in the History section
+of the Document).  You may use the same title as a previous version
+if the original publisher of that version gives permission.
+
+          <li>List on the Title Page, as authors, one or more persons or entities
+responsible for authorship of the modifications in the Modified
+Version, together with at least five of the principal authors of the
+Document (all of its principal authors, if it has fewer than five),
+unless they release you from this requirement.
+
+          <li>State on the Title page the name of the publisher of the
+Modified Version, as the publisher.
+
+          <li>Preserve all the copyright notices of the Document.
+
+          <li>Add an appropriate copyright notice for your modifications
+adjacent to the other copyright notices.
+
+          <li>Include, immediately after the copyright notices, a license notice
+giving the public permission to use the Modified Version under the
+terms of this License, in the form shown in the Addendum below.
+
+          <li>Preserve in that license notice the full lists of Invariant Sections
+and required Cover Texts given in the Document's license notice.
+
+          <li>Include an unaltered copy of this License.
+
+          <li>Preserve the section Entitled &ldquo;History&rdquo;, Preserve its Title, and add
+to it an item stating at least the title, year, new authors, and
+publisher of the Modified Version as given on the Title Page.  If
+there is no section Entitled &ldquo;History&rdquo; in the Document, create one
+stating the title, year, authors, and publisher of the Document as
+given on its Title Page, then add an item describing the Modified
+Version as stated in the previous sentence.
+
+          <li>Preserve the network location, if any, given in the Document for
+public access to a Transparent copy of the Document, and likewise
+the network locations given in the Document for previous versions
+it was based on.  These may be placed in the &ldquo;History&rdquo; section. 
+You may omit a network location for a work that was published at
+least four years before the Document itself, or if the original
+publisher of the version it refers to gives permission.
+
+          <li>For any section Entitled &ldquo;Acknowledgements&rdquo; or &ldquo;Dedications&rdquo;, Preserve
+the Title of the section, and preserve in the section all the
+substance and tone of each of the contributor acknowledgements and/or
+dedications given therein.
+
+          <li>Preserve all the Invariant Sections of the Document,
+unaltered in their text and in their titles.  Section numbers
+or the equivalent are not considered part of the section titles.
+
+          <li>Delete any section Entitled &ldquo;Endorsements&rdquo;.  Such a section
+may not be included in the Modified Version.
+
+          <li>Do not retitle any existing section to be Entitled &ldquo;Endorsements&rdquo; or
+to conflict in title with any Invariant Section.
+
+          <li>Preserve any Warranty Disclaimers.
+          </ol>
+
+     <p>If the Modified Version includes new front-matter sections or
+appendices that qualify as Secondary Sections and contain no material
+copied from the Document, you may at your option designate some or all
+of these sections as invariant.  To do this, add their titles to the
+list of Invariant Sections in the Modified Version's license notice. 
+These titles must be distinct from any other section titles.
+
+     <p>You may add a section Entitled &ldquo;Endorsements&rdquo;, provided it contains
+nothing but endorsements of your Modified Version by various
+parties&mdash;for example, statements of peer review or that the text has
+been approved by an organization as the authoritative definition of a
+standard.
+
+     <p>You may add a passage of up to five words as a Front-Cover Text, and a
+passage of up to 25 words as a Back-Cover Text, to the end of the list
+of Cover Texts in the Modified Version.  Only one passage of
+Front-Cover Text and one of Back-Cover Text may be added by (or
+through arrangements made by) any one entity.  If the Document already
+includes a cover text for the same cover, previously added by you or
+by arrangement made by the same entity you are acting on behalf of,
+you may not add another; but you may replace the old one, on explicit
+permission from the previous publisher that added the old one.
+
+     <p>The author(s) and publisher(s) of the Document do not by this License
+give permission to use their names for publicity for or to assert or
+imply endorsement of any Modified Version.
+
+     <li>COMBINING DOCUMENTS
+
+     <p>You may combine the Document with other documents released under this
+License, under the terms defined in section 4 above for modified
+versions, provided that you include in the combination all of the
+Invariant Sections of all of the original documents, unmodified, and
+list them all as Invariant Sections of your combined work in its
+license notice, and that you preserve all their Warranty Disclaimers.
+
+     <p>The combined work need only contain one copy of this License, and
+multiple identical Invariant Sections may be replaced with a single
+copy.  If there are multiple Invariant Sections with the same name but
+different contents, make the title of each such section unique by
+adding at the end of it, in parentheses, the name of the original
+author or publisher of that section if known, or else a unique number. 
+Make the same adjustment to the section titles in the list of
+Invariant Sections in the license notice of the combined work.
+
+     <p>In the combination, you must combine any sections Entitled &ldquo;History&rdquo;
+in the various original documents, forming one section Entitled
+&ldquo;History&rdquo;; likewise combine any sections Entitled &ldquo;Acknowledgements&rdquo;,
+and any sections Entitled &ldquo;Dedications&rdquo;.  You must delete all
+sections Entitled &ldquo;Endorsements.&rdquo;
+
+     <li>COLLECTIONS OF DOCUMENTS
+
+     <p>You may make a collection consisting of the Document and other documents
+released under this License, and replace the individual copies of this
+License in the various documents with a single copy that is included in
+the collection, provided that you follow the rules of this License for
+verbatim copying of each of the documents in all other respects.
+
+     <p>You may extract a single document from such a collection, and distribute
+it individually under this License, provided you insert a copy of this
+License into the extracted document, and follow this License in all
+other respects regarding verbatim copying of that document.
+
+     <li>AGGREGATION WITH INDEPENDENT WORKS
+
+     <p>A compilation of the Document or its derivatives with other separate
+and independent documents or works, in or on a volume of a storage or
+distribution medium, is called an &ldquo;aggregate&rdquo; if the copyright
+resulting from the compilation is not used to limit the legal rights
+of the compilation's users beyond what the individual works permit. 
+When the Document is included in an aggregate, this License does not
+apply to the other works in the aggregate which are not themselves
+derivative works of the Document.
+
+     <p>If the Cover Text requirement of section 3 is applicable to these
+copies of the Document, then if the Document is less than one half of
+the entire aggregate, the Document's Cover Texts may be placed on
+covers that bracket the Document within the aggregate, or the
+electronic equivalent of covers if the Document is in electronic form. 
+Otherwise they must appear on printed covers that bracket the whole
+aggregate.
+
+     <li>TRANSLATION
+
+     <p>Translation is considered a kind of modification, so you may
+distribute translations of the Document under the terms of section 4. 
+Replacing Invariant Sections with translations requires special
+permission from their copyright holders, but you may include
+translations of some or all Invariant Sections in addition to the
+original versions of these Invariant Sections.  You may include a
+translation of this License, and all the license notices in the
+Document, and any Warranty Disclaimers, provided that you also include
+the original English version of this License and the original versions
+of those notices and disclaimers.  In case of a disagreement between
+the translation and the original version of this License or a notice
+or disclaimer, the original version will prevail.
+
+     <p>If a section in the Document is Entitled &ldquo;Acknowledgements&rdquo;,
+&ldquo;Dedications&rdquo;, or &ldquo;History&rdquo;, the requirement (section 4) to Preserve
+its Title (section 1) will typically require changing the actual
+title.
+
+     <li>TERMINATION
+
+     <p>You may not copy, modify, sublicense, or distribute the Document
+except as expressly provided under this License.  Any attempt
+otherwise to copy, modify, sublicense, or distribute it is void, and
+will automatically terminate your rights under this License.
+
+     <p>However, if you cease all violation of this License, then your license
+from a particular copyright holder is reinstated (a) provisionally,
+unless and until the copyright holder explicitly and finally
+terminates your license, and (b) permanently, if the copyright holder
+fails to notify you of the violation by some reasonable means prior to
+60 days after the cessation.
+
+     <p>Moreover, your license from a particular copyright holder is
+reinstated permanently if the copyright holder notifies you of the
+violation by some reasonable means, this is the first time you have
+received notice of violation of this License (for any work) from that
+copyright holder, and you cure the violation prior to 30 days after
+your receipt of the notice.
+
+     <p>Termination of your rights under this section does not terminate the
+licenses of parties who have received copies or rights from you under
+this License.  If your rights have been terminated and not permanently
+reinstated, receipt of a copy of some or all of the same material does
+not give you any rights to use it.
+
+     <li>FUTURE REVISIONS OF THIS LICENSE
+
+     <p>The Free Software Foundation may publish new, revised versions
+of the GNU Free Documentation License from time to time.  Such new
+versions will be similar in spirit to the present version, but may
+differ in detail to address new problems or concerns.  See
+<a href="http://www.gnu.org/copyleft/">http://www.gnu.org/copyleft/</a>.
+
+     <p>Each version of the License is given a distinguishing version number. 
+If the Document specifies that a particular numbered version of this
+License &ldquo;or any later version&rdquo; applies to it, you have the option of
+following the terms and conditions either of that specified version or
+of any later version that has been published (not as a draft) by the
+Free Software Foundation.  If the Document does not specify a version
+number of this License, you may choose any version ever published (not
+as a draft) by the Free Software Foundation.  If the Document
+specifies that a proxy can decide which future versions of this
+License can be used, that proxy's public statement of acceptance of a
+version permanently authorizes you to choose that version for the
+Document.
+
+     <li>RELICENSING
+
+     <p>&ldquo;Massive Multiauthor Collaboration Site&rdquo; (or &ldquo;MMC Site&rdquo;) means any
+World Wide Web server that publishes copyrightable works and also
+provides prominent facilities for anybody to edit those works.  A
+public wiki that anybody can edit is an example of such a server.  A
+&ldquo;Massive Multiauthor Collaboration&rdquo; (or &ldquo;MMC&rdquo;) contained in the
+site means any set of copyrightable works thus published on the MMC
+site.
+
+     <p>&ldquo;CC-BY-SA&rdquo; means the Creative Commons Attribution-Share Alike 3.0
+license published by Creative Commons Corporation, a not-for-profit
+corporation with a principal place of business in San Francisco,
+California, as well as future copyleft versions of that license
+published by that same organization.
+
+     <p>&ldquo;Incorporate&rdquo; means to publish or republish a Document, in whole or
+in part, as part of another Document.
+
+     <p>An MMC is &ldquo;eligible for relicensing&rdquo; if it is licensed under this
+License, and if all works that were first published under this License
+somewhere other than this MMC, and subsequently incorporated in whole
+or in part into the MMC, (1) had no cover texts or invariant sections,
+and (2) were thus incorporated prior to November 1, 2008.
+
+     <p>The operator of an MMC Site may republish an MMC contained in the site
+under CC-BY-SA on the same site at any time before August 1, 2009,
+provided the MMC is eligible for relicensing.
+
+        </ol>
+
+<h3 class="heading">ADDENDUM: How to use this License for your documents</h3>
+
+<p>To use this License in a document you have written, include a copy of
+the License in the document and put the following copyright and
+license notices just after the title page:
+
+<pre class="smallexample">       Copyright (C)  <var>year</var>  <var>your name</var>.
+       Permission is granted to copy, distribute and/or modify this document
+       under the terms of the GNU Free Documentation License, Version 1.3
+       or any later version published by the Free Software Foundation;
+       with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+       Texts.  A copy of the license is included in the section entitled ``GNU
+       Free Documentation License''.
+</pre>
+   <p>If you have Invariant Sections, Front-Cover Texts and Back-Cover Texts,
+replace the &ldquo;with<small class="dots">...</small>Texts.&rdquo; line with this:
+
+<pre class="smallexample">         with the Invariant Sections being <var>list their titles</var>, with
+         the Front-Cover Texts being <var>list</var>, and with the Back-Cover Texts
+         being <var>list</var>.
+</pre>
+   <p>If you have Invariant Sections without Cover Texts, or some other
+combination of the three, merge those two alternatives to suit the
+situation.
+
+   <p>If your document contains nontrivial examples of program code, we
+recommend releasing these examples in parallel under your choice of
+free software license, such as the GNU General Public License,
+to permit their use in free software.
+
+<!-- Local Variables: -->
+<!-- ispell-local-pdict: "ispell-dict" -->
+<!-- End: -->
+<div class="node">
+<a name="Concept-Index"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Command-Index">Command Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="unnumbered">Concept Index</h2>
+
+<ul class="index-cp" compact>
+<li><a href="#index-g_t_002dblock_002dintro-syntactic-symbols-80">-block-intro syntactic symbols</a>: <a href="#Syntactic-Symbols">Syntactic Symbols</a></li>
+<li><a href="#index-g_t_002dclose-syntactic-symbols-77">-close syntactic symbols</a>: <a href="#Syntactic-Symbols">Syntactic Symbols</a></li>
+<li><a href="#index-g_t_002dcont-syntactic-symbols-79">-cont syntactic symbols</a>: <a href="#Syntactic-Symbols">Syntactic Symbols</a></li>
+<li><a href="#index-g_t_002dintro-syntactic-symbols-78">-intro syntactic symbols</a>: <a href="#Syntactic-Symbols">Syntactic Symbols</a></li>
+<li><a href="#index-g_t_002dopen-syntactic-symbols-76">-open syntactic symbols</a>: <a href="#Syntactic-Symbols">Syntactic Symbols</a></li>
+<li><a href="#index-Adding-Styles-43">Adding Styles</a>: <a href="#Adding-Styles">Adding Styles</a></li>
+<li><a href="#index-Advanced-Customizations-58">Advanced Customizations</a>: <a href="#Advanced-Customizations">Advanced Customizations</a></li>
+<li><a href="#index-announcement-mailing-list-97">announcement mailing list</a>: <a href="#Mailing-Lists-and-Submitting-Bug-Reports">Mailing Lists and Submitting Bug Reports</a></li>
+<li><a href="#index-basic_002doffset-_0028vhdl_002d_0029-28">basic-offset (vhdl-)</a>: <a href="#Customizing-Indentation">Customizing Indentation</a></li>
+<li><a href="#index-beta-testers-mailing-list-96">beta testers mailing list</a>: <a href="#Mailing-Lists-and-Submitting-Bug-Reports">Mailing Lists and Submitting Bug Reports</a></li>
+<li><a href="#index-Built_002din-Styles-39">Built-in Styles</a>: <a href="#Built_002din-Styles">Built-in Styles</a></li>
+<li><a href="#index-comment-only-line-16">comment only line</a>: <a href="#Syntactic-Analysis">Syntactic Analysis</a></li>
+<li><a href="#index-custom-indentation-functions-64">custom indentation functions</a>: <a href="#Custom-Indentation-Functions">Custom Indentation Functions</a></li>
+<li><a href="#index-Custom-Indentation-Functions-63">Custom Indentation Functions</a>: <a href="#Custom-Indentation-Functions">Custom Indentation Functions</a></li>
+<li><a href="#index-Customizing-Indentation-24">Customizing Indentation</a>: <a href="#Customizing-Indentation">Customizing Indentation</a></li>
+<li><a href="#index-File-Styles-48">File Styles</a>: <a href="#File-Styles">File Styles</a></li>
+<li><a href="#index-Frequently-Asked-Questions-81">Frequently Asked Questions</a>: <a href="#Frequently-Asked-Questions">Frequently Asked Questions</a></li>
+<li><a href="#index-Getting-Connected-3">Getting Connected</a>: <a href="#Getting-Connected">Getting Connected</a></li>
+<li><a href="#index-Getting-the-latest-VHDL-Mode-release-89">Getting the latest VHDL Mode release</a>: <a href="#Getting-the-latest-VHDL-Mode-release">Getting the latest VHDL Mode release</a></li>
+<li><a href="#index-hooks-37">hooks</a>: <a href="#Permanent-Customization">Permanent Customization</a></li>
+<li><a href="#index-IEEE-style-40">IEEE style</a>: <a href="#Built_002din-Styles">Built-in Styles</a></li>
+<li><a href="#index-Indentation-Calculation-17">Indentation Calculation</a>: <a href="#Indentation-Calculation">Indentation Calculation</a></li>
+<li><a href="#index-Interactive-Customization-29">Interactive Customization</a>: <a href="#Interactive-Customization">Interactive Customization</a></li>
+<li><a href="#index-Introduction-1">Introduction</a>: <a href="#Introduction">Introduction</a></li>
+<li><a href="#index-Limitations-and-Known-Bugs-91">Limitations and Known Bugs</a>: <a href="#Limitations-and-Known-Bugs">Limitations and Known Bugs</a></li>
+<li><a href="#index-local-variables-49">local variables</a>: <a href="#File-Styles">File Styles</a></li>
+<li><a href="#index-Mailing-Lists-and-Submitting-Bug-Reports-92">Mailing Lists and Submitting Bug Reports</a>: <a href="#Mailing-Lists-and-Submitting-Bug-Reports">Mailing Lists and Submitting Bug Reports</a></li>
+<li><a href="#index-New-Indentation-Engine-4">New Indentation Engine</a>: <a href="#New-Indentation-Engine">New Indentation Engine</a></li>
+<li><a href="#index-Other-Special-Indentations-71">Other Special Indentations</a>: <a href="#Other-Special-Indentations">Other Special Indentations</a></li>
+<li><a href="#index-Permanent-Indentation-35">Permanent Indentation</a>: <a href="#Permanent-Customization">Permanent Customization</a></li>
+<li><a href="#index-relative-buffer-position-8">relative buffer position</a>: <a href="#Syntactic-Analysis">Syntactic Analysis</a></li>
+<li><a href="#index-Sample-_0040file_007b_002eemacs_007d-file-90">Sample <samp><span class="file">.emacs</span></samp> file</a>: <a href="#Sample-_002eemacs-File">Sample .emacs File</a></li>
+<li><a href="#index-set_002doffset-_0028vhdl_002d_0029-26">set-offset (vhdl-)</a>: <a href="#Customizing-Indentation">Customizing Indentation</a></li>
+<li><a href="#index-statement_002dcont-syntactic-symbol-65">statement-cont syntactic symbol</a>: <a href="#Custom-Indentation-Functions">Custom Indentation Functions</a></li>
+<li><a href="#index-Styles-38">Styles</a>: <a href="#Styles">Styles</a></li>
+<li><a href="#index-Syntactic-Analysis-5">Syntactic Analysis</a>: <a href="#Syntactic-Analysis">Syntactic Analysis</a></li>
+<li><a href="#index-syntactic-component-10">syntactic component</a>: <a href="#Syntactic-Analysis">Syntactic Analysis</a></li>
+<li><a href="#index-syntactic-component-list-11">syntactic component list</a>: <a href="#Syntactic-Analysis">Syntactic Analysis</a></li>
+<li><a href="#index-syntactic-symbol-9">syntactic symbol</a>: <a href="#Syntactic-Analysis">Syntactic Analysis</a></li>
+<li><a href="#index-Syntactic-Symbols-74">Syntactic Symbols</a>: <a href="#Syntactic-Symbols">Syntactic Symbols</a></li>
+<li><a href="#index-TAB-23">TAB</a>: <a href="#Indentation-Calculation">Indentation Calculation</a></li>
+<li><a href="#index-vhdl_002dbasic_002doffset-27">vhdl-basic-offset</a>: <a href="#Customizing-Indentation">Customizing Indentation</a></li>
+<li><a href="#index-vhdl_002dset_002doffset-25">vhdl-set-offset</a>: <a href="#Customizing-Indentation">Customizing Indentation</a></li>
+   </ul><div class="node">
+<a name="Command-Index"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Key-Index">Key Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Concept-Index">Concept Index</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="unnumbered">Command Index</h2>
+
+<p>Since all VHDL Mode commands are prepended with the string
+&lsquo;<samp><span class="samp">vhdl-</span></samp>&rsquo;, each appears under its <code>vhdl-&lt;thing&gt;</code> name and its
+<code>&lt;thing&gt; (vhdl-)</code> name.
+
+
+
+<ul class="index-fn" compact>
+<li><a href="#index-add_002dstyle-_0028vhdl_002d_0029-47"><code>add-style (vhdl-)</code></a>: <a href="#Adding-Styles">Adding Styles</a></li>
+<li><a href="#index-indent_002ddefun-_0028vhdl_002d_0029-34"><code>indent-defun (vhdl-)</code></a>: <a href="#Interactive-Customization">Interactive Customization</a></li>
+<li><a href="#index-lineup_002dstatement_002dcont-_0028vhdl_002d_0029-67"><code>lineup-statement-cont (vhdl-)</code></a>: <a href="#Custom-Indentation-Functions">Custom Indentation Functions</a></li>
+<li><a href="#index-newline_002dand_002dindent-88"><code>newline-and-indent</code></a>: <a href="#Frequently-Asked-Questions">Frequently Asked Questions</a></li>
+<li><a href="#index-set_002doffset-_0028vhdl_002d_0029-31"><code>set-offset (vhdl-)</code></a>: <a href="#Interactive-Customization">Interactive Customization</a></li>
+<li><a href="#index-set_002doffset-_0028vhdl_002d_0029-57"><code>set-offset (vhdl-)</code></a>: <a href="#File-Styles">File Styles</a></li>
+<li><a href="#index-set_002dstyle-_0028vhdl_002d_0029-42"><code>set-style (vhdl-)</code></a>: <a href="#Built_002din-Styles">Built-in Styles</a></li>
+<li><a href="#index-show_002dsyntactic_002dinformation-_0028vhdl_002d_0029-15"><code>show-syntactic-information (vhdl-)</code></a>: <a href="#Syntactic-Analysis">Syntactic Analysis</a></li>
+<li><a href="#index-submit_002dbug_002dreport-_0028vhdl_002d_0029-95"><code>submit-bug-report (vhdl-)</code></a>: <a href="#Mailing-Lists-and-Submitting-Bug-Reports">Mailing Lists and Submitting Bug Reports</a></li>
+<li><a href="#index-vhdl_002dadd_002dstyle-46"><code>vhdl-add-style</code></a>: <a href="#Adding-Styles">Adding Styles</a></li>
+<li><a href="#index-vhdl_002dindent_002ddefun-33"><code>vhdl-indent-defun</code></a>: <a href="#Interactive-Customization">Interactive Customization</a></li>
+<li><a href="#index-vhdl_002dindent_002ddefun-68"><code>vhdl-indent-defun</code></a>: <a href="#Custom-Indentation-Functions">Custom Indentation Functions</a></li>
+<li><a href="#index-vhdl_002dlineup_002dstatement_002dcont-66"><code>vhdl-lineup-statement-cont</code></a>: <a href="#Custom-Indentation-Functions">Custom Indentation Functions</a></li>
+<li><a href="#index-vhdl_002dset_002doffset-56"><code>vhdl-set-offset</code></a>: <a href="#File-Styles">File Styles</a></li>
+<li><a href="#index-vhdl_002dset_002doffset-30"><code>vhdl-set-offset</code></a>: <a href="#Interactive-Customization">Interactive Customization</a></li>
+<li><a href="#index-vhdl_002dset_002dstyle-41"><code>vhdl-set-style</code></a>: <a href="#Built_002din-Styles">Built-in Styles</a></li>
+<li><a href="#index-vhdl_002dshow_002dsyntactic_002dinformation-14"><code>vhdl-show-syntactic-information</code></a>: <a href="#Syntactic-Analysis">Syntactic Analysis</a></li>
+<li><a href="#index-vhdl_002dsubmit_002dbug_002dreport-94"><code>vhdl-submit-bug-report</code></a>: <a href="#Mailing-Lists-and-Submitting-Bug-Reports">Mailing Lists and Submitting Bug Reports</a></li>
+<li><a href="#index-vhdl_002dversion-2"><code>vhdl-version</code></a>: <a href="#Introduction">Introduction</a></li>
+   </ul><div class="node">
+<a name="Key-Index"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Variable-Index">Variable Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Command-Index">Command Index</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="unnumbered">Key Index</h2>
+
+
+
+<ul class="index-ky" compact>
+<li><a href="#index-C_002dc-C_002db-93"><code>C-c C-b</code></a>: <a href="#Mailing-Lists-and-Submitting-Bug-Reports">Mailing Lists and Submitting Bug Reports</a></li>
+<li><a href="#index-C_002dc-C_002dx-13"><code>C-c C-x</code></a>: <a href="#Syntactic-Analysis">Syntactic Analysis</a></li>
+<li><a href="#index-C_002dc-O-32"><code>C-c O</code></a>: <a href="#Interactive-Customization">Interactive Customization</a></li>
+<li><a href="#index-C_002dx-h-82"><code>C-x h</code></a>: <a href="#Frequently-Asked-Questions">Frequently Asked Questions</a></li>
+<li><a href="#index-ESC-C_002d_005c-83"><code>ESC C-\</code></a>: <a href="#Frequently-Asked-Questions">Frequently Asked Questions</a></li>
+<li><a href="#index-ESC-C_002dq-84"><code>ESC C-q</code></a>: <a href="#Frequently-Asked-Questions">Frequently Asked Questions</a></li>
+<li><a href="#index-ESC-C_002du-85"><code>ESC C-u</code></a>: <a href="#Frequently-Asked-Questions">Frequently Asked Questions</a></li>
+<li><a href="#index-LFD-87"><code>LFD</code></a>: <a href="#Frequently-Asked-Questions">Frequently Asked Questions</a></li>
+<li><a href="#index-RET-86"><code>RET</code></a>: <a href="#Frequently-Asked-Questions">Frequently Asked Questions</a></li>
+<li><a href="#index-TAB-20"><code>TAB</code></a>: <a href="#Indentation-Calculation">Indentation Calculation</a></li>
+   </ul><div class="node">
+<a name="Variable-Index"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Key-Index">Key Index</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="unnumbered">Variable Index</h2>
+
+<p>Since all VHDL Mode variables are prepended with the string
+&lsquo;<samp><span class="samp">vhdl-</span></samp>&rsquo;, each appears under its <code>vhdl-&lt;thing&gt;</code> name and its
+<code>&lt;thing&gt; (vhdl-)</code> name.
+
+
+
+<ul class="index-vr" compact>
+<li><a href="#index-basic_002doffset-_0028vhdl_002d_0029-62"><code>basic-offset (vhdl-)</code></a>: <a href="#Advanced-Customizations">Advanced Customizations</a></li>
+<li><a href="#index-echo_002dsyntactic_002dinformation_002dp-_0028vhdl_002d_0029-22"><code>echo-syntactic-information-p (vhdl-)</code></a>: <a href="#Indentation-Calculation">Indentation Calculation</a></li>
+<li><a href="#index-file_002doffsets-_0028vhdl_002d_0029-53"><code>file-offsets (vhdl-)</code></a>: <a href="#File-Styles">File Styles</a></li>
+<li><a href="#index-file_002dstyle-_0028vhdl_002d_0029-51"><code>file-style (vhdl-)</code></a>: <a href="#File-Styles">File Styles</a></li>
+<li><a href="#index-offsets_002dalist-_0028vhdl_002d_0029-55"><code>offsets-alist (vhdl-)</code></a>: <a href="#File-Styles">File Styles</a></li>
+<li><a href="#index-offsets_002dalist-_0028vhdl_002d_0029-7"><code>offsets-alist (vhdl-)</code></a>: <a href="#Syntactic-Analysis">Syntactic Analysis</a></li>
+<li><a href="#index-offsets_002dalist-_0028vhdl_002d_0029-70"><code>offsets-alist (vhdl-)</code></a>: <a href="#Custom-Indentation-Functions">Custom Indentation Functions</a></li>
+<li><a href="#index-offsets_002dalist-_0028vhdl_002d_0029-19"><code>offsets-alist (vhdl-)</code></a>: <a href="#Indentation-Calculation">Indentation Calculation</a></li>
+<li><a href="#index-special_002dindent_002dhook-_0028vhdl_002d_0029-73"><code>special-indent-hook (vhdl-)</code></a>: <a href="#Other-Special-Indentations">Other Special Indentations</a></li>
+<li><a href="#index-style_002dalist-_0028vhdl_002d_0029-45"><code>style-alist (vhdl-)</code></a>: <a href="#Adding-Styles">Adding Styles</a></li>
+<li><a href="#index-style_002dalist-_0028vhdl_002d_0029-60"><code>style-alist (vhdl-)</code></a>: <a href="#Advanced-Customizations">Advanced Customizations</a></li>
+<li><a href="#index-vhdl_002dbasic_002doffset-61"><code>vhdl-basic-offset</code></a>: <a href="#Advanced-Customizations">Advanced Customizations</a></li>
+<li><a href="#index-vhdl_002decho_002dsyntactic_002dinformation_002dp-21"><code>vhdl-echo-syntactic-information-p</code></a>: <a href="#Indentation-Calculation">Indentation Calculation</a></li>
+<li><a href="#index-vhdl_002dfile_002doffsets-52"><code>vhdl-file-offsets</code></a>: <a href="#File-Styles">File Styles</a></li>
+<li><a href="#index-vhdl_002dfile_002dstyle-50"><code>vhdl-file-style</code></a>: <a href="#File-Styles">File Styles</a></li>
+<li><a href="#index-vhdl_002dmode_002dhook-36"><code>vhdl-mode-hook</code></a>: <a href="#Permanent-Customization">Permanent Customization</a></li>
+<li><a href="#index-vhdl_002doffsets_002dalist-6"><code>vhdl-offsets-alist</code></a>: <a href="#Syntactic-Analysis">Syntactic Analysis</a></li>
+<li><a href="#index-vhdl_002doffsets_002dalist-69"><code>vhdl-offsets-alist</code></a>: <a href="#Custom-Indentation-Functions">Custom Indentation Functions</a></li>
+<li><a href="#index-vhdl_002doffsets_002dalist-54"><code>vhdl-offsets-alist</code></a>: <a href="#File-Styles">File Styles</a></li>
+<li><a href="#index-vhdl_002doffsets_002dalist-18"><code>vhdl-offsets-alist</code></a>: <a href="#Indentation-Calculation">Indentation Calculation</a></li>
+<li><a href="#index-vhdl_002doffsets_002dalist-75"><code>vhdl-offsets-alist</code></a>: <a href="#Syntactic-Symbols">Syntactic Symbols</a></li>
+<li><a href="#index-vhdl_002dspecial_002dindent_002dhook-72"><code>vhdl-special-indent-hook</code></a>: <a href="#Other-Special-Indentations">Other Special Indentations</a></li>
+<li><a href="#index-vhdl_002dstyle_002dalist-44"><code>vhdl-style-alist</code></a>: <a href="#Adding-Styles">Adding Styles</a></li>
+<li><a href="#index-vhdl_002dstyle_002dalist-59"><code>vhdl-style-alist</code></a>: <a href="#Advanced-Customizations">Advanced Customizations</a></li>
+   </ul>   <div class="footnote">
+<hr>
+<a name="texinfo-footnotes-in-document"></a><h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> The line numbers
+in this and future examples don't actually appear in the buffer.</p>
+
+   <hr></div>
+
+</body></html>
+
+<!--
+
+Local Variables:
+coding: utf-8
+End:
+
+-->

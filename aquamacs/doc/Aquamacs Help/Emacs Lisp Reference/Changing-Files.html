@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,12 +41,15 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
 <hr>
 </div>
 
-<h3 class="section">25.7 Changing File Names and Attributes</h3>
+<h3 class="section">24.7 Changing File Names and Attributes</h3>
 
 <!-- @cindex renaming files  Duplicates rename-file -->
-<p><a name="index-copying-files-1969"></a><a name="index-deleting-files-1970"></a><a name="index-linking-files-1971"></a><a name="index-setting-modes-of-files-1972"></a>
+<p><a name="index-copying-files-2123"></a><a name="index-deleting-files-2124"></a><a name="index-linking-files-2125"></a><a name="index-setting-modes-of-files-2126"></a>
   The functions in this section rename, copy, delete, link, and set
-the modes (permissions) of files.
+the modes (permissions) of files.  They all signal a <code>file-error</code>
+error if they fail to perform their function, reporting the
+system-dependent error message that describes the reason for the
+failure.
 
    <p>In the functions that have an argument <var>newname</var>, if a file by the
 name of <var>newname</var> already exists, the actions taken depend on the
@@ -68,10 +71,10 @@ argument is itself a symbolic link, then only <code>copy-file</code>
 replaces it with its (recursive) target.
 
 <div class="defun">
-&mdash; Command: <b>add-name-to-file</b><var> oldname newname &amp;optional ok-if-already-exists<a name="index-add_002dname_002dto_002dfile-1973"></a></var><br>
-<blockquote><p><a name="index-file-with-multiple-names-1974"></a><a name="index-file-hard-link-1975"></a>This function gives the file named <var>oldname</var> the additional name
-<var>newname</var>.  This means that <var>newname</var> becomes a new &ldquo;hard
-link&rdquo; to <var>oldname</var>.
+&mdash; Command: <b>add-name-to-file</b><var> oldname newname &amp;optional ok-if-already-exists<a name="index-add_002dname_002dto_002dfile-2127"></a></var><br>
+<blockquote><p><a name="index-file-with-multiple-names-2128"></a><a name="index-file-hard-link-2129"></a>This function gives the file named <var>oldname</var> the additional name
+<var>newname</var>.  This means that <var>newname</var> becomes a new hard
+link to <var>oldname</var>.
 
         <p>In the first part of the following example, we list two files,
 <samp><span class="file">foo</span></samp> and <samp><span class="file">foo3</span></samp>.
@@ -116,7 +119,7 @@ by copying the file instead.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>rename-file</b><var> filename newname &amp;optional ok-if-already-exists<a name="index-rename_002dfile-1976"></a></var><br>
+&mdash; Command: <b>rename-file</b><var> filename newname &amp;optional ok-if-already-exists<a name="index-rename_002dfile-2130"></a></var><br>
 <blockquote><p>This command renames the file <var>filename</var> as <var>newname</var>.
 
         <p>If <var>filename</var> has additional names aside from <var>filename</var>, it
@@ -126,7 +129,7 @@ same effect as renaming, aside from momentary intermediate states.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>copy-file</b><var> oldname newname &amp;optional ok-if-exists time preserve-uid-gid preserve-selinux<a name="index-copy_002dfile-1977"></a></var><br>
+&mdash; Command: <b>copy-file</b><var> oldname newname &amp;optional ok-if-exists time preserve-uid-gid preserve-extended-attributes<a name="index-copy_002dfile-2131"></a></var><br>
 <blockquote><p>This command copies the file <var>oldname</var> to <var>newname</var>.  An
 error is signaled if <var>oldname</var> does not exist.  If <var>newname</var>
 names a directory, it copies <var>oldname</var> into that directory,
@@ -139,8 +142,6 @@ some operating systems.)  If setting the time gets an error,
 interactive call, a prefix argument specifies a non-<code>nil</code> value
 for <var>time</var>.
 
-        <p>This function copies the file modes, too.
-
         <p>If argument <var>preserve-uid-gid</var> is <code>nil</code>, we let the operating
 system decide the user and group ownership of the new file (this is
 usually set to the user running Emacs).  If <var>preserve-uid-gid</var> is
@@ -148,15 +149,21 @@ non-<code>nil</code>, we attempt to copy the user and group ownership of the
 file.  This works only on some operating systems, and only if you have
 the correct permissions to do so.
 
-        <p>If the optional argument <var>preserve-extended-attributes</var> is
-non-<code>nil</code>, and Emacs has been built with the appropriate support,
-this function attempts to copy the file's extended attributes, such as
-its SELinux context and ACL entries (see <a href="File-Attributes.html#File-Attributes">File Attributes</a>). 
+        <p>If the optional argument <var>preserve-permissions</var> is non-<code>nil</code>,
+this function copies the file modes (or &ldquo;permissions&rdquo;) of
+<var>oldname</var> to <var>newname</var>, as well as the Access Control List and
+SELinux context (if any).  See <a href="Information-about-Files.html#Information-about-Files">Information about Files</a>.
+
+        <p>Otherwise, the file modes of <var>newname</var> are left unchanged if it is
+an existing file, and set to those of <var>oldname</var>, masked by the
+default file permissions (see <code>set-default-file-modes</code> below), if
+<var>newname</var> is to be newly created.  The Access Control List or
+SELinux context are not copied over in either case. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>make-symbolic-link</b><var> filename newname &amp;optional ok-if-exists<a name="index-make_002dsymbolic_002dlink-1978"></a></var><br>
-<blockquote><p><a name="index-ln-1979"></a><a name="index-file_002dalready_002dexists-1980"></a>This command makes a symbolic link to <var>filename</var>, named
+&mdash; Command: <b>make-symbolic-link</b><var> filename newname &amp;optional ok-if-exists<a name="index-make_002dsymbolic_002dlink-2132"></a></var><br>
+<blockquote><p><a name="index-ln-2133"></a><a name="index-file_002dalready_002dexists-2134"></a>This command makes a symbolic link to <var>filename</var>, named
 <var>newname</var>.  This is like the shell command &lsquo;<samp><span class="samp">ln -s
 </span><var>filename</var> <var>newname</var></samp>&rsquo;.
 
@@ -164,11 +171,11 @@ its SELinux context and ACL entries (see <a href="File-Attributes.html#File-Attr
 links. 
 </p></blockquote></div>
 
-   <p><a name="index-trash-1981"></a><a name="index-delete_002dby_002dmoving_002dto_002dtrash-1982"></a>
+   <p><a name="index-trash-2135"></a><a name="index-delete_002dby_002dmoving_002dto_002dtrash-2136"></a>
 
 <div class="defun">
-&mdash; Command: <b>delete-file</b><var> filename &amp;optional trash<a name="index-delete_002dfile-1983"></a></var><br>
-<blockquote><p><a name="index-rm-1984"></a>This command deletes the file <var>filename</var>.  If the file has
+&mdash; Command: <b>delete-file</b><var> filename &amp;optional trash<a name="index-delete_002dfile-2137"></a></var><br>
+<blockquote><p><a name="index-rm-2138"></a>This command deletes the file <var>filename</var>.  If the file has
 multiple names, it continues to exist under the other names.  If
 <var>filename</var> is a symbolic link, <code>delete-file</code> deletes only the
 symbolic link and not its target (though it does follow symbolic links
@@ -187,11 +194,11 @@ no prefix argument is given, and <code>nil</code> otherwise.
         <p>See also <code>delete-directory</code> in <a href="Create_002fDelete-Dirs.html#Create_002fDelete-Dirs">Create/Delete Dirs</a>. 
 </p></blockquote></div>
 
-   <p><a name="index-file-permissions_002c-setting-1985"></a><a name="index-permissions_002c-file-1986"></a><a name="index-file-modes_002c-setting-1987"></a>
+   <p><a name="index-file-permissions_002c-setting-2139"></a><a name="index-permissions_002c-file-2140"></a><a name="index-file-modes_002c-setting-2141"></a>
 
 <div class="defun">
-&mdash; Command: <b>set-file-modes</b><var> filename mode<a name="index-set_002dfile_002dmodes-1988"></a></var><br>
-<blockquote><p>This function sets the <dfn>file mode</dfn> (or <dfn>file permissions</dfn>) of
+&mdash; Command: <b>set-file-modes</b><var> filename mode<a name="index-set_002dfile_002dmodes-2142"></a></var><br>
+<blockquote><p>This function sets the <dfn>file mode</dfn> (or <dfn>permissions</dfn>) of
 <var>filename</var> to <var>mode</var>.  It recursively follows symbolic links
 at all levels for <var>filename</var>.
 
@@ -215,14 +222,13 @@ returns the permissions of a file.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-default-file-modes</b><var> mode<a name="index-set_002ddefault_002dfile_002dmodes-1989"></a></var><br>
-<blockquote><p><a name="index-umask-1990"></a>This function sets the default file permissions for new files created
-by Emacs and its subprocesses.  Every file created with Emacs
-initially has these permissions, or a subset of them
-(<code>write-region</code> will not grant execute permissions even if the
-default file permissions allow execution).  On Unix and GNU/Linux, the
-default permissions are given by the bitwise complement of the
-&ldquo;umask&rdquo; value.
+&mdash; Function: <b>set-default-file-modes</b><var> mode<a name="index-set_002ddefault_002dfile_002dmodes-2143"></a></var><br>
+<blockquote><p><a name="index-umask-2144"></a>This function sets the default permissions for new files created by
+Emacs and its subprocesses.  Every file created with Emacs initially
+has these permissions, or a subset of them (<code>write-region</code> will
+not grant execute permissions even if the default file permissions
+allow execution).  On Unix and GNU/Linux, the default permissions are
+given by the bitwise complement of the &lsquo;<samp><span class="samp">umask</span></samp>&rsquo; value.
 
         <p>The argument <var>mode</var> should be an integer which specifies the
 permissions, similar to <code>set-file-modes</code> above.  Only the lowest
@@ -234,12 +240,23 @@ permissions.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>default-file-modes</b><var><a name="index-default_002dfile_002dmodes-1991"></a></var><br>
+&mdash; Macro: <b>with-file-modes</b><var> mode body<small class="dots">...</small><a name="index-with_002dfile_002dmodes-2145"></a></var><br>
+<blockquote><p>This macro evaluates the <var>body</var> forms with the default
+permissions for new files temporarily set to <var>modes</var> (whose value
+is as for <code>set-file-modes</code> above).  When finished, it restores
+the original default file permissions, and returns the value of the
+last form in <var>body</var>.
+
+        <p>This is useful for creating private files, for example. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>default-file-modes</b><var><a name="index-default_002dfile_002dmodes-2146"></a></var><br>
 <blockquote><p>This function returns the default file permissions, as an integer. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>read-file-modes</b><var> &amp;optional prompt base-file<a name="index-read_002dfile_002dmodes-1992"></a></var><br>
+&mdash; Function: <b>read-file-modes</b><var> &amp;optional prompt base-file<a name="index-read_002dfile_002dmodes-2147"></a></var><br>
 <blockquote><p>This function reads a set of file mode bits from the minibuffer.  The
 first optional argument <var>prompt</var> specifies a non-default prompt. 
 Second second optional argument <var>base-file</var> is the name of a file
@@ -261,9 +278,9 @@ specifications.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>file-modes-symbolic-to-number</b><var> modes &amp;optional base-modes<a name="index-file_002dmodes_002dsymbolic_002dto_002dnumber-1993"></a></var><br>
+&mdash; Function: <b>file-modes-symbolic-to-number</b><var> modes &amp;optional base-modes<a name="index-file_002dmodes_002dsymbolic_002dto_002dnumber-2148"></a></var><br>
 <blockquote><p>This function converts a symbolic file mode specification in
-<var>modes</var> into the equivalent integer value.  If the symbolic
+<var>modes</var> into the equivalent integer.  If the symbolic
 specification is based on an existing file, that file's mode bits are
 taken from the optional argument <var>base-modes</var>; if that argument is
 omitted or <code>nil</code>, it defaults to 0, i.e., no access rights at
@@ -271,7 +288,7 @@ all.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-file-times</b><var> filename &amp;optional time<a name="index-set_002dfile_002dtimes-1994"></a></var><br>
+&mdash; Function: <b>set-file-times</b><var> filename &amp;optional time<a name="index-set_002dfile_002dtimes-2149"></a></var><br>
 <blockquote><p>This function sets the access and modification times of <var>filename</var>
 to <var>time</var>.  The return value is <code>t</code> if the times are successfully
 set, otherwise it is <code>nil</code>.  <var>time</var> defaults to the current
@@ -280,26 +297,35 @@ time and must be in the format returned by <code>current-time</code>
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-file-selinux-context</b><var> filename context<a name="index-set_002dfile_002dselinux_002dcontext-1995"></a></var><br>
-<blockquote><p>This function sets the SELinux security context of the file
-<var>filename</var> to <var>context</var>.  See <a href="File-Attributes.html#File-Attributes">File Attributes</a>, for a brief
-description of SELinux contexts.  The <var>context</var> argument should be
-a list <code>(</code><var>user</var> <var>role</var> <var>type</var> <var>range</var><code>)</code>, like the
-return value of <code>file-selinux-context</code>.  The function returns
-<code>t</code> if it succeeds to set the SELinux security context of
-<var>filename</var>, <code>nil</code> otherwise.  The function does nothing and
-returns <code>nil</code> if SELinux is disabled, or if Emacs was compiled
-without SELinux support. 
+&mdash; Function: <b>set-file-extended-attributes</b><var> filename attribute-alist<a name="index-set_002dfile_002dextended_002dattributes-2150"></a></var><br>
+<blockquote><p>This function sets the Emacs-recognized extended file attributes for
+<code>filename</code>.  The second argument <var>attribute-alist</var> should be
+an alist of the same form returned by <code>file-extended-attributes</code>. 
+The return value is <code>t</code> if the attributes are successfully set,
+otherwise it is <code>nil</code>. 
+See <a href="Extended-Attributes.html#Extended-Attributes">Extended Attributes</a>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-file-acl</b><var> filename acl-string<a name="index-set_002dfile_002dacl-1996"></a></var><br>
-<blockquote><p>This function sets the ACL entries of the file <var>filename</var> to
-<var>acl-string</var>.  See <a href="File-Attributes.html#File-Attributes">File Attributes</a>, for a brief description of
-ACLs.  The <var>acl-string</var> argument should be a string containing the
-textual representation of the desired ACL entries as returned by
-<code>file-acl</code> (see <a href="File-Attributes.html#File-Attributes">file-acl</a>).  The function
-returns <code>t</code> if it succeeds to set the ACL entries of
+&mdash; Function: <b>set-file-selinux-context</b><var> filename context<a name="index-set_002dfile_002dselinux_002dcontext-2151"></a></var><br>
+<blockquote><p>This function sets the SELinux security context for <var>filename</var> to
+<var>context</var>.  The <var>context</var> argument should be a list
+<code>(</code><var>user</var> <var>role</var> <var>type</var> <var>range</var><code>)</code>, where each
+element is a string.  See <a href="Extended-Attributes.html#Extended-Attributes">Extended Attributes</a>.
+
+        <p>The function returns <code>t</code> if it succeeds in setting the SELinux
+context of <var>filename</var>.  It returns <code>nil</code> if the context was
+not set (e.g., if SELinux is disabled, or if Emacs was compiled
+without SELinux support). 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-file-acl</b><var> filename acl<a name="index-set_002dfile_002dacl-2152"></a></var><br>
+<blockquote><p>This function sets the Access Control List for <var>filename</var> to
+<var>acl</var>.  The <var>acl</var> argument should have the same form returned
+by the function <code>file-acl</code>.  See <a href="Extended-Attributes.html#Extended-Attributes">Extended Attributes</a>.
+
+        <p>The function returns <code>t</code> if it successfully sets the ACL of
 <var>filename</var>, <code>nil</code> otherwise. 
 </p></blockquote></div>
 

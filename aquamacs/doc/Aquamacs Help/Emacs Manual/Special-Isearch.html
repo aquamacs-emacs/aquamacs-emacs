@@ -11,16 +11,16 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Manual',
-updated for Emacs version 24.3.50.
+updated for Emacs version 25.0.50.
 
-Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``The GNU
      Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     with the Front-Cover Texts being ``A GNU Manual,'' and with the
      Back-Cover Texts as in (a) below.  A copy of the license is
      included in the section entitled ``GNU Free Documentation
      License.''
@@ -47,18 +47,20 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Incremental-Search.html#Incremental-Sea
 <p>Some of the characters you type during incremental search have
 special effects.
 
-   <p><a name="index-lax-space-matching-826"></a><a name="index-M_002ds-SPC-_0040r_007b_0028Incremental-search_0029_007d-827"></a><a name="index-SPC-_0040r_007b_0028Incremental-search_0029_007d-828"></a><a name="index-isearch_002dtoggle_002dlax_002dwhitespace-829"></a><a name="index-search_002dwhitespace_002dregexp-830"></a>  By default, incremental search performs <dfn>lax space matching</dfn>:
+   <p><a name="index-lax-space-matching-858"></a><a name="index-M_002ds-SPC-_0040r_007b_0028Incremental-search_0029_007d-859"></a><a name="index-SPC-_0040r_007b_0028Incremental-search_0029_007d-860"></a><a name="index-isearch_002dtoggle_002dlax_002dwhitespace-861"></a><a name="index-search_002dwhitespace_002dregexp-862"></a>  By default, incremental search performs <dfn>lax space matching</dfn>:
 each space, or sequence of spaces, matches any sequence of one or more
 spaces in the text.  Hence, &lsquo;<samp><span class="samp">foo bar</span></samp>&rsquo; matches &lsquo;<samp><span class="samp">foo bar</span></samp>&rsquo;,
-&lsquo;<samp><span class="samp">foo  bar</span></samp>&rsquo;, &lsquo;<samp><span class="samp">foo   bar</span></samp>&rsquo;, and so on (but not &lsquo;<samp><span class="samp">foobar</span></samp>&rsquo;). 
-More precisely, Emacs matches each sequence of space characters in the
-search string to a regular expression specified by the variable
-<code>search-whitespace-regexp</code>.  For example, set it to
-&lsquo;<samp><span class="samp">"[[:space:]\n]+"</span></samp>&rsquo; to make spaces match sequences of newlines as
-well as spaces.  To toggle lax space matching, type <kbd>M-s SPC</kbd>
+&lsquo;<samp><span class="samp">foo&nbsp;&nbsp;<!-- /@w -->bar</span></samp>&rsquo;, &lsquo;<samp><span class="samp">foo&nbsp;&nbsp;&nbsp;<!-- /@w -->bar</span></samp>&rsquo;, and so on (but not
+&lsquo;<samp><span class="samp">foobar</span></samp>&rsquo;).  More precisely, Emacs matches each sequence of space
+characters in the search string to a regular expression specified by
+the variable <code>search-whitespace-regexp</code>.  For example, to make
+spaces match sequences of newlines as well as spaces, set it to
+&lsquo;<samp><span class="samp">"[[:space:]\n]+"</span></samp>&rsquo;.
+
+   <p>To toggle lax space matching, type <kbd>M-s &lt;SPC&gt;</kbd>
 (<code>isearch-toggle-lax-whitespace</code>).  To disable this feature
 entirely, change <code>search-whitespace-regexp</code> to <code>nil</code>; then
-each space in the search string matches exactly one space
+each space in the search string matches exactly one space.
 
    <p>If the search string you entered contains only lower-case letters,
 the search is case-insensitive; as long as an upper-case letter exists
@@ -66,33 +68,49 @@ in the search string, the search becomes case-sensitive.  If you
 delete the upper-case character from the search string, it ceases to
 have this effect.  See <a href="Search-Case.html#Search-Case">Search Case</a>.
 
+   <p><a name="index-invisible-text_002c-searching-for-863"></a><a name="index-M_002ds-i-_0040r_007b_0028Incremental-search_0029_007d-864"></a><a name="index-isearch_002dtoggle_002dinvisible-865"></a>  To toggle whether or not invisible text is searched, type
+<kbd>M-s i</kbd> (<code>isearch-toggle-invisible</code>).  See <a href="Outline-Search.html#Outline-Search">Outline Search</a>.
+
    <p>To search for a newline character, type <kbd>C-j</kbd>.
 
-   <p>To search for other control characters, such as &lt;control-S&gt;,
-quote it by typing <kbd>C-q</kbd> first (see <a href="Inserting-Text.html#Inserting-Text">Inserting Text</a>).  To
-search for non-<acronym>ASCII</acronym> characters, you can either use
-<kbd>C-q</kbd> and enter its octal code, or use an input method
-(see <a href="Input-Methods.html#Input-Methods">Input Methods</a>).  If an input method is enabled in the current
-buffer when you start the search, you can use it in the search string
-also.  While typing the search string, you can toggle the input method
-with the command <kbd>C-\</kbd> (<code>isearch-toggle-input-method</code>).  You
-can also turn on a non-default input method with <kbd>C-^</kbd>
+   <p>To search for non-<acronym>ASCII</acronym> characters, use one of the
+following methods:
+
+     <ul>
+<li>Type <kbd>C-q</kbd>, followed by a non-graphic character or a sequence of
+octal digits.  This adds a character to the search string, similar to
+inserting into a buffer using <kbd>C-q</kbd> (see <a href="Inserting-Text.html#Inserting-Text">Inserting Text</a>).  For
+example, <kbd>C-q C-s</kbd> during incremental search adds the
+&lsquo;<samp><span class="samp">control-S</span></samp>&rsquo; character to the search string.
+
+     <li>Type <kbd>C-x 8 &lt;RET&gt;</kbd>, followed by a Unicode name or code-point. 
+This adds the specified character into the search string, similar to
+the usual <code>insert-char</code> command (see <a href="Inserting-Text.html#Inserting-Text">Inserting Text</a>).
+
+     <li>Use an input method (see <a href="Input-Methods.html#Input-Methods">Input Methods</a>).  If an input method is
+enabled in the current buffer when you start the search, you can use
+it in the search string also.  While typing the search string, you can
+toggle the input method with <kbd>C-\</kbd>
+(<code>isearch-toggle-input-method</code>).  You can also turn on a
+non-default input method with <kbd>C-^</kbd>
 (<code>isearch-toggle-specified-input-method</code>), which prompts for the
 name of the input method.  When an input method is active during
 incremental search, the search prompt includes the input method
 mnemonic, like this:
 
-<pre class="example">     I-search [<var>im</var>]:
+     <pre class="example">          I-search [<var>im</var>]:
 </pre>
-   <p class="noindent"><a name="index-isearch_002dtoggle_002dinput_002dmethod-831"></a><a name="index-isearch_002dtoggle_002dspecified_002dinput_002dmethod-832"></a>where <var>im</var> is the mnemonic of the active input method.  Any input
+     <p class="noindent"><a name="index-isearch_002dtoggle_002dinput_002dmethod-866"></a><a name="index-isearch_002dtoggle_002dspecified_002dinput_002dmethod-867"></a>where <var>im</var> is the mnemonic of the active input method.  Any input
 method you enable during incremental search remains enabled in the
-current buffer afterwards.
+current buffer afterwards. 
+</ul>
 
-   <p><a name="index-M_002d_0025-_0040r_007b_0028Incremental-search_0029_007d-833"></a>  Typing <kbd>M-%</kbd> in incremental search invokes <code>query-replace</code>
+   <p><a name="index-M_002d_0025-_0040r_007b_0028Incremental-search_0029_007d-868"></a>  Typing <kbd>M-%</kbd> in incremental search invokes <code>query-replace</code>
 or <code>query-replace-regexp</code> (depending on search mode) with the
-current search string used as the string to replace.  See <a href="Query-Replace.html#Query-Replace">Query Replace</a>.
+current search string used as the string to replace.  A negative
+prefix argument means to replace backward.  See <a href="Query-Replace.html#Query-Replace">Query Replace</a>.
 
-   <p><a name="index-M_002dTAB-_0040r_007b_0028Incremental-search_0029_007d-834"></a>  Typing <kbd>M-&lt;TAB&gt;</kbd> in incremental search invokes
+   <p><a name="index-M_002dTAB-_0040r_007b_0028Incremental-search_0029_007d-869"></a>  Typing <kbd>M-&lt;TAB&gt;</kbd> in incremental search invokes
 <code>isearch-complete</code>, which attempts to complete the search string
 using the search ring as a list of completion alternatives. 
 See <a href="Completion.html#Completion">Completion</a>.  In many operating systems, the <kbd>M-&lt;TAB&gt;</kbd>
@@ -100,7 +118,7 @@ key sequence is captured by the window manager; you then need to
 rebind <code>isearch-complete</code> to another key sequence if you want to
 use it (see <a href="Rebinding.html#Rebinding">Rebinding</a>).
 
-   <p><a name="index-isearch_002dmode_002dmap-835"></a>  When incremental search is active, you can type <kbd>C-h C-h</kbd> to
+   <p><a name="index-isearch_002dmode_002dmap-870"></a>  When incremental search is active, you can type <kbd>C-h C-h</kbd> to
 access interactive help options, including a list of special key
 bindings.  These key bindings are part of the keymap
 <code>isearch-mode-map</code> (see <a href="Keymaps.html#Keymaps">Keymaps</a>).

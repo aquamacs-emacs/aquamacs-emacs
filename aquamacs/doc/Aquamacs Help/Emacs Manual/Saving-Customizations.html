@@ -11,16 +11,16 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Manual',
-updated for Emacs version 24.3.50.
+updated for Emacs version 25.0.50.
 
-Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``The GNU
      Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     with the Front-Cover Texts being ``A GNU Manual,'' and with the
      Back-Cover Texts as in (a) below.  A copy of the license is
      included in the section entitled ``GNU Free Documentation
      License.''
@@ -42,7 +42,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Easy-Customization.html#Easy-Customizat
 <hr>
 </div>
 
-<h4 class="subsection">48.1.4 Saving Customizations</h4>
+<h4 class="subsection">49.1.4 Saving Customizations</h4>
 
 <p>In the customization buffer, you can <dfn>save</dfn> a customization
 setting by choosing the &lsquo;<samp><span class="samp">Save for Future Sessions</span></samp>&rsquo; choice from
@@ -54,7 +54,7 @@ the customization buffer, saves all applicable settings in the buffer.
 file (see <a href="Init-File.html#Init-File">Init File</a>).  Future Emacs sessions automatically read
 this file at startup, which sets up the customizations again.
 
-   <p><a name="index-custom_002dfile-4334"></a>  You can choose to save customizations somewhere other than your
+   <p><a name="index-custom_002dfile-4492"></a>  You can choose to save customizations somewhere other than your
 initialization file.  To make this work, you must add a couple of
 lines of code to your initialization file, to set the variable
 <code>custom-file</code> to the name of the desired file, and to load that
@@ -85,5 +85,13 @@ customizations in your initialization file.  This is because saving
 customizations from such a session would wipe out all the other
 customizations you might have on your initialization file.
 
+   <p>Please note that any customizations you have not chosen to save for
+future sessions will be lost when you terminate Emacs.  If you'd like
+to be prompted about unsaved customizations at termination time, add
+the following to your initialization file:
+
+<pre class="example">     (add-hook 'kill-emacs-query-functions
+               'custom-prompt-customize-unsaved-options)
+</pre>
    </body></html>
 

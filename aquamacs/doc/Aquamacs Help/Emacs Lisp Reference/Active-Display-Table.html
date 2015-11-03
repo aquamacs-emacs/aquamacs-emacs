@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,9 +41,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Character-Display.html#Character-Displa
 <hr>
 </div>
 
-<h4 class="subsection">38.20.3 Active Display Table</h4>
+<h4 class="subsection">37.21.3 Active Display Table</h4>
 
-<p><a name="index-active-display-table-4053"></a>
+<p><a name="index-active-display-table-4466"></a>
   Each window can specify a display table, and so can each buffer. 
 The window's display table, if there is one, takes precedence over the
 buffer's display table.  If neither exists, Emacs tries to use the
@@ -55,31 +55,34 @@ if you want to force redisplay of the mode line using a new display
 table, call <code>force-mode-line-update</code> (see <a href="Mode-Line-Format.html#Mode-Line-Format">Mode Line Format</a>).
 
 <div class="defun">
-&mdash; Function: <b>window-display-table</b><var> &amp;optional window<a name="index-window_002ddisplay_002dtable-4054"></a></var><br>
+&mdash; Function: <b>window-display-table</b><var> &amp;optional window<a name="index-window_002ddisplay_002dtable-4467"></a></var><br>
 <blockquote><p>This function returns <var>window</var>'s display table, or <code>nil</code> if
 there is none.  The default for <var>window</var> is the selected window. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>set-window-display-table</b><var> window table<a name="index-set_002dwindow_002ddisplay_002dtable-4055"></a></var><br>
+&mdash; Function: <b>set-window-display-table</b><var> window table<a name="index-set_002dwindow_002ddisplay_002dtable-4468"></a></var><br>
 <blockquote><p>This function sets the display table of <var>window</var> to <var>table</var>. 
 The argument <var>table</var> should be either a display table or
 <code>nil</code>. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>buffer-display-table</b><var><a name="index-buffer_002ddisplay_002dtable-4056"></a></var><br>
+&mdash; Variable: <b>buffer-display-table</b><var><a name="index-buffer_002ddisplay_002dtable-4469"></a></var><br>
 <blockquote><p>This variable is automatically buffer-local in all buffers; its value
 specifies the buffer's display table.  If it is <code>nil</code>, there is
 no buffer display table. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>standard-display-table</b><var><a name="index-standard_002ddisplay_002dtable-4057"></a></var><br>
+&mdash; Variable: <b>standard-display-table</b><var><a name="index-standard_002ddisplay_002dtable-4470"></a></var><br>
 <blockquote><p>The value of this variable is the standard display table, which is
 used when Emacs is displaying a buffer in a window with neither a
-window display table nor a buffer display table defined.  Its default
-is <code>nil</code>. 
+window display table nor a buffer display table defined, or when Emacs
+is outputting text to the standard output or error streams.  Although its
+default is typically <code>nil</code>, in an interactive session if the
+terminal cannot display curved quotes, its default maps curved quotes
+to ASCII approximations.  See <a href="Keys-in-Documentation.html#Keys-in-Documentation">Keys in Documentation</a>. 
 </p></blockquote></div>
 
    <p>The <samp><span class="file">disp-table</span></samp> library defines several functions for changing

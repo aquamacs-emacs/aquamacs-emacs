@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -43,54 +43,46 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Byte-Compilation.html#Byte-Compilation"
 
 <h3 class="section">16.3 Documentation Strings and Compilation</h3>
 
-<p><a name="index-dynamic-loading-of-documentation-913"></a>
-  Functions and variables loaded from a byte-compiled file access their
-documentation strings dynamically from the file whenever needed.  This
-saves space within Emacs, and makes loading faster because the
-documentation strings themselves need not be processed while loading the
-file.  Actual access to the documentation strings becomes slower as a
-result, but this normally is not enough to bother users.
+<p><a name="index-dynamic-loading-of-documentation-1051"></a>
+  When Emacs loads functions and variables from a byte-compiled file,
+it normally does not load their documentation strings into memory. 
+Each documentation string is dynamically loaded from the
+byte-compiled file only when needed.  This saves memory, and speeds up
+loading by skipping the processing of the documentation strings.
 
-   <p>Dynamic access to documentation strings does have drawbacks:
+   <p>This feature has a drawback: if you delete, move, or alter the
+compiled file (such as by compiling a new version), Emacs may no
+longer be able to access the documentation string of previously-loaded
+functions or variables.  Such a problem normally only occurs if you
+build Emacs yourself, and happen to edit and/or recompile the Lisp
+source files.  To solve it, just reload each file after recompilation.
 
-     <ul>
-<li>If you delete or move the compiled file after loading it, Emacs can no
-longer access the documentation strings for the functions and variables
-in the file.
+   <p>Dynamic loading of documentation strings from byte-compiled files is
+determined, at compile time, for each byte-compiled file.  It can be
+disabled via the option <code>byte-compile-dynamic-docstrings</code>.
 
-     <li>If you alter the compiled file (such as by compiling a new version),
-then further access to documentation strings in this file will
-probably give nonsense results. 
-</ul>
-
-<p class="noindent">These problems normally occur only if you build Emacs yourself and use
-it from the directory where you built it, and you happen to edit
-and/or recompile the Lisp source files.  They can be easily cured by
-reloading each file after recompiling it.
-
-   <p><a name="index-g_t_0040samp_007b_0023_0040_0040_0040var_007bcount_007d_007d-914"></a><a name="index-g_t_0040samp_007b_0023_0024_007d-915"></a>  The dynamic documentation string feature writes compiled files that
-use a special Lisp reader construct, &lsquo;<samp><span class="samp">#@</span><var>count</var></samp>&rsquo;.  This
-construct skips the next <var>count</var> characters.  It also uses the
-&lsquo;<samp><span class="samp">#$</span></samp>&rsquo; construct, which stands for &ldquo;the name of this file, as a
-string&rdquo;.  It is usually best not to use these constructs in Lisp source
-files, since they are not designed to be clear to humans reading the
-file.
-
-   <p>You can disable the dynamic documentation string feature at compile
-time by setting <code>byte-compile-dynamic-docstrings</code> to <code>nil</code>;
-this is useful mainly if you expect to change the file, and you want
-Emacs processes that have already loaded it to keep working when the
-file changes.  You can do this globally, or for one source file by
-specifying a file-local binding for the variable.  One way to do that
-is by adding this string to the file's first line:
-
-<pre class="example">     -*-byte-compile-dynamic-docstrings: nil;-*-
-</pre>
-   <div class="defun">
-&mdash; User Option: <b>byte-compile-dynamic-docstrings</b><var><a name="index-byte_002dcompile_002ddynamic_002ddocstrings-916"></a></var><br>
+<div class="defun">
+&mdash; User Option: <b>byte-compile-dynamic-docstrings</b><var><a name="index-byte_002dcompile_002ddynamic_002ddocstrings-1052"></a></var><br>
 <blockquote><p>If this is non-<code>nil</code>, the byte compiler generates compiled files
-that are set up for dynamic loading of documentation strings. 
+that are set up for dynamic loading of documentation strings.
+
+        <p>To disable the dynamic loading feature for a specific file, set this
+option to <code>nil</code> in its header line (see <a href="../emacs/File-Variables.html#File-Variables">Local Variables in Files</a>), like this:
+
+     <pre class="smallexample">          -*-byte-compile-dynamic-docstrings: nil;-*-
+</pre>
+        <p>This is useful mainly if you expect to change the file, and you want
+Emacs sessions that have already loaded it to keep working when the
+file changes. 
 </p></blockquote></div>
+
+   <p><a name="index-g_t_0040samp_007b_0023_0040_0040_0040var_007bcount_007d_007d-1053"></a><a name="index-g_t_0040samp_007b_0023_0024_007d-1054"></a>Internally, the dynamic loading of documentation strings is
+accomplished by writing compiled files with a special Lisp reader
+construct, &lsquo;<samp><span class="samp">#@</span><var>count</var></samp>&rsquo;.  This construct skips the next
+<var>count</var> characters.  It also uses the &lsquo;<samp><span class="samp">#$</span></samp>&rsquo; construct, which
+stands for the name of this file, as a string.  Do not use these
+constructs in Lisp source files; they are not designed to be clear to
+humans reading the file.
 
    </body></html>
 

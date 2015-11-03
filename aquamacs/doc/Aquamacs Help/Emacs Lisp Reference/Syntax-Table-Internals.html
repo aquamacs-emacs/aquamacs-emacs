@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,9 +41,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Syntax-Tables.html#Syntax-Tables">Synta
 <hr>
 </div>
 
-<h3 class="section">35.7 Syntax Table Internals</h3>
+<h3 class="section">34.7 Syntax Table Internals</h3>
 
-<p><a name="index-syntax-table-internals-3461"></a>
+<p><a name="index-syntax-table-internals-3791"></a>
   Syntax tables are implemented as char-tables (see <a href="Char_002dTables.html#Char_002dTables">Char-Tables</a>),
 but most Lisp programs don't work directly with their elements. 
 Syntax tables do not store syntax data as syntax descriptors
@@ -51,7 +51,7 @@ Syntax tables do not store syntax data as syntax descriptors
 documented in this section.  This internal format can also be assigned
 as syntax properties (see <a href="Syntax-Properties.html#Syntax-Properties">Syntax Properties</a>).
 
-   <p><a name="index-syntax-code-3462"></a><a name="index-raw-syntax-descriptor-3463"></a>  Each entry in a syntax table is a <dfn>raw syntax descriptor</dfn>: a
+   <p><a name="index-syntax-code-3792"></a><a name="index-raw-syntax-descriptor-3793"></a>  Each entry in a syntax table is a <dfn>raw syntax descriptor</dfn>: a
 cons cell of the form <code>(</code><var>syntax-code</var><code>
 . </code><var>matching-char</var><code>)</code>.  <var>syntax-code</var> is an integer which
 encodes the syntax class and syntax flags, according to the table
@@ -87,13 +87,13 @@ corresponds to each syntax flag.
    <br></td></tr></table>
 
 <div class="defun">
-&mdash; Function: <b>string-to-syntax</b><var> desc<a name="index-string_002dto_002dsyntax-3464"></a></var><br>
+&mdash; Function: <b>string-to-syntax</b><var> desc<a name="index-string_002dto_002dsyntax-3794"></a></var><br>
 <blockquote><p>Given a syntax descriptor <var>desc</var> (a string), this function returns
 the corresponding raw syntax descriptor. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>syntax-after</b><var> pos<a name="index-syntax_002dafter-3465"></a></var><br>
+&mdash; Function: <b>syntax-after</b><var> pos<a name="index-syntax_002dafter-3795"></a></var><br>
 <blockquote><p>This function returns the raw syntax descriptor for the character in
 the buffer after position <var>pos</var>, taking account of syntax
 properties as well as the syntax table.  If <var>pos</var> is outside the
@@ -102,7 +102,7 @@ the return value is <code>nil</code>.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>syntax-class</b><var> syntax<a name="index-syntax_002dclass-3466"></a></var><br>
+&mdash; Function: <b>syntax-class</b><var> syntax<a name="index-syntax_002dclass-3796"></a></var><br>
 <blockquote><p>This function returns the syntax code for the raw syntax descriptor
 <var>syntax</var>.  More precisely, it takes the raw syntax descriptor's
 <var>syntax-code</var> component, masks off the high 16 bits which record

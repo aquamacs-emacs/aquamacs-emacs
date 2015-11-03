@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,9 +41,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Documentation.html#Documentation">Docum
 <hr>
 </div>
 
-<h3 class="section">24.3 Substituting Key Bindings in Documentation</h3>
+<h3 class="section">23.3 Substituting Key Bindings in Documentation</h3>
 
-<p><a name="index-documentation_002c-keys-in-1854"></a><a name="index-keys-in-documentation-strings-1855"></a><a name="index-substituting-keys-in-documentation-1856"></a>
+<p><a name="index-documentation_002c-keys-in-1995"></a><a name="index-keys-in-documentation-strings-1996"></a><a name="index-substituting-keys-in-documentation-1997"></a><a name="index-key-substitution-sequence-1998"></a>
   When documentation strings refer to key sequences, they should use the
 current, actual key bindings.  They can do so using certain special text
 sequences described below.  Accessing documentation strings in the usual
@@ -64,22 +64,40 @@ can also call that function yourself.
 specifies <var>mapvar</var>'s value as the keymap for any following
 &lsquo;<samp><span class="samp">\[</span><var>command</var><span class="samp">]</span></samp>&rsquo; sequences in this documentation string.
 
-     <br><dt><code>\=</code><dd>quotes the following character and is discarded; thus, &lsquo;<samp><span class="samp">\=\[</span></samp>&rsquo; puts
-&lsquo;<samp><span class="samp">\[</span></samp>&rsquo; into the output, and &lsquo;<samp><span class="samp">\=\=</span></samp>&rsquo; puts &lsquo;<samp><span class="samp">\=</span></samp>&rsquo; into the
-output. 
+     <br><dt><code>‘</code><dt><code>`</code><dd>(left single quotation mark and grave accent) both stand for a left quote.
+
+     <br><dt><code>’</code><dt><code>'</code><dd>(right single quotation mark and apostrophe) both stand for a right quote.
+
+     <br><dt><code>\=</code><dd>quotes the following character and is discarded; thus, &lsquo;<samp><span class="samp">\=`</span></samp>&rsquo; puts
+&lsquo;<samp><span class="samp">`</span></samp>&rsquo; into the output, &lsquo;<samp><span class="samp">\=\[</span></samp>&rsquo; puts &lsquo;<samp><span class="samp">\[</span></samp>&rsquo; into the output,
+and &lsquo;<samp><span class="samp">\=\=</span></samp>&rsquo; puts &lsquo;<samp><span class="samp">\=</span></samp>&rsquo; into the output. 
 </dl>
 
    <p><strong>Please note:</strong> Each &lsquo;<samp><span class="samp">\</span></samp>&rsquo; must be doubled when written in a
 string in Emacs Lisp.
 
 <div class="defun">
-&mdash; Function: <b>substitute-command-keys</b><var> string<a name="index-substitute_002dcommand_002dkeys-1857"></a></var><br>
+&mdash; Variable: <b>text-quoting-style</b><var><a name="index-text_002dquoting_002dstyle-1999"></a></var><br>
+<blockquote><p><a name="index-curved-quotes-2000"></a><a name="index-curly-quotes-2001"></a>The value of this variable specifies the style used to generate text
+quotes.  If the variable's value is <code>curve</code>, the style is
+<tt>‘like this’</tt> with curved single quotes.  If the value is
+<code>straight</code>, the style is <tt>'like this'</tt> with straight
+apostrophes.  If the value is <code>grave</code>, the style is <tt>`like
+this'</tt> with grave accent and apostrophe.  The default value <code>nil</code>
+acts like <code>curve</code> if curved single quotes are displayable, and
+like <code>grave</code> otherwise.  To use the traditional <code>grave</code>
+style, put the line <code>(setq text-quoting-style 'grave)</code> into your
+<samp><span class="file">~/.emacs</span></samp> file. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>substitute-command-keys</b><var> string<a name="index-substitute_002dcommand_002dkeys-2002"></a></var><br>
 <blockquote><p>This function scans <var>string</var> for the above special sequences and
 replaces them by what they stand for, returning the result as a string. 
 This permits display of documentation that refers accurately to the
 user's own customized key bindings.
 
-        <p><a name="index-advertised-binding-1858"></a>If a command has multiple bindings, this function normally uses the
+        <p><a name="index-advertised-binding-2003"></a>If a command has multiple bindings, this function normally uses the
 first one it finds.  You can specify one particular key binding by
 assigning an <code>:advertised-binding</code> symbol property to the
 command, like this:
@@ -94,8 +112,8 @@ specifies a key binding that the command does not actually have.
    <p>Here are examples of the special sequences:
 
 <pre class="smallexample">     (substitute-command-keys
-        "To abort recursive edit, type: \\[abort-recursive-edit]")
-     &rArr; "To abort recursive edit, type: C-]"
+        "To abort recursive edit, type `\\[abort-recursive-edit]'.")
+     &rArr; "To abort recursive edit, type ‘C-]’."
      
      (substitute-command-keys
         "The keys that are defined for the minibuffer here are:
@@ -111,9 +129,9 @@ specifies a key binding that the command does not actually have.
      "
      
      (substitute-command-keys
-        "To abort a recursive edit from the minibuffer, type\
-     \\&lt;minibuffer-local-must-match-map&gt;\\[abort-recursive-edit].")
-     &rArr; "To abort a recursive edit from the minibuffer, type C-g."
+        "To abort a recursive edit from the minibuffer, type \
+     `\\&lt;minibuffer-local-must-match-map&gt;\\[abort-recursive-edit]'.")
+     &rArr; "To abort a recursive edit from the minibuffer, type ‘C-g’."
 </pre>
    <p>There are other special conventions for the text in documentation
 strings&mdash;for instance, you can refer to functions, variables, and

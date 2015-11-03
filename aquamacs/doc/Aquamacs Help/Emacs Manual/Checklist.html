@@ -11,16 +11,16 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Manual',
-updated for Emacs version 24.3.50.
+updated for Emacs version 25.0.50.
 
-Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``The GNU
      Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     with the Front-Cover Texts being ``A GNU Manual,'' and with the
      Back-Cover Texts as in (a) below.  A copy of the license is
      included in the section entitled ``GNU Free Documentation
      License.''
@@ -42,9 +42,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Bugs.html#Bugs">Bugs</a>
 <hr>
 </div>
 
-<h3 class="section">51.4 Checklist for Bug Reports</h3>
+<h3 class="section">52.4 Checklist for Bug Reports</h3>
 
-<p><a name="index-reporting-bugs-4497"></a>
+<p><a name="index-checklist-before-reporting-a-bug-4671"></a><a name="index-bug-reporting_002c-checklist-4672"></a>
   Before reporting a bug, first try to see if the problem has already
 been reported (see <a href="Known-Problems.html#Known-Problems">Known Problems</a>).
 
@@ -54,7 +54,7 @@ development version.  We recognize that this is not easy for some
 people, so do not feel that you absolutely must do this before making
 a report.
 
-   <p><a name="index-report_002demacs_002dbug-4498"></a>  The best way to write a bug report for Emacs is to use the command
+   <p><a name="index-report_002demacs_002dbug-4673"></a>  The best way to write a bug report for Emacs is to use the command
 <kbd>M-x report-emacs-bug</kbd>.  This sets up a mail buffer
 (see <a href="Sending-Mail.html#Sending-Mail">Sending Mail</a>) and automatically inserts <em>some</em> of the
 essential information.  However, it cannot supply all the necessary
@@ -123,7 +123,7 @@ unmodified Emacs.  But if you've made modifications and you don't tell
 us, you are sending us on a wild goose chase.)
 
      <p>Be precise about these changes.  A description in English is not
-enough&mdash;send a context diff for them.
+enough&mdash;send a unified context diff for them.
 
      <p>Adding files of your own, or porting to another machine, is a
 modification of the source.
@@ -145,12 +145,14 @@ possible, give a full recipe for an Emacs started with the &lsquo;<samp><span cl
 option (see <a href="Initial-Options.html#Initial-Options">Initial Options</a>).  This bypasses your personal
 customizations.
 
-     <p><a name="index-open_002ddribble_002dfile-4499"></a><a name="index-dribble-file-4500"></a><a name="index-logging-keystrokes-4501"></a>One way to record the input to Emacs precisely is to write a dribble
+     <p><a name="index-open_002ddribble_002dfile-4674"></a><a name="index-dribble-file-4675"></a><a name="index-logging-keystrokes-4676"></a>One way to record the input to Emacs precisely is to write a dribble
 file.  To start the file, use the <kbd>M-x open-dribble-file
 &lt;RET&gt;</kbd> command.  From then on, Emacs copies all your input to the
-specified dribble file until the Emacs process is killed.
+specified dribble file until the Emacs process is killed.  Be aware
+that sensitive information (such as passwords) may end up recorded in
+the dribble file.
 
-     <li><a name="index-open_002dtermscript-4502"></a><a name="index-termscript-file-4503"></a><a name="index-g_t_0040env_007bTERM_007d-environment-variable-4504"></a>For possible display bugs, the terminal type (the value of environment
+     <li><a name="index-open_002dtermscript-4677"></a><a name="index-termscript-file-4678"></a><a name="index-g_t_0040env_007bTERM_007d-environment-variable-4679"></a>For possible display bugs, the terminal type (the value of environment
 variable <samp><span class="env">TERM</span></samp>), the complete termcap entry for the terminal from
 <samp><span class="file">/etc/termcap</span></samp> (since that file is not identical on all machines),
 and the output that Emacs actually sent to the terminal.
@@ -207,7 +209,7 @@ conclusion from our observations.
 
      <li>If the bug is that the Emacs Manual or the Emacs Lisp Reference Manual
 fails to describe the actual behavior of Emacs, or that the text is
-confusing, copy in the text from the online manual which you think is
+confusing, copy in the text from the manual which you think is
 at fault.  If the section is small, just the section name is enough.
 
      <li>If the manifestation of the bug is an Emacs error message, it is
@@ -218,24 +220,24 @@ backtrace showing how the Lisp program in Emacs arrived at the error.
 <samp><span class="file">*Messages*</span></samp> buffer into the bug report.  Copy all of it, not just
 part.
 
-     <p><a name="index-toggle_002ddebug_002don_002derror-4505"></a><a name="index-Edebug-4506"></a>To make a backtrace for the error, use <kbd>M-x toggle-debug-on-error</kbd>
+     <p><a name="index-toggle_002ddebug_002don_002derror-4680"></a><a name="index-Edebug-4681"></a>To make a backtrace for the error, use <kbd>M-x toggle-debug-on-error</kbd>
 before the error happens (that is to say, you must give that command
 and then make the bug happen).  This causes the error to start the Lisp
 debugger, which shows you a backtrace.  Copy the text of the
-debugger's backtrace into the bug report.  See <a href="../elisp/Debugger.html#Debugger">The Lisp Debugger</a>, for information on
-debugging Emacs Lisp programs with the Edebug package.
+debugger's backtrace into the bug report.  See <a href="../elisp/Edebug.html#Edebug">Edebug</a>, for information on debugging
+Emacs Lisp programs with the Edebug package.
 
      <p>This use of the debugger is possible only if you know how to make the
 bug happen again.  If you can't make it happen again, at least copy
 the whole error message.
 
-     <p><a name="index-debug_002don_002dquit-4507"></a>If Emacs appears to be stuck in an infinite loop or in a very long
+     <p><a name="index-debug_002don_002dquit-4682"></a>If Emacs appears to be stuck in an infinite loop or in a very long
 operation, typing <kbd>C-g</kbd> with the variable <code>debug-on-quit</code>
 non-<code>nil</code> will start the Lisp debugger and show a backtrace. 
 This backtrace is useful for debugging such long loops, so if you can
 produce it, copy it into the bug report.
 
-     <p><a name="index-debug_002don_002devent-4508"></a>If you cannot get Emacs to respond to <kbd>C-g</kbd> (e.g., because
+     <p><a name="index-debug_002don_002devent-4683"></a>If you cannot get Emacs to respond to <kbd>C-g</kbd> (e.g., because
 <code>inhibit-quit</code> is set), then you can try sending the signal
 specified by <code>debug-on-event</code> (default SIGUSR2) from outside
 Emacs to cause it to enter the debugger.
@@ -277,7 +279,7 @@ directory.
      <p>However, you need to think when you collect the additional information
 if you want it to show what causes the bug.
 
-     <p><a name="index-backtrace-for-bug-reports-4509"></a>For example, many people send just a backtrace, but that is not very
+     <p><a name="index-backtrace-for-bug-reports-4684"></a>For example, many people send just a backtrace, but that is not very
 useful by itself.  A simple backtrace with arguments often conveys
 little about what is happening inside GNU Emacs, because most of the
 arguments listed in the backtrace are pointers to Lisp objects.  The
@@ -285,7 +287,7 @@ numeric values of these pointers have no significance whatever; all that
 matters is the contents of the objects they point to (and most of the
 contents are themselves pointers).
 
-     <p><a name="index-debug_005fprint-4510"></a>To provide useful information, you need to show the values of Lisp
+     <p><a name="index-debug_005fprint-4685"></a>To provide useful information, you need to show the values of Lisp
 objects in Lisp notation.  Do this for each variable which is a Lisp
 object, in several stack frames near the bottom of the stack.  Look at
 the source to see which variables are Lisp objects, because the debugger
@@ -311,7 +313,7 @@ begin with &lsquo;<samp><span class="samp">x</span></samp>&rsquo;.  These comman
 <code>pr</code> does not, such as when debugging a core dump or when Emacs has
 had a fatal signal.
 
-     <p><a name="index-debugging-Emacs_002c-tricks-and-techniques-4511"></a>More detailed advice and other useful techniques for debugging Emacs
+     <p><a name="index-debugging-Emacs_002c-tricks-and-techniques-4686"></a>More detailed advice and other useful techniques for debugging Emacs
 are available in the file <samp><span class="file">etc/DEBUG</span></samp> in the Emacs distribution. 
 That file also includes instructions for investigating problems
 whereby Emacs stops responding (many people assume that Emacs is

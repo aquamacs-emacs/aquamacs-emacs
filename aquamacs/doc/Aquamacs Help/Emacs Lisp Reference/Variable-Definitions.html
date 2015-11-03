@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -43,7 +43,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Custo
 
 <h3 class="section">14.3 Defining Customization Variables</h3>
 
-<p><a name="index-define-customization-options-807"></a><a name="index-customizable-variables_002c-how-to-define-808"></a><a name="index-user-options_002c-how-to-define-809"></a>
+<p><a name="index-define-customization-options-935"></a><a name="index-customizable-variables_002c-how-to-define-936"></a><a name="index-user-options_002c-how-to-define-937"></a>
   <dfn>Customizable variables</dfn>, also called <dfn>user options</dfn>, are
 global Lisp variables whose values can be set through the Customize
 interface.  Unlike other global variables, which are defined with
@@ -54,19 +54,23 @@ variable should be displayed in the Customize interface, the values it
 is allowed to take, etc.
 
 <div class="defun">
-&mdash; Macro: <b>defcustom</b><var> option standard doc </var>[<var>keyword value</var>]<var><small class="dots">...</small><a name="index-defcustom-810"></a></var><br>
+&mdash; Macro: <b>defcustom</b><var> option standard doc </var>[<var>keyword value</var>]<var><small class="dots">...</small><a name="index-defcustom-938"></a></var><br>
 <blockquote><p>This macro declares <var>option</var> as a user option (i.e., a
 customizable variable).  You should not quote <var>option</var>.
 
         <p>The argument <var>standard</var> is an expression that specifies the
 standard value for <var>option</var>.  Evaluating the <code>defcustom</code> form
-evaluates <var>standard</var>, but does not necessarily install the
-standard value.  If <var>option</var> already has a default value,
-<code>defcustom</code> does not change it.  If the user has saved a
-customization for <var>option</var>, <code>defcustom</code> installs the user's
-customized value as <var>option</var>'s default value.  If neither of those
-cases applies, <code>defcustom</code> installs the result of evaluating
-<var>standard</var> as the default value.
+evaluates <var>standard</var>, but does not necessarily bind the option to
+that value.  If <var>option</var> already has a default value, it is left
+unchanged.  If the user has already saved a customization for
+<var>option</var>, the user's customized value is installed as the default
+value.  Otherwise, the result of evaluating <var>standard</var> is
+installed as the default value.
+
+        <p>Like <code>defvar</code>, this macro marks <code>option</code> as a special
+variable, meaning that it should always be dynamically bound.  If
+<var>option</var> is already lexically bound, that lexical binding remains
+in effect until the binding construct exits.  See <a href="Variable-Scoping.html#Variable-Scoping">Variable Scoping</a>.
 
         <p>The expression <var>standard</var> can be evaluated at various other times,
 too&mdash;whenever the customization facility needs to know <var>option</var>'s
@@ -104,7 +108,7 @@ macro accepts the following keywords:
 values are legitimate, and how to display the value
 (see <a href="Customization-Types.html#Customization-Types">Customization Types</a>).
 
-     <br><dt><code>:options </code><var>value-list</var><dd><a name="index-options_0040r_007b_002c-_0040code_007bdefcustom_007d-keyword_007d-811"></a>Specify the list of reasonable values for use in this
+     <br><dt><code>:options </code><var>value-list</var><dd><a name="index-options_0040r_007b_002c-_0040code_007bdefcustom_007d-keyword_007d-939"></a>Specify the list of reasonable values for use in this
 option.  The user is not restricted to using only these values, but they
 are offered as convenient alternatives.
 
@@ -112,21 +116,22 @@ are offered as convenient alternatives.
 <code>hook</code>, <code>plist</code> and <code>alist</code>.  See the definition of the
 individual types for a description of how to use <code>:options</code>.
 
-     <br><dt><code>:set </code><var>setfunction</var><dd><a name="index-set_0040r_007b_002c-_0040code_007bdefcustom_007d-keyword_007d-812"></a>Specify <var>setfunction</var> as the way to change the value of this
+     <br><dt><code>:set </code><var>setfunction</var><dd><a name="index-set_0040r_007b_002c-_0040code_007bdefcustom_007d-keyword_007d-940"></a>Specify <var>setfunction</var> as the way to change the value of this
 option when using the Customize interface.  The function
 <var>setfunction</var> should take two arguments, a symbol (the option
 name) and the new value, and should do whatever is necessary to update
 the value properly for this option (which may not mean simply setting
-the option as a Lisp variable).  The default for <var>setfunction</var> is
-<code>set-default</code>.
+the option as a Lisp variable); preferably, though, it should not
+modify its value argument destructively.  The default for
+<var>setfunction</var> is <code>set-default</code>.
 
      <p>If you specify this keyword, the variable's documentation string
 should describe how to do the same job in hand-written Lisp code.
 
-     <br><dt><code>:get </code><var>getfunction</var><dd><a name="index-get_0040r_007b_002c-_0040code_007bdefcustom_007d-keyword_007d-813"></a>Specify <var>getfunction</var> as the way to extract the value of this
+     <br><dt><code>:get </code><var>getfunction</var><dd><a name="index-get_0040r_007b_002c-_0040code_007bdefcustom_007d-keyword_007d-941"></a>Specify <var>getfunction</var> as the way to extract the value of this
 option.  The function <var>getfunction</var> should take one argument, a
 symbol, and should return whatever customize should use as the
-&ldquo;current value&rdquo; for that symbol (which need not be the symbol's Lisp
+current value for that symbol (which need not be the symbol's Lisp
 value).  The default is <code>default-value</code>.
 
      <p>You have to really understand the workings of Custom to use
@@ -135,7 +140,7 @@ Custom as variables but are not actually stored in Lisp variables.  It
 is almost surely a mistake to specify <var>getfunction</var> for a value
 that really is stored in a Lisp variable.
 
-     <br><dt><code>:initialize </code><var>function</var><dd><a name="index-initialize_0040r_007b_002c-_0040code_007bdefcustom_007d-keyword_007d-814"></a><var>function</var> should be a function used to initialize the variable
+     <br><dt><code>:initialize </code><var>function</var><dd><a name="index-initialize_0040r_007b_002c-_0040code_007bdefcustom_007d-keyword_007d-942"></a><var>function</var> should be a function used to initialize the variable
 when the <code>defcustom</code> is evaluated.  It should take two arguments,
 the option name (a symbol) and the value.  Here are some predefined
 functions meant for use in this way:
@@ -174,13 +179,13 @@ reevaluates the <code>defcustom</code>, the <var>standard</var> expression can b
 evaluated without error. 
 </dl>
 
-     <br><dt><code>:risky </code><var>value</var><dd><a name="index-risky_0040r_007b_002c-_0040code_007bdefcustom_007d-keyword_007d-815"></a>Set the variable's <code>risky-local-variable</code> property to
+     <br><dt><code>:risky </code><var>value</var><dd><a name="index-risky_0040r_007b_002c-_0040code_007bdefcustom_007d-keyword_007d-943"></a>Set the variable's <code>risky-local-variable</code> property to
 <var>value</var> (see <a href="File-Local-Variables.html#File-Local-Variables">File Local Variables</a>).
 
-     <br><dt><code>:safe </code><var>function</var><dd><a name="index-safe_0040r_007b_002c-_0040code_007bdefcustom_007d-keyword_007d-816"></a>Set the variable's <code>safe-local-variable</code> property to
+     <br><dt><code>:safe </code><var>function</var><dd><a name="index-safe_0040r_007b_002c-_0040code_007bdefcustom_007d-keyword_007d-944"></a>Set the variable's <code>safe-local-variable</code> property to
 <var>function</var> (see <a href="File-Local-Variables.html#File-Local-Variables">File Local Variables</a>).
 
-     <br><dt><code>:set-after </code><var>variables</var><dd><a name="index-set_002dafter_0040r_007b_002c-_0040code_007bdefcustom_007d-keyword_007d-817"></a>When setting variables according to saved customizations, make sure to
+     <br><dt><code>:set-after </code><var>variables</var><dd><a name="index-set_002dafter_0040r_007b_002c-_0040code_007bdefcustom_007d-keyword_007d-945"></a>When setting variables according to saved customizations, make sure to
 set the variables <var>variables</var> before this one; i.e., delay
 setting this variable until after those others have been handled.  Use
 <code>:set-after</code> if setting this variable won't work properly unless
@@ -188,7 +193,7 @@ those other variables already have their intended values.
 </dl>
 
    <p>It is useful to specify the <code>:require</code> keyword for an option
-that &ldquo;turns on&rdquo; a certain feature.  This causes Emacs to load the
+that turns on a certain feature.  This causes Emacs to load the
 feature, if it is not already loaded, whenever the option is set. 
 See <a href="Common-Keywords.html#Common-Keywords">Common Keywords</a>.  Here is an example, from the library
 <samp><span class="file">saveplace.el</span></samp>:
@@ -212,7 +217,7 @@ its definition.  You can do it thus:
         'my-lisp-mode-initialization)
 </pre>
    <div class="defun">
-&mdash; Function: <b>custom-add-frequent-value</b><var> symbol value<a name="index-custom_002dadd_002dfrequent_002dvalue-818"></a></var><br>
+&mdash; Function: <b>custom-add-frequent-value</b><var> symbol value<a name="index-custom_002dadd_002dfrequent_002dvalue-946"></a></var><br>
 <blockquote><p>For the customization option <var>symbol</var>, add <var>value</var> to the
 list of reasonable values.
 
@@ -229,7 +234,7 @@ See <a href="Symbol-Properties.html#Symbol-Properties">Symbol Properties</a>.  T
 which is an expression that evaluates to the value.
 
 <div class="defun">
-&mdash; Function: <b>custom-reevaluate-setting</b><var> symbol<a name="index-custom_002dreevaluate_002dsetting-819"></a></var><br>
+&mdash; Function: <b>custom-reevaluate-setting</b><var> symbol<a name="index-custom_002dreevaluate_002dsetting-947"></a></var><br>
 <blockquote><p>This function re-evaluates the standard value of <var>symbol</var>, which
 should be a user option declared via <code>defcustom</code>.  If the
 variable was customized, this function re-evaluates the saved value
@@ -244,7 +249,7 @@ information available only at run-time.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>custom-variable-p</b><var> arg<a name="index-custom_002dvariable_002dp-820"></a></var><br>
+&mdash; Function: <b>custom-variable-p</b><var> arg<a name="index-custom_002dvariable_002dp-948"></a></var><br>
 <blockquote><p>This function returns non-<code>nil</code> if <var>arg</var> is a customizable
 variable.  A customizable variable is either a variable that has a
 <code>standard-value</code> or <code>custom-autoload</code> property (usually

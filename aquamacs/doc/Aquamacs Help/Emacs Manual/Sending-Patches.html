@@ -10,16 +10,16 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Manual',
-updated for Emacs version 24.3.50.
+updated for Emacs version 25.0.50.
 
-Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``The GNU
      Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     with the Front-Cover Texts being ``A GNU Manual,'' and with the
      Back-Cover Texts as in (a) below.  A copy of the license is
      included in the section entitled ``GNU Free Documentation
      License.''
@@ -40,9 +40,9 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Bugs.html#Bugs">Bugs</a>
 <hr>
 </div>
 
-<h3 class="section">51.5 Sending Patches for GNU Emacs</h3>
+<h3 class="section">52.5 Sending Patches for GNU Emacs</h3>
 
-<p><a name="index-sending-patches-for-GNU-Emacs-4512"></a><a name="index-patches_002c-sending-4513"></a>  If you would like to write bug fixes or improvements for GNU Emacs,
+<p><a name="index-sending-patches-for-GNU-Emacs-4687"></a><a name="index-patches_002c-sending-4688"></a>  If you would like to write bug fixes or improvements for GNU Emacs,
 that is very helpful.  When you send your changes, please follow these
 guidelines to make it easy for the maintainers to use them.  If you
 don't follow these guidelines, your information might still be useful,
@@ -50,17 +50,40 @@ but using it will take extra work.  Maintaining GNU Emacs is a lot of
 work in the best of circumstances, and we can't keep up unless you do
 your best to help.
 
+   <p>Every patch must have several pieces of information before we
+can properly evaluate it.
+
+   <p>When you have all these pieces, bundle them up in a mail message and
+send it to the developers.  Sending it to
+<a href="mailto:bug-gnu-emacs@gnu.org">bug-gnu-emacs@gnu.org</a> (which is the bug/feature list) is
+recommended, because that list is coupled to a tracking system that
+makes it easier to locate patches.  If your patch is not complete and
+you think it needs more discussion, you might want to send it to
+<a href="mailto:emacs-devel@gnu@gnu.org">emacs-devel@gnu@gnu.org</a> instead.  If you revise your patch,
+send it as a followup to the initial topic.
+
+   <p>We prefer to get the patches as plain text, either inline (be careful
+your mail client does not change line breaks) or as MIME attachments.
+
      <ul>
-<li>Send an explanation with your changes of what problem they fix or what
-improvement they bring about.  For a fix for an existing bug, it is
+<li>Include an explanation with your changes of what problem they fix or what
+improvement they bring about.
+
+          <ul>
+<li>For a fix for an existing bug, it is
 best to reply to the relevant discussion on the &lsquo;<samp><span class="samp">bug-gnu-emacs</span></samp>&rsquo;
 list, or the bug entry in the GNU Bug Tracker at
 <a href="http://debbugs.gnu.org">http://debbugs.gnu.org</a>.  Explain why your change fixes the bug.
 
-     <li>Always include a proper bug report for the problem you think you have
-fixed.  We need to convince ourselves that the change is right before
-installing it.  Even if it is correct, we might have trouble
-understanding it if we don't have a way to reproduce the problem.
+          <li>For a new feature, include a description of the feature and your
+implementation.
+
+          <li>For a new bug, include a proper bug report for the problem you think
+you have fixed.  We need to convince ourselves that the change is
+right before installing it.  Even if it is correct, we might have
+trouble understanding it if we don't have a way to reproduce the
+problem. 
+</ul>
 
      <li>Include all the comments that are appropriate to help people reading the
 source in the future understand why this change was needed.
@@ -88,15 +111,22 @@ could do.
 right away.  That gives us the option of installing it immediately if it
 is important.
 
-     <li>Use &lsquo;<samp><span class="samp">diff -c</span></samp>&rsquo; to make your diffs.  Diffs without context are hard
-to install reliably.  More than that, they are hard to study; we must
-always study a patch to decide whether we want to install it.  Unidiff
-format is better than contextless diffs, but not as easy to read as
-&lsquo;<samp><span class="samp">-c</span></samp>&rsquo; format.
+     <li>The patch itself.
 
-     <p>If you have GNU diff, use &lsquo;<samp><span class="samp">diff -c -F'^[_a-zA-Z0-9$]+ *('</span></samp>&rsquo; when
+     <p>Use &lsquo;<samp><span class="samp">diff -u</span></samp>&rsquo; to make your diffs.  Diffs without context are hard
+to install reliably.  More than that, they are hard to study; we must
+always study a patch to decide whether we want to install it.  Context
+format is better than contextless diffs, but we prefer we unified format.
+
+     <p>If you have GNU diff, use &lsquo;<samp><span class="samp">diff -u -F'^[_a-zA-Z0-9$]\+ *('</span></samp>&rsquo; when
 making diffs of C code.  This shows the name of the function that each
 change occurs in.
+
+     <p>If you are using the Emacs repository, make sure your copy is
+up-to-date (e.g., with <code>git pull</code>).  You can commit your changes
+to a private branch and generate a patch from the master version by
+using <code>git format-patch master</code>. Or you can leave your changes
+uncommitted and use <code>git diff</code>.
 
      <li>Avoid any ambiguity as to which is the old version and which is the new. 
 Please make the old version the first argument to diff, and the new
@@ -119,9 +149,12 @@ new function, all you need to say about it is that it is new.  If you
 feel that the purpose needs explaining, it probably does&mdash;but put the
 explanation in comments in the code.  It will be more useful there.
 
-     <p>Please read the <samp><span class="file">ChangeLog</span></samp> files in the <samp><span class="file">src</span></samp> and
-<samp><span class="file">lisp</span></samp> directories to see what sorts of information to put in,
-and to learn the style that we use.  See <a href="Change-Log.html#Change-Log">Change Log</a>.
+     <p>Please look at the change log entries of recent commits to see what
+sorts of information to put in, and to learn the style that we use.  Note that,
+unlike some other projects, we do require change logs for
+documentation, i.e., Texinfo files. 
+See <a href="Change-Log.html#Change-Log">Change Log</a>,
+See <a href="../gnu-coding-standards/Change-Log-Concepts.html#Change-Log-Concepts">Change Log Concepts</a>.
 
      <li>When you write the fix, keep in mind that we can't install a change that
 would break other systems.  Please think about what effect your change
@@ -141,6 +174,5 @@ on other machines.
 form that is clearly safe to install. 
 </ul>
 
-<!-- FIXME: Include the node above? -->
    </body></html>
 

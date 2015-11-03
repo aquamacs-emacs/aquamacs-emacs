@@ -1,0 +1,2666 @@
+<html lang="en">
+<head>
+<title>Enhanced Implementation of Emacs Interpreted Objects</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="Enhanced Implementation of Emacs Interpreted Objects">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="top" href="#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual documents EIEIO, an object framework for Emacs Lisp.
+
+Copyright (C) 2007--2015 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being ``A GNU Manual,'' and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     ``GNU Free Documentation License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<h1 class="settitle">Enhanced Implementation of Emacs Interpreted Objects</h1>
+<div class="node">
+<a name="Top"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Quick-Start">Quick Start</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#dir">(dir)</a>
+
+</div>
+
+<h2 class="unnumbered">EIEIO</h2>
+
+<p><i>EIEIO</i> (&ldquo;Enhanced Implementation of Emacs Interpreted Objects&rdquo;)
+provides an Object Oriented layer for Emacs Lisp, following the basic
+concepts of the Common Lisp Object System (CLOS).  It provides a
+framework for writing object-oriented applications in Emacs.
+
+   <p>This manual documents EIEIO, an object framework for Emacs Lisp.
+
+   <p>Copyright &copy; 2007&ndash;2015 Free Software Foundation, Inc.
+
+   <blockquote>
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with the Front-Cover Texts being &ldquo;A GNU Manual,&rdquo;
+and with the Back-Cover Texts as in (a) below.  A copy of the license
+is included in the section entitled &ldquo;GNU Free Documentation License.&rdquo;
+
+   <p>(a) The FSF's Back-Cover Text is: &ldquo;You have the freedom to copy and
+modify this GNU manual.&rdquo;
+</blockquote>
+
+<ul class="menu">
+<li><a accesskey="1" href="#Quick-Start">Quick Start</a>:            Quick start for EIEIO. 
+<li><a accesskey="2" href="#Introduction">Introduction</a>:           Why use <i>EIEIO</i>?  Basic overview, samples list. 
+<li><a accesskey="3" href="#Building-Classes">Building Classes</a>:       How to write new class structures. 
+<li><a accesskey="4" href="#Making-New-Objects">Making New Objects</a>:     How to construct new objects. 
+<li><a accesskey="5" href="#Accessing-Slots">Accessing Slots</a>:        How to access a slot. 
+<li><a accesskey="6" href="#Writing-Methods">Writing Methods</a>:        How to write a method. 
+<li><a accesskey="7" href="#Method-Invocation">Method Invocation</a>:      How methods are invoked. 
+<li><a accesskey="8" href="#Predicates">Predicates</a>:             Class-p, Object-p, etc-p. 
+<li><a accesskey="9" href="#Association-Lists">Association Lists</a>:      List of objects as association lists. 
+<li><a href="#Customizing">Customizing</a>:            Customizing objects. 
+<li><a href="#Introspection">Introspection</a>:          Looking inside a class. 
+<li><a href="#Base-Classes">Base Classes</a>:           Additional classes you can inherit from. 
+<li><a href="#Browsing">Browsing</a>:               Browsing your class lists. 
+<li><a href="#Class-Values">Class Values</a>:           Displaying information about a class or object. 
+<li><a href="#Default-Superclass">Default Superclass</a>:     The root superclasses. 
+<li><a href="#Signals">Signals</a>:                When you make errors. 
+<li><a href="#Naming-Conventions">Naming Conventions</a>:     Name your objects in an Emacs friendly way. 
+<li><a href="#CLOS-compatibility">CLOS compatibility</a>:     What are the differences? 
+<li><a href="#Wish-List">Wish List</a>:              Things about EIEIO that could be improved. 
+<li><a href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>:   The license for this documentation. 
+<li><a href="#Function-Index">Function Index</a>
+</ul>
+
+<div class="node">
+<a name="Quick-Start"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Introduction">Introduction</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Top">Top</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">1 Quick Start</h2>
+
+<p><i>EIEIO</i> provides an Object Oriented layer for Emacs Lisp.  You can
+use <i>EIEIO</i> to create classes, methods for those classes, and
+instances of classes.
+
+   <p>Here is a simple example of a class named <code>record</code>, containing
+three slots named <code>name</code>, <code>birthday</code>, and <code>phone</code>:
+
+<pre class="example">     (defclass record () ; No superclasses
+       ((name :initarg :name
+              :initform ""
+              :type string
+              :custom string
+              :documentation "The name of a person.")
+        (birthday :initarg :birthday
+                  :initform "Jan 1, 1970"
+                  :custom string
+                  :type string
+                  :documentation "The person's birthday.")
+        (phone :initarg :phone
+               :initform ""
+               :documentation "Phone number."))
+       "A single record for tracking people I know.")
+</pre>
+   <p>Each class can have methods, which are defined like this:
+
+<pre class="example">     (defmethod call-record ((rec record) &amp;optional scriptname)
+       "Dial the phone for the record REC.
+     Execute the program SCRIPTNAME to dial the phone."
+       (message "Dialing the phone for %s"  (oref rec name))
+       (shell-command (concat (or scriptname "dialphone.sh")
+                              " "
+                              (oref rec phone))))
+</pre>
+   <p class="noindent">In this example, the first argument to <code>call-record</code> is a list,
+of the form (<var>varname</var> <var>classname</var>).  <var>varname</var> is the
+name of the variable used for the first argument; <var>classname</var> is
+the name of the class that is expected as the first argument for this
+method.
+
+   <p><i>EIEIO</i> dispatches methods based on the type of the first argument. 
+You can have multiple methods with the same name for different classes
+of object.  When the <code>call-record</code> method is called, the first
+argument is examined to determine the class of that argument, and the
+method matching the input type is then executed.
+
+   <p>Once the behavior of a class is defined, you can create a new
+object of type <code>record</code>.  Objects are created by calling the
+constructor.  The constructor is a function with the same name as your
+class which returns a new instance of that class.  Here is an example:
+
+<pre class="example">     (setq rec (record :name "Eric" :birthday "June" :phone "555-5555"))
+</pre>
+   <p class="noindent">For backward compatibility reasons, the first argument can be a string (a name
+given to this instance).  Each instance used to be given a name, so different
+instances could be easily distinguished when debugging.
+
+   <p>It can be a bit repetitive to also have a :name slot.  To avoid doing
+this, it is sometimes handy to use the base class <code>eieio-named</code>. 
+See <a href="#eieio_002dnamed">eieio-named</a>.
+
+   <p>Calling methods on an object is a lot like calling any function.  The
+first argument should be an object of a class which has had this
+method defined for it.  In this example it would look like this:
+
+<pre class="example">     (call-record rec)
+</pre>
+   <p class="noindent">or
+
+<pre class="example">     (call-record rec "my-call-script")
+</pre>
+   <p>In these examples, <i>EIEIO</i> automatically examines the class of
+<code>rec</code>, and ensures that the method defined above is called.  If
+<code>rec</code> is some other class lacking a <code>call-record</code> method, or
+some other data type, Emacs signals a <code>no-method-definition</code>
+error.  <a href="#Signals">Signals</a>.
+
+<div class="node">
+<a name="Introduction"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Building-Classes">Building Classes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Quick-Start">Quick Start</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">2 Introduction</h2>
+
+<p>First off, please note that this manual cannot serve as a complete
+introduction to object oriented programming and generic functions in
+LISP.  Although EIEIO is not a complete implementation of the Common
+Lisp Object System (CLOS) and also differs from it in several aspects,
+it follows the same basic concepts.  Therefore, it is highly
+recommended to learn those from a textbook or tutorial first,
+especially if you only know OOP from languages like C++ or Java.  If
+on the other hand you are already familiar with CLOS, you should be
+aware that <i>EIEIO</i> does not implement the full CLOS specification and
+also differs in some other aspects which are mentioned below (also
+see <a href="#CLOS-compatibility">CLOS compatibility</a>).
+
+   <p><i>EIEIO</i> supports the following features:
+
+     <ol type=1 start=1>
+<li>A structured framework for the creation of basic classes with attributes
+and methods using singular inheritance similar to CLOS. 
+<li>Type checking, and slot unbinding. 
+<li>Method definitions similar to CLOS. 
+<li>Simple and complex class browsers. 
+<li>Edebug support for methods. 
+<li>Imenu updates. 
+<li>Byte compilation support of methods. 
+<li>Help system extensions for classes and methods. 
+<li>Several base classes for interesting tasks. 
+<li>Simple test suite. 
+<li>Public and private classifications for slots (extensions to CLOS)
+<li>Customization support in a class (extension to CLOS)
+        </ol>
+
+   <p>Due to restrictions in the Emacs Lisp language, CLOS cannot be
+completely supported, and a few functions have been added in place of
+setf.  Here are some important CLOS features that <i>EIEIO</i> presently
+lacks:
+
+     <dl>
+<dt>Method dispatch<dd>EIEO does not support method dispatch for built-in types and multiple
+arguments types.  In other words, method dispatch only looks at the
+first argument, and this one must be an <i>EIEIO</i> type.
+
+     <br><dt>Support for metaclasses<dd>There is just one default metaclass, <code>eieio-default-superclass</code>,
+and you cannot define your own.  The <code>:metaclass</code> tag in
+<code>defclass</code> is ignored.  Also, functions like <code>find-class</code>, which
+should return instances of the metaclass, behave differently in
+<i>EIEIO</i> in that they return symbols or plain structures instead.
+
+     <br><dt>EQL specialization<dd>EIEIO does not support it.
+
+     <br><dt><code>:around</code> method tag<dd>This CLOS method tag is non-functional.
+
+     <br><dt>:default-initargs in <code>defclass</code><dd>Each slot can have an <code>:initform</code> tag, so this is not really necessary.
+
+     <br><dt>Mock object initializers<dd>Each class contains a mock object used for fast initialization of
+instantiated objects.  Using functions with side effects on object slot
+values can potentially cause modifications in the mock object.  <i>EIEIO</i>
+should use a deep copy but currently does not.
+
+   </dl>
+
+<div class="node">
+<a name="Building-Classes"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Making-New-Objects">Making New Objects</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Introduction">Introduction</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">3 Building Classes</h2>
+
+<p>A <dfn>class</dfn> is a definition for organizing data and methods
+together.  An <i>EIEIO</i> class has structures similar to the classes
+found in other object-oriented (OO) languages.
+
+   <p>To create a new class, use the <code>defclass</code> macro:
+
+<div class="defun">
+&mdash; Macro: <b>defclass</b><var> class-name superclass-list slot-list &amp;rest options-and-doc<a name="index-defclass-1"></a></var><br>
+<blockquote>
+        <p>Create a new class named <var>class-name</var>.  The class is represented
+by a symbol with the name <var>class-name</var>.  <i>EIEIO</i> stores the structure of
+the class as a symbol property of <var>class-name</var> (see <a href="elisp.html#Symbol-Components">Symbol Components</a>).
+
+        <p>The <var>class-name</var> symbol's variable documentation string is a
+modified version of the doc string found in <var>options-and-doc</var>. 
+Each time a method is defined, the symbol's documentation string is
+updated to include the methods documentation as well.
+
+        <p>The parent classes for <var>class-name</var> is <var>superclass-list</var>. 
+Each element of <var>superclass-list</var> must be a class.  These classes
+are the parents of the class being created.  Every slot that appears
+in each parent class is replicated in the new class.
+
+        <p>If two parents share the same slot name, the parent which appears in
+the <var>superclass-list</var> first sets the tags for that slot.  If the
+new class has a slot with the same name as the parent, the new slot
+overrides the parent's slot.
+
+        <p>When overriding a slot, some slot attributes cannot be overridden
+because they break basic OO rules.  You cannot override <code>:type</code>
+or <code>:protection</code>. 
+</p></blockquote></div>
+
+<p class="noindent">Whenever defclass is used to create a new class, a predicate is
+created for it, named <var>CLASS-NAME</var><code>-p</code>:
+
+<div class="defun">
+&mdash; Function: <b>CLASS-NAME-p</b><var> object<a name="index-CLASS_002dNAME_002dp-2"></a></var><br>
+<blockquote><p>Return non-<code>nil</code> if and only if <var>OBJECT</var> is of the class
+<var>CLASS-NAME</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable: <b>eieio-error-unsupported-class-tags</b><var><a name="index-eieio_002derror_002dunsupported_002dclass_002dtags-3"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, <code>defclass</code> signals an error if a tag in a slot
+specifier is unsupported.
+
+        <p>This option is here to support programs written with older versions of
+<i>EIEIO</i>, which did not produce such errors. 
+</p></blockquote></div>
+
+<ul class="menu">
+<li><a accesskey="1" href="#Inheritance">Inheritance</a>:          How to specify parents classes. 
+<li><a accesskey="2" href="#Slot-Options">Slot Options</a>:         How to specify features of a slot. 
+<li><a accesskey="3" href="#Class-Options">Class Options</a>:        How to specify features for this class. 
+</ul>
+
+<div class="node">
+<a name="Inheritance"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Slot-Options">Slot Options</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Building-Classes">Building Classes</a>
+
+</div>
+
+<h3 class="section">3.1 Inheritance</h3>
+
+<p><dfn>Inheritance</dfn> is a basic feature of an object-oriented language. 
+In <i>EIEIO</i>, a defined class specifies the super classes from which it
+inherits by using the second argument to <code>defclass</code>.  Here is an
+example:
+
+<pre class="example">     (defclass my-baseclass ()
+        ((slot-A :initarg :slot-A)
+         (slot-B :initarg :slot-B))
+       "My Baseclass.")
+</pre>
+   <p class="noindent">To subclass from <code>my-baseclass</code>, we specify it in the superclass
+list:
+
+<pre class="example">     (defclass my-subclass (my-baseclass)
+        ((specific-slot-A :initarg specific-slot-A)
+         )
+        "My subclass of my-baseclass")
+</pre>
+   <p class="indent">Instances of <code>my-subclass</code> will inherit <code>slot-A</code> and
+<code>slot-B</code>, in addition to having <code>specific-slot-A</code> from the
+declaration of <code>my-subclass</code>.
+
+   <p><i>EIEIO</i> also supports multiple inheritance.  Suppose we define a
+second baseclass, perhaps an &ldquo;interface&rdquo; class, like this:
+
+<pre class="example">     (defclass my-interface ()
+        ((interface-slot :initarg :interface-slot))
+        "An interface to special behavior."
+        :abstract t)
+</pre>
+   <p class="noindent">The interface class defines a special <code>interface-slot</code>, and also
+specifies itself as abstract.  Abstract classes cannot be
+instantiated.  It is not required to make interfaces abstract, but it
+is a good programming practice.
+
+   <p>We can now modify our definition of <code>my-subclass</code> to use this
+interface class, together with our original base class:
+
+<pre class="example">     (defclass my-subclass (my-baseclass my-interface)
+        ((specific-slot-A :initarg specific-slot-A)
+         )
+        "My subclass of my-baseclass")
+</pre>
+   <p class="noindent">With this, <code>my-subclass</code> also has <code>interface-slot</code>.
+
+   <p>If <code>my-baseclass</code> and <code>my-interface</code> had slots with the same
+name, then the superclass showing up in the list first defines the
+slot attributes.
+
+   <p>Inheritance in <i>EIEIO</i> is more than just combining different slots. 
+It is also important in method invocation.  <a href="#Methods">Methods</a>.
+
+   <p>If a method is called on an instance of <code>my-subclass</code>, and that
+method only has an implementation on <code>my-baseclass</code>, or perhaps
+<code>my-interface</code>, then the implementation for the baseclass is
+called.
+
+   <p>If there is a method implementation for <code>my-subclass</code>, and
+another in <code>my-baseclass</code>, the implementation for
+<code>my-subclass</code> can call up to the superclass as well.
+
+<div class="node">
+<a name="Slot-Options"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Class-Options">Class Options</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Inheritance">Inheritance</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Building-Classes">Building Classes</a>
+
+</div>
+
+<h3 class="section">3.2 Slot Options</h3>
+
+<p>The <var>slot-list</var> argument to <code>defclass</code> is a list of elements
+where each element defines one slot.  Each slot is a list of the form
+
+<pre class="example">       (SLOT-NAME :TAG1 ATTRIB-VALUE1
+                  :TAG2 ATTRIB-VALUE2
+                  :TAGN ATTRIB-VALUEN)
+</pre>
+   <p class="noindent">where <var>SLOT-NAME</var> is a symbol that will be used to refer to the
+slot.  <var>:TAG</var> is a symbol that describes a feature to be set
+on the slot.  <var>ATTRIB-VALUE</var> is a lisp expression that will be
+used for <var>:TAG</var>.
+
+   <p>Valid tags are:
+
+     <dl>
+<dt><code>:initarg</code><dd>A symbol that can be used in the argument list of the constructor to
+specify a value for this slot of the new instance being created.
+
+     <p>A good symbol to use for initarg is one that starts with a colon <code>:</code>.
+
+     <p>The slot specified like this:
+     <pre class="example">            (myslot :initarg :myslot)
+</pre>
+     <p>could then be initialized to the number 1 like this:
+     <pre class="example">            (myobject :myslot 1)
+</pre>
+     <p>See <a href="#Making-New-Objects">Making New Objects</a>.
+
+     <br><dt><code>:initform</code><dd>An expression used as the default value for this slot.
+
+     <p>If <code>:initform</code> is left out, that slot defaults to being unbound. 
+It is an error to reference an unbound slot, so if you need
+slots to always be in a bound state, you should always use an
+<code>:initform</code> specifier.
+
+     <p>Use <code>slot-boundp</code> to test if a slot is unbound
+(see <a href="#Predicates">Predicates</a>).  Use <code>slot-makeunbound</code> to set a slot to
+being unbound after giving it a value (see <a href="#Accessing-Slots">Accessing Slots</a>).
+
+     <p>The value passed to initform used to be automatically quoted.  Thus,
+     <pre class="example">          :initform (1 2 3)
+</pre>
+     <p>will use the list as a value.  This is incompatible with CLOS (which would
+signal an error since 1 is not a valid function) and will likely change in the
+future, so better quote your initforms if they're just values.
+
+     <br><dt><code>:type</code><dd>An unquoted type specifier used to validate data set into this slot. 
+See <a href="cl.html#Type-Predicates">Type Predicates</a>. 
+Here are some examples:
+          <dl>
+ <dt><code>symbol</code><dd> A symbol. 
+ <br><dt><code>number</code><dd> A number type
+ <br><dt><code>my-class-name</code><dd> An object of your class type. 
+ <br><dt><code>(or null symbol)</code><dd> A symbol, or <code>nil</code>. 
+ </dl>
+
+     <br><dt><code>:allocation</code><dd>Either :class or :instance (defaults to :instance) used to
+specify how data is stored.  Slots stored per instance have unique
+values for each object.  Slots stored per class have shared values for
+each object.  If one object changes a :class allocated slot, then all
+objects for that class gain the new value.
+
+     <br><dt><code>:documentation</code><dd>Documentation detailing the use of this slot.  This documentation is
+exposed when the user describes a class, and during customization of an
+object.
+
+     <br><dt><code>:accessor</code><dd>Name of a generic function which can be used to fetch the value of this slot. 
+You can call this function later on your object and retrieve the value
+of the slot.
+
+     <p>This options is in the CLOS spec, but is not fully compliant in <i>EIEIO</i>.
+
+     <br><dt><code>:writer</code><dd>Name of a generic function which will write this slot.
+
+     <p>This options is in the CLOS spec, but is not fully compliant in <i>EIEIO</i>.
+
+     <br><dt><code>:reader</code><dd>Name of a generic function which will read this slot.
+
+     <p>This options is in the CLOS spec, but is not fully compliant in <i>EIEIO</i>.
+
+     <br><dt><code>:custom</code><dd>A custom :type specifier used when editing an object of this type. 
+See documentation for <code>defcustom</code> for details.  This specifier is
+equivalent to the :type spec of a <code>defcustom</code> call.
+
+     <p>This options is specific to Emacs, and is not in the CLOS spec.
+
+     <br><dt><code>:label</code><dd>When customizing an object, the value of :label will be used instead
+of the slot name.  This enables better descriptions of the data than
+would usually be afforded.
+
+     <p>This options is specific to Emacs, and is not in the CLOS spec.
+
+     <br><dt><code>:group</code><dd>Similar to <code>defcustom</code>'s :group command, this organizes different
+slots in an object into groups.  When customizing an object, only the
+slots belonging to a specific group need be worked with, simplifying the
+size of the display.
+
+     <p>This options is specific to Emacs, and is not in the CLOS spec.
+
+     <br><dt><code>:printer</code><dd>This routine takes a symbol which is a function name.  The function
+should accept one argument.  The argument is the value from the slot
+to be printed.  The function in <code>object-write</code> will write the
+slot value out to a printable form on <code>standard-output</code>.
+
+     <p>The output format MUST be something that could in turn be interpreted
+with <code>read</code> such that the object can be brought back in from the
+output stream.  Thus, if you wanted to output a symbol, you would need
+to quote the symbol.  If you wanted to run a function on load, you
+can output the code to do the construction of the value.
+
+     <br><dt><code>:protection</code><dd>This is an old option that is not supported any more.
+
+     <p>When using a slot referencing function such as <code>slot-value</code>, and
+the value behind <var>slot</var> is private or protected, then the current
+scope of operation must be within a method of the calling object.
+
+     <p>This protection is not enforced by the code any more, so it's only useful
+as documentation.
+
+     <p>Valid values are:
+
+          <dl>
+<dt><code>:public</code><dd>Access this slot from any scope. 
+<br><dt><code>:protected</code><dd>Access this slot only from methods of the same class or a child class. 
+<br><dt><code>:private</code><dd>Access this slot only from methods of the same class. 
+</dl>
+
+     <p>This options is specific to Emacs, and is not in the CLOS spec.
+
+   </dl>
+
+<div class="node">
+<a name="Class-Options"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Slot-Options">Slot Options</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Building-Classes">Building Classes</a>
+
+</div>
+
+<h3 class="section">3.3 Class Options</h3>
+
+<p>In the <var>options-and-doc</var> arguments to <code>defclass</code>, the
+following class options may be specified:
+
+     <dl>
+<dt><code>:documentation</code><dd>A documentation string for this class.
+
+     <p>If an Emacs-style documentation string is also provided, then this
+option is ignored.  An Emacs-style documentation string is not
+prefixed by the <code>:documentation</code> tag, and appears after the list
+of slots, and before the options.
+
+     <br><dt><code>:allow-nil-initform</code><dd>If this option is non-<code>nil</code>, and the <code>:initform</code> is <code>nil</code>, but
+the <code>:type</code> is specifies something such as <code>string</code> then allow
+this to pass.  The default is to have this option be off.  This is
+implemented as an alternative to unbound slots.
+
+     <p>This options is specific to Emacs, and is not in the CLOS spec.
+
+     <br><dt><code>:abstract</code><dd>A class which is <code>:abstract</code> cannot be instantiated, and instead
+is used to define an interface which subclasses should implement.
+
+     <p>This option is specific to Emacs, and is not in the CLOS spec.
+
+     <br><dt><code>:custom-groups</code><dd>This is a list of groups that can be customized within this class.  This
+slot is auto-generated when a class is created and need not be
+specified.  It can be retrieved with the <code>class-option</code> command,
+however, to see what groups are available.
+
+     <p>This option is specific to Emacs, and is not in the CLOS spec.
+
+     <br><dt><code>:method-invocation-order</code><dd>This controls the order in which method resolution occurs for
+<code>:primary</code> methods in cases of multiple inheritance.  The order
+affects which method is called first in a tree, and if
+<code>call-next-method</code> is used, it controls the order in which the
+stack of methods are run.
+
+     <p>Valid values are:
+
+          <dl>
+<dt><code>:breadth-first</code><dd>Search for methods in the class hierarchy in breadth first order. 
+This is the default. 
+<br><dt><code>:depth-first</code><dd>Search for methods in the class hierarchy in a depth first order. 
+<br><dt><code>:c3</code><dd>Searches for methods in a linearized way that most closely matches
+what CLOS does when a monotonic class structure is defined. 
+</dl>
+
+     <p>See <a href="#Method-Invocation">Method Invocation</a>, for more on method invocation order.
+
+     <br><dt><code>:metaclass</code><dd>Unsupported CLOS option.  Enables the use of a different base class other
+than <code>standard-class</code>.
+
+     <br><dt><code>:default-initargs</code><dd>Unsupported CLOS option.  Specifies a list of initargs to be used when
+creating new objects.  As far as I can tell, this duplicates the
+function of <code>:initform</code>. 
+</dl>
+
+   <p>See <a href="#CLOS-compatibility">CLOS compatibility</a>, for more details on CLOS tags versus
+<i>EIEIO</i>-specific tags.
+
+<div class="node">
+<a name="Making-New-Objects"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Accessing-Slots">Accessing Slots</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Building-Classes">Building Classes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">4 Making New Objects</h2>
+
+<p>Suppose we have a simple class is defined, such as:
+
+<pre class="example">     (defclass record ()
+        ( ) "Doc String")
+</pre>
+   <p class="noindent">It is now possible to create objects of that class type.
+
+   <p>Calling <code>defclass</code> has defined two new functions.  One is the
+constructor <var>record</var>, and the other is the predicate,
+<var>record</var>-p.
+
+<div class="defun">
+&mdash; Function: <b>record</b><var> object-name &amp;rest slots<a name="index-record-4"></a></var><br>
+<blockquote>
+        <p>This creates and returns a new object.  This object is not assigned to
+anything, and will be garbage collected if not saved.  This object
+will be given the string name <var>object-name</var>.  There can be
+multiple objects of the same name, but the name slot provides a handy
+way to keep track of your objects.  <var>slots</var> is just all the slots
+you wish to preset.  Any slot set as such <em>will not</em> get its
+default value, and any side effects from a slot's <code>:initform</code>
+that may be a function will not occur.
+
+        <p>An example pair would appear simply as <code>:value 1</code>.  Of course you
+can do any valid Lispy thing you want with it, such as
+<code>:value (if (boundp 'special-symbol) special-symbol nil)</code>
+
+        <p>Example of creating an object from a class:
+
+     <pre class="example">          (record :value 3 :reference nil)
+</pre>
+        </blockquote></div>
+
+   <p>To create an object from a class symbol, use <code>make-instance</code>.
+
+<div class="defun">
+&mdash; Function: <b>make-instance</b><var> class &amp;rest initargs<a name="index-make_002dinstance-5"></a></var><br>
+<blockquote><p><a name="make_002dinstance"></a>Make a new instance of <var>class</var> based on <var>initargs</var>. 
+<var>class</var> is a class symbol.  For example:
+
+     <pre class="example">            (make-instance 'foo)
+</pre>
+        <p><var>initargs</var> is a property list with keywords based on the <code>:initarg</code>
+for each slot.  For example:
+
+     <pre class="example">            (make-instance <code>'foo</code> <code>:slot1</code> value1 <code>:slotN</code> valueN)
+</pre>
+        </blockquote></div>
+
+<div class="node">
+<a name="Accessing-Slots"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Writing-Methods">Writing Methods</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Making-New-Objects">Making New Objects</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">5 Accessing Slots</h2>
+
+<p>There are several ways to access slot values in an object.  The naming
+and argument-order conventions are similar to those used for
+referencing vectors (see <a href="elisp.html#Vectors">Vectors</a>).
+
+<div class="defun">
+&mdash; Macro: <b>oset</b><var> object slot value<a name="index-oset-6"></a></var><br>
+<blockquote><p>This macro sets the value behind <var>slot</var> to <var>value</var> in
+<var>object</var>.  It returns <var>value</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>oset-default</b><var> class slot value<a name="index-oset_002ddefault-7"></a></var><br>
+<blockquote><p>This macro sets the value for the class-allocated <var>slot</var> in <var>class</var> to
+<var>value</var>.
+
+        <p>For example, if a user wanted all <code>data-objects</code> (see <a href="#Building-Classes">Building Classes</a>) to inform a special object of his own devising when they
+changed, this can be arranged by simply executing this bit of code:
+
+     <pre class="example">          (oset-default data-object reference (list my-special-object))
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>oref</b><var> obj slot<a name="index-oref-8"></a></var><br>
+<blockquote><p><a name="oref"></a>Retrieve the value stored in <var>obj</var> in the slot named by <var>slot</var>. 
+Slot is the name of the slot when created by <dfn>defclass</dfn>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Macro: <b>oref-default</b><var> class slot<a name="index-oref_002ddefault-9"></a></var><br>
+<blockquote><p><a name="oref_002ddefault"></a>Get the value of the class-allocated <var>slot</var> from <var>class</var>. 
+</p></blockquote></div>
+
+   <p>The following accessors are defined by CLOS to reference or modify
+slot values, and use the previously mentioned set/ref routines.
+
+<div class="defun">
+&mdash; Function: <b>slot-value</b><var> object slot<a name="index-slot_002dvalue-10"></a></var><br>
+<blockquote><p><a name="slot_002dvalue"></a>This function retrieves the value of <var>slot</var> from <var>object</var>. 
+Unlike <code>oref</code>, the symbol for <var>slot</var> must be quoted. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>set-slot-value</b><var> object slot value<a name="index-set_002dslot_002dvalue-11"></a></var><br>
+<blockquote><p><a name="set_002dslot_002dvalue"></a>This is not a CLOS function, but is the setter for <code>slot-value</code>
+used by the <code>setf</code> macro.  This
+function sets the value of <var>slot</var> from <var>object</var>.  Unlike
+<code>oset</code>, the symbol for <var>slot</var> must be quoted. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>slot-makeunbound</b><var> object slot<a name="index-slot_002dmakeunbound-12"></a></var><br>
+<blockquote><p>This function unbinds <var>slot</var> in <var>object</var>.  Referencing an
+unbound slot can signal an error. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>object-add-to-list</b><var> object slot item &amp;optional append<a name="index-object_002dadd_002dto_002dlist-13"></a></var><br>
+<blockquote><p><a name="object_002dadd_002dto_002dlist"></a>In OBJECT's <var>slot</var>, add <var>item</var> to the list of elements. 
+Optional argument <var>append</var> indicates we need to append to the list. 
+If <var>item</var> already exists in the list in <var>slot</var>, then it is not added. 
+Comparison is done with <dfn>equal</dfn> through the <dfn>member</dfn> function call. 
+If <var>slot</var> is unbound, bind it to the list containing <var>item</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>object-remove-from-list</b><var> object slot item<a name="index-object_002dremove_002dfrom_002dlist-14"></a></var><br>
+<blockquote><p><a name="object_002dremove_002dfrom_002dlist"></a>In OBJECT's <var>slot</var>, remove occurrences of <var>item</var>. 
+Deletion is done with <dfn>delete</dfn>, which deletes by side effect
+and comparisons are done with <dfn>equal</dfn>. 
+If <var>slot</var> is unbound, do nothing. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>with-slots</b><var> spec-list object &amp;rest body<a name="index-with_002dslots-15"></a></var><br>
+<blockquote><p><a name="with_002dslots"></a>Bind <var>spec-list</var> lexically to slot values in <var>object</var>, and execute <var>body</var>. 
+This establishes a lexical environment for referring to the slots in
+the instance named by the given slot-names as though they were
+variables.  Within such a context the value of the slot can be
+specified by using its slot name, as if it were a lexically bound
+variable.  Both <code>setf</code> and <code>setq</code> can be used to set the value of the
+slot.
+
+        <p><var>spec-list</var> is of a form similar to <dfn>let</dfn>.  For example:
+
+     <pre class="example">            ((VAR1 SLOT1)
+              SLOT2
+              SLOTN
+             (VARN+1 SLOTN+1))
+</pre>
+        <p>Where each <var>var</var> is the local variable given to the associated
+<var>slot</var>.  A slot specified without a variable name is given a
+variable name of the same name as the slot.
+
+     <pre class="example">          (defclass myclass () (x :initform 1))
+          (setq mc (make-instance 'myclass))
+          (with-slots (x) mc x)                      =&gt; 1
+          (with-slots ((something x)) mc something)  =&gt; 1
+</pre>
+        </blockquote></div>
+
+<div class="node">
+<a name="Writing-Methods"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Method-Invocation">Method Invocation</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Accessing-Slots">Accessing Slots</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">6 Writing Methods</h2>
+
+<p>Writing a method in <i>EIEIO</i> is similar to writing a function.  The
+differences are that there are some extra options and there can be
+multiple definitions under the same function symbol.
+
+   <p>Where a method defines an implementation for a particular data type, a
+<dfn>generic method</dfn> accepts any argument, but contains no code.  It
+is used to provide the dispatching to the defined methods.  A generic
+method has no body, and is merely a symbol upon which methods are
+attached.  It also provides the base documentation for what methods
+with that name do.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Generics">Generics</a>
+<li><a accesskey="2" href="#Methods">Methods</a>
+<li><a accesskey="3" href="#Static-Methods">Static Methods</a>
+</ul>
+
+<div class="node">
+<a name="Generics"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Methods">Methods</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Writing-Methods">Writing Methods</a>
+
+</div>
+
+<h3 class="section">6.1 Generics</h3>
+
+<p>Each <i>EIEIO</i> method has one corresponding generic.  This generic
+provides a function binding and the base documentation for the method
+symbol (see <a href="elisp.html#Symbol-Components">Symbol Components</a>).
+
+<div class="defun">
+&mdash; Macro: <b>defgeneric</b><var> method arglist </var>[<var>doc-string</var>]<var><a name="index-defgeneric-16"></a></var><br>
+<blockquote><p>This macro turns the (unquoted) symbol <var>method</var> into a function. 
+<var>arglist</var> is the default list of arguments to use (not implemented
+yet).  <var>doc-string</var> is the documentation used for this symbol.
+
+        <p>A generic function acts as a placeholder for methods.  There is no
+need to call <code>defgeneric</code> yourself, as <code>defmethod</code> will call
+it if necessary.  Currently the argument list is unused.
+
+        <p><code>defgeneric</code> signals an error if you attempt to turn an existing
+Emacs Lisp function into a generic function.
+
+        <p>You can also create a generic method with <code>defmethod</code>
+(see <a href="#Methods">Methods</a>).  When a method is created and there is no generic
+method in place with that name, then a new generic will be created,
+and the new method will use it. 
+</p></blockquote></div>
+
+   <p>In CLOS, a generic call also be used to provide an argument list and
+dispatch precedence for all the arguments.  In <i>EIEIO</i>, dispatching
+only occurs for the first argument, so the <var>arglist</var> is not used.
+
+<div class="node">
+<a name="Methods"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Static-Methods">Static Methods</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Generics">Generics</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Writing-Methods">Writing Methods</a>
+
+</div>
+
+<h3 class="section">6.2 Methods</h3>
+
+<p>A method is a function that is executed if the first argument passed
+to it matches the method's class.  Different <i>EIEIO</i> classes may
+share the same method names.
+
+   <p>Methods are created with the <code>defmethod</code> macro, which is similar
+to <code>defun</code>.
+
+<div class="defun">
+&mdash; Macro: <b>defmethod</b><var> method </var>[<var>:before | :primary | :after | :static </var>]<var> arglist </var>[<var>doc-string</var>]<var> forms<a name="index-defmethod-17"></a></var><br>
+<blockquote>
+        <p><var>method</var> is the name of the function to create.
+
+        <p><code>:before</code> and <code>:after</code> specify execution order (i.e., when
+this form is called).  If neither of these symbols are present, the
+default priority is used (before <code>:after</code> and after
+<code>:before</code>); this default priority is represented in CLOS as
+<code>:primary</code>.
+
+        <p><b>Note:</b> The <code>:BEFORE</code>, <code>:PRIMARY</code>, <code>:AFTER</code>, and
+<code>:STATIC</code> method tags were in all capital letters in previous
+versions of <i>EIEIO</i>.
+
+        <p><var>arglist</var> is the list of arguments to this method.  The first
+argument in this list&mdash;and <em>only</em> the first argument&mdash;may have
+a type specifier (see the example below).  If no type specifier is
+supplied, the method applies to any object.
+
+        <p><var>doc-string</var> is the documentation attached to the implementation. 
+All method doc-strings are incorporated into the generic method's
+function documentation.
+
+        <p><var>forms</var> is the body of the function.
+
+        </blockquote></div>
+
+<p class="noindent">In the following example, we create a method <code>mymethod</code> for the
+<code>classname</code> class:
+
+<pre class="example">     (defmethod mymethod ((obj classname) secondarg)
+       "Doc string" )
+</pre>
+   <p class="noindent">This method only executes if the <var>obj</var> argument passed to it is an
+<i>EIEIO</i> object of class <code>classname</code>.
+
+   <p>A method with no type specifier is a <dfn>default method</dfn>.  If a given
+class has no implementation, then the default method is called when
+that method is used on a given object of that class.
+
+   <p>Only one default method per execution specifier (<code>:before</code>,
+<code>:primary</code>, or <code>:after</code>) is allowed.  If two
+<code>defmethod</code>s appear with <var>arglist</var>s lacking a type specifier,
+and having the same execution specifier, then the first implementation
+is replaced.
+
+   <p>When a method is called on an object, but there is no method specified
+for that object, but there is a method specified for object's parent
+class, the parent class' method is called.  If there is a method
+defined for both, only the child's method is called.  A child method
+may call a parent's method using <code>call-next-method</code>, described
+below.
+
+   <p>If multiple methods and default methods are defined for the same
+method and class, they are executed in this order:
+
+     <ol type=1 start=1>
+<li>method :before
+<li>default :before
+<li>method :primary
+<li>default :primary
+<li>method :after
+<li>default :after
+        </ol>
+
+   <p>If no methods exist, Emacs signals a <code>no-method-definition</code>
+error.  See <a href="#Signals">Signals</a>.
+
+<div class="defun">
+&mdash; Function: <b>call-next-method</b><var> &amp;rest replacement-args<a name="index-call_002dnext_002dmethod-18"></a></var><br>
+<blockquote><p><a name="call_002dnext_002dmethod"></a>This function calls the superclass method from a subclass method. 
+This is the &ldquo;next method&rdquo; specified in the current method list.
+
+        <p>If <var>replacement-args</var> is non-<code>nil</code>, then use them instead of
+<code>eieio-generic-call-arglst</code>.  At the top level, the generic
+argument list is passed in.
+
+        <p>Use <code>next-method-p</code> to find out if there is a next method to
+call. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>next-method-p</b><var><a name="index-next_002dmethod_002dp-19"></a></var><br>
+<blockquote><p><a name="next_002dmethod_002dp"></a>Non-<code>nil</code> if there is a next method. 
+Returns a list of lambda expressions which is the <code>next-method</code>
+order. 
+</p></blockquote></div>
+
+   <p>At present, <i>EIEIO</i> does not implement all the features of CLOS:
+
+     <ol type=1 start=1>
+<li>There is currently no <code>:around</code> tag. 
+<li>CLOS allows multiple sets of type-cast arguments, but <i>EIEIO</i> only
+allows the first argument to be cast.
+        </ol>
+
+<div class="node">
+<a name="Static-Methods"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Methods">Methods</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Writing-Methods">Writing Methods</a>
+
+</div>
+
+<h3 class="section">6.3 Static Methods</h3>
+
+<p>Static methods do not depend on an object instance, but instead
+operate on a class.  You can create a static method by using
+the <code>:static</code> key with <code>defmethod</code>.
+
+   <p>The first argument of a <code>:static</code> method will be a class rather than an
+object.  Use the functions <code>oref-default</code> or <code>oset-default</code> which
+will work on a class.
+
+   <p>A class's <code>make-instance</code> method is defined as a <code>:static</code>
+method.
+
+   <p><b>Note:</b> The <code>:static</code> keyword is unique to <i>EIEIO</i>.
+
+<!-- TODO - Write some more about static methods here -->
+<div class="node">
+<a name="Method-Invocation"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Predicates">Predicates</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Writing-Methods">Writing Methods</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">7 Method Invocation</h2>
+
+<p>When classes are defined, you can specify the
+<code>:method-invocation-order</code>.  This is a feature specific to EIEIO.
+
+   <p>This controls the order in which method resolution occurs for
+<code>:primary</code> methods in cases of multiple inheritance.  The order
+affects which method is called first in a tree, and if
+<code>call-next-method</code> is used, it controls the order in which the
+stack of methods are run.
+
+   <p>The original EIEIO order turned out to be broken for multiple
+inheritance, but some programs depended on it.  As such this option
+was added when the default invocation order was fixed to something
+that made more sense in that case.
+
+   <p>Valid values are:
+
+     <dl>
+<dt><code>:breadth-first</code><dd>Search for methods in the class hierarchy in breadth first order. 
+This is the default. 
+<br><dt><code>:depth-first</code><dd>Search for methods in the class hierarchy in a depth first order. 
+<br><dt><code>:c3</code><dd>Searches for methods in a linearized way that most closely matches
+what CLOS does when a monotonic class structure is defined.
+
+     <p>This is derived from the Dylan language documents by
+Kim Barrett et al.: A Monotonic Superclass Linearization for Dylan
+Retrieved from: http://192.220.96.201/dylan/linearization-oopsla96.html
+</dl>
+
+<div class="node">
+<a name="Predicates"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Association-Lists">Association Lists</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Method-Invocation">Method Invocation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">8 Predicates and Utilities</h2>
+
+<p>Now that we know how to create classes, access slots, and define
+methods, it might be useful to verify that everything is doing ok.  To
+help with this a plethora of predicates have been created.
+
+<div class="defun">
+&mdash; Function: <b>find-class</b><var> symbol &amp;optional errorp<a name="index-find_002dclass-20"></a></var><br>
+<blockquote><p><a name="find_002dclass"></a>Return the class that <var>symbol</var> represents. 
+If there is no class, <code>nil</code> is returned if <var>errorp</var> is <code>nil</code>. 
+If <var>errorp</var> is non-<code>nil</code>, <code>wrong-argument-type</code> is signaled. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>class-p</b><var> class<a name="index-class_002dp-21"></a></var><br>
+<blockquote><p><a name="class_002dp"></a>Return <code>t</code> if <var>class</var> is a valid class vector. 
+<var>class</var> is a symbol. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>slot-exists-p</b><var> object-or-class slot<a name="index-slot_002dexists_002dp-22"></a></var><br>
+<blockquote><p><a name="slot_002dexists_002dp"></a>Non-<code>nil</code> if <var>object-or-class</var> has <var>slot</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>slot-boundp</b><var> object slot<a name="index-slot_002dboundp-23"></a></var><br>
+<blockquote><p><a name="slot_002dboundp"></a>Non-<code>nil</code> if OBJECT's <var>slot</var> is bound. 
+Setting a slot's value makes it bound.  Calling <dfn>slot-makeunbound</dfn> will
+make a slot unbound. 
+<var>object</var> can be an instance or a class. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>eieio-class-name</b><var> class<a name="index-eieio_002dclass_002dname-24"></a></var><br>
+<blockquote><p>Return a string of the form &lsquo;<samp><span class="samp">#&lt;class myclassname&gt;</span></samp>&rsquo; which should look
+similar to other Lisp objects like buffers and processes.  Printing a
+class results only in a symbol. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>class-option</b><var> class option<a name="index-class_002doption-25"></a></var><br>
+<blockquote><p>Return the value in <var>CLASS</var> of a given <var>OPTION</var>. 
+For example:
+
+     <pre class="example">          (class-option eieio-default-superclass :documentation)
+</pre>
+        <p>Will fetch the documentation string for <code>eieio-default-superclass</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>eieio-object-name</b><var> obj<a name="index-eieio_002dobject_002dname-26"></a></var><br>
+<blockquote><p>Return a string of the form &lsquo;<samp><span class="samp">#&lt;object-class myobjname&gt;</span></samp>&rsquo; for <var>obj</var>. 
+This should look like Lisp symbols from other parts of Emacs such as
+buffers and processes, and is shorter and cleaner than printing the
+object's vector.  It is more useful to use <code>object-print</code> to get
+and object's print form, as this allows the object to add extra display
+information into the symbol. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>eieio-object-class</b><var> obj<a name="index-eieio_002dobject_002dclass-27"></a></var><br>
+<blockquote><p>Returns the class symbol from <var>obj</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>eieio-object-class-name</b><var> obj<a name="index-eieio_002dobject_002dclass_002dname-28"></a></var><br>
+<blockquote><p>Returns the symbol of <var>obj</var>'s class. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>eieio-class-parents</b><var> class<a name="index-eieio_002dclass_002dparents-29"></a></var><br>
+<blockquote><p>Returns the direct parents class of <var>class</var>.  Returns <code>nil</code> if
+it is a superclass. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>eieio-class-parents-fast</b><var> class<a name="index-eieio_002dclass_002dparents_002dfast-30"></a></var><br>
+<blockquote><p>Just like <code>eieio-class-parents</code> except it is a macro and no type checking
+is performed. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>eieio-class-parent</b><var> class<a name="index-eieio_002dclass_002dparent-31"></a></var><br>
+<blockquote><p>Deprecated function which returns the first parent of <var>class</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>eieio-class-children</b><var> class<a name="index-eieio_002dclass_002dchildren-32"></a></var><br>
+<blockquote><p>Return the list of classes inheriting from <var>class</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>eieio-class-children-fast</b><var> class<a name="index-eieio_002dclass_002dchildren_002dfast-33"></a></var><br>
+<blockquote><p>Just like <code>eieio-class-children</code>, but with no checks. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>same-class-p</b><var> obj class<a name="index-same_002dclass_002dp-34"></a></var><br>
+<blockquote><p>Returns <code>t</code> if <var>obj</var>'s class is the same as <var>class</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>same-class-fast-p</b><var> obj class<a name="index-same_002dclass_002dfast_002dp-35"></a></var><br>
+<blockquote><p>Same as <code>same-class-p</code> except this is a macro and no type checking
+is performed. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>object-of-class-p</b><var> obj class<a name="index-object_002dof_002dclass_002dp-36"></a></var><br>
+<blockquote><p>Returns <code>t</code> if <var>obj</var> inherits anything from <var>class</var>.  This
+is different from <code>same-class-p</code> because it checks for inheritance. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>child-of-class-p</b><var> child class<a name="index-child_002dof_002dclass_002dp-37"></a></var><br>
+<blockquote><p>Returns <code>t</code> if <var>child</var> is a subclass of <var>class</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>generic-p</b><var> method-symbol<a name="index-generic_002dp-38"></a></var><br>
+<blockquote><p>Returns <code>t</code> if <code>method-symbol</code> is a generic function, as
+opposed to a regular Emacs Lisp function. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Association-Lists"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Customizing">Customizing</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Predicates">Predicates</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">9 Association Lists</h2>
+
+<p>Lisp offers the concept of association lists, with primitives such as
+<code>assoc</code> used to access them.  The following functions can be used
+to manage association lists of <i>EIEIO</i> objects:
+
+<div class="defun">
+&mdash; Function: <b>object-assoc</b><var> key slot list<a name="index-object_002dassoc-39"></a></var><br>
+<blockquote><p><a name="object_002dassoc"></a>Return an object if <var>key</var> is <dfn>equal</dfn> to SLOT's value of an object in <var>list</var>. 
+<var>list</var> is a list of objects whose slots are searched. 
+Objects in <var>list</var> do not need to have a slot named <var>slot</var>, nor does
+<var>slot</var> need to be bound.  If these errors occur, those objects will
+be ignored. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>object-assoc-list</b><var> slot list<a name="index-object_002dassoc_002dlist-40"></a></var><br>
+<blockquote><p>Return an association list generated by extracting <var>slot</var> from all
+objects in <var>list</var>.  For each element of <var>list</var> the <code>car</code> is
+the value of <var>slot</var>, and the <code>cdr</code> is the object it was
+extracted from.  This is useful for generating completion tables. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>eieio-build-class-alist</b><var> &amp;optional base-class<a name="index-eieio_002dbuild_002dclass_002dalist-41"></a></var><br>
+<blockquote><p>Returns an alist of all currently defined classes.  This alist is
+suitable for completion lists used by interactive functions to select a
+class.  The optional argument <var>base-class</var> allows the programmer to
+select only a subset of classes which includes <var>base-class</var> and
+all its subclasses. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Customizing"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Introspection">Introspection</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Association-Lists">Association Lists</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">10 Customizing Objects</h2>
+
+<p><i>EIEIO</i> supports the Custom facility through two new widget types. 
+If a variable is declared as type <code>object</code>, then full editing of
+slots via the widgets is made possible.  This should be used
+carefully, however, because modified objects are cloned, so if there
+are other references to these objects, they will no longer be linked
+together.
+
+   <p>If you want in place editing of objects, use the following methods:
+
+<div class="defun">
+&mdash; Function: <b>eieio-customize-object</b><var> object<a name="index-eieio_002dcustomize_002dobject-42"></a></var><br>
+<blockquote><p>Create a custom buffer and insert a widget for editing <var>object</var>.  At
+the end, an <code>Apply</code> and <code>Reset</code> button are available.  This
+will edit the object "in place" so references to it are also changed. 
+There is no effort to prevent multiple edits of a singular object, so
+care must be taken by the user of this function. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>eieio-custom-widget-insert</b><var> object flags<a name="index-eieio_002dcustom_002dwidget_002dinsert-43"></a></var><br>
+<blockquote><p>This method inserts an edit object into the current buffer in place. 
+It is implemented as <code>(widget-create 'object-edit :value object)</code>. 
+This method is provided as a locale for adding tracking, or
+specializing the widget insert procedure for any object. 
+</p></blockquote></div>
+
+   <p>To define a slot with an object in it, use the <code>object</code> tag.  This
+widget type will be automatically converted to <code>object-edit</code> if you
+do in place editing of you object.
+
+   <p>If you want to have additional actions taken when a user clicks on the
+<code>Apply</code> button, then overload the method <code>eieio-done-customizing</code>. 
+This method does nothing by default, but that may change in the future. 
+This would be the best way to make your objects persistent when using
+in-place editing.
+
+<h3 class="section">10.1 Widget extension</h3>
+
+<p>When widgets are being created, one new widget extension has been added,
+called the <code>:slotofchoices</code>.  When this occurs in a widget
+definition, all elements after it are removed, and the slot is specifies
+is queried and converted into a series of constants.
+
+<pre class="example">     (choice (const :tag "None" nil)
+             :slotofchoices morestuff)
+</pre>
+   <p>and if the slot <code>morestuff</code> contains <code>(sym1 sym2 sym3)</code>, the
+above example is converted into:
+
+<pre class="example">     (choice (const :tag "None" nil)
+             (const sym1)
+             (const sym2)
+             (const sym3))
+</pre>
+   <p>This is useful when a given item needs to be selected from a list of
+items defined in this second slot.
+
+<div class="node">
+<a name="Introspection"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Base-Classes">Base Classes</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Customizing">Customizing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">11 Introspection</h2>
+
+<p>Introspection permits a programmer to peek at the contents of a class
+without any previous knowledge of that class.  While <i>EIEIO</i> implements
+objects on top of vectors, and thus everything is technically visible,
+some functions have been provided.  None of these functions are a part
+of CLOS.
+
+<div class="defun">
+&mdash; Function: <b>object-slots</b><var> obj<a name="index-object_002dslots-44"></a></var><br>
+<blockquote><p>Return the list of public slots for <var>obj</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>class-slot-initarg</b><var> class slot<a name="index-class_002dslot_002dinitarg-45"></a></var><br>
+<blockquote><p>For the given <var>class</var> return an :initarg associated with
+<var>slot</var>.  Not all slots have initargs, so the return value can be
+<code>nil</code>. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Base-Classes"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Browsing">Browsing</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Introspection">Introspection</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">12 Base Classes</h2>
+
+<p>All defined classes, if created with no specified parent class,
+inherit from a special class called <code>eieio-default-superclass</code>. 
+See <a href="#Default-Superclass">Default Superclass</a>.
+
+   <p>Often, it is more convenient to inherit from one of the other base
+classes provided by <i>EIEIO</i>, which have useful pre-defined
+properties.  (Since <i>EIEIO</i> supports multiple inheritance, you can
+even inherit from more than one of these classes at once.)
+
+<ul class="menu">
+<li><a accesskey="1" href="#eieio_002dinstance_002dinheritor">eieio-instance-inheritor</a>:     Enable value inheritance between instances. 
+<li><a accesskey="2" href="#eieio_002dinstance_002dtracker">eieio-instance-tracker</a>:       Enable self tracking instances. 
+<li><a accesskey="3" href="#eieio_002dsingleton">eieio-singleton</a>:              Only one instance of a given class. 
+<li><a accesskey="4" href="#eieio_002dpersistent">eieio-persistent</a>:             Enable persistence for a class. 
+<li><a accesskey="5" href="#eieio_002dnamed">eieio-named</a>:                  Use the object name as a :name slot. 
+<li><a accesskey="6" href="#eieio_002dspeedbar">eieio-speedbar</a>:               Enable speedbar support in your objects. 
+</ul>
+
+<div class="node">
+<a name="eieio-instance-inheritor"></a>
+<a name="eieio_002dinstance_002dinheritor"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#eieio_002dinstance_002dtracker">eieio-instance-tracker</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Base-Classes">Base Classes</a>
+
+</div>
+
+<h3 class="section">12.1 <code>eieio-instance-inheritor</code></h3>
+
+<p>This class is defined in the package <samp><span class="file">eieio-base</span></samp>.
+
+   <p>Instance inheritance is a mechanism whereby the value of a slot in
+object instance can reference the parent instance.  If the parent's slot
+value is changed, then the child instance is also changed.  If the
+child's slot is set, then the parent's slot is not modified.
+
+<div class="defun">
+&mdash; Class: <b>eieio-instance-inheritor</b><var> parent-instance<a name="index-eieio_002dinstance_002dinheritor-46"></a></var><br>
+<blockquote><p>A class whose instances are enabled with instance inheritance. 
+The <var>parent-instance</var> slot indicates the instance which is
+considered the parent of the current instance.  Default is <code>nil</code>. 
+</p></blockquote></div>
+
+   <p><a name="index-clone-47"></a>To use this class, inherit from it with your own class. 
+To make a new instance that inherits from and existing instance of your
+class, use the <code>clone</code> method with additional parameters
+to specify local values.
+
+   <p><a name="index-slot_002dunbound-48"></a>The <code>eieio-instance-inheritor</code> class works by causing cloned
+objects to have all slots unbound.  This class' <code>slot-unbound</code>
+method will cause references to unbound slots to be redirected to the
+parent instance.  If the parent slot is also unbound, then
+<code>slot-unbound</code> will signal an error named <code>slot-unbound</code>.
+
+<div class="node">
+<a name="eieio-instance-tracker"></a>
+<a name="eieio_002dinstance_002dtracker"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#eieio_002dsingleton">eieio-singleton</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#eieio_002dinstance_002dinheritor">eieio-instance-inheritor</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Base-Classes">Base Classes</a>
+
+</div>
+
+<h3 class="section">12.2 <code>eieio-instance-tracker</code></h3>
+
+<p>This class is defined in the package <samp><span class="file">eieio-base</span></samp>.
+
+   <p>Sometimes it is useful to keep a master list of all instances of a given
+class.  The class <code>eieio-instance-tracker</code> performs this task.
+
+<div class="defun">
+&mdash; Class: <b>eieio-instance-tracker</b><var> tracker-symbol<a name="index-eieio_002dinstance_002dtracker-49"></a></var><br>
+<blockquote><p>Enable instance tracking for this class. 
+The slot <var>tracker-symbol</var> should be initialized in inheritors of
+this class to a symbol created with <code>defvar</code>.  This symbol will
+serve as the variable used as a master list of all objects of the given
+class. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method on eieio-instance-tracker: <b>initialize-instance</b><var> obj slot<a name="index-initialize_002dinstance-on-eieio_002dinstance_002dtracker-50"></a></var><br>
+<blockquote><p>This method is defined as an <code>:after</code> method. 
+It adds new instances to the master list.  Do not overload this method
+unless you use <code>call-next-method.</code>
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method on eieio-instance-tracker: <b>delete-instance</b><var> obj<a name="index-delete_002dinstance-on-eieio_002dinstance_002dtracker-51"></a></var><br>
+<blockquote><p>Remove <var>obj</var> from the master list of instances of this class. 
+This may let the garbage collector nab this instance. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; eieio-instance-tracker-find: <b>key</b><var> slot list-symbol<a name="index-key-52"></a></var><br>
+<blockquote><p>This convenience function lets you find instances.  <var>key</var> is the
+value to search for.  <var>slot</var> is the slot to compare <var>KEY</var>
+against.  The function <code>equal</code> is used for comparison. 
+The parameter <var>list-symbol</var> is the variable symbol which contains the
+list of objects to be searched. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="eieio-singleton"></a>
+<a name="eieio_002dsingleton"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#eieio_002dpersistent">eieio-persistent</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#eieio_002dinstance_002dtracker">eieio-instance-tracker</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Base-Classes">Base Classes</a>
+
+</div>
+
+<h3 class="section">12.3 <code>eieio-singleton</code></h3>
+
+<p>This class is defined in the package <samp><span class="file">eieio-base</span></samp>.
+
+<div class="defun">
+&mdash; Class: <b>eieio-singleton</b><var><a name="index-eieio_002dsingleton-53"></a></var><br>
+<blockquote><p>Inheriting from the singleton class will guarantee that there will
+only ever be one instance of this class.  Multiple calls to
+<code>make-instance</code> will always return the same object. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="eieio-persistent"></a>
+<a name="eieio_002dpersistent"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#eieio_002dnamed">eieio-named</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#eieio_002dsingleton">eieio-singleton</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Base-Classes">Base Classes</a>
+
+</div>
+
+<h3 class="section">12.4 <code>eieio-persistent</code></h3>
+
+<p>This class is defined in the package <samp><span class="file">eieio-base</span></samp>.
+
+   <p>If you want an object, or set of objects to be persistent, meaning the
+slot values are important to keep saved between sessions, then you will
+want your top level object to inherit from <code>eieio-persistent</code>.
+
+   <p>To make sure your persistent object can be moved, make sure all file
+names stored to disk are made relative with
+<code>eieio-persistent-path-relative</code>.
+
+<div class="defun">
+&mdash; Class: <b>eieio-persistent</b><var> file file-header-line<a name="index-eieio_002dpersistent-54"></a></var><br>
+<blockquote><p>Enables persistence for instances of this class. 
+Slot <var>file</var> with initarg <code>:file</code> is the file name in which this
+object will be saved. 
+Class allocated slot <var>file-header-line</var> is used with method
+<code>object-write</code> as a header comment. 
+</p></blockquote></div>
+
+   <p>All objects can write themselves to a file, but persistent objects have
+several additional methods that aid in maintaining them.
+
+<div class="defun">
+&mdash; Method on eieio-persistent: <b>eieio-persistent-save</b><var> obj &amp;optional file<a name="index-eieio_002dpersistent_002dsave-on-eieio_002dpersistent-55"></a></var><br>
+<blockquote><p>Write the object <var>obj</var> to its file. 
+If optional argument <var>file</var> is specified, use that file name
+instead. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method on eieio-persistent: <b>eieio-persistent-path-relative</b><var> obj file<a name="index-eieio_002dpersistent_002dpath_002drelative-on-eieio_002dpersistent-56"></a></var><br>
+<blockquote><p>Return a file name derived from <var>file</var> which is relative to the
+stored location of <var>OBJ</var>.  This method should be used to convert
+file names so that they are relative to the save file, making any system
+of files movable from one location to another. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method on eieio-persistent: <b>object-write</b><var> obj &amp;optional comment<a name="index-object_002dwrite-on-eieio_002dpersistent-57"></a></var><br>
+<blockquote><p>Like <code>object-write</code> for <code>standard-object</code>, but will derive
+a header line comment from the class allocated slot if one is not
+provided. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>eieio-persistent-read</b><var> filename &amp;optional class allow-subclass<a name="index-eieio_002dpersistent_002dread-58"></a></var><br>
+<blockquote><p>Read a persistent object from <var>filename</var>, and return it. 
+Signal an error if the object in <var>FILENAME</var> is not a constructor
+for <var>CLASS</var>.  Optional <var>allow-subclass</var> says that it is ok for
+<code>eieio-persistent-read</code> to load in subclasses of class instead of
+being pedantic. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="eieio-named"></a>
+<a name="eieio_002dnamed"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#eieio_002dspeedbar">eieio-speedbar</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#eieio_002dpersistent">eieio-persistent</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Base-Classes">Base Classes</a>
+
+</div>
+
+<h3 class="section">12.5 <code>eieio-named</code></h3>
+
+<p>This class is defined in the package <samp><span class="file">eieio-base</span></samp>.
+
+<div class="defun">
+&mdash; Class: <b>eieio-named</b><var><a name="index-eieio_002dnamed-59"></a></var><br>
+<blockquote><p>Object with a name. 
+Name storage already occurs in an object.  This object provides get/set
+access to it. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="eieio-speedbar"></a>
+<a name="eieio_002dspeedbar"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#eieio_002dnamed">eieio-named</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Base-Classes">Base Classes</a>
+
+</div>
+
+<h3 class="section">12.6 <code>eieio-speedbar</code></h3>
+
+<p>This class is in package <samp><span class="file">eieio-speedbar</span></samp>.
+
+   <p>If a series of class instances map to a tree structure, it is possible
+to cause your classes to be displayable in Speedbar.  See <a href="speedbar.html#Top">Top</a>. 
+Inheriting from these classes will enable a speedbar major display mode
+with a minimum of effort.
+
+<div class="defun">
+&mdash; Class: <b>eieio-speedbar</b><var> buttontype buttonface<a name="index-eieio_002dspeedbar-60"></a></var><br>
+<blockquote><p>Enables base speedbar display for a class. 
+<a name="index-speedbar_002dmake_002dtag_002dline-61"></a>The slot <var>buttontype</var> is any of the symbols allowed by the
+function <code>speedbar-make-tag-line</code> for the <var>exp-button-type</var>
+argument See <a href="speedbar.html#Extending">Extending</a>. 
+The slot <var>buttonface</var> is the face to use for the text of the string
+displayed in speedbar. 
+The slots <var>buttontype</var> and <var>buttonface</var> are class allocated
+slots, and do not take up space in your instances. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Class: <b>eieio-speedbar-directory-button</b><var> buttontype buttonface<a name="index-eieio_002dspeedbar_002ddirectory_002dbutton-62"></a></var><br>
+<blockquote><p>This class inherits from <code>eieio-speedbar</code> and initializes
+<var>buttontype</var> and <var>buttonface</var> to appear as directory level lines. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Class: <b>eieio-speedbar-file-button</b><var> buttontype buttonface<a name="index-eieio_002dspeedbar_002dfile_002dbutton-63"></a></var><br>
+<blockquote><p>This class inherits from <code>eieio-speedbar</code> and initializes
+<var>buttontype</var> and <var>buttonface</var> to appear as file level lines. 
+</p></blockquote></div>
+
+   <p>To use these classes, inherit from one of them in you class.  You can
+use multiple inheritance with them safely.  To customize your class for
+speedbar display, override the default values for <var>buttontype</var> and
+<var>buttonface</var> to get the desired effects.
+
+   <p>Useful methods to define for your new class include:
+
+<div class="defun">
+&mdash; Method on eieio-speedbar: <b>eieio-speedbar-derive-line-path</b><var> obj depth<a name="index-eieio_002dspeedbar_002dderive_002dline_002dpath-on-eieio_002dspeedbar-64"></a></var><br>
+<blockquote><p>Return a string representing a directory associated with an instance
+of <var>obj</var>.  <var>depth</var> can be used to index how many levels of
+indentation have been opened by the user where <var>obj</var> is shown. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method on eieio-speedbar: <b>eieio-speedbar-description</b><var> obj<a name="index-eieio_002dspeedbar_002ddescription-on-eieio_002dspeedbar-65"></a></var><br>
+<blockquote><p>Return a string description of <var>OBJ</var>. 
+This is shown in the minibuffer or tooltip when the mouse hovers over
+this instance in speedbar. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method on eieio-speedbar: <b>eieio-speedbar-child-description</b><var> obj<a name="index-eieio_002dspeedbar_002dchild_002ddescription-on-eieio_002dspeedbar-66"></a></var><br>
+<blockquote><p>Return a string representing a description of a child node of <var>obj</var>
+when that child is not an object.  It is often useful to just use
+item info helper functions such as <code>speedbar-item-info-file-helper</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method on eieio-speedbar: <b>eieio-speedbar-object-buttonname</b><var> obj<a name="index-eieio_002dspeedbar_002dobject_002dbuttonname-on-eieio_002dspeedbar-67"></a></var><br>
+<blockquote><p>Return a string which is the text displayed in speedbar for <var>obj</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method on eieio-speedbar: <b>eieio-speedbar-object-children</b><var> obj<a name="index-eieio_002dspeedbar_002dobject_002dchildren-on-eieio_002dspeedbar-68"></a></var><br>
+<blockquote><p>Return a list of children of <var>obj</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Method on eieio-speedbar: <b>eieio-speedbar-child-make-tag-lines</b><var> obj depth<a name="index-eieio_002dspeedbar_002dchild_002dmake_002dtag_002dlines-on-eieio_002dspeedbar-69"></a></var><br>
+<blockquote><p>This method inserts a list of speedbar tag lines for <var>obj</var> to
+represent its children.  Implement this method for your class
+if your children are not objects themselves.  You still need to
+implement <code>eieio-speedbar-object-children</code>.
+
+        <p>In this method, use techniques specified in the Speedbar manual. 
+See <a href="speedbar.html#Extending">Extending</a>. 
+</p></blockquote></div>
+
+   <p>Some other functions you will need to learn to use are:
+
+<div class="defun">
+&mdash; eieio-speedbar-create: <b>make-map</b><var> key-map menu name toplevelfn<a name="index-make_002dmap-70"></a></var><br>
+<blockquote><p>Register your object display mode with speedbar. 
+<var>make-map</var> is a function which initialized you keymap. 
+<var>key-map</var> is a symbol you keymap is installed into. 
+<var>menu</var> is an easy menu vector representing menu items specific to your
+object display. 
+<var>name</var> is a short string to use as a name identifying you mode. 
+<var>toplevelfn</var> is a function called which must return a list of
+objects representing those in the instance system you wish to browse in
+speedbar.
+
+        <p>Read the Extending chapter in the speedbar manual for more information
+on how speedbar modes work
+See <a href="speedbar.html#Extending">Extending</a>. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Browsing"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Class-Values">Class Values</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Base-Classes">Base Classes</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">13 Browsing class trees</h2>
+
+<p>The command <kbd>M-x eieio-browse</kbd> displays a buffer listing all the
+currently loaded classes in Emacs.  The classes are listed in an
+indented tree structure, starting from <code>eieio-default-superclass</code>
+(see <a href="#Default-Superclass">Default Superclass</a>).
+
+   <p>With a prefix argument, this command prompts for a class name; it then
+lists only that class and its subclasses.
+
+   <p>Here is a sample tree from our current example:
+
+<pre class="example">     eieio-default-superclass
+       +--data-object
+            +--data-object-symbol
+</pre>
+   <p>Note: new classes are consed into the inheritance lists, so the tree
+comes out upside-down.
+
+<div class="node">
+<a name="Class-Values"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Default-Superclass">Default Superclass</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Browsing">Browsing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">14 Class Values</h2>
+
+<p>You can use the normal <code>describe-function</code> command to retrieve
+information about a class.  Running it on constructors will show a
+full description of the generated class.  If you call it on a generic
+function, all implementations of that generic function will be listed,
+together with links through which you can directly jump to the source.
+
+<div class="node">
+<a name="Default-Superclass"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Signals">Signals</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Class-Values">Class Values</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">15 Default Superclass</h2>
+
+<p>All defined classes, if created with no specified parent class, will
+inherit from a special class stored in
+<code>eieio-default-superclass</code>.  This superclass is quite simple, but
+with it, certain default methods or attributes can be added to all
+objects.  In CLOS, this would be named <code>STANDARD-CLASS</code>, and that
+symbol is an alias to <code>eieio-default-superclass</code>.
+
+   <p>Currently, the default superclass is defined as follows:
+
+<pre class="example">     (defclass eieio-default-superclass nil
+       nil
+       "Default parent class for classes with no specified parent class.
+     Its slots are automatically adopted by classes with no specified
+     parents.  This class is not stored in the `parent' slot of a class vector."
+       :abstract t)
+</pre>
+   <p>The default superclass implements several methods providing a default
+behavior for all objects created by <i>EIEIO</i>.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Initialization">Initialization</a>:       How objects are initialized
+<li><a accesskey="2" href="#Basic-Methods">Basic Methods</a>:        Clone, print, and write
+<li><a accesskey="3" href="#Signal-Handling">Signal Handling</a>:      Methods for managing signals. 
+</ul>
+
+<div class="node">
+<a name="Initialization"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Basic-Methods">Basic Methods</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Default-Superclass">Default Superclass</a>
+
+</div>
+
+<h3 class="section">15.1 Initialization</h3>
+
+<p>When creating an object of any type, you can use its constructor, or
+<code>make-instance</code>.  This, in turns calls the method
+<code>initialize-instance</code>, which then calls the method
+<code>shared-initialize</code>.
+
+   <p>These methods are all implemented on the default superclass so you do
+not need to write them yourself, unless you need to override one of
+their behaviors.
+
+   <p>Users should not need to call <code>initialize-instance</code> or
+<code>shared-initialize</code>, as these are used by <code>make-instance</code> to
+initialize the object.  They are instead provided so that users can
+augment these behaviors.
+
+<div class="defun">
+&mdash; Function: <b>initialize-instance</b><var> obj &amp;rest slots<a name="index-initialize_002dinstance-71"></a></var><br>
+<blockquote><p>Initialize <var>obj</var>.  Sets slots of <var>obj</var> with <var>slots</var> which
+is a list of name/value pairs.  These are actually just passed to
+<code>shared-initialize</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>shared-initialize</b><var> obj &amp;rest slots<a name="index-shared_002dinitialize-72"></a></var><br>
+<blockquote><p>Sets slots of <var>obj</var> with <var>slots</var> which is a list of name/value
+pairs.
+
+        <p>This is called from the default constructor. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Basic-Methods"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Signal-Handling">Signal Handling</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Initialization">Initialization</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Default-Superclass">Default Superclass</a>
+
+</div>
+
+<h3 class="section">15.2 Basic Methods</h3>
+
+<p>Additional useful methods defined on the base subclass are:
+
+<div class="defun">
+&mdash; Function: <b>clone</b><var> obj &amp;rest params<a name="index-clone-73"></a></var><br>
+<blockquote><p><a name="clone"></a>Make a copy of <var>obj</var>, and then apply <var>params</var>. 
+<var>params</var> is a parameter list of the same form as <var>initialize-instance</var>
+which are applied to change the object.  When overloading <dfn>clone</dfn>, be
+sure to call <dfn>call-next-method</dfn> first and modify the returned object. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>object-print</b><var> this &amp;rest strings<a name="index-object_002dprint-74"></a></var><br>
+<blockquote><p><a name="object_002dprint"></a>Pretty printer for object <var>this</var>.  Call function <dfn>eieio-object-name</dfn> with <var>strings</var>. 
+The default method for printing object <var>this</var> is to use the
+function <dfn>eieio-object-name</dfn>.
+
+        <p>It is sometimes useful to put a summary of the object into the
+default #&lt;notation&gt; string when using eieio browsing tools.
+
+        <p>Implement this function and specify <var>strings</var> in a call to
+<dfn>call-next-method</dfn> to provide additional summary information. 
+When passing in extra strings from child classes, always remember
+to prepend a space.
+
+     <pre class="example">          (defclass data-object ()
+             (value)
+             "Object containing one data slot.")
+          
+          (defmethod object-print ((this data-object) &amp;optional strings)
+            "Return a string with a summary of the data object as part of the name."
+            (apply 'call-next-method this
+                   (cons (format " value: %s" (render this)) strings)))
+</pre>
+        <p>Here is what some output could look like:
+     <pre class="example">          (object-print test-object)
+             =&gt; #&lt;data-object test-object value: 3&gt;
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>object-write</b><var> obj &amp;optional comment<a name="index-object_002dwrite-75"></a></var><br>
+<blockquote><p>Write <var>obj</var> onto a stream in a readable fashion.  The resulting
+output will be Lisp code which can be used with <code>read</code> and
+<code>eval</code> to recover the object.  Only slots with <code>:initarg</code>s
+are written to the stream. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Signal-Handling"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Basic-Methods">Basic Methods</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Default-Superclass">Default Superclass</a>
+
+</div>
+
+<h3 class="section">15.3 Signal Handling</h3>
+
+<p>The default superclass defines methods for managing error conditions. 
+These methods all throw a signal for a particular error condition.
+
+   <p>By implementing one of these methods for a class, you can change the
+behavior that occurs during one of these error cases, or even ignore
+the error by providing some behavior.
+
+<div class="defun">
+&mdash; Function: <b>slot-missing</b><var> object slot-name operation &amp;optional new-value<a name="index-slot_002dmissing-76"></a></var><br>
+<blockquote><p><a name="slot_002dmissing"></a>Method invoked when an attempt to access a slot in <var>object</var> fails. 
+<var>slot-name</var> is the name of the failed slot, <var>operation</var> is the type of access
+that was requested, and optional <var>new-value</var> is the value that was desired
+to be set.
+
+        <p>This method is called from <code>oref</code>, <code>oset</code>, and other functions which
+directly reference slots in EIEIO objects.
+
+        <p>The default method signals an error of type <code>invalid-slot-name</code>. 
+See <a href="#Signals">Signals</a>.
+
+        <p>You may override this behavior, but it is not expected to return in the
+current implementation.
+
+        <p>This function takes arguments in a different order than in CLOS. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>slot-unbound</b><var> object class slot-name fn<a name="index-slot_002dunbound-77"></a></var><br>
+<blockquote><p><a name="slot_002dunbound"></a>Slot unbound is invoked during an attempt to reference an unbound slot. 
+<var>object</var> is the instance of the object being reference.  <var>class</var> is the
+class of <var>object</var>, and <var>slot-name</var> is the offending slot.  This function
+throws the signal <code>unbound-slot</code>.  You can overload this function and
+return the value to use in place of the unbound value. 
+Argument <var>fn</var> is the function signaling this error. 
+Use <dfn>slot-boundp</dfn> to determine if a slot is bound or not.
+
+        <p>In <var>clos</var>, the argument list is (<var>class</var> <var>object</var> <var>slot-name</var>), but
+<var>eieio</var> can only dispatch on the first argument, so the first two are swapped. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>no-applicable-method</b><var> object method &amp;rest args<a name="index-no_002dapplicable_002dmethod-78"></a></var><br>
+<blockquote><p><a name="no_002dapplicable_002dmethod"></a>Called if there are no implementations for <var>object</var> in <var>method</var>. 
+<var>object</var> is the object which has no method implementation. 
+<var>args</var> are the arguments that were passed to <var>method</var>.
+
+        <p>Implement this for a class to block this signal.  The return
+value becomes the return value of the original method call. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: <b>no-next-method</b><var> object &amp;rest args<a name="index-no_002dnext_002dmethod-79"></a></var><br>
+<blockquote><p><a name="no_002dnext_002dmethod"></a>Called from <dfn>call-next-method</dfn> when no additional methods are available. 
+<var>object</var> is othe object being called on <dfn>call-next-method</dfn>. 
+<var>args</var> are the arguments it is called by. 
+This method signals <dfn>no-next-method</dfn> by default.  Override this
+method to not throw an error, and its return value becomes the
+return value of <dfn>call-next-method</dfn>. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Signals"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Naming-Conventions">Naming Conventions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Default-Superclass">Default Superclass</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">16 Signals</h2>
+
+<p>There are new condition names (signals) that can be caught when using
+<i>EIEIO</i>.
+
+<div class="defun">
+&mdash; Signal: <b>invalid-slot-name</b><var> obj-or-class slot<a name="index-invalid_002dslot_002dname-80"></a></var><br>
+<blockquote><p>This signal is called when an attempt to reference a slot in an
+<var>obj-or-class</var> is made, and the <var>slot</var> is not defined for
+it. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Signal: <b>no-method-definition</b><var> method arguments<a name="index-no_002dmethod_002ddefinition-81"></a></var><br>
+<blockquote><p>This signal is called when <var>method</var> is called, with <var>arguments</var>
+and nothing is resolved.  This occurs when <var>method</var> has been
+defined, but the arguments make it impossible for <i>EIEIO</i> to determine
+which method body to run.
+
+        <p>To prevent this signal from occurring in your class, implement the
+method <code>no-applicable-method</code> for your class.  This method is
+called when to throw this signal, so implementing this for your class
+allows you block the signal, and perform some work. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Signal: <b>no-next-method</b><var> class arguments<a name="index-no_002dnext_002dmethod-82"></a></var><br>
+<blockquote><p>This signal is called if the function <code>call-next-method</code> is called
+and there is no next method to be called.
+
+        <p>Overload the method <code>no-next-method</code> to protect against this signal. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Signal: <b>invalid-slot-type</b><var> slot spec value<a name="index-invalid_002dslot_002dtype-83"></a></var><br>
+<blockquote><p>This signal is called when an attempt to set <var>slot</var> is made, and
+<var>value</var> doesn't match the specified type <var>spec</var>.
+
+        <p>In <i>EIEIO</i>, this is also used if a slot specifier has an invalid value
+during a <code>defclass</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Signal: <b>unbound-slot</b><var> object class slot<a name="index-unbound_002dslot-84"></a></var><br>
+<blockquote><p>This signal is called when an attempt to reference <var>slot</var> in
+<var>object</var> is made, and that instance is currently unbound. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Naming-Conventions"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#CLOS-compatibility">CLOS compatibility</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Signals">Signals</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">17 Naming Conventions</h2>
+
+<p>See <a href="elisp.html#Tips">Tips and Conventions</a>, for a description of Emacs Lisp programming conventions. 
+These conventions help ensure that Emacs packages work nicely one
+another, so an <i>EIEIO</i>-based program should follow them.  Here are
+some conventions that apply specifically to <i>EIEIO</i>-based programs:
+
+     <ul>
+<li>Come up with a package prefix that is relatively short.  Prefix
+all classes, and methods with your prefix.  This is a standard
+convention for functions and variables in Emacs.
+
+     <li>Do not prefix method names with the class name.  All methods in
+<i>EIEIO</i> are &ldquo;virtual&rdquo;, and are dynamically dispatched.  Anyone can
+override your methods at any time.  Your methods should be prefixed
+with your package name.
+
+     <li>Do not prefix slots in your class.  The slots are always locally
+scoped to your class, and need no prefixing.
+
+     <li>If your library inherits from other libraries of classes, you
+must &ldquo;require&rdquo; that library with the <code>require</code> command.
+
+   </ul>
+
+<div class="node">
+<a name="CLOS-compatibility"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Wish-List">Wish List</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Naming-Conventions">Naming Conventions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">18 CLOS compatibility</h2>
+
+<p>Currently, the following functions should behave almost as expected from
+CLOS.
+
+     <dl>
+<dt><code>defclass</code><dd>All slot keywords are available but not all work correctly. 
+Slot keyword differences are:
+
+          <dl>
+<dt>:reader, and :writer tags<dd>Create methods that signal errors instead of creating an unqualified
+method.  You can still create new ones to do its business.
+
+          <br><dt>:accessor<dd>This should create an unqualified method to access a slot, but
+instead pre-builds a method that gets the slot's value.
+
+          <br><dt>:type<dd>Specifier uses the <code>typep</code> function from the <samp><span class="file">cl</span></samp>
+package.  See <a href="cl.html#Type-Predicates">Type Predicates</a>. 
+It therefore has the same issues as that package.  Extensions include
+the ability to provide object names. 
+</dl>
+
+     <p>defclass also supports class options, but does not currently use values
+of <code>:metaclass</code>, and <code>:default-initargs</code>.
+
+     <br><dt><code>make-instance</code><dd>Make instance works as expected, however it just uses the <i>EIEIO</i> instance
+creator automatically generated when a new class is created. 
+See <a href="#Making-New-Objects">Making New Objects</a>.
+
+     <br><dt><code>defgeneric</code><dd>Creates the desired symbol, and accepts all of the expected arguments
+except <code>:around</code>.
+
+     <br><dt><code>defmethod</code><dd>Calls defgeneric, and accepts most of the expected arguments.  Only
+the first argument to the created method may have a type specifier. 
+To type cast against a class, the class must exist before defmethod is
+called.  In addition, the <code>:around</code> tag is not supported.
+
+     <br><dt><code>call-next-method</code><dd>Inside a method, calls the next available method up the inheritance tree
+for the given object.  This is different than that found in CLOS because
+in <i>EIEIO</i> this function accepts replacement arguments.  This permits
+subclasses to modify arguments as they are passed up the tree.  If no
+arguments are given, the expected CLOS behavior is used. 
+</dl>
+
+   <p>CLOS supports the <code>describe</code> command, but <i>EIEIO</i> provides
+support for using the standard <code>describe-function</code> command on a
+constructor or generic function.
+
+   <p>When creating a new class (see <a href="#Building-Classes">Building Classes</a>) there are several
+new keywords supported by <i>EIEIO</i>.
+
+   <p>In <i>EIEIO</i> tags are in lower case, not mixed case.
+
+<div class="node">
+<a name="Wish-List"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#CLOS-compatibility">CLOS compatibility</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">19 Wish List</h2>
+
+<p><i>EIEIO</i> is an incomplete implementation of CLOS.  Finding ways to
+improve the compatibility would help make CLOS style programs run
+better in Emacs.
+
+   <p>Some important compatibility features that would be good to add are:
+
+     <ol type=1 start=1>
+<li>Support for metaclasses and EQL specialization. 
+<li><code>:around</code> method key. 
+<li>Method dispatch for built-in types. 
+<li>Method dispatch for multiple argument typing. 
+<li>Improve integration with the <samp><span class="file">cl</span></samp> package.
+        </ol>
+
+   <p>There are also improvements to be made to allow <i>EIEIO</i> to operate
+better in the Emacs environment.
+
+     <ol type=1 start=1>
+<li>Allow subclassing of Emacs built-in types, such as faces, markers, and
+buffers. 
+<li>Allow method overloading of method-like functions in Emacs.
+        </ol>
+
+<div class="node">
+<a name="GNU-Free-Documentation-License"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Function-Index">Function Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Wish-List">Wish List</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="appendix">Appendix A GNU Free Documentation License</h2>
+
+<!-- The GNU Free Documentation License. -->
+<div align="center">Version 1.3, 3 November 2008</div>
+
+<!-- This file is intended to be included within another document, -->
+<!-- hence no sectioning command or @node. -->
+<pre class="display">     Copyright &copy; 2000, 2001, 2002, 2007, 2008 Free Software Foundation, Inc.
+     <a href="http://fsf.org/">http://fsf.org/</a>
+     
+     Everyone is permitted to copy and distribute verbatim copies
+     of this license document, but changing it is not allowed.
+</pre>
+     <ol type=1 start=0>
+<li>PREAMBLE
+
+     <p>The purpose of this License is to make a manual, textbook, or other
+functional and useful document <dfn>free</dfn> in the sense of freedom: to
+assure everyone the effective freedom to copy and redistribute it,
+with or without modifying it, either commercially or noncommercially. 
+Secondarily, this License preserves for the author and publisher a way
+to get credit for their work, while not being considered responsible
+for modifications made by others.
+
+     <p>This License is a kind of &ldquo;copyleft&rdquo;, which means that derivative
+works of the document must themselves be free in the same sense.  It
+complements the GNU General Public License, which is a copyleft
+license designed for free software.
+
+     <p>We have designed this License in order to use it for manuals for free
+software, because free software needs free documentation: a free
+program should come with manuals providing the same freedoms that the
+software does.  But this License is not limited to software manuals;
+it can be used for any textual work, regardless of subject matter or
+whether it is published as a printed book.  We recommend this License
+principally for works whose purpose is instruction or reference.
+
+     <li>APPLICABILITY AND DEFINITIONS
+
+     <p>This License applies to any manual or other work, in any medium, that
+contains a notice placed by the copyright holder saying it can be
+distributed under the terms of this License.  Such a notice grants a
+world-wide, royalty-free license, unlimited in duration, to use that
+work under the conditions stated herein.  The &ldquo;Document&rdquo;, below,
+refers to any such manual or work.  Any member of the public is a
+licensee, and is addressed as &ldquo;you&rdquo;.  You accept the license if you
+copy, modify or distribute the work in a way requiring permission
+under copyright law.
+
+     <p>A &ldquo;Modified Version&rdquo; of the Document means any work containing the
+Document or a portion of it, either copied verbatim, or with
+modifications and/or translated into another language.
+
+     <p>A &ldquo;Secondary Section&rdquo; is a named appendix or a front-matter section
+of the Document that deals exclusively with the relationship of the
+publishers or authors of the Document to the Document's overall
+subject (or to related matters) and contains nothing that could fall
+directly within that overall subject.  (Thus, if the Document is in
+part a textbook of mathematics, a Secondary Section may not explain
+any mathematics.)  The relationship could be a matter of historical
+connection with the subject or with related matters, or of legal,
+commercial, philosophical, ethical or political position regarding
+them.
+
+     <p>The &ldquo;Invariant Sections&rdquo; are certain Secondary Sections whose titles
+are designated, as being those of Invariant Sections, in the notice
+that says that the Document is released under this License.  If a
+section does not fit the above definition of Secondary then it is not
+allowed to be designated as Invariant.  The Document may contain zero
+Invariant Sections.  If the Document does not identify any Invariant
+Sections then there are none.
+
+     <p>The &ldquo;Cover Texts&rdquo; are certain short passages of text that are listed,
+as Front-Cover Texts or Back-Cover Texts, in the notice that says that
+the Document is released under this License.  A Front-Cover Text may
+be at most 5 words, and a Back-Cover Text may be at most 25 words.
+
+     <p>A &ldquo;Transparent&rdquo; copy of the Document means a machine-readable copy,
+represented in a format whose specification is available to the
+general public, that is suitable for revising the document
+straightforwardly with generic text editors or (for images composed of
+pixels) generic paint programs or (for drawings) some widely available
+drawing editor, and that is suitable for input to text formatters or
+for automatic translation to a variety of formats suitable for input
+to text formatters.  A copy made in an otherwise Transparent file
+format whose markup, or absence of markup, has been arranged to thwart
+or discourage subsequent modification by readers is not Transparent. 
+An image format is not Transparent if used for any substantial amount
+of text.  A copy that is not &ldquo;Transparent&rdquo; is called &ldquo;Opaque&rdquo;.
+
+     <p>Examples of suitable formats for Transparent copies include plain
+ASCII without markup, Texinfo input format, LaTeX input
+format, SGML or XML using a publicly available
+DTD, and standard-conforming simple HTML,
+PostScript or PDF designed for human modification.  Examples
+of transparent image formats include PNG, XCF and
+JPG.  Opaque formats include proprietary formats that can be
+read and edited only by proprietary word processors, SGML or
+XML for which the DTD and/or processing tools are
+not generally available, and the machine-generated HTML,
+PostScript or PDF produced by some word processors for
+output purposes only.
+
+     <p>The &ldquo;Title Page&rdquo; means, for a printed book, the title page itself,
+plus such following pages as are needed to hold, legibly, the material
+this License requires to appear in the title page.  For works in
+formats which do not have any title page as such, &ldquo;Title Page&rdquo; means
+the text near the most prominent appearance of the work's title,
+preceding the beginning of the body of the text.
+
+     <p>The &ldquo;publisher&rdquo; means any person or entity that distributes copies
+of the Document to the public.
+
+     <p>A section &ldquo;Entitled XYZ&rdquo; means a named subunit of the Document whose
+title either is precisely XYZ or contains XYZ in parentheses following
+text that translates XYZ in another language.  (Here XYZ stands for a
+specific section name mentioned below, such as &ldquo;Acknowledgements&rdquo;,
+&ldquo;Dedications&rdquo;, &ldquo;Endorsements&rdquo;, or &ldquo;History&rdquo;.)  To &ldquo;Preserve the Title&rdquo;
+of such a section when you modify the Document means that it remains a
+section &ldquo;Entitled XYZ&rdquo; according to this definition.
+
+     <p>The Document may include Warranty Disclaimers next to the notice which
+states that this License applies to the Document.  These Warranty
+Disclaimers are considered to be included by reference in this
+License, but only as regards disclaiming warranties: any other
+implication that these Warranty Disclaimers may have is void and has
+no effect on the meaning of this License.
+
+     <li>VERBATIM COPYING
+
+     <p>You may copy and distribute the Document in any medium, either
+commercially or noncommercially, provided that this License, the
+copyright notices, and the license notice saying this License applies
+to the Document are reproduced in all copies, and that you add no other
+conditions whatsoever to those of this License.  You may not use
+technical measures to obstruct or control the reading or further
+copying of the copies you make or distribute.  However, you may accept
+compensation in exchange for copies.  If you distribute a large enough
+number of copies you must also follow the conditions in section 3.
+
+     <p>You may also lend copies, under the same conditions stated above, and
+you may publicly display copies.
+
+     <li>COPYING IN QUANTITY
+
+     <p>If you publish printed copies (or copies in media that commonly have
+printed covers) of the Document, numbering more than 100, and the
+Document's license notice requires Cover Texts, you must enclose the
+copies in covers that carry, clearly and legibly, all these Cover
+Texts: Front-Cover Texts on the front cover, and Back-Cover Texts on
+the back cover.  Both covers must also clearly and legibly identify
+you as the publisher of these copies.  The front cover must present
+the full title with all words of the title equally prominent and
+visible.  You may add other material on the covers in addition. 
+Copying with changes limited to the covers, as long as they preserve
+the title of the Document and satisfy these conditions, can be treated
+as verbatim copying in other respects.
+
+     <p>If the required texts for either cover are too voluminous to fit
+legibly, you should put the first ones listed (as many as fit
+reasonably) on the actual cover, and continue the rest onto adjacent
+pages.
+
+     <p>If you publish or distribute Opaque copies of the Document numbering
+more than 100, you must either include a machine-readable Transparent
+copy along with each Opaque copy, or state in or with each Opaque copy
+a computer-network location from which the general network-using
+public has access to download using public-standard network protocols
+a complete Transparent copy of the Document, free of added material. 
+If you use the latter option, you must take reasonably prudent steps,
+when you begin distribution of Opaque copies in quantity, to ensure
+that this Transparent copy will remain thus accessible at the stated
+location until at least one year after the last time you distribute an
+Opaque copy (directly or through your agents or retailers) of that
+edition to the public.
+
+     <p>It is requested, but not required, that you contact the authors of the
+Document well before redistributing any large number of copies, to give
+them a chance to provide you with an updated version of the Document.
+
+     <li>MODIFICATIONS
+
+     <p>You may copy and distribute a Modified Version of the Document under
+the conditions of sections 2 and 3 above, provided that you release
+the Modified Version under precisely this License, with the Modified
+Version filling the role of the Document, thus licensing distribution
+and modification of the Modified Version to whoever possesses a copy
+of it.  In addition, you must do these things in the Modified Version:
+
+          <ol type=A start=1>
+<li>Use in the Title Page (and on the covers, if any) a title distinct
+from that of the Document, and from those of previous versions
+(which should, if there were any, be listed in the History section
+of the Document).  You may use the same title as a previous version
+if the original publisher of that version gives permission.
+
+          <li>List on the Title Page, as authors, one or more persons or entities
+responsible for authorship of the modifications in the Modified
+Version, together with at least five of the principal authors of the
+Document (all of its principal authors, if it has fewer than five),
+unless they release you from this requirement.
+
+          <li>State on the Title page the name of the publisher of the
+Modified Version, as the publisher.
+
+          <li>Preserve all the copyright notices of the Document.
+
+          <li>Add an appropriate copyright notice for your modifications
+adjacent to the other copyright notices.
+
+          <li>Include, immediately after the copyright notices, a license notice
+giving the public permission to use the Modified Version under the
+terms of this License, in the form shown in the Addendum below.
+
+          <li>Preserve in that license notice the full lists of Invariant Sections
+and required Cover Texts given in the Document's license notice.
+
+          <li>Include an unaltered copy of this License.
+
+          <li>Preserve the section Entitled &ldquo;History&rdquo;, Preserve its Title, and add
+to it an item stating at least the title, year, new authors, and
+publisher of the Modified Version as given on the Title Page.  If
+there is no section Entitled &ldquo;History&rdquo; in the Document, create one
+stating the title, year, authors, and publisher of the Document as
+given on its Title Page, then add an item describing the Modified
+Version as stated in the previous sentence.
+
+          <li>Preserve the network location, if any, given in the Document for
+public access to a Transparent copy of the Document, and likewise
+the network locations given in the Document for previous versions
+it was based on.  These may be placed in the &ldquo;History&rdquo; section. 
+You may omit a network location for a work that was published at
+least four years before the Document itself, or if the original
+publisher of the version it refers to gives permission.
+
+          <li>For any section Entitled &ldquo;Acknowledgements&rdquo; or &ldquo;Dedications&rdquo;, Preserve
+the Title of the section, and preserve in the section all the
+substance and tone of each of the contributor acknowledgements and/or
+dedications given therein.
+
+          <li>Preserve all the Invariant Sections of the Document,
+unaltered in their text and in their titles.  Section numbers
+or the equivalent are not considered part of the section titles.
+
+          <li>Delete any section Entitled &ldquo;Endorsements&rdquo;.  Such a section
+may not be included in the Modified Version.
+
+          <li>Do not retitle any existing section to be Entitled &ldquo;Endorsements&rdquo; or
+to conflict in title with any Invariant Section.
+
+          <li>Preserve any Warranty Disclaimers.
+          </ol>
+
+     <p>If the Modified Version includes new front-matter sections or
+appendices that qualify as Secondary Sections and contain no material
+copied from the Document, you may at your option designate some or all
+of these sections as invariant.  To do this, add their titles to the
+list of Invariant Sections in the Modified Version's license notice. 
+These titles must be distinct from any other section titles.
+
+     <p>You may add a section Entitled &ldquo;Endorsements&rdquo;, provided it contains
+nothing but endorsements of your Modified Version by various
+parties&mdash;for example, statements of peer review or that the text has
+been approved by an organization as the authoritative definition of a
+standard.
+
+     <p>You may add a passage of up to five words as a Front-Cover Text, and a
+passage of up to 25 words as a Back-Cover Text, to the end of the list
+of Cover Texts in the Modified Version.  Only one passage of
+Front-Cover Text and one of Back-Cover Text may be added by (or
+through arrangements made by) any one entity.  If the Document already
+includes a cover text for the same cover, previously added by you or
+by arrangement made by the same entity you are acting on behalf of,
+you may not add another; but you may replace the old one, on explicit
+permission from the previous publisher that added the old one.
+
+     <p>The author(s) and publisher(s) of the Document do not by this License
+give permission to use their names for publicity for or to assert or
+imply endorsement of any Modified Version.
+
+     <li>COMBINING DOCUMENTS
+
+     <p>You may combine the Document with other documents released under this
+License, under the terms defined in section 4 above for modified
+versions, provided that you include in the combination all of the
+Invariant Sections of all of the original documents, unmodified, and
+list them all as Invariant Sections of your combined work in its
+license notice, and that you preserve all their Warranty Disclaimers.
+
+     <p>The combined work need only contain one copy of this License, and
+multiple identical Invariant Sections may be replaced with a single
+copy.  If there are multiple Invariant Sections with the same name but
+different contents, make the title of each such section unique by
+adding at the end of it, in parentheses, the name of the original
+author or publisher of that section if known, or else a unique number. 
+Make the same adjustment to the section titles in the list of
+Invariant Sections in the license notice of the combined work.
+
+     <p>In the combination, you must combine any sections Entitled &ldquo;History&rdquo;
+in the various original documents, forming one section Entitled
+&ldquo;History&rdquo;; likewise combine any sections Entitled &ldquo;Acknowledgements&rdquo;,
+and any sections Entitled &ldquo;Dedications&rdquo;.  You must delete all
+sections Entitled &ldquo;Endorsements.&rdquo;
+
+     <li>COLLECTIONS OF DOCUMENTS
+
+     <p>You may make a collection consisting of the Document and other documents
+released under this License, and replace the individual copies of this
+License in the various documents with a single copy that is included in
+the collection, provided that you follow the rules of this License for
+verbatim copying of each of the documents in all other respects.
+
+     <p>You may extract a single document from such a collection, and distribute
+it individually under this License, provided you insert a copy of this
+License into the extracted document, and follow this License in all
+other respects regarding verbatim copying of that document.
+
+     <li>AGGREGATION WITH INDEPENDENT WORKS
+
+     <p>A compilation of the Document or its derivatives with other separate
+and independent documents or works, in or on a volume of a storage or
+distribution medium, is called an &ldquo;aggregate&rdquo; if the copyright
+resulting from the compilation is not used to limit the legal rights
+of the compilation's users beyond what the individual works permit. 
+When the Document is included in an aggregate, this License does not
+apply to the other works in the aggregate which are not themselves
+derivative works of the Document.
+
+     <p>If the Cover Text requirement of section 3 is applicable to these
+copies of the Document, then if the Document is less than one half of
+the entire aggregate, the Document's Cover Texts may be placed on
+covers that bracket the Document within the aggregate, or the
+electronic equivalent of covers if the Document is in electronic form. 
+Otherwise they must appear on printed covers that bracket the whole
+aggregate.
+
+     <li>TRANSLATION
+
+     <p>Translation is considered a kind of modification, so you may
+distribute translations of the Document under the terms of section 4. 
+Replacing Invariant Sections with translations requires special
+permission from their copyright holders, but you may include
+translations of some or all Invariant Sections in addition to the
+original versions of these Invariant Sections.  You may include a
+translation of this License, and all the license notices in the
+Document, and any Warranty Disclaimers, provided that you also include
+the original English version of this License and the original versions
+of those notices and disclaimers.  In case of a disagreement between
+the translation and the original version of this License or a notice
+or disclaimer, the original version will prevail.
+
+     <p>If a section in the Document is Entitled &ldquo;Acknowledgements&rdquo;,
+&ldquo;Dedications&rdquo;, or &ldquo;History&rdquo;, the requirement (section 4) to Preserve
+its Title (section 1) will typically require changing the actual
+title.
+
+     <li>TERMINATION
+
+     <p>You may not copy, modify, sublicense, or distribute the Document
+except as expressly provided under this License.  Any attempt
+otherwise to copy, modify, sublicense, or distribute it is void, and
+will automatically terminate your rights under this License.
+
+     <p>However, if you cease all violation of this License, then your license
+from a particular copyright holder is reinstated (a) provisionally,
+unless and until the copyright holder explicitly and finally
+terminates your license, and (b) permanently, if the copyright holder
+fails to notify you of the violation by some reasonable means prior to
+60 days after the cessation.
+
+     <p>Moreover, your license from a particular copyright holder is
+reinstated permanently if the copyright holder notifies you of the
+violation by some reasonable means, this is the first time you have
+received notice of violation of this License (for any work) from that
+copyright holder, and you cure the violation prior to 30 days after
+your receipt of the notice.
+
+     <p>Termination of your rights under this section does not terminate the
+licenses of parties who have received copies or rights from you under
+this License.  If your rights have been terminated and not permanently
+reinstated, receipt of a copy of some or all of the same material does
+not give you any rights to use it.
+
+     <li>FUTURE REVISIONS OF THIS LICENSE
+
+     <p>The Free Software Foundation may publish new, revised versions
+of the GNU Free Documentation License from time to time.  Such new
+versions will be similar in spirit to the present version, but may
+differ in detail to address new problems or concerns.  See
+<a href="http://www.gnu.org/copyleft/">http://www.gnu.org/copyleft/</a>.
+
+     <p>Each version of the License is given a distinguishing version number. 
+If the Document specifies that a particular numbered version of this
+License &ldquo;or any later version&rdquo; applies to it, you have the option of
+following the terms and conditions either of that specified version or
+of any later version that has been published (not as a draft) by the
+Free Software Foundation.  If the Document does not specify a version
+number of this License, you may choose any version ever published (not
+as a draft) by the Free Software Foundation.  If the Document
+specifies that a proxy can decide which future versions of this
+License can be used, that proxy's public statement of acceptance of a
+version permanently authorizes you to choose that version for the
+Document.
+
+     <li>RELICENSING
+
+     <p>&ldquo;Massive Multiauthor Collaboration Site&rdquo; (or &ldquo;MMC Site&rdquo;) means any
+World Wide Web server that publishes copyrightable works and also
+provides prominent facilities for anybody to edit those works.  A
+public wiki that anybody can edit is an example of such a server.  A
+&ldquo;Massive Multiauthor Collaboration&rdquo; (or &ldquo;MMC&rdquo;) contained in the
+site means any set of copyrightable works thus published on the MMC
+site.
+
+     <p>&ldquo;CC-BY-SA&rdquo; means the Creative Commons Attribution-Share Alike 3.0
+license published by Creative Commons Corporation, a not-for-profit
+corporation with a principal place of business in San Francisco,
+California, as well as future copyleft versions of that license
+published by that same organization.
+
+     <p>&ldquo;Incorporate&rdquo; means to publish or republish a Document, in whole or
+in part, as part of another Document.
+
+     <p>An MMC is &ldquo;eligible for relicensing&rdquo; if it is licensed under this
+License, and if all works that were first published under this License
+somewhere other than this MMC, and subsequently incorporated in whole
+or in part into the MMC, (1) had no cover texts or invariant sections,
+and (2) were thus incorporated prior to November 1, 2008.
+
+     <p>The operator of an MMC Site may republish an MMC contained in the site
+under CC-BY-SA on the same site at any time before August 1, 2009,
+provided the MMC is eligible for relicensing.
+
+        </ol>
+
+<h3 class="heading">ADDENDUM: How to use this License for your documents</h3>
+
+<p>To use this License in a document you have written, include a copy of
+the License in the document and put the following copyright and
+license notices just after the title page:
+
+<pre class="smallexample">       Copyright (C)  <var>year</var>  <var>your name</var>.
+       Permission is granted to copy, distribute and/or modify this document
+       under the terms of the GNU Free Documentation License, Version 1.3
+       or any later version published by the Free Software Foundation;
+       with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+       Texts.  A copy of the license is included in the section entitled ``GNU
+       Free Documentation License''.
+</pre>
+   <p>If you have Invariant Sections, Front-Cover Texts and Back-Cover Texts,
+replace the &ldquo;with<small class="dots">...</small>Texts.&rdquo; line with this:
+
+<pre class="smallexample">         with the Invariant Sections being <var>list their titles</var>, with
+         the Front-Cover Texts being <var>list</var>, and with the Back-Cover Texts
+         being <var>list</var>.
+</pre>
+   <p>If you have Invariant Sections without Cover Texts, or some other
+combination of the three, merge those two alternatives to suit the
+situation.
+
+   <p>If your document contains nontrivial examples of program code, we
+recommend releasing these examples in parallel under your choice of
+free software license, such as the GNU General Public License,
+to permit their use in free software.
+
+<!-- Local Variables: -->
+<!-- ispell-local-pdict: "ispell-dict" -->
+<!-- End: -->
+<div class="node">
+<a name="Function-Index"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="unnumbered">Function Index</h2>
+
+<ul class="index-fn" compact>
+<li><a href="#index-call_002dnext_002dmethod-18"><code>call-next-method</code></a>: <a href="#Methods">Methods</a></li>
+<li><a href="#index-child_002dof_002dclass_002dp-37"><code>child-of-class-p</code></a>: <a href="#Predicates">Predicates</a></li>
+<li><a href="#index-CLASS_002dNAME_002dp-2"><code>CLASS-NAME-p</code></a>: <a href="#Building-Classes">Building Classes</a></li>
+<li><a href="#index-class_002doption-25"><code>class-option</code></a>: <a href="#Predicates">Predicates</a></li>
+<li><a href="#index-class_002dp-21"><code>class-p</code></a>: <a href="#Predicates">Predicates</a></li>
+<li><a href="#index-class_002dslot_002dinitarg-45"><code>class-slot-initarg</code></a>: <a href="#Introspection">Introspection</a></li>
+<li><a href="#index-clone-73"><code>clone</code></a>: <a href="#Basic-Methods">Basic Methods</a></li>
+<li><a href="#index-defclass-1"><code>defclass</code></a>: <a href="#Building-Classes">Building Classes</a></li>
+<li><a href="#index-defgeneric-16"><code>defgeneric</code></a>: <a href="#Generics">Generics</a></li>
+<li><a href="#index-defmethod-17"><code>defmethod</code></a>: <a href="#Methods">Methods</a></li>
+<li><a href="#index-delete_002dinstance-on-eieio_002dinstance_002dtracker-51"><code>delete-instance on eieio-instance-tracker</code></a>: <a href="#eieio_002dinstance_002dtracker">eieio-instance-tracker</a></li>
+<li><a href="#index-eieio_002dbuild_002dclass_002dalist-41"><code>eieio-build-class-alist</code></a>: <a href="#Association-Lists">Association Lists</a></li>
+<li><a href="#index-eieio_002dclass_002dchildren-32"><code>eieio-class-children</code></a>: <a href="#Predicates">Predicates</a></li>
+<li><a href="#index-eieio_002dclass_002dchildren_002dfast-33"><code>eieio-class-children-fast</code></a>: <a href="#Predicates">Predicates</a></li>
+<li><a href="#index-eieio_002dclass_002dname-24"><code>eieio-class-name</code></a>: <a href="#Predicates">Predicates</a></li>
+<li><a href="#index-eieio_002dclass_002dparent-31"><code>eieio-class-parent</code></a>: <a href="#Predicates">Predicates</a></li>
+<li><a href="#index-eieio_002dclass_002dparents-29"><code>eieio-class-parents</code></a>: <a href="#Predicates">Predicates</a></li>
+<li><a href="#index-eieio_002dclass_002dparents_002dfast-30"><code>eieio-class-parents-fast</code></a>: <a href="#Predicates">Predicates</a></li>
+<li><a href="#index-eieio_002dcustom_002dwidget_002dinsert-43"><code>eieio-custom-widget-insert</code></a>: <a href="#Customizing">Customizing</a></li>
+<li><a href="#index-eieio_002dcustomize_002dobject-42"><code>eieio-customize-object</code></a>: <a href="#Customizing">Customizing</a></li>
+<li><a href="#index-eieio_002dobject_002dclass-27"><code>eieio-object-class</code></a>: <a href="#Predicates">Predicates</a></li>
+<li><a href="#index-eieio_002dobject_002dclass_002dname-28"><code>eieio-object-class-name</code></a>: <a href="#Predicates">Predicates</a></li>
+<li><a href="#index-eieio_002dobject_002dname-26"><code>eieio-object-name</code></a>: <a href="#Predicates">Predicates</a></li>
+<li><a href="#index-eieio_002dpersistent_002dpath_002drelative-on-eieio_002dpersistent-56"><code>eieio-persistent-path-relative on eieio-persistent</code></a>: <a href="#eieio_002dpersistent">eieio-persistent</a></li>
+<li><a href="#index-eieio_002dpersistent_002dread-58"><code>eieio-persistent-read</code></a>: <a href="#eieio_002dpersistent">eieio-persistent</a></li>
+<li><a href="#index-eieio_002dpersistent_002dsave-on-eieio_002dpersistent-55"><code>eieio-persistent-save on eieio-persistent</code></a>: <a href="#eieio_002dpersistent">eieio-persistent</a></li>
+<li><a href="#index-eieio_002dspeedbar_002dchild_002ddescription-on-eieio_002dspeedbar-66"><code>eieio-speedbar-child-description on eieio-speedbar</code></a>: <a href="#eieio_002dspeedbar">eieio-speedbar</a></li>
+<li><a href="#index-eieio_002dspeedbar_002dchild_002dmake_002dtag_002dlines-on-eieio_002dspeedbar-69"><code>eieio-speedbar-child-make-tag-lines on eieio-speedbar</code></a>: <a href="#eieio_002dspeedbar">eieio-speedbar</a></li>
+<li><a href="#index-eieio_002dspeedbar_002dderive_002dline_002dpath-on-eieio_002dspeedbar-64"><code>eieio-speedbar-derive-line-path on eieio-speedbar</code></a>: <a href="#eieio_002dspeedbar">eieio-speedbar</a></li>
+<li><a href="#index-eieio_002dspeedbar_002ddescription-on-eieio_002dspeedbar-65"><code>eieio-speedbar-description on eieio-speedbar</code></a>: <a href="#eieio_002dspeedbar">eieio-speedbar</a></li>
+<li><a href="#index-eieio_002dspeedbar_002dobject_002dbuttonname-on-eieio_002dspeedbar-67"><code>eieio-speedbar-object-buttonname on eieio-speedbar</code></a>: <a href="#eieio_002dspeedbar">eieio-speedbar</a></li>
+<li><a href="#index-eieio_002dspeedbar_002dobject_002dchildren-on-eieio_002dspeedbar-68"><code>eieio-speedbar-object-children on eieio-speedbar</code></a>: <a href="#eieio_002dspeedbar">eieio-speedbar</a></li>
+<li><a href="#index-find_002dclass-20"><code>find-class</code></a>: <a href="#Predicates">Predicates</a></li>
+<li><a href="#index-generic_002dp-38"><code>generic-p</code></a>: <a href="#Predicates">Predicates</a></li>
+<li><a href="#index-initialize_002dinstance-71"><code>initialize-instance</code></a>: <a href="#Initialization">Initialization</a></li>
+<li><a href="#index-initialize_002dinstance-on-eieio_002dinstance_002dtracker-50"><code>initialize-instance on eieio-instance-tracker</code></a>: <a href="#eieio_002dinstance_002dtracker">eieio-instance-tracker</a></li>
+<li><a href="#index-invalid_002dslot_002dname-80"><code>invalid-slot-name</code></a>: <a href="#Signals">Signals</a></li>
+<li><a href="#index-invalid_002dslot_002dtype-83"><code>invalid-slot-type</code></a>: <a href="#Signals">Signals</a></li>
+<li><a href="#index-key-52"><code>key</code></a>: <a href="#eieio_002dinstance_002dtracker">eieio-instance-tracker</a></li>
+<li><a href="#index-make_002dinstance-5"><code>make-instance</code></a>: <a href="#Making-New-Objects">Making New Objects</a></li>
+<li><a href="#index-make_002dmap-70"><code>make-map</code></a>: <a href="#eieio_002dspeedbar">eieio-speedbar</a></li>
+<li><a href="#index-next_002dmethod_002dp-19"><code>next-method-p</code></a>: <a href="#Methods">Methods</a></li>
+<li><a href="#index-no_002dapplicable_002dmethod-78"><code>no-applicable-method</code></a>: <a href="#Signal-Handling">Signal Handling</a></li>
+<li><a href="#index-no_002dmethod_002ddefinition-81"><code>no-method-definition</code></a>: <a href="#Signals">Signals</a></li>
+<li><a href="#index-no_002dnext_002dmethod-79"><code>no-next-method</code></a>: <a href="#Signal-Handling">Signal Handling</a></li>
+<li><a href="#index-no_002dnext_002dmethod-82"><code>no-next-method</code></a>: <a href="#Signals">Signals</a></li>
+<li><a href="#index-object_002dadd_002dto_002dlist-13"><code>object-add-to-list</code></a>: <a href="#Accessing-Slots">Accessing Slots</a></li>
+<li><a href="#index-object_002dassoc-39"><code>object-assoc</code></a>: <a href="#Association-Lists">Association Lists</a></li>
+<li><a href="#index-object_002dassoc_002dlist-40"><code>object-assoc-list</code></a>: <a href="#Association-Lists">Association Lists</a></li>
+<li><a href="#index-object_002dof_002dclass_002dp-36"><code>object-of-class-p</code></a>: <a href="#Predicates">Predicates</a></li>
+<li><a href="#index-object_002dprint-74"><code>object-print</code></a>: <a href="#Basic-Methods">Basic Methods</a></li>
+<li><a href="#index-object_002dremove_002dfrom_002dlist-14"><code>object-remove-from-list</code></a>: <a href="#Accessing-Slots">Accessing Slots</a></li>
+<li><a href="#index-object_002dslots-44"><code>object-slots</code></a>: <a href="#Introspection">Introspection</a></li>
+<li><a href="#index-object_002dwrite-75"><code>object-write</code></a>: <a href="#Basic-Methods">Basic Methods</a></li>
+<li><a href="#index-object_002dwrite-on-eieio_002dpersistent-57"><code>object-write on eieio-persistent</code></a>: <a href="#eieio_002dpersistent">eieio-persistent</a></li>
+<li><a href="#index-oref-8"><code>oref</code></a>: <a href="#Accessing-Slots">Accessing Slots</a></li>
+<li><a href="#index-oref_002ddefault-9"><code>oref-default</code></a>: <a href="#Accessing-Slots">Accessing Slots</a></li>
+<li><a href="#index-oset-6"><code>oset</code></a>: <a href="#Accessing-Slots">Accessing Slots</a></li>
+<li><a href="#index-oset_002ddefault-7"><code>oset-default</code></a>: <a href="#Accessing-Slots">Accessing Slots</a></li>
+<li><a href="#index-record-4"><code>record</code></a>: <a href="#Making-New-Objects">Making New Objects</a></li>
+<li><a href="#index-same_002dclass_002dfast_002dp-35"><code>same-class-fast-p</code></a>: <a href="#Predicates">Predicates</a></li>
+<li><a href="#index-same_002dclass_002dp-34"><code>same-class-p</code></a>: <a href="#Predicates">Predicates</a></li>
+<li><a href="#index-set_002dslot_002dvalue-11"><code>set-slot-value</code></a>: <a href="#Accessing-Slots">Accessing Slots</a></li>
+<li><a href="#index-shared_002dinitialize-72"><code>shared-initialize</code></a>: <a href="#Initialization">Initialization</a></li>
+<li><a href="#index-slot_002dboundp-23"><code>slot-boundp</code></a>: <a href="#Predicates">Predicates</a></li>
+<li><a href="#index-slot_002dexists_002dp-22"><code>slot-exists-p</code></a>: <a href="#Predicates">Predicates</a></li>
+<li><a href="#index-slot_002dmakeunbound-12"><code>slot-makeunbound</code></a>: <a href="#Accessing-Slots">Accessing Slots</a></li>
+<li><a href="#index-slot_002dmissing-76"><code>slot-missing</code></a>: <a href="#Signal-Handling">Signal Handling</a></li>
+<li><a href="#index-slot_002dunbound-77"><code>slot-unbound</code></a>: <a href="#Signal-Handling">Signal Handling</a></li>
+<li><a href="#index-slot_002dvalue-10"><code>slot-value</code></a>: <a href="#Accessing-Slots">Accessing Slots</a></li>
+<li><a href="#index-unbound_002dslot-84"><code>unbound-slot</code></a>: <a href="#Signals">Signals</a></li>
+<li><a href="#index-with_002dslots-15"><code>with-slots</code></a>: <a href="#Accessing-Slots">Accessing Slots</a></li>
+</ul>
+<div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Top" href="#Top">EIEIO</a>
+<li><a name="toc_Quick-Start" href="#Quick-Start">1 Quick Start</a>
+<li><a name="toc_Introduction" href="#Introduction">2 Introduction</a>
+<li><a name="toc_Building-Classes" href="#Building-Classes">3 Building Classes</a>
+<ul>
+<li><a href="#Inheritance">3.1 Inheritance</a>
+<li><a href="#Slot-Options">3.2 Slot Options</a>
+<li><a href="#Class-Options">3.3 Class Options</a>
+</li></ul>
+<li><a name="toc_Making-New-Objects" href="#Making-New-Objects">4 Making New Objects</a>
+<li><a name="toc_Accessing-Slots" href="#Accessing-Slots">5 Accessing Slots</a>
+<li><a name="toc_Writing-Methods" href="#Writing-Methods">6 Writing Methods</a>
+<ul>
+<li><a href="#Generics">6.1 Generics</a>
+<li><a href="#Methods">6.2 Methods</a>
+<li><a href="#Static-Methods">6.3 Static Methods</a>
+</li></ul>
+<li><a name="toc_Method-Invocation" href="#Method-Invocation">7 Method Invocation</a>
+<li><a name="toc_Predicates" href="#Predicates">8 Predicates and Utilities</a>
+<li><a name="toc_Association-Lists" href="#Association-Lists">9 Association Lists</a>
+<li><a name="toc_Customizing" href="#Customizing">10 Customizing Objects</a>
+<ul>
+<li><a href="#Customizing">10.1 Widget extension</a>
+</li></ul>
+<li><a name="toc_Introspection" href="#Introspection">11 Introspection</a>
+<li><a name="toc_Base-Classes" href="#Base-Classes">12 Base Classes</a>
+<ul>
+<li><a href="#eieio_002dinstance_002dinheritor">12.1 <code>eieio-instance-inheritor</code></a>
+<li><a href="#eieio_002dinstance_002dtracker">12.2 <code>eieio-instance-tracker</code></a>
+<li><a href="#eieio_002dsingleton">12.3 <code>eieio-singleton</code></a>
+<li><a href="#eieio_002dpersistent">12.4 <code>eieio-persistent</code></a>
+<li><a href="#eieio_002dnamed">12.5 <code>eieio-named</code></a>
+<li><a href="#eieio_002dspeedbar">12.6 <code>eieio-speedbar</code></a>
+</li></ul>
+<li><a name="toc_Browsing" href="#Browsing">13 Browsing class trees</a>
+<li><a name="toc_Class-Values" href="#Class-Values">14 Class Values</a>
+<li><a name="toc_Default-Superclass" href="#Default-Superclass">15 Default Superclass</a>
+<ul>
+<li><a href="#Initialization">15.1 Initialization</a>
+<li><a href="#Basic-Methods">15.2 Basic Methods</a>
+<li><a href="#Signal-Handling">15.3 Signal Handling</a>
+</li></ul>
+<li><a name="toc_Signals" href="#Signals">16 Signals</a>
+<li><a name="toc_Naming-Conventions" href="#Naming-Conventions">17 Naming Conventions</a>
+<li><a name="toc_CLOS-compatibility" href="#CLOS-compatibility">18 CLOS compatibility</a>
+<li><a name="toc_Wish-List" href="#Wish-List">19 Wish List</a>
+<li><a name="toc_GNU-Free-Documentation-License" href="#GNU-Free-Documentation-License">Appendix A GNU Free Documentation License</a>
+<li><a name="toc_Function-Index" href="#Function-Index">Function Index</a>
+</li></ul>
+</div>
+
+</body></html>
+
+<!--
+
+Local Variables:
+coding: utf-8
+End:
+
+-->

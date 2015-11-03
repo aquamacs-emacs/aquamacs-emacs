@@ -1,0 +1,134 @@
+<html lang="en">
+<head>
+<title>Preserving Window Sizes - GNU Emacs Lisp Reference Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="GNU Emacs Lisp Reference Manual">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Windows.html#Windows" title="Windows">
+<link rel="prev" href="Resizing-Windows.html#Resizing-Windows" title="Resizing Windows">
+<link rel="next" href="Splitting-Windows.html#Splitting-Windows" title="Splitting Windows">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 25.0.50.
+
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<div class="node">
+<a name="Preserving-Window-Sizes"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Splitting-Windows.html#Splitting-Windows">Splitting Windows</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Resizing-Windows.html#Resizing-Windows">Resizing Windows</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
+<hr>
+</div>
+
+<h3 class="section">27.5 Preserving Window Sizes</h3>
+
+<p><a name="index-preserving-window-sizes-2481"></a>
+A window can get resized explicitly by using one of the functions from
+the preceding section or implicitly, for example, when resizing an
+adjacent window, when splitting or deleting a window (see <a href="Splitting-Windows.html#Splitting-Windows">Splitting Windows</a>, see <a href="Deleting-Windows.html#Deleting-Windows">Deleting Windows</a>) or when resizing the window's frame
+(see <a href="Size-and-Position.html#Size-and-Position">Size and Position</a>).
+
+   <p>It is possible to avoid implicit resizing of a specific window when
+there are one or more other resizable windows on the same frame.  For
+this purpose, Emacs must be advised to <dfn>preserve</dfn> the size of that
+window.  There are two basic ways to do that.
+
+<div class="defun">
+&mdash; Variable: <b>window-size-fixed</b><var><a name="index-window_002dsize_002dfixed-2482"></a></var><br>
+<blockquote><p>If this buffer-local variable is non-<code>nil</code>, the size of any window
+displaying the buffer cannot normally be changed.  Deleting a window or
+changing the frame's size may still change the window's size, if there
+is no choice.
+
+        <p>If the value is <code>height</code>, then only the window's height is fixed;
+if the value is <code>width</code>, then only the window's width is fixed. 
+Any other non-<code>nil</code> value fixes both the width and the height.
+
+        <p>If this variable is <code>nil</code>, this does not necessarily mean that any
+window showing the buffer can be resized in the desired direction.  To
+determine that, use the function <code>window-resizable</code>. 
+See <a href="Resizing-Windows.html#Resizing-Windows">Resizing Windows</a>. 
+</p></blockquote></div>
+
+   <p>Often <code>window-size-fixed</code> is overly aggressive because it inhibits
+any attempt to explicitly resize or split an affected window as well. 
+This may even happen after the window has been resized implicitly, for
+example, when deleting an adjacent window or resizing the window's
+frame.  The following function tries hard to never disallow resizing
+such a window explicitly:
+
+<div class="defun">
+&mdash; Function: <b>window-preserve-size</b><var> &amp;optional window horizontal preserve<a name="index-window_002dpreserve_002dsize-2483"></a></var><br>
+<blockquote><p>This function (un-)marks the height of window <var>window</var> as preserved
+for future resize operations.  <var>window</var> must be a live window and
+defaults to the selected one.  If the optional argument <var>horizontal</var>
+is non-<code>nil</code>, it (un-)marks the width of <var>window</var> as preserved.
+
+        <p>If the optional argument <var>preserve</var> is <code>t</code>, this means to
+preserve the current height/width of <var>window</var>'s body.  The
+height/width of <var>window</var> will change only if Emacs has no better
+choice.  Resizing a window whose height/width is preserved by this
+function never throws an error.
+
+        <p>If <var>preserve</var> is <code>nil</code>, this means to stop preserving the
+height/width of <var>window</var>, lifting any respective restraint induced
+by a previous call of this function for <var>window</var>.  Calling
+<code>enlarge-window</code>, <code>shrink-window</code> or
+<code>fit-window-to-buffer</code> with <var>window</var> as argument may also
+remove the respective restraint. 
+</p></blockquote></div>
+
+   <p><code>window-preserve-size</code> is currently invoked by the following
+functions:
+
+     <dl>
+<dt><code>fit-window-to-buffer</code><dd>If the optional argument <var>preserve-size</var> of that function
+(see <a href="Resizing-Windows.html#Resizing-Windows">Resizing Windows</a>) is non-<code>nil</code>, the size established by
+that function is preserved.
+
+     <br><dt><code>display-buffer</code><dd>If the <var>alist</var> argument of that function (see <a href="Choosing-Window.html#Choosing-Window">Choosing Window</a>)
+contains a <code>preserve-size</code> entry, the size of the window produced
+by that function is preserved. 
+</dl>
+
+   <p><code>window-preserve-size</code> installs a window parameter (see <a href="Window-Parameters.html#Window-Parameters">Window Parameters</a>) called <code>preserved-size</code> which is consulted by the
+window resizing functions.  This parameter will not prevent resizing the
+window when the window shows another buffer than the one when
+<code>window-preserve-size</code> was invoked or if its size has changed since
+then.
+
+   <p>The following function can be used to check whether the height of a
+particular window is preserved:
+
+<div class="defun">
+&mdash; Function: <b>window-preserved-size</b><var> &amp;optional window horizontal<a name="index-window_002dpreserved_002dsize-2484"></a></var><br>
+<blockquote><p>This function returns the preserved height of window <var>window</var> in
+pixels.  <var>window</var> must be a live window and defaults to the selected
+one.  If the optional argument <var>horizontal</var> is non-<code>nil</code>, it
+returns the preserved width of <var>window</var>.  It returns <code>nil</code> if
+the size of <var>window</var> is not preserved. 
+</p></blockquote></div>
+
+   </body></html>
+

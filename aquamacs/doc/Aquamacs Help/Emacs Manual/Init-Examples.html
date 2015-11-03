@@ -11,16 +11,16 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Manual',
-updated for Emacs version 24.3.50.
+updated for Emacs version 25.0.50.
 
-Copyright (C) 1985--1987, 1993--2013 Free Software Foundation, Inc.
+Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``The GNU
      Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover texts being ``A GNU Manual,'' and with the
+     with the Front-Cover Texts being ``A GNU Manual,'' and with the
      Back-Cover Texts as in (a) below.  A copy of the license is
      included in the section entitled ``GNU Free Documentation
      License.''
@@ -42,7 +42,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Init-File.html#Init-File">Init File</a>
 <hr>
 </div>
 
-<h4 class="subsection">48.4.2 Init File Examples</h4>
+<h4 class="subsection">49.4.2 Init File Examples</h4>
 
 <p>Here are some examples of doing certain commonly desired things with
 Lisp expressions:
@@ -59,8 +59,8 @@ line.
 
      <pre class="example">          (setq c-tab-always-indent nil)
 </pre>
-     <p>Here we have a variable whose value is normally <code>t</code> for `true'
-and the alternative is <code>nil</code> for `false'.
+     <p>Here we have a variable whose value is normally <code>t</code> for &ldquo;true&rdquo;
+and the alternative is <code>nil</code> for &ldquo;false&rdquo;.
 
      <li>Make searches case sensitive by default (in all buffers that do not
 override this).
@@ -73,7 +73,7 @@ not have local values for the variable (see <a href="Locals.html#Locals">Locals<
 buffer's local value, which is probably not what you want to do in an
 init file.
 
-     <li><a name="index-user_002dmail_002daddress-4462"></a>Specify your own email address, if Emacs can't figure it out correctly.
+     <li><a name="index-user_002dmail_002daddress-4620"></a>Specify your own email address, if Emacs can't figure it out correctly.
 
      <pre class="example">          (setq user-mail-address "cheney@torture.gov")
 </pre>
@@ -119,7 +119,7 @@ with &lsquo;<samp><span class="samp">/</span></samp>&rsquo; or &lsquo;<samp><spa
 </pre>
      <p>Here a full file name is used, so no searching is done.
 
-     <li><a name="index-loading-Lisp-libraries-automatically-4463"></a><a name="index-autoload-Lisp-libraries-4464"></a>Tell Emacs to find the definition for the function <code>myfunction</code>
+     <li><a name="index-loading-Lisp-libraries-automatically-4621"></a><a name="index-autoload-Lisp-libraries-4622"></a>Tell Emacs to find the definition for the function <code>myfunction</code>
 by loading a Lisp library named <samp><span class="file">mypackage</span></samp> (i.e., a file
 <samp><span class="file">mypackage.elc</span></samp> or <samp><span class="file">mypackage.el</span></samp>):
 
@@ -153,7 +153,7 @@ If the function is not interactive, omit the <code>t</code> or use
      <li>Redefine all keys which now run <code>next-line</code> in Fundamental mode
 so that they run <code>forward-line</code> instead.
 
-     <p><a name="index-substitute_002dkey_002ddefinition-4465"></a>
+     <p><a name="index-substitute_002dkey_002ddefinition-4623"></a>
      <pre class="example">          (substitute-key-definition 'next-line 'forward-line
                                      global-map)
 </pre>
@@ -193,9 +193,7 @@ the function or facility is available, like this:
      <p class="noindent">You can also simply disregard the errors that occur if the
 function is not defined.
 
-     <pre class="example">          (condition case ()
-              (set-face-background 'region "grey75")
-            (error nil))
+     <pre class="example">          (ignore-errors (set-face-background 'region "grey75"))
 </pre>
      <p>A <code>setq</code> on a variable which does not exist is generally
 harmless, so those do not need a conditional. 

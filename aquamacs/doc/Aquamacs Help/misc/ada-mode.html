@@ -1,0 +1,2064 @@
+<html lang="en">
+<head>
+<title>Ada Mode</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="Ada Mode">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="top" href="#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 1999-2015 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover Texts
+     being "A GNU Manual", and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     "GNU Free Documentation License".
+
+     (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+     modify this GNU manual."
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+<body>
+<h1 class="settitle">Ada Mode</h1>
+<div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Top" href="#Top">Ada Mode</a>
+<li><a name="toc_Overview" href="#Overview">1 Overview</a>
+<li><a name="toc_Installation" href="#Installation">2 Installation</a>
+<li><a name="toc_Customization" href="#Customization">3 Customizing Ada mode</a>
+<ul>
+<li><a href="#Non_002dstandard-file-names">3.1 Non-standard file names</a>
+<li><a href="#Other-compiler">3.2 Other compiler</a>
+<li><a href="#Other-customization">3.3 Other customization</a>
+</li></ul>
+<li><a name="toc_Compiling-Executing" href="#Compiling-Executing">4 Compiling Executing</a>
+<ul>
+<li><a href="#Compile-commands">4.1 Compile commands</a>
+<li><a href="#Compiler-errors">4.2 Compiler errors</a>
+</li></ul>
+<li><a name="toc_Project-files" href="#Project-files">5 Project files</a>
+<ul>
+<li><a href="#Project-File-Overview">5.1 Project File Overview</a>
+<li><a href="#GUI-Editor">5.2 GUI Editor</a>
+<li><a href="#Project-file-variables">5.3 Project file variables</a>
+</li></ul>
+<li><a name="toc_Compiling-Examples" href="#Compiling-Examples">6 Compiling Examples</a>
+<ul>
+<li><a href="#No-project-files">6.1 No project files</a>
+<li><a href="#Set-compiler-options">6.2 Set compiler options</a>
+<li><a href="#Set-source-search-path">6.3 Set source search path</a>
+<li><a href="#Use-GNAT-project-file">6.4 Use GNAT project file</a>
+<li><a href="#Use-multiple-GNAT-project-files">6.5 Use multiple GNAT project files</a>
+</li></ul>
+<li><a name="toc_Moving-Through-Ada-Code" href="#Moving-Through-Ada-Code">7 Moving Through Ada Code</a>
+<li><a name="toc_Identifier-completion" href="#Identifier-completion">8 Identifier completion</a>
+<li><a name="toc_Automatic-Smart-Indentation" href="#Automatic-Smart-Indentation">9 Automatic Smart Indentation</a>
+<li><a name="toc_Formatting-Parameter-Lists" href="#Formatting-Parameter-Lists">10 Formatting Parameter Lists</a>
+<li><a name="toc_Automatic-Casing" href="#Automatic-Casing">11 Automatic Casing</a>
+<li><a name="toc_Statement-Templates" href="#Statement-Templates">12 Statement Templates</a>
+<li><a name="toc_Comment-Handling" href="#Comment-Handling">13 Comment Handling</a>
+<li><a name="toc_GNU-Free-Documentation-License" href="#GNU-Free-Documentation-License">Appendix A GNU Free Documentation License</a>
+<li><a name="toc_Index" href="#Index">Index</a>
+</li></ul>
+</div>
+
+
+
+<div class="node">
+<a name="Top"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Overview">Overview</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#dir">(dir)</a>
+
+</div>
+
+<h2 class="unnumbered">Ada Mode</h2>
+
+<p>Copyright &copy; 1999&ndash;2015 Free Software Foundation, Inc.
+
+   <blockquote>
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with the Front-Cover Texts being &ldquo;A GNU Manual&rdquo;,
+and with the Back-Cover Texts as in (a) below.  A copy of the license
+is included in the section entitled &ldquo;GNU Free Documentation License&rdquo;.
+
+   <p>(a) The FSF's Back-Cover Text is: &ldquo;You have the freedom to copy and
+modify this GNU manual.&rdquo;
+</blockquote>
+
+<ul class="menu">
+<li><a accesskey="1" href="#Overview">Overview</a>
+<li><a accesskey="2" href="#Installation">Installation</a>:                 Installing Ada mode on your system
+<li><a accesskey="3" href="#Customization">Customization</a>:                Setting up Ada mode to your taste
+<li><a accesskey="4" href="#Compiling-Executing">Compiling Executing</a>:          Working with your application within Emacs
+<li><a accesskey="5" href="#Project-files">Project files</a>:                Describing the organization of your project
+<li><a accesskey="6" href="#Compiling-Examples">Compiling Examples</a>:           A small tutorial
+<li><a accesskey="7" href="#Moving-Through-Ada-Code">Moving Through Ada Code</a>:      Moving easily through Ada sources
+<li><a accesskey="8" href="#Identifier-completion">Identifier completion</a>:        Finishing words automatically
+<li><a accesskey="9" href="#Automatic-Smart-Indentation">Automatic Smart Indentation</a>:   Indenting your code automatically as you type
+<li><a href="#Formatting-Parameter-Lists">Formatting Parameter Lists</a>:   Formatting subprograms' parameter lists
+                                     automatically
+<li><a href="#Automatic-Casing">Automatic Casing</a>:             Adjusting the case of words automatically
+<li><a href="#Statement-Templates">Statement Templates</a>:          Inserting code templates
+<li><a href="#Comment-Handling">Comment Handling</a>:             Reformatting comments easily
+<li><a href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>:   The license for this documentation. 
+<li><a href="#Index">Index</a>
+</ul>
+
+<div class="node">
+<a name="Overview"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Installation">Installation</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Top">Top</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">1 Overview</h2>
+
+<p>The Emacs mode for programming in Ada helps the user in understanding
+existing code and facilitates writing new code.
+
+   <p>When the Gnu Ada compiler GNAT is used, the cross-reference
+information output by the compiler is used to provide powerful code
+navigation (jump to definition, find all uses, etc.).
+
+   <p>When you open a file with a file extension of <samp><span class="file">.ads</span></samp> or
+<samp><span class="file">.adb</span></samp>, Emacs will automatically load and activate Ada mode.
+
+   <p>Ada mode works without any customization, if you are using the GNAT
+compiler (<a href="https://libre2.adacore.com/">https://libre2.adacore.com/</a>) and the GNAT default
+naming convention.
+
+   <p>You must customize a few things if you are using a different compiler
+or file naming convention; See <a href="#Other-compiler">Other compiler</a>, See <a href="#Non_002dstandard-file-names">Non-standard file names</a>.
+
+   <p>In addition, you may want to customize the indentation,
+capitalization, and other things; See <a href="#Other-customization">Other customization</a>.
+
+   <p>Finally, for large Ada projects, you will want to set up an Emacs
+Ada mode project file for each project; See <a href="#Project-files">Project files</a>. Note
+that these are different from the GNAT project files used by gnatmake
+and other GNAT commands.
+
+   <p>See the Emacs info manual, section 'Running Debuggers Under Emacs',
+for general information on debugging.
+
+<div class="node">
+<a name="Installation"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Customization">Customization</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Overview">Overview</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">2 Installation</h2>
+
+<p>Ada mode is part of the standard Emacs distribution; if you use that,
+no files need to be installed.
+
+   <p>Ada mode is also available as a separate distribution, from the Emacs
+Ada mode website
+<a href="http://stephe-leake.org/emacs/ada-mode/emacs-ada-mode.html">http://stephe-leake.org/emacs/ada-mode/emacs-ada-mode.html</a>. The
+separate distribution may be more recent.
+
+   <p>For installing the separate distribution, see the <samp><span class="file">README</span></samp> file
+in the distribution.
+
+   <p>To see what version of Ada mode you have installed, do <kbd>M-x
+ada-mode-version</kbd>.
+
+   <p>The following files are provided with the Ada mode distribution:
+
+     <ul>
+<li><samp><span class="file">ada-mode.el</span></samp>: The main file for Ada mode, providing indentation,
+formatting of parameter lists, moving through code, comment handling
+and automatic casing.
+
+     <li><samp><span class="file">ada-prj.el</span></samp>: GUI editing of Ada mode project files, using Emacs
+widgets.
+
+     <li><samp><span class="file">ada-stmt.el</span></samp>: Ada statement templates.
+
+     <li><samp><span class="file">ada-xref.el</span></samp>: GNAT cross-references, completion of identifiers,
+and compilation. Also provides project files (which are not
+GNAT-specific).
+
+   </ul>
+
+<div class="node">
+<a name="Customization"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Compiling-Executing">Compiling Executing</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Installation">Installation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">3 Customizing Ada mode</h2>
+
+<p>Here we assume you are familiar with setting variables in Emacs,
+either thru 'customize' or in elisp (in your <samp><span class="file">.emacs</span></samp> file). For
+a basic introduction to customize, elisp, and Emacs in general, see
+the tutorial in
+<cite>The GNU Emacs Manual</cite>.
+
+   <p>These global Emacs settings are strongly recommended (put them in your
+.emacs):
+
+<pre class="example">     (global-font-lock-mode t)
+     (transient-mark-mode t)
+</pre>
+   <p>&lsquo;<samp><span class="samp">(global-font-lock-mode t)</span></samp>&rsquo; turns on syntax
+highlighting for all buffers (it is off by default because it may be
+too slow for some machines).
+
+   <p>&lsquo;<samp><span class="samp">(transient-mark-mode t)</span></samp>&rsquo; highlights selected text.
+
+   <p>See the Emacs help for each of these variables for more information.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Non_002dstandard-file-names">Non-standard file names</a>
+<li><a accesskey="2" href="#Other-compiler">Other compiler</a>
+<li><a accesskey="3" href="#Other-customization">Other customization</a>
+</ul>
+
+<div class="node">
+<a name="Non-standard-file-names"></a>
+<a name="Non_002dstandard-file-names"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Other-compiler">Other compiler</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Customization">Customization</a>
+
+</div>
+
+<h3 class="section">3.1 Non-standard file names</h3>
+
+<p>By default, Ada mode is configured to use the GNAT file naming
+convention, where file names are a simple modification of the Ada
+names, and the extension for specs and bodies are
+&lsquo;<samp><span class="samp">.ads</span></samp>&rsquo; and &lsquo;<samp><span class="samp">.adb</span></samp>&rsquo;, respectively.
+
+   <p>Ada mode uses the file extensions to allow moving from a package body
+to the corresponding spec and back.
+
+   <p>Ada mode supports a list of alternative file extensions for specs and bodies.
+
+   <p>For instance, if your spec and bodies files are called
+<samp><var>unit</var><span class="file">_s.ada</span></samp> and <samp><var>unit</var><span class="file">_b.ada</span></samp>, respectively, you
+can add the following to your <samp><span class="file">.emacs</span></samp> file:
+
+<pre class="example">     (ada-add-extensions "_s.ada" "_b.ada")
+</pre>
+   <p>You can define additional extensions:
+
+<pre class="example">     (ada-add-extensions ".ads" "_b.ada")
+     (ada-add-extensions ".ads" ".body")
+</pre>
+   <p>This means that whenever Ada mode looks for the body for a file
+whose extension is <samp><span class="file">.ads</span></samp>, it will take the first available file
+that ends with either <samp><span class="file">.adb</span></samp>, <samp><span class="file">_b.ada</span></samp> or
+<samp><span class="file">.body</span></samp>.
+
+   <p>Similarly, if Ada mode is looking for a spec, it will look for
+<samp><span class="file">.ads</span></samp> or <samp><span class="file">_s.ada</span></samp>.
+
+   <p>If the filename is not derived from the Ada name following the GNAT
+convention, things are a little more complicated. You then need to
+rewrite the function <code>ada-make-filename-from-adaname</code>. Doing that
+is beyond the scope of this manual; see the current definitions in
+<samp><span class="file">ada-mode.el</span></samp> and <samp><span class="file">ada-xref.el</span></samp> for examples.
+
+<div class="node">
+<a name="Other-compiler"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Other-customization">Other customization</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Non_002dstandard-file-names">Non-standard file names</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Customization">Customization</a>
+
+</div>
+
+<h3 class="section">3.2 Other compiler</h3>
+
+<p>By default, Ada mode is configured to use the Gnu Ada compiler GNAT.
+
+   <p>To use a different Ada compiler, you must specify the command lines
+used to run that compiler, either in lisp variables or in Emacs
+Ada mode project files. See <a href="#Project-file-variables">Project file variables</a> for the list
+of project variables, and the corresponding lisp variables.
+
+<div class="node">
+<a name="Other-customization"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Other-compiler">Other compiler</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Customization">Customization</a>
+
+</div>
+
+<h3 class="section">3.3 Other customization</h3>
+
+<p>All user-settable Ada mode variables can be set via the menu
+&lsquo;<samp><span class="samp">Ada | Customize</span></samp>&rsquo;.  Click on the &lsquo;<samp><span class="samp">Help</span></samp>&rsquo; button there for help
+on using customize.
+
+   <p>To modify a specific variable, you can directly call the function
+<code>customize-variable</code>; just type <kbd>M-x customize-variable
+&lt;RET&gt; </kbd><var>variable-name</var><kbd> &lt;RET&gt;</kbd>).
+
+   <p>Alternately, you can specify variable settings in the Emacs
+configuration file, <samp><span class="file">.emacs</span></samp>. This file is coded in Emacs lisp,
+and the syntax to set a variable is the following:
+<pre class="example">     (setq variable-name value)
+</pre>
+   <div class="node">
+<a name="Compiling-Executing"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Project-files">Project files</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Customization">Customization</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">4 Compiling Executing</h2>
+
+<p>Ada projects can be compiled, linked, and executed using commands on
+the Ada menu. All of these commands can be customized via a project
+file (see <a href="#Project-files">Project files</a>), but the defaults are sufficient for using
+the GNAT compiler for simple projects (single files, or several files
+in a single directory).
+
+   <p>Even when no project file is used, the GUI project editor (menu
+&lsquo;<samp><span class="samp">Ada | Project | Edit</span></samp>&rsquo;) shows the settings of the various project
+file variables referenced here.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Compile-commands">Compile commands</a>
+<li><a accesskey="2" href="#Compiler-errors">Compiler errors</a>
+</ul>
+
+<div class="node">
+<a name="Compile-commands"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Compiler-errors">Compiler errors</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Compiling-Executing">Compiling Executing</a>
+
+</div>
+
+<h3 class="section">4.1 Compile commands</h3>
+
+<p>Here are the commands for building and using an Ada project, as
+listed in the Ada menu.
+
+   <p>In multi-file projects, there must be one file that is the main
+program. That is given by the <code>main</code> project file variable;
+it defaults to the current file if not yet set, but is also set by the
+&ldquo;set main and build&rdquo; command.
+
+     <dl>
+<dt><code>Check file</code><dd>Compiles the current file in syntax check mode, by running
+<code>check_cmd</code> defined in the current project file. This typically
+runs faster than full compile mode, speeding up finding and fixing
+compilation errors.
+
+     <p>This sets <code>main</code> only if it has not been set yet.
+
+     <br><dt><code>Compile file</code><dd>Compiles the current file, by running <code>comp_cmd</code> from the current
+project file.
+
+     <p>This does not set <code>main</code>.
+
+     <br><dt><code>Set main and Build</code><dd>Sets <code>main</code> to the current file, then executes the Build
+command.
+
+     <br><dt><code>Show main</code><dd>Display <code>main</code> in the message buffer.
+
+     <br><dt><code>Build</code><dd>Compiles all obsolete units of the current <code>main</code>, and links
+<code>main</code>, by running <code>make_cmd</code> from the current project.
+
+     <p>This sets <code>main</code> only if it has not been set yet.
+
+     <br><dt><code>Run</code><dd>Executes the main program in a shell, displayed in a separate Emacs
+buffer. This runs <code>run_cmd</code> from the current project. The
+execution buffer allows for interactive input/output.
+
+     <p>To modify the run command, in particular to provide or change the
+command line arguments, type <kbd>C-u</kbd> before invoking the command.
+
+     <p>This command is not available for a cross-compilation toolchain.
+
+   </dl>
+   It is important when using these commands to understand how
+<code>main</code> is used and changed.
+
+   <p>Build runs 'gnatmake' on the main unit. During a typical edit/compile
+session, this is the only command you need to invoke, which is why it
+is bound to <kbd>C-c C-c</kbd>. It will compile all files needed by the
+main unit, and display compilation errors in any of them.
+
+   <p>Note that Build can be invoked from any Ada buffer; typically you will
+be fixing errors in files other than the main, but you don't have to
+switch back to the main to invoke the compiler again.
+
+   <p>Novices and students typically work on single-file Ada projects. In
+this case, <kbd>C-c C-m</kbd> will normally be the only command needed; it
+will build the current file, rather than the last-built main.
+
+   <p>There are three ways to change <code>main</code>:
+
+     <ol type=1 start=1>
+<li>Invoke &lsquo;<samp><span class="samp">Ada | Set main and Build</span></samp>&rsquo;, which sets <code>main</code> to
+the current file.
+
+     <li>Invoke &lsquo;<samp><span class="samp">Ada | Project | Edit</span></samp>&rsquo;, edit <code>main</code> and
+<code>main</code>, and click &lsquo;<samp><span class="samp">[save]</span></samp>&rsquo;
+
+     <li>Invoke &lsquo;<samp><span class="samp">Ada | Project | Load</span></samp>&rsquo;, and load a project file that specifies <code>main</code>
+
+        </ol>
+
+<div class="node">
+<a name="Compiler-errors"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Compile-commands">Compile commands</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Compiling-Executing">Compiling Executing</a>
+
+</div>
+
+<h3 class="section">4.2 Compiler errors</h3>
+
+<p>The <code>Check file</code>, <code>Compile file</code>, and <code>Build</code> commands
+all place compilation errors in a separate buffer named
+<samp><span class="file">*compilation*</span></samp>.
+
+   <p>Each line in this buffer will become active: you can simply click on
+it with the middle button of the mouse, or move point to it and press
+&lt;RET&gt;. Emacs will then display the relevant source file and put
+point on the line and column where the error was found.
+
+   <p>You can also press the <kbd>C-x `</kbd> key (<code>next-error</code>), and Emacs
+will jump to the first error. If you press that key again, it will
+move you to the second error, and so on.
+
+   <p>Some error messages might also include references to other files. These
+references are also clickable in the same way, or put point after the
+line number and press &lt;RET&gt;.
+
+<div class="node">
+<a name="Project-files"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Compiling-Examples">Compiling Examples</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Compiling-Executing">Compiling Executing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">5 Project files</h2>
+
+<p>An Emacs Ada mode project file specifies what directories hold sources
+for your project, and allows you to customize the compilation commands
+and other things on a per-project basis.
+
+   <p>Note that Ada mode project files <samp><span class="file">*.adp</span></samp> are different than GNAT
+compiler project files <samp><span class="file">*.gpr</span></samp>. However, Emacs Ada mode can use a
+GNAT project file to specify the project directories. If no
+other customization is needed, a GNAT project file can be used without
+an Emacs Ada mode project file.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Project-File-Overview">Project File Overview</a>
+<li><a accesskey="2" href="#GUI-Editor">GUI Editor</a>
+<li><a accesskey="3" href="#Project-file-variables">Project file variables</a>
+</ul>
+
+<div class="node">
+<a name="Project-File-Overview"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#GUI-Editor">GUI Editor</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Project-files">Project files</a>
+
+</div>
+
+<h3 class="section">5.1 Project File Overview</h3>
+
+<p>Project files have a simple syntax; they may be edited directly. Each
+line specifies a project variable name and its value, separated by &ldquo;=&rdquo;:
+<pre class="example">     src_dir=/Projects/my_project/src_1
+     src_dir=/Projects/my_project/src_2
+</pre>
+   <p>Some variables (like <code>src_dir</code>) are lists; multiple occurrences
+are concatenated.
+
+   <p>There must be no space between the variable name and &ldquo;=&rdquo;, and no
+trailing spaces.
+
+   <p>Alternately, a GUI editor for project files is available (see <a href="#GUI-Editor">GUI Editor</a>). It uses Emacs widgets, similar to Emacs customize.
+
+   <p>The GUI editor also provides a convenient way to view current project
+settings, if they have been modified using menu commands rather than
+by editing the project file.
+
+   <p>After the first Ada mode build command is invoked, there is always a
+current project file, given by the lisp variable
+<code>ada-prj-default-project-file</code>. Currently, the only way to show
+the current project file is to invoke the GUI editor.
+
+   <p>To find the project file the first time, Ada mode uses the following
+search algorithm:
+
+     <ul>
+<li>If <code>ada-prj-default-project-file</code> is set, use that.
+
+     <li>Otherwise, search for a file in the current directory with
+the same base name as the Ada file, but extension given by
+<code>ada-prj-file-extension</code> (default <code>".adp"</code>).
+
+     <li>If not found, search for <samp><span class="file">*.adp</span></samp> in the current directory; if
+several are found, prompt the user to select one.
+
+     <li>If none are found, use <samp><span class="file">default.adp</span></samp> in the current directory (even
+if it does not exist).
+
+   </ul>
+
+   <p>This algorithm always sets <code>ada-prj-default-project-file</code>, even
+when the file does not actually exist.
+
+   <p>To change the project file before or after the first one is found,
+invoke &lsquo;<samp><span class="samp">Ada | Project | Load ...</span></samp>&rsquo;.
+
+   <p>Or, in lisp, evaluate <code>(ada-set-default-project-file "/path/file.adp")</code>. 
+This sets <code>ada-prj-default-project-file</code>, and reads the project file.
+
+   <p>You can also specify a GNAT project file to &lsquo;<samp><span class="samp">Ada | Project | Load
+...</span></samp>&rsquo; or <code>ada-set-default-project-file</code>. Emacs Ada mode checks the
+file extension; if it is <code>.gpr</code>, the file is treated as a GNAT
+project file. Any other extension is treated as an Emacs Ada mode
+project file.
+
+<div class="node">
+<a name="GUI-Editor"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Project-file-variables">Project file variables</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Project-File-Overview">Project File Overview</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Project-files">Project files</a>
+
+</div>
+
+<h3 class="section">5.2 GUI Editor</h3>
+
+<p>The project file editor is invoked with the menu &lsquo;<samp><span class="samp">Ada | Projects
+| Edit</span></samp>&rsquo;.
+
+   <p>Once in the buffer for editing the project file, you can save your
+modification using the &lsquo;<samp><span class="samp">[save]</span></samp>&rsquo; button at the bottom of the
+buffer, or the <kbd>C-x C-s</kbd> binding. To cancel your modifications,
+kill the buffer or click on the &lsquo;<samp><span class="samp">[cancel]</span></samp>&rsquo; button.
+
+<div class="node">
+<a name="Project-file-variables"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#GUI-Editor">GUI Editor</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Project-files">Project files</a>
+
+</div>
+
+<h3 class="section">5.3 Project file variables</h3>
+
+<p>The following variables can be defined in a project file; some can
+also be defined in lisp variables.
+
+   <p>To set a project variable that is a list, specify each element of the
+list on a separate line in the project file.
+
+   <p>Any project variable can be referenced in other project variables,
+using a shell-like notation. For instance, if the variable
+<code>comp_cmd</code> contains <code>${comp_opt}</code>, the value of the
+<code>comp_opt</code> variable will be substituted when <code>comp_cmd</code> is
+used.
+
+   <p>In addition, process environment variables can be referenced using the
+same syntax, or the normal <code>$var</code> syntax.
+
+   <p>Most project variables have defaults that can be changed by setting
+lisp variables; the table below identifies the lisp variable for each
+project variable. Lisp variables corresponding to project variables
+that are lists are lisp lists.
+
+   <p>In general, project variables are evaluated when referenced in
+Emacs Ada mode commands. Relative file paths are expanded to
+absolute relative to <code>${build_dir}</code>.
+
+   <p>Here is the list of variables. In the default values, the current
+directory <code>"."</code> is the project file directory.
+
+     <dl>
+<!-- defined in ada-default-prj-properties; alphabetical order -->
+
+     <dt><code>ada_project_path_sep</code>   [default: <code>":" or ";"</code>]<dd>Path separator for <code>ADA_PROJECT_PATH</code>. It defaults to the correct
+value for a native implementation of GNAT for the current operating
+system. The user must override this when using Windows native GNAT
+with Cygwin Emacs, and perhaps in other cases.
+
+     <p>Lisp variable: <code>ada-prj-ada-project-path-sep</code>.
+
+     <br><dt><code>ada_project_path</code>   [default: <code>""</code>]<dd>A list of directories to search for GNAT project files.
+
+     <p>If set, the <code>ADA_PROJECT_PATH</code> process environment variable is
+set to this value in the Emacs process when the Emacs Ada mode project
+is selected via menu &lsquo;<samp><span class="samp">Ada | Project | Load</span></samp>&rsquo;.
+
+     <p>For <code>ada_project_path</code>, relative file paths are expanded to
+absolute when the Emacs Ada project file is read, rather than when the
+project file is selected.
+
+     <p>For example if the project file is in the directory
+<samp><span class="file">/home/myproject</span></samp>, the environment variable <code>GDS_ROOT</code> is
+set to <code>/home/shared</code>, and the project file contains:
+     <pre class="example">          ada_project_path_sep=:
+          ada_project_path=$GDS_ROOT/makerules
+          ada_project_path=../opentoken
+</pre>
+     <p>then as a result the environment variable <code>ADA_PROJECT_PATH</code> will
+be set to <code>"/home/shared/makerules:/home/opentoken/"</code>.
+
+     <p>The default value is not the current value of this environment
+variable, because that will typically have been set by another
+project, and will therefore be incorrect for this project.
+
+     <p>If you have the environment variable set correctly for all of your
+projects, you do not need to set this project variable.
+
+     <br><dt><code>bind_opt</code>       [default: <code>""</code>]<dd>Holds user binder options; used in the default build commands.
+
+     <p>Lisp variable: <code>ada-prj-default-bind-opt</code>.
+
+     <br><dt><code>build_dir</code>      [default: <code>"."</code>]<dd>The compile commands will be issued in this directory.
+
+     <br><dt><code>casing</code>         [default: <code>("~/.emacs_case_exceptions")</code><dd>List of files containing casing exceptions. See the help on
+<code>ada-case-exception-file</code> for more info. 
+<!-- FIXME: section on case exceptions -->
+
+     <p>Lisp variable: <code>ada-case-exception-file</code>.
+
+     <br><dt><code>check_cmd</code>      [default: <code>"${cross_prefix}gnatmake -u -c -gnatc ${gnatmake_opt} ${full_current} -cargs ${comp_opt}"</code>]<dd>Command used to syntax check a single file. 
+The name of the file is substituted for <code>full_current</code>.
+
+     <p>Lisp variable: <code>ada-prj-default-check-cmd</code>
+
+     <br><dt><code>comp_cmd</code>       [default: <code>"${cross_prefix}gnatmake -u -c ${gnatmake_opt} ${full_current} -cargs ${comp_opt}"</code>]<dd>Command used to compile a single file. 
+The name of the file is substituted for <code>full_current</code>.
+
+     <p>Lisp variable: <code>ada-prj-default-comp-cmd</code>.
+
+     <br><dt><code>comp_opt</code>       [default: <code>"-gnatq -gnatQ"</code>]<dd>Holds user compiler options; used in the default compile commands. The
+default value tells gnatmake to generate library files for
+cross-referencing even when there are errors.
+
+     <p>If source code for the project is in multiple directories, the
+appropriate compiler options must be added here. <a href="#Set-source-search-path">Set source search path</a> for examples of this. Alternately, GNAT project files may
+be used; <a href="#Use-GNAT-project-file">Use GNAT project file</a>.
+
+     <p>Lisp variable: <code>ada-prj-default-comp-opt</code>.
+
+     <br><dt><code>cross_prefix</code>   [default: <code>""</code>]<dd>Name of target machine in a cross-compilation environment. Used in
+default compile and build commands.
+
+     <br><dt><code>debug_cmd</code>      [default: <code>"${cross_prefix}gdb ${main}"</code>]<dd>Command used to debug the application
+
+     <p>Lisp variable: <code>ada-prj-default-debugger</code>.
+
+     <br><dt><code>debug_post_cmd</code> [default: <code>""</code>]<dd>Command executed after <code>debug_cmd</code>.
+
+     <br><dt><code>debug_pre_cmd</code>  [default: <code>"cd ${build_dir}"</code>]<dd>Command executed before <code>debug_cmd</code>.
+
+     <br><dt><code>gnatfind_opt</code>   [default: <code>"-rf"</code>]<dd>Holds user gnatfind options; used in the default find commands.
+
+     <p>Lisp variable: <code>ada-prj-gnatfind-switches</code>.
+
+     <br><dt><code>gnatmake_opt</code>   [default: <code>"-g"</code>]<dd>Holds user gnatmake options; used in the default build commands.
+
+     <p>Lisp variable: <code>ada-prj-default-gnatmake-opt</code>.
+
+     <br><dt><code>gpr_file</code>   [default: <code>""</code>]<dd>Specify GNAT project file.
+
+     <p>If set, the source and object directories specified in the GNAT
+project file are appended to <code>src_dir</code> and <code>obj_dir</code>. This
+allows specifying Ada source directories with a GNAT project file, and
+other source directories with the Emacs project file.
+
+     <p>In addition, <code>-P{gpr_file}</code> is added to the project variable
+<code>gnatmake_opt</code> whenever it is referenced. With the default
+project variables, this passes the project file to all gnatmake
+commands.
+
+     <p>Lisp variable: <code>ada-prj-default-gpr-file</code>.
+
+     <!-- FIXME: add gnatstub-opts -->
+     <br><dt><code>link_opt</code>       [default: <code>""</code>]<dd>Holds user linker options; used in the default build commands.
+
+     <p>Lisp variable: <code>ada-prj-default-link-opt</code>.
+
+     <br><dt><code>main</code>           [default: current file]<dd>Specifies the name of the executable file for the project; used in the
+default build commands.
+
+     <br><dt><code>make_cmd</code>       [default: <code>"${cross_prefix}gnatmake -o ${main} ${main} ${gnatmake_opt} -cargs ${comp_opt} -bargs ${bind_opt} -largs ${link_opt}"</code>]<dd>Command used to build the application.
+
+     <p>Lisp variable: <code>ada-prj-default-make-cmd</code>.
+
+     <br><dt><code>obj_dir</code>        [default: <code>"."</code>]<dd>A list of directories to search for library files. Ada mode searches
+this list for the &lsquo;<samp><span class="samp">.ali</span></samp>&rsquo; files generated by GNAT that contain
+cross-reference information.
+
+     <p>The compiler commands must place the &lsquo;<samp><span class="samp">.ali</span></samp>&rsquo; files in one of these
+directories; the default commands do that.
+
+     <br><dt><code>remote_machine</code> [default: <code>""</code>]<dd>Name of the machine to log into before issuing the compile and build
+commands. If this variable is empty, the command will be run on the
+local machine.
+
+     <br><dt><code>run_cmd</code>        [default: <code>"./${main}"</code>]<dd>Command used to run the application.
+
+     <br><dt><code>src_dir</code>        [default: <code>"."</code>]<dd>A list of directories to search for source files, both for compile
+commands and source navigation.
+
+   </dl>
+
+<div class="node">
+<a name="Compiling-Examples"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Moving-Through-Ada-Code">Moving Through Ada Code</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Project-files">Project files</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">6 Compiling Examples</h2>
+
+<p>We present several small projects, and walk thru the process of
+compiling, linking, and running them.
+
+   <p>The first example illustrates more Ada mode features than the others;
+you should work thru that example before doing the others.
+
+   <p>All of these examples assume you are using GNAT.
+
+   <p>The source for these examples is available on the Emacs Ada mode
+website mentioned in See <a href="#Installation">Installation</a>.
+
+<ul class="menu">
+<li><a accesskey="1" href="#No-project-files">No project files</a>:             Just menus
+<li><a accesskey="2" href="#Set-compiler-options">Set compiler options</a>:         A basic Ada mode project file
+<li><a accesskey="3" href="#Set-source-search-path">Set source search path</a>:       Source in multiple directories
+<li><a accesskey="4" href="#Use-GNAT-project-file">Use GNAT project file</a>
+<li><a accesskey="5" href="#Use-multiple-GNAT-project-files">Use multiple GNAT project files</a>
+</ul>
+
+<div class="node">
+<a name="No-project-files"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Set-compiler-options">Set compiler options</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Compiling-Examples">Compiling Examples</a>
+
+</div>
+
+<h3 class="section">6.1 No project files</h3>
+
+<p>This example uses no project files.
+
+   <p>First, create a directory <samp><span class="file">Example_1</span></samp>, containing:
+
+   <p><samp><span class="file">hello.adb</span></samp>:
+
+<pre class="example">     with Ada.Text_IO;
+     procedure Hello
+     is begin
+        Put_Line("Hello from hello.adb");
+     end Hello;
+</pre>
+   <p>Yes, this is missing &ldquo;use Ada.Text_IO;&rdquo; - we want to demonstrate
+compiler error handling.
+
+   <p><samp><span class="file">hello_2.adb</span></samp>:
+
+<pre class="example">     with Hello_Pkg;
+     procedure Hello_2
+     is begin
+        Hello_Pkg.Say_Hello;
+     end Hello_2;
+</pre>
+   <p>This file has no errors.
+
+   <p><samp><span class="file">hello_pkg.ads</span></samp>:
+
+<pre class="example">     package Hello_Pkg is
+        procedure Say_Hello;
+     end Hello_Pkg;
+</pre>
+   <p>This file has no errors.
+
+   <p><samp><span class="file">hello_pkg.adb</span></samp>:
+
+<pre class="example">     with Ada.Text_IO;
+     package Hello_Pkg is
+        procedure Say_Hello
+        is begin
+           Ada.Text_IO.Put_Line ("Hello from hello_pkg.adb");
+        end Say_Hello;
+     end Hello_Pkg;
+</pre>
+   <p>Yes, this is missing the keyword <code>body</code>; another compiler error
+example.
+
+   <p>In buffer <samp><span class="file">hello.adb</span></samp>, invoke &lsquo;<samp><span class="samp">Ada | Check file</span></samp>&rsquo;. You should
+get a <samp><span class="file">*compilation*</span></samp> buffer containing something like (the
+directory paths will be different):
+
+<pre class="smallexample">     cd c:/Examples/Example_1/
+     gnatmake -u -c -gnatc -g c:/Examples/Example_1/hello.adb -cargs -gnatq -gnatQ
+     gcc -c -Ic:/Examples/Example_1/ -gnatc -g -gnatq -gnatQ -I- c:/Examples/Example_1/hello.adb
+     hello.adb:4:04: "Put_Line" is not visible
+     hello.adb:4:04: non-visible declaration at a-textio.ads:264
+     hello.adb:4:04: non-visible declaration at a-textio.ads:260
+     gnatmake: "c:/Examples/Example_1/hello.adb" compilation error
+</pre>
+   <p>If you have enabled font-lock, the lines with actual errors (starting
+with <samp><span class="file">hello.adb</span></samp>) are highlighted, with the file name in red.
+
+   <p>Now type <kbd>C-x `</kbd> (on a PC keyboard, &lt;`&gt; is next to &lt;1&gt;). 
+Or you can click the middle mouse button on the first error line. The
+compilation buffer scrolls to put the first error on the top line, and
+point is put at the place of the error in the <samp><span class="file">hello.adb</span></samp> buffer.
+
+   <p>To fix the error, change the line to be
+
+<pre class="example">         Ada.Text_IO.Put_Line ("hello from hello.adb");
+</pre>
+   <p>Now invoke &lsquo;<samp><span class="samp">Ada | Show main</span></samp>&rsquo;; this displays &lsquo;<samp><span class="samp">Ada mode main: hello</span></samp>&rsquo;.
+
+   <p>Now (in buffer <samp><span class="file">hello.adb</span></samp>), invoke &lsquo;<samp><span class="samp">Ada | Build</span></samp>&rsquo;. You are
+prompted to save the file (if you haven't already). Then the
+compilation buffer is displayed again, containing:
+
+<pre class="example">     cd c:/Examples/Example_1/
+     gnatmake -o hello hello -g -cargs -gnatq -gnatQ -bargs  -largs
+     gcc -c -g -gnatq -gnatQ hello.adb
+     gnatbind -x hello.ali
+     gnatlink hello.ali -o hello.exe -g
+</pre>
+   <p>The compilation has succeeded without errors; <samp><span class="file">hello.exe</span></samp> now
+exists in the same directory as <samp><span class="file">hello.adb</span></samp>.
+
+   <p>Now invoke &lsquo;<samp><span class="samp">Ada | Run</span></samp>&rsquo;. A <samp><span class="file">*run*</span></samp> buffer is displayed,
+containing
+
+<pre class="example">     Hello from hello.adb
+     
+     Process run finished
+</pre>
+   <p>That completes the first part of this example.
+
+   <p>Now we will compile a multi-file project. Open the file
+<samp><span class="file">hello_2.adb</span></samp>, and invoke &lsquo;<samp><span class="samp">Ada | Set main and Build</span></samp>&rsquo;. This
+finds an error in <samp><span class="file">hello_pkg.adb</span></samp>:
+
+<pre class="example">     cd c:/Examples/Example_1/
+     gnatmake -o hello_2 hello_2 -g -cargs -gnatq -gnatQ -bargs  -largs
+     gcc -c -g -gnatq -gnatQ hello_pkg.adb
+     hello_pkg.adb:2:08: keyword "body" expected here [see file name]
+     gnatmake: "hello_pkg.adb" compilation error
+</pre>
+   <p>This demonstrates that gnatmake finds the files needed by the main
+program. However, it cannot find files in a different directory,
+unless you use an Emacs Ada mode project file to specify the other directories;
+See <a href="#Set-source-search-path">Set source search path</a>, or a GNAT project file; <a href="#Use-GNAT-project-file">Use GNAT project file</a>.
+
+   <p>Invoke &lsquo;<samp><span class="samp">Ada | Show main</span></samp>&rsquo;; this displays <samp><span class="file">Ada mode main: hello_2</span></samp>.
+
+   <p>Move to the error with <kbd>C-x `</kbd>, and fix the error by adding <code>body</code>:
+
+<pre class="example">     package body Hello_Pkg is
+</pre>
+   <p>Now, while still in <samp><span class="file">hello_pkg.adb</span></samp>, invoke &lsquo;<samp><span class="samp">Ada | Build</span></samp>&rsquo;. 
+gnatmake successfully builds <samp><span class="file">hello_2</span></samp>. This demonstrates that
+Emacs has remembered the main file, in the project variable
+<code>main</code>, and used it for the Build command.
+
+   <p>Finally, again while in <samp><span class="file">hello_pkg.adb</span></samp>, invoke &lsquo;<samp><span class="samp">Ada | Run</span></samp>&rsquo;. 
+The <samp><span class="file">*run*</span></samp> buffer displays <code>Hello from hello_pkg.adb</code>.
+
+   <p>One final point. If you switch back to buffer <samp><span class="file">hello.adb</span></samp>, and
+invoke &lsquo;<samp><span class="samp">Ada | Run</span></samp>&rsquo;, <samp><span class="file">hello_2.exe</span></samp> will be run. That is
+because <code>main</code> is still set to <code>hello_2</code>, as you can
+see when you invoke &lsquo;<samp><span class="samp">Ada | Project | Edit</span></samp>&rsquo;.
+
+   <p>There are three ways to change <code>main</code>:
+
+     <ol type=1 start=1>
+<li>Invoke &lsquo;<samp><span class="samp">Ada | Set main and Build</span></samp>&rsquo;, which sets <code>main</code> to
+the current file.
+
+     <li>Invoke &lsquo;<samp><span class="samp">Ada | Project | Edit</span></samp>&rsquo;, edit <code>main</code>, and click &lsquo;<samp><span class="samp">[save]</span></samp>&rsquo;
+
+     <li>Invoke &lsquo;<samp><span class="samp">Ada | Project | Load</span></samp>&rsquo;, and load a project file that specifies <code>main</code>
+
+        </ol>
+
+<div class="node">
+<a name="Set-compiler-options"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Set-source-search-path">Set source search path</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#No-project-files">No project files</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Compiling-Examples">Compiling Examples</a>
+
+</div>
+
+<h3 class="section">6.2 Set compiler options</h3>
+
+<p>This example illustrates using an Emacs Ada mode project file to set a
+compiler option.
+
+   <p>If you have files from <samp><span class="file">Example_1</span></samp> open in Emacs, you should
+close them so you don't get confused. Use menu &lsquo;<samp><span class="samp">File | Close
+(current buffer)</span></samp>&rsquo;.
+
+   <p>In directory <samp><span class="file">Example_2</span></samp>, create these files:
+
+   <p><samp><span class="file">hello.adb</span></samp>:
+
+<pre class="example">     with Ada.Text_IO;
+     procedure Hello
+     is begin
+        Put_Line("Hello from hello.adb");
+     end Hello;
+</pre>
+   <p>This is the same as <samp><span class="file">hello.adb</span></samp> from <samp><span class="file">Example_1</span></samp>. It has two
+errors; missing &ldquo;use Ada.Text_IO;&rdquo;, and no space between
+<code>Put_Line</code> and its argument list.
+
+   <p><samp><span class="file">hello.adp</span></samp>:
+
+<pre class="example">     comp_opt=-gnatyt
+</pre>
+   <p>This tells the GNAT compiler to check for token spacing; in
+particular, there must be a space preceding a parenthesis.
+
+   <p>In buffer <samp><span class="file">hello.adb</span></samp>, invoke &lsquo;<samp><span class="samp">Ada | Project | Load...</span></samp>&rsquo;, and
+select <samp><span class="file">Example_2/hello.adp</span></samp>.
+
+   <p>Then, again in buffer <samp><span class="file">hello.adb</span></samp>, invoke &lsquo;<samp><span class="samp">Ada | Set main and
+Build</span></samp>&rsquo;. You should get a <samp><span class="file">*compilation*</span></samp> buffer containing
+something like (the directory paths will be different):
+
+<pre class="example">     cd c:/Examples/Example_2/
+     gnatmake -o hello hello -g -cargs -gnatyt  -bargs  -largs
+     gcc -c -g -gnatyt hello.adb
+     hello.adb:4:04: "Put_Line" is not visible
+     hello.adb:4:04: non-visible declaration at a-textio.ads:264
+     hello.adb:4:04: non-visible declaration at a-textio.ads:260
+     hello.adb:4:12: (style) space required
+     gnatmake: "hello.adb" compilation error
+</pre>
+   <p>Compare this to the compiler output in <a href="#No-project-files">No project files</a>; the
+gnatmake option <code>-cargs -gnatq -gnatQ</code> has been replaced by
+<code>-cargs -gnaty</code>, and an additional error is reported in
+<samp><span class="file">hello.adb</span></samp> on line 4. This shows that <samp><span class="file">hello.adp</span></samp> is being
+used to set the compiler options.
+
+   <p>Fixing the error, linking and running the code proceed as in <a href="#No-project-files">No project files</a>.
+
+<div class="node">
+<a name="Set-source-search-path"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Use-GNAT-project-file">Use GNAT project file</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Set-compiler-options">Set compiler options</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Compiling-Examples">Compiling Examples</a>
+
+</div>
+
+<h3 class="section">6.3 Set source search path</h3>
+
+<p>In this example, we show how to deal with files in more than one
+directory. We start with the same code as in <a href="#No-project-files">No project files</a>;
+create those files (with the errors present)
+
+   <p>Create the directory <samp><span class="file">Example_3</span></samp>, containing:
+
+   <p><samp><span class="file">hello_pkg.ads</span></samp>:
+
+<pre class="example">     package Hello_Pkg is
+        procedure Say_Hello;
+     end Hello_Pkg;
+</pre>
+   <p><samp><span class="file">hello_pkg.adb</span></samp>:
+
+<pre class="example">     with Ada.Text_IO;
+     package Hello_Pkg is
+        procedure Say_Hello
+        is begin
+           Ada.Text_IO.Put_Line ("Hello from hello_pkg.adb");
+        end Say_Hello;
+     end Hello_Pkg;
+</pre>
+   <p>These are the same files from example 1; <samp><span class="file">hello_pkg.adb</span></samp> has an
+error on line 2.
+
+   <p>In addition, create a directory <samp><span class="file">Example_3/Other</span></samp>, containing these files:
+
+   <p><samp><span class="file">Other/hello_3.adb</span></samp>:
+
+<pre class="example">     with Hello_Pkg;
+     with Ada.Text_IO; use Ada.Text_IO;
+     procedure Hello_3
+     is begin
+        Hello_Pkg.Say_Hello;
+        Put_Line ("From hello_3");
+     end Hello_3;
+</pre>
+   <p>There are no errors in this file.
+
+   <p><samp><span class="file">Other/other.adp</span></samp>:
+
+<pre class="example">     src_dir=..
+     comp_opt=-I..
+</pre>
+   <p>Note that there must be no trailing spaces.
+
+   <p>In buffer <samp><span class="file">hello_3.adb</span></samp>, invoke &lsquo;<samp><span class="samp">Ada | Project | Load...</span></samp>&rsquo;, and
+select <samp><span class="file">Example_3/Other/other.adp</span></samp>.
+
+   <p>Then, again in <samp><span class="file">hello_3.adb</span></samp>, invoke &lsquo;<samp><span class="samp">Ada | Set main and
+Build</span></samp>&rsquo;. You should get a <samp><span class="file">*compilation*</span></samp> buffer containing
+something like (the directory paths will be different):
+
+<pre class="example">     cd c:/Examples/Example_3/Other/
+     gnatmake -o hello_3 hello_3 -g -cargs -I.. -bargs  -largs
+     gcc -c -g -I.. hello_3.adb
+     gcc -c -I./ -g -I.. -I- C:\Examples\Example_3\hello_pkg.adb
+     hello_pkg.adb:2:08: keyword "body" expected here [see file name]
+     gnatmake: "C:\Examples\Example_3\hello_pkg.adb" compilation error
+</pre>
+   <p>Compare the <code>-cargs</code> option to the compiler output in <a href="#Set-compiler-options">Set compiler options</a>; this shows that <samp><span class="file">other.adp</span></samp> is being used to
+set the compiler options.
+
+   <p>Move to the error with <kbd>C-x `</kbd>. Ada mode searches the list of
+directories given by <code>src_dir</code> for the file mentioned in the
+compiler error message.
+
+   <p>Fixing the error, linking and running the code proceed as in <a href="#No-project-files">No project files</a>.
+
+<div class="node">
+<a name="Use-GNAT-project-file"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Use-multiple-GNAT-project-files">Use multiple GNAT project files</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Set-source-search-path">Set source search path</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Compiling-Examples">Compiling Examples</a>
+
+</div>
+
+<h3 class="section">6.4 Use GNAT project file</h3>
+
+<p>In this example, we show how to use a GNAT project file, with no Ada
+mode project file.
+
+   <p>Create the directory <samp><span class="file">Example_4</span></samp>, containing:
+
+   <p><samp><span class="file">hello_pkg.ads</span></samp>:
+
+<pre class="example">     package Hello_Pkg is
+        procedure Say_Hello;
+     end Hello_Pkg;
+</pre>
+   <p><samp><span class="file">hello_pkg.adb</span></samp>:
+
+<pre class="example">     with Ada.Text_IO;
+     package Hello_Pkg is
+        procedure Say_Hello
+        is begin
+           Ada.Text_IO.Put_Line ("Hello from hello_pkg.adb");
+        end Say_Hello;
+     end Hello_Pkg;
+</pre>
+   <p>These are the same files from example 1; <samp><span class="file">hello_pkg.adb</span></samp> has an
+error on line 2.
+
+   <p>In addition, create a directory <samp><span class="file">Example_4/Gnat_Project</span></samp>,
+containing these files:
+
+   <p><samp><span class="file">Gnat_Project/hello_4.adb</span></samp>:
+
+<pre class="example">     with Hello_Pkg;
+     with Ada.Text_IO; use Ada.Text_IO;
+     procedure Hello_4
+     is begin
+        Hello_Pkg.Say_Hello;
+        Put_Line ("From hello_4");
+     end Hello_4;
+</pre>
+   <p>There are no errors in this file.
+
+   <p><samp><span class="file">Gnat_Project/hello_4.gpr</span></samp>:
+
+<pre class="example">     Project Hello_4 is
+        for Source_Dirs use (".", "..");
+     end Hello_4;
+</pre>
+   <p>In buffer <samp><span class="file">hello_4.adb</span></samp>, invoke &lsquo;<samp><span class="samp">Ada | Project | Load...</span></samp>&rsquo;, and
+select <samp><span class="file">Example_4/Gnat_Project/hello_4.gpr</span></samp>.
+
+   <p>Then, again in <samp><span class="file">hello_4.adb</span></samp>, invoke &lsquo;<samp><span class="samp">Ada | Set main and
+Build</span></samp>&rsquo;. You should get a <samp><span class="file">*compilation*</span></samp> buffer containing
+something like (the directory paths will be different):
+
+<pre class="smallexample">     cd c:/Examples/Example_4/Gnat_Project/
+     gnatmake -o hello_4 hello_4 -Phello_4.gpr -cargs -gnatq -gnatQ -bargs  -largs
+     gcc -c -g -gnatyt -gnatq -gnatQ -I- -gnatA c:\Examples\Example_4\Gnat_Project\hello_4.adb
+     gcc -c -g -gnatyt -gnatq -gnatQ -I- -gnatA c:\Examples\Example_4\hello_pkg.adb
+     hello_pkg.adb:2:08: keyword "body" expected here [see file name]
+     gnatmake: "c:\examples\example_4\hello_pkg.adb" compilation error
+</pre>
+   <p>Compare the <code>gcc</code> options to the compiler output in <a href="#Set-compiler-options">Set compiler options</a>; this shows that <samp><span class="file">hello_4.gpr</span></samp> is being used to
+set the compiler options.
+
+   <p>Fixing the error, linking and running the code proceed as in <a href="#No-project-files">No project files</a>.
+
+<div class="node">
+<a name="Use-multiple-GNAT-project-files"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Use-GNAT-project-file">Use GNAT project file</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Compiling-Examples">Compiling Examples</a>
+
+</div>
+
+<h3 class="section">6.5 Use multiple GNAT project files</h3>
+
+<p>In this example, we show how to use multiple GNAT project files,
+specifying the GNAT project search path in an Ada mode project file.
+
+   <p>Create the directory <samp><span class="file">Example_4</span></samp> as specified in <a href="#Use-GNAT-project-file">Use GNAT project file</a>.
+
+   <p>Create the directory <samp><span class="file">Example_5</span></samp>, containing:
+
+   <p><samp><span class="file">hello_5.adb</span></samp>:
+
+<pre class="example">     with Hello_Pkg;
+     with Ada.Text_IO; use Ada.Text_IO;
+     procedure Hello_5
+     is begin
+        Hello_Pkg.Say_Hello;
+        Put_Line ("From hello_5");
+     end Hello_5;
+</pre>
+   <p>There are no errors in this file.
+
+   <p><samp><span class="file">hello_5.adp</span></samp>:
+
+<pre class="example">     ada_project_path=../Example_4/Gnat_Project
+     gpr_file=hello_5.gpr
+</pre>
+   <p><samp><span class="file">hello_5.gpr</span></samp>:
+
+<pre class="example">     with "hello_4";
+     Project Hello_5 is
+        for Source_Dirs use (".");
+        package Compiler is
+           for Default_Switches ("Ada") use ("-g", "-gnatyt");
+        end Compiler;
+     end Hello_5;
+</pre>
+   <p>In buffer <samp><span class="file">hello_5.adb</span></samp>, invoke &lsquo;<samp><span class="samp">Ada | Project | Load...</span></samp>&rsquo;, and
+select <samp><span class="file">Example_5/hello_5.adp</span></samp>.
+
+   <p>Then, again in <samp><span class="file">hello_5.adb</span></samp>, invoke &lsquo;<samp><span class="samp">Ada | Set main and
+Build</span></samp>&rsquo;. You should get a <samp><span class="file">*compilation*</span></samp> buffer containing
+something like (the directory paths will be different):
+
+<pre class="smallexample">     cd c:/Examples/Example_5/
+     gnatmake -o hello_5 hello_5 -Phello_5.gpr -g -cargs -gnatq -gnatQ -bargs  -largs
+     gcc -c -g -gnatyt -g -gnatq -gnatQ -I- -gnatA c:\Examples\Example_5\hello_5.adb
+     gcc -c -g -gnatyt -g -gnatq -gnatQ -I- -gnatA c:\Examples\Example_4\hello_pkg.adb
+     hello_pkg.adb:2:08: keyword "body" expected here [see file name]
+     gnatmake: "c:\examples\example_4\hello_pkg.adb" compilation error
+</pre>
+   <p>Now type <kbd>C-x `</kbd>. <samp><span class="file">Example_4/hello_pkg.adb</span></samp> is shown,
+demonstrating that <samp><span class="file">hello_5.gpr</span></samp> and <samp><span class="file">hello_4.gpr</span></samp> are being
+used to set the compilation search path.
+
+<div class="node">
+<a name="Moving-Through-Ada-Code"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Identifier-completion">Identifier completion</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Compiling-Examples">Compiling Examples</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">7 Moving Through Ada Code</h2>
+
+<p>There are several easy to use commands to navigate through Ada code. All
+these functions are available through the Ada menu, and you can also
+use the following key bindings or the command names. Some of these
+menu entries are available only if the GNAT compiler is used, since
+the implementation relies on the GNAT cross-referencing information.
+
+     <dl>
+<dt><kbd>M-C-e</kbd><dd><a name="index-ada_002dnext_002dprocedure-1"></a>Move to the next function/procedure/task, which ever comes next
+(<code>ada-next-procedure</code>). 
+<br><dt><kbd>M-C-a</kbd><dd><a name="index-ada_002dprevious_002dprocedure-2"></a>Move to previous function/procedure/task
+(<code>ada-previous-procedure</code>). 
+<br><dt><kbd>M-x ada-next-package</kbd><dd><a name="index-ada_002dnext_002dpackage-3"></a>Move to next package. 
+<br><dt><kbd>M-x ada-previous-package</kbd><dd><a name="index-ada_002dprevious_002dpackage-4"></a>Move to previous package. 
+<br><dt><kbd>C-c C-a</kbd><dd><a name="index-ada_002dmove_002dto_002dstart-5"></a>Move to matching start of <code>end</code> (<code>ada-move-to-start</code>).  If
+point is at the end of a subprogram, this command jumps to the
+corresponding <code>begin</code> if the user option
+<code>ada-move-to-declaration</code> is <code>nil</code> (default), otherwise it jumps to
+the subprogram declaration. 
+<br><dt><kbd>C-c C-e</kbd><dd><a name="index-ada_002dmove_002dto_002dend-6"></a>Move point to end of current block (<code>ada-move-to-end</code>). 
+<br><dt><kbd>C-c o</kbd><dd>Switch between corresponding spec and body file
+(<code>ff-find-other-file</code>).  If point is in a subprogram, position
+point on the corresponding declaration or body in the other file. 
+<br><dt><kbd>C-c c-d</kbd><dd><a name="index-ada_002dgoto_002ddeclaration-7"></a>Move from any reference to its declaration, for from a declaration to
+its body (for procedures, tasks, private and incomplete types). 
+<br><dt><kbd>C-c C-r</kbd><dd><a name="index-ada_002dfind_002dreferences-8"></a>Runs the <samp><span class="file">gnatfind</span></samp> command to search for all references to the
+identifier surrounding point (<code>ada-find-references</code>). Use
+<kbd>C-x `</kbd> (<code>next-error</code>) to visit each reference (as for
+compilation errors). 
+</dl>
+
+   <p>If the <code>ada-xref-create-ali</code> variable is non-<code>nil</code>, Emacs
+will try to run GNAT for you whenever cross-reference information is
+needed, and is older than the current source file.
+
+<div class="node">
+<a name="Identifier-completion"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Automatic-Smart-Indentation">Automatic Smart Indentation</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Moving-Through-Ada-Code">Moving Through Ada Code</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">8 Identifier completion</h2>
+
+<p>Emacs and Ada mode provide two general ways for the completion of
+identifiers. This is an easy way to type faster: you just have to type
+the first few letters of an identifiers, and then loop through all the
+possible completions.
+
+   <p>The first method is general for Emacs. It works by parsing all open
+files for possible completions.
+
+   <p>For instance, if the words &lsquo;<samp><span class="samp">my_identifier</span></samp>&rsquo;, &lsquo;<samp><span class="samp">my_subprogram</span></samp>&rsquo;
+are the only words starting with &lsquo;<samp><span class="samp">my</span></samp>&rsquo; in any of the opened files,
+then you will have this scenario:
+
+<pre class="example">     You type:  my<kbd>M-/</kbd>
+     Emacs inserts:  &lsquo;<samp><span class="samp">my_identifier</span></samp>&rsquo;
+     If you press <kbd>M-/</kbd> once again, Emacs replaces &lsquo;<samp><span class="samp">my_identifier</span></samp>&rsquo; with
+     &lsquo;<samp><span class="samp">my_subprogram</span></samp>&rsquo;.
+     Pressing <kbd>M-/</kbd> once more will bring you back to &lsquo;<samp><span class="samp">my_identifier</span></samp>&rsquo;.
+</pre>
+   <p>This is a very fast way to do completion, and the casing of words will
+also be respected.
+
+   <p>The second method (<kbd>C-&lt;TAB&gt;</kbd>) is specific to Ada mode and the GNAT
+compiler. Emacs will search the cross-information for possible
+completions.
+
+   <p>The main advantage is that this completion is more accurate: only
+existing identifier will be suggested.
+
+   <p>On the other hand, this completion is a little bit slower and requires
+that you have compiled your file at least once since you created that
+identifier.
+
+     <dl>
+<dt><kbd>C-&lt;TAB&gt;</kbd><dd><a name="index-ada_002dcomplete_002didentifier-9"></a>Complete current identifier using cross-reference information. 
+<br><dt><kbd>M-/</kbd><dd>Complete identifier using buffer information (not Ada-specific). 
+</dl>
+
+<div class="node">
+<a name="Automatic-Smart-Indentation"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Formatting-Parameter-Lists">Formatting Parameter Lists</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Identifier-completion">Identifier completion</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">9 Automatic Smart Indentation</h2>
+
+<p>Ada mode comes with a full set of rules for automatic indentation. You
+can also configure the indentation, via the following variables:
+
+     <dl>
+<dt><code>ada-broken-indent</code>           (default value: 2)<dd>Number of columns to indent the continuation of a broken line.
+
+     <br><dt><code>ada-indent</code>                  (default value: 3)<dd>Number of columns for default indentation.
+
+     <br><dt><code>ada-indent-record-rel-type</code>  (default value: 3)<dd>Indentation for <code>record</code> relative to <code>type</code> or <code>use</code>.
+
+     <br><dt><code>ada-indent-return</code>           (default value: 0)<dd>Indentation for <code>return</code> relative to <code>function</code> (if
+<code>ada-indent-return</code> is greater than 0), or the open parenthesis
+(if <code>ada-indent-return</code> is negative or 0).  Note that in the second
+case, when there is no open parenthesis, the indentation is done
+relative to <code>function</code> with the value of <code>ada-broken-indent</code>.
+
+     <br><dt><code>ada-label-indent</code>            (default value: -4)<dd>Number of columns to indent a label.
+
+     <br><dt><code>ada-stmt-end-indent</code>         (default value: 0)<dd>Number of columns to indent a statement <code>end</code> keyword on a separate line.
+
+     <br><dt><code>ada-when-indent</code>             (default value: 3)<dd>Indentation for <code>when</code> relative to <code>exception</code> or <code>case</code>.
+
+     <br><dt><code>ada-indent-is-separate</code>      (default value: t)<dd>Non-<code>nil</code> means indent <code>is separate</code> or <code>is abstract</code> if on a single line.
+
+     <br><dt><code>ada-indent-to-open-paren</code>    (default value: t)<dd>Non-<code>nil</code> means indent according to the innermost open parenthesis.
+
+     <br><dt><code>ada-indent-after-return</code>     (default value: t)<dd>Non-<code>nil</code> means that the current line will also be re-indented
+before inserting a newline, when you press &lt;RET&gt;. 
+</dl>
+
+   <p>Most of the time, the indentation will be automatic, i.e., when you
+press &lt;RET&gt;, the cursor will move to the correct column on the
+next line.
+
+   <p>You can also indent single lines, or the current region, with &lt;TAB&gt;.
+
+   <p>Another mode of indentation exists that helps you to set up your
+indentation scheme. If you press <kbd>C-c &lt;TAB&gt;</kbd>, Ada mode will do
+the following:
+
+     <ul>
+<li>Reindent the current line, as &lt;TAB&gt; would do. 
+<li>Temporarily move the cursor to a reference line, i.e., the line that
+was used to calculate the current indentation. 
+<li>Display in the message window the name of the variable that provided
+the offset for the indentation. 
+</ul>
+
+   <p>The exact indentation of the current line is the same as the one for the
+reference line, plus an offset given by the variable.
+
+     <dl>
+<dt><kbd>&lt;TAB&gt;</kbd><dd>Indent the current line or the current region. 
+<br><dt><kbd>C-M-\</kbd><dd>Indent lines in the current region. 
+<br><dt><kbd>C-c &lt;TAB&gt;</kbd><dd>Indent the current line and display the name of the variable used for
+indentation. 
+</dl>
+
+<div class="node">
+<a name="Formatting-Parameter-Lists"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Automatic-Casing">Automatic Casing</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Automatic-Smart-Indentation">Automatic Smart Indentation</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">10 Formatting Parameter Lists</h2>
+
+     <dl>
+<dt><kbd>C-c C-f</kbd><dd><a name="index-ada_002dformat_002dparamlist-10"></a>Format the parameter list (<code>ada-format-paramlist</code>). 
+</dl>
+
+   <p>This aligns the declarations on the colon (&lsquo;<samp><span class="samp">:</span></samp>&rsquo;) separating
+argument names and argument types, and aligns the <code>in</code>,
+<code>out</code> and <code>in out</code> keywords.
+
+<div class="node">
+<a name="Automatic-Casing"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Statement-Templates">Statement Templates</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Formatting-Parameter-Lists">Formatting Parameter Lists</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">11 Automatic Casing</h2>
+
+<p>Casing of identifiers, attributes and keywords is automatically
+performed while typing when the variable <code>ada-auto-case</code> is set. 
+Every time you press a word separator, the previous word is
+automatically cased.
+
+   <p>You can customize the automatic casing differently for keywords,
+attributes and identifiers. The relevant variables are the following:
+<code>ada-case-keyword</code>, <code>ada-case-attribute</code> and
+<code>ada-case-identifier</code>.
+
+   <p>All these variables can have one of the following values:
+
+     <dl>
+<dt><code>downcase-word</code><dd>The word will be lowercase. For instance <code>My_vARIable</code> is
+converted to <code>my_variable</code>.
+
+     <br><dt><code>upcase-word</code><dd>The word will be uppercase. For instance <code>My_vARIable</code> is
+converted to <code>MY_VARIABLE</code>.
+
+     <br><dt><code>ada-capitalize-word</code><dd>The first letter and each letter following an underscore (&lsquo;<samp><span class="samp">_</span></samp>&rsquo;)
+are uppercase, others are lowercase. For instance <code>My_vARIable</code>
+is converted to <code>My_Variable</code>.
+
+     <br><dt><code>ada-loose-case-word</code><dd>Characters after an underscore &lsquo;<samp><span class="samp">_</span></samp>&rsquo; character are uppercase,
+others are not modified. For instance <code>My_vARIable</code> is converted
+to <code>My_VARIable</code>. 
+</dl>
+
+   <p>Ada mode allows you to define exceptions to these rules, in a file
+specified by the variable <code>ada-case-exception-file</code>
+(default <samp><span class="file">~/.emacs_case_exceptions</span></samp>). Each line in this file
+specifies the casing of one word or word fragment. Comments may be
+included, separated from the word by a space.
+
+   <p>If the word starts with an asterisk (&lt;*&gt;), it defines the casing
+as a word fragment (or &ldquo;substring&rdquo;); part of a word between two
+underscores or word boundary.
+
+   <p>For example:
+
+<pre class="example">     DOD        Department of Defense
+     *IO
+     GNAT       The GNAT compiler from Ada Core Technologies
+</pre>
+   <p>The word fragment <code>*IO</code> applies to any word containing &ldquo;_io&rdquo;;
+<code>Text_IO</code>, <code>Hardware_IO</code>, etc.
+
+   <p><a name="index-ada_002dcreate_002dcase_002dexception-11"></a>There are two ways to add new items to this file: you can simply edit
+it as you would edit any text file. Or you can position point on the
+word you want to add, and select menu &lsquo;<samp><span class="samp">Ada | Edit | Create Case
+Exception</span></samp>&rsquo;, or press <kbd>C-c C-y</kbd> (<code>ada-create-case-exception</code>). 
+The word will automatically be added to the current list of exceptions
+and to the file.
+
+   <p>To define a word fragment case exception, select the word fragment,
+then select menu &lsquo;<samp><span class="samp">Ada | Edit | Create Case Exception Substring</span></samp>&rsquo;.
+
+   <p>It is sometimes useful to have multiple exception files around (for
+instance, one could be the standard Ada acronyms, the second some
+company specific exceptions, and the last one some project specific
+exceptions). If you set up the variable <code>ada-case-exception-file</code>
+as a list of files, each of them will be parsed and used in your emacs
+session. However, when you save a new exception through the menu, as
+described above, the new exception will be added to the first file in
+the list.
+
+     <dl>
+<dt><kbd>C-c C-b</kbd><dd><a name="index-ada_002dadjust_002dcase_002dbuffer-12"></a>Adjust case in the whole buffer (<code>ada-adjust-case-buffer</code>). 
+<br><dt><kbd>C-c C-y</kbd><dd>Create a new entry in the exception dictionary, with the word under
+the cursor (<code>ada-create-case-exception</code>)
+<br><dt><kbd>C-c C-t</kbd><dd><a name="index-ada_002dcase_002dread_002dexceptions-13"></a>Rereads the exception dictionary from the file
+<code>ada-case-exception-file</code> (<code>ada-case-read-exceptions</code>). 
+</dl>
+
+<div class="node">
+<a name="Statement-Templates"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Comment-Handling">Comment Handling</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Automatic-Casing">Automatic Casing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">12 Statement Templates</h2>
+
+<p>Templates are defined for most Ada statements, using the Emacs
+&ldquo;skeleton&rdquo; package. They can be inserted in the buffer using the
+following commands:
+
+     <dl>
+<dt><kbd>C-c t b</kbd><dd><a name="index-ada_002dexception_002dblock-14"></a>exception Block (<code>ada-exception-block</code>). 
+<br><dt><kbd>C-c t c</kbd><dd><a name="index-ada_002dcase-15"></a>case (<code>ada-case</code>). 
+<br><dt><kbd>C-c t d</kbd><dd><a name="index-ada_002ddeclare_002dblock-16"></a>declare Block (<code>ada-declare-block</code>). 
+<br><dt><kbd>C-c t e</kbd><dd><a name="index-ada_002delse-17"></a>else (<code>ada-else</code>). 
+<br><dt><kbd>C-c t f</kbd><dd><a name="index-ada_002dfor_002dloop-18"></a>for Loop (<code>ada-for-loop</code>). 
+<br><dt><kbd>C-c t h</kbd><dd><a name="index-ada_002dheader-19"></a>Header (<code>ada-header</code>). 
+<br><dt><kbd>C-c t i</kbd><dd><a name="index-ada_002dif-20"></a>if (<code>ada-if</code>). 
+<br><dt><kbd>C-c t k</kbd><dd><a name="index-ada_002dpackage_002dbody-21"></a>package Body (<code>ada-package-body</code>). 
+<br><dt><kbd>C-c t l</kbd><dd><a name="index-ada_002dloop-22"></a>loop (<code>ada-loop</code>). 
+<br><dt><kbd>C-c p</kbd><dd><a name="index-ada_002dsubprogram_002dbody-23"></a>subprogram body (<code>ada-subprogram-body</code>). 
+<br><dt><kbd>C-c t t</kbd><dd><a name="index-ada_002dtask_002dbody-24"></a>task Body (<code>ada-task-body</code>). 
+<br><dt><kbd>C-c t w</kbd><dd><a name="index-ada_002dwhile-25"></a>while Loop (<code>ada-while</code>). 
+<br><dt><kbd>C-c t u</kbd><dd><a name="index-ada_002duse-26"></a>use (<code>ada-use</code>). 
+<br><dt><kbd>C-c t x</kbd><dd><a name="index-ada_002dexit-27"></a>exit (<code>ada-exit</code>). 
+<br><dt><kbd>C-c t C-a</kbd><dd><a name="index-ada_002darray-28"></a>array (<code>ada-array</code>). 
+<br><dt><kbd>C-c t C-e</kbd><dd><a name="index-ada_002delsif-29"></a>elsif (<code>ada-elsif</code>). 
+<br><dt><kbd>C-c t C-f</kbd><dd><a name="index-ada_002dfunction_002dspec-30"></a>function Spec (<code>ada-function-spec</code>). 
+<br><dt><kbd>C-c t C-k</kbd><dd><a name="index-ada_002dpackage_002dspec-31"></a>package Spec (<code>ada-package-spec</code>). 
+<br><dt><kbd>C-c t C-p</kbd><dd><a name="index-ada_002dprocedure_002dspec-32"></a>procedure Spec (<code>ada-package-spec</code>. 
+<br><dt><kbd>C-c t C-r</kbd><dd><a name="index-ada_002drecord-33"></a>record (<code>ada-record</code>). 
+<br><dt><kbd>C-c t C-s</kbd><dd><a name="index-ada_002dsubtype-34"></a>subtype (<code>ada-subtype</code>). 
+<br><dt><kbd>C-c t C-t</kbd><dd><a name="index-ada_002dtask_002dspec-35"></a>task Spec (<code>ada-task-spec</code>). 
+<br><dt><kbd>C-c t C-u</kbd><dd><a name="index-ada_002dwith-36"></a>with (<code>ada-with</code>). 
+<br><dt><kbd>C-c t C-v</kbd><dd><a name="index-ada_002dprivate-37"></a>private (<code>ada-private</code>). 
+<br><dt><kbd>C-c t C-w</kbd><dd><a name="index-ada_002dwhen-38"></a>when (<code>ada-when</code>). 
+<br><dt><kbd>C-c t C-x</kbd><dd><a name="index-ada_002dexception-39"></a>exception (<code>ada-exception</code>). 
+<br><dt><kbd>C-c t C-y</kbd><dd><a name="index-ada_002dtype-40"></a>type (<code>ada-type</code>). 
+</dl>
+
+<div class="node">
+<a name="Comment-Handling"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Statement-Templates">Statement Templates</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">13 Comment Handling</h2>
+
+<p>By default, comment lines get indented like Ada code. There are a few
+additional functions to handle comments:
+
+     <dl>
+<dt><kbd>M-;</kbd><dd>Start a comment in default column. 
+<br><dt><kbd>M-j</kbd><dd>Continue comment on next line. 
+<br><dt><kbd>C-c ;</kbd><dd>Comment the selected region (add &lsquo;<samp><span class="samp">--</span></samp>&rsquo; at the beginning of lines). 
+<br><dt><kbd>C-c :</kbd><dd>Uncomment the selected region
+<br><dt><kbd>M-q</kbd><dd>autofill the current comment. 
+</dl>
+
+<div class="node">
+<a name="GNU-Free-Documentation-License"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Index">Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Comment-Handling">Comment Handling</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="appendix">Appendix A GNU Free Documentation License</h2>
+
+<!-- The GNU Free Documentation License. -->
+<div align="center">Version 1.3, 3 November 2008</div>
+
+<!-- This file is intended to be included within another document, -->
+<!-- hence no sectioning command or @node. -->
+<pre class="display">     Copyright &copy; 2000, 2001, 2002, 2007, 2008 Free Software Foundation, Inc.
+     <a href="http://fsf.org/">http://fsf.org/</a>
+     
+     Everyone is permitted to copy and distribute verbatim copies
+     of this license document, but changing it is not allowed.
+</pre>
+     <ol type=1 start=0>
+<li>PREAMBLE
+
+     <p>The purpose of this License is to make a manual, textbook, or other
+functional and useful document <dfn>free</dfn> in the sense of freedom: to
+assure everyone the effective freedom to copy and redistribute it,
+with or without modifying it, either commercially or noncommercially. 
+Secondarily, this License preserves for the author and publisher a way
+to get credit for their work, while not being considered responsible
+for modifications made by others.
+
+     <p>This License is a kind of &ldquo;copyleft&rdquo;, which means that derivative
+works of the document must themselves be free in the same sense.  It
+complements the GNU General Public License, which is a copyleft
+license designed for free software.
+
+     <p>We have designed this License in order to use it for manuals for free
+software, because free software needs free documentation: a free
+program should come with manuals providing the same freedoms that the
+software does.  But this License is not limited to software manuals;
+it can be used for any textual work, regardless of subject matter or
+whether it is published as a printed book.  We recommend this License
+principally for works whose purpose is instruction or reference.
+
+     <li>APPLICABILITY AND DEFINITIONS
+
+     <p>This License applies to any manual or other work, in any medium, that
+contains a notice placed by the copyright holder saying it can be
+distributed under the terms of this License.  Such a notice grants a
+world-wide, royalty-free license, unlimited in duration, to use that
+work under the conditions stated herein.  The &ldquo;Document&rdquo;, below,
+refers to any such manual or work.  Any member of the public is a
+licensee, and is addressed as &ldquo;you&rdquo;.  You accept the license if you
+copy, modify or distribute the work in a way requiring permission
+under copyright law.
+
+     <p>A &ldquo;Modified Version&rdquo; of the Document means any work containing the
+Document or a portion of it, either copied verbatim, or with
+modifications and/or translated into another language.
+
+     <p>A &ldquo;Secondary Section&rdquo; is a named appendix or a front-matter section
+of the Document that deals exclusively with the relationship of the
+publishers or authors of the Document to the Document's overall
+subject (or to related matters) and contains nothing that could fall
+directly within that overall subject.  (Thus, if the Document is in
+part a textbook of mathematics, a Secondary Section may not explain
+any mathematics.)  The relationship could be a matter of historical
+connection with the subject or with related matters, or of legal,
+commercial, philosophical, ethical or political position regarding
+them.
+
+     <p>The &ldquo;Invariant Sections&rdquo; are certain Secondary Sections whose titles
+are designated, as being those of Invariant Sections, in the notice
+that says that the Document is released under this License.  If a
+section does not fit the above definition of Secondary then it is not
+allowed to be designated as Invariant.  The Document may contain zero
+Invariant Sections.  If the Document does not identify any Invariant
+Sections then there are none.
+
+     <p>The &ldquo;Cover Texts&rdquo; are certain short passages of text that are listed,
+as Front-Cover Texts or Back-Cover Texts, in the notice that says that
+the Document is released under this License.  A Front-Cover Text may
+be at most 5 words, and a Back-Cover Text may be at most 25 words.
+
+     <p>A &ldquo;Transparent&rdquo; copy of the Document means a machine-readable copy,
+represented in a format whose specification is available to the
+general public, that is suitable for revising the document
+straightforwardly with generic text editors or (for images composed of
+pixels) generic paint programs or (for drawings) some widely available
+drawing editor, and that is suitable for input to text formatters or
+for automatic translation to a variety of formats suitable for input
+to text formatters.  A copy made in an otherwise Transparent file
+format whose markup, or absence of markup, has been arranged to thwart
+or discourage subsequent modification by readers is not Transparent. 
+An image format is not Transparent if used for any substantial amount
+of text.  A copy that is not &ldquo;Transparent&rdquo; is called &ldquo;Opaque&rdquo;.
+
+     <p>Examples of suitable formats for Transparent copies include plain
+ASCII without markup, Texinfo input format, LaTeX input
+format, SGML or XML using a publicly available
+DTD, and standard-conforming simple HTML,
+PostScript or PDF designed for human modification.  Examples
+of transparent image formats include PNG, XCF and
+JPG.  Opaque formats include proprietary formats that can be
+read and edited only by proprietary word processors, SGML or
+XML for which the DTD and/or processing tools are
+not generally available, and the machine-generated HTML,
+PostScript or PDF produced by some word processors for
+output purposes only.
+
+     <p>The &ldquo;Title Page&rdquo; means, for a printed book, the title page itself,
+plus such following pages as are needed to hold, legibly, the material
+this License requires to appear in the title page.  For works in
+formats which do not have any title page as such, &ldquo;Title Page&rdquo; means
+the text near the most prominent appearance of the work's title,
+preceding the beginning of the body of the text.
+
+     <p>The &ldquo;publisher&rdquo; means any person or entity that distributes copies
+of the Document to the public.
+
+     <p>A section &ldquo;Entitled XYZ&rdquo; means a named subunit of the Document whose
+title either is precisely XYZ or contains XYZ in parentheses following
+text that translates XYZ in another language.  (Here XYZ stands for a
+specific section name mentioned below, such as &ldquo;Acknowledgements&rdquo;,
+&ldquo;Dedications&rdquo;, &ldquo;Endorsements&rdquo;, or &ldquo;History&rdquo;.)  To &ldquo;Preserve the Title&rdquo;
+of such a section when you modify the Document means that it remains a
+section &ldquo;Entitled XYZ&rdquo; according to this definition.
+
+     <p>The Document may include Warranty Disclaimers next to the notice which
+states that this License applies to the Document.  These Warranty
+Disclaimers are considered to be included by reference in this
+License, but only as regards disclaiming warranties: any other
+implication that these Warranty Disclaimers may have is void and has
+no effect on the meaning of this License.
+
+     <li>VERBATIM COPYING
+
+     <p>You may copy and distribute the Document in any medium, either
+commercially or noncommercially, provided that this License, the
+copyright notices, and the license notice saying this License applies
+to the Document are reproduced in all copies, and that you add no other
+conditions whatsoever to those of this License.  You may not use
+technical measures to obstruct or control the reading or further
+copying of the copies you make or distribute.  However, you may accept
+compensation in exchange for copies.  If you distribute a large enough
+number of copies you must also follow the conditions in section 3.
+
+     <p>You may also lend copies, under the same conditions stated above, and
+you may publicly display copies.
+
+     <li>COPYING IN QUANTITY
+
+     <p>If you publish printed copies (or copies in media that commonly have
+printed covers) of the Document, numbering more than 100, and the
+Document's license notice requires Cover Texts, you must enclose the
+copies in covers that carry, clearly and legibly, all these Cover
+Texts: Front-Cover Texts on the front cover, and Back-Cover Texts on
+the back cover.  Both covers must also clearly and legibly identify
+you as the publisher of these copies.  The front cover must present
+the full title with all words of the title equally prominent and
+visible.  You may add other material on the covers in addition. 
+Copying with changes limited to the covers, as long as they preserve
+the title of the Document and satisfy these conditions, can be treated
+as verbatim copying in other respects.
+
+     <p>If the required texts for either cover are too voluminous to fit
+legibly, you should put the first ones listed (as many as fit
+reasonably) on the actual cover, and continue the rest onto adjacent
+pages.
+
+     <p>If you publish or distribute Opaque copies of the Document numbering
+more than 100, you must either include a machine-readable Transparent
+copy along with each Opaque copy, or state in or with each Opaque copy
+a computer-network location from which the general network-using
+public has access to download using public-standard network protocols
+a complete Transparent copy of the Document, free of added material. 
+If you use the latter option, you must take reasonably prudent steps,
+when you begin distribution of Opaque copies in quantity, to ensure
+that this Transparent copy will remain thus accessible at the stated
+location until at least one year after the last time you distribute an
+Opaque copy (directly or through your agents or retailers) of that
+edition to the public.
+
+     <p>It is requested, but not required, that you contact the authors of the
+Document well before redistributing any large number of copies, to give
+them a chance to provide you with an updated version of the Document.
+
+     <li>MODIFICATIONS
+
+     <p>You may copy and distribute a Modified Version of the Document under
+the conditions of sections 2 and 3 above, provided that you release
+the Modified Version under precisely this License, with the Modified
+Version filling the role of the Document, thus licensing distribution
+and modification of the Modified Version to whoever possesses a copy
+of it.  In addition, you must do these things in the Modified Version:
+
+          <ol type=A start=1>
+<li>Use in the Title Page (and on the covers, if any) a title distinct
+from that of the Document, and from those of previous versions
+(which should, if there were any, be listed in the History section
+of the Document).  You may use the same title as a previous version
+if the original publisher of that version gives permission.
+
+          <li>List on the Title Page, as authors, one or more persons or entities
+responsible for authorship of the modifications in the Modified
+Version, together with at least five of the principal authors of the
+Document (all of its principal authors, if it has fewer than five),
+unless they release you from this requirement.
+
+          <li>State on the Title page the name of the publisher of the
+Modified Version, as the publisher.
+
+          <li>Preserve all the copyright notices of the Document.
+
+          <li>Add an appropriate copyright notice for your modifications
+adjacent to the other copyright notices.
+
+          <li>Include, immediately after the copyright notices, a license notice
+giving the public permission to use the Modified Version under the
+terms of this License, in the form shown in the Addendum below.
+
+          <li>Preserve in that license notice the full lists of Invariant Sections
+and required Cover Texts given in the Document's license notice.
+
+          <li>Include an unaltered copy of this License.
+
+          <li>Preserve the section Entitled &ldquo;History&rdquo;, Preserve its Title, and add
+to it an item stating at least the title, year, new authors, and
+publisher of the Modified Version as given on the Title Page.  If
+there is no section Entitled &ldquo;History&rdquo; in the Document, create one
+stating the title, year, authors, and publisher of the Document as
+given on its Title Page, then add an item describing the Modified
+Version as stated in the previous sentence.
+
+          <li>Preserve the network location, if any, given in the Document for
+public access to a Transparent copy of the Document, and likewise
+the network locations given in the Document for previous versions
+it was based on.  These may be placed in the &ldquo;History&rdquo; section. 
+You may omit a network location for a work that was published at
+least four years before the Document itself, or if the original
+publisher of the version it refers to gives permission.
+
+          <li>For any section Entitled &ldquo;Acknowledgements&rdquo; or &ldquo;Dedications&rdquo;, Preserve
+the Title of the section, and preserve in the section all the
+substance and tone of each of the contributor acknowledgements and/or
+dedications given therein.
+
+          <li>Preserve all the Invariant Sections of the Document,
+unaltered in their text and in their titles.  Section numbers
+or the equivalent are not considered part of the section titles.
+
+          <li>Delete any section Entitled &ldquo;Endorsements&rdquo;.  Such a section
+may not be included in the Modified Version.
+
+          <li>Do not retitle any existing section to be Entitled &ldquo;Endorsements&rdquo; or
+to conflict in title with any Invariant Section.
+
+          <li>Preserve any Warranty Disclaimers.
+          </ol>
+
+     <p>If the Modified Version includes new front-matter sections or
+appendices that qualify as Secondary Sections and contain no material
+copied from the Document, you may at your option designate some or all
+of these sections as invariant.  To do this, add their titles to the
+list of Invariant Sections in the Modified Version's license notice. 
+These titles must be distinct from any other section titles.
+
+     <p>You may add a section Entitled &ldquo;Endorsements&rdquo;, provided it contains
+nothing but endorsements of your Modified Version by various
+parties&mdash;for example, statements of peer review or that the text has
+been approved by an organization as the authoritative definition of a
+standard.
+
+     <p>You may add a passage of up to five words as a Front-Cover Text, and a
+passage of up to 25 words as a Back-Cover Text, to the end of the list
+of Cover Texts in the Modified Version.  Only one passage of
+Front-Cover Text and one of Back-Cover Text may be added by (or
+through arrangements made by) any one entity.  If the Document already
+includes a cover text for the same cover, previously added by you or
+by arrangement made by the same entity you are acting on behalf of,
+you may not add another; but you may replace the old one, on explicit
+permission from the previous publisher that added the old one.
+
+     <p>The author(s) and publisher(s) of the Document do not by this License
+give permission to use their names for publicity for or to assert or
+imply endorsement of any Modified Version.
+
+     <li>COMBINING DOCUMENTS
+
+     <p>You may combine the Document with other documents released under this
+License, under the terms defined in section 4 above for modified
+versions, provided that you include in the combination all of the
+Invariant Sections of all of the original documents, unmodified, and
+list them all as Invariant Sections of your combined work in its
+license notice, and that you preserve all their Warranty Disclaimers.
+
+     <p>The combined work need only contain one copy of this License, and
+multiple identical Invariant Sections may be replaced with a single
+copy.  If there are multiple Invariant Sections with the same name but
+different contents, make the title of each such section unique by
+adding at the end of it, in parentheses, the name of the original
+author or publisher of that section if known, or else a unique number. 
+Make the same adjustment to the section titles in the list of
+Invariant Sections in the license notice of the combined work.
+
+     <p>In the combination, you must combine any sections Entitled &ldquo;History&rdquo;
+in the various original documents, forming one section Entitled
+&ldquo;History&rdquo;; likewise combine any sections Entitled &ldquo;Acknowledgements&rdquo;,
+and any sections Entitled &ldquo;Dedications&rdquo;.  You must delete all
+sections Entitled &ldquo;Endorsements.&rdquo;
+
+     <li>COLLECTIONS OF DOCUMENTS
+
+     <p>You may make a collection consisting of the Document and other documents
+released under this License, and replace the individual copies of this
+License in the various documents with a single copy that is included in
+the collection, provided that you follow the rules of this License for
+verbatim copying of each of the documents in all other respects.
+
+     <p>You may extract a single document from such a collection, and distribute
+it individually under this License, provided you insert a copy of this
+License into the extracted document, and follow this License in all
+other respects regarding verbatim copying of that document.
+
+     <li>AGGREGATION WITH INDEPENDENT WORKS
+
+     <p>A compilation of the Document or its derivatives with other separate
+and independent documents or works, in or on a volume of a storage or
+distribution medium, is called an &ldquo;aggregate&rdquo; if the copyright
+resulting from the compilation is not used to limit the legal rights
+of the compilation's users beyond what the individual works permit. 
+When the Document is included in an aggregate, this License does not
+apply to the other works in the aggregate which are not themselves
+derivative works of the Document.
+
+     <p>If the Cover Text requirement of section 3 is applicable to these
+copies of the Document, then if the Document is less than one half of
+the entire aggregate, the Document's Cover Texts may be placed on
+covers that bracket the Document within the aggregate, or the
+electronic equivalent of covers if the Document is in electronic form. 
+Otherwise they must appear on printed covers that bracket the whole
+aggregate.
+
+     <li>TRANSLATION
+
+     <p>Translation is considered a kind of modification, so you may
+distribute translations of the Document under the terms of section 4. 
+Replacing Invariant Sections with translations requires special
+permission from their copyright holders, but you may include
+translations of some or all Invariant Sections in addition to the
+original versions of these Invariant Sections.  You may include a
+translation of this License, and all the license notices in the
+Document, and any Warranty Disclaimers, provided that you also include
+the original English version of this License and the original versions
+of those notices and disclaimers.  In case of a disagreement between
+the translation and the original version of this License or a notice
+or disclaimer, the original version will prevail.
+
+     <p>If a section in the Document is Entitled &ldquo;Acknowledgements&rdquo;,
+&ldquo;Dedications&rdquo;, or &ldquo;History&rdquo;, the requirement (section 4) to Preserve
+its Title (section 1) will typically require changing the actual
+title.
+
+     <li>TERMINATION
+
+     <p>You may not copy, modify, sublicense, or distribute the Document
+except as expressly provided under this License.  Any attempt
+otherwise to copy, modify, sublicense, or distribute it is void, and
+will automatically terminate your rights under this License.
+
+     <p>However, if you cease all violation of this License, then your license
+from a particular copyright holder is reinstated (a) provisionally,
+unless and until the copyright holder explicitly and finally
+terminates your license, and (b) permanently, if the copyright holder
+fails to notify you of the violation by some reasonable means prior to
+60 days after the cessation.
+
+     <p>Moreover, your license from a particular copyright holder is
+reinstated permanently if the copyright holder notifies you of the
+violation by some reasonable means, this is the first time you have
+received notice of violation of this License (for any work) from that
+copyright holder, and you cure the violation prior to 30 days after
+your receipt of the notice.
+
+     <p>Termination of your rights under this section does not terminate the
+licenses of parties who have received copies or rights from you under
+this License.  If your rights have been terminated and not permanently
+reinstated, receipt of a copy of some or all of the same material does
+not give you any rights to use it.
+
+     <li>FUTURE REVISIONS OF THIS LICENSE
+
+     <p>The Free Software Foundation may publish new, revised versions
+of the GNU Free Documentation License from time to time.  Such new
+versions will be similar in spirit to the present version, but may
+differ in detail to address new problems or concerns.  See
+<a href="http://www.gnu.org/copyleft/">http://www.gnu.org/copyleft/</a>.
+
+     <p>Each version of the License is given a distinguishing version number. 
+If the Document specifies that a particular numbered version of this
+License &ldquo;or any later version&rdquo; applies to it, you have the option of
+following the terms and conditions either of that specified version or
+of any later version that has been published (not as a draft) by the
+Free Software Foundation.  If the Document does not specify a version
+number of this License, you may choose any version ever published (not
+as a draft) by the Free Software Foundation.  If the Document
+specifies that a proxy can decide which future versions of this
+License can be used, that proxy's public statement of acceptance of a
+version permanently authorizes you to choose that version for the
+Document.
+
+     <li>RELICENSING
+
+     <p>&ldquo;Massive Multiauthor Collaboration Site&rdquo; (or &ldquo;MMC Site&rdquo;) means any
+World Wide Web server that publishes copyrightable works and also
+provides prominent facilities for anybody to edit those works.  A
+public wiki that anybody can edit is an example of such a server.  A
+&ldquo;Massive Multiauthor Collaboration&rdquo; (or &ldquo;MMC&rdquo;) contained in the
+site means any set of copyrightable works thus published on the MMC
+site.
+
+     <p>&ldquo;CC-BY-SA&rdquo; means the Creative Commons Attribution-Share Alike 3.0
+license published by Creative Commons Corporation, a not-for-profit
+corporation with a principal place of business in San Francisco,
+California, as well as future copyleft versions of that license
+published by that same organization.
+
+     <p>&ldquo;Incorporate&rdquo; means to publish or republish a Document, in whole or
+in part, as part of another Document.
+
+     <p>An MMC is &ldquo;eligible for relicensing&rdquo; if it is licensed under this
+License, and if all works that were first published under this License
+somewhere other than this MMC, and subsequently incorporated in whole
+or in part into the MMC, (1) had no cover texts or invariant sections,
+and (2) were thus incorporated prior to November 1, 2008.
+
+     <p>The operator of an MMC Site may republish an MMC contained in the site
+under CC-BY-SA on the same site at any time before August 1, 2009,
+provided the MMC is eligible for relicensing.
+
+        </ol>
+
+<h3 class="heading">ADDENDUM: How to use this License for your documents</h3>
+
+<p>To use this License in a document you have written, include a copy of
+the License in the document and put the following copyright and
+license notices just after the title page:
+
+<pre class="smallexample">       Copyright (C)  <var>year</var>  <var>your name</var>.
+       Permission is granted to copy, distribute and/or modify this document
+       under the terms of the GNU Free Documentation License, Version 1.3
+       or any later version published by the Free Software Foundation;
+       with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+       Texts.  A copy of the license is included in the section entitled ``GNU
+       Free Documentation License''.
+</pre>
+   <p>If you have Invariant Sections, Front-Cover Texts and Back-Cover Texts,
+replace the &ldquo;with<small class="dots">...</small>Texts.&rdquo; line with this:
+
+<pre class="smallexample">         with the Invariant Sections being <var>list their titles</var>, with
+         the Front-Cover Texts being <var>list</var>, and with the Back-Cover Texts
+         being <var>list</var>.
+</pre>
+   <p>If you have Invariant Sections without Cover Texts, or some other
+combination of the three, merge those two alternatives to suit the
+situation.
+
+   <p>If your document contains nontrivial examples of program code, we
+recommend releasing these examples in parallel under your choice of
+free software license, such as the GNU General Public License,
+to permit their use in free software.
+
+<!-- Local Variables: -->
+<!-- ispell-local-pdict: "ispell-dict" -->
+<!-- End: -->
+<div class="node">
+<a name="Index"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="unnumbered">Index</h2>
+
+<ul class="index-fn" compact>
+<li><a href="#index-ada_002dadjust_002dcase_002dbuffer-12"><code>ada-adjust-case-buffer</code></a>: <a href="#Automatic-Casing">Automatic Casing</a></li>
+<li><a href="#index-ada_002darray-28"><code>ada-array</code></a>: <a href="#Statement-Templates">Statement Templates</a></li>
+<li><a href="#index-ada_002dcase-15"><code>ada-case</code></a>: <a href="#Statement-Templates">Statement Templates</a></li>
+<li><a href="#index-ada_002dcase_002dread_002dexceptions-13"><code>ada-case-read-exceptions</code></a>: <a href="#Automatic-Casing">Automatic Casing</a></li>
+<li><a href="#index-ada_002dcomplete_002didentifier-9"><code>ada-complete-identifier</code></a>: <a href="#Identifier-completion">Identifier completion</a></li>
+<li><a href="#index-ada_002dcreate_002dcase_002dexception-11"><code>ada-create-case-exception</code></a>: <a href="#Automatic-Casing">Automatic Casing</a></li>
+<li><a href="#index-ada_002ddeclare_002dblock-16"><code>ada-declare-block</code></a>: <a href="#Statement-Templates">Statement Templates</a></li>
+<li><a href="#index-ada_002delse-17"><code>ada-else</code></a>: <a href="#Statement-Templates">Statement Templates</a></li>
+<li><a href="#index-ada_002delsif-29"><code>ada-elsif</code></a>: <a href="#Statement-Templates">Statement Templates</a></li>
+<li><a href="#index-ada_002dexception-39"><code>ada-exception</code></a>: <a href="#Statement-Templates">Statement Templates</a></li>
+<li><a href="#index-ada_002dexception_002dblock-14"><code>ada-exception-block</code></a>: <a href="#Statement-Templates">Statement Templates</a></li>
+<li><a href="#index-ada_002dexit-27"><code>ada-exit</code></a>: <a href="#Statement-Templates">Statement Templates</a></li>
+<li><a href="#index-ada_002dfind_002dreferences-8"><code>ada-find-references</code></a>: <a href="#Moving-Through-Ada-Code">Moving Through Ada Code</a></li>
+<li><a href="#index-ada_002dfor_002dloop-18"><code>ada-for-loop</code></a>: <a href="#Statement-Templates">Statement Templates</a></li>
+<li><a href="#index-ada_002dformat_002dparamlist-10"><code>ada-format-paramlist</code></a>: <a href="#Formatting-Parameter-Lists">Formatting Parameter Lists</a></li>
+<li><a href="#index-ada_002dfunction_002dspec-30"><code>ada-function-spec</code></a>: <a href="#Statement-Templates">Statement Templates</a></li>
+<li><a href="#index-ada_002dgoto_002ddeclaration-7"><code>ada-goto-declaration</code></a>: <a href="#Moving-Through-Ada-Code">Moving Through Ada Code</a></li>
+<li><a href="#index-ada_002dheader-19"><code>ada-header</code></a>: <a href="#Statement-Templates">Statement Templates</a></li>
+<li><a href="#index-ada_002dif-20"><code>ada-if</code></a>: <a href="#Statement-Templates">Statement Templates</a></li>
+<li><a href="#index-ada_002dloop-22"><code>ada-loop</code></a>: <a href="#Statement-Templates">Statement Templates</a></li>
+<li><a href="#index-ada_002dmove_002dto_002dend-6"><code>ada-move-to-end</code></a>: <a href="#Moving-Through-Ada-Code">Moving Through Ada Code</a></li>
+<li><a href="#index-ada_002dmove_002dto_002dstart-5"><code>ada-move-to-start</code></a>: <a href="#Moving-Through-Ada-Code">Moving Through Ada Code</a></li>
+<li><a href="#index-ada_002dnext_002dpackage-3"><code>ada-next-package</code></a>: <a href="#Moving-Through-Ada-Code">Moving Through Ada Code</a></li>
+<li><a href="#index-ada_002dnext_002dprocedure-1"><code>ada-next-procedure</code></a>: <a href="#Moving-Through-Ada-Code">Moving Through Ada Code</a></li>
+<li><a href="#index-ada_002dpackage_002dbody-21"><code>ada-package-body</code></a>: <a href="#Statement-Templates">Statement Templates</a></li>
+<li><a href="#index-ada_002dpackage_002dspec-31"><code>ada-package-spec</code></a>: <a href="#Statement-Templates">Statement Templates</a></li>
+<li><a href="#index-ada_002dprevious_002dpackage-4"><code>ada-previous-package</code></a>: <a href="#Moving-Through-Ada-Code">Moving Through Ada Code</a></li>
+<li><a href="#index-ada_002dprevious_002dprocedure-2"><code>ada-previous-procedure</code></a>: <a href="#Moving-Through-Ada-Code">Moving Through Ada Code</a></li>
+<li><a href="#index-ada_002dprivate-37"><code>ada-private</code></a>: <a href="#Statement-Templates">Statement Templates</a></li>
+<li><a href="#index-ada_002dprocedure_002dspec-32"><code>ada-procedure-spec</code></a>: <a href="#Statement-Templates">Statement Templates</a></li>
+<li><a href="#index-ada_002drecord-33"><code>ada-record</code></a>: <a href="#Statement-Templates">Statement Templates</a></li>
+<li><a href="#index-ada_002dsubprogram_002dbody-23"><code>ada-subprogram-body</code></a>: <a href="#Statement-Templates">Statement Templates</a></li>
+<li><a href="#index-ada_002dsubtype-34"><code>ada-subtype</code></a>: <a href="#Statement-Templates">Statement Templates</a></li>
+<li><a href="#index-ada_002dtask_002dbody-24"><code>ada-task-body</code></a>: <a href="#Statement-Templates">Statement Templates</a></li>
+<li><a href="#index-ada_002dtask_002dspec-35"><code>ada-task-spec</code></a>: <a href="#Statement-Templates">Statement Templates</a></li>
+<li><a href="#index-ada_002dtype-40"><code>ada-type</code></a>: <a href="#Statement-Templates">Statement Templates</a></li>
+<li><a href="#index-ada_002duse-26"><code>ada-use</code></a>: <a href="#Statement-Templates">Statement Templates</a></li>
+<li><a href="#index-ada_002dwhen-38"><code>ada-when</code></a>: <a href="#Statement-Templates">Statement Templates</a></li>
+<li><a href="#index-ada_002dwhile-25"><code>ada-while</code></a>: <a href="#Statement-Templates">Statement Templates</a></li>
+<li><a href="#index-ada_002dwith-36"><code>ada-with</code></a>: <a href="#Statement-Templates">Statement Templates</a></li>
+   </ul></body></html>
+
+<!--
+
+Local Variables:
+coding: utf-8
+End:
+
+-->

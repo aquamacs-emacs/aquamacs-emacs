@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,7 +41,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="Input-Events.html#Input-Events">Input E
 <hr>
 </div>
 
-<h4 class="subsection">21.7.11 Event Examples</h4>
+<h4 class="subsection">20.7.11 Event Examples</h4>
 
 <p>If the user presses and releases the left mouse button over the same
 location, that generates a sequence of events like this:
@@ -65,6 +65,12 @@ into another window.  That produces a pair of events like these:
      (M-S-drag-mouse-2 (#&lt;window 18 on NEWS&gt; mode-line (33 . 31) -457844)
                        (#&lt;window 20 on carlton-sanskrit.tex&gt; 161 (33 . 3)
                         -453816))
+</pre>
+   <p>The frame with input focus might not take up the entire screen, and
+the user might move the mouse outside the scope of the frame.  Inside
+the <code>track-mouse</code> special form, that produces an event like this:
+
+<pre class="smallexample">     (mouse-movement (#&lt;frame *ielm* 0x102849a30&gt; nil (563 . 205) 532301936))
 </pre>
    <p>To handle a SIGUSR1 signal, define an interactive function, and
 bind it to the <code>signal usr1</code> event sequence:

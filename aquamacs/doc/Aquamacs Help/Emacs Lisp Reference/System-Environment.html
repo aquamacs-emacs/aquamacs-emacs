@@ -11,15 +11,15 @@
 <link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
 <!--
 This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 24.3.50.
+corresponding to Emacs version 25.0.50.
 
-Copyright (C) 1990--1996, 1998--2013 Free Software Foundation, Inc.
+Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover texts being ``A GNU Manual,'' and
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
      with the Back-Cover Texts as in (a) below.  A copy of the license
      is included in the section entitled ``GNU Free Documentation
      License.''
@@ -41,25 +41,25 @@ Up:&nbsp;<a rel="up" accesskey="u" href="System-Interface.html#System-Interface"
 <hr>
 </div>
 
-<h3 class="section">39.3 Operating System Environment</h3>
+<h3 class="section">38.3 Operating System Environment</h3>
 
-<p><a name="index-operating-system-environment-4161"></a>
+<p><a name="index-operating-system-environment-4589"></a>
   Emacs provides access to variables in the operating system environment
 through various functions.  These variables include the name of the
 system, the user's <acronym>UID</acronym>, and so on.
 
 <div class="defun">
-&mdash; Variable: <b>system-configuration</b><var><a name="index-system_002dconfiguration-4162"></a></var><br>
+&mdash; Variable: <b>system-configuration</b><var><a name="index-system_002dconfiguration-4590"></a></var><br>
 <blockquote><p>This variable holds the standard GNU configuration name for the
 hardware/software configuration of your system, as a string.  For
 example, a typical value for a 64-bit GNU/Linux system is
 &lsquo;<samp><span class="samp">"x86_64-unknown-linux-gnu"</span></samp>&rsquo;. 
 </p></blockquote></div>
 
-   <p><a name="index-system-type-and-name-4163"></a>
+   <p><a name="index-system-type-and-name-4591"></a>
 
 <div class="defun">
-&mdash; Variable: <b>system-type</b><var><a name="index-system_002dtype-4164"></a></var><br>
+&mdash; Variable: <b>system-type</b><var><a name="index-system_002dtype-4592"></a></var><br>
 <blockquote><p>The value of this variable is a symbol indicating the type of operating
 system Emacs is running on.  The possible values are:
 
@@ -102,21 +102,14 @@ than <code>system-type</code> allows for, you can test
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>system-name</b><var><a name="index-system_002dname-4165"></a></var><br>
+&mdash; Function: <b>system-name</b><var><a name="index-system_002dname-4593"></a></var><br>
 <blockquote><p>This function returns the name of the machine you are running on, as a
 string. 
 </p></blockquote></div>
 
-   <p>The symbol <code>system-name</code> is a variable as well as a function.  In
-fact, the function returns whatever value the variable
-<code>system-name</code> currently holds.  Thus, you can set the variable
-<code>system-name</code> in case Emacs is confused about the name of your
-system.  The variable is also useful for constructing frame titles
-(see <a href="Frame-Titles.html#Frame-Titles">Frame Titles</a>).
-
 <!-- FIXME seems like this section is not the best place for this option? -->
 <div class="defun">
-&mdash; User Option: <b>mail-host-address</b><var><a name="index-mail_002dhost_002daddress-4166"></a></var><br>
+&mdash; User Option: <b>mail-host-address</b><var><a name="index-mail_002dhost_002daddress-4594"></a></var><br>
 <blockquote><p>If this variable is non-<code>nil</code>, it is used instead of
 <code>system-name</code> for purposes of generating email addresses.  For
 example, it is used when constructing the default value of
@@ -128,8 +121,8 @@ Emacs was dumped.  See <a href="Building-Emacs.html#Building-Emacs">Building Ema
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>getenv</b><var> var &amp;optional frame<a name="index-getenv-4167"></a></var><br>
-<blockquote><p><a name="index-environment-variable-access-4168"></a>This function returns the value of the environment variable <var>var</var>,
+&mdash; Command: <b>getenv</b><var> var &amp;optional frame<a name="index-getenv-4595"></a></var><br>
+<blockquote><p><a name="index-environment-variable-access-4596"></a>This function returns the value of the environment variable <var>var</var>,
 as a string.  <var>var</var> should be a string.  If <var>var</var> is undefined
 in the environment, <code>getenv</code> returns <code>nil</code>.  It returns
 &lsquo;<samp><span class="samp">""</span></samp>&rsquo; if <var>var</var> is set but null.  Within Emacs, a list of environment
@@ -151,7 +144,7 @@ variables and their values is kept in the variable <code>process-environment</co
         </blockquote></div>
 
 <div class="defun">
-&mdash; Command: <b>setenv</b><var> variable &amp;optional value substitute<a name="index-setenv-4169"></a></var><br>
+&mdash; Command: <b>setenv</b><var> variable &amp;optional value substitute<a name="index-setenv-4597"></a></var><br>
 <blockquote><p>This command sets the value of the environment variable named
 <var>variable</var> to <var>value</var>.  <var>variable</var> should be a string. 
 Internally, Emacs Lisp can handle any string.  However, normally
@@ -163,6 +156,7 @@ to access the value of <var>variable</var>.  If <var>value</var> is omitted or
 removes <var>variable</var> from the environment.  Otherwise, <var>value</var>
 should be a string.
 
+     <!-- FIXME: Document 'substitute-env-vars'?  -xfq -->
         <p>If the optional argument <var>substitute</var> is non-<code>nil</code>, Emacs
 calls the function <code>substitute-env-vars</code> to expand any
 environment variables in <var>value</var>.
@@ -175,7 +169,7 @@ if it removed <var>variable</var> from the environment.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>process-environment</b><var><a name="index-process_002denvironment-4170"></a></var><br>
+&mdash; Variable: <b>process-environment</b><var><a name="index-process_002denvironment-4598"></a></var><br>
 <blockquote><p>This variable is a list of strings, each describing one environment
 variable.  The functions <code>getenv</code> and <code>setenv</code> work by means
 of this variable.
@@ -188,26 +182,26 @@ of this variable.
               "HOME=/home/lewis"
               ...)
 </pre>
-        <p>If <code>process-environment</code> contains &ldquo;duplicate&rdquo; elements that
+        <p>If <code>process-environment</code> contains multiple elements that
 specify the same environment variable, the first of these elements
-specifies the variable, and the other &ldquo;duplicates&rdquo; are ignored. 
+specifies the variable, and the others are ignored. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>initial-environment</b><var><a name="index-initial_002denvironment-4171"></a></var><br>
+&mdash; Variable: <b>initial-environment</b><var><a name="index-initial_002denvironment-4599"></a></var><br>
 <blockquote><p>This variable holds the list of environment variables Emacs inherited
 from its parent process when Emacs started. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>path-separator</b><var><a name="index-path_002dseparator-4172"></a></var><br>
+&mdash; Variable: <b>path-separator</b><var><a name="index-path_002dseparator-4600"></a></var><br>
 <blockquote><p>This variable holds a string that says which character separates
 directories in a search path (as found in an environment variable).  Its
 value is <code>":"</code> for Unix and GNU systems, and <code>";"</code> for MS systems. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>parse-colon-path</b><var> path<a name="index-parse_002dcolon_002dpath-4173"></a></var><br>
+&mdash; Function: <b>parse-colon-path</b><var> path<a name="index-parse_002dcolon_002dpath-4601"></a></var><br>
 <blockquote><p>This function takes a search path string such as the value of
 the <samp><span class="env">PATH</span></samp> environment variable, and splits it at the separators,
 returning a list of directory names.  <code>nil</code> in this list means
@@ -220,19 +214,19 @@ the current directory.  Although the function's name says
         </blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>invocation-name</b><var><a name="index-invocation_002dname-4174"></a></var><br>
+&mdash; Variable: <b>invocation-name</b><var><a name="index-invocation_002dname-4602"></a></var><br>
 <blockquote><p>This variable holds the program name under which Emacs was invoked.  The
 value is a string, and does not include a directory name. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>invocation-directory</b><var><a name="index-invocation_002ddirectory-4175"></a></var><br>
+&mdash; Variable: <b>invocation-directory</b><var><a name="index-invocation_002ddirectory-4603"></a></var><br>
 <blockquote><p>This variable holds the directory from which the Emacs executable was
 invoked, or <code>nil</code> if that directory cannot be determined. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>installation-directory</b><var><a name="index-installation_002ddirectory-4176"></a></var><br>
+&mdash; Variable: <b>installation-directory</b><var><a name="index-installation_002ddirectory-4604"></a></var><br>
 <blockquote><p>If non-<code>nil</code>, this is a directory within which to look for the
 <samp><span class="file">lib-src</span></samp> and <samp><span class="file">etc</span></samp> subdirectories.  In an installed Emacs,
 it is normally <code>nil</code>.  It is non-<code>nil</code>
@@ -242,14 +236,14 @@ containing the Emacs executable (i.e., <code>invocation-directory</code>).
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>load-average</b><var> &amp;optional use-float<a name="index-load_002daverage-4177"></a></var><br>
+&mdash; Function: <b>load-average</b><var> &amp;optional use-float<a name="index-load_002daverage-4605"></a></var><br>
 <blockquote><p>This function returns the current 1-minute, 5-minute, and 15-minute
 system load averages, in a list.  The load average indicates the
 number of processes trying to run on the system.
 
         <p>By default, the values are integers that are 100 times the system load
 averages, but if <var>use-float</var> is non-<code>nil</code>, then they are
-returned as floating point numbers without multiplying by 100.
+returned as floating-point numbers without multiplying by 100.
 
         <p>If it is impossible to obtain the load average, this function signals
 an error.  On some platforms, access to load averages requires
@@ -270,13 +264,13 @@ the available averages.
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Function: <b>emacs-pid</b><var><a name="index-emacs_002dpid-4178"></a></var><br>
+&mdash; Function: <b>emacs-pid</b><var><a name="index-emacs_002dpid-4606"></a></var><br>
 <blockquote><p>This function returns the process <acronym>ID</acronym> of the Emacs process,
 as an integer. 
 </p></blockquote></div>
 
 <div class="defun">
-&mdash; Variable: <b>tty-erase-char</b><var><a name="index-tty_002derase_002dchar-4179"></a></var><br>
+&mdash; Variable: <b>tty-erase-char</b><var><a name="index-tty_002derase_002dchar-4607"></a></var><br>
 <blockquote><p>This variable holds the erase character that was selected
 in the system's terminal driver, before Emacs was started. 
 <!-- FIXME?  Seems untrue since 23.1.  For me, it is 0. -->
