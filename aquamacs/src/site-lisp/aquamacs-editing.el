@@ -37,8 +37,25 @@
 (aquamacs-set-defaults '((cua-mode t)
                          (select-enable-clipboard nil)))
 
+
+;; Clipboard-yank and yank will use interprogram-paste-function (gui-selection-value).
+;; gui-selection-value prefers the internal kill ring.
 ;; clipboard-kill-ring-save and clipboard-yank switch on select-enable-clipboard temporarily.
 ;; interprogram-paste-function  is gui-selection-value by default.
+
+(defun external-clipboard-value ()
+  (let ((text (gui-backend-get-selection 'CLIPBOARD 'STRING)))
+    (if (string= text (car-safe kill-ring))
+        (car-safe kill-ring)
+      text)))
+
+(require 'menu-bar) ;; must be loaded beforehand.
+(defun clipboard-yank ()
+  "Insert the clipboard contents, or the last stretch of killed text."
+  (interactive "*")
+  (let ((select-enable-clipboard t)
+        (interprogram-paste-function 'external-clipboard-value))
+    (yank)))
 
 (defun unfill-region () 
 "Undo filling, deleting stand-alone newlines.
@@ -89,7 +106,7 @@ like `unfill-region'."
 	(set (make-local-variable 'use-hard-newlines) nil)
 	(set (make-local-variable 'sentence-end-double-space) t)
 	(set (make-local-variable 'paragraph-start)
-		 "[ ’¡¡	\n]")
+		 "[ Â’Â¡Â¡	\n]")
 	(when  (featurep 'xemacs)	
 	  (let ((fill-column (point-max)))
 		(fill-paragraph-or-region nil)))
@@ -108,7 +125,7 @@ like `unfill-region'."
 	(set-fill-prefix)
 	(set (make-local-variable 'sentence-end-double-space) t)
 	(set (make-local-variable 'paragraph-start)
-		 "[ ’¡¡	\n]")
+		 "[ Â’Â¡Â¡	\n]")
 	(when  (featurep 'xemacs)	
 	  (let ((fill-column (point-max)))
 		(fill-paragraph-or-region nil)))
