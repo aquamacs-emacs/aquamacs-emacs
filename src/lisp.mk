@@ -125,19 +125,12 @@ emacs-lisp/eldoc.elc \
 cus-start.elc \
 tooltip.elc \
 leim/leim-list.elc \
-emacs-lisp/advice.elc \
-emacs-lisp/nadvice.elc \
-aquamacs/aquamacs-autoface-mode.elc \
-aquamacs/aquamacs-macros.elc \
-aquamacs/aquamacs-tools.elc \
-aquamacs/macosx/mac-extra-functions.elc \
-aquamacs/aquamacs-tool-bar.elc \
-aquamacs/macosx/osx_defaults.elc \
-aquamacs/aquamacs.elc \
 emacs-lisp/easymenu.elc \
-emulation/cua-base.elc \
-delsel.elc \
 paren.elc \
+timezone.elc \
+emacs-lisp/advice.elc \
+delsel.elc \
+emulation/cua-base.elc \
 site-load.elc \
 site-init.elc \
 
