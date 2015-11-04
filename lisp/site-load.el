@@ -6,16 +6,10 @@
 ;; If you add/remove Lisp files to be loaded here, consider the
 ;; following issues:
 
-;; i) Any file loaded on all platforms should appear in $lisp
-;; and $shortlisp in src/Makefile.in.  Use the .el or .elc version as
-;; appropriate.
+;; i) Load dependencies first.  Automatic loading with `require' is illegal.
+;; ii) Add files and dependencies to src/lisp.mk.
 
-;; ii) Any file that is only loaded on some platforms should appear
-;; in the version of $lisp in the generated Makefile on that platform.
-;; At the present time, this is achieved by use of #ifdefs.
-;; It should also appear in $SOME_MACHINE_LISP on all platforms.
-
-;; The above steps ensure both that the Lisp files are compiled (if
+;; The above step ensures both that the Lisp files are compiled (if
 ;; necessary) before the emacs executable is dumped, and that they are
 ;; passed to make-docfile.  (Any that are not processed for DOC will
 ;; not have doc strings in the dumped Emacs.)  Because of this:
@@ -52,7 +46,7 @@
 
 ;;X (load "emacs-lisp/cconv")
 ;;X (load "emacs-lisp/macroexp")
-;;(load "help-fns")
+;; help-fns : no good (require cl-lib)
 
 ;;X (load "emacs-lisp/debug")
 ;;X (load "emacs-lisp/bytecomp")
@@ -80,7 +74,7 @@
 (load "paren")
 ;;(load "calendar/time-date")
 (load "timezone")
-;;(load "calendar/parse-time")
+;;(load "calendar/parse-time") [no good, require cl-lib]
  
 ;; (load "emacs-lisp/cl-lib") ;; produces error
 
