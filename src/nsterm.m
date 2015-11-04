@@ -7559,7 +7559,7 @@ not_in_argv (NSString *arg)
   [self allocateGState];
 #endif
   [NSApp registerServicesMenuSendTypes: ns_send_types
-                           returnTypes: nil];
+                           returnTypes: ns_return_types];
 
   ns_window_num++;
   return self;
