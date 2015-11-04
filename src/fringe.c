@@ -30,6 +30,8 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "blockinput.h"
 #include "termhooks.h"
 
+int lookup_basic_face_for_buffer (struct frame *f, int face_id, Lisp_Object buffer);
+
 /* Fringe bitmaps are represented in three different ways:
 
    Logical bitmaps are used internally to denote things like
