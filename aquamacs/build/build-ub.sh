@@ -28,7 +28,7 @@ lipo temacs-uni -thin ppc7400 -o temacs
 LC_ALL=C `/bin/pwd`/temacs --batch --load loadup bootstrap
 mv emacs emacs-ppc7400
 rm emacs-24.*
-lipo temacs-uni -thin i386 -o temacs 
+lipo temacs-uni -thin i386 -o temacs
 LC_ALL=C `/bin/pwd`/temacs --batch --load loadup bootstrap
 mv emacs emacs-i386
 
@@ -44,7 +44,7 @@ lipo temacs-uni -thin ppc7400 -o temacs
 LC_ALL=C `/bin/pwd`/temacs -batch -l loadup dump
 mv emacs emacs-ppc7400
 rm emacs-24.*
-lipo temacs-uni -thin i386 -o temacs 
+lipo temacs-uni -thin i386 -o temacs
 LC_ALL=C `/bin/pwd`/temacs -batch -l loadup dump
 mv emacs emacs-i386
 
@@ -56,4 +56,3 @@ cd ..
 make # finish building
 
 make install
-
