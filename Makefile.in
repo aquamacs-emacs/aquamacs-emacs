@@ -613,7 +613,7 @@ install-arch-indep: lisp install-info install-man ${INSTALL_ARCH_INDEP_EXTRA}
 	  printf 'Copying %s to %s...\n' "$$dir" "$$dest" ; \
 	  (cd $${dir}; tar -chf - . ) \
 	    | (cd "$${dest}"; umask 022; \
-	       tar -xvf - && cat > /dev/null) || exit 1; \
+	       tar -xf - && cat > /dev/null) || exit 1; \
 	  if [ "$${dir}" = "${srcdir}/etc" ]; then \
 	      rm -f "$${dest}/DOC"* ; \
 	      rm -f "$${dest}/refcards"/*.aux "$${dest}/refcards"/*.dvi; \
