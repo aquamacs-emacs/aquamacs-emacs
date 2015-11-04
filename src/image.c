@@ -120,6 +120,10 @@ static void free_color_table (void);
 static unsigned long *colors_in_color_table (int *n);
 #endif
 
+#if defined (NS_IMPL_COCOA)
+void ns_resize_truedpi_image (void *eImg, int respect_dpi, Lisp_Object scale_factor, struct image *img);
+#endif
+
 /* Code to deal with bitmaps.  Bitmaps are referenced by their bitmap
    id, which is just an int that this section returns.  Bitmaps are
    reference counted so they can be shared among frames.
