@@ -1750,7 +1750,7 @@ of ignored grammatical constructions. */)
 				       language:nil wrap:NO inSpellDocumentWithTag:tag details:&errdetails];
 
   unblock_input();
-  if (first_word.location < 0)
+  if (first_word.length == 0) // Is this how "no location" is indicated?
     return Qnil;
   else
     return Fcons (make_number ((int) first_word.location), make_number ((int) first_word.length));
