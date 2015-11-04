@@ -211,7 +211,7 @@ mostlyclean:
 
 ## Products not in the release tarfiles.
 clean: mostlyclean
-	rm -f $(DVI_TARGETS) $(HTML_TARGETS) $(PDF_TARGETS) $(PS_TARGETS)
+	rm -rf $(DVI_TARGETS) $(HTML_TARGETS) $(PDF_TARGETS) $(PS_TARGETS)
 
 distclean: clean
 	rm -f Makefile
@@ -258,7 +258,7 @@ uninstall-dvi:
 	done
 uninstall-html:
 	for file in $(HTML_TARGETS); do \
-	  rm -f "$(DESTDIR)$(htmldir)/$${file}"; \
+	  rm -rf "$(DESTDIR)$(htmldir)/$${file}"; \
 	done
 uninstall-ps:
 	ext= ; [ -n "${GZIP_PROG}" ] && ext=.gz; \

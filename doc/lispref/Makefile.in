@@ -170,7 +170,7 @@ mostlyclean:
 	rm -f elisp[12]* vol[12].tmp
 
 clean: mostlyclean
-	rm -f $(DVI_TARGETS) $(HTML_TARGETS) $(PDF_TARGETS) $(PS_TARGETS)
+	rm -rf $(DVI_TARGETS) $(HTML_TARGETS) $(PDF_TARGETS) $(PS_TARGETS)
 	rm -f vol[12].dvi vol[12].pdf vol[12].ps
 
 distclean: clean
@@ -216,7 +216,7 @@ uninstall-dvi:
 	done
 uninstall-html:
 	for file in $(HTML_TARGETS); do \
-	  rm -f "$(DESTDIR)$(htmldir)/$${file}"; \
+	  rm -rf "$(DESTDIR)$(htmldir)/$${file}"; \
 	done
 uninstall-ps:
 	ext= ; [ -n "${GZIP_PROG}" ] && ext=.gz; \
