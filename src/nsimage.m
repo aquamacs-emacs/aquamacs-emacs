@@ -344,10 +344,13 @@ static EmacsImage *ImageList = nil;
 }
 
 
+/* Create image from monochrome bitmap. If both FG and BG are 0
+   (black), set the background to white and make it transparent. */
 - initFromXBM: (unsigned char *)bits width: (int)w height: (int)h
            fg: (unsigned long)fg bg: (unsigned long)bg
 {
   unsigned char *planes[5];
+  unsigned char bg_alpha = 0xff;
 
   [self initWithSize: NSMakeSize (w, h)];
 
@@ -361,7 +364,10 @@ static EmacsImage *ImageList = nil;
   [bmRep getBitmapDataPlanes: planes];
 
   if (fg == 0 && bg == 0)
-    bg = 0xffffff;
+    {
+      bg = 0xffffff;
+      bg_alpha = 0;
+    }
 
   {
     /* pull bits out to set the (bytewise) alpha mask */
@@ -386,21 +392,22 @@ static EmacsImage *ImageList = nil;
           c = *s++;
           for (k = 0; i < w && k < 8; ++k, ++i)
             {
-              *alpha++ = 0xff;
-              if (c & 1)
+              if (c & 0x80)
                 {
                   *rr++ = fgr;
                   *gg++ = fgg;
                   *bb++ = fgb;
+                  *alpha++ = 0xff;
                 }
               else
                 {
                   *rr++ = bgr;
                   *gg++ = bgg;
                   *bb++ = bgb;
+                  *alpha++ = bg_alpha;
                 }
               idx++;
-              c >>= 1;
+              c <<= 1;
             }
         }
   }
