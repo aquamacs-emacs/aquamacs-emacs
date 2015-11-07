@@ -6,7 +6,7 @@
 # then run this. 
 
 $PROJECT_DIR = '/Users/dr/Projects/Aquamacs';
-$REPO_DIR = '/Users/dr/ae24.git';
+$REPO_DIR = '/Users/dr/emacs';
 
 $BINARY = '/Applications/Aquamacs.app';
 
