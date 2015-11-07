@@ -27,6 +27,7 @@
 ;;; Code:
 
 (eval-when-compile
+  (require 'tramp)
   (require 'cl))
 
 (defun ess-inside-string-or-comment-p (&optional pos)
@@ -35,11 +36,10 @@
   ;;FIXME (defun ess-calculate-indent ..)  can do that ...
   (interactive)
   (setq pos (or pos (point)))
-  (let ((pps
-         ;; (parse-partial-sexp (point-min) pos)
-         (syntax-ppss pos)))
-    ;; 3: string,  4: comment
-    (or (nth 3 pps) (nth 4 pps))))
+  (let ((ppss (syntax-ppss pos)))
+    (or (car (setq ppss (nthcdr 3 ppss)))
+        (car (setq ppss (cdr ppss)))
+        (nth 3 ppss))))
 
 
 (defun ess-inside-string-p (&optional pos)
@@ -822,7 +822,7 @@ evaluation of BODY.
 Should be used in `ess-idle-timer-functions' which call the
 process to avoid excessive requests.
 "
-  (declare (indent 1))
+  (declare (indent 1) (debug t))
   `(with-ess-process-buffer 'no-error
      (let ((le (process-get *proc* 'last-eval))
            (tv (process-get *proc* ',time-var)))
@@ -877,7 +877,7 @@ t. See examples in the tracebug code.
 (defmacro ess-execute-dialect-specific (command &optional prompt &rest args)
   "Execute dialect specific command.
 
--- If command is not defined issue warning 'Not availabe for dialect X'
+-- If command is not defined issue warning 'Not available for dialect X'
 -- if a function, execute it with ARGS
 -- If a string starting with 'http' or 'www', browse with `browse-url',
    otherwise execute the command in inferior process.
@@ -1073,18 +1073,19 @@ queried for arguments.
         (setq args nil))
       (or args
           (cadr (assoc funname (process-get proc 'funargs-pre-cache)))
-          (with-current-buffer (ess-command (format ess-funargs-command
-                                                    (ess-quote-special-chars funname))
-                                            nil nil nil nil proc)
-            (goto-char (point-min))
-            (when (re-search-forward "(list" nil t)
-              (goto-char (match-beginning 0))
-              (setq args (ignore-errors (eval (read (current-buffer)))))
-              (if args
-                  (setcar args (cons (car args) (current-time)))))
-            ;; push even if nil
-            (puthash (substring-no-properties funname) args (process-get proc 'funargs-cache))
-            )))))
+	  (and 
+	   (not (process-get proc 'busy))
+	   (with-current-buffer (ess-command (format ess-funargs-command
+						     (ess-quote-special-chars funname))
+					     nil nil nil nil proc)
+	     (goto-char (point-min))
+	     (when (re-search-forward "(list" nil t)
+	       (goto-char (match-beginning 0))
+	       (setq args (ignore-errors (eval (read (current-buffer)))))
+	       (if args
+		   (setcar args (cons (car args) (current-time)))))
+	     ;; push even if nil
+	     (puthash (substring-no-properties funname) args (process-get proc 'funargs-cache))))))))
 
 (defun ess-symbol-start ()
   "Get initial position for objects completion."
@@ -1092,6 +1093,14 @@ queried for arguments.
     (when (and beg (not (save-excursion (goto-char beg)
                                         (looking-at "/\\|.[0-9]"))))
       beg)))
+
+(defun ess-arg-start ()
+  "Get initial position for args completion"
+  (when (not (ess-inside-string-p))
+    (when (ess--funname.start)
+      (if (looking-back "[(,]+[ \t\n]*")
+          (point)
+        (ess-symbol-start)))))
 
 (defvar ess--funname.start nil)
 
@@ -1119,7 +1128,7 @@ later."
 
        (unless (ess-inside-string-p)
          (setq ess--funname.start
-               (condition-case nil ;; check if it is inside a functon 
+               (condition-case nil ;; check if it is inside a functon
                    (progn
                      ;; for the sake of big buffers, look only 1000 chars back
                      (narrow-to-region (max (point-min) (- (point) 1000)) (point))

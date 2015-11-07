@@ -20,8 +20,8 @@
 
 ## Instead of modern  utils::help use one that works in R 1.0.0:
 .ess.findFUN   <- get("find", .ess.utils.name)
-.ess.helpFUN   <- get("help", .ess.utils.name)
 .ess.sourceFUN <- get("source", pos="package:base")
+.ess.helpFUN   <- get("help", envir=.GlobalEnv)# so it also works with d..tools
 
 ### HELP
 .ess.help <- function(..., help.type = getOption('help_type'))
