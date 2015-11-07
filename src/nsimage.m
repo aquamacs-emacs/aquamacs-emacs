@@ -266,37 +266,23 @@ ns_resize_truedpi_image (void *eImg, int respect_dpi, Lisp_Object scale_factor, 
 
 @implementation EmacsImage
 
-static EmacsImage *ImageList = nil;
-
 + allocInitFromFile: (Lisp_Object)file
 {
   NSImageRep *imgRep;
   Lisp_Object found;
   EmacsImage *image;
 
-  #if 1
-  image =  ImageList;
-  /* look for an existing image of the same name */
-  while (image != nil &&
-	 ([image name] == nil || 
-	  [[image name] compare: [NSString stringWithUTF8String: SSDATA (file)]]
-	  != NSOrderedSame))
-    image = [image imageListNext];
-  if (image != nil)
-    {
-      return image;
-    }
-  #else
   // this variant uses the NS/Cocoa image store
-  // it might search among files, so we don't use it (for now)
+  // is it slow?
+
+  /*
   NSImage *image2;
   image2 = [NSImage imageNamed: [NSString stringWithUTF8String: SDATA (file)]];
   if (image2 != nil) // && [image2 isKindOfClass:[EmacsImage class]])
     {
       return image2;
     }
-  #endif
-
+  */
 
   /* Search bitmap-file-path for the file, if appropriate.  */
   found = x_find_image_file (file);
@@ -328,7 +314,7 @@ static EmacsImage *ImageList = nil;
 #endif
   [image setSize: NSMakeSize([imgRep pixelsWide], [imgRep pixelsHigh])];
 
-    ns_resize_truedpi_image(image, 0, Qnil, nil); // no resize, just choose representation.
+  ns_resize_truedpi_image(image, 0, Qnil, nil); // no resize, just choose representation.
       
   [image setName: [NSString stringWithUTF8String: SSDATA (file)]];
 
