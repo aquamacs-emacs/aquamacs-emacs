@@ -2240,6 +2240,15 @@ See also `toggle-frame-maximized'."
 (make-obsolete-variable
  'window-system-version "it does not give useful information." "24.3")
 
+;; Variables which should trigger redisplay of the current buffer.
+(setq redisplay--variables (make-hash-table :test 'eq :size 10))
+(mapc (lambda (var)
+        (puthash var 1 redisplay--variables))
+      '(line-spacing
+        overline-margin
+        line-prefix
+        wrap-prefix))
+
 (provide 'frame)
 
 ;;; frame.el ends here

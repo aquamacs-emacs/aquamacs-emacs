@@ -859,6 +859,9 @@ static NSRect constrain_frame_rect(NSRect frameRect)
 
 static void
 ns_constrain_all_frames (void)
+/* --------------------------------------------------------------------------
+     Ensure that the menu bar doesn't cover any frames.
+   -------------------------------------------------------------------------- */
 {
   Lisp_Object tail, frame;
 
@@ -871,10 +874,14 @@ ns_constrain_all_frames (void)
       struct frame *f = XFRAME (frame);
       if (FRAME_NS_P (f))
         {
-          NSView *view = FRAME_NS_VIEW (f);
+          EmacsView *view = FRAME_NS_VIEW (f);
 
-          [[view window] setFrame:constrain_frame_rect([[view window] frame])
-                          display:NO];
+          if (![view isFullscreen])
+            {
+              [[view window]
+                setFrame:constrain_frame_rect([[view window] frame])
+                 display:NO];
+            }
         }
     }
 
@@ -882,13 +889,11 @@ ns_constrain_all_frames (void)
 }
 
 
-/* Show or hide the menu bar, based on user setting.  */
-
-/* for OS X 10.5 build compatibility [not compatible with post-10.8]*/
-/* typedef NSUInteger NSApplicationPresentationOptions; */
-
 static void
 ns_update_auto_hide_menu_bar (void)
+/* --------------------------------------------------------------------------
+     Show or hide the menu bar, based on user setting.
+   -------------------------------------------------------------------------- */
 {
 #ifdef NS_IMPL_COCOA
   NSTRACE ("ns_update_auto_hide_menu_bar");
@@ -7278,7 +7283,11 @@ not_in_argv (NSString *arg)
 - (void)windowDidResize: (NSNotification *)notification
 {
   NSTRACE ("windowDidResize");
-
+  if (!FRAME_LIVE_P (emacsframe))
+    {
+      NSTRACE_MSG ("Ignored (frame dead)");
+      return;
+    }
   if (emacsframe->output_data.ns->in_animation)
     {
       NSTRACE_MSG ("Ignored (in animation)");
@@ -7852,7 +7861,11 @@ not_in_argv (NSString *arg)
 - (void)windowWillExitFullScreen:(NSNotification *)notification
 {
   NSTRACE ("windowWillExitFullScreen");
-
+  if (!FRAME_LIVE_P (emacsframe))
+    {
+      NSTRACE_MSG ("Ignored (frame dead)");
+      return;
+    }
   if (next_maximized != -1)
     fs_before_fs = next_maximized;
 }
@@ -7860,9 +7873,11 @@ not_in_argv (NSString *arg)
 - (void)windowDidExitFullScreen:(NSNotification *)notification
 {
   NSTRACE ("windowDidExitFullScreen");
-
-  if (! FRAME_LIVE_P (emacsframe))
+  if (!FRAME_LIVE_P (emacsframe))
+    {
+      NSTRACE_MSG ("Ignored (frame dead)");
       return;
+    }
   [self setFSValue: fs_before_fs];
   fs_before_fs = -1;
 #ifdef HAVE_NATIVE_FS
