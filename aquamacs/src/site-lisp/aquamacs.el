@@ -1276,6 +1276,13 @@ we put it on this frame."
   (aquamacs-set-defaults
    '((redisplay-dont-pause t))))
 
+;; -------- PACKAGES -------------
+
+(aquamacs-set-defaults
+ '((package-archives ;; is part of `package' (not loaded)
+    (("melpa-stable" . "https://stable.melpa.org/packages/")
+     ("melpa" . "https://melpa.org/packages/")
+     ("gnu" . "http://elpa.gnu.org/packages/")))))
 
 ;; -------- EDITING MODES AND UI -------------
 
