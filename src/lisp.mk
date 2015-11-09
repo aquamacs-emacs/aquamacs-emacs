@@ -124,13 +124,13 @@ electric.elc \
 emacs-lisp/eldoc.elc \
 cus-start.elc \
 tooltip.elc \
-leim/leim-list.elc \
 emacs-lisp/easymenu.elc \
 paren.elc \
 timezone.elc \
 emacs-lisp/advice.elc \
 delsel.elc \
 emulation/cua-base.elc \
+leim/leim-list.elc \
 site-load.elc \
 site-init.elc \
 
