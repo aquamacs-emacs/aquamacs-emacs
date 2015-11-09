@@ -47,14 +47,24 @@ echo "Compiler flags: $FLAGS"
 
 MACOSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET:-"10.6"}
 export MACOSX_DEPLOYMENT_TARGET
-SDKROOT=${SDKROOT:-"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk"}
-export SDKROOT
 
 echo "MACOSX_DEPLOYMENT_TARGET=" $MACOSX_DEPLOYMENT_TARGET
 echo "SDKROOT=" $SDKROOT
 
 # autoconf must be run via macports to allow its upgrade
 test $OMIT_AUTOGEN || ./autogen.sh ; \
+
+## do not RELY ON FACCESSAT because it isn't present before OS X  10.10
+case "$1" in
+'-release')
+    sed -i '' 's/HAVE_FACCESSAT=1/HAVE_FACCESSAT=0/g' configure
+;;
+'-nightly')
+    sed -i '' 's/HAVE_FACCESSAT=1/HAVE_FACCESSAT=0/g' configure
+;;
+esac
+# That way, we do not have to force use of MacOSX10.9.sdk with SDKROOT
+
 ./configure --with-ns --without-x CFLAGS="$FLAGS -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET" LDFLAGS="$FLAGS -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"; \
 make clean ; \
 make all ; \
