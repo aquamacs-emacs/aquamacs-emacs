@@ -977,7 +977,7 @@ yes-or-no prompts - y or n will do."
 
      (minibuffer-prompt-properties
       ,(plist-put minibuffer-prompt-properties
-		  'point-entered 'minibuffer-avoid-prompt))))
+		  'cursor-intangible t))))
 
 ;; on by default
 (if (and (fboundp 'mac-inline-input-method-mode)
