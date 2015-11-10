@@ -116,47 +116,53 @@ in HTML format."
 	(write-region nil nil target-file nil 'shut-up)))
     (kill-buffer buf)))
 
-(defun aquamacs-copy-as-html (beg end)
-  "Copies the region in HTML format into the clipboard."
-  (interactive "r")
-  (when (or (not transient-mark-mode) mark-active beg)
-    (let ((htmlize-white-background t)
-	  (htmlize-output-type 'inline-css))
-      (let ((select-enable-clipboard t)
-	    (buf (aquamacs-convert-to-html-buffer beg end)))
-	;; externally store text as text
-	(ns-store-selection-internal 'CLIPBOARD (buffer-substring beg end) 'txt)
-	(with-current-buffer buf	
-	  ;; internally (not externally) store the HTML
-	  (let ((interprogram-cut-function nil))
-	    (copy-region-as-kill (point-min) (point-max)))
-	  ;; externally add html to the pasteboard
-	  (ns-store-selection-internal 'CLIPBOARD (buffer-string) 'html))
-
-	;; ns-store-cut-buffer-internal with TYPE 'html doesn't seem to work
-	;; (with-current-buffer buf
-	;;   (ns-store-cut-buffer-internal 'PRIMARY (buffer-string) 'html))
-	(kill-buffer buf)))))
-
-(defun aquamacs-copy-as-pdf (beg end)
+;;;###autoload
+(defun copy-formatted (beg end)
   "Copies the region formatted into the clipboard.
-The region is rendered as PDF and HTML and is
+The region is rendered as RTF and HTML and is
 copied into the clipboard for use in another application."
   (interactive "r")
+  (aquamacs-copy-formatted-internal beg end '(html rtf text)))
+
+;;;###autoload
+(defun copy-as-pdf (beg end)
+  "Copies the region formatted into the clipboard.
+The region is rendered as PDF and is
+copied into the clipboard for use in another application."
+   (interactive "r")
+   (aquamacs-copy-formatted-internal beg end '(pdf)))
+
+(defun aquamacs-copy-formatted-internal (beg end formats)
+  "Copies the region formatted in FORMATS into the clipboard.
+FORMATS is a list of `text', `html', `rtf', or `pdf'."
   (when (or (not transient-mark-mode) mark-active beg)
     (let ((htmlize-white-background t)
 	  (htmlize-output-type 'inline-css))
-      (let ((select-enable-clipboard t)
-	    (buf (aquamacs-convert-to-html-buffer beg end)))
+      (let ((text (buffer-substring beg end))
+            (select-enable-clipboard t)
+            (buf (aquamacs-convert-to-html-buffer beg end)))
 	;; externally store text as text
-	(ns-store-selection-internal 'CLIPBOARD (buffer-substring beg end) 'txt)
 	(with-current-buffer buf	
 	  ;; internally (not externally) store the HTML
 	  (let ((interprogram-cut-function nil))
 	    (copy-region-as-kill (point-min) (point-max)))
-	  ;; Now render a PDF (copies this and HTML to NS pasteboard)
-	  (ns-render-to-pdf (current-buffer) (window-pixel-width (selected-window)) 100))
-	(kill-buffer buf)))))
+	  ;; externally add formats to the pasteboard
+          (ns-store-selection-internal 'CLIPBOARD nil nil) ;; delete pasteboard
+	  ;; HTML first, then RTF  (MS Word fails to paste otherwise)
+          (mapc (lambda (type)
+                  (cond ((eq 'text type)
+                         (ns-store-selection-internal 'CLIPBOARD text 'text))
+                        ((eq 'html type)
+                         (ns-store-selection-internal 'CLIPBOARD (buffer-string) 'html))
+                        ((eq 'rtf type)
+                         (ns-store-selection-internal 'CLIPBOARD (aquamacs-html-to-rtf (buffer-string)) 'rtf))
+                        ((eq 'pdf type)
+                         ;; to do, return PDF as a string as with the others
+                         ;; this overwrites the clipboard, so we cannot combine PDF and other formats
+                         (aquamacs-render-to-pdf (current-buffer) (window-pixel-width (selected-window)) 100))))
+                formats)
+	(kill-buffer buf))
+      ))))
 
 (defun aquamacs-convert-to-html-buffer (&optional beg end)
   "Creates a buffer containing an HTML rendering of the current buffer."

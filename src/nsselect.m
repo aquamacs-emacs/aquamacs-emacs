@@ -197,7 +197,8 @@ ns_string_to_pasteboard_internal (id pb, Lisp_Object str, NSString *gtype)
       else
         {
 	  // Used for ns-own-selection-internal.
-	  eassert (gtype == NSStringPboardType);
+	  // In Aquamacs, gtype maybe HTML
+	  // eassert (gtype == NSStringPboardType);
           [pb setString: nsStr forType: gtype];
         }
       [nsStr release];
@@ -498,10 +499,10 @@ SELECTION is a symbol, typically `PRIMARY', `SECONDARY', or `CLIPBOARD'. */)
   pb = ns_symbol_to_pb (selection);
   if (pb != nil) 
 	{
-	  	if (NILP (type))
-  			ns_string_to_pasteboard (pb, string);
-  		else
-			ns_string_to_pasteboard_with_type (pb, string, type);
+	  if (NILP (type))
+	    ns_string_to_pasteboard (pb, string);
+	  else
+	    ns_string_to_pasteboard_with_type (pb, string, type);
 	}
   return Qnil;
 }
@@ -539,6 +540,7 @@ syms_of_nsselect (void)
   defsubr (&Sns_own_selection_internal);
   defsubr (&Sns_selection_exists_p);
   defsubr (&Sns_selection_owner_p);
+  defsubr (&Sns_store_selection_internal);
 
   Vselection_alist = Qnil;
   staticpro (&Vselection_alist);

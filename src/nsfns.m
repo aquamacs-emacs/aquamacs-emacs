@@ -2003,9 +2003,47 @@ DEFUN ("ns-popup-page-setup-panel", Fns_popup_page_setup_panel, Sns_popup_page_s
   return Qnil;
 }
 
-DEFUN ("ns-render-to-pdf", Fns_render_to_pdf, Sns_render_to_pdf,
+DEFUN ("aquamacs-html-to-rtf", Faquamacs_html_to_rtf,
+       Saquamacs_html_to_rtf, 1, 1, 0,
+       doc: /* Converts HTML to RTF.
+Available in Aquamacs only. */)
+     (Lisp_Object str)
+{
+  Lisp_Object result = Qnil;
+  /* convert HTML to RTF for formatting */
+  NSData *htmlData = [[NSString stringWithUTF8String: SDATA (str)]
+		       dataUsingEncoding:NSUTF8StringEncoding];
+ 
+  NSAttributedString *attrString = [[NSAttributedString alloc]
+					   initWithHTML:htmlData
+						options:@{NSTextEncodingNameDocumentOption: @"UTF-8"}
+                                     documentAttributes:NULL];
+
+  if (attrString)
+    {
+      NSData *rtfData = [attrString RTFFromRange: NSMakeRange(0,[attrString length])
+			      documentAttributes: @{NSDocumentTypeDocumentAttribute: NSRTFTextDocumentType}];
+      if (rtfData)
+	{
+	  if ([rtfData length] > 0)
+	    {
+	      result = make_string_from_bytes ((char *) [rtfData bytes], 1, [rtfData length]);
+	    }
+	  else
+	    result = Qnil;
+	}
+      else
+	error ("aquamacs-html-to-rtf: Generating RTF failed.");
+    }
+  else
+    error ("aquamacs-html-to-rtf: Parsing HTML failed.");
+  return result;
+}
+
+
+DEFUN ("aquamacs-render-to-pdf", Faquamacs_render_to_pdf, Saquamacs_render_to_pdf,
        0, 3, "",
-       doc: /* Render HTML file or buffer SOURCE to PDF.
+       doc: /* Render HTML buffer SOURCE to PDF.
 If successful, resulting PDF (and the input HTML) are put
 on the pasteboard.*/)
      (source, width, height)
@@ -2017,7 +2055,7 @@ on the pasteboard.*/)
   CHECK_NATNUM(height);
   if (! BUFFERP (source))
     {
-     error ("Must give buffer as source for ns-render-to-pdf.");
+     error ("Must give buffer as source for aquamacs-render-to-pdf.");
     }
 
   block_input();
@@ -4349,7 +4387,9 @@ be used as the image of the icon representing the frame.  */);
   defsubr (&Sns_popup_print_panel);
   defsubr (&Sns_popup_page_setup_panel);
   defsubr (&Sns_popup_save_panel);
-  defsubr (&Sns_render_to_pdf);
+  
+  defsubr (&Saquamacs_render_to_pdf);
+  defsubr (&Saquamacs_html_to_rtf);
 
   defsubr (&Sx_show_tip);
   defsubr (&Sx_hide_tip);
