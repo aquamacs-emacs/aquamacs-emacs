@@ -1051,7 +1051,12 @@ that uses or sets the mark."
   (interactive)
   (push-mark (point))
   (push-mark (point-max) nil t)
-  (goto-char (point-min)))
+  (goto-char (point-min))
+  (when transient-mark-mode
+    (setq-local transient-mark-mode
+                (cons 'only
+                      (unless (eq transient-mark-mode 'lambda)
+                        transient-mark-mode)))))
 
 
 ;; Counting lines, one way or another.
