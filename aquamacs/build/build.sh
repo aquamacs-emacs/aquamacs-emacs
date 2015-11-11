@@ -61,7 +61,6 @@ then
 # for current Aquamacs, this will typically be 10.9
 for VERS in 10.6 10.7 10.8 10.9 10.10 10.11 10.12 10.13 10.14; do
     SDK="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${VERS}.sdk"
-    echo $SDK
     if [ -d "$SDK" ]; then
         FINALMESSAGE="This build will be compatible with OS X $VERS onwards."
 	SDKROOT=${SDKROOT:-"$SDK"}
