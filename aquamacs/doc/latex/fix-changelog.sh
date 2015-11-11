@@ -8,12 +8,13 @@ newdir="../Aquamacs\ Help"
 
 cd ../Aquamacs\ Help
 chgfile=$(/usr/bin/grep -m1 -l changelog-top *.html)
+echo "CHGFILE=$chgfile"
 
 cp ${chgfile} ${chgfile}.bak 
 
 (cat ${chgfile}.bak | perl -e 'my $x=join("",<STDIN>); $x=~s!(<H2>.*?)(<a name="changelog-top"></a>)!\2\1!s; print($x);' > ${chgfile} ) 
 
-rm "${chgfile}.bak" 
+rm "${chgfile}.bak" 2>/dev/null
 
 (cat ${chgfile} | perl -e 'my $x=join("",<STDIN>); $x=~s|^.*(<a name="changelog-top"></a>)(.*?)<!--Navigation Panel-->.*</HTML>|\2|s; print($x);' > ${orig}/changelog.html ) 
 
