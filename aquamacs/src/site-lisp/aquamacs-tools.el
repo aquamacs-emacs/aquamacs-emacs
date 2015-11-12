@@ -305,7 +305,7 @@ Carbon Emacs instead of Aquamacs."
 Add the value to the customization group `Aquamacs-is-more-than-Emacs'."
 
   (mapc (lambda (elt)
-	  (custom-load-symbol (car elt))
+	  (custom-load-symbol (car elt)) ;; does nothing for non-custom variables
 	  (let* ((symbol (car elt))
 		 ;; we're accessing the doc property here so
 		 ;; if the symbol is an autoload symbol,
@@ -319,17 +319,30 @@ Add the value to the customization group `Aquamacs-is-more-than-Emacs'."
 		       'variable-documentation)
 		    (error "")))
 		(value (car (cdr elt)))
-		(s-value (get symbol 'standard-value)))
-	    (set symbol value)
+		(s-value (get symbol 'standard-value))
+                (setter (get symbol 'custom-set)))
+            
+            ;; if there's a setter, use it
+            ;; note: symbol must be loaded for this to work
+            (if setter ;; if customizable and there is a special setter
+                (funcall setter symbol value)
+              ;; otherwise, just set it
+              (set symbol value))
+
 	    (set-default symbol value) ;; new in post-0.9.5
- 
+
+            ;; To Do: consider calling `custom-theme-set-variables' for custom
+            ;; settings and create an Aquamacs theme.  This is not trivial,
+            ;; as we do not want to store a "saved variable" as opposed to a
+            ;; new default (as if it had been set with `defcustom').
+
 	    ;; make sure that user customizations get 
 	    ;; saved to customizations.el (.emacs)
 	    ;; and that this appears as the new default.
 
-	    (put symbol 'standard-value `((quote  ,(copy-tree (eval symbol)))))
 	    ;; since the standard-value changed, put it in the
 	    ;; group
+	    (put symbol 'standard-value `((quote  ,(copy-tree (eval symbol)))))
 
 	    (unless (or (eq s-value (get symbol 'standard-value))
 			(get symbol 'aquamacs-original-default))
