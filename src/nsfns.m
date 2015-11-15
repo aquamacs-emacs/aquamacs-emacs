@@ -60,7 +60,9 @@ EmacsTooltip *ns_tooltip = nil;
 Lisp_Object Fx_open_connection (Lisp_Object, Lisp_Object, Lisp_Object);
 
 /* Static variables to handle applescript execution.  */
-static Lisp_Object as_script, *as_result;
+
+static NSAppleScript* as_scriptObject = nil;
+static Lisp_Object *as_result;
 static int as_status;
 
 static ptrdiff_t image_cache_refcount;
@@ -2385,8 +2387,11 @@ Optional arg DIR_ONLY_P, if non-nil, means choose only directories.  */)
                                data2: NSAPP_DATA2_RUNFILEDIALOG];
 
   [NSApp postEvent: nxev atStart: NO];
+
   while (ns_fd_data.panel != nil)
-    [NSApp run];
+	  [NSApp performSelectorOnMainThread:@selector(run)
+					 withObject:nil
+				      waitUntilDone:YES];
 
   if (ns_fd_data.ret == MODAL_OK_RESPONSE)
     {
@@ -2960,19 +2965,17 @@ DEFUN ("ns-convert-utf8-nfd-to-nfc", Fns_convert_utf8_nfd_to_nfc,
    string or a number containing the resulting script value.  Otherwise,
    1 is returned. */
 static int
-ns_do_applescript (Lisp_Object script, Lisp_Object *result)
+ns_do_applescript (NSAppleScript *scriptObject, Lisp_Object *result)
 {
   NSAppleEventDescriptor *desc;
   NSDictionary* errorDict;
   NSAppleEventDescriptor* returnDescriptor = NULL;
 
-  NSAppleScript* scriptObject =
-    [[NSAppleScript alloc] initWithSource:
-			     [NSString stringWithUTF8String: SSDATA (script)]];
-
   returnDescriptor = [scriptObject executeAndReturnError: &errorDict];
-  [scriptObject release];
   *result = Qnil;
+
+  [as_scriptObject release];
+  as_scriptObject = nil;
 
   // to do: maybe evaluate the message in errorDict instead, as per API documentation
   if (returnDescriptor != NULL)
@@ -3018,9 +3021,10 @@ ns_do_applescript (Lisp_Object script, Lisp_Object *result)
 void
 ns_run_ascript (void)
 {
-  if (! NILP (as_script))
-    as_status = ns_do_applescript (as_script, as_result);
-  as_script = Qnil;
+  if (as_scriptObject)
+    {
+      as_status = ns_do_applescript (as_scriptObject, as_result);
+    }
 }
 
 DEFUN ("ns-do-applescript", Fns_do_applescript, Sns_do_applescript, 1, 1, 0,
@@ -3040,8 +3044,32 @@ In case the execution fails, an error is signaled. */)
 
   block_input ();
 
-  as_script = script;
+  as_scriptObject =
+    [[NSAppleScript alloc] initWithSource:
+	   [NSString stringWithUTF8String: SSDATA (script)]];
+
   as_result = &result;
+
+  NSDictionary<NSString *,id> *errorInfo = nil;
+
+  if (NO == [as_scriptObject compileAndReturnError:&errorInfo])
+    {
+      NSString *err = nil;
+      if (errorInfo)
+	  err = [errorInfo objectForKey:NSAppleScriptErrorMessage];
+      [as_scriptObject release]; // is errorInfo autoreleased?
+      as_scriptObject = nil;
+
+      if (err)
+	{
+	  xsignal1 (Qerror, build_string ([err UTF8String]));
+	}
+      else
+	{
+	  error ("Error while parsing AppleScript.");
+	}
+    }
+
 
   NSWindow *win = [NSApp mainWindow];
   if (win == nil)
@@ -3072,13 +3100,19 @@ In case the execution fails, an error is signaled. */)
   // If there are other events, the event loop may exit.  Keep running
   // until the script has been handled.  */
   ns_init_events (&ev);
-  while (! NILP (as_script))
-    [NSApp run];
+  while (as_scriptObject)
+    [NSApp performSelectorOnMainThread:@selector(run)
+			    withObject:nil
+			 waitUntilDone:YES];
   ns_finish_events ();
 
   status = as_status;
   as_status = 0;
   as_result = 0;
+
+  // [as_scriptObject release];
+  // as_scriptObject = nil;
+
   unblock_input ();
   if (status == 0)
     return result;
@@ -4396,8 +4430,6 @@ be used as the image of the icon representing the frame.  */);
 
   defsubr (&Sns_open_help_anchor);
 
-  staticpro (&as_script);
   as_status = 0;
-  as_script = Qnil;
   as_result = 0;
 }
