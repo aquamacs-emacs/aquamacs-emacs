@@ -1678,6 +1678,14 @@ Items in this list are always Lisp symbols.*/)
 send a message; Command-Option dragging items for instance does not trigger 
 a notification */
 
+- (void)setVisible:(BOOL)shown
+{
+  NSTRACE ("[EmacsToolbar setVisible:%d]", shown);
+
+  [super setVisible:shown];
+}
+
+
 /* optional and unneeded */
 // - (void)insertItemWithItemIdentifier:(NSString *)itemIdentifier atIndex:(NSInteger)index
 // - (void)setConfigurationFromDictionary:(NSDictionary *)configDict
