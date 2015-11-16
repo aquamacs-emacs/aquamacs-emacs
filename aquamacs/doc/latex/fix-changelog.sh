@@ -10,6 +10,8 @@ cd ../Aquamacs\ Help
 chgfile=$(/usr/bin/grep -m1 -l changelog-top *.html)
 echo "CHGFILE=$chgfile"
 
+[ -z $CHGFILE ] && exit 1
+
 cp ${chgfile} ${chgfile}.bak 
 
 (cat ${chgfile}.bak | perl -e 'my $x=join("",<STDIN>); $x=~s!(<H2>.*?)(<a name="changelog-top"></a>)!\2\1!s; print($x);' > ${chgfile} ) 

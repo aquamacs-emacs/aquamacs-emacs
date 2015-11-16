@@ -45,6 +45,7 @@ html: aquamacs.tex *.pdf
 	mv $(newdir)/index2.html $(newdir)/index.html ; \
 	tidy -asxhtml -m *.html ; \
 	(cd $(srcdir) ; ./fix-changelog.sh ) ; \
+	echo "Removing extra files." ; \
 	cd $(newdir) ; \
 	rm $(newdir)/WARNINGS $(newdir)/images.* $(newdir)/*.bak 2>dev/null ; \
 	echo "Making new Aquamacs Help directory, copying new help files."	     ; \
