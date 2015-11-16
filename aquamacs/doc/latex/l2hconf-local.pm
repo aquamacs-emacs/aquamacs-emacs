@@ -272,7 +272,7 @@ $PS_IMAGES = 0;
 # -antialias
 # 1 =  use anti-aliasing in the generation of images of figures .
 #
-$ANTI_ALIAS = 0;
+$ANTI_ALIAS = 1;
 
 
 # -antialias_text
@@ -435,7 +435,7 @@ $INFO = 0;
 # If 1, only recycle images generated from previous runs.
 # If 2, recycle images from the current and previous runs.
 #
-$REUSE = 2;
+$REUSE = 0;
 
 
 # -no_images

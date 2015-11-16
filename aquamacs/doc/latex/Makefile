@@ -32,7 +32,9 @@ pdf: aquamacs.tex changelog.tex changes.tex *.pdf
 
 html: aquamacs.tex *.pdf
 	echo "Running latex2html on $(fname)...";				     \
+	rm -r aquamacs; 	\
 	../convert/latex2html -init_file l2hconf-local.pm -local_icons -html_version=4.0 $(fname) ; \
+	sips -s format png aquamacs-logo.pdf --out $(newdir)/image.png; \
 	echo "$(fname) converted to HTML."					     ; \
 	cp aquamacs.css $(newdir)/aquamacs.css					     ; \
 	sed 's/<META NAME="description" CONTENT="/<META NAME="AppleTitle" content="Aquamacs Help ('"${AQUAMACS_MAJOR_VERSION}"')"><META NAME="AppleFont" content="Lucida Grande,Helvetica"><META NAME="description" CONTENT="Aquamacs Emacs - /' <$(newdir)/index.html >$(newdir)/index2.html	     ; \
@@ -44,7 +46,7 @@ html: aquamacs.tex *.pdf
 	tidy -asxhtml -m *.html ; \
 	(cd $(srcdir) ; ./fix-changelog.sh ) ; \
 	cd $(newdir) ; \
-	rm $(newdir)/WARNINGS $(newdir)/images.* $(newdir)/*.bak ; \
+	rm $(newdir)/WARNINGS $(newdir)/images.* $(newdir)/*.bak 2>dev/null ; \
 	echo "Making new Aquamacs Help directory, copying new help files."	     ; \
 	mv $(newdir)/* $(destdir)/ ; \
 	cp $(srcdir)/*.png $(destdir)/			     ; \
