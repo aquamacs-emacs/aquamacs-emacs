@@ -3059,6 +3059,7 @@ In case the execution fails, an error is signaled. */)
   int status;
   NSEvent *nxev;
   struct input_event ev;
+  NSDictionary *errorDict = nil;
 
   CHECK_STRING (script);
   check_window_system (NULL);
@@ -3071,14 +3072,12 @@ In case the execution fails, an error is signaled. */)
 
   as_result = &result;
 
-  NSDictionary<NSString *,id> *errorInfo = nil;
-
-  if (NO == [as_scriptObject compileAndReturnError:&errorInfo])
+  if (NO == [as_scriptObject compileAndReturnError:&errorDict])
     {
       NSString *err = nil;
-      if (errorInfo)
-	  err = [errorInfo objectForKey:NSAppleScriptErrorMessage];
-      [as_scriptObject release]; // is errorInfo autoreleased?
+      if (errorDict)
+	  err = [errorDict objectForKey:NSAppleScriptErrorMessage];
+      [as_scriptObject release]; // is errorDict autoreleased?
       as_scriptObject = nil;
 
       if (err)
