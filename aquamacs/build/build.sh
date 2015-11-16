@@ -81,13 +81,16 @@ echo "MACOSX_DEPLOYMENT_TARGET=" $MACOSX_DEPLOYMENT_TARGET
 
 # autoconf must be run via macports to allow its upgrade
 test $OMIT_AUTOGEN || ./autogen.sh ; \
-./configure --with-ns --without-x CFLAGS="$FLAGS -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET" LDFLAGS="$FLAGS -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"; \
-make clean ; \
-make -j4 all && make -j2 install ; \
-rm -f etc/DOC-* ; \
+./configure --with-ns --without-x CFLAGS="$FLAGS -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET" LDFLAGS="$FLAGS -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET" || exit
+make clean || exit
+make -j4 all || exit
+make -j2 install || exit
+rm -f etc/DOC-*
 
 # generate symbol archive
 test $OMIT_SYMB || dsymutil src/emacs
 
 echo ${FINALMESSAGE}
 echo "Build finished."
+
+exit 0
