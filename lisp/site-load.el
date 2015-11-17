@@ -89,6 +89,7 @@
 (load "emacs-lisp/advice")
 (load "emacs-lisp/nadvice") ;; needed for defadvice
 
+(load "calendar/time-date") ;; for macros (ats)
 ;; (defun aq-preload (_x))
 ;; aquamacs
 ;; the function aq-preload is supplied by the make-aquamacs script
@@ -99,7 +100,7 @@
 ; the following can't be precompiled. reason unknown.
 ;; no text available if this is compiled in. 
 ;;(aq-preload "aquamacs-mode-specific-themes")
-(load "calendar/time-date")
+
 (aq-preload "aquamacs-macros")
 (aq-preload "aquamacs-tool-bar")
 (aq-preload "macosx/osx_defaults")
