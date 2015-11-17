@@ -44,7 +44,7 @@ html: aquamacs.tex *.pdf
 	sed 's|<BODY >|<BODY ><a name="AquamacsIndex"></a>|' <$(newdir)/index.html >$(newdir)/index2.html; \
 	mv $(newdir)/index2.html $(newdir)/index.html ; \
 	tidy -asxhtml -m *.html ; \
-	(cd $(srcdir) ; ./fix-changelog.sh ) ; \
+	(cd $(srcdir) ; ./fix-changelog.sh $(newdir)) ; \
 	echo "Removing extra files." ; \
 	cd $(newdir) ; \
 	rm $(newdir)/WARNINGS $(newdir)/images.* $(newdir)/*.bak 2>/dev/null ; \

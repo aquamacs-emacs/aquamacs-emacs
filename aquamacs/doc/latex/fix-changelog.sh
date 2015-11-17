@@ -4,9 +4,12 @@
 
 orig=`pwd`
 
-newdir="../Aquamacs\ Help"
+newdir=$1 || newdir=aquamacs/
 
-cd ../Aquamacs\ Help
+cd ${newdir}
+echo `pwd`
+echo $(/usr/bin/grep -m1 -l changelog-top *.html)
+echo `/usr/bin/grep -m1 -l changelog-top *.html`
 chgfile=$(/usr/bin/grep -m1 -l changelog-top *.html)
 echo "CHGFILE=$chgfile"
 
