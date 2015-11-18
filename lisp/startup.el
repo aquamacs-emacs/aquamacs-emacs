@@ -2476,7 +2476,7 @@ nil default-directory" name)
 		     ;; OS X sends -psn_ arguments on occasion.
 		     (if (string-match "\\`-psn_"  argi)
 			 (setq did-hook t))
-		     (if (not did-hook)
+		     (unless did-hook
                          ;; Presume that the argument is a file name.
                          (if (string-match "\\`-" argi)
                              (error "Unknown option `%s'" argi))
