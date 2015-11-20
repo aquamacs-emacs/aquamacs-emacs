@@ -31,7 +31,7 @@
 
 
 ;; this will only work if files have been byte-compiled.
-
+(load "emacs-lisp/pcase") ;; for easymenu
 ;;X (load "emacs-lisp/easy-mmode")
 (load "emacs-lisp/easymenu")
 ;(load "mwheel") ;; wants to be loaded at runtime
