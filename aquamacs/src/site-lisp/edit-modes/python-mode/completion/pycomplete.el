@@ -80,7 +80,7 @@ parsed. If limit is given, it limits the size of the returned alist."
         (variable-assignment-re (concat "^[ \t]+\\(\\w+\\)[ \t]*\\(?:=\\|+=\\|*=\\|%=\\|&=\\|^=\\|<<=\\|-=\\|/=\\|**=\\||=\\|>>=\\|//=\\)[ \t]*\\([({[]\\|[rRuU]*['\"]\\|[+\\-]?[[:word:].]+(?\\)")))
     (save-excursion
       ;; First get the current def and its parameters
-      (py-beginning-of-def)
+      (py-backward-def)
       (when (looking-at (concat py-def-re " *\\([^( ]+\\) *\\(([^:]+\\) *:"))
         (setq beg (match-end 0))
         (let ((params (replace-regexp-in-string
@@ -146,7 +146,7 @@ If no class name is found, return nil."
   (let (classname)
     (save-excursion
       (save-restriction
-        (py-beginning-of-class)
+        (py-backward-class)
         (when (looking-at (concat py-class-re " *\\([^( ]+\\)"))
           (setq classname (match-string-no-properties 2))
           (if (interactive-p)
@@ -244,7 +244,7 @@ or if the dot-expression starts with a variable for which the type is known."
 (defun py-complete ()
   "Complete symbol before point using Pymacs. "
   (interactive)
-  (setq py-completion-last-window-configuration
+  (setq py-last-window-configuration
         (current-window-configuration))
   (let ((symbol (py-complete-enhanced-symbol-before-point)))
     (if (string= "" symbol)
@@ -293,7 +293,7 @@ or if the dot-expression starts with a variable for which the type is known."
 (defun py-complete-completion-at-point ()
   "Return a (start end collection) list, so that this function
 can be used as a hook for completion-at-point-functions."
-  (setq py-completion-last-window-configuration
+  (setq py-last-window-configuration
         (current-window-configuration))
   (let ((symbol (py-complete-enhanced-symbol-before-point)))
     (when (not (string= "" symbol))
