@@ -944,7 +944,7 @@ yes-or-no prompts - y or n will do."
      (scroll-margin 0)
      (visual-scroll-margin 2)
 
-     (tramp-verbose 4)                  ;; don't annoy us
+     (tramp-verbose 3)                  ;; don't annoy us  (3 is the default normally anyway)
 
      ;; workaround for a bug in viper cursor color saving mechanism
      (viper-replace-overlay-cursor-color "red4")
