@@ -8904,8 +8904,14 @@ or a cons with a combination."
 
 (defun smart-spacing-string-is-word-boundary (str side)
   (or (string-match "\\w" str)
-      (if (eq side 'left) (or (equal str ".") (equal str ")")))
+      (if (eq side 'left)
+          ;; punctuation typically requiring space to the right
+          (member str '("." "," ":" "!" "?" ";" ")")))
+      ;; to do -- this is language specific
       (if (eq side 'right) (equal str "("))))
+
+(memq "." '("," "." ";" ")"))
+
 
 (defun smart-spacing-yank-handler (string)
   (let ((opoint (point))) ;; experimental - is this right? DR
