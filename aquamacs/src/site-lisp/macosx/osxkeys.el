@@ -260,21 +260,25 @@ With argument, do this that many times."
   (interactive "p")
   (if (and transient-mark-mode mark-active)
       (kill-region (region-beginning) (region-end))
-    (kill-region (point) 
-		 (let ((at-wb
-			(or 
-			 (not smart-spacing-mode)
-			 (eolp)
-			 (string-match 
-			  "\\w" 
-			  (buffer-substring-no-properties 
-			   (point) (min (point-max) (1+ (point))))))))
-		   (forward-word arg) 
-		   (if (not at-wb)
-		       (if (> arg 0)
-			   (skip-chars-forward " " 1)
-			 (skip-chars-backward " " 1)))
-		   (point)))))
+    (if smart-spacing-mode
+        (smart-delete-region (point) (progn (forward-word arg) (point)))
+      (kill-word arg))))
+
+    ;; (kill-region (point)
+    ;;     	 (let ((at-wb
+    ;;     		(or
+    ;;     		 (not smart-spacing-mode)
+    ;;     		 (eolp)
+    ;;     		 (string-match
+    ;;     		  "\\w"
+    ;;     		  (buffer-substring-no-properties
+    ;;     		   (point) (min (point-max) (1+ (point))))))))
+    ;;     	   (forward-word arg)
+    ;;     	   (if (not at-wb)
+    ;;     	       (if (> arg 0)
+    ;;     	           (skip-chars-forward " " 1)
+    ;;     	         (skip-chars-backward " " 1)))
+    ;;     	   (point)))))
 
 (defun aquamacs-backward-kill-word (&optional arg)
   "Kill characters backward until encountering the beginning of a word.
