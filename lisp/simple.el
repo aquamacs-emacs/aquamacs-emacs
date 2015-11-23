@@ -459,27 +459,18 @@ A non-nil INTERACTIVE argument means to run the `post-self-insert-hook'."
 	(put-text-property from (point) 'rear-nonsticky
 			   (cons 'hard sticky)))))
 
-(declare-function electric-indent-just-newline "electric")
-(defun open-line (n &optional interactive)
+(defun open-line (n)
   "Insert a newline and leave point before it.
-If `electric-indent-mode' is enabled, indent the new line if it's
-not empty.
 If there is a fill prefix and/or a `left-margin', insert them on
-the new line.  If the old line would have been blank, insert them
-on the old line as well.
-
-With arg N, insert N newlines.
-A non-nil INTERACTIVE argument means to run the `post-self-insert-hook'."
-  (interactive "*p\np")
+the new line if the line would have been blank.
+With arg N, insert N newlines."
+  (interactive "*p")
   (let* ((do-fill-prefix (and fill-prefix (bolp)))
 	 (do-left-margin (and (bolp) (> (current-left-margin) 0)))
 	 (loc (point-marker))
          ;; Don't expand an abbrev before point.
 	 (abbrev-mode nil))
-    (if (and interactive
-             (looking-at-p "[[:space:]]*$"))
-        (electric-indent-just-newline n)
-      (newline n interactive))
+    (newline n)
     (goto-char loc)
     (while (> n 0)
       (cond ((bolp)
