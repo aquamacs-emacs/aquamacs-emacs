@@ -454,7 +454,11 @@ lisp.mk: $(lispsource)/loadup.el
 	  sed -e 's/$$/.elc \\/' -e 's/\.el\.elc/.el/'; \
 	echo "" ) > $@
 
+## currently, site-lisp.mk is not generated automatically.
+
 -include lisp.mk
+-include site-lisp.mk
+
 shortlisp_filter = leim/leim-list.el site-load.elc site-init.elc
 shortlisp := $(filter-out ${shortlisp_filter},${shortlisp})
 ## Place loaddefs.el first, so it gets generated first, since it is on
