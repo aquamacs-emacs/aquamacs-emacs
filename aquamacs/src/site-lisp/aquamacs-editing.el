@@ -210,7 +210,7 @@ default in case there is not enough text."
 		  ;; cannot set window start, it causes problems at edges of
 		  ;; buffer for no apparent reason.
 		  ;;	(set-window-start (selected-window) (cdr (car psp)))
-		  (setq psp))
+		  (setq psp nil))
 	      (setq psp (cdr psp)))))))
    
     (when (nthcdr 9 page-scrolling-points)
