@@ -592,7 +592,7 @@ if modified buffers exist."
 	    ;; echo area messages
 	    ;; Caveat: this may impede useful functionality in "view"
 	    ;; when reviewing stuff.
-	    (setq timer-idle-list)
+	    (setq timer-idle-list nil)
 	    (save-some-buffers arg t)
 	    (and (or (not (fboundp 'process-list))
 		     ;; process-list is not defined on VMS.
