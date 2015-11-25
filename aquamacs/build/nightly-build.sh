@@ -52,16 +52,16 @@ echo "Building Aquamacs (incremental build)." >>$LOG
 APP=`pwd`/nextstep/Aquamacs.app
 DATE=`date +"%Y-%b-%d-%a-%H%M"`
 BLD=`pwd`/builds/Aquamacs-${DATE}.tar.bz2
+mkdir builds 2>/dev/null
 
 # one step builds on the next:
 aquamacs/build/build.sh -nightly >>$LOG 2>>$LOG  && \
 date >>$LOG && \
 echo "Packaging Aquamacs." >>$LOG && \
-mkdir builds 2>/dev/null && \
 cd `dirname ${APP}` && \
 tar cjf ${BLD} Aquamacs.app && \
-cd ${EMACS_ROOT} && \
-echo "Done." >>$LOG
+echo "Succeeded." >>$LOG
+cd ${EMACS_ROOT}
 
 
 #echo "Archiving symbol table into ${BRANCH}-${DATE}"
