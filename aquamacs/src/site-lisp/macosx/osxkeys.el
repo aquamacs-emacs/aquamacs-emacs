@@ -102,9 +102,16 @@ after updating this variable.")
 ;; to prevent isearch from interpreting this event (and aborting)
 (define-key special-event-map [ns-application-store-state] 'ignore)
 
-(aquamacs-set-defaults '((select-enable-clipboard t)
-                         (mouse-drag-copy-region nil)))
+(aquamacs-set-defaults '((select-enable-clipboard nil)
+                         (mouse-drag-copy-region t)))
 
+;; selecting with mouse should put text into Emacs kill ring.
+;; none of these actions should put text into the system clipboard (NS pasteboard).
+;; Command-C/X/V are bound to commands that temporarily set select-enable-clipboard to t.
+
+;; This way, Emacs-style commands (C-w, C-y) will use the kill ring,
+;; while Mac-style commands interact with other applications, which
+;; is roughly what is desired.
 
 ;; support copy&paste at the right level
 ;; (setq interprogram-paste-function 'aquamacs-cut-buffer-or-selection-value)
