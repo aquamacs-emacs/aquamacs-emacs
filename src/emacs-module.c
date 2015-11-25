@@ -25,6 +25,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "lisp.h"
 #include "dynlib.h"
@@ -386,9 +387,14 @@ module_make_function (emacs_env *env, ptrdiff_t min_arity, ptrdiff_t max_arity,
   envptr->data = data;
 
   Lisp_Object envobj = make_save_ptr (envptr);
+  Lisp_Object doc
+    = (documentation
+       ? code_convert_string_norecord (build_unibyte_string (documentation),
+				       Qutf_8, false)
+       : Qnil);
   Lisp_Object ret = list4 (Qlambda,
                            list2 (Qand_rest, Qargs),
-                           documentation ? build_string (documentation) : Qnil,
+                           doc,
                            list3 (module_call_func,
                                   envobj,
                                   Qargs));
@@ -515,22 +521,34 @@ module_copy_string_contents (emacs_env *env, emacs_value value, char *buffer,
       return false;
     }
 
-  ptrdiff_t raw_size = SBYTES (lisp_str);
-
-  /* Emacs internal encoding is more-or-less UTF8, let's assume utf8
-     encoded emacs string are the same byte size.  */
-
-  if (!buffer || length == 0 || *length-1 < raw_size)
+  Lisp_Object lisp_str_utf8 = ENCODE_UTF_8 (lisp_str);
+  ptrdiff_t raw_size = SBYTES (lisp_str_utf8);
+  if (raw_size == PTRDIFF_MAX)
     {
-      *length = raw_size + 1;
+      module_non_local_exit_signal_1 (env, Qoverflow_error, Qnil);
+      return false;
+    }
+  ptrdiff_t required_buf_size = raw_size + 1;
+
+  eassert (length != NULL);
+
+  if (buffer == NULL)
+    {
+      *length = required_buf_size;
+      return true;
+    }
+
+  eassert (*length >= 0);
+
+  if (*length < required_buf_size)
+    {
+      *length = required_buf_size;
+      module_non_local_exit_signal_1 (env, Qargs_out_of_range, Qnil);
       return false;
     }
 
-  Lisp_Object lisp_str_utf8 = ENCODE_UTF_8 (lisp_str);
-  eassert (raw_size == SBYTES (lisp_str_utf8));
-  *length = raw_size + 1;
-  memcpy (buffer, SDATA (lisp_str_utf8), SBYTES (lisp_str_utf8));
-  buffer[raw_size] = 0;
+  *length = required_buf_size;
+  memcpy (buffer, SDATA (lisp_str_utf8), raw_size + 1);
 
   return true;
 }
@@ -541,13 +559,14 @@ module_make_string (emacs_env *env, const char *str, ptrdiff_t length)
   check_main_thread ();
   eassert (module_non_local_exit_check (env) == emacs_funcall_exit_return);
   MODULE_HANDLE_SIGNALS;
-  if (length > PTRDIFF_MAX)
+  if (length > STRING_BYTES_BOUND)
     {
       module_non_local_exit_signal_1 (env, Qoverflow_error, Qnil);
       return NULL;
     }
-  /* Assume STR is utf8 encoded.  */
-  return lisp_to_value (env, make_string (str, length));
+  Lisp_Object lstr = make_unibyte_string (str, length);
+  return lisp_to_value (env,
+			code_convert_string_norecord (lstr, Qutf_8, false));
 }
 
 static emacs_value
@@ -686,7 +705,7 @@ DEFUN ("module-load", Fmodule_load, Smodule_load, 1, 1, 0,
   if (!gpl_sym)
     error ("Module %s is not GPL compatible", SDATA (file));
 
-  module_init = (emacs_init_function) dynlib_sym (handle, "emacs_module_init");
+  module_init = (emacs_init_function) dynlib_func (handle, "emacs_module_init");
   if (!module_init)
     error ("Module %s does not have an init function.", SDATA (file));
 
@@ -913,7 +932,8 @@ allocate_emacs_value (emacs_env *env, struct emacs_value_storage *storage,
 
 /* Mark all objects allocated from local environments so that they
    don't get garbage-collected.  */
-void mark_modules (void)
+void
+mark_modules (void)
 {
   for (Lisp_Object tem = Vmodule_environments; CONSP (tem); tem = XCDR (tem))
     {
@@ -1015,25 +1035,19 @@ module_format_fun_env (const struct module_fun_env *env)
 {
   /* Try to print a function name if possible.  */
   const char *path, *sym;
-  if (dynlib_addr (env->subr, &path, &sym))
-    {
-      static char const format[] = "#<module function %s from %s>";
-      int size = snprintf (NULL, 0, format, sym, path);
-      eassert (size > 0);
-      char buffer[size + 1];
-      snprintf (buffer, sizeof buffer, format, sym, path);
-      return make_unibyte_string (buffer, size);
-    }
-  else
-    {
-      static char const format[] = "#<module function at %p>";
-      void *subr = env->subr;
-      int size = snprintf (NULL, 0, format, subr);
-      eassert (size > 0);
-      char buffer[size + 1];
-      snprintf (buffer, sizeof buffer, format, subr);
-      return make_unibyte_string (buffer, size);
-    }
+  char buffer[256];
+  char *buf = buffer;
+  ptrdiff_t bufsize = sizeof buffer;
+  ptrdiff_t size
+    = (dynlib_addr (env->subr, &path, &sym)
+       ? exprintf (&buf, &bufsize, buffer, -1,
+		   "#<module function %s from %s>", sym, path)
+       : exprintf (&buf, &bufsize, buffer, -1,
+		   "#<module function at %p>", env->subr));
+  Lisp_Object unibyte_result = make_unibyte_string (buffer, size);
+  if (buf != buffer)
+    xfree (buf);
+  return code_convert_string_norecord (unibyte_result, Qutf_8, false);
 }
 
 
