@@ -54,17 +54,13 @@ DATE=`date +"%Y-%b-%d-%a-%H%M"`
 BLD=`pwd`/builds/Aquamacs-${DATE}.tar.bz2
 
 # one step builds on the next:
-aquamacs/build/build.sh -nightly >>$LOG 2>>$LOG
-
-
-# postprocessing the build, whether successful or not
-
-date >>$LOG
-echo "Packaging Aquamacs." >>$LOG
-mkdir builds 2>/dev/null
-cd `dirname ${APP}`
-tar cjf ${BLD} Aquamacs.app
-cd ${EMACS_ROOT}
+aquamacs/build/build.sh -nightly >>$LOG 2>>$LOG  && \
+date >>$LOG && \
+echo "Packaging Aquamacs." >>$LOG && \
+mkdir builds 2>/dev/null && \
+cd `dirname ${APP}` && \
+tar cjf ${BLD} Aquamacs.app && \
+cd ${EMACS_ROOT} && \
 echo "Done." >>$LOG
 
 
@@ -74,6 +70,7 @@ echo "Done." >>$LOG
 #cp src/emacs ${DSYM_ROOT}/${BRANCH}-${DATE}/
 
 # copy-build-to-server will be called by postprocessing script
+# running this whether it's successful or not.
 cd "$ORIGPATH"
 echo "Postprocessing..." >>$LOG
 . ../post.sh  $BLD $DATE # do server-specific post-processing (webserver copy)
