@@ -100,10 +100,13 @@ point regardless of any selection."
 (defun delete-active-region (&optional killp)
   "Delete the active region.
 If KILLP in not-nil, the active region is killed instead of deleted."
-
   (let ((prev-buffer-undo-list buffer-undo-list)
-        (smart-spacing-mode nil))
-
+        (smart-spacing-mode
+         (and smart-spacing-mode
+              (memq this-command
+                    '(delete-char
+                      delete-backward-char
+                      cua-delete-region)))))
   (cond
    (killp
     ;; Don't allow `kill-region' to change the value of `this-command'.
