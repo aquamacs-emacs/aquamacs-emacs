@@ -197,7 +197,7 @@ If kill-session is non-nil, kills the current session
   (let ((osx-version (shell-command-to-string 
 		      "/usr/bin/sw_vers | /usr/bin/awk '/ProductVersion/ {print $2}'"))
 		(aquamacs-args (or args (list "-q"))))
-    (if (string< "10.6" osx-version)
+    (if (string< osx-version "10.6")
 	(progn
 	  (apply #'call-process "open" nil 0 nil 
 		 "-a" (car command-line-args) 
