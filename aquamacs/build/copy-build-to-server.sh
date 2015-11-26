@@ -73,8 +73,10 @@ echo "</BODY></HTML>" >>latest.html
 
 #$DIR/retry.py --limit 45 --
 
-($AQUAMACS_SKIP_BINARY || rsync --partial --rsh=ssh -l -r builds $DEST/) &&\
-($AQUAMACS_SKIP_BINARY || rsync -l -r  Aquamacs-nightly.tar.bz2 $DEST/) && \
+# ($AQUAMACS_SKIP_BINARY ||
+rsync --partial --rsh=ssh -l -r builds $DEST/  #) &&\
+    # ($AQUAMACS_SKIP_BINARY ||
+rsync -l -r  Aquamacs-nightly.tar.bz2 $DEST/ # ) && \
 rsync -l -r latest-logs latest.html changelog-nightly.html $DEST/ && \
     ssh $DESTSSH "find $DESTPATH/builds -mtime +2 -delete" && echo "All transfers successful."
 
