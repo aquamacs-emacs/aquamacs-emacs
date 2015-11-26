@@ -4,16 +4,16 @@
 
 orig=`pwd`
 
-newdir=$1 || newdir=aquamacs/
+newdir="$1" || newdir=aquamacs/
 
-cd ${newdir}
+cd "${newdir}"
 echo `pwd`
 echo $(/usr/bin/grep -m1 -l changelog-top *.html)
 echo `/usr/bin/grep -m1 -l changelog-top *.html`
 chgfile=$(/usr/bin/grep -m1 -l changelog-top *.html)
 echo "CHGFILE=$chgfile"
 
-[ -z $CHGFILE ] && exit 1
+[ -z $CHGFILE ] || exit 1
 
 cp ${chgfile} ${chgfile}.bak 
 
@@ -21,6 +21,7 @@ cp ${chgfile} ${chgfile}.bak
 
 rm "${chgfile}.bak" 2>/dev/null
 
+echo "Changelog: writing to" ${orig}/changelog.html
 (cat ${chgfile} | perl -e 'my $x=join("",<STDIN>); $x=~s|^.*(<a name="changelog-top"></a>)(.*?)<!--Navigation Panel-->.*</HTML>|\2|s; print($x);' > ${orig}/changelog.html ) 
 
 cd ${orig}
