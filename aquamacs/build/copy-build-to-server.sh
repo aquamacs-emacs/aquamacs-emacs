@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Call:
-# aquamacs/build/copy-build-to-server.sh $DATE  >>$LOG 2>>$LOG
+# aquamacs/build/copy-build-to-server.sh $DATE >>$LOG 2>>$LOG
 
 # AQ_DOWNLOAD_DESTINATION = Sites/Aquamacs has to be set externally
 # AQ_DOWNLOAD_DESTSSH = username@ip
@@ -12,7 +12,7 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-GNUNAME=GNU-Emacs-$2.dmg.bz2
+DATE=$1
 NAME=Aquamacs-$1.tar.bz2
 COPYORLINK='ln -s'
 CHGLOG=`pwd`/aquamacs/doc/latex/changelog.html
@@ -27,8 +27,7 @@ DESTSSH=${AQ_DOWNLOAD_DESTSSH}
 TMP=/tmp/builds
 
 #cd $DEST
-echo "Copying build $DATE to server..." >>$LOG ; \
-
+echo "Copying build $DATE to server..." >>$LOG
 
 scp $LOGPATH/cvs-update.log $DEST/ 2>/dev/null
 scp $LOGPATH/aquamacs-build.log $DEST/ 2>/dev/null 
@@ -62,7 +61,8 @@ if [ -e $TMP/${NAME} ]; then
 fi
 
 echo "<HTML style=\"border: none ;\"><META HTTP-EQUIV=\"expires\" CONTENT=\"now\"><link href=\"http://aquamacs.org/iframe.css\" rel=\"stylesheet\" type=\"text/css\" /><BODY style=\"border: none ;\">" >latest.html
-cat latest-aquamacs.html latest-emacs.html >>latest.html
+cat latest-aquamacs.html >>latest.html
+cat latest-emacs.html >>latest.html 2>/dev/null
 echo "</BODY></HTML>" >>latest.html
 
 # sync and delete older files on server
