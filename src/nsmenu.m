@@ -1260,14 +1260,18 @@ update_frame_tool_bar (struct frame *f)
 
       img_id = lookup_image (f, image);
       img = IMAGE_FROM_ID (f, img_id);
+      if (img == nil)
+        {
+          NSLog (@"Could not prepare toolbar image for display (1).");
+          continue;
+        }
       prepare_image_for_display (f, img);
 
       if (img->load_failed_p || img->pixmap == nil)
         {
-          NSLog (@"Could not prepare toolbar image for display.");
+          NSLog (@"Could not prepare toolbar image for display (2).");
           continue;
         }
-
       captionObj = TOOLPROP (TOOL_BAR_ITEM_LABEL);
       captionText = STRINGP (captionObj) ? SSDATA (captionObj) : "";
 
