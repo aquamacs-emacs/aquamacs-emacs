@@ -620,7 +620,7 @@ ns_set_name_as_filename (struct frame *f)
       else
         fstr = @"";
 
-      ns_set_represented_filename (fstr, f);
+      ns_set_represented_filename(fstr, f);
       [[view window] setTitle: str];
       fset_name (f, name);
     }

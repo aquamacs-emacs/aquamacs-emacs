@@ -329,9 +329,6 @@ static struct {
   NULL, 0, 0
 };
 
-static NSString *represented_filename = nil;
-static struct frame *represented_frame = 0;
-
 #ifdef NS_IMPL_COCOA
 /*
  * State for pending menu activation:
@@ -443,10 +440,20 @@ void x_set_frame_alpha (struct frame *f);
    ========================================================================== */
 
 void
-ns_set_represented_filename (NSString* fstr, struct frame *f)
+ns_set_represented_filename (NSString* filename, struct frame *f)
 {
-  represented_filename = [fstr retain];
-  represented_frame = f;
+  if (filename != nil && f)
+    {
+      NSView *view = FRAME_NS_VIEW (f);
+#ifdef NS_IMPL_COCOA
+      /* work around a bug observed on 10.3 and later where
+         setTitleWithRepresentedFilename does not clear out previous state
+         if given filename does not exist */
+      if (! [[NSFileManager defaultManager] fileExistsAtPath: filename])
+        [[view window] setRepresentedFilename: @""];
+#endif
+      [[view window] setRepresentedFilename: filename];
+    }
 }
 
 void
@@ -5254,23 +5261,6 @@ ns_term_shutdown (int sig)
       return;
     }
 #endif
-
-  if (represented_filename != nil && represented_frame)
-    {
-      NSString *fstr = represented_filename;
-      NSView *view = FRAME_NS_VIEW (represented_frame);
-#ifdef NS_IMPL_COCOA
-      /* work around a bug observed on 10.3 and later where
-         setTitleWithRepresentedFilename does not clear out previous state
-         if given filename does not exist */
-      if (! [[NSFileManager defaultManager] fileExistsAtPath: fstr])
-        [[view window] setRepresentedFilename: @""];
-#endif
-      [[view window] setRepresentedFilename: fstr];
-      [represented_filename release];
-      represented_filename = nil;
-      represented_frame = NULL;
-    }
 
   if (type == NSApplicationDefined)
     {
