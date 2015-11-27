@@ -1567,11 +1567,7 @@ Items in this list are always Lisp symbols.*/)
     {
       item = [[[NSToolbarItem alloc] initWithItemIdentifier: identifier]
                autorelease];
-      /* we must make a copy of the image - otherwise the image data
-	 may be released  at inappropriate moments, creating havoc here
-	 or in Emacs' image cache. Use (clear-image-cache t) to reproduce. */
-      [item setImage: [[img copy] autorelease]];
-      //img->refCount++; /* maybe better to copy the image? */
+      [item setImage: img]; // image is a strong property, will retain as needed.
       [item setToolTip: help_str];
       [item setLabel: label_str];
       [item setPaletteLabel: label_str];
