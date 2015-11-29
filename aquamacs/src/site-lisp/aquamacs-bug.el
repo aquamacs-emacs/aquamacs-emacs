@@ -269,7 +269,7 @@ in `aquamacs-preference-files' for editing."
 	      report-aquamacs-bug
 	      :help "Report a Bug in Aquamacs Emacs"))
 (define-key menu-bar-bug-help-menu [start-vanilla-aquamacs]
-  `(menu-item "Start Aquamacs without customizations"  
+  `(menu-item "Try Aquamacs without customizations"
 	      start-vanilla-aquamacs
 	      :help "Start Aquamacs Emacs without any user-specific settings."))
 (define-key menu-bar-bug-help-menu [start-debug-aquamacs]
