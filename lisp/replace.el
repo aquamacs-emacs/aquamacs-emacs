@@ -34,9 +34,11 @@
   :group 'matching)
 
 (defcustom replace-character-fold nil
-  "Non-nil means `query-replace' should do character folding in matches.
+  "Non-nil means replacement commands should do character folding in matches.
 This means, for instance, that \\=' will match a large variety of
-unicode quotes."
+unicode quotes.
+This variable affects `query-replace' and `replace-string', but not
+`replace-regexp'."
   :type 'boolean
   :group 'matching
   :version "25.1")
@@ -315,6 +317,10 @@ If `replace-lax-whitespace' is non-nil, a space or spaces in the string
 to be replaced will match a sequence of whitespace chars defined by the
 regexp in `search-whitespace-regexp'.
 
+If `replace-character-fold' is non-nil, matching uses character folding,
+i.e. it ignores diacriticals and other differences between equivalent
+character strings.
+
 Third arg DELIMITED (prefix arg if interactive), if non-nil, means replace
 only matches surrounded by word boundaries.  A negative prefix arg means
 replace backward.
@@ -372,6 +378,8 @@ matches using `isearch-filter-predicate'.
 If `replace-regexp-lax-whitespace' is non-nil, a space or spaces in the regexp
 to be replaced will match a sequence of whitespace chars defined by the
 regexp in `search-whitespace-regexp'.
+
+This function is not affected by `replace-character-fold'.
 
 Third arg DELIMITED (prefix arg if interactive), if non-nil, means replace
 only matches surrounded by word boundaries.  A negative prefix arg means
@@ -460,6 +468,8 @@ matches using `isearch-filter-predicate'.
 If `replace-regexp-lax-whitespace' is non-nil, a space or spaces in the regexp
 to be replaced will match a sequence of whitespace chars defined by the
 regexp in `search-whitespace-regexp'.
+
+This function is not affected by `replace-character-fold'.
 
 Third arg DELIMITED (prefix arg if interactive), if non-nil, means replace
 only matches that are surrounded by word boundaries.
@@ -552,6 +562,10 @@ If `replace-lax-whitespace' is non-nil, a space or spaces in the string
 to be replaced will match a sequence of whitespace chars defined by the
 regexp in `search-whitespace-regexp'.
 
+If `replace-character-fold' is non-nil, matching uses character folding,
+i.e. it ignores diacriticals and other differences between equivalent
+character strings.
+
 Third arg DELIMITED (prefix arg if interactive), if non-nil, means replace
 only matches surrounded by word boundaries.  A negative prefix arg means
 replace backward.
@@ -602,6 +616,8 @@ matches using `isearch-filter-predicate'.
 If `replace-regexp-lax-whitespace' is non-nil, a space or spaces in the regexp
 to be replaced will match a sequence of whitespace chars defined by the
 regexp in `search-whitespace-regexp'.
+
+This function is not affected by `replace-character-fold'
 
 In Transient Mark mode, if the mark is active, operate on the contents
 of the region.  Otherwise, operate from point to the end of the buffer.

@@ -135,30 +135,22 @@ frames.
 Works for functions, variables, faces, etc.  It is bound to `C-h o' by
 default.
 
-** New command `checkdoc-package-keywords' checks if the
-current package keywords are recognized.  Set the new option
-`checkdoc-package-keywords-flag' to non-nil to make
-`checkdoc-current-buffer' call this function automatically.
-
-** New function `checkdoc-file' checks for style errors.
-It's meant for use together with `compile':
-emacs -batch --eval "(checkdoc-file \"subr.el\")"
-
-** New command `comment-line' bound to `C-x C-;'.
-
++++
 ** New function `custom-prompt-customize-unsaved-options' checks for
-unsaved customizations and prompts user to customize (if found).
+unsaved customizations and prompts user to customize (if found).  It
+is intended for adding to 'kill-emacs-query-functions'.
 
 +++
 ** Network security (TLS/SSL certificate validity and the like) is
 added via the new Network Security Manager (NSM) and controlled via
 the `network-security-level' variable.
 
++++
 ** C-h l now also lists the commands that were run.
 
-** M-x suggests shorthands and ignores obsolete commands for completion.
-** x-select-enable-clipboard is renamed select-enable-clipboard.
-x-select-enable-primary and renamed select-enable-primary.
++++
+** x-select-enable-clipboard is renamed select-enable-clipboard
+and x-select-enable-primary is renamed select-enable-primary.
 Additionally they both now apply to all systems (OSX, GNUstep, Windows, you
 name it), with the proviso that on some systems (e.g. Windows)
 select-enable-primary is ineffective since the system doesn't
@@ -324,8 +316,14 @@ at configure time.
 
 * Editing Changes in Emacs 25.1
 
++++
+** M-x suggests shorthands and ignores obsolete commands for completion.
+
 ** Successive single-char deletions are collapsed in the undo-log just like
 successive char insertions.
+
++++
+** New command `comment-line' bound to `C-x C-;'.
 
 ** Unicode names entered via C-x 8 RET now use substring completion by default.
 
@@ -359,6 +357,19 @@ standards.
 
 
 * Changes in Specialized Modes and Packages in Emacs 25.1
+
+** Checkdoc
+
++++
+*** New command `checkdoc-package-keywords' checks if the
+current package keywords are recognized.  Set the new option
+`checkdoc-package-keywords-flag' to non-nil to make
+`checkdoc-current-buffer' call this function automatically.
+
++++
+*** New function `checkdoc-file' checks for style errors.
+It's meant for use together with `compile':
+emacs -batch --eval "(checkdoc-file \"subr.el\")"
 
 ** New function `bookmark-set-no-overwrite' bound to C-x r M.
 It raises an error if a bookmark of that name already exists,
