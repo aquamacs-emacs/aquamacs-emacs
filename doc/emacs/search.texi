@@ -26,7 +26,7 @@ thing, but search for patterns instead of fixed strings.
 * Regexps::                   Syntax of regular expressions.
 * Regexp Backslash::          Regular expression constructs starting with `\'.
 * Regexp Example::            A complex regular expression explained.
-* Lax Search::                Search ignores some distinctions between
+* Lax Search::                Search ignores some distinctions among
                                 similar characters, like letter-case.
 * Replace::                   Search, and replace some or all matches.
 * Other Repeating Search::    Operating on all matches for some regexp.
@@ -541,14 +541,22 @@ This enters the minibuffer to read the search string; terminate the
 string with @key{RET}, and then the search takes place.  If the string
 is not found, the search command signals an error.
 
-@findex search-forward
-@findex search-backward
   When you type @kbd{C-s @key{RET}}, the @kbd{C-s} invokes incremental
 search as usual.  That command is specially programmed to invoke the
-command for nonincremental search, @code{search-forward}, if the
-string you specify is empty.  (Such an empty argument would otherwise
-be useless.)  @kbd{C-r @key{RET}} does likewise, invoking the command
-@code{search-backward}.
+command for nonincremental search, if the string you specify is empty.
+(Such an empty argument would otherwise be useless.)  @kbd{C-r
+@key{RET}} does likewise, invoking the nonincremental
+backward-searching command.
+
+  Nonincremental search can also be invoked form the menu bar's
+@samp{Edit->Search} menu.
+
+@findex search-forward
+@findex search-backward
+  You can also use two simpler commands, @kbd{M-x search-forward} and
+@kbd{M-x search-backward}.  These commands look for the literal
+strings you specify, and don't support any of the lax-search features
+(@pxref{Lax Search}) except case folding.
 
 @node Word Search
 @section Word Search
@@ -601,6 +609,9 @@ string, its first and last words need not match whole words.  This is
 so that the matching can proceed incrementally as you type.  This
 additional laxity does not apply to the lazy highlight
 (@pxref{Incremental Search}), which always matches whole words.
+
+  The word search commands don't perform character folding and cannot
+support lax whitespace matching (@pxref{Lax Search}).
 
 @kindex M-s M-w
 @findex eww-search-word
@@ -658,6 +669,9 @@ search.  In nonincremental symbol searches, the beginning and end of
 the search string are required to match the beginning and end of a
 symbol, respectively.
 
+  The symbol search commands don't perform character folding and
+cannot support lax whitespace matching (@pxref{Lax Search}).
+
 @node Regexp Search
 @section Regular Expression Search
 @cindex regexp search
@@ -704,12 +718,18 @@ regexps saved in the search ring is determined by the value of
 @code{regexp-search-ring-max}, 16 by default.
 
   Unlike ordinary incremental search, incremental regexp search
-do not use lax space matching by default.  To toggle this feature
+does not use lax space matching by default.  To toggle this feature
 use @kbd{M-s @key{SPC}} (@code{isearch-toggle-lax-whitespace}).
 Then any @key{SPC} typed in incremental regexp search will match
 any sequence of one or more whitespace characters.  The variable
 @code{search-whitespace-regexp} specifies the regexp for the lax
 space matching.  @xref{Special Isearch}.
+
+  Also unlike ordinary incremental search, incremental regexp search
+cannot use character folding (@pxref{Lax Search}).  (If you toggle
+character folding during incremental regexp search with @kbd{M-s '},
+the search becomes a non-regexp search and the search pattern you
+typed is interpreted as a literal string.)
 
   In some cases, adding characters to the regexp in an incremental
 regexp search can make the cursor move back and start again.  For
@@ -729,7 +749,10 @@ starting position.  These search methods are not mirror images.
   Nonincremental search for a regexp is done with the commands
 @code{re-search-forward} and @code{re-search-backward}.  You can
 invoke these with @kbd{M-x}, or by way of incremental regexp search
-with @kbd{C-M-s @key{RET}} and @kbd{C-M-r @key{RET}}.
+with @kbd{C-M-s @key{RET}} and @kbd{C-M-r @key{RET}}.  When you invoke
+these commands with @kbd{M-x}, they search for the exact regexp you
+specify, and thus don't support any lax-search features (@pxref{Lax
+Search}) except case folding.
 
   If you use the incremental regexp search commands with a prefix
 argument, they perform ordinary string search, like
@@ -1136,7 +1159,7 @@ close-brackets, quotes, or parentheses, repeated zero or more times.
 @cindex lax search
 @cindex character equivalence in search
   Normally, you'd want search commands to disregard certain minor
-differences between the search string you types and the text being
+differences between the search string you type and the text being
 searched.  For example, sequences of whitespace characters of
 different length are usually perceived as equivalent; letter-case
 differences usually don't matter; etc.  This is known as
@@ -1218,13 +1241,13 @@ apropos-variable @key{RET} case-fold-search @key{RET}}.
 
 @cindex character folding in search
 @cindex equivalent character sequences
-  Case folding disregards case distinctions between characters, making
+  Case folding disregards case distinctions among characters, making
 upper-case characters match lower-case variants, and vice versa.  A
 generalization of case folding is @dfn{character folding}, which
-disregards wider classes of distinctions between similar characters.
+disregards wider classes of distinctions among similar characters.
 For instance, under character folding the letter @code{a} matches all
 of its accented cousins like @code{@"a} and @code{@'a}, i.e., the
-match disregards the diacriticals that distinguish between these
+match disregards the diacritics that distinguish these
 variants.  In addition, @code{a} matches other characters that
 resemble it, or have it as part of their graphical representation,
 such as @sc{u+249c parenthesized latin small letter a} and @sc{u+2100
@@ -1240,7 +1263,7 @@ character sequences}.
 
 @kindex M-s ' @r{(Incremental Search)}
 @findex isearch-toggle-character-fold
-  Searches in Emacs by default perform character folding, thus
+  Search commands in Emacs by default perform character folding, thus
 matching equivalent character sequences.  You can disable this
 behavior by customizing the variable @code{search-default-regexp-mode}
 to @code{nil}.  @xref{Search Customizations}.  Within an incremental

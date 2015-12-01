@@ -318,7 +318,7 @@ to be replaced will match a sequence of whitespace chars defined by the
 regexp in `search-whitespace-regexp'.
 
 If `replace-character-fold' is non-nil, matching uses character folding,
-i.e. it ignores diacriticals and other differences between equivalent
+i.e. it ignores diacritics and other differences between equivalent
 character strings.
 
 Third arg DELIMITED (prefix arg if interactive), if non-nil, means replace
@@ -563,7 +563,7 @@ to be replaced will match a sequence of whitespace chars defined by the
 regexp in `search-whitespace-regexp'.
 
 If `replace-character-fold' is non-nil, matching uses character folding,
-i.e. it ignores diacriticals and other differences between equivalent
+i.e. it ignores diacritics and other differences between equivalent
 character strings.
 
 Third arg DELIMITED (prefix arg if interactive), if non-nil, means replace
@@ -1577,6 +1577,9 @@ See also `multi-occur'."
 		    ;; Highlight the matches
 		    (let ((len (length curstring))
 			  (start 0))
+		      ;; Count empty lines that don't use next loop (Bug#22062).
+		      (when (zerop len)
+			(setq matches (1+ matches)))
 		      (while (and (< start len)
 				  (string-match regexp curstring start))
 			(setq matches (1+ matches))

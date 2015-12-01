@@ -2366,7 +2366,7 @@ list that represents a doc string reference.
 	hist-new prov-cons)
     (apply 'require args)
 
-    ;; Record the functions defined by the require in `byte-compille-new-defuns'.
+    ;; Record the functions defined by the require in `byte-compile-new-defuns'.
     (setq hist-new load-history)
     (setq prov-cons (cons 'provide (car args)))
     (while (and hist-new
@@ -4013,8 +4013,13 @@ that suppresses all warnings during execution of BODY."
     (setq byte-compile--for-effect nil)))
 
 (defun byte-compile-funcall (form)
-  (mapc 'byte-compile-form (cdr form))
-  (byte-compile-out 'byte-call (length (cdr (cdr form)))))
+  (if (cdr form)
+      (progn
+        (mapc 'byte-compile-form (cdr form))
+        (byte-compile-out 'byte-call (length (cdr (cdr form)))))
+    (byte-compile-log-warning "`funcall' called with no arguments" nil :error)
+    (byte-compile-form '(signal 'wrong-number-of-arguments '(funcall 0))
+                       byte-compile--for-effect)))
 
 
 ;; let binding
