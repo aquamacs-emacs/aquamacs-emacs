@@ -677,7 +677,12 @@ It is the default value of the variable `top-level'."
 	  ;; Modify the initial frame based on what .emacs puts into
 	  ;; ...-frame-alist.
 	  (if (fboundp 'frame-notice-user-settings)
-	      (frame-notice-user-settings))
+              ;; Errors in frame settings should not prevent
+              ;; us from opening frames.
+              (condition-case err
+                  (frame-notice-user-settings)
+                (error (message "error in frame-notice-user-settings: %s"
+                                (error-message-string err)))))
 	  ;; Set the faces for the initial background mode even if
 	  ;; frame-notice-user-settings didn't (such as on a tty).
 	  ;; frame-set-background-mode is idempotent, so it won't
