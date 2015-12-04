@@ -5,7 +5,7 @@
 ;; Author: Tom Tromey <tromey@redhat.com>
 ;;         Daniel Hackney <dan@haxney.org>
 ;; Created: 10 Mar 2007
-;; Version: 1.0.1
+;; Version: 1.1.0
 ;; Keywords: tools
 ;; Package-Requires: ((tabulated-list "1.0"))
 
@@ -23,14 +23,6 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
-
-;;; Change Log:
-
-;;  2 Apr 2007 - now using ChangeLog file
-;; 15 Mar 2007 - updated documentation
-;; 14 Mar 2007 - Changed how obsolete packages are handled
-;; 13 Mar 2007 - Wrote package-install-from-buffer
-;; 12 Mar 2007 - Wrote package-menu mode
 
 ;;; Commentary:
 
@@ -69,6 +61,7 @@
 ;; * Download.  Fetching the package from ELPA.
 ;; * Install.  Untar the package, or write the .el file, into
 ;;   ~/.emacs.d/elpa/ directory.
+;; * Autoload generation.
 ;; * Byte compile.  Currently this phase is done during install,
 ;;   but we may change this.
 ;; * Activate.  Evaluate the autoloads for the package to make it
@@ -127,14 +120,9 @@
 ;; - "installed" instead of a blank in the status column
 ;; - tramp needs its files to be compiled in a certain order.
 ;;   how to handle this?  fix tramp?
-;; - on emacs 21 we don't kill the -autoloads.el buffer.  what about 22?
 ;; - maybe we need separate .elc directories for various emacs versions
 ;;   and also emacs-vs-xemacs.  That way conditional compilation can
 ;;   work.  But would this break anything?
-;; - should store the package's keywords in archive-contents, then
-;;   let the users filter the package-menu by keyword.  See
-;;   finder-by-keyword.  (We could also let people view the
-;;   Commentary, but it isn't clear how useful this is.)
 ;; - William Xu suggests being able to open a package file without
 ;;   installing it
 ;; - Interface with desktop.el so that restarting after an install
@@ -145,15 +133,9 @@
 ;;   private data dir, aka ".../etc".  Or, maybe data-directory
 ;;   needs to be a list (though this would be less nice)
 ;;   a few packages want this, eg sokoban
-;; - package menu needs:
-;;     ability to know which packages are built-in & thus not deletable
-;;     it can sometimes print odd results, like 0.3 available but 0.4 active
-;;        why is that?
-;; - Allow multiple versions on the server...?
-;;   [ why bother? ]
-;; - Don't install a package which will invalidate dependencies overall
-;; - Allow something like (or (>= emacs 21.0) (>= xemacs 21.5))
-;;   [ currently thinking, why bother.. KISS ]
+;; - Allow multiple versions on the server, so that if a user doesn't
+;;   meet the requirements for the most recent version they can still
+;;   install an older one.
 ;; - Allow optional package dependencies
 ;;   then if we require 'bbdb', bbdb-specific lisp in lisp/bbdb
 ;;   and just don't compile to add to load path ...?
@@ -664,8 +646,30 @@ PKG-DESC is a `package-desc' object."
 (defvar Info-directory-list)
 (declare-function info-initialize "info" ())
 
-(defun package-activate-1 (pkg-desc &optional reload)
+(defun package--load-files-for-activation (pkg-desc reload)
+  "Load files for activating a package given by PKG-DESC.
+Load the autoloads file, and ensure `load-path' is setup.  If
+RELOAD is non-nil, also load all files in the package that
+correspond to previously loaded files."
+  (let* ((loaded-files-list (when reload
+                              (package--list-loaded-files (package-desc-dir pkg-desc)))))
+    ;; Add to load path, add autoloads, and activate the package.
+    (package--activate-autoloads-and-load-path pkg-desc)
+    ;; Call `load' on all files in `package-desc-dir' already present in
+    ;; `load-history'.  This is done so that macros in these files are updated
+    ;; to their new definitions.  If another package is being installed which
+    ;; depends on this new definition, not doing this update would cause
+    ;; compilation errors and break the installation.
+    (with-demoted-errors "Error in package--load-files-for-activation: %s"
+      (mapc (lambda (feature) (load feature nil t))
+            ;; Skip autoloads file since we already evaluated it above.
+            (remove (file-truename (package--autoloads-file-name pkg-desc))
+                    loaded-files-list)))))
+
+(defun package-activate-1 (pkg-desc &optional reload deps)
   "Activate package given by PKG-DESC, even if it was already active.
+If DEPS is non-nil, also activate its dependencies (unless they
+are already activated).
 If RELOAD is non-nil, also `load' any files inside the package which
 correspond to previously loaded files (those returned by
 `package--list-loaded-files')."
@@ -674,20 +678,15 @@ correspond to previously loaded files (those returned by
     (unless pkg-dir
       (error "Internal error: unable to find directory for `%s'"
              (package-desc-full-name pkg-desc)))
-    (let* ((loaded-files-list (when reload
-                                (package--list-loaded-files pkg-dir))))
-      ;; Add to load path, add autoloads, and activate the package.
-      (package--activate-autoloads-and-load-path pkg-desc)
-      ;; Call `load' on all files in `pkg-dir' already present in
-      ;; `load-history'.  This is done so that macros in these files are updated
-      ;; to their new definitions.  If another package is being installed which
-      ;; depends on this new definition, not doing this update would cause
-      ;; compilation errors and break the installation.
-      (with-demoted-errors "Error in package-activate-1: %s"
-        (mapc (lambda (feature) (load feature nil t))
-              ;; Skip autoloads file since we already evaluated it above.
-              (remove (file-truename (package--autoloads-file-name pkg-desc))
-                      loaded-files-list))))
+    ;; Activate its dependencies recursively.
+    ;; FIXME: This doesn't check whether the activated version is the
+    ;; required version.
+    (when deps
+      (dolist (req (package-desc-reqs pkg-desc))
+        (unless (package-activate (car req))
+          (error "Unable to activate package `%s'.\nRequired package `%s-%s' is unavailable"
+                 name (car req) (package-version-join (cadr req))))))
+    (package--load-files-for-activation pkg-desc reload)
     ;; Add info node.
     (when (file-exists-p (expand-file-name "dir" pkg-dir))
       ;; FIXME: not the friendliest, but simple.
@@ -739,7 +738,7 @@ DIR, sorted by most recently loaded last."
 ;; one was already activated.  It also loads a features of this
 ;; package which were already loaded.
 (defun package-activate (package &optional force)
-  "Activate package PACKAGE.
+  "Activate the package named PACKAGE.
 If FORCE is true, (re-)activate it if it's already activated.
 Newer versions are always activated, regardless of FORCE."
   (let ((pkg-descs (cdr (assq package package-alist))))
@@ -759,19 +758,7 @@ Newer versions are always activated, regardless of FORCE."
      ((and (memq package package-activated-list) (not force))
       t)
      ;; Otherwise, proceed with activation.
-     (t
-      (let* ((pkg-vec (car pkg-descs))
-             (fail (catch 'dep-failure
-                     ;; Activate its dependencies recursively.
-                     (dolist (req (package-desc-reqs pkg-vec))
-                       (unless (package-activate (car req))
-                         (throw 'dep-failure req))))))
-        (if fail
-            (warn "Unable to activate package `%s'.
-Required package `%s-%s' is unavailable"
-                  package (car fail) (package-version-join (cadr fail)))
-          ;; If all goes well, activate the package itself.
-          (package-activate-1 pkg-vec force)))))))
+     (t (package-activate-1 (car pkg-descs) nil 'deps)))))
 
 
 ;;; Installation -- Local operations
@@ -843,12 +830,17 @@ untar into a directory named DIR; otherwise, signal an error."
     ;; Update package-alist.
     (let ((new-desc (package-load-descriptor pkg-dir)))
       ;; FIXME: Check that `new-desc' matches `desc'!
+      ;; Activation has to be done before compilation, so that if we're
+      ;; upgrading and macros have changed we load the new definitions
+      ;; before compiling.
+      (package-activate-1 new-desc :reload :deps)
       ;; FIXME: Compilation should be done as a separate, optional, step.
       ;; E.g. for multi-package installs, we should first install all packages
       ;; and then compile them.
-      (package--compile new-desc))
-    ;; Try to activate it.
-    (package-activate name 'force)
+      (package--compile new-desc)
+      ;; After compilation, load again any files loaded by
+      ;; `activate-1', so that we use the byte-compiled definitions.
+      (package--load-files-for-activation new-desc :reload))
     pkg-dir))
 
 (defun package-generate-description-file (pkg-desc pkg-file)

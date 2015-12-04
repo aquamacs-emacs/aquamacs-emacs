@@ -181,41 +181,6 @@ for use in Emacs bug reports.
 hiding character but the default `.' can be used by let-binding the
 variable `read-hide-char'.
 
-** A new text property `inhibit-read-only' can be used in read-only
-buffers to allow certain parts of the text to be writable.
-
-** A new function `directory-files-recursively' returns all matching
-files (recursively) under a directory.
-
-** The new function `directory-name-p' can be used to check whether a file
-name (as returned from, for instance, `file-name-all-completions' is
-a directory file name.  It returns non-nil if the last character in
-the name is a forward slash.
-
-** The function `font-info' now returns more details about a font.
-In particular, it now returns the average width of the font's
-characters, which can be used for geometry-related calculations.
-
-** A new function `default-font-width' returns the average width of a
-character in the current buffer's default font.  If the default face
-is remapped (see `face-remapping-alist'), the value for the remapped
-face is returned.  This function complements the existing function
-`default-font-height'.
-
-** New functions `window-font-height' and `window-font-width' return
-the height and average width of characters in a specified face and
-window.  If FACE is remapped (see `face-remapping-alist'), the
-function returns the information for the remapped face.
-
-** A new function `window-max-chars-per-line' returns the maximal
-number of characters that can be displayed on one line.  If a face
-and/or window are provided, these values are used for the
-calculation.  This function is different from `window-body-width' in
-that it accounts for (i) continuation glyphs, (ii) the size of the
-font, and (iii) the specified window.
-
-** New possible value for `system-type': nacl.
-
 ** Emacs can now load shared/dynamic libraries (modules).
 A dynamic Emacs module is a shared library that provides additional
 functionality for use in Emacs Lisp programs, just like a package
@@ -1141,9 +1106,17 @@ process filter, sentinel, etc., through keyword arguments (similar to
 `make-network-process').
 
 +++
+** A new function `directory-files-recursively' returns all matching
+files (recursively) under a directory.
+
++++
 ** New variable `inhibit-message', when bound to non-nil, inhibits
-   `message' and related functions from displaying messages the Echo
-   Area.  The output is still logged to the *Messages* buffer.
+`message' and related functions from displaying messages the Echo
+Area.  The output is still logged to the *Messages* buffer.
+
++++
+** A new text property `inhibit-read-only' can be used in read-only
+buffers to allow certain parts of the text to be writable.
 
 ** `read-buffer' takes a new `predicate' argument.
 
@@ -1239,6 +1212,35 @@ name.  The variable `system-name' is now obsolete.
 ** If `pwd' is called with a prefix argument, insert the current default
 directory at point.
 
++++
+** New functions return extended information about fonts and faces.
+
++++
+*** The function `font-info' now returns more details about a font.
+In particular, it now returns the average width of the font's
+characters, which can be used for geometry-related calculations.
+
++++
+*** A new function `default-font-width' returns the average width of a
+character in the current buffer's default font.  If the default face
+is remapped (see `face-remapping-alist'), the value for the remapped
+face is returned.  This function complements the existing function
+`default-font-height'.
+
++++
+*** New functions `window-font-height' and `window-font-width' return
+the height and average width of characters in a specified face and
+window.  If FACE is remapped (see `face-remapping-alist'), the
+function returns the information for the remapped face.
+
++++
+*** A new function `window-max-chars-per-line' returns the maximal
+number of characters that can be displayed on one line.  If a face
+and/or window are provided, these values are used for the
+calculation.  This function is different from `window-body-width' in
+that it accounts for (i) continuation glyphs, (ii) the size of the
+font, and (iii) the specified window.
+
 ---
 ** New utilities in subr-x.el:
 *** New macros `if-let' and `when-let' allow defining bindings and to
@@ -1300,6 +1302,13 @@ integers.
 ** New function `set-binary-mode' allows to switch a standard stream
 of the Emacs process to binary I/O mode.
 
++++
+** The new function `directory-name-p' can be used to check whether a file
+name (as returned from, for instance, `file-name-all-completions') is
+a directory file name.  It returns non-nil if the last character in
+the name is a directory separator character (forward slash on GNU and
+Unix systems, forward- or backslash on MS-Windows and MS-DOS).
+
 ** ASCII approximations to curved quotes are put in standard-display-table
 if the terminal cannot display curved quotes.
 
@@ -1308,6 +1317,10 @@ standard-display-table, and encode output using locale-coding-system.
 
 +++
 ** New var `truncate-string-ellipsis' to choose how to indicate truncation.
+
++++
+** New possible value for `system-type': `nacl'.
+This is used by Google's Native Client (NaCl).
 
 ** Miscellaneous name change
 

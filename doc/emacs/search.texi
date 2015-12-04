@@ -610,8 +610,9 @@ so that the matching can proceed incrementally as you type.  This
 additional laxity does not apply to the lazy highlight
 (@pxref{Incremental Search}), which always matches whole words.
 
-  The word search commands don't perform character folding and cannot
-support lax whitespace matching (@pxref{Lax Search}).
+  The word search commands don't perform character folding, and
+toggling lax whitespace matching (@pxref{Lax Search, lax space
+matching}) has no effect on them.
 
 @kindex M-s M-w
 @findex eww-search-word
@@ -669,8 +670,9 @@ search.  In nonincremental symbol searches, the beginning and end of
 the search string are required to match the beginning and end of a
 symbol, respectively.
 
-  The symbol search commands don't perform character folding and
-cannot support lax whitespace matching (@pxref{Lax Search}).
+  The symbol search commands don't perform character folding, and
+toggling lax whitespace matching (@pxref{Lax Search, lax space
+matching}) has no effect on them.
 
 @node Regexp Search
 @section Regular Expression Search
@@ -1263,14 +1265,15 @@ character sequences}.
 
 @kindex M-s ' @r{(Incremental Search)}
 @findex isearch-toggle-character-fold
-  Search commands in Emacs by default perform character folding, thus
-matching equivalent character sequences.  You can disable this
-behavior by customizing the variable @code{search-default-regexp-mode}
-to @code{nil}.  @xref{Search Customizations}.  Within an incremental
-search, typing @kbd{M-s '} (@code{isearch-toggle-character-fold})
-toggles character folding, but only for that search.  (Replace
-commands have a different default, controlled by a separate option;
-see @ref{Replacement and Lax Matches}.)
+  Generally, search commands in Emacs by default perform character
+folding, thus matching equivalent character sequences.  You can
+disable this behavior by customizing the variable
+@code{search-default-regexp-mode} to @code{nil}.  @xref{Search
+Customizations}.  Within an incremental search, typing @kbd{M-s '}
+(@code{isearch-toggle-character-fold}) toggles character folding, but
+only for that search.  (Replace commands have a different default,
+controlled by a separate option; see @ref{Replacement and Lax
+Matches}.)
 
   Like with case folding, typing an explicit variant of a character,
 such as @code{@"a}, as part of the search string disables character

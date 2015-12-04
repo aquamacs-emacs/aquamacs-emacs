@@ -740,20 +740,27 @@ The path separator is colon in GNU and GNU-like systems."
        (error "No such directory found via CDPATH environment variable"))))
 
 (defsubst directory-name-p (name)
-  "Return non-nil if NAME ends with a slash character."
-  (and (> (length name) 0)
-       (char-equal (aref name (1- (length name))) ?/)))
+  "Return non-nil if NAME ends with a directory separator character."
+  (let ((len (length name))
+        (lastc ?.))
+    (if (> len 0)
+        (setq lastc (aref name (1- len))))
+    (or (= lastc ?/)
+        (and (memq system-type '(windows-nt ms-dos))
+             (= lastc ?\\)))))
 
-(defun directory-files-recursively (dir match &optional include-directories)
-  "Return all files under DIR that have file names matching MATCH (a regexp).
+(defun directory-files-recursively (dir regexp &optional include-directories)
+  "Return list of all files under DIR that have file names matching REGEXP.
 This function works recursively.  Files are returned in \"depth first\"
-and alphabetical order.
-If INCLUDE-DIRECTORIES, also include directories that have matching names."
+order, and files from each directory are sorted in alphabetical order.
+Each file name appears in the returned list in its absolute form.
+Optional argument INCLUDE-DIRECTORIES non-nil means also include in the
+output directories whose names match REGEXP."
   (let ((result nil)
 	(files nil)
 	;; When DIR is "/", remote file names like "/method:" could
 	;; also be offered.  We shall suppress them.
-	(tramp-mode (and tramp-mode (file-remote-p dir))))
+	(tramp-mode (and tramp-mode (file-remote-p (expand-file-name dir)))))
     (dolist (file (sort (file-name-all-completions "" dir)
 			'string<))
       (unless (member file '("./" "../"))
@@ -764,11 +771,11 @@ If INCLUDE-DIRECTORIES, also include directories that have matching names."
 	      (unless (file-symlink-p full-file)
 		(setq result
 		      (nconc result (directory-files-recursively
-				     full-file match include-directories))))
+				     full-file regexp include-directories))))
 	      (when (and include-directories
-			 (string-match match leaf))
+			 (string-match regexp leaf))
 		(setq result (nconc result (list full-file)))))
-	  (when (string-match match file)
+	  (when (string-match regexp file)
 	    (push (expand-file-name file dir) files)))))
     (nconc result (nreverse files))))
 
@@ -6302,7 +6309,7 @@ invokes the program specified by `directory-free-space-program'
 and `directory-free-space-args'.  If the system call or program
 is unsuccessful, or if DIR is a remote directory, this function
 returns nil."
-  (unless (file-remote-p dir)
+  (unless (file-remote-p (expand-file-name dir))
     ;; Try to find the number of free blocks.  Non-Posix systems don't
     ;; always have df, but might have an equivalent system call.
     (if (fboundp 'file-system-info)
