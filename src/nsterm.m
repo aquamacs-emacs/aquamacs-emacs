@@ -8825,12 +8825,11 @@ not_in_argv (NSString *arg)
   NSScreen * screen = [self screen];
   if (screen != nil)
     {
-      NSRect sr = [screen frame];
-      sr.size.height -= ns_menu_bar_height (screen);
+      NSRect sr = [screen visibleFrame];
 
       sr = [[self delegate] windowWillUseStandardFrame:self
                                           defaultFrame:sr];
-      [self setFrame: sr display: NO];
+      [self setFrame: sr display: NO animate:YES];
     }
 #endif
 }
