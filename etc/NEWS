@@ -210,7 +210,7 @@ module's functions.  User-ptr objects can also have associated
 "finalizers" -- functions to be run when the object is GC'ed; this is
 useful for freeing any resources allocated for the underlying data
 structure, such as memory, open file descriptors, etc.  A new
-predicate `user-ptr-p' returns non-nil if its argument is a `usr-ptr'
+predicate `user-ptrp' returns non-nil if its argument is a `user-ptr'
 object.
 
 Loadable modules in Emacs are an experimental feature, and subject to
@@ -218,6 +218,7 @@ change in future releases.  For that reason, their support is disabled
 by default, and must be enabled by using the `--with-modules' option
 at configure time.
 
+---
 ** New input method: `tamil-dvorak'.
 
 
@@ -226,26 +227,40 @@ at configure time.
 +++
 ** M-x suggests shorthands and ignores obsolete commands for completion.
 
-** Successive single-char deletions are collapsed in the undo-log just like
-successive char insertions. This behaviour can be extended to other
-commands, using the `undo-auto--amalgamate' function.
+** Changes in undo
 
-** The heuristic used to insert `undo-boundary' after each command has changed,
-so that it supports commands which potentially affect multiple buffers.
++++
+*** Successive single-char deletions are collapsed in the undo-log just like
+successive char insertions.  Which commands invoke this behavior is
+controlled by the new `undo-auto-amalgamate' function.  See the node
+"Undo" in the ELisp manual for more details.
+
++++
+*** The heuristic used to insert `undo-boundary' after each command
+has changed, so that if a command causes changes in more than just the
+current buffer, Emacs now calls `undo-boundary' in every buffer
+affected by the command.
 
 +++
 ** New command `comment-line' bound to `C-x C-;'.
 
-** Unicode names entered via C-x 8 RET now use substring completion by default.
+** New and improved facilities for inserting Unicode characters
 
-** C-x 8 now has shorthands for these chars: ‐ ‑ ‒ – — ― ‘ ’ “ ” † ‡ • ′ ″
+---
+*** Unicode names entered via C-x 8 RET now use substring completion by default.
+
++++
+*** C-x 8 now has shorthands for these chars: ‐ ‑ ‒ – — ― ‘ ’ “ ” † ‡ • ′ ″
 € № ← → ↔ − ≈ ≠ ≤ ≥.  As before, you can type C-x 8 C-h to list shorthands.
 
-** New minor mode electric-quote-mode for quoting ‘like this’ and “like this”
++++
+*** New minor mode electric-quote-mode for quoting ‘like this’ and “like this”
 as you type.  See also the new variable ‘text-quoting-style’.
 
+---
 ** New minor mode global-eldoc-mode is enabled by default.
 
+---
 ** Emacs now supports "bracketed paste mode" when running on a terminal
 that supports it.  This facility allows Emacs to understand pasted
 chunks of text as strings to be inserted, instead of interpreting each
@@ -253,6 +268,7 @@ character in the pasted text as actual user input.  This results in a
 paste experience similar to that under a window system, and significant
 performance improvements when pasting large amounts of text.
 
++++
 ** Emacs now supports the latest version of the UBA.
 The Emacs implementation of the Unicode Bidirectional Algorithm (UBA)
 was updated to support all the latest additions and changes introduced
@@ -261,6 +277,7 @@ This includes full support for directional isolates and the
 Bidirectional Parentheses Algorithm (BPA) specified by these Unicode
 standards.
 
++++
 ** You can access `mouse-buffer-menu' (C-down-mouse-1) using C-f10.
 
 +++
@@ -288,24 +305,29 @@ current package keywords are recognized.  Set the new option
 It's meant for use together with `compile':
 emacs -batch --eval "(checkdoc-file \"subr.el\")"
 
++++
 ** New function `bookmark-set-no-overwrite' bound to C-x r M.
 It raises an error if a bookmark of that name already exists,
 unlike `bookmark-set' which silently updates an existing bookmark.
 
 ** JSON
+
 ---
 *** `json-pretty-print' and `json-pretty-print-buffer' now maintain
 the ordering of object keys by default.
+
 ---
 *** New commands `json-pretty-print-ordered' and
 `json-pretty-print-buffer-ordered' pretty prints JSON objects with
 object keys sorted alphabetically.
 
 ** You can recompute the VC state of a file buffer with `M-x vc-refresh-state'
+
 ** Prog mode has some support for multi-mode indentation.
 See `prog-indentation-context' and `prog-widen'.
 
 ** Prettify Symbols mode
+
 *** Prettify Symbols mode supports custom composition predicates.  By
 overriding the default `prettify-symbols-compose-predicate', modes can
 specify in which contexts a symbol map be composed to some unicode
@@ -328,7 +350,9 @@ and `erc-channel-hide-list' will only hide the specified message types
 for the respective specified targets.
 
 ** Midnight-mode
+
 *** `midnight-mode' is a proper minor mode.
+
 *** clean-buffer-*-regexps can now specify buffers via predicate functions.
 
 ** In xterms, killing text now also sets the CLIPBOARD/PRIMARY selection
@@ -820,6 +844,8 @@ allow overriding the regular expression that recognizes the ldapsearch
 command line's password prompt.
 
 EUDC's BBDB backend now supports BBDB 3.
+
+EUDC's PH backend (eudcb-ph.el) is obsolete.
 
 ** Eshell
 
