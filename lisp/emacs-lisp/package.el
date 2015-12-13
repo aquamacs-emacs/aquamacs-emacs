@@ -216,7 +216,7 @@ of it available such that:
 
 This variable has three possible values:
     nil: no packages are hidden;
-    `archive': only criteria (a) is used;
+    `archive': only criterion (a) is used;
     t: both criteria are used.
 
 This variable has no effect if `package-menu--hide-packages' is
@@ -234,7 +234,7 @@ Each element has the form (ARCHIVE-ID . PRIORITY).
 
 When installing packages, the package with the highest version
 number from the archive with the highest priority is
-selected. When higher versions are available from archives with
+selected.  When higher versions are available from archives with
 lower priorities, the user has to select those manually.
 
 Archives not in this list have the priority 0.
@@ -829,7 +829,10 @@ untar into a directory named DIR; otherwise, signal an error."
     (package--make-autoloads-and-stuff pkg-desc pkg-dir)
     ;; Update package-alist.
     (let ((new-desc (package-load-descriptor pkg-dir)))
-      ;; FIXME: Check that `new-desc' matches `desc'!
+      (unless (equal (package-desc-full-name new-desc)
+                     (package-desc-full-name pkg-desc))
+        (error "The retrieved package (`%s') doesn't match what the archive offered (`%s')"
+               (package-desc-full-name new-desc) (package-desc-full-name pkg-desc)))
       ;; Activation has to be done before compilation, so that if we're
       ;; upgrading and macros have changed we load the new definitions
       ;; before compiling.
@@ -923,11 +926,12 @@ untar into a directory named DIR; otherwise, signal an error."
 ;;;; Compilation
 (defvar warning-minimum-level)
 (defun package--compile (pkg-desc)
-  "Byte-compile installed package PKG-DESC."
+  "Byte-compile installed package PKG-DESC.
+This assumes that `pkg-desc' has already been activated with
+`package-activate-1'."
   (let ((warning-minimum-level :error)
         (save-silently inhibit-message)
         (load-path load-path))
-    (package--activate-autoloads-and-load-path pkg-desc)
     (byte-recompile-directory (package-desc-dir pkg-desc) 0 t)))
 
 ;;;; Inferring package from current buffer

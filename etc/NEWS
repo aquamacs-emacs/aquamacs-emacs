@@ -321,41 +321,44 @@ the ordering of object keys by default.
 `json-pretty-print-buffer-ordered' pretty prints JSON objects with
 object keys sorted alphabetically.
 
-** You can recompute the VC state of a file buffer with `M-x vc-refresh-state'
-
++++
 ** Prog mode has some support for multi-mode indentation.
-See `prog-indentation-context' and `prog-widen'.
+This allows better indentation support in modes that support multiple
+programming languages in the same buffer, like literate programming
+environments or ANTLR programs with embedded Python code.
+
+A major mode can provide indentation context for a sub-mode through
+the `prog-indentation-context' variable.  To support this, modes that
+provide indentation should use `prog-widen' instead of `widen' and
+`prog-first-column' instead of a literal zero.  See the node
+"Mode-Specific Indent" in the ELisp manual for more details.
 
 ** Prettify Symbols mode
 
++++
 *** Prettify Symbols mode supports custom composition predicates.  By
 overriding the default `prettify-symbols-compose-predicate', modes can
-specify in which contexts a symbol map be composed to some unicode
+specify in which contexts a symbol may be displayed as some Unicode
 character.  `prettify-symbols-default-compose-p' is the default which
 is suitable for most programming languages such as C or Lisp (but not
 (La)TeX).
 
++++
 *** Symbols can be unprettified while point is inside them.
 New variable `prettify-symbols-unprettify-at-point' configures this.
 
-** New `xterm-screen-extra-capabilities' config.
+** Enhanced xterm support
 
-** The `save-place' variable is replaced by a `save-place-mode'.
+---
+*** The new variable `xterm-screen-extra-capabilities' for configuring xterm.
+This variable tells Emacs which advanced capabilities are available in
+the xterm terminal emulator used to display Emacs text-mode frames.
+The default is to check each capability, and use it if available.
+(This variable was introduced in Emacs 24.1, but was not announced in
+its NEWS.)
 
-** ERC
-
-*** Hide message types by network or channel.  `erc-hide-list' will
-hide all messages of the specified type, where `erc-network-hide-list'
-and `erc-channel-hide-list' will only hide the specified message types
-for the respective specified targets.
-
-** Midnight-mode
-
-*** `midnight-mode' is a proper minor mode.
-
-*** clean-buffer-*-regexps can now specify buffers via predicate functions.
-
-** In xterms, killing text now also sets the CLIPBOARD/PRIMARY selection
+---
+*** Killing text now also sets the CLIPBOARD/PRIMARY selection
 in the surrounding GUI (using the OSC-52 escape sequence).  This only works
 if your xterm supports it and enables the `allowWindowOps' options (disabled
 by default at least in Debian, for security reasons).
@@ -364,10 +367,31 @@ Similarly, you can yank the CLIPBOARD/PRIMARY selection (using the OSC-52
 escape sequence) if your xterm has the feature enabled but for that you
 additionally need to add `getSelection' to `xterm-extra-capabilities'.
 
-** xterm-mouse-mode now supports mouse-tracking (if your xterm supports it).
++++
+*** `xterm-mouse-mode' now supports mouse-tracking (if your xterm supports it).
+
+---
+** The `save-place' variable is replaced by `save-place-mode'.
+
+** ERC
+
++++
+*** ERC can now hide message types by network or channel.
+`erc-hide-list' will hide all messages of the specified type, while
+`erc-network-hide-list' and `erc-channel-hide-list' will only hide the
+specified message types for the respective specified targets.
+
+** Midnight-mode
+
+---
+*** `midnight-mode' is now a proper minor mode.
+
+---
+*** clean-buffer-*-regexps can now specify buffers via predicate functions.
 
 ** package.el
 
++++
 *** New "external" package status.
 An external package is any installed package that's not built-in and
 not from `package-user-dir', which usually means it's from an entry in
@@ -375,14 +399,16 @@ not from `package-user-dir', which usually means it's from an entry in
 packages, in that they cannot be deleted through the package menu and
 are not considered for upgrades.
 
-The effect, is that a user can manually place a specific version of a
+The effect is that a user can manually place a specific version of a
 package inside `package-directory-list' and the package menu will
 always respect that.
 
++++
 *** If a package is available on multiple archives and one has higher
 priority (as per `package-archive-priorities') only that one is
 listed.  This can be configured with `package-menu-hide-low-priority'.
 
++++
 *** `package-menu-toggle-hiding' now toggles the hiding of packages.
 This includes the above-mentioned low-priority packages, as well as
 available packages whose version is lower than the currently installed
@@ -390,34 +416,43 @@ version (which were previously impossible to display).
 This allows users to downgrade a package if a lower version is
 available.
 
+---
 *** When filtering the package menu, keywords starting with "arc:" or
 "status:" represent package archive or status, respectively, instead
 of actual keywords.
 
+---
 *** Most functions which involve downloading information now take an
 ASYNC argument.  If it is non-nil, package.el performs the download(s)
 asynchronously.
 
+---
 *** New variable `package-menu-async' controls whether the
 package-menu uses asynchronous downloads.
 
+---
 *** `package-install-from-buffer' and `package-install-file' work on directories.
 This follows the same rules as installing from a .tar file, except the
 -pkg file is optional.
 
+---
 *** Packages which are dependencies of other packages cannot be deleted.
 The FORCE argument to `package-delete' overrides this.
 
+---
 *** New custom variable `package-selected-packages' tracks packages
 which were installed by the user (as opposed to installed as
 dependencies).  This variable can also be manually customized.
 
+---
 *** New command `package-install-user-selected-packages' installs all
 packages from `package-selected-packages' which are currently missing.
 
+---
 *** New command `package-autoremove' removes all packages which were
 installed strictly as dependencies but are no longer needed.
 
++++
 ** Shell
 
 When you invoke `shell' interactively, the *shell* buffer will now
@@ -444,20 +479,28 @@ If you need your objects to be named, do it by inheriting from `eieio-named'.
 *** `constructor' is now an obsolete alias for `make-instance'.
 
 ** ido
+
++++
 *** New command `ido-bury-buffer-at-head' bound to C-S-b
 Bury the buffer at the head of `ido-matches', analogous to how C-k
 kills the buffer at head.
+
+---
 *** A prefix argument to `ido-restrict-to-matches' will reverse its
 meaning, and the list is restricted to those elements that do not
 match the current input.
 
 ** Minibuffer
 
-*** You can use <up> and <down> keys to move point in the multi-line
-minibuffer just as in an ordinary buffer.  Only when point moves over
++++
+*** You can use <UP> and <DOWN> arrow keys to move through history by lines.
+The new commands `next-line-or-history-element' and
+`previous-line-or-history-element', bound to <UP> and <DOWN> in the
+minibuffer, allow by-line movement through minibuffer history,
+similarly to an ordinary buffer.  Only when point moves over
 the bottom/top of the minibuffer it goes to the next/previous history
-element.  The new commands bound to <up> and <down> in the minibuffer:
-`next-line-or-history-element' and `previous-line-or-history-element'.
+element.  `M-p' and `M-n' still move directly to previous/next history
+item as before.
 
 ** Search and Replace
 
@@ -732,6 +775,12 @@ Implemented for Bzr, Git, Hg.  As part of this change, the pre-existing
 (undocumented) command vc-hg-push now behaves slightly differently.
 
 *** The new command vc-region-history shows the log+diff of the active region.
+
++++
+*** You can refresh the VC state of a file buffer with `M-x vc-refresh-state'.
+This command is useful when you perform version control commands
+outside Emacs (e.g., from the shell prompt), or if you switch the VC
+back-end for the buffer's file, or remove it from version control.
 
 *** New option `vc-annotate-background-mode' controls whether
 the color range from `vc-annotate-color-map' is applied to the
