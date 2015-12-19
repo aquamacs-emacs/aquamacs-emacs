@@ -114,73 +114,6 @@ and can contain escape sequences for command keys, quotes, and the like.
 
 * Changes in Emacs 25.1
 
-+++
-** Any file of the form .dir-locals*.el is now considered a dir-local
-file, and multiple such files can be used in the same directory.  See
-the variable `dir-locals-file' for more information.
-
----
-** `xref-find-definitions' and `describe-function' now display
-information about mode local overrides (defined by cedet/mode-local.el
-`define-overloadable-function' `define-mode-local-overrides').
-
-+++
-** New `display-buffer' action function `display-buffer-use-some-frame'.
-This displays the buffer in an existing frame other than the current
-frame, and allows the caller to specify a frame predicate to exclude
-frames.
-
-+++
-** New documentation command `describe-symbol'.
-Works for functions, variables, faces, etc.  It is bound to `C-h o' by
-default.
-
-+++
-** New function `custom-prompt-customize-unsaved-options' checks for
-unsaved customizations and prompts user to customize (if found).  It
-is intended for adding to 'kill-emacs-query-functions'.
-
-+++
-** Network security (TLS/SSL certificate validity and the like) is
-added via the new Network Security Manager (NSM) and controlled via
-the `network-security-level' variable.
-
-+++
-** C-h l now also lists the commands that were run.
-
-+++
-** x-select-enable-clipboard is renamed select-enable-clipboard
-and x-select-enable-primary is renamed select-enable-primary.
-Additionally they both now apply to all systems (OSX, GNUstep, Windows, you
-name it), with the proviso that on some systems (e.g. Windows)
-select-enable-primary is ineffective since the system doesn't
-have the equivalent of a primary selection.
-
-+++
-** terpri gets an optional arg ENSURE to conditionally output a newline.
-
-+++
-** New macro `define-advice'.
-
-+++
-** `insert-register' now leaves point after the inserted text
-when called interactively.  A prefix argument toggles this behavior.
-
-+++
-** The new variable `term-file-aliases' replaces some files from lisp/term.
-The function `tty-run-terminal-initialization' consults this variable
-when deciding what terminal-specific initialization code to run.
-
----
-** New variable `system-configuration-features', listing some of the
-main features that Emacs was compiled with.  This is mainly intended
-for use in Emacs bug reports.
-
-+++
-** A password is now hidden also when typed in batch mode.  Another
-hiding character but the default `.' can be used by let-binding the
-variable `read-hide-char'.
-
 ** Emacs can now load shared/dynamic libraries (modules).
 A dynamic Emacs module is a shared library that provides additional
 functionality for use in Emacs Lisp programs, just like a package
@@ -217,6 +150,58 @@ Loadable modules in Emacs are an experimental feature, and subject to
 change in future releases.  For that reason, their support is disabled
 by default, and must be enabled by using the `--with-modules' option
 at configure time.
+
++++
+** Any file of the form .dir-locals*.el is now considered a dir-local
+file, and multiple such files can be used in the same directory.  See
+the variable `dir-locals-file' for more information.
+
++++
+** Network security (TLS/SSL certificate validity and the like) is
+added via the new Network Security Manager (NSM) and controlled via
+the `network-security-level' variable.
+
++++
+** C-h l now also lists the commands that were run.
+
++++
+** x-select-enable-clipboard is renamed select-enable-clipboard
+and x-select-enable-primary is renamed select-enable-primary.
+Additionally they both now apply to all systems (OSX, GNUstep, Windows, you
+name it), with the proviso that on some systems (e.g. Windows)
+select-enable-primary is ineffective since the system doesn't
+have the equivalent of a primary selection.
+
++++
+** New option `switch-to-buffer-in-dedicated-window' allows to customize
+how `switch-to-buffer' proceeds interactively when the selected window
+is strongly dedicated to its buffer.
+
++++
+** The option `even-window-heights' has been renamed to
+`even-window-sizes' and now handles window widths as well.
+
++++
+** terpri gets an optional arg ENSURE to conditionally output a newline.
+
++++
+** `insert-register' now leaves point after the inserted text
+when called interactively.  A prefix argument toggles this behavior.
+
++++
+** The new variable `term-file-aliases' replaces some files from lisp/term.
+The function `tty-run-terminal-initialization' consults this variable
+when deciding what terminal-specific initialization code to run.
+
+---
+** New variable `system-configuration-features', listing some of the
+main features that Emacs was compiled with.  This is mainly intended
+for use in Emacs bug reports.
+
++++
+** A password is now hidden also when typed in batch mode.  Another
+hiding character but the default `.' can be used by let-binding the
+variable `read-hide-char'.
 
 ---
 ** New input method: `tamil-dvorak'.
@@ -288,6 +273,16 @@ standards.
 fontification during full screen scrolling operations, giving less
 hesitant operation during auto-repeat of C-v, M-v at the cost of
 possible inaccuracies in the end position.
+
++++
+** New documentation command `describe-symbol'.
+Works for functions, variables, faces, etc.  It is bound to `C-h o' by
+default.
+
++++
+** New function `custom-prompt-customize-unsaved-options' checks for
+unsaved customizations and prompts user to customize (if found).  It
+is intended for adding to 'kill-emacs-query-functions'.
 
 
 * Changes in Specialized Modes and Packages in Emacs 25.1
@@ -554,8 +549,16 @@ this you can tell Edebug not to stop at the start of the first
 instrumented function.
 
 ** ElDoc
+
++++
 *** New minor mode `global-eldoc-mode'
+It is turned on by default, and affects `*scratch*' and other buffers
+whose major mode supports Emacs Lisp.
+
+---
 *** `eldoc-documentation-function' now defaults to `ignore'
+
+---
 *** `describe-char-eldoc' displays information about character at point,
 and can be used as a default value of `eldoc-documentation-function'.  It is
 useful when, for example, one needs to distinguish various spaces (e.g. ] [,
@@ -611,31 +614,45 @@ invalid certificates are marked in red.
 
 ** Message mode
 
+---
 *** text/html messages that contain inline image parts will be
 transformed into multipart/related messages before sending.
 
-** pcase
-*** New UPatterns `quote', `app', `cl-struct', and `eieio'.
-*** New UPatterns can be defined with `pcase-defmacro'.
 +++
-*** New vector QPattern.
+** In Show Paren Mode, a parenthesis can be highlighted when point
+stands inside it, and certain parens can be highlighted when point is
+at BOL or EOL, or in whitespace there.  To enable these, customize,
+respectively, `show-paren-when-point-inside-paren' or
+`show-paren-when-point-in-periphery'.
 
 ** Lisp mode
 *** Strings after `:documentation' are highlighted as docstrings.
 
 ** Rectangle editing
+
++++
 *** Rectangle Mark mode can have corners past EOL or in the middle of a TAB.
+
++++
 *** C-x C-x in rectangle-mark-mode now cycles through the four corners.
 *** `string-rectangle' provides on-the-fly preview of the result.
 
-** New font-lock functions font-lock-ensure and font-lock-flush, which
-should be used instead of font-lock-fontify-buffer when called from Elisp.
++++
+** New font-lock functions `font-lock-ensure' and `font-lock-flush'.
+These should be used in preference to `font-lock-fontify-buffer' when
+called from Lisp.
 
-** Macro `minibuffer-with-setup-hook' takes (:append FUN) to mean
-appending FUN to `minibuffer-setup-hook'.
+---
+** Macro `minibuffer-with-setup-hook' can optionally append a function
+to `minibuffer-setup-hook'.
+
+If the first argument of the macro is of the form `(:append FUN)',
+then FUN will be appended to `minibuffer-setup-hook', instead of
+prepending it.
 
 ** cl-lib
-*** New functions cl-fresh-line, cl-digit-char-p and cl-parse-integer.
++++
+*** New functions `cl-fresh-line', `cl-digit-char-p', and `cl-parse-integer'.
 
 ** Calendar and diary
 
@@ -683,11 +700,18 @@ The remainder were:
 
 ** New js.el option `js-indent-first-init'.
 
+** Info
+
 ---
-** `Info-fontify-maximum-menu-size' can be t for no limit.
+** Info mode now displays symbol names in fixed-pitch font.
+If you want to get the old behavior back, customize the `Info-quoted'
+face to use the same definitions as the default face.
+
+---
+*** `Info-fontify-maximum-menu-size' can be t for no limit.
 
 +++
-** `info-display-manual' can now be given a prefix argument which (any
+*** `info-display-manual' can now be given a prefix argument which (any
 non-nil value) directs the command to limit the completion
 alternatives to currently visited manuals.
 
@@ -696,9 +720,11 @@ alternatives to currently visited manuals.
 
 ** Rmail
 
++++
 *** The Rmail commands d, C-d and u take optional repeat counts to delete or
 undelete multiple messages.
 
++++
 *** Rmail can now render HTML mail messages if your Emacs was built with
 libxml2 or if you have the Lynx browser installed.  By default, Rmail
 will display the HTML version of a mail message that has both HTML and
@@ -851,6 +877,11 @@ easier binding, which is now unoccupied (`M-,').
 `xref-marker-ring-length'.  `find-tag-marker-ring' is now an obsolete
 alias for a private variable.  `xref-push-marker-stack' and
 `xref-pop-marker-stack' should be used to mutate it instead.
+
+---
+*** `xref-find-definitions' and `describe-function' now display
+information about mode local overrides (defined by cedet/mode-local.el
+`define-overloadable-function' `define-mode-local-overrides').
 
 ** etags
 As a result of the above, these commands are now obsolete:
@@ -1151,6 +1182,12 @@ that happen, `unhandled-file-name-directory' now defaults to calling
 
 * Lisp Changes in Emacs 25.1
 
+** pcase
+*** New UPatterns `quote', `app', `cl-struct', `eieio', `seq', and `map'.
+*** New UPatterns can be defined with `pcase-defmacro'.
++++
+*** New vector QPattern.
+
 ** syntax-propertize is now automatically called on-demand during forward
 parsing functions like `forward-sexp'.
 
@@ -1192,6 +1229,9 @@ Area.  The output is still logged to the *Messages* buffer.
 +++
 ** A new text property `inhibit-read-only' can be used in read-only
 buffers to allow certain parts of the text to be writable.
+
++++
+** New macro `define-advice'.
 
 ** `read-buffer' takes a new `predicate' argument.
 
@@ -1477,18 +1517,15 @@ windows without "fixing" it.  It's supported by `fit-window-to-buffer',
 `temp-buffer-resize-mode' and `display-buffer'.
 
 +++
+** New `display-buffer' action function `display-buffer-use-some-frame'.
+This displays the buffer in an existing frame other than the current
+frame, and allows the caller to specify a frame predicate to exclude
+frames.
+
++++
 ** New minor mode `window-divider-mode' and options
 `window-divider-default-places', `window-divider-default-bottom-width'
 and `window-divider-default-right-width'.
-
-+++
-** New option `switch-to-buffer-in-dedicated-window' allows to customize
-how `switch-to-buffer' proceeds interactively when the selected window
-is strongly dedicated to its buffer.
-
-+++
-** The option `even-window-heights' has been renamed to
-`even-window-sizes' and now handles window widths as well.
 
 ** Tearoff menus and detachable toolbars for Gtk+ has been removed.
 Those features have been deprecated in Gtk+ for a long time.

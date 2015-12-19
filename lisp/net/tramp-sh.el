@@ -486,6 +486,7 @@ The string is used in `tramp-methods'.")
 ;; Solaris: /usr/xpg4/bin:/usr/ccs/bin:/usr/bin:/opt/SUNWspro/bin
 ;; GNU/Linux (Debian, Suse): /bin:/usr/bin
 ;; FreeBSD: /usr/bin:/bin:/usr/sbin:/sbin: - beware trailing ":"!
+;; Darwin: /usr/bin:/bin:/usr/sbin:/sbin
 ;; IRIX64: /usr/bin
 ;;;###tramp-autoload
 (defcustom tramp-remote-path
@@ -1273,6 +1274,7 @@ target of the symlink differ."
 	     (tramp-get-test-command vec)
 	     (tramp-shell-quote-argument localname)
 	     (tramp-get-ls-command vec)
+	     (if (eq id-format 'integer) "-ildn" "-ild")
 	     ;; On systems which have no quoting style, file names
 	     ;; with special characters could fail.
 	     (cond
@@ -1281,7 +1283,6 @@ target of the symlink differ."
 	      ((tramp-get-ls-command-with-w-option vec)
 	       "-w")
 	      (t ""))
-	     (if (eq id-format 'integer) "-ildn" "-ild")
 	     (tramp-shell-quote-argument localname)))
     ;; Parse `ls -l' output ...
     (with-current-buffer (tramp-get-buffer vec)
@@ -4180,44 +4181,6 @@ process to set up.  VEC specifies the connection."
    vec (format "PS1=%s PS2='' PS3='' PROMPT_COMMAND=''"
 	       (tramp-shell-quote-argument tramp-end-of-output)) t)
 
-  ;; Try to set up the coding system correctly.
-  ;; CCC this can't be the right way to do it.  Hm.
-  (tramp-message vec 5 "Determining coding system")
-  (with-current-buffer (process-buffer proc)
-    (if (featurep 'mule)
-	;; Use MULE to select the right EOL convention for communicating
-	;; with the process.
-	(let ((cs (or (and (memq 'utf-8 (coding-system-list))
-			   (string-match "utf-?8" (tramp-get-remote-locale vec))
-			   (cons 'utf-8 'utf-8))
-		      (tramp-compat-funcall 'process-coding-system proc)
-		      (cons 'undecided 'undecided)))
-	      cs-decode cs-encode)
-	  (when (symbolp cs) (setq cs (cons cs cs)))
-	  (setq cs-decode (car cs))
-	  (setq cs-encode (cdr cs))
-	  (unless cs-decode (setq cs-decode 'undecided))
-	  (unless cs-encode (setq cs-encode 'undecided))
-	  (setq cs-encode (tramp-compat-coding-system-change-eol-conversion
-			   cs-encode 'unix))
-	  (tramp-send-command vec "echo foo ; echo bar" t)
-	  (goto-char (point-min))
-	  (when (search-forward "\r" nil t)
-	    (setq cs-decode (tramp-compat-coding-system-change-eol-conversion
-			     cs-decode 'dos)))
-	  (tramp-compat-funcall
-	   'set-buffer-process-coding-system cs-decode cs-encode)
-	  (tramp-message
-	   vec 5 "Setting coding system to `%s' and `%s'" cs-decode cs-encode))
-      ;; Look for ^M and do something useful if found.
-      (when (search-forward "\r" nil t)
-	;; We have found a ^M but cannot frob the process coding system
-	;; because we're running on a non-MULE Emacs.  Let's try
-	;; stty, instead.
-	(tramp-send-command vec "stty -onlcr" t))))
-
-  (tramp-send-command vec "set +o vi +o emacs" t)
-
   ;; Check whether the output of "uname -sr" has been changed.  If
   ;; yes, this is a strong indication that we must expire all
   ;; connection properties.  We start again with
@@ -4236,6 +4199,48 @@ process to set up.  VEC specifies the connection."
       ;; We want to keep the password.
       (tramp-cleanup-connection vec t t)
       (throw 'uname-changed (tramp-maybe-open-connection vec))))
+
+  ;; Try to set up the coding system correctly.
+  ;; CCC this can't be the right way to do it.  Hm.
+  (tramp-message vec 5 "Determining coding system")
+  (with-current-buffer (process-buffer proc)
+    (if (featurep 'mule)
+	;; Use MULE to select the right EOL convention for communicating
+	;; with the process.
+	(let ((cs (or (and (memq 'utf-8 (coding-system-list))
+			   (string-match "utf-?8" (tramp-get-remote-locale vec))
+			   (cons 'utf-8 'utf-8))
+		      (tramp-compat-funcall 'process-coding-system proc)
+		      (cons 'undecided 'undecided)))
+	      cs-decode cs-encode)
+	  (when (symbolp cs) (setq cs (cons cs cs)))
+	  (setq cs-decode (car cs))
+	  (setq cs-encode (cdr cs))
+	  (unless cs-decode (setq cs-decode 'undecided))
+	  (unless cs-encode (setq cs-encode 'undecided))
+	  (setq cs-encode
+		(tramp-compat-coding-system-change-eol-conversion
+		 cs-encode
+		 (if (string-match
+		      "^Darwin" (tramp-get-connection-property vec "uname" ""))
+		     'mac 'unix)))
+	  (tramp-send-command vec "echo foo ; echo bar" t)
+	  (goto-char (point-min))
+	  (when (search-forward "\r" nil t)
+	    (setq cs-decode (tramp-compat-coding-system-change-eol-conversion
+			     cs-decode 'dos)))
+	  (tramp-compat-funcall
+	   'set-buffer-process-coding-system cs-decode cs-encode)
+	  (tramp-message
+	   vec 5 "Setting coding system to `%s' and `%s'" cs-decode cs-encode))
+      ;; Look for ^M and do something useful if found.
+      (when (search-forward "\r" nil t)
+	;; We have found a ^M but cannot frob the process coding system
+	;; because we're running on a non-MULE Emacs.  Let's try
+	;; stty, instead.
+	(tramp-send-command vec "stty -onlcr" t))))
+
+  (tramp-send-command vec "set +o vi +o emacs" t)
 
   ;; Check whether the remote host suffers from buggy
   ;; `send-process-string'.  This is known for FreeBSD (see comment in
@@ -4282,6 +4287,10 @@ process to set up.  VEC specifies the connection."
   (when (string-match "BSD\\|Darwin"
 		      (tramp-get-connection-property vec "uname" ""))
     (tramp-send-command vec "stty -oxtabs" t))
+
+  ;; Set utf8 encoding.  Needed for Mac OS X, for example.  This is
+  ;; non-POSIX, so we must expect errors on some systems.
+  (tramp-send-command vec "stty iutf8 2>/dev/null" t)
 
   ;; Set `remote-tty' process property.
   (let ((tty (tramp-send-command-and-read vec "echo \\\"`tty`\\\"" 'noerror)))
