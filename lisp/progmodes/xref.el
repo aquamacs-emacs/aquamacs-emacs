@@ -1,6 +1,6 @@
 ;; xref.el --- Cross-referencing commands              -*-lexical-binding:t-*-
 
-;; Copyright (C) 2014-2015 Free Software Foundation, Inc.
+;; Copyright (C) 2014-2016 Free Software Foundation, Inc.
 
 ;; This file is part of GNU Emacs.
 
@@ -19,6 +19,11 @@
 
 ;;; Commentary:
 
+;; NOTE: The xref API is still experimental and can change in major,
+;; backward-incompatible ways.  Everyone is encouraged to try it, and
+;; report to us any problems or use cases we hadn't anticipated, by
+;; sending an email to emacs-devel, or `M-x report-emacs-bug'.
+;;
 ;; This file provides a somewhat generic infrastructure for cross
 ;; referencing commands, in particular "find-definition".
 ;;
@@ -246,7 +251,7 @@ find a search tool; by default, this uses \"find | grep\" in the
    (let ((pr (project-current t)))
      (append
       (project-roots pr)
-      (project-library-roots pr)))))
+      (project-external-roots pr)))))
 
 (cl-defgeneric xref-backend-apropos (backend pattern)
   "Find all symbols that match PATTERN.

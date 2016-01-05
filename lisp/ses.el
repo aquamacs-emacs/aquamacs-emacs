@@ -1,6 +1,6 @@
 ;;; ses.el -- Simple Emacs Spreadsheet  -*- lexical-binding:t -*-
 
-;; Copyright (C) 2002-2015 Free Software Foundation, Inc.
+;; Copyright (C) 2002-2016 Free Software Foundation, Inc.
 
 ;; Author: Jonathan Yavner <jyavner@member.fsf.org>
 ;; Maintainer: Vincent Belaïche  <vincentb1@users.sourceforge.net>
@@ -1117,9 +1117,7 @@ region, or nil if cursor is not at a cell."
 The end marker is appropriate if some argument is `end'.
 A range is appropriate if some argument is `range'.
 A single cell is appropriate unless some argument is `needrange'."
-  (if (eq ses--curcell t)
-      ;; curcell recalculation was postponed, but user typed ahead.
-      (ses-set-curcell))
+  (ses-set-curcell); fix  bug#21054
   (cond
    ((not ses--curcell)
     (or (memq 'end args)

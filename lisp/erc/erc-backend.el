@@ -1,6 +1,6 @@
 ;;; erc-backend.el --- Backend network communication for ERC
 
-;; Copyright (C) 2004-2015 Free Software Foundation, Inc.
+;; Copyright (C) 2004-2016 Free Software Foundation, Inc.
 
 ;; Filename: erc-backend.el
 ;; Author: Lawrence Mitchell <wence@gmx.li>
@@ -493,9 +493,19 @@ The current buffer is given by BUFFER."
                                      4 erc-server-send-ping-interval
                                      #'erc-server-send-ping
                                      buffer))
-      (setq erc-server-ping-timer-alist (cons (cons buffer
-                                                    erc-server-ping-handler)
-                                              erc-server-ping-timer-alist)))))
+
+      ;; I check the timer alist for an existing timer. If one exists,
+      ;; I get rid of it
+      (let ((timer-tuple (assq buffer erc-server-ping-timer-alist)))
+        (if timer-tuple
+            ;; this buffer already has a timer. Cancel it and set the new one
+            (progn
+              (erc-cancel-timer (cdr timer-tuple))
+              (setf (cdr (assq buffer erc-server-ping-timer-alist)) erc-server-ping-handler))
+
+          ;; no existing timer for this buffer. Add new one
+          (add-to-list 'erc-server-ping-timer-alist
+                       (cons buffer erc-server-ping-handler)))))))
 
 (defun erc-server-process-alive (&optional buffer)
   "Return non-nil when BUFFER has an `erc-server-process' open or running."
@@ -693,6 +703,9 @@ Conditionally try to reconnect and take appropriate action."
                    (setq erc-server-ping-handler nil)))
           (run-hook-with-args 'erc-disconnected-hook
                               (erc-current-nick) (system-name) "")
+          (dolist (buf (erc-buffer-filter (lambda () (boundp 'erc-channel-users)) cproc))
+            (with-current-buffer buf
+              (setq erc-channel-users (make-hash-table :test 'equal))))
           ;; Remove the prompt
           (goto-char (or (marker-position erc-input-marker) (point-max)))
           (forward-line 0)
@@ -795,7 +808,9 @@ protection algorithm."
 (defun erc-server-send-ping (buf)
   "Send a ping to the IRC server buffer in BUF.
 Additionally, detect whether the IRC process has hung."
-  (if (buffer-live-p buf)
+  (if (and (buffer-live-p buf)
+           (with-current-buffer buf
+             erc-server-last-received-time))
       (with-current-buffer buf
         (if (and erc-server-send-ping-timeout
                  (>

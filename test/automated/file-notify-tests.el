@@ -1,6 +1,6 @@
 ;;; file-notify-tests.el --- Tests of file notifications  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2015 Free Software Foundation, Inc.
+;; Copyright (C) 2013-2016 Free Software Foundation, Inc.
 
 ;; Author: Michael Albinus <michael.albinus@gmx.de>
 
@@ -138,6 +138,7 @@ being the result.")
   (declare (indent 1))
   `(ert-deftest ,(intern (concat (symbol-name test) "-remote")) ()
      ,docstring
+     :tags '(:expensive-test)
      (let* ((temporary-file-directory
 	     file-notify-test-remote-temporary-file-directory)
 	    (ert-test (ert-get-test ',test)))

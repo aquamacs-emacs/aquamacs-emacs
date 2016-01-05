@@ -1,6 +1,6 @@
 ;; bug-reference.el --- buttonize bug references
 
-;; Copyright (C) 2008-2015 Free Software Foundation, Inc.
+;; Copyright (C) 2008-2016 Free Software Foundation, Inc.
 
 ;; Author: Tom Tromey <tromey@redhat.com>
 ;; Created: 21 Mar 2007
@@ -69,7 +69,7 @@ so that it is considered safe, see `enable-local-variables'.")
                 (get s 'bug-reference-url-format)))))
 
 (defcustom bug-reference-bug-regexp
-  "\\([Bb]ug ?#\\|[Pp]atch ?#\\|RFE ?#\\|PR [a-z-+]+/\\)\\([0-9]+\\(?:#[0-9]+\\)?\\)"
+  "\\([Bb]ug ?#?\\|[Pp]atch ?#\\|RFE ?#\\|PR [a-z-+]+/\\)\\([0-9]+\\(?:#[0-9]+\\)?\\)"
   "Regular expression matching bug references.
 The second subexpression should match the bug reference (usually a number)."
   :type 'string

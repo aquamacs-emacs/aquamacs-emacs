@@ -1,6 +1,6 @@
 ;;; cc-langs.el --- language specific settings for CC Mode -*- coding: utf-8 -*-
 
-;; Copyright (C) 1985, 1987, 1992-2015 Free Software Foundation, Inc.
+;; Copyright (C) 1985, 1987, 1992-2016 Free Software Foundation, Inc.
 
 ;; Authors:    2002- Alan Mackenzie
 ;;             1998- Martin Stjernholm
@@ -499,8 +499,13 @@ parameters \(point-min) and \(point-max).")
   ;; For documentation see the following c-lang-defvar of the same name.
   ;; The value here may be a list of functions or a single function.
   t 'c-change-expand-fl-region
-  (c c++ objc) '(c-neutralize-syntax-in-and-mark-CPP
-		 c-change-expand-fl-region)
+  (c objc) '(c-neutralize-syntax-in-and-mark-CPP
+	     c-change-expand-fl-region)
+  c++ '(c-neutralize-syntax-in-and-mark-CPP
+	c-restore-<>-properties
+	c-change-expand-fl-region)
+  java '(c-restore-<>-properties
+	 c-change-expand-fl-region)
   awk 'c-awk-extend-and-syntax-tablify-region)
 (c-lang-defvar c-before-font-lock-functions
 	       (let ((fs (c-lang-const c-before-font-lock-functions)))
@@ -1432,6 +1437,14 @@ properly."
 	     "\\|")
 	    "\\)\\s *"))
 (c-lang-setvar comment-start-skip (c-lang-const comment-start-skip))
+
+(c-lang-defconst comment-end-can-be-escaped
+  "When non-nil, escaped EOLs inside comments are valid.
+This works in Emacs >= 25.1."
+  t nil
+  (c c++ objc) t)
+(c-lang-setvar comment-end-can-be-escaped
+	       (c-lang-const comment-end-can-be-escaped))
 
 (c-lang-defconst c-syntactic-ws-start
   ;; Regexp matching any sequence that can start syntactic whitespace.

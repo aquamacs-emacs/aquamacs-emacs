@@ -1,6 +1,6 @@
 /* Fundamental definitions for GNU Emacs Lisp interpreter. -*- coding: utf-8 -*-
 
-Copyright (C) 1985-1987, 1993-1995, 1997-2015 Free Software Foundation,
+Copyright (C) 1985-1987, 1993-1995, 1997-2016 Free Software Foundation,
 Inc.
 
 This file is part of GNU Emacs.
@@ -329,15 +329,11 @@ error !;
 #define lisp_h_CHECK_TYPE(ok, predicate, x) \
    ((ok) ? (void) 0 : (void) wrong_type_argument (predicate, x))
 #define lisp_h_CONSP(x) (XTYPE (x) == Lisp_Cons)
-/* lisp_h_EQ must never exit non-locally; emacs-module.c relies on
-   that.  */
 #define lisp_h_EQ(x, y) (XLI (x) == XLI (y))
 #define lisp_h_FLOATP(x) (XTYPE (x) == Lisp_Float)
 #define lisp_h_INTEGERP(x) ((XTYPE (x) & (Lisp_Int0 | ~Lisp_Int1)) == Lisp_Int0)
 #define lisp_h_MARKERP(x) (MISCP (x) && XMISCTYPE (x) == Lisp_Misc_Marker)
 #define lisp_h_MISCP(x) (XTYPE (x) == Lisp_Misc)
-/* lisp_h_NILP must never exit non-locally; emacs-module.c relies on
-   that.  */
 #define lisp_h_NILP(x) EQ (x, Qnil)
 #define lisp_h_SET_SYMBOL_VAL(sym, v) \
    (eassert ((sym)->redirect == SYMBOL_PLAINVAL), (sym)->val.value = (v))
@@ -386,14 +382,11 @@ error !;
 # define CHECK_SYMBOL(x) lisp_h_CHECK_SYMBOL (x)
 # define CHECK_TYPE(ok, predicate, x) lisp_h_CHECK_TYPE (ok, predicate, x)
 # define CONSP(x) lisp_h_CONSP (x)
-/* EQ must never exit non-locally; emacs-module.c relies on that.  */
 # define EQ(x, y) lisp_h_EQ (x, y)
 # define FLOATP(x) lisp_h_FLOATP (x)
 # define INTEGERP(x) lisp_h_INTEGERP (x)
 # define MARKERP(x) lisp_h_MARKERP (x)
 # define MISCP(x) lisp_h_MISCP (x)
-/* NILP must never exit non-locally; emacs-module.c relies on
-   that.  */
 # define NILP(x) lisp_h_NILP (x)
 # define SET_SYMBOL_VAL(sym, v) lisp_h_SET_SYMBOL_VAL (sym, v)
 # define SYMBOL_CONSTANT_P(sym) lisp_h_SYMBOL_CONSTANT_P (sym)
@@ -995,8 +988,7 @@ make_natnum (EMACS_INT n)
   return USE_LSB_TAG ? make_number (n) : XIL (n + (int0 << VALBITS));
 }
 
-/* Return true if X and Y are the same object.  Must never exit
-   non-locally; emacs-module.c relies on that.  */
+/* Return true if X and Y are the same object.  */
 
 INLINE bool
 (EQ) (Lisp_Object x, Lisp_Object y)
@@ -1333,7 +1325,7 @@ STRING_MULTIBYTE (Lisp_Object str)
 /* Mark STR as a unibyte string.  */
 #define STRING_SET_UNIBYTE(STR)				\
   do {							\
-    if (EQ (STR, empty_multibyte_string))		\
+    if (XSTRING (STR)->size == 0)			\
       (STR) = empty_unibyte_string;			\
     else						\
       XSTRING (STR)->size_byte = -1;			\
@@ -1343,7 +1335,7 @@ STRING_MULTIBYTE (Lisp_Object str)
    ASCII characters in advance.  */
 #define STRING_SET_MULTIBYTE(STR)			\
   do {							\
-    if (EQ (STR, empty_unibyte_string))			\
+    if (XSTRING (STR)->size == 0)			\
       (STR) = empty_multibyte_string;			\
     else						\
       XSTRING (STR)->size_byte = XSTRING (STR)->size;	\
@@ -2572,9 +2564,6 @@ enum char_bits
   };
 
 /* Data type checking.  */
-
-/* Checks whether X is null.  Must never exit non-locally;
-   emacs-module.c relies on that.  */
 
 INLINE bool
 (NILP) (Lisp_Object x)

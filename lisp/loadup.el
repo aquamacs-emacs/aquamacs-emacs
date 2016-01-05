@@ -1,6 +1,6 @@
 ;;; loadup.el --- load up standardly loaded Lisp files for Emacs
 
-;; Copyright (C) 1985-1986, 1992, 1994, 2001-2015 Free Software
+;; Copyright (C) 1985-1986, 1992, 1994, 2001-2016 Free Software
 ;; Foundation, Inc.
 
 ;; Maintainer: emacs-devel@gnu.org
@@ -277,7 +277,12 @@
 (if (featurep 'ns)
     (progn
       (load "term/common-win")
-      (load "term/ns-win")))
+      ;; Don't load ucs-normalize.el unless uni-*.el files were
+      ;; already produced, because it needs uni-*.el files that might
+      ;; not be built early enough during bootstrap.
+      (when (load-history-filename-element "charprop\\.el")
+        (load "international/ucs-normalize")
+        (load "term/ns-win"))))
 (if (fboundp 'x-create-frame)
     ;; Do it after loading term/foo-win.el since the value of the
     ;; mouse-wheel-*-event vars depends on those files being loaded or not.

@@ -1,6 +1,6 @@
 ;;; emacsbug.el --- command to report Emacs bugs to appropriate mailing list
 
-;; Copyright (C) 1985, 1994, 1997-1998, 2000-2015 Free Software
+;; Copyright (C) 1985, 1994, 1997-1998, 2000-2016 Free Software
 ;; Foundation, Inc.
 
 ;; Author: K. Shane Hartman
@@ -166,6 +166,14 @@ Prompts for bug subject.  Leaves you in a mail buffer."
     (setq message-end-point
 	  (with-current-buffer (messages-buffer)
 	    (point-max-marker)))
+    (condition-case nil
+        ;; For the novice user make sure there's always enough space for
+        ;; the mail and the warnings buffer on this frame (Bug#10873).
+        (unless report-emacs-bug-no-explanations
+          (delete-other-windows)
+          (set-window-dedicated-p nil nil)
+          (set-frame-parameter nil 'unsplittable nil))
+      (error nil))
     (compose-mail report-emacs-bug-address topic)
     ;; The rest of this does not execute if the user was asked to
     ;; confirm and said no.
@@ -218,7 +226,11 @@ and may appear in other public locations.\n\n"
     (let ((txt (delete-and-extract-region (1+ user-point) (point))))
       (insert (propertize "\n" 'display txt)))
 
-    (insert "\n\nIn " (emacs-version) "\n")
+    (insert "\n\nIn " (emacs-version))
+    (if emacs-build-system
+        (insert " built on " emacs-build-system))
+    (insert "\n")
+
     (if (stringp emacs-repository-version)
 	(insert "Repository revision: " emacs-repository-version "\n"))
     (if (fboundp 'ns-os-version)

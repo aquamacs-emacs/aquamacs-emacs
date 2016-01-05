@@ -1,6 +1,6 @@
 ;; erc.el --- An Emacs Internet Relay Chat client  -*- lexical-binding:t -*-
 
-;; Copyright (C) 1997-2015 Free Software Foundation, Inc.
+;; Copyright (C) 1997-2016 Free Software Foundation, Inc.
 
 ;; Author: Alexander L. Belikoff (alexander@belikoff.net)
 ;; Contributors: Sergey Berezin (sergey.berezin@cs.cmu.edu),
@@ -2025,7 +2025,8 @@ Returns the buffer for the given server or channel."
                            (auth-source-search :host server
                                                :max 1
                                                :user nick
-                                               :port port
+                                               ;; secrets.el wouldn’t accept a number
+                                               :port (if (numberp port) (number-to-string port) port)
                                                :require '(:secret)))
                       :secret)))
                 (if (functionp secret)
@@ -4825,6 +4826,11 @@ channel."
 			(_ (error "Unknown prefix char `%S'" ch) voice))
 		      'on)))
           (when updatep
+	    ;; If we didn't issue the NAMES request (consider two clients
+	    ;; talking to an IRC proxy), `erc-channel-begin-receiving-names'
+	    ;; will not have been called, so we have to do it here.
+	    (unless erc-channel-new-member-names
+	      (erc-channel-begin-receiving-names))
             (puthash (erc-downcase name) t
                      erc-channel-new-member-names)
             (erc-update-current-channel-member
@@ -6702,7 +6708,7 @@ or `erc-kill-buffer-hook' if any other buffer."
     (cond
      ((eq (erc-server-buffer) (current-buffer))
       (run-hooks 'erc-kill-server-hook))
-     ((erc-channel-p (erc-default-target))
+     ((erc-channel-p (or (erc-default-target) (buffer-name)))
       (run-hooks 'erc-kill-channel-hook))
      (t
       (run-hooks 'erc-kill-buffer-hook)))))

@@ -1,6 +1,6 @@
 ;;; tramp-compat.el --- Tramp compatibility functions
 
-;; Copyright (C) 2007-2015 Free Software Foundation, Inc.
+;; Copyright (C) 2007-2016 Free Software Foundation, Inc.
 
 ;; Author: Michael Albinus <michael.albinus@gmx.de>
 ;; Keywords: comm, processes
@@ -600,7 +600,8 @@ and replace a sub-expression, e.g.
 Store the result in LIST and return it.  LIST must be a proper list.
 Of several `equal' occurrences of an element in LIST, the first
 one is kept."
-  (cl-delete-duplicates list '(:test equal :from-end) nil)))
+  (tramp-compat-funcall
+   'cl-delete-duplicates list '(:test equal :from-end) nil)))
 
 (add-hook 'tramp-unload-hook
 	  (lambda ()

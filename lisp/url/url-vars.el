@@ -1,6 +1,6 @@
 ;;; url-vars.el --- Variables for Uniform Resource Locator tool
 
-;; Copyright (C) 1996-1999, 2001, 2004-2015 Free Software Foundation,
+;; Copyright (C) 1996-1999, 2001, 2004-2016 Free Software Foundation,
 ;; Inc.
 
 ;; Keywords: comm, data, processes, hypermedia
@@ -356,6 +356,18 @@ Currently supported methods:
 		(const :tag "Use SSL for all connections (obsolete)" :value ssl)
 		(const :tag "Direct connection" :value native))
   :group 'url-hairy)
+
+(defcustom url-user-agent (format "User-Agent: %sURL/%s\r\n"
+				  (if url-package-name
+				      (concat url-package-name "/"
+					      url-package-version " ")
+				    "") url-version)
+  "User Agent used by the URL package for HTTP/HTTPS requests
+Should be a string or a function of no arguments returning a string."
+  :type '(choice (string :tag "A static User-Agent string")
+                 (function :tag "Call a function to get the User-Agent string"))
+  :version "25.1"
+  :group 'url)
 
 (defvar url-setup-done nil "Has setup configuration been done?")
 

@@ -1,5 +1,5 @@
 /* Declarations useful when processing input.
-   Copyright (C) 1985-1987, 1993, 2001-2015 Free Software Foundation,
+   Copyright (C) 1985-1987, 1993, 2001-2016 Free Software Foundation,
    Inc.
 
 This file is part of GNU Emacs.
@@ -245,16 +245,15 @@ extern KBOARD *current_kboard;
 /* Total number of times read_char has returned, modulo UINTMAX_MAX + 1.  */
 extern uintmax_t num_input_events;
 
-
 /* The location of point immediately before the last command was
    executed, or the last time the undo-boundary command added a
    boundary.*/
-ptrdiff_t point_before_last_command_or_undo;
+extern ptrdiff_t point_before_last_command_or_undo;
 
 /* The value of current_buffer immediately before the last command was
    executed, or the last time the undo-boundary command added a
    boundary.*/
-struct buffer *buffer_before_last_command_or_undo;
+extern struct buffer *buffer_before_last_command_or_undo;
 
 extern struct buffer *prev_buffer;
 
@@ -415,6 +414,8 @@ extern void unuse_menu_items (void);
 /* Getting the kind of an event head.  */
 #define EVENT_HEAD_KIND(event_head) \
   (Fget ((event_head), Qevent_kind))
+
+extern void (*handle_user_signal_hook) (int);
 
 /* True while doing kbd input.  */
 extern bool waiting_for_input;

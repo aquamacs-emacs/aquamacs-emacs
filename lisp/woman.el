@@ -1,6 +1,6 @@
 ;;; woman.el --- browse UN*X manual pages `wo (without) man'
 
-;; Copyright (C) 2000-2015 Free Software Foundation, Inc.
+;; Copyright (C) 2000-2016 Free Software Foundation, Inc.
 
 ;; Author: Francis J. Wright <F.J.Wright@qmul.ac.uk>
 ;; Maintainer: emacs-devel@gnu.org
@@ -1749,7 +1749,7 @@ Leave point at end of new text.  Return length of inserted text."
   ;; start in 19.34!
   (save-excursion
     (let ((case-fold-search t))
-      ;; Co-operate with auto-compression mode:
+      ;; Cooperate with auto-compression mode:
       (if (and compressed
 	       (or (eq compressed t)
 		   (string-match-p woman-file-compression-regexp filename))

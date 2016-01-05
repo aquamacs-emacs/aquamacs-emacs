@@ -1,6 +1,6 @@
 ### @configure_input@
 
-# Copyright (C) 1985, 1987-1988, 1993-1995, 1999-2015 Free Software
+# Copyright (C) 1985, 1987-1988, 1993-1995, 1999-2016 Free Software
 # Foundation, Inc.
 
 # This file is part of GNU Emacs.
@@ -489,6 +489,11 @@ $(leimdir)/leim-list.el: bootstrap-emacs$(EXEEXT)
 $(srcdir)/macuvs.h $(lispsource)/international/charprop.el: \
   bootstrap-emacs$(EXEEXT) FORCE
 	$(MAKE) -C ../admin/unidata all EMACS="../$(bootstrap_exe)"
+
+## We require charprop.el to exist before ucs-normalize.el is
+## byte-compiled, because ucs-normalize.el needs to load 2 uni-*.el files.
+$(lispsource)/international/ucs-normalize.elc: | \
+  $(lispsource)/international/charprop.el
 
 lispintdir = ${lispsource}/international
 ${lispintdir}/cp51932.el ${lispintdir}/eucjp-ms.el: FORCE

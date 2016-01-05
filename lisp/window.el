@@ -1,6 +1,6 @@
 ;;; window.el --- GNU Emacs window commands aside from those written in C
 
-;; Copyright (C) 1985, 1989, 1992-1994, 2000-2015 Free Software
+;; Copyright (C) 1985, 1989, 1992-1994, 2000-2016 Free Software
 ;; Foundation, Inc.
 
 ;; Maintainer: emacs-devel@gnu.org
@@ -7879,7 +7879,7 @@ Return non-nil if the window was shrunk, nil otherwise."
 ;; Groups of windows (Follow Mode).
 ;;
 ;; This section of functions extends the functionality of some window
-;; manipulating commands to groups of windows co-operatively
+;; manipulating commands to groups of windows cooperatively
 ;; displaying a buffer, typically with Follow Mode.
 ;;
 ;; The xxx-function variables are permanent locals so that their local

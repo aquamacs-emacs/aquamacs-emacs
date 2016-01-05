@@ -1,6 +1,6 @@
 /* Evaluator for GNU Emacs Lisp interpreter.
 
-Copyright (C) 1985-1987, 1993-1995, 1999-2015 Free Software Foundation,
+Copyright (C) 1985-1987, 1993-1995, 1999-2016 Free Software Foundation,
 Inc.
 
 This file is part of GNU Emacs.
@@ -3196,10 +3196,11 @@ unbind_to (ptrdiff_t count, Lisp_Object value)
 	  { /* If variable has a trivial value (no forwarding), we can
 	       just set it.  No need to check for constant symbols here,
 	       since that was already done by specbind.  */
-	    struct Lisp_Symbol *sym = XSYMBOL (specpdl_symbol (specpdl_ptr));
-	    if (sym->redirect == SYMBOL_PLAINVAL)
+	    Lisp_Object sym = specpdl_symbol (specpdl_ptr);
+	    if (SYMBOLP (sym) && XSYMBOL (sym)->redirect == SYMBOL_PLAINVAL)
 	      {
-		SET_SYMBOL_VAL (sym, specpdl_old_value (specpdl_ptr));
+		SET_SYMBOL_VAL (XSYMBOL (sym),
+				specpdl_old_value (specpdl_ptr));
 		break;
 	      }
 	    else
@@ -3408,12 +3409,12 @@ backtrace_eval_unrewind (int distance)
 	  { /* If variable has a trivial value (no forwarding), we can
 	       just set it.  No need to check for constant symbols here,
 	       since that was already done by specbind.  */
-	    struct Lisp_Symbol *sym = XSYMBOL (specpdl_symbol (tmp));
-	    if (sym->redirect == SYMBOL_PLAINVAL)
+	    Lisp_Object sym = specpdl_symbol (tmp);
+	    if (SYMBOLP (sym) && XSYMBOL (sym)->redirect == SYMBOL_PLAINVAL)
 	      {
 		Lisp_Object old_value = specpdl_old_value (tmp);
-		set_specpdl_old_value (tmp, SYMBOL_VAL (sym));
-		SET_SYMBOL_VAL (sym, old_value);
+		set_specpdl_old_value (tmp, SYMBOL_VAL (XSYMBOL (sym)));
+		SET_SYMBOL_VAL (XSYMBOL (sym), old_value);
 		break;
 	      }
 	    else

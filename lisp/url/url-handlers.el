@@ -1,6 +1,6 @@
 ;;; url-handlers.el --- file-name-handler stuff for URL loading  -*- lexical-binding:t -*-
 
-;; Copyright (C) 1996-1999, 2004-2015 Free Software Foundation, Inc.
+;; Copyright (C) 1996-1999, 2004-2016 Free Software Foundation, Inc.
 
 ;; Keywords: comm, data, processes, hypermedia
 
@@ -309,6 +309,7 @@ They count bytes from the beginning of the body."
 
 (defvar url-http-codes)
 
+;;;###autoload
 (defun url-insert-buffer-contents (buffer url &optional visit beg end replace)
   "Insert the contents of BUFFER into current buffer.
 This is like `url-insert', but also decodes the current buffer as

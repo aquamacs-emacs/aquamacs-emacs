@@ -1,6 +1,6 @@
 @c -*-texinfo-*-
 @c This is part of the GNU Emacs Lisp Reference Manual.
-@c Copyright (C) 1990-1995, 1998-1999, 2001-2015 Free Software
+@c Copyright (C) 1990-1995, 1998-1999, 2001-2016 Free Software
 @c Foundation, Inc.
 @c See the file elisp.texi for copying conditions.
 @node Syntax Tables
@@ -944,6 +944,14 @@ whitespace by the functions in this section and by @code{forward-sexp},
 @vindex parse-sexp-lookup-properties
 The behavior of @code{parse-partial-sexp} is also affected by
 @code{parse-sexp-lookup-properties} (@pxref{Syntax Properties}).
+
+@defvar comment-end-can-be-escaped
+If this buffer local variable is non-@code{nil}, a single character
+which usually terminates a comment doesn't do so when that character
+is escaped.  This is used in C and C++ Modes, where line comments
+starting with @samp{//} can be continued onto the next line by
+escaping the newline with @samp{\}.
+@end defvar
 
 You can use @code{forward-comment} to move forward or backward over
 one comment or several comments.

@@ -1,6 +1,6 @@
 ;;; gnutls.el --- Support SSL/TLS connections through GnuTLS
 
-;; Copyright (C) 2010-2015 Free Software Foundation, Inc.
+;; Copyright (C) 2010-2016 Free Software Foundation, Inc.
 
 ;; Author: Ted Zlatanov <tzz@lifelogs.com>
 ;; Keywords: comm, tls, ssl, encryption
@@ -67,10 +67,11 @@ set this variable to \"normal:-dhe-rsa\"."
 
 (defcustom gnutls-trustfiles
   '(
-    "/etc/ssl/certs/ca-certificates.crt" ; Debian, Ubuntu, Gentoo and Arch Linux
-    "/etc/pki/tls/certs/ca-bundle.crt"   ; Fedora and RHEL
-    "/etc/ssl/ca-bundle.pem"             ; Suse
-    "/usr/ssl/certs/ca-bundle.crt"       ; Cygwin
+    "/etc/ssl/certs/ca-certificates.crt"     ; Debian, Ubuntu, Gentoo and Arch Linux
+    "/etc/pki/tls/certs/ca-bundle.crt"       ; Fedora and RHEL
+    "/etc/ssl/ca-bundle.pem"                 ; Suse
+    "/usr/ssl/certs/ca-bundle.crt"           ; Cygwin
+    "/usr/local/share/certs/ca-root-nss.crt" ; FreeBSD
     )
   "List of CA bundle location filenames or a function returning said list.
 The files may be in PEM or DER format, as per the GnuTLS documentation.
@@ -192,12 +193,7 @@ defaults to GNUTLS_VERIFY_ALLOW_X509_V1_CA_CRT."
 	 ;; The gnutls library doesn't understand files delivered via
 	 ;; the special handlers, so ignore all files found via those.
 	 (file-name-handler-alist nil)
-         (trustfiles (or trustfiles
-                         (delq nil
-                               (mapcar (lambda (f) (and f (file-exists-p f) f))
-                                       (if (functionp gnutls-trustfiles)
-                                           (funcall gnutls-trustfiles)
-                                         gnutls-trustfiles)))))
+         (trustfiles (or trustfiles (gnutls-trustfiles)))
          (priority-string (or priority-string
                               (cond
                                ((eq type 'gnutls-anon)
@@ -249,6 +245,14 @@ defaults to GNUTLS_VERIFY_ALLOW_X509_V1_CA_CRT."
       (signal 'gnutls-error (list process ret)))
 
     process))
+
+(defun gnutls-trustfiles ()
+  "Return a list of usable trustfiles."
+  (delq nil
+        (mapcar (lambda (f) (and f (file-exists-p f) f))
+                (if (functionp gnutls-trustfiles)
+                    (funcall gnutls-trustfiles)
+                  gnutls-trustfiles))))
 
 (declare-function gnutls-error-string "gnutls.c" (error))
 

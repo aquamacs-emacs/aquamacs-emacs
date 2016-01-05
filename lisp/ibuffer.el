@@ -1,6 +1,6 @@
 ;;; ibuffer.el --- operate on buffers like dired  -*- lexical-binding:t -*-
 
-;; Copyright (C) 2000-2015 Free Software Foundation, Inc.
+;; Copyright (C) 2000-2016 Free Software Foundation, Inc.
 
 ;; Author: Colin Walters <walters@verbum.org>
 ;; Maintainer: John Paul Wallington <jpw@gnu.org>
@@ -2614,7 +2614,7 @@ will be inserted before the group at point."
 
 ;;; Start of automatically extracted autoloads.
 
-;;;### (autoloads nil "ibuf-ext" "ibuf-ext.el" "65ef908165926cf48da6f43fd01ef50b")
+;;;### (autoloads nil "ibuf-ext" "ibuf-ext.el" "9521139d5f2ba7c870e3101fd73bb3ce")
 ;;; Generated autoloads from ibuf-ext.el
 
 (autoload 'ibuffer-auto-mode "ibuf-ext" "\

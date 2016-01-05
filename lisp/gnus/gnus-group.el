@@ -1,6 +1,6 @@
 ;;; gnus-group.el --- group mode commands for Gnus
 
-;; Copyright (C) 1996-2015 Free Software Foundation, Inc.
+;; Copyright (C) 1996-2016 Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;; Keywords: news
@@ -1396,7 +1396,8 @@ if it is a string, only list groups matching REGEXP."
       (gnus-group-prepare-flat-list-dead
        (gnus-union
 	not-in-list
-	(setq gnus-killed-list (sort gnus-killed-list 'string<)))
+	(setq gnus-killed-list (sort gnus-killed-list 'string<))
+	:test 'equal)
        gnus-level-killed ?K regexp))
 
     (gnus-group-set-mode-line)

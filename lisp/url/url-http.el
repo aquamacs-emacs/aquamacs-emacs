@@ -1,6 +1,6 @@
 ;;; url-http.el --- HTTP retrieval routines
 
-;; Copyright (C) 1999, 2001, 2004-2015 Free Software Foundation, Inc.
+;; Copyright (C) 1999, 2001, 2004-2016 Free Software Foundation, Inc.
 
 ;; Author: Bill Perry <wmperry@gnu.org>
 ;; Maintainer: emacs-devel@gnu.org
@@ -134,17 +134,6 @@ request.")
     (505 http-version-not-supported      "HTTP version not supported")
     (507 insufficient-storage            "Insufficient storage"))
   "The HTTP return codes and their text.")
-
-(defcustom url-user-agent (format "User-Agent: %sURL/%s\r\n"
-				  (if url-package-name
-				      (concat url-package-name "/"
-					      url-package-version " ")
-				    "") url-version)
-  "User Agent used by the URL package."
-  :type '(choice (string :tag "A static User-Agent string")
-                 (function :tag "Call a function to get the User-Agent string"))
-  :version "25.1"
-  :group 'url)
 
 ;(eval-when-compile
 ;; These are all macros so that they are hidden from external sight
@@ -431,7 +420,7 @@ Return the number of characters removed."
 	(progn
 	  (widen)
 	  (goto-char (point-max))
-	  (insert "<hr>Sorry, but I do not know how to handle " type
+	  (insert "<hr>Sorry, but I do not know how to handle " (or type auth url "")
 		  " authentication.  If you'd like to write it,"
 		  " please use M-x report-emacs-bug RET.<hr>")
           ;; We used to set a `status' var (declared "special") but I can't
@@ -1067,7 +1056,7 @@ the end of the document."
 		  (when (looking-at "\r?\n")
 		    (url-http-debug "Removing terminator of last chunk")
 		    (delete-region (match-beginning 0) (match-end 0)))
-		  (if (re-search-forward "^\r*$" nil t)
+		  (if (re-search-forward "^\r?\n" nil t)
 		      (url-http-debug "Saw end of trailers..."))
 		  (if (url-http-parse-headers)
 		      (url-http-activate-callback))))))))))

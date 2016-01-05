@@ -1,6 +1,6 @@
 ;;; css-mode.el --- Major mode to edit CSS files  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2006-2015 Free Software Foundation, Inc.
+;; Copyright (C) 2006-2016 Free Software Foundation, Inc.
 
 ;; Author: Stefan Monnier <monnier@iro.umontreal.ca>
 ;; Maintainer: Simen Heggestøyl <simenheg@gmail.com>
@@ -308,7 +308,8 @@
 (defcustom css-indent-offset 4
   "Basic size of one indentation step."
   :version "22.2"
-  :type 'integer)
+  :type 'integer
+  :safe 'integerp)
 
 (require 'smie)
 

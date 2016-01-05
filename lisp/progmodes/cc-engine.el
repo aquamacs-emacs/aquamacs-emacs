@@ -1,6 +1,6 @@
 ;;; cc-engine.el --- core syntax guessing engine for CC mode -*- coding: utf-8 -*-
 
-;; Copyright (C) 1985, 1987, 1992-2015 Free Software Foundation, Inc.
+;; Copyright (C) 1985, 1987, 1992-2016 Free Software Foundation, Inc.
 
 ;; Authors:    2001- Alan Mackenzie
 ;;             1998- Martin Stjernholm
@@ -5577,8 +5577,9 @@ comment at the start of cc-engine.el for more info."
 
 (defun c-before-change-check-<>-operators (beg end)
   ;; Unmark certain pairs of "< .... >" which are currently marked as
-  ;; template/generic delimiters.  (This marking is via syntax-table
-  ;; text properties).
+  ;; template/generic delimiters.  (This marking is via syntax-table text
+  ;; properties), and expand the (c-new-BEG c-new-END) region to include all
+  ;; unmarked < and > operators within the certain bounds (see below).
   ;;
   ;; These pairs are those which are in the current "statement" (i.e.,
   ;; the region between the {, }, or ; before BEG and the one after
@@ -5595,40 +5596,43 @@ comment at the start of cc-engine.el for more info."
   ;; FIXME!!!  This routine ignores the possibility of macros entirely.
   ;; 2010-01-29.
   (save-excursion
-    (let ((beg-lit-limits (progn (goto-char beg) (c-literal-limits)))
-	  (end-lit-limits (progn (goto-char end) (c-literal-limits)))
-	  new-beg new-end need-new-beg need-new-end)
-      ;; Locate the barrier before the changed region
+    (c-save-buffer-state
+	((beg-lit-limits (progn (goto-char beg) (c-literal-limits)))
+	 (end-lit-limits (progn (goto-char end) (c-literal-limits)))
+	 new-beg new-end beg-limit end-limit)
+      ;; Locate the earliest < after the barrier before the changed region,
+      ;; which isn't already marked as a paren.
       (goto-char  (if beg-lit-limits (car beg-lit-limits) beg))
-      (c-syntactic-skip-backward "^;{}" (c-determine-limit 512))
-      (setq new-beg (point))
+      (setq beg-limit (c-determine-limit 512))
 
       ;; Remove the syntax-table/category properties from each pertinent <...>
-      ;; pair.  Firsly, the ones with the < before beg and > after beg.
-      (while
-	  (c-search-forward-char-property 'syntax-table c-<-as-paren-syntax beg)
-	(if (c-clear-<-pair-props-if-match-after beg (1- (point)))
-	    (setq need-new-beg t)))
+      ;; pair.  Firstly, the ones with the < before beg and > after beg....
+      (while (progn (c-syntactic-skip-backward "^;{}<" beg-limit)
+		    (eq (char-before) ?<))
+	(c-backward-token-2)
+	(when (eq (char-after) ?<)
+	  (c-clear-<-pair-props-if-match-after beg)))
+      (c-forward-syntactic-ws)
+      (setq new-beg (point))
 
-      ;; Locate the barrier after END.
+      ;; ...Then the ones with < before end and > after end.
       (goto-char (if end-lit-limits (cdr end-lit-limits) end))
-      (c-syntactic-re-search-forward "[;{}]" (c-determine-+ve-limit 512) 'end)
+      (setq end-limit (c-determine-+ve-limit 512))
+      (while (and (c-syntactic-re-search-forward "[;{}>]" end-limit 'end)
+		  (eq (char-before) ?>))
+	(c-end-of-current-token)
+	(when (eq (char-before) ?>)
+	  (c-clear->-pair-props-if-match-before end (1- (point)))))
+      (c-backward-syntactic-ws)
       (setq new-end (point))
 
-      ;; Remove syntax-table properties from the remaining pertinent <...>
-      ;; pairs, those with a > after end and < before end.
-      (while (c-search-backward-char-property 'syntax-table c->-as-paren-syntax end)
-	(if (c-clear->-pair-props-if-match-before end)
-	    (setq need-new-end t)))
-
       ;; Extend the fontification region, if needed.
-      (when need-new-beg
-	(goto-char new-beg)
-	(c-forward-syntactic-ws)
-	(and (< (point) c-new-BEG) (setq c-new-BEG (point))))
-
-      (when need-new-end
-	(and (> new-end c-new-END) (setq c-new-END new-end))))))
+      (and new-beg
+	   (< new-beg c-new-BEG)
+	   (setq c-new-BEG new-beg))
+      (and new-end
+	   (> new-end c-new-END)
+	   (setq c-new-END new-end)))))
 
 (defun c-after-change-check-<>-operators (beg end)
   ;; This is called from `after-change-functions' when
@@ -5668,7 +5672,28 @@ comment at the start of cc-engine.el for more info."
 	    (c-clear-<>-pair-props)
 	    (forward-char)))))))
 
-
+(defun c-restore-<>-properties (_beg _end _old-len)
+  ;; This function is called as an after-change function.  It restores the
+  ;; category/syntax-table properties on template/generic <..> pairs between
+  ;; c-new-BEG and c-new-END.  It may do hidden buffer changes.
+  (c-save-buffer-state ((c-parse-and-markup-<>-arglists t)
+			c-restricted-<>-arglists lit-limits)
+    (goto-char c-new-BEG)
+    (if (setq lit-limits (c-literal-limits))
+	(goto-char (cdr lit-limits)))
+    (while (and (< (point) c-new-END)
+		(c-syntactic-re-search-forward "<" c-new-END 'bound))
+      (backward-char)
+      (save-excursion
+	(c-backward-token-2)
+	(setq c-restricted-<>-arglists
+	     (and (not (looking-at c-opt-<>-sexp-key))
+		  (progn (c-backward-syntactic-ws) ; to < or ,
+			 (and (memq (char-before) '(?< ?,))
+			      (not (eq (c-get-char-property (point) 'c-type)
+				       'c-decl-arg-start)))))))
+      (or (c-forward-<>-arglist nil)
+	  (forward-char)))))
 
 ;; Handling of small scale constructs like types and names.
 
@@ -5964,7 +5989,7 @@ comment at the start of cc-engine.el for more info."
   ;; Recursive part of `c-forward-<>-arglist'.
   ;;
   ;; This function might do hidden buffer changes.
-  (let ((start (point)) res pos tmp
+  (let ((start (point)) res pos
 	;; Cover this so that any recorded found type ranges are
 	;; automatically lost if it turns out to not be an angle
 	;; bracket arglist.  It's propagated through the return value
@@ -6059,15 +6084,13 @@ comment at the start of cc-engine.el for more info."
 		  ;; Either an operator starting with '<' or a nested arglist.
 		  (setq pos (point))
 		  (let (id-start id-end subres keyword-match)
-                  (cond
+		    (cond
 		     ;; The '<' begins a multi-char operator.
 		     ((looking-at c-<-op-cont-regexp)
-		      (setq tmp (match-end 0))
 		      (goto-char (match-end 0)))
 		     ;; We're at a nested <.....>
 		     ((progn
-			(setq tmp pos)
-			(backward-char) ; to the '<'
+			(backward-char)	; to the '<'
 			(and
 			 (save-excursion
 			   ;; There's always an identifier before an angle
@@ -6087,7 +6110,9 @@ comment at the start of cc-engine.el for more info."
 				  (and keyword-match
 				       (c-keyword-member
 					(c-keyword-sym (match-string 1))
-					'c-<>-type-kwds)))))))
+					'c-<>-type-kwds))))))
+			(or subres (goto-char pos))
+			subres)
 		      ;; It was an angle bracket arglist.
 		      (setq c-record-found-types subres)
 
@@ -6103,11 +6128,11 @@ comment at the start of cc-engine.el for more info."
 			    (c-record-ref-id (cons id-start id-end))
                         (c-record-type-id (cons id-start id-end)))))
 
-                   ;; At a "less than" operator.
-                   (t
-                    (forward-char)
-                    )))
-                t)                    ; carry on looping.
+		     ;; At a "less than" operator.
+		     (t
+		      ;; (forward-char) ; NO!  We've already gone over the <.
+		      )))
+		  t)			; carry on looping.
 
 		 ((and (not c-restricted-<>-arglists)
 		       (or (and (eq (char-before) ?&)

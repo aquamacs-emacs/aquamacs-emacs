@@ -1,6 +1,6 @@
 ;;; gnus-util.el --- utility functions for Gnus
 
-;; Copyright (C) 1996-2015 Free Software Foundation, Inc.
+;; Copyright (C) 1996-2016 Free Software Foundation, Inc.
 
 ;; Author: Lars Magne Ingebrigtsen <larsi@gnus.org>
 ;; Keywords: news
@@ -1372,18 +1372,25 @@ Return the modified alist."
 
 (if (fboundp 'union)
     (defalias 'gnus-union 'union)
-  (defun gnus-union (l1 l2)
-    "Set union of lists L1 and L2."
+  (defun gnus-union (l1 l2 &rest keys)
+    "Set union of lists L1 and L2.
+If KEYS contains the `:test' and `equal' pair, use `equal' to compare
+items in lists, otherwise use `eq'."
     (cond ((null l1) l2)
 	  ((null l2) l1)
 	  ((equal l1 l2) l1)
 	  (t
 	   (or (>= (length l1) (length l2))
 	       (setq l1 (prog1 l2 (setq l2 l1))))
-	   (while l2
-	     (or (member (car l2) l1)
-		 (push (car l2) l1))
-	     (pop l2))
+	   (if (eq 'equal (plist-get keys :test))
+	       (while l2
+		 (or (member (car l2) l1)
+		     (push (car l2) l1))
+		 (pop l2))
+	     (while l2
+	       (or (memq (car l2) l1)
+		   (push (car l2) l1))
+	       (pop l2)))
 	   l1))))
 
 (declare-function gnus-add-text-properties "gnus"
@@ -1988,6 +1995,31 @@ to case differences."
     (defalias 'gnus-timer--function 'timer--function)
   (defun gnus-timer--function (timer)
     (elt timer 5)))
+
+(defun gnus-test-list (list predicate)
+  "To each element of LIST apply PREDICATE.
+Return nil if LIST is no list or is empty or some test returns nil;
+otherwise, return t."
+  (when (and list (listp list))
+    (let ((result (mapcar predicate list)))
+      (not (memq nil result)))))
+
+(defun gnus-subsetp (list1 list2)
+  "Return t if LIST1 is a subset of LIST2.
+Similar to `subsetp' but use member for element test so that this works for
+lists of strings."
+  (when (and (listp list1) (listp list2))
+    (if list1
+	(and (member (car list1) list2)
+	     (gnus-subsetp (cdr list1) list2))
+      t)))
+
+(defun gnus-setdiff (list1 list2)
+  "Return member-based set difference of LIST1 and LIST2."
+  (when (and list1 (listp list1) (listp list2))
+    (if (member (car list1) list2)
+	(gnus-setdiff (cdr list1) list2)
+      (cons (car list1) (gnus-setdiff (cdr list1) list2)))))
 
 (provide 'gnus-util)
 

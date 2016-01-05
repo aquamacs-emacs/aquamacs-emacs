@@ -1,6 +1,6 @@
 ;;; simple.el --- basic editing commands for Emacs  -*- lexical-binding: t -*-
 
-;; Copyright (C) 1985-1987, 1993-2015 Free Software Foundation, Inc.
+;; Copyright (C) 1985-1987, 1993-2016 Free Software Foundation, Inc.
 
 ;; Maintainer: emacs-devel@gnu.org
 ;; Keywords: internal
@@ -3430,8 +3430,7 @@ and are only used if a pop-up buffer is displayed."
 		   (t
 		    ;; Buffer
 		    (goto-char (point-min))
-		    (display-buffer (current-buffer)
-				    not-this-window frame))))))))
+		    (display-buffer (current-buffer) action frame))))))))
 
 
 ;; We have a sentinel to prevent insertion of a termination message
