@@ -5,3 +5,4 @@ timezone.elc \
 emacs-lisp/advice.elc \
 delsel.elc \
 emulation/cua-base.elc \
+international/ucs-normalize.elc \
