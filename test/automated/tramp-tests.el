@@ -1658,6 +1658,10 @@ This tests also `make-symbolic-link', `file-truename' and `add-name-to-file'."
 	       (vc-register
 		nil (list (car vc-handled-backends)
 			  (list (file-name-nondirectory tmp-name2))))))
+	    ;; vc-git uses an own process sentinel, Tramp's sentinel
+	    ;; for flushing the cache isn't used.
+	    (with-parsed-tramp-file-name tmp-name1 nil
+	      (tramp-flush-directory-property v localname))
 	    (should (vc-registered (file-name-nondirectory tmp-name2)))))
 
       ;; Cleanup.
@@ -1780,14 +1784,6 @@ Several special characters do not work properly there."
   (with-parsed-tramp-file-name
       (file-truename tramp-test-temporary-file-directory) nil
     (string-match "^HP-UX" (tramp-get-connection-property v "uname" ""))))
-
-(defun tramp--test-darwin-p ()
-  "Check, whether the remote host runs Mac OS X.
-Several special characters do not work properly there."
-  ;; We must refill the cache.  `file-truename' does it.
-  (with-parsed-tramp-file-name
-      (file-truename tramp-test-temporary-file-directory) nil
-    (string-match "^Darwin" (tramp-get-connection-property v "uname" ""))))
 
 (defun tramp--test-check-files (&rest files)
   "Run a simple but comprehensive test over every file in FILES."
@@ -2042,10 +2038,9 @@ Use the `ls' command."
 	(file-name-coding-system 'utf-8))
     (tramp--test-check-files
      (unless (tramp--test-hpux-p) "Γυρίστε το Γαλαξία με Ώτο Στοπ")
-     (unless (or (tramp--test-hpux-p) (tramp--test-darwin-p))
+     (unless (tramp--test-hpux-p)
        "أصبح بوسعك الآن تنزيل نسخة كاملة من موسوعة ويكيبيديا العربية لتصفحها بلا اتصال بالإنترنت")
-     (unless (tramp--test-darwin-p)
-       "银河系漫游指南系列")
+     "银河系漫游指南系列"
      "Автостопом по гала́ктике")))
 
 (ert-deftest tramp-test32-utf8 ()
