@@ -36,6 +36,7 @@ otherwise leave it unmarked.
 This builds Emacs with Cairo drawing.  As a side effect, it provides
 support for built-in printing, when Emacs was built with GTK+.
 
++++
 ** New configure option --with-modules.
 This enables support for loading dynamic modules; see below.
 
@@ -119,6 +120,7 @@ and can contain escape sequences for command keys, quotes, and the like.
 
 * Changes in Emacs 25.1
 
++++
 ** Emacs can now load shared/dynamic libraries (modules).
 A dynamic Emacs module is a shared library that provides additional
 functionality for use in Emacs Lisp programs, just like a package
@@ -166,12 +168,6 @@ the variable `dir-locals-file' for more information.
 added via the new Network Security Manager (NSM) and controlled via
 the `network-security-level' variable.
 
-** If Emacs isn't built with TLS support, an external TLS-capable
-program is used instead.  This program used to be run in --insecure
-mode by default, but has now changed to be secure instead, and will
-fail if you try to connect to non-verifiable hosts.  This is
-controlled by the `tls-program' variable.
-
 +++
 ** C-h l now also lists the commands that were run.
 
@@ -213,6 +209,14 @@ for use in Emacs bug reports.
 ** A password is now hidden also when typed in batch mode.  Another
 hiding character but the default `.' can be used by let-binding the
 variable `read-hide-char'.
+
++++
+** The Emacs pseudo-random number generator can be securely seeded.
+On system where Emacs can access the system entropy or some other
+cryptographically secure random stream, it now uses that when `random'
+is called with its argument `t'.  This allows cryptographically strong
+random values; in particular, the Emacs server now uses this facility
+to produce its authentication key.
 
 ---
 ** New input methods: `tamil-dvorak' and `programmer-dvorak'.
@@ -726,8 +730,6 @@ to produce a neat summary.
 
 ---
 ** New js.el option `js-indent-first-init'.
-It was renamed from `js-indent-first-initialiser', to avoid issues
-with American vs British spelling.
 
 ** Info
 
@@ -780,6 +782,13 @@ See the doc string of `sh-indent-after-continuation' for details.
 ** TLS
 ---
 *** Fatal TLS errors are now silent by default.
+
+---
+*** If Emacs isn't built with TLS support, an external TLS-capable
+program is used instead.  This program used to be run in --insecure
+mode by default, but has now changed to be secure instead, and will
+fail if you try to connect to non-verifiable hosts.  This is
+controlled by the `tls-program' variable.
 
 ** URL
 
@@ -1405,8 +1414,6 @@ buffers to allow certain parts of the text to be writable.
 +++
 ** New macro `define-advice'.
 
-** `read-buffer' takes a new `predicate' argument.
-
 +++
 ** Emacs Lisp now supports generators.
 See the "Generators" section of the ELisp manual for the details.
@@ -1416,15 +1423,19 @@ See the "Generators" section of the ELisp manual for the details.
 See the "Finalizer Type" subsection in the ELisp manual for the
 details.
 
+---
 ** lexical closures can use (:documentation FORM) to build their docstring.
 It should be placed right where the docstring would be, and FORM is then
 evaluated (and should return a string) when the closure is built.
 
++++
 ** define-inline provides a new way to define inlinable functions.
 
-** New function `macroexpand-1' to perform a single step of macroexpansion.
++++
+** New function `macroexpand-1' to perform a single step of macro expansion.
 
-** Some "x-*" were obsoleted:
++++
+** Some "x-*" functions were obsoleted and/or renamed:
 *** x-select-text is renamed gui-select-text.
 *** x-selection-value is renamed gui-selection-value.
 *** x-get-selection is renamed gui-get-selection.
@@ -1432,6 +1443,7 @@ evaluated (and should return a string) when the closure is built.
 *** x-get-selection-value is renamed to gui-get-primary-selection.
 *** x-set-selection is renamed to gui-set-selection
 
++++
 ** New function `string-greaterp', which return the opposite result of
 `string-lessp'.
 
@@ -1455,12 +1467,15 @@ emulates the behavior of modern Posix platforms when the locale's
 codeset is "UTF-8" (as in "en_US.UTF-8").  This is needed because
 MS-Windows doesn't support UTF-8 as codeset in its locales.
 
++++
 ** New function `alist-get', which is also a valid place (aka lvalue).
 
++++
 ** New function `funcall-interactively', which works like `funcall'
 but makes `called-interactively-p' treat the function as (you guessed it)
 called interactively.
 
++++
 ** New function `function-put' to use instead of `put' for function properties.
 
 +++
@@ -1491,6 +1506,7 @@ permissions set to temporary values (e.g., for creating private files).
 +++
 ** You can access the slots of structures using `cl-struct-slot-value'.
 
++++
 ** Function `sort' can deal with vectors.
 
 ** Function `system-name' now returns an updated value if the current
@@ -1718,6 +1734,7 @@ frames.
 `window-divider-default-places', `window-divider-default-bottom-width'
 and `window-divider-default-right-width'.
 
+---
 ** Tearoff menus and detachable toolbars for Gtk+ have been removed.
 Those features have been deprecated in Gtk+ for a long time.
 
