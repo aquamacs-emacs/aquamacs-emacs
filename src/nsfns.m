@@ -3582,6 +3582,7 @@ ns_screen_name (CGDirectDisplayID did)
   char *name = NULL;
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
+if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_9) {
   mach_port_t masterPort;
   io_iterator_t it;
   io_object_t obj;
@@ -3618,15 +3619,14 @@ ns_screen_name (CGDirectDisplayID did)
     }
 
   IOObjectRelease (it);
-
-#else
-
-  name = ns_get_name_from_ioreg (CGDisplayIOServicePort (did));
-
+ }
+else
 #endif
+  {
+  name = ns_get_name_from_ioreg (CGDisplayIOServicePort (did));
+  }
   return name;
 }
-#endif
 
 static Lisp_Object
 ns_make_monitor_attribute_list (struct MonitorInfo *monitors,
@@ -3862,9 +3862,9 @@ compute_tip_xy (struct frame *f,
       pt.y = dpyinfo->last_mouse_motion_y;
       /* Convert to screen coordinates */
       pt = [view convertPoint: pt toView: nil];
-#if !defined (NS_IMPL_COCOA) || MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_7
+     if (! [NSWindow respondsToSelector: @selector(convertRectToScreen:)])
       pt = [[view window] convertBaseToScreen: pt];
-#else
+     else
       {
         NSRect r = NSMakeRect (pt.x, pt.y, 0, 0);
         r = [[view window] convertRectToScreen: r];
