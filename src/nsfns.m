@@ -3582,7 +3582,8 @@ ns_screen_name (CGDirectDisplayID did)
   char *name = NULL;
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
-if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_9) {
+  if (floor(NSAppKitVersionNumber) >= 1265) // NSAppKitVersionNumber10_9
+{
   mach_port_t masterPort;
   io_iterator_t it;
   io_object_t obj;
