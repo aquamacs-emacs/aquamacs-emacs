@@ -356,22 +356,26 @@ OPTION_DEFAULT_ON([zlib],[don't compile with zlib decompression support])
 OPTION_DEFAULT_OFF([modules],[compile with dynamic modules support])
 
 AC_ARG_WITH([file-notification],[AS_HELP_STRING([--with-file-notification=LIB],
- [use a file notification library (LIB one of: yes, gfile, inotify, w32, no)])],
+ [use a file notification library (LIB one of: yes, inotify, kqueue, gfile, w32, no)])],
  [ case "${withval}" in
     y | ye | yes )	val=yes ;;
     n | no )		val=no  ;;
-    g | gf | gfi | gfil | gfile )	val=gfile ;;
     i | in | ino | inot | inoti | inotif | inotify )	val=inotify ;;
+    k | kq | kqu | kque | kqueu | kqueue )	val=kqueue ;;
+    g | gf | gfi | gfil | gfile )	val=gfile ;;
     w | w3 | w32 )	val=w32 ;;
     * ) AC_MSG_ERROR(['--with-file-notification=$withval' is invalid;
-this option's value should be 'yes', 'no', 'gfile', 'inotify' or 'w32'.
+this option's value should be 'yes', 'no', 'inotify', 'kqueue', 'gfile' or 'w32'.
 'yes' is a synonym for 'w32' on MS-Windows, for 'no' on Nextstep,
-otherwise for the first of 'inotify' or 'gfile' that is usable.])
+otherwise for the first of 'inotify', 'kqueue' or 'gfile' that is usable.])
     ;;
    esac
    with_file_notification=$val
  ],
  [with_file_notification=$with_features])
+
+OPTION_DEFAULT_OFF([xwidgets],
+  [enable use of some gtk widgets in Emacs buffers (requires gtk3)])
 
 ## For the times when you want to build Emacs but don't have
 ## a suitable makeinfo, and can live without the manuals.
@@ -2562,6 +2566,26 @@ if test "${HAVE_GTK}" = "yes"; then
  term_header=gtkutil.h
 fi
 
+
+dnl Enable xwidgets if GTK3 and WebKitGTK+ are available.
+HAVE_XWIDGETS=no
+XWIDGETS_OBJ=
+if test "$with_xwidgets" != "no"; then
+  test "$USE_GTK_TOOLKIT" = "GTK3" && test "$window_system" != "none" ||
+    AC_MSG_ERROR([xwidgets requested but gtk3 not used.])
+
+  WEBKIT_REQUIRED=1.4.0
+  WEBKIT_MODULES="webkitgtk-3.0 >= $WEBKIT_REQUIRED"
+  EMACS_CHECK_MODULES([WEBKIT], [$WEBKIT_MODULES])
+  HAVE_XWIDGETS=$HAVE_WEBKIT
+  test $HAVE_XWIDGETS = yes ||
+    AC_MSG_ERROR([xwidgets requested but WebKitGTK+ not found.])
+
+  XWIDGETS_OBJ=xwidget.o
+  AC_DEFINE([HAVE_XWIDGETS], 1, [Define to 1 if you have xwidgets support.])
+fi
+AC_SUBST(XWIDGETS_OBJ)
+
 CFLAGS=$OLD_CFLAGS
 LIBS=$OLD_LIBS
 
@@ -2689,12 +2713,6 @@ AC_SUBST(LIBGNUTLS_CFLAGS)
 NOTIFY_OBJ=
 NOTIFY_SUMMARY=no
 
-dnl FIXME?  Don't auto-detect on NS, but do allow someone to specify
-dnl a particular library.  This doesn't make much sense?
-if test "${HAVE_NS}" = yes && test ${with_file_notification} = yes; then
-  with_file_notification=no
-fi
-
 dnl MS Windows native file monitor is available for mingw32 only.
 case $with_file_notification,$opsys in
   w32,cygwin)
@@ -2725,16 +2743,44 @@ case $with_file_notification,$NOTIFY_OBJ in
     fi ;;
 esac
 
+dnl kqueue is available on BSD-like systems.
+case $with_file_notification,$NOTIFY_OBJ in
+  kqueue,* | yes,)
+    EMACS_CHECK_MODULES([KQUEUE], [libkqueue])
+    if test "$HAVE_KQUEUE" = "yes"; then
+       AC_DEFINE(HAVE_KQUEUE, 1, [Define to 1 to use kqueue.])
+       CPPFLAGS="$CPPFLAGS -I/usr/include/kqueue"
+       NOTIFY_CFLAGS=$KQUEUE_CFLAGS
+       NOTIFY_LIBS=$KQUEUE_LIBS
+       NOTIFY_OBJ=kqueue.o
+       NOTIFY_SUMMARY="yes -lkqueue"
+    else
+       AC_SEARCH_LIBS(kqueue, [])
+       if test "$ac_cv_search_kqueue" != no; then
+         AC_DEFINE(HAVE_KQUEUE, 1, [Define to 1 to use kqueue.])
+	 NOTIFY_OBJ=kqueue.o
+	 NOTIFY_SUMMARY="yes (kqueue)"
+       fi
+    fi ;;
+esac
+
 dnl g_file_monitor exists since glib 2.18.  G_FILE_MONITOR_EVENT_MOVED
 dnl has been added in glib 2.24.  It has been tested under
 dnl GNU/Linux only.
 case $with_file_notification,$NOTIFY_OBJ in
   gfile,* | yes,)
-    EMACS_CHECK_MODULES([GFILENOTIFY], [gio-2.0 >= 2.24])
-    if test "$HAVE_GFILENOTIFY" = "yes"; then
-       AC_DEFINE(HAVE_GFILENOTIFY, 1, [Define to 1 if using GFile.])
-       NOTIFY_OBJ=gfilenotify.o
-       NOTIFY_SUMMARY="yes -lgio (gfile)"
+    if test "${HAVE_NS}" = yes; then
+       AC_MSG_ERROR(['--with-file-notification=gfile' is not supported in NextStep builds.
+Consider kqueue instead.])
+    else
+       EMACS_CHECK_MODULES([GFILENOTIFY], [gio-2.0 >= 2.24])
+       if test "$HAVE_GFILENOTIFY" = "yes"; then
+	  AC_DEFINE(HAVE_GFILENOTIFY, 1, [Define to 1 if using GFile.])
+	  NOTIFY_CFLAGS=$GFILENOTIFY_CFLAGS
+	  NOTIFY_LIBS=$GFILENOTIFY_LIBS
+	  NOTIFY_OBJ=gfilenotify.o
+	  NOTIFY_SUMMARY="yes -lgio (gfile)"
+       fi
     fi ;;
 esac
 
@@ -2746,9 +2792,9 @@ esac
 if test -n "$NOTIFY_OBJ"; then
    AC_DEFINE(USE_FILE_NOTIFY, 1, [Define to 1 if using file notifications.])
 fi
+AC_SUBST(NOTIFY_CFLAGS)
+AC_SUBST(NOTIFY_LIBS)
 AC_SUBST(NOTIFY_OBJ)
-AC_SUBST(GFILENOTIFY_CFLAGS)
-AC_SUBST(GFILENOTIFY_LIBS)
 
 dnl Do not put whitespace before the #include statements below.
 dnl Older compilers (eg sunos4 cc) choke on it.
@@ -3100,7 +3146,7 @@ if test "${HAVE_X11}" = "yes"; then
   if test "${with_cairo}" != "no"; then
     CAIRO_REQUIRED=1.12.0
     CAIRO_MODULE="cairo >= $CAIRO_REQUIRED"
-    PKG_CHECK_MODULES(CAIRO, $CAIRO_MODULE, USE_CAIRO=yes, :)
+    EMACS_CHECK_MODULES(CAIRO, $CAIRO_MODULE, USE_CAIRO=yes, :)
     if test $USE_CAIRO = yes; then
       AC_DEFINE(USE_CAIRO, 1, [Define to 1 if using cairo.])
     else
@@ -3327,7 +3373,6 @@ if test "${HAVE_MODULES}" = yes; then
 fi
 AC_SUBST(MODULES_OBJ)
 AC_SUBST(LIBMODULES)
-AX_GCC_VAR_ATTRIBUTE(cleanup)
 AC_CHECK_FUNCS(dladdr)
 
 ### Use -lpng if available, unless '--with-png=no'.
@@ -4119,8 +4164,8 @@ OLDCFLAGS="$CFLAGS"
 OLDLIBS="$LIBS"
 CFLAGS="$CFLAGS $GTK_CFLAGS $RSVG_CFLAGS $DBUS_CFLAGS $SETTINGS_CFLAGS"
 LIBS="$LIBS $GTK_LIBS $RSVG_LIBS $DBUS_LIBS $SETTINGS_LIBS"
-CFLAGS="$CFLAGS $GFILENOTIFY_CFLAGS $CAIRO_CFLAGS"
-LIBS="$LIBS $GFILENOTIFY_LIBS $CAIRO_LIBS"
+CFLAGS="$CFLAGS $NOTIFY_CFLAGS $CAIRO_CFLAGS"
+LIBS="$LIBS $NOTIFY_LIBS $CAIRO_LIBS"
 AC_MSG_CHECKING([whether GLib is linked in])
 AC_LINK_IFELSE([AC_LANG_PROGRAM(
 	[[#include <glib.h>
@@ -4152,22 +4197,6 @@ if test $emacs_cv_langinfo_codeset = yes; then
 fi
 
 AC_TYPE_MBSTATE_T
-
-AC_MSG_CHECKING([whether "/dev/urandom" is available])
-dev_urandom=no
-dnl MSYS, being a Cygwin fork, thinks "/dev/urandom" does exist, so
-dnl don't check this for the MinGW builds.
-if test "${opsys}" != "mingw32"; then
-   if test -r "/dev/urandom"; then
-      AC_DEFINE(HAVE_DEV_URANDOM, 1, [Define if the system supports the "/dev/urandom" device.])
-      dev_urandom=yes
-   fi
-fi
-if test $dev_urandom = yes; then
-   AC_MSG_RESULT(yes)
-else
-   AC_MSG_RESULT(no)
-fi
 
 dnl Fixme: AC_SYS_POSIX_TERMIOS should probably be used, but it's not clear
 dnl how the tty code is related to POSIX and/or other versions of termios.
@@ -4942,6 +4971,9 @@ case "$USE_X_TOOLKIT" in
   LUCID) TOOLKIT_LIBW="$LUCID_LIBW" ;;
   none) test "x$HAVE_GTK" = "xyes" && TOOLKIT_LIBW="$GTK_LIBS" ;;
 esac
+if test "$HAVE_XWIDGETS" = "yes"; then
+  TOOLKIT_LIBW="$TOOLKIT_LIBW -lXcomposite"
+fi
 AC_SUBST(TOOLKIT_LIBW)
 
 if test "${opsys}" != "mingw32"; then
@@ -5231,7 +5263,8 @@ optsep=
 emacs_config_features=
 for opt in XAW3D XPM JPEG TIFF GIF PNG RSVG CAIRO IMAGEMAGICK SOUND GPM DBUS \
   GCONF GSETTINGS NOTIFY ACL LIBSELINUX GNUTLS LIBXML2 FREETYPE M17N_FLT \
-  LIBOTF XFT ZLIB TOOLKIT_SCROLL_BARS X_TOOLKIT X11 NS MODULES; do
+  LIBOTF XFT ZLIB TOOLKIT_SCROLL_BARS X_TOOLKIT X11 NS MODULES \
+  XWIDGETS; do
 
     case $opt in
       NOTIFY|ACL) eval val=\${${opt}_SUMMARY} ;;
@@ -5281,6 +5314,7 @@ AS_ECHO(["  Does Emacs use -lXaw3d?                                 ${HAVE_XAW3D
   Does Emacs directly use zlib?                           ${HAVE_ZLIB}
   Does Emacs have dynamic modules support?                ${HAVE_MODULES}
   Does Emacs use toolkit scroll bars?                     ${USE_TOOLKIT_SCROLL_BARS}
+  Does Emacs support Xwidgets (requires gtk3)?            ${HAVE_XWIDGETS}
 "])
 
 if test -n "${EMACSDATA}"; then

@@ -64,6 +64,10 @@ If gnustep-config is not available, the old heuristics are used.
 unless gfile is explicitly requested via --with-file-notification='gfile'.
 
 ---
+** 'configure' detects the kqueue file notification library on *BSD
+and Mac OS X machines.
+
+---
 ** The configure option '--with-pkg-config-prog' has been removed.
 Use './configure PKG_CONFIG=/full/name/of/pkg-config' if you need to.
 
@@ -119,6 +123,20 @@ and can contain escape sequences for command keys, quotes, and the like.
 
 
 * Changes in Emacs 25.1
+
+** Xwidgets: a new feature for embedding native widgets inside Emacs buffers.
+If you have gtk3 and webkitgtk3 installed, you can access the
+embedded webkit browser with `M-x xwidget-webkit-browse-url'.  This
+opens a new buffer with the embedded browser.  The buffer will
+have a new mode, `xwidget-webkit-mode' (similar to `image-mode'),
+which supports the webkit widget.
+
+*** New functions for xwidget-webkit mode `xwidget-webkit-insert-string',
+`xwidget-webkit-adjust-size-dispatch', `xwidget-webkit-back',
+`xwidget-webkit-browse-url', `xwidget-webkit-reload',
+`xwidget-webkit-current-url', `xwidget-webkit-scroll-backward',
+`xwidget-webkit-scroll-forward', `xwidget-webkit-scroll-down',
+`xwidget-webkit-scroll-up'.
 
 +++
 ** Emacs can now load shared/dynamic libraries (modules).
@@ -315,6 +333,17 @@ current package keywords are recognized.  Set the new option
 It's meant for use together with `compile':
 emacs -batch --eval "(checkdoc-file \"subr.el\")"
 
+** Desktop
+
+---
+*** The desktop format version has been upgraded from 206 to 208.
+Although Emacs 25.1 can read a version 206 desktop, earlier Emacsen
+cannot read a version 208 desktop.  To upgrade your desktop file, you
+must explicitly request the upgrade, by C-u M-x desktop-save.  You are
+recommended to do this as soon as you have firmly upgraded to Emacs
+25.1 (or later).  Should you ever need to downgrade your desktop file
+to version 206, you can do this with C-u C-u M-x desktop-save.
+
 +++
 ** New function `bookmark-set-no-overwrite' bound to C-x r M.
 It raises an error if a bookmark of that name already exists,
@@ -490,9 +519,12 @@ If you need your objects to be named, do it by inheriting from `eieio-named'.
 *** The <class> variables are declared obsolete.
 +++
 *** The <initarg> variables are declared obsolete.
++++
 *** defgeneric and defmethod are declared obsolete.
+Use the equivalent facilities from cl-generic.el instead.
 +++
 *** `constructor' is now an obsolete alias for `make-instance'.
+--- `pcase' accepts a new UPattern `eieio'.
 
 ** ido
 
@@ -679,6 +711,9 @@ prepending it.
 ** cl-lib
 +++
 *** New functions `cl-fresh-line', `cl-digit-char-p', and `cl-parse-integer'.
+
+---
+*** `pcase' accepts the new UPattern `cl-struct'.
 
 ** Calendar and diary
 
@@ -1096,6 +1131,9 @@ notifications, if Emacs is compiled with file notification support.
 ** File Notifications
 
 +++
+*** The kqueue library is integrated for *BSD and Mac OS X machines.
+
++++
 *** The new event `stopped' signals, that a file notification watch is
 not active any longer.
 
@@ -1145,7 +1183,10 @@ command is called from Emacs (i.e., INSIDE_EMACS environment variable
 is set).  This feature requires newer versions of GnuPG (2.1.5 or
 later) and Pinentry (0.9.5 or later).
 
++++
 ** cl-generic.el provides CLOS-style multiple-dispatch generic functions.
+The main entry points are `cl-defgeneric' and `cl-defmethod'.  See the
+node "Generic Functions" in the Emacs Lisp manual for more details.
 
 ---
 ** scss-mode (a minor variant of css-mode)
@@ -1165,11 +1206,12 @@ a typographically-correct documents.
 ** The `seq' library adds sequence manipulation functions and macros
 that complement basic functions provided by subr.el.  All functions
 are prefixed with `seq-' and work on lists, strings and vectors.
+`pcase' accepts a new Upattern `seq'.
 
 ---
 ** The `map' library provides map-manipulation functions that work on
 alists, hash-table and arrays.  All functions are prefixed with
-`map-'.
+`map-'.  `pcase' accepts a new UPattern `map'.
 
 ---
 ** The `thunk' library provides functions and macros to control the
@@ -1340,7 +1382,7 @@ that happen, `unhandled-file-name-directory' now defaults to calling
 * Lisp Changes in Emacs 25.1
 
 ** pcase
-*** New UPatterns `quote', `app', `cl-struct', `eieio', `seq', and `map'.
+*** New UPatterns `quote', `app'.
 *** New UPatterns can be defined with `pcase-defmacro'.
 +++
 *** New vector QPattern.
@@ -1509,6 +1551,7 @@ permissions set to temporary values (e.g., for creating private files).
 +++
 ** Function `sort' can deal with vectors.
 
+---
 ** Function `system-name' now returns an updated value if the current
 system's name has changed or if the Emacs process has changed systems,
 and to avoid long waits it no longer consults DNS to canonicalize the

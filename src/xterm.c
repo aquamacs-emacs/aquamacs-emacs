@@ -62,6 +62,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "composite.h"
 #include "frame.h"
 #include "dispextern.h"
+#include "xwidget.h"
 #include "fontset.h"
 #include "termhooks.h"
 #include "termopts.h"
@@ -3509,6 +3510,10 @@ x_draw_glyph_string (struct glyph_string *s)
     {
     case IMAGE_GLYPH:
       x_draw_image_glyph_string (s);
+      break;
+
+    case XWIDGET_GLYPH:
+      x_draw_xwidget_glyph_string (s);
       break;
 
     case STRETCH_GLYPH:
@@ -8918,6 +8923,10 @@ x_draw_bar_cursor (struct window *w, struct glyph_row *row, int width, enum text
      and mini-buffer.  */
   cursor_glyph = get_phys_cursor_glyph (w);
   if (cursor_glyph == NULL)
+    return;
+
+  /* Experimental avoidance of cursor on xwidget.  */
+  if (cursor_glyph->type == XWIDGET_GLYPH)
     return;
 
   /* If on an image, draw like a normal cursor.  That's usually better

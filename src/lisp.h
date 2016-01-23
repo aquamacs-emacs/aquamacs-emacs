@@ -799,6 +799,9 @@ enum pvec_type
   PVEC_WINDOW_CONFIGURATION,
   PVEC_SUBR,
   PVEC_OTHER,
+  PVEC_XWIDGET,
+  PVEC_XWIDGET_VIEW,
+
   /* These should be last, check internal_equal to see why.  */
   PVEC_COMPILED,
   PVEC_CHAR_TABLE,
@@ -4313,15 +4316,21 @@ extern void init_font (void);
 extern void syms_of_fontset (void);
 #endif
 
+/* Defined in inotify.c */
+#ifdef HAVE_INOTIFY
+extern void syms_of_inotify (void);
+#endif
+
+/* Defined in kqueue.c */
+#ifdef HAVE_KQUEUE
+extern void globals_of_kqueue (void);
+extern void syms_of_kqueue (void);
+#endif
+
 /* Defined in gfilenotify.c */
 #ifdef HAVE_GFILENOTIFY
 extern void globals_of_gfilenotify (void);
 extern void syms_of_gfilenotify (void);
-#endif
-
-/* Defined in inotify.c */
-#ifdef HAVE_INOTIFY
-extern void syms_of_inotify (void);
 #endif
 
 #ifdef HAVE_W32NOTIFY

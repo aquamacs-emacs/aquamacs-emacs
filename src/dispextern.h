@@ -347,7 +347,10 @@ enum glyph_type
   IMAGE_GLYPH,
 
   /* Glyph is a space of fractional width and/or height.  */
-  STRETCH_GLYPH
+  STRETCH_GLYPH,
+
+  /* Glyph is an external widget drawn by the GUI toolkit.  */
+  XWIDGET_GLYPH
 };
 
 
@@ -498,6 +501,11 @@ struct glyph
 
     /* Image ID for image glyphs (type == IMAGE_GLYPH).  */
     int img_id;
+
+#ifdef HAVE_XWIDGETS
+    /* Xwidget reference (type == XWIDGET_GLYPH).  */
+    struct xwidget *xwidget;
+#endif
 
     /* Sub-structure for type == STRETCH_GLYPH.  */
     struct
@@ -1350,6 +1358,9 @@ struct glyph_string
   /* Image, if any.  */
   struct image *img;
 
+  /* Xwidget.  */
+  struct xwidget *xwidget;
+
   /* Slice */
   struct glyph_slice slice;
 
@@ -2107,7 +2118,10 @@ enum display_element_type
   IT_TRUNCATION,
 
   /* Continuation glyphs.  See the comment for IT_TRUNCATION.  */
-  IT_CONTINUATION
+  IT_CONTINUATION,
+
+  /* Xwidget.  */
+  IT_XWIDGET
 };
 
 
@@ -2171,6 +2185,7 @@ enum it_method {
   GET_FROM_C_STRING,
   GET_FROM_IMAGE,
   GET_FROM_STRETCH,
+  GET_FROM_XWIDGET,
   NUM_IT_METHODS
 };
 
@@ -2388,6 +2403,10 @@ struct it
       struct {
 	Lisp_Object object;
       } stretch;
+      /* method == GET_FROM_XWIDGET */
+      struct {
+	Lisp_Object object;
+      } xwidget;
     } u;
 
     /* Current text and display positions.  */
@@ -2511,6 +2530,9 @@ struct it
 
   /* If what == IT_IMAGE, the id of the image to display.  */
   ptrdiff_t image_id;
+
+  /* If what == IT_XWIDGET.  */
+  struct xwidget *xwidget;
 
   /* Values from `slice' property.  */
   struct it_slice slice;

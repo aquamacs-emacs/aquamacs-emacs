@@ -42,6 +42,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "blockinput.h"
 #include "keymap.h"
 #include "frame.h"
+#include "xwidget.h"
 
 #ifdef WINDOWSNT
 #include "w32heap.h"		/* for mmap_* */
@@ -1746,6 +1747,7 @@ cleaning up all windows currently displaying the buffer to be killed. */)
   unlock_buffer (b);
 
   kill_buffer_processes (buffer);
+  kill_buffer_xwidgets (buffer);
 
   /* Killing buffer processes may run sentinels which may have killed
      our buffer.  */

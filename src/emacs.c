@@ -65,7 +65,7 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "character.h"
 #include "buffer.h"
 #include "window.h"
-
+#include "xwidget.h"
 #include "atimer.h"
 #include "blockinput.h"
 #include "syssignal.h"
@@ -1357,6 +1357,10 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
     tzset ();
 #endif /* MSDOS */
 
+#ifdef HAVE_KQUEUE
+  globals_of_kqueue ();
+#endif
+
 #ifdef HAVE_GFILENOTIFY
   globals_of_gfilenotify ();
 #endif
@@ -1485,6 +1489,7 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
       syms_of_xfns ();
       syms_of_xmenu ();
       syms_of_fontset ();
+      syms_of_xwidget ();
       syms_of_xsettings ();
 #ifdef HAVE_X_SM
       syms_of_xsmfns ();
@@ -1532,13 +1537,17 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
 
       syms_of_gnutls ();
 
-#ifdef HAVE_GFILENOTIFY
-      syms_of_gfilenotify ();
-#endif /* HAVE_GFILENOTIFY */
-
 #ifdef HAVE_INOTIFY
       syms_of_inotify ();
 #endif /* HAVE_INOTIFY */
+
+#ifdef HAVE_KQUEUE
+      syms_of_kqueue ();
+#endif /* HAVE_KQUEUE */
+
+#ifdef HAVE_GFILENOTIFY
+      syms_of_gfilenotify ();
+#endif /* HAVE_GFILENOTIFY */
 
 #ifdef HAVE_DBUS
       syms_of_dbusbind ();

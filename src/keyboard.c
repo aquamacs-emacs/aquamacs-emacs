@@ -4014,6 +4014,13 @@ kbd_buffer_get_event (KBOARD **kbp,
 	  kbd_fetch_ptr = event + 1;
 	}
 #endif
+#ifdef HAVE_XWIDGETS
+      else if (event->kind == XWIDGET_EVENT)
+	{
+	  obj = make_lispy_event (&event->ie);
+	  kbd_fetch_ptr = event + 1;
+	}
+#endif
       else if (event->kind == CONFIG_CHANGED_EVENT)
 	{
 	  obj = make_lispy_event (&event->ie);
@@ -5977,12 +5984,20 @@ make_lispy_event (struct input_event *event)
       }
 #endif /* HAVE_DBUS */
 
-#if defined HAVE_GFILENOTIFY || defined HAVE_INOTIFY
+#ifdef HAVE_XWIDGETS
+    case XWIDGET_EVENT:
+      {
+        return Fcons (Qxwidget_event, event->arg);
+      }
+#endif
+
+
+#if defined HAVE_INOTIFY || defined HAVE_KQUEUE || defined HAVE_GFILENOTIFY
     case FILE_NOTIFY_EVENT:
       {
         return Fcons (Qfile_notify, event->arg);
       }
-#endif /* defined HAVE_GFILENOTIFY || defined HAVE_INOTIFY */
+#endif /* HAVE_INOTIFY || HAVE_KQUEUE || HAVE_GFILENOTIFY */
 
     case CONFIG_CHANGED_EVENT:
 	return list3 (Qconfig_changed_event,
@@ -11000,6 +11015,10 @@ syms_of_keyboard (void)
 
 #ifdef HAVE_DBUS
   DEFSYM (Qdbus_event, "dbus-event");
+#endif
+
+#ifdef HAVE_XWIDGETS
+  DEFSYM (Qxwidget_event, "xwidget-event");
 #endif
 
 #ifdef USE_FILE_NOTIFY
