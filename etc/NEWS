@@ -35,6 +35,8 @@ otherwise leave it unmarked.
 ** New configure option --with-cairo.
 This builds Emacs with Cairo drawing.  As a side effect, it provides
 support for built-in printing, when Emacs was built with GTK+.
+Cairo drawing is an experimental feature in Emacs, and subject to
+change in future releases.
 
 +++
 ** New configure option --with-modules.
@@ -85,7 +87,7 @@ and silent rules are now quieter.  To get the old behavior where
 build with 'make V=1'.
 
 ---
-** The configure option '--with-gameuser' now allows to specify a
+** The configure option '--with-gameuser' now allows you to specify a
 group instead of a user if its argument is prefixed by ':' (a colon).
 This will cause the game score files in ${localstatedir}/games/emacs
 to be owned by that group, and the helper program for updating them to
@@ -198,9 +200,9 @@ select-enable-primary is ineffective since the system doesn't
 have the equivalent of a primary selection.
 
 +++
-** New option `switch-to-buffer-in-dedicated-window' allows to customize
-how `switch-to-buffer' proceeds interactively when the selected window
-is strongly dedicated to its buffer.
+** New option `switch-to-buffer-in-dedicated-window' allows you to
+customize how `switch-to-buffer' proceeds interactively when the
+selected window is strongly dedicated to its buffer.
 
 +++
 ** The option `even-window-heights' has been renamed to
@@ -425,6 +427,9 @@ additionally need to add `getSelection' to `xterm-extra-capabilities'.
 `erc-hide-list' will hide all messages of the specified type, while
 `erc-network-hide-list' and `erc-channel-hide-list' will only hide the
 specified message types for the respective specified targets.
+
+---
+*** Reconnection is now asynchronous.
 
 ** Midnight-mode
 
@@ -850,11 +855,12 @@ plist will contain a :peer element that has the output of
 ** Tramp
 
 +++
-*** New connection method "afp", which allows to access Mac OS X
+*** New connection method "afp", which allows you to access Mac OS X
 volumes via the Apple Filing Protocol.
 
 +++
-*** New connection method "nc", which allows to access dumb busyboxes.
+*** New connection method "nc", which allows you to access dumb
+busyboxes.
 
 +++
 *** Method-specific parameters can be overwritten now with variable
@@ -1014,6 +1020,10 @@ As a result of this, the following commands are now obsolete:
 replacements yet.
 
 +++
+*** Variants of `tags-search' and `tags-query-replace' in Dired were also
+replaced by xref-style commands, see the "Dired" section below.
+
++++
 *** New variables
 
 `find-tag-marker-ring-length' is now an obsolete alias for
@@ -1115,6 +1125,9 @@ make the new option `eshell-destroy-buffer-when-process-dies' non-nil.
 ** Browse-url
 
 ---
+*** Support for the Google Chrome web browser.
+
+---
 *** Support for the Conkeror web browser.
 
 ---
@@ -1152,6 +1165,18 @@ directories and decompress zip files.
 compress many marked files into a single named archive.  The
 compression command is determined from the new
 `dired-compress-files-alist' variable.
+
++++
+*** New user interface for the `A' and `Q' commands.
+These keys, now bound to `dired-do-find-regexp' and
+`dired-do-find-regexp-and-replace', work similarly to `xref-find-apropos'
+and `xref-query-replace-in-results': they present the matches
+in the `*xref*' buffer and let you move through the matches.  No need
+to use `tags-loop-continue' to resume the search or replace loop.  The
+previous commands, `dired-do-search' and
+`dired-do-query-replace-regexp', are still available, but not bound to
+keys; rebind `A' and `Q' to invoke them if you want the old behavior
+back.  We intend to obsolete the old commands in a future release.
 
 ** Tabulated List Mode
 
@@ -1196,7 +1221,7 @@ node "Generic Functions" in the Emacs Lisp manual for more details.
 let-bind the values stored in an alist.
 
 ---
-** `tildify-mode' allows to automatically insert hard spaces as one
+** `tildify-mode' allows automatic insertion of hard spaces as one
 types the text.  Breaking line after a single-character words is
 forbidden by Czech and Polish typography (and may be discouraged in
 other languages), so `auto-tildify-mode' makes it easier to create
@@ -1382,7 +1407,9 @@ that happen, `unhandled-file-name-directory' now defaults to calling
 * Lisp Changes in Emacs 25.1
 
 ** pcase
++++
 *** New UPatterns `quote', `app'.
++++
 *** New UPatterns can be defined with `pcase-defmacro'.
 +++
 *** New vector QPattern.
@@ -1398,7 +1425,7 @@ commands other than the predefined `C-u'.
 
 +++
 ** New functions `filepos-to-bufferpos' and `bufferpos-to-filepos'.
-These allow to convert between buffer positions and the corresponding
+These allow conversion between buffer positions and the corresponding
 file byte offsets, given the file's encoding.
 
 +++
@@ -1521,14 +1548,14 @@ called interactively.
 ** New function `function-put' to use instead of `put' for function properties.
 
 +++
-** The new function `bidi-find-overridden-directionality' allows to
+** The new function `bidi-find-overridden-directionality' allows you to
 find characters whose directionality was, perhaps maliciously,
 overridden by directional override control characters.  Lisp programs
 can use this to detect potential phishing of URLs and other links that
 exploits bidirectional display reordering.
 
 +++
-** The new function `buffer-substring-with-bidi-context' allows to
+** The new function `buffer-substring-with-bidi-context' allows you to
 copy a portion of a buffer into a different location while preserving
 the visual appearance both of the copied text and the text at
 destination, even when the copied text includes mixed bidirectional
@@ -1651,7 +1678,7 @@ undocumented integer-pair format.  Instead, they return a list of two
 integers.
 
 +++
-** New function `set-binary-mode' allows to switch a standard stream
+** New function `set-binary-mode' allows switching a standard stream
 of the Emacs process to binary I/O mode.
 
 +++
@@ -1762,8 +1789,8 @@ fullwidth frames, the behavior may depend on the toolkit used.
    number of columns or lines it displays.
 
 +++
-*** New function `window-preserve-size' allows to preserve the size of
-windows without "fixing" it.  It's supported by `fit-window-to-buffer',
+*** New function `window-preserve-size' allows you to preserve the size of
+a window without "fixing" it.  It's supported by `fit-window-to-buffer',
 `temp-buffer-resize-mode' and `display-buffer'.
 
 +++
