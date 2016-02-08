@@ -54,6 +54,14 @@
   '("charset" "font-face" "import" "media" "namespace" "page")
   "Identifiers that appear in the form @foo.")
 
+(defconst css-bang-ids
+  '("important")
+  "Identifiers that appear in the form !foo.")
+
+(defconst scss-bang-ids
+  '("default" "global" "optional")
+  "Additional identifiers that appear in the form !foo in SCSS.")
+
 (defconst css-descriptor-ids
   '("ascent" "baseline" "bbox" "cap-height" "centerline" "definition-src"
     "descent" "font-family" "font-size" "font-stretch" "font-style"
@@ -215,7 +223,7 @@
 (defconst css-escapes-re
   "\\\\\\(?:[^\000-\037\177]\\|[0-9a-fA-F]+[ \n\t\r\f]?\\)")
 (defconst css-nmchar-re (concat "\\(?:[-[:alnum:]]\\|" css-escapes-re "\\)"))
-(defconst css-nmstart-re (concat "\\(?:--\\)?\\(?:[[:alpha:]]\\|" css-escapes-re "\\)"))
+(defconst css-nmstart-re (concat "\\(?:[[:alpha:]]\\|" css-escapes-re "\\)"))
 (defconst css-ident-re ;; (concat css-nmstart-re css-nmchar-re "*")
   ;; Apparently, "at rules" names can start with a dash, e.g. @-moz-keyframes.
   (concat css-nmchar-re "+"))
@@ -236,8 +244,8 @@
 
 (defun css--font-lock-keywords (&optional sassy)
   `((,(concat "!\\s-*"
-              (regexp-opt (append (if sassy '("global"))
-                                  '("important"))))
+              (regexp-opt (append (if sassy scss-bang-ids)
+                                  css-bang-ids)))
      (0 font-lock-builtin-face))
     ;; Atrules keywords.  IDs not in css-at-ids are valid (ignored).
     ;; In fact the regexp should probably be
@@ -246,6 +254,8 @@
     ;; Since "An at-rule consists of everything up to and including the next
     ;; semicolon (;) or the next block, whichever comes first."
     (,(concat "@" css-ident-re) (0 font-lock-builtin-face))
+    ;; Variables.
+    (,(concat "--" css-ident-re) (0 font-lock-variable-name-face))
     ;; Selectors.
     ;; FIXME: attribute selectors don't work well because they may contain
     ;; strings which have already been highlighted as f-l-string-face and

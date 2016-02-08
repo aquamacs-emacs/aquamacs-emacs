@@ -23,7 +23,7 @@ dnl  along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
 
 AC_PREREQ(2.65)
 dnl Note this is parsed by (at least) make-dist and lisp/cedet/ede/emacs.el.
-AC_INIT(GNU Emacs, 25.0.50, bug-gnu-emacs@gnu.org)
+AC_INIT(GNU Emacs, 25.0.90, bug-gnu-emacs@gnu.org)
 
 dnl Set emacs_config_options to the options of 'configure', quoted for the shell,
 dnl and then quoted again for a C string.  Separate options with spaces.
@@ -330,7 +330,7 @@ OPTION_DEFAULT_ON([tiff],[don't compile with TIFF image support])
 OPTION_DEFAULT_ON([gif],[don't compile with GIF image support])
 OPTION_DEFAULT_ON([png],[don't compile with PNG image support])
 OPTION_DEFAULT_ON([rsvg],[don't compile with SVG image support])
-OPTION_DEFAULT_OFF([cairo],[compile with Cairo drawing])
+OPTION_DEFAULT_OFF([cairo],[compile with Cairo drawing (experimental)])
 OPTION_DEFAULT_ON([xml2],[don't compile with XML parsing support])
 OPTION_DEFAULT_ON([imagemagick],[don't compile with ImageMagick image support])
 
@@ -3141,13 +3141,13 @@ AC_SUBST(LIBOTF_LIBS)
 AC_SUBST(M17N_FLT_CFLAGS)
 AC_SUBST(M17N_FLT_LIBS)
 
-USE_CAIRO=no
+HAVE_CAIRO=no
 if test "${HAVE_X11}" = "yes"; then
   if test "${with_cairo}" != "no"; then
     CAIRO_REQUIRED=1.12.0
     CAIRO_MODULE="cairo >= $CAIRO_REQUIRED"
-    EMACS_CHECK_MODULES(CAIRO, $CAIRO_MODULE, USE_CAIRO=yes, :)
-    if test $USE_CAIRO = yes; then
+    EMACS_CHECK_MODULES(CAIRO, $CAIRO_MODULE)
+    if test $HAVE_CAIRO = yes; then
       AC_DEFINE(USE_CAIRO, 1, [Define to 1 if using cairo.])
     else
       AC_MSG_ERROR([cairo requested but not found.])
@@ -3360,7 +3360,7 @@ if test "${with_modules}" != "no"; then
   else
     SAVE_LIBS=$LIBS
     LIBS="$LIBS $LIBMODULES"
-    AC_CHECK_FUNCS([dlfunc])
+    AC_CHECK_FUNCS([dladdr dlfunc])
     LIBS=$SAVE_LIBS
   fi
 fi
@@ -3373,7 +3373,6 @@ if test "${HAVE_MODULES}" = yes; then
 fi
 AC_SUBST(MODULES_OBJ)
 AC_SUBST(LIBMODULES)
-AC_CHECK_FUNCS(dladdr)
 
 ### Use -lpng if available, unless '--with-png=no'.
 HAVE_PNG=no
@@ -3806,14 +3805,8 @@ getpwent endpwent getgrent endgrent \
 cfmakeraw cfsetspeed copysign __executable_start log2)
 LIBS=$OLD_LIBS
 
-dnl No need to check for aligned_alloc and posix_memalign if using
-dnl gmalloc.o, as it supplies them, unless we're using hybrid_malloc.
-dnl Don't use these functions on Darwin as they are incompatible with
-dnl unexmacosx.c.
-if (test -z "$GMALLOC_OBJ" || test "$hybrid_malloc" = yes) \
-  && test "$opsys" != darwin; then
-  AC_CHECK_FUNCS([aligned_alloc posix_memalign], [break])
-fi
+dnl No need to check for posix_memalign if aligned_alloc works.
+AC_CHECK_FUNCS([aligned_alloc posix_memalign], [break])
 
 dnl Cannot use AC_CHECK_FUNCS
 AC_CACHE_CHECK([for __builtin_unwind_init],
@@ -4920,7 +4913,7 @@ if test "${HAVE_X_WINDOWS}" = "yes" ; then
   XMENU_OBJ=xmenu.o
   XOBJ="xterm.o xfns.o xselect.o xrdb.o xsmfns.o xsettings.o"
   FONT_OBJ=xfont.o
-  if test "$USE_CAIRO" = "yes"; then
+  if test "$HAVE_CAIRO" = "yes"; then
     FONT_OBJ="ftfont.o ftcrfont.o"
   elif test "$HAVE_XFT" = "yes"; then
     FONT_OBJ="$FONT_OBJ ftfont.o xftfont.o ftxfont.o"
@@ -5268,7 +5261,7 @@ for opt in XAW3D XPM JPEG TIFF GIF PNG RSVG CAIRO IMAGEMAGICK SOUND GPM DBUS \
 
     case $opt in
       NOTIFY|ACL) eval val=\${${opt}_SUMMARY} ;;
-      CAIRO|TOOLKIT_SCROLL_BARS|X_TOOLKIT) eval val=\${USE_$opt} ;;
+      TOOLKIT_SCROLL_BARS|X_TOOLKIT) eval val=\${USE_$opt} ;;
       *) eval val=\${HAVE_$opt} ;;
     esac
     case x$val in
@@ -5295,7 +5288,7 @@ AS_ECHO(["  Does Emacs use -lXaw3d?                                 ${HAVE_XAW3D
   Does Emacs use a gif library?                           ${HAVE_GIF} $LIBGIF
   Does Emacs use a png library?                           ${HAVE_PNG} $LIBPNG
   Does Emacs use -lrsvg-2?                                ${HAVE_RSVG}
-  Does Emacs use cairo?                                   ${USE_CAIRO}
+  Does Emacs use cairo?                                   ${HAVE_CAIRO}
   Does Emacs use imagemagick?                             ${HAVE_IMAGEMAGICK}
   Does Emacs support sound?                               ${HAVE_SOUND}
   Does Emacs use -lgpm?                                   ${HAVE_GPM}

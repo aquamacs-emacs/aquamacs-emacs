@@ -797,7 +797,7 @@ property of the major mode name.")
 (defun texinfo-mode-flyspell-verify ()
   "Function used for `flyspell-generic-check-word-predicate' in Texinfo mode."
   (save-excursion
-    (forward-word -1)
+    (forward-word-strictly -1)
     (not (looking-at "@"))))
 
 ;;*--- tex mode --------------------------------------------------------*/
@@ -844,6 +844,9 @@ like <img alt=\"Some thing.\">."
   ;; (point) is next char after the word. Must check one char before.
   (let ((f (get-text-property (- (point) 1) 'face)))
     (memq f flyspell-prog-text-faces)))
+
+;; Records the binding of M-TAB in effect before flyspell was activated.
+(defvar flyspell--prev-meta-tab-binding)
 
 ;;;###autoload
 (defun flyspell-prog-mode ()

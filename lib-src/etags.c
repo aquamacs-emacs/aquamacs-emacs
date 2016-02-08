@@ -354,6 +354,7 @@ static void Cstar_entries (FILE *);
 static void Erlang_functions (FILE *);
 static void Forth_words (FILE *);
 static void Fortran_functions (FILE *);
+static void Go_functions (FILE *);
 static void HTML_labels (FILE *);
 static void Lisp_functions (FILE *);
 static void Lua_functions (FILE *);
@@ -641,6 +642,10 @@ static const char *Fortran_suffixes [] =
 static const char Fortran_help [] =
 "In Fortran code, functions, subroutines and block data are tags.";
 
+static const char *Go_suffixes [] = {"go", NULL};
+static const char Go_help [] =
+  "In Go code, functions, interfaces and packages are tags.";
+
 static const char *HTML_suffixes [] =
   { "htm", "html", "shtml", NULL };
 static const char HTML_help [] =
@@ -724,10 +729,12 @@ static const char Python_help [] =
 generate a tag.";
 
 static const char *Ruby_suffixes [] =
-  { "rb", "ruby", NULL };
+  { "rb", "ru", "rbw", NULL };
+static const char *Ruby_filenames [] =
+  { "Rakefile", "Thorfile", NULL };
 static const char Ruby_help [] =
   "In Ruby code, 'def' or 'class' or 'module' at the beginning of\n\
-a line generate a tag.";
+a line generate a tag.  Constants also generate a tag.";
 
 /* Can't do the `SCM' or `scm' prefix with a version number. */
 static const char *Scheme_suffixes [] =
@@ -794,6 +801,7 @@ static language lang_names [] =
   { "erlang",    Erlang_help,    Erlang_functions,  Erlang_suffixes    },
   { "forth",     Forth_help,     Forth_words,       Forth_suffixes     },
   { "fortran",   Fortran_help,   Fortran_functions, Fortran_suffixes   },
+  { "go",        Go_help,        Go_functions,      Go_suffixes        },
   { "html",      HTML_help,      HTML_labels,       HTML_suffixes      },
   { "java",      Cjava_help,     Cjava_entries,     Cjava_suffixes     },
   { "lisp",      Lisp_help,      Lisp_functions,    Lisp_suffixes      },
@@ -807,7 +815,7 @@ static language lang_names [] =
   { "proc",      no_lang_help,   plain_C_entries,   plain_C_suffixes   },
   { "prolog",    Prolog_help,    Prolog_functions,  Prolog_suffixes    },
   { "python",    Python_help,    Python_functions,  Python_suffixes    },
-  { "ruby",      Ruby_help,      Ruby_functions,    Ruby_suffixes      },
+  { "ruby",      Ruby_help,Ruby_functions,Ruby_suffixes,Ruby_filenames },
   { "scheme",    Scheme_help,    Scheme_functions,  Scheme_suffixes    },
   { "tex",       TeX_help,       TeX_commands,      TeX_suffixes       },
   { "texinfo",   Texinfo_help,   Texinfo_nodes,     Texinfo_suffixes   },
@@ -1477,8 +1485,16 @@ get_language_from_filename (char *file, int case_sensitive)
 {
   language *lang;
   const char **name, **ext, *suffix;
+  char *slash;
 
   /* Try whole file name first. */
+  slash = strrchr (file, '/');
+  if (slash != NULL)
+    file = slash + 1;
+#ifdef DOS_NT
+  else if (file[0] && file[1] == ':')
+    file += 2;
+#endif
   for (lang = lang_names; lang->name != NULL; lang++)
     if (lang->filenames != NULL)
       for (name = lang->filenames; *name != NULL; name++)
@@ -4209,6 +4225,73 @@ Fortran_functions (FILE *inf)
 
 
 /*
+ * Go language support
+ * Original code by Xi Lu <lx@shellcodes.org> (2016)
+ */
+static void
+Go_functions(FILE *inf)
+{
+  char *cp, *name;
+
+  LOOP_ON_INPUT_LINES(inf, lb, cp)
+    {
+      cp = skip_spaces (cp);
+
+      if (LOOKING_AT (cp, "package"))
+	{
+	  name = cp;
+	  while (!notinname (*cp) && *cp != '\0')
+	    cp++;
+	  make_tag (name, cp - name, false, lb.buffer,
+		    cp - lb.buffer + 1, lineno, linecharno);
+	}
+      else if (LOOKING_AT (cp, "func"))
+	{
+	  /* Go implementation of interface, such as:
+	     func (n *Integer) Add(m Integer) ...
+	     skip `(n *Integer)` part.
+	  */
+	  if (*cp == '(')
+	    {
+	      while (*cp != ')')
+		cp++;
+	      cp = skip_spaces (cp+1);
+	    }
+
+	  if (*cp)
+	    {
+	      name = cp;
+
+	      while (!notinname (*cp))
+		cp++;
+
+	      make_tag (name, cp - name, true, lb.buffer,
+			cp - lb.buffer + 1, lineno, linecharno);
+	    }
+	}
+      else if (members && LOOKING_AT (cp, "type"))
+	{
+	  name = cp;
+
+	  /* Ignore the likes of the following:
+	     type (
+	            A
+	     )
+	   */
+	  if (*cp == '(')
+	    return;
+
+	  while (!notinname (*cp) && *cp != '\0')
+	    cp++;
+
+	  make_tag (name, cp - name, false, lb.buffer,
+		    cp - lb.buffer + 1, lineno, linecharno);
+	}
+    }
+}
+
+
+/*
  * Ada parsing
  * Original code by
  * Philippe Waroquiers (1998)
@@ -4547,23 +4630,163 @@ static void
 Ruby_functions (FILE *inf)
 {
   char *cp = NULL;
+  bool reader = false, writer = false, alias = false, continuation = false;
 
   LOOP_ON_INPUT_LINES (inf, lb, cp)
     {
+      bool is_class = false;
+      bool is_method = false;
+      char *name;
+
       cp = skip_spaces (cp);
-      if (LOOKING_AT (cp, "def")
-	  || LOOKING_AT (cp, "class")
-	  || LOOKING_AT (cp, "module"))
+      if (!continuation
+	  /* Constants.  */
+	  && c_isalpha (*cp) && c_isupper (*cp))
 	{
-	  char *name = cp;
+	  char *bp, *colon = NULL;
+
+	  name = cp;
+
+	  for (cp++; c_isalnum (*cp) || *cp == '_' || *cp == ':'; cp++)
+	    {
+	      if (*cp == ':')
+		colon = cp;
+	    }
+	  if (cp > name + 1)
+	    {
+	      bp = skip_spaces (cp);
+	      if (*bp == '=' && !(bp[1] == '=' || bp[1] == '>'))
+		{
+		  if (colon && !c_isspace (colon[1]))
+		    name = colon + 1;
+		  make_tag (name, cp - name, false,
+			    lb.buffer, cp - lb.buffer + 1, lineno, linecharno);
+		}
+	    }
+	}
+      else if (!continuation
+	       /* Modules, classes, methods.  */
+	       && ((is_method = LOOKING_AT (cp, "def"))
+		   || (is_class = LOOKING_AT (cp, "class"))
+		   || LOOKING_AT (cp, "module")))
+	{
+	  const char self_name[] = "self.";
+	  const size_t self_size1 = sizeof (self_name) - 1;
+
+	  name = cp;
 
 	 /* Ruby method names can end in a '='.  Also, operator overloading can
 	    define operators whose names include '='.  */
 	  while (!notinname (*cp) || *cp == '=')
 	    cp++;
 
+	  /* Remove "self." from the method name.  */
+	  if (cp - name > self_size1
+	      && strneq (name, self_name, self_size1))
+	    name += self_size1;
+
+	  /* Remove the class/module qualifiers from method names.  */
+	  if (is_method)
+	    {
+	      char *q;
+
+	      for (q = name; q < cp && *q != '.'; q++)
+		;
+	      if (q < cp - 1)	/* punt if we see just "FOO." */
+		name = q + 1;
+	    }
+
+	  /* Don't tag singleton classes.  */
+	  if (is_class && strneq (name, "<<", 2) && cp == name + 2)
+	    continue;
+
 	  make_tag (name, cp - name, true,
 		    lb.buffer, cp - lb.buffer + 1, lineno, linecharno);
+	}
+      else
+	{
+	  /* Tag accessors and aliases.  */
+
+	  if (!continuation)
+	    reader = writer = alias = false;
+
+	  while (*cp && *cp != '#')
+	    {
+	      if (!continuation)
+		{
+		  reader = writer = alias = false;
+		  if (LOOKING_AT (cp, "attr_reader"))
+		    reader = true;
+		  else if (LOOKING_AT (cp, "attr_writer"))
+		    writer = true;
+		  else if (LOOKING_AT (cp, "attr_accessor"))
+		    {
+		      reader = true;
+		      writer = true;
+		    }
+		  else if (LOOKING_AT (cp, "alias_method"))
+		    alias = true;
+		}
+	      if (reader || writer || alias)
+		{
+		  do {
+		    char *np;
+
+		    cp = skip_spaces (cp);
+		    if (*cp == '(')
+		      cp = skip_spaces (cp + 1);
+		    np = cp;
+		    cp = skip_name (cp);
+		    if (*np != ':')
+		      continue;
+		    np++;
+		    if (reader)
+		      {
+			make_tag (np, cp - np, true,
+				  lb.buffer, cp - lb.buffer + 1,
+				  lineno, linecharno);
+			continuation = false;
+		      }
+		    if (writer)
+		      {
+			size_t name_len = cp - np + 1;
+			char *wr_name = xnew (name_len + 1, char);
+
+			memcpy (wr_name, np, name_len - 1);
+			memcpy (wr_name + name_len - 1, "=", 2);
+			pfnote (wr_name, true, lb.buffer, cp - lb.buffer + 1,
+				lineno, linecharno);
+			continuation = false;
+		      }
+		    if (alias)
+		      {
+			if (!continuation)
+			  make_tag (np, cp - np, true,
+				    lb.buffer, cp - lb.buffer + 1,
+				    lineno, linecharno);
+			continuation = false;
+			while (*cp && *cp != '#' && *cp != ';')
+			  {
+			    if (*cp == ',')
+			      continuation = true;
+			    else if (!c_isspace (*cp))
+			      continuation = false;
+			    cp++;
+			  }
+			if (*cp == ';')
+			  continuation = false;
+		      }
+		    cp = skip_spaces (cp);
+		  } while ((alias
+			    ? (*cp == ',')
+			    : (continuation = (*cp == ',')))
+			   && (cp = skip_spaces (cp + 1), *cp && *cp != '#'));
+		}
+	      if (*cp != '#')
+		cp = skip_name (cp);
+	      while (*cp && *cp != '#' && notinname (*cp))
+		cp++;
+	    }
 	}
     }
 }

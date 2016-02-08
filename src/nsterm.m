@@ -664,10 +664,11 @@ ns_menu_bar_should_be_hidden (void)
 
 static CGFloat
 ns_menu_bar_height (NSScreen *screen)
-/* The height of the menu bar, if visible. */
-{
-  //  NSTRACE ("ns_menu_bar_height");
+/* The height of the menu bar, if visible.
 
+   Note: Don't use this when fullscreen is enabled -- the screen
+   sometimes includes, sometimes excludes the menu bar area. */
+{
   CGFloat res;
 
   if (ns_menu_bar_should_be_hidden())
@@ -687,7 +688,7 @@ ns_menu_bar_height (NSScreen *screen)
 
     }
 
-  // NSTRACE_MSG (NSTRACE_FMT_RETURN "%.0f", res);
+  NSTRACE ("ns_menu_bar_height " NSTRACE_FMT_RETURN " %.0f", res);
 
   return res;
 }
@@ -741,7 +742,7 @@ ns_menu_bar_height (NSScreen *screen)
 //    Result: Menu bar visible, frame placed immediately below the menu.
 //
 
-static NSRect constrain_frame_rect(NSRect frameRect)
+static NSRect constrain_frame_rect(NSRect frameRect, bool isFullscreen)
 {
   NSTRACE ("constrain_frame_rect(" NSTRACE_FMT_RECT ")",
              NSTRACE_ARG_RECT (frameRect));
@@ -773,7 +774,11 @@ static NSRect constrain_frame_rect(NSRect frameRect)
         {
           multiscreenRect = NSUnionRect (multiscreenRect, scrRect);
 
-          menu_bar_height = max(menu_bar_height, ns_menu_bar_height (s));
+          if (!isFullscreen)
+            {
+              CGFloat screen_menu_bar_height = ns_menu_bar_height (s);
+              menu_bar_height = max(menu_bar_height, screen_menu_bar_height);
+            }
         }
     }
 
@@ -867,7 +872,7 @@ ns_constrain_all_frames (void)
           if (![view isFullscreen])
             {
               [[view window]
-                setFrame:constrain_frame_rect([[view window] frame])
+                setFrame:constrain_frame_rect([[view window] frame], false)
                  display:NO];
             }
         }
@@ -1255,7 +1260,7 @@ ns_clip_to_row (struct window *w, struct glyph_row *row,
       // GNUstep doesn't provide named images.  This was reported in
       // 2011, see https://savannah.gnu.org/bugs/?33396
       //
-      // As a drop in replacment, a semi tranparent gray square is used.
+      // As a drop in replacement, a semitransparent gray square is used.
       self.image = [[NSImage alloc] initWithSize:NSMakeSize(32, 32)];
       [self.image lockFocus];
       [[NSColor colorForEmacsRed:0.5 green:0.5 blue:0.5 alpha:0.5] set];
@@ -7557,7 +7562,7 @@ not_in_argv (NSString *arg)
   NSString *name;
 
   NSTRACE ("[EmacsView initFrameFromEmacs:]");
-  NSTRACE_MSG ("cols:%d lines:%d\n", f->text_cols, f->text_lines);
+  NSTRACE_MSG ("cols:%d lines:%d", f->text_cols, f->text_lines);
 
   windowClosing = NO;
   processingCompose = NO;
@@ -8044,14 +8049,25 @@ not_in_argv (NSString *arg)
 
 - (BOOL)isFullscreen
 {
-  NSTRACE ("[EmacsView isFullscreen]");
+  BOOL res;
 
-  if (! fs_is_native) return nonfs_window != nil;
+  if (! fs_is_native)
+    {
+      res = (nonfs_window != nil);
+    }
+  else
+    {
 #ifdef HAVE_NATIVE_FS
-  return ([[self window] styleMask] & NSFullScreenWindowMask) != 0;
+      res = (([[self window] styleMask] & NSFullScreenWindowMask) != 0);
 #else
-  return NO;
+      res = NO;
 #endif
+    }
+
+  NSTRACE ("[EmacsView isFullscreen] " NSTRACE_FMT_RETURN " %d",
+           (int) res);
+
+  return res;
 }
 
 #ifdef HAVE_NATIVE_FS
@@ -8779,7 +8795,8 @@ not_in_argv (NSString *arg)
 #endif
 #endif
 
-  return constrain_frame_rect(frameRect);
+  return constrain_frame_rect(frameRect,
+                              [(EmacsView *)[self delegate] isFullscreen]);
 }
 
 

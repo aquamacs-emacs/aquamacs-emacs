@@ -87,7 +87,7 @@ against previous connections.  If the function determines that
 there is something odd about the connection, the user will be
 queried about what to do about it.
 
-The process it returned if everything is OK, and otherwise, the
+The process is returned if everything is OK, and otherwise, the
 process will be deleted and nil is returned.
 
 If SAVE-FINGERPRINT, always save the fingerprint of the
@@ -309,39 +309,40 @@ unencrypted."
 
 (defun nsm-query-user (message args cert)
   (let ((buffer (get-buffer-create "*Network Security Manager*")))
-    (with-help-window buffer
-      (with-current-buffer buffer
-	(erase-buffer)
-	(when (> (length cert) 0)
-	  (insert cert "\n"))
-	(let ((start (point)))
-	  (insert (apply #'format-message message args))
-	  (goto-char start)
-	  ;; Fill the first line of the message, which usually
-	  ;; contains lots of explanatory text.
-	  (fill-region (point) (line-end-position)))))
-    (let ((responses '((?n . no)
-		       (?s . session)
-		       (?a . always)))
-	  (prefix "")
-	  (cursor-in-echo-area t)
-	  response)
-      (while (not response)
-	(setq response
-	      (cdr
-	       (assq (downcase
-		      (read-char
-		       (concat prefix
-			       "Continue connecting? (No, Session only, Always) ")))
-		     responses)))
-	(unless response
-	  (ding)
-	  (setq prefix "Invalid choice.  ")))
-      (kill-buffer buffer)
-      ;; If called from a callback, `read-char' will insert things
-      ;; into the pending input.  Clear that.
-      (clear-this-command-keys)
-      response)))
+    (save-window-excursion
+      (with-help-window buffer
+        (with-current-buffer buffer
+          (erase-buffer)
+          (when (> (length cert) 0)
+            (insert cert "\n"))
+          (let ((start (point)))
+            (insert (apply #'format-message message args))
+            (goto-char start)
+            ;; Fill the first line of the message, which usually
+            ;; contains lots of explanatory text.
+            (fill-region (point) (line-end-position)))))
+      (let ((responses '((?n . no)
+                         (?s . session)
+                         (?a . always)))
+            (prefix "")
+            (cursor-in-echo-area t)
+            response)
+        (while (not response)
+          (setq response
+                (cdr
+                 (assq (downcase
+                        (read-char
+                         (concat prefix
+                                 "Continue connecting? (No, Session only, Always) ")))
+                       responses)))
+          (unless response
+            (ding)
+            (setq prefix "Invalid choice.  ")))
+        (kill-buffer buffer)
+        ;; If called from a callback, `read-char' will insert things
+        ;; into the pending input.  Clear that.
+        (clear-this-command-keys)
+        response))))
 
 (defun nsm-save-host (host port status what permanency)
   (let* ((id (nsm-id host port))

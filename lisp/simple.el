@@ -1176,7 +1176,7 @@ END, without printing any message."
 	     (save-restriction
 	       (narrow-to-region start end)
 	       (goto-char (point-min))
-	       (while (forward-word 1)
+	       (while (forward-word-strictly 1)
 		 (setq words (1+ words)))))
 	   words))
 	((use-region-p)
@@ -2900,7 +2900,7 @@ removes the previous `undo-boundary' if a series of such calls
 have been made.  By default `self-insert-command' and
 `delete-char' are the only amalgamating commands, although this
 function could be called by any command wishing to have this
-behaviour."
+behavior."
   (let ((last-amalgamating-count
          (undo-auto--last-boundary-amalgamating-number)))
     (setq undo-auto--this-command-amalgamating t)

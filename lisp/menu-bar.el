@@ -200,7 +200,7 @@
   (setq menu-bar-last-search-type 'string)
   ;; Ideally, this whole command would be equivalent to `C-s RET'.
   (let ((isearch-forward (not backward))
-        (isearch-regexp-function search-default-regexp-mode)
+        (isearch-regexp-function search-default-mode)
         (isearch-regexp nil))
     (if (or (equal string "") (not string))
         (funcall (isearch-search-fun-default) (car search-ring))
@@ -1274,6 +1274,52 @@ mail status in mode line"
 		  :enable (not (truncated-partial-width-window-p))))
     menu))
 
+(defvar menu-bar-search-options-menu
+  (let ((menu (make-sparse-keymap "Search Options")))
+
+    (dolist (x '((character-fold-to-regexp "Fold Characters" "Character folding")
+                 (isearch-symbol-regexp "Whole Symbols" "Whole symbol")
+                 (word-search-regexp "Whole Words" "Whole word")))
+      (bindings--define-key menu (vector (nth 0 x))
+        `(menu-item ,(nth 1 x)
+                    (lambda ()
+                      (interactive)
+                      (setq search-default-mode #',(nth 0 x))
+                      (message ,(format "%s search enabled" (nth 2 x))))
+                    :help ,(format "Enable %s search" (downcase (nth 2 x)))
+                    :button (:radio . (eq search-default-mode #',(nth 0 x))))))
+
+    (bindings--define-key menu [regexp-search]
+      '(menu-item "Regular Expression"
+                  (lambda ()
+                    (interactive)
+                    (setq search-default-mode t)
+                    (message "Regular-expression search enabled"))
+                  :help "Enable regular-expression search"
+                  :button (:radio . (eq search-default-mode t))))
+
+    (bindings--define-key menu [regular-search]
+      '(menu-item "Literal Search"
+                  (lambda ()
+                    (interactive)
+                    (when search-default-mode
+                      (setq search-default-mode nil)
+                      (when (symbolp search-default-mode)
+                        (message "Literal search enabled"))))
+                  :help "Disable special search modes"
+                  :button (:radio . (not search-default-mode))))
+
+    (bindings--define-key menu [custom-separator]
+      menu-bar-separator)
+    (bindings--define-key menu [case-fold-search]
+      (menu-bar-make-toggle
+       toggle-case-fold-search case-fold-search
+       "Ignore Case"
+       "Case-Insensitive Search %s"
+       "Ignore letter-case in search commands"))
+
+    menu))
+
 (defvar menu-bar-options-menu
   (let ((menu (make-sparse-keymap "Options")))
     (bindings--define-key menu [customize]
@@ -1362,6 +1408,9 @@ for future buffers."
 ;; (defvar line-wrapping--state nil "Line wrapping mode in effect.
 ;; One of `truncate', `wrap', `word-wrap' and `fill'.")
 ;; (make-variable-buffer-local 'line-wrapping--state)
+    (bindings--define-key menu [search-options]
+      `(menu-item "Default Search Options"
+		  ,menu-bar-search-options-menu))
 
 ; could add something to minor-mode-alist as a lighter for the
 ; mode-line
