@@ -243,7 +243,7 @@ no reference is found, execute the LaTeX View command."
     (("Preview" "open -a Preview.app %o")
      ;;       ("Skim"  "/Applications/Skim.app/Contents/SharedSupport/displayline -b %n %o %b")
      ;;       ("Skim"   "%(Ad)/Contents/MacOS/bin/displayline -b %n %o %b")
-     ("Skim" ("(aquamacs-call-viewer %n \"%b\")"))))
+     ("Skim" "(lambda () (aquamacs-call-viewer %n \"%b\"))")))
    (TeX-view-predicate-list 
     ((output-pdf-skim-running 
       (and (string-match "pdf" (TeX-output-extension))
