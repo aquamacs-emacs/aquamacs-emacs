@@ -1353,6 +1353,10 @@ mail status in mode line"
     (bindings--define-key menu [showhide-separator]
       menu-bar-separator)
 
+    (bindings--define-key menu [search-options]
+      `(menu-item "Default Search Options"
+		  ,menu-bar-search-options-menu))
+
     (bindings--define-key menu [mule]
       ;; It is better not to use backquote here,
       ;; because that makes a bootstrapping problem
@@ -1408,9 +1412,7 @@ for future buffers."
 ;; (defvar line-wrapping--state nil "Line wrapping mode in effect.
 ;; One of `truncate', `wrap', `word-wrap' and `fill'.")
 ;; (make-variable-buffer-local 'line-wrapping--state)
-    (bindings--define-key menu [search-options]
-      `(menu-item "Default Search Options"
-		  ,menu-bar-search-options-menu))
+
 
 ; could add something to minor-mode-alist as a lighter for the
 ; mode-line
