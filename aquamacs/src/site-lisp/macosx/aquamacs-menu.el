@@ -396,6 +396,8 @@ White space here is any of: space, tab, emacs newline (line feed, ASCII 10)."
 
 ;; Command line tool
 (defun aquamacs-install-command-line-tool ()
+  "Install the Aquamacs Command Line Tool.
+On operating systems prior to El Capitan, a package installer is started."
   (interactive)
   (let ((coding-system-for-write 'no-conversion)
         (vers nil)
@@ -424,7 +426,7 @@ White space here is any of: space, tab, emacs newline (line feed, ASCII 10)."
               (installer "Aquamacs Command Line Tool PreElCapitan.mpkg")))
 
         (error nil
-               (installer "Aquamacs Command Line Tool Pre-ElCapitan.mpkg")))
+               (installer "Aquamacs Command Line Tool PreElCapitan.mpkg")))
 
       (aquamacs-message "%sCall command-line-tool from a shell as `aquamacs', e.g., as \"aquamacs file.txt\"" installed))))
 
