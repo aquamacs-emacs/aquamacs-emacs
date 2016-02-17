@@ -402,6 +402,10 @@ Currently this means either text/html or application/xhtml+xml."
 		(condition-case nil
 		    (decode-coding-region (point) (point-max) encode)
 		  (coding-system-error nil))
+                (save-excursion
+                  ;; Remove CRLF before parsing.
+                  (while (re-search-forward "\r$" nil t)
+                    (replace-match "" t t)))
 		(libxml-parse-html-region (point) (point-max))))))
 	(source (and (null document)
 		     (buffer-substring (point) (point-max)))))
@@ -615,11 +619,13 @@ the like."
 		(condition-case nil
 		    (decode-coding-region (point-min) (point-max) 'utf-8)
 		  (coding-system-error nil))
-		(libxml-parse-html-region (point-min) (point-max)))))
+		(libxml-parse-html-region (point-min) (point-max))))
+         (base (plist-get eww-data :url)))
     (eww-score-readability dom)
     (eww-save-history)
     (eww-display-html nil nil
-		      (eww-highest-readability dom)
+                      (list 'base (list (cons 'href base))
+                            (eww-highest-readability dom))
 		      nil (current-buffer))
     (dolist (elem '(:source :url :title :next :previous :up))
       (plist-put eww-data elem (plist-get old-data elem)))

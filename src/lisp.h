@@ -67,19 +67,6 @@ DEFINE_GDB_SYMBOL_BEGIN (int, GCTYPEBITS)
 #define GCTYPEBITS 3
 DEFINE_GDB_SYMBOL_END (GCTYPEBITS)
 
-/* The number of bits needed in an EMACS_INT over and above the number
-   of bits in a pointer.  This is 0 on systems where:
-   1.  We can specify multiple-of-8 alignment on static variables.
-   2.  We know malloc returns a multiple of 8.  */
-#if (defined alignas \
-     && (defined GNU_MALLOC || defined DOUG_LEA_MALLOC || defined __GLIBC__ \
-	 || defined DARWIN_OS || defined __sun || defined __MINGW32__ \
-	 || defined CYGWIN))
-# define NONPOINTER_BITS 0
-#else
-# define NONPOINTER_BITS GCTYPEBITS
-#endif
-
 /* EMACS_INT - signed integer wide enough to hold an Emacs value
    EMACS_INT_MAX - maximum value of EMACS_INT; can be used in #if
    pI - printf length modifier for EMACS_INT
@@ -87,18 +74,16 @@ DEFINE_GDB_SYMBOL_END (GCTYPEBITS)
 #ifndef EMACS_INT_MAX
 # if INTPTR_MAX <= 0
 #  error "INTPTR_MAX misconfigured"
-# elif INTPTR_MAX <= INT_MAX >> NONPOINTER_BITS && !defined WIDE_EMACS_INT
+# elif INTPTR_MAX <= INT_MAX && !defined WIDE_EMACS_INT
 typedef int EMACS_INT;
 typedef unsigned int EMACS_UINT;
 #  define EMACS_INT_MAX INT_MAX
 #  define pI ""
-# elif INTPTR_MAX <= LONG_MAX >> NONPOINTER_BITS && !defined WIDE_EMACS_INT
+# elif INTPTR_MAX <= LONG_MAX && !defined WIDE_EMACS_INT
 typedef long int EMACS_INT;
 typedef unsigned long EMACS_UINT;
 #  define EMACS_INT_MAX LONG_MAX
 #  define pI "l"
-/* Check versus LLONG_MAX, not LLONG_MAX >> NONPOINTER_BITS.
-   In theory this is not safe, but in practice it seems to be OK.  */
 # elif INTPTR_MAX <= LLONG_MAX
 typedef long long int EMACS_INT;
 typedef unsigned long long int EMACS_UINT;
@@ -275,10 +260,6 @@ DEFINE_GDB_SYMBOL_END (USE_LSB_TAG)
 # error "USE_LSB_TAG not supported on this platform; please report this." \
 	"Try 'configure --with-wide-int' to work around the problem."
 error !;
-#endif
-
-#ifndef alignas
-# error "alignas not defined"
 #endif
 
 #ifdef HAVE_STRUCT_ATTRIBUTE_ALIGNED
@@ -4541,6 +4522,12 @@ extern void *record_xmalloc (size_t) ATTRIBUTE_ALLOC_SIZE ((1));
    This feature is experimental and requires careful debugging.
    Build with CPPFLAGS='-DUSE_STACK_LISP_OBJECTS=0' to disable it.  */
 
+#if (!defined USE_STACK_LISP_OBJECTS \
+     && defined __GNUC__ && !defined __clang__ \
+     && !(4 < __GNUC__ + (3 < __GNUC_MINOR__ + (2 <= __GNUC_PATCHLEVEL__))))
+  /* Work around GCC bugs 36584 and 35271, which were fixed in GCC 4.3.2.  */
+# define USE_STACK_LISP_OBJECTS false
+#endif
 #ifndef USE_STACK_LISP_OBJECTS
 # define USE_STACK_LISP_OBJECTS true
 #endif
