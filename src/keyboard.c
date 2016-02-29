@@ -427,6 +427,15 @@ kset_system_key_syms (struct kboard *kb, Lisp_Object val)
 }
 
 
+static bool
+echo_keystrokes_p (void)
+{
+  return (!cursor_in_echo_area)
+	 && (FLOATP (Vecho_keystrokes) ? XFLOAT_DATA (Vecho_keystrokes) > 0.0
+	     : INTEGERP (Vecho_keystrokes) ? XINT (Vecho_keystrokes) > 0
+             : false);
+}
+
 /* Add C to the echo string, without echoing it immediately.  C can be
    a character, which is pretty-printed, or a symbol, whose name is
    printed.  */
@@ -568,7 +577,9 @@ echo_update (void)
 static void
 echo_now (void)
 {
-  if (!current_kboard->immediate_echo)
+  if (!current_kboard->immediate_echo
+      /* This test breaks calls that use `echo_now' to display the echo_prompt.
+         && echo_keystrokes_p () */)
     {
       current_kboard->immediate_echo = true;
       echo_update ();
@@ -2268,13 +2279,6 @@ read_decoded_event_from_main_queue (struct timespec *end_time,
 	}
 #endif
     }
-}
-
-static bool
-echo_keystrokes_p (void)
-{
-  return (FLOATP (Vecho_keystrokes) ? XFLOAT_DATA (Vecho_keystrokes) > 0.0
-	  : INTEGERP (Vecho_keystrokes) ? XINT (Vecho_keystrokes) > 0 : false);
 }
 
 /* Read a character from the keyboard; call the redisplay if needed.  */
@@ -8936,11 +8940,15 @@ read_key_sequence (Lisp_Object *keybuf, int bufsize, Lisp_Object prompt,
 	     of echoing, so that it serves as a prompt for the next
 	     character.  */
 	  kset_echo_prompt (current_kboard, prompt);
+          /* FIXME: This use of echo_now doesn't look quite right and is ugly
+             since it forces us to fiddle with current_kboard->immediate_echo
+             before and after.  */
 	  current_kboard->immediate_echo = false;
 	  echo_now ();
+          if (!echo_keystrokes_p ())
+	    current_kboard->immediate_echo = false;
 	}
-      else if (cursor_in_echo_area
-	       && echo_keystrokes_p ())
+      else if (echo_keystrokes_p ())
 	/* This doesn't put in a dash if the echo buffer is empty, so
 	   you don't always see a dash hanging out in the minibuffer.  */
 	echo_dash ();
@@ -11668,8 +11676,8 @@ It's called with one argument, the help string to display.  */);
 
 After a command is executed, if point moved into a region that has
 special properties (e.g. composition, display), Emacs adjusts point to
-the boundary of the region.  But when a command binds this variable to
-non-nil, this point adjustment is suppressed.
+the boundary of the region.  But when a command leaves this variable at
+a non-nil value (e.g., with a setq), this point adjustment is suppressed.
 
 This variable is set to nil before reading a command, and is checked
 just after executing the command.  */);
@@ -11680,8 +11688,8 @@ just after executing the command.  */);
 	       doc: /* If non-nil, always suppress point adjustments.
 
 The default value is nil, in which case point adjustments are
-suppressed only after special commands that set
-`disable-point-adjustment' (which see) to non-nil.  */);
+suppressed only after special commands that leave
+`disable-point-adjustment' (which see) at a non-nil value.  */);
   Vglobal_disable_point_adjustment = Qnil;
 
   DEFVAR_LISP ("minibuffer-message-timeout", Vminibuffer_message_timeout,
