@@ -114,6 +114,7 @@ term/pc-win.elc \
 ls-lisp.elc \
 disp-table.elc \
 term/common-win.elc \
+international/ucs-normalize.elc \
 term/ns-win.elc \
 mwheel.elc \
 emacs-lisp/float-sup.elc \
@@ -124,13 +125,7 @@ electric.elc \
 emacs-lisp/eldoc.elc \
 cus-start.elc \
 tooltip.elc \
-emacs-lisp/easymenu.elc \
-paren.elc \
-timezone.elc \
-emacs-lisp/advice.elc \
-delsel.elc \
-emulation/cua-base.elc \
-leim/leim-list.elc \
+leim/leim-list.el \
 site-load.elc \
 site-init.elc \
 
