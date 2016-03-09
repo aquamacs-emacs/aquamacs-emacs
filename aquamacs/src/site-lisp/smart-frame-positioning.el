@@ -18,7 +18,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
-;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2013 David Reitter
+;; Copyright (C) 2005-2010, 2013, 2015 David Reitter
 
 ;; Smart Frame Positioning Mode: In environments where many frames are
 ;;  opened, this mode shows them in useful positions on the screen so
@@ -106,12 +106,14 @@ by any of the hook functions, will normally be preserved."
 
 (defun display-get-info (frame)
   (let ((frame (or frame (selected-frame)))
-	(info (ns-display-monitor-attributes-list)))
+	(info (ns-display-monitor-attributes-list))
+        (display-info nil))
     (mapc (lambda (entry)
 	    (let ((fr (assq 'frames entry)))
 	      (if (member frame fr)
 		  (setq display-info entry
-		      info nil)))) info)
+                        info nil))))
+          info)
   display-info))
 
 (defun smart-tool-bar-pixel-height (&optional frame)
