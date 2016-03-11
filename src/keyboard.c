@@ -6513,7 +6513,7 @@ modify_event_symbol (ptrdiff_t symbol_num, int modifiers, Lisp_Object symbol_kin
       else if (name_table != 0 && name_table[symbol_num])
 	value = intern (name_table[symbol_num]);
 
-#ifdef HAVE_X11
+#ifdef HAVE_WINDOW_SYSTEM
       if (NILP (value))
 	{
 	  char *name = x_get_keysym_name (symbol_num);
