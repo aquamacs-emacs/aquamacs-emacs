@@ -1,16 +1,16 @@
 ;;; -*- Emacs-Lisp -*-
 ;;; <plaintext>
-;;; revive.el: Resume Emacs and Aquamacs.
+;;; revive.el: Resume Emacs.
 ;;; (c) 1994-2003 by HIROSE Yuuji [yuuji@gentei.org]
-;;; (c) 2011 by David Reitter [david.reitter@gmail.com]
-;;; revive.el 2.20aquamacs 2011/11/17
+;;; $Id: revive.el,v 2.19 2008/05/13 01:19:16 yuuji Exp $
+;;; Last modified Tue May 13 10:18:52 2008 on firestorm
 
-;;;[[[   NOTICE ���� NOTICE ���� NOTICE ���� NOTICE ���� NOTICE ����   ]]]
+;;;[[[   NOTICE íçà” NOTICE íçà” NOTICE íçà” NOTICE íçà” NOTICE íçà”   ]]]
 ;;;--------------------------------------------------------------------------
 ;;;	If you are using `windows.el', you can omit the settings of
 ;;;	define-key and autoload.
-;;;	windows.el�����i�g�������������� revive.el ���������L�[��������
-;;;	����autoload�������������K�v�������������B
+;;;	windows.elÇïÅíiégÇ¡ÇƒÇ¢ÇÈèÍçáÇÕ revive.el ÇÃÇΩÇﬂÇÃÉLÅ[ÇÃäÑÇËìñ
+;;;	ÇƒÇ‡autoloadÇÃê›íËÇ‡Ç∑ÇÈïKóvÇ™Ç†ÇËÇ‹ÇπÇÒÅB
 ;;;--------------------------------------------------------------------------
 ;;;
 ;;;		Resume Emacs:		revive.el
@@ -22,33 +22,24 @@
 ;;;	`desktop.el' nor by `saveconf.el', into a file  and reconstructs
 ;;;	that status correctly.
 ;;;
-;;;     This version of `revive' can use `desktop' to save and
-;;;	restore global variables and buffers.  It saves all frames.
-;;;     It also integrated with Aquamacs' `tabbar' package.
-;;;
 ;;;[Installation]
 ;;;
 ;;;	  Put revive.el into your elisp  directory included in load-path
 ;;;	and write the next expressions.
 ;;;
-;;;	  (autoload 'revive-save-desktop "revive" "Save status" t)
-;;;	  (autoload 'revive-desktop "revive" "Resume Emacs" t)
+;;;	  (autoload 'save-current-configuration "revive" "Save status" t)
+;;;	  (autoload 'resume "revive" "Resume Emacs" t)
 ;;;	  (autoload 'wipe "revive" "Wipe Emacs" t)
 ;;;
 ;;;	And define favorite keys to those functions.  Here is a sample.
 ;;;
-;;;	  (define-key ctl-x-map "S" 'revive-save-desktop)
-;;;	  (define-key ctl-x-map "F" 'revive-desktop)
+;;;	  (define-key ctl-x-map "S" 'save-current-configuration)
+;;;	  (define-key ctl-x-map "F" 'resume)
 ;;;	  (define-key ctl-x-map "K" 'wipe)
 ;;;
 ;;;[How to use]
 ;;;
-;;;     Call `revive-desktop' to load the configuration;
-;;;     call `revive-save-desktop' to save it to the file.
-;;;     This will use the `desktop' package that comes with Emacs.
-;;; 
-;;;	Alternatively, you can sidestep the `desktop' package and
-;;;     call `save-current-configuration' (`C-x S' if you define key as
+;;;	 Call `save-current-configuration' (`C-x S' if you define key as
 ;;;	above) when  you want to   save current editing status  and call
 ;;;	`resume' to restore it.  Numerical prefix  arg to them specifies
 ;;;	the buffer number in which the editing status will be saved.
@@ -57,12 +48,7 @@
 ;;;		C-u 2 C-x S		;save status into the buffer #2
 ;;;		C-u 3 C-x F		;load status from the buffer #3
 ;;;
-;;;     This variant will only store and restore one frame.
-;;;
 ;;;[Save Variables]
-;;;
-;;;     NOTE: use `desktop' and related configuration variables unless
-;;;     using the resume/save-current-configuration mechanism.
 ;;;
 ;;;	  Revive.el can save global or local variables.  The default
 ;;;	variables to be saved are in revive:save-variables-global-default
@@ -77,8 +63,6 @@
 ;;;
 ;;;[Restoring abnormal buffers]
 ;;;
-;;;     If using `save-current-configuration' and `resume', the following
-;;;     mechanisms for non-file buffers are available.
 ;;;	  The variable revive:major-mode-command-alist-default holds the
 ;;;	list of  major-mode  name  vs.   command  name.   For  example,
 ;;;	mh-rmail  command sees the directory ~/Mail/inbox/ and sets  the
@@ -144,14 +128,105 @@
 ;;;	not responsible  for  any  possible   defects   caused  by  this
 ;;;	software.
 ;;;
-;;;	  Comments  and bug   reports  are welcome. Don't  hesitate   to
-;;;	report them.  My e-mail address is following.
+;;;	  Comments  and bug   reports  are welcome. Don't  hesitated  to
+;;;	report.  My possible e-mail address is following.
 ;;;
 ;;;							yuuji@gentei.org
 ;;;
+;;; Japanese Document follows:
+;;;
+;;;ÅyreviveÇ∆ÇÕÅz
+;;;
+;;;	  revive.el ÇégÇ§Ç∆ÅAEmacs égópéûÇÃèÛë‘ÇÉtÉ@ÉCÉãÇ…ÉZÅ[ÉuÇµÇƒÅA
+;;;	éüâÒ Emacs ÇãNìÆÇ∑ÇÈéûÇ…ÇªÇÃèÛë‘Ç…ïúãAÇ∑ÇÈÇ±Ç∆Ç™Ç≈Ç´Ç‹Ç∑ÅBÇ‡Çø
+;;;	ÇÎÇÒÉEÉBÉìÉhÉEÇÃï™äÑèÛë‘Ç‡ïúå≥Ç≥ÇÍÇÈÇÃÇ≈ saveconf Ç‚ desktop Ç≈
+;;;	Ç¢ÇÁÇ¢ÇÁÇµÇƒÇ¢ÇΩêlÇ…Ç‡Ç®ä©ÇﬂÇ≈Ç∑ÅB
+;;;
+;;;ÅyëgÇ›çûÇ›ï˚Åz
+;;;
+;;;	  revive.el Ç load-path ÇÃí Ç¡ÇΩÉfÉBÉåÉNÉgÉäÇ…ì¸ÇÍÅA~/.emacs Ç…
+;;;	à»â∫ÇÃãLèqÇì¸ÇÍÇƒÇ≠ÇæÇ≥Ç¢ÅB
+;;;
+;;;	  (autoload 'save-current-configuration "revive" "Save status" t)
+;;;	  (autoload 'resume "revive" "Resume Emacs" t)
+;;;	  (autoload 'wipe "revive" "Wipe emacs" t)
+;;;
+;;;	ÇªÇµÇƒè„ÇÃä÷êîÇçDÇ´Ç»ÉLÅ[Ç…äÑÇËìñÇƒÇƒÇ≠ÇæÇ≥Ç¢ÅBà»â∫ÇÕó·Ç≈Ç∑ÅB
+;;;
+;;;	  (define-key ctl-x-map "S" 'save-current-configuration)
+;;;	  (define-key ctl-x-map "F" 'resume)
+;;;	  (define-key ctl-x-map "K" 'wipe)
+;;;
+;;;ÅyégÇ¢ï˚Åz
+;;;
+;;;	  è„ÇÃ define-key ÇÇµÇΩèÍçáÇ…ÇÕÅAC-x S Ç≈åªç›ÇÃï“èWèÛë‘ÇÉZÅ[Éu
+;;;	Ç∑ÇÈÇ±Ç∆Ç™Ç≈Ç´Ç‹Ç∑ÅBsave-current-configuration ä÷êîÇ…êîà¯êîÇÇ¬
+;;;	ÇØÇÈÇ∆ï°êîÇÃèÛë‘Çï ÅXÇ…ÉZÅ[ÉuÇ≈Ç´Ç‹Ç∑ÅBÅuC-u 2 C-x SÅvÇ∆Ç∑ÇÈÇ∆2
+;;;	î‘ÇÃÉoÉbÉtÉ@Ç…åªèÛÇÉZÅ[ÉuÇ≈Ç´Ç‹Ç∑ÅBÇ±ÇÍÇÉçÅ[ÉhÇ∑ÇÈéûÇ‡ìØólÇ…
+;;;	ÅuC-u 2 C-x FÅvÇ∆É^ÉCÉvÇ∑ÇÈÇ∆2î‘ÇÃÉoÉbÉtÉ@Ç©ÇÁèÛë‘ÇÉçÅ[ÉhÇµÇ‹Ç∑ÅB
+;;;
+;;;ÅyïœêîÇÃÉZÅ[ÉuÅz
+;;;
+;;;	  ïœêîÇÃílÇ‡ÉZÅ[ÉuÇµÇƒÇ®Ç≠Ç±Ç∆Ç™Ç≈Ç´Ç‹Ç∑ÅBÉfÉtÉHÉãÉgÇ≈ÉZÅ[ÉuÇ∑ÇÈ 
+;;;	global ïœêîÇÕ revive:save-variables-global-default Ç…ÅAlocal ïœ
+;;;	êîÇÕ revive:save-variables-local-default Ç…íËã`Ç≥ÇÍÇƒÇ¢Ç‹Ç∑ÅBÇŸ
+;;;	Ç©ÇÃïœêîÇ‡ï€ë∂ÇµÇΩÇ¢èÍçáÇÕÅArevive:save-variables-global-private 
+;;;	Ç… global ïœêîñºÇÅArevive:save-variables-local-private Ç… local 
+;;;	ïœêîñºÇÇªÇÍÇºÇÍÉäÉXÉgÇÃå`Ç≈íËã`ÇµÇƒÇ®Ç´Ç‹Ç∑ÅBó·Ç¶ÇŒ gmhist ÇégÇ¡
+;;;	ÇƒÇ¢ÇÈèÍçáÇ…ÇÕÅA
+;;;
+;;;		(setq revive:save-variables-global-private
+;;;		      '(file-history buffer-history minibuffer-history))
+;;;
+;;;	Ç»Ç«Ç∆ ~/.emacs Ç…èëÇ¢ÇƒÇ®Ç≠Ç∆âıìKÇ≈ÇµÇÂÇ§ÅB
+;;;
+;;;ÅyïÅí Ç≈Ç»Ç¢ÉoÉbÉtÉ@ÇÃàµÇ¢Åz
+;;;
+;;;	  mh-rmail Ç≈ÇÕÉJÉåÉìÉgÉoÉbÉtÉ@Ç™ mh-folder-mode, gnus Ç≈ÇÕÉJÉå
+;;;	ÉìÉgÉoÉbÉtÉ@Ç™ gnus-Group-mode Ç…Ç»ÇËÇ‹Ç∑ÅBÇ±ÇÃëŒâûä÷åWÇÕÅAïœêî 
+;;;	revive:major-mode-command-alist-default Ç…èëÇ©ÇÍÇƒÇ¢Ç‹Ç∑ÅBÇ±ÇÃïœ
+;;;	êîÇ…ìoò^Ç≥ÇÍÇƒÇ¢ÇÈà»äOÇÃÇ‡ÇÃÇíËã`ÇµÇΩÇ¢èÍçáÇÕÅA
+;;;
+;;;		(setq revive:major-mode-command-alist-private
+;;;		  '((hogehoge-mode	. hoge)
+;;;		    (herohero-mode	. herohero)
+;;;		    ("É^ÉCÉvÅïÉÅÉjÉÖÅ["	. trr)))
+;;;
+;;;	ÇÃÇÊÇ§Ç… revive:major-mode-command-alist-private ÇÃílÇê›íËÇ∑ÇÈ
+;;;	Ç∆éüâÒ resume ÇµÇΩéûÇ…é©ìÆìIÇ…ëŒâûÇ∑ÇÈÉRÉ}ÉìÉhÇ™ãNìÆÇ≥ÇÍÇ‹Ç∑ÅBÇ‹
+;;;	ÇΩè„ÇÃó·Ç…Ç†ÇÈÇÊÇ§Ç…ÅAmajor-mode(ÉVÉìÉ{Éã)ÇÃë„ÇÌÇËÇ… buffer-name
+;;;	(ï∂éöóÒ)ÇéwíËÇ∑ÇÈÇ±Ç∆Ç‡Ç≈Ç´Ç‹Ç∑ÅB
+;;;
+;;;	  Ç‹ÇΩÅASKKÇÃé´èëÇÃÇÊÇ§Ç…ÉäÉWÉÖÅ[ÉÄÇ∑ÇÈÇ∆Ç§Ç‹Ç≠ìÆÇ©Ç»Ç≠Ç»Ç¡ÇƒÇµ
+;;;	Ç‹Ç§ÉoÉbÉtÉ@Ç™Ç†ÇÈèÍçáÇÕÅAïœêî revive:ignore-buffer-pattern Ç…Çª
+;;;	ÇÃÉoÉbÉtÉ@ñºÇ™É}ÉbÉ`Ç∑ÇÈÇÊÇ§Ç»ê≥ãKï\åªÇê›íËÇµÇƒÇ≠ÇæÇ≥Ç¢ÅB
+;;;
+;;;ÅyÉvÉçÉOÉâÉÄÇ©ÇÁégÇ§Åz
+;;;
+;;;	  âpåÍî≈ÉhÉLÉÖÉÅÉìÉg [For programmers] ÇÃçÄÇéQè∆ÇµÇƒÇ≠ÇæÇ≥Ç¢ÅB
+;;;
+;;;ÅyÇ†Ç∆Ç™Ç´Åz
+;;;
+;;;	  ç≈èâÇÕ resume Ç∆Ç¢Ç§ÉtÉ@ÉCÉãñºÇæÇ¡ÇΩÇÃÇ≈Ç∑Ç™ÅAEmacs 19 ÇÃÉfÉB
+;;;	ÉåÉNÉgÉäÇ… resume.el Ç∆Ç¢Ç§ÉtÉ@ÉCÉãÇ™Ç†Ç¡ÇƒÉVÉáÉbÉNÇéÛÇØÇ‹ÇµÇΩÅB
+;;;	Ç±ÇøÇÁÇÕÉRÉ}ÉìÉhÉâÉCÉìÇ≈âΩâÒ emacs Ç∆ë≈Ç¡ÇƒÇ‡ÅAä˘Ç…ãNìÆÇµÇƒÇ¢ÇÈ 
+;;;	emacs Ç…ÉtÉ@ÉCÉãÇìnÇ∑Ç∆Ç¢Ç§ÇæÇØÇÃ(ÉsÅ[Å[)ÉvÉçÉOÉâÉÄÇ≈ÅuÇ«Ç±Ç™ 
+;;;	resume Ç‚ÇÀÇÒÅvÇ∆åæÇ¢ÇΩÇ≠Ç»ÇËÇ‹ÇµÇΩÇ™â‰ñùÇµÇƒ revive.el Ç…ÉäÉlÅ[
+;;;	ÉÄÇµÇ‹ÇµÇΩÅBÇ†Ç†Ç‹Ç¡ÇΩÇ≠ÅAsaveconf Ç≈Ç‡ desktop Ç≈Ç‡Ç»ÇµìæÇ»Ç©Ç¡
+;;;	ÇΩÉEÉBÉìÉhÉEï™äÑèÛë‘ÇÃïúå≥ÇÉTÉ|Å[ÉgÇµÇΩÇ∆åæÇ§ÇÃÇ…ÅcÅAÇ»ÇÒÇƒÇ±Ç∆
+;;;	ÇÕâpåÍî≈Ç…ÇÕèëÇØÇ»Ç¢Ç»:-)ÅB
+;;;
+;;;ÅyéÊÇËàµÇ¢Åz
+;;;
+;;;	  Ç±ÇÃÉvÉçÉOÉâÉÄÇÕÅAÉtÉäÅ[É\ÉtÉgÉEÉFÉAÇ∆Ç¢ÇΩÇµÇ‹Ç∑ÅBÇ±ÇÃÉvÉçÉOÉâ
+;;;	ÉÄÇégópÇµÇƒê∂Ç∂ÇΩÇ¢Ç©Ç»ÇÈåãâ Ç…ëŒÇµÇƒÇ‡çÏé“ÇÕàÍêÿÇÃê”îCÇïâÇÌÇ»
+;;;	Ç¢Ç‡ÇÃÇ∆Ç¢ÇΩÇµÇ‹Ç∑Ç™ÅAÉRÉÅÉìÉgÇ‚ÉoÉOÉåÉ|Å[ÉgÇÕëÂÇ¢Ç…äΩå}Ç¢ÇΩÇµÇ‹
+;;;	Ç∑ÅBÇ®ãCåyÇ…Ç≤òAóçâ∫Ç≥Ç¢ÅBòAóçÇÕà»â∫ÇÃÉAÉhÉåÉXÇ‹Ç≈Ç®äËÇ¢Ç¢ÇΩÇµÇ‹
+;;;	Ç∑(2003/6åªç›)ÅB
+;;;							yuuji@gentei.org
 
 (defconst revive:version
-  "2.20"
+  "$Id: revive.el,v 2.19 2008/05/13 01:19:16 yuuji Exp $"
   "Version of revive.el")
 
 (defconst revive:version-prefix ";;;")
@@ -202,7 +277,7 @@
 		 (throw 'found nil)))))
 	(error "Unexpected window configuration."))
     (setq curwin win wlist (list win))
-    (while (not (eq curwin (setq win (next-window win "w/o mini"))))
+    (while (not (eq curwin (setq win (next-window win))))
       (setq wlist (append wlist (list win)))) ;use append to preserve order
     wlist))
 
@@ -327,12 +402,15 @@ EDGES is a list of sub-windows' edges."
 	  (revive:select-window-by-edge x1 y1)
 	  (revive:split-window-safe nil (- div-y y1))
 	  (revive:restore-winconf x1 y1 x2 div-y former)
-	  (revive:restore-winconf x1 div-y x2 y2 latter))
+	  (revive:restore-winconf x1 div-y x2 y2 latter)
+	  (message "=="))
 	 ((= y1 (nth 1 divwin))
 	  (revive:select-window-by-edge x1 y1)
 	  (revive:split-window-safe nil (- div-x x1) t)
 	  (revive:restore-winconf x1 y1 div-x y2 former)
-	  (revive:restore-winconf div-x y1 x2 y2 latter))))))))
+	  (revive:restore-winconf div-x y1 x2 y2 latter)
+	  (message "||"))
+	 (t (message "dame!"))))))))
 
 (defvar revive:major-mode-command-alist-default
   '((gnus-Group-mode	. gnus)
@@ -393,9 +471,7 @@ those variable have already localized by their major mode.")
   "*User defined list of the mode specific local variables to save.")
 
 (defvar revive:configuration-file
-  (cond ((eq system-type 'ms-dos) "~/_revive.el")
-	((boundp 'aquamacs-version) "~/Library/Preferences/Aquamacs Emacs/Revive.el")
-	(t "~/.revive.el"))
+  (if (eq system-type 'ms-dos) "~/_revive.el" "~/.revive.el")
   "*File to save window configuration")
 
 (defvar revive:ignore-buffer-pattern "^ \\*"
@@ -439,7 +515,7 @@ window-edges whose first member is always of north west window.
 Buffer-List is a list of buffer property list of all windows.  This
 property lists are stored in order corresponding to Edge-List.  Buffer
 property list is formed as
-'((buffer-file-name) (buffer-name) (point) (window-start) tabs).
+'((buffer-file-name) (buffer-name) (point) (window-start)).
 "
   (let ((curwin (selected-window))
 	(wlist (revive:window-list)) (edges (revive:all-window-edges)) buflist)
@@ -458,9 +534,7 @@ property list is formed as
 				       (buffer-file-name))
 				     (buffer-name)
 				     (point)
-				     (window-start)
-				     (car (if (fboundp 'tabbar-window-list-tabsets-to-save)
-					      (tabbar-window-list-tabsets-to-save t))))))
+				     (window-start))))
 	      wlist (cdr wlist)))
       (select-window curwin)
       (list (revive:screen-width) (revive:screen-height) edges buflist))))
@@ -473,8 +547,6 @@ property list is formed as
   (list 'nth 2 x))
 (defmacro revive:get-window-start (x)
   (list 'nth 3 x))
-(defmacro revive:get-tabs (x)
-  (list 'nth 4 x))
 
 (defun revive:find-file (file)
   "Make the best effort to find-file FILE."
@@ -493,47 +565,33 @@ property list is formed as
 	       (current-buffer))))
    (t nil)))
 
-(defun revive:find-buffer (name file)
-  (or (and file 
-	   (find-buffer-visiting file))
-      (get-buffer name)))
-
 ;;;###autoload
 (defun restore-window-configuration (config)
   "Restore the window configuration.
 Configuration CONFIG should be created by
 current-window-configuration-printable."
-  (let ((one-buffer-one-frame-inhibit t) (one-buffer-one-frame-mode nil)
-	(width (car config)) (height (nth 1 config))
-	(edges (nth 2 config)) (winlist (nth 3 config)) winspec (num 1)
-	(windows-to-delete))
+  (let ((width (car config)) (height (nth 1 config))
+	(edges (nth 2 config)) (buflist (nth 3 config)) buf)
     (set-buffer (get-buffer-create "*scratch*"))
     (setq edges (revive:normalize-edges width height edges))
     (construct-window-configuration edges)
     (revive:select-window-by-edge (revive:minx) (revive:miny))
-    (while winlist
-      (setq winspec (car winlist))
-      (if (fboundp 'tabbar-window-restore-tabs-in-window)
-	  (unless (tabbar-window-restore-tabs-in-window (revive:get-tabs winspec))
-	    (setq winspec nil)
-	    (add-to-list 'windows-to-delete (selected-window))))
-      (if winspec
-	  (let ((target-buffer (revive:find-buffer (revive:get-buffer winspec) (revive:get-file winspec))))
-	(cond
-	 (target-buffer
-	  (switch-to-buffer target-buffer)
-	  (goto-char (revive:get-window-start winspec)) ;to prevent high-bit missing
-	  (set-window-start nil (point))
-	  (goto-char (revive:get-point winspec)))
-	 ((and (stringp (revive:get-file winspec))
-	       (not (file-directory-p (revive:get-file winspec)))
-		 (revive:find-file (revive:get-file winspec)))
-	  (set-window-start nil (revive:get-window-start winspec))
-	  (goto-char (revive:get-point winspec))))))
-      (setq winlist (cdr winlist))
-      (other-window 1))
-    (mapc (lambda (w) (if (window-live-p w) (delete-window w))) windows-to-delete)
-    ))
+    (while buflist
+      (setq buf (car buflist))
+      (cond
+       ((and (revive:get-buffer buf)
+	     (get-buffer (revive:get-buffer buf)))
+	(switch-to-buffer (revive:get-buffer buf))
+	(goto-char (revive:get-window-start buf)) ;to prevent high-bit missing
+	(set-window-start nil (point))
+	(goto-char (revive:get-point buf)))
+       ((and (stringp (revive:get-file buf))
+	     (not (file-directory-p (revive:get-file buf)))
+	     (revive:find-file (revive:get-file buf)))
+	(set-window-start nil (revive:get-window-start buf))
+	(goto-char (revive:get-point buf))))
+      (setq buflist (cdr buflist))
+      (other-window 1))))
 
 ;;;	
 (defun revive:buffer-list ()
@@ -826,195 +884,15 @@ Configuration should be saved by save-current-configuration."
   (require 'cc-mode)
   (revive:find-file (revive:prop-file-name x))
   (funcall (revive:prop-major-mode x))
-  (c-set-style (or (revive:prop-get-value x 'c-indentation-style) "gnu")))
-
-
-(defvar revive:app-restore-path user-emacs-directory)
-(defvar revive:desktop-base-file-name "SessionDesktop.el")
-(defvar revive:frame-configuration-to-restore nil "This variable is typically set by the desktop file.
-Its value is evaluated after loading the file in `revive:restore-application-state'.")
-
-;;;###autoload
-(defun revive-desktop (&optional file auto)
-  "Restores the application state.
-Similar to `resume', though using `desktop' to restore buffers."
-  (interactive)
-  (require 'desktop)
-  (when (and (called-interactively-p) (not auto))
-    (setq file
-	  (expand-file-name
-	  (if (or  
-	       (and last-nonmenu-event 
-		    (not (consp last-nonmenu-event))) 
-	       ;;(not (eq (car-safe last-nonmenu-event)  
-	       ;;	  'mac-apple-event)))
-	       (not use-dialog-box)
-	       (not window-system))
-	      (read-file-name "Session file to load: " nil revive:desktop-base-file-name 'mustmatch)
-	    (ns-read-file-name "Session file to load" nil 'mustmatch revive:desktop-base-file-name)))))
-
-  (message "Restoring application state.")
-  (interactive)
-  (let ((one-buffer-one-frame-mode nil)
-	(desktop-base-file-name (if (and file (not (file-directory-p file)))
-				    (file-name-nondirectory file)
-				  revive:desktop-base-file-name))
-	(desktop-missing-file-warning nil)
-	(desktop-load-locked-desktop t))
-    (cl-letf ((y-or-n-p (&rest args) t)
-	   (yes-or-no-p (&rest args) t)
-		 (desktop-clear nil)) 
-      (desktop-read (if file (if (file-directory-p file) file (file-name-directory file)) revive:app-restore-path))
-      ;; restore window config, if any
-      (eval revive:frame-configuration-to-restore)
-      (setq revive:frame-configuration-to-restore nil))))
-
-(defun revive:restore-frame (fp fc)
-  "Restores configuration of a single frame.
-Uses frame parameters FP and window configuration FC."
-  (let ((f (make-frame (append '((visibility . nil)) fp)))) ; needed in Emacs 23 (iconified)
-    (select-frame f)
-    (sit-for 0) ; needed in Emacs 23 for various frames
-    (set-frame-parameter f 'visibility t) ; needed in Emacs 23 (iconified frames)
-    (sit-for 0) ; needed in Emacs 23 for various frames
-    (set-frame-parameter f 'visibility (or (cdr (assq 'visibility fp)) t)) ; Emacs 23
-    (restore-window-configuration fc)
-    ;; (if (eq 'icon (cdr (assq 'visibility fp)))
-    ;; 	(iconify-frame f)))
-  t))
-
-(defun revive:print-frame-states ()
-  "Prints commands to set frame / window configuration.
-Suitable for use in `desktop-save-hook'"
-  (insert "(setq revive:frame-configuration-to-restore\n  '(progn ")
-  (condition-case err
-      (mapc (lambda (f)
-	      (and (frame-visible-p f) ; do not store invisible frames
-		   (let ((p (frame-parameters f)))
-		     (insert 
-		      (format "\n     \(revive:restore-frame '%S '%S\)"
-			      (mapcon (lambda (x)
-					(unless (memq (caar x) 
-						      '(buried-buffer-list 
-							buffer-list minibuffer 
-							display display-type window-system 
-							parent-id window-id font-backend
-							name))
-					  (list (car x))))
-				      p)
-			      (with-selected-frame f
-				;; this function from revive.el
-				(current-window-configuration-printable)))))))
-	    (frame-list))
-    (error (message "Error while saving application state: %s" err)))
-  (insert "))\n"))
-
-
-;;;###autoload
-(defun revive-save-desktop (&optional file auto)
-  "Save application state with `desktop' and `revive'.
-Similar to `save-current-configuration', 
-though uses `desktop' to restore buffers."
-  (interactive)
-  (require 'desktop)
-  (when (and (called-interactively-p) (not auto) (not file))
-    (setq file
-	  (if (or  
-	       (and last-nonmenu-event 
-		    (not (consp last-nonmenu-event))) 
-	       ;;(not (eq (car-safe last-nonmenu-event)  
-	       ;;	  'mac-apple-event)))
-	       (not use-dialog-box)
-	       (not window-system))
-	      (read-file-name "Session file for saving: ")
-	    (ns-read-file-name "Session file for saving" nil nil revive:desktop-base-file-name))))
-  (let ((desktop-base-file-name (if (and file (not (file-directory-p file)))
-				    (file-name-nondirectory file)
-				  revive:desktop-base-file-name))
-	(desktop-save-hook desktop-save-hook))
-    (add-hook 'desktop-save-hook #'revive:print-frame-states)
-    (cl-letf ((y-or-n-p (&rest args) t)
-	   (yes-or-no-p (&rest args) t)) 
-      (desktop-save (if file (if (file-directory-p file)
-				 file
-			       (file-name-directory file)) revive:app-restore-path) 
-		    'release))))
-
-
-(defcustom revive-desktop-after-launching nil
-  "Control whether to restore the desktop after application launch.
-If set to nil (default), the system control this behavior, and the
-desktop state is saved when required by the system and upon exiting
-Emacs.  If set to `never', the desktop is never stored nor restored.
-If set to t, desktop is always saved and restored.
-
-Under Mac OS X 10.7 `Lion' or later, sessions are stored regularly and retrieved
-upon application start in case the system reboots or the application exists
-unexpectedly.
-
-As application state, Aquamacs stores all buffers showing a file, all tabs,
-windows and frames and their exact locations, and some customization variables.
-Process buffers are not stored."
-  :group 'Aquamacs
-  :version 23.3
-  :type '(choice :tag "Restore desktop..."
-		 (const :tag "always" t)
-		 (const :tag "automatically" nil)
-		 (const :tag "never" 'never)))
-
-(defun revive:revive-desktop (&optional delete-frames)
-  "Automatically restores desktop.
-Does nothing if `revive-desktop-after-launching' is set to `never'.
-If DELETE-FRAMES is non-nil, delete all pre-existing frames."
-  (interactive)
-  (unless (eq 'never revive-desktop-after-launching)
-    (if (boundp 'ns-session-restore-request)
-	(setq ns-session-restore-request 'restored))
-    (condition-case err
-	(let ((frames (visible-frame-list)))
-	  (revive-desktop nil 'auto)
-	  (mapcar #'delete-frame frames))
-      (error (message "Error while restoring application state: %s" err)))))
-
-(defun revive:auto-save-desktop ()
-  "Automatically save desktop.
-Does nothing if `revive-desktop-after-launching' is set to `never'."
-  (interactive)
-  (unless (or (eq 'never revive-desktop-after-launching)
-	      ;; do not save before restoring, if requested
-	      (and (boundp 'ns-session-restore-request)
-		   (eq 'requested ns-session-restore-request)))
-    (condition-case err
-	(revive-save-desktop nil 'auto)
-      (error (message "Error while saving application state: %s" err)))))
-
-(defun revive:after-application-start ()
-  "Restore desktop after application start, if so requested.
-See also `revive-desktop-after-launching'."
-  (unless (or (eq 'never revive-desktop-after-launching) noninteractive)
-    (when (or revive-desktop-after-launching
-	      (and (boundp 'ns-session-restore-request)
-		   (eq 'requested ns-session-restore-request)))
-      (revive:revive-desktop 'delete-frames))))
-
-(defun revive:setup ()
-  (when (not noninteractive)
-    (add-hook 'kill-emacs-hook #'revive:auto-save-desktop)
-    (add-hook 'after-init-hook #'revive:after-application-start 'append)
-    (when (featurep 'ns)
-      (define-key global-map [ns-application-restore] 'revive:revive-desktop)
-      (define-key global-map [ns-application-store-state] 'revive:auto-save-desktop))))
-
+  (c-set-style (or (revive:prop-get-value x 'c-indentation-style) "gnu"))
+)
 
 ;;(provide 'resume)
 (provide 'revive)
 
 
-;; revive.el,v 2.20aquamacs
-
-;; Revision 2.20aquamacs  2011/11/17 davidswelt
-;; Store/restore full application state.  Use Revive for windows, tabbar for tabs.
-;;
+;; $Id: revive.el,v 2.19 2008/05/13 01:19:16 yuuji Exp $
+;; $Log: revive.el,v $
 ;; Revision 2.19  2008/05/13 01:19:16  yuuji
 ;; Add below to revive:save-variables-global-default.
 ;; * file-name-history buffer-name-history minibuffer-history
