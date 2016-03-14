@@ -1,17 +1,17 @@
-;;; -*- Emacs-Lisp -*-
-;;; <plaintext>
-;;; revive.el: Resume Emacs and Aquamacs.
-;;; (c) 1994-2003 by HIROSE Yuuji [yuuji@gentei.org]
-;;; (c) 2011 by David Reitter [david.reitter@gmail.com]
-;;; revive.el 2.19aquamacs 2011/11/17
+;;; revive.el --- Resume Emacs -*- coding: euc-jp -*-
+;;; (c) 1994-2014 by HIROSE Yuuji [yuuji@gentei.org]
+;;; (c) 2011-2016 by David Reitter [david.reitter@gmail.com]
+;;; $Id: revive.el,v 2.23-aquamacs 2016/03/13 08:00:00 davidswelt Exp $
 
-;;;[[[   NOTICE ���� NOTICE ���� NOTICE ���� NOTICE ���� NOTICE ����   ]]]
+;;;[[[   NOTICE      NOTICE      NOTICE      NOTICE      NOTICE        ]]]
 ;;;--------------------------------------------------------------------------
 ;;;	If you are using `windows.el', you can omit the settings of
 ;;;	define-key and autoload.
-;;;	windows.el�����i�g�������������� revive.el ���������L�[��������
-;;;	����autoload�������������K�v�������������B
+;;;	windows.el                       revive.el
+;;;	    autoload
 ;;;--------------------------------------------------------------------------
+;;;
+;;; Commentary:
 ;;;
 ;;;		Resume Emacs:		revive.el
 ;;;
@@ -48,7 +48,7 @@
 ;;;     This will use the `desktop' package that comes with Emacs.
 ;;; 
 ;;;	Alternatively, you can sidestep the `desktop' package and
-;;;     call `save-current-configuration' (`C-x S' if you define key as
+;;;	 Call `save-current-configuration' (`C-x S' if you define key as
 ;;;	above) when  you want to   save current editing status  and call
 ;;;	`resume' to restore it.  Numerical prefix  arg to them specifies
 ;;;	the buffer number in which the editing status will be saved.
@@ -150,8 +150,10 @@
 ;;;							yuuji@gentei.org
 ;;;
 
+;;; Code:
+
 (defconst revive:version
-  "2.20"
+  "$Id: revive.el,v 2.23 2015/03/20 04:03:45 yuuji Exp $"
   "Version of revive.el")
 
 (defconst revive:version-prefix ";;;")
@@ -307,7 +309,7 @@ EDGES is a list of sub-windows' edges."
      ;; |top   |2 |  horizontally.  And call this function recursively on
      ;; +---+--+--+  former (that is, upper half in vertical division or
      ;; |3  |4..  |  left half in horizontal) and latter configuration.
-     ;; +---+-----+  
+     ;; +---+-----+
      (t
       (let ((flist (list topwin))
 	    (elist (cdr edges)) divwin div-x div-y former latter)
@@ -348,12 +350,13 @@ EDGES is a list of sub-windows' edges."
     ;;(c-mode		. revive:c-set-style)
     ;;(cc-mode		. revive:c-set-style)
     ;;(java-mode		. revive:c-set-style)
+    (twittering-mode . revive:twittering)
     )
-  "Default alist of major-mode vs. command name.")
+  "Default alist of `major-mode' vs. command name.")
 (defvar revive:major-mode-command-alist-private nil
   "*User defined revive:major-mode-command-alist")
 (defvar revive:major-mode-command-alist nil
-  "*Alist of major-mode vs. commandname.")
+  "*Alist of `major-mode' vs. commandname.")
 (setq revive:major-mode-command-alist
       (append revive:major-mode-command-alist-private
 	      revive:major-mode-command-alist-default))
@@ -384,7 +387,8 @@ EDGES is a list of sub-windows' edges."
     (yahtml-mode YaTeX-parent-file)
     (c-mode c-indentation-style c-basic-offset)
     (cc-mode c-indentation-style c-basic-offset)
-    (java-mode c-indentation-style c-basic-offset))
+    (java-mode c-indentation-style c-basic-offset)
+    (twittering-mode twittering-timeline-spec-string))
   "Default list of the mode specific local variables to save.
 Actually, revive doesn't make the buffer local variables assuming
 those variable have already localized by their major mode.")
@@ -519,11 +523,11 @@ current-window-configuration-printable."
 	    (add-to-list 'windows-to-delete (selected-window))))
       (if winspec
 	  (let ((target-buffer (revive:find-buffer (revive:get-buffer winspec) (revive:get-file winspec))))
-	(cond
+      (cond
 	 (target-buffer
 	  (switch-to-buffer target-buffer)
 	  (goto-char (revive:get-window-start winspec)) ;to prevent high-bit missing
-	  (set-window-start nil (point))
+	(set-window-start nil (point))
 	  (goto-char (revive:get-point winspec)))
 	 ((and (stringp (revive:get-file winspec))
 	       (not (file-directory-p (revive:get-file winspec)))
@@ -555,7 +559,7 @@ current-window-configuration-printable."
 
 (defun revive:varlist (var2save)
   "Return the (variable . value) list of variables in VAR2SAVE."
-  (delq nil (mapcar 
+  (delq nil (mapcar
 	     (function (lambda (s)
 			 (if (and s (boundp s)) (cons s (symbol-value s)))))
 	     var2save)))
@@ -585,7 +589,7 @@ Variable-List is a return value of revive:varlist."
 	(local-var (append revive:save-variables-local-default
 			   revive:save-variables-local-private))
 	(mode-local-var (append revive:save-variables-mode-local-default
-				revive:save-variables-mode-local-private))) 
+				revive:save-variables-mode-local-private)))
     (save-excursion
       (run-hooks 'revive:buffer-property-list-hook)
       (while buflist
@@ -642,12 +646,14 @@ Variable-List is a return value of revive:varlist."
     (widen)
     (goto-char (point-min))
     (and (search-forward revive:version-prefix nil t)
-	 (goto-char (match-beginning 0)) (kill-line 1))
+	 (goto-char (match-beginning 0))
+	 (delete-region (point) (progn (forward-line 1) (point))))
     (insert (format "%s%s\n" revive:version-prefix revive:version))
     (setq num (or num 1))
     (if (re-search-forward (format "^(%d" num) nil t)
 	(progn (goto-char (match-beginning 0))
-	       (kill-sexp 1) (delete-char 1))
+	       (delete-region (point) (progn (forward-list 1)(point)))
+	       (delete-char 1))
       (goto-char (point-max)))
     (delete-blank-lines)
     (if (not (bolp)) (newline 1))
@@ -692,10 +698,12 @@ Variable-List is a return value of revive:varlist."
 	      )))
       (cond
        (success
-	(if (not (string= (revive:prop-buffer-name x) (buffer-name)))
-	    (rename-buffer (revive:prop-buffer-name x)))
+	(and (not (string= (revive:prop-buffer-name x) (buffer-name)))
+	     (not  (get-buffer (revive:prop-buffer-name x)))
+	     (rename-buffer (revive:prop-buffer-name x)))
 	(set-mark (revive:prop-mark x))
 	(goto-char (revive:prop-point x))
+	(and (fboundp 'region-active-p) (region-active-p) (deactivate-mark))
 	(revive:restore-value (revive:prop-varlist x))))
       (setq blist (cdr blist)))
     (run-hooks 'revive:restore-buffers-hook)))
@@ -717,8 +725,8 @@ Configuration should be saved by save-current-configuration."
 			   (buffer-substring
 			    (point)
 			    (prog2 (end-of-line) (point)))))
-	     (y-or-n-p
-	      "Configuration file's version conflicts. Continue?"))
+	     (not (y-or-n-p
+		   "Configuration file's version conflicts. Continue?")))
 	(error "Configuration file is old.  Please update."))
     (if (null (re-search-forward (format "^(%d" num) nil t))
 	(error "Configuration empty."))
@@ -789,7 +797,7 @@ Configuration should be saved by save-current-configuration."
 	    "~/"))
   (or (and (boundp 'mew-path) mew-path)
       (and (fboundp 'mew-init) (let (mew-demo) (mew-init))))
-  (mew-cache-flush)			;Mew should take more care of 
+  (mew-cache-flush)			;Mew should take more care of
   (get-buffer-create " *mew tmp*")	;unexisting buffer...
   (let ((b (revive:prop-buffer-name x)))
     (cond
@@ -828,6 +836,14 @@ Configuration should be saved by save-current-configuration."
   (funcall (revive:prop-major-mode x))
   (c-set-style (or (revive:prop-get-value x 'c-indentation-style) "gnu")))
 
+(defun revive:twittering ()
+  "Restore buffer of twittering mode.
+This functionality is considered to be migrated from `twittering-mode'."
+  (interactive)
+  (require 'twittering-mode)
+  (twittering-visit-timeline
+   (revive:prop-get-value x 'twittering-timeline-spec-string)))
+
 
 (defvar revive:app-restore-path user-emacs-directory)
 (defvar revive:desktop-base-file-name "SessionDesktop.el")
@@ -861,7 +877,7 @@ Similar to `resume', though using `desktop' to restore buffers."
 				  revive:desktop-base-file-name))
 	(desktop-missing-file-warning nil)
 	(desktop-load-locked-desktop t))
-    (cl-letf ((y-or-n-p (&rest args) t)
+    (cl-flet ((y-or-n-p (&rest args) t)
 	   (yes-or-no-p (&rest args) t)
 		 (desktop-clear nil)) 
       (desktop-read (if file (if (file-directory-p file) file (file-name-directory file)) revive:app-restore-path))
@@ -933,7 +949,7 @@ though uses `desktop' to restore buffers."
 				  revive:desktop-base-file-name))
 	(desktop-save-hook desktop-save-hook))
     (add-hook 'desktop-save-hook #'revive:print-frame-states)
-    (cl-letf ((y-or-n-p (&rest args) t)
+    (cl-flet ((y-or-n-p (&rest args) t)
 	   (yes-or-no-p (&rest args) t)) 
       (desktop-save (if file (if (file-directory-p file)
 				 file
@@ -1010,10 +1026,23 @@ See also `revive-desktop-after-launching'."
 (provide 'revive)
 
 
-;; revive.el,v 2.20aquamacs
 
-;; Revision 2.20aquamacs  2011/11/17 davidswelt
+;; $Id: revive.el,v 2.23 2015/03/20 04:03:45 yuuji Exp $
+;; $Log: revive.el,v $
+;; Revision 2.23-aquamacs  2016/03/13 davidswelt
 ;; Store/restore full application state.  Use Revive for windows, tabbar for tabs.
+;;
+;; Revision 2.23  2015/03/20 04:03:45  yuuji
+;; Summary: kill-sexp replaced to delete-region
+;;
+;; Revision 2.22  2014/04/02 14:25:14  yuuji
+;; Check existence of buffer
+;;
+;; Revision 2.21  2012/08/12 11:56:06  yuuji
+;; Switched to euc-jp.
+;;
+;; Revision 2.20  2012/07/25 23:37:38  yuuji
+;; Update headers and headings.
 ;;
 ;; Revision 2.19  2008/05/13 01:19:16  yuuji
 ;; Add below to revive:save-variables-global-default.
@@ -1104,3 +1133,4 @@ See also `revive-desktop-after-launching'."
 ; paragraph-start: "^$\\|\\|;;;$"
 ; paragraph-separate: "^$\\|\\|;;;$"
 ; End:
+;;; revive.el ends here
