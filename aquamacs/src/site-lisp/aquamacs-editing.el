@@ -102,7 +102,9 @@ like `unfill-region'."
 	;; 	(backward-paragraph 1)
 	;; 	(next-line 1)
 	(beginning-of-line 1)
-	(set-fill-prefix)
+        (progn ;;flet ((message (_x &rest _y) nil))
+          (set-fill-prefix)
+          (message nil))
 	(set (make-local-variable 'use-hard-newlines) nil)
 	(set (make-local-variable 'sentence-end-double-space) t)
 	(set (make-local-variable 'paragraph-start)
@@ -117,12 +119,13 @@ like `unfill-region'."
 	(set (make-local-variable 'sentence-end-double-space) nil)
 	(set (make-local-variable 'paragraph-start)
 		 "\\*\\| \\|#\\|;\\|:\\||\\|!\\|$"))
-
   (unless use-hard-newlines
 	;; 	(backward-paragraph 1)
 	;; 	(next-line 1)
 	(beginning-of-line 1)
-	(set-fill-prefix)
+	(progn ;;flet ((message (_x &rest _y) nil))
+          (set-fill-prefix)
+          (message nil))
 	(set (make-local-variable 'sentence-end-double-space) t)
 	(set (make-local-variable 'paragraph-start)
 		 "[ ¡¡	\n]")
