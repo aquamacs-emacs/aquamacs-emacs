@@ -6,8 +6,8 @@ This file is part of GNU Emacs.
 
 GNU Emacs is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+the Free Software Foundation, either version 3 of the License, or (at
+your option) any later version.
 
 GNU Emacs is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -532,7 +532,7 @@ bidi_copy_it (struct bidi_it *to, struct bidi_it *from)
   /* Copy everything from the start through the active part of
      the level stack.  */
   memcpy (to, from,
-	  (offsetof (struct bidi_it, level_stack[1])
+	  (offsetof (struct bidi_it, level_stack) + sizeof from->level_stack[0]
 	   + from->stack_idx * sizeof from->level_stack[0]));
 }
 
@@ -1919,8 +1919,6 @@ bidi_resolve_explicit (struct bidi_it *bidi_it)
 	{
 	  eassert (bidi_it->prev.charpos == bidi_it->charpos - 1);
 	  prev_type = bidi_it->prev.orig_type;
-	  if (prev_type == FSI)
-	    prev_type = bidi_it->type_after_wn;
 	}
     }
   /* Don't move at end of buffer/string.  */
@@ -1935,8 +1933,6 @@ bidi_resolve_explicit (struct bidi_it *bidi_it)
 	emacs_abort ();
       bidi_it->bytepos += bidi_it->ch_len;
       prev_type = bidi_it->orig_type;
-      if (prev_type == FSI)
-	prev_type = bidi_it->type_after_wn;
     }
   else	/* EOB or end of string */
     prev_type = NEUTRAL_B;
@@ -2091,10 +2087,17 @@ bidi_resolve_explicit (struct bidi_it *bidi_it)
       if (typ1 != STRONG_R && typ1 != STRONG_AL)
 	{
 	  type = LRI;
+	  /* Override orig_type, which will be needed when we come to
+	     examine the next character, which is the first character
+	     inside the isolate.  */
+	  bidi_it->orig_type = type;
 	  goto fsi_as_lri;
 	}
       else
-	type = RLI;
+	{
+	  type = RLI;
+	  bidi_it->orig_type = type;
+	}
       /* FALLTHROUGH */
     case RLI:	/* X5a */
       if (override == NEUTRAL_DIR)
@@ -2315,7 +2318,31 @@ bidi_resolve_weak (struct bidi_it *bidi_it)
 	      if (bidi_it->next_en_type == WEAK_EN) /* ET/BN with EN after it */
 		type = WEAK_EN;
 	    }
-	  else if (bidi_it->next_en_pos >=0)
+	  else if (type == WEAK_BN
+		   /* This condition is for the following important case:
+
+		      . we are at level zero
+		      . either previous strong character was L,
+			 or we've seen no strong characters since sos
+			 and the base paragraph direction is L2R
+		      . this BN is NOT a bidi directional control
+
+		      For such a situation, either this BN will be
+		      converted to EN per W5, and then to L by virtue
+		      of W7; or it will become ON per W6, and then L
+		      because of N1/N2.  So we take a shortcut here
+		      and make it L right away, to avoid the
+		      potentially costly loop below.  This is
+		      important when the buffer has a long series of
+		      control characters, like binary nulls, and no
+		      R2L characters at all.  */
+		   && new_level == 0
+		   && !bidi_explicit_dir_char (bidi_it->ch)
+		   && ((bidi_it->last_strong.type == STRONG_L)
+		       || (bidi_it->last_strong.type == UNKNOWN_BT
+			   && bidi_it->sos == L2R)))
+	    type = STRONG_L;
+	  else if (bidi_it->next_en_pos >= 0)
 	    {
 	      /* We overstepped the last known position for ET
 		 resolution but there could be other such characters
@@ -2978,9 +3005,10 @@ bidi_resolve_neutral (struct bidi_it *bidi_it)
 	 entering the expensive loop in the "else" clause.  */
       else if (current_level == 0
 	       && bidi_it->prev_for_neutral.type == STRONG_L
-	       && type != WEAK_BN
-	       && !bidi_explicit_dir_char (bidi_it->ch)
-	       && !bidi_isolate_fmt_char (type))
+	       && (ASCII_CHAR_P (bidi_it->ch)
+		   || (type != WEAK_BN
+		       && !bidi_explicit_dir_char (bidi_it->ch)
+		       && !bidi_isolate_fmt_char (type))))
 	type = bidi_resolve_neutral_1 (bidi_it->prev_for_neutral.type,
 				       STRONG_L, current_level);
       else if (/* current level is 1 */
@@ -3160,7 +3188,7 @@ bidi_level_of_next_char (struct bidi_it *bidi_it)
 	}
     }
 
-  /* Perhaps the character we want is already cached s fully resolved.
+  /* Perhaps the character we want is already cached as fully resolved.
      If it is, the call to bidi_cache_find below will return a type
      other than UNKNOWN_BT.  */
   if (bidi_cache_idx > bidi_cache_start && !bidi_it->first_elt)
@@ -3220,7 +3248,10 @@ bidi_level_of_next_char (struct bidi_it *bidi_it)
   if ((bidi_it->orig_type == NEUTRAL_WS
        || bidi_it->orig_type == WEAK_BN
        || bidi_isolate_fmt_char (bidi_it->orig_type))
-      && bidi_it->next_for_ws.charpos < bidi_it->charpos)
+      && bidi_it->next_for_ws.charpos < bidi_it->charpos
+      /* If this character is already at base level, we don't need to
+	 reset it, so avoid the potentially costly loop below.  */
+      && level != bidi_it->level_stack[0].level)
     {
       int ch;
       ptrdiff_t clen = bidi_it->ch_len;

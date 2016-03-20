@@ -409,15 +409,19 @@ A non-nil INTERACTIVE argument means to run the `post-self-insert-hook'."
          (last-command-event ?\n)
          ;; Don't auto-fill if we have a numeric argument.
          (auto-fill-function (if arg nil auto-fill-function))
+         (arg (prefix-numeric-value arg))
          (postproc
           ;; Do the rest in post-self-insert-hook, because we want to do it
           ;; *before* other functions on that hook.
           (lambda ()
-            (cl-assert (eq ?\n (char-before)))
+            ;; We are not going to insert any newlines if arg is
+            ;; non-positive.
+            (or (and (numberp arg) (<= arg 0))
+                (cl-assert (eq ?\n (char-before))))
             ;; Mark the newline(s) `hard'.
             (if use-hard-newlines
                 (set-hard-newline-properties
-                 (- (point) (prefix-numeric-value arg)) (point)))
+                 (- (point) arg) (point)))
             ;; If the newline leaves the previous line blank, and we
             ;; have a left margin, delete that from the blank line.
             (save-excursion
@@ -434,19 +438,21 @@ A non-nil INTERACTIVE argument means to run the `post-self-insert-hook'."
                 (move-to-left-margin nil t)))))
     (unwind-protect
         (if (not interactive)
-        ;; FIXME: For non-interactive uses, many calls actually just want
-        ;; (insert "\n"), so maybe we should do just that, so as to avoid
-        ;; the risk of filling or running abbrevs unexpectedly.
-        (let ((post-self-insert-hook (list postproc)))
-          (self-insert-command (prefix-numeric-value arg)))
-      (unwind-protect
-          (progn
-            (add-hook 'post-self-insert-hook postproc nil t)
-            (self-insert-command (prefix-numeric-value arg)))
-        ;; We first used let-binding to protect the hook, but that was naive
-        ;; since add-hook affects the symbol-default value of the variable,
-        ;; whereas the let-binding might only protect the buffer-local value.
-        (remove-hook 'post-self-insert-hook postproc t)))
+            ;; FIXME: For non-interactive uses, many calls actually
+            ;; just want (insert "\n"), so maybe we should do just
+            ;; that, so as to avoid the risk of filling or running
+            ;; abbrevs unexpectedly.
+            (let ((post-self-insert-hook (list postproc)))
+              (self-insert-command arg))
+          (unwind-protect
+              (progn
+                (add-hook 'post-self-insert-hook postproc nil t)
+                (self-insert-command arg))
+            ;; We first used let-binding to protect the hook, but that
+            ;; was naive since add-hook affects the symbol-default
+            ;; value of the variable, whereas the let-binding might
+            ;; only protect the buffer-local value.
+            (remove-hook 'post-self-insert-hook postproc t)))
       (cl-assert (not (member postproc post-self-insert-hook)))
       (cl-assert (not (member postproc (default-value 'post-self-insert-hook))))))
   nil)
@@ -3200,6 +3206,8 @@ shell (with its need to quote arguments)."
 (defun shell-command (command &optional output-buffer error-buffer)
   "Execute string COMMAND in inferior shell; display output, if any.
 With prefix argument, insert the COMMAND's output at point.
+
+Interactively, prompt for COMMAND in the minibuffer.
 
 If COMMAND ends in `&', execute it asynchronously.
 The output appears in the buffer `*Async Shell Command*'.

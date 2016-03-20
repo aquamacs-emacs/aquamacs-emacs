@@ -7,8 +7,8 @@ This file is part of GNU Emacs.
 
 GNU Emacs is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+the Free Software Foundation, either version 3 of the License, or (at
+your option) any later version.
 
 GNU Emacs is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -1257,10 +1257,31 @@ ns_clip_to_row (struct window *w, struct glyph_row *row,
    ========================================================================== */
 
 
+// This bell implementation shows the visual bell image asynchronously
+// from the rest of Emacs. This is done by adding a NSView to the
+// superview of the Emacs window and removing it using a timer.
+//
+// Unfortunately, some Emacs operations, like scrolling, is done using
+// low-level primitives that copy the content of the window, including
+// the bell image. To some extent, this is handled by removing the
+// image prior to scrolling and marking that the window is in need for
+// redisplay.
+//
+// To test this code, make sure that there is no artifacts of the bell
+// image in the following situations. Use a non-empty buffer (like the
+// tutorial) to ensure that a scroll is performed:
+//
+// * Single-window: C-g C-v
+//
+// * Side-by-windows: C-x 3 C-g C-v
+//
+// * Windows above each other: C-x 2 C-g C-v
+
 @interface EmacsBell : NSImageView
 {
   // Number of currently active bell:s.
   unsigned int nestCount;
+  NSView * mView;
   bool isAttached;
 }
 - (void)show:(NSView *)view;
@@ -1282,13 +1303,15 @@ ns_clip_to_row (struct window *w, struct glyph_row *row,
       // 2011, see https://savannah.gnu.org/bugs/?33396
       //
       // As a drop in replacement, a semitransparent gray square is used.
-      self.image = [[NSImage alloc] initWithSize:NSMakeSize(32, 32)];
+      self.image = [[NSImage alloc] initWithSize:NSMakeSize(32 * 5, 32 * 5)];
       [self.image lockFocus];
       [[NSColor colorForEmacsRed:0.5 green:0.5 blue:0.5 alpha:0.5] set];
       NSRectFill(NSMakeRect(0, 0, 32, 32));
       [self.image unlockFocus];
 #else
       self.image = [NSImage imageNamed:NSImageNameCaution];
+      [self.image setSize:NSMakeSize(self.image.size.width * 5,
+                                     self.image.size.height * 5)];
 #endif
     }
   return self;
@@ -1311,6 +1334,7 @@ ns_clip_to_row (struct window *w, struct glyph_row *row,
       [self setFrameSize:self.image.size];
 
       isAttached = true;
+      mView = view;
       [[[view window] contentView] addSubview:self
                                    positioned:NSWindowAbove
                                    relativeTo:nil];
@@ -1340,9 +1364,12 @@ ns_clip_to_row (struct window *w, struct glyph_row *row,
 
 -(void)remove
 {
+  NSTRACE ("[EmacsBell remove]");
   if (isAttached)
     {
+      NSTRACE_MSG ("removeFromSuperview");
       [self removeFromSuperview];
+      mView.needsDisplay = YES;
       isAttached = false;
     }
 }
@@ -1392,6 +1419,8 @@ static void hide_bell ()
      Ensure the bell is hidden.
    -------------------------------------------------------------------------- */
 {
+  NSTRACE ("hide_bell");
+
   if (bell_view != nil)
     {
       [bell_view remove];
@@ -2543,6 +2572,8 @@ ns_clear_frame_area (struct frame *f, int x, int y, int width, int height)
 static void
 ns_copy_bits (struct frame *f, NSRect src, NSRect dest)
 {
+  NSTRACE ("ns_copy_bits");
+
   if (FRAME_NS_VIEW (f))
     {
       hide_bell();              // Ensure the bell image isn't scrolled.

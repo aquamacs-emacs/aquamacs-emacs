@@ -23,7 +23,7 @@ dnl  along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
 
 AC_PREREQ(2.65)
 dnl Note this is parsed by (at least) make-dist and lisp/cedet/ede/emacs.el.
-AC_INIT(GNU Emacs, 25.0.91, bug-gnu-emacs@gnu.org)
+AC_INIT(GNU Emacs, 25.0.92, bug-gnu-emacs@gnu.org)
 
 dnl Set emacs_config_options to the options of 'configure', quoted for the shell,
 dnl and then quoted again for a C string.  Separate options with spaces.
@@ -877,18 +877,19 @@ AC_CACHE_CHECK([whether the compiler is clang], [emacs_cv_clang],
 
 # When compiling with GCC, prefer -isystem to -I when including system
 # include files, to avoid generating useless diagnostics for the files.
-if test "$gl_gcc_warnings" != yes; then
+AS_IF([test "$gl_gcc_warnings" != yes],
+ [
   isystem='-I'
-  if test "$emacs_cv_clang" = yes
-  then
+  AS_IF([test "$emacs_cv_clang" = yes],
+   [
      # Turn off some warnings if supported.
      gl_WARN_ADD([-Wno-switch])
      gl_WARN_ADD([-Wno-tautological-constant-out-of-range-compare])
      gl_WARN_ADD([-Wno-pointer-sign])
      gl_WARN_ADD([-Wno-string-plus-int])
      gl_WARN_ADD([-Wno-unknown-attributes])
-  fi
-else
+   ])
+ ],[
   isystem='-isystem '
 
   # This, $nw, is the list of warnings we disable.
@@ -899,10 +900,9 @@ else
        # Old toolkits mishandle 'const'.
        nw="$nw -Wwrite-strings"
        ;;
-    *)
-       gl_WARN_ADD([-Werror], [WERROR_CFLAGS])
-       ;;
   esac
+  AS_IF([test -z "$nw"],
+    [gl_WARN_ADD([-Werror], [WERROR_CFLAGS])])
   AC_SUBST([WERROR_CFLAGS])
 
   nw="$nw -Wsystem-headers"         # Don't let system headers trigger warnings
@@ -985,7 +985,7 @@ else
 
   gl_MANYWARN_COMPLEMENT([GNULIB_WARN_CFLAGS], [$WARN_CFLAGS], [$nw])
   AC_SUBST([GNULIB_WARN_CFLAGS])
-fi
+ ])
 
 edit_cflags="
   s,///*,/,g
@@ -3594,14 +3594,6 @@ if test "${HAVE_X11}" = "yes"; then
     fi
   fi
   if test $HAVE_XRANDR = yes; then
-    SAVE_CFLAGS="$CFLAGS"
-    SAVE_LIBS="$LIBS"
-    CFLAGS="$XRANDR_CFLAGS $CFLAGS"
-    LIBS="$XRANDR_LIBS $LIBS"
-    AC_CHECK_FUNCS(XRRGetOutputPrimary XRRGetScreenResourcesCurrent)
-    CFLAGS="$SAVE_CFLAGS"
-    LIBS="$SAVE_LIBS"
-
     AC_DEFINE(HAVE_XRANDR, 1, [Define to 1 if you have the XRandr extension.])
   fi
 fi
@@ -5194,8 +5186,8 @@ This file is part of GNU Emacs.
 
 GNU Emacs is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+the Free Software Foundation, either version 3 of the License, or (at
+your option) any later version.
 
 GNU Emacs is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of

@@ -7,8 +7,8 @@ This file is part of GNU Emacs.
 
 GNU Emacs is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+the Free Software Foundation, either version 3 of the License, or (at
+your option) any later version.
 
 GNU Emacs is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -27,13 +27,12 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include "emacsgtkfixed.h"
 
 /* Silence a bogus diagnostic; see GNOME bug 683906.  */
-#if 4 < __GNUC__ + (7 <= __GNUC_MINOR__)
+#if 4 < __GNUC__ + (7 <= __GNUC_MINOR__) && ! GLIB_CHECK_VERSION (2, 35, 7)
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 #endif
 
 typedef struct _EmacsFixed EmacsFixed;
-typedef struct _EmacsFixedPrivate EmacsFixedPrivate;
 typedef struct _EmacsFixedClass EmacsFixedClass;
 
 struct _EmacsFixedPrivate

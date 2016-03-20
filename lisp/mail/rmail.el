@@ -2797,7 +2797,12 @@ The current mail message becomes the message displayed."
 	  ;; rmail-header-style based on the binding in effect when
 	  ;; this function is called; `rmail-toggle-headers' can
 	  ;; inspect this value to determine how to toggle.
-	  (set (make-local-variable 'rmail-header-style) header-style))
+	  (set (make-local-variable 'rmail-header-style) header-style)
+          ;; In case viewing the previous message sets the paragraph
+          ;; direction non-nil, we reset it here to allow independent
+          ;; dynamic determination of paragraph direction in every
+          ;; message.
+          (setq bidi-paragraph-direction nil))
 	(if (and rmail-enable-mime
 		 rmail-show-mime-function
 		 (re-search-forward "mime-version: 1.0" nil t))
@@ -4576,6 +4581,8 @@ Argument MIME is non-nil if this is a mime message."
 
     (list armor-start (- (point-max) after-end) mime
           armor-end-regexp)))
+
+(declare-function rmail-mime-entity-truncated "rmailmm" (entity))
 
 ;; Should this have a key-binding, or be in a menu?
 ;; There doesn't really seem to be an appropriate menu.
