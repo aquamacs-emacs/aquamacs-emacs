@@ -973,7 +973,7 @@ ns_update_auto_hide_menu_bar (void)
 static int ns_update_counter = 0;
 #endif
 
-static int
+static void
 ns_update_begin (struct frame *f)
 /* --------------------------------------------------------------------------
    Prepare for a grouped sequence of drawing calls
@@ -1001,9 +1001,15 @@ ns_update_begin (struct frame *f)
   }
 #endif
 
-  ns_updating_frame = f;
-  int succ = [view lockFocusIfCanDraw];
 
+  if ([view lockFocusIfCanDraw])
+    {
+      ns_updating_frame = f;
+    }
+  else
+    {
+      ns_updating_frame = NULL;
+    }
 
   /* When started from the console, we may not have a graphics state and
      drawing context. ns_update_begin will lead to an error and a warning message
@@ -1042,7 +1048,6 @@ ns_update_begin (struct frame *f)
 #ifdef NS_IMPL_GNUSTEP
   uRect = NSMakeRect (0, 0, 0, 0);
 #endif
-  return succ;
 }
 
 
@@ -1144,7 +1149,10 @@ ns_update_end (struct frame *f)
 
   block_input ();
 
+  if (ns_updating_frame != NULL)
+    {
   [view unlockFocus];
+    }
   ns_flush(f);
 
   unblock_input ();
@@ -1181,7 +1189,9 @@ ns_focus (struct frame *f, NSRect *r, int n)
             }
 
           if (view)
-            [view lockFocus];
+	    {
+	      [view lockFocus];
+	    }
           focus_view = view;
 /*if (view) debug_lock++; */
         }
@@ -2304,13 +2314,11 @@ note_mouse_movement (struct frame *frame, CGFloat x, CGFloat y)
   if (x < r->origin.x || x >= r->origin.x + r->size.width
       || y < r->origin.y || y >= r->origin.y + r->size.height)
     {
-      if (ns_update_begin(frame))
-	{
+      ns_update_begin(frame);
       frame->mouse_moved = 1;
       note_mouse_highlight (frame, x, y);
       remember_mouse_glyph (frame, x, y, r);
       ns_update_end (frame);
-	}
       return 1;
     }
 
