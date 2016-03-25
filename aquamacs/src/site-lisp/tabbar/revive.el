@@ -877,9 +877,9 @@ Similar to `resume', though using `desktop' to restore buffers."
 				  revive:desktop-base-file-name))
 	(desktop-missing-file-warning nil)
 	(desktop-load-locked-desktop t))
-    (cl-flet ((y-or-n-p (&rest args) t)
+    (flet ((y-or-n-p (&rest args) t)
 	   (yes-or-no-p (&rest args) t)
-		 (desktop-clear nil)) 
+           (desktop-clear nil))
       (desktop-read (if file (if (file-directory-p file) file (file-name-directory file)) revive:app-restore-path))
       ;; restore window config, if any
       (eval revive:frame-configuration-to-restore)
@@ -949,7 +949,7 @@ though uses `desktop' to restore buffers."
 				  revive:desktop-base-file-name))
 	(desktop-save-hook desktop-save-hook))
     (add-hook 'desktop-save-hook #'revive:print-frame-states)
-    (cl-flet ((y-or-n-p (&rest args) t)
+    (flet ((y-or-n-p (&rest args) t)
 	   (yes-or-no-p (&rest args) t)) 
       (desktop-save (if file (if (file-directory-p file)
 				 file
