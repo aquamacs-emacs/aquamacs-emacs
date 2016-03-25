@@ -453,7 +453,7 @@ ns_set_represented_filename (NSString* filename, struct frame *f)
         [[view window] setRepresentedFilename: @""];
 #endif
       [[view window] setRepresentedFilename: filename];
-    }
+}
 }
 
 void
@@ -673,13 +673,115 @@ ns_release_autorelease_pool (void *pool)
 }
 
 
-/* True, if the menu bar should be hidden.  */
-
 static BOOL
 ns_menu_bar_should_be_hidden (void)
+/* True, if the menu bar should be hidden.  */
 {
   return !NILP (ns_auto_hide_menu_bar)
     && [NSApp respondsToSelector:@selector(setPresentationOptions:)];
+}
+
+
+struct EmacsMargins
+{
+  CGFloat top;
+  CGFloat bottom;
+  CGFloat left;
+  CGFloat right;
+};
+
+
+static struct EmacsMargins
+ns_screen_margins (NSScreen *screen)
+/* The parts of SCREEN used by the operating system.  */
+{
+  NSTRACE ("ns_screen_margins");
+
+  struct EmacsMargins margins;
+
+  NSRect screenFrame = [screen frame];
+  NSRect screenVisibleFrame = [screen visibleFrame];
+
+  /* Sometimes, visibleFrame isn't up-to-date with respect to a hidden
+     menu bar, check this explicitly.  */
+  if (ns_menu_bar_should_be_hidden())
+    {
+      margins.top = 0;
+    }
+  else
+    {
+      CGFloat frameTop = screenFrame.origin.y + screenFrame.size.height;
+      CGFloat visibleFrameTop = (screenVisibleFrame.origin.y
+                                 + screenVisibleFrame.size.height);
+
+      margins.top = frameTop - visibleFrameTop;
+    }
+
+  {
+    CGFloat frameRight = screenFrame.origin.x + screenFrame.size.width;
+    CGFloat visibleFrameRight = (screenVisibleFrame.origin.x
+                                 + screenVisibleFrame.size.width);
+    margins.right = frameRight - visibleFrameRight;
+  }
+
+  margins.bottom = screenVisibleFrame.origin.y - screenFrame.origin.y;
+  margins.left   = screenVisibleFrame.origin.x - screenFrame.origin.x;
+
+  NSTRACE_MSG ("left:%g right:%g top:%g bottom:%g",
+               margins.left,
+               margins.right,
+               margins.top,
+               margins.bottom);
+
+  return margins;
+}
+
+
+/* A screen margin between 1 and DOCK_IGNORE_LIMIT (inclusive) is
+   assumed to contain a hidden dock.  OS X currently use 4 pixels for
+   this, however, to be future compatible, a larger value is used.  */
+#define DOCK_IGNORE_LIMIT 6
+
+static struct EmacsMargins
+ns_screen_margins_ignoring_hidden_dock (NSScreen *screen)
+/* The parts of SCREEN used by the operating system, excluding the parts
+reserved for an hidden dock.  */
+{
+  NSTRACE ("ns_screen_margins_ignoring_hidden_dock");
+
+  struct EmacsMargins margins = ns_screen_margins(screen);
+
+  /* OS X (currently) reserved 4 pixels along the edge where a hidden
+     dock is located.  Unfortunately, it's not possible to find the
+     location and information about if the dock is hidden.  Instead,
+     it is assumed that if the margin of an edge is less than
+     DOCK_IGNORE_LIMIT, it contains a hidden dock.  */
+  if (margins.left <= DOCK_IGNORE_LIMIT)
+    {
+      margins.left = 0;
+    }
+  if (margins.right <= DOCK_IGNORE_LIMIT)
+    {
+      margins.right = 0;
+    }
+  if (margins.top <= DOCK_IGNORE_LIMIT)
+    {
+      margins.top = 0;
+    }
+  /* Note: This doesn't occur in current versions of OS X, but
+     included for completeness and future compatibility.  */
+  if (margins.bottom <= DOCK_IGNORE_LIMIT)
+    {
+      margins.bottom = 0;
+    }
+
+  NSTRACE_MSG ("left:%g right:%g top:%g bottom:%g",
+               margins.left,
+               margins.right,
+               margins.top,
+               margins.bottom);
+
+  return margins;
 }
 
 
@@ -688,26 +790,11 @@ ns_menu_bar_height (NSScreen *screen)
 /* The height of the menu bar, if visible.
 
    Note: Don't use this when fullscreen is enabled -- the screen
-   sometimes includes, sometimes excludes the menu bar area. */
+   sometimes includes, sometimes excludes the menu bar area.  */
 {
-  CGFloat res;
+  struct EmacsMargins margins = ns_screen_margins(screen);
 
-  if (ns_menu_bar_should_be_hidden())
-    {
-      res = 0;
-    }
-  else
-    {
-      NSRect screenFrame = [screen frame];
-      NSRect screenVisibleFrame = [screen visibleFrame];
-
-      CGFloat frameTop = screenFrame.origin.y + screenFrame.size.height;
-      CGFloat visibleFrameTop = (screenVisibleFrame.origin.y
-                                 + screenVisibleFrame.size.height);
-
-      res = frameTop - visibleFrameTop;
-
-    }
+  CGFloat res = margins.top;
 
   NSTRACE ("ns_menu_bar_height " NSTRACE_FMT_RETURN " %.0f", res);
 
@@ -1004,7 +1091,7 @@ ns_update_begin (struct frame *f)
 
   if ([view lockFocusIfCanDraw])
     {
-      ns_updating_frame = f;
+  ns_updating_frame = f;
     }
   else
     {
@@ -1190,7 +1277,7 @@ ns_focus (struct frame *f, NSRect *r, int n)
 
           if (view)
 	    {
-	      [view lockFocus];
+            [view lockFocus];
 	    }
           focus_view = view;
 /*if (view) debug_lock++; */
@@ -2314,7 +2401,7 @@ note_mouse_movement (struct frame *frame, CGFloat x, CGFloat y)
   if (x < r->origin.x || x >= r->origin.x + r->size.width
       || y < r->origin.y || y >= r->origin.y + r->size.height)
     {
-      ns_update_begin(frame);
+      ns_update_begin (frame);
       frame->mouse_moved = 1;
       note_mouse_highlight (frame, x, y);
       remember_mouse_glyph (frame, x, y, r);
@@ -8882,9 +8969,10 @@ not_in_argv (NSString *arg)
   // the menu-bar.
   [super zoom:sender];
 
-#elsif 0
+#elif 0
   // Native zoom done using the standard zoom animation, plus an
-  // explicit resize to cover the full screen.
+  // explicit resize to cover the full screen, except the menu-bar and
+  // dock, if present.
   [super zoom:sender];
 
   // After the native zoom, resize the resulting frame to fill the
@@ -8904,6 +8992,9 @@ not_in_argv (NSString *arg)
       NSTRACE_FSTYPE ("fullscreenState", fs_state);
 
       NSRect sr = [screen frame];
+      struct EmacsMargins margins
+        = ns_screen_margins_ignoring_hidden_dock(screen);
+
       NSRect wr = [self frame];
       NSTRACE_RECT ("Rect after zoom", wr);
 
@@ -8912,15 +9003,15 @@ not_in_argv (NSString *arg)
       if (fs_state == FULLSCREEN_MAXIMIZED
           || fs_state == FULLSCREEN_HEIGHT)
         {
-          newWr.origin.x = 0;
-          newWr.size.height = sr.size.height - ns_menu_bar_height(screen);
+          newWr.origin.y = sr.origin.y + margins.bottom;
+          newWr.size.height = sr.size.height - margins.top - margins.bottom;
         }
 
       if (fs_state == FULLSCREEN_MAXIMIZED
           || fs_state == FULLSCREEN_WIDTH)
         {
-          newWr.origin.y = 0;
-          newWr.size.width = sr.size.width;
+          newWr.origin.x = sr.origin.x + margins.left;
+          newWr.size.width = sr.size.width - margins.right - margins.left;
         }
 
       if (newWr.size.width     != wr.size.width
