@@ -9,7 +9,7 @@ ORIGPATH=`pwd`
 
 DSYM_ROOT=~/Aquamacs.dSYM.archive
 
-BRANCH=aquamacs3
+BRANCH=rollback # aquamacs3
 EMACS_ROOT=`pwd`
 AQUAMACS_ROOT=`pwd`/aquamacs
 # find git:
