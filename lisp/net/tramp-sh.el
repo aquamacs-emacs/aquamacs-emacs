@@ -520,7 +520,6 @@ as given in your `~/.profile'."
 (defcustom tramp-remote-process-environment
   `("TMOUT=0" "LC_CTYPE=''"
     ,(format "TERM=%s" tramp-terminal-type)
-    "EMACS=t" ;; Deprecated; remove this line once Bash 4.4-or-later is common.
     ,(format "INSIDE_EMACS='%s,tramp:%s'" emacs-version tramp-version)
     "CDPATH=" "HISTORY=" "MAIL=" "MAILCHECK=" "MAILPATH=" "PAGER=cat"
     "autocorrect=" "correct=")
@@ -1525,7 +1524,7 @@ of."
 			  (current-time)
 			time))
 		;; With GNU Emacs, `format-time-string' has an
-		;; optional parameter UNIVERSAL.  This is preferred,
+		;; optional parameter ZONE.  This is preferred,
 		;; because we could handle the case when the remote
 		;; host is located in a different time zone as the
 		;; local host.
@@ -2865,7 +2864,7 @@ This is like `dired-recursive-delete-directory' for Tramp files."
 	  (narrow-to-region (point) (point))
 	  ;; We cannot use `insert-buffer-substring' because the Tramp
 	  ;; buffer changes its contents before insertion due to calling
-	  ;; `expand-file' and alike.
+	  ;; `expand-file-name' and alike.
 	  (insert
 	   (with-current-buffer (tramp-get-buffer v)
 	     (buffer-string)))
@@ -4865,7 +4864,7 @@ connection if a previous connection has died for some reason."
 	      (when (and p (processp p))
 		(delete-process p))
 	      (setenv "TERM" tramp-terminal-type)
-	      (setenv "LC_ALL" "en_US.utf8")
+	      (setenv "LC_ALL" (tramp-get-local-locale vec))
 	      (if (stringp tramp-histfile-override)
 		  (setenv "HISTFILE" tramp-histfile-override)
 		(if tramp-histfile-override
@@ -4875,6 +4874,8 @@ connection if a previous connection has died for some reason."
 		      (setenv "HISTSIZE" "0"))))
 	      (setenv "PROMPT_COMMAND")
 	      (setenv "PS1" tramp-initial-end-of-output)
+              (unless (stringp tramp-encoding-shell)
+                (tramp-error vec 'file-error "`tramp-encoding-shell' not set"))
 	      (let* ((target-alist (tramp-compute-multi-hops vec))
 		     ;; We will apply `tramp-ssh-controlmaster-options'
 		     ;; only for the first hop.
@@ -5521,13 +5522,15 @@ Return ATTR."
 		   vec "stat" (tramp-get-remote-path vec)))
 	  tmp)
       ;; Check whether stat(1) returns usable syntax.  "%s" does not
-      ;; work on older AIX systems.
+      ;; work on older AIX systems.  Recent GNU stat versions (8.24?)
+      ;; use shell quoted format for "%N", we check the boundaries "`"
+      ;; and "'", therefore.  See Bug#23422 in coreutils.
       (when result
 	(setq tmp
 	      (tramp-send-command-and-read
 	       vec (format "%s -c '(\"%%N\" %%s)' /" result) 'noerror))
 	(unless (and (listp tmp) (stringp (car tmp))
-		     (string-match "^./.$" (car tmp))
+		     (string-match "^`/'$" (car tmp))
 		     (integerp (cadr tmp)))
 	  (setq result nil)))
       result)))

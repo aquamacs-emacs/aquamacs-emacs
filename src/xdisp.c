@@ -17086,7 +17086,16 @@ redisplay_window (Lisp_Object window, bool just_this_one_p)
 	    ignore_mouse_drag_p = true;
 #endif
         }
+      ptrdiff_t count1 = SPECPDL_INDEX ();
+      /* x_consider_frame_title calls select-frame, which calls
+	 resize_mini_window, which could resize the mini-window and by
+	 that undo the effect of this redisplay cycle wrt minibuffer
+	 and echo-area display.  Binding inhibit-redisplay to t makes
+	 the call to resize_mini_window a no-op, thus avoiding the
+	 adverse side effects.  */
+      specbind (Qinhibit_redisplay, Qt);
       x_consider_frame_title (w->frame);
+      unbind_to (count1, Qnil);
 #endif
     }
 
@@ -25823,6 +25832,7 @@ append_glyph (struct it *it)
       glyph->object = it->object;
       if (it->pixel_width > 0)
 	{
+	  eassert (it->pixel_width <= SHRT_MAX);
 	  glyph->pixel_width = it->pixel_width;
 	  glyph->padding_p = false;
 	}
@@ -25903,6 +25913,7 @@ append_composite_glyph (struct it *it)
 	}
       glyph->charpos = it->cmp_it.charpos;
       glyph->object = it->object;
+      eassert (it->pixel_width <= SHRT_MAX);
       glyph->pixel_width = it->pixel_width;
       glyph->ascent = it->ascent;
       glyph->descent = it->descent;
@@ -26112,7 +26123,7 @@ produce_image_glyph (struct it *it)
 	{
 	  glyph->charpos = CHARPOS (it->position);
 	  glyph->object = it->object;
-	  glyph->pixel_width = it->pixel_width;
+	  glyph->pixel_width = clip_to_bounds (-1, it->pixel_width, SHRT_MAX);
 	  glyph->ascent = glyph_ascent;
 	  glyph->descent = it->descent;
 	  glyph->voffset = it->voffset;
@@ -26216,7 +26227,7 @@ produce_xwidget_glyph (struct it *it)
 	{
 	  glyph->charpos = CHARPOS (it->position);
 	  glyph->object = it->object;
-	  glyph->pixel_width = it->pixel_width;
+	  glyph->pixel_width = clip_to_bounds (-1, it->pixel_width, SHRT_MAX);
 	  glyph->ascent = glyph_ascent;
 	  glyph->descent = it->descent;
 	  glyph->voffset = it->voffset;
@@ -26302,7 +26313,9 @@ append_stretch_glyph (struct it *it, Lisp_Object object,
 	}
       glyph->charpos = CHARPOS (it->position);
       glyph->object = object;
-      glyph->pixel_width = width;
+      /* FIXME: It would be better to use TYPE_MAX here, but
+	 __typeof__ is not portable enough...  */
+      glyph->pixel_width = clip_to_bounds (-1, width, SHRT_MAX);
       glyph->ascent = ascent;
       glyph->descent = height - ascent;
       glyph->voffset = it->voffset;
@@ -26753,6 +26766,7 @@ append_glyphless_glyph (struct it *it, int face_id, bool for_no_font, int len,
 	}
       glyph->charpos = CHARPOS (it->position);
       glyph->object = it->object;
+      eassert (it->pixel_width <= SHRT_MAX);
       glyph->pixel_width = it->pixel_width;
       glyph->ascent = it->ascent;
       glyph->descent = it->descent;
@@ -31426,8 +31440,11 @@ Value is a number or a cons (WIDTH-DPI . HEIGHT-DPI).  */);
 	       Vtruncate_partial_width_windows,
     doc: /* Non-nil means truncate lines in windows narrower than the frame.
 For an integer value, truncate lines in each window narrower than the
-full frame width, provided the window width is less than that integer;
-otherwise, respect the value of `truncate-lines'.
+full frame width, provided the total window width in column units is less
+than that integer; otherwise, respect the value of `truncate-lines'.
+The total width of the window is as returned by `window-total-width', it
+includes the fringes, the continuation and truncation glyphs, the
+display margins (if any), and the scroll bar
 
 For any other non-nil value, truncate lines in all windows that do
 not span the full frame width.

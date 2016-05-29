@@ -111,7 +111,7 @@ should insert the feature name."
   ;; (point-min), which is acceptable in this case.
   :type 'regexp
   :group 'xref
-  :version "25.0")
+  :version "25.1")
 
 (defcustom find-alias-regexp
   "(defalias +'%s"
@@ -120,7 +120,7 @@ Note it must contain a `%s' at the place where `format'
 should insert the feature name."
   :type 'regexp
   :group 'xref
-  :version "25.0")
+  :version "25.1")
 
 (defvar find-function-regexp-alist
   '((nil . find-function-regexp)
@@ -357,8 +357,10 @@ signal an error.
 
 If VERBOSE is non-nil, and FUNCTION is an alias, display a
 message about the whole chain of aliases."
-  (let ((def (if (symbolp function)
-                 (find-function-advised-original function)))
+  (let ((def (when (symbolp function)
+               (or (fboundp function)
+                   (signal 'void-function (list function)))
+               (find-function-advised-original function)))
         aliases)
     ;; FIXME for completeness, it might be nice to print something like:
     ;; foo (which is advised), which is an alias for bar (which is advised).

@@ -279,7 +279,7 @@ Changes to files matching one of the regexps in this list are not listed.")
     "ChangeLog.nextstep" "Emacs.clr" "spec.txt"
     "gfdl.1"
     "texi/Makefile.in"
-    "lwlib/autodeps.mk"
+    "autodeps.mk"
     "oldXMenu/autodeps.mk"
     "src/autodeps.mk"
     "Imakefile" "icons/sink.ico" "aixcc.lex"
@@ -371,7 +371,7 @@ Changes to files matching one of the regexps in this list are not listed.")
     "lib/qset-acl.c" "lib/qcopy-acl.c" "lib/file-has-acl.c"
     ;; files from old MS Windows build procedures
     "makefile.w32-in"
-    "admin/unidata/makefile.w32-in"
+    "unidata/makefile.w32-in"
     "lib/makefile.w32-in"
     "leim/makefile.w32-in"
     "src/makefile.w32-in"
@@ -691,7 +691,8 @@ Changes to files in this list are not listed.")
     "mh-exec.el" "mh-init.el" "mh-customize.el"
     "net/zone-mode.el" "xesam.el"
     "term/mac-win.el" "sup-mouse.el"
-    "term/vt102.el" "term/vt201.el" "term/vt220.el" "term/vt300.el"
+    "term/apollo.el"
+    "term/vt102.el" "term/vt125.el" "term/vt201.el" "term/vt220.el" "term/vt300.el"
     "term/vt320.el" "term/vt400.el" "term/vt420.el"
     "url-https.el"
     "org-mac-message.el" "org-mew.el" "org-w3m.el" "org-vm.el" "org-wl.el"
@@ -1360,24 +1361,36 @@ and changed by AUTHOR."
 	    (cons (list author wrote-list cowrote-list changed-list)
 		  authors-author-list)))))
 
-(defun authors (root)
+(defun authors (root &optional nologupdate)
   "Extract author information from change logs and Lisp source files.
-ROOT is the root directory under which to find the files.  If called
-interactively, ROOT is read from the minibuffer.
-Result is a buffer *Authors* containing authorship information, and a
-buffer *Authors Errors* containing references to unknown files."
-  (interactive "DEmacs source directory: ")
+ROOT is the root directory under which to find the files.
+Interactively, read ROOT from the minibuffer.
+Accurate author information requires up-to-date change logs, so this
+first updates them, unless optional prefix argument NOLOGUPDATE is non-nil.
+The result is a buffer *Authors* containing authorship information,
+and a buffer *Authors Errors* containing references to unknown files."
+  (interactive "DEmacs source directory: \nP")
   (setq root (expand-file-name root))
+  (unless (file-exists-p (expand-file-name "src/emacs.c" root))
+    (unless (y-or-n-p
+             (format "Not the root directory of Emacs: %s, continue? " root))
+      (user-error "Not the root directory")))
+  ;; May contain your personal entries.
+  (or (not (file-exists-p (expand-file-name "ChangeLog" root)))
+      (y-or-n-p "Unversioned ChangeLog present, continue?")
+      (user-error "Unversioned ChangeLog may have irrelevant entries"))
+  (or nologupdate
+      ;; There are likely to be things that need fixing, so we update
+      ;; the versioned ChangeLog.N rather than the unversioned ChangeLog.
+      (zerop (call-process "make" nil nil nil
+                           "-C" root "change-history-nocommit"))
+      (error "Problem updating ChangeLog"))
   (let ((logs (process-lines find-program root "-name" "ChangeLog*"))
 	(table (make-hash-table :test 'equal))
 	(buffer-name "*Authors*")
 	authors-checked-files-alist
 	authors-invalid-file-names)
     (authors-add-fixed-entries table)
-    (unless (file-exists-p (expand-file-name "src/emacs.c" root))
-      (unless (y-or-n-p
-	       (format "Not the root directory of Emacs: %s, continue? " root))
-	(error "Not the root directory")))
     (dolist (log logs)
       (when (string-match "ChangeLog\\(.[0-9]+\\)?$" log)
 	(message "Scanning %s..." log)

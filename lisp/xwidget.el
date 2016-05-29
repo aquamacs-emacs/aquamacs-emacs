@@ -34,15 +34,8 @@
 (require 'cl-lib)
 (require 'bookmark)
 
-(defcustom xwidget-webkit-scroll-behavior 'native
-  "Scrolling behavior of the webkit instance.
-The possible values are: `native' or `image'."
-  :version "25.1"
-  :group 'frames   ; TODO add xwidgets group if more options are added
-  :type '(choice (const native) (const image)))
-
 (declare-function make-xwidget "xwidget.c"
-                  (beg end type title width height arguments &optional buffer))
+                  (type title width height arguments &optional buffer))
 (declare-function xwidget-set-adjustment "xwidget.c"
                   (xwidget axis relative value))
 (declare-function xwidget-buffer "xwidget.c" (xwidget))
@@ -66,8 +59,7 @@ See `make-xwidget' for the possible TYPE values.
 The usage of optional argument ARGS depends on the xwidget.
 This returns the result of `make-xwidget'."
   (goto-char pos)
-  (let ((id (make-xwidget (point) (point)
-                          type title width height args)))
+  (let ((id (make-xwidget type title width height args)))
     (put-text-property (point) (+ 1 (point))
                        'display (list 'xwidget ':xwidget id))
     id))
@@ -142,40 +134,24 @@ Interactively, URL defaults to the string looking like a url around point."
   "Keymap for `xwidget-webkit-mode'.")
 
 (defun xwidget-webkit-scroll-up ()
-  "Scroll webkit up.
-Depending on the value of `xwidget-webkit-scroll-behavior',
-this scrolls in `native' fashion, or like `image-mode' would."
+  "Scroll webkit up."
   (interactive)
-  (if (eq xwidget-webkit-scroll-behavior 'native)
-      (xwidget-set-adjustment (xwidget-webkit-last-session) 'vertical t 50)
-    (image-scroll-up)))
+  (xwidget-set-adjustment (xwidget-webkit-last-session) 'vertical t 50))
 
 (defun xwidget-webkit-scroll-down ()
-  "Scroll webkit down.
-Depending on the value of `xwidget-webkit-scroll-behavior',
-this scrolls in `native' fashion, or like `image-mode' would."
+  "Scroll webkit down."
   (interactive)
-  (if (eq xwidget-webkit-scroll-behavior 'native)
-      (xwidget-set-adjustment (xwidget-webkit-last-session) 'vertical t -50)
-    (image-scroll-down)))
+  (xwidget-set-adjustment (xwidget-webkit-last-session) 'vertical t -50))
 
 (defun xwidget-webkit-scroll-forward ()
-  "Scroll webkit forwards.
-Depending on the value of `xwidget-webkit-scroll-behavior',
-this scrolls in `native' fashion, or like `image-mode' would."
+  "Scroll webkit forwards."
   (interactive)
-  (if (eq xwidget-webkit-scroll-behavior 'native)
-      (xwidget-set-adjustment (xwidget-webkit-last-session) 'horizontal t 50)
-    (xwidget-webkit-scroll-forward)))   ; FIXME infloop!
+  (xwidget-set-adjustment (xwidget-webkit-last-session) 'horizontal t 50))
 
 (defun xwidget-webkit-scroll-backward ()
-  "Scroll webkit backwards.
-Depending on the value of `xwidget-webkit-scroll-behavior',
-this scrolls in `native' fashion, or like `image-mode' would."
+  "Scroll webkit backwards."
   (interactive)
-  (if (eq xwidget-webkit-scroll-behavior 'native)
-      (xwidget-set-adjustment (xwidget-webkit-last-session) 'horizontal t -50)
-    (xwidget-webkit-scroll-backward))) ; FIXME infloop!
+  (xwidget-set-adjustment (xwidget-webkit-last-session) 'horizontal t -50))
 
 
 ;; The xwidget event needs to go into a higher level handler
@@ -418,9 +394,7 @@ For example, use this to display an anchor."
 (defun xwidget-webkit-adjust-size-dispatch ()
   "Adjust size according to mode."
   (interactive)
-  (if (eq xwidget-webkit-scroll-behavior 'native)
-      (xwidget-webkit-adjust-size-to-window)
-    (xwidget-webkit-adjust-size-to-content))
+  (xwidget-webkit-adjust-size-to-window)
   ;; The recenter is intended to correct a visual glitch.
   ;; It errors out if the buffer isn't visible, but then we don't get
   ;; the glitch, so silence errors.
@@ -454,7 +428,7 @@ For example, use this to display an anchor."
     (setq xwidget-webkit-last-session-buffer (switch-to-buffer
                                               (get-buffer-create bufname)))
     (insert " 'a' adjusts the xwidget size.")
-    (setq xw (xwidget-insert 1 'webkit-osr  bufname 1000 1000))
+    (setq xw (xwidget-insert 1 'webkit  bufname 1000 1000))
     (xwidget-put xw 'callback 'xwidget-webkit-callback)
     (xwidget-webkit-mode)
     (xwidget-webkit-goto-uri (xwidget-webkit-last-session) url)))

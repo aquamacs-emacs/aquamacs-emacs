@@ -1108,7 +1108,9 @@ See `set-process-sentinel' for more info on sentinels.  */)
 
 DEFUN ("set-process-window-size", Fset_process_window_size,
        Sset_process_window_size, 3, 3, 0,
-       doc: /* Tell PROCESS that it has logical window size HEIGHT and WIDTH.  */)
+       doc: /* Tell PROCESS that it has logical window size WIDTH by HEIGHT.
+Value is t if PROCESS was successfully told about the window size,
+nil otherwise.  */)
   (Lisp_Object process, Lisp_Object height, Lisp_Object width)
 {
   CHECK_PROCESS (process);
@@ -4083,19 +4085,6 @@ Data that is unavailable is returned as nil.  */)
 #else
   return Qnil;
 #endif
-}
-
-/* If program file NAME starts with /: for quoting a magic
-   name, remove that, preserving the multibyteness of NAME.  */
-
-Lisp_Object
-remove_slash_colon (Lisp_Object name)
-{
-  return
-    ((SBYTES (name) > 2 && SREF (name, 0) == '/' && SREF (name, 1) == ':')
-     ? make_specified_string (SSDATA (name) + 2, SCHARS (name) - 2,
-			      SBYTES (name) - 2, STRING_MULTIBYTE (name))
-     : name);
 }
 
 /* Turn off input and output for process PROC.  */
@@ -7118,6 +7107,19 @@ add_timer_wait_descriptor (int fd)
 
 #endif /* HAVE_TIMERFD */
 
+/* If program file NAME starts with /: for quoting a magic
+   name, remove that, preserving the multibyteness of NAME.  */
+
+Lisp_Object
+remove_slash_colon (Lisp_Object name)
+{
+  return
+    ((SBYTES (name) > 2 && SREF (name, 0) == '/' && SREF (name, 1) == ':')
+     ? make_specified_string (SSDATA (name) + 2, SCHARS (name) - 2,
+			      SBYTES (name) - 2, STRING_MULTIBYTE (name))
+     : name);
+}
+
 /* Add DESC to the set of keyboard input descriptors.  */
 
 void
@@ -7643,13 +7645,6 @@ The variable takes effect when `start-process' is called.  */);
   defsubr (&Sset_process_filter_multibyte);
   defsubr (&Sprocess_filter_multibyte_p);
 
-#endif	/* subprocesses */
-
-  defsubr (&Sget_buffer_process);
-  defsubr (&Sprocess_inherit_coding_system_flag);
-  defsubr (&Slist_system_processes);
-  defsubr (&Sprocess_attributes);
-
  {
    Lisp_Object subfeatures = Qnil;
    const struct socket_options *sopt;
@@ -7684,4 +7679,10 @@ The variable takes effect when `start-process' is called.  */);
    Fprovide (intern_c_string ("make-network-process"), subfeatures);
  }
 
+#endif	/* subprocesses */
+
+  defsubr (&Sget_buffer_process);
+  defsubr (&Sprocess_inherit_coding_system_flag);
+  defsubr (&Slist_system_processes);
+  defsubr (&Sprocess_attributes);
 }

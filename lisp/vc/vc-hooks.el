@@ -40,7 +40,7 @@
   :group 'mode-line
   :version "25.1")
 
-(defface vc-state-base-face
+(defface vc-state-base
   '((default))
   "Base face for VC state indicator."
   :group 'vc-faces
@@ -48,49 +48,49 @@
   :version "25.1")
 
 (defface vc-up-to-date-state
-  '((default :inherit vc-state-base-face))
+  '((default :inherit vc-state-base))
   "Face for VC modeline state when the file is up to date."
   :version "25.1"
   :group 'vc-faces)
 
 (defface vc-needs-update-state
-  '((default :inherit vc-state-base-face))
+  '((default :inherit vc-state-base))
   "Face for VC modeline state when the file needs update."
   :version "25.1"
   :group 'vc-faces)
 
 (defface vc-locked-state
-  '((default :inherit vc-state-base-face))
+  '((default :inherit vc-state-base))
   "Face for VC modeline state when the file locked."
   :version "25.1"
   :group 'vc-faces)
 
 (defface vc-locally-added-state
-  '((default :inherit vc-state-base-face))
+  '((default :inherit vc-state-base))
   "Face for VC modeline state when the file is locally added."
   :version "25.1"
   :group 'vc-faces)
 
 (defface vc-conflict-state
-  '((default :inherit vc-state-base-face))
+  '((default :inherit vc-state-base))
   "Face for VC modeline state when the file contains merge conflicts."
   :version "25.1"
   :group 'vc-faces)
 
 (defface vc-removed-state
-  '((default :inherit vc-state-base-face))
+  '((default :inherit vc-state-base))
   "Face for VC modeline state when the file was removed from the VC system."
   :version "25.1"
   :group 'vc-faces)
 
 (defface vc-missing-state
-  '((default :inherit vc-state-base-face))
+  '((default :inherit vc-state-base))
   "Face for VC modeline state when the file is missing from the file system."
   :version "25.1"
   :group 'vc-faces)
 
 (defface vc-edited-state
-  '((default :inherit vc-state-base-face))
+  '((default :inherit vc-state-base))
   "Face for VC modeline state when the file is edited."
   :version "25.1"
   :group 'vc-faces)
@@ -122,7 +122,7 @@ An empty list disables VC altogether."
   :group 'vc)
 
 ;; Note: we don't actually have a darcs back end yet.
-;; Also, Meta-CVS (corresponding to MCVS) and Arch are unsupported.
+;; Also, Arch is unsupported, and the Meta-CVS back end has been removed.
 ;; The Arch back end will be retrieved and fixed if it is ever required.
 (defcustom vc-directory-exclusion-list (purecopy '("SCCS" "RCS" "CVS" "MCVS"
 					 ".src" ".svn" ".git" ".hg" ".bzr"
@@ -476,7 +476,7 @@ status of this file.  Otherwise, the value returned is one of:
   ;; - `copied' and `moved' (might be handled by `removed' and `added')
   (or (vc-file-getprop file 'vc-state)
       (when (> (length file) 0)         ;Why??  --Stef
-	(setq backend (or backend (vc-responsible-backend file)))
+	(setq backend (or backend (vc-backend file)))
 	(when backend
           (vc-state-refresh file backend)))))
 
@@ -495,7 +495,7 @@ status of this file.  Otherwise, the value returned is one of:
 If FILE is not registered, this function always returns nil."
   (or (vc-file-getprop file 'vc-working-revision)
       (progn
-	(setq backend (or backend (vc-responsible-backend file)))
+	(setq backend (or backend (vc-backend file)))
 	(when backend
 	  (vc-file-setprop file 'vc-working-revision
 			   (vc-call-backend backend 'working-revision file))))))

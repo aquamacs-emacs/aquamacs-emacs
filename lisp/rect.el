@@ -370,7 +370,7 @@ no text on the right side of the rectangle."
   "Delete all whitespace following a specified column in each line.
 The left edge of the rectangle specifies the position in each line
 at which whitespace deletion should begin.  On each line in the
-rectangle, all continuous whitespace starting at that column is deleted.
+rectangle, all contiguous whitespace starting at that column is deleted.
 
 When called from a program the rectangle's corners are START and END.
 With a prefix (or a FILL) argument, also fill too short lines."
@@ -398,8 +398,9 @@ With a prefix (or a FILL) argument, also fill too short lines."
 (defun rectangle--space-to (col)
   (propertize " " 'display `(space :align-to ,col)))
 
-(defface rectangle-preview-face '((t :inherit region))
-  "The face to use for the `string-rectangle' preview.")
+(defface rectangle-preview '((t :inherit region))
+  "The face to use for the `string-rectangle' preview."
+  :version "25.1")
 
 (defcustom rectangle-preview t
   "If non-nil, `string-rectangle' will show an-the-fly preview."
@@ -407,40 +408,41 @@ With a prefix (or a FILL) argument, also fill too short lines."
   :type 'boolean)
 
 (defun rectangle--string-preview ()
-  (let ((str (minibuffer-contents)))
-    (when (equal str "")
-      (setq str (or (car-safe minibuffer-default)
-                    (if (stringp minibuffer-default) minibuffer-default))))
-    (when str (setq str (propertize str 'face 'region)))
-    (with-selected-window rectangle--string-preview-window
-      (unless (or (null rectangle--string-preview-state)
-                  (equal str (car rectangle--string-preview-state)))
-        (rectangle--string-flush-preview)
-        (apply-on-rectangle
-         (lambda (startcol endcol)
-           (let* ((sc (move-to-column startcol))
-                  (start (if (<= sc startcol) (point)
-                           (forward-char -1)
-                           (setq sc (current-column))
-                           (point)))
-                  (ec (move-to-column endcol))
-                  (end (point))
-                  (ol (make-overlay start end)))
-             (push ol (nthcdr 3 rectangle--string-preview-state))
-             ;; FIXME: The extra spacing doesn't interact correctly with
-             ;; the extra spacing added by the rectangular-region-highlight.
-             (when (< sc startcol)
-               (overlay-put ol 'before-string (rectangle--space-to startcol)))
-             (let ((as (when (< endcol ec)
-                         ;; (rectangle--space-to ec)
-                         (spaces-string (- ec endcol))
-                         )))
-               (if (= start end)
-                   (overlay-put ol 'after-string (if as (concat str as) str))
-                 (overlay-put ol 'display str)
-                 (if as (overlay-put ol 'after-string as))))))
-         (nth 1 rectangle--string-preview-state)
-         (nth 2 rectangle--string-preview-state))))))
+  (when rectangle-preview
+    (let ((str (minibuffer-contents)))
+      (when (equal str "")
+        (setq str (or (car-safe minibuffer-default)
+                      (if (stringp minibuffer-default) minibuffer-default))))
+      (when str (setq str (propertize str 'face 'rectangle-preview)))
+      (with-selected-window rectangle--string-preview-window
+        (unless (or (null rectangle--string-preview-state)
+                    (equal str (car rectangle--string-preview-state)))
+          (rectangle--string-flush-preview)
+          (apply-on-rectangle
+           (lambda (startcol endcol)
+             (let* ((sc (move-to-column startcol))
+                    (start (if (<= sc startcol) (point)
+                             (forward-char -1)
+                             (setq sc (current-column))
+                             (point)))
+                    (ec (move-to-column endcol))
+                    (end (point))
+                    (ol (make-overlay start end)))
+               (push ol (nthcdr 3 rectangle--string-preview-state))
+               ;; FIXME: The extra spacing doesn't interact correctly with
+               ;; the extra spacing added by the rectangular-region-highlight.
+               (when (< sc startcol)
+                 (overlay-put ol 'before-string (rectangle--space-to startcol)))
+               (let ((as (when (< endcol ec)
+                           ;; (rectangle--space-to ec)
+                           (spaces-string (- ec endcol))
+                           )))
+                 (if (= start end)
+                     (overlay-put ol 'after-string (if as (concat str as) str))
+                   (overlay-put ol 'display str)
+                   (if as (overlay-put ol 'after-string as))))))
+           (nth 1 rectangle--string-preview-state)
+           (nth 2 rectangle--string-preview-state)))))))
 
 ;; FIXME: Should this be turned into inhibit-region-highlight and made to apply
 ;; to non-rectangular regions as well?

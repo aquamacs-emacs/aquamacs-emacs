@@ -46,6 +46,10 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #ifdef MSDOS
 #include "msdos.h"
+#if __DJGPP__ == 2 && __DJGPP_MINOR__ < 5
+# define INFINITY  __builtin_inf()
+# define NAN       __builtin_nan("")
+#endif
 #endif
 
 #ifdef HAVE_NS
@@ -4504,6 +4508,7 @@ were read in.  */);
 	       doc: /* List of directories to search for files to load.
 Each element is a string (directory file name) or nil (meaning
 `default-directory').
+This list is consulted by the `require' function.
 Initialized during startup as described in Info node `(elisp)Library Search'.
 Use `directory-file-name' when adding items to this path.  However, Lisp
 programs that process this list should tolerate directories both with

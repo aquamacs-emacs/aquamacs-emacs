@@ -1969,10 +1969,10 @@ DEFUN ("format-time-string", Fformat_time_string, Sformat_time_string, 1, 3, 0,
        doc: /* Use FORMAT-STRING to format the time TIME, or now if omitted.
 TIME is specified as (HIGH LOW USEC PSEC), as returned by
 `current-time' or `file-attributes'.  The obsolete form (HIGH . LOW)
-is also still accepted.
-The optional ZONE is omitted or nil for Emacs local time, t for
-Universal Time, `wall' for system wall clock time, or a string as in
-`set-time-zone-rule' for a time zone rule.
+is also still accepted.  The optional ZONE is omitted or nil for Emacs
+local time, t for Universal Time, `wall' for system wall clock time,
+or a string as in the TZ environment variable.
+
 The value is a copy of FORMAT-STRING, but with certain constructs replaced
 by text that describes the specified date and time in TIME:
 
@@ -2086,7 +2086,7 @@ as from `current-time' and `file-attributes', or nil to use the
 current time.  The obsolete form (HIGH . LOW) is also still accepted.
 The optional ZONE is omitted or nil for Emacs local time, t for
 Universal Time, `wall' for system wall clock time, or a string as in
-`set-time-zone-rule' for a time zone rule.
+the TZ environment variable.
 
 The list has the following nine members: SEC is an integer between 0
 and 60; SEC is 60 for a leap second, which only some operating systems
@@ -2151,9 +2151,9 @@ DEFUN ("encode-time", Fencode_time, Sencode_time, 6, MANY, 0,
 This is the reverse operation of `decode-time', which see.
 The optional ZONE is omitted or nil for Emacs local time, t for
 Universal Time, `wall' for system wall clock time, or a string as in
-`set-time-zone-rule' for a time zone rule.  It can also be a list (as
-from `current-time-zone') or an integer (as from `decode-time')
-applied without consideration for daylight saving time.
+the TZ environment variable.  It can also be a list (as from
+`current-time-zone') or an integer (as from `decode-time') applied
+without consideration for daylight saving time.
 
 You can pass more than 7 arguments; then the first six arguments
 are used as SECOND through YEAR, and the *last* argument is used as ZONE.
@@ -2213,7 +2213,7 @@ but this is considered obsolete.
 
 The optional ZONE is omitted or nil for Emacs local time, t for
 Universal Time, `wall' for system wall clock time, or a string as in
-`set-time-zone-rule' for a time zone rule.  */)
+the TZ environment variable.  */)
   (Lisp_Object specified_time, Lisp_Object zone)
 {
   time_t value = lisp_seconds_argument (specified_time);
@@ -2290,7 +2290,7 @@ instead of using the current time.  The argument should have the form
 `current-time' and from `file-attributes'.  SPECIFIED-TIME can also
 have the form (HIGH . LOW), but this is considered obsolete.
 Optional second arg ZONE is omitted or nil for the local time zone, or
-a string as in `set-time-zone-rule'.
+a string as in the TZ environment variable.
 
 Some operating systems cannot provide all this information to Emacs;
 in this case, `current-time-zone' returns a list containing nil for
@@ -2331,8 +2331,11 @@ the data it can't find.  */)
 
 DEFUN ("set-time-zone-rule", Fset_time_zone_rule, Sset_time_zone_rule, 1, 1, 0,
        doc: /* Set the Emacs local time zone using TZ, a string specifying a time zone rule.
-If TZ is nil or `wall', use system wall clock time.  If TZ is t, use
-Universal Time.  If TZ is an integer, treat it as in `encode-time'.
+
+If TZ is nil or `wall', use system wall clock time; this differs from
+the usual Emacs convention where nil means current local time.  If TZ
+is t, use Universal Time.  If TZ is an integer, treat it as in
+`encode-time'.
 
 Instead of calling this function, you typically want something else.
 To temporarily use a different time zone rule for just one invocation
@@ -2481,7 +2484,7 @@ insert1 (Lisp_Object arg)
 
 DEFUN ("insert", Finsert, Sinsert, 0, MANY, 0,
        doc: /* Insert the arguments, either strings or characters, at point.
-Point and before-insertion markers move forward to end up
+Point and after-insertion markers move forward to end up
  after the inserted text.
 Any other markers at the point of insertion remain before the text.
 
@@ -2505,7 +2508,7 @@ usage: (insert &rest ARGS)  */)
 DEFUN ("insert-and-inherit", Finsert_and_inherit, Sinsert_and_inherit,
    0, MANY, 0,
        doc: /* Insert the arguments at point, inheriting properties from adjoining text.
-Point and before-insertion markers move forward to end up
+Point and after-insertion markers move forward to end up
  after the inserted text.
 Any other markers at the point of insertion remain before the text.
 
@@ -2879,10 +2882,9 @@ DEFUN ("compare-buffer-substrings", Fcompare_buffer_substrings, Scompare_buffer_
        6, 6, 0,
        doc: /* Compare two substrings of two buffers; return result as number.
 Return -N if first string is less after N-1 chars, +N if first string is
-greater after N-1 chars, or 0 if strings match.  Each substring is
-represented as three arguments: BUFFER, START and END.  That makes six
-args in all, three for each substring.
-
+greater after N-1 chars, or 0 if strings match.
+The first substring is in BUFFER1 from START1 to END1 and the second
+is in BUFFER2 from START2 to END2.
 The value of `case-fold-search' in the current buffer
 determines whether case is significant or ignored.  */)
   (Lisp_Object buffer1, Lisp_Object start1, Lisp_Object end1, Lisp_Object buffer2, Lisp_Object start2, Lisp_Object end2)
@@ -3663,10 +3665,11 @@ In batch mode, the message is printed to the standard error stream,
 followed by a newline.
 
 The first argument is a format control string, and the rest are data
-to be formatted under control of the string.  See `format' for details.
+to be formatted under control of the string.  See `format-message' for
+details.
 
-Note: Use (message "%s" VALUE) to print the value of expressions and
-variables to avoid accidentally interpreting `%' as format specifiers.
+Note: (message "%s" VALUE) displays the string VALUE without
+interpreting format characters like `%', `\\=`', and `\\=''.
 
 If the first argument is nil or the empty string, the function clears
 any existing message; this lets the minibuffer contents show.  See
@@ -3694,7 +3697,8 @@ DEFUN ("message-box", Fmessage_box, Smessage_box, 1, MANY, 0,
        doc: /* Display a message, in a dialog box if possible.
 If a dialog box is not available, use the echo area.
 The first argument is a format control string, and the rest are data
-to be formatted under control of the string.  See `format' for details.
+to be formatted under control of the string.  See `format-message' for
+details.
 
 If the first argument is nil or the empty string, clear any existing
 message; let the minibuffer contents show.
@@ -3725,7 +3729,8 @@ If this command was invoked with the mouse, use a dialog box if
 `use-dialog-box' is non-nil.
 Otherwise, use the echo area.
 The first argument is a format control string, and the rest are data
-to be formatted under control of the string.  See `format' for details.
+to be formatted under control of the string.  See `format-message' for
+details.
 
 If the first argument is nil or the empty string, clear any existing
 message; let the minibuffer contents show.

@@ -72,7 +72,7 @@
   (let ((map (make-sparse-keymap "Set Coding System")))
     (bindings--define-key map [set-buffer-process-coding-system]
       '(menu-item "For I/O with Subprocess" set-buffer-process-coding-system
-        :visible (fboundp 'start-process)
+        :visible (fboundp 'make-process)
         :enable (get-buffer-process (current-buffer))
         :help "How to en/decode I/O from/to subprocess connected to this buffer"))
     (bindings--define-key map [set-next-selection-coding-system]
@@ -2734,8 +2734,8 @@ See also `locale-charset-language-names', `locale-language-names',
     ;; Default to A4 paper if we're not in a C, POSIX or US locale.
     ;; (See comments in Flocale_info.)
     (unless frame
-      (let ((locale locale)
-	    (paper (locale-info 'paper)))
+      (let ((paper (locale-info 'paper))
+            locale)
 	(if paper
 	    ;; This will always be null at the time of writing.
 	    (cond

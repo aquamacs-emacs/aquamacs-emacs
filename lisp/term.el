@@ -915,19 +915,6 @@ is buffer-local."
 
 (term-set-escape-char (or term-escape-char ?\C-c))
 
-(defvar overflow-newline-into-fringe)
-
-(defun term-window-width ()
-  (if (and (not (featurep 'xemacs))
-	   (display-graphic-p)
-	   overflow-newline-into-fringe
-	   ;; Subtract 1 from the width when any fringe has zero width,
-	   ;; not just the right fringe.  Bug#18601.
-	   (/= (frame-parameter nil 'left-fringe) 0)
-	   (/= (frame-parameter nil 'right-fringe) 0))
-      (window-body-width)
-    (1- (window-body-width))))
-
 
 (put 'term-mode 'mode-class 'special)
 
@@ -1014,7 +1001,7 @@ Entry to this mode runs the hooks on `term-mode-hook'."
   (setq buffer-display-table term-display-table)
   (set (make-local-variable 'term-home-marker) (copy-marker 0))
   (set (make-local-variable 'term-height) (1- (window-height)))
-  (set (make-local-variable 'term-width) (term-window-width))
+  (set (make-local-variable 'term-width) (window-max-chars-per-line))
   (set (make-local-variable 'term-last-input-start) (make-marker))
   (set (make-local-variable 'term-last-input-end) (make-marker))
   (set (make-local-variable 'term-last-input-match) "")
@@ -4151,7 +4138,17 @@ the process.  Any more args are arguments to PROGRAM."
     ;; .emacs ...
     (term-set-escape-char ?\C-x))
 
-  (switch-to-buffer term-ansi-buffer-name))
+  (switch-to-buffer term-ansi-buffer-name)
+  ;; For some reason, without the below setting, ansi-term behaves
+  ;; sluggishly, not clear why, since the buffer is typically very
+  ;; small.
+  ;;
+  ;; There's a larger problem here with supporting bidirectional text:
+  ;; the application that writes to the terminal could have its own
+  ;; ideas about displaying bidirectional text, and might not want us
+  ;; reordering the text or deciding on base paragraph direction.  One
+  ;; such application is Emacs in TTY mode...  FIXME.
+  (setq bidi-paragraph-direction 'left-to-right))
 
 
 ;;; Serial terminals

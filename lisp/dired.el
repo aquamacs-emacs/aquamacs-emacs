@@ -3353,7 +3353,12 @@ object files--just `.o' will mark more than you might think."
 (defun dired-mark-files-containing-regexp (regexp &optional marker-char)
   "Mark all files with contents containing REGEXP for use in later commands.
 A prefix argument means to unmark them instead.
-`.' and `..' are never marked."
+`.' and `..' are never marked.
+
+Note that if a file is visited in an Emacs buffer, this command will
+look in the buffer without revisiting the file, so the results might
+be inconsistent with the file on disk if its contents has changed
+since it was last visited."
   (interactive
    (list (read-regexp (concat (if current-prefix-arg "Unmark" "Mark")
                               " files containing (regexp): ")
@@ -3914,7 +3919,7 @@ Ask means pop up a menu for the user to select one of copy, move or link."
 
 ;;; Start of automatically extracted autoloads.
 
-;;;### (autoloads nil "dired-aux" "dired-aux.el" "17b411edeac40022109eb6f705b83079")
+;;;### (autoloads nil "dired-aux" "dired-aux.el" "8346506b9ef7167fd55b5eac7e6617a1")
 ;;; Generated autoloads from dired-aux.el
 
 (autoload 'dired-diff "dired-aux" "\
@@ -4418,12 +4423,24 @@ with the command \\[tags-loop-continue].
 \(fn FROM TO &optional DELIMITED)" t nil)
 
 (autoload 'dired-do-find-regexp "dired-aux" "\
-Find all matches for REGEXP in all marked files, recursively.
+Find all matches for REGEXP in all marked files.
+For any marked directory, all of its files are searched recursively.
+However, files matching `grep-find-ignored-files' and subdirectories
+matching `grep-find-ignored-directories' are skipped in the marked
+directories.
+
+REGEXP should use constructs supported by your local `grep' command.
 
 \(fn REGEXP)" t nil)
 
 (autoload 'dired-do-find-regexp-and-replace "dired-aux" "\
-Replace matches of FROM with TO, in all marked files, recursively.
+Replace matches of FROM with TO, in all marked files.
+For any marked directory, matches in all of its files are replaced,
+recursively.  However, files matching `grep-find-ignored-files'
+and subdirectories matching `grep-find-ignored-directories' are skipped
+in the marked directories.
+
+REGEXP should use constructs supported by your local `grep' command.
 
 \(fn FROM TO)" t nil)
 

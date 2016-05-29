@@ -180,7 +180,7 @@ use for the remote host."
   :type '(file :must-match t))
 
 (defcustom tramp-encoding-command-switch
-  (if (string-match "cmd\\.exe" tramp-encoding-shell)
+  (if (string-match "cmd\\.exe" (or tramp-encoding-shell ""))
       "/c"
     "-c")
   "Use this switch together with `tramp-encoding-shell' for local commands.
@@ -189,7 +189,7 @@ See the variable `tramp-encoding-shell' for more information."
   :type 'string)
 
 (defcustom tramp-encoding-command-interactive
-  (unless (string-match "cmd\\.exe" tramp-encoding-shell) "-i")
+  (unless (string-match "cmd\\.exe" (or tramp-encoding-shell "")) "-i")
   "Use this switch together with `tramp-encoding-shell' for interactive shells.
 See the variable `tramp-encoding-shell' for more information."
   :version "24.1"
@@ -3938,6 +3938,26 @@ This is used internally by `tramp-file-mode-from-int'."
   (if (and (fboundp 'group-gid) (equal id-format 'integer))
       (tramp-compat-funcall 'group-gid)
     (nth 3 (tramp-compat-file-attributes "~/" id-format))))
+
+(defun tramp-get-local-locale (&optional vec)
+  ;; We use key nil for local connection properties.
+  (with-tramp-connection-property nil "locale"
+    (let ((candidates '("en_US.utf8" "C.utf8" "en_US.UTF-8"))
+	  locale)
+      (with-temp-buffer
+	(unless (or (memq system-type '(windows-nt))
+                    (not (zerop (tramp-call-process
+                                 nil "locale" nil t nil "-a"))))
+	  (while candidates
+	    (goto-char (point-min))
+	    (if (string-match (format "^%s\r?$" (regexp-quote (car candidates)))
+			      (buffer-string))
+		(setq locale (car candidates)
+		      candidates nil)
+	      (setq candidates (cdr candidates))))))
+      ;; Return value.
+      (when vec (tramp-message vec 7 "locale %s" (or locale "C")))
+      (or locale "C"))))
 
 ;;;###tramp-autoload
 (defun tramp-check-cached-permissions (vec access)

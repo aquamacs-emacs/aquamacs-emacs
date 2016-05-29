@@ -146,18 +146,18 @@ nil means use goto-char using the second argument position.")
 			       &optional avoid-current
 			       extra-test-inclusive
 			       extra-test-exclusive)
-  "Test if BUFFER is a `next-error' capable buffer.
+  "Return non-nil if BUFFER is a `next-error' capable buffer.
+If AVOID-CURRENT is non-nil, and BUFFER is the current buffer,
+return nil.
 
-If AVOID-CURRENT is non-nil, treat the current buffer
-as an absolute last resort only.
+The function EXTRA-TEST-INCLUSIVE, if non-nil, is called if
+BUFFER would not normally qualify.  If it returns non-nil, BUFFER
+is considered `next-error' capable, anyway, and the function
+returns non-nil.
 
-The function EXTRA-TEST-INCLUSIVE, if non-nil, is called in each buffer
-that normally would not qualify.  If it returns t, the buffer
-in question is treated as usable.
-
-The function EXTRA-TEST-EXCLUSIVE, if non-nil, is called in each buffer
-that would normally be considered usable.  If it returns nil,
-that buffer is rejected."
+The function EXTRA-TEST-EXCLUSIVE, if non-nil, is called if the
+buffer would normally qualify.  If it returns nil, BUFFER is
+rejected, and the function returns nil."
   (and (buffer-name buffer)		;First make sure it's live.
        (not (and avoid-current (eq buffer (current-buffer))))
        (with-current-buffer buffer
@@ -1424,10 +1424,11 @@ If nil, don't change the value of `debug-on-error'."
   :version "21.1")
 
 (defun eval-expression-print-format (value)
-  "Format VALUE as a result of evaluated expression.
-Return a formatted string which is displayed in the echo area
-in addition to the value printed by prin1 in functions which
-display the result of expression evaluation."
+  "If VALUE in an integer, return a specially formatted string.
+This string will typically look like \" (#o1, #x1, ?\\C-a)\".
+If VALUE is not an integer, nil is returned.
+This function is used by functions like `prin1' that display the
+result of expression evaluation."
   (if (and (integerp value)
 	   (or (eq standard-output t)
 	       (zerop (prefix-numeric-value current-prefix-arg))))
@@ -2844,6 +2845,18 @@ buffers that were changed during the last command.")
 
 If set to non-nil, this will effectively disable the timer.")
 
+(defvar-local undo-auto-disable-boundaries nil
+  "Disable the automatic addition of boundaries.
+
+If set to non-nil, `undo-boundary' will not be called
+automatically in a buffer either at the end of a command, or as a
+result of `undo-auto-current-boundary-timer'.
+
+When this is set to non-nil, it is important to ensure that
+`undo-boundary' is called frequently enough. Failure to do so
+will result in user-visible warnings that the situation is
+probably a bug.")
+
 (defvar undo-auto--this-command-amalgamating nil
   "Non-nil if `this-command' should be amalgamated.
 This variable is set to nil by `undo-auto--boundaries' and is set
@@ -2883,7 +2896,8 @@ REASON describes the reason that the boundary is being added; see
   (dolist (b undo-auto--undoably-changed-buffers)
           (when (buffer-live-p b)
             (with-current-buffer b
-              (undo-auto--ensure-boundary cause))))
+              (unless undo-auto-disable-boundaries
+                (undo-auto--ensure-boundary cause)))))
   (setq undo-auto--undoably-changed-buffers nil))
 
 (defun undo-auto--boundary-timer ()
@@ -2910,10 +2924,10 @@ See also `undo-auto--buffer-undoably-changed'.")
   "Add an `undo-boundary' in appropriate buffers."
   (undo-auto--boundaries
    (let ((amal undo-auto--this-command-amalgamating))
-       (setq undo-auto--this-command-amalgamating nil)
-       (if amal
-           'amalgamate
-         'command))))
+     (setq undo-auto--this-command-amalgamating nil)
+     (if amal
+         'amalgamate
+       'command))))
 
 (defun undo-auto-amalgamate ()
   "Amalgamate undo if necessary.
@@ -5223,7 +5237,7 @@ This macro does what `save-excursion' did before Emacs 25.1."
 
 (defcustom use-empty-active-region nil
   "Whether \"region-aware\" commands should act on empty regions.
-If nil, region-aware commands treat empty regions as inactive.
+If nil, region-aware commands treat the empty region as inactive.
 If non-nil, region-aware commands treat the region as active as
 long as the mark is active, even if the region is empty.
 
@@ -6418,7 +6432,8 @@ Those commands will move to this position in the line moved to
 rather than trying to keep the same horizontal position.
 With a non-nil argument ARG, clears out the goal column
 so that \\[next-line] and \\[previous-line] resume vertical motion.
-The goal column is stored in the variable `goal-column'."
+The goal column is stored in the variable `goal-column'.
+This is a buffer-local setting."
   (interactive "P")
   (if arg
       (progn

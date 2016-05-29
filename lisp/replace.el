@@ -33,7 +33,7 @@
   :type 'boolean
   :group 'matching)
 
-(defcustom replace-character-fold nil
+(defcustom replace-char-fold nil
   "Non-nil means replacement commands should do character folding in matches.
 This means, for instance, that \\=' will match a large variety of
 unicode quotes.
@@ -167,8 +167,6 @@ wants to replace FROM with TO."
     ;; unavailable while preparing to dump.
     (custom-reevaluate-setting 'query-replace-from-to-separator)
     (let* ((history-add-new-input nil)
-	   (text-property-default-nonsticky
-	    (cons '(separator . t) text-property-default-nonsticky))
 	   (separator
 	    (when query-replace-from-to-separator
 	      (propertize "\0"
@@ -193,11 +191,15 @@ wants to replace FROM with TO."
 	    ;; a region in order to specify the minibuffer input.
 	    ;; That should not clobber the region for the query-replace itself.
 	    (save-excursion
-	      (if regexp-flag
-		  (read-regexp prompt nil 'query-replace-from-to-history)
-		(read-from-minibuffer
-		 prompt nil nil nil 'query-replace-from-to-history
-		 (car (if regexp-flag regexp-search-ring search-ring)) t))))
+              (minibuffer-with-setup-hook
+                  (lambda ()
+                    (setq-local text-property-default-nonsticky
+                                (cons '(separator . t) text-property-default-nonsticky)))
+                (if regexp-flag
+                    (read-regexp prompt nil 'query-replace-from-to-history)
+                  (read-from-minibuffer
+                   prompt nil nil nil 'query-replace-from-to-history
+                   (car (if regexp-flag regexp-search-ring search-ring)) t)))))
            (to))
       (if (and (zerop (length from)) query-replace-defaults)
 	  (cons (caar query-replace-defaults)
@@ -296,6 +298,10 @@ In Transient Mark mode, if the mark is active, operate on the contents
 of the region.  Otherwise, operate from point to the end of the buffer's
 accessible portion.
 
+In interactive use, the prefix arg (non-nil DELIMITED in
+non-interactive use), means replace only matches surrounded by
+word boundaries.  A negative prefix arg means replace backward.
+
 Use \\<minibuffer-local-map>\\[next-history-element] \
 to pull the last incremental search string to the minibuffer
 that reads FROM-STRING, or invoke replacements from
@@ -318,13 +324,9 @@ If `replace-lax-whitespace' is non-nil, a space or spaces in the string
 to be replaced will match a sequence of whitespace chars defined by the
 regexp in `search-whitespace-regexp'.
 
-If `replace-character-fold' is non-nil, matching uses character folding,
+If `replace-char-fold' is non-nil, matching uses character folding,
 i.e. it ignores diacritics and other differences between equivalent
 character strings.
-
-Third arg DELIMITED (prefix arg if interactive), if non-nil, means replace
-only matches surrounded by word boundaries.  A negative prefix arg means
-replace backward.
 
 Fourth and fifth arg START and END specify the region to operate on.
 
@@ -381,7 +383,7 @@ If `replace-regexp-lax-whitespace' is non-nil, a space or spaces in the regexp
 to be replaced will match a sequence of whitespace chars defined by the
 regexp in `search-whitespace-regexp'.
 
-This function is not affected by `replace-character-fold'.
+This function is not affected by `replace-char-fold'.
 
 Third arg DELIMITED (prefix arg if interactive), if non-nil, means replace
 only matches surrounded by word boundaries.  A negative prefix arg means
@@ -472,7 +474,7 @@ If `replace-regexp-lax-whitespace' is non-nil, a space or spaces in the regexp
 to be replaced will match a sequence of whitespace chars defined by the
 regexp in `search-whitespace-regexp'.
 
-This function is not affected by `replace-character-fold'.
+This function is not affected by `replace-char-fold'.
 
 Third arg DELIMITED (prefix arg if interactive), if non-nil, means replace
 only matches that are surrounded by word boundaries.
@@ -566,7 +568,7 @@ If `replace-lax-whitespace' is non-nil, a space or spaces in the string
 to be replaced will match a sequence of whitespace chars defined by the
 regexp in `search-whitespace-regexp'.
 
-If `replace-character-fold' is non-nil, matching uses character folding,
+If `replace-char-fold' is non-nil, matching uses character folding,
 i.e. it ignores diacritics and other differences between equivalent
 character strings.
 
@@ -621,7 +623,7 @@ If `replace-regexp-lax-whitespace' is non-nil, a space or spaces in the regexp
 to be replaced will match a sequence of whitespace chars defined by the
 regexp in `search-whitespace-regexp'.
 
-This function is not affected by `replace-character-fold'
+This function is not affected by `replace-char-fold'
 
 In Transient Mark mode, if the mark is active, operate on the contents
 of the region.  Otherwise, operate from point to the end of the buffer's
@@ -1992,7 +1994,9 @@ but coerced to the correct value of INTEGERS."
 FIXEDCASE, LITERAL are passed to `replace-match' (which see).
 After possibly editing it (if `\\?' is present), NEWTEXT is also
 passed to `replace-match'.  If NOEDIT is true, no check for `\\?'
-is made (to save time).  MATCH-DATA is used for the replacement.
+is made (to save time).
+MATCH-DATA is used for the replacement, and is a data structure
+as returned from the `match-data' function.
 In case editing is done, it is changed to use markers.  BACKWARD is
 used to reverse the replacement direction.
 
@@ -2047,9 +2051,9 @@ It is called with three arguments, as if it were
   ;; used after `recursive-edit' might override them.
   (let* ((isearch-regexp regexp-flag)
 	 (isearch-regexp-function (or delimited-flag
-                           (and replace-character-fold
+                           (and replace-char-fold
                                 (not regexp-flag)
-                                #'character-fold-to-regexp)))
+                                #'char-fold-to-regexp)))
 	 (isearch-lax-whitespace
 	  replace-lax-whitespace)
 	 (isearch-regexp-lax-whitespace

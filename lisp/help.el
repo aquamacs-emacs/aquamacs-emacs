@@ -1468,7 +1468,8 @@ the same names as used in the original source code, when possible."
 (define-obsolete-function-alias 'help-make-usage 'help--make-usage "25.1")
 
 (defun help--make-usage-docstring (fn arglist)
-  (help--docstring-quote (format "%S" (help--make-usage fn arglist))))
+  (let ((print-escape-newlines t))
+    (help--docstring-quote (format "%S" (help--make-usage fn arglist)))))
 
 
 (provide 'help)

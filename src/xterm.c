@@ -7897,7 +7897,13 @@ handle_one_xevent (struct x_display_info *dpyinfo,
             record_asynch_buffer_change ();
 
 #ifdef USE_GTK
+	  /* xg_frame_resized does the wrong thing with Gtk+ 3.20.3 or later.
+	     For earlier Gtk+ versions it is unclear whether
+	     xg_frame_resized is useful, so leave it in for now.
+	     See Bug#23144.  */
+# if ! GTK_CHECK_VERSION (3, 20, 3)
           xg_frame_resized (f, -1, -1);
+# endif
 #endif
         }
       goto OTHER;
@@ -10746,6 +10752,8 @@ x_set_window_size (struct frame *f, bool change_gravity,
   cancel_mouse_face (f);
 
   unblock_input ();
+
+  do_pending_window_change (false);
 }
 
 /* Move the mouse to position pixel PIX_X, PIX_Y relative to frame F.  */

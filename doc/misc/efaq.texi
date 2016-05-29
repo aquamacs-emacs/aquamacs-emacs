@@ -2296,7 +2296,7 @@ is actually typical for regexp syntax.)
 @cindex Recursive search/replace operations
 
 Dired mode (@kbd{M-x dired @key{RET}}, or @kbd{C-x d}) supports the
-command @code{dired-do-query-replace-regexp} (@kbd{Q}), which allows
+command @code{dired-do-find-regexp-and-replace} (@kbd{Q}), which allows
 users to replace regular expressions in multiple files.
 
 You can use this command to perform search/replace operations on
@@ -2321,7 +2321,7 @@ To accept all replacements in each file, hit @kbd{!}.
 Another way to do the same thing is to use the ``tags'' feature of
 Emacs: it includes the command @code{tags-query-replace} which performs
 a query-replace across all the files mentioned in the @file{TAGS} file.
-@xref{Tags Search,,, emacs, The GNU Emacs Manual}.
+@xref{Identifier Search,,, emacs, The GNU Emacs Manual}.
 
 @node Documentation for etags
 @section Where is the documentation for @code{etags}?
@@ -2414,7 +2414,7 @@ error messages, inserts them into a special buffer called
 the source.  Type @kbd{C-x `} to step through the offending lines one by
 one (starting with Emacs 22, you can also use @kbd{M-g M-p} and
 @kbd{M-g M-n} to go to the previous and next matches directly).  Click
-@kbd{Mouse-2} or press @key{RET} on a message text in the
+@kbd{mouse-2} or press @key{RET} on a message text in the
 @file{*compilation*} buffer to go to the line whose number is mentioned
 in that message.
 
@@ -2670,11 +2670,6 @@ by typing @kbd{M-x ansi-color-for-comint-mode} in the Shell buffer, or
 by adding @code{(add-hook 'shell-mode-hook
 'ansi-color-for-comint-mode-on)} to your init file.
 
-In Emacs versions before 21.1, the @code{ansi-color} package is not
-included.  In that case, you need to unalias @code{ls} for interactive
-shells running in Emacs; this can be done by checking the @code{EMACS}
-variable in the environment.
-
 @node Fullscreen mode on MS-Windows
 @section How can I start Emacs in fullscreen mode on MS-Windows?
 @cindex Maximize frame
@@ -2763,11 +2758,9 @@ For @code{tcsh}, put this in your @file{.cshrc} (or @file{.tcshrc})
 file:
 
 @example
-if ($?EMACS) then
-    if ("$EMACS" =~ /*) then
-        if ($?tcsh) unset edit
-        stty nl
-    endif
+if ($?INSIDE_EMACS && $?tcsh)
+    unset edit
+    stty -icrnl -onlcr -echo susp ^Z
 endif
 @end example
 
@@ -2775,7 +2768,7 @@ Or put this in your @file{.emacs_tcsh} or @file{~/.emacs.d/init_tcsh.sh} file:
 
 @example
 unset edit
-stty nl
+stty -icrnl -onlcr -echo susp ^Z
 @end example
 
 Alternatively, use @code{csh} in your shell buffers instead of
@@ -3901,7 +3894,7 @@ is how to make @kbd{H-M-RIGHT} move forward a word:
 Not all modifiers are permitted in all situations.  @key{Hyper},
 @key{Super}, and @key{Alt} are not available on Unix character
 terminals.  Non-@acronym{ASCII} keys and mouse events (e.g., @kbd{C-=} and
-@kbd{Mouse-1}) also fall under this category.
+@kbd{mouse-1}) also fall under this category.
 
 @end itemize
 

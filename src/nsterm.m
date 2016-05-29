@@ -623,8 +623,15 @@ ns_init_locale (void)
 
   @try
     {
+      /* It seems OS X should probably use UTF-8 everywhere.
+         'localeIdentifier' does not specify the encoding, and I can't
+         find any way to get the OS to tell us which encoding to use,
+         so hard-code '.UTF-8'. */
+      NSString *localeID = [NSString stringWithFormat:@"%@.UTF-8",
+                                     [locale localeIdentifier]];
+
       /* Set LANG to locale, but not if LANG is already set. */
-      setenv("LANG", [[locale localeIdentifier] UTF8String], 0);
+      setenv("LANG", [localeID UTF8String], 0);
     }
   @catch (NSException *e)
     {
@@ -1736,7 +1743,12 @@ x_iconify_frame (struct frame *f)
       [[view window] orderOut: NSApp];
       [[view window] setFrame: t display: NO];
     }
+
+  /* Processing input while Emacs is being minimized can cause a
+     crash, so block it for the duration. */
+  block_input();
   [[view window] miniaturize: NSApp];
+  unblock_input();
 }
 
 /* Free X resources of frame F.  */

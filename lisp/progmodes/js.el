@@ -1744,7 +1744,7 @@ This performs fontification according to `js--class-styles'."
   "Regular expression matching variable declaration keywords.")
 
 (defconst js--indent-operator-re
-  (concat "[-+*/%<>&^|?:.]\\([^-+*/]\\|$\\)\\|!?=\\|"
+  (concat "[-+*/%<>&^|?:.]\\([^-+*/.]\\|$\\)\\|!?=\\|"
           (js--regexp-opt-symbol '("in" "instanceof")))
   "Regexp matching operators that affect indentation of continued expressions.")
 
@@ -1770,16 +1770,20 @@ This performs fontification according to `js--class-styles'."
   "Return non-nil if the current line continues an expression."
   (save-excursion
     (back-to-indentation)
-    (or (js--looking-at-operator-p)
-        (and (js--re-search-backward "\n" nil t)
-	     (progn
-	       (skip-chars-backward " \t")
-	       (or (bobp) (backward-char))
-	       (and (> (point) (point-min))
-                    (save-excursion (backward-char) (not (looking-at "[/*]/")))
-                    (js--looking-at-operator-p)
-		    (and (progn (backward-char)
-				(not (looking-at "+\\+\\|--\\|/[/*]"))))))))))
+    (if (js--looking-at-operator-p)
+        (or (not (memq (char-after) '(?- ?+)))
+            (progn
+              (forward-comment (- (point)))
+              (not (memq (char-before) '(?, ?\[ ?\()))))
+      (and (js--re-search-backward "\n" nil t)
+           (progn
+             (skip-chars-backward " \t")
+             (or (bobp) (backward-char))
+             (and (> (point) (point-min))
+                  (save-excursion (backward-char) (not (looking-at "[/*]/")))
+                  (js--looking-at-operator-p)
+                  (and (progn (backward-char)
+                              (not (looking-at "+\\+\\|--\\|/[/*]"))))))))))
 
 
 (defun js--end-of-do-while-loop-p ()
@@ -1888,9 +1892,11 @@ In particular, return the buffer position of the first `for' kwd."
           ;; To skip arbitrary expressions we need the parser,
           ;; so we'll just guess at it.
           (if (and (> end (point)) ; Not empty literal.
-                   (re-search-forward "[^,]]* \\(for\\) " end t)
+                   (re-search-forward "[^,]]* \\(for\\_>\\)" end t)
                    ;; Not inside comment or string literal.
-                   (not (nth 8 (parse-partial-sexp bracket (point)))))
+                   (let ((status (parse-partial-sexp bracket (point))))
+                     (and (= 1 (car status))
+                          (not (nth 8 status)))))
               (match-beginning 1)))))))
 
 (defun js--array-comp-indentation (bracket for-kwd)
