@@ -4286,8 +4286,8 @@ the group would be preserved too."
 
 (defun file-name-sans-extension (filename)
   "Return FILENAME sans final \"extension\".
-The extension, in a file name, is the part that follows the last `.',
-except that a leading `.', if any, doesn't count."
+The extension, in a file name, is the part that begins with the last `.',
+except that a leading `.' of the file name, if there is one, doesn't count."
   (save-match-data
     (let ((file (file-name-sans-versions (file-name-nondirectory filename)))
 	  directory)
@@ -4302,15 +4302,16 @@ except that a leading `.', if any, doesn't count."
 
 (defun file-name-extension (filename &optional period)
   "Return FILENAME's final \"extension\".
-The extension, in a file name, is the part that follows the last `.',
-excluding version numbers and backup suffixes,
-except that a leading `.', if any, doesn't count.
+The extension, in a file name, is the part that begins with the last `.',
+excluding version numbers and backup suffixes, except that a leading `.'
+of the file name, if there is one, doesn't count.
 Return nil for extensionless file names such as `foo'.
 Return the empty string for file names such as `foo.'.
 
-If PERIOD is non-nil, then the returned value includes the period
-that delimits the extension, and if FILENAME has no extension,
-the value is \"\"."
+By default, the returned value excludes the period that starts the
+extension, but if the optional argument PERIOD is non-nil, the period
+is included in the value, and in that case, if FILENAME has no
+extension, the value is \"\"."
   (save-match-data
     (let ((file (file-name-sans-versions (file-name-nondirectory filename))))
       (if (and (string-match "\\.[^.]*\\'" file)
@@ -6201,7 +6202,7 @@ and `list-directory-verbose-switches'."
 
 PATTERN is assumed to represent a file-name wildcard suitable for the
 underlying filesystem.  For Unix and GNU/Linux, each character from the
-set [ \\t\\n;<>&|()`'\"#$] is quoted with a backslash; for DOS/Windows, all
+set [ \\t\\n;<>&|()\\=`\\='\"#$] is quoted with a backslash; for DOS/Windows, all
 the parts of the pattern which don't include wildcard characters are
 quoted with double quotes.
 
