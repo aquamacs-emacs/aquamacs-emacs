@@ -1029,9 +1029,6 @@ ns_update_auto_hide_menu_bar (void)
     - DR 2014-01-11
    */
 
-
-  NSTRACE (ns_update_auto_hide_menu_bar);
-
   if (NSApp != nil && [NSApp isActive])
     {
       // Note, "setPresentationOptions" triggers an error unless the
@@ -6488,7 +6485,7 @@ not_in_argv (NSString *arg)
   id newFont;
   float size;
 
-  NSTRACE (changeColor);
+  NSTRACE ("changeColor");
   if (!emacs_event)
     return;
 
@@ -6514,7 +6511,7 @@ not_in_argv (NSString *arg)
   id newFont;
   float size;
 
-  NSTRACE (changeColor);
+  NSTRACE ("changeDocumentBackgroundColor");
   if (!emacs_event)
     return;
 
@@ -6536,7 +6533,7 @@ not_in_argv (NSString *arg)
 {
   NSEvent *e =[[self window] currentEvent];
 
-  NSTRACE (changeSpelling);
+  NSTRACE ("changeSpelling");
   if (!emacs_event)
     return;
 
@@ -6566,7 +6563,7 @@ not_in_argv (NSString *arg)
 - (void)checkSpelling:(id)sender {
  NSEvent *e =[[self window] currentEvent];
 
-  NSTRACE (checkSpelling);
+  NSTRACE ("checkSpelling");
   if (!emacs_event)
     return;
 
