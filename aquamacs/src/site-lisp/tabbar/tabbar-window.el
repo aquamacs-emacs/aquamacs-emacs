@@ -283,11 +283,15 @@ Return the current tabset, which corresponds to (selected-window)."
   "Wait for emacs to be idle before updating tabsets.  This prevents tabs from
 updating when a new window shows the current buffer, just before the window shows
 new buffer."
- ; (if (eq this-command 'split-window-vertically)
-  (if tabbar-window-immediate-screen-fresh ;; see macro `fast-screen-refresh' in aquamacs-tabbar
-      (tabbar-window-update-tabsets)
-    (run-with-idle-timer 0 nil
-			 'tabbar-window-update-tabsets)))
+  ;; Do not redisplay when changes are made in temporary buffers
+  ;; This assumes that an appropriate buffer is current when run.
+  ;; This function is in first-change-hook, but also in
+  ;; window-configuration-change-hook.
+  (unless (equal " " (substring (buffer-name) 0 1))
+    (if tabbar-window-immediate-screen-fresh ;; see macro `fast-screen-refresh' in aquamacs-tabbar
+        (tabbar-window-update-tabsets)
+      (run-with-idle-timer 0 nil
+                           'tabbar-window-update-tabsets))))
 
 (defadvice dnd-open-local-file (after dnd-update-tabs activate)
   (if tabbar-mode
