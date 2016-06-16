@@ -358,7 +358,7 @@ un-Mac-like way when you select text and copy&paste it.")))
    (setq fringe-mode
 	 (cons (cdr-safe (assq 'left-fringe default-frame-alist))
 	       (cdr-safe (assq 'right-fringe default-frame-alist))))
-   (if (eq fringe-mode '(nil)) (setq fringe-mode))
+   (if (eq fringe-mode '(nil)) (setq fringe-mode nil))
 
    ;; run this after the frames have been established
    ;; via default-frame-alist
@@ -920,7 +920,6 @@ yes-or-no prompts - y or n will do."
 (aquamacs-set-defaults
    `((line-move-visual arrow-keys-only)
      (text-mode-hook (smart-spacing-mode auto-detect-wrap))
-     (save-place t)
      (save-place-limit 500) ;; speed on quit
      (save-place-forget-unreadable-files nil) ;; too slow
      (mail-setup-with-from nil)
@@ -1001,11 +1000,12 @@ yes-or-no prompts - y or n will do."
     (aquamacs-set-defaults '((setq gnus-select-method
 				   '(nntp "news.readfreenews.net")))))
 
-					; activate the modes now
+;; activate the modes now
+  (save-place-mode 1)
   (global-font-lock-mode 1)
   (column-number-mode 1)
 
-					; ------- Frames (OSX Windows) ----------
+;; ------- Frames (OSX Windows) ----------
 
   (ats "before view")
   (require 'view)
@@ -1056,7 +1056,7 @@ Use this argument instead of explicitly setting `view-exit-action'."
 (setq default-frame-alist (assq-delete-all 'height default-frame-alist))
 ;; sensible defaults for the position of the special windows
 ;; (in case user turns them off)
-(assq-set 'top 30 'special-display-frame-alist)
+(assq-set 'top 30 'special-display-frame-alist)  ;; TO DO: replace with display-buffer-alist
 (assq-set 'left '(- 0) 'special-display-frame-alist)
 (assq-set 'height 30 'special-display-frame-alist)
 (assq-set 'width 75 'special-display-frame-alist)
