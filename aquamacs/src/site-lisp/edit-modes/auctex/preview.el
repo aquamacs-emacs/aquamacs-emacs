@@ -448,9 +448,10 @@ dots per inch.  Buffer-local to rendering buffer.")
   "Generate resolution argument for gs.
 Calculated from real-life factor SCALE and XRES and
 YRES, the screen resolution in dpi."
+  ;; (message "scal %s, xres %s, magn %s" scale xres (preview-get-magnification))
   (format "-r%gx%g"
-	  (/ (* scale xres) (preview-get-magnification))
-	  (/ (* scale yres) (preview-get-magnification))))
+	  (round (/ (* scale xres) (preview-get-magnification)))
+	  (round (/ (* scale yres) (preview-get-magnification)))))
 
 (defun preview-gs-behead-outstanding (err)
   "Remove leading element of outstanding queue after error.
@@ -1851,7 +1852,7 @@ BUFFER-MISC is the appropriate data to be used."
 					    desktop-buffer-name
 					    desktop-buffer-misc)))))
 
-(defcustom preview-auto-cache-preamble 'ask
+(defcustom preview-auto-cache-preamble t
   "*Whether to generate a preamble cache format automatically.
 Possible values are nil, t, and `ask'."
   :group 'preview-latex
@@ -2501,24 +2502,24 @@ to add the preview functionality."
     (easy-menu-define preview-menu LaTeX-mode-map
       "This is the menu for preview-latex."
       '("Preview"
-	"Generate previews"
-	["(or toggle) at point" preview-at-point]
-	["for environment" preview-environment]
-	["for section" preview-section]
-	["for region" preview-region (preview-mark-active)]
-	["for buffer" preview-buffer]
-	["for document" preview-document]
+	["Generate previews" :active nil]
+	["  (or toggle) at point" preview-at-point]
+	["  for environment" preview-environment]
+	["  for section" preview-section]
+	["  for region" preview-region (preview-mark-active)]
+	["  for buffer" preview-buffer]
+	["  for document" preview-document]
 	"---"
-	"Remove previews"
-	["at point" preview-clearout-at-point]
-	["from section" preview-clearout-section]
-	["from region" preview-clearout (preview-mark-active)]
-	["from buffer" preview-clearout-buffer]
-	["from document" preview-clearout-document]
+	["Remove previews" :active nil]
+	["  at point" preview-clearout-at-point]
+	["  from section" preview-clearout-section]
+	["  from region" preview-clearout (preview-mark-active)]
+	["  from buffer" preview-clearout-buffer]
+	["  from document" preview-clearout-document]
 	"---"
-	"Turn preamble cache"
-	["on" preview-cache-preamble]
-	["off" preview-cache-preamble-off]
+	["Turn preamble cache" :active nil]
+	["  on" preview-cache-preamble]
+	["  off" preview-cache-preamble-off]
 	"---"
 	("Customize"
 	 ["Browse options"

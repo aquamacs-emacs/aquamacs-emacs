@@ -143,7 +143,7 @@ If nil, none is specified."
      (context-mode) :help "Run ConTeXt until completion")
     ("BibTeX" "bibtex %s" TeX-run-BibTeX nil t :help "Run BibTeX")
     ("Biber" "biber %s" TeX-run-Biber nil t :help "Run Biber")
-    ("View" "%V" TeX-run-discard-or-function t t :help "Run Viewer")
+    ("View" "%V" TeX-run-discard-or-function nil t :help "Run Viewer")
     ("Print" "%p" TeX-run-command t t :help "Print the file")
     ("Queue" "%q" TeX-run-background nil t :help "View the printer queue"
      :visible TeX-queue-command)
@@ -1896,7 +1896,7 @@ Return the full path to the executable if possible."
 		    TeX-source-specials-view-emacsclient-flags)))
     (if (and client-full (file-executable-p client-full))
 	(concat client-full " " options)
-      (concat client-base " " options))))
+   (concat "\\\"" aquamacs-mac-application-bundle-directory "/Contents/MacOS/bin/" client-base "\\\" " options))))
 
 (defun TeX-source-specials-view-expand-options (&optional viewer)
   "Return source specials command line option for viewer command.
