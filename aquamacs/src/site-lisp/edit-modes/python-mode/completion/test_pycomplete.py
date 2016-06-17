@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import os
+import os, sys
 import linecache
 import tempfile
 from pycomplete import *
@@ -19,7 +19,8 @@ def test_signature():
            'csv_reader = reader(iterable [, dialect=\'excel\']'
     assert pysignature('super') in (
         'super(type) -> unbound super object',
-        'super() -> same as super(__class__, <first argument>)')
+        'super() -> same as super(__class__, <first argument>)',
+        'super(type, obj) -> bound super object; requires isinstance(obj, type)')
 
 def test_help():
     assert pyhelp('os.path.join').startswith('Help on function join')
@@ -28,7 +29,8 @@ def test_help():
     assert pyhelp('csv', imports=('import csv',)).startswith(
         'Help on module csv:\n\nNAME\n    csv - CSV parsing and writing.\n')
     assert pyhelp('import').startswith(
-        'The ``import`` statement\n************************\n')
+        ('The ``import`` statement\n************************\n',
+         'The "import" statement\n**********************\n'))
     assert pyhelp('pydoc.help').startswith(
         'Help on class Helper in module pydoc')
     assert pyhelp('') == ''
@@ -181,8 +183,9 @@ if __name__ == '__main__':
         assert pycompletions('TestClass._member2.', name) == []
         assert pycompletions('TestClass.__member3.ext', name) == \
           ['extend']
-        assert pycompletions('TestClass.member4.prin', name) == \
-          ['print_help', 'print_usage', 'print_version']
+        if sys.version_info[0] < 3:
+            assert pycompletions('TestClass.member4.prin', name) == \
+              ['print_help', 'print_usage', 'print_version']
         assert pycompletions('TestClass.member5.writel', name) == \
           ['writelines']
         assert pycompletions('TestClass.member6.from', name) == \
