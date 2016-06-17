@@ -268,6 +268,14 @@ Better logic needed!  (see 2 uses, in this file).")
                                                     (self-insert-command (prefix-numeric-value arg)))
                                                 (self-insert-command (prefix-numeric-value arg))))))
 
+(defun SAS-menu ()
+  "Start SAS from the menu."
+  (interactive)
+  (if ess-microsoft-p
+      ;; replace with other choices for starting SAS under XEmacs?
+      (error "SAS cannot be started this way in ESS on Windows.")
+    (SAS)))
+
 (defun SAS ()
   "Call 'SAS', from SAS Institute."
   (interactive)
@@ -278,6 +286,7 @@ Better logic needed!  (see 2 uses, in this file).")
              ess-dialect
              temp-dialect))
     (ess-SAS-pre-run-hook temp-dialect)
+    (setq ess-eval-visibly-p nil)
     (inferior-ess)
     (save-excursion
       (set-buffer "*SAS*")

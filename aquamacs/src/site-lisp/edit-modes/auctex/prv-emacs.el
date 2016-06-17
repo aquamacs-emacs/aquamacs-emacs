@@ -80,6 +80,10 @@ Consults `preview-transparent-color'."
 			  (nth 1 preview-transparent-color)
 			  'default)))))
 
+;; Aquamacs-specific
+(defun preview-set-image-size (image)
+  (append image `(:conversion ,(cons 'scale (/ 1.0 preview-resolution-factor)))))
+
 (defsubst preview-create-icon-1 (file type ascent border)
   `(image
     :file ,file
@@ -91,7 +95,7 @@ Consults `preview-transparent-color'."
 (defun preview-create-icon (file type ascent border)
   "Create an icon from FILE, image TYPE, ASCENT and BORDER."
   (list
-   (preview-create-icon-1 file type ascent border)
+   (preview-set-image-size (preview-create-icon-1 file type ascent border))
    file type ascent border))
 
 (put 'preview-filter-specs :type
@@ -388,6 +392,7 @@ run buffer.  A noop for Emacs."
     (define-key LaTeX-mode-map [tool-bar preview]
       `(menu-item "Preview at point" preview-at-point
 		  :image ,preview-tb-icon
+		  :label "Preview"
 		  :help "Preview on/off at point")))
   (when buffer-file-name
     (let* ((filename (expand-file-name buffer-file-name))
@@ -520,8 +525,14 @@ overlays not in the active window."
 This searches FACE for an ATTRIBUTE, using INHERIT
 for resolving unspecified or relative specs.  See the fourth
 argument of function `face-attribute' for details."
-      (face-attribute face attribute nil inherit))
-
+      ;; We must be aware of `face-remapping-alist', because `face-attribute' is not.
+      (if (and inherit
+	       (boundp 'face-remapping-alist))
+	  (setq inherit (or (cdr (assq inherit face-remapping-alist)) inherit)))
+      (face-attribute (or (if (boundp 'face-remapping-alist) (cdr (assq face face-remapping-alist)))
+			  face)
+		      attribute nil inherit))
+  
   (defun preview-inherited-face-attribute (face attribute &optional inherit)
     "Fetch face attribute while adhering to inheritance.
 This searches FACE for an ATTRIBUTE.  If it is 'unspecified,
@@ -585,12 +596,14 @@ The fourth value is the transparent border thickness."
 	((eq (car image) 'image)
 	 image)
 	(t
+	 (preview-set-image-size
 	 (preview-create-icon-1 (nth 0 image)
 				(nth 1 image)
 				(nth 2 image)
 				(if (< (length image) 4)
 				    (preview-get-heuristic-mask)
 				  (nth 3 image))))))
+  )
 
 (defsubst preview-supports-image-type (imagetype)
   "Check if IMAGETYPE is supported."

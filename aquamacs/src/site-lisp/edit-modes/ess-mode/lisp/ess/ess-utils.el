@@ -877,11 +877,10 @@ t. See examples in the tracebug code.
 (defmacro ess-execute-dialect-specific (command &optional prompt &rest args)
   "Execute dialect specific command.
 
--- If command is not defined issue warning 'Not available for dialect X'
--- if a function, execute it with ARGS
+-- If command is nil issue warning 'Not available for dialect X'
+-- If command is a elisp function, execute it with ARGS
 -- If a string starting with 'http' or 'www', browse with `browse-url',
    otherwise execute the command in inferior process.
-
 -- If a string, interpret as a command to subprocess, and
    substitute ARGS with `(format ,command ,@args).
 
@@ -892,7 +891,7 @@ If prompt is a string just pass it to `read-string'. If a list, pass it
 to `ess-completing-read'.
 "
   `(if (null ,command)
-       (message "Sorry, not implemented for dialect %s" ess-dialect)
+       (message "Not implemented for dialect %s" ess-dialect)
      (let* ((com  (if (symbolp ,command)
                      (symbol-function ,command)
                    ,command))
@@ -1152,6 +1151,83 @@ later."
       ;; don't detect intermediate prompts
       (setq content (concat "{" content "}\n")))
     (ess-command content)))
+
+(defvar ess-current-region-overlay
+  (let ((overlay (make-overlay (point) (point))))
+    (overlay-put overlay 'face  'highlight)
+    overlay)
+  "The overlay for highlighting currently evaluated region or line.")
+
+(defun ess-blink-region (start end)
+  (when ess-blink-region
+    (move-overlay ess-current-region-overlay start end)
+    (run-with-timer ess-blink-delay nil
+                    (lambda ()
+                      (delete-overlay ess-current-region-overlay)))))
+
+(defun ess-deactivate-mark ()
+  (cond ((and (featurep 'evil) evil-mode)
+         (when (evil-visual-state-p)
+           (evil-normal-state)))
+        ((fboundp 'deactivate-mark)
+         (deactivate-mark))))
+
+(defun ess-replace-in-string (str regexp newtext &optional literal)
+  "Replace all matches in STR for REGEXP with NEWTEXT string.
+Optional LITERAL non-nil means do a literal replacement.
+Otherwise treat \\ in NEWTEXT string as special:
+  \\& means substitute original matched text,
+  \\N means substitute match for \(...\) number N,
+  \\\\ means insert one \\."
+  (if (not (stringp str))
+      (error "(replace-in-string): First argument must be a string: %s" str))
+  (if (stringp newtext)
+      nil
+    (error "(replace-in-string): 3rd arg must be a string: %s"
+           newtext))
+  (let ((rtn-str "")
+        (start 0)
+        (special)
+        match prev-start)
+    (while (setq match (string-match regexp str start))
+      (setq prev-start start
+            start (match-end 0)
+            rtn-str
+            (concat
+             rtn-str
+             (substring str prev-start match)
+             (cond (literal newtext)
+                   (t (mapconcat
+                       (function
+                        (lambda (c)
+                          (if special
+                              (progn
+                                (setq special nil)
+                                (cond ((eq c ?\\) "\\")
+                                      ((eq c ?&)
+                                       (substring str
+                                                  (match-beginning 0)
+                                                  (match-end 0)))
+                                      ((and (>= c ?0) (<= c ?9))
+                                       (if (> c (+ ?0 (length
+                                                       (match-data))))
+                                           ;; Invalid match num
+                                           (error "(replace-in-string) Invalid match num: %c" c)
+                                         (setq c (- c ?0))
+                                         (substring str
+                                                    (match-beginning c)
+                                                    (match-end c))))
+                                      (t (char-to-string c))))
+                            (if (eq c ?\\) (progn (setq special t) nil)
+                              (char-to-string c)))))
+                       newtext ""))))))
+    (concat rtn-str (substring str start))))
+
+(defun ess-kill-last-line ()
+  (save-excursion
+    (goto-char (point-max))
+    (forward-line -1)
+    (delete-region (point-at-eol) (point-max))))
 
 (provide 'ess-utils)
 

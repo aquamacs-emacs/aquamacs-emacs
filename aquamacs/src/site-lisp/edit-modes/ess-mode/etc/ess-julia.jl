@@ -1,5 +1,6 @@
 module ESS
 
+
 function all_help_topics()
     Base.Help.init_help()
     ## show all categories 
@@ -11,9 +12,10 @@ function all_help_topics()
     end
 end
 
-function help(topic::String)
-    ##Base.Help.help(topic) ## v0.3 and earlier?
-    eval(parse("@doc $topic")) ##v0.4
+function help(topic::AbstractString)
+    VERSION >= v"0.4-" ?
+    eval(current_module(), parse("@doc $topic")) :
+    Base.Help.help(topic)
 end    
 
 ## modified version of function show(io::IO, m::Method)
@@ -27,9 +29,11 @@ function fun_args(m::Method)
     e = Base.uncompressed_ast(li)
     argnames = e.args[1]
     print(io, "(")
-    print_joined(io, [isempty(d[2]) ? d[1] : d[1]*"::"*d[2] for d in decls], ",", ",")    
+    print_joined(io, [escape_string(isempty(d[2]) ? d[1] : d[1]*"::"*d[2]) for d in decls], ",", ",")    
     print(io, ")")
 end 
+
+VERSION >= v"0.4-" && (Base.function_module(f::Function)=f.env.module)
 
 ## modified versionof show(io::IO, mt::MethodTable)
 function fun_args(f::Function)
@@ -40,16 +44,14 @@ function fun_args(f::Function)
     end 
     print("(list \"$mod\" nil '(")
     d = mt.defs
-    while !is(d, ())
+    while d != nothing && d != ()
         print("\"")
         ## method
         fun_args(d)
         print("\" ")
         d = d.next
-        if is(d,())
-            print("))")
-        end
     end
+    print("))")
 end
 
 function fun_args(s::ASCIIString)
@@ -65,7 +67,7 @@ end
 
 function fun_args(t::DataType)
     print("(list nil nil '(")
-    for d = names(t)
+    for d = fieldnames(t)
         print("\"$d\" ")
     end
     print("))")
@@ -83,7 +85,7 @@ function components(m::Module)
 end
 
 function components(t::DataType)
-    for v in sort(names(t))
+    for v in sort(fieldnames(t))
         println(rpad(string(v), 30), "field")
     end
 end

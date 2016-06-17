@@ -69,8 +69,7 @@ VISIBLY is not currently used."
 ;;; HELP
 (defun ess-julia-get-help-topics (&optional proc)
   (append (ess-get-words-from-vector "ESS.all_help_topics()\n")
-          (ess-julia--get-objects)))
-    ;; (ess-command com)))
+          (ess-julia--get-objects proc)))
 
 (defun ess-julia--retrive-topics (url)
   (with-current-buffer (url-retrieve-synchronously url)
@@ -136,10 +135,10 @@ VISIBLY is not currently used."
         (message "No ESS process of dialect %s started" ess-dialect)
         nil))))
 
-(defun ess-julia-objects (prefix)
-  "Get all cached objects"
+(defun ess-julia-objects (prefix &optional proc)
+  "Given PREFIX get all cached objects from PROC."
   (when prefix
-    (let ((proc (ess-get-next-available-process nil t)))
+    (let ((proc (or proc (ess-get-next-available-process nil t))))
       (if (string-match "\\(.*\\)\\..*$" prefix)
           (let ((module (match-string 1 prefix)))
             (mapcar (lambda (el) (concat module "." (car el)))
@@ -150,8 +149,7 @@ VISIBLY is not currently used."
   "Return all available objects.
 Local caching might be used. If MODULE is givven, return only
 objects from that MODULE."
-  (setq proc (or proc
-                 (get-process ess-local-process-name)))
+  (setq proc (or proc (ess-get-process)))
   (when (process-live-p proc)
     (let ((objects (process-get proc 'objects)))
       (if (process-get proc 'busy)
@@ -227,7 +225,9 @@ objects from that MODULE."
     (prefix (unless (company-in-string-or-comment)
               (let ((start (ess-symbol-start)))
                 (when start (buffer-substring-no-properties start (point))))))
-    (candidates (all-completions arg (mapcar #'car (ess-julia-objects arg))))
+    (candidates (let ((proc (ess-get-next-available-process)))
+                  (when proc
+                    (all-completions arg (mapcar #'car (ess-julia-objects arg proc))))))
     (doc-buffer (company-doc-buffer (ess-julia-get-object-help-string arg)))))
 
 
@@ -284,54 +284,55 @@ to look up any doc strings."
 
 ;;; CORE
 (defvar ess-julia-customize-alist
-  '((comint-use-prompt-regexp		. t)
-    (ess-eldoc-function                 . 'ess-julia-eldoc-function)
-    (inferior-ess-primary-prompt	. "a> ") ;; from julia>
-    (inferior-ess-secondary-prompt	. nil)
-    (inferior-ess-prompt		. "\\w*> ")
-    (ess-local-customize-alist		. 'ess-julia-customize-alist)
-    (inferior-ess-program		. inferior-julia-program-name)
-    (ess-get-help-topics-function	. 'ess-julia-get-help-topics)
-    (ess-help-web-search-command        . "http://docs.julialang.org/en/latest/search/?q=%s")
-    (ess-manual-lookup-command          . 'ess-julia-manual-lookup-function)
+  '((comint-use-prompt-regexp      . t)
+    (ess-eldoc-function            . 'ess-julia-eldoc-function)
+    (inferior-ess-primary-prompt   . "a> ") ;; from julia>
+    (inferior-ess-secondary-prompt . nil)
+    (inferior-ess-prompt           . "\\w*> ")
+    (ess-local-customize-alist     . 'ess-julia-customize-alist)
+    (inferior-ess-program          . inferior-julia-program-name)
+    (ess-get-help-topics-function  . 'ess-julia-get-help-topics)
+    (ess-help-web-search-command   . "http://docs.julialang.org/en/latest/search/?q=%s")
+    (ess-manual-lookup-command     . 'ess-julia-manual-lookup-function)
     ;; (ess-reference-lookup-command       . 'ess-julia-reference-lookup-function)
-    (ess-load-command   		. "include(\"%s\")\n")
-    (ess-funargs-command                . "ESS.fun_args(\"%s\")\n")
-    (ess-dump-error-re			. "in \\w* at \\(.*\\):[0-9]+")
-    (ess-error-regexp			. "\\(^\\s-*at\\s-*\\(?3:.*\\):\\(?2:[0-9]+\\)\\)")
-    (ess-error-regexp-alist		. ess-julia-error-regexp-alist)
-    (ess-send-string-function		. nil);'ess-julia-send-string-function)
-    (ess-imenu-generic-expression       . ess-julia-imenu-generic-expression)
-    ;; (inferior-ess-objects-command	. inferior-R-objects-command)
-    ;; (inferior-ess-search-list-command	. "search()\n")
-    (inferior-ess-help-command		. "ESS.help(\"%s\")\n")
-    ;; (inferior-ess-help-command	. "help(\"%s\")\n")
-    (ess-language			. "julia")
-    (ess-dialect			. "julia")
-    (ess-suffix				. "jl")
-    (ess-ac-sources                     . '(ac-source-ess-julia-objects))
-    (ess-company-backends		. '(company-ess-julia-objects))
-    (ess-dump-filename-template		. (ess-replace-regexp-in-string
-					   "S$" ess-suffix ; in the one from custom:
-					   ess-dump-filename-template-proto))
-    (ess-mode-editing-alist	        . nil)
-    (ess-change-sp-regexp		. nil );ess-R-change-sp-regexp)
-    (ess-help-sec-regex			. ess-help-R-sec-regex)
-    (ess-help-sec-keys-alist		. ess-help-R-sec-keys-alist)
-    (ess-loop-timeout			. ess-S-loop-timeout);fixme: dialect spec.
-    (ess-cmd-delay			. ess-R-cmd-delay)
-    (ess-function-pattern		. ess-R-function-pattern)
-    (ess-object-name-db-file		. "ess-jl-namedb.el" )
-    (ess-smart-operators		. ess-R-smart-operators)
-    (inferior-ess-help-filetype        . nil)
-    (inferior-ess-exit-command		. "exit()\n")
+    (ess-load-command              . "include(\"%s\")\n")
+    (ess-funargs-command           . "ESS.fun_args(\"%s\")\n")
+    (ess-dump-error-re             . "in \\w* at \\(.*\\):[0-9]+")
+    (ess-error-regexp              . "\\(^\\s-*at\\s-*\\(?3:.*\\):\\(?2:[0-9]+\\)\\)")
+    (ess-error-regexp-alist        . ess-julia-error-regexp-alist)
+    (ess-imenu-generic-expression  . ess-julia-imenu-generic-expression)
+    ;; (inferior-ess-objects-command    . inferior-R-objects-command)
+    ;; (inferior-ess-search-list-command        . "search()\n")
+    (inferior-ess-help-command     . "ESS.help(\"%s\")\n")
+    ;; (inferior-ess-help-command       . "help(\"%s\")\n")
+    (ess-language                  . "julia")
+    (ess-dialect                   . "julia")
+    (ess-suffix                    . "jl")
+    (ess-ac-sources                . '(ac-source-ess-julia-objects))
+    (ess-company-backends          . '(company-ess-julia-objects))
+    (ess-dump-filename-template    . (ess-replace-regexp-in-string
+                                           "S$" ess-suffix ; in the one from custom:
+                                           ess-dump-filename-template-proto))
+    (ess-mode-editing-alist        . nil)
+    (ess-change-sp-regexp          . nil );ess-R-change-sp-regexp)
+    (ess-help-sec-regex            . ess-help-R-sec-regex)
+    (ess-help-sec-keys-alist       . ess-help-R-sec-keys-alist)
+    (ess-loop-timeout              . ess-S-loop-timeout);fixme: dialect spec.
+    (ess-cmd-delay                 . ess-R-cmd-delay)
+    (ess-function-pattern          . ess-R-function-pattern)
+    (ess-object-name-db-file       . "ess-jl-namedb.el" )
+    (ess-smart-operators           . ess-R-smart-operators)
+    (inferior-ess-help-filetype    . nil)
+    (inferior-ess-exit-command     . "exit()\n")
     ;;harmful for shell-mode's C-a: -- but "necessary" for ESS-help?
-    (inferior-ess-start-file		. nil) ;; "~/.ess-R"
-    (inferior-ess-start-args		. "")
-    (inferior-ess-language-start	. nil)
-    (ess-STERM		. "iESS")
-    (ess-editor		. R-editor)
-    (ess-pager		. R-pager)
+    (inferior-ess-start-file       . nil) ;; "~/.ess-R"
+    (inferior-ess-start-args       . "")
+    (inferior-ess-language-start   . nil)
+    (ess-STERM                     . "iESS")
+    (ess-editor                    . R-editor)
+    (ess-pager                     . R-pager)
+    (ess-getwd-command             . "pwd()\n")
+    (ess-setwd-command             . "cd(expanduser(\"%s\"))\n")
     )
   "Variables to customize for Julia -- set up later than emacs initialization.")
 

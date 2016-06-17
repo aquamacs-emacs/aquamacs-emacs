@@ -11,7 +11,7 @@
         getRversion()
     } else {
         paste(R.version$major, R.version$minor, sep=".")
- }
+    }
 
 .ess.R.has.utils <- (.ess.Rversion >= "1.9.0")
 .ess.utils.name <- paste("package",
@@ -20,16 +20,28 @@
 
 ## Instead of modern  utils::help use one that works in R 1.0.0:
 .ess.findFUN   <- get("find", .ess.utils.name)
-.ess.sourceFUN <- get("source", pos="package:base")
-.ess.helpFUN   <- get("help", envir=.GlobalEnv)# so it also works with d..tools
+
 
 ### HELP
-.ess.help <- function(..., help.type = getOption('help_type'))
-{
-    if (.ess.Rversion > '2.10')# abbreviating 'help_type' on purpose:
-	.ess.helpFUN(..., help = help.type)
-    else # not using identical(), and working also for NULL:
-	.ess.helpFUN(..., htmlhelp = (length(help.type) && help.type=='html'))
+.ess.help <- function(..., help.type = getOption("help_type")) {
+    if (is.null(help.type)) {
+        help.type <- "text"
+    }
+
+    ## - Searching in global env makes sure it works with devtools
+    ## - Redefining to .ess.help this way is necessary because
+    ##   `print.help_files_with_topic` (used internally when there's
+    ##   more than one a package) uses the quoted call
+    .ess.help <- function(...) {
+        do.call(get("help", envir = .GlobalEnv), list(...))
+    }
+
+    if (.ess.Rversion > "2.10") {
+        ## Abbreviating help_type to avoid underscore
+        .ess.help(..., help = help.type)
+    } else {
+        .ess.help(..., htmlhelp = help.type == "html")
+    }
 }
 
 .ess.getHelpAliases <- function(){
@@ -46,29 +58,44 @@
 }
 
 ### SOURCING
-.ess.eval <- function(string, echo = TRUE, print.eval = TRUE,
+.ess.eval <- function(string, visibly = TRUE, output = FALSE,
                       max.deparse.length = 300,
-		      file = tempfile("ESS"),
-		      local = if (.ess.Rversion > '2.13') parent.frame() else FALSE)
+                      file = tempfile("ESS"), local = NULL)
 {
+    if (is.null(local)) {
+        local <- if (.ess.Rversion > '2.13') parent.frame() else FALSE
+    }
+
     ## create FILE, put string into it. Then source.
     ## arguments are like in source and .ess.source
     cat(string, file = file)
     on.exit(file.remove(file))
-    .ess.source(file, echo = echo, print.eval = print.eval,
-		max.deparse.length = max.deparse.length, local = local)
+    .ess.source(file, visibly = visibly, output = output,
+                max.deparse.length = max.deparse.length,
+                local = local, fake.source = TRUE)
 }
 
-.ess.source <- function(file, echo = TRUE, print.eval = TRUE,
-			max.deparse.length = 300,
-			local = if (.ess.Rversion > '2.13') parent.frame() else FALSE)
+.ess.source <- function(file, visibly = TRUE, output = FALSE,
+                        max.deparse.length = 300,
+                        local = NULL, fake.source = FALSE)
 {
+    if (is.null(local)) {
+        local <- if (.ess.Rversion > '2.13') parent.frame() else FALSE
+    }
+
     ss <- # drop 'keep.source' for older versions
-	if(.ess.Rversion >= "2.8") .ess.sourceFUN
-        else function(..., keep.source) .ess.sourceFUN(...)
-    invisible(ss(file, echo = echo, local = local, print.eval = print.eval,
-		 max.deparse.length = max.deparse.length,
-		 keep.source = TRUE)$value) ## return value for org-babel
+        if(.ess.Rversion >= "2.8") base::source
+        else function(..., keep.source) base::source(...)
+    out <- ss(file, echo = visibly, local = local, print.eval = output,
+              max.deparse.length = max.deparse.length,
+              keep.source = TRUE)$value
+
+    if (!fake.source) {
+        cat(sprintf("Sourced file %s\n", file))
+    }
+
+    ## Return value for org-babel
+    invisible(out)
 }
 
 if(.ess.Rversion < "1.8")
@@ -83,3 +110,7 @@ if(.ess.Rversion < "1.8")
         unquote(substitute(expr))
     }
 
+
+## Local Variables:
+## eval: (ess-set-style 'RRR t)
+## End:
