@@ -1,6 +1,6 @@
 ;;; harvard.el --- Support for Harvard Citation style package for AUCTeX.
 
-;; Copyright (C) 1994, 1997, 2005 Free Software Foundation, Inc.
+;; Copyright (C) 1994, 1997, 2005, 2012, 2014 Free Software Foundation, Inc.
 
 ;; Author: Berwin Turlach <statba@nus.edu.sg>
 ;; Maintainer: auctex-devel@gnu.org
@@ -25,89 +25,89 @@
 
 ;;; Code:
 
-(TeX-add-style-hook "harvard"
- (function
-  (lambda ()
+(TeX-add-style-hook
+ "harvard"
+ #'(lambda ()
 
-    (LaTeX-add-environments
-     '("thebibliography" LaTeX-env-harvardbib ignore))
+     (LaTeX-add-environments
+      '("thebibliography" LaTeX-env-harvardbib ignore))
 
-    (TeX-add-symbols
-     "harvardand"
-     '("citeasnoun"
-       (TeX-arg-conditional TeX-arg-cite-note-p ([ "Note" ]) nil)
-       TeX-arg-cite)
-     '("possessivecite"
-       (TeX-arg-conditional TeX-arg-cite-note-p ([ "Note" ]) nil)
-       TeX-arg-cite)
-     '("citeaffixed"
-       (TeX-arg-conditional TeX-arg-cite-note-p ([ "Note" ]) nil)
-       TeX-arg-cite "Affix")
-     '("citeyear"
-       (TeX-arg-conditional TeX-arg-cite-note-p ([ "Note" ]) nil)
-       TeX-arg-cite)
-     '("citename"
-       (TeX-arg-conditional TeX-arg-cite-note-p ([ "Note" ]) nil)
-       TeX-arg-cite)
-     '("citationstyle"
-       (TeX-arg-eval completing-read "Citation style: " '(("agsm") ("dcu"))))
-     '("citationmode"
-       (TeX-arg-eval completing-read "Citation mode: "
-                     '(("full") ("abbr") ("default"))))
-     '("harvardparenthesis"
-       (TeX-arg-eval completing-read "Harvardparenthesis: "
-                     '(("round") ("curly") ("angle") ("square"))))
-     '("bibliographystyle"
-       (TeX-arg-eval
-	completing-read "Bibliography style: "
-        '(("agsm") ("apsr") ("dcu") ("jmr") ("jphysicsB") ("kluwer") ("nederlands") ("econometrica")))
-       ignore)
-     '("harvarditem" [ "Short citation" ]
-       "Complete citation" "Year" TeX-arg-define-cite))
+     (TeX-add-symbols
+      "harvardand"
+      '("citeasnoun"
+	(TeX-arg-conditional TeX-arg-cite-note-p ([ "Note" ]) nil)
+	TeX-arg-cite)
+      '("possessivecite"
+	(TeX-arg-conditional TeX-arg-cite-note-p ([ "Note" ]) nil)
+	TeX-arg-cite)
+      '("citeaffixed"
+	(TeX-arg-conditional TeX-arg-cite-note-p ([ "Note" ]) nil)
+	TeX-arg-cite "Affix")
+      '("citeyear"
+	(TeX-arg-conditional TeX-arg-cite-note-p ([ "Note" ]) nil)
+	TeX-arg-cite)
+      '("citename"
+	(TeX-arg-conditional TeX-arg-cite-note-p ([ "Note" ]) nil)
+	TeX-arg-cite)
+      '("citationstyle"
+	(TeX-arg-eval completing-read "Citation style: " '(("agsm") ("dcu"))))
+      '("citationmode"
+	(TeX-arg-eval completing-read "Citation mode: "
+		      '(("full") ("abbr") ("default"))))
+      '("harvardparenthesis"
+	(TeX-arg-eval completing-read "Harvardparenthesis: "
+		      '(("round") ("curly") ("angle") ("square"))))
+      '("bibliographystyle"
+	(TeX-arg-eval
+	 completing-read "Bibliography style: "
+	 '(("agsm") ("apsr") ("dcu") ("jmr") ("jphysicsB") ("kluwer") ("nederlands") ("econometrica")))
+	ignore)
+      '("harvarditem" [ "Short citation" ]
+	"Complete citation" "Year" TeX-arg-define-cite))
 
-    (setq TeX-complete-list
-	  (append '(("\\\\citeasnoun\\[[^]\n\r\\%]*\\]{\\([^{}\n\r\\%,]*\\)"
-                     1 LaTeX-bibitem-list "}")
-                    ("\\\\citeasnoun{\\([^{}\n\r\\%,]*\\)" 1
-                     LaTeX-bibitem-list "}")
-                    ("\\\\possessivecite\\[[^]\n\r\\%]*\\]{\\([^{}\n\r\\%,]*\\)" 
-                     1 LaTeX-bibitem-list "}")
-                    ("\\\\possessivecite{\\([^{}\n\r\\%,]*\\)" 1
-                     LaTeX-bibitem-list "}")
-                    ("\\\\citename\\[[^]\n\r\\%]*\\]{\\([^{}\n\r\\%,]*\\)"
-                     1 LaTeX-bibitem-list "}")
-                    ("\\\\citename{\\([^{}\n\r\\%,]*\\)" 1
-                     LaTeX-bibitem-list "}")
-                    ("\\\\citeaffixed\\[[^]\n\r\\%]*\\]{\\([^{}\n\r\\%,]*\\)"
-                     1 LaTeX-bibitem-list "}")
-                    ("\\\\citeaffixed{\\([^{}\n\r\\%,]*\\)" 1
-                     LaTeX-bibitem-list "}") 
-                    ("\\\\citeaffixed{\\([^{}\n\r\\%]*,\\)\\([^{}\n\r\\%,]*\\)"
-                     2 LaTeX-bibitem-list)
-                    ("\\\\citeyear\\[[^]\n\r\\%]*\\]{\\([^{}\n\r\\%,]*\\)"
-                     1 LaTeX-bibitem-list "}")
-                    ("\\\\citeyear{\\([^{}\n\r\\%,]*\\)" 1
-                     LaTeX-bibitem-list "}") 
-                    ("\\\\citeyear{\\([^{}\n\r\\%]*,\\)\\([^{}\n\r\\%,]*\\)"
-                     2 LaTeX-bibitem-list))
-		  TeX-complete-list))
+     (setq TeX-complete-list
+	   (append '(("\\\\citeasnoun\\[[^]\n\r\\%]*\\]{\\([^{}\n\r\\%,]*\\)"
+		      1 LaTeX-bibitem-list "}")
+		     ("\\\\citeasnoun{\\([^{}\n\r\\%,]*\\)" 1
+		      LaTeX-bibitem-list "}")
+		     ("\\\\possessivecite\\[[^]\n\r\\%]*\\]{\\([^{}\n\r\\%,]*\\)"
+		      1 LaTeX-bibitem-list "}")
+		     ("\\\\possessivecite{\\([^{}\n\r\\%,]*\\)" 1
+		      LaTeX-bibitem-list "}")
+		     ("\\\\citename\\[[^]\n\r\\%]*\\]{\\([^{}\n\r\\%,]*\\)"
+		      1 LaTeX-bibitem-list "}")
+		     ("\\\\citename{\\([^{}\n\r\\%,]*\\)" 1
+		      LaTeX-bibitem-list "}")
+		     ("\\\\citeaffixed\\[[^]\n\r\\%]*\\]{\\([^{}\n\r\\%,]*\\)"
+		      1 LaTeX-bibitem-list "}")
+		     ("\\\\citeaffixed{\\([^{}\n\r\\%,]*\\)" 1
+		      LaTeX-bibitem-list "}")
+		     ("\\\\citeaffixed{\\([^{}\n\r\\%]*,\\)\\([^{}\n\r\\%,]*\\)"
+		      2 LaTeX-bibitem-list)
+		     ("\\\\citeyear\\[[^]\n\r\\%]*\\]{\\([^{}\n\r\\%,]*\\)"
+		      1 LaTeX-bibitem-list "}")
+		     ("\\\\citeyear{\\([^{}\n\r\\%,]*\\)" 1
+		      LaTeX-bibitem-list "}")
+		     ("\\\\citeyear{\\([^{}\n\r\\%]*,\\)\\([^{}\n\r\\%,]*\\)"
+		      2 LaTeX-bibitem-list))
+		   TeX-complete-list))
 
-    (setq LaTeX-auto-regexp-list
-          (append '(("\\\\harvarditem{\\([a-zA-Z][^%#'()={}]*\\)}{\\([0-9][^, %\"#'()={}]*\\)}{\\([a-zA-Z][^, %\"#'()={}]*\\)}" 3 LaTeX-auto-bibitem)
-                    ("\\\\harvarditem\\[[^][\n\r]+\\]{\\([a-zA-Z][^%#'()={}]*\\)}{\\([0-9][^, %\"#'()={}]*\\)}{\\([a-zA-Z][^, %\"#'()={}]*\\)}" 3 LaTeX-auto-bibitem)
-                    )
-                  LaTeX-auto-regexp-list))
-    
-    (setq LaTeX-item-list
-	  (cons '("thebibliography" . LaTeX-item-harvardbib)
-		LaTeX-item-list))
+     (setq LaTeX-auto-regexp-list
+	   (append '(("\\\\harvarditem{\\([a-zA-Z][^%#'()={}]*\\)}{\\([0-9][^, %\"#'()={}]*\\)}{\\([a-zA-Z][^, %\"#'()={}]*\\)}" 3 LaTeX-auto-bibitem)
+		     ("\\\\harvarditem\\[[^][\n\r]+\\]{\\([a-zA-Z][^%#'()={}]*\\)}{\\([0-9][^, %\"#'()={}]*\\)}{\\([a-zA-Z][^, %\"#'()={}]*\\)}" 3 LaTeX-auto-bibitem)
+		     )
+		   LaTeX-auto-regexp-list))
 
-    ;; Tell RefTeX
-    (when (fboundp 'reftex-set-cite-format)
-      (reftex-set-cite-format 'harvard))))
+     (setq LaTeX-item-list
+	   (cons '("thebibliography" . LaTeX-item-harvardbib)
+		 LaTeX-item-list))
+
+     ;; Tell RefTeX
+     (when (fboundp 'reftex-set-cite-format)
+       (reftex-set-cite-format 'harvard)))
  LaTeX-dialect)
 
-(defun LaTeX-env-harvardbib (environment &optional ignore)
+(defun LaTeX-env-harvardbib (environment &optional _ignore)
   "Insert ENVIRONMENT with label for harvarditem."
   (LaTeX-insert-environment environment
 			    (concat TeX-grop "xx" TeX-grcl))

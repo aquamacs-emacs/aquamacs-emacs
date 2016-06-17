@@ -1,4 +1,4 @@
-;; Copyright (C) 1994, 2013  Free Software Foundation, Inc.
+;; Copyright (C) 1994, 2013, 2014  Free Software Foundation, Inc.
 
 ;; Author: Werner Fink <werner@suse.de>
 ;; Maintainer: auctex-devel@gnu.org
@@ -94,18 +94,18 @@
   "Insert ENVIRONMENT and prompt for recipient and address."
   (let (
 	(sender (LaTeX-dinbrief-sender))
-	(recipient (read-string "Empfänger: "))
+	(recipient (TeX-read-string "Empfänger: "))
 	(address (LaTeX-dinbrief-recipient))
-	(date (read-string "Datum: " (LaTeX-dinbrief-today)))
-	(postremark (read-string "Postvermerk: "))
-	(fenster (read-string "Fenster \(ja/nein\): "))
-	(vermerk (read-string "Behandlungsvermerk: "))
-	(verteil (read-string "Verteiler: "))
-	(betreff (read-string "Betreff: "))
-	(opening (read-string "Anrede: "))
-	(closing (read-string "Schluss: "))
-	(signature (read-string "Unterschrift: "))
-	(anlage (read-string "Anlagen: ")))
+	(date (TeX-read-string "Datum: " (LaTeX-dinbrief-today)))
+	(postremark (TeX-read-string "Postvermerk: "))
+	(fenster (TeX-read-string "Fenster \(ja/nein\): "))
+	(vermerk (TeX-read-string "Behandlungsvermerk: "))
+	(verteil (TeX-read-string "Verteiler: "))
+	(betreff (TeX-read-string "Betreff: "))
+	(opening (TeX-read-string "Anrede: "))
+	(closing (TeX-read-string "Schluss: "))
+	(signature (TeX-read-string "Unterschrift: "))
+	(anlage (TeX-read-string "Anlagen: ")))
 
     (if (string= fenster "ja")
 	(progn
@@ -117,7 +117,7 @@
 	  (newline-and-indent)
 	  (LaTeX-dinbrief-insert TeX-esc "windowtics")
 	  (newline-and-indent)
-	  (let ((retouradr (read-string "Retouradresse: " sender)))
+	  (let ((retouradr (TeX-read-string "Retouradresse: " sender)))
 	    (newline-and-indent)
 	  (if (not (zerop (length retouradr)))
 	      (progn
@@ -206,15 +206,15 @@
 (defun LaTeX-dinbrief-sender ()
   "Read and write the senders address."
   (interactive)
-  (let ((name (read-string "Absender: " (user-full-name)))
-	(str  (read-string "Meine Strasse:  "))
-	(ort  (read-string "Mein Wohnort:  ")))
+  (let ((name (TeX-read-string "Absender: " (user-full-name)))
+	(str  (TeX-read-string "Meine Strasse:  "))
+	(ort  (TeX-read-string "Mein Wohnort:  ")))
     (if (not (zerop (length name)))
 	(progn
 	  (goto-char (point-min)) ; insert before \end{document}
 	  (if (re-search-forward ".end.document." (point-max) t)
-	     (beginning-of-line 1))
-	  (previous-line 1)
+	      (beginning-of-line 1))
+	  (previous-line 1)             ;FIXME: Use forward-line!
 	  (LaTeX-dinbrief-insert TeX-esc "address" TeX-grop name)
 	  (if (not (zerop (length str)))
 	      (progn
@@ -233,8 +233,8 @@
 (defun LaTeX-dinbrief-recipient ()
   "Read and return the recipient address."
   (interactive)
-  (let ((str  (read-string "Wohnhaft in Strasse:  "))
-	(ort  (read-string "Aus der Ortschaft:  ")))
+  (let ((str  (TeX-read-string "Wohnhaft in Strasse:  "))
+	(ort  (TeX-read-string "Aus der Ortschaft:  ")))
     (if (not (zerop (length str)))
 	(if (not (zerop (length ort)))
 	    (concat str " " TeX-esc TeX-esc " " ort)
@@ -264,7 +264,7 @@
     (let ((year (substring ctime-string (match-beginning 3) (match-end 3)))
 	  (month (substring ctime-string (match-beginning 1) (match-end 1)))
 	  (day (substring ctime-string (match-beginning 2) (match-end 2)))
-	  (place (read-string "Heutiger Ort: ")))
+	  (place (TeX-read-string "Heutiger Ort: ")))
       (if (assoc month month-alist)
 	  (progn
 	    (setq month (cdr (assoc month month-alist)))

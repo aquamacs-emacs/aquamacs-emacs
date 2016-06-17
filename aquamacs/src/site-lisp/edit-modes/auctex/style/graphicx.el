@@ -1,6 +1,6 @@
 ;;; graphicx.el --- AUCTeX style file for graphicx.sty
 
-;; Copyright (C) 2000, 2004, 2005 by Free Software Foundation, Inc.
+;; Copyright (C) 2000, 2004, 2005, 2014 by Free Software Foundation, Inc.
 
 ;; Author: Ryuichi Arafune <arafune@debian.org>
 ;; Created: 1999/3/20
@@ -91,7 +91,7 @@ doesn't works with Emacs 21.3 or XEmacs.  See
  	  (string-match (LaTeX-includegraphics-extensions) fname))))
    (TeX-master-directory)))
 
-(defun LaTeX-arg-includegraphics (prefix)
+(defun LaTeX-arg-includegraphics (_prefix)
   "Ask for mandantory and optional arguments for the \\includegraphics command.
 
 The extent of the optional arguments is determined by the prefix argument and
@@ -123,19 +123,19 @@ The extent of the optional arguments is determined by the prefix argument and
 	 (totalheight
 	  (TeX-arg-maybe
 	   'totalheight incl-opts
-	   '(read-string
+	   '(TeX-read-string
 	     (concat "Total Height (" TeX-default-unit-for-image "): "))))
 	 (height
 	  (TeX-arg-maybe
 	   'height incl-opts
 	   ;; Either totalheight or height make sense:
 	   '(when (zerop (length totalheight))
-	      (read-string
+	      (TeX-read-string
 	       (concat "Figure height (" TeX-default-unit-for-image "): ")))))
 	 (width
 	  (TeX-arg-maybe
 	   'width incl-opts
-	   '(read-string
+	   '(TeX-read-string
 	     (concat "Figure width (" TeX-default-unit-for-image "): "))))
 	 (scale
 	  (TeX-arg-maybe
@@ -144,22 +144,22 @@ The extent of the optional arguments is determined by the prefix argument and
 	   '(when (zerop (+ (length totalheight)
 			    (length height)
 			    (length width)))
-	      (read-string "Scale: "))))
+	      (TeX-read-string "Scale: "))))
 	 (angle
 	  (TeX-arg-maybe
 	   'angle incl-opts
-	   '(read-string "Rotation angle: ")))
+	   '(TeX-read-string "Rotation angle: ")))
 	 (origin
 	  (TeX-arg-maybe
 	   'origin incl-opts
-	   '(read-string
+	   '(TeX-read-string
 	     (concat
 	      "Origin (any combination of `lcr' (horizontal) "
 	      "and `tcbB' (vertical)): "))))
 	 (page ;; Not in any table; Only for PDF.
 	  (TeX-arg-maybe
 	   'page incl-opts
-	   '(read-string "Page: ")))
+	   '(TeX-read-string "Page: ")))
 	 (bb
 	  (TeX-arg-maybe
 	   'bb incl-opts
@@ -236,29 +236,29 @@ The extent of the optional arguments is determined by the prefix argument and
       (setq maybe-comma ",")
       (setq maybe-left-brace ""))
     (when bb
-      (setq llx (read-string "Bounding Box lower left x: "))
-      (setq lly (read-string "Bounding Box lower left y: "))
-      (setq urx (read-string "Bounding Box upper right x: "))
-      (setq ury (read-string "Bounding Box upper right y: "))
+      (setq llx (TeX-read-string "Bounding Box lower left x: "))
+      (setq lly (TeX-read-string "Bounding Box lower left y: "))
+      (setq urx (TeX-read-string "Bounding Box upper right x: "))
+      (setq ury (TeX-read-string "Bounding Box upper right y: "))
       (insert maybe-left-brace maybe-comma
 	      "bb=" llx " " lly " " urx " " ury)
       (setq maybe-comma ",")
       (setq maybe-left-brace ""))
     ;;
     (when viewport
-      (setq llx (read-string "Viewport lower left x: "))
-      (setq lly (read-string "Viewport lower left y: "))
-      (setq urx (read-string "Viewport upper right x: "))
-      (setq ury (read-string "Viewport upper right y: "))
+      (setq llx (TeX-read-string "Viewport lower left x: "))
+      (setq lly (TeX-read-string "Viewport lower left y: "))
+      (setq urx (TeX-read-string "Viewport upper right x: "))
+      (setq ury (TeX-read-string "Viewport upper right y: "))
       (insert maybe-left-brace maybe-comma
 	      "viewport=" llx " " lly " " urx " " ury)
       (setq maybe-comma ",")
       (setq maybe-left-brace ""))
     (when trim
-      (setq llx (read-string "Trim lower left x: "))
-      (setq lly (read-string "Trim lower left y: "))
-      (setq urx (read-string "Trim Upper right x: "))
-      (setq ury (read-string "Trim Upper right y: "))
+      (setq llx (TeX-read-string "Trim lower left x: "))
+      (setq lly (TeX-read-string "Trim lower left y: "))
+      (setq urx (TeX-read-string "Trim Upper right x: "))
+      (setq ury (TeX-read-string "Trim Upper right y: "))
       (insert maybe-left-brace maybe-comma
 	      "trim=" llx " " lly " " urx " " ury)
       (setq maybe-comma ",")

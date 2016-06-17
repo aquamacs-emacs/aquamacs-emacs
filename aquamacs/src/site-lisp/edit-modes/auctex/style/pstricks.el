@@ -1,6 +1,6 @@
 ;;; pstricks.el --- AUCTeX style for the `pstricks' package.
 
-;; Copyright (C) 2007, 2009, 2013 Free Software Foundation, Inc.
+;; Copyright (C) 2007, 2009, 2013-2015 Free Software Foundation, Inc.
 
 ;; Author: Holger Sparr <holger.sparr@gmx.net>
 ;; Maintainer: auctex-devel@gnu.org
@@ -226,7 +226,7 @@ package PNAME"
                   (concat "Point (default " (car LaTeX-pst-point-history) ")")
                   (car LaTeX-pst-point-history)))
 
-(defun LaTeX-pst-point-in-parens (optional)
+(defun LaTeX-pst-point-in-parens (_optional)
   "Enclose point in parentheses."
   (LaTeX-pst-enclose-obj 'LaTeX-pst-point ?( ?)))
 
@@ -517,7 +517,7 @@ package PNAME"
   (TeX-arg-key-val optional LaTeX-pst-basic-parameters-list))
 
 ;;; Macros
-(defun LaTeX-pst-macro-psarc (optional &optional arg)
+(defun LaTeX-pst-macro-psarc (_optional &optional _arg)
   "Return \\psarc arguments after querying."
   (let ((arrows (LaTeX-pst-arrows))
         (pnt (if current-prefix-arg nil (LaTeX-pst-point))))
@@ -526,11 +526,11 @@ package PNAME"
             "{" (LaTeX-pst-extdir "Radius") "}{" (LaTeX-pst-angle) "}{"
             (LaTeX-pst-angle) "}")))
 
-(defun LaTeX-pst-macro-pscircle (optional &optional arg)
+(defun LaTeX-pst-macro-pscircle (_optional &optional _arg)
   "Return \\pscircle arguments after querying."
   (insert "(" (LaTeX-pst-point) "){" (LaTeX-pst-extdir "Radius") "}"))
 
-(defun LaTeX-pst-macro-rput (optional &optional arg)
+(defun LaTeX-pst-macro-rput (_optional &optional _arg)
   "Return \\rput arguments after querying."
   (let ((refpoint (LaTeX-pst-refpoint))
         (rotation (if current-prefix-arg (LaTeX-pst-angle) nil)))
@@ -539,7 +539,7 @@ package PNAME"
                 (concat "{" rotation "}")
               "") "(" (LaTeX-pst-point) ")")))
 
-(defun LaTeX-pst-macro-uput (optional &optional arg)
+(defun LaTeX-pst-macro-uput (_optional &optional _arg)
   "Return \\uput arguments after querying."
   (let ((dist (LaTeX-pst-extdir "Distance"))
         (refpoint (LaTeX-pst-refpoint)))
@@ -549,7 +549,7 @@ package PNAME"
               "[]")
             "{" (LaTeX-pst-angle) "}(" (LaTeX-pst-point) ")")))
 
-(defun LaTeX-pst-macro-multirputps (optional &optional arg)
+(defun LaTeX-pst-macro-multirputps (_optional &optional _arg)
   "Return \\multirput or \\multips arguments after querying."
   (let ((refpoint (LaTeX-pst-refpoint))
         (rotation (if current-prefix-arg (LaTeX-pst-angle) nil))
@@ -560,7 +560,7 @@ package PNAME"
             (if rotation (format "{%s}" rotation) "")
             "(" pnt ")(" dpnt "){" repi "}")))
 
-(defun LaTeX-pst-macro-psline (optional &optional arg)
+(defun LaTeX-pst-macro-psline (_optional &optional _arg)
   "Return \\psline or \\ps[ce]?curve[*] arguments after querying."
   (let ((arrows (LaTeX-pst-arrows))
         (pnt1 (LaTeX-pst-point))
@@ -571,7 +571,7 @@ package PNAME"
       (setq pnt1 pnt2)
       (setq pnt2 (LaTeX-pst-point)))))
 
-(defun LaTeX-pst-macro-psdots (optional single)
+(defun LaTeX-pst-macro-psdots (_optional single)
   "Return \\psdot[s]? arguments after querying."
   (let* ((pnt1 (LaTeX-pst-point))
          (pnt2 (if single pnt1 (LaTeX-pst-point))))
@@ -581,13 +581,13 @@ package PNAME"
       (insert "(" pnt1 ")")
       (setq pnt2 (LaTeX-pst-point)))))
 
-(defun LaTeX-pst-macro-parabola (optional &optional arg)
+(defun LaTeX-pst-macro-parabola (_optional &optional _arg)
   "Return \\parabola arguments after querying."
   (let ((arrows (LaTeX-pst-arrows)))
     (insert (if arrows (format "{%s}" arrows) "")
             "(" (LaTeX-pst-point) ")(" (LaTeX-pst-point) ")")))
 
-(defun LaTeX-pst-macro-pnt-twolen (optional prompt1 prompt2)
+(defun LaTeX-pst-macro-pnt-twolen (_optional prompt1 prompt2)
   "Return point and 2 paired lengths in separate parens as arguments."
   ;; insert \psellipse[*]?, \psdiamond or \pstriangle  arguments
   (let ((pnt (if current-prefix-arg nil (LaTeX-pst-point))))
@@ -595,7 +595,7 @@ package PNAME"
             "(" (LaTeX-pst-extdir prompt1) ","
             (LaTeX-pst-extdir prompt2) ")")))
 
-(defun LaTeX-pst-macro-psbezier (optional &optional arg)
+(defun LaTeX-pst-macro-psbezier (_optional &optional _arg)
   "Return \\psbezier arguments after querying."
   (let ((arrows (LaTeX-pst-arrows))
         (pnt1 (LaTeX-pst-point))
@@ -608,7 +608,7 @@ package PNAME"
       (setq pnt2 pnt3)
       (setq pnt3 (LaTeX-pst-point)))))
 
-(defun LaTeX-pst-macro-pspolygon (optional &optional arg)
+(defun LaTeX-pst-macro-pspolygon (_optional &optional _arg)
   "Return \\pspolygon arguments after querying."
   (let ((pnt1 (LaTeX-pst-point))
         (pnt2 (LaTeX-pst-point))
@@ -619,13 +619,13 @@ package PNAME"
       (setq pnt2 pnt3)
       (setq pnt3 (LaTeX-pst-point)))))
 
-(defun LaTeX-pst-macro-psframe (optional &optional arg)
+(defun LaTeX-pst-macro-psframe (_optional &optional _arg)
   "Return \\psframe arguments after querying."
   (let ((pnt1 (if current-prefix-arg nil (LaTeX-pst-point)))
         (pnt2 (LaTeX-pst-point)))
     (insert (if pnt1 (format "(%s)" pnt1) "") "(" pnt2 ")")))
 
-(defun LaTeX-pst-macro-psgrid (optional &optional arg)
+(defun LaTeX-pst-macro-psgrid (_optional &optional _arg)
   "Return \\psgrid arguments after querying."
   (let* ((cpref (if current-prefix-arg (car current-prefix-arg) 0))
          (pnt1 (if (> cpref 4) (LaTeX-pst-point) nil))
@@ -634,9 +634,9 @@ package PNAME"
     (insert (if pnt1 (format "(%s)" pnt1) "")
             (if pnt2 (format "(%s)(%s)" pnt2 pnt3) ""))))
 
-(defun LaTeX-pst-macro-newpsobject (&optional arg)
+(defun LaTeX-pst-macro-newpsobject (&optional _arg)
   "Return \\newpsobject arguments after querying."
-  (insert "{" (read-string "New PSObject Name: ") "}"
+  (insert "{" (TeX-read-string "New PSObject Name: ") "}"
 	  ;; FIXME: It would be better to use something more confined
 	  ;; than `TeX-symbol-list'.
           "{" (completing-read "Parent Object: " (TeX-symbol-list))
@@ -699,10 +699,9 @@ package PNAME"
   "Clear `LaTeX-auto-pstricks' before use."
   (setq LaTeX-auto-pstricks nil))
 
-;; FIXME: This does not seem to work unless one does a manual reparse.
-;; Check e.g. with "\definecolor" and "fillcolor=".
-(add-hook 'TeX-auto-prepare-hook 'LaTeX-pst-prepare)
-(add-hook 'TeX-auto-cleanup-hook 'LaTeX-pst-cleanup)
+(add-hook 'TeX-auto-prepare-hook #'LaTeX-pst-prepare t)
+(add-hook 'TeX-auto-cleanup-hook #'LaTeX-pst-cleanup )
+(add-hook 'TeX-update-style-hook #'TeX-auto-parse t)
 
 ;;; Additional Functionality
 (defun LaTeX-pst-parameters-add (&optional arg)
@@ -712,7 +711,7 @@ parameter\(s\) to the already existing ones at the end of the
 comma separated list. Point has to be within the sexp to modify."
   (interactive "P")
   (let ((newpara  (LaTeX-pst-parameters-pref-and-chosen nil t))
-        (regexp "\\(") beg end check)
+        (regexp "\\(") end check)
     (if arg
         (progn
           (re-search-backward "\\\\\\([a-zA-Z]\\)")
@@ -777,7 +776,8 @@ comma separated list. Point has to be within the sexp to modify."
 (TeX-add-style-hook
  "pstricks"
  (lambda ()
-   (unless (member "pst-pdf" TeX-active-styles)
+   (unless (or (member "pst-pdf" TeX-active-styles)
+	       (eq TeX-engine 'xetex))
      (TeX-PDF-mode-off))
    (mapc 'TeX-auto-add-regexp LaTeX-auto-pstricks-regexp-list)
    (LaTeX-add-environments

@@ -51,7 +51,9 @@
 ;; i.e. the first file in load-path
 ;; load the right auctex.el (first one in load-path)
 ;; (locate-library "auctex.el" t)
+(load "tex-site" nil nil nil)
 (load "auctex" nil nil nil)
+(load "preview-latex" nil nil nil)
 ;; this is not done by default
 ;; maybe add a menu option?
 ;;(load "preview-latex.el" nil t t)
@@ -119,14 +121,14 @@ Only checks once - subsequent calls will not result in any action."
       (if (string-match "^no " (buffer-string))
 	   (message  
 	    "No Ghostscript (pdf2dsc) found - preview-latex not activated.")
-	(load "preview-latex.el" nil t nil)))
+	(load "auctex/preview-latex" nil nil nil)))
     (setq aq-preview-latex-checked t)) nil)
 
 ;; must be done here do initialize
 ;; can't be loaded in hook later on.
 (load-preview-if-ghostscript)
 
-(autoload 'preview-mode-setup "preview")
+;;(autoload 'preview-mode-setup "preview")
 
 
 (defvar LaTeX-mode-hook nil) ;; make sure it's defined

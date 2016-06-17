@@ -1,6 +1,6 @@
 ;;; CJK.el --- AUCTeX style for the CJK package.
 
-;; Copyright (C) 2009 Free Software Foundation, Inc.
+;; Copyright (C) 2009, 2014 Free Software Foundation, Inc.
 
 ;; Author: Ralf Angeli <angeli@caeruleus.net>
 ;; Maintainer: auctex-devel@gnu.org
@@ -46,11 +46,11 @@ The function can be used for CJK and CJK* environments."
   (LaTeX-insert-environment
    env
    (concat
-    (let ((font-enc (read-string "(Optional) Font encoding: ")))
+    (let ((font-enc (TeX-read-string "(Optional) Font encoding: ")))
       (unless (zerop (length font-enc)) (format "[%s]" font-enc)))
     (format "{%s}" (completing-read "Encoding: "
 				    (mapcar 'list LaTeX-CJK-enc-list)))
-    (format "{%s}" (read-string "Font family: ")))))
+    (format "{%s}" (TeX-read-string "Font family: ")))))
 
 (TeX-add-style-hook
  "CJK"

@@ -1,6 +1,6 @@
 ;;; pst-node.el --- AUCTeX style for `pst-node.sty'
 
-;; Copyright (C) 2007, 2013 Free Software Foundation, Inc.
+;; Copyright (C) 2007, 2013, 2014 Free Software Foundation, Inc.
 
 ;; Author: Holger Sparr <holger.sparr@gmx.net>
 ;; Created: 21 Jun 2007
@@ -87,34 +87,35 @@
   (LaTeX-package-parameters optional "pstnode" preparam param))
 
 ;;; Macros
-(defun LaTeX-pstnode-macro-nput (optional &optional arg)
+(defun LaTeX-pstnode-macro-nput (_optional &optional _arg)
   "Return \\nput arguments after querying."
   (insert "[rot=" (LaTeX-pst-angle) "]{" (LaTeX-pst-angle) "}{"
           (LaTeX-pst-node) "}"))
 
-(defun LaTeX-pstnode-macro-cnodeput (optional &optional arg)
+(defun LaTeX-pstnode-macro-cnodeput (_optional &optional _arg)
   "Return \\cnodeput arguments after querying."
   (let ((rotation (if current-prefix-arg (LaTeX-pst-angle) nil))
         (pnt (if current-prefix-arg (LaTeX-pst-point) nil)))
     (insert (if rotation (format "{%s}" rotation) "")
             (if pnt (format "(%s)" pnt) "") "{" (LaTeX-pst-node) "}")))
 
-(defun LaTeX-pstnode-macro-nc (optional &optional arg)
+(defun LaTeX-pstnode-macro-nc (_optional &optional _arg)
   "Return \\nc* arguments after querying."
   (let ((arrows (LaTeX-pst-arrows)))
     (insert (if arrows (format "{%s}" arrows) "") "{" (LaTeX-pst-node)
             "}{" (LaTeX-pst-node) "}")))
 
-(defun LaTeX-pstnode-macro-pc (optional &optional arg)
+(defun LaTeX-pstnode-macro-pc (_optional &optional _arg)
   "Return \\pc* arguments after querying."
   (let ((arrows (LaTeX-pst-arrows)))
     (insert (if arrows (format "{%s}" arrows) "") "(" (LaTeX-pst-point)
             ")(" (LaTeX-pst-point) ")")))
 
-(defun LaTeX-pstnode-macro-tnabcput (optional &optional arg)
+(defun LaTeX-pstnode-macro-tnabcput (optional &optional _arg)
   "Return \\t?put or \\n?put arguments after querying."
   (TeX-argument-insert (LaTeX-pstnode-parameters-pref-and-chosen
-                        '("nrot" "npos")) optional))
+                        '("nrot" "npos"))
+                       optional))
 
 ;;; Environments
 (defun LaTeX-pstnode-env-psmatrix (env)

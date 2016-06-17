@@ -163,15 +163,15 @@
 (defun LaTeX-amsmath-env-alignat (env)
   "Insert ENV with column number specifications.
 Insert suitable number of ampersands also if possible."
-  (let ((ncols (read-string "Number of columns: ")))
+  (let ((ncols (TeX-read-string "Number of columns: ")))
     (LaTeX-insert-environment env (concat TeX-grop ncols TeX-grcl))
     (LaTeX-item-equation-alignat t)))
 
 (defun LaTeX-amsmath-env-alignedat (env)
   "Insert ENV with position and column number specifications.
 Insert suitable number of ampersands also if possible."
-  (let ((where (read-string "(Optional) Vertical position (t or b): "))
-	(ncols (read-string "Number of columns: ")))
+  (let ((where (TeX-read-string "(Optional) Vertical position (t or b): "))
+	(ncols (TeX-read-string "Number of columns: ")))
     (unless (string= where "")
       (setq where (concat LaTeX-optop where LaTeX-optcl)))
     (LaTeX-insert-environment env (concat where TeX-grop ncols TeX-grcl))

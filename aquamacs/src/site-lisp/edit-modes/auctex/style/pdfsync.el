@@ -1,6 +1,6 @@
 ;;; pdfsync.el --- AUCTeX style for `pdfsync.sty'
 
-;; Copyright (C) 2005, 2008 Free Software Foundation, Inc.
+;; Copyright (C) 2005, 2008, 2014 Free Software Foundation, Inc.
 
 ;; Author: Ralf Angeli <angeli@iwi.uni-sb.de>
 ;; Maintainer: auctex-devel@gnu.org
@@ -40,7 +40,6 @@
 	 (pdfsync-file (concat master ".pdfsync"))
 	 (buf-live-p (get-file-buffer pdfsync-file))
 	 (sync-record "0")
-	 (sync-line "-1")
 	 (sync-page "1")
 	 last-match)
     (when (file-exists-p pdfsync-file)
@@ -65,7 +64,6 @@
 		     (throw 'break nil))
 		    (t
 		     (setq sync-record (match-string 1)
-			   sync-line (match-string 2)
 			   last-match (match-beginning 0))))))
 	  ;; Look for the page number.
 	  (goto-char (or last-match (point-min)))

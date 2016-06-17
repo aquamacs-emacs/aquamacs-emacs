@@ -1,6 +1,6 @@
 ;;; scrlttr2.el --- AUCTeX style for scrlttr2.cls.
 
-;; Copyright (C) 2002, 2007 Free Software Foundation
+;; Copyright (C) 2002, 2007, 2014 Free Software Foundation
 
 ;; Author: Mark Trettin <Mark.Trettin@gmx.de>
 ;; Created: 2002-10-26
@@ -130,8 +130,8 @@
      '("letter" (lambda (env &rest ignore)
 		  (LaTeX-insert-environment
 		   env
-		   (let ((options (read-string "Optional options: "))
-			 (recip (read-string "Recipient: ")))
+		   (let ((options (TeX-read-string "Optional options: "))
+			 (recip (TeX-read-string "Recipient: ")))
 		     (concat
 		      (if (not (zerop (length options)))
 			  (format "[%s]" options))

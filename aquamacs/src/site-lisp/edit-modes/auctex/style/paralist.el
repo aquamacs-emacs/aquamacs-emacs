@@ -35,7 +35,7 @@
   "Insert ENVIRONMENT, an optional label and the first item."
   (LaTeX-insert-environment
    environment
-   (let ((label (read-string "(Optional) Label: ")))
+   (let ((label (TeX-read-string "(Optional) Label: ")))
      (concat (unless (zerop (length label))
                (format "[%s]" label)))))
   (LaTeX-find-matching-begin)

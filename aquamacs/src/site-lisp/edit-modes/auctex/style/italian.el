@@ -50,7 +50,7 @@
 			    LaTeX-italian-close-quote
 			  "\">")))
        (setq TeX-quote-language
-	     `("italian" ,open-quote ,close-quote TeX-quote-after-quote))))
+	     `("italian" ,open-quote ,close-quote ,TeX-quote-after-quote))))
    ;; Fontification of quotation marks.
    (when (fboundp 'font-latex-add-quotes)
      (font-latex-add-quotes '("\"<" "\">" french)))

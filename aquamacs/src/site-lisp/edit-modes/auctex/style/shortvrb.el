@@ -1,6 +1,6 @@
 ;;; shortvrb.el --- AUCTeX style for `shortvrb.sty'
 
-;; Copyright (C) 2009 Free Software Foundation, Inc.
+;; Copyright (C) 2009, 2014 Free Software Foundation, Inc.
 
 ;; Author: Ralf Angeli <angeli@caeruleus.net>
 ;; Maintainer: auctex-devel@gnu.org
@@ -71,10 +71,9 @@ your document actually defines shortvrb chars using
    (when (and LaTeX-shortvrb-chars
 	      (fboundp 'font-latex-set-syntactic-keywords)
 	      (eq TeX-install-font-lock 'font-latex-setup))
-     (let (syntax-alist)
-       (dolist (char LaTeX-shortvrb-chars)
-	 (add-to-list 'syntax-alist (cons char "|")))
-       (font-latex-add-to-syntax-alist syntax-alist))))
+     (font-latex-add-to-syntax-alist
+      (mapcar (lambda (char) (cons char "|"))
+              LaTeX-shortvrb-chars))))
  LaTeX-dialect)
 
 ;; Don't look for file-local variables before this line, so that the example in

@@ -1,6 +1,6 @@
 ;;; hyperref.el --- AUCTeX style for `hyperref.sty' v6.83m
 
-;; Copyright (C) 2008, 2013 Free Software Foundation, Inc.
+;; Copyright (C) 2008, 2013--2015 Free Software Foundation, Inc.
 
 ;; Author: Ralf Angeli <angeli@caeruleus.net>
 ;; Maintainer: auctex-devel@gnu.org
@@ -153,6 +153,64 @@
     ("nextactionraw"))
   "Key=value options for href macro of the hyperref package.")
 
+;; See http://www.tug.org/applications/hyperref/ftp/doc/manual.html#x1-220006.2
+
+(defvar LaTeX-hyperref-forms-options
+  '(("accesskey")
+    ("align"          ("0" "1" "2"))
+    ("altname")
+    ("backgroundcolor")
+    ("bordercolor")
+    ("bordersep")
+    ("borderwidth")
+    ;; "borderstyle" is not mentioned in the original hyperref-doc, it
+    ;; can be seen in action in
+    ;; http://mirrors.ctan.org/macros/latex/contrib/hyperref/test/testform.tex
+    ;; S=Solid (default), D=Dashed, B=Beveled, I=Inset, U=Underline
+    ("borderstyle"    ("S" "D" "B" "I" "U"))
+    ("calculate")
+    ("charsize")
+    ("checkboxsymbol" ("true" "false"))
+    ("checked")
+    ("color")
+    ("combo"          ("true" "false"))
+    ("default")
+    ("disabled"       ("true" "false"))
+    ("format")
+    ("height")
+    ("hidden"         ("true" "false"))
+    ("keystroke")
+    ("mappingname")
+    ("maxlen")
+    ("menulength")
+    ("multiline"      ("true" "false"))
+    ("name")
+    ("onblur")
+    ("onchange")
+    ("onclick")
+    ("ondblclick")
+    ("onfocus")
+    ("onkeydown")
+    ("onkeypress")
+    ("onkeyup")
+    ("onmousedown")
+    ("onmousemove")
+    ("onmouseout")
+    ("onmouseover")
+    ("onmouseup")
+    ("onselect")
+    ("password"       ("true" "false"))
+    ("popdown"        ("true" "false"))
+    ("radio"          ("true" "false"))
+    ("radiosymbol")
+    ("readonly"       ("true" "false"))
+    ("rotation")
+    ("tabkey")
+    ("validate")
+    ("value")
+    ("width"))
+  "Key=value options for Forms related macros of the hyperref package.")
+
 (TeX-add-style-hook
  "hyperref"
  (lambda ()
@@ -172,6 +230,7 @@
     '("hypertarget" "Name" "Text")
     '("phantomsection" 0)
     '("autoref" TeX-arg-ref)
+    '("autoref*" TeX-arg-ref)
     '("ref*" TeX-arg-ref)
     '("pageref*" TeX-arg-ref)
     '("autopageref" TeX-arg-ref)
@@ -184,12 +243,15 @@
     '("texorpdfstring" "TeX string" "PDF string")
     '("hypercalcbp" t)
     '("Acrobatmenu" "Menu option" "Text")
-    '("TextField" ["Parameters"] "Label")
-    '("CheckBox" ["Parameters"] "Label")
-    '("ChoiceMenu" ["Parameters"] "Label" "Choices")
-    '("PushButton" ["Parameters"] "Label")
-    '("Submit" ["Parameters"] "Label")
-    '("Reset" ["Parameters"] "Label")
+    ;; The next 6 macros take Key-vals defined in
+    ;; "LaTeX-hyperref-forms-options".  For an example, see
+    ;; http://mirrors.ctan.org/macros/latex/contrib/hyperref/test/testform.tex
+    '("TextField"  [ (TeX-arg-key-val LaTeX-hyperref-forms-options) ] "Label")
+    '("CheckBox"   [ (TeX-arg-key-val LaTeX-hyperref-forms-options) ] "Label")
+    '("ChoiceMenu" [ (TeX-arg-key-val LaTeX-hyperref-forms-options) ] "Label" "Choices")
+    '("PushButton" [ (TeX-arg-key-val LaTeX-hyperref-forms-options) ] "Label")
+    '("Submit"     [ (TeX-arg-key-val LaTeX-hyperref-forms-options) ] "Label")
+    '("Reset"      [ (TeX-arg-key-val LaTeX-hyperref-forms-options) ] "Label")
     '("LayoutTextField" "Label" "Field")
     '("LayoutChoiceField" "Label" "Field")
     '("LayoutCheckField" "Label" "Field")
@@ -198,6 +260,17 @@
     '("MakeTextField" "Width" "Height")
     '("MakeChoiceField" "Width" "Height")
     '("MakeButtonField" "Text"))
+
+   ;; Form fields must be inside a "Form"-env, one per file is allowed, cf.
+   ;; http://www.tug.org/applications/hyperref/ftp/doc/manual.html#x1-200006
+   ;; It is up to user to insert [<options>] after \begin{Form}
+   (LaTeX-add-environments
+    '("Form"))
+
+   ;; Do not indent the content of the "Form"-env; it is odd if the
+   ;; whole document is indented.
+   (make-local-variable 'LaTeX-indent-environment-list)
+   (add-to-list 'LaTeX-indent-environment-list '("Form" current-indentation))
 
    (add-to-list 'LaTeX-verbatim-macros-with-braces-local "nolinkurl")
    (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperbaseurl")
@@ -216,11 +289,13 @@
 				("hyperref" "{{{{")
 				("hyperlink" "{{")
 				("hypertarget" "{{")
-				("autoref" "{")
+				("autoref" "*{")
 				("ref" "*{")
 				("pageref" "*{")
 				("autopageref" "*{"))
 			      'reference)
+     (font-latex-add-keywords '(("hypersetup" "{"))
+			      'function)
      ;; For syntactic fontification, e.g. verbatim constructs.
      (font-latex-set-syntactic-keywords))
 

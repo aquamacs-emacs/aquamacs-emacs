@@ -1,6 +1,6 @@
 ;;; mathtools.el --- Style hook for the LaTeX package `mathtools'.
 
-;; Copyright (C) 2011-2012 Free Software Foundation, Inc.
+;; Copyright (C) 2011-2012, 2014 Free Software Foundation, Inc.
 
 ;; Author: Mads Jensen <mje@inducks.org>
 ;; Created: 2011-02-13
@@ -124,7 +124,7 @@
     '("shoveright" [ TeX-arg-size ] 1)
     ;; don't understand t, but intertext in amsmath.el uses it
     '("shortintertext" t)
-    '("DeclarePairedDelimeter" TeX-arg-macro "Left delimeter" "Right delimeter")
+    '("DeclarePairedDelimiter" TeX-arg-macro "Left delimiter" "Right delimiter")
     ;; 3.4.4
     '("MoveEqLeft" [ "Number" ])
     '("ArrowBetweenLines" [ TeX-arg-macro ] )
@@ -148,44 +148,44 @@
     '("splitdfrac" 2))
 
    (setq LaTeX-item-list
-	 (append '(("multlined"    . LaTeX-item-equation)
-		   ("lgathered" . LaTeX-item-equation)
-		   ("rgathered" . LaTeX-item-equation)
+	 (append '(("multlined"   . LaTeX-item-equation)
+		   ("lgathered"   . LaTeX-item-equation)
+		   ("rgathered"   . LaTeX-item-equation)
 		   ("spreadlines" . LaTeX-item-equation)
-		   ("matrix*" .  LaTeX-item-equation)
-		   ("pmatrix*" .  LaTeX-item-equation)
-		   ("bmatrix*" .  LaTeX-item-equation)
-		   ("Bmatrix*" .  LaTeX-item-equation)
-		   ("vmatrix*" .  LaTeX-item-equation)
-		   ("Vmatrix*" .  LaTeX-item-equation)
-		   ("dcases"    . LaTeX-item-equation)
-		   ("dcases*"    . LaTeX-item-equation))
+		   ("matrix*"     . LaTeX-item-equation)
+		   ("pmatrix*"    . LaTeX-item-equation)
+		   ("bmatrix*"    . LaTeX-item-equation)
+		   ("Bmatrix*"    . LaTeX-item-equation)
+		   ("vmatrix*"    . LaTeX-item-equation)
+		   ("Vmatrix*"    . LaTeX-item-equation)
+		   ("dcases"      . LaTeX-item-equation)
+		   ("dcases*"     . LaTeX-item-equation))
 		 LaTeX-item-list))
 
    (setq LaTeX-label-alist
-	 (append '(("lgathered"    . LaTeX-amsmath-label)
-		   ("rgathered"   . LaTeX-amsmath-label)
-		   ("multlined"    . LaTeX-amsmath-label)
-		   LaTeX-label-alist))))
+	 (append '(("lgathered" . LaTeX-amsmath-label)
+		   ("rgathered" . LaTeX-amsmath-label)
+		   ("multlined" . LaTeX-amsmath-label))
+		 LaTeX-label-alist)))
  LaTeX-dialect)
 
 (defun LaTeX-mathtools-env-matrix-starred (env)
-  (let ((where (read-string "(optional) Vertical placement of columns: ")))
+  (let ((where (TeX-read-string "(optional) Vertical placement of columns: ")))
     (if (string= where "")
 	(setq where "")
       (setq where (concat "[" where "]")))
     (LaTeX-insert-environment env where)))
 
 (defun LaTeX-mathtools-env-spreadlines (env)
-  (let ((spread (read-string "Spacing between lines: ")))
+  (let ((spread (TeX-read-string "Spacing between lines: ")))
     (LaTeX-insert-environment env (concat TeX-grop spread TeX-grcl))
     (newline-and-indent)))
 
 ;; FIXME: there are probably more subtle ways to support more than one
 ;; optional argument; please change if this is the case
 (defun LaTeX-mathtools-env-multlined (env)
-  (let ((pos (read-string "(optional) Position: "))
-	(width (read-string "(optional) Width: "))
+  (let ((pos (TeX-read-string "(optional) Position: "))
+	(width (TeX-read-string "(optional) Width: "))
 	(extra ""))
     (if (not (string= pos ""))
 	(setq pos (concat LaTeX-optop pos LaTeX-optcl))
@@ -194,7 +194,6 @@
 	(setq width (concat LaTeX-optop width LaTeX-optcl))
       (setq width ""))
     (setq extra (concat pos width))
-    (LaTeX-insert-environment env extra)
-    (newline-and-indent)))
+    (LaTeX-insert-environment env extra)))
 
 ;;; mathtools.el ends here.

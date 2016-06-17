@@ -1,6 +1,6 @@
 ;;; inputenc.el --- AUCTeX style for `inputenc.sty'
 
-;; Copyright (C) 2005 Free Software Foundation, Inc.
+;; Copyright (C) 2005, 2014 Free Software Foundation, Inc.
 
 ;; Author: Arne Jørgensen <arne@arnested.dk>
 ;; Keywords: tex
@@ -66,9 +66,9 @@
 
 	    ;; return selected input encoding
 	    selected)))
-    (read-string "Input encoding: ")))
+    (TeX-read-string "Input encoding: ")))
 
-(defun LaTeX-arg-inputenc-inputenc (optional)
+(defun LaTeX-arg-inputenc-inputenc (_optional)
   "Prompt for input encoding."
   (TeX-argument-insert (LaTeX-inputenc-package-options) nil))
 

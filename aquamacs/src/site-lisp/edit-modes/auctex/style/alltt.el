@@ -37,8 +37,6 @@
    (make-local-variable 'LaTeX-indent-environment-list)
    (add-to-list 'LaTeX-indent-environment-list
 		'("alltt" current-indentation))
-   (make-local-variable 'LaTeX-verbatim-regexp)
-   (setq LaTeX-verbatim-regexp (concat LaTeX-verbatim-regexp "\\|alltt"))
    (add-to-list 'LaTeX-verbatim-environments-local "alltt")
    ;; Fontification
    (when (and (featurep 'font-latex)

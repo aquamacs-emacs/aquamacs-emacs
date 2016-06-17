@@ -1,6 +1,6 @@
 ;;; natbib.el --- Style hook for the natbib package
 
-;; Copyright (C) 1997, 1998, 2004, 2007 Free Software Foundation, Inc.
+;; Copyright (C) 1997, 1998, 2004, 2007, 2014 Free Software Foundation, Inc.
 
 ;; Authors: Berwin Turlach <statba@nus.edu.sg>
 ;;          Carsten Dominik <dominik@strw.leidenuniv.nl>
@@ -108,12 +108,12 @@
 	(reftex-set-cite-format 'natbib))))
  LaTeX-dialect)
 
-(defun natbib-note-args (optional &optional prompt definition)
+(defun natbib-note-args (optional &optional _prompt _definition)
   "Prompt for two note arguments a natbib citation command."
   (if TeX-arg-cite-note-p
-      (let* ((pre (read-string 
+      (let* ((pre (TeX-read-string
 		   (TeX-argument-prompt optional optional "Pre-note")))
-	     (post (read-string
+	     (post (TeX-read-string
 		    (TeX-argument-prompt optional optional "Post-note"))))
 	(if (not (string= pre "")) (insert "[" pre "]"))
 	(if (not (string= post ""))
@@ -123,7 +123,7 @@
 
 (defvar LaTeX-natbib-package-options '("numbers" "super" "authoryear"
 				       "round" "square" "angle" "curly"
-				       "comma" "colon" "nobibstyle" 
+				       "comma" "colon" "nobibstyle"
 				       "bibstyle" "openbib" "sectionbib"
 				       "sort" "sort&compress"
 				       "longnamesfirst" "nonamebreak")

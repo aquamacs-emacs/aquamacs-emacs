@@ -1,6 +1,6 @@
 ;;; scrbase.el --- AUCTeX style for the KOMA-Script bundle.
 
-;; Copyright (C) 2002, 2004, 2005, 2007 Free Software Foundation, Inc.
+;; Copyright (C) 2002, 2004, 2005, 2007, 2014 Free Software Foundation, Inc.
 
 ;; Author: Mark Trettin <Mark.Trettin@gmx.de>
 ;; Created: 2002-09-26
@@ -75,8 +75,8 @@
      '("labeling" (lambda (env &rest ignore)
 		    (LaTeX-insert-environment
 		     env
-		     (let ((delim (read-string "(Optional) Delimiter: "))
-			   (width (read-string "Longest item: ")))
+		     (let ((delim (TeX-read-string "(Optional) Delimiter: "))
+			   (width (TeX-read-string "Longest item: ")))
 		       (concat
 			(if (not (zerop (length delim)))
 			    (format "[%s]" delim))
@@ -87,8 +87,8 @@
      '("addmargin" (lambda (env &rest ignore)
 		     (LaTeX-insert-environment
 		      env
-		      (let ((leftin (read-string "(Optional) Left Indentation: "))
-			    (indent (read-string "Indentation: ")))
+		      (let ((leftin (TeX-read-string "(Optional) Left Indentation: "))
+			    (indent (TeX-read-string "Indentation: ")))
 			(concat
 			 (if (not (zerop (length leftin)))
 			     (format "[%s]" leftin))
@@ -96,8 +96,8 @@
      '("addmargin*" (lambda (env &rest ignore)
 		      (LaTeX-insert-environment
 		       env
-		       (let ((innin (read-string "(Optional) Inner Indentation: "))
-			     (indent (read-string "Indentation: ")))
+		       (let ((innin (TeX-read-string "(Optional) Inner Indentation: "))
+			     (indent (TeX-read-string "Indentation: ")))
 			 (concat
 			  (if (not (zerop (length innin)))
 			      (format "[%s]" innin))
@@ -105,11 +105,11 @@
      '("captionbeside" (lambda (env &rest ignore)
 			 (LaTeX-insert-environment
 			  env
-			  (let ((lofent (read-string "(Optional) Lof Entry: "))
-				(title (read-string "Caption: "))
-				(place (read-string "(Optional) Placement (l,r,o,i): "))
-				(width (read-string "(Optional) Width: "))
-				(offset (read-string "(Optional) Offset: ")))
+			  (let ((lofent (TeX-read-string "(Optional) Lof Entry: "))
+				(title (TeX-read-string "Caption: "))
+				(place (TeX-read-string "(Optional) Placement (l,r,o,i): "))
+				(width (TeX-read-string "(Optional) Width: "))
+				(offset (TeX-read-string "(Optional) Offset: ")))
 			    (concat
 			     (if (not (zerop (length lofent)))
 				 (format "[%s]" lofent))

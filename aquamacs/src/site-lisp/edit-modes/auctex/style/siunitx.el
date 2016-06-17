@@ -1,6 +1,6 @@
 ;;; siunitx.el --- AUCTeX style for `siunitx.sty' version 2.5s.
 
-;; Copyright (C) 2012-2014 Free Software Foundation, Inc.
+;; Copyright (C) 2012-2015 Free Software Foundation, Inc.
 
 ;; Maintainer: auctex-devel@gnu.org
 ;; Author: Mosè Giordano <giordano.mose@libero.it>
@@ -29,6 +29,8 @@
 
 ;;; Code:
 
+(require 'tex) ;Indispensable when compiling the call to `TeX-auto-add-type'.
+
 (TeX-auto-add-type "siunitx-unit" "LaTeX")
 
 ;; Self Parsing -- see (info "(auctex)Hacking the Parser").  `\\(?:\\[.*\\]\\)?'
@@ -54,9 +56,9 @@
 	    (add-to-list 'LaTeX-siunitx-unit-list (list symbol)))
 	  LaTeX-auto-siunitx-unit))
 
-;; FIXME: This does not seem to work unless one does a manual reparse.
-(add-hook 'TeX-auto-prepare-hook 'LaTeX-siunitx-prepare)
-(add-hook 'TeX-auto-cleanup-hook 'LaTeX-siunitx-cleanup)
+(add-hook 'TeX-auto-prepare-hook #'LaTeX-siunitx-prepare t)
+(add-hook 'TeX-auto-cleanup-hook #'LaTeX-siunitx-cleanup t)
+(add-hook 'TeX-update-style-hook #'TeX-auto-parse t)
 
 (defvar LaTeX-siunitx-unit-history nil
   "History of units in siunitx.")

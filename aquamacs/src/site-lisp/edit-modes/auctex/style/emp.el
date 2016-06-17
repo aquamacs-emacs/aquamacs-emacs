@@ -1,6 +1,6 @@
 ;;; emp.el --- AUCTeX support for emp.sty
 
-;; Copyright (C) 2004, 2005  Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2014  Free Software Foundation, Inc.
 
 ;; Author: Yvon Henel aka TeXnicien de surface <Yvon.Henel@wanadoo.fr>
 ;; Maintainer: auctex-devel@gnu.org
@@ -44,16 +44,16 @@
 (defun LaTeX-env-emp-gen (environment-name)
    "Ask for file, width and length. Insert environment-name environment
 Used for emp, empdef, and empgraph environments."
-   (let ((emp-fig-name (read-string "figure name: " ""))
-	 (emp-fig-width (read-string "figure width: " "1" ))
-	 (emp-fig-height (read-string "figure height: " "1" ))
+   (let ((emp-fig-name (TeX-read-string "figure name: " ""))
+	 (emp-fig-width (TeX-read-string "figure width: " "1" ))
+	 (emp-fig-height (TeX-read-string "figure height: " "1" ))
 	 ;;; emp.sty demands a width and a height for each of the
 	 ;;; emp, empdef, and empgraph environments
 	 ;;; we give them 1 by default
 	 ;;; not necessarily the best thing to do?
 	 )
      (if (not (zerop (length emp-fig-name)))
-	 (progn 
+	 (progn
 	   (setq LaTeX-emp-fig-name (concat LaTeX-optop emp-fig-name LaTeX-optcl))
 	   (LaTeX-insert-environment environment-name LaTeX-emp-fig-name))
 	 (LaTeX-insert-environment environment-name))
@@ -64,11 +64,11 @@ Used for emp, empdef, and empgraph environments."
      (indent-according-to-mode)
      ))
 
-(defun LaTeX-env-empfile (optional)
+(defun LaTeX-env-empfile (_optional)
    "Ask for file. Insert empfile environment"
-   (let ((empfile (read-string "empfile: " "")))
+   (let ((empfile (TeX-read-string "empfile: " "")))
      (if (not (zerop (length empfile)))
-	 (progn 
+	 (progn
 	   (setq LaTeX-emp-file-name (concat LaTeX-optop empfile LaTeX-optcl))
 	   (setq mpost-emp-file-name (concat empfile ".mp"))
 	   (LaTeX-insert-environment "empfile" LaTeX-emp-file-name))

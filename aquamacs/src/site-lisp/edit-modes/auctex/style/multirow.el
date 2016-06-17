@@ -37,7 +37,7 @@
       [ "Big struts" ] "Width" [ "Fixup" ] t)
     "multirowsetup")
 
-   (if (not (boundp 'LaTeX-bigstruct-package-options))
+   (if (not (boundp 'LaTeX-bigstrut-package-options))
        (TeX-add-symbols "bigstrutjot"))
 
    ;; Fontification

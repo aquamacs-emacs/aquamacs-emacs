@@ -1,6 +1,6 @@
 ;;; MinionPro.el -- AUCTeX style for MinionPro.sty
 
-;; Copyright (C) 2005 Free Software Foundation, Inc.
+;; Copyright (C) 2005, 2014 Free Software Foundation, Inc.
 
 ;; Author: Mark Trettin <Mark.Trettin@gmx.de>
 ;; Maintainer: auctex-devel@gnu.org
@@ -26,39 +26,30 @@
 
 ;;; Commentary: 
 
-;; This file adds support for `MinionPro.sty' (v2.0). 
+;; This file adds support for `MinionPro.sty' (v2.3) from 2012/08/03.
+;; The latest version of MinionPro is available as part of FontPro
+;; bundle from <https://www.github.com/sebschub>.
 
-;;; Code
+;;; Code:
 
 (TeX-add-style-hook
  "MinionPro"
  (lambda ()
+
+   ;; New symbols
    (TeX-add-symbols
-    ;; New symbols
-    '("figureversion"
-      (TeX-arg-eval completing-read "Figure style: "
-		    '(("text") ("osf")
-		      ("lining") ("lf")
-		      ("tabular") ("tab")
-		      ("proportional") ("prop"))))
     '("smallfrac" "Numerator" "Denominator")
-    '("slantfrac" "Numerator" "Denominator")
-    ;; IMHO they should be added to the other \text.. and \..shape commands
-    '("textsw" 1)
-    '("textssc" 1)
-    "sscshape"
-    "swshape")
+    '("slantfrac" "Numerator" "Denominator"))
+
    ;; Run style hook for amsmath which is loaded via MnSymbol
-   (TeX-run-style-hooks "amsmath")
+   (TeX-run-style-hooks "amsmath" "fontaxes" "textcomp")
+
    ;; Fontification
    (when (and (featurep 'font-latex)
 	      (eq TeX-install-font-lock 'font-latex-setup))
      (font-latex-add-keywords '(("smallfrac" "{{")
-				("slantfrac" "{{")
-				("textsw" "{")
-				("textssc" "{"))
-			      'textual)
-     (font-latex-add-keywords '(("figureversion" "{")) 'variable)))
+				("slantfrac" "{{"))
+			      'textual)))
  LaTeX-dialect)
 
 (defvar LaTeX-MinionPro-package-options
@@ -66,7 +57,13 @@
     "slides" "textosf" "mathosf" "osf" "textlf" "mathlf" "lf"
     "mathtabular" "mnsy" "cmsy" "swash" "abx" "amsbb" "fourierbb"
     "lucidabb" "mixedgreek" "italicgreek" "frenchmath" "minionint"
-    "footnotefigures")
-"Package options for the MinionPro package.")
+    "footnotefigures"
+
+    ;; Additional options in v2.1
+    "onlytext" "onlymath" "loosequotes" "openg" "normalsize" "nonormalsize"
+
+    ;; Additional option in v2.2
+    "scale")
+  "Package options for the MinionPro package.")
 
 ;;; MinionPro.el ends here

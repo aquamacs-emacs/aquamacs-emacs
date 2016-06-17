@@ -1,6 +1,6 @@
 ;;; bigstrut.el --- AUCTeX style for `bigstrut.sty'
 
-;; Copyright (C) 2012 Free Software Foundation, Inc.
+;; Copyright (C) 2012, 2014 Free Software Foundation, Inc.
 
 ;; Author: Mads Jensen <mje@inducks.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -37,12 +37,13 @@
     '("bigstrut" [ TeX-arg-bigstrut ])))
  LaTeX-dialect)
 
-(defun TeX-arg-bigstrut (optional &optional prompt)
-  "Prompt for the optional argument in \\bigstrut"
+(defun TeX-arg-bigstrut (optional &optional _prompt)
+  "Prompt for the optional argument in \\bigstrut."
   (TeX-argument-insert
    (completing-read (TeX-argument-prompt
      optional "Strut to top (t) or bottom (b)" nil t)
-     (mapcar 'list '("t" "b")) nil t) optional))
+                    (mapcar 'list '("t" "b")) nil t)
+   optional))
 
 (defvar LaTeX-bigstrut-package-options nil
   "Package options for the bigstrut package.")

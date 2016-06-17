@@ -1,6 +1,6 @@
 ;;; csquotes.el --- AUCTeX style for `csquotes.sty'
 
-;; Copyright (C) 2004, 2005, 2006 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2006, 2014 Free Software Foundation, Inc.
 
 ;; Author: Ralf Angeli <angeli@caeruleus.net>
 ;; Maintainer: auctex-devel@gnu.org
@@ -57,7 +57,7 @@ the insertion of optional arguments."
 		optional t)
 	(setq prompt elt
 	      optional nil))
-      (setq user-input (read-string (TeX-argument-prompt optional prompt nil)))
+      (setq user-input (TeX-read-string (TeX-argument-prompt optional prompt nil)))
       (unless (and optional (zerop (length user-input)))
 	(setq env-extra (concat env-extra
 				(if optional LaTeX-optop TeX-grop)

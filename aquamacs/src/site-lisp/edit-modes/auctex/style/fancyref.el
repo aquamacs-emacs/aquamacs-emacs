@@ -1,6 +1,6 @@
 ;;; fancyref.el --- AUCTeX style file with support for fancyref.sty
 
-;; Copyright (C) 1999 Free Software Foundation, Inc.
+;; Copyright (C) 1999, 2014 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <dominik@strw.leidenuniv.nl>
 ;; Maintainer: auctex-devel@gnu.org
@@ -106,7 +106,7 @@
 
 (defun LaTeX-fancyref-formats () LaTeX-fancyref-formats)
 
-(defun TeX-arg-fancyref-format (optional &optional prompt definition)
+(defun TeX-arg-fancyref-format (optional &optional prompt _definition)
   "Prompt for a fancyref format name.
 If the user gives an unknown name, add it to the list."
   (let ((format (completing-read (TeX-argument-prompt optional prompt "Format")

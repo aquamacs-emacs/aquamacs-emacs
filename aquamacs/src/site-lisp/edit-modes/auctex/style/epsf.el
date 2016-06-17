@@ -1,8 +1,10 @@
 ;;; epsf.el - Support for the epsf style option.
 
 ;; Contributed by Marc Gemis <makke@wins.uia.ac.be>
+;; Copyright (C) 2014 Free Software Foundation, Inc.
+;; FIXME: What about the copyright for <= 2014?
 
-;;; Code: 
+;;; Code:
 
 (TeX-add-style-hook
  "epsf"
@@ -17,10 +19,10 @@
     "epsfllx" "epsflly" "epsfury" "epsfverbosetrue"))
  LaTeX-dialect)
 
-(defun TeX-arg-epsfsize (optional &optional prompt definition)
+(defun TeX-arg-epsfsize (_optional &optional _prompt _definition)
   "Create a line that print epsf figures at a certain percentage"
   (interactive)
-  (let ((scale (read-string "Scale in percent (default 75): ")))
+  (let ((scale (TeX-read-string "Scale in percent (default 75): ")))
     (setq scale (if (zerop (length scale)) "75" scale))
     (save-excursion
       ; append #1#{scale#1}

@@ -50,13 +50,13 @@
  LaTeX-dialect)
 
 (defun LaTeX-plext-env-array (env)
-  (let ((dir (read-string "(Optional) Direction (t or y or z): "))
+  (let ((dir (TeX-read-string "(Optional) Direction (t or y or z): "))
 	(width (if (string= env "tabular*")
-		   (read-string "Width: " LaTeX-default-width)))
+		   (TeX-read-string "Width: " LaTeX-default-width)))
 	(pos (and LaTeX-default-position ; LaTeX-default-position can
 					; be nil, i.e. do not prompt
-		  (read-string "(Optional) Position: " LaTeX-default-position)))
-	(fmt (read-string "Format: " LaTeX-default-format)))
+		  (TeX-read-string "(Optional) Position: " LaTeX-default-position)))
+	(fmt (TeX-read-string "Format: " LaTeX-default-format)))
     (unless (zerop (length dir))
       (setq dir (concat "<" dir ">")))
     (if (string= env "tabular*")

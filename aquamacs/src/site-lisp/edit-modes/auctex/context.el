@@ -1,6 +1,6 @@
 ;;; context.el --- Support for ConTeXt documents.
 
-;; Copyright (C) 2003-2006, 2008, 2010, 2012, 2014
+;; Copyright (C) 2003-2006, 2008, 2010, 2012, 2014, 2015
 ;;   Free Software Foundation, Inc.
 
 ;; Maintainer: Berend de Boer <berend@pobox.com>
@@ -64,16 +64,19 @@
 
 ;;; variables
 
-;; globals used in certain macro's.
-(defvar done-mark nil
-  "Position of point afterwards, default nil (meaning end).")
+;; Dynamically scoped vars used in certain macro's.
+;; BEWARE: We used to give them a global nil value, but this can mess up poor
+;; unrelated packages using those same vars but expecting them to be
+;; lexically scoped.
+;; So don't give them a global value, which makes sure the effect of `defvar'
+;; localized to this file!
+(defvar done-mark)     ;Position of point afterwards, default nil (meaning end)
 
-(defvar reference nil
-  "Set by `ConTeXt-section-ref', used by `ConTeXt-section-section'.")
+(defvar reference);Used by `ConTeXt-section-ref' and `ConTeXt-section-section'.
 
-(defvar title nil
-  "Set by `ConTeXt-section-title', used by `ConTeXt-section-section'.")
-
+(defvar title); Used by `ConTeXt-section-title' and `ConTeXt-section-section'.
+(defvar name)
+(defvar level)
 
 ;; others
 
@@ -302,8 +305,8 @@ The following variables can be set to customize:
 		       (ConTeXt-up-section (- val)))
 		      (t val)))
 	 (name (ConTeXt-numbered-section-name level))
-	 (toc nil)
 	 (title "")
+         (reference nil)
 	 (done-mark (make-marker)))
     (newline)
     (run-hooks 'ConTeXt-numbered-section-hook)
@@ -410,9 +413,9 @@ section."
 
 The following variables are set before the hooks are run
 
-level - numeric section level, see the documentation of `ConTeXt-section'.
-name - name of the sectioning command, derived from `level'.
-title - The title of the section, default to an empty string.
+`level' - numeric section level, see the documentation of `ConTeXt-section'.
+`name' - name of the sectioning command, derived from `level'.
+`title' - The title of the section, default to an empty string.
 `done-mark' - Position of point afterwards, default nil (meaning end).
 
 The following standard hook exist -
@@ -451,13 +454,14 @@ in your .emacs file."
     ConTeXt-section-title
     ConTeXt-section-ref
     ConTeXt-section-section)
+  ;; FIXME: I can't see where this variable is used!
   "List of hooks to run when a new section is inserted.
 
 The following variables are set before the hooks are run
 
-level - numeric section level, see the documentation of `ConTeXt-section'.
-name - name of the sectioning command, derived from `level'.
-title - The title of the section, default to an empty string.
+`level' - numeric section level, see the documentation of `ConTeXt-section'.
+`name' - name of the sectioning command, derived from `level'.
+`title' - The title of the section, default to an empty string.
 `done-mark' - Position of point afterwards, default nil (meaning end).
 
 The following standard hook exist -
@@ -519,7 +523,7 @@ the name of the sectioning command inserted with `\\[ConTeXt-section]'."
   "Hook to prompt for ConTeXt section title.
 Insert this hook into `ConTeXt-(un)numbered-section-hook' to allow the user to change
 the title of the section inserted with `\\[ConTeXt-section]."
-  (setq title (read-string "What title: ")))
+  (setq title (TeX-read-string "What title: ")))
 
 (defun ConTeXt-section-section ()
   "Hook to insert ConTeXt section command into the file.
@@ -560,28 +564,43 @@ inserted after the sectioning command."
 ;; Various
 (defun TeX-ConTeXt-sentinel (process name)
   "Cleanup TeX output buffer after running ConTeXt."
-  (cond ((TeX-TeX-sentinel-check process name))
-	((save-excursion
-	   ;; in a full ConTeXt run there will multiple texutil
-	   ;; outputs. Just looking for "another run needed" would
-	   ;; find the first occurence
-	   (goto-char (point-max))
-	   (re-search-backward "TeXUtil " nil t)
-	   (re-search-forward "another run needed" nil t))
-	 (message (concat "You should run ConTeXt again "
-			  "to get references right, "
-			  (TeX-current-pages)))
-	 (setq TeX-command-next TeX-command-default))
-	((re-search-forward "removed files :" nil t)
-	 (message "sucessfully cleaned up"))
-	((re-search-forward "^ ?TeX\\(Exec\\|Util\\)" nil t) ;; strange regexp --pg
-	 (message (concat name ": successfully formatted "
-			  (TeX-current-pages)))
-	 (setq TeX-command-next TeX-command-Show))
-	(t
-	 (message (concat name ": problems after "
-			  (TeX-current-pages)))
-	 (setq TeX-command-next TeX-command-default))))
+  (cond
+   ;; Mark IV
+   ((with-current-buffer TeX-command-buffer
+      (string= ConTeXt-Mark-version "IV"))
+    (cond ((TeX-TeX-sentinel-check process name))
+	  ((re-search-forward "fatal error: " nil t)
+	   (message (concat name ": problems after "
+			    (TeX-current-pages)))
+	   (setq TeX-command-next TeX-command-default))
+	  (t
+	   (message (concat name ": successfully formatted "
+			    (TeX-current-pages)))
+	   (setq TeX-command-next TeX-command-Show))))
+   ;; Mark II
+   (t
+    (cond ((TeX-TeX-sentinel-check process name))
+	  ((save-excursion
+	     ;; in a full ConTeXt run there will multiple texutil
+	     ;; outputs. Just looking for "another run needed" would
+	     ;; find the first occurence
+	     (goto-char (point-max))
+	     (re-search-backward "TeXUtil " nil t)
+	     (re-search-forward "another run needed" nil t))
+	   (message (concat "You should run ConTeXt again "
+			    "to get references right, "
+			    (TeX-current-pages)))
+	   (setq TeX-command-next TeX-command-default))
+	  ((re-search-forward "removed files :" nil t)
+	   (message "sucessfully cleaned up"))
+	  ((re-search-forward "^ ?TeX\\(Exec\\|Util\\)" nil t) ;; strange regexp --pg
+	   (message (concat name ": successfully formatted "
+			    (TeX-current-pages)))
+	   (setq TeX-command-next TeX-command-Show))
+	  (t
+	   (message (concat name ": problems after "
+			    (TeX-current-pages)))
+	   (setq TeX-command-next TeX-command-default))))))
 
 
 ;;; Environments
@@ -856,8 +875,7 @@ If INNER is non-nil, go to the point just past before
 			(ConTeXt-environment-stop-name)
 			"\\)"
 			))
-	(level 1)
-	(pos))
+	(level 1))
     ;;jump over the \start... when at the beginning of it.
     (when (looking-at (concat (regexp-quote TeX-esc)
 			      (ConTeXt-environment-start-name)))
@@ -935,13 +953,13 @@ If INNER is non-nil, go to the point just past the \\start... macro."
 
 ;;; Macro Argument Hooks
 
-(defun ConTeXt-optional-argument-insert (arg &optional prefix)
+(defun ConTeXt-optional-argument-insert (arg &optional _prefix)
   "Insert ARG surrounded by square brackets."
   (insert ConTeXt-optop)
   (insert arg)
   (insert ConTeXt-optcl))
 
-(defun ConTeXt-required-argument-insert (arg &optional prefix)
+(defun ConTeXt-required-argument-insert (arg &optional _prefix)
   "Insert ARG surrounded by curly braces."
   (insert TeX-grop)
   (insert arg)
@@ -1150,7 +1168,7 @@ An optional fourth (or sixth) element means always replace if t."
   (modify-syntax-entry ?\( "." ConTeXt-indent-syntax-table)
   (modify-syntax-entry ?\) "." ConTeXt-indent-syntax-table))
 
-(defun ConTeXt-indent-line (&optional arg)
+(defun ConTeXt-indent-line (&optional _arg)
   (with-syntax-table ConTeXt-indent-syntax-table
     ;; TODO: Rather than ignore $, we should try to be more clever about it.
     (let ((indent
@@ -1573,24 +1591,51 @@ else.  There might be text before point."
 
 ;;; Option expander
 
+(defcustom ConTeXt-Mark-version "II"
+  "ConTeXt Mark version used for running ConTeXt."
+  :type "string"
+  :group 'TeX-command)
+(make-variable-buffer-local 'ConTeXt-Mark-version)
+(put 'ConTeXt-Mark-version 'safe-local-variable 'stringp)
+
 (defvar ConTeXt-texexec-option-nonstop "--nonstop "
   "Command line option for texexec to use nonstopmode.")
 
+(defun ConTeXt-expand-command ()
+  "Expand ConTeXt command.
+Use `ConTeXt-Mark-version' to choose the command."
+  (cond
+   ((string= ConTeXt-Mark-version "IV")
+    "context")
+   ;; In any other case fall back on Mark II.
+   (t
+    "texexec")))
+
 (defun ConTeXt-expand-options ()
   "Expand options for context command."
-  (concat
-   (let ((engine (eval (nth 4 (assq TeX-engine (TeX-engine-alist))))))
-     (when engine
-       (format "--engine=%s " engine)))
-   (unless (eq ConTeXt-current-interface "en")
-     (format "--interface=%s " ConTeXt-current-interface))
-   (when TeX-source-correlate-mode
-     (format "--passon=\"%s\" "
-	     (if (eq (TeX-source-correlate-method-active) 'synctex)
-		 TeX-synctex-tex-flags
-	       TeX-source-specials-tex-flags)))
-   (unless TeX-interactive-mode
-     ConTeXt-texexec-option-nonstop)))
+  (cond
+   ;; Mark IV
+   ((string= ConTeXt-Mark-version "IV")
+    (concat
+     (if TeX-source-correlate-mode
+	 "--synctex=1 ")
+     (unless TeX-interactive-mode
+       ConTeXt-texexec-option-nonstop)))
+   ;; In any other case fall back on Mark II.
+   (t
+    (concat
+     (let ((engine (eval (nth 4 (assq TeX-engine (TeX-engine-alist))))))
+       (when engine
+	 (format "--engine=%s " engine)))
+     (unless (eq ConTeXt-current-interface "en")
+       (format "--interface=%s " ConTeXt-current-interface))
+     (when TeX-source-correlate-mode
+       (format "--passon=\"%s\" "
+	       (if (eq (TeX-source-correlate-method-active) 'synctex)
+		   TeX-synctex-tex-flags
+		 TeX-source-specials-tex-flags)))
+     (unless TeX-interactive-mode
+       ConTeXt-texexec-option-nonstop)))))
 
 ;;; Mode
 
@@ -1696,7 +1741,7 @@ i.e. you do _not_ have to cater for this yourself by adding \\\\' or $."
   (easy-menu-add ConTeXt-mode-command-menu ConTeXt-mode-map)
   (setq ConTeXt-menu-changed t)
 
-  (if (= emacs-major-version 20)
+  (if (fboundp 'make-local-hook)
       (make-local-hook 'activate-menubar-hook))
   (add-hook 'activate-menubar-hook 'ConTeXt-menu-update nil t)
 

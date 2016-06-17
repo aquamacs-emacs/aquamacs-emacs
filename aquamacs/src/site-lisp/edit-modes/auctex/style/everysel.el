@@ -1,6 +1,6 @@
 ;;; everysel.el --- AUCTeX style for `everysel.sty'
 
-;; Copyright (C) 2012 Free Software Foundation, Inc.
+;; Copyright (C) 2012, 2015 Free Software Foundation, Inc.
 
 ;; Author: Mads Jensen <mje@inducks.org>
 ;; Created: 2012-12-25
@@ -36,7 +36,7 @@
     ;; adds a hook (the argument code) to be called after \\selectfont
     '("EverySelectfont" 1)
     ;; adds a hook to be called after the next \\selectfont
-    '("AtNextSelectont" 1)))
+    '("AtNextSelectfont" 1)))
  LaTeX-dialect)
 
 (defvar LaTeX-everysel-package-options nil

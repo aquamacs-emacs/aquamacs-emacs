@@ -1,6 +1,6 @@
 ;;; multi-prompt.el --- Completing read of multiple strings
 
-;; Copyright (C) 1996, 1997, 2000, 2009 Free Software Foundation
+;; Copyright (C) 1996, 1997, 2000, 2009, 2014 Free Software Foundation
 
 ;; Author: Per Abrahamsen <abraham@dina.kvl.dk>
 ;; Maintainer: auctex-devel@gnu.org
@@ -62,7 +62,6 @@ are the arguments to `completing-read'.  See that."
     (let* ((minibuffer-local-completion-map new-map)
 	   (minibuffer-local-must-match-map new-map)
 	   (multi-prompt-found nil)
-	   (done nil)
 	   (filter (cond (unique
 			  (lambda (x)
 			    (and (not (member (car x) multi-prompt-found))
@@ -119,8 +118,8 @@ are the arguments to `completing-read'.  See that."
   (interactive)
   (when  (call-interactively 'minibuffer-complete)
     (let ((content (buffer-substring-no-properties (point-min) (point-max))))
-      (when (or (not require-match)
-		(assoc content table))
+      (when (or ;; (not require-match)
+                (assoc content minibuffer-completion-table))
 	(throw 'multi-prompt-next content)))))
 
 

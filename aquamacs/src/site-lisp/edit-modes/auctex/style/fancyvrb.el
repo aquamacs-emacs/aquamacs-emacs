@@ -159,10 +159,6 @@
     "FancyVerbLine")
 
    ;; Filling
-   (set (make-local-variable 'LaTeX-verbatim-regexp)
-   	 (concat
-   	  LaTeX-verbatim-regexp
-   	  "\\|Verbatim\\|BVerbatim\\|LVerbatim\\|SaveVerbatim\\|VerbatimOut"))
    (add-to-list 'LaTeX-verbatim-environments-local "Verbatim")
    (add-to-list 'LaTeX-verbatim-environments-local "BVerbatim")
    (add-to-list 'LaTeX-verbatim-environments-local "LVerbatim")
@@ -190,7 +186,7 @@
 				("LVerbatimInput" "[{"))
 			      'reference)
      (font-latex-add-keywords '(("Verb" "[")) ; The second argument should
-					      ; actually be verbatim.
+					; actually be verbatim.
 			      'textual)
      (font-latex-add-keywords '(("fvset" "{")) 'variable)
      ;; For syntactic fontification, e.g. verbatim constructs.

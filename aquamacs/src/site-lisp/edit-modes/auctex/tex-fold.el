@@ -1,6 +1,6 @@
 ;;; tex-fold.el --- Fold TeX macros.
 
-;; Copyright (C) 2004, 2005, 2006, 2007, 2008, 2011-2012
+;; Copyright (C) 2004, 2005, 2006, 2007, 2008, 2011-2012, 2014
 ;;   Free Software Foundation, Inc.
 
 ;; Author: Ralf Angeli <angeli@caeruleus.net>
@@ -43,6 +43,8 @@
 ;; currently is forced before folding it.
 
 ;;; Code:
+
+(eval-when-compile (require 'cl))
 
 (when (featurep 'xemacs)
   (require 'overlay))
@@ -334,8 +336,8 @@ for macros and 'math for math macros."
 			  ((eq type 'math) TeX-fold-math-spec-list-internal)
 			  (t TeX-fold-macro-spec-list-internal)))
 	(dolist (i (cadr item))
-	  (add-to-list 'fold-list (list i (car item)))
-	  (add-to-list 'item-list i)))
+          (pushnew (list i (car item)) fold-list :test #'equal)
+	  (pushnew i item-list :test #'equal)))
       (when item-list
 	(setq regexp (cond ((and (eq type 'env)
 				 (eq major-mode 'context-mode))
@@ -708,7 +710,7 @@ breaks will be replaced by spaces."
     (dolist (ov (overlays-at (point)))
       (when (and (eq (overlay-get ov 'category) 'TeX-fold)
 		 (numberp (overlay-get ov 'TeX-fold-display-string-spec)))
-	(add-to-list 'overlays ov)))
+	(pushnew ov overlays)))
     (when overlays
       ;; Sort list according to descending starts.
       (setq overlays (sort (copy-sequence overlays)
@@ -808,7 +810,8 @@ That means, put respective properties onto overlay OV."
 			   (n 1))
 		       (while (setq arg (TeX-fold-macro-nth-arg
 					 n ov-start ov-end))
-			 (add-to-list 'arg-list (car arg) t)
+                         (unless (member (car arg) arg-list)
+                           (setq arg-list (append arg-list (list (car arg)))))
 			 (setq n (1+ n)))
 		       (or (condition-case nil
 			       (apply spec arg-list)

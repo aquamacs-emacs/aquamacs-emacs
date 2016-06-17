@@ -1,6 +1,6 @@
 ;;; longtable.el --- AUCTeX style for `longtable.sty'.
 
-;; Copyright (C) 2013, 2014  Free Software Foundation, Inc.
+;; Copyright (C) 2013--2015  Free Software Foundation, Inc.
 
 ;; Maintainer: auctex-devel@gnu.org
 ;; Author: Mosè Giordano <giordano.mose@libero.it>
@@ -36,8 +36,8 @@
     '("longtable" (lambda (environment)
 		    (let ((pos (completing-read (TeX-argument-prompt t nil "Position")
 						'(("l") ("r") ("c"))))
-			  (fmt (read-string "Format: " LaTeX-default-format))
-			  (caption (read-string "Caption: ")))
+			  (fmt (TeX-read-string "Format: " LaTeX-default-format))
+			  (caption (TeX-read-string "Caption: ")))
 		      (setq LaTeX-default-format fmt)
 		      (LaTeX-insert-environment environment
 						(concat
@@ -58,13 +58,6 @@
 			  (LaTeX-newline)
 			  (indent-according-to-mode)))))))
    (TeX-add-symbols
-    ;; Parameters
-    '("LTleft" 0)
-    '("LTright" 0)
-    '("LTpre" 0)
-    '("LTpost" 0)
-    '("LTcapwidth" 0)
-    '("LTchunksize" 0)
     ;; Commands to end table rows
     '("endhead" 0)
     '("endfirsthead" 0)
@@ -72,6 +65,13 @@
     '("endlastfoot" 0)
     ;; Caption commands
     '("caption*" 1))
+
+   ;; These parameters are set with \setlength
+   (LaTeX-add-lengths
+    "LTleft" "LTright" "LTpre" "LTpost" "LTcapwidth")
+
+   ;; This parameter is set with \setcounter
+   (LaTeX-add-counters "LTchunksize")
 
    ;; Use the enhanced table formatting
    (add-to-list 'LaTeX-indent-environment-list

@@ -1,6 +1,6 @@
 ;;; toolbar-x.el --- fancy toolbar handling in Emacs and XEmacs
 
-;; Copyright (C) 2004, 2005, 2008 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2008, 2014 Free Software Foundation, Inc.
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -106,6 +106,8 @@
 
 ;;; Code:
 
+(eval-when-compile (require 'cl))
+
 ;; Note that this just gives a useful default.  Icons are expected to
 ;; be in subdirectory "images" or "toolbar" relative to the load-path.
 ;; Packages loading toolbarx are advised to explicitly add their own
@@ -125,7 +127,7 @@
 			      ;;(file-directory-p x)
 			      x))
 		     load-path))
-   (list (concat data-directory "images")))
+   (list data-directory))
   "List of directories where toolbarx finds its images.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -147,8 +149,6 @@
 (defun toolbarx-make-string-from-symbol (symbol)
   "Return a string from the name of a SYMBOL.
 Upcase initials and replace dashes by spaces."
-  (if (eq symbol 'separator)
-      "--"
   (let* ((str (upcase-initials (symbol-name symbol)))
 	 (str2))
     (dolist (i (append str nil))
@@ -156,7 +156,6 @@ Upcase initials and replace dashes by spaces."
 	  (push 32 str2)
 	(push i str2)))			; else push identical
     (concat (nreverse str2))))
-  )
 
 (defun toolbarx-make-symbol-from-string (string)
   "Return a (intern) symbol from STRING.
@@ -180,8 +179,7 @@ different.  OPTION-LIST equal to nil is a good option list."
     (dotimes (i n)
       (when (> i 0)
 	(setq temp-opt-list (cddr temp-opt-list)))
-      (add-to-list 'list-diff
-		   (car temp-opt-list))
+      (pushnew (car temp-opt-list) list-diff :test #'equal)
       (setq elt-in-valid (and elt-in-valid
 			      (memq (car temp-opt-list)
 				    valid-options))))
@@ -632,10 +630,8 @@ object VAL of a dropdown group (see documentation of function
   (let* ((props-types-alist
 	  '((:image	      toolbarx-test-image-type)
 	    (:command	      toolbarx-test-any-type)
-	    (:title          toolbarx-test-string-or-nil)
 	    (:enable	      toolbarx-test-any-type)
 	    (:visible	      toolbarx-test-any-type)
-	    (:label          toolbarx-test-string-or-nil)
 	    (:help	      toolbarx-test-string-or-nil)
 	    (:insert	      toolbarx-test-any-type	   . and)
 	    (:toolbar	      toolbarx-test-toolbar-type)
@@ -1132,9 +1128,7 @@ an extension.  If the extension is omitted, `xpm', `xbm' and
 	(and file (make-glyph file))
       (if file
 	  (create-image file)
-	(find-image `((:type png :file ,(concat image ".png"))
-		      (:type tiff :file ,(concat image ".tiff"))
-		      (:type xpm :file ,(concat image ".xpm"))
+	(find-image `((:type xpm :file ,(concat image ".xpm"))
 		      (:type xbm :file ,(concat image ".xbm"))
 		      (:type pbm :file ,(concat image ".pbm"))))))))
 
@@ -1241,14 +1235,11 @@ function `toolbar-install-toolbar'."
 			     (cadr (memq :enable filtered-props))))
 	       (visible (cons (memq :visible filtered-props)
 			      (cadr (memq :visible filtered-props))))
-	       (label (cons (memq :label filtered-props)
-			    (cadr (memq :label filtered-props))))
 	       (button (cons (memq :button filtered-props)
 			     (cadr (memq :button filtered-props))))
 	       (menuitem (append
 			  (list 'menu-item
-				(or (cadr (memq :title filtered-props)) 
-				    (toolbarx-make-string-from-symbol symbol))
+				(toolbarx-make-string-from-symbol symbol)
 				command
 				:image image-descriptor)
 			  (when (car help)
@@ -1257,8 +1248,6 @@ function `toolbar-install-toolbar'."
 			    (list :enable (cdr enable)))
 			  (when (car visible)
 			    (list :visible (cdr visible)))
-			  (when (car label)
-			    (list :label (cdr label)))
 			  (when (car button)
 			    (list :button (cdr button)))))
 	       (key-not-used

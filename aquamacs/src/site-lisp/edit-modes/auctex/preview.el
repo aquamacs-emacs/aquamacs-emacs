@@ -1,6 +1,6 @@
 ;;; preview.el --- embed preview LaTeX images in source buffer
 
-;; Copyright (C) 2001-2006, 2010-2014  Free Software Foundation, Inc.
+;; Copyright (C) 2001-2006, 2010-2015  Free Software Foundation, Inc.
 
 ;; Author: David Kastrup
 ;; Keywords: tex, wp, convenience
@@ -54,8 +54,7 @@ preview-latex buffers will not survive across sessions.")))
       (require 'reporter)
     (file-error (message "Missing reporter library, probably from the mail-lib package:
 preview-latex's bug reporting commands will probably not work.")))
-  (require 'info)
-  (defvar error))
+  (require 'info))
 
 ;; we need the compatibility macros which do _not_ get byte-compiled.
 (eval-when-compile
@@ -328,7 +327,8 @@ LIST consists of TeX dimensions in sp (1/65536 TeX point)."
    (consp list)
    (let* ((dims (vconcat (mapcar
 			  #'(lambda (x)
-			      (/ x 65781.76)) list)))
+			      (/ x 65781.76))
+                          list)))
 	  (box
 	   (vector
 	    (+ 72 (min 0 (aref dims 2)))
@@ -338,13 +338,15 @@ LIST consists of TeX dimensions in sp (1/65536 TeX point)."
 	  (border (if preview-parsed-tightpage
 		      (vconcat (mapcar
 				#'(lambda(x)
-				    (/ x 65781.76)) preview-parsed-tightpage))
+				    (/ x 65781.76))
+                                preview-parsed-tightpage))
 		    (vector (- preview-TeX-bb-border)
 			    (- preview-TeX-bb-border)
 			    preview-TeX-bb-border
 			    preview-TeX-bb-border))))
-     (dotimes (i 4 box)
-       (aset box i (+ (aref box i) (aref border i)))))))
+     (dotimes (i 4)
+       (aset box i (+ (aref box i) (aref border i))))
+     box)))
 
 (defcustom preview-gs-command
   (or ;; The GS wrapper coming with TeX Live
@@ -446,10 +448,9 @@ dots per inch.  Buffer-local to rendering buffer.")
   "Generate resolution argument for gs.
 Calculated from real-life factor SCALE and XRES and
 YRES, the screen resolution in dpi."
-  ;; (message "scal %s, xres %s, magn %s" scale xres (preview-get-magnification))
   (format "-r%gx%g"
-	  (round (/ (* scale xres) (preview-get-magnification)))
-	  (round (/ (* scale yres) (preview-get-magnification)))))
+	  (/ (* scale xres) (preview-get-magnification))
+	  (/ (* scale yres) (preview-get-magnification))))
 
 (defun preview-gs-behead-outstanding (err)
   "Remove leading element of outstanding queue after error.
@@ -509,19 +510,20 @@ of a cell used for string concatenation."
    (t (error "Bad string expansion"))))
 
 (defconst preview-expandable-string
-  ((lambda (f) (funcall f (funcall f 'sexp)))
-   (lambda (x)
-     `(choice
-       string
-       (repeat :tag "Concatenate"
-	(choice
-	 string
-	 (cons :tag "Separated list"
-	       (choice (string :tag "Separator")
-		       (symbol :tag "Indirect separator or flag"))
-	       ,x)
-	 (symbol :tag "Indirect variable (no separator)")))
-       (symbol :tag "Indirect variable (with separator)"))))
+  (let ((f (lambda (x)
+             `(choice
+               string
+               (repeat :tag "Concatenate"
+                       (choice
+                        string
+                        (cons :tag "Separated list"
+                              (choice (string :tag "Separator")
+                                      (symbol :tag
+                                              "Indirect separator or flag"))
+                              ,x)
+                        (symbol :tag "Indirect variable (no separator)")))
+               (symbol :tag "Indirect variable (with separator)")))))
+    (funcall f (funcall f 'sexp)))
   "Type to be used for `preview-string-expand'.
 Just a hack until we get to learn how to do this properly.
 Recursive definitions are not popular with Emacs,
@@ -881,7 +883,7 @@ Pure borderless black-on-white will return an empty string."
 (defalias 'preview-dvipng-abort 'preview-dvips-abort)
 ;  "Abort a DviPNG run.")
 
-(defun preview-gs-dvips-sentinel (process command &optional gsstart)
+(defun preview-gs-dvips-sentinel (process _command &optional gsstart)
   "Sentinel function for indirect rendering DviPS process.
 The usual PROCESS and COMMAND arguments for
 `TeX-sentinel-function' apply.  Starts gs if GSSTART is set."
@@ -911,7 +913,7 @@ The usual PROCESS and COMMAND arguments for
     (error (preview-log-error err "DviPS sentinel" process)))
   (preview-reraise-error process))
 
-(defun preview-pdf2dsc-sentinel (process command &optional gsstart)
+(defun preview-pdf2dsc-sentinel (process _command &optional gsstart)
   "Sentinel function for indirect rendering PDF process.
 The usual PROCESS and COMMAND arguments for
 `TeX-sentinel-function' apply.  Starts gs if GSSTART is set."
@@ -967,7 +969,7 @@ The usual PROCESS and COMMAND arguments for
 	(unless (eq (process-status process) 'signal)
 	  (preview-dvips-abort)))))
 
-(defun preview-dvipng-sentinel (process command &optional placeall)
+(defun preview-dvipng-sentinel (process _command &optional placeall)
   "Sentinel function for indirect rendering DviPNG process.
 The usual PROCESS and COMMAND arguments for
 `TeX-sentinel-function' apply.  Places all snippets if PLACEALL is set."
@@ -1115,7 +1117,8 @@ is located."
       (push ov preview-gs-queue)))
   t)
 
-(defun preview-gs-place (ov snippet box run-buffer tempdir ps-file imagetype)
+
+(defun preview-gs-place (ov snippet box run-buffer tempdir ps-file _imagetype)
   "Generate an image placeholder rendered over by Ghostscript.
 This enters OV into all proper queues in order to make it render
 this image for real later, and returns the overlay after setting
@@ -1140,6 +1143,8 @@ for the file extension."
   (preview-add-urgentization #'preview-gs-urgentize ov run-buffer)
   (list ov))
 
+(defvar view-exit-action)
+
 (defun preview-mouse-open-error (string)
   "Display STRING in a new view buffer on click."
   (let ((buff (get-buffer-create
@@ -1157,9 +1162,11 @@ for the file extension."
   "Display eps FILE in a view buffer on click.
 Place point at POSITION, else beginning of file."
   (let ((default-major-mode
+          ;; FIXME: Yuck!  Just arrange for the file name to have the right
+          ;; extension instead!
 	  (or
 	   (assoc-default "x.ps" auto-mode-alist #'string-match)
-	   default-major-mode))
+	   (default-value 'major-mode)))
 	(buff (get-file-buffer file)))
     (save-excursion
       (if buff
@@ -1426,24 +1433,16 @@ icon is cached in the property list of the symbol."
 	   ,@(preview-filter-specs-1 (nthcdr 2 specs))))))
 
 (put 'preview-filter-specs :min
-     #'(lambda (keyword value &rest args)
+     #'(lambda (_keyword value &rest args)
 	 (if (> value preview-min-spec)
 	     (throw 'preview-filter-specs nil)
 	   (preview-filter-specs-1 args))))
 
-(defvar preview-datadir (file-name-directory load-file-name)
-  "The directory relative to which package data may be found.
-This should be hardwired into the startup file containing the
-autoloads for preview-latex.")
-
 (put 'preview-filter-specs :file
-     #'(lambda (keyword value &rest args)
+     #'(lambda (_keyword value &rest args)
 	 `(:file ,(expand-file-name value (expand-file-name "images"
-							    preview-datadir))
+							    TeX-data-directory))
 		 ,@(preview-filter-specs-1 args))))
-
-(defvar preview-lispdir TeX-lisp-directory
-  "The directory where the preview lisp files are located.")
 
 (defun preview-ascent-from-bb (bb)
   "This calculates the image ascent from its bounding box.
@@ -1832,16 +1831,13 @@ BUFFER-MISC is the appropriate data to be used."
 				     (preview-buffer-restore-internal
 				      ',buffer-misc)))))
 
-(defun desktop-buffer-preview (desktop-buffer-file-name
-			       desktop-buffer-name
-			       desktop-buffer-misc)
+(defun desktop-buffer-preview (file-name _buffer-name misc)
   "Hook function for restoring persistent previews into a buffer."
-  (when (and desktop-buffer-file-name
-	     (file-readable-p desktop-buffer-file-name))
-    (let ((buf (find-file-noselect desktop-buffer-file-name)))
-      (if (eq (car desktop-buffer-misc) 'preview)
+  (when (and file-name (file-readable-p file-name))
+    (let ((buf (find-file-noselect file-name)))
+      (if (eq (car misc) 'preview)
 	  (with-current-buffer buf
-	    (preview-buffer-restore desktop-buffer-misc)
+	    (preview-buffer-restore misc)
 	    buf)
 	buf))))
 
@@ -1855,7 +1851,7 @@ BUFFER-MISC is the appropriate data to be used."
 					    desktop-buffer-name
 					    desktop-buffer-misc)))))
 
-(defcustom preview-auto-cache-preamble t
+(defcustom preview-auto-cache-preamble 'ask
   "*Whether to generate a preamble cache format automatically.
 Possible values are nil, t, and `ask'."
   :group 'preview-latex
@@ -2269,8 +2265,7 @@ See description of `TeX-command-list' for details."
 
 (defun preview-copy-text (ov)
   "Copy the text of OV into the kill buffer."
-  (save-excursion
-    (set-buffer (overlay-buffer ov))
+  (with-current-buffer (overlay-buffer ov)
     (copy-region-as-kill (overlay-start ov) (overlay-end ov))))
 
 (defun preview-copy-mml (ov)
@@ -2497,44 +2492,47 @@ pp")
   "Hook function for embedding the preview package into AUCTeX.
 This is called by `LaTeX-mode-hook' and changes AUCTeX variables
 to add the preview functionality."
-  (remove-hook 'LaTeX-mode-hook #'LaTeX-preview-setup)
-  (add-hook 'LaTeX-mode-hook #'preview-mode-setup)
-  (define-key LaTeX-mode-map "\C-c\C-p" preview-map)
-  (easy-menu-define preview-menu LaTeX-mode-map
-    "This is the menu for preview-latex."
-    '("Preview"
-      ["Generate previews" :active nil]
-      ["  (or toggle) at point" preview-at-point]
-      ["  for environment" preview-environment]
-      ["  for section" preview-section]
-      ["  for region" preview-region (preview-mark-active)]
-      ["  for buffer" preview-buffer]
-      ["  for document" preview-document]
-      "---"
-      ["Remove previews" :active nil]
-      ["  at point" preview-clearout-at-point]
-      ["  from section" preview-clearout-section]
-      ["  from region" preview-clearout (preview-mark-active)]
-      ["  from buffer" preview-clearout-buffer]
-      ["  from document" preview-clearout-document]
-      "---"
-      ["Turn preamble cache" :active nil]
-      ["  on" preview-cache-preamble]
-      ["  off" preview-cache-preamble-off]
-      "---"
-      (["Customize" :active nil]
-       ["  Browse options"
-	(customize-group 'preview)]
-       ["  Extend this menu"
-	(easy-menu-add-item
-	 nil '("Preview")
-	 (customize-menu-create 'preview))])
-      ["Read documentation" preview-goto-info-page]
-      ["Report Bug" preview-report-bug]))
-  (if (eq major-mode 'latex-mode)
-      (preview-mode-setup))
-  (if (boundp 'desktop-buffer-misc)
-      (preview-buffer-restore desktop-buffer-misc)))
+  ;; This has to be done only once.
+  (unless (and (boundp 'LaTeX-mode-hook)
+	       (memq #'preview-mode-setup LaTeX-mode-hook))
+    (remove-hook 'LaTeX-mode-hook #'LaTeX-preview-setup)
+    (add-hook 'LaTeX-mode-hook #'preview-mode-setup)
+    (define-key LaTeX-mode-map "\C-c\C-p" preview-map)
+    (easy-menu-define preview-menu LaTeX-mode-map
+      "This is the menu for preview-latex."
+      '("Preview"
+	"Generate previews"
+	["(or toggle) at point" preview-at-point]
+	["for environment" preview-environment]
+	["for section" preview-section]
+	["for region" preview-region (preview-mark-active)]
+	["for buffer" preview-buffer]
+	["for document" preview-document]
+	"---"
+	"Remove previews"
+	["at point" preview-clearout-at-point]
+	["from section" preview-clearout-section]
+	["from region" preview-clearout (preview-mark-active)]
+	["from buffer" preview-clearout-buffer]
+	["from document" preview-clearout-document]
+	"---"
+	"Turn preamble cache"
+	["on" preview-cache-preamble]
+	["off" preview-cache-preamble-off]
+	"---"
+	("Customize"
+	 ["Browse options"
+	  (customize-group 'preview)]
+	 ["Extend this menu"
+	  (easy-menu-add-item
+	   nil '("Preview")
+	   (customize-menu-create 'preview))])
+	["Read documentation" preview-goto-info-page]
+	["Report Bug" preview-report-bug]))
+    (if (eq major-mode 'latex-mode)
+	(preview-mode-setup))
+    (if (boundp 'desktop-buffer-misc)
+	(preview-buffer-restore desktop-buffer-misc))))
 
 (defun preview-clean-subdir (dir)
   "Cleans out a temporary DIR with preview image files."
@@ -2578,19 +2576,12 @@ later while in use."
     (add-hook 'kill-emacs-hook #'preview-cleanout-tempfiles t)
     (setq TeX-active-tempdir
 	  (list (make-temp-file (expand-file-name
-			   "tmp" (file-name-as-directory topdir)) t)
+				 "tmp" (file-name-as-directory topdir)) t)
 		topdir
 		0))
     (shell-quote-argument
      (concat (file-name-as-directory (file-name-nondirectory topdir))
 	     (file-name-nondirectory (nth 0 TeX-active-tempdir))))))
-
-;; Hook into TeX immediately if it's loaded, use LaTeX-mode-hook if not.
-(if (featurep 'latex)
-    (LaTeX-preview-setup)
-  (add-hook 'LaTeX-mode-hook #'LaTeX-preview-setup))
-
-;;;###autoload (add-hook 'LaTeX-mode-hook #'LaTeX-preview-setup)
 
 (defun preview-parse-counters (string)
   "Extract counter information from STRING."
@@ -2666,8 +2657,8 @@ call, and in its CDR the final stuff for the placement hook."
 	  file line
 	  (lsnippet 0) lstart (lfile "") lline lbuffer lpoint
 	  lcounters
-	  string after-string error context-start
-	  context offset
+	  string after-string
+	  offset
 	  parsestate (case-fold-search nil)
 	  (run-buffer (current-buffer))
 	  (run-coding-system preview-coding-system)
@@ -2696,39 +2687,39 @@ call, and in its CDR the final stuff for the placement hook."
  !\\(?:offset(\\([---0-9]+\\))\\|\
 name(\\([^)]+\\))\\)\\|\
 ^Preview: \\([a-zA-Z]+\\) \\([^\n\r]*\\)\r?$" nil t)
-;;; Ok, here is a line by line breakdown:
-;;; match-alternative 1:
-;;; error indicator for TeX error, either style.
-;;; match-alternative 2:
-;;; The same, but file-line-error-style, matching on file name.
-;;; match-alternative 3:
-;;; Too ugly to describe in detail.  In short, we try to catch file
-;;; names built from path components that don't contain spaces or
-;;; other special characters once the file extension has started.
-;;;
-;;; Position for searching immediately after the file name so as to
-;;; not miss closing parens or something.
-;;; (match-string 3) is the file name.
-;;; match-alternative 4:
-;;; )+\( \|$\)
-;;; a closing paren followed by the end of line or a space: a just
-;;; closed file.
-;;; match-alternative 5 (wrapped into one shy group with
-;;; match-alternative 6, so that the match on first char is slightly
-;;; faster):
-;;; !offset(\([---0-9]+\))
-;;; an AUCTeX offset message. (match-string 5) is the offset itself
-;;; !name(\([^)]+\))
-;;; an AUCTeX file name message.  (match-string 6) is the file name
-;;; TODO: Actually, the latter two should probably again match only
-;;; after a space or newline, since that it what \message produces.
-;;;disabled in prauctex.def:
-;;;\(?:Ov\|Und\)erfull \\.*[0-9]*--[0-9]*
-;;;\(?:.\{79\}
-;;;\)*.*$\)\|
-;;; This would have caught overfull box messages that consist of
-;;; several lines of context all with 79 characters in length except
-;;; of the last one.  prauctex.def kills all such messages.
+;;;   Ok, here is a line by line breakdown:
+;;;   match-alternative 1:
+;;;   error indicator for TeX error, either style.
+;;;   match-alternative 2:
+;;;   The same, but file-line-error-style, matching on file name.
+;;;   match-alternative 3:
+;;;   Too ugly to describe in detail.  In short, we try to catch file
+;;;   names built from path components that don't contain spaces or
+;;;   other special characters once the file extension has started.
+;;;  
+;;;   Position for searching immediately after the file name so as to
+;;;   not miss closing parens or something.
+;;;   (match-string 3) is the file name.
+;;;   match-alternative 4:
+;;;   )+\( \|$\)
+;;;   a closing paren followed by the end of line or a space: a just
+;;;   closed file.
+;;;   match-alternative 5 (wrapped into one shy group with
+;;;   match-alternative 6, so that the match on first char is slightly
+;;;   faster):
+;;;   !offset(\([---0-9]+\))
+;;;   an AUCTeX offset message. (match-string 5) is the offset itself
+;;;   !name(\([^)]+\))
+;;;   an AUCTeX file name message.  (match-string 6) is the file name
+;;;   TODO: Actually, the latter two should probably again match only
+;;;   after a space or newline, since that it what \message produces.
+;;;  disabled in prauctex.def:
+;;;  \(?:Ov\|Und\)erfull \\.*[0-9]*--[0-9]*
+;;;  \(?:.\{79\}
+;;;  \)*.*$\)\|
+;;;   This would have caught overfull box messages that consist of
+;;;   several lines of context all with 79 characters in length except
+;;;   of the last one.  prauctex.def kills all such messages.
 	      (setq file (match-string-no-properties 2))
 	      (cond
 	       ((match-beginning 1)
@@ -2755,23 +2746,19 @@ name(\\([^)]+\\))\\)\\|\
 					       (match-string 6)))
 				    t))
 			    counters (mapcar #'cdr preview-parsed-counters)
-			    error (progn
-				    (setq lpoint (point))
-				    (end-of-line)
-				    (buffer-substring lpoint (point)))
-
-			    ;; And the context for the help window.
-			    context-start (point)
 
 			    ;; And the line number to position the cursor.
-;;; variant 1: profiling seems to indicate the regexp-heavy solution
-;;; to be favorable.  Removing incomplete characters from the error
-;;; context is an absolute nuisance.
-			    line (and (re-search-forward "\
+                            line (progn
+                                   (setq lpoint (point))
+                                   (end-of-line)
+;;;  variant 1: profiling seems to indicate the regexp-heavy solution
+;;;  to be favorable.  Removing incomplete characters from the error
+;;;  context is an absolute nuisance.
+                                   (and (re-search-forward "\
 ^l\\.\\([0-9]+\\) \\(\\.\\.\\.\\(?:\\^*\\(?:[89a-f][0-9a-f]\\|[]@-\\_?]\\)\\|\
 \[0-9a-f]?\\)\\)?\\([^\n\r]*?\\)\r?
 \\([^\n\r]*?\\)\\(\\(?:\\^+[89a-f]?\\)?\\.\\.\\.\\)?\r?$" nil t)
-				      (string-to-number (match-string 1)))
+                                        (string-to-number (match-string 1))))
 			    ;; And a string of the context to search for.
 			    string (and line (match-string 3))
 			    after-string (and line (buffer-substring
@@ -2780,8 +2767,6 @@ name(\\([^)]+\\))\\)\\|\
 							  (match-beginning 0)))
 						    (match-end 4)))
 
-			    ;; And we have now found to the end of the context.
-			    context (buffer-substring context-start (point))
 			    ;; We may use these in another buffer.
 			    offset (or (car TeX-error-offset) 0)
 			    file (car TeX-error-file))
@@ -2806,11 +2791,12 @@ name(\\([^)]+\\))\\)\\|\
 				(setq slow-hook
 				      (nconc slow-hook (list lst)))))))
 			(condition-case err
-			    (save-excursion (run-hooks 'slow-hook))
+			    (save-excursion (mapc #'funcall slow-hook))
 			  (error (preview-log-error err "Translation hook")))
 			(push (vector file (+ line offset)
 				      string after-string
-				      snippet box counters) parsestate)))
+				      snippet box counters)
+                              parsestate)))
 		  ;; else normal error message
 		  (forward-line)
 		  (re-search-forward "^l\\.[0-9]" nil t)
@@ -2907,7 +2893,8 @@ name(\\([^)]+\\))\\)\\|\
 						       'end
 						       (- line lline))
 				  (forward-line (- line lline)))))
-			(goto-line line))
+                        (goto-char (point-min))
+                        (forward-line (1- line)))
 		      (setq lpoint (point))
 		      (cond
 		       ((search-forward (concat string after-string)
@@ -3067,7 +3054,7 @@ and `preview-colors' are set as given."
     (insert-before-markers "Running `" name "' with ``" command "''\n")
     (setq mode-name name)
     (setq TeX-sentinel-function
-	  (lambda (process name) (message "%s: done." name)))
+	  (lambda (_process name) (message "%s: done." name)))
     (if TeX-process-asynchronous
 	(let ((process (start-process name (current-buffer) TeX-shell
 				      TeX-shell-command-option
@@ -3105,12 +3092,13 @@ If FAST is set, do a fast conversion."
     (setq preview-ps-file (and fast
 			       (preview-make-filename
 				(preview-make-filename
-				 "preview.ps" tempdir) tempdir)))
+				 "preview.ps" tempdir)
+                                tempdir)))
     (goto-char (point-max))
     (insert-before-markers "Running `" name "' with ``" command "''\n")
     (setq mode-name name)
     (setq TeX-sentinel-function
-	  (lambda (process name) (message "%s: done." name)))
+	  (lambda (_process name) (message "%s: done." name)))
     (if TeX-process-asynchronous
 	(let ((process (start-process name (current-buffer) TeX-shell
 				      TeX-shell-command-option
@@ -3148,12 +3136,13 @@ If FAST is set, do a fast conversion."
 			   pdfsource
 			   (preview-make-filename
 			    (preview-make-filename
-			     "preview.dsc" tempdir) tempdir)))
+			     "preview.dsc" tempdir)
+                            tempdir)))
     (goto-char (point-max))
     (insert-before-markers "Running `" name "' with ``" command "''\n")
     (setq mode-name name)
     (setq TeX-sentinel-function
-	  (lambda (process name) (message "%s: done." name)))
+	  (lambda (_process name) (message "%s: done." name)))
     (if TeX-process-asynchronous
 	(let ((process (start-process name (current-buffer) TeX-shell
 				      TeX-shell-command-option
@@ -3174,7 +3163,7 @@ If FAST is set, do a fast conversion."
 		    TeX-shell-command-option
 		    command))))
 
-(defun preview-TeX-inline-sentinel (process name)
+(defun preview-TeX-inline-sentinel (process _name)
   "Sentinel function for preview.
 See `TeX-sentinel-function' and `set-process-sentinel'
 for definition of PROCESS and NAME."
@@ -3553,11 +3542,11 @@ internal parameters, STR may be a log to insert into the current log."
 	     (delete-process process)
 	     (preview-reraise-error process)))))
 
-(defconst preview-version "11.88"
+(defconst preview-version "11.89"
   "Preview version.
 If not a regular release, the date of the last change.")
 
-(defconst preview-release-date "2014-10-29"
+(defconst preview-release-date "2015-11-13"
   "Preview release date using the ISO 8601 format, yyyy-mm-dd.")
 
 (defun preview-dump-state (buffer)

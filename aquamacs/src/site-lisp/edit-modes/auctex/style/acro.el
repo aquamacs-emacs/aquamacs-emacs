@@ -1,6 +1,6 @@
 ;;; acro.el --- AUCTeX style for `acro.sty' version 1.2a.
 
-;; Copyright (C) 2013 Free Software Foundation, Inc.
+;; Copyright (C) 2013-2015 Free Software Foundation, Inc.
 
 ;; Maintainer: auctex-devel@gnu.org
 ;; Author: Mosè Giordano <giordano.mose@libero.it>
@@ -28,6 +28,8 @@
 ;; This file adds support for `acro.sty' version 1.2a.
 
 ;;; Code:
+
+(require 'tex) ;Indispensable when compiling the call to `TeX-auto-add-type'.
 
 (defvar LaTeX-acro-package-options-list
   '(;; General Options
@@ -100,9 +102,9 @@ set to `true'."
 	    (LaTeX-provided-package-options-member "acro" "macros=true"))
     (add-to-list 'TeX-auto-symbol LaTeX-auto-acro-acronym)))
 
-;; FIXME: This does not seem to work unless one does a manual reparse.
-(add-hook 'TeX-auto-prepare-hook 'LaTeX-acro-prepare)
-(add-hook 'TeX-auto-cleanup-hook 'LaTeX-acro-cleanup)
+(add-hook 'TeX-auto-prepare-hook #'LaTeX-acro-prepare t)
+(add-hook 'TeX-auto-cleanup-hook #'LaTeX-acro-cleanup t)
+(add-hook 'TeX-update-style-hook #'TeX-auto-parse t)
 
 (defvar LaTeX-acro-acronym-history nil
   "History of acronyms in acro.")

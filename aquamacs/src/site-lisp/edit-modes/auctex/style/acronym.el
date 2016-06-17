@@ -1,6 +1,6 @@
 ;;; acronym.el --- AUCTeX style for `acronym.sty' version 1.38.
 
-;; Copyright (C) 2013 Free Software Foundation, Inc.
+;; Copyright (C) 2013-2015 Free Software Foundation, Inc.
 
 ;; Maintainer: auctex-devel@gnu.org
 ;; Author: Mosè Giordano <giordano.mose@libero.it>
@@ -29,6 +29,8 @@
 
 ;;; Code:
 
+(require 'tex) ;Indispensable when compiling the call to `TeX-auto-add-type'.
+
 (TeX-auto-add-type "acronym" "LaTeX")
 
 ;; Self Parsing -- see (info "(auctex)Hacking the Parser").
@@ -49,9 +51,9 @@
 	  (add-to-list 'LaTeX-acronym-list (list acronym)))
 	LaTeX-auto-acronym))
 
-;; FIXME: This does not seem to work unless one does a manual reparse.
-(add-hook 'TeX-auto-prepare-hook 'LaTeX-acronym-prepare)
-(add-hook 'TeX-auto-cleanup-hook 'LaTeX-acronym-cleanup)
+(add-hook 'TeX-auto-prepare-hook #'LaTeX-acronym-prepare t)
+(add-hook 'TeX-auto-cleanup-hook #'LaTeX-acronym-cleanup t)
+(add-hook 'TeX-update-style-hook #'TeX-auto-parse t)
 
 (defvar LaTeX-acronym-acronym-history nil
   "History of acronyms in acronym.")

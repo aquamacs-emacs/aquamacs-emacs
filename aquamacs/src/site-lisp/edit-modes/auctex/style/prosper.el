@@ -1,6 +1,6 @@
 ;;; prosper.el --- Prosper style file for AUCTeX
 
-;; Copyright (C) 2001, 2002 by Philip Lord, Nevin Kapur
+;; Copyright (C) 2001, 2002, 2014 by Philip Lord, Nevin Kapur
 
 ;; Authors:  Phillip Lord<p.lord@russet.org.uk>
 ;;           Nevin Kapur <nevin@jhu.edu>
@@ -52,12 +52,12 @@
 ;; Constants:
 
 
-;;;; This is partly working now, and it a little neater than it
-;;;; was. The main problem is that the redefinition of "documentclass"
-;;;; does not happen until its all too late, so that stuff never
-;;;; happens correctly. This is easy enough to fix by fiddling with
-;;;; auctex. I shall have to download the latest version, and see if
-;;;; its already been fixed.
+;; This is partly working now, and it a little neater than it
+;; was. The main problem is that the redefinition of "documentclass"
+;; does not happen until its all too late, so that stuff never
+;; happens correctly. This is easy enough to fix by fiddling with
+;; auctex. I shall have to download the latest version, and see if
+;; its already been fixed.
 
 
 
@@ -80,7 +80,7 @@
     "alcatel" "gyom" "pascal" "rico"
     ))
 
-(defun LaTeX-prosper-insert-title (optional)
+(defun LaTeX-prosper-insert-title (_optional)
   (newline)
   (mapc (lambda(f)
 	  (TeX-insert-macro f)
@@ -92,7 +92,7 @@
 
 
 ;; Utility functions
-(defun LaTeX-prosper-arg-pdftransition (environment)
+(defun LaTeX-prosper-arg-pdftransition (_environment)
   (let ((default
           (if (boundp 'LaTeX-prosper-transition-history)
               (car LaTeX-prosper-transition-history)
@@ -117,7 +117,7 @@
    nil nil nil nil "default" ))
 
 
-(defun LaTeX-prosper-insert-options(environment)
+(defun LaTeX-prosper-insert-options(_environment)
   (insert "[" )
   (insert (LaTeX-prosper-slide-style-prompt) " ")
   (mapc (lambda(f)
@@ -131,14 +131,14 @@
   (delete-char -1)
   (insert "]"))
 
-(defun LaTeX-prosper-insert-slide (environment)
+(defun LaTeX-prosper-insert-slide (_environment)
   (if (y-or-n-p "Surround with overlay ?")
       (progn (TeX-insert-macro "overlays")
              (if (search-backward "{" 0 t)
                  (progn
                    (goto-char (+ 1 (point)))
                    (insert "%\n")))))
-  (let ((title (read-string "Title: ")))
+  (let ((title (TeX-read-string "Title: ")))
     (LaTeX-insert-environment "slide" (concat TeX-grop title TeX-grcl))))
 
 

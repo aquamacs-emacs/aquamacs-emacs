@@ -30,6 +30,8 @@
 
 ;;; Code:
 
+(eval-when-compile (require 'cl))
+
 (defvar LaTeX-babel-language-list
   '("afrikaans"
     "bahasa" "indonesian" "indon" "bahasai" "bahasam" "malay" "meyalu"
@@ -107,12 +109,12 @@
 	    ;; Append element to `active-languages' to respect loading order.
 	    ;; `babel' package uses as default language the last loaded one,
 	    ;; except if it is set with the `main' option.
-	    (add-to-list 'active-languages elt t))))
+	    (pushnew elt active-languages :test #'equal))))
     (if main-language
-	(add-to-list 'active-languages main-language t))
-    active-languages))
+        (pushnew main-language active-languages :test #'equal))
+    (nreverse active-languages)))
 
-(defun TeX-arg-babel-lang (optional &optional prompt)
+(defun TeX-arg-babel-lang (_optional &optional _prompt)
   "Prompt for a language with completion and insert it as an argument."
   (TeX-argument-insert
    (completing-read "Language: " (LaTeX-babel-active-languages)) nil))
