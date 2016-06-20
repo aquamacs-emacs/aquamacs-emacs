@@ -66,7 +66,8 @@ to the system configuration; look at `system-configuration' instead."
 		      "Aquamacs "
 		      (if (boundp 'aquamacs-version) aquamacs-version "?")
 		      (if (boundp 'aquamacs-minor-version) aquamacs-minor-version "?")
-		      " "))
+		      " ")
+                    "")
                  emacs-version
 		 system-configuration
 		 (cond ((featurep 'motif)
