@@ -8431,7 +8431,7 @@ Returns the newly created indirect buffer."
 
 ;;; Handling of Backspace and Delete keys.
 
-(defcustom normal-erase-is-backspace t
+(defcustom normal-erase-is-backspace 'maybe
   "Set the default behavior of the Delete and Backspace keys.
 
 If set to t, Delete key deletes forward and Backspace key deletes
