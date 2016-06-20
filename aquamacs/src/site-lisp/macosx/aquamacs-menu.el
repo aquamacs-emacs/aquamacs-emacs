@@ -402,6 +402,7 @@ On operating systems prior to El Capitan, a package installer is started."
   (let ((coding-system-for-write 'no-conversion)
         (vers nil)
         (installed "")
+        (local-bin "/usr/local/bin/")
         (bin (format "%s/Contents/MacOS/bin/" aquamacs-mac-application-bundle-directory))
         (src (format "%s/Contents/Resources/" aquamacs-mac-application-bundle-directory)))
     (cl-flet ((installer (x)
@@ -417,10 +418,22 @@ On operating systems prior to El Capitan, a package installer is started."
                   ;; attempt to copy directly
                   (condition-case nil
                       (progn
-                        (copy-file (concat bin "aquamacs") "/usr/local/bin/" 'overwrite-if-exists)
-                        (copy-file (concat bin "emacsclient") "/usr/local/bin/" 'overwrite-if-exists)
-                        (setq installed "The command-line tools have been installed.\n"))
+                        (condition-case nil (delete-file (concat local-bin "aquamacs")) (error nil))
+                        (copy-file (concat bin "aquamacs") local-bin 'overwrite-if-exists)
+                        (condition-case nil (delete-file (concat local-bin "emacsclient")) (error nil))
+                        (copy-file (concat bin "emacsclient") local-bin 'overwrite-if-exists)
+                        ;; The Emacs script is not relocateable because it needs to find the
+                        ;; Aquamacs binary.  Thus we symlink it.
+                        (condition-case nil (delete-file (concat local-bin "emacs")) (error nil))
+                        (make-symbolic-link (concat bin "emacs") (concat local-bin "emacs"))
+                        (setq installed "Command-line tools have been installed.
+Installed to /usr/local/bin:
+aquamacs, emacsclient and emacs.
+
+You must repeat this process if Aquamacs.app is moved.
+\n"))
                     (error nil
+                           (message "Failed to install command line tools directly.")
                            (installer "Aquamacs Command Line Tool.mpkg"))))
               ;; open pre-ElCapitan Installer
               (installer "Aquamacs Command Line Tool PreElCapitan.mpkg")))
@@ -428,8 +441,7 @@ On operating systems prior to El Capitan, a package installer is started."
         (error nil
                (installer "Aquamacs Command Line Tool PreElCapitan.mpkg")))
 
-      (aquamacs-message "%sCall command-line-tool from a shell as `aquamacs', e.g., as \"aquamacs file.txt\"" installed))))
-
+      (aquamacs-message "%sCall command line tool from a shell as `aquamacs', e.g., as \"aquamacs file.txt\"" installed))))
 
   
 (define-key-after menu-bar-tools-menu [menu-tools-command-line-tool]

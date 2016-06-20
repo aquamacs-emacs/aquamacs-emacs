@@ -33,7 +33,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
-;; Copyright (C) 2005-2015: David Reitter
+;; Copyright (C) 2005-2016: David Reitter
 
 
 (require 'aquamacs-tools)
@@ -148,11 +148,12 @@ Separate paths from file names with --."
   ;; activated by aquamacs-load-preferences
 
   (defun aquamacs-activate-features-new-in-this-version ()
-
     ;; aquamacs-customization-version-id contains the version id
     ;; of aquamacs when the customization file was written
+    ;; not present if Aquamacs was loaded with --no-site-file
 
     (when (and (not (equal init-file-user nil)) ;; no .emacs was read (-q option)
+               (boundp 'aquamacs-customization-version-id)
 	       aquamacs-customization-version-id
 	       (> aquamacs-customization-version-id 0))
 

@@ -573,14 +573,38 @@ your source-file while holding the Command and Shift keys.
 % Older utilities that preceeded Skim were  \TeX niscope and PDFView.  They do not work out-of-the-box with Aquamacs. Using the ``Pdfsync'' package works.
 
 
-\subsection{Lisp Support}
+% \subsection{Lisp Support}
 
-Lisp programmers will appreciate the Superior Lisp Interaction Mode for Emacs, SLIME.  This is available from the Aquamacs website as a convenient point-and-click installer package, which will result in fully integrated Lisp experience.
+% Lisp programmers will appreciate the Superior Lisp Interaction Mode for Emacs, SLIME.  This is available from the Aquamacs website as a convenient point-and-click installer package, which will result in fully integrated Lisp experience.
 
 
-\subsection{Java Support}
+% \subsection{Java Support}
 
-Java programmers should install the JDEE point-and-click installer package, available from the Aquamacs website (\url{http://aquamacs.org/download.shtml}).
+% Java programmers should install the JDEE point-and-click installer package, available from the Aquamacs website (\url{http://aquamacs.org/download.shtml}).
+
+
+\subsection{Command Line Tools}
+
+Aquamacs can install command line tools.  Run M-x aquamacs-install-command-line-tool, or choose \emph{Install Command Line Tools} from the Tools menu.
+The following commands will be made available from a terminal running the system's default login shell:
+
+\begin{itemize}
+\item {\tt aquamacs}: This tool will start up a new Aquamacs or run an existing one.  (If multiple Aquamacs.app application bundles are present in the system, unexpected behavior may occur.  This is a OSX limitation.)   You may give arguments to the tool and use it as {\tt EDITOR} setting.
+\item {\tt emacsclient}: This is a tool standard to every GNU Emacs distribution.  It will open a file or execute arbitrary commands in a running Emacs/Aquamacs instance.  (Aquamacs automatically starts the associated server so that you do not need to call M-x server-start.)
+\item {\tt emacs}: This tool is installed only if direct install is possible by Aquamacs into /usr/local/bin, on Mac OSX 10.11 or later.   Emacs will start up vanilla mode Aquamacs directly in the text terminal, with no Aquamacs customizations, emulating GNU Emacs.  This allows you to run a late-version Emacs with your system, without the need for installing another package.
+\end{itemize}
+
+
+\subsection{Vanilla Emacs Mode}
+
+Aquamacs may be run in \emph{vanilla Emacs mode}.  This will disable most Aquamacs customizations and prevent loading of included packages.
+Aquamacs will be most similar to GNU Emacs.   The mode is intended primarily for terminal use.
+
+To enable the mode, start the Aquamacs process from a terminal, with the {\tt --no-site-file} parameter.
+
+The mode is also enabled by the command line tool {\tt emacs}.
+
+
 
 \section{Requirements}
 Aquamacs requires Mac OS X 10.6 or later.  The downloadable Aquamacs runs on all modern Macs with 64-bit capable Intel processors.  Versions for older Macs (32-bit Intel, PPC) may be compiled by the end user.
@@ -641,6 +665,8 @@ information.\footnote{The following paths are loaded for backward
 If an (emtpy) file named \emph{.nosearch} exists in a specific path, Aquamacs does not load any \emph
 {site-start} and \emph{site-prestart} source files in this or descending paths and does not add that or 
 subsequent paths to the load-path. 
+
+
 
 \subsection{Startup files}
 In short, most settings are stored in these files:
