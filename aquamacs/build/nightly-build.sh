@@ -2,7 +2,7 @@
 
 # for internal use only
 
-cd ~/Nightly/Cocoa24ub/aquamacs-emacs.git
+cd ~/Nightly/master/aquamacs-emacs.git
 
 ORIGPATH=`pwd`
 . ../env.sh  # set server-specific (non-public) env variables
@@ -32,8 +32,8 @@ echo "Latest change:" >>$LOG
 git log --oneline -1  >>$LOG
 
 # this version will merge
-# git checkout -f aquamacs24 >>$LOG  2>>$LOG
-# git pull origin aquamacs24  >>$LOG  2>>$LOG
+# git checkout -f aquamacs3 >>$LOG  2>>$LOG
+# git pull origin aquamacs3  >>$LOG  2>>$LOG
 
 # make doc often creates stuff, which subsequent "git-pull" refuses to overwrite
 git clean -f aquamacs/doc/  >>$LOG  2>>$LOG
