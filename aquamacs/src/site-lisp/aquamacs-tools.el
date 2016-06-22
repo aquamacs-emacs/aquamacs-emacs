@@ -607,22 +607,40 @@ Aquamacs only.
 	count)
     (error 0)))
    
-(defun list2english (list &optional avoid-oxford-comma)
+(defun list2english (list &optional avoid-oxford-comma add-be)
   "Converts a list of strings to a single string with an English-language list.
-Commas and \"and\" are inserted as necessary.
+Commas and \"and\" are inserted as necessary
 An Oxford comma is used by default if appropriate.
-Set AVOID-OXFORD-COMMA to `avoid' to prevent an Oxford comma in any case."
+Set AVOID-OXFORD-COMMA to non-nil to prevent an Oxford comma in any case."
+  (concat
+   (list2english-internal list (if avoid-oxford-comma 'avoid))
+   (if add-be
+       (if (or (not list) (cdr list))
+           " are" " is")
+     "")))
+(defun list2english-internal (list &optional avoid-oxford-comma)
   (if (cddr list)
-      (list2english (cons (concat (car list) ", " (cadr list)) (cddr list)) (or avoid-oxford-comma 'force-on))
+      (list2english-internal (cons (concat (car list) ", " (cadr list)) (cddr list))
+                    (or avoid-oxford-comma 'force-on))
     (if (cdr list)
         (concat (car list) (if (equal avoid-oxford-comma 'force-on) ", and " " and ") (cadr list))
       (car list))))
 ;; test cases
 ;; (list2english '("one" "two"))
-;; (list2english '("one" "two" "three"))
+;; (list2english '("one" "two" "three") nil nil)
+;; (list2english '("one" "two" "three") t t)
 ;; (list2english '("one"))
+;; (list2english '("one") t t)
+;; (list2english '("one") nil t)
 ;; (list2english '("one" "two" "three") 'no)
- 
+;; (list2english nil nil t)
+
+(defun login-shell-command-to-string (command)
+  "Execute login shell command COMMAND and return its output as a string."
+  (with-output-to-string
+    (with-current-buffer
+      standard-output
+      (process-file shell-file-name nil t nil "-l" shell-command-switch command))))
 
 (provide 'aquamacs-tools)
 

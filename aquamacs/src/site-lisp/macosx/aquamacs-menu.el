@@ -396,54 +396,48 @@ White space here is any of: space, tab, emacs newline (line feed, ASCII 10)."
 
 ;; Command line tool
 (defun aquamacs-install-command-line-tool ()
-  "Install the Aquamacs Command Line Tool.
-On operating systems prior to El Capitan, a package installer is started."
+  "Install the Aquamacs Command Line Tool."
   (interactive)
-  (let ((coding-system-for-write 'no-conversion)
+  (let* ((coding-system-for-write 'no-conversion)
         (vers nil)
-        (installed "")
-        (local-bin "/usr/local/bin/")
+        (to-be-installed '("emacsclient" "aquamacs"))
+        (elcapitan (version<= "10.11"
+                              (with-temp-buffer (call-process "sw_vers" nil t nil "-productVersion")
+                                                (trim-string (buffer-string)))))
+        (local-bin (if elcapitan
+                       "/usr/local/bin/" "/usr/bin/"))
         (bin (format "%s/Contents/MacOS/bin/" aquamacs-mac-application-bundle-directory))
-        (src (format "%s/Contents/Resources/" aquamacs-mac-application-bundle-directory)))
-    (cl-flet ((installer (x)
-                      (call-process "open" nil 0 nil "-a" "Installer" 
-                                    (concat src x))))
-      (condition-case nil
-          (progn
-            (setq vers
-                  (with-temp-buffer (call-process "sw_vers" nil t nil "-productVersion")
-                                    (trim-string (buffer-string))))
-            (if (version<= "10.11" vers) ;; El Capitan
-                (progn
-                  ;; attempt to copy directly
-                  (condition-case nil
-                      (progn
-                        (condition-case nil (delete-file (concat local-bin "aquamacs")) (error nil))
-                        (copy-file (concat bin "aquamacs") local-bin 'overwrite-if-exists)
-                        (condition-case nil (delete-file (concat local-bin "emacsclient")) (error nil))
-                        (copy-file (concat bin "emacsclient") local-bin 'overwrite-if-exists)
-                        ;; The Emacs script is not relocateable because it needs to find the
-                        ;; Aquamacs binary.  Thus we symlink it.
-                        (condition-case nil (delete-file (concat local-bin "emacs")) (error nil))
-                        (make-symbolic-link (concat bin "emacs") (concat local-bin "emacs"))
-                        (setq installed "Command-line tools have been installed.
-Installed to /usr/local/bin:
-aquamacs, emacsclient and emacs.
-
+        (src (format "%s/Contents/Resources/" aquamacs-mac-application-bundle-directory))
+        ;; On pre-ElCapitan systems, we rename the original emacs binary to emacs22.
+        (emrename (if (or elcapitan
+                          (file-symlink-p "/usr/bin/emacs"))
+                      ""
+                    " && mv /usr/bin/emacs /usr/bin/emacs22 2>/dev/null"))
+        (install-emacs (yes-or-no-p "Install emacs tool to use Aquamacs as text terminal emacs?\nThis will normally supersede the system-provided Emacs (an old version)."))
+        (emscript (if install-emacs (format "%s && ln -sf '%s%s' '%s%s'" emrename bin "emacs" local-bin "emacs") ""))
+        (to-be-installed (if install-emacs (cons "emacs" to-be-installed) to-be-installed))
+        (script (concat (format "cp '%s%s' '%s%s' '%s'" bin "aquamacs" bin "emacsclient" local-bin
+                                emscript))))
+      ;; (message "Script: %s" script)
+      (do-applescript (format "do shell script \"%s\" with administrator privileges" script))
+      (let ((notfound nil))
+           (mapc
+                  (lambda (c)
+                    (when c
+                      (unless (equal (trim-string (login-shell-command-to-string (concat "which " c))) (concat local-bin c))
+                        (push c notfound)
+                        )))
+                  to-be-installed)
+           (aquamacs-message (concat "Command-line tools have been installed.
+" (list2english to-be-installed) " installed to /usr/local/bin.
+" (if (member "emacs" to-be-installed) "
 You must repeat this process if Aquamacs.app is moved.
-\n"))
-                    (error nil
-                           (message "Failed to install command line tools directly.")
-                           (installer "Aquamacs Command Line Tool.mpkg"))))
-              ;; open pre-ElCapitan Installer
-              (installer "Aquamacs Command Line Tool PreElCapitan.mpkg")))
+\n" "")
+(if notfound
+    (format "Warning: %s not in your shell's PATH, or may be eclipsed." (list2english notfound nil 'add-verb))
+  "Call command line tool from a shell as `aquamacs', e.g., as \"aquamacs file.txt\""
+  ))))))
 
-        (error nil
-               (installer "Aquamacs Command Line Tool PreElCapitan.mpkg")))
-
-      (aquamacs-message "%sCall command line tool from a shell as `aquamacs', e.g., as \"aquamacs file.txt\"" installed))))
-
-  
 (define-key-after menu-bar-tools-menu [menu-tools-command-line-tool]
   `(menu-item "Install Command Line Tools" 
 	      aquamacs-install-command-line-tool
