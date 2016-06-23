@@ -225,22 +225,22 @@ end tell"
 		  "~/Library/Preferences/Aquamacs Emacs" ; for Aquamacs (user-specific)
 		  )))
 	(setq aquamacs-mac-add-standard-directories-added-flag t)
-	(mapcar (lambda (dir)
-		  (let* ((xdir (directory-file-name (expand-file-name dir)))
-			 (default-directory xdir))
-		    (and xdir
-			 (not (file-exists-p ".nosearch"))
-			 (not (file-exists-p ".ignore"))  ;; backwards compatiblity (Aq2.3 and lower)
-			 (add-to-list 'load-path xdir) ;; add at beginning of list
-			 ;; Now add subdirectories.
-			 (condition-case nil
-			     ;; this will insert at the position of the
-			     ;; current directory (`default-directory'),
-			     ;; which we have canonicalized so that
-			     ;; its position is correctly determined
-			     (normal-top-level-add-subdirs-to-load-path)
-			   (error nil)))))
-		directories)
+	(mapc (lambda (dir)
+                (let* ((xdir (directory-file-name (expand-file-name dir)))
+                       (default-directory xdir))
+                  (and xdir
+                       (not (file-exists-p ".nosearch"))
+                       (not (file-exists-p ".ignore"))  ;; backwards compatiblity (Aq2.3 and lower)
+                       (add-to-list 'load-path xdir) ;; add at beginning of list
+                       ;; Now add subdirectories.
+                       (condition-case nil
+                           ;; this will insert at the position of the
+                           ;; current directory (`default-directory'),
+                           ;; which we have canonicalized so that
+                           ;; its position is correctly determined
+                           (normal-top-level-add-subdirs-to-load-path)
+                         (error nil)))))
+              directories)
 	
 	;; remove Enhanced Carbon Emacs plugin
 
