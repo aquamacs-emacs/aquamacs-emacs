@@ -730,10 +730,10 @@ may be set to `nil' if such empty frames become visible inadvertently."
 	(progn 
 	  (if (and aquamacs-keep-running-via-empty-frame (equal (ns-visible-frame-list)
 		     (list (or frame (selected-frame)))))
-	      (error) ;; create *empty* frame or hide current one
+	      (error "obof1 error") ;; create *empty* frame or hide current one
 	    (delete-frame (or frame (selected-frame))))
 	  (unless (visible-frame-list) ;; delete-frame may succeed if iconified frames are around
-	    (error)))
+	    (error "obof2 error")))
       (error
        ;; we're doing delete-frame later
        ;;(run-hook-with-args 'delete-frame-functions f)
