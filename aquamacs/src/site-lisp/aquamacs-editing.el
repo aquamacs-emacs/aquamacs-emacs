@@ -160,7 +160,7 @@ default in case there is not enough text."
   (interactive)
   ;; calc mean length of lines
   (save-excursion
-    (beginning-of-buffer)
+    (goto-char (point-min))
     (let ((start-point (point))
 	  (count 0)
 	  (empty-lines 0)
