@@ -2018,6 +2018,13 @@ get_glyph_string_clip_rects (struct glyph_string *s, NativeRectangle *rects, int
       /* This is a text line that may be partially visible.  */
       r.x = window_box_left (s->w, s->area);
       r.width = window_box_width (s->w, s->area);
+
+      /* Aquamacs workaround - Because the cursor is drawn without limiting focus to the
+	 window box, but it is removed by writing glyph and nothing into the right margin,
+	 while focus is applied to the window box, parts of the cursor may remain visible.
+	 This is a stop-gap measure that fails if the cursor is (bar . 3) or wider. */
+      r.width += 1;
+
       r.height = s->row->visible_height;
     }
 
