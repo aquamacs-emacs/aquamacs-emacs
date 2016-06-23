@@ -104,8 +104,7 @@ from earlier versions of the distribution."
 			    (load user-init-file t)
 			  (error ;; this code is from startup.el
 			   (let ((message-log-max nil))
-			     (save-excursion
-			       (set-buffer (get-buffer-create "*Messages*"))
+			     (with-current-buffer (get-buffer-create "*Messages*")
 			       (insert "\n\n"
 				       (format "An error has occurred while loading `%s.el (or .elc)':\n\n"
 					       user-init-file)
@@ -123,7 +122,7 @@ from earlier versions of the distribution."
 				      (mapconcat 'prin1-to-string (cdr error) ", "))
 			     (let ((pop-up-windows nil))
 			       (pop-to-buffer "*Messages*")
-			       (end-of-buffer))
+			       (goto-char (point-max)))
 			     (setq init-file-had-error t)))
 			  )))
 		    aquamacs-preference-files))
