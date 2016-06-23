@@ -390,7 +390,7 @@ Optional CODING is used for encoding coding-system."
 (defun load-post-sitestart-files ()
   "Load the Aquamacs plugins from site-start directories."
   (let (loaded)
-    (mapcar 
+    (mapc
      (lambda (p) (unless (file-exists-p (concat p "/.ignore"))
 		   (let ((infod (concat p "/info"))
 			 (file (expand-file-name (concat p "/site-start") "~/")))
@@ -410,7 +410,7 @@ Optional CODING is used for encoding coding-system."
 (defun load-pre-sitestart-files ()
   "Load the pre-start Aquamacs plugins from site-prestart directories."
   (let (loaded)
-    (mapcar 
+    (mapc
      (lambda (p) (unless (file-exists-p (concat p "/.ignore"))
 		   (let ((infod (concat p "/info"))
 			 (file (expand-file-name (concat p "/site-prestart") "~/")))
@@ -426,7 +426,7 @@ Optional CODING is used for encoding coding-system."
     t))
 ; (load-pre-sitestart-files)
 
-
+(defvar aq-timer nil)
 (defun aq-current-milliseconds ()
   (let ((ti (cdr (current-time)))
 	
@@ -587,7 +587,7 @@ Aquamacs only.
 	  (aquamacs-purge-directory (file-name-directory aquamacs-autosave-directory)
 			   ".*"
 			   days)))
-    (if (called-interactively-p) 
+    (if (called-interactively-p 'interactive)
 	(message "%s Session and %s Auto save files older than %s days purged." count1 count2 days))))
 
 (defun aquamacs-purge-directory (directory regexp days)
