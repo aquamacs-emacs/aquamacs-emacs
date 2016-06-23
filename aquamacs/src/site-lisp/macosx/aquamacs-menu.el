@@ -416,18 +416,20 @@ White space here is any of: space, tab, emacs newline (line feed, ASCII 10)."
         (install-emacs (yes-or-no-p "Install emacs tool to use Aquamacs as text terminal emacs?\nThis will normally supersede the system-provided Emacs (an old version)."))
         (emscript (if install-emacs (format "%s && ln -sf '%s%s' '%s%s'" emrename bin "emacs" local-bin "emacs") ""))
         (to-be-installed (if install-emacs (cons "emacs" to-be-installed) to-be-installed))
-        (script (concat (format "cp '%s%s' '%s%s' '%s'" bin "aquamacs" bin "emacsclient" local-bin
-                                emscript))))
+        (script (format "cp '%s%s' '%s%s' '%s'%s"
+                        bin "aquamacs"
+                        bin "emacsclient"
+                        local-bin
+                        emscript)))
       ;; (message "Script: %s" script)
       (do-applescript (format "do shell script \"%s\" with administrator privileges" script))
       (let ((notfound nil))
            (mapc
-                  (lambda (c)
-                    (when c
-                      (unless (equal (trim-string (login-shell-command-to-string (concat "which " c))) (concat local-bin c))
-                        (push c notfound)
-                        )))
-                  to-be-installed)
+            (lambda (c)
+              (when c
+                (unless (equal (trim-string (login-shell-command-to-string (concat "which " c))) (concat local-bin c))
+                  (push c notfound))))
+            to-be-installed)
            (aquamacs-message (concat "Command-line tools have been installed.
 " (list2english to-be-installed) " installed to /usr/local/bin.
 " (if (member "emacs" to-be-installed) "
