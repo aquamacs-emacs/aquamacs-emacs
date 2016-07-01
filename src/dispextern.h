@@ -1547,7 +1547,8 @@ extern Lisp_Object Qwindow_wants_header_line_function,
    large vertical space.  The heuristics is in the factor of 3.  We
    ignore the ascent and descent values reported by such fonts, and
    instead go by the values reported for individual glyphs.  */
-#define FONT_TOO_HIGH(ft)  ((ft)->ascent + (ft)->descent > 3*(ft)->pixel_size)
+#define FONT_TOO_HIGH(ft)						\
+  ((ft)->pixel_size > 0 && (ft)->ascent + (ft)->descent > 3*(ft)->pixel_size)
 
 
 /***********************************************************************
