@@ -1,7 +1,7 @@
 ;; Aquamacs-mac-fontsets
 
 ;; specify some default fontsets that should work on the Mac
-;; some fonts might not be found - a warning is issues
+;; some fonts might not be found - a warning is issued
 ;; this should eventually be replaced by a complete font selection
 ;; dialog
 
@@ -9,8 +9,6 @@
 ;; Maintainer: David Reitter
 ;; Keywords: aquamacs fonts
  
-;; Last change: $Id: aquamacs-mac-fontsets.el,v 1.14 2009/02/12 19:08:04 davidswelt Exp $
-
 ;; This file is part of Aquamacs Emacs
 ;; http://www.aquamacs.org/
 
@@ -30,7 +28,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2012 David Reitter
+;; Copyright (C) 2005, 2012, 2016 David Reitter
 
 
 (eval-when-compile (require 'aquamacs-macros))
@@ -47,7 +45,12 @@
 (set-fontset-font t '(#x20AB . #x20B6) (font-spec :name "AppleSymbol"))
 ;; SINGLE LOW-9 QUOTATION MARK  and others
 (set-fontset-font t '(#x2017 . #x201A) (font-spec :name "AppleSymbol"))
- 
+
+;; Emoji
+
+(set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji")
+                  nil 'prepend)
+
 ;; (set-fontset-font t '( #x2000 . #x21FF) (font-spec :name "AppleGothic"))
 ;; (set-fontset-font t '( #x2000 . #x21FF) (font-spec :name "AppleSymbol"))
 
