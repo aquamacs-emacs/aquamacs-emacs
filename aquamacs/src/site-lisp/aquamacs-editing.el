@@ -241,4 +241,17 @@ default in case there is not enough text."
   (or mark-active (set-mark-command nil))
   (aquamacs-page-up t))
 
+;; (defun filladapt-mode (&optional arg)
+;;   "Obsolete."
+;;   (interactive "P")
+;;   (message "Warning: filladapt-mode has been removed from the Aquamacs distribution."))
+
+;; (defun turn-on-filladapt-mode ()
+;;   "Unconditionally turn on Filladapt mode in the current buffer."
+;;   (filladapt-mode 1))
+
+;; (defun turn-off-filladapt-mode ()
+;;   "Unconditionally turn off Filladapt mode in the current buffer."
+;;   (filladapt-mode -1))
+
 (provide 'aquamacs-editing)
