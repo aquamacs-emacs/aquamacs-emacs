@@ -84,8 +84,6 @@ after updating this variable.")
    
  
 
-(require 'filladapt)
-
 (require 'mac-extra-functions)
  
 (require 'aquamacs-redo)

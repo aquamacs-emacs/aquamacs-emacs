@@ -121,7 +121,6 @@
 ;(aq-preload "auctex-config")
 
 ;(aq-preload "oneonone/strings")  ; loads cl must be compiled
-(aq-preload "filladapt")
 
 (aq-preload "tabbar/revive") ; load/save sessions 
 
