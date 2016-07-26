@@ -403,16 +403,13 @@ With a prefix (or a FILL) argument, also fill too short lines."
   :version "25.1")
 
 (defcustom rectangle-preview t
-  "If non-nil, `string-rectangle' will show an-the-fly preview."
+  "If non-nil, `string-rectangle' will show an on-the-fly preview."
   :version "25.1"
   :type 'boolean)
 
 (defun rectangle--string-preview ()
   (when rectangle-preview
     (let ((str (minibuffer-contents)))
-      (when (equal str "")
-        (setq str (or (car-safe minibuffer-default)
-                      (if (stringp minibuffer-default) minibuffer-default))))
       (when str (setq str (propertize str 'face 'rectangle-preview)))
       (with-selected-window rectangle--string-preview-window
         (unless (or (null rectangle--string-preview-state)
