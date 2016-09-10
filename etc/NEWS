@@ -329,6 +329,9 @@ GnuTLS encryption functions if possible.
 
 ** JSON
 
+*** 'json-encode-string' now only escapes the characters it has to.
+Which means that the encoded strings can contain non-ASCII characters.
+
 *** 'json-pretty-print' and 'json-pretty-print-buffer' now maintain
 the ordering of object keys by default.
 
@@ -1265,6 +1268,12 @@ Emacs 24.2 and earlier, which did not support unary '/'.
 that happen, 'unhandled-file-name-directory' now defaults to calling
 'file-name-as-directory'.
 
+** The URL package now insists on sending only unibyte strings to server
+This means packages that use URL cannot bind 'url-request-data' to
+multibyte strings.  If non-ASCII characters should be part of the URL
+payload, then 'url-request-data' should be encoded to become a unibyte
+string.
+
 
 * Lisp Changes in Emacs 25.1
 
@@ -1630,6 +1639,14 @@ frames.
 *** New minor mode 'window-divider-mode' and options
 'window-divider-default-places', 'window-divider-default-bottom-width'
 and 'window-divider-default-right-width'.
+
+*** When a window is shrunk horizontally its margins are no longer removed
+automatically.  Rather, Emacs refuses to split or resize windows when
+this would cause margins to no longer fit into the width reserved for the
+corresponding window.  An application can override this behavior for a
+particular window by setting that window's 'min-margins' parameter.  As
+a consequence, the application becomes fully responsible for trimming
+the margin sizes of that window and any window inheriting these margins.
 
 *** The window displaying the '*Completions*' buffer with minibuffer
 completion candidates is now shown at the bottom of the selected

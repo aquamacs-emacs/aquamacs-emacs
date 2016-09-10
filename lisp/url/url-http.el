@@ -315,7 +315,9 @@ request.")
                   "Accept-encoding: " url-mime-encoding-string "\r\n"))
              (if url-mime-charset-string
                  (concat
-                  "Accept-charset: " url-mime-charset-string "\r\n"))
+                  "Accept-charset: "
+                  (url-http--encode-string url-mime-charset-string)
+                  "\r\n"))
              ;; Languages we understand
              (if url-mime-language-string
                  (concat
@@ -330,9 +332,10 @@ request.")
              auth
              ;; Cookies
 	     (when (url-use-cookies url-http-target-url)
-	       (url-cookie-generate-header-lines
-		host real-fname
-		(equal "https" (url-type url-http-target-url))))
+               (url-http--encode-string
+                (url-cookie-generate-header-lines
+                 host real-fname
+                 (equal "https" (url-type url-http-target-url)))))
              ;; If-modified-since
              (if (and (not no-cache)
                       (member url-http-method '("GET" nil)))
