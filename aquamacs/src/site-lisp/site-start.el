@@ -51,7 +51,7 @@ It is guaranteed that for any two Aquamacs releases A and B,
 if aquamacs-version-id for B is higher than aquamacs-version-id 
 for A, then B is newer than A.")
 
-(defvar aquamacs-minor-version "dev"
+(defvar aquamacs-minor-version ""
 "Version code for minor maintenance releases.
 Changes in this code are ignored during the online version check.")
 
